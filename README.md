@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/ProteinsWebTeam/interpro7-client.svg?branch=master)](https://travis-ci.org/ProteinsWebTeam/interpro7-client)
+[![Coverage Status](https://coveralls.io/repos/github/ProteinsWebTeam/interpro7-client/badge.svg?branch=master)](https://coveralls.io/github/ProteinsWebTeam/interpro7-client?branch=master)
+
 New InterPro Web-Client
 ============
 
