@@ -1,0 +1,64 @@
+@import "../../styles/spacing.css";
+@import "../../styles/colors.css";
+
+.group {}
+.flip {}
+
+.home, .view, .focus {
+  composes: group;
+}
+
+.focus, .hint, .standard {
+  composes: flip;
+}
+
+.standard {
+  display: flex;
+  overflow: hidden;
+  padding: 0.2rem 0;
+  color: var(--colors-gray);
+
+  @nest & > .hint {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  @nest & .group > * {
+    padding-left: var(--spacing-medium);
+
+    &:last-child {
+      display: none;
+    }
+  }
+
+  @nest & .group:not(:first-child) > *::before {
+    content: '/';
+    padding-right: var(--spacing-medium);
+    color: color(var(--colors-gray) a(0.8));
+  }
+}
+
+.expanded {
+  composes : standard;
+  background-color: #74bbd8;
+
+  @nest & > .hint {
+    width: auto;
+    height: 1em;
+    overflow: visible;
+  }
+
+  @nest & .group.focus {
+    display: block;
+    padding-left: 1em;
+  }
+}
+
+.groups {
+  flex: 1;
+}
+
+.hint {
+  margin: 0 var(--spacing-medium);
+}

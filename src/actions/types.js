@@ -1,0 +1,4 @@
+export const TOGGLE_SIDE_NAV = 'TOGGLE_SIDE_NAV';
+
+export const CHANGE_SETTINGS = 'CHANGE_SETTINGS';
+export const RESET_SETTINGS = 'RESET_SETTINGS';

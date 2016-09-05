@@ -1,0 +1,53 @@
+.read_more {
+  composes: card from 'styles/blocks.css';
+  display: flex;
+  flex-direction: column;
+
+  @nest & > div {
+    transition: max-height 0.5s ease-in-out;
+
+    &:hover {
+      will-change: max-height;
+    }
+  }
+
+  @nest & > button {
+    border: none;
+    background-color: transparent;
+    opacity: 0.5;
+    font-size: large;
+    width: 1em;
+    margin: auto;
+    transition: transform 0.5s ease-in-out;
+
+    &:hover {
+      will-change: transform;
+    }
+  }
+}
+
+.hidden {
+  display:none;
+}
+
+.collapsed {
+  composes: read_more;
+
+  @nest & > div {
+    max-height: 200px;
+    overflow: hidden;
+  }
+}
+
+.opened {
+  composes: read_more;
+
+  @nest & > div {
+    max-height: 1000px;
+    overflow: scroll;
+  }
+
+  @nest & > button > div {
+    transform: rotate(180deg);
+  }
+}

@@ -1,0 +1,12 @@
+root:
+  website: //localhost:8080
+  API: //192.168.99.100:8000/api
+pages:
+  entry:
+    plural: entries
+  protein: null
+  structure: null
+  proteome: null
+  pathway: null
+pagination:
+  pageSize: 10

@@ -1,0 +1,39 @@
+@import "../../../styles/colors.css";
+
+.reference {
+  padding-top: 1em;
+  text-indent: -1em;
+  padding-left: 1em;
+}
+.reference span {
+  padding-left: 1em;
+}
+.reference span.title {
+  font-style: italic;
+}
+.reference span.reference_id {
+  padding-left: 0em;
+  color: #9DA0A4;
+}
+.reference:target span.reference_id {
+  font-weight: bold;
+  color: red;
+}
+
+.reference a.doi_url {
+  padding-left: 1em;
+}
+.reference a:not([href*="localhost"])::before {
+  content: " \21AA ";
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  columns: 25em;
+  column-rule: solid var(--colors-nearly-white) 1px;
+
+  @nest & > * {
+    break-inside: avoid;
+  }
+}

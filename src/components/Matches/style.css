@@ -1,0 +1,61 @@
+@import "../../styles/colors.css";
+@import "../../styles/spacing.css";
+@import "../../styles/fonts.css";
+
+.list {
+  padding: 0;
+  list-style: none;
+
+  @nest & > li {
+    margin-bottom: var(--spacing-medium);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.svgContainer {
+  margin: var(--spacing-small) 0 var(--spacing-small) calc(-1 * var(--spacing-big));
+  width: calc(100% + 2 * var(--spacing-big));
+  height: 60px;
+  overflow-y: hidden;
+  overflow-x: auto;
+  background-color: lightgray;
+  box-shadow: 0 1px 3px gray;
+  user-select: none;
+  cursor: default;
+}
+
+.svg {
+  font-family: var(--fonts-mono);
+  height: 100%;
+  overflow: visible;
+
+  &:hover text {
+    opacity: 1;
+  }
+
+  @nest & text {
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+    fill: var(--colors-nearly-black);
+  }
+}
+
+.primary {
+  fill: var(--colors-nearly-white);
+}
+
+.secondary {
+  opacity: 0.6;
+  transform-origin: center;
+  transition-property: opacity, transform;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-out;
+
+  &:hover {
+    opacity: 0.9;
+    transform: scaleY(1.2);
+  }
+}

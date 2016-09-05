@@ -1,0 +1,21 @@
+@import "../../../styles/fonts.css";
+
+.sequence_block {
+  font-family: var(--fonts-mono-alt);
+  font-size: 0.7em;
+
+  @nest & > div.sequence_index {
+    display: block;
+    float: left;
+    text-align: right;
+    padding-right: 5px;
+    border-right: 1px solid LightGray;
+    vertical-align: top;
+    color: #999;
+  }
+  @nest & > div.sequence {
+    padding-left: 5px;
+    color: #000;
+  }
+
+}

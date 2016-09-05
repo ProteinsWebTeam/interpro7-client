@@ -1,0 +1,23 @@
+[ignore]
+<PROJECT_ROOT>/\..*
+<PROJECT_ROOT>/dist/.*
+.*/node_modules/flow-typed
+.*/node_modules/editions*
+.*/node_modules/fbjs.*
+.*/node_modules/babel.*
+.*/node_modules/.*json
+
+[include]
+
+[libs]
+./node_modules/iflow-react-router/index.js.flow
+./interfaces
+
+[options]
+module.name_mapper='^\(.*\).css$' -> 'empty/object'
+module.name_mapper='^\(.*\).yml$' -> 'empty/object'
+module.system.node.resolve_dirname=node_modules
+module.system.node.resolve_dirname=src
+munge_underscores=true
+esproposal.class_static_fields=enable
+esproposal.class_instance_fields=enable

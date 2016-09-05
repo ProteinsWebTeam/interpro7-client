@@ -1,0 +1,59 @@
+@import "./spacing.css";
+@import "./colors.css";
+
+.table {
+  display: table;
+  table-layout: fixed;
+  margin: auto;
+  max-width: 100%;
+  border-spacing: 0;
+}
+
+.header th {
+  padding: var(--spacing-small);
+  padding-bottom: var(--spacing-big);
+}
+
+.header > tr {
+  background-color: var(--colors-nearly-white);
+}
+
+.body {
+  @nest & td {
+    padding: var(--spacing-small);
+    border-top: solid 1px lightgray;
+    text-align: center;
+  }
+
+  @nest & > tr {
+    &:nth-child(2n) {
+      background-color: var(--colors-nearly-white);
+    }
+
+    &:hover {
+      background-color: darkgray;
+    }
+
+    &:last-child > td {
+      border-bottom: solid 1px lightgray;
+    }
+  }
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  text-align: center;
+
+  @nest & > tr {
+    background-color: var(--colors-nearly-white);
+  }
+
+  @nest & td {
+    padding: var(--spacing-big) 0;
+
+    @nest & > * {
+      margin: var(--spacing-small);
+    }
+  }
+}

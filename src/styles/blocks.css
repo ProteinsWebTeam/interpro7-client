@@ -1,0 +1,43 @@
+@import "./spacing.css";
+
+.card {
+  position: relative;
+  display: block;
+  z-index: 1;
+  margin: var(--spacing-medium);
+  padding: var(--spacing-big);
+  border-radius: var(--spacing-small);
+  background-color: white;
+  box-shadow: 1px 1px 5px gray;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  box-shadow: 3px 3px 5px gray;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+.grid {
+  max-width: 2000px;
+  margin: 0 auto;
+
+  @nest & > * {
+    margin: 0 var(--spacing-medium);
+    display: flex;
+
+    @nest & > * {
+      flex: 1;
+    }
+  }
+}

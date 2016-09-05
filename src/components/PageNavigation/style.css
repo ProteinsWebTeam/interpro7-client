@@ -1,0 +1,16 @@
+@import "../../styles/colors.css";
+
+.nav {
+  composes: card from '../../styles/blocks.css';
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  color: var(--colors-main);
+
+  @nest & > * {
+    min-width: 100px;
+    padding: 0.3em;
+    text-decoration: none;
+  }
+}

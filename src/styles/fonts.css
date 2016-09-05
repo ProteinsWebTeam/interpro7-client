@@ -1,0 +1,7 @@
+@import url(https://fonts.googleapis.com/css?family=Quicksand);
+
+:root {
+  --fonts-header: 'Quicksand', sans-serif;
+  --fonts-mono: 'Lucida Console', Monaco, monospace;
+  --fonts-mono-alt: 'Courier New', monospace;
+}
