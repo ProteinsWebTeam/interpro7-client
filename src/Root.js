@@ -1,10 +1,13 @@
 /* @flow */
 import React, {PropTypes as T} from 'react';
 
+// Global stylesheets loaded here
+import 'foundation-sites/dist/foundation-flex.css';
+import 'styles/global.css';
+
 import Header from 'components/Header';
 import SideMenu from 'components/SideMenu';
 
-import 'styles/global.css';
 
 const Root = (
   {children, location}/*: {children: Node, location: {pathname: string}}*/

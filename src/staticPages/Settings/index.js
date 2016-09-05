@@ -1,23 +1,38 @@
 import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
+import cn from 'classnames';
+
 import {changeSettings, resetSettings} from 'actions/creators';
+
+import f from 'foundation-sites/dist/foundation-flex.css';
 
 const PaginationSettings = ({pagination, handleChange}) => (
   <form data-category="pagination">
     <h4>Pagination settings</h4>
-    <label>
-      number of returned results by page:&nbsp;
-      <input
-        type="range"
-        min="1"
-        max="200"
-        step="1"
-        value={pagination.pageSize}
-        name="pageSize"
-        onChange={handleChange}
-      />
-      <span>{pagination.pageSize}</span>
-    </label>
+    <div className={f.row}>
+      <div className={cn(f['medium-12'], f.column)}>
+        <label>
+          number of returned results by page:
+          <div className={f['row']}>
+            <div className={cn(f['medium-11'], f.column)}>
+              <input
+                type="range"
+                min="1"
+                max="200"
+                step="1"
+                value={pagination.pageSize}
+                name="pageSize"
+                onChange={handleChange}
+                style={{width: '100%'}}
+              />
+            </div>
+            <div className={cn(f['medium-1'], f.column)}>
+              {pagination.pageSize}
+            </div>
+          </div>
+        </label>
+      </div>
+    </div>
   </form>
 );
 PaginationSettings.propTypes = {
@@ -48,34 +63,42 @@ CacheSettings.propTypes = {
 const APISettings = ({api, handleChange}) => (
   <form data-category="api">
     <h4>API settings</h4>
-    <label>
-      Hostname:&nbsp;
-      <input
-        type="text"
-        value={api.hostname}
-        name="hostname"
-        onChange={handleChange}
-      />
-    </label>
-    <label>
-      Port:&nbsp;
-      <input
-        type="number"
-        min="1"
-        value={api.port}
-        name="port"
-        onChange={handleChange}
-      />
-    </label>
-    <label>
-      Root:&nbsp;
-      <input
-        type="text"
-        value={api.root}
-        name="root"
-        onChange={handleChange}
-      />
-    </label>
+    <div className={f.row}>
+      <div className={cn(f['medium-4'], f.columns)}>
+        <label>
+          Hostname:
+          <input
+            type="text"
+            value={api.hostname}
+            name="hostname"
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+      <div className={cn(f['medium-4'], f.columns)}>
+        <label>
+          Port:
+          <input
+            type="number"
+            min="1"
+            value={api.port}
+            name="port"
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+      <div className={cn(f['medium-4'], f.columns)}>
+        <label>
+          Root:
+          <input
+            type="text"
+            value={api.root}
+            name="root"
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+    </div>
   </form>
 );
 APISettings.propTypes = {
@@ -100,7 +123,7 @@ const Settings = (
     <UISettings ui={ui} handleChange={changeSettings} />
     <CacheSettings cache={cache} handleChange={changeSettings} />
     <APISettings api={api} handleChange={changeSettings} />
-    <button onClick={resetSettings}>
+    <button onClick={resetSettings} className={f.button}>
       Reset settings to default values
     </button>
   </main>

@@ -20,7 +20,7 @@ const cssSettings = {
 };
 
 const urlSettings = {
-  name: path.join('static', 'files', '[name].[hash:3].[ext]'),
+  name: path.join('static', 'files', `${PROD ? '' : '[name].'}[hash:3].[ext]`),
   limit: 512,
 };
 
@@ -55,6 +55,13 @@ module.exports = {
         loader: ExtractTextPlugin.extract(
           'style',
           `css?${JSON.stringify(cssSettings)}!postcss`
+        ),
+      },
+      {
+        test: /\.scss$/i,
+        loader: ExtractTextPlugin.extract(
+          'style',
+          `css?${JSON.stringify(cssSettings)}!sass?sourceMap=${!PROD}`
         ),
       },
       {

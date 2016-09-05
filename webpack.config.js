@@ -114,6 +114,13 @@ const config = {
         ),
       },
       {
+        test: /\.scss$/i,
+        loader: ExtractTextPlugin.extract(
+          'style',
+          `css?${JSON.stringify(cssSettings)}!sass?sourceMap=${!PROD}`
+        ),
+      },
+      {
         test: /\.(jpe?g|png|gif|svg)$/i,
         // Automatic image optimisation with img-loader
         loader: `url?${JSON.stringify(urlSettings)}!img`,
