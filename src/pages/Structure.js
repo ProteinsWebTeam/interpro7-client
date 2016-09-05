@@ -21,7 +21,11 @@ const colorHash = new ColorHash();
 const Structure = (
   {data, location: {query, pathname}, children}
   /*: {
-    data: {results?: Array<Object>, metadata?: Object, structure?: Object},
+    data: {
+      results?: Array<Object>,
+      structure?: Object,
+      metadata?: Object,
+    },
     location: {query: Object, pathname: string},
     children: React$Element<any>
   } */

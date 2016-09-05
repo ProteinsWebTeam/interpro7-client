@@ -4,8 +4,10 @@ import config from 'config';
 export const singular/*: Array<string> */ = Object.keys(config.pages);
 export const plural/*: Array<string> */ = Object.entries(config.pages)
   .map(([key, value]) => {
-    if (!(value && value.plural)) return `${key}s`;
-    return value.plural;
+    if (value && value.plural && typeof value.plural === 'string') {
+      return value.plural;
+    }
+    return `${key}s`;
   });
 
 export const toPlural = (s/*: string */) => {

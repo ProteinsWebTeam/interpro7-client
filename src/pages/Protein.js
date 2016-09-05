@@ -22,7 +22,11 @@ const colorHash = new ColorHash();
 const Protein = (
   {data, location: {query, pathname}, children}
   /*: {
-    data: {results?: Array<Object>, proteins?: Object},
+    data: {
+      results?: Array<Object>,
+      proteins?: Object,
+      metadata?: Object,
+    },
     location: {pathname: string, query: Object},
     children: React$Element<any>,
   } */

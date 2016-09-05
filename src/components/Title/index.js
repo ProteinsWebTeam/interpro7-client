@@ -40,6 +40,8 @@ const Title = (
       gene?: string,
       experiment_type?: string,
       source_organism?: Object,
+      release_date?: string,
+      chains?: Array<string>,
     },
     pathname: string
   }*/
