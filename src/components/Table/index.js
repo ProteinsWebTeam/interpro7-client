@@ -5,9 +5,11 @@ import {Link, withRouter} from 'react-router/es6';
 import {connect} from 'react-redux';
 
 import debounce from 'lodash-es/debounce';
+import cn from 'classnames';
 
 import styles from 'styles/blocks.css';
 import tblStyles from 'styles/tables.css';
+import f from 'foundation-sites/dist/foundation-flex.css';
 
 const DEBOUNCE_RATE = 500;// In ms
 
@@ -76,31 +78,47 @@ const Footer = (
     <tfoot className={tblStyles.footer}>
       <tr>
         <td colSpan={width}>
-          <Link to={{pathname, query: {page: 1, page_size: pageSize}}}>
-            {'|<'}
-          </Link>
-          <Link
-            to={{
-              pathname,
-              query: {page: page - 1 || 1, page_size: pageSize},
-            }}
+          <ul
+            className={cn(f.pagination, f['text-center'])}
+            role="navigation"
+            aria-label="Pagination"
           >
-            {'<'}
-          </Link>
-          <span>
-            {`${index}-${index + data.results.length - 1} of ${data.count}`}
-          </span>
-          <Link
-            to={{
-              pathname,
-              query: {page: Math.min(page + 1, lastPage), page_size: pageSize},
-            }}
-          >
-            {'>'}
-          </Link>
-          <Link to={{pathname, query: {page: lastPage, page_size: pageSize}}}>
-            {'>|'}
-          </Link>
+            <li>
+              <Link to={{pathname, query: {page: 1, page_size: pageSize}}}>
+                {'|<'}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={{
+                  pathname,
+                  query: {page: page - 1 || 1, page_size: pageSize},
+                }}
+              >
+                {'<'}
+              </Link>
+            </li>
+            <li className={f.ellipsis} aria-hidden="true" />
+            <li className={f.current}>
+              {`${index}-${index + data.results.length - 1} of ${data.count}`}
+            </li>
+            <li className={f.ellipsis} aria-hidden="true" />
+            <li>
+              <Link
+                to={{
+                pathname,
+                query: {page: Math.min(page + 1, lastPage), page_size: pageSize},
+              }}
+              >
+                {'>'}
+              </Link>
+            </li>
+            <li>
+              <Link to={{pathname, query: {page: lastPage, page_size: pageSize}}}>
+                {'>|'}
+              </Link>
+            </li>
+          </ul>
         </td>
       </tr>
     </tfoot>
@@ -158,13 +176,27 @@ class _SearchBox extends Component {
     const {query} = this.state;
     return (
       <form>
-        <label>
-          {children || 'Filter'}:
-          <input type="text" onChange={this.handleChange} value={query} />
-        </label>
-        <label>
-          <input type="button" onClick={this.handleReset} value="reset" />
-        </label>
+        <div className={f['input-group']}>
+          <label className={f['input-group-label']} htmlFor="table-filter-text">
+            {children || 'Filter'}:
+          </label>
+          <input
+            id="table-filter-text"
+            type="text"
+            onChange={this.handleChange}
+            value={query}
+            placeholder="text filter"
+            className={f['input-group-field']}
+          />
+          <div className={f['input-group-button']}>
+            <input
+              type="button"
+              onClick={this.handleReset}
+              value="Reset"
+              className={f.button}
+            />
+          </div>
+        </div>
       </form>
     );
   }
