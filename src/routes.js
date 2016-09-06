@@ -2,18 +2,6 @@
 import {createElement} from 'react';
 
 import Root from 'Root';
-import Home from 'pages/Home';
-import Entry from 'pages/Entry';
-import Protein from 'pages/Protein';
-import Structure from 'pages/Structure';
-
-import EntrySub from 'subPages/Entry';
-import ProteinSub from 'subPages/Protein';
-import StructureSub from 'subPages/Structure';
-
-import EntrySummary from 'components/Entry/Summary';
-import ProteinSummary from 'components/Protein/Summary';
-import StructureSummary from 'components/Structure/Summary';
 
 import NotFound from 'staticPages/error/NotFound';
 
@@ -39,15 +27,27 @@ const subPagesTransformer = (subPages, main) => subPages
 const subPages = [
   {
     path: '(.*/)*entry(/.*)*',
-    component: EntrySub,
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('subPages/Entry').default);
+      });
+    },
   },
   {
     path: '(.*/)*protein(/.*)*',
-    component: ProteinSub,
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('subPages/Protein').default);
+      });
+    },
   },
   {
     path: '(.*/)*structure(/.*)*',
-    component: StructureSub,
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('subPages/Structure').default);
+      });
+    },
   },
 ];
 
@@ -55,34 +55,58 @@ const subPages = [
 const contentPages = [
   {
     path: '/entry',
-    components: Entry,
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('pages/Entry').default);
+      });
+    },
     childRoutes: [
       ...subPagesTransformer(subPages, 'entry'),
       {
         path: '*',
-        component: EntrySummary,
+        getComponent(_, cb) {
+          require.ensure([], () => {
+            cb(null, require('components/Entry/Summary').default);
+          });
+        },
       },
     ],
   },
   {
     path: '/protein',
-    component: Protein,
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('pages/Protein').default);
+      });
+    },
     childRoutes: [
       ...subPagesTransformer(subPages, 'protein'),
       {
         path: '*',
-        component: ProteinSummary,
+        getComponent(_, cb) {
+          require.ensure([], () => {
+            cb(null, require('components/Protein/Summary').default);
+          });
+        },
       },
     ],
   },
   {
     path: '/structure',
-    component: Structure,
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('pages/Structure').default);
+      });
+    },
     childRoutes: [
       ...subPagesTransformer(subPages, 'structure'),
       {
         path: '*',
-        component: StructureSummary,
+        getComponent(_, cb) {
+          require.ensure([], () => {
+            cb(null, require('components/Structure/Summary').default);
+          });
+        },
       },
     ],
   },
@@ -144,6 +168,10 @@ const otherPages = [
 export default {
   path: '/',
   component: Root,
-  indexRoute: {component: Home},
+  getIndexRoute(_, cb) {
+    require.ensure([], () => {
+      cb(null, {component: require('pages/Home').default});
+    });
+  },
   childRoutes: [...contentPages, ...staticPages, ...otherPages],
 };
