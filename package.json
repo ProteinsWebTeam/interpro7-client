@@ -9,8 +9,8 @@
   "scripts": {
     "test": "npm-run-all test:*",
     "test:flow": "flow check || echo \"flow unable to run, skipping\"",
-    "test:lint": "esw --color --ignore-path .gitignore './**/*.js'",
-    "test:unit": "mocha-webpack --webpack-config webpack.config.test.js --colors --growl --reporter dot 'src/**/*test?(s).js'",
+    "test:lint": "esw --color --ignore-path .gitignore \"./**/*.js\"",
+    "test:unit": "mocha-webpack --webpack-config webpack.config.test.js --colors --growl --reporter dot \"src/**/*test?(s).js\"",
     "test:functional": "echo \"Warning, no functional test specified yet, passing\" && exit 0",
     "dev": "webpack-dev-server",
     "dev:test:lint": "npm run test:lint -- --watch",

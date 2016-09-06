@@ -7,7 +7,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-const WebAppManifestPlugin = require('./plugins/web-app-manifest');
+// const WebAppManifestPlugin = require('./plugins/web-app-manifest');
 // Dashboard
 const Dashboard = require('webpack-dashboard');
 const DashboardPlugin = require('webpack-dashboard/plugin');
@@ -82,7 +82,7 @@ const config = {
       minify: PROD,
     }),
     new HtmlWebpackPlugin(htmlSettings),
-    new WebAppManifestPlugin(),
+    // new WebAppManifestPlugin(),
   ],
   module: {
     loaders: [

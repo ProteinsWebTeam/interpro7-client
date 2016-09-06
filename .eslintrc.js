@@ -78,7 +78,7 @@ const rules = {
   // Require a space around certain keywords
   'keyword-spacing': 1,
   // Disallow mixed 'LF' and 'CRLF' as linebreaks
-  'linebreak-style': [1, 'unix'],
+  'linebreak-style': [0, 'unix'],
   // Specify the maximum depth that blocks can be nested
   'max-depth': [1, 4],
   // Specify the maximum length of a line in your program
