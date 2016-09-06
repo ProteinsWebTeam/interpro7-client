@@ -150,12 +150,16 @@ if (PROD) {
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
   config.devtool = 'source-map';
   config.devServer = {
+    contentBase: [],
     colors: true,
     inline: true,
     hot: true,
     quiet: !!process.env.DASHBOARD,
     historyApiFallback: {
-      index: '/interpro/',
+      index: config.output.publicPath,
+    },
+    watchOptions: {
+      ignored: /node_modules/,
     },
   };
 }

@@ -13,7 +13,7 @@ const PaginationSettings = ({pagination, handleChange}) => (
       <div className={cn(f['medium-12'], f.column)}>
         <label>
           number of returned results by page:
-          <div className={f['row']}>
+          <div className={f.row}>
             <div className={cn(f['medium-11'], f.column)}>
               <input
                 type="range"
