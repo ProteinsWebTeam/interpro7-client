@@ -15,12 +15,12 @@ const Root = (
   <div>
     <Header pathname={location.pathname} />
     <SideMenu position="left" />
-    {children}
+    {children || 'Loading...'}
   </div>
 );
 
 Root.propTypes = {
-  children: T.node.isRequired,
+  children: T.node,
   location: T.object.isRequired,
 };
 

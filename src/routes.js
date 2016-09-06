@@ -1,3 +1,4 @@
+/* globals require: false */
 import {createElement} from 'react';
 
 import Root from 'Root';
@@ -13,11 +14,6 @@ import StructureSub from 'subPages/Structure';
 import EntrySummary from 'components/Entry/Summary';
 import ProteinSummary from 'components/Protein/Summary';
 import StructureSummary from 'components/Structure/Summary';
-
-import About from 'staticPages/About';
-import Help from 'staticPages/Help';
-import Contact from 'staticPages/Contact';
-import Settings from 'staticPages/Settings';
 
 import NotFound from 'staticPages/error/NotFound';
 
@@ -96,19 +92,35 @@ const contentPages = [
 const staticPages = [
   {
     path: 'about',
-    component: About,
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('staticPages/About').default);
+      });
+    },
   },
   {
     path: 'help',
-    component: Help,
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('staticPages/Help').default);
+      });
+    },
   },
   {
     path: 'contact',
-    component: Contact,
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('staticPages/Contact').default);
+      });
+    },
   },
   {
     path: 'settings',
-    component: Settings,
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('staticPages/Settings').default);
+      });
+    },
   },
 ];
 
