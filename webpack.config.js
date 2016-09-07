@@ -34,7 +34,7 @@ const cssSettings = {
 
 // General settings for file processing
 const urlSettings = {
-  name: path.join('static', 'files', `${PROD ? '' : '[name].'}[hash:3].[ext]`),
+  name: `${PROD ? '' : '[name].'}[hash:3].[ext]`,
   limit: 512,
 };
 
@@ -60,25 +60,20 @@ const config = {
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: '/interpro/',
-    filename: path.join('static', 'js', 'app.[chunkhash:3].js'),
-    chunkFilename: path.join('static', 'js', '[id].[chunkhash:3].js'),
+    filename: 'app.[chunkhash:3].js',
+    chunkFilename: '[id].[chunkhash:3].js',
   },
   plugins: [
     // vendor chunk will go in this file
-    new webpack.optimize.CommonsChunkPlugin(
-      'vendor',
-      path.join('static', 'js', 'vendor.[hash:3].js')
-    ),
-    new ExtractTextPlugin(
-      path.join('static', 'css', 'styles.[contenthash:3].css')
-    ),
+    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.[hash:3].js'),
+    new ExtractTextPlugin('styles.[contenthash:3].css'),
     // Generates lots of favicons from source image
     // and injects their path into the head of index.html
     new FaviconsWebpackPlugin({
       // source
       logo: path.join(__dirname, 'src', 'images', 'logo', 'logo_75x75.png'),
       // output file prefix (type, size and ext will be added automatically)
-      prefix: path.join('static', 'files', 'icons', 'icon.[hash:3].'),
+      prefix: 'icon.[hash:3].',
       minify: PROD,
     }),
     new HtmlWebpackPlugin(htmlSettings),

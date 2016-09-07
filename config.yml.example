@@ -1,6 +1,6 @@
 root:
-  website: //localhost:8080
-  API: //192.168.99.100:8000/api
+  website: //localhost:8080/interpro/
+  API: //localhost:8000/interpro/api/
 pages:
   entry:
     plural: entries

@@ -20,15 +20,13 @@ const cssSettings = {
 };
 
 const urlSettings = {
-  name: path.join('static', 'files', `${PROD ? '' : '[name].'}[hash:3].[ext]`),
+  name: `${PROD ? '' : '[name].'}[hash:3].[ext]`,
   limit: 512,
 };
 
 module.exports = {
   plugins: [
-    new ExtractTextPlugin(
-      path.join('static', 'css', 'styles.[contenthash:3].css')
-    ),
+    new ExtractTextPlugin('styles.[contenthash:3].css'),
   ],
   module: {
     loaders: [
