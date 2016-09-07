@@ -106,15 +106,20 @@ const Footer = (
             <li>
               <Link
                 to={{
-                pathname,
-                query: {page: Math.min(page + 1, lastPage), page_size: pageSize},
-              }}
+                  pathname,
+                  query: {
+                    page: Math.min(page + 1, lastPage),
+                    page_size: pageSize,
+                  },
+                }}
               >
                 {'>'}
               </Link>
             </li>
             <li>
-              <Link to={{pathname, query: {page: lastPage, page_size: pageSize}}}>
+              <Link
+                to={{pathname, query: {page: lastPage, page_size: pageSize}}}
+              >
                 {'>|'}
               </Link>
             </li>

@@ -31,3 +31,20 @@ export const resetSettings = (value = null) => ({
   type: types.RESET_SETTINGS,
   value,
 });
+
+export const loadingData = key => ({
+  type: types.LOADING_DATA,
+  key,
+});
+
+export const loadedData = (key, data) => ({
+  type: types.LOADED_DATA,
+  key,
+  data,
+});
+
+export const failedLoadingData = (key, error) => ({
+  type: types.FAILED_LOADING_DATA,
+  key,
+  error,
+});

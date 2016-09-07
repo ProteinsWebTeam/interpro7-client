@@ -3,6 +3,7 @@ import settingsStorage from 'storage/settings';
 import config from 'config';
 
 const DEFAULT_HTTP_PORT = 80;
+
 const getDefaultSettings = () => ({
   pagination: {
     pageSize: config.pagination.pageSize,
@@ -10,6 +11,7 @@ const getDefaultSettings = () => ({
   ui: {},
   cache: {},
   api: {
+    protocol: config.root.API.protocol,
     hostname: config.root.API.hostname,
     port: config.root.API.port || DEFAULT_HTTP_PORT,
     root: config.root.API.pathname,

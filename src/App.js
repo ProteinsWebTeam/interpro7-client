@@ -8,6 +8,7 @@ import {useScroll} from 'react-router-scroll';
 
 import config from 'config';
 import routes from 'routes';
+import loadDataForURL from 'data';
 import createStore from 'store';
 
 const history = useRouterHistory(createBrowserHistory)({
@@ -16,12 +17,7 @@ const history = useRouterHistory(createBrowserHistory)({
 
 const store = createStore();
 
-const handleURLChange = ({pathname, query}) => {
-  console.log(pathname);
-  console.log(query);
-}
-
-history.listen(handleURLChange);
+history.listen(loadDataForURL(store));
 
 // Override scroll behavior, prevents jumping back to the top
 // TODO: define and implement when we actually want to jump back to the top
