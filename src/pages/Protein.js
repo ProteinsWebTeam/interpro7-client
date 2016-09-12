@@ -3,7 +3,6 @@ import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es6';
 import ColorHash from 'color-hash/lib/color-hash';
 
-import loader from 'higherOrder/Loader';
 import pageNavigation from 'components/PageNavigation';
 
 import Table, {Column, Search} from 'components/Table';
@@ -32,7 +31,9 @@ const Protein = (
   } */
 ) => {
   let main;
-  if (Array.isArray(data.results)) {
+  if (!data) {
+    main = 'Loading...';
+  } else if (Array.isArray(data.results)) {
     const maxLength = data.results.reduce((max, result) => (
       Math.max(max, (result.metadata || result).length)
     ), 0);
@@ -144,5 +145,6 @@ Protein.propTypes = {
   }).isRequired,
   children: T.node,
 };
+Protein.dataUrlMatch = /^protein/i;
 
-export default loader()(Protein);
+export default Protein;

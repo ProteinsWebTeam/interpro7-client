@@ -3,9 +3,7 @@ import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es6';
 import ColorHash from 'color-hash/lib/color-hash';
 
-import loader from 'higherOrder/Loader';
 import pageNavigation from 'components/PageNavigation';
-// import animate from 'higherOrder/Animate';
 
 import Table, {Column, Search} from 'components/Table';
 import Title from 'components/Title';
@@ -118,6 +116,6 @@ Entry.propTypes = {
   }).isRequired,
   children: T.node,
 };
+Entry.dataUrlMatch = /^entry/i;
 
-// export default loader()(animate({selector: `.${styles.card}`})(Entry));
-export default loader()(Entry);
+export default Entry;

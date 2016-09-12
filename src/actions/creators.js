@@ -32,19 +32,19 @@ export const resetSettings = (value = null) => ({
   value,
 });
 
-export const loadingData = key => ({
+export const loadingData = urlKey => ({
   type: types.LOADING_DATA,
-  key,
+  urlKey,
 });
 
-export const loadedData = (key, data) => ({
+export const loadedData = (urlKey, data) => ({
   type: types.LOADED_DATA,
-  key,
+  urlKey,
   data,
 });
 
-export const failedLoadingData = (key, error) => ({
+export const failedLoadingData = (urlKey, error) => ({
   type: types.FAILED_LOADING_DATA,
-  key,
+  urlKey,
   error,
 });

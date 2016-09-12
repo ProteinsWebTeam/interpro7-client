@@ -3,7 +3,6 @@ import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es6';
 import ColorHash from 'color-hash/lib/color-hash';
 
-import loader from 'higherOrder/Loader';
 import pageNavigation from 'components/PageNavigation';
 
 import Title from 'components/Title';
@@ -118,5 +117,6 @@ Structure.propTypes = {
   }).isRequired,
   children: T.node,
 };
+Structure.dataUrlMatch = /^structure/i;
 
-export default loader()(Structure);
+export default Structure;

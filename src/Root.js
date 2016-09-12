@@ -7,6 +7,7 @@ import 'styles/global.css';
 
 import Header from 'components/Header';
 import SideMenu from 'components/SideMenu';
+import Loading from 'Loading';
 
 const Root = (
   {children, location}/*: {children: Node, location: {pathname: string}}*/
@@ -14,7 +15,7 @@ const Root = (
   <div>
     <Header pathname={location.pathname} />
     <SideMenu position="left" />
-    {children || 'Loading...'}
+    <Loading>{children}</Loading>
   </div>
 );
 

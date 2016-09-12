@@ -26,17 +26,17 @@ const rules = {
   // Enforces no braces where they can be omitted
   'arrow-body-style': [1, 'as-needed'],
   // Require space before/after arrow function's arrow
-  'arrow-spacing': [1, { 'before': true, 'after': true }],
+  'arrow-spacing': [1, {before: true, after: true}],
   // Treat var statements as if they were block scoped
   'block-scoped-var': 1,
   // Enforce one true brace style
   'brace-style': [1, '1tbs'],
   // Require camel case names
-  'camelcase': [1, { 'properties': 'never' }],
+  'camelcase': [1, {properties: 'never'}],
   // Disallow trailing commas in object literals
   'comma-dangle': [1, 'always-multiline'],
   // Enforce spacing after comma
-  'comma-spacing': [1, { 'before': false, 'after': true }],
+  'comma-spacing': [1, {before: false, after: true}],
   // Enforce one true comma style
   'comma-style': [1, 'last'],
   // Specify the maximum cyclomatic complexity allowed in a program
@@ -56,7 +56,7 @@ const rules = {
   // Enforces consistent newlines before or after dots
   'dot-location': [1, 'property'],
   // Encourages use of dot notation whenever possible
-  'dot-notation': [1, { 'allowKeywords': true }],
+  'dot-notation': [1, {allowKeywords: true}],
   // Enforce newline at the end of file, with no multiple empty lines
   'eol-last': 1,
   // Require the use of === and !==
@@ -70,11 +70,11 @@ const rules = {
   // Enforce importing before anything else
   'import/imports-first': 1,
   // Set a specific indent width for your code
-  'indent': [1, 2, { 'SwitchCase': 1, 'VariableDeclarator': 1 }],
+  'indent': [1, 2, {SwitchCase: 1, VariableDeclarator: 1 }],
   // Specify quote type in JSX attributes
   'jsx-quotes': [1, 'prefer-double'],
   // Enforce spacing style for keys and values in object literal properties
-  'key-spacing': [1, {'mode': 'minimum'}],
+  'key-spacing': [1, {mode: 'minimum'}],
   // Require a space around certain keywords
   'keyword-spacing': 1,
   // Disallow mixed 'LF' and 'CRLF' as linebreaks
@@ -178,11 +178,11 @@ const rules = {
   // Disallow creation of functions within loops
   'no-loop-func': 1,
   // Disallow magic numbers
-  'no-magic-numbers': [1, { 'ignoreArrayIndexes': true, 'ignore': [0, 1, 2] }],
+  'no-magic-numbers': [1, {ignoreArrayIndexes: true, ignore: [0, 1, 2]}],
   // Disallow mixed spaces and tabs for indentation
   'no-mixed-spaces-and-tabs': 2,
   // Disallow multiple empty lines and only one newline at the end
-  'no-multiple-empty-lines': [1, { 'max': 2, 'maxEOF': 1 }],
+  'no-multiple-empty-lines': [1, {max: 2, maxEOF: 1}],
   // Disallow use of multiple spaces
   'no-multi-spaces': 1,
   // Disallow use of multiline strings
@@ -214,7 +214,7 @@ const rules = {
   'no-octal-escape': 2,
   // Disallow reassignment of function parameters
   // Disallow parameter object manipulation
-  'no-param-reassign': [2, { 'props': true }],
+  'no-param-reassign': [2, {props: true}],
   // Disallow string concatenation when using __dirname and __filename
   'no-path-concat': 1,
   // Disallow use of process.env
@@ -257,7 +257,7 @@ const rules = {
   'no-unmodified-loop-condition': 2,
   // Disallow the use of Boolean literals in conditional expressions,
   // also, prefer `a || b` over `a ? a : b`
-  'no-unneeded-ternary': [1, {'defaultAssignment': false}],
+  'no-unneeded-ternary': [1, {defaultAssignment: false}],
   // Disallow unreachable statements after a
   // return, throw, continue, or break statement
   'no-unreachable': 1,
@@ -266,7 +266,11 @@ const rules = {
   // Disallow unused labels
   'no-unused-labels': 1,
   // Disallow declaration of variables that are not used in the code
-  'no-unused-vars': [1, {'args': 'after-used'}],
+  'no-unused-vars': [1, {
+    args: 'after-used',
+    argsIgnorePattern: '^_',
+    varsIgnorePattern: '^_',
+  }],
   // Disallow use of variables before they are defined
   'no-use-before-define': 2,
   // Disallow unnecessary .call() and .apply()
@@ -312,7 +316,7 @@ const rules = {
   // Validate closing bracket location in JSX
   'react/jsx-closing-bracket-location': 1,
   // Disallow spaces inside of curly braces in JSX attributes
-  'react/jsx-curly-spacing': [1, 'never', {'allowMultiline': true}],
+  'react/jsx-curly-spacing': [1, 'never', {allowMultiline: true}],
   // Enforce event handler naming conventions in JSX
   'react/jsx-handler-names': 0,
   // Validate props indentation in JSX
@@ -320,7 +324,7 @@ const rules = {
   // Validate JSX has key prop when in array or iterator
   'react/jsx-key': 2,
   // Prevent usage of .bind() and arrow functions in JSX props
-  'react/jsx-no-bind': [2, {'allowArrowFunctions': true}],
+  'react/jsx-no-bind': [2, {allowArrowFunctions: true}],
   // Prevent duplicate props in JSX
   'react/jsx-no-duplicate-props': 2,
   // Disallow undeclared variables in JSX
@@ -344,7 +348,7 @@ const rules = {
   // Prevent usage of isMounted
   'react/no-is-mounted': 2,
   // Prevent multiple component definition per file
-  'react/no-multi-comp': [1, {'ignoreStateless': true}],
+  'react/no-multi-comp': [1, {ignoreStateless: true}],
   // Prevent using string references
   'react/no-string-refs': 1,
   // Prevent usage of unknown DOM property
@@ -372,7 +376,7 @@ const rules = {
   // Require or disallow use of semicolons instead of ASI
   'semi': [1, 'always'],
   // Enforce spacing before and after semicolons
-  'semi-spacing': [1, {'before': false, 'after': true}],
+  'semi-spacing': [1, {before: false, after: true}],
   // Disallow space before function opening parenthesis
   'space-before-function-paren': [1, 'never'],
   // Disallow spaces inside parentheses
@@ -382,7 +386,7 @@ const rules = {
   // Require spaces before/after unary operators
   'space-unary-ops': 1,
   // Require a space immediately following the // or /* in a comment
-  'spaced-comment': [1, 'always', {'markers': [':', '::'], 'exceptions': ['-']}],
+  'spaced-comment': [1, 'always', {markers: [':', '::'], exceptions: ['-']}],
   // Disallow usage of spacing in template strings
   'template-curly-spacing': [1, 'never'],
   // Disallow comparisons with the value NaN

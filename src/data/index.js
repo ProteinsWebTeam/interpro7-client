@@ -1,6 +1,11 @@
 import {loadingData, loadedData, failedLoadingData} from 'actions/creators';
 import {cachedFetchJSON} from 'utils/cachedFetch';
 
+// Regular expressions
+const STARTING_SLASH = /^\//;
+const MULTIPLE_SLAHES = /\/+/g;
+const PATHS_REQUIRING_DATA = /^\/?(entry|protein|structure)(\/|$)/i;
+
 // Creates a search string from a query object
 const queryObjectToSearchString = obj => {
   const partialSearchString = Object.entries(obj)
@@ -15,23 +20,26 @@ const buildApiUrl = (pathname, query, {pagination, api}) => {
     page_size: pagination.pageSize,
     ...query,
   });
+  const cleanPathname = pathname
+    .replace(STARTING_SLASH, '')
+    .replace(MULTIPLE_SLAHES, '/');
+
   return (
     `${api.protocol}//${api.hostname}:${api.port}` +
-    `${api.root}${pathname}${searchString}`
+    `${api.root}/${cleanPathname}${searchString}`
   );
 };
 
 // Looks at the pathname to see if data needs to be loaded from the API
-const shouldLoadData = pathname => (
-  /^\/(entry|protein|structure)(\/|$)/i.test(pathname)
-);
+const shouldLoadData = pathname => PATHS_REQUIRING_DATA.test(pathname);
 
 export default store => async ({pathname, query, search}) => {
   if (!shouldLoadData(pathname)) return;
-  console.log(store.getState().settings);
+
   const dataKey = pathname + search;
   const dataUrl = buildApiUrl(pathname, query, store.getState().settings);
   console.log(`loading data for ${dataUrl}`);
+
   store.dispatch(loadingData(dataKey));
   try {
     store.dispatch(loadedData(dataKey, await cachedFetchJSON(dataUrl)));
