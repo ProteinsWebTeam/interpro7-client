@@ -2,7 +2,7 @@
 import React, {PropTypes as T} from 'react';
 
 // Global stylesheets loaded here
-import 'foundation-sites/dist/foundation-flex.css';
+import 'styles/foundation';
 import 'styles/global.css';
 
 import Header from 'components/Header';

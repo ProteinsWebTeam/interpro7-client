@@ -1,20 +1,19 @@
 import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
-import cn from 'classnames';
 
 import {changeSettings, resetSettings} from 'actions/creators';
 
-import f from 'foundation-sites/dist/foundation-flex.css';
+import f from 'styles/foundation';
 
 const PaginationSettings = ({pagination, handleChange}) => (
   <form data-category="pagination">
     <h4>Pagination settings</h4>
-    <div className={f.row}>
-      <div className={cn(f['medium-12'], f.column)}>
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
         <label>
           number of returned results by page:
           <div className={f.row}>
-            <div className={cn(f['medium-11'], f.column)}>
+            <div className={f('medium-11', 'column')}>
               <input
                 type="range"
                 min="1"
@@ -26,7 +25,7 @@ const PaginationSettings = ({pagination, handleChange}) => (
                 style={{width: '100%'}}
               />
             </div>
-            <div className={cn(f['medium-1'], f.column)}>
+            <div className={f('medium-1', 'column')}>
               {pagination.pageSize}
             </div>
           </div>
@@ -63,8 +62,8 @@ CacheSettings.propTypes = {
 const APISettings = ({api, handleChange}) => (
   <form data-category="api">
     <h4>API settings</h4>
-    <div className={f.row}>
-      <div className={cn(f['medium-4'], f.columns)}>
+    <div className={f('row')}>
+      <div className={f('medium-4', 'columns')}>
         <label>
           Hostname:
           <input
@@ -75,7 +74,7 @@ const APISettings = ({api, handleChange}) => (
           />
         </label>
       </div>
-      <div className={cn(f['medium-4'], f.columns)}>
+      <div className={f('medium-4', 'columns')}>
         <label>
           Port:
           <input
@@ -87,7 +86,7 @@ const APISettings = ({api, handleChange}) => (
           />
         </label>
       </div>
-      <div className={cn(f['medium-4'], f.columns)}>
+      <div className={f('medium-4', 'columns')}>
         <label>
           Root:
           <input
@@ -123,7 +122,7 @@ const Settings = (
     <UISettings ui={ui} handleChange={changeSettings} />
     <CacheSettings cache={cache} handleChange={changeSettings} />
     <APISettings api={api} handleChange={changeSettings} />
-    <button onClick={resetSettings} className={f.button}>
+    <button onClick={resetSettings} className={f('button')}>
       Reset settings to default values
     </button>
   </main>

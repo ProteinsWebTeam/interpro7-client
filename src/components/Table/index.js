@@ -5,11 +5,10 @@ import {Link, withRouter} from 'react-router/es6';
 import {connect} from 'react-redux';
 
 import debounce from 'lodash-es/debounce';
-import cn from 'classnames';
 
 import styles from 'styles/blocks.css';
 import tblStyles from 'styles/tables.css';
-import f from 'foundation-sites/dist/foundation-flex.css';
+import f from 'styles/foundation';
 
 const DEBOUNCE_RATE = 500;// In ms
 
@@ -79,7 +78,7 @@ const Footer = (
       <tr>
         <td colSpan={width}>
           <ul
-            className={cn(f.pagination, f['text-center'])}
+            className={f('pagination', 'text-center')}
             role="navigation"
             aria-label="Pagination"
           >
@@ -98,11 +97,11 @@ const Footer = (
                 {'<'}
               </Link>
             </li>
-            <li className={f.ellipsis} aria-hidden="true" />
-            <li className={f.current}>
+            <li className={f('ellipsis')} aria-hidden="true" />
+            <li className={f('current')}>
               {`${index}-${index + data.results.length - 1} of ${data.count}`}
             </li>
-            <li className={f.ellipsis} aria-hidden="true" />
+            <li className={f('ellipsis')} aria-hidden="true" />
             <li>
               <Link
                 to={{
@@ -181,8 +180,8 @@ class _SearchBox extends Component {
     const {query} = this.state;
     return (
       <form>
-        <div className={f['input-group']}>
-          <label className={f['input-group-label']} htmlFor="table-filter-text">
+        <div className={f('input-group')}>
+          <label className={f('input-group-label')} htmlFor="table-filter-text">
             {children || 'Filter'}:
           </label>
           <input
@@ -191,14 +190,14 @@ class _SearchBox extends Component {
             onChange={this.handleChange}
             value={query}
             placeholder="text filter"
-            className={f['input-group-field']}
+            className={f('input-group-field')}
           />
-          <div className={f['input-group-button']}>
+          <div className={f('input-group-button')}>
             <input
               type="button"
               onClick={this.handleReset}
               value="Reset"
-              className={f.button}
+              className={f('button')}
             />
           </div>
         </div>
