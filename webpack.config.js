@@ -139,7 +139,9 @@ if (PROD) {
   config.plugins.push(new webpack.optimize.UglifyJsPlugin());
   // This is needed to trigger React's optimizations for prod
   config.plugins.push(new webpack.DefinePlugin({
-    'process.env.NODE_ENV': '"production"',
+    'process.env': {
+      NODE_ENV: JSON.stringify('production'),
+    },
   }));
 } else {
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
