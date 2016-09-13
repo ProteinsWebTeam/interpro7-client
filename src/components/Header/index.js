@@ -3,12 +3,15 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router/es6';
 
 import {openSideNav} from 'actions/creators';
-
+import cn from 'classnames/bind';
 import Breadcrumb from '../Breadcrumb';
 
 import styles from './style.css';
 import logo from 'images/logo/logo_75x75.png';
+import f from 'foundation-sites/dist/foundation.css';
 
+cn.bind(f);
+cn.bind(styles);
 
 // Only does this in a browser
 // Logic to attach the scaling of the banner to the scroll position
@@ -90,7 +93,8 @@ const Ebi = () => (
 );
 
 const HeaderBackground = () => (
-  <div className={styles.header_background} />
+  // <div className={styles.header_background} />
+  <div/>
 );
 
 const menuItems = {
@@ -196,15 +200,30 @@ MediumLevel.propTypes = {
 };
 
 const Header = ({pathname}) => (
-  <header className={styles.header}>
+  // <header className={styles.header}>
+
+  <div className={styles.local_masthead}>
+  <header>
+
+  <div className={f.row}>
+    <div className={cn('columns', 'large-12')}>
+
     <Ebi />
-    <div className={styles.container}>
+
+    <div >
       <HeaderBackground />
       <TopLevel />
       <MediumLevel pageType={pathname.split('/').filter(x => x)[0]}/>
     </div>
-    <Breadcrumb pathname={pathname} />
+
+    </div></div>
+
+
   </header>
+
+    <Breadcrumb pathname={pathname} />
+    
+    </div>
 );
 Header.propTypes = {
   pathname: T.string.isRequired,

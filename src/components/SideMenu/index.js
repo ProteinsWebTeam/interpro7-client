@@ -28,7 +28,7 @@ const SideMenu = ({sideNav: visible, position = 'left', closeSideNav}) => {
         aria-hidden={!visible}
       >
         <ul>Menu
-          <li>menu content</li>
+          <li><a href="#">menu content</a></li>
         </ul>
       </aside>
       <div
