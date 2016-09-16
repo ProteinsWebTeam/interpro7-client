@@ -16,8 +16,14 @@ export const closeSideNav = () => ({
 });
 
 const parseValue = target => {
-  if (target.type === 'range') return parseFloat(target.value);
-  return target.value;
+  switch (target.type) {
+    case 'range':
+      return parseFloat(target.value);
+    case 'checkbox':
+      return target.checked;
+    default:
+      return target.value;
+  }
 };
 
 export const changeSettings = event => ({

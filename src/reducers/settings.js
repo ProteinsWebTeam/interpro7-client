@@ -9,7 +9,9 @@ const getDefaultSettings = () => ({
     pageSize: config.pagination.pageSize,
   },
   ui: {},
-  cache: {},
+  cache: {
+    enabled: config.cache.enabled,
+  },
   api: {
     protocol: config.root.API.protocol,
     hostname: config.root.API.hostname,

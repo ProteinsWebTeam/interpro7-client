@@ -10,3 +10,5 @@ pages:
   pathway: null
 pagination:
   pageSize: 10
+cache:
+  enabled: true

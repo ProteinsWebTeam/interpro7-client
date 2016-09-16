@@ -37,12 +37,18 @@ export default store => async ({pathname, query, search}) => {
   if (!shouldLoadData(pathname)) return;
 
   const dataKey = pathname + search;
-  const dataUrl = buildApiUrl(pathname, query, store.getState().settings);
+  const {settings} = store.getState();
+  const dataUrl = buildApiUrl(pathname, query, settings);
   console.log(`loading data for ${dataUrl}`);
 
   store.dispatch(loadingData(dataKey));
   try {
-    store.dispatch(loadedData(dataKey, await cachedFetchJSON(dataUrl)));
+    store.dispatch(
+      loadedData(
+        dataKey,
+        await cachedFetchJSON(dataUrl, {useCache: settings.cache.enabled})
+      )
+    );
   } catch (err) {
     store.dispatch(failedLoadingData(dataKey, err));
   }
