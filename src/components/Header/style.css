@@ -120,40 +120,36 @@
 }
 
 .hamb_line {
-  stroke: var(--colors-nearly-black);
-  transition: transform 0.5s ease-in-out;
+  stroke-width:1.9px;/*svg style*/
+  stroke: var(--colors-nearly-black);/*svg style*/
+  stroke-linecap:round;/*svg style*/
   transform: rotate(0) translateY(0);
   transform-origin: 50% 50%;
 }
 
-.hamb_1 {
+.hamb_1, .hamb_2, .hamb_3 {
   composes: hamb_line;
 }
 
+.hamb_1_open, .hamb_2_open, .hamb_3_open {
+  composes: hamb_line;
+}
+.hamb_1, .hamb_2, .hamb_3 { transition: all .3s;}/*otherwise doesn't loop*/
 .hamb_1_open {
-  composes: hamb_line;
-
-  transform: rotate(45deg) translate(4px);
+  transform: rotate(45deg) translate(2px, 2px);
+  transition: transform 0.3s ease-in-out;
 }
 
-.hamb_2 {
-  composes: hamb_line;
+ .hamb_2_open {
+  /*transform: rotate(0) translate(-14px);*/
+  opacity:0;
+  transition: opacity .3s;
 }
 
-.hamb_2_open {
-  composes: hamb_line;
-
-  transform: rotate(0) translate(-14px);
-}
-
-.hamb_3 {
-  composes: hamb_line;
-}
 
 .hamb_3_open {
-  composes: hamb_line;
-
-  transform: rotate(-45deg) translate(4px);
+  transform: rotate(-45deg) translate(2px, -2px);
+  transition: transform 0.3s ease-in-out;
 }
 
 .medium_level {
