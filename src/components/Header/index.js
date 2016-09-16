@@ -4,7 +4,6 @@ import {Link} from 'react-router/es6';
 
 import {openSideNav} from 'actions/creators';
 import cn from 'classnames/bind';
-import Breadcrumb from '../Breadcrumb';
 
 import styles from './style.css';
 import logo from 'images/logo/logo_75x75.png';
@@ -118,20 +117,20 @@ const _HamburgerBtn = ({openSideNav, open, svg}) => {
   return (
     <span>
       <svg
-        viewBox="0 0 12 10" width="1.5em" height="1.5em"
+        viewBox="0 0 12 10" width="2.5em" height="2.5em"
         className={styles.top_level_hamburger}
         onClick={openSideNav}
       >
         <line
-          x1="1" y1="2" x2="11" y2="2"
+          x1="1" y1="2" x2="10" y2="2"
           className={open ? styles.hamb_1_open : styles.hamb_1}
         />
         <line
-          x1="1" y1="5" x2="11" y2="5"
+          x1="1" y1="5" x2="10" y2="5"
           className={open ? styles.hamb_2_open : styles.hamb_2}
         />
         <line
-          x1="1" y1="8" x2="11" y2="8"
+          x1="1" y1="8" x2="10" y2="8"
           className={open ? styles.hamb_3_open : styles.hamb_3}
         />
       </svg>
@@ -220,9 +219,6 @@ const Header = ({pathname}) => (
 
 
   </header>
-
-    <Breadcrumb pathname={pathname} />
-    
     </div>
 );
 Header.propTypes = {
