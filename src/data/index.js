@@ -20,7 +20,7 @@ const buildApiUrl = (pathname, query, {pagination, api}) => {
     page_size: pagination.pageSize,
     ...query,
   });
-  const cleanPathname = pathname
+  const cleanPathname = `${pathname}/`
     .replace(STARTING_SLASH, '')
     .replace(MULTIPLE_SLAHES, '/');
 
