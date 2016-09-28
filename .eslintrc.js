@@ -1,4 +1,11 @@
+const path = require('path');
+
 const parser = 'babel-eslint';
+
+const parserOptions = {
+  ecmaVersion: 2017,
+  sourceType: 'module',
+};
 
 const plugins = ['react', 'import'];
 
@@ -10,7 +17,11 @@ const settings = {
     '\.(json|yml|css)$',
     '\.(jpe?g|png|gif|svg)$'
   ],
-  'import/resolver': 'webpack',
+  'import/resolver': {
+    webpack: {
+      config: path.resolve('.', 'webpack', 'config.js'),
+    },
+  },
 };
 
 const env = {
@@ -406,5 +417,5 @@ const rules = {
 };
 
 module.exports = {
-  parser, plugins, extends: extending, settings, env, rules,
+  parser, parserOptions, plugins, extends: extending, settings, env, rules,
 };

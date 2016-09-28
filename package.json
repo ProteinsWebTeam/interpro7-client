@@ -10,9 +10,9 @@
     "test": "npm-run-all test:*",
     "test:flow": "flow check || echo \"flow unable to run, skipping\"",
     "test:lint": "esw --color --ignore-path .gitignore \"./**/*.js\"",
-    "test:unit": "mocha-webpack --webpack-config webpack.config.test.js --colors --growl --reporter dot \"src/**/*test?(s).js\"",
+    "test:unit": "NODE_ENV=test mocha-webpack --webpack-config webpack/config.js --growl --reporter dot \"src/**/*test?(s).js\"",
     "test:functional": "echo \"Warning, no functional test specified yet, passing\" && exit 0",
-    "dev": "webpack-dev-server",
+    "dev": "webpack-dev-server --config webpack/config.js",
     "dev:test": "npm-run-all -rp dev:test:*",
     "dev:test:lint": "npm run test:lint -- --watch",
     "dev:test:unit": "npm run test:unit -- --watch",
@@ -20,14 +20,40 @@
     "bundle": "webpack --progress",
     "predeploy": "npm-run-all test clean",
     "deploy": "npm run bundle",
-    "deploy:staging": "npm run deploy",
-    "deploy:production": "NODE_ENV=production npm run deploy",
+    "deploy:staging": "npm run deploy -- -- --config webpack/config.js",
+    "deploy:production": "NODE_ENV=production npm run deploy -- -- --config webpack/config.js",
     "start": "npm-run-all -rp dev:test dev",
     "stats": "webpack --profile --json > .stats/stats.json"
   },
   "contributors": [
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)"
   ],
+  "babel": {
+    "presets": [
+      [
+        "es2015",
+        {
+          "modules": "commonjs"
+        }
+      ],
+      "es2016",
+      "es2017",
+      "stage-2",
+      "react"
+    ],
+    "plugins": [
+      "transform-react-constant-elements",
+      "transform-runtime",
+      "transform-react-jsx-source"
+    ],
+    "env": {
+      "production": {
+        "presets": [
+          "babili"
+        ]
+      }
+    }
+  },
   "dependencies": {
     "color-hash": "^1.0.3",
     "foundation-sites": "^6.2.3",
@@ -44,7 +70,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.14.0",
-    "babel-eslint": "^6.1.2",
+    "babel-eslint": "^7.0.0",
     "babel-loader": "^6.2.5",
     "babel-plugin-transform-react-constant-elements": "^6.9.1",
     "babel-plugin-transform-react-jsx-source": "^6.9.0",
@@ -61,7 +87,7 @@
     "classnames": "^2.2.5",
     "css-loader": "^0.25.0",
     "empty": "^0.10.1",
-    "eslint": "^3.6.0",
+    "eslint": "^3.6.1",
     "eslint-import-resolver-webpack": "^0.6.0",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-react": "^6.3.0",
@@ -77,7 +103,7 @@
     "img-loader": "^1.3.1",
     "json-loader": "^0.5.4",
     "jsx-chai": "^4.0.0",
-    "mocha": "^3.0.2",
+    "mocha": "^3.1.0",
     "mocha-webpack": "^0.6.0",
     "node-sass": "^3.10.0",
     "npm-run-all": "^3.1.0",
