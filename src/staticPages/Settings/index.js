@@ -124,7 +124,7 @@ APISettings.propTypes = {
 
 const Settings = (
   {
-    settings: {pagination = {}, ui = {}, cache = {}, api = {}},
+    settings: {pagination = {}, ui = {}, cache = {}, api = {}, ebi = {}},
     changeSettings,
     resetSettings,
   }
@@ -149,6 +149,7 @@ Settings.propTypes = {
     ui: T.object.isRequired,
     cache: T.object.isRequired,
     api: T.object.isRequired,
+    ebi: T.object.isRequired,
   }).isRequired,
   changeSettings: T.func.isRequired,
   resetSettings: T.func.isRequired,

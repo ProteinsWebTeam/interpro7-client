@@ -9,7 +9,16 @@ const output = require('./config/output');
 const plugins = require('./config/plugins');
 const loaders = require('./config/loaders');
 const resolve = require('./config/resolve');
-
+const yaml = require('js-yaml');
+let port = 8080;
+const fs = require('fs');
+const data = fs.readFileSync('config.yml');
+const iprConfig = yaml.safeLoad(data);
+try {
+  port = iprConfig.root.website.match(/.+:(\d+).*/)[1];
+} catch (err) {
+  throw (err);
+}
 const PROD = process.env.NODE_ENV === 'production';
 
 const config = {
@@ -46,6 +55,7 @@ if (!PROD) {
     contentBase: '',
     colors: true,
     inline: true,
+    port,
     hot: true,
     quiet: !!process.env.DASHBOARD,
     historyApiFallback: {
