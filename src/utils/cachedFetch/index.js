@@ -21,8 +21,9 @@ const cachedFetch = (url, options = {}) => {
   });
 };
 
-export const cachedFetchJSON = (url, options) => (
-  cachedFetch(url, options).then(r => r.json())
-);
+export const cachedFetchJSON = async (url, options) => {
+  const r = await cachedFetch(url, options);
+  return await r.json();
+};
 
 export default cachedFetch;
