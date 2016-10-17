@@ -4,7 +4,7 @@ import {cachedFetchJSON} from 'utils/cachedFetch';
 // Regular expressions
 const STARTING_SLASH = /^\//;
 const MULTIPLE_SLAHES = /\/+/g;
-const PATHS_REQUIRING_DATA = /^\/?(entry|protein|structure)(\/|$)/i;
+const PATHS_REQUIRING_DATA = /^\/?(entry|protein|structure|search)(\/|$)/i;
 
 // Creates a search string from a query object
 const queryObjectToSearchString = obj => {
@@ -30,6 +30,31 @@ const buildApiUrl = (pathname, query, {pagination, api}) => {
   );
 };
 
+// Creates a URL to query the EBIsearch API
+const ebi_parameters={
+  format: 'json',
+  fields: 'PDB,UNIPROT,description',
+};
+const buildEBISearchUrl = (pathname, query, {pagination, ebi}) => {
+  const mapped ={},
+    ebi_keys_map = {
+      page:"start",
+      page_size: "size",
+      search:"query"
+    };
+  Object.keys(query).map(key=>{
+    mapped[ebi_keys_map[key]] = key=="page"?(query.page-1)*query.page_size:query[key]
+  });
+  const searchString = queryObjectToSearchString({
+    size: pagination.pageSize,
+    ...mapped, ...ebi_parameters
+  });
+  return (
+    `${ebi.protocol}//${ebi.hostname}:${ebi.port}` +
+    `${ebi.root}${searchString}`
+  );
+};
+
 // Looks at the pathname to see if data needs to be loaded from the API
 const shouldLoadData = pathname => PATHS_REQUIRING_DATA.test(pathname);
 
@@ -38,7 +63,9 @@ export default store => async ({pathname, query, search}) => {
 
   const dataKey = pathname + search;
   const {settings} = store.getState();
-  const dataUrl = buildApiUrl(pathname, query, settings);
+  const dataUrl = (pathname=='/search')?
+    buildEBISearchUrl(pathname, query, settings):
+    buildApiUrl(pathname, query, settings);
   console.log(`loading data for ${dataUrl}`);
 
   store.dispatch(loadingData(dataKey));

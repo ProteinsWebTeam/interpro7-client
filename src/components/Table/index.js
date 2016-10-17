@@ -9,11 +9,8 @@ import _Column from './Column';
 import _Row from './Row';
 import _Footer from './Footer';
 
-import styles from 'styles/blocks.css';
-import tblStyles from 'styles/tables.css';
-
 const Table = (
-  {data, query, pathname, children}
+  {data, query, pathname, title, children}
   /*: {
    data: Object,
    query: Object,
@@ -28,7 +25,8 @@ const Table = (
   const search = _children.find(child => child.type === _Search);
 
   return (
-    <div className={styles.card}>
+    <div>
+      {title&&<h4>{title}</h4>}
       {
         search &&
         <_SearchBox
@@ -37,16 +35,16 @@ const Table = (
           pathname={pathname}
         />
       }
-      <table className={tblStyles.table}>
+      <table>
         <_Header columns={columns} />
         <_Body rows={data.results} columns={columns} />
-        <_Footer
-          data={data}
-          pagination={query}
-          pathname={pathname}
-          width={columns.length}
-        />
       </table>
+      <_Footer
+        data={data}
+        pagination={query}
+        pathname={pathname}
+        width={columns.length}
+      />
     </div>
   );
 };

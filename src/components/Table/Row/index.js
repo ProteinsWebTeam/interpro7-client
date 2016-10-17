@@ -6,10 +6,10 @@ const defaultRenderer = (value/*: string | number */) => (
 
 const Row = ({row, columns}/*: {row: Object, columns: Array<Object>}*/) => (
   <tr>
-    {columns.map(({accessKey, renderer = defaultRenderer}) => (
+    {columns.map(({accessKey, cellStyle, renderer = defaultRenderer}) => (
       <td
         key={accessKey}
-        style={{width: accessKey === 'length' ? '100%' : 'auto'}}
+        style={cellStyle}
       >
         {renderer(row[accessKey], row)}
       </td>

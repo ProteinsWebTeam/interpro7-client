@@ -9,6 +9,21 @@ class SearchByText extends Component {
     super(props);
     this.state = {value: ''};
   }
+  routerPush = () => {
+    const {pageSize} = this.props,
+      pathname="/search";
+    const query/*: {page: number, page_size: number, search?: string} */ = {
+      page: 1,
+      page_size: pageSize,
+    };
+    const {value: search} = this.state;
+    if (search) query.search = search;
+    this.props.router.push({pathname, query});
+  };
+
+  componentWillReceiveProps({query = ''}) {
+    this.setState({query});
+  }
 
   handleChange = (event) => {
     this.setState({value: event.target.value});
@@ -47,7 +62,7 @@ class SearchByText extends Component {
                 <div className={f("large-12", "columns", "small", "search-eg")} onClick={this.handleClick}> e.g.
                   <Example value="IPR020422"/>,
                   <Example value="kinase" />,
-                  <Example value="P51587" />,
+                  <Example value="Q9ZZT7" />,
                   <Example value="PF02932" />,
                   <Example value="GO:0007165"/>
                 </div>
@@ -55,7 +70,9 @@ class SearchByText extends Component {
 
               <div className={f("row")} style={{marginTop: "1em"}}>
                 <div className={f("large-12", "columns")}>
-                  <a href="#" className={f("button")}>Search</a>
+                  <a className={f("button")}
+                     onClick={this.routerPush}
+                  >Search</a>
                   <a className={f("secondary", "hollow", "button")}
                      onClick={this.handleReset}
                   >Clear</a>
@@ -73,6 +90,7 @@ const Example = ({value})=> (
   <a style={{cursor: "pointer"}} data-search={value}> {value}</a>
 );
 export default withRouter(
+  // connect(state => ({pageSize: state.settings.pagination.pageSize}))(SearchByText)
   connect(({settings: {pagination: {pageSize}}}) => ({pageSize}))(SearchByText)
 );
 
