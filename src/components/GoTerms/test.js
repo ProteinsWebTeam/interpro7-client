@@ -27,7 +27,8 @@ describe('External links', () => {
           biological_process: [
             {name: 'proteolysis', id: 'GO:0006508'},
           ],
-        }} />
+        }}
+        />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
         <div className={styles.card}>
@@ -72,7 +73,8 @@ describe('External links', () => {
           biological_process: [
             {name: 'nucleic acid binding', id: 'GO:0003676'},
           ],
-        }} />
+        }}
+        />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
         <div className={styles.card}>
@@ -102,7 +104,8 @@ describe('External links', () => {
           molecular_function: [],
           cellular_component: [],
           biological_process: [],
-        }} />
+        }}
+        />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
         <div className={styles.card}>

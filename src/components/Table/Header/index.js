@@ -4,7 +4,9 @@ const Header = ({columns}/*: {columns: Array<Object>} */) => (
   <thead>
   <tr>
     {columns.map(({accessKey, name, headerStyle, children}) => (
-      <th key={accessKey} style={headerStyle}>{children || name || accessKey}</th>
+      <th key={accessKey} style={headerStyle}>
+        {children || name || accessKey}
+      </th>
     ))}
   </tr>
   </thead>

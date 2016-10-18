@@ -26,7 +26,7 @@ const Table = (
 
   return (
     <div>
-      {title&&<h4>{title}</h4>}
+      {title && <h4>{title}</h4>}
       {
         search &&
         <_SearchBox
@@ -43,7 +43,6 @@ const Table = (
         data={data}
         pagination={query}
         pathname={pathname}
-        width={columns.length}
       />
     </div>
   );
@@ -52,6 +51,7 @@ Table.propTypes = {
   data: T.object.isRequired,
   query: T.object.isRequired,
   pathname: T.string.isRequired,
+  title: T.string,
   children: T.any,
 };
 

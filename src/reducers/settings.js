@@ -1,5 +1,5 @@
 import {CHANGE_SETTINGS, RESET_SETTINGS} from 'actions/types';
-import settingsStorage from 'storage/settings';
+// import settingsStorage from 'storage/settings';
 import config from 'config';
 
 const DEFAULT_HTTP_PORT = 80;
@@ -25,9 +25,9 @@ const getDefaultSettings = () => ({
     root: config.root.API.pathname,
   },
 });
-//TODO: find a way to use the default when this has been changed in code
+// TODO: find a way to use the default when this has been changed in code
 export default (
-  state = //settingsStorage.getValue() ||
+  state = // settingsStorage.getValue() ||
   getDefaultSettings(),
   action
 ) => {

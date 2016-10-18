@@ -31,23 +31,25 @@ const buildApiUrl = (pathname, query, {pagination, api}) => {
 };
 
 // Creates a URL to query the EBIsearch API
-const ebi_parameters={
+const ebiParameters = {
   format: 'json',
   fields: 'PDB,UNIPROT,description',
 };
 const buildEBISearchUrl = (pathname, query, {pagination, ebi}) => {
-  const mapped ={},
-    ebi_keys_map = {
-      page:"start",
-      page_size: "size",
-      search:"query"
+  const mapped = {},
+    ebiKeysMap = {
+      page: 'start',
+      page_size: 'size',
+      search: 'query',
     };
-  Object.keys(query).map(key=>{
-    mapped[ebi_keys_map[key]] = key=="page"?(query.page-1)*query.page_size:query[key]
+  Object.keys(query).forEach(key => {
+    mapped[ebiKeysMap[key]] = key === 'page' ?
+      (query.page - 1) * query.page_size :
+      query[key];
   });
   const searchString = queryObjectToSearchString({
     size: pagination.pageSize,
-    ...mapped, ...ebi_parameters
+    ...mapped, ...ebiParameters,
   });
   return (
     `${ebi.protocol}//${ebi.hostname}:${ebi.port}` +
@@ -63,8 +65,8 @@ export default store => async ({pathname, query, search}) => {
 
   const dataKey = pathname + search;
   const {settings} = store.getState();
-  const dataUrl = (pathname=='/search')?
-    buildEBISearchUrl(pathname, query, settings):
+  const dataUrl = (pathname === '/search') ?
+    buildEBISearchUrl(pathname, query, settings) :
     buildApiUrl(pathname, query, settings);
   console.log(`loading data for ${dataUrl}`);
 

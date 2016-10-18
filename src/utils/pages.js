@@ -20,7 +20,7 @@ export const plural/*: Array<string> */ = Object.entries(config.pages)
 
 /**
  * Takes the text in singular of the page and returns the text in plural
- * @param s text in singular
+ * @param {string}s text in singular
  * @returns {*} text in plural
  */
 export const toPlural = (s/*: string */) => {

@@ -9,9 +9,13 @@ class SearchByText extends Component {
     super(props);
     this.state = {value: ''};
   }
+
+  componentWillReceiveProps({query = ''}) {
+    this.setState({query});
+  }
   routerPush = () => {
     const {pageSize} = this.props,
-      pathname="/search";
+      pathname = '/search';
     const query/*: {page: number, page_size: number, search?: string} */ = {
       page: 1,
       page_size: pageSize,
@@ -21,45 +25,43 @@ class SearchByText extends Component {
     this.props.router.push({pathname, query});
   };
 
-  componentWillReceiveProps({query = ''}) {
-    this.setState({query});
-  }
-
   handleChange = (event) => {
     this.setState({value: event.target.value});
   };
   handleClick = (event) => {
-    const value=event.target.dataset.search;
-    if (value)
-      this.setState({value});
+    const value = event.target.dataset.search;
+    if (value) this.setState({value});
   };
   handleReset = () => this.setState({value: ''});
 
   render() {
     const {value} = this.state;
     return (
-    <div className={f("row")}>
-      <div className={f("large-12", "columns")}>
+    <div className={f('row')}>
+      <div className={f('large-12', 'columns')}>
         <form>
-          <fieldset className={f("fieldset")}>
+          <fieldset className={f('fieldset')}>
             <legend>Search InterPro</legend>
-            <div className={f("secondary", "callout")}>
+            <div className={f('secondary', 'callout')}>
 
-              <div className={f("row")}>
-                <div className={f("large-12", "columns")}>
+              <div className={f('row')}>
+                <div className={f('large-12', 'columns')}>
                   <label>Sequences, family, domains or GO terms</label>
                   <input
                     type="text"
                     onChange={this.handleChange}
                     value={value}
-                    placeholder="Enter your search"/>
+                    placeholder="Enter your search"
+                  />
                 </div>
 
 
               </div>
 
-              <div className={f("row")}>
-                <div className={f("large-12", "columns", "small", "search-eg")} onClick={this.handleClick}> e.g.
+              <div className={f('row')}>
+                <div className={f('large-12', 'columns', 'small', 'search-eg')}
+                  onClick={this.handleClick}
+                > e.g.
                   <Example value="IPR020422"/>,
                   <Example value="kinase" />,
                   <Example value="Q9ZZT7" />,
@@ -68,13 +70,13 @@ class SearchByText extends Component {
                 </div>
               </div>
 
-              <div className={f("row")} style={{marginTop: "1em"}}>
-                <div className={f("large-12", "columns")}>
-                  <a className={f("button")}
-                     onClick={this.routerPush}
+              <div className={f('row')} style={{marginTop: '1em'}}>
+                <div className={f('large-12', 'columns')}>
+                  <a className={f('button')}
+                    onClick={this.routerPush}
                   >Search</a>
-                  <a className={f("secondary", "hollow", "button")}
-                     onClick={this.handleReset}
+                  <a className={f('secondary', 'hollow', 'button')}
+                    onClick={this.handleReset}
                   >Clear</a>
                 </div>
               </div>
@@ -84,14 +86,23 @@ class SearchByText extends Component {
         </form>
       </div>
     </div>
-    )};
+    );}
 }
-const Example = ({value})=> (
-  <a style={{cursor: "pointer"}} data-search={value}> {value}</a>
+SearchByText.propTypes = {
+  pageSize: T.number,
+  router: T.object,
+  value: T.string,
+};
+
+const Example = ({value}) => (
+  <a style={{cursor: 'pointer'}} data-search={value}> {value}</a>
 );
+Example.propTypes = {
+  value: T.string,
+};
 export default withRouter(
-  // connect(state => ({pageSize: state.settings.pagination.pageSize}))(SearchByText)
-  connect(({settings: {pagination: {pageSize}}}) => ({pageSize}))(SearchByText)
+  connect(({settings: {pagination: {pageSize}}}) =>
+    ({pageSize}))(SearchByText)
 );
 
 // export default SearchByText;
