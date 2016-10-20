@@ -48,7 +48,6 @@ class SearchBox extends Component {
   };
 
   render() {
-    const {search: {children}} = this.props;
     const {query} = this.state;
     return (
       <div className={f('float-right')} style={{position: 'relative'}} >

@@ -111,7 +111,7 @@ const Entry = (
     }
   } else {
     // TODO: Improve message and navigation out of it.
-    main=<div>There are no entries with the exiting filters.</div>
+    main = <div>There are no entries with the exiting filters.</div>;
   }
   return <main>{main}</main>;
 };

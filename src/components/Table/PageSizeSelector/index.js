@@ -18,7 +18,7 @@ class PageSizeSelector extends Component{
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.applyAll = this.applyAll.bind(this);
-    this.state = {pageSize: props.pageSize}
+    this.state = {pageSize: props.pageSize};
   }
   handleChange(event) {
     console.log(this.props.pageSize, event.target.value);
@@ -31,7 +31,7 @@ class PageSizeSelector extends Component{
       },
     });
   }
-  applyAll(event){
+  applyAll(){
     this.props.changePageSize(this.state.pageSize);
   }
   render(){
@@ -50,8 +50,8 @@ class PageSizeSelector extends Component{
         </select> results
         <a className=
              {f('icon', 'icon-functional', 'primary', 'apply-all')}
-           data-icon="s"
-           onClick={this.applyAll}
+          data-icon="s"
+          onClick={this.applyAll}
         > <div>Apply to all tables</div></a>
       </div>
     );

@@ -39,7 +39,7 @@ const Protein = (
     const maxLength = data.results.reduce((max, result) => (
       Math.max(max, (result.metadata || result).length)
     ), 0);
-    console.log("url",dataUrl);
+    console.log('url', dataUrl);
     main = (
       <Table
         data={data}
@@ -48,7 +48,11 @@ const Protein = (
       >
         <Exporter>
           <ul>
-            <li><a href={`${dataUrl}&format=json`} download="proteins.json">JSON</a><br/></li>
+            <li>
+                <a
+                  href={`${dataUrl}&format=json`}
+                  download="proteins.json"
+                >JSON</a><br/></li>
             <li><a href={`${dataUrl}`}>Open in API web view</a></li>
           </ul>
         </Exporter>
