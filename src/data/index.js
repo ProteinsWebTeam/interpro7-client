@@ -75,6 +75,7 @@ export default store => async ({pathname, query, search}) => {
     store.dispatch(
       loadedData(
         dataKey,
+        dataUrl,
         await cachedFetchJSON(dataUrl, {useCache: settings.cache.enabled})
       )
     );

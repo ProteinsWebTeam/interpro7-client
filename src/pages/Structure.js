@@ -6,7 +6,7 @@ import ColorHash from 'color-hash/lib/color-hash';
 import pageNavigation from 'components/PageNavigation';
 
 import Title from 'components/Title';
-import Table, {Column, Search} from 'components/Table';
+import Table, {Column, Search, PageSizeSelector} from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
 
@@ -37,6 +37,7 @@ const Structure = (
         query={query}
         pathname={pathname}
       >
+        <PageSizeSelector/>
         <Search>Search structures</Search>
         <Column
           accessKey="accession"

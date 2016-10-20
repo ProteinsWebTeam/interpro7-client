@@ -1,7 +1,7 @@
 /* eslint-env node */
 /* eslint no-param-reassign: 0 */
 /* eslint no-magic-numbers: 0 */
-
+/* eslint max-statements: 0 */
 /* class WebAppManifestPlugin {
   constructor({
     output = Error('undefined output'),
@@ -56,15 +56,16 @@ class WebAppManifestPlugin {
       // TODO: clean-up, put into separate functions
       // Get everything we need
       const index = Object.keys(compilation.assets)
-        .find(n => n.endsWith('index.html'));
-      let indexContent = compilation.assets[index].source();
-      const manifest = Object.keys(compilation.assets)
-        .find(n => n.endsWith('manifest.json'));
-      let manifestContent = compilation.assets[manifest]._value;
-      const manifestPath = compiler.options.output.publicPath + manifest;
-      const iconPathPrefix = manifestPath.replace('manifest.json', '');
-      const [closingHead] = indexContent.match(/^\s*<\/head>/m);
-      const indent = closingHead.replace('</head>', '').repeat(2);
+          .find(n => n.endsWith('index.html')),
+        manifest = Object.keys(compilation.assets)
+          .find(n => n.endsWith('manifest.json'));
+      let indexContent = compilation.assets[index].source(),
+        manifestContent = compilation.assets[manifest]._value;
+      const manifestPath = compiler.options.output.publicPath + manifest,
+        iconPathPrefix = manifestPath.replace('manifest.json', ''),
+        [closingHead] = indexContent.match(/^\s*<\/head>/m),
+        indent = closingHead.replace('</head>', '').repeat(2);
+
       // Transform
       indexContent = indexContent.replace(
         closingHead,

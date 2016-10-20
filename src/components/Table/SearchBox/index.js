@@ -51,29 +51,25 @@ class SearchBox extends Component {
     const {search: {children}} = this.props;
     const {query} = this.state;
     return (
-      <form>
-        <div className={f('input-group')}>
-          <label className={f('input-group-label')} htmlFor="table-filter-text">
-            {children || 'Filter'}:
-          </label>
+      <div className={f('float-right')} style={{position: 'relative'}} >
+        <form>
+          <button
+            className={f('close-button')}
+            type="button"
+            style={{right: '0.5rem', top: '0'}}
+            onClick={this.handleReset}
+          >
+            <span>&times;</span>
+          </button>
           <input
             id="table-filter-text"
             type="text"
             onChange={this.handleChange}
             value={query}
-            placeholder="text filter"
-            className={f('input-group-field')}
+            placeholder="Filter table"
           />
-          <div className={f('input-group-button')}>
-            <input
-              type="button"
-              onClick={this.handleReset}
-              value="Reset"
-              className={f('button')}
-            />
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     );
   }
 }

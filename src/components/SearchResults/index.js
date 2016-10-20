@@ -1,10 +1,11 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }]*/
 import React, {PropTypes as T} from 'react';
 import {withRouter, Link} from 'react-router/es6';
-import Table, {Column} from 'components/Table';
+import {connect} from 'react-redux';
+import Table, {Column, PageSizeSelector, Exporter} from 'components/Table';
 const maxLength = 200;
 
-const SearchResults = ({data, query, router}) => {
+const SearchResults = ({data, query, router, dataUrl}) => {
   if (!data) {
     return <div/>;
   } else if (data.hitCount === 0) {
@@ -34,6 +35,10 @@ const SearchResults = ({data, query, router}) => {
         pathname="/search"
         title="Search Results"
       >
+        <Exporter>
+          <a href={dataUrl} download="SearchResults.json">JSON</a>
+        </Exporter>
+        <PageSizeSelector pageSize={query.page_size}/>
         <Column
           accessKey="id"
           renderer={id => (
@@ -65,6 +70,9 @@ SearchResults.propTypes = {
   data: T.object,
   query: T.object,
   router: T.object,
+  dataUrl: T.string,
 };
 
-export default withRouter(SearchResults);
+export default withRouter(
+  connect((state) => ({dataUrl: state.data.dataUrl}))(SearchResults)
+);

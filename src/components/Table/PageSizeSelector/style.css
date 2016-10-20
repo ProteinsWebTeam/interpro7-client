@@ -1,0 +1,16 @@
+@import "../../../styles/ebi/fonts.css";
+
+.apply-all{
+  margin-left: 1rem;
+  display: inline-block;
+  cursor: pointer;
+}
+.apply-all div{
+  display: inline-block;
+  transition: transform 300ms ease-in-out;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.apply-all:hover div {
+  transform: scaleX(1);
+}
