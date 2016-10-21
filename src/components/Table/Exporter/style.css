@@ -1,0 +1,15 @@
+div.exporter {
+  margin-left: 10px;
+  position: relative;
+  & > .dropdown-content {
+    top: 100%;
+    right: 0;
+    overflow:auto;
+    width: initial;
+    min-width: 220%;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 300ms ease-in-out;
+    visibility: visible;
+  }
+}

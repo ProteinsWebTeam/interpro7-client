@@ -29,7 +29,8 @@ describe('<Title />', () => {
           type: 'domain',
           accession: 'PF02171',
           source_database: 'pfam',
-        }} />
+        }}
+        />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
         <div className={styles.card}>
@@ -61,7 +62,8 @@ describe('<Title />', () => {
             name: 'Aspergillus clavatus',
             taxid: 344612,
           },
-        }} />
+        }}
+        />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
         <div className={styles.card}>
@@ -95,7 +97,8 @@ describe('<Title />', () => {
           experiment_type: 'Solution NMR',
           release_date: '2009-02-24',
           chains: ['A', 'B'],
-        }} />
+        }}
+        />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
         <div className={styles.card}>

@@ -26,6 +26,12 @@ const parseValue = target => {
   }
 };
 
+export const changePageSize = pageSize => ({
+  type: types.CHANGE_SETTINGS,
+  category: 'pagination',
+  key: 'pageSize',
+  value: +pageSize,
+});
 export const changeSettings = event => ({
   type: types.CHANGE_SETTINGS,
   category: event.target.form.dataset.category,
@@ -43,9 +49,10 @@ export const loadingData = urlKey => ({
   urlKey,
 });
 
-export const loadedData = (urlKey, data) => ({
+export const loadedData = (urlKey, dataUrl, data) => ({
   type: types.LOADED_DATA,
   urlKey,
+  dataUrl,
   data,
 });
 

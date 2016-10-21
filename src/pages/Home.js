@@ -3,6 +3,7 @@ import React from 'react';
 import {Link} from 'react-router/es6';
 
 import styles from 'styles/blocks.css';
+import SearchByText from 'components/SearchByText';
 
 const Home = () => (
   <main>
@@ -13,6 +14,9 @@ const Home = () => (
         <li><Link to="structure">Structures</Link></li>
       </ul>
     </nav>
+    <section className={styles.card}>
+      <SearchByText />
+    </section>
   </main>
 );
 

@@ -1,4 +1,26 @@
 import classNames from 'classnames/bind';
 import foundation from 'foundation-sites/dist/foundation-flex.css';
-
+/**
+ * Use the default when only foundation is required
+ * @example
+ * import f from 'styles/foundation';
+ * // And in the JSX
+ * <div className={f('row')}>
+ */
 export default classNames.bind(foundation);
+
+/**
+ * If multiple css needs to be bound, use this function, which need to be
+ * called from the file where is used. e.g.
+ * @example
+ * import s from './other_style.css';
+ * const f_and_s = foundationPartial(s);
+ * // And in the JSX. th class row comes from foundation and the custom
+ * // comes from other_style.css
+ * <div className={f_and_s('row', 'custom')}>
+ * @param {object} otherStyles other css that have been imported in the file.
+ * @returns {object} a classNames object that can be used to define classes
+ */
+export const foundationPartial = (...otherStyles) => (
+  classNames.bind(Object.assign({}, foundation, ...otherStyles))
+);

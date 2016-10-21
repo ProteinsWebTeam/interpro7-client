@@ -1,6 +1,12 @@
 import {LOADING_DATA, LOADED_DATA, FAILED_LOADING_DATA} from 'actions/types';
 
-const DEFAULT_STATE = {urlKey: null, loading: false, data: null, error: null};
+const DEFAULT_STATE = {
+  urlKey: null,
+  dataUrl: null,
+  loading: false,
+  data: null,
+  error: null,
+};
 
 export default (
   state = DEFAULT_STATE,
@@ -16,7 +22,11 @@ export default (
       // This is not the fetch you are looking for, move along
       if (state.urlKey !== action.urlKey) return state;
       // Add the data to the redux state and remove loading flag
-      return {...state, loading: false, data: action.data};
+      return {
+        ...state,
+        loading: false,
+        data: action.data,
+        dataUrl: action.dataUrl};
     // We failed to load data
     case FAILED_LOADING_DATA:
       // But, this is not the fetch you are looking for, move along

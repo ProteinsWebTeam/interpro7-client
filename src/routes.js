@@ -110,6 +110,16 @@ const contentPages = [
       },
     ],
   },
+  {
+    path: '/search',
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('pages/Search').default);
+      });
+    },
+    childRoutes: [
+    ],
+  },
 ];
 
 // Routes to static pages of the website

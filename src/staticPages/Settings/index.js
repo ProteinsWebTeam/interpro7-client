@@ -121,10 +121,55 @@ APISettings.propTypes = {
   handleChange: T.func.isRequired,
 };
 
+const EBISearchSettings = ({ebi, handleChange}) => (
+  <form data-category="ebi">
+    <h4>EBI Search settings</h4>
+    <div className={f('row')}>
+      <div className={f('medium-4', 'column')}>
+        <label>
+          Hostname:
+          <input
+            type="text"
+            value={ebi.hostname}
+            name="hostname"
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+      <div className={f('medium-4', 'column')}>
+        <label>
+          Port:
+          <input
+            type="number"
+            min="1"
+            value={ebi.port}
+            name="port"
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+      <div className={f('medium-4', 'column')}>
+        <label>
+          Root:
+          <input
+            type="text"
+            value={ebi.root}
+            name="root"
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+    </div>
+  </form>
+);
+EBISearchSettings.propTypes = {
+  ebi: T.object.isRequired,
+  handleChange: T.func.isRequired,
+};
 
 const Settings = (
   {
-    settings: {pagination = {}, ui = {}, cache = {}, api = {}},
+    settings: {pagination = {}, ui = {}, cache = {}, api = {}, ebi = {}},
     changeSettings,
     resetSettings,
   }
@@ -138,6 +183,7 @@ const Settings = (
     <UISettings ui={ui} handleChange={changeSettings} />
     <CacheSettings cache={cache} handleChange={changeSettings} />
     <APISettings api={api} handleChange={changeSettings} />
+    <EBISearchSettings ebi={ebi} handleChange={changeSettings} />
     <button onClick={resetSettings} className={f('button')}>
       Reset settings to default values
     </button>
@@ -149,6 +195,7 @@ Settings.propTypes = {
     ui: T.object.isRequired,
     cache: T.object.isRequired,
     api: T.object.isRequired,
+    ebi: T.object.isRequired,
   }).isRequired,
   changeSettings: T.func.isRequired,
   resetSettings: T.func.isRequired,

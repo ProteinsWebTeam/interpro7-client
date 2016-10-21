@@ -2,12 +2,10 @@ import React, {PropTypes as T} from 'react';
 
 import Row from '../Row';
 
-import tblStyles from 'styles/tables.css';
-
 export const Body = (
   {rows, columns}/*: {rows: Array<Object>, columns: Array<Object>}*/
 ) => (
-  <tbody className={tblStyles.body}>
+  <tbody>
   {rows.map((row, i) => {
     const rowData = row.metadata || row;
     return (

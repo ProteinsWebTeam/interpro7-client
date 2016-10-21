@@ -6,7 +6,8 @@ import ColorHash from 'color-hash/lib/color-hash';
 import pageNavigation from 'components/PageNavigation';
 
 import Title from 'components/Title';
-import Table, {Column, Search} from 'components/Table';
+import Table, {Column, Search, PageSizeSelector, Exporter}
+  from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
 
@@ -18,7 +19,7 @@ const StructurePageNavigation = pageNavigation(page);
 const colorHash = new ColorHash();
 
 const Structure = (
-  {data, location: {query, pathname}, children}
+  {data, location: {query, pathname}, dataUrl, children}
   /*: {
     data: {
       results?: Array<Object>,
@@ -26,6 +27,7 @@ const Structure = (
       metadata?: Object,
     },
     location: {query: Object, pathname: string},
+    dataUrl: string,
     children: React$Element<any>
   } */
 ) => {
@@ -37,6 +39,17 @@ const Structure = (
         query={query}
         pathname={pathname}
       >
+        <Exporter>
+          <ul>
+            <li>
+              <a
+                href={`${dataUrl}&format=json`}
+                download="proteins.json"
+              >JSON</a><br/></li>
+            <li><a href={`${dataUrl}`}>Open in API web view</a></li>
+          </ul>
+        </Exporter>
+        <PageSizeSelector/>
         <Search>Search structures</Search>
         <Column
           accessKey="accession"
@@ -115,6 +128,7 @@ Structure.propTypes = {
   location: T.shape({
     pathname: T.string.isRequired,
   }).isRequired,
+  dataUrl: T.string,
   children: T.node,
 };
 Structure.dataUrlMatch = /^structure/i;
