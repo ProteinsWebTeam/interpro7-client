@@ -81,10 +81,10 @@ if (window) {
 
 // This is temporary, assume the guidelines might change in the future
 const EbiGlobalHeader = () => (
-  <div id="global-masthead">
+  <div id="global-masthead" className="clearfix">
     <nav>
       <div className={f('row')}>
-        <ul id="global-nav" class="menu">
+        <ul id="global-nav" className="menu">
           <li id="home-mobile">
             <a href="//www.ebi.ac.uk"></a>
           </li>

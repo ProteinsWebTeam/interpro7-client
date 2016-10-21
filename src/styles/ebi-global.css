@@ -1078,16 +1078,18 @@ input.clearable::-ms-clear {
 /* Tablesorter styling */
 table.tablesorter thead tr th,
 table.tablesorter thead tr th.tablesorter-headerUnSorted {
-  background-image: url(../libraries/tablesorter/css/images/black-unsorted.gif);
+  /*background-image: url(../libraries/tablesorter/css/images/black-unsorted.gif);*/
   background-repeat: no-repeat;
   background-position: center right;
   cursor: pointer; }
 
 table.tablesorter thead tr th.tablesorter-headerAsc {
-  background-image: url(../libraries/tablesorter/css/images/black-asc.gif); }
+  /*background-image: url(../libraries/tablesorter/css/images/black-asc.gif);*/
+}
 
 table.tablesorter thead tr th.tablesorter-headerDesc {
-  background-image: url(../libraries/tablesorter/css/images/black-desc.gif); }
+  /*background-image: url(../libraries/tablesorter/css/images/black-desc.gif);*/
+}
 
 /* No colour striping tables */
 table.no-stripe tbody tr:nth-child(even) {
