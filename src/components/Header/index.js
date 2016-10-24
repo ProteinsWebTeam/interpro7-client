@@ -6,10 +6,16 @@ import {openSideNav} from 'actions/creators';
 
 import Breadcrumb from '../Breadcrumb';
 
-import styles from './style.css';
 import logo from 'images/logo/logo_75x75.png';
 
-import f from 'styles/foundation';
+import {foundationPartial} from 'styles/foundation';
+import styles from './style.css';
+import ebi_global_styles from 'styles/ebi_global';
+import fonts from 'styles/ebi/fonts.css'
+const styleBundle = foundationPartial(styles, fonts, ebi_global_styles);
+
+
+
 
 // Only does this in a browser
 // Logic to attach the scaling of the banner to the scroll position
@@ -80,17 +86,81 @@ if (window) {
 }
 
 // This is temporary, assume the guidelines might change in the future
+var iconClasses = styleBundle({
+  'icon': true,
+  'icon-generic': true
+});
+
+var iconFunctionalClasses = styleBundle({
+  "icon": true,
+  "icon-functional": true
+});
+
 const EbiGlobalHeader = () => (
-  <div id="global-masthead" className="clearfix">
+  <div id={styleBundle('global-masthead')} className={styleBundle('clearfix')}>
+    <a href="//www.ebi.ac.uk" title="Go to the EMBL-EBI homepage">
+      <span className={styleBundle('ebi-logo')}></span>
+    </a>
     <nav>
-      <div className={f('row')}>
-        <ul id="global-nav" className="menu">
+      <div className={styleBundle('row')}>
+        <ul id={styleBundle('global-nav')} className={styleBundle('menu')}>
+
           <li id="home-mobile">
             <a href="//www.ebi.ac.uk"></a>
           </li>
-          <li id="home">
-            <a href="//www.ebi.ac.uk"></a>
+
+          <li id="home" className={styleBundle('active')}>
+            <a href="//www.ebi.ac.uk">
+              <i className={iconClasses} data-icon="H"></i> EMBL-EBI
+            </a>
           </li>
+
+          <li id="services">
+            <a href="//www.ebi.ac.uk">
+              <i className={iconClasses} data-icon="("></i> Services
+            </a>
+          </li>
+
+          <li id="research">
+            <a href="//www.ebi.ac.uk">
+              <i className={iconClasses} data-icon=")"></i> Research
+            </a>
+          </li>
+
+          <li id="training">
+            <a href="//www.ebi.ac.uk">
+              <i className={iconClasses} data-icon="t"></i> Training
+            </a>
+          </li>
+
+          <li id="about">
+            <a href="//www.ebi.ac.uk">
+              <i className={iconClasses} data-icon="i"></i> About us
+            </a>
+          </li>
+
+          <li id="search">
+            <a href="#"
+               data-toggle={styleBundle("search-global-dropdown")}
+               aria-controls={styleBundle("search-global-dropdown")}
+               data-yeti-box={styleBundle("search-global-dropdown")}
+               aria-haspopup="true"
+               aria-expanded="false">
+              <i className={iconFunctionalClasses} data-icon="1"></i>
+              <span className={styleBundle('show-for-small-only')}>Search</span>
+            </a>
+            <div id={styleBundle("search-global-dropdown")}
+                 className={styleBundle('dropdown-pane')}
+                 data-dropdown="arn8xj-dropdown"
+                 data-options="closeOnClick:true;"
+                 aria-hidden="true"
+                 data-yeti-box={styleBundle('dropdown-pane')}
+                 aria-labelledby="8m8za8-dd-anchor"
+                 data-events="resize"
+            >
+            </div>
+          </li>
+
         </ul>
       </div>
     </nav>
