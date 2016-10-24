@@ -9,7 +9,7 @@ const ContributingSignatures = (
   {contr, pathname}/*: {contr: Object, pathname: string} */
 ) => (
   <div className={styles.card} style={{flex: '0 0 auto'}}>
-    <h3>Contributing signatures:</h3>
+    <h5>Contributing signatures:</h5>
     <ul>
       {Object.entries(contr).map(([key, values]) => (
         <li key={key}>

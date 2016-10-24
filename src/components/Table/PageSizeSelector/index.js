@@ -35,6 +35,11 @@ class PageSizeSelector extends Component{
     this.props.changePageSize(this.state.pageSize);
   }
   render(){
+    const options = [10, 15, 30, 100];
+    if (options.indexOf(this.state.pageSize) == -1) {
+      options.push(this.state.pageSize);
+      options.sort((a,b)=>a-b);
+    }
     return (
       <div className={f('float-left')}>
         Show <select
@@ -43,10 +48,9 @@ class PageSizeSelector extends Component{
           value = {this.state.pageSize}
           onChange={this.handleChange}
              >
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="30">30</option>
-          <option value="100">100</option>
+        {
+          options.map((opt,i)=>(<option key={i} value={opt}>{opt}</option>))
+        }
         </select> results
         <a className=
              {f('icon', 'icon-functional', 'primary', 'apply-all')}

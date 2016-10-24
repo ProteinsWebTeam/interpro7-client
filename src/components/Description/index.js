@@ -22,20 +22,16 @@ ParagraphWithCites.propTypes = {
 };
 
 const Description = ({textBlocks}/*: {textBlocks: Array<string>}*/) => (
-  <ReadMoreCard>
     <div className={styles.content}>
-      <h3>Description</h3>
-      <ol>
+      <h4>Description</h4>
       {textBlocks.map((b, i) => (
-        <li key={i}>
+        <p key={i}>
           {transformFormatted(b).map((p, i) => (
             <ParagraphWithCites key={i} p={p} />
           ))}
-        </li>
+        </p>
       ))}
-      </ol>
     </div>
-  </ReadMoreCard>
 );
 
 Description.propTypes = {

@@ -39,7 +39,7 @@ class Loading extends Component {
     const {data, children} = this.state;
 
     return (
-      <div>
+      <div id="content" role="main">
         <div style={{
           pointerEvents: loading ? 'auto' : 'none',
           cursor: 'progress',

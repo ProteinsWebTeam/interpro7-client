@@ -7,9 +7,14 @@ import styles from 'styles/blocks.css';
 
 const Integration = ({intr, pathname}) => (
   <div className={styles.card} style={{flex: '0 0 auto'}}>
-    Integrated to <Link to={buildLink(pathname, 'entry', 'interpro', intr)}>
-      {intr}
-    </Link>
+    <h5>Integrated to</h5>
+    <ul className='chevron'>
+      <li>
+        <Link to={buildLink(pathname, 'entry', 'interpro', intr)}>
+          {intr}
+        </Link>
+      </li>
+    </ul>
   </div>
 );
 Integration.propTypes = {

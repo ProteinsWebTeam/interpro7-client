@@ -3,15 +3,15 @@ import React, {PropTypes as T} from 'react';
 import styles from 'styles/blocks.css';
 import refStyles from './style.css';
 import {PMCLink, DOILink} from '../../ExtLink';
+import f from 'styles/foundation';
 
 // import {buildAnchorLink} from '../../utils/url';
 
 const Literature = ({references}) => (
-  <div className={styles.card}>
-    <h3>Literature</h3>
+  <div className={f('row')}>
     <ul className={refStyles.list}>
       {Object.entries(references).map(([pubID, ref]) => (
-        <li className={refStyles.reference} key={pubID} id={pubID}>
+        <li className={refStyles.reference+" "+f('small')} key={pubID} id={pubID}>
           <span className={refStyles.reference_id}>[{pubID}]</span>
           <span className={refStyles.authors}>{ref.authors}</span>
           <span className={refStyles.year}>({ref.year})</span>.
