@@ -3,6 +3,7 @@ import React, {PropTypes as T} from 'react';
 
 // Global stylesheets loaded here
 import 'styles/foundation';
+import 'styles/ebi-global.css';
 import 'styles/global.css';
 
 import Header from 'components/Header';

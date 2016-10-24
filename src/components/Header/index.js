@@ -9,6 +9,7 @@ import Breadcrumb from '../Breadcrumb';
 import styles from './style.css';
 import logo from 'images/logo/logo_75x75.png';
 
+import f from 'styles/foundation';
 
 // Only does this in a browser
 // Logic to attach the scaling of the banner to the scroll position
@@ -79,15 +80,34 @@ if (window) {
 }
 
 // This is temporary, assume the guidelines might change in the future
-const Ebi = () => (
-  <div className={styles.ebi}>
-    <span>EMBL-EBI</span>
-    <span className={styles.ebi_services}>Services</span>
-    <span>Research</span>
-    <span>Training</span>
-    <span>About us</span>
+const EbiGlobalHeader = () => (
+  <div id="global-masthead" className="clearfix">
+    <nav>
+      <div className={f('row')}>
+        <ul id="global-nav" className="menu">
+          <li id="home-mobile">
+            <a href="//www.ebi.ac.uk"></a>
+          </li>
+          <li id="home">
+            <a href="//www.ebi.ac.uk"></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
   </div>
 );
+
+/*
+ <nav>
+ <div className={styles.ebi}>
+ <span>EMBL-EBI</span>
+ <span className={styles.ebi_services}>Services</span>
+ <span>Research</span>
+ <span>Training</span>
+ <span>About us</span>
+ </div>
+ </nav>
+ */
 
 const HeaderBackground = () => (
   <div className={styles.header_background} />
@@ -197,7 +217,7 @@ MediumLevel.propTypes = {
 
 const Header = ({pathname}) => (
   <header className={styles.header}>
-    <Ebi />
+    <EbiGlobalHeader />
     <div className={styles.container}>
       <HeaderBackground />
       <TopLevel />
