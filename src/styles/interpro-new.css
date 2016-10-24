@@ -244,9 +244,9 @@ h5 small, h6 small {color: #8b8b8b;} /*style-darker*/
 ul.domaintree  li, ul.familytree  li, ul.chevron  li {list-style: none;}
 ul.domaintree, ul.familytree, ul.chevron {margin-left:0;}
 
-ul.familytree li:before, li.familybranch:before {content: ''; display: inline-block; height: 1.3em; background-image: url(../images/family_icon.svg); background-size: 100%; background-repeat: no-repeat; padding-left: 1.5em; top: 5px; position: relative;}
-ul.domaintree li:before, li.domainbranch:before {content: ''; display: inline-block; height: 1.3em; background-image: url(../images/domain_icon.svg); background-size: 100%; background-repeat: no-repeat; padding-left: 1.5em; top: 5px; position: relative;}
-ul.chevron li:before {content: ''; display: inline-block; height: 1em; background-image: url(../images/chevron.svg); background-repeat: no-repeat; padding-left: 1em; position: relative; top: 3px;}
+ul.familytree>li:before, li.familybranch:before {content: ''; display: inline-block; height: 1.3em; background-image: url(../images/family_icon.svg); background-size: 100%; background-repeat: no-repeat; padding-left: 1.5em; top: 5px; position: relative;}
+ul.domaintree>li:before, li.domainbranch:before {content: ''; display: inline-block; height: 1.3em; background-image: url(../images/domain_icon.svg); background-size: 100%; background-repeat: no-repeat; padding-left: 1.5em; top: 5px; position: relative;}
+ul.chevron>li:before {content: ''; display: inline-block; height: 1em; background-image: url(../images/chevron.svg); background-repeat: no-repeat; padding-left: 1em; position: relative; top: 3px;}
 /****************************** END RIGHT PANEL *****************************/
 
 /****************************** TABLE *********************************/

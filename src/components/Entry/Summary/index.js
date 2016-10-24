@@ -41,6 +41,7 @@ const SummaryEntry = (
           }
           {
             metadata.member_databases &&
+            Object.keys(metadata.member_databases).length > 0 &&
             <div className={f('panel')}>
               <ContributingSignatures
                 contr={metadata.member_databases}
@@ -67,8 +68,6 @@ const SummaryEntry = (
         </div>
       </section>
     }
-    <div>
-      </div>
   </div>
 );
 SummaryEntry.propTypes = {

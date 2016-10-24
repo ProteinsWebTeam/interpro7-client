@@ -1,15 +1,8 @@
 /* @flow */
 import React, {PropTypes as T} from 'react';
+import ipro from 'styles/interpro-new.css';
 import {Link} from 'react-router/es6';
-
-import TypeTag from 'components/TypeTag';
-import {
-  Name, OriginDB, SourceOrganism,
-} from 'components/SimpleCommonComponents';
-
 import {buildLink} from 'utils/url';
-
-import styles from 'styles/blocks.css';
 
 const formatter = new Intl.DateTimeFormat(
   'en-UK',
@@ -29,31 +22,47 @@ Time.propTypes = {
   children: T.element,
 };
 
-const InterproSymbol = ({type})=> (
-  <svg width="90" height="70" id="name">
-    <g>
-      <rect x="10" y="10" width="60" height="60"
-            style={{
-              fill: 'black',
-              opacity: 0.1,
-            }}/>
-      <rect x="0" y="0" width="60" height="60"
-            style={{
-              fill: '#ee2a09',
-              stroke: '#d41813',
-              strokeWidth: 10,
-              opacity: 1,
-              position: 'absolute',
-              left: 0,
-              top:0,
-            }}/>
-      <text x="10" y="62" fill="white" fontFamily="Arial" fontWeight="bold" fontSize="70" style={{
-        boxShadow: "black 10px 10px 10px;",
-      }}> {type[0]} </text>
-    </g>
-    Sorry, your browser does not support inline SVG.
-  </svg>
+const InterproSymbol = ({type}) => (
+  <div className={ipro['my-svg-container']}>
+    <svg
+      className={ipro['my-svg']}
+      preserveAspectRatio="xMinYMin meet"
+      viewBox="0 0 70 70"
+    >
+      <g>
+        <rect x="10" y="10" width="60" height="60"
+          style={{
+            fill: 'black',
+            opacity: 0.1,
+          }}
+        />
+        <rect x="0" y="0" width="60" height="60"
+          style={{
+            fill: '#ee2a09',
+            stroke: '#d41813',
+            strokeWidth: 10,
+            opacity: 1,
+            position: 'absolute',
+            left: 0,
+            top: 0,
+          }}
+        />
+        <text
+          x="10" y="62" fill="white"
+          fontFamily="Arial" fontWeight="bold" fontSize="70"
+          style={{
+            boxShadow: 'black 10px 10px 10px',
+          }}
+        > {type[0]} </text>
+      </g>
+      Sorry, your browser does not support inline SVG.
+    </svg>
+  </div>
 );
+InterproSymbol.propTypes = {
+  type: T.string.isRequired,
+};
+
 const Title = (
   {metadata, pathname}
   /*: {
@@ -70,19 +79,39 @@ const Title = (
     },
     pathname: string
   }*/
-) => (
-  <div className={styles.card}>
-    <div style={{float: 'left'}}>
+) => {
+  const isEntry = pathname.startsWith('/entry');
+  return (
+    <div>
       {
-        pathname.startsWith('/entry') &&
+        isEntry &&
         <InterproSymbol type={metadata.type}/>
       }
+      <h3>{metadata.name.name} <small>({metadata.accession})</small></h3>
+      {
+        isEntry && metadata.source_database.toLowerCase() !== 'interpro' &&
+        <div className={ipro['md-hlight']}>
+          <div><h5>Member database:</h5></div>
+          <div style={{paddingLeft: '9px'}}>
+            <h5>
+              <Link to={buildLink(pathname, 'entry', metadata.source_database)}>
+                {metadata.source_database}
+              </Link>
+            </h5>
+          </div>
+        </div>
+      }
+      {
+        metadata.name.short &&
+        <p>Short name:
+          <i className="small" style={{color: '#41647d'}}>
+            {metadata.name.short}
+          </i>
+        </p>
+      }
     </div>
-    <h3>{metadata.name.name}<small>({metadata.accession})</small></h3>
-
-
-  </div>
-);
+  );
+};
 Title.propTypes = {
   metadata: T.object.isRequired,
   pathname: T.string.isRequired,
