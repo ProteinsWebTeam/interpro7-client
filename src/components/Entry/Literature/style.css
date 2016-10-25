@@ -11,17 +11,17 @@
 .reference span.title {
   font-style: italic;
 }
-.reference span.reference_id {
+.reference span.index {
   padding-left: 0em;
   color: #9DA0A4;
 }
-.reference:target span.reference_id {
+.reference:target span.index {
   font-weight: bold;
-  color: red;
+  color: rgb(65, 100, 125);
 }
 
-.reference a.doi_url {
-  padding-left: 1em;
+.reference a:not([href*="localhost"]){
+  white-space: nowrap;
 }
 .reference a:not([href*="localhost"])::before {
   content: " \21AA ";

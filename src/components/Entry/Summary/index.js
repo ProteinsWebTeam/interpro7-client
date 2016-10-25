@@ -30,7 +30,7 @@ const SummaryEntry = (
       <div className={f('row')}>
         <div className={f('medium-8', 'large-8', 'columns')}>
           <Title metadata={metadata} pathname={pathname}/>
-          <Description textBlocks={metadata.description} />
+          <Description textBlocks={metadata.description} literature={metadata.literature} />
         </div>
         <div className={f('medium-4', 'large-4', 'columns')}>
           {
@@ -54,15 +54,16 @@ const SummaryEntry = (
     </section>
     {
       Object.keys(metadata.literature).length &&
-      <section>
+      <section id="references">
         <div className={f('row')}>
-          <Literature references={metadata.literature} />
+          <div className={f('large-12', 'columns')}><h4>References</h4></div>
         </div>
+        <Literature references={metadata.literature} />
       </section>
     }
     {
       Object.keys(metadata.go_terms) &&
-      <section>
+      <section id="goterms">
         <div className={f('row')}>
           <GoTerms terms={metadata.go_terms} />
         </div>
