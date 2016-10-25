@@ -21,6 +21,27 @@ export default classNames.bind(foundation);
  * @param {object} otherStyles other css that have been imported in the file.
  * @returns {object} a classNames object that can be used to define classes
  */
-export const foundationPartial = (...otherStyles) => (
-  classNames.bind(Object.assign({}, foundation, ...otherStyles))
-);
+export const foundationPartial = (...otherStyles) => {
+  // classNames.bind(Object.assign({}, foundation, ...otherStyles))
+  // [foundation, ...otherStyles].reduce((acc, style) => {
+  //   return Object.entries(style).reduce((acc, [rule, hash]) => {
+  //     if (acc[rule]) {
+  //       acc[rule] += ' ' + hash;
+  //     } else {
+  //       acc[rule] = hash;
+  //     }
+  //     return acc;
+  //   }, acc);
+  // }, {})
+  const output = {};
+  for (const style of [foundation, ...otherStyles]) {
+    for (const [rule, hash] of Object.entries(style)) {
+      if (output[rule]) {
+        output[rule] += ` ${hash}`;
+      } else {
+        output[rule] = hash;
+      }
+    }
+  }
+  return classNames.bind(output);
+};

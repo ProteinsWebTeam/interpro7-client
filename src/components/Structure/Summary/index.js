@@ -1,7 +1,7 @@
 /* @flow */
 import React, {PropTypes as T} from 'react';
 
-import PDBPrints from 'components/Structure/PDBPrints';
+import 'pdb-web-components';
 
 import styles from 'styles/blocks.css';
 
@@ -11,7 +11,9 @@ const SummaryStructure = (
   <div>
     <div className={styles.card}>
       <h2>Summary</h2>
-      <PDBPrints accession={metadata.accession} />
+      <pdb-prints size="64">
+        <pdb-data-loader pdbid={metadata.accession} />
+      </pdb-prints>
       <div style={{display: 'flex', justifyContent: 'center'}}>
         <img
           src={`//www.ebi.ac.uk/pdbe/static/entry/${

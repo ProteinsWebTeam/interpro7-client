@@ -1,0 +1,362 @@
+/******************************Overwritting EBI  global****************************/
+ul#global-nav {padding-top:0;}/****IMPORTANT TO FIX****remove space on top of page for EBI menu**********/
+#local-masthead nav ul#secondary-menu-links.menu li a:hover:after, #local-masthead nav ul#global-nav.menu li a:hover:after, #local-masthead nav ul.menu li a:hover:after {    top: 0px;border-left: 0px solid transparent;    border-right: 0px solid transparent;} /*****remove arrows in the menu*****/
+#local-masthead nav ul li a:active {border-bottom: 3px white solid;} /*****remove arrows in the menu - fill the gap when menu click when no arrow*****/
+
+a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
+#content a:hover, #content a:focus, #content a:active {border-bottom: 1px solid #8c8c8c; } /*STYLE - add a line for links just on mouse over*/
+#content {padding-top: 1rem ;}/*add some more space on top between banner and breadcrumb */
+#local-masthead nav ul.menu li {border-right: 1px solid rgba(248, 248, 248, 0.2);}/*STYLE - slightly hide division between menu items*/
+#local-masthead ul li.is-active a, #local-masthead ul li a:hover, #local-masthead nav ul li a.hover, #local-masthead nav ul li a:hover {color: #000;}/*STYLE - make menu items hover slightly darker*/
+.pagination .current {background: #3798a7;}/*STYLE - custom color for table pagination MISSING in THEME-EBI*/
+
+/*div#local-masthead {position:relative;}!*to have the right banner button icons align properly on the right when offcanvas is open - work only if content is resized*!*/
+/****************************** END Overwritting EBI  global**********************/
+
+/******************************Local style***************************************/
+
+
+/*ICONS*/
+/*.nav-toggle {position: absolute; top: 28px;  right: 55px;}*/
+/*.nav-toggle span, .nav-toggle span:before, .nav-toggle span:after { cursor: pointer; border-radius: 1px; height: 5px; width: 35px;  background: white;  position: absolute; display: block; content: '';*/
+/*}*/
+/*.nav-toggle span:before {top: -10px;}*/
+/*.nav-toggle span:after {bottom: -10px;}*/
+/*.nav-toggle span, .nav-toggle span:before, .nav-toggle span:after {*/
+    /*transition: all 500ms ease-in-out;*/
+/*}*/
+/*.nav-toggle.active span {*/
+    /*background-color: transparent;*/
+/*}*/
+/*.nav-toggle.active span:before, .nav-toggle.active span:after {*/
+    /*top: 0;*/
+/*}*/
+/*.nav-toggle.active span:before {*/
+    /*transform: rotate(45deg);*/
+/*}*/
+/*.nav-toggle.active span:after {*/
+    /*transform: rotate(-45deg);*/
+/*}*/
+
+/******************************BANNER*********************************/
+.main-header {width: 100%; height: 260px;/*better to define size here than in the #content padding*/}
+.main-header.sm {position: relative;} /*mobile - remove sticky*/
+#local-masthead h1 {white-space: nowrap;} /*remove space between logo and text so it doesn't break on two lines*/
+#local-masthead h1 span {font-size: 41%;}
+
+/***** LOCAL BUTTONS  *****/
+.local-site-search .icon-functional:before ,.local-offcanvas-menu .icon-functional:before {font-size: 40px;}
+html.fontface .local-site-search .icon-functional:before ,.local-offcanvas-menu .icon-functional:before {padding-right:0;} /*solve a bug with search icon moving on two lines on firefox*/
+.local-site-search .button, .local-offcanvas-menu .button,.local-site-search .button:hover, .local-offcanvas-menu .button:hover {background-color: transparent;}/*we don't want bgd for those buttons*/
+.local-site-search {position: absolute; top: 118px;  right: 10px; }/*let the text field appear with no size problem*/
+.local-offcanvas-menu  {position: absolute; top: 68px;  right: 10px;}
+/*.local-offcanvas-menu .button {margin:0;} is it still used?*/
+/*Menu - not used anymore in the new way to interact with offcanvas*/
+/*.main-header .local-offcanvas-menu .close-menu {display: none;}!*switch between open/close text*!*/
+/*.offc-nav.expand ~ .main-header .local-offcanvas-menu .close-menu {display: block;}!*switch between open/close text*!*/
+/*.offc-nav.expand ~ .main-header .local-offcanvas-menu .open-menu {display: none;}!*switch between open/close text*!*/
+/*Search*/
+.local-site-search .search-box {width: 0; display: block; float: right; padding: 0;/*background-color: rgba(255, 255, 255, 0.07);*/background-color: rgba(255, 255, 255, 0); box-shadow: none; outline: 0;border-bottom: 1px solid rgba(255, 255, 255, 0.4); border-top:none;border-left:none;  border-right:none;font-size: 1rem;  color: rgba(255, 255, 255, 0.5);}
+.local-site-search .button {float:right;}/*important to keep for the smooth effect moving left the magnifying icon next to input field*/
+.local-site-search [type='text']:focus {border-bottom: 3px solid white; border-top:none;  border-left:none; border-right:none; color:white;  background-color: transparent;  outline: none; box-shadow: none; transition: box-shadow 0.5s, border-color 0.25s ease-in-out;}
+.local-site-search:hover .tool-search .search-box, .search-box:focus {width: 70%;}
+.local-site-search:hover ::-webkit-input-placeholder {opacity:1;}/*animation to make the placeholder appear softly*/
+.local-site-search:hover ::-moz-placeholder {opacity:1;}
+.local-site-search:hover :-moz-placeholder {opacity:1;}
+.local-site-search:hover :-ms-input-placeholder {opacity:1;}
+::-webkit-input-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;transition: opacity .3s ease-in-out;}
+::-moz-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;   transition: opacity .3s ease-in-out;}
+:-moz-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;   transition: opacity .3s ease-in-out;}
+:-ms-input-placeholder {color: rgba(255,255,255,0.5); opacity:0.1; transition: opacity .3s ease-in-out;}
+input:focus::-webkit-input-placeholder {color:transparent;}/*css solution to make the placeholder text disappear*/
+input:focus:-moz-placeholder {color:transparent;}
+input:focus::-moz-placeholder {color:transparent;}
+input:focus:-ms-input-placeholder {color:transparent;}
+/***** /LOCAL BUTTONS *** /
+
+/* MENU*/
+.horizontal.menu > li > a {border-bottom-style: solid; border-bottom-width:3px; border-bottom-color:transparent;}/* CROSS ICON PBM - to make all menu items same height*/
+
+#local-masthead .menu .active {color: #0a0a0a; background: #fff;}/*this should be defined in the default ebi css*/
+/*#local-masthead .menu > li > a {border-bottom-style: solid; border-bottom-color:transparent;}!*important to make all menu items same height otherwise buggy effect on click*!*/
+.badge {background: rgba(0, 0, 0, 0.23);padding: 0.6em 0.1em;font-weight: normal; /*avoid bold on badge when activated*/}
+.entry-menu-medium-step-01, .entry-menu-medium-step-02,.entry-menu-medium-step-03, .main-menu-all {display:none;}/*hide different menu version collapsed*/
+
+#local-masthead nav ul.dropdown.menu.float-left li a:hover:after {display: none; border-bottom: 3px;} /*important for collapse button remove foundation "bar" after that bug and makes the elements move*//*remove extra space that makes the banner move just for small screen*/
+#local-masthead ul.submenu li a:hover {background-color:#85b6d3; /*was 79b4d4*/color:white; /*border-bottom: 3px #85b6d3 solid;*/} /*dropdown menu style - button collapse*/
+
+
+/*RD - Breakpoints for menu to collapse into dropdown*/
+/*large*/
+@media screen and (min-width: 1296px) {.main-menu-all {display:block;}}
+/*medium large*/
+@media screen and (min-width: 1236px) and (max-width: 1295.9375px) {.entry-menu-medium-step-01 {display: block;}}
+/*medium*/
+@media screen and (min-width: 916px) and (max-width: 1235.9375px) {.entry-menu-medium-step-02 {display: block;}}
+/*small medium*/
+@media screen and (min-width: 40em) and (max-width: 915.9375px) {.entry-menu-medium-step-03 {display: block;}}
+/*/RD - Breakpoints for menu to collapse into dropdown*/
+
+/*/MENU*/
+
+
+/*
+IMAGE BANNER
+*/
+#local-masthead.md {
+    background-repeat: no-repeat, no-repeat;
+    background-position:  top left, top left;
+    background-size:  100%, 2000px;
+}
+#local-masthead.md-sm {background-repeat: no-repeat, no-repeat;
+    background-position: top right, left;
+    background-size: 100%, 100% 518px;}
+
+#local-masthead.md-gp {background-repeat: no-repeat, repeat;
+    background-position: top right, left;
+    background-size: 100%, 10%;}
+
+#local-masthead img {margin-left: -82px;margin-right: 4px; /*useful on sticky to hide logo totally*/width: 65px;}/*to make logo look like an icon -IMPORTANT limit width of image or banner show black bgd at bottom*/
+#local-masthead.md-smart {
+    background-image: linear-gradient(to right, #325578,rgba(249, 255, 182, 0.53),rgb(43, 111, 128) ), url(../images/backgrounds/fondation-morse-header.jpg);
+    background-position: top right, left;
+    background-size: 100%, 1027px;
+}
+
+#local-masthead {
+    background-image: linear-gradient(to right, rgba(0, 85, 158, 0.9),rgba(45, 174, 193, 0.5),rgba(0, 85, 158, 0.9) ), url(../images/backgrounds/fondation-morse-header.jpg);
+    background-repeat: no-repeat, repeat;
+    background-position: left, top right;
+    background-size: 100%, 1400px;
+}
+/*image entry*/
+.my-svg-container {float: left;  width: 15%;/*19%*/ vertical-align: middle;margin-right:2rem; margin-bottom: 0.5rem;}
+#my-svg-icon, #my-svg-icon-sm {background-image: linear-gradient(to right, rgba(58, 95, 125, 0.6),rgba(152, 216, 186, 0.6) ), url(../images/backgrounds/fondation-morse-header.jpg);height:8rem; width:8rem; border:1px solid #ccc;} /*specific style for MD icon*/
+.ico_hamb {margin-top:9px; margin-right:1rem;cursor: pointer;user-select: none; transition: transform 0.5s ease-in-out; transform: translateY(0);}
+.hamb_line {
+    stroke-width:1.5px;/*svg style*/
+    stroke: #fff;/*svg style*/
+    stroke-linecap:round;/*svg style*/
+    /*transform: rotate(0) translateY(0);*/
+    transform-origin: 50% 50%;/*needed*/
+}
+.ico_close .hamb_1 {transform: rotate(45deg) translate(2px, 2px); transition: transform 0.3s ease-in-out;}
+.ico_close .hamb_2 { opacity:0; transition: opacity .3s;}
+.ico_close .hamb_3 {transform: rotate(-45deg) translate(2.2px, -2.2px); transition: transform 0.3s ease-in-out;}
+
+.hamb_1, .hamb_2, .hamb_3 {transition: all .3s;}/*otherwise doesn't loop*/
+/************************ END BANNER**********************************/
+
+/************************ STICKY BANNER**********************************/
+.smaller {z-index: 1;left: 0; position:fixed; margin-top: -10.5em !important; }
+.smaller #local-masthead div#local-title {margin:1.2rem 0 2rem 0;}
+.smaller #local-title h1 {transform:  translate(28px,74px); font-size: 170%;}/*move logo reduce logo text*/
+.smaller #local-title h1 img {width:40px;}/*reduce logo image*/
+.smaller  h4 {transform: translate(156px,32px); font-size: 133%;}/*transform tagline*/
+.smaller .local-site-search {top:164px; right:72px;}/*move icon on right*/
+.smaller .local-offcanvas-menu  {top:164px;}/*move icon on right*/
+.smaller .local-site-search .icon-functional:before, .smaller .local-offcanvas-menu .icon-functional:before {font-size: 30px;}/*icon size and position*/
+
+/*solve bug offset title with sticky*/
+.anchor {display: block; position: relative; width: 0; height: 0;  z-index: -1; visibility: hidden; left: 0; top: -84px; /*change depending on banner width*/ }
+
+
+/*Foundation sticky*/
+#local-masthead.is-stuck .off-canvas {border:1px tan solid;}
+/*#local-masthead.is-stuck header .masthead {padding-top: 4.2rem;}*//*hack to give more height to the banner ?*/
+/*#local-masthead.is-stuck div#local-title  {margin-bottom:0.2rem;}*//*reduce space between title and menu when sticky*/
+#local-masthead.is-stuck div#local-title h1 {transform: scale(0.6) translate(-350px,131px);}/*transform logo*/
+#local-masthead.is-stuck h4 {transform: scale(0.8) translate(96px,24px);}/*transform tagline*/
+/*#local-masthead.is-stuck .extra {box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1) }*/ /*add a border and shadow*/
+#local-masthead.is-stuck .local-site-search {top:164px; right:72px;}
+#local-masthead.is-stuck .local-offcanvas-menu  {top:164px;}
+/*/Foundation sticky*/
+/************************ END STICKY BANNER**********************************/
+
+/******************************OFF CANVAS MENU*********************************/
+body.modal-open {overflow: hidden;} /*make the content of the page non-scrollable for offcanvas*/
+.offc-nav {width: 20rem; z-index: 3; position: fixed; top:0; right: -100%; height: 100%; background: rgba(59, 59, 59, 1); overflow-y: auto; /*vertical scroll*/-webkit-overflow-scrolling: touch; /*Use momentum-based scrolling, where the content continues to scroll for a while after finishing the scroll gesture*/  transition: all 0.25s ease;}
+.offc-nav.expand {right: 0;}
+.offc-nav.expand.shadow-in {box-shadow: inset 9px 0px 17px -11px rgba(0,0,0,0.9);}
+.offc-nav.expand.shadow-out {box-shadow:1px 0px 2px 3px rgba(0,0,0,0.3);}
+.offc-nav.expand ~ .main-header .local-offcanvas-menu, .offc-nav.expand ~ .main-header .local-site-search {transform: translateX(-20em);} /*animate the menu button open/close*/
+.offc-nav.expand ~ .dialog_layer {position: fixed;top: 0; right: 0; bottom: 0; left: 0;  height: 100%;width: 100%; background:  rgba(0, 0, 0, 0.5); z-index: 2; pointer-events: all; /*all click block*/ }
+/*.offc-nav:after {content: "";position: absolute;top: 0; right: 0; height: 100%;width: 34px; background: linear-gradient(left, transparent, rgba(0, 0, 0, 0.4));}*//*is this used?*/
+.offc-nav.expand a.exit-offcanvas, a.exit-offcanvas:visited {font-size: 200%; color: #999; float: right;font-weight: bold; position: absolute;top: -56px; right: 10px;  z-index: 5;}/*cross icon in right offcanvas menu*/
+.offc-nav.expand a.exit-offcanvas:hover {color: rgba(255,255,255,0.2);}
+/*off-canvas style from Foundation offcanvas.css*/
+ul.off-canvas-list {background: #333; bottom: 0; box-sizing: content-box;  -webkit-overflow-scrolling: touch; outline:0; list-style-type: none; margin: 0; padding: 0;}/*list style offcanvas menu*/
+ul.off-canvas-list li label {background: #444444; border-bottom: none; border-top: 1px solid #5e5e5e; color: #999999; display: block; font-size: 0.7rem; font-weight: bold;  margin: 0; padding: 0.52rem 0.83333rem; text-transform: uppercase;}/*title section*/
+ul.off-canvas-list li a {border-bottom: 0px solid #262626; color: rgba(255, 255, 255, 0.7); display: block; padding: 0.4rem 0.66667rem; transition: background 0.3s; font-size: 90%;/*same as top menu*/}
+ul.off-canvas-list.domain li a.active {color:black; font-weight: bold;}
+ul.off-canvas-list li a:hover {background: rgba(0, 0, 0, 0.3);}
+/*.offc-nav.expand ~ .main-header {transform: translateX(-9px);} !*important compensate for hidden scrollbar and avoid page move right and left doens't work for all screen sizes*!*/
+
+/*no-color option*/
+.no-col ul.off-canvas-list.primary.domain, .no-col ul.off-canvas-list.primary.family, .no-col ul.off-canvas-list.secondary, .no-col ul.off-canvas-list.tertiary {background: transparent;}
+.no-col .is-drilldown-submenu  {background: #3B3B3B;}
+.no-col ul.off-canvas-list li a.active {color:#2199e8;}
+.no-col ul.off-canvas-list li label {background: rgba(255,255,255,0.05);}
+/*/no-color option*/
+
+/*color just on label*/
+.label-col ul.off-canvas-list.primary.domain li label {color:#7dbb72;}
+.label-col ul.off-canvas-list.secondary li label {color:#2199e8;}
+.label-col ul.off-canvas-list.tertiary li label {color:#34b5b5;}
+.label-col .is-drilldown-submenu, .label-col ul.off-canvas-list.primary.domain, .label-col ul.off-canvas-list.secondary, .label-col ul.off-canvas-list.tertiary {background: #3B3B3B;}
+.label-col ul.off-canvas-list li a.active {color: #7dbb72;}
+
+.label-col ul.off-canvas-list.primary.domain li a:hover {background: rgba(51, 121, 38, 0.2);}
+.label-col ul.off-canvas-list.secondary li a:hover {background: rgba(47, 182, 197, 0.2);}
+.label-col ul.off-canvas-list.tertiary li a:hover {background: rgba(63,165,156,0.2);}
+/*/color just on label*/
+
+ul.off-canvas-list.primary.domain {background:#6aad4c;}/*domain*/
+ul.off-canvas-list.primary.family {background: indianred;}/*family*/
+ul.off-canvas-list.secondary, .is-drilldown-submenu  {background: #0e72bb;}
+ul.off-canvas-list.tertiary {background: #279292;}
+/*ul.off-canvas-list.primary li a { border-bottom: 1px solid rgba(0, 0, 0, 0.25);}*/
+
+/*drilldown feature*/
+.is-drilldown-submenu {margin:0;}
+.js-drilldown-back {background: #444444; border-bottom: none; border-top: 1px solid #5e5e5e;}
+/*.is-drilldown-submenu {top:38px;}*/
+/*/drilldown feature*/
+/******************************END OFF CANVAS MENU*********************************/
+
+/*Overwritting Foundation*/
+h1 small, h2 small, h3 small, h4 small {color: #bbb;}
+h5 small, h6 small {color: #8b8b8b;} /*style-darker*/
+.label {white-space: inherit;}/*labels for go terms were long and clashing with grid*/
+/*.has-tip {border-bottom-width: 0px;} not needed  anymore for go terms?*/
+#local-masthead h1 small, #local-masthead h2 small, #local-masthead h3 small, #local-masthead h4 small, #local-masthead h5 small, #local-masthead h6 small {color: #cacaca;}/*style - banner subtitle*/
+#local-masthead.md h4 small {color: #416b80;}/*specific to md */
+#local-masthead.md-smart h4 small {color: #a2d7b9;}
+/*/Overwritting Foundation*/
+
+/****************************** RIGHT PANEL *********************************/
+.panel a {color:#4c4c4c; padding-left: 3px ;}/*neutral link same as font-color*/
+.panel a:hover {color:#4c4c4c;}
+.panel a span {color:#bbb;font-size: 79%;}
+
+.panel .mdlink {background: #dde4e9; border-left: 5px solid #558abb; color: #4d4e53;    padding: 15px;}
+
+ul.domaintree  li, ul.familytree  li, ul.chevron  li {list-style: none;}
+ul.domaintree, ul.familytree, ul.chevron {margin-left:0;}
+
+ul.familytree>li:before, li.familybranch:before {content: ''; display: inline-block; height: 1.3em; background-image: url(../images/family_icon.svg); background-size: 100%; background-repeat: no-repeat; padding-left: 1.5em; top: 5px; position: relative;}
+ul.domaintree>li:before, li.domainbranch:before {content: ''; display: inline-block; height: 1.3em; background-image: url(../images/domain_icon.svg); background-size: 100%; background-repeat: no-repeat; padding-left: 1.5em; top: 5px; position: relative;}
+ul.chevron>li:before {content: ''; display: inline-block; height: 1em; background-image: url(../images/chevron.svg); background-repeat: no-repeat; padding-left: 1em; position: relative; top: 3px;}
+/****************************** END RIGHT PANEL *****************************/
+
+/****************************** TABLE *********************************/
+/*Filter menu option*/
+.sub-nav { background-color: #e7f2ff;  padding: 0.2rem 0.2rem 0.2rem 0;margin-bottom:1rem;}
+.sub-nav li {color: #686868;  font-size: 0.77778rem;  padding-left: 0.88889rem; }
+#content .sub-nav li.active a {border-radius: 3px; color: #fff; cursor: default;font-weight: normal; padding: 0.16667rem 0.88889rem;}
+#content .sub-nav a {border-bottom:0px solid red;}
+/*/filter menu option*/
+/****************************** END TABLE *********************************/
+
+
+/******************************LOCAL STYLE*********************************/
+/*footer*/
+.local_footer {padding:1rem 0;}
+.local_footer ul.off-canvas-list {background-color: transparent;}
+.local_footer ul.off-canvas-list label {background-color:transparent ;color:#baf7d5; font-size: 0.9rem;border-top:0px solid white;}
+.local_footer#local-masthead  ul.off-canvas-list a:visited.active {color:rgba(68, 68, 68, 0.6); }
+.local_footer#local-masthead  img.logo_faint {margin-left: 0;  margin-right: 0;  width: 170px;opacity: 0.4;}
+.local_footer#local-masthead  h1 {color:black;opacity: 0.4;}
+.local_footer .is-drilldown-submenu { background-color: #509394;}
+.local_footer#local-masthead {background-size: 130%, 110%;}
+/*Entry page - md info next title*/
+.md-hlight {display: block;overflow: auto;}
+.md-hlight div {float:left;}
+.md-hlight h5 {color: #41647d;}
+.md-hlight a, .md-hlight a:visited {color: #41647d;}
+/*/Entry page - md info next title*/
+
+/*homepage figures*/
+.fig-container {float: left; width: 17%; margin: 0 2em 1em 0; overflow: hidden;}
+.fig_sqc {background: url(../images/sqc.png) no-repeat -23% 136%; background-size: 65%;  height: 16em; width: 20em; margin-bottom: -78px; margin-top: 15px;}
+.fig_proteins {background: url(../images/proteins.png) no-repeat 0% 0%; background-size: 55%; height: 16em; width: 20em; margin-bottom: -68px;}
+.fig_protban {background: url(../images/backgrounds/protein3d_02.png) no-repeat 85% 9%; background-size: 503%; height: 16em; width: 20em; margin-bottom: -68px;}
+.fig_sqcban {background: url(../images/backgrounds/composite_03.png) no-repeat 85% 9%; background-size: 503%; height: 16em; width: 20em; margin-bottom: -68px;}
+/*/homepage figures*/
+
+/*homepage entry-list component*/
+.entry-list-latest ul {list-style: none; padding: 0; margin: 0; font-size: 94%;}
+.entry-list-latest .list-project-l ul li { padding: 0.2em 0.5em; border-radius: 6px;}
+.entry-list-latest .list-project-l ul li:hover {background-color:aliceblue;}
+.entry-list-latest .list-project-l a, .tabs a { color: #0a0a0a;}
+.list-project-l {position: relative;width: 100%; overflow-x: hidden; overflow-y: auto; height: 264px; margin-bottom: 1rem;}
+/*/homepage entry-list component*/
+
+/*homepage news component*/
+.jumbo-news-container {text-align: center; background-color: #eee; padding: 72px 0 72px 0;}
+.jumbo-news-centred {color: #454545; font-size: 130%; width: 38%; margin: 0 auto;}
+/*/homepage news component*/
+
+/*entry page - go term etiquette*/
+body .has-tip.go-bp {background-color: #058dc7; color:white;}
+body .has-tip.go-mf {background-color: #50b432; color:white;}
+body .has-tip.go-cc {background-color: #ed561b; color:white;}
+/*/entry page - go term etiquette*/
+
+/*back to top button*/
+#back-top {position: fixed; bottom: 0;  right: 19px; z-index: 100;}
+#back-top span.topicon {font-size: 1.5em;color:white;opacity: 0.18; background-color: black;padding: 6px 7px;}
+#back-top:hover span.topicon {opacity: 0.4; }
+#back-top a:hover,#back-top a:focus,#back-top a:active {border-bottom: 0px solid #8c8c8c; }
+#back-top span.text {opacity: 0; color: grey; font-size: 0.8em;}
+#back-top:hover span.text {opacity: 1;}
+#back-top:hover {padding-bottom: 14px;}
+/*/back to top button*/
+
+/*animation*/
+.anim {-webkit-transition: all .3s; /* Safari */ -moz-transition: all .3s; -o-transition: all .3s; -ms-transition: all .3s; transition: all .3s;}
+.animtxt {transition: font 0.3s ease;}
+/*#local-masthead:hover {-webkit-animation: bg-shift 10s infinite linear;}*/
+@-webkit-keyframes bg-shift{0%{background-position:0px;}100%{background-position:800px;}}@-moz-keyframes bg-shift{0%{background-position:0px;}100%{background-position:800px;}}@-ms-keyframes bg-shift{0%{background-position:0px;}100%{background-position:800px;}}
+/*/animation*/
+
+/*RESPONSIVE DESIGN*/
+@media screen and (max-width: 86em){
+    /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large devices*!*/
+    #local-masthead h1 {transform: translateX(80px);} /*this should be added to EBI style move the logo +text inside banner area for smaller screens*/
+    }
+
+/* Medium only */
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+    /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large devices*!*/
+    #local-masthead h1  {font-size: 2.4rem;}
+    #local-masthead h1 img {width:50px}
+    #local-masthead h4 {font-size: 110%;margin-bottom:1.2rem;}/*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
+    .menu > li.embl-selector {display:none ;}/*this should be added to EBI style to fix the slector to collpase row in two lines*/
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em){
+    #local-masthead {background-size: 100%, 600px;} /*reduce bgd image*/
+    .main-header {height:auto;}/*important - removed height banner defined when sticky*/
+    #local-masthead h1  {font-size: 1.8rem; transform: translateX(0px);}/*title logo small + remove translation*/
+    #local-masthead img {margin-left:0; margin-right:0; width:40px;}
+    #local-masthead .masthead {padding-top: 1.4rem;} /*align logo with menu icon on right*/
+    /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large  devices*!*/
+    .offc-nav.expand ~ .main-header .local-offcanvas-menu, .offc-nav.expand ~ .main-header .local-site-search {transform: translateX(-12em);}/*translation of the buttons is reduced for small screens*/
+    .local-site-search .icon-functional:before, .local-offcanvas-menu .icon-functional:before {font-size: 30px;}/*icon size and position*/
+    .local-site-search:hover .tool-search .search-box, .search-box:focus  {width: 50%;}/*reduce width input*/
+    .offc-nav {width: 12rem;} /*reduce width off-canvas menu*/
+    table th, table td  {font-size: 90%; word-break: break-all;}
+    /*remove the main menu - shouldn't this be done using foundation?*/
+    /*#local-masthead nav ul.dropdown.menu.float-left > li:first-child {display: inline-block; border-right: none;}*/
+    /*#local-masthead nav ul.dropdown.menu.float-left > li {display: none;}*/
+    #local-masthead nav ul#global-nav.menu li:nth-child(6),#local-masthead nav ul#global-nav.menu li:nth-child(7) {display:none;}/*remove 2 list items from EBI-global, as it collapse on two rows*/
+    #local-masthead nav ul li a:active {border-bottom:0px white solid;}/* !*important to keep - remove  gap when Entry menu click otherwise banner is moving*!*/
+    .my-svg-container {width: 36%; float: none; margin: 0 auto;}
+    .anchor { top: -144px;}/*change anchor position as no sticky for small screens*/
+}
+
+@media screen and (max-width: 20em){
+    .local-offcanvas-menu, .local-site-search {opacity:0;}/*make the buttons disappear for very small screens so they don't overlap with title*/
+}

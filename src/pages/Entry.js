@@ -12,6 +12,7 @@ import Title from 'components/Title';
 import {removeLastSlash} from 'utils/url';
 
 import styles from 'styles/blocks.css';
+import f from 'styles/foundation';
 
 const page = 'entry';
 const EntryPageNavigation = pageNavigation(page);
@@ -33,7 +34,7 @@ const Entry = (
 ) => {
   let main;
   if (data) {
-    if (Array.isArray(data.results)) {
+    if (Array.isArray(data.results)) { // List of entries
       main = (
         <Table
           data={data}
@@ -66,25 +67,13 @@ const Entry = (
           <Column accessKey="type">Type</Column>
         </Table>
       );
-    } else if (data.metadata) {
+    } else if (data.metadata) { // Single Entry page + including menu
       main = (
         <div>
-          <div style={{display: 'flex'}}>
-            <div style={{flexGrow: 3}}>
-              <Title metadata={data.metadata} pathname={pathname}/>
-            </div>
-            <div style={{flexGrow: 1}}>
-              <EntryPageNavigation
-                accession={data.metadata.accession}
-                counters={data.metadata.counters}
-                pathname={pathname}
-              />
-            </div>
-          </div>
           {cloneElement(children, {data})}
         </div>
       );
-    } else if (data.entries) {
+    } else if (data.entries) { // Member Database page
       main = (
         <div>
           <div style={{display: 'flex'}} className={styles.card}>
