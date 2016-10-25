@@ -96,88 +96,203 @@ var iconFunctionalClasses = styleBundle({
   "icon-functional": true
 });
 
+var emblSelectorClasses = styleBundle({
+  "float-right": true,
+  "show-for-medium": true,
+  "embl-selector": true
+});
+
+var emblButtonClasses = styleBundle({
+  "button": true,
+  "float-right": true
+});
+
+var emblLocationListClasses = styleBundle({
+  "column": true,
+  "padding-bottom-medium": true
+});
+
 const EbiGlobalHeader = () => (
-  <div id={styleBundle('global-masthead')} className={styleBundle('clearfix')}>
-    <a href="//www.ebi.ac.uk" title="Go to the EMBL-EBI homepage">
-      <span className={styleBundle('ebi-logo')}></span>
-    </a>
-    <nav>
-      <div className={styleBundle('row')}>
-        <ul id={styleBundle('global-nav')} className={styleBundle('menu')}>
+  <div>
+    <div id={styleBundle('global-masthead')} className={styleBundle('clearfix')}>
+      <a href="//www.ebi.ac.uk" title="Go to the EMBL-EBI homepage">
+        <span className={styleBundle('ebi-logo')}></span>
+      </a>
+      <nav>
+        <div className={styleBundle('row')}>
+          <ul id={styleBundle('global-nav')} className={styleBundle('menu')}>
 
-          <li id="home-mobile">
-            <a href="//www.ebi.ac.uk"></a>
-          </li>
+            <li id="home-mobile">
+              <a href="//www.ebi.ac.uk"></a>
+            </li>
 
-          <li id="home" className={styleBundle('active')}>
-            <a href="//www.ebi.ac.uk">
-              <i className={iconClasses} data-icon="H"></i> EMBL-EBI
-            </a>
-          </li>
+            <li id="home" className={styleBundle('active')}>
+              <a href="//www.ebi.ac.uk">
+                <i className={iconClasses} data-icon="H"></i> EMBL-EBI
+              </a>
+            </li>
 
-          <li id="services">
-            <a href="//www.ebi.ac.uk">
-              <i className={iconClasses} data-icon="("></i> Services
-            </a>
-          </li>
+            <li id="services">
+              <a href="//www.ebi.ac.uk/services">
+                <i className={iconClasses} data-icon="("></i> Services
+              </a>
+            </li>
 
-          <li id="research">
-            <a href="//www.ebi.ac.uk">
-              <i className={iconClasses} data-icon=")"></i> Research
-            </a>
-          </li>
+            <li id="research">
+              <a href="//www.ebi.ac.uk/research">
+                <i className={iconClasses} data-icon=")"></i> Research
+              </a>
+            </li>
 
-          <li id="training">
-            <a href="//www.ebi.ac.uk">
-              <i className={iconClasses} data-icon="t"></i> Training
-            </a>
-          </li>
+            <li id="training">
+              <a href="//www.ebi.ac.uk/training">
+                <i className={iconClasses} data-icon="t"></i> Training
+              </a>
+            </li>
 
-          <li id="about">
-            <a href="//www.ebi.ac.uk">
-              <i className={iconClasses} data-icon="i"></i> About us
-            </a>
-          </li>
+            <li id="about">
+              <a href="//www.ebi.ac.uk/about">
+                <i className={iconClasses} data-icon="i"></i> About us
+              </a>
+            </li>
 
-          <li id="search">
-            <a href="#"
-               data-toggle={styleBundle("search-global-dropdown")}
-               aria-controls={styleBundle("search-global-dropdown")}
-               data-yeti-box={styleBundle("search-global-dropdown")}
-               aria-haspopup="true"
-               aria-expanded="false">
-              <i className={iconFunctionalClasses} data-icon="1"></i>
-              <span className={styleBundle('show-for-small-only')}>Search</span>
-            </a>
-            <div id={styleBundle("search-global-dropdown")}
-                 className={styleBundle('dropdown-pane')}
-                 data-dropdown="arn8xj-dropdown"
-                 data-options="closeOnClick:true;"
-                 aria-hidden="true"
-                 data-yeti-box={styleBundle('dropdown-pane')}
-                 aria-labelledby="8m8za8-dd-anchor"
-                 data-events="resize"
-            >
-            </div>
-          </li>
+            <li id="search">
+              <a href="#"
+                 data-toggle={styleBundle("search-global-dropdown")}
+                 aria-controls={styleBundle("search-global-dropdown")}
+                 data-yeti-box={styleBundle("search-global-dropdown")}
+                 aria-haspopup="true"
+                 aria-expanded="false">
+                <i className={iconFunctionalClasses} data-icon="1"></i>
+                <span className={styleBundle('show-for-small-only')}>Search</span>
+              </a>
+              <EbiHeaderSearchForm />
+            </li>
 
-        </ul>
+            <li className={emblSelectorClasses}>
+              <button className={emblButtonClasses}
+                      type="button"
+                      data-toggle={styleBundle("embl-dropdown")}
+                      aria-controls={styleBundle("embl-dropdown")}
+                      data-is-focus="false"
+                      data-yeti-box={styleBundle("embl-dropdown")}
+                      aria-haspopup="true"
+                      aria-expanded="false">Hinxton</button>
+            </li>
+
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div id={styleBundle("embl-dropdown")}
+        className={styleBundle("dropdown-pane bottom")}
+        data-dropdown={styleBundle("qs9ew3-dropdown")}
+        aria-hidden="true"
+        data-yeti-box={styleBundle("embl-dropdown")}
+        data-resize={styleBundle("embl-dropdown")}
+        aria-labelledby={styleBundle("36bcej-dd-anchor")}
+        data-events="resize"
+        style={{
+          top: "48px",
+          left: "1px"
+        }}>
+
+      <p>
+        EMBL-EBI in Hinxton is one of five EMBL locations across europe.<br /> <a href="https://www.ebi.ac.uk/about" className={styleBundle({"small": true, "readmore": true})}>More about EMBL-EBI</a>
+      </p>
+      <h6>Connect to another EMBL location</h6>
+
+      <div className={styleBundle({
+        "small-collapse": true,
+        "small-up-2": true,
+        "padding-bottom-large": true,
+        "clearfix": true})}>
+        <div className={emblLocationListClasses}>
+          <a href="https://www.embl.fr/" >Grenoble</a>
+          <div className={styleBundle("small")}>Structural Biology</div>
+        </div>
       </div>
-    </nav>
+
+      <div className={styleBundle({
+        "small-collapse": true,
+        "small-up-2": true,
+        "padding-bottom-large": true,
+        "clearfix": true})}>
+        <div className={emblLocationListClasses}>
+          <a href="https://www.embl.fr/" >Hamburg</a>
+          <div className={styleBundle("small")}>Structural Biology</div>
+        </div>
+      </div>
+
+      <div className={styleBundle({
+        "small-collapse": true,
+        "small-up-2": true,
+        "padding-bottom-large": true,
+        "clearfix": true})}>
+        <div className={emblLocationListClasses}>
+          <a href="https://www.embl.fr/" >Heidelberg</a>
+          <div className={styleBundle("small")}>Main Laboratory</div>
+        </div>
+      </div>
+
+      <div className={styleBundle({
+        "small-collapse": true,
+        "small-up-2": true,
+        "padding-bottom-large": true,
+        "clearfix": true})}>
+        <div className={emblLocationListClasses}>
+          <a href="https://www.embl.fr/" >Monterotondo</a>
+          <div className={styleBundle("small")}>Mouse Biology</div>
+        </div>
+      </div>
+
+    </div>
   </div>
 );
 
-/*
- <nav>
- <div className={styles.ebi}>
- <span>EMBL-EBI</span>
- <span className={styles.ebi_services}>Services</span>
- <span>Research</span>
- <span>Training</span>
- <span>About us</span>
- </div>
- </nav>
- */
+const EbiHeaderSearchForm = () => (
+<div id={styleBundle("search-global-dropdown")}
+     className={styleBundle('dropdown-pane')}
+     data-dropdown="arn8xj-dropdown"
+     data-options="closeOnClick:true;"
+     aria-hidden="true"
+     data-yeti-box={styleBundle('dropdown-pane')}
+     aria-labelledby="8m8za8-dd-anchor"
+     data-events="resize"
+     style={{
+       top: "49.375[x",
+       left: "1px"
+     }}
+>
+  <form id={styleBundle('global-search')}
+        name={styleBundle('global-search')}
+        action="/ebisearch/search.ebi"
+        method="GET">
+    <fieldset>
+      <div className={styleBundle("input-group")}>
+        <input type="text"
+               name="query"
+               id={styleBundle("global-searchbox")}
+               className={styleBundle("input-group-field")}
+               placeholder="Search all of EMBL-EBI"></input>
+
+        <div className={styleBundle("input-group-button")}>
+          <input type="submit"
+                 name="submit"
+                 value="Search"
+                 className="button"></input>
+          <input type="hidden"
+                 name="db"
+                 value="allebi"></input>
+          <input type="hidden"
+                 name="requestFrom"
+                 value="global-masthead"></input>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+);
 
 const HeaderBackground = () => (
   <div className={styles.header_background} />
