@@ -13,7 +13,7 @@ import styles from 'styles/blocks.css';
 chai.use(jsxChai);
 const renderer = createRenderer();
 
-describe('External links', () => {
+describe.skip('External links', () => {
   describe('<GoTerms />', () => {
     it('should render GoTerms component', () => {
       renderer.render(

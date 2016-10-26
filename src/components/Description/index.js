@@ -6,7 +6,8 @@ import React, {PropTypes as T, Component} from 'react';
 
 import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
-const f = foundationPartial(ebiStyles);
+import styles from './style.css';
+const f = foundationPartial(ebiStyles, styles);
 
 import {transformFormatted} from 'utils/text';
 
@@ -42,25 +43,29 @@ class Description extends Component {
   }
   render(){
     const {textBlocks, literature} = this.props,
-      maxNumberOfChars = 500;
-    let tb = textBlocks;
-    if (!this.state.isOpen) {
-      tb = textBlocks.slice(0, 1);
-      if (tb[0].length>maxNumberOfChars) {
-        tb[0]=tb[0].substring(0, maxNumberOfChars) + '...';
-      }
-    }
+      maxNumberOfChars = 500,
+      hide = textBlocks.length < 2 && textBlocks[0].length < maxNumberOfChars;
     return (
       <div className={f('content')}>
         <h4>Description</h4>
-        {tb.map((b, i) => (
-          <p key={i}>
-            {transformFormatted(b).map((p, i) => (
-              <ParagraphWithCites key={i} p={p} literature={literature}/>
-            ))}
-          </p>
-        ))}
-        <button className={f('button')} id="show-more" onClick={this.handleClick}>
+        <div
+          className={f('animate-height', {collapsed: !this.state.isOpen})}
+          style={{maxHeight: this.state.isOpen ? '5000px' : '200px'}}
+        >
+          {textBlocks.map((b, i) => (
+            <div key={i}>
+              {transformFormatted(b).map((p, i) => (
+                <ParagraphWithCites key={i} p={p} literature={literature}/>
+              ))}
+            </div>
+          ))}
+        </div>
+        <br/>
+        <button
+          className={f('button', 'secondary', {hidden: hide})}
+          id="show-more"
+          onClick={this.handleClick}
+        >
           Read {this.state.isOpen ? 'less' : 'more'} about this entry
         </button>
       </div>
