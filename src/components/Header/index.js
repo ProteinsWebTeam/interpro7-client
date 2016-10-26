@@ -421,8 +421,11 @@ const Header = ({pathname}) => (
     <div className={styleBundle("sticky-container")}
       style={{ height: "203.75px"}}
     >
-      <div id={ebi_petrol_theme['local-masthead']}
-           className={styleBundle('sticky')}
+      <div id={ebi_global_styles['local-masthead']}
+           className={styleBundle({
+             sticky: "true",
+             "local-masthead": "true"
+           })}
            data-sticky="o53j5f-sticky"
            data-sticky-on="large"
            data-top-anchor="180"
