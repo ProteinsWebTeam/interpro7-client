@@ -63,12 +63,8 @@ const SummaryEntry = (
     }
     {
       Object.keys(metadata.go_terms) &&
-      <section id="goterms">
-        <div className={f('row')}>
-          <GoTerms terms={metadata.go_terms} />
-        </div>
-      </section>
-    }
+      <GoTerms terms={metadata.go_terms} />
+  }
   </div>
 );
 SummaryEntry.propTypes = {

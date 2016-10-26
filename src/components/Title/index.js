@@ -3,7 +3,6 @@ import React, {PropTypes as T} from 'react';
 import ipro from 'styles/interpro-new.css';
 import {Link} from 'react-router/es6';
 
-import 'interpro-components';
 
 import {buildLink} from 'utils/url';
 
@@ -63,7 +62,6 @@ const InterproSymbol = ({type}) => (
       </g>
       Sorry, your browser does not support inline SVG.
     </svg>
-    <interpro-type type={type} />
   </div>
 );
 InterproSymbol.propTypes = {

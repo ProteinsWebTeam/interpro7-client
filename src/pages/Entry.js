@@ -18,6 +18,7 @@ const page = 'entry';
 const EntryPageNavigation = pageNavigation(page);
 
 const colorHash = new ColorHash();
+import 'interpro-components';
 
 const Entry = (
   {data, location: {query, pathname}, dataUrl, children}
@@ -64,7 +65,12 @@ const Entry = (
             Accession
           </Column>
           <Column accessKey="name">Name</Column>
-          <Column accessKey="type">Type</Column>
+          <Column
+            accessKey="type"
+            renderer={(type)=>(
+              <interpro-type type={type} />
+            )}
+          >Type</Column>
         </Table>
       );
     } else if (data.metadata) { // Single Entry page + including menu
