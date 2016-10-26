@@ -27,7 +27,7 @@ Time.propTypes = {
 /* const InterproSymbol = ({type}) => (
 
 ); */
-const InterproSymbol = ({type}) => (
+export const InterproSymbol = ({type}) => (
   <div className={ipro['my-svg-container']}>
     <svg
       className={ipro['my-svg']}
