@@ -1,6 +1,6 @@
 /* @flow */
 import React, {PropTypes as T, cloneElement} from 'react';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 import ColorHash from 'color-hash/lib/color-hash';
 
 import pageNavigation from 'components/PageNavigation';

@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }]*/
 import React, {PropTypes as T} from 'react';
-import {withRouter, Link} from 'react-router/es6';
+import {withRouter, Link} from 'react-router/es';
 import {connect} from 'react-redux';
 import Table, {Column, PageSizeSelector, Exporter} from 'components/Table';
 const maxLength = 200;

@@ -19,10 +19,10 @@ module.exports = {
     {
       test: /\.js$/i,
       include: [
-        path.resolve('.', 'src'),
-        path.resolve('.', 'node_modules', 'react-router', 'es6'),
-        path.resolve('.', 'node_modules', 'lodash-es'),
-        path.resolve('.', 'node_modules', 'color-hash'),
+        path.resolve('src'),
+        path.resolve('node_modules', 'react-router', 'es'),
+        path.resolve('node_modules', 'lodash-es'),
+        path.resolve('node_modules', 'color-hash'),
       ],
       // loaders: [
       //   {
@@ -55,14 +55,10 @@ module.exports = {
       //     },
       //   ],
       // })],
-      loader: PROD || TEST ?
-        ExtractTextPlugin.extract(
-          'style-loader',
-          `css-loader?${JSON.stringify(cssSettings)}!postcss-loader`
-        ) :
-        `style-loader!css-loader?${
-          JSON.stringify(cssSettings)
-        }!postcss-loader`,
+      loader: ExtractTextPlugin.extract(
+        'style-loader',
+        `css-loader?${JSON.stringify(cssSettings)}!postcss-loader`
+      ),
     },
     {
       test: /\.scss$/i,
@@ -79,16 +75,12 @@ module.exports = {
       //     },
       //   ],
       // })],
-      loader: PROD || TEST ?
-        ExtractTextPlugin.extract(
-          'style-loader',
-          `css-loader?${
-            JSON.stringify(cssSettings)
-          }!sass-loader?sourceMap=${!PROD}`
-        ) :
-        `style-loader!css-loader?${
+      loader: ExtractTextPlugin.extract(
+        'style-loader',
+        `css-loader?${
           JSON.stringify(cssSettings)
-        }!sass-loader?sourceMap`,
+        }!sass-loader?sourceMap=${!PROD}`
+      ),
     },
     {
       test: /\.(jpe?g|png|gif|svg)$/i,
@@ -97,33 +89,32 @@ module.exports = {
       //     loader: 'url-loader',
       //     query: {
       //       name: `${PROD ? '' : '[name].'}[hash:3].[ext]`,
-      //       limit: 512,
+      //       limit: 1024,
       //     },
       //   },
       //   {
       //     loader: 'img-loader',
       //   },
       // ],
-      loader: `url-loader?${JSON.stringify({
-        name: `${PROD ? '' : '[name].'}[hash:3].[ext]`,
-        limit: 512,
-      })}!img-loader`,
+      loader: `url-loader?name=${
+        PROD ? '' : '[name].'
+      }[hash:3].[ext]&limit=1024!img-loader`,
     },
     {
-      test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-      loader: 'url-loader?limit=10000&mimetype=application/font-woff',
+      test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+      loader: 'url-loader?limit=1024&mimetype=application/font-woff',
       // loaders: [
       //   {
       //     loader: 'url-loader',
       //     query: {
-      //       limit: 10000,
+      //       limit: 1024,
       //       mimetype: 'application/font-woff',
       //     },
       //   },
       // ],
     },
     {
-      test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
       loader: 'file-loader',
       // loaders: ['file-loader'],
     },

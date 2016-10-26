@@ -1,5 +1,5 @@
 import React, {PropTypes as T} from 'react';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 import {buildLink} from 'utils/url';
 
 import styles from 'styles/blocks.css';
