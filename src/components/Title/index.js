@@ -96,19 +96,16 @@ const Title = (
       {
         isEntry && metadata.source_database.toLowerCase() !== 'interpro' &&
         <div className={ipro['md-hlight']}>
-          <div><h5>Member database:</h5></div>
-          <div style={{paddingLeft: '9px'}}>
-            <h5>
+            <h5>Member database:&nbsp;
               <Link to={buildLink(pathname, 'entry', metadata.source_database)}>
                 {metadata.source_database}
               </Link>
             </h5>
-          </div>
         </div>
       }
       {
         metadata.name.short &&
-        <p>Short name:
+        <p>Short name:&nbsp;
           <i className="small" style={{color: '#41647d'}}>
             {metadata.name.short}
           </i>

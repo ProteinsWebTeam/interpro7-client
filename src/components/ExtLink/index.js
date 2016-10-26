@@ -8,16 +8,17 @@ const types = {
   target: T.string,
 };
 
-export const BaseLink = ({id, pattern, target, className, children}) => (
-  <a target={target} href={pattern.replace('{id}', id)} className={className}>
-    {children}
-  </a>
-);
+export const BaseLink = ({id, pattern, target, className, children}) => {
+  const props = {href: pattern.replace('{id}', id), target};
+  if (className) props.className = className;
+  console.log("link", props);
+  return <a {...props}>{children}</a>;
+};
 BaseLink.propTypes = {
   id: T.oneOfType([T.string, T.number]).isRequired,
   pattern: T.string.isRequired,
   target: T.string.isRequired,
-  className: T.array,
+  className: T.string,
   children: T.node.isRequired,
 };
 
@@ -72,7 +73,7 @@ export const GoLink = ({id, target, className, children}) => {
       id={id.replace(':', '_')}
       target={target || '_blank'}
       pattern={pattern}
-      className={className}
+      {...(className?{className}:{})}
     >
       {children || id.replace('_', ':')}
     </BaseLink>
