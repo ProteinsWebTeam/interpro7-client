@@ -1,6 +1,6 @@
 import React, {Component, PropTypes as T} from 'react';
 import {findDOMNode} from 'react-dom';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 
 import domAttributeChecker from 'higherOrder/DOMAttributeChecker';
 import cfg from 'config';

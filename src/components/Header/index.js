@@ -1,16 +1,15 @@
 import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 
 import {openSideNav} from 'actions/creators';
-import cn from 'classnames/bind';
+
+import Breadcrumb from '../Breadcrumb';
 
 import styles from './style.css';
 import logo from 'images/logo/logo_75x75.png';
-import f from 'foundation-sites/dist/foundation.css';
 
-cn.bind(f);
-cn.bind(styles);
+import f from 'styles/foundation';
 
 // Only does this in a browser
 // Logic to attach the scaling of the banner to the scroll position
@@ -81,19 +80,37 @@ if (window) {
 }
 
 // This is temporary, assume the guidelines might change in the future
-const Ebi = () => (
-  <div className={styles.ebi}>
-    <span>EMBL-EBI</span>
-    <span className={styles.ebi_services}>Services</span>
-    <span>Research</span>
-    <span>Training</span>
-    <span>About us</span>
+const EbiGlobalHeader = () => (
+  <div id="global-masthead" className="clearfix">
+    <nav>
+      <div className={f('row')}>
+        <ul id="global-nav" className="menu">
+          <li id="home-mobile">
+            <a href="//www.ebi.ac.uk" />
+          </li>
+          <li id="home">
+            <a href="//www.ebi.ac.uk" />
+          </li>
+        </ul>
+      </div>
+    </nav>
   </div>
 );
 
+/*
+ <nav>
+ <div className={styles.ebi}>
+ <span>EMBL-EBI</span>
+ <span className={styles.ebi_services}>Services</span>
+ <span>Research</span>
+ <span>Training</span>
+ <span>About us</span>
+ </div>
+ </nav>
+ */
+
 const HeaderBackground = () => (
-  // <div className={styles.header_background} />
-  <div/>
+  <div className={styles.header_background} />
 );
 
 const menuItems = {
@@ -204,8 +221,8 @@ const Header = ({pathname}) => (
   <div className={styles.local_masthead}>
   <header>
 
-  <div className={f.row}>
-    <div className={cn('columns', 'large-12')}>
+  <div className={f('row')}>
+    <div className={f('columns', 'large-12')}>
 
     <Ebi />
 

@@ -5,3 +5,4 @@ dist/
 config.yml
 config.json
 stats.json
+**/.DS_Store

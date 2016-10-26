@@ -1,17 +1,15 @@
 /* @flow */
 import React from 'react';
-import {Link} from 'react-router/es6';
-import f from 'foundation-sites/dist/foundation.css';
-import cn from 'classnames/bind';
+import {Link} from 'react-router/es';
+import f from 'foundation';
+import SearchByText from 'components/SearchByText';
 
-cn.bind(f);
-import styles from 'styles/blocks.css';
 
 const Home = () => (
   <main>
 
-      <div className={f.row}>
-        <div className={cn('columns', 'large-12')}>
+      <div className={f('row')}>
+        <div className={f('columns', 'large-12')}>
 
       <ul>
         <li><Link to="entry">Entries</Link></li>

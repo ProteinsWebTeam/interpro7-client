@@ -1,0 +1,19 @@
+@import "../../../styles/ebi/fonts.css";
+
+.apply-all{
+  margin-left: 1rem;
+  display: inline-block;
+  cursor: pointer;
+  perspective: 100px;
+  backface-visibility: hidden;
+}
+.apply-all div{
+  display: inline-block;
+  transition: transform 300ms ease-in-out;
+  transform: rotate3d(0, 1, 0, 91deg);
+  transform-origin: left;
+  backface-visibility: hidden;
+}
+.apply-all:hover div {
+  transform: rotate3d(0, 1, 0, 0deg);
+}

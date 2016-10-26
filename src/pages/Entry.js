@@ -1,24 +1,17 @@
 /* @flow */
 import React, {PropTypes as T, cloneElement} from 'react';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 import ColorHash from 'color-hash/lib/color-hash';
-
-import pageNavigation from 'components/PageNavigation';
-
-import Table, {Column, Search} from 'components/Table';
-import Title from 'components/Title';
+import Table, {Column, Search, PageSizeSelector, Exporter}
+  from 'components/Table';
 
 import {removeLastSlash} from 'utils/url';
-
-import styles from 'styles/blocks.css';
-
-const page = 'entry';
-const EntryPageNavigation = pageNavigation(page);
+import 'interpro-components';
 
 const colorHash = new ColorHash();
 
 const Entry = (
-  {data, location: {query, pathname}, children}
+  {data, location: {query, pathname}, dataUrl, children}
   /*: {
     data: {
       results?: Array<Object>,
@@ -26,86 +19,96 @@ const Entry = (
       metadata?: Object,
      },
     location: {pathname: string, query: Object},
+    dataUrl: string,
     children: React$Element<any>,
   } */
 ) => {
   let main;
-  if (Array.isArray(data.results)) {
-    main = (
-      <Table
-        data={data}
-        query={query}
-        pathname={pathname}
-      >
-        <Search>Search entries</Search>
-        <Column
-          accessKey="accession"
-          renderer={(acc/*: string */) => (
-            <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-              {acc}
-            </Link>
-          )}
+  if (data) {
+    if (Array.isArray(data.results)) { // List of entries
+      main = (
+        <Table
+          data={data}
+          query={query}
+          pathname={pathname}
         >
-          Accession
-        </Column>
-        <Column accessKey="name">Name</Column>
-        <Column accessKey="type">Type</Column>
-      </Table>
-    );
-  } else if (data.metadata) {
-    main = (
-      <div>
-        <div style={{display: 'flex'}}>
-          <div style={{flexGrow: 3}}>
-            <Title metadata={data.metadata} pathname={pathname} />
-          </div>
-          <div style={{flexGrow: 1}}>
-            <EntryPageNavigation
-              accession={data.metadata.accession}
-              counters={data.metadata.counters}
-              pathname={pathname}
-            />
-          </div>
+          <Exporter>
+            <ul>
+              <li>
+                <a
+                  href={`${dataUrl}&format=json`}
+                  download="proteins.json"
+                >JSON</a><br/></li>
+              <li><a href={`${dataUrl}`}>Open in API web view</a></li>
+            </ul>
+          </Exporter>
+          <PageSizeSelector/>
+          <Search>Search entries</Search>
+          <Column
+            accessKey="accession"
+            renderer={(acc/*: string */) => (
+              <Link to={`${removeLastSlash(pathname)}/${acc}`}>
+                {acc}
+              </Link>
+            )}
+          >
+            Accession
+          </Column>
+          <Column accessKey="name">Name</Column>
+          <Column
+            accessKey="type"
+            renderer={(type) => (
+              <interpro-type type={type} />
+            )}
+          >Type</Column>
+        </Table>
+      );
+    } else if (data.metadata) { // Single Entry page + including menu
+      main = (
+        <div>
+          {cloneElement(children, {data})}
         </div>
-        {cloneElement(children, {data})}
-      </div>
-    );
-  } else if (data.entries) {
-    main = (
-      <div>
-        <div style={{display: 'flex'}} className={styles.card}>
-        {Object.entries(data.entries.member_databases)
-          .map(([name, count]) => (
+      );
+    } else if (data.entries) { // Member Database page
+      main = (
+        <div>
+          <div style={{display: 'flex'}}>
+            {Object.entries(data.entries.member_databases)
+              .map(([name, count]) => (
+                <Link
+                  to={`${removeLastSlash(pathname)}/${name}`}
+                  style={{
+                    flex: count,
+                    textAlign: 'center',
+                    padding: '1em 0',
+                    backgroundColor: colorHash.hex(name),
+                  }}
+                  key={name}
+                >
+                  {name} ({count})
+                </Link>
+              ))
+            }
+          </div>
+          <div style={{display: 'flex'}}>
             <Link
-              to={`${removeLastSlash(pathname)}/${name}`}
+              to={`${removeLastSlash(pathname)}/interpro`}
               style={{
-                flex: count,
+                flex: data.entries ? data.entries.interpro : 1,
                 textAlign: 'center',
                 padding: '1em 0',
-                backgroundColor: colorHash.hex(name),
+                backgroundColor: colorHash.hex('interpro'),
               }}
-              key={name}
             >
-              {name} ({count})
+              InterPro ({data.entries ? data.entries.interpro : 0})
             </Link>
-          ))
-        }
+          </div>
         </div>
-        <div style={{display: 'flex'}} className={styles.card}>
-        <Link
-          to={`${removeLastSlash(pathname)}/interpro`}
-          style={{
-            flex: data.entries ? data.entries.interpro : 1,
-            textAlign: 'center',
-            padding: '1em 0',
-            backgroundColor: colorHash.hex('interpro'),
-          }}
-        >
-          InterPro ({data.entries ? data.entries.interpro : 0})
-        </Link>
-        </div>
-      </div>
-    );
+      );
+    }
+  } else {
+    // TODO: Improve message and navigation out of it.
+    main = <div>There are no entries with the exiting filters.</div>;
   }
   return <main>{main}</main>;
 };
@@ -114,6 +117,7 @@ Entry.propTypes = {
   location: T.shape({
     pathname: T.string.isRequired,
   }).isRequired,
+  dataUrl: T.string,
   children: T.node,
 };
 Entry.dataUrlMatch = /^entry/i;

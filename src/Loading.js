@@ -39,7 +39,7 @@ class Loading extends Component {
     const {data, children} = this.state;
 
     return (
-      <div>
+      <div id="content" role="main">
         <div style={{
           pointerEvents: loading ? 'auto' : 'none',
           cursor: 'progress',
@@ -51,13 +51,15 @@ class Loading extends Component {
           textAlign: 'center',
           paddingTop: '2em',
           transition: loading ? 'opacity 0.5s ease-in' : '',
-        }}>
+        }}
+        >
           Loading
         </div>
         <div style={{
           opacity: loading ? HALF_VISIBLE : VISIBLE,
           transition: loading ? '' : 'opacity 0.5s ease-out',
-        }}>
+        }}
+        >
           {data && children ?
             cloneElement(children, {...otherProps, ...data}) :
             <div>Loading...</div>

@@ -8,7 +8,10 @@ import jsxChai from 'jsx-chai';
 import GoTerms from '.';
 import {GoLink} from 'components/ExtLink';
 
-import styles from 'styles/blocks.css';
+import ebiStyles from 'styles/ebi-global.css';
+import ipro from 'styles/interpro-new.css';
+import {foundationPartial} from 'styles/foundation';
+const f = foundationPartial(ebiStyles, ipro);
 
 chai.use(jsxChai);
 const renderer = createRenderer();
@@ -18,97 +21,140 @@ describe('External links', () => {
     it('should render GoTerms component', () => {
       renderer.render(
         <GoTerms terms={{
-          molecular_function: [
-            {name: 'serine-type carboxypeptidase activity', id: 'GO:0004185'},
-          ],
-          cellular_component: [
-            {name: 'vacuole', id: 'GO:0005773'},
-          ],
+          cellular_component: [],
           biological_process: [
-            {name: 'proteolysis', id: 'GO:0006508'},
+            {id: 'GO:0004930', name: 'test1'},
+            {id: 'GO:0007186', name: 'test2'},
+            {id: 'GO:0016021', name: 'test3'},
           ],
-        }} />
+          molecular_function: []}}
+        />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
-        <div className={styles.card}>
-          <h3>Gene Ontology Terms</h3>
-          <ul>
-            <li key="molecular_function">
-              <h4>molecular_function:</h4>
-              <ul>
-                <li><GoLink id="GO:0004185">
-                  serine-type carboxypeptidase activity (GO:0004185)
-                </GoLink></li>
+        <section id="go-terms">
+          <div className={f('row')}>
+            <div className={f('large-12', 'columns')}>
+              <h4>Go terms</h4>
+            </div>
+          </div>
+          <div className={f('row')}>
+            <div
+              key="cellular_component"
+              className={f('medium-6', 'large-4', 'columns')}
+            >
+              <h5 style={{textTransform: 'capitalize'}}>
+                cellular component
+              </h5>
+              <ul className={f('no-bullet')}>
+                <li>
+                  <span className={f('secondary', 'label')}>None</span>
+                </li>
               </ul>
-            </li>
-            <li key="cellular_component">
-              <h4>cellular_component:</h4>
-              <ul>
-                <li><GoLink id="GO:0005773">
-                  vacuole (GO:0005773)
-                </GoLink></li>
+            </div>
+            <div
+              key="biological_process"
+              className={f('medium-6', 'large-4', 'columns')}
+            >
+              <h5 style={{textTransform: 'capitalize'}}>
+                biological process
+              </h5>
+              <ul className={f('no-bullet')}>
+                <li key="GO:0004930">
+                  <GoLink
+                    id="GO:0004930"
+                    className={f('label', 'go', 'biological_process')}
+                  >test1 (GO:0004930)</GoLink>
+                </li>
+                <li key="GO:0007186">
+                  <GoLink
+                    id="GO:0007186"
+                    className={f('label', 'go', 'biological_process')}
+                  >test2 (GO:0007186)</GoLink>
+                </li>
+                <li key="GO:0016021">
+                  <GoLink
+                    id="GO:0016021"
+                    className={f('label', 'go', 'biological_process')}
+                  >test3 (GO:0016021)</GoLink>
+                </li>
               </ul>
-            </li>
-            <li key="biological_process">
-              <h4>biological_process:</h4>
-              <ul>
-                <li><GoLink id="GO:0006508">
-                  proteolysis (GO:0006508)
-                </GoLink></li>
+            </div>
+            <div
+              key="molecular_function"
+              className={f('medium-6', 'large-4', 'columns')}
+            >
+              <h5 style={{textTransform: 'capitalize'}}>
+                molecular function
+              </h5>
+              <ul className={f('no-bullet')}>
+                <li>
+                  <span className={f('secondary', 'label')}>None</span>
+                </li>
               </ul>
-            </li>
-          </ul>
-        </div>
+            </div>
+          </div>
+        </section>
       );
     });
 
-    it('should render GOTerms component with only the defined subset', () => {
+    it('should render GOTerms component with empty subset', () => {
       renderer.render(
         <GoTerms terms={{
-          molecular_function: [
-            {name: 'nucleic acid binding', id: 'GO:0003676'},
-          ],
-          cellular_component: [],
-          biological_process: [
-            {name: 'nucleic acid binding', id: 'GO:0003676'},
-          ],
-        }} />
-      );
-      expect(renderer.getRenderOutput()).to.deep.equal(
-        <div className={styles.card}>
-          <h3>Gene Ontology Terms</h3>
-          <ul>
-            <li key="molecular_function">
-              <h4>molecular_function:</h4>
-              <ul>
-                <li><GoLink id="GO:0003676">
-                  nucleic acid binding (GO:0003676)
-                </GoLink></li>
-              </ul>
-            </li>
-            <li key="biological_process">
-              <h4>biological_process:</h4>
-              <ul>
-                <li><GoLink id="GO:0003676">
-                  nucleic acid binding (GO:0003676)
-                </GoLink></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      );
-      renderer.render(
-        <GoTerms terms={{
-          molecular_function: [],
           cellular_component: [],
           biological_process: [],
-        }} />
+          molecular_function: [],
+        }}
+        />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
-        <div className={styles.card}>
-          <h3>Gene Ontology Terms</h3>
-          <ul />
-        </div>
+        <section id="go-terms">
+          <div className={f('row')}>
+            <div className={f('large-12', 'columns')}>
+              <h4>Go terms</h4>
+            </div>
+          </div>
+          <div className={f('row')}>
+            <div
+              key="cellular_component"
+              className={f('medium-6', 'large-4', 'columns')}
+            >
+              <h5 style={{textTransform: 'capitalize'}}>
+                cellular component
+              </h5>
+              <ul className={f('no-bullet')}>
+                <li>
+                  <span className={f('secondary', 'label')}>None</span>
+                </li>
+              </ul>
+            </div>
+            <div
+              key="biological_process"
+              className={f('medium-6', 'large-4', 'columns')}
+            >
+              <h5 style={{textTransform: 'capitalize'}}>
+                biological process
+              </h5>
+              <ul className={f('no-bullet')}>
+                <li>
+                  <span className={f('secondary', 'label')}>None</span>
+                </li>
+              </ul>
+            </div>
+            <div
+              key="molecular_function"
+              className={f('medium-6', 'large-4', 'columns')}
+            >
+              <h5 style={{textTransform: 'capitalize'}}>
+                molecular function
+              </h5>
+              <ul className={f('no-bullet')}>
+                <li>
+                  <span className={f('secondary', 'label')}>None</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
       );
     });
   });

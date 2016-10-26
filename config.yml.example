@@ -1,6 +1,7 @@
 root:
   website: //localhost:8080/interpro/
   API: //localhost:8000/interpro/api/
+  EBIsearch: //www.ebi.ac.uk/ebisearch/ws/rest/interpro
 pages:
   entry:
     plural: entries
@@ -10,3 +11,5 @@ pages:
   pathway: null
 pagination:
   pageSize: 10
+cache:
+  enabled: true

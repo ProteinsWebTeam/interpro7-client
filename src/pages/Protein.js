@@ -1,11 +1,12 @@
 /* @flow */
 import React, {PropTypes as T, cloneElement} from 'react';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 import ColorHash from 'color-hash/lib/color-hash';
 
 import pageNavigation from 'components/PageNavigation';
 
-import Table, {Column, Search} from 'components/Table';
+import Table, {Column, Search, PageSizeSelector, Exporter}
+  from 'components/Table';
 import Title from 'components/Title';
 
 import {removeLastSlash, buildLink} from 'utils/url';
@@ -19,7 +20,7 @@ const SVG_WIDTH = 100;
 const colorHash = new ColorHash();
 
 const Protein = (
-  {data, location: {query, pathname}, children}
+  {data, location: {query, pathname}, dataUrl, children}
   /*: {
     data: {
       results?: Array<Object>,
@@ -27,6 +28,7 @@ const Protein = (
       metadata?: Object,
     },
     location: {pathname: string, query: Object},
+    dataUrl: string,
     children: React$Element<any>,
   } */
 ) => {
@@ -37,12 +39,24 @@ const Protein = (
     const maxLength = data.results.reduce((max, result) => (
       Math.max(max, (result.metadata || result).length)
     ), 0);
+    console.log('url', dataUrl);
     main = (
       <Table
         data={data}
         query={query}
         pathname={pathname}
       >
+        <Exporter>
+          <ul>
+            <li>
+                <a
+                  href={`${dataUrl}&format=json`}
+                  download="proteins.json"
+                >JSON</a><br/></li>
+            <li><a href={`${dataUrl}`}>Open in API web view</a></li>
+          </ul>
+        </Exporter>
+        <PageSizeSelector pageSize={query.page_size}/>
         <Search>Search proteins</Search>
         <Column
           accessKey="accession"
@@ -143,6 +157,7 @@ Protein.propTypes = {
   location: T.shape({
     pathname: T.string.isRequired,
   }).isRequired,
+  dataUrl: T.string,
   children: T.node,
 };
 Protein.dataUrlMatch = /^protein/i;

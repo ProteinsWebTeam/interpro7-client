@@ -1,0 +1,4 @@
+.animate-height{
+  transition: max-height 300ms ease-in-out;
+  overflow: hidden;
+}

@@ -3,7 +3,8 @@ import React, {PropTypes as T} from 'react';
 
 // Global stylesheets loaded here
 import 'styles/foundation';
-import 'styles/global.css';
+import 'styles/ebi-global.css';
+import 'styles/interpro-new.css';
 
 import Header from 'components/Header';
 import SideMenu from 'components/SideMenu';

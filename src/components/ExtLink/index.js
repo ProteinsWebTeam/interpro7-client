@@ -4,18 +4,20 @@ import React, {PropTypes as T} from 'react';
 const types = {
   id: T.oneOfType([T.string, T.number]).isRequired,
   children: T.node,
+  className: T.string,
   target: T.string,
 };
 
-export const BaseLink = ({id, pattern, target, children}) => (
-  <a target={target} href={pattern.replace('{id}', id)}>
-    {children}
-  </a>
-);
+export const BaseLink = ({id, pattern, target, className, children}) => {
+  const props = {href: pattern.replace('{id}', id), target};
+  if (className) props.className = className;
+  return <a {...props}>{children}</a>;
+};
 BaseLink.propTypes = {
   id: T.oneOfType([T.string, T.number]).isRequired,
   pattern: T.string.isRequired,
   target: T.string.isRequired,
+  className: T.string,
   children: T.node.isRequired,
 };
 
@@ -60,7 +62,7 @@ PMCLink.propTypes = {
 
 export const DOILink = patternLinkWrapper('{id}');
 
-export const GoLink = ({id, target, children}) => {
+export const GoLink = ({id, target, className, children}) => {
   const pattern = (
     'http://www.ebi.ac.uk/ols/beta/ontologies/go/terms?iri=' +
     'http://purl.obolibrary.org/obo/{id}'
@@ -70,6 +72,7 @@ export const GoLink = ({id, target, children}) => {
       id={id.replace(':', '_')}
       target={target || '_blank'}
       pattern={pattern}
+      {...(className ? {className} : {})}
     >
       {children || id.replace('_', ':')}
     </BaseLink>

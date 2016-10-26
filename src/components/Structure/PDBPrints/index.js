@@ -28,7 +28,7 @@ const dependencies = [
     attributes: {
       src: '//www.ebi.ac.uk/pdbe/pdb-component-library/v1.0/js/pdb.component.library.min-1.0.0.js',
     },
-  }
+  },
 ];
 const prepareDependency = dependency => {
   const el = document.createElement(dependency.element);

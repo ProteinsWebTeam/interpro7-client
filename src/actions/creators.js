@@ -16,10 +16,22 @@ export const closeSideNav = () => ({
 });
 
 const parseValue = target => {
-  if (target.type === 'range') return parseFloat(target.value);
-  return target.value;
+  switch (target.type) {
+    case 'range':
+      return parseFloat(target.value);
+    case 'checkbox':
+      return target.checked;
+    default:
+      return target.value;
+  }
 };
 
+export const changePageSize = pageSize => ({
+  type: types.CHANGE_SETTINGS,
+  category: 'pagination',
+  key: 'pageSize',
+  value: +pageSize,
+});
 export const changeSettings = event => ({
   type: types.CHANGE_SETTINGS,
   category: event.target.form.dataset.category,
@@ -37,9 +49,10 @@ export const loadingData = urlKey => ({
   urlKey,
 });
 
-export const loadedData = (urlKey, data) => ({
+export const loadedData = (urlKey, dataUrl, data) => ({
   type: types.LOADED_DATA,
   urlKey,
+  dataUrl,
   data,
 });
 
