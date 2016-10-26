@@ -16,6 +16,7 @@
     "dev:test": "npm-run-all -rp dev:test:*",
     "dev:test:lint": "npm run test:lint -- --watch",
     "dev:test:unit": "npm run test:unit -- --watch",
+    "lint:fix": "esw --color --ignore-path .gitignore \"./**/*.js\" --fix",
     "clean": "rimraf dist",
     "bundle": "webpack --progress",
     "predeploy": "npm-run-all test clean",

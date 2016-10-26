@@ -11,7 +11,7 @@ const types = {
 export const BaseLink = ({id, pattern, target, className, children}) => {
   const props = {href: pattern.replace('{id}', id), target};
   if (className) props.className = className;
-  console.log("link", props);
+  console.log('link', props);
   return <a {...props}>{children}</a>;
 };
 BaseLink.propTypes = {
@@ -73,7 +73,7 @@ export const GoLink = ({id, target, className, children}) => {
       id={id.replace(':', '_')}
       target={target || '_blank'}
       pattern={pattern}
-      {...(className?{className}:{})}
+      {...(className ? {className} : {})}
     >
       {children || id.replace('_', ':')}
     </BaseLink>

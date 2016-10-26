@@ -17,11 +17,12 @@ const Literature = ({references}) => (
     <ul className={f('list')}>
       {Object.entries(references).map(([pubID, ref], i) => (
         <li className={f('reference', 'small')} key={pubID} id={pubID}>
-          <span className={f('index')}>[{i+1}]</span>
+          <span className={f('index')}>[{i + 1}]</span>
           <span className={f('authors')}>{ref.authors}</span>
           <span className={f('year')}>({ref.year})</span>.
           <span className={f('title')}>{ref.title}</span>
-          {ref.ISOJournal && <span className={f('journal')}>{ref.ISOJournal}, </span>}
+          {ref.ISOJournal &&
+           <span className={f('journal')}>{ref.ISOJournal}, </span>}
           {ref.issue && <span className={f('issue')}>{ref.issue}, </span>}
           {ref.rawPages && <span className={f('pages')}>{ref.rawPages}. </span>}
           <span className={f('reference_id')}>{pubID}.</span>
