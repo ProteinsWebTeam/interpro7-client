@@ -3,7 +3,8 @@ const path = require('path');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const PROD = process.env.NODE_ENV === 'PRODUCTION';
+const PROD = process.env.NODE_ENV === 'production';
+const TEST = process.env.NODE_ENV === 'test';
 
 const cssSettings = {
   modules: true,
@@ -54,10 +55,14 @@ module.exports = {
       //     },
       //   ],
       // })],
-      loader: ExtractTextPlugin.extract(
-        'style-loader',
-        `css-loader?${JSON.stringify(cssSettings)}!postcss-loader`
-      ),
+      loader: PROD || TEST ?
+        ExtractTextPlugin.extract(
+          'style-loader',
+          `css-loader?${JSON.stringify(cssSettings)}!postcss-loader`
+        ) :
+        `style-loader!css-loader?${
+          JSON.stringify(cssSettings)
+        }!postcss-loader`,
     },
     {
       test: /\.scss$/i,
@@ -74,12 +79,16 @@ module.exports = {
       //     },
       //   ],
       // })],
-      loader: ExtractTextPlugin.extract(
-        'style-loader',
-        `css-loader?${
+      loader: PROD || TEST ?
+        ExtractTextPlugin.extract(
+          'style-loader',
+          `css-loader?${
+            JSON.stringify(cssSettings)
+          }!sass-loader?sourceMap=${!PROD}`
+        ) :
+        `style-loader!css-loader?${
           JSON.stringify(cssSettings)
-        }!sass-loader?sourceMap=${!PROD}`
-      ),
+        }!sass-loader?sourceMap`,
     },
     {
       test: /\.(jpe?g|png|gif|svg)$/i,

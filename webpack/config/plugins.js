@@ -27,7 +27,10 @@ const common = [
   // new WebAppManifestPlugin(),
 ];
 
-const test = [...common];
+const test = [
+  ...common,
+  new ExtractTextPlugin('styles.[contenthash:3].css'),
+];
 
 // modifying common
 common.push(
@@ -39,7 +42,6 @@ common.push(
 );
 
 const dev = common.concat([
-  new ExtractTextPlugin('styles.[contenthash:3].css'),
   // Generates lots of favicons from source image
   // and injects their path into the head of index.html
   new FaviconsWebpackPlugin({
@@ -61,6 +63,7 @@ if (process.env.DASHBOARD) {
 }
 
 const production = common.concat([
+  new ExtractTextPlugin('styles.[contenthash:3].css'),
   new FaviconsWebpackPlugin({
     logo: path.join('.', 'images', 'logo', 'logo_75x75.png'),
     prefix: 'icon.[hash:3].',
