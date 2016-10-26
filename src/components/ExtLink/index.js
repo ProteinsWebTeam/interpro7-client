@@ -4,14 +4,13 @@ import React, {PropTypes as T} from 'react';
 const types = {
   id: T.oneOfType([T.string, T.number]).isRequired,
   children: T.node,
-  className: T.array,
+  className: T.string,
   target: T.string,
 };
 
 export const BaseLink = ({id, pattern, target, className, children}) => {
   const props = {href: pattern.replace('{id}', id), target};
   if (className) props.className = className;
-  console.log('link', props);
   return <a {...props}>{children}</a>;
 };
 BaseLink.propTypes = {

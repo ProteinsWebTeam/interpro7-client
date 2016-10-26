@@ -22,7 +22,6 @@ class PageSizeSelector extends Component{
     this.state = {pageSize: props.pageSize};
   }
   handleChange(event) {
-    console.log(this.props.pageSize, event.target.value);
     this.setState({pageSize: event.target.value});
     this.props.router.push({
       pathname: this.props.pathname,
