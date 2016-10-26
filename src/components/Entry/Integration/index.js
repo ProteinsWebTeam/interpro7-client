@@ -9,7 +9,7 @@ import ipro from 'styles/interpro-new.css';
 const Integration = ({intr, pathname}) => (
   <div className={styles.card} style={{flex: '0 0 auto'}}>
     <h5>Integrated to</h5>
-    <ul className={ipro['chevron']}>
+    <ul className={ipro.chevron}>
       <li>
         <Link to={buildLink(pathname, 'entry', 'interpro', intr)}>
           {intr}

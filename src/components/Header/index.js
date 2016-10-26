@@ -86,10 +86,10 @@ const EbiGlobalHeader = () => (
       <div className={f('row')}>
         <ul id="global-nav" className="menu">
           <li id="home-mobile">
-            <a href="//www.ebi.ac.uk"></a>
+            <a href="//www.ebi.ac.uk" />
           </li>
           <li id="home">
-            <a href="//www.ebi.ac.uk"></a>
+            <a href="//www.ebi.ac.uk" />
           </li>
         </ul>
       </div>

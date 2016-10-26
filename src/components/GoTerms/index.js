@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: [1, {ignore: [1, 10, 15, 30, 100]}] */
 import React, {PropTypes as T} from 'react';
 
 import {GoLink} from 'components/ExtLink';

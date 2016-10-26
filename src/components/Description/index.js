@@ -1,25 +1,22 @@
 /* @flow */
-/* eslint no-magic-numbers: [1, {ignore: [2]}] */
+/* eslint no-magic-numbers: [1, {ignore: [0, 1, 2]}] */
 import React, {PropTypes as T, Component} from 'react';
-
-// import ReadMoreCard from 'components/ReadMoreCard';
-
+import {transformFormatted} from 'utils/text';
 import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
 import styles from './style.css';
 const f = foundationPartial(ebiStyles, styles);
 
-import {transformFormatted} from 'utils/text';
 
 const ParagraphWithCites = ({p, literature}) => (
   <p>
-    {p.split( /<cite id="([^"]+)" ?\/>/i /*/\[(PUB\d+)\]/i*/).map((part, i) => {
-      const refCounter = Object.keys(literature).indexOf(part)+1;
+    {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
+      const refCounter = Object.keys(literature).indexOf(part) + 1;
       return (
       i % 2 ?
         <a key={i} href={`${location.pathname}#${part}`}>{refCounter}</a> :
         <span key={i}>{part}</span>
-    )})}
+    );})}
   </p>
 );
 ParagraphWithCites.propTypes = {

@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 15, 30, 100]}] */
 import React, {PropTypes as T, Component} from 'react';
 import {withRouter} from 'react-router/es';
 import {connect} from 'react-redux';
@@ -9,10 +10,10 @@ const f = foundationPartial(s);
 class PageSizeSelector extends Component{
   static propTypes = {
     query: T.object,
-    pageSize: T.number.isRequired,
-    router: T.object.isRequired,
-    pathname: T.string.isRequired,
-    changePageSize: T.func.isRequired,
+    pageSize: T.number,
+    router: T.object,
+    pathname: T.string,
+    changePageSize: T.func,
   };
   constructor(props){
     super(props);
@@ -21,7 +22,6 @@ class PageSizeSelector extends Component{
     this.state = {pageSize: props.pageSize};
   }
   handleChange(event) {
-    console.log(this.props.pageSize, event.target.value);
     this.setState({pageSize: event.target.value});
     this.props.router.push({
       pathname: this.props.pathname,
@@ -36,9 +36,9 @@ class PageSizeSelector extends Component{
   }
   render(){
     const options = [10, 15, 30, 100];
-    if (options.indexOf(this.state.pageSize) == -1) {
+    if (options.indexOf(this.state.pageSize) === -1) {
       options.push(this.state.pageSize);
-      options.sort((a,b)=>a-b);
+      options.sort((a, b) => a - b);
     }
     return (
       <div className={f('float-left')}>
@@ -49,7 +49,7 @@ class PageSizeSelector extends Component{
           onChange={this.handleChange}
              >
         {
-          options.map((opt,i)=>(<option key={i} value={opt}>{opt}</option>))
+          options.map((opt, i) => (<option key={i} value={opt}>{opt}</option>))
         }
         </select> results
         <a className=
