@@ -23,11 +23,14 @@ const common = [
   //     postcss: [postcssImport, postcssApply, cssnext],
   //   },
   // }),
-  new ExtractTextPlugin('styles.[contenthash:3].css'),
+  // new ExtractTextPlugin('styles.[contenthash:3].css'),
   // new WebAppManifestPlugin(),
 ];
 
-const test = [...common];
+const test = [
+  ...common,
+  new ExtractTextPlugin('styles.[contenthash:3].css'),
+];
 
 // modifying common
 common.push(
@@ -60,6 +63,7 @@ if (process.env.DASHBOARD) {
 }
 
 const production = common.concat([
+  new ExtractTextPlugin('styles.[contenthash:3].css'),
   new FaviconsWebpackPlugin({
     logo: path.join('.', 'images', 'logo', 'logo_75x75.png'),
     prefix: 'icon.[hash:3].',

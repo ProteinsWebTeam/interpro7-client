@@ -298,9 +298,13 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 /*/homepage news component*/
 
 /*entry page - go term etiquette*/
-body .has-tip.go-bp {background-color: #058dc7; color:white;}
-body .has-tip.go-mf {background-color: #50b432; color:white;}
-body .has-tip.go-cc {background-color: #ed561b; color:white;}
+a.go {
+  cursor: pointer;
+  color: white;
+}
+.biological_process {background-color: #058dc7;}
+.molecular_function {background-color: #50b432;}
+.cellular_component {background-color: #ed561b;}
 /*/entry page - go term etiquette*/
 
 /*back to top button*/
