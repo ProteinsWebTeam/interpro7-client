@@ -4,7 +4,7 @@ import {Link} from 'react-router/es';
 
 import {openSideNav} from 'actions/creators';
 
-import Breadcrumb from '../Breadcrumb';
+import DynamicMenu from './DynamicMenu';
 
 import styles from './style.css';
 import logo from 'images/logo/logo_75x75.png';
@@ -222,8 +222,8 @@ const Header = ({pathname}) => (
       <HeaderBackground />
       <TopLevel />
       <MediumLevel pageType={pathname.split('/').filter(x => x)[0]}/>
+      <DynamicMenu />
     </div>
-    <Breadcrumb pathname={pathname} />
   </header>
 );
 Header.propTypes = {

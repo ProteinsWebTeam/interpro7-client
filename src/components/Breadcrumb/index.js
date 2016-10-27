@@ -132,6 +132,7 @@ class Breadcrumb extends Component {
     const endpoints = formatEndpoints(paths, expanded, this.props);
     return (
       <nav
+        style={{display: this.props.pathname === '/' ? 'none' : 'flex'}}
         className={styles[expanded ? 'expanded' : 'standard']}
         onFocus={this.expand} onBlur={this.reduce}
         onMouseEnter={this.expand} onMouseLeave={this.reduce}
