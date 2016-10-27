@@ -4,7 +4,6 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const PROD = process.env.NODE_ENV === 'production';
-const TEST = process.env.NODE_ENV === 'test';
 
 const cssSettings = {
   modules: true,
@@ -23,6 +22,9 @@ module.exports = {
         path.resolve('node_modules', 'react-router', 'es'),
         path.resolve('node_modules', 'lodash-es'),
         path.resolve('node_modules', 'color-hash'),
+        // path.resolve('node_modules', 'data-loader'),
+        // path.resolve('node_modules', 'interpro-components'),
+        // path.resolve('node_modules', 'pdb-web-components'),
       ],
       // loaders: [
       //   {

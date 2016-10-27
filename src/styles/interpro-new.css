@@ -1,16 +1,16 @@
 /******************************Overwritting EBI  global****************************/
 ul#global-nav {padding-top:0;}/****IMPORTANT TO FIX****remove space on top of page for EBI menu**********/
-#local-masthead nav ul#secondary-menu-links.menu li a:hover:after, #local-masthead nav ul#global-nav.menu li a:hover:after, #local-masthead nav ul.menu li a:hover:after {    top: 0px;border-left: 0px solid transparent;    border-right: 0px solid transparent;} /*****remove arrows in the menu*****/
-#local-masthead nav ul li a:active {border-bottom: 3px white solid;} /*****remove arrows in the menu - fill the gap when menu click when no arrow*****/
+.local-masthead nav ul#secondary-menu-links.menu li a:hover:after, .local-masthead nav ul#global-nav.menu li a:hover:after, .local-masthead nav ul.menu li a:hover:after {    top: 0px;border-left: 0px solid transparent;    border-right: 0px solid transparent;} /*****remove arrows in the menu*****/
+.local-masthead nav ul li a:active {border-bottom: 3px white solid;} /*****remove arrows in the menu - fill the gap when menu click when no arrow*****/
 
 a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
 #content a:hover, #content a:focus, #content a:active {border-bottom: 1px solid #8c8c8c; } /*STYLE - add a line for links just on mouse over*/
 #content {padding-top: 1rem ;}/*add some more space on top between banner and breadcrumb */
-#local-masthead nav ul.menu li {border-right: 1px solid rgba(248, 248, 248, 0.2);}/*STYLE - slightly hide division between menu items*/
-#local-masthead ul li.is-active a, #local-masthead ul li a:hover, #local-masthead nav ul li a.hover, #local-masthead nav ul li a:hover {color: #000;}/*STYLE - make menu items hover slightly darker*/
+.local-masthead nav ul.menu li {border-right: 1px solid rgba(248, 248, 248, 0.2);}/*STYLE - slightly hide division between menu items*/
+.local-masthead ul li.is-active a, .local-masthead ul li a:hover, .local-masthead nav ul li a.hover, .local-masthead nav ul li a:hover {color: #000;}/*STYLE - make menu items hover slightly darker*/
 .pagination .current {background: #3798a7;}/*STYLE - custom color for table pagination MISSING in THEME-EBI*/
 
-/*div#local-masthead {position:relative;}!*to have the right banner button icons align properly on the right when offcanvas is open - work only if content is resized*!*/
+/*div.local-masthead {position:relative;}!*to have the right banner button icons align properly on the right when offcanvas is open - work only if content is resized*!*/
 /****************************** END Overwritting EBI  global**********************/
 
 /******************************Local style***************************************/
@@ -41,8 +41,8 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 /******************************BANNER*********************************/
 .main-header {width: 100%; height: 260px;/*better to define size here than in the #content padding*/}
 .main-header.sm {position: relative;} /*mobile - remove sticky*/
-#local-masthead h1 {white-space: nowrap;} /*remove space between logo and text so it doesn't break on two lines*/
-#local-masthead h1 span {font-size: 41%;}
+.local-masthead h1 {white-space: nowrap;} /*remove space between logo and text so it doesn't break on two lines*/
+.local-masthead h1 span {font-size: 41%;}
 
 /***** LOCAL BUTTONS  *****/
 .local-site-search .icon-functional:before ,.local-offcanvas-menu .icon-functional:before {font-size: 40px;}
@@ -79,11 +79,16 @@ input:focus:-ms-input-placeholder {color:transparent;}
 
 #local-masthead .menu .active {color: #0a0a0a; background: #fff;}/*this should be defined in the default ebi css*/
 /*#local-masthead .menu > li > a {border-bottom-style: solid; border-bottom-color:transparent;}!*important to make all menu items same height otherwise buggy effect on click*!*/
-.badge {background: rgba(0, 0, 0, 0.23);padding: 0.6em 0.1em;font-weight: normal; /*avoid bold on badge when activated*/}
+.badge {
+  background: rgba(0, 0, 0, 0.23);
+  border-radius: 1em;
+  padding: 0.5em;
+  font-weight: normal; /*avoid bold on badge when activated*/
+}
 .entry-menu-medium-step-01, .entry-menu-medium-step-02,.entry-menu-medium-step-03, .main-menu-all {display:none;}/*hide different menu version collapsed*/
 
-#local-masthead nav ul.dropdown.menu.float-left li a:hover:after {display: none; border-bottom: 3px;} /*important for collapse button remove foundation "bar" after that bug and makes the elements move*//*remove extra space that makes the banner move just for small screen*/
-#local-masthead ul.submenu li a:hover {background-color:#85b6d3; /*was 79b4d4*/color:white; /*border-bottom: 3px #85b6d3 solid;*/} /*dropdown menu style - button collapse*/
+.local-masthead nav ul.dropdown.menu.float-left li a:hover:after {display: none; border-bottom: 3px;} /*important for collapse button remove foundation "bar" after that bug and makes the elements move*//*remove extra space that makes the banner move just for small screen*/
+.local-masthead ul.submenu li a:hover {background-color:#85b6d3; /*was 79b4d4*/color:white; /*border-bottom: 3px #85b6d3 solid;*/} /*dropdown menu style - button collapse*/
 
 
 /*RD - Breakpoints for menu to collapse into dropdown*/
@@ -103,27 +108,27 @@ input:focus:-ms-input-placeholder {color:transparent;}
 /*
 IMAGE BANNER
 */
-#local-masthead.md {
+.local-masthead.md {
     background-repeat: no-repeat, no-repeat;
     background-position:  top left, top left;
     background-size:  100%, 2000px;
 }
-#local-masthead.md-sm {background-repeat: no-repeat, no-repeat;
+.local-masthead.md-sm {background-repeat: no-repeat, no-repeat;
     background-position: top right, left;
     background-size: 100%, 100% 518px;}
 
-#local-masthead.md-gp {background-repeat: no-repeat, repeat;
+.local-masthead.md-gp {background-repeat: no-repeat, repeat;
     background-position: top right, left;
     background-size: 100%, 10%;}
 
-#local-masthead img {margin-left: -82px;margin-right: 4px; /*useful on sticky to hide logo totally*/width: 65px;}/*to make logo look like an icon -IMPORTANT limit width of image or banner show black bgd at bottom*/
-#local-masthead.md-smart {
+.local-masthead img {margin-left: -82px;margin-right: 4px; /*useful on sticky to hide logo totally*/width: 65px;}/*to make logo look like an icon -IMPORTANT limit width of image or banner show black bgd at bottom*/
+.local-masthead.md-smart {
     background-image: linear-gradient(to right, #325578,rgba(249, 255, 182, 0.53),rgb(43, 111, 128) ), url(../images/backgrounds/fondation-morse-header.jpg);
     background-position: top right, left;
     background-size: 100%, 1027px;
 }
 
-#local-masthead {
+.local-masthead {
     background-image: linear-gradient(to right, rgba(0, 85, 158, 0.9),rgba(45, 174, 193, 0.5),rgba(0, 85, 158, 0.9) ), url(../images/backgrounds/fondation-morse-header.jpg);
     background-repeat: no-repeat, repeat;
     background-position: left, top right;
@@ -149,7 +154,7 @@ IMAGE BANNER
 
 /************************ STICKY BANNER**********************************/
 .smaller {z-index: 1;left: 0; position:fixed; margin-top: -10.5em !important; }
-.smaller #local-masthead div#local-title {margin:1.2rem 0 2rem 0;}
+.smaller .local-masthead div#local-title {margin:1.2rem 0 2rem 0;}
 .smaller #local-title h1 {transform:  translate(28px,74px); font-size: 170%;}/*move logo reduce logo text*/
 .smaller #local-title h1 img {width:40px;}/*reduce logo image*/
 .smaller  h4 {transform: translate(156px,32px); font-size: 133%;}/*transform tagline*/
@@ -162,14 +167,14 @@ IMAGE BANNER
 
 
 /*Foundation sticky*/
-#local-masthead.is-stuck .off-canvas {border:1px tan solid;}
-/*#local-masthead.is-stuck header .masthead {padding-top: 4.2rem;}*//*hack to give more height to the banner ?*/
-/*#local-masthead.is-stuck div#local-title  {margin-bottom:0.2rem;}*//*reduce space between title and menu when sticky*/
-#local-masthead.is-stuck div#local-title h1 {transform: scale(0.6) translate(-350px,131px);}/*transform logo*/
-#local-masthead.is-stuck h4 {transform: scale(0.8) translate(96px,24px);}/*transform tagline*/
-/*#local-masthead.is-stuck .extra {box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1) }*/ /*add a border and shadow*/
-#local-masthead.is-stuck .local-site-search {top:164px; right:72px;}
-#local-masthead.is-stuck .local-offcanvas-menu  {top:164px;}
+.local-masthead.is-stuck .off-canvas {border:1px tan solid;}
+/*.local-masthead.is-stuck header .masthead {padding-top: 4.2rem;}*//*hack to give more height to the banner ?*/
+/*.local-masthead.is-stuck div#local-title  {margin-bottom:0.2rem;}*//*reduce space between title and menu when sticky*/
+.local-masthead.is-stuck div#local-title h1 {transform: scale(0.6) translate(-350px,131px);}/*transform logo*/
+.local-masthead.is-stuck h4 {transform: scale(0.8) translate(96px,24px);}/*transform tagline*/
+/*.local-masthead.is-stuck .extra {box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1) }*/ /*add a border and shadow*/
+.local-masthead.is-stuck .local-site-search {top:164px; right:72px;}
+.local-masthead.is-stuck .local-offcanvas-menu  {top:164px;}
 /*/Foundation sticky*/
 /************************ END STICKY BANNER**********************************/
 
@@ -229,9 +234,9 @@ h1 small, h2 small, h3 small, h4 small {color: #bbb;}
 h5 small, h6 small {color: #8b8b8b;} /*style-darker*/
 .label {white-space: inherit;}/*labels for go terms were long and clashing with grid*/
 /*.has-tip {border-bottom-width: 0px;} not needed  anymore for go terms?*/
-#local-masthead h1 small, #local-masthead h2 small, #local-masthead h3 small, #local-masthead h4 small, #local-masthead h5 small, #local-masthead h6 small {color: #cacaca;}/*style - banner subtitle*/
-#local-masthead.md h4 small {color: #416b80;}/*specific to md */
-#local-masthead.md-smart h4 small {color: #a2d7b9;}
+.local-masthead h1 small, .local-masthead h2 small, .local-masthead h3 small, .local-masthead h4 small, .local-masthead h5 small, .local-masthead h6 small {color: #cacaca;}/*style - banner subtitle*/
+.local-masthead.md h4 small {color: #416b80;}/*specific to md */
+.local-masthead.md-smart h4 small {color: #a2d7b9;}
 /*/Overwritting Foundation*/
 
 /****************************** RIGHT PANEL *********************************/
@@ -264,11 +269,11 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 .local_footer {padding:1rem 0;}
 .local_footer ul.off-canvas-list {background-color: transparent;}
 .local_footer ul.off-canvas-list label {background-color:transparent ;color:#baf7d5; font-size: 0.9rem;border-top:0px solid white;}
-.local_footer#local-masthead  ul.off-canvas-list a:visited.active {color:rgba(68, 68, 68, 0.6); }
-.local_footer#local-masthead  img.logo_faint {margin-left: 0;  margin-right: 0;  width: 170px;opacity: 0.4;}
-.local_footer#local-masthead  h1 {color:black;opacity: 0.4;}
+.local_footer.local-masthead  ul.off-canvas-list a:visited.active {color:rgba(68, 68, 68, 0.6); }
+.local_footer.local-masthead  img.logo_faint {margin-left: 0;  margin-right: 0;  width: 170px;opacity: 0.4;}
+.local_footer.local-masthead  h1 {color:black;opacity: 0.4;}
 .local_footer .is-drilldown-submenu { background-color: #509394;}
-.local_footer#local-masthead {background-size: 130%, 110%;}
+.local_footer.local-masthead {background-size: 130%, 110%;}
 /*Entry page - md info next title*/
 .md-hlight {display: block;overflow: auto;}
 .md-hlight div {float:left;}
@@ -320,32 +325,32 @@ a.go {
 /*animation*/
 .anim {-webkit-transition: all .3s; /* Safari */ -moz-transition: all .3s; -o-transition: all .3s; -ms-transition: all .3s; transition: all .3s;}
 .animtxt {transition: font 0.3s ease;}
-/*#local-masthead:hover {-webkit-animation: bg-shift 10s infinite linear;}*/
+/*.local-masthead:hover {-webkit-animation: bg-shift 10s infinite linear;}*/
 @-webkit-keyframes bg-shift{0%{background-position:0px;}100%{background-position:800px;}}@-moz-keyframes bg-shift{0%{background-position:0px;}100%{background-position:800px;}}@-ms-keyframes bg-shift{0%{background-position:0px;}100%{background-position:800px;}}
 /*/animation*/
 
 /*RESPONSIVE DESIGN*/
 @media screen and (max-width: 86em){
     /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large devices*!*/
-    #local-masthead h1 {transform: translateX(80px);} /*this should be added to EBI style move the logo +text inside banner area for smaller screens*/
+    .local-masthead h1 {transform: translateX(80px);} /*this should be added to EBI style move the logo +text inside banner area for smaller screens*/
     }
 
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
     /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large devices*!*/
-    #local-masthead h1  {font-size: 2.4rem;}
-    #local-masthead h1 img {width:50px}
-    #local-masthead h4 {font-size: 110%;margin-bottom:1.2rem;}/*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
+    .local-masthead h1  {font-size: 2.4rem;}
+    .local-masthead h1 img {width:50px}
+    .local-masthead h4 {font-size: 110%;margin-bottom:1.2rem;}/*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
     .menu > li.embl-selector {display:none ;}/*this should be added to EBI style to fix the slector to collpase row in two lines*/
 }
 
 /* Small only */
 @media screen and (max-width: 39.9375em){
-    #local-masthead {background-size: 100%, 600px;} /*reduce bgd image*/
+    .local-masthead {background-size: 100%, 600px;} /*reduce bgd image*/
     .main-header {height:auto;}/*important - removed height banner defined when sticky*/
-    #local-masthead h1  {font-size: 1.8rem; transform: translateX(0px);}/*title logo small + remove translation*/
-    #local-masthead img {margin-left:0; margin-right:0; width:40px;}
-    #local-masthead .masthead {padding-top: 1.4rem;} /*align logo with menu icon on right*/
+    .local-masthead h1  {font-size: 1.8rem; transform: translateX(0px);}/*title logo small + remove translation*/
+    .local-masthead img {margin-left:0; margin-right:0; width:40px;}
+    .local-masthead .masthead {padding-top: 1.4rem;} /*align logo with menu icon on right*/
     /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large  devices*!*/
     .offc-nav.expand ~ .main-header .local-offcanvas-menu, .offc-nav.expand ~ .main-header .local-site-search {transform: translateX(-12em);}/*translation of the buttons is reduced for small screens*/
     .local-site-search .icon-functional:before, .local-offcanvas-menu .icon-functional:before {font-size: 30px;}/*icon size and position*/
@@ -353,10 +358,10 @@ a.go {
     .offc-nav {width: 12rem;} /*reduce width off-canvas menu*/
     table th, table td  {font-size: 90%; word-break: break-all;}
     /*remove the main menu - shouldn't this be done using foundation?*/
-    /*#local-masthead nav ul.dropdown.menu.float-left > li:first-child {display: inline-block; border-right: none;}*/
-    /*#local-masthead nav ul.dropdown.menu.float-left > li {display: none;}*/
-    #local-masthead nav ul#global-nav.menu li:nth-child(6),#local-masthead nav ul#global-nav.menu li:nth-child(7) {display:none;}/*remove 2 list items from EBI-global, as it collapse on two rows*/
-    #local-masthead nav ul li a:active {border-bottom:0px white solid;}/* !*important to keep - remove  gap when Entry menu click otherwise banner is moving*!*/
+    /*.local-masthead nav ul.dropdown.menu.float-left > li:first-child {display: inline-block; border-right: none;}*/
+    /*.local-masthead nav ul.dropdown.menu.float-left > li {display: none;}*/
+    .local-masthead nav ul#global-nav.menu li:nth-child(6),.local-masthead nav ul#global-nav.menu li:nth-child(7) {display:none;}/*remove 2 list items from EBI-global, as it collapse on two rows*/
+    .local-masthead nav ul li a:active {border-bottom:0px white solid;}/* !*important to keep - remove  gap when Entry menu click otherwise banner is moving*!*/
     .my-svg-container {width: 36%; float: none; margin: 0 auto;}
     .anchor { top: -144px;}/*change anchor position as no sticky for small screens*/
 }

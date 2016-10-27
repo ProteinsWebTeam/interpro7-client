@@ -27,27 +27,30 @@ const subPagesTransformer = (subPages, main) => subPages
 const subPages = [
   {
     path: '(.*/)*entry(/.*)*',
-    getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('subPages/Entry').default);
-      });
-    },
+    component: require('subPages/Entry').default,
+    // getComponent(_, cb) {
+    //   require.ensure([], () => {
+    //     cb(null, require('subPages/Entry').default);
+    //   });
+    // },
   },
   {
     path: '(.*/)*protein(/.*)*',
-    getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('subPages/Protein').default);
-      });
-    },
+    component: require('subPages/Protein').default,
+    // getComponent(_, cb) {
+    //   require.ensure([], () => {
+    //     cb(null, require('subPages/Protein').default);
+    //   });
+    // },
   },
   {
     path: '(.*/)*structure(/.*)*',
-    getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('subPages/Structure').default);
-      });
-    },
+    component: require('subPages/Structure').default,
+    // getComponent(_, cb) {
+    //   require.ensure([], () => {
+    //     cb(null, require('subPages/Structure').default);
+    //   });
+    // },
   },
 ];
 

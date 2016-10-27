@@ -5,6 +5,8 @@
     <% for (const css of htmlWebpackPlugin.files.css) { %>
     <link href="<%= css %>" rel="stylesheet">
     <% } %>
+    <script src="<%= require('file!interpro-components/dist/index.js')%>"></script>
+    <script src="<%= require('file!pdb-web-components/dist/index.js')%>"></script>
     <% for (const chunk of Object.keys(htmlWebpackPlugin.files.chunks)) { %>
     <script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" defer></script>
     <% } %>

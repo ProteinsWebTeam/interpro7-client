@@ -1,8 +1,6 @@
 /* @flow */
 import React, {PropTypes as T} from 'react';
 
-import 'pdb-web-components';
-
 import styles from 'styles/blocks.css';
 
 const SummaryStructure = (
