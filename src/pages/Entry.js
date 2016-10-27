@@ -58,7 +58,7 @@ const Entry = (
           <Column
             accessKey="type"
             renderer={(type) => (
-              <interpro-type type={type} />
+              <interpro-type type={type} expanded>{type}</interpro-type>
             )}
           >Type</Column>
         </Table>

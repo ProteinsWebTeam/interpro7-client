@@ -15,7 +15,7 @@ const ParagraphWithCites = ({p, literature}) => (
       return (
       i % 2 ?
         <a key={i} href={`${location.pathname}#${part}`}>{refCounter}</a> :
-        <span key={i}>{part}</span>
+        <span key={i}>{part === ', ' ? ',\u00a0' : part}</span>
     );})}
   </p>
 );
