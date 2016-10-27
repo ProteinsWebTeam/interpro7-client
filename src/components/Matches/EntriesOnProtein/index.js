@@ -1,6 +1,5 @@
 /* eslint no-magic-numbers: 0 */
 import React, {PropTypes as T} from 'react';
-import {Link} from 'react-router';
 import ColorHash from 'color-hash/lib/color-hash';
 
 import style from '../style.css';
@@ -18,21 +17,21 @@ const EntriesOnProtein = (
       <svg
         className={style.svg}
         preserveAspectRatio="xMinYMid meet"
-        width={protein.length}
+        viewBox={`0 0 ${protein.length + offset} 60`}
       >
         <g transform={`translate(0 ${offset - baseSize / 2})`}>
-          <Link
-            to={`/protein/${protein.source_database}/${protein.accession}/`}
-          >
             <title>{protein.accession}</title>
             <rect
               x="0" y="0" rx={baseSize / niceRatio}
               width={protein.length} height={baseSize}
               className={style.primary}
             />
-          </Link>
-          <text y="-0.2em" transform={`translate(${protein.length} 0)`}>
-            <tspan textAnchor="end">
+          <text
+            x="0.1em"
+            y="0.8em"
+            transform={`translate(${protein.length} 0)`}
+          >
+            <tspan>
               {protein.length}
             </tspan>
           </text>
@@ -46,9 +45,6 @@ const EntriesOnProtein = (
                   `translate(${coords[0].protein[0]} ${offset - baseSize})`
                 }
               >
-                <Link
-                  to={`/entry/${entry.source_database}/${entry.accession}`}
-                >
                   <title>{entry.accession}</title>
                   <rect
                     x="0" y="0" rx={baseSize * 2 / niceRatio}
@@ -57,7 +53,6 @@ const EntriesOnProtein = (
                     height={baseSize * 2}
                     className={style.secondary}
                   />
-                </Link>
                 <text y="-0.2em">
                   <tspan textAnchor="middle">
                     {coords[0].protein[0]}

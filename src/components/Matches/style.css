@@ -1,6 +1,5 @@
 @import "../../styles/colors.css";
 @import "../../styles/spacing.css";
-@import "../../styles/fonts.css";
 
 .list {
   padding: 0;
@@ -17,19 +16,17 @@
 
 .svgContainer {
   margin: var(--spacing-small) 0 var(--spacing-small) calc(-1 * var(--spacing-big));
-  width: calc(100% + 2 * var(--spacing-big));
   height: 60px;
   overflow-y: hidden;
   overflow-x: auto;
-  background-color: lightgray;
-  box-shadow: 0 1px 3px gray;
   user-select: none;
   cursor: default;
+  padding: 0 1em 0 1em;
 }
 
 .svg {
-  font-family: var(--fonts-mono);
   height: 100%;
+  width: 100%;
   overflow: visible;
 
   &:hover text {
@@ -37,14 +34,15 @@
   }
 
   @nest & text {
-    opacity: 0;
+    opacity: 0.2;
     transition: opacity 0.25s ease-out;
-    fill: var(--colors-nearly-black);
+    fill: var(--colors-gray);
+    font-size: 0.8em;
   }
 }
 
 .primary {
-  fill: var(--colors-nearly-white);
+  fill: lightgray;
 }
 
 .secondary {

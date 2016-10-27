@@ -39,7 +39,6 @@ const Protein = (
     const maxLength = data.results.reduce((max, result) => (
       Math.max(max, (result.metadata || result).length)
     ), 0);
-    console.log('url', dataUrl);
     main = (
       <Table
         data={data}

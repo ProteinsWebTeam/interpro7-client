@@ -14,7 +14,10 @@ const SummaryProtein = (
       Object.keys(metadata.go_terms).length &&
       <div><GoTerms terms={metadata.go_terms} /></div>
     }
-    <div><Description textBlocks={metadata.description} /></div>
+    {
+      metadata.description && metadata.description.length &&
+      <Description textBlocks={metadata.description}/>
+    }
     <div><Sequence>{metadata.sequence}</Sequence></div>
   </div>
 );
