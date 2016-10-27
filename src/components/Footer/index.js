@@ -117,7 +117,7 @@ const Footer = () => (
           "small-6": "true",
           "medium-2": "true"
         })}>
-          <h5 class="about">
+          <h5 className={styleBundle("about")}>
             <a className={styleBundle("ebi-color")} href="//www.ebi.ac.uk/about">About EMBL-EBI</a>
           </h5>
           <ul>
