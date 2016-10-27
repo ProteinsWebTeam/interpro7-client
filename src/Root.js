@@ -7,6 +7,7 @@ import 'styles/ebi-global.css';
 import 'styles/interpro-new.css';
 
 import Header from 'components/Header';
+import Footer from 'components/Footer';
 import SideMenu from 'components/SideMenu';
 import Loading from 'Loading';
 
@@ -17,6 +18,7 @@ const Root = (
     <Header pathname={location.pathname} />
     <SideMenu position="left" />
     <Loading>{children}</Loading>
+    <Footer />
   </div>
 );
 
