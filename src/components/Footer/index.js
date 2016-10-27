@@ -130,7 +130,7 @@ const Footer = () => (
             <li>
               <a href="//www.ebi.ac.uk/about/jobs" title="Jobs, postdocs, PhDs...">Jobs</a>
             </li>
-            <li className={styleBundle("first")}>
+            <li>
               <a href="//www.ebi.ac.uk/about/news">News</a>
             </li>
             <li>
@@ -141,7 +141,7 @@ const Footer = () => (
 
       </nav>
 
-      <section id="ebi-footer-meta" className={styleBundle("row")}>
+      <section id={styleBundle("ebi-footer-meta")} className={styleBundle("row")}>
         <div className={styleBundle("columns")}>
           <p className={styleBundle("address")}>EMBL-EBI, Wellcome Genome Campus, Hinxton, Cambridgeshire, CB10 1SD, UK. +44 (0)1223 49 44 44</p>
           <p className={styleBundle("legal")}>Copyright © EMBL-EBI 2016 | EMBL-EBI is <a href="http://www.embl.org/">part of the European Molecular Biology Laboratory</a> | <a href="//www.ebi.ac.uk/about/terms-of-use">Terms of use</a>
