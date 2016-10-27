@@ -8,7 +8,7 @@ import styles from './style.css';
 const f = foundationPartial(ebiStyles, styles);
 
 
-const ParagraphWithCites = ({p, literature}) => (
+const ParagraphWithCites = ({p, literature={}}) => (
   <p>
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = Object.keys(literature).indexOf(part) + 1;
@@ -72,6 +72,6 @@ class Description extends Component {
 }
 Description.propTypes = {
   textBlocks: T.array.isRequired,
-  literature: T.object.isRequired,
+  literature: T.object,
 };
 export default Description;

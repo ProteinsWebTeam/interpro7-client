@@ -77,9 +77,14 @@ input:focus:-ms-input-placeholder {color:transparent;}
 /* MENU*/
 .horizontal.menu > li > a {border-bottom-style: solid; border-bottom-width:3px; border-bottom-color:transparent;}/* CROSS ICON PBM - to make all menu items same height*/
 
-.local-masthead .menu .active {color: #0a0a0a; background: #fff;}/*this should be defined in the default ebi css*/
-/*.local-masthead .menu > li > a {border-bottom-style: solid; border-bottom-color:transparent;}!*important to make all menu items same height otherwise buggy effect on click*!*/
-.badge {background: rgba(0, 0, 0, 0.23);padding: 0.6em 0.1em;font-weight: normal; /*avoid bold on badge when activated*/}
+#local-masthead .menu .active {color: #0a0a0a; background: #fff;}/*this should be defined in the default ebi css*/
+/*#local-masthead .menu > li > a {border-bottom-style: solid; border-bottom-color:transparent;}!*important to make all menu items same height otherwise buggy effect on click*!*/
+.badge {
+  background: rgba(0, 0, 0, 0.23);
+  border-radius: 1em;
+  padding: 0.5em;
+  font-weight: normal; /*avoid bold on badge when activated*/
+}
 .entry-menu-medium-step-01, .entry-menu-medium-step-02,.entry-menu-medium-step-03, .main-menu-all {display:none;}/*hide different menu version collapsed*/
 
 .local-masthead nav ul.dropdown.menu.float-left li a:hover:after {display: none; border-bottom: 3px;} /*important for collapse button remove foundation "bar" after that bug and makes the elements move*//*remove extra space that makes the banner move just for small screen*/

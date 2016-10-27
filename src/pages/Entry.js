@@ -6,8 +6,10 @@ import Table, {Column, Search, PageSizeSelector, Exporter}
   from 'components/Table';
 
 import {removeLastSlash} from 'utils/url';
-import 'interpro-components';
 
+import pageNavigation from 'components/PageNavigation';
+const page = 'entry';
+const EntryPageNavigation = pageNavigation(page);
 const colorHash = new ColorHash();
 
 const Entry = (
@@ -24,9 +26,9 @@ const Entry = (
   } */
 ) => {
   let main;
-  if (data) {
-    if (Array.isArray(data.results)) { // List of entries
-      main = (
+  // if (data) {
+  if (Array.isArray(data.results)) { // List of entries
+    main = (
         <Table
           data={data}
           query={query}
@@ -63,14 +65,19 @@ const Entry = (
           >Type</Column>
         </Table>
       );
-    } else if (data.metadata) { // Single Entry page + including menu
-      main = (
+  } else if (data.metadata) { // Single Entry page + including menu
+    main = (
         <div>
-          {cloneElement(children, {data})}
+          {children && cloneElement(children, {data})}
+          <EntryPageNavigation
+            accession={data.metadata.accession}
+            counters={data.metadata.counters}
+            pathname={pathname}
+          />
         </div>
       );
-    } else if (data.entries) { // Member Database page
-      main = (
+  } else if (data.entries) { // Member Database page
+    main = (
         <div>
           <div style={{display: 'flex'}}>
             {Object.entries(data.entries.member_databases)
@@ -105,11 +112,11 @@ const Entry = (
           </div>
         </div>
       );
-    }
-  } else {
-    // TODO: Improve message and navigation out of it.
-    main = <div>There are no entries with the exiting filters.</div>;
   }
+  // } else {
+  //   // TODO: Improve message and navigation out of it.
+  //   main = <div>There are no entries with the exiting filters.</div>;
+  // }
   return <main>{main}</main>;
 };
 Entry.propTypes = {
