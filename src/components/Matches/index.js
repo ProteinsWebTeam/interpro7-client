@@ -7,10 +7,7 @@ import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
 import ProteinsOnStructure from './ProteinsOnStructure';
 
-import style from './style.css';
-import Table, {Column, Search, PageSizeSelector, Exporter}
-  from 'components/Table';
-import {removeLastSlash} from 'utils/url';
+import Table, {Column} from 'components/Table';
 
 const propTypes = {
   matches: T.arrayOf(T.object).isRequired,

@@ -27,8 +27,8 @@ const Entry = (
 ) => {
   let main;
   // if (data) {
-    if (Array.isArray(data.results)) { // List of entries
-      main = (
+  if (Array.isArray(data.results)) { // List of entries
+    main = (
         <Table
           data={data}
           query={query}
@@ -65,8 +65,8 @@ const Entry = (
           >Type</Column>
         </Table>
       );
-    } else if (data.metadata) { // Single Entry page + including menu
-      main = (
+  } else if (data.metadata) { // Single Entry page + including menu
+    main = (
         <div>
           {children && cloneElement(children, {data})}
           <EntryPageNavigation
@@ -76,8 +76,8 @@ const Entry = (
           />
         </div>
       );
-    } else if (data.entries) { // Member Database page
-      main = (
+  } else if (data.entries) { // Member Database page
+    main = (
         <div>
           <div style={{display: 'flex'}}>
             {Object.entries(data.entries.member_databases)
@@ -112,7 +112,7 @@ const Entry = (
           </div>
         </div>
       );
-    }
+  }
   // } else {
   //   // TODO: Improve message and navigation out of it.
   //   main = <div>There are no entries with the exiting filters.</div>;

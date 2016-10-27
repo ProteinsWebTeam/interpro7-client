@@ -1,6 +1,5 @@
 /* eslint no-magic-numbers: 0 */
 import React, {PropTypes as T} from 'react';
-import {Link} from 'react-router';
 import ColorHash from 'color-hash/lib/color-hash';
 
 import style from '../style.css';
@@ -18,7 +17,7 @@ const EntriesOnProtein = (
       <svg
         className={style.svg}
         preserveAspectRatio="xMinYMid meet"
-        viewBox={`0 0 ${protein.length+offset} 60`}
+        viewBox={`0 0 ${protein.length + offset} 60`}
       >
         <g transform={`translate(0 ${offset - baseSize / 2})`}>
             <title>{protein.accession}</title>
