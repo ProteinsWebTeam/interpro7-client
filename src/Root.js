@@ -7,6 +7,7 @@ import 'styles/ebi-global.css';
 import 'styles/interpro-new.css';
 
 import Header from 'components/Header';
+import Footer from 'components/Footer';
 import SideMenu from 'components/SideMenu';
 import Breadcrumb from 'components/Breadcrumb';
 import Loading from 'Loading';
@@ -19,6 +20,7 @@ const Root = (
     <SideMenu position="left" />
     <Breadcrumb pathname={location.pathname} />
     <Loading>{children}</Loading>
+    <Footer />
   </div>
 );
 
