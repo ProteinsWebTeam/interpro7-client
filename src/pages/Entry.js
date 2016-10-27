@@ -1,12 +1,11 @@
 /* @flow */
 import React, {PropTypes as T, cloneElement} from 'react';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 import ColorHash from 'color-hash/lib/color-hash';
 import Table, {Column, Search, PageSizeSelector, Exporter}
   from 'components/Table';
 
 import {removeLastSlash} from 'utils/url';
-import 'interpro-components';
 
 import pageNavigation from 'components/PageNavigation';
 const page = 'entry';
@@ -61,7 +60,7 @@ const Entry = (
           <Column
             accessKey="type"
             renderer={(type) => (
-              <interpro-type type={type} />
+              <interpro-type type={type} expanded>{type}</interpro-type>
             )}
           >Type</Column>
         </Table>

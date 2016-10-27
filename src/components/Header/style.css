@@ -1,5 +1,6 @@
 @import "../../styles/colors.css";
 @import "../../styles/spacing.css";
+@import "../../styles/fonts.css";
 
 
 .standard {
@@ -36,8 +37,9 @@
 
   background-color: #00559e;
   background-image: linear-gradient(
-    to right, rgba(0, 85, 158, 0.9), rgba(45, 174, 193, 0.5), rgba(0, 85, 158, 0.9)
-  ), url("images/banner/fondation-morse-header.jpg");
+    to right,
+    rgba(0, 85, 158, 0.9), rgba(45, 174, 193, 0.5), rgba(0, 85, 158, 0.9)
+  ), url(images/banner/fondation-morse-header.jpg);
 }
 
 .container {

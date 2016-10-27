@@ -1,6 +1,6 @@
 /* @flow */
 import React from 'react';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 
 import styles from 'styles/blocks.css';
 import SearchByText from 'components/SearchByText';

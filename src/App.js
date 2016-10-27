@@ -1,10 +1,7 @@
 import React from 'react';
 import {Provider} from 'react-redux';
-import {
-  Router, applyRouterMiddleware, useRouterHistory,
-} from 'react-router/es6';
+import {Router, useRouterHistory} from 'react-router/es';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
-import {useScroll} from 'react-router-scroll';
 
 import config from 'config';
 import routes from 'routes';
@@ -17,18 +14,16 @@ const history = useRouterHistory(createBrowserHistory)({
 
 const store = createStore();
 
+// For next changes to  history
 history.listen(loadDataForURL(store));
-
-// Override scroll behavior, prevents jumping back to the top
-// TODO: define and implement when we actually want to jump back to the top
-const scrollMiddleware = useScroll(() => {});
+// For first load
+loadDataForURL(store)(history.getCurrentLocation());
 
 const App = () => (
   <Provider store={store}>
     <Router
       history={history}
       routes={routes}
-      render={applyRouterMiddleware(scrollMiddleware)}
     />
   </Provider>
 );

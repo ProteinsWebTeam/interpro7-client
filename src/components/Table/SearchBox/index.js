@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter} from 'react-router/es6';
+import {withRouter} from 'react-router/es';
 import {connect} from 'react-redux';
 import debounce from 'lodash-es/debounce';
 
