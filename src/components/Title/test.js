@@ -7,22 +7,22 @@ import jsxChai from 'jsx-chai';
 
 import {Link} from 'react-router';
 
-import Title, {Time} from '.';
-import TypeTag from 'components/TypeTag';
+import Title, {Time, InterproSymbol} from '.';
 import {
   OriginDB, SourceOrganism, Name,
 } from 'components/SimpleCommonComponents';
 
 import styles from 'styles/blocks.css';
+import ipro from 'styles/interpro-new.css';
 
 chai.use(jsxChai);
 const renderer = createRenderer();
 
-describe.skip('<Title />', () => {
+describe('<Title />', () => {
   describe('For an entry', () => {
     it('should render a title component correctly', () => {
       renderer.render(
-        <Title pathname="/some/pathname/" metadata={{
+        <Title pathname="/entry/pathname/" metadata={{
           name: {
             name: 'Piwi domain',
           },
@@ -33,22 +33,21 @@ describe.skip('<Title />', () => {
         />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
-        <div className={styles.card}>
-          <h2>Piwi domain</h2>
-          <div>
-            <TypeTag type="domain" full={true} />
-            <Name name={{name: 'Piwi domain'}} accession="PF02171" />
-            <OriginDB
-              source="pfam"
-              pathname="/some/pathname/"
-              accession="PF02171"
-            />
+        <div>
+          <InterproSymbol type="domain"/>
+          <h3>Piwi domain <small>(PF02171)</small></h3>
+          <div className={ipro['md-hlight']}>
+            <h5>Member database:&nbsp;
+              <Link to="/entry/pfam/">
+                pfam
+              </Link>
+            </h5>
           </div>
         </div>
       );
     });
   });
-  describe('For a protein', () => {
+  describe.skip('For a protein', () => {
     it('should render a title component correctly', () => {
       renderer.render(
         <Title pathname="/some/pathname/" metadata={{
@@ -85,7 +84,7 @@ describe.skip('<Title />', () => {
       );
     });
   });
-  describe('For a structure', () => {
+  describe.skip('For a structure', () => {
     it('should render a title component correctly', () => {
       renderer.render(
         <Title pathname="/some/pathname/1JM7/" metadata={{

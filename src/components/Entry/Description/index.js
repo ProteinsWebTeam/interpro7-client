@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: [1, {ignore: [2]}] */
+/* eslint no-magic-numbers: [1, {ignore: [1, 2]}] */
 import React, {PropTypes as T} from 'react';
 
 import ReadMoreCard from '../../ReadMoreCard';

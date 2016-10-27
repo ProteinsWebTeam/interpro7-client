@@ -1,7 +1,7 @@
 /* @flow */
 import React, {PropTypes as T} from 'react';
 import ipro from 'styles/interpro-new.css';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 
 
 import {buildLink} from 'utils/url';
@@ -27,7 +27,7 @@ Time.propTypes = {
 /* const InterproSymbol = ({type}) => (
 
 ); */
-const InterproSymbol = ({type}) => (
+export const InterproSymbol = ({type}) => (
   <div className={ipro['my-svg-container']}>
     <svg
       className={ipro['my-svg']}
@@ -36,28 +36,28 @@ const InterproSymbol = ({type}) => (
     >
       <g>
         <rect x="10" y="10" width="60" height="60"
-              style={{
-              fill: 'black',
-              opacity: 0.1,
-            }}
+          style={{
+            fill: 'black',
+            opacity: 0.1,
+          }}
         />
         <rect x="0" y="0" width="60" height="60"
-              style={{
-              fill: '#ee2a09',
-              stroke: '#d41813',
-              strokeWidth: 10,
-              opacity: 1,
-              position: 'absolute',
-              left: 0,
-              top: 0,
-            }}
+          style={{
+            fill: '#ee2a09',
+            stroke: '#d41813',
+            strokeWidth: 10,
+            opacity: 1,
+            position: 'absolute',
+            left: 0,
+            top: 0,
+          }}
         />
         <text
           x="10" y="62" fill="white"
           fontFamily="Arial" fontWeight="bold" fontSize="70"
           style={{
-              boxShadow: 'black 10px 10px 10px',
-            }}
+            boxShadow: 'black 10px 10px 10px',
+          }}
         > {type[0]} </text>
       </g>
       Sorry, your browser does not support inline SVG.
@@ -96,19 +96,16 @@ const Title = (
       {
         isEntry && metadata.source_database.toLowerCase() !== 'interpro' &&
         <div className={ipro['md-hlight']}>
-          <div><h5>Member database:</h5></div>
-          <div style={{paddingLeft: '9px'}}>
-            <h5>
+            <h5>Member database:&nbsp;
               <Link to={buildLink(pathname, 'entry', metadata.source_database)}>
                 {metadata.source_database}
               </Link>
             </h5>
-          </div>
         </div>
       }
       {
         metadata.name.short &&
-        <p>Short name:
+        <p>Short name:&nbsp;
           <i className="small" style={{color: '#41647d'}}>
             {metadata.name.short}
           </i>

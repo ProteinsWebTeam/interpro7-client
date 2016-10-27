@@ -23,7 +23,7 @@ const common = [
   //     postcss: [postcssImport, postcssApply, cssnext],
   //   },
   // }),
-  // new ExtractTextPlugin('styles.[contenthash:3].css'),
+  new ExtractTextPlugin('styles.[contenthash:3].css'),
   // new WebAppManifestPlugin(),
 ];
 
@@ -39,7 +39,6 @@ common.push(
 );
 
 const dev = common.concat([
-  new ExtractTextPlugin('styles.[contenthash:3].css'),
   // Generates lots of favicons from source image
   // and injects their path into the head of index.html
   new FaviconsWebpackPlugin({

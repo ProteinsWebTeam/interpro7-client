@@ -1,6 +1,6 @@
 import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 
 import {openSideNav} from 'actions/creators';
 

@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: [1, {ignore: [1, 10, 15, 30, 100]}] */
 import React, {PropTypes as T} from 'react';
 
 import {GoLink} from 'components/ExtLink';
@@ -27,11 +28,7 @@ const GoTerms = ({terms}/*: {terms: {[key: string]: Array<any>}} */) => (
                     <li key={id}>
                       <GoLink
                         id={id}
-                        className={f('has-tip', 'label', {
-                          'go-mf': key === 'molecular_function',
-                          'go-cc': key === 'cellular_component',
-                          'go-bp': key === 'biological_process',
-                        })}
+                        className={f('label', 'go', key)}
                       >{name} ({id})</GoLink>
                     </li>
                   )) :

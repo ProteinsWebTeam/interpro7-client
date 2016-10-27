@@ -3,7 +3,7 @@ const path = require('path');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const PROD = process.env.NODE_ENV === 'PRODUCTION';
+const PROD = process.env.NODE_ENV === 'production';
 
 const cssSettings = {
   modules: true,
@@ -18,10 +18,13 @@ module.exports = {
     {
       test: /\.js$/i,
       include: [
-        path.resolve('.', 'src'),
-        path.resolve('.', 'node_modules', 'react-router', 'es6'),
-        path.resolve('.', 'node_modules', 'lodash-es'),
-        path.resolve('.', 'node_modules', 'color-hash'),
+        path.resolve('src'),
+        path.resolve('node_modules', 'react-router', 'es'),
+        path.resolve('node_modules', 'lodash-es'),
+        path.resolve('node_modules', 'color-hash'),
+        path.resolve('node_modules', 'data-loader'),
+        path.resolve('node_modules', 'interpro-components'),
+        path.resolve('node_modules', 'pdb-web-components'),
       ],
       // loaders: [
       //   {
@@ -88,33 +91,32 @@ module.exports = {
       //     loader: 'url-loader',
       //     query: {
       //       name: `${PROD ? '' : '[name].'}[hash:3].[ext]`,
-      //       limit: 512,
+      //       limit: 1024,
       //     },
       //   },
       //   {
       //     loader: 'img-loader',
       //   },
       // ],
-      loader: `url-loader?${JSON.stringify({
-        name: `${PROD ? '' : '[name].'}[hash:3].[ext]`,
-        limit: 512,
-      })}!img-loader`,
+      loader: `url-loader?name=${
+        PROD ? '' : '[name].'
+      }[hash:3].[ext]&limit=1024!img-loader`,
     },
     {
-      test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-      loader: 'url-loader?limit=10000&mimetype=application/font-woff',
+      test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+      loader: 'url-loader?limit=1024&mimetype=application/font-woff',
       // loaders: [
       //   {
       //     loader: 'url-loader',
       //     query: {
-      //       limit: 10000,
+      //       limit: 1024,
       //       mimetype: 'application/font-woff',
       //     },
       //   },
       // ],
     },
     {
-      test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
       loader: 'file-loader',
       // loaders: ['file-loader'],
     },

@@ -1,24 +1,14 @@
 /* @flow */
 import React, {PropTypes as T, cloneElement} from 'react';
-import {Link} from 'react-router/es6';
+import {Link} from 'react-router/es';
 import ColorHash from 'color-hash/lib/color-hash';
-
-import pageNavigation from 'components/PageNavigation';
-
 import Table, {Column, Search, PageSizeSelector, Exporter}
   from 'components/Table';
-import Title from 'components/Title';
 
 import {removeLastSlash} from 'utils/url';
-
-import styles from 'styles/blocks.css';
-import f from 'styles/foundation';
-
-const page = 'entry';
-const EntryPageNavigation = pageNavigation(page);
+import 'interpro-components';
 
 const colorHash = new ColorHash();
-import 'interpro-components';
 
 const Entry = (
   {data, location: {query, pathname}, dataUrl, children}
@@ -67,8 +57,8 @@ const Entry = (
           <Column accessKey="name">Name</Column>
           <Column
             accessKey="type"
-            renderer={(type)=>(
-              <interpro-type type={type} />
+            renderer={(type) => (
+              <interpro-type type={type} expanded>{type}</interpro-type>
             )}
           >Type</Column>
         </Table>
@@ -82,7 +72,7 @@ const Entry = (
     } else if (data.entries) { // Member Database page
       main = (
         <div>
-          <div style={{display: 'flex'}} className={styles.card}>
+          <div style={{display: 'flex'}}>
             {Object.entries(data.entries.member_databases)
               .map(([name, count]) => (
                 <Link
@@ -100,7 +90,7 @@ const Entry = (
               ))
             }
           </div>
-          <div style={{display: 'flex'}} className={styles.card}>
+          <div style={{display: 'flex'}}>
             <Link
               to={`${removeLastSlash(pathname)}/interpro`}
               style={{

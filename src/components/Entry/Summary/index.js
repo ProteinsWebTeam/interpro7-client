@@ -30,7 +30,10 @@ const SummaryEntry = (
       <div className={f('row')}>
         <div className={f('medium-8', 'large-8', 'columns')}>
           <Title metadata={metadata} pathname={pathname}/>
-          <Description textBlocks={metadata.description} literature={metadata.literature} />
+          <Description
+            textBlocks={metadata.description}
+            literature={metadata.literature}
+          />
         </div>
         <div className={f('medium-4', 'large-4', 'columns')}>
           {
