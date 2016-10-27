@@ -14,7 +14,7 @@ import ebi_global_styles from 'styles/ebi-global.css';
 import fonts from 'styles/ebi/fonts.css'
 import ebi_theme from 'styles/theme-template.css';
 import ebi_petrol_theme from 'styles/theme-embl-petrol.css';
-const styleBundle = foundationPartial(styles, fonts, ebi_global_styles, ebi_petrol_theme, ebi_theme);
+const styleBundle = foundationPartial(styles, fonts, ebi_petrol_theme, ebi_theme, ebi_global_styles);
 
 
 
@@ -123,41 +123,41 @@ const EbiGlobalHeader = () => (
       <div className={styleBundle('row')}>
         <ul id={styleBundle('global-nav')} className={styleBundle('menu')}>
 
-          <li id="home-mobile">
+          <li id={styleBundle("home-mobile")}>
             <a href="//www.ebi.ac.uk"></a>
           </li>
 
-          <li id="home" className={styleBundle('active')}>
+          <li id={styleBundle("home")} className={styleBundle('active')}>
             <a href="//www.ebi.ac.uk">
               <i className={iconClasses} data-icon="H"></i> EMBL-EBI
             </a>
           </li>
 
-          <li id="services">
+          <li id={styleBundle("services")}>
             <a href="//www.ebi.ac.uk/services">
               <i className={iconClasses} data-icon="("></i> Services
             </a>
           </li>
 
-          <li id="research">
+          <li id={styleBundle("research")}>
             <a href="//www.ebi.ac.uk/research">
               <i className={iconClasses} data-icon=")"></i> Research
             </a>
           </li>
 
-          <li id="training">
+          <li id={styleBundle("training")}>
             <a href="//www.ebi.ac.uk/training">
               <i className={iconClasses} data-icon="t"></i> Training
             </a>
           </li>
 
-          <li id="about">
+          <li id={styleBundle("about")}>
             <a href="//www.ebi.ac.uk/about">
               <i className={iconClasses} data-icon="i"></i> About us
             </a>
           </li>
 
-          <li id="search">
+          <li id={styleBundle("search")}>
             <a href="#"
                data-toggle={styleBundle("search-global-dropdown")}
                aria-controls={styleBundle("search-global-dropdown")}
@@ -170,7 +170,7 @@ const EbiGlobalHeader = () => (
             <EbiHeaderSearchForm />
           </li>
 
-          <li className={emblSelectorClasses}>
+          <li className={emblSelectorClasses} style={{flexGrow: 1}}>
             <button className={emblButtonClasses}
                     type="button"
                     data-toggle={styleBundle("embl-dropdown")}
@@ -245,7 +245,10 @@ const EbiHeaderSearchForm = () => (
 
 const EmblDropdownDiv = () => (
   <div id={styleBundle("embl-dropdown")}
-       className={styleBundle("dropdown-pane bottom")}
+       className={styleBundle({
+         "dropdown-pane": "true",
+         "bottom": "true"
+       })}
        data-dropdown={styleBundle("qs9ew3-dropdown")}
        aria-hidden="true"
        data-yeti-box={styleBundle("embl-dropdown")}
