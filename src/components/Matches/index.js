@@ -8,6 +8,9 @@ import EntriesOnStructure from './EntriesOnStructure';
 import ProteinsOnStructure from './ProteinsOnStructure';
 
 import style from './style.css';
+import Table, {Column, Search, PageSizeSelector, Exporter}
+  from 'components/Table';
+import {removeLastSlash} from 'utils/url';
 
 const propTypes = {
   matches: T.arrayOf(T.object).isRequired,
@@ -36,10 +39,7 @@ const MatchesByPrimary = (
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
   return (
-    <li>
-      <Link to="" />
-      <MatchComponent matches={matches} {...props} />
-    </li>
+    <MatchComponent matches={matches} {...props} />
   );
 };
 MatchesByPrimary.propTypes = propTypes;
@@ -49,25 +49,53 @@ const Matches = (
   {matches, primary, ...props}
   /*: {matches: Array<Object>, primary: string, props: Array<any>}*/
 ) => {
-  const matchesByPrimary = matches.reduce((prev, match) => {
-    const acc = match[primary].accession;
-    if (prev[acc]) {
-      prev[acc].push(match);
-      return prev;
-    }
-    return Object.assign(prev, {[acc]: [match]});
-  }, {});
+  const dataTable = {
+    results: matches.map(e => ({match: e, ...e.protein})),
+    count: matches.length,
+  };
+  const pathname = '',
+    query = {};
   return (
-    <ul className={style.list}>
-      {Object.entries(matchesByPrimary).map(([acc, matches]) => (
+    <Table
+      data={dataTable}
+      query={query}
+      pathname={pathname}
+    >
+      <Column
+        accessKey="accession"
+        renderer={(acc/*: string */, row) => (
+          <Link to={`${primary}/${row.source_database}/${acc}`}>
+            {acc}
+          </Link>
+        )}
+      >
+        Accession
+      </Column>
+      <Column accessKey="source_database">
+        Source Database
+      </Column>
+      <Column
+        accessKey="match"
+        renderer={(match/*: string */) => (
         <MatchesByPrimary
-          key={acc}
-          matches={matches}
+          matches={[match]}
           primary={primary}
           {...props}
         />
-      ))}
-    </ul>
+        )}
+      >
+        Architecture
+      </Column>
+
+    </Table>
+      // {Object.entries(matchesByPrimary).map(([acc, matches]) => (
+      //   <MatchesByPrimary
+      //     key={acc}
+      //     matches={matches}
+      //     primary={primary}
+      //     {...props}
+      //   />
+      // ))}
   );
 };
 Matches.propTypes = propTypes;

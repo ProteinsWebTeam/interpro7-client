@@ -8,6 +8,9 @@ import Table, {Column, Search, PageSizeSelector, Exporter}
 import {removeLastSlash} from 'utils/url';
 import 'interpro-components';
 
+import pageNavigation from 'components/PageNavigation';
+const page = 'entry';
+const EntryPageNavigation = pageNavigation(page);
 const colorHash = new ColorHash();
 
 const Entry = (
@@ -24,7 +27,7 @@ const Entry = (
   } */
 ) => {
   let main;
-  if (data) {
+  // if (data) {
     if (Array.isArray(data.results)) { // List of entries
       main = (
         <Table
@@ -66,7 +69,12 @@ const Entry = (
     } else if (data.metadata) { // Single Entry page + including menu
       main = (
         <div>
-          {cloneElement(children, {data})}
+          {children && cloneElement(children, {data})}
+          <EntryPageNavigation
+            accession={data.metadata.accession}
+            counters={data.metadata.counters}
+            pathname={pathname}
+          />
         </div>
       );
     } else if (data.entries) { // Member Database page
@@ -106,10 +114,10 @@ const Entry = (
         </div>
       );
     }
-  } else {
-    // TODO: Improve message and navigation out of it.
-    main = <div>There are no entries with the exiting filters.</div>;
-  }
+  // } else {
+  //   // TODO: Improve message and navigation out of it.
+  //   main = <div>There are no entries with the exiting filters.</div>;
+  // }
   return <main>{main}</main>;
 };
 Entry.propTypes = {
