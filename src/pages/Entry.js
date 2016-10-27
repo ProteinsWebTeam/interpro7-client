@@ -6,7 +6,6 @@ import Table, {Column, Search, PageSizeSelector, Exporter}
   from 'components/Table';
 
 import {removeLastSlash} from 'utils/url';
-import 'interpro-components';
 
 const colorHash = new ColorHash();
 
