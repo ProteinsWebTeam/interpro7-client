@@ -10,7 +10,7 @@ const cssSettings = {
   minimize: PROD,
   importLoaders: 1,
   sourceMap: !PROD,
-  localIdentName: `${PROD ? '' : '[name]__[local]___'}[hash:base64:3]`,
+  localIdentName: `${PROD ? '' : '[folder]_[name]__[local]___'}[hash:base64:3]`,
 };
 
 module.exports = {
@@ -44,6 +44,16 @@ module.exports = {
       loader: 'json-loader!yaml-loader',
     },
     {
+      test: /((ebi-global)|(interpro-new))\.css$/i,
+      loader: ExtractTextPlugin.extract(
+        'style-loader',
+        `css-loader?${
+          JSON.stringify(
+            Object.assign({}, cssSettings, {localIdentName: '[local]'})
+          )}!postcss-loader`
+      ),
+    },
+    {
       test: /\.css$/i,
       // loaders: [ExtractTextPlugin.extract({
       //   fallbackLoader: 'style-loader',
@@ -57,6 +67,7 @@ module.exports = {
       //     },
       //   ],
       // })],
+      exclude: /((ebi-global)|(interpro-new))\.css$/i,
       loader: ExtractTextPlugin.extract(
         'style-loader',
         `css-loader?${JSON.stringify(cssSettings)}!postcss-loader`

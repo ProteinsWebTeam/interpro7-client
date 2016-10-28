@@ -73,8 +73,6 @@
 }
 
 .top_level_title {
-  composes: standard;
-
   font-family: var(--fonts-header);
   transform-origin: bottom left;
   transition: transform 0.5s ease-in-out;
@@ -99,7 +97,6 @@
 }
 
 .top_level_hamburger {
-  margin: var(--spacing-big);
   padding: var(--spacing-small);
   background: none;
   border: none;
@@ -116,7 +113,7 @@
 }
 
 .hamb_line {
-  stroke: var(--colors-nearly-black);
+  stroke: white;
   transition: transform 0.5s ease-in-out;
   transform: rotate(0) translateY(0);
   transform-origin: 50% 50%;

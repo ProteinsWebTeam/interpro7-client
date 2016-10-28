@@ -45,7 +45,7 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 .local-masthead h1 span {font-size: 41%;}
 
 /***** LOCAL BUTTONS  *****/
-.local-site-search .icon-functional:before ,.local-offcanvas-menu .icon-functional:before {font-size: 40px;}
+.local-site-search .icon-functional:before ,.local-offcanvas-menu .icon-functional:before {font-size: 2.5em;}
 html.fontface .local-site-search .icon-functional:before ,.local-offcanvas-menu .icon-functional:before {padding-right:0;} /*solve a bug with search icon moving on two lines on firefox*/
 .local-site-search .button, .local-offcanvas-menu .button,.local-site-search .button:hover, .local-offcanvas-menu .button:hover {background-color: transparent;}/*we don't want bgd for those buttons*/
 .local-site-search {position: absolute; top: 118px;  right: 10px; }/*let the text field appear with no size problem*/
@@ -56,7 +56,7 @@ html.fontface .local-site-search .icon-functional:before ,.local-offcanvas-menu 
 /*.offc-nav.expand ~ .main-header .local-offcanvas-menu .close-menu {display: block;}!*switch between open/close text*!*/
 /*.offc-nav.expand ~ .main-header .local-offcanvas-menu .open-menu {display: none;}!*switch between open/close text*!*/
 /*Search*/
-.local-site-search .search-box {width: 0; display: block; float: right; padding: 0;/*background-color: rgba(255, 255, 255, 0.07);*/background-color: rgba(255, 255, 255, 0); box-shadow: none; outline: 0;border-bottom: 1px solid rgba(255, 255, 255, 0.4); border-top:none;border-left:none;  border-right:none;font-size: 1rem;  color: rgba(255, 255, 255, 0.5);}
+.local-site-search .search-box {width: 0; transition: width .3s; display: block; float: right; padding: 0;/*background-color: rgba(255, 255, 255, 0.07);*/background-color: rgba(255, 255, 255, 0); box-shadow: none; outline: 0;border-bottom: 1px solid rgba(255, 255, 255, 0.4); border-top:none;border-left:none;  border-right:none;font-size: 1rem;  color: rgba(255, 255, 255, 0.5);}
 .local-site-search .button {float:right;}/*important to keep for the smooth effect moving left the magnifying icon next to input field*/
 .local-site-search [type='text']:focus {border-bottom: 3px solid white; border-top:none;  border-left:none; border-right:none; color:white;  background-color: transparent;  outline: none; box-shadow: none; transition: box-shadow 0.5s, border-color 0.25s ease-in-out;}
 .local-site-search:hover .tool-search .search-box, .search-box:focus {width: 70%;}
@@ -127,7 +127,7 @@ IMAGE BANNER
     background-position: top right, left;
     background-size: 100%, 1027px;
 }
-
+#local-masthead,
 .local-masthead {
     background-image: linear-gradient(to right, rgba(0, 85, 158, 0.9),rgba(45, 174, 193, 0.5),rgba(0, 85, 158, 0.9) ), url(../images/backgrounds/fondation-morse-header.jpg);
     background-repeat: no-repeat, repeat;
@@ -341,7 +341,7 @@ a.go {
     .local-masthead h1  {font-size: 2.4rem;}
     .local-masthead h1 img {width:50px}
     .local-masthead h4 {font-size: 110%;margin-bottom:1.2rem;}/*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
-    .menu > li.embl-selector {display:none ;}/*this should be added to EBI style to fix the slector to collpase row in two lines*/
+    /*.menu > li.embl-selector {display:none ;}/*this should be added to EBI style to fix the slector to collpase row in two lines*/
 }
 
 /* Small only */
