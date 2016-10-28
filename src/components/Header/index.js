@@ -7,6 +7,7 @@ import {openSideNav} from 'actions/creators';
 import DynamicMenu from './DynamicMenu';
 
 import logo from 'images/logo/interpro_white.png';
+import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
 import {foundationPartial} from 'styles/foundation';
 import styles from './style.css';
@@ -365,21 +366,19 @@ const SideIcons = () => (
         <HamburgerBtn svg={true} />
       </div>
       <div className={styleBundle('local-site-search', 'anim')}>
-        <form
+        <div
           className={styleBundle('tool-search')}
           id="local-search"
           name="local-search"
-          action="/search"
-          method="GET"
         >
-          <input
-            type="text"
+          <TextSearchBox
             maxLength="255"
             value=""
             className={styleBundle('search-box')}
+            name="search"
           />
           <Link to="/search" className={iconFunctionalClasses} data-icon="1" />
-        </form>
+        </div>
       </div>
 
     </div>

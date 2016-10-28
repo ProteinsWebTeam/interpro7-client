@@ -1,45 +1,39 @@
 import React, {PropTypes as T, Component} from 'react';
 import {withRouter} from 'react-router/es';
 import {connect} from 'react-redux';
+import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
 import f from 'styles/foundation';
 
 class SearchByText extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {value: '', submit: false};
   }
 
   componentWillReceiveProps({query = ''}) {
     this.setState({query});
   }
-  routerPush = () => {
-    const {pageSize} = this.props,
-      pathname = '/search';
-    const query/*: {page: number, page_size: number, search?: string} */ = {
-      page: 1,
-      page_size: pageSize,
-    };
-    const {value: search} = this.state;
-    if (search) query.search = search;
-    this.props.router.push({pathname, query});
-  };
 
-  handleChange = (event) => {
-    this.setState({value: event.target.value});
-  };
   handleClick = (event) => {
     const value = event.target.dataset.search;
     if (value) this.setState({value});
   };
   handleReset = () => this.setState({value: ''});
+  handleSubmit = (event) => {
+    event.preventDefault();
+  };
+  handleSubmitClick = () => {
+    this.setState({submit: true});
+    requestAnimationFrame(() => this.setState({submit: false}));
+  }
 
   render() {
-    const {value} = this.state;
+    const {value, submit} = this.state;
     return (
     <div className={f('row')}>
       <div className={f('large-12', 'columns')}>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <fieldset className={f('fieldset')}>
             <legend>Search InterPro</legend>
             <div className={f('secondary', 'callout')}>
@@ -47,11 +41,12 @@ class SearchByText extends Component {
               <div className={f('row')}>
                 <div className={f('large-12', 'columns')}>
                   <label>Sequences, family, domains or GO terms</label>
-                  <input
-                    type="text"
-                    onChange={this.handleChange}
+                  <TextSearchBox
                     value={value}
-                    placeholder="Enter your search"
+                    toSubmit={submit}
+                    ref={(input) => {
+                      this.searchInput = input;
+                    }}
                   />
                 </div>
 
@@ -73,7 +68,7 @@ class SearchByText extends Component {
               <div className={f('row')} style={{marginTop: '1em'}}>
                 <div className={f('large-12', 'columns')}>
                   <a className={f('button')}
-                    onClick={this.routerPush}
+                    onClick={this.handleSubmitClick}
                   >Search</a>
                   <a className={f('secondary', 'hollow', 'button')}
                     onClick={this.handleReset}
@@ -100,6 +95,7 @@ const Example = ({value}) => (
 Example.propTypes = {
   value: T.string,
 };
+
 export default withRouter(
   connect(({settings: {pagination: {pageSize}}}) =>
     ({pageSize}))(SearchByText)
