@@ -69,11 +69,6 @@ const Entry = (
     main = (
         <div>
           {children && cloneElement(children, {data})}
-          <EntryPageNavigation
-            accession={data.metadata.accession}
-            counters={data.metadata.counters}
-            pathname={pathname}
-          />
         </div>
       );
   } else if (data.entries) { // Member Database page
