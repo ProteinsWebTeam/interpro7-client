@@ -6,17 +6,15 @@ import {openSideNav} from 'actions/creators';
 
 import DynamicMenu from './DynamicMenu';
 
-import logo from 'images/logo/logo_75x75.png';
+import logo from 'images/logo/interpro_white.png';
+import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
 import {foundationPartial} from 'styles/foundation';
 import styles from './style.css';
-import ebi_global_styles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css'
-import ebi_theme from 'styles/theme-template.css';
-import ebi_petrol_theme from 'styles/theme-embl-petrol.css';
-const styleBundle = foundationPartial(styles, fonts, ebi_petrol_theme, ebi_theme, ebi_global_styles);
-
-
+import ebiGlobalStyles from 'styles/ebi-global.css';
+import fonts from 'styles/ebi/fonts.css';
+import ipro from 'styles/interpro-new.css';
+const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro);
 
 
 // Only does this in a browser
@@ -88,83 +86,78 @@ if (window) {
 }
 
 // This is temporary, assume the guidelines might change in the future
-var iconClasses = styleBundle({
-  'icon': true,
-  'icon-generic': true
+const iconClasses = styleBundle({
+  icon: true,
+  'icon-generic': true,
 });
 
-var iconFunctionalClasses = styleBundle({
-  "icon": true,
-  "icon-functional": true
+const iconFunctionalClasses = styleBundle({
+  icon: true,
+  'icon-functional': true,
 });
 
-var emblSelectorClasses = styleBundle({
-  "float-right": true,
-  "show-for-medium": true,
-  "embl-selector": true
+const emblSelectorClasses = styleBundle({
+  'float-right': true,
+  'show-for-medium': true,
+  'embl-selector': true,
 });
 
-var emblButtonClasses = styleBundle({
-  "button": true,
-  "float-right": true
+const emblButtonClasses = styleBundle({
+  button: true,
+  'float-right': true,
 });
 
-var emblLocationListClasses = styleBundle({
-  "column": true,
-  "padding-bottom-medium": true
+const emblLocationListClasses = styleBundle({
+  column: true,
+  'padding-bottom-medium': true,
 });
 
 const EbiGlobalHeader = () => (
-  <div id={styleBundle('global-masthead')} className={styleBundle('clearfix')}>
+  <div id="global-masthead" className={styleBundle('clearfix')}>
     <a href="//www.ebi.ac.uk" title="Go to the EMBL-EBI homepage">
-      <span className={styleBundle('ebi-logo')}></span>
+      <span className={styleBundle('ebi-logo')}/>
     </a>
     <nav>
       <div className={styleBundle('row')}>
-        <ul id={styleBundle('global-nav')} className={styleBundle('menu')}>
+        <ul id="global-nav" className={styleBundle('menu')}>
 
-          <li id={styleBundle("home-mobile")}>
-            <a href="//www.ebi.ac.uk"></a>
+          <li id="home-mobile" >
+            <a href="//www.ebi.ac.uk" />
           </li>
 
-          <li id={styleBundle("home")} className={styleBundle('active')}>
+          <li id="home" className={styleBundle('active')}>
             <a href="//www.ebi.ac.uk">
-              <i className={iconClasses} data-icon="H"></i> EMBL-EBI
+              <i className={iconClasses} data-icon="H" /> EMBL-EBI
             </a>
           </li>
 
-          <li id={styleBundle("services")}>
+          <li id="services" >
             <a href="//www.ebi.ac.uk/services">
-              <i className={iconClasses} data-icon="("></i> Services
+              <i className={iconClasses} data-icon="(" /> Services
             </a>
           </li>
 
-          <li id={styleBundle("research")}>
+          <li id="research" >
             <a href="//www.ebi.ac.uk/research">
-              <i className={iconClasses} data-icon=")"></i> Research
+              <i className={iconClasses} data-icon=")" /> Research
             </a>
           </li>
 
-          <li id={styleBundle("training")}>
+          <li id="training" >
             <a href="//www.ebi.ac.uk/training">
-              <i className={iconClasses} data-icon="t"></i> Training
+              <i className={iconClasses} data-icon="t" /> Training
             </a>
           </li>
 
-          <li id={styleBundle("about")}>
+          <li id="about" >
             <a href="//www.ebi.ac.uk/about">
-              <i className={iconClasses} data-icon="i"></i> About us
+              <i className={iconClasses} data-icon="i" /> About us
             </a>
           </li>
 
-          <li id={styleBundle("search")}>
-            <a href="#"
-               data-toggle={styleBundle("search-global-dropdown")}
-               aria-controls={styleBundle("search-global-dropdown")}
-               data-yeti-box={styleBundle("search-global-dropdown")}
-               aria-haspopup="true"
-               aria-expanded="false">
-              <i className={iconFunctionalClasses} data-icon="1"></i>
+          <li id="search" >
+            <a href="#">
+              <i className={iconFunctionalClasses} data-icon="1" />
               <span className={styleBundle('show-for-small-only')}>Search</span>
             </a>
             <EbiHeaderSearchForm />
@@ -172,70 +165,67 @@ const EbiGlobalHeader = () => (
 
           <li className={emblSelectorClasses} style={{flexGrow: 1}}>
             <button className={emblButtonClasses}
-                    type="button"
-                    data-toggle={styleBundle("embl-dropdown")}
-                    aria-controls={styleBundle("embl-dropdown")}
-                    data-is-focus="false"
-                    data-yeti-box={styleBundle("embl-dropdown")}
-                    aria-haspopup="true"
-                    aria-expanded="false">Hinxton</button>
+              type="button"
+            >Hinxton</button>
           </li>
 
         </ul>
       </div>
     </nav>
+    <EmblDropdownDiv />
   </div>
 
 );
 
 const EbiSkipToDiv = () => (
-  <div id={styleBundle("skip-to")}>
+  <div id="skip-to" >
     <ul>
       <li><a href="#content">Skip to main content</a></li>
       <li><a href="#local-nav">Skip to local navigation</a></li>
       <li><a href="#global-nav">Skip to EBI global navigation menu</a></li>
-      <li><a href="#global-nav-expanded">Skip to expanded EBI global navigation menu (includes all sub-sections)</a></li>
+      <li><a href="#global-nav-expanded">
+        Skip to expanded EBI global navigation menu (includes all sub-sections)
+      </a></li>
     </ul>
   </div>
 );
 
 const EbiHeaderSearchForm = () => (
-<div id={styleBundle("search-global-dropdown")}
-     className={styleBundle('dropdown-pane')}
-     data-dropdown="arn8xj-dropdown"
-     data-options="closeOnClick:true;"
-     aria-hidden="true"
-     data-yeti-box={styleBundle('dropdown-pane')}
-     aria-labelledby="8m8za8-dd-anchor"
-     data-events="resize"
-     style={{
-       top: "49.375[x",
-       left: "1px"
-     }}
+<div id="search-global-dropdown"
+  className={styleBundle('dropdown-pane')}
+  style={{
+    top: '49.375[x',
+    left: '1px',
+  }}
 >
-  <form id={styleBundle('global-search')}
-        name={styleBundle('global-search')}
-        action="/ebisearch/search.ebi"
-        method="GET">
+  <form id="global-search"
+    name={styleBundle('global-search')}
+    action="/ebisearch/search.ebi"
+    method="GET"
+  >
     <fieldset>
-      <div className={styleBundle("input-group")}>
+      <div className={styleBundle('input-group')}>
         <input type="text"
-               name="query"
-               id={styleBundle("global-searchbox")}
-               className={styleBundle("input-group-field")}
-               placeholder="Search all of EMBL-EBI"></input>
+          name="query"
+          id="global-searchbox"
+          className={styleBundle('input-group-field')}
+          placeholder="Search all of EMBL-EBI"
+        />
 
-        <div className={styleBundle("input-group-button")}>
+        <div className={styleBundle('input-group-button')}>
           <input type="submit"
-                 name="submit"
-                 value="Search"
-                 className="button"></input>
+            name="submit"
+            value="Search"
+            className="button"
+          />
           <input type="hidden"
-                 name="db"
-                 value="allebi"></input>
+            name="db"
+            value="allebi"
+          />
           <input type="hidden"
-                 name="requestFrom"
-                 value="global-masthead"></input>
+            name="requestFrom"
+            value="global-masthead"
+          />
         </div>
       </div>
     </fieldset>
@@ -244,76 +234,75 @@ const EbiHeaderSearchForm = () => (
 );
 
 const EmblDropdownDiv = () => (
-  <div id={styleBundle("embl-dropdown")}
-       className={styleBundle({
-         "dropdown-pane": "true",
-         "bottom": "true"
-       })}
-       data-dropdown={styleBundle("qs9ew3-dropdown")}
-       aria-hidden="true"
-       data-yeti-box={styleBundle("embl-dropdown")}
-       data-resize={styleBundle("embl-dropdown")}
-       aria-labelledby={styleBundle("36bcej-dd-anchor")}
-       data-events="resize"
-       style={{
-         top: "48px",
-         left: "1px"
-       }}>
+  <div id="embl-dropdown"
+    className={styleBundle({
+      'dropdown-pane': 'true',
+      bottom: 'true',
+    })}
+    style={{
+      top: '48px',
+      left: '1px',
+    }}
+  >
 
     <p>
-      EMBL-EBI in Hinxton is one of five EMBL locations across europe.<br /> <a href="https://www.ebi.ac.uk/about" className={styleBundle({"small": true, "readmore": true})}>More about EMBL-EBI</a>
+      EMBL-EBI in Hinxton is one of five EMBL locations across europe.<br />
+      <a
+        href="https://www.ebi.ac.uk/about"
+        className={styleBundle({small: true, readmore: true})}
+      >More about EMBL-EBI</a>
     </p>
     <h6>Connect to another EMBL location</h6>
 
     <div className={styleBundle({
-      "small-collapse": true,
-      "small-up-2": true,
-      "padding-bottom-large": true,
-      "clearfix": true})}>
+      'small-collapse': true,
+      'small-up-2': true,
+      'padding-bottom-large': true,
+      clearfix: true})}
+    >
       <div className={emblLocationListClasses}>
         <a href="https://www.embl.fr/" >Grenoble</a>
-        <div className={styleBundle("small")}>Structural Biology</div>
+        <div className={styleBundle('small')}>Structural Biology</div>
       </div>
     </div>
 
     <div className={styleBundle({
-      "small-collapse": true,
-      "small-up-2": true,
-      "padding-bottom-large": true,
-      "clearfix": true})}>
+      'small-collapse': true,
+      'small-up-2': true,
+      'padding-bottom-large': true,
+      clearfix: true})}
+    >
       <div className={emblLocationListClasses}>
         <a href="https://www.embl.fr/" >Hamburg</a>
-        <div className={styleBundle("small")}>Structural Biology</div>
+        <div className={styleBundle('small')}>Structural Biology</div>
       </div>
     </div>
 
     <div className={styleBundle({
-      "small-collapse": true,
-      "small-up-2": true,
-      "padding-bottom-large": true,
-      "clearfix": true})}>
+      'small-collapse': true,
+      'small-up-2': true,
+      'padding-bottom-large': true,
+      clearfix: true})}
+    >
       <div className={emblLocationListClasses}>
         <a href="https://www.embl.fr/" >Heidelberg</a>
-        <div className={styleBundle("small")}>Main Laboratory</div>
+        <div className={styleBundle('small')}>Main Laboratory</div>
       </div>
     </div>
 
     <div className={styleBundle({
-      "small-collapse": true,
-      "small-up-2": true,
-      "padding-bottom-large": true,
-      "clearfix": true})}>
+      'small-collapse': true,
+      'small-up-2': true,
+      'padding-bottom-large': true,
+      clearfix: true})}
+    >
       <div className={emblLocationListClasses}>
         <a href="https://www.embl.fr/" >Monterotondo</a>
-        <div className={styleBundle("small")}>Mouse Biology</div>
+        <div className={styleBundle('small')}>Mouse Biology</div>
       </div>
     </div>
 
   </div>
-);
-
-const HeaderBackground = () => (
-  <div className={styles.header_background} />
 );
 
 const menuItems = {
@@ -337,7 +326,7 @@ const _HamburgerBtn = ({openSideNav, open, svg}) => {
   return (
     <span>
       <svg
-        viewBox="0 0 12 10" width="1.5em" height="1.5em"
+        viewBox="0 0 12 10" width="2.5em" height="2.5em"
         className={styles.top_level_hamburger}
         onClick={openSideNav}
       >
@@ -367,19 +356,51 @@ const HamburgerBtn = connect(
   {openSideNav}
 )(_HamburgerBtn);
 
-const TopLevel = () => (
-  <span className={styles.top_level}>
-    <Link to="/" className={styles.top_level_title}>
-      <img src={logo} alt="logo" />
-      <div>
-        <h1>InterPro</h1>
-        <h5>Protein sequence analysis & classification</h5>
+const SideIcons = () => (
+  <div
+    className={styleBundle('columns', 'small-4', 'medium-2')}
+    id="slide-menu"
+  >
+    <div className={styleBundle('local-buttons')}>
+      <div className={styleBundle('local-offcanvas-menu', 'anim')}>
+        <HamburgerBtn svg={true} />
       </div>
-    </Link>
-    <HamburgerBtn svg={true} />
-  </span>
+      <div className={styleBundle('local-site-search', 'anim')}>
+        <div
+          className={styleBundle('tool-search')}
+          id="local-search"
+          name="local-search"
+        >
+          <TextSearchBox
+            maxLength="255"
+            value=""
+            className={styleBundle('search-box')}
+            name="search"
+          />
+          <Link to="/search" className={iconFunctionalClasses} data-icon="1" />
+        </div>
+      </div>
+
+    </div>
+  </div>
 );
 
+const TopLevel = () => (
+  <div
+    className={styleBundle('columns', 'small-8', 'medium-10', 'anim')}
+    id="local-title"
+  >
+    <h1>
+      <Link to="/" title="Back to InterPro homepage">
+        <img src={logo} alt="InterPro logo" />
+        InterPro
+      </Link>
+    </h1>
+    <h4 className={styleBundle('hide-for-small-only')}>
+      Classification of protein families
+    </h4>
+  </div>
+);
 
 const MenuItem = ({active, children}) => (
   <Link
@@ -419,33 +440,20 @@ MediumLevel.propTypes = {
 };
 
 const Header = ({pathname}) => (
-  <div>
-    <EbiSkipToDiv />
-    <div className={styleBundle("sticky-container")}
-      style={{ height: "203.75px"}}
-    >
-      <div id={ebi_global_styles['local-masthead']}
-           className={styleBundle({
-             sticky: "true",
-             "local-masthead": "true"
-           })}
-           data-sticky="o53j5f-sticky"
-           data-sticky-on="large"
-           data-top-anchor="180"
-           data-btm-anchor="300000"
-           data-resize={styleBundle("local-masthead")}
-           data-events="resize"
-      >
-        <header className={styles.header}>
-          <EbiGlobalHeader />
-          <EmblDropdownDiv />
-          <div className={styles.container}>
-            <HeaderBackground />
-            <TopLevel />
-            <DynamicMenu />
-          </div>
+  <div className={ipro['smaller-container']}>
+    <div className={ipro['main-header']}>
+      <EbiSkipToDiv />
+        <header
+          id="local-masthead"
+          className={ipro['local-masthead']}
+        >
+            <EbiGlobalHeader />
+            <div className={styleBundle('masthead', 'row')}>
+              <TopLevel />
+              <SideIcons />
+              <DynamicMenu location={pathname}/>
+            </div>
         </header>
-      </div>
     </div>
   </div>
 );
