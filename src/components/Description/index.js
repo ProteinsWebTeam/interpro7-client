@@ -59,7 +59,7 @@ class Description extends Component {
         </div>
         <br/>
         <button
-          className={f('button', 'secondary', {hidden: hide})}
+          className={f('button', 'primary', {hidden: hide})}
           id="show-more"
           onClick={this.handleClick}
         >
