@@ -5,8 +5,8 @@ import {transformFormatted} from 'utils/text';
 import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
 import styles from './style.css';
-const f = foundationPartial(ebiStyles, styles);
-
+import theme from 'styles/theme-interpro.css';
+const f = foundationPartial(ebiStyles, styles, theme);
 
 const ParagraphWithCites = ({p, literature = {}}) => (
   <p>
@@ -59,7 +59,7 @@ class Description extends Component {
         </div>
         <br/>
         <button
-          className={f('button', 'primary', {hidden: hide})}
+          className={f('button', {hidden: hide})}
           id="show-more"
           onClick={this.handleClick}
         >
