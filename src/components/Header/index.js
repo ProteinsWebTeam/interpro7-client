@@ -5,8 +5,8 @@ import {Link} from 'react-router/es';
 import {openSideNav} from 'actions/creators';
 
 import DynamicMenu from './DynamicMenu';
+import Title from './Title';
 
-import logo from 'images/logo/interpro_white.png';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
 import {foundationPartial} from 'styles/foundation';
@@ -385,22 +385,6 @@ const SideIcons = () => (
   </div>
 );
 
-const TopLevel = () => (
-  <div
-    className={styleBundle('columns', 'small-8', 'medium-10', 'anim')}
-    id="local-title"
-  >
-    <h1>
-      <Link to="/" title="Back to InterPro homepage">
-        <img src={logo} alt="InterPro logo" />
-        InterPro
-      </Link>
-    </h1>
-    <h4 className={styleBundle('hide-for-small-only')}>
-      Classification of protein families
-    </h4>
-  </div>
-);
 
 const MenuItem = ({active, children}) => (
   <Link
@@ -449,7 +433,7 @@ const Header = ({pathname}) => (
         >
             <EbiGlobalHeader />
             <div className={styleBundle('masthead', 'row')}>
-              <TopLevel />
+              <Title location={pathname}/>
               <SideIcons />
               <DynamicMenu location={pathname}/>
             </div>

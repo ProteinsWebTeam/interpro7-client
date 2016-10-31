@@ -58,10 +58,15 @@ const buildEBISearchUrl = (pathname, query, {pagination, ebi}) => {
 };
 
 // Looks at the pathname to see if data needs to be loaded from the API
-const shouldLoadData = pathname => PATHS_REQUIRING_DATA.test(pathname);
+const shouldLoadData = (pathname, query = null) => {
+  if (pathname.startsWith('/search')) {
+    return (query !== null && query.search);
+  }
+  return PATHS_REQUIRING_DATA.test(pathname);
+};
 
 export default store => async ({pathname, query, search}) => {
-  if (!shouldLoadData(pathname)) return;
+  if (!shouldLoadData(pathname, query)) return;
 
   const dataKey = pathname + search;
   const {settings} = store.getState();

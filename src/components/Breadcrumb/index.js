@@ -101,7 +101,6 @@ class Breadcrumb extends Component {
       const curr = node.getBoundingClientRect();
       const prev = positions.get(node);
       if (prev) {
-        // debugger;
         console.log(
           `translate(${prev.left - curr.left}px, ${prev.top - curr.top}px)`
         );
