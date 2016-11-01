@@ -1,4 +1,4 @@
-import {LOADING_DATA, LOADED_DATA, FAILED_LOADING_DATA} from 'actions/types';
+import {LOADING_DATA, LOADED_DATA, FAILED_LOADING_DATA,UNLOADING_DATA} from 'actions/types';
 
 const DEFAULT_STATE = {
   urlKey: null,
@@ -33,6 +33,8 @@ export default (
       if (state.urlKey !== action.urlKey) return state;
       // No data, but pass the error along to maybe display to the user
       return {...state, loading: false, error: action.error};
+    case UNLOADING_DATA:
+      return {...state, loading: false, data: null, dataUrl: null}
     default:
       return state;
   }

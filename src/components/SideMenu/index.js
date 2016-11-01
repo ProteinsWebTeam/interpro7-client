@@ -2,6 +2,8 @@ import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router/es';
 
+import url from 'url';
+
 import {closeSideNav} from 'actions/creators';
 import {menuEntries} from 'components/Header/DynamicMenu';
 
@@ -12,6 +14,64 @@ import style from './style.css';
 
 const f = foundationPartial(ebiStyles, interproStyles, style);
 
+const menu = [
+  {
+    name: 'Entity Menu',
+    isDrilldown: false,
+    className: 'primary',
+    options: menuEntries.singleEntity,
+    relativePaths: true,
+    hide: (data) => (!data || !data.metadata),
+  },
+  {
+    name: 'Interpro Menu',
+    isDrilldown: true,
+    className: 'secondary',
+    options: menuEntries.home,
+  },
+  {
+    name: 'EBI Menu',
+    isDrilldown: false,
+    options: [
+      {
+        to: 'http://www.ebi.ac.uk',
+        icon: 'H',
+        name: 'EBI home',
+        className: 'icon-generic',
+      },
+      {
+        to: 'http://www.ebi.ac.uk/services',
+        icon: '(',
+        name: 'Services',
+        className: 'icon-generic',
+      },
+      {
+        to: 'http://www.ebi.ac.uk/research',
+        icon: ')',
+        name: 'Research',
+        className: 'icon-generic',
+      },
+      {
+        to: 'http://www.ebi.ac.uk/training',
+        icon: 't',
+        name: 'Training',
+        className: 'icon-generic',
+      },
+      {
+        to: 'http://www.ebi.ac.uk/about',
+        icon: 'i',
+        name: 'About EBI',
+        className: 'icon-generic',
+      },
+    ],
+  },
+];
+// TODO: Make sure this is not hardcoded:
+menu[1].options[2].submenu = {
+  name: 'Browse',
+  isDrilldown: false,
+  options: menuEntries.entities,
+};
 
 const setRootGrayscale = (() => {
   let root;
@@ -24,12 +84,70 @@ const setRootGrayscale = (() => {
   };
 })();
 
-const BrowseMenu = ({isOpen, toggleBrowse, closeSideNav}) => (
+const MenuLink = ({element, closeSideNav, reletivePath=false, pathname='', data}) => {
+  const to = (reletivePath && pathname !== '/' ? pathname : '') + element.to;
+  return (
+    <li>
+      {
+        url.parse(to).host ?
+          <a
+            href={element.to}
+            className={f('icon', element.className)}
+            data-icon={element.icon}
+          > {element.name}</a> :
+          <Link
+            to={to}
+            className={f('icon', element.className, {active: pathname===to})}
+            data-icon={element.icon}
+            onClick={closeSideNav}
+          > {element.name}
+            {element.counter && data && data.metadata && data.metadata.counters &&
+            <span className={f('badge')}>
+                  {data.metadata.counters[element.counter] || 0}
+                </span>
+            }
+          </Link>
+      }
+    </li>
+  );
+};
+
+const MenuSection = ({section, pathname, type, data, isOpen, toggle, closeSideNav}) => (
+  <ul
+    className={f('off-canvas-list', section.className || 'tertiary' ,{
+      hide: (section.hide && section.hide(data)),
+    })}
+  >
+    <li><label>{section.name}</label></li>
+    {section.options
+      .filter(({to}) => !section.relativePaths || !to.includes(type))
+      .map((e, i) => (
+          e.submenu ?
+            <SubMenu
+              key={i}
+              isOpen={isOpen(section.name)}
+              toggle={toggle(section.name)}
+              closeSideNav={closeSideNav}
+              options={menuEntries.entities}
+            /> :
+            <MenuLink
+              key={i}
+              element={e}
+              closeSideNav={closeSideNav}
+              reletivePath={section.relativePaths}
+              pathname={pathname}
+              data={data}
+            />
+      ))
+    }
+  </ul>
+);
+const SubMenu = ({isOpen, toggle, closeSideNav, options}) => (
   <li
     role="menuitem" className={f('is-drilldown-submenu-parent')}
     aria-haspopup="true" aria-expanded="false" aria-label=" Browse"
   >
-    <a onClick={toggleBrowse}>
+    <a onClick={toggle}>
       <i
         className={f('icon', 'icon-functional')}
         data-icon="b"
@@ -41,10 +159,10 @@ const BrowseMenu = ({isOpen, toggleBrowse, closeSideNav}) => (
       style={{transform: `translateX(${isOpen ? '-100%' : '0%'})`}}
     >
       <li className={f('js-drilldown-back')}>
-        <a onClick={toggleBrowse}>Back InterPro menu</a>
+        <a onClick={toggle}>Back InterPro menu</a>
       </li>
       {
-        menuEntries.entities.map((ent, index) => (
+        options.map((ent, index) => (
           <li key={index}>
             <Link
               to={ent.to}
@@ -58,26 +176,26 @@ const BrowseMenu = ({isOpen, toggleBrowse, closeSideNav}) => (
     </ul>
   </li>
 );
-BrowseMenu.propTypes = {
-  isOpen: T.bool.isRequired,
-  toggleBrowse: T.func.isRequired,
-  closeSideNav: T.func.isRequired,
-};
 
 class SideMenu extends Component{
 
   constructor(props){
     super(props);
-    this.state = {browse: false};
+    this.state = {Browse: false};
   }
 
-  toggleBrowse = () => {
-    this.setState({browse: !this.state.browse});
+  toggleSubMenu = (name) => () => {
+    const newState = {};
+    newState[name] = !this.state[name];
+    this.setState(newState);
   }
 
   render() {
-    const {sideNav: visible, position = 'left', closeSideNav} = this.props;
+    const {
+      sideNav: visible, position = 'left', closeSideNav, pathname, data,
+    } = this.props;
     const left = position === 'left';
+    const type = pathname.match(/^\/([^/]*)/)[1].toLowerCase();
     setRootGrayscale(visible);
     return (
       <div>
@@ -101,50 +219,30 @@ class SideMenu extends Component{
             onClick={closeSideNav}
           > <span aria-hidden="true">×</span></a>
 
-          <div className={f('is-drilldown')} style={{maxWidth: '100%'}}>
-            <ul className={f('off-canvas-list', 'secondary')}>
-              <li><label>InterPro menu</label></li>
-              {
-                menuEntries.home.map((e, i) => (
-                  (e.name === 'Browse') ?
-                    <BrowseMenu
-                      key={i}
-                      isOpen={this.state.browse}
-                      toggleBrowse={this.toggleBrowse}
-                      closeSideNav={closeSideNav}
-                    /> :
-                    <li key={i}>
-                      <Link
-                        to={e.to}
-                        className={f('icon', e.className)}
-                        data-icon={e.icon}
-                        onClick={closeSideNav}
-                      > {e.name}</Link>
-                    </li>
-                ))
-              }
-            </ul>
-          </div>
-
-          <ul className={f('off-canvas-list', 'tertiary')}>
-            <li><label>EBI menu</label></li>
-            {[
-              {link: 'http://www.ebi.ac.uk', icon: 'H', name: 'EBI home'},
-              {link: 'http://www.ebi.ac.uk/services', icon: '(', name: 'Services'},
-              {link: 'http://www.ebi.ac.uk/research', icon: ')', name: 'Research'},
-              {link: 'http://www.ebi.ac.uk/training', icon: 't', name: 'Training'},
-              {link: 'http://www.ebi.ac.uk/about', icon: 'i', name: 'About EBI'},
-            ].map((e, i) => (
-              <li key={i}>
-                <a
-                  href={e.link}
-                  className={f('icon', 'icon-generic')}
-                  data-icon={e.icon}
-                > {e.name}</a>
-              </li>
+          {
+            menu.map((section, i) => (
+              section.isDrilldown ?
+                <div key={i} className={f('is-drilldown')} style={{maxWidth: '100%'}}>
+                  <MenuSection
+                    pathname={pathname}
+                    type={type}
+                    data={data}
+                    section={section}
+                    closeSideNav={closeSideNav}
+                    isOpen={(name) => this.state[name]}
+                    toggle={(name) => this.toggleSubMenu(name)}
+                  />
+                </div> :
+                <MenuSection
+                  key={i}
+                  data={data}
+                  pathname={pathname}
+                  type={type}
+                  section={section}
+                  closeSideNav={closeSideNav}
+                />
             ))
-            }
-          </ul>
+          }
 
         </aside>
         <div onClick={closeSideNav}
@@ -156,11 +254,13 @@ class SideMenu extends Component{
 }
 SideMenu.propTypes = {
   sideNav: T.bool.isRequired,
+  data: T.object,
   position: T.oneOf(['left', 'right']),
+  pathname: T.string.isRequired,
   closeSideNav: T.func.isRequired,
 };
 
 export default connect(
-  ({ui: {sideNav}}) => ({sideNav}),
+  ({ui: {sideNav}, data:{data}}) => ({sideNav, data}),
   {closeSideNav}
 )(SideMenu);

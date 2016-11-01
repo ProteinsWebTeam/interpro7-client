@@ -16,8 +16,8 @@ const Root = (
   {children, location}/*: {children: Node, location: {pathname: string}}*/
 ) => (
   <div>
+    <SideMenu position="right" pathname={location.pathname} />
     <Header pathname={location.pathname} />
-    <SideMenu position="right" />
     <Breadcrumb pathname={location.pathname} />
     <Loading>{children}</Loading>
     <Footer />

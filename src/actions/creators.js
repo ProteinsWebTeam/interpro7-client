@@ -55,6 +55,9 @@ export const loadedData = (urlKey, dataUrl, data) => ({
   dataUrl,
   data,
 });
+export const unloadingData = () => ({
+  type: types.UNLOADING_DATA,
+});
 
 export const failedLoadingData = (urlKey, error) => ({
   type: types.FAILED_LOADING_DATA,

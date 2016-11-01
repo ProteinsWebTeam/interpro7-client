@@ -205,7 +205,7 @@ ul.off-canvas-list li a:hover {background: rgba(0, 0, 0, 0.3);}
 /*/no-color option*/
 
 /*color just on label*/
-.label-col ul.off-canvas-list.primary.domain li label {color:#7dbb72;}
+.label-col ul.off-canvas-list.primary li label {color:#7dbb72;}
 .label-col ul.off-canvas-list.secondary li label {color:#2199e8;}
 .label-col ul.off-canvas-list.tertiary li label {color:#34b5b5;}
 .label-col .is-drilldown-submenu, .label-col ul.off-canvas-list.primary.domain, .label-col ul.off-canvas-list.secondary, .label-col ul.off-canvas-list.tertiary {background: #3B3B3B;}

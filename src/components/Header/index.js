@@ -356,16 +356,22 @@ const HamburgerBtn = connect(
   {openSideNav}
 )(_HamburgerBtn);
 
-const SideIcons = () => (
+const _SideIcons = ({open}) => (
   <div
     className={styleBundle('columns', 'small-4', 'medium-2')}
     id="slide-menu"
   >
     <div className={styleBundle('local-buttons')}>
-      <div className={styleBundle('local-offcanvas-menu', 'anim')}>
+      <div
+        className={styleBundle('local-offcanvas-menu', 'anim')}
+        style={{transform: `translateX(${open?'-20em':'0em'})`}}
+      >
         <HamburgerBtn svg={true} />
       </div>
-      <div className={styleBundle('local-site-search', 'anim')}>
+      <div
+        className={styleBundle('local-site-search', 'anim')}
+        style={{transform: `translateX(${open?'-20em':'0em'})`}}
+      >
         <div
           className={styleBundle('tool-search')}
           id="local-search"
@@ -384,6 +390,13 @@ const SideIcons = () => (
     </div>
   </div>
 );
+_SideIcons.propTypes = {
+  open: T.bool.isRequired,
+};
+
+const SideIcons = connect(
+  ({ui: {sideNav: open}}) => ({open})
+)(_SideIcons);
 
 
 const MenuItem = ({active, children}) => (

@@ -1,4 +1,4 @@
-import {loadingData, loadedData, failedLoadingData} from 'actions/creators';
+import {loadingData, unloadingData, loadedData, failedLoadingData} from 'actions/creators';
 import {cachedFetchJSON} from 'utils/cachedFetch';
 
 // Regular expressions
@@ -66,7 +66,11 @@ const shouldLoadData = (pathname, query = null) => {
 };
 
 export default store => async ({pathname, query, search}) => {
-  if (!shouldLoadData(pathname, query)) return;
+  if (!shouldLoadData(pathname, query)) {
+    console.log(`unloading data`);
+    store.dispatch(unloadingData());
+    return;
+  }
 
   const dataKey = pathname + search;
   const {settings} = store.getState();
