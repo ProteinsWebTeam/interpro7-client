@@ -1,12 +1,12 @@
 import React from 'react';
 
 import {foundationPartial} from 'styles/foundation';
-import EBIGlobalStyles from 'styles/ebi-global.css';
+import ebiGlobalStyles from 'styles/ebi-global.css';
 import fonts from 'styles/ebi/fonts.css';
-import EBITheme from 'styles/theme-template.css';
-import EBIPetrolTheme from 'styles/theme-embl-petrol.css';
+import ebiTheme from 'styles/theme-template.css';
+import ebiPetrolTheme from 'styles/theme-embl-petrol.css';
 const styleBundle = foundationPartial(
-  fonts, EBIPetrolTheme, EBITheme, EBIGlobalStyles
+  fonts, ebiPetrolTheme, ebiTheme, ebiGlobalStyles
 );
 
 // This is temporary, assume the guidelines might change in the future
