@@ -88,7 +88,9 @@ MenuLink.propTypes = {
   }),
 };
 
-const MenuSection = ({section, pathname, type, data, isOpen, toggle, closeSideNav}) => (
+const MenuSection = (
+  {section, pathname, type, data, isOpen, toggle, closeSideNav}
+) => (
   <ul
     className={f('off-canvas-list', section.className || 'tertiary', {
       hide: (section.hide && section.hide(data)),
