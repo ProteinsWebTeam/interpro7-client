@@ -8,7 +8,10 @@ import f from 'styles/foundation';
 class SearchByText extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: '', submit: false};
+    this.state = {
+      value: (props.location.query ? props.location.query.search : ''),
+      submit: false,
+    };
   }
 
   componentWillReceiveProps({query = ''}) {
@@ -59,7 +62,7 @@ class SearchByText extends Component {
                 > e.g.
                   <Example value="IPR020422"/>,
                   <Example value="kinase" />,
-                  <Example value="Q9ZZT7" />,
+                  <Example value="Q9ZJX4" />,
                   <Example value="PF02932" />,
                   <Example value="GO:0007165"/>
                 </div>
@@ -87,6 +90,9 @@ SearchByText.propTypes = {
   pageSize: T.number,
   router: T.object,
   value: T.string,
+  location: T.shape({
+    query: T.object,
+  }),
 };
 
 const Example = ({value}) => (

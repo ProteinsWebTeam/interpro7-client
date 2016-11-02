@@ -13,10 +13,11 @@ const ParagraphWithCites = ({p, literature = {}}) => (
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = Object.keys(literature).indexOf(part) + 1;
       return (
-      i % 2 ?
-        <a key={i} href={`${location.pathname}#${part}`}>{refCounter}</a> :
-        <span key={i}>{part === ', ' ? ',\u00a0' : part}</span>
-    );})}
+        i % 2 ?
+          <a key={i} href={`${location.pathname}#${part}`}>{refCounter}</a> :
+          <span key={i}>{part === ', ' ? ',\u00a0' : part}</span>
+      );
+    })}
   </p>
 );
 ParagraphWithCites.propTypes = {
