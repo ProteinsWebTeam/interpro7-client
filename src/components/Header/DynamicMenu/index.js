@@ -8,16 +8,17 @@ import interproStyles from 'styles/interpro-new.css';
 
 const styles = foundationPartial(ebiStyles, interproStyles);
 
-const menuEntries = {
+export const menuEntries = {
   home: [
-    {to: '/', name: 'Home'},
-    {to: '/search/', name: 'Search'},
-    {to: '/browse/', name: 'Browse'},
-    {to: '/release_notes/', name: 'Release Notes'},
-    {to: '/download/', name: 'Download'},
-    {to: '/help/', name: 'Help'},
-    {to: '/about/', name: 'About'},
-    {to: '/settings/', name: 'Settings'},
+    {to: '/', name: 'Home', icon: 'H', className: 'icon-generic'},
+    {to: '/search/', name: 'Search', icon: '1', className: 'icon-functional'},
+    {to: '/browse/', name: 'Browse', icon: 'b', className: 'icon-functional'},
+    {to: '/release_notes/', name: 'Release Notes', icon: '0',
+      className: 'icon-functional'},
+    {to: '/download/', name: 'Download', icon: '=', className: 'icon-functional'},
+    {to: '/help/', name: 'Help', icon: '?', className: 'icon-generic'},
+    {to: '/about/', name: 'About', icon: 'i', className: 'icon-generic'},
+    {to: '/settings/', name: 'Settings', icon: 's', className: 'icon-functional'},
   ],
   entities: [
     {to: '/entry/interpro/', name: 'Entry'},

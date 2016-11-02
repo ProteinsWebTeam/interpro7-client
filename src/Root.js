@@ -17,7 +17,7 @@ const Root = (
 ) => (
   <div>
     <Header pathname={location.pathname} />
-    <SideMenu position="left" />
+    <SideMenu position="right" />
     <Breadcrumb pathname={location.pathname} />
     <Loading>{children}</Loading>
     <Footer />

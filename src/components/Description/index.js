@@ -39,12 +39,12 @@ class Description extends Component {
     this.setState({isOpen: !this.state.isOpen});
   }
   render(){
-    const {textBlocks, literature} = this.props,
+    const {textBlocks, literature, title='Description'} = this.props,
       maxNumberOfChars = 500,
       hide = textBlocks.length < 2 && textBlocks[0].length < maxNumberOfChars;
     return (
       <div className={f('content')}>
-        <h4>Description</h4>
+        <h4>{title}</h4>
         <div
           className={f('animate-height', {collapsed: !this.state.isOpen})}
           style={{maxHeight: this.state.isOpen ? '5000px' : '200px'}}
@@ -73,5 +73,6 @@ class Description extends Component {
 Description.propTypes = {
   textBlocks: T.array.isRequired,
   literature: T.object,
+  title: T.string,
 };
 export default Description;

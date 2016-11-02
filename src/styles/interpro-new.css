@@ -223,7 +223,7 @@ ul.off-canvas-list.tertiary {background: #279292;}
 /*ul.off-canvas-list.primary li a { border-bottom: 1px solid rgba(0, 0, 0, 0.25);}*/
 
 /*drilldown feature*/
-.is-drilldown-submenu {margin:0;}
+.is-drilldown-submenu {margin:0; height: 100%; display: block;  z-index: 1;}
 .js-drilldown-back {background: #444444; border-bottom: none; border-top: 1px solid #5e5e5e;}
 /*.is-drilldown-submenu {top:38px;}*/
 /*/drilldown feature*/
