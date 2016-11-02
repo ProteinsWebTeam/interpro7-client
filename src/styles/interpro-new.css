@@ -15,7 +15,34 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 
 /******************************Local style***************************************/
 
+/*ICONS*/
+/*MEMBER DATABASE SVG icons*/
+.md-color, .md-server {fill:#e5e5e5; font-size:9em; font-family: 'EBI-generic', arial, sans-serif;}
+.md-list  {font-size: 80%;}
+.md-list svg {margin-bottom: -15px; margin-top: -15px; /*hack to reposition the view port without changing the coordinates of all svg*/}
+.md-list a h6 {margin-bottom:0;}
+.md-list a.md-cg h6 {white-space: nowrap;}
+.md-list a p {font-size: 90%;}
 
+.md-mask {display: none;}
+.md-cg .md-color {fill:#a98de1;}
+.md-cd .md-color {fill:#b5de6c;}
+.md-ha .md-color {fill:#00e2e2;}
+.md-pa .md-color {fill:#c4b8a7;}
+.md-pf .md-color {fill:#9bbbe0;}
+.md-pi .md-color {fill:#dfafdf;}
+.md-pri .md-color {fill:#7fe07f;}
+.md-pro .md-color {fill:#7d9bc8;}
+.md-prpro .md-color, .md-pr .md-color {fill:#e1dc30;}
+.md-prpat .md-color {fill:#E1691B;}
+.md-sf .md-color {fill:#00b1d3;}
+.md-sm .md-color {fill:#e48686;}
+.md-su .md-color {fill:#686868;}
+.md-ti .md-color {fill:#4f9294;}
+/*/MEMBER DATABASE SVG icons*/
+
+
+/*/MEMBER DATABASE icons*/
 /*ICONS*/
 /*.nav-toggle {position: absolute; top: 28px;  right: 55px;}*/
 /*.nav-toggle span, .nav-toggle span:before, .nav-toggle span:after { cursor: pointer; border-radius: 1px; height: 5px; width: 35px;  background: white;  position: absolute; display: block; content: '';*/
@@ -290,13 +317,23 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 .fig-sqcban {background: url(../images/backgrounds/composite_03.png) no-repeat 85% 9%; background-size: 503%; height: 16em; width: 20em; margin-bottom: -68px;}
 /*/homepage figures*/
 
+
 /*homepage entry-list component*/
 .entry-list-latest ul {list-style: none; padding: 0; margin: 0; font-size: 94%;}
 .entry-list-latest .list-project-l ul li { padding: 0.2em 0.5em; border-radius: 6px;}
-.entry-list-latest .list-project-l ul li:hover {background-color:aliceblue;}
+.entry-list-latest .list-project-l ul li:hover {background-color:#e4f3ff;}
 .entry-list-latest .list-project-l a, .tabs a { color: #0a0a0a;}
 .list-project-l {position: relative;width: 100%; overflow-x: hidden; overflow-y: auto; height: 264px; margin-bottom: 1rem;}
 /*/homepage entry-list component*/
+
+/*homepage member database list*/
+.browse-by .columns:hover {background-color:#e4f3ff;}
+#content .browse-by a:hover {border-bottom-width: 0;}
+.browse-by .md-list .icon-generic {font-size: 233%;}
+.browse-by .md-list .small.icon-generic {font-size:129%;}
+.browse-by .md-list small {color:#0a0a0a;font-weight:bold;}
+
+/*/homepage member database list*/
 
 /*homepage news component*/
 .jumbo-news-container {text-align: center; background-color: #eee; padding: 72px 0 72px 0;}
