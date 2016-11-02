@@ -5,7 +5,7 @@ import {Link} from 'react-router/es';
 import url from 'url';
 
 import {closeSideNav} from 'actions/creators';
-import {menuEntries} from 'components/Header/DynamicMenu';
+import {EBI, InterPro, singleEntity} from 'menuConfig';
 
 import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
@@ -19,7 +19,7 @@ const menu = [
     name: 'Entity Menu',
     isDrilldown: false,
     className: 'primary',
-    options: menuEntries.singleEntity,
+    options: singleEntity,
     relativePaths: true,
     hide: (data) => (!data || !data.metadata),
   },
@@ -27,51 +27,14 @@ const menu = [
     name: 'Interpro Menu',
     isDrilldown: true,
     className: 'secondary',
-    options: menuEntries.home,
+    options: InterPro,
   },
   {
     name: 'EBI Menu',
     isDrilldown: false,
-    options: [
-      {
-        to: 'http://www.ebi.ac.uk',
-        icon: 'H',
-        name: 'EBI home',
-        className: 'icon-generic',
-      },
-      {
-        to: 'http://www.ebi.ac.uk/services',
-        icon: '(',
-        name: 'Services',
-        className: 'icon-generic',
-      },
-      {
-        to: 'http://www.ebi.ac.uk/research',
-        icon: ')',
-        name: 'Research',
-        className: 'icon-generic',
-      },
-      {
-        to: 'http://www.ebi.ac.uk/training',
-        icon: 't',
-        name: 'Training',
-        className: 'icon-generic',
-      },
-      {
-        to: 'http://www.ebi.ac.uk/about',
-        icon: 'i',
-        name: 'About EBI',
-        className: 'icon-generic',
-      },
-    ],
+    options: EBI,
   },
 ];
-// TODO: Make sure this is not hardcoded:
-menu[1].options[2].submenu = {
-  name: 'Browse',
-  isDrilldown: false,
-  options: menuEntries.entities,
-};
 
 const setRootGrayscale = (() => {
   let root;
@@ -84,27 +47,27 @@ const setRootGrayscale = (() => {
   };
 })();
 
-const MenuLink = ({element, closeSideNav, reletivePath = false, pathname = '', data}) => {
-  const to = (reletivePath && pathname !== '/' ? pathname : '') + element.to;
+const MenuLink = ({element, closeSideNav, relativePath = false, pathname = '', data}) => {
+  const to = (relativePath && pathname !== '/' ? pathname : '') + element.to;
   return (
     <li>
       {
         url.parse(to).host ?
           <a
             href={element.to}
-            className={f('icon', element.className)}
+            className={f('icon', `icon-${element.iconClass || 'generic'}`)}
             data-icon={element.icon}
           > {element.name}</a> :
           <Link
             to={to}
-            className={f('icon', element.className, {active: pathname === to})}
+            className={f('icon', `icon-${element.iconClass || 'generic'}`, {active: pathname === to})}
             data-icon={element.icon}
             onClick={closeSideNav}
-          > {element.name}
+          > {element.name}&nbsp;
             {element.counter && data && data.metadata && data.metadata.counters &&
-            <span className={f('badge')}>
-                  {data.metadata.counters[element.counter] || 0}
-                </span>
+              <span className={f('badge')}>
+                {data.metadata.counters[element.counter] || 0}
+              </span>
             }
           </Link>
       }
@@ -113,7 +76,7 @@ const MenuLink = ({element, closeSideNav, reletivePath = false, pathname = '', d
 };
 MenuLink.propTypes = {
   closeSideNav: T.func.isRequired,
-  reletivePath: T.bool,
+  relativePath: T.bool,
   pathname: T.string,
   data: T.object,
   element: T.shape({
@@ -147,7 +110,7 @@ const MenuSection = ({section, pathname, type, data, isOpen, toggle, closeSideNa
               key={i}
               element={e}
               closeSideNav={closeSideNav}
-              reletivePath={section.relativePaths}
+              relativePath={section.relativePaths}
               pathname={pathname}
               data={data}
             />
@@ -176,7 +139,7 @@ MenuSection.propTypes = {
 const SubMenu = ({isOpen = false, toggle, closeSideNav, options}) => (
   <li
     role="menuitem" className={f('is-drilldown-submenu-parent')}
-    aria-haspopup="true" aria-expanded="false" aria-label=" Browse"
+    ariaHaspopup="true" ariaExpanded="false" ariaLabel=" Browse"
   >
     <a onClick={toggle}>
       <i
@@ -197,7 +160,7 @@ const SubMenu = ({isOpen = false, toggle, closeSideNav, options}) => (
           <li key={index}>
             <Link
               to={ent.to}
-              className={f('icon', ent.className)}
+              className={f('icon', `icon-${ent.iconClass || 'generic'}`)}
               data-icon={ent.icon}
               onClick={closeSideNav}
             > {ent.name}</Link>
@@ -250,7 +213,7 @@ class SideMenu extends Component{
           }
           style={{transform: visible ? 'translateX(0)' : ''}}
           role="menu"
-          aria-hidden={!visible}
+          ariaHidden={!visible}
           id="main-nav"
         >
 

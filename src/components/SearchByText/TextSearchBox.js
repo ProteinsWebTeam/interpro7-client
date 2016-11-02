@@ -29,8 +29,8 @@ class TextSearchBox extends Component {
     if (target.charCode === enterKey) {
       this.routerPush();
     }
-
   }
+
   handleChange = (event) => {
     this.setState({value: event.target.value});
   };

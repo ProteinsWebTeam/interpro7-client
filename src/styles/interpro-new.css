@@ -56,10 +56,10 @@ html.fontface .local-site-search .icon-functional:before ,.local-offcanvas-menu 
 /*.offc-nav.expand ~ .main-header .local-offcanvas-menu .close-menu {display: block;}!*switch between open/close text*!*/
 /*.offc-nav.expand ~ .main-header .local-offcanvas-menu .open-menu {display: none;}!*switch between open/close text*!*/
 /*Search*/
-.local-site-search .search-box {width: 0; transition: width .3s; display: block; float: right; padding: 0;/*background-color: rgba(255, 255, 255, 0.07);*/background-color: rgba(255, 255, 255, 0); box-shadow: none; outline: 0;border-bottom: 1px solid rgba(255, 255, 255, 0.4); border-top:none;border-left:none;  border-right:none;font-size: 1rem;  color: rgba(255, 255, 255, 0.5);}
+.local-site-search .search-box {width: 70%; transform: scaleX(0); transform-origin: right; transition: transform .3s ease-in-out; display: block; float: right; padding: 0;/*background-color: rgba(255, 255, 255, 0.07);*/background-color: rgba(255, 255, 255, 0); box-shadow: none; outline: 0;border-bottom: 1px solid rgba(255, 255, 255, 0.4); border-top:none;border-left:none;  border-right:none;font-size: 1rem;  color: rgba(255, 255, 255, 0.5);}
 .local-site-search .button {float:right;}/*important to keep for the smooth effect moving left the magnifying icon next to input field*/
 .local-site-search [type='text']:focus {border-bottom: 3px solid white; border-top:none;  border-left:none; border-right:none; color:white;  background-color: transparent;  outline: none; box-shadow: none; transition: box-shadow 0.5s, border-color 0.25s ease-in-out;}
-.local-site-search:hover .tool-search .search-box, .search-box:focus {width: 70%;}
+.local-site-search:hover .tool-search .search-box, .search-box:focus {transform: scaleX(1);}
 .local-site-search:hover ::-webkit-input-placeholder {opacity:1;}/*animation to make the placeholder appear softly*/
 .local-site-search:hover ::-moz-placeholder {opacity:1;}
 .local-site-search:hover :-moz-placeholder {opacity:1;}

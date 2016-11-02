@@ -6,41 +6,13 @@ import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
 import interproStyles from 'styles/interpro-new.css';
 
+import {InterPro, entities, singleEntity} from 'menuConfig';
+
 const styles = foundationPartial(ebiStyles, interproStyles);
 
-export const menuEntries = {
-  home: [
-    {to: '/', name: 'Home', icon: 'H', className: 'icon-generic'},
-    {to: '/search/', name: 'Search', icon: '1', className: 'icon-functional'},
-    {to: '/browse/', name: 'Browse', icon: 'b', className: 'icon-functional'},
-    {to: '/release_notes/', name: 'Release Notes', icon: '0',
-      className: 'icon-functional'},
-    {to: '/download/', name: 'Download', icon: '=', className: 'icon-functional'},
-    {to: '/help/', name: 'Help', icon: '?', className: 'icon-generic'},
-    {to: '/about/', name: 'About', icon: 'i', className: 'icon-generic'},
-    {to: '/settings/', name: 'Settings', icon: 's', className: 'icon-functional'},
-  ],
-  entities: [
-    {to: '/entry/interpro/', name: 'Entry'},
-    {to: '/protein/uniprot/', name: 'Protein'},
-    {to: '/structure/pdb/', name: 'Structure'},
-    {to: '/proteome/', name: 'Proteome'},
-    {to: '/pathway/', name: 'Pathway'},
-  ],
-  singleEntity: [
-    {to: '/', name: 'overview'},
-    {to: '/entry/', name: 'entries', counter: 'entries'},
-    {to: '/protein/', name: 'proteins', counter: 'proteins'},
-    {to: '/structure/', name: 'structures', counter: 'structures'},
-    {to: '/species/', name: 'species', counter: 'species'},
-    {to: '/domain_architecture/', name: 'domain architectures'},
-    {to: '/hmm_models/', name: 'HMM models'},
-  ],
-};
-
-const HomeMenu = () => (
+const InterProMenu = () => (
   <ul className={styles('menu')}>
-    {menuEntries.home.map(({to, name}) => (
+    {InterPro.map(({to, name}) => (
       <li key={to}>
         <Link to={to} activeClassName={styles('active')}>{name}</Link>
       </li>
@@ -54,7 +26,7 @@ const SingleEntityMenu = ({data, type, pathname}) => {
   );
   return (
     <ul className={styles('menu')}>
-      {menuEntries.singleEntity
+      {singleEntity
         .filter(({to}) => !to.includes(type))
         .map(({to, name, counter}) => (
           <li key={to}>
@@ -80,7 +52,7 @@ SingleEntityMenu.propTypes = {
 
 const EntityMenu = () => (
   <ul className={styles('menu')}>
-    {menuEntries.entities.map(({to, name}) => (
+    {entities.map(({to, name}) => (
       <li key={to}>
         <Link to={to} activeClassName={styles('active')}>{name}</Link>
       </li>
@@ -93,7 +65,7 @@ const EntityMenu = () => (
 // };
 
 const DynamicMenu = ({data, location: {pathname}}) => {
-  if (!data || pathname === '/') return <HomeMenu />;
+  if (!data || pathname === '/') return <InterProMenu />;
   const type = pathname.match(/^\/([^/]*)/)[1].toLowerCase();
   if (data.metadata) {
     return (
