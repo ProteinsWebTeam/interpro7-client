@@ -10,23 +10,23 @@ const SearchResults = ({data, query, router, dataUrl}) => {
     return <div/>;
   } else if (data.hitCount === 0) {
     return <div>There are not matches for the term queried</div>;
-  } else if (data.hitCount === 1 && data.entries[0].id === query.query){
+  } else if (data.hitCount === 1 && data.entries[0].id === query.search){
     window.requestAnimationFrame(() => {
-      router.replace(`/entry/interpro/${query.query}`);
+      router.replace(`/entry/interpro/${query.search}`);
     });
-    return <div>Interpro entry found - {query.query}</div>;
+    return <div>Interpro entry found - {query.search}</div>;
   } else if (data.hitCount > 0 &&
-             data.entries[0].fields.PDB.indexOf(query.query) !== -1){
+             data.entries[0].fields.PDB.indexOf(query.search) !== -1){
     window.requestAnimationFrame(() => {
-      router.replace({pathname: `/structure/pdb/${query.query}`});
+      router.replace({pathname: `/structure/pdb/${query.search}`});
     });
-    return <div>PDB structure found - {query.query}</div>;
+    return <div>PDB structure found - {query.search}</div>;
   } else if (data.hitCount > 0 &&
-             data.entries[0].fields.UNIPROT.indexOf(query.query) !== -1) {
+             data.entries[0].fields.UNIPROT.indexOf(query.search) !== -1) {
     window.requestAnimationFrame(() => {
-      router.replace({pathname: `/protein/uniprot/${query.query}`});
+      router.replace({pathname: `/protein/uniprot/${query.search}`});
     });
-    return <div>UniProt protein found - {query.query}</div>;
+    return <div>UniProt protein found - {query.search}</div>;
   }
   return (
       <Table
@@ -63,7 +63,7 @@ const SearchResults = ({data, query, router, dataUrl}) => {
         </Column>
 
       </Table>
-      );
+  );
 
 };
 SearchResults.propTypes = {
