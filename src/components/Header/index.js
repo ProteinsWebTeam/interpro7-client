@@ -51,7 +51,7 @@ if (window) {
     // Polls regularly the DOM to see if the element to watch is here
     const to = setInterval(() => {
       const [headerEBI] = document.getElementsByClassName(
-        styles.ebi.split(' ')[0]
+        styleBundle('ebi').split(' ')[0]
       );
       if (headerEBI) {
         // When we got the element, stop the interval
