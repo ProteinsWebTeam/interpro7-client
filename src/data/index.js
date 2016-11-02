@@ -1,4 +1,5 @@
-import {loadingData, unloadingData, loadedData, failedLoadingData} from 'actions/creators';
+import {loadingData, unloadingData, loadedData, failedLoadingData}
+  from 'actions/creators';
 import {cachedFetchJSON} from 'utils/cachedFetch';
 
 // Regular expressions
@@ -67,16 +68,16 @@ const shouldLoadData = (pathname, query = null) => {
 
 export default store => async ({pathname, query, search}) => {
   if (!shouldLoadData(pathname, query)) {
-    console.log(`unloading data`);
+    console.log('unloading data');
     store.dispatch(unloadingData());
     return;
   }
 
-  const dataKey = pathname + search;
-  const {settings} = store.getState();
-  const dataUrl = (pathname === '/search') ?
-    buildEBISearchUrl(pathname, query, settings) :
-    buildApiUrl(pathname, query, settings);
+  const dataKey = pathname + search,
+    {settings} = store.getState(),
+    dataUrl = (pathname === '/search') ?
+      buildEBISearchUrl(pathname, query, settings) :
+      buildApiUrl(pathname, query, settings);
   console.log(`loading data for ${dataUrl}`);
 
   store.dispatch(loadingData(dataKey));

@@ -41,7 +41,7 @@ const mapPathArrayToLink = paths => paths.map(({url, name}, i) => (
   <Link key={url || i} to={url || '#'}>{name}</Link>
 ));
 
-const formatEndpoints = (paths, expanded, {clientWidth, scrollWidth}) => {
+const formatEndpoints = (paths) => {
   // console.log(clientWidth);
   // console.log(scrollWidth);
   const output = [

@@ -84,7 +84,7 @@ const setRootGrayscale = (() => {
   };
 })();
 
-const MenuLink = ({element, closeSideNav, reletivePath=false, pathname='', data}) => {
+const MenuLink = ({element, closeSideNav, reletivePath = false, pathname = '', data}) => {
   const to = (reletivePath && pathname !== '/' ? pathname : '') + element.to;
   return (
     <li>
@@ -97,7 +97,7 @@ const MenuLink = ({element, closeSideNav, reletivePath=false, pathname='', data}
           > {element.name}</a> :
           <Link
             to={to}
-            className={f('icon', element.className, {active: pathname===to})}
+            className={f('icon', element.className, {active: pathname === to})}
             data-icon={element.icon}
             onClick={closeSideNav}
           > {element.name}
@@ -111,10 +111,23 @@ const MenuLink = ({element, closeSideNav, reletivePath=false, pathname='', data}
     </li>
   );
 };
+MenuLink.propTypes = {
+  closeSideNav: T.func.isRequired,
+  reletivePath: T.bool,
+  pathname: T.string,
+  data: T.object,
+  element: T.shape({
+    to: T.string.isRequired,
+    name: T.string.isRequired,
+    className: T.string,
+    icon: T.string,
+    counter: T.string,
+  }),
+};
 
 const MenuSection = ({section, pathname, type, data, isOpen, toggle, closeSideNav}) => (
   <ul
-    className={f('off-canvas-list', section.className || 'tertiary' ,{
+    className={f('off-canvas-list', section.className || 'tertiary', {
       hide: (section.hide && section.hide(data)),
     })}
   >
@@ -128,7 +141,7 @@ const MenuSection = ({section, pathname, type, data, isOpen, toggle, closeSideNa
               isOpen={isOpen(section.name)}
               toggle={toggle(section.name)}
               closeSideNav={closeSideNav}
-              options={menuEntries.entities}
+              options={e.submenu.options}
             /> :
             <MenuLink
               key={i}
@@ -142,7 +155,25 @@ const MenuSection = ({section, pathname, type, data, isOpen, toggle, closeSideNa
     }
   </ul>
 );
-const SubMenu = ({isOpen, toggle, closeSideNav, options}) => (
+MenuSection.propTypes = {
+  isOpen: T.func,
+  toggle: T.func,
+  closeSideNav: T.func.isRequired,
+  data: T.object,
+  pathname: T.string.isRequired,
+  type: T.string.isRequired,
+  section: T.shape({
+    name: T.string.isRequired,
+    submenu: T.object,
+    isDrilldown: T.bool,
+    className: T.string,
+    relativePaths: T.bool,
+    hide: T.func,
+    options: T.array.isRequired,
+  }).isRequired,
+};
+
+const SubMenu = ({isOpen = false, toggle, closeSideNav, options}) => (
   <li
     role="menuitem" className={f('is-drilldown-submenu-parent')}
     aria-haspopup="true" aria-expanded="false" aria-label=" Browse"
@@ -176,6 +207,16 @@ const SubMenu = ({isOpen, toggle, closeSideNav, options}) => (
     </ul>
   </li>
 );
+SubMenu.propTypes = {
+  isOpen: T.bool,
+  toggle: T.func.isRequired,
+  closeSideNav: T.func.isRequired,
+  options: T.arrayOf(T.shape({
+    to: T.string.isRequired,
+    icon: T.string,
+    name: T.string.isRequired,
+  })).isRequired,
+};
 
 class SideMenu extends Component{
 
@@ -221,8 +262,11 @@ class SideMenu extends Component{
 
           {
             menu.map((section, i) => (
-              section.isDrilldown ?
-                <div key={i} className={f('is-drilldown')} style={{maxWidth: '100%'}}>
+                <div
+                  key={i}
+                  className={f({'is-drilldown': section.isDrilldown})}
+                  style={{maxWidth: '100%'}}
+                >
                   <MenuSection
                     pathname={pathname}
                     type={type}
@@ -232,15 +276,7 @@ class SideMenu extends Component{
                     isOpen={(name) => this.state[name]}
                     toggle={(name) => this.toggleSubMenu(name)}
                   />
-                </div> :
-                <MenuSection
-                  key={i}
-                  data={data}
-                  pathname={pathname}
-                  type={type}
-                  section={section}
-                  closeSideNav={closeSideNav}
-                />
+                </div>
             ))
           }
 
@@ -261,6 +297,6 @@ SideMenu.propTypes = {
 };
 
 export default connect(
-  ({ui: {sideNav}, data:{data}}) => ({sideNav, data}),
+  ({ui: {sideNav}, data: {data}}) => ({sideNav, data}),
   {closeSideNav}
 )(SideMenu);

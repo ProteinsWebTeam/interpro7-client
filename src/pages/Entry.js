@@ -7,9 +7,6 @@ import Table, {Column, Search, PageSizeSelector, Exporter}
 
 import {removeLastSlash} from 'utils/url';
 
-import pageNavigation from 'components/PageNavigation';
-const page = 'entry';
-const EntryPageNavigation = pageNavigation(page);
 const colorHash = new ColorHash();
 
 const Entry = (

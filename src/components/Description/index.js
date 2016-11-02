@@ -23,13 +23,23 @@ ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
   literature: T.object.isRequired,
 };
-
+/* ::
+ type Props = {
+   textBlocks: Array<string> ,
+   literature?: Object,
+   title?: string,
+ }
+ */
 class Description extends Component {
-  static propTypes = {
-    children: T.any,
-  };
+  /* ::
+   props: Props;
+   state: {
+     isOpen: boolean,
+   };
+   handleClick: () => void;
+   */
 
-  constructor(props) {
+  constructor(props/* : Props*/) {
     super(props);
     this.state = {isOpen: false};
     this.handleClick = this.handleClick.bind(this);
@@ -39,7 +49,7 @@ class Description extends Component {
     this.setState({isOpen: !this.state.isOpen});
   }
   render(){
-    const {textBlocks, literature, title='Description'} = this.props,
+    const {textBlocks, literature, title = 'Description'} = this.props,
       maxNumberOfChars = 500,
       hide = textBlocks.length < 2 && textBlocks[0].length < maxNumberOfChars;
     return (

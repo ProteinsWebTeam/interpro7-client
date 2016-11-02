@@ -55,6 +55,7 @@ export const loadedData = (urlKey, dataUrl, data) => ({
   dataUrl,
   data,
 });
+
 export const unloadingData = () => ({
   type: types.UNLOADING_DATA,
 });

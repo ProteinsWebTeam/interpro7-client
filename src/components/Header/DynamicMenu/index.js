@@ -78,7 +78,7 @@ SingleEntityMenu.propTypes = {
   pathname: T.string.isRequired,
 };
 
-const EntityMenu = ({data, type}) => (
+const EntityMenu = () => (
   <ul className={styles('menu')}>
     {menuEntries.entities.map(({to, name}) => (
       <li key={to}>
@@ -87,17 +87,19 @@ const EntityMenu = ({data, type}) => (
     ))}
   </ul>
 );
-EntityMenu.propTypes = {
-  data: T.object.isRequired,
-  type: T.string.isRequired,
-};
+// EntityMenu.propTypes = {
+//   data: T.object.isRequired,
+//   type: T.string.isRequired,
+// };
 
 const DynamicMenu = ({data, location: {pathname}}) => {
   if (!data || pathname === '/') return <HomeMenu />;
   const type = pathname.match(/^\/([^/]*)/)[1].toLowerCase();
-  if (data.metadata) return (
-    <SingleEntityMenu data={data} type={type} pathname={pathname} />
-  );
+  if (data.metadata) {
+    return (
+      <SingleEntityMenu data={data} type={type} pathname={pathname} />
+    );
+  }
   return <EntityMenu data={data} type={type} />;
 };
 DynamicMenu.propTypes = {

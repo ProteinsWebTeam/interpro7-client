@@ -364,13 +364,13 @@ const _SideIcons = ({open}) => (
     <div className={styleBundle('local-buttons')}>
       <div
         className={styleBundle('local-offcanvas-menu', 'anim')}
-        style={{transform: `translateX(${open?'-20em':'0em'})`}}
+        style={{transform: `translateX(${open ? '-20em' : '0em'})`}}
       >
         <HamburgerBtn svg={true} />
       </div>
       <div
         className={styleBundle('local-site-search', 'anim')}
-        style={{transform: `translateX(${open?'-20em':'0em'})`}}
+        style={{transform: `translateX(${open ? '-20em' : '0em'})`}}
       >
         <div
           className={styleBundle('tool-search')}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router/es';
 import logo from 'images/logo/interpro_white.png';
@@ -40,6 +40,10 @@ const Title = ({location, data}) => {
       </h4>
     </div>
   );
+};
+Title.propTypes = {
+  location: T.string.isRequired,
+  data: T.object,
 };
 
 export default connect(({data: data}) => data)(Title);
