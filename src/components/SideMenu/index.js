@@ -2,10 +2,9 @@ import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router/es';
 
-import url from 'url';
-
 import {closeSideNav} from 'actions/creators';
 import {EBI, InterPro, singleEntity} from 'menuConfig';
+import MenuItem from 'components/Menu/MenuItem';
 
 import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
@@ -49,31 +48,29 @@ const setRootGrayscale = (() => {
 
 const MenuLink = ({element, closeSideNav, relativePath = false, pathname = '', data}) => {
   const to = (relativePath && pathname !== '/' ? pathname : '') + element.to;
+  const isBadgePresent = (
+    element.counter && data && data.metadata && data.metadata.counters
+  );
   return (
     <li>
-      {
-        url.parse(to).host ?
-          <a
-            href={element.to}
+      <MenuItem
+        to={to}
+        className={f('flex', {active: pathname === to})}
+        onClick={closeSideNav}
+      >
+        {element.icon &&
+          <i
             className={f('icon', `icon-${element.iconClass || 'generic'}`)}
             data-icon={element.icon}
-          > {element.name}</a> :
-          <Link
-            to={to}
-            className={
-              f('icon', `icon-${element.iconClass || 'generic'}`,
-                {active: pathname === to})
-            }
-            data-icon={element.icon}
-            onClick={closeSideNav}
-          > {element.name}&nbsp;
-            {element.counter && data && data.metadata && data.metadata.counters &&
-              <span className={f('badge')}>
-                {data.metadata.counters[element.counter] || 0}
-              </span>
-            }
-          </Link>
-      }
+          />
+        }
+        {element.name}
+        {isBadgePresent &&
+          <span className={f('badge')}>
+            {data.metadata.counters[element.counter] || 0}
+          </span>
+        }
+      </MenuItem>
     </li>
   );
 };
@@ -218,7 +215,7 @@ class SideMenu extends Component{
           }
           style={{transform: visible ? 'translateX(0)' : ''}}
           role="menu"
-          ariaHidden={!visible}
+          aria-hidden={!visible}
           id="main-nav"
         >
 
@@ -226,7 +223,7 @@ class SideMenu extends Component{
             className={f('exit-offcanvas', 'icon', 'icon-functional')}
             title="Close menu - handside navigation" id="button-close-rmenu"
             onClick={closeSideNav}
-          > <span aria-hidden="true">×</span></a>
+          ><span aria-hidden="true">×</span></a>
 
           {
             menu.map((section, i) => (

@@ -19,6 +19,18 @@
   transform: translateX(-20em);
 }
 
+.flex {
+  display: flex;
+}
+
+.icon {
+  margin-right: 0.25em;
+}
+
+.badge {
+  margin-left: 0.25em;
+}
+
 .right_container {
   composes: container;
 
