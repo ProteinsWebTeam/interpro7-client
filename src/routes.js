@@ -136,6 +136,14 @@ const staticPages = [
     },
   },
   {
+    path: 'browse',
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('staticPages/Browse').default);
+      });
+    },
+  },
+  {
     path: 'help',
     getComponent(_, cb) {
       require.ensure([], () => {
