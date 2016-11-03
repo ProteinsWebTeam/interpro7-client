@@ -201,7 +201,7 @@ class SideMenu extends Component{
       sideNav: visible, position = 'left', closeSideNav, pathname, data,
     } = this.props;
     const left = position === 'left';
-    const type = pathname.match(/^\/([^/]*)/)[1].toLowerCase();
+    const type = pathname.match(/^\/?([^/]*)/)[1].toLowerCase();
     setRootGrayscale(visible);
     return (
       <div>
