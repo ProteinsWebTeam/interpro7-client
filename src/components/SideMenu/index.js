@@ -60,7 +60,10 @@ const MenuLink = ({element, closeSideNav, relativePath = false, pathname = '', d
           > {element.name}</a> :
           <Link
             to={to}
-            className={f('icon', `icon-${element.iconClass || 'generic'}`, {active: pathname === to})}
+            className={
+              f('icon', `icon-${element.iconClass || 'generic'}`,
+                {active: pathname === to})
+            }
             data-icon={element.icon}
             onClick={closeSideNav}
           > {element.name}&nbsp;

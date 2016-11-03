@@ -5,13 +5,13 @@ import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
 import Sequence from 'components/Protein/Sequence';
 import Title from 'components/Title';
-import {UniProtLink} from 'components/ExtLink'
+import {UniProtLink} from 'components/ExtLink';
 import f from 'styles/foundation';
-import uniprotLogo from 'images/uniprot.png'
+import uniprotLogo from 'images/uniprot.png';
 
 const SummaryProtein = (
   {data: {metadata}, location: {pathname}}
-  /*: {data: {metadata: Object}} */
+  /*: {data: {metadata: Object}, location: {pathname: string}} */
 ) => (
   <div className={f('sections')}>
     <section>
