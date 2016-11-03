@@ -15,6 +15,15 @@ const SummaryEntry = (
   /*: {
     data: {
       metadata: {
+        accession: string,
+        name: {name: string, short: ?string},
+        source_database: string,
+        type: string,
+        gene?: string,
+        experiment_type?: string,
+        source_organism?: Object,
+        release_date?: string,
+        chains?: Array<string>,
         integrated: string,
         member_databases?: Object,
         go_terms: Object,
@@ -56,7 +65,7 @@ const SummaryEntry = (
       </div>
     </section>
     {
-      Object.keys(metadata.literature).length &&
+      Object.keys(metadata.literature).length > 0 &&
       <section id="references">
         <div className={f('row')}>
           <div className={f('large-12', 'columns')}><h4>References</h4></div>

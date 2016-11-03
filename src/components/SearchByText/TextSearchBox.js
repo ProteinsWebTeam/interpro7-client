@@ -7,7 +7,9 @@ class TextSearchBox extends Component {
     super(props);
     this.state = {value: props.value};
   }
-  componentWillReceiveProps({value = '', toSubmit = false}) {
+  componentWillReceiveProps(nextProps) {
+    const {value = '', toSubmit = false} = nextProps;
+    if (this.props.value === value && this.props.toSubmit === toSubmit) return;
     if (toSubmit) this.routerPush();
     this.setState({value});
   }
@@ -29,8 +31,8 @@ class TextSearchBox extends Component {
     if (target.charCode === enterKey) {
       this.routerPush();
     }
-
   }
+
   handleChange = (event) => {
     this.setState({value: event.target.value});
   };
@@ -54,6 +56,7 @@ TextSearchBox.propTypes = {
   router: T.object,
   value: T.string,
   className: T.string,
+  toSubmit: T.bool,
 };
 
 export default withRouter(

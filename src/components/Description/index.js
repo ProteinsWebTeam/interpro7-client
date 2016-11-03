@@ -13,23 +13,34 @@ const ParagraphWithCites = ({p, literature = {}}) => (
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = Object.keys(literature).indexOf(part) + 1;
       return (
-      i % 2 ?
-        <a key={i} href={`${location.pathname}#${part}`}>{refCounter}</a> :
-        <span key={i}>{part === ', ' ? ',\u00a0' : part}</span>
-    );})}
+        i % 2 ?
+          <a key={i} href={`${location.pathname}#${part}`}>{refCounter}</a> :
+          <span key={i}>{part === ', ' ? ',\u00a0' : part}</span>
+      );
+    })}
   </p>
 );
 ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
-  literature: T.object.isRequired,
+  literature: T.object,
 };
-
+/* ::
+ type Props = {
+   textBlocks: Array<string> ,
+   literature?: Object,
+   title?: string,
+ }
+ */
 class Description extends Component {
-  static propTypes = {
-    children: T.any,
-  };
+  /* ::
+   props: Props;
+   state: {
+     isOpen: boolean,
+   };
+   handleClick: () => void;
+   */
 
-  constructor(props) {
+  constructor(props/* : Props*/) {
     super(props);
     this.state = {isOpen: false};
     this.handleClick = this.handleClick.bind(this);
@@ -39,12 +50,12 @@ class Description extends Component {
     this.setState({isOpen: !this.state.isOpen});
   }
   render(){
-    const {textBlocks, literature} = this.props,
+    const {textBlocks, literature, title = 'Description'} = this.props,
       maxNumberOfChars = 500,
       hide = textBlocks.length < 2 && textBlocks[0].length < maxNumberOfChars;
     return (
       <div className={f('content')}>
-        <h4>Description</h4>
+        <h4>{title}</h4>
         <div
           className={f('animate-height', {collapsed: !this.state.isOpen})}
           style={{maxHeight: this.state.isOpen ? '5000px' : '200px'}}
@@ -73,5 +84,6 @@ class Description extends Component {
 Description.propTypes = {
   textBlocks: T.array.isRequired,
   literature: T.object,
+  title: T.string,
 };
 export default Description;

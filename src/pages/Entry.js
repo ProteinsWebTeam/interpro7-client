@@ -7,9 +7,6 @@ import Table, {Column, Search, PageSizeSelector, Exporter}
 
 import {removeLastSlash} from 'utils/url';
 
-import pageNavigation from 'components/PageNavigation';
-const page = 'entry';
-const EntryPageNavigation = pageNavigation(page);
 const colorHash = new ColorHash();
 
 const Entry = (
@@ -69,11 +66,6 @@ const Entry = (
     main = (
         <div>
           {children && cloneElement(children, {data})}
-          <EntryPageNavigation
-            accession={data.metadata.accession}
-            counters={data.metadata.counters}
-            pathname={pathname}
-          />
         </div>
       );
   } else if (data.entries) { // Member Database page

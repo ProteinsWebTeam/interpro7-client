@@ -9,7 +9,7 @@ import SearchResults from 'components/SearchResults';
 const Search = ({data, location: {query}}) => (
   <main>
     <section className={styles.card}>
-      <SearchByText />
+      <SearchByText/>
       <SearchResults data={data} query={query} />
     </section>
   </main>

@@ -24,10 +24,12 @@ Time.propTypes = {
   children: T.element,
 };
 
-/* const InterproSymbol = ({type}) => (
-
-); */
-export const InterproSymbol = ({type}) => (
+export const InterproSymbol = (
+  {type}
+  /*: {
+    type: string
+  }*/
+) => (
   <div className={ipro['my-svg-container']}>
     <svg
       className={ipro['my-svg']}
@@ -75,7 +77,7 @@ const Title = (
       name: {name: string, short: ?string},
       accession: string,
       source_database: string,
-      type?: string,
+      type: string,
       gene?: string,
       experiment_type?: string,
       source_organism?: Object,

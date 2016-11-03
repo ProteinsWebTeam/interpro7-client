@@ -83,10 +83,10 @@ html.fontface .local-site-search .icon-functional:before ,.local-offcanvas-menu 
 /*.offc-nav.expand ~ .main-header .local-offcanvas-menu .close-menu {display: block;}!*switch between open/close text*!*/
 /*.offc-nav.expand ~ .main-header .local-offcanvas-menu .open-menu {display: none;}!*switch between open/close text*!*/
 /*Search*/
-.local-site-search .search-box {width: 0; transition: width .3s; display: block; float: right; padding: 0;/*background-color: rgba(255, 255, 255, 0.07);*/background-color: rgba(255, 255, 255, 0); box-shadow: none; outline: 0;border-bottom: 1px solid rgba(255, 255, 255, 0.4); border-top:none;border-left:none;  border-right:none;font-size: 1rem;  color: rgba(255, 255, 255, 0.5);}
+.local-site-search .search-box {width: 70%; transform: scaleX(0); transform-origin: right; transition: transform .3s ease-in-out; display: block; float: right; padding: 0;/*background-color: rgba(255, 255, 255, 0.07);*/background-color: rgba(255, 255, 255, 0); box-shadow: none; outline: 0;border-bottom: 1px solid rgba(255, 255, 255, 0.4); border-top:none;border-left:none;  border-right:none;font-size: 1rem;  color: rgba(255, 255, 255, 0.5);}
 .local-site-search .button {float:right;}/*important to keep for the smooth effect moving left the magnifying icon next to input field*/
 .local-site-search [type='text']:focus {border-bottom: 3px solid white; border-top:none;  border-left:none; border-right:none; color:white;  background-color: transparent;  outline: none; box-shadow: none; transition: box-shadow 0.5s, border-color 0.25s ease-in-out;}
-.local-site-search:hover .tool-search .search-box, .search-box:focus {width: 70%;}
+.local-site-search:hover .tool-search .search-box, .search-box:focus {transform: scaleX(1);}
 .local-site-search:hover ::-webkit-input-placeholder {opacity:1;}/*animation to make the placeholder appear softly*/
 .local-site-search:hover ::-moz-placeholder {opacity:1;}
 .local-site-search:hover :-moz-placeholder {opacity:1;}
@@ -221,7 +221,7 @@ body.modal-open {overflow: hidden;} /*make the content of the page non-scrollabl
 /*off-canvas style from Foundation offcanvas.css*/
 ul.off-canvas-list {background: #333; bottom: 0; box-sizing: content-box;  -webkit-overflow-scrolling: touch; outline:0; list-style-type: none; margin: 0; padding: 0;}/*list style offcanvas menu*/
 ul.off-canvas-list li label {background: #444444; border-bottom: none; border-top: 1px solid #5e5e5e; color: #999999; display: block; font-size: 0.7rem; font-weight: bold;  margin: 0; padding: 0.52rem 0.83333rem; text-transform: uppercase;}/*title section*/
-ul.off-canvas-list li a {border-bottom: 0px solid #262626; color: rgba(255, 255, 255, 0.7); display: block; padding: 0.4rem 0.66667rem; transition: background 0.3s; font-size: 90%;/*same as top menu*/}
+ul.off-canvas-list li a {border-bottom: 0px solid #262626; color: rgba(255, 255, 255, 0.7); padding: 0.4rem 0.66667rem; transition: background 0.3s; font-size: 90%;/*same as top menu*/}
 ul.off-canvas-list.domain li a.active {color:black; font-weight: bold;}
 ul.off-canvas-list li a:hover {background: rgba(0, 0, 0, 0.3);}
 /*.offc-nav.expand ~ .main-header {transform: translateX(-9px);} !*important compensate for hidden scrollbar and avoid page move right and left doens't work for all screen sizes*!*/
@@ -234,7 +234,7 @@ ul.off-canvas-list li a:hover {background: rgba(0, 0, 0, 0.3);}
 /*/no-color option*/
 
 /*color just on label*/
-.label-col ul.off-canvas-list.primary.domain li label {color:#7dbb72;}
+.label-col ul.off-canvas-list.primary li label {color:#7dbb72;}
 .label-col ul.off-canvas-list.secondary li label {color:#2199e8;}
 .label-col ul.off-canvas-list.tertiary li label {color:#34b5b5;}
 .label-col .is-drilldown-submenu, .label-col ul.off-canvas-list.primary.domain, .label-col ul.off-canvas-list.secondary, .label-col ul.off-canvas-list.tertiary {background: #3B3B3B;}
@@ -252,7 +252,7 @@ ul.off-canvas-list.tertiary {background: #279292;}
 /*ul.off-canvas-list.primary li a { border-bottom: 1px solid rgba(0, 0, 0, 0.25);}*/
 
 /*drilldown feature*/
-.is-drilldown-submenu {margin:0;}
+.is-drilldown-submenu {margin:0; height: 100%; display: block;  z-index: 1;}
 .js-drilldown-back {background: #444444; border-bottom: none; border-top: 1px solid #5e5e5e;}
 /*.is-drilldown-submenu {top:38px;}*/
 /*/drilldown feature*/

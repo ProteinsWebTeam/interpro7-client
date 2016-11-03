@@ -9,7 +9,7 @@ import {Link} from 'react-router';
 
 import Title, {Time, InterproSymbol} from '.';
 import {
-  OriginDB, SourceOrganism, Name,
+  OriginDB, Name,
 } from 'components/SimpleCommonComponents';
 
 import styles from 'styles/blocks.css';
@@ -22,14 +22,16 @@ describe('<Title />', () => {
   describe('For an entry', () => {
     it('should render a title component correctly', () => {
       renderer.render(
-        <Title pathname="/entry/pathname/" metadata={{
-          name: {
-            name: 'Piwi domain',
-          },
-          type: 'domain',
-          accession: 'PF02171',
-          source_database: 'pfam',
-        }}
+        <Title
+          pathname="/entry/pathname/"
+          metadata={{
+            name: {
+              name: 'Piwi domain',
+            },
+            type: 'domain',
+            accession: 'PF02171',
+            source_database: 'pfam',
+          }}
         />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
@@ -47,39 +49,31 @@ describe('<Title />', () => {
       );
     });
   });
-  describe.skip('For a protein', () => {
+  describe('For a protein', () => {
     it('should render a title component correctly', () => {
       renderer.render(
-        <Title pathname="/some/pathname/" metadata={{
-          name: {
-            name: 'Carboxypeptidase Y homolog A',
-          },
-          accession: 'A1CUJ5',
-          source_database: 'swissprot',
-          gene: 'cpyA',
-          source_organism: {
-            name: 'Aspergillus clavatus',
-            taxid: 344612,
-          },
-        }}
+        <Title
+          pathname="/some/pathname/"
+          metadata={{
+            length: 462,
+            description:  ["Created on Monday 13 August 2007 by user 'UJJWAL'"],
+            name: {
+              other: [],
+              name: 'VATB_METVS',
+              short: '',
+            },
+            gene: '',
+            id: 'VATB_METVS',
+            accession: 'A6UP55',
+          }}
         />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
-        <div className={styles.card}>
-          <h2>Carboxypeptidase Y homolog A</h2>
-          <div>
-            <Name
-              name={{name: 'Carboxypeptidase Y homolog A'}}
-              accession="A1CUJ5"
-            />
-            <OriginDB
-              source="swissprot"
-              pathname="/some/pathname/"
-              accession="A1CUJ5"
-            />
-            <p>Gene: cpyA</p>
-            <SourceOrganism name="Aspergillus clavatus" taxid={344612} />
-          </div>
+        <div>
+          <h3>
+            VATB_METVS
+            <small>(A6UP55)</small>
+          </h3>
         </div>
       );
     });

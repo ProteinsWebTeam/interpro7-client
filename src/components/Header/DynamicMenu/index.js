@@ -6,40 +6,13 @@ import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
 import interproStyles from 'styles/interpro-new.css';
 
+import {InterPro, entities, singleEntity} from 'menuConfig';
+
 const styles = foundationPartial(ebiStyles, interproStyles);
 
-const menuEntries = {
-  home: [
-    {to: '/', name: 'Home'},
-    {to: '/search/', name: 'Search'},
-    {to: '/browse/', name: 'Browse'},
-    {to: '/release_notes/', name: 'Release Notes'},
-    {to: '/download/', name: 'Download'},
-    {to: '/help/', name: 'Help'},
-    {to: '/about/', name: 'About'},
-    {to: '/settings/', name: 'Settings'},
-  ],
-  entities: [
-    {to: '/entry/interpro/', name: 'Entry'},
-    {to: '/protein/uniprot/', name: 'Protein'},
-    {to: '/structure/pdb/', name: 'Structure'},
-    {to: '/proteome/', name: 'Proteome'},
-    {to: '/pathway/', name: 'Pathway'},
-  ],
-  singleEntity: [
-    {to: '/', name: 'overview'},
-    {to: '/entry/', name: 'entries', counter: 'entries'},
-    {to: '/protein/', name: 'proteins', counter: 'proteins'},
-    {to: '/structure/', name: 'structures', counter: 'structures'},
-    {to: '/species/', name: 'species', counter: 'species'},
-    {to: '/domain_architecture/', name: 'domain architectures'},
-    {to: '/hmm_models/', name: 'HMM models'},
-  ],
-};
-
-const HomeMenu = () => (
+const InterProMenu = () => (
   <ul className={styles('menu')}>
-    {menuEntries.home.map(({to, name}) => (
+    {InterPro.map(({to, name}) => (
       <li key={to}>
         <Link to={to} activeClassName={styles('active')}>{name}</Link>
       </li>
@@ -53,7 +26,7 @@ const SingleEntityMenu = ({data, type, pathname}) => {
   );
   return (
     <ul className={styles('menu')}>
-      {menuEntries.singleEntity
+      {singleEntity
         .filter(({to}) => !to.includes(type))
         .map(({to, name, counter}) => (
           <li key={to}>
@@ -77,26 +50,28 @@ SingleEntityMenu.propTypes = {
   pathname: T.string.isRequired,
 };
 
-const EntityMenu = ({data, type}) => (
+const EntityMenu = () => (
   <ul className={styles('menu')}>
-    {menuEntries.entities.map(({to, name}) => (
+    {entities.map(({to, name}) => (
       <li key={to}>
         <Link to={to} activeClassName={styles('active')}>{name}</Link>
       </li>
     ))}
   </ul>
 );
-EntityMenu.propTypes = {
-  data: T.object.isRequired,
-  type: T.string.isRequired,
-};
+// EntityMenu.propTypes = {
+//   data: T.object.isRequired,
+//   type: T.string.isRequired,
+// };
 
 const DynamicMenu = ({data, location: {pathname}}) => {
-  if (!data || pathname === '/') return <HomeMenu />;
+  if (!data || pathname === '/') return <InterProMenu />;
   const type = pathname.match(/^\/([^/]*)/)[1].toLowerCase();
-  if (data.metadata) return (
-    <SingleEntityMenu data={data} type={type} pathname={pathname} />
-  );
+  if (data.metadata) {
+    return (
+      <SingleEntityMenu data={data} type={type} pathname={pathname} />
+    );
+  }
   return <EntityMenu data={data} type={type} />;
 };
 DynamicMenu.propTypes = {

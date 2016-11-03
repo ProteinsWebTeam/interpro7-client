@@ -1,4 +1,5 @@
-import {loadingData, loadedData, failedLoadingData} from 'actions/creators';
+import {loadingData, unloadingData, loadedData, failedLoadingData}
+  from 'actions/creators';
 import {cachedFetchJSON} from 'utils/cachedFetch';
 
 // Regular expressions
@@ -58,16 +59,25 @@ const buildEBISearchUrl = (pathname, query, {pagination, ebi}) => {
 };
 
 // Looks at the pathname to see if data needs to be loaded from the API
-const shouldLoadData = pathname => PATHS_REQUIRING_DATA.test(pathname);
+const shouldLoadData = (pathname, query = null) => {
+  if (pathname.startsWith('/search')) {
+    return (query !== null && query.search);
+  }
+  return PATHS_REQUIRING_DATA.test(pathname);
+};
 
 export default store => async ({pathname, query, search}) => {
-  if (!shouldLoadData(pathname)) return;
+  if (!shouldLoadData(pathname, query)) {
+    console.log('unloading data');
+    store.dispatch(unloadingData());
+    return;
+  }
 
-  const dataKey = pathname + search;
-  const {settings} = store.getState();
-  const dataUrl = (pathname === '/search') ?
-    buildEBISearchUrl(pathname, query, settings) :
-    buildApiUrl(pathname, query, settings);
+  const dataKey = pathname + search,
+    {settings} = store.getState(),
+    dataUrl = (pathname === '/search') ?
+      buildEBISearchUrl(pathname, query, settings) :
+      buildApiUrl(pathname, query, settings);
   console.log(`loading data for ${dataUrl}`);
 
   store.dispatch(loadingData(dataKey));

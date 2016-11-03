@@ -5,8 +5,8 @@ import {Link} from 'react-router/es';
 import {openSideNav} from 'actions/creators';
 
 import DynamicMenu from './DynamicMenu';
+import Title from './Title';
 
-import logo from 'images/logo/interpro_white.png';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
 import {foundationPartial} from 'styles/foundation';
@@ -51,7 +51,7 @@ if (window) {
     // Polls regularly the DOM to see if the element to watch is here
     const to = setInterval(() => {
       const [headerEBI] = document.getElementsByClassName(
-        styles.ebi.split(' ')[0]
+        styleBundle('ebi').split(' ')[0]
       );
       if (headerEBI) {
         // When we got the element, stop the interval
@@ -356,16 +356,22 @@ const HamburgerBtn = connect(
   {openSideNav}
 )(_HamburgerBtn);
 
-const SideIcons = () => (
+const _SideIcons = ({open}) => (
   <div
     className={styleBundle('columns', 'small-4', 'medium-2')}
     id="slide-menu"
   >
     <div className={styleBundle('local-buttons')}>
-      <div className={styleBundle('local-offcanvas-menu', 'anim')}>
+      <div
+        className={styleBundle('local-offcanvas-menu', 'anim')}
+        style={{transform: `translateX(${open ? '-20em' : '0em'})`}}
+      >
         <HamburgerBtn svg={true} />
       </div>
-      <div className={styleBundle('local-site-search', 'anim')}>
+      <div
+        className={styleBundle('local-site-search', 'anim')}
+        style={{transform: `translateX(${open ? '-20em' : '0em'})`}}
+      >
         <div
           className={styleBundle('tool-search')}
           id="local-search"
@@ -384,23 +390,14 @@ const SideIcons = () => (
     </div>
   </div>
 );
+_SideIcons.propTypes = {
+  open: T.bool.isRequired,
+};
 
-const TopLevel = () => (
-  <div
-    className={styleBundle('columns', 'small-8', 'medium-10', 'anim')}
-    id="local-title"
-  >
-    <h1>
-      <Link to="/" title="Back to InterPro homepage">
-        <img src={logo} alt="InterPro logo" />
-        InterPro
-      </Link>
-    </h1>
-    <h4 className={styleBundle('hide-for-small-only')}>
-      Classification of protein families
-    </h4>
-  </div>
-);
+const SideIcons = connect(
+  ({ui: {sideNav: open}}) => ({open})
+)(_SideIcons);
+
 
 const MenuItem = ({active, children}) => (
   <Link
@@ -449,7 +446,7 @@ const Header = ({pathname}) => (
         >
             <EbiGlobalHeader />
             <div className={styleBundle('masthead', 'row')}>
-              <TopLevel />
+              <Title location={pathname}/>
               <SideIcons />
               <DynamicMenu location={pathname}/>
             </div>

@@ -41,7 +41,7 @@ const mapPathArrayToLink = paths => paths.map(({url, name}, i) => (
   <Link key={url || i} to={url || '#'}>{name}</Link>
 ));
 
-const formatEndpoints = (paths, expanded, {clientWidth, scrollWidth}) => {
+const formatEndpoints = (paths) => {
   // console.log(clientWidth);
   // console.log(scrollWidth);
   const output = [
@@ -101,7 +101,6 @@ class Breadcrumb extends Component {
       const curr = node.getBoundingClientRect();
       const prev = positions.get(node);
       if (prev) {
-        // debugger;
         console.log(
           `translate(${prev.left - curr.left}px, ${prev.top - curr.top}px)`
         );
