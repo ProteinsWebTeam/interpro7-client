@@ -24,7 +24,7 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 .md-list a.md-cg h6 {white-space: nowrap;}
 .md-list a p {font-size: 90%;}
 
-.md-mask {display: none;}
+.svg-mask {display: none;}
 .md-cg .md-color {fill:#a98de1;}
 .md-cd .md-color {fill:#b5de6c;}
 .md-ha .md-color {fill:#00e2e2;}
@@ -161,7 +161,9 @@ IMAGE BANNER
     background-position: left, top right;
     background-size: 100%, 1400px;
 }
+
 /*image entry*/
+.entrytype-panel .my-svg-container {width: 60%; margin: 0 auto; float:none;}
 .my-svg-container {float: left;  width: 15%;/*19%*/ vertical-align: middle;margin-right:2rem; margin-bottom: 0.5rem;}
 #my-svg-icon, #my-svg-icon-sm {background-image: linear-gradient(to right, rgba(58, 95, 125, 0.6),rgba(152, 216, 186, 0.6) ), url(../images/backgrounds/fondation-morse-header.jpg);height:8rem; width:8rem; border:1px solid #ccc;} /*specific style for MD icon*/
 .ico_hamb {margin-top:9px; margin-right:1rem;cursor: pointer;user-select: none; transition: transform 0.5s ease-in-out; transform: translateY(0);}
