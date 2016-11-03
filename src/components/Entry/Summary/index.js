@@ -65,7 +65,7 @@ const SummaryEntry = (
       </div>
     </section>
     {
-      Object.keys(metadata.literature).length &&
+      Object.keys(metadata.literature).length > 0 &&
       <section id="references">
         <div className={f('row')}>
           <div className={f('large-12', 'columns')}><h4>References</h4></div>
