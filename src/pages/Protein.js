@@ -3,18 +3,13 @@ import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es';
 import ColorHash from 'color-hash/lib/color-hash';
 
-import pageNavigation from 'components/PageNavigation';
-
 import Table, {Column, Search, PageSizeSelector, Exporter}
   from 'components/Table';
-import Title from 'components/Title';
 
 import {removeLastSlash, buildLink} from 'utils/url';
 
 import styles from 'styles/blocks.css';
 
-const page = 'protein';
-const ProteinPageNavigation = pageNavigation(page);
 
 const SVG_WIDTH = 100;
 const colorHash = new ColorHash();
@@ -114,18 +109,6 @@ const Protein = (
   } else if (data.metadata) {
     main = (
       <div>
-        <div style={{display: 'flex'}}>
-          <div style={{flexGrow: 3}}>
-            <Title metadata={data.metadata} pathname={pathname} />
-          </div>
-          <div style={{flexGrow: 1}}>
-            <ProteinPageNavigation
-              accession={data.metadata.accession}
-              counters={data.metadata.counters}
-              pathname={pathname}
-            />
-          </div>
-        </div>
         {cloneElement(children, {data})}
       </div>
     );
