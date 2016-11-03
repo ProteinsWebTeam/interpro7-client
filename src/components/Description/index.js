@@ -22,7 +22,7 @@ const ParagraphWithCites = ({p, literature = {}}) => (
 );
 ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
-  literature: T.object.isRequired,
+  literature: T.object,
 };
 /* ::
  type Props = {
