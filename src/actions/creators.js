@@ -1,18 +1,32 @@
 import * as types from 'actions/types';
 
 // Action creators
+export const toggleEMBLMapNav = () => ({
+  type: types.TOGGLE_EMBL_MAP_NAV,
+});
+
+export const openEMBLMapNav = () => ({
+  type: types.TOGGLE_EMBL_MAP_NAV,
+  status: 'open',
+});
+
+export const closeEMBLMapNav = () => ({
+  type: types.TOGGLE_EMBL_MAP_NAV,
+  status: 'closed',
+});
+
 export const toggleSideNav = () => ({
   type: types.TOGGLE_SIDE_NAV,
 });
 
 export const openSideNav = () => ({
   type: types.TOGGLE_SIDE_NAV,
-  status: 'open',
+  status: 'visible',
 });
 
 export const closeSideNav = () => ({
   type: types.TOGGLE_SIDE_NAV,
-  status: 'closed',
+  status: 'hidden',
 });
 
 const parseValue = target => {
