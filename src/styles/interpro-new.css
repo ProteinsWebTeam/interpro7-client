@@ -14,17 +14,10 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 /****************************** END Overwritting EBI  global**********************/
 
 /******************************Local style***************************************/
-
 /*ICONS*/
 /*MEMBER DATABASE SVG icons*/
-.md-color, .md-server {fill:#e5e5e5; font-size:9em; font-family: 'EBI-generic', arial, sans-serif;}
-.md-list  {font-size: 80%;}
-.md-list svg {margin-bottom: -15px; margin-top: -15px; /*hack to reposition the view port without changing the coordinates of all svg*/}
-.md-list a h6 {margin-bottom:0;}
-.md-list a.md-cg h6 {white-space: nowrap;}
-.md-list a p {font-size: 90%;}
-
 .svg-mask {display: none;}
+.md-color, .md-server {fill:#dedede; font-size:9em; font-family: 'EBI-generic', arial, sans-serif;}
 .md-cg .md-color {fill:#a98de1;}
 .md-cd .md-color {fill:#b5de6c;}
 .md-ha .md-color {fill:#00e2e2;}
@@ -163,7 +156,10 @@ IMAGE BANNER
 }
 
 /*image entry*/
-.entrytype-panel .my-svg-container {width: 60%; margin: 0 auto; float:none;}
+.entrytype-panel .svg-container {width: 60%; margin: 0 auto; float:none;}
+.entrylatest-panel .list-item {display: flex; flex-wrap: nowrap;}
+.entrylatest-panel .svg-container {width: 5%;margin-right: 0.8em;/*leave margin at the bottom to keep alignment of signature text */padding-top:4px;}
+
 .my-svg-container {float: left;  width: 15%;/*19%*/ vertical-align: middle;margin-right:2rem; margin-bottom: 0.5rem;}
 #my-svg-icon, #my-svg-icon-sm {background-image: linear-gradient(to right, rgba(58, 95, 125, 0.6),rgba(152, 216, 186, 0.6) ), url(../images/backgrounds/fondation-morse-header.jpg);height:8rem; width:8rem; border:1px solid #ccc;} /*specific style for MD icon*/
 .ico_hamb {margin-top:9px; margin-right:1rem;cursor: pointer;user-select: none; transition: transform 0.5s ease-in-out; transform: translateY(0);}
@@ -294,6 +290,10 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 
 
 /******************************LOCAL STYLE*********************************/
+/*TABS*/
+.tabs .tabs-title > a { color: #0a0a0a;}
+.tabs .tabs-title.is-active > a:focus, .tabs .tabs-title.is-active > a {color: white; background: #666;} /*tabs style - the default tabs style from EBI using aria-selected='true'.is-active doesn't work*/
+
 /*footer*/
 .local_footer {padding:1rem 0;}
 .local_footer ul.off-canvas-list {background-color: transparent;}
@@ -310,6 +310,12 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 .md-hlight a, .md-hlight a:visited {color: #41647d;}
 /*/Entry page - md info next title*/
 
+/*homepage gal*/
+.browse-by .columns:hover {background-color:#e4f3ff;} /*add a light mouse over effect*/
+#content .browse-by .tabs-title a:hover, #content .entry-list .tabs-title a:hover  {border-bottom-width: 0;}/*remove dark line that appear on tabs*/
+#content .browse-by a.button:hover, #content .entry-list a.button:hover {border: 1px solid transparent;} /*remove dark line that appear on button*/
+/*/homepage gal*/
+
 /*homepage figures*/
 .fig-container {float: left; width: 17%; margin: 0 2em 1em 0; overflow: hidden;}
 .fig-sqc {background: url(../images/sqc.png) no-repeat -23% 136%; background-size: 65%;  height: 16em; width: 20em; margin-bottom: -78px; margin-top: 15px;}
@@ -319,23 +325,23 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 .fig-sqcban {background: url(../images/backgrounds/composite_03.png) no-repeat 85% 9%; background-size: 503%; height: 16em; width: 20em; margin-bottom: -68px;}
 /*/homepage figures*/
 
-
 /*homepage entry-list component*/
-.entry-list-latest ul {list-style: none; padding: 0; margin: 0; font-size: 94%;}
-.entry-list-latest .list-project-l ul li { padding: 0.2em 0.5em; border-radius: 6px;}
-.entry-list-latest .list-project-l ul li:hover {background-color:#e4f3ff;}
-.entry-list-latest .list-project-l a, .tabs a { color: #0a0a0a;}
-.list-project-l {position: relative;width: 100%; overflow-x: hidden; overflow-y: auto; height: 264px; margin-bottom: 1rem;}
+.entry-list ul {list-style: none; padding: 0; margin: 0; font-size: 94%;}
+.list-vertical-scrol {position: relative;width: 100%; overflow-x: hidden; overflow-y: auto; height: 378px; margin-bottom: 1rem;}
+.entry-list .list-vertical-scrol ul li { padding: 0.4em 0.8em; border-radius: 6px;}
+.entry-list .list-vertical-scrol ul li:hover {background-color:#e4f3ff;}
+.entry-list .list-vertical-scrol a { color: #0a0a0a; }
+.entry-list .icon-sign {width: 29px; float: left;}
 /*/homepage entry-list component*/
 
-/*homepage member database list*/
-.browse-by .columns:hover {background-color:#e4f3ff;}
-#content .browse-by a:hover {border-bottom-width: 0;}
-.browse-by .md-list .icon-generic {font-size: 233%;}
-.browse-by .md-list .small.icon-generic {font-size:129%;}
-.browse-by .md-list small {color:#0a0a0a;font-weight:bold;}
-
-/*/homepage member database list*/
+/*homepage member database list component*/
+.md-list {font-size: 80%;}
+.md-list svg {margin-bottom: -15px; margin-top: -15px; /*temp reposition the view port without changing the coordinates of all svg*/}
+#content .md-list a:hover:not(.button) {border-bottom:0px deeppink solid;} /*need the content because of EBI sytle defined*/
+.md-list a h6 {margin-bottom:0;}/*remove space around title*/
+.md-list a.md-cg h6 {white-space: nowrap;}/*avoid  text collapse for cathgene*/
+.md-list small {color:#0a0a0a;font-weight:bold;}
+/*/homepage member database list component*/
 
 /*homepage news component*/
 .jumbo-news-container {text-align: center; background-color: #eee; padding: 72px 0 72px 0;}
@@ -343,10 +349,7 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 /*/homepage news component*/
 
 /*entry page - go term etiquette*/
-a.go {
-  cursor: pointer;
-  color: white;
-}
+a.go {cursor: pointer;color: white;}
 .biological_process {background-color: #058dc7;}
 .molecular_function {background-color: #50b432;}
 .cellular_component {background-color: #ed561b;}
