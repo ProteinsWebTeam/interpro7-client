@@ -61,7 +61,7 @@ const contentPages = [
     getComponent(_, cb) {
       require.ensure([], () => {
         cb(null, require('pages/Entry').default);
-      });
+      }, 'entry');
     },
     childRoutes: [
       ...subPagesTransformer(subPages, 'entry'),
@@ -70,7 +70,7 @@ const contentPages = [
         getComponent(_, cb) {
           require.ensure([], () => {
             cb(null, require('components/Entry/Summary').default);
-          });
+          }, 'entry-overview');
         },
       },
     ],
@@ -80,7 +80,7 @@ const contentPages = [
     getComponent(_, cb) {
       require.ensure([], () => {
         cb(null, require('pages/Protein').default);
-      });
+      }, 'protein');
     },
     childRoutes: [
       ...subPagesTransformer(subPages, 'protein'),
@@ -89,7 +89,7 @@ const contentPages = [
         getComponent(_, cb) {
           require.ensure([], () => {
             cb(null, require('components/Protein/Summary').default);
-          });
+          }, 'protein-overview');
         },
       },
     ],
@@ -99,7 +99,7 @@ const contentPages = [
     getComponent(_, cb) {
       require.ensure([], () => {
         cb(null, require('pages/Structure').default);
-      });
+      }, 'structure');
     },
     childRoutes: [
       ...subPagesTransformer(subPages, 'structure'),
@@ -108,7 +108,7 @@ const contentPages = [
         getComponent(_, cb) {
           require.ensure([], () => {
             cb(null, require('components/Structure/Summary').default);
-          });
+          }, 'structure-overview');
         },
       },
     ],
@@ -118,7 +118,7 @@ const contentPages = [
     getComponent(_, cb) {
       require.ensure([], () => {
         cb(null, require('pages/Search').default);
-      });
+      }, 'search');
     },
     childRoutes: [
     ],
@@ -132,7 +132,7 @@ const staticPages = [
     getComponent(_, cb) {
       require.ensure([], () => {
         cb(null, require('staticPages/About').default);
-      });
+      }, 'about');
     },
   },
   {
@@ -140,7 +140,7 @@ const staticPages = [
     getComponent(_, cb) {
       require.ensure([], () => {
         cb(null, require('staticPages/Browse').default);
-      });
+      }, 'browse');
     },
   },
   {
@@ -148,7 +148,7 @@ const staticPages = [
     getComponent(_, cb) {
       require.ensure([], () => {
         cb(null, require('staticPages/Help').default);
-      });
+      }, 'help');
     },
   },
   {
@@ -156,7 +156,7 @@ const staticPages = [
     getComponent(_, cb) {
       require.ensure([], () => {
         cb(null, require('staticPages/Contact').default);
-      });
+      }, 'contact');
     },
   },
   {
@@ -164,7 +164,7 @@ const staticPages = [
     getComponent(_, cb) {
       require.ensure([], () => {
         cb(null, require('staticPages/Settings').default);
-      });
+      }, 'settings');
     },
   },
 ];
@@ -192,7 +192,7 @@ export default {
   getIndexRoute(_, cb) {
     require.ensure([], () => {
       cb(null, {component: require('pages/Home').default});
-    });
+    }, 'home');
   },
   childRoutes: [...contentPages, ...staticPages, ...otherPages],
 };

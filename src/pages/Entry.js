@@ -1,15 +1,14 @@
 /* @flow */
 import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es';
-import ColorHash from 'color-hash/lib/color-hash';
-import Table, {Column, Search, PageSizeSelector, Exporter}
-  from 'components/Table';
+
+import Table, {
+  Column, Search, PageSizeSelector, Exporter
+} from 'components/Table';
 
 import {removeLastSlash} from 'utils/url';
 
 import f from 'styles/foundation';
-
-const colorHash = new ColorHash();
 
 const Entry = (
   {data, location: {query, pathname}, dataUrl, children}
@@ -81,37 +80,29 @@ const Entry = (
   } else if (data.entries) { // List of Member Databases
     main = (
         <div>
-          <div style={{display: 'flex'}}>
+          <ul>Member databases:
             {Object.entries(data.entries.member_databases)
               .map(([name, count]) => (
-                <Link
-                  to={`${removeLastSlash(pathname)}/${name}`}
-                  style={{
-                    flex: count,
-                    textAlign: 'center',
-                    padding: '1em 0',
-                    backgroundColor: colorHash.hex(name),
-                  }}
-                  key={name}
-                >
-                  {name} ({count})
-                </Link>
+                <li key={name}>
+                  <Link to={`${removeLastSlash(pathname)}/${name}`}>
+                    {name} ({count})
+                  </Link>
+                </li>
               ))
             }
-          </div>
-          <div style={{display: 'flex'}}>
-            <Link
-              to={`${removeLastSlash(pathname)}/interpro`}
-              style={{
-                flex: data.entries ? data.entries.interpro : 1,
-                textAlign: 'center',
-                padding: '1em 0',
-                backgroundColor: colorHash.hex('interpro'),
-              }}
-            >
-              InterPro ({data.entries ? data.entries.interpro : 0})
-            </Link>
-          </div>
+          </ul>
+          <ul>
+            <li>
+              <Link to={`${removeLastSlash(pathname)}/interpro`}>
+                InterPro ({data.entries ? data.entries.interpro : 0})
+              </Link>
+            </li>
+            <li>
+              <Link to={`${removeLastSlash(pathname)}/unintegrated`}>
+                Unintegrated
+              </Link>
+            </li>
+          </ul>
         </div>
       );
   }

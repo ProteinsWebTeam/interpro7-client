@@ -123,22 +123,15 @@ const Protein = (
     );
   } else if (data.proteins) { // List of protein databases
     main = (
-      <div style={{display: 'flex'}} className={styles.card}>
+      <ul className={styles.card}>
         {Object.entries(data.proteins).map(([name, count]) => (
-          <Link
-            to={`${removeLastSlash(pathname)}/${name}`}
-            style={{
-              flex: count,
-              textAlign: 'center',
-              padding: '1em 0',
-              backgroundColor: colorHash.hex(name),
-            }}
-            key={name}
-          >
-            {name} ({count})
-          </Link>
+          <li key={name}>
+            <Link to={`${removeLastSlash(pathname)}/${name}`}>
+              {name} ({count})
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     );
   }
   return <main>{main}</main>;
