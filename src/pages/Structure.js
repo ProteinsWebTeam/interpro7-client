@@ -2,8 +2,6 @@
 import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es';
 
-import pageNavigation from 'components/PageNavigation';
-
 import Title from 'components/Title';
 import Table, {Column, Search, PageSizeSelector, Exporter}
   from 'components/Table';
@@ -11,9 +9,6 @@ import Table, {Column, Search, PageSizeSelector, Exporter}
 import {removeLastSlash, buildLink} from 'utils/url';
 
 import styles from 'styles/blocks.css';
-
-const page = 'structure';
-const StructurePageNavigation = pageNavigation(page);
 
 const Structure = (
   {data, location: {query, pathname}, dataUrl, children}
@@ -86,13 +81,6 @@ const Structure = (
         <div style={{display: 'flex'}}>
           <div style={{flexGrow: 3}}>
             <Title metadata={data.metadata} pathname={pathname} />
-          </div>
-          <div style={{flexGrow: 1}}>
-            <StructurePageNavigation
-              accession={data.metadata.accession}
-              counters={data.metadata.counters}
-              pathname={pathname}
-            />
           </div>
         </div>
         {cloneElement(children, {data})}
