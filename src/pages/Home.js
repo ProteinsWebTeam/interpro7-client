@@ -86,7 +86,7 @@ const Home = () => (
                         <text x="50%" y="50%" textAnchor="middle" dx="-0.01em" dy="0.4em" className={f('md-server')}>D</text>
                         <text x="50%" y="50%" textAnchor="middle" dx="-0.01em" dy="0.4em" className={f('md-color')} clipPath="url(#cut-off-center)">D</text>
                       </svg>
-                    
+
                       <h6 data-tooltip title="CATH-Gene3D database describes protein families and domain architectures in complete genomes. Protein families are formed using a Markov clustering algorithm, followed by multi-linkage clustering according to sequence identity. Mapping of predicted structure and sequence domains is undertaken using hidden Markov models libraries representing CATH and Pfam domains. CATH-Gene3D is based at University College, London, UK.">CATH-GENE3D
                       </h6><p><small>3.5.0</small><br/><span >11273 entries</span></p>
 
@@ -332,7 +332,7 @@ const Home = () => (
             </div>
             {// panel2 - temp display block
             }
-            <div className={f('tabs-panel', 'entrytype-panel')} id="panel2" >
+            <div className={f('tabs-panel','entrytype-panel')} id="panel2" >
                <div className={f('row')}>
 
                 <div className={f('columns', 'medium-4', 'large-4', 'text-center')}>
@@ -352,6 +352,7 @@ const Home = () => (
                       <rect x="4" y="4" width="60" height="60" strokeWidth="8" stroke="#36a30f" style={{fill: ('#50bb30')}} />
                       <polygon points="0,68 68,0 68,68" style={{fill: ('#36a30f')}} />
                       <text x="50%" y="50%" textAnchor="middle" dx="-2px" dy="20px" style={{fill: ('white'), fontSize: 60, fontWeight: 700, fontFamily: 'Montserrat, arial, serif'}}>D</text>
+                      <text x="50%" y="50%" textAnchor="middle" dx="-2px" dy="20px" style={{fill: ('white'), fontSize: 60, fontWeight: 700, fontFamily: 'Montserrat, arial, serif'}} clipPath="url(#cut-off-bottom)">D</text>
                     </svg>
                     </div>
 
@@ -469,7 +470,7 @@ const Home = () => (
 
             <div className={f('tabs-panel', 'is-active', 'entrylatest-panel')} id="panel01">
               <div className={f('row')}>
-
+                <div className={f('columns')}>
                 <h5> <small>Total : 29415 entries</small></h5>
                 <div className={f('list-vertical-scrol')}>
                   <ul>
@@ -485,7 +486,7 @@ const Home = () => (
                        <div className={f('list-body')}>
                          <div className={f('list-title')}> Thiazole synthase ThiG <span>(IPR033983)</span> - <i>8192 proteins matched</i><br/></div>
                          <div className={f('list-more')}>
-                           <svg viewBox="0 0 72 72" className={f('icon-sign')}>
+                           <svg viewBox="0 0 72 72" className={f('md-small')}>
                            <use href="#md-pfam"/>
                            </svg>
                            <small>Pfam: <a href="/interpro/pfam/PF05690" className={f('list-sign')}> PF05690</a> (1 contributing signature)</small></div>
@@ -503,7 +504,7 @@ const Home = () => (
                         <div className={f('list-body')}>
                           <div className={f('list-title')}> SusD-like, N-terminal <span>(IPR033985)</span> - <i>22916 proteins matched</i><br/></div>
                           <div className={f('list-more')}>
-                            <svg viewBox="0 0 72 72" className={f('icon-sign')}>
+                            <svg viewBox="0 0 72 72" className={f('md-small')}>
                               <use href="#md-pfam"/>
                             </svg>
                             <small>Pfam: <a href="/interpro/entry/pfam/PF14322" className={f('list-sign')}> PF14322</a> (1 contributing signature)</small></div>
@@ -521,7 +522,7 @@ const Home = () => (
                         <div className={f('list-body')}>
                           <div className={f('list-title')}>Clusterin, conserved site <span>(IPR033986)</span> - <i>145 proteins matched</i><br/></div>
                           <div className={f('list-more')}>
-                            <svg viewBox="0 0 72 72" className={f('icon-sign')}>
+                            <svg viewBox="0 0 72 72" className={f('md-small')}>
                               <use href="#md-prosite-patterns"/>
                             </svg>
                             <small>PROSITE patterns: <a href="/interpro/entry/prosite/PS00492" className={f('list-sign')}>PS00492</a>, <a href="/interpro/entry/prosite/PS00493" className={f('list-sign')}>PS00493</a> (2 contributing signatures)</small> </div>
@@ -540,7 +541,7 @@ const Home = () => (
                       <div className={f('list-body')}>
                         <div className={f('list-title')}>Aggrecan/versican, C-type lectin-like domain  <span>(IPR033987)</span> - <i>249 proteins matched</i><br/></div>
                         <div className={f('list-more')}>
-                          <svg viewBox="0 0 72 72" className={f('icon-sign')}>
+                          <svg viewBox="0 0 72 72" className={f('md-small')}>
                             <use href="#md-cdd"/>
                           </svg>
                           <small>CDD: <a href="/interpro/entry/cdd/cd03588" className={f('list-sign')}>cd03588</a> (1 contributing signature)</small></div>
@@ -560,7 +561,7 @@ const Home = () => (
                         <div className={f('list-body')}>
                           <div className={f('list-title')}>CEL-1-like C-type lectin-like domain   <span>(IPR033988)</span> - <i>75 proteins matched</i><br/></div>
                           <div className={f('list-more')}>
-                            <svg viewBox="0 0 72 72" className={f('icon-sign')}>
+                            <svg viewBox="0 0 72 72" className={f('md-small')}>
                               <use href="#md-cdd"/>
                             </svg>
                             <small>CDD: <a href="/interpro/entry/cdd/cd03589" className={f('list-sign')}>cd03589 </a> (1 contributing signature)</small></div>
@@ -578,7 +579,7 @@ const Home = () => (
                         <div className={f('list-body')}>
                           <div className={f('list-title')}>CD209-like, C-type lectin-like domain <span>(IPR033989)</span> - <i>1586 proteins matched</i><br/></div>
                           <div className={f('list-more')}>
-                            <svg viewBox="0 0 72 72" className={f('icon-sign')}>
+                            <svg viewBox="0 0 72 72" className={f('md-small')}>
                             <use href="#md-cdd"/>
                             </svg>
                             <small>CDD: <a href="/interpro/entry/cdd/cd03590" className={f('list-sign')}>cd03590 </a> (1 contributing signature)</small></div>
@@ -596,7 +597,7 @@ const Home = () => (
                         <div className={f('list-body')}>
                           <div className={f('list-title')}>Pol I subunit A12, C-terminal zinc ribbon <span>(IPR034004)</span> - <i>977 proteins matched</i><br/></div>
                           <div className={f('list-more')}>
-                            <svg viewBox="0 0 72 72" className={f('icon-sign')}>
+                            <svg viewBox="0 0 72 72" className={f('md-small')}>
                               <use href="#md-cdd"/>
                             </svg>
                             <small>CDD: <a href="/interpro/entry/cdd/cd10507 " className={f('list-sign')}>cd10507</a> (1 contributing signature)</small></div>
@@ -614,7 +615,7 @@ const Home = () => (
                         <div className={f('list-body')}>
                           <div className={f('list-title')}>Peptidyl-dipeptidase DCP <span>(IPR034005)</span> - <i>8245 proteins matched</i><br/></div>
                           <div className={f('list-more')}>
-                            <svg viewBox="0 0 72 72" className={f('icon-sign')}>
+                            <svg viewBox="0 0 72 72" className={f('md-small')}>
                               <use href="#md-cdd"/>
                             </svg>
                             <small>CDD: <a href="/interpro/entry/cdd/cd06456" className={f('list-sign')}>cd06456</a> (1 contributing signature)</small></div>
@@ -627,7 +628,9 @@ const Home = () => (
                 </div>{// end list-vertical-scrol
               }
            <a href="/entry" className={f('button')}>View all entries</a>
-         </div>
+                </div> {// end columns
+              }
+              </div>
               {// end row
               }
        </div>
@@ -654,6 +657,111 @@ const Home = () => (
 
     </div> {// end Browse entry & entry list
   }
+
+    <div className={f('row', 'small-up-1', 'medium-up-1', 'large-up-2')} data-equalizer>
+
+    <div className={f('columns', 'publication-list')}>
+      {// Tools & paper
+      }
+      <div className={f('callout')} data-equalizer-watch>
+
+
+          <h5>Publications </h5>
+          <a href="http://nar.oxfordjournals.org/content/43/D1/D213">
+            <div className={f('media-object')}>
+              <div className={f('media-object-section')}>
+                <span className={f('icon', 'icon-conceptual')} data-icon="l"></span>
+              </div>
+             <div className={f('media-object-section')}>
+                <p>The InterPro protein families database: the classification resource after 15 years <br/><i>Nucleic Acids Research</i>, 2015.</p>
+              </div>
+            </div>
+          </a>
+
+          <a href="http://database.oxfordjournals.org/content/2016/baw027.full">
+            <div className={f('media-object')}>
+              <div className={f('media-object-section')}>
+                <span className={f('icon', 'icon-conceptual')} data-icon="l"></span>
+              </div>
+              <div className={f('media-object-section')}>
+                <p>GO annotation in InterPro: why stability does not indicate accuracy in a sea of changing annotation. <br/><i>Database</i>, 2016.</p>
+              </div>
+            </div>
+          </a>
+
+          <a href="http://bioinformatics.oxfordjournals.org/content/early/2014/01/29/bioinformatics.btu031.full">
+            <div className={f('media-object')}>
+              <div className={f('media-object-section')}>
+                <span className={f('icon', 'icon-conceptual')} data-icon="l"></span>
+               </div>
+             <div className={f('media-object-section')}>
+                <p>InterProScan 5: genome-scale protein function classification.<br/><i>Bioinformatics</i>, 2014.</p>
+              </div>
+            </div>
+          </a>
+
+        <a href="/about/publications" className={f('button')}>View all publications</a>
+
+        </div>{// end callout
+      }
+
+      </div>{// end columns publication list
+    }
+
+
+      <div className={f('columns', 'tools-list')}>
+        {// Tools
+        }
+        <div className={f('callout')} data-equalizer-watch>
+
+
+          <h5>Tools </h5>
+
+          <div className={f('row')}>
+
+            <div className={f('columns','medium-6', 'medium-push-6')}>
+
+                  <h5>IDA</h5>
+              <img src="https://www.ebi.ac.uk/interpro/resources/images/logo_ida_100.png" style={{marginLeft: 40, marginBottom: 10}} />
+                  <p>
+                    The InterPro Domain Architecture (IDA) tool allows you to search the InterPro database with a particular set of domains, and returns all of the domain architectures and associated proteins that match the query.
+                    <a href="about/tools/ida" className={f('readmore')} target="_blank"> Read more</a>
+                  </p>
+
+            </div>
+            {// medium-6
+            }
+
+            <div className={f('columns','medium-6', 'medium-push-6')}>
+            <h5>InterProScan</h5>
+              {//<img src="http://www.ebi.ac.uk/interpro/resources/images/logo_interproscan_214.png" />
+              }
+              <img src="https://www.ebi.ac.uk/interpro/resources/images//logo_interproscan_ext.png" style={{ marginBottom: 2}}/>
+            <p>
+               InterProScan is a sequence analysis application (nucleotide and protein sequences) that combines different protein signature recognition methods into one resource.
+              <a href="about/tools/interproscan" className={f('readmore')} target="_blank"> Read more</a>
+            </p>
+            </div>
+            {// medium-6
+          }
+
+          </div>
+
+
+          {// <a href="/about/tools" className={f('button')}>View all tools</a>
+          }
+
+        </div>{// end callout
+      }
+
+      </div>{// end columns publication list
+    }
+
+
+
+    </div>{// end row
+  }
+
   </main>
 );
 
