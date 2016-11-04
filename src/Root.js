@@ -5,6 +5,7 @@ import React, {PropTypes as T} from 'react';
 import 'styles/foundation';
 import 'styles/ebi-global.css';
 import 'styles/global.css';
+import 'styles/theme-interpro.css';
 import 'styles/interpro-new.css';
 
 import Header from 'components/Header';

@@ -4,7 +4,7 @@
 
 
 .standard {
-  width: 100vw;
+/* width: 100vw; *//*removed as it clashed with foundation grid*/
   margin: 0;
   display: flex;
   align-items: center;
@@ -19,6 +19,12 @@
   top: -100px;/*-34px (EBI header);*/
   z-index: 10;
 }
+
+.local_masthead {
+  background-image: linear-gradient(to right, rgba(0, 85, 158, 0.9),rgba(45, 174, 193, 0.5),rgba(0, 85, 158, 0.9) ), url("images/banner/fondation-morse-header.jpg");
+  background-repeat: no-repeat, repeat;
+  background-position: left, top right;
+  background-size: 100%, 1400px;}
 
 .header_background {
   position: absolute;
@@ -119,34 +125,29 @@
   transform-origin: 50% 50%;
 }
 
-.hamb_1 {
+.hamb_1, .hamb_2, .hamb_3 {
   composes: hamb_line;
 }
 
+.hamb_1_open, .hamb_2_open, .hamb_3_open {
+  composes: hamb_line;
+}
+.hamb_1, .hamb_2, .hamb_3 { transition: all .3s;}/*otherwise doesn't loop*/
 .hamb_1_open {
-  composes: hamb_line;
-
-  transform: rotate(45deg) translate(4px);
+  transform: rotate(45deg) translate(2px, 2px);
+  transition: transform 0.3s ease-in-out;
 }
 
-.hamb_2 {
-  composes: hamb_line;
+ .hamb_2_open {
+  /*transform: rotate(0) translate(-14px);*/
+  opacity:0;
+  transition: opacity .3s;
 }
 
-.hamb_2_open {
-  composes: hamb_line;
-
-  transform: rotate(0) translate(-14px);
-}
-
-.hamb_3 {
-  composes: hamb_line;
-}
 
 .hamb_3_open {
-  composes: hamb_line;
-
-  transform: rotate(-45deg) translate(4px);
+  transform: rotate(-45deg) translate(2px, -2px);
+  transition: transform 0.3s ease-in-out;
 }
 
 .medium_level {
