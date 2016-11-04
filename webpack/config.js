@@ -17,7 +17,7 @@ const iprConfig = yaml.safeLoad(data);
 try {
   port = iprConfig.root.website.match(/.+:(\d+).*/)[1];
 } catch (err) {
-  throw (err);
+  port = 80;
 }
 const PROD = process.env.NODE_ENV === 'production';
 

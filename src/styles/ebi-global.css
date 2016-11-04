@@ -656,7 +656,9 @@ body .breadcrumbs a {
     MISC TWEAKS
   =============================== */
 ul.menu {
-  font-size: .9rem; }
+  font-size: .9rem;
+  align-items: stretch;
+}
 
 /* Image tweaks */
 body .thumbnail {

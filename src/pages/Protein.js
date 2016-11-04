@@ -9,6 +9,7 @@ import Table, {Column, Search, PageSizeSelector, Exporter}
 import {removeLastSlash, buildLink} from 'utils/url';
 
 import styles from 'styles/blocks.css';
+import f from 'styles/foundation';
 
 
 const SVG_WIDTH = 100;
@@ -30,106 +31,107 @@ const Protein = (
   let main;
   if (!data) {
     main = 'Loading...';
-  } else if (Array.isArray(data.results)) {
+  } else if (Array.isArray(data.results)) { // List of proteins
     const maxLength = data.results.reduce((max, result) => (
       Math.max(max, (result.metadata || result).length)
     ), 0);
     main = (
-      <Table
-        data={data}
-        query={query}
-        pathname={pathname}
-      >
-        <Exporter>
-          <ul>
-            <li>
-                <a
-                  href={`${dataUrl}&format=json`}
-                  download="proteins.json"
-                >JSON</a><br/></li>
-            <li><a href={`${dataUrl}`}>Open in API web view</a></li>
-          </ul>
-        </Exporter>
-        <PageSizeSelector pageSize={query.page_size}/>
-        <Search>Search proteins</Search>
-        <Column
-          accessKey="accession"
-          renderer={(acc/*: string */) => (
-            <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-              {acc}
-            </Link>
-          )}
-        >
-          Accession
-        </Column>
-        <Column
-          accessKey="name"
-          renderer={
-            (name/*: string */, {accession}/*: {accession: string} */) => (
-              <Link to={`${removeLastSlash(pathname)}/${accession}`}>
-                {name}
-              </Link>
-            )
-          }
-        >
-          Name
-        </Column>
-        <Column
-          accessKey="source_database"
-          renderer={(db/*: string */) => (
-            <Link to={buildLink(pathname, 'protein', db)}>{db}</Link>
-          )}
-        >
-          Source Database
-        </Column>
-        <Column
-          accessKey="length"
-          renderer={(length/*: number */, row) => (
-            <div
-              title={`${length} amino-acids`}
-              style={{
-                width: `${length / maxLength * SVG_WIDTH}%`,
-                padding: '0.2rem',
-                backgroundColor: colorHash.hex(row.accession),
-                borderRadius: '0.2rem',
-                textAlign: 'start',
-                overflowX: 'hidden',
-                whiteSpace: 'nowrap',
-                textOverflow: 'clip',
-              }}
+      <div className={f('row')}>
+        <div className={f('large-12', 'columns')}>
+          <Table
+            data={data}
+            query={query}
+            pathname={pathname}
+          >
+            <Exporter>
+              <ul>
+                <li>
+                    <a
+                      href={`${dataUrl}&format=json`}
+                      download="proteins.json"
+                    >JSON</a><br/></li>
+                <li><a href={`${dataUrl}`}>Open in API web view</a></li>
+              </ul>
+            </Exporter>
+            <PageSizeSelector pageSize={query.page_size}/>
+            <Search>Search proteins</Search>
+            <Column
+              accessKey="accession"
+              renderer={(acc/*: string */) => (
+                <Link to={`${removeLastSlash(pathname)}/${acc}`}>
+                  {acc}
+                </Link>
+              )}
             >
-              {length} amino-acids
-            </div>
-          )}
-        >
-          Length
-        </Column>
-      </Table>
+              Accession
+            </Column>
+            <Column
+              accessKey="name"
+              renderer={
+                (name/*: string */, {accession}/*: {accession: string} */) => (
+                  <Link to={`${removeLastSlash(pathname)}/${accession}`}>
+                    {name}
+                  </Link>
+                )
+              }
+            >
+              Name
+            </Column>
+            <Column
+              accessKey="source_database"
+              renderer={(db/*: string */) => (
+                <Link to={buildLink(pathname, 'protein', db)}>{db}</Link>
+              )}
+            >
+              Source Database
+            </Column>
+            <Column
+              accessKey="length"
+              renderer={(length/*: number */, row) => (
+                <div
+                  title={`${length} amino-acids`}
+                  style={{
+                    width: `${length / maxLength * SVG_WIDTH}%`,
+                    padding: '0.2rem',
+                    backgroundColor: colorHash.hex(row.accession),
+                    borderRadius: '0.2rem',
+                    textAlign: 'start',
+                    overflowX: 'hidden',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'clip',
+                  }}
+                >
+                  {length} amino-acids
+                </div>
+              )}
+            >
+              Length
+            </Column>
+          </Table>
+        </div>
+      </div>
     );
-  } else if (data.metadata) {
+  } else if (data.metadata) { // Single Protein page
     main = (
       <div>
-        {cloneElement(children, {data})}
+        {cloneElement(children, {data})
+          /* The children content defined in routes points to
+             components/Protein/Summary
+           */
+        }
       </div>
     );
-  } else if (data.proteins) {
+  } else if (data.proteins) { // List of protein databases
     main = (
-      <div style={{display: 'flex'}} className={styles.card}>
+      <ul className={styles.card}>
         {Object.entries(data.proteins).map(([name, count]) => (
-          <Link
-            to={`${removeLastSlash(pathname)}/${name}`}
-            style={{
-              flex: count,
-              textAlign: 'center',
-              padding: '1em 0',
-              backgroundColor: colorHash.hex(name),
-            }}
-            key={name}
-          >
-            {name} ({count})
-          </Link>
+          <li key={name}>
+            <Link to={`${removeLastSlash(pathname)}/${name}`}>
+              {name} ({count})
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     );
   }
   return <main>{main}</main>;

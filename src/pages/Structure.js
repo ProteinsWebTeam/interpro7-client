@@ -1,7 +1,6 @@
 /* @flow */
 import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es';
-import ColorHash from 'color-hash/lib/color-hash';
 
 import pageNavigation from 'components/PageNavigation';
 
@@ -15,8 +14,6 @@ import styles from 'styles/blocks.css';
 
 const page = 'structure';
 const StructurePageNavigation = pageNavigation(page);
-
-const colorHash = new ColorHash();
 
 const Structure = (
   {data, location: {query, pathname}, dataUrl, children}
@@ -103,22 +100,15 @@ const Structure = (
     );
   } else if (data.structures) {
     main = (
-      <div style={{display: 'flex'}} className={styles.card}>
+      <ul className={styles.card}>
         {Object.entries(data.structures).map(([name, count]) => (
-          <Link
-            to={`${removeLastSlash(pathname)}/${name}`}
-            style={{
-              flex: count,
-              textAlign: 'center',
-              padding: '1em 0',
-              backgroundColor: colorHash.hex(name),
-            }}
-            key={name}
-          >
-            {name} ({count})
-          </Link>
+          <li key={name}>
+            <Link to={`${removeLastSlash(pathname)}/${name}`}>
+              {name} ({count})
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     );
   }
   return <main>{main}</main>;
