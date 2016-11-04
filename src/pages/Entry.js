@@ -99,7 +99,7 @@ const Entry = (
             </li>
             <li>
               <Link to={`${removeLastSlash(pathname)}/unintegrated`}>
-                Unintegrated
+                Unintegrated ({data.entries ? data.entries.unintegrated : 0})
               </Link>
             </li>
           </ul>
