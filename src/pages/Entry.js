@@ -7,6 +7,8 @@ import Table, {Column, Search, PageSizeSelector, Exporter}
 
 import {removeLastSlash} from 'utils/url';
 
+import f from 'styles/foundation';
+
 const colorHash = new ColorHash();
 
 const Entry = (
@@ -26,49 +28,57 @@ const Entry = (
   // if (data) {
   if (Array.isArray(data.results)) { // List of entries
     main = (
-        <Table
-          data={data}
-          query={query}
-          pathname={pathname}
-        >
-          <Exporter>
-            <ul>
-              <li>
-                <a
-                  href={`${dataUrl}&format=json`}
-                  download="proteins.json"
-                >JSON</a><br/></li>
-              <li><a href={`${dataUrl}`}>Open in API web view</a></li>
-            </ul>
-          </Exporter>
-          <PageSizeSelector/>
-          <Search>Search entries</Search>
-          <Column
-            accessKey="accession"
-            renderer={(acc/*: string */) => (
-              <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-                {acc}
-              </Link>
-            )}
+      <div className={f('row')}>
+        <div className={f('large-12', 'columns')}>
+          <Table
+            data={data}
+            query={query}
+            pathname={pathname}
           >
-            Accession
-          </Column>
-          <Column accessKey="name">Name</Column>
-          <Column
-            accessKey="type"
-            renderer={(type) => (
-              <interpro-type type={type} expanded>{type}</interpro-type>
-            )}
-          >Type</Column>
-        </Table>
-      );
-  } else if (data.metadata) { // Single Entry page + including menu
+            <Exporter>
+              <ul>
+                <li>
+                  <a
+                    href={`${dataUrl}&format=json`}
+                    download="proteins.json"
+                  >JSON</a><br/></li>
+                <li><a href={`${dataUrl}`}>Open in API web view</a></li>
+              </ul>
+            </Exporter>
+            <PageSizeSelector/>
+            <Search>Search entries</Search>
+            <Column
+              accessKey="accession"
+              renderer={(acc/*: string */) => (
+                <Link to={`${removeLastSlash(pathname)}/${acc}`}>
+                  {acc}
+                </Link>
+              )}
+            >
+              Accession
+            </Column>
+            <Column accessKey="name">Name</Column>
+            <Column
+              accessKey="type"
+              renderer={(type) => (
+                <interpro-type type={type} expanded>{type}</interpro-type>
+              )}
+            >Type</Column>
+          </Table>
+        </div>
+      </div>
+    );
+  } else if (data.metadata) { // Single Entry page
     main = (
         <div>
-          {children && cloneElement(children, {data})}
+          {children && cloneElement(children, {data})
+            /* The children content defined in routes points to
+             components/Entry/Summary
+             */
+          }
         </div>
       );
-  } else if (data.entries) { // Member Database page
+  } else if (data.entries) { // List of Member Databases
     main = (
         <div>
           <div style={{display: 'flex'}}>
