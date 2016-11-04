@@ -66,7 +66,7 @@ const EntityMenu = () => (
 
 const DynamicMenu = ({data, location: {pathname}}) => {
   if (!data || pathname === '/') return <InterProMenu />;
-  const type = pathname.match(/^\/([^/]*)/)[1].toLowerCase();
+  const type = pathname.match(/^\/?([^/]*)/)[1].toLowerCase();
   if (data.metadata) {
     return (
       <SingleEntityMenu data={data} type={type} pathname={pathname} />
