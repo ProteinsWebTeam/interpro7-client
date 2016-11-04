@@ -24,6 +24,9 @@ const componentMatch = {
   protein: {
     entry: EntriesOnProtein,
   },
+  entry: {
+    protein: EntriesOnProtein,
+  },
   structure: {
     entry: EntriesOnStructure,
     protein: ProteinsOnStructure,
@@ -47,9 +50,10 @@ const Matches = (
   /*: {matches: Array<Object>, primary: string, props: Array<any>}*/
 ) => {
   const dataTable = {
-    results: matches.map(e => ({match: e, ...e.protein})),
+    results: matches.map(e => ({match: e, ...e[primary]})),
     count: matches.length,
   };
+  console.log(dataTable);
   const pathname = '',
     query = {};
   return (

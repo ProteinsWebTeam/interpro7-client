@@ -63,8 +63,8 @@ const primariesAndSecondaries = {
   },
   protein: {
     entry: {
-      primary: 'protein',
-      secondary: 'entry',
+      primary: 'entry',
+      secondary: 'protein',
     },
     structure: {
       primary: 'structure',

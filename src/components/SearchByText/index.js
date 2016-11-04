@@ -62,7 +62,7 @@ class SearchByText extends Component {
                 > e.g.
                   <Example value="IPR020422"/>,
                   <Example value="kinase" />,
-                  <Example value="Q9ZJX4" />,
+                  <Example value="O00167" />,
                   <Example value="PF02932" />,
                   <Example value="GO:0007165"/>
                 </div>
