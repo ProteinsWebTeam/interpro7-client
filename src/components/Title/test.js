@@ -36,7 +36,9 @@ describe('<Title />', () => {
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
         <div>
-          <InterproSymbol type="domain"/>
+          <div className="my-svg-container">
+            <InterproSymbol type="domain"/>
+          </div>
           <h3>Piwi domain <small>(PF02171)</small></h3>
           <div className={ipro['md-hlight']}>
             <h5>Member database:&nbsp;

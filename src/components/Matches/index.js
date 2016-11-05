@@ -5,7 +5,8 @@ import {Link} from 'react-router/es';
 
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
-import ProteinsOnStructure from './ProteinsOnStructure';
+import StructureOnProtein from './StructureOnProtein';
+
 
 import Table, {Column} from 'components/Table';
 
@@ -29,7 +30,7 @@ const componentMatch = {
   },
   structure: {
     entry: EntriesOnStructure,
-    protein: ProteinsOnStructure,
+    protein: StructureOnProtein,
   },
 };
 
@@ -53,7 +54,6 @@ const Matches = (
     results: matches.map(e => ({match: e, ...e[primary]})),
     count: matches.length,
   };
-  console.log(dataTable);
   const pathname = '',
     query = {};
   return (

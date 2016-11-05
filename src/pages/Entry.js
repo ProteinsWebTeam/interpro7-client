@@ -3,7 +3,7 @@ import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es';
 
 import Table, {
-  Column, Search, PageSizeSelector, Exporter
+  Column, Search, PageSizeSelector, Exporter,
 } from 'components/Table';
 
 import {removeLastSlash} from 'utils/url';

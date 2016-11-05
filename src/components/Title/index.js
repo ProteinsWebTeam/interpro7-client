@@ -23,49 +23,65 @@ Time.propTypes = {
   date: T.string.isRequired,
   children: T.element,
 };
-
+const entryTypeColors = {
+  F: ['#d41813', 'rgb(245, 69, 40)', 'rgb(212, 24, 19)'],
+  D: ['#36a30f', 'rgb(80, 187, 48)', 'rgb(54, 163, 15)'],
+  S: ['#a83cc9', '#c646ec', '#a83cc9'],
+  R: ['#ff8511', '#ffa249', '#ff8511'],
+  C: ['#1f64b3', '#1e77dc', '#1f64b3'],
+  U: ['#737373', '#8c8c8c', '#737373'],
+};
 export const InterproSymbol = (
   {type}
   /*: {
     type: string
   }*/
-) => (
-  <div className={ipro['my-svg-container']}>
-    <svg
-      className={ipro['my-svg']}
-      preserveAspectRatio="xMinYMin meet"
-      viewBox="0 0 70 70"
-    >
-      <g>
-        <rect x="10" y="10" width="60" height="60"
-          style={{
-            fill: 'black',
-            opacity: 0.1,
-          }}
+) => {
+  const colors = entryTypeColors[type[0]],
+    ch = (type === 'undefined') ? '?' : type[0];
+  return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 72 72"
+        id={`type-${type}`}
+      >
+        <defs>
+          <clipPath id="cut-off-bottom">
+            <polygon points="0,68 68,0 68,68" />
+          </clipPath>
+        </defs>
+        <rect
+          x="12" y="12" width="60" height="60"
+          style={{fill: ('black'), opacity: 0.15}}
         />
-        <rect x="0" y="0" width="60" height="60"
-          style={{
-            fill: '#ee2a09',
-            stroke: '#d41813',
-            strokeWidth: 10,
-            opacity: 1,
-            position: 'absolute',
-            left: 0,
-            top: 0,
-          }}
+        <rect
+          x="4" y="4" width="60" height="60"
+          strokeWidth="8" stroke={colors[0]}
+          fill={colors[1]}
         />
+        <polygon points="0,68 68,0 68,68" fill={colors[2]} />
         <text
-          x="10" y="62" fill="white"
-          fontFamily="Arial" fontWeight="bold" fontSize="70"
+          x="50%" y="50%" textAnchor="middle" dx="-2px" dy="20px"
           style={{
-            boxShadow: 'black 10px 10px 10px',
+            fill: ('white'),
+            fontSize: 60,
+            fontWeight: 700,
+            fontFamily: 'Montserrat, arial, serif',
           }}
-        > {type[0]} </text>
-      </g>
-      Sorry, your browser does not support inline SVG.
-    </svg>
-  </div>
-);
+        >{ch}</text>
+        <text
+          x="50%" y="50%" textAnchor="middle" dx="-2px" dy="20px"
+          style={{
+            fill: ('white'),
+            fontSize: 60,
+            fontWeight: 700,
+            fontFamily: 'Montserrat, arial, serif',
+            clipPath: 'url(#cut-off-bottom)',
+          }}
+        >{ch}</text>
+      </svg>
+  );
+};
 InterproSymbol.propTypes = {
   type: T.string.isRequired,
 };
@@ -92,7 +108,9 @@ const Title = (
     <div>
       {
         isEntry &&
-        <InterproSymbol type={metadata.type}/>
+        <div className={ipro['my-svg-container']}>
+          <InterproSymbol type={metadata.type}/>
+        </div>
       }
       <h3>{metadata.name.name} <small>({metadata.accession})</small></h3>
       {
