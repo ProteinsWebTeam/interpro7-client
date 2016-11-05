@@ -7,8 +7,8 @@ import style from './style.css';
 
 const s = classnames.bind(style);
 
-const HALF_VISIBLE = 0.5;
-const VISIBLE = 1;
+// const HALF_VISIBLE = 0.5;
+// const VISIBLE = 1;
 
 class Loading extends Component {
   static propTypes = {

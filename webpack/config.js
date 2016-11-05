@@ -11,13 +11,14 @@ const loaders = require('./config/loaders');
 const resolve = require('./config/resolve');
 const yaml = require('js-yaml');
 let port = 8080;
+const httpPort = 80;
 const fs = require('fs');
 const data = fs.readFileSync('config.yml');
 const iprConfig = yaml.safeLoad(data);
 try {
   port = iprConfig.root.website.match(/.+:(\d+).*/)[1];
 } catch (err) {
-  port = 80;
+  port = httpPort;
 }
 const PROD = process.env.NODE_ENV === 'production';
 

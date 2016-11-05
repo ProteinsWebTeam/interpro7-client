@@ -161,7 +161,7 @@ IMAGE BANNER
 /*image entry*/
 .entrytype-panel .svg-container {width: 60%; margin: 0 auto; float:none;}
 .entrylatest-panel .list-item {display: flex; flex-wrap: nowrap;}
-.entrylatest-panel .svg-container {width: 5%;margin-right: 0.8em;/*leave margin at the bottom to keep alignment of signature text */padding-top:4px;}
+.entrylatest-panel .svg-container {width: 5%;margin-right: 0.8em;/*leave margin at the bottom to keep alignment of signature text */padding-top:4px; float: left;}
 
 .my-svg-container {float: left;  width: 15%;/*19%*/ vertical-align: middle;margin-right:2rem; margin-bottom: 0.5rem;}
 #my-svg-icon, #my-svg-icon-sm {background-image: linear-gradient(to right, rgba(58, 95, 125, 0.6),rgba(152, 216, 186, 0.6) ), url(../images/backgrounds/fondation-morse-header.jpg);height:8rem; width:8rem; border:1px solid #ccc;} /*specific style for MD icon*/
