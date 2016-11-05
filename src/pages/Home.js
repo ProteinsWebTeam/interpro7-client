@@ -9,11 +9,16 @@ import {Link} from 'react-router/es';
 import {memberDB, entryType, latests} from 'staticData/home';
 import Tabs from 'components/Tabs';
 
+import iscanLogo from 'images/logo_interproscan_ext.png';
+import idaLogo from 'images/logo_ida_100.png';
+
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'styles/ebi-global.css';
 import fonts from 'styles/ebi/fonts.css';
 import theme from 'styles/theme-interpro.css';
+
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
+
 
 const InterproGraphic = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 120" >
@@ -228,7 +233,7 @@ const Home = () => (
 
             <div title="Latest entries">
               <div className={f('row', 'entrylatest-panel')}>
-                <div className={f('column')}>
+                <div className={f('columns')}>
 
                   <h5> <small>Total : 29415 entries</small></h5>
                   <div className={f('list-vertical-scrol')}>
@@ -288,10 +293,13 @@ const Home = () => (
           <a href="http://nar.oxfordjournals.org/content/43/D1/D213">
             <div className={f('media-object')}>
               <div className={f('media-object-section')}>
-                <span className={f('icon', 'icon-conceptual')} data-icon="l"></span>
+                <span className={f('icon', 'icon-conceptual')} data-icon="l">&nbsp;</span>
               </div>
              <div className={f('media-object-section')}>
-                <p>The InterPro protein families database: the classification resource after 15 years <br/><i>Nucleic Acids Research</i>, 2015.</p>
+                <p>
+                  The InterPro protein families database: the classification resource
+                  after 15 years <br/><i>Nucleic Acids Research</i>, 2015.
+                </p>
               </div>
             </div>
           </a>
@@ -299,21 +307,27 @@ const Home = () => (
           <a href="http://database.oxfordjournals.org/content/2016/baw027.full">
             <div className={f('media-object')}>
               <div className={f('media-object-section')}>
-                <span className={f('icon', 'icon-conceptual')} data-icon="l"></span>
+                <span className={f('icon', 'icon-conceptual')} data-icon="l">&nbsp;</span>
               </div>
               <div className={f('media-object-section')}>
-                <p>GO annotation in InterPro: why stability does not indicate accuracy in a sea of changing annotation. <br/><i>Database</i>, 2016.</p>
+                <p>
+                  GO annotation in InterPro: why stability does not indicate accuracy in a
+                  sea of changing annotation. <br/><i>Database</i>, 2016.
+                </p>
               </div>
             </div>
           </a>
 
-          <a href="http://bioinformatics.oxfordjournals.org/content/early/2014/01/29/bioinformatics.btu031.full">
+          <a href="http://bioinformatics.oxfordjournals.org/content/30/9/1236">
             <div className={f('media-object')}>
               <div className={f('media-object-section')}>
-                <span className={f('icon', 'icon-conceptual')} data-icon="l"></span>
+                <span className={f('icon', 'icon-conceptual')} data-icon="l">&nbsp;</span>
                </div>
              <div className={f('media-object-section')}>
-                <p>InterProScan 5: genome-scale protein function classification.<br/><i>Bioinformatics</i>, 2014.</p>
+                <p>
+                  InterProScan 5: genome-scale protein function classification.<br/>
+                  <i>Bioinformatics</i>, 2014.
+                </p>
               </div>
             </div>
           </a>
@@ -337,27 +351,38 @@ const Home = () => (
 
           <div className={f('row')}>
 
-            <div className={f('columns','medium-6', 'medium-push-6')}>
+            <div className={f('columns', 'medium-6', 'medium-push-6')}>
 
                   <h5>IDA</h5>
-              <img src="https://www.ebi.ac.uk/interpro/resources/images/logo_ida_100.png" style={{marginLeft: 40, marginBottom: 10}} />
+              <img src={idaLogo} style={{marginLeft: 40, marginBottom: 10}}/>
                   <p>
-                    The InterPro Domain Architecture (IDA) tool allows you to search the InterPro database with a particular set of domains, and returns all of the domain architectures and associated proteins that match the query.
-                    <a href="about/tools/ida" className={f('readmore')} target="_blank"> Read more</a>
+                    The InterPro Domain Architecture (IDA) tool allows you to search the
+                    InterPro database with a particular set of domains, and returns all
+                    of the domain architectures and associated proteins that match the
+                    query.
+                    <Link href="about/tools#ida" className={f('readmore')}
+                      target="_blank"
+                    >
+                      Read more
+                    </Link>
                   </p>
 
             </div>
             {// medium-6
             }
 
-            <div className={f('columns','medium-6', 'medium-push-6')}>
+            <div className={f('columns', 'medium-6', 'medium-push-6')}>
             <h5>InterProScan</h5>
-              {//<img src="http://www.ebi.ac.uk/interpro/resources/images/logo_interproscan_214.png" />
-              }
-              <img src="https://www.ebi.ac.uk/interpro/resources/images//logo_interproscan_ext.png" style={{ marginBottom: 2}}/>
+{// <img src="http://www.ebi.ac.uk/interpro/resources/images/logo_interproscan_214.png" />
+}
+              <img src={iscanLogo} style={{marginBottom: 2}}/>
             <p>
-               InterProScan is a sequence analysis application (nucleotide and protein sequences) that combines different protein signature recognition methods into one resource.
-              <a href="about/tools/interproscan" className={f('readmore')} target="_blank"> Read more</a>
+               InterProScan is a sequence analysis application (nucleotide and protein
+              sequences) that combines different protein signature recognition methods
+              into one resource.
+              <Link
+                href="about/tools#interproscan" className={f('readmore')} target="_blank"
+              > Read more</Link>
             </p>
             </div>
             {// medium-6
@@ -374,7 +399,6 @@ const Home = () => (
 
       </div>{// end columns publication list
     }
-
 
 
     </div>{// end row
