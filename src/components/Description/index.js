@@ -39,7 +39,6 @@ class Description extends Component {
    };
    handleClick: () => void;
    */
-
   constructor(props/* : Props*/) {
     super(props);
     this.state = {isOpen: false};
