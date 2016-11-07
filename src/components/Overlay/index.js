@@ -3,7 +3,7 @@ import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
 import classnames from 'classnames/bind';
 
-import {closeSideNav} from 'actions/creators';
+import {closeSideNav, closeEMBLMapNav} from 'actions/creators';
 
 import styles from './style.css';
 
@@ -19,11 +19,12 @@ Overlay.propTypes = {
 
 export default connect(
   // selector
-  ({ui: {sideNav}}) => ({visible: sideNav}),
+  ({ui: {sideNav, emblMapNav}}) => ({visible: sideNav || emblMapNav}),
   // action creators
   dispatch => ({
     closeEverything() {
       dispatch(closeSideNav());
+      dispatch(closeEMBLMapNav());
     },
   })
 )(Overlay);

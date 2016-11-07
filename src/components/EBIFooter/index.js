@@ -10,7 +10,7 @@ const styleBundle = foundationPartial(
   styles, fonts, ebiPetrolTheme, ebiTheme, ebiGlobalStyles
 );
 
-const Footer = () => (
+const EBIFooter = () => (
   <footer>
     <div id={styleBundle('global-footer')}>
       <nav
@@ -23,8 +23,8 @@ const Footer = () => (
           'medium-2': 'true',
         })}
         >
-          <a href="//www.ebi.ac.uk" title="EMBL-EBI"><
-            span className={styleBundle('ebi-logo')} />
+          <a href="//www.ebi.ac.uk" title="EMBL-EBI">
+            <span className={styleBundle('ebi-logo')} />
           </a>
           <ul />
         </div>
@@ -38,7 +38,9 @@ const Footer = () => (
             <a
               className={styleBundle('services-color')}
               href="//www.ebi.ac.uk/services"
-            >Services</a>
+            >
+              Services
+            </a>
           </h5>
           <ul>
             <li className={styleBundle('first')}>
@@ -76,8 +78,8 @@ const Footer = () => (
             </li>
             <li className={styleBundle('last')}>
               <a href="//www.ebi.ac.uk/research/postdocs">Postdocs </a>
-              &amp;
-              <a href="//www.ebi.ac.uk/research/eipp"> PhDs</a>
+              &nbsp;&amp;&nbsp;
+              <a href="//www.ebi.ac.uk/research/eipp">PhDs</a>
             </li>
           </ul>
         </div>
@@ -104,7 +106,9 @@ const Footer = () => (
               <a href="//www.ebi.ac.uk/training/roadshow">Train outside EBI</a>
             </li>
             <li>
-              <a href="//www.ebi.ac.uk/training/online">Train online</a>
+              <a href="//www.ebi.ac.uk/training/online">
+                Train online
+              </a>
             </li>
             <li className={styleBundle('last')}>
               <a href="//www.ebi.ac.uk/training/contact-us">
@@ -194,19 +198,23 @@ const Footer = () => (
       >
         <div className={styleBundle('columns')}>
           <p className={styleBundle('address')}>
-            EMBL-EBI, Wellcome Genome Campus, Hinxton,
-            Cambridgeshire, CB10 1SD, UK. +44 (0)1223 49 44 44
+            EMBL-EBI, Wellcome Genome Campus, Hinxton, Cambridgeshire,
+            CB10 1SD, UK. +44 (0)1223 49 44 44
           </p>
           <p className={styleBundle('legal')}>
             Copyright © EMBL-EBI 2016 | EMBL-EBI is
             <a href="http://www.embl.org/">
               part of the European Molecular Biology Laboratory
-            </a> |
-            <a href="//www.ebi.ac.uk/about/terms-of-use"> Terms of use</a>
-            <a
-              className={styleBundle({readmore: 'true', 'float-right': 'true'})}
+            </a> | <a href="//www.ebi.ac.uk/about/terms-of-use">Terms of use</a>
+            <a className={
+              styleBundle({
+                readmore: 'true',
+                'float-right': 'true',
+              })}
               href="http://intranet.ebi.ac.uk"
-            >Intranet</a>
+            >
+              Intranet
+            </a>
           </p>
         </div>
       </section>
@@ -215,4 +223,4 @@ const Footer = () => (
   </footer>
 );
 
-export default Footer;
+export default EBIFooter;

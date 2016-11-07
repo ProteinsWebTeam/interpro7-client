@@ -10,7 +10,7 @@ import 'styles/interpro-new.css';
 
 import Overlay from 'components/Overlay';
 import Header from 'components/Header';
-import Footer from 'components/Footer';
+import Footer from 'components/EBIFooter';
 import SideMenu from 'components/SideMenu';
 import Breadcrumb from 'components/Breadcrumb';
 import Loading from 'components/Loading';
