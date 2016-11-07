@@ -1,4 +1,5 @@
 const process = require('process');
+const fs = require('fs');
 
 const postcssImport = require('postcss-import');
 const postcssApply = require('postcss-apply');
@@ -10,16 +11,9 @@ const plugins = require('./config/plugins');
 const loaders = require('./config/loaders');
 const resolve = require('./config/resolve');
 const yaml = require('js-yaml');
-let port = 8080;
-const httpPort = 80;
-const fs = require('fs');
-const data = fs.readFileSync('config.yml');
-const iprConfig = yaml.safeLoad(data);
-try {
-  port = iprConfig.root.website.match(/.+:(\d+).*/)[1];
-} catch (err) {
-  port = httpPort;
-}
+const iprConfig = yaml.safeLoad(fs.readFileSync('config.yml'));
+const defaultPort = 80;
+const [, port = defaultPort] = iprConfig.root.website.match(/.+:(\d+).*/) || [];
 const PROD = process.env.NODE_ENV === 'production';
 
 const config = {

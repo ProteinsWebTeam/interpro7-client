@@ -26,7 +26,10 @@ const StructureOnProtein = (
             width={protein.length} height={baseSize}
             className={style.primary}
           />
-          <text x="0.1em" y="0.8em" transform={`translate(${protein.length} 0)`}>
+          <text
+            x="0.1em" y="0.8em"
+            transform={`translate(${protein.length} 0)`}
+          >
             <tspan>{protein.length}</tspan>
           </text>
         </g>

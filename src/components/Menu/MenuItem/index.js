@@ -3,6 +3,8 @@ import {Link} from 'react-router';
 
 import {BaseLink} from 'components/ExtLink';
 
+import styles from './style.css';
+
 const isExternal = ([first, second]) => (
   // 'http://www.example.com'
   //  ↑
@@ -12,14 +14,31 @@ const isExternal = ([first, second]) => (
   second === '/'
 );
 
-const MenuItem = ({children, to, ...props}) => {
+const MenuItem = ({children, to, disabled = false, className, ...props}) => {
   const CustomLink = isExternal(to) ? BaseLink : Link;
-  return <CustomLink to={to} {...props}>{children}</CustomLink>;
+  return (
+    <CustomLink
+      to={to}
+      className={
+        disabled ?
+        `${className || ''} ${styles.disabled}`.trim() :
+        className
+      }
+      {...(
+        disabled ?
+        {disabled: true, tabIndex: '-1', 'aria-disabled': 'true'} :
+        {}
+      )}
+      {...props}
+    >
+      {children}
+    </CustomLink>);
 };
 MenuItem.propTypes = {
   children: T.node.isRequired,
   to: T.string.isRequired,
-  props: T.object,
+  className: T.string,
+  disabled: T.bool,
 };
 
 export default MenuItem;

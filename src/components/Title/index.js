@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 import React, {PropTypes as T} from 'react';
 import ipro from 'styles/interpro-new.css';
 import {Link} from 'react-router/es';
