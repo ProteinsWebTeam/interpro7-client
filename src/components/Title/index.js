@@ -71,12 +71,12 @@ export const InterproSymbol = (
         >{ch}</text>
         <text
           x="50%" y="50%" textAnchor="middle" dx="-2px" dy="20px"
+          clipPath="url(#cut-off-bottom)"
           style={{
-            fill: ('white'),
+            fill: ('#e6e6e6'),
             fontSize: 60,
             fontWeight: 700,
-            fontFamily: 'Montserrat, arial, serif',
-            clipPath: 'url(#cut-off-bottom)',
+            fontFamily: 'Montserrat, arial, serif'
           }}
         >{ch}</text>
       </svg>
