@@ -13,7 +13,10 @@ const styleBundle = foundationPartial(
 const Footer = () => (
   <footer>
     <div id={styleBundle('global-footer')}>
-      <nav id={styleBundle('global-nav-expanded')} className={styleBundle('row')}>
+      <nav
+        id={styleBundle('global-nav-expanded')}
+        className={styleBundle('row')}
+      >
         <div className={styleBundle({
           columns: 'true',
           'small-6': 'true',
@@ -57,7 +60,10 @@ const Footer = () => (
         })}
         >
           <h5 className={styleBundle('research')}>
-            <a className={styleBundle('research-color')} href="//www.ebi.ac.uk/research">
+            <a
+              className={styleBundle('research-color')}
+              href="//www.ebi.ac.uk/research"
+            >
               Research
             </a>
           </h5>
@@ -83,7 +89,10 @@ const Footer = () => (
         })}
         >
           <h5 className={styleBundle('training')}>
-            <a className={styleBundle('training-color')} href="//www.ebi.ac.uk/training">
+            <a
+              className={styleBundle('training-color')}
+              href="//www.ebi.ac.uk/training"
+            >
               Training
             </a>
           </h5>
@@ -98,7 +107,9 @@ const Footer = () => (
               <a href="//www.ebi.ac.uk/training/online">Train online</a>
             </li>
             <li className={styleBundle('last')}>
-              <a href="//www.ebi.ac.uk/training/contact-us">Contact organisers</a>
+              <a href="//www.ebi.ac.uk/training/contact-us">
+                Contact organisers
+              </a>
             </li>
           </ul>
         </div>
@@ -110,7 +121,10 @@ const Footer = () => (
         })}
         >
           <h5 className={styleBundle('industry')}>
-            <a className={styleBundle('industry-color')} href="//www.ebi.ac.uk/industry">
+            <a
+              className={styleBundle('industry-color')}
+              href="//www.ebi.ac.uk/industry"
+            >
               Industry
             </a>
           </h5>
@@ -127,7 +141,9 @@ const Footer = () => (
               </a>
             </li>
             <li className={styleBundle('last')}>
-              <a href="//www.ebi.ac.uk/industry/contact">Contact Industry programme</a>
+              <a href="//www.ebi.ac.uk/industry/contact">
+                Contact Industry programme
+              </a>
             </li>
           </ul>
         </div>
@@ -139,7 +155,10 @@ const Footer = () => (
         })}
         >
           <h5 className={styleBundle('about')}>
-            <a className={styleBundle('ebi-color')} href="//www.ebi.ac.uk/about">
+            <a
+              className={styleBundle('ebi-color')}
+              href="//www.ebi.ac.uk/about"
+            >
               About EMBL-EBI
             </a>
           </h5>
@@ -151,7 +170,10 @@ const Footer = () => (
               <a href="//www.ebi.ac.uk/about/events">Events</a>
             </li>
             <li>
-              <a href="//www.ebi.ac.uk/about/jobs" title="Jobs, postdocs, PhDs...">
+              <a
+                href="//www.ebi.ac.uk/about/jobs"
+                title="Jobs, postdocs, PhDs..."
+              >
                 Jobs
               </a>
             </li>
@@ -166,7 +188,10 @@ const Footer = () => (
 
       </nav>
 
-      <section id={styleBundle('ebi-footer-meta')} className={styleBundle('row')}>
+      <section
+        id={styleBundle('ebi-footer-meta')}
+        className={styleBundle('row')}
+      >
         <div className={styleBundle('columns')}>
           <p className={styleBundle('address')}>
             EMBL-EBI, Wellcome Genome Campus, Hinxton,

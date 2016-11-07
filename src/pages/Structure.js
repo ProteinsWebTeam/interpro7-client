@@ -2,7 +2,6 @@
 import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es';
 
-import Title from 'components/Title';
 import Table, {Column, Search, PageSizeSelector, Exporter}
   from 'components/Table';
 

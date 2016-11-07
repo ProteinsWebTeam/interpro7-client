@@ -30,7 +30,9 @@ class Tabs extends Component {
                   })}
                 key={i}
               >
-                <a href="#" onClick={this.handleChangeTab(i)}>{child.props.title}</a>
+                <a href="#" onClick={this.handleChangeTab(i)}>
+                  {child.props.title}
+                </a>
               </li>
             ))
           }

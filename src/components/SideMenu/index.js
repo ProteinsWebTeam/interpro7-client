@@ -46,7 +46,9 @@ const setRootGrayscale = (() => {
   };
 })();
 
-const MenuLink = ({element, closeSideNav, relativePath = false, pathname = '', data}) => {
+const MenuLink = (
+  {element, closeSideNav, relativePath = false, pathname = '', data}
+) => {
   const to = (relativePath && pathname !== '/' ? pathname : '') + element.to;
   const isBadgePresent = (
     element.counter && data && data.metadata && data.metadata.counters
