@@ -1,14 +1,14 @@
-/* @flow */
+// @flow
 import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es';
 
-import Title from 'components/Title';
 import Table, {Column, Search, PageSizeSelector, Exporter}
   from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
 
 import styles from 'styles/blocks.css';
+import f from 'styles/foundation';
 
 const Structure = (
   {data, location: {query, pathname}, dataUrl, children}
@@ -24,7 +24,7 @@ const Structure = (
   } */
 ) => {
   let main;
-  if (Array.isArray(data.results)) {
+  if (Array.isArray(data.results)) { // List of structures
     main = (
       <Table
         data={data}
@@ -75,14 +75,9 @@ const Structure = (
         </Column>
       </Table>
     );
-  } else if (data.metadata) {
+  } else if (data.metadata) { // Single Entry page
     main = (
       <div>
-        <div style={{display: 'flex'}}>
-          <div style={{flexGrow: 3}}>
-            <Title metadata={data.metadata} pathname={pathname} />
-          </div>
-        </div>
         {cloneElement(children, {data})}
       </div>
     );
@@ -99,7 +94,15 @@ const Structure = (
       </ul>
     );
   }
-  return <main>{main}</main>;
+  return (
+    <main>
+      <div className={f('row')}>
+        <div className={f('large-12', 'columns')}>
+          {main}
+        </div>
+      </div>
+    </main>
+  );
 };
 Structure.propTypes = {
   data: T.object,

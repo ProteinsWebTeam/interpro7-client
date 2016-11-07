@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 import React, {PropTypes as T} from 'react';
 import {foundationPartial} from 'styles/foundation';
 import SearchByText from 'components/SearchByText';

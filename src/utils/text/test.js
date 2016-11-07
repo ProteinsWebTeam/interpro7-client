@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 /* eslint-env mocha */
 import {expect} from 'chai';
 
