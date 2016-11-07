@@ -1,6 +1,7 @@
 // @flow
 /* eslint no-magic-numbers: [1, {ignore: [0, 1, 2]}] */
 import React, {PropTypes as T, Component} from 'react';
+import ReactDOM from 'react-dom';
 import {transformFormatted} from 'utils/text';
 import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
@@ -24,11 +25,15 @@ ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
   literature: T.object,
 };
+
+const defaultHeightToHide = 200;
 /* ::
  type Props = {
    textBlocks: Array<string> ,
    literature?: Object,
    title?: string,
+   extraTextForButton?: string,
+   heightToHide?: number,
  }
  */
 class Description extends Component {
@@ -43,21 +48,55 @@ class Description extends Component {
     super(props);
     this.state = {isOpen: false};
     this.handleClick = this.handleClick.bind(this);
+    this.moreButton = null;
+    this.divContent = null;
+  }
+  componentDidMount = () => {
+    window.addEventListener('resize', this.recheckHeight);
+    this.recheckHeight();
+  }
 
+  componentDidUpdate() {
+    this.recheckHeight();
+  }
+
+  componentWillUnmount = () => {
+    window.removeEventListener('resize', this.recheckHeight);
   }
   handleClick(){
     this.setState({isOpen: !this.state.isOpen});
   }
+  onResize() {
+    this.recheckHeight();
+  }
+  recheckHeight() {
+    if (this.moreButton && this.divContent) {
+      const moreDiv = ReactDOM.findDOMNode(this.moreButton),
+        contentDiv = ReactDOM.findDOMNode(this.divContent),
+        {heightToHide = defaultHeightToHide} = this.props;
+      if (moreDiv.offsetTop - contentDiv.offsetTop < heightToHide) {
+        this.moreButton.style.visibility = 'hidden';
+      } else {
+        this.moreButton.style.visibility = 'visible';
+      }
+    }
+  }
   render(){
-    const {textBlocks, literature, title = 'Description', extratextForButton = '', heightToHide='200px'} = this.props,
-      maxNumberOfChars = 500,
-      hide = textBlocks.length < 2 && textBlocks[0].length < maxNumberOfChars;
+    const {
+      textBlocks, literature,
+      title = 'Description',
+      extraTextForButton = '',
+      heightToHide = defaultHeightToHide,
+    } = this.props;
     return (
       <div className={f('content')}>
         <h4>{title}</h4>
         <div
           className={f('animate-height', {collapsed: !this.state.isOpen})}
-          style={{maxHeight: this.state.isOpen ? '5000px' : heightToHide}}
+          style={{
+            maxHeight: this.state.isOpen ? '5000px' : `${heightToHide}px`,
+          }}
+          ref={(e) => this.divContent = e}
         >
           {textBlocks.map((b, i) => (
             <div key={i}>
@@ -67,13 +106,14 @@ class Description extends Component {
             </div>
           ))}
         </div>
-        <br/>
         <button
-          className={f('button', {hidden: hide})}
+          className={f('button')}
           id="show-more"
           onClick={this.handleClick}
+          ref={(e) => this.moreButton = e}
+          style={{marginTop: '1em'}}
         >
-          Read {this.state.isOpen ? 'less' : 'more'} {extratextForButton}
+          Read {this.state.isOpen ? 'less' : 'more'} {extraTextForButton}
         </button>
       </div>
 
@@ -84,5 +124,7 @@ Description.propTypes = {
   textBlocks: T.array.isRequired,
   literature: T.object,
   title: T.string,
+  extraTextForButton: T.string,
+  heightToHide: T.number,
 };
 export default Description;

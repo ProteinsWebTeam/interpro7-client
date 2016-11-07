@@ -123,14 +123,17 @@ const Home = () => (
 
         <Description
           title=""
-          extratextForButton="about InterPro"
-          heightToHide="100px"
+          extraTextForButton="about InterPro"
+          heightToHide="100"
           textBlocks={[
             `InterPro provides functional analysis of proteins by classifying them into
              families and predicting domains and important sites. We combine protein
              signatures from a number of member databases into a single searchable
              resource, capitalising on their individual strengths to produce a powerful
-             integrated database and diagnostic tool.To classify proteins in this way, InterPro uses predictive models, known as signatures, provided by several different databases (referred to as member databases) that make up the InterPro consortium.`,
+             integrated database and diagnostic tool.To classify proteins in this way,
+             InterPro uses predictive models, known as signatures, provided by several
+             different databases (referred to as member databases) that make up the
+             InterPro consortium.`,
           ]}
         />
 

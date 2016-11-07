@@ -47,7 +47,7 @@ class Tabs extends Component {
                 key={i}
                 className={f('tabs-panel', {
                   'is-active': this.state.activeTab === i,
-                }) + (' '+ child.props.className || '')}
+                }) + (` ${child.props.className}` || '')}
               >
                 {child.props.children}
               </div>
