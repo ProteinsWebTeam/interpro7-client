@@ -1,7 +1,9 @@
 // @flow
 import React, {PropTypes as T} from 'react';
-import {withRouter, Link} from 'react-router/es';
+import {withRouter} from 'react-router/es';
 import {connect} from 'react-redux';
+
+import MenuItem from 'components/Menu/MenuItem';
 
 import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
@@ -15,9 +17,9 @@ const InterProMenu = ({pathname}) => (
   <ul className={styles('menu')}>
     {InterPro.map(({to, name}) => (
       <li key={to}>
-        <Link to={to} className={styles({active: pathname === to})}>
+        <MenuItem to={to} className={styles({active: pathname === to})}>
           {name}
-        </Link>
+        </MenuItem>
       </li>
     ))}
   </ul>
@@ -36,14 +38,18 @@ const SingleEntityMenu = ({data, type, pathname}) => {
         .filter(({to}) => !to.includes(type))
         .map(({to, name, counter}) => (
           <li key={to}>
-            <Link to={baseURL + to} activeClassName={styles('active')}>
+            <MenuItem
+              to={baseURL + to}
+              activeClassName={styles('active')}
+              disabled={counter && !data.metadata.counters[counter]}
+            >
               {name}&nbsp;
               {counter &&
                 <span className={styles('badge')}>
                   {data.metadata.counters[counter] || 0}
                 </span>
               }
-            </Link>
+            </MenuItem>
           </li>
         ))
       }
@@ -60,7 +66,7 @@ const EntityMenu = () => (
   <ul className={styles('menu')}>
     {entities.map(({to, name}) => (
       <li key={to}>
-        <Link to={to} activeClassName={styles('active')}>{name}</Link>
+        <MenuItem to={to} activeClassName={styles('active')}>{name}</MenuItem>
       </li>
     ))}
   </ul>
