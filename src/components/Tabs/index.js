@@ -20,7 +20,7 @@ class Tabs extends Component {
     const _children = Children.toArray(children);
     return (
       <div>
-        <ul className={f('tabs')} data-tabs id="example-tabs">
+        <ul className={f('tabs')}>
           {
             _children.map((child, i) => (
               <li
@@ -38,15 +38,14 @@ class Tabs extends Component {
 
         <div
           className={f('tabs', 'tabs-content')}
-          data-tabs-content="example-tabs"
         >
           {
             _children.map((child, i) => (
               <div
                 key={i}
-                className={f('tabs-panel', 'md-list', {
+                className={f('tabs-panel', {
                   'is-active': this.state.activeTab === i,
-                })}
+                }) + (' '+ child.props.className || '')}
               >
                 {child.props.children}
               </div>
