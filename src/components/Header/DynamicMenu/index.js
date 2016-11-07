@@ -1,3 +1,4 @@
+// @flow
 import React, {PropTypes as T} from 'react';
 import {withRouter, Link} from 'react-router/es';
 import {connect} from 'react-redux';
@@ -10,15 +11,20 @@ import {InterPro, entities, singleEntity} from 'menuConfig';
 
 const styles = foundationPartial(ebiStyles, interproStyles);
 
-const InterProMenu = () => (
+const InterProMenu = ({pathname}) => (
   <ul className={styles('menu')}>
     {InterPro.map(({to, name}) => (
       <li key={to}>
-        <Link to={to} activeClassName={styles('active')}>{name}</Link>
+        <Link to={to} className={styles({active: pathname === to})}>
+          {name}
+        </Link>
       </li>
     ))}
   </ul>
 );
+InterProMenu.propTypes = {
+  pathname: T.string.isRequired,
+};
 
 const SingleEntityMenu = ({data, type, pathname}) => {
   const [baseURL] = pathname.match(
@@ -59,13 +65,9 @@ const EntityMenu = () => (
     ))}
   </ul>
 );
-// EntityMenu.propTypes = {
-//   data: T.object.isRequired,
-//   type: T.string.isRequired,
-// };
 
 const DynamicMenu = ({data, location: {pathname}}) => {
-  if (!data || pathname === '/') return <InterProMenu />;
+  if (!data || pathname === '/') return <InterProMenu pathname={pathname} />;
   const type = pathname.match(/^\/?([^/]*)/)[1].toLowerCase();
   if (data.metadata) {
     return (

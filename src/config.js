@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 /* eslint-env node */
 /* eslint no-process-env: 0 */
 /* eslint operator-linebreak: 0 */

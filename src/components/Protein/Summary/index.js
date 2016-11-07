@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 import React, {PropTypes as T} from 'react';
 
 import GoTerms from 'components/GoTerms';

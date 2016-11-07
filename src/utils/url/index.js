@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 const FINAL_SLASH = /\/*$/;
 
 export const removeLastSlash = (str/*: string*/) => (

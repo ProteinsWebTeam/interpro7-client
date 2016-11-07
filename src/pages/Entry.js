@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es';
 
