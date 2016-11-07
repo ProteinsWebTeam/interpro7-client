@@ -45,11 +45,7 @@ export const InterproSymbol = (
         viewBox="0 0 72 72"
         id={`type-${type}`}
       >
-        <defs>
-          <clipPath id="cut-off-bottom">
-            <polygon points="0,68 68,0 68,68" />
-          </clipPath>
-        </defs>
+
         <rect
           x="12" y="12" width="60" height="60"
           style={{fill: ('black'), opacity: 0.15}}
