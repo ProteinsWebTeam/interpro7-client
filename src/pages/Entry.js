@@ -44,7 +44,7 @@ const Entry = (
                 <li><a href={`${dataUrl}`}>Open in API web view</a></li>
               </ul>
             </Exporter>
-            <PageSizeSelector/>
+            <PageSizeSelector />
             <Search>Search entries</Search>
             <Column
               accessKey="accession"
@@ -56,11 +56,24 @@ const Entry = (
             >
               Accession
             </Column>
-            <Column accessKey="name">Name</Column>
+            <Column
+              accessKey="name"
+              renderer={
+                (name/*: string */, {accession}/*: {accession: string} */) => (
+                  <Link to={`${removeLastSlash(pathname)}/${accession}`}>
+                    {name}
+                  </Link>
+                )
+              }
+            >
+              Name
+            </Column>
             <Column
               accessKey="type"
               renderer={(type) => (
-                <interpro-type type={type} expanded>{type}</interpro-type>
+                <interpro-type type={type.replace('_', ' ')} expanded>
+                  {type}
+                </interpro-type>
               )}
             >Type</Column>
           </Table>
