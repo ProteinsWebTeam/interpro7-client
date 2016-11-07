@@ -31,58 +31,54 @@ const Entry = (
   // if (data) {
   if (Array.isArray(data.results)) { // List of entries
     main = (
-      <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
-          <Table
-            data={data}
-            query={query}
-            pathname={pathname}
-          >
-            <Exporter>
-              <ul>
-                <li>
-                  <a
-                    href={`${dataUrl}&format=json`}
-                    download="proteins.json"
-                  >JSON</a><br/></li>
-                <li><a href={`${dataUrl}`}>Open in API web view</a></li>
-              </ul>
-            </Exporter>
-            <PageSizeSelector />
-            <Search>Search entries</Search>
-            <Column
-              accessKey="accession"
-              renderer={(acc/*: string */) => (
-                <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-                  {acc}
-                </Link>
-              )}
-            >
-              Accession
-            </Column>
-            <Column
-              accessKey="name"
-              renderer={
-                (name/*: string */, {accession}/*: {accession: string} */) => (
-                  <Link to={`${removeLastSlash(pathname)}/${accession}`}>
-                    {name}
-                  </Link>
-                )
-              }
-            >
-              Name
-            </Column>
-            <Column
-              accessKey="type"
-              renderer={(type) => (
-                <interpro-type type={type.replace('_', ' ')} expanded>
-                  {type}
-                </interpro-type>
-              )}
-            >Type</Column>
-          </Table>
-        </div>
-      </div>
+      <Table
+        data={data}
+        query={query}
+        pathname={pathname}
+      >
+        <Exporter>
+          <ul>
+            <li>
+              <a
+                href={`${dataUrl}&format=json`}
+                download="proteins.json"
+              >JSON</a><br/></li>
+            <li><a href={`${dataUrl}`}>Open in API web view</a></li>
+          </ul>
+        </Exporter>
+        <PageSizeSelector />
+        <Search>Search entries</Search>
+        <Column
+          accessKey="accession"
+          renderer={(acc/*: string */) => (
+            <Link to={`${removeLastSlash(pathname)}/${acc}`}>
+              {acc}
+            </Link>
+          )}
+        >
+          Accession
+        </Column>
+        <Column
+          accessKey="name"
+          renderer={
+            (name/*: string */, {accession}/*: {accession: string} */) => (
+              <Link to={`${removeLastSlash(pathname)}/${accession}`}>
+                {name}
+              </Link>
+            )
+          }
+        >
+          Name
+        </Column>
+        <Column
+          accessKey="type"
+          renderer={(type) => (
+            <interpro-type type={type.replace('_', ' ')} expanded>
+              {type}
+            </interpro-type>
+          )}
+        >Type</Column>
+      </Table>
     );
   } else if (data.metadata) { // Single Entry page
     main = (
@@ -97,7 +93,8 @@ const Entry = (
   } else if (data.entries) { // List of Member Databases
     main = (
         <div>
-          <ul>Member databases:
+          Member databases:
+          <ul>
             {Object.entries(data.entries.member_databases)
               .map(([name, count]) => (
                 <li key={name}>
@@ -127,7 +124,15 @@ const Entry = (
   //   // TODO: Improve message and navigation out of it.
   //   main = <div>There are no entries with the exiting filters.</div>;
   // }
-  return <main>{main}</main>;
+  return (
+    <main>
+      <div className={f('row')}>
+        <div className={f('large-12', 'columns')}>
+          {main}
+        </div>
+      </div>
+    </main>
+  );
 };
 Entry.propTypes = {
   data: T.object,
