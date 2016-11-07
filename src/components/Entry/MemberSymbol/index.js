@@ -13,18 +13,14 @@ const MemberSymbol = (
       viewBox="0 0 200 200"
       id={`md-${type}`}
     >
-      <defs>
-        <clipPath id="cut-off-center">
-          <rect x="33%" y="33%" width="70" height="70"/>
-        </clipPath>
-      </defs>
+      
       <text
         x="50%" y="50%"
         textAnchor="middle"
         dx="-0.01em" dy="0.4em"
         className={f('md-server')}
       >D</text>
-      {
+      { //interesting to try text "&"
         type === 'new' ?
           <text
             x="50%" y="50%"
@@ -43,6 +39,7 @@ const MemberSymbol = (
             className={f('md-color')}
             clipPath="url(#cut-off-center)"
           >D</text>
+        //interesting to try text "&"
       }
     </svg>
 
