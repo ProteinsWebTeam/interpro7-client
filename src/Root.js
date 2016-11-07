@@ -8,6 +8,7 @@ import 'styles/global.css';
 import 'styles/theme-interpro.css';
 import 'styles/interpro-new.css';
 
+import Overlay from 'components/Overlay';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
 import SideMenu from 'components/SideMenu';
@@ -18,6 +19,7 @@ const Root = (
   {children, location}/*: {children: Node, location: {pathname: string}}*/
 ) => (
   <div>
+    <Overlay />
     <SideMenu position="right" pathname={location.pathname} />
     <Header pathname={location.pathname} />
     <Breadcrumb pathname={location.pathname} />

@@ -21,7 +21,7 @@ const MenuItem = ({children, to, disabled = false, className, ...props}) => {
       to={to}
       className={
         disabled ?
-        `${className || ''} ${styles['disabled']}`.trim() :
+        `${className || ''} ${styles.disabled}`.trim() :
         className
       }
       {...(
@@ -37,6 +37,7 @@ const MenuItem = ({children, to, disabled = false, className, ...props}) => {
 MenuItem.propTypes = {
   children: T.node.isRequired,
   to: T.string.isRequired,
+  className: T.string,
   disabled: T.bool,
 };
 

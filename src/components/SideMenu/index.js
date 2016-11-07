@@ -194,11 +194,11 @@ class SideMenu extends Component{
     const newState = {};
     newState[name] = !this.state[name];
     this.setState(newState);
-  }
+  };
 
   render() {
     const {
-      sideNav: visible, position = 'left', closeSideNav, pathname, data,
+      sideNav: visible, position = 'left', pathname, data,
     } = this.props;
     const left = position === 'left';
     const type = pathname.match(/^\/?([^/]*)/)[1].toLowerCase();
@@ -246,9 +246,6 @@ class SideMenu extends Component{
           }
 
         </aside>
-        <div onClick={closeSideNav}
-          className={visible ? style.overlay_visible : style.overlay_hidden}
-        />
       </div>
     );
   }
@@ -258,10 +255,8 @@ SideMenu.propTypes = {
   data: T.object,
   position: T.oneOf(['left', 'right']),
   pathname: T.string.isRequired,
-  closeSideNav: T.func.isRequired,
 };
 
 export default connect(
-  ({ui: {sideNav}, data: {data}}) => ({sideNav, data}),
-  {closeSideNav}
+  ({ui: {sideNav}, data: {data}}) => ({sideNav, data})
 )(SideMenu);

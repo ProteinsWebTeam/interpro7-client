@@ -37,30 +37,3 @@
   right: 0;
   transform: translateX(20em);
 }
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  z-index: 100;
-  background: linear-gradient(to left, black, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5), black);
-  transition: opacity 0.3s ease-in-out;
-}
-
-.overlay_hidden {
-  composes: overlay;
-
-  opacity: 0;
-  pointer-events: none;
-  cursor: pointer;
-}
-
-.overlay_visible {
-  composes: overlay;
-
-  opacity: 0.5;
-  pointer-events: auto;
-  cursor: pointer;
-}

@@ -6,10 +6,10 @@ import {connect} from 'react-redux';
 import MenuItem from 'components/Menu/MenuItem';
 
 import {foundationPartial} from 'styles/foundation';
-import ebiStyles from 'styles/ebi-global.css';
-import interproStyles from 'styles/interpro-new.css';
+import ebiStyles from '../../../styles/ebi-global.css';
+import interproStyles from '../../../styles/interpro-new.css';
 
-import {InterPro, entities, singleEntity} from 'menuConfig';
+import {InterPro, entities, singleEntity} from '../../../menuConfig';
 
 const styles = foundationPartial(ebiStyles, interproStyles);
 

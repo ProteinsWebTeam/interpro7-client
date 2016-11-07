@@ -4,7 +4,7 @@ import {Link} from 'react-router/es';
 
 import {openSideNav} from 'actions/creators';
 
-import DynamicMenu from './DynamicMenu';
+import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
 
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
