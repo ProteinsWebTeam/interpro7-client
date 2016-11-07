@@ -50,7 +50,7 @@ class Description extends Component {
     this.setState({isOpen: !this.state.isOpen});
   }
   render(){
-    const {textBlocks, literature, title = 'Description'} = this.props,
+    const {textBlocks, literature, title = 'Description', extratextForButton = '', heightToHide='200px'} = this.props,
       maxNumberOfChars = 500,
       hide = textBlocks.length < 2 && textBlocks[0].length < maxNumberOfChars;
     return (
@@ -58,7 +58,7 @@ class Description extends Component {
         <h4>{title}</h4>
         <div
           className={f('animate-height', {collapsed: !this.state.isOpen})}
-          style={{maxHeight: this.state.isOpen ? '5000px' : '200px'}}
+          style={{maxHeight: this.state.isOpen ? '5000px' : heightToHide}}
         >
           {textBlocks.map((b, i) => (
             <div key={i}>
@@ -74,7 +74,7 @@ class Description extends Component {
           id="show-more"
           onClick={this.handleClick}
         >
-          Read {this.state.isOpen ? 'less' : 'more'} about this entry
+          Read {this.state.isOpen ? 'less' : 'more'} {extratextForButton}
         </button>
       </div>
 
