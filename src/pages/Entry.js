@@ -15,7 +15,11 @@ const Entry = (
   /*: {
     data: {
       results?: Array<Object>,
-      entries?: {member_databases: Object, interpro: number},
+      entries?: {
+        member_databases: Object,
+        interpro: number,
+        unintegrated: number
+      },
       metadata?: Object,
      },
     location: {pathname: string, query: Object},
