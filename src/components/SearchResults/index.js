@@ -1,34 +1,70 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }]*/
-import React, {PropTypes as T} from 'react';
+import React, {PropTypes as T, Component} from 'react';
 import {withRouter, Link} from 'react-router/es';
 import {connect} from 'react-redux';
 import Table, {Column, PageSizeSelector, Exporter} from 'components/Table';
 const maxLength = 200;
+const NOT_FOUND = 0,
+  IPRO_FOUND = 1,
+  UNIPROT_FOUND = 2,
+  PDB_FOUND = 3;
 
-const SearchResults = ({data, query, router, dataUrl}) => {
-  if (!data) {
-    return <div/>;
-  } else if (data.hitCount === 0) {
-    return <div>There are not matches for the term queried</div>;
-  } else if (data.hitCount === 1 && data.entries[0].id === query.search){
-    window.requestAnimationFrame(() => {
-      router.replace(`/entry/interpro/${query.search}`);
-    });
-    return <div>Interpro entry found - {query.search}</div>;
-  } else if (data.hitCount > 0 &&
-             data.entries[0].fields.PDB.indexOf(query.search) !== -1){
-    window.requestAnimationFrame(() => {
-      router.replace({pathname: `/structure/pdb/${query.search}`});
-    });
-    return <div>PDB structure found - {query.search}</div>;
-  } else if (data.hitCount > 0 &&
-             data.entries[0].fields.UNIPROT.indexOf(query.search) !== -1) {
-    window.requestAnimationFrame(() => {
-      router.replace({pathname: `/protein/uniprot/${query.search}`});
-    });
-    return <div>UniProt protein found - {query.search}</div>;
+class SearchResults extends Component {
+  constructor(props){
+    super(props);
+    this.foundType = 0;
+    this.redirectedTo = null;
   }
-  return (
+  componentDidMount() {
+    this.redirect();
+  }
+  componentDidUpdate() {
+    this.redirect();
+  }
+
+  redirect() {
+    const {query, router} = this.props;
+    window.requestAnimationFrame(() => {
+      let goTo = null;
+      switch (this.foundType) {
+        case IPRO_FOUND:
+          goTo = `/entry/interpro/${query.search}`;
+          break;
+        case UNIPROT_FOUND:
+          goTo = `/protein/uniprot/${query.search}`;
+          break;
+        case PDB_FOUND:
+          goTo = `/structure/pdb/${query.search}`;
+          break;
+        default:
+          goTo = null;
+      }
+      if (goTo && goTo !== this.redirectedTo) {
+        this.redirectedTo = goTo;
+        router.replace({pathname: goTo});
+      }
+    });
+  }
+  render() {
+    const {data, query, dataUrl} = this.props;
+    this.foundType = NOT_FOUND;
+    if (!data) {
+      return <div/>;
+    } else if (data.hitCount === 0) {
+      return <div>There are not matches for the term queried</div>;
+    } else if (data.hitCount === 1 && data.entries[0].id === query.search){
+      this.foundType = IPRO_FOUND;
+      return <div>Interpro entry found - {query.search}</div>;
+    } else if (data.hitCount > 0 &&
+      data.entries[0].fields.PDB.indexOf(query.search) !== -1){
+      this.foundType = PDB_FOUND;
+      return <div>PDB structure found - {query.search}</div>;
+    } else if (data.hitCount > 0 &&
+      data.entries[0].fields.UNIPROT.indexOf(query.search) !== -1) {
+      this.foundType = UNIPROT_FOUND;
+      return <div>UniProt protein found - {query.search}</div>;
+    }
+    return (
       <Table
         data={{results: data.entries, count: data.hitCount}}
         query={query}
@@ -42,10 +78,10 @@ const SearchResults = ({data, query, router, dataUrl}) => {
         <Column
           accessKey="id"
           renderer={id => (
-              <Link to={`/entry/interpro/${id}`}>
-                {id}
-              </Link>
-            )
+            <Link to={`/entry/interpro/${id}`}>
+              {id}
+            </Link>
+          )
           }
           headerStyle={{width: '200px'}}
         >
@@ -63,9 +99,10 @@ const SearchResults = ({data, query, router, dataUrl}) => {
         </Column>
 
       </Table>
-  );
+    );
 
-};
+  }
+}
 SearchResults.propTypes = {
   data: T.object,
   query: T.object,
