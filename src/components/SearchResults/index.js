@@ -1,10 +1,10 @@
-/* eslint no-magic-numbers: ["error", { "ignore": [-1,0,1] }]*/
+/* eslint max-statements: ["error", 13] */
 import React, {PropTypes as T, Component} from 'react';
 import {withRouter, Link} from 'react-router/es';
 import {connect} from 'react-redux';
 import Table, {Column, PageSizeSelector, Exporter} from 'components/Table';
 const maxLength = 200;
-const NOT_FOUND = 0,
+const NOT_FOUND = -1,
   IPRO_FOUND = 1,
   UNIPROT_FOUND = 2,
   PDB_FOUND = 3;
@@ -56,11 +56,11 @@ class SearchResults extends Component {
       this.foundType = IPRO_FOUND;
       return <div>Interpro entry found - {query.search}</div>;
     } else if (data.hitCount > 0 &&
-      data.entries[0].fields.PDB.indexOf(query.search) !== -1){
+      data.entries[0].fields.PDB.indexOf(query.search) !== NOT_FOUND){
       this.foundType = PDB_FOUND;
       return <div>PDB structure found - {query.search}</div>;
     } else if (data.hitCount > 0 &&
-      data.entries[0].fields.UNIPROT.indexOf(query.search) !== -1) {
+      data.entries[0].fields.UNIPROT.indexOf(query.search) !== NOT_FOUND) {
       this.foundType = UNIPROT_FOUND;
       return <div>UniProt protein found - {query.search}</div>;
     }
