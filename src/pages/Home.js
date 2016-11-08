@@ -24,10 +24,12 @@ const MaskSvgIcons = () => (
   viewBox="0 0 200 200"
   style={{
     position: 'fixed',
+    width:0,
+    height:0,
     top: -1800,
     left: -1800,
-    /* to hide SVG on the page as display:none is not working*/
-  }}
+  /* to hide SVG on the page as display:none is not working*/
+}}
 >
   <defs>
     <clipPath id="cut-off-center" >
@@ -77,7 +79,7 @@ const InterproGraphic = () => (
 );
 
 const LatestEntry = ({entry}) => (
-  // this should change depending on entry type
+  //this should change depending on entry type
   <li className={f('list-item')}
     data-tooltip
     title="Domain entry"
@@ -230,7 +232,7 @@ const Home = () => (
                              className={f('small', 'icon', 'icon-generic')}
                              data-icon="i" data-tooltip
                              title={e.description}
-                                 />
+                           />
                          </h5>
                          <p>{e.counter} entries<br/></p> </a>
                      </div>
@@ -436,7 +438,24 @@ const Home = () => (
 
     </div>{// end row
   }
+    <div className={f('expanded','row')}>
 
+
+        <div className={'jumbo-news'} >
+          <div className={'jumbo-news-container'} >
+          <h3 className={f('icon','icon-socialmedia', 'icon-s2')} data-icon="T"></h3>
+          <a href="#">InterPro 60.0 now available with a new member db: MobiDB Lite, residue annotation and covers 79.8% of UniProtKB. See http://www.ebi.ac.uk/interpro/
+          </a>
+          <h5><a href=""> Tweets by ‎‏@InterProDB</a></h5>
+          </div>
+        </div>{// end jumbo-news
+      }
+
+
+
+
+      </div>{// end row
+    }
   </main>
 
 
