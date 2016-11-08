@@ -19,6 +19,19 @@ import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
+const MaskSvgIcons = () => (
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style={{position:'fixed', top:-1800, left:-1800/* to hide SVG on the page as display:none is not working*/}}>
+  <defs>
+    <clipPath id="cut-off-center" >
+      <rect x="33%" y="33%" width="70" height="70"/>
+    </clipPath>
+
+    <clipPath id="cut-off-bottom" >
+      <polygon points="0,68 68,0 68,68" />
+    </clipPath>
+  </defs>
+</svg>
+);
 
 const InterproGraphic = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 120" >
@@ -56,11 +69,12 @@ const InterproGraphic = () => (
 );
 
 const LatestEntry = ({entry}) => (
-  <li
+  //this should change depending on entry type
+  <li className={f('list-item')}
     data-tooltip
     title="Domain entry"
   >
-    <Link to={`/entry/interpro/${entry.accession}`}>
+
       <div className={f('svg-container')} >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72"
           className={f('icon-list')}
@@ -68,14 +82,17 @@ const LatestEntry = ({entry}) => (
           <use href={`#type-${entry.type}`}/>
         </svg>
       </div>
+
+      <div className={f('list-body')}>
+       <Link to={`/entry/interpro/${entry.accession}`}>
       <div className={f('list-title')}>
         {entry.name}
         <span>({entry.accession})</span> -
         <i>{entry.counter} proteins matched</i>
         <br/>
       </div>
-    </Link>
-    <div className={f('list-body')}>
+      </Link>
+
       {
         entry.contributing.map((c, j) => (
           <div className={f('list-more')} key={j}>
@@ -151,8 +168,10 @@ const Home = () => (
 
         <div className={f('callout')} data-equalizer-watch>
 
+          <MaskSvgIcons />
+
           <Tabs>
-            <div title="by member database">
+            <div title="by member database" className={f('md-list')}>
               <div className={f('row')}>
                 {
                   memberDB.map((e, i) => (
@@ -184,7 +203,7 @@ const Home = () => (
 
             {// panel2 - temp display block
             }
-            <div title="by entry type">
+            <div title="by entry type" className={f('entry-type')}>
                <div className={f('row')}>
                  {
                    entryType.map((e, i) => (
@@ -199,7 +218,7 @@ const Home = () => (
 
                          <h5>
                            {e.type}
-                           <span
+                           &nbsp;<span
                              className={f('small', 'icon', 'icon-generic')}
                              data-icon="i" data-tooltip
                              title={e.description}
@@ -237,11 +256,11 @@ const Home = () => (
 
           <Tabs>
 
-            <div title="Latest entries">
-              <div className={f('row', 'entrylatest-panel')}>
+            <div title="Latest entries" className={f('entry-list')}>
+              <div className={f('row')}>
                 <div className={f('columns')}>
 
-                  <h5> <small>Total : 29415 entries</small></h5>
+                  <h5><small> Total : 29415 entries</small></h5>
                   <div className={f('list-vertical-scrol')}>
                     <ul>
                       {
@@ -263,14 +282,14 @@ const Home = () => (
           }
           <div title="Featured">
             <div className={f('row')}>
-              Featured: Under Development
+              <div className={f('columns')}>Featured: Under development</div>
             </div>
            </div>
           {// end panel02
           }
           <div title="Most Popular">
             <div className={f('row')}>
-              Most Popular: Under Development
+              <div className={f('columns')}>Most Popular: Under Development</div>
             </div>
           </div>
 
@@ -411,6 +430,8 @@ const Home = () => (
   }
 
   </main>
+
+
 );
 
 export default Home;
