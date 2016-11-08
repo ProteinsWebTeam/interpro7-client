@@ -96,7 +96,9 @@ class Description extends Component {
           style={{
             maxHeight: this.state.isOpen ? '5000px' : `${heightToHide}px`,
           }}
-          ref={(e) => this.divContent = e}
+          ref={(e) => {
+            this.divContent = e;
+          }}
         >
           {textBlocks.map((b, i) => (
             <div key={i}>
@@ -110,7 +112,9 @@ class Description extends Component {
           className={f('button')}
           id="show-more"
           onClick={this.handleClick}
-          ref={(e) => this.moreButton = e}
+          ref={(e) => {
+            this.moreButton = e;
+          }}
           style={{marginTop: '1em'}}
         >
           Read {this.state.isOpen ? 'less' : 'more'} {extraTextForButton}
