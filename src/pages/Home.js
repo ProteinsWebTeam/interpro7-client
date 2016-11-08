@@ -20,7 +20,7 @@ import theme from 'styles/theme-interpro.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
 const MaskSvgIcons = () => (
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style={{position:'fixed', top:-1800, left:-1800/* to hide SVG on the page as display:none is not working*/}}>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style={{position: 'fixed', top: -1800, left: -1800/* to hide SVG on the page as display:none is not working*/}}>
   <defs>
     <clipPath id="cut-off-center" >
       <rect x="33%" y="33%" width="70" height="70"/>
@@ -69,7 +69,7 @@ const InterproGraphic = () => (
 );
 
 const LatestEntry = ({entry}) => (
-  //this should change depending on entry type
+  // this should change depending on entry type
   <li className={f('list-item')}
     data-tooltip
     title="Domain entry"
@@ -222,7 +222,7 @@ const Home = () => (
                              className={f('small', 'icon', 'icon-generic')}
                              data-icon="i" data-tooltip
                              title={e.description}
-                           />
+                                 />
                          </h5>
                          <p>{e.counter} entries<br/></p> </a>
                      </div>
