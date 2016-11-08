@@ -72,7 +72,7 @@ export const InterproSymbol = (
             fill: ('#e6e6e6'),
             fontSize: 60,
             fontWeight: 700,
-            fontFamily: 'Montserrat, arial, serif'
+            fontFamily: 'Montserrat, arial, serif',
           }}
         >{ch}</text>
       </svg>
