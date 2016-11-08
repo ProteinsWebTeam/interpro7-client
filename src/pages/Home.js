@@ -440,7 +440,7 @@ const Home = () => (
   }
     <div className={f('expanded','row')}>
 
-
+      <div className={f('columns')}>
         <div className={'jumbo-news'} >
           <div className={'jumbo-news-container'} >
           <h3 className={f('icon','icon-socialmedia', 'icon-s2')} data-icon="T"></h3>
@@ -451,8 +451,8 @@ const Home = () => (
         </div>{// end jumbo-news
       }
 
-
-
+      </div>{// end columns
+    }
 
       </div>{// end row
     }
