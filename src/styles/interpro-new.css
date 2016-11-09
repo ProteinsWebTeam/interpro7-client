@@ -4,7 +4,7 @@ ul#global-nav {padding-top:0;}/****IMPORTANT TO FIX****remove space on top of pa
 .local-masthead nav ul li a:active {border-bottom: 3px white solid;} /*****remove arrows in the menu - fill the gap when menu click when no arrow*****/
 
 a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
-#content a:hover, #content a:focus, #content a:active {border-bottom: 1px solid #8c8c8c; } /*STYLE - add a line for links just on mouse over*/
+a:hover, a:focus, a:active {border-bottom: 1px solid #8c8c8c; } /*STYLE - add a line for links just on mouse over*/
 #content {padding-top: 1rem; padding-bottom:0;}/*add some more space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer*/
 .local-masthead nav ul.menu li {border-right: 1px solid rgba(248, 248, 248, 0.2);}/*STYLE - slightly hide division between menu items*/
 .local-masthead ul li.is-active a, .local-masthead ul li a:hover, .local-masthead nav ul li a.hover, .local-masthead nav ul li a:hover {color: #000;}/*STYLE - make menu items hover slightly darker*/
@@ -17,7 +17,7 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 /*ICONS*/
 /*MEMBER DATABASE SVG icons*/
 .svg-mask {display: none;}
-.md-color, .md-server {fill:#dedede; font-size:9em; font-family: 'EBI-generic', arial, sans-serif;}
+.md-color, .md-server {fill:#d6d6d6; font-size:9em; font-family: 'EBI-generic', arial, sans-serif;}
 .md-cg .md-color {fill:#a98de1;}
 .md-cd .md-color {fill:#b5de6c;}
 .md-ha .md-color {fill:#00e2e2;}
@@ -64,7 +64,7 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 .local-masthead h1 {white-space: nowrap;} /*remove space between logo and text so it doesn't break on two lines*/
 .local-masthead h1 span {font-size: 41%;}
 
-/***** LOCAL BUTTONS  *****/
+/***** LOCAL BUTTONS  + LINKS*****/
 .local-site-search .icon-functional:before ,.local-offcanvas-menu .icon-functional:before {font-size: 2.5em;}
 html.fontface .local-site-search .icon-functional:before ,.local-offcanvas-menu .icon-functional:before {padding-right:0;} /*solve a bug with search icon moving on two lines on firefox*/
 .local-site-search .button, .local-offcanvas-menu .button,.local-site-search .button:hover, .local-offcanvas-menu .button:hover {background-color: transparent;}/*we don't want bgd for those buttons*/
@@ -92,7 +92,9 @@ input:focus::-webkit-input-placeholder {color:transparent;}/*css solution to mak
 input:focus:-moz-placeholder {color:transparent;}
 input:focus::-moz-placeholder {color:transparent;}
 input:focus:-ms-input-placeholder {color:transparent;}
-/***** /LOCAL BUTTONS *** /
+
+a:hover.noline {border-bottom:0 solid transparent;}
+/***** /LOCAL BUTTONS + LINKS *** /
 
 /* MENU*/
 .horizontal.menu > li > a {border-bottom-style: solid; border-bottom-width:3px; border-bottom-color:transparent;}/* CROSS ICON PBM - to make all menu items same height*/
@@ -330,6 +332,13 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 .md-list a.md-cg h6 {white-space: nowrap;}/*avoid  text collapse for cathgene*/
 .md-list small {color:#0a0a0a;font-weight:bold;}
 /*/homepage member database list component*/
+
+/*homepage species list component*/
+.species-list {font-size: 80%;}
+.species-list a {border-bottom: transparent solid 1px;}
+.species-list span:before {font-size: 520%;}
+/*/homepage species list component*/
+
 /*homepage entry type list component*/
 .entry-type .svg-container {width: 60%; margin: 0 auto; float:none;}
 /*/homepage entry type list component*/
