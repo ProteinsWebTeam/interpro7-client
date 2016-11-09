@@ -6,7 +6,7 @@ import Description from 'components/Description';
 import {InterproSymbol} from 'components/Title';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import {Link} from 'react-router/es';
-import {memberDB, entryType, latests, speciesFeat} from 'staticData/home';
+import {memberDB, entryType, latests, speciesFeat, GoList} from 'staticData/home';
 import Tabs from 'components/Tabs';
 import Twit from 'components/Twitter';
 
@@ -254,7 +254,7 @@ const Home = () => (
                       className={f('columns', 'medium-3', 'large-3', 'text-center')}
                       key={i}
                     >
-                      <a className={f('noline')} href="#" data-tooltip title={e.description}>
+                      <a href="#" data-tooltip title={e.description}>
                      <span style={{color: e.color}}
                        className={f('small', 'icon', 'icon-species')}
                        data-icon={e.icon} data-tooltip
@@ -269,11 +269,37 @@ const Home = () => (
 
               </div>
             </div>
-            {// panel4
+            {// panel4- By Go terms
             }
-            <div title="by GO terms">
-              <div className={f('row')}>test panel4
-              </div>
+            <div title="by GO terms" className={f('go-list')}>
+                <div className={f('row')}>
+                  {
+                    GoList.map((e, i) => (
+                      <div
+                        className={f('columns', 'medium-3', 'large-3', 'text-center')}
+                        key={i}
+                      >
+                        <a  href="#" data-tooltip title={e.description}>
+                     <span style={{color: e.color}}
+                           className={f('small', 'icon', 'icon-functional')}
+                            data-icon="T" data-tooltip title={e.category}
+                     />
+                          <h6>
+                            {e.title}&nbsp;<span
+                            className={f('small', 'icon', 'icon-generic')}
+                            data-icon="i" data-tooltip
+                            title={e.description}
+                          />
+                          </h6>
+                          <p>{e.counterD} entries <br/><small>({e.counterS} proteins)</small></p> </a>
+                      </div>
+                    ))
+                  }
+
+                </div>
+
+              <Link to="/browse/Goterms" className={f('button')}>View all Go terms</Link>
+
             </div>
           </Tabs>
 
