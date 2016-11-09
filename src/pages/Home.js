@@ -6,7 +6,7 @@ import Description from 'components/Description';
 import {InterproSymbol} from 'components/Title';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import {Link} from 'react-router/es';
-import {memberDB, entryType, latests} from 'staticData/home';
+import {memberDB, entryType, latests, speciesFeat} from 'staticData/home';
 import Tabs from 'components/Tabs';
 import Twit from 'components/Twitter';
 
@@ -212,7 +212,7 @@ const Home = () => (
               <Link to="/entry" className={f('button')}>View all entries</Link>
             </div>
 
-            {// panel2 - temp display block
+            {// panel2 - by entry type
             }
             <div title="by entry type" className={f('entry-type')}>
                <div className={f('row')}>
@@ -244,15 +244,37 @@ const Home = () => (
               <a href="/entry" className={f('button')}>View all entries</a>
 
             </div>
-            {// panel3
+            {// panel 3 - by species
             }
-            <div title="by species">
-              test panel3
+            <div title="by species" className={f('species-list')}>
+              <div className={f('row')}>
+                {
+                  speciesFeat.map((e, i) => (
+                    <div
+                      className={f('columns', 'medium-3', 'large-3', 'text-center')}
+                      key={i}
+                    >
+                      <a className={f('noline')} href="#" data-tooltip title={e.description}>
+                     <span style={{color: e.color}}
+                       className={f('small', 'icon', 'icon-species')}
+                       data-icon={e.icon} data-tooltip
+                      
+                     />
+                        <h6>
+                          {e.title}
+                        </h6>
+                        <p>{e.counterD} entries <br/><small>({e.counterS} proteins)</small></p> </a>
+                    </div>
+                  ))
+                }
+
+              </div>
             </div>
             {// panel4
             }
             <div title="by GO terms">
-              test panel4
+              <div className={f('row')}>test panel4
+              </div>
             </div>
           </Tabs>
 
@@ -323,7 +345,6 @@ const Home = () => (
       {// Tools & paper
       }
       <div className={f('callout')} data-equalizer-watch>
-
 
           <h5>Publications </h5>
           <a href="http://nar.oxfordjournals.org/content/43/D1/D213">
