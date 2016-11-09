@@ -200,7 +200,7 @@ const Home = () => (
                         </h6>
                         <p>
                           <small>{e.version}</small><br/>
-                          <span >{e.counter} entries</span>
+                          <span >{e.counter} {e.type === 'new' ? '' : 'entries'}</span>
                         </p>
 
                       </Link>
