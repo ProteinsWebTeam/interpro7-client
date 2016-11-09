@@ -1,10 +1,14 @@
+// @flow
 import React, {PropTypes as T} from 'react';
 
 import MenuItem from 'components/Menu/MenuItem';
 
 import {InterPro} from 'menuConfig';
 
-const InterproMenu = ({pathname, className, children}) => (
+const InterproMenu = (
+  {pathname, className, children}
+  /*: {pathname: string, className?: string, children?: any} */
+) => (
   <ul className={className}>
     {children}
     {InterPro.map(({to, name}) => (

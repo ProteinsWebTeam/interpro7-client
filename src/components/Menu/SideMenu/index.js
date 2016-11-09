@@ -1,3 +1,4 @@
+// @flow
 import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
 // import {Link} from 'react-router/es';
@@ -169,16 +170,16 @@ const setRootGrayscale = (() => {
 // };
 
 class SideMenu extends Component{
-  constructor(props){
-    super(props);
-    this.state = {Browse: false};
-  }
+  // constructor(props){
+  //   super(props);
+  //   this.state = {Browse: false};
+  // }
 
-  toggleSubMenu = (name) => () => {
-    const newState = {};
-    newState[name] = !this.state[name];
-    this.setState(newState);
-  };
+  // toggleSubMenu = (name) => () => {
+  //   const newState = {};
+  //   newState[name] = !this.state[name];
+  //   this.setState(newState);
+  // };
 
   render() {
     const {visible, pathname, data, closeSideNav} = this.props;

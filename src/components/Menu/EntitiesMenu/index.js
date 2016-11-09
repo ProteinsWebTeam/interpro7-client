@@ -1,3 +1,4 @@
+// @flow
 import React, {PropTypes as T} from 'react';
 
 import MenuItem from 'components/Menu/MenuItem';
@@ -6,7 +7,9 @@ import {entities} from 'menuConfig';
 
 import ebiStyles from 'styles/ebi-global.css';
 
-const EntitiesMenu = ({className, children}) => (
+const EntitiesMenu = (
+  {className, children}/*: {className?: string, children?: any} */
+) => (
   <ul className={className}>
     {children}
     {entities.map(({to, name}) => (
