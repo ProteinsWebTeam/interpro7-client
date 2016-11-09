@@ -159,25 +159,8 @@ IMAGE BANNER
 }
 
 /*image entry*/
-.entrytype-panel .svg-container {width: 60%; margin: 0 auto; float:none;}
-.entrylatest-panel .list-item {display: flex; flex-wrap: nowrap;}
-.entrylatest-panel .svg-container {width: 5%;margin-right: 0.8em;/*leave margin at the bottom to keep alignment of signature text */padding-top:4px; float: left;}
-
 .my-svg-container {float: left;  width: 15%;/*19%*/ vertical-align: middle;margin-right:2rem; margin-bottom: 0.5rem;}
 #my-svg-icon, #my-svg-icon-sm {background-image: linear-gradient(to right, rgba(58, 95, 125, 0.6),rgba(152, 216, 186, 0.6) ), url(../images/backgrounds/fondation-morse-header.jpg);height:8rem; width:8rem; border:1px solid #ccc;} /*specific style for MD icon*/
-.ico_hamb {margin-top:9px; margin-right:1rem;cursor: pointer;user-select: none; transition: transform 0.5s ease-in-out; transform: translateY(0);}
-.hamb_line {
-    stroke-width:1.5px;/*svg style*/
-    stroke: #fff;/*svg style*/
-    stroke-linecap:round;/*svg style*/
-    /*transform: rotate(0) translateY(0);*/
-    transform-origin: 50% 50%;/*needed*/
-}
-.ico_close .hamb_1 {transform: rotate(45deg) translate(2px, 2px); transition: transform 0.3s ease-in-out;}
-.ico_close .hamb_2 { opacity:0; transition: opacity .3s;}
-.ico_close .hamb_3 {transform: rotate(-45deg) translate(2.2px, -2.2px); transition: transform 0.3s ease-in-out;}
-
-.hamb_1, .hamb_2, .hamb_3 {transition: all .3s;}/*otherwise doesn't loop*/
 /************************ END BANNER**********************************/
 
 /************************ STICKY BANNER**********************************/
@@ -297,6 +280,10 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 .tabs .tabs-title > a { color: #0a0a0a;}
 .tabs .tabs-title.is-active > a:focus, .tabs .tabs-title.is-active > a {color: white; background: #666;} /*tabs style - the default tabs style from EBI using aria-selected='true'.is-active doesn't work*/
 
+.tabs .tabs-title > button { color: #0a0a0a; padding: 1.25rem 1.5rem; font-size: 0.75rem; line-height: 1;}
+.tabs .tabs-title > button:hover { background-color: #DDD; }
+.tabs .tabs-title.is-active > button:focus, .tabs .tabs-title.is-active > button {color: white; background: #666;} /*tabs style - the default tabs style from EBI using aria-selected='true'.is-active doesn't work*/
+
 /*footer*/
 .local_footer {padding:1rem 0;}
 .local_footer ul.off-canvas-list {background-color: transparent;}
@@ -315,7 +302,7 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 
 /*homepage gal*/
 .browse-by .columns:hover {background-color:#e4f3ff;} /*add a light mouse over effect*/
-#content .browse-by .tabs-title a:hover, #content .entry-list .tabs-title a:hover  {border-bottom-width: 0;}/*remove dark line that appear on tabs*/
+#content .browse-by .tabs-title a:hover, #content .entry-list .tabs-title a:hover,#content .browse-by .tabs-title a:focus, #content .entry-list .tabs-title a:focus   {border-bottom-width: 0;}/*remove dark line that appear on tabs*/
 #content .browse-by a.button:hover, #content .entry-list a.button:hover {border: 1px solid transparent;} /*remove dark line that appear on button*/
 /*/homepage gal*/
 
@@ -329,8 +316,10 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 /*/homepage figures*/
 
 /*homepage entry-list component*/
+.entry-list .svg-container {width: 5%;margin-right: 0.8em;padding-top:4px; float: left;} /*svg icon size*/
 .entry-list ul {list-style: none; padding: 0; margin: 0; font-size: 94%;}
-.list-vertical-scrol {position: relative;width: 100%; overflow-x: hidden; overflow-y: auto; height: 378px; margin-bottom: 1rem;}
+.list-vertical-scrol {position: relative;width: 100%; overflow-x: hidden; overflow-y: auto; /*height: 378px;*/ margin-bottom: 1rem;}
+.entry-list .list-item {display: flex; flex-wrap: nowrap;}
 .entry-list .list-vertical-scrol ul li { padding: 0.4em 0; border-radius: 6px;}
 .entry-list .list-vertical-scrol ul li:hover {background-color:#e4f3ff;}
 .entry-list .list-vertical-scrol a { color: #0a0a0a; }
@@ -345,6 +334,9 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 .md-list a.md-cg h6 {white-space: nowrap;}/*avoid  text collapse for cathgene*/
 .md-list small {color:#0a0a0a;font-weight:bold;}
 /*/homepage member database list component*/
+/*homepage entry type list component*/
+.entry-type .svg-container {width: 60%; margin: 0 auto; float:none;}
+/*/homepage entry type list component*/
 
 /*homepage news component*/
 .jumbo-news-container {text-align: center; background-color: #eee; padding: 72px 0 72px 0;}

@@ -111,7 +111,7 @@ export const memberDB = [
     version: '2006.1',
     counter: 1894,
   }, {
-    type: 'patterns',
+    type: 'PATTERNS',
     to: 'entry/prosite',
     className: f('md-prpat'),
     title:
@@ -123,7 +123,7 @@ export const memberDB = [
     version: '20.119',
     counter: 1309,
   }, {
-    type: 'profiles',
+    type: 'PROFILES',
     to: 'entry/prosite',
     className: f('md-prpro'),
     title:
