@@ -202,7 +202,7 @@ const EBIFooter = () => (
             CB10 1SD, UK. +44 (0)1223 49 44 44
           </p>
           <p className={styleBundle('legal')}>
-            Copyright © EMBL-EBI 2016 | EMBL-EBI is
+            Copyright © EMBL-EBI 2016 | EMBL-EBI is&nbsp;
             <a href="http://www.embl.org/">
               part of the European Molecular Biology Laboratory
             </a> | <a href="//www.ebi.ac.uk/about/terms-of-use">Terms of use</a>

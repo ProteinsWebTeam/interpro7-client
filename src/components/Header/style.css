@@ -16,12 +16,15 @@
 
 .header {
   position: sticky;
-  top: -100px;/*-34px (EBI header);*/
+  top: -100px;/* -34px (EBI header); */
   z-index: 10;
 }
 
 .local_masthead {
-  background-image: linear-gradient(to right, rgba(0, 85, 158, 0.9),rgba(45, 174, 193, 0.5),rgba(0, 85, 158, 0.9) ), url("images/banner/fondation-morse-header.jpg");
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 85, 158, 0.9), rgba(45, 174, 193, 0.5), rgba(0, 85, 158, 0.9)
+  ), url("images/banner/fondation-morse-header.jpg");
   background-repeat: no-repeat, repeat;
   background-position: left, top right;
   background-size: 100%, 1400px;}
@@ -218,4 +221,48 @@
       }
     }
   }
+}
+
+.side-icons {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding: 0.25rem;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(0);
+}
+
+.side-search {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+
+  @nest & > input {
+    margin: 0.25rem;
+    border: none;
+    border-bottom: 3px solid currentColor;
+    background-color: transparent;
+    box-shadow: none;
+    opacity: 0;
+    color: white;
+    transition: opacity 0.3s ease-in-out;
+
+    &::placeholder {
+      color: currentColor;
+    }
+
+    &:focus, &:hover {
+      border: none;
+      border-bottom: 3px solid currentColor;
+      background-color: transparent;
+      box-shadow: none;
+      opacity: 1;
+    }
+  }
+}
+
+.movedAway {
+  transform: translateX(-20em);
 }

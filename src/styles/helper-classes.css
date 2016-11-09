@@ -1,0 +1,11 @@
+.sc, .smallcaps, .small-caps {
+  font-variant: small-caps;
+}
+
+.select-none {
+  user-select: none;
+}
+
+.cursor-default {
+  cursor: default;
+}

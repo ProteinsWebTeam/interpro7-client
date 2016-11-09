@@ -1,0 +1,97 @@
+@import "../../../styles/colors.css";
+@import "../../../styles/ebi/fonts.css";
+
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 20em;
+  z-index: 101;
+  background-color: rgba(59, 59, 59, 1);
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(20em);
+  overflow-y: scroll;
+
+  @nest & ul {
+    list-style: none;
+    margin: 0;
+  }
+
+  @nest & a {
+    display: block;
+    padding: 0.4rem 0.6rem;
+    font-size: 90%;
+    transition: background-color 0.2s ease-in-out;
+  }
+}
+
+.visible {
+  transform: translateX(0);
+}
+
+.flex {
+  display: flex;
+}
+
+.icon {
+  margin-right: 0.25em;
+}
+
+.badge {
+  margin-left: 0.25em;
+}
+
+.exit {
+  font-size: 200%;
+  color: #999;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  right: 0.2em;
+  width: 1em;
+  height: 1em;
+  z-index: 1;
+  user-select: none;
+  opacity: 0.8;
+  overflow: hidden;
+}
+
+.exit:hover {
+  opacity: 1;
+}
+
+.primary {
+  color: #7dbb72;
+
+  @nest & a:hover, a:focus {
+    background-color: #7dbb7233;
+  }
+}
+
+.secondary {
+  color: #219908;
+
+  @nest & a:hover, a:focus {
+    background-color: #21990833;
+  }
+}
+
+.tertiary {
+  color: #34b5b5;
+
+  @nest & a:hover, a:focus {
+    background-color: #34b5b533;
+  }
+}
+
+.menu-label {
+  background: #444;
+  border-top: 1px solid #5e5e5e;
+  font-size: 0.7rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 0.5rem 0.8rem;
+  display: block;
+  text-transform: uppercase;
+}
