@@ -17,7 +17,7 @@ a:hover, a:focus, a:active {border-bottom: 1px solid #8c8c8c; } /*STYLE - add a 
 /*ICONS*/
 /*MEMBER DATABASE SVG icons*/
 .svg-mask {display: none;}
-.md-color, .md-server {fill:#d6d6d6; font-size:9em; font-family: 'EBI-generic', arial, sans-serif;}
+.md-color, .md-server {fill:#e2e2e2; font-size:9em; font-family: 'EBI-generic', arial, sans-serif;}
 .md-cg .md-color {fill: #a88cc3;}
 .md-cd .md-color {fill:#aad262;}
 .md-ha .md-color {fill:#00e2e2;}
