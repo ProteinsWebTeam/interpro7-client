@@ -19,12 +19,12 @@ a:hover, a:focus, a:active {border-bottom: 1px solid #8c8c8c; } /*STYLE - add a 
 .svg-mask {display: none;}
 .md-color, .md-server {fill:#e2e2e2; font-size:9em; font-family: 'EBI-generic', arial, sans-serif;}
 .md-cg .md-color {fill: #a88cc3;}
-.md-cd .md-color {fill:#aad262;}
+.md-cd .md-color {fill:#addc58;}
 .md-ha .md-color {fill:#00e2e2;}
 .md-pa .md-color {fill:#bfac92;}
 .md-pf .md-color {fill:#6287b1; /*was 9bbbe0*/}
 .md-pi .md-color {fill:#dfafdf;}
-.md-pri .md-color {fill:#71bb5c;}
+.md-pri .md-color {fill:#4fd829;}
 .md-pro .md-color {fill:#8d99e4;}
 .md-prpro .md-color, .md-pr .md-color {fill:#ff9229;}
 .md-prpat .md-color {fill:#ffc300;/*was 8899a6*/}
@@ -339,6 +339,10 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 /*homepage species list component*/
 .species-list span:before {font-size: 520%;}
 /*/homepage species list component*/
+
+/*homepage Go list component*/
+.go-list span.bullet-icon {font-size: 520%; line-height: 0.5;}
+/*/homepage Go list component*/
 
 /*homepage entry type list component*/
 .entry-type .svg-container {width: 60%; margin: 0 auto; float:none;}
