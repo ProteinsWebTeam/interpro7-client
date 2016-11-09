@@ -1,5 +1,5 @@
 // @flow
-import React, {PropTypes as T} from 'react';
+import React, {PropTypes as T, Component} from 'react';
 import {withRouter} from 'react-router/es';
 import {connect} from 'react-redux';
 
@@ -13,27 +13,57 @@ import interproStyles from 'styles/interpro-new.css';
 
 const styles = foundationPartial(ebiStyles, interproStyles);
 
-const DynamicMenu = ({data, location: {pathname}}) => {
-  if (!data || pathname === '/') {
-    return <InterproMenu pathname={pathname} className={styles('menu')} />;
-  }
-  if (data.metadata) {
-    return (
-      <SingleEntityMenu
-        data={data}
-        pathname={pathname}
-        className={styles('menu')}
-      />
-    );
-  }
-  return <EntitiesMenu className={styles('menu')} />;
-};
-DynamicMenu.propTypes = {
-  data: T.object,
-  location: T.shape({
-    pathname: T.string.isRequired,
-  }).isRequired,
-};
+class DynamicMenu extends Component {
+  /* ::
+    state: {
+      data: ?Object,
+    };
+  */
+  propTypes = {
+    data: T.object.isRequired,
+    loading: T.bool.isRequired,
+    location: T.shape({
+      pathname: T.string.isRequired,
+    }).isRequired,
+  };
 
-export default withRouter(connect(({data: {data}}) => ({data}))(DynamicMenu));
+  constructor() {
+    super();
+    this.state = {data: null};
+  }
+
+  componentWillMount() {
+    if (!this.props.loading) {
+      this.setState({data: this.props.data || null});
+    }
+  }
+
+  componentWillReceiveProps({data, loading}) {
+    if (!loading) {
+      this.setState({data});
+    }
+  }
+
+  render() {
+    const {location: {pathname}} = this.props;
+    const {data} = this.state;
+    if (!data || pathname === '/') {
+      return <InterproMenu pathname={pathname} className={styles('menu')} />;
+    }
+    if (data.metadata) {
+      return (
+        <SingleEntityMenu
+          data={data}
+          pathname={pathname}
+          className={styles('menu')}
+        />
+      );
+    }
+    return <EntitiesMenu className={styles('menu')} />;
+  }
+}
+
+export default withRouter(
+  connect(({data: {data, loading}}) => ({data, loading}))(DynamicMenu)
+);
 
