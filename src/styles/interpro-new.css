@@ -313,6 +313,11 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 .fig-sqcban {background: url(../images/backgrounds/composite_03.png) no-repeat 85% 9%; background-size: 503%; height: 16em; width: 20em; margin-bottom: -68px;}
 /*/homepage figures*/
 
+/*homepage components gal*/
+.species-list, .go-list, .md-list {font-size: 80%;}
+.species-list a:hover:not(.button), .go-list a:hover:not(.button), .md-list a:hover:not(.button)  {border-bottom:0px deeppink solid;}
+/*/homepage components gal*/
+
 /*homepage entry-list component*/
 .entry-list .svg-container {width: 5%;margin-right: 0.8em;padding-top:4px; float: left;} /*svg icon size*/
 .entry-list ul {list-style: none; padding: 0; margin: 0; font-size: 94%;}
@@ -325,17 +330,13 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 /*/homepage entry-list component*/
 
 /*homepage member database list component*/
-.md-list {font-size: 80%;}
 .md-list svg {margin-bottom: -15px; margin-top: -15px; /*temp reposition the view port without changing the coordinates of all svg*/}
-.md-list a:hover:not(.button) {border-bottom:0px deeppink solid;} /*need the content because of EBI sytle defined*/
 .md-list a h6 {margin-bottom:0;}/*remove space around title*/
 .md-list a.md-cg h6 {white-space: nowrap;}/*avoid  text collapse for cathgene*/
 .md-list small {color:#0a0a0a;font-weight:bold;}
 /*/homepage member database list component*/
 
 /*homepage species list component*/
-.species-list {font-size: 80%;}
-.species-list a:hover:not(.button) {border-bottom:0px deeppink solid;}
 .species-list span:before {font-size: 520%;}
 /*/homepage species list component*/
 
