@@ -75,7 +75,7 @@ export default store => async ({pathname, query, search}) => {
 
   const dataKey = pathname + search,
     {settings} = store.getState(),
-    dataUrl = (/\/?search$/.test(pathname)) ?
+    dataUrl = (/\/?search$/i.test(pathname)) ?
       buildEBISearchUrl(pathname, query, settings) :
       buildApiUrl(pathname, query, settings);
   console.log(`loading data for ${dataUrl}`);
