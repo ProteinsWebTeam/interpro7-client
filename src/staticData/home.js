@@ -432,70 +432,70 @@ export const GoList = [{
   counterS: 36,
   category: 'Biological process',
   color: '#5bc0de',
-},{
-  title: 'Cell projection assembly',
-  description:
-    `Description from Go website`,
-  counterD: 6,
-  counterS: 36,
-  category: 'Biological process',
-  color: '#5bc0de',
-},{
-  title: 'Cell projection assembly',
-  description:
-    `Description from Go website`,
-  counterD: 6,
-  counterS: 36,
-  category: 'Biological process',
-  color: '#5bc0de',
-},{
-  title: 'Cellular component organization',
-  description:
-    `Description from Go website`,
-  counterD: 6,
-  counterS: 36,
-  category: 'Biological process',
-  color: '#5bc0de',
-},{
-  title: 'Cell growth',
-  description:
-    `Description from Go website`,
-  counterD: 6,
-  counterS: 36,
-  category: 'Biological process',
-  color: '#5bc0de',
-},{
-  title: 'ATPase activity',
-  description:
-    `Description from Go website`,
-  counterD: 6,
-  counterS: 36,
-  category: 'Molecular function',
-  color: '#5cb85c',
-},{
-  title: 'GTPase activity',
-  description:
-    `Description from Go website`,
-  counterD: 6,
-  counterS: 36,
-  category: 'Molecular function',
-  color: '#5cb85c',
-},{
-  title: 'Helicase activity',
-  description:
-    `Description from Go website`,
-  counterD: 6,
-  counterS: 36,
-  category: 'Molecular function',
-  color: '#5cb85c',
-},{
-  title: 'Hydrolase activity',
-  description:
-    `Description from Go website`,
-  counterD: 6,
-  counterS: 36,
-  category: 'Molecular function',
-  color: '#5cb85c',
+// },{
+//   title: 'Cell projection assembly',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Biological process',
+//   color: '#5bc0de',
+// },{
+//   title: 'Cell projection assembly',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Biological process',
+//   color: '#5bc0de',
+// },{
+//   title: 'Cellular component organization',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Biological process',
+//   color: '#5bc0de',
+// },{
+//   title: 'Cell growth',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Biological process',
+//   color: '#5bc0de',
+// },{
+//   title: 'ATPase activity',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Molecular function',
+//   color: '#5cb85c',
+// },{
+//   title: 'GTPase activity',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Molecular function',
+//   color: '#5cb85c',
+// },{
+//   title: 'Helicase activity',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Molecular function',
+//   color: '#5cb85c',
+// },{
+//   title: 'Hydrolase activity',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Molecular function',
+//   color: '#5cb85c',
 }];
 export const entryType = [{
   title: 'This icon represent a domain type of InterPro entry',
