@@ -302,6 +302,201 @@ export const speciesFeat = [{
   coverage: 50,
   icon: '?',
 }];
+
+
+export const GoList = [{
+  title: 'Catalytic activity',
+  Category: 'Molecular function',
+  description:
+    `Description from Go website`,
+  counterD: 12545,
+  counterS: 386,
+  color: '#5cb85c',
+},{
+  title: 'DNA binding',
+  Category: 'Molecular function',
+  description:
+    `Description from Go website`,
+  counterD: 12450,
+  counterS: 450,
+  color: '#5cb85c',
+},{
+  title: 'Metabolic process',
+  category: 'Biological process',
+  description:
+    `Description from Go website`,
+  counterD: 12429,
+  counterS: 386,
+  color: '#5bc0de',
+},{
+  title: 'Oxidation-reduction process ',
+  category: 'Molecular function',
+  description:
+    `Description from Go website`,
+  counterD: 12429,
+  counterS: 386,
+  color: '#5cb85c',
+},{
+  title: 'Outer membrane',
+  description:
+    `Description from Go website`,
+  counterD: 12429,
+  counterS: 386,
+  category: 'Cellular components',
+  color: '#d9534f',
+},{
+  title: 'ATP binding',
+  description:
+    `Description from Go website`,
+  counterD: 12429,
+  counterS: 42,
+  category: 'Molecular function',
+  color: '#5cb85c',
+},{
+  title: 'Oxidoreductase activity',
+  description:
+    `Description from Go website`,
+  counterD: 12193,
+  counterS: 93,
+  category: 'Molecular function',
+  color: '#5cb85c',
+},{
+  title: 'Transport',
+  description:
+    `Description from Go website`,
+  counterD: 12093,
+  counterS: 10,
+  category: 'Biological process',
+  color: '#5bc0de',
+},{
+  title: 'DNA replication',
+  description:
+    `Description from Go website`,
+  counterD: 12089,
+  counterS: 564,
+  category: 'Molecular function',
+  color: '#5cb85c',
+},{
+  title: 'Integral component of membrane',
+  description:
+    `Description from Go website`,
+  counterD: 120,
+  counterS: 36,
+  category: 'Molecular function',
+  color: '#5cb85c',
+},{
+  title: 'Cofactor bindind',
+  description:
+    `Description from Go website`,
+  counterD: 1276,
+  counterS: 36,
+  category: 'Molecular function',
+  color: '#5cb85c',
+},{
+  title: 'DNA polymerase complex',
+  description:
+    `Description from Go website`,
+  counterD: 206,
+  counterS: 36,
+  category: 'Cellular components',
+  color: '#d9534f',
+},{
+  title: 'Cell projection assembly',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+},{
+  title: 'Cell projection assembly',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+},{
+  title: 'Cellular component organization',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+},{
+  title: 'Cell growth',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+},{
+  title: 'Cell projection assembly',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+},{
+  title: 'Cell projection assembly',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+},{
+  title: 'Cellular component organization',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+},{
+  title: 'Cell growth',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+},{
+  title: 'ATPase activity',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Molecular function',
+  color: '#5cb85c',
+},{
+  title: 'GTPase activity',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Molecular function',
+  color: '#5cb85c',
+},{
+  title: 'Helicase activity',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Molecular function',
+  color: '#5cb85c',
+},{
+  title: 'Hydrolase activity',
+  description:
+    `Description from Go website`,
+  counterD: 6,
+  counterS: 36,
+  category: 'Molecular function',
+  color: '#5cb85c',
+}];
 export const entryType = [{
   title: 'This icon represent a domain type of InterPro entry',
   type: 'Domain',
@@ -349,6 +544,7 @@ export const entryType = [{
                       sites, post-translational modification sites and conserved sites`,
   counter: 1843,
 }];
+
 export const latests = [
   {
     accession: 'IPR033983',
