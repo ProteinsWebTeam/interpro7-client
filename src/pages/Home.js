@@ -281,9 +281,9 @@ const Home = () => (
                       >
                         <a  href="#" data-tooltip title={e.description}>
                      <span style={{color: e.color}}
-                           className={f('small', 'icon', 'icon-functional')}
-                            data-icon="T" data-tooltip title={e.category}
-                     />
+                           className={f('small', 'bullet-icon')}
+                            data-tooltip title={e.category}
+                     >&bull;</span>
                           <h6>
                             {e.title}&nbsp;<span
                             className={f('small', 'icon', 'icon-generic')}
