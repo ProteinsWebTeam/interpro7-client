@@ -8,6 +8,7 @@ import MemberSymbol from 'components/Entry/MemberSymbol';
 import {Link} from 'react-router/es';
 import {memberDB, entryType, latests} from 'staticData/home';
 import Tabs from 'components/Tabs';
+import Twit from 'components/Twitter';
 
 import iscanLogo from 'images/logo_interproscan_ext.png';
 import idaLogo from 'images/logo_ida_100.png';
@@ -444,9 +445,13 @@ const Home = () => (
         <div className={'jumbo-news'} >
           <div className={'jumbo-news-container'} >
           <h3 className={f('icon','icon-socialmedia', 'icon-s2')} data-icon="T"></h3>
-          <a href="#">InterPro 60.0 now available with a new member db: MobiDB Lite, residue annotation and covers 79.8% of UniProtKB. See http://www.ebi.ac.uk/interpro/
-          </a>
-          <h5><a href=""> Tweets by ‎‏@InterProDB</a></h5>
+            {//
+              //<a href="#">InterPro 60.0 now available with a new member db: MobiDB Lite, residue annotation and covers 79.8% of UniProtKB. See http://www.ebi.ac.uk/interpro/</a>
+              //<h5><a href=""> Tweets by ‎‏@InterProDB</a></h5>
+              // would be nice to extract just the text from twitter widget as we do for EMG
+              }
+          <Twit></Twit>
+
           </div>
         </div>{// end jumbo-news
       }
