@@ -1,6 +1,9 @@
 const process = require('process');
 const fs = require('fs');
 
+const url = require('url');
+const yaml = require('js-yaml');
+
 const postcssImport = require('postcss-import');
 const postcssApply = require('postcss-apply');
 const cssnext = require('postcss-cssnext');
@@ -10,14 +13,17 @@ const output = require('./config/output');
 const plugins = require('./config/plugins');
 const loaders = require('./config/loaders');
 const resolve = require('./config/resolve');
-const yaml = require('js-yaml');
+
+const DEFAULT_PORT = 80;
+
 const iprConfig = yaml.safeLoad(fs.readFileSync('config.yml'));
-const defaultPort = 80;
-const [, port = defaultPort] = iprConfig.root.website.match(/.+:(\d+).*/) || [];
+const websiteURL = url.parse(iprConfig.root.website, true, true);
 const PROD = process.env.NODE_ENV === 'production';
 
 const config = {
-  entry, output, resolve,
+  entry,
+  output: output({publicPath: websiteURL.pathname}),
+  resolve,
   plugins: plugins[PROD ? 'production' : 'dev'],
   module: loaders,
   postcss: [
@@ -50,7 +56,7 @@ if (!PROD) {
     contentBase: '',
     colors: true,
     inline: true,
-    port,
+    port: websiteURL.port || DEFAULT_PORT,
     hot: true,
     quiet: !!process.env.DASHBOARD,
     historyApiFallback: {

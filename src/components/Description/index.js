@@ -58,7 +58,7 @@ class Description extends Component {
     super(props);
     this.state = {
       isOpen: false,
-      contentSize: 5000
+      contentSize: 5000,
     };
     this.handleClick = this.handleClick.bind(this);
     this.moreButton = null;
