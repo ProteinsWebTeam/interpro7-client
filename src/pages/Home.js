@@ -25,12 +25,12 @@ const MaskSvgIcons = () => (
   viewBox="0 0 200 200"
   style={{
     position: 'fixed',
-    width:0,
-    height:0,
+    width: 0,
+    height: 0,
     top: -1800,
     left: -1800,
   /* to hide SVG on the page as display:none is not working*/
-}}
+  }}
 >
   <defs>
     <clipPath id="cut-off-center" >
@@ -80,7 +80,7 @@ const InterproGraphic = () => (
 );
 
 const LatestEntry = ({entry}) => (
-  //this should change depending on entry type
+  // this should change depending on entry type
   <li className={f('list-item')}
     data-tooltip
     title="Domain entry"
@@ -233,7 +233,7 @@ const Home = () => (
                              className={f('small', 'icon', 'icon-generic')}
                              data-icon="i" data-tooltip
                              title={e.description}
-                           />
+                                 />
                          </h5>
                          <p>{e.counter} entries<br/></p> </a>
                      </div>
@@ -255,14 +255,18 @@ const Home = () => (
                       key={i}
                     >
                       <a href="#" data-tooltip title={e.description}>
-                     <span style={{color: e.color}}
-                       className={f('small', 'icon', 'icon-species')}
-                       data-icon={e.icon} data-tooltip
-                     />
+                        <span
+                          style={{color: e.color}}
+                          className={f('small', 'icon', 'icon-species')}
+                          data-icon={e.icon} data-tooltip
+                        />
                         <h6>
                           {e.title}
                         </h6>
-                        <p>{e.counterD} entries <br/><small>({e.counterS} proteins)</small></p> </a>
+                        <p>{e.counterD} entries <br/>
+                          <small>({e.counterS} proteins)</small>
+                        </p>
+                      </a>
                     </div>
                   ))
                 }
@@ -279,19 +283,25 @@ const Home = () => (
                         className={f('columns', 'medium-3', 'large-3', 'text-center')}
                         key={i}
                       >
-                        <a  href="#" data-tooltip title={e.description}>
-                     <span style={{color: e.color}}
-                           className={f('small', 'bullet-icon')}
+                        <a href="#" data-tooltip title={e.description}>
+                          <span
+                            style={{color: e.color}}
+                            className={f('small', 'bullet-icon')}
                             data-tooltip title={e.category}
-                     >&bull;</span>
+                          >&bull;</span>
                           <h6>
-                            {e.title}&nbsp;<span
-                            className={f('small', 'icon', 'icon-generic')}
-                            data-icon="i" data-tooltip
-                            title={e.description}
-                          />
+                            {e.title}&nbsp;
+                            <span
+                              className={f('small', 'icon', 'icon-generic')}
+                              data-icon="i" data-tooltip
+                              title={e.description}
+                            />
                           </h6>
-                          <p>{e.counterD} entries <br/><small>({e.counterS} proteins)</small></p> </a>
+                          <p>
+                            {e.counterD} entries <br/>
+                            <small>({e.counterS} proteins)</small>
+                          </p>
+                        </a>
                       </div>
                     ))
                   }
@@ -485,18 +495,19 @@ const Home = () => (
 
     </div>{// end row
   }
-    <div className={f('expanded','row')}>
+    <div className={f('expanded', 'row')}>
 
       <div className={f('columns')}>
         <div className={'jumbo-news'} >
           <div className={'jumbo-news-container'} >
-          <h3 className={f('icon','icon-socialmedia', 'icon-s2')} data-icon="T"></h3>
-            {//
-              //<a href="#">InterPro 60.0 now available with a new member db: MobiDB Lite, residue annotation and covers 79.8% of UniProtKB. See http://www.ebi.ac.uk/interpro/</a>
-              //<h5><a href=""> Tweets by ‎‏@InterProDB</a></h5>
-              // would be nice to extract just the text from twitter widget as we do for EMG
-              }
-          <Twit></Twit>
+          <h3 className={f('icon', 'icon-socialmedia', 'icon-s2')} data-icon="T" />
+{
+// <a href="#">InterPro 60.0 now available with a new member db: MobiDB Lite, residue
+// annotation and covers 79.8% of UniProtKB. See http://www.ebi.ac.uk/interpro/</a>
+// <h5><a href=""> Tweets by ‎‏@InterProDB</a></h5>
+// would be nice to extract just the text from twitter widget as we do for EMG
+}
+          <Twit />
 
           </div>
         </div>{// end jumbo-news
