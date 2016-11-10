@@ -24,7 +24,7 @@ const Title = ({location, data}) => {
 
   return (
     <div
-      className={style('columns', 'small-8', 'medium-10', 'anim')}
+      className={style('columns', 'small-6', 'medium-8', 'anim')}
       id="local-title"
     >
       <h1>

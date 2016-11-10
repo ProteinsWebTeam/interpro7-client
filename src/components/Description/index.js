@@ -1,5 +1,3 @@
-// @flow
-/* eslint no-magic-numbers: [1, {ignore: [0, 1, 2]}] */
 import React, {PropTypes as T, Component} from 'react';
 import ReactDOM from 'react-dom';
 import {transformFormatted} from 'utils/text';
@@ -38,12 +36,12 @@ const defaultHeightToHide = 200;
  */
 class Description extends Component {
   /* ::
-   props: Props;
-   state: {
-     isOpen: boolean,
-   };
-   handleClick: () => void;
-   */
+    props: Props;
+    state: {
+      isOpen: boolean,
+    };
+    handleClick: () => void;
+  */
   constructor(props/* : Props*/) {
     super(props);
     this.state = {isOpen: false};
@@ -71,9 +69,9 @@ class Description extends Component {
   }
   recheckHeight() {
     if (this.moreButton && this.divContent) {
-      const moreDiv = ReactDOM.findDOMNode(this.moreButton),
-        contentDiv = ReactDOM.findDOMNode(this.divContent),
-        {heightToHide = defaultHeightToHide} = this.props;
+      const moreDiv = ReactDOM.findDOMNode(this.moreButton);
+      const contentDiv = ReactDOM.findDOMNode(this.divContent);
+      const {heightToHide = defaultHeightToHide} = this.props;
       if (moreDiv.offsetTop - contentDiv.offsetTop < heightToHide) {
         this.moreButton.style.visibility = 'hidden';
       } else {

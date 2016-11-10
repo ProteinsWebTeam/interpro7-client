@@ -2,13 +2,13 @@ import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router/es';
 
+import classnames from 'classnames/bind';
+
 import {openSideNav} from 'actions/creators';
 
 import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
-
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
-
 import EBIHeader, {EbiSkipToDiv} from 'components/EBIHeader';
 
 import {foundationPartial} from 'styles/foundation';
@@ -16,8 +16,8 @@ import styles from './style.css';
 import ebiGlobalStyles from 'styles/ebi-global.css';
 import fonts from 'styles/ebi/fonts.css';
 import ipro from 'styles/interpro-new.css';
-const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro);
-
+const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
+const reducedStyleBundle = classnames.bind(styles);
 
 // Only does this in a browser
 // Logic to attach the scaling of the banner to the scroll position
@@ -106,11 +106,10 @@ const _HamburgerBtn = ({openSideNav, open, svg}) => {
     );
   }
   return (
-    <span>
+    <button onClick={openSideNav}>
       <svg
-        viewBox="0 0 12 10" width="2.5em" height="2.5em"
+        viewBox="0 0 12 10" width="2.5rem" height="2.5rem"
         className={styles.top_level_hamburger}
-        onClick={openSideNav}
       >
         <line
           x1="1" y1="2" x2="10" y2="2"
@@ -125,7 +124,7 @@ const _HamburgerBtn = ({openSideNav, open, svg}) => {
           className={open ? styles.hamb_3_open : styles.hamb_3}
         />
       </svg>
-    </span>
+    </button>
   );
 };
 _HamburgerBtn.propTypes = {
@@ -137,59 +136,82 @@ const HamburgerBtn = connect(
   ({ui: {sideNav: open}}) => ({open}),
   {openSideNav}
 )(_HamburgerBtn);
-
-const iconFunctionalClasses = styleBundle({
-  icon: true,
-  'icon-functional': true,
-});
-
-const _SideIcons = ({open}) => (
-  <div
-    className={styleBundle('columns', 'small-4', 'medium-2')}
-    id="slide-menu"
-  >
-    <div className={styleBundle('local-buttons')}>
-      <div
-        className={styleBundle('local-offcanvas-menu', 'anim')}
-        style={{transform: `translateX(${open ? '-20em' : '0em'})`}}
+//
+// const _SideIcons = ({open}) => (
+//   <div
+//     className={styleBundle('columns', 'small-4', 'medium-2')}
+//     id="slide-menu"
+//   >
+//     <div className={styleBundle('local-buttons')}>
+//       <div
+//         className={styleBundle('local-offcanvas-menu', 'anim')}
+//         style={{transform: `translateX(${open ? '-20em' : '0em'})`}}
+//       >
+//         <HamburgerBtn svg={true} />
+//       </div>
+//       <div
+//         className={styleBundle('local-site-search', 'anim')}
+//         style={{transform: `translateX(${open ? '-20em' : '0em'})`}}
+//       >
+//         <label
+//           className={styleBundle('header-search')}
+//           id="local-search"
+//           name="local-search"
+//         >
+//           <Link
+//             to="/search"
+//             className={styleBundle('icon', 'icon-functional')}
+//             data-icon="1"
+//           />
+//           <TextSearchBox
+//             maxLength="255"
+//             value=""
+//             name="search"
+//           />
+//         </label>
+//       </div>
+//
+//     </div>
+//   </div>
+// );
+const _SideIcons = ({movedAway}) => (
+  <div className={reducedStyleBundle('side-icons', {movedAway})}>
+    <HamburgerBtn svg={true} />
+    <label className={reducedStyleBundle('side-search')}>
+      <TextSearchBox
+        maxLength="255"
+        value=""
+        name="search"
+      />
+      <Link
+        to="/search"
       >
-        <HamburgerBtn svg={true} />
-      </div>
-      <div
-        className={styleBundle('local-site-search', 'anim')}
-        style={{transform: `translateX(${open ? '-20em' : '0em'})`}}
-      >
-        <div
-          className={styleBundle('tool-search')}
-          id="local-search"
-          name="local-search"
+        <svg
+          width="2rem" height="2rem" viewBox="0 0 490 490"
+          style={{verticalAlign: 'middle'}}
         >
-          <TextSearchBox
-            maxLength="255"
-            value=""
-            className={styleBundle('search-box')}
-            name="search"
+          <path
+            fill="none" stroke="white" strokeWidth="40" strokeLinecap="round"
+            d="m280,278a153,153 0 1,0-2,2l170,170m-91-117"
           />
-          <Link to="/search" className={iconFunctionalClasses} data-icon="1" />
-        </div>
-      </div>
-
-    </div>
+        </svg>
+      </Link>
+    </label>
   </div>
 );
 _SideIcons.propTypes = {
-  open: T.bool.isRequired,
+  movedAway: T.bool.isRequired,
 };
 
 const SideIcons = connect(
-  ({ui: {sideNav: open}}) => ({open})
+  ({ui: {sideNav: open}}) => ({movedAway: open})
 )(_SideIcons);
 
 
 const MenuItem = ({active, children}) => (
   <Link
     to={`/${children.toLowerCase()}/`}
-    className={active ? styles.active : null}
+    className={reducedStyleBundle({active})}
   >
     {children}
   </Link>

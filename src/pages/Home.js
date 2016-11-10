@@ -152,7 +152,7 @@ const Home = () => (
         <Description
           title=""
           extraTextForButton="about InterPro"
-          heightToHide="100"
+          heightToHide={100}
           textBlocks={[
             `InterPro provides functional analysis of proteins by classifying them into
              families and predicting domains and important sites. We combine protein

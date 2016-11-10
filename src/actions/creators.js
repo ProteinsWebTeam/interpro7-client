@@ -29,6 +29,10 @@ export const closeSideNav = () => ({
   status: 'close',
 });
 
+export const closeEverything = () => ({
+  type: types.CLOSE_EVERYTHING,
+});
+
 const parseValue = target => {
   switch (target.type) {
     case 'range':

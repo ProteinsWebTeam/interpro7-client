@@ -84,10 +84,10 @@ html.fontface .local-site-search .icon-functional:before ,.local-offcanvas-menu 
 .local-site-search:hover ::-moz-placeholder {opacity:1;}
 .local-site-search:hover :-moz-placeholder {opacity:1;}
 .local-site-search:hover :-ms-input-placeholder {opacity:1;}
-::-webkit-input-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;transition: opacity .3s ease-in-out;}
-::-moz-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;   transition: opacity .3s ease-in-out;}
-:-moz-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;   transition: opacity .3s ease-in-out;}
-:-ms-input-placeholder {color: rgba(255,255,255,0.5); opacity:0.1; transition: opacity .3s ease-in-out;}
+/*::-webkit-input-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;transition: opacity .3s ease-in-out;}*/
+/*::-moz-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;   transition: opacity .3s ease-in-out;}*/
+/*:-moz-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;   transition: opacity .3s ease-in-out;}*/
+/*:-ms-input-placeholder {color: rgba(255,255,255,0.5); opacity:0.1; transition: opacity .3s ease-in-out;}*/
 input:focus::-webkit-input-placeholder {color:transparent;}/*css solution to make the placeholder text disappear*/
 input:focus:-moz-placeholder {color:transparent;}
 input:focus::-moz-placeholder {color:transparent;}
@@ -193,15 +193,15 @@ IMAGE BANNER
 
 /******************************OFF CANVAS MENU*********************************/
 body.modal-open {overflow: hidden;} /*make the content of the page non-scrollable for offcanvas*/
-.offc-nav {width: 20rem; z-index: 3; position: fixed; top:0; right: -100%; height: 100%; background: rgba(59, 59, 59, 1); overflow-y: auto; /*vertical scroll*/-webkit-overflow-scrolling: touch; /*Use momentum-based scrolling, where the content continues to scroll for a while after finishing the scroll gesture*/  transition: all 0.25s ease;}
-.offc-nav.expand {right: 0;}
-.offc-nav.expand.shadow-in {box-shadow: inset 9px 0px 17px -11px rgba(0,0,0,0.9);}
-.offc-nav.expand.shadow-out {box-shadow:1px 0px 2px 3px rgba(0,0,0,0.3);}
+/*.offc-nav {width: 20rem; z-index: 3; position: fixed; top:0; right: -100%; height: 100%; background: rgba(59, 59, 59, 1); overflow-y: auto; !*vertical scroll*!-webkit-overflow-scrolling: touch; !*Use momentum-based scrolling, where the content continues to scroll for a while after finishing the scroll gesture*!  transition: all 0.25s ease;}*/
+/*.offc-nav.expand {right: 0;}*/
+/*.offc-nav.expand.shadow-in {box-shadow: inset 9px 0px 17px -11px rgba(0,0,0,0.9);}*/
+/*.offc-nav.expand.shadow-out {box-shadow:1px 0px 2px 3px rgba(0,0,0,0.3);}*/
 .offc-nav.expand ~ .main-header .local-offcanvas-menu, .offc-nav.expand ~ .main-header .local-site-search {transform: translateX(-20em);} /*animate the menu button open/close*/
 .offc-nav.expand ~ .dialog_layer {position: fixed;top: 0; right: 0; bottom: 0; left: 0;  height: 100%;width: 100%; background:  rgba(0, 0, 0, 0.5); z-index: 2; pointer-events: all; /*all click block*/ }
 /*.offc-nav:after {content: "";position: absolute;top: 0; right: 0; height: 100%;width: 34px; background: linear-gradient(left, transparent, rgba(0, 0, 0, 0.4));}*//*is this used?*/
-.offc-nav.expand a.exit-offcanvas, a.exit-offcanvas:visited {font-size: 200%; color: #999; float: right;font-weight: bold; position: absolute;top: -56px; right: 10px;  z-index: 5;}/*cross icon in right offcanvas menu*/
-.offc-nav.expand a.exit-offcanvas:hover {color: rgba(255,255,255,0.2);}
+/*.offc-nav a.exit-offcanvas, a.exit-offcanvas:visited {font-size: 200%; color: #999; float: right;font-weight: bold; position: absolute;top: -56px; right: 10px;  z-index: 5;}!*cross icon in right offcanvas menu*!*/
+/*.offc-nav a.exit-offcanvas:hover {color: rgba(255,255,255,0.2);}*/
 /*off-canvas style from Foundation offcanvas.css*/
 ul.off-canvas-list {background: #333; bottom: 0; box-sizing: content-box;  -webkit-overflow-scrolling: touch; outline:0; list-style-type: none; margin: 0; padding: 0;}/*list style offcanvas menu*/
 ul.off-canvas-list li label {background: #444444; border-bottom: none; border-top: 1px solid #5e5e5e; color: #999999; display: block; font-size: 0.7rem; font-weight: bold;  margin: 0; padding: 0.52rem 0.83333rem; text-transform: uppercase;}/*title section*/
@@ -281,6 +281,10 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 /*TABS*/
 .tabs .tabs-title > a { color: #0a0a0a;}
 .tabs .tabs-title.is-active > a:focus, .tabs .tabs-title.is-active > a {color: white; background: #666;} /*tabs style - the default tabs style from EBI using aria-selected='true'.is-active doesn't work*/
+
+.tabs .tabs-title > button { color: #0a0a0a; padding: 1.25rem 1.5rem; font-size: 0.75rem; line-height: 1;}
+.tabs .tabs-title > button:hover { background-color: #DDD; }
+.tabs .tabs-title.is-active > button:focus, .tabs .tabs-title.is-active > button {color: white; background: #666;} /*tabs style - the default tabs style from EBI using aria-selected='true'.is-active doesn't work*/
 
 /*footer*/
 .local_footer {padding:1rem 0;}

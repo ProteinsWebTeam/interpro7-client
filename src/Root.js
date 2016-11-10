@@ -11,18 +11,19 @@ import 'styles/interpro-new.css';
 import Overlay from 'components/Overlay';
 import Header from 'components/Header';
 import Footer from 'components/EBIFooter';
-import SideMenu from 'components/SideMenu';
+import SideMenu from 'components/Menu/SideMenu';
 import Breadcrumb from 'components/Breadcrumb';
 import Loading from 'components/Loading';
 
 const Root = (
-  {children, location}/*: {children: Node, location: {pathname: string}}*/
+  {children, location: {pathname}}
+  /*: {children: Node, location: {pathname: string}}*/
 ) => (
   <div>
     <Overlay />
-    <SideMenu position="right" pathname={location.pathname} />
-    <Header pathname={location.pathname} />
-    <Breadcrumb pathname={location.pathname} />
+    <SideMenu pathname={pathname} />
+    <Header pathname={pathname} />
+    <Breadcrumb pathname={pathname} />
     <Loading>{children}</Loading>
     <Footer />
   </div>
@@ -30,7 +31,9 @@ const Root = (
 
 Root.propTypes = {
   children: T.node,
-  location: T.object.isRequired,
+  location: T.shape({
+    pathname: T.string.isRequired,
+  }).isRequired,
 };
 
 export default Root;
