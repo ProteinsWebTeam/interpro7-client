@@ -6,6 +6,9 @@ import url from 'url';
 import _config from '../config.yml';
 import _pkg from '../package.json';
 
+const HTTPS_DEFAULT_PORT = 443;
+const HTTP_DEFAULT_PORT = 80;
+
 const config/*: {
   root: {
     website: string,
@@ -17,9 +20,15 @@ const config/*: {
 
 for (const [key, value] of Object.entries(config.root)) {
   if (typeof value === 'string') {
-    config.root[key] = url.parse(
-      `${value.startsWith('//') ? 'http:' : ''}${value}`
-    );
+    const urlObj = config.root[key] = url.parse(value, true, true);
+    if (!urlObj.protocol && global.location) {
+      urlObj.protocol = global.location.protocol;
+    }
+    if (!urlObj.port) {
+      urlObj.port = (
+        urlObj.protocol || ''
+      ).includes('s') ? HTTPS_DEFAULT_PORT : HTTP_DEFAULT_PORT;
+    }
   }
 }
 
