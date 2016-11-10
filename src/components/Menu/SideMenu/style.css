@@ -64,7 +64,7 @@
 .primary {
   color: #7dbb72;
 
-  @nest & a:hover, a:focus {
+  @nest & a:hover, & a:focus {
     background-color: #7dbb7233;
   }
 }
@@ -72,7 +72,7 @@
 .secondary {
   color: #219908;
 
-  @nest & a:hover, a:focus {
+  @nest & a:hover, & a:focus {
     background-color: #21990833;
   }
 }
@@ -80,7 +80,7 @@
 .tertiary {
   color: #34b5b5;
 
-  @nest & a:hover, a:focus {
+  @nest & a:hover, & a:focus {
     background-color: #34b5b533;
   }
 }

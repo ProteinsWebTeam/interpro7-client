@@ -231,7 +231,7 @@ class SideMenu extends Component{
                 browse
               </span>
             </EntitiesMenu>
-            <InterproMenu pathname={pathname} className={f('primary')}>
+            <InterproMenu pathname={pathname} className={f('secondary')}>
               <span
                 className={f('menu-label', 'select-none', 'cursor-default')}
               >

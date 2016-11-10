@@ -45,12 +45,14 @@ class Description extends Component {
   static propTypes = {
     textBlocks: T.array.isRequired,
     literature: T.object,
-    title: T.string,
+    title: T.string.isRequired,
     extraTextForButton: T.string.isRequired,
     heightToHide: T.number,
   };
 
   static defaultProps = {
+    title: 'Description',
+    extraTextForButton: '',
     heightToHide: defaultHeightToHide,
   };
 
@@ -99,10 +101,7 @@ class Description extends Component {
   }
   render(){
     const {
-      textBlocks, literature,
-      title = 'Description',
-      extraTextForButton = '',
-      heightToHide,
+      textBlocks, literature, title, extraTextForButton, heightToHide,
     } = this.props;
     return (
       <div className={f('content')}>

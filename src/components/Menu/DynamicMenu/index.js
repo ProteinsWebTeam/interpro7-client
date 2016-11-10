@@ -20,7 +20,7 @@ class DynamicMenu extends Component {
     };
   */
   static propTypes = {
-    data: T.object.isRequired,
+    data: T.object,
     loading: T.bool.isRequired,
     location: T.shape({
       pathname: T.string.isRequired,
