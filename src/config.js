@@ -27,7 +27,7 @@ for (const [key, value] of Object.entries(config.root)) {
     if (!urlObj.port) {
       urlObj.port = (
         urlObj.protocol || ''
-      ).endsWith('s') ? HTTPS_DEFAULT_PORT : HTTP_DEFAULT_PORT;
+      ).includes('s') ? HTTPS_DEFAULT_PORT : HTTP_DEFAULT_PORT;
     }
   }
 }
