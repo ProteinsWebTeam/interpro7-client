@@ -12,18 +12,23 @@ import blockStyles from 'styles/blocks.css';
 const ObjectToList = ({obj, component: Component}) => (
   <ul>
     {
-      Object.entries(obj).map(([k, value]) => (
-        <li key={k}>
-          {
-            typeof value === 'object' ?
-              <span>
-                {`${k}: `}
-                <ObjectToList obj={value} component={Component} />
-              </span> :
-              <Component value={value} k={k} />
-          }
-        </li>
-      ))
+      Object.entries(obj)
+        .filter(([_, v]) => (
+          // value !== 0 or, if object, contains values
+          v && (typeof v !== 'object' || Object.keys(v).length)
+        ))
+        .map(([k, value]) => (
+          <li key={k}>
+            {
+              typeof value === 'object' ?
+                <span>
+                  {`${k}: `}
+                  <ObjectToList obj={value} component={Component} />
+                </span> :
+                <Component value={value} k={k} />
+            }
+          </li>
+        ))
     }
   </ul>
 );
