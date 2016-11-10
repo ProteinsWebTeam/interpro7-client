@@ -6,8 +6,9 @@ import Description from 'components/Description';
 import {InterproSymbol} from 'components/Title';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import {Link} from 'react-router/es';
-import {memberDB, entryType, latests} from 'staticData/home';
+import {memberDB, entryType, latests, speciesFeat, GoList} from 'staticData/home';
 import Tabs from 'components/Tabs';
+import Twit from 'components/Twitter';
 
 import iscanLogo from 'images/logo_interproscan_ext.png';
 import idaLogo from 'images/logo_ida_100.png';
@@ -24,9 +25,11 @@ const MaskSvgIcons = () => (
   viewBox="0 0 200 200"
   style={{
     position: 'fixed',
+    width: 0,
+    height: 0,
     top: -1800,
     left: -1800,
-    /* to hide SVG on the page as display:none is not working*/
+  /* to hide SVG on the page as display:none is not working*/
   }}
 >
   <defs>
@@ -197,7 +200,7 @@ const Home = () => (
                         </h6>
                         <p>
                           <small>{e.version}</small><br/>
-                          <span >{e.counter} entries</span>
+                          <span >{e.counter} {e.type === 'new' ? '' : 'entries'}</span>
                         </p>
 
                       </Link>
@@ -209,7 +212,7 @@ const Home = () => (
               <Link to="/entry" className={f('button')}>View all entries</Link>
             </div>
 
-            {// panel2 - temp display block
+            {// panel2 - by entry type
             }
             <div title="by entry type" className={f('entry-type')}>
                <div className={f('row')}>
@@ -241,15 +244,72 @@ const Home = () => (
               <a href="/entry" className={f('button')}>View all entries</a>
 
             </div>
-            {// panel3
+            {// panel 3 - by species
             }
-            <div title="by species">
-              test panel3
+            <div title="by species" className={f('species-list')}>
+              <div className={f('row')}>
+                {
+                  speciesFeat.map((e, i) => (
+                    <div
+                      className={f('columns', 'medium-3', 'large-3', 'text-center')}
+                      key={i}
+                    >
+                      <a href="#" data-tooltip title={e.description}>
+                        <span
+                          style={{color: e.color}}
+                          className={f('small', 'icon', 'icon-species')}
+                          data-icon={e.icon} data-tooltip
+                        />
+                        <h6>
+                          {e.title}
+                        </h6>
+                        <p>{e.counterD} entries <br/>
+                          <small>({e.counterS} proteins)</small>
+                        </p>
+                      </a>
+                    </div>
+                  ))
+                }
+
+              </div>
             </div>
-            {// panel4
+            {// panel4- By Go terms
             }
-            <div title="by GO terms">
-              test panel4
+            <div title="by GO terms" className={f('go-list')}>
+                <div className={f('row')}>
+                  {
+                    GoList.map((e, i) => (
+                      <div
+                        className={f('columns', 'medium-3', 'large-3', 'text-center')}
+                        key={i}
+                      >
+                        <a href="#" data-tooltip title={e.description}>
+                          <span
+                            style={{color: e.color}}
+                            className={f('small', 'bullet-icon')}
+                            data-tooltip title={e.category}
+                          >&bull;</span>
+                          <h6>
+                            {e.title}&nbsp;
+                            <span
+                              className={f('small', 'icon', 'icon-generic')}
+                              data-icon="i" data-tooltip
+                              title={e.description}
+                            />
+                          </h6>
+                          <p>
+                            {e.counterD} entries <br/>
+                            <small>({e.counterS} proteins)</small>
+                          </p>
+                        </a>
+                      </div>
+                    ))
+                  }
+
+                </div>
+
+              <Link to="/browse/Goterms" className={f('button')}>View all Go terms</Link>
+
             </div>
           </Tabs>
 
@@ -320,7 +380,6 @@ const Home = () => (
       {// Tools & paper
       }
       <div className={f('callout')} data-equalizer-watch>
-
 
           <h5>Publications </h5>
           <a href="http://nar.oxfordjournals.org/content/43/D1/D213">
@@ -436,7 +495,29 @@ const Home = () => (
 
     </div>{// end row
   }
+    <div className={f('expanded', 'row')}>
 
+      <div className={f('columns')}>
+        <div className={'jumbo-news'} >
+          <div className={'jumbo-news-container'} >
+          <h3 className={f('icon', 'icon-socialmedia', 'icon-s2')} data-icon="T" />
+{
+// <a href="#">InterPro 60.0 now available with a new member db: MobiDB Lite, residue
+// annotation and covers 79.8% of UniProtKB. See http://www.ebi.ac.uk/interpro/</a>
+// <h5><a href=""> Tweets by ‎‏@InterProDB</a></h5>
+// would be nice to extract just the text from twitter widget as we do for EMG
+}
+          <Twit />
+
+          </div>
+        </div>{// end jumbo-news
+      }
+
+      </div>{// end columns
+    }
+
+      </div>{// end row
+    }
   </main>
 
 

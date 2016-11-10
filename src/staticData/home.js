@@ -192,6 +192,311 @@ export const memberDB = [
   },
 ];
 
+export const speciesFeat = [{
+  title: 'Rice',
+  kingdom: 'Eukaryota',
+  description:
+    'Oryza sativa subsp. japonica',
+  counterD: 40797,
+  counterS: 37386,
+  coverage: 54,
+  icon: '6',
+  color: '#5cb85c',
+}, {
+  title: 'Mouse-ear cress',
+  kingdom: 'Eukaryota',
+  description:
+    'Arabidopsis thaliana',
+  counterD: 31462,
+  counterS: 43096,
+  coverage: 79,
+  icon: 'B',
+  color: '#5cb85c',
+}, {
+  title: 'Human',
+  kingdom: 'Eukaryota',
+  description: 'Homo sapiens',
+  counterD: 70214,
+  counterS: 93748,
+  coverage: 70,
+  icon: 'H',
+  color: '#d9534f',
+}, {
+  title: 'Zebrafish',
+  kingdom: 'Eukaryota',
+  description: 'Danio rerio',
+  counterD: 87864,
+  counterS: 43095,
+  coverage: 87,
+  icon: 'Z',
+  color: '#d9534f',
+}, {
+  title: 'Mouse',
+  kingdom: 'Eukaryota',
+  description: 'Mus musculus',
+  counterD: 82766,
+  counterS: 50690,
+  coverage: 80,
+  icon: 'M',
+  color: '#d9534f',
+}, {
+  title: 'Fruit fly',
+  kingdom: 'Eukaryota',
+  description: 'Drosophila melanogaster',
+  counterD: 39537,
+  counterS: 21945,
+  coverage: 80,
+  icon: 'F',
+  color: '#d9534f',
+}, {
+  title: 'Caenorhabditis elegans',
+  kingdom: 'Eukaryota',
+  description: 'Caenorhabditis elegans',
+  counterD: 32011,
+  counterS: 26563,
+  coverage: 67,
+  icon: 'W',
+  color: '#d9534f',
+}, {
+  title: 'Baker s yeast',
+  kingdom: 'Eukaryota',
+  description: 'Saccharomyces cerevisiae (strain ATCC 204508 / S288c)',
+  counterD: 7750,
+  counterS: 6718,
+  coverage: 74,
+  icon: '',
+  color: '#5bc0de',
+}, {
+  title: 'Fission yeast',
+  kingdom: 'Eukaryota',
+  description: 'Schizosaccharomyces pombe (strain 972 / ATCC 24843)',
+  counterD: 7276,
+  counterS: 5121,
+  coverage: 87,
+  icon: '',
+  color: '#5bc0de',
+}, {
+  title: 'Escherichia coli',
+  kingdom: 'Bacteria',
+  description: 'Escherichia coli (strain K12)',
+  counterD: 6072,
+  counterS: 4306,
+  coverage: 73,
+  icon: 'L',
+  color: '#5bc0de',
+}, {
+  title: 'Caulobacter phage phiCbK',
+  kingdom: 'Virus',
+  description: 'Caulobacter phage phiCbK',
+  counterD: 53,
+  counterS: 318,
+  coverage: 13,
+  icon: 'v',
+  color: '#5bc0de',
+}, {
+  title: 'Unclassified',
+  kingdom: 'Unclassified',
+  description: 'Sequences that matches no species',
+  counterD: 276,
+  counterS: 121,
+  coverage: 50,
+  icon: '?',
+}];
+
+
+export const GoList = [{
+  title: 'Catalytic activity',
+  Category: 'Molecular function',
+  description:
+    'Description from Go website',
+  counterD: 12545,
+  counterS: 386,
+  color: '#5cb85c',
+}, {
+  title: 'DNA binding',
+  Category: 'Molecular function',
+  description:
+    'Description from Go website',
+  counterD: 12450,
+  counterS: 450,
+  color: '#5cb85c',
+}, {
+  title: 'Metabolic process',
+  category: 'Biological process',
+  description:
+    'Description from Go website',
+  counterD: 12429,
+  counterS: 386,
+  color: '#5bc0de',
+}, {
+  title: 'Oxidation-reduction process ',
+  category: 'Molecular function',
+  description:
+    'Description from Go website',
+  counterD: 12429,
+  counterS: 386,
+  color: '#5cb85c',
+}, {
+  title: 'Outer membrane',
+  description:
+    'Description from Go website',
+  counterD: 12429,
+  counterS: 386,
+  category: 'Cellular components',
+  color: '#d9534f',
+}, {
+  title: 'ATP binding',
+  description:
+    'Description from Go website',
+  counterD: 12429,
+  counterS: 42,
+  category: 'Molecular function',
+  color: '#5cb85c',
+}, {
+  title: 'Oxidoreductase activity',
+  description:
+    'Description from Go website',
+  counterD: 12193,
+  counterS: 93,
+  category: 'Molecular function',
+  color: '#5cb85c',
+}, {
+  title: 'Transport',
+  description:
+    'Description from Go website',
+  counterD: 12093,
+  counterS: 10,
+  category: 'Biological process',
+  color: '#5bc0de',
+}, {
+  title: 'DNA replication',
+  description:
+    'Description from Go website',
+  counterD: 12089,
+  counterS: 564,
+  category: 'Molecular function',
+  color: '#5cb85c',
+}, {
+  title: 'Integral component of membrane',
+  description:
+    'Description from Go website',
+  counterD: 120,
+  counterS: 36,
+  category: 'Molecular function',
+  color: '#5cb85c',
+}, {
+  title: 'Cofactor bindind',
+  description:
+    'Description from Go website',
+  counterD: 1276,
+  counterS: 36,
+  category: 'Molecular function',
+  color: '#5cb85c',
+}, {
+  title: 'DNA polymerase complex',
+  description:
+    'Description from Go website',
+  counterD: 206,
+  counterS: 36,
+  category: 'Cellular components',
+  color: '#d9534f',
+}, {
+  title: 'Cell projection assembly',
+  description:
+    'Description from Go website',
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+}, {
+  title: 'Cell projection assembly',
+  description:
+    'Description from Go website',
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+}, {
+  title: 'Cellular component organization',
+  description:
+    'Description from Go website',
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+}, {
+  title: 'Cell growth',
+  description:
+    'Description from Go website',
+  counterD: 6,
+  counterS: 36,
+  category: 'Biological process',
+  color: '#5bc0de',
+// },{
+//   title: 'Cell projection assembly',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Biological process',
+//   color: '#5bc0de',
+// },{
+//   title: 'Cell projection assembly',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Biological process',
+//   color: '#5bc0de',
+// },{
+//   title: 'Cellular component organization',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Biological process',
+//   color: '#5bc0de',
+// },{
+//   title: 'Cell growth',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Biological process',
+//   color: '#5bc0de',
+// },{
+//   title: 'ATPase activity',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Molecular function',
+//   color: '#5cb85c',
+// },{
+//   title: 'GTPase activity',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Molecular function',
+//   color: '#5cb85c',
+// },{
+//   title: 'Helicase activity',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Molecular function',
+//   color: '#5cb85c',
+// },{
+//   title: 'Hydrolase activity',
+//   description:
+//     `Description from Go website`,
+//   counterD: 6,
+//   counterS: 36,
+//   category: 'Molecular function',
+//   color: '#5cb85c',
+}];
 export const entryType = [{
   title: 'This icon represent a domain type of InterPro entry',
   type: 'Domain',
