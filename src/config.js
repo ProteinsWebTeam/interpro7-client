@@ -21,13 +21,13 @@ const config/*: {
 for (const [key, value] of Object.entries(config.root)) {
   if (typeof value === 'string') {
     const urlObj = config.root[key] = url.parse(value, true, true);
-    if (!urlObj.protocol && window.location) {
-      urlObj.protocol = window.location.protocol;
+    if (!urlObj.protocol && global.location) {
+      urlObj.protocol = global.location.protocol;
     }
     if (!urlObj.port) {
       urlObj.port = (
-        urlObj.protocol.endsWith('s') ? HTTPS_DEFAULT_PORT : HTTP_DEFAULT_PORT
-      );
+        urlObj.protocol || ''
+      ).endsWith('s') ? HTTPS_DEFAULT_PORT : HTTP_DEFAULT_PORT;
     }
   }
 }
