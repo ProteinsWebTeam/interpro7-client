@@ -27,6 +27,10 @@ class DynamicMenu extends Component {
     }).isRequired,
   };
 
+  static defaultProps = {
+    data: null,
+  };
+
   constructor() {
     super();
     this.state = {data: null};
@@ -34,14 +38,12 @@ class DynamicMenu extends Component {
 
   componentWillMount() {
     if (!this.props.loading) {
-      this.setState({data: this.props.data || null});
+      this.setState({data: this.props.data});
     }
   }
 
   componentWillReceiveProps({data, loading}) {
-    if (!loading) {
-      this.setState({data});
-    }
+    if (!loading) this.setState({data});
   }
 
   render() {
