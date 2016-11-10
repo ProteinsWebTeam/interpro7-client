@@ -108,7 +108,7 @@ const _HamburgerBtn = ({openSideNav, open, svg}) => {
   return (
     <button onClick={openSideNav}>
       <svg
-        viewBox="0 0 12 10" width="2.5rem" height="2.5rem"
+        viewBox="0 0 12 10" width="2.5em" height="2.5em"
         className={styles.top_level_hamburger}
       >
         <line
@@ -187,7 +187,7 @@ const _SideIcons = ({movedAway}) => (
         to="/search"
       >
         <svg
-          width="2rem" height="2rem" viewBox="0 0 490 490"
+          width="2em" height="2em" viewBox="0 0 490 490"
           style={{verticalAlign: 'middle'}}
         >
           <path
