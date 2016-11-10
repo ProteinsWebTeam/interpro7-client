@@ -60,7 +60,7 @@ if (!PROD) {
     hot: true,
     quiet: !!process.env.DASHBOARD,
     historyApiFallback: {
-      index: output.publicPath,
+      index: websiteURL.pathname,
     },
     watchOptions: {
       ignored: /node_modules/,
