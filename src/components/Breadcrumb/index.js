@@ -2,7 +2,7 @@ import React, {Component, PropTypes as T} from 'react';
 import {findDOMNode} from 'react-dom';
 import {Link} from 'react-router/es';
 
-import domAttributeChecker from 'higherOrder/DOMAttributeChecker';
+// import domAttributeChecker from 'higherOrder/DOMAttributeChecker';
 import cfg from 'config';
 
 import styles from './style.css';
@@ -56,9 +56,9 @@ const formatEndpoints = (paths) => {
 class Breadcrumb extends Component {
   static propTypes = {
     pathname: T.string.isRequired,
-    refreshDOMAttributes: T.func.isRequired,
-    scrollWidth: T.number,
-    clientWidth: T.number,
+    // refreshDOMAttributes: T.func.isRequired,
+    // scrollWidth: T.number,
+    // clientWidth: T.number,
   };
 
   state = {
@@ -131,7 +131,7 @@ class Breadcrumb extends Component {
     const endpoints = formatEndpoints(paths, expanded, this.props);
     return (
       <nav
-        style={{display: this.props.pathname === '/' ? 'none' : 'flex'}}
+        style={{display: this.props.pathname === '/' ? 'none' : ''}}
         className={styles[expanded ? 'expanded' : 'standard']}
         onFocus={this.expand} onBlur={this.reduce}
         onMouseEnter={this.expand} onMouseLeave={this.reduce}
@@ -154,7 +154,8 @@ class Breadcrumb extends Component {
   }
 }
 
-export default domAttributeChecker(
-  'clientWidth', 'clientHeight', 'scrollWidth',
-)(Breadcrumb);
+export default Breadcrumb;
+// export default domAttributeChecker(
+//   'clientWidth', 'clientHeight', 'scrollWidth',
+// )(Breadcrumb);
 // export default AdvancedBreadcrumb;
