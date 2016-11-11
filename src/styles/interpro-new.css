@@ -4,7 +4,7 @@ ul#global-nav {padding-top:0;}/****IMPORTANT TO FIX****remove space on top of pa
 .local-masthead nav ul li a:active {border-bottom: 3px white solid;} /*****remove arrows in the menu - fill the gap when menu click when no arrow*****/
 
 a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
-a:hover, a:focus, a:active {border-bottom: 1px solid #8c8c8c; } /*STYLE - add a line for links just on mouse over*/
+#content a:hover, #content a:focus, #content a:active {border-bottom: 1px solid #8c8c8c;} /*STYLE - add a line for links just on mouse over - NOTE used to avoid getting border on mouse ohover on the top tabs*/
 #content {padding-top: 1rem; padding-bottom:0;}/*add some more space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer*/
 .local-masthead nav ul.menu li {border-right: 1px solid rgba(248, 248, 248, 0.2);}/*STYLE - slightly hide division between menu items*/
 .local-masthead ul li.is-active a, .local-masthead ul li a:hover, .local-masthead nav ul li a.hover, .local-masthead nav ul li a:hover {color: #000;}/*STYLE - make menu items hover slightly darker*/
