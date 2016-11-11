@@ -12,3 +12,8 @@
   border-bottom: none;
   border-top: 1px solid #5e5e5e;
 }
+
+.menu-label {
+  font-weight: bold;
+  color: currentColor;
+}

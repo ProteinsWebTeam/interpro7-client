@@ -6,24 +6,48 @@ import SubMenu from 'components/Menu/SubMenu';
 
 import {InterPro} from 'menuConfig';
 
+import {foundationPartial} from 'styles/foundation';
+import fonts from 'styles/ebi/fonts.css';
+
+const iconStyle = foundationPartial(fonts);
+
 const InterproMenu = (
-  {pathname, className, includeSubMenues = false, children}
-  /*:
-    {pathname: string, className?: string, includeSubMenues?: boolean, children?: any}
-  */
+  {pathname, className, includeSubMenus = false, children}
+  /*: {
+    pathname: string,
+    className?: string,
+    includeSubMenus?: boolean,
+    children?: any
+  } */
 ) => (
   <ul className={className}>
     {children}
-    {InterPro.map(({to, name, options}) => (
-      includeSubMenues && options ?
+    {InterPro.map(({to, name, icon, iconClass = 'generic', options}) => (
+      includeSubMenus && options ?
         <SubMenu
           key={to}
           pathname={pathname}
           options={options}
           className={className}
-        >{name}</SubMenu> :
+        >
+          {
+            icon &&
+            <i
+              data-icon={icon}
+              className={iconStyle('icon', `icon-${iconClass}`)}
+            />
+          }
+          {name}
+        </SubMenu> :
         <li key={to}>
           <MenuItem to={to} active={pathname === to}>
+            {
+              icon &&
+              <i
+                data-icon={icon}
+                className={iconStyle('icon', `icon-${iconClass}`)}
+              />
+            }
             {name}
           </MenuItem>
         </li>
@@ -33,7 +57,7 @@ const InterproMenu = (
 InterproMenu.propTypes = {
   pathname: T.string.isRequired,
   className: T.string,
-  includeSubMenues: T.bool,
+  includeSubMenus: T.bool,
   children: T.any,
 };
 

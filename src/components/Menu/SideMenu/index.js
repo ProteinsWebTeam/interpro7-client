@@ -226,7 +226,7 @@ class SideMenu extends Component{
             <InterproMenu
               pathname={pathname}
               className={f('secondary', 'is-drilldown')}
-              includeSubMenues={true}
+              includeSubMenus={true}
             >
               <span className={f('menu-label', 'select-none', 'cursor-default')}>
                 interpro menu

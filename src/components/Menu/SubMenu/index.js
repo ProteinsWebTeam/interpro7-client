@@ -13,6 +13,7 @@ const f = foundationPartial(menuItemStyle, style);
 /* ::
    type Props = {
      pathname: string,
+     visible: boolean,
      options: Array<Object>,
      className?: string,
      children?: any
@@ -46,8 +47,11 @@ class SubMenu extends Component {
           })} ${className}`}
         >
           <li className={f('js-drilldown-back')}>
-            <a className={f('menu-item')} onClick={this.handleClick}>
-              Back InterPro menu
+            <a
+              className={f('menu-label')}
+              onClick={this.handleClick}
+            >
+              Back to InterPro menu
             </a>
           </li>
           {options.map(({to, name}) => (
