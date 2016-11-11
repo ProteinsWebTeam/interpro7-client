@@ -4,6 +4,7 @@
   display: block;
   z-index: 1;
   background: #4b4b4b;
+  transition: transform 0.3s ease-in-out;
 }
 
 .js-drilldown-back {
