@@ -32,10 +32,11 @@ const entryTypeColors = {
   U: ['#737373', '#8c8c8c', '#737373'],
 };
 export const InterproSymbol = (
-  {type}
+  {type, className = ''}
   /*: {
-    type: string
-  }*/
+   type: string
+   className?: string
+   }*/
 ) => {
   const colors = entryTypeColors[type[0]],
     ch = (type === 'undefined') ? '?' : type[0];
@@ -44,6 +45,7 @@ export const InterproSymbol = (
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 72 72"
         id={`type-${type}`}
+        className={`${className}`}
       >
 
         <rect
@@ -80,6 +82,7 @@ export const InterproSymbol = (
 };
 InterproSymbol.propTypes = {
   type: T.string.isRequired,
+  className: T.string,
 };
 
 const Title = (

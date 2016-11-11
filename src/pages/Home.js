@@ -87,11 +87,7 @@ const LatestEntry = ({entry}) => (
   >
 
       <div className={f('svg-container')} >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72"
-          className={f('icon-list')}
-        >
-          <use href={`#type-${entry.type}`}/>
-        </svg>
+        <InterproSymbol type={entry.type} className={f('icon-list')} />
       </div>
 
       <div className={f('list-body')}>
@@ -107,11 +103,7 @@ const LatestEntry = ({entry}) => (
       {
         entry.contributing.map((c, j) => (
           <div className={f('list-more')} key={j}>
-            <svg xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 72 72" className={f('md-small')}
-            >
-              <use href={`#md-${c.source_database.toUpperCase()}`} />
-            </svg>
+            <MemberSymbol type={c.source_database} className={f('md-small')} />
             <small>
               {c.source_database}:
               <Link
@@ -190,7 +182,7 @@ const Home = () => (
                       className={f('columns', 'medium-3', 'large-3', 'text-center')}
                       key={i}
                     >
-                      <Link to={e.to} className={e.className}>
+                      <Link to={e.to}>
                         <MemberSymbol type={e.type}/>
                         <h6
                           data-tooltip
