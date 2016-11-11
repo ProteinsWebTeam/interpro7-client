@@ -34,9 +34,9 @@ const entryTypeColors = {
 export const InterproSymbol = (
   {type, className = ''}
   /*: {
-   type: string
-   className?: string
-   }*/
+    type: string,
+    className?: string
+  } */
 ) => {
   const colors = entryTypeColors[type[0]],
     ch = (type === 'undefined') ? '?' : type[0];

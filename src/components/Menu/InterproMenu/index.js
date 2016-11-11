@@ -13,9 +13,12 @@ const iconStyle = foundationPartial(fonts);
 
 const InterproMenu = (
   {pathname, className, includeSubMenus = false, children}
-  /*:
-    {pathname: string, className?: string, includeSubMenues?: boolean, children?: any}
-  */
+  /*: {
+    pathname: string,
+    className?: string,
+    includeSubMenus?: boolean,
+    children?: any
+  } */
 ) => (
   <ul className={className}>
     {children}

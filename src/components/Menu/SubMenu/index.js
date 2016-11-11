@@ -13,6 +13,7 @@ const f = foundationPartial(menuItemStyle, style);
 /* ::
    type Props = {
      pathname: string,
+     visible: boolean,
      options: Array<Object>,
      className?: string,
      children?: any
