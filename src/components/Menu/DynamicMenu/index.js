@@ -10,8 +10,9 @@ import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
 import interproStyles from 'styles/interpro-new.css';
+import localStyles from './style.css';
 
-const styles = foundationPartial(ebiStyles, interproStyles);
+const styles = foundationPartial(ebiStyles, interproStyles, localStyles);
 
 class DynamicMenu extends Component {
   /* ::
@@ -49,19 +50,19 @@ class DynamicMenu extends Component {
   render() {
     const {location: {pathname}} = this.props;
     const {data} = this.state;
+    let Menu = EntitiesMenu;
     if (!data || pathname === '/') {
-      return <InterproMenu pathname={pathname} className={styles('menu')} />;
+      Menu = InterproMenu;
+    } else if (data.metadata) {
+      Menu = SingleEntityMenu;
     }
-    if (data.metadata) {
-      return (
-        <SingleEntityMenu
-          data={data}
-          pathname={pathname}
-          className={styles('menu')}
-        />
-      );
-    }
-    return <EntitiesMenu className={styles('menu')} />;
+    return (
+      <Menu
+        data={data}
+        pathname={pathname}
+        className={styles('menu', 'dynamic-menu')}
+      />
+    );
   }
 }
 

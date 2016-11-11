@@ -6,8 +6,8 @@ import url from 'url';
 import _config from '../config.yml';
 import _pkg from '../package.json';
 
-const HTTPS_DEFAULT_PORT = 443;
-const HTTP_DEFAULT_PORT = 80;
+const HTTPS_DEFAULT_PORT = '443';
+const HTTP_DEFAULT_PORT = '80';
 
 const config/*: {
   root: {

@@ -12,12 +12,11 @@ const Twit = () => (
 );
 
 const twitter = (d, s, id) => {
-  const fjs = d.getElementsByTagName(s)[0],
-    p = /^http:/.test(d.location) ? 'http' : 'https';
+  const fjs = d.getElementsByTagName(s)[0];
   if (!d.getElementById(id)){
     const js = d.createElement(s);
     js.id = id;
-    js.src = `${p}://platform.twitter.com/widgets.js`;
+    js.src = '//platform.twitter.com/widgets.js';
     fjs.parentNode.insertBefore(js, fjs);
   }
 };

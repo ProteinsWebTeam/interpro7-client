@@ -8,6 +8,10 @@
   &:hover {
     color: #ccc;
   }
+
+  @nest & i {
+    margin-right: 0.25em;
+  }
 }
 
 .disabled {
