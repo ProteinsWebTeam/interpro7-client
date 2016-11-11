@@ -1,6 +1,8 @@
 import React, {PropTypes as T} from 'react';
-import f from 'styles/foundation';
+import {foundationPartial} from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
+
+const f = foundationPartial(ipro);
 
 const classNames = {
   CATH: f('md-cg'),

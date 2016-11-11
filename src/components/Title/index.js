@@ -82,6 +82,7 @@ export const InterproSymbol = (
 };
 InterproSymbol.propTypes = {
   type: T.string.isRequired,
+  className: T.string,
 };
 
 const Title = (
@@ -135,7 +136,6 @@ const Title = (
 Title.propTypes = {
   metadata: T.object.isRequired,
   pathname: T.string.isRequired,
-  className: T.string,
 };
 
 export default Title;
