@@ -6,6 +6,7 @@ import MenuItem from 'components/Menu/MenuItem';
 import {foundationPartial} from 'styles/foundation';
 import menuItemStyle from 'components/Menu/MenuItem/style.css';
 import style from './style.css';
+import {connect} from 'react-redux';
 
 const f = foundationPartial(menuItemStyle, style);
 
@@ -25,6 +26,9 @@ class SubMenu extends Component {
   constructor(props/* : Props*/) {
     super(props);
     this.state = {isActive: false};
+  }
+  componentWillReceiveProps({visible}) {
+    if (!visible) this.setState({isActive: false});
   }
   handleClick = () => {
     this.setState({isActive: !this.state.isActive});
@@ -61,9 +65,10 @@ class SubMenu extends Component {
 }
 SubMenu.propTypes = {
   pathname: T.string.isRequired,
+  visible: T.bool.isRequired,
   className: T.string,
   options: T.array,
   children: T.any,
 };
 
-export default SubMenu;
+export default connect(({ui: {sideNav}}) => ({visible: sideNav}))(SubMenu);
