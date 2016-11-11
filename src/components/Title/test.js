@@ -7,12 +7,8 @@ import jsxChai from 'jsx-chai';
 
 import {Link} from 'react-router';
 
-import Title, {Time, InterproSymbol} from '.';
-import {
-  OriginDB, Name,
-} from 'components/SimpleCommonComponents';
+import Title, {InterproSymbol} from '.';
 
-import styles from 'styles/blocks.css';
 import ipro from 'styles/interpro-new.css';
 
 chai.use(jsxChai);
@@ -80,7 +76,7 @@ describe('<Title />', () => {
       );
     });
   });
-  describe.skip('For a structure', () => {
+  describe('For a structure', () => {
     it('should render a title component correctly', () => {
       renderer.render(
         <Title pathname="/some/pathname/1JM7/" metadata={{
@@ -96,22 +92,10 @@ describe('<Title />', () => {
         />
       );
       expect(renderer.getRenderOutput()).to.deep.equal(
-        <div className={styles.card}>
-          <h2>RING-domain heterodimer</h2>
-          <div>
-            <Name name={{name: 'RING-domain heterodimer'}} accession="1JM7" />
-            <OriginDB
-              source="pdb"
-              pathname="/some/pathname/1JM7/"
-              accession="1JM7"
-            />
-            <p>Experiment Type: Solution NMR</p>
-            <p>Release Date: <Time date="2009-02-24" /></p>
-            <ul>Chains:
-              <li><Link to="/some/pathname/1JM7/A/">Chain A</Link></li>
-              <li><Link to="/some/pathname/1JM7/B/">Chain B</Link></li>
-            </ul>
-          </div>
+        <div>
+          <h3>RING-domain heterodimer
+            <small>(1JM7)</small>
+          </h3>
         </div>
       );
     });

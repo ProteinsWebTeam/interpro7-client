@@ -9,8 +9,20 @@ import style from './style.css';
 
 const f = foundationPartial(menuItemStyle, style);
 
+/* ::
+   type Props = {
+     pathname: string,
+     options: Array<Object>,
+     className?: string,
+     children?: any
+   };
+ */
 class SubMenu extends Component {
-  constructor(props) {
+  /* ::
+   props: Props;
+   state: {isActive: boolean};
+   */
+  constructor(props/* : Props*/) {
     super(props);
     this.state = {isActive: false};
   }
@@ -18,8 +30,7 @@ class SubMenu extends Component {
     this.setState({isActive: !this.state.isActive});
   }
   render() {
-    const {pathname, options, className, children} = this.props;
-    /*: {pathname: string, className?: string, options: array, children?: any} */
+    const {pathname, options, className = '', children} = this.props;
     return (
       <li className={f('is-drilldown-submenu-parent')}>
         <a className={f('menu-item')} onClick={this.handleClick}>
