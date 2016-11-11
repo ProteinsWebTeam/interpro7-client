@@ -20,7 +20,8 @@ export const memberDB = [
       College, London, UK.`,
     name: 'CATH-GENE3D',
     version: '3.5.0',
-    counter: 1345,
+    counter: 2626,
+    integrated: 1724,
   }, {
     type: 'CDD',
     to: 'entry/cdd',
@@ -36,7 +37,8 @@ export const memberDB = [
       number of external source databases.`,
     name: 'CDD',
     version: '3.14',
-    counter: 2626,
+    counter: 11273,
+    integrated: 1108,
   }, {
     type: 'HAMAP',
     to: 'entry/hamap',
@@ -49,6 +51,7 @@ export const memberDB = [
     name: 'HAMAP',
     version: '201605.11',
     counter: 2087,
+    integrated: 2081,
   }, {
     type: 'PANTHER',
     to: 'entry/panther',
@@ -64,6 +67,7 @@ export const memberDB = [
     name: 'PANTHER',
     version: '10.0',
     counter: 95118,
+    integrated: 5406,
   }, {
     type: 'PFAM',
     to: 'entry/pfam',
@@ -75,6 +79,7 @@ export const memberDB = [
     name: 'PFAM',
     version: '30.0',
     counter: 16306,
+    integrated: 15716,
   }, {
     type: 'PIRSF',
     to: 'entry/pirsf',
@@ -88,6 +93,7 @@ export const memberDB = [
     name: 'PIRSF',
     version: '3.01',
     counter: 3285,
+    integrated: 3223,
   }, {
     type: 'PRINTS',
     to: 'entry/prints',
@@ -99,6 +105,7 @@ export const memberDB = [
     name: 'PRINTS',
     version: '42.0',
     counter: 2106,
+    integrated: 1994,
   }, {
     type: 'PRODOM',
     to: 'entry/prodom',
@@ -110,6 +117,7 @@ export const memberDB = [
     name: 'PRODOM',
     version: '2006.1',
     counter: 1894,
+    integrated: 1128,
   }, {
     type: 'PATTERNS',
     to: 'entry/prosite',
@@ -122,6 +130,7 @@ export const memberDB = [
     name: 'PROSITE patterns',
     version: '20.119',
     counter: 1309,
+    integrated: 1290,
   }, {
     type: 'PROFILES',
     to: 'entry/prosite',
@@ -134,6 +143,7 @@ export const memberDB = [
     name: 'PROSITE profiles',
     version: '20.119',
     counter: 1136,
+    integrated: 1107,
   }, {
     type: 'SFLD',
     to: 'entry/sfld',
@@ -145,6 +155,7 @@ export const memberDB = [
     name: 'SFLD',
     version: '1',
     counter: 480,
+    integrated: 17,
   }, {
     type: 'SMART',
     to: 'entry/',
@@ -156,6 +167,7 @@ export const memberDB = [
     name: 'SMART',
     version: '7.1',
     counter: 1312,
+    integrated: 1265,
   }, {
     type: 'SUPERFAMILIES',
     to: 'entry/ssf',
@@ -169,6 +181,7 @@ export const memberDB = [
     name: 'SUPERFAMILY',
     version: '1.75',
     counter: 2019,
+    integrated: 1413,
   }, {
     type: 'TIGRFAMS',
     to: 'entry/tigrfams',
@@ -181,6 +194,7 @@ export const memberDB = [
     name: 'TIGRFAMS',
     version: '15.0',
     counter: 4408,
+    integrated: 4453,
   }, {
     type: 'new',
     to: 'contact/',
@@ -188,6 +202,7 @@ export const memberDB = [
     title: 'Want to become a partner?',
     name: 'New partner?',
     counter: 'click to join us',
+    integrated: '',
     version: '',
   },
 ];
