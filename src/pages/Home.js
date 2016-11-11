@@ -87,11 +87,7 @@ const LatestEntry = ({entry}) => (
   >
 
       <div className={f('svg-container')} >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72"
-          className={f('icon-list')}
-        >
-          <use href={`#type-${entry.type}`}/>
-        </svg>
+        <InterproSymbol type={entry.type} className={f('icon-list')} />
       </div>
 
       <div className={f('list-body')}>
@@ -107,11 +103,7 @@ const LatestEntry = ({entry}) => (
       {
         entry.contributing.map((c, j) => (
           <div className={f('list-more')} key={j}>
-            <svg xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 72 72" className={f('md-small')}
-            >
-              <use href={`#md-${c.source_database.toUpperCase()}`} />
-            </svg>
+            <MemberSymbol type={c.source_database} className={f('md-small')} />
             <small>
               {c.source_database}:
               <Link
@@ -158,7 +150,7 @@ const Home = () => (
              families and predicting domains and important sites. We combine protein
              signatures from a number of member databases into a single searchable
              resource, capitalising on their individual strengths to produce a powerful
-             integrated database and diagnostic tool.To classify proteins in this way,
+             integrated database and diagnostic tool. To classify proteins in this way,
              InterPro uses predictive models, known as signatures, provided by several
              different databases (referred to as member databases) that make up the
              InterPro consortium.`,
@@ -190,7 +182,7 @@ const Home = () => (
                       className={f('columns', 'medium-3', 'large-3', 'text-center')}
                       key={i}
                     >
-                      <Link to={e.to} className={e.className}>
+                      <Link to={e.to}>
                         <MemberSymbol type={e.type}/>
                         <h6
                           data-tooltip

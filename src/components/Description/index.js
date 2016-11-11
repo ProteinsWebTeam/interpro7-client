@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import ReactDOM from 'react-dom';
+import {findDOMNode} from 'react-dom';
 import {transformFormatted} from 'utils/text';
 import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
@@ -42,9 +42,26 @@ class Description extends Component {
     };
     handleClick: () => void;
   */
+  static propTypes = {
+    textBlocks: T.array.isRequired,
+    literature: T.object,
+    title: T.string.isRequired,
+    extraTextForButton: T.string.isRequired,
+    heightToHide: T.number,
+  };
+
+  static defaultProps = {
+    title: 'Description',
+    extraTextForButton: '',
+    heightToHide: defaultHeightToHide,
+  };
+
   constructor(props/* : Props*/) {
     super(props);
-    this.state = {isOpen: false};
+    this.state = {
+      isOpen: false,
+      contentSize: 5000,
+    };
     this.handleClick = this.handleClick.bind(this);
     this.moreButton = null;
     this.divContent = null;
@@ -69,22 +86,22 @@ class Description extends Component {
   }
   recheckHeight() {
     if (this.moreButton && this.divContent) {
-      const moreDiv = ReactDOM.findDOMNode(this.moreButton);
-      const contentDiv = ReactDOM.findDOMNode(this.divContent);
-      const {heightToHide = defaultHeightToHide} = this.props;
+      const moreDiv = findDOMNode(this.moreButton);
+      const contentDiv = findDOMNode(this.divContent);
+      const {heightToHide} = this.props;
       if (moreDiv.offsetTop - contentDiv.offsetTop < heightToHide) {
         this.moreButton.style.visibility = 'hidden';
       } else {
         this.moreButton.style.visibility = 'visible';
       }
+      // requestAnimationFrame(() => {console.log('setting'); this.setState({
+      //   contentSize: contentDiv.firstElementChild.offsetHeight,
+      // })});
     }
   }
   render(){
     const {
-      textBlocks, literature,
-      title = 'Description',
-      extraTextForButton = '',
-      heightToHide = defaultHeightToHide,
+      textBlocks, literature, title, extraTextForButton, heightToHide,
     } = this.props;
     return (
       <div className={f('content')}>
@@ -92,7 +109,9 @@ class Description extends Component {
         <div
           className={f('animate-height', {collapsed: !this.state.isOpen})}
           style={{
-            maxHeight: this.state.isOpen ? '5000px' : `${heightToHide}px`,
+            maxHeight: `${
+              this.state.isOpen ? this.state.contentSize : heightToHide
+            }px`,
           }}
           ref={(e) => {
             this.divContent = e;
@@ -122,11 +141,5 @@ class Description extends Component {
     );
   }
 }
-Description.propTypes = {
-  textBlocks: T.array.isRequired,
-  literature: T.object,
-  title: T.string,
-  extraTextForButton: T.string,
-  heightToHide: T.number,
-};
+
 export default Description;

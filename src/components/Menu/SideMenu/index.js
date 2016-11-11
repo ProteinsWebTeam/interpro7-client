@@ -9,7 +9,6 @@ import {closeSideNav} from 'actions/creators';
 
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterproMenu from 'components/Menu/InterproMenu';
-import EntitiesMenu from 'components/Menu/EntitiesMenu';
 import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 
 import {foundationPartial} from 'styles/foundation';
@@ -224,24 +223,17 @@ class SideMenu extends Component{
                 </span>
               </SingleEntityMenu>
             }
-            <EntitiesMenu className={f('secondary')}>
-              <span
-                className={f('menu-label', 'select-none', 'cursor-default')}
-              >
-                browse
-              </span>
-            </EntitiesMenu>
-            <InterproMenu pathname={pathname} className={f('primary')}>
-              <span
-                className={f('menu-label', 'select-none', 'cursor-default')}
-              >
+            <InterproMenu
+              pathname={pathname}
+              className={f('secondary', 'is-drilldown')}
+              includeSubMenues={true}
+            >
+              <span className={f('menu-label', 'select-none', 'cursor-default')}>
                 interpro menu
               </span>
             </InterproMenu>
             <EBIMenu className={f('tertiary')}>
-              <span
-                className={f('menu-label', 'select-none', 'cursor-default')}
-              >
+              <span className={f('menu-label', 'select-none', 'cursor-default')}>
                 ebi menu
               </span>
             </EBIMenu>
