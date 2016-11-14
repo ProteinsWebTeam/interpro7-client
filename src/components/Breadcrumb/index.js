@@ -5,7 +5,13 @@ import {Link} from 'react-router/es';
 // import domAttributeChecker from 'higherOrder/DOMAttributeChecker';
 import cfg from 'config';
 
-import styles from './style.css';
+import {foundationPartial} from 'styles/foundation';
+import ebiStyles from 'styles/ebi-global.css';
+import interproStyles from 'styles/interpro-new.css';
+import helperClasses from 'styles/helper-classes.css';
+import style from './style.css';
+
+const f = foundationPartial(ebiStyles, interproStyles, helperClasses, style);
 
 const parts = new Set(Object.keys(cfg.pages));
 
@@ -96,7 +102,7 @@ class Breadcrumb extends Component {
   handleUpdate = () => {
     const cont = findDOMNode(this);
     if (!cont.animate) return;
-    const nodes = [...cont.parentElement.getElementsByClassName(styles.flip)];
+    const nodes = [...cont.parentElement.getElementsByClassName(f('flip'))];
     for (const node of nodes) {
       const curr = node.getBoundingClientRect();
       const prev = positions.get(node);
@@ -130,26 +136,33 @@ class Breadcrumb extends Component {
     const {expanded, paths} = this.state;
     const endpoints = formatEndpoints(paths, expanded, this.props);
     return (
-      <nav
-        style={{display: this.props.pathname === '/' ? 'none' : ''}}
-        className={styles[expanded ? 'expanded' : 'standard']}
-        onFocus={this.expand} onBlur={this.reduce}
-        onMouseEnter={this.expand} onMouseLeave={this.reduce}
-      >
-        <span className={styles.groups}>
-          {endpoints.map((endpoint, i) => (
-            <span key={i} className={i <= 1 ? styles.group : styles.focus}>
-              {mapPathArrayToLink(endpoint.paths)}
+      <div className={f('row')} style={{flexShrink:0}}>
+        <div className={f('columns', 'large-12')} style={{width: '100vw'}}>
+          <nav
+            style={{display: this.props.pathname === '/' ? 'none' : ''}}
+            className={f('breadcrumbs', {
+              expanded: expanded,
+              standard: !expanded,
+            })}
+            onFocus={this.expand} onBlur={this.reduce}
+            onMouseEnter={this.expand} onMouseLeave={this.reduce}
+          >
+            <span className={f('groups')}>
+              {endpoints.map((endpoint, i) => (
+                <span key={i} className={f({group: i <= 1, focus: i > 1})}>
+                  {mapPathArrayToLink(endpoint.paths)}
+                </span>
+              ))}
             </span>
-          ))}
-        </span>
-        <span className={styles.hint}>
-          <Link to="/help" title="help">
-            <div>main view</div>
-            <div>focus</div>
-          </Link>
-        </span>
-      </nav>
+            <span className={f('hint')}>
+              <Link to="/help" title="help">
+                <div>main view</div>
+                <div>focus</div>
+              </Link>
+            </span>
+          </nav>
+        </div>
+      </div>
     );
   }
 }

@@ -18,6 +18,9 @@
   overflow: hidden;
   padding: 0.2rem 0;
   color: var(--colors-gray);
+  font-size: 0.6875rem;
+  cursor: default;
+  text-transform: uppercase;
 
   @nest & > .hint {
     width: 0;
