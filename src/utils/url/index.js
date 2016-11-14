@@ -18,7 +18,7 @@ export const buildLink = (
     if (to.length) {
       replacement += `${to.join('/')}/`;
     }
-    return path.replace(new RegExp(`\/${from}.*$`, 'i'), replacement);
+    return path.replace(new RegExp(`\/?${from}.*$`, 'i'), replacement);
   }
   let output = `${path}/`;
   if (to.length) {
