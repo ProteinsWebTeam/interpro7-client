@@ -18,6 +18,7 @@
 .sequence_word::before {
   counter-increment: sequence 10;
   content: counter(sequence);
+  user-select: none;
   color: var(--colors-main);
   position: absolute;
   left: -4em;
