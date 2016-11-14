@@ -15,11 +15,6 @@ import localStyles from './style.css';
 const styles = foundationPartial(ebiStyles, interproStyles, localStyles);
 
 class DynamicMenu extends Component {
-  /* ::
-    state: {
-      data: ?Object,
-    };
-  */
   static propTypes = {
     data: T.object,
     loading: T.bool.isRequired,
@@ -32,24 +27,12 @@ class DynamicMenu extends Component {
     data: null,
   };
 
-  constructor() {
-    super();
-    this.state = {data: null};
-  }
-
-  componentWillMount() {
-    if (!this.props.loading) {
-      this.setState({data: this.props.data});
-    }
-  }
-
-  componentWillReceiveProps({data, loading}) {
-    if (!loading) this.setState({data});
+  shouldComponentUpdate({loading}) {
+    return !loading;
   }
 
   render() {
-    const {location: {pathname}} = this.props;
-    const {data} = this.state;
+    const {location: {pathname}, data} = this.props;
     let Menu = EntitiesMenu;
     if (!data || pathname === '/') {
       Menu = InterproMenu;

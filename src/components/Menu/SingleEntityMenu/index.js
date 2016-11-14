@@ -25,7 +25,7 @@ const SingleEntityMenu = (
           <li key={to}>
             <MenuItem
               to={baseURL + to}
-              activeClassName={ebiStyles.active}
+              active={pathname === baseURL + to}
               disabled={counter && !data.metadata.counters[counter]}
             >
               {name}&nbsp;

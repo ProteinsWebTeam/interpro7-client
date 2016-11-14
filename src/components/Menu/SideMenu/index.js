@@ -180,6 +180,10 @@ class SideMenu extends Component{
   //   this.setState(newState);
   // };
 
+  shouldComponentUpdate({loading}) {
+    return !loading;
+  }
+
   render() {
     const {visible, pathname, data, closeSideNav} = this.props;
     setRootGrayscale(visible);
@@ -267,11 +271,14 @@ class SideMenu extends Component{
 SideMenu.propTypes = {
   visible: T.bool.isRequired,
   data: T.object,
+  loading: T.bool.isRequired,
   pathname: T.string.isRequired,
   closeSideNav: T.func.isRequired,
 };
 
 export default connect(
-  ({ui: {sideNav}, data: {data}}) => ({visible: sideNav, data}),
+  ({ui: {sideNav}, data: {data, loading}}) => (
+    {visible: sideNav, data, loading}
+  ),
   {closeSideNav}
 )(SideMenu);
