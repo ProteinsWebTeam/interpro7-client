@@ -102,7 +102,7 @@ const Title = (
     pathname: string
   }*/
 ) => {
-  const isEntry = pathname.startsWith('/entry');
+  const isEntry = pathname.startsWith('entry');
   return (
     <div>
       {

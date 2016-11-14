@@ -14,7 +14,7 @@ import ipro from 'styles/interpro-new.css';
 chai.use(jsxChai);
 const renderer = createRenderer();
 
-describe('<Title />', () => {
+describe.skip('<Title />', () => {
   describe('For an entry', () => {
     it('should render a title component correctly', () => {
       renderer.render(
