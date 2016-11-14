@@ -58,6 +58,7 @@ const _EmblDropdownDiv = ({visible}) => (
       transform: `translateY(${visible ? '0' : '-150%'})`,
       opacity: visible ? 1 : 0,
       visibility: 'visible',
+      zIndex: 101,
     }}
   >
     <p>
