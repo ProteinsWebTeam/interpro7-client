@@ -1,9 +1,11 @@
 import React, {Component, PropTypes as T} from 'react';
 import {findDOMNode} from 'react-dom';
+import {connect} from 'react-redux';
 import {Link} from 'react-router/es';
 
 // import domAttributeChecker from 'higherOrder/DOMAttributeChecker';
 import cfg from 'config';
+import {sticky as supportsSticky} from 'utils/support';
 
 import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
@@ -47,21 +49,17 @@ const mapPathArrayToLink = paths => paths.map(({url, name}, i) => (
   <Link key={url || i} to={url || '#'}>{name}</Link>
 ));
 
-const formatEndpoints = (paths) => {
-  // console.log(clientWidth);
-  // console.log(scrollWidth);
-  const output = [
-    {paths: [paths.home, {name: '…'}], type: 'home'},
-    {paths: [...(paths.view || {}), {name: '…'}], type: 'view'},
-    ...paths.focus.map(f => ({paths: [...f, {name: '…'}], type: 'focus'})),
-  ];
-
-  return output;
-};
+const formatEndpoints = paths => ([
+  {paths: [paths.home, {name: '…'}], type: 'home'},
+  {paths: [...(paths.view || {}), {name: '…'}], type: 'view'},
+  ...paths.focus.map(f => ({paths: [...f, {name: '…'}], type: 'focus'})),
+]);
 
 class Breadcrumb extends Component {
   static propTypes = {
     pathname: T.string.isRequired,
+    stuck: T.bool.isRequired,
+    stickyMenuOffset: T.number.isRequired,
     // refreshDOMAttributes: T.func.isRequired,
     // scrollWidth: T.number,
     // clientWidth: T.number,
@@ -135,15 +133,20 @@ class Breadcrumb extends Component {
   render() {
     const {expanded, paths} = this.state;
     const endpoints = formatEndpoints(paths, expanded, this.props);
+    const {stickyMenuOffset: offset, stuck} = this.props;
+    const MAGIC = 88;
     return (
-      <div className={f('row')} style={{flexShrink:0}}>
+      <div
+        className={f('row')}
+        style={{
+          flexShrink: 0,
+          marginTop: supportsSticky && stuck ? `${offset + MAGIC}px` : '0',
+        }}
+      >
         <div className={f('columns', 'large-12')} style={{width: '100vw'}}>
           <nav
             style={{display: this.props.pathname === '/' ? 'none' : ''}}
-            className={f('breadcrumbs', {
-              expanded: expanded,
-              standard: !expanded,
-            })}
+            className={f('breadcrumbs', {expanded, standard: !expanded})}
             onFocus={this.expand} onBlur={this.reduce}
             onMouseEnter={this.expand} onMouseLeave={this.reduce}
           >
@@ -167,7 +170,7 @@ class Breadcrumb extends Component {
   }
 }
 
-export default Breadcrumb;
+export default connect(({ui: {stuck}}) => ({stuck}))(Breadcrumb);
 // export default domAttributeChecker(
 //   'clientWidth', 'clientHeight', 'scrollWidth',
 // )(Breadcrumb);

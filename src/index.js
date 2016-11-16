@@ -41,7 +41,6 @@ const handleError = e => {
   } catch (_) {/**/}
   console.error(e);
   // TODO: send to analytics
-  document.location.reload();
 };
 
 window.addEventListener('unhandledrejection', handleError);

@@ -67,15 +67,15 @@ const Footer = (
                 </li>);
             }
             return (
-                <li key={i} className={page === e ? f('current') : ''}>
-                  <Link to={{pathname, query: {
-                    page: e,
-                    page_size: pageSize,
-                    search: pagination.search}}}
-                  >
-                    {e}
-                  </Link>
-                </li>
+              <li key={i} className={page === e ? f('current') : ''}>
+                <Link to={{pathname, query: {
+                  page: e,
+                  page_size: pageSize,
+                  search: pagination.search}}}
+                >
+                  {e}
+                </Link>
+              </li>
             );})
           }
           {(page === lastPage) ?

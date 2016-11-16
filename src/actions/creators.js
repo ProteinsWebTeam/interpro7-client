@@ -33,6 +33,14 @@ export const closeEverything = () => ({
   type: types.CLOSE_EVERYTHING,
 });
 
+export const stick = () => ({
+  type: types.STUCK,
+});
+
+export const unstick = () => ({
+  type: types.UNSTUCK,
+});
+
 const parseValue = target => {
   switch (target.type) {
     case 'range':

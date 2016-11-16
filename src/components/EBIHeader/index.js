@@ -202,9 +202,8 @@ const EBIHeader = () => (
 
 );
 
-/*
-Skip to div
- */
+// Skip to div
+// TODO: Check why we have to put that
 export const EbiSkipToDiv = () => (
   <div id="skip-to" >
     <ul>

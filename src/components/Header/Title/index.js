@@ -6,13 +6,14 @@ import logo from 'images/logo/interpro_white.png';
 import {foundationPartial} from 'styles/foundation';
 import ebiGlobalStyles from 'styles/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
-const style = foundationPartial(ebiGlobalStyles, ipro);
+import localStyles from './style.css';
+const styles = foundationPartial(ebiGlobalStyles, ipro, localStyles);
 
-const Title = ({location, data}) => {
-  let subtitle = 'Classification of protein families',
-    small1 = null,
-    small2 = null;
-  if (location !== '/' && data !== null){
+const Title = ({location, data, loading, stuck}) => {
+  let subtitle = 'Classification of protein families';
+  let small1;
+  let small2;
+  if (location !== '/' && data !== null) {
     if (data.metadata){
       subtitle = data.metadata.name.name;
       small1 = (data.metadata.source_database.toLowerCase() === 'interpro') ?
@@ -24,17 +25,21 @@ const Title = ({location, data}) => {
 
   return (
     <div
-      className={style('columns', 'small-6', 'medium-8', 'anim')}
+      className={styles('columns', 'small-6', 'medium-8', 'anim')}
       id="local-title"
     >
-      <h1>
+      <h1 className={styles('main-title', {stuck})}>
         <Link to="/" title="Back to InterPro homepage">
-          <img src={logo} alt="InterPro logo" />
+          <img
+            src={logo}
+            alt="InterPro logo"
+            className={styles('main-logo', {stuck, loading})}
+          />
           InterPro
         </Link>
         {small1 && <span> {small1}</span>}
       </h1>
-      <h4 className={style('hide-for-small-only')}>
+      <h4 className={styles('hide-for-small-only', 'subtitle', {stuck})}>
         {subtitle}
         {small2 && <small> ({small2})</small>}
       </h4>
@@ -44,6 +49,10 @@ const Title = ({location, data}) => {
 Title.propTypes = {
   location: T.string.isRequired,
   data: T.object,
+  loading: T.bool.isRequired,
+  stuck: T.bool.isRequired,
 };
 
-export default connect(({data: data}) => data)(Title);
+export default connect(
+  ({data: {data, loading}, ui: {stuck}}) => ({data, loading, stuck})
+)(Title);

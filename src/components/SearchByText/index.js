@@ -34,57 +34,59 @@ class SearchByText extends Component {
   render() {
     const {value, submit} = this.state;
     return (
-    <div className={f('row')}>
-      <div className={f('large-12', 'columns')}>
-        <form onSubmit={this.handleSubmit}>
-          <fieldset className={f('fieldset')}>
-            <legend>Search InterPro</legend>
-            <div className={f('secondary', 'callout')}>
+      <div className={f('row')}>
+        <div className={f('large-12', 'columns')}>
+          <form onSubmit={this.handleSubmit}>
+            <fieldset className={f('fieldset')}>
+              <legend>Search InterPro</legend>
+              <div className={f('secondary', 'callout')}>
 
-              <div className={f('row')}>
-                <div className={f('large-12', 'columns')}>
-                  <label>Sequences, family, domains or GO terms</label>
-                  <TextSearchBox
-                    value={value}
-                    toSubmit={submit}
-                    ref={(input) => {
-                      this.searchInput = input;
-                    }}
-                  />
+                <div className={f('row')}>
+                  <div className={f('large-12', 'columns')}>
+                    <label>Sequences, family, domains or GO terms</label>
+                    <TextSearchBox
+                      value={value}
+                      toSubmit={submit}
+                      ref={(input) => {
+                        this.searchInput = input;
+                      }}
+                    />
+                  </div>
+
+
                 </div>
 
-
-              </div>
-
-              <div className={f('row')}>
-                <div className={f('large-12', 'columns', 'small', 'search-eg')}
-                  onClick={this.handleClick}
-                > e.g.
-                  <Example value="IPR020422"/>,
-                  <Example value="kinase" />,
-                  <Example value="O00167" />,
-                  <Example value="PF02932" />,
-                  <Example value="GO:0007165"/>
+                <div className={f('row')}>
+                  <div
+                    className={f('large-12', 'columns', 'small', 'search-eg')}
+                    onClick={this.handleClick}
+                  > e.g.
+                    <Example value="IPR020422"/>,
+                    <Example value="kinase" />,
+                    <Example value="O00167" />,
+                    <Example value="PF02932" />,
+                    <Example value="GO:0007165"/>
+                  </div>
                 </div>
-              </div>
 
-              <div className={f('row')} style={{marginTop: '1em'}}>
-                <div className={f('large-12', 'columns')}>
-                  <a className={f('button')}
-                    onClick={this.handleSubmitClick}
-                  >Search</a>
-                  <a className={f('secondary', 'hollow', 'button')}
-                    onClick={this.handleReset}
-                  >Clear</a>
+                <div className={f('row')} style={{marginTop: '1em'}}>
+                  <div className={f('large-12', 'columns')}>
+                    <a className={f('button')}
+                      onClick={this.handleSubmitClick}
+                    >Search</a>
+                    <a className={f('secondary', 'hollow', 'button')}
+                      onClick={this.handleReset}
+                    >Clear</a>
+                  </div>
                 </div>
-              </div>
 
-            </div>
-          </fieldset>
-        </form>
+              </div>
+            </fieldset>
+          </form>
+        </div>
       </div>
-    </div>
-    );}
+    );
+  }
 }
 SearchByText.propTypes = {
   pageSize: T.number,

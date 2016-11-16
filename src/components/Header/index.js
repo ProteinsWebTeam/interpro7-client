@@ -11,6 +11,8 @@ import Title from './Title';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 import EBIHeader, {EbiSkipToDiv} from 'components/EBIHeader';
 
+import {sticky as supportsSticky} from 'utils/support';
+
 import {foundationPartial} from 'styles/foundation';
 import styles from './style.css';
 import ebiGlobalStyles from 'styles/ebi-global.css';
@@ -19,80 +21,12 @@ import ipro from 'styles/interpro-new.css';
 const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
 const reducedStyleBundle = classnames.bind(styles);
 
-// Only does this in a browser
-// Logic to attach the scaling of the banner to the scroll position
-if (window) {
-  // If IntersectionObserver is supported use that
-  if (window.IntersectionObserver) {
-    const MIN_VISIBLE_THRESHOLD = 0.01;
-    const POLLING_TIMEOUT = 500;
-    let scaled;
-    let translated;
-    // IntersectionObserver to be used on the EBI header
-    const io = new IntersectionObserver(([{intersectionRatio}]) => {
-      // If the element to scaled is not there yet, get it here
-      if (!scaled) {
-        [scaled] = document.getElementsByClassName(
-          styles.top_level_title.split(' ')[0]
-        );
-      }
-      if (!translated) {
-        [translated] = document.getElementsByClassName(
-          styles.top_level_hamburger.split(' ')[0]
-        );
-      }
-      // If the EBI header is visible, display full banner
-      if (intersectionRatio) {
-        scaled.classList.remove(styles.scrolled);
-        translated.classList.remove(styles.scrolled);
-      } else {// Otherwise, scale down the banner
-        scaled.classList.add(styles.scrolled);
-        translated.classList.add(styles.scrolled);
-      }
-    }, {threshold: [MIN_VISIBLE_THRESHOLD]});
-    // Polls regularly the DOM to see if the element to watch is here
-    const to = setInterval(() => {
-      const [headerEBI] = document.getElementsByClassName(
-        styleBundle('ebi').split(' ')[0]
-      );
-      if (headerEBI) {
-        // When we got the element, stop the interval
-        clearInterval(to);
-        // And start observing it
-        io.observe(headerEBI);
-      }
-    }, POLLING_TIMEOUT);
-  } else {// Otherwise fall back to watching scroll position
-    const SCROLL_OFFSET = 34;// Height of the EBI banner
-    let scaled;// Element to scale
-    let translated;// Element to translate
-    let scrolled = window.scrollY > SCROLL_OFFSET;// Flag
-    window.addEventListener('scroll', () => {
-      if (!scaled) {
-        [scaled] = document.getElementsByClassName(
-          styles.top_level_title.split(' ')[0]
-        );
-      }
-      if (!translated) {
-        [translated] = document.getElementsByClassName(
-          styles.top_level_hamburger.split(' ')[0]
-        );
-      }
-      if (scrolled !== window.scrollY > SCROLL_OFFSET) {
-        scrolled = !scrolled;
-        scaled.classList.toggle(styles.scrolled);
-        translated.classList.toggle(styles.scrolled);
-      }
-    }, {passive: true});
-  }
-}
-
 const menuItems = {
   dynamicPages: ['Entry', 'Protein', 'Structure', 'Proteome', 'Pathway'],
   staticPages: ['About', 'Help', 'Contact', 'Settings'],
 };
 
-const _HamburgerBtn = ({openSideNav, open, svg}) => {
+const _HamburgerBtn = ({openSideNav, open, svg, stuck}) => {
   if (!svg) {
     return (
       <span>
@@ -109,7 +43,7 @@ const _HamburgerBtn = ({openSideNav, open, svg}) => {
     <button onClick={openSideNav}>
       <svg
         viewBox="0 0 12 10" width="2.5em" height="2.5em"
-        className={styles.top_level_hamburger}
+        className={reducedStyleBundle('top_level_hamburger', {stuck})}
       >
         <line
           x1="1" y1="2" x2="10" y2="2"
@@ -131,53 +65,17 @@ _HamburgerBtn.propTypes = {
   openSideNav: T.func.isRequired,
   open: T.bool.isRequired,
   svg: T.bool.isRequired,
+  stuck: T.bool.isRequired,
 };
 const HamburgerBtn = connect(
   ({ui: {sideNav: open}}) => ({open}),
   {openSideNav}
 )(_HamburgerBtn);
-//
-// const _SideIcons = ({open}) => (
-//   <div
-//     className={styleBundle('columns', 'small-4', 'medium-2')}
-//     id="slide-menu"
-//   >
-//     <div className={styleBundle('local-buttons')}>
-//       <div
-//         className={styleBundle('local-offcanvas-menu', 'anim')}
-//         style={{transform: `translateX(${open ? '-20em' : '0em'})`}}
-//       >
-//         <HamburgerBtn svg={true} />
-//       </div>
-//       <div
-//         className={styleBundle('local-site-search', 'anim')}
-//         style={{transform: `translateX(${open ? '-20em' : '0em'})`}}
-//       >
-//         <label
-//           className={styleBundle('header-search')}
-//           id="local-search"
-//           name="local-search"
-//         >
-//           <Link
-//             to="/search"
-//             className={styleBundle('icon', 'icon-functional')}
-//             data-icon="1"
-//           />
-//           <TextSearchBox
-//             maxLength="255"
-//             value=""
-//             name="search"
-//           />
-//         </label>
-//       </div>
-//
-//     </div>
-//   </div>
-// );
-const _SideIcons = ({movedAway}) => (
+
+const _SideIcons = ({movedAway, stuck}) => (
   <div className={reducedStyleBundle('side-icons', {movedAway})}>
-    <HamburgerBtn svg={true} />
-    <label className={reducedStyleBundle('side-search')}>
+    <HamburgerBtn svg={true} stuck={stuck} />
+    <label className={reducedStyleBundle('side-search', {stuck})}>
       <TextSearchBox
         maxLength="255"
         value=""
@@ -201,12 +99,12 @@ const _SideIcons = ({movedAway}) => (
 );
 _SideIcons.propTypes = {
   movedAway: T.bool.isRequired,
+  stuck: T.bool.isRequired,
 };
 
 const SideIcons = connect(
   ({ui: {sideNav: open}}) => ({movedAway: open})
 )(_SideIcons);
-
 
 const MenuItem = ({active, children}) => (
   <Link
@@ -245,26 +143,36 @@ MediumLevel.propTypes = {
   pageType: T.string,
 };
 
-const Header = ({pathname}) => (
-  <div className={ipro['smaller-container']}>
-    <div className={ipro['main-header']}>
-      <EbiSkipToDiv />
-        <header
-          id="local-masthead"
-          className={ipro['local-masthead']}
-        >
-            <EBIHeader />
-            <div className={styleBundle('masthead', 'row')}>
-              <Title location={pathname}/>
-              <SideIcons />
-              <DynamicMenu location={pathname}/>
-            </div>
-        </header>
+const styleForHeader = (supportsSticky, offset, stuck) => {
+  const style = {top: `-${offset}px`};
+  if (supportsSticky) {
+    return {...style, position: 'sticky'};
+  }
+  if (stuck) {
+    return {...style, position: 'fixed'};
+  }
+  return style;
+};
+
+const Header = ({pathname, stickyMenuOffset: offset, stuck}) => (
+  <header
+    id={ebiGlobalStyles['local-masthead']}
+    className={styleBundle('header', 'local-masthead')}
+    style={styleForHeader(false && supportsSticky, offset, stuck)}
+  >
+    <EbiSkipToDiv />
+    <EBIHeader />
+    <div className={styleBundle('masthead', 'row')}>
+      <Title location={pathname} reduced={false} />
+      <SideIcons reduced={false} stuck={stuck} />
+      <DynamicMenu location={pathname}/>
     </div>
-  </div>
+  </header>
 );
 Header.propTypes = {
   pathname: T.string.isRequired,
+  stickyMenuOffset: T.number.isRequired,
+  stuck: T.bool.isRequired,
 };
 
-export default Header;
+export default connect(({ui: {stuck}}) => ({stuck}))(Header);

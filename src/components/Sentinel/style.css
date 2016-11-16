@@ -1,0 +1,8 @@
+.sentinel {
+  position: absolute;
+  height: 1px;
+  width: 100vw;
+  pointer-events: none;
+  /*background: red;
+  z-index: 99999;*/
+}

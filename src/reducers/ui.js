@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import {
-  TOGGLE_SIDE_NAV, TOGGLE_EMBL_MAP_NAV, CLOSE_EVERYTHING,
+  TOGGLE_SIDE_NAV, TOGGLE_EMBL_MAP_NAV, CLOSE_EVERYTHING, STUCK, UNSTUCK,
 } from 'actions/types';
 
 export const sideNav = (state = false, action) => {
@@ -27,4 +27,15 @@ export const emblMapNav = (state = false, action) => {
   }
 };
 
-export default combineReducers({sideNav, emblMapNav});
+export const stuck = (state = false, action) => {
+  switch (action.type) {
+    case STUCK:
+      return true;
+    case UNSTUCK:
+      return false;
+    default:
+      return state;
+  }
+};
+
+export default combineReducers({sideNav, emblMapNav, stuck});

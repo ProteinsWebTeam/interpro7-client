@@ -15,8 +15,11 @@
 }
 
 .header {
-  position: sticky;
-  top: -100px;/* -34px (EBI header); */
+  /*position: sticky;*/
+  /*top: -150px;!* -34px (EBI header); *!*/
+  left: 0;
+  right: 0;
+  height: 238px;/*magic*/
   z-index: 10;
 }
 
@@ -44,7 +47,7 @@
   background-repeat: no-repeat;
   background-size: auto 100%;*/
 
-  background-color: #00559e;
+  background: #00559e;
   background-image: linear-gradient(
     to right,
     rgba(0, 85, 158, 0.9), rgba(45, 174, 193, 0.5), rgba(0, 85, 158, 0.9)
@@ -115,17 +118,17 @@
   color: var(--colors-nearly-white);
   cursor: pointer;
   transition: transform 0.5s ease-in-out;
-  transform: translateY(0);
+  transform: translateY(0) rotateZ(0);
 
-  &.scrolled {
-    transform: translateY(100%);
+  &.stuck {
+    transform: translateY(150%) rotateZ(-180deg);
   }
 }
 
 .hamb_line {
-  stroke-width:1.5px;
+  stroke-width: 1.5px;
   stroke: #fff;
-  stroke-linecap:round;
+  stroke-linecap: round;
   transform-origin: 50% 50%;
 }
 
@@ -136,7 +139,10 @@
 .hamb_1_open, .hamb_2_open, .hamb_3_open {
   composes: hamb_line;
 }
-.hamb_1, .hamb_2, .hamb_3 { transition: all .3s;}/*otherwise doesn't loop*/
+.hamb_1, .hamb_2, .hamb_3 {
+  transition: transform .3s ease-in-out;
+}
+
 .hamb_1_open {
   transform: rotate(45deg) translate(2px, 2px);
   transition: transform 0.3s ease-in-out;
@@ -146,7 +152,6 @@
   opacity:0;
   transition: opacity .3s;
 }
-
 
 .hamb_3_open {
   transform: rotate(-45deg) translate(2px, -2px);
@@ -238,6 +243,13 @@
   display: flex;
   align-items: center;
   font-size: 1.5rem;
+  transform: translate(0, 0);
+  transition: transform 0.3s ease-in-out 0.15s;
+
+  &.stuck {
+    transform: translate(-25%, 50%);
+    transition-delay: 0s;
+  }
 
   @nest & svg {
     transition: transform 0.5s ease-in-out;

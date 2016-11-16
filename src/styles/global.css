@@ -13,8 +13,6 @@ body {
   color: var(--colors-nearly-black);
   font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   font-weight: 300;
-  transition: transform 0.5s ease-in-out;
-  transform: translateX(0);
 }
 
 a {
@@ -27,18 +25,9 @@ header a {
 }
 
 :global(#root) {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  width: 100vw;
-  overflow-x: hidden;
-  transition: filter 0.5s ease-in-out;
-  filter: grayscale(0);
-
   @nest & > * {
-    height: 100vh;
-    width: 100vw;
+    /*height: 100vh;*/
+    /*width: 100vw;*/
     display: flex;
     flex-direction: column;
 
