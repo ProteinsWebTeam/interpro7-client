@@ -18,13 +18,10 @@ export default class extends Component {
     document.cookie = 'cookies-accepted=true';
     if (this.banner.animate) {
       this.banner
-        .animate(
-          [
-            {transform: 'translateY(0)', opacity: 1},// from
-            {transform: 'translateY(100%)', opacity: 0.5},// to
-          ],
-          {duration: 300, fill: 'forwards', easing: 'ease-in'}
-        )
+        .animate([
+          {transform: 'translateY(0)', opacity: 1},
+          {transform: 'translateY(100%)', opacity: 0.5},
+        ], {duration: 300, fill: 'forwards', easing: 'ease-in'})
         .onfinish = () => this.setState({display: false});
     } else {
       this.setState({display: false});

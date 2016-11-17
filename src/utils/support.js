@@ -1,2 +1,4 @@
 // @flow
-export const sticky = window ? CSS.supports('position', 'sticky') : false;
+export const sticky = (
+  window && window.CSS && window.CSS.supports('position', 'sticky') || false
+);
