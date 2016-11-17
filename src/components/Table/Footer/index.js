@@ -57,26 +57,34 @@ const Footer = (
               >Previous</Link>
             </li>
           }
-          { pages.map((e, i) => {
-            if (e === '...') {
-              return <li key={i} className={f('ellipsis')}/>;
-            } else if (page === e) {
+          {
+            pages.map((e, i) => {
+              if (e === '...') {
+                return <li key={i} className={f('ellipsis')}/>;
+              } else if (page === e) {
+                return (
+                  <li key={i} className={f('current')}>
+                    <span className={f('show-for-sr')}>You're on page</span>{e}
+                  </li>
+                );
+              }
               return (
-                <li key={i} className={f('current')}>
-                  <span className={f('show-for-sr')}>You're on page</span>{e}
-                </li>);
-            }
-            return (
-              <li key={i} className={page === e ? f('current') : ''}>
-                <Link to={{pathname, query: {
-                  page: e,
-                  page_size: pageSize,
-                  search: pagination.search}}}
-                >
-                  {e}
-                </Link>
-              </li>
-            );})
+                <li key={i} className={page === e ? f('current') : ''}>
+                  <Link
+                    to={{
+                      pathname,
+                      query: {
+                        page: e,
+                        page_size: pageSize,
+                        search: pagination.search,
+                      },
+                    }}
+                  >
+                    {e}
+                  </Link>
+                </li>
+              );
+            })
           }
           {(page === lastPage) ?
             <li className={f('disabled')}>

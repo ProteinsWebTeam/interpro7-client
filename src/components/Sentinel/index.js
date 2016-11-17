@@ -6,41 +6,51 @@ import {sticky as supportsSticky} from 'utils/support';
 
 import styles from './style.css';
 
-const listenScrolled = (element, {top, stick, unstick}) => {
-  const output = {unsubscribe() {}};
-  if (!window) return output;
-  console.log(element);
-  if (supportsSticky) {
-    // IntersectionObserver to be used on the EBI header
-    const io = new IntersectionObserver(([{intersectionRatio: notStuck}]) => {
-      // If the EBI header is visible, display full banner
-      notStuck ? unstick() : stick();
-    });
-    io.observe(element);
-    output.unsubscribe = () => {
+// Default, use IntersectionObserver
+const listenScrolledIO = (element, {stick, unstick}) => {
+  // IntersectionObserver to be used on the EBI header
+  const io = new IntersectionObserver(([{intersectionRatio: notStuck}]) => {
+    // If the EBI header is visible, display full banner
+    notStuck ? unstick() : stick();
+  }, {threshold: [1]});
+  io.observe(element);
+  return ({
+    unsubscribe() {
       io.disconnect();
-    };
-  } else {
-    let isStuck = false;
-    const checkStickyness = () => {
-      const isNowStuck = window.scrollY > top;
-      // Detect if stickyness status has changed
-      if (isNowStuck !== isStuck) {
-        // Trigger reducers if it has changed
-        isNowStuck ? stick() : unstick();
-        isStuck = isNowStuck;
-      }
-    };
-    window.addEventListener('resize', checkStickyness, {passive: true});
-    window.addEventListener('scroll', checkStickyness, {passive: true});
-    // Run once, just in case
-    checkStickyness();
-    output.unsubscribe = () => {
+    },
+  });
+};
+
+// Fallback to event listener
+const listenScrolledEventListener = ({stick, unstick, top}) => {
+  let isStuck = false;
+  const checkStickyness = () => {
+    const isNowStuck = window.scrollY > top;
+    // Detect if stickyness status has changed
+    if (isNowStuck !== isStuck) {
+      // Trigger reducers if it has changed
+      isNowStuck ? stick() : unstick();
+      isStuck = isNowStuck;
+    }
+  };
+  window.addEventListener('resize', checkStickyness, {passive: true});
+  window.addEventListener('scroll', checkStickyness, {passive: true});
+  // Run once, just in case
+  checkStickyness();
+  return ({
+    unsubscribe() {
       window.removeEventListener('resize', checkStickyness);
       window.removeEventListener('scroll', checkStickyness);
-    };
+    },
+  });
+};
+
+const listenScrolled = (element, args) => {
+  if (!window) return {unsubscribe() {}};
+  if (supportsSticky) {
+    return listenScrolledIO(element, args);
   }
-  return output;
+  return listenScrolledEventListener(args);
 };
 
 const Sentinel = class extends Component {
@@ -66,7 +76,6 @@ const Sentinel = class extends Component {
     const {top} = this.props;
     return (
       <span
-        aria-visible="false"
         className={styles.sentinel}
         style={{top: `${top}px`}}
         ref={element => {

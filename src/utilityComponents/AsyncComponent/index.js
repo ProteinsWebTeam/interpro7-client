@@ -18,7 +18,7 @@ export default class extends Component {
   }
 
   render() {
-    const {componentPath, trigger, placeHolder, ...props} = this.props;
+    const {componentPath, placeHolder, ...props} = this.props;
     const {Component = placeHolder} = this.state;
     /* trigger.then(() => require.ensure(
       componentPath,
