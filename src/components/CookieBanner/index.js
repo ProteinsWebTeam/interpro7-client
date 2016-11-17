@@ -19,7 +19,10 @@ export default class extends Component {
     if (this.banner.animate) {
       this.banner
         .animate(
-          [{transform: 'translateY(100%)', opacity: 0.5}],
+          [
+            {transform: 'translateY(0)', opacity: 1},// from
+            {transform: 'translateY(100%)', opacity: 0.5},// to
+          ],
           {duration: 300, fill: 'forwards', easing: 'ease-in'}
         )
         .onfinish = () => this.setState({display: false});

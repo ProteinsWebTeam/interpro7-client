@@ -2,7 +2,6 @@ import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
 
 import {stick, unstick} from 'actions/creators';
-import {sticky as supportsSticky} from 'utils/support';
 
 import styles from './style.css';
 
@@ -47,7 +46,7 @@ const listenScrolledEventListener = ({stick, unstick, top}) => {
 
 const listenScrolled = (element, args) => {
   if (!window) return {unsubscribe() {}};
-  if (supportsSticky) {
+  if (window.IntersectionObserver) {
     return listenScrolledIO(element, args);
   }
   return listenScrolledEventListener(args);
