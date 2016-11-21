@@ -2,3 +2,10 @@
   /*transition: max-height 300ms ease-in-out;*/
   overflow: hidden;
 }
+
+@supports (initial-letter: 2) {
+  .paragraph::first-letter {
+    font-weight: bold;
+    initial-letter: 2;
+  }
+}
