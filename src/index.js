@@ -26,10 +26,7 @@ const main = async () => {
         // Re-renders App
         render(<NextApp />, DOM_ROOT);
       } catch (error) {
-        // If any error, renders the error inside a RedBox
-        // (displays it in the browser)
-        const RedBox = require('redbox-react');
-        render(<RedBox error={error} />, DOM_ROOT);
+        console.error(error);
       }
     });
   }

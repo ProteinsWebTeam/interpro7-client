@@ -1,6 +1,9 @@
 // @flow
+/* globals require: false */
 import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router/es';
+
+import {webComponents} from 'utils/polyfills';
 
 import Table, {
   Column, Search, PageSizeSelector, Exporter,
@@ -9,6 +12,14 @@ import Table, {
 import {removeLastSlash} from 'utils/url';
 
 import f from 'styles/foundation';
+
+webComponents().then(() => {
+  require.ensure(
+    [],
+    () => require('interpro-components'),
+    'interpro-components'
+  );
+});
 
 const Entry = (
   {data, location: {query, pathname}, dataUrl, children}

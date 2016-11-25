@@ -1,5 +1,5 @@
 import React, {PropTypes as T} from 'react';
-import {Link} from 'react-router';
+import {Link} from 'react-router/es';
 import {connect} from 'react-redux';
 
 import {BaseLink} from 'components/ExtLink';

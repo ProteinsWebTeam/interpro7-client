@@ -50,8 +50,8 @@ if (process.env.NODE_ENV === 'test') {
 
 if (!PROD) {
   config.devtool = process.env.NODE_ENV === 'test' ?
-    'source-map' :
-    'inline-source-map';
+    '#source-map' :
+    '#inline-source-map';
   config.devServer = {
     contentBase: '',
     colors: true,

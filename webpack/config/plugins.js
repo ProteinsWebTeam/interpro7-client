@@ -33,8 +33,9 @@ const test = [...common];
 common.push(
   // vendor chunk will go in this file
   new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor',
-    filename: 'vendor.[hash:3].js',
+    names: ['vendor'],
+    filename: '[name].[hash:3].js',
+    minChunks: Infinity,
   })
 );
 
