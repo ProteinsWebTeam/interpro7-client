@@ -1,6 +1,7 @@
 import * as types from 'actions/types';
 
 // Action creators
+// UI
 export const toggleEMBLMapNav = () => ({
   type: types.TOGGLE_EMBL_MAP_NAV,
 });
@@ -41,6 +42,7 @@ export const unstick = () => ({
   type: types.UNSTUCK,
 });
 
+// settings
 const parseValue = target => {
   switch (target.type) {
     case 'range':
@@ -70,6 +72,7 @@ export const resetSettings = (value = null) => ({
   value,
 });
 
+// data
 export const loadingData = urlKey => ({
   type: types.LOADING_DATA,
   urlKey,
@@ -90,4 +93,16 @@ export const failedLoadingData = (urlKey, error) => ({
   type: types.FAILED_LOADING_DATA,
   urlKey,
   error,
+});
+
+// toast messages
+export const addToast = (toast, id) => ({
+  type: types.ADD_TOAST,
+  id,
+  toast,
+});
+
+export const removeToast = id => ({
+  type: types.REMOVE_TOAST,
+  id,
 });

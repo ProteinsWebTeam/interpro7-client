@@ -2,6 +2,7 @@
 import React, {PropTypes as T} from 'react';
 import {foundationPartial} from 'styles/foundation';
 import SearchByText from 'components/SearchByText';
+import IPScanSearch from 'components/IPScanSearch';
 import Description from 'components/Description';
 import {InterproSymbol} from 'components/Title';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -157,7 +158,19 @@ const Home = () => (
           ]}
         />
 
-        <SearchByText />
+
+        <fieldset className={f('fieldset')}>
+          <legend>Search InterPro</legend>
+          <Tabs>
+            <div title="by text">
+              <SearchByText />
+            </div>
+            <div title="by sequence">
+              <IPScanSearch />
+            </div>
+          </Tabs>
+        </fieldset>
+
 
       </div>
     </div>

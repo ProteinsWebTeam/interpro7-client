@@ -5,6 +5,7 @@
 .*/node_modules/editions*
 .*/node_modules/fbjs.*
 .*/node_modules/babel.*
+.*/node_modules/draft-js
 .*/node_modules/.*json
 
 [include]

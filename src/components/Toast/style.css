@@ -1,0 +1,19 @@
+.toast-display {
+  position: fixed;
+  display: flex;
+  flex-direction: column-reverse;
+  bottom: 1rem;
+  right: 1rem;
+  list-style: none;
+  margin: 0;
+  pointer-events: none;
+  z-index: 102;
+}
+
+.toast {
+  float: right;
+  margin: 1rem 0;
+  pointer-events: auto;
+  min-width: calc(50vw - 2rem);
+  max-width: calc(100vw - 2rem);
+}

@@ -55,7 +55,7 @@ const rules = {
   // Disallow padding inside computed properties
   'computed-property-spacing': [1, 'never'],
   // Require return statements to either always or never specify values
-  'consistent-return': 1,
+  'consistent-return': 0,
   // Enforce consistent naming when capturing the current execution context
   'consistent-this': 1,
   // Verify super() callings in constructors
@@ -117,7 +117,7 @@ const rules = {
   // Disallow modifying variables of class declarations
   'no-class-assign': 1,
   // Disallow assignment in conditional expressions
-  'no-cond-assign': [1, 'always'],
+  'no-cond-assign': [1, 'except-parens'],
   // Disallow use of constant expressions in conditions
   'no-constant-condition': 1,
   // Disallow modifying variables that are declared using const
@@ -237,7 +237,7 @@ const rules = {
   // Disallow multiple spaces in a regular expression literal
   'no-regex-spaces': 1,
   // Disallow use of assignment in return statement
-  'no-return-assign': 1,
+  'no-return-assign': 0,
   // Disallow use of `javascript:` urls.
   'no-script-url': 2,
   // Disallow self assignment

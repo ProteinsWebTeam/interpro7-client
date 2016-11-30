@@ -7,6 +7,7 @@ import config from 'config';
 import routes from 'routes';
 import loadDataForURL from 'data';
 import createStore from 'store';
+import {createToastManagerWithStore} from 'toasts';
 
 const history = useRouterHistory(createBrowserHistory)({
   basename: config.root.website.pathname,
@@ -18,6 +19,8 @@ const store = createStore();
 history.listen(loadDataForURL(store));
 // For first load
 loadDataForURL(store)(history.getCurrentLocation());
+// Instantiate Toast manager
+createToastManagerWithStore(store);
 
 const App = () => (
   <Provider store={store}>

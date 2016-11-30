@@ -14,3 +14,7 @@ export const LOADING_DATA = 'LOADING_DATA';
 export const LOADED_DATA = 'LOADED_DATA';
 export const FAILED_LOADING_DATA = 'FAILED_LOADING_DATA';
 export const UNLOADING_DATA = 'UNLOADING_DATA';
+
+// toast messages
+export const ADD_TOAST = 'ADD_TOAST';
+export const REMOVE_TOAST = 'REMOVE_TOAST';

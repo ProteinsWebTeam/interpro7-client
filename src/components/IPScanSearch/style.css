@@ -1,0 +1,29 @@
+@import '../../styles/fonts.css';
+
+.editor {
+  height: auto;
+  min-height: 10em;
+  font-family: var(--fonts-mono-alt);
+
+  @nest & :global(.public-DraftEditorPlaceholder-root) {
+    color: #cacaca;
+    position: absolute;
+  }
+}
+
+.invalid-block {
+  border-color: red;
+}
+
+.comment {
+  color: gray;
+}
+
+.invalid-letter {
+  color: red;
+  font-weight: bold;
+}
+
+input:disabled {
+  background: gray;
+}

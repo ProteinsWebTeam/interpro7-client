@@ -1,6 +1,6 @@
 /* eslint-env node */
 import {createStore, applyMiddleware, compose} from 'redux';
-import rootReducer from 'reducers/root';
+import rootReducer from 'reducers';
 import settingsStorage from 'storage/settings';
 import {DEV} from 'config';
 
@@ -29,9 +29,9 @@ const getEnhancer = () => {
 
 const hmr = store => {
   // If any change to the root reducer or its dependency tree
-  module.hot.accept('reducers/root', () => {
+  module.hot.accept('reducers', () => {
     // Reloads the root reducer
-    const nextReducer = require('reducers/root').default;
+    const nextReducer = require('reducers').default;
     // And replaces it in the store
     store.replaceReducer(nextReducer);
   });
