@@ -1,14 +1,15 @@
 import React, {PropTypes as T, Component} from 'react';
 import {Editor, EditorState, CompositeDecorator, convertToRaw} from 'draft-js';
 import {withRouter} from 'react-router/es';
+import {connect} from 'react-redux';
 
-import {getToastManager} from 'toasts';
+import {addToast} from 'actions/creators';
+
+import id from 'utils/cheapUniqueId';
 
 import {foundationPartial} from 'styles/foundation';
 import styles from './style.css';
 const s = foundationPartial(styles);
-
-const toastManager = getToastManager();
 
 const strategy = re => (block, cb) => {
   const text = block.getText();
@@ -18,12 +19,19 @@ const strategy = re => (block, cb) => {
   }
 };
 
-const classedSpan = className => ({offsetKey, children}) => (
-  <span className={className} data-offset-key={offsetKey}>{children}</span>
-);
+const classedSpan = className => {
+  const Span = ({offsetKey, children}) => (
+    <span className={className} data-offset-key={offsetKey}>{children}</span>
+  );
+  Span.propTypes = {
+    offsetKey: T.number.isRequired,
+    children: T.any,
+  };
+  return Span;
+};
 
-const checkValidity = (({comment, IUPACProt}) => (
-  lines => lines.reduce((acc, line) => (
+const checkValidity = (({comment, IUPACProt}) => lines => (
+  lines.reduce((acc, line) => (
     acc && (comment.test(line) || IUPACProt.test(line))
   ), true))
 )({comment: /^\s*[>;].*$/m, IUPACProt: /^[a-z* -]*$/mi});
@@ -57,6 +65,15 @@ const submitSearch = async value => {
 };
 
 class IPScanSearch extends Component {
+  static propTypes = {
+    addToast: T.func.isRequired,
+    router: T.object,
+    value: T.string,
+    location: T.shape({
+      query: T.object,
+    }),
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -65,12 +82,7 @@ class IPScanSearch extends Component {
     };
   }
 
-  handleClick = event => {
-    const value = event.target.dataset.search;
-    if (value) this.setState({value});
-  };
-
-  handleReset = () => this.setState(
+  _handleReset = () => this.setState(
     {
       editorState: EditorState.createEmpty(compositeDecorator),
       valid: true,
@@ -78,29 +90,33 @@ class IPScanSearch extends Component {
     () => this.editor.focus()
   );
 
-  handleSubmitFail = err => {
+  _handleSubmitFail = err => {
     // An error happened during job submission
     console.error(err);
+    // Focuses back to the editor to modify the sequence
+    this.editor.focus();
     // Displays message and bails
-    toastManager.add({
+    this.props.addToast({
       title: 'Job submission failed',
       body: 'Something wrong happened while trying to submit your job',
       className: s('alert'),
-    });
+      ttl: 5000,
+    }, id());
   };
 
-  handleSubmitSuccess = id => {
+  _handleSubmitSuccess = jobId => {
     // If job successfully submitted, resets input field
-    this.handleReset();
+    this._handleReset();
     // And notifies user
-    toastManager.add({
+    this.props.addToast({
       title: 'Job submitted',
-      body: `Your job has been successfully submitted with an id of ${id}`,
+      body: `Your job has been successfully submitted with an id of ${jobId}`,
       className: s('success'),
-    });
+      ttl: 5000,
+    }, id());
   };
 
-  handleSubmit = async event => {
+  _handleSubmit = async event => {
     event.preventDefault();
     const lines = convertToRaw(
       this.state.editorState.getCurrentContent()
@@ -108,20 +124,20 @@ class IPScanSearch extends Component {
     if (!lines.length) return;
     const value = lines.join('\n');
     console.log(`POSTing ${value}`);
-    let id;
+    let jobId;
     try {
-      id = await submitSearch(value);
+      jobId = await submitSearch(value);
     } catch (err) {
-      return this.handleSubmitFail(err);
+      return this._handleSubmitFail(err);
     }
-    this.handleSubmitSuccess(id);
+    this._handleSubmitSuccess(jobId);
   };
 
-  handleEditorClick = () => {
+  _handleEditorClick = () => {
     this.editor.focus();
   };
 
-  handleChange = editorState => {
+  _handleChange = editorState => {
     const lines = convertToRaw(editorState.getCurrentContent()).blocks
       .map(block => block.text);
     this.setState({
@@ -135,7 +151,7 @@ class IPScanSearch extends Component {
     return (
       <div className={s('row')}>
         <div className={s('large-12', 'columns')}>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this._handleSubmit}>
             <div className={s('secondary', 'callout')}>
 
               <div className={s('row')}>
@@ -144,12 +160,12 @@ class IPScanSearch extends Component {
                   <div
                     type="text"
                     className={s('editor', {'invalid-block': !valid})}
-                    onClick={this.handleEditorClick}
+                    onClick={this._handleEditorClick}
                   >
                     <Editor
                       placeholder="Enter your sequence"
                       editorState={editorState}
-                      onChange={this.handleChange}
+                      onChange={this._handleChange}
                       ref={editor => this.editor = editor}
                     />
                   </div>
@@ -166,7 +182,7 @@ class IPScanSearch extends Component {
                   />
                   <button
                     className={s('secondary', 'hollow', 'button')}
-                    onClick={this.handleReset}
+                    onClick={this._handleReset}
                   >Clear</button>
                 </div>
               </div>
@@ -178,12 +194,7 @@ class IPScanSearch extends Component {
     );
   }
 }
-IPScanSearch.propTypes = {
-  router: T.object,
-  value: T.string,
-  location: T.shape({
-    query: T.object,
-  }),
-};
 
-export default withRouter(IPScanSearch);
+export default withRouter(
+  connect(null, {addToast})(IPScanSearch)
+);

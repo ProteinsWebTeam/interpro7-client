@@ -110,7 +110,7 @@
     "mocha": "^3.2.0",
     "mocha-webpack": "^0.7.0",
     "node-sass": "^3.13.0",
-    "npm-run-all": "^3.1.0",
+    "npm-run-all": "^3.1.2",
     "postcss-apply": "^0.4.0",
     "postcss-cssnext": "^2.9.0",
     "postcss-import": "^8.2.0",

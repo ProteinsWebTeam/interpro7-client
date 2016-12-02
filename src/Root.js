@@ -17,7 +17,7 @@ import Footer from 'components/EBIFooter';
 import SideMenu from 'components/Menu/SideMenu';
 import Breadcrumb from 'components/Breadcrumb';
 import Loading from 'components/Loading';
-import ToastDisplay from 'components/Toast';
+import ToastDisplay from 'components/Toast/ToastDisplay';
 import CookieBanner from 'components/CookieBanner';
 
 const STICKY_MENU_OFFSET = 150;

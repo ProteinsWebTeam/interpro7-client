@@ -1,12 +1,18 @@
 import {ADD_TOAST, REMOVE_TOAST} from 'actions/types';
 
+const extractAllBut = key => ({
+  from(source) {
+    const {[key]: _, ...subset} = source;
+    return subset;
+  },
+});
+
 export default (state = {}, action) => {
   switch (action.type) {
     case ADD_TOAST:
       return {...state, [action.id]: action.toast};
     case REMOVE_TOAST:
-      const {[action.id]: _, ...newState} = state;
-      return newState;
+      return extractAllBut(action.id).from(state);
     default:
       return state;
   }

@@ -117,7 +117,7 @@ const contentPages = [
     path: '/search',
     getComponent(_, cb) {
       require.ensure([], () => {
-        cb(null, require('pages/Search').default);
+        cb(null, require('staticPages/Search').default);
       }, 'search');
     },
     childRoutes: [
