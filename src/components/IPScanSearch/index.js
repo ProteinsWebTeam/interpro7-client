@@ -92,7 +92,7 @@ class IPScanSearch extends Component {
 
   _handleReset = text => this.setState(
     {
-      editorState: text ?
+      editorState: (text && typeof text === 'string') ?
         EditorState.createWithContent(
           ContentState.createFromText(text),
           compositeDecorator
@@ -243,6 +243,7 @@ class IPScanSearch extends Component {
                       value="Search"
                     />
                     <button
+                      type="button"
                       className={s('secondary', 'hollow', 'button')}
                       onClick={this._handleReset}
                     >Clear</button>
