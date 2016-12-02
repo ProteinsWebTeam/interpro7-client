@@ -1,5 +1,7 @@
 import React, {PropTypes as T, Component} from 'react';
-import {Editor, EditorState, CompositeDecorator, convertToRaw} from 'draft-js';
+import {
+  Editor, EditorState, ContentState, CompositeDecorator, convertToRaw,
+} from 'draft-js';
 import {withRouter} from 'react-router/es';
 import {connect} from 'react-redux';
 
@@ -24,7 +26,7 @@ const classedSpan = className => {
     <span className={className} data-offset-key={offsetKey}>{children}</span>
   );
   Span.propTypes = {
-    offsetKey: T.number.isRequired,
+    offsetKey: T.string.isRequired,
     children: T.any,
   };
   return Span;
@@ -46,6 +48,12 @@ const compositeDecorator = new CompositeDecorator([
     component: classedSpan(s('invalid-letter')),
   },
 ]);
+
+const blockEvent = f => e => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (f) return f(e);
+};
 
 const submitSearch = async value => {
   const r = await fetch(
@@ -82,10 +90,16 @@ class IPScanSearch extends Component {
     };
   }
 
-  _handleReset = () => this.setState(
+  _handleReset = text => this.setState(
     {
-      editorState: EditorState.createEmpty(compositeDecorator),
+      editorState: text ?
+        EditorState.createWithContent(
+          ContentState.createFromText(text),
+          compositeDecorator
+        ) :
+        EditorState.createEmpty(compositeDecorator),
       valid: true,
+      dragging: false,
     },
     () => this.editor.focus()
   );
@@ -133,6 +147,28 @@ class IPScanSearch extends Component {
     this._handleSubmitSuccess(jobId);
   };
 
+  _handleFile = file => {
+    const fr = new FileReader();
+    fr.onload = () => {
+      this._handleReset(fr.result);
+    };
+    fr.readAsText(file);
+  };
+
+  _handleDroppedFiles = ({dataTransfer: {files: [file]}}) => (
+    this._handleFile(file)
+  );
+
+  _handleDragging = () => this.setState({dragging: true});
+
+  _handleUndragging = () => this.setState({dragging: false});
+
+  _handleFileChange = ({target}) => {
+    this._handleFile(target.files[0]);
+    // eslint-disable-next-line no-param-reassign
+    target.value = null;
+  };
+
   _handleEditorClick = () => {
     this.editor.focus();
   };
@@ -147,47 +183,75 @@ class IPScanSearch extends Component {
   };
 
   render() {
-    const {editorState, valid} = this.state;
+    const {editorState, valid, dragging} = this.state;
     return (
       <div className={s('row')}>
         <div className={s('large-12', 'columns')}>
-          <form onSubmit={this._handleSubmit}>
-            <div className={s('secondary', 'callout')}>
-
-              <div className={s('row')}>
-                <div className={s('large-12', 'columns')}>
-                  <label>Sequence, in FASTA format</label>
+          <form
+            onSubmit={this._handleSubmit}
+            onDrop={blockEvent(this._handleDroppedFiles)}
+            onDrag={blockEvent(this._handleDragging)}
+            onDragStart={blockEvent(this._handleDragging)}
+            onDragEnd={blockEvent(this._handleUndragging)}
+            onDragOver={blockEvent(this._handleDragging)}
+            onDragEnter={blockEvent(this._handleDragging)}
+            onDragExit={blockEvent(this._handleUndragging)}
+            onDragLeave={blockEvent(this._handleUndragging)}
+            className={s('search-form', {dragging})}
+          >
+            <div>
+              <div className={s('secondary', 'callout')}>
+                <div className={s('row')}>
                   <div
-                    type="text"
-                    className={s('editor', {'invalid-block': !valid})}
-                    onClick={this._handleEditorClick}
+                    className={s('large-12', 'columns')}
                   >
-                    <Editor
-                      placeholder="Enter your sequence"
-                      editorState={editorState}
-                      onChange={this._handleChange}
-                      ref={editor => this.editor = editor}
-                    />
+                    <label onClick={this._handleEditorClick}>
+                      Sequence, in FASTA format
+                      <div
+                        type="text"
+                        className={s('editor', {'invalid-block': !valid})}
+                      >
+                        <Editor
+                          placeholder="Enter your sequence"
+                          editorState={editorState}
+                          handleDroppedFiles={this._handleDroppedFiles}
+                          onChange={this._handleChange}
+                          ref={editor => this.editor = editor}
+                        />
+                      </div>
+                    </label>
+                    <label className={s('file-input-label')}>
+                      <span>or</span>
+                      <a type="button" className={s('hollow', 'button')}>
+                        load from a file…
+                      </a>
+                      <input
+                        type="file"
+                        onChange={this._handleFileChange}
+                        hidden
+                      />
+                    </label>
                   </div>
                 </div>
-              </div>
 
-              <div className={s('row')} style={{marginTop: '1em'}}>
-                <div className={s('large-12', 'columns')}>
-                  <input
-                    type="submit"
-                    className={s('button', {disabled: !valid})}
-                    disabled={!valid}
-                    value="Search"
-                  />
-                  <button
-                    className={s('secondary', 'hollow', 'button')}
-                    onClick={this._handleReset}
-                  >Clear</button>
+                <div className={s('row')} style={{marginTop: '1em'}}>
+                  <div className={s('large-12', 'columns')}>
+                    <input
+                      type="submit"
+                      className={s('button', {disabled: !valid})}
+                      disabled={!valid}
+                      value="Search"
+                    />
+                    <button
+                      className={s('secondary', 'hollow', 'button')}
+                      onClick={this._handleReset}
+                    >Clear</button>
+                  </div>
                 </div>
-              </div>
 
+              </div>
             </div>
+            <div className={s('dragging-overlay')}>Drop your file here</div>
           </form>
         </div>
       </div>

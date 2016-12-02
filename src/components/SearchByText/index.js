@@ -40,14 +40,13 @@ class SearchByText extends Component {
 
               <div className={f('row')}>
                 <div className={f('large-12', 'columns')}>
-                  <label>Family, domains or GO terms</label>
-                  <TextSearchBox
-                    value={value}
-                    toSubmit={submit}
-                    ref={(input) => {
-                      this.searchInput = input;
-                    }}
-                  />
+                  <label>Family, domains or GO terms
+                    <TextSearchBox
+                      value={value}
+                      toSubmit={submit}
+                      ref={input => this.searchInput = input}
+                    />
+                  </label>
                 </div>
 
 
