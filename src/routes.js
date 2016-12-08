@@ -59,18 +59,21 @@ const contentPages = [
   {
     path: '/entry',
     getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('pages/Entry').default);
-      }, 'entry');
+      System.import('pages/Entry').then(m => cb(null, m.default));
+      // require.ensure([], () => {
+      //   cb(null, require('pages/Entry').default);
+      // }, 'entry');
     },
     childRoutes: [
       ...subPagesTransformer(subPages, 'entry'),
       {
         path: '*',
         getComponent(_, cb) {
-          require.ensure([], () => {
-            cb(null, require('components/Entry/Summary').default);
-          }, 'entry-overview');
+          System.import('components/Entry/Summary')
+            .then(m => cb(null, m.default));
+          // require.ensure([], () => {
+          //   cb(null, require('components/Entry/Summary').default);
+          // }, 'entry-overview');
         },
       },
     ],
@@ -78,18 +81,21 @@ const contentPages = [
   {
     path: '/protein',
     getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('pages/Protein').default);
-      }, 'protein');
+      System.import('pages/Protein').then(m => cb(null, m.default));
+      // require.ensure([], () => {
+      //   cb(null, require('pages/Protein').default);
+      // }, 'protein');
     },
     childRoutes: [
       ...subPagesTransformer(subPages, 'protein'),
       {
         path: '*',
         getComponent(_, cb) {
-          require.ensure([], () => {
-            cb(null, require('components/Protein/Summary').default);
-          }, 'protein-overview');
+          System.import('components/Protein/Summary')
+            .then(m => cb(null, m.default));
+          // require.ensure([], () => {
+          //   cb(null, require('components/Protein/Summary').default);
+          // }, 'protein-overview');
         },
       },
     ],
@@ -97,18 +103,21 @@ const contentPages = [
   {
     path: '/structure',
     getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('pages/Structure').default);
-      }, 'structure');
+      System.import('pages/Structure').then(m => cb(null, m.default));
+      // require.ensure([], () => {
+      //   cb(null, require('pages/Structure').default);
+      // }, 'structure');
     },
     childRoutes: [
       ...subPagesTransformer(subPages, 'structure'),
       {
         path: '*',
         getComponent(_, cb) {
-          require.ensure([], () => {
-            cb(null, require('components/Structure/Summary').default);
-          }, 'structure-overview');
+          System.import('components/Structure/Summary')
+            .then(m => cb(null, m.default));
+          // require.ensure([], () => {
+          //   cb(null, require('components/Structure/Summary').default);
+          // }, 'structure-overview');
         },
       },
     ],
@@ -116,9 +125,10 @@ const contentPages = [
   {
     path: '/search',
     getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('staticPages/Search').default);
-      }, 'search');
+      System.import('staticPages/Search').then(m => cb(null, m.default));
+      // require.ensure([], () => {
+      //   cb(null, require('staticPages/Search').default);
+      // }, 'search');
     },
     childRoutes: [
     ],
@@ -130,41 +140,46 @@ const staticPages = [
   {
     path: 'about',
     getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('staticPages/About').default);
-      }, 'about');
+      System.import('staticPages/About').then(m => cb(null, m.default));
+      // require.ensure([], () => {
+      //   cb(null, require('staticPages/About').default);
+      // }, 'about');
     },
   },
   {
     path: 'browse',
     getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('staticPages/Browse').default);
-      }, 'browse');
+      System.import('staticPages/Browse').then(m => cb(null, m.default));
+      // require.ensure([], () => {
+      //   cb(null, require('staticPages/Browse').default);
+      // }, 'browse');
     },
   },
   {
     path: 'help',
     getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('staticPages/Help').default);
-      }, 'help');
+      System.import('staticPages/Help').then(m => cb(null, m.default));
+      // require.ensure([], () => {
+      //   cb(null, require('staticPages/Help').default);
+      // }, 'help');
     },
   },
   {
     path: 'contact',
     getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('staticPages/Contact').default);
-      }, 'contact');
+      System.import('staticPages/Contact').then(m => cb(null, m.default));
+      // require.ensure([], () => {
+      //   cb(null, require('staticPages/Contact').default);
+      // }, 'contact');
     },
   },
   {
     path: 'settings',
     getComponent(_, cb) {
-      require.ensure([], () => {
-        cb(null, require('staticPages/Settings').default);
-      }, 'settings');
+      System.import('staticPages/Settings').then(m => cb(null, m.default));
+      // require.ensure([], () => {
+      //   cb(null, require('staticPages/Settings').default);
+      // }, 'settings');
     },
   },
 ];
@@ -190,9 +205,10 @@ export default {
   path: '/',
   component: Root,
   getIndexRoute(_, cb) {
-    require.ensure([], () => {
-      cb(null, {component: require('pages/Home').default});
-    }, 'home');
+    System.import('pages/Home').then(m => cb(null, m.default));
+    // require.ensure([], () => {
+    //   cb(null, {component: require('pages/Home').default});
+    // }, 'home');
   },
   childRoutes: [...contentPages, ...staticPages, ...otherPages],
 };

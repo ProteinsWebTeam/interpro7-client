@@ -1,8 +1,12 @@
 const path = require('path');
 
 module.exports = {
-  root: [
+  // root: [
+  //   path.resolve('.', 'src'),
+  //   // 'node_modules',
+  // ],
+  modules: [
     path.resolve('.', 'src'),
-    // 'node_modules',
+    'node_modules',
   ],
 };

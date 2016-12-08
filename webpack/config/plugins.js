@@ -9,21 +9,27 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const Dashboard = require('webpack-dashboard');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 // Other
-// const cssnext = require('postcss-cssnext');
-// const postcssImport = require('postcss-import');
-// const postcssApply = require('postcss-apply');
+const cssnext = require('postcss-cssnext');
+const postcssImport = require('postcss-import');
+const postcssApply = require('postcss-apply');
 
 const pkg = require(path.resolve('package.json'));
 
+const PROD = process.env.NODE_ENV === 'production';
+
 const common = [
   // Webpack 2
-  // new webpack.LoaderOptionsPlugin({
-  //   options: {
-  //     context: __dirname,
-  //     postcss: [postcssImport, postcssApply, cssnext],
-  //   },
+  new webpack.LoaderOptionsPlugin({
+    options: {
+      debug: !PROD,
+      context: __dirname,
+      postcss: [postcssImport, postcssApply, cssnext],
+    },
+  }),
+  // new ExtractTextPlugin({
+  //   filename: 'styles.[contenthash:3].css',
+  //   allChunks: true,
   // }),
-  new ExtractTextPlugin('styles.[contenthash:3].css'),
   // new WebAppManifestPlugin(),
 ];
 

@@ -14,6 +14,7 @@ import {removeLastSlash} from 'utils/url';
 import f from 'styles/foundation';
 
 webComponents().then(() => {
+  // System.import('interpro-components').then(m => cb(null, m.default));
   require.ensure(
     [],
     () => require('interpro-components'),
