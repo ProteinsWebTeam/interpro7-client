@@ -1,7 +1,7 @@
 // @flow
 /* globals require: false */
 import React, {PropTypes as T, cloneElement} from 'react';
-import {Link} from 'react-router/es';
+import {Link} from 'react-router';
 
 import {webComponents} from 'utils/polyfills';
 

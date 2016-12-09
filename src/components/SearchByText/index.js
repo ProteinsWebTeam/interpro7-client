@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter} from 'react-router/es';
+import {withRouter} from 'react-router';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
 import f from 'styles/foundation';

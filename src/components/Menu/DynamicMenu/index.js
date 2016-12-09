@@ -1,6 +1,6 @@
 // @flow
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter} from 'react-router/es';
+import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
 
 import InterproMenu from 'components/Menu/InterproMenu';

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes as T} from 'react';
 import {findDOMNode} from 'react-dom';
 import {connect} from 'react-redux';
-import {Link} from 'react-router/es';
+import {Link} from 'react-router';
 
 // import domAttributeChecker from 'higherOrder/DOMAttributeChecker';
 import cfg from 'config';

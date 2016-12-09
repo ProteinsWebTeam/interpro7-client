@@ -1,6 +1,6 @@
 // @flow
 import React, {PropTypes as T, cloneElement} from 'react';
-import {Link} from 'react-router/es';
+import {Link} from 'react-router';
 
 import Table, {Column, Search, PageSizeSelector, Exporter}
   from 'components/Table';

@@ -1,6 +1,6 @@
 /* eslint max-statements: ["error", 13] */
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter, Link} from 'react-router/es';
+import {withRouter, Link} from 'react-router';
 import {connect} from 'react-redux';
 import Table, {Column, PageSizeSelector, Exporter} from 'components/Table';
 const maxLength = 200;

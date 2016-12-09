@@ -1,7 +1,7 @@
 // @flow
 import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
-// import {Link} from 'react-router/es';
+// import {Link} from 'react-router';
 
 import {closeSideNav} from 'actions/creators';
 // import {EBI, InterPro, entities, singleEntity} from 'menuConfig';

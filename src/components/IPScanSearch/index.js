@@ -2,7 +2,7 @@ import React, {PropTypes as T, Component} from 'react';
 import {
   Editor, EditorState, ContentState, CompositeDecorator, convertToRaw,
 } from 'draft-js';
-import {withRouter} from 'react-router/es';
+import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
 
 import {addToast} from 'actions/creators';

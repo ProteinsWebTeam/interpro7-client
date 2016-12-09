@@ -53,7 +53,7 @@ if (!PROD) {
     '#source-map' :
     '#inline-source-map';
   config.devServer = {
-    contentBase: '/',
+    // contentBase: '',
     stats: {
       colors: true,
     },

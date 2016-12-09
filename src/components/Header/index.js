@@ -1,6 +1,6 @@
 import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router/es';
+import {Link} from 'react-router';
 
 import classnames from 'classnames/bind';
 

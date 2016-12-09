@@ -1,7 +1,7 @@
 // @flow
 /* eslint no-magic-numbers: [1, {ignore: [0, 1, 2]}] */
 import React, {PropTypes as T} from 'react';
-import {Link} from 'react-router/es';
+import {Link} from 'react-router';
 
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';

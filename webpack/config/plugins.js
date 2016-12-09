@@ -26,6 +26,7 @@ const common = [
       postcss: [postcssImport, postcssApply, cssnext],
     },
   }),
+  new webpack.NamedModulesPlugin(),
   // new ExtractTextPlugin({
   //   filename: 'styles.[contenthash:3].css',
   //   allChunks: true,

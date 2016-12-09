@@ -6,7 +6,7 @@ import IPScanSearch from 'components/IPScanSearch';
 import Description from 'components/Description';
 import {InterproSymbol} from 'components/Title';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import {Link} from 'react-router/es';
+import {Link} from 'react-router';
 import {memberDB, entryType, latests, speciesFeat, GoList} from 'staticData/home';
 import Tabs from 'components/Tabs';
 import Twit from 'components/Twitter';

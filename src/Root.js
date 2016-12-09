@@ -12,9 +12,9 @@ import 'styles/interpro-new.css';
 
 import Overlay from 'components/Overlay';
 import Sentinel from 'components/Sentinel';
-import Header from 'components/Header';
+// import Header from 'components/Header';
 import Footer from 'components/EBIFooter';
-import SideMenu from 'components/Menu/SideMenu';
+// import SideMenu from 'components/Menu/SideMenu';
 import Breadcrumb from 'components/Breadcrumb';
 import Loading from 'components/Loading';
 import ToastDisplay from 'components/Toast/ToastDisplay';
@@ -28,8 +28,8 @@ const Root = (
 ) => (
   <div>
     <Overlay />
-    <SideMenu pathname={pathname} />
-    <Header pathname={pathname} stickyMenuOffset={STICKY_MENU_OFFSET} />
+    {/*<SideMenu pathname={pathname} />*/}
+    {/*<Header pathname={pathname} stickyMenuOffset={STICKY_MENU_OFFSET} />*/}
     <Sentinel top={STICKY_MENU_OFFSET} />
     <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} pathname={pathname} />
     <Loading>{children}</Loading>

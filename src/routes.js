@@ -205,6 +205,7 @@ export default {
   path: '/',
   component: Root,
   getIndexRoute(_, cb) {
+    console.log('getting index');
     System.import('pages/Home').then(m => cb(null, m.default));
     // require.ensure([], () => {
     //   cb(null, {component: require('pages/Home').default});
