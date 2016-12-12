@@ -1,6 +1,8 @@
 /* eslint-env node */
 /* eslint-env mocha */
 /* eslint react/jsx-key: 0 */
+import 'babel-polyfill';
+
 import React from 'react';
 import {createRenderer} from 'react-addons-test-utils';
 import chai, {expect} from 'chai';

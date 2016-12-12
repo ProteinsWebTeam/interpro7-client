@@ -1,6 +1,8 @@
 /* eslint-env node */
 /* eslint-env mocha */
 /* eslint no-magic-numbers: [1, {ignore: [12345]}]*/
+import 'babel-polyfill';
+
 import React, {createElement} from 'react';
 import {createRenderer} from 'react-addons-test-utils';
 import chai, {expect} from 'chai';
