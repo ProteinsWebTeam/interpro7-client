@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {addToast} from 'actions/creators';
 
 import id from 'utils/cheapUniqueId';
+import blockEvent from 'utils/blockEvent';
 
 import {foundationPartial} from 'styles/foundation';
 import styles from './style.css';
@@ -48,12 +49,6 @@ const compositeDecorator = new CompositeDecorator([
     component: classedSpan(s('invalid-letter')),
   },
 ]);
-
-const blockEvent = f => e => {
-  e.preventDefault();
-  e.stopPropagation();
-  if (f) return f(e);
-};
 
 const submitSearch = async value => {
   const r = await fetch(
@@ -155,13 +150,13 @@ class IPScanSearch extends Component {
     fr.readAsText(file);
   };
 
-  _handleDroppedFiles = ({dataTransfer: {files: [file]}}) => (
-    this._handleFile(file)
+  _handleDroppedFiles = blockEvent(
+    ({dataTransfer: {files: [file]}}) => this._handleFile(file)
   );
 
-  _handleDragging = () => this.setState({dragging: true});
+  _handleDragging = blockEvent(() => this.setState({dragging: true}));
 
-  _handleUndragging = () => this.setState({dragging: false});
+  _handleUndragging = blockEvent(() => this.setState({dragging: false}));
 
   _handleFileChange = ({target}) => {
     this._handleFile(target.files[0]);
@@ -169,9 +164,7 @@ class IPScanSearch extends Component {
     target.value = null;
   };
 
-  _handleEditorClick = () => {
-    this.editor.focus();
-  };
+  _handleEditorClick = () => this.editor.focus();
 
   _handleChange = editorState => {
     const lines = convertToRaw(editorState.getCurrentContent()).blocks
@@ -189,14 +182,14 @@ class IPScanSearch extends Component {
         <div className={s('large-12', 'columns')}>
           <form
             onSubmit={this._handleSubmit}
-            onDrop={blockEvent(this._handleDroppedFiles)}
-            onDrag={blockEvent(this._handleDragging)}
-            onDragStart={blockEvent(this._handleDragging)}
-            onDragEnd={blockEvent(this._handleUndragging)}
-            onDragOver={blockEvent(this._handleDragging)}
-            onDragEnter={blockEvent(this._handleDragging)}
-            onDragExit={blockEvent(this._handleUndragging)}
-            onDragLeave={blockEvent(this._handleUndragging)}
+            onDrop={this._handleDroppedFiles}
+            onDrag={this._handleDragging}
+            onDragStart={this._handleDragging}
+            onDragEnd={this._handleUndragging}
+            onDragOver={this._handleDragging}
+            onDragEnter={this._handleDragging}
+            onDragExit={this._handleUndragging}
+            onDragLeave={this._handleUndragging}
             className={s('search-form', {dragging})}
           >
             <div>

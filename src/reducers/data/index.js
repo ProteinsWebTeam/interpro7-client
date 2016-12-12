@@ -1,3 +1,4 @@
+// @flow
 import {LOADING_DATA, LOADED_DATA, FAILED_LOADING_DATA, UNLOADING_DATA}
   from 'actions/types';
 
@@ -9,10 +10,7 @@ const DEFAULT_STATE = {
   error: null,
 };
 
-export default (
-  state = DEFAULT_STATE,
-  action
-) => {
+export default (state/*: Object */ = DEFAULT_STATE, action/*: Object */) => {
   switch (action.type) {
     // We will try to retrieve data
     case LOADING_DATA:

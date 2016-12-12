@@ -1,10 +1,11 @@
+// @flow
 import fetch from 'isomorphic-fetch';
 
 import {pkg} from 'config';
 
 const SUCCESS_STATUS = 200;
 
-const cachedFetch = (url, options = {}) => {
+const cachedFetch = (url/*: string */, options/*: Object */ = {}) => {
   const {useCache, ...restOfOptions} = options;
   const key = `${pkg.name}-cachedFetch-${url}`;
   const cached = sessionStorage.getItem(key);
@@ -21,7 +22,9 @@ const cachedFetch = (url, options = {}) => {
   });
 };
 
-export const cachedFetchJSON = async (url, options) => {
+export const cachedFetchJSON = async (
+  url/*: string */, options/*: Object */
+) => {
   const r = await cachedFetch(url, options);
   return await r.json();
 };

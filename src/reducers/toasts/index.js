@@ -1,3 +1,4 @@
+// @flow
 import {ADD_TOAST, REMOVE_TOAST} from 'actions/types';
 
 const extractAllBut = key => ({
@@ -7,7 +8,7 @@ const extractAllBut = key => ({
   },
 });
 
-export default (state = {}, action) => {
+export default (state/*: Object */ = {}, action/*: Object */) => {
   switch (action.type) {
     case ADD_TOAST:
       return {...state, [action.id]: action.toast};

@@ -10,7 +10,9 @@
 
 [include]
 
+
 [libs]
+./flow-typed
 ./node_modules/iflow-react-router/index.js.flow
 ./interfaces
 

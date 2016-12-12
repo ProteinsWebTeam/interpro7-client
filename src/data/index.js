@@ -8,7 +8,7 @@ const MULTIPLE_SLAHES = /\/+/g;
 const PATHS_REQUIRING_DATA = /^\/?(entry|protein|structure|search)(\/|$)/i;
 
 // Creates a search string from a query object
-const queryObjectToSearchString = obj => {
+const queryObjectToSearchString = (obj) => {
   const partialSearchString = Object.entries(obj)
     .reduce((acc, [k, v]) => `${acc}&${k}=${v}`, '')
     .slice(1);
