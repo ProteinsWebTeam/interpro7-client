@@ -3,6 +3,7 @@ import React, {PropTypes as T} from 'react';
 import {foundationPartial} from 'styles/foundation';
 import SearchByText from 'components/SearchByText';
 import IPScanSearch from 'components/IPScanSearch';
+import IPScanStatus from 'components/IPScanStatus';
 import Description from 'components/Description';
 import {InterproSymbol} from 'components/Title';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -167,6 +168,7 @@ const Home = () => (
             </div>
             <div title="by sequence">
               <IPScanSearch />
+              <IPScanStatus refreshRate={120000} />
             </div>
           </Tabs>
         </fieldset>

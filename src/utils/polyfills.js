@@ -1,4 +1,3 @@
-// @flow
 /* globals require: false */
 import {webComponents as supportsWebComponents} from 'utils/support';
 

@@ -17,6 +17,14 @@
   }
 }
 
+.line-with-buttons {
+  align-items: baseline;
+
+  @nest & > * {
+    margin: auto 0.5ch;
+  }
+}
+
 .file-input-label {
   display: flex;
   align-items: baseline;

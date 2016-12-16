@@ -120,8 +120,14 @@ const contentPages = [
         cb(null, require('staticPages/Search').default);
       }, 'search');
     },
-    childRoutes: [
-    ],
+  },
+  {
+    path: '/sequencesearch/:job',
+    getComponent(_, cb) {
+      require.ensure([], () => {
+        cb(null, require('staticPages/SequenceSearch').default);
+      }, 'sequencesearch');
+    },
   },
 ];
 
