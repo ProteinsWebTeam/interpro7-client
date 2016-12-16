@@ -6,17 +6,21 @@ import fonts from 'styles/ebi/fonts.css';
 import theme from 'styles/theme-interpro.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
-class Tabs extends Component {
+export default class extends Component {
+  static propTypes = {
+    children: T.any,
+  };
+
   constructor(props){
     super(props);
     this.state = {activeTab: 0};
   }
-  handleChangeTab = index => () => (
-    this.setState({activeTab: index})
-  );
+
+  _handleChangeTab = index => () => this.setState({activeTab: index});
 
   render() {
     const {children} = this.props;
+    const {activeTab} = this.state;
     const _children = Children.toArray(children);
     return (
       <div>
@@ -26,11 +30,11 @@ class Tabs extends Component {
               <li
                 className={f(
                   'tabs-title', {
-                    'is-active': this.state.activeTab === i,
+                    'is-active': activeTab === i,
                   })}
                 key={i}
               >
-                <button onClick={this.handleChangeTab(i)}>
+                <button onClick={this._handleChangeTab(i)}>
                   {child.props.title}
                 </button>
               </li>
@@ -41,25 +45,28 @@ class Tabs extends Component {
         <div
           className={f('tabs', 'tabs-content')}
         >
-          {
+          {/*
             _children.map((child, i) => (
               <div
                 key={i}
                 className={f('tabs-panel', {
-                  'is-active': this.state.activeTab === i,
-                }) + (` ${child.props.className}` || '')}
+                  'is-active': activeTab === i,
+                }) + ' ' + (child.props.className || '')}
               >
                 {child.props.children}
               </div>
             ))
-          }
+          */}
+          <div
+            className={[
+              f('tabs-panel', 'is-active'),
+              (_children[activeTab].props.className || ''),
+            ].join(' ').trim()}
+          >
+            {_children[activeTab].props.children}
+          </div>
         </div>
       </div>
     );
   }
-
 }
-Tabs.propTypes = {
-  children: T.any,
-};
-export default Tabs;
