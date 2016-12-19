@@ -7,6 +7,7 @@ class TextSearchBox extends Component {
     super(props);
     this.state = {value: props.value};
   }
+
   componentWillReceiveProps(nextProps) {
     const {value = '', toSubmit = false} = nextProps;
     if (this.props.value === value && this.props.toSubmit === toSubmit) return;
@@ -15,8 +16,8 @@ class TextSearchBox extends Component {
   }
 
   routerPush = () => {
-    const {pageSize} = this.props,
-      pathname = '/search';
+    const {pageSize} = this.props;
+    const pathname = '/search';
     const query/*: {page: number, page_size: number, search?: string} */ = {
       page: 1,
       page_size: pageSize,

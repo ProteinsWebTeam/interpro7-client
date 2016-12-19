@@ -302,6 +302,8 @@ const rules = {
   'object-curly-spacing': [1, 'never'],
   // Require method and property shorthand syntax for object literals
   'object-shorthand': [1, 'always'],
+  // Enforce variables to be declared either together or separately in functions
+  'one-var': [1, 'never'],
   // Require assignment operator shorthand where possible
   'operator-assignment': 1,
   // Enforce line breaks to be placed after operators

@@ -54,7 +54,7 @@ const compositeDecorator = new CompositeDecorator([
 
 const submitSearch = async ({value}) => {
   const body = new FormData();
-  body.set('email', 'hjkljhgjklkmjnhbgvjnklm@gmail.com');
+  body.set('email', 'interpro-team@ebi.ac.uk');// TODO: get that from config
   body.set('sequence', value);
   const r = await fetch(
     'http://ashdev-2:31110/Tools/services/rest/iprscan5/run/',
@@ -183,7 +183,8 @@ class IPScanSearch extends Component {
     if (!lines.length) return;
     const value = lines.join('\n');
     // console.log(`POSTing ${value}`);
-    let jobAndJobId, IPScanId;
+    let jobAndJobId;
+    let IPScanId;
     try {
       [jobAndJobId, IPScanId] = await Promise.all([
         this._createAndStoreJob({value}),

@@ -54,7 +54,8 @@
       "production": {
         "presets": [
           "babili"
-        ]
+        ],
+        "comments": false
       }
     }
   },
@@ -78,16 +79,17 @@
     "react-router": "^3.0.0",
     "redux": "^3.6.0",
     "skatejs-web-components": "^5.0.1",
-    "timeago.js": "^2.0.4"
+    "timeago.js": "^2.0.4",
+    "timing-functions": "^0.1.1"
   },
   "devDependencies": {
-    "babel-core": "^6.18.2",
+    "babel-core": "^6.21.0",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-react-constant-elements": "^6.9.1",
     "babel-plugin-transform-react-jsx-source": "^6.9.0",
     "babel-preset-babili": "^0.0.9",
-    "babel-preset-env": "^1.1.1",
+    "babel-preset-env": "^1.1.4",
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-2": "^6.18.0",
     "babel-register": "^6.18.0",
@@ -113,7 +115,7 @@
     "jsx-chai": "^4.0.0",
     "mocha": "^3.2.0",
     "mocha-webpack": "^0.7.0",
-    "node-sass": "^4.0.0",
+    "node-sass": "^4.1.0",
     "npm-run-all": "^3.1.2",
     "postcss-apply": "^0.4.0",
     "postcss-cssnext": "^2.9.0",

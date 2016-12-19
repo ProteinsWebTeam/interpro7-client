@@ -2,12 +2,16 @@
 import React, {PropTypes as T, Component} from 'react';
 import {withRouter, Link} from 'react-router/es';
 import {connect} from 'react-redux';
+
+import {frame} from 'timing-functions/src';
+
 import Table, {Column, PageSizeSelector, Exporter} from 'components/Table';
+
 const maxLength = 200;
-const NOT_FOUND = -1,
-  IPRO_FOUND = 1,
-  UNIPROT_FOUND = 2,
-  PDB_FOUND = 3;
+const NOT_FOUND = -1;
+const IPRO_FOUND = 1;
+const UNIPROT_FOUND = 2;
+const PDB_FOUND = 3;
 
 class SearchResults extends Component {
   constructor(props){
@@ -15,35 +19,36 @@ class SearchResults extends Component {
     this.foundType = 0;
     this.redirectedTo = null;
   }
+
   componentDidMount() {
     this.redirect();
   }
+
   componentDidUpdate() {
     this.redirect();
   }
 
-  redirect() {
+  async redirect() {
     const {query, router} = this.props;
-    window.requestAnimationFrame(() => {
-      let goTo = null;
-      switch (this.foundType) {
-        case IPRO_FOUND:
-          goTo = `/entry/interpro/${query.search}`;
-          break;
-        case UNIPROT_FOUND:
-          goTo = `/protein/uniprot/${query.search}`;
-          break;
-        case PDB_FOUND:
-          goTo = `/structure/pdb/${query.search}`;
-          break;
-        default:
-          goTo = null;
-      }
-      if (goTo && goTo !== this.redirectedTo) {
-        this.redirectedTo = goTo;
-        router.replace({pathname: goTo});
-      }
-    });
+    await frame();
+    let goTo = null;
+    switch (this.foundType) {
+      case IPRO_FOUND:
+        goTo = `/entry/interpro/${query.search}`;
+        break;
+      case UNIPROT_FOUND:
+        goTo = `/protein/uniprot/${query.search}`;
+        break;
+      case PDB_FOUND:
+        goTo = `/structure/pdb/${query.search}`;
+        break;
+      default:
+        goTo = null;
+    }
+    if (goTo && goTo !== this.redirectedTo) {
+      this.redirectedTo = goTo;
+      router.replace({pathname: goTo});
+    }
   }
   render() {
     const {data, query, dataUrl} = this.props;
