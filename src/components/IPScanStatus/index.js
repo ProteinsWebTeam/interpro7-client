@@ -1,6 +1,7 @@
 import React, {PropTypes as T, Component} from 'react';
 import Link from 'react-router/es/Link';
-
+import {connect} from 'react-redux';
+import url from 'url';
 import TA from 'timeago.js';
 
 import getTableAccess from 'storage/idb';
@@ -12,21 +13,14 @@ const ONE_MINUTE = 60000;
 
 const getDefinedjobs = state => Object.entries(state).filter(([, j]) => j);
 
-const fetchStatus = async IPScanId => {
-  const response = await fetch(
-    `http://ashdev-2:31110/Tools/services/rest/iprscan5/status/${IPScanId}`
-  );
-  const rawStatus = await response.text();
-  return rawStatus.toLowerCase().replace('_', ' ');
-};
-
-export default class extends Component {
+const IPScanStatus = class extends Component {
   static defaultProps = {
     refreshRate: 2 * ONE_MINUTE,
   };
 
   static propTypes = {
     refreshRate: T.number,
+    ipScan: T.object.isRequired,
   };
 
   constructor(props) {
@@ -50,6 +44,17 @@ export default class extends Component {
     clearTimeout(this._timeout);
   }
 
+  _fetchStatus = async IPScanId => {
+    const response = await fetch(
+      url.resolve(
+        url.format({...this.props.ipScan, pathname: this.props.ipScan.root}),
+        `status/${IPScanId}`
+      )
+    );
+    const rawStatus = await response.text();
+    return rawStatus.toLowerCase().replace('_', ' ');
+  };
+
   _getAllJobs = async () => {
     const jobsTableAccess = await this._jobsTableAccess;
     const jobs = await jobsTableAccess.getAll();
@@ -66,7 +71,7 @@ export default class extends Component {
           let newStatus;
           try {
             // Get status from the API
-            newStatus = await fetchStatus(id);
+            newStatus = await this._fetchStatus(id);
           } catch (err) {
             // Might be offline, of API might be down, just ignore
             return;
@@ -132,7 +137,10 @@ export default class extends Component {
               </tr>
             </thead>
             <tbody>
-              {jobs.map((
+              {jobs.sort(
+                // Sort by creation time (newest first)
+                ([, {times: {created: a}}], [, {times: {created: b}}]) => b - a
+              ).map((
                 [jobId, {id, status, times: {created, lastUpdate}, saved}]
               ) => {
                 const lastUpdateDate = new Date(lastUpdate);
@@ -179,4 +187,6 @@ export default class extends Component {
       </div>
     );
   }
-}
+};
+
+export default connect(({settings: {ipScan}}) => ({ipScan}))(IPScanStatus);

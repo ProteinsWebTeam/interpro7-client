@@ -4,7 +4,9 @@ import {
 } from 'draft-js';
 import {withRouter} from 'react-router/es';
 import {connect} from 'react-redux';
+import url from 'url';
 
+import config from 'config';
 import {addToast} from 'actions/creators';
 
 import id from 'utils/cheapUniqueId';
@@ -52,21 +54,6 @@ const compositeDecorator = new CompositeDecorator([
   },
 ]);
 
-const submitSearch = async ({value}) => {
-  const body = new FormData();
-  body.set('email', 'interpro-team@ebi.ac.uk');// TODO: get that from config
-  body.set('sequence', value);
-  const r = await fetch(
-    'http://ashdev-2:31110/Tools/services/rest/iprscan5/run/',
-    {method: 'POST', body}
-  );
-  console.log(r);
-  const text = await r.text();
-  if (!r.ok) throw new Error(text);
-  console.log(text);
-  return text;
-};
-
 class IPScanSearch extends Component {
   static propTypes = {
     addToast: T.func.isRequired,
@@ -75,6 +62,7 @@ class IPScanSearch extends Component {
     location: T.shape({
       query: T.object,
     }),
+    ipScan: T.object.isRequired,
   };
 
   constructor(props) {
@@ -122,6 +110,24 @@ class IPScanSearch extends Component {
       throw err;
     }
     return {jobId, job};
+  };
+
+  _submitSearch = async ({value}) => {
+    const body = new FormData();
+    body.set('email', config.IPScan.contactEmail);
+    body.set('sequence', value);
+    const r = await fetch(
+      url.resolve(
+        url.format({...this.props.ipScan, pathname: this.props.ipScan.root}),
+        'run'
+      ),
+      {method: 'POST', body}
+    );
+    console.log(r);
+    const text = await r.text();
+    if (!r.ok) throw new Error(text);
+    console.log(text);
+    return text;
   };
 
   _storeSubmittedJob = async ({jobId, job}) => {
@@ -188,7 +194,7 @@ class IPScanSearch extends Component {
     try {
       [jobAndJobId, IPScanId] = await Promise.all([
         this._createAndStoreJob({value}),
-        submitSearch({value}),
+        this._submitSearch({value}),
       ]);
     } catch (err) {
       return this._handleSubmitFail(err);
@@ -341,5 +347,5 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
 }
 
 export default withRouter(
-  connect(null, {addToast})(IPScanSearch)
+  connect(({settings: {ipScan}}) => ({ipScan}), {addToast})(IPScanSearch)
 );

@@ -14,6 +14,7 @@ const config/*: {
     website: {pathname: string, port: string, protocol: string},
     API: {pathname: string, port: string, protocol: string},
     EBIsearch: {pathname: string, port: string, protocol: string},
+    IPScan: {pathname: string, port: string, protocol: string},
   },
   pages: {[key: string]: ?{plural: string}},
   pagination: {pageSize: number}

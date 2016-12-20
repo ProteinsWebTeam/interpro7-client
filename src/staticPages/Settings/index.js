@@ -75,16 +75,18 @@ CacheSettings.propTypes = {
   handleChange: T.func.isRequired,
 };
 
-const APISettings = ({api, handleChange}) => (
-  <form data-category="api">
-    <h4>API settings</h4>
+const EndpointSettings = (
+  {handleChange, category, endpointDetails: {hostname, port, root}, children}
+) => (
+  <form data-category={category}>
+    <h4>{children}</h4>
     <div className={f('row')}>
       <div className={f('medium-4', 'column')}>
         <label>
           Hostname:
           <input
             type="text"
-            value={api.hostname}
+            value={hostname}
             name="hostname"
             onChange={handleChange}
           />
@@ -96,7 +98,7 @@ const APISettings = ({api, handleChange}) => (
           <input
             type="number"
             min="1"
-            value={api.port}
+            value={port}
             name="port"
             onChange={handleChange}
           />
@@ -107,7 +109,7 @@ const APISettings = ({api, handleChange}) => (
           Root:
           <input
             type="text"
-            value={api.root}
+            value={root}
             name="root"
             onChange={handleChange}
           />
@@ -116,60 +118,22 @@ const APISettings = ({api, handleChange}) => (
     </div>
   </form>
 );
-APISettings.propTypes = {
-  api: T.object.isRequired,
+EndpointSettings.propTypes = {
   handleChange: T.func.isRequired,
-};
-
-const EBISearchSettings = ({ebi, handleChange}) => (
-  <form data-category="ebi">
-    <h4>EBI Search settings</h4>
-    <div className={f('row')}>
-      <div className={f('medium-4', 'column')}>
-        <label>
-          Hostname:
-          <input
-            type="text"
-            value={ebi.hostname}
-            name="hostname"
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-      <div className={f('medium-4', 'column')}>
-        <label>
-          Port:
-          <input
-            type="number"
-            min="1"
-            value={ebi.port}
-            name="port"
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-      <div className={f('medium-4', 'column')}>
-        <label>
-          Root:
-          <input
-            type="text"
-            value={ebi.root}
-            name="root"
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-    </div>
-  </form>
-);
-EBISearchSettings.propTypes = {
-  ebi: T.object.isRequired,
-  handleChange: T.func.isRequired,
+  category: T.string.isRequired,
+  endpointDetails: T.shape({
+    hostname: T.string.isRequired,
+    port: T.string.isRequired,
+    root: T.string.isRequired,
+  }).isRequired,
+  children: T.any.isRequired,
 };
 
 const Settings = (
   {
-    settings: {pagination = {}, ui = {}, cache = {}, api = {}, ebi = {}},
+    settings: {
+      pagination = {}, ui = {}, cache = {}, api = {}, ebi = {}, ipScan = {},
+    },
     changeSettings,
     resetSettings,
   }
@@ -182,8 +146,27 @@ const Settings = (
     />
     <UISettings ui={ui} handleChange={changeSettings} />
     <CacheSettings cache={cache} handleChange={changeSettings} />
-    <APISettings api={api} handleChange={changeSettings} />
-    <EBISearchSettings ebi={ebi} handleChange={changeSettings} />
+    <EndpointSettings
+      handleChange={changeSettings}
+      category="api"
+      endpointDetails={api}
+    >
+      API Settings
+    </EndpointSettings>
+    <EndpointSettings
+      handleChange={changeSettings}
+      category="ebi"
+      endpointDetails={ebi}
+    >
+      EBI Search Settings
+    </EndpointSettings>
+    <EndpointSettings
+      handleChange={changeSettings}
+      category="ipScan"
+      endpointDetails={ipScan}
+    >
+      InterProScan Settings
+    </EndpointSettings>
     <button onClick={resetSettings} className={f('button')}>
       Reset settings to default values
     </button>

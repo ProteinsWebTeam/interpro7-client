@@ -24,6 +24,12 @@ const getDefaultSettings = () => ({
     port: config.root.API.port || DEFAULT_HTTP_PORT,
     root: config.root.API.pathname,
   },
+  ipScan: {
+    protocol: config.root.IPScan.protocol,
+    hostname: config.root.IPScan.hostname,
+    port: config.root.IPScan.port || DEFAULT_HTTP_PORT,
+    root: config.root.IPScan.pathname,
+  },
 });
 // TODO: find a way to use the default when this has been changed in code
 export default (

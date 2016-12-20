@@ -2,6 +2,9 @@ root:
   website: //localhost:8080/interpro/
   API: //localhost:8000/interpro/api/
   EBIsearch: //www.ebi.ac.uk/ebisearch/ws/rest/interpro
+  IPScan: //ebi.ac.uk/Tools/services/rest/iprscan5/
+IPScan:
+  contactEmail: example@example.com
 pages:
   entry:
     plural: entries
