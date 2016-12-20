@@ -1,3 +1,4 @@
+// @flow
 // UI
 export const TOGGLE_SIDE_NAV = 'TOGGLE_SIDE_NAV';
 export const TOGGLE_EMBL_MAP_NAV = 'TOGGLE_EMBL_MAP_NAV';

@@ -1,3 +1,4 @@
+// @flow
 import * as types from 'actions/types';
 
 // Action creators
@@ -54,31 +55,37 @@ const parseValue = target => {
   }
 };
 
-export const changePageSize = pageSize => ({
+export const changePageSize = (pageSize/* :number */) => ({
   type: types.CHANGE_SETTINGS,
   category: 'pagination',
   key: 'pageSize',
   value: +pageSize,
 });
-export const changeSettings = event => ({
-  type: types.CHANGE_SETTINGS,
-  category: event.target.form.dataset.category,
-  key: event.target.name,
-  value: parseValue(event.target),
-});
+export const changeSettings = (event/* :Event */) => {
+  if (event.target instanceof HTMLInputElement) {
+    return {
+      type: types.CHANGE_SETTINGS,
+      category: event.target.form && event.target.form.dataset.category,
+      key: event.target.name,
+      value: parseValue(event.target),
+    };
+  }
+};
 
-export const resetSettings = (value = null) => ({
+export const resetSettings = (value/*: string | number | null */ = null) => ({
   type: types.RESET_SETTINGS,
   value,
 });
 
 // data
-export const loadingData = urlKey => ({
+export const loadingData = (urlKey/*: string */) => ({
   type: types.LOADING_DATA,
   urlKey,
 });
 
-export const loadedData = (urlKey, dataUrl, data) => ({
+export const loadedData = (
+  urlKey/*: string */, dataUrl/*: string */, data/*: Object */
+) => ({
   type: types.LOADED_DATA,
   urlKey,
   dataUrl,
@@ -89,20 +96,20 @@ export const unloadingData = () => ({
   type: types.UNLOADING_DATA,
 });
 
-export const failedLoadingData = (urlKey, error) => ({
+export const failedLoadingData = (urlKey/*: string */, error/*: Error */) => ({
   type: types.FAILED_LOADING_DATA,
   urlKey,
   error,
 });
 
 // toast messages
-export const addToast = (toast, id) => ({
+export const addToast = (toast/*: Object */, id/*: string */) => ({
   type: types.ADD_TOAST,
   id,
   toast,
 });
 
-export const removeToast = id => ({
+export const removeToast = (id/*: string */) => ({
   type: types.REMOVE_TOAST,
   id,
 });

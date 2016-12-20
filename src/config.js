@@ -11,8 +11,10 @@ const HTTP_DEFAULT_PORT = '80';
 
 const config/*: {
   root: {
-    website: string,
-    API: string,
+    website: {pathname: string, port: string, protocol: string},
+    API: {pathname: string, port: string, protocol: string},
+    EBIsearch: {pathname: string, port: string, protocol: string},
+    IPScan: {pathname: string, port: string, protocol: string},
   },
   pages: {[key: string]: ?{plural: string}},
   pagination: {pageSize: number}

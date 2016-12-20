@@ -40,7 +40,7 @@ const hmr = store => {
 export default () => {
   const store = createStore(rootReducer, getEnhancer());
   if (settingsStorage) {
-    settingsStorage.setLinkedStore(store);
+    // settingsStorage.setLinkedStore(store);
     const persistSubscriber = persist(store, settingsStorage);
     // Run it once at startup
     persistSubscriber();

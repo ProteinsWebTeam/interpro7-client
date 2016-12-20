@@ -8,7 +8,7 @@ const MULTIPLE_SLAHES = /\/+/g;
 const PATHS_REQUIRING_DATA = /^\/?(entry|protein|structure|search)(\/|$)/i;
 
 // Creates a search string from a query object
-const queryObjectToSearchString = obj => {
+const queryObjectToSearchString = (obj) => {
   const partialSearchString = Object.entries(obj)
     .reduce((acc, [k, v]) => `${acc}&${k}=${v}`, '')
     .slice(1);
@@ -37,12 +37,12 @@ const ebiParameters = {
   fields: 'PDB,UNIPROT,description',
 };
 const buildEBISearchUrl = (pathname, query, {pagination, ebi}) => {
-  const mapped = {},
-    ebiKeysMap = {
-      page: 'start',
-      page_size: 'size',
-      search: 'query',
-    };
+  const mapped = {};
+  const ebiKeysMap = {
+    page: 'start',
+    page_size: 'size',
+    search: 'query',
+  };
   Object.keys(query).forEach(key => {
     mapped[ebiKeysMap[key]] = key === 'page' ?
       (query.page - 1) * query.page_size :
@@ -73,11 +73,11 @@ export default store => async ({pathname, query, search}) => {
     return;
   }
 
-  const dataKey = pathname + search,
-    {settings} = store.getState(),
-    dataUrl = (/\/?search$/i.test(pathname)) ?
-      buildEBISearchUrl(pathname, query, settings) :
-      buildApiUrl(pathname, query, settings);
+  const dataKey = pathname + search;
+  const {settings} = store.getState();
+  const dataUrl = (/\/?search$/i.test(pathname)) ?
+    buildEBISearchUrl(pathname, query, settings) :
+    buildApiUrl(pathname, query, settings);
   console.log(`loading data for ${dataUrl}`);
 
   store.dispatch(loadingData(dataKey));

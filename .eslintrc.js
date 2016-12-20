@@ -99,7 +99,7 @@ const rules = {
   // Limits number of parameters that can be used in the function declaration
   'max-params': [1, 4],
   // Specify the maximum number of statement allowed in a function
-  'max-statements': [1, 10],
+  'max-statements': [1, 12],
   // Require a capital letter for constructors
   'new-cap': 1,
   // Disallow omission of parens when invoking constructor with no arguments
@@ -302,6 +302,8 @@ const rules = {
   'object-curly-spacing': [1, 'never'],
   // Require method and property shorthand syntax for object literals
   'object-shorthand': [1, 'always'],
+  // Enforce variables to be declared either together or separately in functions
+  'one-var': [1, 'never'],
   // Require assignment operator shorthand where possible
   'operator-assignment': 1,
   // Enforce line breaks to be placed after operators

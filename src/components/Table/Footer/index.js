@@ -26,13 +26,13 @@ const Footer = (
   {data, pagination, pathname}
   /*: {data: Object, pagination: Object, pathname: string, width: number} */
 ) => {
-  const page = parseInt(pagination.page || 1, 10),
-    pageSize = parseInt(
+  const page = parseInt(pagination.page || 1, 10);
+  const pageSize = parseInt(
       pagination.page_size || config.pagination.pageSize, 10
-    ),
-    index = (page - 1) * pageSize + 1,
-    lastPage = Math.ceil(data.count / pageSize) || 1,
-    pages = getPageLabels(page, lastPage);
+    );
+  const index = (page - 1) * pageSize + 1;
+  const lastPage = Math.ceil(data.count / pageSize) || 1;
+  const pages = getPageLabels(page, lastPage);
 
   return (
     <div>

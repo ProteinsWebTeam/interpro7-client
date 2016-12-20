@@ -54,8 +54,8 @@ const Matches = (
     results: matches.map(e => ({match: e, ...e[primary]})),
     count: matches.length,
   };
-  const pathname = '',
-    query = {};
+  const pathname = '';
+  const query = {};
   return (
     <Table
       data={dataTable}

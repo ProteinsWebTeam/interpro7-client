@@ -3,6 +3,7 @@ import React, {PropTypes as T} from 'react';
 import Tabs from 'components/Tabs';
 import SearchByText from 'components/SearchByText';
 import IPScanSearch from 'components/IPScanSearch';
+import IPScanStatus from 'components/IPScanStatus';
 import SearchResults from 'components/SearchResults';
 
 import foundation from 'styles/foundation';
@@ -19,6 +20,7 @@ const Search = ({data, location: {query}}) => (
           </div>
           <div title="by sequence">
             <IPScanSearch />
+            <IPScanStatus refreshRate={120000} />
           </div>
         </Tabs>
       </fieldset>

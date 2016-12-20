@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 /* eslint max-statements: [1, 20] */
+import 'babel-polyfill';
 
 import chai, {expect} from 'chai';
 import {spy} from 'sinon';

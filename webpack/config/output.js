@@ -1,8 +1,8 @@
 const path = require('path');
 
-module.exports = ({publicPath = '/interpro/'} = {}) => ({
+module.exports = ({publicPath = '/interpro7/'} = {}) => ({
   path: path.resolve('dist'),
   publicPath,
-  filename: 'app.[chunkhash:3].js',
-  chunkFilename: '[id].[chunkhash:3].js',
+  filename: '[id].[name].[chunkhash:3].js',
+  chunkFilename: '[id].[name].[chunkhash:3].js',
 });

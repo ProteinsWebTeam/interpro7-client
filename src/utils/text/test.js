@@ -1,5 +1,7 @@
 // @flow
 /* eslint-env mocha */
+import 'babel-polyfill';
+
 import {expect} from 'chai';
 
 import {transformFormatted} from '.';

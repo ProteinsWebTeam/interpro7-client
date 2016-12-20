@@ -38,8 +38,8 @@ export const InterproSymbol = (
     className?: string
   } */
 ) => {
-  const colors = entryTypeColors[type[0]],
-    ch = (type === 'undefined') ? '?' : type[0];
+  const colors = entryTypeColors[type[0]];
+  const ch = (type === 'undefined') ? '?' : type[0];
   return (
       <svg
         xmlns="http://www.w3.org/2000/svg"

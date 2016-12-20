@@ -1,5 +1,8 @@
 import React, {PropTypes as T, Component} from 'react';
 import {withRouter} from 'react-router';
+
+import {frame} from 'timing-functions/src';
+
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
 import f from 'styles/foundation';
@@ -21,13 +24,17 @@ class SearchByText extends Component {
     const value = event.target.dataset.search;
     if (value) this.setState({value});
   };
+
   handleReset = () => this.setState({value: ''});
+
   handleSubmit = (event) => {
     event.preventDefault();
   };
-  handleSubmitClick = () => {
-    this.setState({submit: true});
-    requestAnimationFrame(() => this.setState({submit: false}));
+
+  handleSubmitClick = async () => {
+    await new Promise(res => this.setState({submit: true}, res));
+    await frame();
+    this.setState({submit: false});
   };
 
   render() {
