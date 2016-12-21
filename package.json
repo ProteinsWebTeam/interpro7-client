@@ -10,7 +10,7 @@
     "test": "npm-run-all test:*",
     "test:flow": "flow check || echo \"flow unable to run, skipping\"",
     "test:lint": "esw --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
-    "test:unit": "echo ignoring for now || NODE_ENV=test mocha-webpack --webpack-config webpack/config.js --growl --reporter dot \"src/**/*test?(s).js\"",
+    "test:unit": "NODE_ENV=test mocha-webpack --webpack-config webpack/config.js --growl --reporter dot \"src/**/*test?(s).js\"",
     "test:functional": "echo \"Warning, no functional test specified yet, passing\" && exit 0",
     "dev": "webpack-dev-server --config webpack/config.js",
     "dev:test": "npm-run-all -rp dev:test:*",
@@ -39,7 +39,19 @@
           "useBuiltIns": true,
           "targets": {
             "browsers": "last 1 version, > 10%",
-            "node": true
+            "node": true,
+            "exclude": [
+              "typed.data-view",
+              "typed.int8-array",
+              "typed.uint8-array",
+              "typed.uint8-clamped-array",
+              "typed.int16-array",
+              "typed.uint16-array",
+              "typed.int32-array",
+              "typed.uint32-array",
+              "typed.float32-array",
+              "typed.float64-array"
+            ]
           }
         }
       ],

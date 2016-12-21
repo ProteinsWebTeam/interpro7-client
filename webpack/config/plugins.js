@@ -27,10 +27,10 @@ const common = [
     },
   }),
   new webpack.NamedModulesPlugin(),
-  // new ExtractTextPlugin({
-  //   filename: 'styles.[contenthash:3].css',
-  //   allChunks: true,
-  // }),
+  new ExtractTextPlugin({
+    filename: 'styles.[contenthash:3].css',
+    allChunks: true,
+  }),
   // new WebAppManifestPlugin(),
 ];
 

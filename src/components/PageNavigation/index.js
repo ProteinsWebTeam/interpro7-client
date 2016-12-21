@@ -1,7 +1,7 @@
 // @flow
 /* eslint no-magic-numbers: [1, {ignore: [0]}] */
 import React, {PropTypes as T} from 'react';
-import {Link} from 'react-router';
+import Link from 'react-router/Link';
 
 import Badge from 'components/Badge';
 

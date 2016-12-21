@@ -1,7 +1,7 @@
 const process = require('process');
 const path = require('path');
 
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const PROD = process.env.NODE_ENV === 'production';
 
@@ -33,115 +33,79 @@ module.exports = {
           loader: 'babel-loader',
         },
       ],
-      // loader: 'babel-loader',
     },
     {
       test: /\.json$/i,
-      use: ['json-loader'],
-      // loader: 'json-loader',
+      use: [
+        {
+          loader: 'json-loader',
+        },
+      ],
     },
     {
       test: /\.yml$/i,
-      use: ['json-loader', 'yaml-loader'],
-      // loader: 'json-loader!yaml-loader',
+      use: [
+        {
+          loader: 'json-loader',
+        },
+        {
+          loader: 'yaml-loader',
+        },
+      ],
     },
     {
       test: /((ebi-global)|(interpro-new))\.css$/i,
-      // loader: ExtractTextPlugin.extract(
-      //   'style-loader',
-      //   `css-loader?${
-      //     JSON.stringify(
-      //       Object.assign({}, cssSettings, {localIdentName: '[local]'})
-      //     )}!postcss-loader`
-      // ),
-      // use: ExtractTextPlugin.extract({
-      //   fallbackLoader: 'style-loader',
-      //   loader: [
-      //     {
-      //       loader: 'css-loader',
-      //       query: Object.assign(
-      //         {}, cssSettings, {localIdentName: '[local]'}
-      //       ),
-      //     },
-      //     {
-      //       loader: 'postcss-loader',
-      //     },
-      //   ],
-      // }),
-      use: [
-        {
-          loader: 'style-loader',
-        },
-        {
-          loader: 'css-loader',
-          query: Object.assign(
-            {}, cssSettings, {localIdentName: '[local]'}
-          ),
-        },
-        {
-          loader: 'postcss-loader',
-        },
-      ],
+
+      // Use `loader` instead of `use` for now, otherwise breaks
+      // See https://github.com/webpack/extract-text-webpack-plugin/issues/282
+      loader: ExtractTextPlugin.extract({
+        fallbackLoader: 'style-loader',
+        loader: [
+          {
+            loader: 'css-loader',
+            query: Object.assign({}, cssSettings, {localIdentName: '[local]'}),
+          },
+          {
+            loader: 'postcss-loader',
+          },
+        ],
+      }),
     },
     {
       test: /\.css$/i,
-      // use: ExtractTextPlugin.extract({
-      //   fallbackLoader: 'style-loader',
-      //   loader: [
-      //     {
-      //       loader: 'css-loader',
-      //       options: cssSettings,
-      //     },
-      //     {
-      //       loader: 'postcss-loader',
-      //     },
-      //   ],
-      // }),
-      use: [
-        {loader: 'style-loader'},
-        {loader: 'css-loader', options: cssSettings},
-        {loader: 'postcss-loader'},
-      ],
+      // Use `loader` instead of `use` for now, otherwise breaks
+      // See https://github.com/webpack/extract-text-webpack-plugin/issues/282
+      loader: ExtractTextPlugin.extract({
+        fallbackLoader: 'style-loader',
+        loader: [
+          {
+            loader: 'css-loader',
+            query: cssSettings,
+          },
+          {
+            loader: 'postcss-loader',
+          },
+        ],
+      }),
       exclude: /((ebi-global)|(interpro-new))\.css$/i,
-      // loader: ExtractTextPlugin.extract(
-      //   'style-loader',
-      //   `css-loader?${JSON.stringify(cssSettings)}!postcss-loader`
-      // ),
     },
     {
       test: /\.scss$/i,
-      // use: ExtractTextPlugin.extract({
-      //   fallbackLoader: 'style-loader',
-      //   loader: [
-      //     {
-      //       loader: 'css-loader',
-      //       options: cssSettings,
-      //     },
-      //     {
-      //       loader: 'sass-loader',
-      //       options: {sourceMap: !PROD},
-      //     },
-      //   ],
-      // }),
-      use: [
-        {
-          loader: 'style-loader',
-        },
-        {
-          loader: 'css-loader',
-          options: cssSettings,
-        },
-        {
-          loader: 'sass-loader',
-          options: {sourceMap: !PROD},
-        },
-      ],
-      // loader: ExtractTextPlugin.extract(
-      //   'style-loader',
-      //   `css-loader?${
-      //     JSON.stringify(cssSettings)
-      //   }!sass-loader?sourceMap=${!PROD}`
-      // ),
+      // Use `loader` instead of `use` for now, otherwise breaks
+      // See https://github.com/webpack/extract-text-webpack-plugin/issues/282
+      loader: ExtractTextPlugin.extract({
+        fallbackLoader: 'style-loader',
+        loader: [
+          {
+            loader: 'css-loader',
+            options: cssSettings,
+          },
+          {
+            loader: 'sass-loader',
+            options: {sourceMap: !PROD},
+          },
+        ],
+      }),
     },
     {
       test: /\.(jpe?g|png|gif|svg)$/i,
@@ -157,13 +121,9 @@ module.exports = {
           loader: 'img-loader',
         },
       ],
-      // loader: `url-loader?name=${
-      //   PROD ? '' : '[name].'
-      // }[hash:3].[ext]&limit=1024!img-loader`,
     },
     {
       test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
-      // loader: 'url-loader?limit=1024&mimetype=application/font-woff',
       use: [
         {
           loader: 'url-loader',
@@ -176,8 +136,11 @@ module.exports = {
     },
     {
       test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
-      // loader: 'file-loader',
-      use: ['file-loader'],
+      use: [
+        {
+          loader: 'file-loader',
+        },
+      ],
     },
   ],
 };

@@ -31,6 +31,9 @@ const config = {
   //   postcssApply,
   //   cssnext,
   // ],
+  performance: {
+    maxAssetSize: 500000,
+  },
 };
 
 switch (process.env.NODE_ENV) {

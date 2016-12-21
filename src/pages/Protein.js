@@ -1,6 +1,6 @@
 // @flow
 import React, {PropTypes as T, cloneElement} from 'react';
-import {Link} from 'react-router';
+import Link from 'react-router/Link';
 import ColorHash from 'color-hash/lib/color-hash';
 
 import Table, {Column, Search, /*PageSizeSelector,*/ Exporter}

@@ -8,7 +8,7 @@ import {createRenderer} from 'react-addons-test-utils';
 import chai, {expect} from 'chai';
 import jsxChai from 'jsx-chai';
 
-import {Link} from 'react-router';
+import Link from 'react-router/Link';
 
 import {Name, ExtOriginDB, OriginDB, SourceOrganism} from '.';
 import {TaxLink, PDBeLink, UniProtLink} from 'components/ExtLink';

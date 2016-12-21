@@ -4,6 +4,8 @@ import {Provider} from 'react-redux';
 import BrowserRouter from 'react-router/BrowserRouter';
 // import createBrowserHistory from 'history/createBrowserHistory';
 
+import createHistory from 'history/createBrowserHistory';
+
 import Root from 'Root';
 
 import config from 'config';
@@ -19,10 +21,12 @@ import {createToastManagerWithStore} from 'toasts';
 console.log(config);
 const store = createStore();
 
+const history = createHistory({basename: config.root.website.pathname});
+
 // For next changes to  history
-// history.listen(loadDataForURL(store));
+history.listen(loadDataForURL(store));
 // For first load
-// loadDataForURL(store)(history.getCurrentLocation());
+loadDataForURL(store)(history.location);
 // Instantiate Toast manager
 createToastManagerWithStore(store);
 

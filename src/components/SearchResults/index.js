@@ -1,6 +1,7 @@
 /* eslint max-statements: ["error", 13] */
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter, Link} from 'react-router';
+import Link from 'react-router/Link';
+import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
 
 import {frame} from 'timing-functions/src';
