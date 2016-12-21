@@ -1,6 +1,7 @@
 import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router';
+import Match from 'react-router/Match';
+import Link from 'react-router/Link';
 
 import classnames from 'classnames/bind';
 
@@ -165,7 +166,7 @@ const Header = ({pathname, stickyMenuOffset: offset, stuck}) => (
     <div className={styleBundle('masthead', 'row')}>
       <Title location={pathname} reduced={false} />
       <SideIcons reduced={false} stuck={stuck} />
-      <DynamicMenu location={pathname}/>
+      <Match pattern="*" component={DynamicMenu} />
     </div>
   </header>
 );

@@ -1,13 +1,13 @@
 // @flow
 import React from 'react';
 import {Provider} from 'react-redux';
-import {BrowserRouter} from 'react-router';
+import BrowserRouter from 'react-router/BrowserRouter';
 // import createBrowserHistory from 'history/createBrowserHistory';
 
 import Root from 'Root';
 
 import config from 'config';
-import routes from 'routes';
+// import routes from 'routes';
 import loadDataForURL from 'data';
 import createStore from 'store';
 import {createToastManagerWithStore} from 'toasts';
@@ -28,12 +28,8 @@ createToastManagerWithStore(store);
 
 const App = () => (
   <Provider store={store}>
-    <BrowserRouter
-      basename={config.root.website.pathname}
-      history={history}
-      routes={routes}
-    >
-      <Root location={{pathname: ''}}/>
+    <BrowserRouter basename={config.root.website.pathname}>
+      <Root />
     </BrowserRouter>
   </Provider>
 );

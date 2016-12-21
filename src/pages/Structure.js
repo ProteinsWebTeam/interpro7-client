@@ -2,7 +2,7 @@
 import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router';
 
-import Table, {Column, Search, PageSizeSelector, Exporter}
+import Table, {Column, Search, /*PageSizeSelector,*/ Exporter}
   from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
@@ -41,7 +41,7 @@ const Structure = (
             <li><a href={`${dataUrl}`}>Open in API web view</a></li>
           </ul>
         </Exporter>
-        <PageSizeSelector/>
+        {/*<PageSizeSelector/>*/}
         <Search>Search structures</Search>
         <Column
           accessKey="accession"

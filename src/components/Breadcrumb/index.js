@@ -71,18 +71,18 @@ class Breadcrumb extends Component {
     nCompressed: 0,
   };
 
-  componentWillMount = () => {
+  componentWillMount() {
     this.setState({
       paths: getPaths(this.props.pathname),
     });
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     // window.node = findDOMNode(this);
     // this.handleUpdate();
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  componentWillReceiveProps(nextProps) {
     // console.log('will receive props', ...Object.values(nextProps));
     if (this.props.pathname !== nextProps.pathname) {
       this.setState({
@@ -91,7 +91,7 @@ class Breadcrumb extends Component {
     }
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate() {
     // this.handleUpdate();
     // FIXME: get new measurement some other way, or limit it.
     // this.props.refreshDOMAttributes();
@@ -120,15 +120,15 @@ class Breadcrumb extends Component {
       }
       positions.set(node, curr);
     }
-  }
+  };
 
   expand = () => {
     this.setState({expanded: true});
-  }
+  };
 
   reduce = () => {
     this.setState({expanded: false});
-  }
+  };
 
   render() {
     const {expanded, paths} = this.state;

@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import {frame} from 'timing-functions/src';
 
-import Table, {Column, PageSizeSelector, Exporter} from 'components/Table';
+import Table, {Column,/* PageSizeSelector, */Exporter} from 'components/Table';
 
 const maxLength = 200;
 const NOT_FOUND = -1;
@@ -79,7 +79,7 @@ class SearchResults extends Component {
         <Exporter>
           <a href={dataUrl} download="SearchResults.json">JSON</a>
         </Exporter>
-        <PageSizeSelector pageSize={query.page_size}/>
+        {/*<PageSizeSelector pageSize={query.page_size}/>*/}
         <Column
           accessKey="id"
           renderer={id => (

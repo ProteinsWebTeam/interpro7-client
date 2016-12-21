@@ -2,7 +2,7 @@ import React, {PropTypes as T, Component} from 'react';
 import {
   Editor, EditorState, ContentState, CompositeDecorator, convertToRaw,
 } from 'draft-js';
-import {withRouter} from 'react-router';
+import Match from 'react-router/Match';
 import {connect} from 'react-redux';
 import url from 'url';
 
@@ -57,7 +57,6 @@ const compositeDecorator = new CompositeDecorator([
 class IPScanSearch extends Component {
   static propTypes = {
     addToast: T.func.isRequired,
-    router: T.object,
     value: T.string,
     location: T.shape({
       query: T.object,
@@ -346,6 +345,11 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
   }
 }
 
-export default withRouter(
-  connect(({settings: {ipScan}}) => ({ipScan}), {addToast})(IPScanSearch)
+export default () => (
+  <Match
+    pattern="*"
+    component={
+      connect(({settings: {ipScan}}) => ({ipScan}), {addToast})(IPScanSearch)
+    }
+  />
 );

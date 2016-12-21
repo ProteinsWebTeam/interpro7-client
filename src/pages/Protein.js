@@ -3,7 +3,7 @@ import React, {PropTypes as T, cloneElement} from 'react';
 import {Link} from 'react-router';
 import ColorHash from 'color-hash/lib/color-hash';
 
-import Table, {Column, Search, PageSizeSelector, Exporter}
+import Table, {Column, Search, /*PageSizeSelector,*/ Exporter}
   from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
@@ -51,7 +51,7 @@ const Protein = (
             <li><a href={`${dataUrl}`}>Open in API web view</a></li>
           </ul>
         </Exporter>
-        <PageSizeSelector pageSize={query.page_size}/>
+        {/*<PageSizeSelector pageSize={query.page_size}/>*/}
         <Search>Search proteins</Search>
         <Column
           accessKey="accession"

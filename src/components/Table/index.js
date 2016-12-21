@@ -44,14 +44,14 @@ const Table = (
           pathname={pathname}
         />*/
       }
-      {
+      {/*
         search &&
         <_SearchBox
           search={search.props}
           query={query.search}
           pathname={pathname}
         />
-      }
+      */}
       <table>
         <_Header columns={columns} />
         <_Body rows={data.results} columns={columns} />

@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter} from 'react-router';
+import Match from 'react-router/Match';
 
 import {frame} from 'timing-functions/src';
 
@@ -91,7 +91,6 @@ class SearchByText extends Component {
   }
 }
 SearchByText.propTypes = {
-  router: T.object,
   value: T.string,
   location: T.shape({
     query: T.object,
@@ -105,6 +104,6 @@ Example.propTypes = {
   value: T.string,
 };
 
-export default withRouter(SearchByText);
+export default () => <Match pattern="*" component={SearchByText} />;
 
 // export default SearchByText;

@@ -5,7 +5,7 @@ import {Link} from 'react-router';
 import {webComponents} from 'utils/polyfills';
 
 import Table, {
-  Column, Search, PageSizeSelector, Exporter,
+  Column, Search, /*PageSizeSelector,*/ Exporter,
 } from 'components/Table';
 
 import {removeLastSlash} from 'utils/url';
@@ -57,7 +57,7 @@ const Entry = (
             <li><a href={`${dataUrl}`}>Open in API web view</a></li>
           </ul>
         </Exporter>
-        <PageSizeSelector />
+        {/*<PageSizeSelector />*/}
         <Search>Search entries</Search>
         <Column
           accessKey="accession"
