@@ -225,6 +225,11 @@ const Home = createAsyncComponent(() => import('pages/Home'));
 const Entry = createAsyncComponent(() => import('pages/Entry'));
 const Protein = createAsyncComponent(() => import('pages/Protein'));
 const Structure = createAsyncComponent(() => import('pages/Structure'));
+// Search
+const SequenceSearch = createAsyncComponent(
+  () => import('staticPages/SequenceSearch')
+);
+const Search = createAsyncComponent(() => import('staticPages/Search'));
 // Static pages
 const About = createAsyncComponent(() => import('staticPages/About'));
 const Browse = createAsyncComponent(() => import('staticPages/Browse'));
@@ -255,6 +260,14 @@ export default () => (
     <Match
       pattern="/structure"
       component={Structure}
+    />
+    <Match
+      pattern="/search/sequence/:job"
+      component={SequenceSearch}
+    />
+    <Match
+      pattern="/search"
+      component={Search}
     />
     <Match
       pattern="/about"

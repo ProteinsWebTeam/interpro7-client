@@ -27,7 +27,7 @@ class SearchByText extends Component {
 
   handleReset = () => this.setState({value: ''});
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault();
   };
 

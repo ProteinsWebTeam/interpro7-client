@@ -148,7 +148,7 @@ const IPScanStatus = class extends Component {
                   <tr key={jobId}>
                     <td>{
                       id ?
-                        <Link to={`/sequencesearch/${id}`}>{id}</Link> :
+                        <Link to={`/search/sequence/${id}`}>{id}</Link> :
                         'None'
                     }</td>
                     <td>

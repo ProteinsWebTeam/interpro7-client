@@ -1,4 +1,6 @@
 import React, {Component, PropTypes as T, Children} from 'react';
+import Redirect from 'react-router/Redirect';
+
 import {foundationPartial} from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'styles/ebi-global.css';
@@ -22,6 +24,7 @@ export default class extends Component {
     const {children} = this.props;
     const {activeTab} = this.state;
     const _children = Children.toArray(children);
+    const _child = _children[activeTab];
     return (
       <div>
         <ul className={f('tabs')}>
@@ -35,6 +38,7 @@ export default class extends Component {
                 key={i}
               >
                 <button onClick={this._handleChangeTab(i)}>
+                  {activeTab === i && <Redirect to={_child.props.to} push />}
                   {child.props.title}
                 </button>
               </li>
@@ -60,10 +64,10 @@ export default class extends Component {
           <div
             className={[
               f('tabs-panel', 'is-active'),
-              (_children[activeTab].props.className || ''),
+              (_child.props.className || ''),
             ].join(' ').trim()}
           >
-            {_children[activeTab].props.children}
+            {_child.props.children}
           </div>
         </div>
       </div>

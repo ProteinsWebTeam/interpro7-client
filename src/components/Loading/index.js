@@ -42,7 +42,7 @@ class Loading extends Component {
 
   render() {
     const {
-      data: {loading}, children: _, component: Component, ...otherProps,
+      data: {loading}, children: _, component: Component, ...otherProps
     } = this.props;
     const {data, children} = this.state;
 

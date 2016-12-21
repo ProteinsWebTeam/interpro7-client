@@ -1,13 +1,23 @@
 import React, {PropTypes as T} from 'react';
+import Match from 'react-router/Match';
 
 import Tabs from 'components/Tabs';
-import SearchByText from 'components/SearchByText';
-import IPScanSearch from 'components/IPScanSearch';
-import IPScanStatus from 'components/IPScanStatus';
 import SearchResults from 'components/SearchResults';
+
+import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 import foundation from 'styles/foundation';
 import styles from 'styles/blocks.css';
+
+const SearchByText = createAsyncComponent(
+  () => import('components/SearchByText')
+);
+const IPScanSearch = createAsyncComponent(
+  () => import('components/IPScanSearch')
+);
+const IPScanStatus = createAsyncComponent(
+  () => import('components/IPScanStatus')
+);
 
 const Search = ({data, location: {query}}) => (
   <main>
@@ -15,16 +25,20 @@ const Search = ({data, location: {query}}) => (
       <fieldset className={foundation('fieldset')}>
         <legend>Search InterPro</legend>
         <Tabs>
-          <div title="by text">
+          <div title="by text" to="/search/text">
             <SearchByText />
           </div>
-          <div title="by sequence">
+          <div title="by sequence" to="/search/sequence">
             <IPScanSearch />
             <IPScanStatus refreshRate={120000} />
           </div>
         </Tabs>
       </fieldset>
-      <SearchResults data={data} query={query} />
+      <Match
+        pattern="*"
+        component={SearchResults}
+      />
+      {/*<SearchResults data={data} query={query} />*/}
     </section>
   </main>
 );

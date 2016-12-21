@@ -1,4 +1,4 @@
-import React, {PropTypes as T} from 'react';
+import React from 'react';
 import Match from 'react-router/Match';
 
 import {schedule} from 'timing-functions/src';

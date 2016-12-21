@@ -1,7 +1,7 @@
 /* eslint max-statements: ["error", 13] */
 import React, {PropTypes as T, Component} from 'react';
 import Link from 'react-router/Link';
-import {withRouter} from 'react-router';
+// import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
 
 import {frame} from 'timing-functions/src';
@@ -116,6 +116,4 @@ SearchResults.propTypes = {
   dataUrl: T.string,
 };
 
-export default withRouter(
-  connect((state) => ({dataUrl: state.data.dataUrl}))(SearchResults)
-);
+export default connect(state => ({dataUrl: state.data.dataUrl}))(SearchResults);
