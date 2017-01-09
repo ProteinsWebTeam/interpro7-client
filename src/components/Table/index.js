@@ -20,6 +20,7 @@ const Table = (
    children?: any
    } */
 ) => {
+  const _query = query || {};
   const _children = Children.toArray(children);
   // Extract prop information out of every Column element's props
   const columns = _children.filter(child => child.type === _Column)
@@ -40,7 +41,7 @@ const Table = (
       {
         /*pageSize &&
         <_PageSizeSelector
-          query={query}
+          query={_query}
           pathname={pathname}
         />*/
       }
@@ -48,7 +49,7 @@ const Table = (
         search &&
         <_SearchBox
           search={search.props}
-          query={query.search}
+          query={_query.search}
           pathname={pathname}
         />
       */}
@@ -58,7 +59,7 @@ const Table = (
       </table>
       <_Footer
         data={data}
-        pagination={query}
+        pagination={_query}
         pathname={pathname}
       />
     </div>
@@ -66,7 +67,7 @@ const Table = (
 };
 Table.propTypes = {
   data: T.object.isRequired,
-  query: T.object.isRequired,
+  query: T.object,
   pathname: T.string.isRequired,
   title: T.string,
   children: T.any,

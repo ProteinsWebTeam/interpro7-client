@@ -1,6 +1,8 @@
-// @flow
-import React, {PropTypes as T, cloneElement} from 'react';
+import React, {PropTypes as T} from 'react';
 import Link from 'react-router/Link';
+import {connect} from 'react-redux';
+
+import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 import Table, {Column, Search, /*PageSizeSelector,*/ Exporter}
   from 'components/Table';
@@ -10,8 +12,12 @@ import {removeLastSlash, buildLink} from 'utils/url';
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
+const Summary = createAsyncComponent(
+  () => import('components/Structure/Summary')
+);
+
 const Structure = (
-  {data, location: {query, pathname}, dataUrl, children}
+  {data, location: {query, pathname}, dataUrl}
   /*: {
     data: {
       results?: Array<Object>,
@@ -20,11 +26,12 @@ const Structure = (
     },
     location: {query: Object, pathname: string},
     dataUrl: string,
-    children: React$Element<any>
   } */
 ) => {
   let main;
-  if (Array.isArray(data.results)) { // List of structures
+  if (!data) {
+    main = <div>Loading data...</div>;
+  } else if (Array.isArray(data.results)) { // List of structures
     main = (
       <Table
         data={data}
@@ -78,7 +85,7 @@ const Structure = (
   } else if (data.metadata) { // Single Entry page
     main = (
       <div>
-        {cloneElement(children, {data})}
+        <Summary data={data} location={{pathname}} />
       </div>
     );
   } else if (data.structures) {
@@ -114,4 +121,4 @@ Structure.propTypes = {
 };
 Structure.dataUrlMatch = /^structure/i;
 
-export default Structure;
+export default connect(({data: {urlKey, data}}) => ({urlKey, data}))(Structure);

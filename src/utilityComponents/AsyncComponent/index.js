@@ -1,3 +1,4 @@
+/* eslint react/no-multi-comp: ["off"] */
 import React, {PropTypes as T, Component} from 'react';
 
 const AsyncComponent = class extends Component {

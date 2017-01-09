@@ -20,7 +20,6 @@ import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 //   }));
 
 // TODO: check how to define a prefix for the URL (is base tag in head enough?)
-// TODO: implement code-splitting, separating by main routes
 
 // Routes for the subpages/tabs that will be used for every main page
 // (removing the subpage corresponding to the page below in the code)
@@ -236,7 +235,6 @@ const Browse = createAsyncComponent(() => import('staticPages/Browse'));
 const Help = createAsyncComponent(() => import('staticPages/Help'));
 const Contact = createAsyncComponent(() => import('staticPages/Contact'));
 const Settings = createAsyncComponent(() => import('staticPages/Settings'));
-// const About = createAsyncComponent(() => import('staticPages/About'));
 
 const NotFound = createAsyncComponent(
   () => import('staticPages/error/NotFound')

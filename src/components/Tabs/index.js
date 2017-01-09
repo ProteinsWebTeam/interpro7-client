@@ -31,10 +31,7 @@ export default class extends Component {
           {
             _children.map((child, i) => (
               <li
-                className={f(
-                  'tabs-title', {
-                    'is-active': activeTab === i,
-                  })}
+                className={f('tabs-title', {'is-active': activeTab === i})}
                 key={i}
               >
                 <button onClick={this._handleChangeTab(i)}>
@@ -46,9 +43,7 @@ export default class extends Component {
           }
         </ul>
 
-        <div
-          className={f('tabs', 'tabs-content')}
-        >
+        <div className={f('tabs', 'tabs-content')}>
           {/*
             _children.map((child, i) => (
               <div

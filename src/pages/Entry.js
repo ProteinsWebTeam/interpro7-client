@@ -1,6 +1,9 @@
 /* globals require: false */
-import React, {PropTypes as T, cloneElement} from 'react';
+import React, {PropTypes as T} from 'react';
 import Link from 'react-router/Link';
+import {connect} from 'react-redux';
+
+import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 import {webComponents} from 'utils/polyfills';
 
@@ -21,8 +24,10 @@ webComponents().then(() => {
   );
 });
 
+const Summary = createAsyncComponent(() => import('components/Entry/Summary'));
+
 const Entry = (
-  {data, location: {query, pathname}, dataUrl, children}
+  {data, location: {query, pathname}, dataUrl}
   /*: {
     data: {
       results?: Array<Object>,
@@ -35,12 +40,12 @@ const Entry = (
      },
     location: {pathname: string, query: Object},
     dataUrl: string,
-    children: React$Element<any>,
   } */
 ) => {
   let main;
-  // if (data) {
-  if (Array.isArray(data.results)) { // List of entries
+  if (!data) {
+    main = <div>Loading data...</div>;
+  } else if (Array.isArray(data.results)) { // List of entries
     main = (
       <Table
         data={data}
@@ -93,14 +98,10 @@ const Entry = (
     );
   } else if (data.metadata) { // Single Entry page
     main = (
-        <div>
-          {children && cloneElement(children, {data})
-            /* The children content defined in routes points to
-             components/Entry/Summary
-             */
-          }
-        </div>
-      );
+      <div>
+        <Summary data={data} location={{pathname}} />
+      </div>
+    );
   } else if (data.entries) { // List of Member Databases
     main = (
         <div>
@@ -130,11 +131,10 @@ const Entry = (
           </ul>
         </div>
       );
+  } else {
+    // TODO: Improve message and navigation out of it.
+    main = <div>There are no entries with the exiting filters.</div>;
   }
-  // } else {
-  //   // TODO: Improve message and navigation out of it.
-  //   main = <div>There are no entries with the exiting filters.</div>;
-  // }
   return (
     <main>
       <div className={f('row')}>
@@ -151,8 +151,7 @@ Entry.propTypes = {
     pathname: T.string.isRequired,
   }).isRequired,
   dataUrl: T.string,
-  children: T.node,
 };
 Entry.dataUrlMatch = /^entry/i;
 
-export default Entry;
+export default connect(({data: {urlKey, data}}) => ({urlKey, data}))(Entry);
