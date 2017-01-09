@@ -1,14 +1,25 @@
 /* globals require: false */
 import {webComponents as supportsWebComponents} from 'utils/support';
 
-export const webComponents = () => new Promise(res => {
-  if (supportsWebComponents) {
-    res(true);
-    return;
+let response;
+
+// Tries to get Web Components support somehow (through polyfill if need be)
+// Throws if failed to have Web Component support, even when trying to polyfill
+// Return a boolean, true if native support, false if polyfilled
+export const webComponents = () => {
+  if (!response) {
+    response = new Promise(async (res, rej) => {
+      if (supportsWebComponents) {
+        res(true);
+        return;
+      }
+      try {
+        await import('skatejs-web-components/src');
+        res(false)
+      } catch (err) {
+        rej(err);
+      }
+    });
   }
-  require.ensure([], () => {
-    // TODO: fix error in firefox
-    // require('skatejs-web-components/src');
-    res(false);
-  }, 'web-components-polyfill');
-});
+  return response;
+};

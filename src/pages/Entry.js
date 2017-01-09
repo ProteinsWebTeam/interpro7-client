@@ -1,4 +1,3 @@
-/* globals require: false */
 import React, {PropTypes as T} from 'react';
 import Link from 'react-router/Link';
 import {connect} from 'react-redux';
@@ -15,14 +14,12 @@ import {removeLastSlash} from 'utils/url';
 
 import f from 'styles/foundation';
 
-webComponents().then(() => {
-  // import('interpro-components').then(m => m.default);
-  require.ensure(
-    [],
-    () => require('interpro-components'),
-    'interpro-components'
-  );
-});
+(async () => {
+  // Waits for Web Components tobe present somehow (native or polyfill)
+  await webComponents();
+  // Then, load the webcomponents needed
+  import('interpro-components/src');
+})();
 
 const Summary = createAsyncComponent(() => import('components/Entry/Summary'));
 
