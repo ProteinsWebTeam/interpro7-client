@@ -24,7 +24,7 @@
     "deploy:staging": "npm run deploy",
     "deploy:production": "NODE_ENV=production npm run deploy",
     "start": "npm-run-all -rp dev:test dev",
-    "stats": "webpack --profile --json > .stats/stats.json"
+    "stats": "webpack --config webpack/config.js --profile --json > .stats/stats.json"
   },
   "contributors": [
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)"
@@ -78,7 +78,7 @@
     "data-loader": "^0.1.7",
     "draft-js": "^0.9.1",
     "foundation-sites": "~6.2.4",
-    "history": "^4.4.1",
+    "history": "^4.5.1",
     "idb": "^2.0.0",
     "interpro-components": "^0.1.5",
     "isomorphic-fetch": "^2.2.1",
@@ -87,7 +87,7 @@
     "react": "^15.4.1",
     "react-addons-transition-group": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-redux": "^5.0.1",
+    "react-redux": "^5.0.2",
     "react-router": "^4.0.0-alpha.6",
     "redux": "^3.6.0",
     "skatejs-web-components": "^5.0.1",
@@ -102,7 +102,7 @@
     "babel-plugin-transform-react-constant-elements": "^6.9.1",
     "babel-plugin-transform-react-jsx-source": "^6.9.0",
     "babel-preset-babili": "^0.0.9",
-    "babel-preset-env": "^1.1.7",
+    "babel-preset-env": "^1.1.8",
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-2": "^6.18.0",
     "babel-register": "^6.18.0",
@@ -110,7 +110,7 @@
     "classnames": "^2.2.5",
     "css-loader": "^0.26.1",
     "empty": "^0.10.1",
-    "eslint": "^3.12.2",
+    "eslint": "^3.13.1",
     "eslint-import-resolver-webpack": "^0.8.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-react": "^6.8.0",
@@ -132,7 +132,7 @@
     "npm-run-all": "^4.0.0",
     "postcss-apply": "^0.4.0",
     "postcss-cssnext": "^2.9.0",
-    "postcss-import": "^9.0.0",
+    "postcss-import": "^9.1.0",
     "postcss-loader": "^1.2.1",
     "react-addons-test-utils": "^15.4.1",
     "rimraf": "^2.5.4",

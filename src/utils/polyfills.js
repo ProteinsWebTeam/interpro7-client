@@ -1,4 +1,3 @@
-/* globals require: false */
 import {webComponents as supportsWebComponents} from 'utils/support';
 
 let response;
@@ -15,7 +14,7 @@ export const webComponents = () => {
       }
       try {
         await import('skatejs-web-components/src');
-        res(false)
+        res(false);
       } catch (err) {
         rej(err);
       }

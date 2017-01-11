@@ -4,10 +4,6 @@ const fs = require('fs');
 const url = require('url');
 const yaml = require('js-yaml');
 
-// const postcssImport = require('postcss-import');
-// const postcssApply = require('postcss-apply');
-// const cssnext = require('postcss-cssnext');
-
 const entry = require('./config/entry');
 const output = require('./config/output');
 const plugins = require('./config/plugins');
@@ -26,11 +22,6 @@ const config = {
   resolve,
   plugins: plugins[PROD ? 'production' : 'dev'],
   module: rules,
-  // postcss: [
-  //   postcssImport,
-  //   postcssApply,
-  //   cssnext,
-  // ],
   performance: {
     maxAssetSize: 500000,
   },
