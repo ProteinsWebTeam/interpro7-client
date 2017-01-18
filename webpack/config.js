@@ -4,11 +4,7 @@ const fs = require('fs');
 const url = require('url');
 const yaml = require('js-yaml');
 
-const entry = require('./config/entry');
-const output = require('./config/output');
 const plugins = require('./config/plugins');
-const rules = require('./config/rules');
-const resolve = require('./config/resolve');
 
 const DEFAULT_PORT = 80;
 
@@ -17,11 +13,10 @@ const websiteURL = url.parse(iprConfig.root.website, true, true);
 const PROD = process.env.NODE_ENV === 'production';
 
 const config = {
-  entry,
-  output: output({publicPath: websiteURL.pathname}),
-  resolve,
-  plugins: plugins[PROD ? 'production' : 'dev'],
-  module: rules,
+  entry: require('./config/entry'),
+  output: require('./config/output')({publicPath: websiteURL.pathname}),
+  resolve: require('./config/resolve'),
+  module: require('./config/module'),
   performance: {
     maxAssetSize: 500000,
   },
