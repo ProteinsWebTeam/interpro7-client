@@ -1,5 +1,4 @@
 import React from 'react';
-import Match from 'react-router/Match';
 
 import {schedule} from 'timing-functions/src';
 
@@ -25,32 +24,16 @@ const STICKY_MENU_OFFSET = 150;
 export default () => (
   <div>
     <Overlay />
-    <Match
-      pattern="*"
-      render={({pathname}) => (
-        <AsyncComponent
-          pathname={pathname}
-          getComponent={async () => {
-            // eslint-disable-next-line no-magic-numbers
-            await schedule(1000);// Schedule asap, but do it anyway after 1s
-            return import('components/Menu/SideMenu');
-          }}
-        />
-      )}
+    <AsyncComponent
+      getComponent={async () => {
+        // eslint-disable-next-line no-magic-numbers
+        await schedule(1000);// Schedule asap, but do it anyway after 1s
+        return import('components/Menu/SideMenu');
+      }}
     />
-    <Match
-      pattern="*"
-      render={({pathname}) => (
-        <Header stickyMenuOffset={STICKY_MENU_OFFSET} pathname={pathname} />
-      )}
-    />
+    <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
     <Sentinel top={STICKY_MENU_OFFSET} />
-    <Match
-      pattern="*"
-      render={({pathname}) => (
-        <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} pathname={pathname} />
-      )}
-    />
+    <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} />
     <Pages />
     <AsyncComponent
       getComponent={async () => {

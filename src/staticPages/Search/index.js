@@ -1,5 +1,5 @@
 import React, {PropTypes as T} from 'react';
-import Match from 'react-router/Match';
+import {Route} from 'react-router-dom';
 
 import Tabs from 'components/Tabs';
 import SearchResults from 'components/SearchResults';
@@ -34,8 +34,8 @@ const Search = ({data, location: {query}}) => (
           </div>
         </Tabs>
       </fieldset>
-      <Match
-        pattern="*"
+      <Route
+        path="*"
         component={SearchResults}
       />
       {/*<SearchResults data={data} query={query} />*/}

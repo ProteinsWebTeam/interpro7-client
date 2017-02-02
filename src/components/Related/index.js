@@ -1,6 +1,6 @@
 
 import React, {PropTypes as T} from 'react';
-import Link from 'react-router/Link';
+import {Link} from 'react-router-dom';
 
 import Matches from 'components/Matches';
 

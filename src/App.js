@@ -1,8 +1,7 @@
 // @flow
 import React from 'react';
 import {Provider} from 'react-redux';
-import BrowserRouter from 'react-router/BrowserRouter';
-// import createBrowserHistory from 'history/createBrowserHistory';
+import {Router} from 'react-router-dom';
 
 import createHistory from 'history/createBrowserHistory';
 
@@ -13,10 +12,6 @@ import config from 'config';
 import loadDataForURL from 'data';
 import createStore from 'store';
 import {createToastManagerWithStore} from 'toasts';
-
-// const history = useRouterHistory(createBrowserHistory)({
-//   basename: config.root.website.pathname,
-// });
 
 console.log(config);
 const store = createStore();
@@ -32,9 +27,9 @@ createToastManagerWithStore(store);
 
 const App = () => (
   <Provider store={store}>
-    <BrowserRouter basename={config.root.website.pathname}>
+    <Router history={history}>
       <Root />
-    </BrowserRouter>
+    </Router>
   </Provider>
 );
 

@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import Match from 'react-router/Match';
+import {Route} from 'react-router-dom';
 
 import {frame} from 'timing-functions/src';
 
@@ -104,6 +104,6 @@ Example.propTypes = {
   value: T.string,
 };
 
-export default () => <Match pattern="*" component={SearchByText} />;
+export default () => <Route path="*" component={SearchByText} />;
 
 // export default SearchByText;

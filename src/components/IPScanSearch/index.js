@@ -2,7 +2,7 @@ import React, {PropTypes as T, Component} from 'react';
 import {
   Editor, EditorState, ContentState, CompositeDecorator, convertToRaw,
 } from 'draft-js';
-import Match from 'react-router/Match';
+import {Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 import url from 'url';
 
@@ -346,8 +346,8 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
 }
 
 export default () => (
-  <Match
-    pattern="*"
+  <Route
+    path="*"
     component={
       connect(({settings: {ipScan}}) => ({ipScan}), {addToast})(IPScanSearch)
     }

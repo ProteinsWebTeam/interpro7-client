@@ -3,7 +3,7 @@ import {foundationPartial} from 'styles/foundation';
 import Description from 'components/Description';
 import {InterproSymbol} from 'components/Title';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import Link from 'react-router/Link';
+import {Link} from 'react-router-dom';
 import {memberDB, entryType, latests, speciesFeat, GoList}
   from 'staticData/home';
 import Tabs from 'components/Tabs';

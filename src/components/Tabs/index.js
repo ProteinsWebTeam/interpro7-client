@@ -1,5 +1,5 @@
 import React, {Component, PropTypes as T, Children} from 'react';
-import Redirect from 'react-router/Redirect';
+import {Redirect} from 'react-router-dom';
 
 import {foundationPartial} from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';

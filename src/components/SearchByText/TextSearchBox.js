@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import Redirect from 'react-router/Redirect';
+import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 class TextSearchBox extends Component {

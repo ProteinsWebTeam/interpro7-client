@@ -1,5 +1,5 @@
 import React, {PropTypes as T} from 'react';
-import Link from 'react-router/Link';
+import {Link} from 'react-router-dom';
 
 const ObjectList = ({object}) => {
   const base = location.pathname + (location.pathname.endsWith('/') ? '' : '/');

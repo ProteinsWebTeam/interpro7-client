@@ -1,12 +1,11 @@
 /* eslint max-statements: ["error", 13] */
 import React, {PropTypes as T, Component} from 'react';
-import Link from 'react-router/Link';
-// import {withRouter} from 'react-router';
+import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import {frame} from 'timing-functions/src';
 
-import Table, {Column,/* PageSizeSelector, */Exporter} from 'components/Table';
+import Table, {Column, /* PageSizeSelector, */Exporter} from 'components/Table';
 
 const maxLength = 200;
 const NOT_FOUND = -1;

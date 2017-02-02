@@ -1,6 +1,6 @@
 // @flow
 import React, {PropTypes as T, createElement} from 'react';
-import Link from 'react-router/Link';
+import {Link} from 'react-router-dom';
 
 import {TaxLink, PDBeLink, UniProtLink} from 'components/ExtLink';
 

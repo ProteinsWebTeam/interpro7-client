@@ -1,55 +1,8 @@
 import React from 'react';
 
-// import Root from 'Root';
-
-import Match from 'react-router/Match';
-import Miss from 'react-router/Miss';
+import {Switch, Route} from 'react-router-dom';
 
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
-
-// const subPagesTransformer = (subPages, main) => subPages
-//   // Remove subPage matching the main page
-//   .filter(({path}) => !path.includes(main))
-//   .map(({path, component}) => ({
-//     path,
-//     component: ({data, ...props}) => (
-//       // If no data, don't render
-//       // Inject type of the main page inside the subPage
-//       data && createElement(component, {data, ...props, main})
-//     ),
-//   }));
-//
-// Routes for the subpages/tabs that will be used for every main page
-// (removing the subpage corresponding to the page below in the code)
-// const subPages = [
-//   {
-//     path: '(.*/)*entry(/.*)*',
-//     component: require('subPages/Entry').default,
-//     // getComponent(_, cb) {
-//     //   require.ensure([], () => {
-//     //     cb(null, require('subPages/Entry').default);
-//     //   });
-//     // },
-//   },
-//   {
-//     path: '(.*/)*protein(/.*)*',
-//     component: require('subPages/Protein').default,
-//     // getComponent(_, cb) {
-//     //   require.ensure([], () => {
-//     //     cb(null, require('subPages/Protein').default);
-//     //   });
-//     // },
-//   },
-//   {
-//     path: '(.*/)*structure(/.*)*',
-//     component: require('subPages/Structure').default,
-//     // getComponent(_, cb) {
-//     //   require.ensure([], () => {
-//     //     cb(null, require('subPages/Structure').default);
-//     //   });
-//     // },
-//   },
-// ];
 
 // Main pages
 const Home = createAsyncComponent(() => import('pages/Home'));
@@ -73,58 +26,19 @@ const NotFound = createAsyncComponent(
 );
 
 export default () => (
-  <div>
-    <Match
-      pattern="/"
-      exactly
-      component={Home}
-    />
-    <Match
-      pattern="/entry"
-      component={Entry}
-    />
-    <Match
-      pattern="/protein"
-      component={Protein}
-    />
-    <Match
-      pattern="/structure"
-      component={Structure}
-    />
-    <Match
-      pattern="/search/sequence/:job"
-      component={SequenceSearch}
-    />
-    <Match
-      pattern="/search"
-      component={Search}
-    />
-    <Match
-      pattern="/about"
-      component={About}
-    />
-    <Match
-      pattern="/browse"
-      component={Browse}
-    />
-    <Match
-      pattern="/help"
-      component={Help}
-    />
-    <Match
-      pattern="/contact"
-      component={Contact}
-    />
-    <Match
-      pattern="/settings"
-      component={Settings}
-    />
-    <Match
-      pattern="/404"
-      component={NotFound}
-    />
-    <Miss
-      component={NotFound}
-    />
-  </div>
+  <Switch>
+    <Route path="/" exact component={Home} />
+    <Route path="/entry" component={Entry} />
+    <Route path="/protein" component={Protein} />
+    <Route path="/structure" component={Structure} />
+    <Route path="/search/sequence/:job" component={SequenceSearch} />
+    <Route path="/search" component={Search} />
+    <Route path="/about" component={About} />
+    <Route path="/browse" component={Browse} />
+    <Route path="/help" component={Help} />
+    <Route path="/contact" component={Contact} />
+    <Route path="/settings" component={Settings} />
+    <Route path="/404" component={NotFound} />
+    <Route component={NotFound} />
+  </Switch>
 );

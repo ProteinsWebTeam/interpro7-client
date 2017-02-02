@@ -1,6 +1,6 @@
 import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
-import Link from 'react-router/Link';
+import {Link} from 'react-router-dom';
 import logo from 'images/logo/interpro_white.png';
 
 import {foundationPartial} from 'styles/foundation';
