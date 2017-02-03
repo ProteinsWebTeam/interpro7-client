@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter} from 'react-router/es';
+import {Route} from 'react-router-dom';
 
 import {frame} from 'timing-functions/src';
 
@@ -27,7 +27,7 @@ class SearchByText extends Component {
 
   handleReset = () => this.setState({value: ''});
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault();
   };
 
@@ -91,7 +91,6 @@ class SearchByText extends Component {
   }
 }
 SearchByText.propTypes = {
-  router: T.object,
   value: T.string,
   location: T.shape({
     query: T.object,
@@ -105,6 +104,6 @@ Example.propTypes = {
   value: T.string,
 };
 
-export default withRouter(SearchByText);
+export default () => <Route path="*" component={SearchByText} />;
 
 // export default SearchByText;

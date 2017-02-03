@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter} from 'react-router/es';
+import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 class TextSearchBox extends Component {
@@ -24,7 +24,7 @@ class TextSearchBox extends Component {
     };
     const {value: search} = this.state;
     if (search) query.search = search;
-    this.props.router.push({pathname, query});
+    this.setState({redirecting: {pathname, query}});
   };
 
   handleKeyPress = (target) => {
@@ -39,7 +39,8 @@ class TextSearchBox extends Component {
   };
 
   render() {
-    const {value} = this.state;
+    const {value, redirecting} = this.state;
+    if (redirecting) return <Redirect to={redirecting} />;
     return (
       <input
         type="text"
@@ -60,7 +61,6 @@ TextSearchBox.propTypes = {
   toSubmit: T.bool,
 };
 
-export default withRouter(
-  connect(({settings: {pagination: {pageSize}}}) =>
-    ({pageSize}))(TextSearchBox)
-);
+export default connect(
+  ({settings: {pagination: {pageSize}}}) => ({pageSize})
+)(TextSearchBox);

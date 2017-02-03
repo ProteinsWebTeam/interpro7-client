@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import {Link} from 'react-router/es';
+import {Link} from 'react-router-dom';
 
 import f from 'styles/foundation';
 
@@ -10,9 +10,9 @@ export default () => (
       <div className={f('row')}>
         <div className={f('medium-8', 'large-8', 'columns')}>
           <ul>
-            <li><Link to="entry">Entries</Link></li>
-            <li><Link to="protein">Proteins</Link></li>
-            <li><Link to="structure">Structures</Link></li>
+            <li><Link to="/entry">Entries</Link></li>
+            <li><Link to="/protein">Proteins</Link></li>
+            <li><Link to="/structure">Structures</Link></li>
           </ul>
         </div>
       </div>

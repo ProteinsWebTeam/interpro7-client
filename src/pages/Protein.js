@@ -1,9 +1,11 @@
-// @flow
-import React, {PropTypes as T, cloneElement} from 'react';
-import {Link} from 'react-router/es';
+import React, {PropTypes as T} from 'react';
+import {Link} from 'react-router-dom';
 import ColorHash from 'color-hash/lib/color-hash';
+import {connect} from 'react-redux';
 
-import Table, {Column, Search, PageSizeSelector, Exporter}
+import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
+
+import Table, {Column, Search, /*PageSizeSelector,*/ Exporter}
   from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
@@ -11,12 +13,15 @@ import {removeLastSlash, buildLink} from 'utils/url';
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
-
 const SVG_WIDTH = 100;
 const colorHash = new ColorHash();
 
+const Summary = createAsyncComponent(
+  () => import('components/Protein/Summary')
+);
+
 const Protein = (
-  {data, location: {query, pathname}, dataUrl, children}
+  {data, location: {query, pathname}, dataUrl}
   /*: {
     data: {
       results?: Array<Object>,
@@ -25,12 +30,11 @@ const Protein = (
     },
     location: {pathname: string, query: Object},
     dataUrl: string,
-    children: React$Element<any>,
   } */
 ) => {
   let main;
   if (!data) {
-    main = 'Loading...';
+    main = <div>Loading data...</div>;
   } else if (Array.isArray(data.results)) { // List of proteins
     const maxLength = data.results.reduce((max, result) => (
       Math.max(max, (result.metadata || result).length)
@@ -51,7 +55,7 @@ const Protein = (
             <li><a href={`${dataUrl}`}>Open in API web view</a></li>
           </ul>
         </Exporter>
-        <PageSizeSelector pageSize={query.page_size}/>
+        {/*<PageSizeSelector pageSize={query.page_size}/>*/}
         <Search>Search proteins</Search>
         <Column
           accessKey="accession"
@@ -110,11 +114,7 @@ const Protein = (
   } else if (data.metadata) { // Single Protein page
     main = (
       <div>
-        {cloneElement(children, {data})
-          /* The children content defined in routes points to
-             components/Protein/Summary
-           */
-        }
+        <Summary data={data} location={{pathname}} />
       </div>
     );
   } else if (data.proteins) { // List of protein databases
@@ -146,8 +146,7 @@ Protein.propTypes = {
     pathname: T.string.isRequired,
   }).isRequired,
   dataUrl: T.string,
-  children: T.node,
 };
 Protein.dataUrlMatch = /^protein/i;
 
-export default Protein;
+export default connect(({data: {urlKey, data}}) => ({urlKey, data}))(Protein);

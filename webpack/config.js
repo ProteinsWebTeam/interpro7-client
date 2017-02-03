@@ -4,15 +4,7 @@ const fs = require('fs');
 const url = require('url');
 const yaml = require('js-yaml');
 
-const postcssImport = require('postcss-import');
-const postcssApply = require('postcss-apply');
-const cssnext = require('postcss-cssnext');
-
-const entry = require('./config/entry');
-const output = require('./config/output');
 const plugins = require('./config/plugins');
-const loaders = require('./config/loaders');
-const resolve = require('./config/resolve');
 
 const DEFAULT_PORT = 80;
 
@@ -21,16 +13,13 @@ const websiteURL = url.parse(iprConfig.root.website, true, true);
 const PROD = process.env.NODE_ENV === 'production';
 
 const config = {
-  entry,
-  output: output({publicPath: websiteURL.pathname}),
-  resolve,
-  plugins: plugins[PROD ? 'production' : 'dev'],
-  module: loaders,
-  postcss: [
-    postcssImport,
-    postcssApply,
-    cssnext,
-  ],
+  entry: require('./config/entry'),
+  output: require('./config/output')({publicPath: websiteURL.pathname}),
+  resolve: require('./config/resolve'),
+  module: require('./config/module'),
+  performance: {
+    maxAssetSize: 500000,
+  },
 };
 
 switch (process.env.NODE_ENV) {
@@ -53,10 +42,12 @@ if (!PROD) {
     '#source-map' :
     '#inline-source-map';
   config.devServer = {
-    contentBase: '',
-    colors: true,
+    // contentBase: '',
+    stats: {
+      colors: true,
+    },
     inline: true,
-    port: websiteURL.port || DEFAULT_PORT,
+    port: +websiteURL.port || DEFAULT_PORT,
     hot: true,
     quiet: !!process.env.DASHBOARD,
     historyApiFallback: {

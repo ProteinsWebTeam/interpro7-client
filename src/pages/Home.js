@@ -1,16 +1,15 @@
-// @flow
 import React, {PropTypes as T} from 'react';
 import {foundationPartial} from 'styles/foundation';
-import SearchByText from 'components/SearchByText';
-import IPScanSearch from 'components/IPScanSearch';
-import IPScanStatus from 'components/IPScanStatus';
 import Description from 'components/Description';
 import {InterproSymbol} from 'components/Title';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import {Link} from 'react-router/es';
-import {memberDB, entryType, latests, speciesFeat, GoList} from 'staticData/home';
+import {Link} from 'react-router-dom';
+import {memberDB, entryType, latests, speciesFeat, GoList}
+  from 'staticData/home';
 import Tabs from 'components/Tabs';
-import Twit from 'components/Twitter';
+import {schedule} from 'timing-functions/src';
+import AsyncComponent, {createAsyncComponent}
+  from 'utilityComponents/AsyncComponent';
 
 import iscanLogo from 'images/logo_interproscan_ext.png';
 import idaLogo from 'images/logo_ida_100.png';
@@ -21,6 +20,16 @@ import fonts from 'styles/ebi/fonts.css';
 import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
+
+const SearchByText = createAsyncComponent(
+  () => import('components/SearchByText')
+);
+const IPScanSearch = createAsyncComponent(
+  () => import('components/IPScanSearch')
+);
+const IPScanStatus = createAsyncComponent(
+  () => import('components/IPScanStatus')
+);
 
 const MaskSvgIcons = () => (
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -459,7 +468,7 @@ const Home = () => (
                     InterPro database with a particular set of domains, and returns all
                     of the domain architectures and associated proteins that match the
                     query.
-                    <Link href="about/tools#ida" className={f('readmore')}
+                    <Link to="about/tools#ida" className={f('readmore')}
                       target="_blank"
                     >
                       Read more
@@ -480,7 +489,7 @@ const Home = () => (
               sequences) that combines different protein signature recognition methods
               into one resource.
               <Link
-                href="about/tools#interproscan" className={f('readmore')} target="_blank"
+                to="about/tools#interproscan" className={f('readmore')} target="_blank"
               > Read more</Link>
             </p>
             </div>
@@ -514,7 +523,13 @@ const Home = () => (
 // <h5><a href=""> Tweets by ‎‏@InterProDB</a></h5>
 // would be nice to extract just the text from twitter widget as we do for EMG
 }
-          <Twit />
+          <AsyncComponent
+            getComponent={async () => {
+              // eslint-disable-next-line no-magic-numbers
+              await schedule(10000);// Schedule asap, but do it anyway after 10s
+              return import('components/Twitter');
+            }}
+          />
 
           </div>
         </div>{// end jumbo-news

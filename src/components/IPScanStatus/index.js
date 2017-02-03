@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import Link from 'react-router/es/Link';
+import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import url from 'url';
 import TA from 'timeago.js';
@@ -148,7 +148,7 @@ const IPScanStatus = class extends Component {
                   <tr key={jobId}>
                     <td>{
                       id ?
-                        <Link to={`/sequencesearch/${id}`}>{id}</Link> :
+                        <Link to={`/search/sequence/${id}`}>{id}</Link> :
                         'None'
                     }</td>
                     <td>

@@ -1,6 +1,5 @@
 // @flow
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter} from 'react-router/es';
 import {connect} from 'react-redux';
 
 import InterproMenu from 'components/Menu/InterproMenu';
@@ -20,7 +19,7 @@ class DynamicMenu extends Component {
     loading: T.bool.isRequired,
     location: T.shape({
       pathname: T.string.isRequired,
-    }).isRequired,
+    }),
   };
 
   static defaultProps = {
@@ -49,7 +48,7 @@ class DynamicMenu extends Component {
   }
 }
 
-export default withRouter(
-  connect(({data: {data, loading}}) => ({data, loading}))(DynamicMenu)
-);
+export default connect(
+  ({data: {data, loading}}) => ({data, loading})
+)(DynamicMenu);
 

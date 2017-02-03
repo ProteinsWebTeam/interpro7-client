@@ -1,5 +1,6 @@
-// @flow
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+
+import {schedule} from 'timing-functions/src';
 
 // Global stylesheets loaded here
 import 'styles/foundation';
@@ -8,54 +9,56 @@ import 'styles/global.css';
 import 'styles/theme-interpro.css';
 import 'styles/interpro-new.css';
 
-// import AsyncComponent from 'utilityComponents/AsyncComponent';
+import AsyncComponent from 'utilityComponents/AsyncComponent';
 
 import Overlay from 'components/Overlay';
+
 import Sentinel from 'components/Sentinel';
 import Header from 'components/Header';
-import Footer from 'components/EBIFooter';
-import SideMenu from 'components/Menu/SideMenu';
 import Breadcrumb from 'components/Breadcrumb';
-import Loading from 'components/Loading';
-import ToastDisplay from 'components/Toast/ToastDisplay';
-import CookieBanner from 'components/CookieBanner';
+
+import Pages from 'Pages';
 
 const STICKY_MENU_OFFSET = 150;
 
-const Root = (
-  {children, location: {pathname}}
-  /*: {children: Node, location: {pathname: string}}*/
-) => (
+export default () => (
   <div>
     <Overlay />
-    <SideMenu pathname={pathname} />
-    <Header pathname={pathname} stickyMenuOffset={STICKY_MENU_OFFSET} />
+    <AsyncComponent
+      getComponent={async () => {
+        // eslint-disable-next-line no-magic-numbers
+        await schedule(1000);// Schedule asap, but do it anyway after 1s
+        return import('components/Menu/SideMenu');
+      }}
+    />
+    <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
     <Sentinel top={STICKY_MENU_OFFSET} />
-    <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} pathname={pathname} />
-    <Loading>{children}</Loading>
-    <Footer />
-    <ToastDisplay />
-    <CookieBanner />
-    {/* <AsyncComponent
-      componentPath="components/CookieBanner"
-      trigger={new Promise((res, rej) => {
+    <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} />
+    <Pages />
+    <AsyncComponent
+      getComponent={async () => {
+        // eslint-disable-next-line no-magic-numbers
+        await schedule(1000);// Schedule asap, but do it anyway after 1s
+        return import('components/EBIFooter');
+      }}
+    />
+    <AsyncComponent
+      getComponent={async () => {
+        // eslint-disable-next-line no-magic-numbers
+        await schedule(1000);// Schedule asap, but do it anyway after 1s
+        return import('components/Toast/ToastDisplay');
+      }}
+    />
+    <AsyncComponent
+      getComponent={async () => {
+        // eslint-disable-next-line no-magic-numbers
+        await schedule(5000);// Schedule asap, but do it anyway after 5s
         try {
-          // access first match, means cookies accepted
-          document.cookie.match(/cookies-accepted=(true)/i)[1];
-          rej();
+          if (document.cookie.match(/cookies-accepted=(true)/i)[1]) return;
         } catch (_) {
-          res();
+          return import('components/CookieBanner');
         }
-      })}
-    /> */}
+      }}
+    />
   </div>
 );
-
-Root.propTypes = {
-  children: T.node,
-  location: T.shape({
-    pathname: T.string.isRequired,
-  }).isRequired,
-};
-
-export default Root;

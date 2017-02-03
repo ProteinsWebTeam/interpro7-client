@@ -1,11 +1,11 @@
 /* eslint max-statements: ["error", 13] */
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter, Link} from 'react-router/es';
+import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import {frame} from 'timing-functions/src';
 
-import Table, {Column, PageSizeSelector, Exporter} from 'components/Table';
+import Table, {Column, /* PageSizeSelector, */Exporter} from 'components/Table';
 
 const maxLength = 200;
 const NOT_FOUND = -1;
@@ -79,7 +79,7 @@ class SearchResults extends Component {
         <Exporter>
           <a href={dataUrl} download="SearchResults.json">JSON</a>
         </Exporter>
-        <PageSizeSelector pageSize={query.page_size}/>
+        {/*<PageSizeSelector pageSize={query.page_size}/>*/}
         <Column
           accessKey="id"
           renderer={id => (
@@ -115,6 +115,4 @@ SearchResults.propTypes = {
   dataUrl: T.string,
 };
 
-export default withRouter(
-  connect((state) => ({dataUrl: state.data.dataUrl}))(SearchResults)
-);
+export default connect(state => ({dataUrl: state.data.dataUrl}))(SearchResults);
