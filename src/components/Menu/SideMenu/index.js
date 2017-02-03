@@ -1,7 +1,6 @@
 // @flow
 import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 
 import {closeSideNav} from 'actions/creators';
 // import {EBI, InterPro, entities, singleEntity} from 'menuConfig';
@@ -25,7 +24,7 @@ class SideMenu extends Component {
   }
 
   render() {
-    const {visible, location: {pathname}, data, closeSideNav} = this.props;
+    const {visible, pathname, data, closeSideNav} = this.props;
     return (
       <div>
         <aside
@@ -89,15 +88,13 @@ SideMenu.propTypes = {
   visible: T.bool.isRequired,
   data: T.object,
   loading: T.bool.isRequired,
-  location: T.shape({
-    pathname: T.string.isRequired,
-  }),
+  pathname: T.string.isRequired,
   closeSideNav: T.func.isRequired,
 };
 
-export default withRouter(connect(
-  ({ui: {sideNav}, data: {data, loading}}) => (
-    {visible: sideNav, data, loading}
+export default connect(
+  ({ui: {sideNav}, data: {data, loading}, location: {pathname}}) => (
+    {visible: sideNav, data, loading, pathname}
   ),
   {closeSideNav}
-)(SideMenu));
+)(SideMenu);

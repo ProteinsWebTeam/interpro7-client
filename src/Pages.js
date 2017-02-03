@@ -1,6 +1,5 @@
-import React from 'react';
-
-import {Switch, Route} from 'react-router-dom';
+import React, {PropTypes as T} from 'react';
+import {connect} from 'react-redux';
 
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
@@ -25,20 +24,31 @@ const NotFound = createAsyncComponent(
   () => import('staticPages/error/NotFound')
 );
 
-export default () => (
-  <Switch>
-    <Route path="/" exact component={Home} />
-    <Route path="/entry" component={Entry} />
-    <Route path="/protein" component={Protein} />
-    <Route path="/structure" component={Structure} />
-    <Route path="/search/sequence/:job" component={SequenceSearch} />
-    <Route path="/search" component={Search} />
-    <Route path="/about" component={About} />
-    <Route path="/browse" component={Browse} />
-    <Route path="/help" component={Help} />
-    <Route path="/contact" component={Contact} />
-    <Route path="/settings" component={Settings} />
-    <Route path="/404" component={NotFound} />
-    <Route component={NotFound} />
-  </Switch>
-);
+const pages = [
+  {path: '/', exact: true, component: Home},
+  {path: '/entry', component: Entry},
+  {path: '/protein', component: Protein},
+  {path: '/structure', component: Structure},
+  {path: '/search/sequence/', component: SequenceSearch},
+  {path: '/search', component: Search},
+  {path: '/about', component: About},
+  {path: '/browse', component: Browse},
+  {path: '/help', component: Help},
+  {path: '/contact', component: Contact},
+  {path: '/settings', component: Settings},
+  {path: '/404', component: NotFound},
+  {component: NotFound},
+];
+
+const Pages = props => {
+  const _pathname = props.location.pathname.toLowerCase();
+  const Component = pages.find(({path = '', exact}) => (
+    exact ? (_pathname === path) : (_pathname.startsWith(path))
+  )).component;
+  return <Component {...props} />;
+};
+Pages.propTypes = {
+  props: T.object.isRequired,
+};
+
+export default connect(({location}) => ({location}))(Pages);

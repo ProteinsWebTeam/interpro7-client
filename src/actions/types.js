@@ -1,4 +1,7 @@
 // @flow
+// location
+export const NEW_LOCATION = 'NEW_LOCATION';
+
 // UI
 export const TOGGLE_SIDE_NAV = 'TOGGLE_SIDE_NAV';
 export const TOGGLE_EMBL_MAP_NAV = 'TOGGLE_EMBL_MAP_NAV';

@@ -1,7 +1,8 @@
 /* eslint max-statements: ["error", 13] */
 import React, {PropTypes as T, Component} from 'react';
-import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+
+import Link from 'components/Link';
 
 import {frame} from 'timing-functions/src';
 
@@ -51,28 +52,28 @@ class SearchResults extends Component {
     }
   }
   render() {
-    const {data, query, dataUrl} = this.props;
+    const {data, search, dataUrl} = this.props;
     this.foundType = NOT_FOUND;
     if (!data) {
       return <div/>;
     } else if (data.hitCount === 0) {
       return <div>There are not matches for the term queried</div>;
-    } else if (data.hitCount === 1 && data.entries[0].id === query.search){
+    } else if (data.hitCount === 1 && data.entries[0].id === search.search){
       this.foundType = IPRO_FOUND;
-      return <div>Interpro entry found - {query.search}</div>;
+      return <div>Interpro entry found - {search.search}</div>;
     } else if (data.hitCount > 0 &&
-      data.entries[0].fields.PDB.indexOf(query.search) !== NOT_FOUND){
+      data.entries[0].fields.PDB.indexOf(search.search) !== NOT_FOUND){
       this.foundType = PDB_FOUND;
-      return <div>PDB structure found - {query.search}</div>;
+      return <div>PDB structure found - {search.search}</div>;
     } else if (data.hitCount > 0 &&
-      data.entries[0].fields.UNIPROT.indexOf(query.search) !== NOT_FOUND) {
+      data.entries[0].fields.UNIPROT.indexOf(search.search) !== NOT_FOUND) {
       this.foundType = UNIPROT_FOUND;
-      return <div>UniProt protein found - {query.search}</div>;
+      return <div>UniProt protein found - {search.search}</div>;
     }
     return (
       <Table
         data={{results: data.entries, count: data.hitCount}}
-        query={query}
+        query={search}
         pathname="/search"
         title="Search Results"
       >
@@ -110,9 +111,10 @@ class SearchResults extends Component {
 }
 SearchResults.propTypes = {
   data: T.object,
-  query: T.object,
-  router: T.object,
+  search: T.object,
   dataUrl: T.string,
 };
 
-export default connect(state => ({dataUrl: state.data.dataUrl}))(SearchResults);
+export default connect(
+  ({data: {dataUrl}, location: {search}}) => ({dataUrl, search})
+)(SearchResults);

@@ -17,9 +17,7 @@ class DynamicMenu extends Component {
   static propTypes = {
     data: T.object,
     loading: T.bool.isRequired,
-    location: T.shape({
-      pathname: T.string.isRequired,
-    }),
+    pathname: T.string.isRequired,
   };
 
   static defaultProps = {
@@ -31,7 +29,7 @@ class DynamicMenu extends Component {
   }
 
   render() {
-    const {location: {pathname}, data} = this.props;
+    const {pathname, data} = this.props;
     let Menu = EntitiesMenu;
     if (!data || pathname === '/') {
       Menu = InterproMenu;

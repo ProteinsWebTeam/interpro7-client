@@ -2,6 +2,12 @@
 import * as types from 'actions/types';
 
 // Action creators
+// location
+export const goToLocation = location => ({
+  type: types.NEW_LOCATION,
+  location,
+});
+
 // UI
 export const toggleEMBLMapNav = () => ({
   type: types.TOGGLE_EMBL_MAP_NAV,

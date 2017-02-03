@@ -2,7 +2,6 @@ import React, {PropTypes as T, Component} from 'react';
 import {
   Editor, EditorState, ContentState, CompositeDecorator, convertToRaw,
 } from 'draft-js';
-import {Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 import url from 'url';
 
@@ -58,9 +57,6 @@ class IPScanSearch extends Component {
   static propTypes = {
     addToast: T.func.isRequired,
     value: T.string,
-    location: T.shape({
-      query: T.object,
-    }),
     ipScan: T.object.isRequired,
   };
 
@@ -345,11 +341,7 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
   }
 }
 
-export default () => (
-  <Route
-    path="*"
-    component={
-      connect(({settings: {ipScan}}) => ({ipScan}), {addToast})(IPScanSearch)
-    }
-  />
-);
+export default connect(
+  ({settings: {ipScan}}) => ({ipScan}),
+  {addToast}
+)(IPScanSearch);

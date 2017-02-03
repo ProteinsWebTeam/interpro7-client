@@ -1,11 +1,11 @@
 import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
-import {Route, Link, withRouter} from 'react-router-dom';
 
 import classnames from 'classnames/bind';
 
 import {openSideNav} from 'actions/creators';
 
+import Link from 'components/Link';
 import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
@@ -154,7 +154,7 @@ const styleForHeader = (supportsSticky, offset, stuck) => {
   return style;
 };
 
-const Header = ({location, stickyMenuOffset: offset, stuck}) => (
+const Header = ({pathname, stickyMenuOffset: offset, stuck}) => (
   <header
     id={ebiGlobalStyles['local-masthead']}
     className={styleBundle('header', 'local-masthead')}
@@ -163,18 +163,18 @@ const Header = ({location, stickyMenuOffset: offset, stuck}) => (
     <EbiSkipToDiv />
     <EBIHeader />
     <div className={styleBundle('masthead', 'row')}>
-      <Title location={location.pathname} reduced={false} />
+      <Title reduced={false} />
       <SideIcons reduced={false} stuck={stuck} />
-      <Route path="*" component={DynamicMenu} />
+      <DynamicMenu pathname={pathname} />
     </div>
   </header>
 );
 Header.propTypes = {
-  location: T.shape({
-    pathname: T.string.isRequired,
-  }).isRequired,
+  pathname: T.string.isRequired,
   stickyMenuOffset: T.number.isRequired,
   stuck: T.bool.isRequired,
 };
 
-export default withRouter(connect(({ui: {stuck}}) => ({stuck}))(Header));
+export default connect(
+  ({ui: {stuck}, location: {pathname}}) => ({stuck, pathname})
+)(Header);

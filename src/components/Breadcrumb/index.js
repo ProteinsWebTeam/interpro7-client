@@ -1,7 +1,8 @@
 import React, {Component, PropTypes as T} from 'react';
 import {findDOMNode} from 'react-dom';
 import {connect} from 'react-redux';
-import {Link, withRouter} from 'react-router-dom';
+
+import Link from 'components/Link';
 
 // import domAttributeChecker from 'higherOrder/DOMAttributeChecker';
 import cfg from 'config';
@@ -57,9 +58,7 @@ const formatEndpoints = paths => ([
 
 class Breadcrumb extends Component {
   static propTypes = {
-    location: T.shape({
-      pathname: T.string.isRequired,
-    }),
+    pathname: T.string.isRequired,
     stuck: T.bool.isRequired,
     stickyMenuOffset: T.number.isRequired,
     // refreshDOMAttributes: T.func.isRequired,
@@ -75,7 +74,7 @@ class Breadcrumb extends Component {
 
   componentWillMount() {
     this.setState({
-      paths: getPaths(this.props.location.pathname),
+      paths: getPaths(this.props.pathname),
     });
   }
 
@@ -86,9 +85,9 @@ class Breadcrumb extends Component {
 
   componentWillReceiveProps(nextProps) {
     // console.log('will receive props', ...Object.values(nextProps));
-    if (this.props.location.pathname !== nextProps.location.pathname) {
+    if (this.props.pathname !== nextProps.pathname) {
       this.setState({
-        paths: getPaths(nextProps.location.pathname),
+        paths: getPaths(nextProps.pathname),
       });
     }
   }
@@ -134,6 +133,7 @@ class Breadcrumb extends Component {
 
   render() {
     const {expanded, paths} = this.state;
+    const pathname = this.props;
     const endpoints = formatEndpoints(paths, expanded, this.props);
     const {stickyMenuOffset: offset, stuck} = this.props;
     const MAGIC = 88;
@@ -147,7 +147,7 @@ class Breadcrumb extends Component {
       >
         <div className={f('columns', 'large-12')} style={{width: '100vw'}}>
           <nav
-            style={{display: this.props.location.pathname === '/' ? 'none' : ''}}
+            style={{display: pathname === '/' ? 'none' : ''}}
             className={f('breadcrumbs', {expanded, standard: !expanded})}
             onFocus={this.expand} onBlur={this.reduce}
             onMouseEnter={this.expand} onMouseLeave={this.reduce}
@@ -172,7 +172,9 @@ class Breadcrumb extends Component {
   }
 }
 
-export default withRouter(connect(({ui: {stuck}}) => ({stuck}))(Breadcrumb));
+export default connect(
+  ({ui: {stuck}, location: {pathname}}) => ({stuck, pathname})
+)(Breadcrumb);
 // export default domAttributeChecker(
 //   'clientWidth', 'clientHeight', 'scrollWidth',
 // )(Breadcrumb);

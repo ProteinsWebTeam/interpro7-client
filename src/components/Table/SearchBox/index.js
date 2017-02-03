@@ -1,5 +1,4 @@
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import debounce from 'lodash-es/debounce';
 
@@ -73,6 +72,8 @@ class SearchBox extends Component {
   }
 }
 
-export default withRouter(
-  connect(({settings: {pagination: {pageSize}}}) => ({pageSize}))(SearchBox)
-);
+export default connect(
+  ({settings: {pagination: {pageSize}}, location: {pathname}}) => (
+    {pageSize, pathname}
+  )
+)(SearchBox);

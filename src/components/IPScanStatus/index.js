@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import {Link} from 'react-router-dom';
+import Link from 'components/Link';
 import {connect} from 'react-redux';
 import url from 'url';
 import TA from 'timeago.js';

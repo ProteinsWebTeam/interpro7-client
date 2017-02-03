@@ -1,10 +1,12 @@
 /* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 15, 30, 100]}] */
 import React, {PropTypes as T, Component} from 'react';
-import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
+
 import {changePageSize} from 'actions/creators';
 import {foundationPartial} from 'styles/foundation';
+
 import s from './style.css';
+
 const f = foundationPartial(s);
 
 class PageSizeSelector extends Component{
@@ -15,12 +17,14 @@ class PageSizeSelector extends Component{
     pathname: T.string,
     changePageSize: T.func,
   };
+
   constructor(props){
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.applyAll = this.applyAll.bind(this);
     this.state = {pageSize: props.pageSize};
   }
+
   handleChange(event) {
     this.setState({pageSize: event.target.value});
     this.props.router.push({
@@ -31,9 +35,11 @@ class PageSizeSelector extends Component{
       },
     });
   }
+
   applyAll(){
     this.props.changePageSize(this.state.pageSize);
   }
+
   render(){
     const options = [10, 15, 30, 100];
     if (options.indexOf(this.state.pageSize) === -1) {
@@ -62,7 +68,9 @@ class PageSizeSelector extends Component{
   }
 }
 
-export default withRouter(
-  connect(({settings: {pagination: {pageSize}}}) => ({pageSize}),
-  {changePageSize})(PageSizeSelector)
-);
+export default connect(
+  ({settings: {pagination: {pageSize}}, location: {pathname}}) => (
+    {pageSize, pathname}
+  ),
+  {changePageSize}
+)(PageSizeSelector);

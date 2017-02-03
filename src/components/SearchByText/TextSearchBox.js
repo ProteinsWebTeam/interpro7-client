@@ -1,5 +1,4 @@
 import React, {PropTypes as T, Component} from 'react';
-import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 class TextSearchBox extends Component {
@@ -40,7 +39,7 @@ class TextSearchBox extends Component {
 
   render() {
     const {value, redirecting} = this.state;
-    if (redirecting) return <Redirect to={redirecting} />;
+    // if (redirecting) return <Redirect to={redirecting} />;
     return (
       <input
         type="text"

@@ -1,6 +1,7 @@
 import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
+
+import Link from 'components/Link';
 import logo from 'images/logo/interpro_white.png';
 
 import {foundationPartial} from 'styles/foundation';
@@ -9,11 +10,11 @@ import ipro from 'styles/interpro-new.css';
 import localStyles from './style.css';
 const styles = foundationPartial(ebiGlobalStyles, ipro, localStyles);
 
-const Title = ({location, data, loading, stuck}) => {
+const Title = ({pathname, data, loading, stuck}) => {
   let subtitle = 'Classification of protein families';
   let small1;
   let small2;
-  if (location !== '/' && data !== null) {
+  if (pathname !== '/' && data !== null) {
     if (data.metadata){
       subtitle = data.metadata.name.name;
       small1 = (data.metadata.source_database.toLowerCase() === 'interpro') ?
@@ -47,12 +48,14 @@ const Title = ({location, data, loading, stuck}) => {
   );
 };
 Title.propTypes = {
-  location: T.string.isRequired,
+  pathname: T.string.isRequired,
   data: T.object,
   loading: T.bool.isRequired,
   stuck: T.bool.isRequired,
 };
 
 export default connect(
-  ({data: {data, loading}, ui: {stuck}}) => ({data, loading, stuck})
+  ({data: {data, loading}, ui: {stuck}, location: {pathname}}) => (
+    {data, loading, stuck, pathname}
+  )
 )(Title);

@@ -1,5 +1,7 @@
 /* eslint-env node */
 import {createStore, applyMiddleware, compose} from 'redux';
+import qs from 'query-string';
+
 import rootReducer from 'reducers';
 import settingsStorage from 'storage/settings';
 import {DEV} from 'config';
@@ -18,8 +20,17 @@ const persist = (store, storage) => (() => {
   };
 })();
 
-const getEnhancer = () => {
-  const middlewares = [];
+const historyMW = history => ({getState}) => next => action => {
+  const output = next(action);
+  const {pathname, search, hash} = getState().location;
+  if (action.type === 'NEW_LOCATION') {
+    history.push({pathname, search: qs.stringify(search), hash});
+  }
+  console.log(output);
+};
+
+const getEnhancer = history => {
+  const middlewares = [historyMW(history)];
 
   return compose(
     applyMiddleware(...middlewares),
@@ -37,8 +48,13 @@ const hmr = store => {
   });
 };
 
-export default () => {
-  const store = createStore(rootReducer, getEnhancer());
+export default history => {
+  const {location: {pathname, search, hash}} = history;
+  const store = createStore(
+    rootReducer,
+    {location: {pathname, search: qs.parse(search), hash}},
+    getEnhancer(history)
+  );
   if (settingsStorage) {
     // settingsStorage.setLinkedStore(store);
     const persistSubscriber = persist(store, settingsStorage);

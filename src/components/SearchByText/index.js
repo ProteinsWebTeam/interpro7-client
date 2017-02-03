@@ -1,5 +1,5 @@
 import React, {PropTypes as T, Component} from 'react';
-import {Route} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import {frame} from 'timing-functions/src';
 
@@ -11,7 +11,7 @@ class SearchByText extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: (props.location.query ? props.location.query.search : ''),
+      value: props.search.search || '',
       submit: false,
     };
   }
@@ -92,9 +92,9 @@ class SearchByText extends Component {
 }
 SearchByText.propTypes = {
   value: T.string,
-  location: T.shape({
-    query: T.object,
-  }),
+  search: T.shape({
+    search: T.string,
+  }).isRequired,
 };
 
 const Example = ({value}) => (
@@ -104,6 +104,4 @@ Example.propTypes = {
   value: T.string,
 };
 
-export default () => <Route path="*" component={SearchByText} />;
-
-// export default SearchByText;
+export default connect(({location: {search}}) => ({search}))(SearchByText);

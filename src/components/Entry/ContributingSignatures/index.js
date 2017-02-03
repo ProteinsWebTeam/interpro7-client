@@ -1,5 +1,6 @@
 import React, {PropTypes as T} from 'react';
-import {Link} from 'react-router-dom';
+
+import Link from 'components/Link';
 import {buildLink} from 'utils/url';
 
 import styles from 'styles/blocks.css';

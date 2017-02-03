@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import {Provider} from 'react-redux';
-import {Router} from 'react-router-dom';
 
 import createHistory from 'history/createBrowserHistory';
 
@@ -13,10 +12,8 @@ import loadDataForURL from 'data';
 import createStore from 'store';
 import {createToastManagerWithStore} from 'toasts';
 
-console.log(config);
-const store = createStore();
-
 const history = createHistory({basename: config.root.website.pathname});
+const store = createStore(history);
 
 // For next changes to  history
 history.listen(loadDataForURL(store));
@@ -27,9 +24,7 @@ createToastManagerWithStore(store);
 
 const App = () => (
   <Provider store={store}>
-    <Router history={history}>
-      <Root />
-    </Router>
+    <Root />
   </Provider>
 );
 

@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: 0 */
 import React, {PropTypes as T} from 'react';
-import {Link} from 'react-router-dom';
+import Link from 'components/Link';
 import ColorHash from 'color-hash/lib/color-hash';
 
 import style from '../style.css';
