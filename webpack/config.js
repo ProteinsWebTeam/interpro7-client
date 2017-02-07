@@ -47,7 +47,8 @@ if (!PROD) {
       colors: true,
     },
     inline: true,
-    port: +websiteURL.port || DEFAULT_PORT,
+    overlay: true,
+    port: websiteURL.port || DEFAULT_PORT,
     hot: true,
     quiet: !!process.env.DASHBOARD,
     historyApiFallback: {

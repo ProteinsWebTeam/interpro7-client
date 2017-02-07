@@ -1,10 +1,17 @@
 // @flow
 import * as types from 'actions/types';
 
+//:: type Location = {pathname: string, search: Object, hash: string};
+
 // Action creators
 // location
-export const goToLocation = location => ({
+export const goToLocation = (location/*: string | Location */) => ({
   type: types.NEW_LOCATION,
+  location,
+});
+
+export const locationChangeFromHistory = (location/*: Location */) => ({
+  type: types.NEW_PROCESSED_LOCATION,
   location,
 });
 

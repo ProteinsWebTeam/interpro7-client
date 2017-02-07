@@ -5,6 +5,9 @@ import qs from 'query-string';
 import rootReducer from 'reducers';
 import settingsStorage from 'storage/settings';
 import {DEV} from 'config';
+import {NEW_LOCATION} from 'actions/types';
+import {locationChangeFromHistory} from 'actions/creators';
+import processLocation from 'utils/location';
 
 // Subscriber Generator
 const persist = (store, storage) => (() => {
@@ -20,13 +23,24 @@ const persist = (store, storage) => (() => {
   };
 })();
 
-const historyMW = history => ({getState}) => next => action => {
-  const output = next(action);
-  const {pathname, search, hash} = getState().location;
-  if (action.type === 'NEW_LOCATION') {
+// Middleware to handle history change events
+const historyMW = history => ({dispatch}) => {
+  // Dispatch new action only when history actually changes
+  // Build new action from scratch
+  history.listen(({pathname, search, hash}) => dispatch(
+    locationChangeFromHistory({pathname, search: qs.parse(search), hash})
+  ));
+  return next => action => {
+    // If anything but NEW_LOCATION, process normally
+    if (action.type !== NEW_LOCATION) {
+      next(action);// next() returns action
+      return;
+    }
+    // Otherwise, don't process and update history, it'll eventually
+    // result in another action being dispatched through callback
+    const {pathname, search, hash} = processLocation(action.location);
     history.push({pathname, search: qs.stringify(search), hash});
-  }
-  console.log(output);
+  };
 };
 
 const getEnhancer = history => {
