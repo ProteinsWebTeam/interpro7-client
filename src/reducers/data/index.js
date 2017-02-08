@@ -11,6 +11,7 @@ const DEFAULT_STATE = {
 };
 
 export default (state/*: Object */ = DEFAULT_STATE, action/*: Object */) => {
+  if (action.key) return state;
   switch (action.type) {
     // We will try to retrieve data
     case LOADING_DATA:

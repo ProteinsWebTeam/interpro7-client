@@ -1,11 +1,12 @@
 import React, {PropTypes as T} from 'react';
+
 import {foundationPartial} from 'styles/foundation';
 import Description from 'components/Description';
-import {InterproSymbol} from 'components/Title';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import Link from 'components/Link';
-import {memberDB, entryType, latests, speciesFeat, GoList}
-  from 'staticData/home';
+import ByMemberDatabase from 'components/home/ByMemberDatabase';
+import {InterproSymbol} from 'components/Title';
+import Link from 'components/generic/Link';
+import {entryType, latests, speciesFeat, GoList} from 'staticData/home';
 import Tabs from 'components/Tabs';
 import {schedule} from 'timing-functions/src';
 import AsyncComponent, {createAsyncComponent}
@@ -32,31 +33,30 @@ const IPScanStatus = createAsyncComponent(
 );
 
 const MaskSvgIcons = () => (
-<svg xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 200 200"
-  style={{
-    position: 'fixed',
-    width: 0,
-    height: 0,
-    top: -1800,
-    left: -1800,
-  /* to hide SVG on the page as display:none is not working*/
-  }}
->
-  <defs>
-    <clipPath id="cut-off-center" >
-      <rect x="33%" y="33%" width="70" height="70"/>
-    </clipPath>
-
-    <clipPath id="cut-off-bottom" >
-      <polygon points="0,68 68,0 68,68" />
-    </clipPath>
-  </defs>
-</svg>
+  <svg
+    viewBox="0 0 200 200"
+    style={{
+      position: 'fixed',
+      width: 0,
+      height: 0,
+      top: -1800,
+      left: -1800,
+    /* to hide SVG on the page as display:none is not working*/
+    }}
+  >
+    <defs>
+      <clipPath id="cut-off-center">
+        <rect x="33%" y="33%" width="70" height="70" />
+      </clipPath>
+      <clipPath id="cut-off-bottom">
+        <polygon points="0,68 68,0 68,68" />
+      </clipPath>
+    </defs>
+  </svg>
 );
 
 const InterproGraphic = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 120" >
+  <svg viewBox="0 0 150 120" >
     <line x1="20" y1="0" x2="20" y2="130" strokeWidth="3" stroke="#cacaca"/>
     <line x1="50" y1="0" x2="50" y2="130" strokeWidth="3" stroke="#cacaca"/>
     <line x1="80" y1="0" x2="80" y2="130" strokeWidth="3" stroke="#cacaca"/>
@@ -199,33 +199,7 @@ const Home = () => (
 
           <Tabs>
             <div title="by member database" className={f('md-list')}>
-              <div className={f('row')}>
-                {
-                  memberDB.map((e, i) => (
-                    <div
-                      className={f('columns', 'medium-3', 'large-3', 'text-center')}
-                      key={i}
-                    >
-                      <Link to={e.to}>
-                        <MemberSymbol type={e.type}/>
-                        <h6
-                          data-tooltip
-                          title={e.title}
-                        >
-                          {e.name}
-                        </h6>
-                        <p>
-                          <small>{e.version}</small><br/>
-                          <span >{e.counter} {e.type === 'new' ? '' : 'entries'}</span>
-                        </p>
-
-                      </Link>
-                    </div>
-                  ))
-                }
-              </div>
-
-              <Link to="/entry" className={f('button')}>View all entries</Link>
+              <ByMemberDatabase />
             </div>
 
             {// panel2 - by entry type

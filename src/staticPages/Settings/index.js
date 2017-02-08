@@ -1,9 +1,14 @@
 import React, {PropTypes as T} from 'react';
 import {connect} from 'react-redux';
 
+import loadData from 'higherOrder/loadData';
+
 import {changeSettings, resetSettings} from 'actions/creators';
 
-import f from 'styles/foundation';
+import styles from './styles.css';
+import {foundationPartial} from 'styles/foundation';
+
+const f = foundationPartial(styles);
 
 const PaginationSettings = ({pagination, handleChange}) => (
   <form data-category="pagination">
@@ -75,13 +80,22 @@ CacheSettings.propTypes = {
   handleChange: T.func.isRequired,
 };
 
-const EndpointSettings = (
-  {handleChange, category, endpointDetails: {hostname, port, root}, children}
-) => (
+const getStatus = (loading, response) => {
+  if (loading) return 'Unknown';
+  return response ? 'Reachable' : 'Unreachable';
+}
+
+const EndpointSettings = ({
+  handleChange,
+  category,
+  endpointDetails: {hostname, port, root},
+  data: {loading, payload},
+  children
+}) => (
   <form data-category={category}>
     <h4>{children}</h4>
     <div className={f('row')}>
-      <div className={f('medium-4', 'column')}>
+      <div className={f('medium-3', 'column')}>
         <label>
           Hostname:
           <input
@@ -92,7 +106,7 @@ const EndpointSettings = (
           />
         </label>
       </div>
-      <div className={f('medium-4', 'column')}>
+      <div className={f('medium-3', 'column')}>
         <label>
           Port:
           <input
@@ -104,7 +118,7 @@ const EndpointSettings = (
           />
         </label>
       </div>
-      <div className={f('medium-4', 'column')}>
+      <div className={f('medium-3', 'column')}>
         <label>
           Root:
           <input
@@ -113,6 +127,25 @@ const EndpointSettings = (
             name="root"
             onChange={handleChange}
           />
+        </label>
+      </div>
+      <div className={f('medium-3', 'column')}>
+        <label>
+          Status:
+          <output
+            className={f(
+              'button',
+              'output',
+              'hollow',
+              {
+                secondary: loading,
+                success: !loading && payload,
+                alert: !loading && !payload,
+              }
+            )}
+          >
+            {getStatus(loading, payload)}
+          </output>
         </label>
       </div>
     </div>
@@ -127,7 +160,33 @@ EndpointSettings.propTypes = {
     root: T.string.isRequired,
   }).isRequired,
   children: T.any.isRequired,
+  data: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.bool,
+  }),
 };
+
+const pingOptions = {method: 'HEAD', cache: 'no-store', noCache: true};
+const APIEndpointSettings = loadData(
+  ({settings: {api}}) => (
+    `${api.protocol}//${api.hostname}:${api.port}${api.root}entry`
+  ),
+  pingOptions
+)(EndpointSettings);
+
+const EBIEndpointSettings = loadData(
+  ({settings: {ebi}}) => (
+    `${ebi.protocol}//${ebi.hostname}:${ebi.port}${ebi.root}`
+  ),
+  pingOptions
+)(EndpointSettings);
+
+const IPScanEndpointSettings = loadData(
+  ({settings: {ipScan}}) => (
+    `${ipScan.protocol}//${ipScan.hostname}:${ipScan.port}${ipScan.root}`
+  ),
+  pingOptions
+)(EndpointSettings);
 
 const Settings = (
   {
@@ -146,27 +205,27 @@ const Settings = (
     />
     <UISettings ui={ui} handleChange={changeSettings} />
     <CacheSettings cache={cache} handleChange={changeSettings} />
-    <EndpointSettings
+    <APIEndpointSettings
       handleChange={changeSettings}
       category="api"
       endpointDetails={api}
     >
       API Settings
-    </EndpointSettings>
-    <EndpointSettings
+    </APIEndpointSettings>
+    <EBIEndpointSettings
       handleChange={changeSettings}
       category="ebi"
       endpointDetails={ebi}
     >
       EBI Search Settings
-    </EndpointSettings>
-    <EndpointSettings
+    </EBIEndpointSettings>
+    <IPScanEndpointSettings
       handleChange={changeSettings}
       category="ipScan"
       endpointDetails={ipScan}
     >
       InterProScan Settings
-    </EndpointSettings>
+    </IPScanEndpointSettings>
     <button onClick={resetSettings} className={f('button')}>
       Reset settings to default values
     </button>

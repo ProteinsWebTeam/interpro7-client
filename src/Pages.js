@@ -48,7 +48,9 @@ const Pages = props => {
   return <Component {...props} />;
 };
 Pages.propTypes = {
-  props: T.object.isRequired,
+  location: T.shape({
+    pathname: T.string.isRequired,
+  }).isRequired,
 };
 
 export default connect(({location}) => ({location}))(Pages);

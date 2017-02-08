@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Link from 'components/Link';
+import Link from 'components/generic/Link';
 
 import f from 'styles/foundation';
 

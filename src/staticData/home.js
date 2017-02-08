@@ -9,6 +9,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 export const memberDB = [
   {
     type: 'CATH',
+    apiType: 'gene3d',
     to: 'entry/gene3d',
     className: f('md-cg'),
     title:
@@ -24,6 +25,7 @@ export const memberDB = [
     integrated: 1724,
   }, {
     type: 'CDD',
+    apiType: 'cdd',
     to: 'entry/cdd',
     className: f('md-cd'),
     title:
@@ -41,6 +43,7 @@ export const memberDB = [
     integrated: 1108,
   }, {
     type: 'HAMAP',
+    apiType: 'hamap',
     to: 'entry/hamap',
     className: f('md-ha'),
     title:
@@ -54,6 +57,7 @@ export const memberDB = [
     integrated: 2081,
   }, {
     type: 'PANTHER',
+    apiType: 'panther',
     to: 'entry/panther',
     className: f('md-pa'),
     title:
@@ -70,6 +74,7 @@ export const memberDB = [
     integrated: 5406,
   }, {
     type: 'PFAM',
+    apiType: 'pfam',
     to: 'entry/pfam',
     className: f('md-pf'),
     title:
@@ -82,6 +87,7 @@ export const memberDB = [
     integrated: 15716,
   }, {
     type: 'PIRSF',
+    apiType: 'pirsf',
     to: 'entry/pirsf',
     className: f('md-pi'),
     title:
@@ -96,6 +102,7 @@ export const memberDB = [
     integrated: 3223,
   }, {
     type: 'PRINTS',
+    apiType: 'prints',
     to: 'entry/prints',
     className: f('md-pri'),
     title:
@@ -108,6 +115,7 @@ export const memberDB = [
     integrated: 1994,
   }, {
     type: 'PRODOM',
+    apiType: 'prodom',
     to: 'entry/prodom',
     className: f('md-pro'),
     title:
@@ -120,6 +128,7 @@ export const memberDB = [
     integrated: 1128,
   }, {
     type: 'PATTERNS',
+    apiType: 'prosite',
     to: 'entry/prosite',
     className: f('md-prpat'),
     title:
@@ -133,6 +142,7 @@ export const memberDB = [
     integrated: 1290,
   }, {
     type: 'PROFILES',
+    apiType: 'prosite',
     to: 'entry/prosite',
     className: f('md-prpro'),
     title:
@@ -146,6 +156,7 @@ export const memberDB = [
     integrated: 1107,
   }, {
     type: 'SFLD',
+    apiType: 'sfld',
     to: 'entry/sfld',
     className: f('md-sf'),
     title:
@@ -158,6 +169,7 @@ export const memberDB = [
     integrated: 17,
   }, {
     type: 'SMART',
+    apiType: 'smart',
     to: 'entry/',
     className: f('md-sm'),
     title:
@@ -170,6 +182,7 @@ export const memberDB = [
     integrated: 1265,
   }, {
     type: 'SUPERFAMILIES',
+    apiType: 'ssf',
     to: 'entry/ssf',
     className: f('md-su'),
     title:
@@ -184,6 +197,7 @@ export const memberDB = [
     integrated: 1413,
   }, {
     type: 'TIGRFAMS',
+    apiType: 'tigrfams',
     to: 'entry/tigrfams',
     className: f('md-ti'),
     title:

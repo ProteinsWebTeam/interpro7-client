@@ -1,7 +1,7 @@
 import React, {Component, PropTypes as T} from 'react';
 import {connect} from 'react-redux';
 
-import {goToLocation} from 'actions/creators';
+import {goToLocation} from '../../../actions/creators';
 
 const happenedWithModifierKey = event => !!(
   event.metaKey || event.altKey || event.ctrlKey || event.shiftKey

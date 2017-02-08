@@ -2,7 +2,7 @@
 import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
 
-import Link from 'components/Link';
+import Link from 'components/generic/Link';
 
 import {frame} from 'timing-functions/src';
 

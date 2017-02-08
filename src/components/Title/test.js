@@ -7,7 +7,7 @@ import {createRenderer} from 'react-addons-test-utils';
 import chai, {expect} from 'chai';
 import jsxChai from 'jsx-chai';
 
-import Link from 'components/Link';
+import Link from 'components/generic/Link';
 
 import Title, {InterproSymbol} from '.';
 

@@ -5,7 +5,7 @@ import {pkg} from 'config';
 
 const SUCCESS_STATUS = 200;
 
-const cachedFetch = (url/*: string */, options/*: Object */ = {}) => {
+export const cachedFetch = (url/*: string */, options/*: Object */ = {}) => {
   const {useCache, ...restOfOptions} = options;
   const key = `${pkg.name}-cachedFetch-${url}`;
   const cached = sessionStorage.getItem(key);

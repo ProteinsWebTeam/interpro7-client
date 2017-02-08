@@ -5,7 +5,7 @@ import classnames from 'classnames/bind';
 
 import {openSideNav} from 'actions/creators';
 
-import Link from 'components/Link';
+import Link from 'components/generic/Link';
 import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
