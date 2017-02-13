@@ -80,17 +80,17 @@ CacheSettings.propTypes = {
   handleChange: T.func.isRequired,
 };
 
-const getStatus = (loading, response) => {
+const getStatusText = (loading, response) => {
   if (loading) return 'Unknown';
   return response ? 'Reachable' : 'Unreachable';
-}
+};
 
 const EndpointSettings = ({
   handleChange,
   category,
   endpointDetails: {hostname, port, root},
   data: {loading, payload},
-  children
+  children,
 }) => (
   <form data-category={category}>
     <h4>{children}</h4>
@@ -144,7 +144,7 @@ const EndpointSettings = ({
               }
             )}
           >
-            {getStatus(loading, payload)}
+            {getStatusText(loading, payload)}
           </output>
         </label>
       </div>

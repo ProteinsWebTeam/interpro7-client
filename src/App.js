@@ -16,9 +16,9 @@ const history = createHistory({basename: config.root.website.pathname});
 const store = createStore(history);
 
 // For next changes to  history
-history.listen(loadDataForURL(store));
+// history.listen(loadDataForURL(store));
 // For first load
-loadDataForURL(store)(history.location);
+// loadDataForURL(store)(history.location);
 // Instantiate Toast manager
 createToastManagerWithStore(store);
 

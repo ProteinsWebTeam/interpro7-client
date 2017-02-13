@@ -149,4 +149,6 @@ Protein.propTypes = {
 };
 Protein.dataUrlMatch = /^protein/i;
 
-export default connect(({data: {urlKey, data}}) => ({urlKey, data}))(Protein);
+export default connect(
+  ({data: {urlKey, data}}, location) => ({urlKey, data, location})
+)(Protein);

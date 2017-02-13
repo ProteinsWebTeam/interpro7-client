@@ -10,7 +10,7 @@ import ipro from 'styles/interpro-new.css';
 import localStyles from './style.css';
 const styles = foundationPartial(ebiGlobalStyles, ipro, localStyles);
 
-const Title = ({pathname, data, loading, stuck}) => {
+const Title = ({pathname, data = null, loading, stuck}) => {
   let subtitle = 'Classification of protein families';
   let small1;
   let small2;
@@ -55,7 +55,9 @@ Title.propTypes = {
 };
 
 export default connect(
-  ({data: {data, loading}, ui: {stuck}, location: {pathname}}) => (
-    {data, loading, stuck, pathname}
-  )
+  ({dataMap = {}, ui: {stuck}, location: {pathname}}) => ({
+    loading: Object.values(dataMap).some(datum => datum.loading),
+    stuck,
+    pathname,
+  })
 )(Title);

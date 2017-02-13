@@ -1,6 +1,6 @@
-import React, {PropTypes as T} from 'react';
-import {connect} from 'react-redux';
+import React from 'react';
 
+import Switch from 'components/generic/Switch';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 // Main pages
@@ -24,33 +24,24 @@ const NotFound = createAsyncComponent(
   () => import('staticPages/error/NotFound')
 );
 
-const pages = [
-  {path: '/', exact: true, component: Home},
-  {path: '/entry', component: Entry},
-  {path: '/protein', component: Protein},
-  {path: '/structure', component: Structure},
-  {path: '/search/sequence/', component: SequenceSearch},
-  {path: '/search', component: Search},
-  {path: '/about', component: About},
-  {path: '/browse', component: Browse},
-  {path: '/help', component: Help},
-  {path: '/contact', component: Contact},
-  {path: '/settings', component: Settings},
-  {path: '/404', component: NotFound},
-  {component: NotFound},
-];
+const pages = new Set([
+  {path: 'entry', component: Entry},
+  {path: 'protein', component: Protein},
+  {path: 'structure', component: Structure},
+  {path: 'search', component: Search},
+  {path: 'about', component: About},
+  {path: 'browse', component: Browse},
+  {path: 'help', component: Help},
+  {path: 'contact', component: Contact},
+  {path: 'settings', component: Settings},
+  {path: '404', component: NotFound},
+]);
 
-const Pages = props => {
-  const _pathname = props.location.pathname.toLowerCase();
-  const Component = pages.find(({path = '', exact}) => (
-    exact ? (_pathname === path) : (_pathname.startsWith(path))
-  )).component;
-  return <Component {...props} />;
-};
-Pages.propTypes = {
-  location: T.shape({
-    pathname: T.string.isRequired,
-  }).isRequired,
-};
-
-export default connect(({location}) => ({location}))(Pages);
+export default props => (
+  <Switch
+    indexRoute={Home}
+    childRoutes={pages}
+    catchAll={NotFound}
+    {...props}
+  />
+);

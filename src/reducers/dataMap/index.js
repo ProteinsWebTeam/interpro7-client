@@ -20,7 +20,7 @@ export default (
         [action.key]: {
           ...state[action.key],
           loading: false,
-          payload: action.payload
+          payload: action.payload,
         },
       };
     case FAILED_LOADING_DATA:

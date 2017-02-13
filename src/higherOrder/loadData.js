@@ -13,7 +13,7 @@ const getFetch = (method/*: string */)/*: function */ => {
 
 const mapStateToProps = getUrl => state => ({
   appState: state,
-  data: state.dataMap[getUrl(state)] || {},
+  data: state.dataMap[getUrl(state)] || {loading: true},
 });
 
 const loadData = (
@@ -21,14 +21,14 @@ const loadData = (
   options/*: Object */
 ) => {
   const fetchFun = getFetch(options && options.method);
-  return (Wrapped/*: React$Component */) => {
+  return (Wrapped/*: ReactClass<*> */) => {
     class Wrapper extends Component {
       static propTypes = {
         appState: T.object.isRequired,
         dispatch: T.func.isRequired,
       };
 
-      async componentWillMount() {
+      componentWillMount() {
         const {dispatch, appState} = this.props;
         // Key is the URL to fetch
         // (stored in `key` because `this._url` might change)
@@ -36,19 +36,12 @@ const loadData = (
         // Changes redux state
         dispatch({type: LOADING_DATA, key});
         // Starts the fetch
-        this._cancelablePromise = cancelable(fetchFun(key, options));
+        this._cancelableFetch = cancelable(fetchFun(key, options));
         // Eventually changes the state according to response
-        try {
-          // Success
-          dispatch({
-            type: LOADED_DATA,
-            payload: await this._cancelablePromise.promise,
-            key,
-          });
-        } catch (error) {
-          // Problem fetching (or could be in the dispatch too)
-          dispatch({type: FAILED_LOADING_DATA, error, key});
-        }
+        this._cancelableFetch.promise.then(
+          payload => dispatch({type: LOADED_DATA, payload, key}),
+          error => dispatch({type: FAILED_LOADING_DATA, error, key})
+        );
       }
 
       async componentWillUpdate({appState: nextAppState, dispatch}) {
@@ -56,25 +49,18 @@ const loadData = (
         if (nextAppState.location === this.props.appState.location) return;
         // New location, cancel previous fetch
         // (if still running, otherwise won't do anything)
-        this._cancelablePromise.cancel();
+        this._cancelableFetch.cancel();
         // Unload previous data
         dispatch({type: UNLOADING_DATA, key: this._url});
         // Key is the new URL to fetch
         // (stored in `key` because `this._url` might change)
         const key = this._url = getUrl(nextAppState);
         dispatch({type: LOADING_DATA, key});
-        this._cancelablePromise = cancelable(fetchFun(key, options));
-        try {
-          // Success
-          dispatch({
-            type: LOADED_DATA,
-            payload: await this._cancelablePromise.promise,
-            key,
-          });
-        } catch (error) {
-          // Problem fetching (or could be in the dispatch too)
-          dispatch({type: FAILED_LOADING_DATA, error, key});
-        }
+        this._cancelableFetch = cancelable(fetchFun(key, options));
+        this._cancelableFetch.promise.then(
+          payload => dispatch({type: LOADED_DATA, payload, key}),
+          error => dispatch({type: FAILED_LOADING_DATA, error, key})
+        );
       }
 
       componentWillUnmount() {
@@ -82,7 +68,7 @@ const loadData = (
         this.props.dispatch({type: UNLOADING_DATA, key: this._url});
         // Cancel previous fetch
         // (if still running, otherwise won't do anything)
-        this._cancelablePromise.cancel();
+        this._cancelableFetch.cancel();
         this._url = null;
       }
 
@@ -92,7 +78,7 @@ const loadData = (
       }
     };
     return connect(mapStateToProps(getUrl))(Wrapper);
-  }
+  };
 };
 
 export default loadData;

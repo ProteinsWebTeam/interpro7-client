@@ -46,7 +46,5 @@ class DynamicMenu extends Component {
   }
 }
 
-export default connect(
-  ({data: {data, loading}}) => ({data, loading})
-)(DynamicMenu);
+export default connect(() => ({data: {}, loading: false}))(DynamicMenu);
 
