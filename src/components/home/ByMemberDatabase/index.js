@@ -15,6 +15,14 @@ import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
+const DEFAULT_DELAY = 25;
+const DEFAULT_DURATION = 250;
+const DEFAULT_ANIMATION = {
+  duration: DEFAULT_DURATION,
+  easing: 'ease-in-out',
+  fill: 'both',
+};
+
 class ByMemberDatabase extends Component {
   static propTypes = {
     data: T.object.isRequired,
@@ -31,7 +39,7 @@ class ByMemberDatabase extends Component {
       if (!node.animate) return;
       node.animate(
         {opacity: [0, 1]},
-        {duration: 250, easing: 'ease-in-out', delay: i++ * 25, fill: 'both'}
+        {...DEFAULT_ANIMATION, delay: DEFAULT_DELAY * i++}
       );
     }
   }
@@ -46,7 +54,9 @@ class ByMemberDatabase extends Component {
             memberDB.map((e) => (
               <div
                 className={f('columns', 'medium-3', 'large-3', 'text-center')}
-                ref={node => {this._animatables.add(node)}}
+                ref={node => {
+                  this._animatables.add(node);
+                }}
                 key={e.name}
               >
                 <Link to={e.to}>

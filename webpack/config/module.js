@@ -59,8 +59,8 @@ module.exports = {
       // Use `loader` instead of `use` for now, otherwise breaks
       // See https://github.com/webpack/extract-text-webpack-plugin/issues/282
       loader: ExtractTextPlugin.extract({
-        fallbackLoader: 'style-loader',
-        loader: [
+        fallback: 'style-loader',
+        use: [
           {
             loader: 'css-loader',
             query: Object.assign({}, cssSettings, {localIdentName: '[local]'}),
@@ -76,8 +76,8 @@ module.exports = {
       // Use `loader` instead of `use` for now, otherwise breaks
       // See https://github.com/webpack/extract-text-webpack-plugin/issues/282
       loader: ExtractTextPlugin.extract({
-        fallbackLoader: 'style-loader',
-        loader: [
+        fallback: 'style-loader',
+        use: [
           {
             loader: 'css-loader',
             query: cssSettings,
@@ -94,8 +94,8 @@ module.exports = {
       // Use `loader` instead of `use` for now, otherwise breaks
       // See https://github.com/webpack/extract-text-webpack-plugin/issues/282
       loader: ExtractTextPlugin.extract({
-        fallbackLoader: 'style-loader',
-        loader: [
+        fallback: 'style-loader',
+        use: [
           {
             loader: 'css-loader',
             options: cssSettings,

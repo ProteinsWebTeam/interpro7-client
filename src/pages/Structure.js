@@ -1,5 +1,4 @@
 import React, {PropTypes as T} from 'react';
-import {connect} from 'react-redux';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
@@ -19,6 +18,16 @@ const _Summary = createAsyncComponent(
   () => import('components/Structure/Summary')
 );
 
+const propTypes = {
+  data: T.shape({
+    payload: T.object,
+    loading: T.bool.isRequired,
+  }).isRequired,
+  location: T.shape({
+    pathname: T.string.isRequired,
+  }).isRequired,
+};
+
 const Overview = ({data: {payload, loading}, location: {pathname}}) => {
   if (loading) return <div>Loading...</div>;
   return (
@@ -33,6 +42,7 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
     </ul>
   );
 };
+Overview.propTypes = propTypes;
 
 const List = ({data: {payload, loading}, location: {pathname}}) => {
   if (loading) return <div>Loading...</div>;
@@ -87,6 +97,7 @@ const List = ({data: {payload, loading}, location: {pathname}}) => {
     </Table>
   );
 };
+List.propTypes = propTypes;
 
 const Summary = ({data: {payload, loading}, location}) => {
   if (loading) return <div>Loading...</div>;
@@ -94,8 +105,9 @@ const Summary = ({data: {payload, loading}, location}) => {
     <div>
       <_Summary data={payload} location={location} />
     </div>
-  )
+  );
 };
+Summary.propTypes = propTypes;
 
 const Structure = ({...props}) => (
   <main>

@@ -2,9 +2,8 @@ import React, {Component, PropTypes as T} from 'react';
 import {findDOMNode} from 'react-dom';
 import {connect} from 'react-redux';
 
-import Link from 'components/generic/Link';;
+import Link from 'components/generic/Link';
 
-// import domAttributeChecker from 'higherOrder/DOMAttributeChecker';
 import cfg from 'config';
 import {sticky as supportsSticky} from 'utils/support';
 

@@ -49,9 +49,12 @@ Switch.propTypes = {
   indexRoute: T.func.isRequired,
   childRoutes: T.shape({
     [Symbol.iterator]: T.func.isRequired,
-  }),// any Iterable, like a Set or an Array
+  })/* any Iterable, like a Set or an Array */,
   catchAll: T.func,
   base: T.string,
+  location: T.shape({
+    pathname: T.string.isRequired,
+  }).isRequired,
 };
 
 export default connect(({location}) => ({location}))(Switch);
