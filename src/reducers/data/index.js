@@ -2,39 +2,40 @@
 import {LOADING_DATA, LOADED_DATA, FAILED_LOADING_DATA, UNLOADING_DATA}
   from 'actions/types';
 
-const DEFAULT_STATE = {
-  urlKey: null,
-  dataUrl: null,
-  loading: false,
-  data: null,
-  error: null,
-};
+/*:: type Datum = {
+  payload: any,
+  loading: boolean,
+  error: any,
+} */
 
-export default (state/*: Object */ = DEFAULT_STATE, action/*: Object */) => {
-  if (action.key) return state;
+export default (
+  state/*: {[key: string]: Datum} */ = {}, action/*: Object */
+) => {
   switch (action.type) {
-    // We will try to retrieve data
     case LOADING_DATA:
-      // Set data for this key as loading
-      return {...DEFAULT_STATE, urlKey: action.urlKey, loading: true};
-    // We have successfully loaded data
+      return {...state, [action.key]: {loading: true}};
     case LOADED_DATA:
-      // This is not the fetch you are looking for, move along
-      if (state.urlKey !== action.urlKey) return state;
-      // Add the data to the redux state and remove loading flag
       return {
         ...state,
-        loading: false,
-        data: action.data,
-        dataUrl: action.dataUrl};
-    // We failed to load data
+        [action.key]: {
+          ...state[action.key],
+          loading: false,
+          payload: action.payload,
+        },
+      };
     case FAILED_LOADING_DATA:
-      // But, this is not the fetch you are looking for, move along
-      if (state.urlKey !== action.urlKey) return state;
-      // No data, but pass the error along to maybe display to the user
-      return {...state, loading: false, error: action.error};
+      return {
+        ...state,
+        [action.key]: {
+          ...state[action.key],
+          loading: false,
+          error: action.error,
+        },
+      };
+    // eslint-disable-next-line no-case-declarations
     case UNLOADING_DATA:
-      return {...state, loading: false, data: null, dataUrl: null};
+      const {[action.key]: _, ...newState} = state;
+      return newState;
     default:
       return state;
   }

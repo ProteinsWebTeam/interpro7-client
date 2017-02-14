@@ -19,10 +19,6 @@ const _Summary = createAsyncComponent(
   () => import('components/Structure/Summary')
 );
 
-const stateToData = (
-  {settings: {api: {protocol, hostname, port, root}}, location: {pathname}}
-) => `${protocol}//${hostname}:${port}${root}${pathname}`;
-
 const Overview = ({data: {payload, loading}, location: {pathname}}) => {
   if (loading) return <div>Loading...</div>;
   return (
@@ -106,13 +102,15 @@ const Structure = ({...props}) => (
     <div className={f('row')}>
       <div className={f('large-12', 'columns')}>
         <Switch
+          {...props}
           base="structure"
-          indexRoute={loadData(stateToData)(Overview)}
-          catchAll={({match}) => (
+          indexRoute={Overview}
+          catchAll={({match, ...props}) => (
             <Switch
+              {...props}
               base={match}
-              indexRoute={loadData(stateToData)(List)}
-              catchAll={loadData(stateToData)(Summary)}
+              indexRoute={List}
+              catchAll={Summary}
             />
           )}
         />
@@ -121,4 +119,4 @@ const Structure = ({...props}) => (
   </main>
 );
 
-export default Structure;
+export default loadData()(Structure);

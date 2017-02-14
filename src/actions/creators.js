@@ -91,27 +91,25 @@ export const resetSettings = (value/*: string | number | null */ = null) => ({
 });
 
 // data
-export const loadingData = (urlKey/*: string */) => ({
+export const loadingData = (key/*: string */) => ({
   type: types.LOADING_DATA,
-  urlKey,
+  key,
 });
 
-export const loadedData = (
-  urlKey/*: string */, dataUrl/*: string */, data/*: Object */
-) => ({
+export const loadedData = (key/*: string */, payload/*: Object */) => ({
   type: types.LOADED_DATA,
-  urlKey,
-  dataUrl,
-  data,
+  key,
+  payload,
 });
 
-export const unloadingData = () => ({
+export const unloadingData = (key/*: string */) => ({
   type: types.UNLOADING_DATA,
+  key,
 });
 
-export const failedLoadingData = (urlKey/*: string */, error/*: Error */) => ({
+export const failedLoadingData = (key/*: string */, error/*: Error */) => ({
   type: types.FAILED_LOADING_DATA,
-  urlKey,
+  key,
   error,
 });
 

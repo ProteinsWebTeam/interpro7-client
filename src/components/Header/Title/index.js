@@ -55,8 +55,8 @@ Title.propTypes = {
 };
 
 export default connect(
-  ({dataMap = {}, ui: {stuck}, location: {pathname}}) => ({
-    loading: Object.values(dataMap).some(datum => datum.loading),
+  ({data = {}, ui: {stuck}, location: {pathname}}) => ({
+    loading: Object.values(data).some(datum => datum.loading),
     stuck,
     pathname,
   })
