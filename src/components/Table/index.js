@@ -4,8 +4,8 @@ import React, {PropTypes as T, Children} from 'react';
 import _Header from './Header';
 import _Exporter from './Exporter';
 import _PageSizeSelector from './PageSizeSelector';
-import _Search from './Search';
-// import _SearchBox from './SearchBox';
+// import _Search from './Search';
+import _SearchBox from './SearchBox';
 import _Body from './Body';
 import _Column from './Column';
 import _Row from './Row';
@@ -25,7 +25,7 @@ const Table = (
   // Extract prop information out of every Column element's props
   const columns = _children.filter(child => child.type === _Column)
     .map(child => child.props);
-  const search = _children.find(child => child.type === _Search);
+  const search = _children.find(child => child.type === _SearchBox);
   const pageSize = _children.find(child => child.type === _PageSizeSelector);
   const exporter = _children.find(child => child.type === _Exporter);
 
@@ -45,14 +45,14 @@ const Table = (
           pathname={pathname}
         />
       }
-      {/*
+      {
         search &&
         <_SearchBox
           search={search.props}
           query={_query.search}
           pathname={pathname}
         />
-      */}
+      }
       <table>
         <_Header columns={columns} />
         <_Body rows={data.results} columns={columns} />
@@ -75,10 +75,10 @@ Table.propTypes = {
 
 export default Table;
 export const Header = _Header;
-export const Search = _Search;
+// export const Search = _Search;
 export const PageSizeSelector = _PageSizeSelector;
 export const Exporter = _Exporter;
-// export const SearchBox = _SearchBox;
+export const SearchBox = _SearchBox;
 export const Body = _Body;
 export const Column = _Column;
 export const Row = _Row;

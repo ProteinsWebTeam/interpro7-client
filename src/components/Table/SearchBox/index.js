@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import debounce from 'lodash-es/debounce';
 
 import f from 'styles/foundation';
+import {goToLocation} from '../../../actions/creators';
 
 const DEBOUNCE_RATE = 500;// In ms
 
@@ -17,7 +18,7 @@ class SearchBox extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {search: props.search};
+    this.state = {search: props.query};
   }
 
   componentWillMount() {
@@ -43,11 +44,11 @@ class SearchBox extends Component {
     };
     const {query: search} = this.state;
     if (search) query.search = search;
-    this.props.router.push({pathname, query});
+    this.props.goToLocation({pathname:pathname, search: query});
   };
 
   render() {
-    const {query} = this.state;
+    const {search} = this.state;
     return (
       <div className={f('float-right')} style={{position: 'relative'}} >
         <form>
@@ -63,7 +64,7 @@ class SearchBox extends Component {
             id="table-filter-text"
             type="text"
             onChange={this.handleChange}
-            value={query}
+            value={search}
             placeholder="Filter table"
           />
         </form>
@@ -75,5 +76,6 @@ class SearchBox extends Component {
 export default connect(
   ({settings: {pagination: {pageSize}}, location: {pathname}}) => (
     {pageSize, pathname}
-  )
+  ),
+  {goToLocation}
 )(SearchBox);

@@ -8,7 +8,7 @@ import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 import ColorHash from 'color-hash/lib/color-hash';
 
-import Table, {Column, Search, PageSizeSelector, Exporter}
+import Table, {Column, SearchBox, PageSizeSelector, Exporter}
   from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
@@ -67,7 +67,7 @@ const List = ({data: {payload, loading}, location: {pathname, search}}) => {
         </ul>
       </Exporter>
       <PageSizeSelector/>
-      <Search>Search proteins</Search>
+      <SearchBox>Search proteins</SearchBox>
       <Column
         accessKey="accession"
         renderer={(acc/*: string */) => (

@@ -6,7 +6,7 @@ import Link from 'components/generic/Link';
 import loadData from 'higherOrder/loadData';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
-import Table, {Column, Search, PageSizeSelector, Exporter}
+import Table, {Column, SearchBox, PageSizeSelector, Exporter}
   from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
@@ -63,7 +63,7 @@ const List = ({data: {payload, loading}, location: {pathname, search}}) => {
         </ul>
       </Exporter>
       <PageSizeSelector/>
-      <Search>Search structures</Search>
+      <SearchBox>Search structures</SearchBox>
       <Column
         accessKey="accession"
         renderer={(acc/*: string */) => (
