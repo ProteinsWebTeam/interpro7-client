@@ -11,7 +11,7 @@ const f = foundationPartial(s);
 
 class PageSizeSelector extends Component{
   static propTypes = {
-    query: T.object,
+    search: T.object,
     pageSize: T.number,
     router: T.object,
     pathname: T.string,
@@ -29,8 +29,8 @@ class PageSizeSelector extends Component{
     this.setState({pageSize: event.target.value});
     this.props.router.push({
       pathname: this.props.pathname,
-      query: {
-        ...this.props.query, page_size: event.target.value,
+      search: {
+        ...this.props.search, page_size: event.target.value,
         page: 1,
       },
     });

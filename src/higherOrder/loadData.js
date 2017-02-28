@@ -7,11 +7,16 @@ import {
   loadingData, loadedData, unloadingData, failedLoadingData,
 } from 'actions/creators';
 
+const searchParamsToURL = search => search ?
+  Object.entries(search)
+    .reduce((acc, val) => acc + (val[1] ? `&${val[0]}=${val[1]}` : ''), '')
+    .slice(1) : '';
+
 // Assumes that the default would be to get data from the API, according to
 // current pathname
 const defaultGetUrl = key => (
-  {settings: {[key]: {protocol, hostname, port, root}}, location: {pathname}}
-) => `${protocol}//${hostname}:${port}${root}${pathname}`;
+  {settings: {[key]: {protocol, hostname, port, root}}, location: {pathname, search}}
+) => `${protocol}//${hostname}:${port}${root}${pathname}?${searchParamsToURL(search)}`;
 
 const getFetch = (method/*: string */)/*: function */ => {
   if (method !== 'HEAD') return cachedFetchJSON;

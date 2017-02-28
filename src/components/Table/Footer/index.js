@@ -50,7 +50,7 @@ const Footer = (
               Previous <span className={f('show-for-sr')}>You're on page</span>
             </li> :
             <li>
-              <Link to={{pathname, query: {
+              <Link to={{pathname, search: {
                 page: page - 1,
                 page_size: pageSize,
                 search: pagination.search}}}
@@ -73,7 +73,7 @@ const Footer = (
                   <Link
                     to={{
                       pathname,
-                      query: {
+                      search: {
                         page: e,
                         page_size: pageSize,
                         search: pagination.search,
@@ -91,7 +91,7 @@ const Footer = (
               Next <span className={f('show-for-sr')}>You're on page</span>
             </li> :
             <li>
-              <Link to={{pathname, query: {
+              <Link to={{pathname, search: {
                 page: page + 1,
                 page_size: pageSize,
                 search: pagination.search}}}

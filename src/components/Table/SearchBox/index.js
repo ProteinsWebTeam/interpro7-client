@@ -17,7 +17,7 @@ class SearchBox extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {query: props.query};
+    this.state = {search: props.search};
   }
 
   componentWillMount() {

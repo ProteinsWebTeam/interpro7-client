@@ -39,7 +39,7 @@ const Table = (
         </_Exporter>
       }
       {
-        /*pageSize &&
+        /* pageSize &&
         <_PageSizeSelector
           query={_query}
           pathname={pathname}
