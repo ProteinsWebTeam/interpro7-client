@@ -80,7 +80,7 @@ class SearchResults extends Component {
         <Exporter>
           <a href={dataUrl} download="SearchResults.json">JSON</a>
         </Exporter>
-        {/*<PageSizeSelector pageSize={query.page_size}/>*/}
+        {/* <PageSizeSelector pageSize={query.page_size}/>*/}
         <Column
           accessKey="id"
           renderer={id => (

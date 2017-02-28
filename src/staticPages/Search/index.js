@@ -34,7 +34,7 @@ const Search = ({data, location: {query}}) => (
         </Tabs>
       </fieldset>
       <SearchResults />
-      {/*<SearchResults data={data} query={query} />*/}
+      {/* <SearchResults data={data} query={query} />*/}
     </section>
   </main>
 );
