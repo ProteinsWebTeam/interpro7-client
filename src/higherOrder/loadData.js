@@ -15,8 +15,12 @@ const searchParamsToURL = search => search ?
 // Assumes that the default would be to get data from the API, according to
 // current pathname
 const defaultGetUrl = key => (
-  {settings: {[key]: {protocol, hostname, port, root}}, location: {pathname, search}}
-) => `${protocol}//${hostname}:${port}${root}${pathname}?${searchParamsToURL(search)}`;
+  {settings: {[key]: {protocol, hostname, port, root}, pagination}, location: {pathname, search}}
+) => {
+  const _search = search || {};
+  _search.page_size = _search.page_size || pagination.pageSize;git
+  return `${protocol}//${hostname}:${port}${root}${pathname}?${searchParamsToURL(_search)}`;
+};
 
 const getFetch = (method/*: string */)/*: function */ => {
   if (method !== 'HEAD') return cachedFetchJSON;

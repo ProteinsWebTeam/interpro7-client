@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 import {changePageSize} from 'actions/creators';
 import {foundationPartial} from 'styles/foundation';
+import {goToLocation} from '../../../actions/creators';
 
 import s from './style.css';
 
@@ -22,12 +23,14 @@ class PageSizeSelector extends Component{
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.applyAll = this.applyAll.bind(this);
-    this.state = {pageSize: props.pageSize};
+    this.state = {
+      pageSize: props.search.page_size?props.search.page_size:props.pageSize
+    };
   }
 
   handleChange(event) {
     this.setState({pageSize: event.target.value});
-    this.props.router.push({
+    this.props.goToLocation({
       pathname: this.props.pathname,
       search: {
         ...this.props.search, page_size: event.target.value,
@@ -42,7 +45,7 @@ class PageSizeSelector extends Component{
 
   render(){
     const options = [10, 15, 30, 100];
-    if (options.indexOf(this.state.pageSize) === -1) {
+    if (options.indexOf(this.state.pageSize*1) === -1) {
       options.push(this.state.pageSize);
       options.sort((a, b) => a - b);
     }
@@ -72,5 +75,6 @@ export default connect(
   ({settings: {pagination: {pageSize}}, location: {pathname}}) => (
     {pageSize, pathname}
   ),
-  {changePageSize}
+  {changePageSize, goToLocation}
 )(PageSizeSelector);
+// export default PageSizeSelector;

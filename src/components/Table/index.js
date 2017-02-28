@@ -3,7 +3,7 @@ import React, {PropTypes as T, Children} from 'react';
 
 import _Header from './Header';
 import _Exporter from './Exporter';
-// import _PageSizeSelector from './PageSizeSelector';
+import _PageSizeSelector from './PageSizeSelector';
 import _Search from './Search';
 // import _SearchBox from './SearchBox';
 import _Body from './Body';
@@ -26,7 +26,7 @@ const Table = (
   const columns = _children.filter(child => child.type === _Column)
     .map(child => child.props);
   const search = _children.find(child => child.type === _Search);
-  // const pageSize = _children.find(child => child.type === _PageSizeSelector);
+  const pageSize = _children.find(child => child.type === _PageSizeSelector);
   const exporter = _children.find(child => child.type === _Exporter);
 
   return (
@@ -39,11 +39,11 @@ const Table = (
         </_Exporter>
       }
       {
-        /* pageSize &&
+        pageSize &&
         <_PageSizeSelector
-          query={_query}
+          search={_query}
           pathname={pathname}
-        />*/
+        />
       }
       {/*
         search &&
@@ -76,7 +76,7 @@ Table.propTypes = {
 export default Table;
 export const Header = _Header;
 export const Search = _Search;
-// export const PageSizeSelector = _PageSizeSelector;
+export const PageSizeSelector = _PageSizeSelector;
 export const Exporter = _Exporter;
 // export const SearchBox = _SearchBox;
 export const Body = _Body;
