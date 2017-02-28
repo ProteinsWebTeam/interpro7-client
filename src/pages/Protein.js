@@ -8,7 +8,7 @@ import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 import ColorHash from 'color-hash/lib/color-hash';
 
-import Table, {Column, Search, /* PageSizeSelector,*/ Exporter}
+import Table, {Column, Search, PageSizeSelector, Exporter}
   from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
@@ -45,7 +45,7 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
 };
 Overview.propTypes = propTypes;
 
-const List = ({data: {payload, loading}, location: {pathname}}) => {
+const List = ({data: {payload, loading}, location: {pathname, search}}) => {
   if (loading) return <div>Loading...</div>;
   const maxLength = payload.results.reduce((max, result) => (
     Math.max(max, (result.metadata || result).length)
@@ -53,7 +53,7 @@ const List = ({data: {payload, loading}, location: {pathname}}) => {
   return (
     <Table
       data={payload}
-      query={{}}
+      query={search}
       pathname={pathname}
     >
       <Exporter>
@@ -66,7 +66,7 @@ const List = ({data: {payload, loading}, location: {pathname}}) => {
           <li><a href={`${''}`}>Open in API web view</a></li>
         </ul>
       </Exporter>
-      {/* <PageSizeSelector pageSize={query.page_size}/>*/}
+      <PageSizeSelector/>
       <Search>Search proteins</Search>
       <Column
         accessKey="accession"

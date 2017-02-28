@@ -18,7 +18,7 @@ const defaultGetUrl = key => (
   {settings: {[key]: {protocol, hostname, port, root}, pagination}, location: {pathname, search}}
 ) => {
   const _search = search || {};
-  _search.page_size = _search.page_size || pagination.pageSize;git
+  _search.page_size = _search.page_size || pagination.pageSize;
   return `${protocol}//${hostname}:${port}${root}${pathname}?${searchParamsToURL(_search)}`;
 };
 

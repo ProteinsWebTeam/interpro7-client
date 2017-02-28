@@ -8,7 +8,7 @@ import loadData from 'higherOrder/loadData';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 import Table, {
-  Column, Search, /* PageSizeSelector,*/ Exporter,
+  Column, Search, PageSizeSelector, Exporter,
 } from 'components/Table';
 
 import {removeLastSlash} from 'utils/url';
@@ -77,7 +77,7 @@ const List = ({data: {payload, loading}, location: {search, pathname}}) => {
           <li><a href={`${''}`}>Open in API web view</a></li>
         </ul>
       </Exporter>
-      {/* <PageSizeSelector />*/}
+      <PageSizeSelector />
       <Search>Search entries</Search>
       <Column
         accessKey="accession"
