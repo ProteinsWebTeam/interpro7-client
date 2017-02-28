@@ -6,7 +6,7 @@ import Link from 'components/generic/Link';
 import loadData from 'higherOrder/loadData';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
-import Table, {Column, Search, /*PageSizeSelector,*/ Exporter}
+import Table, {Column, Search, /* PageSizeSelector,*/ Exporter}
   from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
@@ -62,7 +62,7 @@ const List = ({data: {payload, loading}, location: {pathname}}) => {
           <li><a href={''}>Open in API web view</a></li>
         </ul>
       </Exporter>
-      {/*<PageSizeSelector/>*/}
+      {/* <PageSizeSelector/>*/}
       <Search>Search structures</Search>
       <Column
         accessKey="accession"
@@ -132,3 +132,7 @@ const Structure = ({...props}) => (
 );
 
 export default loadData()(Structure);
+// loadData will create an component that wraps Structure.
+// Such component will request content and it will put it in the state and make it
+// available for its children. Because there are not parameters when invoking the method,
+// the data is requested from the api based on the current URL
