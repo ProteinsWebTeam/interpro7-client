@@ -1,6 +1,5 @@
 // @flow
 import React, {PropTypes as T, Component} from 'react';
-import {connect} from 'react-redux';
 
 import InterproMenu from 'components/Menu/InterproMenu';
 import EntitiesMenu from 'components/Menu/EntitiesMenu';
@@ -10,6 +9,7 @@ import {foundationPartial} from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
 import interproStyles from 'styles/interpro-new.css';
 import localStyles from './style.css';
+import loadData from 'higherOrder/loadData';
 
 const styles = foundationPartial(ebiStyles, interproStyles, localStyles);
 
@@ -29,16 +29,16 @@ class DynamicMenu extends Component {
   }
 
   render() {
-    const {pathname, data} = this.props;
+    const {pathname, data: {loading, payload}} = this.props;
     let Menu = EntitiesMenu;
-    if (!data || pathname === '/') {
+    if (loading || !payload || pathname === '/') {
       Menu = InterproMenu;
-    } else if (data.metadata) {
+    } else if (payload.metadata) {
       Menu = SingleEntityMenu;
     }
     return (
       <Menu
-        data={data}
+        data={payload}
         pathname={pathname}
         className={styles('menu', 'dynamic-menu')}
       />
@@ -46,5 +46,5 @@ class DynamicMenu extends Component {
   }
 }
 
-export default connect(() => ({data: {}, loading: false}))(DynamicMenu);
+export default loadData()(DynamicMenu);
 

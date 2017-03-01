@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {closeSideNav} from 'actions/creators';
 // import {EBI, InterPro, entities, singleEntity} from 'menuConfig';
 // import MenuItem from 'components/Menu/MenuItem';
+import loadData from 'higherOrder/loadData';
 
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterproMenu from 'components/Menu/InterproMenu';
@@ -24,13 +25,12 @@ class SideMenu extends Component {
   }
 
   render() {
-    const {visible, pathname, data, closeSideNav} = this.props;
+    const {visible, pathname, data: {payload, loading}, closeSideNav} = this.props;
     return (
       <div>
         <aside
           className={f('container', {visible})}
           role="menu"
-          aria-hidden={!visible}
           id="main-nav"
         >
           <button
@@ -43,9 +43,9 @@ class SideMenu extends Component {
           </button>
           <ul>
             {
-              data && data.metadata &&
+              !loading && payload && payload.metadata &&
               <SingleEntityMenu
-                data={data}
+                data={payload}
                 pathname={pathname}
                 className={f('primary')}
               >
@@ -53,9 +53,9 @@ class SideMenu extends Component {
                   className={f('menu-label', 'select-none', 'cursor-default')}
                 >
                   {(
-                    data.metadata.name.short ||
-                    data.metadata.name.name ||
-                    data.metadata.accession
+                    payload.metadata.name.short ||
+                    payload.metadata.name.name ||
+                    payload.metadata.accession
                   )}
                 </span>
               </SingleEntityMenu>
@@ -93,8 +93,8 @@ SideMenu.propTypes = {
 };
 
 export default connect(
-  ({ui: {sideNav}, data: {data, loading}, location: {pathname}}) => (
-    {visible: sideNav, data, loading, pathname}
+  ({ui: {sideNav}, location: {pathname}}) => (
+    {visible: sideNav, pathname}
   ),
   {closeSideNav}
-)(SideMenu);
+)(loadData()(SideMenu));
