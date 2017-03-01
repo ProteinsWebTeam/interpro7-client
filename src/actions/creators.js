@@ -5,11 +5,10 @@ import * as types from 'actions/types';
 
 // Action creators
 // location
-export const goToLocation = (location/*: string | Location */) => {
-  return {
+export const goToLocation = (location/*: string | Location */) => ({
   type: types.NEW_LOCATION,
   location,
-}};
+});
 
 export const locationChangeFromHistory = (location/*: Location */) => ({
   type: types.NEW_PROCESSED_LOCATION,

@@ -9,9 +9,9 @@ const Entry = createAsyncComponent(() => import('pages/Entry'));
 const Protein = createAsyncComponent(() => import('pages/Protein'));
 const Structure = createAsyncComponent(() => import('pages/Structure'));
 // Search
-const SequenceSearch = createAsyncComponent(
-  () => import('staticPages/SequenceSearch')
-);
+// const SequenceSearch = createAsyncComponent(
+//   () => import('staticPages/SequenceSearch')
+// );
 const Search = createAsyncComponent(() => import('staticPages/Search'));
 // Static pages
 const About = createAsyncComponent(() => import('staticPages/About'));

@@ -125,7 +125,7 @@ const List = ({data: {payload, loading}, location: {pathname, search}}) => {
 };
 List.propTypes = propTypes;
 
-const _Summary = createAsyncComponent(
+const SummaryAsync = createAsyncComponent(
   () => import('components/Protein/Summary')
 );
 
@@ -133,7 +133,7 @@ const Summary = ({data: {payload, loading}, location}) => {
   if (loading) return <div>Loading...</div>;
   return (
     <div>
-      <_Summary data={payload} location={location} />
+      <SummaryAsync data={payload} location={location} />
     </div>
   );
 };

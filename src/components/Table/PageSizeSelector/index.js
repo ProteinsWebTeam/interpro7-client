@@ -2,9 +2,8 @@
 import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
 
-import {changePageSize} from 'actions/creators';
 import {foundationPartial} from 'styles/foundation';
-import {goToLocation} from '../../../actions/creators';
+import {goToLocation, changePageSize} from '../../../actions/creators';
 
 import s from './style.css';
 
@@ -17,6 +16,7 @@ class PageSizeSelector extends Component{
     router: T.object,
     pathname: T.string,
     changePageSize: T.func,
+    goToLocation: T.func,
   };
 
   constructor(props){
@@ -24,7 +24,7 @@ class PageSizeSelector extends Component{
     this.handleChange = this.handleChange.bind(this);
     this.applyAll = this.applyAll.bind(this);
     this.state = {
-      pageSize: props.search.page_size?props.search.page_size:props.pageSize
+      pageSize: props.search.page_size ? props.search.page_size : props.pageSize,
     };
   }
 
@@ -45,7 +45,7 @@ class PageSizeSelector extends Component{
 
   render(){
     const options = [10, 15, 30, 100];
-    if (options.indexOf(this.state.pageSize*1) === -1) {
+    if (options.indexOf(this.state.pageSize * 1) === -1) {
       options.push(this.state.pageSize);
       options.sort((a, b) => a - b);
     }

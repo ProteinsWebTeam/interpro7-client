@@ -18,7 +18,7 @@ const IPScanStatus = createAsyncComponent(
   () => import('components/IPScanStatus')
 );
 
-const Search = ({data, location: {query}}) => (
+const Search = () => (
   <main>
     <section className={styles.card}>
       <fieldset className={foundation('fieldset')}>
@@ -40,8 +40,6 @@ const Search = ({data, location: {query}}) => (
 );
 
 Search.propTypes = {
-  data: T.object,
-  location: T.object,
   children: T.node,
 };
 

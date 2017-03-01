@@ -14,7 +14,7 @@ import {removeLastSlash, buildLink} from 'utils/url';
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
-const _Summary = createAsyncComponent(
+const SummaryAsync = createAsyncComponent(
   () => import('components/Structure/Summary')
 );
 
@@ -103,7 +103,7 @@ const Summary = ({data: {payload, loading}, location}) => {
   if (loading) return <div>Loading...</div>;
   return (
     <div>
-      <_Summary data={payload} location={location} />
+      <SummaryAsync data={payload} location={location} />
     </div>
   );
 };

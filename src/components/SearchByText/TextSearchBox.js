@@ -38,7 +38,7 @@ class TextSearchBox extends Component {
   };
 
   render() {
-    const {value, redirecting} = this.state;
+    const {value} = this.state;
     // if (redirecting) return <Redirect to={redirecting} />;
     return (
       <input

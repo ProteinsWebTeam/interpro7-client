@@ -14,6 +14,7 @@ class SearchBox extends Component {
     router: T.object.isRequired,
     pathname: T.string.isRequired,
     pageSize: T.number.isRequired,
+    goToLocation: T.func,
   };
 
   constructor(props) {
@@ -44,7 +45,7 @@ class SearchBox extends Component {
     };
     const {query: search} = this.state;
     if (search) query.search = search;
-    this.props.goToLocation({pathname:pathname, search: query});
+    this.props.goToLocation({pathname, search: query});
   };
 
   render() {
