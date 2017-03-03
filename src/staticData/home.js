@@ -23,6 +23,7 @@ export const memberDB = [
     version: '3.5.0',
     counter: 2626,
     integrated: 1724,
+    accession: 'G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{2,4}$',
   }, {
     type: 'CDD',
     apiType: 'cdd',
@@ -41,6 +42,7 @@ export const memberDB = [
     version: '3.14',
     counter: 11273,
     integrated: 1108,
+    accession: '(?:c|s)d[0-9]{5}$'
   }, {
     type: 'HAMAP',
     apiType: 'hamap',
@@ -55,6 +57,7 @@ export const memberDB = [
     version: '201605.11',
     counter: 2087,
     integrated: 2081,
+    accession: 'MF_[0-9]{5}(_(A|B){1})?$'
   }, {
     type: 'PANTHER',
     apiType: 'panther',
@@ -72,6 +75,7 @@ export const memberDB = [
     version: '10.0',
     counter: 95118,
     integrated: 5406,
+    accession: 'PTHR[0-9]{5}(:SF[0-9]{1,3})?$'
   }, {
     type: 'PFAM',
     apiType: 'pfam',
@@ -85,6 +89,7 @@ export const memberDB = [
     version: '30.0',
     counter: 16306,
     integrated: 15716,
+    accession: 'PF[0-9]{5}$'
   }, {
     type: 'PIRSF',
     apiType: 'pirsf',
@@ -100,6 +105,7 @@ export const memberDB = [
     version: '3.01',
     counter: 3285,
     integrated: 3223,
+    accession: 'PIRSF[0-9]{6}$'
   }, {
     type: 'PRINTS',
     apiType: 'prints',
@@ -113,6 +119,7 @@ export const memberDB = [
     version: '42.0',
     counter: 2106,
     integrated: 1994,
+    accession: 'PR[0-9]{5}$'
   }, {
     type: 'PRODOM',
     apiType: 'prodom',
@@ -126,6 +133,7 @@ export const memberDB = [
     version: '2006.1',
     counter: 1894,
     integrated: 1128,
+    accession: 'PD[A-Z0-9]{6}$'
   }, {
     type: 'PATTERNS',
     apiType: 'prosite',
@@ -140,6 +148,7 @@ export const memberDB = [
     version: '20.119',
     counter: 1309,
     integrated: 1290,
+    accession: 'PS[0-9]{5}$'
   }, {
     type: 'PROFILES',
     apiType: 'prosite',
@@ -154,6 +163,7 @@ export const memberDB = [
     version: '20.119',
     counter: 1136,
     integrated: 1107,
+    accession: 'PS[0-9]{5}$'
   }, {
     type: 'SFLD',
     apiType: 'sfld',
@@ -167,6 +177,7 @@ export const memberDB = [
     version: '1',
     counter: 480,
     integrated: 17,
+    accession: 'sfldg\d{5}'
   }, {
     type: 'SMART',
     apiType: 'smart',
@@ -180,6 +191,7 @@ export const memberDB = [
     version: '7.1',
     counter: 1312,
     integrated: 1265,
+    accession: 'SM[0-9]{5}$'
   }, {
     type: 'SUPERFAMILIES',
     apiType: 'ssf',
@@ -195,6 +207,7 @@ export const memberDB = [
     version: '1.75',
     counter: 2019,
     integrated: 1413,
+    accession: 'SSF[0-9]{5,6}$'
   }, {
     type: 'TIGRFAMS',
     apiType: 'tigrfams',
@@ -209,6 +222,7 @@ export const memberDB = [
     version: '15.0',
     counter: 4408,
     integrated: 4453,
+    accession: 'TIGR[0-9]{5}$'
   }, {
     type: 'new',
     to: 'contact/',

@@ -15,6 +15,7 @@ import {removeLastSlash} from 'utils/url';
 
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
+import {memberDB} from 'staticData/home';
 
 const propTypes = {
   data: T.shape({
@@ -115,36 +116,70 @@ const List = ({data: {payload, loading}, location: {search, pathname}}) => {
 List.propTypes = propTypes;
 
 const SummaryAsync = createAsyncComponent(() => import('components/Entry/Summary'));
+const StructureAsync = createAsyncComponent(() => import('subPages/Structure'));
+const ProteinAsync = createAsyncComponent(() => import('subPages/Protein'));
 
-const Summary = ({data: {payload, loading}, location}) => {
+const pages = new Set([
+  {path: 'structure', component: StructureAsync},
+  {path: 'protein', component: ProteinAsync},
+]);
+
+const Summary = (props) => {
+  const {data: {payload, loading}, location, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
     <div>
-      <SummaryAsync data={payload} location={location} />
+      <Switch
+        {...props}
+        main="entry"
+        base={match}
+        indexRoute={() => <SummaryAsync data={payload} location={location} />}
+        childRoutes={pages}
+      />
+
     </div>
   );
 };
 Summary.propTypes = propTypes;
 
-const Entry = ({...props}) => (
-  <main>
-    <div className={f('row')}>
-      <div className={f('large-12', 'columns')}>
-        <Switch
-          {...props}
-          base="entry"
-          indexRoute={Overview}
-          catchAll={({match, ...props}) => (
-            <Switch
-              {...props}
-              base={match}
-              indexRoute={List}
-              catchAll={Summary}
-            />
-          )}
-        />
+const Entry = ({...props}) => {
+  const dbs = new RegExp(
+    '^('+memberDB
+      .map(db=>db.apiType)
+      .filter(db=>db)
+      .join("|")+')$',
+    'i'
+  );
+  const db_accs =new RegExp(
+    '^('+memberDB
+      .map(db=>db.accession)
+      .filter(db=>db)
+      .join("|")+'|IPR\d{6})$',
+    'i'
+  );
+  return (
+    <main>
+      <div className={f('row')}>
+        <div className={f('large-12', 'columns')}>
+          <Switch
+            {...props}
+            base="entry"
+            indexRoute={Overview}
+            catchAll={({match, ...props}) => (
+              <Switch
+                {...props}
+                base={match}
+                indexRoute={List}
+                childRoutes={[
+                  {path: dbs, component: List},
+                  {path: db_accs, component: Summary},
+                ]}
+              />
+            )}
+          />
+        </div>
       </div>
-    </div>
-  </main>
-);
+    </main>
+  );
+}
 export default loadData()(Entry);

@@ -125,15 +125,28 @@ const List = ({data: {payload, loading}, location: {pathname, search}}) => {
 };
 List.propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(
-  () => import('components/Protein/Summary')
-);
+const SummaryAsync = createAsyncComponent(() => import('components/Protein/Summary'));
+const StructureAsync = createAsyncComponent(() => import('subPages/Structure'));
+const EntryAsync = createAsyncComponent(() => import('subPages/Entry'));
 
-const Summary = ({data: {payload, loading}, location}) => {
+const pages = new Set([
+  {path: 'structure', component: StructureAsync},
+  {path: 'entry', component: EntryAsync},
+]);
+
+const Summary = (props) => {
+  const {data: {payload, loading}, location, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
     <div>
-      <SummaryAsync data={payload} location={location} />
+      <Switch
+        {...props}
+        main="protein"
+        base={match}
+        indexRoute={() => <SummaryAsync data={payload} location={location} />}
+        childRoutes={pages}
+      />
+
     </div>
   );
 };
@@ -152,7 +165,9 @@ const Protein = ({...props}) => (
               {...props}
               base={match}
               indexRoute={List}
-              catchAll={Summary}
+              childRoutes={[
+                {path:/[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i, component:Summary}
+              ]}
             />
           )}
         />
