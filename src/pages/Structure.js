@@ -119,10 +119,9 @@ const Summary = (props) => {
     </div>
   );
 };
-Summary.propTypes = propTypes;
+Summary.propTypes = {props: propTypes};
 
-const Structure = ({...props}) => {
-  return (
+const Structure = ({...props}) => (
     <main>
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
@@ -143,7 +142,6 @@ const Structure = ({...props}) => {
       </div>
     </main>
   );
-}
 
 export default loadData()(Structure);
 // loadData will create an component that wraps Structure.

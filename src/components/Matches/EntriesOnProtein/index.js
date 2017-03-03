@@ -13,7 +13,7 @@ const EntriesOnProtein = (
 ) => {
   const protein = matches[0].protein;
   protein.length = protein.length | matches[0].coordinates[0].protein[1];
-  //TODO: make sure we have protein length in the coordinates object
+  // TODO: make sure we have protein length in the coordinates object
   return (
     <div className={style.svgContainer}>
       <svg

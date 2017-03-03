@@ -44,10 +44,10 @@ const EntriesOnStructure = (
         <g>
           {
             matches.map(({coordinates: coords, entry}) => {
-              coords.forEach((m,i)=>{
-                let n = m;
-                n.structure = m.structure || [0,m.protein[1]-m.protein[0]]
-              })
+              coords.forEach((m) => {
+                const n = m;
+                n.structure = m.structure || [0, m.protein[1] - m.protein[0]];
+              });
 
               return (
                 <g
@@ -86,7 +86,7 @@ const EntriesOnStructure = (
                     </tspan>
                   </text>
                 </g>
-              )
+              );
             })
           }
         </g>

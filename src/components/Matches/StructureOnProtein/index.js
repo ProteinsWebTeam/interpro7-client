@@ -12,7 +12,7 @@ const StructureOnProtein = (
   }
 ) => {
   const protein = matches[0].protein;
-  //TODO: Define the format of the coordinates field, it should include coordinates
+  // TODO: Define the format of the coordinates field, it should include coordinates
   // in both entities and the length of the base one, eg a protein of 500aa maps
   // the structure in 100 to 200, which corrspond to the coordinate 0-99 in the structure.
   protein.length = protein.length || 500;
@@ -40,11 +40,11 @@ const StructureOnProtein = (
         <g>
           {
             matches.map(({coordinates: coords, structure}) => {
-              coords.forEach((m,i)=>{
-                let n = m;
-                n.structure = m.structure || [0,m.protein[1]-m.protein[0]]
-              })
-              return(
+              coords.forEach((m) => {
+                const n = m;
+                n.structure = m.structure || [0, m.protein[1] - m.protein[0]];
+              });
+              return (
                 <g
                   key={structure.accession}
                   transform={
@@ -77,7 +77,7 @@ const StructureOnProtein = (
                     </tspan>
                   </text>
                 </g>
-              )
+              );
             })
           }
         </g>

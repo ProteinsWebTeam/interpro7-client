@@ -140,21 +140,21 @@ const Summary = (props) => {
     </div>
   );
 };
-Summary.propTypes = propTypes;
+Summary.propTypes = {props: propTypes};
 
 const Entry = ({...props}) => {
   const dbs = new RegExp(
-    '^('+memberDB
-      .map(db=>db.apiType)
-      .filter(db=>db)
-      .join("|")+')$',
+    `^(${memberDB
+      .map(db => db.apiType)
+      .filter(db => db)
+      .join('|')})$`,
     'i'
   );
-  const db_accs =new RegExp(
-    '^('+memberDB
-      .map(db=>db.accession)
-      .filter(db=>db)
-      .join("|")+'|IPR\d{6})$',
+  const dbAccs = new RegExp(
+    `^(${memberDB
+      .map(db => db.accession)
+      .filter(db => db)
+      .join('|')}|IPR\d{6})$`,
     'i'
   );
   return (
@@ -172,7 +172,7 @@ const Entry = ({...props}) => {
                 indexRoute={List}
                 childRoutes={[
                   {path: dbs, component: List},
-                  {path: db_accs, component: Summary},
+                  {path: dbAccs, component: Summary},
                 ]}
               />
             )}
@@ -181,5 +181,5 @@ const Entry = ({...props}) => {
       </div>
     </main>
   );
-}
+};
 export default loadData()(Entry);

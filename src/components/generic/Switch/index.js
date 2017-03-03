@@ -22,7 +22,7 @@ const getComponent = (
   if (!level) return indexRoute;
   // Loop through all the possible child routes
   for (const {path, component} of childRoutes) {
-    if (level.match(path)) {//if (path === level) {// got a match, so stop here and...
+    if (level.match(path)) {// if (path === level) {// got a match, so stop here and...
       return component;// return the corresponding component
     }
   }

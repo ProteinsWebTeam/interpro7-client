@@ -116,7 +116,7 @@ RelatedAdvanced.propTypes = {
 };
 
 const Related = ({data, secondary, ...props}) => {
-  const {payload:{metadata: mainData, [toPlural(secondary)]: secondaryData}} = data;
+  const {payload: {metadata: mainData, [toPlural(secondary)]: secondaryData}} = data;
   const RelatedComponent = (
     Array.isArray(secondaryData) ? RelatedAdvanced : RelatedSimple
   );

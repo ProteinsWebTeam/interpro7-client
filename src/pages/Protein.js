@@ -150,7 +150,7 @@ const Summary = (props) => {
     </div>
   );
 };
-Summary.propTypes = propTypes;
+Summary.propTypes = {props: propTypes};
 
 const Protein = ({...props}) => (
   <main>
@@ -166,7 +166,7 @@ const Protein = ({...props}) => (
               base={match}
               indexRoute={List}
               childRoutes={[
-                {path:/[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i, component:Summary}
+                {path: /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i, component: Summary},
               ]}
             />
           )}
