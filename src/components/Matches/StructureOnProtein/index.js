@@ -12,6 +12,10 @@ const StructureOnProtein = (
   }
 ) => {
   const protein = matches[0].protein;
+  //TODO: Define the format of the coordinates field, it should include coordinates
+  // in both entities and the length of the base one, eg a protein of 500aa maps
+  // the structure in 100 to 200, which corrspond to the coordinate 0-99 in the structure.
+  protein.length = protein.length || 500;
   return (
     <div className={style.svgContainer}>
       <svg
@@ -35,13 +39,18 @@ const StructureOnProtein = (
         </g>
         <g>
           {
-            matches.map(({coordinates: coords, structure}) => (
-              <g
-                key={structure.accession}
-                transform={
-                  `translate(${coords[0].structure[0]} ${offset - baseSize})`
-                }
-              >
+            matches.map(({coordinates: coords, structure}) => {
+              coords.forEach((m,i)=>{
+                let n = m;
+                n.structure = m.structure || [0,m.protein[1]-m.protein[0]]
+              })
+              return(
+                <g
+                  key={structure.accession}
+                  transform={
+                    `translate(${coords[0].structure[0]} ${offset - baseSize})`
+                  }
+                >
                   <title>{structure.accession}</title>
                   <rect
                     x="0" y="0" rx={baseSize * 2 / niceRatio}
@@ -50,25 +59,26 @@ const StructureOnProtein = (
                     height={baseSize * 2}
                     className={style.secondary}
                   />
-                <text y="-0.2em">
-                  <tspan textAnchor="middle">
-                    {coords[0].protein[0]}
-                  </tspan>
-                </text>
-                <text
-                  y="-0.2em"
-                  transform={
-                    `translate(${
+                  <text y="-0.2em">
+                    <tspan textAnchor="middle">
+                      {coords[0].protein[0]}
+                    </tspan>
+                  </text>
+                  <text
+                    y="-0.2em"
+                    transform={
+                      `translate(${
                       coords[0].protein[1] - coords[0].protein[0]
-                    } 0)`
-                  }
-                >
-                  <tspan textAnchor="middle">
-                    {coords[0].protein[1]}
-                  </tspan>
-                </text>
-              </g>
-            ))
+                        } 0)`
+                    }
+                  >
+                    <tspan textAnchor="middle">
+                      {coords[0].protein[1]}
+                    </tspan>
+                  </text>
+                </g>
+              )
+            })
           }
         </g>
       </svg>

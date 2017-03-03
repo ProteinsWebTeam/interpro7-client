@@ -14,9 +14,9 @@ import {removeLastSlash, buildLink} from 'utils/url';
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
-const SummaryAsync = createAsyncComponent(
-  () => import('components/Structure/Summary')
-);
+const EntryAsync = createAsyncComponent(() => import('subPages/Entry'));
+const ProteinAsync = createAsyncComponent(() => import('subPages/Protein'));
+const SummaryAsync = createAsyncComponent(() => import('components/Structure/Summary'));
 
 const propTypes = {
   data: T.shape({
@@ -99,37 +99,51 @@ const List = ({data: {payload, loading}, location: {pathname, search}}) => {
 };
 List.propTypes = propTypes;
 
-const Summary = ({data: {payload, loading}, location}) => {
+const pages = new Set([
+  {path: 'entry', component: EntryAsync},
+  {path: 'protein', component: ProteinAsync},
+]);
+const Summary = (props) => {
+  const {data: {payload, loading}, location, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
     <div>
-      <SummaryAsync data={payload} location={location} />
+      <Switch
+        {...props}
+        main="structure"
+        base={match}
+        indexRoute={() => <SummaryAsync data={payload} location={location} />}
+        childRoutes={pages}
+      />
+
     </div>
   );
 };
 Summary.propTypes = propTypes;
 
-const Structure = ({...props}) => (
-  <main>
-    <div className={f('row')}>
-      <div className={f('large-12', 'columns')}>
-        <Switch
-          {...props}
-          base="structure"
-          indexRoute={Overview}
-          catchAll={({match, ...props}) => (
-            <Switch
-              {...props}
-              base={match}
-              indexRoute={List}
-              catchAll={Summary}
-            />
-          )}
-        />
+const Structure = ({...props}) => {
+  return (
+    <main>
+      <div className={f('row')}>
+        <div className={f('large-12', 'columns')}>
+          <Switch
+            {...props}
+            base="structure"
+            indexRoute={Overview}
+            catchAll={({match, ...props}) => (
+              <Switch
+                {...props}
+                base={match}
+                indexRoute={List}
+                childRoutes={[{path: /^\d[a-zA-Z\d]{3}$/, component: Summary}]}
+              />
+            )}
+          />
+        </div>
       </div>
-    </div>
-  </main>
-);
+    </main>
+  );
+}
 
 export default loadData()(Structure);
 // loadData will create an component that wraps Structure.

@@ -78,12 +78,12 @@ const primariesAndSecondaries = {
   },
   structure: {
     entry: {
-      primary: 'structure',
-      secondary: 'entry',
+      primary: 'entry',
+      secondary: 'structure',
     },
     protein: {
-      primary: 'structure',
-      secondary: 'protein',
+      primary: 'protein',
+      secondary: 'structure',
     },
   },
 };
@@ -116,7 +116,7 @@ RelatedAdvanced.propTypes = {
 };
 
 const Related = ({data, secondary, ...props}) => {
-  const {metadata: mainData, [toPlural(secondary)]: secondaryData} = data;
+  const {payload:{metadata: mainData, [toPlural(secondary)]: secondaryData}} = data;
   const RelatedComponent = (
     Array.isArray(secondaryData) ? RelatedAdvanced : RelatedSimple
   );

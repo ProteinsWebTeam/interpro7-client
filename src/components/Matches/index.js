@@ -24,9 +24,11 @@ const propTypes = {
 const componentMatch = {
   protein: {
     entry: EntriesOnProtein,
+    structure: StructureOnProtein,
   },
   entry: {
     protein: EntriesOnProtein,
+    structure: EntriesOnStructure,
   },
   structure: {
     entry: EntriesOnStructure,
@@ -39,6 +41,12 @@ const MatchesByPrimary = (
   {matches, primary, secondary, ...props}
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
+  matches.map((m)=>{
+    let n = m;
+    if (m.coordinates.constructor === String)
+      n.coordinates = JSON.parse(m.coordinates)
+    return n;
+  })
   return (
     <MatchComponent matches={matches} {...props} />
   );
@@ -65,7 +73,7 @@ const Matches = (
       <Column
         accessKey="accession"
         renderer={(acc/*: string */, row) => (
-          <Link to={`${primary}/${row.source_database}/${acc}`}>
+          <Link to={`/${primary}/${row.source_database}/${acc}`}>
             {acc}
           </Link>
         )}

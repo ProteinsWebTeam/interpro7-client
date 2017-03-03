@@ -43,44 +43,51 @@ const EntriesOnStructure = (
         </g>
         <g>
           {
-            matches.map(({coordinates: coords, entry}) => (
-              <g
-                key={entry.accession}
-                transform={
-                  `translate(${coords[0].structure[0]} ${offset - baseSize})`
-                }
-              >
-                <Link
-                  to={`/entry/${entry.source_database}/${entry.accession}`}
-                >
-                  <title>{entry.accession}</title>
-                  <rect
-                    x="0" y="0" rx={baseSize * 2 / niceRatio}
-                    width={coords[0].structure[1] - coords[0].structure[0]}
-                    height={baseSize * 2}
-                    fill={colorHash.hex(entry.accession)}
-                    className={style.secondary}
-                  />
-                </Link>
-                <text y="-0.2em">
-                  <tspan textAnchor="middle">
-                    {coords[0].structure[0]}
-                  </tspan>
-                </text>
-                <text
-                  y="-0.2em"
+            matches.map(({coordinates: coords, entry}) => {
+              coords.forEach((m,i)=>{
+                let n = m;
+                n.structure = m.structure || [0,m.protein[1]-m.protein[0]]
+              })
+
+              return (
+                <g
+                  key={entry.accession}
                   transform={
-                    `translate(${
-                      coords[0].structure[1] - coords[0].structure[0]
-                    } 0)`
+                    `translate(${coords[0].structure[0]} ${offset - baseSize})`
                   }
                 >
-                  <tspan textAnchor="middle">
-                    {coords[0].structure[1]}
-                  </tspan>
-                </text>
-              </g>
-            ))
+                  <Link
+                    to={`/entry/${entry.source_database}/${entry.accession}`}
+                  >
+                    <title>{entry.accession}</title>
+                    <rect
+                      x="0" y="0" rx={baseSize * 2 / niceRatio}
+                      width={coords[0].structure[1] - coords[0].structure[0]}
+                      height={baseSize * 2}
+                      fill={colorHash.hex(entry.accession)}
+                      className={style.secondary}
+                    />
+                  </Link>
+                  <text y="-0.2em">
+                    <tspan textAnchor="middle">
+                      {coords[0].structure[0]}
+                    </tspan>
+                  </text>
+                  <text
+                    y="-0.2em"
+                    transform={
+                      `translate(${
+                      coords[0].structure[1] - coords[0].structure[0]
+                        } 0)`
+                    }
+                  >
+                    <tspan textAnchor="middle">
+                      {coords[0].structure[1]}
+                    </tspan>
+                  </text>
+                </g>
+              )
+            })
           }
         </g>
       </svg>
