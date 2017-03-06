@@ -422,3 +422,6 @@ a.go {cursor: pointer;color: white;}
 @media screen and (max-width: 20em){
     .local-offcanvas-menu, .local-site-search {opacity:0;}/*make the buttons disappear for very small screens so they don't overlap with title*/
 }
+@media screen and (min-width: 40em){
+  .local-masthead h4 {font-size: 110%;}/*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
+}
