@@ -119,7 +119,7 @@ const Summary = (props) => {
     </div>
   );
 };
-Summary.propTypes = {props: propTypes};
+Summary.propTypes = T.shape({props: propTypes});
 
 const Structure = ({...props}) => (
     <main>

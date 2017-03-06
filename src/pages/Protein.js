@@ -150,30 +150,33 @@ const Summary = (props) => {
     </div>
   );
 };
-Summary.propTypes = {props: propTypes};
+Summary.propTypes = T.shape({props: propTypes});
 
-const Protein = ({...props}) => (
-  <main>
-    <div className={f('row')}>
-      <div className={f('large-12', 'columns')}>
-        <Switch
-          {...props}
-          base="protein"
-          indexRoute={Overview}
-          catchAll={({match, ...props}) => (
-            <Switch
-              {...props}
-              base={match}
-              indexRoute={List}
-              childRoutes={[
-                {path: /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i, component: Summary},
-              ]}
-            />
-          )}
-        />
+const Protein = ({...props}) => {
+  const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
+  return (
+    <main>
+      <div className={f('row')}>
+        <div className={f('large-12', 'columns')}>
+          <Switch
+            {...props}
+            base="protein"
+            indexRoute={Overview}
+            catchAll={({match, ...props}) => (
+              <Switch
+                {...props}
+                base={match}
+                indexRoute={List}
+                childRoutes={[
+                  {path: acc, component: Summary},
+                ]}
+              />
+            )}
+          />
+        </div>
       </div>
-    </div>
-  </main>
-);
+    </main>
+  );
+};
 
 export default loadData()(Protein);

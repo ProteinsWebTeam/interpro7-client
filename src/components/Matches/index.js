@@ -39,6 +39,7 @@ const componentMatch = {
 // List of all matches for one `primary`, one to many
 const MatchesByPrimary = (
   {matches, primary, secondary, ...props}
+  /*: {matches: Array<Object>, primary: string, secondary: string, props: Array<any>}*/
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
   matches.map((m) => {
@@ -56,8 +57,8 @@ MatchesByPrimary.propTypes = propTypes;
 
 // List of all matches, many to many
 const Matches = (
-  {matches, primary, ...props}
-  /*: {matches: Array<Object>, primary: string, props: Array<any>}*/
+  {matches, primary, secondary, ...props}
+  /*: {matches: Array<Object>, primary: string, secondary: string, props: Array<any>}*/
 ) => {
   const dataTable = {
     results: matches.map(e => ({match: e, ...e[primary]})),
@@ -86,10 +87,11 @@ const Matches = (
       </Column>
       <Column
         accessKey="match"
-        renderer={(match/*: string */) => (
+        renderer={(match/*: Object */) => (
         <MatchesByPrimary
           matches={[match]}
           primary={primary}
+          secondary={secondary}
           {...props}
         />
         )}
