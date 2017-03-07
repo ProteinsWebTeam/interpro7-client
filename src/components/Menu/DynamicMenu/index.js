@@ -16,7 +16,7 @@ const styles = foundationPartial(ebiStyles, interproStyles, localStyles);
 class DynamicMenu extends Component {
   static propTypes = {
     data: T.object,
-    loading: T.bool.isRequired,
+    loading: T.bool,
     pathname: T.string.isRequired,
   };
 

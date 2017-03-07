@@ -87,7 +87,7 @@ class SideMenu extends Component {
 SideMenu.propTypes = {
   visible: T.bool.isRequired,
   data: T.object,
-  loading: T.bool.isRequired,
+  loading: T.bool,
   pathname: T.string.isRequired,
   closeSideNav: T.func.isRequired,
 };

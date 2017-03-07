@@ -124,6 +124,7 @@ const getEbiSearchURL = ({
     location: {pathname, search}
   }) => {
     const s = search || {};
+    if (!s.search) return null;
     const fields ='PDB,UNIPROT,description';
     s.page_size = s.page_size || pagination.pageSize;
     return `${protocol}//${hostname}:${port}${root}?query=${s.search}&format=json&fields=${fields}`;
