@@ -154,7 +154,7 @@ const Entry = ({...props}) => {
     `^(${memberDB
       .map(db => db.accession)
       .filter(db => db)
-      .join('|')}|IPR\d{6})$`,
+      .join('|')}|IPR[0-9]{6})$`,
     'i'
   );
   return (

@@ -7,6 +7,15 @@ import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
 import f from 'styles/foundation';
 
+const Example = ({value}) => {
+  return (
+    <a style={{cursor: 'pointer'}} data-search={value}> {value}</a>
+  );
+}
+Example.propTypes = {
+  value: T.string,
+};
+
 class SearchByText extends Component {
   constructor(props) {
     super(props);
@@ -55,8 +64,6 @@ class SearchByText extends Component {
                     />
                   </label>
                 </div>
-
-
               </div>
 
               <div className={f('row')}>
@@ -97,11 +104,5 @@ SearchByText.propTypes = {
   }).isRequired,
 };
 
-const Example = ({value}) => (
-  <a style={{cursor: 'pointer'}} data-search={value}> {value}</a>
-);
-Example.propTypes = {
-  value: T.string,
-};
 
 export default connect(({location: {search}}) => ({search}))(SearchByText);

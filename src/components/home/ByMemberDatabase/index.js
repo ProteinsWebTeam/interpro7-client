@@ -83,7 +83,7 @@ class ByMemberDatabase extends Component {
 }
 
 const urlFromState = ({settings: {api: {protocol, hostname, port, root}}}) => (
-  `${protocol}//${hostname}:${port}${root}entry`
+  `${protocol}//${hostname}:${port}${root}/entry`
 );
 // const urlFromState = console.log;
 
