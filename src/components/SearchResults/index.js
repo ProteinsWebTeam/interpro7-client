@@ -1,11 +1,11 @@
 /* eslint max-statements: ["error", 13] */
 import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
-
-import Link from 'components/generic/Link';
-
 import {frame} from 'timing-functions/src';
 
+import Link from 'components/generic/Link';
+import {goToLocation} from 'actions/creators';
+import loadData from 'higherOrder/loadData';
 import Table, {Column, /* PageSizeSelector, */Exporter} from 'components/Table';
 
 const maxLength = 200;
@@ -30,49 +30,51 @@ class SearchResults extends Component {
   }
 
   async redirect() {
-    const {query, router} = this.props;
+    const {search} = this.props;
     await frame();
     let goTo = null;
     switch (this.foundType) {
       case IPRO_FOUND:
-        goTo = `/entry/interpro/${query.search}`;
+        goTo = `/entry/interpro/${search.search}`;
         break;
       case UNIPROT_FOUND:
-        goTo = `/protein/uniprot/${query.search}`;
+        goTo = `/protein/uniprot/${search.search}`;
         break;
       case PDB_FOUND:
-        goTo = `/structure/pdb/${query.search}`;
+        goTo = `/structure/pdb/${search.search}`;
         break;
       default:
         goTo = null;
     }
     if (goTo && goTo !== this.redirectedTo) {
+      console.log(goTo);
       this.redirectedTo = goTo;
-      router.replace({pathname: goTo});
+      this.props.goToLocation({pathname: goTo});
     }
   }
   render() {
-    const {data, search, dataUrl} = this.props;
+    const {data: {payload, loading}, search, dataUrl} = this.props;
     this.foundType = NOT_FOUND;
-    if (!data) {
+    if (loading) return <div>Loading...</div>;
+    if (!payload) {
       return <div/>;
-    } else if (data.hitCount === 0) {
+    } else if (payload.hitCount === 0) {
       return <div>There are not matches for the term queried</div>;
-    } else if (data.hitCount === 1 && data.entries[0].id === search.search){
+    } else if (payload.hitCount === 1 && payload.entries[0].id === search.search){
       this.foundType = IPRO_FOUND;
       return <div>Interpro entry found - {search.search}</div>;
-    } else if (data.hitCount > 0 &&
-      data.entries[0].fields.PDB.indexOf(search.search) !== NOT_FOUND){
+    } else if (payload.hitCount > 0 &&
+      payload.entries[0].fields.PDB.indexOf(search.search) !== NOT_FOUND){
       this.foundType = PDB_FOUND;
       return <div>PDB structure found - {search.search}</div>;
-    } else if (data.hitCount > 0 &&
-      data.entries[0].fields.UNIPROT.indexOf(search.search) !== NOT_FOUND) {
+    } else if (payload.hitCount > 0 &&
+      payload.entries[0].fields.UNIPROT.indexOf(search.search) !== NOT_FOUND) {
       this.foundType = UNIPROT_FOUND;
       return <div>UniProt protein found - {search.search}</div>;
     }
     return (
       <Table
-        data={{results: data.entries, count: data.hitCount}}
+        data={{results: payload.entries, count: payload.hitCount}}
         query={search}
         pathname="/search"
         title="Search Results"
@@ -115,6 +117,19 @@ SearchResults.propTypes = {
   dataUrl: T.string,
 };
 
+const getEbiSearchURL = ({
+    settings: {
+      ebi: {protocol, hostname, port, root},
+      pagination},
+    location: {pathname, search}
+  }) => {
+    const s = search || {};
+    const fields ='PDB,UNIPROT,description';
+    s.page_size = s.page_size || pagination.pageSize;
+    return `${protocol}//${hostname}:${port}${root}?query=${s.search}&format=json&fields=${fields}`;
+  };
+
 export default connect(
-  ({data: {dataUrl}, location: {search}}) => ({dataUrl, search})
-)(SearchResults);
+  ({data: {dataUrl}, location: {search}}) => ({dataUrl, search}),
+  {goToLocation}
+)(loadData(getEbiSearchURL)(SearchResults));

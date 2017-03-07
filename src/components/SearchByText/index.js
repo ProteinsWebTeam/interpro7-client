@@ -29,7 +29,7 @@ class SearchByText extends Component {
     this.setState({query});
   }
 
-  handleClick = (event) => {
+  handleExampleClick = (event) => {
     const value = event.target.dataset.search;
     if (value) this.setState({value});
   };
@@ -69,13 +69,14 @@ class SearchByText extends Component {
               <div className={f('row')}>
                 <div
                   className={f('large-12', 'columns', 'small', 'search-eg')}
-                  onClick={this.handleClick}
+                  onClick={this.handleExampleClick}
                 > e.g.
                   <Example value="IPR020422"/>,
                   <Example value="kinase" />,
                   <Example value="O00167" />,
                   <Example value="PF02932" />,
-                  <Example value="GO:0007165"/>
+                  <Example value="GO:0007165"/>,
+                  <Example value="1t2v"/>
                 </div>
               </div>
 

@@ -1,5 +1,6 @@
 import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
+import {goToLocation} from 'actions/creators';
 
 class TextSearchBox extends Component {
   constructor(props) {
@@ -23,7 +24,12 @@ class TextSearchBox extends Component {
     };
     const {value: search} = this.state;
     if (search) query.search = search;
-    this.setState({redirecting: {pathname, query}});
+    // this.setState({redirecting: {pathname, query}});
+    this.props.goToLocation({
+      pathname: pathname,
+      search: query,
+    });
+
   };
 
   handleKeyPress = (target) => {
@@ -61,5 +67,6 @@ TextSearchBox.propTypes = {
 };
 
 export default connect(
-  ({settings: {pagination: {pageSize}}}) => ({pageSize})
+  ({settings: {pagination: {pageSize}}}) => ({pageSize}),
+  {goToLocation}
 )(TextSearchBox);
