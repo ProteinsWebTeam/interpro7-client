@@ -140,7 +140,7 @@ const Summary = (props) => {
     </div>
   );
 };
-Summary.propTypes = T.shape({props: propTypes});
+Summary.propTypes = {};
 
 const Entry = ({...props}) => {
   const dbs = new RegExp(

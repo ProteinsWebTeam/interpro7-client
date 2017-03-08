@@ -47,9 +47,12 @@ const Switch = ({
 };
 Switch.propTypes = {
   indexRoute: T.func.isRequired,
-  childRoutes: T.shape({
-    [Symbol.iterator]: T.func.isRequired,
-  })/* any Iterable, like a Set or an Array */,
+  childRoutes: T.oneOfType([
+    T.shape({
+      [Symbol.iterator]: T.func.isRequired,
+    }),
+    T.array,
+  ])/* any Iterable, like a Set or an Array */,
   catchAll: T.func,
   base: T.string,
   location: T.shape({
