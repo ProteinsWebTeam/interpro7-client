@@ -16,7 +16,9 @@ import f from 'styles/foundation';
 
 const EntryAsync = createAsyncComponent(() => import('subPages/Entry'));
 const ProteinAsync = createAsyncComponent(() => import('subPages/Protein'));
-const SummaryAsync = createAsyncComponent(() => import('components/Structure/Summary'));
+const SummaryAsync = createAsyncComponent(
+  () => import('components/Structure/Summary')
+);
 
 const propTypes = {
   data: T.shape({
@@ -63,7 +65,12 @@ const List = ({data: {payload, loading}, location: {pathname, search}}) => {
         </ul>
       </Exporter>
       <PageSizeSelector/>
-      <SearchBox>Search structures</SearchBox>
+      <SearchBox
+        search={search.search}
+        pathname={pathname}
+      >
+        Search structures
+      </SearchBox>
       <Column
         accessKey="accession"
         renderer={(acc/*: string */) => (
@@ -121,30 +128,33 @@ const Summary = (props) => {
 };
 Summary.propTypes = T.shape({props: propTypes});
 
+// Keep outside! Otherwise will be redefined at each render of the outer Switch
+const InnerSwitch = ({match, ...props}) => (
+  <Switch
+    {...props}
+    base={match}
+    indexRoute={List}
+    childRoutes={[{path: /^\d[a-zA-Z\d]{3}$/, component: Summary}]}
+  />
+);
+
 const Structure = ({...props}) => (
-    <main>
-      <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
-          <Switch
-            {...props}
-            base="structure"
-            indexRoute={Overview}
-            catchAll={({match, ...props}) => (
-              <Switch
-                {...props}
-                base={match}
-                indexRoute={List}
-                childRoutes={[{path: /^\d[a-zA-Z\d]{3}$/, component: Summary}]}
-              />
-            )}
-          />
-        </div>
+  <main>
+    <div className={f('row')}>
+      <div className={f('large-12', 'columns')}>
+        <Switch
+          {...props}
+          base="structure"
+          indexRoute={Overview}
+          catchAll={InnerSwitch}
+        />
       </div>
-    </main>
-  );
+    </div>
+  </main>
+);
 
 export default loadData()(Structure);
 // loadData will create an component that wraps Structure.
-// Such component will request content and it will put it in the state and make it
-// available for its children. Because there are not parameters when invoking the method,
-// the data is requested from the api based on the current URL
+// Such component will request content and it will put it in the state and make
+// it available for its children. Because there are not parameters when invoking
+// the method,the data is requested from the api based on the current URL

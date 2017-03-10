@@ -26,19 +26,20 @@ const Footer = (
   {data, pagination, pathname}
   /*: {data: Object, pagination: Object, pathname: string, width: number} */
 ) => {
+  if (data.loading) return null;
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
       pagination.page_size || config.pagination.pageSize, 10
     );
   const index = (page - 1) * pageSize + 1;
-  const lastPage = Math.ceil(data.count / pageSize) || 1;
+  const lastPage = Math.ceil(data.payload.count / pageSize) || 1;
   const pages = getPageLabels(page, lastPage);
 
   return (
     <div>
         <div className={f('float-left')}>
-          {`Showing ${index} to ${index + data.results.length - 1}
-            of ${data.count} results`}
+          {`Showing ${index} to ${index + data.payload.results.length - 1}
+            of ${data.payload.count} results`}
         </div>
         <ul
           className={f('pagination', 'text-right')}
@@ -103,7 +104,10 @@ const Footer = (
   );
 };
 Footer.propTypes = {
-  data: T.object.isRequired,
+  data: T.shape({
+    loading: T.boolean,
+    payload: T.object,
+  }),
   pagination: T.object.isRequired,
   pathname: T.string.isRequired,
 };

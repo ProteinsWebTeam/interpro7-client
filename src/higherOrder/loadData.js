@@ -49,6 +49,13 @@ const loadData = (
         unloadingData: T.func.isRequired,
       };
 
+      constructor(...args) {
+        super(...args);
+        this.state = {
+          staleData: {},
+        };
+      }
+
       componentWillMount() {
         const {
           loadingData, loadedData, failedLoadingData, appState, data,
@@ -69,6 +76,15 @@ const loadData = (
         );
       }
 
+      componentWillReceiveProps({data: nextData}) {
+        if (
+          !nextData.loading &&
+          nextData.payload !== this.state.staleData.payload
+        ) {
+          this.setState({staleData: nextData});
+        }
+      }
+
       componentWillUpdate({
         appState: nextAppState,
         loadingData, loadedData, failedLoadingData, unloadingData, data,
@@ -79,7 +95,7 @@ const loadData = (
         if (data.loading || data.payload) return;
         // New location, cancel previous fetch
         // (if still running, otherwise won't do anything)
-        this._cancelableFetch.cancel();
+        if (this._cancelableFetch) this._cancelableFetch.cancel();
         // Unload previous data
         unloadingData(this._url);
         // Key is the new URL to fetch
@@ -98,7 +114,7 @@ const loadData = (
         this.props.unloadingData(this._url);
         // Cancel previous fetch
         // (if still running, otherwise won't do anything)
-        this._cancelableFetch.cancel();
+        if (this._cancelableFetch) this._cancelableFetch.cancel();
         this._url = null;
       }
 
@@ -112,7 +128,7 @@ const loadData = (
         if (typeof props.data.loading === 'undefined') {
           props.data.loading = true;
         }
-        return <Wrapped {...props} />;
+        return <Wrapped staleData={this.state.staleData} {...props} />;
       }
     }
 
