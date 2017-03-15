@@ -9,50 +9,38 @@ const DEBOUNCE_RATE = 500;// In ms
 
 class SearchBox extends Component {
   static propTypes = {
-    query: T.string,
-    search: T.object.isRequired,
-    router: T.object.isRequired,
-    pathname: T.string.isRequired,
-    pageSize: T.number.isRequired,
+    search: T.string,
+    location: T.object.isRequired,
     goToLocation: T.func,
   };
 
   constructor(props) {
     super(props);
-    this.state = {search: props.query};
-  }
-
-  componentWillMount() {
+    this.state = {search: this.props.search};
     this.routerPush = debounce(this.routerPush, DEBOUNCE_RATE);
   }
 
-  componentWillReceiveProps({query = ''}) {
-    this.setState({query});
-  }
+  handleReset = () => this.handleChange({target: {value: null}});
 
-  handleChange = ({target: {value: query}}) => {
-    this.setState({query});
-    this.routerPush();
-  };
+  handleChange = ({target: {value: search}}) => this.setState(
+    {search},
+    this.routerPush
+  );
 
-  handleReset = () => this.setState({query: ''}, this.routerPush);
-
-  routerPush = () => {
-    const {pageSize, pathname} = this.props;
-    const query/*: {page: number, page_size: number, search?: string} */ = {
+  routerPush = () => this.props.goToLocation({
+    pathname: this.props.location.pathname,
+    search: {
+      ...this.props.location.search,
       page: 1,
-      page_size: pageSize,
-    };
-    const {query: search} = this.state;
-    if (search) query.search = search;
-    this.props.goToLocation({pathname, search: query});
-  };
+      search: this.state.search,
+    },
+  });
 
   render() {
-    const {search} = this.state;
     return (
       <div className={f('float-right')} style={{position: 'relative'}} >
-        <form>
+        {this.props.children || 'Search:'}
+        <form style={{display: 'inline-block', marginLeft: '1ch'}}>
           <button
             className={f('close-button')}
             type="button"
@@ -64,8 +52,8 @@ class SearchBox extends Component {
           <input
             id="table-filter-text"
             type="text"
+            value={this.state.search || ''}
             onChange={this.handleChange}
-            value={search}
             placeholder="Filter table"
           />
         </form>
@@ -75,8 +63,6 @@ class SearchBox extends Component {
 }
 
 export default connect(
-  ({settings: {pagination: {pageSize}}, location: {pathname}}) => (
-    {pageSize, pathname}
-  ),
+  ({location}) => ({location}),
   {goToLocation}
 )(SearchBox);

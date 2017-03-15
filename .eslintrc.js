@@ -281,6 +281,7 @@ const rules = {
     args: 'after-used',
     argsIgnorePattern: '^_',
     varsIgnorePattern: '^_',
+    ignoreRestSiblings: true,
   }],
   // Disallow use of variables before they are defined
   'no-use-before-define': 2,

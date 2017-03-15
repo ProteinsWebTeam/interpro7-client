@@ -30,7 +30,7 @@ const getFetch = (method/*: string */)/*: function */ => {
 
 const mapStateToProps = getUrl => state => ({
   appState: state,
-  data: state.data[getUrl(state)] || {loading: true},
+  data: state.data[getUrl(state)] || {},
 });
 
 const loadData = (
@@ -49,10 +49,19 @@ const loadData = (
         unloadingData: T.func.isRequired,
       };
 
+      constructor(...args) {
+        super(...args);
+        this.state = {
+          staleData: {},
+        };
+      }
+
       componentWillMount() {
         const {
-          loadingData, loadedData, failedLoadingData, appState,
+          loadingData, loadedData, failedLoadingData, appState, data,
         } = this.props;
+        // If data is already there, or loading, don't do anything
+        if (data.loading || data.payload) return;
         // Key is the URL to fetch
         // (stored in `key` because `this._url` might change)
         const key = this._url = _getUrl(appState);
@@ -67,15 +76,26 @@ const loadData = (
         );
       }
 
+      componentWillReceiveProps({data: nextData}) {
+        if (
+          !nextData.loading &&
+          nextData.payload !== this.state.staleData.payload
+        ) {
+          this.setState({staleData: nextData});
+        }
+      }
+
       componentWillUpdate({
         appState: nextAppState,
-        loadingData, loadedData, failedLoadingData, unloadingData,
+        loadingData, loadedData, failedLoadingData, unloadingData, data,
       }) {
         // Same location, no need to reload data
         if (nextAppState.location === this.props.appState.location) return;
+        // If data is already there, or loading, don't do anything
+        if (data.loading || data.payload) return;
         // New location, cancel previous fetch
         // (if still running, otherwise won't do anything)
-        this._cancelableFetch.cancel();
+        if (this._cancelableFetch) this._cancelableFetch.cancel();
         // Unload previous data
         unloadingData(this._url);
         // Key is the new URL to fetch
@@ -94,21 +114,21 @@ const loadData = (
         this.props.unloadingData(this._url);
         // Cancel previous fetch
         // (if still running, otherwise won't do anything)
-        this._cancelableFetch.cancel();
+        if (this._cancelableFetch) this._cancelableFetch.cancel();
         this._url = null;
       }
 
       render() {
         const {
-          // Ignore
-          appState: _,
-          loadingData: __,
-          loadedData: ___,
-          failedLoadingData: ____,
+          // Remove from props
+          appState, loadingData, loadedData, failedLoadingData,
           // Keep, to pass on
           ...props
         } = this.props;
-        return <Wrapped {...props} />;
+        if (typeof props.data.loading === 'undefined') {
+          props.data.loading = true;
+        }
+        return <Wrapped staleData={this.state.staleData} {...props} />;
       }
     }
 

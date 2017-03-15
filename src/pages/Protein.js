@@ -67,7 +67,12 @@ const List = ({data: {payload, loading}, location: {pathname, search}}) => {
         </ul>
       </Exporter>
       <PageSizeSelector/>
-      <SearchBox>Search proteins</SearchBox>
+      <SearchBox
+        search={search.search}
+        pathname={pathname}
+      >
+        Search proteins
+      </SearchBox>
       <Column
         accessKey="accession"
         renderer={(acc/*: string */) => (
@@ -125,7 +130,9 @@ const List = ({data: {payload, loading}, location: {pathname, search}}) => {
 };
 List.propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(() => import('components/Protein/Summary'));
+const SummaryAsync = createAsyncComponent(
+  () => import('components/Protein/Summary')
+);
 const StructureAsync = createAsyncComponent(() => import('subPages/Structure'));
 const EntryAsync = createAsyncComponent(() => import('subPages/Entry'));
 
@@ -152,31 +159,34 @@ const Summary = (props) => {
 };
 Summary.propTypes = T.shape({props: propTypes});
 
-const Protein = ({...props}) => {
-  const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
-  return (
-    <main>
-      <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
-          <Switch
-            {...props}
-            base="protein"
-            indexRoute={Overview}
-            catchAll={({match, ...props}) => (
-              <Switch
-                {...props}
-                base={match}
-                indexRoute={List}
-                childRoutes={[
-                  {path: acc, component: Summary},
-                ]}
-              />
-            )}
-          />
-        </div>
+const acc = (
+  /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i
+);
+// Keep outside! Otherwise will be redefined at each render of the outer Switch
+const InnerSwitch = ({match, ...props}) => (
+  <Switch
+    {...props}
+    base={match}
+    indexRoute={List}
+    childRoutes={[
+      {path: acc, component: Summary},
+    ]}
+  />
+);
+
+const Protein = ({...props}) => (
+  <main>
+    <div className={f('row')}>
+      <div className={f('large-12', 'columns')}>
+        <Switch
+          {...props}
+          base="protein"
+          indexRoute={Overview}
+          catchAll={InnerSwitch}
+        />
       </div>
-    </main>
-  );
-};
+    </div>
+  </main>
+);
 
 export default loadData()(Protein);

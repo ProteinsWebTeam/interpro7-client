@@ -11,10 +11,17 @@ import _Column from './Column';
 import _Row from './Row';
 import _Footer from './Footer';
 
+const getData = (data, staleData) => {
+  if (!data.loading) return data;
+  if (staleData && staleData.payload) return staleData;
+  return {payload: {results: [], count: 0}};
+};
+
 const Table = (
-  {data, query, pathname, title, children}
+  {data, staleData, query, pathname, title, children}
   /*: {
-   data: Object,
+   data: {loading: boolean, payload: Object},
+   staleData: {loading: boolean, payload: Object},
    query: Object,
    pathname: string,
    children?: any
@@ -32,12 +39,7 @@ const Table = (
   return (
     <div>
       {title && <h4>{title}</h4>}
-      {
-        exporter &&
-        <_Exporter>
-          {exporter.props.children}
-        </_Exporter>
-      }
+      {exporter}
       {
         pageSize &&
         <_PageSizeSelector
@@ -45,20 +47,16 @@ const Table = (
           pathname={pathname}
         />
       }
-      {
-        search &&
-        <_SearchBox
-          search={search.props}
-          query={_query.search}
-          pathname={pathname}
-        />
-      }
+      {search}
       <table>
         <_Header columns={columns} />
-        <_Body rows={data.results} columns={columns} />
+        <_Body
+          rows={getData(data, staleData).payload.results}
+          columns={columns}
+        />
       </table>
       <_Footer
-        data={data}
+        data={getData(data, staleData)}
         pagination={_query}
         pathname={pathname}
       />
@@ -66,7 +64,14 @@ const Table = (
   );
 };
 Table.propTypes = {
-  data: T.object.isRequired,
+  data: T.shape({
+    loading: T.bool,
+    payload: T.object,
+  }),
+  staleData: T.shape({
+    loading: T.bool,
+    payload: T.object,
+  }),
   query: T.object,
   pathname: T.string.isRequired,
   title: T.string,

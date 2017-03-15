@@ -60,62 +60,65 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
 };
 Overview.propTypes = propTypes;
 
-const List = ({data: {payload, loading}, location: {search, pathname}}) => {
-  if (loading) return <div>Loading...</div>;
-  return (
-    <Table
-      data={payload}
-      query={search}
+const List = ({data, location: {search, pathname}}) => (
+  <Table
+    data={data}
+    query={search}
+    pathname={pathname}
+  >
+    <Exporter>
+      <ul>
+        <li>
+          <a href={`${''}&format=json`} download="proteins.json">
+            JSON
+          </a><br/></li>
+        <li><a href={`${''}`}>Open in API web view</a></li>
+      </ul>
+    </Exporter>
+    <PageSizeSelector />
+    <SearchBox
+      search={search.search}
       pathname={pathname}
     >
-      <Exporter>
-        <ul>
-          <li>
-            <a
-              href={`${''}&format=json`}
-              download="proteins.json"
-            >JSON</a><br/></li>
-          <li><a href={`${''}`}>Open in API web view</a></li>
-        </ul>
-      </Exporter>
-      <PageSizeSelector />
-      <SearchBox>Search entries</SearchBox>
-      <Column
-        accessKey="accession"
-        renderer={(acc/*: string */) => (
-          <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-            {acc}
+      Search entries:
+    </SearchBox>
+    <Column
+      accessKey="accession"
+      renderer={(acc/*: string */) => (
+        <Link to={`${removeLastSlash(pathname)}/${acc}`}>
+          {acc}
+        </Link>
+      )}
+    >
+      Accession
+    </Column>
+    <Column
+      accessKey="name"
+      renderer={
+        (name/*: string */, {accession}/*: {accession: string} */) => (
+          <Link to={`${removeLastSlash(pathname)}/${accession}`}>
+            {name}
           </Link>
-        )}
-      >
-        Accession
-      </Column>
-      <Column
-        accessKey="name"
-        renderer={
-          (name/*: string */, {accession}/*: {accession: string} */) => (
-            <Link to={`${removeLastSlash(pathname)}/${accession}`}>
-              {name}
-            </Link>
-          )
-        }
-      >
-        Name
-      </Column>
-      <Column
-        accessKey="type"
-        renderer={(type) => (
-          <interpro-type type={type.replace('_', ' ')} expanded>
-            {type}
-          </interpro-type>
-        )}
-      >Type</Column>
-    </Table>
-  );
-};
+        )
+      }
+    >
+      Name
+    </Column>
+    <Column
+      accessKey="type"
+      renderer={(type) => (
+        <interpro-type type={type.replace('_', ' ')} expanded>
+          {type}
+        </interpro-type>
+      )}
+    >Type</Column>
+  </Table>
+);
 List.propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(() => import('components/Entry/Summary'));
+const SummaryAsync = createAsyncComponent(
+  () => import('components/Entry/Summary')
+);
 const StructureAsync = createAsyncComponent(() => import('subPages/Structure'));
 const ProteinAsync = createAsyncComponent(() => import('subPages/Protein'));
 
@@ -140,46 +143,48 @@ const Summary = (props) => {
     </div>
   );
 };
-Summary.propTypes = T.shape({props: propTypes});
+Summary.propTypes = {};
 
-const Entry = ({...props}) => {
-  const dbs = new RegExp(
-    `^(${memberDB
-      .map(db => db.apiType)
-      .filter(db => db)
-      .join('|')})$`,
-    'i'
-  );
-  const dbAccs = new RegExp(
-    `^(${memberDB
-      .map(db => db.accession)
-      .filter(db => db)
-      .join('|')}|IPR[0-9]{6})$`,
-    'i'
-  );
-  return (
-    <main>
-      <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
-          <Switch
-            {...props}
-            base="entry"
-            indexRoute={Overview}
-            catchAll={({match, ...props}) => (
-              <Switch
-                {...props}
-                base={match}
-                indexRoute={List}
-                childRoutes={[
-                  {path: dbs, component: List},
-                  {path: dbAccs, component: Summary},
-                ]}
-              />
-            )}
-          />
-        </div>
+const dbs = new RegExp(
+  `^(${memberDB
+    .map(db => db.apiType)
+    .filter(db => db)
+    .join('|')})$`,
+  'i'
+);
+const dbAccs = new RegExp(
+  `^(${memberDB
+    .map(db => db.accession)
+    .filter(db => db)
+    .join('|')}|IPR[0-9]{6})$`,
+  'i'
+);
+
+// Keep outside! Otherwise will be redefined at each render of the outer Switch
+const InnerSwitch = ({match, ...props}) => (
+  <Switch
+    {...props}
+    base={match}
+    indexRoute={List}
+    childRoutes={[
+      {path: dbs, component: List},
+      {path: dbAccs, component: Summary},
+    ]}
+  />
+);
+
+const Entry = ({...props}) => (
+  <main>
+    <div className={f('row')}>
+      <div className={f('large-12', 'columns')}>
+        <Switch
+          {...props}
+          base="entry"
+          indexRoute={Overview}
+          catchAll={InnerSwitch}
+        />
       </div>
-    </main>
-  );
-};
+    </div>
+  </main>
+);
 export default loadData()(Entry);
