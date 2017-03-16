@@ -28,6 +28,7 @@ const propTypes = {
   location: T.shape({
     pathname: T.string.isRequired,
   }).isRequired,
+  match: T.string,
 };
 
 const Overview = ({data: {payload, loading}, location: {pathname}}) => {
@@ -48,7 +49,8 @@ Overview.propTypes = propTypes;
 
 const List = ({data: {payload, loading, status}, location: {pathname, search}}) => {
   let _payload = payload;
-  const notFound = !loading && status!==200;
+  const HTTP_OK = 200;
+  const notFound = !loading && status !== HTTP_OK;
   if (loading || notFound) {
     _payload = {
       results: [],
@@ -145,6 +147,9 @@ const InnerSwitch = ({match, ...props}) => (
     childRoutes={[{path: /^\d[a-zA-Z\d]{3}$/, component: Summary}]}
   />
 );
+InnerSwitch.propTypes = {
+  match: T.string,
+};
 
 const Structure = ({...props}) => (
   <main>

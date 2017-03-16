@@ -23,7 +23,7 @@ const getPageLabels = (page, lastPage) => {
 };
 
 const Footer = (
-  {data, actualSize, pagination, pathname,notFound}
+  {data, actualSize, pagination, pathname, notFound}
   /*: {data: Object, pagination: Object, pathname: string, actualSize: number} */
 ) => {
   const page = parseInt(pagination.page || 1, 10);
@@ -33,11 +33,13 @@ const Footer = (
   const index = (page - 1) * pageSize + 1;
   const lastPage = Math.ceil(actualSize / pageSize) || 1;
   const pages = getPageLabels(page, lastPage);
-  let bottomLabel = "Loading data";
-  if (notFound)
-    bottomLabel = "No data available";
-  else if (actualSize)
-    bottomLabel = `Showing ${index} to ${index + data.length - 1} of ${actualSize} results`
+  let bottomLabel = 'Loading data';
+  if (notFound) {
+    bottomLabel = 'No data available';
+  } else if (actualSize) {
+    bottomLabel = `Showing ${index} to ${index + data.length - 1} 
+                   of ${actualSize} results`;
+  }
   return (
     <div>
         <div className={f('float-left')}>
@@ -110,6 +112,7 @@ Footer.propTypes = {
   actualSize: T.number,
   pagination: T.object.isRequired,
   pathname: T.string.isRequired,
+  notFound: T.bool,
 };
 
 export default Footer;

@@ -32,14 +32,14 @@ const mapStateToProps = getUrl => state => ({
   appState: state,
   data: state.data[getUrl(state)] || {},
 });
-const getBaseURL= url => url.slice(0,url.indexOf('?'));
+const getBaseURL = url => url.slice(0, url.indexOf('?'));
 const loadData = (
   getUrl/*: (appState: Object) => string */ = 'api',
   options/*: Object */
 ) => {
   const _getUrl = (getUrl instanceof Function) ? getUrl : defaultGetUrl(getUrl);
   const fetchFun = getFetch(options && options.method);
-  let url;
+
   return (Wrapped/*: ReactClass<*> */) => {
     class DataWrapper extends Component {
       static propTypes = {
@@ -48,6 +48,11 @@ const loadData = (
         loadedData: T.func.isRequired,
         failedLoadingData: T.func.isRequired,
         unloadingData: T.func.isRequired,
+        data: T.shape({
+          loading: T.bool,
+          payload: T.object,
+          status: T.number,
+        }),
       };
 
       constructor(props) {
@@ -55,7 +60,7 @@ const loadData = (
         this.state = {
           staleData: props.data,
         };
-        this._url = "";
+        this._url = '';
         this.avoidStaleData = true;
       }
 
@@ -143,8 +148,9 @@ const loadData = (
           _data = this.state.staleData;
           isStale = true;
         }
-        if (!_data.loading)
+        if (!_data.loading) {
           this._url = _getUrl(appState);
+        }
         return <Wrapped {...props} data={_data} isStale={isStale}/>;
       }
     }

@@ -62,13 +62,14 @@ Overview.propTypes = propTypes;
 
 const List = ({data, location: {search, pathname}}) => {
   let _payload = data.payload;
-  const notFound = !data.loading && data.status!==200;
+  const HTTP_OK = 200;
+  const notFound = !data.loading && data.status !== HTTP_OK;
   if (data.loading || notFound) {
     _payload = {
       results: [],
     };
   }
-  return(
+  return (
     <Table
       dataTable={_payload.results}
       actualSize={_payload.count}
@@ -124,7 +125,7 @@ const List = ({data, location: {search, pathname}}) => {
       >Type</Column>
     </Table>
   );
-}
+};
 List.propTypes = propTypes;
 
 const SummaryAsync = createAsyncComponent(
@@ -154,7 +155,17 @@ const Summary = (props) => {
     </div>
   );
 };
-Summary.propTypes = {};
+Summary.propTypes = {
+  data: T.shape({
+    loading: T.bool,
+    payload: T.object,
+    status: T.number,
+  }).isRequired,
+  location: T.shape({
+    pathname: T.string.isRequired,
+  }).isRequired,
+  match: T.string,
+};
 
 const dbs = new RegExp(
   `^(${memberDB
@@ -183,7 +194,9 @@ const InnerSwitch = ({match, ...props}) => (
     ]}
   />
 );
-
+InnerSwitch.propTypes = {
+  match: T.string,
+};
 const Entry = ({...props}) => (
   <main>
     <div className={f('row')}>

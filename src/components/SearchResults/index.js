@@ -115,20 +115,22 @@ SearchResults.propTypes = {
   data: T.object,
   search: T.object,
   dataUrl: T.string,
+  goToLocation: T.func,
 };
 
 const getEbiSearchURL = ({
     settings: {
       ebi: {protocol, hostname, port, root},
       pagination},
-    location: {pathname, search}
+    location: {search},
   }) => {
-    const s = search || {};
-    if (!s.search) return null;
-    const fields ='PDB,UNIPROT,description';
-    s.page_size = s.page_size || pagination.pageSize;
-    return `${protocol}//${hostname}:${port}${root}?query=${s.search}&format=json&fields=${fields}`;
-  };
+  const s = search || {};
+  if (!s.search) return null;
+  const fields = 'PDB,UNIPROT,description';
+  s.page_size = s.page_size || pagination.pageSize;
+  const params = `?query=${s.search}&format=json&fields=${fields}`;
+  return `${protocol}//${hostname}:${port}${root}${params}`;
+};
 
 export default connect(
   ({data: {dataUrl}, location: {search}}) => ({dataUrl, search}),

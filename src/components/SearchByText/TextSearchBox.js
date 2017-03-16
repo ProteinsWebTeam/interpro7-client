@@ -26,7 +26,7 @@ class TextSearchBox extends Component {
     if (search) query.search = search;
     // this.setState({redirecting: {pathname, query}});
     this.props.goToLocation({
-      pathname: pathname,
+      pathname,
       search: query,
     });
 
@@ -64,6 +64,7 @@ TextSearchBox.propTypes = {
   value: T.string,
   className: T.string,
   toSubmit: T.bool,
+  goToLocation: T.func,
 };
 
 export default connect(

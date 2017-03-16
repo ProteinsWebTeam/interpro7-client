@@ -20,6 +20,8 @@ const propTypes = {
     offset: T.number,
     niceRatio: T.number,
   }),
+  actualSize: T.number,
+  search: T.object,
 };
 
 const componentMatch = {
@@ -62,7 +64,6 @@ const Matches = (
   /*: {matches: Array<Object>, primary: string, secondary: string, props: Array<any>}*/
 ) => {
   const pathname = '';
-  const query = {};
   return (
     <Table
       dataTable={matches.map(e => ({match: e, ...e[primary]}))}
@@ -110,4 +111,4 @@ const Matches = (
 };
 Matches.propTypes = propTypes;
 
-export default connect(({location:{search}})=>({search}))(Matches);
+export default connect(({location: {search}}) => ({search}))(Matches);

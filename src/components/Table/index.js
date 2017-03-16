@@ -66,11 +66,12 @@ const Table = (
   );
 };
 Table.propTypes = {
-  data: T.array,
+  dataTable: T.array,
   actualSize: T.number,
   query: T.object,
   pathname: T.string.isRequired,
   title: T.string,
+  notFound: T.bool,
   children: T.any,
 };
 

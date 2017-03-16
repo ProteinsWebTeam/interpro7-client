@@ -12,6 +12,7 @@ class SearchBox extends Component {
     search: T.string,
     location: T.object.isRequired,
     goToLocation: T.func,
+    children: T.any,
   };
 
   constructor(props) {

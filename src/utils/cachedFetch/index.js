@@ -28,8 +28,8 @@ export const cachedFetchJSON = async (
   const r = await cachedFetch(url, options);
   return {
     response: await r.json(),
-    status:r.status,
-    ok: r.ok
+    status: r.status,
+    ok: r.ok,
   };
 };
 

@@ -89,8 +89,9 @@ const primariesAndSecondaries = {
   },
 };
 
-const RelatedAdvanced = ({mainData, secondaryData, main, secondary, pathname, actualSize}) => {
-  return (
+const RelatedAdvanced = (
+  {mainData, secondaryData, main, secondary, actualSize}
+  ) => (
     <div>
       <p>
         This {main} is related to
@@ -111,30 +112,27 @@ const RelatedAdvanced = ({mainData, secondaryData, main, secondary, pathname, ac
       />
     </div>
   );
-}
 RelatedAdvanced.propTypes = {
   mainData: T.object.isRequired,
   secondaryData: T.arrayOf(T.object).isRequired,
   main: T.string.isRequired,
   secondary: T.string.isRequired,
+  actualSize: T.number,
 };
 const getReversedURL = ({
-    settings: {
-      api: {protocol, hostname, port, root},
-      pagination},
-    location: {pathname, search}
-  })=>{
-    const
-      index = pathname.slice(2).search("protein|entry|structure")+1,
-      newPath = pathname.slice(index)+pathname.slice(0,index),
-      s = search || {};
-    return `${protocol}//${hostname}:${port}${root}${newPath}?${searchParamsToURL(s)}`;
+    settings: {api: {protocol, hostname, port, root}},
+    location: {pathname, search},
+  }) => {
+  const index = pathname.slice(2).search('protein|entry|structure') + 1;
+  const newPath = pathname.slice(index) + pathname.slice(0, index);
+  const s = search || {};
+  return `${protocol}//${hostname}:${port}${root}${newPath}?${searchParamsToURL(s)}`;
 };
 const RelatedAdvancedQuery = loadData(getReversedURL)(
-  ({data:{payload, loading},secondaryData, ...props})=> {
+  ({data: {payload, loading}, secondaryData: _, ...props}) => {
     if (loading) return <div>Loading...</div>;
-    const _secondaryData = payload.results.map(x=>{
-      const obj  = x.metadata;
+    const _secondaryData = payload.results.map(x => {
+      const obj = x.metadata;
       obj.coordinates = x[toPlural(props.main)][0].coordinates;
       return obj;
     });
@@ -144,12 +142,15 @@ const RelatedAdvancedQuery = loadData(getReversedURL)(
         actualSize={payload.count}
         {...props}
       />
-    )
+    );
   }
 );
 
 const Related = ({data, secondary, ...props}) => {
-  const {loading, payload: {metadata: mainData, [toPlural(secondary)]: secondaryData}} = data;
+  const {
+    loading,
+    payload: {metadata: mainData, [toPlural(secondary)]: secondaryData},
+  } = data;
   if (loading) return <div>Loading...</div>;
   const RelatedComponent = (
     Array.isArray(secondaryData) ? RelatedAdvancedQuery : RelatedSimple
