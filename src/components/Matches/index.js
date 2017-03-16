@@ -61,7 +61,15 @@ MatchesByPrimary.propTypes = propTypes;
 // List of all matches, many to many
 const Matches = (
   {matches, primary, secondary, actualSize, search, ...props}
-  /*: {matches: Array<Object>, primary: string, secondary: string, props: Array<any>}*/
+  /*: {
+        matches: Array<Object>,
+        primary: string,
+        secondary: string,
+        actualSize:number,
+        search: Object,
+        props: Array<any>
+      }
+  */
 ) => {
   const pathname = '';
   return (
