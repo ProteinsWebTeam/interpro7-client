@@ -23,23 +23,25 @@ const getPageLabels = (page, lastPage) => {
 };
 
 const Footer = (
-  {data, pagination, pathname}
-  /*: {data: Object, pagination: Object, pathname: string, width: number} */
+  {data, actualSize, pagination, pathname,notFound}
+  /*: {data: Object, pagination: Object, pathname: string, actualSize: number} */
 ) => {
-  if (data.loading) return null;
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
       pagination.page_size || config.pagination.pageSize, 10
     );
   const index = (page - 1) * pageSize + 1;
-  const lastPage = Math.ceil(data.payload.count / pageSize) || 1;
+  const lastPage = Math.ceil(actualSize / pageSize) || 1;
   const pages = getPageLabels(page, lastPage);
-
+  let bottomLabel = "Loading data";
+  if (notFound)
+    bottomLabel = "No data available";
+  else if (actualSize)
+    bottomLabel = `Showing ${index} to ${index + data.length - 1} of ${actualSize} results`
   return (
     <div>
         <div className={f('float-left')}>
-          {`Showing ${index} to ${index + data.payload.results.length - 1}
-            of ${data.payload.count} results`}
+          {bottomLabel}
         </div>
         <ul
           className={f('pagination', 'text-right')}
@@ -104,10 +106,8 @@ const Footer = (
   );
 };
 Footer.propTypes = {
-  data: T.shape({
-    loading: T.boolean,
-    payload: T.object,
-  }),
+  data: T.array,
+  actualSize: T.number,
   pagination: T.object.isRequired,
   pathname: T.string.isRequired,
 };

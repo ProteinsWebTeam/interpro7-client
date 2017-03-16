@@ -11,17 +11,17 @@ import _Column from './Column';
 import _Row from './Row';
 import _Footer from './Footer';
 
-const getData = (data, staleData) => {
-  if (!data.loading) return data;
-  if (staleData && staleData.payload) return staleData;
-  return {payload: {results: [], count: 0}};
-};
+// const getData = (data, staleData) => {
+//   if (!data.loading) return data;
+//   if (staleData && staleData.payload) return staleData;
+//   return {payload: {results: [], count: 0}};
+// };
 
 const Table = (
-  {data, staleData, query, pathname, title, children}
+  {dataTable, actualSize, query, pathname, title, notFound, children}
   /*: {
-   data: {loading: boolean, payload: Object},
-   staleData: {loading: boolean, payload: Object},
+   dataTable: Array<Object>,
+   actualSize: number
    query: Object,
    pathname: string,
    children?: any
@@ -51,27 +51,23 @@ const Table = (
       <table>
         <_Header columns={columns} />
         <_Body
-          rows={getData(data, staleData).payload.results}
+          rows={dataTable}
           columns={columns}
         />
       </table>
       <_Footer
-        data={getData(data, staleData)}
+        data={dataTable}
+        actualSize={actualSize}
         pagination={_query}
         pathname={pathname}
+        notFound={notFound}
       />
     </div>
   );
 };
 Table.propTypes = {
-  data: T.shape({
-    loading: T.bool,
-    payload: T.object,
-  }),
-  staleData: T.shape({
-    loading: T.bool,
-    payload: T.object,
-  }),
+  data: T.array,
+  actualSize: T.number,
   query: T.object,
   pathname: T.string.isRequired,
   title: T.string,

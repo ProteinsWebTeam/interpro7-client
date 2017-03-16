@@ -7,7 +7,7 @@ import {
   loadingData, loadedData, unloadingData, failedLoadingData,
 } from 'actions/creators';
 
-const searchParamsToURL = search => search ?
+const _SearchParamsToURL = search => search ?
   Object.entries(search)
     .reduce((acc, val) => acc + (val[1] ? `&${val[0]}=${val[1]}` : ''), '')
     .slice(1) : '';
@@ -20,7 +20,7 @@ const defaultGetUrl = key => ({
   }) => {
   const s = search || {};
   s.page_size = s.page_size || pagination.pageSize;
-  return `${protocol}//${hostname}:${port}${root}${pathname}?${searchParamsToURL(s)}`;
+  return `${protocol}//${hostname}:${port}${root}${pathname}?${_SearchParamsToURL(s)}`;
 };
 
 const getFetch = (method/*: string */)/*: function */ => {
@@ -32,15 +32,16 @@ const mapStateToProps = getUrl => state => ({
   appState: state,
   data: state.data[getUrl(state)] || {},
 });
-
+const getBaseURL= url => url.slice(0,url.indexOf('?'));
 const loadData = (
   getUrl/*: (appState: Object) => string */ = 'api',
   options/*: Object */
 ) => {
   const _getUrl = (getUrl instanceof Function) ? getUrl : defaultGetUrl(getUrl);
   const fetchFun = getFetch(options && options.method);
+  let url;
   return (Wrapped/*: ReactClass<*> */) => {
-    class Wrapper extends Component {
+    class DataWrapper extends Component {
       static propTypes = {
         appState: T.object.isRequired,
         loadingData: T.func.isRequired,
@@ -49,36 +50,39 @@ const loadData = (
         unloadingData: T.func.isRequired,
       };
 
-      constructor(...args) {
-        super(...args);
+      constructor(props) {
+        super(props);
         this.state = {
-          staleData: {},
+          staleData: props.data,
         };
+        this._url = "";
+        this.avoidStaleData = true;
       }
 
       componentWillMount() {
         const {
           loadingData, loadedData, failedLoadingData, appState, data,
         } = this.props;
+        // (stored in `key` because `this._url` might change)
+        const key = this._url = _getUrl(appState);
+
         // If data is already there, or loading, don't do anything
         if (data.loading || data.payload) return;
         // Key is the URL to fetch
-        // (stored in `key` because `this._url` might change)
-        const key = this._url = _getUrl(appState);
         // Changes redux state
         loadingData(key);
         // Starts the fetch
         this._cancelableFetch = cancelable(fetchFun(key, options));
         // Eventually changes the state according to response
         this._cancelableFetch.promise.then(
-          payload => loadedData(key, payload),
+          response => loadedData(key, response),
           error => failedLoadingData(key, error)
         );
       }
 
       componentWillReceiveProps({data: nextData}) {
         if (
-          !nextData.loading &&
+          !nextData.loading && nextData.payload &&
           nextData.payload !== this.state.staleData.payload
         ) {
           this.setState({staleData: nextData});
@@ -89,6 +93,8 @@ const loadData = (
         appState: nextAppState,
         loadingData, loadedData, failedLoadingData, unloadingData, data,
       }) {
+        this.avoidStaleData = getBaseURL(this._url) !== getBaseURL(_getUrl(nextAppState));
+
         // Same location, no need to reload data
         if (nextAppState.location === this.props.appState.location) return;
         // If data is already there, or loading, don't do anything
@@ -100,6 +106,7 @@ const loadData = (
         unloadingData(this._url);
         // Key is the new URL to fetch
         // (stored in `key` because `this._url` might change)
+
         const key = this._url = _getUrl(nextAppState);
         loadingData(key);
         this._cancelableFetch = cancelable(fetchFun(key, options));
@@ -123,20 +130,31 @@ const loadData = (
           // Remove from props
           appState, loadingData, loadedData, failedLoadingData,
           // Keep, to pass on
+          data,
           ...props
         } = this.props;
-        if (typeof props.data.loading === 'undefined') {
-          props.data.loading = true;
+
+        if (typeof data.loading === 'undefined') {
+          data.loading = true;
         }
-        return <Wrapped staleData={this.state.staleData} {...props} />;
+        let _data = data;
+        let isStale = false;
+        if (!this.avoidStaleData && _data.loading && this.state.staleData.payload) {
+          _data = this.state.staleData;
+          isStale = true;
+        }
+        if (!_data.loading)
+          this._url = _getUrl(appState);
+        return <Wrapped {...props} data={_data} isStale={isStale}/>;
       }
     }
 
     return connect(
       mapStateToProps(_getUrl),
       {loadingData, loadedData, unloadingData, failedLoadingData}
-    )(Wrapper);
+    )(DataWrapper);
   };
 };
 
 export default loadData;
+export const searchParamsToURL = _SearchParamsToURL;

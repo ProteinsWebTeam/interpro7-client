@@ -60,60 +60,71 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
 };
 Overview.propTypes = propTypes;
 
-const List = ({data, location: {search, pathname}}) => (
-  <Table
-    data={data}
-    query={search}
-    pathname={pathname}
-  >
-    <Exporter>
-      <ul>
-        <li>
-          <a href={`${''}&format=json`} download="proteins.json">
-            JSON
-          </a><br/></li>
-        <li><a href={`${''}`}>Open in API web view</a></li>
-      </ul>
-    </Exporter>
-    <PageSizeSelector />
-    <SearchBox
-      search={search.search}
+const List = ({data, location: {search, pathname}}) => {
+  let _payload = data.payload;
+  const notFound = !data.loading && data.status!==200;
+  if (data.loading || notFound) {
+    _payload = {
+      results: [],
+    };
+  }
+  return(
+    <Table
+      dataTable={_payload.results}
+      actualSize={_payload.count}
+      query={search}
       pathname={pathname}
+      notFound={notFound}
     >
-      Search entries:
-    </SearchBox>
-    <Column
-      accessKey="accession"
-      renderer={(acc/*: string */) => (
-        <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-          {acc}
-        </Link>
-      )}
-    >
-      Accession
-    </Column>
-    <Column
-      accessKey="name"
-      renderer={
-        (name/*: string */, {accession}/*: {accession: string} */) => (
-          <Link to={`${removeLastSlash(pathname)}/${accession}`}>
-            {name}
+      <Exporter>
+        <ul>
+          <li>
+            <a href={`${''}&format=json`} download="proteins.json">
+              JSON
+            </a><br/></li>
+          <li><a href={`${''}`}>Open in API web view</a></li>
+        </ul>
+      </Exporter>
+      <PageSizeSelector />
+      <SearchBox
+        search={search.search}
+        pathname={pathname}
+      >
+        Search entries:
+      </SearchBox>
+      <Column
+        accessKey="accession"
+        renderer={(acc/*: string */) => (
+          <Link to={`${removeLastSlash(pathname)}/${acc}`}>
+            {acc}
           </Link>
-        )
-      }
-    >
-      Name
-    </Column>
-    <Column
-      accessKey="type"
-      renderer={(type) => (
-        <interpro-type type={type.replace('_', ' ')} expanded>
-          {type}
-        </interpro-type>
-      )}
-    >Type</Column>
-  </Table>
-);
+        )}
+      >
+        Accession
+      </Column>
+      <Column
+        accessKey="name"
+        renderer={
+          (name/*: string */, {accession}/*: {accession: string} */) => (
+            <Link to={`${removeLastSlash(pathname)}/${accession}`}>
+              {name}
+            </Link>
+          )
+        }
+      >
+        Name
+      </Column>
+      <Column
+        accessKey="type"
+        renderer={(type) => (
+          <interpro-type type={type.replace('_', ' ')} expanded>
+            {type}
+          </interpro-type>
+        )}
+      >Type</Column>
+    </Table>
+  );
+}
 List.propTypes = propTypes;
 
 const SummaryAsync = createAsyncComponent(

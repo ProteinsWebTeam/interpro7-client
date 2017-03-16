@@ -26,7 +26,11 @@ export const cachedFetchJSON = async (
   url/*: string */, options/*: Object */
 ) => {
   const r = await cachedFetch(url, options);
-  return await r.json();
+  return {
+    response: await r.json(),
+    status:r.status,
+    ok: r.ok
+  };
 };
 
 export default cachedFetch;

@@ -96,11 +96,14 @@ export const loadingData = (key/*: string */) => ({
   key,
 });
 
-export const loadedData = (key/*: string */, payload/*: Object */) => ({
-  type: types.LOADED_DATA,
-  key,
-  payload,
-});
+export const loadedData = (key/*: string */, response/*: Object */) => {
+  return {
+    type: types.LOADED_DATA,
+      key,
+      payload: response.response,
+      status: response.status
+  }
+};
 
 export const unloadingData = (key/*: string */) => ({
   type: types.UNLOADING_DATA,

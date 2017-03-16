@@ -1,6 +1,7 @@
 
 import React, {PropTypes as T} from 'react';
 import Link from 'components/generic/Link';
+import loadData, {searchParamsToURL} from 'higherOrder/loadData';
 
 import Matches from 'components/Matches';
 
@@ -88,37 +89,70 @@ const primariesAndSecondaries = {
   },
 };
 
-const RelatedAdvanced = ({mainData, secondaryData, main, secondary}) => (
-  <div>
-    <p>
-      This {main} is related to
-      {
-        secondaryData.length > 1 ?
-          ` these ${toPlural(secondary)}:` :
-          ` this ${secondary}:`
-      }
-    </p>
-    <Matches
-      matches={
-        secondaryData.reduce((prev, {coordinates, ...secondaryData}) => (
-          [...prev, {[main]: mainData, [secondary]: secondaryData, coordinates}]
-        ), [])
-      }
-      {...primariesAndSecondaries[main][secondary]}
-    />
-  </div>
-);
+const RelatedAdvanced = ({mainData, secondaryData, main, secondary, pathname, actualSize}) => {
+  return (
+    <div>
+      <p>
+        This {main} is related to
+        {
+          secondaryData.length > 1 ?
+            ` these ${toPlural(secondary)}:` :
+            ` this ${secondary}:`
+        }
+      </p>
+      <Matches
+        actualSize={actualSize}
+        matches={
+          secondaryData.reduce((prev, {coordinates, ...secondaryData}) => (
+            [...prev, {[main]: mainData, [secondary]: secondaryData, coordinates}]
+          ), [])
+        }
+        {...primariesAndSecondaries[main][secondary]}
+      />
+    </div>
+  );
+}
 RelatedAdvanced.propTypes = {
   mainData: T.object.isRequired,
   secondaryData: T.arrayOf(T.object).isRequired,
   main: T.string.isRequired,
   secondary: T.string.isRequired,
 };
+const getReversedURL = ({
+    settings: {
+      api: {protocol, hostname, port, root},
+      pagination},
+    location: {pathname, search}
+  })=>{
+    const
+      index = pathname.slice(2).search("protein|entry|structure")+1,
+      newPath = pathname.slice(index)+pathname.slice(0,index),
+      s = search || {};
+    return `${protocol}//${hostname}:${port}${root}${newPath}?${searchParamsToURL(s)}`;
+};
+const RelatedAdvancedQuery = loadData(getReversedURL)(
+  ({data:{payload, loading},secondaryData, ...props})=> {
+    if (loading) return <div>Loading...</div>;
+    const _secondaryData = payload.results.map(x=>{
+      const obj  = x.metadata;
+      obj.coordinates = x[toPlural(props.main)][0].coordinates;
+      return obj;
+    });
+    return (
+      <RelatedAdvanced
+        secondaryData={_secondaryData}
+        actualSize={payload.count}
+        {...props}
+      />
+    )
+  }
+);
 
 const Related = ({data, secondary, ...props}) => {
-  const {payload: {metadata: mainData, [toPlural(secondary)]: secondaryData}} = data;
+  const {loading, payload: {metadata: mainData, [toPlural(secondary)]: secondaryData}} = data;
+  if (loading) return <div>Loading...</div>;
   const RelatedComponent = (
-    Array.isArray(secondaryData) ? RelatedAdvanced : RelatedSimple
+    Array.isArray(secondaryData) ? RelatedAdvancedQuery : RelatedSimple
   );
   return (
     <div className={blockStyles.card}>

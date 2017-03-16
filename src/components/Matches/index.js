@@ -1,6 +1,7 @@
 // @flow
 /* eslint no-magic-numbers: [1, {ignore: [0, 1, 2]}] */
 import React, {PropTypes as T} from 'react';
+import {connect} from 'react-redux';
 import Link from 'components/generic/Link';
 
 import EntriesOnProtein from './EntriesOnProtein';
@@ -57,19 +58,16 @@ MatchesByPrimary.propTypes = propTypes;
 
 // List of all matches, many to many
 const Matches = (
-  {matches, primary, secondary, ...props}
+  {matches, primary, secondary, actualSize, search, ...props}
   /*: {matches: Array<Object>, primary: string, secondary: string, props: Array<any>}*/
 ) => {
-  const dataTable = {
-    results: matches.map(e => ({match: e, ...e[primary]})),
-    count: matches.length,
-  };
   const pathname = '';
   const query = {};
   return (
     <Table
-      data={dataTable}
-      query={query}
+      dataTable={matches.map(e => ({match: e, ...e[primary]}))}
+      actualSize={actualSize}
+      query={search}
       pathname={pathname}
     >
       <Column
@@ -112,4 +110,4 @@ const Matches = (
 };
 Matches.propTypes = propTypes;
 
-export default Matches;
+export default connect(({location:{search}})=>({search}))(Matches);

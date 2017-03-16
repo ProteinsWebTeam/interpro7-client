@@ -17,7 +17,7 @@ class Link extends Component {
       T.string,
       T.shape({
         pathname: T.string.isRequired,
-        search: T.string,
+        search: T.object,
         hash: T.string,
       }),
     ]),

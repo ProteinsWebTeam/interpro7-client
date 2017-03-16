@@ -46,13 +46,21 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
 };
 Overview.propTypes = propTypes;
 
-const List = ({data: {payload, loading}, location: {pathname, search}}) => {
-  if (loading) return <div>Loading...</div>;
+const List = ({data: {payload, loading, status}, location: {pathname, search}}) => {
+  let _payload = payload;
+  const notFound = !loading && status!==200;
+  if (loading || notFound) {
+    _payload = {
+      results: [],
+    };
+  }
   return (
     <Table
-      data={payload}
+      dataTable={_payload.results}
+      actualSize={_payload.count}
       query={search}
       pathname={pathname}
+      notFound={notFound}
     >
       <Exporter>
         <ul>

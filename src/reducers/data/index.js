@@ -21,6 +21,7 @@ export default (
           ...state[action.key],
           loading: false,
           payload: action.payload,
+          status: action.status,
         },
       };
     case FAILED_LOADING_DATA:
