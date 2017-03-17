@@ -15,6 +15,7 @@ const propTypes = {
   matches: T.arrayOf(T.object).isRequired,
   primary: T.string.isRequired,
   secondary: T.string.isRequired,
+  isStale: T.bool.isRequired,
   options: T.shape({
     baseSize: T.number,
     offset: T.number,
@@ -92,9 +93,9 @@ const Matches = (
         accessKey="accession"
         renderer={(
           acc/*: string */,
-          {source_database}/*: {source_database: string} */
+          {source_database: sourceDatabase}/*: {source_database: string} */
         ) => (
-          <Link to={`/${primary}/${source_database}/${acc}`}>
+          <Link to={`/${primary}/${sourceDatabase}/${acc}`}>
             {acc}
           </Link>
         )}
@@ -105,10 +106,10 @@ const Matches = (
         accessKey="name"
         renderer={(
           name/*: string */,
-          {accession, source_database}
+          {accession, source_database: sourceDatabase}
           /*: {accession: string, source_database: string} */
         ) => (
-          <Link to={`/${primary}/${source_database}/${accession}`}>
+          <Link to={`/${primary}/${sourceDatabase}/${accession}`}>
             {name}
           </Link>
         )}

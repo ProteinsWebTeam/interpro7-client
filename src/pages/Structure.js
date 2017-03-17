@@ -25,6 +25,7 @@ const propTypes = {
     payload: T.object,
     loading: T.bool.isRequired,
   }).isRequired,
+  isStale: T.bool.isRequired,
   location: T.shape({
     pathname: T.string.isRequired,
   }).isRequired,

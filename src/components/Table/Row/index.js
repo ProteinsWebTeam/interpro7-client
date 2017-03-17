@@ -11,7 +11,6 @@ const Row = class extends Component {
   };
 
   componentDidMount() {
-    console.log(this._node);
     if (!this._node.animate) return;
     // onenter for this node
     // this._node.animate(
