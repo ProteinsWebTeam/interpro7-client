@@ -12,9 +12,15 @@ const styles = foundationPartial(ebiStyles);
 const SingleEntityMenu = (
   {data, pathname, className, children}
 ) => {
-  const [baseURL] = pathname.match(
-    new RegExp(`^.*${data.metadata.accession}`, 'i')
-  );
+  let baseURL;
+  try {
+    baseURL = pathname.match(
+      new RegExp(`^.*${data.metadata.accession}`, 'i')
+    )[0];
+  } catch(_) {
+    // TODO: do something smarter
+    return null;
+  }
   const type = baseURL.match(/^\/?([^/]*)/)[1].toLowerCase();
   return (
     <ul className={className}>
