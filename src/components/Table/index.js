@@ -11,6 +11,11 @@ import _Column from './Column';
 import _Row from './Row';
 import _Footer from './Footer';
 
+import classname from 'classnames/bind';
+import style from './style.css';
+
+const s = classname.bind(style);
+
 // const getData = (data, staleData) => {
 //   if (!data.loading) return data;
 //   if (staleData && staleData.payload) return staleData;
@@ -18,9 +23,10 @@ import _Footer from './Footer';
 // };
 
 const Table = (
-  {dataTable, actualSize, query, pathname, title, notFound, children}
+  {dataTable, isStale, actualSize, query, pathname, title, notFound, children}
   /*: {
    dataTable: Array<Object>,
+   isStale: ?boolean,
    actualSize: number
    query: Object,
    pathname: string,
@@ -48,7 +54,7 @@ const Table = (
         />
       }
       {search}
-      <table>
+      <table className={s('table', {isStale})}>
         <_Header columns={columns} />
         <_Body
           rows={dataTable}
@@ -67,6 +73,7 @@ const Table = (
 };
 Table.propTypes = {
   dataTable: T.array,
+  isStale: T.bool,
   actualSize: T.number,
   query: T.object,
   pathname: T.string.isRequired,

@@ -1,0 +1,14 @@
+.table {
+  transition-property: opacity, filter;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  opacity: 1;
+  filter: grayscale(0);
+
+  &.isStale {
+    user-select: none;
+    pointer-events: none;
+    opacity: 0.5;
+    filter: grayscale(50%);
+  }
+}

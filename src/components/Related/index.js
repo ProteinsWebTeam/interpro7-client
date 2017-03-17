@@ -90,7 +90,7 @@ const primariesAndSecondaries = {
 };
 
 const RelatedAdvanced = (
-  {mainData, secondaryData, main, secondary, actualSize}
+  {mainData, secondaryData, isStale, main, secondary, actualSize}
   ) => (
     <div>
       <p>
@@ -108,6 +108,7 @@ const RelatedAdvanced = (
             [...prev, {[main]: mainData, [secondary]: secondaryData, coordinates}]
           ), [])
         }
+        isStale={isStale}
         {...primariesAndSecondaries[main][secondary]}
       />
     </div>
@@ -115,6 +116,7 @@ const RelatedAdvanced = (
 RelatedAdvanced.propTypes = {
   mainData: T.object.isRequired,
   secondaryData: T.arrayOf(T.object).isRequired,
+  isStale: T.bool.isRequired,
   main: T.string.isRequired,
   secondary: T.string.isRequired,
   actualSize: T.number,

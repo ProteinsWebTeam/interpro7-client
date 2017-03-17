@@ -9,7 +9,7 @@ import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
 
 
-import Table, {Column} from 'components/Table';
+import Table, {Column, PageSizeSelector, SearchBox} from 'components/Table';
 
 const propTypes = {
   matches: T.arrayOf(T.object).isRequired,
@@ -60,12 +60,13 @@ MatchesByPrimary.propTypes = propTypes;
 
 // List of all matches, many to many
 const Matches = (
-  {matches, primary, secondary, actualSize, search, ...props}
+  {matches, primary, secondary, actualSize, isStale, search, ...props}
   /*: {
         matches: Array<Object>,
         primary: string,
         secondary: string,
-        actualSize:number,
+        actualSize: number,
+        isStale: boolean,
         search: Object,
         props: Array<any>
       }
@@ -78,16 +79,41 @@ const Matches = (
       actualSize={actualSize}
       query={search}
       pathname={pathname}
+      isStale={isStale}
     >
+      <PageSizeSelector />
+      <SearchBox
+        search={search.search}
+        pathname={pathname}
+      >
+        Search
+      </SearchBox>
       <Column
         accessKey="accession"
-        renderer={(acc/*: string */, row) => (
-          <Link to={`/${primary}/${row.source_database}/${acc}`}>
+        renderer={(
+          acc/*: string */,
+          {source_database}/*: {source_database: string} */
+        ) => (
+          <Link to={`/${primary}/${source_database}/${acc}`}>
             {acc}
           </Link>
         )}
       >
         Accession
+      </Column>
+      <Column
+        accessKey="name"
+        renderer={(
+          name/*: string */,
+          {accession, source_database}
+          /*: {accession: string, source_database: string} */
+        ) => (
+          <Link to={`/${primary}/${source_database}/${accession}`}>
+            {name}
+          </Link>
+        )}
+      >
+        Name
       </Column>
       <Column accessKey="source_database">
         Source Database
@@ -99,6 +125,7 @@ const Matches = (
           matches={[match]}
           primary={primary}
           secondary={secondary}
+          location={location}
           {...props}
         />
         )}

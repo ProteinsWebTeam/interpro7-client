@@ -47,7 +47,11 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
 };
 Overview.propTypes = propTypes;
 
-const List = ({data: {payload, loading, status}, location: {pathname, search}}) => {
+const List = ({
+  data: {payload, loading, status},
+  isStale,
+  location: {pathname, search},
+}) => {
   let _payload = payload;
   const HTTP_OK = 200;
   const notFound = !loading && status !== HTTP_OK;
@@ -59,6 +63,7 @@ const List = ({data: {payload, loading, status}, location: {pathname, search}}) 
   return (
     <Table
       dataTable={_payload.results}
+      isStale={isStale}
       actualSize={_payload.count}
       query={search}
       pathname={pathname}
