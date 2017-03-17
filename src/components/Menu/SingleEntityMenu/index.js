@@ -17,7 +17,7 @@ const SingleEntityMenu = (
     baseURL = pathname.match(
       new RegExp(`^.*${data.metadata.accession}`, 'i')
     )[0];
-  } catch(_) {
+  } catch (_) {
     // TODO: do something smarter
     return null;
   }
