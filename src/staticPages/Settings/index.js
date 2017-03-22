@@ -166,27 +166,29 @@ EndpointSettings.propTypes = {
   }),
 };
 
-const pingOptions = {method: 'HEAD', cache: 'no-store', noCache: true};
-const APIEndpointSettings = loadData(
-  ({settings: {api}}) => (
-    `${api.protocol}//${api.hostname}:${api.port}${api.root}entry`
-  ),
-  pingOptions
-)(EndpointSettings);
+const fetchOptions = {method: 'HEAD', cache: 'no-store', noCache: true};
+const APIEndpointSettings = loadData({
+  getUrl({settings: {api}}) {
+    return `${api.protocol}//${api.hostname}:${api.port}${api.root}entry`;
+  },
+  fetchOptions,
+})(EndpointSettings);
 
-const EBIEndpointSettings = loadData(
-  ({settings: {ebi}}) => (
-    `${ebi.protocol}//${ebi.hostname}:${ebi.port}${ebi.root}`
-  ),
-  pingOptions
-)(EndpointSettings);
+const EBIEndpointSettings = loadData({
+  getUrl({settings: {ebi}}) {
+    return `${ebi.protocol}//${ebi.hostname}:${ebi.port}${ebi.root}`;
+  },
+  fetchOptions,
+})(EndpointSettings);
 
-const IPScanEndpointSettings = loadData(
-  ({settings: {ipScan}}) => (
-    `${ipScan.protocol}//${ipScan.hostname}:${ipScan.port}${ipScan.root}`
-  ),
-  pingOptions
-)(EndpointSettings);
+const IPScanEndpointSettings = loadData({
+  getUrl({settings: {ipScan}}) {
+    return (
+      `${ipScan.protocol}//${ipScan.hostname}:${ipScan.port}${ipScan.root}`
+    );
+  },
+  fetchOptions,
+})(EndpointSettings);
 
 const Settings = (
   {

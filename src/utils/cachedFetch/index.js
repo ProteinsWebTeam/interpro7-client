@@ -22,14 +22,24 @@ export const cachedFetch = (url/*: string */, options/*: Object */ = {}) => {
   });
 };
 
+export const cachedFetchText = async (
+  url/*: string */, options/*: Object */
+) => {
+  const response = await cachedFetch(url, options);
+  return {
+    payload: await response.text(),
+    status: response.status,
+    ok: response.ok,
+  };
+};
 export const cachedFetchJSON = async (
   url/*: string */, options/*: Object */
 ) => {
-  const r = await cachedFetch(url, options);
+  const response = await cachedFetch(url, options);
   return {
-    response: await r.json(),
-    status: r.status,
-    ok: r.ok,
+    payload: await response.json(),
+    status: response.status,
+    ok: response.ok,
   };
 };
 

@@ -15,7 +15,7 @@ const propTypes = {
   matches: T.arrayOf(T.object).isRequired,
   primary: T.string.isRequired,
   secondary: T.string.isRequired,
-  isStale: T.bool.isRequired,
+  isStale: T.bool,
   options: T.shape({
     baseSize: T.number,
     offset: T.number,

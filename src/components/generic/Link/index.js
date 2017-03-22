@@ -25,7 +25,6 @@ class Link extends Component {
 
   handleClick = event => {
     const {onClick, target, goToLocation, to} = this.props;
-    console.log(event);
     // pass it on to an externally defined handler
     if (onClick) onClick(event);
     if (event.defaultPrevented) return;
