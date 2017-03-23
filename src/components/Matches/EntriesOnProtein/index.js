@@ -12,8 +12,8 @@ const EntriesOnProtein = (
   }
 ) => {
   const protein = matches[0].protein;
-  protein.length = protein.length || matches[0].coordinates[0].protein[1];
-  // TODO: make sure we have protein length in the coordinates object
+  const main = ('entry_protein_coordinates' in protein) ? 'protein' : 'entry';
+
   return (
     <div className={style.svgContainer}>
       <svg
@@ -40,36 +40,36 @@ const EntriesOnProtein = (
         </g>
         <g>
           {
-            matches.map(({coordinates: coords, entry}) => (
+            matches.map(({[main]: {entry_protein_coordinates: {coordinates}}, entry}) => (
               <g
                 key={entry.accession}
                 transform={
-                  `translate(${coords[0].protein[0]} ${offset - baseSize})`
+                  `translate(${coordinates[0][0][0]} ${offset - baseSize})`
                 }
               >
                   <title>{entry.accession}</title>
                   <rect
                     x="0" y="0" rx={baseSize * 2 / niceRatio}
-                    width={coords[0].protein[1] - coords[0].protein[0]}
+                    width={coordinates[0][0][1] - coordinates[0][0][0]}
                     fill={colorHash.hex(entry.accession)}
                     height={baseSize * 2}
                     className={style.secondary}
                   />
                 <text y="-0.2em">
                   <tspan textAnchor="middle">
-                    {coords[0].protein[0]}
+                    {coordinates[0][0][0]}
                   </tspan>
                 </text>
                 <text
                   y="-0.2em"
                   transform={
                     `translate(${
-                      coords[0].protein[1] - coords[0].protein[0]
+                      coordinates[0][0][1] - coordinates[0][0][0]
                     } 0)`
                   }
                 >
                   <tspan textAnchor="middle">
-                    {coords[0].protein[1]}
+                    {coordinates[0][0][1]}
                   </tspan>
                 </text>
               </g>
