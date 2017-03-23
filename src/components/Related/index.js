@@ -135,7 +135,11 @@ const RelatedAdvancedQuery = loadData(getReversedURL)(
     if (loading) return <div>Loading...</div>;
     const _secondaryData = payload.results.map(x => {
       const obj = x.metadata;
-      obj.coordinates = x[toPlural(props.main)][0].coordinates;
+      const plural = toPlural(props.main);
+      // Given the reverse of the URL, and that we are quering by an accession
+      // we can assume is only one, hence [0]
+      obj.entry_protein_coordinates = x[plural][0].entry_protein_coordinates;
+      obj.protein_structure_coordinates = x[plural][0].protein_structure_coordinates;
       return obj;
     });
     return (

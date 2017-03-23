@@ -46,13 +46,6 @@ const MatchesByPrimary = (
   /*: {matches: Array<Object>, primary: string, secondary: string, props: Array<any>}*/
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
-  matches.map((m) => {
-    const n = m;
-    if (m.coordinates.constructor === String) {
-      n.coordinates = JSON.parse(m.coordinates);
-    }
-    return n;
-  });
   return (
     <MatchComponent matches={matches} {...props} />
   );
