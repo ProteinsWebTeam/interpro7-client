@@ -119,6 +119,9 @@ module.exports = {
         },
         {
           loader: 'img-loader',
+          options: {
+            enabled: PROD,
+          },
         },
       ],
     },
