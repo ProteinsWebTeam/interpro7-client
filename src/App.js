@@ -2,7 +2,7 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 
-import createHistory from 'history/createBrowserHistory';
+import createHistory from 'history/es/createBrowserHistory';
 
 import Root from 'Root';
 
