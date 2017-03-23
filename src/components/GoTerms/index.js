@@ -11,9 +11,9 @@ import {foundationPartial} from 'styles/foundation';
 const f = foundationPartial(ebiStyles, ipro);
 
 const defaultPayload = {
-  cellular_component: [],
   biological_process: [],
   molecular_function: [],
+  cellular_component: [],
 };
 export const GoTermsByCategory = (
   {data: {loading, payload = defaultPayload}},
