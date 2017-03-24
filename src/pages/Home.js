@@ -4,6 +4,7 @@ import {foundationPartial} from 'styles/foundation';
 import Description from 'components/Description';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import ByMemberDatabase from 'components/home/ByMemberDatabase';
+import ByEntryType from 'components/home/ByEntryType';
 import {InterproSymbol} from 'components/Title';
 import Link from 'components/generic/Link';
 import {entryType, latests, speciesFeat, GoList} from 'staticData/home';
@@ -205,34 +206,7 @@ const Home = () => (
             {// panel2 - by entry type
             }
             <div title="by entry type" className={f('entry-type')}>
-               <div className={f('row')}>
-                 {
-                   entryType.map((e, i) => (
-                     <div
-                       className={f('columns', 'medium-4', 'large-4', 'text-center')}
-                       key={i}
-                     >
-                       <a href="#" data-tooltip title={e.title}>
-                         <div className={f('svg-container')}>
-                           <InterproSymbol type={e.type}/>
-                         </div>
-
-                         <h5>
-                           {e.type}
-                           &nbsp;<span
-                             className={f('small', 'icon', 'icon-generic')}
-                             data-icon="i" data-tooltip
-                             title={e.description}
-                                 />
-                         </h5>
-                         <p>{e.counter} entries<br/></p> </a>
-                     </div>
-                   ))
-                 }
-              </div>
-
-              <a href="/entry" className={f('button')}>View all entries</a>
-
+              <ByEntryType />
             </div>
             {// panel 3 - by species
             }
