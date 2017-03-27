@@ -48,8 +48,9 @@ class ByEntryType extends Component {
     const {data: {payload}} = this.props;
     const counts = payload && Object.entries(payload).reduce(
       (p, c) => {
-        p[c[0].toLowerCase()] = c[1];
-        return p;
+        const out = p;
+        out[c[0].toLowerCase()] = c[1];
+        return out;
       },
       {}
     );
@@ -57,7 +58,7 @@ class ByEntryType extends Component {
       <div>
         <div className={f('row')}>
           {
-            entryType.map((e,i) => (
+            entryType.map((e, i) => (
               <div
                 className={f('columns', 'medium-4', 'large-4', 'text-center')}
                 ref={node => {

@@ -7,7 +7,7 @@ import ByMemberDatabase from 'components/home/ByMemberDatabase';
 import ByEntryType from 'components/home/ByEntryType';
 import {InterproSymbol} from 'components/Title';
 import Link from 'components/generic/Link';
-import {entryType, latests, speciesFeat, GoList} from 'staticData/home';
+import {latests, speciesFeat, GoList} from 'staticData/home';
 import Tabs from 'components/Tabs';
 import {schedule} from 'timing-functions/src';
 import AsyncComponent, {createAsyncComponent}

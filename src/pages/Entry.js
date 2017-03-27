@@ -28,9 +28,9 @@ const propTypes = {
   }).isRequired,
 };
 
-const Overview = ({data: {payload, loading}, location: {pathname, search:{type}}}) => {
+const Overview = ({data: {payload, loading}, location: {pathname, search: {type}}}) => {
   if (loading) return <div>Loading...</div>;
-  const params = type?`?type=${type}`:'';
+  const params = type ? `?type=${type}` : '';
   return (
       <div>
         Member databases:
