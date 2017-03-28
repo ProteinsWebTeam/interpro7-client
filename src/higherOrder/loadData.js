@@ -1,7 +1,8 @@
 import React, {Component, PropTypes as T} from 'react';
 import {connect} from 'react-redux';
+import lodashGet from 'lodash-es/get';
 
-import {cachedFetchJSON, cachedFetch} from 'utils/cachedFetch';
+import {cachedFetchJSON, cachedFetchText, cachedFetch} from 'utils/cachedFetch';
 import cancelable from 'utils/cancelable';
 import {
   loadingData, loadedData, unloadingData, failedLoadingData,
@@ -20,10 +21,13 @@ const defaultGetUrl = key => ({
   }) => {
   const s = search || {};
   s.page_size = s.page_size || pagination.pageSize;
-  return `${protocol}//${hostname}:${port}${root}${pathname}?${_SearchParamsToURL(s)}`;
+  return `${protocol}//${hostname}:${port}${root}${pathname}?${
+    _SearchParamsToURL(s)
+  }`;
 };
 
-const getFetch = (method/*: string */)/*: function */ => {
+const getFetch = ({method, responseType}) => {
+  if (responseType === 'text') return cachedFetchText;
   if (method !== 'HEAD') return cachedFetchJSON;
   return (...args) => cachedFetch(...args).then(r => r.ok);
 };
@@ -33,12 +37,45 @@ const mapStateToProps = getUrl => state => ({
   data: state.data[getUrl(state)] || {},
 });
 const getBaseURL = url => url.slice(0, url.indexOf('?'));
-const loadData = (
-  getUrl/*: (appState: Object) => string */ = 'api',
-  options/*: Object */
-) => {
-  const _getUrl = (getUrl instanceof Function) ? getUrl : defaultGetUrl(getUrl);
-  const fetchFun = getFetch(options && options.method);
+
+// getUrl
+const defaultGetUrlForApi = defaultGetUrl('api');
+const extractGetUrl = (getUrl = defaultGetUrlForApi) => {
+  if (typeof getUrl === 'string') {
+    return defaultGetUrl(getUrl);
+  }
+  return getUrl;
+};
+// selector
+const defaultSelector = payload => payload;
+const extractSelector = (selector = defaultSelector) => {
+  if (typeof selector === 'string') {
+    return payload => lodashGet(payload, selector);
+  }
+  return selector;
+};
+//
+const extractParams = params => {
+  const extracted = {
+    getUrl: defaultGetUrlForApi,
+    fetchOptions: {},
+    selector: defaultSelector,
+  };
+  if (!params) return extracted;
+  if (typeof params !== 'object') {
+    extracted.getUrl = (
+      typeof params === 'string' ? defaultGetUrl(params) : params
+    );
+    return extracted;
+  }
+  extracted.getUrl = extractGetUrl(params.getUrl);
+  extracted.fetchOptions = params.fetchOptions || {};
+  extracted.selector = extractSelector(params.selector);
+  return extracted;
+};
+const loadData = params => {
+  const {getUrl, fetchOptions, selector} = extractParams(params);
+  const fetchFun = getFetch(fetchOptions);
 
   return (Wrapped/*: ReactClass<*> */) => {
     class DataWrapper extends Component {
@@ -50,7 +87,7 @@ const loadData = (
         unloadingData: T.func.isRequired,
         data: T.shape({
           loading: T.bool,
-          payload: T.object,
+          payload: T.any,
           status: T.number,
         }),
       };
@@ -69,7 +106,7 @@ const loadData = (
           loadingData, loadedData, failedLoadingData, appState, data,
         } = this.props;
         // (stored in `key` because `this._url` might change)
-        const key = this._url = _getUrl(appState);
+        const key = this._url = getUrl(appState);
 
         // If data is already there, or loading, don't do anything
         if (data.loading || data.payload) return;
@@ -77,10 +114,10 @@ const loadData = (
         // Changes redux state
         loadingData(key);
         // Starts the fetch
-        this._cancelableFetch = cancelable(fetchFun(key, options));
+        this._cancelableFetch = cancelable(fetchFun(key, fetchOptions));
         // Eventually changes the state according to response
         this._cancelableFetch.promise.then(
-          response => loadedData(key, response),
+          response => loadedData(key, response, selector),
           error => failedLoadingData(key, error)
         );
       }
@@ -98,7 +135,9 @@ const loadData = (
         appState: nextAppState,
         loadingData, loadedData, failedLoadingData, unloadingData, data,
       }) {
-        this.avoidStaleData = getBaseURL(this._url) !== getBaseURL(_getUrl(nextAppState));
+        this.avoidStaleData = (
+          getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState))
+        );
 
         // Same location, no need to reload data
         if (nextAppState.location === this.props.appState.location) return;
@@ -112,11 +151,11 @@ const loadData = (
         // Key is the new URL to fetch
         // (stored in `key` because `this._url` might change)
 
-        const key = this._url = _getUrl(nextAppState);
+        const key = this._url = getUrl(nextAppState);
         loadingData(key);
-        this._cancelableFetch = cancelable(fetchFun(key, options));
+        this._cancelableFetch = cancelable(fetchFun(key, fetchOptions));
         this._cancelableFetch.promise.then(
-          payload => loadedData(key, payload),
+          payload => loadedData(key, payload, selector),
           error => failedLoadingData(key, error),
         );
       }
@@ -144,19 +183,21 @@ const loadData = (
         }
         let _data = data;
         let isStale = false;
-        if (!this.avoidStaleData && _data.loading && this.state.staleData.payload) {
+        if (
+          !this.avoidStaleData && _data.loading && this.state.staleData.payload
+        ) {
           _data = this.state.staleData;
           isStale = true;
         }
         if (!_data.loading) {
-          this._url = _getUrl(appState);
+          this._url = getUrl(appState);
         }
         return <Wrapped {...props} data={_data} isStale={isStale}/>;
       }
     }
 
     return connect(
-      mapStateToProps(_getUrl),
+      mapStateToProps(getUrl),
       {loadingData, loadedData, unloadingData, failedLoadingData}
     )(DataWrapper);
   };

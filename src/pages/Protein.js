@@ -157,8 +157,8 @@ const pages = new Set([
   {path: 'entry', component: EntryAsync},
 ]);
 
-const Summary = (props) => {
-  const {data: {payload, loading}, location, match} = props;
+const Summary = props => {
+  const {data: {loading, payload}, location, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
     <div>
@@ -173,7 +173,14 @@ const Summary = (props) => {
     </div>
   );
 };
-Summary.propTypes = T.shape({props: propTypes});
+Summary.propTypes = {
+  data: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.any.isRequired,
+  }).isRequired,
+  location: T.object.isRequired,
+  match: T.string.isRequired,
+};
 
 const acc = (
   /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i

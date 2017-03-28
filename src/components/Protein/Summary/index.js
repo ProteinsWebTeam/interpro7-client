@@ -34,10 +34,8 @@ const SummaryProtein = (
         </div>
       </div>
     </section>
-    <Sequence>{metadata.sequence}</Sequence>
-    {
-      <GoTerms terms={metadata.go_terms} />
-    }
+    <Sequence accession={metadata.accession} sequence={metadata.sequence} />
+    <GoTerms terms={metadata.go_terms} />
   </div>
 );
 SummaryProtein.propTypes = {

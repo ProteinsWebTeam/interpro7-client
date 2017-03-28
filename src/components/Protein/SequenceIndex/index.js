@@ -3,9 +3,12 @@ import React, {Component} from 'react';
 import seqStyles from '../Sequence/style.css';
 
 class SequenceIndex extends Component {
-  state = {
-    lineLength: 100,
-    numberOfLines: 10,
+  constructor(...props) {
+    super(...props);
+    this.state = {
+      lineLength: 100,
+      numberOfLines: 10,
+    };
   }
 
   setLineLength(lineLength) {

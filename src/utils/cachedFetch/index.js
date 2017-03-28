@@ -22,15 +22,19 @@ export const cachedFetch = (url/*: string */, options/*: Object */ = {}) => {
   });
 };
 
-export const cachedFetchJSON = async (
-  url/*: string */, options/*: Object */
-) => {
-  const r = await cachedFetch(url, options);
-  return {
-    response: await r.json(),
-    status: r.status,
-    ok: r.ok,
+const commonCachedFetch = (responseType/*: 'json' | 'text' */ = 'json') =>
+  async (url/*: string */, options/*: Object */) => {
+    const response = await cachedFetch(url, options);
+    let payloadP;
+    if (responseType === 'text') {
+      payloadP = response.text();
+    } else {
+      payloadP = response.json();
+    }
+    return {payload: await payloadP, status: response.status, ok: response.ok};
   };
-};
+
+export const cachedFetchText = commonCachedFetch('text');
+export const cachedFetchJSON = commonCachedFetch('json');
 
 export default cachedFetch;

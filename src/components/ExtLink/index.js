@@ -27,8 +27,8 @@ BaseLink.propTypes = {
 };
 
 const patternLinkWrapper = pattern => {
-  const Wrapped = ({id, target, children}) => (
-    <BaseLink id={id} target={target || '_blank'} pattern={pattern}>
+  const Wrapped = ({id, target, children, ...props}) => (
+    <BaseLink id={id} target={target || '_blank'} pattern={pattern} {...props}>
       {children || id}
     </BaseLink>
   );
@@ -37,11 +37,12 @@ const patternLinkWrapper = pattern => {
   return Wrapped;
 };
 
-export const TaxLink = ({id, target, children}) => (
+export const TaxLink = ({id, target, children, ...props}) => (
   <BaseLink
     id={id}
     target={target || '_blank'}
     pattern="https://www.ebi.ac.uk/ena/data/view/Taxon:{id}"
+    {...props}
   >
     {children || `TaxID ${id}`}
   </BaseLink>
@@ -51,11 +52,12 @@ TaxLink.propTypes = {
   id: T.number.isRequired,
 };
 
-export const PMCLink = ({id, target, children}) => (
+export const PMCLink = ({id, target, children, ...props}) => (
   <BaseLink
     id={id}
     target={target || '_blank'}
     pattern="https://europepmc.org/abstract/MED/{id}"
+    {...props}
   >
     {children || `PUB${id}`}
   </BaseLink>
@@ -67,7 +69,7 @@ PMCLink.propTypes = {
 
 export const DOILink = patternLinkWrapper('{id}');
 
-export const GoLink = ({id, target, className, children}) => {
+export const GoLink = ({id, target, className, children, ...props}) => {
   const pattern = (
     'http://www.ebi.ac.uk/ols/beta/ontologies/go/terms?iri=' +
     'http://purl.obolibrary.org/obo/{id}'
@@ -78,6 +80,7 @@ export const GoLink = ({id, target, className, children}) => {
       target={target || '_blank'}
       pattern={pattern}
       {...(className ? {className} : {})}
+      {...props}
     >
       {children || id.replace('_', ':')}
     </BaseLink>
@@ -97,10 +100,10 @@ export const UniProtLink = patternLinkWrapper(
   'http://www.uniprot.org/uniprot/{id}'
 );
 
-const ExtLink = ({id, children}) => {
+const ExtLink = ({id, children, ...props}) => {
   switch (true) {
     case id.startsWith('PUB'):
-      return <PMCLink id={id.slice(3)}>{children}</PMCLink>;
+      return <PMCLink id={id.slice(3)} {...props}>{children}</PMCLink>;
     default:
       throw Error('Not a supported reference link');
   }
