@@ -94,23 +94,16 @@ GoTermsByCategoryWithData.propTypes = {
   ids: T.array,
 };
 
-const GoTerms = ({terms}/*: {terms: {[key: string]: Array<any>}} */) => {
-  let ids = [];
-  // TODO: remove when API is updated
-  if (terms && terms.biological_process) {
-    ids = terms.biological_process.map(go => go.id);
-  }
-  return (
-    <section id="go-terms">
-      <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
-          <h4>Go terms</h4>
-        </div>
+const GoTerms = ({terms}/*: {terms: Array<string>} */) => (
+  <section id="go-terms">
+    <div className={f('row')}>
+      <div className={f('large-12', 'columns')}>
+        <h4>Go terms</h4>
       </div>
-      <GoTermsByCategoryWithData ids={ids} />
-    </section>
-  );
-};
+    </div>
+    <GoTermsByCategoryWithData ids={terms || []} />
+  </section>
+);
 GoTerms.propTypes = {
   terms: T.object.isRequired,
 };
