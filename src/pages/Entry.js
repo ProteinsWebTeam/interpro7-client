@@ -4,6 +4,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
+import loadWebComponent from 'utils/loadWebComponent';
 
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
@@ -70,6 +71,9 @@ const List = ({data, isStale, location: {search, pathname}}) => {
       results: [],
     };
   }
+  loadWebComponent(
+    () => import('interpro-components').then(m => m.InterproType),
+  ).as('interpro-type');
   return (
     <Table
       dataTable={_payload.results}

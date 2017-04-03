@@ -24,7 +24,7 @@
     "deploy:staging": "npm run deploy",
     "deploy:production": "NODE_ENV=production npm run deploy",
     "start": "npm-run-all -rp dev:test dev",
-    "stats": "webpack --config webpack/config.js --profile --json > .stats/stats.json"
+    "stats": "NODE_ENV=production webpack --config webpack/config.js --profile --json > .stats/stats.json"
   },
   "contributors": [
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)"
@@ -90,10 +90,10 @@
     "react-dom": "^15.4.1",
     "react-redux": "^5.0.3",
     "redux": "^3.6.0",
-    "skatejs-web-components": "^5.1.0",
     "timeago.js": "^3.0.0",
     "timing-functions": "^0.1.2",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "webcomponents.js": "github:webcomponents/webcomponentsjs#v1.0.0-rc.7"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
@@ -140,6 +140,8 @@
     "sinon": "^2.1.0",
     "sinon-chai": "^2.9.0",
     "style-loader": "^0.16.0",
+    "uglifyjs-webpack-plugin": "^0.4.0",
+    "uglify-js": "mishoo/UglifyJS2#harmony",
     "url-loader": "^0.5.8",
     "webpack": "^2.3.1",
     "webpack-dashboard": "^0.3.0",
