@@ -13,7 +13,7 @@ export const webComponents = () => {
         return;
       }
       try {
-        await import('skatejs-web-components/src');
+        await import('webcomponents.js/webcomponents-sd-ce');
         res(false);
       } catch (err) {
         rej(err);

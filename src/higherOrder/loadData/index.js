@@ -1,36 +1,14 @@
 import React, {Component, PropTypes as T} from 'react';
 import {connect} from 'react-redux';
-import lodashGet from 'lodash-es/get';
 
-import {cachedFetchJSON, cachedFetchText, cachedFetch} from 'utils/cachedFetch';
 import cancelable from 'utils/cancelable';
 import {
   loadingData, loadedData, unloadingData, failedLoadingData,
 } from 'actions/creators';
 
-const _SearchParamsToURL = search => search ?
-  Object.entries(search)
-    .reduce((acc, val) => acc + (val[1] ? `&${val[0]}=${val[1]}` : ''), '')
-    .slice(1) : '';
-
-// Assumes that the default would be to get data from the API, according to
-// current pathname
-const defaultGetUrl = key => ({
-    settings: {[key]: {protocol, hostname, port, root}, pagination},
-    location: {pathname, search},
-  }) => {
-  const s = search || {};
-  s.page_size = s.page_size || pagination.pageSize;
-  return `${protocol}//${hostname}:${port}${root}${pathname}?${
-    _SearchParamsToURL(s)
-  }`;
-};
-
-const getFetch = ({method, responseType}) => {
-  if (responseType === 'text') return cachedFetchText;
-  if (method !== 'HEAD') return cachedFetchJSON;
-  return (...args) => cachedFetch(...args).then(r => r.ok);
-};
+import * as defaults from './defaults';
+import extractParams from './extractParams';
+import getFetch from './getFetch';
 
 const mapStateToProps = getUrl => state => ({
   appState: state,
@@ -38,47 +16,14 @@ const mapStateToProps = getUrl => state => ({
 });
 const getBaseURL = url => url.slice(0, url.indexOf('?'));
 
-// getUrl
-const defaultGetUrlForApi = defaultGetUrl('api');
-const extractGetUrl = (getUrl = defaultGetUrlForApi) => {
-  if (typeof getUrl === 'string') {
-    return defaultGetUrl(getUrl);
-  }
-  return getUrl;
-};
-// selector
-const defaultSelector = payload => payload;
-const extractSelector = (selector = defaultSelector) => {
-  if (typeof selector === 'string') {
-    return payload => lodashGet(payload, selector);
-  }
-  return selector;
-};
-//
-const extractParams = params => {
-  const extracted = {
-    getUrl: defaultGetUrlForApi,
-    fetchOptions: {},
-    selector: defaultSelector,
-  };
-  if (!params) return extracted;
-  if (typeof params !== 'object') {
-    extracted.getUrl = (
-      typeof params === 'string' ? defaultGetUrl(params) : params
-    );
-    return extracted;
-  }
-  extracted.getUrl = extractGetUrl(params.getUrl);
-  extracted.fetchOptions = params.fetchOptions || {};
-  extracted.selector = extractSelector(params.selector);
-  return extracted;
-};
 const loadData = params => {
-  const {getUrl, fetchOptions, selector} = extractParams(params);
+  const {getUrl, fetchOptions, selector, propNamespace} = extractParams(params);
   const fetchFun = getFetch(fetchOptions);
 
   return (Wrapped/*: ReactClass<*> */) => {
     class DataWrapper extends Component {
+      static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
+
       static propTypes = {
         appState: T.object.isRequired,
         loadingData: T.func.isRequired,
@@ -94,16 +39,15 @@ const loadData = params => {
 
       constructor(props) {
         super(props);
-        this.state = {
-          staleData: props.data,
-        };
+        this.state = {staleData: props.data};
         this._url = '';
-        this.avoidStaleData = true;
+        this._avoidStaleData = true;
       }
 
       componentWillMount() {
         const {
-          loadingData, loadedData, failedLoadingData, appState, data,
+          appState, data,
+          loadingData, loadedData, failedLoadingData, unloadingData,
         } = this.props;
         // (stored in `key` because `this._url` might change)
         const key = this._url = getUrl(appState);
@@ -118,7 +62,9 @@ const loadData = params => {
         // Eventually changes the state according to response
         this._cancelableFetch.promise.then(
           response => loadedData(key, response, selector),
-          error => failedLoadingData(key, error)
+          error => (
+            [error.canceled ? unloadingData : failedLoadingData](key, error)
+          ),
         );
       }
 
@@ -135,7 +81,7 @@ const loadData = params => {
         appState: nextAppState,
         loadingData, loadedData, failedLoadingData, unloadingData, data,
       }) {
-        this.avoidStaleData = (
+        this._avoidStaleData = (
           getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState))
         );
 
@@ -156,7 +102,9 @@ const loadData = params => {
         this._cancelableFetch = cancelable(fetchFun(key, fetchOptions));
         this._cancelableFetch.promise.then(
           payload => loadedData(key, payload, selector),
-          error => failedLoadingData(key, error),
+          error => (
+            [error.canceled ? unloadingData : failedLoadingData](key, error)
+          ),
         );
       }
 
@@ -174,25 +122,22 @@ const loadData = params => {
           // Remove from props
           appState, loadingData, loadedData, failedLoadingData,
           // Keep, to pass on
-          data,
-          ...props
+          data: dataFromProps, ...rest
         } = this.props;
-
-        if (typeof data.loading === 'undefined') {
-          data.loading = true;
-        }
-        let _data = data;
-        let isStale = false;
-        if (
-          !this.avoidStaleData && _data.loading && this.state.staleData.payload
-        ) {
-          _data = this.state.staleData;
-          isStale = true;
-        }
-        if (!_data.loading) {
+        const data = {...dataFromProps};
+        if (typeof data.loading === 'undefined') data.loading = true;
+        const useStaleData = (
+          !this._avoidStaleData && data.loading && this.state.staleData.payload
+        );
+        if (!data.loading) {
           this._url = getUrl(appState);
         }
-        return <Wrapped {...props} data={_data} isStale={isStale}/>;
+        const passedProps = {
+          ...rest,
+          [`data${propNamespace}`]: useStaleData ? this.state.staleData : data,
+          [`isStale${propNamespace}`]: useStaleData,
+        };
+        return <Wrapped {...passedProps} />;
       }
     }
 
@@ -204,4 +149,4 @@ const loadData = params => {
 };
 
 export default loadData;
-export const searchParamsToURL = _SearchParamsToURL;
+export const searchParamsToURL = defaults._SearchParamsToURL;

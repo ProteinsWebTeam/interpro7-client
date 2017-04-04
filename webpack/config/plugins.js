@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 // Dashboard
 const Dashboard = require('webpack-dashboard');
 const DashboardPlugin = require('webpack-dashboard/plugin');
@@ -40,21 +41,13 @@ const test = [...common];
 common.push(
   // vendor chunk will go in this file
   new webpack.optimize.CommonsChunkPlugin({
-    names: ['vendor'],
-    filename: '[name].[hash:3].js',
+    names: ['vendor', 'polyfills', 'manifest'],
+    filename: PROD ? '[name].[hash:3].js' : '[name].js',
     minChunks: Infinity,
   })
 );
 
 const dev = common.concat([
-  // Generates lots of favicons from source image
-  // and injects their path into the head of index.html
-  new FaviconsWebpackPlugin({
-    // source
-    logo: path.join('.', 'images', 'logo', 'logo_75x75.png'),
-    // output file prefix (type, size and ext will be added automatically)
-    prefix: 'icon.[hash:3].',
-  }),
   new HtmlWebpackPlugin({
     title: pkg.name,
     template: path.join('.', 'src', 'index.template.html'),
@@ -68,6 +61,8 @@ if (process.env.DASHBOARD) {
 }
 
 const production = common.concat([
+  // Generates lots of favicons from source image
+  // and injects their path into the head of index.html
   new FaviconsWebpackPlugin({
     logo: path.join('.', 'images', 'logo', 'logo_75x75.png'),
     prefix: 'icon.[hash:3].',
@@ -83,7 +78,7 @@ const production = common.concat([
       conservativeCollapse: true,
     },
   }),
-  new webpack.optimize.UglifyJsPlugin(),
+  new UglifyJSPlugin(),
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify('production'),
