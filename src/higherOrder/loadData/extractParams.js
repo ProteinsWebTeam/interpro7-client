@@ -23,8 +23,9 @@ const extractSelector = (selector/*: ?Selector */) => {
   return selector;
 };
 /* ::
+  type GetUrl = Object => string;
   type Params = {
-    getUrl: ?function,
+    getUrl: ?GetUrl,
     fetchOptions: ?Object,
     selector: ?Selector,
     propNamespace: ?string,

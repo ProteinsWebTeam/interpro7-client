@@ -22,6 +22,8 @@ const loadData = params => {
 
   return (Wrapped/*: ReactClass<*> */) => {
     class DataWrapper extends Component {
+      static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
+
       static propTypes = {
         appState: T.object.isRequired,
         loadingData: T.func.isRequired,
@@ -37,16 +39,15 @@ const loadData = params => {
 
       constructor(props) {
         super(props);
-        this.state = {
-          staleData: props.data,
-        };
+        this.state = {staleData: props.data};
         this._url = '';
-        this.avoidStaleData = true;
+        this._avoidStaleData = true;
       }
 
       componentWillMount() {
         const {
-          loadingData, loadedData, failedLoadingData, appState, data,
+          appState, data,
+          loadingData, loadedData, failedLoadingData, unloadingData,
         } = this.props;
         // (stored in `key` because `this._url` might change)
         const key = this._url = getUrl(appState);
@@ -61,7 +62,9 @@ const loadData = params => {
         // Eventually changes the state according to response
         this._cancelableFetch.promise.then(
           response => loadedData(key, response, selector),
-          error => failedLoadingData(key, error)
+          error => (
+            [error.canceled ? unloadingData : failedLoadingData](key, error)
+          ),
         );
       }
 
@@ -78,7 +81,7 @@ const loadData = params => {
         appState: nextAppState,
         loadingData, loadedData, failedLoadingData, unloadingData, data,
       }) {
-        this.avoidStaleData = (
+        this._avoidStaleData = (
           getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState))
         );
 
@@ -99,7 +102,9 @@ const loadData = params => {
         this._cancelableFetch = cancelable(fetchFun(key, fetchOptions));
         this._cancelableFetch.promise.then(
           payload => loadedData(key, payload, selector),
-          error => failedLoadingData(key, error),
+          error => (
+            [error.canceled ? unloadingData : failedLoadingData](key, error)
+          ),
         );
       }
 
@@ -122,7 +127,7 @@ const loadData = params => {
         const data = {...dataFromProps};
         if (typeof data.loading === 'undefined') data.loading = true;
         const useStaleData = (
-          !this.avoidStaleData && data.loading && this.state.staleData.payload
+          !this._avoidStaleData && data.loading && this.state.staleData.payload
         );
         if (!data.loading) {
           this._url = getUrl(appState);
