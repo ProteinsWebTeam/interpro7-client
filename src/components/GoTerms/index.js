@@ -101,7 +101,7 @@ const GoTerms = ({terms}/*: {terms: Array<string>} */) => (
         <h4>Go terms</h4>
       </div>
     </div>
-    {/*<GoTermsByCategoryWithData ids={terms || []} />*/}
+     <GoTermsByCategoryWithData ids={terms || []} />
   </section>
 );
 GoTerms.propTypes = {

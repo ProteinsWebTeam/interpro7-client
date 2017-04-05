@@ -146,9 +146,19 @@ const pages = new Set([
   {path: 'protein', component: ProteinAsync},
 ]);
 
-const SummaryComponent = ({data: {payload}}) => <SummaryAsync data={payload} location={location} />;
+const SummaryComponent =
+  ({data: {payload}, location}) => <SummaryAsync data={payload} location={location} />;
+SummaryComponent.propTypes = {
+  data: T.shape({
+    payload: T.object,
+  }).isRequired,
+  location: T.shape({
+    pathname: T.string.isRequired,
+  }).isRequired,
+};
+
 const Summary = (props) => {
-  const {data: {payload, loading}, location, match} = props;
+  const {data: {loading}, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
     <div>
