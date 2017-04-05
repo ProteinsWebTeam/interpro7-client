@@ -146,6 +146,7 @@ const pages = new Set([
   {path: 'protein', component: ProteinAsync},
 ]);
 
+const SummaryComponent = ({data: {payload}}) => <SummaryAsync data={payload} location={location} />;
 const Summary = (props) => {
   const {data: {payload, loading}, location, match} = props;
   if (loading) return <div>Loading...</div>;
@@ -155,7 +156,7 @@ const Summary = (props) => {
         {...props}
         main="entry"
         base={match}
-        indexRoute={() => <SummaryAsync data={payload} location={location} />}
+        indexRoute={SummaryComponent}
         childRoutes={pages}
       />
 
