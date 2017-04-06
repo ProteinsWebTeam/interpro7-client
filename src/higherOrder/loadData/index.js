@@ -17,7 +17,7 @@ const mapStateToProps = getUrl => state => ({
 const getBaseURL = url => url.slice(0, url.indexOf('?'));
 
 const loadData = params => {
-  const {getUrl, fetchOptions, selector, propNamespace} = extractParams(params);
+  const {getUrl, fetchOptions, propNamespace} = extractParams(params);
   const fetchFun = getFetch(fetchOptions);
 
   return (Wrapped/*: ReactClass<*> */) => {
@@ -56,12 +56,18 @@ const loadData = params => {
         if (data.loading || data.payload) return;
         // Key is the URL to fetch
         // Changes redux state
-        loadingData(key);
+        try {
+          loadingData(key);
+        } catch (err) {
+          console.warn(err);
+          this._cancelableFetch = cancelable(Promise.resolve());
+          return;
+        }
         // Starts the fetch
         this._cancelableFetch = cancelable(fetchFun(key, fetchOptions));
         // Eventually changes the state according to response
         this._cancelableFetch.promise.then(
-          response => loadedData(key, response, selector),
+          response => loadedData(key, response),
           error => (
             [error.canceled ? unloadingData : failedLoadingData](key, error)
           ),
@@ -77,6 +83,7 @@ const loadData = params => {
         }
       }
 
+      // eslint-disable-next-line max-statements
       componentWillUpdate({
         appState: nextAppState,
         loadingData, loadedData, failedLoadingData, unloadingData, data,
@@ -98,10 +105,16 @@ const loadData = params => {
         // (stored in `key` because `this._url` might change)
 
         const key = this._url = getUrl(nextAppState);
-        loadingData(key);
+        try {
+          loadingData(key);
+        } catch (err) {
+          console.warn(err);
+          this._cancelableFetch = cancelable(Promise.resolve());
+          return;
+        }
         this._cancelableFetch = cancelable(fetchFun(key, fetchOptions));
         this._cancelableFetch.promise.then(
-          payload => loadedData(key, payload, selector),
+          payload => loadedData(key, payload),
           error => (
             [error.canceled ? unloadingData : failedLoadingData](key, error)
           ),

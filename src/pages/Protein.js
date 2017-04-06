@@ -31,20 +31,27 @@ const propTypes = {
   match: T.string,
 };
 
-const Overview = ({data: {payload, loading}, location: {pathname}}) => {
-  if (loading) return <div>Loading...</div>;
-  return (
-    <ul className={styles.card}>
-      {Object.entries(payload.proteins || {}).map(([name, count]) => (
-          <li key={name}>
-            <Link to={`${removeLastSlash(pathname)}/${name}`}>
-              {name} ({count})
-            </Link>
-          </li>
-        ))}
-    </ul>
-  );
+const defaultPayload = {
+  proteins: {
+    swissprot: null,
+    trembl: null,
+  },
 };
+
+const Overview = ({
+  data: {payload = defaultPayload},
+  location: {pathname},
+}) => (
+  <ul className={styles.card}>
+    {Object.entries(payload.proteins || {}).map(([name, count]) => (
+        <li key={name}>
+          <Link to={`${removeLastSlash(pathname)}/${name}`}>
+            {name}{Number.isFinite(count) ? ` (${count})` : ''}
+          </Link>
+        </li>
+      ))}
+  </ul>
+);
 Overview.propTypes = propTypes;
 
 const List = ({

@@ -1,6 +1,8 @@
 /* eslint react/no-multi-comp: ["off"] */
 import React, {PropTypes as T, Component} from 'react';
 
+import cancelable from 'utils/cancelable';
+
 const AsyncComponent = class extends Component {
   static displayName = 'AsyncComponent';
 
@@ -14,11 +16,18 @@ const AsyncComponent = class extends Component {
     this.state = {};
   }
 
-  async componentWillMount() {
-    try {
-      const module = await this.props.getComponent();
-      this.setState({Component: module.default});
-    } catch (err) {/*  */}
+  componentDidMount() {
+    if (this.state.Component) return;
+    this._moduleP = cancelable(this.props.getComponent());
+    this._moduleP.promise.then(
+      module => this.setState({Component: module.default || module})
+    ).catch(error => {
+      if (!error.canceled) console.error(error);
+    });
+  }
+
+  componentWillUnmount() {
+    this._moduleP.cancel();
   }
 
   render() {
@@ -45,14 +54,18 @@ export const createAsyncComponent = (importFn/* : function */, placeHolder) => (
       this.state = {};
     }
 
-    async componentWillMount() {
+    componentDidMount() {
       if (this.state.Component) return;
-      try {
-        const module = await importFn();
-        this.setState({Component: module.default});
-      } catch (err) {
-        console.error(err);
-      }
+      this._moduleP = cancelable(importFn());
+      this._moduleP.promise.then(
+        module => this.setState({Component: module.default || module})
+      ).catch(error => {
+        if (!error.canceled) throw error;
+      });
+    }
+
+    componentWillUnmount() {
+      this._moduleP.cancel();
     }
 
     render() {
