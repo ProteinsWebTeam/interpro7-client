@@ -1,5 +1,8 @@
 // @flow
 import React, {PropTypes as T, Component} from 'react';
+import {connect} from 'react-redux';
+
+import {goToLocation} from 'actions/creators';
 
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
@@ -39,6 +42,12 @@ class SummaryEntry extends Component {
   async componentDidMount() {
     await Promise.all(webComponents);
     this._hierarchy.hierarchy = this.props.data.metadata.hierarchy;
+    this._hierarchy.addEventListener('click', e => {
+      e.preventDefault();
+      if (e.path[0].classList.contains('link')){
+        this.props.goToLocation(e.path[0].getAttribute('href'));
+      }
+    });
   }
   render() {
     const {data: {metadata}, location: {pathname}} = this.props;
@@ -58,7 +67,10 @@ class SummaryEntry extends Component {
             <div className={f('row')}>
               <div className={f('medium-8', 'large-8', 'columns')}>
                 <Title metadata={metadata} pathname={pathname}/>
-                <interpro-hierarchy accession={metadata.accession} hideafter="2"
+                <interpro-hierarchy
+                  accession={metadata.accession}
+                  hideafter="2"
+                  hrefroot="/entry/interpro"
                   ref={(node) => this._hierarchy = node}
                 />
                 <br/>
@@ -106,6 +118,7 @@ class SummaryEntry extends Component {
 }
 
 SummaryEntry.propTypes = {
+  goToLocation: T.func.isRequired,
   data: T.shape({
     metadata: T.object.isRequired,
   }),
@@ -114,4 +127,4 @@ SummaryEntry.propTypes = {
   }).isRequired,
 };
 
-export default SummaryEntry;
+export default connect(null, {goToLocation})(SummaryEntry);
