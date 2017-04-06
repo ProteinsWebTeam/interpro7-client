@@ -41,10 +41,11 @@ class SummaryEntry extends Component {
    */
   async componentDidMount() {
     await Promise.all(webComponents);
-    this._hierarchy.hierarchy = this.props.data.metadata.hierarchy;
+    const h = this.props.data.metadata.hierarchy;
+    if (h) this._hierarchy.hierarchy = h;
     this._hierarchy.addEventListener('click', e => {
-      e.preventDefault();
       if (e.path[0].classList.contains('link')){
+        e.preventDefault();
         this.props.goToLocation(e.path[0].getAttribute('href'));
       }
     });
