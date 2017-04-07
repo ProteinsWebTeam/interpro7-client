@@ -46,41 +46,41 @@ const StructureOnProtein = (
                 structure,
               } = match;
               return coordinates.map(
-                (str_match, i) => (
+                (strMatch, i) => (
                   <g
                     key={`${structure.accession}-${i}`}
                     transform={
-                      `translate(${str_match[0]} ${offset - baseSize})`
+                      `translate(${strMatch[0]} ${offset - baseSize})`
                     }
                   >
                     <title>{structure.accession}</title>
                     <rect
                       x="0" y="0" rx={baseSize * 2 / niceRatio}
-                      width={str_match[1] - str_match[0]}
+                      width={strMatch[1] - strMatch[0]}
                       fill={colorHash.hex(structure.accession)}
                       height={baseSize * 2}
                       className={style.secondary}
                     />
                     <text y="-0.2em">
                       <tspan textAnchor="middle">
-                        {str_match[0]}
+                        {strMatch[0]}
                       </tspan>
                     </text>
                     <text
                       y="-0.2em"
                       transform={
                         `translate(${
-                        str_match[1] - str_match[0]
+                        strMatch[1] - strMatch[0]
                           } 0)`
                       }
                     >
                       <tspan textAnchor="middle">
-                        {str_match[1]}
+                        {strMatch[1]}
                       </tspan>
                     </text>
                   </g>
                 )
-              )
+              );
             })
           }
         </g>

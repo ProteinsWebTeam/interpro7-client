@@ -42,8 +42,8 @@ const EntriesOnProtein = (
           {
             matches.map(
               ({[main]: {entry_protein_coordinates: {coordinates}}, entry}) =>
-                coordinates.map((entry_match,i)=>
-                  entry_match.map((region,j) => (
+                coordinates.map((entryMatch, i) =>
+                  entryMatch.map((region, j) => (
                     <g
                       key={`${entry.accession}-${i}-${j}`}
                       transform={
