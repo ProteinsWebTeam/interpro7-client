@@ -99,11 +99,10 @@ export const loadingData = (key/*: string */) => ({
 export const loadedData = (
   key/*: string */,
   response/*: Object */,
-  selector/*: any => any */,
 ) => ({
   type: types.LOADED_DATA,
   key,
-  payload: selector(response.payload),
+  payload: response.payload,
   status: response.status,
 });
 

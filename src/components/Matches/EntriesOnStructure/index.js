@@ -38,39 +38,44 @@ const EntriesOnStructure = (
           {
             matches.map(({[main]: {
               entry_protein_coordinates: {coordinates: coords_ep},
-            }, entry}) => (
-                <g
-                  key={entry.accession}
-                  transform={
-                    `translate(${coords_ep[0][0][0]} ${offset - baseSize / 2})`
-                  }
-                >
-                  <title>{entry.accession}</title>
-                  <rect
-                    x="0" y="0" rx={baseSize / niceRatio}
-                    width={coords_ep[0][0][1] - coords_ep[0][0][0]}
-                    height={baseSize}
-                    fill={colorHash.hex(entry.accession)}
-                    className={style.secondary}
-                  />
-                  <text y="-0.2em">
-                    <tspan textAnchor="middle">
-                      {coords_ep[0][0][0]}
-                    </tspan>
-                  </text>
-                  <text
-                    y="-0.2em"
-                    transform={
-                      `translate(${
-                      coords_ep[0][0][1] - coords_ep[0][0][0]
-                        } 0)`
-                    }
-                  >
-                    <tspan textAnchor="middle">
-                      {coords_ep[0][0][1]}
-                    </tspan>
-                  </text>
-                </g>
+            }, entry}) =>
+              coords_ep.map(
+                (entry_match, i) => entry_match.map(
+                  (region_match, j) => (
+                    <g
+                      key={`${entry.accession}-${i}-${j}`}
+                      transform={
+                        `translate(${region_match[0]} ${offset - baseSize / 2})`
+                      }
+                    >
+                      <title>{entry.accession}</title>
+                      <rect
+                        x="0" y="0" rx={baseSize / niceRatio}
+                        width={region_match[1] - region_match[0]}
+                        height={baseSize}
+                        fill={colorHash.hex(entry.accession)}
+                        className={style.secondary}
+                      />
+                      <text y="-0.2em">
+                        <tspan textAnchor="middle">
+                          {region_match[0]}
+                        </tspan>
+                      </text>
+                      <text
+                        y="-0.2em"
+                        transform={
+                          `translate(${
+                          region_match[1] - region_match[0]
+                            } 0)`
+                        }
+                      >
+                        <tspan textAnchor="middle">
+                          {region_match[1]}
+                        </tspan>
+                      </text>
+                    </g>
+                  )
+                )
               )
             )
           }
@@ -79,39 +84,42 @@ const EntriesOnStructure = (
           {
             matches.map(({[main]: {
                            protein_structure_coordinates: {coordinates: coords_sp},
-                         }}) => (
-                <g
-                  key={structure.accession}
-                  transform={
-                    `translate(${coords_sp[0][0][0]} ${offset - baseSize})`
-                  }
-                >
-                  <title>{structure.accession}</title>
-                  <rect
-                    x="0" y="0" rx={baseSize * 2 / niceRatio}
-                    width={coords_sp[0][0][1] - coords_sp[0][0][0]}
-                    height={baseSize * 2}
-                    fill={colorHash.hex(structure.accession)}
-                    className={style.secondary}
-                  />
-                  <text y="-0.2em">
-                    <tspan textAnchor="middle">
-                      {coords_sp[0][0][0]}
-                    </tspan>
-                  </text>
-                  <text
-                    y="-0.2em"
+                         }}) =>
+              coords_sp.map(
+                (str_match, i) => (
+                  <g
+                    key={`${structure.accession}-${i}`}
                     transform={
-                      `translate(${
-                      coords_sp[0][0][1] - coords_sp[0][0][0]
-                        } 0)`
+                      `translate(${str_match[0]} ${offset - baseSize})`
                     }
                   >
-                    <tspan textAnchor="middle">
-                      {coords_sp[0][0][1]}
-                    </tspan>
-                  </text>
-                </g>
+                    <title>{structure.accession}</title>
+                    <rect
+                      x="0" y="0" rx={baseSize * 2 / niceRatio}
+                      width={str_match[1] - str_match[0]}
+                      height={baseSize * 2}
+                      fill={colorHash.hex(structure.accession)}
+                      className={style.secondary}
+                    />
+                    <text y="-0.2em">
+                      <tspan textAnchor="middle">
+                        {str_match[0]}
+                      </tspan>
+                    </text>
+                    <text
+                      y="-0.2em"
+                      transform={
+                        `translate(${
+                        str_match[1] - str_match[0]
+                          } 0)`
+                      }
+                    >
+                      <tspan textAnchor="middle">
+                        {str_match[1]}
+                      </tspan>
+                    </text>
+                  </g>
+                )
               )
             )
           }

@@ -40,40 +40,46 @@ const EntriesOnProtein = (
         </g>
         <g>
           {
-            matches.map(({[main]: {entry_protein_coordinates: {coordinates}}, entry}) => (
-              <g
-                key={entry.accession}
-                transform={
-                  `translate(${coordinates[0][0][0]} ${offset - baseSize})`
-                }
-              >
-                  <title>{entry.accession}</title>
-                  <rect
-                    x="0" y="0" rx={baseSize * 2 / niceRatio}
-                    width={coordinates[0][0][1] - coordinates[0][0][0]}
-                    fill={colorHash.hex(entry.accession)}
-                    height={baseSize * 2}
-                    className={style.secondary}
-                  />
-                <text y="-0.2em">
-                  <tspan textAnchor="middle">
-                    {coordinates[0][0][0]}
-                  </tspan>
-                </text>
-                <text
-                  y="-0.2em"
-                  transform={
-                    `translate(${
-                      coordinates[0][0][1] - coordinates[0][0][0]
-                    } 0)`
-                  }
-                >
-                  <tspan textAnchor="middle">
-                    {coordinates[0][0][1]}
-                  </tspan>
-                </text>
-              </g>
-            ))
+            matches.map(
+              ({[main]: {entry_protein_coordinates: {coordinates}}, entry}) =>
+                coordinates.map((entry_match,i)=>
+                  entry_match.map((region,j) => (
+                    <g
+                      key={`${entry.accession}-${i}-${j}`}
+                      transform={
+                        `translate(${region[0]} ${offset - baseSize})`
+                      }
+                    >
+                        <title>{entry.accession}</title>
+                        <rect
+                          x="0" y="0" rx={baseSize * 2 / niceRatio}
+                          width={region[1] - region[0]}
+                          fill={colorHash.hex(entry.accession)}
+                          height={baseSize * 2}
+                          className={style.secondary}
+                        />
+                      <text y="-0.2em">
+                        <tspan textAnchor="middle">
+                          {region[0]}
+                        </tspan>
+                      </text>
+                      <text
+                        y="-0.2em"
+                        transform={
+                          `translate(${
+                            region[1] - region[0]
+                          } 0)`
+                        }
+                      >
+                        <tspan textAnchor="middle">
+                          {region[1]}
+                        </tspan>
+                      </text>
+                    </g>
+                  )
+                )
+              )
+            )
           }
         </g>
       </svg>
@@ -82,7 +88,6 @@ const EntriesOnProtein = (
 };
 EntriesOnProtein.propTypes = {
   matches: T.arrayOf(T.shape({
-    coordinates: T.arrayOf(T.object).isRequired,
     protein: T.object.isRequired,
     entry: T.object.isRequired,
   })).isRequired,

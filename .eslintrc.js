@@ -101,7 +101,7 @@ const rules = {
   // Specify the maximum number of statement allowed in a function
   'max-statements': [1, 12],
   // Require a capital letter for constructors
-  'new-cap': 1,
+  'new-cap': 0,
   // Disallow omission of parens when invoking constructor with no arguments
   'new-parens': 1,
   // Disallow the use of alert, confirm, and prompt

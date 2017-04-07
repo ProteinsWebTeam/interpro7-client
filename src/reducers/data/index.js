@@ -13,6 +13,7 @@ export default (
 ) => {
   switch (action.type) {
     case LOADING_DATA:
+      if (state[action.key]) throw new Error('Already loading');
       return {...state, [action.key]: {loading: true}};
     case LOADED_DATA:
       return {

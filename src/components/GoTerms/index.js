@@ -15,39 +15,54 @@ const defaultPayload = {
   molecular_function: [],
   cellular_component: [],
 };
+
+const EBISearchDataSelector = payload => payload.entries.reduce(
+  (terms, go) => {
+    terms[go.fields.namespace].push({
+      id: go.id,
+      name: go.fields.name,
+    });
+    return terms;
+  },
+  {...defaultPayload},
+);
+
 export const GoTermsByCategory = (
   {data: {loading, payload = defaultPayload}},
-) => (
-  <div className={f('row')}>
-    {Object.entries(payload)
-      .map(([key, values]) => (
-        <div key={key} className={f('medium-6', 'large-4', 'columns')}>
-          <h5 style={{textTransform: 'capitalize'}}>
-            {key.replace('_', ' ')}
-          </h5>
-          <ul className={f('no-bullet')}>
-            { values && values.length ?
-              values.map(({id, name}) => (
-                <li key={id}>
-                  <GoLink
-                    id={id}
-                    className={f('label', 'go', key)}
-                    title={id}
-                  >{name || id}</GoLink>
+) => {
+  const data = EBISearchDataSelector(payload);
+  return (
+    <div className={f('row')}>
+      {Object.entries(data)
+        .map(([key, values]) => (
+          <div key={key} className={f('medium-6', 'large-4', 'columns')}>
+            <h5 style={{textTransform: 'capitalize'}}>
+              {key.replace('_', ' ')}
+            </h5>
+            <ul className={f('no-bullet')}>
+              { values && values.length ?
+                values.map(({id, name}) => (
+                  <li key={id}>
+                    <GoLink
+                      id={id}
+                      className={f('label', 'go', key)}
+                      title={id}
+                    >{name || id}</GoLink>
+                  </li>
+                )) :
+                <li>
+                  <span className={f('secondary', 'label')}>
+                    {loading ? 'Loading...' : 'None'}
+                  </span>
                 </li>
-              )) :
-              <li>
-                <span className={f('secondary', 'label')}>
-                  {loading ? 'Loading...' : 'None'}
-                </span>
-              </li>
-            }
-          </ul>
-        </div>
-      ))
-    }
-  </div>
-);
+              }
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  );
+};
 GoTermsByCategory.propTypes = {
   data: T.shape({
     loading: T.bool.isRequired,
@@ -65,16 +80,6 @@ const urlFromState = ids => (
   `${protocol}//${hostname}:${port}${root}/../go/entry/${
     ids.join(',')
   }?fields=name,namespace&format=json`
-);
-const EBISearchDataSelector = payload => payload.entries.reduce(
-  (terms, go) => {
-    terms[go.fields.namespace].push({
-      id: go.id,
-      name: go.fields.name,
-    });
-    return terms;
-  },
-  {...defaultPayload},
 );
 
 const GoTermsByCategoryWithData = ({ids}) => {
@@ -94,18 +99,18 @@ GoTermsByCategoryWithData.propTypes = {
   ids: T.array,
 };
 
-const GoTerms = ({terms}/*: {terms: Array<string>} */) => (
+const GoTerms = (/* {terms}/*: {terms: Array<string>} */) => (
   <section id="go-terms">
     <div className={f('row')}>
       <div className={f('large-12', 'columns')}>
         <h4>Go terms</h4>
       </div>
     </div>
-     <GoTermsByCategoryWithData ids={terms || []} />
+    {/* <GoTermsByCategoryWithData ids={terms || []} /> */}
   </section>
 );
 GoTerms.propTypes = {
-  terms: T.object.isRequired,
+  // terms: T.object.isRequired,
 };
 
 export default GoTerms;

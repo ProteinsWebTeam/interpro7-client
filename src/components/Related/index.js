@@ -153,11 +153,11 @@ const RelatedAdvancedQuery = loadData(getReversedURL)(
 );
 
 const Related = ({data, secondary, ...props}) => {
+  if (data.loading) return <div>Loading...</div>;
   const {
-    loading,
-    payload: {metadata: mainData, [toPlural(secondary)]: secondaryData},
-  } = data;
-  if (loading) return <div>Loading...</div>;
+    metadata: mainData,
+    [toPlural(secondary)]: secondaryData,
+  } = data.payload;
   const RelatedComponent = (
     Array.isArray(secondaryData) ? RelatedAdvancedQuery : RelatedSimple
   );
