@@ -22,7 +22,7 @@ const AsyncComponent = class extends Component {
     this._moduleP.promise.then(
       module => this.setState({Component: module.default || module})
     ).catch(error => {
-      if (!error.canceled) console.error(error);
+      if (!error.canceled) console.log('error?');
     });
   }
 

@@ -10,6 +10,8 @@ import {toPlural} from 'utils/pages';
 
 import blockStyles from 'styles/blocks.css';
 
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
+
 const ObjectToList = ({obj, component: Component}) => (
   <ul>
     {
@@ -90,9 +92,16 @@ const primariesAndSecondaries = {
 };
 
 const RelatedAdvanced = (
-  {mainData, secondaryData, isStale, main, secondary, actualSize}
+  {mainData, secondaryData, isStale, main, secondary, actualSize, pathname}
   ) => (
     <div>
+      {
+        main === 'protein' &&
+        secondary === 'entry' &&
+        pathname.indexOf('interpro') > 0 ?
+          <ProteinEntryHierarchy entries={secondaryData} /> :
+          null
+      }
       <p>
         This {main} is related to
         {
@@ -119,6 +128,7 @@ RelatedAdvanced.propTypes = {
   isStale: T.bool.isRequired,
   main: T.string.isRequired,
   secondary: T.string.isRequired,
+  pathname: T.string.isRequired,
   actualSize: T.number,
 };
 const getReversedURL = ({
