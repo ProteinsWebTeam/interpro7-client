@@ -4,6 +4,7 @@ import React, {PropTypes as T} from 'react';
 import GoTerms from 'components/GoTerms';
 import Sequence from 'components/Protein/Sequence';
 import Length from 'components/Protein/Length';
+import Species from 'components/Protein/Species';
 import Accession from 'components/Protein/Accession';
 import Title from 'components/Title';
 import {UniProtLink} from 'components/ExtLink';
@@ -21,6 +22,7 @@ const SummaryProtein = (
           <div className={f('medium-8', 'large-8', 'columns')}>
             <Title metadata={metadata} pathname={pathname} />
             <Accession metadata={metadata} pathname={pathname} />
+            <Species metadata={metadata} pathname={pathname} />
             <Length metadata={metadata} pathname={pathname} />
           </div>
           <div className={f('medium-4', 'large-4', 'columns')}>
