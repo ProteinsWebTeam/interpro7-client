@@ -8,14 +8,14 @@ import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 import foundation from 'styles/foundation';
 import styles from 'styles/blocks.css';
 
-const SearchByText = createAsyncComponent(
-  () => import('components/SearchByText')
-);
+const SearchByText = createAsyncComponent(() => import(
+  /* webpackChunkName: "search-by-text" */'components/SearchByText'
+));
 const IPScanSearch = createAsyncComponent(
-  () => import('components/IPScanSearch')
+  () => import(/* webpackChunkName: "ipscan-search" */'components/IPScanSearch')
 );
 const IPScanStatus = createAsyncComponent(
-  () => import('components/IPScanStatus')
+  () => import(/* webpackChunkName: "ipscan-status" */'components/IPScanStatus')
 );
 
 const Search = () => (

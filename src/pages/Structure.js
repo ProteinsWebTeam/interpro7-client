@@ -14,11 +14,15 @@ import {removeLastSlash, buildLink} from 'utils/url';
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
-const EntryAsync = createAsyncComponent(() => import('subPages/Entry'));
-const ProteinAsync = createAsyncComponent(() => import('subPages/Protein'));
-const SummaryAsync = createAsyncComponent(
-  () => import('components/Structure/Summary')
-);
+const EntryAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "entry-subpage" */'subPages/Entry'
+));
+const ProteinAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "protein-subpage" */'subPages/Protein'
+));
+const SummaryAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "structure-summary" */'components/Structure/Summary'
+));
 
 const propTypes = {
   data: T.shape({

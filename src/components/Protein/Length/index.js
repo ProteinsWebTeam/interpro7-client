@@ -1,4 +1,3 @@
-// @flow
 import React, {PropTypes as T} from 'react';
 import styles from 'styles/blocks.css';
 

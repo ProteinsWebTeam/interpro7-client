@@ -1,5 +1,7 @@
 let polyfillLoader = async () => {
-  const polyfills = await import('utils/polyfills');
+  const polyfills = await import(
+    /* webpackChunkName: "utils-polyfills" */'utils/polyfills'
+  );
   const WCPolyfill = await polyfills.webComponents();
   polyfillLoader = () => WCPolyfill;
   return WCPolyfill;

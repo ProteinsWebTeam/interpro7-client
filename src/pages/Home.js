@@ -22,14 +22,14 @@ import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
-const SearchByText = createAsyncComponent(
-  () => import('components/SearchByText')
-);
+const SearchByText = createAsyncComponent(() => import(
+  /* webpackChunkName: "search-by-text" */'components/SearchByText'
+));
 const IPScanSearch = createAsyncComponent(
-  () => import('components/IPScanSearch')
+  () => import(/* webpackChunkName: "ipscan-search" */'components/IPScanSearch')
 );
 const IPScanStatus = createAsyncComponent(
-  () => import('components/IPScanStatus')
+  () => import(/* webpackChunkName: "ipscan-status" */'components/IPScanStatus')
 );
 
 const MaskSvgIcons = () => (
@@ -501,7 +501,9 @@ const Home = () => (
             getComponent={async () => {
               // eslint-disable-next-line no-magic-numbers
               await schedule(10000);// Schedule asap, but do it anyway after 10s
-              return import('components/Twitter');
+              return import(
+                /* webpackChunkName: "twitter" */'components/Twitter'
+              );
             }}
           />
 

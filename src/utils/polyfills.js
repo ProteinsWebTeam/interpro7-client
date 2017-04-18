@@ -13,7 +13,10 @@ export const webComponents = () => {
         return;
       }
       try {
-        await import('webcomponents.js/webcomponents-sd-ce');
+        await import(
+          /* webpackChunkName: "webcomponents-polyfill" */
+          'webcomponents.js/webcomponents-sd-ce'
+        );
         res(false);
       } catch (err) {
         rej(err);

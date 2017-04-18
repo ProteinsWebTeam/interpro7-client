@@ -72,7 +72,9 @@ const List = ({data, isStale, location: {search, pathname}}) => {
     };
   }
   loadWebComponent(
-    () => import('interpro-components').then(m => m.InterproType),
+    () => import(
+      /* webpackChunkName: "interpro-components" */'interpro-components'
+    ).then(m => m.InterproType),
   ).as('interpro-type');
   return (
     <Table
@@ -134,11 +136,15 @@ const List = ({data, isStale, location: {search, pathname}}) => {
 };
 List.propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(
-  () => import('components/Entry/Summary')
-);
-const StructureAsync = createAsyncComponent(() => import('subPages/Structure'));
-const ProteinAsync = createAsyncComponent(() => import('subPages/Protein'));
+const SummaryAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "entry-summary" */'components/Entry/Summary'
+));
+const StructureAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "structure-subpage" */'subPages/Structure'
+));
+const ProteinAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "protein-subpage" */'subPages/Protein'
+));
 
 const pages = new Set([
   {path: 'structure', component: StructureAsync},

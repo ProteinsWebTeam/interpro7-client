@@ -28,7 +28,9 @@ export default () => (
       getComponent={async () => {
         // eslint-disable-next-line no-magic-numbers
         await schedule(1000);// Schedule asap, but do it anyway after 1s
-        return import('components/Menu/SideMenu');
+        return (
+          import(/* webpackChunkName: "side-menu" */'components/Menu/SideMenu')
+        );
       }}
     />
     <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
@@ -39,14 +41,18 @@ export default () => (
       getComponent={async () => {
         // eslint-disable-next-line no-magic-numbers
         await schedule(1000);// Schedule asap, but do it anyway after 1s
-        return import('components/EBIFooter');
+        return (
+          import(/* webpackChunkName: "ebi-footer" */'components/EBIFooter')
+        );
       }}
     />
     <AsyncComponent
       getComponent={async () => {
         // eslint-disable-next-line no-magic-numbers
         await schedule(1000);// Schedule asap, but do it anyway after 1s
-        return import('components/Toast/ToastDisplay');
+        return import(
+          /* webpackChunkName: "toast-display" */'components/Toast/ToastDisplay'
+        );
       }}
     />
     <AsyncComponent
@@ -56,7 +62,9 @@ export default () => (
         try {
           if (document.cookie.match(/cookies-accepted=(true)/i)[1]) return;
         } catch (_) {
-          return import('components/CookieBanner');
+          return import(
+            /* webpackChunkName: "cookie-banner" */'components/CookieBanner'
+          );
         }
       }}
     />

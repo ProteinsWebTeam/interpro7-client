@@ -153,11 +153,15 @@ const List = ({
 };
 List.propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(
-  () => import('components/Protein/Summary')
-);
-const StructureAsync = createAsyncComponent(() => import('subPages/Structure'));
-const EntryAsync = createAsyncComponent(() => import('subPages/Entry'));
+const SummaryAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "protein-summary" */'components/Protein/Summary'
+));
+const StructureAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "structure-subpage" */'subPages/Structure'
+));
+const EntryAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "entry-subpage" */'subPages/Entry'
+));
 
 const pages = new Set([
   {path: 'structure', component: StructureAsync},
