@@ -3,37 +3,33 @@ import React, {PropTypes as T} from 'react';
 
 import {GoLink} from 'components/ExtLink';
 
-import loadData from 'higherOrder/loadData';
-
 import ebiStyles from 'styles/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 import {foundationPartial} from 'styles/foundation';
 const f = foundationPartial(ebiStyles, ipro);
 
-const defaultPayload = {
+const getDefaultPayload = () => ({
   biological_process: [],
   molecular_function: [],
   cellular_component: [],
-};
+});
 
-const EBISearchDataSelector = payload => payload.entries.reduce(
-  (terms, go) => {
-    terms[go.fields.namespace].push({
-      id: go.id,
-      name: go.fields.name,
-    });
-    return terms;
-  },
-  {...defaultPayload},
-);
-
-export const GoTermsByCategory = (
-  {data: {loading, payload = defaultPayload}},
-) => {
-  const data = EBISearchDataSelector(payload);
+export const GoTermsByCategory = ({terms}) => {
+  // TODO: change when GO terms are correct in the API
+  const _terms = terms.reduce((acc, term) => {
+    // eslint-disable-next-line no-param-reassign
+    if (!acc[term.category]) acc[term.category] = [];
+    if (typeof term === 'string') {
+      acc[term.category].push({identifier: term});
+      return acc;
+    }
+    acc[term.category].push(term);
+    return acc;
+  }, getDefaultPayload());
+  console.log(_terms);
   return (
     <div className={f('row')}>
-      {Object.entries(data)
+      {Object.entries(_terms)
         .map(([key, values]) => (
           <div key={key} className={f('medium-6', 'large-4', 'columns')}>
             <h5 style={{textTransform: 'capitalize'}}>
@@ -41,19 +37,17 @@ export const GoTermsByCategory = (
             </h5>
             <ul className={f('no-bullet')}>
               { values && values.length ?
-                values.map(({id, name}) => (
-                  <li key={id}>
+                values.map(({identifier, name}) => (
+                  <li key={identifier}>
                     <GoLink
-                      id={id}
+                      id={identifier}
                       className={f('label', 'go', key)}
-                      title={id}
-                    >{name || id}</GoLink>
+                      title={identifier}
+                    >{name || identifier}</GoLink>
                   </li>
                 )) :
                 <li>
-                  <span className={f('secondary', 'label')}>
-                    {loading ? 'Loading...' : 'None'}
-                  </span>
+                  <span className={f('secondary', 'label')}>None</span>
                 </li>
               }
             </ul>
@@ -64,53 +58,21 @@ export const GoTermsByCategory = (
   );
 };
 GoTermsByCategory.propTypes = {
-  data: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.shape({
-      cellular_component: T.array.isRequired,
-      biological_process: T.array.isRequired,
-      molecular_function: T.array.isRequired,
-    }),
-  }).isRequired,
+  terms: T.arrayOf(T.object.isRequired).isRequired,
 };
 
-const urlFromState = ids => (
-  {settings: {ebi: {protocol, hostname, port, root}}},
-) => (
-  `${protocol}//${hostname}:${port}${root}/../go/entry/${
-    ids.join(',')
-  }?fields=name,namespace&format=json`
-);
-
-const GoTermsByCategoryWithData = ({ids}) => {
-  if (!(ids && ids.length)) {
-    return (
-      <GoTermsByCategory data={{loading: false, payload: defaultPayload}} />
-    );
-  }
-  const loadDataParams = {
-    getUrl: urlFromState(ids),
-    selector: EBISearchDataSelector,
-  };
-  const Component = loadData(loadDataParams)(GoTermsByCategory);
-  return <Component />;
-};
-GoTermsByCategoryWithData.propTypes = {
-  ids: T.array,
-};
-
-const GoTerms = (/* {terms}/*: {terms: Array<string>} */) => (
+const GoTerms = ({terms}/*: {terms: Array<object>} */) => (
   <section id="go-terms">
     <div className={f('row')}>
       <div className={f('large-12', 'columns')}>
         <h4>Go terms</h4>
       </div>
     </div>
-    {/* <GoTermsByCategoryWithData ids={terms || []} /> */}
+    <GoTermsByCategory terms={terms}/>
   </section>
 );
 GoTerms.propTypes = {
-  // terms: T.object.isRequired,
+  terms: T.arrayOf(T.object.isRequired).isRequired,
 };
 
 export default GoTerms;
