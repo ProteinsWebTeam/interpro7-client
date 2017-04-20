@@ -16,6 +16,7 @@ const mapStateToProps = getUrl => state => ({
 });
 const getBaseURL = url => url.slice(0, url.indexOf('?'));
 
+// eslint-disable-next-line max-params
 const load = (
   loadingData, loadedData, unloadingData, failedLoadingData, fetchFun, fetchOptions) =>
   (key) => {

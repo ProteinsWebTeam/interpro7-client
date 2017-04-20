@@ -14,8 +14,7 @@ import uniprotLogo from 'images/uniprot.png';
 const SummaryProtein = (
   {data: {metadata}, location: {pathname}}
   /*: {data: {metadata: Object}, location: {pathname: string}} */
-) => {
-  return (
+) => (
     <div className={f('sections')}>
       <section>
         <div className={f('row')}>
@@ -43,7 +42,6 @@ const SummaryProtein = (
       <GoTerms terms={metadata.go_terms} />
     </div>
   );
-}
 SummaryProtein.propTypes = {
   data: T.shape({
     metadata: T.object.isRequired,

@@ -180,7 +180,7 @@ SummaryComponent.propTypes = {
 };
 
 const Summary = props => {
-  const {data: {loading, payload}, location, match} = props;
+  const {data: {loading}, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
     <div>
