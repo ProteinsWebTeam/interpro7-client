@@ -1,4 +1,3 @@
-// @flow
 import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
 
