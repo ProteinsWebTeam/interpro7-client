@@ -3,7 +3,7 @@ import React, {PropTypes as T, Component} from 'react';
 import {connect} from 'react-redux';
 
 import {foundationPartial} from 'styles/foundation';
-import {goToLocation, changePageSize} from '../../../actions/creators';
+import {goToLocation, changePageSize} from 'actions/creators';
 
 import s from './style.css';
 

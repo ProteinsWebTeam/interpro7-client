@@ -8,7 +8,8 @@ const colorHash = new ColorHash();
 
 const EntriesOnProtein = (
   {
-    matches, options: {baseSize = 10, offset = 30, niceRatio = 6} = {},
+    matches,
+    options: {baseSize = 10, offset = 30, niceRatio = 6/* , scale = 1*/} = {},
   }
 ) => {
   const protein = matches[0].protein;

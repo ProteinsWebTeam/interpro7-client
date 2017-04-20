@@ -18,5 +18,4 @@ const Redirect = class extends Component {
   }
 };
 
-// eslint-disable-next-line no-undefined
-export default connect(undefined, {goToLocation})(Redirect);
+export default connect(null, {goToLocation})(Redirect);

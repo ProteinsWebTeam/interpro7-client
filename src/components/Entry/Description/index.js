@@ -1,7 +1,7 @@
 /* eslint no-magic-numbers: [1, {ignore: [1, 2]}] */
 import React, {PropTypes as T} from 'react';
 
-import ReadMoreCard from '../../ReadMoreCard';
+import ReadMoreCard from 'components/ReadMoreCard';
 
 import styles from 'styles/blocks.css';
 

@@ -1,5 +1,5 @@
 import React, {PropTypes as T} from 'react';
-import {PMCLink, DOILink} from '../../ExtLink';
+import {PMCLink, DOILink} from 'components/ExtLink';
 
 import refStyles from './style.css';
 import ebiStyles from 'styles/ebi-global.css';
@@ -10,7 +10,7 @@ const f = foundationPartial(refStyles, ebiStyles);
 // in this case is taking row from ebi.css but is not
 // using the foundation that has been defined
 
-// import {buildAnchorLink} from '../../utils/url';
+// import {buildAnchorLink} from 'utils/url';
 
 const Literature = ({references}) => (
   <div className={f('row')}><div className={f('large-12', 'columns')}>

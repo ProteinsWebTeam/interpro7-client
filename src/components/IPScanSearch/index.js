@@ -194,6 +194,7 @@ class IPScanSearch extends Component {
     } catch (err) {
       return this._handleSubmitFail(err);
     }
+    console.log({jobAndJobId, IPScanId});
     jobAndJobId.job.id = IPScanId;
     this._handleSubmitSuccess(jobAndJobId);
   };
