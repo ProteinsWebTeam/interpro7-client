@@ -16,6 +16,12 @@ const main = async () => {
   // Root of the DOM to hook React to
   const DOM_ROOT = document.getElementById('root');
 
+  // If “PERF” is defined in the environment, activate “why-did-you-update” tool
+  if (DEV && process.env.PERF) {
+    const {whyDidYouUpdate} = require('why-did-you-update');
+    whyDidYouUpdate(React);
+  }
+
   // Main render function
   render(<App />, DOM_ROOT);
 
