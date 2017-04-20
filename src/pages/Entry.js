@@ -29,8 +29,9 @@ const propTypes = {
   }).isRequired,
 };
 
-const Overview = ({data: {payload, loading}, location: {pathname}}) => {
+const Overview = ({data: {payload, loading}, location: {pathname, search: {type}}}) => {
   if (loading) return <div>Loading...</div>;
+  const params = type ? `?type=${type}` : '';
   return (
       <div>
         Member databases:
@@ -38,7 +39,7 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
           {Object.entries(payload.entries.member_databases)
             .map(([name, count]) => (
               <li key={name}>
-                <Link to={`${removeLastSlash(pathname)}/${name}`}>
+                <Link to={`${removeLastSlash(pathname)}/${name}${params}`}>
                   {name} ({count})
                 </Link>
               </li>
@@ -47,12 +48,12 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
         </ul>
         <ul className={styles.card}>
           <li>
-            <Link to={`${removeLastSlash(pathname)}/interpro`}>
+            <Link to={`${removeLastSlash(pathname)}/interpro${params}`}>
               InterPro ({payload.entries ? payload.entries.interpro : 0})
             </Link>
           </li>
           <li>
-            <Link to={`${removeLastSlash(pathname)}/unintegrated`}>
+            <Link to={`${removeLastSlash(pathname)}/unintegrated${params}`}>
               Unintegrated ({payload.entries ? payload.entries.unintegrated : 0})
             </Link>
           </li>
@@ -151,12 +152,19 @@ const pages = new Set([
   {path: 'protein', component: ProteinAsync},
 ]);
 
-const SummaryAsync2 = ({data: {payload}, location}) => (
-  <SummaryAsync data={payload} location={location} />
-);
+const SummaryComponent =
+  ({data: {payload}, location}) => <SummaryAsync data={payload} location={location} />;
+SummaryComponent.propTypes = {
+  data: T.shape({
+    payload: T.object,
+  }).isRequired,
+  location: T.shape({
+    pathname: T.string.isRequired,
+  }).isRequired,
+};
 
 const Summary = (props) => {
-  const {data: {payload, loading}, location, match} = props;
+  const {data: {loading}, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
     <div>
@@ -164,7 +172,7 @@ const Summary = (props) => {
         {...props}
         main="entry"
         base={match}
-        indexRoute={SummaryAsync2}
+        indexRoute={SummaryComponent}
         childRoutes={pages}
       />
 

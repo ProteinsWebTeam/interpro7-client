@@ -168,6 +168,17 @@ const pages = new Set([
   {path: 'entry', component: EntryAsync},
 ]);
 
+const SummaryComponent =
+  ({data: {payload}, location}) => <SummaryAsync data={payload} location={location} />;
+SummaryComponent.propTypes = {
+  data: T.shape({
+    payload: T.object,
+  }).isRequired,
+  location: T.shape({
+    pathname: T.string.isRequired,
+  }).isRequired,
+};
+
 const Summary = props => {
   const {data: {loading, payload}, location, match} = props;
   if (loading) return <div>Loading...</div>;
@@ -177,7 +188,7 @@ const Summary = props => {
         {...props}
         main="protein"
         base={match}
-        indexRoute={() => <SummaryAsync data={payload} location={location} />}
+        indexRoute={SummaryComponent}
         childRoutes={pages}
       />
 

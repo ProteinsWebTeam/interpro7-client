@@ -16,6 +16,7 @@ const StructureOnProtein = (
   // in both entities and the length of the base one, eg a protein of 500aa maps
   // the structure in 100 to 200, which corrspond to the coordinate 0-99 in the structure.
   protein.length = protein.length || 500;
+  const main = ('entry_protein_coordinates' in protein) ? 'protein' : 'structure';
   return (
     <div className={style.svgContainer}>
       <svg
@@ -39,44 +40,46 @@ const StructureOnProtein = (
         </g>
         <g>
           {
-            matches.map(({coordinates: coords, structure}) => {
-              coords.forEach((m) => {
-                const n = m;
-                n.structure = m.structure || [0, m.protein[1] - m.protein[0]];
-              });
-              return (
-                <g
-                  key={structure.accession}
-                  transform={
-                    `translate(${coords[0].structure[0]} ${offset - baseSize})`
-                  }
-                >
-                  <title>{structure.accession}</title>
-                  <rect
-                    x="0" y="0" rx={baseSize * 2 / niceRatio}
-                    width={coords[0].structure[1] - coords[0].structure[0]}
-                    fill={colorHash.hex(structure.accession)}
-                    height={baseSize * 2}
-                    className={style.secondary}
-                  />
-                  <text y="-0.2em">
-                    <tspan textAnchor="middle">
-                      {coords[0].protein[0]}
-                    </tspan>
-                  </text>
-                  <text
-                    y="-0.2em"
+            matches.map((match) => {
+              const {
+                [main]: {protein_structure_coordinates: {coordinates}},
+                structure,
+              } = match;
+              return coordinates.map(
+                (strMatch, i) => (
+                  <g
+                    key={`${structure.accession}-${i}`}
                     transform={
-                      `translate(${
-                      coords[0].protein[1] - coords[0].protein[0]
-                        } 0)`
+                      `translate(${strMatch[0]} ${offset - baseSize})`
                     }
                   >
-                    <tspan textAnchor="middle">
-                      {coords[0].protein[1]}
-                    </tspan>
-                  </text>
-                </g>
+                    <title>{structure.accession}</title>
+                    <rect
+                      x="0" y="0" rx={baseSize * 2 / niceRatio}
+                      width={strMatch[1] - strMatch[0]}
+                      fill={colorHash.hex(structure.accession)}
+                      height={baseSize * 2}
+                      className={style.secondary}
+                    />
+                    <text y="-0.2em">
+                      <tspan textAnchor="middle">
+                        {strMatch[0]}
+                      </tspan>
+                    </text>
+                    <text
+                      y="-0.2em"
+                      transform={
+                        `translate(${
+                        strMatch[1] - strMatch[0]
+                          } 0)`
+                      }
+                    >
+                      <tspan textAnchor="middle">
+                        {strMatch[1]}
+                      </tspan>
+                    </text>
+                  </g>
+                )
               );
             })
           }

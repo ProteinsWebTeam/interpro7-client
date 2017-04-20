@@ -10,6 +10,8 @@ import {toPlural} from 'utils/pages';
 
 import blockStyles from 'styles/blocks.css';
 
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
+
 const ObjectToList = ({obj, component: Component}) => (
   <ul>
     {
@@ -90,9 +92,16 @@ const primariesAndSecondaries = {
 };
 
 const RelatedAdvanced = (
-  {mainData, secondaryData, isStale, main, secondary, actualSize}
+  {mainData, secondaryData, isStale, main, secondary, actualSize, pathname}
   ) => (
     <div>
+      {
+        main === 'protein' &&
+        secondary === 'entry' &&
+        pathname.indexOf('interpro') > 0 ?
+          <ProteinEntryHierarchy entries={secondaryData} /> :
+          null
+      }
       <p>
         This {main} is related to
         {
@@ -119,6 +128,7 @@ RelatedAdvanced.propTypes = {
   isStale: T.bool.isRequired,
   main: T.string.isRequired,
   secondary: T.string.isRequired,
+  pathname: T.string.isRequired,
   actualSize: T.number,
 };
 const getReversedURL = ({
@@ -135,7 +145,11 @@ const RelatedAdvancedQuery = loadData(getReversedURL)(
     if (loading) return <div>Loading...</div>;
     const _secondaryData = payload.results.map(x => {
       const obj = x.metadata;
-      obj.coordinates = x[toPlural(props.main)][0].coordinates;
+      const plural = toPlural(props.main);
+      // Given the reverse of the URL, and that we are quering by an accession
+      // we can assume is only one, hence [0]
+      obj.entry_protein_coordinates = x[plural][0].entry_protein_coordinates;
+      obj.protein_structure_coordinates = x[plural][0].protein_structure_coordinates;
       return obj;
     });
     return (
