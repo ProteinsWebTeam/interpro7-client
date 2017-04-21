@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 15, 30, 100]}] */
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 import {connect} from 'react-redux';
 
 import {foundationPartial} from 'styles/foundation';

@@ -1,4 +1,5 @@
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import {PMCLink, DOILink} from 'components/ExtLink';
 
 import refStyles from './style.css';

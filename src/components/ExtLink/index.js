@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: [1, {ignore: [3]}] */
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 const types = {
   id: T.oneOfType([T.string, T.number]).isRequired,

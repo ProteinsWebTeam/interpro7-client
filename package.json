@@ -84,6 +84,7 @@
     "isomorphic-fetch": "^2.2.1",
     "lodash-es": "^4.17.2",
     "pdb-web-components": "^0.1.3",
+    "prop-types": "^15.5.8",
     "query-string": "^4.3.4",
     "react": "^15.5.4",
     "react-addons-transition-group": "^15.5.2",

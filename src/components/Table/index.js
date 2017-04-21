@@ -1,5 +1,6 @@
 /* eslint react/jsx-pascal-case: 0 */
-import React, {PropTypes as T, Children} from 'react';
+import React, {Children} from 'react';
+import T from 'prop-types';
 
 import _Header from './Header';
 import _Exporter from './Exporter';

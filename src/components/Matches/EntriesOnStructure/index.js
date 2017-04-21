@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: 0 */
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import ColorHash from 'color-hash/lib/color-hash';
 
 import style from '../style.css';

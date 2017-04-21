@@ -1,4 +1,4 @@
-import {Component, PropTypes as T} from 'react';
+import {Component} from 'react'; import T from 'prop-types';
 import {connect} from 'react-redux';
 
 import {goToLocation} from 'actions/creators';

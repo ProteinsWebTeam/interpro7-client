@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: 0 */
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import ColorHash from 'color-hash/lib/color-hash';
 
 import style from '../style.css';
@@ -23,12 +24,12 @@ const EntriesOnProtein = (
         viewBox={`0 0 ${protein.length + offset} 60`}
       >
         <g transform={`translate(0 ${offset - baseSize / 2})`}>
-            <title>{protein.accession}</title>
-            <rect
-              x="0" y="0" rx={baseSize / niceRatio}
-              width={protein.length} height={baseSize}
-              className={style.primary}
-            />
+          <title>{protein.accession}</title>
+          <rect
+            x="0" y="0" rx={baseSize / niceRatio}
+            width={protein.length} height={baseSize}
+            className={style.primary}
+          />
           <text
             x="0.1em"
             y="0.8em"

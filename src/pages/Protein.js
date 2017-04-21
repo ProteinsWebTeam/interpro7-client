@@ -1,4 +1,5 @@
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';

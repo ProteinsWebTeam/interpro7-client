@@ -1,5 +1,6 @@
 /* eslint react/no-multi-comp: ["off"] */
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 
 import cancelable from 'utils/cancelable';
 

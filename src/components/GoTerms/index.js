@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: [1, {ignore: [1, 10, 15, 30, 100]}] */
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import {GoLink} from 'components/ExtLink';
 
@@ -26,7 +27,6 @@ export const GoTermsByCategory = ({terms}) => {
     acc[term.category].push(term);
     return acc;
   }, getDefaultPayload());
-  console.log(_terms);
   return (
     <div className={f('row')}>
       {Object.entries(_terms)
@@ -36,6 +36,7 @@ export const GoTermsByCategory = ({terms}) => {
               {key.replace('_', ' ')}
             </h5>
             <ul className={f('no-bullet')}>
+              { values && values.length && values.forEach(console.log) && null }
               { values && values.length ?
                 values.map(({identifier, name}) => (
                   <li key={identifier}>

@@ -1,5 +1,6 @@
 /* eslint max-statements: ["error", 13] */
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 import {connect} from 'react-redux';
 import {frame} from 'timing-functions/src';
 
