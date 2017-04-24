@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, {Component} from 'react';
 import T from 'prop-types';
 // import Switch from 'components/generic/Switch';
@@ -18,6 +19,26 @@ const getUrl = end => ({
 }`;
 
 const mergeData = (interpro, integrated) => {
+  const ipro = {};
+  const out = interpro.reduce((acc, val) => {
+    val.signatures = [];
+    ipro[val.accession] = val;
+    if (!(val.entry_type in acc)) {
+      acc[val.entry_type] = [];
+    }
+    acc[val.entry_type].push(val);
+    return acc;
+  }, {});
+  for (const entry of integrated){
+    if (entry.entry_integrated in ipro){
+      ipro[entry.entry_integrated].signatures.push(entry);
+    } else console.error('integrated entry without interpro:', entry);
+
+  }
+  return out;
+};
+
+const mergeDataOld = (interpro, integrated) => {
   const output = {};
   for (const ipEntry of interpro) {
     output[ipEntry.accession] = [];
@@ -50,79 +71,101 @@ let Index = class extends Component {
     if (dataInterPro.loading || dataIntegrated.loading) {
       return <div>Loading...</div>;
     }
-    const data = mergeData(
+    const data = mergeDataOld(
       dataInterPro.payload.entries,
       dataIntegrated.payload.entries
     );
+    console.log(mergeData(
+      dataInterPro.payload.entries,
+      dataIntegrated.payload.entries
+    ));
     const mainLength = mainData.payload.metadata.length;
     return (
-      <ul>Detailed signature matches:
-        {Object.entries(data).map(([accession, signatures]) => {
-          const entry = dataInterPro.payload.entries.find(
-            e => e.accession === accession
-          );
-          return (
-            <li key={accession}>
-              <div>
-                <interpro-type type={entry.entry_type.replace('_', ' ')}>
-                  {entry.entry_type}
-                </interpro-type>
-                <Link to={`/entry/${entry.source_database}/${accession}`}>
-                  {accession.toUpperCase()}
-                </Link>
-              </div>
-              <svg
-                width={mainLength * 4}
-                viewBox={`0 0 ${mainLength} ${signatures.length * 7 + 2}`}
-                style={{background: 'lightgray'}}
-              >
-                {signatures.map((signature, i) => (
-                  <g
-                    key={signature.accession}
-                    transform={`translate(0, ${i * 7 + 2})`}
-                  >
-                    {signature.entry_protein_coordinates.coordinates[0].map(
-                      ([from, to]) => (
-                        <rect
-                          key={`${from}-${to}`}
-                          x={from} y="0" rx="1" ry="1"
-                          width={to - from + 1} height="5"
-                          fill="white" stroke="black" strokeWidth="0.5"
-                        />
-                      )
-                    )}
-                  </g>
-                ))}
-              </svg>
-              {signatures.map(signature => {
-                const matches = [{
-                  protein: mainData.payload.metadata,
-                  entry: signature,
-                }];
-                return (
-                  <div
-                    key={signature.accession}
-                    style={{display: 'flex', alignItems: 'center'}}
-                  >
-                    <EntriesOnProtein
-                      matches={matches}
-                      options={{scale: 4}}
-                    />
-                    ▸
-                    <Link
-                      to={`/entry/${
-                        signature.source_database
-                        }/${signature.accession}`}
-                    >
-                      {signature.accession}
+      <div>
+        <div style={{background: '#EEE'}}>
+          <div>
+            [placeholder Families]
+          </div>
+          <div>
+            [placeholder Domains]
+          </div>
+          <div>
+            [placeholder Unintegrated]
+          </div>
+          <div>
+            [placeholder Per residue]
+          </div>
+        </div>
+        <div>
+          <ul>Detailed signature matches:
+            {Object.entries(data).map(([accession, signatures]) => {
+              const entry = dataInterPro.payload.entries.find(
+                e => e.accession === accession
+              );
+              return (
+                <li key={accession}>
+                  <div>
+                    <interpro-type type={entry.entry_type.replace('_', ' ')}>
+                      {entry.entry_type}
+                    </interpro-type>
+                    <Link to={`/entry/${entry.source_database}/${accession}`}>
+                      {accession.toUpperCase()}
                     </Link>
                   </div>
-                );
-              })}
-            </li>
-          );
-        })}
-      </ul>
+                  <svg
+                    width={mainLength * 4}
+                    viewBox={`0 0 ${mainLength} ${signatures.length * 7 + 2}`}
+                    style={{background: 'lightgray'}}
+                  >
+                    {signatures.map((signature, i) => (
+                      <g
+                        key={signature.accession}
+                        transform={`translate(0, ${i * 7 + 2})`}
+                      >
+                        {signature.entry_protein_coordinates.coordinates[0].map(
+                          ([from, to]) => (
+                            <rect
+                              key={`${from}-${to}`}
+                              x={from} y="0" rx="1" ry="1"
+                              width={to - from + 1} height="5"
+                              fill="white" stroke="black" strokeWidth="0.5"
+                            />
+                          )
+                        )}
+                      </g>
+                    ))}
+                  </svg>
+                  {signatures.map(signature => {
+                    const matches = [{
+                      protein: mainData.payload.metadata,
+                      entry: signature,
+                    }];
+                    return (
+                      <div
+                        key={signature.accession}
+                        style={{display: 'flex', alignItems: 'center'}}
+                      >
+                        <EntriesOnProtein
+                          matches={matches}
+                          options={{scale: 4}}
+                        />
+                        ▸
+                        <Link
+                          to={`/entry/${
+                            signature.source_database
+                            }/${signature.accession}`}
+                        >
+                          {signature.accession}
+                        </Link>
+                      </div>
+                    );
+                  })}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
     );
   }
 };
