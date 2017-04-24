@@ -109,6 +109,7 @@ const List = ({data, isStale, location: {search, pathname}}) => {
             {acc}
           </Link>
         )}
+        sortField="accession"
       >
         Accession
       </Column>
@@ -121,6 +122,7 @@ const List = ({data, isStale, location: {search, pathname}}) => {
             </Link>
           )
         }
+        sortField="name"
       >
         Name
       </Column>

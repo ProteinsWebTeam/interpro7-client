@@ -15,7 +15,10 @@ const cleanPathname = (pathname/*: string */) => (
 
 export default (location/*: string | Location */) => {
   if (typeof location !== 'string') {
-    return {...location, pathname: cleanPathname(location.pathname)};
+    if (location.pathname) {
+      return {...location, pathname: cleanPathname(location.pathname)};
+    }
+    return location;
   }
   const [, pathname, , search = '', , hash = ''] = (
     location.match(locationRE) || []
