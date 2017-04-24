@@ -2,10 +2,9 @@
 import React, {PropTypes as T} from 'react';
 import styles from 'styles/blocks.css';
 
-
 const Length = ({metadata, pathname}) => {
   return (
-    <div>Length: {metadata.length} amino acids</div>
+    <div>Length: {metadata.length} amino acids {metadata.fragment === "N" ? '(complete)' : '(fragment)'}</div>
   )};
 
 Length.propTypes = {
