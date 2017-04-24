@@ -1,9 +1,10 @@
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 import {connect} from 'react-redux';
 import debounce from 'lodash-es/debounce';
 
 import f from 'styles/foundation';
-import {goToLocation} from '../../../actions/creators';
+import {goToLocation} from 'actions/creators';
 
 const DEBOUNCE_RATE = 500;// In ms
 

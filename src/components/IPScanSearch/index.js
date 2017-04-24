@@ -1,4 +1,5 @@
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 import {
   Editor, EditorState, ContentState, CompositeDecorator, convertToRaw,
 } from 'draft-js';
@@ -194,6 +195,7 @@ class IPScanSearch extends Component {
     } catch (err) {
       return this._handleSubmitFail(err);
     }
+    console.log({jobAndJobId, IPScanId});
     jobAndJobId.job.id = IPScanId;
     this._handleSubmitSuccess(jobAndJobId);
   };

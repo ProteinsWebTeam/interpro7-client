@@ -1,4 +1,5 @@
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
@@ -14,11 +15,15 @@ import {removeLastSlash, buildLink} from 'utils/url';
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
-const EntryAsync = createAsyncComponent(() => import('subPages/Entry'));
-const ProteinAsync = createAsyncComponent(() => import('subPages/Protein'));
-const SummaryAsync = createAsyncComponent(
-  () => import('components/Structure/Summary')
-);
+const EntryAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "entry-subpage" */'subPages/Entry'
+));
+const ProteinAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "protein-subpage" */'subPages/Protein'
+));
+const SummaryAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "structure-summary" */'components/Structure/Summary'
+));
 
 const propTypes = {
   data: T.shape({
@@ -94,6 +99,7 @@ const List = ({
             {acc}
           </Link>
         )}
+        sortField="accession"
       >
         Accession
       </Column>
@@ -106,6 +112,7 @@ const List = ({
             </Link>
           )
         }
+        sortField="name"
       >
         Name
       </Column>

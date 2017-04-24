@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4] }]*/
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import Link from 'components/generic/Link';
 
 import config from 'config';

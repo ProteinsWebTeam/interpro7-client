@@ -54,6 +54,11 @@ const dev = common.concat([
     inject: false,
   }),
   new webpack.HotModuleReplacementPlugin(),
+  new webpack.DefinePlugin({
+    'process.env': {
+      PERF: JSON.stringify(!!process.env.PERF),
+    },
+  }),
 ]);
 
 if (process.env.DASHBOARD) {

@@ -1,5 +1,7 @@
 let polyfillLoader = async () => {
-  const polyfills = await import('utils/polyfills');
+  const polyfills = await import(
+    /* webpackChunkName: "utils-polyfills" */'utils/polyfills'
+  );
   const WCPolyfill = await polyfills.webComponents();
   polyfillLoader = () => WCPolyfill;
   return WCPolyfill;
@@ -7,8 +9,8 @@ let polyfillLoader = async () => {
 
 export default importer => ({
   async as(namespace) {
-    if (window.customElements.get(namespace)) return;
     await polyfillLoader();
+    if (window.customElements.get(namespace)) return;
     const webComponent = await importer();
     window.customElements.define(namespace, webComponent);
   },

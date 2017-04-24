@@ -1,4 +1,5 @@
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 import {findDOMNode} from 'react-dom';
 import {transformFormatted} from 'utils/text';
 import {foundationPartial} from 'styles/foundation';

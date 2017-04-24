@@ -1,4 +1,4 @@
-import {PropTypes as T} from 'react';
+import T from 'prop-types';
 
 const Column = () => null;
 Column.propTypes = {
@@ -8,6 +8,7 @@ Column.propTypes = {
   headerStyle: T.object,
   cellStyle: T.object,
   children: T.any,
+  sortField: T.string,
 };
 
 export default Column;

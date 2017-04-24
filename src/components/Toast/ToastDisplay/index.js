@@ -1,4 +1,5 @@
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 import {connect} from 'react-redux';
 
 import {removeToast} from 'actions/creators';

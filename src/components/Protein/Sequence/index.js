@@ -1,4 +1,5 @@
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import {foundationPartial} from 'styles/foundation';
 import pStyles from './style.css';

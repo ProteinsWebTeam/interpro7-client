@@ -1,4 +1,4 @@
-import React, {Component, PropTypes as T} from 'react';
+import React, {Component} from 'react'; import T from 'prop-types';
 import {connect} from 'react-redux';
 
 import cancelable from 'utils/cancelable';
@@ -14,7 +14,29 @@ const mapStateToProps = getUrl => state => ({
   appState: state,
   data: state.data[getUrl(state)] || {},
 });
-const getBaseURL = url => url.slice(0, url.indexOf('?'));
+const getBaseURL = url => url ? url.slice(0, url.indexOf('?')) : '';
+
+// eslint-disable-next-line max-params
+const load = (
+  loadingData, loadedData, unloadingData, failedLoadingData, fetchFun, fetchOptions) =>
+  (key) => {
+    try {
+      loadingData(key);
+    } catch (err) {
+      console.warn(err);
+      return cancelable(Promise.resolve());
+    }
+    // Starts the fetch
+    const c = cancelable(fetchFun(key, fetchOptions));
+    // Eventually changes the state according to response
+    c.promise.then(
+      response => loadedData(key, response),
+      error => (
+        [error.canceled ? unloadingData : failedLoadingData](key, error)
+      ),
+    );
+    return c;
+  };
 
 const loadData = params => {
   const {getUrl, fetchOptions, propNamespace} = extractParams(params);
@@ -42,6 +64,7 @@ const loadData = params => {
         this.state = {staleData: props.data};
         this._url = '';
         this._avoidStaleData = true;
+        this._load = null;
       }
 
       componentWillMount() {
@@ -51,27 +74,18 @@ const loadData = params => {
         } = this.props;
         // (stored in `key` because `this._url` might change)
         const key = this._url = getUrl(appState);
+        if (!this._load) {
+          this._load = load(
+            loadingData, loadedData, unloadingData, failedLoadingData,
+            fetchFun, fetchOptions
+          );
+        }
 
         // If data is already there, or loading, don't do anything
         if (data.loading || data.payload) return;
         // Key is the URL to fetch
         // Changes redux state
-        try {
-          loadingData(key);
-        } catch (err) {
-          console.warn(err);
-          this._cancelableFetch = cancelable(Promise.resolve());
-          return;
-        }
-        // Starts the fetch
-        this._cancelableFetch = cancelable(fetchFun(key, fetchOptions));
-        // Eventually changes the state according to response
-        this._cancelableFetch.promise.then(
-          response => loadedData(key, response),
-          error => (
-            [error.canceled ? unloadingData : failedLoadingData](key, error)
-          ),
-        );
+        this._cancelableFetch = this._load(key);
       }
 
       componentWillReceiveProps({data: nextData}) {
@@ -105,20 +119,13 @@ const loadData = params => {
         // (stored in `key` because `this._url` might change)
 
         const key = this._url = getUrl(nextAppState);
-        try {
-          loadingData(key);
-        } catch (err) {
-          console.warn(err);
-          this._cancelableFetch = cancelable(Promise.resolve());
-          return;
+        if (!this._load) {
+          this._load = load(
+            loadingData, loadedData, unloadingData, failedLoadingData,
+            fetchFun, fetchOptions
+          );
         }
-        this._cancelableFetch = cancelable(fetchFun(key, fetchOptions));
-        this._cancelableFetch.promise.then(
-          payload => loadedData(key, payload),
-          error => (
-            [error.canceled ? unloadingData : failedLoadingData](key, error)
-          ),
-        );
+        this._cancelableFetch = this._load(key);
       }
 
       componentWillUnmount() {

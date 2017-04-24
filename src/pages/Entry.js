@@ -1,4 +1,5 @@
-import React, {PropTypes as T} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
@@ -29,8 +30,9 @@ const propTypes = {
   }).isRequired,
 };
 
-const Overview = ({data: {payload, loading}, location: {pathname}}) => {
+const Overview = ({data: {payload, loading}, location: {pathname, search: {type}}}) => {
   if (loading) return <div>Loading...</div>;
+  const params = type ? `?type=${type}` : '';
   return (
       <div>
         Member databases:
@@ -38,7 +40,7 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
           {Object.entries(payload.entries.member_databases)
             .map(([name, count]) => (
               <li key={name}>
-                <Link to={`${removeLastSlash(pathname)}/${name}`}>
+                <Link to={`${removeLastSlash(pathname)}/${name}${params}`}>
                   {name} ({count})
                 </Link>
               </li>
@@ -47,12 +49,12 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
         </ul>
         <ul className={styles.card}>
           <li>
-            <Link to={`${removeLastSlash(pathname)}/interpro`}>
+            <Link to={`${removeLastSlash(pathname)}/interpro${params}`}>
               InterPro ({payload.entries ? payload.entries.interpro : 0})
             </Link>
           </li>
           <li>
-            <Link to={`${removeLastSlash(pathname)}/unintegrated`}>
+            <Link to={`${removeLastSlash(pathname)}/unintegrated${params}`}>
               Unintegrated ({payload.entries ? payload.entries.unintegrated : 0})
             </Link>
           </li>
@@ -62,95 +64,118 @@ const Overview = ({data: {payload, loading}, location: {pathname}}) => {
 };
 Overview.propTypes = propTypes;
 
-const List = ({data, isStale, location: {search, pathname}}) => {
-  let _payload = data.payload;
-  const HTTP_OK = 200;
-  const notFound = !data.loading && data.status !== HTTP_OK;
-  if (data.loading || notFound) {
-    _payload = {
-      results: [],
-    };
-  }
-  loadWebComponent(
-    () => import('interpro-components').then(m => m.InterproType),
-  ).as('interpro-type');
-  return (
-    <Table
-      dataTable={_payload.results}
-      isStale={isStale}
-      actualSize={_payload.count}
-      query={search}
-      pathname={pathname}
-      notFound={notFound}
-    >
-      <Exporter>
-        <ul>
-          <li>
-            <a href={`${''}&format=json`} download="proteins.json">
-              JSON
-            </a><br/></li>
-          <li><a href={`${''}`}>Open in API web view</a></li>
-        </ul>
-      </Exporter>
-      <PageSizeSelector />
-      <SearchBox
-        search={search.search}
-        pathname={pathname}
-      >
-        Search entries:
-      </SearchBox>
-      <Column
-        accessKey="accession"
-        renderer={(acc/*: string */) => (
-          <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-            {acc}
-          </Link>
-        )}
-      >
-        Accession
-      </Column>
-      <Column
-        accessKey="name"
-        renderer={
-          (name/*: string */, {accession}/*: {accession: string} */) => (
-            <Link to={`${removeLastSlash(pathname)}/${accession}`}>
-              {name}
-            </Link>
-          )
-        }
-      >
-        Name
-      </Column>
-      <Column
-        accessKey="type"
-        renderer={(type) => (
-          <interpro-type type={type.replace('_', ' ')} expanded>
-            {type}
-          </interpro-type>
-        )}
-      >Type</Column>
-    </Table>
-  );
-};
-List.propTypes = propTypes;
+const List = class extends Component {
+  static propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(
-  () => import('components/Entry/Summary')
-);
-const StructureAsync = createAsyncComponent(() => import('subPages/Structure'));
-const ProteinAsync = createAsyncComponent(() => import('subPages/Protein'));
+  componentWillMount() {
+    loadWebComponent(
+      () => import(
+        /* webpackChunkName: "interpro-components" */'interpro-components'
+        ).then(m => m.InterproType),
+    ).as('interpro-type');
+  }
+
+  render() {
+    const {data, isStale, location: {search, pathname}} = this.props;
+    let _payload = data.payload;
+    const HTTP_OK = 200;
+    const notFound = !data.loading && data.status !== HTTP_OK;
+    if (data.loading || notFound) {
+      _payload = {
+        results: [],
+      };
+    }
+    return (
+      <Table
+        dataTable={_payload.results}
+        isStale={isStale}
+        actualSize={_payload.count}
+        query={search}
+        pathname={pathname}
+        notFound={notFound}
+      >
+        <Exporter>
+          <ul>
+            <li>
+              <a href={`${''}&format=json`} download="proteins.json">
+                JSON
+              </a><br/></li>
+            <li><a href={`${''}`}>Open in API web view</a></li>
+          </ul>
+        </Exporter>
+        <PageSizeSelector />
+        <SearchBox
+          search={search.search}
+          pathname={pathname}
+        >
+          Search entries:
+        </SearchBox>
+        <Column
+          accessKey="accession"
+          renderer={(acc/*: string */) => (
+            <Link to={`${removeLastSlash(pathname)}/${acc}`}>
+              {acc}
+            </Link>
+          )}
+          sortField="accession"
+        >
+          Accession
+        </Column>
+        <Column
+          accessKey="name"
+          renderer={
+            (name/*: string */, {accession}/*: {accession: string} */) => (
+              <Link to={`${removeLastSlash(pathname)}/${accession}`}>
+                {name}
+              </Link>
+            )
+          }
+          sortField="name"
+        >
+          Name
+        </Column>
+        <Column
+          accessKey="type"
+          renderer={(type) => (
+            <interpro-type type={type.replace('_', ' ')} expanded>
+              {type}
+            </interpro-type>
+          )}
+        >Type</Column>
+      </Table>
+    );
+  }
+};
+
+const SummaryAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "entry-summary" */'components/Entry/Summary'
+));
+const StructureAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "structure-subpage" */'subPages/Structure'
+));
+const ProteinAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "protein-subpage" */'subPages/Protein'
+));
 
 const pages = new Set([
   {path: 'structure', component: StructureAsync},
   {path: 'protein', component: ProteinAsync},
 ]);
 
-const SummaryAsync2 = ({data: {payload}, location}) => (
+const SummaryComponent = ({data: {payload}, location}) => (
   <SummaryAsync data={payload} location={location} />
 );
+SummaryComponent.propTypes = {
+  data: T.shape({
+    payload: T.object,
+  }).isRequired,
+  location: T.shape({
+    pathname: T.string.isRequired,
+  }).isRequired,
+};
 
 const Summary = (props) => {
-  const {data: {payload, loading}, location, match} = props;
+  const {data: {loading}, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
     <div>
@@ -158,7 +183,7 @@ const Summary = (props) => {
         {...props}
         main="entry"
         base={match}
-        indexRoute={SummaryAsync2}
+        indexRoute={SummaryComponent}
         childRoutes={pages}
       />
 

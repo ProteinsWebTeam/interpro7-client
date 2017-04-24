@@ -1,4 +1,5 @@
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
@@ -103,6 +104,7 @@ const List = ({
             {acc}
           </Link>
         )}
+        sortField="accession"
       >
         Accession
       </Column>
@@ -145,6 +147,7 @@ const List = ({
             {length} amino-acids
           </div>
         )}
+        sortField="length"
       >
         Length
       </Column>
@@ -153,19 +156,34 @@ const List = ({
 };
 List.propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(
-  () => import('components/Protein/Summary')
-);
-const StructureAsync = createAsyncComponent(() => import('subPages/Structure'));
-const EntryAsync = createAsyncComponent(() => import('subPages/Entry'));
+const SummaryAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "protein-summary" */'components/Protein/Summary'
+));
+const StructureAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "structure-subpage" */'subPages/Structure'
+));
+const EntryAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "entry-subpage" */'subPages/Entry'
+));
 
 const pages = new Set([
   {path: 'structure', component: StructureAsync},
   {path: 'entry', component: EntryAsync},
 ]);
 
+const SummaryComponent =
+  ({data: {payload}, location}) => <SummaryAsync data={payload} location={location} />;
+SummaryComponent.propTypes = {
+  data: T.shape({
+    payload: T.object,
+  }).isRequired,
+  location: T.shape({
+    pathname: T.string.isRequired,
+  }).isRequired,
+};
+
 const Summary = props => {
-  const {data: {loading, payload}, location, match} = props;
+  const {data: {loading}, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
     <div>
@@ -173,7 +191,7 @@ const Summary = props => {
         {...props}
         main="protein"
         base={match}
-        indexRoute={() => <SummaryAsync data={payload} location={location} />}
+        indexRoute={SummaryComponent}
         childRoutes={pages}
       />
 

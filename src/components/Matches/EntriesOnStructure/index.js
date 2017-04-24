@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: 0 */
-import React, {PropTypes as T} from 'react';
-import Link from 'components/generic/Link';
+import React from 'react';
+import T from 'prop-types';
 import ColorHash from 'color-hash/lib/color-hash';
 
 import style from '../style.css';
@@ -13,81 +13,116 @@ const EntriesOnStructure = (
   }
 ) => {
   const structure = matches[0].structure;
-  // TODO: change that!
-  structure.length = 250;
+  const main = ('entry_protein_coordinates' in structure) ? 'structure' : 'entry';
+  const length = matches[0][main].entry_protein_coordinates.length;
   return (
     <div className={style.svgContainer}>
       <svg
         className={style.svg}
         preserveAspectRatio="xMinYMid meet"
-        width={structure.length}
+        viewBox={`0 0 ${length + offset} 60`}
+        width={length}
       >
         <g transform={`translate(0 ${offset - baseSize / 2})`}>
-          <Link
-            to={`/structure/${
-              structure.source_database
-            }/${structure.accession}/`}
-          >
-            <title>{structure.accession}</title>
-            <rect
-              x="0" y="0" rx={baseSize / niceRatio}
-              width={structure.length} height={baseSize}
-              className={style.primary}
-            />
-          </Link>
-          <text y="-0.2em" transform={`translate(${structure.length} 0)`}>
+          <rect
+            x="0" y="0" rx={baseSize / niceRatio}
+            width={length} height={baseSize}
+            className={style.primary}
+          />
+          <text y="-0.2em" transform={`translate(${length} 0)`}>
             <tspan textAnchor="end">
-              {structure.length}
+              {length}
             </tspan>
           </text>
         </g>
         <g>
           {
-            matches.map(({coordinates: coords, entry}) => {
-              coords.forEach((m) => {
-                const n = m;
-                n.structure = m.structure || [0, m.protein[1] - m.protein[0]];
-              });
-
-              return (
-                <g
-                  key={entry.accession}
-                  transform={
-                    `translate(${coords[0].structure[0]} ${offset - baseSize})`
-                  }
-                >
-                  <Link
-                    to={`/entry/${entry.source_database}/${entry.accession}`}
-                  >
-                    <title>{entry.accession}</title>
-                    <rect
-                      x="0" y="0" rx={baseSize * 2 / niceRatio}
-                      width={coords[0].structure[1] - coords[0].structure[0]}
-                      height={baseSize * 2}
-                      fill={colorHash.hex(entry.accession)}
-                      className={style.secondary}
-                    />
-                  </Link>
-                  <text y="-0.2em">
-                    <tspan textAnchor="middle">
-                      {coords[0].structure[0]}
-                    </tspan>
-                  </text>
-                  <text
-                    y="-0.2em"
+            matches.map(({[main]: {
+              entry_protein_coordinates: {coordinates: coords_ep},
+            }, entry}) =>
+              coords_ep.map(
+                (entryMatch, i) => entryMatch.map(
+                  (regionMatch, j) => (
+                    <g
+                      key={`${entry.accession}-${i}-${j}`}
+                      transform={
+                        `translate(${regionMatch[0]} ${offset - baseSize / 2})`
+                      }
+                    >
+                      <title>{entry.accession}</title>
+                      <rect
+                        x="0" y="0" rx={baseSize / niceRatio}
+                        width={regionMatch[1] - regionMatch[0]}
+                        height={baseSize}
+                        fill={colorHash.hex(entry.accession)}
+                        className={style.secondary}
+                      />
+                      <text y="-0.2em">
+                        <tspan textAnchor="middle">
+                          {regionMatch[0]}
+                        </tspan>
+                      </text>
+                      <text
+                        y="-0.2em"
+                        transform={
+                          `translate(${
+                          regionMatch[1] - regionMatch[0]
+                            } 0)`
+                        }
+                      >
+                        <tspan textAnchor="middle">
+                          {regionMatch[1]}
+                        </tspan>
+                      </text>
+                    </g>
+                  )
+                )
+              )
+            )
+          }
+        </g>
+        <g>
+          {
+            matches.map(({[main]: {
+                           protein_structure_coordinates: {coordinates: coords_sp},
+                         }}) =>
+              coords_sp.map(
+                (strMatch, i) => (
+                  <g
+                    key={`${structure.accession}-${i}`}
                     transform={
-                      `translate(${
-                      coords[0].structure[1] - coords[0].structure[0]
-                        } 0)`
+                      `translate(${strMatch[0]} ${offset - baseSize})`
                     }
                   >
-                    <tspan textAnchor="middle">
-                      {coords[0].structure[1]}
-                    </tspan>
-                  </text>
-                </g>
-              );
-            })
+                    <title>{structure.accession}</title>
+                    <rect
+                      x="0" y="0" rx={baseSize * 2 / niceRatio}
+                      width={strMatch[1] - strMatch[0]}
+                      height={baseSize * 2}
+                      fill={colorHash.hex(structure.accession)}
+                      className={style.secondary}
+                    />
+                    <text y="-0.2em">
+                      <tspan textAnchor="middle">
+                        {strMatch[0]}
+                      </tspan>
+                    </text>
+                    <text
+                      y="-0.2em"
+                      transform={
+                        `translate(${
+                        strMatch[1] - strMatch[0]
+                          } 0)`
+                      }
+                    >
+                      <tspan textAnchor="middle">
+                        {strMatch[1]}
+                      </tspan>
+                    </text>
+                  </g>
+                )
+              )
+            )
           }
         </g>
       </svg>

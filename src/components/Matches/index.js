@@ -1,6 +1,7 @@
 // @flow
 /* eslint no-magic-numbers: [1, {ignore: [0, 1, 2]}] */
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import {connect} from 'react-redux';
 import Link from 'components/generic/Link';
 
@@ -46,13 +47,6 @@ const MatchesByPrimary = (
   /*: {matches: Array<Object>, primary: string, secondary: string, props: Array<any>}*/
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
-  matches.map((m) => {
-    const n = m;
-    if (m.coordinates.constructor === String) {
-      n.coordinates = JSON.parse(m.coordinates);
-    }
-    return n;
-  });
   return (
     <MatchComponent matches={matches} {...props} />
   );

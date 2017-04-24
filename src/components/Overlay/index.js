@@ -1,5 +1,6 @@
 // @flow
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import {connect} from 'react-redux';
 import classnames from 'classnames/bind';
 

@@ -1,5 +1,6 @@
 // @flow
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import GoTerms from 'components/GoTerms';
 import Sequence from 'components/Protein/Sequence';
@@ -14,8 +15,7 @@ import uniprotLogo from 'images/uniprot.png';
 const SummaryProtein = (
   {data: {metadata}, location: {pathname}}
   /*: {data: {metadata: Object}, location: {pathname: string}} */
-) => {
-  return (
+) => (
     <div className={f('sections')}>
       <section>
         <div className={f('row')}>
@@ -43,7 +43,6 @@ const SummaryProtein = (
       <GoTerms terms={metadata.go_terms} />
     </div>
   );
-}
 SummaryProtein.propTypes = {
   data: T.shape({
     metadata: T.object.isRequired,

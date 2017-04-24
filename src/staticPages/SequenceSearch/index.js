@@ -1,4 +1,5 @@
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 
 import getTableAccess from 'storage/idb';
 

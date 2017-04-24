@@ -40,4 +40,6 @@ export const pkg = _pkg;
 
 export const PROD = process.env.NODE_ENV === 'production';
 
+export const PERF = process.env.PERF;
+
 export const DEV = !PROD;

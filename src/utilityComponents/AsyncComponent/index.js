@@ -1,5 +1,6 @@
 /* eslint react/no-multi-comp: ["off"] */
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 
 import cancelable from 'utils/cancelable';
 
@@ -22,7 +23,7 @@ const AsyncComponent = class extends Component {
     this._moduleP.promise.then(
       module => this.setState({Component: module.default || module})
     ).catch(error => {
-      if (!error.canceled) console.error(error);
+      if (error.canceled) console.log('error?');
     });
   }
 
@@ -39,15 +40,20 @@ const AsyncComponent = class extends Component {
 
 const defaultPlaceHolder = () => <div>Loading...</div>;
 
-export const createAsyncComponent = (importFn/* : function */, placeHolder) => (
-  class extends Component {
+export const createAsyncComponent = (importFn/* : function */, placeHolder) => {
+  let imported;
+  return class AsyncComponent extends Component {
     static displayName = 'AsyncComponent';
 
     static defaultProps = {placeHolder: placeHolder || defaultPlaceHolder};
-
     static propTypes = {
       placeHolder: T.any,
     };
+
+    static preload() {
+      if (imported) return;
+      imported = importFn();
+    }
 
     constructor(props) {
       super(props);
@@ -56,7 +62,8 @@ export const createAsyncComponent = (importFn/* : function */, placeHolder) => (
 
     componentDidMount() {
       if (this.state.Component) return;
-      this._moduleP = cancelable(importFn());
+      AsyncComponent.preload();
+      this._moduleP = cancelable(imported);
       this._moduleP.promise.then(
         module => this.setState({Component: module.default || module})
       ).catch(error => {
@@ -73,7 +80,7 @@ export const createAsyncComponent = (importFn/* : function */, placeHolder) => (
       const {Component = placeHolder} = this.state;
       return Component ? <Component {...props} /> : null;
     }
-  }
-);
+  };
+};
 
 export default AsyncComponent;

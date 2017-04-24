@@ -2,16 +2,16 @@ import React, {Component} from 'react'; import T from 'prop-types';
 
 import {foundationPartial} from 'styles/foundation';
 import Link from 'components/generic/Link';
-import MemberSymbol from 'components/Entry/MemberSymbol';
+import {InterproSymbol} from 'components/Title';
 import loadData from 'higherOrder/loadData';
 
-import {memberDB} from 'staticData/home';
+import {entryType} from 'staticData/home';
 
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'styles/ebi-global.css';
 import fonts from 'styles/ebi/fonts.css';
 import theme from 'styles/theme-interpro.css';
-import local from './styles.css';
+import local from '../ByMemberDatabase/styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
@@ -23,7 +23,7 @@ const DEFAULT_ANIMATION = {
   fill: 'both',
 };
 
-class ByMemberDatabase extends Component {
+class ByEntryType extends Component {
   static propTypes = {
     data: T.object.isRequired,
   };
@@ -46,28 +46,42 @@ class ByMemberDatabase extends Component {
 
   render() {
     const {data: {payload}} = this.props;
-    const counts = payload && payload.entries.member_databases;
+    const counts = payload && Object.entries(payload).reduce(
+      (p, c) => {
+        const out = p;
+        out[c[0].toLowerCase()] = c[1];
+        return out;
+      },
+      {}
+    );
     return (
       <div>
         <div className={f('row')}>
           {
-            memberDB.map((e) => (
+            entryType.map((e, i) => (
               <div
-                className={f('columns', 'medium-3', 'large-3', 'text-center')}
+                className={f('columns', 'medium-4', 'large-4', 'text-center')}
                 ref={node => {
                   this._animatables.add(node);
                 }}
-                key={e.name}
+                key={i}
               >
-                <Link to={e.to}>
-                  <MemberSymbol type={e.type}/>
-                  <h6 data-tooltip title={e.title}>
-                    {e.name}
-                  </h6>
+                <Link to={`/entry?type=${e.type}`}>
+                  <div className={f('svg-container')}>
+                    <InterproSymbol type={e.type}/>
+                  </div>
+                  <h5 data-tooltip title={e.title}>
+                    {e.type}
+                    &nbsp;
+                    <span
+                      className={f('small', 'icon', 'icon-generic')}
+                      data-icon="i" data-tooltip
+                      title={e.description}
+                    />
+                  </h5>
                   <p>
-                    <small>{e.version}</small><br/>
                     <span className={f('count', {visible: payload})}>
-                      {counts && e.apiType && counts[e.apiType] || ''}
+                      {counts && e.type && counts[e.type.toLowerCase()] || ''}
                       {e.type === 'new' ? ' ' : ' entries'}
                     </span>
                   </p>
@@ -83,8 +97,8 @@ class ByMemberDatabase extends Component {
 }
 
 const urlFromState = ({settings: {api: {protocol, hostname, port, root}}}) => (
-  `${protocol}//${hostname}:${port}${root}/entry`
+  `${protocol}//${hostname}:${port}${root}/entry?group_by=type`
 );
 // const urlFromState = console.log;
 
-export default loadData(urlFromState)(ByMemberDatabase);
+export default loadData(urlFromState)(ByEntryType);

@@ -1,12 +1,14 @@
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import {foundationPartial} from 'styles/foundation';
 import Description from 'components/Description';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import ByMemberDatabase from 'components/home/ByMemberDatabase';
+import ByEntryType from 'components/home/ByEntryType';
 import {InterproSymbol} from 'components/Title';
 import Link from 'components/generic/Link';
-import {entryType, latests, speciesFeat, GoList} from 'staticData/home';
+import {latests, speciesFeat, GoList} from 'staticData/home';
 import Tabs from 'components/Tabs';
 import {schedule} from 'timing-functions/src';
 import AsyncComponent, {createAsyncComponent}
@@ -22,14 +24,14 @@ import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
-const SearchByText = createAsyncComponent(
-  () => import('components/SearchByText')
-);
+const SearchByText = createAsyncComponent(() => import(
+  /* webpackChunkName: "search-by-text" */'components/SearchByText'
+));
 const IPScanSearch = createAsyncComponent(
-  () => import('components/IPScanSearch')
+  () => import(/* webpackChunkName: "ipscan-search" */'components/IPScanSearch')
 );
 const IPScanStatus = createAsyncComponent(
-  () => import('components/IPScanStatus')
+  () => import(/* webpackChunkName: "ipscan-status" */'components/IPScanStatus')
 );
 
 const MaskSvgIcons = () => (
@@ -205,34 +207,7 @@ const Home = () => (
             {// panel2 - by entry type
             }
             <div title="by entry type" className={f('entry-type')}>
-               <div className={f('row')}>
-                 {
-                   entryType.map((e, i) => (
-                     <div
-                       className={f('columns', 'medium-4', 'large-4', 'text-center')}
-                       key={i}
-                     >
-                       <a href="#" data-tooltip title={e.title}>
-                         <div className={f('svg-container')}>
-                           <InterproSymbol type={e.type}/>
-                         </div>
-
-                         <h5>
-                           {e.type}
-                           &nbsp;<span
-                             className={f('small', 'icon', 'icon-generic')}
-                             data-icon="i" data-tooltip
-                             title={e.description}
-                                 />
-                         </h5>
-                         <p>{e.counter} entries<br/></p> </a>
-                     </div>
-                   ))
-                 }
-              </div>
-
-              <a href="/entry" className={f('button')}>View all entries</a>
-
+              <ByEntryType />
             </div>
             {// panel 3 - by species
             }
@@ -501,7 +476,9 @@ const Home = () => (
             getComponent={async () => {
               // eslint-disable-next-line no-magic-numbers
               await schedule(10000);// Schedule asap, but do it anyway after 10s
-              return import('components/Twitter');
+              return import(
+                /* webpackChunkName: "twitter" */'components/Twitter'
+              );
             }}
           />
 

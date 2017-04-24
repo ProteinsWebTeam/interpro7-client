@@ -1,5 +1,6 @@
 // @flow
-import React, {PropTypes as T, createElement} from 'react';
+import React, {createElement} from 'react';
+import T from 'prop-types';
 import Link from 'components/generic/Link';
 
 import {TaxLink, PDBeLink, UniProtLink} from 'components/ExtLink';

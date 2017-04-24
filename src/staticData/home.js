@@ -223,15 +223,6 @@ export const memberDB = [
     counter: 4408,
     integrated: 4453,
     accession: 'TIGR[0-9]{5}$',
-  }, {
-    type: 'new',
-    to: 'contact/',
-    className: f('md-new'),
-    title: 'Want to become a partner?',
-    name: 'New partner?',
-    counter: 'click to join us',
-    integrated: '',
-    version: '',
   },
 ];
 

@@ -4,24 +4,44 @@ import Switch from 'components/generic/Switch';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 // Main pages
-const Home = createAsyncComponent(() => import('pages/Home'));
-const Entry = createAsyncComponent(() => import('pages/Entry'));
-const Protein = createAsyncComponent(() => import('pages/Protein'));
-const Structure = createAsyncComponent(() => import('pages/Structure'));
+const Home = createAsyncComponent(
+  () => import(/* webpackChunkName: "home" */'pages/Home')
+);
+const Entry = createAsyncComponent(
+  () => import(/* webpackChunkName: "entry-page" */'pages/Entry')
+);
+const Protein = createAsyncComponent(
+  () => import(/* webpackChunkName: "protein-page" */'pages/Protein')
+);
+const Structure = createAsyncComponent(
+  () => import(/* webpackChunkName: "structure-page" */'pages/Structure')
+);
 // Search
 // const SequenceSearch = createAsyncComponent(
 //   () => import('staticPages/SequenceSearch')
 // );
-const Search = createAsyncComponent(() => import('staticPages/Search'));
+const Search = createAsyncComponent(
+  () => import(/* webpackChunkName: "search" */'staticPages/Search')
+);
 // Static pages
-const About = createAsyncComponent(() => import('staticPages/About'));
-const Browse = createAsyncComponent(() => import('staticPages/Browse'));
-const Help = createAsyncComponent(() => import('staticPages/Help'));
-const Contact = createAsyncComponent(() => import('staticPages/Contact'));
-const Settings = createAsyncComponent(() => import('staticPages/Settings'));
+const About = createAsyncComponent(
+  () => import(/* webpackChunkName: "about" */'staticPages/About')
+);
+const Browse = createAsyncComponent(
+  () => import(/* webpackChunkName: "browse" */'staticPages/Browse')
+);
+const Help = createAsyncComponent(
+  () => import(/* webpackChunkName: "help" */'staticPages/Help')
+);
+const Contact = createAsyncComponent(
+  () => import(/* webpackChunkName: "contact" */'staticPages/Contact')
+);
+const Settings = createAsyncComponent(
+  () => import(/* webpackChunkName: "settings" */'staticPages/Settings')
+);
 
 const NotFound = createAsyncComponent(
-  () => import('staticPages/error/NotFound')
+  () => import(/* webpackChunkName: "not-found" */'staticPages/error/NotFound')
 );
 
 const pages = new Set([

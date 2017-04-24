@@ -1,5 +1,8 @@
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import {connect} from 'react-redux';
+
+import {goToLocation} from 'actions/creators';
 
 // get the next level in the pathname, after the base
 const getLevel = (pathname/*: string*/, base/*: ?string*/)/*: ?string */ => {
@@ -33,6 +36,7 @@ const defaultCatchAll = () => <div>404</div>;
 
 const Switch = ({
   ...props,
+  dispatch,
   indexRoute,
   childRoutes = [],
   catchAll = defaultCatchAll,
@@ -40,10 +44,12 @@ const Switch = ({
 }) => {
   // get the URL level
   const level = getLevel(props.location.pathname, base.toLowerCase());
+  // redirect
+  const redirect = to => dispatch(goToLocation(to));
   // get the component to render according to the level
   const Component = getComponent(level, indexRoute, childRoutes) || catchAll;
   //
-  return <Component {...props} match={level} />;
+  return <Component {...props} redirect={redirect} match={level} />;
 };
 Switch.propTypes = {
   indexRoute: T.func.isRequired,
@@ -53,6 +59,7 @@ Switch.propTypes = {
     }),
     T.array,
   ])/* any Iterable, like a Set or an Array */,
+  dispatch: T.func.isRequired,
   catchAll: T.func,
   base: T.string,
   location: T.shape({
