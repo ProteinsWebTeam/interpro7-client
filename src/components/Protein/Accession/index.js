@@ -1,8 +1,9 @@
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 
 const Accession = ({metadata}) => (
-    <div>Accession:
+    <div>Accession:&nbsp;
       <a href={`//www.uniprot.org/uniprot/${metadata.accession}`}>
         {metadata.accession}
       </a> ({metadata.id})

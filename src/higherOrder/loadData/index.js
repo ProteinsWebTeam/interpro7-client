@@ -1,4 +1,4 @@
-import React, {Component, PropTypes as T} from 'react';
+import React, {Component} from 'react'; import T from 'prop-types';
 import {connect} from 'react-redux';
 
 import cancelable from 'utils/cancelable';
@@ -14,7 +14,7 @@ const mapStateToProps = getUrl => state => ({
   appState: state,
   data: state.data[getUrl(state)] || {},
 });
-const getBaseURL = url => url.slice(0, url.indexOf('?'));
+const getBaseURL = url => url ? url.slice(0, url.indexOf('?')) : '';
 
 // eslint-disable-next-line max-params
 const load = (

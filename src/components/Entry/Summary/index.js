@@ -1,4 +1,5 @@
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 import {connect} from 'react-redux';
 
 import {goToLocation} from 'actions/creators';
@@ -37,7 +38,22 @@ class SummaryEntry extends Component {
      },
      location: {pathname: string},
    };
-   */
+  */
+  componentWillMount() {
+    const interproComponents = import(
+      /* webpackChunkName: "interpro-components" */'interpro-components'
+    );
+    webComponents.push(loadWebComponent(
+      () => interproComponents.then(m => m.InterproHierarchy),
+    ).as('interpro-hierarchy'));
+    webComponents.push(loadWebComponent(
+      () => interproComponents.then(m => m.InterproEntry),
+    ).as('interpro-entry'));
+    webComponents.push(loadWebComponent(
+      () => interproComponents.then(m => m.InterproType),
+    ).as('interpro-type'));
+  }
+
   async componentDidMount() {
     await Promise.all(webComponents);
     const h = this.props.data.metadata.hierarchy;
@@ -49,18 +65,9 @@ class SummaryEntry extends Component {
       }
     });
   }
+
   render() {
     const {data: {metadata}, location: {pathname}} = this.props;
-    webComponents.push(loadWebComponent(
-        () => import('interpro-components').then(m => m.InterproHierarchy),
-      ).as('interpro-hierarchy'));
-    webComponents.push(loadWebComponent(
-        () => import('interpro-components').then(m => m.InterproEntry),
-      ).as('interpro-entry'));
-    webComponents.push(loadWebComponent(
-        () => import('interpro-components').then(m => m.InterproType),
-      ).as('interpro-type'));
-
     return (
         <div className={f('sections')}>
           <section>

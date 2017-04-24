@@ -1,4 +1,4 @@
-import {Component, PropTypes as T} from 'react';
+import {Component} from 'react'; import T from 'prop-types';
 import {connect} from 'react-redux';
 
 import {goToLocation} from 'actions/creators';
@@ -18,5 +18,4 @@ const Redirect = class extends Component {
   }
 };
 
-// eslint-disable-next-line no-undefined
-export default connect(undefined, {goToLocation})(Redirect);
+export default connect(null, {goToLocation})(Redirect);

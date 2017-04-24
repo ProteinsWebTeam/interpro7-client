@@ -1,6 +1,7 @@
 // @flow
 /* eslint no-magic-numbers: [1, {ignore: [0, 1, 2]}] */
-import React, {PropTypes as T} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import {connect} from 'react-redux';
 import Link from 'components/generic/Link';
 

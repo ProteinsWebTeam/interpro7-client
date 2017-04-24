@@ -1,4 +1,5 @@
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 import Link from 'components/generic/Link';
 import {connect} from 'react-redux';
 import url from 'url';
@@ -31,7 +32,7 @@ const IPScanStatus = class extends Component {
     this._blobsTableAccess = getTableAccess('blobs');
     // Only create one instance, and only when it is needed
     if (!timeago) timeago = new TA();
-    // Reference to timeout (ton cancel it on unmount)
+    // Reference to timeout (to cancel it on unmount)
     this._timeout = null;
   }
 

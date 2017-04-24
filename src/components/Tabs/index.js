@@ -1,4 +1,5 @@
-import React, {Component, PropTypes as T, Children} from 'react';
+import React, {Component, Children} from 'react';
+import T from 'prop-types';
 
 import {foundationPartial} from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';

@@ -1,5 +1,6 @@
 // @flow
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 
 import MenuItem from 'components/Menu/MenuItem';
 

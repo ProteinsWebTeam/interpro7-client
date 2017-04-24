@@ -7,7 +7,7 @@ import {render} from 'react-dom';
 
 import App from 'App';
 
-import {DEV} from 'config';
+import {DEV, PERF} from 'config';
 import ready from 'utils/ready';
 
 const main = async () => {
@@ -15,6 +15,9 @@ const main = async () => {
   await ready();
   // Root of the DOM to hook React to
   const DOM_ROOT = document.getElementById('root');
+
+  // If “PERF” is defined in the environment, activate “why-did-you-update” tool
+  if (DEV && PERF) require('why-did-you-update').whyDidYouUpdate(React);
 
   // Main render function
   render(<App />, DOM_ROOT);

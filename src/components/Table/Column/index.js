@@ -1,4 +1,4 @@
-import {PropTypes as T} from 'react';
+import T from 'prop-types';
 
 const Column = () => null;
 Column.propTypes = {

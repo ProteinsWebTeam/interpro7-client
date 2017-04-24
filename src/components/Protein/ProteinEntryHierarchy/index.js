@@ -1,4 +1,5 @@
-import React, {PropTypes as T, Component} from 'react';
+import React, {Component} from 'react';
+import T from 'prop-types';
 
 
 import loadWebComponent from 'utils/loadWebComponent';
@@ -49,6 +50,33 @@ const getHierarchy = (accs, hierarchies) => new Promise((resolve, reject) => {
 const webComponents = [];
 
 class ProteinEntryHierarchy extends Component {
+  static propTypes = {
+    entries: T.arrayOf(T.shape({
+      accession: T.string.required,
+      type: T.string.required,
+    })),
+    api: T.shape({
+      protocol: T.string.required,
+      hostname: T.string.required,
+      port: T.string.required,
+      root: T.string.required,
+    }),
+  };
+
+  componentWillMount() {
+    const interproComponents = import(
+      /* webpackChunkName: "interpro-components" */'interpro-components'
+    );
+    webComponents.push(loadWebComponent(
+      () => interproComponents.then(m => m.InterproHierarchy)
+    ).as('interpro-hierarchy'));
+    webComponents.push(loadWebComponent(
+      () => interproComponents.then(m => m.InterproEntry)
+    ).as('interpro-entry'));
+    webComponents.push(loadWebComponent(
+      interproComponents.then(m => m.InterproType),
+    ).as('interpro-type'));
+  }
 
   async componentDidMount() {
     await Promise.all(webComponents);
@@ -70,18 +98,9 @@ class ProteinEntryHierarchy extends Component {
       })
       .catch(reason => console.log(reason.message));
   }
+
   render() {
     const {entries} = this.props;
-    webComponents.push(loadWebComponent(
-      () => import('interpro-components').then(m => m.InterproHierarchy),
-    ).as('interpro-hierarchy'));
-    webComponents.push(loadWebComponent(
-      () => import('interpro-components').then(m => m.InterproEntry),
-    ).as('interpro-entry'));
-    webComponents.push(loadWebComponent(
-      () => import('interpro-components').then(m => m.InterproType),
-    ).as('interpro-type'));
-
     return (
       <interpro-hierarchy
         accessions={entries.map(e => e.accession)}
@@ -92,18 +111,5 @@ class ProteinEntryHierarchy extends Component {
     );
   }
 }
-
-ProteinEntryHierarchy.propTypes = {
-  entries: T.arrayOf(T.shape({
-    accession: T.string.required,
-    type: T.string.required,
-  })),
-  api: T.shape({
-    protocol: T.string.required,
-    hostname: T.string.required,
-    port: T.string.required,
-    root: T.string.required,
-  }),
-};
 
 export default connect(({settings: {api}}) => ({api}))(ProteinEntryHierarchy);

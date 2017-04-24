@@ -1,4 +1,5 @@
-import React, {PropTypes as T, Component, cloneElement} from 'react';
+import React, {Component, cloneElement} from 'react';
+import T from 'prop-types';
 import {connect} from 'react-redux';
 
 import classnames from 'classnames/bind';
