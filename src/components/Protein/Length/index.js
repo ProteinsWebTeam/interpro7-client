@@ -1,16 +1,15 @@
-// @flow
-import React, {PropTypes as T} from 'react';
-import styles from 'styles/blocks.css';
+import React from 'react';
+import T from 'prop-types';
 
-const Length = ({metadata, pathname}) => (
-    <div>Length: {metadata.length} amino acids {metadata.fragment === "N" ? '(complete)' : '(fragment)'}</div>
-  );
+const Length = ({metadata}) =>  (
+  <div>Length: {metadata.length} amino acids {metadata.fragment === "N" ? '(complete)' : '(fragment)'}</div>
+);
 
 Length.propTypes = {
   metadata: T.shape({
-    length: T.number.isRequired
+    length: T.number.isRequired,
+    fragment: T.string.isRequired,
   }).isRequired,
-  pathname: T.string.isRequired,
 };
 
 export default Length;
