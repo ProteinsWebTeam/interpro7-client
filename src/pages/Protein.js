@@ -104,7 +104,6 @@ const List = ({
             {acc}
           </Link>
         )}
-        sortField="accession"
       >
         Accession
       </Column>
@@ -147,7 +146,6 @@ const List = ({
             {length} amino-acids
           </div>
         )}
-        sortField="length"
       >
         Length
       </Column>

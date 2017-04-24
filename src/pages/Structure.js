@@ -99,7 +99,6 @@ const List = ({
             {acc}
           </Link>
         )}
-        sortField="accession"
       >
         Accession
       </Column>
@@ -112,7 +111,6 @@ const List = ({
             </Link>
           )
         }
-        sortField="name"
       >
         Name
       </Column>

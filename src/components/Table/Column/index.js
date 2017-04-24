@@ -8,7 +8,6 @@ Column.propTypes = {
   headerStyle: T.object,
   cellStyle: T.object,
   children: T.any,
-  sortField: T.string,
 };
 
 export default Column;

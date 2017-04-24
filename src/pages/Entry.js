@@ -117,7 +117,6 @@ const List = class extends Component {
               {acc}
             </Link>
           )}
-          sortField="accession"
         >
           Accession
         </Column>
@@ -130,7 +129,6 @@ const List = class extends Component {
               </Link>
             )
           }
-          sortField="name"
         >
           Name
         </Column>
