@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {parse} from 'url';
 
 import {goToLocation} from 'actions/creators';
 
@@ -9,9 +10,18 @@ const happenedWithModifierKey = event => !!(
 );
 const happenedWithLeftClick = event => event.button === 0;
 
+const match = (toOfLink, {pathname}) => {
+  let to = toOfLink;
+  if (typeof toOfLink === 'string') to = parse(toOfLink);
+  return pathname.startsWith(to.pathname);
+};
+
 class Link extends Component {
   static propTypes = {
     onClick: T.func,
+    location: T.shape({
+      pathname: T.string.isRequired,
+    }).isRequired,
     goToLocation: T.func.isRequired,
     target: T.string,
     to: T.oneOfType([
@@ -22,6 +32,8 @@ class Link extends Component {
         hash: T.string,
       }),
     ]),
+    className: T.string,
+    activeClass: T.string,
   };
 
   handleClick = event => {
@@ -39,9 +51,16 @@ class Link extends Component {
   };
 
   render() {
-    const {onClick, goToLocation, ...props} = this.props;
-    return <a {...props} onClick={this.handleClick} />;
+    const {
+      onClick, location, goToLocation, activeClass, className: cn, to, ...props
+    } = this.props;
+    const className = `${
+      match(to, location) ? activeClass : ''
+    } ${cn || ''}`.trim();
+    return (
+      <a {...props} className={className || null} onClick={this.handleClick} />
+    );
   }
 }
 
-export default connect(null, {goToLocation})(Link);
+export default connect(({location}) => ({location}), {goToLocation})(Link);

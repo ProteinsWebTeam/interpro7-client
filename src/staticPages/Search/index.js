@@ -4,13 +4,15 @@ import T from 'prop-types';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
-import Tabs from 'components/Tabs';
 import SearchResults from 'components/SearchResults';
 
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
-import foundation from 'styles/foundation';
+import {foundationPartial} from 'styles/foundation';
+import ipro from 'styles/interpro-new.css';
 import styles from 'styles/blocks.css';
+
+const f = foundationPartial(ipro);
 
 const SearchByText = createAsyncComponent(() => import(
   /* webpackChunkName: "search-by-text" */'components/SearchByText'
@@ -45,38 +47,40 @@ const RedirectToText = () => (
 const Search = () => (
   <main>
     <section className={styles.card}>
-      <fieldset className={foundation('fieldset')}>
+      <fieldset className={f('fieldset')}>
         <legend>Search InterPro</legend>
-        <Tabs>
-          <div title="by text">
-            <SearchByText />
-          </div>
-          <div title="by sequence" to="/search/sequence">
-            <IPScanSearch />
-            <IPScanStatus refreshRate={120000} />
-          </div>
-        </Tabs>
-        <div>new, below</div>
-        <ul className={foundation('tabs')}>
+        <ul className={f('tabs')}>
           <li
-            className={foundation('tabs-title')}
+            className={f('tabs-title')}
             onMouseOver={SearchByText.preload}
           >
-            <Link to="/search/text">by text</Link>
+            <Link
+              to="/search/text"
+              activeClass={f('is-active', 'is-active-tab')}
+            >
+              by text
+            </Link>
           </li>
           <li
-            className={foundation('tabs-title')}
+            className={f('tabs-title')}
             onMouseOver={IPScanSearchAndStatus.preload}
           >
-            <Link to="/search/sequence">by sequence</Link>
+            <Link
+              to="/search/sequence"
+              activeClass={f('is-active', 'is-active-tab')}
+            >
+              by sequence
+            </Link>
           </li>
         </ul>
-        <div className={foundation('tabs', 'tabs-content')}>
-          <Switch
-            base="search"
-            indexRoute={RedirectToText}
-            childRoutes={routes}
-          />
+        <div className={f('tabs', 'tabs-content')}>
+          <div className={f('tabs-panel', 'is-active')}>
+            <Switch
+              base="search"
+              indexRoute={RedirectToText}
+              childRoutes={routes}
+            />
+          </div>
         </div>
       </fieldset>
       <SearchResults />

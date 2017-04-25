@@ -1,8 +1,12 @@
 import React from 'react';
 import T from 'prop-types';
 
-const Length = ({metadata}) =>  (
-  <div>Length: {metadata.length} amino acids {metadata.fragment === "N" ? '(complete)' : '(fragment)'}</div>
+const Length = ({metadata}) => (
+  <div>
+    Length: {metadata.length} amino acids {
+      metadata.fragment === 'N' ? '(complete)' : '(fragment)'
+    }
+  </div>
 );
 
 Length.propTypes = {
