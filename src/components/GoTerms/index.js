@@ -3,6 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 
 import {GoLink} from 'components/ExtLink';
+import AnimatedEntryList from 'components/AnimatedEntryList';
 
 import ebiStyles from 'styles/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
@@ -35,8 +36,7 @@ export const GoTermsByCategory = ({terms}) => {
             <h5 style={{textTransform: 'capitalize'}}>
               {key.replace('_', ' ')}
             </h5>
-            <ul className={f('no-bullet')}>
-              { values && values.length && values.forEach(console.log) && null }
+            <AnimatedEntryList duration={500} className={f('no-bullet')}>
               { values && values.length ?
                 values.map(({identifier, name}) => (
                   <li key={identifier}>
@@ -51,7 +51,7 @@ export const GoTermsByCategory = ({terms}) => {
                   <span className={f('secondary', 'label')}>None</span>
                 </li>
               }
-            </ul>
+            </AnimatedEntryList>
           </div>
         ))
       }

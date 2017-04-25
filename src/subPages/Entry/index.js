@@ -10,12 +10,15 @@ import loadWebComponent from 'utils/loadWebComponent';
 
 import Related from 'components/Related';
 
+import {format, resolve} from 'url';
+
 const getUrl = end => ({
   settings: {api: {protocol, hostname, port, root}},
   location: {pathname},
-}) => `${protocol}//${hostname}:${port}${root}${
-  pathname.replace(/entry.*$/i, `entry/${end}`)
-}`;
+}) => resolve(
+  format({protocol, hostname, port, root}),
+  pathname.replace(/entry.*$/i, `entry/${end}`),
+);
 
 const mergeData = (interpro, integrated) => {
   const output = {};

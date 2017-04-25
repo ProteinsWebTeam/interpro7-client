@@ -1,4 +1,5 @@
-import React, {Component} from 'react'; import T from 'prop-types';
+import React, {Component} from 'react';
+import T from 'prop-types';
 import {findDOMNode} from 'react-dom';
 import {connect} from 'react-redux';
 

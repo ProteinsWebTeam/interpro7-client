@@ -1,8 +1,12 @@
-import React, {Component} from 'react'; import T from 'prop-types';
+import React from 'react';
+import T from 'prop-types';
+import {format} from 'url';
 
 import {foundationPartial} from 'styles/foundation';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
+import AnimatedEntryList from 'components/AnimatedEntryList';
+
 import loadData from 'higherOrder/loadData';
 
 import {memberDB} from 'staticData/home';
@@ -15,76 +19,51 @@ import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
-const DEFAULT_DELAY = 25;
-const DEFAULT_DURATION = 250;
-const DEFAULT_ANIMATION = {
-  duration: DEFAULT_DURATION,
-  easing: 'ease-in-out',
-  fill: 'both',
+const ByMemberDatabase = ({data: {payload}}) => {
+  const counts = payload && payload.entries.member_databases;
+  return (
+    <div>
+      <AnimatedEntryList className={f('row')} element="div">
+        {
+          memberDB.map((e) => (
+            <div
+              className={f('columns', 'medium-3', 'large-3', 'text-center')}
+              key={e.name}
+            >
+              <Link to={e.to}>
+                <MemberSymbol type={e.type}/>
+                <h6 data-tooltip title={e.title}>
+                  {e.name}
+                </h6>
+                <p>
+                  <small>{e.version}</small><br/>
+                  <span className={f('count', {visible: payload})}>
+                      {counts && e.apiType && counts[e.apiType] || ''}
+                    {e.type === 'new' ? ' ' : ' entries'}
+                    </span>
+                </p>
+              </Link>
+            </div>
+          ))
+        }
+      </AnimatedEntryList>
+      <Link to="/entry" className={f('button')}>View all entries</Link>
+    </div>
+  );
+};
+ByMemberDatabase.propTypes = {
+  data: T.shape({
+    payload: T.object,
+  }).isRequired,
 };
 
-class ByMemberDatabase extends Component {
-  static propTypes = {
-    data: T.object.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    this._animatables = new Set();
-  }
-
-  componentDidMount() {
-    let i = 0;
-    for (const node of this._animatables) {
-      if (!node.animate) return;
-      node.animate(
-        {opacity: [0, 1]},
-        {...DEFAULT_ANIMATION, delay: DEFAULT_DELAY * i++}
-      );
-    }
-  }
-
-  render() {
-    const {data: {payload}} = this.props;
-    const counts = payload && payload.entries.member_databases;
-    return (
-      <div>
-        <div className={f('row')}>
-          {
-            memberDB.map((e) => (
-              <div
-                className={f('columns', 'medium-3', 'large-3', 'text-center')}
-                ref={node => {
-                  this._animatables.add(node);
-                }}
-                key={e.name}
-              >
-                <Link to={e.to}>
-                  <MemberSymbol type={e.type}/>
-                  <h6 data-tooltip title={e.title}>
-                    {e.name}
-                  </h6>
-                  <p>
-                    <small>{e.version}</small><br/>
-                    <span className={f('count', {visible: payload})}>
-                      {counts && e.apiType && counts[e.apiType] || ''}
-                      {e.type === 'new' ? ' ' : ' entries'}
-                    </span>
-                  </p>
-                </Link>
-              </div>
-            ))
-          }
-        </div>
-        <Link to="/entry" className={f('button')}>View all entries</Link>
-      </div>
-    );
-  }
-}
-
-const urlFromState = ({settings: {api: {protocol, hostname, port, root}}}) => (
-  `${protocol}//${hostname}:${port}${root}/entry`
-);
-// const urlFromState = console.log;
+const urlFromState = (
+  {settings: {api: {protocol, hostname, port, root}}}
+) => format({
+  protocol,
+  hostname,
+  port,
+  pathname: `${root}/entry`,
+});
 
 export default loadData(urlFromState)(ByMemberDatabase);
