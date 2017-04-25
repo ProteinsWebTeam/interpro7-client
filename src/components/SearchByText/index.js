@@ -9,8 +9,8 @@ import TextSearchBox from 'components/SearchByText/TextSearchBox';
 import f from 'styles/foundation';
 
 const Example = ({value}) => (
-    <a style={{cursor: 'pointer'}} data-search={value}> {value}</a>
-  );
+  <a style={{cursor: 'pointer'}} data-search={value}> {value}</a>
+);
 Example.propTypes = {
   value: T.string,
 };

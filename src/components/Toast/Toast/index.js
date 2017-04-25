@@ -45,7 +45,7 @@ export default class extends Component {
   render() {
     const {
       toastId, title, body, className, // used, or transformed before passed
-      paused: _, ttl: __, handleClose: ___, // ignored
+      paused, ttl, handleClose, // ignored
       ...props// passed
     } = this.props;
     return (

@@ -1,4 +1,3 @@
-/* eslint no-magic-numbers: [1, {ignore: [1, 10, 15, 30, 100]}] */
 import React from 'react';
 import T from 'prop-types';
 
@@ -11,12 +10,12 @@ import {foundationPartial} from 'styles/foundation';
 const f = foundationPartial(ebiStyles, ipro);
 
 const getDefaultPayload = () => ({
-  biological_process: [],
-  molecular_function: [],
-  cellular_component: [],
+  'Biological Process': [],
+  'Molecular Function': [],
+  'Cellular Component': [],
 });
 
-export const GoTermsByCategory = ({terms}) => {
+const GoTerms = ({terms}/*: {terms: Array<Object>} */) => {
   // TODO: change when GO terms are correct in the API
   const _terms = terms.reduce((acc, term) => {
     // eslint-disable-next-line no-param-reassign
@@ -29,49 +28,40 @@ export const GoTermsByCategory = ({terms}) => {
     return acc;
   }, getDefaultPayload());
   return (
-    <div className={f('row')}>
-      {Object.entries(_terms)
-        .map(([key, values]) => (
-          <div key={key} className={f('medium-6', 'large-4', 'columns')}>
-            <h5 style={{textTransform: 'capitalize'}}>
-              {key.replace('_', ' ')}
-            </h5>
-            <AnimatedEntryList duration={500} className={f('no-bullet')}>
-              { values && values.length ?
-                values.map(({identifier, name}) => (
-                  <li key={identifier}>
-                    <GoLink
-                      id={identifier}
-                      className={f('label', 'go', key)}
-                      title={identifier}
-                    >{name || identifier}</GoLink>
+    <section id="go-terms">
+      <div className={f('row')}>
+        <div className={f('large-12', 'columns')}>
+          <h4>Go terms</h4>
+        </div>
+      </div>
+      <div className={f('row')}>
+        {Object.entries(_terms)
+          .map(([key, values]) => (
+            <div key={key} className={f('medium-6', 'large-4', 'columns')}>
+              <h5>{key.replace('_', ' ')}</h5>
+              <AnimatedEntryList duration={500} className={f('no-bullet')}>
+                { values && values.length ?
+                  values.map(({identifier, name}) => (
+                    <li key={identifier}>
+                      <GoLink
+                        id={identifier}
+                        className={f('label', 'go', key)}
+                        title={identifier}
+                      >{name || identifier}</GoLink>
+                    </li>
+                  )) :
+                  <li>
+                    <span className={f('secondary', 'label')}>None</span>
                   </li>
-                )) :
-                <li>
-                  <span className={f('secondary', 'label')}>None</span>
-                </li>
-              }
-            </AnimatedEntryList>
-          </div>
-        ))
-      }
-    </div>
+                }
+              </AnimatedEntryList>
+            </div>
+          ))
+        }
+      </div>
+    </section>
   );
 };
-GoTermsByCategory.propTypes = {
-  terms: T.arrayOf(T.object.isRequired).isRequired,
-};
-
-const GoTerms = ({terms}/*: {terms: Array<object>} */) => (
-  <section id="go-terms">
-    <div className={f('row')}>
-      <div className={f('large-12', 'columns')}>
-        <h4>Go terms</h4>
-      </div>
-    </div>
-    <GoTermsByCategory terms={terms}/>
-  </section>
-);
 GoTerms.propTypes = {
   terms: T.arrayOf(T.object.isRequired).isRequired,
 };

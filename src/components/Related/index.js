@@ -142,7 +142,7 @@ const getReversedURL = ({
   return `${protocol}//${hostname}:${port}${root}${newPath}?${searchParamsToURL(s)}`;
 };
 const RelatedAdvancedQuery = loadData(getReversedURL)(
-  ({data: {payload, loading}, secondaryData: _, ...props}) => {
+  ({data: {payload, loading}, secondaryData, ...props}) => {
     if (loading) return <div>Loading...</div>;
     const _secondaryData = payload.results.map(x => {
       const obj = x.metadata;

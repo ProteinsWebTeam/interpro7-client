@@ -32,7 +32,7 @@ const AsyncComponent = class extends Component {
   }
 
   render() {
-    const {placeHolder, getComponent: _, ...props} = this.props;
+    const {placeHolder, getComponent, ...props} = this.props;
     const {Component = placeHolder} = this.state;
     return Component ? <Component {...props} /> : null;
   }

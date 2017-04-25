@@ -39,7 +39,7 @@ class Link extends Component {
   };
 
   render() {
-    const {onClick: _, goToLocation: __, ...props} = this.props;
+    const {onClick, goToLocation, ...props} = this.props;
     return <a {...props} onClick={this.handleClick} />;
   }
 }
