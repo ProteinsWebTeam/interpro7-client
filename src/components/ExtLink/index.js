@@ -10,7 +10,7 @@ const types = {
 };
 
 export const BaseLink = (
-  {id, pattern, href, to, target, className, children, ...rest}
+  {id, pattern, href, to, target, className, children, activeClass, ...rest}
 ) => {
   const props = {href: href || to || pattern.replace('{id}', id)};
   if (target) props.target = target;
@@ -24,6 +24,7 @@ BaseLink.propTypes = {
   to: T.string,
   target: T.string,
   className: T.string,
+  activeClass: T.oneOfType([T.string, T.func]),
   children: T.node.isRequired,
 };
 

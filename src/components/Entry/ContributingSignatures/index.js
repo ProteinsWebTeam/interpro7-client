@@ -2,7 +2,7 @@ import React from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-import AnimatedEntryList from 'components/AnimatedEntryList';
+import AnimatedEntry from 'components/AnimatedEntry';
 
 import {buildLink} from 'utils/url';
 
@@ -14,7 +14,7 @@ const ContributingSignatures = (
 ) => (
   <div className={styles.card} style={{flex: '0 0 auto'}}>
     <h5>Contributing signatures:</h5>
-    <AnimatedEntryList className={ipro.chevron}>
+    <AnimatedEntry className={ipro.chevron}>
       {Object.entries(contr).map(([key, values]) => (
         <li key={key}>
           <Link to={buildLink(pathname, 'entry', key)}>{key}</Link>:
@@ -29,7 +29,7 @@ const ContributingSignatures = (
           </ul>
         </li>
       ))}
-    </AnimatedEntryList>
+    </AnimatedEntry>
   </div>
 );
 ContributingSignatures.propTypes = {

@@ -18,7 +18,7 @@ const EBIMenu = (
     {children}
     {EBI.map(({to, name, icon, iconClass = 'generic'}) => (
       <li key={to}>
-        <MenuItem to={to}>
+        <MenuItem to={to} >
           {
             icon &&
             <i

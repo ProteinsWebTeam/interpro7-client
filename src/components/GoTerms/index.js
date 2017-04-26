@@ -2,7 +2,7 @@ import React from 'react';
 import T from 'prop-types';
 
 import {GoLink} from 'components/ExtLink';
-import AnimatedEntryList from 'components/AnimatedEntryList';
+import AnimatedEntry from 'components/AnimatedEntry';
 
 import ebiStyles from 'styles/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
@@ -39,7 +39,7 @@ const GoTerms = ({terms}/*: {terms: Array<Object>} */) => {
           .map(([key, values]) => (
             <div key={key} className={f('medium-6', 'large-4', 'columns')}>
               <h5>{key.replace('_', ' ')}</h5>
-              <AnimatedEntryList duration={500} className={f('no-bullet')}>
+              <AnimatedEntry duration={500} className={f('no-bullet')}>
                 { values && values.length ?
                   values.map(({identifier, name}) => (
                     <li key={identifier}>
@@ -54,7 +54,7 @@ const GoTerms = ({terms}/*: {terms: Array<Object>} */) => {
                     <span className={f('secondary', 'label')}>None</span>
                   </li>
                 }
-              </AnimatedEntryList>
+              </AnimatedEntry>
             </div>
           ))
         }

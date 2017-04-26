@@ -7,6 +7,7 @@ import {closeSideNav} from 'actions/creators';
 // import {EBI, InterPro, entities, singleEntity} from 'menuConfig';
 // import MenuItem from 'components/Menu/MenuItem';
 import loadData from 'higherOrder/loadData';
+import {getUrlForApi} from 'higherOrder/loadData/defaults';
 
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterproMenu from 'components/Menu/InterproMenu';
@@ -93,9 +94,20 @@ SideMenu.propTypes = {
   closeSideNav: T.func.isRequired,
 };
 
+// TODO: change logic for menu loading data
+const urlBlacklist = new Set(['browse', 'search', 'settings', 'about', 'help']);
+const getUrlFromState = ({settings, location}) => {
+  for (const blacklist of urlBlacklist) {
+    if (location.pathname.toLowerCase().includes(blacklist)) {
+      return getUrlForApi({settings, location: {pathname: ''}});
+    }
+  }
+  return getUrlForApi({settings, location});
+};
+
 export default connect(
   ({ui: {sideNav}, location: {pathname}}) => (
     {visible: sideNav, pathname}
   ),
   {closeSideNav}
-)(loadData()(SideMenu));
+)(loadData(getUrlFromState)(SideMenu));

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
+import AnimatedEntry from 'components/AnimatedEntry';
+
 import foundation from 'styles/foundation';
 
-export default class extends Component {
-  static displayName = 'CookieBanner';
-
+export default class CookieBanner extends Component {
   componentWillMount() {
     if (document) {
       this.setState({
@@ -16,8 +16,8 @@ export default class extends Component {
 
   handleClick = () => {
     document.cookie = 'cookies-accepted=true';
-    if (this.banner.animate) {
-      this.banner
+    if (this._banner && this._banner.animate) {
+      this._banner
         .animate([
           {transform: 'translateY(0)', opacity: 1},
           {transform: 'translateY(100%)', opacity: 0.5},
@@ -32,10 +32,13 @@ export default class extends Component {
     const {display = false} = this.state;
     if (!display) return null;
     return (
-      <div
-        ref={banner => {
-          this.banner = banner;
+      <AnimatedEntry
+        animateSelf={true}
+        keyframes={{
+          opacity: [0, 1],
+          transform: ['translateY(100%)', 'translateY(0)'],
         }}
+        element="div"
         style={{
           position: 'fixed',
           bottom: 0,
@@ -66,7 +69,7 @@ export default class extends Component {
           ×
         </button>
         </div>
-      </div>
+      </AnimatedEntry>
     );
   }
 }

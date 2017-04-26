@@ -5,7 +5,7 @@ import {format} from 'url';
 import {foundationPartial} from 'styles/foundation';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import AnimatedEntryList from 'components/AnimatedEntryList';
+import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadData from 'higherOrder/loadData';
 
@@ -23,7 +23,7 @@ const ByMemberDatabase = ({data: {payload}}) => {
   const counts = payload && payload.entries.member_databases;
   return (
     <div>
-      <AnimatedEntryList className={f('row')} element="div">
+      <AnimatedEntry className={f('row')} element="div">
         {
           memberDB.map((e) => (
             <div
@@ -46,7 +46,7 @@ const ByMemberDatabase = ({data: {payload}}) => {
             </div>
           ))
         }
-      </AnimatedEntryList>
+      </AnimatedEntry>
       <Link to="/entry" className={f('button')}>View all entries</Link>
     </div>
   );

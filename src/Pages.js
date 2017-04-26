@@ -57,7 +57,7 @@ const pages = new Set([
   {path: '404', component: NotFound},
 ]);
 
-export default props => (
+const Pages = props => (
   <Switch
     indexRoute={Home}
     childRoutes={pages}
@@ -65,3 +65,5 @@ export default props => (
     {...props}
   />
 );
+
+export default Pages;

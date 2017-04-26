@@ -19,25 +19,26 @@ const getBaseURL = url => url ? url.slice(0, url.indexOf('?')) : '';
 
 // eslint-disable-next-line max-params
 const load = (
-  loadingData, loadedData, unloadingData, failedLoadingData, fetchFun, fetchOptions) =>
-  (key) => {
-    try {
-      loadingData(key);
-    } catch (err) {
-      console.warn(err);
-      return cancelable(Promise.resolve());
-    }
-    // Starts the fetch
-    const c = cancelable(fetchFun(key, fetchOptions));
-    // Eventually changes the state according to response
-    c.promise.then(
-      response => loadedData(key, response),
-      error => (
-        [error.canceled ? unloadingData : failedLoadingData](key, error)
-      ),
-    );
-    return c;
-  };
+  loadingData, loadedData, unloadingData,
+  failedLoadingData, fetchFun, fetchOptions
+) => key => {
+  try {
+    loadingData(key);
+  } catch (err) {
+    console.warn(err);
+    return cancelable(Promise.resolve());
+  }
+  // Starts the fetch
+  const c = cancelable(fetchFun(key, fetchOptions));
+  // Eventually changes the state according to response
+  c.promise.then(
+    response => loadedData(key, response),
+    error => (
+      [error.canceled ? unloadingData : failedLoadingData](key, error)
+    ),
+  );
+  return c;
+};
 
 const loadData = params => {
   const {getUrl, fetchOptions, propNamespace} = extractParams(params);

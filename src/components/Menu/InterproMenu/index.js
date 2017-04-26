@@ -41,7 +41,7 @@ const InterproMenu = (
           {name}
         </SubMenu> :
         <li key={to}>
-          <MenuItem to={to} active={pathname === to}>
+          <MenuItem to={to}>
             {
               icon &&
               <i

@@ -22,10 +22,10 @@ import ipro from 'styles/interpro-new.css';
 const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
 const reducedStyleBundle = classnames.bind(styles);
 
-const menuItems = {
-  dynamicPages: ['Entry', 'Protein', 'Structure', 'Proteome', 'Pathway'],
-  staticPages: ['About', 'Help', 'Contact', 'Settings'],
-};
+// const menuItems = {
+//   dynamicPages: ['Entry', 'Protein', 'Structure', 'Proteome', 'Pathway'],
+//   staticPages: ['About', 'Help', 'Contact', 'Settings'],
+// };
 
 const _HamburgerBtn = ({openSideNav, open, svg, stuck}) => {
   if (!svg) {
@@ -120,29 +120,29 @@ MenuItem.propTypes = {
   active: T.bool,
 };
 
-const SubMediumLevel = ({pages, pageType}) => (
-  <span>
-    {pages.map(page => (
-      <MenuItem key={page} active={page.toLowerCase() === pageType}>
-        {page}
-      </MenuItem>
-    ))}
-  </span>
-);
-SubMediumLevel.propTypes = {
-  pages: T.arrayOf(T.string).isRequired,
-  pageType: T.string,
-};
+// const SubMediumLevel = ({pages, pageType}) => (
+//   <span>
+//     {pages.map(page => (
+//       <MenuItem key={page}>
+//         {page}
+//       </MenuItem>
+//     ))}
+//   </span>
+// );
+// SubMediumLevel.propTypes = {
+//   pages: T.arrayOf(T.string).isRequired,
+//   pageType: T.string,
+// };
 
-const MediumLevel = ({pageType}) => (
-  <div className={styles.medium_level}>
-    <SubMediumLevel pages={menuItems.dynamicPages} pageType={pageType} />
-    <SubMediumLevel pages={menuItems.staticPages} pageType={pageType} />
-  </div>
-);
-MediumLevel.propTypes = {
-  pageType: T.string,
-};
+// const MediumLevel = ({pageType}) => (
+//   <div className={styles.medium_level}>
+//     <SubMediumLevel pages={menuItems.dynamicPages} pageType={pageType} />
+//     <SubMediumLevel pages={menuItems.staticPages} pageType={pageType} />
+//   </div>
+// );
+// MediumLevel.propTypes = {
+//   pageType: T.string,
+// };
 
 const styleForHeader = (supportsSticky, offset, stuck) => {
   const style = {top: `-${offset}px`};

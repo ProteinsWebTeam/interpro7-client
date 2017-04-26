@@ -10,10 +10,10 @@ const happenedWithModifierKey = event => !!(
 );
 const happenedWithLeftClick = event => event.button === 0;
 
-const match = (toOfLink, {pathname}) => {
+const defaultMatchFn = (toOfLink, {pathname}) => {
   let to = toOfLink;
   if (typeof toOfLink === 'string') to = parse(toOfLink);
-  return pathname.startsWith(to.pathname);
+  return pathname.startsWith((to.pathname || '').replace(/\/*$/, ''));
 };
 
 class Link extends Component {
@@ -33,7 +33,10 @@ class Link extends Component {
       }),
     ]),
     className: T.string,
-    activeClass: T.string,
+    activeClass: T.oneOfType([
+      T.string,
+      T.func,
+    ]),
   };
 
   handleClick = event => {
@@ -54,11 +57,18 @@ class Link extends Component {
     const {
       onClick, location, goToLocation, activeClass, className: cn, to, ...props
     } = this.props;
-    const className = `${
-      match(to, location) ? activeClass : ''
-    } ${cn || ''}`.trim();
+    let className = `${cn || ''} `;
+    if (typeof activeClass === 'function') {
+      className += activeClass(location, defaultMatchFn);
+    } else if (defaultMatchFn(to, location)) {
+      className += activeClass || '';
+    }
     return (
-      <a {...props} className={className || null} onClick={this.handleClick} />
+      <a
+        {...props}
+        className={className.trim() || null}
+        onClick={this.handleClick}
+      />
     );
   }
 }

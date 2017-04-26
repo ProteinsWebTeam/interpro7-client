@@ -32,7 +32,6 @@ const SingleEntityMenu = (
           <li key={to}>
             <MenuItem
               to={baseURL + to}
-              active={pathname === baseURL + to}
               disabled={counter && !data.metadata.counters[counter]}
             >
               {name}&nbsp;

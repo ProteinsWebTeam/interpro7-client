@@ -23,24 +23,31 @@ const isExternal = ([first, second]) => (
   second === '/'
 );
 
-const MenuItem = (
-  {
-    children,
-    to,
-    disabled = false,
-    active = false,
-    className,
-    closeEverything,
-    ...props
+const activeClassFn = (to, activeClass) => (location, defaultMatchFn) => {
+  // check exact match for Home
+  if (to === '/' || to.pathname === '/') {
+    return (location.pathname === '/') ? s('active', activeClass) : '';
   }
-) => {
+  return defaultMatchFn(to, location) ? s('active', activeClass) : '';
+};
+
+const MenuItem = ({
+  children,
+  to,
+  disabled = false,
+  className,
+  activeClass,
+  closeEverything,
+  ...props
+}) => {
   const CustomLink = isExternal(to) ? BaseLink : Link;
   return (
     <CustomLink
       to={to}
       onClick={closeEverything}
+      activeClass={activeClassFn(to, activeClass)}
       className={`
-        ${className || ''} ${s('select-none', 'menu-item', {disabled, active})}
+        ${className || ''} ${s('select-none', 'menu-item', {disabled})}
       `.trim()}
       {...(
         disabled ?
@@ -50,15 +57,16 @@ const MenuItem = (
       {...props}
     >
       {children}
-    </CustomLink>);
+    </CustomLink>
+  );
 };
 MenuItem.propTypes = {
   children: T.node.isRequired,
   to: T.string.isRequired,
   closeEverything: T.func.isRequired,
   disabled: T.bool,
-  active: T.bool,
   className: T.string,
+  activeClass: T.string,
 };
 
 export default connect(null, {closeEverything})(MenuItem);

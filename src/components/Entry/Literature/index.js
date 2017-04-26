@@ -1,7 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
 import {PMCLink, DOILink} from 'components/ExtLink';
-import AnimatedEntryList from 'components/AnimatedEntryList';
+import AnimatedEntry from 'components/AnimatedEntry';
 
 import refStyles from './style.css';
 import ebiStyles from 'styles/ebi-global.css';
@@ -16,7 +16,7 @@ const f = foundationPartial(refStyles, ebiStyles);
 
 const Literature = ({references}) => (
   <div className={f('row')}><div className={f('large-12', 'columns')}>
-    <AnimatedEntryList className={f('list')} itemDelay={100} duration={500}>
+    <AnimatedEntry className={f('list')} itemDelay={100} duration={500}>
       {Object.entries(references).map(([pubID, ref], i) => (
         <li className={f('reference', 'small')} key={pubID} id={pubID}>
           <span className={f('index')}>[{i + 1}]</span>
@@ -33,7 +33,7 @@ const Literature = ({references}) => (
           <PMCLink id={ref.PMID}>EuropePMC</PMCLink>
         </li>
       ))}
-    </AnimatedEntryList>
+    </AnimatedEntry>
   </div></div>
 );
 Literature.propTypes = {

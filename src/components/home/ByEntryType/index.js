@@ -5,7 +5,7 @@ import {format} from 'url';
 import {foundationPartial} from 'styles/foundation';
 import Link from 'components/generic/Link';
 import {InterproSymbol} from 'components/Title';
-import AnimatedEntryList from 'components/AnimatedEntryList';
+import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadData from 'higherOrder/loadData';
 
@@ -30,7 +30,7 @@ const ByEntryType = ({data: {payload}}) => {
   );
   return (
     <div>
-      <AnimatedEntryList className={f('row')} element="div">
+      <AnimatedEntry className={f('row')} element="div">
         {
           entryType.map((e, i) => (
             <div
@@ -60,7 +60,7 @@ const ByEntryType = ({data: {payload}}) => {
             </div>
           ))
         }
-      </AnimatedEntryList>
+      </AnimatedEntry>
       <Link to="/entry" className={f('button')}>View all entries</Link>
     </div>
   );

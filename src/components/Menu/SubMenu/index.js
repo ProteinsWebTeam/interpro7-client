@@ -36,7 +36,7 @@ class SubMenu extends Component {
     this.setState({isActive: !this.state.isActive});
   }
   render() {
-    const {pathname, options, className = '', children} = this.props;
+    const {options, className = '', children} = this.props;
     return (
       <li className={f('is-drilldown-submenu-parent')}>
         <a className={f('menu-item')} onClick={this.handleClick}>
@@ -57,7 +57,7 @@ class SubMenu extends Component {
           </li>
           {options.map(({to, name}) => (
             <li key={to}>
-              <MenuItem to={to} active={pathname === to}>
+              <MenuItem to={to}>
                 {name}
               </MenuItem>
             </li>

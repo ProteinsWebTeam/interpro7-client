@@ -5,7 +5,7 @@ import T from 'prop-types';
 const DEFAULT_ITEM_DELAY = 25;
 const DEFAULT_DURATION = 250;
 
-export default class extends Component {
+export default class AnimatedEntry extends Component {
   /* ::
     _node: ?Element
     _animations: ?Array<any>
@@ -22,6 +22,7 @@ export default class extends Component {
     delay: T.number,
     itemDelay: T.number,
     duration: T.number,
+    animateSelf: T.bool,
   };
 
   static defaultProps = {
@@ -30,15 +31,17 @@ export default class extends Component {
     delay: 0,
     itemDelay: DEFAULT_ITEM_DELAY,
     duration: DEFAULT_DURATION,
+    animateSelf: false,
   };
 
   componentDidMount() {
-    if (!(this._node && this._node.animate)) return;
-    const {keyframes, delay, itemDelay, duration} = this.props;
-    this._animations = Array.from(
-      this._node.children
-    ).map((child/*: any */, i) => child.animate(
-      {keyframes},
+    if (!this._node || !this._node.animate) return;
+    const {keyframes, delay, itemDelay, duration, animateSelf} = this.props;
+    const toAnimate = Array.from(
+      animateSelf ? [this._node] : this._node.children
+    );
+    this._animations = toAnimate.map((element/*: any */, i) => element.animate(
+      keyframes,
       {
         duration,
         delay: delay + itemDelay * (i + 1),
@@ -57,7 +60,8 @@ export default class extends Component {
   render() {
     const {
       element: Element,
-      keyframes, delay, itemDelay, duration, // remove those from props passed
+      // remove those in next line from props passed
+      keyframes, delay, itemDelay, duration, animateSelf,
       ...props
     } = this.props;
     return <Element ref={node => this._node = node} {...props} />;
