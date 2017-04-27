@@ -1,0 +1,25 @@
+.domains {
+  font-size: 10px;
+  font-family: sans-serif;
+}
+.protein rect{
+  fill: rgb(70,130,160);
+}
+.protein rect:hover{
+  fill: rgb(60,120,150);
+}
+
+.header-section {
+  font-weight: bold;
+  fill: rgb(150, 60,120);
+}
+.entry text {
+  font-weight: 500;
+}
+.entry:hover>text, .signature:hover>text {
+  font-weight: bold;
+}
+.entry-instance:hover>rect{
+  stroke: #5f5f5f;
+  stroke-width: 1px;
+}

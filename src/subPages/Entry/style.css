@@ -1,0 +1,19 @@
+:root {
+  --grided-bg-color: #DDD;
+  --grided-line-color: #AAA;
+  --grided-line-width: 1px;
+  --grided-line-length: 10px;
+  --grided-line-gap: 3px;
+  --grided-line-separation: 100px;
+}
+.grid-lined{
+  background-color: var(--grided-bg-color);
+  background-image: linear-gradient(0deg,
+  var(--grided-bg-color) var(--grided-line-gap),
+  transparent 1px, transparent
+  ),linear-gradient(90deg,
+    var(--grided-line-color) var(--grided-line-width),
+    transparent 1px, transparent
+  );
+  background-size: var(--grided-line-separation) var(--grided-line-length);
+}

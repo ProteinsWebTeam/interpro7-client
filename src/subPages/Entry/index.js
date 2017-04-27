@@ -5,11 +5,17 @@ import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 import EntriesOnProtein from 'components/Matches/EntriesOnProtein';
+import DomainArchitecture from'components/Protein/DomainArchitecture';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
 
 import Related from 'components/Related';
+
+import classname from 'classnames/bind';
+import styles from './style.css';
+
+const s = classname.bind(styles);
 
 const getUrl = end => ({
   settings: {api: {protocol, hostname, port, root}},
@@ -75,26 +81,15 @@ let Index = class extends Component {
       dataInterPro.payload.entries,
       dataIntegrated.payload.entries
     );
-    console.log(mergeData(
+    const mergedData = mergeData(
       dataInterPro.payload.entries,
       dataIntegrated.payload.entries
-    ));
+    );
     const mainLength = mainData.payload.metadata.length;
     return (
       <div>
-        <div style={{background: '#EEE'}}>
-          <div>
-            [placeholder Families]
-          </div>
-          <div>
-            [placeholder Domains]
-          </div>
-          <div>
-            [placeholder Unintegrated]
-          </div>
-          <div>
-            [placeholder Per residue]
-          </div>
+        <div style={{width: '98vw' }}>
+          <DomainArchitecture protein={mainData.payload.metadata} data={mergedData} />
         </div>
         <div>
           <ul>Detailed signature matches:

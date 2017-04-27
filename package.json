@@ -75,6 +75,7 @@
     "babel-polyfill": "^6.23.0",
     "color-hash": "^1.0.3",
     "core-js": "^2.4.1",
+    "d3": "^4.8.0",
     "data-loader": "^0.1.8",
     "draft-js": "^0.10.0",
     "foundation-sites": "~6.2.4",
