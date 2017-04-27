@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import {closeSideNav} from 'actions/creators';
 // import {EBI, InterPro, entities, singleEntity} from 'menuConfig';
@@ -22,6 +23,14 @@ import style from './style.css';
 const f = foundationPartial(ebiStyles, interproStyles, helperClasses, style);
 
 class SideMenu extends Component {
+  static propTypes = {
+    visible: T.bool.isRequired,
+    data: T.object,
+    loading: T.bool,
+    pathname: T.string.isRequired,
+    closeSideNav: T.func.isRequired,
+  };
+
   shouldComponentUpdate({loading}) {
     return !loading;
   }
@@ -86,13 +95,6 @@ class SideMenu extends Component {
     );
   }
 }
-SideMenu.propTypes = {
-  visible: T.bool.isRequired,
-  data: T.object,
-  loading: T.bool,
-  pathname: T.string.isRequired,
-  closeSideNav: T.func.isRequired,
-};
 
 // TODO: change logic for menu loading data
 const urlBlacklist = new Set(['browse', 'search', 'settings', 'about', 'help']);
@@ -105,9 +107,12 @@ const getUrlFromState = ({settings, location}) => {
   return getUrlForApi({settings, location});
 };
 
+const mapStateToProps = createSelector(
+  state => state.ui.sideNav,
+  state => state.location.pathname,
+  (visible, pathname) => ({visible, pathname})
+);
 export default connect(
-  ({ui: {sideNav}, location: {pathname}}) => (
-    {visible: sideNav, pathname}
-  ),
+  mapStateToProps,
   {closeSideNav}
 )(loadData(getUrlFromState)(SideMenu));

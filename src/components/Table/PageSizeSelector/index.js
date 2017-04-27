@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import {foundationPartial} from 'styles/foundation';
 import {goToLocation, changePageSize} from 'actions/creators';
@@ -72,10 +73,13 @@ class PageSizeSelector extends Component{
   }
 }
 
+const mapStateToProps = createSelector(
+  state => state.settings.pagination.pageSize,
+  state => state.location.pathname,
+  (pageSize, pathname) => ({pageSize, pathname})
+);
+
 export default connect(
-  ({settings: {pagination: {pageSize}}, location: {pathname}}) => (
-    {pageSize, pathname}
-  ),
+  mapStateToProps,
   {changePageSize, goToLocation}
 )(PageSizeSelector);
-// export default PageSizeSelector;

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import {removeToast} from 'actions/creators';
 
@@ -73,4 +74,9 @@ const ToastDisplay = class extends Component {
   }
 };
 
-export default connect(({toasts}) => ({toasts}), {removeToast})(ToastDisplay);
+const mapStateToProps = createSelector(
+  state => state.toasts,
+  toasts => ({toasts})
+);
+
+export default connect(mapStateToProps, {removeToast})(ToastDisplay);

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import debounce from 'lodash-es/debounce';
 
 import f from 'styles/foundation';
@@ -64,7 +65,9 @@ class SearchBox extends Component {
   }
 }
 
-export default connect(
-  ({location}) => ({location}),
-  {goToLocation}
-)(SearchBox);
+const mapStateToProps = createSelector(
+  state => state.location,
+  location => ({location})
+);
+
+export default connect(mapStateToProps, {goToLocation})(SearchBox);

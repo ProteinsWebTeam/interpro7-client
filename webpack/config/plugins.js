@@ -41,7 +41,7 @@ const test = [...common];
 common.push(
   // vendor chunk will go in this file
   new webpack.optimize.CommonsChunkPlugin({
-    names: ['vendor', 'polyfills', 'manifest'],
+    names: ['vendor', 'redux', 'polyfills', 'manifest'],
     filename: PROD ? '[name].[hash:3].js' : '[name].js',
     minChunks: Infinity,
   })

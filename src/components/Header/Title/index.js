@@ -1,6 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import Link from 'components/generic/Link';
 import logo from 'images/logo/interpro_white.png';
@@ -55,10 +56,14 @@ Title.propTypes = {
   stuck: T.bool.isRequired,
 };
 
-export default connect(
-  ({data = {}, ui: {stuck}, location: {pathname}}) => ({
-    loading: Object.values(data).some(datum => datum.loading),
-    stuck,
-    pathname,
-  })
-)(Title);
+const mapStateToProps = createSelector(
+  createSelector(
+    state => state.data,
+    (data = {}) => Object.values(data).some(datum => datum.loading)
+  ),
+  state => state.ui.stuck,
+  state => state.location.pathname,
+  (loading, stuck, pathname) => ({loading, stuck, pathname}),
+);
+
+export default connect(mapStateToProps)(Title);

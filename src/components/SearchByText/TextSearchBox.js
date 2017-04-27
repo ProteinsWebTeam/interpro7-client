@@ -1,9 +1,20 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+
 import {goToLocation} from 'actions/creators';
 
 class TextSearchBox extends Component {
+  static propTypes = {
+    pageSize: T.number,
+    router: T.object,
+    value: T.string,
+    className: T.string,
+    toSubmit: T.bool,
+    goToLocation: T.func,
+  };
+
   constructor(props) {
     super(props);
     this.state = {value: props.value};
@@ -59,16 +70,10 @@ class TextSearchBox extends Component {
     );
   }
 }
-TextSearchBox.propTypes = {
-  pageSize: T.number,
-  router: T.object,
-  value: T.string,
-  className: T.string,
-  toSubmit: T.bool,
-  goToLocation: T.func,
-};
 
-export default connect(
-  ({settings: {pagination: {pageSize}}}) => ({pageSize}),
-  {goToLocation}
-)(TextSearchBox);
+const mapStateToProps = createSelector(
+  state => state.settings.pagination.pageSize,
+  pageSize => ({pageSize})
+);
+
+export default connect(mapStateToProps, {goToLocation})(TextSearchBox);

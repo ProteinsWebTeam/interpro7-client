@@ -2,6 +2,8 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+
 import {frame} from 'timing-functions/src';
 
 import Link from 'components/generic/Link';
@@ -16,6 +18,13 @@ const UNIPROT_FOUND = 2;
 const PDB_FOUND = 3;
 
 class SearchResults extends Component {
+  static propTypes = {
+    data: T.object,
+    search: T.object,
+    dataUrl: T.string,
+    goToLocation: T.func,
+  };
+
   constructor(props){
     super(props);
     this.foundType = 0;
@@ -53,6 +62,7 @@ class SearchResults extends Component {
       this.props.goToLocation({pathname: goTo});
     }
   }
+
   render() {
     const {data: {payload, loading}, search, dataUrl} = this.props;
     this.foundType = NOT_FOUND;
@@ -112,12 +122,6 @@ class SearchResults extends Component {
 
   }
 }
-SearchResults.propTypes = {
-  data: T.object,
-  search: T.object,
-  dataUrl: T.string,
-  goToLocation: T.func,
-};
 
 const getEbiSearchURL = ({
     settings: {
@@ -133,7 +137,12 @@ const getEbiSearchURL = ({
   return `${protocol}//${hostname}:${port}${root}${params}`;
 };
 
+const mapStateToProps = createSelector(
+  state => state.data.dataUrl,
+  state => state.location.search,
+  (dataUrl, search) => ({dataUrl, search})
+);
+
 export default connect(
-  ({data: {dataUrl}, location: {search}}) => ({dataUrl, search}),
-  {goToLocation}
+  mapStateToProps, {goToLocation}
 )(loadData(getEbiSearchURL)(SearchResults));

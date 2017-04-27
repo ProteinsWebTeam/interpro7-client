@@ -1,6 +1,8 @@
 import React from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+
 import {toggleEMBLMapNav} from 'actions/creators';
 
 import {foundationPartial} from 'styles/foundation';
@@ -43,10 +45,7 @@ _EmblButton.propTypes = {
   toggleEMBLMapNav: T.func.isRequired,
 };
 
-const EmblButton = connect(
-  null,
-  {toggleEMBLMapNav}
-)(_EmblButton);
+const EmblButton = connect(null, {toggleEMBLMapNav})(_EmblButton);
 
 const _EmblDropdownDiv = ({visible}) => (
   <div
@@ -133,9 +132,12 @@ _EmblDropdownDiv.propTypes = {
   visible: T.bool.isRequired,
 };
 
-const EmblDropdownDiv = connect(
-  state => ({visible: state.ui.emblMapNav})
-)(_EmblDropdownDiv);
+const mapStateToProps = createSelector(
+  state => state.ui.emblMapNav,
+  visible => ({visible})
+);
+
+const EmblDropdownDiv = connect(mapStateToProps)(_EmblDropdownDiv);
 
 const iconClasses = styleBundle({
   icon: true,

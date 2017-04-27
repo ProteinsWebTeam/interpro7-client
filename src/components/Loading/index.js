@@ -1,6 +1,7 @@
 import React, {Component, cloneElement} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import classnames from 'classnames/bind';
 
@@ -65,4 +66,9 @@ class Loading extends Component {
   }
 }
 
-export default connect(({data}) => ({data}))(Loading);
+const mapStateToProps = createSelector(
+  state => state.data,
+  data => ({data})
+);
+
+export default connect(mapStateToProps)(Loading);

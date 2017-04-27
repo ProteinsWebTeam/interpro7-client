@@ -1,13 +1,14 @@
 // @flow
 import React, {Component} from 'react';
 import T from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import MenuItem from 'components/Menu/MenuItem';
 
 import {foundationPartial} from 'styles/foundation';
 import menuItemStyle from 'components/Menu/MenuItem/style.css';
 import style from './style.css';
-import {connect} from 'react-redux';
 
 const f = foundationPartial(menuItemStyle, style);
 
@@ -76,4 +77,9 @@ SubMenu.propTypes = {
   children: T.any,
 };
 
-export default connect(({ui: {sideNav}}) => ({visible: sideNav}))(SubMenu);
+const mapStateToProps = createSelector(
+  state => state.ui.sideNav,
+  visible => ({visible})
+);
+
+export default connect(mapStateToProps)(SubMenu);

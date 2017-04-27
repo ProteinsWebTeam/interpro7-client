@@ -1,6 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import {goToLocation} from 'actions/creators';
 
@@ -67,4 +68,9 @@ Switch.propTypes = {
   }).isRequired,
 };
 
-export default connect(({location}) => ({location}))(Switch);
+const mapStateToProps = createSelector(
+  state => state.location,
+  location => ({location})
+);
+
+export default connect(mapStateToProps)(Switch);

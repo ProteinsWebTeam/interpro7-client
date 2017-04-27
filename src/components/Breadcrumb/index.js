@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
-import {findDOMNode} from 'react-dom';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import Link from 'components/generic/Link';
 
@@ -79,7 +79,6 @@ class Breadcrumb extends Component {
   }
 
   componentDidMount() {
-    // window.node = findDOMNode(this);
     // this.handleUpdate();
   }
 
@@ -99,9 +98,8 @@ class Breadcrumb extends Component {
   }
 
   handleUpdate = () => {
-    const cont = findDOMNode(this);
-    if (!cont.animate) return;
-    const nodes = [...cont.parentElement.getElementsByClassName(f('flip'))];
+    if (!this._node || !this._node.animate) return;
+    const nodes = [...this._node.parentElement.getElementsByClassName(f('flip'))];
     for (const node of nodes) {
       const curr = node.getBoundingClientRect();
       const prev = positions.get(node);
@@ -144,6 +142,7 @@ class Breadcrumb extends Component {
           flexShrink: 0,
           marginTop: supportsSticky && stuck ? `${offset + MAGIC}px` : '0',
         }}
+        ref={node => this._node = node}
       >
         <div className={f('columns', 'large-12')} style={{width: '100vw'}}>
           <nav
@@ -172,10 +171,10 @@ class Breadcrumb extends Component {
   }
 }
 
-export default connect(
-  ({ui: {stuck}, location: {pathname}}) => ({stuck, pathname})
-)(Breadcrumb);
-// export default domAttributeChecker(
-//   'clientWidth', 'clientHeight', 'scrollWidth',
-// )(Breadcrumb);
-// export default AdvancedBreadcrumb;
+const mapStateToProps = createSelector(
+  state => state.ui.stuck,
+  state => state.location.pathname,
+  (stuck, pathname) => ({stuck, pathname})
+);
+
+export default connect(mapStateToProps)(Breadcrumb);

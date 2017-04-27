@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import {frame} from 'timing-functions/src';
 
@@ -16,6 +17,13 @@ Example.propTypes = {
 };
 
 class SearchByText extends Component {
+  static propTypes = {
+    value: T.string,
+    search: T.shape({
+      search: T.string,
+    }).isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -97,12 +105,10 @@ class SearchByText extends Component {
     );
   }
 }
-SearchByText.propTypes = {
-  value: T.string,
-  search: T.shape({
-    search: T.string,
-  }).isRequired,
-};
 
+const mapStateToProps = createSelector(
+  state => state.location.search,
+  search => ({search})
+);
 
-export default connect(({location: {search}}) => ({search}))(SearchByText);
+export default connect(mapStateToProps)(SearchByText);

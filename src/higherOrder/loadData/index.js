@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import cancelable from 'utils/cancelable';
 import {
@@ -11,10 +12,11 @@ import * as defaults from './defaults';
 import extractParams from './extractParams';
 import getFetch from './getFetch';
 
-const mapStateToProps = getUrl => state => ({
-  appState: state,
-  data: state.data[getUrl(state)] || {},
-});
+const mapStateToProps = getUrl => createSelector(
+  state => state,
+  state => state.data[getUrl(state)] || {},
+  (appState, data) => ({appState, data})
+);
 const getBaseURL = url => url ? url.slice(0, url.indexOf('?')) : '';
 
 // eslint-disable-next-line max-params

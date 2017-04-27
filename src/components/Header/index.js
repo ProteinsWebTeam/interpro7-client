@@ -1,6 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import classnames from 'classnames/bind';
 
@@ -68,8 +69,13 @@ _HamburgerBtn.propTypes = {
   svg: T.bool.isRequired,
   stuck: T.bool.isRequired,
 };
+const getSideNav = state => state.ui.sideNav;
+const mapStateToPropsHamburger = createSelector(
+  getSideNav,
+  open => ({open})
+);
 const HamburgerBtn = connect(
-  ({ui: {sideNav: open}}) => ({open}),
+  mapStateToPropsHamburger,
   {openSideNav}
 )(_HamburgerBtn);
 
@@ -102,10 +108,11 @@ _SideIcons.propTypes = {
   movedAway: T.bool.isRequired,
   stuck: T.bool.isRequired,
 };
-
-const SideIcons = connect(
-  ({ui: {sideNav: open}}) => ({movedAway: open})
-)(_SideIcons);
+const mapStateToPropsSideIcons = createSelector(
+  getSideNav,
+  movedAway => ({movedAway})
+);
+const SideIcons = connect(mapStateToPropsSideIcons)(_SideIcons);
 
 const MenuItem = ({active, children}) => (
   <Link
@@ -176,6 +183,9 @@ Header.propTypes = {
   stuck: T.bool.isRequired,
 };
 
-export default connect(
-  ({ui: {stuck}, location: {pathname}}) => ({stuck, pathname})
-)(Header);
+const mapStateToProps = createSelector(
+  state => state.ui.stuck,
+  state => state.location.pathname,
+  (stuck, pathname) => ({stuck, pathname})
+);
+export default connect(mapStateToProps)(Header);

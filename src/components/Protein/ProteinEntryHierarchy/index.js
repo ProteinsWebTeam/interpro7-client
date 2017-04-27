@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
-
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import loadWebComponent from 'utils/loadWebComponent';
 
-import {connect} from 'react-redux';
 import getFetch from 'higherOrder/loadData/getFetch';
 
 const hierarchyContainsAccession = (node, accession) => {
@@ -112,4 +112,9 @@ class ProteinEntryHierarchy extends Component {
   }
 }
 
-export default connect(({settings: {api}}) => ({api}))(ProteinEntryHierarchy);
+const mapStateToProps = createSelector(
+  state => state.settings.api,
+  api => ({api})
+);
+
+export default connect(mapStateToProps)(ProteinEntryHierarchy);

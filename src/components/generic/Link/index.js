@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {parse} from 'url';
 
 import {goToLocation} from 'actions/creators';
@@ -73,4 +74,9 @@ class Link extends Component {
   }
 }
 
-export default connect(({location}) => ({location}), {goToLocation})(Link);
+const mapStateToProps = createSelector(
+  state => state.location,
+  location => ({location})
+);
+
+export default connect(mapStateToProps, {goToLocation})(Link);

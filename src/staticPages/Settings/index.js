@@ -1,6 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 import loadData from 'higherOrder/loadData';
 
@@ -246,7 +247,12 @@ Settings.propTypes = {
   resetSettings: T.func.isRequired,
 };
 
+const mapStateToProps = createSelector(
+  state => state.settings,
+  settings => ({settings})
+);
+
 export default connect(
-  ({settings}) => ({settings}),
+  mapStateToProps,
   {changeSettings, resetSettings}
 )(Settings);

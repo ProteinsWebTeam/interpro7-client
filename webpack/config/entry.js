@@ -9,9 +9,12 @@ module.exports = {
     'react',
     'react-dom',
     'isomorphic-fetch',
-    'redux',
-    'react-redux',
     'lodash-es',
     'history',
+  ],
+  redux: [
+    'redux',
+    'react-redux',
+    'reselect',
   ],
 };
