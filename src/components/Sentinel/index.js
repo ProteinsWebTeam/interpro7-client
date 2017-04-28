@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 
@@ -53,7 +53,7 @@ const listenScrolled = (element, args) => {
   return listenScrolledEventListener(args);
 };
 
-const Sentinel = class extends Component {
+class Sentinel extends PureComponent {
   static defaultProps = {
     top: 0,
   };
@@ -84,6 +84,6 @@ const Sentinel = class extends Component {
       />
     );
   }
-};
+}
 
 export default connect(null, {stick, unstick})(Sentinel);

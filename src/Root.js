@@ -1,4 +1,5 @@
 import React from 'react';
+import {Helmet} from 'react-helmet';
 
 import {schedule} from 'timing-functions/src';
 
@@ -23,6 +24,10 @@ const STICKY_MENU_OFFSET = 150;
 
 export default () => (
   <div>
+    <Helmet
+      titleTemplate="%s - InterPro"
+      defaultTitle="InterPro"
+    />
     <Overlay />
     <AsyncComponent
       getComponent={async () => {

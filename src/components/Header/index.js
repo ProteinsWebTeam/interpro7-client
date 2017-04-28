@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -20,18 +20,23 @@ import styles from './style.css';
 import ebiGlobalStyles from 'styles/ebi-global.css';
 import fonts from 'styles/ebi/fonts.css';
 import ipro from 'styles/interpro-new.css';
+
 const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
 const reducedStyleBundle = classnames.bind(styles);
 
-// const menuItems = {
-//   dynamicPages: ['Entry', 'Protein', 'Structure', 'Proteome', 'Pathway'],
-//   staticPages: ['About', 'Help', 'Contact', 'Settings'],
-// };
+class _HamburgerBtn extends PureComponent {
+  static propTypes = {
+    openSideNav: T.func.isRequired,
+    open: T.bool.isRequired,
+    svg: T.bool.isRequired,
+    stuck: T.bool.isRequired,
+  };
 
-const _HamburgerBtn = ({openSideNav, open, svg, stuck}) => {
-  if (!svg) {
-    return (
-      <span>
+  render() {
+    const {openSideNav, open, svg, stuck} = this.props;
+    if (!svg) {
+      return (
+        <span>
         <button
           className={styles.top_level_hamburger}
           onClick={openSideNav}
@@ -39,36 +44,32 @@ const _HamburgerBtn = ({openSideNav, open, svg, stuck}) => {
           ☰
         </button>
       </span>
+      );
+    }
+    return (
+      <button onClick={openSideNav}>
+        <svg
+          viewBox="0 0 12 10" width="2.5em" height="2.5em"
+          className={reducedStyleBundle('top_level_hamburger', {stuck})}
+        >
+          <line
+            x1="1" y1="2" x2="10" y2="2"
+            className={open ? styles.hamb_1_open : styles.hamb_1}
+          />
+          <line
+            x1="1" y1="5" x2="10" y2="5"
+            className={open ? styles.hamb_2_open : styles.hamb_2}
+          />
+          <line
+            x1="1" y1="8" x2="10" y2="8"
+            className={open ? styles.hamb_3_open : styles.hamb_3}
+          />
+        </svg>
+      </button>
     );
   }
-  return (
-    <button onClick={openSideNav}>
-      <svg
-        viewBox="0 0 12 10" width="2.5em" height="2.5em"
-        className={reducedStyleBundle('top_level_hamburger', {stuck})}
-      >
-        <line
-          x1="1" y1="2" x2="10" y2="2"
-          className={open ? styles.hamb_1_open : styles.hamb_1}
-        />
-        <line
-          x1="1" y1="5" x2="10" y2="5"
-          className={open ? styles.hamb_2_open : styles.hamb_2}
-        />
-        <line
-          x1="1" y1="8" x2="10" y2="8"
-          className={open ? styles.hamb_3_open : styles.hamb_3}
-        />
-      </svg>
-    </button>
-  );
-};
-_HamburgerBtn.propTypes = {
-  openSideNav: T.func.isRequired,
-  open: T.bool.isRequired,
-  svg: T.bool.isRequired,
-  stuck: T.bool.isRequired,
-};
+}
+
 const getSideNav = state => state.ui.sideNav;
 const mapStateToPropsHamburger = createSelector(
   getSideNav,
@@ -79,35 +80,45 @@ const HamburgerBtn = connect(
   {openSideNav}
 )(_HamburgerBtn);
 
-const _SideIcons = ({movedAway, stuck}) => (
-  <div className={reducedStyleBundle('side-icons', {movedAway})}>
-    <HamburgerBtn svg={true} stuck={stuck} />
-    <label className={reducedStyleBundle('side-search', {stuck})}>
-      <TextSearchBox
-        maxLength="255"
-        value=""
-        name="search"
-      />
-      <Link
-        to="/search"
-      >
-        <svg
-          width="2em" height="2em" viewBox="0 0 490 490"
-          style={{verticalAlign: 'middle'}}
-        >
-          <path
-            fill="none" stroke="white" strokeWidth="40" strokeLinecap="round"
-            d="m280,278a153,153 0 1,0-2,2l170,170m-91-117"
+class _SideIcons extends PureComponent {
+  static propTypes = {
+    movedAway: T.bool.isRequired,
+    stuck: T.bool.isRequired,
+  };
+
+  render() {
+    const {movedAway, stuck} = this.props;
+    return (
+      <div className={reducedStyleBundle('side-icons', {movedAway})}>
+        <HamburgerBtn svg={true} stuck={stuck} />
+        <label className={reducedStyleBundle('side-search', {stuck})}>
+          <TextSearchBox
+            maxLength="255"
+            value=""
+            name="search"
           />
-        </svg>
-      </Link>
-    </label>
-  </div>
-);
-_SideIcons.propTypes = {
-  movedAway: T.bool.isRequired,
-  stuck: T.bool.isRequired,
-};
+          <Link
+            to="/search"
+          >
+            <svg
+              width="2em" height="2em" viewBox="0 0 490 490"
+              style={{verticalAlign: 'middle'}}
+            >
+              <path
+                fill="none"
+                stroke="white"
+                strokeWidth="40"
+                strokeLinecap="round"
+                d="m280,278a153,153 0 1,0-2,2l170,170m-91-117"
+              />
+            </svg>
+          </Link>
+        </label>
+      </div>
+    );
+  }
+}
+
 const mapStateToPropsSideIcons = createSelector(
   getSideNav,
   movedAway => ({movedAway})
@@ -162,26 +173,32 @@ const styleForHeader = (supportsSticky, offset, stuck) => {
   return style;
 };
 
-const Header = ({pathname, stickyMenuOffset: offset, stuck}) => (
-  <header
-    id={ebiGlobalStyles['local-masthead']}
-    className={styleBundle('header', 'local-masthead')}
-    style={styleForHeader(false && supportsSticky, offset, stuck)}
-  >
-    <EbiSkipToDiv />
-    <EBIHeader />
-    <div className={styleBundle('masthead', 'row')}>
-      <Title reduced={false} />
-      <SideIcons reduced={false} stuck={stuck} />
-      <DynamicMenu pathname={pathname} />
-    </div>
-  </header>
-);
-Header.propTypes = {
-  pathname: T.string.isRequired,
-  stickyMenuOffset: T.number.isRequired,
-  stuck: T.bool.isRequired,
-};
+class Header extends PureComponent {
+  static propTypes = {
+    pathname: T.string.isRequired,
+    stickyMenuOffset: T.number.isRequired,
+    stuck: T.bool.isRequired,
+  };
+
+  render() {
+    const {pathname, stickyMenuOffset: offset, stuck} = this.props;
+    return (
+      <header
+        id={ebiGlobalStyles['local-masthead']}
+        className={styleBundle('header', 'local-masthead')}
+        style={styleForHeader(false && supportsSticky, offset, stuck)}
+      >
+        <EbiSkipToDiv />
+        <EBIHeader />
+        <div className={styleBundle('masthead', 'row')}>
+          <Title reduced={false} />
+          <SideIcons reduced={false} stuck={stuck} />
+          <DynamicMenu pathname={pathname} />
+        </div>
+      </header>
+    );
+  }
+}
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,

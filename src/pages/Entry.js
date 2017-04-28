@@ -64,7 +64,7 @@ const Overview = ({data: {payload, loading}, location: {pathname, search: {type}
 };
 Overview.propTypes = propTypes;
 
-const List = class extends Component {
+class List extends Component {
   static propTypes = propTypes;
 
   componentWillMount() {
@@ -143,7 +143,7 @@ const List = class extends Component {
       </Table>
     );
   }
-};
+}
 
 const SummaryAsync = createAsyncComponent(() => import(
   /* webpackChunkName: "entry-summary" */'components/Entry/Summary'

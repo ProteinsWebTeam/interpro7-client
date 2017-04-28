@@ -31,8 +31,8 @@ class SideMenu extends Component {
     closeSideNav: T.func.isRequired,
   };
 
-  shouldComponentUpdate({loading}) {
-    return !loading;
+  shouldComponentUpdate({visible, loading}) {
+    return visible && !loading;
   }
 
   render() {
@@ -98,14 +98,18 @@ class SideMenu extends Component {
 
 // TODO: change logic for menu loading data
 const urlBlacklist = new Set(['browse', 'search', 'settings', 'about', 'help']);
-const getUrlFromState = ({settings, location}) => {
-  for (const blacklist of urlBlacklist) {
-    if (location.pathname.toLowerCase().includes(blacklist)) {
-      return getUrlForApi({settings, location: {pathname: ''}});
+const mapStateToUrl = createSelector(
+  state => state.settings,
+  state => state.location,
+  (settings, location) => {
+    for (const blacklist of urlBlacklist) {
+      if (location.pathname.toLowerCase().includes(blacklist)) {
+        return getUrlForApi({settings, location: {pathname: ''}});
+      }
     }
+    return getUrlForApi({settings, location});
   }
-  return getUrlForApi({settings, location});
-};
+);
 
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
@@ -115,4 +119,4 @@ const mapStateToProps = createSelector(
 export default connect(
   mapStateToProps,
   {closeSideNav}
-)(loadData(getUrlFromState)(SideMenu));
+)(loadData(mapStateToUrl)(SideMenu));

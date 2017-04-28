@@ -1,6 +1,7 @@
 // @flow
 import React, {Component} from 'react';
 import T from 'prop-types';
+import {createSelector} from 'reselect';
 
 import InterproMenu from 'components/Menu/InterproMenu';
 import EntitiesMenu from 'components/Menu/EntitiesMenu';
@@ -51,14 +52,18 @@ class DynamicMenu extends Component {
 
 // TODO: change logic for menu loading data
 const urlBlacklist = new Set(['browse', 'search', 'settings', 'about', 'help']);
-const getUrlFromState = ({settings, location}) => {
-  for (const blacklist of urlBlacklist) {
-    if (location.pathname.toLowerCase().includes(blacklist)) {
-      return getUrlForApi({settings, location: {pathname: ''}});
+const mapStateToUrl = createSelector(
+  state => state.settings,
+  state => state.location,
+  (settings, location) => {
+    for (const blacklist of urlBlacklist) {
+      if (location.pathname.toLowerCase().includes(blacklist)) {
+        return getUrlForApi({settings, location: {pathname: ''}});
+      }
     }
+    return getUrlForApi({settings, location});
   }
-  return getUrlForApi({settings, location});
-};
+);
 
-export default loadData(getUrlFromState)(DynamicMenu);
+export default loadData(mapStateToUrl)(DynamicMenu);
 

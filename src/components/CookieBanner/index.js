@@ -1,10 +1,15 @@
+// @flow
 import React, {Component} from 'react';
 
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import foundation from 'styles/foundation';
 
-export default class CookieBanner extends Component {
+class CookieBanner extends Component {
+  /* ::
+    state: {display: ?bool}
+    _banner: ?any
+  */
   componentWillMount() {
     if (document) {
       this.setState({
@@ -73,3 +78,5 @@ export default class CookieBanner extends Component {
     );
   }
 }
+
+export default CookieBanner;

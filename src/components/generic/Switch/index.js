@@ -20,7 +20,7 @@ const getLevel = (pathname/*: string*/, base/*: ?string*/)/*: ?string */ => {
 const getComponent = (
   level/*: ?string */,
   indexRoute/*: React.Component<*, *, *> */,
-  childRoutes/*: ?Array<{path: string, component: React.Component<*, *, *>}> */
+  childRoutes/*: Array<{path: string, component: React$Component<*, *, *>}> */
 ) => {
   // If nothing to match against, use the index route
   if (!level) return indexRoute;

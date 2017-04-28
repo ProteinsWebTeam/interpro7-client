@@ -8,6 +8,7 @@ module.exports = {
   vendor: [
     'react',
     'react-dom',
+    'react-helmet',
     'isomorphic-fetch',
     'lodash-es',
     'history',

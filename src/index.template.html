@@ -2,6 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta lang="en-GB" />
+    <meta name="theme-color" content="#00559e" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <% for (const chunk of Object.keys(htmlWebpackPlugin.files.chunks)) { %>
     <script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" defer></script>
     <% } %>

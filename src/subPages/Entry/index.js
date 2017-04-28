@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
+import {createSelector} from 'reselect';
 // import Switch from 'components/generic/Switch';
 
 import Link from 'components/generic/Link';
@@ -11,14 +12,6 @@ import loadWebComponent from 'utils/loadWebComponent';
 import Related from 'components/Related';
 
 import {format, resolve} from 'url';
-
-const getUrl = end => ({
-  settings: {api: {protocol, hostname, port, root}},
-  location: {pathname},
-}) => resolve(
-  format({protocol, hostname, port, root}),
-  pathname.replace(/entry.*$/i, `entry/${end}`),
-);
 
 const mergeData = (interpro, integrated) => {
   const output = {};
@@ -33,111 +26,128 @@ const mergeData = (interpro, integrated) => {
   return output;
 };
 
-let Index = class extends Component {
-  static propTypes = {
-    mainData: T.object.isRequired,
-    dataInterPro: T.object.isRequired,
-    dataIntegrated: T.object.isRequired,
-  };
+const getUrlFor = createSelector(// this one only to memoize it
+  db => db,
+  db => createSelector(
+    state => state.settings.api,
+    state => state.location.pathname,
+    ({protocol, hostname, port, root}, pathname) => resolve(
+      format({protocol, hostname, port, root}),
+      pathname.replace(/entry.*$/i, `entry/${db}`),
+    )
+  ),
+);
 
-  componentWillMount() {
-    loadWebComponent(
-      () => import(
-        /* webpackChunkName: "interpro-components" */'interpro-components'
-      ).then(m => m.InterproType)
-    ).as('interpro-type');
-  }
+const Index = ['Integrated', 'InterPro'].reduce(
+  (Index, db) => loadData({
+    getUrl: getUrlFor(db),
+    propNamespace: db,
+  })(Index),
+  class Index extends Component {
+    static propTypes = {
+      mainData: T.object.isRequired,
+      dataInterPro: T.object.isRequired,
+      dataIntegrated: T.object.isRequired,
+    };
 
-  render() {
-    const {mainData, dataInterPro, dataIntegrated} = this.props;
-    if (dataInterPro.loading || dataIntegrated.loading) {
-      return <div>Loading...</div>;
+    componentWillMount() {
+      loadWebComponent(
+        () => import(
+          /* webpackChunkName: "interpro-components" */'interpro-components'
+          ).then(m => m.InterproType)
+      ).as('interpro-type');
     }
-    const data = mergeData(
-      dataInterPro.payload.entries,
-      dataIntegrated.payload.entries
-    );
-    const mainLength = mainData.payload.metadata.length;
-    return (
-      <ul>Detailed signature matches:
-        {Object.entries(data).map(([accession, signatures]) => {
-          const entry = dataInterPro.payload.entries.find(
-            e => e.accession === accession
-          );
-          return (
-            <li key={accession}>
-              <div>
-                <interpro-type type={entry.entry_type.replace('_', ' ')}>
-                  {entry.entry_type}
-                </interpro-type>
-                <Link to={`/entry/${entry.source_database}/${accession}`}>
-                  {accession.toUpperCase()}
-                </Link>
-              </div>
-              <svg
-                width={mainLength * 4}
-                viewBox={`0 0 ${mainLength} ${signatures.length * 7 + 2}`}
-                style={{background: 'lightgray'}}
-              >
-                {signatures.map((signature, i) => (
-                  <g
-                    key={signature.accession}
-                    transform={`translate(0, ${i * 7 + 2})`}
-                  >
-                    {signature.entry_protein_coordinates.coordinates[0].map(
-                      ([from, to]) => (
-                        <rect
-                          key={`${from}-${to}`}
-                          x={from} y="0" rx="1" ry="1"
-                          width={to - from + 1} height="5"
-                          fill="white" stroke="black" strokeWidth="0.5"
-                        />
-                      )
-                    )}
-                  </g>
-                ))}
-              </svg>
-              {signatures.map(signature => {
-                const matches = [{
-                  protein: mainData.payload.metadata,
-                  entry: signature,
-                }];
-                return (
-                  <div
-                    key={signature.accession}
-                    style={{display: 'flex', alignItems: 'center'}}
-                  >
-                    <EntriesOnProtein
-                      matches={matches}
-                      options={{scale: 4}}
-                    />
-                    ▸
-                    <Link
-                      to={`/entry/${
-                        signature.source_database
-                        }/${signature.accession}`}
-                    >
-                      {signature.accession}
-                    </Link>
-                  </div>
-                );
-              })}
-            </li>
-          );
-        })}
-      </ul>
-    );
-  }
-};
 
-Index = loadData({
-  getUrl: getUrl('Integrated'),
-  propNamespace: 'Integrated',
-})(Index);
-Index = loadData({
-  getUrl: getUrl('InterPro'),
-  propNamespace: 'InterPro',
-})(Index);
+    render() {
+      const {mainData, dataInterPro, dataIntegrated} = this.props;
+      if (dataInterPro.loading || dataIntegrated.loading) {
+        return <div>Loading...</div>;
+      }
+      const data = mergeData(
+        dataInterPro.payload.entries,
+        dataIntegrated.payload.entries
+      );
+      const mainLength = mainData.payload.metadata.length;
+      return (
+        <ul>Detailed signature matches:
+          {Object.entries(data).map(([accession, signatures]) => {
+            const entry = dataInterPro.payload.entries.find(
+              e => e.accession === accession
+            );
+            return (
+              <li key={accession}>
+                <div>
+                  <interpro-type type={entry.entry_type.replace('_', ' ')}>
+                    {entry.entry_type}
+                  </interpro-type>
+                  <Link to={`/entry/${entry.source_database}/${accession}`}>
+                    {accession.toUpperCase()}
+                  </Link>
+                </div>
+                <svg
+                  width={mainLength * 4}
+                  viewBox={`0 0 ${mainLength} ${signatures.length * 7 + 2}`}
+                  style={{background: 'lightgray'}}
+                >
+                  {signatures.map((signature, i) => (
+                    <g
+                      key={signature.accession}
+                      transform={`translate(0, ${i * 7 + 2})`}
+                    >
+                      {signature.entry_protein_coordinates.coordinates[0].map(
+                        ([from, to]) => (
+                          <rect
+                            key={`${from}-${to}`}
+                            x={from} y="0" rx="1" ry="1"
+                            width={to - from + 1} height="5"
+                            fill="white" stroke="black" strokeWidth="0.5"
+                          />
+                        )
+                      )}
+                    </g>
+                  ))}
+                </svg>
+                {signatures.map(signature => {
+                  const matches = [{
+                    protein: mainData.payload.metadata,
+                    entry: signature,
+                  }];
+                  return (
+                    <div
+                      key={signature.accession}
+                      style={{display: 'flex', alignItems: 'center'}}
+                    >
+                      <EntriesOnProtein
+                        matches={matches}
+                        options={{scale: 4}}
+                      />
+                      ▸
+                      <Link
+                        to={`/entry/${
+                          signature.source_database
+                          }/${signature.accession}`}
+                      >
+                        {signature.accession}
+                      </Link>
+                    </div>
+                  );
+                })}
+              </li>
+            );
+          })}
+        </ul>
+      );
+    }
+  }
+);
+// Index = loadData({
+//   getUrl: getUrlFor('Integrated'),
+//   propNamespace: 'Integrated',
+// })(Index);
+// Index = loadData({
+//   getUrl: getUrlFor('InterPro'),
+//   propNamespace: 'InterPro',
+// })(Index);
 
 const EntrySub = (
   {data, location: {pathname}, main}

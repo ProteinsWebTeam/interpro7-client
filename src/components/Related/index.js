@@ -1,6 +1,7 @@
-
 import React from 'react';
 import T from 'prop-types';
+import {createSelector} from 'reselect';
+
 import Link from 'components/generic/Link';
 import loadData, {searchParamsToURL} from 'higherOrder/loadData';
 
@@ -132,16 +133,18 @@ RelatedAdvanced.propTypes = {
   pathname: T.string.isRequired,
   actualSize: T.number,
 };
-const getReversedURL = ({
-    settings: {api: {protocol, hostname, port, root}},
-    location: {pathname, search},
-  }) => {
-  const index = pathname.slice(2).search('protein|entry|structure') + 1;
-  const newPath = pathname.slice(index) + pathname.slice(0, index);
-  const s = search || {};
-  return `${protocol}//${hostname}:${port}${root}${newPath}?${searchParamsToURL(s)}`;
-};
-const RelatedAdvancedQuery = loadData(getReversedURL)(
+
+const getReversedUrl = createSelector(
+  state => state.settings.api,
+  state => state.location,
+  ({protocol, hostname, port, root}, {pathname, search}) => {
+    const index = pathname.slice(2).search('protein|entry|structure') + 1;
+    const newPath = pathname.slice(index) + pathname.slice(0, index);
+    const s = search || {};
+    return `${protocol}//${hostname}:${port}${root}${newPath}?${searchParamsToURL(s)}`;
+  }
+);
+const RelatedAdvancedQuery = loadData(getReversedUrl)(
   ({data: {payload, loading}, secondaryData, ...props}) => {
     if (loading) return <div>Loading...</div>;
     const _secondaryData = payload.results.map(x => {

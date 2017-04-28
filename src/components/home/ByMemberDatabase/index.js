@@ -1,5 +1,7 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
+import {createSelector} from 'reselect';
 import {format} from 'url';
 
 import {foundationPartial} from 'styles/foundation';
@@ -57,13 +59,14 @@ ByMemberDatabase.propTypes = {
   }).isRequired,
 };
 
-const urlFromState = (
-  {settings: {api: {protocol, hostname, port, root}}}
-) => format({
-  protocol,
-  hostname,
-  port,
-  pathname: `${root}/entry`,
-});
+const mapStateToUrl = createSelector(
+  state => state.settings.api,
+  ({protocol, hostname, port, root}) => format({
+    protocol,
+    hostname,
+    port,
+    pathname: `${root}/entry`,
+  })
+);
 
-export default loadData(urlFromState)(ByMemberDatabase);
+export default loadData(mapStateToUrl)(ByMemberDatabase);

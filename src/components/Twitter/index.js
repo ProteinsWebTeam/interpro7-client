@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 const Twit = () => (
   <a
     className="twitter-timeline" height="100"
@@ -21,6 +20,5 @@ const twitter = (d, s, id) => {
   }
 };
 twitter(document, 'script', 'twitter-wjs');
-
 
 export default Twit;

@@ -362,7 +362,7 @@ const rules = {
   // Prevent usage of isMounted
   'react/no-is-mounted': 2,
   // Prevent multiple component definition per file
-  'react/no-multi-comp': [1, {ignoreStateless: true}],
+  'react/no-multi-comp': 0,
   // Prevent using string references
   'react/no-string-refs': 1,
   // Prevent usage of unknown DOM property

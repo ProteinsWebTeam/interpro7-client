@@ -1,11 +1,13 @@
 // @flow
 import React from 'react';
 import T from 'prop-types';
-import ipro from 'styles/interpro-new.css';
+import {Helmet} from 'react-helmet';
+
 import Link from 'components/generic/Link';
 
-
 import {buildLink} from 'utils/url';
+
+import ipro from 'styles/interpro-new.css';
 
 const formatter = new Intl.DateTimeFormat(
   'en-UK',
@@ -112,6 +114,9 @@ const Title = (
           <InterproSymbol type={metadata.type}/>
         </div>
       }
+      <Helmet>
+        <title>{metadata.accession}</title>
+      </Helmet>
       <h3>{metadata.name.name} <small>({metadata.accession})</small></h3>
       {
         isEntry && metadata.source_database.toLowerCase() !== 'interpro' &&

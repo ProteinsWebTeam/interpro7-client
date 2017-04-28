@@ -1,6 +1,8 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import {format} from 'url';
+import {createSelector} from 'reselect';
 
 import {foundationPartial} from 'styles/foundation';
 import Link from 'components/generic/Link';
@@ -71,14 +73,15 @@ ByEntryType.propTypes = {
   }).isRequired,
 };
 
-const urlFromState = (
-  {settings: {api: {protocol, hostname, port, root}}}
-) => format({
-  protocol,
-  hostname,
-  port,
-  pathname: `${root}/entry`,
-  query: {group_by: 'type'},
-});
+const mapStateToUrl = createSelector(
+  state => state.settings.api,
+  ({protocol, hostname, port, root}) => format({
+    protocol,
+    hostname,
+    port,
+    pathname: `${root}/entry`,
+    query: {group_by: 'type'},
+  })
+);
 
-export default loadData(urlFromState)(ByEntryType);
+export default loadData(mapStateToUrl)(ByEntryType);

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -9,7 +9,7 @@ import Toast from 'components/Toast/Toast';
 
 import styles from './style.css';
 
-const ToastDisplay = class extends Component {
+class ToastDisplay extends PureComponent {
   static propTypes = {
     toasts: T.object.isRequired,
     removeToast: T.func.isRequired,
@@ -72,7 +72,7 @@ const ToastDisplay = class extends Component {
       </ul>
     );
   }
-};
+}
 
 const mapStateToProps = createSelector(
   state => state.toasts,

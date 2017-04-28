@@ -106,7 +106,6 @@ class SearchResults extends Component {
         >
           Accession
         </Column>
-
         <Column
           accessKey="fields"
           renderer={d => (
@@ -116,26 +115,10 @@ class SearchResults extends Component {
         >
           Description
         </Column>
-
       </Table>
     );
-
   }
 }
-
-const getEbiSearchURL = ({
-    settings: {
-      ebi: {protocol, hostname, port, root},
-      pagination},
-    location: {search},
-  }) => {
-  const s = search || {};
-  if (!s.search) return null;
-  const fields = 'PDB,UNIPROT,description';
-  s.page_size = s.page_size || pagination.pageSize;
-  const params = `?query=${s.search}&format=json&fields=${fields}`;
-  return `${protocol}//${hostname}:${port}${root}${params}`;
-};
 
 const mapStateToProps = createSelector(
   state => state.data.dataUrl,
@@ -143,6 +126,20 @@ const mapStateToProps = createSelector(
   (dataUrl, search) => ({dataUrl, search})
 );
 
+const getEbiSearchUrl = createSelector(
+  state => state.settings.ebi,
+  state => state.settings.pagination,
+  state => state.location.search,
+  ({protocol, hostname, port, root}, pagination, search) => {
+    const s = search || {};
+    if (!s.search) return null;
+    const fields = 'PDB,UNIPROT,description';
+    s.page_size = s.page_size || pagination.pageSize;
+    const params = `?query=${s.search}&format=json&fields=${fields}`;
+    return `${protocol}//${hostname}:${port}${root}${params}`;
+  }
+);
+
 export default connect(
   mapStateToProps, {goToLocation}
-)(loadData(getEbiSearchURL)(SearchResults));
+)(loadData(getEbiSearchUrl)(SearchResults));

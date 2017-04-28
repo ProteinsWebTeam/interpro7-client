@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+// @flow
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -17,7 +18,7 @@ const defaultMatchFn = (toOfLink, {pathname}) => {
   return pathname.startsWith((to.pathname || '').replace(/\/*$/, ''));
 };
 
-class Link extends Component {
+class Link extends PureComponent {
   static propTypes = {
     onClick: T.func,
     location: T.shape({

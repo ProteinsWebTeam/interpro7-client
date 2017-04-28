@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -49,7 +49,7 @@ const getHierarchy = (accs, hierarchies) => new Promise((resolve, reject) => {
 });
 const webComponents = [];
 
-class ProteinEntryHierarchy extends Component {
+class ProteinEntryHierarchy extends PureComponent {
   static propTypes = {
     entries: T.arrayOf(T.shape({
       accession: T.string.required,

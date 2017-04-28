@@ -168,27 +168,29 @@ EndpointSettings.propTypes = {
   }),
 };
 
+const getUrlForEndpoint = createSelector(// this one is just to memoize it
+  endpoint => endpoint,
+  endpoint => createSelector(
+    state => state.settings[endpoint],
+    ({protocol, hostname, port, root}) => (
+      `${protocol}//${hostname}:${port}${root}`
+    )
+  ),
+);
+
 const fetchOptions = {method: 'HEAD', cache: 'no-store', noCache: true};
 const APIEndpointSettings = loadData({
-  getUrl({settings: {api}}) {
-    return `${api.protocol}//${api.hostname}:${api.port}${api.root}entry`;
-  },
+  getUrl: getUrlForEndpoint('api'),
   fetchOptions,
 })(EndpointSettings);
 
 const EBIEndpointSettings = loadData({
-  getUrl({settings: {ebi}}) {
-    return `${ebi.protocol}//${ebi.hostname}:${ebi.port}${ebi.root}`;
-  },
+  getUrl: getUrlForEndpoint('ebi'),
   fetchOptions,
 })(EndpointSettings);
 
 const IPScanEndpointSettings = loadData({
-  getUrl({settings: {ipScan}}) {
-    return (
-      `${ipScan.protocol}//${ipScan.hostname}:${ipScan.port}${ipScan.root}`
-    );
-  },
+  getUrl: getUrlForEndpoint('ipScan'),
   fetchOptions,
 })(EndpointSettings);
 

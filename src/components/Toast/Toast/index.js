@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 
 import {foundationPartial} from 'styles/foundation';
@@ -7,7 +7,7 @@ const s = foundationPartial(localStyles);
 
 const GRANULARITY = 250;// 250ms, time frequency of ttl update
 
-export default class extends Component {
+export default class Toast extends PureComponent {
   static propTypes = {
     toastId: T.string.isRequired,
     paused: T.bool.isRequired,
