@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import * as d3 from 'd3';
 import classname from 'classnames/bind';
 import styles from './style.css';
@@ -101,14 +102,14 @@ class EntryRenderer {
         if (entry.signatures && entry.signatures.length) {
           entry._signatures = entry.signatures;
           entry.signatures = [];
-        }
-        else if (entry._signatures && entry._signatures.length) {
+        } else if (entry._signatures && entry._signatures.length) {
           entry.signatures = entry._signatures;
           entry._signatures = [];
         }
         this.update();
         console.log('toggle', entry);
       });
+    const opacity = 0.3;
     if (entry.signatures) {
       matchG.enter().append('rect')
         .attr('x', m => this.x(m[0]))
@@ -117,10 +118,10 @@ class EntryRenderer {
           this.signatureRender.trackHeight +
           this.signatureRender.tPadding.top +
           this.signatureRender.tPadding.bottom
-        ) + (entry.signatures.length?this.signatureRender.tPadding.bottom:0))
+        ) + (entry.signatures.length ? this.signatureRender.tPadding.bottom : 0))
         .attr('width', m => this.x(m[1] - m[0]))
         .style('fill', this.getColor(entry))
-        .style('opacity', 0.3);
+        .style('opacity', opacity);
     }
   }
 }

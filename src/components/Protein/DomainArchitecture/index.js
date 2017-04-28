@@ -45,19 +45,28 @@ class DomainArchitecture extends Component {
       .domain([0, protein.length])
       .range([0, proteinWidth]);
 
+
+    this.entryRenderer = new EntryRenderer({
+      trackHeight: 0,
+      trackPadding,
+      padding,
+      xScale: this.x,
+      protein}
+    );
+    const panelHeight = this.drawContent(family, domain, protein);
+    svg.attr('height', panelHeight);
+  }
+  shouldComponentUpdate(){
+    return false;
+  }
+  drawContent(family, domain, protein){
     let offsetY = padding.top;
-
-    this.entryRenderer = new EntryRenderer({trackHeight: 0, trackPadding, padding, xScale: this.x, protein});
-
     this.addAxis();
     offsetY += this.addProtein(protein);
     offsetY += this.addEntriesBlock(family, protein, offsetY, 'Families');
     offsetY += trackPadding.bottom * 2;
     offsetY += this.addEntriesBlock(domain, protein, offsetY, 'Domains');
-    svg.attr('height', offsetY);
-  }
-  shouldComponentUpdate(){
-    return false;
+    return offsetY;
   }
 
   addAxis(){
@@ -124,7 +133,10 @@ class DomainArchitecture extends Component {
     const trackHeight = title.node().getBBox().height;
     let innerHeight = this.entryRenderer.trackHeight = trackHeight;
     this.entryRenderer.render(familiesG, entries, trackHeight);
-    innerHeight += this.entryRenderer.innerHeight + trackPadding.top + trackPadding.bottom;
+    innerHeight +=
+      this.entryRenderer.innerHeight +
+      trackPadding.top +
+      trackPadding.bottom;
     bg.attr('height', innerHeight);
     return innerHeight;
   }
