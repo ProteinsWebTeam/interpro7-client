@@ -1,11 +1,11 @@
 // @flow
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 
 const DEFAULT_ITEM_DELAY = 25;
 const DEFAULT_DURATION = 250;
 
-export default class AnimatedEntry extends Component {
+export default class AnimatedEntry extends PureComponent {
   /* ::
     _node: ?Element
     _animations: ?Array<any>

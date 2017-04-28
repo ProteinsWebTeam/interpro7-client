@@ -49,7 +49,7 @@ describe('External links', () => {
             </BaseLink>
           );
           expect(renderer.getRenderOutput()).to.deep.equal(
-            <a href={expected} target="_blank">
+            <a href={expected} target="_blank" rel="noopener">
               {child}
             </a>
           );

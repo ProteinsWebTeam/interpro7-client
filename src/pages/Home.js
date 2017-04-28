@@ -1,7 +1,5 @@
 import React from 'react';
 import T from 'prop-types';
-
-import {foundationPartial} from 'styles/foundation';
 import Description from 'components/Description';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import ByMemberDatabase from 'components/home/ByMemberDatabase';
@@ -14,13 +12,15 @@ import {schedule} from 'timing-functions/src';
 import AsyncComponent, {createAsyncComponent}
   from 'utilityComponents/AsyncComponent';
 
-import iscanLogo from 'images/logo_interproscan_ext.png';
-import idaLogo from 'images/logo_ida_100.png';
+import {foundationPartial} from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'styles/ebi-global.css';
 import fonts from 'styles/ebi/fonts.css';
 import theme from 'styles/theme-interpro.css';
+
+import iscanLogo from 'images/logo_interproscan_ext.png';
+import idaLogo from 'images/logo_ida_100.png';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
@@ -425,72 +425,35 @@ const Home = () => (
                   </p>
 
             </div>
-            {// medium-6
-            }
-
             <div className={f('columns', 'medium-6', 'medium-push-6')}>
-            <h5>InterProScan</h5>
-{// <img src="http://www.ebi.ac.uk/interpro/resources/images/logo_interproscan_214.png" />
-}
+              <h5>InterProScan</h5>
               <img src={iscanLogo} style={{marginBottom: 2}}/>
-            <p>
-               InterProScan is a sequence analysis application (nucleotide and protein
-              sequences) that combines different protein signature recognition methods
-              into one resource.
-              <Link
-                to="about/tools#interproscan" className={f('readmore')} target="_blank"
-              > Read more</Link>
-            </p>
+              <p>
+                InterProScan is a sequence analysis application (nucleotide and
+                protein sequences) that combines different protein signature
+                recognition methods into one resource.
+                <Link
+                  to="about/tools#interproscan"
+                  className={f('readmore')}
+                  target="_blank"
+                >
+                  Read more
+                </Link>
+              </p>
             </div>
-            {// medium-6
-          }
-
           </div>
-
-
-          {// <a href="/about/tools" className={f('button')}>View all tools</a>
-          }
-
-        </div>{// end callout
-      }
-
-      </div>{// end columns publication list
-    }
-
-
-    </div>{// end row
-  }
-    <div className={f('expanded', 'row')}>
-
-      <div className={f('columns')}>
-        <div className={'jumbo-news'} >
-          <div className={'jumbo-news-container'} >
-          <h3 className={f('icon', 'icon-socialmedia', 'icon-s2')} data-icon="T" />
-{
-// <a href="#">InterPro 60.0 now available with a new member db: MobiDB Lite, residue
-// annotation and covers 79.8% of UniProtKB. See http://www.ebi.ac.uk/interpro/</a>
-// <h5><a href=""> Tweets by ‎‏@InterProDB</a></h5>
-// would be nice to extract just the text from twitter widget as we do for EMG
-}
-          <AsyncComponent
-            getComponent={async () => {
-              // eslint-disable-next-line no-magic-numbers
-              await schedule(10000);// Schedule asap, but do it anyway after 10s
-              return import(
-                /* webpackChunkName: "twitter" */'components/Twitter'
-              );
-            }}
-          />
-
-          </div>
-        </div>{// end jumbo-news
-      }
-
-      </div>{// end columns
-    }
-
-      </div>{// end row
-    }
+        </div>
+      </div>
+    </div>
+    <AsyncComponent
+      getComponent={async () => {
+        // eslint-disable-next-line no-magic-numbers
+        await schedule(10000);// Schedule asap, but do it anyway after 10s
+        return import(
+          /* webpackChunkName: "twitter" */'components/Twitter'
+          );
+      }}
+    />
   </main>
 
 

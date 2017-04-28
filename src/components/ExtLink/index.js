@@ -9,18 +9,24 @@ const types = {
   target: T.string,
 };
 
-export const BaseLink = (
-  {id, pattern, href, to, target, className, children, activeClass, ...rest}
-) => {
+export const BaseLink = ({
+  id, pattern, href, to, target, rel, className, children, activeClass, ...rest
+}) => {
   const props = {href: href || to || pattern.replace('{id}', id)};
   if (target) props.target = target;
   if (className) props.className = className;
+  if (rel) {
+    props.rel = (rel.includes('noopener')) ? rel : `${rel} noopener`;
+  } else {
+    props.rel = 'noopener';
+  }
   return <a {...rest} {...props}>{children}</a>;
 };
 BaseLink.propTypes = {
   id: T.oneOfType([T.string, T.number]),
   pattern: T.string,
   href: T.string,
+  rel: T.string,
   to: T.string,
   target: T.string,
   className: T.string,
@@ -35,7 +41,6 @@ const patternLinkWrapper = pattern => {
     </BaseLink>
   );
   Wrapped.propTypes = types;
-
   return Wrapped;
 };
 

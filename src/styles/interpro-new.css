@@ -357,9 +357,30 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 /*/homepage entry type list component*/
 
 /*homepage twit component*/
-.jumbo-news {text-align: center; background-color: #eee; padding: 60px 0;}
-.jumbo-news-container {color: #454545; font-size: 130%; width: 38%; margin: 0 auto;}
-.jumbo-news-container h3 {font-size: 270%;}
+.jumbo-news {
+  text-align: center;
+  background-color: #eee;
+  padding: 2em 0 1em 0;
+}
+.jumbo-news-container {
+  padding: 0;
+  color: #454545;
+  font-size: 130%;
+  width: 38%;
+  margin: 0 auto;
+
+  @nest & > h3 {
+    font-size: 270%;
+  }
+
+  @nest & > iframe {
+    opacity: 0;
+    transform: translateX(50%);
+    transition-property: opacity, transform;
+    transition-duration: 750ms;
+    transition-timing-function: ease-in-out;
+  }
+}
 /*/homepage twit component*/
 
 /*entry page - go term etiquette*/

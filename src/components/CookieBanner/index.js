@@ -63,6 +63,7 @@ class CookieBanner extends Component {
           <a
             target="_blank"
             href="https://www.ebi.ac.uk/about/terms-of-use"
+            rel="noopener"
           >
             Terms of Use
           </a>.

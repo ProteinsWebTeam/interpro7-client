@@ -67,6 +67,7 @@ const _EmblDropdownDiv = ({visible}) => (
       <a
         href="https://www.ebi.ac.uk/about"
         className={styleBundle({small: true, readmore: true})}
+        rel="noopener"
       >More about EMBL-EBI</a>
     </p>
     <h6>Connect to another EMBL location</h6>
@@ -80,7 +81,7 @@ const _EmblDropdownDiv = ({visible}) => (
       })}
     >
       <div className={emblLocationListClasses}>
-        <a href="https://www.embl.fr/" >Grenoble</a>
+        <a href="https://www.embl.fr/" rel="noopener">Grenoble</a>
         <div className={styleBundle('small')}>Structural Biology</div>
       </div>
     </div>
@@ -94,7 +95,7 @@ const _EmblDropdownDiv = ({visible}) => (
       })}
     >
       <div className={emblLocationListClasses}>
-        <a href="https://www.embl.fr/" >Hamburg</a>
+        <a href="https://www.embl-hamburg.de/" rel="noopener">Hamburg</a>
         <div className={styleBundle('small')}>Structural Biology</div>
       </div>
     </div>
@@ -108,7 +109,7 @@ const _EmblDropdownDiv = ({visible}) => (
       })}
     >
       <div className={emblLocationListClasses}>
-        <a href="https://www.embl.fr/" >Heidelberg</a>
+        <a href="https://www.embl.de/" rel="noopener">Heidelberg</a>
         <div className={styleBundle('small')}>Main Laboratory</div>
       </div>
     </div>
@@ -122,7 +123,7 @@ const _EmblDropdownDiv = ({visible}) => (
       })}
     >
       <div className={emblLocationListClasses}>
-        <a href="https://www.embl.fr/" >Monterotondo</a>
+        <a href="https://www.embl.it/" rel="noopener">Monterotondo</a>
         <div className={styleBundle('small')}>Mouse Biology</div>
       </div>
     </div>
@@ -153,7 +154,11 @@ const emblSelectorClasses = styleBundle({
 
 const EBIHeader = () => (
   <div id="global-masthead" className={styleBundle('clearfix')}>
-    <a href="//www.ebi.ac.uk" title="Go to the EMBL-EBI homepage">
+    <a
+      href="//www.ebi.ac.uk"
+      title="Go to the EMBL-EBI homepage"
+      rel="noopener"
+    >
       <span className={styleBundle('ebi-logo')}/>
     </a>
     <nav>
@@ -161,35 +166,35 @@ const EBIHeader = () => (
         <ul id="global-nav" className={styleBundle('menu')}>
 
           <li id="home-mobile" >
-            <a href="//www.ebi.ac.uk" />
+            <a href="//www.ebi.ac.uk" rel="noopener" />
           </li>
 
           <li id="home" className={styleBundle('active')}>
-            <a href="//www.ebi.ac.uk">
+            <a href="//www.ebi.ac.uk" rel="noopener">
               <i className={iconClasses} data-icon="H" /> EMBL-EBI
             </a>
           </li>
 
           <li id="services" >
-            <a href="//www.ebi.ac.uk/services">
+            <a href="//www.ebi.ac.uk/services" rel="noopener">
               <i className={iconClasses} data-icon="(" /> Services
             </a>
           </li>
 
           <li id="research" >
-            <a href="//www.ebi.ac.uk/research">
+            <a href="//www.ebi.ac.uk/research" rel="noopener">
               <i className={iconClasses} data-icon=")" /> Research
             </a>
           </li>
 
           <li id="training" >
-            <a href="//www.ebi.ac.uk/training">
+            <a href="//www.ebi.ac.uk/training" rel="noopener">
               <i className={iconClasses} data-icon="t" /> Training
             </a>
           </li>
 
           <li id="about" >
-            <a href="//www.ebi.ac.uk/about">
+            <a href="//www.ebi.ac.uk/about" rel="noopener">
               <i className={iconClasses} data-icon="i" /> About us
             </a>
           </li>

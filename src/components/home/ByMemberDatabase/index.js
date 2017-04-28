@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import {createSelector} from 'reselect';
 import {format} from 'url';
@@ -21,43 +21,45 @@ import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
-const ByMemberDatabase = ({data: {payload}}) => {
-  const counts = payload && payload.entries.member_databases;
-  return (
-    <div>
-      <AnimatedEntry className={f('row')} element="div">
-        {
-          memberDB.map((e) => (
-            <div
-              className={f('columns', 'medium-3', 'large-3', 'text-center')}
-              key={e.name}
-            >
-              <Link to={e.to}>
-                <MemberSymbol type={e.type}/>
-                <h6 data-tooltip title={e.title}>
-                  {e.name}
-                </h6>
-                <p>
-                  <small>{e.version}</small><br/>
-                  <span className={f('count', {visible: payload})}>
-                      {counts && e.apiType && counts[e.apiType] || ''}
-                    {e.type === 'new' ? ' ' : ' entries'}
+class ByMemberDatabase extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      payload: T.object,
+    }).isRequired,
+  };
+
+  render() {
+    const {data: {payload}} = this.props;
+    const counts = payload && payload.entries.member_databases;
+    return (
+      <div>
+        <AnimatedEntry className={f('row')} element="div">
+          {
+            memberDB.map(({name, to, type, title, version, apiType}) => (
+              <div
+                className={f('columns', 'medium-3', 'large-3', 'text-center')}
+                key={name}
+              >
+                <Link to={to}>
+                  <MemberSymbol type={type}/>
+                  <h6 data-tooltip title={title}>{name}</h6>
+                  <p>
+                    <small>{version}</small><br/>
+                    <span className={f('count', {visible: payload})}>
+                      {counts && apiType && counts[apiType] || ''}
+                      {type === 'new' ? ' ' : ' entries'}
                     </span>
-                </p>
-              </Link>
-            </div>
-          ))
-        }
-      </AnimatedEntry>
-      <Link to="/entry" className={f('button')}>View all entries</Link>
-    </div>
-  );
-};
-ByMemberDatabase.propTypes = {
-  data: T.shape({
-    payload: T.object,
-  }).isRequired,
-};
+                  </p>
+                </Link>
+              </div>
+            ))
+          }
+        </AnimatedEntry>
+        <Link to="/entry" className={f('button')}>View all entries</Link>
+      </div>
+    );
+  }
+}
 
 const mapStateToUrl = createSelector(
   state => state.settings.api,
