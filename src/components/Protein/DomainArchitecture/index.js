@@ -16,7 +16,7 @@ const numberOfTicks = 10;
 const padding = {
   top: 30,
   bottom: 0,
-  left: 20,
+  left: 10,
   right: 100,
 };
 const trackPadding = {
@@ -32,7 +32,7 @@ class DomainArchitecture extends Component {
     data: T.object,
   };
   componentDidMount(){
-    const {protein, data: {family, domain}} = this.props;
+    const {protein, data} = this.props;
     const svg = d3.select(this._container)
       .append('svg')
       .attr('width', '100%');
@@ -44,28 +44,25 @@ class DomainArchitecture extends Component {
     this.x = d3.scaleLinear()
       .domain([0, protein.length])
       .range([0, proteinWidth]);
-
-
-    this.entryRenderer = new EntryRenderer({
-      trackHeight: 0,
-      trackPadding,
-      padding,
-      xScale: this.x,
-      protein}
-    );
-    const panelHeight = this.drawContent(family, domain, protein);
+    const panelHeight = this.drawContent(data, protein);
     svg.attr('height', panelHeight);
   }
   shouldComponentUpdate(){
     return false;
   }
-  drawContent(family, domain, protein){
+  drawContent(data, protein){
     let offsetY = padding.top;
     this.addAxis();
     offsetY += this.addProtein(protein);
-    offsetY += this.addEntriesBlock(family, protein, offsetY, 'Families');
+    offsetY += this.addEntriesBlock(data.family, protein, offsetY, 'Families');
     offsetY += trackPadding.bottom * 2;
-    offsetY += this.addEntriesBlock(domain, protein, offsetY, 'Domains');
+    offsetY += this.addEntriesBlock(data.domain, protein, offsetY, 'Domains');
+    for (const key of Object.keys(data)){
+      if (key !== 'family' && key !== 'domain') {
+        offsetY += trackPadding.bottom * 2;
+        offsetY += this.addEntriesBlock(data[key], protein, offsetY, key);
+      }
+    }
     return offsetY;
   }
 
@@ -117,6 +114,14 @@ class DomainArchitecture extends Component {
     return proteinHeight + trackPadding.bottom * 2;
   }
   addEntriesBlock(entries, protein, offsetY, subtitle){
+    const entryRenderer = new EntryRenderer({
+      trackHeight: 0,
+      trackPadding,
+      padding,
+      xScale: this.x,
+      protein}
+    );
+
     const familiesG = this.mainG.append('g')
       .attr('transform', `translate(${padding.left}, ${offsetY})`)
       .attr('class', s('families'));
@@ -128,13 +133,13 @@ class DomainArchitecture extends Component {
       .attr('class', s('header-section'))
       .attr('x', padding.left + trackPadding.left)
       .attr('y', '1em')
-      .attr('text-anchor', 'middle')
+      // .attr('text-anchor', 'middle')
       .text(subtitle);
     const trackHeight = title.node().getBBox().height;
-    let innerHeight = this.entryRenderer.trackHeight = trackHeight;
-    this.entryRenderer.render(familiesG, entries, trackHeight);
+    let innerHeight = entryRenderer.trackHeight = trackHeight;
+    entryRenderer.render(familiesG, entries, trackHeight);
     innerHeight +=
-      this.entryRenderer.innerHeight +
+      entryRenderer.innerHeight +
       trackPadding.top +
       trackPadding.bottom;
     bg.attr('height', innerHeight);

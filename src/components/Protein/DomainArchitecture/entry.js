@@ -37,29 +37,36 @@ class EntryRenderer {
   update() {
     this.innerHeight = 0;
     const interproG = this.group.selectAll(`.${s(this.className)}`)
-      .data(this.entries);
-    interproG.each((d, i, c) => this.updateEntry(d, i, c));
+      .data(this.entries, d => d.accession);
+    interproG.each((d, i, c) => this.updateEntry({d, i, c}));
     interproG.enter()
       .append('g')
       .attr('class', s(this.className))
-      .each((d, i, c) => this.updateEntry(d, i, c));
+      .attr('transform', 'scale(1,0)')
+      .each((d, i, c) => this.updateEntry({d, i, c}))
+      .append('text')
+        .attr('x', this.tPadding.right + this.x(this.protein.length))
+        .attr('y', '0.5em')
+        .text(d => d.accession);
+
+    interproG.exit()
+      .transition()
+        .attr('transform', 'scale(1,0)')
+      .remove();
   }
-  updateEntry(d, i, c){
+  updateEntry({d, i, c}){
     const g = d3.select(c[i]);
     const tHeight = this.trackHeight + this.tPadding.bottom + this.tPadding.top;
-    const instanceG = g.selectAll(`.${s('entry-instance')}`)
+    const instanceG = g.selectAll(`.${s(`${this.className}-instance`)}`)
       .data(d.entry_protein_coordinates.coordinates);
-    instanceG.each((data, i, c) => this.updateMatch(data, i, c, d));
+    instanceG.each((data, i, c) => this.updateMatch({d: data, i, c}, d, instanceG));
     instanceG.enter()
       .append('g')
-      .attr('class', s('entry-instance'))
-      .each((data, i, c) => this.updateMatch(data, i, c, d));
+      .attr('class', s(`${this.className}-instance`))
+      .each((data, i, c) => this.updateMatch({d: data, i, c}, d, instanceG));
     instanceG.exit().remove();
-    g.append('text')
-      .attr('x', this.tPadding.right + this.x(this.protein.length))
-      .attr('y', '0.5em')
-      .text(d => d.accession);
-    g.attr('transform', `translate(0, ${this.offsetY + this.innerHeight})`);
+    g.transition()
+      .attr('transform', `scale(1,1)translate(0, ${this.offsetY + this.innerHeight})`);
     this.innerHeight += tHeight;
     if (d.signatures){
       this.signatureRender.render(g,
@@ -70,17 +77,20 @@ class EntryRenderer {
       this.innerHeight += this.signatureRender.innerHeight;
     }
   }
-  getColor(entry){
-    return colorHash.hex(entry.accession.split('').reverse().join(''));
+  getColor(entry, format = 'HEX'){
+    const acc = entry.accession.split('').reverse().join('');
+    if (format.toUpperCase() === 'RGB') return colorHash.rgb(acc);
+    if (format.toUpperCase() === 'HEX') return colorHash.hex(acc);
+    if (format.toUpperCase() === 'HSL') return colorHash.hsl(acc);
   }
-  updateMatch(d, i, c, entry) {
+  updateMatch({d, i, c}, entry, instanceG) {
     const g = d3.select(c[i]);
     const color = this.getColor(entry);
-    const matchG = g.selectAll(`.${s('entry-match')}`)
+    const matchG = g.selectAll(`.${s(`${this.className}-match`)}`)
       .data(d);
-    if (d.length > 1) {
+    if (instanceG && d.length > 1) {
       // Line connecting Disjunctive matches of an entry
-      g.append('line')
+      instanceG.enter().append('line')
         .attr('x1', this.x(Math.min(...(d.map(x => x[0])))))
         .attr('y1', this.trackHeight / 2)
         .attr('x2', this.x(Math.max(...(d.map(x => x[1])))))
@@ -91,7 +101,7 @@ class EntryRenderer {
     matchG.exit().remove();
 
     matchG.enter().append('rect')
-      .attr('class', s('entry-match'))
+      .attr('class', s(`${this.className}-match`))
       .attr('width', m => this.x(m[1] - m[0]))
       .attr('height', this.trackHeight)
       .attr('x', m => this.x(m[0]))
@@ -109,19 +119,29 @@ class EntryRenderer {
         this.update();
         console.log('toggle', entry);
       });
-    const opacity = 0.3;
     if (entry.signatures) {
-      matchG.enter().append('rect')
-        .attr('x', m => this.x(m[0]))
-        .attr('y', this.trackHeight)
-        .attr('height', entry.signatures.length * (
-          this.signatureRender.trackHeight +
-          this.signatureRender.tPadding.top +
-          this.signatureRender.tPadding.bottom
-        ) + (entry.signatures.length ? this.signatureRender.tPadding.bottom : 0))
-        .attr('width', m => this.x(m[1] - m[0]))
-        .style('fill', this.getColor(entry))
-        .style('opacity', opacity);
+      if (instanceG.node()) {
+        const p = d3.select(instanceG.node().parentNode);
+        p.selectAll('.signatures-bg')
+          .attr('opacity', entry.signatures.length ? 0 : 1)
+          .transition()
+          .attr('opacity', entry.signatures.length ? 1 : 0);
+      }
+      matchG.enter().each(m => {
+        instanceG.enter().append('rect')
+          .attr('class', 'signatures-bg')
+          .attr('x', this.x(m[0]))
+          .attr('y', this.trackHeight - 1)
+          .attr('height', 1 + entry.signatures.length * (
+              this.signatureRender.trackHeight +
+              this.signatureRender.tPadding.top +
+              this.signatureRender.tPadding.bottom
+            ) + (entry.signatures.length ? this.signatureRender.tPadding.bottom : 0))
+          .attr('width', this.x(m[1] - m[0]))
+          .style('fill', `rgba(${this.getColor(entry, 'RGB').join()},0.3)`)
+          .style('stroke', this.getColor(entry))
+          .attr('stroke-dasharray', '1,3');
+      });
     }
   }
 }

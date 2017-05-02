@@ -1,5 +1,5 @@
 .domains {
-  font-size: 10px;
+  font-size: 12px;
   font-family: sans-serif;
 }
 .protein rect{
@@ -13,8 +13,14 @@
   font-weight: bold;
   fill: rgb(150, 60,120);
 }
-.entry text {
+.entry>text {
   font-weight: 500;
+  text-transform: uppercase;
+
+}
+.signature text {
+  font-size: 0.9em;
+  text-transform: uppercase;
 }
 .entry:hover>text, .signature:hover>text {
   font-weight: bold;
