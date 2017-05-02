@@ -6,7 +6,7 @@ import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
-
+import {getUrlForApi} from 'higherOrder/loadData/defaults'
 import ColorHash from 'color-hash/lib/color-hash';
 
 import Table, {Column, SearchBox, PageSizeSelector, Exporter}
@@ -165,10 +165,14 @@ const StructureAsync = createAsyncComponent(() => import(
 const EntryAsync = createAsyncComponent(() => import(
   /* webpackChunkName: "entry-subpage" */'subPages/Entry'
 ));
+const DomainAsync = createAsyncComponent(() => import(
+  /* webpackChunkName: "entry-subpage" */'subPages/DomainArchitecture'
+  ));
 
 const pages = new Set([
   {path: 'structure', component: StructureAsync},
   {path: 'entry', component: EntryAsync},
+  {path: 'domain_architecture', component: DomainAsync},
 ]);
 
 const SummaryComponent =
@@ -240,4 +244,6 @@ const Protein = ({...props}) => (
   </main>
 );
 
-export default loadData()(Protein);
+export default loadData((...args) =>
+  getUrlForApi(...args).replace('domain_architecture', 'entry')
+)(Protein);
