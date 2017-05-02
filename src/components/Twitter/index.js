@@ -1,4 +1,8 @@
+// @flow
 import React, {Component} from 'react';
+
+import cancelable from 'utils/cancelable';
+import loadResource from 'utils/loadResource';
 
 import {foundationPartial} from 'styles/foundation';
 
@@ -9,31 +13,38 @@ import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
-const loadTwitterScript = () => new Promise((res, rej) => {
-  const script = document.createElement('script');
-  script.async = true;
-  script.onload = res;
-  script.onerror = rej;
-  script.src = '//platform.twitter.com/widgets.js';
-  document.head.appendChild(script);
-}).then(() => window.twttr.events.bind(
-  'rendered',
-  ({target}) => {
-    // eslint-disable-next-line no-param-reassign
-    target.style.opacity = 1;
-    // eslint-disable-next-line no-param-reassign
-    target.style.transform = 'translateX(0)';
-  }
-));
-let twitterScript;
+let bound = false;
 
 class Twitter extends Component {
+  /* ::
+    _node: ?Element
+    _twitterScript: ?{
+      cancel: function,
+      promise: Promise<any>,
+    }
+  */
   componentDidMount() {
-    if (!twitterScript) twitterScript = loadTwitterScript();
-    twitterScript.then(() => {
+    this._twitterScript = cancelable(
+      loadResource('//platform.twitter.com/widgets.js')
+    );
+    this._twitterScript.promise.then(() => {
       if (!window.twttr) return;
-      window.twttr.widgets.load(this._node);
+      if (!bound) {
+        // Only need to bind this once
+        window.twttr.events.bind('rendered', ({target}) => {
+          // eslint-disable-next-line no-param-reassign
+          target.style.opacity = 1;
+          // eslint-disable-next-line no-param-reassign
+          target.style.transform = 'translateX(0)';
+        });
+        bound = true;
+      }
+      if (this._node) window.twttr.widgets.load(this._node);
     });
+  }
+
+  comnponentWillUnmount() {
+    if (this._twitterScript) this._twitterScript.cancel();
   }
 
   render() {

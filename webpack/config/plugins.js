@@ -46,6 +46,13 @@ common.push(
     minChunks: Infinity,
   })
 );
+common.push(
+  new webpack.optimize.CommonsChunkPlugin({
+    children: true,
+    async: true,
+    minChunks: 3,
+  })
+);
 
 const dev = common.concat([
   new HtmlWebpackPlugin({
