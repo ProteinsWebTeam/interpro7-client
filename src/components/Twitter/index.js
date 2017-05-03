@@ -15,6 +15,8 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
 let bound = false;
 
+const noPadding = {padding: 0};
+
 class Twitter extends Component {
   /* ::
     _node: ?Element
@@ -50,7 +52,7 @@ class Twitter extends Component {
   render() {
     return (
       <div className={f('expanded', 'row')}>
-        <div className={f('columns')}>
+        <div className={f('columns')} style={noPadding}>
           <div className={'jumbo-news'} >
             <div className={'jumbo-news-container'} >
               <h3
