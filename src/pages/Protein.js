@@ -6,7 +6,7 @@ import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
-import {getUrlForApi} from 'higherOrder/loadData/defaults'
+import {getUrlForApi} from 'higherOrder/loadData/defaults';
 import ColorHash from 'color-hash/lib/color-hash';
 
 import Table, {Column, SearchBox, PageSizeSelector, Exporter}

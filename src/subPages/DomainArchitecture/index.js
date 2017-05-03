@@ -52,7 +52,7 @@ let Index = class extends Component {
       dataIntegrated.payload.entries
     );
     return (
-      <div style={{width: '98vw'}}>
+      <div>
         <DomainArchitecture protein={mainData.payload.metadata} data={mergedData} />
       </div>
     );

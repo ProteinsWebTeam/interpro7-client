@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, {Component} from 'react';
+import React from 'react';
 import T from 'prop-types';
 
 import Related from 'components/Related';
