@@ -48,6 +48,8 @@ class EntryComponent {
     });
 
     this.protein = protein;
+    this.dispatch = d3.dispatch('entryclick', 'entrymouseover', 'entrymouseout');
+
     this.render();
     // Redraw based on the new size whenever the browser window is resized.
     this.windowResizer = () => {
@@ -135,18 +137,16 @@ class EntryComponent {
     protG.append('rect')
       .attr('width', d => this.x(d.length))
       .attr('height', proteinHeight)
-      .attr('x', 0)
-      .attr('y', 0)
       .attr('rx', proteinHeight / 2)
       .attr('ry', proteinHeight / 2);
     prot.selectAll('rect')
       .attr('width', d => this.x(d.length));
 
     protG.append('text')
-      .attr('x', d => this.x(d.length))
+      .attr('x', d => trackPadding.right + this.x(d.length))
       // eslint-disable-next-line no-magic-numbers
-      .attr('y', -3)
-      .attr('text-anchor', 'middle')
+      .attr('y', proteinHeight)
+      .style('font-size', '0.8em')
       .text(d => d.length);
     prot.selectAll('text')
       .attr('x', d => this.x(d.length));
@@ -220,6 +220,9 @@ class EntryComponent {
       }
     }
     this.render();
+  }
+  on(...args){
+    this.dispatch.on(...args);
   }
 }
 export default EntryComponent;

@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
+import {connect} from 'react-redux';
+
+import {goToLocation} from 'actions/creators';
 
 import EntryComponent from './entry_component';
 
@@ -15,6 +18,15 @@ class DomainArchitecture extends Component {
   componentDidMount(){
     const {protein, data} = this.props;
     this.ec = new EntryComponent(this._container, protein, data);
+    this.ec.on('entryclick', e => {
+      this.props.goToLocation(`/entry/${e.source_database}/${e.accession}`);
+    });
+    this.ec.on('entrymouseover', e => {
+      console.log('mouseover', e);
+    });
+    this.ec.on('entrymouseout', e => {
+      console.log('mouseout', e);
+    });
   }
   shouldComponentUpdate(){
     return false;
@@ -40,4 +52,11 @@ class DomainArchitecture extends Component {
     );
   }
 }
-export default DomainArchitecture;
+
+DomainArchitecture.propTypes = {
+  goToLocation: T.func.isRequired,
+  data: T.object,
+  protein: T.object,
+};
+
+export default connect(null, {goToLocation})(DomainArchitecture);

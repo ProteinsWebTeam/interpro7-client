@@ -32,6 +32,7 @@ class EntryRenderer {
       padding: this.padding,
       xScale: this.x,
       protein: this.protein,
+      parent: this.parent,
     });
     this.update();
   }
@@ -49,7 +50,9 @@ class EntryRenderer {
         .attr('class', 'label')
         .attr('x', this.tPadding.right + this.x(this.protein.length))
         .attr('y', this.trackHeight)
-        .text(d => d.accession);
+        .text(d => d.accession)
+        .style('cursor', 'pointer')
+        .on('click', e => this.parent.dispatch.call('entryclick', this, e));
     interproG.selectAll(`.${s(this.className)} .label`)
       .attr('x', this.tPadding.right + this.x(this.protein.length));
 
@@ -68,6 +71,11 @@ class EntryRenderer {
     instanceG.enter()
       .append('g')
       .attr('class', s(`${this.className}-instance`))
+      .on('mouseover', (e, i ,g) => this.parent.dispatch.call('entrymouseover', this, {
+        entry: d,
+        event: {d: e, i, g},
+      }))
+      .on('mouseout', () => this.parent.dispatch.call('entrymouseout', this, d))
       .each((data, i, c) => this.updateMatch({d: data, i, c}, d, instanceG));
     instanceG.exit().remove();
     g.transition()
