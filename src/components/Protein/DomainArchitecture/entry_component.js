@@ -52,18 +52,18 @@ class EntryComponent {
 
     this.render();
     // Redraw based on the new size whenever the browser window is resized.
-    this.windowResizer = () => {
-      requestAnimationFrame(() => {
-        const width = this.svg.style('width').replace('px', '');
-        proteinWidth = width - padding.left - padding.right;
-        this.x = d3.scaleLinear()
-          .domain([0, protein.length])
-          .range([0, proteinWidth]);
-        this.render();
-      });
-    };
     window.addEventListener('resize', this.windowResizer);
   }
+  windowResizer = () => {
+    requestAnimationFrame(() => {
+      const width = this.svg.style('width').replace('px', '');
+      proteinWidth = width - padding.left - padding.right;
+      this.x = d3.scaleLinear()
+        .domain([0, this.protein.length])
+        .range([0, proteinWidth]);
+      this.render();
+    });
+  };
   render(){
     let offsetY = padding.top;
     this.addAxis();

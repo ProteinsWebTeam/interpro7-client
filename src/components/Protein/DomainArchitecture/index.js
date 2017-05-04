@@ -1,20 +1,26 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
+import PopperJS from 'popper.js';
 
 import {goToLocation} from 'actions/creators';
 
 import EntryComponent from './entry_component';
 
+
 import classname from 'classnames/bind';
 import styles from './style.css';
 const s = classname.bind(styles);
+
 
 class DomainArchitecture extends Component {
   static propTypes = {
     protein: T.object,
     data: T.object,
   };
+  state = {
+    entryHovered: null,
+  }
   componentDidMount(){
     const {protein, data} = this.props;
     this.ec = new EntryComponent(this._container, protein, data);
@@ -22,10 +28,17 @@ class DomainArchitecture extends Component {
       this.props.goToLocation(`/entry/${e.source_database}/${e.accession}`);
     });
     this.ec.on('entrymouseover', e => {
-      console.log('mouseover', e);
+      this._popper.classList.remove('hide');
+      this._popper.appendChild(this.getElementFromEntry(e.entry));
+      this.popper = new PopperJS(e.event.g[0], this._popper, {
+        placement: 'top',
+        applyStyle: {enabled: false},
+      });
     });
-    this.ec.on('entrymouseout', e => {
-      console.log('mouseout', e);
+    this.ec.on('entrymouseout', () => {
+      this._popper.removeChild(this._popper.lastChild);
+      this.popper.destroy();
+      this._popper.classList.add('hide');
     });
   }
   shouldComponentUpdate(){
@@ -40,6 +53,17 @@ class DomainArchitecture extends Component {
   handleExpand = () => {
     this.ec.expandAll();
   }
+  getElementFromEntry(entry){
+    const tagString =
+      `<div>
+        <h4>${entry.accession}</h4>
+        <p>${entry.entry_type}</p>
+      </div>`;
+    const range = document.createRange();
+    range.selectNode(document.getElementsByTagName('div').item(0));
+    return range.createContextualFragment(tagString);
+
+  }
   render(){
     return (
       <div>
@@ -48,6 +72,9 @@ class DomainArchitecture extends Component {
           <button onClick={this.handleExpand}>Expand All</button>
         </div>
         <div ref={e => this._container = e}/>
+        <div ref={e => this._popper = e} className={s('popper', 'hide')}>
+          <div className={s('popper__arrow')}/>
+        </div>
       </div>
     );
   }

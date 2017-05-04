@@ -71,7 +71,7 @@ class EntryRenderer {
     instanceG.enter()
       .append('g')
       .attr('class', s(`${this.className}-instance`))
-      .on('mouseover', (e, i ,g) => this.parent.dispatch.call('entrymouseover', this, {
+      .on('mouseover', (e, i, g) => this.parent.dispatch.call('entrymouseover', this, {
         entry: d,
         event: {d: e, i, g},
       }))
