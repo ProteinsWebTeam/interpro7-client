@@ -23,6 +23,7 @@ const trackPadding = {
   left: 5,
   right: 5,
 };
+const maxZoom = 4;
 
 class EntryComponent {
   constructor(container, protein, data){
@@ -145,7 +146,7 @@ class EntryComponent {
           .style('cursor', d3.event.shiftKey ? 'zoom-out' : 'zoom-in');
       })
       .call(d3.zoom()
-        .scaleExtent([1, 4])
+        .scaleExtent([1, maxZoom])
         .on('zoom', () => {
           const evt = d3.event.transform;
           this.mainG.attr('transform', `translate(${evt.x}, 0) scale(${evt.k}, 1)`);
