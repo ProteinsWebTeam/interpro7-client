@@ -138,7 +138,18 @@ class EntryComponent {
       .attr('width', d => this.x(d.length))
       .attr('height', proteinHeight)
       .attr('rx', proteinHeight / 2)
-      .attr('ry', proteinHeight / 2);
+      .attr('ry', proteinHeight / 2)
+      .style('cursor', 'zoom-in')
+      .on('mouseover', () => {
+        protG.selectAll('rect')
+          .style('cursor', d3.event.shiftKey ? 'zoom-out' : 'zoom-in');
+      })
+      .call(d3.zoom()
+        .scaleExtent([1, 4])
+        .on('zoom', () => {
+          const evt = d3.event.transform;
+          this.mainG.attr('transform', `translate(${evt.x}, 0) scale(${evt.k}, 1)`);
+        }));
     prot.selectAll('rect')
       .attr('width', d => this.x(d.length));
 
