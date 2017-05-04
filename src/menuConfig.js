@@ -55,17 +55,17 @@ export const singleEntity = [
     name: 'overview',
   },
   {
-    to: '/entry/',
+    to: '/entry/interpro',
     name: 'entries',
     counter: 'entries',
   },
   {
-    to: '/protein/',
+    to: '/protein/uniprot',
     name: 'proteins',
     counter: 'proteins',
   },
   {
-    to: '/structure/',
+    to: '/structure/pdb',
     name: 'structures',
     counter: 'structures',
   },
