@@ -22,7 +22,7 @@ import Pages from 'Pages';
 
 const STICKY_MENU_OFFSET = 150;
 
-export default () => (
+const Root = () => (
   <div>
     <Helmet
       titleTemplate="%s - InterPro"
@@ -75,3 +75,5 @@ export default () => (
     />
   </div>
 );
+
+export default Root;

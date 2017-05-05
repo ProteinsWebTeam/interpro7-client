@@ -10,6 +10,9 @@ import App from 'App';
 import {DEV, PERF} from 'config';
 import ready from 'utils/ready';
 
+const schemaOrg = dev => import(/* webpackChunkName: "schemaOrg" */'schema_org')
+  .then(m => m.init(dev));
+
 const main = async () => {
   // Waiting for DOMContentReady
   await ready();
@@ -18,6 +21,9 @@ const main = async () => {
 
   // If “PERF” is defined in the environment, activate “why-did-you-update” tool
   if (DEV && PERF) require('why-did-you-update').whyDidYouUpdate(React);
+
+  // Instantiates schema.org manager
+  schemaOrg();
 
   // Main render function
   render(<App />, DOM_ROOT);

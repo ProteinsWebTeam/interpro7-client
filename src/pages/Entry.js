@@ -155,6 +155,12 @@ const ProteinAsync = createAsyncComponent(() => import(
   /* webpackChunkName: "protein-subpage" */'subPages/Protein'
 ));
 
+const SchemaOrgData = createAsyncComponent(
+  () => import(/* webpackChunkName: "schemaOrg" */'schema_org'),
+  () => null,
+  'SchemaOrgData'
+);
+
 const pages = new Set([
   {path: 'structure', component: StructureAsync},
   {path: 'protein', component: ProteinAsync},
@@ -176,16 +182,13 @@ const Summary = (props) => {
   const {data: {loading}, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
-    <div>
-      <Switch
-        {...props}
-        main="entry"
-        base={match}
-        indexRoute={SummaryComponent}
-        childRoutes={pages}
-      />
-
-    </div>
+    <Switch
+      {...props}
+      main="entry"
+      base={match}
+      indexRoute={SummaryComponent}
+      childRoutes={pages}
+    />
   );
 };
 Summary.propTypes = {
@@ -230,10 +233,24 @@ const InnerSwitch = ({match, ...props}) => (
 InnerSwitch.propTypes = {
   match: T.string,
 };
-const Entry = ({...props}) => (
+
+const schemaProcessData = data => ({
+  '@type': 'ProteinEntity',
+  '@id': '@mainEntity',
+  identifier: data.metadata.accession,
+  biologicalType: data.metadata.type,
+});
+
+const Entry = props => (
   <main>
     <div className={f('row')}>
       <div className={f('large-12', 'columns')}>
+        {props.data.payload &&
+          <SchemaOrgData
+            data={props.data.payload}
+            processData={schemaProcessData}
+          />
+        }
         <Switch
           {...props}
           base="entry"
@@ -244,4 +261,9 @@ const Entry = ({...props}) => (
     </div>
   </main>
 );
+Entry.propTypes = {
+  data: T.shape({
+    payload: T.object,
+  }).isRequired,
+};
 export default loadData()(Entry);

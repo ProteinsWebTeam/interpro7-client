@@ -40,10 +40,16 @@ const AsyncComponent = class extends Component {
 
 const defaultPlaceHolder = () => <div>Loading...</div>;
 
-export const createAsyncComponent = (importFn/* : function */, placeHolder) => {
+export const createAsyncComponent = (
+  importFn/* : function */,
+  placeHolder,
+  displayName,
+) => {
   let imported;
   return class AsyncComponent extends Component {
-    static displayName = 'AsyncComponent';
+    static displayName = `AsyncComponent${
+      displayName ? `(${displayName})` : ''
+    }`;
 
     static defaultProps = {placeHolder: placeHolder || defaultPlaceHolder};
     static propTypes = {
