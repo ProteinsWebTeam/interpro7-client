@@ -40,12 +40,16 @@ class EntryRenderer {
     this.innerHeight = 0;
     const interproG = this.group.selectAll(`.${s(this.className)}`)
       .data(this.entries, d => d.accession);
-    interproG.each((d, i, c) => this.updateEntry({d, i, c}));
+    interproG.each((d, i, c) => {
+      this.updateEntry({d, i, c});
+      this.updateResidues({d, i, c});
+    });
     interproG.enter()
       .append('g')
       .attr('class', s(this.className))
       .attr('transform', 'scale(1,0)')
       .each((d, i, c) => this.updateEntry({d, i, c}))
+      .each((d, i, c) => this.updateResidues({d, i, c}))
       .append('text')
         .attr('class', 'label')
         .attr('x', this.tPadding.right + this.x(this.protein.length))
@@ -62,6 +66,38 @@ class EntryRenderer {
       .remove();
     this.entries.height += this.innerHeight;
   }
+  updateResidues({d, i, c}) {
+    const g = d3.select(c[i]);
+    if (d.residues){
+      const residuesG = g.selectAll(`.${s(`${this.className}-residues`)}`)
+        .data([d]);
+      // instanceG.each((data, i, c) => this.updateMatch({d: data, i, c}, d, instanceG));
+      const resG = residuesG.enter()
+        .append('g')
+        .attr('class', s(`${this.className}-residues`));
+
+      const residue = resG.selectAll(`.${s(`${this.className}-residue`)}`)
+        .data(d.residues);
+
+      residuesG.selectAll(`.${s(`${this.className}-residue`)}`)
+        .attr('x', m => this.x(m.from))
+        .attr('width', m => this.x(Math.max(m.to - m.from, 1)));
+      residue.enter()
+        .append('rect')
+        .attr('class', s(`${this.className}-residue`))
+        .attr('x', m => this.x(m.from))
+        .attr('height', this.trackHeight)
+        .attr('width', m => this.x(Math.max(m.to - m.from, 1)))
+        .on('mouseover', (e, i, g) => this.parent.dispatch.call('entrymouseover', this, {
+          residue: e,
+          event: {d: e, i, g: [g[i]]},
+        }))
+        .on('mouseout', () => this.parent.dispatch.call('entrymouseout', this, d))
+      ;
+
+    }
+  }
+
   updateEntry({d, i, c}){
     const g = d3.select(c[i]);
     const tHeight = this.trackHeight + this.tPadding.bottom + this.tPadding.top;
@@ -78,6 +114,7 @@ class EntryRenderer {
       .on('mouseout', () => this.parent.dispatch.call('entrymouseout', this, d))
       .each((data, i, c) => this.updateMatch({d: data, i, c}, d, instanceG));
     instanceG.exit().remove();
+
     g.transition()
       .attr('transform', `scale(1,1)translate(0, ${this.offsetY + this.innerHeight})`);
     this.innerHeight += tHeight;

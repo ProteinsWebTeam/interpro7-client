@@ -7,7 +7,7 @@ import classname from 'classnames/bind';
 import styles from './style.css';
 const s = classname.bind(styles);
 
-const proteinHeight = 10;
+const proteinHeight = 4;
 let proteinWidth = 0;
 const height = 2000;
 const numberOfTicks = 10;
@@ -159,7 +159,7 @@ class EntryComponent {
       // eslint-disable-next-line no-magic-numbers
       .attr('y', proteinHeight)
       .style('font-size', '0.8em')
-      .text(d => d.length);
+      .text(d => `${d.length} aa`);
     prot.selectAll('text')
       .attr('x', d => this.x(d.length));
     return proteinHeight + trackPadding.bottom * 2;

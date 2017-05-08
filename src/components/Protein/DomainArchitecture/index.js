@@ -29,7 +29,12 @@ class DomainArchitecture extends Component {
     });
     this.ec.on('entrymouseover', e => {
       this._popper.classList.remove('hide');
-      this._popper.appendChild(this.getElementFromEntry(e.entry));
+      if (e.hasOwnProperty('entry')) {
+        this._popper.appendChild(this.getElementFromEntry(e.entry));
+      }
+      if (e.hasOwnProperty('residue')) {
+        this._popper.appendChild(this.getElementFromResidue(e.residue));
+      }
       this.popper = new PopperJS(e.event.g[0], this._popper, {
         placement: 'top',
         applyStyle: {enabled: false},
@@ -62,7 +67,21 @@ class DomainArchitecture extends Component {
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));
     return range.createContextualFragment(tagString);
-
+  }
+  getElementFromResidue(residue){
+    const tagString =
+      `<div>
+        <h4>${residue.name} (${residue.residue})</h4>
+        <p>${
+          (residue.from !== residue.to) ?
+          `${residue.from}-${residue.to}` :
+          residue.from
+        }</p>
+        <p>${residue.description}</p>
+      </div>`;
+    const range = document.createRange();
+    range.selectNode(document.getElementsByTagName('div').item(0));
+    return range.createContextualFragment(tagString);
   }
   render(){
     return (
