@@ -3,6 +3,8 @@ import T from 'prop-types';
 import {PMCLink, DOILink} from 'components/ExtLink';
 import AnimatedEntry from 'components/AnimatedEntry';
 
+import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
+
 import refStyles from './style.css';
 import ebiStyles from 'styles/ebi-global.css';
 import {foundationPartial} from 'styles/foundation';
@@ -14,11 +16,25 @@ const f = foundationPartial(refStyles, ebiStyles);
 
 // import {buildAnchorLink} from 'utils/url';
 
+const SchemaOrgData = createAsyncComponent(
+  () => import(/* webpackChunkName: "schemaOrg" */'schema_org'),
+  () => null,
+  'SchemaOrgData'
+);
+
+const schemaProcessData = data => ({
+  '@type': 'ScholarlyArticle',
+  '@id': '@citation',
+  identifier: `http://identifiers.org/pubmed/${data.PMID}`,
+  author: data.authors,
+});
+
 const Literature = ({references}) => (
   <div className={f('row')}><div className={f('large-12', 'columns')}>
     <AnimatedEntry className={f('list')} itemDelay={100} duration={500}>
       {Object.entries(references).map(([pubID, ref], i) => (
         <li className={f('reference', 'small')} key={pubID} id={pubID}>
+          <SchemaOrgData data={ref} processData={schemaProcessData}/>
           <span className={f('index')}>[{i + 1}]</span>
           <span className={f('authors')}>{ref.authors}</span>
           <span className={f('year')}>({ref.year})</span>.

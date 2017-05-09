@@ -10,8 +10,9 @@ import App from 'App';
 import {DEV, PERF} from 'config';
 import ready from 'utils/ready';
 
-const schemaOrg = dev => import(/* webpackChunkName: "schemaOrg" */'schema_org')
-  .then(m => m.init(dev));
+const schemaOrgManager = (...args) => import(
+  /* webpackChunkName: "schemaOrg" */'schema_org'
+).then(m => new m.Manager(...args));
 
 const main = async () => {
   // Waiting for DOMContentReady
@@ -23,7 +24,7 @@ const main = async () => {
   if (DEV && PERF) require('why-did-you-update').whyDidYouUpdate(React);
 
   // Instantiates schema.org manager
-  schemaOrg();
+  schemaOrgManager({dev: DEV});
 
   // Main render function
   render(<App />, DOM_ROOT);

@@ -2,19 +2,12 @@ import {PureComponent} from 'react';
 import T from 'prop-types';
 
 import {schedule} from 'timing-functions/src';
-import {DEV} from 'config';
 
-let instanciated = false;
+import merger from './merger';
+
 let manager;
 
 const DEFAULT_MAX_DELAY = 1000;
-
-const rootData = {
-  '@context': 'http://schema.org',
-  '@type': 'WebSite',
-  url: 'https://www.ebi.ac.uk/interpro',
-  mainEntityOfPage: '@mainEntity',
-};
 
 /*:: type Payload = {
   subscriber: any,
@@ -22,7 +15,7 @@ const rootData = {
   processData: any => Object,
 };*/
 
-class Manager {
+export class Manager {
   /* ::
     _node: Element
     _maxDelay: number
@@ -31,32 +24,44 @@ class Manager {
     _plannedRender: boolean
   */
   constructor(
-    node/*: Element */,
-    maxDelay/*: number */= DEFAULT_MAX_DELAY
+    {maxDelay = DEFAULT_MAX_DELAY, dev} = {}
+    /*: {maxDelay: number, dev: ?boolean} */
   ) {
-    this._node = node;
+    // Skip if no document present
+    if (!document) return;
+    // Create container script node
+    this._node = document.createElement('script');
+    this._node.type = 'application/ld+json';
+    // Define instance values
     this._maxDelay = maxDelay;
+    this._dev = dev;
     this._subscriptions = new Map();
     this._dataMap = new Map();
     this._plannedRender = false;
+    // Skip if document head not present
+    if (!document.head) return;
+    // Kick off render
     this._planRender();
+    // expose instance to React component
+    // eslint-disable-next-line consistent-this
+    manager = this;
+  }
+
+  disconnect() {
+    this.parentNode.removeChild(this._node);
+    this._node = null;
   }
 
   _render() {
-    console.log('merging');
-    const schema = {};
-    for (const [key, value] of Object.entries(rootData)) {
-      if (value[0] === '@') {
-        const data = this._dataMap.get(value);
-        if (data) {
-          schema[key] = data;
-        }// else don't add
-      } else {
-        schema[key] = value;
-      }
-    }
+    if (!this._node) return;
+    const schema = merger(this._dataMap);
     console.log(schema);
-    this._node.textContent = JSON.stringify(schema, null, DEV ? 2 : 0);
+    this._node.textContent = JSON.stringify(schema, null, this._dev ? 2 : 0);
+    // This should happen the first time it is rendered
+    if (!this._node.parentNode && document.head) {
+      // Add to the DOM
+      document.head.appendChild(this._node);
+    }
   }
 
   async _planRender() {
@@ -74,7 +79,9 @@ class Manager {
       subscriptionPayload.data
     );
     if (!id) throw new Error('no "@id" found');
-    this._dataMap.set(id, processed);
+    const dataSet = this._dataMap.get(id) || new Set();
+    dataSet.add(processed);
+    this._dataMap.set(id, dataSet);
     this._subscriptions.set(subscriptionPayload.subscriber, id);
     this._planRender();
   }
@@ -94,29 +101,11 @@ class Manager {
   }
 }
 
-export const init = (maxDelay/*: ?number */) => {
-  // Skip if already executed
-  if (instanciated) return;
-  // Skip if document not ready
-  if (!document) return;
-  // Create container script node
-  const node = document.createElement('script');
-  node.type = 'application/ld+json';
-  // Skip if document not ready
-  if (!document.head) return;
-  // Add to the DOM
-  document.head.appendChild(node);
-  // Subscription manager
-  const manager = new Manager(node, maxDelay);
-  // Everything OK, so turn on the flag
-  instanciated = true;
-  return manager;
-};
-
 export default class SchemaOrgData extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,
     processData: T.func.isRequired,
+    children: T.node,
   };
 
   static defaultProps = {
@@ -124,15 +113,18 @@ export default class SchemaOrgData extends PureComponent {
   };
 
   componentDidMount() {
+    if (!manager) return;
     const {data, processData} = this.props;
     manager.subscribe({subscriber: this, data, processData});
   }
 
   componentWillUnmount() {
+    if (!manager) return;
     manager.unsubscribe(this);
   }
 
   render() {
-    return null;
+    const {children} = this.props;
+    return children || null;
   }
 }

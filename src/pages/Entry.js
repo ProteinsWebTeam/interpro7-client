@@ -239,6 +239,7 @@ const schemaProcessData = data => ({
   '@id': '@mainEntity',
   identifier: data.metadata.accession,
   biologicalType: data.metadata.type,
+  citation: '@citation',
 });
 
 const Entry = props => (
