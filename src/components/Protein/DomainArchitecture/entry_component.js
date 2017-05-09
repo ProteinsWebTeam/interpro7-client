@@ -45,6 +45,8 @@ class EntryComponent {
       if (b.key.toLowerCase() === 'family') return 1;
       if (a.key.toLowerCase() === 'domain') return 0;
       if (b.key.toLowerCase() === 'domain') return 1;
+      if (a.key.toLowerCase() === 'residue') return 1;
+      if (b.key.toLowerCase() === 'residue') return 0;
       return (a.key > b.key) ? 1 : 0;
     });
 
@@ -192,9 +194,17 @@ class EntryComponent {
         xScale: this.x,
         protein: this.protein,
         parent: this,
-      }
-      );
-      entryRenderer.render(d3.select(c[i]), d.value.expanded ? d.value : [], trackHeight);
+      });
+
+      // if (d.key === 'residues'){
+      //   entryRenderer.renderResidues(
+      //     d3.select(c[i]), d.value.expanded ? d.value : [], trackHeight
+      //   );
+      // } else {
+        entryRenderer.render(
+          d3.select(c[i]), d.value.expanded ? d.value : [], trackHeight
+        );
+      // }
     });
     let x = 0;
     entriesG.transition().attr('transform', (d, i) => {
@@ -214,9 +224,9 @@ class EntryComponent {
   collapseAll(){
     for (const entryGroup of this.sortedData){
       for (const entry of entryGroup.value){
-        if (entry.signatures && entry.signatures.length) {
-          entry._signatures = entry.signatures;
-          entry.signatures = [];
+        if (entry.children && entry.children.length) {
+          entry._children = entry.children;
+          entry.children = [];
         }
       }
     }
@@ -225,9 +235,9 @@ class EntryComponent {
   expandAll(){
     for (const entryGroup of this.sortedData){
       for (const entry of entryGroup.value){
-        if (entry._signatures && entry._signatures.length) {
-          entry.signatures = entry._signatures;
-          entry._signatures = [];
+        if (entry._children && entry._children.length) {
+          entry.children = entry._children;
+          entry._children = [];
         }
       }
     }
