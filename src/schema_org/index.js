@@ -16,9 +16,26 @@ const rootData = {
   mainEntityOfPage: '@mainEntity',
 };
 
+/*:: type Payload = {
+  subscriber: any,
+  data: any,
+  processData: any => Object,
+};*/
+
 class Manager {
-  constructor(node) {
+  /* ::
+    _node: Element
+    _maxDelay: number
+    _subscriptions: Map<any, boolean | string>
+    _dataMap: Map<string, Object>
+    _plannedRender: boolean
+  */
+  constructor(
+    node/*: Element */,
+    maxDelay/*: number */= DEFAULT_MAX_DELAY
+  ) {
     this._node = node;
+    this._maxDelay = maxDelay;
     this._subscriptions = new Map();
     this._dataMap = new Map();
     this._plannedRender = false;
@@ -45,13 +62,13 @@ class Manager {
   async _planRender() {
     if (this._plannedRender) return;
     this._plannedRender = true;
-    await schedule(DEFAULT_MAX_DELAY);
+    await schedule(this._maxDelay);
     this._plannedRender = false;
     this._render();
   }
 
-  async _process(subscriptionPayload) {
-    await schedule(DEFAULT_MAX_DELAY);
+  async _process(subscriptionPayload/*: Payload */) {
+    await schedule(this._maxDelay);
     if (!this._subscriptions.has(subscriptionPayload.subscriber)) return;
     const {['@id']: id, ...processed} = subscriptionPayload.processData(
       subscriptionPayload.data
@@ -62,7 +79,7 @@ class Manager {
     this._planRender();
   }
 
-  subscribe(subscriptionPayload) {
+  subscribe(subscriptionPayload/*: Payload */) {
     this._subscriptions.set(subscriptionPayload.subscriber, true);
     this._process(subscriptionPayload);
   }
@@ -77,20 +94,23 @@ class Manager {
   }
 }
 
-export const init = () => {
+export const init = (maxDelay/*: ?number */) => {
   // Skip if already executed
   if (instanciated) return;
   // Skip if document not ready
-  if (!(document && document.head)) return;
+  if (!document) return;
   // Create container script node
   const node = document.createElement('script');
   node.type = 'application/ld+json';
+  // Skip if document not ready
+  if (!document.head) return;
   // Add to the DOM
   document.head.appendChild(node);
   // Subscription manager
-  new Manager(node);
+  const manager = new Manager(node, maxDelay);
   // Everything OK, so turn on the flag
   instanciated = true;
+  return manager;
 };
 
 export default class SchemaOrgData extends PureComponent {
