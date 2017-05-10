@@ -99,7 +99,7 @@ const rules = {
   // Limits number of parameters that can be used in the function declaration
   'max-params': [1, 4],
   // Specify the maximum number of statement allowed in a function
-  'max-statements': [1, 12],
+  'max-statements': [1, 15],
   // Require a capital letter for constructors
   'new-cap': 0,
   // Disallow omission of parens when invoking constructor with no arguments

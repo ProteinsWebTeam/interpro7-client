@@ -203,7 +203,7 @@ const Summary = props => {
 Summary.propTypes = {
   data: T.shape({
     loading: T.bool.isRequired,
-    payload: T.any.isRequired,
+    payload: T.any,
   }).isRequired,
   location: T.object.isRequired,
   match: T.string.isRequired,

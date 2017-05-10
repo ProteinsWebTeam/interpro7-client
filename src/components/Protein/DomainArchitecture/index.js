@@ -13,6 +13,21 @@ import styles from './style.css';
 const s = classname.bind(styles);
 
 
+const requestFullScreen = (element) => {
+  if ('requestFullscreen' in element){
+    element.requestFullscreen();
+  }
+  if ('webkitRequestFullscreen' in element){
+    element.webkitRequestFullscreen();
+  }
+  if ('mozRequestFullScreen' in element){
+    element.mozRequestFullScreen();
+  }
+  if ('msRequestFullscreen' in element){
+    element.msRequestFullscreen();
+  }
+};
+
 class DomainArchitecture extends Component {
   static propTypes = {
     protein: T.object,
@@ -58,6 +73,9 @@ class DomainArchitecture extends Component {
   handleExpand = () => {
     this.ec.expandAll();
   }
+  handleFullScreen = () => {
+    requestFullScreen(this._main);
+  }
   getElementFromEntry(entry){
     const tagString =
       `<div>
@@ -73,9 +91,9 @@ class DomainArchitecture extends Component {
       `<div>
         <h4>${residue.name} (${residue.residue})</h4>
         <p>${
-          (residue.from !== residue.to) ?
-          `${residue.from}-${residue.to}` :
-          residue.from
+          (residue.from === residue.to) ?
+          residue.from :
+          `${residue.from}-${residue.to}`
         }</p>
         <p>${residue.description}</p>
       </div>`;
@@ -85,10 +103,11 @@ class DomainArchitecture extends Component {
   }
   render(){
     return (
-      <div>
+    <div ref={e => this._main = e} className={s('fullscreenable')}>
         <div className={s('buttons')}>
           <button onClick={this.handleCollapse}>Collapse All</button> |
-          <button onClick={this.handleExpand}>Expand All</button>
+          <button onClick={this.handleExpand}> Expand All</button> |
+          <button onClick={this.handleFullScreen} className={s('fullscreen')}> ⇧</button>
         </div>
         <div ref={e => this._container = e}/>
         <div ref={e => this._popper = e} className={s('popper', 'hide')}>

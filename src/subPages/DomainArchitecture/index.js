@@ -53,7 +53,7 @@ const mergeResidues = (residues) => {
   return out;
 };
 
-const mergeData = (interpro, integrated, residues) => {
+const mergeData = (interpro, integrated, unintegrated, residues) => {
   const ipro = {};
   const out = interpro.reduce((acc, val) => {
     val.signatures = [];
@@ -65,22 +65,26 @@ const mergeData = (interpro, integrated, residues) => {
     acc[val.entry_type].push(val);
     return acc;
   }, {});
-  if (Object.keys(residues).length > 0) {
-    out.residues = mergeResidues(residues);
+  if (unintegrated.length > 0) {
+    out.unintegrated = unintegrated;
   }
-  for (const entry of integrated){
+  for (const entry of integrated.concat(unintegrated)){
     if (residues.hasOwnProperty(entry.accession)){
-      // entry.residues = residues[entry.accession];
       entry.children = entry.residues = mergeResidues({
         [entry.accession]: residues[entry.accession],
       });
+      delete residues[entry.accession];
     }
     if (entry.entry_integrated in ipro){
       ipro[entry.entry_integrated].signatures.push(entry);
       ipro[entry.entry_integrated].children.push(entry);
-    } else console.error('integrated entry without interpro:', entry);
+    } else if (entry in integrated) {
+      console.error('integrated entry without interpro:', entry);
+    }
   }
-  console.log(out);
+  if (Object.keys(residues).length > 0) {
+    out.residues = mergeResidues(residues);
+  }
   return out;
 };
 
@@ -89,17 +93,20 @@ let Index = class extends Component {
     mainData: T.object.isRequired,
     dataInterPro: T.object.isRequired,
     dataIntegrated: T.object.isRequired,
+    dataUnintegrated: T.object.isRequired,
     dataResidues: T.object.isRequired,
   };
 
   render(){
-    const {mainData, dataInterPro, dataIntegrated, dataResidues} = this.props;
+    const {mainData, dataInterPro, dataIntegrated, dataResidues, dataUnintegrated} =
+      this.props;
     if (dataInterPro.loading || dataIntegrated.loading) {
       return <div>Loading...</div>;
     }
     const mergedData = mergeData(
       dataInterPro.payload.entries,
-      dataIntegrated.payload.entries,
+      'payload' in dataIntegrated ? dataIntegrated.payload.entries : [],
+      'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
       dataResidues.payload
     );
     return (
@@ -109,7 +116,7 @@ let Index = class extends Component {
     );
   }
 };
-Index = ['Integrated', 'InterPro', 'Residues'].reduce(
+Index = ['Integrated', 'InterPro', 'Residues', 'Unintegrated'].reduce(
   (Index, db) => loadData({
     getUrl: getUrlFor(db),
     propNamespace: db,

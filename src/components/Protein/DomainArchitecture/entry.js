@@ -6,6 +6,7 @@ import ColorHash from 'color-hash/lib/color-hash';
 
 const s = classname.bind(styles);
 const colorHash = new ColorHash();
+const childrenScale = 0.8;
 
 class EntryRenderer {
   constructor({trackHeight, trackPadding, padding, xScale, protein, parent}){
@@ -22,7 +23,7 @@ class EntryRenderer {
     this.entries = entries;
     this.className = className;
     this.childrenRender = new EntryRenderer({
-      trackHeight: this.trackHeight * 0.8,
+      trackHeight: this.trackHeight * childrenScale,
       trackPadding: {
         bottom: this.tPadding.bottom - 1,
         top: this.tPadding.top - 2,
@@ -155,12 +156,11 @@ class EntryRenderer {
     let h = 0;
     if (entry.children && entry.children.length) {
       h = entry.children.length * (
-          this.trackHeight +
-          this.tPadding.bottom
+          this.trackHeight
         );
-      // h += this.tPadding.bottom;
+      h += this.tPadding.bottom;
       h += entry.children
-        .map(s => this.getChildrenHeight(s) * 0.8)
+        .map(s => this.getChildrenHeight(s) * childrenScale)
         .reduce((acc, v) => acc + v, 0);
     }
     return h;

@@ -45,8 +45,8 @@ class EntryComponent {
       if (b.key.toLowerCase() === 'family') return 1;
       if (a.key.toLowerCase() === 'domain') return 0;
       if (b.key.toLowerCase() === 'domain') return 1;
-      if (a.key.toLowerCase() === 'residue') return 1;
-      if (b.key.toLowerCase() === 'residue') return 0;
+      if (a.key.toLowerCase() === 'residues') return 1;
+      if (b.key.toLowerCase() === 'residues') return 0;
       return (a.key > b.key) ? 1 : 0;
     });
 
@@ -201,7 +201,7 @@ class EntryComponent {
       //     d3.select(c[i]), d.value.expanded ? d.value : [], trackHeight
       //   );
       // } else {
-        entryRenderer.render(
+      entryRenderer.render(
           d3.select(c[i]), d.value.expanded ? d.value : [], trackHeight
         );
       // }
