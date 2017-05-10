@@ -7,6 +7,7 @@ import cancelable from 'utils/cancelable';
 import {
   loadingData, loadedData, unloadingData, failedLoadingData,
 } from 'actions/creators';
+import {alreadyLoadingError} from 'reducers/data';
 
 import * as defaults from './defaults';
 import extractParams from './extractParams';
@@ -27,7 +28,9 @@ const load = (
   try {
     loadingData(key);
   } catch (err) {
-    console.warn(err);
+    if (err.message !== alreadyLoadingError) {
+      console.warn(err);
+    }
     return cancelable(Promise.resolve());
   }
   // Starts the fetch
@@ -36,7 +39,7 @@ const load = (
   c.promise.then(
     response => loadedData(key, response),
     error => (
-      [error.canceled ? unloadingData : failedLoadingData](key, error)
+      (error.canceled ? unloadingData : failedLoadingData)(key, error)
     ),
   );
   return c;
