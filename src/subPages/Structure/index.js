@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-param-reassign */
 import React, {Component} from 'react';
 import T from 'prop-types';
@@ -47,35 +46,17 @@ const mergeData = (interpro, structures) => {
       ...obj,
     })).sort((a, b) => a.label > b.label);
   }
-  // for (const entry of integrated.concat(unintegrated)){
-  //   if (residues.hasOwnProperty(entry.accession)){
-  //     entry.children = entry.residues = mergeResidues({
-  //       [entry.accession]: residues[entry.accession],
-  //     });
-  //     delete residues[entry.accession];
-  //   }
-  //   if (entry.entry_integrated in ipro){
-  //     ipro[entry.entry_integrated].signatures.push(entry);
-  //     ipro[entry.entry_integrated].children.push(entry);
-  //   } else if (entry in integrated) {
-  //     console.error('integrated entry without interpro:', entry);
-  //   }
-  // }
-  // if (Object.keys(residues).length > 0) {
-  //   out.residues = mergeResidues(residues);
-  // }
   return out;
 };
 
 let Index = class extends Component {
   static propTypes = {
     mainData: T.object.isRequired,
-    dataInterPro: T.object.isRequired,
+    dataInterPro: T.object,
   };
 
   render(){
-    const {mainData, dataInterPro} =
-      this.props;
+    const {mainData, dataInterPro} = this.props;
     if (dataInterPro.loading) {
       return <div>Loading...</div>;
     }

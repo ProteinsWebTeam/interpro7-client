@@ -54,6 +54,7 @@ class EntryComponent {
     this.dispatch = d3.dispatch('entryclick', 'entrymouseover', 'entrymouseout');
 
     this.render();
+    this.addGuideRect();
     // Redraw based on the new size whenever the browser window is resized.
     window.addEventListener('resize', this.windowResizer);
   }
@@ -67,6 +68,40 @@ class EntryComponent {
       this.render();
     });
   };
+  addGuideRect() {
+    this.mainG.insert('rect', `.${s('entries')}`)
+      .attr('class', s('guide'))
+      .attr('x', padding.left)
+      .attr('y', padding.top)
+      .attr('width', 1)
+      .attr('height', 1)
+      // .style('stroke', 'rgb(151, 151, 168)');
+      .style('fill', 'rgba(137, 140, 77, 0.4)');
+    this.overFeature = null;
+    this.mainG.on('mousemove', () => this.renderGuide());
+  }
+  renderGuide(){
+    d3.select(`.${s('guide')}`)
+      .attr('height', this.totalHeight)
+      .attr('width', this.overFeature ?
+        Math.max(this.x(this.overFeature[1] - this.overFeature[0]), 1) :
+        1)
+      .attr('x', this.overFeature ?
+        padding.left + this.x(this.overFeature[0]) :
+        d3.mouse(this.mainG.node())[0]);
+    // if (this.overFeature){
+    //   d3.select(`.${s('guide')}`)
+    //     .attr('height', this.totalHeight)
+    //     .attr('width', this.x(this.overFeature[1] - this.overFeature[0]))
+    //     .attr('x', padding.left + this.x(this.overFeature[0]));
+    // } else {
+    //   d3.select(`.${s('guide')}`)
+    //     .attr('height', this.totalHeight)
+    //     .attr('width', 1)
+    //     .attr('x', d3.mouse(this.mainG.node())[0]);
+    // }
+
+  }
   render(){
     let offsetY = padding.top;
     this.addAxis();
@@ -89,12 +124,11 @@ class EntryComponent {
 
     entriesG
       .call(selection => this.updateEntriesBlock(selection, offsetY, false));
-
-    this.svg.transition()
-      .attr('height', offsetY +
+    this.totalHeight = offsetY +
       this.sortedData.reduce((acc, v) => acc + v.value.height, 0) +
-      this.sortedData.length * (trackPadding.bottom + trackPadding.top)
-    );
+      this.sortedData.length * (trackPadding.bottom + trackPadding.top);
+    this.svg.transition()
+      .attr('height', this.totalHeight);
   }
 
   addAxis(){

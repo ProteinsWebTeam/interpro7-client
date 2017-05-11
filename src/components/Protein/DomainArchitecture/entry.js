@@ -144,7 +144,9 @@ class EntryRenderer {
           entry._children = [];
         }
         this.parent.render();
-      });
+      })
+      .on('mouseover', d => this.parent.overFeature = d)
+      .on('mouseout', () => this.parent.overFeature = null);
     if (parentNode) {
       parentNode.selectAll(`rect.${s(`${this.className}-match`)}`)
         .attr('x', m => this.x(m[0]))
