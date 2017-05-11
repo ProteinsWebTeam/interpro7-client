@@ -90,7 +90,10 @@ class SummaryEntry extends Component {
                 {
                   metadata.integrated &&
                   <div className={f('panel')}>
-                    <Integration intr={metadata.integrated} pathname={pathname}/>
+                    <Integration
+                      intr={metadata.integrated}
+                      pathname={pathname}
+                    />
                   </div>
                 }
                 {
@@ -110,7 +113,9 @@ class SummaryEntry extends Component {
             Object.keys(metadata.literature).length > 0 &&
             <section id="references">
               <div className={f('row')}>
-                <div className={f('large-12', 'columns')}><h4>References</h4></div>
+                <div className={f('large-12', 'columns')}>
+                  <h4>References</h4>
+                </div>
               </div>
               <Literature references={metadata.literature}/>
             </section>

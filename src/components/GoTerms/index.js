@@ -17,7 +17,11 @@ const getDefaultPayload = () => ({
 
 const GoTerms = ({terms}/*: {terms: Array<Object>} */) => {
   // TODO: change when GO terms are correct in the API
-  const _terms = terms.reduce((acc, term) => {
+  let _terms = terms;
+  if (!Array.isArray(terms) && !Object.keys(terms).length) {
+    _terms = [];
+  }
+  _terms = _terms.reduce((acc, term) => {
     // eslint-disable-next-line no-param-reassign
     if (!acc[term.category]) acc[term.category] = [];
     if (typeof term === 'string') {

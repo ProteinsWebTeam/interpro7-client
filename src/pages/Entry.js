@@ -34,32 +34,32 @@ const Overview = ({data: {payload, loading}, location: {pathname, search: {type}
   if (loading) return <div>Loading...</div>;
   const params = type ? `?type=${type}` : '';
   return (
-      <div>
-        Member databases:
-        <ul className={styles.card}>
-          {Object.entries(payload.entries.member_databases)
-            .map(([name, count]) => (
-              <li key={name}>
-                <Link to={`${removeLastSlash(pathname)}/${name}${params}`}>
-                  {name} ({count})
-                </Link>
-              </li>
-            ))
-          }
-        </ul>
-        <ul className={styles.card}>
-          <li>
-            <Link to={`${removeLastSlash(pathname)}/interpro${params}`}>
-              InterPro ({payload.entries ? payload.entries.interpro : 0})
-            </Link>
-          </li>
-          <li>
-            <Link to={`${removeLastSlash(pathname)}/unintegrated${params}`}>
-              Unintegrated ({payload.entries ? payload.entries.unintegrated : 0})
-            </Link>
-          </li>
-        </ul>
-      </div>
+    <div>
+      Member databases:
+      <ul className={styles.card}>
+        {Object.entries(payload.entries.member_databases)
+          .map(([name, count]) => (
+            <li key={name}>
+              <Link to={`${removeLastSlash(pathname)}/${name}${params}`}>
+                {name} ({count})
+              </Link>
+            </li>
+          ))
+        }
+      </ul>
+      <ul className={styles.card}>
+        <li>
+          <Link to={`${removeLastSlash(pathname)}/interpro${params}`}>
+            InterPro ({payload.entries ? payload.entries.interpro : 0})
+          </Link>
+        </li>
+        <li>
+          <Link to={`${removeLastSlash(pathname)}/unintegrated${params}`}>
+            Unintegrated ({payload.entries ? payload.entries.unintegrated : 0})
+          </Link>
+        </li>
+      </ul>
+    </div>
   );
 };
 Overview.propTypes = propTypes;
@@ -238,8 +238,13 @@ const schemaProcessData = data => ({
   '@type': 'ProteinEntity',
   '@id': '@mainEntity',
   identifier: data.metadata.accession,
+  name: data.metadata.name.name || data.metadata.accession,
+  alternateName: data.metadata.name.long || null,
+  inDataset: data.metadata.source_database,
   biologicalType: data.metadata.type,
   citation: '@citation',
+  isBasedOn: '@isBasedOn',
+  isBaseFor: '@isBaseFor',
 });
 
 const Entry = props => (

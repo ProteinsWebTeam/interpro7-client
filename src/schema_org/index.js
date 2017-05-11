@@ -24,7 +24,7 @@ export class Manager {
     _plannedRender: boolean
   */
   constructor(
-    {maxDelay = DEFAULT_MAX_DELAY, dev} = {}
+    {maxDelay = DEFAULT_MAX_DELAY, dev, root} = {}
     /*: {maxDelay: number, dev: ?boolean} */
   ) {
     // Skip if no document present
@@ -35,6 +35,7 @@ export class Manager {
     // Define instance values
     this._maxDelay = maxDelay;
     this._dev = dev;
+    this._rootData = root;
     this._subscriptions = new Map();
     this._dataMap = new Map();
     this._plannedRender = false;
@@ -52,11 +53,13 @@ export class Manager {
     this._node = null;
   }
 
-  _render() {
+  _render(mergedData) {
     if (!this._node) return;
-    const schema = merger(this._dataMap);
-    console.log(schema);
-    this._node.textContent = JSON.stringify(schema, null, this._dev ? 2 : 0);
+    this._node.textContent = JSON.stringify(
+      mergedData,
+      null,
+      this._dev ? 2 : 0
+    );
     // This should happen the first time it is rendered
     if (!this._node.parentNode && document.head) {
       // Add to the DOM
@@ -67,9 +70,18 @@ export class Manager {
   async _planRender() {
     if (this._plannedRender) return;
     this._plannedRender = true;
-    await schedule(this._maxDelay);
+    const deadline = await schedule(this._maxDelay);
+    if (this._dev) console.groupCollapsed('Schema.org rendering');
+    if (this._dev) console.time('schema.org rendering took');
+    if (this._dev) console.time('Schema.org merger');
+    const mergedData = await merger(this._dataMap, deadline, this._rootData);
+    if (this._dev) console.timeEnd('Schema.org merger');
     this._plannedRender = false;
-    this._render();
+    if (this._dev) console.time('Schema.org stringify to DOM');
+    this._render(mergedData);
+    if (this._dev) console.timeEnd('Schema.org stringify to DOM');
+    if (this._dev) console.groupEnd();
+    if (this._dev) console.timeEnd('schema.org rendering took');
   }
 
   async _process(subscriptionPayload/*: Payload */) {

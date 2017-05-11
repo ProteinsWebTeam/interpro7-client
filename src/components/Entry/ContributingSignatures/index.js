@@ -4,10 +4,25 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
+import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
+
 import {buildLink} from 'utils/url';
 
 import styles from 'styles/blocks.css';
 import ipro from 'styles/interpro-new.css';
+
+const SchemaOrgData = createAsyncComponent(
+  () => import(/* webpackChunkName: "schemaOrg" */'schema_org'),
+  () => null,
+  'SchemaOrgData'
+);
+
+const schemaProcessData = data => ({
+  '@type': 'ProteinEntity',
+  '@id': '@isBasedOn',
+  inDataset: data.db,
+  name: data.name,
+});
 
 const ContributingSignatures = (
   {contr, pathname}/*: {contr: Object, pathname: string} */
@@ -21,6 +36,10 @@ const ContributingSignatures = (
           <ul>
             {values.map(value => (
               <li key={value}>
+                <SchemaOrgData
+                  data={{db: key, name: value}}
+                  processData={schemaProcessData}
+                />
                 <Link to={buildLink(pathname, 'entry', key, value)}>
                   {value}
                 </Link>

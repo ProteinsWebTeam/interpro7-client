@@ -7,7 +7,7 @@ import {render} from 'react-dom';
 
 import App from 'App';
 
-import {DEV, PERF} from 'config';
+import config, {DEV, PERF} from 'config';
 import ready from 'utils/ready';
 
 const schemaOrgManager = (...args) => import(
@@ -24,7 +24,15 @@ const main = async () => {
   if (DEV && PERF) require('why-did-you-update').whyDidYouUpdate(React);
 
   // Instantiates schema.org manager
-  schemaOrgManager({dev: DEV});
+  schemaOrgManager({
+    dev: DEV,
+    root: {
+      '@context': 'http://schema.org',
+      '@type': 'WebSite',
+      url: config.root.website.protocol + config.root.website.href,
+      mainEntityOfPage: '@mainEntity',
+    },
+  });
 
   // Main render function
   render(<App />, DOM_ROOT);
