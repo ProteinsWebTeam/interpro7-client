@@ -22,7 +22,12 @@
   font-size: 0.9em;
   text-transform: uppercase;
 }
-.entry:hover>text, .signature:hover>text {
+.residue text {
+  font-size: 0.7em;
+  text-transform: uppercase;
+}
+
+.entry:hover>text, .signature:hover>text, .residue:hover>text {
   font-weight: bold;
 }
 .entry-instance:hover>rect, .signature:hover>rect{
@@ -35,12 +40,13 @@ div.buttons {
   font-size: 0.9em;
   margin-right: 10%;
 }
-/*div.popper {*/
-  /*background-color: white;*/
-  /*border: #514690 1px solid;*/
-  /*padding: 0.5em;*/
-  /*margin-bottom: 0.5em;*/
-/*}*/
+.fullscreenable:-webkit-full-screen .fullscreen{
+  display: none;
+}
+.fullscreenable:-webkit-full-screen  {
+  width: 100vw;
+}
+
 .popper{
   position: absolute;
   background: white;

@@ -7,7 +7,7 @@ import classname from 'classnames/bind';
 import styles from './style.css';
 const s = classname.bind(styles);
 
-const proteinHeight = 10;
+const proteinHeight = 4;
 let proteinWidth = 0;
 const height = 2000;
 const numberOfTicks = 10;
@@ -45,6 +45,8 @@ class EntryComponent {
       if (b.key.toLowerCase() === 'family') return 1;
       if (a.key.toLowerCase() === 'domain') return 0;
       if (b.key.toLowerCase() === 'domain') return 1;
+      if (a.key.toLowerCase() === 'residues') return 1;
+      if (b.key.toLowerCase() === 'residues') return 0;
       return (a.key > b.key) ? 1 : 0;
     });
 
@@ -52,6 +54,7 @@ class EntryComponent {
     this.dispatch = d3.dispatch('entryclick', 'entrymouseover', 'entrymouseout');
 
     this.render();
+    this.addGuideRect();
     // Redraw based on the new size whenever the browser window is resized.
     window.addEventListener('resize', this.windowResizer);
   }
@@ -65,6 +68,40 @@ class EntryComponent {
       this.render();
     });
   };
+  addGuideRect() {
+    this.mainG.insert('rect', `.${s('entries')}`)
+      .attr('class', s('guide'))
+      .attr('x', padding.left)
+      .attr('y', padding.top)
+      .attr('width', 1)
+      .attr('height', 1)
+      // .style('stroke', 'rgb(151, 151, 168)');
+      .style('fill', 'rgba(137, 140, 77, 0.4)');
+    this.overFeature = null;
+    this.mainG.on('mousemove', () => this.renderGuide());
+  }
+  renderGuide(){
+    d3.select(`.${s('guide')}`)
+      .attr('height', this.totalHeight)
+      .attr('width', this.overFeature ?
+        Math.max(this.x(this.overFeature[1] - this.overFeature[0]), 1) :
+        1)
+      .attr('x', this.overFeature ?
+        padding.left + this.x(this.overFeature[0]) :
+        d3.mouse(this.mainG.node())[0]);
+    // if (this.overFeature){
+    //   d3.select(`.${s('guide')}`)
+    //     .attr('height', this.totalHeight)
+    //     .attr('width', this.x(this.overFeature[1] - this.overFeature[0]))
+    //     .attr('x', padding.left + this.x(this.overFeature[0]));
+    // } else {
+    //   d3.select(`.${s('guide')}`)
+    //     .attr('height', this.totalHeight)
+    //     .attr('width', 1)
+    //     .attr('x', d3.mouse(this.mainG.node())[0]);
+    // }
+
+  }
   render(){
     let offsetY = padding.top;
     this.addAxis();
@@ -87,12 +124,11 @@ class EntryComponent {
 
     entriesG
       .call(selection => this.updateEntriesBlock(selection, offsetY, false));
-
-    this.svg.transition()
-      .attr('height', offsetY +
+    this.totalHeight = offsetY +
       this.sortedData.reduce((acc, v) => acc + v.value.height, 0) +
-      this.sortedData.length * (trackPadding.bottom + trackPadding.top)
-    );
+      this.sortedData.length * (trackPadding.bottom + trackPadding.top);
+    this.svg.transition()
+      .attr('height', this.totalHeight);
   }
 
   addAxis(){
@@ -159,7 +195,7 @@ class EntryComponent {
       // eslint-disable-next-line no-magic-numbers
       .attr('y', proteinHeight)
       .style('font-size', '0.8em')
-      .text(d => d.length);
+      .text(d => `${d.length} aa`);
     prot.selectAll('text')
       .attr('x', d => this.x(d.length));
     return proteinHeight + trackPadding.bottom * 2;
@@ -192,9 +228,17 @@ class EntryComponent {
         xScale: this.x,
         protein: this.protein,
         parent: this,
-      }
-      );
-      entryRenderer.render(d3.select(c[i]), d.value.expanded ? d.value : [], trackHeight);
+      });
+
+      // if (d.key === 'residues'){
+      //   entryRenderer.renderResidues(
+      //     d3.select(c[i]), d.value.expanded ? d.value : [], trackHeight
+      //   );
+      // } else {
+      entryRenderer.render(
+          d3.select(c[i]), d.value.expanded ? d.value : [], trackHeight
+        );
+      // }
     });
     let x = 0;
     entriesG.transition().attr('transform', (d, i) => {
@@ -214,9 +258,9 @@ class EntryComponent {
   collapseAll(){
     for (const entryGroup of this.sortedData){
       for (const entry of entryGroup.value){
-        if (entry.signatures && entry.signatures.length) {
-          entry._signatures = entry.signatures;
-          entry.signatures = [];
+        if (entry.children && entry.children.length) {
+          entry._children = entry.children;
+          entry.children = [];
         }
       }
     }
@@ -225,9 +269,9 @@ class EntryComponent {
   expandAll(){
     for (const entryGroup of this.sortedData){
       for (const entry of entryGroup.value){
-        if (entry._signatures && entry._signatures.length) {
-          entry.signatures = entry._signatures;
-          entry._signatures = [];
+        if (entry._children && entry._children.length) {
+          entry.children = entry._children;
+          entry._children = [];
         }
       }
     }

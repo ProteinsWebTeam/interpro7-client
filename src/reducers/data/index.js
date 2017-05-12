@@ -8,12 +8,14 @@ import {LOADING_DATA, LOADED_DATA, FAILED_LOADING_DATA, UNLOADING_DATA}
   error: any,
 } */
 
+export const alreadyLoadingError = 'Already Loading';
+
 export default (
   state/*: {[key: string]: Datum} */ = {}, action/*: Object */
 ) => {
   switch (action.type) {
     case LOADING_DATA:
-      if (state[action.key]) throw new Error('Already loading');
+      if (state[action.key]) throw new Error(alreadyLoadingError);
       return {...state, [action.key]: {loading: true}};
     case LOADED_DATA:
       return {
