@@ -32,10 +32,13 @@ class DomainArchitecture extends Component {
   static propTypes = {
     protein: T.object,
     data: T.object,
+    goToLocation: T.func.isRequired,
   };
+
   state = {
     entryHovered: null,
-  }
+  };
+
   componentDidMount(){
     const {protein, data} = this.props;
     this.ec = new EntryComponent(this._container, protein, data);
@@ -69,13 +72,13 @@ class DomainArchitecture extends Component {
   }
   handleCollapse = () => {
     this.ec.collapseAll();
-  }
+  };
   handleExpand = () => {
     this.ec.expandAll();
-  }
+  };
   handleFullScreen = () => {
     requestFullScreen(this._main);
-  }
+  };
   getElementFromEntry(entry){
     const tagString =
       `<div>
@@ -117,11 +120,5 @@ class DomainArchitecture extends Component {
     );
   }
 }
-
-DomainArchitecture.propTypes = {
-  goToLocation: T.func.isRequired,
-  data: T.object,
-  protein: T.object,
-};
 
 export default connect(null, {goToLocation})(DomainArchitecture);
