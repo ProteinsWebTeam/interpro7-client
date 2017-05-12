@@ -21,7 +21,12 @@ const main = async () => {
   const DOM_ROOT = document.getElementById('root');
 
   // If “PERF” is defined in the environment, activate “why-did-you-update” tool
-  if (DEV && PERF) require('why-did-you-update').whyDidYouUpdate(React);
+  if (DEV && PERF) {
+    require('why-did-you-update').whyDidYouUpdate(
+      React,
+      {include: /.*/},
+    );
+  }
 
   // Instantiates schema.org manager
   schemaOrgManager({

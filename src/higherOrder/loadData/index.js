@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -7,6 +7,7 @@ import cancelable from 'utils/cancelable';
 import {
   loadingData, loadedData, unloadingData, failedLoadingData,
 } from 'actions/creators';
+import {alreadyLoadingError} from 'reducers/data';
 
 import * as defaults from './defaults';
 import extractParams from './extractParams';
@@ -27,7 +28,9 @@ const load = (
   try {
     loadingData(key);
   } catch (err) {
-    console.warn(err);
+    if (err.message !== alreadyLoadingError) {
+      console.warn(err);
+    }
     return cancelable(Promise.resolve());
   }
   // Starts the fetch
@@ -36,7 +39,7 @@ const load = (
   c.promise.then(
     response => loadedData(key, response),
     error => (
-      [error.canceled ? unloadingData : failedLoadingData](key, error)
+      (error.canceled ? unloadingData : failedLoadingData)(key, error)
     ),
   );
   return c;
@@ -47,7 +50,7 @@ const loadData = params => {
   const fetchFun = getFetch(fetchOptions);
 
   return (Wrapped/*: ReactClass<*> */) => {
-    class DataWrapper extends Component {
+    class DataWrapper extends PureComponent {
       static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
 
       static propTypes = {
@@ -146,9 +149,10 @@ const loadData = params => {
           // Remove from props
           appState, loadingData, loadedData, failedLoadingData,
           // Keep, to pass on
-          data: dataFromProps, ...rest
+          data, ...rest
         } = this.props;
-        const data = {...dataFromProps};
+        // TODO: remove next line if nothing breaks because of it
+        // const data = {...dataFromProps};// maybe useful?..
         if (typeof data.loading === 'undefined') data.loading = true;
         const useStaleData = (
           !this._avoidStaleData && data.loading && this.state.staleData.payload

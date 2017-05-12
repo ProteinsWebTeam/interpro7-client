@@ -99,7 +99,7 @@ const rules = {
   // Limits number of parameters that can be used in the function declaration
   'max-params': [1, 4],
   // Specify the maximum number of statement allowed in a function
-  'max-statements': [1, 12],
+  'max-statements': [1, 15],
   // Require a capital letter for constructors
   'new-cap': 0,
   // Disallow omission of parens when invoking constructor with no arguments
@@ -377,8 +377,6 @@ const rules = {
   'react/self-closing-comp': 1,
   // Enforce component methods order
   'react/sort-comp': 1,
-  // Prevent missing parentheses around multilines JSX
-  'react/wrap-multilines': 1,
   // Require JSDoc comment
   'require-jsdoc': [1, {require: {
     FunctionDeclaration: true,
