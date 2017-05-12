@@ -41,7 +41,7 @@ const Switch = ({
   childRoutes = [],
   catchAll = defaultCatchAll,
   base = '',
-  ...props,
+  ...props
 }) => {
   // get the URL level
   const level = getLevel(props.location.pathname, base.toLowerCase());

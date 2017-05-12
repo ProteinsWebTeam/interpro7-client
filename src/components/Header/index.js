@@ -125,25 +125,6 @@ const mapStateToPropsSideIcons = createSelector(
 );
 const SideIcons = connect(mapStateToPropsSideIcons)(_SideIcons);
 
-class MenuItem extends PureComponent {
-  static propTypes = {
-    children: T.string.isRequired,
-    active: T.bool,
-  };
-
-  render() {
-    const {active, children} = this.props;
-    return (
-      <Link
-        to={`/${children.toLowerCase()}/`}
-        className={reducedStyleBundle({active})}
-      >
-        {children}
-      </Link>
-    );
-  }
-}
-
 // const SubMediumLevel = ({pages, pageType}) => (
 //   <span>
 //     {pages.map(page => (

@@ -36,7 +36,7 @@ class SideMenu extends PureComponent {
       visible,
       pathname,
       data: {payload, loading},
-      closeSideNav
+      closeSideNav,
     } = this.props;
     return (
       <div>
