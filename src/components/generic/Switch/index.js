@@ -36,12 +36,12 @@ const getComponent = (
 const defaultCatchAll = () => <div>404</div>;
 
 const Switch = ({
-  ...props,
   dispatch,
   indexRoute,
   childRoutes = [],
   catchAll = defaultCatchAll,
   base = '',
+  ...props,
 }) => {
   // get the URL level
   const level = getLevel(props.location.pathname, base.toLowerCase());

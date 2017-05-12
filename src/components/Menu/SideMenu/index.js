@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -22,7 +22,7 @@ import style from './style.css';
 
 const f = foundationPartial(ebiStyles, interproStyles, helperClasses, style);
 
-class SideMenu extends Component {
+class SideMenu extends PureComponent {
   static propTypes = {
     visible: T.bool.isRequired,
     data: T.object,
@@ -31,12 +31,13 @@ class SideMenu extends Component {
     closeSideNav: T.func.isRequired,
   };
 
-  shouldComponentUpdate({visible, loading}) {
-    return visible && !loading;
-  }
-
   render() {
-    const {visible, pathname, data: {payload, loading}, closeSideNav} = this.props;
+    const {
+      visible,
+      pathname,
+      data: {payload, loading},
+      closeSideNav
+    } = this.props;
     return (
       <div>
         <aside

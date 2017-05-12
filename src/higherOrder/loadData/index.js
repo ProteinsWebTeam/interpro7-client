@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -47,7 +47,7 @@ const loadData = params => {
   const fetchFun = getFetch(fetchOptions);
 
   return (Wrapped/*: ReactClass<*> */) => {
-    class DataWrapper extends Component {
+    class DataWrapper extends PureComponent {
       static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
 
       static propTypes = {
@@ -146,9 +146,10 @@ const loadData = params => {
           // Remove from props
           appState, loadingData, loadedData, failedLoadingData,
           // Keep, to pass on
-          data: dataFromProps, ...rest
+          data, ...rest
         } = this.props;
-        const data = {...dataFromProps};
+        // TODO: remove next line if nothing breaks because of it
+        // const data = {...dataFromProps};// maybe useful?..
         if (typeof data.loading === 'undefined') data.loading = true;
         const useStaleData = (
           !this._avoidStaleData && data.loading && this.state.staleData.payload
