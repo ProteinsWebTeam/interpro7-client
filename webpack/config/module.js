@@ -2,6 +2,8 @@ const process = require('process');
 const path = require('path');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const postCSSImport = require('postcss-import');
+const cssNext = require('postcss-cssnext');
 
 const PROD = process.env.NODE_ENV === 'production';
 
@@ -63,10 +65,13 @@ module.exports = {
         use: [
           {
             loader: 'css-loader',
-            query: Object.assign({}, cssSettings, {localIdentName: '[local]'}),
+            options:  Object.assign({}, cssSettings, {localIdentName: '[local]'}),
           },
           {
             loader: 'postcss-loader',
+            options:  {
+              plugins: [postCSSImport(), cssNext()],
+            },
           },
         ],
       }),
@@ -80,10 +85,13 @@ module.exports = {
         use: [
           {
             loader: 'css-loader',
-            query: cssSettings,
+            options:  cssSettings,
           },
           {
             loader: 'postcss-loader',
+            options:  {
+              plugins: [postCSSImport(), cssNext()],
+            },
           },
         ],
       }),

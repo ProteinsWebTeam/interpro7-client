@@ -9,10 +9,6 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 // Dashboard
 const Dashboard = require('webpack-dashboard');
 const DashboardPlugin = require('webpack-dashboard/plugin');
-// Other
-const cssnext = require('postcss-cssnext');
-const postcssImport = require('postcss-import');
-const postcssApply = require('postcss-apply');
 
 const pkg = require(path.resolve('package.json'));
 
@@ -24,7 +20,6 @@ const common = [
     options: {
       debug: !PROD,
       context: __dirname,
-      postcss: [postcssImport, postcssApply, cssnext],
     },
   }),
   new webpack.NamedModulesPlugin(),
