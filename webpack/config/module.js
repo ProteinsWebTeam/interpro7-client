@@ -6,6 +6,7 @@ const postCSSImport = require('postcss-import');
 const cssNext = require('postcss-cssnext');
 
 const PROD = process.env.NODE_ENV === 'production';
+const TEST = process.env.NODE_ENV === 'test';
 
 const cssSettings = {
   modules: true,
@@ -60,12 +61,16 @@ module.exports = {
 
       // Use `loader` instead of `use` for now, otherwise breaks
       // See https://github.com/webpack/extract-text-webpack-plugin/issues/282
-      loader: ExtractTextPlugin.extract({
+      use: (PROD || TEST) ? ExtractTextPlugin.extract({
         fallback: 'style-loader',
         use: [
           {
             loader: 'css-loader',
-            options:  Object.assign({}, cssSettings, {localIdentName: '[local]'}),
+            options:  Object.assign(
+              {},
+              cssSettings,
+              {localIdentName: '[local]'}
+            ),
           },
           {
             loader: 'postcss-loader',
@@ -74,13 +79,25 @@ module.exports = {
             },
           },
         ],
-      }),
+      }) : [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options:  Object.assign({}, cssSettings, {localIdentName: '[local]'}),
+        },
+        {
+          loader: 'postcss-loader',
+          options:  {
+            plugins: [postCSSImport(), cssNext()],
+          },
+        },
+      ],
     },
     {
       test: /\.css$/i,
       // Use `loader` instead of `use` for now, otherwise breaks
       // See https://github.com/webpack/extract-text-webpack-plugin/issues/282
-      loader: ExtractTextPlugin.extract({
+      use: (PROD || TEST) ? ExtractTextPlugin.extract({
         fallback: 'style-loader',
         use: [
           {
@@ -94,14 +111,26 @@ module.exports = {
             },
           },
         ],
-      }),
+      }) : [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options:  cssSettings,
+        },
+        {
+          loader: 'postcss-loader',
+          options:  {
+            plugins: [postCSSImport(), cssNext()],
+          },
+        },
+      ],
       exclude: /((ebi-global)|(interpro-new))\.css$/i,
     },
     {
       test: /\.scss$/i,
       // Use `loader` instead of `use` for now, otherwise breaks
       // See https://github.com/webpack/extract-text-webpack-plugin/issues/282
-      loader: ExtractTextPlugin.extract({
+      use: (PROD || TEST) ? ExtractTextPlugin.extract({
         fallback: 'style-loader',
         use: [
           {
@@ -113,7 +142,17 @@ module.exports = {
             options: {sourceMap: !PROD},
           },
         ],
-      }),
+      }) : [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: cssSettings,
+        },
+        {
+          loader: 'sass-loader',
+          options: {sourceMap: !PROD},
+        },
+      ],
     },
     {
       test: /\.(jpe?g|png|gif|svg)$/i,

@@ -14,6 +14,11 @@ const pkg = require(path.resolve('package.json'));
 
 const PROD = process.env.NODE_ENV === 'production';
 
+const extractTextPlugin = new ExtractTextPlugin({
+  filename: 'styles.[contenthash:3].css',
+  allChunks: true,
+});
+
 const common = [
   // Webpack 2
   new webpack.LoaderOptionsPlugin({
@@ -23,14 +28,10 @@ const common = [
     },
   }),
   new webpack.NamedModulesPlugin(),
-  new ExtractTextPlugin({
-    filename: 'styles.[contenthash:3].css',
-    allChunks: true,
-  }),
   // new WebAppManifestPlugin(),
 ];
 
-const test = [...common];
+const test = [...common, extractTextPlugin];
 
 // modifying common
 common.push(
@@ -70,6 +71,7 @@ if (process.env.DASHBOARD) {
 const production = common.concat([
   // Generates lots of favicons from source image
   // and injects their path into the head of index.html
+  extractTextPlugin,
   new FaviconsWebpackPlugin({
     logo: path.join('.', 'images', 'logo', 'logo_75x75.png'),
     prefix: 'icon.[hash:3].',
