@@ -41,9 +41,7 @@ const mergeResidues = (residues) => {
   out = Object.keys(out).map(a => ({
     accession: a,
     type: 'residue',
-    entry_protein_coordinates: {
-      coordinates: [out[a].map(b => [b.from, b.to])],
-    },
+    coordinates: [out[a].map(b => [b.from, b.to])],
     name: out[a].reduce((acc, v) => v.name),
     entry: out[a].reduce((acc, v) => v.entry),
     residue: out[a].map(b => b.residue),
@@ -58,6 +56,7 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   const out = interpro.reduce((acc, val) => {
     val.signatures = [];
     val.children = [];
+    val.coordinates = val.entry_protein_coordinates.coordinates;
     ipro[val.accession] = val;
     if (!(val.entry_type in acc)) {
       acc[val.entry_type] = [];
@@ -69,6 +68,7 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
     out.unintegrated = unintegrated;
   }
   for (const entry of integrated.concat(unintegrated)){
+    entry.coordinates = entry.entry_protein_coordinates.coordinates;
     if (residues.hasOwnProperty(entry.accession)){
       entry.children = entry.residues = mergeResidues({
         [entry.accession]: residues[entry.accession],

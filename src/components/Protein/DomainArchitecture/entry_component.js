@@ -41,12 +41,16 @@ class EntryComponent {
       .range([0, proteinWidth]);
     this.data = data;
     this.sortedData = d3.entries(this.data).sort((a, b) => {
-      if (a.key.toLowerCase() === 'family') return 0;
-      if (b.key.toLowerCase() === 'family') return 1;
-      if (a.key.toLowerCase() === 'domain') return 0;
-      if (b.key.toLowerCase() === 'domain') return 1;
-      if (a.key.toLowerCase() === 'residues') return 1;
-      if (b.key.toLowerCase() === 'residues') return 0;
+      const firsts = ['family', 'domain'];
+      const lasts = ['residues', 'features', 'predictions'];
+      for (const label of firsts){
+        if (a.key.toLowerCase() === label) return 0;
+        if (b.key.toLowerCase() === label) return 1;
+      }
+      for (const l of lasts){
+        if (a.key.toLowerCase() === l) return 1;
+        if (b.key.toLowerCase() === l) return 0;
+      }
       return (a.key > b.key) ? 1 : 0;
     });
 
@@ -69,7 +73,7 @@ class EntryComponent {
     });
   };
   addGuideRect() {
-    this.mainG.insert('rect', `.${s('entries')}`)
+    this.mainG.insert('rect', `.${s('protein')}`)
       .attr('class', s('guide'))
       .attr('x', padding.left)
       .attr('y', padding.top)

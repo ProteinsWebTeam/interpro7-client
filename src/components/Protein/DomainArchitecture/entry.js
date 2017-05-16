@@ -40,7 +40,7 @@ class EntryRenderer {
   update() {
     this.innerHeight = 0;
     const interproG = this.group.selectAll(`.${s(this.className)}`)
-      .data(this.entries, d => d.accession);
+      .data(this.entries, d => d.label || d.accession);
     interproG.each((d, i, c) => {
       this.updateEntry({d, i, c});
       // this.updateInlineResidues({d, i, c});
@@ -72,7 +72,7 @@ class EntryRenderer {
     const g = d3.select(c[i]);
     const tHeight = this.trackHeight + this.tPadding.bottom + this.tPadding.top;
     const instanceG = g.selectAll(`.${s(`${this.className}-instance`)}`)
-      .data(d.entry_protein_coordinates.coordinates);
+      .data(d.coordinates);
     instanceG.each((data, i, c) => this.updateMatch({d: data, i, c}, d, instanceG));
     instanceG.enter()
       .append('g')
