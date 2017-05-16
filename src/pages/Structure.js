@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
@@ -131,7 +131,7 @@ const pages = new Set([
   {path: 'entry', component: EntryAsync},
   {path: 'protein', component: ProteinAsync},
 ]);
-const Summary = (props) => {
+const Summary = props => {
   const {data: {payload, loading}, location, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
@@ -143,11 +143,17 @@ const Summary = (props) => {
         indexRoute={() => <SummaryAsync data={payload} location={location} />}
         childRoutes={pages}
       />
-
     </div>
   );
 };
-Summary.propTypes = T.shape({props: propTypes});
+Summary.propTypes = {
+  data: T.shape({
+    payload: T.object.isRequired,
+    loading: T.bool.isRequired,
+  }).isRequired,
+  location: T.object.isRequired,
+  match: T.string.isRequired,
+};
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = ({match, ...props}) => (
@@ -162,20 +168,33 @@ InnerSwitch.propTypes = {
   match: T.string,
 };
 
-const Structure = ({...props}) => (
-  <main>
-    <div className={f('row')}>
-      <div className={f('large-12', 'columns')}>
-        <Switch
-          {...props}
-          base="structure"
-          indexRoute={Overview}
-          catchAll={InnerSwitch}
-        />
-      </div>
-    </div>
-  </main>
-);
+class Structure extends PureComponent {
+  componentWillUpdate(nextProps) {
+    console.table(
+      Object.entries(this.props).map(([key, value]) => ({
+        key,
+        equal: nextProps[key] === value,
+      }))
+    );
+  }
+
+  render() {
+    return (
+      <main>
+        <div className={f('row')}>
+          <div className={f('large-12', 'columns')}>
+            <Switch
+              {...this.props}
+              base="structure"
+              indexRoute={Overview}
+              catchAll={InnerSwitch}
+            />
+          </div>
+        </div>
+      </main>
+    );
+  }
+}
 
 export default loadData()(Structure);
 // loadData will create an component that wraps Structure.

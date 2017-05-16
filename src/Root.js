@@ -10,7 +10,7 @@ import 'styles/global.css';
 import 'styles/theme-interpro.css';
 import 'styles/interpro-new.css';
 
-import AsyncComponent from 'utilityComponents/AsyncComponent';
+import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 import Overlay from 'components/Overlay';
 
@@ -21,57 +21,51 @@ import Breadcrumb from 'components/Breadcrumb';
 import Pages from 'Pages';
 
 const STICKY_MENU_OFFSET = 150;
+const DEFAULT_SCHEDULE_DELAY = 1000;
 
-export default () => (
+const SideMenuAsync = createAsyncComponent(
+  () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
+    /* webpackChunkName: "side-menu" */'components/Menu/SideMenu'
+  ))
+);
+
+const EBIFooterAsync = createAsyncComponent(
+  () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
+    /* webpackChunkName: "ebi-footer" */'components/EBIFooter'
+  ))
+);
+
+const ToastDisplayAsync = createAsyncComponent(
+  () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
+    /* webpackChunkName: "toast-display" */'components/Toast/ToastDisplay'
+  ))
+);
+
+const CookieFooterAsync = createAsyncComponent(
+  () => schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
+    try {
+      if (document.cookie.match(/cookies-accepted=(true)/i)[1]) return;
+    } catch (_) {
+      return import(
+        /* webpackChunkName: "cookie-banner" */'components/CookieBanner'
+      );
+    }
+  })
+);
+
+const Root = () => (
   <div>
-    <Helmet
-      titleTemplate="%s - InterPro"
-      defaultTitle="InterPro"
-    />
+    <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
     <Overlay />
-    <AsyncComponent
-      getComponent={async () => {
-        // eslint-disable-next-line no-magic-numbers
-        await schedule(1000);// Schedule asap, but do it anyway after 1s
-        return (
-          import(/* webpackChunkName: "side-menu" */'components/Menu/SideMenu')
-        );
-      }}
-    />
+    <SideMenuAsync />
     <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
     <Sentinel top={STICKY_MENU_OFFSET} />
     <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} />
     <Pages />
-    <AsyncComponent
-      getComponent={async () => {
-        // eslint-disable-next-line no-magic-numbers
-        await schedule(1000);// Schedule asap, but do it anyway after 1s
-        return (
-          import(/* webpackChunkName: "ebi-footer" */'components/EBIFooter')
-        );
-      }}
-    />
-    <AsyncComponent
-      getComponent={async () => {
-        // eslint-disable-next-line no-magic-numbers
-        await schedule(1000);// Schedule asap, but do it anyway after 1s
-        return import(
-          /* webpackChunkName: "toast-display" */'components/Toast/ToastDisplay'
-        );
-      }}
-    />
-    <AsyncComponent
-      getComponent={async () => {
-        // eslint-disable-next-line no-magic-numbers
-        await schedule(5000);// Schedule asap, but do it anyway after 5s
-        try {
-          if (document.cookie.match(/cookies-accepted=(true)/i)[1]) return;
-        } catch (_) {
-          return import(
-            /* webpackChunkName: "cookie-banner" */'components/CookieBanner'
-          );
-        }
-      }}
-    />
+    <EBIFooterAsync />
+    <ToastDisplayAsync />
+    <CookieFooterAsync />
   </div>
 );
+
+export default Root;

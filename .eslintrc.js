@@ -377,8 +377,6 @@ const rules = {
   'react/self-closing-comp': 1,
   // Enforce component methods order
   'react/sort-comp': 1,
-  // Prevent missing parentheses around multilines JSX
-  'react/wrap-multilines': 1,
   // Require JSDoc comment
   'require-jsdoc': [1, {require: {
     FunctionDeclaration: true,

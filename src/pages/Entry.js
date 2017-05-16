@@ -34,32 +34,32 @@ const Overview = ({data: {payload, loading}, location: {pathname, search: {type}
   if (loading) return <div>Loading...</div>;
   const params = type ? `?type=${type}` : '';
   return (
-      <div>
-        Member databases:
-        <ul className={styles.card}>
-          {Object.entries(payload.entries.member_databases)
-            .map(([name, count]) => (
-              <li key={name}>
-                <Link to={`${removeLastSlash(pathname)}/${name}${params}`}>
-                  {name} ({count})
-                </Link>
-              </li>
-            ))
-          }
-        </ul>
-        <ul className={styles.card}>
-          <li>
-            <Link to={`${removeLastSlash(pathname)}/interpro${params}`}>
-              InterPro ({payload.entries ? payload.entries.interpro : 0})
-            </Link>
-          </li>
-          <li>
-            <Link to={`${removeLastSlash(pathname)}/unintegrated${params}`}>
-              Unintegrated ({payload.entries ? payload.entries.unintegrated : 0})
-            </Link>
-          </li>
-        </ul>
-      </div>
+    <div>
+      Member databases:
+      <ul className={styles.card}>
+        {Object.entries(payload.entries.member_databases)
+          .map(([name, count]) => (
+            <li key={name}>
+              <Link to={`${removeLastSlash(pathname)}/${name}${params}`}>
+                {name} ({count})
+              </Link>
+            </li>
+          ))
+        }
+      </ul>
+      <ul className={styles.card}>
+        <li>
+          <Link to={`${removeLastSlash(pathname)}/interpro${params}`}>
+            InterPro ({payload.entries ? payload.entries.interpro : 0})
+          </Link>
+        </li>
+        <li>
+          <Link to={`${removeLastSlash(pathname)}/unintegrated${params}`}>
+            Unintegrated ({payload.entries ? payload.entries.unintegrated : 0})
+          </Link>
+        </li>
+      </ul>
+    </div>
   );
 };
 Overview.propTypes = propTypes;
@@ -155,6 +155,12 @@ const ProteinAsync = createAsyncComponent(() => import(
   /* webpackChunkName: "protein-subpage" */'subPages/Protein'
 ));
 
+const SchemaOrgData = createAsyncComponent(
+  () => import(/* webpackChunkName: "schemaOrg" */'schema_org'),
+  () => null,
+  'SchemaOrgData'
+);
+
 const pages = new Set([
   {path: 'structure', component: StructureAsync},
   {path: 'protein', component: ProteinAsync},
@@ -176,16 +182,13 @@ const Summary = (props) => {
   const {data: {loading}, match} = props;
   if (loading) return <div>Loading...</div>;
   return (
-    <div>
-      <Switch
-        {...props}
-        main="entry"
-        base={match}
-        indexRoute={SummaryComponent}
-        childRoutes={pages}
-      />
-
-    </div>
+    <Switch
+      {...props}
+      main="entry"
+      base={match}
+      indexRoute={SummaryComponent}
+      childRoutes={pages}
+    />
   );
 };
 Summary.propTypes = {
@@ -230,10 +233,30 @@ const InnerSwitch = ({match, ...props}) => (
 InnerSwitch.propTypes = {
   match: T.string,
 };
-const Entry = ({...props}) => (
+
+const schemaProcessData = data => ({
+  '@type': 'ProteinEntity',
+  '@id': '@mainEntity',
+  identifier: data.metadata.accession,
+  name: data.metadata.name.name || data.metadata.accession,
+  alternateName: data.metadata.name.long || null,
+  inDataset: data.metadata.source_database,
+  biologicalType: data.metadata.type,
+  citation: '@citation',
+  isBasedOn: '@isBasedOn',
+  isBaseFor: '@isBaseFor',
+});
+
+const Entry = props => (
   <main>
     <div className={f('row')}>
       <div className={f('large-12', 'columns')}>
+        {props.data.payload &&
+          <SchemaOrgData
+            data={props.data.payload}
+            processData={schemaProcessData}
+          />
+        }
         <Switch
           {...props}
           base="entry"
@@ -244,4 +267,9 @@ const Entry = ({...props}) => (
     </div>
   </main>
 );
+Entry.propTypes = {
+  data: T.shape({
+    payload: T.object,
+  }).isRequired,
+};
 export default loadData()(Entry);
