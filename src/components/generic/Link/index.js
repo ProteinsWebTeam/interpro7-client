@@ -3,7 +3,9 @@ import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {parse} from 'url';
+import {parse, format, resolve} from 'url';
+
+import config from 'config';
 
 import {goToLocation} from 'actions/creators';
 
@@ -16,6 +18,21 @@ const defaultMatchFn = (toOfLink, {pathname}) => {
   let to = toOfLink;
   if (typeof toOfLink === 'string') to = parse(toOfLink);
   return pathname.startsWith((to.pathname || '').replace(/\/*$/, ''));
+};
+
+const generateHref = (location/*: Object */, to/*: string | Object */) => {
+  if (typeof to === 'string') {
+    return config.root.website.pathname + resolve(location.pathname, to);
+  }
+  return format({
+    ...config.root.website,
+    pathname: config.root.website.pathname + resolve(
+      location.pathname,
+      to.pathname || ''
+    ),
+    query: to.search || {},
+    hash: to.hash || '',
+  });
 };
 
 class Link extends PureComponent {
@@ -65,9 +82,11 @@ class Link extends PureComponent {
     } else if (defaultMatchFn(to, location)) {
       className += activeClass || '';
     }
+    const href = generateHref(location, to);
     return (
       <a
         {...props}
+        href={href}
         className={className.trim() || null}
         onClick={this.handleClick}
       />

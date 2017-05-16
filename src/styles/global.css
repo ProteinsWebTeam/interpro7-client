@@ -31,7 +31,7 @@ header a {
     display: flex;
     flex-direction: column;
 
-    @nest & > *[role="main"] {
+    @nest & > main {
       flex: 1;
     }
   }

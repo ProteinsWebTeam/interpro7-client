@@ -169,15 +169,6 @@ InnerSwitch.propTypes = {
 };
 
 class Structure extends PureComponent {
-  componentWillUpdate(nextProps) {
-    console.table(
-      Object.entries(this.props).map(([key, value]) => ({
-        key,
-        equal: nextProps[key] === value,
-      }))
-    );
-  }
-
   render() {
     return (
       <main>
