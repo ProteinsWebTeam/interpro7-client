@@ -67,6 +67,7 @@ export class Manager {
     }
   }
 
+// eslint-disable-next-line complexity
   async _planRender() {
     if (this._plannedRender) return;
     this._plannedRender = true;

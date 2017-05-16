@@ -32,15 +32,16 @@ const getUrlFor = createSelector(// this one only to memoize it
 const formatStructureInfoObj = obj => {
   const out = [];
   for (const db of Object.keys(obj)) {
-    if (db.toLowerCase() === 'pdbe') continue;
-    for (const acc of Object.keys(obj[db])) {
-      out.push({
-        accession: acc,
-        source_database: db,
-        coordinates: [obj[db][acc].coordinates.map(
-          x => [x.start, x.end]
-        )],
-      });
+    if (db.toLowerCase() !== 'pdbe') {
+      for (const acc of Object.keys(obj[db])) {
+        out.push({
+          accession: acc,
+          source_database: db,
+          coordinates: [obj[db][acc].coordinates.map(
+            x => [x.start, x.end]
+          )],
+        });
+      }
     }
   }
   return out;

@@ -51,7 +51,7 @@ const mergeResidues = (residues) => {
   return out;
 };
 
-const mergeData = (interpro, integrated, unintegrated, residues) => {
+const groupByEntryType = (interpro) => {
   const ipro = {};
   const out = interpro.reduce((acc, val) => {
     val.signatures = [];
@@ -64,6 +64,11 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
     acc[val.entry_type].push(val);
     return acc;
   }, {});
+  return {out, ipro};
+};
+
+const mergeData = (interpro, integrated, unintegrated, residues) => {
+  const {out, ipro} = groupByEntryType(interpro);
   if (unintegrated.length > 0) {
     out.unintegrated = unintegrated;
   }

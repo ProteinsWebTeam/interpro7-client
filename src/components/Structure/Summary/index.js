@@ -2,7 +2,7 @@
 import React, {PureComponent} from 'react';
 import T from 'prop-types';
 import Title from 'components/Title';
-import {PDBeLink, PDBe3DLink} from 'components/ExtLink';
+import {PDBeLink} from 'components/ExtLink';
 import Embed from 'components/Embed';
 
 import f from 'styles/foundation';
@@ -50,15 +50,15 @@ class SummaryStructure extends PureComponent {
                     </PDBeLink>
                   </li>
                 </ul>
-                {/*<PDBe3DLink id={metadata.accession}>*/}
-                  {/*<img*/}
-                    {/*src={`//www.ebi.ac.uk/pdbe/static/entry/${*/}
-                      {/*metadata.accession.toLowerCase()*/}
-                      {/*}_entity_1_front_image-400x400.png`}*/}
-                    {/*alt="structure image"*/}
-                    {/*style={{maxWidth: '100%'}}*/}
-                  {/*/>*/}
-                {/*</PDBe3DLink>*/}
+                {/* <PDBe3DLink id={metadata.accession}>*/}
+                  {/* <img*/}
+                    {/* src={`//www.ebi.ac.uk/pdbe/static/entry/${*/}
+                      {/* metadata.accession.toLowerCase()*/}
+                      {/* }_entity_1_front_image-400x400.png`}*/}
+                    {/* alt="structure image"*/}
+                    {/* style={{maxWidth: '100%'}}*/}
+                  {/* />*/}
+                {/* </PDBe3DLink>*/}
               </div>
             </div>
           </div>
