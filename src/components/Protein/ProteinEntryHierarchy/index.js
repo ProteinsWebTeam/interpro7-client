@@ -64,17 +64,17 @@ class ProteinEntryHierarchy extends PureComponent {
   };
 
   componentWillMount() {
-    const interproComponents = import(
+    const interproComponents = () => import(
       /* webpackChunkName: "interpro-components" */'interpro-components'
     );
     webComponents.push(loadWebComponent(
-      () => interproComponents.then(m => m.InterproHierarchy)
+      () => interproComponents().then(m => m.InterproHierarchy)
     ).as('interpro-hierarchy'));
     webComponents.push(loadWebComponent(
-      () => interproComponents.then(m => m.InterproEntry)
+      () => interproComponents().then(m => m.InterproEntry)
     ).as('interpro-entry'));
     webComponents.push(loadWebComponent(
-      interproComponents.then(m => m.InterproType),
+      () => interproComponents().then(m => m.InterproType),
     ).as('interpro-type'));
   }
 
