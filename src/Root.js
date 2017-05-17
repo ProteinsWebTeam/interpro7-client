@@ -12,6 +12,7 @@ import 'styles/interpro-new.css';
 
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
+import LoadingBar from 'components/LoadingBar';
 import Overlay from 'components/Overlay';
 
 import Sentinel from 'components/Sentinel';
@@ -56,6 +57,7 @@ const CookieFooterAsync = createAsyncComponent(
 const Root = () => (
   <div>
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
+    <LoadingBar />
     <Overlay />
     <SideMenuAsync />
     <Header stickyMenuOffset={STICKY_MENU_OFFSET} />

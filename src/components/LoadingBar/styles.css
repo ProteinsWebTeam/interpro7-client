@@ -1,0 +1,13 @@
+@import "../../styles/colors.css";
+
+.loading_bar {
+  position: absolute;
+  z-index: 100;
+  width: 100vw;
+  height: 2px;
+  background-color: var(--colors-main);
+  box-shadow: var(--colors-main) 0 0 2px 1px;
+  transition: transform 0.5s ease-in-out;
+  transform-origin: 0 0;
+  will-change: transform;
+}
