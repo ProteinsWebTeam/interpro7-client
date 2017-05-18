@@ -27,9 +27,9 @@ const mapStateToProps = createSelector(
   (data = {}) => {
     const values = Object.values(data);
     const progress = values.reduce(
-      (acc, {loading}) => acc + 1 / (loading ? 2 : 1),
+      (acc, {loading, progress}) => acc + (1 / (loading ? 2 : 1)) + progress,
       0
-    ) / values.length;
+    ) / (2 * values.length);
     return ({progress: isNaN(progress) ? 1 : progress});
   },
 );

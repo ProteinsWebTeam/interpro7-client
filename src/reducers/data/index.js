@@ -1,10 +1,13 @@
 // @flow
-import {LOADING_DATA, LOADED_DATA, FAILED_LOADING_DATA, UNLOADING_DATA}
-  from 'actions/types';
+import {
+  LOADING_DATA, LOADED_DATA, PROGRESS_DATA,
+  FAILED_LOADING_DATA, UNLOADING_DATA,
+} from 'actions/types';
 
 /*:: type Datum = {
   payload: any,
   loading: boolean,
+  progress: number,
   error: any,
 } */
 
@@ -16,7 +19,7 @@ export default (
   switch (action.type) {
     case LOADING_DATA:
       if (state[action.key]) throw new Error(alreadyLoadingError);
-      return {...state, [action.key]: {loading: true}};
+      return {...state, [action.key]: {loading: true, progress: 0}};
     case LOADED_DATA:
       return {
         ...state,
@@ -25,6 +28,15 @@ export default (
           loading: false,
           payload: action.payload,
           status: action.status,
+          progress: 1,
+        },
+      };
+    case PROGRESS_DATA:
+      return {
+        ...state,
+        [action.key]: {
+          ...state[action.key],
+          progress: action.progress,
         },
       };
     case FAILED_LOADING_DATA:
@@ -34,6 +46,7 @@ export default (
           ...state[action.key],
           loading: false,
           error: action.error,
+          progress: 1,
         },
       };
     // eslint-disable-next-line no-case-declarations
