@@ -43,10 +43,13 @@ class DomainArchitecture extends Component {
     const {protein, data} = this.props;
     this.ec = new EntryComponent(this._container, protein, data);
     this.ec.on('entryclick', e => {
-      this.props.goToLocation(`/entry/${e.source_database}/${e.accession}`);
+      if (e.link) {
+        this.props.goToLocation(e.link);
+      }
     });
     this.ec.on('entrymouseover', e => {
       this._popper.classList.remove('hide');
+      // console.log(e);
       if (e.hasOwnProperty('entry')) {
         this._popper.appendChild(this.getElementFromEntry(e.entry));
       }
@@ -82,8 +85,14 @@ class DomainArchitecture extends Component {
   getElementFromEntry(entry){
     const tagString =
       `<div>
-        <h4>${entry.accession}</h4>
-        <p>${entry.entry_type}</p>
+        <h4>${entry.label || entry.accession}</h4>
+        <p>${entry.entry_type || ''}</p>
+        <p>${
+          Array.isArray(entry.source_database) ?
+          entry.source_database[0] :
+          entry.source_database}
+          ${entry.entry ? `(${entry.entry})` : ''}
+        </p>
       </div>`;
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));

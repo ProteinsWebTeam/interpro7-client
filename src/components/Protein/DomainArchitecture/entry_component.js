@@ -85,26 +85,18 @@ class EntryComponent {
     this.mainG.on('mousemove', () => this.renderGuide());
   }
   renderGuide(){
-    d3.select(`.${s('guide')}`)
+    this.mainG.select(`.${s('guide')}`)
       .attr('height', this.totalHeight)
       .attr('width', this.overFeature ?
         Math.max(this.x(this.overFeature[1] - this.overFeature[0]), 1) :
         1)
       .attr('x', this.overFeature ?
         padding.left + this.x(this.overFeature[0]) :
-        d3.mouse(this.mainG.node())[0]);
-    // if (this.overFeature){
-    //   d3.select(`.${s('guide')}`)
-    //     .attr('height', this.totalHeight)
-    //     .attr('width', this.x(this.overFeature[1] - this.overFeature[0]))
-    //     .attr('x', padding.left + this.x(this.overFeature[0]));
-    // } else {
-    //   d3.select(`.${s('guide')}`)
-    //     .attr('height', this.totalHeight)
-    //     .attr('width', 1)
-    //     .attr('x', d3.mouse(this.mainG.node())[0]);
-    // }
-
+        Math.min(
+          this.x(this.protein.length),
+          d3.mouse(this.mainG.node())[0]
+        )
+      );
   }
   render(){
     let offsetY = padding.top;
@@ -117,7 +109,7 @@ class EntryComponent {
     entriesG.enter()
       .append('g')
       .attr('transform', `translate(${padding.left}, ${offsetY})`)
-      .attr('class', s('entries'))
+      .attr('class', d => s('entries', d.key))
       .each(d => {
         d.value.expanded = true;
         d.value.height = 0;
@@ -221,7 +213,7 @@ class EntryComponent {
         });
     }
     entriesG.selectAll(`text.${s('header-section')}`)
-      .text(d => `${d.value.expanded ? '-' : '+'} ${d.key}`);
+      .text(d => `${d.value.expanded ? '▽' : '△'} ${d.key}`);
     const trackHeight = d3.select(`text.${s('header-section')}`).node().getBBox().height;
     entriesG.each((d, i, c) => {
       d.value.height = trackHeight;

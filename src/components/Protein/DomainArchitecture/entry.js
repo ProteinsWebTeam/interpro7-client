@@ -52,11 +52,13 @@ class EntryRenderer {
       .each((d, i, c) => this.updateEntry({d, i, c}))
       // .each((d, i, c) => this.updateInlineResidues({d, i, c}))
       .append('text')
-        .attr('class', 'label')
+        .attr('class', d => s({
+          label: true,
+          link: (typeof d.link !== 'undefined'),
+        }))
         .attr('x', this.tPadding.right + this.x(this.protein.length))
         .attr('y', this.trackHeight)
         .text(d => d.label || d.accession)
-        .style('cursor', 'pointer')
         .on('click', e => this.parent.dispatch.call('entryclick', this, e));
     interproG.selectAll(`.${s(this.className)} .label`)
       .attr('x', this.tPadding.right + this.x(this.protein.length));

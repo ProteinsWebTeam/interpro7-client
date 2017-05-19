@@ -57,6 +57,7 @@ const groupByEntryType = (interpro) => {
     val.signatures = [];
     val.children = [];
     val.coordinates = val.entry_protein_coordinates.coordinates;
+    val.link = `/entry/${val.source_database}/${val.accession}`;
     ipro[val.accession] = val;
     if (!(val.entry_type in acc)) {
       acc[val.entry_type] = [];
@@ -66,10 +67,20 @@ const groupByEntryType = (interpro) => {
   }, {});
   return {out, ipro};
 };
+const addSignature = (entry, ipro, integrated) => {
+  if (entry.entry_integrated in ipro){
+    entry.link = `/entry/${entry.source_database}/${entry.accession}`;
+    ipro[entry.entry_integrated].signatures.push(entry);
+    ipro[entry.entry_integrated].children.push(entry);
+  } else if (entry in integrated) {
+    console.error('integrated entry without interpro:', entry);
+  }
+};
 
 const mergeData = (interpro, integrated, unintegrated, residues) => {
   const {out, ipro} = groupByEntryType(interpro);
   if (unintegrated.length > 0) {
+    unintegrated.forEach(u => u.link = `/entry/${u.source_database}/${u.accession}`);
     out.unintegrated = unintegrated;
   }
   for (const entry of integrated.concat(unintegrated)){
@@ -80,12 +91,7 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
       });
       delete residues[entry.accession];
     }
-    if (entry.entry_integrated in ipro){
-      ipro[entry.entry_integrated].signatures.push(entry);
-      ipro[entry.entry_integrated].children.push(entry);
-    } else if (entry in integrated) {
-      console.error('integrated entry without interpro:', entry);
-    }
+    addSignature(entry, ipro, integrated);
   }
   if (Object.keys(residues).length > 0) {
     out.residues = mergeResidues(residues);

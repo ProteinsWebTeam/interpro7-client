@@ -13,6 +13,7 @@ import {toPlural} from 'utils/pages';
 import blockStyles from 'styles/blocks.css';
 
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
+import EntriesOnStructure from 'components/Structure/EntriesOnStructure';
 
 const ObjectToList = ({obj, component: Component}) => (
   <ul>
@@ -92,11 +93,16 @@ const primariesAndSecondaries = {
     },
   },
 };
-
 const RelatedAdvanced = (
   {mainData, secondaryData, isStale, main, secondary, actualSize, pathname}
   ) => (
     <div>
+      {
+        main === 'structure' &&
+        secondary === 'entry' ?
+          <EntriesOnStructure entries={secondaryData}/> :
+          null
+      }
       {
         main === 'protein' &&
         secondary === 'entry' &&
@@ -154,6 +160,9 @@ const RelatedAdvancedQuery = loadData(getReversedUrl)(
       // we can assume is only one, hence [0]
       obj.entry_protein_coordinates = x[plural][0].entry_protein_coordinates;
       obj.protein_structure_coordinates = x[plural][0].protein_structure_coordinates;
+      if (x[plural][0].chain){
+        obj.chain = x[plural][0].chain;
+      }
       return obj;
     });
     return (

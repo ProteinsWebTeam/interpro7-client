@@ -53,6 +53,7 @@ const mergeData = (interpro, structures, structureInfo) => {
     val.signatures = [];
     val.children = [];
     val.coordinates = val.entry_protein_coordinates.coordinates;
+    val.link = `/entry/${val.source_database}/${val.accession}`;
     ipro[val.accession] = val;
     if (!(val.entry_type in acc)) {
       acc[val.entry_type] = [];
@@ -64,6 +65,7 @@ const mergeData = (interpro, structures, structureInfo) => {
     out.structures = structures.map(({...obj}) => ({
       label: `${obj.accession}: ${obj.chain}`,
       coordinates: [obj.protein_structure_coordinates.coordinates],
+      link: `/structure/${obj.source_database}/${obj.accession}`,
       ...obj,
     })).sort((a, b) => a.label > b.label);
   }
