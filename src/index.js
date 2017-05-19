@@ -46,14 +46,10 @@ const main = async () => {
   if (DEV && module.hot) {
     // If any change in App or its dependency tree
     module.hot.accept('App', () => {
-      try {
-        // Reloads App
-        const NextApp = require('App').default;
-        // Re-renders App
-        render(<NextApp />, DOM_ROOT);
-      } catch (error) {
-        console.error(error);
-      }
+      // Reloads App
+      const NextApp = require('App').default;
+      // Re-renders App
+      render(<NextApp />, DOM_ROOT);
     });
   }
 };

@@ -106,6 +106,15 @@ export const loadedData = (
   status: response.status,
 });
 
+export const progressData = (
+  key/*: string */,
+  progress/*: number */,
+) => ({
+  type: types.PROGRESS_DATA,
+  key,
+  progress,
+});
+
 export const unloadingData = (key/*: string */) => ({
   type: types.UNLOADING_DATA,
   key,

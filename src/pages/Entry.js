@@ -71,7 +71,7 @@ class List extends Component {
     loadWebComponent(
       () => import(
         /* webpackChunkName: "interpro-components" */'interpro-components'
-        ).then(m => m.InterproType),
+      ).then(m => m.InterproType),
     ).as('interpro-type');
   }
 

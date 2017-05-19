@@ -5,7 +5,7 @@ import {createSelector} from 'reselect';
 
 import cancelable from 'utils/cancelable';
 import {
-  loadingData, loadedData, unloadingData, failedLoadingData,
+  loadingData, loadedData, progressData, unloadingData, failedLoadingData,
 } from 'actions/creators';
 import {alreadyLoadingError} from 'reducers/data';
 
@@ -22,8 +22,8 @@ const getBaseURL = url => url ? url.slice(0, url.indexOf('?')) : '';
 
 // eslint-disable-next-line max-params
 const load = (
-  loadingData, loadedData, unloadingData,
-  failedLoadingData, fetchFun, fetchOptions
+  loadingData, loadedData, progressData, unloadingData, failedLoadingData,
+  fetchFun, fetchOptions
 ) => key => {
   try {
     loadingData(key);
@@ -33,8 +33,9 @@ const load = (
     }
     return cancelable(Promise.resolve());
   }
+  const onProgress = progress => progressData(key, progress);
   // Starts the fetch
-  const c = cancelable(fetchFun(key, fetchOptions));
+  const c = cancelable(fetchFun(key, fetchOptions, onProgress));
   // Eventually changes the state according to response
   c.promise.then(
     response => loadedData(key, response),
@@ -57,6 +58,7 @@ const loadData = params => {
         appState: T.object.isRequired,
         loadingData: T.func.isRequired,
         loadedData: T.func.isRequired,
+        progressData: T.func.isRequired,
         failedLoadingData: T.func.isRequired,
         unloadingData: T.func.isRequired,
         data: T.shape({
@@ -77,14 +79,15 @@ const loadData = params => {
       componentWillMount() {
         const {
           appState, data,
-          loadingData, loadedData, failedLoadingData, unloadingData,
+          loadingData, loadedData, progressData,
+          failedLoadingData, unloadingData,
         } = this.props;
         // (stored in `key` because `this._url` might change)
         const key = this._url = getUrl(appState);
         if (!this._load) {
           this._load = load(
-            loadingData, loadedData, unloadingData, failedLoadingData,
-            fetchFun, fetchOptions
+            loadingData, loadedData, progressData, unloadingData,
+            failedLoadingData, fetchFun, fetchOptions,
           );
         }
 
@@ -171,7 +174,7 @@ const loadData = params => {
 
     return connect(
       mapStateToProps(getUrl),
-      {loadingData, loadedData, unloadingData, failedLoadingData}
+      {loadingData, loadedData, progressData, unloadingData, failedLoadingData}
     )(DataWrapper);
   };
 };

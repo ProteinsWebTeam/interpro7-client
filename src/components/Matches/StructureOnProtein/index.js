@@ -91,7 +91,7 @@ const StructureOnProtein = (
 };
 StructureOnProtein.propTypes = {
   matches: T.arrayOf(T.shape({
-    coordinates: T.arrayOf(T.object).isRequired,
+    coordinates: T.arrayOf(T.object),
     structure: T.object.isRequired,
     protein: T.object.isRequired,
   })).isRequired,
