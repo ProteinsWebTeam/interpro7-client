@@ -6,7 +6,7 @@ import ColorHash from 'color-hash/lib/color-hash';
 
 const s = classname.bind(styles);
 const colorHash = new ColorHash();
-const childrenScale = 0.8;
+const childrenScale = 0.7;
 
 class EntryRenderer {
   constructor({trackHeight, trackPadding, padding, xScale, protein, parent}){
@@ -75,7 +75,9 @@ class EntryRenderer {
     const tHeight = this.trackHeight + this.tPadding.bottom + this.tPadding.top;
     const instanceG = g.selectAll(`.${s(`${this.className}-instance`)}`)
       .data(d.coordinates);
-    instanceG.each((data, i, c) => this.updateMatch({d: data, i, c}, d, instanceG));
+    instanceG.each((data, i, c) => {
+      this.updateMatch({d: data, i, c}, d, instanceG);
+    });
     instanceG.enter()
       .append('g')
       .attr('class', s(`${this.className}-instance`))
@@ -84,7 +86,11 @@ class EntryRenderer {
         event: {d: e, i, g},
       }))
       .on('mouseout', () => this.parent.dispatch.call('entrymouseout', this, d))
-      .each((data, i, c) => this.updateMatch({d: data, i, c}, d, instanceG));
+      .each((data, i, c) => {
+        this.updateMatch({d: data, i, c}, d, instanceG);
+        // this.updateChildrenBg(instanceG, parentNode, entry, d);
+
+      });
     instanceG.exit().remove();
 
     g.transition()
@@ -98,6 +104,11 @@ class EntryRenderer {
       );
       this.innerHeight += this.childrenRender.innerHeight;
     }
+    instanceG.enter()
+      .each((data, i, c) => this.updateChildrenBg({d: data, i, c}, d, instanceG));
+    instanceG
+      .each((data, i, c) => this.updateChildrenBg({d: data, i, c}, d, instanceG));
+
   }
   getColor(entry, format = 'HEX'){
     const acc = entry.accession.split('').reverse().join('');
@@ -154,42 +165,32 @@ class EntryRenderer {
         .attr('x', m => this.x(m[0]))
         .attr('width', m => this.x(Math.max(m[1] - m[0], 1)));
     }
-    this.updateChildrenBg(instanceG, parentNode, entry, d);
   }
-  getChildrenHeight(entry) {
-    let h = 0;
-    if (entry.children && entry.children.length) {
-      h = entry.children.length * (
-          this.trackHeight
-        );
-      h += this.tPadding.bottom;
-      h += entry.children
-        .map(s => this.getChildrenHeight(s) * childrenScale)
-        .reduce((acc, v) => acc + v, 0);
-    }
-    return h;
-
-  }
-  updateChildrenBg(instanceG, parentNode, entry, d){
+  updateChildrenBg({d, i, c}, entry, instanceG) {
     if (entry.children) {
-      const matchBG = instanceG.enter().selectAll('.children-bg')
-        .data(entry.children ? d : null);
-      const h = this.getChildrenHeight(entry);
+      const g = d3.select(c[i]);
+      const parentNode = instanceG.node() ? d3.select(instanceG.node().parentNode) : null;
+      const matchBG = g.selectAll(`.${s(`${this.className}-children-bg`)}`)
+        .data(d);
+      matchBG.exit().remove();
+
       matchBG.enter().insert('rect', ':first-child')
-        .attr('class', 'children-bg')
+        .attr('class', s(`${this.className}-children-bg`))
         .attr('x', m => this.x(m[0]))
         .attr('y', this.trackHeight - 1)
-        .attr('height', h)
+        .attr('height', this.childrenRender.innerHeight + this.tPadding.bottom)
         .attr('width', m => this.x(m[1] - m[0]))
         .style('fill', `rgba(${this.getColor(entry, 'RGB').join()},0.0)`)
         .style('stroke', '#000')
         .attr('stroke-dasharray', '1,3');
+
       if (parentNode) {
-        parentNode.selectAll('.children-bg')
+        parentNode.selectAll(`rect.${s(`${this.className}-children-bg`)}`)
           .attr('x', m => this.x(m[0]))
-          .attr('width', m => this.x(m[1] - m[0]))
+          .attr('y', this.trackHeight - 1)
           .transition()
-          .attr('height', entry.children.length ? h : 0);
+          .attr('height', this.childrenRender.innerHeight + this.tPadding.bottom)
+          .attr('width', m => this.x(m[1] - m[0]));
       }
     }
   }
