@@ -1,5 +1,5 @@
 // @flow
-export default (promise/*: Promise<any> */) => {
+export default (promise/*: Promise<any> */ = Promise.resolve()) => {
   let canceled = false;
   return {
     promise: promise.then(value => {

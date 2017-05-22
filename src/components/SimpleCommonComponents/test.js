@@ -4,7 +4,7 @@
 import 'babel-polyfill';
 
 import React, {createElement} from 'react';
-import {createRenderer} from 'react-addons-test-utils';
+import {createRenderer} from 'react-dom/test-utils';
 import chai, {expect} from 'chai';
 import jsxChai from 'jsx-chai';
 

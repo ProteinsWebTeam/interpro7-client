@@ -58,7 +58,7 @@ const Table = (
       <table className={s('table', {isStale})}>
         <_Header columns={columns} />
         <_Body
-          rows={dataTable}
+          rows={dataTable || []}
           columns={columns}
         />
       </table>

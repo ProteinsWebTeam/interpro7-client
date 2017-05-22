@@ -1,0 +1,6 @@
+:root {
+  --timing-instant: 100ms;
+  --timing-quick: 250ms;
+  --timing-medium: 500ms;
+  --timing-long: 1s;
+}
