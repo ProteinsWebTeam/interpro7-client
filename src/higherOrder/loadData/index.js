@@ -166,7 +166,7 @@ const loadData = params => {
         const passedProps = {
           ...rest,
           [`data${propNamespace}`]: useStaleData ? this.state.staleData : data,
-          [`isStale${propNamespace}`]: useStaleData,
+          [`isStale${propNamespace}`]: !!useStaleData,
         };
         return <Wrapped {...passedProps} />;
       }

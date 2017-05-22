@@ -12,7 +12,6 @@ import 'styles/interpro-new.css';
 
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
-import LoadingBar from 'components/LoadingBar';
 import Overlay from 'components/Overlay';
 
 import Sentinel from 'components/Sentinel';
@@ -24,22 +23,38 @@ import Pages from 'Pages';
 const STICKY_MENU_OFFSET = 150;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 
+const NullComponent = () => null;
+
+const LoadingBarAsync = createAsyncComponent(
+  () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
+    /* webpackChunkName: "loading-bar" */'components/LoadingBar'
+  )),
+  NullComponent,
+  'LoadingBar'
+);
+
 const SideMenuAsync = createAsyncComponent(
   () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
     /* webpackChunkName: "side-menu" */'components/Menu/SideMenu'
-  ))
+  )),
+  NullComponent,
+  'SideMenu',
 );
 
 const EBIFooterAsync = createAsyncComponent(
   () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
     /* webpackChunkName: "ebi-footer" */'components/EBIFooter'
-  ))
+  )),
+  NullComponent,
+  'EBIFooter',
 );
 
 const ToastDisplayAsync = createAsyncComponent(
   () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
     /* webpackChunkName: "toast-display" */'components/Toast/ToastDisplay'
-  ))
+  )),
+  NullComponent,
+  'ToastDisplay',
 );
 
 const CookieFooterAsync = createAsyncComponent(
@@ -51,13 +66,15 @@ const CookieFooterAsync = createAsyncComponent(
         /* webpackChunkName: "cookie-banner" */'components/CookieBanner'
       );
     }
-  })
+  }),
+  NullComponent,
+  'CookieFooter',
 );
 
 const Root = () => (
   <div>
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
-    <LoadingBar />
+    <LoadingBarAsync />
     <Overlay />
     <SideMenuAsync />
     <Header stickyMenuOffset={STICKY_MENU_OFFSET} />

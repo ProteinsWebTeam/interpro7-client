@@ -30,8 +30,12 @@ const propTypes = {
   }).isRequired,
 };
 
-const Overview = ({data: {payload, loading}, location: {pathname, search: {type}}}) => {
-  if (loading) return <div>Loading...</div>;
+const Overview = ({
+  data: {payload, loading},
+  location: {pathname, search: {type}},
+  isStale,
+}) => {
+  if (loading || isStale) return <div>Loading...</div>;
   const params = type ? `?type=${type}` : '';
   return (
     <div>
@@ -178,9 +182,11 @@ SummaryComponent.propTypes = {
   }).isRequired,
 };
 
-const Summary = (props) => {
-  const {data: {loading}, match} = props;
-  if (loading) return <div>Loading...</div>;
+const Summary = props => {
+  const {data: {loading, payload}, isStale, match} = props;
+  if (loading || (isStale && !payload.metadata)) {
+    return <div>Loading...</div>;
+  }
   return (
     <Switch
       {...props}
@@ -197,6 +203,7 @@ Summary.propTypes = {
     payload: T.object,
     status: T.number,
   }).isRequired,
+  isStale: T.bool.isRequired,
   location: T.shape({
     pathname: T.string.isRequired,
   }).isRequired,
@@ -204,17 +211,17 @@ Summary.propTypes = {
 };
 
 const dbs = new RegExp(
-  `^(${memberDB
+  `(${memberDB
     .map(db => db.apiType)
     .filter(db => db)
-    .join('|')})$`,
+    .join('|')})`,
   'i'
 );
 const dbAccs = new RegExp(
-  `^(${memberDB
+  `(${memberDB
     .map(db => db.accession)
     .filter(db => db)
-    .join('|')}|IPR[0-9]{6})$`,
+    .join('|')}|IPR[0-9]{6})`,
   'i'
 );
 
@@ -251,7 +258,7 @@ const Entry = props => (
   <main>
     <div className={f('row')}>
       <div className={f('large-12', 'columns')}>
-        {props.data.payload &&
+        {props.data.payload && props.data.payload.accession &&
           <SchemaOrgData
             data={props.data.payload}
             processData={schemaProcessData}

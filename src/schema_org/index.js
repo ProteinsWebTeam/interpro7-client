@@ -116,7 +116,7 @@ export class Manager {
 
 export default class SchemaOrgData extends PureComponent {
   static propTypes = {
-    data: T.object.isRequired,
+    data: T.any.isRequired,
     processData: T.func.isRequired,
     children: T.node,
   };

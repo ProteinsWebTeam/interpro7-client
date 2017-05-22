@@ -6,30 +6,78 @@ import {createSelector} from 'reselect';
 import styles from './styles.css';
 
 class LoadingBar extends PureComponent {
+  /* ::
+    props: {
+      progress: number,
+    };
+    _node: ?Element;
+  */
+
   static propTypes = {
     progress: T.number.isRequired,
   };
 
+  componentDidMount() {
+    this._node.addEventListener('transitionend', this._onTransitionEnd);
+    this._updateProgress(0, this.props.progress);
+  }
+
+  componentDidUpdate({progress}) {
+    this._updateProgress(progress, this.props.progress);
+  }
+
+  componentWillUnmount() {
+    this._node.removeEventListener('transitionend', this._onTransitionEnd);
+  }
+
+  _updateProgress = (prevProgress, progress) => {
+    if (!this._node) return;
+    this._node.style.transform = `scaleX(${progress})`;
+    if (progress !== 1) this._node.style.opacity = '1';
+  };
+
+  _onTransitionEnd = ({propertyName}) => {
+    switch (propertyName) {
+      case 'transform':
+        if ((this.props.progress === 1) && (this._node.style.opacity === '1')) {
+          this._node.style.opacity = '0';
+        }
+        break;
+      case 'opacity':
+        if (this.props.progress === 1) {
+          this._node.style.transform = 'scaleX(0)';
+        }
+        break;
+      default:
+        // ignore
+    }
+  };
+
   render() {
     const {progress} = this.props;
-    const scaleY = (progress === 1 ? 0 : 1);
     return (
       <span
+        ref={node => this._node = node}
         className={styles.loading_bar}
-        style={{transform: `scaleX(${progress}) scaleY(${scaleY})`}}
+        role="progressbar"
+        aria-valuenow={progress}
+        aria-valuemin="0"
+        aria-valuemax="1"
       />
     );
   }
 }
 
+const reducer = (
+  acc/*: number */,
+  {loading, progress}/*: {loading: boolean, progress: number} */
+) => acc + (1 / (loading ? 2 : 1)) + progress;
+
 const mapStateToProps = createSelector(
   state => state.data,
   (data = {}) => {
     const values = Object.values(data);
-    const progress = values.reduce(
-      (acc, {loading, progress}) => acc + (1 / (loading ? 2 : 1)) + progress,
-      0
-    ) / (2 * values.length);
+    const progress = values.reduce(reducer, 0) / (2 * values.length);
     return ({progress: isNaN(progress) ? 1 : progress});
   },
 );
