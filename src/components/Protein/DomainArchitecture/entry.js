@@ -167,7 +167,7 @@ class EntryRenderer {
     }
   }
   updateChildrenBg({d, i, c}, entry, instanceG) {
-    if (entry.children) {
+    if ((entry.children && entry.children.length) || (entry._children && entry._children.length)) {
       const g = d3.select(c[i]);
       const parentNode = instanceG.node() ? d3.select(instanceG.node().parentNode) : null;
       const matchBG = g.selectAll(`.${s(`${this.className}-children-bg`)}`)

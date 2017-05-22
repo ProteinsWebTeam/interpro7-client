@@ -13,7 +13,8 @@ import {toPlural} from 'utils/pages';
 import blockStyles from 'styles/blocks.css';
 
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
-import EntriesOnStructure from 'components/Structure/EntriesOnStructure';
+import EntriesOnStructure from 'components/Related/EntriesOnStructure';
+import StructureOnProtein from 'components/Related/StructureOnProtein';
 
 const ObjectToList = ({obj, component: Component}) => (
   <ul>
@@ -97,6 +98,12 @@ const RelatedAdvanced = (
   {mainData, secondaryData, isStale, main, secondary, actualSize, pathname}
   ) => (
     <div>
+      {
+        main === 'protein' &&
+        secondary === 'structure' ?
+          <StructureOnProtein structures={secondaryData} protein={mainData}/> :
+          null
+      }
       {
         main === 'structure' &&
         secondary === 'entry' ?
