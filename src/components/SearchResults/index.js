@@ -85,9 +85,10 @@ class SearchResults extends Component {
     }
     return (
       <Table
-        data={{results: payload.entries, count: payload.hitCount}}
+        dataTable={payload.entries}
+        actualSize={payload.hitCount}
         query={search}
-        pathname="/search"
+        pathname="/search/text"
         title="Search Results"
       >
         <Exporter>

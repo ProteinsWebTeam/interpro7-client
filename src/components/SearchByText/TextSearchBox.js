@@ -29,7 +29,7 @@ class TextSearchBox extends Component {
 
   routerPush = () => {
     const {pageSize} = this.props;
-    const pathname = '/search';
+    const pathname = '/search/text';
     const query/*: {page: number, page_size: number, search?: string} */ = {
       page: 1,
       page_size: pageSize,
