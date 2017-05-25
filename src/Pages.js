@@ -3,6 +3,8 @@ import React from 'react';
 import Switch from 'components/generic/Switch';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
+import BrowseTabs from 'components/BrowseTabs';
+
 // Main pages
 const Home = createAsyncComponent(
   () => import(/* webpackChunkName: "home" */'pages/Home')
@@ -58,12 +60,15 @@ const pages = new Set([
 ]);
 
 const Pages = props => (
-  <Switch
-    indexRoute={Home}
-    childRoutes={pages}
-    catchAll={NotFound}
-    {...props}
-  />
+  <div>
+    <BrowseTabs />
+    <Switch
+      indexRoute={Home}
+      childRoutes={pages}
+      catchAll={NotFound}
+      {...props}
+    />
+  </div>
 );
 
 export default Pages;

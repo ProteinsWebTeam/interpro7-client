@@ -1,0 +1,16 @@
+.tabs {
+  border:0;
+  padding-bottom: 1em;
+}
+
+.tabs-title a{
+  border-bottom: 2px solid #7ba3b6;
+  font-size: 1rem;
+}
+
+.tabs-title a.is-active-tab {
+  background: white;
+  border: 2px solid #7ba3b6;
+  border-radius: 5px 5px 0 0;
+  border-bottom: 0;
+}

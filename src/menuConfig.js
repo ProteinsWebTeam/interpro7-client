@@ -97,7 +97,7 @@ export const InterPro = [
     iconClass: 'functional',
   },
   {
-    to: '/browse/',
+    to: '/entry/interpro',
     icon: 'b',
     name: 'Browse',
     iconClass: 'functional',

@@ -151,8 +151,8 @@ export const memberDB = [
     accession: 'PS[0-9]{5}',
   }, {
     type: 'PROFILES',
-    apiType: 'prosite',
-    to: 'entry/prosite',
+    apiType: 'profile',
+    to: 'entry/profile',
     className: f('md-prpro'),
     title:
       `PROSITE is a database of protein families and domains. It consists of biologically
@@ -181,7 +181,7 @@ export const memberDB = [
   }, {
     type: 'SMART',
     apiType: 'smart',
-    to: 'entry/',
+    to: 'entry/smart',
     className: f('md-sm'),
     title:
       `SMART (a Simple Modular Architecture Research Tool) allows the identification
