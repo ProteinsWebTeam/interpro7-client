@@ -12,6 +12,7 @@ import {
 } from 'actions/creators';
 import processLocation from 'utils/location';
 import path2description from 'utils/processLocation/path2description';
+import description2path from 'utils/processLocation/description2path';
 
 // Subscriber Generator
 const persist = (store, storage) => (() => {
@@ -35,6 +36,8 @@ const historyMW = history => ({dispatch}) => {
     dispatch(
       locationChangeFromHistory({pathname, search: qs.parse(search), hash})
     );
+    console.log(pathname);
+    console.log(description2path(path2description(pathname)));
     dispatch(
       newLocationChangeFromHistory({
         description: path2description(pathname),

@@ -1,3 +1,4 @@
+// @flow
 const getEmptyDescription = () => ({
   other: null,
   mainType: null,
@@ -23,13 +24,21 @@ const getEmptyDescription = () => ({
 const handler = {
   children: new Set(),
   key: null,
-  getKey: () => null,
+  getKey: (_description/*: {[key: string]: ?string} */) => null,
   cleanedUp: null,
-  cleanUp: value => value.toLowerCase(),
-  match: () => true,
-  handle(description, current, next, ...rest) {
+  cleanUp: (value/*: string */) => value.toLowerCase(),
+  match: (
+    _current/*: string */,
+    _description/*: {[key: string]: ?string} */
+  ) => true,
+  handle(
+    description/*: {[key: string]: ?string} */,
+    current/*: ?string */,
+    next/*: ?string */,
+    ...rest/*: Array<string> */
+  ) {
     const key = this.key || this.getKey(description);
-    if (key) {
+    if (key && current) {
       // eslint-disable-next-line no-param-reassign
       description[key] = this.cleanedUp || this.cleanUp(current);
     }
@@ -89,10 +98,10 @@ const memberDBAccessionHandler = Object.create(handler, {
     },
   },
   cleanUp: {
-    value: value => value.toUpperCase(),
+    value: (value/*: string */) => value.toUpperCase(),
   },
   match: {
-    value: current => {
+    value: (current, _description) => {
       for (const {re} of memberDB) {
         if (re.test(current)) return true;
       }
@@ -129,10 +138,10 @@ const interProAccessionHandler = Object.create(handler, {
     value: ({mainAccession}) => `${mainAccession ? 'focus' : 'main'}Accession`,
   },
   cleanUp: {
-    value: value => value.toUpperCase(),
+    value: (value/*: string */) => value.toUpperCase(),
   },
   match: {
-    value: current => interPro.re.test(current),
+    value: (current, _description) => interPro.re.test(current),
   },
 });
 
@@ -144,7 +153,7 @@ const interProHandler = Object.create(handler, {
     value: 'InterPro',
   },
   match: {
-    value: current => current.toLowerCase() === interPro.name,
+    value: (current, _description) => current.toLowerCase() === interPro.name,
   },
 });
 
@@ -167,7 +176,7 @@ const structureChainHandler = Object.create(handler, {
   },
   cleanUp: {
     // keep the same as it is case-sensitive
-    value: value => value,
+    value: (value/*: string */) => value,
   },
   match: {
     value: /^[a-z0-9]{1,4}$/i,
@@ -179,7 +188,7 @@ const structureAccessionHandler = Object.create(handler, {
     value: ({mainAccession}) => `${mainAccession ? 'focus' : 'main'}Accesion`,
   },
   cleanUp: {
-    value: value => value.toUpperCase(),
+    value: (value/*: string */) => value.toUpperCase(),
   },
   match: {
     value: /^[a-z0-9]{4}$/i,
@@ -194,7 +203,7 @@ const structureDBHandler = Object.create(handler, {
     value: 'PDB',
   },
   match: {
-    value: current => current.toLowerCase() === 'pdb',
+    value: (current, _description) => current.toLowerCase() === 'pdb',
   },
 });
 
@@ -214,7 +223,7 @@ const proteinAccessionHandler = Object.create(handler, {
     value: ({mainAccession}) => `${mainAccession ? 'focus' : 'main'}Accession`,
   },
   cleanUp: {
-    value: value => value.toUpperCase(),
+    value: (value/*: string */) => value.toUpperCase(),
   },
   match: {
     value: /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
@@ -257,7 +266,7 @@ const otherHandler = Object.create(handler, {
     value: 'other',
   },
   match: {
-    value: (_, {mainType}) => !mainType,
+    value: (_current, {mainType}) => !mainType,
   },
 });
 
