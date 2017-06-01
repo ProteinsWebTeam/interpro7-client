@@ -1,0 +1,47 @@
+.tabs {
+  border:0;
+  padding-bottom: 1em;
+}
+
+.tabs-title, .tabs-title a{
+  transition-property: border, margin, color, transform, padding;
+  transition-duration: 0.5s;
+}
+.tabs-title a{
+  border-right: 2px solid #7ba3b6;
+  border-left: 3px solid transparent;
+  font-size: 1rem;
+  padding: 0.7rem 1.25rem;
+}
+
+.tabs-title a.is-active-tab {
+  background: white;
+  border: 2px solid #7ba3b6;
+  border-radius: 5px 0 0 5px;
+  border-right: 0;
+}
+
+.expand-button {
+  border: 1px solid lightgray;
+  position: relative;
+  left: 90%;
+}
+.collapsed .tabs-title{
+  margin-left: -140px;
+}
+.collapsed .tabs-title a {
+  color: transparent;
+}
+.collapsed .tabs-title a.is-active-tab {
+  color: black;
+  padding: 0;
+  position: relative;
+  left: 60px;
+  top: 53px;
+  text-align: center;
+  transform: rotate(-90deg) scaleX(1);
+  transform-origin: top center 0;
+  border: 2px solid #7ba3b6;
+  border-bottom: 0;
+  border-radius: 5px 5px 0 0;
+}

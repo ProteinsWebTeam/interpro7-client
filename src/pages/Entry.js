@@ -12,7 +12,9 @@ import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 import Table, {
   Column, SearchBox, PageSizeSelector, Exporter,
 } from 'components/Table';
-
+import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import BrowseTabs from 'components/BrowseTabs';
+import EntryListFilter from 'components/Entry/EntryListFilters';
 import {removeLastSlash} from 'utils/url';
 
 import styles from 'styles/blocks.css';
@@ -90,61 +92,103 @@ class List extends Component {
       };
     }
     return (
-      <Table
-        dataTable={_payload.results}
-        isStale={isStale}
-        actualSize={_payload.count}
-        query={search}
-        pathname={pathname}
-        notFound={notFound}
-      >
-        <Exporter>
-          <ul>
-            <li>
-              <a href={`${''}&format=json`} download="proteins.json">
-                JSON
-              </a><br/></li>
-            <li><a href={`${''}`}>Open in API web view</a></li>
-          </ul>
-        </Exporter>
-        <PageSizeSelector />
-        <SearchBox
-          search={search.search}
+      <div>
+        <EntryListFilter /><hr/>
+        <Table
+          dataTable={_payload.results}
+          isStale={isStale}
+          actualSize={_payload.count}
+          query={search}
           pathname={pathname}
+          notFound={notFound}
         >
-          Search entries:
-        </SearchBox>
-        <Column
-          accessKey="accession"
-          renderer={(acc/*: string */) => (
-            <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-              {acc}
-            </Link>
-          )}
-        >
-          Accession
-        </Column>
-        <Column
-          accessKey="name"
-          renderer={
-            (name/*: string */, {accession}/*: {accession: string} */) => (
-              <Link to={`${removeLastSlash(pathname)}/${accession}`}>
-                {name}
+          <Exporter>
+            <ul>
+              <li>
+                <a href={`${''}&format=json`} download="proteins.json">
+                  JSON
+                </a><br/></li>
+              <li><a href={`${''}`}>Open in API web view</a></li>
+            </ul>
+          </Exporter>
+          <PageSizeSelector />
+          <SearchBox
+            search={search.search}
+            pathname={pathname}
+          >
+            Search entries:
+          </SearchBox>
+          <Column
+            accessKey="type"
+            renderer={(type) => (
+              <interpro-type type={type.replace('_', ' ')} expanded>
+                {type}
+              </interpro-type>
+            )}
+          >Type</Column>
+          <Column
+            accessKey="name"
+            renderer={
+              (name/*: string */, {accession}/*: {accession: string} */) => (
+                <Link to={`${removeLastSlash(pathname)}/${accession}`}>
+                  {name}
+                </Link>
+              )
+            }
+          >
+            Name
+          </Column>
+          <Column
+            accessKey="accession"
+            renderer={(acc/*: string */) => (
+              <Link to={`${removeLastSlash(pathname)}/${acc}`}>
+                {acc}
               </Link>
-            )
+            )}
+          >
+            Accession
+          </Column>
+          {
+            pathname.indexOf('interpro') === -1 ?
+              <Column
+                accessKey="integrated"
+                renderer={(acc/*: string */) => (
+                  <Link to={`/entry/interpro/${acc}`}>
+                    {acc}
+                  </Link>
+                )}
+              >
+                Integrated
+              </Column> :
+              <Column
+                accessKey="member_databases"
+                renderer={(mdb/*: string */) => (
+                  Object.keys(mdb).map((db, i) => (
+                    <div key={i} style={{
+                      backgroundColor: '#DDDDDD',
+                      padding: '1px',
+                      marginBottom: '1px',
+                    }}>
+                      {db}
+                      {
+                        mdb[db].map((acc, j) => (
+                          <span className={f('label')} key={j} style={{float: 'right'}}>
+                            <Link to={`/entry/${db}/${acc}`}>
+                              {acc}
+                            </Link>
+                          </span>)
+                        )
+                      }
+                    </div>
+                  ))
+
+                )}
+              >
+                Signatures <span className={f('label')}>Sign ID</span>
+              </Column>
           }
-        >
-          Name
-        </Column>
-        <Column
-          accessKey="type"
-          renderer={(type) => (
-            <interpro-type type={type.replace('_', ' ')} expanded>
-              {type}
-            </interpro-type>
-          )}
-        >Type</Column>
-      </Table>
+        </Table>
+      </div>
     );
   }
 }
@@ -257,7 +301,12 @@ const schemaProcessData = data => ({
 const Entry = props => (
   <main>
     <div className={f('row')}>
-      <div className={f('large-12', 'columns')}>
+      <div className={f('shrink', 'columns')}>
+        <MemberDBTabs/>
+      </div>
+      <div className={f('columns')}>
+        {/*<BrowseTabs />*/}
+
         {props.data.payload && props.data.payload.accession &&
           <SchemaOrgData
             data={props.data.payload}

@@ -83,6 +83,7 @@ class Link extends PureComponent {
       className += activeClass || '';
     }
     const href = generateHref(location, to);
+    console.log(...props);
     return (
       <a
         {...props}

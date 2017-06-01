@@ -4,7 +4,6 @@ import Switch from 'components/generic/Switch';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 import BrowseTabs from 'components/BrowseTabs';
-
 // Main pages
 const Home = createAsyncComponent(
   () => import(/* webpackChunkName: "home" */'pages/Home')
