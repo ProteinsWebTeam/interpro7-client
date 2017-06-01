@@ -6,8 +6,12 @@ import rootReducer from 'reducers';
 import settingsStorage from 'storage/settings';
 import {DEV} from 'config';
 import {NEW_LOCATION} from 'actions/types';
-import {locationChangeFromHistory} from 'actions/creators';
+import {
+  locationChangeFromHistory,
+  newLocationChangeFromHistory,
+} from 'actions/creators';
 import processLocation from 'utils/location';
+import path2description from 'utils/processLocation/path2description';
 
 // Subscriber Generator
 const persist = (store, storage) => (() => {
@@ -27,9 +31,18 @@ const persist = (store, storage) => (() => {
 const historyMW = history => ({dispatch}) => {
   // Dispatch new action only when history actually changes
   // Build new action from scratch
-  history.listen(({pathname, search, hash}) => dispatch(
-    locationChangeFromHistory({pathname, search: qs.parse(search), hash})
-  ));
+  history.listen(({pathname, search, hash}) => {
+    dispatch(
+      locationChangeFromHistory({pathname, search: qs.parse(search), hash})
+    );
+    dispatch(
+      newLocationChangeFromHistory({
+        description: path2description(pathname),
+        search: qs.parse(search),
+        hash,
+      })
+    );
+  });
   return next => action => {
     // If anything but NEW_LOCATION, process normally
     if (action.type !== NEW_LOCATION) {
@@ -66,9 +79,17 @@ export default history => {
   const {location: {pathname, search, hash}} = history;
   const store = createStore(
     rootReducer,
-    {location: {pathname, search: qs.parse(search), hash}},
+    {
+      location: {pathname, search: qs.parse(search), hash},
+      newLocation: {
+        description: path2description(pathname),
+        search: qs.parse(search),
+        hash,
+      },
+    },
     getEnhancer(history)
   );
+  window.getState = store.getState.bind(store);// TODO: remove, only for debug
   if (settingsStorage) {
     // settingsStorage.setLinkedStore(store);
     const persistSubscriber = persist(store, settingsStorage);
