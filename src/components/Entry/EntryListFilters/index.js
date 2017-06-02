@@ -7,6 +7,7 @@ import {createSelector} from 'reselect';
 import FiltersPanel from 'components/FiltersPanel';
 import EntryTypeFilter from './EntryTypeFilter';
 import IntegratedFilter from './IntegratedFilter';
+import SignaturesFilter from './SignaturesFilter';
 
 const EntryListFilter = ({pathname}) => (
   <FiltersPanel>
@@ -16,7 +17,7 @@ const EntryListFilter = ({pathname}) => (
     {
       pathname.indexOf('interpro') < 0 ?
         <IntegratedFilter label="InterPro State"/> :
-        <div label="Signatures in">Member DB</div>
+        <SignaturesFilter label="Signatures in"/>
     }
   </FiltersPanel>
 );

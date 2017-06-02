@@ -8,12 +8,11 @@ import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
 import {goToLocation} from 'actions/creators';
-import loadWebComponent from 'utils/loadWebComponent';
 
 
-class EntryTypeFilter extends Component {
+class SignaturesFilter extends Component {
   static propTypes = {
-    dataEntryType: T.shape({
+    dataIntegrated: T.shape({
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
@@ -21,48 +20,54 @@ class EntryTypeFilter extends Component {
     pathname: T.string,
     search: T.object,
   };
+  constructor(){
+    super();
+    this.state = {value: null};
+  }
   componentWillMount() {
-    loadWebComponent(
-      () => import(
-        /* webpackChunkName: "interpro-components" */'interpro-components'
-        ).then(m => m.InterproType),
-    ).as('interpro-type');
+    if (this.props.pathname.indexOf('/unintegrated') > 0) {
+      this.setState({value: 'unintegrated'});
+    } else if (this.props.pathname.indexOf('/integrated') > 0) {
+      this.setState({value: 'integrated'});
+    } else {
+      this.setState({value: 'both'});
+    }
   }
   handleSelection = (option) => {
+    let path = this.props.pathname
+      .replace('/integrated', '')
+      .replace('/unintegrated', '');
+    this.setState({value: option});
+    if (option === 'integrated') {
+      path = path.replace('/entry', '/entry/integrated');
+    } else if (option === 'unintegrated') {
+      path = path.replace('/entry', '/entry/unintegrated');
+    }
     this.props.goToLocation({
-      pathname: this.props.pathname,
-      search: {
-        ...this.props.search,
-        type: option === 'ALL' ? null : option,
-      },
+      pathname: path,
+      search: this.props.search,
     });
   };
   render() {
-    const {dataEntryType: {loading, payload}, search} = this.props;
+    const {dataIntegrated: {loading, payload}} = this.props;
     const types = loading ? {} : payload;
+    // if (!loading) types.Any = Object.values(types).reduce((acc, v) => acc + v, 0);
     if (!loading){
-      types.ALL = Object.keys(types)
-                    .filter(a => a !== 'ALL')
-                    .reduce((acc, v) => acc + types[v], 0);
+      types.Any = Object.keys(types)
+        .filter(a => a !== 'Any')
+        .reduce((acc, v) => acc + types[v], 0);
     }
     return (
       <div>
+
         { Object.keys(types).sort().map((type, i) => (
           <div key={i}>
             <input
-              type="radio" name="entry_type" id={type} value={type}
+              type="radio" name="interpro_state" id={type} value={type}
               onChange={() => this.handleSelection(type)}
-              checked={(!search.type && type === 'ALL') || search.type === type}
+              checked={this.state.value === type}
             />
-            <label htmlFor={type}>
-              {
-                type === 'ALL' ? type :
-                <interpro-type type={type.replace('_', ' ')} expanded>
-                  {type}
-                </interpro-type>
-              }
-              <small> ({types[type]})</small>
-            </label>
+            <label htmlFor={type}>{type} <small>({types[type]})</small></label>
           </div>
         ))
         }
@@ -76,13 +81,13 @@ const getUrlFor = createSelector(
   state => state.location,
   ({protocol, hostname, port, root}, {pathname, search}) => {
     const parameters = Object.keys(search)
-      .reduce((acc, v) => {
-        if (v !== 'type' && v !== 'search' && search[v]) {
+      .reduce((acc, v)=> {
+        if (v !== 'search' && v !== 'type' && search[v]) {
           acc.push(`${v}=${search[v]}`);
         }
         return acc;
       }, []);
-    parameters.push('group_by=type');
+    parameters.push('group_by=member_databases');
     return resolve(
       format({protocol, hostname, port, pathname: root}),
       `${(root + pathname)}?${parameters.join('&')}`,
@@ -98,5 +103,5 @@ const mapStateToProps = createSelector(
 
 export default connect(mapStateToProps, {goToLocation})(loadData({
   getUrl: getUrlFor,
-  propNamespace: 'EntryType',
-})(EntryTypeFilter));
+  propNamespace: 'Integrated',
+})(SignaturesFilter));

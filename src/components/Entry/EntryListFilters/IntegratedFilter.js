@@ -39,22 +39,14 @@ class IntegratedFilter extends Component {
       .replace('/unintegrated', '');
     this.setState({value: option});
     if (option === 'integrated') {
-      if (this.state.integrated && this.state.unintegrated){
-        path = path.replace('/entry', '/entry/unintegrated');
-      }
-      if (!this.state.integrated && !this.state.unintegrated){
-        path = path.replace('/entry', '/entry/integrated');
-      }
+      path = path.replace('/entry', '/entry/integrated');
+    } else if (option === 'unintegrated') {
+      path = path.replace('/entry', '/entry/unintegrated');
     }
-    if (option === 'unintegrated') {
-      if (this.state.integrated && this.state.unintegrated){
-        path = path.replace('/entry', '/entry/integrated');
-      }
-      if (!this.state.integrated && !this.state.unintegrated){
-        path = path.replace('/entry', '/entry/unintegrated');
-      }
-    }
-    this.props.goToLocation(path);
+    this.props.goToLocation({
+      pathname: path,
+      search: this.props.search,
+    });
   };
   render() {
     const {dataIntegrated: {loading, payload}} = this.props;
@@ -63,7 +55,7 @@ class IntegratedFilter extends Component {
     return (
       <div>
 
-        { Object.keys(types).map((type, i) => (
+        { Object.keys(types).sort().map((type, i) => (
           <div key={i}>
             <input
               type="radio" name="interpro_state" id={type} value={type}
@@ -81,13 +73,23 @@ class IntegratedFilter extends Component {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.location.pathname,
-  ({protocol, hostname, port, root}, pathname) => resolve(
-    format({protocol, hostname, port, pathname: root}),
-    `${(root + pathname)}?interpro_status`
-      .replace('/integrated', '')
-      .replace('/unintegrated', ''),
-  )
+  state => state.location,
+  ({protocol, hostname, port, root}, {pathname, search}) => {
+    const parameters = Object.keys(search)
+      .reduce((acc, v)=> {
+        if (v !== 'search' && search[v]) {
+          acc.push(`${v}=${search[v]}`);
+        }
+        return acc;
+      }, []);
+    parameters.push('interpro_status');
+    return resolve(
+      format({protocol, hostname, port, pathname: root}),
+      `${(root + pathname)}?${parameters.join('&')}`
+        .replace('/integrated', '')
+        .replace('/unintegrated', ''),
+    );
+  }
 );
 
 const mapStateToProps = createSelector(
