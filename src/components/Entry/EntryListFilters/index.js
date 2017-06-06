@@ -8,6 +8,7 @@ import FiltersPanel from 'components/FiltersPanel';
 import EntryTypeFilter from './EntryTypeFilter';
 import IntegratedFilter from './IntegratedFilter';
 import SignaturesFilter from './SignaturesFilter';
+import GOTermsFilter from './GOTermsFilter';
 
 const EntryListFilter = ({pathname}) => (
   <FiltersPanel>
@@ -19,6 +20,7 @@ const EntryListFilter = ({pathname}) => (
         <IntegratedFilter label="InterPro State"/> :
         <SignaturesFilter label="Signatures in"/>
     }
+    <GOTermsFilter label="GO Terms"/>
   </FiltersPanel>
 );
 const mapStateToProps = createSelector(

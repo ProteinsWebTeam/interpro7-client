@@ -86,6 +86,11 @@ class List extends Component {
     let _payload = data.payload;
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
+    const goColors = {
+      P: 'rgb(220, 254, 210)',
+      F: 'rgb(254, 220, 210)',
+      C: 'rgb(220, 210, 254)',
+    };
     if (data.loading || notFound) {
       _payload = {
         results: [],
@@ -187,6 +192,22 @@ class List extends Component {
                 Signatures <span className={f('label')}>Sign ID</span>
               </Column>
           }
+          <Column
+            accessKey="go_terms"
+            renderer={(gos/*: string */) => (
+              gos.map((go, i) => (
+                <div key={i} style={{
+                  backgroundColor: go.category ? goColors[go.category] : '#DDDDDD',
+                  padding: '1px',
+                  marginBottom: '1px',
+                }}>
+                  {go.name ? go.name : 'None'}
+                </div>
+              ))
+            )}
+          >
+            GO Terms
+          </Column>
         </Table>
       </div>
     );

@@ -14,7 +14,7 @@ const FilterPanel = ({label, collapsed, onCollapse, children}) => (
       height: collapsed ? 0 : '100%',
       transform: collapsed ? 'scaleY(0)' : 'scaleY(1)',
       transformOrigin: '0 top',
-      overflowY: 'hidden',
+      overflowY: collapsed ? 'hidden' : 'scroll',
       paddingLeft: '3px',
       transitionDuration: '0.5s',
       transitionProperty: 'transform',
@@ -53,7 +53,7 @@ class FiltersPanel extends Component {
   }
   render() {
     return (
-      <div className={f('row')}>
+      <div className={f('row')} style={{maxHeight: '200px', marginBottom: '30px'}}>
         <div className={f('shrink', 'columns')}>
           <h5>Filter By</h5>
           <button onClick={this.collapseAll}>Collapse All ▾</button>
