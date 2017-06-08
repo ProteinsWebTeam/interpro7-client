@@ -14,7 +14,7 @@ export const goToNewLocation = (
   location/*: string | Location */,
   replace/*: ?boolean */,
 ) => ({
-  type: types.NEW_LOCATION,
+  type: types.NEW_NEW_LOCATION,
   location,
   replace,
 });

@@ -3,7 +3,7 @@ import qs from 'query-string';
 const locationRE = /^([^?#]*)(\?([^#]*))?(#.*)?$/;
 const multipleSlash = /\/+/g;
 
-const cleanPathname = (pathname/*: string */) => (
+const cleanPathname = (pathname/*: string */ = '') => (
   pathname.replace(multipleSlash, '/')
 );
 

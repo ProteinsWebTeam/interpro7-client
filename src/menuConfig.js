@@ -29,22 +29,50 @@ export const EBI = [
 export const entities = [
   {
     to: '/entry/interpro/',
+    newTo: {
+      description: {
+        mainType: 'entry',
+        mainDB: 'InterPro',
+      },
+    },
     name: 'Entry',
   },
   {
     to: '/protein/uniprot/',
+    newTo: {
+      description: {
+        mainType: 'protein',
+        mainDB: 'UniProt',
+      },
+    },
     name: 'Protein',
   },
   {
     to: '/structure/pdb/',
+    newTo: {
+      description: {
+        mainType: 'structure',
+        mainDB: 'PDB',
+      },
+    },
     name: 'Structure',
   },
   {
     to: '/proteome/',
+    newTo: {
+      description: {
+        mainType: 'proteome',
+      },
+    },
     name: 'Proteome',
   },
   {
     to: '/pathway/',
+    newTo: {
+      description: {
+        mainType: 'pathway',
+      },
+    },
     name: 'Pathway',
   },
 ];

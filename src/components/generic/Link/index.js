@@ -7,7 +7,7 @@ import {parse, format, resolve} from 'url';
 
 import config from 'config';
 
-import {goToLocation} from 'actions/creators';
+import {goToLocation, goToNewLocation} from 'actions/creators';
 
 const happenedWithModifierKey = event => !!(
   event.metaKey || event.altKey || event.ctrlKey || event.shiftKey
@@ -42,15 +42,21 @@ class Link extends PureComponent {
       pathname: T.string.isRequired,
     }).isRequired,
     goToLocation: T.func.isRequired,
+    goToNewLocation: T.func.isRequired,
     target: T.string,
     to: T.oneOfType([
       T.string,
       T.shape({
-        pathname: T.string.isRequired,
+        description: T.object.isRequired,
         search: T.object,
         hash: T.string,
       }),
     ]),
+    newTo: T.shape({
+      description: T.object.isRequired,
+      search: T.object,
+      hash: T.string,
+    }),
     className: T.string,
     activeClass: T.oneOfType([
       T.string,
@@ -59,7 +65,7 @@ class Link extends PureComponent {
   };
 
   handleClick = event => {
-    const {onClick, target, goToLocation, to} = this.props;
+    const {onClick, target, goToLocation, goToNewLocation, to, newTo} = this.props;
     // pass it on to an externally defined handler
     if (onClick) onClick(event);
     if (event.defaultPrevented) return;
@@ -69,12 +75,19 @@ class Link extends PureComponent {
     if (target) return;
     // OK, now we can handle it
     event.preventDefault();
-    goToLocation(to);
+    if (newTo) {
+      // debugger;
+      goToNewLocation(newTo);
+    } else {
+      goToLocation(to);
+    }
   };
 
   render() {
     const {
-      onClick, location, goToLocation, activeClass, className: cn, to, ...props
+      onClick, location, goToLocation, goToNewLocation,
+      activeClass, className: cn, to, newTo,
+      ...props
     } = this.props;
     let className = `${cn || ''} `;
     if (typeof activeClass === 'function') {
@@ -99,4 +112,4 @@ const mapStateToProps = createSelector(
   location => ({location})
 );
 
-export default connect(mapStateToProps, {goToLocation})(Link);
+export default connect(mapStateToProps, {goToLocation, goToNewLocation})(Link);
