@@ -36,6 +36,10 @@ export default history => ({dispatch}) => {
     // Otherwise, don't process and update history, it'll eventually
     // result in another action being dispatched through callback
     const {pathname, search, hash} = processLocation(action.location);
-    history.push({pathname, search: qs.stringify(search), hash});
+    history[action.replace ? 'replace' : 'push']({
+      pathname,
+      search: qs.stringify(search),
+      hash,
+    });
   };
 };

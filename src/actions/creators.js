@@ -10,6 +10,15 @@ export const goToLocation = (location/*: string | Location */) => ({
   location,
 });
 
+export const goToNewLocation = (
+  location/*: string | Location */,
+  replace/*: ?boolean */,
+) => ({
+  type: types.NEW_LOCATION,
+  location,
+  replace,
+});
+
 export const locationChangeFromHistory = (location/*: Location */) => ({
   type: types.NEW_PROCESSED_LOCATION,
   location,
