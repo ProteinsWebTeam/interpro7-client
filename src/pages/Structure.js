@@ -38,7 +38,7 @@ const propTypes = {
 };
 
 const Overview = ({data: {payload, loading}, location: {pathname}}) => {
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading…</div>;
   return (
     <ul className={styles.card}>
       {Object.entries(payload.structures || {}).map(([name, count]) => (
@@ -133,7 +133,7 @@ const pages = new Set([
 ]);
 const Summary = props => {
   const {data: {payload, loading}, location, match} = props;
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading…</div>;
   return (
     <div>
       <Switch

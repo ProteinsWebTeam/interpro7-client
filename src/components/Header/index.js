@@ -97,9 +97,7 @@ class _SideIcons extends PureComponent {
             value=""
             name="search"
           />
-          <Link
-            to="/search"
-          >
+          <Link newTo={{description: {other: 'search'}}}>
             <svg
               width="2em" height="2em" viewBox="0 0 490 490"
               style={{verticalAlign: 'middle'}}

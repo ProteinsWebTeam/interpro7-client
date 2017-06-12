@@ -26,7 +26,7 @@ import {getEmptyDescription} from 'utils/processLocation/utils';
   getKey: Description => ?string,
   cleanedUp: ?string,
   cleanUp: string => ?string,
-  match: ((string, Description) => ?boolean) | RegExp,
+  match: (string, Description) => ?boolean,
   handle: Function,
 }; */
 
@@ -47,10 +47,7 @@ const handler/*: Handler */ = {
     }
     if (!next) return description;
     for (const child of this.children) {
-      const matched = typeof child.match === 'function' ?
-        child.match(next, description) :
-        child.match.test(next);
-      if (matched) {
+      if (child.match(next, description)) {
         return child.handle(description, next, ...rest);
       }
     }
@@ -73,6 +70,8 @@ const memberDB = new Set([
   {name: 'prints', re: /PR[0-9]{5}/i, type: 'entry'},
   {name: 'prodom', re: /PD[A-Z0-9]{6}/i, type: 'entry'},
   {name: 'prosite', re: /PS[0-9]{5}/i, type: 'entry'},
+  {name: 'patterns', re: /PS[0-9]{5}/i, type: 'entry'},
+  {name: 'profiles', re: /PS[0-9]{5}/i, type: 'entry'},
   {name: 'sfld', re: /sfldg\d{5}/i, type: 'entry'},
   {name: 'smart', re: /SM[0-9]{5}/i, type: 'entry'},
   {name: 'ssf', re: /SSF[0-9]{5,6}/i, type: 'entry'},
@@ -190,7 +189,7 @@ export const structureChainHandler/*: Handler */ = Object.create(handler, {
     value: (value/*: string */) => value,
   },
   match: {
-    value: /^[a-z0-9]{1,4}$/i,
+    value: (current/*: string */) => /^[a-z0-9]{1,4}$/i.test(current),
   },
 });
 
@@ -204,7 +203,7 @@ export const structureAccessionHandler/*: Handler */ = Object.create(handler, {
     value: (value/*: string */) => value.toUpperCase(),
   },
   match: {
-    value: /^[a-z0-9]{4}$/i,
+    value: (current/*: string */) => /^[a-z0-9]{4}$/i.test(current),
   },
 });
 
@@ -245,8 +244,12 @@ export const proteinAccessionHandler/*: Handler */ = Object.create(handler, {
     value: (value/*: string */) => value.toUpperCase(),
   },
   match: {
-    // eslint-disable-next-line max-len
-    value: /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
+    value: (current/*: string */) => (
+      // eslint-disable-next-line max-len
+      /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i.test(
+        current
+      )
+    ),
   },
 });
 
@@ -255,7 +258,9 @@ export const proteinDBHandler/*: Handler */ = Object.create(handler, {
     value: ({mainDB}/*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
   },
   match: {
-    value: /^((uni|swiss\-)prot|trembl)$/i,
+    value: (current/*: string */) => (
+      /^((uni|swiss\-)prot|trembl)$/i.test(current)
+    ),
   },
 });
 
@@ -272,6 +277,32 @@ export const proteinHandler/*: Handler */ = Object.create(handler, {
   },
 });
 
+export const proteomeHandler/*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: ({mainType}/*: Description */) => (
+      `${mainType ? 'focus' : 'main'}Type`
+    ),
+  },
+  match: {
+    value: (current/*: string */, {mainType}/*: Description */) => (
+      (mainType !== 'proteome') && (current.toLowerCase() === 'proteome')
+    ),
+  },
+});
+
+export const pathwayHandler/*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: ({mainType}/*: Description */) => (
+      `${mainType ? 'focus' : 'main'}Type`
+    ),
+  },
+  match: {
+    value: (current/*: string */, {mainType}/*: Description */) => (
+      (mainType !== 'pathway') && (current.toLowerCase() === 'pathway')
+    ),
+  },
+});
+
 export const entryHandler/*: Handler */ = Object.create(handler, {
   getKey: {
     value: ({mainType}/*: Description */) => (
@@ -281,6 +312,71 @@ export const entryHandler/*: Handler */ = Object.create(handler, {
   match: {
     value: (current/*: string */, {mainType}/*: Description */) => (
       (mainType !== 'entry') && (current.toLowerCase() === 'entry')
+    ),
+  },
+});
+
+export const valueTextSearchHandler/*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: () => 'mainAccession',
+  },
+  cleanUp: {
+    value: (value/*: string */) => value,
+  },
+});
+
+export const textSearchHandler/*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: () => 'mainDB',
+  },
+  cleanedUp: {
+    value: 'text',
+  },
+  match: {
+    value: (current/*: string */, {mainDB}/*: Description */) => (
+      !mainDB && (current.toLowerCase() === 'text')
+    ),
+  },
+});
+
+export const jobSequenceSearchHandler/*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: () => 'mainAccession',
+  },
+  cleanUp: {
+    value: (value/*: string */) => value,
+  },
+  match: {
+    value: (current/*: string */) => (
+      /iprscan5-S\d{8}-\d{6}-\d{4}-\d{8}-(pg|oy)/.test(current)
+    ),
+  },
+});
+
+export const sequenceSearchHandler/*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: () => 'mainDB',
+  },
+  cleanedUp: {
+    value: 'sequence',
+  },
+  match: {
+    value: (current/*: string */, {mainDB}/*: Description */) => (
+      !mainDB && (current.toLowerCase() === 'sequence')
+    ),
+  },
+});
+
+export const searchHandler/*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: () => 'mainType',
+  },
+  cleanedUp: {
+    value: 'search',
+  },
+  match: {
+    value: (current/*: string */, {mainType}/*: Description */) => (
+      !mainType && (current.toLowerCase() === 'search')
     ),
   },
 });

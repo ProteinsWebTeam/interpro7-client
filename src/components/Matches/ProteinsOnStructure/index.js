@@ -25,9 +25,11 @@ const ProteinsOnStructure = (
       >
         <g transform={`translate(0 ${offset - baseSize / 2})`}>
           <Link
-            to={`/structure/${
-              structure.source_database
-            }/${structure.accession}/`}
+            newTo={{description: {
+              mainType: 'structure',
+              mainDB: structure.source_database,
+              mainAccession: structure.accession,
+            }}}
           >
             <title>{structure.accession}</title>
             <rect
@@ -52,9 +54,11 @@ const ProteinsOnStructure = (
                 }
               >
                 <Link
-                  to={`/protein/${
-                    protein.source_database
-                  }/${protein.accession}`}
+                  newTo={{description: {
+                    mainType: 'protein',
+                    mainDB: protein.source_database,
+                    mainAccession: protein.accession,
+                  }}}
                 >
                   <title>{protein.accession}</title>
                   <rect

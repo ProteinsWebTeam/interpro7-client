@@ -32,7 +32,7 @@ const Title = ({pathname, data = null, loading, stuck}) => {
       id="local-title"
     >
       <h1 className={styles('main-title', {stuck})}>
-        <Link to="/" title="Back to InterPro homepage">
+        <Link newTo={{description: {}}} title="Back to InterPro homepage">
           <img
             src={logo}
             alt="InterPro logo"

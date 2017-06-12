@@ -3,16 +3,20 @@ import {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 
-import {goToLocation} from 'actions/creators';
+import {goToNewLocation} from 'actions/creators';
 
 const Redirect = class extends Component {
   static propTypes = {
-    goToLocation: T.func.isRequired,
-    to: T.any.isRequired,
+    goToNewLocation: T.func.isRequired,
+    to: T.shape({
+      description: T.object.isRequired,
+      search: T.object,
+      hash: T.string,
+    }).isRequired,
   };
 
   componentWillMount() {
-    this.props.goToLocation(this.props.to);
+    this.props.goToNewLocation(this.props.to);
   }
 
   render() {
@@ -20,4 +24,4 @@ const Redirect = class extends Component {
   }
 };
 
-export default connect(null, {goToLocation})(Redirect);
+export default connect(null, {goToNewLocation})(Redirect);

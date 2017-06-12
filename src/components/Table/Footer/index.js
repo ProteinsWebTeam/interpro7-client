@@ -13,11 +13,11 @@ const getPageLabels = (page, lastPage) => {
   pages.splice(0, 1);
   if (lastPage > maxPagesDisplayed){
     if (page < maxPagesDisplayed / 2) {
-      pages = [1, 2, 3, 4, '...', lastPage];
+      pages = [1, 2, 3, 4, '…', lastPage];
     } else if (page > lastPage - maxPagesDisplayed / 2) {
-      pages = [1, '...', lastPage - 3, lastPage - 2, lastPage - 1, lastPage];
+      pages = [1, '…', lastPage - 3, lastPage - 2, lastPage - 1, lastPage];
     } else {
-      pages = [1, '...', page - 1, page, page + 1, '...', lastPage];
+      pages = [1, '…', page - 1, page, page + 1, '…', lastPage];
     }
   }
   return pages;
@@ -56,16 +56,25 @@ const Footer = (
               Previous <span className={f('show-for-sr')}>You're on page</span>
             </li> :
             <li>
-              <Link to={{pathname, search: {
-                page: page - 1,
-                page_size: pageSize,
-                search: pagination.search}}}
-              >Previous</Link>
+              <Link
+                newTo={({description, search, hash}) => ({
+                  description,
+                  search: {
+                    ...search,
+                    page: search.page - 1,
+                    page_size: pageSize,
+                    search: pagination.search,
+                  },
+                  hash,
+                })}
+              >
+                Previous
+              </Link>
             </li>
           }
           {
             pages.map((e, i) => {
-              if (e === '...') {
+              if (e === '…') {
                 return <li key={i} className={f('ellipsis')}/>;
               } else if (page === e) {
                 return (
@@ -77,14 +86,16 @@ const Footer = (
               return (
                 <li key={i} className={page === e ? f('current') : ''}>
                   <Link
-                    to={{
-                      pathname,
+                    newTo={({description, search, hash}) => ({
+                      description,
                       search: {
+                        ...search,
                         page: e,
                         page_size: pageSize,
                         search: pagination.search,
                       },
-                    }}
+                      hash,
+                    })}
                   >
                     {e}
                   </Link>

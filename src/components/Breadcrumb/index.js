@@ -47,7 +47,7 @@ const getPaths = fullPath => {
 const positions = new WeakMap();
 
 const mapPathArrayToLink = paths => paths.map(({url, name}, i) => (
-  <Link key={url || i} to={url || '#'}>{name}</Link>
+  null && <Link key={url || i} to={url || '#'}>{name}</Link>
 ));
 
 const formatEndpoints = paths => ([
@@ -159,7 +159,7 @@ class Breadcrumb extends Component {
               ))}
             </span>
             <span className={f('hint')}>
-              <Link to="/help" title="help">
+              <Link newTo={{description: {other: 'help'}}} title="help">
                 <div>main view</div>
                 <div>focus</div>
               </Link>

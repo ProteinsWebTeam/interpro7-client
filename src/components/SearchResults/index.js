@@ -66,7 +66,7 @@ class SearchResults extends Component {
   render() {
     const {data: {payload, loading}, search, dataUrl} = this.props;
     this.foundType = NOT_FOUND;
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div>Loading…</div>;
     if (!payload) {
       return <div/>;
     } else if (payload.hitCount === 0) {
@@ -98,7 +98,13 @@ class SearchResults extends Component {
         <Column
           accessKey="id"
           renderer={id => (
-            <Link to={`/entry/interpro/${id}`}>
+            <Link
+              newTo={{description: {
+                mainType: 'entry',
+                mainDB: 'InterPro',
+                mainAccession: id,
+              }}}
+            >
               {id}
             </Link>
           )
@@ -110,7 +116,7 @@ class SearchResults extends Component {
         <Column
           accessKey="fields"
           renderer={d => (
-            <div>{d.description[0].slice(0, maxLength)}...</div>
+            <div>{d.description[0].slice(0, maxLength)}…</div>
           )}
           cellStyle={{textAlign: 'justify'}}
         >

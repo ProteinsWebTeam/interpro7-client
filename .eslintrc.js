@@ -123,7 +123,7 @@ const rules = {
   // Disallow modifying variables that are declared using const
   'no-const-assign': 2,
   // Disallow use of the continue statement
-  'no-continue': 1,
+  'no-continue': 0,
   // Disallow control characters in regular expressions
   'no-control-regex': 1,
   // Disallow use of debugger

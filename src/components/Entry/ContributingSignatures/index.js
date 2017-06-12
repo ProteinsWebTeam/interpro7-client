@@ -6,8 +6,6 @@ import AnimatedEntry from 'components/AnimatedEntry';
 
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
-import {buildLink} from 'utils/url';
-
 import styles from 'styles/blocks.css';
 import ipro from 'styles/interpro-new.css';
 
@@ -24,24 +22,28 @@ const schemaProcessData = data => ({
   name: data.name,
 });
 
-const ContributingSignatures = (
-  {contr, pathname}/*: {contr: Object, pathname: string} */
-) => (
+const ContributingSignatures = ({contr}/*: {contr: Object} */) => (
   <div className={styles.card} style={{flex: '0 0 auto'}}>
     <h5>Contributing signatures:</h5>
     <AnimatedEntry className={ipro.chevron}>
-      {Object.entries(contr).map(([key, values]) => (
-        <li key={key}>
-          <Link to={buildLink(pathname, 'entry', key)}>{key}</Link>:
+      {Object.entries(contr).map(([db, accessions]) => (
+        <li key={db}>
+          <Link newTo={{description: {mainType: 'entry', mainDB: db}}}>
+            {db}
+          </Link>:
           <ul>
-            {values.map(value => (
-              <li key={value}>
+            {accessions.map(accession => (
+              <li key={accession}>
                 <SchemaOrgData
-                  data={{db: key, name: value}}
+                  data={{db, name: accession}}
                   processData={schemaProcessData}
                 />
-                <Link to={buildLink(pathname, 'entry', key, value)}>
-                  {value}
+                <Link
+                  newTo={{description: {
+                    mainType: 'entry', mainDB: db, mainAccession: accession,
+                  }}}
+                >
+                  {accession}
                 </Link>
               </li>
             ))}
@@ -53,7 +55,6 @@ const ContributingSignatures = (
 );
 ContributingSignatures.propTypes = {
   contr: T.object.isRequired,
-  pathname: T.string.isRequired,
 };
 
 export default ContributingSignatures;

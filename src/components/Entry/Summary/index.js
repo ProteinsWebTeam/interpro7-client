@@ -90,20 +90,14 @@ class SummaryEntry extends Component {
                 {
                   metadata.integrated &&
                   <div className={f('panel')}>
-                    <Integration
-                      intr={metadata.integrated}
-                      pathname={pathname}
-                    />
+                    <Integration intr={metadata.integrated} />
                   </div>
                 }
                 {
                   metadata.member_databases &&
                   Object.keys(metadata.member_databases).length > 0 &&
                   <div className={f('panel')}>
-                    <ContributingSignatures
-                      contr={metadata.member_databases}
-                      pathname={pathname}
-                    />
+                    <ContributingSignatures contr={metadata.member_databases} />
                   </div>
                 }
               </div>

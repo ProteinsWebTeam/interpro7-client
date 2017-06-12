@@ -11,6 +11,7 @@ export const memberDB = [
     type: 'CATH',
     apiType: 'gene3d',
     to: 'entry/gene3d',
+    newTo: {description: {mainType: 'entry', mainDB: 'gene3d'}},
     className: f('md-cg'),
     title:
       `CATH-Gene3D database describes protein families and domain architectures in
@@ -28,6 +29,7 @@ export const memberDB = [
     type: 'CDD',
     apiType: 'cdd',
     to: 'entry/cdd',
+    newTo: {description: {mainType: 'entry', mainDB: 'cdd'}},
     className: f('md-cd'),
     title:
       `CDD is a protein annotation resource that consists of a collection of annotated
@@ -47,6 +49,7 @@ export const memberDB = [
     type: 'HAMAP',
     apiType: 'hamap',
     to: 'entry/hamap',
+    newTo: {description: {mainType: 'entry', mainDB: 'hamap'}},
     className: f('md-ha'),
     title:
       `HAMAP stands for High-quality Automated and Manual Annotation of Proteins. HAMAP
@@ -62,6 +65,7 @@ export const memberDB = [
     type: 'PANTHER',
     apiType: 'panther',
     to: 'entry/panther',
+    newTo: {description: {mainType: 'entry', mainDB: 'panther'}},
     className: f('md-pa'),
     title:
       `PANTHER is a large collection of protein families that have been subdivided into
@@ -80,6 +84,7 @@ export const memberDB = [
     type: 'PFAM',
     apiType: 'pfam',
     to: 'entry/pfam',
+    newTo: {description: {mainType: 'entry', mainDB: 'pfam'}},
     className: f('md-pf'),
     title:
       `Pfam is a large collection of multiple sequence alignments and hidden Markov
@@ -94,6 +99,7 @@ export const memberDB = [
     type: 'PIRSF',
     apiType: 'pirsf',
     to: 'entry/pirsf',
+    newTo: {description: {mainType: 'entry', mainDB: 'pirsf'}},
     className: f('md-pi'),
     title:
       `PIRSF protein classification system is a network with multiple levels of
@@ -110,6 +116,7 @@ export const memberDB = [
     type: 'PRINTS',
     apiType: 'prints',
     to: 'entry/prints',
+    newTo: {description: {mainType: 'entry', mainDB: 'prints'}},
     className: f('md-pri'),
     title:
       `PRINTS is a compendium of protein fingerprints. A fingerprint is a group
@@ -124,6 +131,7 @@ export const memberDB = [
     type: 'PRODOM',
     apiType: 'prodom',
     to: 'entry/prodom',
+    newTo: {description: {mainType: 'entry', mainDB: 'prodom'}},
     className: f('md-pro'),
     title:
       `ProDom protein domain database consists of an automatic compilation of homologous
@@ -138,6 +146,7 @@ export const memberDB = [
     type: 'PATTERNS',
     apiType: 'prosite',
     to: 'entry/prosite',
+    newTo: {description: {mainType: 'entry', mainDB: 'prosite'}},
     className: f('md-prpat'),
     title:
       `PROSITE is a database of protein families and domains. It consists of biologically
@@ -153,6 +162,7 @@ export const memberDB = [
     type: 'PROFILES',
     apiType: 'prosite',
     to: 'entry/prosite',
+    newTo: {description: {mainType: 'entry', mainDB: 'prosite'}},
     className: f('md-prpro'),
     title:
       `PROSITE is a database of protein families and domains. It consists of biologically
@@ -168,6 +178,7 @@ export const memberDB = [
     type: 'SFLD',
     apiType: 'sfld',
     to: 'entry/sfld',
+    newTo: {description: {mainType: 'entry', mainDB: 'sfld'}},
     className: f('md-sf'),
     title:
       `SFLD (Structure-Function Linkage Database) is a hierarchical classification of
@@ -182,6 +193,7 @@ export const memberDB = [
     type: 'SMART',
     apiType: 'smart',
     to: 'entry/',
+    newTo: {description: {mainType: 'entry', mainDB: 'smart'}},
     className: f('md-sm'),
     title:
       `SMART (a Simple Modular Architecture Research Tool) allows the identification
@@ -196,6 +208,7 @@ export const memberDB = [
     type: 'SUPERFAMILIES',
     apiType: 'ssf',
     to: 'entry/ssf',
+    newTo: {description: {mainType: 'entry', mainDB: 'ssf'}},
     className: f('md-su'),
     title:
       `SUPERFAMILY is a library of profile hidden Markov models that represent all
@@ -212,6 +225,7 @@ export const memberDB = [
     type: 'TIGRFAMS',
     apiType: 'tigrfams',
     to: 'entry/tigrfams',
+    newTo: {description: {mainType: 'entry', mainDB: 'tigrfams'}},
     className: f('md-ti'),
     title:
       `TIGRFAMs is a collection of protein families, featuring curated multiple sequence

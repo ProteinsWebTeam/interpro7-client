@@ -5,8 +5,6 @@ import {Helmet} from 'react-helmet';
 
 import Link from 'components/generic/Link';
 
-import {buildLink} from 'utils/url';
-
 import ipro from 'styles/interpro-new.css';
 
 const formatter = new Intl.DateTimeFormat(
@@ -121,11 +119,16 @@ const Title = (
       {
         isEntry && metadata.source_database.toLowerCase() !== 'interpro' &&
         <div className={ipro['md-hlight']}>
-            <h5>Member database:&nbsp;
-              <Link to={buildLink(pathname, 'entry', metadata.source_database)}>
-                {metadata.source_database}
-              </Link>
-            </h5>
+          <h5>Member database:&nbsp;
+            <Link
+              newTo={{description: {
+                mainType: 'entry',
+                mainDB: metadata.source_database,
+              }}}
+            >
+              {metadata.source_database}
+            </Link>
+          </h5>
         </div>
       }
       {

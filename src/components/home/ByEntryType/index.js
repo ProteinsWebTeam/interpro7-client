@@ -34,28 +34,28 @@ const ByEntryType = ({data: {payload}}) => {
     <div>
       <AnimatedEntry className={f('row')} element="div">
         {
-          entryType.map((e, i) => (
+          entryType.map(({type, title, description}, i) => (
             <div
               className={f('columns', 'medium-4', 'large-4', 'text-center')}
               key={i}
             >
-              <Link to={`/entry?type=${e.type}`}>
+              <Link newTo={{description: {mainType: 'entry'}, search: {type}}}>
                 <div className={f('svg-container')}>
-                  <InterproSymbol type={e.type}/>
+                  <InterproSymbol type={type}/>
                 </div>
-                <h5 data-tooltip title={e.title}>
-                  {e.type}
+                <h5 data-tooltip title={title}>
+                  {type}
                   &nbsp;
                   <span
                     className={f('small', 'icon', 'icon-generic')}
                     data-icon="i" data-tooltip
-                    title={e.description}
+                    title={description}
                   />
                 </h5>
                 <p>
                   <span className={f('count', {visible: payload})}>
-                    {counts && e.type && counts[e.type.toLowerCase()] || ''}
-                    {e.type === 'new' ? ' ' : ' entries'}
+                    {counts && type && counts[type.toLowerCase()] || ''}
+                    {type === 'new' ? ' ' : ' entries'}
                   </span>
                 </p>
               </Link>
@@ -63,7 +63,12 @@ const ByEntryType = ({data: {payload}}) => {
           ))
         }
       </AnimatedEntry>
-      <Link to="/entry" className={f('button')}>View all entries</Link>
+      <Link
+        newTo={{description: {mainType: 'entry'}}}
+        className={f('button')}
+      >
+        View all entries
+      </Link>
     </div>
   );
 };

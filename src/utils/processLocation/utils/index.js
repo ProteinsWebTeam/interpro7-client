@@ -20,7 +20,7 @@ export const getEmptyDescription = () => ({
   focusMemberDBAccession: null,
 });
 
-export const descriptionItemToHandler = new Map([
+export const descriptionItemToHandlers = new Map([
   [
     'other',
     new Set([handlers.otherHandler]),
@@ -31,6 +31,10 @@ export const descriptionItemToHandler = new Map([
       handlers.structureHandler,
       handlers.proteinHandler,
       handlers.entryHandler,
+      handlers.proteomeHandler,
+      handlers.pathwayHandler,
+      handlers.searchHandler,
+      handlers.otherHandler,
     ]),
   ],
   [
@@ -44,6 +48,8 @@ export const descriptionItemToHandler = new Map([
       handlers.interProHandler,
       handlers.structureDBHandler,
       handlers.proteinDBHandler,
+      handlers.sequenceSearchHandler,
+      handlers.textSearchHandler,
     ]),
   ],
   [
@@ -53,6 +59,8 @@ export const descriptionItemToHandler = new Map([
       handlers.interProAccessionHandler,
       handlers.structureAccessionHandler,
       handlers.proteinAccessionHandler,
+      handlers.jobSequenceSearchHandler,
+      handlers.valueTextSearchHandler,
     ]),
   ],
   [
@@ -77,6 +85,8 @@ export const descriptionItemToHandler = new Map([
       handlers.structureHandler,
       handlers.proteinHandler,
       handlers.entryHandler,
+      handlers.proteomeHandler,
+      handlers.pathwayHandler,
     ]),
   ],
   [

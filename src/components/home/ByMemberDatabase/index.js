@@ -35,12 +35,12 @@ class ByMemberDatabase extends PureComponent {
       <div>
         <AnimatedEntry className={f('row')} element="div">
           {
-            memberDB.map(({name, to, type, title, version, apiType}) => (
+            memberDB.map(({name, newTo, type, title, version, apiType}) => (
               <div
                 className={f('columns', 'medium-3', 'large-3', 'text-center')}
                 key={name}
               >
-                <Link to={to}>
+                <Link newTo={newTo}>
                   <MemberSymbol type={type}/>
                   <h6 data-tooltip title={title}>{name}</h6>
                   <p>
@@ -55,7 +55,12 @@ class ByMemberDatabase extends PureComponent {
             ))
           }
         </AnimatedEntry>
-        <Link to="/entry" className={f('button')}>View all entries</Link>
+        <Link
+          newTo={{description: {mainType: 'entry'}}}
+          className={f('button')}
+        >
+          View all entries
+        </Link>
       </div>
     );
   }

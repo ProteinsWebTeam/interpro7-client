@@ -35,7 +35,7 @@ const Overview = ({
   location: {pathname, search: {type}},
   isStale,
 }) => {
-  if (loading || isStale) return <div>Loading...</div>;
+  if (loading || isStale) return <div>Loading…</div>;
   const params = type ? `?type=${type}` : '';
   return (
     <div>
@@ -185,7 +185,7 @@ SummaryComponent.propTypes = {
 const Summary = props => {
   const {data: {loading, payload}, isStale, match} = props;
   if (loading || (isStale && !payload.metadata)) {
-    return <div>Loading...</div>;
+    return <div>Loading…</div>;
   }
   return (
     <Switch

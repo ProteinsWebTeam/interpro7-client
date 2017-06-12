@@ -1,26 +1,9 @@
 // @flow
-const orderedKeys = new Set([
-  'other',
-  'mainType',
-  'mainIntegration',
-  'mainDB',
-  'mainAccession',
-  'mainChain',
-  'mainMemberDB',
-  'mainMemberDBAccession',
-  'mainDetail',
-  'focusType',
-  'focusIntegration',
-  'focusDB',
-  'focusAccession',
-  'focusChain',
-  'focusMemberDB',
-  'focusMemberDBAccession',
-]);
+import {descriptionItemToHandlers} from 'utils/processLocation/utils';
 
 export default (description/*: {[key: string]: ?string} */) => {
   let output = '/';
-  for (const key of orderedKeys) {
+  for (const key of descriptionItemToHandlers.keys()) {
     const value = description[key];
     if (value) {// filter out empty values
       output += value + '/';// eslint-disable-line prefer-template

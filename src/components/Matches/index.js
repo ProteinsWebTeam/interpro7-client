@@ -89,7 +89,11 @@ const Matches = (
           acc/*: string */,
           {source_database: sourceDatabase}/*: {source_database: string} */
         ) => (
-          <Link to={`/${primary}/${sourceDatabase}/${acc}`}>
+          <Link
+            newTo={{description: {
+              mainType: primary, mainDB: sourceDatabase, mainAccession: acc,
+            }}}
+          >
             {acc}
           </Link>
         )}
@@ -103,7 +107,13 @@ const Matches = (
           {accession, source_database: sourceDatabase}
           /*: {accession: string, source_database: string} */
         ) => (
-          <Link to={`/${primary}/${sourceDatabase}/${accession}`}>
+          <Link
+            newTo={{description: {
+              mainType: primary,
+              mainDB: sourceDatabase,
+              mainAccession: accession,
+            }}}
+          >
             {name}
           </Link>
         )}

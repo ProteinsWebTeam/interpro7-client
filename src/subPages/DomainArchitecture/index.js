@@ -112,7 +112,7 @@ let Index = class extends Component {
     const {mainData, dataInterPro, dataIntegrated, dataResidues, dataUnintegrated} =
       this.props;
     if (dataInterPro.loading || dataIntegrated.loading) {
-      return <div>Loading...</div>;
+      return <div>Loading…</div>;
     }
     const mergedData = mergeData(
       dataInterPro.payload.entries,

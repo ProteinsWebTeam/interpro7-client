@@ -41,7 +41,7 @@ const routes = new Set([
 ]);
 
 const RedirectToText = () => (
-  <Redirect to="/search/text" />
+  <Redirect to={{description: {mainType: 'search', mainDB: 'text'}}} />
 );
 
 const Search = () => (
@@ -55,7 +55,7 @@ const Search = () => (
             onMouseOver={SearchByText.preload}
           >
             <Link
-              to="/search/text"
+              newTo={{description: {mainType: 'search', mainDB: 'text'}}}
               activeClass={f('is-active', 'is-active-tab')}
             >
               by text
@@ -66,7 +66,7 @@ const Search = () => (
             onMouseOver={IPScanSearchAndStatus.preload}
           >
             <Link
-              to="/search/sequence"
+              newTo={{description: {mainType: 'search', mainDB: 'sequence'}}}
               activeClass={f('is-active', 'is-active-tab')}
             >
               by sequence
