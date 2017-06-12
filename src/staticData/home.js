@@ -327,7 +327,7 @@ export const speciesFeat = [{
   coverage: 73,
   icon: 'L',
   color: '#5bc0de',
-  tax_id: 574521,
+  tax_id: 83333,
 }, {
   title: 'Caulobacter phage phiCbK',
   kingdom: 'Virus',

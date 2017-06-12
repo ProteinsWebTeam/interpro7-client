@@ -20,35 +20,33 @@ import local from '../ByMemberDatabase/styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
-const BySpecies = ({data: {payload}}) => {
-  console.log(payload);
-  return(
-    <AnimatedEntry className={f('row')} element="div">
-      {
-        // TODO: Include number of entries
-        speciesFeat.map((e, i) => (
-          <div
-            className={f('columns', 'medium-4', 'large-4', 'text-center')}
-            key={i}
-          >
-            <Link to={`/protein/uniprot?tax_id=${e.tax_id}`}>
-              <span
-                style={{color: e.color}}
-                className={f('small', 'icon', 'icon-species')}
-                data-icon={e.icon} data-tooltip
-              />
-              <h6>
-                {e.title}
-              </h6>
-              <p>{payload && payload[e.tax_id] ? payload[e.tax_id] : '...'} proteins
-              </p>
-            </Link>
-          </div>
-        ))
-      }
-    </AnimatedEntry>
-  );
-}
+const BySpecies = ({data: {payload}}) => (
+  <AnimatedEntry className={f('row')} element="div">
+    {
+      // TODO: Include number of entries
+      speciesFeat.map((e, i) => (
+        <div
+          className={f('columns', 'medium-4', 'large-4', 'text-center')}
+          key={i}
+        >
+          <Link to={`/protein/uniprot?tax_id=${e.tax_id}`}>
+            <span
+              style={{color: e.color}}
+              className={f('small', 'icon', 'icon-species')}
+              data-icon={e.icon} data-tooltip
+            />
+            <h6>
+              {e.title}
+            </h6>
+            <p>{payload && payload[e.tax_id] ? payload[e.tax_id] : '...'} proteins
+            </p>
+          </Link>
+        </div>
+      ))
+    }
+  </AnimatedEntry>
+);
+
 BySpecies.propTypes = {
   data: T.shape({
     payload: T.object,
