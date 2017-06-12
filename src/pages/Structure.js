@@ -12,6 +12,8 @@ import Table, {Column, SearchBox, PageSizeSelector, Exporter}
 
 import {removeLastSlash, buildLink} from 'utils/url';
 
+import {PDBeLink} from 'components/ExtLink';
+
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
@@ -73,6 +75,7 @@ const List = ({
       actualSize={_payload.count}
       query={search}
       pathname={pathname}
+      pdbsumPath = "www.ebi.ac.uk/pdbsum/"
       notFound={notFound}
     >
       <Exporter>
@@ -115,12 +118,18 @@ const List = ({
         Name
       </Column>
       <Column
-        accessKey="source_database"
-        renderer={(db/*: string */) => (
-          <Link to={buildLink(pathname, 'structure', db)}>{db}</Link>
+        accessKey="accession"
+        defaultKey="structureAccession"
+        renderer={(acc/*: string */) => (
+          <PDBeLink id={acc}>
+            <img src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${acc}/traces.jpg`}
+              alt="structure image"
+              style={{maxWidth: '33%'}}
+            />
+          </PDBeLink>
         )}
       >
-        Source Database
+        Structure
       </Column>
     </Table>
   );
