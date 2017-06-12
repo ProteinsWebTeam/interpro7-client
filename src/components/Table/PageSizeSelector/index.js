@@ -21,31 +21,31 @@ class PageSizeSelector extends Component{
     goToLocation: T.func,
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.applyAll = this.applyAll.bind(this);
-    this.state = {
-      pageSize: props.search.page_size ? props.search.page_size : props.pageSize,
-    };
+    const pageSize = (
+      props.search.page_size ? props.search.page_size : props.pageSize
+    );
+    this.state = {pageSize};
   }
 
-  handleChange(event) {
+  handleChange = event => {
     this.setState({pageSize: event.target.value});
     this.props.goToLocation({
       pathname: this.props.pathname,
       search: {
-        ...this.props.search, page_size: event.target.value,
+        ...this.props.search,
+        page_size: event.target.value,
         page: 1,
       },
     });
-  }
+  };
 
-  applyAll(){
+  applyAll = () => {
     this.props.changePageSize(this.state.pageSize);
-  }
+  };
 
-  render(){
+  render() {
     const options = [10, 15, 30, 100];
     if (options.indexOf(this.state.pageSize * 1) === -1) {
       options.push(this.state.pageSize);
@@ -53,21 +53,26 @@ class PageSizeSelector extends Component{
     }
     return (
       <div className={f('float-left')}>
-        Show <select
+        Show
+        <select
           className={f('small')}
           style={{width: 'auto'}}
-          value = {this.state.pageSize}
+          value={this.state.pageSize}
           onChange={this.handleChange}
-             >
-        {
-          options.map((opt, i) => (<option key={i} value={opt}>{opt}</option>))
-        }
+        >
+          {
+            options.map((opt, i) => (
+              <option key={i} value={opt}>{opt}</option>
+            ))
+          }
         </select> results
-        <a className=
-             {f('icon', 'icon-functional', 'primary', 'apply-all')}
+        <a
+          className={f('icon', 'icon-functional', 'primary', 'apply-all')}
           data-icon="s"
           onClick={this.applyAll}
-        > <div>Apply to all tables</div></a>
+        >
+          <div>Apply to all tables</div>
+        </a>
       </div>
     );
   }

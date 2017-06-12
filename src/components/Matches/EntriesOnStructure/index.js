@@ -66,8 +66,8 @@ const EntriesOnStructure = (
                         y="-0.2em"
                         transform={
                           `translate(${
-                          regionMatch[1] - regionMatch[0]
-                            } 0)`
+                            regionMatch[1] - regionMatch[0]
+                          } 0)`
                         }
                       >
                         <tspan textAnchor="middle">
@@ -84,8 +84,8 @@ const EntriesOnStructure = (
         <g>
           {
             matches.map(({[main]: {
-                           protein_structure_coordinates: {coordinates: coords_sp},
-                         }}) =>
+              protein_structure_coordinates: {coordinates: coords_sp},
+            }}) =>
               coords_sp.map(
                 (strMatch, i) => (
                   <g
@@ -111,8 +111,8 @@ const EntriesOnStructure = (
                       y="-0.2em"
                       transform={
                         `translate(${
-                        strMatch[1] - strMatch[0]
-                          } 0)`
+                          strMatch[1] - strMatch[0]
+                        } 0)`
                       }
                     >
                       <tspan textAnchor="middle">

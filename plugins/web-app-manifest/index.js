@@ -56,9 +56,9 @@ class WebAppManifestPlugin {
       // TODO: clean-up, put into separate functions
       // Get everything we need
       const index = Object.keys(compilation.assets)
-          .find(n => n.endsWith('index.html'));
+        .find(n => n.endsWith('index.html'));
       const manifest = Object.keys(compilation.assets)
-          .find(n => n.endsWith('manifest.json'));
+        .find(n => n.endsWith('manifest.json'));
       let indexContent = compilation.assets[index].source();
       let manifestContent = compilation.assets[manifest]._value;
       const manifestPath = compiler.options.output.publicPath + manifest;

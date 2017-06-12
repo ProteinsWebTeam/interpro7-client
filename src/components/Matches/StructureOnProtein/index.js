@@ -71,8 +71,8 @@ const StructureOnProtein = (
                       y="-0.2em"
                       transform={
                         `translate(${
-                        strMatch[1] - strMatch[0]
-                          } 0)`
+                          strMatch[1] - strMatch[0]
+                        } 0)`
                       }
                     >
                       <tspan textAnchor="middle">

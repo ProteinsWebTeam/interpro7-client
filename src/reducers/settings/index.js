@@ -34,7 +34,7 @@ const getDefaultSettings = () => ({
 // TODO: find a way to use the default when this has been changed in code
 export default (
   state/*: Object */ = // settingsStorage.getValue() ||
-    getDefaultSettings(),
+  getDefaultSettings(),
   action/*: Object */
 ) => {
   switch (action.type) {

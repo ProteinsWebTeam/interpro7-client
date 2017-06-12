@@ -96,7 +96,7 @@ export const memberDBAccessionHandler/*: Handler */ = Object.create(handler, {
       const position = description.focusType ? 'main' : 'focus';
       return `${position}${
         (description[`${position}Accession`] ? 'MemberDB' : '')
-        }Accession`;
+      }Accession`;
     },
   },
   cleanUp: {
@@ -117,7 +117,7 @@ export const memberDBHandler/*: Handler */ = Object.create(handler, {
       const position = description.focusType ? 'main' : 'focus';
       return `${position}${
         (description[`${position}Accession`] ? 'Member' : '')
-        }DB`;
+      }DB`;
     },
   },
   match: {

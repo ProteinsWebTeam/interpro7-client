@@ -55,25 +55,25 @@ class CookieBanner extends Component {
         }}
       >
         <div className={foundation('row')}>
-        <span style={{marginRight: '2em', flex: 1}} >
+          <span style={{marginRight: '2em', flex: 1}} >
           This website uses cookies.
           By continuing to browse this site,
           you are agreeing to the use of our site cookies.
           To find out more, see our{' '}
-          <a
-            target="_blank"
-            href="https://www.ebi.ac.uk/about/terms-of-use"
-            rel="noopener"
-          >
+            <a
+              target="_blank"
+              href="https://www.ebi.ac.uk/about/terms-of-use"
+              rel="noopener"
+            >
             Terms of Use
-          </a>.
-        </span>
-        <button
-          style={{fontWeight: 'bold', padding: '0.5em'}}
-          onClick={this.handleClick}
-        >
+            </a>.
+          </span>
+          <button
+            style={{fontWeight: 'bold', padding: '0.5em'}}
+            onClick={this.handleClick}
+          >
           ×
-        </button>
+          </button>
         </div>
       </AnimatedEntry>
     );

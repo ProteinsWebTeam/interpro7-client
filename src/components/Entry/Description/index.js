@@ -26,13 +26,13 @@ const Description = ({textBlocks}) => (
     <div className={styles.content}>
       <h3>Description</h3>
       <ol>
-      {textBlocks.map((b, i) => (
-        <li key={i}>
-          {transformFormatted(b).map((p, i) => (
-            <ParagraphWithCites key={i} p={p} />
-          ))}
-        </li>
-      ))}
+        {textBlocks.map((b, i) => (
+          <li key={i}>
+            {transformFormatted(b).map((p, i) => (
+              <ParagraphWithCites key={i} p={p} />
+            ))}
+          </li>
+        ))}
       </ol>
     </div>
   </ReadMoreCard>

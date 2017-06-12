@@ -126,27 +126,27 @@ const Matches = (
       <Column
         accessKey="match"
         renderer={(match/*: Object */) => (
-        <MatchesByPrimary
-          matches={[match]}
-          primary={primary}
-          secondary={secondary}
-          location={location}
-          {...props}
-        />
+          <MatchesByPrimary
+            matches={[match]}
+            primary={primary}
+            secondary={secondary}
+            location={location}
+            {...props}
+          />
         )}
       >
         Architecture
       </Column>
 
     </Table>
-      // {Object.entries(matchesByPrimary).map(([acc, matches]) => (
-      //   <MatchesByPrimary
-      //     key={acc}
-      //     matches={matches}
-      //     primary={primary}
-      //     {...props}
-      //   />
-      // ))}
+  // {Object.entries(matchesByPrimary).map(([acc, matches]) => (
+  //   <MatchesByPrimary
+  //     key={acc}
+  //     matches={matches}
+  //     primary={primary}
+  //     {...props}
+  //   />
+  // ))}
   );
 };
 Matches.propTypes = propTypes;

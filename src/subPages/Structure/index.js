@@ -7,15 +7,15 @@ const StructureSub = (
   {data, location: {pathname}, main}
   /*: {data: Object, location: {pathname: string}, main: string} */
 ) => (
-    <div>
-      <Related
-        data={data}
-        main={main}
-        secondary="structure"
-        pathname={pathname}
-      />
-    </div>
-  );
+  <div>
+    <Related
+      data={data}
+      main={main}
+      secondary="structure"
+      pathname={pathname}
+    />
+  </div>
+);
 StructureSub.propTypes = {
   data: T.object.isRequired,
   location: T.shape({

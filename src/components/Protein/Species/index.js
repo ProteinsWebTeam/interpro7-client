@@ -3,8 +3,8 @@ import T from 'prop-types';
 
 
 const Species = ({metadata}) => (
-    <div>Species: {metadata.source_organism.fullname}</div>
-  );
+  <div>Species: {metadata.source_organism.fullname}</div>
+);
 
 Species.propTypes = {
   metadata: T.shape({

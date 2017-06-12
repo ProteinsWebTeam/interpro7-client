@@ -88,9 +88,9 @@ class DomainArchitecture extends Component {
         <h4>${entry.label || entry.accession}</h4>
         <p>${entry.entry_type || ''}</p>
         <p>${
-          Array.isArray(entry.source_database) ?
-          entry.source_database[0] :
-          entry.source_database}
+  Array.isArray(entry.source_database) ?
+    entry.source_database[0] :
+    entry.source_database}
           ${entry.entry ? `(${entry.entry})` : ''}
         </p>
       </div>`;
@@ -103,10 +103,10 @@ class DomainArchitecture extends Component {
       `<div>
         <h4>${residue.name} (${residue.residue})</h4>
         <p>${
-          (residue.from === residue.to) ?
-          residue.from :
-          `${residue.from}-${residue.to}`
-        }</p>
+  (residue.from === residue.to) ?
+    residue.from :
+    `${residue.from}-${residue.to}`
+}</p>
         <p>${residue.description}</p>
       </div>`;
     const range = document.createRange();
@@ -115,7 +115,7 @@ class DomainArchitecture extends Component {
   }
   render(){
     return (
-    <div ref={e => this._main = e} className={s('fullscreenable')}>
+      <div ref={e => this._main = e} className={s('fullscreenable')}>
         <div className={s('buttons')}>
           <button onClick={this.handleCollapse}>Collapse All</button> |
           <button onClick={this.handleExpand}> Expand All</button> |

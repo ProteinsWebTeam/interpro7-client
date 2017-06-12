@@ -32,10 +32,11 @@ const emblLocationListClasses = styleBundle({
 });
 
 const _EmblButton = ({toggleEMBLMapNav}) => (
-  <button className={styleBundle({
-    button: true,
-    'float-right': true,
-  })}
+  <button
+    className={styleBundle({
+      button: true,
+      'float-right': true,
+    })}
     type="button"
     onClick={toggleEMBLMapNav}
   >

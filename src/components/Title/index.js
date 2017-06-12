@@ -42,43 +42,43 @@ export const InterproSymbol = (
   const colors = entryTypeColors[type[0]];
   const ch = (type === 'undefined') ? '?' : type[0];
   return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 72 72"
-        id={`type-${type}`}
-        className={`${className}`}
-      >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 72 72"
+      id={`type-${type}`}
+      className={`${className}`}
+    >
 
-        <rect
-          x="12" y="12" width="60" height="60"
-          style={{fill: ('black'), opacity: 0.15}}
-        />
-        <rect
-          x="4" y="4" width="60" height="60"
-          strokeWidth="8" stroke={colors[0]}
-          fill={colors[1]}
-        />
-        <polygon points="0,68 68,0 68,68" fill={colors[2]} />
-        <text
-          x="50%" y="50%" textAnchor="middle" dx="-2px" dy="20px"
-          style={{
-            fill: ('white'),
-            fontSize: 60,
-            fontWeight: 700,
-            fontFamily: 'Montserrat, arial, serif',
-          }}
-        >{ch}</text>
-        <text
-          x="50%" y="50%" textAnchor="middle" dx="-2px" dy="20px"
-          clipPath="url(#cut-off-bottom)"
-          style={{
-            fill: ('#e6e6e6'),
-            fontSize: 60,
-            fontWeight: 700,
-            fontFamily: 'Montserrat, arial, serif',
-          }}
-        >{ch}</text>
-      </svg>
+      <rect
+        x="12" y="12" width="60" height="60"
+        style={{fill: ('black'), opacity: 0.15}}
+      />
+      <rect
+        x="4" y="4" width="60" height="60"
+        strokeWidth="8" stroke={colors[0]}
+        fill={colors[1]}
+      />
+      <polygon points="0,68 68,0 68,68" fill={colors[2]} />
+      <text
+        x="50%" y="50%" textAnchor="middle" dx="-2px" dy="20px"
+        style={{
+          fill: ('white'),
+          fontSize: 60,
+          fontWeight: 700,
+          fontFamily: 'Montserrat, arial, serif',
+        }}
+      >{ch}</text>
+      <text
+        x="50%" y="50%" textAnchor="middle" dx="-2px" dy="20px"
+        clipPath="url(#cut-off-bottom)"
+        style={{
+          fill: ('#e6e6e6'),
+          fontSize: 60,
+          fontWeight: 700,
+          fontFamily: 'Montserrat, arial, serif',
+        }}
+      >{ch}</text>
+    </svg>
   );
 };
 InterproSymbol.propTypes = {

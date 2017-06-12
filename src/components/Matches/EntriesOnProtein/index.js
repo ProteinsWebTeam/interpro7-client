@@ -52,14 +52,14 @@ const EntriesOnProtein = (
                         `translate(${region[0]} ${offset - baseSize})`
                       }
                     >
-                        <title>{entry.accession}</title>
-                        <rect
-                          x="0" y="0" rx={baseSize * 2 / niceRatio}
-                          width={region[1] - region[0]}
-                          fill={colorHash.hex(entry.accession)}
-                          height={baseSize * 2}
-                          className={style.secondary}
-                        />
+                      <title>{entry.accession}</title>
+                      <rect
+                        x="0" y="0" rx={baseSize * 2 / niceRatio}
+                        width={region[1] - region[0]}
+                        fill={colorHash.hex(entry.accession)}
+                        height={baseSize * 2}
+                        className={style.secondary}
+                      />
                       <text y="-0.2em">
                         <tspan textAnchor="middle">
                           {region[0]}
@@ -79,8 +79,8 @@ const EntriesOnProtein = (
                       </text>
                     </g>
                   )
+                  )
                 )
-              )
             )
           }
         </g>

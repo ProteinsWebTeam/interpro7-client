@@ -37,13 +37,13 @@ class _HamburgerBtn extends PureComponent {
     if (!svg) {
       return (
         <span>
-        <button
-          className={styles.top_level_hamburger}
-          onClick={openSideNav}
-        >
+          <button
+            className={styles.top_level_hamburger}
+            onClick={openSideNav}
+          >
           ☰
-        </button>
-      </span>
+          </button>
+        </span>
       );
     }
     return (

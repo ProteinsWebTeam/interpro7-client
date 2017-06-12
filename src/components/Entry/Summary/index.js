@@ -69,42 +69,42 @@ class SummaryEntry extends Component {
   render() {
     const {data: {metadata}, location: {pathname}} = this.props;
     return (
-        <div className={f('sections')}>
-          <section>
-            <div className={f('row')}>
-              <div className={f('medium-8', 'large-8', 'columns')}>
-                <Title metadata={metadata} pathname={pathname}/>
-                <interpro-hierarchy
-                  accession={metadata.accession}
-                  hideafter="2"
-                  hrefroot="/entry/interpro"
-                  ref={(node) => this._hierarchy = node}
-                />
-                <br/>
-                <Description
-                  textBlocks={metadata.description}
-                  literature={metadata.literature}
-                />
-              </div>
-              <div className={f('medium-4', 'large-4', 'columns')}>
-                {
-                  metadata.integrated &&
+      <div className={f('sections')}>
+        <section>
+          <div className={f('row')}>
+            <div className={f('medium-8', 'large-8', 'columns')}>
+              <Title metadata={metadata} pathname={pathname}/>
+              <interpro-hierarchy
+                accession={metadata.accession}
+                hideafter="2"
+                hrefroot="/entry/interpro"
+                ref={(node) => this._hierarchy = node}
+              />
+              <br/>
+              <Description
+                textBlocks={metadata.description}
+                literature={metadata.literature}
+              />
+            </div>
+            <div className={f('medium-4', 'large-4', 'columns')}>
+              {
+                metadata.integrated &&
                   <div className={f('panel')}>
                     <Integration intr={metadata.integrated} />
                   </div>
-                }
-                {
-                  metadata.member_databases &&
+              }
+              {
+                metadata.member_databases &&
                   Object.keys(metadata.member_databases).length > 0 &&
                   <div className={f('panel')}>
                     <ContributingSignatures contr={metadata.member_databases} />
                   </div>
-                }
-              </div>
+              }
             </div>
-          </section>
-          {
-            Object.keys(metadata.literature).length > 0 &&
+          </div>
+        </section>
+        {
+          Object.keys(metadata.literature).length > 0 &&
             <section id="references">
               <div className={f('row')}>
                 <div className={f('large-12', 'columns')}>
@@ -113,12 +113,12 @@ class SummaryEntry extends Component {
               </div>
               <Literature references={metadata.literature}/>
             </section>
-          }
-          {
-            Object.keys(metadata.go_terms) &&
+        }
+        {
+          Object.keys(metadata.go_terms) &&
             <GoTerms terms={metadata.go_terms}/>
-          }
-        </div>
+        }
+      </div>
     );
   }
 }

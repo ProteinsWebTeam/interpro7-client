@@ -127,7 +127,9 @@ const LatestEntry = ({entry}) => (
                   mainMemberDBAccession: c.accession,
                 }}}
                 className={f('list-sign')}
-              > {c.accession}</Link>
+              >
+                {c.accession}
+              </Link>
               ({entry.contributing.length} contributing signature)
             </small>
           </div>
@@ -246,37 +248,37 @@ const Home = () => (
             {// panel4- By Go terms
             }
             <div title="by GO terms" className={f('go-list')}>
-                <div className={f('row')}>
-                  {
-                    GoList.map((e, i) => (
-                      <div
-                        className={f('columns', 'medium-3', 'large-3', 'text-center')}
-                        key={i}
-                      >
-                        <a href="#" data-tooltip title={e.description}>
+              <div className={f('row')}>
+                {
+                  GoList.map((e, i) => (
+                    <div
+                      className={f('columns', 'medium-3', 'large-3', 'text-center')}
+                      key={i}
+                    >
+                      <a href="#" data-tooltip title={e.description}>
+                        <span
+                          style={{color: e.color}}
+                          className={f('small', 'bullet-icon')}
+                          data-tooltip title={e.category}
+                        >&bull;</span>
+                        <h6>
+                          {e.title}&nbsp;
                           <span
-                            style={{color: e.color}}
-                            className={f('small', 'bullet-icon')}
-                            data-tooltip title={e.category}
-                          >&bull;</span>
-                          <h6>
-                            {e.title}&nbsp;
-                            <span
-                              className={f('small', 'icon', 'icon-generic')}
-                              data-icon="i" data-tooltip
-                              title={e.description}
-                            />
-                          </h6>
-                          <p>
-                            {e.counterD} entries <br/>
-                            <small>({e.counterS} proteins)</small>
-                          </p>
-                        </a>
-                      </div>
-                    ))
-                  }
+                            className={f('small', 'icon', 'icon-generic')}
+                            data-icon="i" data-tooltip
+                            title={e.description}
+                          />
+                        </h6>
+                        <p>
+                          {e.counterD} entries <br/>
+                          <small>({e.counterS} proteins)</small>
+                        </p>
+                      </a>
+                    </div>
+                  ))
+                }
 
-                </div>
+              </div>
 
               <Link to="/browse/Goterms" className={f('button')}>View all Go terms</Link>
 
@@ -285,7 +287,7 @@ const Home = () => (
 
 
         </div>
-        </div>
+      </div>
 
       <div className={f('columns', 'entry-list')}>
         {// Browse by latest entries or most popular
@@ -320,37 +322,37 @@ const Home = () => (
               </div>
               {// end row
               }
-          </div>
-          {// end panel01
-          }
-          <div title="Featured">
-            <div className={f('row')}>
-              <div className={f('columns')}>Featured: Under development</div>
             </div>
-           </div>
-          {// end panel02
-          }
-          <div title="Most Popular">
-            <div className={f('row')}>
-              <div className={f('columns')}>Most Popular: Under Development</div>
+            {// end panel01
+            }
+            <div title="Featured">
+              <div className={f('row')}>
+                <div className={f('columns')}>Featured: Under development</div>
+              </div>
             </div>
-          </div>
+            {// end panel02
+            }
+            <div title="Most Popular">
+              <div className={f('row')}>
+                <div className={f('columns')}>Most Popular: Under Development</div>
+              </div>
+            </div>
 
-        </Tabs>
-        {// end anotherexample-tabs
-        }
+          </Tabs>
+          {// end anotherexample-tabs
+          }
         </div>{// end callout
-      }
+        }
       </div>{// end entry-list
-    }
+      }
     </div> {// end Browse entry & entry list
-  }
+    }
     <div
       className={f('row', 'small-up-1', 'medium-up-1', 'large-up-2')}
       data-equalizer
     >
-    <div className={f('columns', 'publication-list')}>
-      <div className={f('callout')} data-equalizer-watch>
+      <div className={f('columns', 'publication-list')}>
+        <div className={f('callout')} data-equalizer-watch>
           <h5>Publications </h5>
           <Link href="http://nar.oxfordjournals.org/content/43/D1/D213">
             <div className={f('media-object')}>
@@ -396,8 +398,8 @@ const Home = () => (
                 <span className={f('icon', 'icon-conceptual')} data-icon="l">
                   &nbsp;
                 </span>
-               </div>
-             <div className={f('media-object-section')}>
+              </div>
+              <div className={f('media-object-section')}>
                 <p>
                   InterProScan 5: genome-scale protein function classification.
                   <br/><i>Bioinformatics</i>, 2014.
@@ -406,21 +408,21 @@ const Home = () => (
             </div>
           </Link>
 
-        <Link
-          newTo={{
-            description: {other: 'about'},
-            hash: 'publications',
-          }}
-          className={f('button')}
-        >
+          <Link
+            newTo={{
+              description: {other: 'about'},
+              hash: 'publications',
+            }}
+            className={f('button')}
+          >
           View all publications
-        </Link>
+          </Link>
 
         </div>{// end callout
-      }
+        }
 
       </div>{// end columns publication list
-    }
+      }
 
 
       <div className={f('columns', 'tools-list')}>
@@ -435,21 +437,21 @@ const Home = () => (
             <div className={f('columns', 'medium-6', 'medium-push-6')}>
               <h5>IDA</h5>
               <img src={idaLogo} style={{marginLeft: 40, marginBottom: 10}}/>
-                <p>
+              <p>
                   The InterPro Domain Architecture (IDA) tool allows you to
                   search the InterPro database with a particular set of domains,
                   and returns all of the domain architectures and associated
                   proteins that match the query.
-                  <Link
-                    newTo={{
-                      description: {other: 'about'},
-                      hash: 'tools-ida',
-                    }}
-                    className={f('readmore')}
-                  >
+                <Link
+                  newTo={{
+                    description: {other: 'about'},
+                    hash: 'tools-ida',
+                  }}
+                  className={f('readmore')}
+                >
                     Read more
-                  </Link>
-                </p>
+                </Link>
+              </p>
             </div>
             <div className={f('columns', 'medium-6', 'medium-push-6')}>
               <h5>InterProScan</h5>
@@ -479,7 +481,7 @@ const Home = () => (
         await schedule(10000);// Schedule asap, but do it anyway after 10s
         return import(
           /* webpackChunkName: "twitter" */'components/Twitter'
-          );
+        );
       }}
     />
   </main>

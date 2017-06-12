@@ -149,15 +149,15 @@ const IPScanStatus = class extends Component {
                   <tr key={jobId}>
                     <td>{
                       id ?
-                         <Link
-                           newTo={{description: {
-                             mainType: 'search',
-                             mainDB: 'sequence',
-                             mainAccession: id,
-                           }}}
-                         >
-                           {id}
-                         </Link> :
+                        <Link
+                          newTo={{description: {
+                            mainType: 'search',
+                            mainDB: 'sequence',
+                            mainAccession: id,
+                          }}}
+                        >
+                          {id}
+                        </Link> :
                         'None'
                     }</td>
                     <td>

@@ -63,7 +63,7 @@ const MemberSymbol = (
             className={f('md-color')}
             clipPath="url(#cut-off-center)"
           >D</text>
-        // interesting to try text "&"
+      // interesting to try text "&"
       }
     </svg>
 

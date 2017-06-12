@@ -22,7 +22,7 @@ const accessions = [
   // UniProt
   '[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}',
   // PDB
-  //'[0-9A-Z]{4}',
+  // '[0-9A-Z]{4}',
 ];
 const dbAccs = new RegExp(
   `/(${accessions.map(db => db.accession).filter(db => db).join('|')})`,
@@ -63,8 +63,8 @@ const SingleEntityMenu = (
               {name}&nbsp;
               {counter &&
               <span className={styles('badge')}>
-                  {data.metadata.counters[counter] || 0}
-                </span>
+                {data.metadata.counters[counter] || 0}
+              </span>
               }
             </MenuItem>
           </li>

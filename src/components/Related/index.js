@@ -96,47 +96,47 @@ const primariesAndSecondaries = {
 };
 const RelatedAdvanced = (
   {mainData, secondaryData, isStale, main, secondary, actualSize, pathname}
-  ) => (
-    <div>
-      {
-        main === 'protein' &&
+) => (
+  <div>
+    {
+      main === 'protein' &&
         secondary === 'structure' ?
-          <StructureOnProtein structures={secondaryData} protein={mainData}/> :
-          null
-      }
-      {
-        main === 'structure' &&
+        <StructureOnProtein structures={secondaryData} protein={mainData}/> :
+        null
+    }
+    {
+      main === 'structure' &&
         secondary === 'entry' ?
-          <EntriesOnStructure entries={secondaryData}/> :
-          null
-      }
-      {
-        main === 'protein' &&
+        <EntriesOnStructure entries={secondaryData}/> :
+        null
+    }
+    {
+      main === 'protein' &&
         secondary === 'entry' &&
         pathname.indexOf('interpro') > 0 ?
-          <ProteinEntryHierarchy entries={secondaryData} /> :
-          null
-      }
-      <p>
+        <ProteinEntryHierarchy entries={secondaryData} /> :
+        null
+    }
+    <p>
         This {main} is related to
-        {
-          secondaryData.length > 1 ?
-            ` these ${toPlural(secondary)}:` :
-            ` this ${secondary}:`
-        }
-      </p>
-      <Matches
-        actualSize={actualSize}
-        matches={
-          secondaryData.reduce((prev, {coordinates, ...secondaryData}) => (
-            [...prev, {[main]: mainData, [secondary]: secondaryData, coordinates}]
-          ), [])
-        }
-        isStale={isStale}
-        {...primariesAndSecondaries[main][secondary]}
-      />
-    </div>
-  );
+      {
+        secondaryData.length > 1 ?
+          ` these ${toPlural(secondary)}:` :
+          ` this ${secondary}:`
+      }
+    </p>
+    <Matches
+      actualSize={actualSize}
+      matches={
+        secondaryData.reduce((prev, {coordinates, ...secondaryData}) => (
+          [...prev, {[main]: mainData, [secondary]: secondaryData, coordinates}]
+        ), [])
+      }
+      isStale={isStale}
+      {...primariesAndSecondaries[main][secondary]}
+    />
+  </div>
+);
 RelatedAdvanced.propTypes = {
   mainData: T.object.isRequired,
   secondaryData: T.arrayOf(T.object).isRequired,

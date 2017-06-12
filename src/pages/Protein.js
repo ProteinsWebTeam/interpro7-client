@@ -45,12 +45,12 @@ const Overview = ({
 }) => (
   <ul className={styles.card}>
     {Object.entries(payload.proteins || {}).map(([name, count]) => (
-        <li key={name}>
-          <Link to={`${removeLastSlash(pathname)}/${name}`}>
-            {name}{Number.isFinite(count) ? ` (${count})` : ''}
-          </Link>
-        </li>
-      ))}
+      <li key={name}>
+        <Link to={`${removeLastSlash(pathname)}/${name}`}>
+          {name}{Number.isFinite(count) ? ` (${count})` : ''}
+        </Link>
+      </li>
+    ))}
   </ul>
 );
 Overview.propTypes = propTypes;
@@ -165,7 +165,7 @@ const EntryAsync = createAsyncComponent(() => import(
 ));
 const DomainAsync = createAsyncComponent(() => import(
   /* webpackChunkName: "entry-subpage" */'subPages/DomainArchitecture'
-  ));
+));
 
 const pages = new Set([
   {path: 'structure', component: StructureAsync},

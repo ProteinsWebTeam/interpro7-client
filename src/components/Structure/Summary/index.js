@@ -51,13 +51,13 @@ class SummaryStructure extends PureComponent {
                   </li>
                 </ul>
                 {/* <PDBe3DLink id={metadata.accession}>*/}
-                  {/* <img*/}
-                    {/* src={`//www.ebi.ac.uk/pdbe/static/entry/${*/}
-                      {/* metadata.accession.toLowerCase()*/}
-                      {/* }_entity_1_front_image-400x400.png`}*/}
-                    {/* alt="structure image"*/}
-                    {/* style={{maxWidth: '100%'}}*/}
-                  {/* />*/}
+                {/* <img*/}
+                {/* src={`//www.ebi.ac.uk/pdbe/static/entry/${*/}
+                {/* metadata.accession.toLowerCase()*/}
+                {/* }_entity_1_front_image-400x400.png`}*/}
+                {/* alt="structure image"*/}
+                {/* style={{maxWidth: '100%'}}*/}
+                {/* />*/}
                 {/* </PDBe3DLink>*/}
               </div>
             </div>
@@ -83,7 +83,7 @@ class SummaryStructure extends PureComponent {
               <img
                 src={`//www.ebi.ac.uk/pdbe/static/entry/${
                   metadata.accession.toLowerCase()
-                  }_entity_1_front_image-400x400.png`}
+                }_entity_1_front_image-400x400.png`}
                 alt="structure image"
                 style={{maxWidth: '100%'}}
               />

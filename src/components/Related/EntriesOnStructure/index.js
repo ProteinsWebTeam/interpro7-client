@@ -37,17 +37,17 @@ const mergeData = (secondaryData) => {
 };
 
 const EntriesOnStructure = ({entries}) => (
-    <div>
-      {
-        mergeData(entries).map((e, i) => (
-          <div key={i}>
-            <h4>Chain {e.chain}</h4>
-            <DomainArchitecture protein={e.protein} data={e.data}/>
-          </div>
-        ))
-      }
-    </div>
-  );
+  <div>
+    {
+      mergeData(entries).map((e, i) => (
+        <div key={i}>
+          <h4>Chain {e.chain}</h4>
+          <DomainArchitecture protein={e.protein} data={e.data}/>
+        </div>
+      ))
+    }
+  </div>
+);
 EntriesOnStructure.propTypes = {
   entries: T.array.isRequired,
 };

@@ -142,21 +142,21 @@ class EntryComponent {
     const bg = this.mainG.selectAll('rect')
       .data([this.protein]);
     bg.enter()
-        .append('rect')
-        .attr('width', proteinWidth)
-        .attr('height', height)
-        .attr('x', padding.left)
-        .attr('y', padding.top)
-        .style('fill', '#DDE');
+      .append('rect')
+      .attr('width', proteinWidth)
+      .attr('height', height)
+      .attr('x', padding.left)
+      .attr('y', padding.top)
+      .style('fill', '#DDE');
     bg.attr('width', proteinWidth);
     const axis = this.mainG.selectAll('g')
       .data([this.protein]);
 
     axis.enter()
       .append('g')
-        .attr('class', s('axis'))
-        .attr('transform', `translate(${padding.left}, ${padding.top})`)
-        .call(customXaxis);
+      .attr('class', s('axis'))
+      .attr('transform', `translate(${padding.left}, ${padding.top})`)
+      .call(customXaxis);
     axis.call(customXaxis);
   }
 
@@ -165,8 +165,8 @@ class EntryComponent {
       .data([this.protein]);
     const protG = prot.enter()
       .append('g')
-        .attr('transform', `translate(${padding.left}, ${padding.top})`)
-        .attr('class', s('protein'));
+      .attr('transform', `translate(${padding.left}, ${padding.top})`)
+      .attr('class', s('protein'));
     protG.append('rect')
       .attr('width', d => this.x(d.length))
       .attr('height', proteinHeight)
@@ -232,8 +232,8 @@ class EntryComponent {
       //   );
       // } else {
       entryRenderer.render(
-          d3.select(c[i]), d.value.expanded ? d.value : [], trackHeight
-        );
+        d3.select(c[i]), d.value.expanded ? d.value : [], trackHeight
+      );
       // }
     });
     let x = 0;
