@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, {Component} from 'react';
 import T from 'prop-types';
 
@@ -10,9 +11,9 @@ import {format, resolve} from 'url';
 import {goToLocation} from 'actions/creators';
 
 
-class GOTermsFilter extends Component {
+class TaxonomyFilter extends Component {
   static propTypes = {
-    dataIntegrated: T.shape({
+    dataEntryType: T.shape({
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
@@ -25,35 +26,41 @@ class GOTermsFilter extends Component {
       pathname: this.props.pathname,
       search: {
         ...this.props.search,
-        go_term: option === 'Any' ? null : option,
+        tax_id: option === 'ALL' ? null : option,
       },
     });
   };
   render() {
-    const {dataIntegrated: {loading, payload}, search: {go_term: go}} = this.props;
-    const types = loading ? {} : payload;
-    // if (!loading) types.Any = Object.values(types).reduce((acc, v) => acc + v, 0);
+    const {dataEntryType: {loading, payload}, search} = this.props;
+    const taxes = loading ? {} : payload;
     if (!loading){
-      types.Any = 'N/A';
+      taxes.ALL = 'N/A';
     }
-    const categories = {
-      'Biological Process': 'P',
-      'Cellular Component': 'C',
-      'Molecular Function': 'F',
-    };
     return (
-      <div>
-
-        { Object.keys(types).sort().map((type, i) => (
-          <div key={i}>
-            <input
-              type="radio" name="go_category" id={type} value={categories[type]}
-              onChange={() => this.handleSelection(categories[type])}
-              checked={type === 'Any' || go === categories[type]}
-            />
-            <label htmlFor={type}>{type} <small>({types[type]})</small></label>
-          </div>
-        ))
+      <div style={{overflowX: 'hidden'}}>
+        { Object.keys(taxes).sort().map((tax, i) => {
+          let taxObj;
+          try {
+            taxObj = JSON.parse(tax);
+            taxObj.counter = taxes[tax];
+            tax = taxObj.taxid;
+          } catch (e){
+            taxObj = null;
+          }
+          return (
+              <div key={i}>
+                <input
+                  type="radio" name="entry_type" id={tax} value={tax}
+                  onChange={() => this.handleSelection(tax)}
+                  checked={(!search.tax_id && tax === 'ALL') || search.tax_id === tax}
+                />
+                <label htmlFor={tax}>
+                  {taxObj ? taxObj.scientificname : tax}
+                  <small> ({taxObj ? taxObj.counter : taxes[tax]})</small>
+                </label>
+              </div>
+          );
+        })
         }
       </div>
     );
@@ -66,13 +73,12 @@ const getUrlFor = createSelector(
   ({protocol, hostname, port, root}, {pathname, search}) => {
     const parameters = Object.keys(search)
       .reduce((acc, v) => {
-        if (v !== 'search' && v !== 'signature_in' && v !== 'page_size' &&
-          search[v]) {
+        if (v !== 'tax_id' && v !== 'search' && search[v]) {
           acc.push(`${v}=${search[v]}`);
         }
         return acc;
       }, []);
-    parameters.push('group_by=go_terms');
+    parameters.push('group_by=tax_id');
     return resolve(
       format({protocol, hostname, port, pathname: root}),
       `${(root + pathname)}?${parameters.join('&')}`,
@@ -88,5 +94,6 @@ const mapStateToProps = createSelector(
 
 export default connect(mapStateToProps, {goToLocation})(loadData({
   getUrl: getUrlFor,
-  propNamespace: 'Integrated',
-})(GOTermsFilter));
+  propNamespace: 'EntryType',
+})(TaxonomyFilter));
+

@@ -13,7 +13,7 @@ import Table, {
   Column, SearchBox, PageSizeSelector, Exporter,
 } from 'components/Table';
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
-import BrowseTabs from 'components/BrowseTabs';
+// import BrowseTabs from 'components/BrowseTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import {removeLastSlash} from 'utils/url';
 
@@ -154,7 +154,7 @@ class List extends Component {
             Accession
           </Column>
           {
-            pathname.indexOf('interpro') === -1 ?
+            pathname.indexOf('interpro') < 0 ?
               <Column
                 accessKey="integrated"
                 renderer={(acc/*: string */) => (
@@ -173,7 +173,8 @@ class List extends Component {
                       backgroundColor: '#DDDDDD',
                       padding: '1px',
                       marginBottom: '1px',
-                    }}>
+                    }}
+                    >
                       {db}
                       {
                         mdb[db].map((acc, j) => (
@@ -200,7 +201,8 @@ class List extends Component {
                   backgroundColor: go.category ? goColors[go.category] : '#DDDDDD',
                   padding: '1px',
                   marginBottom: '1px',
-                }}>
+                }}
+                >
                   {go.name ? go.name : 'None'}
                 </div>
               ))
@@ -326,7 +328,7 @@ const Entry = props => (
         <MemberDBTabs/>
       </div>
       <div className={f('columns')}>
-        {/*<BrowseTabs />*/}
+        {/* <BrowseTabs />*/}
 
         {props.data.payload && props.data.payload.accession &&
           <SchemaOrgData

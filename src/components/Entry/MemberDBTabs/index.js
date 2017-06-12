@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
+import {connect} from 'react-redux';
 
 import Link from 'components/generic/Link';
 import {createSelector} from 'reselect';
@@ -35,6 +36,7 @@ class MemberDBTabs extends Component {
       loading: T.bool.isRequired,
       payload: T.object,
     }),
+    pathname: T.string,
   }
   constructor(){
     super();
@@ -42,6 +44,10 @@ class MemberDBTabs extends Component {
   }
   handleExpansion = () => {
     this.setState({collapsed: !this.state.collapsed});
+  }
+  getLink(to) {
+    if (this.props.pathname.startsWith('/entry')) return to;
+    return this.props.pathname.replace(/\/entry.*/, '') + to;
   }
   render() {
     const {data: {loading, payload}} = this.props;
@@ -68,7 +74,7 @@ class MemberDBTabs extends Component {
             tabs.map((e, i) => (
               <li className={f('tabs-title')} key={i}>
                 <Link
-                  to={e.to}
+                  to={this.getLink(e.to)}
                   activeClass={f('is-active', 'is-active-tab')}
                   style={{borderLeftColor: e.name in colors ? colors[e.name] : null}}
                 >
@@ -82,10 +88,10 @@ class MemberDBTabs extends Component {
     );
   }
 }
-// const mapStateToProps = createSelector(
-//   state => state.location.pathname,
-//   (pathname) => ({pathname})
-// );
+const mapStateToProps = createSelector(
+  state => state.location.pathname,
+  (pathname) => ({pathname})
+);
 const getMemberDBUrl = createSelector(
   state => state.settings.api,
   state => state.location.search,
@@ -94,4 +100,4 @@ const getMemberDBUrl = createSelector(
   )
 );
 
-export default loadData(getMemberDBUrl)(MemberDBTabs);
+export default connect(mapStateToProps)(loadData(getMemberDBUrl)(MemberDBTabs));

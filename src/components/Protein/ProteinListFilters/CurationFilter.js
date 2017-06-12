@@ -10,9 +10,9 @@ import {format, resolve} from 'url';
 import {goToLocation} from 'actions/creators';
 
 
-class IntegratedFilter extends Component {
+class CurationFilter extends Component {
   static propTypes = {
-    dataIntegrated: T.shape({
+    dataReviewed: T.shape({
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
@@ -25,44 +25,42 @@ class IntegratedFilter extends Component {
     this.state = {value: null};
   }
   componentWillMount() {
-    if (this.props.pathname.indexOf('/unintegrated') > 0) {
-      this.setState({value: 'unintegrated'});
-    } else if (this.props.pathname.indexOf('/integrated') > 0) {
-      this.setState({value: 'integrated'});
+    if (this.props.pathname.indexOf('/swissprot') > 0) {
+      this.setState({value: 'swissprot'});
+    } else if (this.props.pathname.indexOf('/trembl') > 0) {
+      this.setState({value: 'trembl'});
     } else {
-      this.setState({value: 'both'});
+      this.setState({value: 'uniprot'});
     }
   }
   handleSelection = (option) => {
-    let path = this.props.pathname
-      .replace('/integrated', '')
-      .replace('/unintegrated', '');
+    const path = this.props.pathname
+      .replace(/\/uniprot|\/swissprot|\/trembl/, `/${option}`);
     this.setState({value: option});
-    if (option === 'integrated') {
-      path = path.replace('/entry', '/entry/integrated');
-    } else if (option === 'unintegrated') {
-      path = path.replace('/entry', '/entry/unintegrated');
-    }
     this.props.goToLocation({
       pathname: path,
       search: this.props.search,
     });
   };
   render() {
-    const {dataIntegrated: {loading, payload}} = this.props;
-    const types = loading ? {} : payload;
-    if (!loading) types.both = payload.integrated + payload.unintegrated;
+    const {dataReviewed: {loading, payload}} = this.props;
+    const databases = loading ? {} : payload;
+    if (!loading) databases.uniprot = databases.swissprot + databases.trembl;
+    const label = {
+      swissprot: 'Reviewed',
+      trembl: 'Unreviewed',
+      uniprot: 'Both',
+    };
     return (
       <div>
-
-        { Object.keys(types).sort().map((type, i) => (
+        { Object.keys(databases).sort().map((db, i) => (
           <div key={i}>
             <input
-              type="radio" name="interpro_state" id={type} value={type}
-              onChange={() => this.handleSelection(type)}
-              checked={this.state.value === type}
+              type="radio" name="curated_filter" id={db} value={db}
+              onChange={() => this.handleSelection(db)}
+              checked={this.state.value === db}
             />
-            <label htmlFor={type}>{type} <small>({types[type]})</small></label>
+            <label htmlFor={db}>{label[db]} <small>({databases[db]})</small></label>
           </div>
         ))
         }
@@ -82,12 +80,12 @@ const getUrlFor = createSelector(
         }
         return acc;
       }, []);
-    parameters.push('interpro_status');
+    parameters.push('group_by=source_database');
     return resolve(
       format({protocol, hostname, port, pathname: root}),
       `${(root + pathname)}?${parameters.join('&')}`
-        .replace('/integrated', '')
-        .replace('/unintegrated', ''),
+        .replace('/swissprot', '/uniprot')
+        .replace('/trembl', '/uniprot'),
     );
   }
 );
@@ -100,5 +98,5 @@ const mapStateToProps = createSelector(
 
 export default connect(mapStateToProps, {goToLocation})(loadData({
   getUrl: getUrlFor,
-  propNamespace: 'Integrated',
-})(IntegratedFilter));
+  propNamespace: 'Reviewed',
+})(CurationFilter));

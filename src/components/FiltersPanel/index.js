@@ -26,7 +26,7 @@ const FilterPanel = ({label, collapsed, onCollapse, children}) => (
 );
 FilterPanel.propTypes = {
   label: T.string.isRequired,
-  collapsed: T.boolean,
+  collapsed: T.bool,
   onCollapse: T.func,
   children: T.any,
 };
@@ -41,7 +41,7 @@ class FiltersPanel extends Component {
 
   }
   componentWillMount(){
-    this.setState({filters: this.props.children.map(() => true)});
+    this.setState({filters: this.props.children.map(() => false)});
   }
   collapseAll = () => {
     this.setState({filters: this.props.children.map(() => true)});
