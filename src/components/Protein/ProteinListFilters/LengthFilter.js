@@ -42,7 +42,7 @@ class LengthFilter extends Component {
       const vals = [+this.input1.value, +this.input2.value].sort((a, b) => a - b);
       this.setState({from: vals[0], to: vals[1]});
       const {pathname, search} = this.props;
-      search.protein_lenght = `${this.state.from}-${this.state.to}`;
+      search.protein_length = `${this.state.from}-${this.state.to}`;
       this.props.goToLocation({
         pathname,
         search,

@@ -39,14 +39,6 @@ class TaxonomyFilter extends Component {
     return (
       <div style={{overflowX: 'hidden'}}>
         { Object.keys(taxes).sort().map((tax, i) => {
-          let taxObj;
-          try {
-            taxObj = JSON.parse(tax);
-            taxObj.counter = taxes[tax];
-            tax = taxObj.taxid;
-          } catch (e){
-            taxObj = null;
-          }
           return (
               <div key={i}>
                 <input
@@ -55,8 +47,8 @@ class TaxonomyFilter extends Component {
                   checked={(!search.tax_id && tax === 'ALL') || search.tax_id === tax}
                 />
                 <label htmlFor={tax}>
-                  {taxObj ? taxObj.scientificname : tax}
-                  <small> ({taxObj ? taxObj.counter : taxes[tax]})</small>
+                  {tax}
+                  <small> ({taxes[tax]})</small>
                 </label>
               </div>
           );
