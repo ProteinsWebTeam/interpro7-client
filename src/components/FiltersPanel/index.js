@@ -41,7 +41,10 @@ class FiltersPanel extends Component {
 
   }
   componentWillMount(){
-    this.setState({filters: this.props.children.map(() => false)});
+    const children = this.props.children.length ?
+      this.props.children :
+      [this.props.children];
+    this.setState({filters: children.map(() => false)});
   }
   collapseAll = () => {
     this.setState({filters: this.props.children.map(() => true)});
@@ -52,13 +55,17 @@ class FiltersPanel extends Component {
     this.setState(state);
   }
   render() {
+    const children = this.props.children.length ?
+      this.props.children :
+      [this.props.children];
     return (
       <div className={f('row')} style={{maxHeight: '200px', marginBottom: '30px'}}>
         <div className={f('shrink', 'columns')}>
           <h5>Filter By</h5>
           <button onClick={this.collapseAll}>Collapse All ▾</button>
         </div>
-        {this.props.children.map((child, i) => (
+        {
+          children.map((child, i) => (
           <FilterPanel
             key={i}
             label={child.props.label}

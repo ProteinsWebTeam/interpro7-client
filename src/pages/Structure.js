@@ -11,8 +11,10 @@ import Table, {Column, SearchBox, PageSizeSelector, Exporter}
   from 'components/Table';
 
 import {removeLastSlash, buildLink} from 'utils/url';
+import MemberDBTabs from 'components/Entry/MemberDBTabs';
 
 import {PDBeLink} from 'components/ExtLink';
+import StructureListFilters from 'components/Structure/StructureListFilters';
 
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
@@ -69,69 +71,72 @@ const List = ({
     };
   }
   return (
-    <Table
-      dataTable={_payload.results}
-      isStale={isStale}
-      actualSize={_payload.count}
-      query={search}
-      pathname={pathname}
-      pdbsumPath = "www.ebi.ac.uk/pdbsum/"
-      notFound={notFound}
-    >
-      <Exporter>
-        <ul>
-          <li>
-            <a
-              href={`${''}&format=json`}
-              download="proteins.json"
-            >JSON</a><br/></li>
-          <li><a href={''}>Open in API web view</a></li>
-        </ul>
-      </Exporter>
-      <PageSizeSelector/>
-      <SearchBox
-        search={search.search}
+    <div>
+      <StructureListFilters /> <hr/>
+      <Table
+        dataTable={_payload.results}
+        isStale={isStale}
+        actualSize={_payload.count}
+        query={search}
         pathname={pathname}
+        pdbsumPath = "www.ebi.ac.uk/pdbsum/"
+        notFound={notFound}
       >
-        Search structures
-      </SearchBox>
-      <Column
-        accessKey="accession"
-        renderer={(acc/*: string */) => (
-          <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-            {acc}
-          </Link>
-        )}
-      >
-        Accession
-      </Column>
-      <Column
-        accessKey="name"
-        renderer={
-          (name/*: string */, {accession}/*: {accession: string} */) => (
-            <Link to={`${removeLastSlash(pathname)}/${accession}`}>
-              {name}
+        <Exporter>
+          <ul>
+            <li>
+              <a
+                href={`${''}&format=json`}
+                download="proteins.json"
+              >JSON</a><br/></li>
+            <li><a href={''}>Open in API web view</a></li>
+          </ul>
+        </Exporter>
+        <PageSizeSelector/>
+        <SearchBox
+          search={search.search}
+          pathname={pathname}
+        >
+          Search structures
+        </SearchBox>
+        <Column
+          accessKey="accession"
+          renderer={(acc/*: string */) => (
+            <Link to={`${removeLastSlash(pathname)}/${acc}`}>
+              {acc}
             </Link>
-          )
-        }
-      >
-        Name
-      </Column>
-      <Column
-        accessKey="accession"
-        defaultKey="structureAccession"
-        renderer={(acc/*: string */) => (
-          <PDBeLink id={acc}>
-            <img src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${acc}/traces.jpg`}
-              alt="structure image"
-              style={{maxWidth: '33%'}}
-            />
-          </PDBeLink>
-        )}
-      >
-        Structure
-      </Column>
-    </Table>
+          )}
+        >
+          Accession
+        </Column>
+        <Column
+          accessKey="name"
+          renderer={
+            (name/*: string */, {accession}/*: {accession: string} */) => (
+              <Link to={`${removeLastSlash(pathname)}/${accession}`}>
+                {name}
+              </Link>
+            )
+          }
+        >
+          Name
+        </Column>
+        <Column
+          accessKey="accession"
+          defaultKey="structureAccession"
+          renderer={(acc/*: string */) => (
+            <PDBeLink id={acc}>
+              <img src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${acc}/traces.jpg`}
+                alt="structure image"
+                style={{maxWidth: '33%'}}
+              />
+            </PDBeLink>
+          )}
+        >
+          Structure
+        </Column>
+      </Table>
+    </div>
   );
 };
 List.propTypes = propTypes;
@@ -170,7 +175,10 @@ const InnerSwitch = ({match, ...props}) => (
     {...props}
     base={match}
     indexRoute={List}
-    childRoutes={[{path: /^\d[a-zA-Z\d]{3}$/, component: Summary}]}
+    childRoutes={[
+      {path: /^\d[a-zA-Z\d]{3}$/, component: Summary},
+      {path: 'entry', component: List},
+    ]}
   />
 );
 InnerSwitch.propTypes = {
@@ -182,7 +190,10 @@ class Structure extends PureComponent {
     return (
       <main>
         <div className={f('row')}>
-          <div className={f('large-12', 'columns')}>
+          <div className={f('shrink', 'columns')}>
+            <MemberDBTabs/>
+          </div>
+          <div className={f('columns')}>
             <Switch
               {...this.props}
               base="structure"
