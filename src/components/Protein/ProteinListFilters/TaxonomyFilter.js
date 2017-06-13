@@ -38,8 +38,7 @@ class TaxonomyFilter extends Component {
     }
     return (
       <div style={{overflowX: 'hidden'}}>
-        { Object.keys(taxes).sort().map((tax, i) => {
-          return (
+        { Object.keys(taxes).sort().map((tax, i) => (
               <div key={i}>
                 <input
                   type="radio" name="entry_type" id={tax} value={tax}
@@ -51,8 +50,7 @@ class TaxonomyFilter extends Component {
                   <small> ({taxes[tax]})</small>
                 </label>
               </div>
-          );
-        })
+          ))
         }
       </div>
     );

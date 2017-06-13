@@ -12,8 +12,8 @@ import ExperimentTypeFilter from './ExperimentTypeFilter';
 const StructureListFilters = () => (
   <FiltersPanel>
     <ExperimentTypeFilter label="Experiment Type" />
-    {/*<TaxonomyFilter label="Taxonomy" />*/}
-    {/*<LengthFilter label="Protein Length"/>*/}
+    {/* <TaxonomyFilter label="Taxonomy" />*/}
+    {/* <LengthFilter label="Protein Length"/>*/}
   </FiltersPanel>
 );
 const mapStateToProps = createSelector(

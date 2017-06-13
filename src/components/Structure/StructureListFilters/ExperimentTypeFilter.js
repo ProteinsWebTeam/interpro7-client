@@ -38,8 +38,7 @@ class ExperimentTypeFilter extends Component {
     }
     return (
       <div style={{overflowX: 'hidden'}}>
-        { Object.keys(types).sort().map((type, i) => {
-          return (
+        { Object.keys(types).sort().map((type, i) => (
               <div key={i}>
                 <input
                   type="radio" name="experiment_type" id={type} value={type}
@@ -54,8 +53,7 @@ class ExperimentTypeFilter extends Component {
                   <small> ({types[type]})</small>
                 </label>
               </div>
-          );
-        })
+          ))
         }
       </div>
     );

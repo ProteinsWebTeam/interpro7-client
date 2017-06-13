@@ -10,7 +10,7 @@ import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 import Table, {Column, SearchBox, PageSizeSelector, Exporter}
   from 'components/Table';
 
-import {removeLastSlash, buildLink} from 'utils/url';
+import {removeLastSlash} from 'utils/url';
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
 
 import {PDBeLink} from 'components/ExtLink';

@@ -46,8 +46,10 @@ class FiltersPanel extends Component {
       [this.props.children];
     this.setState({filters: children.map(() => false)});
   }
-  collapseAll = () => {
-    this.setState({filters: this.props.children.map(() => true)});
+  toggleAll = () => {
+    const toCollapse = Object.values(this.state.filters)
+      .reduce((acc, v) => v && acc, true);
+    this.setState({filters: this.props.children.map(() => !toCollapse)});
   }
   toggleFilter = (i) => {
     const state = this.state;
@@ -58,11 +60,15 @@ class FiltersPanel extends Component {
     const children = this.props.children.length ?
       this.props.children :
       [this.props.children];
+    const toCollapse = Object.values(this.state.filters)
+      .reduce((acc, v) => v && acc, true);
     return (
       <div className={f('row')} style={{maxHeight: '200px', marginBottom: '30px'}}>
         <div className={f('shrink', 'columns')}>
           <h5>Filter By</h5>
-          <button onClick={this.collapseAll}>Collapse All ▾</button>
+          <button onClick={this.toggleAll}>
+            {toCollapse ? 'Show All ▸' : 'Collapse All ▾'}
+            </button>
         </div>
         {
           children.map((child, i) => (
