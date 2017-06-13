@@ -3,8 +3,6 @@ import T from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 
-import {goToLocation} from 'actions/creators';
-
 // get the next level in the pathname, after the base
 const getLevel = (pathname/*: string*/, base/*: ?string*/)/*: ?string */ => {
   let baseMatched = !base;// false if a base is defined, true if no base
@@ -36,7 +34,6 @@ const getComponent = (
 const defaultCatchAll = () => <div>404</div>;
 
 const Switch = ({
-  dispatch,
   indexRoute,
   childRoutes = [],
   catchAll = defaultCatchAll,
@@ -45,12 +42,10 @@ const Switch = ({
 }) => {
   // get the URL level
   const level = getLevel(props.location.pathname, base.toLowerCase());
-  // redirect
-  const redirect = to => dispatch(goToLocation(to));
   // get the component to render according to the level
   const Component = getComponent(level, indexRoute, childRoutes) || catchAll;
   //
-  return <Component {...props} redirect={redirect} match={level} />;
+  return <Component {...props} match={level} />;
 };
 Switch.propTypes = {
   indexRoute: T.func.isRequired,
@@ -60,17 +55,22 @@ Switch.propTypes = {
     }),
     T.array,
   ])/* any Iterable, like a Set or an Array */,
-  dispatch: T.func.isRequired,
   catchAll: T.func,
   base: T.string,
   location: T.shape({
     pathname: T.string.isRequired,
   }).isRequired,
+  newLocation: T.shape({
+    description: T.object.isRequired,
+    search: T.object.isRequired,
+    hash: T.string.isRequired,
+  }).isRequired,
 };
 
 const mapStateToProps = createSelector(
   state => state.location,
-  location => ({location})
+  state => state.newLocation,
+  (location, newLocation) => ({location, newLocation}),
 );
 
 export default connect(mapStateToProps)(Switch);

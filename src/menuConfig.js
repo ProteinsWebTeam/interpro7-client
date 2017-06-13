@@ -1,26 +1,26 @@
 export const EBI = [
   {
-    to: 'https://www.ebi.ac.uk',
+    href: 'https://www.ebi.ac.uk',
     icon: 'H',
     name: 'EMBL-EBI',
   },
   {
-    to: 'https://www.ebi.ac.uk/services',
+    href: 'https://www.ebi.ac.uk/services',
     icon: '(',
     name: 'Services',
   },
   {
-    to: 'https://www.ebi.ac.uk/research',
+    href: 'https://www.ebi.ac.uk/research',
     icon: ')',
     name: 'Research',
   },
   {
-    to: 'https://www.ebi.ac.uk/training',
+    href: 'https://www.ebi.ac.uk/training',
     icon: 't',
     name: 'Training',
   },
   {
-    to: 'https://www.ebi.ac.uk/about',
+    href: 'https://www.ebi.ac.uk/about',
     icon: 'i',
     name: 'About us',
   },
@@ -28,7 +28,6 @@ export const EBI = [
 
 export const entities = [
   {
-    to: '/entry/interpro/',
     newTo: {
       description: {
         mainType: 'entry',
@@ -38,7 +37,6 @@ export const entities = [
     name: 'Entry',
   },
   {
-    to: '/protein/uniprot/',
     newTo: {
       description: {
         mainType: 'protein',
@@ -48,7 +46,6 @@ export const entities = [
     name: 'Protein',
   },
   {
-    to: '/structure/pdb/',
     newTo: {
       description: {
         mainType: 'structure',
@@ -58,7 +55,6 @@ export const entities = [
     name: 'Structure',
   },
   {
-    to: '/proteome/',
     newTo: {
       description: {
         mainType: 'proteome',
@@ -67,7 +63,6 @@ export const entities = [
     name: 'Proteome',
   },
   {
-    to: '/pathway/',
     newTo: {
       description: {
         mainType: 'pathway',
@@ -79,82 +74,142 @@ export const entities = [
 
 export const singleEntity = [
   {
-    to: '/',
+    newTo(location) {
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          focusType: null,
+          focusDB: null,
+        },
+      };
+    },
     name: 'overview',
   },
   {
-    to: '/entry/interpro',
+    newTo(location) {
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          focusType: 'entry',
+          focusDB: 'InterPro',
+        },
+      };
+    },
     name: 'entries',
     counter: 'entries',
   },
   {
-    to: '/protein/uniprot',
+    newTo(location) {
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          focusType: 'protein',
+          focusDB: 'UniProt',
+        },
+      };
+    },
     name: 'proteins',
     counter: 'proteins',
   },
   {
-    to: '/structure/pdb',
+    newTo(location) {
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          focusType: 'structure',
+          focusDB: 'PDB',
+        },
+      };
+    },
     name: 'structures',
     counter: 'structures',
   },
   {
-    to: '/species/',
+    newTo(location) {
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainDetail: 'species',
+        },
+      };
+    },
     name: 'species',
     counter: 'species',
   },
   {
-    to: '/domain_architecture/',
+    newTo(location) {
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainDetail: 'domain_architecture',
+        },
+      };
+    },
     name: 'domain architectures',
   },
   {
-    to: '/hmm_models/',
+    newTo(location) {
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainDetail: 'hmm_models',
+        },
+      };
+    },
     name: 'HMM models',
   },
 ];
 
 export const InterPro = [
   {
-    to: '/',
+    newTo: {description: {}},
     icon: 'H',
     name: 'Home',
   },
   {
-    to: '/search/',
+    newTo: {description: {mainType: 'search'}},
     icon: '1',
     name: 'Search',
     iconClass: 'functional',
   },
   {
-    to: '/browse/',
+    newTo: {description: {other: 'browse'}},
     icon: 'b',
     name: 'Browse',
     iconClass: 'functional',
     options: entities,
   },
   {
-    to: '/release_notes/',
+    newTo: {description: {other: 'release_notes'}},
     icon: '0',
     name: 'Release Notes',
     iconClass: 'functional',
   },
   {
-    to: '/download/',
+    newTo: {description: {other: 'download'}},
     icon: '=',
     name: 'Download',
     iconClass: 'functional',
   },
   {
-    to: '/help/',
+    newTo: {description: {other: 'help'}},
     icon: '?',
     name: 'Help',
   },
   {
-    to: '/about/',
+    newTo: {description: {other: 'about'}},
     icon: 'i',
     name: 'About',
   },
   {
-    to: '/settings/',
+    newTo: {description: {other: 'settings'}},
     icon: 's',
     name: 'Settings',
     iconClass: 'functional',

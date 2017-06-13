@@ -87,7 +87,7 @@ InterproSymbol.propTypes = {
 };
 
 const Title = (
-  {metadata, pathname}
+  {metadata, mainType}
   /*: {
     metadata: {
       name: {name: string, short: ?string},
@@ -100,10 +100,10 @@ const Title = (
       release_date?: string,
       chains?: Array<string>,
     },
-    pathname: string
-  }*/
+    mainType: string,
+  } */
 ) => {
-  const isEntry = pathname.startsWith('entry');
+  const isEntry = mainType === 'entry';
   return (
     <div>
       {
@@ -144,7 +144,7 @@ const Title = (
 };
 Title.propTypes = {
   metadata: T.object.isRequired,
-  pathname: T.string.isRequired,
+  mainType: T.string.isRequired,
 };
 
 export default Title;

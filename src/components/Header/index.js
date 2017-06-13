@@ -8,7 +8,7 @@ import classnames from 'classnames/bind';
 import {openSideNav} from 'actions/creators';
 
 import Link from 'components/generic/Link';
-import DynamicMenu from 'components/Menu/DynamicMenu';
+import InterproMenu from 'components/Menu/InterproMenu';
 import Title from './Title';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 import EBIHeader, {EbiSkipToDiv} from 'components/EBIHeader';
@@ -166,7 +166,7 @@ class Header extends PureComponent {
   };
 
   render() {
-    const {pathname, stickyMenuOffset: offset, stuck} = this.props;
+    const {stickyMenuOffset: offset, stuck} = this.props;
     return (
       <header
         id={ebiGlobalStyles['local-masthead']}
@@ -178,7 +178,7 @@ class Header extends PureComponent {
         <div className={styleBundle('masthead', 'row')}>
           <Title reduced={false} />
           <SideIcons reduced={false} stuck={stuck} />
-          <DynamicMenu pathname={pathname} />
+          <InterproMenu className={styleBundle('menu', 'interpro-menu')} />
         </div>
       </header>
     );
@@ -187,7 +187,6 @@ class Header extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  state => state.location.pathname,
-  (stuck, pathname) => ({stuck, pathname})
+  (stuck) => ({stuck})
 );
 export default connect(mapStateToProps)(Header);

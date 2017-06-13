@@ -58,7 +58,7 @@ const MaskSvgIcons = () => (
 );
 
 const InterproGraphic = () => (
-  <svg viewBox="0 0 150 120" >
+  <svg viewBox="0 0 150 120">
     <line x1="20" y1="0" x2="20" y2="130" strokeWidth="3" stroke="#cacaca"/>
     <line x1="50" y1="0" x2="50" y2="130" strokeWidth="3" stroke="#cacaca"/>
     <line x1="80" y1="0" x2="80" y2="130" strokeWidth="3" stroke="#cacaca"/>
@@ -108,8 +108,11 @@ const LatestEntry = ({entry}) => (
       >
         <div className={f('list-title')}>
           {entry.name}
-          <span>({entry.accession})</span> -
-          <i>{entry.counter} proteins matched</i>
+          <span>
+            ({entry.accession})
+          </span> — <i>
+            {entry.counter} proteins matched
+          </i>
           <br/>
         </div>
       </Link>
@@ -129,8 +132,9 @@ const LatestEntry = ({entry}) => (
                 className={f('list-sign')}
               >
                 {c.accession}
-              </Link>
-              ({entry.contributing.length} contributing signature)
+              </Link> ({entry.contributing.length} contributing signature{
+                entry.contributing.length > 1 ? 's' : ''
+              })
             </small>
           </div>
         ))
@@ -277,15 +281,12 @@ const Home = () => (
                     </div>
                   ))
                 }
-
               </div>
-
-              <Link to="/browse/Goterms" className={f('button')}>View all Go terms</Link>
-
+              <Link href="interpro7/browse/Goterms" className={f('button')}>
+                View all Go terms
+              </Link>
             </div>
           </Tabs>
-
-
         </div>
       </div>
 

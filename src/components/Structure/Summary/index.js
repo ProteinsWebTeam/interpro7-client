@@ -1,9 +1,12 @@
 // @flow
 import React, {PureComponent} from 'react';
 import T from 'prop-types';
+
 import Title from 'components/Title';
 import {PDBeLink} from 'components/ExtLink';
 import Embed from 'components/Embed';
+
+import loadWebComponent from 'utils/loadWebComponent';
 
 import f from 'styles/foundation';
 import pdbLogo from 'images/pdbe.png';
@@ -18,16 +21,28 @@ class SummaryStructure extends PureComponent {
     location: T.shape({
       pathname: T.string.isRequired,
     }).isRequired,
-  };
+  }
+
+  componentWillMount() {
+    const pdbComponents = () => import(
+      /* webpackChunkName: "pdb-web-components" */'pdb-web-components'
+    );
+    loadWebComponent(
+      () => pdbComponents().then(m => m.PdbDataLoader),
+    ).as('pdb-data-loader');
+    loadWebComponent(
+      () => pdbComponents().then(m => m.PdbPrints),
+    ).as('pdb-prints');
+  }
 
   render() {
-    const {data: {metadata}, location: {pathname}} = this.props;
+    const {data: {metadata}} = this.props;
     return (
       <div className={f('sections')}>
         <section>
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
-              <Title metadata={metadata} pathname={pathname} />
+              <Title metadata={metadata} mainType={'structure'} />
               <h4>Summary</h4>
               <pdb-prints size="48">
                 <pdb-data-loader pdbid={metadata.accession} />

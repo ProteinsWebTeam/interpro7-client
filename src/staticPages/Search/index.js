@@ -1,7 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
 
-import Switch from 'components/generic/Switch';
+import Switch from 'components/generic/NewSwitch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import SearchResults from 'components/SearchResults';
@@ -36,8 +36,8 @@ IPScanSearchAndStatus.preload = () => {
 };
 
 const routes = new Set([
-  {path: 'text', component: SearchByText},
-  {path: 'sequence', component: IPScanSearchAndStatus},
+  {value: 'text', component: SearchByText},
+  {value: 'sequence', component: IPScanSearchAndStatus},
 ]);
 
 const RedirectToText = () => (
@@ -76,7 +76,7 @@ const Search = () => (
         <div className={f('tabs', 'tabs-content')}>
           <div className={f('tabs-panel', 'is-active')}>
             <Switch
-              base="search"
+              locationSelector={l => l.description.mainDB}
               indexRoute={RedirectToText}
               childRoutes={routes}
             />

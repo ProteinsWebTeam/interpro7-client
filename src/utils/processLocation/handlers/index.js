@@ -71,11 +71,13 @@ const memberDB = new Set([
   {name: 'prodom', re: /PD[A-Z0-9]{6}/i, type: 'entry'},
   {name: 'prosite', re: /PS[0-9]{5}/i, type: 'entry'},
   {name: 'patterns', re: /PS[0-9]{5}/i, type: 'entry'},
-  {name: 'profiles', re: /PS[0-9]{5}/i, type: 'entry'},
+  {name: 'profiles', re: /PS[0-9]{5}/i, type: 'entry'}, // TODO: check which one
+  {name: 'profile', re: /PS[0-9]{5}/i, type: 'entry'}, // TODO: is correct
   {name: 'sfld', re: /sfldg\d{5}/i, type: 'entry'},
   {name: 'smart', re: /SM[0-9]{5}/i, type: 'entry'},
   {name: 'ssf', re: /SSF[0-9]{5,6}/i, type: 'entry'},
   {name: 'tigrfams', re: /TIGR[0-9]{5}/i, type: 'entry'},
+  {name: 'mobidblt', re: /\w+/, type: 'entry'},
 ]);
 const interPro = {name: 'interpro', re: /IPR[0-9]{6}/i, type: 'entry'};
 

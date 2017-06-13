@@ -23,10 +23,10 @@ const InterproMenu = (
 ) => (
   <ul className={className}>
     {children}
-    {InterPro.map(({to, name, icon, iconClass = 'generic', options}) => (
+    {InterPro.map(({newTo, name, icon, iconClass = 'generic', options}) => (
       includeSubMenus && options ?
         <SubMenu
-          key={to}
+          key={name}
           pathname={pathname}
           options={options}
           className={className}
@@ -40,8 +40,8 @@ const InterproMenu = (
           }
           {name}
         </SubMenu> :
-        <li key={to}>
-          <MenuItem to={to}>
+        <li key={name}>
+          <MenuItem newTo={newTo}>
             {
               icon &&
               <i

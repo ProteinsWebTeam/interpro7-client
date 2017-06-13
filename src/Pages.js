@@ -1,6 +1,7 @@
+// @flow
 import React from 'react';
 
-import Switch from 'components/generic/Switch';
+import Switch from 'components/generic/NewSwitch';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 // Main pages
@@ -45,20 +46,20 @@ const NotFound = createAsyncComponent(
 );
 
 const pages = new Set([
-  {path: 'entry', component: Entry},
-  {path: 'protein', component: Protein},
-  {path: 'structure', component: Structure},
-  {path: 'search', component: Search},
-  {path: 'about', component: About},
-  {path: 'browse', component: Browse},
-  {path: 'help', component: Help},
-  {path: 'contact', component: Contact},
-  {path: 'settings', component: Settings},
-  {path: '404', component: NotFound},
+  {value: 'entry', component: Entry},
+  {value: 'protein', component: Protein},
+  {value: 'structure', component: Structure},
+  {value: 'search', component: Search},
+  {value: 'about', component: About},
+  {value: 'browse', component: Browse},
+  {value: 'help', component: Help},
+  {value: 'contact', component: Contact},
+  {value: 'settings', component: Settings},
 ]);
 
-const Pages = props => (
+const Pages = (props/*: Object */) => (
   <Switch
+    locationSelector={l => l.description.other || l.description.mainType}
     indexRoute={Home}
     childRoutes={pages}
     catchAll={NotFound}

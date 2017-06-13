@@ -13,6 +13,7 @@ import Title from 'components/Title';
 
 import f from 'styles/foundation';
 import loadWebComponent from 'utils/loadWebComponent';
+
 const webComponents = [];
 
 class SummaryEntry extends Component {
@@ -36,7 +37,7 @@ class SummaryEntry extends Component {
          literature: Object,
        }
      },
-     location: {pathname: string},
+     location: {description: {mainType: string}},
    };
   */
   componentWillMount() {
@@ -67,13 +68,16 @@ class SummaryEntry extends Component {
   }
 
   render() {
-    const {data: {metadata}, location: {pathname}} = this.props;
+    const {
+      data: {metadata},
+      location: {description: {mainType}},
+    } = this.props;
     return (
       <div className={f('sections')}>
         <section>
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
-              <Title metadata={metadata} pathname={pathname}/>
+              <Title metadata={metadata} mainType={mainType}/>
               <interpro-hierarchy
                 accession={metadata.accession}
                 hideafter="2"
@@ -129,7 +133,9 @@ SummaryEntry.propTypes = {
     metadata: T.object.isRequired,
   }),
   location: T.shape({
-    pathname: T.string.isRequired,
+    description: T.shape({
+      mainAccession: T.string.isRequired,
+    }).isRequired,
   }).isRequired,
 };
 

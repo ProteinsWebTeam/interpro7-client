@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 
-import Switch from 'components/generic/Switch';
+import Switch from 'components/generic/NewSwitch';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
@@ -12,8 +12,6 @@ import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 import Table, {
   Column, SearchBox, PageSizeSelector, Exporter,
 } from 'components/Table';
-
-import {removeLastSlash} from 'utils/url';
 
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
@@ -26,17 +24,17 @@ const propTypes = {
   }).isRequired,
   isStale: T.bool.isRequired,
   location: T.shape({
-    pathname: T.string.isRequired,
+    description: T.object.isRequired,
+    search: T.object.isRequired,
   }).isRequired,
 };
 
 const Overview = ({
   data: {payload, loading},
-  location: {pathname, search: {type}},
+  location: {search: {type}},
   isStale,
 }) => {
   if (loading || isStale) return <div>Loading…</div>;
-  const params = type ? `?type=${type}` : '';
   return (
     <div>
       Member databases:
@@ -44,7 +42,12 @@ const Overview = ({
         {Object.entries(payload.entries.member_databases)
           .map(([name, count]) => (
             <li key={name}>
-              <Link to={`${removeLastSlash(pathname)}/${name}${params}`}>
+              <Link
+                newTo={{
+                  description: {mainType: 'entry', mainDB: name},
+                  search: {type},
+                }}
+              >
                 {name} ({count})
               </Link>
             </li>
@@ -53,12 +56,22 @@ const Overview = ({
       </ul>
       <ul className={styles.card}>
         <li>
-          <Link to={`${removeLastSlash(pathname)}/interpro${params}`}>
+          <Link
+            newTo={{
+              description: {mainType: 'entry', mainDB: 'InterPro'},
+              search: {type},
+            }}
+          >
             InterPro ({payload.entries ? payload.entries.interpro : 0})
           </Link>
         </li>
         <li>
-          <Link to={`${removeLastSlash(pathname)}/unintegrated${params}`}>
+          <Link
+            newTo={{
+              description: {mainType: 'entry', mainIntegration: 'Unintegrated'},
+              search: {type},
+            }}
+          >
             Unintegrated ({payload.entries ? payload.entries.unintegrated : 0})
           </Link>
         </li>
@@ -80,7 +93,7 @@ class List extends Component {
   }
 
   render() {
-    const {data, isStale, location: {search, pathname}} = this.props;
+    const {data, isStale, location: {search}} = this.props;
     let _payload = data.payload;
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
@@ -95,7 +108,7 @@ class List extends Component {
         isStale={isStale}
         actualSize={_payload.count}
         query={search}
-        pathname={pathname}
+        pathname={''}
         notFound={notFound}
       >
         <Exporter>
@@ -110,15 +123,24 @@ class List extends Component {
         <PageSizeSelector />
         <SearchBox
           search={search.search}
-          pathname={pathname}
+          pathname={''}
         >
           Search entries:
         </SearchBox>
         <Column
           accessKey="accession"
-          renderer={(acc/*: string */) => (
-            <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-              {acc}
+          renderer={(accession/*: string */) => (
+            <Link
+              newTo={location => ({
+                ...location,
+                description: {
+                  mainType: location.description.mainType,
+                  mainDB: location.description.mainDB,
+                  mainAccession: accession,
+                },
+              })}
+            >
+              {accession}
             </Link>
           )}
         >
@@ -128,7 +150,16 @@ class List extends Component {
           accessKey="name"
           renderer={
             (name/*: string */, {accession}/*: {accession: string} */) => (
-              <Link to={`${removeLastSlash(pathname)}/${accession}`}>
+              <Link
+                newTo={location => ({
+                  ...location,
+                  description: {
+                    mainType: location.description.mainType,
+                    mainDB: location.description.mainDB,
+                    mainAccession: accession,
+                  },
+                })}
+              >
                 {name}
               </Link>
             )
@@ -166,8 +197,8 @@ const SchemaOrgData = createAsyncComponent(
 );
 
 const pages = new Set([
-  {path: 'structure', component: StructureAsync},
-  {path: 'protein', component: ProteinAsync},
+  {value: 'structure', component: StructureAsync},
+  {value: 'protein', component: ProteinAsync},
 ]);
 
 const SummaryComponent = ({data: {payload}, location}) => (
@@ -183,15 +214,16 @@ SummaryComponent.propTypes = {
 };
 
 const Summary = props => {
-  const {data: {loading, payload}, isStale, match} = props;
+  const {data: {loading, payload}, isStale} = props;
   if (loading || (isStale && !payload.metadata)) {
     return <div>Loading…</div>;
   }
   return (
     <Switch
       {...props}
-      main="entry"
-      base={match}
+      locationSelector={
+        l => l.description.mainDetail || l.description.focusType
+      }
       indexRoute={SummaryComponent}
       childRoutes={pages}
     />
@@ -226,20 +258,20 @@ const dbAccs = new RegExp(
 );
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = ({match, ...props}) => (
+const InnerSwitch = (props) => (
   <Switch
     {...props}
-    base={match}
+    locationSelector={
+      l => l.description.mainAccession || l.description.focusType
+    }
     indexRoute={List}
     childRoutes={[
-      {path: dbs, component: List},
-      {path: dbAccs, component: Summary},
+      {value: dbs, component: List},
+      {value: dbAccs, component: Summary},
     ]}
+    catchAll={List}
   />
 );
-InnerSwitch.propTypes = {
-  match: T.string,
-};
 
 const schemaProcessData = data => ({
   '@type': 'ProteinEntity',
@@ -266,7 +298,7 @@ const Entry = props => (
         }
         <Switch
           {...props}
-          base="entry"
+          locationSelector={l => l.description.mainDB}
           indexRoute={Overview}
           catchAll={InnerSwitch}
         />

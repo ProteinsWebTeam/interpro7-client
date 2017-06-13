@@ -16,9 +16,9 @@ const EBIMenu = (
 ) => (
   <ul className={className}>
     {children}
-    {EBI.map(({to, name, icon, iconClass = 'generic'}) => (
-      <li key={to}>
-        <MenuItem to={to} >
+    {EBI.map(({href, name, icon, iconClass = 'generic'}) => (
+      <li key={href}>
+        <MenuItem href={href} >
           {
             icon &&
             <i

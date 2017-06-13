@@ -20,7 +20,7 @@ const SummaryProtein = (
     <section>
       <div className={f('row')}>
         <div className={f('medium-8', 'large-8', 'columns')}>
-          <Title metadata={metadata} pathname={pathname} />
+          <Title metadata={metadata} mainType={'protein'} />
           <Accession metadata={metadata} pathname={pathname} />
           <Species metadata={metadata} pathname={pathname} />
           <Length metadata={metadata} pathname={pathname} />

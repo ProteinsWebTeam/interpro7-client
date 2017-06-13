@@ -34,7 +34,9 @@ const activeClassFn = (to, activeClass) => (location, defaultMatchFn) => {
 class MenuItem extends PureComponent {
   static propTypes = {
     children: T.node.isRequired,
-    to: T.string.isRequired,
+    href: T.string,
+    to: T.string,
+    newTo: T.object,
     closeEverything: T.func.isRequired,
     disabled: T.bool,
     className: T.string,
@@ -44,22 +46,27 @@ class MenuItem extends PureComponent {
   render() {
     const {
       children,
+      href,
       to,
+      newTo,
       disabled = false,
       className,
       activeClass,
       closeEverything,
       ...props
     } = this.props;
-    const CustomLink = isExternal(to) ? BaseLink : Link;
+    const CustomLink = (!newTo && isExternal(to || href)) ? BaseLink : Link;
     return (
       <CustomLink
         to={to}
+        newTo={newTo}
         onClick={closeEverything}
         activeClass={activeClassFn(to, activeClass)}
-        className={`
-        ${className || ''} ${s('select-none', 'menu-item', {disabled})}
-      `.trim()}
+        className={
+          `${className || ''} ${
+            s('select-none', 'menu-item', {disabled})
+          }`.trim()
+        }
         {...(
           disabled ?
             {disabled: true, tabIndex: '-1', 'aria-disabled': 'true'} :

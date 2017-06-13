@@ -26,16 +26,20 @@ class SubMenu extends Component {
    props: Props;
    state: {isActive: boolean};
    */
+
   constructor(props/* : Props*/) {
     super(props);
     this.state = {isActive: false};
   }
+
   componentWillReceiveProps({visible}) {
     if (!visible) this.setState({isActive: false});
   }
+
   handleClick = () => {
     this.setState({isActive: !this.state.isActive});
-  }
+  };
+
   render() {
     const {options, className = '', children} = this.props;
     return (
@@ -56,9 +60,9 @@ class SubMenu extends Component {
               Back to InterPro menu
             </a>
           </li>
-          {options.map(({to, name}) => (
-            <li key={to}>
-              <MenuItem to={to}>
+          {options.map(({newTo, name}) => (
+            <li key={name}>
+              <MenuItem newTo={newTo}>
                 {name}
               </MenuItem>
             </li>
@@ -67,7 +71,6 @@ class SubMenu extends Component {
       </li>
     );
   }
-
 }
 SubMenu.propTypes = {
   pathname: T.string.isRequired,

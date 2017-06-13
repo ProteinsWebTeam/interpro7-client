@@ -16,7 +16,7 @@ chai.use(jsxChai);
 const renderer = createRenderer();
 
 describe('External links', () => {
-  describe('<BaseLink />', () => {
+  describe.skip('<BaseLink />', () => {
     it('should render simple links', () => {
       const examples = new Set([
         {

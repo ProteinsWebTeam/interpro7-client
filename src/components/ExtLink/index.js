@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: [1, {ignore: [3]}] */
 import React from 'react';
+import Link from 'components/generic/Link';
 import T from 'prop-types';
 
 const types = {
@@ -10,17 +11,16 @@ const types = {
 };
 
 export const BaseLink = ({
-  id, pattern, href, to, target, rel, className, children, activeClass, ...rest
+  id, pattern, href, newTo, to, rel, className, children, activeClass, ...rest
 }) => {
-  const props = {href: href || to || pattern.replace('{id}', id)};
-  if (target) props.target = target;
+  const props = {href: href || newTo || to || (pattern || '').replace('{id}', id)};
   if (className) props.className = className;
   if (rel) {
     props.rel = (rel.includes('noopener')) ? rel : `${rel} noopener`;
   } else {
     props.rel = 'noopener';
   }
-  return <a {...rest} {...props}>{children}</a>;
+  return <Link {...rest} {...props}>{children}</Link>;
 };
 BaseLink.propTypes = {
   id: T.oneOfType([T.string, T.number]),
@@ -28,6 +28,7 @@ BaseLink.propTypes = {
   href: T.string,
   rel: T.string,
   to: T.string,
+  newTo: T.object,
   target: T.string,
   className: T.string,
   activeClass: T.oneOfType([T.string, T.func]),
