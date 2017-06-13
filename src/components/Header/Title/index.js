@@ -12,11 +12,11 @@ import ipro from 'styles/interpro-new.css';
 import localStyles from './style.css';
 const styles = foundationPartial(ebiGlobalStyles, ipro, localStyles);
 
-const Title = ({pathname, data = null, loading, stuck}) => {
+const Title = ({data = null, loading, stuck}) => {
   let subtitle = 'Classification of protein families';
   let small1;
   let small2;
-  if (pathname !== '/' && data !== null) {
+  if (data !== null) {
     if (data.metadata){
       subtitle = data.metadata.name.name;
       small1 = (data.metadata.source_database.toLowerCase() === 'interpro') ?
@@ -50,7 +50,6 @@ const Title = ({pathname, data = null, loading, stuck}) => {
   );
 };
 Title.propTypes = {
-  pathname: T.string.isRequired,
   data: T.object,
   loading: T.bool.isRequired,
   stuck: T.bool.isRequired,

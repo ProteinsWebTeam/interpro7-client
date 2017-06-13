@@ -13,7 +13,7 @@ import fonts from 'styles/ebi/fonts.css';
 const iconStyle = foundationPartial(fonts);
 
 const InterproMenu = (
-  {pathname, className, includeSubMenus = false, children}
+  {className, includeSubMenus = false, children}
   /*: {
     pathname: string,
     className?: string,
@@ -27,7 +27,7 @@ const InterproMenu = (
       includeSubMenus && options ?
         <SubMenu
           key={name}
-          pathname={pathname}
+          pathname={''}
           options={options}
           className={className}
         >
@@ -56,7 +56,6 @@ const InterproMenu = (
   </ul>
 );
 InterproMenu.propTypes = {
-  pathname: T.string.isRequired,
   className: T.string,
   includeSubMenus: T.bool,
   children: T.any,

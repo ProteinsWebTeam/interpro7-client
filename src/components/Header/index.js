@@ -160,7 +160,6 @@ const styleForHeader = (supportsSticky, offset, stuck) => {
 
 class Header extends PureComponent {
   static propTypes = {
-    pathname: T.string.isRequired,
     stickyMenuOffset: T.number.isRequired,
     stuck: T.bool.isRequired,
   };
