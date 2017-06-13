@@ -56,10 +56,14 @@ const Footer = (
               Previous <span className={f('show-for-sr')}>You're on page</span>
             </li> :
             <li>
-              <Link to={{pathname, search: {
-                page: page - 1,
-                page_size: pageSize,
-                search: pagination.search}}}
+              <Link to={{
+                pathname,
+                search: {
+                  ...pagination,
+                  page: page - 1,
+                  page_size: pageSize,
+                },
+              }}
               >Previous</Link>
             </li>
           }
@@ -74,16 +78,13 @@ const Footer = (
                   </li>
                 );
               }
+              const search = {...pagination, page: e, page_size: pageSize};
               return (
                 <li key={i} className={page === e ? f('current') : ''}>
                   <Link
                     to={{
                       pathname,
-                      search: {
-                        page: e,
-                        page_size: pageSize,
-                        search: pagination.search,
-                      },
+                      search,
                     }}
                   >
                     {e}
@@ -97,10 +98,14 @@ const Footer = (
               Next <span className={f('show-for-sr')}>You're on page</span>
             </li> :
             <li>
-              <Link to={{pathname, search: {
-                page: page + 1,
-                page_size: pageSize,
-                search: pagination.search}}}
+              <Link to={{
+                pathname,
+                search: {
+                  ...pagination,
+                  page: page + 1,
+                  page_size: pageSize,
+                },
+              }}
               >Next</Link>
             </li>
           }
