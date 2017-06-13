@@ -7,25 +7,30 @@ import Link from 'components/generic/Link';
 import {createSelector} from 'reselect';
 import {entities, singleEntity} from 'menuConfig';
 import loadData from 'higherOrder/loadData';
-import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 
 import styles from './style.css';
 import {foundationPartial} from 'styles/foundation';
 
 const f = foundationPartial(styles);
+const NOT_FOUND = -1;
 
 const BrowseTabs = ({pathname, data: {loading, payload}}) => {
   const parts = pathname.split('/');
   const endpoints = ['entry', 'protein', 'structure'];
-  const NOT_FOUND = -1;
+  let isRelativePath = false;
+  let base = pathname;
   if (parts.length > 1 && endpoints.indexOf(parts[1]) !== NOT_FOUND) {
     let tabs = [];
     if (!loading) {
       if (payload && 'results' in payload) {
         tabs = entities;
       }
-      if (payload && 'metadata' in payload) {
-        tabs = singleEntity;
+      if (payload && 'metadata' in payload || parts[4] === 'domain_architecture') {
+        tabs = singleEntity.filter(a => a.to.indexOf(parts[1]) === NOT_FOUND);
+        base = tabs.reduce(
+          (acc, v) => v.to === '/' ? acc : acc.replace(v.to, ''), base
+        );
+        isRelativePath = true;
       }
     }
     return (
@@ -36,7 +41,7 @@ const BrowseTabs = ({pathname, data: {loading, payload}}) => {
               tabs.map((e, i) => (
                 <li className={f('tabs-title')} key={i}>
                   <Link
-                    to={e.to}
+                    to={isRelativePath ? base + e.to : e.to}
                     activeClass={f('is-active', 'is-active-tab')}
                   >
                     {e.name}
@@ -48,11 +53,6 @@ const BrowseTabs = ({pathname, data: {loading, payload}}) => {
           </ul>
         </div>
       </div>
-    );
-  } else if (parts.length > 1 && endpoints.indexOf(parts[1]) !== NOT_FOUND &&
-    !loading && 'metadata' in payload) {
-    return (
-      <SingleEntityMenu pathname={pathname}/>
     );
   }
   return null;

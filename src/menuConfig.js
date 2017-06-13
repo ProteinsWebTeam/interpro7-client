@@ -39,14 +39,14 @@ export const entities = [
     to: '/structure/pdb/',
     name: 'Structure',
   },
-  {
-    to: '/proteome/',
-    name: 'Proteome',
-  },
-  {
-    to: '/pathway/',
-    name: 'Pathway',
-  },
+  // {
+  //   to: '/proteome/',
+  //   name: 'Proteome',
+  // },
+  // {
+  //   to: '/pathway/',
+  //   name: 'Pathway',
+  // },
 ];
 
 export const singleEntity = [

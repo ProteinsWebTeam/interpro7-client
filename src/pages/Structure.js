@@ -10,7 +10,6 @@ import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 import Table, {Column, SearchBox, PageSizeSelector, Exporter}
   from 'components/Table';
 
-import {removeLastSlash} from 'utils/url';
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
 
 import {PDBeLink} from 'components/ExtLink';
@@ -71,71 +70,79 @@ const List = ({
     };
   }
   return (
-    <div>
-      <StructureListFilters /> <hr/>
-      <Table
-        dataTable={_payload.results}
-        isStale={isStale}
-        actualSize={_payload.count}
-        query={search}
-        pathname={pathname}
-        pdbsumPath = "www.ebi.ac.uk/pdbsum/"
-        notFound={notFound}
-      >
-        <Exporter>
-          <ul>
-            <li>
-              <a
-                href={`${''}&format=json`}
-                download="proteins.json"
-              >JSON</a><br/></li>
-            <li><a href={''}>Open in API web view</a></li>
-          </ul>
-        </Exporter>
-        <PageSizeSelector/>
-        <SearchBox
-          search={search.search}
+    <div className={f('row')}>
+      <div className={f('shrink', 'columns')}>
+        <MemberDBTabs/>
+      </div>
+      <div className={f('columns')}>
+        <StructureListFilters /> <hr/>
+        <Table
+          dataTable={_payload.results}
+          isStale={isStale}
+          actualSize={_payload.count}
+          query={search}
           pathname={pathname}
+          pdbsumPath = "www.ebi.ac.uk/pdbsum/"
+          notFound={notFound}
         >
-          Search structures
-        </SearchBox>
-        <Column
-          accessKey="accession"
-          renderer={(acc/*: string */) => (
-            <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-              {acc}
-            </Link>
-          )}
-        >
-          Accession
-        </Column>
-        <Column
-          accessKey="name"
-          renderer={
-            (name/*: string */, {accession}/*: {accession: string} */) => (
-              <Link to={`${removeLastSlash(pathname)}/${accession}`}>
-                {name}
+          <Exporter>
+            <ul>
+              <li>
+                <a
+                  href={`${''}&format=json`}
+                  download="proteins.json"
+                >JSON</a><br/></li>
+              <li><a href={''}>Open in API web view</a></li>
+            </ul>
+          </Exporter>
+          <PageSizeSelector/>
+          <SearchBox
+            search={search.search}
+            pathname={pathname}
+          >
+            Search structures
+          </SearchBox>
+          <Column
+            accessKey="accession"
+            renderer={(acc/*: string */) => (
+              <Link to={`/structure/pdb/${acc}`}>
+                {acc}
               </Link>
-            )
-          }
-        >
-          Name
-        </Column>
-        <Column
-          accessKey="accession"
-          defaultKey="structureAccession"
-          renderer={(acc/*: string */) => (
-            <PDBeLink id={acc}>
-              <img src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${acc}/traces.jpg`}
-                alt="structure image"
-                style={{maxWidth: '33%'}}
-              />
-            </PDBeLink>
-          )}
-        >
-          Structure
-        </Column>
-      </Table>
+            )}
+          >
+            Accession
+          </Column>
+          <Column
+            accessKey="name"
+            renderer={
+              (name/*: string */, {accession}/*: {accession: string} */) => (
+                <Link to={`/structure/pdb/${accession}`}>
+                  {name}
+                </Link>
+              )
+            }
+          >
+            Name
+          </Column>
+          <Column
+            accessKey="accession"
+            defaultKey="structureAccession"
+            renderer={(acc/*: string */) => (
+              <PDBeLink id={acc}>
+                <img
+                  src={
+                    `//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${acc}/traces.jpg`
+                  }
+                  alt="structure image"
+                  style={{maxWidth: '33%'}}
+                />
+              </PDBeLink>
+            )}
+          >
+            Structure
+          </Column>
+        </Table>
+      </div>
     </div>
   );
 };
@@ -189,19 +196,12 @@ class Structure extends PureComponent {
   render() {
     return (
       <main>
-        <div className={f('row')}>
-          <div className={f('shrink', 'columns')}>
-            <MemberDBTabs/>
-          </div>
-          <div className={f('columns')}>
-            <Switch
-              {...this.props}
-              base="structure"
-              indexRoute={Overview}
-              catchAll={InnerSwitch}
-            />
-          </div>
-        </div>
+        <Switch
+          {...this.props}
+          base="structure"
+          indexRoute={Overview}
+          catchAll={InnerSwitch}
+        />
       </main>
     );
   }

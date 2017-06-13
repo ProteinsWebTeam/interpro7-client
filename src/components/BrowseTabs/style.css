@@ -1,7 +1,12 @@
 .tabs {
   margin: 1em;
+  border: 0;
+  border-bottom: 1px solid #e6e6e6;
 }
 
+.tabs-title {
+  margin-right: 5px;
+}
 .tabs-title a{
   font-size: 1rem;
   background: #CCCCCC;

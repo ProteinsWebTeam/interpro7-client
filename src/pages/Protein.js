@@ -74,86 +74,91 @@ const List = ({
     Math.max(max, (result.metadata || result).length)
   ), 0);
   return (
-    <div>
-      <ProteinListFilters /><hr/>
-      <Table
-        dataTable={_payload.results}
-        isStale={isStale}
-        actualSize={_payload.count}
-        query={search}
-        pathname={pathname}
-        notFound={notFound}
-      >
-        <Exporter>
-          <ul>
-            <li>
-              <a
-                href={`${''}&format=json`}
-                download="proteins.json"
-              >JSON</a><br/></li>
-            <li><a href={`${''}`}>Open in API web view</a></li>
-          </ul>
-        </Exporter>
-        <PageSizeSelector />
-        <SearchBox
-          search={search.search}
+    <div className={f('row')}>
+      <div className={f('shrink', 'columns')}>
+        <MemberDBTabs/>
+      </div>
+      <div className={f('columns')}>
+        <ProteinListFilters /><hr/>
+        <Table
+          dataTable={_payload.results}
+          isStale={isStale}
+          actualSize={_payload.count}
+          query={search}
           pathname={pathname}
+          notFound={notFound}
         >
-          Search proteins
-        </SearchBox>
-        <Column
-          accessKey="accession"
-          renderer={(acc/*: string */) => (
-            <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-              {acc}
-            </Link>
-          )}
-        >
-          Accession
-        </Column>
-        <Column
-          accessKey="name"
-          renderer={
-            (name/*: string */, {accession}/*: {accession: string} */) => (
-              <Link to={`${removeLastSlash(pathname)}/${accession}`}>
-                {name}
+          <Exporter>
+            <ul>
+              <li>
+                <a
+                  href={`${''}&format=json`}
+                  download="proteins.json"
+                >JSON</a><br/></li>
+              <li><a href={`${''}`}>Open in API web view</a></li>
+            </ul>
+          </Exporter>
+          <PageSizeSelector />
+          <SearchBox
+            search={search.search}
+            pathname={pathname}
+          >
+            Search proteins
+          </SearchBox>
+          <Column
+            accessKey="accession"
+            renderer={(acc/*: string */) => (
+              <Link to={`/protein/uniprot/${acc}`}>
+                {acc}
               </Link>
-            )
-          }
-        >
-          Name
-        </Column>
-        <Column
-          accessKey="source_database"
-          renderer={(db/*: string */) => (
-            <Link to={buildLink(pathname, 'protein', db)}>{db}</Link>
-          )}
-        >
-          Source Database
-        </Column>
-        <Column
-          accessKey="length"
-          renderer={(length/*: number */, row) => (
-            <div
-              title={`${length} amino-acids`}
-              style={{
-                width: `${length / maxLength * SVG_WIDTH}%`,
-                padding: '0.2rem',
-                backgroundColor: colorHash.hex(row.accession),
-                borderRadius: '0.2rem',
-                textAlign: 'start',
-                overflowX: 'hidden',
-                whiteSpace: 'nowrap',
-                textOverflow: 'clip',
-              }}
-            >
-              {length} amino-acids
-            </div>
-          )}
-        >
-          Length
-        </Column>
-      </Table>
+            )}
+          >
+            Accession
+          </Column>
+          <Column
+            accessKey="name"
+            renderer={
+              (name/*: string */, {accession}/*: {accession: string} */) => (
+                <Link to={`/protein/uniprot/${accession}`}>
+                  {name}
+                </Link>
+              )
+            }
+          >
+            Name
+          </Column>
+          <Column
+            accessKey="source_database"
+            renderer={(db/*: string */) => (
+              <Link to={buildLink(pathname, 'protein', db)}>{db}</Link>
+            )}
+          >
+            Source Database
+          </Column>
+          <Column
+            accessKey="length"
+            renderer={(length/*: number */, row) => (
+              <div
+                title={`${length} amino-acids`}
+                style={{
+                  width: `${length / maxLength * SVG_WIDTH}%`,
+                  padding: '0.2rem',
+                  backgroundColor: colorHash.hex(row.accession),
+                  borderRadius: '0.2rem',
+                  textAlign: 'start',
+                  overflowX: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'clip',
+                }}
+              >
+                {length} amino-acids
+              </div>
+            )}
+          >
+            Length
+          </Column>
+        </Table>
+      </div>
     </div>
   );
 };
@@ -235,19 +240,12 @@ InnerSwitch.propTypes = {
 
 const Protein = ({...props}) => (
   <main>
-    <div className={f('row')}>
-      <div className={f('shrink', 'columns')}>
-        <MemberDBTabs/>
-      </div>
-      <div className={f('columns')}>
-        <Switch
-          {...props}
-          base="protein"
-          indexRoute={Overview}
-          catchAll={InnerSwitch}
-        />
-      </div>
-    </div>
+    <Switch
+      {...props}
+      base="protein"
+      indexRoute={Overview}
+      catchAll={InnerSwitch}
+    />
   </main>
 );
 

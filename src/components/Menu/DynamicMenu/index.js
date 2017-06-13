@@ -57,7 +57,7 @@ export default (props/*: Object */) => (
     {...props}
     className={menuStyles}
     indexRoute={InterproMenu}
-    childRoutes={typeChildRoutes}
+    // childRoutes={typeChildRoutes}
     catchAll={InterproMenu}
   />
 );
