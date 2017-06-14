@@ -55,6 +55,9 @@ const main = async () => {
 };
 
 const handleError = e => {
+  if (DEV) {
+    throw e;
+  }
   try {
     e.preventDefault();
   } catch (_) {/**/}

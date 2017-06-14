@@ -9,10 +9,21 @@ let polyfillLoader = async () => {
 
 export default importer => ({
   async as(namespace) {
+    let _ns = namespace;
+    // Check if not already defined
+    if (_ns && window.customElements.get(_ns)) return;
     await polyfillLoader();
-    if (window.customElements.get(namespace)) return;
     let webComponent = await importer();
     if (webComponent.default) webComponent = webComponent.default;
-    window.customElements.define(namespace, webComponent);
+    // if no name was specified, use default provided by WebComponent
+    if (!_ns && webComponent.is) _ns = webComponent.is;
+    // if at this point there is no name, give up
+    if (!_ns) {
+      throw new Error('Please specify a name for WebComponent');
+    }
+    // Check again, to avoid race conditions
+    if (window.customElements.get(_ns)) return;
+    window.customElements.define(_ns, webComponent);
+    return _ns;
   },
 });

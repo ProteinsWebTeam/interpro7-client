@@ -29,7 +29,19 @@ const BySpecies = ({data: {payload}}) => (
           className={f('columns', 'medium-4', 'large-4', 'text-center')}
           key={i}
         >
-          <Link to={`/protein/uniprot?tax_id=${e.tax_id}`}>
+          <Link
+            newTo={location => ({
+              description: {
+                mainType: 'protein',
+                mainDB: 'uniprot',
+              },
+              search: {
+                ...location.search,
+                tax_id: e.tax_id,
+              },
+              hash: location.hash,
+            })}
+          >
             <span
               style={{color: e.color}}
               className={f('small', 'icon', 'icon-species')}

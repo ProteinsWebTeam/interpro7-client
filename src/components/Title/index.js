@@ -43,12 +43,10 @@ export const InterproSymbol = (
   const ch = (type === 'undefined') ? '?' : type[0];
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 72 72"
       id={`type-${type}`}
       className={`${className}`}
     >
-
       <rect
         x="12" y="12" width="60" height="60"
         style={{fill: ('black'), opacity: 0.15}}
@@ -67,7 +65,9 @@ export const InterproSymbol = (
           fontWeight: 700,
           fontFamily: 'Montserrat, arial, serif',
         }}
-      >{ch}</text>
+      >
+        {ch}
+      </text>
       <text
         x="50%" y="50%" textAnchor="middle" dx="-2px" dy="20px"
         clipPath="url(#cut-off-bottom)"
@@ -77,7 +77,9 @@ export const InterproSymbol = (
           fontWeight: 700,
           fontFamily: 'Montserrat, arial, serif',
         }}
-      >{ch}</text>
+      >
+        {ch}
+      </text>
     </svg>
   );
 };
@@ -148,40 +150,3 @@ Title.propTypes = {
 };
 
 export default Title;
-/*
-
- <div>
- {metadata.type && <TypeTag type={metadata.type} full={true} />}
- <Name name={metadata.name} accession={metadata.accession} />
- <OriginDB
- source={metadata.source_database}
- pathname={pathname}
- accession={metadata.accession}
- />
- {metadata.gene && <p>Gene: {metadata.gene}</p>}
- {
- metadata.experiment_type &&
- <p>Experiment Type: {metadata.experiment_type}</p>
- }
- {
- metadata.source_organism &&
- <SourceOrganism {...metadata.source_organism} />
- }
- {
- metadata.release_date &&
- <p>Release Date: <Time date={metadata.release_date} /></p>
- }
- {
- metadata.chains && metadata.chains.length &&
- <ul>Chains:
- {metadata.chains.map(c => (
- <li key={c}>
- <Link to={buildLink(pathname, metadata.accession, c)}>
- Chain {c}
- </Link>
- </li>
- ))}
- </ul>
- }
- </div>
- */

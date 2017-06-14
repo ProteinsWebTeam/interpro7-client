@@ -7,23 +7,26 @@ import loadData from 'higherOrder/loadData';
 import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
-import {goToLocation} from 'actions/creators';
+import {goToNewLocation} from 'actions/creators';
 
 
 class IntegratedFilter extends Component {
   static propTypes = {
-    dataIntegrated: T.shape({
+    data: T.shape({
       loading: T.bool.isRequired,
-      payload: T.object,
+      payload: T.any,
     }).isRequired,
-    goToLocation: T.func.isRequired,
-    pathname: T.string,
-    search: T.object,
+    goToNewLocation: T.func.isRequired,
+    location: T.shape({
+      description: T.object,
+    }).isRequired,
   };
+
   constructor(){
     super();
     this.state = {value: null};
   }
+
   componentWillMount() {
     if (this.props.pathname.indexOf('/unintegrated') > 0) {
       this.setState({value: 'unintegrated'});
@@ -33,38 +36,46 @@ class IntegratedFilter extends Component {
       this.setState({value: 'both'});
     }
   }
-  handleSelection = (option) => {
-    let path = this.props.pathname
+
+  handleSelection = ({target: {value}}) => {
+    let path = (this.props.pathname || '')
       .replace('/integrated', '')
       .replace('/unintegrated', '');
-    this.setState({value: option});
-    if (option === 'integrated') {
+    this.setState({value});
+    if (value === 'integrated') {
       path = path.replace('/entry', '/entry/integrated');
-    } else if (option === 'unintegrated') {
+    } else if (value === 'unintegrated') {
       path = path.replace('/entry', '/entry/unintegrated');
     }
-    this.props.goToLocation({
-      pathname: path,
-      search: this.props.search,
+    this.props.goToNewLocation({
+      ...this.props.location,
+      description: {
+        ...this.props.location.description, // FIXME
+      },
     });
   };
+
   render() {
-    const {dataIntegrated: {loading, payload}} = this.props;
+    const {data: {loading, payload}} = this.props;
     const types = loading ? {} : payload;
     if (!loading) types.both = payload.integrated + payload.unintegrated;
     return (
       <div>
-
-        { Object.keys(types).sort().map((type, i) => (
-          <div key={i}>
-            <input
-              type="radio" name="interpro_state" id={type} value={type}
-              onChange={() => this.handleSelection(type)}
-              checked={this.state.value === type}
-            />
-            <label htmlFor={type}>{type} <small>({types[type]})</small></label>
-          </div>
-        ))
+        {
+          Object.keys(types).sort().map(type => (
+            <div key={type}>
+              <label>
+                <input
+                  type="radio"
+                  name="interpro_state"
+                  value={type}
+                  onChange={this._handleSelection}
+                  checked={this.state.value === type}
+                />
+                {type} <small>({types[type]})</small>
+              </label>
+            </div>
+          ))
         }
       </div>
     );
@@ -93,12 +104,10 @@ const getUrlFor = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.location.pathname,
-  state => state.location.search,
-  (pathname, search) => ({pathname, search})
+  state => state.newLocation,
+  location => ({location}),
 );
 
-export default connect(mapStateToProps, {goToLocation})(loadData({
+export default connect(mapStateToProps, {goToNewLocation})(loadData({
   getUrl: getUrlFor,
-  propNamespace: 'Integrated',
 })(IntegratedFilter));
