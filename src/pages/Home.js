@@ -4,9 +4,10 @@ import Description from 'components/Description';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import ByMemberDatabase from 'components/home/ByMemberDatabase';
 import ByEntryType from 'components/home/ByEntryType';
+import BySpecies from 'components/home/BySpecies';
 import {InterproSymbol} from 'components/Title';
 import Link from 'components/generic/Link';
-import {latests, speciesFeat, GoList} from 'staticData/home';
+import {latests, GoList} from 'staticData/home';
 import Tabs from 'components/Tabs';
 import {schedule} from 'timing-functions/src';
 import AsyncComponent, {createAsyncComponent}
@@ -43,7 +44,7 @@ const MaskSvgIcons = () => (
       height: 0,
       top: -1800,
       left: -1800,
-    /* to hide SVG on the page as display:none is not working*/
+    /* to hide SVG on the page as display:none is not working */
     }}
   >
     <defs>
@@ -223,31 +224,7 @@ const Home = () => (
             {// panel 3 - by species
             }
             <div title="by species" className={f('species-list')}>
-              <div className={f('row')}>
-                {
-                  speciesFeat.map((e, i) => (
-                    <div
-                      className={f('columns', 'medium-3', 'large-3', 'text-center')}
-                      key={i}
-                    >
-                      <a href="#" data-tooltip title={e.description}>
-                        <span
-                          style={{color: e.color}}
-                          className={f('small', 'icon', 'icon-species')}
-                          data-icon={e.icon} data-tooltip
-                        />
-                        <h6>
-                          {e.title}
-                        </h6>
-                        <p>{e.counterD} entries <br/>
-                          <small>({e.counterS} proteins)</small>
-                        </p>
-                      </a>
-                    </div>
-                  ))
-                }
-
-              </div>
+              <BySpecies />
             </div>
             {// panel4- By Go terms
             }

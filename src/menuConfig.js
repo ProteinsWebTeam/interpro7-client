@@ -147,7 +147,7 @@ export const singleEntity = [
         ...location,
         description: {
           ...location.description,
-          mainDetail: 'domain_architecture',
+          mainDetail: 'domain_architectures',
         },
       };
     },
@@ -180,7 +180,7 @@ export const InterPro = [
     iconClass: 'functional',
   },
   {
-    newTo: {description: {other: 'browse'}},
+    newTo: {description: {mainType: 'entry', mainDB: 'InterPro'}},
     icon: 'b',
     name: 'Browse',
     iconClass: 'functional',

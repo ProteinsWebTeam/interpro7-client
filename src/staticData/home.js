@@ -160,9 +160,9 @@ export const memberDB = [
     accession: 'PS[0-9]{5}',
   }, {
     type: 'PROFILES',
-    apiType: 'prosite',
-    to: 'entry/prosite',
-    newTo: {description: {mainType: 'entry', mainDB: 'prosite'}},
+    apiType: 'profile',
+    to: 'entry/profile',
+    newTo: {description: {mainType: 'entry', mainDB: 'profile'}},
     className: f('md-prpro'),
     title:
       `PROSITE is a database of protein families and domains. It consists of biologically
@@ -192,7 +192,7 @@ export const memberDB = [
   }, {
     type: 'SMART',
     apiType: 'smart',
-    to: 'entry/',
+    to: 'entry/smart',
     newTo: {description: {mainType: 'entry', mainDB: 'smart'}},
     className: f('md-sm'),
     title:
@@ -250,6 +250,7 @@ export const speciesFeat = [{
   coverage: 54,
   icon: '6',
   color: '#5cb85c',
+  tax_id: 39947,
 }, {
   title: 'Mouse-ear cress',
   kingdom: 'Eukaryota',
@@ -260,6 +261,7 @@ export const speciesFeat = [{
   coverage: 79,
   icon: 'B',
   color: '#5cb85c',
+  tax_id: 3702,
 }, {
   title: 'Human',
   kingdom: 'Eukaryota',
@@ -269,6 +271,7 @@ export const speciesFeat = [{
   coverage: 70,
   icon: 'H',
   color: '#d9534f',
+  tax_id: 9606,
 }, {
   title: 'Zebrafish',
   kingdom: 'Eukaryota',
@@ -278,6 +281,7 @@ export const speciesFeat = [{
   coverage: 87,
   icon: 'Z',
   color: '#d9534f',
+  tax_id: 7955,
 }, {
   title: 'Mouse',
   kingdom: 'Eukaryota',
@@ -287,6 +291,7 @@ export const speciesFeat = [{
   coverage: 80,
   icon: 'M',
   color: '#d9534f',
+  tax_id: 10090,
 }, {
   title: 'Fruit fly',
   kingdom: 'Eukaryota',
@@ -296,6 +301,7 @@ export const speciesFeat = [{
   coverage: 80,
   icon: 'F',
   color: '#d9534f',
+  tax_id: 7227,
 }, {
   title: 'Caenorhabditis elegans',
   kingdom: 'Eukaryota',
@@ -305,6 +311,7 @@ export const speciesFeat = [{
   coverage: 67,
   icon: 'W',
   color: '#d9534f',
+  tax_id: 6239,
 }, {
   title: 'Baker s yeast',
   kingdom: 'Eukaryota',
@@ -314,6 +321,7 @@ export const speciesFeat = [{
   coverage: 74,
   icon: '',
   color: '#5bc0de',
+  tax_id: 559292,
 }, {
   title: 'Fission yeast',
   kingdom: 'Eukaryota',
@@ -323,15 +331,17 @@ export const speciesFeat = [{
   coverage: 87,
   icon: '',
   color: '#5bc0de',
+  tax_id: 284812,
 }, {
   title: 'Escherichia coli',
   kingdom: 'Bacteria',
-  description: 'Escherichia coli (strain K12)',
+  description: 'Escherichia coli O127:H6 (strain E2348/69 / EPEC)',
   counterD: 6072,
   counterS: 4306,
   coverage: 73,
   icon: 'L',
   color: '#5bc0de',
+  tax_id: 83333,
 }, {
   title: 'Caulobacter phage phiCbK',
   kingdom: 'Virus',
@@ -341,6 +351,7 @@ export const speciesFeat = [{
   coverage: 13,
   icon: 'v',
   color: '#5bc0de',
+  tax_id: 1204537,
 }, {
   title: 'Unclassified',
   kingdom: 'Unclassified',

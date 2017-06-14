@@ -28,9 +28,9 @@ const Row = class extends Component {
     const {row, columns} = this.props;
     return (
       <tr ref={node => this._node = node}>
-        {columns.map(({accessKey, cellStyle, renderer = defaultRenderer}) => (
+        {columns.map(({accessKey, defaultKey, cellStyle, renderer = defaultRenderer}) => (
           <td
-            key={accessKey}
+            key={defaultKey || accessKey}
             style={cellStyle}
           >
             {renderer(row[accessKey], row)}

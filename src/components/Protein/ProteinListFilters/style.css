@@ -1,0 +1,29 @@
+.multirange .original, .multirange.ghost {
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  vertical-align: top;
+}
+
+input[type="range"].original {
+  position: absolute;
+}
+input[type="range"].original::-webkit-slider-thumb {
+  position: relative;
+  z-index: 2;
+}
+
+input[type="range"].original::-moz-range-thumb {
+  transform: scale(1); /* FF doesn't apply position it seems */
+  z-index: 1;
+}
+
+input[type="range"].original::-moz-range-track,
+input[type="range"].original::-webkit-slider-runnable-track {
+  border-color: transparent; /* needed to switch FF to "styleable" control */
+}
+input[type="range"].ghost {
+  position: absolute;
+}
+
+

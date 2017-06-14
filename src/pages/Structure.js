@@ -10,6 +10,11 @@ import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 import Table, {Column, SearchBox, PageSizeSelector, Exporter}
   from 'components/Table';
 
+import MemberDBTabs from 'components/Entry/MemberDBTabs';
+
+import {PDBeLink} from 'components/ExtLink';
+import StructureListFilters from 'components/Structure/StructureListFilters';
+
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
@@ -35,18 +40,13 @@ const propTypes = {
   }).isRequired,
 };
 
-const Overview = ({data: {payload, loading}, location: {search: {type}}}) => {
+const Overview = ({data: {payload, loading}}) => {
   if (loading) return <div>Loading…</div>;
   return (
     <ul className={styles.card}>
       {Object.entries(payload.structures || {}).map(([name, count]) => (
         <li key={name}>
-          <Link
-            newTo={{
-              description: {mainType: 'structure', mainDB: name},
-              search: {type},
-            }}
-          >
+          <Link newTo={{description: {mainType: 'structure', mainDB: name}}}>
             {name} ({count})
           </Link>
         </li>
@@ -70,90 +70,99 @@ const List = ({
     };
   }
   return (
-    <Table
-      dataTable={_payload.results}
-      isStale={isStale}
-      actualSize={_payload.count}
-      query={search}
-      pathname={''}
-      notFound={notFound}
-    >
-      <Exporter>
-        <ul>
-          <li>
-            <a
-              href={`${''}&format=json`}
-              download="structures.json"
-            >JSON</a><br/></li>
-          <li><a href={''}>Open in API web view</a></li>
-        </ul>
-      </Exporter>
-      <PageSizeSelector/>
-      <SearchBox
-        search={search.search}
-        pathname={''}
-      >
-        Search structures
-      </SearchBox>
-      <Column
-        accessKey="accession"
-        renderer={(accession/*: string */) => (
-          <Link
-            newTo={location => ({
-              ...location,
-              description: {
-                mainType: location.description.mainType,
-                mainDB: location.description.mainDB,
-                mainAccession: accession,
-              },
-            })}
+    <div className={f('row')}>
+      <div className={f('shrink', 'columns')}>
+        <MemberDBTabs/>
+      </div>
+      <div className={f('columns')}>
+        <StructureListFilters /> <hr/>
+        <Table
+          dataTable={_payload.results}
+          isStale={isStale}
+          actualSize={_payload.count}
+          query={search}
+          pathname={''}
+          notFound={notFound}
+        >
+          <Exporter>
+            <ul>
+              <li>
+                <a
+                  href={`${''}&format=json`}
+                  download="structures.json"
+                >
+                  JSON
+                </a><br/></li>
+              <li><a href={''}>Open in API web view</a></li>
+            </ul>
+          </Exporter>
+          <PageSizeSelector/>
+          <SearchBox
+            search={search.search}
+            pathname={''}
           >
-            {accession}
-          </Link>
-        )}
-      >
-        Accession
-      </Column>
-      <Column
-        accessKey="name"
-        renderer={
-          (name/*: string */, {accession}/*: {accession: string} */) => (
-            <Link
-              newTo={location => ({
-                ...location,
-                description: {
-                  mainType: location.description.mainType,
-                  mainDB: location.description.mainDB,
-                  mainAccession: accession,
-                },
-              })}
-            >
-              {name}
-            </Link>
-          )
-        }
-      >
-        Name
-      </Column>
-      <Column
-        accessKey="source_database"
-        renderer={(db/*: string */) => (
-          <Link
-            newTo={location => ({
-              ...location,
-              description: {
-                mainType: location.description.mainType,
-                mainDB: location.description.mainDB,
-              },
-            })}
+            Search structures
+          </SearchBox>
+          <Column
+            accessKey="accession"
+            renderer={(accession/*: string */) => (
+              <Link
+                newTo={location => ({
+                  ...location,
+                  description: {
+                    mainType: location.description.mainType,
+                    mainDB: location.description.mainDB,
+                    mainAccession: accession,
+                  },
+                })}
+              >
+                {accession}
+              </Link>
+            )}
           >
-            {db}
-          </Link>
-        )}
-      >
-        Source Database
-      </Column>
-    </Table>
+            Accession
+          </Column>
+          <Column
+            accessKey="name"
+            renderer={
+              (name/*: string */, {accession}/*: {accession: string} */) => (
+                <Link
+                  newTo={location => ({
+                    ...location,
+                    description: {
+                      mainType: location.description.mainType,
+                      mainDB: location.description.mainDB,
+                      mainAccession: accession,
+                    },
+                  })}
+                >
+                  {name}
+                </Link>
+              )
+            }
+          >
+            Name
+          </Column>
+          <Column
+            accessKey="accession"
+            defaultKey="structureAccession"
+            renderer={(accession/*: string */) => (
+              <PDBeLink id={accession}>
+                <img
+                  src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${
+                    accession
+                  }/traces.jpg`}
+                  alt="structure image"
+                  style={{maxWidth: '33%'}}
+                />
+              </PDBeLink>
+            )}
+          >
+            Structure
+          </Column>
+        </Table>
+      </div>
+    </div>
   );
 };
 List.propTypes = propTypes;
@@ -212,16 +221,12 @@ class Structure extends PureComponent {
   render() {
     return (
       <main>
-        <div className={f('row')}>
-          <div className={f('large-12', 'columns')}>
-            <Switch
-              {...this.props}
-              locationSelector={l => l.description.mainDB}
-              indexRoute={Overview}
-              catchAll={InnerSwitch}
-            />
-          </div>
-        </div>
+        <Switch
+          {...this.props}
+          locationSelector={l => l.description.mainDB}
+          indexRoute={Overview}
+          catchAll={InnerSwitch}
+        />
       </main>
     );
   }

@@ -36,7 +36,7 @@ export const InterproSymbol = (
   {type, className = ''}
   /*: {
     type: string,
-    className?: string
+    className?: string,
   } */
 ) => {
   const colors = entryTypeColors[type[0]];

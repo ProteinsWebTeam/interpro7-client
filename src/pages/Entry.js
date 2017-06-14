@@ -13,6 +13,10 @@ import Table, {
   Column, SearchBox, PageSizeSelector, Exporter,
 } from 'components/Table';
 
+import MemberDBTabs from 'components/Entry/MemberDBTabs';
+// import BrowseTabs from 'components/BrowseTabs';
+import EntryListFilter from 'components/Entry/EntryListFilters';
+
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 import {memberDB} from 'staticData/home';
@@ -93,89 +97,183 @@ class List extends Component {
   }
 
   render() {
-    const {data, isStale, location: {search}} = this.props;
+    const {
+      data, isStale,
+      location: {description: {mainDB}, search},
+    } = this.props;
     let _payload = data.payload;
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
+    const goColors = {
+      P: 'rgb(220, 254, 210)',
+      F: 'rgb(254, 220, 210)',
+      C: 'rgb(220, 210, 254)',
+    };
     if (data.loading || notFound) {
       _payload = {
         results: [],
       };
     }
     return (
-      <Table
-        dataTable={_payload.results}
-        isStale={isStale}
-        actualSize={_payload.count}
-        query={search}
-        pathname={''}
-        notFound={notFound}
-      >
-        <Exporter>
-          <ul>
-            <li>
-              <a href={`${''}&format=json`} download="entries.json">
-                JSON
-              </a><br/></li>
-            <li><a href={`${''}`}>Open in API web view</a></li>
-          </ul>
-        </Exporter>
-        <PageSizeSelector />
-        <SearchBox
-          search={search.search}
-          pathname={''}
-        >
-          Search entries:
-        </SearchBox>
-        <Column
-          accessKey="accession"
-          renderer={(accession/*: string */) => (
-            <Link
-              newTo={location => ({
-                ...location,
-                description: {
-                  mainType: location.description.mainType,
-                  mainDB: location.description.mainDB,
-                  mainAccession: accession,
-                },
-              })}
+      <div className={f('row')}>
+        <div className={f('shrink', 'columns')}>
+          <MemberDBTabs/>
+        </div>
+        <div className={f('columns')}>
+          <EntryListFilter /><hr/>
+          <Table
+            dataTable={_payload.results}
+            isStale={isStale}
+            actualSize={_payload.count}
+            query={search}
+            pathname={''}
+            notFound={notFound}
+          >
+            <Exporter>
+              <ul>
+                <li>
+                  <a href={`${''}&format=json`} download="entries.json">
+                    JSON
+                  </a><br/></li>
+                <li><a href={`${''}`}>Open in API web view</a></li>
+              </ul>
+            </Exporter>
+            <PageSizeSelector />
+            <SearchBox
+              search={search.search}
+              pathname={''}
             >
-              {accession}
-            </Link>
-          )}
-        >
-          Accession
-        </Column>
-        <Column
-          accessKey="name"
-          renderer={
-            (name/*: string */, {accession}/*: {accession: string} */) => (
-              <Link
-                newTo={location => ({
-                  ...location,
-                  description: {
-                    mainType: location.description.mainType,
-                    mainDB: location.description.mainDB,
-                    mainAccession: accession,
-                  },
-                })}
-              >
-                {name}
-              </Link>
-            )
-          }
-        >
-          Name
-        </Column>
-        <Column
-          accessKey="type"
-          renderer={(type) => (
-            <interpro-type type={type.replace('_', ' ')} expanded>
-              {type}
-            </interpro-type>
-          )}
-        >Type</Column>
-      </Table>
+              Search entries:
+            </SearchBox>
+            <Column
+              accessKey="type"
+              renderer={(type) => (
+                <interpro-type type={type.replace('_', ' ')} expanded>
+                  {type}
+                </interpro-type>
+              )}
+            >Type</Column>
+            <Column
+              accessKey="name"
+              renderer={
+                (name/*: string */, {accession}/*: {accession: string} */) => (
+                  <Link
+                    newTo={location => ({
+                      ...location,
+                      description: {
+                        mainType: location.description.mainType,
+                        mainDB: location.description.mainDB,
+                        mainAccession: accession,
+                      },
+                    })}
+                  >
+                    {name}
+                  </Link>
+                )
+              }
+            >
+              Name
+            </Column>
+            <Column
+              accessKey="accession"
+              renderer={(accession/*: string */) => (
+                <Link
+                  newTo={location => ({
+                    ...location,
+                    description: {
+                      mainType: location.description.mainType,
+                      mainDB: location.description.mainDB,
+                      mainAccession: accession,
+                    },
+                  })}
+                >
+                  {accession}
+                </Link>
+              )}
+            >
+              Accession
+            </Column>
+            {
+              mainDB === 'InterPro' ?
+                <Column
+                  accessKey="integrated"
+                  renderer={(accession/*: string */) => (
+                    <Link
+                      newTo={{description: {
+                        mainType: 'entry',
+                        mainDB: 'InterPro',
+                        mainAccession: accession,
+                      }}}
+                    >
+                      {accession}
+                    </Link>
+                  )}
+                >
+                  Integrated
+                </Column> :
+                <Column
+                  accessKey="member_databases"
+                  renderer={(mdb/*: string */) => (
+                    Object.keys(mdb).map(db => (
+                      <div
+                        key={db}
+                        style={{
+                          backgroundColor: '#DDDDDD',
+                          padding: '1px',
+                          marginBottom: '1px',
+                        }}
+                      >
+                        {db}
+                        {
+                          mdb[db].map(accession => (
+                            <span
+                              key={accession}
+                              className={f('label')}
+                              style={{float: 'right'}}
+                            >
+                              <Link
+                                newTo={{description: {
+                                  mainType: 'entry',
+                                  mainDB: db,
+                                  mainAccession: accession,
+                                }}}
+                              >
+                                {accession}
+                              </Link>
+                            </span>)
+                          )
+                        }
+                      </div>
+                    ))
+                  )}
+                >
+                  Signatures <span className={f('label')}>Sign ID</span>
+                </Column>
+            }
+            <Column
+              accessKey="go_terms"
+              renderer={(gos/*: Array<Object> */) => (
+                gos.map(go => (
+                  <div
+                    key={go.identifier}
+                    style={{
+                      backgroundColor: (
+                        go.category ? goColors[go.category] : '#DDDDDD'
+                      ),
+                      padding: '1px',
+                      marginBottom: '1px',
+                    }}
+                  >
+                    {go.name ? go.name : 'None'}
+                  </div>
+                ))
+              )}
+            >
+              GO Terms
+            </Column>
+          </Table>
+        </div>
+      </div>
     );
   }
 }
@@ -288,22 +386,18 @@ const schemaProcessData = data => ({
 
 const Entry = props => (
   <main>
-    <div className={f('row')}>
-      <div className={f('large-12', 'columns')}>
-        {props.data.payload && props.data.payload.accession &&
-          <SchemaOrgData
-            data={props.data.payload}
-            processData={schemaProcessData}
-          />
-        }
-        <Switch
-          {...props}
-          locationSelector={l => l.description.mainDB}
-          indexRoute={Overview}
-          catchAll={InnerSwitch}
-        />
-      </div>
-    </div>
+    {props.data.payload && props.data.payload.accession &&
+    <SchemaOrgData
+      data={props.data.payload}
+      processData={schemaProcessData}
+    />
+    }
+    <Switch
+      {...props}
+      locationSelector={l => l.description.mainDB}
+      indexRoute={Overview}
+      catchAll={InnerSwitch}
+    />
   </main>
 );
 Entry.propTypes = {
