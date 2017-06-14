@@ -4,7 +4,6 @@ import T from 'prop-types';
 import {stringify as qsStringify} from 'query-string';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {parse, format, resolve} from 'url';
 
 import description2description from
   'utils/processLocation/description2description';
@@ -18,25 +17,28 @@ const happenedWithModifierKey = event => !!(
 );
 const happenedWithLeftClick = event => event.button === 0;
 
-const defaultMatchFn = (toOfLink, {pathname}) => {
-  let to = toOfLink;
-  if (typeof toOfLink === 'string') to = parse(toOfLink);
-  return pathname.startsWith((to.pathname || '').replace(/\/*$/, ''));
-};
+const defaultMatchFn = () => true;// {
+//   return true;
+//   let to = toOfLink;
+//   if (typeof toOfLink === 'string') to = parse(toOfLink);
+//   return pathname.startsWith((to.pathname || '').replace(/\/*$/, ''));
+// };
 
 const generateHref = (location/*: Object */, to/*: string | Object */) => {
   if (typeof to === 'string') {
-    return config.root.website.pathname + resolve(location.pathname, to);
+    return '';
+    // return config.root.website.pathname + resolve(location.pathname, to);
   }
-  return format({
-    ...config.root.website,
-    pathname: config.root.website.pathname + resolve(
-      location.pathname,
-      to.pathname || ''
-    ),
-    query: to.search || {},
-    hash: to.hash || '',
-  });
+  return '';
+  // return format({
+  //   ...config.root.website,
+  //   pathname: config.root.website.pathname + resolve(
+  //     location.pathname,
+  //     to.pathname || ''
+  //   ),
+  //   query: to.search || {},
+  //   hash: to.hash || '',
+  // });
 };
 
 class Link extends PureComponent {
@@ -109,7 +111,7 @@ class Link extends PureComponent {
     if (!href && !newTo) {
       if (typeof activeClass === 'function') {
         className += activeClass(location, defaultMatchFn);
-      } else if (defaultMatchFn(to, location)) {
+      } else {
         className += activeClass || '';
       }
     }

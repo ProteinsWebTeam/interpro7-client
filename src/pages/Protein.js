@@ -1,7 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
 
-import Switch from 'components/generic/Switch';
+import Switch from 'components/generic/NewSwitch';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
@@ -11,8 +11,6 @@ import ColorHash from 'color-hash/lib/color-hash';
 
 import Table, {Column, SearchBox, PageSizeSelector, Exporter}
   from 'components/Table';
-
-import {removeLastSlash, buildLink} from 'utils/url';
 
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
@@ -27,7 +25,7 @@ const propTypes = {
   }).isRequired,
   isStale: T.bool.isRequired,
   location: T.shape({
-    pathname: T.string.isRequired,
+    description: T.object.isRequired,
   }).isRequired,
   match: T.string,
 };
@@ -39,14 +37,11 @@ const defaultPayload = {
   },
 };
 
-const Overview = ({
-  data: {payload = defaultPayload},
-  location: {pathname},
-}) => (
+const Overview = ({data: {payload = defaultPayload}}) => (
   <ul className={styles.card}>
     {Object.entries(payload.proteins || {}).map(([name, count]) => (
       <li key={name}>
-        <Link to={`${removeLastSlash(pathname)}/${name}`}>
+        <Link newTo={{description: {mainType: 'protein', mainDB: name}}}>
           {name}{Number.isFinite(count) ? ` (${count})` : ''}
         </Link>
       </li>
@@ -58,7 +53,7 @@ Overview.propTypes = propTypes;
 const List = ({
   data: {payload, loading, status},
   isStale,
-  location: {pathname, search},
+  location: {search},
 }) => {
   let _payload = payload;
   const HTTP_OK = 200;
@@ -77,31 +72,39 @@ const List = ({
       isStale={isStale}
       actualSize={_payload.count}
       query={search}
-      pathname={pathname}
+      pathname={''}
       notFound={notFound}
     >
       <Exporter>
         <ul>
           <li>
-            <a
-              href={`${''}&format=json`}
-              download="proteins.json"
-            >JSON</a><br/></li>
+            <a href={`${''}&format=json`} download="proteins.json">
+              JSON
+            </a><br/></li>
           <li><a href={`${''}`}>Open in API web view</a></li>
         </ul>
       </Exporter>
       <PageSizeSelector />
       <SearchBox
         search={search.search}
-        pathname={pathname}
+        pathname={''}
       >
         Search proteins
       </SearchBox>
       <Column
         accessKey="accession"
-        renderer={(acc/*: string */) => (
-          <Link to={`${removeLastSlash(pathname)}/${acc}`}>
-            {acc}
+        renderer={(accession/*: string */) => (
+          <Link
+            newTo={location => ({
+              ...location,
+              description: {
+                mainType: location.description.mainType,
+                mainDB: location.description.mainDB,
+                mainAccession: accession,
+              },
+            })}
+          >
+            {accession}
           </Link>
         )}
       >
@@ -111,7 +114,16 @@ const List = ({
         accessKey="name"
         renderer={
           (name/*: string */, {accession}/*: {accession: string} */) => (
-            <Link to={`${removeLastSlash(pathname)}/${accession}`}>
+            <Link
+              newTo={location => ({
+                ...location,
+                description: {
+                  mainType: location.description.mainType,
+                  mainDB: location.description.mainDB,
+                  mainAccession: accession,
+                },
+              })}
+            >
               {name}
             </Link>
           )
@@ -122,7 +134,17 @@ const List = ({
       <Column
         accessKey="source_database"
         renderer={(db/*: string */) => (
-          <Link to={buildLink(pathname, 'protein', db)}>{db}</Link>
+          <Link
+            newTo={location => ({
+              ...location,
+              description: {
+                mainType: location.description.mainType,
+                mainDB: location.description.mainDB,
+              },
+            })}
+          >
+            {db}
+          </Link>
         )}
       >
         Source Database
@@ -167,73 +189,69 @@ const DomainAsync = createAsyncComponent(() => import(
   /* webpackChunkName: "entry-subpage" */'subPages/DomainArchitecture'
 ));
 
-const pages = new Set([
-  {path: 'structure', component: StructureAsync},
-  {path: 'entry', component: EntryAsync},
-  {path: 'domain_architecture', component: DomainAsync},
-]);
-
-const SummaryComponent =
-  ({data: {payload}, location}) => <SummaryAsync data={payload} location={location} />;
+const SummaryComponent = ({data: {payload}, location}) => (
+  <SummaryAsync data={payload} location={location} />
+);
 SummaryComponent.propTypes = {
   data: T.shape({
-    payload: T.object,
+    payload: T.any,
   }).isRequired,
-  location: T.shape({
-    pathname: T.string.isRequired,
-  }).isRequired,
+  location: T.object.isRequired,
 };
 
+const pages = new Set([
+  {value: 'structure', component: StructureAsync},
+  {value: 'entry', component: EntryAsync},
+  {value: 'domain_architecture', component: DomainAsync},
+]);
 const Summary = props => {
-  const {data: {loading}, match} = props;
-  if (loading) return <div>Loading…</div>;
+  const {data: {loading, payload}} = props;
+  if (loading || !payload.metadata) return <div>Loading…</div>;
   return (
     <div>
       <Switch
         {...props}
-        main="protein"
-        base={match}
+        locationSelector={
+          l => l.description.mainDetail || l.description.focusType
+        }
         indexRoute={SummaryComponent}
         childRoutes={pages}
       />
-
     </div>
   );
 };
 Summary.propTypes = {
   data: T.shape({
     loading: T.bool.isRequired,
-    payload: T.any,
   }).isRequired,
   location: T.object.isRequired,
-  match: T.string.isRequired,
 };
 
 const acc = (
   /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i
 );
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = ({match, ...props}) => (
+const InnerSwitch = (props) => (
   <Switch
     {...props}
-    base={match}
+    locationSelector={
+      l => l.description.mainAccession || l.description.focusType
+    }
     indexRoute={List}
     childRoutes={[
-      {path: acc, component: Summary},
+      {value: acc, component: Summary},
     ]}
+    catchAll={List}
   />
 );
-InnerSwitch.propTypes = {
-  match: T.string,
-};
 
-const Protein = ({...props}) => (
+const Protein = (props) => (
   <main>
     <div className={f('row')}>
       <div className={f('large-12', 'columns')}>
         <Switch
           {...props}
-          base="protein"
+          locationSelector={l => l.description.mainDB}
           indexRoute={Overview}
           catchAll={InnerSwitch}
         />

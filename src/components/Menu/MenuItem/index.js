@@ -23,13 +23,13 @@ const isExternal = ([first, second]) => (
   second === '/'
 );
 
-const activeClassFn = (to, activeClass) => (location, defaultMatchFn) => {
-  // check exact match for Home
-  if (to === '/' || to.pathname === '/') {
-    return (location.pathname === '/') ? s('active', activeClass) : '';
-  }
-  return defaultMatchFn(to, location) ? s('active', activeClass) : '';
-};
+// const activeClassFn = (to, activeClass) => (location, defaultMatchFn) => {
+//   // check exact match for Home
+//   if (to === '/' || to.pathname === '/') {
+//     return (location.pathname === '/') ? s('active', activeClass) : '';
+//   }
+//   return defaultMatchFn(to, location) ? s('active', activeClass) : '';
+// };
 
 class MenuItem extends PureComponent {
   static propTypes = {
@@ -61,7 +61,7 @@ class MenuItem extends PureComponent {
         to={to}
         newTo={newTo}
         onClick={closeEverything}
-        activeClass={activeClassFn(to, activeClass)}
+        // activeClass={activeClassFn(to, activeClass)}
         className={
           `${className || ''} ${
             s('select-none', 'menu-item', {disabled})

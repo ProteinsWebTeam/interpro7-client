@@ -24,8 +24,8 @@ const getPageLabels = (page, lastPage) => {
 };
 
 const Footer = (
-  {data, actualSize, pagination, pathname, notFound}
-  /*: {data: Object, pagination: Object, pathname: string, actualSize: number} */
+  {data, actualSize, pagination, notFound}
+  /*: {data: Object, pagination: Object, actualSize: number} */
 ) => {
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
@@ -108,11 +108,17 @@ const Footer = (
               Next <span className={f('show-for-sr')}>You're on page</span>
           </li> :
           <li>
-            <Link to={{pathname, search: {
-              page: page + 1,
-              page_size: pageSize,
-              search: pagination.search}}}
-            >Next</Link>
+            <Link
+              newTo={location => ({
+                ...location,
+                search: {
+                  ...location.search,
+                  page: (location.search.page || 1) + 1,
+                },
+              })}
+            >
+              Next
+            </Link>
           </li>
         }
       </ul>
@@ -123,7 +129,6 @@ Footer.propTypes = {
   data: T.array,
   actualSize: T.number,
   pagination: T.object.isRequired,
-  pathname: T.string.isRequired,
   notFound: T.bool,
 };
 

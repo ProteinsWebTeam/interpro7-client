@@ -11,7 +11,8 @@ export default importer => ({
   async as(namespace) {
     await polyfillLoader();
     if (window.customElements.get(namespace)) return;
-    const webComponent = await importer();
+    let webComponent = await importer();
+    if (webComponent.default) webComponent = webComponent.default;
     window.customElements.define(namespace, webComponent);
   },
 });

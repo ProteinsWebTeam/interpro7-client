@@ -169,8 +169,8 @@ SummaryComponent.propTypes = {
 };
 
 const pages = new Set([
-  {path: 'entry', component: EntryAsync},
-  {path: 'protein', component: ProteinAsync},
+  {value: 'entry', component: EntryAsync},
+  {value: 'protein', component: ProteinAsync},
 ]);
 const Summary = props => {
   const {data: {loading}} = props;
@@ -188,11 +188,9 @@ const Summary = props => {
 };
 Summary.propTypes = {
   data: T.shape({
-    payload: T.object.isRequired,
     loading: T.bool.isRequired,
   }).isRequired,
   location: T.object.isRequired,
-  match: T.string.isRequired,
 };
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch

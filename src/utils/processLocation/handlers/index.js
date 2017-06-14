@@ -198,11 +198,8 @@ export const structureChainHandler/*: Handler */ = Object.create(handler, {
 export const structureAccessionHandler/*: Handler */ = Object.create(handler, {
   getKey: {
     value: ({mainAccession}/*: Description */) => (
-      `${mainAccession ? 'focus' : 'main'}Accesion`
+      `${mainAccession ? 'focus' : 'main'}Accession`
     ),
-  },
-  cleanUp: {
-    value: (value/*: string */) => value.toUpperCase(),
   },
   match: {
     value: (current/*: string */) => /^[a-z0-9]{4}$/i.test(current),
@@ -261,7 +258,7 @@ export const proteinDBHandler/*: Handler */ = Object.create(handler, {
   },
   match: {
     value: (current/*: string */) => (
-      /^((uni|swiss\-)prot|trembl)$/i.test(current)
+      /^((uni|swiss\-?)prot|trembl)$/i.test(current)
     ),
   },
 });

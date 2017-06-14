@@ -114,7 +114,7 @@ class List extends Component {
         <Exporter>
           <ul>
             <li>
-              <a href={`${''}&format=json`} download="proteins.json">
+              <a href={`${''}&format=json`} download="entries.json">
                 JSON
               </a><br/></li>
             <li><a href={`${''}`}>Open in API web view</a></li>

@@ -13,17 +13,16 @@ import f from 'styles/foundation';
 import uniprotLogo from 'images/uniprot.png';
 
 const SummaryProtein = (
-  {data: {metadata}, location: {pathname}}
-  /*: {data: {metadata: Object}, location: {pathname: string}} */
+  {data: {metadata}}/*: {data: {metadata: Object}} */
 ) => (
   <div className={f('sections')}>
     <section>
       <div className={f('row')}>
         <div className={f('medium-8', 'large-8', 'columns')}>
           <Title metadata={metadata} mainType={'protein'} />
-          <Accession metadata={metadata} pathname={pathname} />
-          <Species metadata={metadata} pathname={pathname} />
-          <Length metadata={metadata} pathname={pathname} />
+          <Accession metadata={metadata} />
+          <Species metadata={metadata} />
+          <Length metadata={metadata} />
         </div>
         <div className={f('medium-4', 'large-4', 'columns')}>
           <div className={f('panel')}>
@@ -46,9 +45,6 @@ const SummaryProtein = (
 SummaryProtein.propTypes = {
   data: T.shape({
     metadata: T.object.isRequired,
-  }).isRequired,
-  location: T.shape({
-    pathname: T.string.isRequired,
   }).isRequired,
 };
 

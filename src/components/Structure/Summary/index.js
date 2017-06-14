@@ -3,6 +3,7 @@ import React, {PureComponent} from 'react';
 import T from 'prop-types';
 
 import Title from 'components/Title';
+import Link from 'components/generic/Link';
 import {PDBeLink} from 'components/ExtLink';
 import Embed from 'components/Embed';
 
@@ -19,14 +20,18 @@ class SummaryStructure extends PureComponent {
       metadata: T.object.isRequired,
     }).isRequired,
     location: T.shape({
-      pathname: T.string.isRequired,
+      description: T.object.isRequired,
     }).isRequired,
-  }
+  };
 
   componentWillMount() {
     const pdbComponents = () => import(
       /* webpackChunkName: "pdb-web-components" */'pdb-web-components'
     );
+    const dataLoader = () => import(
+      /* webpackChunkName: "data-loader" */'data-loader'
+    );
+    loadWebComponent(() => dataLoader()).as('data-loader');
     loadWebComponent(
       () => pdbComponents().then(m => m.PdbDataLoader),
     ).as('pdb-data-loader');
@@ -51,7 +56,24 @@ class SummaryStructure extends PureComponent {
                 metadata.chains &&
                 <div>
                   <h4>Chains:</h4>
-                  { metadata.chains.join(', ') }
+                  {metadata.chains.map(
+                    chain => (
+                      <Link
+                        key={chain}
+                        newTo={location => ({
+                          ...location,
+                          description: {
+                            mainType: location.description.mainType,
+                            mainDB: location.description.mainDB,
+                            mainAccession: location.description.mainAccession,
+                            mainChain: chain,
+                          },
+                        })}
+                      >
+                        {chain}
+                      </Link>
+                    )
+                  )}
                 </div>
               }
             </div>
