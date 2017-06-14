@@ -5,8 +5,6 @@ import Link from 'components/generic/Link';
 
 import {TaxLink, PDBeLink, UniProtLink} from 'components/ExtLink';
 
-import {buildLink} from 'utils/url';
-
 export const Name = (
   {name: {name, short}, accession}
   /*: {name: {name: string, short: ?string}, accession: string} */
@@ -56,20 +54,26 @@ ExtOriginDB.propTypes = {
 };
 
 export const OriginDB = (
-  {source, pathname, accession}
-  /*: {source: string, pathname: string, accession: string | number} */
+  {source, accession}
+  /*: {source: string, accession: string | number} */
 ) => (
   <p>
-    Source DB:&nbsp;
-    <Link to={buildLink(pathname, pathname.split('/')[1], source)}>
+    Source DB:{' '}
+    <Link
+      newTo={location => ({
+        ...location,
+        description: {
+          mainType: location.description.mainType,
+          mainDB: source,
+        },
+      })}
+    >
       {source}
-    </Link>&nbsp;
-    <ExtOriginDB source={source} accession={accession} />
+    </Link> <ExtOriginDB source={source} accession={accession} />
   </p>
 );
 OriginDB.propTypes = {
   source: T.string.isRequired,
-  pathname: T.string.isRequired,
   accession: T.oneOfType([T.string, T.number]).isRequired,
 };
 

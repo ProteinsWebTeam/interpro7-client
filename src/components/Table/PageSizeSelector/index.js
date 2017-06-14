@@ -54,7 +54,8 @@ class PageSizeSelector extends Component{
     }
     return (
       <div className={f('float-left')}>
-        Show <select
+        Show{' '}
+        <select
           className={f('small')}
           style={{width: 'auto'}}
           value={this.state.pageSize}

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import Switch from 'components/generic/NewSwitch';
+import Switch from 'components/generic/Switch';
 import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
 
 // Main pages

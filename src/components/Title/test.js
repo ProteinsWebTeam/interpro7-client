@@ -7,6 +7,8 @@ import {createRenderer} from 'react-dom/test-utils';
 import chai, {expect} from 'chai';
 import jsxChai from 'jsx-chai';
 
+import {Helmet} from 'react-helmet';
+
 import Link from 'components/generic/Link';
 
 import Title, {InterproSymbol} from '.';
@@ -21,7 +23,6 @@ describe.skip('<Title />', () => {
     it('should render a title component correctly', () => {
       renderer.render(
         <Title
-          pathname="/entry/pathname/"
           metadata={{
             name: {
               name: 'Piwi domain',
@@ -37,10 +38,13 @@ describe.skip('<Title />', () => {
           <div className="my-svg-container">
             <InterproSymbol type="domain"/>
           </div>
+          <Helmet>
+            <title>PF02171</title>
+          </Helmet>
           <h3>Piwi domain <small>(PF02171)</small></h3>
           <div className={ipro['md-hlight']}>
             <h5>Member database:&nbsp;
-              <Link to="/entry/pfam/">
+              <Link newTo={{description: {mainType: 'entry', mainDB: 'pfam'}}}>
                 pfam
               </Link>
             </h5>

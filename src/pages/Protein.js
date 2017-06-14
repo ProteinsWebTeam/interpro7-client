@@ -1,7 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
 
-import Switch from 'components/generic/NewSwitch';
+import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';

@@ -7,7 +7,6 @@ import loadData, {searchParamsToURL} from 'higherOrder/loadData';
 
 import Matches from 'components/Matches';
 
-import {buildLink} from 'utils/url';
 import {toPlural} from 'utils/pages';
 
 import blockStyles from 'styles/blocks.css';
@@ -44,13 +43,23 @@ ObjectToList.propTypes = {
   component: T.func.isRequired,
 };
 
-const RelatedSimple = ({secondaryData, main, secondary, pathname}) => (
+const RelatedSimple = ({secondaryData, main, secondary}) => (
   <div>
     <p>This {main} is related to this:</p>
     <ObjectToList
       obj={secondaryData}
       component={({k: db, value}) => (
-        <Link to={buildLink(pathname, secondary, db)}>{db}: {value}</Link>
+        <Link
+          newTo={location => ({
+            ...location,
+            description: {
+              mainType: secondary,
+              mainDB: db,
+            },
+          })}
+        >
+          {db}: {value}
+        </Link>
       )}
     />
   </div>
