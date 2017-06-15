@@ -7,20 +7,22 @@ import loadData from 'higherOrder/loadData';
 import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
-import {goToLocation} from 'actions/creators';
+import {goToNewLocation} from 'actions/creators';
 import loadWebComponent from 'utils/loadWebComponent';
 
 
 class EntryTypeFilter extends Component {
   static propTypes = {
-    dataEntryType: T.shape({
+    data: T.shape({
       loading: T.bool.isRequired,
-      payload: T.object,
+      payload: T.any,
     }).isRequired,
-    goToLocation: T.func.isRequired,
-    pathname: T.string,
-    search: T.object,
+    goToNewLocation: T.func.isRequired,
+    location: T.shape({
+      search: T.object.isRequired,
+    }).isRequired,
   };
+
   componentWillMount() {
     loadWebComponent(
       () => import(
@@ -28,43 +30,47 @@ class EntryTypeFilter extends Component {
       ).then(m => m.InterproType),
     ).as('interpro-type');
   }
-  handleSelection = (option) => {
-    this.props.goToLocation({
-      pathname: this.props.pathname,
+
+  _handleSelection = ({target: {value}}) => {
+    this.props.goToNewLocation({
+      ...this.props.location,
       search: {
-        ...this.props.search,
-        type: option === 'ALL' ? null : option,
+        ...this.props.location.search,
+        type: value === 'ALL' ? null : value,
       },
     });
   };
+
   render() {
-    const {dataEntryType: {loading, payload}, search} = this.props;
-    const types = loading ? {} : payload;
+    const {data: {loading, payload}, location: {search}} = this.props;
+    const types = Object.entries(loading ? {} : payload)
+      .sort(([, a], [, b]) => b - a);
     if (!loading){
-      types.ALL = Object.keys(types)
-        .filter(a => a !== 'ALL')
-        .reduce((acc, v) => acc + types[v], 0);
+      types.unshift(['ALL', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
     return (
       <div>
-        { Object.keys(types).sort().map((type, i) => (
-          <div key={i}>
-            <input
-              type="radio" name="entry_type" id={type} value={type}
-              onChange={() => this.handleSelection(type)}
-              checked={(!search.type && type === 'ALL') || search.type === type}
-            />
-            <label htmlFor={type}>
-              {
-                type === 'ALL' ? type :
-                  <interpro-type type={type.replace('_', ' ')} expanded>
-                    {type}
-                  </interpro-type>
-              }
-              <small> ({types[type]})</small>
-            </label>
-          </div>
-        ))
+        {
+          types.map(([type, count]) => (
+            <div key={type}>
+              <label>
+                <input
+                  type="radio"
+                  name="entry_type"
+                  value={type}
+                  onChange={this._handleSelection}
+                  checked={
+                    (!search.type && type === 'ALL') || search.type === type
+                  }
+                /> {
+                  type === 'ALL' ? type :
+                    <interpro-type type={type.replace('_', ' ')} expanded>
+                      {type}
+                    </interpro-type>
+                } <small>({count})</small>
+              </label>
+            </div>
+          ))
         }
       </div>
     );
@@ -91,12 +97,10 @@ const getUrlFor = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.location.pathname,
-  state => state.location.search,
-  (pathname, search) => ({pathname, search})
+  state => state.newLocation,
+  location => ({location}),
 );
 
-export default connect(mapStateToProps, {goToLocation})(loadData({
+export default connect(mapStateToProps, {goToNewLocation})(loadData({
   getUrl: getUrlFor,
-  propNamespace: 'EntryType',
 })(EntryTypeFilter));

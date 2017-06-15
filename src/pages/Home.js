@@ -118,8 +118,8 @@ const LatestEntry = ({entry}) => (
         </div>
       </Link>
       {
-        entry.contributing.map((c, j) => (
-          <div className={f('list-more')} key={j}>
+        entry.contributing.map(c => (
+          <div className={f('list-more')} key={c.accession}>
             <MemberSymbol type={c.source_database} className={f('md-small')} />
             <small>
               {c.source_database}:
@@ -231,10 +231,10 @@ const Home = () => (
             <div title="by GO terms" className={f('go-list')}>
               <div className={f('row')}>
                 {
-                  GoList.map((e, i) => (
+                  GoList.map(e => (
                     <div
                       className={f('columns', 'medium-3', 'large-3', 'text-center')}
-                      key={i}
+                      key={e.title}
                     >
                       <a href="#" data-tooltip title={e.description}>
                         <span
@@ -271,9 +271,7 @@ const Home = () => (
         {// Browse by latest entries or most popular
         }
         <div className={f('callout')} data-equalizer-watch>
-
           <Tabs>
-
             <div title="Latest entries" className={f('entry-list')}>
               <div className={f('row')}>
                 <div className={f('columns')}>
@@ -282,8 +280,8 @@ const Home = () => (
                   <div className={f('list-vertical-scrol')}>
                     <ul>
                       {
-                        latests.map((e, i) => (
-                          <LatestEntry entry={e} key={i} />
+                        latests.map(e => (
+                          <LatestEntry entry={e} key={e.accession} />
                         ))
                       }
                     </ul>

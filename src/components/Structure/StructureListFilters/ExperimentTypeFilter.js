@@ -8,8 +8,7 @@ import loadData from 'higherOrder/loadData';
 import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
-import {goToLocation} from 'actions/creators';
-
+import {goToNewLocation} from 'actions/creators';
 
 class ExperimentTypeFilter extends Component {
   static propTypes = {
@@ -17,43 +16,48 @@ class ExperimentTypeFilter extends Component {
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
-    goToLocation: T.func.isRequired,
-    pathname: T.string,
-    search: T.object,
+    goToNewLocation: T.func.isRequired,
+    location: T.shape({
+      search: T.object.isRequired,
+    }).isRequired,
   };
-  handleSelection = (option) => {
-    this.props.goToLocation({
-      pathname: this.props.pathname,
+
+  _handleSelection = ({target: {value}}) => {
+    this.props.goToNewLocation({
+      ...this.props.location,
       search: {
-        ...this.props.search,
-        experiment_type: option === 'ALL' ? null : option,
+        ...this.props.location.search,
+        experiment_type: value === 'ALL' ? null : value,
       },
     });
   };
+
   render() {
-    const {data: {loading, payload}, search} = this.props;
-    const types = loading ? {} : payload;
+    const {data: {loading, payload}, location: {search}} = this.props;
+    const types = Object.entries(loading ? {} : payload)
+      .sort(([, a], [, b]) => b - a);
     if (!loading){
-      types.ALL = 'N/A';
+      types.unshift(['ALL', 'N/A']);
     }
     return (
       <div style={{overflowX: 'hidden'}}>
-        { Object.keys(types).sort().map((type, i) => (
-          <div key={i}>
-            <input
-              type="radio" name="experiment_type" id={type} value={type}
-              onChange={() => this.handleSelection(type)}
-              checked={
-                (!search.experiment_type && type === 'ALL') ||
+        {
+          types.map(([type, count]) => (
+            <div key={type}>
+              <label>
+                <input
+                  type="radio"
+                  name="experiment_type"
+                  value={type}
+                  onChange={this._handleSelection}
+                  checked={
+                    (!search.experiment_type && type === 'ALL') ||
                     search.experiment_type === type
-              }
-            />
-            <label htmlFor={type}>
-              {type}
-              <small> ({types[type]})</small>
-            </label>
-          </div>
-        ))
+                  }
+                /> {type} <small> ({count})</small>
+              </label>
+            </div>
+          ))
         }
       </div>
     );
@@ -80,12 +84,11 @@ const getUrlFor = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.location.pathname,
-  state => state.location.search,
-  (pathname, search) => ({pathname, search})
+  state => state.newLocation,
+  location => ({location}),
 );
 
-export default connect(mapStateToProps, {goToLocation})(
+export default connect(mapStateToProps, {goToNewLocation})(
   loadData(getUrlFor)(ExperimentTypeFilter)
 );
 

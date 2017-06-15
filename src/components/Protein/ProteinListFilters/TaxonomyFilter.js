@@ -35,15 +35,15 @@ class TaxonomyFilter extends Component {
 
   render() {
     const {data: {loading, payload}, location: {search}} = this.props;
-    const _taxes = Object.entries(loading ? {} : payload)
+    const taxes = Object.entries(loading ? {} : payload)
       .sort(([, a], [, b]) => b - a);
     if (!loading) {
-      _taxes.unshift(['ALL', 'N/A']);
+      taxes.unshift(['ALL', 'N/A']);
     }
     return (
       <div style={{overflowX: 'hidden'}}>
         {
-          _taxes.map(([taxId, count]) => (
+          taxes.map(([taxId, count]) => (
             <div key={taxId}>
               <label>
                 <input

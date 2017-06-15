@@ -38,8 +38,9 @@ const Footer = (
   if (notFound) {
     bottomLabel = 'No data available';
   } else if (actualSize) {
-    bottomLabel = `Showing ${index} to ${index + data.length - 1} 
-                   of ${actualSize} results`;
+    bottomLabel = (
+      `Showing ${index} to ${index + data.length - 1} of ${actualSize} results`
+    );
   }
   return (
     <div>
@@ -73,18 +74,18 @@ const Footer = (
           </li>
         }
         {
-          pages.map((e, i) => {
+          pages.map(e => {
             if (e === '…') {
-              return <li key={i} className={f('ellipsis')}/>;
+              return <li key={e} className={f('ellipsis')}/>;
             } else if (page === e) {
               return (
-                <li key={i} className={f('current')}>
+                <li key={e} className={f('current')}>
                   <span className={f('show-for-sr')}>You're on page</span>{e}
                 </li>
               );
             }
             return (
-              <li key={i} className={page === e ? f('current') : ''}>
+              <li key={e} className={page === e ? f('current') : ''}>
                 <Link
                   newTo={({description, search, hash}) => ({
                     description,
@@ -105,7 +106,7 @@ const Footer = (
         }
         {(page === lastPage) ?
           <li className={f('disabled')}>
-              Next <span className={f('show-for-sr')}>You're on page</span>
+            Next <span className={f('show-for-sr')}>You're on page</span>
           </li> :
           <li>
             <Link

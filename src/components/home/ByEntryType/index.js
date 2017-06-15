@@ -34,10 +34,10 @@ const ByEntryType = ({data: {payload}}) => {
     <div>
       <AnimatedEntry className={f('row')} element="div">
         {
-          entryType.map(({type, title, description}, i) => (
+          entryType.map(({type, title, description}) => (
             <div
               className={f('columns', 'medium-4', 'large-4', 'text-center')}
-              key={i}
+              key={type}
             >
               <Link newTo={{description: {mainType: 'entry'}, search: {type}}}>
                 <div className={f('svg-container')}>

@@ -7,62 +7,78 @@ import loadData from 'higherOrder/loadData';
 import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
-import {goToLocation} from 'actions/creators';
+import {goToNewLocation} from 'actions/creators';
 
+const label = {
+  swissprot: 'Reviewed',
+  trembl: 'Unreviewed',
+  uniprot: 'Both',
+};
 
 class CurationFilter extends Component {
   static propTypes = {
-    dataReviewed: T.shape({
+    data: T.shape({
       loading: T.bool.isRequired,
-      payload: T.object,
+      payload: T.any,
     }).isRequired,
-    goToLocation: T.func.isRequired,
-    pathname: T.string,
-    search: T.object,
+    goToNewLocation: T.func.isRequired,
+    location: T.shape({
+      description: T.shape({
+        mainDB: T.string,
+      }).isRequired,
+      search: T.object.isRequired,
+    }).isRequired,
   };
-  constructor(){
+
+  constructor() {
     super();
     this.state = {value: null};
   }
+
   componentWillMount() {
-    if (this.props.pathname.indexOf('/swissprot') > 0) {
+    const {mainDB} = this.props.location.description;
+    if (mainDB === 'swissprot') {
       this.setState({value: 'swissprot'});
-    } else if (this.props.pathname.indexOf('/trembl') > 0) {
+    } else if (mainDB === 'trembl') {
       this.setState({value: 'trembl'});
     } else {
       this.setState({value: 'uniprot'});
     }
   }
-  handleSelection = (option) => {
-    const path = this.props.pathname
-      .replace(/\/uniprot|\/swissprot|\/trembl/, `/${option}`);
-    this.setState({value: option});
-    this.props.goToLocation({
-      pathname: path,
-      search: this.props.search,
+
+  _handleSelection = ({target: {value}}) => {
+    this.setState({value});
+    this.props.goToNewLocation({
+      ...this.props.location,
+      description: {
+        ...this.props.location.description,
+        mainDB: value,
+      },
     });
   };
+
   render() {
-    const {dataReviewed: {loading, payload}} = this.props;
+    const {data: {loading, payload}} = this.props;
     const databases = loading ? {} : payload;
-    if (!loading) databases.uniprot = databases.swissprot + databases.trembl;
-    const label = {
-      swissprot: 'Reviewed',
-      trembl: 'Unreviewed',
-      uniprot: 'Both',
-    };
+    if (!loading) {
+      databases.uniprot = (databases.swissprot || 0) + (databases.trembl || 0);
+    }
     return (
       <div>
-        { Object.keys(databases).sort().map((db, i) => (
-          <div key={i}>
-            <input
-              type="radio" name="curated_filter" id={db} value={db}
-              onChange={() => this.handleSelection(db)}
-              checked={this.state.value === db}
-            />
-            <label htmlFor={db}>{label[db]} <small>({databases[db]})</small></label>
-          </div>
-        ))
+        {
+          Object.keys(databases).sort().map(db => (
+            <div key={db}>
+              <label>
+                <input
+                  type="radio"
+                  name="curated_filter"
+                  value={db}
+                  onChange={this._handleSelection}
+                  checked={this.state.value === db}
+                /> {label[db]} <small>({databases[db]})</small>
+              </label>
+            </div>
+          ))
         }
       </div>
     );
@@ -91,12 +107,10 @@ const getUrlFor = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.location.pathname,
-  state => state.location.search,
-  (pathname, search) => ({pathname, search})
+  state => state.newLocation,
+  location => ({location})
 );
 
-export default connect(mapStateToProps, {goToLocation})(loadData({
+export default connect(mapStateToProps, {goToNewLocation})(loadData({
   getUrl: getUrlFor,
-  propNamespace: 'Reviewed',
 })(CurationFilter));

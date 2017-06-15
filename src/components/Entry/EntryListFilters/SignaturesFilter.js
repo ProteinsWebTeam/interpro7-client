@@ -7,51 +7,57 @@ import loadData from 'higherOrder/loadData';
 import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
-import {goToLocation} from 'actions/creators';
+import {goToNewLocation} from 'actions/creators';
 
 
 class SignaturesFilter extends Component {
   static propTypes = {
-    dataIntegrated: T.shape({
+    data: T.shape({
       loading: T.bool.isRequired,
-      payload: T.object,
+      payload: T.any,
     }).isRequired,
-    goToLocation: T.func.isRequired,
-    pathname: T.string,
-    search: T.object,
+    goToNewLocation: T.func.isRequired,
+    location: T.shape({
+      search: T.object.isRequired,
+    }).isRequired,
   };
-  handleSelection = (option) => {
-    this.props.goToLocation({
-      pathname: this.props.pathname,
+
+  _handleSelection = ({target: {value}}) => {
+    this.props.goToNewLocation({
+      ...this.location,
       search: {
-        ...this.props.search,
-        signature_in: option === 'Any' ? null : option,
+        ...this.props.location.search,
+        signature_in: value === 'Any' ? null : value,
       },
     });
   };
+
   render() {
     const {
-      dataIntegrated: {loading, payload},
-      search: {signature_in: signature},
+      data: {loading, payload},
+      location: {search: {signature_in: signature}},
     } = this.props;
-    const types = loading ? {} : payload;
-    // if (!loading) types.Any = Object.values(types).reduce((acc, v) => acc + v, 0);
+    const signatureDBs = Object.entries(loading ? {} : payload)
+      .sort(([, a], [, b]) => b - a);
     if (!loading){
-      types.Any = 'N/A';
+      signatureDBs.unshift(['Any', 'N/A']);
     }
     return (
       <div>
-
-        { Object.keys(types).sort().map((type, i) => (
-          <div key={i}>
-            <input
-              type="radio" name="interpro_state" id={type} value={type}
-              onChange={() => this.handleSelection(type)}
-              checked={type === 'Any' || signature === type}
-            />
-            <label htmlFor={type}>{type} <small>({types[type]})</small></label>
-          </div>
-        ))
+        {
+          signatureDBs.map(([signatureDB, count]) => (
+            <div key={signatureDB}>
+              <label>
+                <input
+                  type="radio"
+                  name="interpro_state"
+                  value={signatureDB}
+                  onChange={this._handleSelection}
+                  checked={signatureDB === 'Any' || signature === signatureDB}
+                /> {signatureDB} <small>({count})</small>
+              </label>
+            </div>
+          ))
         }
       </div>
     );
@@ -79,12 +85,10 @@ const getUrlFor = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.location.pathname,
-  state => state.location.search,
-  (pathname, search) => ({pathname, search})
+  state => state.newLocation,
+  location => ({location}),
 );
 
-export default connect(mapStateToProps, {goToLocation})(loadData({
+export default connect(mapStateToProps, {goToNewLocation})(loadData({
   getUrl: getUrlFor,
-  propNamespace: 'Integrated',
 })(SignaturesFilter));
