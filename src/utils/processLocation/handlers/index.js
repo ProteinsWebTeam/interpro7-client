@@ -95,7 +95,7 @@ export const mainDetailHandler/*: Handler */ = Object.create(handler, {
 export const memberDBAccessionHandler/*: Handler */ = Object.create(handler, {
   getKey: {
     value: (description/*: Description */) => {
-      const position = description.focusType ? 'main' : 'focus';
+      const position = description.focusType ? 'focus' : 'main';
       return `${position}${
         (description[`${position}Accession`] ? 'MemberDB' : '')
       }Accession`;
@@ -116,7 +116,7 @@ export const memberDBAccessionHandler/*: Handler */ = Object.create(handler, {
 export const memberDBHandler/*: Handler */ = Object.create(handler, {
   getKey: {
     value: (description/*: Description */) => {
-      const position = description.focusType ? 'main' : 'focus';
+      const position = description.focusType ? 'focus' : 'main';
       return `${position}${
         (description[`${position}Accession`] ? 'Member' : '')
       }DB`;

@@ -196,22 +196,6 @@ class List extends Component {
             {
               mainDB === 'InterPro' ?
                 <Column
-                  accessKey="integrated"
-                  renderer={(accession/*: string */) => (
-                    <Link
-                      newTo={{description: {
-                        mainType: 'entry',
-                        mainDB: 'InterPro',
-                        mainAccession: accession,
-                      }}}
-                    >
-                      {accession}
-                    </Link>
-                  )}
-                >
-                  Integrated
-                </Column> :
-                <Column
                   accessKey="member_databases"
                   renderer={(mdb/*: string */) => (
                     Object.keys(mdb).map(db => (
@@ -248,6 +232,22 @@ class List extends Component {
                   )}
                 >
                   Signatures <span className={f('label')}>Sign ID</span>
+                </Column> :
+                <Column
+                  accessKey="integrated"
+                  renderer={(accession/*: string */) => (
+                    <Link
+                      newTo={{description: {
+                        mainType: 'entry',
+                        mainDB: 'InterPro',
+                        mainAccession: accession,
+                      }}}
+                    >
+                      {accession}
+                    </Link>
+                  )}
+                >
+                  Integrated
                 </Column>
             }
             <Column

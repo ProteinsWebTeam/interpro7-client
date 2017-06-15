@@ -28,29 +28,31 @@ class IntegratedFilter extends Component {
   }
 
   componentWillMount() {
-    if (this.props.pathname.indexOf('/unintegrated') > 0) {
+    const integration = (
+      this.props.location.description.mainIntegration ||
+      this.props.location.description.focusIntegration
+    );
+    if (integration === 'unintegrated') {
       this.setState({value: 'unintegrated'});
-    } else if (this.props.pathname.indexOf('/integrated') > 0) {
+    } else if (integration === 'integrated') {
       this.setState({value: 'integrated'});
     } else {
       this.setState({value: 'both'});
     }
   }
 
-  handleSelection = ({target: {value}}) => {
-    let path = (this.props.pathname || '')
-      .replace('/integrated', '')
-      .replace('/unintegrated', '');
+  _handleSelection = ({target: {value}}) => {
     this.setState({value});
-    if (value === 'integrated') {
-      path = path.replace('/entry', '/entry/integrated');
-    } else if (value === 'unintegrated') {
-      path = path.replace('/entry', '/entry/unintegrated');
-    }
+    const integrationKey = (
+      this.props.location.description.mainType === 'entry' ?
+        'mainIntegration' :
+        'focusIntegration'
+    );
     this.props.goToNewLocation({
       ...this.props.location,
       description: {
-        ...this.props.location.description, // FIXME
+        ...this.props.location.description,
+        [integrationKey]: value === 'both' ? null : value,
       },
     });
   };
