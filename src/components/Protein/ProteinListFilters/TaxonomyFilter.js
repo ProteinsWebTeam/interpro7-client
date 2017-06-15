@@ -8,49 +8,57 @@ import loadData from 'higherOrder/loadData';
 import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
-import {goToLocation} from 'actions/creators';
-
+import {goToNewLocation} from 'actions/creators';
 
 class TaxonomyFilter extends Component {
   static propTypes = {
-    dataEntryType: T.shape({
+    data: T.shape({
       loading: T.bool.isRequired,
-      payload: T.object,
+      payload: T.any,
     }).isRequired,
-    goToLocation: T.func.isRequired,
-    pathname: T.string,
+    location: T.shape({
+      search: T.object.isRequired,
+    }).isRequired,
+    goToNewLocation: T.func.isRequired,
     search: T.object,
   };
-  handleSelection = (option) => {
-    this.props.goToLocation({
-      pathname: this.props.pathname,
+
+  _handleSelection = ({target: {value}}) => {
+    this.props.goToNewLocation({
+      ...this.props.location,
       search: {
-        ...this.props.search,
-        tax_id: option === 'ALL' ? null : option,
+        ...this.props.location.search,
+        tax_id: value === 'ALL' ? null : value,
       },
     });
   };
+
   render() {
-    const {dataEntryType: {loading, payload}, search} = this.props;
-    const taxes = loading ? {} : payload;
-    if (!loading){
-      taxes.ALL = 'N/A';
+    const {data: {loading, payload}, location: {search}} = this.props;
+    const _taxes = Object.entries(loading ? {} : payload)
+      .sort(([, a], [, b]) => b - a);
+    if (!loading) {
+      _taxes.unshift(['ALL', 'N/A']);
     }
     return (
       <div style={{overflowX: 'hidden'}}>
-        { Object.keys(taxes).sort().map((tax, i) => (
-          <div key={i}>
-            <input
-              type="radio" name="entry_type" id={tax} value={tax}
-              onChange={() => this.handleSelection(tax)}
-              checked={(!search.tax_id && tax === 'ALL') || search.tax_id === tax}
-            />
-            <label htmlFor={tax}>
-              {tax}
-              <small> ({taxes[tax]})</small>
-            </label>
-          </div>
-        ))
+        {
+          _taxes.map(([taxId, count]) => (
+            <div key={taxId}>
+              <label>
+                <input
+                  type="radio"
+                  name="entry_type"
+                  value={taxId}
+                  onChange={this._handleSelection}
+                  checked={
+                    (!search.tax_id && taxId === 'ALL') ||
+                    search.tax_id === taxId
+                  }
+                /> {taxId} <small style={{float: 'right'}}>({count})</small>
+              </label>
+            </div>
+          ))
         }
       </div>
     );
@@ -77,13 +85,11 @@ const getUrlFor = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.location.pathname,
-  state => state.location.search,
-  (pathname, search) => ({pathname, search})
+  state => state.newLocation,
+  location => ({location})
 );
 
-export default connect(mapStateToProps, {goToLocation})(loadData({
+export default connect(mapStateToProps, {goToNewLocation})(loadData({
   getUrl: getUrlFor,
-  propNamespace: 'EntryType',
 })(TaxonomyFilter));
 

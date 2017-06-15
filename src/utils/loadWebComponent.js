@@ -19,11 +19,14 @@ export default importer => ({
     if (!_ns && webComponent.is) _ns = webComponent.is;
     // if at this point there is no name, give up
     if (!_ns) {
+      console.error('No name for WebComponent', webComponent);
       throw new Error('Please specify a name for WebComponent');
     }
     // Check again, to avoid race conditions
     if (window.customElements.get(_ns)) return;
+    // Actually doing the defining
     window.customElements.define(_ns, webComponent);
+    // Returning the name used for the definition, just in case might be useful
     return _ns;
   },
 });

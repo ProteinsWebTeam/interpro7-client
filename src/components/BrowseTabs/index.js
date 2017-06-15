@@ -38,8 +38,8 @@ const BrowseTabs = ({pathname, data: {loading, payload}}) => {
         <div className={f('large-12', 'columns')}>
           <ul className={f('tabs')}>
             {
-              tabs.map((e, i) => (
-                <li className={f('tabs-title')} key={i}>
+              tabs.map(e => (
+                <li className={f('tabs-title')} key={e.name}>
                   <Link
                     to={isRelativePath ? base + e.to : e.to}
                     activeClass={f('is-active', 'is-active-tab')}

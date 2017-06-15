@@ -24,10 +24,10 @@ const BySpecies = ({data: {payload}}) => (
   <AnimatedEntry className={f('row')} element="div">
     {
       // TODO: Include number of entries
-      speciesFeat.map((e, i) => (
+      speciesFeat.map(e => (
         <div
           className={f('columns', 'medium-4', 'large-4', 'text-center')}
-          key={i}
+          key={e.tax_id}
         >
           <Link
             newTo={location => ({
