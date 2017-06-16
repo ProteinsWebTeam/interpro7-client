@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 
+import NumberLabel from 'components/NumberLabel';
+
 import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
 
@@ -8,6 +10,8 @@ import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
 import {goToNewLocation} from 'actions/creators';
+
+import f from 'styles/foundation';
 
 const categories = {
   'Biological Process': 'P',
@@ -51,16 +55,18 @@ class GOTermsFilter extends Component {
       <div>
         {
           Object.keys(types).sort().map(type => (
-            <div key={type}>
-              <label>
+            <div key={type} className={f('column')}>
+              <label className={f('row', 'align-middle')}>
                 <input
                   type="radio"
                   name="go_category"
                   value={categories[type]}
                   onChange={this._handleSelection}
                   checked={(type === 'Any' && !go) || go === categories[type]}
+                  style={{margin: '0.25em'}}
                 />
-                {type} <small>({types[type]})</small>
+                <span>{type}</span>
+                <NumberLabel value={types[type]} />
               </label>
             </div>
           ))

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 
+import NumberLabel from 'components/NumberLabel';
+
 import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
 
@@ -9,6 +11,7 @@ import {format, resolve} from 'url';
 
 import {goToNewLocation} from 'actions/creators';
 
+import f from 'styles/foundation';
 
 class SignaturesFilter extends Component {
   static propTypes = {
@@ -40,21 +43,24 @@ class SignaturesFilter extends Component {
     const signatureDBs = Object.entries(loading ? {} : payload)
       .sort(([, a], [, b]) => b - a);
     if (!loading){
-      signatureDBs.unshift(['Any', 'N/A']);
+      signatureDBs.unshift(['Any', NaN]);
     }
     return (
       <div>
         {
           signatureDBs.map(([signatureDB, count]) => (
-            <div key={signatureDB}>
-              <label>
+            <div key={signatureDB} className={f('column')}>
+              <label className={f('row', 'align-middle')}>
                 <input
                   type="radio"
                   name="interpro_state"
                   value={signatureDB}
                   onChange={this._handleSelection}
                   checked={signatureDB === 'Any' || signature === signatureDB}
-                /> {signatureDB} <small>({count})</small>
+                  style={{margin: '0.25em'}}
+                />
+                <span>{signatureDB}</span>
+                <NumberLabel value={count} />
               </label>
             </div>
           ))

@@ -1,0 +1,21 @@
+@import "../../styles/timing.css";
+
+.filters-panel {
+  max-height: 200px;
+  margin-bottom: 30px;
+}
+
+.filter-panel {
+  height: 100%;
+  overflow-y: scroll;
+  padding-left: 3px;
+  transform: scaleY(1);
+  transform-origin: 0 top;
+  transition: transform ease-in-out var(--timing-medium);
+
+  &.collapsed {
+    height: 0;
+    transform: scaleY(0);
+    overflow-y: hidden;
+  }
+}

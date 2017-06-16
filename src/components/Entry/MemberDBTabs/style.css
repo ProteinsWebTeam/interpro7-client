@@ -1,3 +1,5 @@
+@import "../../../styles/colors.css";
+
 .tabs {
   border:0;
   padding-bottom: 1em;
@@ -44,4 +46,9 @@
   border: 2px solid #7ba3b6;
   border-bottom: 0;
   border-radius: 5px 5px 0 0;
+}
+
+.number-label {
+  background: #0001;
+  color: var(--colors-dark);
 }

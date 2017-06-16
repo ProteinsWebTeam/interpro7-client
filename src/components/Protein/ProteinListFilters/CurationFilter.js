@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 
+import NumberLabel from 'components/NumberLabel';
+
 import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
 
@@ -8,6 +10,8 @@ import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
 import {goToNewLocation} from 'actions/creators';
+
+import f from 'styles/foundation';
 
 const label = {
   swissprot: 'Reviewed',
@@ -67,15 +71,18 @@ class CurationFilter extends Component {
       <div>
         {
           Object.keys(databases).sort().map(db => (
-            <div key={db}>
-              <label>
+            <div key={db} className={f('column')}>
+              <label className={f('row', 'align-middle')}>
                 <input
                   type="radio"
                   name="curated_filter"
                   value={db}
                   onChange={this._handleSelection}
                   checked={this.state.value === db}
-                /> {label[db]} <small>({databases[db]})</small>
+                  style={{margin: '0.25em'}}
+                />
+                <span>{label[db]}</span>
+                <NumberLabel value={databases[db]} />
               </label>
             </div>
           ))

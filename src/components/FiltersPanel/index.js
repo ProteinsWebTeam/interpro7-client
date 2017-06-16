@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 
-import f from 'styles/foundation';
+import {foundationPartial} from 'styles/foundation';
+import style from './style.css';
+
+const f = foundationPartial(style);
 
 const FilterPanel = ({label, collapsed, onCollapse, children}) => (
   <div className={f('columns')}>
@@ -10,16 +13,7 @@ const FilterPanel = ({label, collapsed, onCollapse, children}) => (
         {collapsed ? '▸' : '▾'} {label}
       </button>
     </h6>
-    <div style={{
-      height: collapsed ? 0 : '100%',
-      transform: collapsed ? 'scaleY(0)' : 'scaleY(1)',
-      transformOrigin: '0 top',
-      overflowY: collapsed ? 'hidden' : 'scroll',
-      paddingLeft: '3px',
-      transitionDuration: '0.5s',
-      transitionProperty: 'transform',
-    }}
-    >
+    <div className={f('filter-panel', {collapsed})}>
       {children}
     </div>
   </div>
@@ -34,28 +28,32 @@ FilterPanel.propTypes = {
 class FiltersPanel extends Component {
   static propTypes = {
     children: T.any,
-  }
+  };
+
   constructor(){
     super();
     this.state = {filters: []};
-
   }
+
   componentWillMount(){
     const children = this.props.children.length ?
       this.props.children :
       [this.props.children];
     this.setState({filters: children.map(() => false)});
   }
+
   toggleAll = () => {
     const toCollapse = Object.values(this.state.filters)
       .reduce((acc, v) => v && acc, true);
     this.setState({filters: this.props.children.map(() => !toCollapse)});
-  }
+  };
+
   toggleFilter = (i) => {
     const state = this.state;
     state.filters[i] = !state.filters[i];
     this.setState(state);
-  }
+  };
+
   render() {
     const children = this.props.children.length ?
       this.props.children :
@@ -63,7 +61,7 @@ class FiltersPanel extends Component {
     const toCollapse = Object.values(this.state.filters)
       .reduce((acc, v) => v && acc, true);
     return (
-      <div className={f('row')} style={{maxHeight: '200px', marginBottom: '30px'}}>
+      <div className={f('row', 'filters-panel')}>
         <div className={f('shrink', 'columns')}>
           <h5>Filter By</h5>
           <button onClick={this.toggleAll}>
@@ -85,4 +83,5 @@ class FiltersPanel extends Component {
     );
   }
 }
+
 export default FiltersPanel;

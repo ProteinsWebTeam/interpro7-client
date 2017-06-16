@@ -148,7 +148,7 @@ class List extends Component {
             <Column
               accessKey="type"
               renderer={(type) => (
-                <interpro-type type={type.replace('_', ' ')} expanded>
+                <interpro-type type={type.replace('_', ' ')} title={type}>
                   {type}
                 </interpro-type>
               )}

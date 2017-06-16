@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 
+import NumberLabel from 'components/NumberLabel';
+
 import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
 
@@ -9,6 +11,7 @@ import {format, resolve} from 'url';
 
 import {goToNewLocation} from 'actions/creators';
 
+import f from 'styles/foundation';
 
 class IntegratedFilter extends Component {
   static propTypes = {
@@ -65,16 +68,18 @@ class IntegratedFilter extends Component {
       <div>
         {
           Object.keys(types).sort().map(type => (
-            <div key={type}>
-              <label>
+            <div key={type} className={f('column')}>
+              <label className={f('row', 'align-middle')}>
                 <input
                   type="radio"
                   name="interpro_state"
                   value={type}
                   onChange={this._handleSelection}
                   checked={this.state.value === type}
+                  style={{margin: '0.25em'}}
                 />
-                {type} <small>({types[type]})</small>
+                <span>{type}</span>
+                <NumberLabel value={types[type]} />
               </label>
             </div>
           ))

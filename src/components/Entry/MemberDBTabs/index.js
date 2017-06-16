@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 
+import NumberLabel from 'components/NumberLabel';
 import Link from 'components/generic/Link';
 import {createSelector} from 'reselect';
 
@@ -107,10 +108,15 @@ class MemberDBTabs extends Component {
                   newTo={e.newTo}
                   activeClass={f('is-active', 'is-active-tab')}
                   style={{
+                    display: 'flex',
                     borderLeftColor: colors[e.name] ? colors[e.name] : null,
                   }}
                 >
-                  {e.name} <span style={{float: 'right'}}>({e.value})</span>
+                  <span>{e.name}&nbsp;</span>
+                  <NumberLabel
+                    value={e.value}
+                    className={f('number-label')}
+                  />
                 </Link>
               </li>
             ))

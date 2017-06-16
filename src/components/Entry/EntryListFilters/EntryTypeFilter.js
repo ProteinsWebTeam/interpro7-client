@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 
+import NumberLabel from 'components/NumberLabel';
+
 import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
 
@@ -10,6 +12,7 @@ import {format, resolve} from 'url';
 import {goToNewLocation} from 'actions/creators';
 import loadWebComponent from 'utils/loadWebComponent';
 
+import f from 'styles/foundation';
 
 class EntryTypeFilter extends Component {
   static propTypes = {
@@ -52,8 +55,8 @@ class EntryTypeFilter extends Component {
       <div>
         {
           types.map(([type, count]) => (
-            <div key={type}>
-              <label>
+            <div key={type} className={f('column')}>
+              <label className={f('row', 'align-middle')}>
                 <input
                   type="radio"
                   name="entry_type"
@@ -62,12 +65,15 @@ class EntryTypeFilter extends Component {
                   checked={
                     (!search.type && type === 'ALL') || search.type === type
                   }
-                /> {
+                  style={{margin: '0.25em'}}
+                />
+                {
                   type === 'ALL' ? type :
                     <interpro-type type={type.replace('_', ' ')} expanded>
                       {type}
                     </interpro-type>
-                } <small>({count})</small>
+                }
+                <NumberLabel value={count} />
               </label>
             </div>
           ))

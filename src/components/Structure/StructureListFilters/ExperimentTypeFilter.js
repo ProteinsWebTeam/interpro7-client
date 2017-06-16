@@ -2,6 +2,8 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 
+import NumberLabel from 'components/NumberLabel';
+
 import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
 
@@ -9,6 +11,8 @@ import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
 import {goToNewLocation} from 'actions/creators';
+
+import f from 'styles/foundation';
 
 class ExperimentTypeFilter extends Component {
   static propTypes = {
@@ -37,14 +41,14 @@ class ExperimentTypeFilter extends Component {
     const types = Object.entries(loading ? {} : payload)
       .sort(([, a], [, b]) => b - a);
     if (!loading){
-      types.unshift(['ALL', 'N/A']);
+      types.unshift(['ALL', NaN]);
     }
     return (
       <div style={{overflowX: 'hidden'}}>
         {
           types.map(([type, count]) => (
-            <div key={type}>
-              <label>
+            <div key={type} className={f('column')}>
+              <label className={f('row', 'align-middle')}>
                 <input
                   type="radio"
                   name="experiment_type"
@@ -54,7 +58,10 @@ class ExperimentTypeFilter extends Component {
                     (!search.experiment_type && type === 'ALL') ||
                     search.experiment_type === type
                   }
-                /> {type} <small> ({count})</small>
+                  style={{margin: '0.25em'}}
+                />
+                <span>{type}</span>
+                <NumberLabel value={count} />
               </label>
             </div>
           ))

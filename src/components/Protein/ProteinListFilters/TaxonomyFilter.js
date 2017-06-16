@@ -2,6 +2,8 @@
 import React, {Component} from 'react';
 import T from 'prop-types';
 
+import NumberLabel from 'components/NumberLabel';
+
 import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
 
@@ -9,6 +11,8 @@ import {createSelector} from 'reselect';
 import {format, resolve} from 'url';
 
 import {goToNewLocation} from 'actions/creators';
+
+import f from 'styles/foundation';
 
 class TaxonomyFilter extends Component {
   static propTypes = {
@@ -38,14 +42,14 @@ class TaxonomyFilter extends Component {
     const taxes = Object.entries(loading ? {} : payload)
       .sort(([, a], [, b]) => b - a);
     if (!loading) {
-      taxes.unshift(['ALL', 'N/A']);
+      taxes.unshift(['ALL', NaN]);
     }
     return (
       <div style={{overflowX: 'hidden'}}>
         {
           taxes.map(([taxId, count]) => (
-            <div key={taxId}>
-              <label>
+            <div key={taxId} className={f('column')}>
+              <label className={f('row', 'align-middle')}>
                 <input
                   type="radio"
                   name="entry_type"
@@ -55,7 +59,10 @@ class TaxonomyFilter extends Component {
                     (!search.tax_id && taxId === 'ALL') ||
                     search.tax_id === taxId
                   }
-                /> {taxId} <small style={{float: 'right'}}>({count})</small>
+                  style={{margin: '0.25em'}}
+                />
+                <span>{taxId}</span>
+                <NumberLabel value={count} />
               </label>
             </div>
           ))
