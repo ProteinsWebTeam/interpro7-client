@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
 
-import {goToLocation} from 'actions/creators';
+import {goToNewLocation} from 'actions/creators';
+import path2description from 'utils/processLocation/path2description';
 
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
@@ -62,7 +63,9 @@ class SummaryEntry extends Component {
     this._hierarchy.addEventListener('click', e => {
       if (e.path[0].classList.contains('link')){
         e.preventDefault();
-        this.props.goToLocation(e.path[0].getAttribute('href'));
+        this.props.goToNewLocation(
+          path2description(e.path[0].getAttribute('href'))
+        );
       }
     });
   }
@@ -82,7 +85,7 @@ class SummaryEntry extends Component {
                 accession={metadata.accession}
                 hideafter="2"
                 hrefroot="/entry/interpro"
-                ref={(node) => this._hierarchy = node}
+                ref={node => this._hierarchy = node}
               />
               <br/>
               <Description
@@ -128,7 +131,7 @@ class SummaryEntry extends Component {
 }
 
 SummaryEntry.propTypes = {
-  goToLocation: T.func.isRequired,
+  goToNewLocation: T.func.isRequired,
   data: T.shape({
     metadata: T.object.isRequired,
   }),
@@ -139,4 +142,4 @@ SummaryEntry.propTypes = {
   }).isRequired,
 };
 
-export default connect(null, {goToLocation})(SummaryEntry);
+export default connect(null, {goToNewLocation})(SummaryEntry);

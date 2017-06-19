@@ -306,9 +306,7 @@ SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.object,
   }).isRequired,
-  location: T.shape({
-    pathname: T.string.isRequired,
-  }).isRequired,
+  location: T.object.isRequired,
 };
 
 const Summary = props => {
@@ -331,13 +329,8 @@ Summary.propTypes = {
   data: T.shape({
     loading: T.bool,
     payload: T.object,
-    status: T.number,
   }).isRequired,
   isStale: T.bool.isRequired,
-  location: T.shape({
-    pathname: T.string.isRequired,
-  }).isRequired,
-  match: T.string,
 };
 
 const dbs = new RegExp(

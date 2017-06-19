@@ -67,9 +67,9 @@ class GOTermsFilter extends Component {
                 />
                 <span>{term}</span>
                 {
-                  typeof count !== 'undefined' ?
-                    <NumberLabel value={count} /> :
-                    null
+                  typeof count === 'undefined' ?
+                    null :
+                    <NumberLabel value={count} />
                 }
               </label>
             </div>

@@ -4,25 +4,13 @@ import T from 'prop-types';
 
 import Related from 'components/Related';
 
-const ProteinSub = (
-  {data, location: {pathname}, main}
-  /*: {data: Object, location: {pathname: string}, main: string} */
-) => (
+const ProteinSub = ({data}/*: {data: Object} */) => (
   <div>
-    <Related
-      data={data}
-      main={main}
-      secondary="protein"
-      pathname={pathname}
-    />
+    <Related data={data} />
   </div>
 );
 ProteinSub.propTypes = {
   data: T.object.isRequired,
-  location: T.shape({
-    pathname: T.string.isRequired,
-  }).isRequired,
-  main: T.string.isRequired,
 };
 
 export default ProteinSub;

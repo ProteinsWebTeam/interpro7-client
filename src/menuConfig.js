@@ -97,6 +97,7 @@ export const singleEntity = [
         },
       };
     },
+    type: 'entry',
     name: 'entries',
     counter: 'entries',
   },
@@ -111,6 +112,7 @@ export const singleEntity = [
         },
       };
     },
+    type: 'protein',
     name: 'proteins',
     counter: 'proteins',
   },
@@ -125,6 +127,7 @@ export const singleEntity = [
         },
       };
     },
+    type: 'structure',
     name: 'structures',
     counter: 'structures',
   },

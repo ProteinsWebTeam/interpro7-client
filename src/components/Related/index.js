@@ -1,8 +1,10 @@
 import React from 'react';
 import T from 'prop-types';
+import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 
 import Link from 'components/generic/Link';
+import description2path from 'utils/processLocation/description2path';
 import loadData, {searchParamsToURL} from 'higherOrder/loadData';
 
 import Matches from 'components/Matches';
@@ -43,9 +45,9 @@ ObjectToList.propTypes = {
   component: T.func.isRequired,
 };
 
-const RelatedSimple = ({secondaryData, main, secondary}) => (
+const _RelatedSimple = ({secondaryData, mainType, focusType}) => (
   <div>
-    <p>This {main} is related to this:</p>
+    <p>This {mainType} is related to this:</p>
     <ObjectToList
       obj={secondaryData}
       component={({k: db, value}) => (
@@ -53,7 +55,7 @@ const RelatedSimple = ({secondaryData, main, secondary}) => (
           newTo={location => ({
             ...location,
             description: {
-              mainType: secondary,
+              mainType: focusType,
               mainDB: db,
             },
           })}
@@ -64,12 +66,17 @@ const RelatedSimple = ({secondaryData, main, secondary}) => (
     />
   </div>
 );
-RelatedSimple.propTypes = {
+_RelatedSimple.propTypes = {
   secondaryData: T.object.isRequired,
-  main: T.string.isRequired,
-  secondary: T.string.isRequired,
-  pathname: T.string.isRequired,
+  mainType: T.string.isRequired,
+  focusType: T.string.isRequired,
 };
+const mapStateToPropsSimple = createSelector(
+  state => state.newLocation.description.mainType,
+  state => state.newLocation.description.focusType,
+  (mainType, focusType) => ({mainType, focusType}),
+);
+const RelatedSimple = connect(mapStateToPropsSimple)(_RelatedSimple);
 
 const primariesAndSecondaries = {
   entry: {
@@ -103,79 +110,104 @@ const primariesAndSecondaries = {
     },
   },
 };
-const RelatedAdvanced = (
-  {mainData, secondaryData, isStale, main, secondary, actualSize, pathname}
+const _RelatedAdvanced = (
+  {mainData, secondaryData, isStale, mainType, focusType, focusDB, actualSize}
 ) => (
   <div>
     {
-      main === 'protein' &&
-        secondary === 'structure' ?
+      mainType === 'protein' &&
+        focusType === 'structure' ?
         <StructureOnProtein structures={secondaryData} protein={mainData}/> :
         null
     }
     {
-      main === 'structure' &&
-        secondary === 'entry' ?
+      mainType === 'structure' &&
+        focusType === 'entry' ?
         <EntriesOnStructure entries={secondaryData}/> :
         null
     }
     {
-      main === 'protein' &&
-        secondary === 'entry' &&
-        pathname.indexOf('interpro') > 0 ?
+      mainType === 'protein' &&
+        focusType === 'entry' &&
+        focusDB === 'InterPro' ?
         <ProteinEntryHierarchy entries={secondaryData} /> :
         null
     }
     <p>
-        This {main} is related to
+        This {mainType} is related to
       {
         secondaryData.length > 1 ?
-          ` these ${toPlural(secondary)}:` :
-          ` this ${secondary}:`
+          ` these ${toPlural(focusType)}:` :
+          ` this ${focusType}:`
       }
     </p>
     <Matches
       actualSize={actualSize}
       matches={
-        secondaryData.reduce((prev, {coordinates, ...secondaryData}) => (
-          [...prev, {[main]: mainData, [secondary]: secondaryData, coordinates}]
-        ), [])
+        secondaryData.reduce((prev, {coordinates, ...secondaryData}) => ([
+          ...prev,
+          {[mainType]: mainData, [focusType]: secondaryData, coordinates},
+        ]), [])
       }
       isStale={isStale}
-      {...primariesAndSecondaries[main][secondary]}
+      {...primariesAndSecondaries[mainType][focusType]}
     />
   </div>
 );
-RelatedAdvanced.propTypes = {
+_RelatedAdvanced.propTypes = {
   mainData: T.object.isRequired,
   secondaryData: T.arrayOf(T.object).isRequired,
   isStale: T.bool.isRequired,
-  main: T.string.isRequired,
-  secondary: T.string.isRequired,
-  pathname: T.string.isRequired,
+  mainType: T.string.isRequired,
+  focusType: T.string.isRequired,
+  focusDB: T.string.isRequired,
   actualSize: T.number,
 };
+const mapStateToPropsAdvanced = createSelector(
+  state => state.newLocation.description.mainType,
+  state => state.newLocation.description.focusType,
+  state => state.newLocation.description.focusDB,
+  (mainType, focusType, focusDB) => ({mainType, focusType, focusDB}),
+);
+const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
 
 const getReversedUrl = createSelector(
   state => state.settings.api,
-  state => state.location,
-  ({protocol, hostname, port, root}, {pathname, search}) => {
-    const index = pathname.slice(2).search('protein|entry|structure') + 1;
-    const newPath = pathname.slice(index) + pathname.slice(0, index);
+  state => state.newLocation.description,
+  state => state.newLocation.search,
+  ({protocol, hostname, port, root}, description, search) => {
+    const newDesc = Object.entries(description).reduce((acc, [key, value]) => {
+      let newKey = key;
+      if (key.startsWith('focus')) newKey = newKey.replace('focus', 'main');
+      if (key.startsWith('main')) newKey = newKey.replace('main', 'focus');
+      // eslint-disable-next-line no-param-reassign
+      acc[newKey] = value;
+      return acc;
+    }, {});
     const s = search || {};
-    return `${protocol}//${hostname}:${port}${root}${newPath}?${searchParamsToURL(s)}`;
+    return `${protocol}//${hostname}:${port}${root}${
+      description2path(newDesc)
+    }?${searchParamsToURL(s)}`;
   }
 );
-const RelatedAdvancedQuery = loadData(getReversedUrl)(
+const mapStateToPropsAdvancedQuery = createSelector(
+  state => state.newLocation.description.mainType,
+  mainType => ({mainType}),
+);
+const RelatedAdvancedQuery = connect(
+  mapStateToPropsAdvancedQuery
+)(loadData(getReversedUrl)(
   ({data: {payload, loading}, secondaryData, ...props}) => {
     if (loading) return <div>Loading...</div>;
     const _secondaryData = payload.results.map(x => {
       const obj = x.metadata;
-      const plural = toPlural(props.main);
+      const plural = toPlural(props.mainType);
       // Given the reverse of the URL, and that we are quering by an accession
       // we can assume is only one, hence [0]
       obj.entry_protein_coordinates = x[plural][0].entry_protein_coordinates;
-      obj.protein_structure_coordinates = x[plural][0].protein_structure_coordinates;
+      obj.protein_structure_coordinates = (
+        x[plural][0].protein_structure_coordinates
+      );
       if (x[plural][0].chain){
         obj.chain = x[plural][0].chain;
       }
@@ -189,13 +221,13 @@ const RelatedAdvancedQuery = loadData(getReversedUrl)(
       />
     );
   }
-);
+));
 
-const Related = ({data, secondary, ...props}) => {
+const Related = ({data, focusType, ...props}) => {
   if (data.loading) return <div>Loading...</div>;
   const {
     metadata: mainData,
-    [toPlural(secondary)]: secondaryData,
+    [toPlural(focusType)]: secondaryData,
   } = data.payload;
   const RelatedComponent = (
     Array.isArray(secondaryData) ? RelatedAdvancedQuery : RelatedSimple
@@ -205,7 +237,6 @@ const Related = ({data, secondary, ...props}) => {
       <RelatedComponent
         secondaryData={secondaryData}
         mainData={mainData}
-        secondary={secondary}
         {...props}
       />
     </div>
@@ -213,7 +244,11 @@ const Related = ({data, secondary, ...props}) => {
 };
 Related.propTypes = {
   data: T.object.isRequired,
-  secondary: T.string.isRequired,
+  focusType: T.string.isRequired,
 };
+const mapStateToPropsDefault = createSelector(
+  state => state.newLocation.description.focusType,
+  focusType => ({focusType}),
+);
 
-export default Related;
+export default connect(mapStateToPropsDefault)(Related);
