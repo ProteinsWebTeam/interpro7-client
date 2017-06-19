@@ -42,31 +42,35 @@ class GOTermsFilter extends Component {
   };
 
   render() {
-    const {
-      data: {loading, payload},
-      location: {search: {go_term: go}},
-    } = this.props;
-    const types = loading ? {} : payload;
-    // if (!loading) types.Any = Object.values(types).reduce((acc, v) => acc + v, 0);
+    const {data: {loading, payload}, location: {search}} = this.props;
+    const terms = Object.entries(loading ? {} : payload)
+      .sort(([, a], [, b]) => b - a);
     if (!loading){
-      types.Any = 'N/A';
+      terms.unshift(['Any']);
     }
     return (
       <div>
         {
-          Object.keys(types).sort().map(type => (
-            <div key={type} className={f('column')}>
+          terms.map(([term, count]) => (
+            <div key={term} className={f('column')}>
               <label className={f('row', 'align-middle')}>
                 <input
                   type="radio"
                   name="go_category"
-                  value={categories[type]}
+                  value={categories[term]}
                   onChange={this._handleSelection}
-                  checked={(type === 'Any' && !go) || go === categories[type]}
+                  checked={
+                    (term === 'Any' && !search.go_term) ||
+                    search.go_term === categories[term]
+                  }
                   style={{margin: '0.25em'}}
                 />
-                <span>{type}</span>
-                <NumberLabel value={types[type]} />
+                <span>{term}</span>
+                {
+                  typeof count !== 'undefined' ?
+                    <NumberLabel value={count} /> :
+                    null
+                }
               </label>
             </div>
           ))

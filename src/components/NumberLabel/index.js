@@ -7,15 +7,22 @@ import style from './style.css';
 
 const f = foundationPartial(style);
 
+// Avoid doing too much work
+// This is to update a number value, not style, so no need re-render every frame
+const MAX_FPS = 10;
+TweenLite.ticker.fps(MAX_FPS);
+
+const DELAY_RANGE = 0.1;
+
 class NumberLabel extends Component {
   static propTypes = {
     value: T.number,
-    delay: T.number,
+    duration: T.number,
     className: T.string,
   };
 
   static defaultProps = {
-    delay: 1,
+    duration: 1,
   };
 
   constructor(props/*: ?any */) {
@@ -24,38 +31,40 @@ class NumberLabel extends Component {
   }
 
   componentWillMount() {
-    const {value} = this.props;
-    this._animateTo(value);
+    this._animate(this.state.value, this.props.value);
   }
 
   componentWillReceiveProps({value}) {
-    const {value: prevValue} = this.state;
-    const canAnimate = (
-      prevValue !== value &&
-      Number.isFinite(prevValue) &&
-      Number.isFinite(value)
-    );
-    if (canAnimate) {
-      return this._animateTo(value);
-    }
-    this.setState({value});
+    this._animate(this.state.value, value);
   }
 
-  _animateTo = to => {
+  _animate = (from, to) => {
     if (this._animation) this._animation.kill();
+    const canAnimate = (
+      from !== to &&
+      Number.isFinite(from) &&
+      Number.isFinite(to)
+    );
+    if (!canAnimate) return this.setState({value: to});
+
     const animatable = {value: this.state.value};
     this._animation = TweenLite.to(
       animatable,
-      this.props.delay,
+      this.props.duration,
       {
         value: to,
+        // between 0 and 10% of full duration
+        delay: Math.random() * this.props.duration * DELAY_RANGE,
         onUpdate: () => this.setState({value: Math.round(animatable.value)}),
       }
     );
   };
 
   render() {
-    const {value: _, delay: __, className, ...props} = this.props;
+    const {
+      value: _, duration: __,
+      className, ...props
+    } = this.props;
     let {value: _value} = this.state;
     if (isNaN(_value)) _value = 'N/A';
     if (Number.isFinite(_value)) _value = _value.toLocaleString();
