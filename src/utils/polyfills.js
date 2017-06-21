@@ -15,7 +15,7 @@ export const webComponents = () => {
       try {
         await import(
           /* webpackChunkName: "webcomponents-polyfill" */
-          'webcomponents.js/webcomponents-sd-ce'
+          '@webcomponents/webcomponentsjs/webcomponents-sd-ce'
         );
         res(false);
       } catch (err) {

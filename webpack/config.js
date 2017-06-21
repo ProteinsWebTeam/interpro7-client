@@ -43,9 +43,7 @@ if (!PROD) {
     '#inline-source-map';
   config.devServer = {
     // contentBase: '',
-    stats: {
-      colors: true,
-    },
+    stats: 'errors-only',
     inline: true,
     overlay: true,
     port: websiteURL.port || DEFAULT_PORT,
@@ -56,7 +54,6 @@ if (!PROD) {
     },
     watchOptions: {
       ignored: /node_modules/,
-      poll: 500,
     },
   };
 }
