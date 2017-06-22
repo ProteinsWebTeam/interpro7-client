@@ -66,10 +66,10 @@
 }
 
 .secondary {
-  color: #219908;
+  color: #2199e8;
 
   @nest & a:hover, & a:focus {
-    background-color: #21990833;
+    background-color: rgba(60, 135, 185, 0.2);
   }
 }
 
