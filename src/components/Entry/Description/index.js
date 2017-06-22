@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: [1, {ignore: [1, 2]}] */
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -21,7 +21,7 @@ ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
 };
 
-const Description = ({textBlocks}) => (
+const Description = ({textBlocks}/*: {|textBlocks: Array<string>|} */) => (
   <ReadMoreCard>
     <div className={styles.content}>
       <h3>Description</h3>

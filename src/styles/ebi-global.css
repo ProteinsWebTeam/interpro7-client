@@ -442,10 +442,6 @@ ul.menu.dropdown ul.menu.is-dropdown-submenu.js-dropdown-active {
 .dropdown.menu > li.is-dropdown-submenu-parent > a::after {
   border-color: #FFF transparent transparent; }
 
-/* active sidebar items */
-.menu > li > a.active {
-  font-weight: bold; }
-
 /* dropdown arrow */
 body .dropdown.menu .has-submenu.is-down-arrow > a::after {
   border-color: rgba(0, 0, 0, 0.4) transparent transparent; }

@@ -18,14 +18,11 @@ const Protein = createAsyncComponent(
 const Structure = createAsyncComponent(
   () => import(/* webpackChunkName: "structure-page" */'pages/Structure')
 );
-// Search
-// const SequenceSearch = createAsyncComponent(
-//   () => import('staticPages/SequenceSearch')
-// );
+
+// Static pages
 const Search = createAsyncComponent(
   () => import(/* webpackChunkName: "search" */'staticPages/Search')
 );
-// Static pages
 const About = createAsyncComponent(
   () => import(/* webpackChunkName: "about" */'staticPages/About')
 );
