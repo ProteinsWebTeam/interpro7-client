@@ -4,13 +4,11 @@ ul#global-nav {padding-top:0;}/****IMPORTANT TO FIX****remove space on top of pa
 .local-masthead nav ul li a:active {border-bottom: 3px white solid;} /*****remove arrows in the menu - fill the gap when menu click when no arrow*****/
 
 a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
-/*a:hover, a:focus, a:active {border-bottom: 1px solid #8c8c8c; } /*STYLE - add a line for links just on mouse over*/
 #content {padding-top: 1rem; padding-bottom:0;}/*add some more space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer*/
 .local-masthead nav ul.menu li {border-right: 1px solid rgba(248, 248, 248, 0.2);}/*STYLE - slightly hide division between menu items*/
 .local-masthead ul li.is-active a, .local-masthead ul li a:hover, .local-masthead nav ul li a.hover, .local-masthead nav ul li a:hover {color: #000;}/*STYLE - make menu items hover slightly darker*/
 .pagination .current {background: #3798a7;}/*STYLE - custom color for table pagination MISSING in THEME-EBI*/
-
-/*div.local-masthead {position:relative;}!*to have the right banner button icons align properly on the right when offcanvas is open - work only if content is resized*!*/
+.callout {background: #eaeaea;}/*redefining a darker bgd for callout as they use to be*/
 /****************************** END Overwritting EBI  global**********************/
 
 /******************************Local style***************************************/
@@ -20,10 +18,10 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 .md-color, .md-server {fill:#e2e2e2; font-size:9em; font-family: 'EBI-generic', arial, sans-serif;}
 .md-cg .md-color {fill: #a88cc3;}
 .md-cd .md-color {fill:#addc58;}
-.md-ha .md-color {fill:#00e2e2;}
+.md-ha .md-color {fill:#1ad8d8;}
 .md-pa .md-color {fill:#bfac92;}
 .md-pf .md-color {fill:#6287b1; /*was 9bbbe0*/}
-.md-pi .md-color {fill:#dfafdf;}
+.md-pi .md-color {fill:#e299e2;}
 .md-pri .md-color {fill:#4fd829;}
 .md-pro .md-color {fill:#8d99e4;}
 .md-prpro .md-color, .md-pr .md-color {fill:#ff9229;}
@@ -31,7 +29,7 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 .md-sf .md-color {fill:#00b1d3;}
 .md-sm .md-color {fill:#ff7a76;}
 .md-su .md-color {fill:#686868;}
-.md-ti .md-color {fill:#4f9294;}
+.md-ti .md-color {fill:#b37977;}
 /*/MEMBER DATABASE SVG icons*/
 
 
