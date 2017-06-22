@@ -12,6 +12,7 @@
   transition: transform 0.3s ease-in-out;
   transform: translateX(20em);
   overflow-y: scroll;
+  box-shadow: 1px 0px 2px 3px rgba(0,0,0,0.3);
 
   @nest & ul {
     list-style: none;
