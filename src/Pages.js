@@ -60,7 +60,12 @@ const pages = new Set([
 
 const Pages = (props/*: Object */) => (
   <div>
-    <BrowseTabs />
+    <Switch
+      {...props}
+      indexRoute={() => null}
+      locationSelector={l => l.description.mainAccession}
+      catchAll={BrowseTabs}
+    />
     <Switch
       {...props}
       locationSelector={l => l.description.other || l.description.mainType}

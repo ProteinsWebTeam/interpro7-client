@@ -97,7 +97,7 @@ const rules = {
   // Specify the maximum depth callbacks can be nested
   'max-nested-callbacks': [1, 4],
   // Limits number of parameters that can be used in the function declaration
-  'max-params': [1, 4],
+  'max-params': [1, 5],
   // Specify the maximum number of statement allowed in a function
   'max-statements': [1, 15],
   // Require a capital letter for constructors

@@ -55,15 +55,19 @@ class CookieBanner extends Component {
         }}
       >
         <div className={foundation('row')}>
-          <span style={{marginRight: '2em', flex: 1}} >
-          This website uses cookies.
-          By continuing to browse this site,
-          you are agreeing to the use of our site cookies.
-          To find out more, see our{' '}
+          <span style={{marginRight: '2em', flex: 1}}>
+            This website uses cookies.
+            By continuing to browse this site,
+            you are agreeing to the use of our site cookies.
+            To find out more, see our{' '}
             <a
               target="_blank"
               href="https://www.ebi.ac.uk/about/terms-of-use"
               rel="noopener"
+              style={{
+                color: '#f8f8f8',
+                borderBottom: '1px dotted',
+              }}
             >
             Terms of Use
             </a>.

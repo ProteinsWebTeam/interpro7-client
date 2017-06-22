@@ -40,7 +40,7 @@ class MenuItem extends PureComponent {
     closeEverything: T.func.isRequired,
     disabled: T.bool,
     className: T.string,
-    activeClass: T.string,
+    activeClass: T.oneOfType([T.string, T.func]),
   };
 
   render() {
@@ -56,12 +56,21 @@ class MenuItem extends PureComponent {
       ...props
     } = this.props;
     const CustomLink = (!newTo && isExternal(to || href)) ? BaseLink : Link;
+    let _activeClass = s('active');
+    if (typeof activeClass === 'string') {
+      _activeClass += ` ${activeClass || ''}`;
+    } else if (typeof activeClass === 'function') {
+      _activeClass = (...args) => {
+        const output = (activeClass(...args) || '').trim();
+        if (output) return `${output} ${s('active')}`;
+      };
+    }
     return (
       <CustomLink
-        to={to}
         newTo={newTo}
+        href={href}
         onClick={closeEverything}
-        // activeClass={activeClassFn(to, activeClass)}
+        activeClass={_activeClass}
         className={
           `${className || ''} ${
             s('select-none', 'menu-item', {disabled})

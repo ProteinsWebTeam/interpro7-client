@@ -129,14 +129,14 @@ class SearchResults extends Component {
 
 const mapStateToProps = createSelector(
   state => state.data.dataUrl,
-  state => state.location.search,
+  state => state.newLocation.search,
   (dataUrl, search) => ({dataUrl, search})
 );
 
 const getEbiSearchUrl = createSelector(
   state => state.settings.ebi,
   state => state.settings.pagination,
-  state => state.location.search,
+  state => state.newLocation.search,
   ({protocol, hostname, port, root}, pagination, search) => {
     const s = search || {};
     if (!s.search) return null;

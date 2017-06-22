@@ -79,7 +79,7 @@
     "d3": "^4.8.0",
     "data-loader": "^0.1.8",
     "draft-js": "^0.10.1",
-    "foundation-sites": "^6.2.4",
+    "foundation-sites": "~6.2.4",
     "gsap": "^1.19.1",
     "history": "^4.6.2",
     "idb": "^2.0.3",
