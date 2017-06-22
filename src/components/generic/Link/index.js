@@ -1,7 +1,6 @@
 // @flow
 import React, {PureComponent} from 'react';
 import T from 'prop-types';
-import isEqual from 'lodash-es/isEqual';
 import {stringify as qsStringify} from 'query-string';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -43,10 +42,12 @@ const generateClassName = (
   if (typeof activeClass === 'function') {
     return `${className || ''} ${activeClass(location) || ''}`;
   }
-  if (isEqual(nextLocation.description, location.description)) {
-    return `${className || ''} ${activeClass}`;
+  for (const [key, value] of Object.entries(nextLocation.description)) {
+    // If it is ever true, it means we don't have a match
+    if (location.description[key] !== value) return className;
   }
-  return className;
+  // If we arrive here, we have a match
+  return `${className || ''} ${activeClass}`;
 };
 
 class Link extends PureComponent {
@@ -99,7 +100,7 @@ class Link extends PureComponent {
     const nextLocation = getNextLocation(location, newTo);
     const _href = generateHref(nextLocation, href);
     const _className = generateClassName(
-      className, activeClass, location, newTo, href,
+      className, activeClass, location, nextLocation, href,
     ) || '';
     return (
       <a

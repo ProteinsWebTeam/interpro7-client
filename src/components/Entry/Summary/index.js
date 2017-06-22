@@ -118,7 +118,10 @@ class SummaryEntry extends Component {
                   <h4>References</h4>
                 </div>
               </div>
-              <Literature references={metadata.literature}/>
+              <Literature
+                references={metadata.literature}
+                description={metadata.description}
+              />
             </section>
         }
         {
