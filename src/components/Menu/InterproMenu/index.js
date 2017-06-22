@@ -21,6 +21,7 @@ const InterproMenu = (
     children?: any
   } */
 ) => (
+  <nav>
   <ul className={className}>
     {children}
     {InterPro.map(({newTo, name, icon, iconClass = 'generic', options}) => (
@@ -54,6 +55,7 @@ const InterproMenu = (
         </li>
     ))}
   </ul>
+  </nav>
 );
 InterproMenu.propTypes = {
   className: T.string,
