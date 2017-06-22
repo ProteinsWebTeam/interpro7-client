@@ -5,8 +5,8 @@ ul#global-nav {padding-top:0;}/****IMPORTANT TO FIX****remove space on top of pa
 
 a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
 #content {padding-top: 1rem; padding-bottom:0;}/*add some more space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer*/
-.local-masthead nav ul.menu li {border-right: 1px solid rgba(248, 248, 248, 0.2);}/*STYLE - slightly hide division between menu items*/
-.local-masthead ul li.is-active a, .local-masthead ul li a:hover, .local-masthead nav ul li a.hover, .local-masthead nav ul li a:hover {color: #000;}/*STYLE - make menu items hover slightly darker*/
+#local-masthead nav ul.menu li {border-right: 1px solid rgba(248, 248, 248, 0.2);}/*STYLE - slightly hide division between menu items - need to keep ID specificity to override EBI style TILL they change the ID in EBI-GLOBAL */
+#local-masthead ul li.is-active a, #local-masthead ul li a:hover, #local-masthead nav ul li a.hover, #local-masthead nav ul li a:hover {color: #000;}/*STYLE - make menu items hover slightly darker*/
 .pagination .current {background: #3798a7;}/*STYLE - custom color for table pagination MISSING in THEME-EBI*/
 .callout {background: #eaeaea;}/*redefining a darker bgd for callout as they use to be*/
 /****************************** END Overwritting EBI  global**********************/
