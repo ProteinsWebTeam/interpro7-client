@@ -22,39 +22,41 @@ const InterproMenu = (
   } */
 ) => (
   <nav>
-  <ul className={className}>
-    {children}
-    {InterPro.map(({newTo, name, icon, iconClass = 'generic', options}) => (
-      includeSubMenus && options ?
-        <SubMenu
-          key={name}
-          pathname={''}
-          options={options}
-          className={className}
-        >
-          {
-            icon &&
-            <i
-              data-icon={icon}
-              className={iconStyle('icon', `icon-${iconClass}`)}
-            />
-          }
-          {name}
-        </SubMenu> :
-        <li key={name}>
-          <MenuItem newTo={newTo}>
-            {
-              icon &&
+    <ul className={className}>
+      {children}
+      {InterPro.map(
+        ({newTo, name, icon, iconClass = 'generic', activeClass, options}) => (
+          includeSubMenus && options ?
+            <SubMenu
+              key={name}
+              pathname={''}
+              options={options}
+              className={className}
+            >
+              {
+                icon &&
               <i
                 data-icon={icon}
                 className={iconStyle('icon', `icon-${iconClass}`)}
               />
-            }
-            {name}
-          </MenuItem>
-        </li>
-    ))}
-  </ul>
+              }
+              {name}
+            </SubMenu> :
+            <li key={name}>
+              <MenuItem newTo={newTo} activeClass={activeClass}>
+                {
+                  icon &&
+                <i
+                  data-icon={icon}
+                  className={iconStyle('icon', `icon-${iconClass}`)}
+                />
+                }
+                {name}
+              </MenuItem>
+            </li>
+        )
+      )}
+    </ul>
   </nav>
 );
 InterproMenu.propTypes = {

@@ -1,3 +1,5 @@
+import f from 'styles/foundation';
+
 export const EBI = [
   {
     href: 'https://www.ebi.ac.uk',
@@ -175,6 +177,9 @@ export const InterPro = [
     newTo: {description: {}},
     icon: 'H',
     name: 'Home',
+    activeClass({description: {mainType, other}}) {
+      if (!(mainType || other)) return f('is-active');
+    },
   },
   {
     newTo: {description: {mainType: 'search'}},

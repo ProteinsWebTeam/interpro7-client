@@ -5,10 +5,7 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 
 import {closeSideNav} from 'actions/creators';
-// import {EBI, InterPro, entities, singleEntity} from 'menuConfig';
-// import MenuItem from 'components/Menu/MenuItem';
 import loadData from 'higherOrder/loadData';
-import {getUrlForApi} from 'higherOrder/loadData/defaults';
 
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterproMenu from 'components/Menu/InterproMenu';
@@ -27,14 +24,12 @@ class SideMenu extends PureComponent {
     visible: T.bool.isRequired,
     data: T.object,
     loading: T.bool,
-    pathname: T.string.isRequired,
     closeSideNav: T.func.isRequired,
   };
 
   render() {
     const {
       visible,
-      pathname,
       data: {payload, loading},
       closeSideNav,
     } = this.props;
@@ -58,7 +53,7 @@ class SideMenu extends PureComponent {
               !loading && payload && payload.metadata &&
               <SingleEntityMenu
                 data={payload}
-                pathname={pathname}
+                pathname={''}
                 className={f('primary')}
               >
                 <span
@@ -73,21 +68,21 @@ class SideMenu extends PureComponent {
               </SingleEntityMenu>
             }
             <InterproMenu
-              pathname={pathname}
+              pathname={''}
               className={f('secondary', 'is-drilldown')}
               includeSubMenus={true}
             >
               <span
                 className={f('menu-label', 'select-none', 'cursor-default')}
               >
-                interpro menu
+                InterPro menu
               </span>
             </InterproMenu>
             <EBIMenu className={f('tertiary')}>
               <span
                 className={f('menu-label', 'select-none', 'cursor-default')}
               >
-                ebi menu
+                EBI menu
               </span>
             </EBIMenu>
           </ul>
@@ -98,26 +93,26 @@ class SideMenu extends PureComponent {
 }
 
 // TODO: change logic for menu loading data
-const urlBlacklist = new Set(['browse', 'search', 'settings', 'about', 'help']);
-const mapStateToUrl = createSelector(
-  state => state.settings,
-  state => state.location,
-  (settings, location) => {
-    for (const blacklist of urlBlacklist) {
-      if (location.pathname.toLowerCase().includes(blacklist)) {
-        return getUrlForApi({settings, location: {pathname: ''}});
-      }
-    }
-    return getUrlForApi({settings, location});
-  }
-);
+// const urlBlacklist = new Set(['browse', 'search', 'settings', 'about', 'help']);
+// const mapStateToUrl = createSelector(
+//   state => state.settings,
+//   state => state.location,
+//   state => state.newLocation,
+//   (settings, location, newLocation) => {
+//     for (const blacklist of urlBlacklist) {
+//       if (location.pathname.toLowerCase().includes(blacklist)) {
+//         return getUrlForApi({settings, location: {pathname: ''}, newLocation});
+//       }
+//     }
+//     return getUrlForApi({settings, location, newLocation});
+//   }
+// );
 
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
-  state => state.location.pathname,
-  (visible, pathname) => ({visible, pathname})
+  visible => ({visible})
 );
 export default connect(
   mapStateToProps,
   {closeSideNav}
-)(loadData(mapStateToUrl)(SideMenu));
+)(loadData()(SideMenu));
