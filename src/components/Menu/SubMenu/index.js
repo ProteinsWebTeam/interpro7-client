@@ -54,7 +54,7 @@ class SubMenu extends Component {
         >
           <li className={f('js-drilldown-back')}>
             <a
-              className={f('menu-label')}
+              className={f('menu-label', 'menu-item')}
               onClick={this.handleClick}
             >
               Back to InterPro menu
