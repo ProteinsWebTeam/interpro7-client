@@ -100,7 +100,8 @@ a:hover.noline {border-bottom:0 solid transparent;}
 #local-masthead .menu a {
   height: 100%;
 }
-#local-masthead .menu .active {color: #0a0a0a; background: #fff;border:none;font-weight: bold;/*temp while we areplace the active class on <li> and not <a> element*/}/*this should be defined in the default ebi css*/
+#local-masthead a.active {color: #0a0a0a;} /*define the colour for active tab link*/
+.masthead .menu .active {color: #0a0a0a; background: #fff;border:none;font-weight: bold;/*temp while we replace the active class on <li> and not <a> element*/}/*this should be defined in the default ebi css*/
 /*#local-masthead .menu > li > a {border-bottom-style: solid; border-bottom-color:transparent;}!*important to make all menu items same height otherwise buggy effect on click*!*/
 .badge {
   background: rgba(0, 0, 0, 0.23);
