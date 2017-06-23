@@ -19,8 +19,8 @@
   /*top: -150px;!* -34px (EBI header); *!*/
   left: 0;
   right: 0;
-  height: 238px;/*magic*/
-  z-index: 10;
+  height: 238px;/*magic --- SP for what use ?*/
+  /*z-index: 3;*//*SP removed z-index as it clashes with popup top EBI button-if needed needs to be more specific to each individual div (global-masthead and masthead )*/
 }
 
 .local_masthead {
