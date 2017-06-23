@@ -20,7 +20,7 @@
 }
 
 .active {
-  color: #93b5cc;
+  color: #74abd0;
   border-bottom:0;/*temp while waiting for menu to redefine active class on <li> element */
 
   &:visited {
