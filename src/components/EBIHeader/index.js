@@ -26,11 +26,6 @@ const styleBundle = foundationPartial(
 /*
  EMBL-EBI button and hidden div behaviour
  */
-const emblLocationListClasses = styleBundle({
-  column: true,
-  'padding-bottom-medium': true,
-});
-
 const _EmblButton = ({toggleEMBLMapNav}) => (
   <button
     className={styleBundle({
@@ -64,7 +59,7 @@ const _EmblDropdownDiv = ({visible}) => (
     }}
   >
     <p>
-      EMBL-EBI in Hinxton is one of five EMBL locations across europe.<br />
+      EMBL-EBI in Hinxton is one of six EMBL locations across europe.<br />
       <a
         href="https://www.ebi.ac.uk/about"
         className={styleBundle({small: true, readmore: true})}
@@ -75,59 +70,92 @@ const _EmblDropdownDiv = ({visible}) => (
 
     <div
       className={styleBundle({
-        'small-collapse': true,
-        'small-up-2': true,
-        'padding-bottom-large': true,
-        clearfix: true,
+       'row': true,
+      'small-collapse': true,
+      clearfix: true,
+      'padding-bottom-large': true,
+    })}
+    >
+    <div
+      className={styleBundle({
+        'columns': true,
+        'small-5': true,
+        'padding-bottom-medium': true,
       })}
     >
-      <div className={emblLocationListClasses}>
+
+      <a href="https://www.embl.de/" rel="noopener">Heidelberg</a>
+      <div className={styleBundle('small')}>Main Laboratory</div>
+
+    </div>
+
+    <div
+      className={styleBundle({
+        'columns': true,
+        'small-7': true,
+        'padding-bottom-medium': true,
+      })}
+    >
+
+      <a href="http://www.embl-barcelona.es/" rel="noopener">Barcelona</a>
+      <div className={styleBundle('small')}>Tissue biology and disease modelling</div>
+
+    </div>
+
+    <div
+      className={styleBundle({
+        'columns': true,
+        'small-5': true,
+        'padding-bottom-medium': true,
+      })}
+    >
+
         <a href="https://www.embl.fr/" rel="noopener">Grenoble</a>
         <div className={styleBundle('small')}>Structural Biology</div>
-      </div>
+
     </div>
 
     <div
       className={styleBundle({
-        'small-collapse': true,
-        'small-up-2': true,
-        'padding-bottom-large': true,
-        clearfix: true,
+        'columns': true,
+        'small-7': true,
+        'padding-bottom-medium': true,
       })}
     >
-      <div className={emblLocationListClasses}>
         <a href="https://www.embl-hamburg.de/" rel="noopener">Hamburg</a>
         <div className={styleBundle('small')}>Structural Biology</div>
-      </div>
+
     </div>
 
     <div
       className={styleBundle({
-        'small-collapse': true,
-        'small-up-2': true,
-        'padding-bottom-large': true,
-        clearfix: true,
+        'columns': true,
+        'small-5': true,
+        'padding-bottom-medium': true,
       })}
     >
-      <div className={emblLocationListClasses}>
-        <a href="https://www.embl.de/" rel="noopener">Heidelberg</a>
-        <div className={styleBundle('small')}>Main Laboratory</div>
-      </div>
-    </div>
 
-    <div
-      className={styleBundle({
-        'small-collapse': true,
-        'small-up-2': true,
-        'padding-bottom-large': true,
-        clearfix: true,
-      })}
-    >
-      <div className={emblLocationListClasses}>
         <a href="https://www.embl.it/" rel="noopener">Monterotondo</a>
         <div className={styleBundle('small')}>Mouse Biology</div>
-      </div>
+
     </div>
+
+    <div
+      className={styleBundle({
+        'columns': true,
+        'small-7': true,
+        'padding-bottom-medium': true,
+      })}
+    >
+
+      <a href="http://embl.org/"
+         className={styleBundle({
+        'readmore': true,
+      })} >More about EMBL</a>
+
+    </div>
+    </div>
+
 
   </div>
 );
