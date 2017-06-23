@@ -100,7 +100,7 @@ a:hover.noline {border-bottom:0 solid transparent;}
 #local-masthead .menu a {
   height: 100%;
 }
-#local-masthead .menu .active {color: #0a0a0a; background: #fff;}/*this should be defined in the default ebi css*/
+#local-masthead .menu .active {color: #0a0a0a; background: #fff;border:none;font-weight: bold;/*temp while we areplace the active class on <li> and not <a> element*/}/*this should be defined in the default ebi css*/
 /*#local-masthead .menu > li > a {border-bottom-style: solid; border-bottom-color:transparent;}!*important to make all menu items same height otherwise buggy effect on click*!*/
 .badge {
   background: rgba(0, 0, 0, 0.23);
@@ -144,7 +144,7 @@ IMAGE BANNER
     background-position: top right, left;
     background-size: 100%, 10%;}
 
-.local-masthead img {margin-left: -82px;margin-right: 4px; /*useful on sticky to hide logo totally*/width: 65px;}/*to make logo look like an icon -IMPORTANT limit width of image or banner show black bgd at bottom*/
+.local-masthead img {margin-left: -82px;margin-right: 0.9rem; /*useful on sticky to hide logo totally*/width: 65px;}/*to make logo look like an icon -IMPORTANT limit width of image or banner show black bgd at bottom*/
 .local-masthead.md-smart {
     background-image: linear-gradient(to right, #325578,rgba(249, 255, 182, 0.53),rgb(43, 111, 128) ), url(../images/backgrounds/fondation-morse-header.jpg);
     background-position: top right, left;
@@ -193,8 +193,6 @@ IMAGE BANNER
 body.modal-open {overflow: hidden;} /*make the content of the page non-scrollable for offcanvas*/
 /*.offc-nav {width: 20rem; z-index: 3; position: fixed; top:0; right: -100%; height: 100%; background: rgba(59, 59, 59, 1); overflow-y: auto; !*vertical scroll*!-webkit-overflow-scrolling: touch; !*Use momentum-based scrolling, where the content continues to scroll for a while after finishing the scroll gesture*!  transition: all 0.25s ease;}*/
 /*.offc-nav.expand {right: 0;}*/
-/*.offc-nav.expand.shadow-in {box-shadow: inset 9px 0px 17px -11px rgba(0,0,0,0.9);}*/
-/*.offc-nav.expand.shadow-out {box-shadow:1px 0px 2px 3px rgba(0,0,0,0.3);}*/
 .offc-nav.expand ~ .main-header .local-offcanvas-menu, .offc-nav.expand ~ .main-header .local-site-search {transform: translateX(-20em);} /*animate the menu button open/close*/
 .offc-nav.expand ~ .dialog_layer {position: fixed;top: 0; right: 0; bottom: 0; left: 0;  height: 100%;width: 100%; background:  rgba(0, 0, 0, 0.5); z-index: 2; pointer-events: all; /*all click block*/ }
 /*.offc-nav:after {content: "";position: absolute;top: 0; right: 0; height: 100%;width: 34px; background: linear-gradient(left, transparent, rgba(0, 0, 0, 0.4));}*//*is this used?*/
@@ -422,12 +420,12 @@ a.go {cursor: pointer;color: white;}
     /*.menu > li.embl-selector {display:none ;}/*this should be added to EBI style to fix the slector to collpase row in two lines*/
 }
 
-/* Small only */
+/* Small screen only */
 @media screen and (max-width: 39.9375em){
     .local-masthead {background-size: 100%, 600px;} /*reduce bgd image*/
     .main-header {height:auto;}/*important - removed height banner defined when sticky*/
     .local-masthead h1  {font-size: 1.8rem; transform: translateX(0px);}/*title logo small + remove translation*/
-    .local-masthead img {margin-left:0; margin-right:0; width:40px;}
+    .local-masthead img {margin-left:0; margin-right:0.4rem; width:40px;}
     .local-masthead .masthead {padding-top: 1.4rem;} /*align logo with menu icon on right*/
     /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large  devices*!*/
     .offc-nav.expand ~ .main-header .local-offcanvas-menu, .offc-nav.expand ~ .main-header .local-site-search {transform: translateX(-12em);}/*translation of the buttons is reduced for small screens*/
