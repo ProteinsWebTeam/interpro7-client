@@ -7,12 +7,13 @@ import {createSelector} from 'reselect';
 import {toggleEMBLMapNav} from 'actions/creators';
 
 import {foundationPartial} from 'styles/foundation';
+import styles from './style.css';
 import ebiGlobalStyles from 'styles/ebi-global.css';
 import fonts from 'styles/ebi/fonts.css';
 import ebiTheme from 'styles/theme-template.css';
 import ebiPetrolTheme from 'styles/theme-embl-petrol.css';
 const styleBundle = foundationPartial(
-  fonts, ebiPetrolTheme, ebiTheme, ebiGlobalStyles
+  styles, fonts, ebiPetrolTheme, ebiTheme, ebiGlobalStyles
 );
 
 /**
@@ -55,7 +56,6 @@ const _EmblDropdownDiv = ({visible}) => (
       transform: `translateY(${visible ? '0' : '-150%'})`,
       opacity: visible ? 1 : 0,
       visibility: 'visible',
-      zIndex: 101,
     }}
   >
     <p>
