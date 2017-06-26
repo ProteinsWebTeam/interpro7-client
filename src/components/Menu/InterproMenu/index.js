@@ -7,6 +7,8 @@ import SubMenu from 'components/Menu/SubMenu';
 
 import {InterPro} from 'menuConfig';
 
+import logo from 'images/logo/interpro_grey_offcanvas.png';
+
 import {foundationPartial} from 'styles/foundation';
 import fonts from 'styles/ebi/fonts.css';
 
@@ -42,18 +44,22 @@ const InterproMenu = (
               }
               {name}
             </SubMenu> :
-            <li key={name}>
-              <MenuItem newTo={newTo} activeClass={activeClass}>
-                {
-                  icon &&
-                <i
-                  data-icon={icon}
-                  className={iconStyle('icon', `icon-${iconClass}`)}
-                />
-                }
-                {name}
-              </MenuItem>
-            </li>
+      <li key={name}>
+        <MenuItem newTo={newTo} activeClass={activeClass}>
+          {
+            icon!==('H') &&
+            <i
+              data-icon={icon}
+              className={iconStyle('icon', `icon-${iconClass}`)}
+            ></i>
+          }
+          {
+            icon===('H') &&
+            <span>
+            </span>}
+          {name}
+        </MenuItem>
+      </li>
         )
       )}
     </ul>
