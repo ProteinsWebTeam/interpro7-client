@@ -24,7 +24,7 @@ export const EBI = [
   {
     href: 'https://www.ebi.ac.uk/about',
     icon: 'i',
-    name: 'About us',
+    name: 'About EBI',
   },
 ];
 
@@ -214,7 +214,7 @@ export const InterPro = [
   {
     newTo: {description: {other: 'about'}},
     icon: 'i',
-    name: 'About',
+    name: 'About InterPro',
   },
   {
     newTo: {description: {other: 'settings'}},
