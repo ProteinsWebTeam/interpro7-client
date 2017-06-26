@@ -28,5 +28,5 @@
   }
 }
 /*off-canvas interpro home icon*/
-aside .menu-item.active div {width:22px; height:22px;  float: left; margin-right:2px; background: url(../../../images/logo/interpro_blue_offcanvas.png) no-repeat ;}
-aside .menu-item div {width:22px; height:22px;  float: left; margin-right:2px; background: url(../../../images/logo/interpro_grey_offcanvas.png) no-repeat ;}
+aside .menu-item.active span {width:22px; height:22px;  float: left; margin-right:2px; background: url(../../../images/logo/interpro_blue_offcanvas.png) no-repeat ;}
+aside .menu-item span {width:22px; height:22px;  float: left; margin-right:2px; background: url(../../../images/logo/interpro_grey_offcanvas.png) no-repeat ;}
