@@ -42,7 +42,7 @@ class SideMenu extends PureComponent {
         >
           <button
             className={f('exit')}
-            title="Close menu - handside navigation"
+            title="Close side menu"
             onClick={closeSideNav}
             aria-hidden="true"
           >
