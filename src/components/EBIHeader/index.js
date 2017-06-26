@@ -198,13 +198,13 @@ const EBIHeader = () => (
             <a href="//www.ebi.ac.uk" rel="noopener" />
           </li>
 
-          <li id="home" className={styleBundle('active')}>
+          <li id="home">
             <a href="//www.ebi.ac.uk" rel="noopener">
               <i className={iconClasses} data-icon="H" /> EMBL-EBI
             </a>
           </li>
 
-          <li id="services" >
+          <li id="services" className={styleBundle('active')}>
             <a href="//www.ebi.ac.uk/services" rel="noopener">
               <i className={iconClasses} data-icon="(" /> Services
             </a>
