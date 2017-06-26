@@ -214,7 +214,7 @@ export const InterPro = [
   {
     newTo: {description: {other: 'about'}},
     icon: 'i',
-    name: 'About InterPro',
+    name: 'About',
   },
   {
     newTo: {description: {other: 'settings'}},
