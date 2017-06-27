@@ -41,7 +41,7 @@
 
 .exit {
   font-size: 200%;
-  color: #999;
+  color: rgba(255,255,255,0.2);
   font-weight: bold;
   position: absolute;
   top: 0;
@@ -50,12 +50,11 @@
   height: 1em;
   z-index: 1;
   user-select: none;
-  opacity: 0.8;
   overflow: hidden;
 }
 
 .exit:hover {
-  opacity: 1;
+  color: rgba(255,255,255,0.4);
 }
 
 .primary {
