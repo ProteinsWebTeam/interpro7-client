@@ -2,7 +2,6 @@
 import React from 'react';
 import T from 'prop-types';
 import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
 
 import {toggleEMBLMapNav} from 'actions/creators';
 
@@ -44,131 +43,6 @@ _EmblButton.propTypes = {
 };
 
 const EmblButton = connect(null, {toggleEMBLMapNav})(_EmblButton);
-
-const _EmblDropdownDiv = ({visible}) => (
-  <div
-    id="embl-dropdown"
-    className={styleBundle({'dropdown-pane': 'true', bottom: 'true'})}
-    style={{
-      top: '48px',
-      left: '1px',
-      transition: 'transform 0.5s ease-in-out, opacity 0.5s ease-in-out',
-      transform: `translateY(${visible ? '0' : '-150%'})`,
-      opacity: visible ? 1 : 0,
-      visibility: 'visible',
-    }}
-  >
-    <p>
-      EMBL-EBI in Hinxton is one of six EMBL locations across europe.<br />
-      <a
-        href="https://www.ebi.ac.uk/about"
-        className={styleBundle({small: true, readmore: true})}
-        rel="noopener"
-      >More about EMBL-EBI</a>
-    </p>
-    <h6>Connect to another EMBL location</h6>
-
-    <div
-      className={styleBundle({
-       'row': true,
-      'small-collapse': true,
-      clearfix: true,
-      'padding-bottom-large': true,
-    })}
-    >
-    <div
-      className={styleBundle({
-        'columns': true,
-        'small-5': true,
-        'padding-bottom-medium': true,
-      })}
-    >
-
-      <a href="https://www.embl.de/" rel="noopener">Heidelberg</a>
-      <div className={styleBundle('small')}>Main Laboratory</div>
-
-    </div>
-
-    <div
-      className={styleBundle({
-        'columns': true,
-        'small-7': true,
-        'padding-bottom-medium': true,
-      })}
-    >
-
-      <a href="http://www.embl-barcelona.es/" rel="noopener">Barcelona</a>
-      <div className={styleBundle('small')}>Tissue biology and disease modelling</div>
-
-    </div>
-
-    <div
-      className={styleBundle({
-        'columns': true,
-        'small-5': true,
-        'padding-bottom-medium': true,
-      })}
-    >
-
-        <a href="https://www.embl.fr/" rel="noopener">Grenoble</a>
-        <div className={styleBundle('small')}>Structural Biology</div>
-
-    </div>
-
-    <div
-      className={styleBundle({
-        'columns': true,
-        'small-7': true,
-        'padding-bottom-medium': true,
-      })}
-    >
-        <a href="https://www.embl-hamburg.de/" rel="noopener">Hamburg</a>
-        <div className={styleBundle('small')}>Structural Biology</div>
-
-    </div>
-
-    <div
-      className={styleBundle({
-        'columns': true,
-        'small-5': true,
-        'padding-bottom-medium': true,
-      })}
-    >
-
-        <a href="https://www.embl.it/" rel="noopener">Monterotondo</a>
-        <div className={styleBundle('small')}>Mouse Biology</div>
-
-    </div>
-
-    <div
-      className={styleBundle({
-        'columns': true,
-        'small-7': true,
-        'padding-bottom-medium': true,
-      })}
-    >
-
-      <a href="http://embl.org/"
-         className={styleBundle({
-        'readmore': true,
-      })} >More about EMBL</a>
-
-    </div>
-    </div>
-
-
-  </div>
-);
-_EmblDropdownDiv.propTypes = {
-  visible: T.bool.isRequired,
-};
-
-const mapStateToProps = createSelector(
-  state => state.ui.emblMapNav,
-  visible => ({visible})
-);
-
-const EmblDropdownDiv = connect(mapStateToProps)(_EmblDropdownDiv);
 
 const iconClasses = styleBundle({
   icon: true,
@@ -235,7 +109,6 @@ const EBIHeader = () => (
         </ul>
       </div>
     </nav>
-    <EmblDropdownDiv />
   </div>
 
 );

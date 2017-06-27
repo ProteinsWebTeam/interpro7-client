@@ -4,7 +4,7 @@
   left: 0;
   height: 100vh;
   width: 100vw;
-  z-index: 3;/*top of header*/
+  z-index: 4;
   background: black;
   transition: opacity 0.3s ease-in-out;
   opacity: 0;

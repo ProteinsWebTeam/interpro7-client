@@ -41,6 +41,14 @@ const SideMenuAsync = createAsyncComponent(
   'SideMenu',
 );
 
+const EMBLDropdownAsync = createAsyncComponent(
+  () => schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => import(
+    /* webpackChunkName: "cookie-banner" */'components/EMBLDropdown'
+  )),
+  NullComponent,
+  'EMBLDropdown',
+);
+
 const EBIFooterAsync = createAsyncComponent(
   () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
     /* webpackChunkName: "ebi-footer" */'components/EBIFooter'
@@ -76,6 +84,7 @@ const Root = () => (
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
     <LoadingBarAsync />
     <Overlay />
+    <EMBLDropdownAsync />
     <SideMenuAsync />
     <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
     <Sentinel top={STICKY_MENU_OFFSET} />

@@ -1,0 +1,19 @@
+@import "../../styles/timing.css";
+
+.embl-dropdown {
+  z-index: 101;
+  position: fixed;
+  top: 48px;
+  left: 1px;
+  transition-timing-function: ease-in-out;
+  transition-duration: var(--timing-medium);
+  transition-property: transform, opacity;
+  transform: translateY(-150%);
+  opacity: 0;
+  visibility: visible;
+
+  &.visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
