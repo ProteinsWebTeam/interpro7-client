@@ -98,17 +98,15 @@ class _SideIcons extends PureComponent {
             name="search"
           />
           <Link newTo={{description: {other: 'search'}}}>
-            <svg
-              width="2em" height="2em" viewBox="0 0 490 490"
-              style={{verticalAlign: 'middle'}}
+            <svg  
+              width="2.2em" height="2.2em" class="icon icon--search" viewBox="0 0 480 480"
             >
               <path
                 fill="none"
                 stroke="white"
-                strokeWidth="40"
+                strokeWidth="50"
                 strokeLinecap="round"
-                d="m280,278a153,153 0 1,0-2,2l170,170m-91-117"
-              />
+                d="M5,20 m280,278 a110,110 0 1,0-3,2 l90,112m-91-117"></path>
             </svg>
           </Link>
         </label>
