@@ -81,6 +81,9 @@
     background-color: #34b5b533;
   }
 }
+
+ul li a:hover {background: rgba(0, 0, 0, 0.3);}
+
 /*bgd palette for side menu - not used yet */
 .primary.domain {background:#6aad4c;}
 .primary.family {background: indianred;}
