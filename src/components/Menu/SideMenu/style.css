@@ -59,10 +59,10 @@
 }
 
 .primary {
-  color: #7dbb72;
+  color: #999999;
 
   @nest & a:hover, & a:focus {
-    background-color: #7dbb7233;
+    background-color: rgba(0, 0, 0, 0.3);
   }
 }
 
