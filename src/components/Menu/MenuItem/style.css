@@ -24,7 +24,7 @@
   border-bottom:0;/*temp while waiting for menu to redefine active class on <li> element */
 
   &:visited {
-    color: #7dbb72;
+    color: #989898;
   }
 }
 /*off-canvas interpro home icon*/
