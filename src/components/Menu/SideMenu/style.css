@@ -81,6 +81,11 @@
     background-color: #34b5b533;
   }
 }
+/*bgd palette for side menu - not used yet */
+.primary.domain {background:#6aad4c;}
+.primary.family {background: indianred;}
+.tertiary.clans {background: #279292;}
+.secondary.default {background: #4b4b4b;}
 
 .menu-label {
   background: #444;
