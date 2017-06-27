@@ -32,7 +32,11 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 .md-ti .md-color {fill:#b37977;}
 /*/MEMBER DATABASE SVG icons*/
 
-
+/*SVG icons*/
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+}
 /*/MEMBER DATABASE icons*/
 /*ICONS*/
 /*.nav-toggle {position: absolute; top: 28px;  right: 55px;}*/
