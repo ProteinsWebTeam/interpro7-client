@@ -107,7 +107,7 @@
     padding: var(--spacing-big);
   }
 }
-
+.masthead button  {outline: 0;}
 .top_level_hamburger {
   margin-top: var(--spacing-medium);
   padding: var(--spacing-small);
@@ -129,7 +129,7 @@
   stroke-width: 1.5px;
   stroke: #fff;
   stroke-linecap: round;
-  transform-origin: 50% 50%;
+  transform-origin: 44% 50%;
 }
 
 .hamb_1, .hamb_2, .hamb_3 {
@@ -144,7 +144,7 @@
 }
 
 .hamb_1_open {
-  transform: rotate(45deg) translate(2px, 2px);
+  transform: rotate(45deg) translate(1.9px, 1.3px);
   transition: transform 0.3s ease-in-out;
 }
 
@@ -154,7 +154,7 @@
 }
 
 .hamb_3_open {
-  transform: rotate(-45deg) translate(2px, -2px);
+  transform: rotate(-45deg) translate(2.5px, -1.9px);
   transition: transform 0.3s ease-in-out;
 }
 
