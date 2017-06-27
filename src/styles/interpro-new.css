@@ -190,57 +190,6 @@ IMAGE BANNER
 /*/Foundation sticky*/
 /************************ END STICKY BANNER**********************************/
 
-/******************************OFF CANVAS MENU*********************************/
-body.modal-open {overflow: hidden;} /*make the content of the page non-scrollable for offcanvas*/
-/*.offc-nav {width: 20rem; z-index: 3; position: fixed; top:0; right: -100%; height: 100%; background: rgba(59, 59, 59, 1); overflow-y: auto; !*vertical scroll*!-webkit-overflow-scrolling: touch; !*Use momentum-based scrolling, where the content continues to scroll for a while after finishing the scroll gesture*!  transition: all 0.25s ease;}*/
-/*.offc-nav.expand {right: 0;}*/
-.offc-nav.expand ~ .main-header .local-offcanvas-menu, .offc-nav.expand ~ .main-header .local-site-search {transform: translateX(-20em);} /*animate the menu button open/close*/
-.offc-nav.expand ~ .dialog_layer {position: fixed;top: 0; right: 0; bottom: 0; left: 0;  height: 100%;width: 100%; background:  rgba(0, 0, 0, 0.5); z-index: 2; pointer-events: all; /*all click block*/ }
-/*.offc-nav:after {content: "";position: absolute;top: 0; right: 0; height: 100%;width: 34px; background: linear-gradient(left, transparent, rgba(0, 0, 0, 0.4));}*//*is this used?*/
-/*.offc-nav a.exit-offcanvas, a.exit-offcanvas:visited {font-size: 200%; color: #999; float: right;font-weight: bold; position: absolute;top: -56px; right: 10px;  z-index: 5;}!*cross icon in right offcanvas menu*!*/
-/*.offc-nav a.exit-offcanvas:hover {color: rgba(255,255,255,0.2);}*/
-/*off-canvas style from Foundation offcanvas.css*/
-ul.off-canvas-list {background: #333; bottom: 0; box-sizing: content-box;  -webkit-overflow-scrolling: touch; outline:0; list-style-type: none; margin: 0; padding: 0;}/*list style offcanvas menu*/
-ul.off-canvas-list li label {background: #444444; border-bottom: none; border-top: 1px solid #5e5e5e; color: #999999; display: block; font-size: 0.7rem; font-weight: bold;  margin: 0; padding: 0.52rem 0.83333rem; text-transform: uppercase;}/*title section*/
-ul.off-canvas-list li a {border-bottom: 0px solid #262626; color: rgba(255, 255, 255, 0.7); padding: 0.4rem 0.66667rem; transition: background 0.3s; font-size: 90%;/*same as top menu*/}
-ul.off-canvas-list.domain li a.active {
-  color: black;
-}
-ul.off-canvas-list li a:hover {background: rgba(0, 0, 0, 0.3);}
-/*.offc-nav.expand ~ .main-header {transform: translateX(-9px);} !*important compensate for hidden scrollbar and avoid page move right and left doens't work for all screen sizes*!*/
-
-/*no-color option*/
-.no-col ul.off-canvas-list.primary.domain, .no-col ul.off-canvas-list.primary.family, .no-col ul.off-canvas-list.secondary, .no-col ul.off-canvas-list.tertiary {background: transparent;}
-.no-col .is-drilldown-submenu  {background: #3B3B3B;}
-.no-col ul.off-canvas-list li a.active {color:#2199e8;}
-.no-col ul.off-canvas-list li label {background: rgba(255,255,255,0.05);}
-/*/no-color option*/
-
-/*color just on label*/
-.label-col ul.off-canvas-list.primary li label {color:#7dbb72;}
-.label-col ul.off-canvas-list.secondary li label {color:#2199e8;}
-.label-col ul.off-canvas-list.tertiary li label {color:#34b5b5;}
-.label-col .is-drilldown-submenu, .label-col ul.off-canvas-list.primary.domain, .label-col ul.off-canvas-list.secondary, .label-col ul.off-canvas-list.tertiary {background: #3B3B3B;}
-.label-col ul.off-canvas-list li a.active {color: #7dbb72;}
-
-.label-col ul.off-canvas-list.primary.domain li a:hover {background: rgba(51, 121, 38, 0.2);}
-.label-col ul.off-canvas-list.secondary li a:hover {background: rgba(47, 182, 197, 0.2);}
-.label-col ul.off-canvas-list.tertiary li a:hover {background: rgba(63,165,156,0.2);}
-/*/color just on label*/
-
-ul.off-canvas-list.primary.domain {background:#6aad4c;}/*domain*/
-ul.off-canvas-list.primary.family {background: indianred;}/*family*/
-ul.off-canvas-list.secondary, .is-drilldown-submenu  {background: #4b4b4b;}
-ul.off-canvas-list.tertiary {background: #279292;}
-/*ul.off-canvas-list.primary li a { border-bottom: 1px solid rgba(0, 0, 0, 0.25);}*/
-
-/*drilldown feature*/
-.is-drilldown-submenu {margin:0; height: 100%; display: block;  z-index: 1;}
-.js-drilldown-back {background: #444444; border-bottom: none; border-top: 1px solid #5e5e5e;}
-/*.is-drilldown-submenu {top:38px;}*/
-/*/drilldown feature*/
-/******************************END OFF CANVAS MENU*********************************/
-
 /*Overwritting Foundation*/
 h1 small, h2 small, h3 small, h4 small {color: #bbb;}
 h5 small, h6 small {color: #8b8b8b;} /*style-darker*/
