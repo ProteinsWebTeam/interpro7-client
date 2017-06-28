@@ -362,10 +362,15 @@ scaleX(0);
   transform-origin: 185px 324px;
 }
 
-.side-icons {transition: opacity .3s;}
+@media screen and (max-width: 39.9375em) {
+  .side-icons svg {
+    transform: scale(0.8);
+  }
+}
 
 @media screen and (max-width: 20em) {
- .side-icons {
+  .side-icons {
+    transition: opacity .3s;
     opacity: 0;
   }
 }
