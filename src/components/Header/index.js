@@ -47,23 +47,23 @@ class _HamburgerBtn extends PureComponent {
       );
     }
     return (
-        <svg onClick={openSideNav}
-          viewBox="0 0 12 10" width="2.5em" height="2.5em"
-          className={reducedStyleBundle('top_level_hamburger', {stuck})}
-        >
-          <line
-            x1="1" y1="2" x2="9" y2="2"
-            className={open ? styles.hamb_1_open : styles.hamb_1}
-          />
-          <line
-            x1="1" y1="5" x2="9" y2="5"
-            className={open ? styles.hamb_2_open : styles.hamb_2}
-          />
-          <line
-            x1="1" y1="8" x2="9" y2="8"
-            className={open ? styles.hamb_3_open : styles.hamb_3}
-          />
-        </svg>
+      <svg onClick={openSideNav}
+           viewBox="0 0 12 10" width="2.5em" height="2.5em"
+           className={reducedStyleBundle('top_level_hamburger', {stuck})}
+      >
+        <line
+          x1="1" y1="2" x2="9" y2="2"
+          className={open ? styles.hamb_1_open : styles.hamb_1}
+        />
+        <line
+          x1="1" y1="5" x2="9" y2="5"
+          className={open ? styles.hamb_2_open : styles.hamb_2}
+        />
+        <line
+          x1="1" y1="8" x2="9" y2="8"
+          className={open ? styles.hamb_3_open : styles.hamb_3}
+        />
+      </svg>
     );
   }
 }
