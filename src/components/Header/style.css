@@ -154,7 +154,7 @@
 
 .hamb_1_open {
   transform: rotate(45deg) translate(1.9px, 1.3px);
-  transition: transform 0.3s ease-in-out;
+  transition: transform .3s ease-in-out;
 }
 
 .hamb_2_open {
@@ -236,7 +236,7 @@
      right: 0;
      background-color: var(--colors-nearly-white);
      transform: translateY(100%);
-     transition: transform 0.2s ease-out;
+     transition: transform .2s ease-out;
    }
 
   &.active {
@@ -265,7 +265,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-end;
-  transition: transform 0.3s ease-in-out;
+  transition: transform .3s ease-in-out;
   transform: translateX(0);
 }
 
@@ -274,7 +274,7 @@
   align-items: center;
   font-size: 1.5rem;
   transform: translate(0, 0);
-  transition: transform 0.3s ease-in-out 0.15s;
+  transition: transform .3s ease-in-out 0.15s;
 
 &
 .stuck {
@@ -283,7 +283,7 @@
 }
 
 @nest & svg {
-  transition: transform 0.5s ease-in-out;
+  transition: transform .5s ease-in-out;
   transform: rotate(0deg);
 }
 
@@ -362,8 +362,10 @@ scaleX(0);
   transform-origin: 185px 324px;
 }
 
+.side-icons {transition: opacity .3s;}
+
 @media screen and (max-width: 20em) {
-  .local-offcanvas-menu, .side-search {
+ .side-icons {
     opacity: 0;
   }
 }
