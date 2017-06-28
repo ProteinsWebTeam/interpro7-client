@@ -98,8 +98,10 @@ class _SideIcons extends PureComponent {
             name="search"
           />
           <Link newTo={{description: {other: 'search'}}}>
-            <svg  
-              width="2.2em" height="2.2em" class="icon icon--search" viewBox="0 0 480 480"
+            <svg
+              width="2.2em" height="2.2em"
+              className={reducedStyleBundle('icon','icon--search')}
+              viewBox="0 0 480 480"
             >
               <path
                 fill="none"
