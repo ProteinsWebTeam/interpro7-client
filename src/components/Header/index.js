@@ -47,8 +47,7 @@ class _HamburgerBtn extends PureComponent {
       );
     }
     return (
-      <button onClick={openSideNav}>
-        <svg
+        <svg onClick={openSideNav}
           viewBox="0 0 12 10" width="2.5em" height="2.5em"
           className={reducedStyleBundle('top_level_hamburger', {stuck})}
         >
@@ -65,7 +64,6 @@ class _HamburgerBtn extends PureComponent {
             className={open ? styles.hamb_3_open : styles.hamb_3}
           />
         </svg>
-      </button>
     );
   }
 }
