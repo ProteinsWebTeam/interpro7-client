@@ -109,8 +109,6 @@
 }
 .masthead button  {outline: 0;}
 .top_level_hamburger {
-  margin-top: var(--spacing-medium);
-  padding: var(--spacing-small);
   background: none;
   border: none;
   user-select: none;
@@ -234,7 +232,6 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-end;
-  padding: 0.25rem;
   transition: transform 0.3s ease-in-out;
   transform: translateX(0);
 }
@@ -290,7 +287,13 @@
 .interpro-menu i {
   display: none;
 }
-
+/*use when off canvas is open and icons need to move left*/
 .movedAway {
   transform: translateX(-20em);
+}
+
+@media screen and (max-width: 20em){
+  .local-offcanvas-menu, .side-search {
+    opacity: 0;
+  }
 }
