@@ -89,7 +89,8 @@ class _SideIcons extends PureComponent {
   render() {
     const {movedAway, stuck} = this.props;
     return (
-      <div className={reducedStyleBundle('side-icons', {movedAway})}>
+      <div className={styleBundle('columns','small-6', 'medium-4')}>
+        <div className={reducedStyleBundle('side-icons', {movedAway})}>
         <HamburgerBtn svg={true} stuck={stuck}/>
         <label className={reducedStyleBundle('side-search', {stuck})}>
           <TextSearchBox
@@ -113,6 +114,7 @@ class _SideIcons extends PureComponent {
             </svg>
           </Link>
         </label>
+        </div>
       </div>
     );
   }
