@@ -90,7 +90,7 @@ class _SideIcons extends PureComponent {
     const {movedAway, stuck} = this.props;
     return (
       <div className={reducedStyleBundle('side-icons', {movedAway})}>
-        <HamburgerBtn svg={true} stuck={stuck} />
+        <HamburgerBtn svg={true} stuck={stuck}/>
         <label className={reducedStyleBundle('side-search', {stuck})}>
           <TextSearchBox
             maxLength="255"
@@ -100,7 +100,7 @@ class _SideIcons extends PureComponent {
           <Link newTo={{description: {other: 'search'}}}>
             <svg
               width="2.2em" height="2.2em"
-              className={reducedStyleBundle('icon','icon--search')}
+              className={reducedStyleBundle('icon', 'icon--search')}
               viewBox="0 0 480 480"
             >
               <path
@@ -108,7 +108,8 @@ class _SideIcons extends PureComponent {
                 stroke="white"
                 strokeWidth="50"
                 strokeLinecap="round"
-                d="M5,20 m280,278 a110,110 0 1,0-3,2 l90,112m-91-117"></path>
+                d="M5,20 m280,278 a110,110 0 1,0-3,2 l90,112m-91-117"
+              />
             </svg>
           </Link>
         </label>
