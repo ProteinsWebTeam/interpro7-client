@@ -35,10 +35,10 @@ const InterproMenu = (
             >
               {
                 icon &&
-              <i
-                data-icon={icon}
-                className={iconStyle('icon', `icon-${iconClass}`)}
-              />
+                <i
+                  data-icon={icon}
+                  className={iconStyle('icon', `icon-${iconClass}`)}
+                />
               }
               {name}
             </SubMenu> :
@@ -53,8 +53,8 @@ const InterproMenu = (
                 }
                 {
                   icon === ('H') &&
-                  <span>
-            </span>}
+                  <span/>
+                }
                 {name}
               </MenuItem>
             </li>
