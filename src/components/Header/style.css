@@ -2,16 +2,15 @@
 @import "../../styles/spacing.css";
 @import "../../styles/fonts.css";
 
-
 .standard {
-/* width: 100vw; *//*removed as it clashed with foundation grid*/
+  /* width: 100vw; *//*removed as it clashed with foundation grid*/
   margin: 0;
   display: flex;
   align-items: center;
 
-  @nest & > * {
-    padding: var(--spacing-medium);
-  }
+@nest & > * {
+  padding: var(--spacing-medium);
+}
 }
 
 .header {
@@ -19,7 +18,7 @@
   /*top: -150px;!* -34px (EBI header); *!*/
   left: 0;
   right: 0;
-  height: 238px;/*magic --- SP for what use ?*/
+  height: 238px; /*magic --- SP for what use ?*/
   z-index: 3;
 }
 
@@ -30,7 +29,8 @@
   ), url("images/banner/fondation-morse-header.jpg");
   background-repeat: no-repeat, repeat;
   background-position: left, top right;
-  background-size: 100%, 1400px;}
+  background-size: 100%, 1400px;
+}
 
 .header_background {
   position: absolute;
@@ -65,14 +65,18 @@
   background-color: var(--colors-dark);
   color: var(--colors-nearly-white);
 
-  @nest & > * {
-    border-left: solid 1px grey;
+@nest & > * {
+  border-left: solid
 
-    &:first-child {
-      flex: 1;
-      border-left: none;
-    }
-  }
+1px grey
+
+;
+
+&:first-child {
+   flex: 1;
+   border-left: none;
+ }
+}
 }
 
 .ebi_services {
@@ -91,23 +95,27 @@
   transform: scaleY(1);
   flex: 1;
 
-  &.scrolled {
-    transform: scale(0.5);
-  }
-
-  @nest & * {
-    margin: 0;
-  }
-
-  @nest & > * {
-    padding: var(--spacing-huge) 0;
-  }
-
-  @nest & img {
-    padding: var(--spacing-big);
-  }
+&
+.scrolled {
+  transform: scale(0.5);
 }
-.masthead button  {outline: 0;}
+
+@nest & * {
+  margin: 0;
+}
+
+@nest & > * {
+  padding: var(--spacing-huge) 0;
+}
+
+@nest & img {
+  padding: var(--spacing-big);
+}
+}
+.masthead button {
+  outline: 0;
+}
+
 .top_level_hamburger {
   background: none;
   border: none;
@@ -116,11 +124,13 @@
   color: var(--colors-nearly-white);
   cursor: pointer;
   transition: transform 0.5s ease-in-out;
-  transform: translateY(0)/* rotateZ(0)*/;
+  transform: translateY(0) /* rotateZ(0)*/;
 
-  &.stuck {
-    transform: translateY(150%)/* rotateZ(-180deg)*/;
-  }
+&
+.stuck {
+  transform: translateY(150%) /* rotateZ(-180deg)*/;
+}
+
 }
 
 .hamb_line {
@@ -137,6 +147,7 @@
 .hamb_1_open, .hamb_2_open, .hamb_3_open {
   composes: hamb_line;
 }
+
 .hamb_1, .hamb_2, .hamb_3 {
   transition: transform .3s ease-in-out;
 }
@@ -146,8 +157,8 @@
   transition: transform 0.3s ease-in-out;
 }
 
- .hamb_2_open {
-  opacity:0;
+.hamb_2_open {
+  opacity: 0;
   transition: opacity .3s;
 }
 
@@ -160,70 +171,92 @@
   composes: standard;
   justify-content: space-between;
   color: var(--colors-nearly-white);
-  /*background-color: var(--colors-main);*/
+
+/*background-color: var(--colors-main);*/
+
+@nest & > * {
+  padding:
+
+0;
 
   @nest & > * {
-    padding: 0;
+    padding:
 
-    @nest & > * {
-      padding: var(--spacing-medium);
-      position: relative;
-      display: inline-flex;
-      overflow-y: hidden;
-      z-index: 1;
-      transition: color 0.2s ease-out;
+  var(--spacing-medium
 
-      &:not(:first-child) {
-        border-left: solid 1px var(--colors-nearly-white);
-      }
+  );
+    position: relative
 
-      &::before {
-        content: "";
-        z-index: 0;
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
-        height: 0;
-        width: 10%;
-        border-style: solid;
-        border-width: var(--spacing-medium);
-        border-color: transparent;
-        border-bottom-color: var(--colors-nearly-white);
-        transform: translateY(var(--spacing-medium));
-        transition: transform 0.2s ease-out;
-      }
+  ;
+    display: inline-flex
 
-      &::after {
-        content: "";
-        z-index: -1;
-        position: absolute;
-        height: 100%;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: var(--colors-nearly-white);
-        transform: translateY(100%);
-        transition: transform 0.2s ease-out;
-      }
+  ;
+    overflow-y: hidden
 
-      &.active {
-        color: var(--colors-main);
+  ;
+    z-index:
 
-        &::after {
-          transform: translateY(0);
-        }
-      }
+  1;
+    transition: color
 
-      &:hover, &:focus {
-        &::before {
-          transform: translateY(0);
-        }
-      }
-    }
+  0.2s ease-out
+
+  ;
+
+  &:not(:first-child) {
+     border-left: solid 1px var(--colors-nearly-white);
+   }
+
+  &::before {
+     content: "";
+     z-index: 0;
+     position: absolute;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     margin: auto;
+     height: 0;
+     width: 10%;
+     border-style: solid;
+     border-width: var(--spacing-medium);
+     border-color: transparent;
+     border-bottom-color: var(--colors-nearly-white);
+     transform: translateY(var(--spacing-medium));
+     transition: transform 0.2s ease-out;
+   }
+
+  &::after {
+     content: "";
+     z-index: -1;
+     position: absolute;
+     height: 100%;
+     top: 0;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     background-color: var(--colors-nearly-white);
+     transform: translateY(100%);
+     transition: transform 0.2s ease-out;
+   }
+
+  &.active {
+     color: var(--colors-main);
+
+  &::after {
+     transform: translateY(0);
+   }
   }
+
+&:hover,
+
+&:focus {
+
+&::before {
+   transform: translateY(0);
+ }
+}
+}
+}
 }
 
 .side-icons {
@@ -243,56 +276,93 @@
   transform: translate(0, 0);
   transition: transform 0.3s ease-in-out 0.15s;
 
-  &.stuck {
-    transform: translate(-25%, 50%);
-    transition-delay: 0s;
-  }
+&
+.stuck {
+  transform: translate(-25%, 50%);
+  transition-delay: 0s;
+}
 
-  @nest & svg {
-    transition: transform 0.5s ease-in-out;
-    transform: rotate(0deg);
-  }
+@nest & svg {
+  transition: transform 0.5s ease-in-out;
+  transform: rotate(0deg);
+}
 
-  @nest & > input {
-    margin: 0.25rem;
-    border: none;
-    border-bottom: 3px solid currentColor;
-    background-color: transparent;
-    box-shadow: none;
-    color: white;
-    opacity: 0;
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+@nest & > input {
+  margin:
 
-    &::placeholder {
-      color: currentColor;
+0.25rem
+
+;
+  border: none
+
+;
+  border-bottom:
+
+3px solid currentColor
+
+;
+  background-color: transparent
+
+;
+  box-shadow: none
+
+;
+  color: white
+
+;
+  opacity:
+
+0;
+  transform:
+
+scaleX(0);
+  transform-origin: right
+
+;
+  transition: opacity
+
+0.5s ease-in-out, transform
+
+0.3s ease-in-out
+
+;
+
+&::placeholder {
+   color: currentColor;
+ }
+
+&:focus,
+
+&:hover {
+   border: none;
+   border-bottom: 3px solid currentColor;
+   background-color: transparent;
+   box-shadow: none;
+   opacity: 1;
+   transform: scaleX(1);
+
+& ~ * > svg {
+      transform: rotate(90deg);
     }
-
-    &:focus, &:hover {
-      border: none;
-      border-bottom: 3px solid currentColor;
-      background-color: transparent;
-      box-shadow: none;
-      opacity: 1;
-      transform: scaleX(1);
-
-      & ~ * > svg {
-        transform: rotate(90deg);
-      }
-    }
-  }
+}
+}
 }
 
 .interpro-menu i {
   display: none;
 }
+
 /*use when off canvas is open and icons need to move left*/
 .movedAway {
   transform: translateX(-20em);
 }
 
-@media screen and (max-width: 20em){
+.icon--search > path {
+  transform: rotate(-15deg);
+  transform-origin: 185px 324px;
+}
+
+@media screen and (max-width: 20em) {
   .local-offcanvas-menu, .side-search {
     opacity: 0;
   }
