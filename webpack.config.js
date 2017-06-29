@@ -261,7 +261,7 @@ module.exports = (env = { dev: true }) => {
       maxAssetSize: 5 * kB * kB, // 5MB
     },
     plugins: [
-      new webpack.optimize.ModuleConcatenationPlugin(),
+      // new webpack.optimize.ModuleConcatenationPlugin(),
       new webpack.LoaderOptionsPlugin({
         options: {
           debug: !env.production,
@@ -343,6 +343,8 @@ module.exports = (env = { dev: true }) => {
     config.devServer = {
       // contentBase: '',
       stats: 'errors-only',
+      noInfo: true,
+      publicPath: config.output.publicPath,
       inline: true,
       overlay: true,
       port: websiteURL.port || DEFAULT_PORT,
