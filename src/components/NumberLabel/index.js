@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
-import {TweenLite} from 'gsap';
+import TweenLite from 'gsap/TweenLite';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 import style from './style.css';
 
 const f = foundationPartial(style);
@@ -25,47 +25,37 @@ class NumberLabel extends Component {
     duration: 1,
   };
 
-  constructor(props/*: ?any */) {
+  constructor(props /*: ?any */) {
     super(props);
-    this.state = {value: 0};
+    this.state = { value: 0 };
   }
 
   componentWillMount() {
     this._animate(this.state.value, this.props.value);
   }
 
-  componentWillReceiveProps({value}) {
+  componentWillReceiveProps({ value }) {
     this._animate(this.state.value, value);
   }
 
   _animate = (from, to) => {
     if (this._animation) this._animation.kill();
-    const canAnimate = (
-      from !== to &&
-      Number.isFinite(from) &&
-      Number.isFinite(to)
-    );
-    if (!canAnimate) return this.setState({value: to});
+    const canAnimate =
+      from !== to && Number.isFinite(from) && Number.isFinite(to);
+    if (!canAnimate) return this.setState({ value: to });
 
-    const animatable = {value: this.state.value};
-    this._animation = TweenLite.to(
-      animatable,
-      this.props.duration,
-      {
-        value: to,
-        // between 0 and 10% of full duration
-        delay: Math.random() * this.props.duration * DELAY_RANGE,
-        onUpdate: () => this.setState({value: Math.round(animatable.value)}),
-      }
-    );
+    const animatable = { value: this.state.value };
+    this._animation = TweenLite.to(animatable, this.props.duration, {
+      value: to,
+      // between 0 and 10% of full duration
+      delay: Math.random() * this.props.duration * DELAY_RANGE,
+      onUpdate: () => this.setState({ value: Math.round(animatable.value) }),
+    });
   };
 
   render() {
-    const {
-      value: _, duration: __,
-      className, ...props
-    } = this.props;
-    let {value: _value} = this.state;
+    const { value: _, duration: __, className, ...props } = this.props;
+    let { value: _value } = this.state;
     if (isNaN(_value)) _value = 'N/A';
     if (Number.isFinite(_value)) _value = _value.toLocaleString();
     return (

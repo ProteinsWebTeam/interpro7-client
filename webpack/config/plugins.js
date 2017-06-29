@@ -20,7 +20,7 @@ const extractTextPlugin = new ExtractTextPlugin({
 });
 
 const common = [
-  // Webpack 2
+  new webpack.optimize.ModuleConcatenationPlugin(),
   new webpack.LoaderOptionsPlugin({
     options: {
       debug: !PROD,
@@ -35,9 +35,9 @@ const test = [...common, extractTextPlugin];
 
 // modifying common
 common.push(
-  // vendor chunk will go in this file
+  // declared chunks will go in these files
   new webpack.optimize.CommonsChunkPlugin({
-    names: ['vendor', 'redux', 'polyfills', 'manifest'],
+    names: ['vendor', 'visual', 'redux', 'polyfills', 'manifest'],
     filename: PROD ? '[name].[hash:3].js' : '[name].js',
     minChunks: Infinity,
   })
@@ -95,4 +95,4 @@ const production = common.concat([
   }),
 ]);
 
-module.exports = {dev, test, production};
+module.exports = { dev, test, production };

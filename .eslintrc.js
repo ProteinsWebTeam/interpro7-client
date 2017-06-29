@@ -5,24 +5,20 @@ const parser = 'babel-eslint';
 const parserOptions = {
   ecmaVersion: 2017,
   sourceType: 'module',
-};
-
-const plugins = ['react', 'import'];
-
-const extending = ['plugin:import/errors', 'plugin:import/warnings'];
-
-const settings = {
-  'import/ignore': [
-    'node_modules',
-    '\.(json|yml|css)$',
-    '\.(jpe?g|png|gif|svg)$'
-  ],
-  'import/resolver': {
-    webpack: {
-      config: path.resolve('.', 'webpack', 'config.js'),
-    },
+  ecmaFeatures: {
+    jsx: true,
+    modules: true,
   },
 };
+
+const extending = [
+  'plugin:react/recommended',
+  'prettier',
+  'prettier/flowtype',
+  'prettier/react',
+];
+
+const plugins = ['react'];
 
 const env = {
   browser: true,
@@ -37,21 +33,21 @@ const rules = {
   // Enforces no braces where they can be omitted
   'arrow-body-style': [1, 'as-needed'],
   // Require space before/after arrow function's arrow
-  'arrow-spacing': [1, {before: true, after: true}],
+  'arrow-spacing': [1, { before: true, after: true }],
   // Treat var statements as if they were block scoped
   'block-scoped-var': 1,
   // Enforce one true brace style
   'brace-style': [1, '1tbs'],
   // Require camel case names
-  'camelcase': [1, {properties: 'never'}],
+  camelcase: [1, { properties: 'never' }],
   // Disallow trailing commas in object literals
   'comma-dangle': [1, 'always-multiline'],
   // Enforce spacing after comma
-  'comma-spacing': [1, {before: false, after: true}],
+  'comma-spacing': [1, { before: false, after: true }],
   // Enforce one true comma style
   'comma-style': [1, 'last'],
   // Specify the maximum cyclomatic complexity allowed in a program
-  'complexity': [1, 9],
+  complexity: [1, 9],
   // Disallow padding inside computed properties
   'computed-property-spacing': [1, 'never'],
   // Require return statements to either always or never specify values
@@ -60,32 +56,26 @@ const rules = {
   'consistent-this': 1,
   // Verify super() callings in constructors
   'constructor-super': 1,
-  // Specify curly brace conventions for all control statements
-  'curly': [1, 'multi-line'],
   // Require default case in switch statements
   'default-case': 1,
   // Enforces consistent newlines before or after dots
   'dot-location': [1, 'property'],
   // Encourages use of dot notation whenever possible
-  'dot-notation': [1, {allowKeywords: true}],
+  'dot-notation': [1, { allowKeywords: true }],
   // Enforce newline at the end of file, with no multiple empty lines
   'eol-last': 1,
   // Require the use of === and !==
-  'eqeqeq': 1,
+  eqeqeq: 1,
   // Enforce use of function declarations or expressions
   'func-style': [1, 'expression'],
   // Enforce the spacing around the * in generator functions
   'generator-star-spacing': [1, 'after'],
   // Make sure for-in loops have an if statement
   'guard-for-in': 2,
-  // Enforce importing before anything else
-  'import/imports-first': 1,
-  // Set a specific indent width for your code
-  'indent': [1, 2, {SwitchCase: 1, VariableDeclarator: 1 }],
   // Specify quote type in JSX attributes
   'jsx-quotes': [1, 'prefer-double'],
   // Enforce spacing style for keys and values in object literal properties
-  'key-spacing': [1, {mode: 'minimum'}],
+  'key-spacing': [1, { mode: 'minimum' }],
   // Require a space around certain keywords
   'keyword-spacing': 1,
   // Disallow mixed 'LF' and 'CRLF' as linebreaks
@@ -189,11 +179,11 @@ const rules = {
   // Disallow creation of functions within loops
   'no-loop-func': 1,
   // Disallow magic numbers
-  'no-magic-numbers': [1, {ignoreArrayIndexes: true, ignore: [0, 1, 2]}],
+  'no-magic-numbers': [1, { ignoreArrayIndexes: true, ignore: [0, 1, 2] }],
   // Disallow mixed spaces and tabs for indentation
   'no-mixed-spaces-and-tabs': 2,
   // Disallow multiple empty lines and only one newline at the end
-  'no-multiple-empty-lines': [1, {max: 2, maxEOF: 1}],
+  'no-multiple-empty-lines': [1, { max: 2, maxEOF: 1 }],
   // Disallow use of multiple spaces
   'no-multi-spaces': 1,
   // Disallow use of multiline strings
@@ -225,7 +215,7 @@ const rules = {
   'no-octal-escape': 2,
   // Disallow reassignment of function parameters
   // Disallow parameter object manipulation
-  'no-param-reassign': [2, {props: true}],
+  'no-param-reassign': [2, { props: true }],
   // Disallow string concatenation when using __dirname and __filename
   'no-path-concat': 1,
   // Disallow use of process.env
@@ -268,7 +258,7 @@ const rules = {
   'no-unmodified-loop-condition': 2,
   // Disallow the use of Boolean literals in conditional expressions,
   // also, prefer `a || b` over `a ? a : b`
-  'no-unneeded-ternary': [1, {defaultAssignment: false}],
+  'no-unneeded-ternary': [1, { defaultAssignment: false }],
   // Disallow unreachable statements after a
   // return, throw, continue, or break statement
   'no-unreachable': 1,
@@ -277,12 +267,15 @@ const rules = {
   // Disallow unused labels
   'no-unused-labels': 1,
   // Disallow declaration of variables that are not used in the code
-  'no-unused-vars': [1, {
-    args: 'after-used',
-    argsIgnorePattern: '^_',
-    varsIgnorePattern: '^_',
-    ignoreRestSiblings: true,
-  }],
+  'no-unused-vars': [
+    1,
+    {
+      args: 'after-used',
+      argsIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
+      ignoreRestSiblings: true,
+    },
+  ],
   // Disallow use of variables before they are defined
   'no-use-before-define': 2,
   // Disallow unnecessary .call() and .apply()
@@ -299,16 +292,12 @@ const rules = {
   'no-whitespace-before-property': 1,
   // Disallow use of the with statement
   'no-with': 2,
-  // Disallow padding inside curly braces
-  'object-curly-spacing': [1, 'never'],
   // Require method and property shorthand syntax for object literals
   'object-shorthand': [1, 'always'],
   // Enforce variables to be declared either together or separately in functions
   'one-var': [1, 'never'],
   // Require assignment operator shorthand where possible
   'operator-assignment': 1,
-  // Enforce line breaks to be placed after operators
-  'operator-linebreak': [1, 'after'],
   // Suggest using arrow functions as callbacks
   'prefer-arrow-callback': 1,
   // Suggest using of const declaration when never modified after declared
@@ -324,13 +313,13 @@ const rules = {
   // Require quotes around object literal property names as needed
   'quote-props': [1, 'as-needed'],
   // Specify whether double or single quotes should be used
-  'quotes': [1, 'single', 'avoid-escape'],
+  quotes: [1, 'single', 'avoid-escape'],
   // Require use of the second argument for parseInt()
-  'radix': 1,
+  radix: 1,
   // Validate closing bracket location in JSX
   'react/jsx-closing-bracket-location': 1,
   // Disallow spaces inside of curly braces in JSX attributes
-  'react/jsx-curly-spacing': [1, 'never', {allowMultiline: true}],
+  'react/jsx-curly-spacing': [1, 'never', { allowMultiline: true }],
   // Enforce event handler naming conventions in JSX
   'react/jsx-handler-names': 0,
   // Validate props indentation in JSX
@@ -338,7 +327,7 @@ const rules = {
   // Validate JSX has key prop when in array or iterator
   'react/jsx-key': 2,
   // Prevent usage of .bind() and arrow functions in JSX props
-  'react/jsx-no-bind': [2, {allowArrowFunctions: true}],
+  'react/jsx-no-bind': [2, { allowArrowFunctions: true }],
   // Prevent duplicate props in JSX
   'react/jsx-no-duplicate-props': 2,
   // Disallow undeclared variables in JSX
@@ -378,21 +367,26 @@ const rules = {
   // Enforce component methods order
   'react/sort-comp': 1,
   // Require JSDoc comment
-  'require-jsdoc': [1, {require: {
-    FunctionDeclaration: true,
-    MethodDefinition: false,
-    ClassDeclaration: false
-  }}],
+  'require-jsdoc': [
+    1,
+    {
+      require: {
+        FunctionDeclaration: true,
+        MethodDefinition: false,
+        ClassDeclaration: false,
+      },
+    },
+  ],
   // Disallow generator functions that do not have yield
   'require-yield': 2,
   // Require or disallow use of semicolons instead of ASI
-  'semi': [1, 'always'],
+  semi: [1, 'always'],
   // Enforce spacing before and after semicolons
-  'semi-spacing': [1, {before: false, after: true}],
+  'semi-spacing': [1, { before: false, after: true }],
   // Disallow space before function opening parenthesis
   'space-before-function-paren': [
     1,
-    {anonymous: 'always', named: 'never', asyncArrow: 'always'},
+    { anonymous: 'always', named: 'never', asyncArrow: 'always' },
   ],
   // Disallow spaces inside parentheses
   'space-in-parens': [1, 'never'],
@@ -401,7 +395,7 @@ const rules = {
   // Require spaces before/after unary operators
   'space-unary-ops': 1,
   // Require a space immediately following the // or /* in a comment
-  'spaced-comment': [1, 'always', {markers: [':', '::'], exceptions: ['-']}],
+  'spaced-comment': [1, 'always', { markers: [':', '::'], exceptions: ['-'] }],
   // Disallow usage of spacing in template strings
   'template-curly-spacing': [1, 'never'],
   // Disallow comparisons with the value NaN
@@ -417,9 +411,7 @@ const rules = {
   // Enforce spacing around the * in yield* expressions
   'yield-star-spacing': [1, 'after'],
   // Disallow Yoda conditions
-  'yoda': 1,
+  yoda: 1,
 };
 
-module.exports = {
-  parser, parserOptions, plugins, extends: extending, settings, env, rules,
-};
+module.exports = { parser, parserOptions, plugins, env, rules };
