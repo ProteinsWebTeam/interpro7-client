@@ -39,3 +39,19 @@
     opacity: 0;
   }
 }
+
+.logo-text {display:flex; align-items: center; margin-left: -82px;  margin-right: 4px;}
+.logo-text svg {width: 62px; margin-right: 0.9rem;/*to be aligned with tagline, aslo depends on svg width*/}
+@media screen and (max-width: 63.9375em) and (min-width: 40em){
+  .logo-text  svg {
+    width: 50px;
+  }
+}
+@media screen and (max-width: 39.9375em){
+  .logo-text  svg {
+    width: 40px;
+  }
+  .logo-text{transform: translateX(82px);}
+}
+.logo-flex-item {display: flex; align-items: center;}
+.logo-color {fill: white;}
