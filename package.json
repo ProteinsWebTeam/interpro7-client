@@ -8,11 +8,11 @@
   "license": "GPL-3.0",
   "scripts": {
     "test": "npm-run-all test:*",
-    "test:flow": "if flow version; then flow check; else echo \"flow unable to run, skipping\"; fi",
+    "test:flow": "flow check",
     "test:lint": "esw --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
-    "test:unit": "NODE_ENV=test mocha-webpack --webpack-config webpack/config.js --growl --reporter dot \"src/**/*test?(s).js\"",
+    "test:unit": "mocha-webpack --webpack-config webpack.test.config.js --growl --reporter dot \"src/**/*test?(s).js\"",
     "test:functional": "echo \"Warning, no functional test specified yet, passing\" && exit 0",
-    "dev": "webpack-dev-server --config webpack/config.js",
+    "dev": "webpack-dev-server",
     "dev:test": "npm-run-all -rp dev:test:*",
     "dev:test:lint": "npm run test:lint -- --watch",
     "dev:test:unit": "npm run test:unit -- --watch",
@@ -23,9 +23,9 @@
     "predeploy": "npm-run-all test clean",
     "deploy": "npm run bundle",
     "deploy:staging": "npm run deploy",
-    "deploy:production": "NODE_ENV=production npm run deploy",
+    "deploy:production": "npm run deploy -- --env.production",
     "start": "npm-run-all -rp dev:test dev",
-    "stats": "NODE_ENV=production webpack --config webpack/config.js --profile --json > dist/stats.json"
+    "stats": "webpack --env.production --profile --json > dist/stats.json"
   },
   "contributors": [
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)"
@@ -91,7 +91,7 @@
     "data-loader": "^0.1.8",
     "draft-js": "^0.10.1",
     "foundation-sites": "~6.2.4",
-    "gsap": "^1.19.1",
+    "gsap": "^1.20.0",
     "history": "^4.6.2",
     "idb": "^2.0.3",
     "interpro-components": "^0.1.7",
@@ -153,7 +153,7 @@
     "prettier": "^1.5.2",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
-    "sinon": "^2.3.4",
+    "sinon": "^2.3.6",
     "sinon-chai": "^2.11.0",
     "source-map": "^0.5.6",
     "style-loader": "^0.18.2",
