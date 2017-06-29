@@ -77,6 +77,10 @@
       "prettier --single-quote --trailing-comma es5 --write",
       "git add"
     ],
+    "*.css": [
+      "prettier --write",
+      "git add"
+    ],
     "src/**/*.js": [
       "prettier --single-quote --trailing-comma all --write",
       "git add"

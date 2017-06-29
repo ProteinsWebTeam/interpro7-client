@@ -5,7 +5,9 @@ html {
   background-color: var(--colors-nearly-white);
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -29,6 +31,7 @@ header a {
   @nest & > * {
     height: 100vh;
     width: 100vw;
+    overflow-y: hidden;
     display: flex;
     flex-direction: column;
 
