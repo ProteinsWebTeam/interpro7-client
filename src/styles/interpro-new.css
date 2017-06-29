@@ -380,6 +380,7 @@ a.go {cursor: pointer;color: white;}
     .main-header {height:auto;}/*important - removed height banner defined when sticky*/
     .local-masthead h1  {font-size: 1.8rem; transform: translateX(0px);}/*title logo small + remove translation*/
     .local-masthead img {margin-left:0; margin-right:0.4rem; width:40px;}
+    .local-masthead h1 svg {margin-left:0; margin-right:0.4rem; width:40px;}
     .local-masthead .masthead {padding-top: 1.4rem;} /*align logo with menu icon on right*/
     /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large  devices*!*/
     .offc-nav.expand ~ .main-header .local-offcanvas-menu, .offc-nav.expand ~ .main-header .local-site-search {transform: translateX(-12em);}/*translation of the buttons is reduced for small screens*/
