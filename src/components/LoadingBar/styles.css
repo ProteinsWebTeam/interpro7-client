@@ -7,15 +7,14 @@
   top: 0;
   left: 0;
   z-index: 100;
-  width: 100vw;
+  width: 100%;
   height: var(--spacing-small);
   background-color: var(--colors-main);
   pointer-events: none;
   transform: scaleX(0);
   opacity: 1;
   transform-origin: 0 0;
-  transition:
-    transform var(--timing-medium) ease-in-out,
+  transition: transform var(--timing-medium) ease-in-out,
     opacity var(--timing-quick) ease-in-out;
   will-change: transform, opacity;
 }
