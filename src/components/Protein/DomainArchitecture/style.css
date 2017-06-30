@@ -2,21 +2,20 @@
   font-size: 12px;
   font-family: sans-serif;
 }
-.protein rect{
-  fill: rgb(70,130,160);
+.protein rect {
+  fill: rgb(70, 130, 160);
 }
-.protein rect:hover{
-  fill: rgb(60,120,150);
+.protein rect:hover {
+  fill: rgb(60, 120, 150);
 }
 
 .header-section {
   font-weight: bold;
-  fill: rgb(102, 102,102);
+  fill: rgb(102, 102, 102);
 }
-.entry>text {
+.entry > text {
   font-weight: 500;
   text-transform: uppercase;
-
 }
 .signature text {
   font-size: 0.9em;
@@ -26,40 +25,44 @@
   font-size: 0.7em;
   text-transform: uppercase;
 }
-.residues>rect, .predictions>rect, .features>rect{
+.residues > rect,
+.predictions > rect,
+.features > rect {
   opacity: 0.6;
 }
 
-.entry:hover>text, .signature:hover>text, .residue:hover>text {
+.entry:hover > text,
+.signature:hover > text,
+.residue:hover > text {
   font-weight: bold;
 }
-.entry-instance:hover>rect, .signature:hover>rect{
+.entry-instance:hover > rect,
+.signature:hover > rect {
   stroke: #5f5f5f;
   stroke-width: 1px;
 }
 .link {
   cursor: pointer;
-
 }
 div.buttons {
   text-align: right;
   font-size: 0.9em;
   margin-right: 10%;
 }
-.fullscreenable:-webkit-full-screen .fullscreen{
+.fullscreenable:-webkit-full-screen .fullscreen {
   display: none;
 }
-.fullscreenable:-webkit-full-screen  {
-  width: 100vw;
+.fullscreenable:-webkit-full-screen {
+  width: 100%;
 }
 
-.popper{
+.popper {
   position: absolute;
   background: white;
   color: black;
   min-width: 150px;
   border-radius: 3px;
-  box-shadow: 0 0 2px rgba(0,0,0,0.5);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   padding: 10px;
   text-align: center;
   margin: 3px;
@@ -73,7 +76,7 @@ div.buttons {
   border-color: white;
 }
 
-.popper[x-placement^="top"] .popper__arrow{
+.popper[x-placement^="top"] .popper__arrow {
   border-width: 5px 5px 0 5px;
   border-left-color: transparent;
   border-right-color: transparent;
@@ -83,7 +86,7 @@ div.buttons {
   margin-top: 0;
   margin-bottom: 0;
 }
-.popper[x-placement^="bottom"]{
+.popper[x-placement^="bottom"] {
   margin-top: 5px;
 }
 .popper[x-placement^="bottom"] .popper__arrow {
@@ -99,7 +102,7 @@ div.buttons {
 .popper[x-placement^="right"] {
   margin-left: 5px;
 }
-.popper[x-placement^="right"] .popper__arrow{
+.popper[x-placement^="right"] .popper__arrow {
   border-width: 5px 5px 5px 0;
   border-left-color: transparent;
   border-top-color: transparent;
@@ -109,10 +112,10 @@ div.buttons {
   margin-left: 0;
   margin-right: 0;
 }
-.popper[x-placement^="left"]{
+.popper[x-placement^="left"] {
   margin-right: 5px;
 }
-.popper[x-placement^="left"] .popper__arrow{
+.popper[x-placement^="left"] .popper__arrow {
   border-width: 5px 0 5px 5px;
   border-top-color: transparent;
   border-right-color: transparent;
