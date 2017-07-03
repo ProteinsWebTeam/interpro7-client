@@ -35,35 +35,36 @@ const Title = ({ data = null, loading, stuck }) => {
         <Link newTo={{ description: {} }} title="Back to InterPro homepage">
           <div className={styles('logo-text')}>
             <div className={styles('logo-flex-item')}>
-              <svg class="icon" viewBox="0 0 88 88" width="62">
-                <mask id="logo-mask">
+              <svg className={styles('icon')} viewBox="0 0 88 88" width="62">
+                <defs>
+                  <mask id="logo-mask">
+                    <rect
+                      x="10"
+                      y="10"
+                      ry="8"
+                      width="65"
+                      height="65"
+                      fill="white"
+                    />
+                    <rect x="10" y="41" height="4" width="65" fill="black" />
+                    <rect
+                      x="23"
+                      y="34"
+                      ry="8"
+                      height="18"
+                      width="38"
+                      fill="black"
+                    />
+                  </mask>
+                </defs>
+                <g transform="rotate(-45 45 41)">
                   <rect
                     x="10"
-                    y="-65"
+                    y="10"
                     ry="8"
-                    fill="white"
                     width="65"
                     height="65"
-                  />
-                  <rect x="10" y="-34" height="4" width="65" fill="black" />
-                  <rect
-                    x="23"
-                    y="-41"
-                    ry="8"
-                    height="18"
-                    width="38"
-                    fill="black"
-                  />
-                </mask>
-                <g transform="rotate(-45 136 4)">
-                  <rect
-                    x="10"
-                    y="-65"
-                    ry="8"
                     fill="white"
-                    className={styles('logo-color')}
-                    width="65"
-                    height="65"
                     mask="url(#logo-mask)"
                   />
                 </g>
