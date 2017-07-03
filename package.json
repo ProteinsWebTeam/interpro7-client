@@ -65,37 +65,44 @@
     ],
     "env": {
       "production": {
-        "presets": ["babili"],
+        "presets": [
+          "babili"
+        ],
         "comments": false
       }
     }
   },
   "lint-staged": {
-    "*.js": ["prettier --single-quote --trailing-comma es5 --write", "git add"],
-    "*.css": ["prettier --write", "git add"],
-    "*.json": ["prettier --write", "git add"],
+    "*.js": [
+      "prettier --single-quote --trailing-comma es5 --write",
+      "git add"
+    ],
+    "*.css": [
+      "prettier --write",
+      "git add"
+    ],
     "src/**/*.js": [
       "prettier --single-quote --trailing-comma all --write",
       "git add"
     ]
   },
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "github:webcomponents/webcomponentsjs#v1.0.1",
+    "@webcomponents/webcomponentsjs": "^1.0.1",
     "babel-polyfill": "^6.23.0",
     "color-hash": "^1.0.3",
     "core-js": "^2.4.1",
     "d3": "^4.8.0",
-    "data-loader": "^0.1.8",
+    "data-loader": "^0.2.0",
     "draft-js": "^0.10.1",
     "foundation-sites": "~6.2.4",
-    "gsap": "^1.20.0",
+    "gsap": "^1.20.2",
     "history": "^4.6.2",
     "idb": "^2.0.3",
-    "interpro-components": "^0.1.7",
+    "interpro-components": "^0.2.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash-es": "^4.17.2",
-    "pdb-web-components": "^0.1.3",
-    "popper.js": "^1.10.6",
+    "pdb-web-components": "^0.2.0",
+    "popper.js": "^1.10.8",
     "prop-types": "^15.5.10",
     "query-string": "^4.3.4",
     "react": "^15.6.1",
@@ -125,6 +132,7 @@
     "css-loader": "^0.28.4",
     "empty": "^0.10.1",
     "eslint": "^4.1.1",
+    "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-react": "^7.1.0",
     "eslint-watch": "^3.1.1",
     "extract-text-webpack-plugin": "^2.1.2",
@@ -135,7 +143,7 @@
     "glob": "^7.1.2",
     "glob-loader": "^0.3.0",
     "html-webpack-plugin": "^2.29.0",
-    "husky": "^0.14.1",
+    "husky": "^0.14.2",
     "img-loader": "^2.0.0",
     "json-loader": "^0.5.4",
     "jsx-chai": "^4.0.0",
