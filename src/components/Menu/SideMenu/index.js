@@ -1,17 +1,16 @@
 // @flow
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
-import {closeSideNav} from 'actions/creators';
-import loadData from 'higherOrder/loadData';
+import { closeSideNav } from 'actions/creators';
 
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterproMenu from 'components/Menu/InterproMenu';
 import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
 import interproStyles from 'styles/interpro-new.css';
 import helperClasses from 'styles/helper-classes.css';
@@ -22,21 +21,16 @@ const f = foundationPartial(ebiStyles, interproStyles, helperClasses, style);
 class SideMenu extends PureComponent {
   static propTypes = {
     visible: T.bool.isRequired,
-    data: T.object,
-    loading: T.bool,
+    mainAccession: T.string,
     closeSideNav: T.func.isRequired,
   };
 
   render() {
-    const {
-      visible,
-      data: {payload, loading},
-      closeSideNav,
-    } = this.props;
+    const { visible, mainAccession, closeSideNav } = this.props;
     return (
       <div>
         <aside
-          className={f('container', {visible})}
+          className={f('container', { visible })}
           role="menu"
           id="main-nav"
         >
@@ -49,24 +43,14 @@ class SideMenu extends PureComponent {
             ×
           </button>
           <ul>
-            {
-              !loading && payload && payload.metadata &&
-              <SingleEntityMenu
-                data={payload}
-                pathname={''}
-                className={f('primary')}
-              >
+            {mainAccession &&
+              <SingleEntityMenu className={f('primary')}>
                 <span
                   className={f('menu-label', 'select-none', 'cursor-default')}
                 >
-                  {(
-                    payload.metadata.name.short ||
-                    payload.metadata.name.name ||
-                    payload.metadata.accession
-                  )}
+                  {mainAccession}
                 </span>
-              </SingleEntityMenu>
-            }
+              </SingleEntityMenu>}
             <InterproMenu
               pathname={''}
               className={f('secondary', 'is-drilldown')}
@@ -110,9 +94,8 @@ class SideMenu extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
-  visible => ({visible})
+  state => state.newLocation.description.mainAccession,
+  (visible, mainAccession) => ({ visible, mainAccession })
 );
-export default connect(
-  mapStateToProps,
-  {closeSideNav}
-)(loadData()(SideMenu));
+
+export default connect(mapStateToProps, { closeSideNav })(SideMenu);

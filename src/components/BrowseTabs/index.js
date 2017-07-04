@@ -2,11 +2,11 @@
 import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 import NumberLabel from 'components/NumberLabel';
 
-import { createSelector } from 'reselect';
 import { singleEntity } from 'menuConfig';
 import loadData from 'higherOrder/loadData';
 
