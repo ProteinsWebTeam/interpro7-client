@@ -11,4 +11,10 @@
     opacity: 0.5;
     filter: grayscale(50%);
   }
+
+  @nest & th {
+    top: 88px;
+    position: sticky;
+    background: #f8f8f8cc;
+  }
 }
