@@ -5,26 +5,16 @@ import * as types from 'actions/types';
 
 // Action creators
 // location
-export const goToLocation = (location/*: string | Location */) => ({
-  type: types.NEW_LOCATION,
-  location,
-});
-
 export const goToNewLocation = (
-  location/*: string | Location */,
-  replace/*: ?boolean */,
+  location /*: string | Location */,
+  replace /*: ?boolean */
 ) => ({
   type: types.NEW_NEW_LOCATION,
   location,
   replace,
 });
 
-export const locationChangeFromHistory = (location/*: Location */) => ({
-  type: types.NEW_PROCESSED_LOCATION,
-  location,
-});
-
-export const newLocationChangeFromHistory = (newLocation/*: Object */) => ({
+export const newLocationChangeFromHistory = (newLocation /*: Object */) => ({
   type: types.NEW_PROCESSED_NEW_LOCATION,
   newLocation,
 });
@@ -82,13 +72,13 @@ const parseValue = target => {
   }
 };
 
-export const changePageSize = (pageSize/* :number */) => ({
+export const changePageSize = (pageSize /* :number */) => ({
   type: types.CHANGE_SETTINGS,
   category: 'pagination',
   key: 'pageSize',
   value: +pageSize,
 });
-export const changeSettings = (event/* :Event */) => {
+export const changeSettings = (event /* :Event */) => {
   if (event.target instanceof HTMLInputElement) {
     return {
       type: types.CHANGE_SETTINGS,
@@ -99,55 +89,49 @@ export const changeSettings = (event/* :Event */) => {
   }
 };
 
-export const resetSettings = (value/*: string | number | null */ = null) => ({
+export const resetSettings = (value /*: string | number | null */ = null) => ({
   type: types.RESET_SETTINGS,
   value,
 });
 
 // data
-export const loadingData = (key/*: string */) => ({
+export const loadingData = (key /*: string */) => ({
   type: types.LOADING_DATA,
   key,
 });
 
-export const loadedData = (
-  key/*: string */,
-  response/*: Object */,
-) => ({
+export const loadedData = (key /*: string */, response /*: Object */) => ({
   type: types.LOADED_DATA,
   key,
   payload: response.payload,
   status: response.status,
 });
 
-export const progressData = (
-  key/*: string */,
-  progress/*: number */,
-) => ({
+export const progressData = (key /*: string */, progress /*: number */) => ({
   type: types.PROGRESS_DATA,
   key,
   progress,
 });
 
-export const unloadingData = (key/*: string */) => ({
+export const unloadingData = (key /*: string */) => ({
   type: types.UNLOADING_DATA,
   key,
 });
 
-export const failedLoadingData = (key/*: string */, error/*: Error */) => ({
+export const failedLoadingData = (key /*: string */, error /*: Error */) => ({
   type: types.FAILED_LOADING_DATA,
   key,
   error,
 });
 
 // toast messages
-export const addToast = (toast/*: Object */, id/*: string */) => ({
+export const addToast = (toast /*: Object */, id /*: string */) => ({
   type: types.ADD_TOAST,
   id,
   toast,
 });
 
-export const removeToast = (id/*: string */) => ({
+export const removeToast = (id /*: string */) => ({
   type: types.REMOVE_TOAST,
   id,
 });

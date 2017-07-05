@@ -52,7 +52,7 @@ const mapPathArrayToLink = paths =>
       null &&
       <Link key={url || i} to={url || '#'}>
         {name}
-      </Link>,
+      </Link>
   );
 
 const formatEndpoints = paths => [
@@ -63,7 +63,7 @@ const formatEndpoints = paths => [
 
 class Breadcrumb extends Component {
   static propTypes = {
-    pathname: T.string.isRequired,
+    description: T.object.isRequired,
     stuck: T.bool.isRequired,
     stickyMenuOffset: T.number.isRequired,
     // refreshDOMAttributes: T.func.isRequired,
@@ -79,7 +79,7 @@ class Breadcrumb extends Component {
 
   componentWillMount() {
     this.setState({
-      paths: getPaths(this.props.pathname),
+      paths: getPaths(''),
     });
   }
 
@@ -89,9 +89,9 @@ class Breadcrumb extends Component {
 
   componentWillReceiveProps(nextProps) {
     // console.log('will receive props', ...Object.values(nextProps));
-    if (this.props.pathname !== nextProps.pathname) {
+    if (this.props.description !== nextProps.description) {
       this.setState({
-        paths: getPaths(nextProps.pathname),
+        paths: getPaths(''),
       });
     }
   }
@@ -112,7 +112,7 @@ class Breadcrumb extends Component {
       const prev = positions.get(node);
       if (prev) {
         console.log(
-          `translate(${prev.left - curr.left}px, ${prev.top - curr.top}px)`,
+          `translate(${prev.left - curr.left}px, ${prev.top - curr.top}px)`
         );
         node.animate(
           [
@@ -122,7 +122,7 @@ class Breadcrumb extends Component {
             },
             { transform: 'translate(0, 0)' },
           ],
-          { duration: 500, easing: 'ease-out' },
+          { duration: 500, easing: 'ease-out' }
         );
       }
       positions.set(node, curr);
@@ -139,7 +139,6 @@ class Breadcrumb extends Component {
 
   render() {
     const { expanded, paths } = this.state;
-    const pathname = this.props;
     const endpoints = formatEndpoints(paths, expanded, this.props);
     const { stickyMenuOffset: offset, stuck } = this.props;
     const MAGIC = 88;
@@ -154,7 +153,7 @@ class Breadcrumb extends Component {
       >
         <div className={f('columns', 'large-12')} style={{ width: '100%' }}>
           <nav
-            style={{ display: pathname === '/' ? 'none' : '' }}
+            style={{ display: this.props.description.mainType ? '' : 'none' }}
             className={f('breadcrumbs', { expanded, standard: !expanded })}
             onFocus={this.expand}
             onBlur={this.reduce}
@@ -165,7 +164,7 @@ class Breadcrumb extends Component {
               {endpoints.map((endpoint, i) =>
                 <span key={i} className={f({ group: i <= 1, focus: i > 1 })}>
                   {mapPathArrayToLink(endpoint.paths)}
-                </span>,
+                </span>
               )}
             </span>
             <span className={f('hint')}>
@@ -183,8 +182,8 @@ class Breadcrumb extends Component {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  state => state.location.pathname,
-  (stuck, pathname) => ({ stuck, pathname }),
+  state => state.newLocation.description,
+  (stuck, description) => ({ stuck, description })
 );
 
 export default connect(mapStateToProps)(Breadcrumb);

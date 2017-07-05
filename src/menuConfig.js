@@ -152,7 +152,7 @@ export const singleEntity = [
         ...location,
         description: {
           ...location.description,
-          mainDetail: 'domain_architectures',
+          mainDetail: 'domain_architecture',
         },
       };
     },
@@ -174,50 +174,50 @@ export const singleEntity = [
 
 export const InterPro = [
   {
-    newTo: {description: {}},
+    newTo: { description: {} },
     icon: 'H',
     name: 'Home',
-    activeClass({description: {mainType, other}}) {
+    activeClass({ description: { mainType, other } }) {
       if (!(mainType || other)) return f('is-active');
     },
   },
   {
-    newTo: {description: {mainType: 'search'}},
+    newTo: { description: { mainType: 'search' } },
     icon: '1',
     name: 'Search',
     iconClass: 'functional',
   },
   {
-    newTo: {description: {mainType: 'entry', mainDB: 'InterPro'}},
+    newTo: { description: { mainType: 'entry', mainDB: 'InterPro' } },
     icon: 'b',
     name: 'Browse',
     iconClass: 'functional',
     options: entities,
   },
   {
-    newTo: {description: {other: 'release_notes'}},
+    newTo: { description: { other: 'release_notes' } },
     icon: '0',
     name: 'Release Notes',
     iconClass: 'functional',
   },
   {
-    newTo: {description: {other: 'download'}},
+    newTo: { description: { other: 'download' } },
     icon: '=',
     name: 'Download',
     iconClass: 'functional',
   },
   {
-    newTo: {description: {other: 'help'}},
+    newTo: { description: { other: 'help' } },
     icon: '?',
     name: 'Help',
   },
   {
-    newTo: {description: {other: 'about'}},
+    newTo: { description: { other: 'about' } },
     icon: 'i',
     name: 'About',
   },
   {
-    newTo: {description: {other: 'settings'}},
+    newTo: { description: { other: 'settings' } },
     icon: 's',
     name: 'Settings',
     iconClass: 'functional',

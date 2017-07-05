@@ -3,6 +3,7 @@
 import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import Link from 'components/generic/Link';
 
 import EntriesOnProtein from './EntriesOnProtein';
@@ -163,4 +164,9 @@ const Matches = (
 };
 Matches.propTypes = propTypes;
 
-export default connect(({ location: { search } }) => ({ search }))(Matches);
+const mapStateToProps = createSelector(
+  state => state.newLocation.search,
+  search => ({ search }),
+);
+
+export default connect(mapStateToProps)(Matches);

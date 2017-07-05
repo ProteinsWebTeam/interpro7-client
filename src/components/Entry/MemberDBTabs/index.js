@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import NumberLabel from 'components/NumberLabel';
 import Link from 'components/generic/Link';
-import {createSelector} from 'reselect';
+import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 import styles from './style.css';
 
 const f = foundationPartial(styles);
@@ -46,20 +46,20 @@ class MemberDBTabs extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {collapsed: false};
+    this.state = { collapsed: false };
   }
 
-  _handleExpansion = ({collapsed}) => {
-    this.setState({collapsed: !collapsed});
+  _handleExpansion = ({ collapsed }) => {
+    this.setState({ collapsed: !collapsed });
   };
 
   render() {
     const {
-      data: {loading, payload},
-      location: {description: {mainType}},
+      data: { loading, payload },
+      location: { description: { mainType } },
     } = this.props;
-    const {collapsed} = this.state;
-    const mainOrFocus = (mainType === 'entry') ? 'main' : 'focus';
+    const { collapsed } = this.state;
+    const mainOrFocus = mainType === 'entry' ? 'main' : 'focus';
     let tabs;
     if (!loading) {
       tabs = [
@@ -77,22 +77,20 @@ class MemberDBTabs extends Component {
           },
           value: payload.entries.interpro,
         },
-        ...Object.keys(payload.entries.member_databases)
-          .sort()
-          .map(e => ({
-            name: e,
-            newTo(location) {
-              return {
-                ...location,
-                description: {
-                  ...location.description,
-                  [`${mainOrFocus}Type`]: 'entry',
-                  [`${mainOrFocus}DB`]: e,
-                },
-              };
-            },
-            value: payload.entries.member_databases[e],
-          })),
+        ...Object.keys(payload.entries.member_databases).sort().map(e => ({
+          name: e,
+          newTo(location) {
+            return {
+              ...location,
+              description: {
+                ...location.description,
+                [`${mainOrFocus}Type`]: 'entry',
+                [`${mainOrFocus}DB`]: e,
+              },
+            };
+          },
+          value: payload.entries.member_databases[e],
+        })),
       ];
     }
     return (
@@ -100,27 +98,24 @@ class MemberDBTabs extends Component {
         <button onClick={this._handleExpansion} className={f('expand-button')}>
           {this.state.collapsed ? '≫' : '≪'}
         </button>
-        <ul className={f('vertical', 'tabs', {collapsed})}>
-          {
-            (tabs || []).map(e => (
-              <li className={f('tabs-title')} key={e.name}>
-                <Link
-                  newTo={e.newTo}
-                  activeClass={f('is-active', 'is-active-tab')}
-                  style={{
-                    display: 'flex',
-                    borderLeftColor: colors[e.name] ? colors[e.name] : null,
-                  }}
-                >
-                  <span>{e.name}&nbsp;</span>
-                  <NumberLabel
-                    value={e.value}
-                    className={f('number-label')}
-                  />
-                </Link>
-              </li>
-            ))
-          }
+        <ul className={f('vertical', 'tabs', { collapsed })}>
+          {(tabs || []).map(e =>
+            <li className={f('tabs-title')} key={e.name}>
+              <Link
+                newTo={e.newTo}
+                activeClass={f('is-active', 'is-active-tab')}
+                style={{
+                  display: 'flex',
+                  borderLeftColor: colors[e.name] ? colors[e.name] : null,
+                }}
+              >
+                <span>
+                  {e.name}&nbsp;
+                </span>
+                <NumberLabel value={e.value} className={f('number-label')} />
+              </Link>
+            </li>,
+          )}
         </ul>
       </div>
     );
@@ -129,15 +124,14 @@ class MemberDBTabs extends Component {
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({location}),
+  location => ({ location }),
 );
 
 const getMemberDBUrl = createSelector(
   state => state.settings.api,
-  state => state.location.search,
-  ({protocol, hostname, port, root}) => (
-    `${protocol}//${hostname}:${port}${root}/entry`
-  ),
+  state => state.newLocation.search,
+  ({ protocol, hostname, port, root }) =>
+    `${protocol}//${hostname}:${port}${root}/entry`,
 );
 
 export default connect(mapStateToProps)(loadData(getMemberDBUrl)(MemberDBTabs));

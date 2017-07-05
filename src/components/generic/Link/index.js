@@ -1,42 +1,36 @@
 // @flow
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import {stringify as qsStringify} from 'query-string';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
+import { stringify as qsStringify } from 'query-string';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
-import description2description from
-  'utils/processLocation/description2description';
+import description2description from 'utils/processLocation/description2description';
 import description2path from 'utils/processLocation/description2path';
 import config from 'config';
 
-import {goToNewLocation} from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
-const happenedWithModifierKey = event => !!(
-  event.metaKey || event.altKey || event.ctrlKey || event.shiftKey
-);
+const happenedWithModifierKey = event =>
+  !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 const happenedWithLeftClick = event => event.button === 0;
 
-const getNextLocation = (location, to) => (
-  typeof to === 'function' ? to(location) : to
-);
+const getNextLocation = (location, to) =>
+  typeof to === 'function' ? to(location) : to;
 
-const generateHref = (
-  nextLocation/*: Object */,
-  href/*: ?string */,
-) => {
+const generateHref = (nextLocation /*: Object */, href /*: ?string */) => {
   if (href) return href;
-  return `${config.root.website.pathname}${
-    description2path(description2description(nextLocation.description))
-  }?${qsStringify(nextLocation.search)}`.replace(/\?(#|$)/, '');
+  return `${config.root.website.pathname}${description2path(
+    description2description(nextLocation.description),
+  )}?${qsStringify(nextLocation.search)}`.replace(/\?(#|$)/, '');
 };
 
 const generateClassName = (
-  className/*: ?string */,
-  activeClass/*: ?(string | function) */,
-  location/*: Object */,
-  nextLocation/*: Object */,
-  href/*: ?string */
+  className /*: ?string */,
+  activeClass /*: ?(string | function) */,
+  location /*: Object */,
+  nextLocation /*: Object */,
+  href /*: ?string */,
 ) => {
   if (href || !(activeClass && nextLocation)) return className;
   if (typeof activeClass === 'function') {
@@ -70,14 +64,11 @@ class Link extends PureComponent {
       T.func,
     ]),
     className: T.string,
-    activeClass: T.oneOfType([
-      T.string,
-      T.func,
-    ]),
+    activeClass: T.oneOfType([T.string, T.func]),
   };
 
   handleClick = event => {
-    const {onClick, target, goToNewLocation, newTo, location} = this.props;
+    const { onClick, target, goToNewLocation, newTo, location } = this.props;
     // pass it on to an externally defined handler
     if (onClick) onClick(event);
     if (event.defaultPrevented) return;
@@ -93,15 +84,20 @@ class Link extends PureComponent {
   // TODO: remove eslint ignore after complete refactoring
   render() {
     const {
-      onClick, location, goToNewLocation,
-      activeClass, className, newTo, href,
+      onClick,
+      location,
+      goToNewLocation,
+      activeClass,
+      className,
+      newTo,
+      href,
       ...props
     } = this.props;
     const nextLocation = getNextLocation(location, newTo);
     const _href = generateHref(nextLocation, href);
-    const _className = generateClassName(
-      className, activeClass, location, nextLocation, href,
-    ) || '';
+    const _className =
+      generateClassName(className, activeClass, location, nextLocation, href) ||
+      '';
     return (
       <a
         {...props}
@@ -115,7 +111,12 @@ class Link extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  (location) => ({location}),
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, {goToNewLocation})(Link);
+export default connect(mapStateToProps, {
+  goToNewLocation: (...args) => {
+    console.log(...args);
+    return goToNewLocation(...args);
+  },
+})(Link);
