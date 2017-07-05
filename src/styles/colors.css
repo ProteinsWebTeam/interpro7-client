@@ -1,12 +1,13 @@
 :root {
-  --colors-main: #007C82;
+  --colors-main: #007c82;
   --colors-nearly-white: #fff;
   --colors-nearly-black: #111;
   --colors-dark: #333;
+  --colors-graydark: #676767;
   --colors-gray: #888;
 
-  --colors-family: #FE3600;
-  --colors-domain: #59D417;
-  --colors-repeat: #FF9000;
-  --colors-site: #CE70E2;
+  --colors-family: #fe3600;
+  --colors-domain: #59d417;
+  --colors-repeat: #ff9000;
+  --colors-site: #ce70e2;
 }
