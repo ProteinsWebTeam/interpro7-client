@@ -24,7 +24,6 @@ const ReferenceSection = (database) => {
       )
     }
     </ul>
-
   </li>);
 };
 
@@ -36,12 +35,12 @@ const sortString = (a, b) => {
 
 const CrossReferences = ({cross_references}) => {
   //reformat
-  const databases = Object.entries(cross_references).sort(([a], [b]) => sortString(a, b));
+  const databases = Object.entries(cross_references).sort(([a], [b]) => a.rank - b.rank );
   return (<div><ul>{
     <AnimatedEntry className="cross_references" itemDelay={100} duration={500}>{
         databases.map(
-          ([database, {description, accessions}]) => (
-            <ReferenceSection key={database} name={database} description={description} accessions={accessions}/>
+          ([database, {displayName, description, accessions}]) => (
+            <ReferenceSection key={database} name={displayName} description={description} accessions={accessions}/>
           )
         )
       }
