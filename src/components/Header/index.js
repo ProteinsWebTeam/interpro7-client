@@ -105,6 +105,7 @@ class _SideIcons extends PureComponent {
                 viewBox="0 0 480 480"
               >
                 <path
+                  transform="rotate(-45, 328, 222)"
                   fill="none"
                   stroke="white"
                   strokeWidth="50"
