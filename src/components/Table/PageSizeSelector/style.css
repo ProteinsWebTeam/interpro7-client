@@ -1,4 +1,5 @@
 @import "../../../styles/ebi/fonts.css";
+@import "../../../styles/timing.css";
 
 .apply-all {
   margin-left: 1rem;
@@ -13,11 +14,11 @@
 
   @nest & > div {
     display: inline-block;
-    /*transition: transform 300ms ease-in-out;*/
+    /*transition: transform var(--timing-fast) ease-in-out;*/
     /*transform: rotate3d(0, 1, 0, 91deg);*/
     /*transform-origin: left;*/
     /*backface-visibility: hidden;*/
     opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity var(--timing-fast) ease-in-out;
   }
 }
