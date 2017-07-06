@@ -58,7 +58,7 @@ class GOTermsFilter extends Component {
               <input
                 type="radio"
                 name="go_category"
-                value={categories[term]}
+                value={categories[term] || 'Any'}
                 onChange={this._handleSelection}
                 checked={
                   (term === 'Any' && !search.go_term) ||
