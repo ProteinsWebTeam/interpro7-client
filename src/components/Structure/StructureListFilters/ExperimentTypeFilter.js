@@ -1,16 +1,16 @@
 /* eslint-disable no-param-reassign */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { stringify as qsStringify } from 'query-string';
 
 import NumberLabel from 'components/NumberLabel';
 
-import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
+import description2path from 'utils/processLocation/description2path';
 
-import {createSelector} from 'reselect';
-import {format, resolve} from 'url';
-
-import {goToNewLocation} from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import f from 'styles/foundation';
 
@@ -26,7 +26,7 @@ class ExperimentTypeFilter extends Component {
     }).isRequired,
   };
 
-  _handleSelection = ({target: {value}}) => {
+  _handleSelection = ({ target: { value } }) => {
     this.props.goToNewLocation({
       ...this.props.location,
       search: {
@@ -37,35 +37,36 @@ class ExperimentTypeFilter extends Component {
   };
 
   render() {
-    const {data: {loading, payload}, location: {search}} = this.props;
-    const types = Object.entries(loading ? {} : payload)
-      .sort(([, a], [, b]) => b - a);
-    if (!loading){
+    const { data: { loading, payload }, location: { search } } = this.props;
+    const types = Object.entries(loading ? {} : payload).sort(
+      ([, a], [, b]) => b - a
+    );
+    if (!loading) {
       types.unshift(['ALL', NaN]);
     }
     return (
-      <div style={{overflowX: 'hidden'}}>
-        {
-          types.map(([type, count]) => (
-            <div key={type} className={f('column')}>
-              <label className={f('row', 'align-middle')}>
-                <input
-                  type="radio"
-                  name="experiment_type"
-                  value={type}
-                  onChange={this._handleSelection}
-                  checked={
-                    (!search.experiment_type && type === 'ALL') ||
-                    search.experiment_type === type
-                  }
-                  style={{margin: '0.25em'}}
-                />
-                <span>{type}</span>
-                <NumberLabel value={count} />
-              </label>
-            </div>
-          ))
-        }
+      <div style={{ overflowX: 'hidden' }}>
+        {types.map(([type, count]) =>
+          <div key={type} className={f('column')}>
+            <label className={f('row', 'align-middle')}>
+              <input
+                type="radio"
+                name="experiment_type"
+                value={type}
+                onChange={this._handleSelection}
+                checked={
+                  (!search.experiment_type && type === 'ALL') ||
+                  search.experiment_type === type
+                }
+                style={{ margin: '0.25em' }}
+              />
+              <span>
+                {type}
+              </span>
+              <NumberLabel value={count} />
+            </label>
+          </div>
+        )}
       </div>
     );
   }
@@ -73,29 +74,25 @@ class ExperimentTypeFilter extends Component {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.location,
-  ({protocol, hostname, port, root}, {pathname, search}) => {
-    const parameters = Object.keys(search)
-      .reduce((acc, v) => {
-        if (v !== 'experiment_type' && v !== 'search' && search[v]) {
-          acc.push(`${v}=${search[v]}`);
-        }
-        return acc;
-      }, []);
-    parameters.push('group_by=experiment_type');
-    return resolve(
-      format({protocol, hostname, port, pathname: root}),
-      `${(root + pathname)}?${parameters.join('&')}`,
-    );
+  state => state.newLocation.description,
+  state => state.newLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    // omit from search
+    const { experiment_type, search: _, ..._search } = search;
+    // add to search
+    _search.group_by = 'experiment_type';
+    // build URL
+    return `${protocol}//${hostname}:${port}${root}${description2path(
+      description
+    )}?${qsStringify(_search)}`;
   }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({location}),
+  location => ({ location })
 );
 
-export default connect(mapStateToProps, {goToNewLocation})(
+export default connect(mapStateToProps, { goToNewLocation })(
   loadData(getUrlFor)(ExperimentTypeFilter)
 );
-

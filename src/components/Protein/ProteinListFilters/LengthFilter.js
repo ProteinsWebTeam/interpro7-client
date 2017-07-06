@@ -19,16 +19,19 @@ class LengthFilter extends Component {
     description: T.object,
     search: T.object,
   };
+
   constructor() {
     super();
     this.max = 40000;
     this.state = { from: 0, to: this.max };
   }
+
   componentWillMount() {
     const { search: { protein_length: pl } } = this.props;
     const [from, to] = pl ? pl.split('-').map(a => +a) : [0, this.max];
     this.setState({ from, to });
   }
+
   handleChange = () => {
     const vals = [+this.input1.value, +this.input2.value].sort((a, b) => a - b);
     const waitingTime = 500;
@@ -49,6 +52,7 @@ class LengthFilter extends Component {
       this.timer = null;
     }, waitingTime);
   };
+
   render() {
     return (
       <div>

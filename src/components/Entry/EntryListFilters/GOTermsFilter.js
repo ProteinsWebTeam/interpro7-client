@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { stringify as qsStringify } from 'query-string';
 
 import NumberLabel from 'components/NumberLabel';
 
-import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
+import description2path from 'utils/processLocation/description2path';
 
-import {createSelector} from 'reselect';
-import {format, resolve} from 'url';
-
-import {goToNewLocation} from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import f from 'styles/foundation';
 
@@ -31,7 +31,7 @@ class GOTermsFilter extends Component {
     }).isRequired,
   };
 
-  _handleSelection = ({target: {value}}) => {
+  _handleSelection = ({ target: { value } }) => {
     this.props.goToNewLocation({
       ...this.props.location,
       search: {
@@ -42,39 +42,38 @@ class GOTermsFilter extends Component {
   };
 
   render() {
-    const {data: {loading, payload}, location: {search}} = this.props;
-    const terms = Object.entries(loading ? {} : payload)
-      .sort(([, a], [, b]) => b - a);
-    if (!loading){
+    const { data: { loading, payload }, location: { search } } = this.props;
+    const terms = Object.entries(loading ? {} : payload).sort(
+      ([, a], [, b]) => b - a,
+    );
+    if (!loading) {
       terms.unshift(['Any']);
     }
     return (
       <div>
-        {
-          terms.map(([term, count]) => (
-            <div key={term} className={f('column')}>
-              <label className={f('row', 'align-middle')}>
-                <input
-                  type="radio"
-                  name="go_category"
-                  value={categories[term]}
-                  onChange={this._handleSelection}
-                  checked={
-                    (term === 'Any' && !search.go_term) ||
-                    search.go_term === categories[term]
-                  }
-                  style={{margin: '0.25em'}}
-                />
-                <span>{term}</span>
-                {
-                  typeof count === 'undefined' ?
-                    null :
-                    <NumberLabel value={count} />
+        {terms.map(([term, count]) =>
+          <div key={term} className={f('column')}>
+            <label className={f('row', 'align-middle')}>
+              <input
+                type="radio"
+                name="go_category"
+                value={categories[term]}
+                onChange={this._handleSelection}
+                checked={
+                  (term === 'Any' && !search.go_term) ||
+                  search.go_term === categories[term]
                 }
-              </label>
-            </div>
-          ))
-        }
+                style={{ margin: '0.25em' }}
+              />
+              <span>
+                {term}
+              </span>
+              {typeof count === 'undefined'
+                ? null
+                : <NumberLabel value={count} />}
+            </label>
+          </div>,
+        )}
       </div>
     );
   }
@@ -82,29 +81,27 @@ class GOTermsFilter extends Component {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.location,
-  ({protocol, hostname, port, root}, {pathname, search}) => {
-    const parameters = Object.keys(search)
-      .reduce((acc, v) => {
-        if (v !== 'search' && v !== 'signature_in' && v !== 'page_size' &&
-          search[v]) {
-          acc.push(`${v}=${search[v]}`);
-        }
-        return acc;
-      }, []);
-    parameters.push('group_by=go_terms');
-    return resolve(
-      format({protocol, hostname, port, pathname: root}),
-      `${(root + pathname)}?${parameters.join('&')}`,
-    );
-  }
+  state => state.newLocation.description,
+  state => state.newLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    // omit from search
+    const { page_size, search: _, signature_in, ..._search } = search;
+    // add to search
+    _search.group_by = 'go_terms';
+    // build URL
+    return `${protocol}//${hostname}:${port}${root}${description2path(
+      description,
+    )}?${qsStringify(_search)}`;
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({location}),
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, {goToNewLocation})(loadData({
-  getUrl: getUrlFor,
-})(GOTermsFilter));
+export default connect(mapStateToProps, { goToNewLocation })(
+  loadData({
+    getUrl: getUrlFor,
+  })(GOTermsFilter),
+);

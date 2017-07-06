@@ -1,12 +1,11 @@
 /* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
 
-import { createSelector } from 'reselect';
-import description2path from 'utils/processLocation/description2path';
-
 import loadData from 'higherOrder/loadData';
+import description2path from 'utils/processLocation/description2path';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 
@@ -18,19 +17,20 @@ const getUrlFor = createSelector(
       state => state.settings.api,
       state => state.newLocation.description,
       ({ protocol, hostname, port, root }, description) => {
+        // omit from description
         const { mainDetail: _, ..._description } = description;
-        let pathname = description2path(_description);
+        // brand new search
         const search = {};
         if (db === 'Residues') {
           search.residues = null;
         } else {
-          pathname += `/entry/${db}`;
+          _description.focusType = 'entry';
+          _description.focusDB = db;
         }
-        const queryString = qsStringify(search);
-        return `${protocol}//${hostname}:${port}${(root + pathname).replace(
-          /\/+/g,
-          '/'
-        )}${queryString ? `?${queryString}` : ''}`;
+        // build URL
+        return `${protocol}//${hostname}:${port}${root}${description2path(
+          _description
+        )}?${qsStringify(search)}`.replace(/\?$/, '');
       }
     )
 );

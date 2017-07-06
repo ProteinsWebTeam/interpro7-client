@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { stringify as qsStringify } from 'query-string';
 
 import NumberLabel from 'components/NumberLabel';
 
-import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
+import description2path from 'utils/processLocation/description2path';
 
-import {createSelector} from 'reselect';
-import {format, resolve} from 'url';
-
-import {goToNewLocation} from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import f from 'styles/foundation';
 
@@ -36,22 +36,22 @@ class CurationFilter extends Component {
 
   constructor() {
     super();
-    this.state = {value: null};
+    this.state = { value: null };
   }
 
   componentWillMount() {
-    const {mainDB} = this.props.location.description;
+    const { mainDB } = this.props.location.description;
     if (mainDB === 'swissprot') {
-      this.setState({value: 'swissprot'});
+      this.setState({ value: 'swissprot' });
     } else if (mainDB === 'trembl') {
-      this.setState({value: 'trembl'});
+      this.setState({ value: 'trembl' });
     } else {
-      this.setState({value: 'uniprot'});
+      this.setState({ value: 'uniprot' });
     }
   }
 
-  _handleSelection = ({target: {value}}) => {
-    this.setState({value});
+  _handleSelection = ({ target: { value } }) => {
+    this.setState({ value });
     this.props.goToNewLocation({
       ...this.props.location,
       description: {
@@ -62,31 +62,31 @@ class CurationFilter extends Component {
   };
 
   render() {
-    const {data: {loading, payload}} = this.props;
+    const { data: { loading, payload } } = this.props;
     const databases = loading ? {} : payload;
     if (!loading) {
       databases.uniprot = (databases.swissprot || 0) + (databases.trembl || 0);
     }
     return (
       <div>
-        {
-          Object.keys(databases).sort().map(db => (
-            <div key={db} className={f('column')}>
-              <label className={f('row', 'align-middle')}>
-                <input
-                  type="radio"
-                  name="curated_filter"
-                  value={db}
-                  onChange={this._handleSelection}
-                  checked={this.state.value === db}
-                  style={{margin: '0.25em'}}
-                />
-                <span>{label[db]}</span>
-                <NumberLabel value={databases[db]} />
-              </label>
-            </div>
-          ))
-        }
+        {Object.keys(databases).sort().map(db =>
+          <div key={db} className={f('column')}>
+            <label className={f('row', 'align-middle')}>
+              <input
+                type="radio"
+                name="curated_filter"
+                value={db}
+                onChange={this._handleSelection}
+                checked={this.state.value === db}
+                style={{ margin: '0.25em' }}
+              />
+              <span>
+                {label[db]}
+              </span>
+              <NumberLabel value={databases[db]} />
+            </label>
+          </div>,
+        )}
       </div>
     );
   }
@@ -94,30 +94,29 @@ class CurationFilter extends Component {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.location,
-  ({protocol, hostname, port, root}, {pathname, search}) => {
-    const parameters = Object.keys(search)
-      .reduce((acc, v) => {
-        if (v !== 'search' && search[v]) {
-          acc.push(`${v}=${search[v]}`);
-        }
-        return acc;
-      }, []);
-    parameters.push('group_by=source_database');
-    return resolve(
-      format({protocol, hostname, port, pathname: root}),
-      `${(root + pathname)}?${parameters.join('&')}`
-        .replace('/swissprot', '/uniprot')
-        .replace('/trembl', '/uniprot'),
-    );
-  }
+  state => state.newLocation.description,
+  state => state.newLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    // transform description
+    const _description = { ...description, mainDB: 'UniProt' };
+    // omit from search
+    const { search: _, ..._search } = search;
+    // add to search
+    _search.group_by = 'source_database';
+    // build URL
+    return `${protocol}//${hostname}:${port}${root}${description2path(
+      description,
+    )}?${qsStringify(_search)}`;
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({location})
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, {goToNewLocation})(loadData({
-  getUrl: getUrlFor,
-})(CurationFilter));
+export default connect(mapStateToProps, { goToNewLocation })(
+  loadData({
+    getUrl: getUrlFor,
+  })(CurationFilter),
+);
