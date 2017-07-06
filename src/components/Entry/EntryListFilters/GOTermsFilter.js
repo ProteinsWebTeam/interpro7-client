@@ -36,7 +36,8 @@ class GOTermsFilter extends Component {
       ...this.props.location,
       search: {
         ...this.props.location.search,
-        go_term: value === 'Any' ? null : value,
+        // eslint-disable-next-line no-undefined
+        go_term: value === 'Any' ? undefined : value,
       },
     });
   };
@@ -44,7 +45,7 @@ class GOTermsFilter extends Component {
   render() {
     const { data: { loading, payload }, location: { search } } = this.props;
     const terms = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
     if (!loading) {
       terms.unshift(['Any']);
@@ -72,7 +73,7 @@ class GOTermsFilter extends Component {
                 ? null
                 : <NumberLabel value={count} />}
             </label>
-          </div>,
+          </div>
         )}
       </div>
     );
@@ -90,18 +91,18 @@ const getUrlFor = createSelector(
     _search.group_by = 'go_terms';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description,
+      description
     )}?${qsStringify(_search)}`;
-  },
+  }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(GOTermsFilter),
+  })(GOTermsFilter)
 );

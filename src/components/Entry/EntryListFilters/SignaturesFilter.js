@@ -30,7 +30,8 @@ class SignaturesFilter extends Component {
       ...this.location,
       search: {
         ...this.props.location.search,
-        signature_in: value === 'Any' ? null : value,
+        // eslint-disable-next-line no-undefined
+        signature_in: value === 'Any' ? undefined : value,
       },
     });
   };
@@ -41,7 +42,7 @@ class SignaturesFilter extends Component {
       location: { search: { signature_in: signature } },
     } = this.props;
     const signatureDBs = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
     if (!loading) {
       signatureDBs.unshift(['Any', NaN]);
@@ -64,7 +65,7 @@ class SignaturesFilter extends Component {
               </span>
               <NumberLabel value={count} />
             </label>
-          </div>,
+          </div>
         )}
       </div>
     );
@@ -82,18 +83,18 @@ const getUrlFor = createSelector(
     _search.group_by = 'member_databases';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description,
+      description
     )}?${qsStringify(_search)}`;
-  },
+  }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(SignaturesFilter),
+  })(SignaturesFilter)
 );
