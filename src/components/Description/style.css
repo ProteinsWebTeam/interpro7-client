@@ -1,5 +1,7 @@
-.animate-height{
-  /*transition: max-height 300ms ease-in-out;*/
+@import "../../styles/timing.css";
+
+.animate-height {
+  /*transition: max-height var(--timing-fast) ease-in-out;*/
   overflow: hidden;
 }
 

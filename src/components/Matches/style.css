@@ -1,5 +1,6 @@
 @import "../../styles/colors.css";
 @import "../../styles/spacing.css";
+@import "../../styles/timing.css";
 
 .list {
   padding: 0;
@@ -15,7 +16,8 @@
 }
 
 .svgContainer {
-  margin: var(--spacing-small) 0 var(--spacing-small) calc(-1 * var(--spacing-big));
+  margin: var(--spacing-small) 0 var(--spacing-small)
+    calc(-1 * var(--spacing-big));
   height: 60px;
   overflow-y: hidden;
   overflow-x: auto;
@@ -35,7 +37,7 @@
 
   @nest & text {
     opacity: 0.2;
-    transition: opacity 0.25s ease-out;
+    transition: opacity var(--timing-fast) ease-out;
     fill: var(--colors-gray);
     font-size: 0.8em;
   }
@@ -49,7 +51,7 @@
   opacity: 0.6;
   transform-origin: center;
   transition-property: opacity, transform;
-  transition-duration: 0.25s;
+  transition-duration: var(--timing-fast);
   transition-timing-function: ease-out;
 
   &:hover {
