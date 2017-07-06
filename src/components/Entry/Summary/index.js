@@ -8,6 +8,7 @@ import path2description from 'utils/processLocation/path2description';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
 import Literature from 'components/Entry/Literature';
+import CrossReferences from 'components/Entry/CrossReferences';
 import Integration from 'components/Entry/Integration';
 import ContributingSignatures from 'components/Entry/ContributingSignatures';
 import Title from 'components/Title';
@@ -127,6 +128,15 @@ class SummaryEntry extends Component {
         {
           Object.keys(metadata.go_terms) &&
             <GoTerms terms={metadata.go_terms}/>
+        }
+        {
+          Object.keys(metadata.cross_references).length > 0 &&
+            <section id="cross_references">
+              <div>
+                <h4>Cross References</h4>
+              </div>
+              <CrossReferences cross_references={metadata.cross_references}/>
+            </section>
         }
       </div>
     );
