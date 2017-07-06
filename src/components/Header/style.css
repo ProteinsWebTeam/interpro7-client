@@ -359,6 +359,9 @@
   }
 }
 /*Navigation - remove icons*/
+ul.interpro-menu {
+  border: 1px transparent solid;
+} /*important just .interpro-menu  doesn't work - remove border that appears when sticky - temp?*/
 .interpro-menu i {
   display: none;
 }
