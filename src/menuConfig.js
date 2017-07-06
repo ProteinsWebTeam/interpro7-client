@@ -1,6 +1,15 @@
+// @flow
 import f from 'styles/foundation';
 
-export const EBI = [
+/* ::
+  type Location = {|
+    description: {|[key: string]: string|},
+    search: {|[key: string]: string|},
+    hash: string,
+  |};
+*/
+
+export const EBI /*: Array<Object> */ = [
   {
     href: 'https://www.ebi.ac.uk',
     icon: 'H',
@@ -28,7 +37,7 @@ export const EBI = [
   },
 ];
 
-export const entities = [
+export const entities /*: Array<Object> */ = [
   {
     newTo: {
       description: {
@@ -74,9 +83,9 @@ export const entities = [
   },
 ];
 
-export const singleEntity = [
+export const singleEntity /*: Array<Object> */ = [
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -89,7 +98,7 @@ export const singleEntity = [
     name: 'overview',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -104,7 +113,7 @@ export const singleEntity = [
     counter: 'entries',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -119,7 +128,7 @@ export const singleEntity = [
     counter: 'proteins',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -134,7 +143,7 @@ export const singleEntity = [
     counter: 'structures',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -147,7 +156,7 @@ export const singleEntity = [
     counter: 'species',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -159,7 +168,7 @@ export const singleEntity = [
     name: 'domain architectures',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -172,12 +181,12 @@ export const singleEntity = [
   },
 ];
 
-export const InterPro = [
+export const InterPro /*: Array<Object> */ = [
   {
     newTo: { description: {} },
     icon: 'H',
     name: 'Home',
-    activeClass({ description: { mainType, other } }) {
+    activeClass({ description: { mainType, other } } /*: Location */) {
       if (!(mainType || other)) return f('is-active');
     },
   },

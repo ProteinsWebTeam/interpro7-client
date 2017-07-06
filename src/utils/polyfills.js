@@ -1,4 +1,5 @@
-import {webComponents as supportsWebComponents} from 'utils/support';
+// @flow
+import { webComponents as supportsWebComponents } from 'utils/support';
 
 let response;
 
@@ -13,10 +14,8 @@ export const webComponents = () => {
         return;
       }
       try {
-        await import(
-          /* webpackChunkName: "webcomponents-polyfill" */
-          '@webcomponents/webcomponentsjs/webcomponents-sd-ce'
-        );
+        await import(/* webpackChunkName: "webcomponents-polyfill" */
+        '@webcomponents/webcomponentsjs/webcomponents-sd-ce');
         res(false);
       } catch (err) {
         rej(err);

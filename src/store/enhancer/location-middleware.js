@@ -11,12 +11,13 @@ export default history => ({ dispatch }) => {
   // Dispatch new action only when history actually changes
   // Build new action from scratch
   history.listen(({ pathname, search, hash, state: stateDescription }) => {
+    if (stateDescription) console.log('history state', stateDescription);
     dispatch(
       newLocationChangeFromHistory({
         description: path2description(pathname),
         search: qs.parse(search),
         hash,
-      })
+      }),
     );
   });
   return next => action => {

@@ -28,22 +28,5 @@ export const buildLink = (
 
 export const buildAnchorLink = (
   pathname /*: string */,
-  anchor /*: string */ = ''
+  anchor /*: string */ = '',
 ) => `${pathname}#${anchor}`;
-
-export const searchParamsToUrl = (search /*: {[key: string]: string} */) => {
-  const entries = Object.entries(search || {});
-  if (!entries.length) return '';
-  return entries
-    .reduce((acc, [key, value]) => {
-      if (!value && value !== 0) return acc;
-      if (isNaN(value) || typeof value === 'object' || value === true) {
-        return `${acc}&${key}`;
-      }
-      if (typeof value === 'string' || typeof value === 'number') {
-        `${acc}&${key}=${value}`;
-      }
-      return acc;
-    }, '')
-    .slice(1);
-};

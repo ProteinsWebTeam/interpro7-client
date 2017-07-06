@@ -1,5 +1,4 @@
-/* eslint react/no-multi-comp: ["off"] */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 
 import cancelable from 'utils/cancelable';
@@ -20,11 +19,11 @@ const AsyncComponent = class extends Component {
   componentDidMount() {
     if (this.state.Component) return;
     this._moduleP = cancelable(this.props.getComponent());
-    this._moduleP.promise.then(
-      module => this.setState({Component: module.default || module})
-    ).catch(error => {
-      if (error.canceled) console.log('error?');
-    });
+    this._moduleP.promise
+      .then(module => this.setState({ Component: module.default || module }))
+      .catch(error => {
+        if (error.canceled) console.log('error?');
+      });
   }
 
   componentWillUnmount() {
@@ -32,8 +31,8 @@ const AsyncComponent = class extends Component {
   }
 
   render() {
-    const {placeHolder, getComponent, ...props} = this.props;
-    const {Component = placeHolder} = this.state;
+    const { placeHolder, getComponent, ...props } = this.props;
+    const { Component = placeHolder } = this.state;
     return Component ? <Component {...props} /> : null;
   }
 };
@@ -41,17 +40,17 @@ const AsyncComponent = class extends Component {
 const defaultPlaceHolder = () => <div>Loading...</div>;
 
 export const createAsyncComponent = (
-  importFn/* : function */,
+  importFn /* : function */,
   placeHolder,
-  displayName,
+  displayName
 ) => {
   let imported;
   return class AsyncComponent extends Component {
-    static displayName = `AsyncComponent${
-      displayName ? `(${displayName})` : ''
-    }`;
+    static displayName = `AsyncComponent${displayName
+      ? `(${displayName})`
+      : ''}`;
 
-    static defaultProps = {placeHolder: placeHolder || defaultPlaceHolder};
+    static defaultProps = { placeHolder: placeHolder || defaultPlaceHolder };
     static propTypes = {
       placeHolder: T.any,
     };
@@ -70,11 +69,11 @@ export const createAsyncComponent = (
       if (this.state.Component) return;
       AsyncComponent.preload();
       this._moduleP = cancelable(imported);
-      this._moduleP.promise.then(
-        module => this.setState({Component: module.default || module})
-      ).catch(error => {
-        if (!error.canceled) throw error;
-      });
+      this._moduleP.promise
+        .then(module => this.setState({ Component: module.default || module }))
+        .catch(error => {
+          if (!error.canceled) throw error;
+        });
     }
 
     componentWillUnmount() {
@@ -82,8 +81,8 @@ export const createAsyncComponent = (
     }
 
     render() {
-      const {placeHolder, ...props} = this.props;
-      const {Component = placeHolder} = this.state;
+      const { placeHolder, ...props } = this.props;
+      const { Component = placeHolder } = this.state;
       return Component ? <Component {...props} /> : null;
     }
   };

@@ -1,18 +1,20 @@
+// @flow
 /* eslint-env node */
 // Polyfills
 import 'babel-polyfill';
 
 import React from 'react';
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 
 import App from 'App';
 
-import config, {DEV, PERF} from 'config';
+import config, { DEV, PERF } from 'config';
 import ready from 'utils/ready';
 
-const schemaOrgManager = (...args) => import(
-  /* webpackChunkName: "schemaOrg" */'schema_org'
-).then(m => new m.Manager(...args));
+const schemaOrgManager = (...args) =>
+  import(/* webpackChunkName: "schemaOrg" */ 'schema_org').then(
+    m => new m.Manager(...args)
+  );
 
 const main = async () => {
   // Waiting for DOMContentReady
@@ -22,10 +24,7 @@ const main = async () => {
 
   // If “PERF” is defined in the environment, activate “why-did-you-update” tool
   if (DEV && PERF) {
-    require('why-did-you-update').whyDidYouUpdate(
-      React,
-      {include: /.*/},
-    );
+    require('why-did-you-update').whyDidYouUpdate(React, { include: /.*/ });
   }
 
   // Instantiates schema.org manager
@@ -43,7 +42,7 @@ const main = async () => {
   render(<App />, DOM_ROOT);
 
   // This block enables HMR if needed
-  if (DEV && module.hot) {
+  if (DEV && module.hot && typeof module.hot.accept === 'function') {
     // If any change in App or its dependency tree
     module.hot.accept('App', () => {
       // Reloads App
@@ -60,7 +59,9 @@ const handleError = e => {
   }
   try {
     e.preventDefault();
-  } catch (_) {/**/}
+  } catch (_) {
+    /**/
+  }
   console.error(e);
   // TODO: send to analytics
 };

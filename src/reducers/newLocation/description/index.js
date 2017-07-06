@@ -21,9 +21,7 @@ const getDefaultState = () => ({
 export default (state = getDefaultState(), action) => {
   switch (action.type) {
     case NEW_PROCESSED_NEW_LOCATION:
-      console.warn(action.newLocation.description);
-      console.warn(d2d(action.newLocation.description));
-      return { ...state, ...d2d(action.newLocation.description) };
+      return d2d(action.newLocation.description);
     default:
       return state;
   }

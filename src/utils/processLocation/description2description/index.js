@@ -1,6 +1,7 @@
+// @flow
 import { descriptionItemToHandlers } from 'utils/processLocation/utils';
 
-export default description => {
+export default (description /*: {[key: string]: string} */) => {
   const _description = {};
   for (const [key, handlers] of descriptionItemToHandlers) {
     if (!description[key]) {
