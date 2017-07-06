@@ -31,7 +31,8 @@ class ExperimentTypeFilter extends Component {
       ...this.props.location,
       search: {
         ...this.props.location.search,
-        experiment_type: value === 'ALL' ? null : value,
+        // eslint-disable-next-line no-undefined
+        experiment_type: value === 'ALL' ? undefined : value,
       },
     });
   };
@@ -39,7 +40,7 @@ class ExperimentTypeFilter extends Component {
   render() {
     const { data: { loading, payload }, location: { search } } = this.props;
     const types = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a
+      ([, a], [, b]) => b - a,
     );
     if (!loading) {
       types.unshift(['ALL', NaN]);
@@ -65,7 +66,7 @@ class ExperimentTypeFilter extends Component {
               </span>
               <NumberLabel value={count} />
             </label>
-          </div>
+          </div>,
         )}
       </div>
     );
@@ -83,16 +84,16 @@ const getUrlFor = createSelector(
     _search.group_by = 'experiment_type';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description
+      description,
     )}?${qsStringify(_search)}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  loadData(getUrlFor)(ExperimentTypeFilter)
+  loadData(getUrlFor)(ExperimentTypeFilter),
 );

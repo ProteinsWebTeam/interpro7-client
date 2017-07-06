@@ -137,7 +137,10 @@ const loadData = params => {
           getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState));
 
         // Same location, no need to reload data
-        if (nextAppState.location === this.props.appState.location) return;
+        if (nextAppState.newLocation === this.props.appState.newLocation) {
+          return;
+        }
+
         // If data is already there, or loading, don't do anything
         if (data.loading || data.payload) return;
         // New location, cancel previous fetch

@@ -14,8 +14,8 @@ const EntryListFilter = ({ mainDB }) =>
   <FiltersPanel>
     <EntryTypeFilter label="Entry Type" />
     {mainDB === 'InterPro'
-      ? <IntegratedFilter label="InterPro State" />
-      : <SignaturesFilter label="Signatures in" />}
+      ? <SignaturesFilter label="Signatures in" />
+      : <IntegratedFilter label="InterPro State" />}
     <GOTermsFilter label="GO Terms" />
   </FiltersPanel>;
 EntryListFilter.propTypes = {
@@ -24,7 +24,7 @@ EntryListFilter.propTypes = {
 
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainDB,
-  mainDB => ({ mainDB }),
+  mainDB => ({ mainDB })
 );
 
 export default connect(mapStateToProps)(EntryListFilter);
