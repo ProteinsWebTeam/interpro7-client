@@ -1,5 +1,5 @@
 import d2d from 'utils/processLocation/description2description';
-import {NEW_PROCESSED_NEW_LOCATION} from 'actions/types';
+import { NEW_PROCESSED_NEW_LOCATION } from 'actions/types';
 
 const getDefaultState = () => ({
   other: null,
@@ -21,7 +21,9 @@ const getDefaultState = () => ({
 export default (state = getDefaultState(), action) => {
   switch (action.type) {
     case NEW_PROCESSED_NEW_LOCATION:
-      return {...state, ...d2d(action.newLocation.description)};
+      console.warn(action.newLocation.description);
+      console.warn(d2d(action.newLocation.description));
+      return { ...state, ...d2d(action.newLocation.description) };
     default:
       return state;
   }

@@ -10,16 +10,13 @@ import description2path from 'utils/processLocation/description2path';
 export default history => ({ dispatch }) => {
   // Dispatch new action only when history actually changes
   // Build new action from scratch
-  history.listen(({ pathname, search, hash, state: description }) => {
-    if (description) console.log('description', description);
-    console.log(pathname);
-    console.log(description2path(path2description(pathname)));
+  history.listen(({ pathname, search, hash, state: stateDescription }) => {
     dispatch(
       newLocationChangeFromHistory({
         description: path2description(pathname),
         search: qs.parse(search),
         hash,
-      }),
+      })
     );
   });
   return next => action => {

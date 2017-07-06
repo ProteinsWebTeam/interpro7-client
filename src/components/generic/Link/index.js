@@ -114,9 +114,4 @@ const mapStateToProps = createSelector(
   location => ({ location }),
 );
 
-export default connect(mapStateToProps, {
-  goToNewLocation: (...args) => {
-    console.log(...args);
-    return goToNewLocation(...args);
-  },
-})(Link);
+export default connect(mapStateToProps, { goToNewLocation })(Link);
