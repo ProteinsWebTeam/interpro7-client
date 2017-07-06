@@ -2,15 +2,14 @@
 /* eslint no-magic-numbers: [1, {ignore: [0, 1, 2]}] */
 import React from 'react';
 import T from 'prop-types';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Link from 'components/generic/Link';
 
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
 
-
-import Table, {Column, PageSizeSelector, SearchBox} from 'components/Table';
+import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 
 const propTypes = {
   matches: T.arrayOf(T.object).isRequired,
@@ -43,112 +42,125 @@ const componentMatch = {
 
 // List of all matches for one `primary`, one to many
 const MatchesByPrimary = (
-  {matches, primary, secondary, ...props}
-  /*: {matches: Array<Object>, primary: string, secondary: string, props: Array<any>}*/
+  {
+    matches,
+    primary,
+    secondary,
+    ...props
+  } /*: {
+  matches: Array<Object>,
+  primary: string,
+  secondary: string,
+  props: Array<any>,
+} */,
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
-  return (
-    <MatchComponent matches={matches} {...props} />
-  );
+  return <MatchComponent matches={matches} {...props} />;
 };
 MatchesByPrimary.propTypes = propTypes;
 
 // List of all matches, many to many
 const Matches = (
-  {matches, primary, secondary, actualSize, isStale, search, ...props}
-  /*: {
-        matches: Array<Object>,
-        primary: string,
-        secondary: string,
-        actualSize: number,
-        isStale: boolean,
-        search: Object,
-        props: Array<any>
-      }
-  */
+  {
+    matches,
+    primary,
+    secondary,
+    actualSize,
+    isStale,
+    search,
+    ...props
+  } /*: {
+   matches: Array<Object>,
+   primary: string,
+   secondary: string,
+   actualSize: number,
+   isStale: boolean,
+   search: Object,
+   props: Array<any>
+} */,
 ) => {
   const pathname = '';
   return (
     <Table
-      dataTable={matches.map(e => ({match: e, ...e[primary]}))}
+      dataTable={matches.map(e => ({ match: e, ...e[primary] }))}
       actualSize={actualSize}
       query={search}
       pathname={pathname}
       isStale={isStale}
     >
       <PageSizeSelector />
-      <SearchBox
-        search={search.search}
-        pathname={pathname}
-      >
+      <SearchBox search={search.search} pathname={pathname}>
         Search
       </SearchBox>
       <Column
         accessKey="accession"
         renderer={(
-          acc/*: string */,
-          {source_database: sourceDatabase}/*: {source_database: string} */
-        ) => (
+          acc /*: string */,
+          { source_database: sourceDatabase } /*: {source_database: string} */,
+        ) =>
           <Link
-            newTo={{description: {
-              mainType: primary, mainDB: sourceDatabase, mainAccession: acc,
-            }}}
+            newTo={{
+              description: {
+                mainType: primary,
+                mainDB: sourceDatabase,
+                mainAccession: acc,
+              },
+            }}
           >
             {acc}
-          </Link>
-        )}
+          </Link>}
       >
         Accession
       </Column>
       <Column
         accessKey="name"
         renderer={(
-          name/*: string */,
-          {accession, source_database: sourceDatabase}
-          /*: {accession: string, source_database: string} */
-        ) => (
+          name /*: string */,
+          {
+            accession,
+            source_database: sourceDatabase,
+          } /*: {accession: string, source_database: string} */,
+        ) =>
           <Link
-            newTo={{description: {
-              mainType: primary,
-              mainDB: sourceDatabase,
-              mainAccession: accession,
-            }}}
+            newTo={{
+              description: {
+                mainType: primary,
+                mainDB: sourceDatabase,
+                mainAccession: accession,
+              },
+            }}
           >
             {name}
-          </Link>
-        )}
+          </Link>}
       >
         Name
       </Column>
-      <Column accessKey="source_database">
-        Source Database
-      </Column>
+      <Column accessKey="source_organism.fullname">Species</Column>
+      <Column accessKey="source_database">Source Database</Column>
       <Column
         accessKey="match"
-        renderer={(match/*: Object */) => (
+        renderer={(match /*: Object */) =>
           <MatchesByPrimary
             matches={[match]}
             primary={primary}
             secondary={secondary}
             location={location}
             {...props}
-          />
-        )}
+          />}
       >
         Architecture
       </Column>
-
     </Table>
-  // {Object.entries(matchesByPrimary).map(([acc, matches]) => (
-  //   <MatchesByPrimary
-  //     key={acc}
-  //     matches={matches}
-  //     primary={primary}
-  //     {...props}
-  //   />
-  // ))}
+    // {Object.entries(matchesByPrimary).map(([acc, matches]) => (
+    //   <MatchesByPrimary
+    //     key={acc}
+    //     matches={matches}
+    //     primary={primary}
+    //     {...props}
+    //   />
+    // ))}
   );
 };
 Matches.propTypes = propTypes;
 
-export default connect(({location: {search}}) => ({search}))(Matches);
+export default connect(({ location: { search } }) => ({ search }))(Matches);
