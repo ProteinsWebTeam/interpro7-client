@@ -10,8 +10,8 @@ export default (importer /*: Function */) => ({
   async as(namespace /*: ?string */) {
     let _ns = namespace;
     // Check if not already defined
-    if (_ns && window.customElements.get(_ns)) return;
     await polyfillLoader();
+    if (_ns && window.customElements.get(_ns)) return;
     let webComponent = await importer();
     if (webComponent.default) webComponent = webComponent.default;
     // if no name was specified, use default provided by WebComponent
