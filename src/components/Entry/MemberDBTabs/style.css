@@ -6,23 +6,30 @@
   padding-bottom: 1em;
 }
 
-.tabs-title, .tabs-title a {
+.tabs-title,
+.tabs-title a {
   transition-property: border, color, transform;
-  transition-duration: var(--timing-medium);
+  transition-duration: var(--timing-fast);
 }
 .tabs-title a {
-  border: 2px solid transparent;
+  /*border: 2px solid transparent;*/
   border-right: 2px solid #7ba3b6;
   border-left: 3px solid transparent;
-  border-radius: 5px 0 0 5px;
+  /*border-radius: 5px 0 0 5px;*/
   font-size: 1rem;
-  padding: 0.7rem 1.25rem;
+  padding: .7rem .7rem;
 }
 
 .tabs-title a.is-active-tab {
   background: white;
   border: 2px solid #7ba3b6;
   border-right: 2px solid transparent;
+  border-left-width: 14px;
+}
+
+.tabs-title a:hover {
+  /*background-color: #dff2ff;
+  border-left-width: 20px; experiment*/
 }
 
 .expand-button {
@@ -51,6 +58,7 @@
 }
 
 .number-label {
-  background: #0001;
-  color: var(--colors-dark);
+  background: rgba(0, 0, 0, 0.07);
+  color: var(--colors-graydark);
+  font-size: 0.8rem;
 }
