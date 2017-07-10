@@ -128,8 +128,7 @@ handlers.rootHandler.children = new Set([
 const MULTIPLE_SLASHES = /\/+/;
 const notFalsy = x => x;
 
-export default (path/*: string */) => {
+export default (path /*: string */) => {
   const parts = path.split(MULTIPLE_SLASHES).filter(notFalsy);
-  // eslint-disable-next-line no-undefined
   return handlers.rootHandler.handle(undefined, ...parts);
 };

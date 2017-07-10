@@ -248,8 +248,6 @@ const rules = {
   'no-trailing-spaces': 1,
   // Disallow use of undeclared variables unless set as global
   'no-undef': 2,
-  // Disallow use of 'undefined' variable
-  'no-undefined': 2,
   // Avoid code that looks like two expressions but is actually one
   'no-unexpected-multiline': 2,
   // Disallow unmodified conditions of loops

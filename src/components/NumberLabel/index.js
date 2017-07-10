@@ -38,6 +38,13 @@ class NumberLabel extends Component {
     this._animate(this.state.value, value);
   }
 
+  componentWillUnmount() {
+    if (this._animation) {
+      this._animation.kill();
+      this._animation = null;
+    }
+  }
+
   _animate = (from, to) => {
     if (this._animation) this._animation.kill();
     const canAnimate =

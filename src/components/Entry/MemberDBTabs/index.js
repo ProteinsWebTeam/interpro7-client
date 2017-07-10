@@ -72,6 +72,7 @@ class MemberDBTabs extends Component {
                 ...location.description,
                 [`${mainOrFocus}Type`]: 'entry',
                 [`${mainOrFocus}DB`]: 'InterPro',
+                mainIntegration: null,
               },
             };
           },
@@ -86,6 +87,10 @@ class MemberDBTabs extends Component {
                 ...location.description,
                 [`${mainOrFocus}Type`]: 'entry',
                 [`${mainOrFocus}DB`]: e,
+              },
+              search: {
+                ...location.search,
+                signature_in: undefined,
               },
             };
           },
@@ -114,7 +119,7 @@ class MemberDBTabs extends Component {
                 </span>
                 <NumberLabel value={e.value} className={f('number-label')} />
               </Link>
-            </li>,
+            </li>
           )}
         </ul>
       </div>
@@ -124,14 +129,14 @@ class MemberDBTabs extends Component {
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 const getMemberDBUrl = createSelector(
   state => state.settings.api,
   state => state.newLocation.search,
   ({ protocol, hostname, port, root }) =>
-    `${protocol}//${hostname}:${port}${root}/entry`,
+    `${protocol}//${hostname}:${port}${root}/entry`
 );
 
 export default connect(mapStateToProps)(loadData(getMemberDBUrl)(MemberDBTabs));
