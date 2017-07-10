@@ -165,7 +165,7 @@
     "uglify-js": "mishoo/UglifyJS2#harmony",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.9",
-    "webpack": "^3.1.0",
+    "webpack": "^2.5.0",
     "webpack-dashboard": "^0.4.0",
     "webpack-dev-server": "^2.5.1",
     "why-did-you-update": "0.0.8",
