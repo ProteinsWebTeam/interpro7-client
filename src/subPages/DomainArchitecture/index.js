@@ -58,12 +58,15 @@ const mergeResidues = residues => {
   return out;
 };
 
+const toArrayStructure = locations =>
+  locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
+
 const groupByEntryType = interpro => {
   const ipro = {};
   const out = interpro.reduce((acc, val) => {
     val.signatures = [];
     val.children = [];
-    val.coordinates = val.entry_protein_coordinates.coordinates;
+    val.coordinates = toArrayStructure(val.entry_protein_locations);
     val.link = `/entry/${val.source_database}/${val.accession}`;
     ipro[val.accession] = val;
     if (!(val.entry_type in acc)) {
@@ -93,7 +96,7 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
     out.unintegrated = unintegrated;
   }
   for (const entry of integrated.concat(unintegrated)) {
-    entry.coordinates = entry.entry_protein_coordinates.coordinates;
+    entry.coordinates = toArrayStructure(entry.entry_protein_locations);
     if (residues.hasOwnProperty(entry.accession)) {
       entry.children = entry.residues = mergeResidues({
         [entry.accession]: residues[entry.accession],

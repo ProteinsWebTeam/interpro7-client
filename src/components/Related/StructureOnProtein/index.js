@@ -22,7 +22,7 @@ const getUrlFor = createSelector(
         // brand new search
         const search = {};
         if (db === 'StructureInfo') {
-          search.StructureInfo = null;
+          search.structureinfo = null;
         } else {
           _description.focusType = 'entry';
           _description.focusDB = db;
@@ -50,12 +50,15 @@ const formatStructureInfoObj = obj => {
   return out;
 };
 
+const toArrayStructure = locations =>
+  locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
+
 const mergeData = (interpro, structures, structureInfo) => {
   const ipro = {};
   const out = interpro.reduce((acc, val) => {
     val.signatures = [];
     val.children = [];
-    val.coordinates = val.entry_protein_coordinates.coordinates;
+    val.coordinates = toArrayStructure(val.entry_protein_locations);
     val.link = `/entry/${val.source_database}/${val.accession}`;
     ipro[val.accession] = val;
     if (!(val.entry_type in acc)) {
@@ -68,7 +71,7 @@ const mergeData = (interpro, structures, structureInfo) => {
     out.structures = structures
       .map(({ ...obj }) => ({
         label: `${obj.accession}: ${obj.chain}`,
-        coordinates: [obj.protein_structure_coordinates.coordinates],
+        coordinates: toArrayStructure(obj.protein_structure_locations),
         link: `/structure/${obj.source_database}/${obj.accession}`,
         ...obj,
       }))
@@ -92,14 +95,14 @@ let StructureOnProtein = class extends Component {
   };
 
   render() {
-    const { structures, dataInterPro, dataStructureinfo, protein } = this.props;
-    if (dataInterPro.loading || dataStructureinfo.loading) {
+    const { structures, dataInterPro, dataStructureInfo, protein } = this.props;
+    if (dataInterPro.loading || dataStructureInfo.loading) {
       return <div>Loading...</div>;
     }
     const mergedData = mergeData(
       dataInterPro.payload.entries,
       structures,
-      dataStructureinfo.payload
+      dataStructureInfo.payload
     );
     return (
       <div>
@@ -108,7 +111,7 @@ let StructureOnProtein = class extends Component {
     );
   }
 };
-StructureOnProtein = ['InterPro', 'Structureinfo'].reduce(
+StructureOnProtein = ['InterPro', 'StructureInfo'].reduce(
   (Index, db) =>
     loadData({
       getUrl: getUrlFor(db),
