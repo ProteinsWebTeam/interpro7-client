@@ -18,7 +18,7 @@
     "dev:test:unit": "npm run test:unit -- --watch",
     "lint:fix": "npm run test:lint -- --fix",
     "clean": "rimraf dist",
-    "bundle": "webpack --progress --config webpack/config.js",
+    "bundle": "webpack --progress",
     "precommit": "lint-staged",
     "predeploy": "npm-run-all test clean",
     "deploy": "npm run bundle",
