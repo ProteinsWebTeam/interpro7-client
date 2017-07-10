@@ -1,4 +1,4 @@
-import {createStore} from 'redux';
+import { createStore } from 'redux';
 import qs from 'query-string';
 
 import rootReducer from 'reducers';
@@ -9,32 +9,32 @@ import enhancer from 'store/enhancer';
 import hmr from 'store/hmr';
 
 // Subscriber Generator
-const persist = (store, storage) => (() => {
-  let settings;
-  // Subscriber
-  return () => {
-    const newSettings = store.getState().settings;
-    if (settings === newSettings) return;
-    settings = newSettings;
+const persist = (store, storage) =>
+  (() => {
+    let settings;
+    // Subscriber
+    return () => {
+      const newSettings = store.getState().settings;
+      if (settings === newSettings) return;
+      settings = newSettings;
 
-    // Async!
-    storage.setValue(settings);
-  };
-})();
+      // Async!
+      storage.setValue(settings);
+    };
+  })();
 
 export default history => {
-  const {location: {pathname, search, hash}} = history;
+  const { location: { pathname, search, hash } } = history;
   const store = createStore(
     rootReducer,
     {
-      location: {pathname, search: qs.parse(search), hash},
       newLocation: {
         description: path2description(pathname),
         search: qs.parse(search),
         hash,
       },
     },
-    enhancer(history)
+    enhancer(history),
   );
   if (settingsStorage) {
     // settingsStorage.setLinkedStore(store);

@@ -1,16 +1,15 @@
-/* eslint-disable no-param-reassign */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { stringify as qsStringify } from 'query-string';
 
 import NumberLabel from 'components/NumberLabel';
 
-import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
+import description2path from 'utils/processLocation/description2path';
 
-import {createSelector} from 'reselect';
-import {format, resolve} from 'url';
-
-import {goToNewLocation} from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import f from 'styles/foundation';
 
@@ -27,46 +26,47 @@ class TaxonomyFilter extends Component {
     search: T.object,
   };
 
-  _handleSelection = ({target: {value}}) => {
+  _handleSelection = ({ target: { value } }) => {
     this.props.goToNewLocation({
       ...this.props.location,
       search: {
         ...this.props.location.search,
-        tax_id: value === 'ALL' ? null : value,
+        // eslint-disable-next-line no-undefined
+        tax_id: value === 'ALL' ? undefined : value,
       },
     });
   };
 
   render() {
-    const {data: {loading, payload}, location: {search}} = this.props;
-    const taxes = Object.entries(loading ? {} : payload)
-      .sort(([, a], [, b]) => b - a);
+    const { data: { loading, payload }, location: { search } } = this.props;
+    const taxes = Object.entries(loading ? {} : payload).sort(
+      ([, a], [, b]) => b - a
+    );
     if (!loading) {
       taxes.unshift(['ALL', NaN]);
     }
     return (
-      <div style={{overflowX: 'hidden'}}>
-        {
-          taxes.map(([taxId, count]) => (
-            <div key={taxId} className={f('column')}>
-              <label className={f('row', 'align-middle')}>
-                <input
-                  type="radio"
-                  name="entry_type"
-                  value={taxId}
-                  onChange={this._handleSelection}
-                  checked={
-                    (!search.tax_id && taxId === 'ALL') ||
-                    search.tax_id === taxId
-                  }
-                  style={{margin: '0.25em'}}
-                />
-                <span>{taxId}</span>
-                <NumberLabel value={count} />
-              </label>
-            </div>
-          ))
-        }
+      <div style={{ overflowX: 'hidden' }}>
+        {taxes.map(([taxId, count]) =>
+          <div key={taxId} className={f('column')}>
+            <label className={f('row', 'align-middle')}>
+              <input
+                type="radio"
+                name="entry_type"
+                value={taxId}
+                onChange={this._handleSelection}
+                checked={
+                  (!search.tax_id && taxId === 'ALL') || search.tax_id === taxId
+                }
+                style={{ margin: '0.25em' }}
+              />
+              <span>
+                {taxId}
+              </span>
+              <NumberLabel value={count} />
+            </label>
+          </div>
+        )}
       </div>
     );
   }
@@ -74,29 +74,27 @@ class TaxonomyFilter extends Component {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.location,
-  ({protocol, hostname, port, root}, {pathname, search}) => {
-    const parameters = Object.keys(search)
-      .reduce((acc, v) => {
-        if (v !== 'tax_id' && v !== 'search' && search[v]) {
-          acc.push(`${v}=${search[v]}`);
-        }
-        return acc;
-      }, []);
-    parameters.push('group_by=tax_id');
-    return resolve(
-      format({protocol, hostname, port, pathname: root}),
-      `${(root + pathname)}?${parameters.join('&')}`,
-    );
+  state => state.newLocation.description,
+  state => state.newLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    // omit from search
+    const { tax_id, search: _, ..._search } = search;
+    // add to search
+    _search.group_by = 'tax_id';
+    // build URL
+    return `${protocol}//${hostname}:${port}${root}${description2path(
+      description
+    )}?${qsStringify(_search)}`;
   }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({location})
+  location => ({ location })
 );
 
-export default connect(mapStateToProps, {goToNewLocation})(loadData({
-  getUrl: getUrlFor,
-})(TaxonomyFilter));
-
+export default connect(mapStateToProps, { goToNewLocation })(
+  loadData({
+    getUrl: getUrlFor,
+  })(TaxonomyFilter)
+);

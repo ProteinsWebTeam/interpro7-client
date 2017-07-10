@@ -1,15 +1,18 @@
 /* eslint max-statements: ["error", 13] */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
-import {frame} from 'timing-functions/src';
+import { frame } from 'timing-functions/src';
 
 import Link from 'components/generic/Link';
-import {goToLocation} from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 import loadData from 'higherOrder/loadData';
-import Table, {Column, /* PageSizeSelector, */Exporter} from 'components/Table';
+import Table, {
+  Column,
+  /* PageSizeSelector, */ Exporter,
+} from 'components/Table';
 
 const maxLength = 200;
 const NOT_FOUND = -1;
@@ -22,10 +25,10 @@ class SearchResults extends Component {
     data: T.object,
     search: T.object,
     dataUrl: T.string,
-    goToLocation: T.func,
+    goToNewLocation: T.func,
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.foundType = 0;
     this.redirectedTo = null;
@@ -40,7 +43,7 @@ class SearchResults extends Component {
   }
 
   async redirect() {
-    const {search} = this.props;
+    const { search } = this.props;
     await frame();
     let goTo = null;
     switch (this.foundType) {
@@ -59,29 +62,48 @@ class SearchResults extends Component {
     if (goTo && goTo !== this.redirectedTo) {
       console.log(goTo);
       this.redirectedTo = goTo;
-      this.props.goToLocation({pathname: goTo});
+      this.props.goToNewLocation({ pathname: goTo });
     }
   }
 
   render() {
-    const {data: {payload, loading}, search, dataUrl} = this.props;
+    const { data: { payload, loading }, search, dataUrl } = this.props;
     this.foundType = NOT_FOUND;
     if (loading) return <div>Loading…</div>;
     if (!payload) {
-      return <div/>;
+      return <div />;
     } else if (payload.hitCount === 0) {
       return <div>There are not matches for the term queried</div>;
-    } else if (payload.hitCount === 1 && payload.entries[0].id === search.search){
+    } else if (
+      payload.hitCount === 1 &&
+      payload.entries[0].id === search.search
+    ) {
       this.foundType = IPRO_FOUND;
-      return <div>Interpro entry found - {search.search}</div>;
-    } else if (payload.hitCount > 0 &&
-      payload.entries[0].fields.PDB.indexOf(search.search) !== NOT_FOUND){
+      return (
+        <div>
+          Interpro entry found - {search.search}
+        </div>
+      );
+    } else if (
+      payload.hitCount > 0 &&
+      payload.entries[0].fields.PDB.indexOf(search.search) !== NOT_FOUND
+    ) {
       this.foundType = PDB_FOUND;
-      return <div>PDB structure found - {search.search}</div>;
-    } else if (payload.hitCount > 0 &&
-      payload.entries[0].fields.UNIPROT.indexOf(search.search) !== NOT_FOUND) {
+      return (
+        <div>
+          PDB structure found - {search.search}
+        </div>
+      );
+    } else if (
+      payload.hitCount > 0 &&
+      payload.entries[0].fields.UNIPROT.indexOf(search.search) !== NOT_FOUND
+    ) {
       this.foundType = UNIPROT_FOUND;
-      return <div>UniProt protein found - {search.search}</div>;
+      return (
+        <div>
+          UniProt protein found - {search.search}
+        </div>
+      );
     }
     return (
       <Table
@@ -92,33 +114,36 @@ class SearchResults extends Component {
         title="Search Results"
       >
         <Exporter>
-          <a href={dataUrl} download="SearchResults.json">JSON</a>
+          <a href={dataUrl} download="SearchResults.json">
+            JSON
+          </a>
         </Exporter>
         {/* <PageSizeSelector pageSize={query.page_size}/>*/}
         <Column
           accessKey="id"
-          renderer={id => (
+          renderer={id =>
             <Link
-              newTo={{description: {
-                mainType: 'entry',
-                mainDB: 'InterPro',
-                mainAccession: id,
-              }}}
+              newTo={{
+                description: {
+                  mainType: 'entry',
+                  mainDB: 'InterPro',
+                  mainAccession: id,
+                },
+              }}
             >
               {id}
-            </Link>
-          )
-          }
-          headerStyle={{width: '200px'}}
+            </Link>}
+          headerStyle={{ width: '200px' }}
         >
           Accession
         </Column>
         <Column
           accessKey="fields"
-          renderer={d => (
-            <div>{d.description[0].slice(0, maxLength)}…</div>
-          )}
-          cellStyle={{textAlign: 'justify'}}
+          renderer={d =>
+            <div>
+              {d.description[0].slice(0, maxLength)}…
+            </div>}
+          cellStyle={{ textAlign: 'justify' }}
         >
           Description
         </Column>
@@ -130,23 +155,23 @@ class SearchResults extends Component {
 const mapStateToProps = createSelector(
   state => state.data.dataUrl,
   state => state.newLocation.search,
-  (dataUrl, search) => ({dataUrl, search})
+  (dataUrl, search) => ({ dataUrl, search }),
 );
 
 const getEbiSearchUrl = createSelector(
   state => state.settings.ebi,
   state => state.settings.pagination,
   state => state.newLocation.search,
-  ({protocol, hostname, port, root}, pagination, search) => {
+  ({ protocol, hostname, port, root }, pagination, search) => {
     const s = search || {};
     if (!s.search) return null;
     const fields = 'PDB,UNIPROT,description';
     s.page_size = s.page_size || pagination.pageSize;
     const params = `?query=${s.search}&format=json&fields=${fields}`;
     return `${protocol}//${hostname}:${port}${root}${params}`;
-  }
+  },
 );
 
-export default connect(
-  mapStateToProps, {goToLocation}
-)(loadData(getEbiSearchUrl)(SearchResults));
+export default connect(mapStateToProps, { goToNewLocation })(
+  loadData(getEbiSearchUrl)(SearchResults),
+);

@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { stringify as qsStringify } from 'query-string';
 
 import NumberLabel from 'components/NumberLabel';
 
-import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
+import description2path from 'utils/processLocation/description2path';
 
-import {createSelector} from 'reselect';
-import {format, resolve} from 'url';
-
-import {goToNewLocation} from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import f from 'styles/foundation';
 
@@ -25,46 +25,48 @@ class SignaturesFilter extends Component {
     }).isRequired,
   };
 
-  _handleSelection = ({target: {value}}) => {
+  _handleSelection = ({ target: { value } }) => {
     this.props.goToNewLocation({
       ...this.location,
       search: {
         ...this.props.location.search,
-        signature_in: value === 'Any' ? null : value,
+        // eslint-disable-next-line no-undefined
+        signature_in: value === 'Any' ? undefined : value,
       },
     });
   };
 
   render() {
     const {
-      data: {loading, payload},
-      location: {search: {signature_in: signature}},
+      data: { loading, payload },
+      location: { search: { signature_in: signature } },
     } = this.props;
-    const signatureDBs = Object.entries(loading ? {} : payload)
-      .sort(([, a], [, b]) => b - a);
-    if (!loading){
+    const signatureDBs = Object.entries(loading ? {} : payload).sort(
+      ([, a], [, b]) => b - a
+    );
+    if (!loading) {
       signatureDBs.unshift(['Any', NaN]);
     }
     return (
       <div>
-        {
-          signatureDBs.map(([signatureDB, count]) => (
-            <div key={signatureDB} className={f('column')}>
-              <label className={f('row', 'align-middle')}>
-                <input
-                  type="radio"
-                  name="interpro_state"
-                  value={signatureDB}
-                  onChange={this._handleSelection}
-                  checked={signatureDB === 'Any' || signature === signatureDB}
-                  style={{margin: '0.25em'}}
-                />
-                <span>{signatureDB}</span>
-                <NumberLabel value={count} />
-              </label>
-            </div>
-          ))
-        }
+        {signatureDBs.map(([signatureDB, count]) =>
+          <div key={signatureDB} className={f('column')}>
+            <label className={f('row', 'align-middle')}>
+              <input
+                type="radio"
+                name="interpro_state"
+                value={signatureDB}
+                onChange={this._handleSelection}
+                checked={signatureDB === 'Any' || signature === signatureDB}
+                style={{ margin: '0.25em' }}
+              />
+              <span>
+                {signatureDB}
+              </span>
+              <NumberLabel value={count} />
+            </label>
+          </div>
+        )}
       </div>
     );
   }
@@ -72,29 +74,27 @@ class SignaturesFilter extends Component {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.location,
-  ({protocol, hostname, port, root}, {pathname, search}) => {
-    const parameters = Object.keys(search)
-      .reduce((acc, v) => {
-        if (v !== 'search' && v !== 'signature_in' && v !== 'page_size' &&
-          search[v]) {
-          acc.push(`${v}=${search[v]}`);
-        }
-        return acc;
-      }, []);
-    parameters.push('group_by=member_databases');
-    return resolve(
-      format({protocol, hostname, port, pathname: root}),
-      `${(root + pathname)}?${parameters.join('&')}`,
-    );
+  state => state.newLocation.description,
+  state => state.newLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    // omit from search
+    const { signature_in, search: _, page_size, ..._search } = search;
+    // add to search
+    _search.group_by = 'member_databases';
+    // build URL
+    return `${protocol}//${hostname}:${port}${root}${description2path(
+      description
+    )}?${qsStringify(_search)}`;
   }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({location}),
+  location => ({ location })
 );
 
-export default connect(mapStateToProps, {goToNewLocation})(loadData({
-  getUrl: getUrlFor,
-})(SignaturesFilter));
+export default connect(mapStateToProps, { goToNewLocation })(
+  loadData({
+    getUrl: getUrlFor,
+  })(SignaturesFilter)
+);

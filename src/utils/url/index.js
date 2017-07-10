@@ -1,16 +1,15 @@
 // @flow
 const FINAL_SLASH = /\/*$/;
 
-export const removeLastSlash = (str/*: string*/) => (
-  str.replace(FINAL_SLASH, '')
-);
+export const removeLastSlash = (str /*: string*/) =>
+  str.replace(FINAL_SLASH, '');
 
 // Builds a new absolute URL from the current one, keeping everything before
 // the 'from' parameter and adding everything that is passed as 'to' parameters.
 export const buildLink = (
-  pathname/*: string */,
-  from/*: ?string */,
-  ...to/*: Array<string> */
+  pathname /*: string */,
+  from /*: ?string */,
+  ...to /*: Array<string> */
 ) => {
   const path = removeLastSlash(pathname);
   if (from) {
@@ -28,7 +27,6 @@ export const buildLink = (
 };
 
 export const buildAnchorLink = (
-  pathname/*: string */, anchor/*: string */ = ''
-) => (
-  `${pathname}#${anchor}`
-);
+  pathname /*: string */,
+  anchor /*: string */ = '',
+) => `${pathname}#${anchor}`;

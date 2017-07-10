@@ -1,17 +1,18 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
-import {frame} from 'timing-functions/src';
+import { frame } from 'timing-functions/src';
 
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
 import f from 'styles/foundation';
 
-const Example = ({value}) => (
-  <a style={{cursor: 'pointer'}} data-search={value}> {value}</a>
-);
+const Example = ({ value }) =>
+  <a style={{ cursor: 'pointer' }} data-search={value}>
+    {' '}{value}
+  </a>;
 Example.propTypes = {
   value: T.string,
 };
@@ -32,42 +33,42 @@ class SearchByText extends Component {
     };
   }
 
-  componentWillReceiveProps({query = ''}) {
-    this.setState({query});
+  componentWillReceiveProps({ query = '' }) {
+    this.setState({ query });
   }
 
-  handleExampleClick = (event) => {
+  handleExampleClick = event => {
     const value = event.target.dataset.search;
-    if (value) this.setState({value});
+    if (value) this.setState({ value });
   };
 
-  handleReset = () => this.setState({value: ''});
+  handleReset = () => this.setState({ value: '' });
 
   handleSubmit = event => {
     event.preventDefault();
   };
 
   handleSubmitClick = async () => {
-    await new Promise(res => this.setState({submit: true}, res));
+    await new Promise(res => this.setState({ submit: true }, res));
     await frame();
-    this.setState({submit: false});
+    this.setState({ submit: false });
   };
 
   render() {
-    const {value, submit} = this.state;
+    const { value, submit } = this.state;
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <form onSubmit={this.handleSubmit}>
             <div className={f('secondary', 'callout')}>
-
               <div className={f('row')}>
                 <div className={f('large-12', 'columns')}>
-                  <label>Family, domains or GO terms
+                  <label>
+                    Family, domains or GO terms
                     <TextSearchBox
                       value={value}
                       toSubmit={submit}
-                      ref={input => this.searchInput = input}
+                      ref={input => (this.searchInput = input)}
                     />
                   </label>
                 </div>
@@ -77,27 +78,30 @@ class SearchByText extends Component {
                 <div
                   className={f('large-12', 'columns', 'small', 'search-eg')}
                   onClick={this.handleExampleClick}
-                > e.g.
-                  <Example value="IPR020422"/>,
+                >
+                  {' '}e.g.
+                  <Example value="IPR020422" />,
                   <Example value="kinase" />,
                   <Example value="O00167" />,
                   <Example value="PF02932" />,
-                  <Example value="GO:0007165"/>,
-                  <Example value="1t2v"/>
+                  <Example value="GO:0007165" />,
+                  <Example value="1t2v" />
                 </div>
               </div>
 
-              <div className={f('row')} style={{marginTop: '1em'}}>
+              <div className={f('row')} style={{ marginTop: '1em' }}>
                 <div className={f('large-12', 'columns')}>
-                  <a className={f('button')}
-                    onClick={this.handleSubmitClick}
-                  >Search</a>
-                  <a className={f('secondary', 'hollow', 'button')}
+                  <a className={f('button')} onClick={this.handleSubmitClick}>
+                    Search
+                  </a>
+                  <a
+                    className={f('secondary', 'hollow', 'button')}
                     onClick={this.handleReset}
-                  >Clear</a>
+                  >
+                    Clear
+                  </a>
                 </div>
               </div>
-
             </div>
           </form>
         </div>
@@ -107,8 +111,8 @@ class SearchByText extends Component {
 }
 
 const mapStateToProps = createSelector(
-  state => state.location.search,
-  search => ({search})
+  state => state.newLocation.search,
+  search => ({ search }),
 );
 
 export default connect(mapStateToProps)(SearchByText);

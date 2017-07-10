@@ -1,29 +1,38 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import cancelable from 'utils/cancelable';
 import {
-  loadingData, loadedData, progressData, unloadingData, failedLoadingData,
+  loadingData,
+  loadedData,
+  progressData,
+  unloadingData,
+  failedLoadingData,
 } from 'actions/creators';
-import {alreadyLoadingError} from 'reducers/data';
+import { alreadyLoadingError } from 'reducers/data';
 
-import * as defaults from './defaults';
 import extractParams from './extractParams';
 import getFetch from './getFetch';
 
-const mapStateToProps = getUrl => createSelector(
-  state => state,
-  state => state.data[getUrl(state)] || {},
-  (appState, data) => ({appState, data})
-);
-const getBaseURL = url => url ? url.slice(0, url.indexOf('?')) : '';
+const mapStateToProps = getUrl =>
+  createSelector(
+    state => state,
+    state => state.data[getUrl(state)] || {},
+    (appState, data) => ({ appState, data })
+  );
+const getBaseURL = url => (url ? url.slice(0, url.indexOf('?')) : '');
 
 // eslint-disable-next-line max-params
 const load = (
-  loadingData, loadedData, progressData, unloadingData, failedLoadingData,
-  fetchFun, fetchOptions
+  loadingData,
+  loadedData,
+  progressData,
+  unloadingData,
+  failedLoadingData,
+  fetchFun,
+  fetchOptions
 ) => key => {
   try {
     loadingData(key);
@@ -39,18 +48,16 @@ const load = (
   // Eventually changes the state according to response
   c.promise.then(
     response => loadedData(key, response),
-    error => (
-      (error.canceled ? unloadingData : failedLoadingData)(key, error)
-    ),
+    error => (error.canceled ? unloadingData : failedLoadingData)(key, error)
   );
   return c;
 };
 
 const loadData = params => {
-  const {getUrl, fetchOptions, propNamespace} = extractParams(params);
+  const { getUrl, fetchOptions, propNamespace } = extractParams(params);
   const fetchFun = getFetch(fetchOptions);
 
-  return (Wrapped/*: ReactClass<*> */) => {
+  return (Wrapped /*: ReactClass<*> */) => {
     class DataWrapper extends PureComponent {
       static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
 
@@ -70,7 +77,7 @@ const loadData = params => {
 
       constructor(props) {
         super(props);
-        this.state = {staleData: props.data};
+        this.state = { staleData: props.data };
         this._url = '';
         this._avoidStaleData = true;
         this._load = null;
@@ -78,16 +85,25 @@ const loadData = params => {
 
       componentWillMount() {
         const {
-          appState, data,
-          loadingData, loadedData, progressData,
-          failedLoadingData, unloadingData,
+          appState,
+          data,
+          loadingData,
+          loadedData,
+          progressData,
+          failedLoadingData,
+          unloadingData,
         } = this.props;
         // (stored in `key` because `this._url` might change)
-        const key = this._url = getUrl(appState);
+        const key = (this._url = getUrl(appState));
         if (!this._load) {
           this._load = load(
-            loadingData, loadedData, progressData, unloadingData,
-            failedLoadingData, fetchFun, fetchOptions,
+            loadingData,
+            loadedData,
+            progressData,
+            unloadingData,
+            failedLoadingData,
+            fetchFun,
+            fetchOptions
           );
         }
 
@@ -98,26 +114,33 @@ const loadData = params => {
         this._cancelableFetch = this._load(key);
       }
 
-      componentWillReceiveProps({data: nextData}) {
+      componentWillReceiveProps({ data: nextData }) {
         if (
-          !nextData.loading && nextData.payload &&
+          !nextData.loading &&
+          nextData.payload &&
           nextData.payload !== this.state.staleData.payload
         ) {
-          this.setState({staleData: nextData});
+          this.setState({ staleData: nextData });
         }
       }
 
       // eslint-disable-next-line max-statements
       componentWillUpdate({
         appState: nextAppState,
-        loadingData, loadedData, failedLoadingData, unloadingData, data,
+        loadingData,
+        loadedData,
+        failedLoadingData,
+        unloadingData,
+        data,
       }) {
-        this._avoidStaleData = (
-          getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState))
-        );
+        this._avoidStaleData =
+          getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState));
 
         // Same location, no need to reload data
-        if (nextAppState.location === this.props.appState.location) return;
+        if (nextAppState.newLocation === this.props.appState.newLocation) {
+          return;
+        }
+
         // If data is already there, or loading, don't do anything
         if (data.loading || data.payload) return;
         // New location, cancel previous fetch
@@ -128,11 +151,15 @@ const loadData = params => {
         // Key is the new URL to fetch
         // (stored in `key` because `this._url` might change)
 
-        const key = this._url = getUrl(nextAppState);
+        const key = (this._url = getUrl(nextAppState));
         if (!this._load) {
           this._load = load(
-            loadingData, loadedData, unloadingData, failedLoadingData,
-            fetchFun, fetchOptions
+            loadingData,
+            loadedData,
+            unloadingData,
+            failedLoadingData,
+            fetchFun,
+            fetchOptions
           );
         }
         this._cancelableFetch = this._load(key);
@@ -150,16 +177,19 @@ const loadData = params => {
       render() {
         const {
           // Remove from props
-          appState, loadingData, loadedData, failedLoadingData,
+          appState,
+          loadingData,
+          loadedData,
+          failedLoadingData,
           // Keep, to pass on
-          data, ...rest
+          data,
+          ...rest
         } = this.props;
         // TODO: remove next line if nothing breaks because of it
         // const data = {...dataFromProps};// maybe useful?..
         if (typeof data.loading === 'undefined') data.loading = true;
-        const useStaleData = (
-          !this._avoidStaleData && data.loading && this.state.staleData.payload
-        );
+        const useStaleData =
+          !this._avoidStaleData && data.loading && this.state.staleData.payload;
         if (!data.loading) {
           this._url = getUrl(appState);
         }
@@ -172,12 +202,14 @@ const loadData = params => {
       }
     }
 
-    return connect(
-      mapStateToProps(getUrl),
-      {loadingData, loadedData, progressData, unloadingData, failedLoadingData}
-    )(DataWrapper);
+    return connect(mapStateToProps(getUrl), {
+      loadingData,
+      loadedData,
+      progressData,
+      unloadingData,
+      failedLoadingData,
+    })(DataWrapper);
   };
 };
 
 export default loadData;
-export const searchParamsToURL = defaults._SearchParamsToURL;

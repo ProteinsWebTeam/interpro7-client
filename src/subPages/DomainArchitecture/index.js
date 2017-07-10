@@ -1,33 +1,40 @@
 /* eslint-disable no-param-reassign */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
-
-import {createSelector} from 'reselect';
-import {format, resolve} from 'url';
+import { createSelector } from 'reselect';
+import { stringify as qsStringify } from 'query-string';
 
 import loadData from 'higherOrder/loadData';
+import description2path from 'utils/processLocation/description2path';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 
-const getUrlFor = createSelector(// this one only to memoize it
+const getUrlFor = createSelector(
+  // this one only to memoize it
   db => db,
-  db => createSelector(
-    state => state.settings.api,
-    state => state.location.pathname,
-    ({protocol, hostname, port, root}, pathname) => {
-      const newURL = (db === 'Residues') ?
-        `${(root + pathname).replace('domain_architecture', '')}?${db.toLowerCase()}` :
-        (root + pathname)
-          .replace('domain_architecture', 'entry')
-          .replace(/entry.*$/i, `entry/${db}`);
-      return resolve(
-        format({protocol, hostname, port, pathname: root}),
-        newURL,
-      );
-    }
-  ),
+  db =>
+    createSelector(
+      state => state.settings.api,
+      state => state.newLocation.description,
+      ({ protocol, hostname, port, root }, description) => {
+        // omit from description
+        const { mainDetail: _, ..._description } = description;
+        // brand new search
+        const search = {};
+        if (db === 'Residues') {
+          search.residues = null;
+        } else {
+          _description.focusType = 'entry';
+          _description.focusDB = db;
+        }
+        // build URL
+        return `${protocol}//${hostname}:${port}${root}${description2path(
+          _description
+        )}?${qsStringify(search)}`.replace(/\?$/, '');
+      }
+    )
 );
-const mergeResidues = (residues) => {
+const mergeResidues = residues => {
   let out = {};
   for (const key of Object.keys(residues)) {
     residues[key].reduce((acc, v) => {
@@ -51,7 +58,7 @@ const mergeResidues = (residues) => {
   return out;
 };
 
-const groupByEntryType = (interpro) => {
+const groupByEntryType = interpro => {
   const ipro = {};
   const out = interpro.reduce((acc, val) => {
     val.signatures = [];
@@ -65,10 +72,10 @@ const groupByEntryType = (interpro) => {
     acc[val.entry_type].push(val);
     return acc;
   }, {});
-  return {out, ipro};
+  return { out, ipro };
 };
 const addSignature = (entry, ipro, integrated) => {
-  if (entry.entry_integrated in ipro){
+  if (entry.entry_integrated in ipro) {
     entry.link = `/entry/${entry.source_database}/${entry.accession}`;
     ipro[entry.entry_integrated].signatures.push(entry);
     ipro[entry.entry_integrated].children.push(entry);
@@ -78,14 +85,16 @@ const addSignature = (entry, ipro, integrated) => {
 };
 
 const mergeData = (interpro, integrated, unintegrated, residues) => {
-  const {out, ipro} = groupByEntryType(interpro);
+  const { out, ipro } = groupByEntryType(interpro);
   if (unintegrated.length > 0) {
-    unintegrated.forEach(u => u.link = `/entry/${u.source_database}/${u.accession}`);
+    unintegrated.forEach(
+      u => (u.link = `/entry/${u.source_database}/${u.accession}`)
+    );
     out.unintegrated = unintegrated;
   }
-  for (const entry of integrated.concat(unintegrated)){
+  for (const entry of integrated.concat(unintegrated)) {
     entry.coordinates = entry.entry_protein_coordinates.coordinates;
-    if (residues.hasOwnProperty(entry.accession)){
+    if (residues.hasOwnProperty(entry.accession)) {
       entry.children = entry.residues = mergeResidues({
         [entry.accession]: residues[entry.accession],
       });
@@ -108,9 +117,14 @@ let Index = class extends Component {
     dataResidues: T.object.isRequired,
   };
 
-  render(){
-    const {mainData, dataInterPro, dataIntegrated, dataResidues, dataUnintegrated} =
-      this.props;
+  render() {
+    const {
+      mainData,
+      dataInterPro,
+      dataIntegrated,
+      dataResidues,
+      dataUnintegrated,
+    } = this.props;
     if (dataInterPro.loading || dataIntegrated.loading) {
       return <div>Loading…</div>;
     }
@@ -122,26 +136,31 @@ let Index = class extends Component {
     );
     return (
       <div>
-        <DomainArchitecture protein={mainData.payload.metadata} data={mergedData} />
+        <DomainArchitecture
+          protein={mainData.payload.metadata}
+          data={mergedData}
+        />
       </div>
     );
   }
 };
 Index = ['Integrated', 'InterPro', 'Residues', 'Unintegrated'].reduce(
-  (Index, db) => loadData({
-    getUrl: getUrlFor(db),
-    propNamespace: db,
-  })(Index), Index);
-
-const DomainSub = (
-  {data}
-  /*: {data: Object, location: {pathname: string}, main: string} */
-) => (
-  <div>
-    <h3>{data.payload.metadata.accession}</h3>
-    <Index mainData={data} />
-  </div>
+  (Index, db) =>
+    loadData({
+      getUrl: getUrlFor(db),
+      propNamespace: db,
+    })(Index),
+  Index
 );
+
+const DomainSub = ({ data }) =>
+  /*: {data: Object, location: {pathname: string}, main: string} */
+  <div>
+    <h3>
+      {data.payload.metadata.accession}
+    </h3>
+    <Index mainData={data} />
+  </div>;
 DomainSub.propTypes = {
   data: T.object.isRequired,
 };

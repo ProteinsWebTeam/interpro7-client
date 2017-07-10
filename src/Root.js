@@ -1,7 +1,8 @@
+// @flow
 import React from 'react';
-import {Helmet} from 'react-helmet';
+import { Helmet } from 'react-helmet';
 
-import {schedule} from 'timing-functions/src';
+import { schedule } from 'timing-functions/src';
 
 // Global stylesheets loaded here
 import 'styles/foundation';
@@ -10,7 +11,7 @@ import 'styles/global.css';
 import 'styles/theme-interpro.css';
 import 'styles/interpro-new.css';
 
-import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
+import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
 
 import Overlay from 'components/Overlay';
 
@@ -26,60 +27,68 @@ const DEFAULT_SCHEDULE_DELAY = 1000;
 const NullComponent = () => null;
 
 const LoadingBarAsync = createAsyncComponent(
-  () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
-    /* webpackChunkName: "loading-bar" */'components/LoadingBar'
-  )),
+  () =>
+    schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
+      import(/* webpackChunkName: "loading-bar" */ 'components/LoadingBar')
+    ),
   NullComponent,
   'LoadingBar'
 );
 
 const SideMenuAsync = createAsyncComponent(
-  () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
-    /* webpackChunkName: "side-menu" */'components/Menu/SideMenu'
-  )),
+  () =>
+    schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
+      import(/* webpackChunkName: "side-menu" */ 'components/Menu/SideMenu')
+    ),
   NullComponent,
-  'SideMenu',
+  'SideMenu'
 );
 
 const EMBLDropdownAsync = createAsyncComponent(
-  () => schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => import(
-    /* webpackChunkName: "cookie-banner" */'components/EMBLDropdown'
-  )),
+  () =>
+    schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() =>
+      import(/* webpackChunkName: "cookie-banner" */ 'components/EMBLDropdown')
+    ),
   NullComponent,
-  'EMBLDropdown',
+  'EMBLDropdown'
 );
 
 const EBIFooterAsync = createAsyncComponent(
-  () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
-    /* webpackChunkName: "ebi-footer" */'components/EBIFooter'
-  )),
+  () =>
+    schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
+      import(/* webpackChunkName: "ebi-footer" */ 'components/EBIFooter')
+    ),
   NullComponent,
-  'EBIFooter',
+  'EBIFooter'
 );
 
 const ToastDisplayAsync = createAsyncComponent(
-  () => schedule(DEFAULT_SCHEDULE_DELAY).then(() => import(
-    /* webpackChunkName: "toast-display" */'components/Toast/ToastDisplay'
-  )),
+  () =>
+    schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
+      import(/* webpackChunkName: "toast-display" */ 'components/Toast/ToastDisplay')
+    ),
   NullComponent,
-  'ToastDisplay',
+  'ToastDisplay'
 );
 
 const CookieFooterAsync = createAsyncComponent(
-  () => schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
-    try {
-      if (document.cookie.match(/cookies-accepted=(true)/i)[1]) return;
-    } catch (_) {
-      return import(
-        /* webpackChunkName: "cookie-banner" */'components/CookieBanner'
-      );
-    }
-  }),
+  () =>
+    schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
+      try {
+        if (
+          window.document &&
+          window.document.cookie.match(/cookies-accepted=(true)/i)[1]
+        )
+          return;
+      } catch (_) {
+        return import(/* webpackChunkName: "cookie-banner" */ 'components/CookieBanner');
+      }
+    }),
   NullComponent,
-  'CookieFooter',
+  'CookieFooter'
 );
 
-const Root = () => (
+const Root = () =>
   <div>
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
     <LoadingBarAsync />
@@ -93,7 +102,6 @@ const Root = () => (
     <EBIFooterAsync />
     <ToastDisplayAsync />
     <CookieFooterAsync />
-  </div>
-);
+  </div>;
 
 export default Root;

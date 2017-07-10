@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { stringify as qsStringify } from 'query-string';
 
 import NumberLabel from 'components/NumberLabel';
 
-import {connect} from 'react-redux';
 import loadData from 'higherOrder/loadData';
+import description2path from 'utils/processLocation/description2path';
 
-import {createSelector} from 'reselect';
-import {format, resolve} from 'url';
-
-import {goToNewLocation} from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import f from 'styles/foundation';
 
@@ -25,32 +25,30 @@ class IntegratedFilter extends Component {
     }).isRequired,
   };
 
-  constructor(){
+  constructor() {
     super();
-    this.state = {value: null};
+    this.state = { value: null };
   }
 
   componentWillMount() {
-    const integration = (
+    const integration =
       this.props.location.description.mainIntegration ||
-      this.props.location.description.focusIntegration
-    );
+      this.props.location.description.focusIntegration;
     if (integration === 'unintegrated') {
-      this.setState({value: 'unintegrated'});
+      this.setState({ value: 'unintegrated' });
     } else if (integration === 'integrated') {
-      this.setState({value: 'integrated'});
+      this.setState({ value: 'integrated' });
     } else {
-      this.setState({value: 'both'});
+      this.setState({ value: 'both' });
     }
   }
 
-  _handleSelection = ({target: {value}}) => {
-    this.setState({value});
-    const integrationKey = (
-      this.props.location.description.mainType === 'entry' ?
-        'mainIntegration' :
-        'focusIntegration'
-    );
+  _handleSelection = ({ target: { value } }) => {
+    this.setState({ value });
+    const integrationKey =
+      this.props.location.description.mainType === 'entry'
+        ? 'mainIntegration'
+        : 'focusIntegration';
     this.props.goToNewLocation({
       ...this.props.location,
       description: {
@@ -61,29 +59,29 @@ class IntegratedFilter extends Component {
   };
 
   render() {
-    const {data: {loading, payload}} = this.props;
+    const { data: { loading, payload } } = this.props;
     const types = loading ? {} : payload;
     if (!loading) types.both = payload.integrated + payload.unintegrated;
     return (
       <div>
-        {
-          Object.keys(types).sort().map(type => (
-            <div key={type} className={f('column')}>
-              <label className={f('row', 'align-middle')}>
-                <input
-                  type="radio"
-                  name="interpro_state"
-                  value={type}
-                  onChange={this._handleSelection}
-                  checked={this.state.value === type}
-                  style={{margin: '0.25em'}}
-                />
-                <span>{type}</span>
-                <NumberLabel value={types[type]} />
-              </label>
-            </div>
-          ))
-        }
+        {Object.keys(types).sort().map(type =>
+          <div key={type} className={f('column')}>
+            <label className={f('row', 'align-middle')}>
+              <input
+                type="radio"
+                name="interpro_state"
+                value={type}
+                onChange={this._handleSelection}
+                checked={this.state.value === type}
+                style={{ margin: '0.25em' }}
+              />
+              <span>
+                {type}
+              </span>
+              <NumberLabel value={types[type]} />
+            </label>
+          </div>,
+        )}
       </div>
     );
   }
@@ -91,30 +89,29 @@ class IntegratedFilter extends Component {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.location,
-  ({protocol, hostname, port, root}, {pathname, search}) => {
-    const parameters = Object.keys(search)
-      .reduce((acc, v) => {
-        if (v !== 'search' && search[v]) {
-          acc.push(`${v}=${search[v]}`);
-        }
-        return acc;
-      }, []);
-    parameters.push('interpro_status');
-    return resolve(
-      format({protocol, hostname, port, pathname: root}),
-      `${(root + pathname)}?${parameters.join('&')}`
-        .replace('/integrated', '')
-        .replace('/unintegrated', ''),
-    );
-  }
+  state => state.newLocation.description,
+  state => state.newLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    // omit from description
+    const { integration, ..._description } = description;
+    // omit from search
+    const { search: _, ..._search } = search;
+    // add to search
+    _search.interpro_status = null;
+    // build URL
+    return `${protocol}//${hostname}:${port}${root}${description2path(
+      _description,
+    )}?${qsStringify(_search)}`;
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({location}),
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, {goToNewLocation})(loadData({
-  getUrl: getUrlFor,
-})(IntegratedFilter));
+export default connect(mapStateToProps, { goToNewLocation })(
+  loadData({
+    getUrl: getUrlFor,
+  })(IntegratedFilter),
+);

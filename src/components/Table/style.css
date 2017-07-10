@@ -1,6 +1,8 @@
+@import "../../styles/timing.css";
+
 .table {
   transition-property: opacity, filter;
-  transition-duration: 0.25s;
+  transition-duration: var(--timing-fast);
   transition-timing-function: ease-in-out;
   opacity: 1;
   filter: grayscale(0);

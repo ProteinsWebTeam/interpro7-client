@@ -82,8 +82,6 @@ const rules = {
   'linebreak-style': [0, 'unix'],
   // Specify the maximum depth that blocks can be nested
   'max-depth': [1, 4],
-  // Specify the maximum length of a line in your program
-  'max-len': [1, 90, 2],
   // Specify the maximum depth callbacks can be nested
   'max-nested-callbacks': [1, 4],
   // Limits number of parameters that can be used in the function declaration

@@ -1,40 +1,38 @@
 /* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 15, 30, 100]}] */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
-import {foundationPartial} from 'styles/foundation';
-import {goToLocation, changePageSize} from 'actions/creators';
+import { foundationPartial } from 'styles/foundation';
+import { goToNewLocation, changePageSize } from 'actions/creators';
 
 import s from './style.css';
 
 const f = foundationPartial(s);
 
-class PageSizeSelector extends Component{
+class PageSizeSelector extends Component {
   static propTypes = {
-    search: T.object,
+    location: T.object.isRequired,
     pageSize: T.number,
-    router: T.object,
-    pathname: T.string,
     changePageSize: T.func,
-    goToLocation: T.func,
+    goToNewLocation: T.func,
   };
 
   constructor(props) {
     super(props);
-    const pageSize = (
-      props.search.page_size ? props.search.page_size : props.pageSize
-    );
-    this.state = {pageSize};
+    const pageSize = props.location.search.page_size
+      ? props.location.search.page_size
+      : props.pageSize;
+    this.state = { pageSize };
   }
 
   handleChange = event => {
-    this.setState({pageSize: event.target.value});
-    this.props.goToLocation({
-      pathname: this.props.pathname,
+    this.setState({ pageSize: event.target.value });
+    this.props.goToNewLocation({
+      ...this.props.location,
       search: {
-        ...this.props.search,
+        ...this.props.location.search,
         page_size: event.target.value,
         page: 1,
       },
@@ -48,25 +46,26 @@ class PageSizeSelector extends Component{
   render() {
     let options = [10, 15, 30, 100];
     if (options.indexOf(this.state.pageSize * 1) === -1) {
-      options = Array.from(
-        new Set([...options, this.state.pageSize])
-      ).sort((a, b) => a - b);
+      options = Array.from(new Set([...options, this.state.pageSize])).sort(
+        (a, b) => a - b,
+      );
     }
     return (
       <div className={f('float-left')}>
         Show{' '}
         <select
           className={f('small')}
-          style={{width: 'auto'}}
+          style={{ width: 'auto' }}
           value={this.state.pageSize}
           onChange={this.handleChange}
         >
-          {
-            options.map(opt => (
-              <option key={opt} value={opt}>{opt}</option>
-            ))
-          }
-        </select> results
+          {options.map(opt =>
+            <option key={opt} value={opt}>
+              {opt}
+            </option>,
+          )}
+        </select>{' '}
+        results
         <a
           className={f('icon', 'icon-functional', 'primary', 'apply-all')}
           data-icon="s"
@@ -81,11 +80,10 @@ class PageSizeSelector extends Component{
 
 const mapStateToProps = createSelector(
   state => state.settings.pagination.pageSize,
-  state => state.location.pathname,
-  (pageSize, pathname) => ({pageSize, pathname})
+  state => state.newLocation,
+  (pageSize, location) => ({ pageSize, location }),
 );
 
-export default connect(
-  mapStateToProps,
-  {changePageSize, goToLocation}
-)(PageSizeSelector);
+export default connect(mapStateToProps, { changePageSize, goToNewLocation })(
+  PageSizeSelector,
+);

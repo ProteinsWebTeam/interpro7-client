@@ -261,7 +261,7 @@ module.exports = (env = { dev: true }) => {
       maxAssetSize: 5 * kB * kB, // 5MB
     },
     plugins: [
-      // new webpack.optimize.ModuleConcatenationPlugin(),
+      new webpack.optimize.ModuleConcatenationPlugin(),
       new webpack.LoaderOptionsPlugin({
         options: {
           debug: !env.production,

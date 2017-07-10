@@ -1,6 +1,15 @@
+// @flow
 import f from 'styles/foundation';
 
-export const EBI = [
+/* ::
+  type Location = {|
+    description: {|[key: string]: string|},
+    search: {|[key: string]: string|},
+    hash: string,
+  |};
+*/
+
+export const EBI /*: Array<Object> */ = [
   {
     href: 'https://www.ebi.ac.uk',
     icon: 'H',
@@ -28,7 +37,7 @@ export const EBI = [
   },
 ];
 
-export const entities = [
+export const entities /*: Array<Object> */ = [
   {
     newTo: {
       description: {
@@ -74,9 +83,9 @@ export const entities = [
   },
 ];
 
-export const singleEntity = [
+export const singleEntity /*: Array<Object> */ = [
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -89,7 +98,7 @@ export const singleEntity = [
     name: 'overview',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -104,7 +113,7 @@ export const singleEntity = [
     counter: 'entries',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -119,7 +128,7 @@ export const singleEntity = [
     counter: 'proteins',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -134,7 +143,7 @@ export const singleEntity = [
     counter: 'structures',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -147,19 +156,19 @@ export const singleEntity = [
     counter: 'species',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
           ...location.description,
-          mainDetail: 'domain_architectures',
+          mainDetail: 'domain_architecture',
         },
       };
     },
     name: 'domain architectures',
   },
   {
-    newTo(location) {
+    newTo(location /*: Location */) {
       return {
         ...location,
         description: {
@@ -172,52 +181,52 @@ export const singleEntity = [
   },
 ];
 
-export const InterPro = [
+export const InterPro /*: Array<Object> */ = [
   {
-    newTo: {description: {}},
+    newTo: { description: {} },
     icon: 'H',
     name: 'Home',
-    activeClass({description: {mainType, other}}) {
+    activeClass({ description: { mainType, other } } /*: Location */) {
       if (!(mainType || other)) return f('is-active');
     },
   },
   {
-    newTo: {description: {mainType: 'search'}},
+    newTo: { description: { mainType: 'search' } },
     icon: '1',
     name: 'Search',
     iconClass: 'functional',
   },
   {
-    newTo: {description: {mainType: 'entry', mainDB: 'InterPro'}},
+    newTo: { description: { mainType: 'entry', mainDB: 'InterPro' } },
     icon: 'b',
     name: 'Browse',
     iconClass: 'functional',
     options: entities,
   },
   {
-    newTo: {description: {other: 'release_notes'}},
+    newTo: { description: { other: 'release_notes' } },
     icon: '0',
     name: 'Release Notes',
     iconClass: 'functional',
   },
   {
-    newTo: {description: {other: 'download'}},
+    newTo: { description: { other: 'download' } },
     icon: '=',
     name: 'Download',
     iconClass: 'functional',
   },
   {
-    newTo: {description: {other: 'help'}},
+    newTo: { description: { other: 'help' } },
     icon: '?',
     name: 'Help',
   },
   {
-    newTo: {description: {other: 'about'}},
+    newTo: { description: { other: 'about' } },
     icon: 'i',
     name: 'About',
   },
   {
-    newTo: {description: {other: 'settings'}},
+    newTo: { description: { other: 'settings' } },
     icon: 's',
     name: 'Settings',
     iconClass: 'functional',

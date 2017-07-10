@@ -100,8 +100,7 @@ const mapStateToProps = createSelector(
     (data = {}) => Object.values(data).some(datum => datum.loading),
   ),
   state => state.ui.stuck,
-  state => state.location.pathname,
-  (loading, stuck, pathname) => ({ loading, stuck, pathname }),
+  (loading, stuck) => ({ loading, stuck }),
 );
 
 export default connect(mapStateToProps)(Title);

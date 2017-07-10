@@ -1,16 +1,17 @@
 @import "../../styles/colors.css";
 @import "../../styles/spacing.css";
 @import "../../styles/fonts.css";
+@import "../../styles/timing.css";
 
 .standard {
-  /* width: 100vw; *//*removed as it clashed with foundation grid*/
+  /* width: 100vw; */ /*removed as it clashed with foundation grid*/
   margin: 0;
   display: flex;
   align-items: center;
 
-@nest & > * {
-  padding: var(--spacing-medium);
-}
+  @nest & > * {
+    padding: var(--spacing-medium);
+  }
 }
 
 .header {
@@ -24,9 +25,12 @@
 
 .local_masthead {
   background-image: linear-gradient(
-    to right,
-    rgba(0, 85, 158, 0.9), rgba(45, 174, 193, 0.5), rgba(0, 85, 158, 0.9)
-  ), url("images/banner/fondation-morse-header.jpg");
+      to right,
+      rgba(0, 85, 158, 0.9),
+      rgba(45, 174, 193, 0.5),
+      rgba(0, 85, 158, 0.9)
+    ),
+    url("images/banner/fondation-morse-header.jpg");
   background-repeat: no-repeat, repeat;
   background-position: left, top right;
   background-size: 100%, 1400px;
@@ -49,9 +53,12 @@
 
   background: #00559e;
   background-image: linear-gradient(
-    to right,
-    rgba(0, 85, 158, 0.9), rgba(45, 174, 193, 0.5), rgba(0, 85, 158, 0.9)
-  ), url(images/banner/fondation-morse-header.jpg);
+      to right,
+      rgba(0, 85, 158, 0.9),
+      rgba(45, 174, 193, 0.5),
+      rgba(0, 85, 158, 0.9)
+    ),
+    url(images/banner/fondation-morse-header.jpg);
 }
 
 .container {
@@ -65,18 +72,14 @@
   background-color: var(--colors-dark);
   color: var(--colors-nearly-white);
 
-@nest & > * {
-  border-left: solid
+  @nest & > * {
+    border-left: solid 1px grey;
 
-1px grey
-
-;
-
-&:first-child {
-   flex: 1;
-   border-left: none;
- }
-}
+    &:first-child {
+      flex: 1;
+      border-left: none;
+    }
+  }
 }
 
 .ebi_services {
@@ -95,22 +98,22 @@
   transform: scaleY(1);
   flex: 1;
 
-&
-.scrolled {
-  transform: scale(0.5);
-}
+  &
+  .scrolled {
+    transform: scale(0.5);
+  }
 
-@nest & * {
-  margin: 0;
-}
+  @nest & * {
+    margin: 0;
+  }
 
-@nest & > * {
-  padding: var(--spacing-huge) 0;
-}
+  @nest & > * {
+    padding: var(--spacing-huge) 0;
+  }
 
-@nest & img {
-  padding: var(--spacing-big);
-}
+  @nest & img {
+    padding: var(--spacing-big);
+  }
 }
 .masthead button {
   outline: 0;
@@ -123,14 +126,13 @@
   font-size: larger;
   color: var(--colors-nearly-white);
   cursor: pointer;
-  transition: transform 0.5s ease-in-out;
-  transform: translateY(0) /* rotateZ(0)*/;
+  transform: translateY(0);
+  transition-duration: var(--timing-fast);
+  transition-timing-function: ease-in-out;
 
-&
-.stuck {
-  transform: translateY(150%) /* rotateZ(-180deg)*/;
-}
-
+  &.stuck {
+    transform: translateY(166%) Scale(0.8);
+  }
 }
 
 .hamb_line {
@@ -140,15 +142,21 @@
   transform-origin: 44% 50%;
 }
 
-.hamb_1, .hamb_2, .hamb_3 {
+.hamb_1,
+.hamb_2,
+.hamb_3 {
   composes: hamb_line;
 }
 
-.hamb_1_open, .hamb_2_open, .hamb_3_open {
+.hamb_1_open,
+.hamb_2_open,
+.hamb_3_open {
   composes: hamb_line;
 }
 
-.hamb_1, .hamb_2, .hamb_3 {
+.hamb_1,
+.hamb_2,
+.hamb_3 {
   transition: transform .3s ease-in-out;
 }
 
@@ -172,91 +180,71 @@
   justify-content: space-between;
   color: var(--colors-nearly-white);
 
-/*background-color: var(--colors-main);*/
-
-@nest & > * {
-  padding:
-
-0;
+  /*background-color: var(--colors-main);*/
 
   @nest & > * {
-    padding:
+    padding: 0;
 
-  var(--spacing-medium
+    @nest & > * {
+      padding: var(--spacing-medium);
+      position: relative;
+      display: inline-flex;
+      overflow-y: hidden;
+      z-index: 1;
+      transition: color 0.2s ease-out;
 
-  );
-    position: relative
+      &:not(:first-child) {
+        border-left: solid 1px var(--colors-nearly-white);
+      }
 
-  ;
-    display: inline-flex
+      &::before {
+        content: "";
+        z-index: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        height: 0;
+        width: 10%;
+        border-style: solid;
+        border-width: var(--spacing-medium);
+        border-color: transparent;
+        border-bottom-color: var(--colors-nearly-white);
+        transform: translateY(var(--spacing-medium));
+        transition: transform 0.2s ease-out;
+      }
 
-  ;
-    overflow-y: hidden
+      &::after {
+        content: "";
+        z-index: -1;
+        position: absolute;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--colors-nearly-white);
+        transform: translateY(100%);
+        transition: transform .2s ease-out;
+      }
 
-  ;
-    z-index:
+      &.active {
+        color: var(--colors-main);
 
-  1;
-    transition: color
+        &::after {
+          transform: translateY(0);
+        }
+      }
 
-  0.2s ease-out
-
-  ;
-
-  &:not(:first-child) {
-     border-left: solid 1px var(--colors-nearly-white);
-   }
-
-  &::before {
-     content: "";
-     z-index: 0;
-     position: absolute;
-     left: 0;
-     right: 0;
-     bottom: 0;
-     margin: auto;
-     height: 0;
-     width: 10%;
-     border-style: solid;
-     border-width: var(--spacing-medium);
-     border-color: transparent;
-     border-bottom-color: var(--colors-nearly-white);
-     transform: translateY(var(--spacing-medium));
-     transition: transform 0.2s ease-out;
-   }
-
-  &::after {
-     content: "";
-     z-index: -1;
-     position: absolute;
-     height: 100%;
-     top: 0;
-     bottom: 0;
-     left: 0;
-     right: 0;
-     background-color: var(--colors-nearly-white);
-     transform: translateY(100%);
-     transition: transform .2s ease-out;
-   }
-
-  &.active {
-     color: var(--colors-main);
-
-  &::after {
-     transform: translateY(0);
-   }
+      &:hover,
+      &:focus {
+        &::before {
+          transform: translateY(0);
+        }
+      }
+    }
   }
-
-&:hover,
-
-&:focus {
-
-&::before {
-   transform: translateY(0);
- }
-}
-}
-}
 }
 
 .side-icons {
@@ -274,92 +262,88 @@
   align-items: center;
   font-size: 1.5rem;
   transform: translate(0, 0);
-  transition: transform .3s ease-in-out 0.15s;
+  transition-duration: var(--timing-fast);
+  transition-timing-function: ease-in-out;
 
-&
-.stuck {
-  transform: translate(-25%, 50%);
-  transition-delay: 0s;
-}
-
-@nest & svg {
-  transition: transform .5s ease-in-out;
-  transform: rotate(0deg);
-}
-
-@nest & > input {
-  margin:
-
-0.25rem
-
-;
-  border: none
-
-;
-  border-bottom:
-
-3px solid currentColor
-
-;
-  background-color: transparent
-
-;
-  box-shadow: none
-
-;
-  color: white
-
-;
-  opacity:
-
-0;
-  transform:
-
-scaleX(0);
-  transform-origin: right
-
-;
-  transition: opacity
-
-0.5s ease-in-out, transform
-
-0.3s ease-in-out
-
-;
-
-&::placeholder {
-   color: currentColor;
- }
-
-&:focus,
-
-&:hover {
-   border: none;
-   border-bottom: 3px solid currentColor;
-   background-color: transparent;
-   box-shadow: none;
-   opacity: 1;
-   transform: scaleX(1);
-
-& ~ * > svg {
-      transform: rotate(90deg);
+  &.stuck {
+    transform: translate(-20%, 50%);
+    transition-delay: 0s;
+    @nest & svg {
+      transform: Scale(0.8);
     }
-}
-}
-}
+    @nest & svg:hover {
+      transform: rotate(90deg) Scale(0.8);
+    }
+    @nest & > input:hover ~ a svg {
+      transform: rotate(90deg) Scale(0.8);
+    }
+  }
 
-.interpro-menu i {
-  display: none;
+  @nest & svg {
+    transition-timing-function: ease-in-out;
+    transition-duration: var(--timing-fast);
+  }
+  @nest & svg:hover {
+    transition-timing-function: ease-in-out;
+    transition-duration: var(--timing-fast);
+    transform: rotate(90deg);
+  }
+
+  @nest & > input {
+    margin: 0.25rem;
+    border: none;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.4);
+    background-color: transparent;
+    box-shadow: none;
+    color: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    transform: scaleX(1);
+    transform-origin: right;
+    transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+
+    &:focus,
+    &:hover {
+      border: none;
+      border-bottom: 3px solid currentColor;
+      background-color: transparent;
+      box-shadow: none;
+      opacity: 1;
+      transform: scaleX(1);
+
+      & ~ * > svg {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  @nest & > input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  @nest & > input:hover {
+    border: none;
+    border-bottom: 3px solid currentColor;
+    background-color: transparent;
+    box-shadow: none;
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  @nest & > input:hover ~ a svg {
+    transform: rotate(90deg);
+  }
+  @nest & > input[type='text']:focus {
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    box-shadow: none;
+    border-bottom: 3px solid currentColor;
+    transition: border-color .2s ease-in-out, background-color .2s ease-in-out;
+  }
 }
 
 /*use when off canvas is open and icons need to move left*/
 .movedAway {
   transform: translateX(-20em);
-}
-
-.icon--search > path {
-  transform: rotate(-15deg);
-  transform-origin: 185px 324px;
 }
 
 @media screen and (max-width: 39.9375em) {
@@ -373,4 +357,11 @@ scaleX(0);
     transition: opacity .3s;
     opacity: 0;
   }
+}
+/*Navigation - remove icons*/
+ul.interpro-menu {
+  border: 2px transparent solid;
+} /*important just .interpro-menu  doesn't work - remove border that appears when sticky - temp?*/
+.interpro-menu i {
+  display: none;
 }
