@@ -84,7 +84,7 @@ const EntriesOnStructure = ({
               locations.map((location, i) =>
                 location.fragments.map((fragment, j) =>
                   <g
-                    key={`${structure.accession}-${i}`}
+                    key={`${structure.accession}-${i}-${j}`}
                     transform={`translate(${fragment.start} ${offset -
                       baseSize})`}
                   >

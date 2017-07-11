@@ -91,7 +91,7 @@ let StructureOnProtein = class extends Component {
     structures: T.array.isRequired,
     dataInterPro: T.object,
     protein: T.object,
-    dataStructureinfo: T.object,
+    dataStructureInfo: T.object,
   };
 
   render() {

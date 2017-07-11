@@ -52,10 +52,10 @@ const StructureOnProtein = ({
               [main]: { protein_structure_locations: locations },
               structure,
             } = match;
-            locations.map((location, i) =>
-              location.fragments.map((fragment, i) =>
+            return locations.map((location, i) =>
+              location.fragments.map((fragment, j) =>
                 <g
-                  key={`${structure.accession}-${i}`}
+                  key={`${structure.accession}-${i}-${j}`}
                   transform={`translate(${fragment.start} ${offset -
                     baseSize})`}
                 >
@@ -78,14 +78,14 @@ const StructureOnProtein = ({
                   </text>
                   <text
                     y="-0.2em"
-                    transform={`translate(${fragment[1] - fragment[0]} 0)`}
+                    transform={`translate(${fragment.end - fragment.start} 0)`}
                   >
                     <tspan textAnchor="middle">
                       {fragment[1]}
                     </tspan>
                   </text>
-                </g>
-              )
+                </g>,
+              ),
             );
           })}
         </g>
@@ -98,7 +98,7 @@ StructureOnProtein.propTypes = {
     T.shape({
       structure: T.object.isRequired,
       protein: T.object.isRequired,
-    })
+    }),
   ).isRequired,
   options: T.object,
 };
