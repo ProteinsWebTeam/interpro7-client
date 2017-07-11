@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
@@ -6,11 +6,14 @@ import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
-
-import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
+import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
 import Table, {
-  Column, SearchBox, PageSizeSelector, Exporter,
+  Column,
+  SearchBox,
+  PageSizeSelector,
+  Exporter,
 } from 'components/Table';
 
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
@@ -19,7 +22,7 @@ import EntryListFilter from 'components/Entry/EntryListFilters';
 
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
-import {memberDB} from 'staticData/home';
+import { memberDB } from 'staticData/home';
 
 const propTypes = {
   data: T.shape({
@@ -34,8 +37,8 @@ const propTypes = {
 };
 
 const Overview = ({
-  data: {payload, loading},
-  location: {search: {type}},
+  data: { payload, loading },
+  location: { search: { type } },
   isStale,
 }) => {
   if (loading || isStale) return <div>Loading…</div>;
@@ -43,27 +46,25 @@ const Overview = ({
     <div>
       Member databases:
       <ul className={styles.card}>
-        {Object.entries(payload.entries.member_databases)
-          .map(([name, count]) => (
-            <li key={name}>
-              <Link
-                newTo={{
-                  description: {mainType: 'entry', mainDB: name},
-                  search: {type},
-                }}
-              >
-                {name} ({count})
-              </Link>
-            </li>
-          ))
-        }
+        {Object.entries(payload.entries.member_databases).map(([name, count]) =>
+          <li key={name}>
+            <Link
+              newTo={{
+                description: { mainType: 'entry', mainDB: name },
+                search: { type },
+              }}
+            >
+              {name} ({count})
+            </Link>
+          </li>,
+        )}
       </ul>
       <ul className={styles.card}>
         <li>
           <Link
             newTo={{
-              description: {mainType: 'entry', mainDB: 'InterPro'},
-              search: {type},
+              description: { mainType: 'entry', mainDB: 'InterPro' },
+              search: { type },
             }}
           >
             InterPro ({payload.entries ? payload.entries.interpro : 0})
@@ -72,8 +73,11 @@ const Overview = ({
         <li>
           <Link
             newTo={{
-              description: {mainType: 'entry', mainIntegration: 'Unintegrated'},
-              search: {type},
+              description: {
+                mainType: 'entry',
+                mainIntegration: 'Unintegrated',
+              },
+              search: { type },
             }}
           >
             Unintegrated ({payload.entries ? payload.entries.unintegrated : 0})
@@ -89,17 +93,18 @@ class List extends Component {
   static propTypes = propTypes;
 
   componentWillMount() {
-    loadWebComponent(
-      () => import(
-        /* webpackChunkName: "interpro-components" */'interpro-components'
-      ).then(m => m.InterproType),
+    loadWebComponent(() =>
+      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
+        m => m.InterproType,
+      ),
     ).as('interpro-type');
   }
 
   render() {
     const {
-      data, isStale,
-      location: {description: {mainDB}, search},
+      data,
+      isStale,
+      location: { description: { mainDB }, search },
     } = this.props;
     let _payload = data.payload;
     const HTTP_OK = 200;
@@ -117,10 +122,11 @@ class List extends Component {
     return (
       <div className={f('row')}>
         <div className={f('shrink', 'columns')}>
-          <MemberDBTabs/>
+          <MemberDBTabs />
         </div>
         <div className={f('columns')}>
-          <EntryListFilter /><hr/>
+          <EntryListFilter />
+          <hr />
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -134,49 +140,51 @@ class List extends Component {
                 <li>
                   <a href={`${''}&format=json`} download="entries.json">
                     JSON
-                  </a><br/></li>
-                <li><a href={`${''}`}>Open in API web view</a></li>
+                  </a>
+                  <br />
+                </li>
+                <li>
+                  <a href={`${''}`}>Open in API web view</a>
+                </li>
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox
-              search={search.search}
-              pathname={''}
-            >
+            <SearchBox search={search.search} pathname={''}>
               Search entries:
             </SearchBox>
             <Column
               accessKey="type"
-              renderer={(type) => (
+              renderer={type =>
                 <interpro-type type={type.replace('_', ' ')} title={type}>
                   {type}
-                </interpro-type>
-              )}
-            >Type</Column>
+                </interpro-type>}
+            >
+              Type
+            </Column>
             <Column
               accessKey="name"
-              renderer={
-                (name/*: string */, {accession}/*: {accession: string} */) => (
-                  <Link
-                    newTo={location => ({
-                      ...location,
-                      description: {
-                        mainType: location.description.mainType,
-                        mainDB: location.description.mainDB,
-                        mainAccession: accession,
-                      },
-                    })}
-                  >
-                    {name}
-                  </Link>
-                )
-              }
+              renderer={(
+                name /*: string */,
+                { accession } /*: {accession: string} */,
+              ) =>
+                <Link
+                  newTo={location => ({
+                    ...location,
+                    description: {
+                      mainType: location.description.mainType,
+                      mainDB: location.description.mainDB,
+                      mainAccession: accession,
+                    },
+                  })}
+                >
+                  {name}
+                </Link>}
             >
               Name
             </Column>
             <Column
               accessKey="accession"
-              renderer={(accession/*: string */) => (
+              renderer={(accession /*: string */) =>
                 <Link
                   newTo={location => ({
                     ...location,
@@ -188,17 +196,15 @@ class List extends Component {
                   })}
                 >
                   {accession}
-                </Link>
-              )}
+                </Link>}
             >
               Accession
             </Column>
-            {
-              mainDB === 'InterPro' ?
-                <Column
+            {mainDB === 'InterPro'
+              ? <Column
                   accessKey="member_databases"
-                  renderer={(mdb/*: string */) => (
-                    Object.keys(mdb).map(db => (
+                  renderer={(mdb /*: string */) =>
+                    Object.keys(mdb).map(db =>
                       <div
                         key={db}
                         style={{
@@ -208,66 +214,64 @@ class List extends Component {
                         }}
                       >
                         {db}
-                        {
-                          mdb[db].map(accession => (
-                            <span
-                              key={accession}
-                              className={f('label')}
-                              style={{float: 'right'}}
-                            >
-                              <Link
-                                newTo={{description: {
+                        {mdb[db].map(accession =>
+                          <span
+                            key={accession}
+                            className={f('label')}
+                            style={{ float: 'right' }}
+                          >
+                            <Link
+                              newTo={{
+                                description: {
                                   mainType: 'entry',
                                   mainDB: db,
                                   mainAccession: accession,
-                                }}}
-                              >
-                                {accession}
-                              </Link>
-                            </span>)
-                          )
-                        }
-                      </div>
-                    ))
-                  )}
+                                },
+                              }}
+                            >
+                              {accession}
+                            </Link>
+                          </span>,
+                        )}
+                      </div>,
+                    )}
                 >
                   Signatures <span className={f('label')}>Sign ID</span>
-                </Column> :
-                <Column
+                </Column>
+              : <Column
                   accessKey="integrated"
-                  renderer={(accession/*: string */) => (
+                  renderer={(accession /*: string */) =>
                     <Link
-                      newTo={{description: {
-                        mainType: 'entry',
-                        mainDB: 'InterPro',
-                        mainAccession: accession,
-                      }}}
+                      newTo={{
+                        description: {
+                          mainType: 'entry',
+                          mainDB: 'InterPro',
+                          mainAccession: accession,
+                        },
+                      }}
                     >
                       {accession}
-                    </Link>
-                  )}
+                    </Link>}
                 >
                   Integrated
-                </Column>
-            }
+                </Column>}
             <Column
               accessKey="go_terms"
-              renderer={(gos/*: Array<Object> */) => (
-                gos.map(go => (
+              renderer={(gos /*: Array<Object> */) =>
+                gos.map(go =>
                   <div
                     key={go.identifier}
                     style={{
-                      backgroundColor: (
-                        go.category ? goColors[go.category] : '#DDDDDD'
-                      ),
+                      backgroundColor: go.category
+                        ? goColors[go.category]
+                        : '#DDDDDD',
                       padding: '1px',
                       marginBottom: '1px',
                     }}
                   >
                     {go.name ? go.name : 'None'}
-                  </div>
-                ))
-              )}
+                  </div>,
+                )}
             >
               GO Terms
             </Column>
@@ -278,30 +282,33 @@ class List extends Component {
   }
 }
 
-const SummaryAsync = createAsyncComponent(() => import(
-  /* webpackChunkName: "entry-summary" */'components/Entry/Summary'
-));
-const StructureAsync = createAsyncComponent(() => import(
-  /* webpackChunkName: "structure-subpage" */'subPages/Structure'
-));
-const ProteinAsync = createAsyncComponent(() => import(
-  /* webpackChunkName: "protein-subpage" */'subPages/Protein'
-));
+const SummaryAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "entry-summary" */ 'components/Entry/Summary'),
+);
+const StructureAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
+);
+const ProteinAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein'),
+);
+const SpeciesAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Species'),
+);
 
 const SchemaOrgData = createAsyncComponent(
-  () => import(/* webpackChunkName: "schemaOrg" */'schema_org'),
+  () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   () => null,
-  'SchemaOrgData'
+  'SchemaOrgData',
 );
 
 const pages = new Set([
-  {value: 'structure', component: StructureAsync},
-  {value: 'protein', component: ProteinAsync},
+  { value: 'structure', component: StructureAsync },
+  { value: 'protein', component: ProteinAsync },
+  { value: 'species', component: SpeciesAsync },
 ]);
 
-const SummaryComponent = ({data: {payload}, location}) => (
-  <SummaryAsync data={payload} location={location} />
-);
+const SummaryComponent = ({ data: { payload }, location }) =>
+  <SummaryAsync data={payload} location={location} />;
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.object,
@@ -310,16 +317,15 @@ SummaryComponent.propTypes = {
 };
 
 const Summary = props => {
-  const {data: {loading, payload}, isStale} = props;
+  const { data: { loading, payload }, isStale } = props;
   if (loading || (isStale && !payload.metadata)) {
     return <div>Loading…</div>;
   }
   return (
     <Switch
       {...props}
-      locationSelector={
-        l => l.description.mainDetail || l.description.focusType
-      }
+      locationSelector={l =>
+        l.description.mainDetail || l.description.focusType}
       indexRoute={SummaryComponent}
       childRoutes={pages}
     />
@@ -334,35 +340,30 @@ Summary.propTypes = {
 };
 
 const dbs = new RegExp(
-  `(${memberDB
-    .map(db => db.apiType)
-    .filter(db => db)
-    .join('|')})`,
-  'i'
+  `(${memberDB.map(db => db.apiType).filter(db => db).join('|')})`,
+  'i',
 );
 const dbAccs = new RegExp(
   `(${memberDB
     .map(db => db.accession)
     .filter(db => db)
     .join('|')}|IPR[0-9]{6})`,
-  'i'
+  'i',
 );
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = (props) => (
+const InnerSwitch = props =>
   <Switch
     {...props}
-    locationSelector={
-      l => l.description.mainAccession || l.description.focusType
-    }
+    locationSelector={l =>
+      l.description.mainAccession || l.description.focusType}
     indexRoute={List}
     childRoutes={[
-      {value: dbs, component: List},
-      {value: dbAccs, component: Summary},
+      { value: dbs, component: List },
+      { value: dbAccs, component: Summary },
     ]}
     catchAll={List}
-  />
-);
+  />;
 
 const schemaProcessData = data => ({
   '@type': 'ProteinEntity',
@@ -377,25 +378,26 @@ const schemaProcessData = data => ({
   isBaseFor: '@isBaseFor',
 });
 
-const Entry = props => (
+const Entry = props =>
   <main>
-    {props.data.payload && props.data.payload.accession &&
-    <SchemaOrgData
-      data={props.data.payload}
-      processData={schemaProcessData}
-    />
-    }
+    {props.data.payload &&
+      props.data.payload.accession &&
+      <SchemaOrgData
+        data={props.data.payload}
+        processData={schemaProcessData}
+      />}
     <Switch
       {...props}
       locationSelector={l => l.description.mainDB}
       indexRoute={Overview}
       catchAll={InnerSwitch}
     />
-  </main>
-);
+  </main>;
 Entry.propTypes = {
   data: T.shape({
     payload: T.object,
   }).isRequired,
 };
-export default loadData()(Entry);
+export default loadData((...args) =>
+  getUrlForApi(...args).replace('species', ''),
+)(Entry);
