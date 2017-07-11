@@ -80,10 +80,12 @@ module.exports = (env = { dev: true }) => {
           test: /\.js$/i,
           include: [
             path.resolve('src'),
-            path.resolve('node_modules', 'react-router', 'es'),
             path.resolve('node_modules', 'lodash-es'),
             path.resolve('node_modules', 'color-hash'),
             path.resolve('node_modules', 'timing-functions'),
+            path.resolve('node_modules', 'data-loader'),
+            path.resolve('node_modules', 'interpro-components'),
+            path.resolve('node_modules', 'pdb-web-components'),
           ],
           use: [
             {
@@ -264,6 +266,7 @@ module.exports = (env = { dev: true }) => {
       // new webpack.optimize.ModuleConcatenationPlugin(),
       new webpack.LoaderOptionsPlugin({
         options: {
+          minimize: !!env.production,
           debug: !env.production,
           context: __dirname,
         },
@@ -321,7 +324,19 @@ module.exports = (env = { dev: true }) => {
             },
           })
         : null,
-      // env.production ? new UglifyJSPlugin() : null,
+      env.production
+        ? new webpack.optimize.UglifyJsPlugin({
+            beautify: false,
+            mangle: {
+              screw_ie8: true,
+              keep_fnames: true,
+            },
+            compress: {
+              screw_ie8: true,
+            },
+            comments: false,
+          })
+        : null,
     ].filter(x => x), // filter out empty values
   };
 

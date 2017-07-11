@@ -23,7 +23,7 @@
     "predeploy": "npm-run-all test clean",
     "deploy": "npm run bundle",
     "deploy:staging": "npm run deploy",
-    "deploy:production": "npm run deploy -- --env.production",
+    "deploy:production": "npm run deploy -- -- --env.production",
     "start": "npm-run-all -rp dev:test dev",
     "stats": "webpack --env.production --profile --json > dist/stats.json"
   },
@@ -162,8 +162,7 @@
     "sinon-chai": "^2.11.0",
     "source-map": "^0.5.6",
     "style-loader": "^0.18.2",
-    "uglify-js": "mishoo/UglifyJS2#harmony",
-    "uglifyjs-webpack-plugin": "^0.4.6",
+    "uglify-js": "^3.0.24",
     "url-loader": "^0.5.9",
     "webpack": "^2.5.0",
     "webpack-dashboard": "^0.4.0",
