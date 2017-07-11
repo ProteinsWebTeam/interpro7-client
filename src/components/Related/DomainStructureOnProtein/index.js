@@ -29,10 +29,10 @@ const getUrlFor = createSelector(
         }
         // build URL
         return `${protocol}//${hostname}:${port}${root}${description2path(
-          _description
+          _description,
         )}?${qsStringify(search)}`.replace(/\?$/, '');
-      }
-    )
+      },
+    ),
 );
 const formatStructureInfoObj = obj => {
   const out = [];
@@ -102,7 +102,7 @@ let StructureOnProtein = class extends Component {
     const mergedData = mergeData(
       dataInterPro.payload.entries,
       structures,
-      dataStructureInfo.payload
+      dataStructureInfo.payload,
     );
     return (
       <div>
@@ -117,7 +117,7 @@ StructureOnProtein = ['InterPro', 'StructureInfo'].reduce(
       getUrl: getUrlFor(db),
       propNamespace: db,
     })(Index),
-  StructureOnProtein
+  StructureOnProtein,
 );
 
 export default StructureOnProtein;

@@ -47,7 +47,7 @@ const EntriesOnStructure = ({ entries }) =>
           Chain {e.chain}
         </h4>
         <DomainArchitecture protein={e.protein} data={e.data} />
-      </div>
+      </div>,
     )}
   </div>;
 EntriesOnStructure.propTypes = {
