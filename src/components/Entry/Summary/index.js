@@ -131,7 +131,7 @@ class SummaryEntry extends Component {
             <div>
               <h4>Cross References</h4>
             </div>
-            <CrossReferences cross_references={metadata.cross_references} />
+            <CrossReferences xRefs={metadata.cross_references} />
           </section>}
       </div>
     );

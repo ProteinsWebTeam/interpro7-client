@@ -6,25 +6,16 @@ import { createSelector } from 'reselect';
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
+
 import ebiGlobalStyles from 'styles/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 import localStyles from './style.css';
+
 const styles = foundationPartial(ebiGlobalStyles, ipro, localStyles);
 
-const Title = ({ data = null, loading, stuck }) => {
-  let subtitle = 'Classification of protein families';
-  let small1;
-  let small2;
-  if (data !== null) {
-    if (data.metadata) {
-      subtitle = data.metadata.name.name;
-      small1 =
-        data.metadata.source_database.toLowerCase() === 'interpro'
-          ? null
-          : data.metadata.source_database;
-      small2 = data.metadata.accession;
-    }
-  }
+const Title = ({ loading, mainDB, mainAccession, stuck }) => {
+  const subtitle =
+    mainAccession || mainDB || 'Classification of protein families';
 
   return (
     <div
@@ -34,7 +25,12 @@ const Title = ({ data = null, loading, stuck }) => {
       <h1 className={styles('main-title', { stuck })}>
         <Link newTo={{ description: {} }} title="Back to InterPro homepage">
           <div className={styles('logo-text')}>
-            <div className={styles('logo-flex-item')}>
+            <div
+              className={styles('logo-flex-item', 'main-logo', {
+                stuck,
+                loading,
+              })}
+            >
               <svg className={styles('icon')} viewBox="0 0 88 88" width="62">
                 <defs>
                   <mask id="logo-mask">
@@ -73,24 +69,22 @@ const Title = ({ data = null, loading, stuck }) => {
             <div className={styles('logo-flex-item')}>InterPro</div>
           </div>
         </Link>
-        {small1 &&
-          <span>
-            {' '}{small1}
-          </span>}
       </h1>
       <h4 className={styles('hide-for-small-only', 'subtitle', { stuck })}>
         {subtitle}
-        {small2 &&
+        {mainDB &&
+          mainDB !== subtitle &&
           <small>
-            {' '}({small2})
+            {' '}({mainDB})
           </small>}
       </h4>
     </div>
   );
 };
 Title.propTypes = {
-  data: T.object,
   loading: T.bool.isRequired,
+  mainDB: T.string,
+  mainAccession: T.string,
   stuck: T.bool.isRequired,
 };
 
@@ -99,8 +93,15 @@ const mapStateToProps = createSelector(
     state => state.data,
     (data = {}) => Object.values(data).some(datum => datum.loading),
   ),
+  state => state.newLocation.description.mainDB,
+  state => state.newLocation.description.mainAccession,
   state => state.ui.stuck,
-  (loading, stuck) => ({ loading, stuck }),
+  (loading, mainDB, mainAccession, stuck) => ({
+    loading,
+    mainDB,
+    mainAccession,
+    stuck,
+  }),
 );
 
 export default connect(mapStateToProps)(Title);

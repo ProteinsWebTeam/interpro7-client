@@ -89,7 +89,6 @@ const ProteinFastas = connect(
   mapStateToProps,
 )(({ accession, taxId, data: { loading, payload } }) => {
   if (loading || !payload) return null;
-  console.log(payload);
   return (
     <a
       download={`${accession}-${taxId}.fasta`}
