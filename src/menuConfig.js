@@ -51,7 +51,7 @@ export const entities /*: Array<Object> */ = [
     newTo: {
       description: {
         mainType: 'protein',
-        mainDB: 'UniProt',
+        mainDB: 'SwissProt',
       },
     },
     name: 'Protein',

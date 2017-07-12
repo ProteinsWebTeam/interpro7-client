@@ -3,12 +3,14 @@ import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { stringify as qsStringify } from 'query-string';
 
 import Link from 'components/generic/Link';
 import NumberLabel from 'components/NumberLabel';
 
-import { singleEntity } from 'menuConfig';
+import { entities, singleEntity } from 'menuConfig';
 import loadData from 'higherOrder/loadData';
+import description2path from 'utils/processLocation/description2path';
 
 import styles from './style.css';
 import { foundationPartial } from 'styles/foundation';
@@ -24,8 +26,9 @@ const Counter = ({ name, data: { loading, payload } }) => {
       payload.metadata.counters &&
       Number.isFinite(payload.metadata.counters[name])
     )
-  )
+  ) {
     return null;
+  }
   return (
     <span>
       <NumberLabel
@@ -44,8 +47,13 @@ Counter.propTypes = {
   }).isRequired,
 };
 
-const BrowseTabs = ({ mainType, data }) => {
-  const tabs = singleEntity.filter(e => e.type !== mainType);
+const BrowseTabs = ({ mainType, mainAccession, data }) => {
+  let tabs;
+  if (mainAccession) {
+    tabs = singleEntity.filter(e => e.type !== mainType);
+  } else {
+    tabs = entities;
+  }
   return (
     <div className={f('row')}>
       <div className={f('large-12', 'columns')}>
@@ -59,7 +67,7 @@ const BrowseTabs = ({ mainType, data }) => {
                 <Counter name={e.name} data={data} />
                 {e.name}
               </Link>
-            </li>
+            </li>,
           )}
         </ul>
       </div>
@@ -68,6 +76,7 @@ const BrowseTabs = ({ mainType, data }) => {
 };
 BrowseTabs.propTypes = {
   mainType: T.string,
+  mainAccession: T.string,
   data: T.shape({
     loading: T.bool.isRequired,
     payload: T.any,
@@ -76,7 +85,8 @@ BrowseTabs.propTypes = {
 
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainType,
-  mainType => ({ mainType })
+  state => state.newLocation.description.mainAccession,
+  (mainType, mainAccession) => ({ mainType, mainAccession }),
 );
 
 const mapStateToUrl = createSelector(
@@ -84,8 +94,21 @@ const mapStateToUrl = createSelector(
   state => state.newLocation.description.mainType,
   state => state.newLocation.description.mainDB,
   state => state.newLocation.description.mainAccession,
-  ({ protocol, hostname, port, root }, type, db, accession) =>
-    `${protocol}//${hostname}:${port}${root}${type}/${db}/${accession}`
+  state => state.newLocation.search,
+  (
+    { protocol, hostname, port, root },
+    mainType,
+    mainDB,
+    mainAccession,
+    search,
+  ) => {
+    if (!mainAccession) return '';
+    return `${protocol}//${hostname}:${port}${root}${description2path({
+      mainType,
+      mainDB,
+      mainAccession,
+    })}?${qsStringify(search)}`.replace(/\?$/, '');
+  },
 );
 
 export default loadData(mapStateToUrl)(connect(mapStateToProps)(BrowseTabs));

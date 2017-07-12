@@ -17,7 +17,6 @@ import Table, {
 } from 'components/Table';
 
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
-// import BrowseTabs from 'components/BrowseTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 
 import styles from 'styles/blocks.css';

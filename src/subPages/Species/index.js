@@ -246,7 +246,7 @@ const mapStateToUrl = createSelector(
     };
     return `${protocol}//${hostname}:${port}${root}${description2path(
       _description,
-    )}?${qsStringify({ group_by: 'tax_id' })}`.replace(/\?$/, '');
+    )}?${qsStringify({ group_by: 'tax_id' })}`;
   },
 );
 
