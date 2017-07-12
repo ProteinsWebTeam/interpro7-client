@@ -47,7 +47,7 @@ const ida2json = ida => {
             .map(acc => `IPR${`0000000${acc}`.substr(-numDigitsInAccession)}`),
           fragment: m[1].split('-').map(Number),
         };
-      }),
+      })
     ),
   };
   return obj;
@@ -82,6 +82,7 @@ const IDAGraphic = ({ idaObj }) => {
                 y1="0"
                 y2={height}
                 strokeDasharray="4, 2"
+                vectorEffect="non-scaling-stroke"
               />
               <text
                 x={2 + (i + 1) * gapBetwenGuidelines}
@@ -91,7 +92,7 @@ const IDAGraphic = ({ idaObj }) => {
               >
                 {(i + 1) * gapBetwenGuidelines}
               </text>
-            </g>,
+            </g>
           )}
         </g>
         <g>
@@ -111,11 +112,11 @@ const IDAGraphic = ({ idaObj }) => {
                       width={fragment.end - fragment.start}
                       fill={colorHash.hex(domain.accessions[0])}
                       height={10}
-                    />,
+                    />
                   )}
-                </g>,
+                </g>
               )}
-            </g>,
+            </g>
           )}
         </g>
       </svg>
@@ -166,10 +167,10 @@ const DomainArchitectures = ({
                     }}
                   >
                     {' '}{acc}{' '}
-                  </Link>,
+                  </Link>
                 )}{' '}
                 -
-              </span>,
+              </span>
             )}
             <IDAGraphic idaObj={idaObj} />
             {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
@@ -195,18 +196,18 @@ const getUrlFor = createSelector(
     _search.ida = null;
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description,
+      description
     ).replace('domain_architecture', '')}?${qsStringify(_search)}`;
-  },
+  }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation.description,
-  description => ({ description }),
+  description => ({ description })
 );
 
 export default connect(mapStateToProps)(
   loadData({
     getUrl: getUrlFor,
-  })(DomainArchitectures),
+  })(DomainArchitectures)
 );
