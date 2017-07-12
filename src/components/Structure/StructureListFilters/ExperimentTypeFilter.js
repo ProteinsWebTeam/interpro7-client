@@ -31,7 +31,6 @@ class ExperimentTypeFilter extends Component {
       ...this.props.location,
       search: {
         ...this.props.location.search,
-        // eslint-disable-next-line no-undefined
         experiment_type: value === 'ALL' ? undefined : value,
       },
     });

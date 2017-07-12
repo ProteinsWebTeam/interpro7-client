@@ -14,7 +14,6 @@ const cssNext = require('postcss-cssnext');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-// const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const extractTextPlugin = new ExtractTextPlugin({
   filename: 'styles.[contenthash:3].css',
@@ -64,12 +63,14 @@ module.exports = (env = { dev: true }) => {
     output: {
       path: path.resolve('dist'),
       publicPath: websiteURL.pathname || '/interpro7/',
-      filename: env.production
-        ? '[id].[name].[chunkhash:3].js'
-        : '[id].[name].js',
-      chunkFilename: env.production
-        ? '[id].[name].[chunkhash:3].js'
-        : '[id].[name].js',
+      filename:
+        env.production || env.staging
+          ? '[id].[name].[chunkhash:3].js'
+          : '[id].[name].js',
+      chunkFilename:
+        env.production || env.staging
+          ? '[id].[name].[chunkhash:3].js'
+          : '[id].[name].js',
     },
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
@@ -80,7 +81,6 @@ module.exports = (env = { dev: true }) => {
           test: /\.js$/i,
           include: [
             path.resolve('src'),
-            path.resolve('node_modules', 'react-router', 'es'),
             path.resolve('node_modules', 'lodash-es'),
             path.resolve('node_modules', 'color-hash'),
             path.resolve('node_modules', 'timing-functions'),
@@ -88,6 +88,22 @@ module.exports = (env = { dev: true }) => {
           use: [
             {
               loader: 'babel-loader',
+            },
+          ],
+        },
+        {
+          test: /\.js$/i,
+          include: [
+            path.resolve('node_modules', 'data-loader'),
+            path.resolve('node_modules', 'interpro-components'),
+            path.resolve('node_modules', 'pdb-web-components'),
+          ],
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['stage-2'],
+              },
             },
           ],
         },
@@ -115,7 +131,7 @@ module.exports = (env = { dev: true }) => {
           // Use `loader` instead of `use` for now, otherwise breaks
           // https://github.com/webpack/extract-text-webpack-plugin/issues/282
           use:
-            env.production || env.test
+            env.production || env.test || env.staging
               ? ExtractTextPlugin.extract({
                   fallback: 'style-loader',
                   use: [
@@ -154,7 +170,7 @@ module.exports = (env = { dev: true }) => {
           // Use `loader` instead of `use` for now, otherwise breaks
           // https://github.com/webpack/extract-text-webpack-plugin/issues/282
           use:
-            env.production || env.test
+            env.production || env.test || env.staging
               ? ExtractTextPlugin.extract({
                   fallback: 'style-loader',
                   use: [
@@ -190,7 +206,7 @@ module.exports = (env = { dev: true }) => {
           // Use `loader` instead of `use` for now, otherwise breaks
           // https://github.com/webpack/extract-text-webpack-plugin/issues/282
           use:
-            env.production || env.test
+            env.production || env.test || env.staging
               ? ExtractTextPlugin.extract({
                   fallback: 'style-loader',
                   use: [
@@ -264,6 +280,7 @@ module.exports = (env = { dev: true }) => {
       // new webpack.optimize.ModuleConcatenationPlugin(),
       new webpack.LoaderOptionsPlugin({
         options: {
+          minimize: !!env.production,
           debug: !env.production,
           context: __dirname,
         },
@@ -285,13 +302,6 @@ module.exports = (env = { dev: true }) => {
             async: true,
             minChunks: 3,
           }),
-      env.dev
-        ? new HtmlWebpackPlugin({
-            title: pkg.name,
-            template: path.join('.', 'src', 'index.template.html'),
-            inject: false,
-          })
-        : null,
       env.dev ? new webpack.HotModuleReplacementPlugin() : null,
       env.dev
         ? new webpack.DefinePlugin({
@@ -302,26 +312,39 @@ module.exports = (env = { dev: true }) => {
           })
         : null,
       env.dashboard ? new DashboardPlugin(new Dashboard().setData) : null,
-      env.production
+      env.production || env.staging
         ? new FaviconsWebpackPlugin({
             logo: path.join('.', 'images', 'logo', 'logo_75x75.png'),
             prefix: 'icon.[hash:3].',
             minify: true,
           })
         : null,
-      env.production
+      env.production || env.staging || env.dev
         ? new HtmlWebpackPlugin({
             title: pkg.name,
             template: path.join('.', 'src', 'index.template.html'),
             inject: false,
-            minify: {
+            minify: env.dev && {
               removeComments: true,
               collapseWhitespace: true,
               conservativeCollapse: true,
             },
           })
         : null,
-      // env.production ? new UglifyJSPlugin() : null,
+      env.production
+        ? new webpack.optimize.UglifyJsPlugin({
+            beautify: false,
+            mangle: {
+              screw_ie8: true,
+              keep_fnames: true,
+            },
+            compress: {
+              screw_ie8: true,
+            },
+            comments: false,
+          })
+        : null,
+      env.production || env.staging ? extractTextPlugin : null,
     ].filter(x => x), // filter out empty values
   };
 
@@ -334,7 +357,7 @@ module.exports = (env = { dev: true }) => {
   if (env.dev) {
     config.devtool = '#inline-source-map';
   }
-  if (env.test) {
+  if (env.test || env.staging) {
     config.devtool = '#cheap-module-source-map';
   }
 

@@ -18,7 +18,6 @@
 [options]
 module.name_mapper='^\(.*\).css$' -> 'empty/object'
 module.name_mapper='^\(.*\).yml$' -> 'empty/object'
-module.name_mapper='react-redux' -> 'empty/object'
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=src
 munge_underscores=true

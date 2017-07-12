@@ -47,18 +47,18 @@ class SummaryEntry extends Component {
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components');
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then(m => m.InterproHierarchy)
-      ).as('interpro-hierarchy')
+        interproComponents().then(m => m.InterproHierarchy),
+      ).as('interpro-hierarchy'),
     );
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then(m => m.InterproEntry)
-      ).as('interpro-entry')
+        interproComponents().then(m => m.InterproEntry),
+      ).as('interpro-entry'),
     );
     webComponents.push(
       loadWebComponent(() => interproComponents().then(m => m.InterproType)).as(
-        'interpro-type'
-      )
+        'interpro-type',
+      ),
     );
   }
 
@@ -70,7 +70,7 @@ class SummaryEntry extends Component {
       if (e.path[0].classList.contains('link')) {
         e.preventDefault();
         this.props.goToNewLocation(
-          path2description(e.path[0].getAttribute('href'))
+          path2description(e.path[0].getAttribute('href')),
         );
       }
     });
@@ -131,7 +131,7 @@ class SummaryEntry extends Component {
             <div>
               <h4>Cross References</h4>
             </div>
-            <CrossReferences cross_references={metadata.cross_references} />
+            <CrossReferences xRefs={metadata.cross_references} />
           </section>}
       </div>
     );

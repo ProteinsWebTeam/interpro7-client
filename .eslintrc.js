@@ -248,8 +248,6 @@ const rules = {
   'no-trailing-spaces': 1,
   // Disallow use of undeclared variables unless set as global
   'no-undef': 2,
-  // Disallow use of 'undefined' variable
-  'no-undefined': 2,
   // Avoid code that looks like two expressions but is actually one
   'no-unexpected-multiline': 2,
   // Disallow unmodified conditions of loops
@@ -320,8 +318,6 @@ const rules = {
   'react/jsx-curly-spacing': [1, 'never', { allowMultiline: true }],
   // Enforce event handler naming conventions in JSX
   'react/jsx-handler-names': 0,
-  // Validate props indentation in JSX
-  'react/jsx-indent-props': [1, 2],
   // Validate JSX has key prop when in array or iterator
   'react/jsx-key': 2,
   // Prevent usage of .bind() and arrow functions in JSX props
