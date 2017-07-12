@@ -14,7 +14,6 @@ const cssNext = require('postcss-cssnext');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-// const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const extractTextPlugin = new ExtractTextPlugin({
   filename: 'styles.[contenthash:3].css',
@@ -83,6 +82,16 @@ module.exports = (env = { dev: true }) => {
             path.resolve('node_modules', 'lodash-es'),
             path.resolve('node_modules', 'color-hash'),
             path.resolve('node_modules', 'timing-functions'),
+          ],
+          use: [
+            {
+              loader: 'babel-loader',
+            },
+          ],
+        },
+        {
+          test: /\.js$/i,
+          include: [
             path.resolve('node_modules', 'data-loader'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'pdb-web-components'),
@@ -90,6 +99,9 @@ module.exports = (env = { dev: true }) => {
           use: [
             {
               loader: 'babel-loader',
+              options: {
+                presets: ['stage-2'],
+              },
             },
           ],
         },
