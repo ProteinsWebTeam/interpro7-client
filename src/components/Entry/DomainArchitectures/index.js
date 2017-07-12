@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: [1, {ignore: [0,1,2,3, 10]}]*/
 import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -33,6 +34,7 @@ const groupDomains = domains => {
 
 const ida2json = ida => {
   const idaParts = ida.split('#');
+  const numDigitsInAccession = 6;
   const obj = {
     length: Number(idaParts[0].split('/')[0]),
     domains: groupDomains(
@@ -42,7 +44,7 @@ const ida2json = ida => {
           id: m[0],
           accessions: m[0]
             .split('&')
-            .map(acc => `IPR${`0000000${acc}`.substr(-6)}`),
+            .map(acc => `IPR${`0000000${acc}`.substr(-numDigitsInAccession)}`),
           fragment: m[1].split('-').map(Number),
         };
       }),
@@ -57,6 +59,7 @@ const IDAGraphic = ({ idaObj }) => {
   };
   const height =
     idaObj.domains.length * options.trackHeight + options.trackHeight / 2;
+  const legendHeight = options.trackHeight / 3;
   let gapBetwenGuidelines = Math.pow(10, `${idaObj.length}`.length - 1);
   let numberOfGuides = Math.trunc(idaObj.length / gapBetwenGuidelines);
   if (numberOfGuides < 2) {
@@ -71,7 +74,7 @@ const IDAGraphic = ({ idaObj }) => {
         viewBox={`0 0 ${idaObj.length} ${height}`}
       >
         <g className={style.guidelines}>
-          {Array.apply(null, { length: numberOfGuides }).map((x, i) =>
+          {Array(...{ length: numberOfGuides }).map((x, i) =>
             <g key={i}>
               <line
                 x1={(i + 1) * gapBetwenGuidelines}
@@ -82,8 +85,8 @@ const IDAGraphic = ({ idaObj }) => {
               />
               <text
                 x={2 + (i + 1) * gapBetwenGuidelines}
-                y={options.trackHeight / 3}
-                style={{ fontSize: options.trackHeight / 3 }}
+                y={legendHeight}
+                style={{ fontSize: legendHeight }}
                 fill="black"
               >
                 {(i + 1) * gapBetwenGuidelines}
@@ -119,6 +122,9 @@ const IDAGraphic = ({ idaObj }) => {
     </div>
   );
 };
+IDAGraphic.propTypes = {
+  idaObj: T.object.isRequired,
+};
 
 const DomainArchitectures = ({
   data: { loading, payload },
@@ -150,6 +156,7 @@ const DomainArchitectures = ({
               <span key={d.accessions.join('|')}>
                 {d.accessions.map(acc =>
                   <Link
+                    key={acc}
                     newTo={{
                       description: {
                         mainType: 'entry',
@@ -165,12 +172,16 @@ const DomainArchitectures = ({
               </span>,
             )}
             <IDAGraphic idaObj={idaObj} />
-            {/*<pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
+            {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
           </div>
         );
       })};
     </div>
   );
+};
+DomainArchitectures.propTypes = {
+  data: T.object.isRequired,
+  description: T.object.isRequired,
 };
 
 const getUrlFor = createSelector(

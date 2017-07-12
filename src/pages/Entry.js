@@ -203,8 +203,8 @@ class List extends Component {
             </Column>
             {mainDB === 'InterPro'
               ? <Column
-                  accessKey="member_databases"
-                  renderer={(mdb /*: string */) =>
+                accessKey="member_databases"
+                renderer={(mdb /*: string */) =>
                     Object.keys(mdb).map(db =>
                       <div
                         key={db}
@@ -240,8 +240,8 @@ class List extends Component {
                   Signatures <span className={f('label')}>Sign ID</span>
                 </Column>
               : <Column
-                  accessKey="integrated"
-                  renderer={(accession /*: string */) =>
+                accessKey="integrated"
+                renderer={(accession /*: string */) =>
                     <Link
                       newTo={{
                         description: {
