@@ -24,7 +24,7 @@ const ObjectToList = ({ obj, component: Component }) =>
       .filter(
         ([_, v]) =>
           // value !== 0 or, if object, contains values
-          v && (typeof v !== 'object' || Object.keys(v).length),
+          v && (typeof v !== 'object' || Object.keys(v).length)
       )
       .map(([k, value]) =>
         <li key={k}>
@@ -34,7 +34,7 @@ const ObjectToList = ({ obj, component: Component }) =>
                 <ObjectToList obj={value} component={Component} />
               </span>
             : <Component value={value} k={k} />}
-        </li>,
+        </li>
       )}
   </ul>;
 ObjectToList.propTypes = {
@@ -71,7 +71,7 @@ _RelatedSimple.propTypes = {
 const mapStateToPropsSimple = createSelector(
   state => state.newLocation.description.mainType,
   state => state.newLocation.description.focusType,
-  (mainType, focusType) => ({ mainType, focusType }),
+  (mainType, focusType) => ({ mainType, focusType })
 );
 const RelatedSimple = connect(mapStateToPropsSimple)(_RelatedSimple);
 
@@ -139,7 +139,7 @@ const _RelatedAdvanced = ({
           ...prev,
           { [mainType]: mainData, [focusType]: secondaryData, coordinates },
         ],
-        [],
+        []
       )}
       isStale={isStale}
       {...primariesAndSecondaries[mainType][focusType]}
@@ -158,7 +158,7 @@ const mapStateToPropsAdvanced = createSelector(
   state => state.newLocation.description.mainType,
   state => state.newLocation.description.focusType,
   state => state.newLocation.description.focusDB,
-  (mainType, focusType, focusDB) => ({ mainType, focusType, focusDB }),
+  (mainType, focusType, focusDB) => ({ mainType, focusType, focusDB })
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
 
@@ -167,6 +167,7 @@ const getReversedUrl = createSelector(
   state => state.newLocation.description,
   state => state.newLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
+    console.log('reversing');
     const newDesc = Object.entries(description).reduce((acc, [key, value]) => {
       let newKey = key;
       if (key.startsWith('focus')) newKey = newKey.replace('focus', 'main');
@@ -177,17 +178,17 @@ const getReversedUrl = createSelector(
     }, {});
     const s = search || {};
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      newDesc,
+      newDesc
     )}?${qsStringify(s)}`;
-  },
+  }
 );
 const mapStateToPropsAdvancedQuery = createSelector(
   state => state.newLocation.description.mainType,
-  mainType => ({ mainType }),
+  mainType => ({ mainType })
 );
 const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
   loadData(
-    getReversedUrl,
+    getReversedUrl
   )(({ data: { payload, loading }, secondaryData, ...props }) => {
     if (loading) return <div>Loading...</div>;
     const _secondaryData = payload.results.map(x => {
@@ -211,7 +212,7 @@ const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
         {...props}
       />
     );
-  }),
+  })
 );
 
 const Related = ({ data, focusType, ...props }) => {
@@ -239,7 +240,7 @@ Related.propTypes = {
 };
 const mapStateToPropsDefault = createSelector(
   state => state.newLocation.description.focusType,
-  focusType => ({ focusType }),
+  focusType => ({ focusType })
 );
 
 export default connect(mapStateToPropsDefault)(Related);

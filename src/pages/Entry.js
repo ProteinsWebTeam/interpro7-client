@@ -6,6 +6,7 @@ import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
+import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
 import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
 
@@ -56,7 +57,7 @@ const Overview = ({
             >
               {name} ({count})
             </Link>
-          </li>,
+          </li>
         )}
       </ul>
       <ul className={styles.card}>
@@ -95,8 +96,8 @@ class List extends Component {
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+        m => m.InterproType
+      )
     ).as('interpro-type');
   }
 
@@ -165,7 +166,7 @@ class List extends Component {
               accessKey="name"
               renderer={(
                 name /*: string */,
-                { accession } /*: {accession: string} */,
+                { accession } /*: {accession: string} */
               ) =>
                 <Link
                   newTo={location => ({
@@ -231,9 +232,9 @@ class List extends Component {
                             >
                               {accession}
                             </Link>
-                          </span>,
+                          </span>
                         )}
-                      </div>,
+                      </div>
                     )}
                 >
                   Signatures <span className={f('label')}>Sign ID</span>
@@ -270,7 +271,7 @@ class List extends Component {
                     }}
                   >
                     {go.name ? go.name : 'None'}
-                  </div>,
+                  </div>
                 )}
             >
               GO Terms
@@ -283,22 +284,22 @@ class List extends Component {
 }
 
 const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-summary" */ 'components/Entry/Summary'),
+  import(/* webpackChunkName: "entry-summary" */ 'components/Entry/Summary')
 );
 const StructureAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
+  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure')
 );
 const ProteinAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein'),
+  import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein')
 );
 const DomainAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
+  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture')
 );
 
 const SchemaOrgData = createAsyncComponent(
   () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   () => null,
-  'SchemaOrgData',
+  'SchemaOrgData'
 );
 
 const pages = new Set([
@@ -341,14 +342,14 @@ Summary.propTypes = {
 
 const dbs = new RegExp(
   `(${memberDB.map(db => db.apiType).filter(db => db).join('|')})`,
-  'i',
+  'i'
 );
 const dbAccs = new RegExp(
   `(${memberDB
     .map(db => db.accession)
     .filter(db => db)
     .join('|')}|IPR[0-9]{6})`,
-  'i',
+  'i'
 );
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
@@ -398,4 +399,8 @@ Entry.propTypes = {
     payload: T.object,
   }).isRequired,
 };
-export default loadData()(Entry);
+export default loadData((...args) =>
+  getUrlForApi(...args)
+    .replace('species', '')
+    .replace('domain_architecture', '')
+)(Entry);
