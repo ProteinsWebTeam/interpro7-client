@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
+import AnimatedEntry from 'components/AnimatedEntry';
 import NumberLabel from 'components/NumberLabel';
 import Link from 'components/generic/Link';
 import { createSelector } from 'reselect';
@@ -31,6 +32,35 @@ const colors = {
   InterPro: '#2199E8',
 };
 
+class MemberDBTab extends PureComponent {
+  static propTypes = {
+    newTo: T.oneOfType([T.object, T.func]).isRequired,
+    name: T.string.isRequired,
+    value: T.number.isRequired,
+  };
+
+  render() {
+    const { newTo, name, value } = this.props;
+    const style = { color: colors[name] ? colors[name] : null };
+    return (
+      <li className={f('tabs-title')}>
+        <Link
+          newTo={newTo}
+          activeClass={f('is-active', 'is-active-tab')}
+          style={style}
+        >
+          <span>
+            {name}&nbsp;
+          </span>
+          <NumberLabel value={value} className={f('number-label')} />
+        </Link>
+      </li>
+    );
+  }
+}
+
+let tabs;
+
 class MemberDBTabs extends Component {
   static propTypes = {
     data: T.shape({
@@ -49,8 +79,8 @@ class MemberDBTabs extends Component {
     this.state = { collapsed: false };
   }
 
-  _handleExpansion = ({ collapsed }) => {
-    this.setState({ collapsed: !collapsed });
+  _handleExpansion = () => {
+    this.setState(({ collapsed }) => ({ collapsed: !collapsed }));
   };
 
   render() {
@@ -60,8 +90,7 @@ class MemberDBTabs extends Component {
     } = this.props;
     const { collapsed } = this.state;
     const mainOrFocus = mainType === 'entry' ? 'main' : 'focus';
-    let tabs;
-    if (!loading) {
+    if (!loading && !tabs) {
       tabs = [
         {
           name: 'InterPro',
@@ -101,27 +130,12 @@ class MemberDBTabs extends Component {
     return (
       <div>
         <button onClick={this._handleExpansion} className={f('expand-button')}>
-          {this.state.collapsed ? '≫' : '≪'}
+          {collapsed ? '≫' : '≪'}
         </button>
-        <ul className={f('vertical', 'tabs', { collapsed })}>
-          {(tabs || []).map(e =>
-            <li className={f('tabs-title')} key={e.name}>
-              <Link
-                newTo={e.newTo}
-                activeClass={f('is-active', 'is-active-tab')}
-                style={{
-                  display: 'flex',
-                  borderLeftColor: colors[e.name] ? colors[e.name] : null,
-                }}
-              >
-                <span>
-                  {e.name}&nbsp;
-                </span>
-                <NumberLabel value={e.value} className={f('number-label')} />
-              </Link>
-            </li>
-          )}
-        </ul>
+        {tabs &&
+          <AnimatedEntry className={f('vertical', 'tabs', { collapsed })}>
+            {tabs.map(e => <MemberDBTab key={e.name} {...e} />)}
+          </AnimatedEntry>}
       </div>
     );
   }
@@ -129,14 +143,13 @@ class MemberDBTabs extends Component {
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 const getMemberDBUrl = createSelector(
   state => state.settings.api,
-  state => state.newLocation.search,
   ({ protocol, hostname, port, root }) =>
-    `${protocol}//${hostname}:${port}${root}/entry`
+    `${protocol}//${hostname}:${port}${root}/entry`,
 );
 
 export default connect(mapStateToProps)(loadData(getMemberDBUrl)(MemberDBTabs));

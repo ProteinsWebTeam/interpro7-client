@@ -13,7 +13,7 @@ import ready from 'utils/ready';
 
 const schemaOrgManager = (...args) =>
   import(/* webpackChunkName: "schemaOrg" */ 'schema_org').then(
-    m => new m.Manager(...args)
+    m => new m.Manager(...args),
   );
 
 const main = async () => {
@@ -24,7 +24,8 @@ const main = async () => {
 
   // If “PERF” is defined in the environment, activate “why-did-you-update” tool
   if (DEV && PERF) {
-    require('why-did-you-update').whyDidYouUpdate(React, { include: /.*/ });
+    // if (DEV) {
+    // require('why-did-you-update').whyDidYouUpdate(React, { include: /.*/ });
   }
 
   // Instantiates schema.org manager

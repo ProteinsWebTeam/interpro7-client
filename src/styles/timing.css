@@ -4,4 +4,6 @@
   --timing-medium: 500ms;
   --timing-slow: 1s;
   --timing-really-slow: 2s;
+
+  --timing-fn-spring: cubic-bezier(0.43, 1.34, 0.7, 1.15);
 }

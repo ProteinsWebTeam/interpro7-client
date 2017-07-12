@@ -6,25 +6,49 @@
   padding-bottom: 1em;
 }
 
-.tabs-title,
-.tabs-title a {
-  transition-property: border, color, transform;
-  transition-duration: var(--timing-fast);
-}
 .tabs-title a {
   /*border: 2px solid transparent;*/
   border-right: 2px solid #7ba3b6;
-  border-left: 3px solid transparent;
+  border-left: 3px solid currentColor;
   /*border-radius: 5px 0 0 5px;*/
   font-size: 1rem;
   padding: .7rem .7rem;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: currentColor;
+    transition: transform var(--timing-medium) var(--timing-fn-spring);
+    transform: translateX(calc(100% - 1px));
+  }
+
+  &:hover::before {
+    transform: translateX(calc(100% - 1ch));
+  }
+
+  & > span {
+    color: initial;
+  }
 }
 
 .tabs-title a.is-active-tab {
   background: white;
-  border: 2px solid #7ba3b6;
-  border-right: 2px solid transparent;
-  border-left-width: 14px;
+  //border: 2px solid #7ba3b6;
+  //border-right: 2px solid transparent;
+  //border-left-width: 14px;
+
+  &::before,
+  &:hover::before {
+    transition-delay: var(--timing-medium);
+    transform: translateX(calc(-100% + 1ch));
+  }
 }
 
 .tabs-title a:hover {
