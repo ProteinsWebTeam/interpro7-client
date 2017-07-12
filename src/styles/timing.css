@@ -3,4 +3,5 @@
   --timing-fast: 250ms;
   --timing-medium: 500ms;
   --timing-slow: 1s;
+  --timing-really-slow: 2s;
 }

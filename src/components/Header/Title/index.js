@@ -25,12 +25,7 @@ const Title = ({ loading, mainDB, mainAccession, stuck }) => {
       <h1 className={styles('main-title', { stuck })}>
         <Link newTo={{ description: {} }} title="Back to InterPro homepage">
           <div className={styles('logo-text')}>
-            <div
-              className={styles('logo-flex-item', 'main-logo', {
-                stuck,
-                loading,
-              })}
-            >
+            <div className={styles('logo-flex-item', 'main-logo', { stuck })}>
               <svg className={styles('icon')} viewBox="0 0 88 88" width="62">
                 <defs>
                   <mask id="logo-mask">
@@ -50,6 +45,7 @@ const Title = ({ loading, mainDB, mainAccession, stuck }) => {
                       height="18"
                       width="38"
                       fill="black"
+                      className={styles('domain', { loading })}
                     />
                   </mask>
                 </defs>
@@ -103,5 +99,4 @@ const mapStateToProps = createSelector(
     stuck,
   }),
 );
-
 export default connect(mapStateToProps)(Title);
