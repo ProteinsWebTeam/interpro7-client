@@ -9,6 +9,8 @@ import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData';
 
+import { toPlural } from 'utils/pages';
+
 import { foundationPartial } from 'styles/foundation';
 import styles from './style.css';
 
@@ -58,6 +60,18 @@ class MemberDBTab extends PureComponent {
     );
   }
 }
+const entryIsMain = ({ description: { mainType } }) => mainType === 'entry';
+const mainOrFocus = location => (entryIsMain(location) ? 'main' : 'focus');
+const getValueFor = ({ entries }, mainType, db) => {
+  let extract;
+  if (db === 'interpro') {
+    extract = entries.interpro;
+  } else {
+    extract = entries.member_databases[db];
+  }
+  if (mainType === 'entry') return extract;
+  return extract[toPlural(mainType)];
+};
 
 let tabs;
 
@@ -67,11 +81,7 @@ class MemberDBTabs extends Component {
       loading: T.bool.isRequired,
       payload: T.object,
     }),
-    location: T.shape({
-      description: T.shape({
-        mainType: T.string,
-      }).isRequired,
-    }).isRequired,
+    mainType: T.string,
   };
 
   constructor(props) {
@@ -84,13 +94,9 @@ class MemberDBTabs extends Component {
   };
 
   render() {
-    const {
-      data: { loading, payload },
-      location: { description: { mainType } },
-    } = this.props;
+    const { data: { loading, payload }, mainType } = this.props;
     const { collapsed } = this.state;
-    const mainOrFocus = mainType === 'entry' ? 'main' : 'focus';
-    if (!loading && !tabs) {
+    if (!loading) {
       tabs = [
         {
           name: 'InterPro',
@@ -99,13 +105,13 @@ class MemberDBTabs extends Component {
               ...location,
               description: {
                 ...location.description,
-                [`${mainOrFocus}Type`]: 'entry',
-                [`${mainOrFocus}DB`]: 'InterPro',
+                [`${mainOrFocus(location)}Type`]: 'entry',
+                [`${mainOrFocus(location)}DB`]: 'InterPro',
                 mainIntegration: null,
               },
             };
           },
-          value: payload.entries.interpro,
+          value: getValueFor(payload, mainType, 'interpro'),
         },
         ...Object.keys(payload.entries.member_databases).sort().map(e => ({
           name: e,
@@ -114,8 +120,8 @@ class MemberDBTabs extends Component {
               ...location,
               description: {
                 ...location.description,
-                [`${mainOrFocus}Type`]: 'entry',
-                [`${mainOrFocus}DB`]: e,
+                [`${mainOrFocus(location)}Type`]: 'entry',
+                [`${mainOrFocus(location)}DB`]: e,
               },
               search: {
                 ...location.search,
@@ -123,7 +129,7 @@ class MemberDBTabs extends Component {
               },
             };
           },
-          value: payload.entries.member_databases[e],
+          value: getValueFor(payload, mainType, e),
         })),
       ];
     }
@@ -142,14 +148,21 @@ class MemberDBTabs extends Component {
 }
 
 const mapStateToProps = createSelector(
-  state => state.newLocation,
-  location => ({ location }),
+  state => state.newLocation.description.mainType,
+  mainType => ({ mainType }),
 );
 
 const getMemberDBUrl = createSelector(
   state => state.settings.api,
-  ({ protocol, hostname, port, root }) =>
-    `${protocol}//${hostname}:${port}${root}/entry`,
+  state => state.newLocation,
+  ({ protocol, hostname, port, root }, location) => {
+    let output = `${protocol}//${hostname}:${port}${root}/entry`;
+    if (!entryIsMain(location)) {
+      output += `/${location.description.mainType}/${location.description
+        .mainDB}`;
+    }
+    return output;
+  },
 );
 
 export default connect(mapStateToProps)(loadData(getMemberDBUrl)(MemberDBTabs));

@@ -1,32 +1,36 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
-import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
+import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
 
-import Table, {Column, SearchBox, PageSizeSelector, Exporter}
-  from 'components/Table';
+import Table, {
+  Column,
+  SearchBox,
+  PageSizeSelector,
+  Exporter,
+} from 'components/Table';
 
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
 
-import {PDBeLink} from 'components/ExtLink';
+import { PDBeLink } from 'components/ExtLink';
 import StructureListFilters from 'components/Structure/StructureListFilters';
 
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
-const EntryAsync = createAsyncComponent(() => import(
-  /* webpackChunkName: "entry-subpage" */'subPages/Entry'
-));
-const ProteinAsync = createAsyncComponent(() => import(
-  /* webpackChunkName: "protein-subpage" */'subPages/Protein'
-));
-const SummaryAsync = createAsyncComponent(() => import(
-  /* webpackChunkName: "structure-summary" */'components/Structure/Summary'
-));
+const EntryAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
+);
+const ProteinAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein'),
+);
+const SummaryAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'),
+);
 
 const propTypes = {
   data: T.shape({
@@ -40,26 +44,28 @@ const propTypes = {
   }).isRequired,
 };
 
-const Overview = ({data: {payload, loading}}) => {
+const Overview = ({ data: { payload, loading } }) => {
   if (loading) return <div>Loading…</div>;
   return (
     <ul className={styles.card}>
-      {Object.entries(payload.structures || {}).map(([name, count]) => (
+      {Object.entries(payload.structures || {}).map(([name, count]) =>
         <li key={name}>
-          <Link newTo={{description: {mainType: 'structure', mainDB: name}}}>
+          <Link
+            newTo={{ description: { mainType: 'structure', mainDB: name } }}
+          >
             {name} ({count})
           </Link>
-        </li>
-      ))}
+        </li>,
+      )}
     </ul>
   );
 };
 Overview.propTypes = propTypes;
 
 const List = ({
-  data: {payload, loading, status},
+  data: { payload, loading, status },
   isStale,
-  location: {search},
+  location: { search },
 }) => {
   let _payload = payload;
   const HTTP_OK = 200;
@@ -72,10 +78,10 @@ const List = ({
   return (
     <div className={f('row')}>
       <div className={f('shrink', 'columns')}>
-        <MemberDBTabs/>
+        <MemberDBTabs />
       </div>
       <div className={f('columns')}>
-        <StructureListFilters /> <hr/>
+        <StructureListFilters /> <hr />
         <Table
           dataTable={_payload.results}
           isStale={isStale}
@@ -87,25 +93,23 @@ const List = ({
           <Exporter>
             <ul>
               <li>
-                <a
-                  href={`${''}&format=json`}
-                  download="structures.json"
-                >
+                <a href={`${''}&format=json`} download="structures.json">
                   JSON
-                </a><br/></li>
-              <li><a href={''}>Open in API web view</a></li>
+                </a>
+                <br />
+              </li>
+              <li>
+                <a href={''}>Open in API web view</a>
+              </li>
             </ul>
           </Exporter>
-          <PageSizeSelector/>
-          <SearchBox
-            search={search.search}
-            pathname={''}
-          >
+          <PageSizeSelector />
+          <SearchBox search={search.search} pathname={''}>
             Search structures
           </SearchBox>
           <Column
             accessKey="accession"
-            renderer={(accession/*: string */) => (
+            renderer={(accession /*: string */) =>
               <Link
                 newTo={location => ({
                   ...location,
@@ -117,46 +121,42 @@ const List = ({
                 })}
               >
                 {accession}
-              </Link>
-            )}
+              </Link>}
           >
             Accession
           </Column>
           <Column
             accessKey="name"
-            renderer={
-              (name/*: string */, {accession}/*: {accession: string} */) => (
-                <Link
-                  newTo={location => ({
-                    ...location,
-                    description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: accession,
-                    },
-                  })}
-                >
-                  {name}
-                </Link>
-              )
-            }
+            renderer={(
+              name /*: string */,
+              { accession } /*: {accession: string} */,
+            ) =>
+              <Link
+                newTo={location => ({
+                  ...location,
+                  description: {
+                    mainType: location.description.mainType,
+                    mainDB: location.description.mainDB,
+                    mainAccession: accession,
+                  },
+                })}
+              >
+                {name}
+              </Link>}
           >
             Name
           </Column>
           <Column
             accessKey="accession"
             defaultKey="structureAccession"
-            renderer={(accession/*: string */) => (
+            renderer={(accession /*: string */) =>
               <PDBeLink id={accession}>
                 <img
-                  src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${
-                    accession
-                  }/traces.jpg`}
+                  src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
                   alt="structure image"
-                  style={{maxWidth: '33%'}}
+                  style={{ maxWidth: '33%' }}
                 />
-              </PDBeLink>
-            )}
+              </PDBeLink>}
           >
             Structure
           </Column>
@@ -167,9 +167,8 @@ const List = ({
 };
 List.propTypes = propTypes;
 
-const SummaryComponent = ({data: {payload}, location}) => (
-  <SummaryAsync data={payload} location={location} />
-);
+const SummaryComponent = ({ data: { payload }, location }) =>
+  <SummaryAsync data={payload} location={location} />;
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.any,
@@ -178,18 +177,17 @@ SummaryComponent.propTypes = {
 };
 
 const pages = new Set([
-  {value: 'entry', component: EntryAsync},
-  {value: 'protein', component: ProteinAsync},
+  { value: 'entry', component: EntryAsync },
+  { value: 'protein', component: ProteinAsync },
 ]);
 const Summary = props => {
-  const {data: {loading}} = props;
+  const { data: { loading } } = props;
   if (loading) return <div>Loading…</div>;
   return (
     <Switch
       {...props}
-      locationSelector={
-        l => l.description.mainDetail || l.description.focusType
-      }
+      locationSelector={l =>
+        l.description.mainDetail || l.description.focusType}
       indexRoute={SummaryComponent}
       childRoutes={pages}
     />
@@ -203,31 +201,27 @@ Summary.propTypes = {
 };
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = (props) => (
+const InnerSwitch = props =>
   <Switch
     {...props}
-    locationSelector={
-      l => l.description.mainAccession || l.description.focusType
-    }
+    locationSelector={l =>
+      l.description.mainAccession || l.description.focusType}
     indexRoute={List}
-    childRoutes={[
-      {value: /^[a-z\d]{4}$/i, component: Summary},
-    ]}
+    childRoutes={[{ value: /^[a-z\d]{4}$/i, component: Summary }]}
     catchAll={List}
-  />
-);
+  />;
 
 class Structure extends PureComponent {
   render() {
     return (
-      <main>
+      <div>
         <Switch
           {...this.props}
           locationSelector={l => l.description.mainDB}
           indexRoute={Overview}
           catchAll={InnerSwitch}
         />
-      </main>
+      </div>
     );
   }
 }

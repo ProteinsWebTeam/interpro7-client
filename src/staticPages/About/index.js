@@ -1,8 +1,4 @@
 // @flow
 import React from 'react';
 
-export default () => (
-  <main>
-    About page
-  </main>
-);
+export default () => <section>About page</section>;

@@ -5,12 +5,16 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
-import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
-import {getUrlForApi} from 'higherOrder/loadData/defaults';
+import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import { getUrlForApi } from 'higherOrder/loadData/defaults';
 import ColorHash from 'color-hash/lib/color-hash';
 
-import Table, {Column, SearchBox, PageSizeSelector, Exporter}
-  from 'components/Table';
+import Table, {
+  Column,
+  SearchBox,
+  PageSizeSelector,
+  Exporter,
+} from 'components/Table';
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 
@@ -39,23 +43,23 @@ const defaultPayload = {
   },
 };
 
-const Overview = ({data: {payload = defaultPayload}}) => (
+const Overview = ({ data: { payload = defaultPayload } }) =>
   <ul className={styles.card}>
-    {Object.entries(payload.proteins || {}).map(([name, count]) => (
+    {Object.entries(payload.proteins || {}).map(([name, count]) =>
       <li key={name}>
-        <Link newTo={{description: {mainType: 'protein', mainDB: name}}}>
-          {name}{Number.isFinite(count) ? ` (${count})` : ''}
+        <Link newTo={{ description: { mainType: 'protein', mainDB: name } }}>
+          {name}
+          {Number.isFinite(count) ? ` (${count})` : ''}
         </Link>
-      </li>
-    ))}
-  </ul>
-);
+      </li>,
+    )}
+  </ul>;
 Overview.propTypes = propTypes;
 
 const List = ({
-  data: {payload, loading, status},
+  data: { payload, loading, status },
   isStale,
-  location: {search},
+  location: { search },
 }) => {
   let _payload = payload;
   const HTTP_OK = 200;
@@ -65,16 +69,18 @@ const List = ({
       results: [],
     };
   }
-  const maxLength = _payload.results.reduce((max, result) => (
-    Math.max(max, (result.metadata || result).length)
-  ), 0);
+  const maxLength = _payload.results.reduce(
+    (max, result) => Math.max(max, (result.metadata || result).length),
+    0,
+  );
   return (
     <div className={f('row')}>
       <div className={f('shrink', 'columns')}>
-        <MemberDBTabs/>
+        <MemberDBTabs />
       </div>
       <div className={f('columns')}>
-        <ProteinListFilters /><hr/>
+        <ProteinListFilters />
+        <hr />
         <Table
           dataTable={_payload.results}
           isStale={isStale}
@@ -86,25 +92,23 @@ const List = ({
           <Exporter>
             <ul>
               <li>
-                <a
-                  href={`${''}&format=json`}
-                  download="proteins.json"
-                >
+                <a href={`${''}&format=json`} download="proteins.json">
                   JSON
-                </a><br/></li>
-              <li><a href={`${''}`}>Open in API web view</a></li>
+                </a>
+                <br />
+              </li>
+              <li>
+                <a href={`${''}`}>Open in API web view</a>
+              </li>
             </ul>
           </Exporter>
           <PageSizeSelector />
-          <SearchBox
-            search={search.search}
-            pathname={''}
-          >
+          <SearchBox search={search.search} pathname={''}>
             Search proteins
           </SearchBox>
           <Column
             accessKey="accession"
-            renderer={(accession/*: string */) => (
+            renderer={(accession /*: string */) =>
               <Link
                 newTo={location => ({
                   ...location,
@@ -116,35 +120,34 @@ const List = ({
                 })}
               >
                 {accession}
-              </Link>
-            )}
+              </Link>}
           >
             Accession
           </Column>
           <Column
             accessKey="name"
-            renderer={
-              (name/*: string */, {accession}/*: {accession: string} */) => (
-                <Link
-                  newTo={location => ({
-                    ...location,
-                    description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: accession,
-                    },
-                  })}
-                >
-                  {name}
-                </Link>
-              )
-            }
+            renderer={(
+              name /*: string */,
+              { accession } /*: {accession: string} */,
+            ) =>
+              <Link
+                newTo={location => ({
+                  ...location,
+                  description: {
+                    mainType: location.description.mainType,
+                    mainDB: location.description.mainDB,
+                    mainAccession: accession,
+                  },
+                })}
+              >
+                {name}
+              </Link>}
           >
             Name
           </Column>
           <Column
             accessKey="source_database"
-            renderer={(db/*: string */) => (
+            renderer={(db /*: string */) =>
               <Link
                 newTo={location => ({
                   ...location,
@@ -155,14 +158,13 @@ const List = ({
                 })}
               >
                 {db}
-              </Link>
-            )}
+              </Link>}
           >
             Source Database
           </Column>
           <Column
             accessKey="length"
-            renderer={(length/*: number */, row) => (
+            renderer={(length /*: number */, row) =>
               <div
                 title={`${length} amino-acids`}
                 style={{
@@ -177,8 +179,7 @@ const List = ({
                 }}
               >
                 {length} amino-acids
-              </div>
-            )}
+              </div>}
           >
             Length
           </Column>
@@ -189,22 +190,21 @@ const List = ({
 };
 List.propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(() => import(
-  /* webpackChunkName: "protein-summary" */'components/Protein/Summary'
-));
-const StructureAsync = createAsyncComponent(() => import(
-  /* webpackChunkName: "structure-subpage" */'subPages/Structure'
-));
-const EntryAsync = createAsyncComponent(() => import(
-  /* webpackChunkName: "entry-subpage" */'subPages/Entry'
-));
-const DomainAsync = createAsyncComponent(() => import(
-  /* webpackChunkName: "entry-subpage" */'subPages/DomainArchitecture'
-));
-
-const SummaryComponent = ({data: {payload}, location}) => (
-  <SummaryAsync data={payload} location={location} />
+const SummaryAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'),
 );
+const StructureAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
+);
+const EntryAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
+);
+const DomainAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
+);
+
+const SummaryComponent = ({ data: { payload }, location }) =>
+  <SummaryAsync data={payload} location={location} />;
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.any,
@@ -213,20 +213,19 @@ SummaryComponent.propTypes = {
 };
 
 const pages = new Set([
-  {value: 'structure', component: StructureAsync},
-  {value: 'entry', component: EntryAsync},
-  {value: 'domain_architecture', component: DomainAsync},
+  { value: 'structure', component: StructureAsync },
+  { value: 'entry', component: EntryAsync },
+  { value: 'domain_architecture', component: DomainAsync },
 ]);
 const Summary = props => {
-  const {data: {loading, payload}} = props;
+  const { data: { loading, payload } } = props;
   if (loading || !payload.metadata) return <div>Loading…</div>;
   return (
     <div>
       <Switch
         {...props}
-        locationSelector={
-          l => l.description.mainDetail || l.description.focusType
-        }
+        locationSelector={l =>
+          l.description.mainDetail || l.description.focusType}
         indexRoute={SummaryComponent}
         childRoutes={pages}
       />
@@ -240,35 +239,28 @@ Summary.propTypes = {
   location: T.object.isRequired,
 };
 
-const acc = (
-  /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i
-);
+const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = (props) => (
+const InnerSwitch = props =>
   <Switch
     {...props}
-    locationSelector={
-      l => l.description.mainAccession || l.description.focusType
-    }
+    locationSelector={l =>
+      l.description.mainAccession || l.description.focusType}
     indexRoute={List}
-    childRoutes={[
-      {value: acc, component: Summary},
-    ]}
+    childRoutes={[{ value: acc, component: Summary }]}
     catchAll={List}
-  />
-);
+  />;
 
-const Protein = (props) => (
-  <main>
+const Protein = props =>
+  <div>
     <Switch
       {...props}
       locationSelector={l => l.description.mainDB}
       indexRoute={Overview}
       catchAll={InnerSwitch}
     />
-  </main>
-);
+  </div>;
 
 export default loadData((...args) =>
-  getUrlForApi(...args).replace('domain_architecture', 'entry')
+  getUrlForApi(...args).replace('domain_architecture', 'entry'),
 )(Protein);

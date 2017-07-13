@@ -378,7 +378,7 @@ const schemaProcessData = data => ({
 });
 
 const Entry = props =>
-  <main>
+  <div>
     {props.data.payload &&
       props.data.payload.accession &&
       <SchemaOrgData
@@ -391,7 +391,7 @@ const Entry = props =>
       indexRoute={Overview}
       catchAll={InnerSwitch}
     />
-  </main>;
+  </div>;
 Entry.propTypes = {
   data: T.shape({
     payload: T.object,

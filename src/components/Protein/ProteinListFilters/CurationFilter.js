@@ -92,7 +92,7 @@ class CurationFilter extends Component {
   }
 }
 
-const getUrlFor = createSelector(
+const getUrl = createSelector(
   state => state.settings.api,
   state => state.newLocation.description,
   state => state.newLocation.search,
@@ -105,7 +105,7 @@ const getUrlFor = createSelector(
     _search.group_by = 'source_database';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description,
+      _description,
     )}?${qsStringify(_search)}`;
   },
 );
@@ -116,7 +116,5 @@ const mapStateToProps = createSelector(
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  loadData({
-    getUrl: getUrlFor,
-  })(CurationFilter),
+  loadData(getUrl)(CurationFilter),
 );

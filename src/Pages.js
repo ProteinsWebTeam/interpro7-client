@@ -56,7 +56,7 @@ const pages = new Set([
 ]);
 
 const Pages = (props /*: Object */) =>
-  <div>
+  <main>
     <Switch
       {...props}
       indexRoute={() => null}
@@ -70,6 +70,6 @@ const Pages = (props /*: Object */) =>
       childRoutes={pages}
       catchAll={NotFound}
     />
-  </div>;
+  </main>;
 
 export default Pages;

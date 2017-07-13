@@ -43,22 +43,23 @@ class SummaryEntry extends Component {
    };
   */
   componentWillMount() {
+    if (webComponents.length) return;
     const interproComponents = () =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components');
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then(m => m.InterproHierarchy)
-      ).as('interpro-hierarchy')
+        interproComponents().then(m => m.InterproHierarchy),
+      ).as('interpro-hierarchy'),
     );
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then(m => m.InterproEntry)
-      ).as('interpro-entry')
+        interproComponents().then(m => m.InterproEntry),
+      ).as('interpro-entry'),
     );
     webComponents.push(
       loadWebComponent(() => interproComponents().then(m => m.InterproType)).as(
-        'interpro-type'
-      )
+        'interpro-type',
+      ),
     );
   }
 
@@ -70,7 +71,7 @@ class SummaryEntry extends Component {
       if (e.path[0].classList.contains('link')) {
         e.preventDefault();
         this.props.goToNewLocation(
-          path2description(e.path[0].getAttribute('href'))
+          path2description(e.path[0].getAttribute('href')),
         );
       }
     });

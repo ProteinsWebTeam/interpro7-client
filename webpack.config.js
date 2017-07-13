@@ -288,20 +288,20 @@ module.exports = (env = { dev: true }) => {
       new webpack.NamedModulesPlugin(),
       // new WebAppManifestPlugin(),
       env.test || env.production ? extractTextPlugin : null,
-      env.test
-        ? null
-        : new webpack.optimize.CommonsChunkPlugin({
-            names: ['vendor', 'visual', 'redux', 'polyfills', 'manifest'],
-            filename: env.production ? '[name].[hash:3].js' : '[name].js',
-            minChunks: Infinity,
-          }),
-      env.test
-        ? null
-        : new webpack.optimize.CommonsChunkPlugin({
-            children: true,
-            async: true,
-            minChunks: 3,
-          }),
+      // env.test
+      //   ? null
+      //   : new webpack.optimize.CommonsChunkPlugin({
+      //       names: ['vendor', 'visual', 'redux', 'polyfills', 'manifest'],
+      //       filename: env.production ? '[name].[hash:3].js' : '[name].js',
+      //       minChunks: Infinity,
+      //     }),
+      // env.test
+      //   ? null
+      //   : new webpack.optimize.CommonsChunkPlugin({
+      //       children: true,
+      //       async: true,
+      //       minChunks: 3,
+      //     }),
       env.dev ? new webpack.HotModuleReplacementPlugin() : null,
       env.dev
         ? new webpack.DefinePlugin({
@@ -324,6 +324,7 @@ module.exports = (env = { dev: true }) => {
             title: pkg.name,
             template: path.join('.', 'src', 'index.template.html'),
             inject: false,
+            // chunksSortMode: 'dependency',
             minify: env.dev && {
               removeComments: true,
               collapseWhitespace: true,
