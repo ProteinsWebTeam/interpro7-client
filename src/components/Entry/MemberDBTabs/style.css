@@ -66,9 +66,13 @@
   }
 }
 
-.tabs-title a:hover {
-  /*background-color: #dff2ff;
-  border-left-width: 20px; experiment*/
+@media screen and (prefers-reduced-motion: reduce) {
+  .tabs-title a {
+    &::before,
+    &::after {
+      transition: none !important;
+    }
+  }
 }
 
 .expand-button {
