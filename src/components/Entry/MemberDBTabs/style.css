@@ -8,7 +8,7 @@
 
 .tabs-title a {
   /*border: 2px solid transparent;*/
-  border-right: 2px solid #7ba3b6;
+  //border-right: 2px solid #7ba3b6;
   border-left: 3px solid currentColor;
   /*border-radius: 5px 0 0 5px;*/
   font-size: 1rem;
@@ -17,16 +17,26 @@
   display: flex;
   overflow: hidden;
 
-  &::before {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
     right: 0;
-    background: currentColor;
     transition: transform var(--timing-medium) var(--timing-fn-spring);
     transform: translateX(calc(100% - 1px));
+  }
+
+  &::before {
+    background: currentColor;
+    left: 0;
+  }
+
+  &::after {
+    border: 1px solid currentColor;
+    left: 100%;
+    width: 120%;
   }
 
   &:hover::before {
@@ -45,9 +55,14 @@
   //border-left-width: 14px;
 
   &::before,
+  &::after,
   &:hover::before {
     transition-delay: var(--timing-medium);
     transform: translateX(calc(-100% + 1ch));
+  }
+
+  &::after {
+    transform: translateX(-80%);
   }
 }
 
