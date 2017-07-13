@@ -288,13 +288,14 @@ module.exports = (env = { dev: true }) => {
       new webpack.NamedModulesPlugin(),
       // new WebAppManifestPlugin(),
       env.test || env.production ? extractTextPlugin : null,
-      // env.test
-      //   ? null
-      //   : new webpack.optimize.CommonsChunkPlugin({
-      //       names: ['vendor', 'visual', 'redux', 'polyfills', 'manifest'],
-      //       filename: env.production ? '[name].[hash:3].js' : '[name].js',
-      //       minChunks: Infinity,
-      //     }),
+      env.test
+        ? null
+        : new webpack.optimize.CommonsChunkPlugin({
+            names: ['vendor', 'visual', 'redux', 'polyfills', 'manifest'],
+            filename: env.production ? '[name].[hash:3].js' : '[name].js',
+            minChunks: Infinity,
+          }),
+      // TODO: try to have the next block working again
       // env.test
       //   ? null
       //   : new webpack.optimize.CommonsChunkPlugin({
@@ -366,8 +367,8 @@ module.exports = (env = { dev: true }) => {
   if (env.dev) {
     config.devServer = {
       // contentBase: '',
-      // stats: 'errors-only',
-      // noInfo: true,
+      stats: 'errors-only',
+      noInfo: true,
       publicPath: config.output.publicPath,
       inline: true,
       overlay: true,

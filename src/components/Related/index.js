@@ -167,7 +167,6 @@ const getReversedUrl = createSelector(
   state => state.newLocation.description,
   state => state.newLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
-    console.log('reversing');
     const newDesc = Object.entries(description).reduce((acc, [key, value]) => {
       let newKey = key;
       if (key.startsWith('focus')) newKey = newKey.replace('focus', 'main');

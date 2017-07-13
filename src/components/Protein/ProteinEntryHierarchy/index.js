@@ -54,15 +54,15 @@ class ProteinEntryHierarchy extends PureComponent {
   static propTypes = {
     entries: T.arrayOf(
       T.shape({
-        accession: T.string.required,
-        type: T.string.required,
+        accession: T.string.isRequired,
+        type: T.string.isRequired,
       }),
     ),
     api: T.shape({
-      protocol: T.string.required,
-      hostname: T.string.required,
-      port: T.string.required,
-      root: T.string.required,
+      protocol: T.string.isRequired,
+      hostname: T.string.isRequired,
+      port: T.string.isRequired,
+      root: T.string.isRequired,
     }),
   };
 
