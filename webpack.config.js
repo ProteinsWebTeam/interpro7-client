@@ -366,8 +366,8 @@ module.exports = (env = { dev: true }) => {
   if (env.dev) {
     config.devServer = {
       // contentBase: '',
-      stats: 'errors-only',
-      noInfo: true,
+      // stats: 'errors-only',
+      // noInfo: true,
       publicPath: config.output.publicPath,
       inline: true,
       overlay: true,

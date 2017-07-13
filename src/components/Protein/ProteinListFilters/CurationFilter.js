@@ -63,9 +63,11 @@ class CurationFilter extends Component {
 
   render() {
     const { data: { loading, payload } } = this.props;
-    const databases = loading ? {} : payload;
+    const databases = loading || !payload ? {} : payload;
     if (!loading) {
-      databases.uniprot = (databases.swissprot || 0) + (databases.trembl || 0);
+      databases.uniprot = databases
+        ? (databases.swissprot || 0) + (databases.trembl || 0)
+        : 0;
     }
     return (
       <div>

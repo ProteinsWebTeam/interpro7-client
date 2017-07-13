@@ -7,15 +7,12 @@ import style from '../style.css';
 
 const colorHash = new ColorHash();
 
-const EntriesOnProtein = (
-  {
-    matches,
-    options: {baseSize = 10, offset = 30, niceRatio = 6/* , scale = 1*/} = {},
-  }
-) => {
+const EntriesOnProtein = ({
+  matches,
+  options: { baseSize = 10, offset = 30, niceRatio = 6 /* , scale = 1*/ } = {},
+}) => {
   const protein = matches[0].protein;
-  const main = ('entry_protein_coordinates' in protein) ? 'protein' : 'entry';
-
+  const main = 'entry_protein_locations' in protein ? 'protein' : 'entry';
   return (
     <div className={style.svgContainer}>
       <svg
@@ -24,10 +21,15 @@ const EntriesOnProtein = (
         viewBox={`0 0 ${protein.length + offset} 60`}
       >
         <g transform={`translate(0 ${offset - baseSize / 2})`}>
-          <title>{protein.accession}</title>
+          <title>
+            {protein.accession}
+          </title>
           <rect
-            x="0" y="0" rx={baseSize / niceRatio}
-            width={protein.length} height={baseSize}
+            x="0"
+            y="0"
+            rx={baseSize / niceRatio}
+            width={protein.length}
+            height={baseSize}
             className={style.primary}
           />
           <text
@@ -41,58 +43,57 @@ const EntriesOnProtein = (
           </text>
         </g>
         <g>
-          {
-            matches.map(
-              ({[main]: {entry_protein_coordinates: {coordinates}}, entry}) =>
-                coordinates.map((entryMatch, i) =>
-                  entryMatch.map((region, j) => (
-                    <g
-                      key={`${entry.accession}-${i}-${j}`}
-                      transform={
-                        `translate(${region[0]} ${offset - baseSize})`
-                      }
+          {matches.map(
+            ({ [main]: { entry_protein_locations: locations }, entry }) =>
+              locations.map((location, i) =>
+                location.fragments.map((fragment, j) =>
+                  <g
+                    key={`${entry.accession}-${i}-${j}`}
+                    transform={`translate(${fragment.start} ${offset -
+                      baseSize})`}
+                  >
+                    <title>
+                      {entry.accession}
+                    </title>
+                    <rect
+                      x="0"
+                      y="0"
+                      rx={baseSize * 2 / niceRatio}
+                      width={fragment.end - fragment.start}
+                      fill={colorHash.hex(entry.accession)}
+                      height={baseSize * 2}
+                      className={style.secondary}
+                    />
+                    <text y="-0.2em">
+                      <tspan textAnchor="middle">
+                        {fragment.start}
+                      </tspan>
+                    </text>
+                    <text
+                      y="-0.2em"
+                      transform={`translate(${fragment.end -
+                        fragment.start} 0)`}
                     >
-                      <title>{entry.accession}</title>
-                      <rect
-                        x="0" y="0" rx={baseSize * 2 / niceRatio}
-                        width={region[1] - region[0]}
-                        fill={colorHash.hex(entry.accession)}
-                        height={baseSize * 2}
-                        className={style.secondary}
-                      />
-                      <text y="-0.2em">
-                        <tspan textAnchor="middle">
-                          {region[0]}
-                        </tspan>
-                      </text>
-                      <text
-                        y="-0.2em"
-                        transform={
-                          `translate(${
-                            region[1] - region[0]
-                          } 0)`
-                        }
-                      >
-                        <tspan textAnchor="middle">
-                          {region[1]}
-                        </tspan>
-                      </text>
-                    </g>
-                  )
-                  )
-                )
-            )
-          }
+                      <tspan textAnchor="middle">
+                        {fragment.end}
+                      </tspan>
+                    </text>
+                  </g>,
+                ),
+              ),
+          )}
         </g>
       </svg>
     </div>
   );
 };
 EntriesOnProtein.propTypes = {
-  matches: T.arrayOf(T.shape({
-    protein: T.object.isRequired,
-    entry: T.object.isRequired,
-  })).isRequired,
+  matches: T.arrayOf(
+    T.shape({
+      protein: T.object.isRequired,
+      entry: T.object.isRequired,
+    }),
+  ).isRequired,
   options: T.object,
 };
 

@@ -293,6 +293,9 @@ const ProteinAsync = createAsyncComponent(() =>
 const SpeciesAsync = createAsyncComponent(() =>
   import(/* webpackChunkName: "entry-subpage" */ 'subPages/Species'),
 );
+const DomainAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
+);
 
 const SchemaOrgData = createAsyncComponent(
   () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -304,6 +307,7 @@ const pages = new Set([
   { value: 'structure', component: StructureAsync },
   { value: 'protein', component: ProteinAsync },
   { value: 'species', component: SpeciesAsync },
+  { value: 'domain_architecture', component: DomainAsync },
 ]);
 
 const SummaryComponent = ({ data: { payload }, location }) =>
@@ -398,5 +402,7 @@ Entry.propTypes = {
   }).isRequired,
 };
 export default loadData((...args) =>
-  getUrlForApi(...args).replace('species', ''),
+  getUrlForApi(...args)
+    .replace('species', '')
+    .replace('domain_architecture', ''),
 )(Entry);
