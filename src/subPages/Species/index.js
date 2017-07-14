@@ -99,7 +99,6 @@ const ProteinFastas = connect(
   );
 });
 ProteinFastas.propTypes = {
-  accession: T.string.isRequired,
   taxId: T.string.isRequired,
   data: T.shape({
     loading: T.bool.isRequired,
@@ -139,7 +138,6 @@ const ProteinAccessions = connect(
   );
 });
 ProteinAccessions.propTypes = {
-  accession: T.string.isRequired,
   taxId: T.string.isRequired,
   data: T.shape({
     loading: T.bool.isRequired,

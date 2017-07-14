@@ -158,6 +158,7 @@ export const singleEntity /*: Array<Object> */ = [
         },
       };
     },
+    type: 'protein',
     name: 'species',
     counter: 'species',
   },
