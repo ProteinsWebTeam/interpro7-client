@@ -1,0 +1,10 @@
+@import "../styles/timing.css";
+
+.with-data {
+  transition: opacity var(--timing-fast) ease-in-out;
+}
+
+.with-stale-data {
+  user-select: none;
+  opacity: 0.5;
+}

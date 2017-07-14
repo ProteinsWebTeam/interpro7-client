@@ -19,6 +19,10 @@ import MemberDBTabs from 'components/Entry/MemberDBTabs';
 import { PDBeLink } from 'components/ExtLink';
 import StructureListFilters from 'components/Structure/StructureListFilters';
 
+import classname from 'classnames/bind';
+import pageStyle from './style.css';
+const ps = classname.bind(pageStyle);
+
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
@@ -214,7 +218,9 @@ const InnerSwitch = props =>
 class Structure extends PureComponent {
   render() {
     return (
-      <div>
+      <div
+        className={ps('with-data', { ['with-stale-data']: this.props.isStale })}
+      >
         <Switch
           {...this.props}
           locationSelector={l => l.description.mainDB}

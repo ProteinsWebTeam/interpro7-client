@@ -18,6 +18,10 @@ import Table, {
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 
+import classname from 'classnames/bind';
+import pageStyle from './style.css';
+const ps = classname.bind(pageStyle);
+
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
@@ -252,7 +256,7 @@ const InnerSwitch = props =>
   />;
 
 const Protein = props =>
-  <div>
+  <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
     <Switch
       {...props}
       locationSelector={l => l.description.mainDB}

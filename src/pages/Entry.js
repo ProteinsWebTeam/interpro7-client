@@ -19,6 +19,10 @@ import Table, {
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 
+import classname from 'classnames/bind';
+import pageStyle from './style.css';
+const ps = classname.bind(pageStyle);
+
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 import { memberDB } from 'staticData/home';
@@ -310,8 +314,8 @@ const pages = new Set([
   { value: 'domain_architecture', component: DomainAsync },
 ]);
 
-const SummaryComponent = ({ data: { payload }, location }) =>
-  <SummaryAsync data={payload} location={location} />;
+const SummaryComponent = ({ data: { payload }, isStale, location }) =>
+  <SummaryAsync data={payload} isStale={isStale} location={location} />;
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.object,
@@ -382,7 +386,7 @@ const schemaProcessData = data => ({
 });
 
 const Entry = props =>
-  <div>
+  <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
     {props.data.payload &&
       props.data.payload.accession &&
       <SchemaOrgData
