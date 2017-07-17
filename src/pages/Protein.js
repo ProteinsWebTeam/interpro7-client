@@ -264,6 +264,9 @@ const Protein = props =>
       catchAll={InnerSwitch}
     />
   </div>;
+Protein.propTypes = {
+  isStale: T.bool.isRequired,
+};
 
 export default loadData((...args) =>
   getUrlForApi(...args).replace('domain_architecture', 'entry'),

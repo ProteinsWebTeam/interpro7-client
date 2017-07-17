@@ -320,6 +320,7 @@ SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.object,
   }).isRequired,
+  isStale: T.bool.isRequired,
   location: T.object.isRequired,
 };
 
@@ -404,6 +405,7 @@ Entry.propTypes = {
   data: T.shape({
     payload: T.object,
   }).isRequired,
+  isStale: T.bool.isRequired,
 };
 export default loadData((...args) =>
   getUrlForApi(...args)

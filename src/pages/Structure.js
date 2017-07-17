@@ -216,6 +216,10 @@ const InnerSwitch = props =>
   />;
 
 class Structure extends PureComponent {
+  static propTypes = {
+    isStale: T.bool.isRequired,
+  };
+
   render() {
     return (
       <div
