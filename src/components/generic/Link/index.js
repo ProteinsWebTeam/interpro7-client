@@ -68,9 +68,17 @@ class Link extends PureComponent {
   };
 
   handleClick = event => {
-    const { onClick, target, goToNewLocation, newTo, location } = this.props;
+    const {
+      onClick,
+      target,
+      goToNewLocation,
+      newTo,
+      href,
+      location,
+    } = this.props;
     // pass it on to an externally defined handler
     if (onClick) onClick(event);
+    if (!newTo && href) return;
     if (event.defaultPrevented) return;
     // conditions to ignore handling
     if (!happenedWithLeftClick(event)) return;
