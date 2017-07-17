@@ -150,6 +150,7 @@ const List = ({
           >
             Name
           </Column>
+          <Column accessKey="experiment_type">Experiment type</Column>
           <Column
             accessKey="accession"
             defaultKey="structureAccession"

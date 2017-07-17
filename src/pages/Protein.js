@@ -166,6 +166,7 @@ const List = ({
           >
             Source Database
           </Column>
+          <Column accessKey="source_organism.fullname">Species</Column>
           <Column
             accessKey="length"
             renderer={(length /*: number */, row) =>
