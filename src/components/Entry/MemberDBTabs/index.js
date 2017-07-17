@@ -37,24 +37,30 @@ const colors = {
 class MemberDBTab extends PureComponent {
   static propTypes = {
     newTo: T.oneOfType([T.object, T.func]).isRequired,
-    name: T.string.isRequired,
+    children: T.string.isRequired,
     value: T.number.isRequired,
+    mainType: T.string.isRequired,
   };
 
   render() {
-    const { newTo, name, value } = this.props;
-    const style = { color: colors[name] ? colors[name] : null };
+    const { newTo, children, value, mainType } = this.props;
     return (
       <li className={f('tabs-title')}>
         <Link
           newTo={newTo}
           activeClass={f('is-active', 'is-active-tab')}
-          style={style}
+          style={{ color: colors[children] ? colors[children] : null }}
         >
           <span>
-            {name}&nbsp;
+            {children}&nbsp;
           </span>
-          <NumberLabel value={value} className={f('number-label')} />
+          <NumberLabel
+            value={value}
+            className={f('number-label')}
+            title={`${value} ${value > 1
+              ? toPlural(mainType)
+              : mainType} found`}
+          />
         </Link>
       </li>
     );
@@ -138,9 +144,18 @@ class MemberDBTabs extends Component {
         <button onClick={this._handleExpansion} className={f('expand-button')}>
           {collapsed ? '≫' : '≪'}
         </button>
+        <span className={f('vertical', 'tabs', { collapsed })}>
+          <span>
+            {toPlural(mainType)} found
+          </span>
+        </span>
         {tabs &&
           <AnimatedEntry className={f('vertical', 'tabs', { collapsed })}>
-            {tabs.map(e => <MemberDBTab key={e.name} {...e} />)}
+            {tabs.map(e =>
+              <MemberDBTab key={e.name} {...e} mainType={mainType}>
+                {e.name}
+              </MemberDBTab>,
+            )}
           </AnimatedEntry>}
       </div>
     );

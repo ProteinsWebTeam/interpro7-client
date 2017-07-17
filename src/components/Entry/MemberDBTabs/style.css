@@ -6,7 +6,8 @@
   padding-bottom: 1em;
 }
 
-.tabs-title a {
+.tabs-title > a,
+.tabs-title > span {
   /*border: 2px solid transparent;*/
   //border-right: 2px solid #7ba3b6;
   border-left: 3px solid currentColor;
@@ -20,6 +21,7 @@
   &::before,
   &::after {
     content: '';
+    pointer-events: none;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -48,7 +50,7 @@
   }
 }
 
-.tabs-title a.is-active-tab {
+.tabs-title > a.is-active-tab {
   background: white;
   //border: 2px solid #7ba3b6;
   //border-right: 2px solid transparent;
@@ -67,7 +69,8 @@
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  .tabs-title a {
+  .tabs-title > a,
+  .tabs-title > span {
     &::before,
     &::after {
       transition: none !important;
@@ -82,10 +85,13 @@
 }
 .collapsed .tabs-title {
   margin-left: -140px;
+
+  & a,
+  & span {
+    display: none;
+  }
 }
-.collapsed .tabs-title a {
-  color: transparent;
-}
+
 .collapsed .tabs-title a.is-active-tab {
   color: black;
   padding: 0;
