@@ -171,6 +171,7 @@
     "webpack-dashboard": "^0.4.0",
     "webpack-dev-server": "^2.5.1",
     "why-did-you-update": "0.0.8",
+    "worker-loader": "^0.8.1",
     "yaml-loader": "^0.5.0"
   },
   "false": {}

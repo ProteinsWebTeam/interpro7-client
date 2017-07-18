@@ -78,6 +78,14 @@ module.exports = (env = { dev: true }) => {
     module: {
       rules: [
         {
+          test: /\.worker\.js/i,
+          use: [
+            {
+              loader: 'worker-loader',
+            },
+          ],
+        },
+        {
           test: /\.js$/i,
           include: [
             path.resolve('src'),

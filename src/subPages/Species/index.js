@@ -6,6 +6,7 @@ import { stringify as qsStringify } from 'query-string';
 
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
+import ProgressButton from 'components/ProgressButton';
 
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
@@ -55,14 +56,14 @@ const mapStateToUrlForProteinIDsFor = createSelector(
         const _description = {
           mainType: 'protein',
           // TODO: change when 'uniprot' will work on the API
-          mainDB: 'swissprot',
+          mainDB: 'UniProt',
           focusType: description.mainType,
           focusDB: description.mainDB,
           focusAccession: description.mainAccession,
         };
         return `${protocol}//${hostname}:${port}${root}${description2path(
           _description,
-        )}?${qsStringify({ tax_id: taxId, page_size: 200 })}`.replace(
+        )}?${qsStringify({ tax_id: taxId, page_size: 300 })}`.replace(
           /\?$/,
           '',
         );
@@ -93,67 +94,109 @@ const ProteinFastas = connect(
     <a
       download={`${accession}-${taxId}.fasta`}
       href={payloadToFastaBlobUrl(payload)}
-    >
-      FASTA
-    </a>
+      className={f('icon', 'icon-functional')}
+      data-icon="S"
+      title={`FASTA file for ${accession} for tax ID ${taxId}`}
+    />
   );
 });
-ProteinFastas.propTypes = {
-  taxId: T.string.isRequired,
-  data: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.object,
-  }).isRequired,
-};
 
-const ProteinFastasRenderer = taxId => {
-  const Wrapped = loadData(mapStateToUrlForProteinIDsFor(taxId))(ProteinFastas);
-  return <Wrapped taxId={taxId} />;
-};
-ProteinFastasRenderer.propTypes = {
-  taxId: T.string.isRequired,
-};
+const getWorker = () =>
+  import('webWorkers/proteinFile/index.worker.js').then(Worker => new Worker());
 
-const payloadToAccessionBlobUrl = createSelector(
-  payload => payload.results,
-  results =>
-    URL.createObjectURL(
-      new Blob([results.map(r => r.metadata.accession).join('\n')], {
-        type: 'text/plain',
-      }),
-    ),
+class _ProteinFile extends PureComponent {
+  static propTypes = {
+    description: T.object.isRequired,
+    api: T.object.isRequired,
+    taxId: T.string.isRequired,
+    type: T.string.isRequired,
+  };
+
+  _workerMessage = ({ data: { type, details } }) => {
+    switch (type) {
+      case 'progress':
+        this.setState({ progress: details });
+        return;
+      case 'failed':
+        console.error(details);
+        this.setState({ failed: true });
+        return;
+      case 'success':
+        this.setState({ downloading: false });
+        if (this._anchor) {
+          this._anchor.href = details;
+        }
+        return;
+    }
+  };
+
+  _handleClick = e => {
+    if (this._anchor && this._anchor.href) return;
+    e.preventDefault();
+    if (this.state.downloading || this.state.failed) return;
+    this.setState({ downloading: true });
+    getWorker().then(worker => {
+      this._worker = worker;
+      this._worker.addEventListener('message', this._workerMessage);
+      const { description, api, taxId } = this.props;
+      this._worker.postMessage({
+        description,
+        api,
+        taxId,
+        type: this.props.type,
+      });
+    });
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      downloading: false,
+      failed: false,
+      progress: 0,
+    };
+  }
+
+  componentWillUnmount() {
+    if (this._anchor && this._anchor.href) {
+      URL.revokeObjectURL(this._anchor.href);
+    }
+    if (this._worker) {
+      this._worker.removeEventListener('message', this._workerMessage);
+      if ('terminate' in this._worker) this._worker.terminate();
+    }
+  }
+
+  render() {
+    const { taxId, description: { mainAccession }, type } = this.props;
+    return (
+      <a
+        ref={node => (this._anchor = node)}
+        // download={`${mainAccession}-${taxId}.txt`}
+        target="_blank"
+        title={`${type === 'FASTA'
+          ? 'FASTA file'
+          : 'Protein accessions'} for ${mainAccession} for tax ID ${taxId}`}
+        onClick={this._handleClick}
+      >
+        <ProgressButton {...this.state} />
+      </a>
+    );
+  }
+}
+
+const mapStateToProps2 = createSelector(
+  state => state.settings.api,
+  state => state.newLocation.description,
+  (api, description) => ({ api, description }),
 );
+const ProteinFile = connect(mapStateToProps2)(_ProteinFile);
 
-const ProteinAccessions = connect(
-  mapStateToProps,
-)(({ accession, taxId, data: { loading, payload } }) => {
-  if (loading || !payload) return null;
-  return (
-    <a
-      download={`${accession}-${taxId}.txt`}
-      href={payloadToAccessionBlobUrl(payload)}
-    >
-      Accessions
-    </a>
-  );
-});
-ProteinAccessions.propTypes = {
-  taxId: T.string.isRequired,
-  data: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.object,
-  }).isRequired,
-};
+const ProteinAccessionsRenderer = taxId =>
+  <ProteinFile taxId={taxId} type="accession" />;
 
-const ProteinAccessionsRenderer = taxId => {
-  const Wrapped = loadData(mapStateToUrlForProteinIDsFor(taxId))(
-    ProteinAccessions,
-  );
-  return <Wrapped taxId={taxId} />;
-};
-ProteinAccessionsRenderer.propTypes = {
-  taxId: T.string.isRequired,
-};
+const ProteinFastasRenderer = taxId =>
+  <ProteinFile taxId={taxId} type="FASTA" />;
 
 const payloadToProcessed = createSelector(
   payload => payload,
@@ -215,7 +258,7 @@ class SpeciesSub extends PureComponent {
               defaultKey="proteinFastas"
               renderer={ProteinFastasRenderer}
             >
-              FASTA (not working yet)
+              FASTA
             </Column>
             <Column
               accessKey="taxId"
