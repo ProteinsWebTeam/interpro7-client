@@ -73,14 +73,6 @@ export const entities /*: Array<Object> */ = [
     },
     name: 'Proteome',
   },
-  {
-    newTo: {
-      description: {
-        mainType: 'pathway',
-      },
-    },
-    name: 'Pathway',
-  },
 ];
 
 export const singleEntity /*: Array<Object> */ = [

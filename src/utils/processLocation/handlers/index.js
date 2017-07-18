@@ -270,17 +270,6 @@ export const proteomeHandler /*: Handler */ = Object.create(handler, {
   },
 });
 
-export const pathwayHandler /*: Handler */ = Object.create(handler, {
-  getKey: {
-    value: ({ mainType } /*: Description */) =>
-      `${mainType ? 'focus' : 'main'}Type`,
-  },
-  match: {
-    value: (current /*: string */, { mainType } /*: Description */) =>
-      mainType !== 'pathway' && current.toLowerCase() === 'pathway',
-  },
-});
-
 export const entryHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: ({ mainType } /*: Description */) =>
