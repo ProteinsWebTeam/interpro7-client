@@ -3,10 +3,20 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { getToastManager } from 'toasts';
+
 import ProgressButton from 'components/ProgressButton';
 
 const getWorker = () =>
   import('webWorkers/proteinFile').then(Worker => new Worker());
+
+const getDownloadName = createSelector(
+  props => props.description.mainAccession,
+  props => props.taxId,
+  props => props.type,
+  (accession, taxId, type) =>
+    `${accession}-${taxId}.${type === 'FASTA' ? 'fasta' : 'txt'}`,
+);
 
 class ProteinFile extends PureComponent {
   static propTypes = {
@@ -18,6 +28,7 @@ class ProteinFile extends PureComponent {
 
   constructor(props) {
     super(props);
+    this._toastManager = getToastManager();
     this.state = {
       downloading: false,
       failed: false,
@@ -74,6 +85,15 @@ class ProteinFile extends PureComponent {
           progress: 1,
           href: details,
         });
+        this._toastManager.add({
+          title: 'Your file is ready',
+          link: {
+            href: details,
+            // download: getDownloadName(this.props),
+            target: '_blank',
+            children: getDownloadName(this.props),
+          },
+        });
         return;
       default:
         console.warn(`'${type}' is not a valid message type`);
@@ -85,7 +105,7 @@ class ProteinFile extends PureComponent {
     const { downloading, success, failed, progress, href } = this.state;
     return (
       <a
-        // download={`${mainAccession}-${taxId}.txt`}
+        // download={getDownloadName(this.props)}
         href={href}
         target="_blank"
         title={`${type === 'FASTA'
