@@ -18,15 +18,16 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 class ProgressButton extends PureComponent {
   static propTypes = {
-    downloading: T.bool,
-    progress: T.number,
-    failed: T.bool,
+    downloading: T.bool.isRequired,
+    success: T.bool.isRequired,
+    failed: T.bool.isRequired,
+    progress: T.number.isRequired,
   };
 
   render() {
-    const { downloading, progress } = this.props;
+    const { downloading, success, progress, failed } = this.props;
     return (
-      <span className={s('container')}>
+      <span className={s('container', { failed })}>
         <svg
           width="2em"
           height="2em"
@@ -62,13 +63,13 @@ class ProgressButton extends PureComponent {
             r={RADIUS - STROKE_WIDTH / 2 + 1}
             fill="#e6e6e6"
           />
-          <g className={s('card')}>
+          <g className={s('card', { flipped: success })}>
             <image
               x="30"
               y="10"
               width="60"
               height="100"
-              className={s('back', { flipped: progress === 1 })}
+              className={s('back')}
               href={download}
             />
             <image
@@ -76,7 +77,7 @@ class ProgressButton extends PureComponent {
               y="10"
               width="60"
               height="100"
-              className={s('front', { flipped: progress === 1 })}
+              className={s('front')}
               href={save}
             />
           </g>

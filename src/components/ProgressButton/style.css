@@ -12,6 +12,10 @@
   margin: auto;
 }
 
+.failed {
+  cursor: not-allowed;
+}
+
 @keyframes pulsing {
   0% {
     transform: rotate(0) scale(1);
@@ -65,24 +69,26 @@
     transform-origin: center;
     transition: transform var(--timing-fast) linear;
   }
+
+  &.flipped {
+    & > .front {
+      transform: rotateY(90deg);
+      transition-delay: 0s;
+    }
+
+    & > .back {
+      transform: rotateY(0);
+      transition-delay: var(--timing-fast);
+    }
+  }
 }
 
 .front {
   transform: rotateY(0);
   transition-delay: var(--timing-fast);
-
-  &.flipped {
-    transform: rotateY(90deg);
-    transition-delay: 0s;
-  }
 }
 
 .back {
   transform: rotateY(90deg);
   transition-delay: 0s;
-
-  &.flipped {
-    transform: rotateY(0);
-    transition-delay: var(--timing-fast);
-  }
 }

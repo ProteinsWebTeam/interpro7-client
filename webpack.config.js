@@ -74,6 +74,7 @@ module.exports = (env = { dev: true }) => {
     },
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
+      extensions: ['.js', '.json', '.worker.js'],
     },
     module: {
       rules: [
