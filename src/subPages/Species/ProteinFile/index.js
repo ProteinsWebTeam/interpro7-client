@@ -3,8 +3,6 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { getToastManager } from 'toasts';
-
 import ProgressButton from 'components/ProgressButton';
 
 const getWorker = () =>
@@ -28,7 +26,6 @@ class ProteinFile extends PureComponent {
 
   constructor(props) {
     super(props);
-    this._toastManager = getToastManager();
     this.state = {
       downloading: false,
       failed: false,
@@ -85,15 +82,6 @@ class ProteinFile extends PureComponent {
           progress: 1,
           href: details,
         });
-        this._toastManager.add({
-          title: 'Your file is ready',
-          link: {
-            href: details,
-            // download: getDownloadName(this.props),
-            target: '_blank',
-            children: getDownloadName(this.props),
-          },
-        });
         return;
       default:
         console.warn(`'${type}' is not a valid message type`);
@@ -105,7 +93,7 @@ class ProteinFile extends PureComponent {
     const { downloading, success, failed, progress, href } = this.state;
     return (
       <a
-        // download={getDownloadName(this.props)}
+        download={getDownloadName(this.props)}
         href={href}
         target="_blank"
         title={`${type === 'FASTA'
