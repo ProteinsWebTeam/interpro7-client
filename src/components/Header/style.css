@@ -128,10 +128,9 @@
   transform: translateY(0);
   transition-duration: var(--timing-fast);
   transition-timing-function: ease-in-out;
-
-  &.stuck {
-    transform: translateY(166%) Scale(0.8);
-  }
+}
+.top_level_hamburger.stuck {
+  transform: translateY(166%) Scale(0.8);
 }
 
 .hamb_line {
@@ -268,15 +267,13 @@
 .side-search.stuck {
   transform: translate(-20%, 50%);
   transition-delay: 0s;
-  @nest & svg {
-    transform: Scale(0.8);
-  }
-  @nest & svg:hover {
-    transform: rotate(90deg) Scale(0.8);
-  }
-  @nest & > input:hover ~ a svg {
-    transform: rotate(90deg) Scale(0.8);
-  }
+}
+.side-search.stuck svg {
+  transform: Scale(0.8);
+}
+.side-search.stuck svg:hover,
+.side-search.stuck > input:hover ~ a svg {
+  transform: rotate(90deg) Scale(0.8);
 }
 
 .side-search svg {
