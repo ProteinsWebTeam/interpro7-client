@@ -5,8 +5,12 @@ import Link from 'components/generic/Link';
 
 import { TaxLink, PDBeLink, UniProtLink } from 'components/ExtLink';
 
-export const Name = ({ name: { name, short }, accession }) =>
-  /*: {name: {name: string, short: ?string}, accession: string} */
+export const Name = (
+  {
+    name: { name, short },
+    accession,
+  } /*: {name: {name: string, short: ?string}, accession: string} */,
+) =>
   <div>
     <h3>
       {name} ({accession})
@@ -53,8 +57,9 @@ ExtOriginDB.propTypes = {
   accession: T.oneOfType([T.string, T.number]).isRequired,
 };
 
-export const OriginDB = ({ source, accession }) =>
-  /*: {source: string, accession: string | number} */
+export const OriginDB = (
+  { source, accession } /*: {source: string, accession: string | number} */,
+) =>
   <p>
     Source DB:{' '}
     <Link
