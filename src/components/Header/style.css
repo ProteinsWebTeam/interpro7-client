@@ -98,8 +98,7 @@
   transform: scaleY(1);
   flex: 1;
 
-  &
-  .scrolled {
+  & .scrolled {
     transform: scale(0.5);
   }
 
@@ -264,81 +263,81 @@
   transform: translate(0, 0);
   transition-duration: var(--timing-fast);
   transition-timing-function: ease-in-out;
+}
 
-  &.stuck {
-    transform: translate(-20%, 50%);
-    transition-delay: 0s;
-    @nest & svg {
-      transform: Scale(0.8);
-    }
-    @nest & svg:hover {
-      transform: rotate(90deg) Scale(0.8);
-    }
-    @nest & > input:hover ~ a svg {
-      transform: rotate(90deg) Scale(0.8);
-    }
-  }
-
+.side-search.stuck {
+  transform: translate(-20%, 50%);
+  transition-delay: 0s;
   @nest & svg {
-    transition-timing-function: ease-in-out;
-    transition-duration: var(--timing-fast);
+    transform: Scale(0.8);
   }
   @nest & svg:hover {
-    transition-timing-function: ease-in-out;
-    transition-duration: var(--timing-fast);
-    transform: rotate(90deg);
+    transform: rotate(90deg) Scale(0.8);
   }
-
-  @nest & > input {
-    margin: 0.25rem;
-    border: none;
-    border-bottom: 3px solid rgba(255, 255, 255, 0.4);
-    background-color: transparent;
-    box-shadow: none;
-    color: rgba(255, 255, 255, 0.5);
-    opacity: 0;
-    transform: scaleX(1);
-    transform-origin: right;
-    transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
-
-    &:focus,
-    &:hover {
-      border: none;
-      border-bottom: 3px solid currentColor;
-      background-color: transparent;
-      box-shadow: none;
-      opacity: 1;
-      transform: scaleX(1);
-
-      & ~ * > svg {
-        transform: rotate(90deg);
-      }
-    }
+  @nest & > input:hover ~ a svg {
+    transform: rotate(90deg) Scale(0.8);
   }
+}
 
-  @nest & > input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-  }
+.side-search svg {
+  transition-timing-function: ease-in-out;
+  transition-duration: var(--timing-fast);
+}
+.side-search svg:hover {
+  transition-timing-function: ease-in-out;
+  transition-duration: var(--timing-fast);
+  transform: rotate(90deg);
+}
 
-  @nest & > input:hover {
+.side-search > input {
+  margin: 0.25rem;
+  border: none;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.4);
+  background-color: transparent;
+  box-shadow: none;
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+
+  &:focus,
+  &:hover {
     border: none;
     border-bottom: 3px solid currentColor;
     background-color: transparent;
     box-shadow: none;
     opacity: 1;
     transform: scaleX(1);
+
+    & ~ * > svg {
+      transform: rotate(90deg);
+    }
   }
-  @nest & > input:hover ~ a svg {
-    transform: rotate(90deg);
-  }
-  @nest & > input[type='text']:focus {
-    color: rgba(255, 255, 255, 1);
-    background-color: rgba(255, 255, 255, 0.1);
-    border: none;
-    box-shadow: none;
-    border-bottom: 3px solid currentColor;
-    transition: border-color .2s ease-in-out, background-color .2s ease-in-out;
-  }
+}
+
+.side-search > input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.side-search > input:hover {
+  border: none;
+  border-bottom: 3px solid currentColor;
+  background-color: transparent;
+  box-shadow: none;
+  opacity: 1;
+  transform: scaleX(1);
+}
+.side-search > input:hover ~ a svg {
+  transform: rotate(90deg);
+}
+.side-search > input[type='text']:focus {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  box-shadow: none;
+  border-bottom: 3px solid currentColor;
+  transition: border-color .2s ease-in-out, background-color .2s ease-in-out;
 }
 
 /*use when off canvas is open and icons need to move left*/
