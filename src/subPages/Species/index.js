@@ -55,7 +55,7 @@ const mapStateToUrlForProteinIDsFor = createSelector(
         const _description = {
           mainType: 'protein',
           // TODO: change when 'uniprot' will work on the API
-          mainDB: 'swissprot',
+          mainDB: 'reviewed',
           focusType: description.mainType,
           focusDB: description.mainDB,
           focusAccession: description.mainAccession,

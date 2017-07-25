@@ -14,8 +14,8 @@ import { goToNewLocation } from 'actions/creators';
 import f from 'styles/foundation';
 
 const label = {
-  swissprot: 'Reviewed',
-  trembl: 'Unreviewed',
+  reviewed: 'Reviewed',
+  unreviewed: 'Unreviewed',
   uniprot: 'Both',
 };
 
@@ -41,10 +41,10 @@ class CurationFilter extends Component {
 
   componentWillMount() {
     const { mainDB } = this.props.location.description;
-    if (mainDB === 'swissprot') {
-      this.setState({ value: 'swissprot' });
-    } else if (mainDB === 'trembl') {
-      this.setState({ value: 'trembl' });
+    if (mainDB === 'reviewed') {
+      this.setState({ value: 'reviewed' });
+    } else if (mainDB === 'unreviewed') {
+      this.setState({ value: 'unreviewed' });
     } else {
       this.setState({ value: 'uniprot' });
     }
@@ -66,7 +66,7 @@ class CurationFilter extends Component {
     const databases = loading || !payload ? {} : payload;
     if (!loading) {
       databases.uniprot = databases
-        ? (databases.swissprot || 0) + (databases.trembl || 0)
+        ? (databases.reviewed || 0) + (databases.unreviewed || 0)
         : 0;
     }
     return (

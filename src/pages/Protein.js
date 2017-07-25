@@ -42,8 +42,8 @@ const propTypes = {
 
 const defaultPayload = {
   proteins: {
-    swissprot: null,
-    trembl: null,
+    reviewed: null,
+    unreviewed: null,
   },
 };
 

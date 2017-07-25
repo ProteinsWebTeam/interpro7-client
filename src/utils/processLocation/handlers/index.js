@@ -243,8 +243,7 @@ export const proteinDBHandler /*: Handler */ = Object.create(handler, {
     value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
   },
   match: {
-    value: (current /*: string */) =>
-      /^((uni|swiss\-?)prot|trembl)$/i.test(current),
+    value: (current /*: string */) => /^(un)?reviewed$/i.test(current),
   },
 });
 
