@@ -9,14 +9,12 @@ import { foundationPartial } from 'styles/foundation';
 import styles from './style.css';
 import ebiGlobalStyles from 'styles/ebi-global.css';
 import fonts from 'styles/ebi/fonts.css';
-import ebiTheme from 'styles/theme-template.css';
-import ebiPetrolTheme from 'styles/theme-embl-petrol.css';
+import interproTheme from 'styles/theme-interpro.css';
 const styleBundle = foundationPartial(
   styles,
   fonts,
-  ebiPetrolTheme,
-  ebiTheme,
-  ebiGlobalStyles
+  interproTheme,
+  ebiGlobalStyles,
 );
 
 /**
