@@ -65,7 +65,7 @@ module.exports = (env = { dev: true }) => {
       publicPath: websiteURL.pathname || '/interpro7/',
       filename:
         env.production || env.staging
-          ? '[id].[name].[chunkhash:3].js'
+          ? '[id].[name].[hash:3].js'
           : '[id].[name].js',
       chunkFilename:
         env.production || env.staging
