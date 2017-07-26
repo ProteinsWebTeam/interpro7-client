@@ -237,7 +237,20 @@ input:focus:-ms-input-placeholder {
 a:hover.noline {
   border-bottom: 0 solid transparent;
 }
-/***** /LOCAL BUTTONS + LINKS *** /
+/*****LOCAL BUTTONS + LINKS ***/
+/* SEARCH*/
+.search-eg,
+.search-eg a {
+  font-size: 90%;
+  color: #777;
+}
+.search-eg a:hover {
+  border-bottom: 1px #777 solid;
+}
+/*Member database list*/
+.md-list a:not(.button) {
+  color: #0a0a0a;
+} /*all except font button*/
 
 /* MENU*/
 .horizontal.menu > li > a {
