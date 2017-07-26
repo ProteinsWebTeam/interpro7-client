@@ -21,12 +21,24 @@
 
 .active {
   color: #74abd0;
-  border-bottom:0;/*temp while waiting for menu to redefine active class on <li> element */
+  border-bottom: 0; /*temp while waiting for menu to redefine active class on <li> element */
 
   &:visited {
-    color: #989898;
+    color: #74abd0;
   }
 }
 /*off-canvas interpro home icon*/
-aside .menu-item.active span {width:22px; height:22px;  float: left; margin-right:2px; background: url(../../../images/logo/interpro_blue_offcanvas.png) no-repeat ;}
-aside .menu-item span {width:22px; height:22px;  float: left; margin-right:2px; background: url(../../../images/logo/interpro_grey_offcanvas.png) no-repeat ;}
+aside .menu-item.active span {
+  width: 22px;
+  height: 22px;
+  float: left;
+  margin-right: 2px;
+  background: url(../../../images/logo/interpro_blue_offcanvas.png) no-repeat;
+}
+aside .menu-item span {
+  width: 22px;
+  height: 22px;
+  float: left;
+  margin-right: 2px;
+  background: url(../../../images/logo/interpro_grey_offcanvas.png) no-repeat;
+}
