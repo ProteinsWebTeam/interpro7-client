@@ -79,9 +79,8 @@
 }
 
 .expand-button {
-  border: 1px solid lightgray;
-  position: relative;
-  left: 90%;
+  padding: 0.2em 0.4em;
+  margin-bottom: -1px; /*to make it show just 1px border at the bottom when in reality you have 2px*/
 }
 .collapsed .tabs-title {
   margin-left: -140px;
