@@ -11,8 +11,8 @@
   background-color: rgba(59, 59, 59, 1);
   transition: transform 0.3s ease-in-out;
   transform: translateX(20em);
-  /*overflow-y: scroll;*//*remove the overflow as it creates left scrollbar(Win) by default and content is limited*/
-  box-shadow: 1px 0px 2px 3px rgba(0,0,0,0.3);
+  /*overflow-y: scroll;*/ /*remove the overflow as it creates left scrollbar(Win) by default and content is limited*/
+  box-shadow: 1px 0px 2px 3px rgba(0, 0, 0, 0.3);
 
   @nest & ul {
     list-style: none;
@@ -41,7 +41,7 @@
 
 .exit {
   font-size: 200%;
-  color: rgba(255,255,255,0.2);
+  color: rgba(255, 255, 255, 0.2);
   font-weight: bold;
   position: absolute;
   top: 0;
@@ -55,7 +55,7 @@
 }
 
 .exit:hover {
-  color: rgba(255,255,255,0.4);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .primary {
@@ -82,13 +82,23 @@
   }
 }
 
-ul li a:hover {background: rgba(0, 0, 0, 0.3);}
+.container ul li a:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
 
 /*bgd palette for side menu - not used yet */
-.primary.domain {background:#6aad4c;}
-.primary.family {background: indianred;}
-.tertiary.clans {background: #279292;}
-.secondary.default {background: #4b4b4b;}
+.primary.domain {
+  background: #6aad4c;
+}
+.primary.family {
+  background: indianred;
+}
+.tertiary.clans {
+  background: #279292;
+}
+.secondary.default {
+  background: #4b4b4b;
+}
 
 .menu-label {
   background: #444;
