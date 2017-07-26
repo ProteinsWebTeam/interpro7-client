@@ -66,13 +66,6 @@ class PageSizeSelector extends Component {
           )}
         </select>{' '}
         results
-        <a
-          className={f('icon', 'icon-functional', 'primary', 'apply-all')}
-          data-icon="s"
-          onClick={this.applyAll}
-        >
-          <div>Apply to all tables</div>
-        </a>
       </div>
     );
   }
