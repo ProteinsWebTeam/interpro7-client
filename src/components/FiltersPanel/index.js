@@ -7,7 +7,7 @@ import style from './style.css';
 const f = foundationPartial(style);
 
 const FilterPanel = ({ label, collapsed, onCollapse, children }) =>
-  <div className={f('columns')}>
+  <div className={f('columns', 'col-width-limit')}>
     <h6 onClick={onCollapse} style={{ cursor: 'pointer' }}>
       {collapsed ? '▸' : '▾'} {label}
     </h6>
@@ -72,6 +72,7 @@ class FiltersPanel extends Component {
             </span>
           </button>
         </div>
+
         {children.map((child, i) =>
           <FilterPanel
             key={i}
