@@ -1,16 +1,22 @@
 @import "../../styles/timing.css";
 
-button {
-  font-size: 120%;
-}
-.but-collapse {
-  font-size: 80%;
-}
-
 .filters-panel {
   max-height: 200px;
   /*margin-bottom: 30px;*/
 }
+.filters-panel h6 {
+  font-size: 120%;
+}
+.filters-panel .but-collapse {
+  font-size: 80%;
+}
+.filter-title-arrow {
+  font-size: 150%;
+}
+
+.col-width-limit {
+  max-width: 30%;
+} /* so column doesn't expand totally when only 1-2 filters*/
 
 .filter-panel {
   height: 80%; /*to show exactly max-height: 200px defined on filters-panel*/
@@ -22,7 +28,7 @@ button {
 
   &.collapsed {
     height: 0;
-    transform: scaleY(0);
+    /*transform: scaleY(0);*/
     overflow-y: hidden;
   }
 }
