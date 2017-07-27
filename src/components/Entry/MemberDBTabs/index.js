@@ -141,8 +141,17 @@ class MemberDBTabs extends Component {
     }
     return (
       <div>
-        <button onClick={this._handleExpansion} className={f('expand-button')}>
-          {collapsed ? '≫' : '≪'}
+        <button
+          onClick={this._handleExpansion}
+          className={f(
+            'expand-button',
+            'large',
+            'hollow',
+            'float-right',
+            'button',
+          )}
+        >
+          {collapsed ? '»' : '«'}
         </button>
         <span className={f('vertical', 'tabs', { collapsed })}>
           <span>
