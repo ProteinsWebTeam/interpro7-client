@@ -8,10 +8,8 @@ const f = foundationPartial(style);
 
 const FilterPanel = ({ label, collapsed, onCollapse, children }) =>
   <div className={f('columns')}>
-    <h6>
-      <button onClick={onCollapse}>
-        {collapsed ? '▸' : '▾'} {label}
-      </button>
+    <h6 onClick={onCollapse} style={{ cursor: 'pointer' }}>
+      {collapsed ? '▸' : '▾'} {label}
     </h6>
     <div className={f('filter-panel', { collapsed })}>
       {children}
@@ -66,9 +64,12 @@ class FiltersPanel extends Component {
     return (
       <div className={f('row', 'filters-panel')}>
         <div className={f('shrink', 'columns')}>
-          <h5>Filter By</h5>
+          <h6>Filter By</h6>
           <button className={f('but-collapse')} onClick={this.toggleAll}>
-            {toCollapse ? 'Show All ▸' : 'Collapse All ▾'}
+            {toCollapse ? 'Show All' : 'Collapse All'}
+            <span className={f('filter-title-arrow')}>
+              {toCollapse ? ' ▸' : ' ▾'}
+            </span>
           </button>
         </div>
         {children.map((child, i) =>
