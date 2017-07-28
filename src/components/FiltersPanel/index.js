@@ -63,12 +63,12 @@ class FiltersPanel extends Component {
     );
     return (
       <div className={f('row', 'filters-panel')}>
-        <div className={f('shrink', 'columns')}>
+        <div className={f('shrink', 'columns', 'show-for-medium')}>
           <h6>Filter By</h6>
           <button className={f('but-collapse')} onClick={this.toggleAll}>
-            {toCollapse ? 'Show All' : 'Collapse All'}
+            {toCollapse ? 'Show All ' : 'Collapse All'}
             <span className={f('filter-title-arrow')}>
-              {toCollapse ? ' ▸' : ' ▾'}
+              {toCollapse ? '▸  ' : '▾'}
             </span>
           </button>
         </div>
