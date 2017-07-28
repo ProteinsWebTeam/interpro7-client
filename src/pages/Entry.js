@@ -124,10 +124,10 @@ class List extends Component {
     }
     return (
       <div className={f('row')}>
-        <div className={f('shrink', 'columns')}>
+        <div className={f('columns', 'medium-2')}>
           <MemberDBTabs />
         </div>
-        <div className={f('columns')}>
+        <div className={f('columns', 'medium-10')}>
           <EntryListFilter />
           <hr />
           <Table
