@@ -53,10 +53,13 @@ class EntryTypeFilter extends Component {
       types.unshift(['ALL', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
     return (
-      <div>
+      <div className={f('list-entries')}>
         {types.map(([type, count]) =>
           <div key={type} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label
+              className={f('row', 'align-middle')}
+              style={{ cursor: 'pointer' }}
+            >
               <input
                 type="radio"
                 name="entry_type"
