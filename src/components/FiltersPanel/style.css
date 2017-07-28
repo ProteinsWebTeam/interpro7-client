@@ -19,7 +19,8 @@
 } /* so column doesn't expand totally when only 1-2 filters*/
 
 .filter-panel {
-  height: 80%; /*to show exactly max-height: 200px defined on filters-panel*/
+  max-height: 80%;
+  margin-bottom: 0.5rem;
   overflow-y: auto;
 
   &.collapsed {
