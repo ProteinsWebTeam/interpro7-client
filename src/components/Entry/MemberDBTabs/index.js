@@ -153,11 +153,7 @@ class MemberDBTabs extends Component {
         >
           {collapsed ? '»' : '«'}
         </button>
-        <span className={f('vertical', 'tabs', { collapsed })}>
-          <span>
-            {toPlural(mainType)} found
-          </span>
-        </span>
+        <span className={f('vertical', 'tabs', { collapsed })} />
         {tabs &&
           <AnimatedEntry className={f('vertical', 'tabs', { collapsed })}>
             {tabs.map(e =>
