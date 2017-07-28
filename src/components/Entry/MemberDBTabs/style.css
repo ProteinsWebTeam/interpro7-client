@@ -38,7 +38,7 @@
   &::after {
     border: 1px solid currentColor;
     left: 100%;
-    width: 120%;
+    width: 130%;
   }
 
   &:hover::before {
@@ -52,15 +52,12 @@
 
 .tabs-title > a.is-active-tab {
   background: white;
-  //border: 2px solid #7ba3b6;
-  //border-right: 2px solid transparent;
-  //border-left-width: 14px;
 
   &::before,
   &::after,
   &:hover::before {
     transition-delay: var(--timing-medium);
-    transform: translateX(calc(-100% + 1ch));
+    transform: translateX(calc(-100% + 0.7ch));
   }
 
   &::after {
@@ -80,7 +77,7 @@
 
 .expand-button {
   padding: 0.2em 0.4em;
-  margin-bottom: -1px; /*to make it show just 1px border at the bottom when in reality you have 2px*/
+  margin-bottom: 0;
 }
 .collapsed .tabs-title {
   margin-left: -140px;
