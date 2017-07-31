@@ -33,3 +33,13 @@ hr {
   margin-top: 0;
   margin-bottom: 0.5rem;
 }
+/* Medium + */
+@media screen and (min-width: 40em) and (max-width: 56em) {
+  .filter-panel label span {
+    display: none;
+  }
+  .filter-panel label input + span {
+    display: block;
+  }
+  /*.filter-panel span:nth-last-of-type(1) {border:1px blue solid;}*/
+}
