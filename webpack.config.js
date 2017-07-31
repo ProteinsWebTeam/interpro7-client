@@ -111,14 +111,6 @@ module.exports = (env = { dev: true }) => {
         //   ],
         // },
         {
-          test: /\.json$/i,
-          use: [
-            {
-              loader: 'json-loader',
-            },
-          ],
-        },
-        {
           test: /\.yml$/i,
           use: [
             {
