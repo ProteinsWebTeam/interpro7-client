@@ -35,7 +35,7 @@
   }
 
   &::before {
-    background: currentColor;
+    background: #777;
     left: 0;
   }
 
@@ -114,4 +114,8 @@
 .is-active .number-label {
   color: white;
   background: rgba(0, 0, 0, .3);
+}
+
+.tabs-title > a.is-active:before {
+  background: currentColor;
 }
