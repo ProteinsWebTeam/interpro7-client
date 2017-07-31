@@ -6,13 +6,17 @@
   padding-bottom: 1em;
 }
 
+.tabs-title span:first-child {
+  color: #222;
+}
+
 .tabs-title > a,
 .tabs-title > span {
   /*border: 2px solid transparent;*/
-  //border-right: 2px solid #7ba3b6;
+  /*border-right: 2px solid #7ba3b6;*/
   border-left: 3px solid currentColor;
   /*border-radius: 5px 0 0 5px;*/
-  font-size: 1rem;
+  font-size: 0.9rem;
   padding: .7rem .7rem;
   position: relative;
   display: flex;
@@ -43,10 +47,6 @@
 
   &:hover::before {
     transform: translateX(calc(100% - 1ch));
-  }
-
-  & > span {
-    color: initial;
   }
 }
 
@@ -105,4 +105,13 @@
 .number-label {
   background: rgba(0, 0, 0, 0.07);
   color: var(--colors-graydark);
+}
+
+.is-active span:first-child {
+  font-weight: bold;
+}
+
+.is-active .number-label {
+  color: white;
+  background: rgba(0, 0, 0, .3);
 }
