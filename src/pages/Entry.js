@@ -124,9 +124,8 @@ class List extends Component {
     }
     return (
       <div className={f('row')}>
-        <div className={f('columns', 'small-12', 'medium-3', 'large-2')}>
-          <MemberDBTabs />
-        </div>
+        <MemberDBTabs />
+
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
