@@ -41,5 +41,7 @@ hr {
   .filter-panel label input + span {
     display: block;
   }
-  /*.filter-panel span:nth-last-of-type(1) {border:1px blue solid;}*/
+  input[value="ALL"] + span {
+    visibility: hidden;
+  } /*target the remaining label for first panel entry type: all*/
 }
