@@ -72,7 +72,11 @@ class EntryTypeFilter extends Component {
               />
               {type === 'ALL'
                 ? type
-                : <interpro-type type={type.replace('_', ' ')} expanded>
+                : <interpro-type
+                    type={type.replace('_', ' ')}
+                    expanded
+                    size="17px"
+                  >
                     {type}
                   </interpro-type>}
               <NumberLabel value={count} />
