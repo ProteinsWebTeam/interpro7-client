@@ -140,7 +140,11 @@ class MemberDBTabs extends Component {
       ];
     }
     return (
-      <div>
+      <div
+        className={f('columns', 'small-12', 'medium-3', 'large-2', {
+          collapsed,
+        })}
+      >
         <button
           onClick={this._handleExpansion}
           className={f(
