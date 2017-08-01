@@ -346,10 +346,6 @@ Summary.propTypes = {
   isStale: T.bool.isRequired,
 };
 
-const dbs = new RegExp(
-  `(${memberDB.map(db => db.apiType).filter(db => db).join('|')})`,
-  'i',
-);
 const dbAccs = new RegExp(
   `(${memberDB
     .map(db => db.accession)
@@ -365,10 +361,7 @@ const InnerSwitch = props =>
     locationSelector={l =>
       l.description.mainAccession || l.description.focusType}
     indexRoute={List}
-    childRoutes={[
-      { value: dbs, component: List },
-      { value: dbAccs, component: Summary },
-    ]}
+    childRoutes={[{ value: dbAccs, component: Summary }]}
     catchAll={List}
   />;
 

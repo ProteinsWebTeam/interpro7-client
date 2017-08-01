@@ -72,7 +72,7 @@ const memberDB = new Set([
   { name: 'patterns', re: /PS[0-9]{5}/i, type: 'entry' },
   { name: 'profiles', re: /PS[0-9]{5}/i, type: 'entry' }, // TODO: check which one
   { name: 'profile', re: /PS[0-9]{5}/i, type: 'entry' }, // TODO: is correct
-  { name: 'sfld', re: /sfldg\d{5}/i, type: 'entry' },
+  { name: 'sfld', re: /sfld[gf]\d{5}/i, type: 'entry' },
   { name: 'smart', re: /SM[0-9]{5}/i, type: 'entry' },
   { name: 'ssf', re: /SSF[0-9]{5,6}/i, type: 'entry' },
   { name: 'tigrfams', re: /TIGR[0-9]{5}/i, type: 'entry' },
