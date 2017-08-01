@@ -45,3 +45,14 @@ hr {
     visibility: hidden;
   } /*target the remaining label for first panel entry type: all*/
 }
+
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  .filters-panel {
+    flex-flow: row wrap;
+    max-height: none;
+  }
+  .filter-panel {
+    max-height: 150px;
+  }
+}
