@@ -1,6 +1,7 @@
 /* eslint-env node */
 const fs = require('fs');
 const path = require('path');
+const childProcess = require('child_process');
 
 const webpack = require('webpack');
 const url = require('url');
@@ -110,6 +111,14 @@ module.exports = (env = { dev: true }) => {
         //     },
         //   ],
         // },
+        {
+          test: /\.json$/i,
+          use: [
+            {
+              loader: 'json-loader',
+            },
+          ],
+        },
         {
           test: /\.yml$/i,
           use: [
@@ -305,6 +314,29 @@ module.exports = (env = { dev: true }) => {
               PERF: JSON.stringify(!!env.performance),
               NODE_ENV: env.production ? JSON.stringify('production') : null,
             },
+            'process.info': JSON.stringify({
+              git: {
+                branch: childProcess
+                  .execSync('git rev-parse --abbrev-ref HEAD')
+                  .toString()
+                  .trim(),
+                hash: childProcess
+                  .execSync('git rev-parse HEAD')
+                  .toString()
+                  .trim(),
+                remote: childProcess
+                  .execSync('git ls-remote --get-url')
+                  .toString()
+                  .trim(),
+                tag: childProcess
+                  .execSync('git rev-parse --tags HEAD')
+                  .toString()
+                  .trim(),
+              },
+              build: {
+                time: Date.now(),
+              },
+            }),
           })
         : null,
       env.dashboard ? new DashboardPlugin(new Dashboard().setData) : null,
