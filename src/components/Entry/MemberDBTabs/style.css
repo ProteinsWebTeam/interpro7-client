@@ -80,26 +80,37 @@
   margin-bottom: 0;
 }
 .collapsed .tabs-title {
-  margin-left: -140px;
-
   & a,
   & span {
     display: none;
   }
 }
+/*target the div - increase width - that come immediatly after collapsed - doesn't work using class*/
+.collapsed + div {
+  flex: 0 0 93%;
+  max-width: 93%;
+}
 
+/*onglet appearing on collapsed - not used */
 .collapsed .tabs-title a.is-active-tab {
-  color: black;
-  padding: 0;
-  position: relative;
-  left: 60px;
-  top: 53px;
+  display: none; /*flex*/
+  position: absolute;
+  left: 0;
+  top: 0;
   text-align: center;
   transform: rotate(-90deg) scaleX(1);
   transform-origin: top center 0;
-  border: 2px solid #7ba3b6;
+  border: 0px solid #7ba3b6;
   border-bottom: 0;
-  border-radius: 5px 5px 0 0;
+  padding: 0.22rem 0.8rem;
+  & span {
+    display: inline-block;
+  }
+}
+
+.collapsed.columns {
+  flex: 0 0 auto;
+  padding-right: 0;
 }
 
 .number-label {
