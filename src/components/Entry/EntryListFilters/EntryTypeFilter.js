@@ -68,14 +68,14 @@ class EntryTypeFilter extends Component {
                 checked={
                   (!search.type && type === 'ALL') || search.type === type
                 }
-                style={{ margin: '0.25em' }}
+                style={{ margin: '0 0.25em 0 0' }}
               />
               {type === 'ALL'
                 ? type
                 : <interpro-type
                     type={type.replace('_', ' ')}
                     expanded
-                    size="17px"
+                    size="16px"
                   >
                     {type}
                   </interpro-type>}
