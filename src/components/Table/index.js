@@ -55,25 +55,37 @@ const Table = ({
     return (
       <div className={f('row')}>
         <div className={f('columns', 'table-view')}>
-          {title &&
-            <h4>
-              {title}
-            </h4>}
-          {exporter}
-          {pageSize &&
-            <_PageSizeSelector search={_query} pathname={pathname} />}
-          {search}
-          <table className={f('table', { isStale })}>
-            <_Header columns={columns} />
-            <_Body rows={dataTable || []} columns={columns} />
-          </table>
-          <_Footer
-            data={dataTable}
-            actualSize={actualSize}
-            pagination={_query}
-            pathname={pathname}
-            notFound={notFound}
-          />
+          <div className={f('row')}>
+            <div className={f('columns', 'table-results-filtering')}>
+              {title &&
+                <h4>
+                  {title}
+                </h4>}
+              {exporter}
+              {pageSize &&
+                <_PageSizeSelector search={_query} pathname={pathname} />}
+              {search}
+            </div>
+          </div>
+          <div className={f('row')}>
+            <div className={f('columns')}>
+              <table className={f('table', 'light', { isStale })}>
+                <_Header columns={columns} />
+                <_Body rows={dataTable || []} columns={columns} />
+              </table>
+            </div>
+          </div>
+          <div className={f('row')}>
+            <div className={f('columns')}>
+              <_Footer
+                data={dataTable}
+                actualSize={actualSize}
+                pagination={_query}
+                pathname={pathname}
+                notFound={notFound}
+              />
+            </div>
+          </div>
         </div>
       </div>
     );
