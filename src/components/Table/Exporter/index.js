@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 import s from './style.css';
 const fPlus = foundationPartial(s);
 
@@ -10,30 +10,27 @@ class Exporter extends Component {
     children: T.any,
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {isOpen: false};
+    this.state = { isOpen: false };
   }
-  render(){
-    const {children} = this.props;
+  render() {
+    const { children } = this.props;
     return (
       <div
-        className={fPlus('button-group', 'float-right', 'exporter')}
+        className={fPlus('button-group', 'small', 'float-right', 'exporter')}
       >
         <a
-          className={fPlus('arrow-only', 'button', 'dropdown', 'hover')}
+          className={fPlus('button', 'dropdown', 'small', 'hover')}
           onClick={() => {
-            this.setState({isOpen: !this.state.isOpen});
+            this.setState({ isOpen: !this.state.isOpen });
           }}
-          style={{margin: 0}}
+          style={{ margin: 0 }}
         >
-          <span className={fPlus('show-for-sr')}>Get data</span>Get data </a>
+          Export data{' '}
+        </a>
         <div
-          className={fPlus(
-            'dropdown-pane',
-            'left',
-            'dropdown-content')
-          }
+          className={fPlus('dropdown-pane', 'left', 'dropdown-content')}
           style={{
             transform: `scaleY(${this.state.isOpen ? 1 : 0})`,
           }}
