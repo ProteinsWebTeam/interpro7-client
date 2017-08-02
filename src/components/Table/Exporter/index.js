@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-
+import fonts from 'styles/ebi/fonts.css';
 import { foundationPartial } from 'styles/foundation';
 import s from './style.css';
-const fPlus = foundationPartial(s);
+const fPlus = foundationPartial(s, fonts);
 
 class Exporter extends Component {
   static propTypes = {
@@ -27,7 +27,11 @@ class Exporter extends Component {
           }}
           style={{ margin: 0 }}
         >
-          Export data{' '}
+          <span
+            className={fPlus('icon', 'icon-functional')}
+            data-icon="="
+          />{' '}
+          Export {' '}
         </a>
         <div
           className={fPlus('dropdown-pane', 'left', 'dropdown-content')}
