@@ -1,7 +1,7 @@
-div.exporter {
+.exporter {
   margin: 0 0 0 0.5rem;
   position: relative;
-  & > .dropdown-content {
+  & .dropdown-content {
     top: 100%;
     right: 0;
     overflow: auto;
