@@ -13,3 +13,6 @@
     visibility: visible;
   }
 }
+.exporter .dropdown-pane {
+  z-index: 2;
+} /* so sticky header stay on top*/
