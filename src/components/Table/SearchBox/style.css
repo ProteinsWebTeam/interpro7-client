@@ -1,0 +1,29 @@
+.filter-box {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+.filter-box ::-webkit-input-placeholder {
+  color: #aeaeae;
+}
+.filter-box ::-moz-placeholder {
+  color: #aeaeae;
+}
+.filter-box .cancel-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 0;
+  opacity: 0;
+  font-size: 2em;
+  line-height: 1;
+  cursor: pointer;
+}
+.filter-box input:hover + .cancel-button,
+.cancel-button:hover {
+  opacity: 0.7;
+}
+.filter-box input {
+  color: #505f74;
+}
+.filter-box input:hover {
+  border: 1px #b9d7ef solid;
+}
