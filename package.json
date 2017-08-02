@@ -98,7 +98,7 @@
     "d3": "^4.10.0",
     "data-loader": "^0.2.0",
     "draft-js": "^0.10.1",
-    "ebi-framework": "github:ebiwd/EBI-Framework#v1.2",
+    "ebi-framework": "^1.2.0-alpha.2",
     "foundation-sites": "^6.4.1",
     "gsap": "^1.20.2",
     "history": "^4.6.3",

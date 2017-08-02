@@ -42,7 +42,7 @@ const cssSettings = env => ({
     ? ''
     : '[folder]_[name]__[local]___'}[hash:base64:3]`,
   alias: {
-    '../libraries': 'ebi-framework/libraries',
+    '../libraries/tablesorter': 'ebi-framework/libraries/tablesorter/dist',
     'EBI-Conceptual': 'EBI-Icon-fonts/EBI-Conceptual',
     'EBI-Functional': 'EBI-Icon-fonts/EBI-Functional',
     'EBI-Generic': 'EBI-Icon-fonts/EBI-Generic',
