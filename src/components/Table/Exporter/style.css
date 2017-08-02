@@ -4,12 +4,12 @@ div.exporter {
   & > .dropdown-content {
     top: 100%;
     right: 0;
-    overflow:auto;
+    overflow: auto;
     width: initial;
     min-width: 220%;
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 300ms ease-in-out;
+    /*transform: scaleY(0);*/
+    /*transform-origin: top;*/
+    /*transition: transform 300ms ease-in-out;*/
     visibility: visible;
   }
 }
