@@ -56,15 +56,17 @@ const Table = ({
       <div className={f('row')}>
         <div className={f('columns', 'table-view')}>
           <div className={f('row')}>
-            <div className={f('columns', 'table-results-filtering')}>
-              {title &&
-                <h4>
-                  {title}
-                </h4>}
-              {exporter}
-              {pageSize &&
-                <_PageSizeSelector search={_query} pathname={pathname} />}
-              {search}
+            <div className={f('columns')}>
+              <div className={f('table-results-filtering')}>
+                {title &&
+                  <h4>
+                    {title}
+                  </h4>}
+                {exporter}
+                {pageSize &&
+                  <_PageSizeSelector search={_query} pathname={pathname} />}
+                {search}
+              </div>
             </div>
           </div>
           <div className={f('row')}>
