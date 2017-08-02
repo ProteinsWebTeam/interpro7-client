@@ -41,6 +41,16 @@ const cssSettings = env => ({
   localIdentName: `${env.production
     ? ''
     : '[folder]_[name]__[local]___'}[hash:base64:3]`,
+  alias: {
+    '../libraries': 'ebi-framework/libraries',
+    'EBI-Conceptual': 'EBI-Icon-fonts/EBI-Conceptual',
+    'EBI-Functional': 'EBI-Icon-fonts/EBI-Functional',
+    'EBI-Generic': 'EBI-Icon-fonts/EBI-Generic',
+    'EBI-Species': 'EBI-Icon-fonts/EBI-Species',
+    'EBI-SocialMedia': 'EBI-Icon-fonts/EBI-SocialMedia',
+    'EBI-FileFormats': 'EBI-Icon-fonts/EBI-FileFormats',
+    'EBI-Chemistry': 'EBI-Icon-fonts/EBI-Chemistry',
+  },
 });
 
 // eslint-disable-next-line complexity
@@ -216,7 +226,9 @@ module.exports = (env = { dev: true }) => {
                   use: [
                     {
                       loader: 'css-loader',
-                      options: cssSettings(env),
+                      options: Object.assign({}, cssSettings(env), {
+                        localIdentName: '[local]',
+                      }),
                     },
                     {
                       loader: 'sass-loader',
@@ -228,7 +240,9 @@ module.exports = (env = { dev: true }) => {
                   'style-loader',
                   {
                     loader: 'css-loader',
-                    options: cssSettings(env),
+                    options: Object.assign({}, cssSettings(env), {
+                      localIdentName: '[local]',
+                    }),
                   },
                   {
                     loader: 'sass-loader',

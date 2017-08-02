@@ -7,7 +7,7 @@ import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiGlobalStyles from 'styles/ebi-global.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import ipro from 'styles/interpro-new.css';
 import localStyles from './style.css';
 

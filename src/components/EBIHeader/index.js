@@ -7,16 +7,16 @@ import { toggleEMBLMapNav } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import styles from './style.css';
-import ebiGlobalStyles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css';
-import ebiTheme from 'styles/theme-template.css';
-import ebiPetrolTheme from 'styles/theme-embl-petrol.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import ebiTheme from 'ebi-framework/css/theme-template.css';
+import ebiPetrolTheme from 'ebi-framework/css/theme-embl-petrol.css';
 const styleBundle = foundationPartial(
   styles,
   fonts,
   ebiPetrolTheme,
   ebiTheme,
-  ebiGlobalStyles
+  ebiGlobalStyles,
 );
 
 /**
@@ -32,11 +32,9 @@ const styleBundle = foundationPartial(
  */
 const _EmblButton = ({ toggleEMBLMapNav }) =>
   <button
-    className={styleBundle({
-      button: true,
-      'float-right': true,
-    })}
+    className={styleBundle('button', 'float-right')}
     type="button"
+    aria-expanded="false"
     onClick={toggleEMBLMapNav}
   >
     Hinxton
@@ -47,19 +45,11 @@ _EmblButton.propTypes = {
 
 const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
 
-const iconClasses = styleBundle({
-  icon: true,
-  'icon-generic': true,
-});
-
-const emblSelectorClasses = styleBundle({
-  'float-right': true,
-  'show-for-medium': true,
-  'embl-selector': true,
-});
-
 const EBIHeader = () =>
-  <div id="global-masthead" className={styleBundle('clearfix')}>
+  <div
+    id="global-masthead"
+    className={styleBundle('clearfix', 'masthead-black-bar')}
+  >
     <a
       href="//www.ebi.ac.uk"
       title="Go to the EMBL-EBI homepage"
@@ -74,37 +64,44 @@ const EBIHeader = () =>
             <a href="//www.ebi.ac.uk" rel="noopener" />
           </li>
 
-          <li id="home">
+          <li id="home" className={styleBundle('home')}>
             <a href="//www.ebi.ac.uk" rel="noopener">
-              <i className={iconClasses} data-icon="H" />EMBL-EBI
+              EMBL-EBI
             </a>
           </li>
 
-          <li id="services" className={styleBundle('active')}>
+          <li id="services" className={styleBundle('services', 'active')}>
             <a href="//www.ebi.ac.uk/services" rel="noopener">
-              <i className={iconClasses} data-icon="(" />Services
+              Services
             </a>
           </li>
 
-          <li id="research">
+          <li id="research" className={styleBundle('research')}>
             <a href="//www.ebi.ac.uk/research" rel="noopener">
-              <i className={iconClasses} data-icon=")" />Research
+              Research
             </a>
           </li>
 
-          <li id="training">
+          <li id="training" className={styleBundle('training')}>
             <a href="//www.ebi.ac.uk/training" rel="noopener">
-              <i className={iconClasses} data-icon="t" />Training
+              Training
             </a>
           </li>
 
-          <li id="about">
+          <li id="about" className={styleBundle('about')}>
             <a href="//www.ebi.ac.uk/about" rel="noopener">
-              <i className={iconClasses} data-icon="i" />About us
+              About us
             </a>
           </li>
 
-          <li className={emblSelectorClasses} style={{ flexGrow: 1 }}>
+          <li
+            className={styleBundle(
+              'float-right',
+              'show-for-medium',
+              'embl-selector',
+            )}
+            style={{ flexGrow: 1 }}
+          >
             <EmblButton />
           </li>
         </ul>

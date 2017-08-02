@@ -6,7 +6,7 @@ import { schedule } from 'timing-functions/src';
 
 // Global stylesheets loaded here
 import 'styles/foundation';
-import 'styles/ebi-global.css';
+import 'ebi-framework/css/ebi-global.scss';
 import 'styles/global.css';
 import 'styles/theme-interpro.css';
 import 'styles/interpro-new.css';
@@ -17,11 +17,11 @@ import Overlay from 'components/Overlay';
 
 import Sentinel from 'components/Sentinel';
 import Header from 'components/Header';
-import Breadcrumb from 'components/Breadcrumb';
+// import Breadcrumb from 'components/Breadcrumb';
 
 import Pages from 'Pages';
 
-const STICKY_MENU_OFFSET = 150;
+const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 
 const NullComponent = () => null;
@@ -29,46 +29,46 @@ const NullComponent = () => null;
 const LoadingBarAsync = createAsyncComponent(
   () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "loading-bar" */ 'components/LoadingBar')
+      import(/* webpackChunkName: "loading-bar" */ 'components/LoadingBar'),
     ),
   NullComponent,
-  'LoadingBar'
+  'LoadingBar',
 );
 
 const SideMenuAsync = createAsyncComponent(
   () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "side-menu" */ 'components/Menu/SideMenu')
+      import(/* webpackChunkName: "side-menu" */ 'components/Menu/SideMenu'),
     ),
   NullComponent,
-  'SideMenu'
+  'SideMenu',
 );
 
 const EMBLDropdownAsync = createAsyncComponent(
   () =>
     schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "cookie-banner" */ 'components/EMBLDropdown')
+      import(/* webpackChunkName: "cookie-banner" */ 'components/EMBLDropdown'),
     ),
   NullComponent,
-  'EMBLDropdown'
+  'EMBLDropdown',
 );
 
 const EBIFooterAsync = createAsyncComponent(
   () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "ebi-footer" */ 'components/EBIFooter')
+      import(/* webpackChunkName: "ebi-footer" */ 'components/EBIFooter'),
     ),
   NullComponent,
-  'EBIFooter'
+  'EBIFooter',
 );
 
 const ToastDisplayAsync = createAsyncComponent(
   () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "toast-display" */ 'components/Toast/ToastDisplay')
+      import(/* webpackChunkName: "toast-display" */ 'components/Toast/ToastDisplay'),
     ),
   NullComponent,
-  'ToastDisplay'
+  'ToastDisplay',
 );
 
 const CookieFooterAsync = createAsyncComponent(
@@ -85,7 +85,7 @@ const CookieFooterAsync = createAsyncComponent(
       }
     }),
   NullComponent,
-  'CookieFooter'
+  'CookieFooter',
 );
 
 const Root = () =>
@@ -97,8 +97,8 @@ const Root = () =>
     <SideMenuAsync />
     <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
     <Sentinel top={STICKY_MENU_OFFSET} />
-    <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} />
-    <Pages />
+    {/* <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} /> */}
+    <Pages top={STICKY_MENU_OFFSET} />
     <EBIFooterAsync />
     <ToastDisplayAsync />
     <CookieFooterAsync />

@@ -4,34 +4,31 @@ import T from 'prop-types';
 
 import MenuItem from 'components/Menu/MenuItem';
 
-import {EBI} from 'menuConfig';
+import { EBI } from 'menuConfig';
 
-import {foundationPartial} from 'styles/foundation';
-import fonts from 'styles/ebi/fonts.css';
+import { foundationPartial } from 'styles/foundation';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const iconStyle = foundationPartial(fonts);
 
 const EBIMenu = (
-  {className, children}/*: {className?: string, children?: any} */
-) => (
+  { className, children } /*: {className?: string, children?: any} */,
+) =>
   <ul className={className}>
     {children}
-    {EBI.map(({href, name, icon, iconClass = 'generic'}) => (
+    {EBI.map(({ href, name, icon, iconClass = 'generic' }) =>
       <li key={href}>
-        <MenuItem href={href} >
-          {
-            icon &&
+        <MenuItem href={href}>
+          {icon &&
             <i
               data-icon={icon}
               className={iconStyle('icon', `icon-${iconClass}`)}
-            />
-          }
+            />}
           {name}
         </MenuItem>
-      </li>
-    ))}
-  </ul>
-);
+      </li>,
+    )}
+  </ul>;
 EBIMenu.propTypes = {
   className: T.string,
   children: T.any,

@@ -15,11 +15,11 @@
 }
 
 .header {
-  /*position: sticky;*/
-  /*top: -150px;!* -34px (EBI header); *!*/
+  //position: sticky;
+  //top: -150px;/*!* -34px (EBI header); *!*/
   left: 0;
   right: 0;
-  height: 238px; /*magic --- SP for what use ?*/
+  //height: 238px; /*magic --- SP for what use ?*/
   z-index: 3;
 }
 

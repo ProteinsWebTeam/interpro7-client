@@ -1,12 +1,12 @@
 import React from 'react';
 import T from 'prop-types';
 
-import {GoLink} from 'components/ExtLink';
+import { GoLink } from 'components/ExtLink';
 import AnimatedEntry from 'components/AnimatedEntry';
 
-import ebiStyles from 'styles/ebi-global.css';
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import ipro from 'styles/interpro-new.css';
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 const f = foundationPartial(ebiStyles, ipro);
 
 const getDefaultPayload = () => ({
@@ -15,12 +15,12 @@ const getDefaultPayload = () => ({
   'Cellular Component': [],
 });
 
-const GoTerms = ({terms}/*: {terms: Array<Object>} */) => {
+const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
   const _terms = terms.reduce((acc, term) => {
     // eslint-disable-next-line no-param-reassign
     if (!acc[term.category]) acc[term.category] = [];
     if (typeof term === 'string') {
-      acc[term.category].push({identifier: term});
+      acc[term.category].push({ identifier: term });
       return acc;
     }
     acc[term.category].push(term);
@@ -34,29 +34,30 @@ const GoTerms = ({terms}/*: {terms: Array<Object>} */) => {
         </div>
       </div>
       <div className={f('row')}>
-        {Object.entries(_terms)
-          .map(([key, values]) => (
-            <div key={key} className={f('medium-6', 'large-4', 'columns')}>
-              <h5>{key.replace('_', ' ')}</h5>
-              <AnimatedEntry duration={500} className={f('no-bullet')}>
-                { values && values.length ?
-                  values.map(({identifier, name}) => (
+        {Object.entries(_terms).map(([key, values]) =>
+          <div key={key} className={f('medium-6', 'large-4', 'columns')}>
+            <h5>
+              {key.replace('_', ' ')}
+            </h5>
+            <AnimatedEntry duration={500} className={f('no-bullet')}>
+              {values && values.length
+                ? values.map(({ identifier, name }) =>
                     <li key={identifier}>
                       <GoLink
                         id={identifier}
                         className={f('label', 'go', key)}
                         title={identifier}
-                      >{name || identifier}</GoLink>
-                    </li>
-                  )) :
-                  <li>
+                      >
+                        {name || identifier}
+                      </GoLink>
+                    </li>,
+                  )
+                : <li>
                     <span className={f('secondary', 'label')}>None</span>
-                  </li>
-                }
-              </AnimatedEntry>
-            </div>
-          ))
-        }
+                  </li>}
+            </AnimatedEntry>
+          </div>,
+        )}
       </div>
     </section>
   );

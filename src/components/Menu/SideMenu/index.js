@@ -12,7 +12,7 @@ import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
-import ebiStyles from 'styles/ebi-global.css';
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import interproStyles from 'styles/interpro-new.css';
 import helperClasses from 'styles/helper-classes.css';
 import style from './style.css';

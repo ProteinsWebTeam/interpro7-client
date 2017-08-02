@@ -1,21 +1,21 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import cancelable from 'utils/cancelable';
 import loadResource from 'utils/loadResource';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
 let bound = false;
 
-const noPadding = {padding: 0};
+const noPadding = { padding: 0 };
 
 class Twitter extends Component {
   /* ::
@@ -27,13 +27,13 @@ class Twitter extends Component {
   */
   componentDidMount() {
     this._twitterScript = cancelable(
-      loadResource('//platform.twitter.com/widgets.js')
+      loadResource('//platform.twitter.com/widgets.js'),
     );
     this._twitterScript.promise.then(() => {
       if (!window.twttr) return;
       if (!bound) {
         // Only need to bind this once
-        window.twttr.events.bind('rendered', ({target}) => {
+        window.twttr.events.bind('rendered', ({ target }) => {
           // eslint-disable-next-line no-param-reassign
           target.style.opacity = 1;
           // eslint-disable-next-line no-param-reassign
@@ -53,14 +53,14 @@ class Twitter extends Component {
     return (
       <div className={f('expanded', 'row')}>
         <div className={f('columns')} style={noPadding}>
-          <div className={'jumbo-news'} >
-            <div className={'jumbo-news-container'} >
+          <div className={'jumbo-news'}>
+            <div className={'jumbo-news-container'}>
               <h3
                 className={f('icon', 'icon-socialmedia', 'icon-s2')}
                 data-icon="T"
               />
               <a
-                ref={node => this._node = node}
+                ref={node => (this._node = node)}
                 data-dnt="true"
                 data-chrome={
                   'nofooter noborders noheader noscrollbar transparent'

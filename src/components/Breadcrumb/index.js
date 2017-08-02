@@ -9,7 +9,7 @@ import cfg from 'config';
 import { sticky as supportsSticky } from 'utils/support';
 
 import { foundationPartial } from 'styles/foundation';
-import ebiStyles from 'styles/ebi-global.css';
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import interproStyles from 'styles/interpro-new.css';
 import helperClasses from 'styles/helper-classes.css';
 import style from './style.css';
@@ -52,7 +52,7 @@ const mapPathArrayToLink = paths =>
       null &&
       <Link key={url || i} to={url || '#'}>
         {name}
-      </Link>
+      </Link>,
   );
 
 const formatEndpoints = paths => [
@@ -112,7 +112,7 @@ class Breadcrumb extends Component {
       const prev = positions.get(node);
       if (prev) {
         console.log(
-          `translate(${prev.left - curr.left}px, ${prev.top - curr.top}px)`
+          `translate(${prev.left - curr.left}px, ${prev.top - curr.top}px)`,
         );
         node.animate(
           [
@@ -122,7 +122,7 @@ class Breadcrumb extends Component {
             },
             { transform: 'translate(0, 0)' },
           ],
-          { duration: 500, easing: 'ease-out' }
+          { duration: 500, easing: 'ease-out' },
         );
       }
       positions.set(node, curr);
@@ -164,7 +164,7 @@ class Breadcrumb extends Component {
               {endpoints.map((endpoint, i) =>
                 <span key={i} className={f({ group: i <= 1, focus: i > 1 })}>
                   {mapPathArrayToLink(endpoint.paths)}
-                </span>
+                </span>,
               )}
             </span>
             <span className={f('hint')}>
@@ -183,7 +183,7 @@ class Breadcrumb extends Component {
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
   state => state.newLocation.description,
-  (stuck, description) => ({ stuck, description })
+  (stuck, description) => ({ stuck, description }),
 );
 
 export default connect(mapStateToProps)(Breadcrumb);

@@ -17,8 +17,8 @@ import AsyncComponent, {
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 
 import iscanLogo from 'images/logo_interproscan_ext.png';
@@ -180,7 +180,7 @@ LatestEntry.propTypes = {
 };
 
 const Home = () =>
-  <div>
+  <div style={{ marginTop: '1em' }}>
     <div className={f('row')}>
       <div className={f('columns', 'large-12')}>
         <div

@@ -1,25 +1,26 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
-import {findDOMNode} from 'react-dom';
-import {transformFormatted} from 'utils/text';
-import {foundationPartial} from 'styles/foundation';
-import ebiStyles from 'styles/ebi-global.css';
+import { findDOMNode } from 'react-dom';
+import { transformFormatted } from 'utils/text';
+import { foundationPartial } from 'styles/foundation';
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import styles from './style.css';
 import theme from 'styles/theme-interpro.css';
 const f = foundationPartial(ebiStyles, styles, theme);
 
-const ParagraphWithCites = ({p, literature = {}}) => (
+const ParagraphWithCites = ({ p, literature = {} }) =>
   <p className={styles.paragraph}>
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = Object.keys(literature).indexOf(part) + 1;
-      return (
-        i % 2 ?
-          <a key={i} href={`${location.pathname}#${part}`}>{refCounter}</a> :
-          <span key={i}>{part === ', ' ? ',\u00a0' : part}</span>
-      );
+      return i % 2
+        ? <a key={i} href={`${location.pathname}#${part}`}>
+            {refCounter}
+          </a>
+        : <span key={i}>
+            {part === ', ' ? ',\u00a0' : part}
+          </span>;
     })}
-  </p>
-);
+  </p>;
 ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
   literature: T.object,
@@ -57,7 +58,7 @@ class Description extends Component {
     heightToHide: defaultHeightToHide,
   };
 
-  constructor(props/* : Props*/) {
+  constructor(props /* : Props*/) {
     super(props);
     this.state = {
       isOpen: false,
@@ -70,7 +71,7 @@ class Description extends Component {
   componentDidMount = () => {
     window.addEventListener('resize', this.recheckHeight);
     this.recheckHeight();
-  }
+  };
 
   componentDidUpdate() {
     this.recheckHeight();
@@ -78,9 +79,9 @@ class Description extends Component {
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.recheckHeight);
-  }
-  handleClick(){
-    this.setState({isOpen: !this.state.isOpen});
+  };
+  handleClick() {
+    this.setState({ isOpen: !this.state.isOpen });
   }
   onResize() {
     this.recheckHeight();
@@ -89,7 +90,7 @@ class Description extends Component {
     if (this.moreButton && this.divContent) {
       const moreDiv = findDOMNode(this.moreButton);
       const contentDiv = findDOMNode(this.divContent);
-      const {heightToHide} = this.props;
+      const { heightToHide } = this.props;
       if (moreDiv.offsetTop - contentDiv.offsetTop < heightToHide) {
         this.moreButton.style.visibility = 'hidden';
       } else {
@@ -100,45 +101,50 @@ class Description extends Component {
       // })});
     }
   }
-  render(){
+  render() {
     const {
-      textBlocks, literature, title, extraTextForButton, heightToHide,
+      textBlocks,
+      literature,
+      title,
+      extraTextForButton,
+      heightToHide,
     } = this.props;
     return (
       <div className={f('content')}>
-        <h4>{title}</h4>
+        <h4>
+          {title}
+        </h4>
         <div
-          className={f('animate-height', {collapsed: !this.state.isOpen})}
+          className={f('animate-height', { collapsed: !this.state.isOpen })}
           style={{
-            maxHeight: `${
-              this.state.isOpen ? this.state.contentSize : heightToHide
-            }px`,
+            maxHeight: `${this.state.isOpen
+              ? this.state.contentSize
+              : heightToHide}px`,
           }}
-          ref={(e) => {
+          ref={e => {
             this.divContent = e;
           }}
         >
-          {textBlocks.map((b, i) => (
+          {textBlocks.map((b, i) =>
             <div key={i}>
-              {transformFormatted(b).map((p, i) => (
-                <ParagraphWithCites key={i} p={p} literature={literature}/>
-              ))}
-            </div>
-          ))}
+              {transformFormatted(b).map((p, i) =>
+                <ParagraphWithCites key={i} p={p} literature={literature} />,
+              )}
+            </div>,
+          )}
         </div>
         <button
           className={f('button')}
           id="show-more"
           onClick={this.handleClick}
-          ref={(e) => {
+          ref={e => {
             this.moreButton = e;
           }}
-          style={{marginTop: '1em'}}
+          style={{ marginTop: '1em' }}
         >
           Read {this.state.isOpen ? 'less' : 'more'} {extraTextForButton}
         </button>
       </div>
-
     );
   }
 }

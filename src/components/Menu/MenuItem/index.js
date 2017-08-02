@@ -8,7 +8,7 @@ import { BaseLink } from 'components/ExtLink';
 import { closeEverything } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
-import ebiStyles from 'styles/ebi-global.css';
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import helperClasses from 'styles/helper-classes.css';
 import styles from './style.css';
 

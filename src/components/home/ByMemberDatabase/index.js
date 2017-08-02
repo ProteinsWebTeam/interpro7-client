@@ -1,21 +1,21 @@
 // @flow
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import {createSelector} from 'reselect';
-import {format} from 'url';
+import { createSelector } from 'reselect';
+import { format } from 'url';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadData from 'higherOrder/loadData';
 
-import {memberDB} from 'staticData/home';
+import { memberDB } from 'staticData/home';
 
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
 
@@ -29,34 +29,37 @@ class ByMemberDatabase extends PureComponent {
   };
 
   render() {
-    const {data: {payload}} = this.props;
+    const { data: { payload } } = this.props;
     const counts = payload && payload.entries.member_databases;
     return (
       <div>
         <AnimatedEntry className={f('row')} element="div">
-          {
-            memberDB.map(({name, newTo, type, title, version, apiType}) => (
-              <div
-                className={f('columns', 'medium-3', 'large-3', 'text-center')}
-                key={name}
-              >
-                <Link newTo={newTo}>
-                  <MemberSymbol type={type}/>
-                  <h6 data-tooltip title={title}>{name}</h6>
-                  <p>
-                    <small>{version}</small><br/>
-                    <span className={f('count', {visible: payload})}>
-                      {counts && apiType && counts[apiType] || ''}
-                      {type === 'new' ? ' ' : ' entries'}
-                    </span>
-                  </p>
-                </Link>
-              </div>
-            ))
-          }
+          {memberDB.map(({ name, newTo, type, title, version, apiType }) =>
+            <div
+              className={f('columns', 'medium-3', 'large-3', 'text-center')}
+              key={name}
+            >
+              <Link newTo={newTo}>
+                <MemberSymbol type={type} />
+                <h6 data-tooltip title={title}>
+                  {name}
+                </h6>
+                <p>
+                  <small>
+                    {version}
+                  </small>
+                  <br />
+                  <span className={f('count', { visible: payload })}>
+                    {(counts && apiType && counts[apiType]) || ''}
+                    {type === 'new' ? ' ' : ' entries'}
+                  </span>
+                </p>
+              </Link>
+            </div>,
+          )}
         </AnimatedEntry>
         <Link
-          newTo={{description: {mainType: 'entry'}}}
+          newTo={{ description: { mainType: 'entry' } }}
           className={f('button')}
         >
           View all entries
@@ -68,12 +71,13 @@ class ByMemberDatabase extends PureComponent {
 
 const mapStateToUrl = createSelector(
   state => state.settings.api,
-  ({protocol, hostname, port, root}) => format({
-    protocol,
-    hostname,
-    port,
-    pathname: `${root}/entry`,
-  })
+  ({ protocol, hostname, port, root }) =>
+    format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}/entry`,
+    }),
 );
 
 export default loadData(mapStateToUrl)(ByMemberDatabase);

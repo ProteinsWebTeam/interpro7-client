@@ -12,7 +12,7 @@ import description2path from 'utils/processLocation/description2path';
 
 import { foundationPartial } from 'styles/foundation';
 
-import fonts from 'styles/ebi/fonts.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(fonts);
 

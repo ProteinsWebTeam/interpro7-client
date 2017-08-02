@@ -1,5 +1,8 @@
 // @flow
 import React from 'react';
+import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import Switch from 'components/generic/Switch';
 import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
@@ -55,8 +58,8 @@ const pages = new Set([
   { value: 'settings', component: Settings },
 ]);
 
-const Pages = (props /*: Object */) =>
-  <main>
+const Pages = ({ stuck, top, ...props } /*: Object */) =>
+  <main style={{ marginTop: stuck ? '198.75px' : 0 }}>
     <Switch
       {...props}
       indexRoute={() => null}
@@ -71,5 +74,14 @@ const Pages = (props /*: Object */) =>
       catchAll={NotFound}
     />
   </main>;
+Pages.propTypes = {
+  stuck: T.bool.isRequired,
+  top: T.number.isRequired,
+};
 
-export default Pages;
+const mapStateToProps = createSelector(
+  state => state.ui.stuck,
+  stuck => ({ stuck }),
+);
+
+export default connect(mapStateToProps)(Pages);
