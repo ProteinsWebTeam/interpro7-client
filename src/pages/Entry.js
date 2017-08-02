@@ -152,7 +152,7 @@ class List extends Component {
             </Exporter>
             <PageSizeSelector />
             <SearchBox search={search.search} pathname={''}>
-              Search entries:
+              &nbsp;
             </SearchBox>
             <Column
               accessKey="type"
