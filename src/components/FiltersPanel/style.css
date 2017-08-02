@@ -30,8 +30,7 @@
 }
 
 hr {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
+  margin: 0;
 }
 /* Medium + */
 @media screen and (min-width: 40em) and (max-width: 56em) {
