@@ -207,34 +207,30 @@ class List extends Component {
                   accessKey="member_databases"
                   renderer={(mdb /*: string */) =>
                     Object.keys(mdb).map(db =>
-                      <div
-                        key={db}
-                        style={{
-                          backgroundColor: '#DDDDDD',
-                          padding: '1px',
-                          marginBottom: '1px',
-                        }}
-                      >
-                        {db}
-                        {mdb[db].map(accession =>
-                          <span
-                            key={accession}
-                            className={f('label')}
-                            style={{ float: 'right' }}
-                          >
-                            <Link
-                              newTo={{
-                                description: {
-                                  mainType: 'entry',
-                                  mainDB: db,
-                                  mainAccession: accession,
-                                },
-                              }}
+                      <div key={db} className={ps('sign-row')}>
+                        <span className={ps('sign-cell')}>
+                          {db}
+                        </span>
+                        <span className={ps('sign-cell')}>
+                          {mdb[db].map(accession =>
+                            <span
+                              key={accession}
+                              className={ps('sign-label', 'sign-freq')}
                             >
-                              {accession}
-                            </Link>
-                          </span>,
-                        )}
+                              <Link
+                                newTo={{
+                                  description: {
+                                    mainType: 'entry',
+                                    mainDB: db,
+                                    mainAccession: accession,
+                                  },
+                                }}
+                              >
+                                {accession}
+                              </Link>
+                            </span>,
+                          )}
+                        </span>
                       </div>,
                     )}
                 >
