@@ -51,7 +51,7 @@ class PageSizeSelector extends Component {
       );
     }
     return (
-      <div className={f('float-left')}>
+      <div className={f('table-length')}>
         Show{' '}
         <select
           className={f('small')}
