@@ -22,3 +22,7 @@
     transition: opacity var(--timing-fast) ease-in-out;
   }
 }
+.table-length,
+.table-length select {
+  font-size: 0.9rem;
+}
