@@ -25,7 +25,7 @@ const BySpecies = ({ data: { payload } }) =>
     {// TODO: Include number of entries
     speciesFeat.map(e =>
       <div
-        className={f('columns', 'medium-4', 'large-4', 'text-center')}
+        className={f('column', 'small-3', 'medium-2', 'large-4', 'text-center')}
         key={e.tax_id}
       >
         <Link

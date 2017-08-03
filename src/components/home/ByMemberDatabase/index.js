@@ -36,7 +36,13 @@ class ByMemberDatabase extends PureComponent {
         <AnimatedEntry className={f('row')} element="div">
           {memberDB.map(({ name, newTo, type, title, version, apiType }) =>
             <div
-              className={f('columns', 'medium-3', 'large-3', 'text-center')}
+              className={f(
+                'column',
+                'small-3',
+                'medium-2',
+                'large-4',
+                'text-center',
+              )}
               key={name}
             >
               <Link newTo={newTo}>

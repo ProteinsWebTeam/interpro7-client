@@ -1,5 +1,7 @@
 import classNames from 'classnames/bind';
+// import foundation from 'foundation-sites/dist/css/foundation.css';
 import foundation from 'foundation-sites/dist/css/foundation-float.css';
+
 /**
  * Use the default when only foundation is required
  * @example
