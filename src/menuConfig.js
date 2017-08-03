@@ -68,10 +68,11 @@ export const entities /*: Array<Object> */ = [
   {
     newTo: {
       description: {
-        mainType: 'proteome',
+        mainType: 'organism',
+        mainDB: 'taxonomy',
       },
     },
-    name: 'Proteome',
+    name: 'Organism',
   },
 ];
 
