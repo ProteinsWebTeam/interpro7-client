@@ -42,7 +42,7 @@ class SearchBox extends Component {
 
   render() {
     return (
-      <div className={f('float-right')} style={{ position: 'relative' }}>
+      <div className={f('table-filter')}>
         {this.props.children || 'Search:'}
         <div className={f('filter-box')}>
           <input
