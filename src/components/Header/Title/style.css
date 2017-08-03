@@ -2,11 +2,11 @@
 
 .main-title {
   transform: translateY(0) scale(1);
-  transform-origin: 20%; /* magic */
+  transform-origin: 20%; /* magic when time try to use 0% for vertical move only*/
   transition: transform var(--timing-fast) ease-in-out;
 
   &.stuck {
-    transform: translateY(100%) scale(calc(2 / 3));
+    transform: translateY(100%) scale(0.64);
   }
 }
 
@@ -43,12 +43,7 @@
 }
 
 .main-logo {
-  transform: rotateZ(0);
   transition: transform var(--timing-fast) ease-in-out;
-
-  &.stuck {
-    transform: rotateZ(180deg);
-  }
 }
 
 .domain.loading {
@@ -65,7 +60,7 @@
   transition: transform var(--timing-fast) ease-in-out;
 
   &.stuck {
-    transform: translate(18ch, 12px);
+    transform: translate(18ch, 18px);
   }
 }
 
@@ -81,12 +76,30 @@
   margin-right: 0.9rem; /*to be aligned with tagline, aslo depends on svg width*/
 }
 
-@media screen and (max-width: 63.9375em) and (min-width: 40em) {
-  .logo-text  svg {
-    width: 50px;
+/*change EBI global font effect to happen at 63em instead of 75em*/
+@media screen and (min-width: 64em) and (max-width: 75em) {
+  body h1 {
+    font-size: 3rem;
   }
 }
 
+/*med-large only*/
+@media screen and (min-width: 64em) and (max-width: 75em) {
+  .logo-text  svg {
+    /*border:1px grey solid;*/
+  }
+}
+/*medium only*/
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  .logo-text  svg {
+    width: 50px;
+  }
+  .local-masthead h1 {
+    font-size: 2.4rem;
+  }
+}
+
+/*small only*/
 @media screen and (max-width: 39.9375em) {
   .logo-text  svg {
     width: 40px;

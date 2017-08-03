@@ -1,35 +1,98 @@
 /******************************Overwritting EBI  global****************************/
-ul#global-nav {padding-top:0;}/****IMPORTANT TO FIX****remove space on top of page for EBI menu**********/
-.local-masthead nav ul#secondary-menu-links.menu li a:hover:after, .local-masthead nav ul#global-nav.menu li a:hover:after, .local-masthead nav ul.menu li a:hover:after {    top: 0px;border-left: 0px solid transparent;    border-right: 0px solid transparent;} /*****remove arrows in the menu*****/
-.local-masthead nav ul li a:active {border-bottom: 3px white solid;} /*****remove arrows in the menu - fill the gap when menu click when no arrow*****/
+ul#global-nav {
+  padding-top: 0;
+} /****IMPORTANT TO FIX****remove space on top of page for EBI menu**********/
+.local-masthead nav ul#secondary-menu-links.menu li a:hover:after,
+.local-masthead nav ul#global-nav.menu li a:hover:after,
+.local-masthead nav ul.menu li a:hover:after {
+  top: 0px;
+  border-left: 0px solid transparent;
+  border-right: 0px solid transparent;
+} /*****remove arrows in the menu*****/
+.local-masthead nav ul li a:active {
+  border-bottom: 3px white solid;
+} /*****remove arrows in the menu - fill the gap when menu click when no arrow*****/
 
-a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
-#content {padding-top: 1rem; padding-bottom:0;}/*add some more space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer*/
-#local-masthead nav ul.menu li {border-right: 1px solid rgba(248, 248, 248, 0.2);}/*STYLE - slightly hide division between menu items - need to keep ID specificity to override EBI style TILL they change the ID in EBI-GLOBAL */
-#local-masthead ul li.is-active a, #local-masthead ul li a:hover, #local-masthead nav ul li a.hover, #local-masthead nav ul li a:hover {color: #000;}/*STYLE - make menu items hover slightly darker*/
-.pagination .current {background: #3798a7;}/*STYLE - custom color for table pagination MISSING in THEME-EBI*/
-.callout {background: #eaeaea;}/*redefining a darker bgd for callout as they use to be*/
+a,
+a:visited {
+  border-bottom-width: 0;
+} /*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
+#content {
+  padding-top: 1rem;
+  padding-bottom: 0;
+} /*add some more space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer*/
+#local-masthead nav ul.menu li {
+  border-right: 1px solid rgba(248, 248, 248, 0.2);
+} /*STYLE - slightly hide division between menu items - need to keep ID specificity to override EBI style TILL they change the ID in EBI-GLOBAL */
+#local-masthead ul li.is-active a,
+#local-masthead ul li a:hover,
+#local-masthead nav ul li a.hover,
+#local-masthead nav ul li a:hover {
+  color: #000;
+} /*STYLE - make menu items hover slightly darker*/
+.pagination .current {
+  background: #3798a7;
+} /*STYLE - custom color for table pagination MISSING in THEME-EBI*/
+.callout {
+  background: #eaeaea;
+} /*redefining a darker bgd for callout as they use to be*/
 /****************************** END Overwritting EBI  global**********************/
 
 /******************************Local style***************************************/
 /*ICONS*/
 /*MEMBER DATABASE SVG icons*/
-.svg-mask {display: none;}
-.md-color, .md-server {fill:#e2e2e2; font-size:9em; font-family: 'EBI-generic', arial, sans-serif;}
-.md-cg .md-color {fill: #a88cc3;}
-.md-cd .md-color {fill:#addc58;}
-.md-ha .md-color {fill:#1ad8d8;}
-.md-pa .md-color {fill:#bfac92;}
-.md-pf .md-color {fill:#6287b1; /*was 9bbbe0*/}
-.md-pi .md-color {fill:#e299e2;}
-.md-pri .md-color {fill:#4fd829;}
-.md-pro .md-color {fill:#8d99e4;}
-.md-prpro .md-color, .md-pr .md-color {fill:#ff9229;}
-.md-prpat .md-color {fill:#ffc300;/*was 8899a6*/}
-.md-sf .md-color {fill:#00b1d3;}
-.md-sm .md-color {fill:#ff7a76;}
-.md-su .md-color {fill:#686868;}
-.md-ti .md-color {fill:#b37977;}
+.svg-mask {
+  display: none;
+}
+.md-color,
+.md-server {
+  fill: #e2e2e2;
+  font-size: 9em;
+  font-family: 'EBI-generic', arial, sans-serif;
+}
+.md-cg .md-color {
+  fill: #a88cc3;
+}
+.md-cd .md-color {
+  fill: #addc58;
+}
+.md-ha .md-color {
+  fill: #1ad8d8;
+}
+.md-pa .md-color {
+  fill: #bfac92;
+}
+.md-pf .md-color {
+  fill: #6287b1; /*was 9bbbe0*/
+}
+.md-pi .md-color {
+  fill: #e299e2;
+}
+.md-pri .md-color {
+  fill: #4fd829;
+}
+.md-pro .md-color {
+  fill: #8d99e4;
+}
+.md-prpro .md-color,
+.md-pr .md-color {
+  fill: #ff9229;
+}
+.md-prpat .md-color {
+  fill: #ffc300; /*was 8899a6*/
+}
+.md-sf .md-color {
+  fill: #00b1d3;
+}
+.md-sm .md-color {
+  fill: #ff7a76;
+}
+.md-su .md-color {
+  fill: #686868;
+}
+.md-ti .md-color {
+  fill: #b37977;
+}
 /*/MEMBER DATABASE SVG icons*/
 
 /*SVG icons*/
@@ -45,67 +108,156 @@ a, a:visited {border-bottom-width: 0;}/*STYLE - remove the dotted line for links
 /*.nav-toggle span:before {top: -10px;}*/
 /*.nav-toggle span:after {bottom: -10px;}*/
 /*.nav-toggle span, .nav-toggle span:before, .nav-toggle span:after {*/
-    /*transition: all 500ms ease-in-out;*/
+/*transition: all 500ms ease-in-out;*/
 /*}*/
 /*.nav-toggle.active span {*/
-    /*background-color: transparent;*/
+/*background-color: transparent;*/
 /*}*/
 /*.nav-toggle.active span:before, .nav-toggle.active span:after {*/
-    /*top: 0;*/
+/*top: 0;*/
 /*}*/
 /*.nav-toggle.active span:before {*/
-    /*transform: rotate(45deg);*/
+/*transform: rotate(45deg);*/
 /*}*/
 /*.nav-toggle.active span:after {*/
-    /*transform: rotate(-45deg);*/
+/*transform: rotate(-45deg);*/
 /*}*/
 
 /******************************BANNER*********************************/
-.main-header {width: 100%; height: 260px;/*better to define size here than in the #content padding*/}
-.main-header.sm {position: relative;} /*mobile - remove sticky*/
-.local-masthead h1 {white-space: nowrap;} /*remove space between logo and text so it doesn't break on two lines*/
-.local-masthead h1 span {font-size: 41%;}
+.main-header {
+  width: 100%;
+  height: 260px; /*better to define size here than in the #content padding*/
+}
+.main-header.sm {
+  position: relative;
+} /*mobile - remove sticky*/
+.local-masthead h1 {
+  white-space: nowrap;
+} /*remove space between logo and text so it doesn't break on two lines*/
+.local-masthead h1 span {
+  font-size: 41%;
+}
 
 /***** LOCAL BUTTONS  + LINKS*****/
-.local-site-search .icon-functional:before ,.local-offcanvas-menu .icon-functional:before {font-size: 2.5em;}
-html.fontface .local-site-search .icon-functional:before ,.local-offcanvas-menu .icon-functional:before {padding-right:0;} /*solve a bug with search icon moving on two lines on firefox*/
-.local-site-search .button, .local-offcanvas-menu .button,.local-site-search .button:hover, .local-offcanvas-menu .button:hover {background-color: transparent;}/*we don't want bgd for those buttons*/
-.local-site-search {position: absolute; top: 118px;  right: 10px; }/*let the text field appear with no size problem*/
-.local-offcanvas-menu  {position: absolute; top: 68px;  right: 10px;}
+.local-site-search .icon-functional:before,
+.local-offcanvas-menu .icon-functional:before {
+  font-size: 2.5em;
+}
+html.fontface .local-site-search .icon-functional:before,
+.local-offcanvas-menu .icon-functional:before {
+  padding-right: 0;
+} /*solve a bug with search icon moving on two lines on firefox*/
+.local-site-search .button,
+.local-offcanvas-menu .button,
+.local-site-search .button:hover,
+.local-offcanvas-menu .button:hover {
+  background-color: transparent;
+} /*we don't want bgd for those buttons*/
+.local-site-search {
+  position: absolute;
+  top: 118px;
+  right: 10px;
+} /*let the text field appear with no size problem*/
+.local-offcanvas-menu {
+  position: absolute;
+  top: 68px;
+  right: 10px;
+}
 /*.local-offcanvas-menu .button {margin:0;} is it still used?*/
 /*Menu - not used anymore in the new way to interact with offcanvas*/
 /*.main-header .local-offcanvas-menu .close-menu {display: none;}!*switch between open/close text*!*/
 /*.offc-nav.expand ~ .main-header .local-offcanvas-menu .close-menu {display: block;}!*switch between open/close text*!*/
 /*.offc-nav.expand ~ .main-header .local-offcanvas-menu .open-menu {display: none;}!*switch between open/close text*!*/
 /*Search*/
-.local-site-search .search-box {width: 70%; transform: scaleX(0); transform-origin: right; transition: transform .3s ease-in-out; display: block; float: right; padding: 0;/*background-color: rgba(255, 255, 255, 0.07);*/background-color: rgba(255, 255, 255, 0); box-shadow: none; outline: 0;border-bottom: 1px solid rgba(255, 255, 255, 0.4); border-top:none;border-left:none;  border-right:none;font-size: 1rem;  color: rgba(255, 255, 255, 0.5);}
-.local-site-search .button {float:right;}/*important to keep for the smooth effect moving left the magnifying icon next to input field*/
-.local-site-search [type='text']:focus {border-bottom: 3px solid white; border-top:none;  border-left:none; border-right:none; color:white;  background-color: transparent;  outline: none; box-shadow: none; transition: box-shadow 0.5s, border-color 0.25s ease-in-out;}
-.local-site-search:hover .tool-search .search-box, .search-box:focus {transform: scaleX(1);}
-.local-site-search:hover ::-webkit-input-placeholder {opacity:1;}/*animation to make the placeholder appear softly*/
-.local-site-search:hover ::-moz-placeholder {opacity:1;}
-.local-site-search:hover :-moz-placeholder {opacity:1;}
-.local-site-search:hover :-ms-input-placeholder {opacity:1;}
+.local-site-search .search-box {
+  width: 70%;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .3s ease-in-out;
+  display: block;
+  float: right;
+  padding: 0; /*background-color: rgba(255, 255, 255, 0.07);*/
+  background-color: rgba(255, 255, 255, 0);
+  box-shadow: none;
+  outline: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+.local-site-search .button {
+  float: right;
+} /*important to keep for the smooth effect moving left the magnifying icon next to input field*/
+.local-site-search [type='text']:focus {
+  border-bottom: 3px solid white;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  color: white;
+  background-color: transparent;
+  outline: none;
+  box-shadow: none;
+  transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
+}
+.local-site-search:hover .tool-search .search-box,
+.search-box:focus {
+  transform: scaleX(1);
+}
+.local-site-search:hover ::-webkit-input-placeholder {
+  opacity: 1;
+} /*animation to make the placeholder appear softly*/
+.local-site-search:hover ::-moz-placeholder {
+  opacity: 1;
+}
+.local-site-search:hover :-moz-placeholder {
+  opacity: 1;
+}
+.local-site-search:hover :-ms-input-placeholder {
+  opacity: 1;
+}
 /*::-webkit-input-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;transition: opacity .3s ease-in-out;}*/
 /*::-moz-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;   transition: opacity .3s ease-in-out;}*/
 /*:-moz-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;   transition: opacity .3s ease-in-out;}*/
 /*:-ms-input-placeholder {color: rgba(255,255,255,0.5); opacity:0.1; transition: opacity .3s ease-in-out;}*/
-input:focus::-webkit-input-placeholder {color:transparent;}/*css solution to make the placeholder text disappear*/
-input:focus:-moz-placeholder {color:transparent;}
-input:focus::-moz-placeholder {color:transparent;}
-input:focus:-ms-input-placeholder {color:transparent;}
+input:focus::-webkit-input-placeholder {
+  color: transparent;
+} /*css solution to make the placeholder text disappear*/
+input:focus:-moz-placeholder {
+  color: transparent;
+}
+input:focus::-moz-placeholder {
+  color: transparent;
+}
+input:focus:-ms-input-placeholder {
+  color: transparent;
+}
 
-a:hover.noline {border-bottom:0 solid transparent;}
+a:hover.noline {
+  border-bottom: 0 solid transparent;
+}
 /***** /LOCAL BUTTONS + LINKS *** /
 
 /* MENU*/
-.horizontal.menu > li > a {border-bottom-style: solid; border-bottom-width:3px; border-bottom-color:transparent;}/* CROSS ICON PBM - to make all menu items same height*/
+.horizontal.menu > li > a {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: transparent;
+} /* CROSS ICON PBM - to make all menu items same height*/
 
 #local-masthead .menu a {
   height: 100%;
 }
-#local-masthead a.active {color: #0a0a0a;} /*define the colour for active tab link*/
-.masthead .menu .active {color: #0a0a0a; background: #fff;border:none;font-weight: bold;/*temp while we replace the active class on <li> and not <a> element*/}/*this should be defined in the default ebi css*/
+#local-masthead a.active {
+  color: #0a0a0a;
+} /*define the colour for active tab link*/
+.masthead .menu .active {
+  color: #0a0a0a;
+  background: #fff;
+  border: none;
+  font-weight: bold; /*temp while we replace the active class on <li> and not <a> element*/
+} /*this should be defined in the default ebi css*/
 /*#local-masthead .menu > li > a {border-bottom-style: solid; border-bottom-color:transparent;}!*important to make all menu items same height otherwise buggy effect on click*!*/
 .badge {
   background: rgba(0, 0, 0, 0.23);
@@ -113,128 +265,331 @@ a:hover.noline {border-bottom:0 solid transparent;}
   padding: 0.5em;
   font-weight: normal; /*avoid bold on badge when activated*/
 }
-.entry-menu-medium-step-01, .entry-menu-medium-step-02,.entry-menu-medium-step-03, .main-menu-all {display:none;}/*hide different menu version collapsed*/
+.entry-menu-medium-step-01,
+.entry-menu-medium-step-02,
+.entry-menu-medium-step-03,
+.main-menu-all {
+  display: none;
+} /*hide different menu version collapsed*/
 
-.local-masthead nav ul.dropdown.menu.float-left li a:hover:after {display: none; border-bottom: 3px;} /*important for collapse button remove foundation "bar" after that bug and makes the elements move*//*remove extra space that makes the banner move just for small screen*/
-.local-masthead ul.submenu li a:hover {background-color:#85b6d3; /*was 79b4d4*/color:white; /*border-bottom: 3px #85b6d3 solid;*/} /*dropdown menu style - button collapse*/
-
+.local-masthead nav ul.dropdown.menu.float-left li a:hover:after {
+  display: none;
+  border-bottom: 3px;
+} /*important for collapse button remove foundation "bar" after that bug and makes the elements move*/ /*remove extra space that makes the banner move just for small screen*/
+.local-masthead ul.submenu li a:hover {
+  background-color: #85b6d3; /*was 79b4d4*/
+  color: white; /*border-bottom: 3px #85b6d3 solid;*/
+} /*dropdown menu style - button collapse*/
 
 /*RD - Breakpoints for menu to collapse into dropdown*/
 /*large*/
-@media screen and (min-width: 1296px) {.main-menu-all {display:block;}}
+@media screen and (min-width: 1296px) {
+  .main-menu-all {
+    display: block;
+  }
+}
 /*medium large*/
-@media screen and (min-width: 1236px) and (max-width: 1295.9375px) {.entry-menu-medium-step-01 {display: block;}}
+@media screen and (min-width: 1236px) and (max-width: 1295.9375px) {
+  .entry-menu-medium-step-01 {
+    display: block;
+  }
+}
 /*medium*/
-@media screen and (min-width: 916px) and (max-width: 1235.9375px) {.entry-menu-medium-step-02 {display: block;}}
+@media screen and (min-width: 916px) and (max-width: 1235.9375px) {
+  .entry-menu-medium-step-02 {
+    display: block;
+  }
+}
 /*small medium*/
-@media screen and (min-width: 40em) and (max-width: 915.9375px) {.entry-menu-medium-step-03 {display: block;}}
+@media screen and (min-width: 40em) and (max-width: 915.9375px) {
+  .entry-menu-medium-step-03 {
+    display: block;
+  }
+}
 /*/RD - Breakpoints for menu to collapse into dropdown*/
 
 /*/MENU*/
-
 
 /*
 IMAGE BANNER
 */
 .local-masthead.md {
-    background-repeat: no-repeat, no-repeat;
-    background-position:  top left, top left;
-    background-size:  100%, 2000px;
+  background-repeat: no-repeat, no-repeat;
+  background-position: top left, top left;
+  background-size: 100%, 2000px;
 }
-.local-masthead.md-sm {background-repeat: no-repeat, no-repeat;
-    background-position: top right, left;
-    background-size: 100%, 100% 518px;}
+.local-masthead.md-sm {
+  background-repeat: no-repeat, no-repeat;
+  background-position: top right, left;
+  background-size: 100%, 100% 518px;
+}
 
-.local-masthead.md-gp {background-repeat: no-repeat, repeat;
-    background-position: top right, left;
-    background-size: 100%, 10%;}
+.local-masthead.md-gp {
+  background-repeat: no-repeat, repeat;
+  background-position: top right, left;
+  background-size: 100%, 10%;
+}
 
-.local-masthead img {margin-left: -82px;margin-right: 0.9rem; /*useful on sticky to hide logo totally*/width: 65px;}/*to make logo look like an icon -IMPORTANT limit width of image or banner show black bgd at bottom*/
+.local-masthead img {
+  margin-left: -82px;
+  margin-right: 0.9rem; /*useful on sticky to hide logo totally*/
+  width: 65px;
+} /*to make logo look like an icon -IMPORTANT limit width of image or banner show black bgd at bottom*/
 .local-masthead.md-smart {
-    background-image: linear-gradient(to right, #325578,rgba(249, 255, 182, 0.53),rgb(43, 111, 128) ), url(../images/backgrounds/fondation-morse-header.jpg);
-    background-position: top right, left;
-    background-size: 100%, 1027px;
+  background-image: linear-gradient(
+      to right,
+      #325578,
+      rgba(249, 255, 182, 0.53),
+      rgb(43, 111, 128)
+    ),
+    url(../images/backgrounds/fondation-morse-header.jpg);
+  background-position: top right, left;
+  background-size: 100%, 1027px;
 }
 #local-masthead,
 .local-masthead {
-    background-image: linear-gradient(to right, rgba(0, 85, 158, 0.9),rgba(45, 174, 193, 0.5),rgba(0, 85, 158, 0.9) ), url(../images/backgrounds/fondation-morse-header.jpg);
-    background-repeat: no-repeat, repeat;
-    background-position: left, top right;
-    background-size: 100%, 1400px;
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 85, 158, 0.9),
+      rgba(45, 174, 193, 0.5),
+      rgba(0, 85, 158, 0.9)
+    ),
+    url(../images/backgrounds/fondation-morse-header.jpg);
+  background-repeat: no-repeat, repeat;
+  background-position: left, top right;
+  background-size: 100%, 1400px;
 }
 
 /*image entry*/
-.my-svg-container {float: left;  width: 15%;/*19%*/ vertical-align: middle;margin-right:2rem; margin-bottom: 0.5rem;}
-#my-svg-icon, #my-svg-icon-sm {background-image: linear-gradient(to right, rgba(58, 95, 125, 0.6),rgba(152, 216, 186, 0.6) ), url(../images/backgrounds/fondation-morse-header.jpg);height:8rem; width:8rem; border:1px solid #ccc;} /*specific style for MD icon*/
+.my-svg-container {
+  float: left;
+  width: 15%; /*19%*/
+  vertical-align: middle;
+  margin-right: 2rem;
+  margin-bottom: 0.5rem;
+}
+#my-svg-icon,
+#my-svg-icon-sm {
+  background-image: linear-gradient(
+      to right,
+      rgba(58, 95, 125, 0.6),
+      rgba(152, 216, 186, 0.6)
+    ),
+    url(../images/backgrounds/fondation-morse-header.jpg);
+  height: 8rem;
+  width: 8rem;
+  border: 1px solid #ccc;
+} /*specific style for MD icon*/
 /************************ END BANNER**********************************/
 
 /************************ STICKY BANNER**********************************/
-.smaller {z-index: 1;left: 0; position:fixed; margin-top: -10.5em !important; }
-.smaller .local-masthead div#local-title {margin:1.2rem 0 2rem 0;}
-.smaller #local-title h1 {transform:  translate(28px,74px); font-size: 170%;}/*move logo reduce logo text*/
-.smaller #local-title h1 img {width:40px;}/*reduce logo image*/
-.smaller  h4 {transform: translate(156px,32px); font-size: 133%;}/*transform tagline*/
-.smaller .local-site-search {top:164px; right:72px;}/*move icon on right*/
-.smaller .local-offcanvas-menu  {top:164px;}/*move icon on right*/
-.smaller .local-site-search .icon-functional:before, .smaller .local-offcanvas-menu .icon-functional:before {font-size: 30px;}/*icon size and position*/
+.smaller {
+  z-index: 1;
+  left: 0;
+  position: fixed;
+  margin-top: -10.5em !important;
+}
+.smaller .local-masthead div#local-title {
+  margin: 1.2rem 0 2rem 0;
+}
+.smaller #local-title h1 {
+  transform: translate(28px, 74px);
+  font-size: 170%;
+} /*move logo reduce logo text*/
+.smaller #local-title h1 img {
+  width: 40px;
+} /*reduce logo image*/
+.smaller  h4 {
+  transform: translate(156px, 32px);
+  font-size: 133%;
+} /*transform tagline*/
+.smaller .local-site-search {
+  top: 164px;
+  right: 72px;
+} /*move icon on right*/
+.smaller .local-offcanvas-menu {
+  top: 164px;
+} /*move icon on right*/
+.smaller .local-site-search .icon-functional:before,
+.smaller .local-offcanvas-menu .icon-functional:before {
+  font-size: 30px;
+} /*icon size and position*/
 
 /*solve bug offset title with sticky*/
-.anchor {display: block; position: relative; width: 0; height: 0;  z-index: -1; visibility: hidden; left: 0; top: -84px; /*change depending on banner width*/ }
-
+.anchor {
+  display: block;
+  position: relative;
+  width: 0;
+  height: 0;
+  z-index: -1;
+  visibility: hidden;
+  left: 0;
+  top: -84px; /*change depending on banner width*/
+}
 
 /*Foundation sticky*/
-.local-masthead.is-stuck .off-canvas {border:1px tan solid;}
-/*.local-masthead.is-stuck header .masthead {padding-top: 4.2rem;}*//*hack to give more height to the banner ?*/
-/*.local-masthead.is-stuck div#local-title  {margin-bottom:0.2rem;}*//*reduce space between title and menu when sticky*/
-.local-masthead.is-stuck div#local-title h1 {transform: scale(0.6) translate(-350px,131px);}/*transform logo*/
-.local-masthead.is-stuck h4 {transform: scale(0.8) translate(96px,24px);}/*transform tagline*/
+.local-masthead.is-stuck .off-canvas {
+  border: 1px tan solid;
+}
+/*.local-masthead.is-stuck header .masthead {padding-top: 4.2rem;}*/ /*hack to give more height to the banner ?*/
+/*.local-masthead.is-stuck div#local-title  {margin-bottom:0.2rem;}*/ /*reduce space between title and menu when sticky*/
+.local-masthead.is-stuck div#local-title h1 {
+  transform: scale(0.6) translate(-350px, 131px);
+} /*transform logo*/
+.local-masthead.is-stuck h4 {
+  transform: scale(0.8) translate(96px, 24px);
+} /*transform tagline*/
 /*.local-masthead.is-stuck .extra {box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1) }*/ /*add a border and shadow*/
-.local-masthead.is-stuck .local-site-search {top:164px; right:72px;}
-.local-masthead.is-stuck .local-offcanvas-menu  {top:164px;}
+.local-masthead.is-stuck .local-site-search {
+  top: 164px;
+  right: 72px;
+}
+.local-masthead.is-stuck .local-offcanvas-menu {
+  top: 164px;
+}
 /*/Foundation sticky*/
 /************************ END STICKY BANNER**********************************/
 
 /*Overwritting Foundation*/
-h1 small, h2 small, h3 small, h4 small {color: #bbb;}
-h5 small, h6 small {color: #8b8b8b;} /*style-darker*/
-.label {white-space: inherit;}/*labels for go terms were long and clashing with grid*/
+h1 small,
+h2 small,
+h3 small,
+h4 small {
+  color: #bbb;
+}
+h5 small,
+h6 small {
+  color: #8b8b8b;
+} /*style-darker*/
+.label {
+  white-space: inherit;
+} /*labels for go terms were long and clashing with grid*/
 /*.has-tip {border-bottom-width: 0px;} not needed  anymore for go terms?*/
-.local-masthead h1 small, .local-masthead h2 small, .local-masthead h3 small, .local-masthead h4 small, .local-masthead h5 small, .local-masthead h6 small {color: #cacaca;}/*style - banner subtitle*/
-.local-masthead.md h4 small {color: #416b80;}/*specific to md */
-.local-masthead.md-smart h4 small {color: #a2d7b9;}
+.local-masthead h1 small,
+.local-masthead h2 small,
+.local-masthead h3 small,
+.local-masthead h4 small,
+.local-masthead h5 small,
+.local-masthead h6 small {
+  color: #cacaca;
+} /*style - banner subtitle*/
+.local-masthead.md h4 small {
+  color: #416b80;
+} /*specific to md */
+.local-masthead.md-smart h4 small {
+  color: #a2d7b9;
+}
 /*/Overwritting Foundation*/
 
 /****************************** RIGHT PANEL *********************************/
-.panel a {color:#4c4c4c; padding-left: 3px ;}/*neutral link same as font-color*/
-.panel a:hover {color:#4c4c4c;}
-.panel a span {color:#bbb;font-size: 79%;}
+.panel a {
+  color: #4c4c4c;
+  padding-left: 3px;
+} /*neutral link same as font-color*/
+.panel a:hover {
+  color: #4c4c4c;
+}
+.panel a span {
+  color: #bbb;
+  font-size: 79%;
+}
 
-.panel .mdlink {background: #dde4e9; border-left: 5px solid #558abb; color: #4d4e53;    padding: 15px;}
+.panel .mdlink {
+  background: #dde4e9;
+  border-left: 5px solid #558abb;
+  color: #4d4e53;
+  padding: 15px;
+}
 
-ul.domaintree  li, ul.familytree  li, ul.chevron  li {list-style: none;}
-ul.domaintree, ul.familytree, ul.chevron {margin-left:0;}
+ul.domaintree  li,
+ul.familytree  li,
+ul.chevron  li {
+  list-style: none;
+}
+ul.domaintree,
+ul.familytree,
+ul.chevron {
+  margin-left: 0;
+}
 
-ul.familytree>li:before, li.familybranch:before {content: ''; display: inline-block; height: 1.3em; background-image: url(../images/family_icon.svg); background-size: 100%; background-repeat: no-repeat; padding-left: 1.5em; top: 5px; position: relative;}
-ul.domaintree>li:before, li.domainbranch:before {content: ''; display: inline-block; height: 1.3em; background-image: url(../images/domain_icon.svg); background-size: 100%; background-repeat: no-repeat; padding-left: 1.5em; top: 5px; position: relative;}
-ul.chevron>li:before {content: ''; display: inline-block; height: 1em; background-image: url(../images/chevron.svg); background-repeat: no-repeat; padding-left: 1em; position: relative; top: 3px;}
+ul.familytree > li:before,
+li.familybranch:before {
+  content: '';
+  display: inline-block;
+  height: 1.3em;
+  background-image: url(../images/family_icon.svg);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  padding-left: 1.5em;
+  top: 5px;
+  position: relative;
+}
+ul.domaintree > li:before,
+li.domainbranch:before {
+  content: '';
+  display: inline-block;
+  height: 1.3em;
+  background-image: url(../images/domain_icon.svg);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  padding-left: 1.5em;
+  top: 5px;
+  position: relative;
+}
+ul.chevron > li:before {
+  content: '';
+  display: inline-block;
+  height: 1em;
+  background-image: url(../images/chevron.svg);
+  background-repeat: no-repeat;
+  padding-left: 1em;
+  position: relative;
+  top: 3px;
+}
 /****************************** END RIGHT PANEL *****************************/
 
 /****************************** TABLE *********************************/
 /*Filter menu option*/
-.sub-nav { background-color: #e7f2ff;  padding: 0.2rem 0.2rem 0.2rem 0;margin-bottom:1rem;}
-.sub-nav li {color: #686868;  font-size: 0.77778rem;  padding-left: 0.88889rem; }
-#content .sub-nav li.active a {border-radius: 3px; color: #fff; cursor: default;font-weight: normal; padding: 0.16667rem 0.88889rem;}
-#content .sub-nav a {border-bottom:0px solid red;}
+.sub-nav {
+  background-color: #e7f2ff;
+  padding: 0.2rem 0.2rem 0.2rem 0;
+  margin-bottom: 1rem;
+}
+.sub-nav li {
+  color: #686868;
+  font-size: 0.77778rem;
+  padding-left: 0.88889rem;
+}
+#content .sub-nav li.active a {
+  border-radius: 3px;
+  color: #fff;
+  cursor: default;
+  font-weight: normal;
+  padding: 0.16667rem 0.88889rem;
+}
+#content .sub-nav a {
+  border-bottom: 0px solid red;
+}
 /*/filter menu option*/
 /****************************** END TABLE *********************************/
 
-
 /******************************LOCAL STYLE*********************************/
 /*TABS*/
-.tabs .tabs-title.is-active > a:focus, .tabs .tabs-title.is-active > a {color: white; background: #666;} /*tabs style - the default tabs style from EBI using aria-selected='true'.is-active doesn't work*/
+.tabs .tabs-title.is-active > a:focus,
+.tabs .tabs-title.is-active > a {
+  color: white;
+  background: #666;
+} /*tabs style - the default tabs style from EBI using aria-selected='true'.is-active doesn't work*/
 
-.tabs .tabs-title > button { color: #0a0a0a; padding: 1.25rem 1.5rem; font-size: 0.75rem; line-height: 1;}
-.tabs .tabs-title > button:hover { background-color: #DDD; }
+.tabs .tabs-title > button {
+  color: #0a0a0a;
+  padding: 1.25rem 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+.tabs .tabs-title > button:hover {
+  background-color: #ddd;
+}
 .tabs .tabs-title.is-active > button:focus,
 .tabs .tabs-title.is-active > button,
 .is-active-tab {
@@ -243,69 +598,207 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 } /*tabs style - the default tabs style from EBI using aria-selected='true'.is-active doesn't work*/
 
 /*footer*/
-.local_footer {padding:1rem 0;}
-.local_footer ul.off-canvas-list {background-color: transparent;}
-.local_footer ul.off-canvas-list label {background-color:transparent ;color:#baf7d5; font-size: 0.9rem;border-top:0px solid white;}
-.local_footer.local-masthead  ul.off-canvas-list a:visited.active {color:rgba(68, 68, 68, 0.6); }
-.local_footer.local-masthead  img.logo_faint {margin-left: 0;  margin-right: 0;  width: 170px;opacity: 0.4;}
-.local_footer.local-masthead  h1 {color:black;opacity: 0.4;}
-.local_footer .is-drilldown-submenu { background-color: #509394;}
-.local_footer.local-masthead {background-size: 130%, 110%;}
+.local_footer {
+  padding: 1rem 0;
+}
+.local_footer ul.off-canvas-list {
+  background-color: transparent;
+}
+.local_footer ul.off-canvas-list label {
+  background-color: transparent;
+  color: #baf7d5;
+  font-size: 0.9rem;
+  border-top: 0px solid white;
+}
+.local_footer.local-masthead  ul.off-canvas-list a:visited.active {
+  color: rgba(68, 68, 68, 0.6);
+}
+.local_footer.local-masthead  img.logo_faint {
+  margin-left: 0;
+  margin-right: 0;
+  width: 170px;
+  opacity: 0.4;
+}
+.local_footer.local-masthead  h1 {
+  color: black;
+  opacity: 0.4;
+}
+.local_footer .is-drilldown-submenu {
+  background-color: #509394;
+}
+.local_footer.local-masthead {
+  background-size: 130%, 110%;
+}
 /*Entry page - md info next title*/
-.md-hlight {display: block;overflow: auto;}
-.md-hlight div {float:left;}
-.md-hlight h5 {color: #41647d;}
-.md-hlight a, .md-hlight a:visited {color: #41647d;}
+.md-hlight {
+  display: block;
+  overflow: auto;
+}
+.md-hlight div {
+  float: left;
+}
+.md-hlight h5 {
+  color: #41647d;
+}
+.md-hlight a,
+.md-hlight a:visited {
+  color: #41647d;
+}
 /*/Entry page - md info next title*/
 
 /*homepage gal*/
-.browse-by .columns:hover {background-color:#e4f3ff;} /*add a light mouse over effect*/
-#content .browse-by .tabs-title a:hover, #content .entry-list .tabs-title a:hover,#content .browse-by .tabs-title a:focus, #content .entry-list .tabs-title a:focus   {border-bottom-width: 0;}/*remove dark line that appear on tabs*/
-#content .browse-by a.button:hover, #content .entry-list a.button:hover {border: 1px solid transparent;} /*remove dark line that appear on button*/
+.browse-by .columns:hover {
+  background-color: #e4f3ff;
+} /*add a light mouse over effect*/
+#content .browse-by .tabs-title a:hover,
+#content .entry-list .tabs-title a:hover,
+#content .browse-by .tabs-title a:focus,
+#content .entry-list .tabs-title a:focus {
+  border-bottom-width: 0;
+} /*remove dark line that appear on tabs*/
+#content .browse-by a.button:hover,
+#content .entry-list a.button:hover {
+  border: 1px solid transparent;
+} /*remove dark line that appear on button*/
 /*/homepage gal*/
 
 /*homepage figures*/
-.fig-container {float: left; width: 17%; margin: 0 2em 1em 0; overflow: hidden;}
-.fig-sqc {background: url(../images/sqc.png) no-repeat -23% 136%; background-size: 65%;  height: 16em; width: 20em; margin-bottom: -78px; margin-top: 15px;}
-.fig-sqcbig {background: url(../images/sqc.png) no-repeat 0% 0%; background-size: 111%; background-position-y: 74%; background-position-x: 145%; height: 16em; width: 30em; margin-bottom: -78px; margin-top: 15px;}
-.fig-proteins {background: url(../images/proteins.png) no-repeat 0% 0%; background-size: 55%; height: 16em; width: 20em; margin-bottom: -68px;}
-.fig-protban {background: url(../images/backgrounds/protein3d_02.png) repeat 85% 9%;background-size: 353%; height: 16em; width: 20em; margin-bottom: -68px;}
-.fig-sqcban {background: url(../images/backgrounds/composite_03.png) no-repeat 85% 9%; background-size: 503%; height: 16em; width: 20em; margin-bottom: -68px;}
+.fig-container {
+  float: left;
+  width: 17%;
+  margin: 0 2em 1em 0;
+  overflow: hidden;
+}
+.fig-sqc {
+  background: url(../images/sqc.png) no-repeat -23% 136%;
+  background-size: 65%;
+  height: 16em;
+  width: 20em;
+  margin-bottom: -78px;
+  margin-top: 15px;
+}
+.fig-sqcbig {
+  background: url(../images/sqc.png) no-repeat 0% 0%;
+  background-size: 111%;
+  background-position-y: 74%;
+  background-position-x: 145%;
+  height: 16em;
+  width: 30em;
+  margin-bottom: -78px;
+  margin-top: 15px;
+}
+.fig-proteins {
+  background: url(../images/proteins.png) no-repeat 0% 0%;
+  background-size: 55%;
+  height: 16em;
+  width: 20em;
+  margin-bottom: -68px;
+}
+.fig-protban {
+  background: url(../images/backgrounds/protein3d_02.png) repeat 85% 9%;
+  background-size: 353%;
+  height: 16em;
+  width: 20em;
+  margin-bottom: -68px;
+}
+.fig-sqcban {
+  background: url(../images/backgrounds/composite_03.png) no-repeat 85% 9%;
+  background-size: 503%;
+  height: 16em;
+  width: 20em;
+  margin-bottom: -68px;
+}
 /*/homepage figures*/
 
 /*homepage components gal*/
-.species-list, .go-list, .md-list {font-size: 80%;}
-.species-list a:hover:not(.button), .go-list a:hover:not(.button), .md-list a:hover:not(.button)  {border-bottom:0px deeppink solid;}
+.species-list,
+.go-list,
+.md-list {
+  font-size: 80%;
+}
+.species-list a:hover:not(.button),
+.go-list a:hover:not(.button),
+.md-list a:hover:not(.button) {
+  border-bottom: 0px deeppink solid;
+}
 /*/homepage components gal*/
 
 /*homepage entry-list component*/
-.entry-list .svg-container {width: 5%;margin-right: 0.8em;padding-top:4px; float: left;} /*svg icon size*/
-.entry-list ul {list-style: none; padding: 0; margin: 0; font-size: 94%;}
-.list-vertical-scrol {position: relative;width: 100%; overflow-x: hidden; overflow-y: auto; /*height: 378px;*/ margin-bottom: 1rem;}
-.entry-list .list-item {display: flex; flex-wrap: nowrap;}
-.entry-list .list-vertical-scrol ul li { padding: 0.4em 0; border-radius: 6px;}
-.entry-list .list-vertical-scrol ul li:hover {background-color:#e4f3ff;}
-.entry-list .list-vertical-scrol a { color: #0a0a0a; }
-.entry-list .md-small {width: 29px; float: left;}
+.entry-list .svg-container {
+  width: 5%;
+  margin-right: 0.8em;
+  padding-top: 4px;
+  float: left;
+} /*svg icon size*/
+.entry-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 94%;
+}
+.list-vertical-scrol {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto; /*height: 378px;*/
+  margin-bottom: 1rem;
+}
+.entry-list .list-item {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.entry-list .list-vertical-scrol ul li {
+  padding: 0.4em 0;
+  border-radius: 6px;
+}
+.entry-list .list-vertical-scrol ul li:hover {
+  background-color: #e4f3ff;
+}
+.entry-list .list-vertical-scrol a {
+  color: #0a0a0a;
+}
+.entry-list .md-small {
+  width: 29px;
+  float: left;
+}
 /*/homepage entry-list component*/
 
 /*homepage member database list component*/
-.md-list svg {margin-bottom: -15px; margin-top: -15px; /*temp reposition the view port without changing the coordinates of all svg*/}
-.md-list a h6 {margin-bottom:0;}/*remove space around title*/
-.md-list a.md-cg h6 {white-space: nowrap;}/*avoid  text collapse for cathgene*/
-.md-list small {color:#0a0a0a;font-weight:bold;}
+.md-list svg {
+  margin-bottom: -15px;
+  margin-top: -15px; /*temp reposition the view port without changing the coordinates of all svg*/
+}
+.md-list a h6 {
+  margin-bottom: 0;
+} /*remove space around title*/
+.md-list a.md-cg h6 {
+  white-space: nowrap;
+} /*avoid  text collapse for cathgene*/
+.md-list small {
+  color: #0a0a0a;
+  font-weight: bold;
+}
 /*/homepage member database list component*/
 
 /*homepage species list component*/
-.species-list span:before {font-size: 520%;}
+.species-list span:before {
+  font-size: 520%;
+}
 /*/homepage species list component*/
 
 /*homepage Go list component*/
-.go-list span.bullet-icon {font-size: 520%; line-height: 0.5;}
+.go-list span.bullet-icon {
+  font-size: 520%;
+  line-height: 0.5;
+}
 /*/homepage Go list component*/
 
 /*homepage entry type list component*/
-.entry-type .svg-container {width: 60%; margin: 0 auto; float:none;}
+.entry-type .svg-container {
+  width: 60%;
+  margin: 0 auto;
+  float: none;
+}
 /*/homepage entry type list component*/
 
 /*homepage twit component*/
@@ -336,70 +829,184 @@ ul.chevron>li:before {content: ''; display: inline-block; height: 1em; backgroun
 /*/homepage twit component*/
 
 /*entry page - go term etiquette*/
-a.go {cursor: pointer;color: white;}
-.biological_process {background-color: #058dc7;}
-.molecular_function {background-color: #50b432;}
-.cellular_component {background-color: #ed561b;}
+a.go {
+  cursor: pointer;
+  color: white;
+}
+.biological_process {
+  background-color: #058dc7;
+}
+.molecular_function {
+  background-color: #50b432;
+}
+.cellular_component {
+  background-color: #ed561b;
+}
 /*/entry page - go term etiquette*/
 
 /*back to top button*/
-#back-top {position: fixed; bottom: 0;  right: 19px; z-index: 100;}
-#back-top span.topicon {font-size: 1.5em;color:white;opacity: 0.18; background-color: black;padding: 6px 7px;}
-#back-top:hover span.topicon {opacity: 0.4; }
-#back-top a:hover,#back-top a:focus,#back-top a:active {border-bottom: 0px solid #8c8c8c; }
-#back-top span.text {opacity: 0; color: grey; font-size: 0.8em;}
-#back-top:hover span.text {opacity: 1;}
-#back-top:hover {padding-bottom: 14px;}
+#back-top {
+  position: fixed;
+  bottom: 0;
+  right: 19px;
+  z-index: 100;
+}
+#back-top span.topicon {
+  font-size: 1.5em;
+  color: white;
+  opacity: 0.18;
+  background-color: black;
+  padding: 6px 7px;
+}
+#back-top:hover span.topicon {
+  opacity: 0.4;
+}
+#back-top a:hover,
+#back-top a:focus,
+#back-top a:active {
+  border-bottom: 0px solid #8c8c8c;
+}
+#back-top span.text {
+  opacity: 0;
+  color: grey;
+  font-size: 0.8em;
+}
+#back-top:hover span.text {
+  opacity: 1;
+}
+#back-top:hover {
+  padding-bottom: 14px;
+}
 /*/back to top button*/
 
 /*animation*/
-.anim {-webkit-transition: all .3s; /* Safari */ -moz-transition: all .3s; -o-transition: all .3s; -ms-transition: all .3s; transition: all .3s;}
-.animtxt {transition: font 0.3s ease;}
+.anim {
+  -webkit-transition: all .3s; /* Safari */
+  -moz-transition: all .3s;
+  -o-transition: all .3s;
+  -ms-transition: all .3s;
+  transition: all .3s;
+}
+.animtxt {
+  transition: font 0.3s ease;
+}
 /*.local-masthead:hover {-webkit-animation: bg-shift 10s infinite linear;}*/
-@-webkit-keyframes bg-shift{0%{background-position:0px;}100%{background-position:800px;}}@-moz-keyframes bg-shift{0%{background-position:0px;}100%{background-position:800px;}}@-ms-keyframes bg-shift{0%{background-position:0px;}100%{background-position:800px;}}
+@-webkit-keyframes bg-shift {
+  0% {
+    background-position: 0px;
+  }
+  100% {
+    background-position: 800px;
+  }
+}
+@-moz-keyframes bg-shift {
+  0% {
+    background-position: 0px;
+  }
+  100% {
+    background-position: 800px;
+  }
+}
+@-ms-keyframes bg-shift {
+  0% {
+    background-position: 0px;
+  }
+  100% {
+    background-position: 800px;
+  }
+}
 /*/animation*/
 
 /*RESPONSIVE DESIGN*/
-@media screen and (max-width: 86em){
-    /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large devices*!*/
-    .local-masthead h1 {transform: translateX(80px);} /*this should be added to EBI style move the logo +text inside banner area for smaller screens*/
-    }
+@media screen and (max-width: 86em) {
+  /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large devices*!*/
+  .local-masthead h1 {
+    transform: translateX(80px);
+  } /*this should be added to EBI style move the logo +text inside banner area for smaller screens*/
+}
 
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-    /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large devices*!*/
-    .local-masthead h1  {font-size: 2.4rem;}
-    .local-masthead h1 img {width:50px}
-    .local-masthead h4 {font-size: 110%;margin-bottom:1.2rem;}/*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
-    /*.menu > li.embl-selector {display:none ;}/*this should be added to EBI style to fix the slector to collpase row in two lines*/
+  .local-masthead h4 {
+    font-size: 110%;
+    margin-bottom: 1.2rem;
+  } /*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
 }
 
 /* Small screen only */
-@media screen and (max-width: 39.9375em){
-    .local-masthead {background-size: 100%, 600px;} /*reduce bgd image*/
-    .main-header {height:auto;}/*important - removed height banner defined when sticky*/
-    .local-masthead h1  {font-size: 1.8rem; transform: translateX(0px);}/*title logo small + remove translation*/
-    .local-masthead img {margin-left:0; margin-right:0.4rem; width:40px;}
-    .local-masthead h1 svg {margin-left:0; margin-right:0.4rem; width:40px;}
-    .local-masthead .masthead {padding-top: 1.4rem;} /*align logo with menu icon on right*/
-    /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large  devices*!*/
-    .offc-nav.expand ~ .main-header .local-offcanvas-menu, .offc-nav.expand ~ .main-header .local-site-search {transform: translateX(-12em);}/*translation of the buttons is reduced for small screens*/
-    .local-site-search .icon-functional:before, .local-offcanvas-menu .icon-functional:before {font-size: 30px;}/*icon size and position*/
-    .local-site-search:hover .tool-search .search-box, .search-box:focus  {width: 50%;}/*reduce width input*/
-    .offc-nav {width: 12rem;} /*reduce width off-canvas menu*/
-    table th, table td  {font-size: 90%; word-break: break-all;}
-    /*remove the main menu - shouldn't this be done using foundation?*/
-    /*.local-masthead nav ul.dropdown.menu.float-left > li:first-child {display: inline-block; border-right: none;}*/
-    /*.local-masthead nav ul.dropdown.menu.float-left > li {display: none;}*/
-    .local-masthead nav ul#global-nav.menu li:nth-child(6),.local-masthead nav ul#global-nav.menu li:nth-child(7) {display:none;}/*remove 2 list items from EBI-global, as it collapse on two rows*/
-    .local-masthead nav ul li a:active {border-bottom:0px white solid;}/* !*important to keep - remove  gap when Entry menu click otherwise banner is moving*!*/
-    .my-svg-container {width: 36%; float: none; margin: 0 auto;}
-    .anchor { top: -144px;}/*change anchor position as no sticky for small screens*/
+@media screen and (max-width: 39.9375em) {
+  .local-masthead {
+    background-size: 100%, 600px;
+  } /*reduce bgd image*/
+  .main-header {
+    height: auto;
+  } /*important - removed height banner defined when sticky*/
+  .local-masthead h1 {
+    font-size: 1.8rem;
+    transform: translateX(0px);
+  } /*title logo small + remove translation*/
+  .local-masthead img {
+    margin-left: 0;
+    margin-right: 0.4rem;
+    width: 40px;
+  }
+  .local-masthead h1 svg {
+    margin-left: 0;
+    margin-right: 0.4rem;
+    width: 40px;
+  }
+  .local-masthead .masthead {
+    padding-top: 1.4rem;
+  } /*align logo with menu icon on right*/
+  /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large  devices*!*/
+  .offc-nav.expand ~ .main-header .local-offcanvas-menu,
+  .offc-nav.expand ~ .main-header .local-site-search {
+    transform: translateX(-12em);
+  } /*translation of the buttons is reduced for small screens*/
+  .local-site-search .icon-functional:before,
+  .local-offcanvas-menu .icon-functional:before {
+    font-size: 30px;
+  } /*icon size and position*/
+  .local-site-search:hover .tool-search .search-box,
+  .search-box:focus {
+    width: 50%;
+  } /*reduce width input*/
+  .offc-nav {
+    width: 12rem;
+  } /*reduce width off-canvas menu*/
+  table th,
+  table td {
+    font-size: 90%;
+    word-break: break-all;
+  }
+  /*remove the main menu - shouldn't this be done using foundation?*/
+  /*.local-masthead nav ul.dropdown.menu.float-left > li:first-child {display: inline-block; border-right: none;}*/
+  /*.local-masthead nav ul.dropdown.menu.float-left > li {display: none;}*/
+  .local-masthead nav ul#global-nav.menu li:nth-child(6),
+  .local-masthead nav ul#global-nav.menu li:nth-child(7) {
+    display: none;
+  } /*remove 2 list items from EBI-global, as it collapse on two rows*/
+  .local-masthead nav ul li a:active {
+    border-bottom: 0px white solid;
+  } /* !*important to keep - remove  gap when Entry menu click otherwise banner is moving*!*/
+  .my-svg-container {
+    width: 36%;
+    float: none;
+    margin: 0 auto;
+  }
+  .anchor {
+    top: -144px;
+  } /*change anchor position as no sticky for small screens*/
 }
 
-@media screen and (max-width: 20em){
-    .local-offcanvas-menu, .local-site-search {opacity:0;}/*make the buttons disappear for very small screens so they don't overlap with title*/
+@media screen and (max-width: 20em) {
+  .local-offcanvas-menu,
+  .local-site-search {
+    opacity: 0;
+  } /*make the buttons disappear for very small screens so they don't overlap with title*/
 }
-@media screen and (min-width: 40em){
-  .local-masthead h4 {font-size: 110%;}/*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
+@media screen and (min-width: 40em) {
+  .local-masthead h4 {
+    font-size: 110%;
+  } /*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
 }
