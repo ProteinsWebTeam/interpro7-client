@@ -20,15 +20,12 @@ class Exporter extends Component {
       <div
         className={fPlus('button-group', 'small', 'float-right', 'exporter')}
       >
-        <a
-          className={fPlus('button', 'small', 'hover')}
-          title="recent search activity"
-        >
+        <a className={fPlus('button', 'small')} title="recent search activity">
           <span className={fPlus('icon', 'icon-generic')} data-icon="{" />{' '}
           Recent search{' '}
         </a>
         <a
-          className={fPlus('button', 'dropdown', 'small', 'hover')}
+          className={fPlus('button', 'dropdown', 'small')}
           onClick={() => {
             this.setState({ isOpen: !this.state.isOpen });
           }}
@@ -39,7 +36,7 @@ class Exporter extends Component {
           />{' '}
           Export {' '}
         </a>
-        <a className={fPlus('button', 'small', 'hover')}>
+        <a className={fPlus('button', 'small')}>
           <span className={fPlus('icon', 'icon-functional')} data-icon="s" />
         </a>
         <div
