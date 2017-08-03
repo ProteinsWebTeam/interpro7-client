@@ -62,10 +62,10 @@ const Table = ({
                   <h4>
                     {title}
                   </h4>}
-                {exporter}
                 {pageSize &&
                   <_PageSizeSelector search={_query} pathname={pathname} />}
                 {search}
+                {exporter}
               </div>
             </div>
           </div>
