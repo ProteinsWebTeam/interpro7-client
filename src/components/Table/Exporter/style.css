@@ -2,11 +2,13 @@
   margin: 0 0 0 0.5rem;
   position: relative;
   & .dropdown-content {
+    position: absolute;
     top: 100%;
-    right: 0;
+    right: 28.6%; /*temp value while popup position is working better*/
     overflow: auto;
     width: initial;
-    min-width: 220%;
+    min-width: 150%; /*temp value*/
+    padding: 1rem 0.5rem;
     /*transform: scaleY(0);*/
     /*transform-origin: top;*/
     /*transition: transform 300ms ease-in-out;*/
