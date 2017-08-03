@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Link from 'components/generic/Link';
 import T from 'prop-types';
 import fonts from 'styles/ebi/fonts.css';
 import { foundationPartial } from 'styles/foundation';
@@ -32,9 +33,12 @@ class Exporter extends Component {
           />{' '}
           Export {' '}
         </a>
-        <a className={fPlus('button', 'small')}>
-          <span className={fPlus('icon', 'icon-functional')} data-icon="s" />
-        </a>
+        <Link
+          newTo={{ description: { other: 'settings' } }}
+          className={fPlus('icon', 'icon-functional')}
+          data-icon="s"
+          style={{ padding: '0.3em 0.5em' }}
+        />
         <div
           className={fPlus('dropdown-pane', 'left', 'dropdown-content')}
           style={{
