@@ -1,3 +1,8 @@
+.table-filter {
+  line-height: 0;
+  position: relative;
+}
+
 .filter-box {
   display: inline-block;
   margin-left: 0.5rem;
@@ -11,7 +16,7 @@
 .filter-box .cancel-button {
   position: absolute;
   right: 0.5rem;
-  top: 0;
+  top: 0.2rem;
   opacity: 0;
   font-size: 2em;
   line-height: 1;
@@ -19,7 +24,7 @@
 }
 .filter-box input:hover + .cancel-button,
 .cancel-button:hover {
-  opacity: 0.7;
+  opacity: 0.6;
 }
 .filter-box input {
   color: #505f74;
