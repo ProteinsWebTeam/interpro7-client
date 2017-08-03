@@ -20,10 +20,6 @@ class Exporter extends Component {
       <div
         className={fPlus('button-group', 'small', 'float-right', 'exporter')}
       >
-        <a className={fPlus('button', 'small')} title="recent search activity">
-          <span className={fPlus('icon', 'icon-generic')} data-icon="{" />{' '}
-          Recent search{' '}
-        </a>
         <a
           className={fPlus('button', 'dropdown', 'small')}
           onClick={() => {
