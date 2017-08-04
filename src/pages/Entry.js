@@ -3,6 +3,7 @@ import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import { GoLink } from 'components/ExtLink';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
@@ -113,9 +114,9 @@ class List extends Component {
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
     const goColors = {
-      P: 'rgb(220, 254, 210)',
-      F: 'rgb(254, 220, 210)',
-      C: 'rgb(220, 210, 254)',
+      P: '#cce7f3',
+      F: '#e5f5d7',
+      C: '#fbdcd0',
     };
     if (data.loading || notFound) {
       _payload = {
@@ -213,10 +214,7 @@ class List extends Component {
                         </span>
                         <span className={ps('sign-cell')}>
                           {mdb[db].map(accession =>
-                            <span
-                              key={accession}
-                              className={ps('sign-label', 'sign-freq')}
-                            >
+                            <span key={accession} className={ps('sign-label')}>
                               <Link
                                 newTo={{
                                   description: {
@@ -258,16 +256,23 @@ class List extends Component {
               renderer={(gos /*: Array<Object> */) =>
                 gos.map(go =>
                   <div
+                    className={ps('go-row')}
                     key={go.identifier}
                     style={{
                       backgroundColor: go.category
                         ? goColors[go.category]
                         : '#DDDDDD',
-                      padding: '1px',
-                      marginBottom: '1px',
                     }}
                   >
-                    {go.name ? go.name : 'None'}
+                    <span className={ps('go-cell')}>
+                      <GoLink
+                        id={go.identifier}
+                        className={f('go')}
+                        title={go.identifier}
+                      >
+                        {go.name ? go.name : 'None'}
+                      </GoLink>
+                    </span>
                   </div>,
                 )}
             >
