@@ -7,7 +7,7 @@
 }
 
 .tabs-title span:first-child {
-  color: #222;
+  color: #4b555b;
 }
 
 .tabs-title > a,
@@ -123,9 +123,19 @@
 
 .is-active .number-label {
   color: white;
-  background: rgba(0, 0, 0, .3);
+  background: #92989c;
 }
 
 .tabs-title > a.is-active:before {
   background: currentColor;
+}
+
+button.hollow.light {
+  color: #92989c;
+  border: 1px solid #92989c;
+  outline: 0;
+}
+button.hollow.light:hover {
+  color: #222;
+  border: 1px solid #222;
 }
