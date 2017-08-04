@@ -33,7 +33,12 @@ class Exporter extends Component {
         </a>
         <Link
           newTo={{ description: { other: 'settings' } }}
-          className={fPlus('icon', 'icon-functional', 'icon-settings')}
+          className={fPlus(
+            'icon',
+            'icon-functional',
+            'icon-settings',
+            'show-for-large',
+          )}
           data-icon="s"
         />
         <div
