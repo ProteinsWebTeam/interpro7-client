@@ -12,10 +12,11 @@ import _Column from './Column';
 import _Row from './Row';
 import _Footer from './Footer';
 
+import fonts from 'styles/ebi/fonts.css';
 import { foundationPartial } from 'styles/foundation';
 import styles from './style.css';
 
-const f = foundationPartial(styles);
+const f = foundationPartial(styles, fonts);
 
 // const getData = (data, staleData) => {
 //   if (!data.loading) return data;
@@ -58,14 +59,29 @@ const Table = ({
           <div className={f('row')}>
             <div className={f('columns')}>
               <div className={f('table-results-filtering')}>
-                {title &&
-                  <h4>
-                    {title}
-                  </h4>}
-                {pageSize &&
-                  <_PageSizeSelector search={_query} pathname={pathname} />}
-                {search}
-                {exporter}
+                <div className={f('pagesize-wrapper')}>
+                  {title &&
+                    <h4>
+                      {title}
+                    </h4>}
+                  {pageSize &&
+                    <_PageSizeSelector search={_query} pathname={pathname} />}
+                </div>
+                <div className={f('show-for-large')}>
+                  <a
+                    className={f('icon-view', 'table-view')}
+                    title="View your results as a table"
+                  />
+                  <a
+                    className={f('icon-view', 'list-view', 'disabled')}
+                    data-icon="i"
+                    title="View your results as a list"
+                  />
+                </div>
+                <div className={f('filter-wrapper')}>
+                  {search}
+                  {exporter}
+                </div>
               </div>
             </div>
           </div>
