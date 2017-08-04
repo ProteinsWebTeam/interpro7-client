@@ -35,7 +35,7 @@
   }
 
   &::before {
-    background: #777;
+    background: #cacaca;
     left: 0;
   }
 
@@ -114,7 +114,6 @@
 }
 
 .number-label {
-  background: rgba(0, 0, 0, 0.07);
   color: var(--colors-graydark);
 }
 
