@@ -32,11 +32,6 @@
 .go-row {
   border: 1px solid #fff;
   font-size: 0.8rem;
-  opacity: 0.8;
-}
-
-.go-row:hover {
-  opacity: 1;
 }
 
 .go-cell {
