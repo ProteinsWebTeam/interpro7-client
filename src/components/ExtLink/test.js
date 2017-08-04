@@ -4,12 +4,18 @@
 import 'babel-polyfill';
 
 import React from 'react';
-import {createRenderer} from 'react-dom/test-utils';
-import chai, {expect} from 'chai';
+import { createRenderer } from 'react-dom/test-utils';
+import chai, { expect } from 'chai';
 import jsxChai from 'jsx-chai';
 
 import {
-  BaseLink, TaxLink, PMCLink, DOILink, GoLink, PDBeLink, UniProtLink,
+  BaseLink,
+  TaxLink,
+  PMCLink,
+  DOILink,
+  GoLink,
+  PDBeLink,
+  UniProtLink,
 } from '.';
 
 chai.use(jsxChai);
@@ -37,21 +43,23 @@ describe('External links', () => {
       ]);
       const children = new Set([
         <div>link</div>,
-        <div>div<span>span</span></div>,
+        <div>
+          div<span>span</span>
+        </div>,
         'link',
       ]);
 
-      for (const {pattern, id, expected} of examples) {
+      for (const { pattern, id, expected } of examples) {
         for (const child of children) {
           renderer.render(
             <BaseLink id={id} pattern={pattern} target="_blank">
               {child}
-            </BaseLink>
+            </BaseLink>,
           );
           expect(renderer.getRenderOutput()).to.deep.equal(
             <a href={expected} target="_blank" rel="noopener">
               {child}
-            </a>
+            </a>,
           );
         }
       }
@@ -60,9 +68,7 @@ describe('External links', () => {
 
   describe('<TaxLink />', () => {
     it('should render simple links', () => {
-      renderer.render(
-        <TaxLink id={12345} />
-      );
+      renderer.render(<TaxLink id={12345} />);
       expect(renderer.getRenderOutput()).to.deep.equal(
         <BaseLink
           id={12345}
@@ -70,16 +76,14 @@ describe('External links', () => {
           target="_blank"
         >
           TaxID 12345
-        </BaseLink>
+        </BaseLink>,
       );
     });
   });
 
   describe('<PMCLink />', () => {
     it('should render simple links', () => {
-      renderer.render(
-        <PMCLink id={12345} />
-      );
+      renderer.render(<PMCLink id={12345} />);
       expect(renderer.getRenderOutput()).to.deep.equal(
         <BaseLink
           id={12345}
@@ -87,47 +91,32 @@ describe('External links', () => {
           target="_blank"
         >
           PUB12345
-        </BaseLink>
+        </BaseLink>,
       );
     });
   });
 
   describe('<DOILink />', () => {
     it('should render simple links', () => {
-      renderer.render(
-        <DOILink id="1.2.a.b" />
-      );
+      renderer.render(<DOILink id="1.2.a.b" />);
       expect(renderer.getRenderOutput()).to.deep.equal(
-        <BaseLink
-          id="1.2.a.b"
-          pattern="{id}"
-          target="_blank"
-        >
+        <BaseLink id="1.2.a.b" pattern="{id}" target="_blank">
           1.2.a.b
-        </BaseLink>
+        </BaseLink>,
       );
     });
   });
 
   describe('<GoLink />', () => {
     it('should render simple links', () => {
-      const pattern = (
-        'http://www.ebi.ac.uk/ols/beta/ontologies/go/terms?iri=' +
-        'http://purl.obolibrary.org/obo/{id}'
-      );
+      const pattern = 'https://www.ebi.ac.uk/QuickGO/GTerm?id={id}';
       const expected = (
-        <BaseLink
-          id="GO_0003676"
-          pattern={pattern}
-          target="_blank"
-        >
+        <BaseLink id="GO:0003676" pattern={pattern} target="_blank">
           GO:0003676
         </BaseLink>
       );
       for (const id of ['GO_0003676', 'GO:0003676']) {
-        renderer.render(
-          <GoLink id={id} />
-        );
+        renderer.render(<GoLink id={id} />);
         expect(renderer.getRenderOutput()).to.deep.equal(expected);
       }
     });
@@ -144,9 +133,7 @@ describe('External links', () => {
           101m
         </BaseLink>
       );
-      renderer.render(
-        <PDBeLink id="101m" />
-      );
+      renderer.render(<PDBeLink id="101m" />);
       expect(renderer.getRenderOutput()).to.deep.equal(expected);
     });
   });
@@ -162,9 +149,7 @@ describe('External links', () => {
           A0A023GPI8
         </BaseLink>
       );
-      renderer.render(
-        <UniProtLink id="A0A023GPI8" />
-      );
+      renderer.render(<UniProtLink id="A0A023GPI8" />);
       expect(renderer.getRenderOutput()).to.deep.equal(expected);
     });
   });
