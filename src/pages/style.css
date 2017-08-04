@@ -39,3 +39,19 @@
   width: 100%;
   padding: 4px 6px;
 }
+
+.sign-label-head {
+  border-radius: 2px;
+  background: #b9d7ef;
+  padding: 0.1rem 0.4rem;
+  color: #6b7982;
+}
+.sign-label-head.bp {
+  background: #cce7f3;
+}
+.sign-label-head.mf {
+  background: #e5f5d7;
+}
+.sign-label-head.cc {
+  background: #fbdcd0;
+}
