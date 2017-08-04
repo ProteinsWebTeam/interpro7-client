@@ -232,7 +232,10 @@ class List extends Component {
                       </div>,
                     )}
                 >
-                  Signatures <span className={f('label')}>Sign ID</span>
+                  Signatures{' '}
+                  <span className={ps('sign-label-head')} title="Signature ID">
+                    ID
+                  </span>
                 </Column>
               : <Column
                   accessKey="integrated"
@@ -276,7 +279,25 @@ class List extends Component {
                   </div>,
                 )}
             >
-              GO Terms
+              GO Terms{' '}
+              <span
+                className={ps('sign-label-head', 'bp')}
+                title="Biological process category"
+              >
+                BP
+              </span>{' '}
+              <span
+                className={ps('sign-label-head', 'mf')}
+                title="Molecular function category"
+              >
+                MF
+              </span>{' '}
+              <span
+                className={ps('sign-label-head', 'cc')}
+                title="Cellular component category"
+              >
+                CC
+              </span>
             </Column>
           </Table>
         </div>
