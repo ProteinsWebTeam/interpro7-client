@@ -11,21 +11,36 @@
 
 .sign-row {
   background: #f2f6f7;
-  padding: 1px;
   border: 1px solid #fff;
   font-size: 0.8rem;
 }
+
 .sign-cell {
   display: table-cell;
   width: 100%;
   padding: 4px 6px;
 }
+
 .sign-label {
   display: inline-block;
   min-width: 70px;
   border-radius: 2px;
   text-align: center;
-}
-.sign-label.sign-freq {
   background: #b9d7ef;
+}
+
+.go-row {
+  border: 1px solid #fff;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.go-row:hover {
+  opacity: 1;
+}
+
+.go-cell {
+  display: table-cell;
+  width: 100%;
+  padding: 4px 6px;
 }
