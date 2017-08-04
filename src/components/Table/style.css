@@ -17,6 +17,112 @@
   @nest & th {
     top: 88px;
     position: sticky;
-    background: #f8f8f8cc;
+    background: rgba(228, 228, 228, 0.8);
+  }
+}
+
+/*light table style*/
+table.light {
+  color: #4b555b;
+  font-size: 0.93em;
+}
+table.light thead {
+  color: #94a6ad;
+  font-size: 0.9em;
+  margin: 10px 0;
+  border: 0;
+}
+table.light thead th {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px 30px 10px 10px;
+  outline: none;
+  border-bottom: 1px solid #d4dddf;
+  text-transform: uppercase;
+  font-size: 0.93em;
+  font-weight: 400;
+  color: #a7b2b6;
+}
+.sign-label {
+  color: red;
+}
+table.light tbody tr:nth-child(even) {
+  background-color: #fff;
+}
+table.light tbody tr td {
+  border-top: 1px solid #d4dddf;
+  border-bottom: 1px solid #d4dddf;
+}
+table.light tbody a,
+.table.light tbody a:visited {
+  color: #4b555b;
+}
+table.light tbody a:hover {
+  border-bottom: 1px solid #4b555b;
+}
+table.light .order-row {
+  background: #f2f6f7;
+  border: 1px solid #fff;
+}
+table.light .tfooter label {
+  color: #a7b2b6;
+  font-size: 0.93em;
+}
+table.light .subheader {
+  color: #505f74;
+  margin: 10px 0 0 10px;
+}
+
+.table-view .table-results-filtering {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #505f74;
+  margin-bottom: 0.5rem;
+  background: #e9f1f3;
+  padding: 0.4rem 0.5rem;
+}
+.table-view select {
+  color: #505f74;
+  margin: 0;
+  height: inherit;
+}
+.table-view input {
+  margin-bottom: 0;
+  height: inherit;
+}
+.table-view .table-results-filtering .icon-view {
+  color: #71818a;
+  margin-right: 1rem;
+  opacity: 0.5;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+}
+.table-view .table-results-filtering .icon-view:last-child {
+  margin-right: 0;
+}
+.table-view .table-results-filtering .icon-view.table-view {
+  background: url(../../images/icons/ico-view-table.svg) no-repeat;
+}
+.table-view .table-results-filtering .icon-view.list-view {
+  background: url(../../images/icons/ico-view-list.svg) no-repeat;
+}
+.table-view .table-results-filtering .icon-view.disabled {
+  opacity: 0.1;
+  cursor: not-allowed;
+}
+.table-view .table-results-filtering .filter-wrapper {
+  display: flex;
+}
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  /*table.light th {word-break: break-all;}*/
+  table.light th:nth-child(1),
+  table.light th:nth-child(5) {
+    display: none;
+  } /*remove GO terms*/
+  table.light td:nth-child(1),
+  table.light td:nth-child(5) {
+    display: none;
   }
 }
