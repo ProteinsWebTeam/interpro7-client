@@ -4,7 +4,7 @@
   & .dropdown-content {
     position: absolute;
     top: 100%;
-    right: 28.6%; /*temp value while popup position is working better*/
+    right: 25.6%; /*temp value while popup position is working better*/
     overflow: auto;
     width: initial;
     min-width: 150%; /*temp value*/
