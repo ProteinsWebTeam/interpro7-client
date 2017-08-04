@@ -152,7 +152,7 @@ class MemberDBTabs extends Component {
             'large',
             'hollow',
             'float-right',
-            'secondary',
+            'light',
             'button',
           )}
         >
