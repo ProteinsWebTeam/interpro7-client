@@ -18,9 +18,7 @@ class Exporter extends Component {
   render() {
     const { children } = this.props;
     return (
-      <div
-        className={fPlus('button-group', 'small', 'float-right', 'exporter')}
-      >
+      <div className={fPlus('button-group', 'small', 'exporter')}>
         <a
           className={fPlus('button', 'dropdown', 'small')}
           onClick={() => {
