@@ -42,6 +42,7 @@ const propTypes = {
 
 const defaultPayload = {
   proteins: {
+    uniprot: null,
     reviewed: null,
     unreviewed: null,
   },

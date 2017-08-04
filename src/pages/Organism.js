@@ -6,7 +6,6 @@ import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
 import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
-import ColorHash from 'color-hash/lib/color-hash';
 
 import Table, {
   Column,
@@ -21,9 +20,6 @@ const ps = classname.bind(pageStyle);
 
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
-
-const SVG_WIDTH = 100;
-const colorHash = new ColorHash();
 
 const propTypes = {
   data: T.shape({
@@ -65,10 +61,6 @@ const List = ({
       results: [],
     };
   }
-  const maxLength = _payload.results.reduce(
-    (max, result) => Math.max(max, (result.metadata || result).length),
-    0,
-  );
   return (
     <div className={f('row')}>
       <div className={f('columns')}>
@@ -107,17 +99,17 @@ const List = ({
                   description: {
                     mainType: location.description.mainType,
                     mainDB: location.description.mainDB,
-                    mainAccession: accession,
+                    mainAccession: `${accession}`,
                   },
                 })}
               >
                 {accession}
               </Link>}
           >
-            Accession
+            TaxID
           </Column>
           <Column
-            accessKey="name"
+            accessKey="full_name"
             renderer={(
               name /*: string */,
               { accession } /*: {accession: string} */,
@@ -128,7 +120,7 @@ const List = ({
                   description: {
                     mainType: location.description.mainType,
                     mainDB: location.description.mainDB,
-                    mainAccession: accession,
+                    mainAccession: `${accession}`,
                   },
                 })}
               >
@@ -136,45 +128,6 @@ const List = ({
               </Link>}
           >
             Name
-          </Column>
-          <Column
-            accessKey="source_database"
-            renderer={(db /*: string */) =>
-              <Link
-                newTo={location => ({
-                  ...location,
-                  description: {
-                    mainType: location.description.mainType,
-                    mainDB: location.description.mainDB,
-                  },
-                })}
-              >
-                {db}
-              </Link>}
-          >
-            Source Database
-          </Column>
-          <Column accessKey="source_organism.fullname">Species</Column>
-          <Column
-            accessKey="length"
-            renderer={(length /*: number */, row) =>
-              <div
-                title={`${length} amino-acids`}
-                style={{
-                  width: `${length / maxLength * SVG_WIDTH}%`,
-                  padding: '0.2rem',
-                  backgroundColor: colorHash.hex(row.accession),
-                  borderRadius: '0.2rem',
-                  textAlign: 'start',
-                  overflowX: 'hidden',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'clip',
-                }}
-              >
-                {length} amino-acids
-              </div>}
-          >
-            Length
           </Column>
         </Table>
       </div>
@@ -184,7 +137,7 @@ const List = ({
 List.propTypes = propTypes;
 
 const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'),
+  import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
 );
 // const StructureAsync = createAsyncComponent(() =>
 //   import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
@@ -230,6 +183,7 @@ Summary.propTypes = {
   location: T.object.isRequired,
 };
 
+const acc = /(UP\d{9})|(\d+)|(all)/i;
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props =>
   <Switch
@@ -237,9 +191,7 @@ const InnerSwitch = props =>
     locationSelector={l =>
       l.description.mainAccession || l.description.focusType}
     indexRoute={List}
-    childRoutes={[
-      /*{ value: acc, component: Summary }*/
-    ]}
+    childRoutes={[{ value: acc, component: Summary }]}
     catchAll={List}
   />;
 
