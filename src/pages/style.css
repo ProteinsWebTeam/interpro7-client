@@ -9,6 +9,11 @@
   opacity: 0.5;
 }
 
+.acc-row {
+  border: 1px solid #fff;
+  font-size: 0.74rem;
+}
+
 .sign-row {
   background: #f2f6f7;
   border: 1px solid #fff;
