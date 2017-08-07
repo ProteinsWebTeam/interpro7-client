@@ -25,6 +25,7 @@
 table.light {
   color: #4b555b;
   font-size: 0.93em;
+  margin-bottom: 0;
 }
 
 table.light thead {
@@ -124,4 +125,25 @@ table.light .subheader {
 }
 .table-view .table-results-filtering .filter-wrapper {
   display: flex;
+}
+
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #505f74;
+  margin-bottom: 0.5rem;
+  padding: 0.4rem 0.5rem;
+}
+
+.table-footer ul {
+  margin-bottom: 0;
+}
+
+.table-footer ul li a {
+  color: #505f74;
+}
+
+.table-footer ul li.current {
+  background: #71818a; /*b4cad8*/
 }
