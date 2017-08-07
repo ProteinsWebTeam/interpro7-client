@@ -5,7 +5,6 @@
 
 .filter-box {
   display: inline-block;
-  margin-left: 0.5rem;
 }
 .filter-box ::-webkit-input-placeholder {
   color: #aeaeae;
