@@ -282,19 +282,19 @@ class List extends Component {
               GO Terms{' '}
               <span
                 className={ps('sign-label-head', 'bp')}
-                title="Biological process category"
+                title="Biological process term"
               >
                 BP
               </span>{' '}
               <span
                 className={ps('sign-label-head', 'mf')}
-                title="Molecular function category"
+                title="Molecular function term"
               >
                 MF
               </span>{' '}
               <span
                 className={ps('sign-label-head', 'cc')}
-                title="Cellular component category"
+                title="Cellular component term"
               >
                 CC
               </span>
