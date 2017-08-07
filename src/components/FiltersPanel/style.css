@@ -9,6 +9,7 @@
 }
 .filters-panel .but-collapse {
   font-size: 80%;
+  outline: 0;
 }
 .filter-title-arrow {
   font-size: 150%;
