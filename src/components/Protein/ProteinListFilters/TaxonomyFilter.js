@@ -31,7 +31,6 @@ class TaxonomyFilter extends Component {
       ...this.props.location,
       search: {
         ...this.props.location.search,
-        // eslint-disable-next-line no-undefined
         tax_id: value === 'ALL' ? undefined : value,
       },
     });
@@ -40,7 +39,7 @@ class TaxonomyFilter extends Component {
   render() {
     const { data: { loading, payload }, location: { search } } = this.props;
     const taxes = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a
+      ([, a], [, b]) => b - a,
     );
     if (!loading) {
       taxes.unshift(['ALL', NaN]);
@@ -65,7 +64,7 @@ class TaxonomyFilter extends Component {
               </span>
               <NumberLabel value={count} />
             </label>
-          </div>
+          </div>,
         )}
       </div>
     );
@@ -83,18 +82,18 @@ const getUrlFor = createSelector(
     _search.group_by = 'tax_id';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description
+      description,
     )}?${qsStringify(_search)}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(TaxonomyFilter)
+  })(TaxonomyFilter),
 );

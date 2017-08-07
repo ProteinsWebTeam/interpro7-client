@@ -9,6 +9,7 @@ import { closeSideNav } from 'actions/creators';
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterproMenu from 'components/Menu/InterproMenu';
 import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
+import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 import ebiStyles from 'styles/ebi-global.css';
@@ -17,6 +18,50 @@ import helperClasses from 'styles/helper-classes.css';
 import style from './style.css';
 
 const f = foundationPartial(ebiStyles, interproStyles, helperClasses, style);
+
+// TODO: eventually remove all of this logic a few releases after initial launch
+const getOldHref = createSelector(
+  description => description,
+  d => {
+    const href = 'https://www.ebi.ac.uk/interpro/';
+    if (d.mainType === 'entry') {
+      if (!d.mainDB) {
+        return href;
+      } else if (d.mainDB.toLowerCase() === 'interpro') {
+        if (d.mainAccession) {
+          return `${href}entry/${d.mainAccession}/`;
+        }
+        return `${href}search/`;
+      }
+      if (!d.mainAccession) {
+        return `${href}signature/${d.mainAccession}/`;
+      }
+      return `${href}member-database/${d.mainDB}/`;
+    } else if (d.mainType === 'protein' && d.mainAccession) {
+      return `${href}protein/${d.mainAccession}/`;
+    }
+    return href;
+  },
+);
+
+const _OldInterProLink = ({ description }) =>
+  <Link
+    style={{ color: 'gray' }}
+    href={getOldHref(description)}
+    target="_blank"
+  >
+    See this page in the old InterPro website
+  </Link>;
+_OldInterProLink.propTypes = {
+  description: T.object.isRequired,
+};
+
+const mapStateToPropsForOldLink = createSelector(
+  state => state.newLocation.description,
+  description => ({ description }),
+);
+
+const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
 
 class SideMenu extends PureComponent {
   static propTypes = {
@@ -69,6 +114,10 @@ class SideMenu extends PureComponent {
                 EBI menu
               </span>
             </EBIMenu>
+            <span />
+            <li className={f('menu-label', 'cursor-default', 'tertiary')}>
+              <OldInterProLink />
+            </li>
           </ul>
         </aside>
       </div>
@@ -95,7 +144,7 @@ class SideMenu extends PureComponent {
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
   state => state.newLocation.description.mainAccession,
-  (visible, mainAccession) => ({ visible, mainAccession })
+  (visible, mainAccession) => ({ visible, mainAccession }),
 );
 
 export default connect(mapStateToProps, { closeSideNav })(SideMenu);

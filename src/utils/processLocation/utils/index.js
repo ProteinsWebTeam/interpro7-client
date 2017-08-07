@@ -21,10 +21,7 @@ export const getEmptyDescription = () => ({
 });
 
 export const descriptionItemToHandlers = new Map([
-  [
-    'other',
-    new Set([handlers.otherHandler]),
-  ],
+  ['other', new Set([handlers.otherHandler])],
   [
     'mainType',
     new Set([
@@ -32,15 +29,11 @@ export const descriptionItemToHandlers = new Map([
       handlers.proteinHandler,
       handlers.entryHandler,
       handlers.proteomeHandler,
-      handlers.pathwayHandler,
       handlers.searchHandler,
       handlers.otherHandler,
     ]),
   ],
-  [
-    'mainIntegration',
-    new Set([handlers.integrationHandler]),
-  ],
+  ['mainIntegration', new Set([handlers.integrationHandler])],
   [
     'mainDB',
     new Set([
@@ -63,22 +56,10 @@ export const descriptionItemToHandlers = new Map([
       handlers.valueTextSearchHandler,
     ]),
   ],
-  [
-    'mainChain',
-    new Set([handlers.structureChainHandler]),
-  ],
-  [
-    'mainMemberDB',
-    new Set([handlers.memberDBHandler]),
-  ],
-  [
-    'mainMemberDBAccession',
-    new Set([handlers.memberDBAccessionHandler]),
-  ],
-  [
-    'mainDetail',
-    new Set([handlers.mainDetailHandler]),
-  ],
+  ['mainChain', new Set([handlers.structureChainHandler])],
+  ['mainMemberDB', new Set([handlers.memberDBHandler])],
+  ['mainMemberDBAccession', new Set([handlers.memberDBAccessionHandler])],
+  ['mainDetail', new Set([handlers.mainDetailHandler])],
   [
     'focusType',
     new Set([
@@ -86,13 +67,9 @@ export const descriptionItemToHandlers = new Map([
       handlers.proteinHandler,
       handlers.entryHandler,
       handlers.proteomeHandler,
-      handlers.pathwayHandler,
     ]),
   ],
-  [
-    'focusIntegration',
-    new Set([handlers.integrationHandler]),
-  ],
+  ['focusIntegration', new Set([handlers.integrationHandler])],
   [
     'focusDB',
     new Set([
@@ -111,16 +88,7 @@ export const descriptionItemToHandlers = new Map([
       handlers.proteinAccessionHandler,
     ]),
   ],
-  [
-    'focusChain',
-    new Set([handlers.structureChainHandler]),
-  ],
-  [
-    'focusMemberDB',
-    new Set([handlers.memberDBHandler]),
-  ],
-  [
-    'focusMemberDBAccession',
-    new Set([handlers.memberDBAccessionHandler]),
-  ],
+  ['focusChain', new Set([handlers.structureChainHandler])],
+  ['focusMemberDB', new Set([handlers.memberDBHandler])],
+  ['focusMemberDBAccession', new Set([handlers.memberDBAccessionHandler])],
 ]);

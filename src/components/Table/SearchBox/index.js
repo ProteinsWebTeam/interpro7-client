@@ -41,7 +41,7 @@ class SearchBox extends Component {
     return (
       <div className={f('float-right')} style={{ position: 'relative' }}>
         {this.props.children || 'Search:'}
-        <form style={{ display: 'inline-block', marginLeft: '1ch' }}>
+        <div style={{ display: 'inline-block', marginLeft: '1ch' }}>
           <button
             className={f('close-button')}
             type="button"
@@ -57,7 +57,7 @@ class SearchBox extends Component {
             onChange={this.handleChange}
             placeholder="Filter table"
           />
-        </form>
+        </div>
       </div>
     );
   }

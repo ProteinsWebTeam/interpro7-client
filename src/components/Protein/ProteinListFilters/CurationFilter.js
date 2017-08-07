@@ -63,9 +63,11 @@ class CurationFilter extends Component {
 
   render() {
     const { data: { loading, payload } } = this.props;
-    const databases = loading ? {} : payload;
+    const databases = loading || !payload ? {} : payload;
     if (!loading) {
-      databases.uniprot = (databases.swissprot || 0) + (databases.trembl || 0);
+      databases.uniprot = databases
+        ? (databases.swissprot || 0) + (databases.trembl || 0)
+        : 0;
     }
     return (
       <div>
@@ -92,7 +94,7 @@ class CurationFilter extends Component {
   }
 }
 
-const getUrlFor = createSelector(
+const getUrl = createSelector(
   state => state.settings.api,
   state => state.newLocation.description,
   state => state.newLocation.search,
@@ -105,7 +107,7 @@ const getUrlFor = createSelector(
     _search.group_by = 'source_database';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description,
+      _description,
     )}?${qsStringify(_search)}`;
   },
 );
@@ -116,7 +118,5 @@ const mapStateToProps = createSelector(
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  loadData({
-    getUrl: getUrlFor,
-  })(CurationFilter),
+  loadData(getUrl)(CurationFilter),
 );

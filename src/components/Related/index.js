@@ -15,8 +15,8 @@ import { toPlural } from 'utils/pages';
 import blockStyles from 'styles/blocks.css';
 
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
-import EntriesOnStructure from 'components/Related/EntriesOnStructure';
-import StructureOnProtein from 'components/Related/StructureOnProtein';
+import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
+import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
 
 const ObjectToList = ({ obj, component: Component }) =>
   <ul>
@@ -193,11 +193,12 @@ const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
     const _secondaryData = payload.results.map(x => {
       const obj = x.metadata;
       const plural = toPlural(props.mainType);
-      // Given the reverse of the URL, and that we are quering by an accession
+      // Given the reverse of the URL, and that we are querying by an accession
       // we can assume is only one, hence [0]
-      obj.entry_protein_coordinates = x[plural][0].entry_protein_coordinates;
-      obj.protein_structure_coordinates =
-        x[plural][0].protein_structure_coordinates;
+      obj.entry_protein_locations = x[plural][0].entry_protein_locations;
+      obj.protein_length = x[plural][0].protein_length;
+      obj.protein_structure_locations =
+        x[plural][0].protein_structure_locations;
       if (x[plural][0].chain) {
         obj.chain = x[plural][0].chain;
       }
@@ -214,11 +215,11 @@ const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
 );
 
 const Related = ({ data, focusType, ...props }) => {
-  if (data.loading) return <div>Loading...</div>;
   const {
     metadata: mainData,
     [toPlural(focusType)]: secondaryData,
   } = data.payload;
+  if (data.loading || !secondaryData) return <div>Loading...</div>;
   const RelatedComponent = Array.isArray(secondaryData)
     ? RelatedAdvancedQuery
     : RelatedSimple;

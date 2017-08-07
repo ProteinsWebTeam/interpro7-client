@@ -51,7 +51,7 @@ export const entities /*: Array<Object> */ = [
     newTo: {
       description: {
         mainType: 'protein',
-        mainDB: 'UniProt',
+        mainDB: 'SwissProt',
       },
     },
     name: 'Protein',
@@ -73,14 +73,6 @@ export const entities /*: Array<Object> */ = [
     },
     name: 'Proteome',
   },
-  {
-    newTo: {
-      description: {
-        mainType: 'pathway',
-      },
-    },
-    name: 'Pathway',
-  },
 ];
 
 export const singleEntity /*: Array<Object> */ = [
@@ -90,6 +82,7 @@ export const singleEntity /*: Array<Object> */ = [
         ...location,
         description: {
           ...location.description,
+          mainDetail: null,
           focusType: null,
           focusDB: null,
         },
@@ -103,6 +96,7 @@ export const singleEntity /*: Array<Object> */ = [
         ...location,
         description: {
           ...location.description,
+          mainDetail: null,
           focusType: 'entry',
           focusDB: 'InterPro',
         },
@@ -118,6 +112,7 @@ export const singleEntity /*: Array<Object> */ = [
         ...location,
         description: {
           ...location.description,
+          mainDetail: null,
           focusType: 'protein',
           focusDB: 'UniProt',
         },
@@ -133,6 +128,7 @@ export const singleEntity /*: Array<Object> */ = [
         ...location,
         description: {
           ...location.description,
+          mainDetail: null,
           focusType: 'structure',
           focusDB: 'PDB',
         },
@@ -148,10 +144,13 @@ export const singleEntity /*: Array<Object> */ = [
         ...location,
         description: {
           ...location.description,
+          focusType: null,
+          focusDB: null,
           mainDetail: 'species',
         },
       };
     },
+    type: 'protein',
     name: 'species',
     counter: 'species',
   },
@@ -161,6 +160,8 @@ export const singleEntity /*: Array<Object> */ = [
         ...location,
         description: {
           ...location.description,
+          focusType: null,
+          focusDB: null,
           mainDetail: 'domain_architecture',
         },
       };
@@ -173,6 +174,8 @@ export const singleEntity /*: Array<Object> */ = [
         ...location,
         description: {
           ...location.description,
+          focusType: null,
+          focusDB: null,
           mainDetail: 'hmm_models',
         },
       };

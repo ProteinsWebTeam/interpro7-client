@@ -6,30 +6,76 @@
   padding-bottom: 1em;
 }
 
-.tabs-title,
-.tabs-title a {
-  transition-property: border, color, transform;
-  transition-duration: var(--timing-fast);
-}
-.tabs-title a {
+.tabs-title > a,
+.tabs-title > span {
   /*border: 2px solid transparent;*/
-  border-right: 2px solid #7ba3b6;
-  border-left: 3px solid transparent;
+  //border-right: 2px solid #7ba3b6;
+  border-left: 3px solid currentColor;
   /*border-radius: 5px 0 0 5px;*/
   font-size: 1rem;
   padding: .7rem .7rem;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    transition: transform var(--timing-medium) var(--timing-fn-spring);
+    transform: translateX(calc(100% - 1px));
+  }
+
+  &::before {
+    background: currentColor;
+    left: 0;
+  }
+
+  &::after {
+    border: 1px solid currentColor;
+    left: 100%;
+    width: 120%;
+  }
+
+  &:hover::before {
+    transform: translateX(calc(100% - 1ch));
+  }
+
+  & > span {
+    color: initial;
+  }
 }
 
-.tabs-title a.is-active-tab {
+.tabs-title > a.is-active-tab {
   background: white;
-  border: 2px solid #7ba3b6;
-  border-right: 2px solid transparent;
-  border-left-width: 14px;
+  //border: 2px solid #7ba3b6;
+  //border-right: 2px solid transparent;
+  //border-left-width: 14px;
+
+  &::before,
+  &::after,
+  &:hover::before {
+    transition-delay: var(--timing-medium);
+    transform: translateX(calc(-100% + 1ch));
+  }
+
+  &::after {
+    transform: translateX(-80%);
+  }
 }
 
-.tabs-title a:hover {
-  /*background-color: #dff2ff;
-  border-left-width: 20px; experiment*/
+@media screen and (prefers-reduced-motion: reduce) {
+  .tabs-title > a,
+  .tabs-title > span {
+    &::before,
+    &::after {
+      transition: none !important;
+    }
+  }
 }
 
 .expand-button {
@@ -39,10 +85,13 @@
 }
 .collapsed .tabs-title {
   margin-left: -140px;
+
+  & a,
+  & span {
+    display: none;
+  }
 }
-.collapsed .tabs-title a {
-  color: transparent;
-}
+
 .collapsed .tabs-title a.is-active-tab {
   color: black;
   padding: 0;
