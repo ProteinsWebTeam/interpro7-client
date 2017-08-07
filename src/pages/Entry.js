@@ -157,6 +157,7 @@ class List extends Component {
             </SearchBox>
             <Column
               accessKey="type"
+              className={ps('col-type')}
               renderer={type =>
                 <interpro-type type={type.replace('_', ' ')} title={type}>
                   {type}
@@ -256,6 +257,7 @@ class List extends Component {
                 </Column>}
             <Column
               accessKey="go_terms"
+              className={ps('col-go')}
               renderer={(gos /*: Array<Object> */) =>
                 gos.map(go =>
                   <div
