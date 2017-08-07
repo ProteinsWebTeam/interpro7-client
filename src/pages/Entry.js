@@ -199,7 +199,9 @@ class List extends Component {
                     },
                   })}
                 >
-                  {accession}
+                  <div className={ps('acc-row')}>
+                    {accession}
+                  </div>
                 </Link>}
             >
               Accession
