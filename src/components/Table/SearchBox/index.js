@@ -43,7 +43,6 @@ class SearchBox extends Component {
   render() {
     return (
       <div className={f('table-filter')}>
-        {this.props.children || 'Search:'}
         <div className={f('filter-box')}>
           <input
             id="table-filter-text"
