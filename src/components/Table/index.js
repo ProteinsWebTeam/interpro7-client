@@ -11,6 +11,7 @@ import _Body from './Body';
 import _Column from './Column';
 import _Row from './Row';
 import _Footer from './Footer';
+import _TotalNb from './TotalNb';
 
 import fonts from 'styles/ebi/fonts.css';
 import { foundationPartial } from 'styles/foundation';
@@ -64,10 +65,15 @@ const Table = ({
                     <h4>
                       {title}
                     </h4>}
-                  {pageSize &&
-                    <_PageSizeSelector search={_query} pathname={pathname} />}
+                  <_TotalNb
+                    data={dataTable}
+                    actualSize={actualSize}
+                    pagination={_query}
+                    pathname={pathname}
+                    notFound={notFound}
+                  />
                 </div>
-                <div className={f('show-for-large')}>
+                <div className={f('show-for-large')} style={{ lineHeight: 0 }}>
                   <a
                     className={f('icon-view', 'table-view')}
                     title="View your results as a table"
@@ -95,13 +101,17 @@ const Table = ({
           </div>
           <div className={f('row')}>
             <div className={f('columns')}>
-              <_Footer
-                data={dataTable}
-                actualSize={actualSize}
-                pagination={_query}
-                pathname={pathname}
-                notFound={notFound}
-              />
+              <div className={f('table-footer')}>
+                {pageSize &&
+                  <_PageSizeSelector search={_query} pathname={pathname} />}
+                <_Footer
+                  data={dataTable}
+                  actualSize={actualSize}
+                  pagination={_query}
+                  pathname={pathname}
+                  notFound={notFound}
+                />
+              </div>
             </div>
           </div>
         </div>
