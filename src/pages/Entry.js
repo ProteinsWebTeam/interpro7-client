@@ -172,6 +172,7 @@ class List extends Component {
                 { accession } /*: {accession: string} */,
               ) =>
                 <Link
+                  title={name}
                   newTo={location => ({
                     ...location,
                     description: {
@@ -190,6 +191,7 @@ class List extends Component {
               accessKey="accession"
               renderer={(accession /*: string */) =>
                 <Link
+                  title={accession}
                   newTo={location => ({
                     ...location,
                     description: {
@@ -199,9 +201,9 @@ class List extends Component {
                     },
                   })}
                 >
-                  <div className={ps('acc-row')}>
+                  <span className={ps('acc-row')}>
                     {accession}
-                  </div>
+                  </span>
                 </Link>}
             >
               Accession
