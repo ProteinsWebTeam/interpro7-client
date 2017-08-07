@@ -2,26 +2,20 @@
 import React from 'react';
 import T from 'prop-types';
 
-import Link from 'components/generic/Link';
+import Metadata from 'wrappers/Metadata';
+import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
 const Species = (
   {
-    metadata: { source_organism: { fullname, taxid } },
+    metadata: { source_organism: { taxid } },
   } /*: {metadata: {source_organism: {fullname: string, taxid: number}}} */,
-) => {
-  const newTo = {
-    description: {
-      mainType: 'organism',
-      mainDB: 'taxonomy',
-      mainAccession: `${taxid}`,
-    },
-  };
-  return (
-    <div>
-      Species: <Link newTo={newTo}>{fullname}</Link>
-    </div>
-  );
-};
+) =>
+  <div>
+    {'Species: '}
+    <Metadata endpoint="organism" db="taxonomy" accession={taxid}>
+      <TaxIdOrName />
+    </Metadata>
+  </div>;
 
 Species.propTypes = {
   metadata: T.shape({

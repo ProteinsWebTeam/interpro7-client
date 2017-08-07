@@ -1,50 +1,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { createSelector } from 'reselect';
 
-import Link from 'components/generic/Link';
-
-import loadData from 'higherOrder/loadData';
-import description2path from 'utils/processLocation/description2path';
-
-class LineageItem extends PureComponent {
-  static propTypes = {
-    taxId: T.string.isRequired,
-    data: T.object.isRequired,
-  };
-
-  render() {
-    const { taxId, data } = this.props;
-    const displayedText =
-      (data.payload &&
-        data.payload.metadata &&
-        data.payload.metadata.scientific_name) ||
-      taxId;
-    const newTo = {
-      description: {
-        mainType: 'organism',
-        mainDB: 'taxonomy',
-        mainAccession: taxId.toString(),
-      },
-    };
-    return (
-      <span>
-        {' '}→ <Link newTo={newTo}>{displayedText}</Link>
-      </span>
-    );
-  }
-}
-
-const getUrlFor = taxId =>
-  createSelector(
-    state => state.settings.api,
-    ({ protocol, hostname, port, root }) =>
-      `${protocol}//${hostname}:${port}${root}${description2path({
-        mainType: 'organism',
-        mainDB: 'taxonomy',
-        mainAccession: taxId.toString(),
-      })}`,
-  );
+import Metadata from 'wrappers/Metadata';
+import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
 class Lineage extends PureComponent {
   static propTypes = {
@@ -56,10 +14,19 @@ class Lineage extends PureComponent {
     return (
       <div>
         Lineage:
-        {lineage.map(taxId => {
-          const LineageItemWithData = loadData(getUrlFor(taxId))(LineageItem);
-          return <LineageItemWithData taxId={taxId} key={taxId} />;
-        })}
+        {lineage.map(taxId =>
+          <span key={taxId}>
+            {' → '}
+            <Metadata
+              endpoint={'organism'}
+              db={'taxonomy'}
+              accession={taxId}
+              key={taxId}
+            >
+              <TaxIdOrName />
+            </Metadata>
+          </span>,
+        )}
       </div>
     );
   }

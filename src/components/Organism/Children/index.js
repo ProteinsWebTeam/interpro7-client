@@ -1,52 +1,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { createSelector } from 'reselect';
 
-import Link from 'components/generic/Link';
-
-import loadData from 'higherOrder/loadData';
-import description2path from 'utils/processLocation/description2path';
-
-class Child extends PureComponent {
-  static propTypes = {
-    taxId: T.string.isRequired,
-    data: T.object.isRequired,
-  };
-
-  render() {
-    const { taxId, data } = this.props;
-    const displayedText =
-      (data.payload &&
-        data.payload.metadata &&
-        data.payload.metadata.scientific_name) ||
-      taxId;
-    const newTo = {
-      description: {
-        mainType: 'organism',
-        mainDB: 'taxonomy',
-        mainAccession: taxId.toString(),
-      },
-    };
-    return (
-      <li>
-        <Link newTo={newTo}>
-          {displayedText}
-        </Link>
-      </li>
-    );
-  }
-}
-
-const getUrlFor = taxId =>
-  createSelector(
-    state => state.settings.api,
-    ({ protocol, hostname, port, root }) =>
-      `${protocol}//${hostname}:${port}${root}${description2path({
-        mainType: 'organism',
-        mainDB: 'taxonomy',
-        mainAccession: taxId.toString(),
-      })}`,
-  );
+import Metadata from 'wrappers/Metadata';
+import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
 class Children extends PureComponent {
   static propTypes = {
@@ -59,10 +15,18 @@ class Children extends PureComponent {
       <ul>
         Children:
         {children.length
-          ? children.map(taxId => {
-              const ChildWithData = loadData(getUrlFor(taxId))(Child);
-              return <ChildWithData taxId={taxId} key={taxId} />;
-            })
+          ? children.map(taxId =>
+              <li key={taxId}>
+                <Metadata
+                  endpoint={'organism'}
+                  db={'taxonomy'}
+                  accession={taxId}
+                  key={taxId}
+                >
+                  <TaxIdOrName />
+                </Metadata>
+              </li>,
+            )
           : <li>no child</li>}
       </ul>
     );

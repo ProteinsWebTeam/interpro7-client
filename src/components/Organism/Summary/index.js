@@ -24,6 +24,10 @@ const SummaryOrganism = (
           <div className={f('medium-8', 'large-8', 'columns')}>
             <Title metadata={_metadata} mainType={'organism'} />
             <Accession metadata={_metadata} />
+            {_metadata.rank &&
+              <div>
+                Rank: {_metadata.rank}
+              </div>}
             <Lineage lineage={_metadata.lineage} />
             <Children children={_metadata.children} />
           </div>
