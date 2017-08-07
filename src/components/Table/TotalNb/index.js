@@ -9,7 +9,7 @@ import { foundationPartial } from 'styles/foundation';
 import s from '../style.css';
 const f = foundationPartial(s);
 
-const Footer = ({ data, actualSize, pagination, notFound }) => {
+const TotalNb = ({ data, actualSize, pagination, notFound }) => {
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,
@@ -24,7 +24,7 @@ const Footer = ({ data, actualSize, pagination, notFound }) => {
   } else if (actualSize) {
     textLabel = (
       <span>
-        {index} - {iendex + data.length - 1} of <strong>{actualSize}</strong>{' '}
+        {index} - {index + data.length - 1} of <strong>{actualSize}</strong>{' '}
         results
       </span>
     );
@@ -35,11 +35,11 @@ const Footer = ({ data, actualSize, pagination, notFound }) => {
     </div>
   );
 };
-Footer.propTypes = {
+TotalNb.propTypes = {
   data: T.array,
   actualSize: T.number,
   pagination: T.object.isRequired,
   notFound: T.bool,
 };
 
-export default Footer;
+export default TotalNb;
