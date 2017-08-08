@@ -36,6 +36,10 @@
   }
 }
 
+interpro-type {
+  line-height: 1.5;
+} /*important to keep: define correct line-height for entry type filter*/
+
 hr {
   margin: 0;
 }
