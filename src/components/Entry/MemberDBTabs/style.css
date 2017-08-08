@@ -139,3 +139,9 @@ button.hollow.light:hover {
   color: #222;
   border: 1px solid #222;
 }
+@media screen and (max-width: 39.9375em) {
+  /*temp while we replace MD menu by select */
+  .tabs-title:last-child {
+    border-bottom: 1px #cacaca solid;
+  }
+}
