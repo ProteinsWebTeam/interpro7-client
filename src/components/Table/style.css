@@ -37,7 +37,6 @@ table.light thead {
 
 table.light thead th {
   background: rgba(255, 255, 255, 0.8);
-  padding: 10px 30px 10px 10px;
   outline: none;
   border-bottom: 1px solid #d4dddf;
   text-transform: uppercase;
