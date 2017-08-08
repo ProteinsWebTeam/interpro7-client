@@ -75,7 +75,7 @@ class EntryTypeFilter extends Component {
                 : <interpro-type
                     type={type.replace('_', ' ')}
                     expanded
-                    size="16px"
+                    size="17px"
                   >
                     {type}
                   </interpro-type>}
