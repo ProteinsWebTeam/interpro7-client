@@ -97,6 +97,7 @@
     "d3": "^4.10.0",
     "data-loader": "^0.2.0",
     "draft-js": "^0.10.1",
+    "filesize": "^3.5.10",
     "foundation-sites": "~6.2.4",
     "gsap": "^1.20.2",
     "history": "^4.6.3",
