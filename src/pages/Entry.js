@@ -159,7 +159,11 @@ class List extends Component {
               accessKey="type"
               className={ps('col-type')}
               renderer={type =>
-                <interpro-type type={type.replace('_', ' ')} title={type}>
+                <interpro-type
+                  type={type.replace('_', ' ')}
+                  title={type}
+                  size="26px"
+                >
                   {type}
                 </interpro-type>}
             >
