@@ -4,10 +4,10 @@
   & .dropdown-content {
     position: absolute;
     top: 100%;
-    right: 25.6%; /*temp value while popup position is working better*/
+    right: 24%; /*temp value while popup position is working better*/
     overflow: auto;
     width: initial;
-    min-width: 150%; /*temp value*/
+    min-width: 180%; /*temp value*/
     padding: 1rem 0.5rem;
     /*transform: scaleY(0);*/
     /*transform-origin: top;*/
