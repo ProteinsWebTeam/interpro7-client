@@ -114,7 +114,7 @@ class List extends Component {
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
     const goColors = {
-      P: '#cce7f3',
+      P: '#c2e6ec',
       F: '#e5f5d7',
       C: '#fbdcd0',
     };
