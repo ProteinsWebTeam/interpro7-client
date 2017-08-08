@@ -68,7 +68,7 @@ class EntryTypeFilter extends Component {
                 checked={
                   (!search.type && type === 'ALL') || search.type === type
                 }
-                style={{ margin: '0 0.25em 0 0' }}
+                style={{ margin: '0.25em ' }}
               />
               {type === 'ALL'
                 ? type
