@@ -4,6 +4,12 @@
   max-height: 250px;
   flex-flow: row nowrap; /*make it work with Firefox*/
 }
+.filters-panel,
+.filters-panel h6,
+.filters-panel label {
+  color: #4b555b;
+}
+
 .filters-panel h6 {
   font-size: 120%;
 }
