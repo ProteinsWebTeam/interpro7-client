@@ -44,7 +44,7 @@ class PageSizeSelector extends Component {
   };
 
   render() {
-    let options = [10, 15, 30, 100];
+    let options = [10, 25, 50, 100];
     if (options.indexOf(this.state.pageSize * 1) === -1) {
       options = Array.from(new Set([...options, this.state.pageSize])).sort(
         (a, b) => a - b,
