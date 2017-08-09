@@ -1,7 +1,7 @@
 .label {
   margin-left: auto;
-  background: #d4dddf;
-  /*background: rgba(0, 0, 0, 0.07);*/
+  background: rgba(0, 0, 0, 0.07);
+  /*background: #d4dddf;*/
   color: #676767;
   font-size: 0.78rem;
   cursor: pointer;
