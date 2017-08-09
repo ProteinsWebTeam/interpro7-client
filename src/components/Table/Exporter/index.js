@@ -20,7 +20,7 @@ class Exporter extends Component {
     return (
       <div className={fPlus('button-group', 'small', 'exporter')}>
         <a
-          className={fPlus('button', 'dropdown', 'small')}
+          className={fPlus('button', 'dropdown')}
           onClick={() => {
             this.setState({ isOpen: !this.state.isOpen });
           }}
