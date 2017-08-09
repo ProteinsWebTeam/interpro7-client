@@ -67,49 +67,49 @@
 
 /*custom active number label - temp?*/
 .tabs-title a.InterPro.is-active .number-label {
-  background-color: #2199e8;
+  background-color: var(--colors-interpro);
 }
 .tabs-title a.gene3d.is-active .number-label {
-  background-color: #a88cc3;
+  background-color: var(--colors-gene3d);
 }
 .tabs-title a.cdd.is-active .number-label {
-  background-color: #addc58;
+  background-color: var(--colors-cdd);
 }
 .tabs-title a.hamap.is-active .number-label {
-  background-color: #00e2e2;
+  background-color: var(--colors-hamap);
 }
 .tabs-title a.panther.is-active .number-label {
-  background-color: #bfac92;
+  background-color: var(--colors-panther);
 }
 .tabs-title a.pfam.is-active .number-label {
-  background-color: #6287b1;
+  background-color: var(--colors-pfam);
 }
 .tabs-title a.pirsf.is-active .number-label {
-  background-color: #dfafdf;
+  background-color: var(--colors-pirsf);
 }
 .tabs-title a.prints.is-active .number-label {
-  background-color: #4fd829;
+  background-color: var(--colors-prints);
 }
 .tabs-title a.prodom.is-active .number-label {
-  background-color: #8d99e4;
+  background-color: var(--colors-prodom);
 }
 .tabs-title a.profile.is-active .number-label {
-  background-color: #ff9229;
+  background-color: var(--colors-profile);
 }
 .tabs-title a.prosite.is-active .number-label {
-  background-color: #ffc300;
+  background-color: var(--colors-prosite);
 }
 .tabs-title a.sfld.is-active .number-label {
-  background-color: #00b1d3;
+  background-color: var(--colors-sfld);
 }
 .tabs-title a.smart.is-active .number-label {
-  background-color: #ff7a76;
+  background-color: var(--colors-smart);
 }
 .tabs-title a.ssf.is-active .number-label {
-  background-color: #686868;
+  background-color: var(--colors-ssf);
 }
 .tabs-title a.tigrfams.is-active .number-label {
-  background-color: #4f9294;
+  background-color: var(--colors-tigrfams);
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
