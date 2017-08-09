@@ -48,10 +48,10 @@ class MemberDBTab extends PureComponent {
       <li className={f('tabs-title')}>
         <Link
           newTo={newTo}
-          activeClass={f('is-active', 'is-active-tab')}
+          activeClass={f('is-active', 'is-active-tab', [children])}
           style={{ color: colors[children] ? colors[children] : null }}
         >
-          <span>
+          <span className={f('db-label')}>
             {children}&nbsp;
           </span>
           <NumberLabel
