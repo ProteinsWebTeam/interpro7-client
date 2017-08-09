@@ -144,7 +144,11 @@ class List extends Component {
                   <a href={`${''}&format=json`} download="entries.json">
                     JSON
                   </a>
-                  <br />
+                </li>
+                <li>
+                  <a href={`${''}&format=tsv`} download="entries.tsv">
+                    TSV
+                  </a>
                 </li>
                 <li>
                   <a href={`${''}`}>Open in API web view</a>
