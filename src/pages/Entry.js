@@ -176,7 +176,7 @@ class List extends Component {
                 { accession } /*: {accession: string} */,
               ) =>
                 <Link
-                  title={name}
+                  title={`${name} (${accession})`}
                   newTo={location => ({
                     ...location,
                     description: {
@@ -225,6 +225,7 @@ class List extends Component {
                           {mdb[db].map(accession =>
                             <span key={accession} className={ps('sign-label')}>
                               <Link
+                                title={`${accession} signature`}
                                 newTo={{
                                   description: {
                                     mainType: 'entry',
@@ -281,7 +282,7 @@ class List extends Component {
                       <GoLink
                         id={go.identifier}
                         className={f('go')}
-                        title={go.identifier}
+                        title={`${go.name} (${go.identifier})`}
                       >
                         {go.name ? go.name : 'None'}
                       </GoLink>
