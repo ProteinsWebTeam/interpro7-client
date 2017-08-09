@@ -1,9 +1,9 @@
 {
-  "name": "new_interpro_webviews",
+  "name": "interpro7-client",
   "version": "0.0.5",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ProteinsWebTeam/new_interpro_webviews.git"
+    "url": "https://github.com/ProteinsWebTeam/interpro7-client.git"
   },
   "license": "GPL-3.0",
   "scripts": {
@@ -172,6 +172,5 @@
     "webpack-dev-server": "^2.6.1",
     "why-did-you-update": "0.0.8",
     "yaml-loader": "^0.5.0"
-  },
-  "false": {}
+  }
 }
