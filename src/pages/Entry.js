@@ -301,6 +301,10 @@ const DomainAsync = createAsyncComponent(() =>
   import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
 );
 
+const HmmModelsAsync = createAsyncComponent(() =>
+  import(/* webpackChunkName: "entry-subpage" */ 'subPages/HmmModels'),
+);
+
 const SchemaOrgData = createAsyncComponent(
   () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   () => null,
@@ -312,6 +316,7 @@ const pages = new Set([
   { value: 'protein', component: ProteinAsync },
   { value: 'species', component: SpeciesAsync },
   { value: 'domain_architecture', component: DomainAsync },
+  { value: 'hmm_models', component: HmmModelsAsync },
 ]);
 
 const SummaryComponent = ({ data: { payload }, isStale, location }) =>
@@ -403,5 +408,6 @@ Entry.propTypes = {
 export default loadData((...args) =>
   getUrlForApi(...args)
     .replace('species', '')
+    .replace('hmm_models', '')
     .replace('domain_architecture', ''),
 )(Entry);

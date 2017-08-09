@@ -180,7 +180,7 @@ export const singleEntity /*: Array<Object> */ = [
         },
       };
     },
-    name: 'HMM models',
+    name: 'hmm models',
   },
 ];
 
