@@ -10,4 +10,20 @@
   --colors-domain: #59d417;
   --colors-repeat: #ff9000;
   --colors-site: #ce70e2;
+
+  --colors-interpro: #2199e8;
+  --colors-gene3d: #a88cc3;
+  --colors-cdd: #addc58;
+  --colors-hamap: #00e2e2;
+  --colors-panther: #bfac92;
+  --colors-pfam: #6287b1;
+  --colors-pirsf: #dfafdf;
+  --colors-prints: #4fd829;
+  --colors-prodom: #8d99e4;
+  --colors-profile: #ff9229;
+  --colors-prosite: #ffc300;
+  --colors-sfld: #00b1d3;
+  --colors-smart: #ff7a76;
+  --colors-ssf: #686868;
+  --colors-tigrfams: #4f9294;
 }
