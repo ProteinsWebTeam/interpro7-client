@@ -1,9 +1,9 @@
 {
-  "name": "new_interpro_webviews",
+  "name": "interpro7-client",
   "version": "0.0.5",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ProteinsWebTeam/new_interpro_webviews.git"
+    "url": "https://github.com/ProteinsWebTeam/interpro7-client.git"
   },
   "license": "GPL-3.0",
   "scripts": {
@@ -90,15 +90,16 @@
     }
   },
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "^1.0.3",
-    "EBI-Icon-fonts": "^1.2.0-rc-2",
+    "@webcomponents/webcomponentsjs": "^1.0.6",
+    "EBI-Icon-fonts": "^1.2.0",
     "babel-polyfill": "^6.23.0",
     "color-hash": "^1.0.3",
-    "core-js": "^2.4.1",
+    "core-js": "^2.5.0",
     "d3": "^4.10.0",
     "data-loader": "^0.2.0",
     "draft-js": "^0.10.1",
-    "ebi-framework": "^1.2.0-alpha.2",
+    "ebi-framework": "^1.2.0",
+    "filesize": "^3.5.10",
     "foundation-sites": "^6.4.1",
     "gsap": "^1.20.2",
     "history": "^4.6.3",
@@ -132,18 +133,18 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.24.1",
-    "chai": "^4.1.0",
+    "chai": "^4.1.1",
     "classnames": "^2.2.5",
     "css-loader": "^0.28.4",
     "empty": "^0.10.1",
-    "eslint": "^4.3.0",
+    "eslint": "^4.4.1",
     "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-react": "^7.1.0",
     "eslint-watch": "^3.1.2",
     "extract-text-webpack-plugin": "^3.0.0",
     "favicons-webpack-plugin": "0.0.7",
     "file-loader": "^0.11.2",
-    "flow-bin": "^0.51.1",
+    "flow-bin": "^0.52.0",
     "flow-typed": "^2.1.5",
     "glob": "^7.1.2",
     "glob-loader": "^0.3.0",
@@ -151,7 +152,7 @@
     "husky": "^0.14.3",
     "img-loader": "^2.0.0",
     "jsx-chai": "^4.0.0",
-    "lint-staged": "^4.0.2",
+    "lint-staged": "^4.0.3",
     "mocha": "^3.4.2",
     "mocha-webpack": "^0.7.0",
     "node-sass": "^4.5.3",
@@ -173,6 +174,5 @@
     "webpack-dev-server": "^2.6.1",
     "why-did-you-update": "0.0.8",
     "yaml-loader": "^0.5.0"
-  },
-  "false": {}
+  }
 }
