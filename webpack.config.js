@@ -320,12 +320,8 @@ module.exports = (env = { dev: true }) => {
                   .execSync('git rev-parse --abbrev-ref HEAD')
                   .toString()
                   .trim(),
-                hash: childProcess
+                commit: childProcess
                   .execSync('git rev-parse HEAD')
-                  .toString()
-                  .trim(),
-                remote: childProcess
-                  .execSync('git ls-remote --get-url')
                   .toString()
                   .trim(),
                 tag: childProcess
