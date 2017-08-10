@@ -67,21 +67,23 @@
 
 .secondary {
   color: #2199e8;
+}
 
-  @nest & a:hover, & a:focus {
-    background-color: rgba(60, 135, 185, 0.2);
-  }
+.container .secondary a:hover,
+.container .secondary a:focus {
+  background-color: rgba(60, 135, 185, 0.2);
 }
 
 .tertiary {
   color: #34b5b5;
-
-  @nest & a:hover, & a:focus {
-    background-color: #34b5b533;
-  }
 }
 
-ul li a:hover {
+.container .tertiary a:hover,
+.container .tertiary a:focus {
+  background-color: rgba(63, 165, 156, 0.2);
+}
+
+.container ul li a:hover {
   background: rgba(0, 0, 0, 0.3);
 }
 

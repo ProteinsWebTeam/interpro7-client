@@ -1,15 +1,24 @@
-div.exporter {
-  margin-left: 10px;
+.exporter {
+  margin: 0 0 0 0.5rem;
   position: relative;
-  & > .dropdown-content {
+  & .dropdown-content {
+    position: absolute;
     top: 100%;
-    right: 0;
-    overflow:auto;
+    right: 24%; /*temp value while popup position is working better*/
+    overflow: auto;
     width: initial;
-    min-width: 220%;
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 300ms ease-in-out;
+    min-width: 180%; /*temp value*/
+    padding: 1rem 0.5rem;
+    /*transform: scaleY(0);*/
+    /*transform-origin: top;*/
+    /*transition: transform 300ms ease-in-out;*/
     visibility: visible;
   }
+}
+.exporter .dropdown-pane {
+  z-index: 2;
+} /* so sticky header stay on top*/
+.exporter .icon-settings {
+  padding: 0.3em 0.4em;
+  color: #71818a;
 }

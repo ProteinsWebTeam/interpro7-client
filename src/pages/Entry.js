@@ -3,6 +3,7 @@ import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import { GoLink } from 'components/ExtLink';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
@@ -113,9 +114,9 @@ class List extends Component {
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
     const goColors = {
-      P: 'rgb(220, 254, 210)',
-      F: 'rgb(254, 220, 210)',
-      C: 'rgb(220, 210, 254)',
+      P: '#c2e6ec',
+      F: '#e5f5d7',
+      C: '#fbdcd0',
     };
     if (data.loading || notFound) {
       _payload = {
@@ -124,10 +125,9 @@ class List extends Component {
     }
     return (
       <div className={f('row')}>
-        <div className={f('shrink', 'columns')}>
-          <MemberDBTabs />
-        </div>
-        <div className={f('columns')}>
+        <MemberDBTabs />
+
+        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
           <Table
@@ -144,7 +144,11 @@ class List extends Component {
                   <a href={`${''}&format=json`} download="entries.json">
                     JSON
                   </a>
-                  <br />
+                </li>
+                <li>
+                  <a href={`${''}&format=tsv`} download="entries.tsv">
+                    TSV
+                  </a>
                 </li>
                 <li>
                   <a href={`${''}`}>Open in API web view</a>
@@ -153,12 +157,17 @@ class List extends Component {
             </Exporter>
             <PageSizeSelector />
             <SearchBox search={search.search} pathname={''}>
-              Search entries:
+              &nbsp;
             </SearchBox>
             <Column
               accessKey="type"
+              className={ps('col-type')}
               renderer={type =>
-                <interpro-type type={type.replace('_', ' ')} title={type}>
+                <interpro-type
+                  type={type.replace('_', ' ')}
+                  title={type}
+                  size="26px"
+                >
                   {type}
                 </interpro-type>}
             >
@@ -171,6 +180,7 @@ class List extends Component {
                 { accession } /*: {accession: string} */,
               ) =>
                 <Link
+                  title={`${name} (${accession})`}
                   newTo={location => ({
                     ...location,
                     description: {
@@ -189,6 +199,7 @@ class List extends Component {
               accessKey="accession"
               renderer={(accession /*: string */) =>
                 <Link
+                  title={accession}
                   newTo={location => ({
                     ...location,
                     description: {
@@ -198,7 +209,9 @@ class List extends Component {
                     },
                   })}
                 >
-                  {accession}
+                  <span className={ps('acc-row')}>
+                    {accession}
+                  </span>
                 </Link>}
             >
               Accession
@@ -208,38 +221,35 @@ class List extends Component {
                   accessKey="member_databases"
                   renderer={(mdb /*: string */) =>
                     Object.keys(mdb).map(db =>
-                      <div
-                        key={db}
-                        style={{
-                          backgroundColor: '#DDDDDD',
-                          padding: '1px',
-                          marginBottom: '1px',
-                        }}
-                      >
-                        {db}
-                        {mdb[db].map(accession =>
-                          <span
-                            key={accession}
-                            className={f('label')}
-                            style={{ float: 'right' }}
-                          >
-                            <Link
-                              newTo={{
-                                description: {
-                                  mainType: 'entry',
-                                  mainDB: db,
-                                  mainAccession: accession,
-                                },
-                              }}
-                            >
-                              {accession}
-                            </Link>
-                          </span>,
-                        )}
+                      <div key={db} className={ps('sign-row')}>
+                        <span className={ps('sign-cell')}>
+                          {db}
+                        </span>
+                        <span className={ps('sign-cell')}>
+                          {mdb[db].map(accession =>
+                            <span key={accession} className={ps('sign-label')}>
+                              <Link
+                                title={`${accession} signature`}
+                                newTo={{
+                                  description: {
+                                    mainType: 'entry',
+                                    mainDB: db,
+                                    mainAccession: accession,
+                                  },
+                                }}
+                              >
+                                {accession}
+                              </Link>
+                            </span>,
+                          )}
+                        </span>
                       </div>,
                     )}
                 >
-                  Signatures <span className={f('label')}>Sign ID</span>
+                  Signatures{' '}
+                  <span className={ps('sign-label-head')} title="Signature ID">
+                    ID
+                  </span>
                 </Column>
               : <Column
                   accessKey="integrated"
@@ -260,23 +270,49 @@ class List extends Component {
                 </Column>}
             <Column
               accessKey="go_terms"
+              className={ps('col-go')}
               renderer={(gos /*: Array<Object> */) =>
                 gos.map(go =>
                   <div
+                    className={ps('go-row')}
                     key={go.identifier}
                     style={{
                       backgroundColor: go.category
                         ? goColors[go.category]
                         : '#DDDDDD',
-                      padding: '1px',
-                      marginBottom: '1px',
                     }}
                   >
-                    {go.name ? go.name : 'None'}
+                    <span className={ps('go-cell')}>
+                      <GoLink
+                        id={go.identifier}
+                        className={f('go')}
+                        title={`${go.name} (${go.identifier})`}
+                      >
+                        {go.name ? go.name : 'None'}
+                      </GoLink>
+                    </span>
                   </div>,
                 )}
             >
-              GO Terms
+              GO Terms{' '}
+              <span
+                className={ps('sign-label-head', 'bp')}
+                title="Biological process term"
+              >
+                BP
+              </span>{' '}
+              <span
+                className={ps('sign-label-head', 'mf')}
+                title="Molecular function term"
+              >
+                MF
+              </span>{' '}
+              <span
+                className={ps('sign-label-head', 'cc')}
+                title="Cellular component term"
+              >
+                CC
+              </span>
             </Column>
           </Table>
         </div>

@@ -8,6 +8,7 @@ Column.propTypes = {
   renderer: T.func,
   headerStyle: T.object,
   cellStyle: T.object,
+  className: T.string,
   children: T.any,
 };
 

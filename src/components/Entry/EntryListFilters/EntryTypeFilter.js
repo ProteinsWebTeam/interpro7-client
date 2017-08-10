@@ -53,10 +53,13 @@ class EntryTypeFilter extends Component {
       types.unshift(['ALL', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
     return (
-      <div>
+      <div className={f('list-entries')}>
         {types.map(([type, count]) =>
           <div key={type} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label
+              className={f('row', 'align-middle')}
+              style={{ cursor: 'pointer' }}
+            >
               <input
                 type="radio"
                 name="entry_type"
@@ -65,11 +68,15 @@ class EntryTypeFilter extends Component {
                 checked={
                   (!search.type && type === 'ALL') || search.type === type
                 }
-                style={{ margin: '0.25em' }}
+                style={{ margin: '0.25em ' }}
               />
               {type === 'ALL'
                 ? type
-                : <interpro-type type={type.replace('_', ' ')} expanded>
+                : <interpro-type
+                    type={type.replace('_', ' ')}
+                    expanded
+                    size="17px"
+                  >
                     {type}
                   </interpro-type>}
               <NumberLabel value={count} />

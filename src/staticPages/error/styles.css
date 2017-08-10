@@ -1,0 +1,14 @@
+.error-msg {
+  padding: 5rem 0 5rem;
+  text-align: center;
+}
+
+.error-msg h1.oversized {
+  font-size: 4.5rem;
+  color: black;
+  line-height: 1;
+}
+
+.error-msg ul {
+  list-style-type: none;
+}

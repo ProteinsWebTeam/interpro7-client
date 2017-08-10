@@ -1,13 +1,12 @@
 // @flow
 import React from 'react';
-
-import Link from 'components/generic/Link';
-
-import DiskUsage from './disk-usage';
-
+import styles from './styles.css';
+import { foundationPartial } from 'styles/foundation';
 import info from './info';
 import { pkg } from 'config';
-
+import Link from 'components/generic/Link';
+import DiskUsage from './disk-usage';
+const f = foundationPartial(styles);
 // remove last “.git”
 const url = pkg.repository.url.replace('.git', '');
 
@@ -59,8 +58,12 @@ const DeveloperInfo = () =>
   </div>;
 
 export default () =>
-  <section>
-    <h4>About this website</h4>
-    <DiskUsage />
-    <DeveloperInfo />
-  </section>;
+  <div className={f('row')}>
+    <div className={f('columns', 'large-12')}>
+      <section>
+        <h4>About this website</h4>
+        <DiskUsage />
+        <DeveloperInfo />
+      </section>
+    </div>
+  </div>;

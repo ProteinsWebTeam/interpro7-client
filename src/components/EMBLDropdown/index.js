@@ -7,15 +7,13 @@ import { createSelector } from 'reselect';
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import ebiTheme from 'ebi-framework/css/theme-template.css';
-import ebiPetrolTheme from 'ebi-framework/css/theme-embl-petrol.css';
+import interproTheme from 'styles/theme-interpro.css';
 const styleBundle = foundationPartial(
   styles,
   fonts,
-  ebiPetrolTheme,
-  ebiTheme,
+  interproTheme,
   ebiGlobalStyles,
 );
 

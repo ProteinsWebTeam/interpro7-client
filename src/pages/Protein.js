@@ -79,10 +79,9 @@ const List = ({
   );
   return (
     <div className={f('row')}>
-      <div className={f('shrink', 'columns')}>
-        <MemberDBTabs />
-      </div>
-      <div className={f('columns')}>
+      <MemberDBTabs />
+
+      <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
         <ProteinListFilters />
         <hr />
         <Table

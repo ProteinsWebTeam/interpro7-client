@@ -195,36 +195,44 @@ const Settings = ({
   changeSettings,
   resetSettings,
 }) =>
-  <section onChange={changeSettings}>
-    <h3>Settings</h3>
-    <PaginationSettings pagination={pagination} handleChange={changeSettings} />
-    <UISettings ui={ui} handleChange={changeSettings} />
-    <CacheSettings cache={cache} handleChange={changeSettings} />
-    <APIEndpointSettings
-      handleChange={changeSettings}
-      category="api"
-      endpointDetails={api}
-    >
-      API Settings
-    </APIEndpointSettings>
-    <EBIEndpointSettings
-      handleChange={changeSettings}
-      category="ebi"
-      endpointDetails={ebi}
-    >
-      EBI Search Settings
-    </EBIEndpointSettings>
-    <IPScanEndpointSettings
-      handleChange={changeSettings}
-      category="ipScan"
-      endpointDetails={ipScan}
-    >
-      InterProScan Settings
-    </IPScanEndpointSettings>
-    <button onClick={resetSettings} className={f('button')}>
-      Reset settings to default values
-    </button>
-  </section>;
+  <div className={f('row')}>
+    <div className={f('columns', 'large-12')}>
+      <section onChange={changeSettings}>
+        <h3>Settings</h3>
+
+        <PaginationSettings
+          pagination={pagination}
+          handleChange={changeSettings}
+        />
+        <UISettings ui={ui} handleChange={changeSettings} />
+        <CacheSettings cache={cache} handleChange={changeSettings} />
+        <APIEndpointSettings
+          handleChange={changeSettings}
+          category="api"
+          endpointDetails={api}
+        >
+          API Settings
+        </APIEndpointSettings>
+        <EBIEndpointSettings
+          handleChange={changeSettings}
+          category="ebi"
+          endpointDetails={ebi}
+        >
+          EBI Search Settings
+        </EBIEndpointSettings>
+        <IPScanEndpointSettings
+          handleChange={changeSettings}
+          category="ipScan"
+          endpointDetails={ipScan}
+        >
+          InterProScan Settings
+        </IPScanEndpointSettings>
+        <button onClick={resetSettings} className={f('button')}>
+          Reset settings to default values
+        </button>
+      </section>
+    </div>
+  </div>;
 Settings.propTypes = {
   settings: T.shape({
     pagination: T.object.isRequired,
