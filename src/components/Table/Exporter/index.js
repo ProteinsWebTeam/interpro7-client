@@ -1,13 +1,33 @@
 import React, { Component } from 'react';
 import Link from 'components/generic/Link';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import fonts from 'styles/ebi/fonts.css';
 import { foundationPartial } from 'styles/foundation';
 import s from './style.css';
 const fPlus = foundationPartial(s, fonts);
+const colors = {
+  gene3d: '#a88cc3',
+  cdd: '#addc58',
+  hamap: '#00e2e2',
+  panther: '#bfac92',
+  pfam: '#6287b1',
+  pirsf: '#dfafdf',
+  prints: '#4fd829',
+  prodom: '#8d99e4',
+  profile: '#ff9229',
+  prosite: '#ffc300',
+  sfld: '#00b1d3',
+  smart: '#ff7a76',
+  ssf: '#686868',
+  tigrfams: '#4f9294',
+  InterPro: '#2199E8',
+};
 
 class Exporter extends Component {
   static propTypes = {
+    mainDB: T.string.isRequired,
     children: T.any,
   };
 
@@ -16,11 +36,12 @@ class Exporter extends Component {
     this.state = { isOpen: false };
   }
   render() {
-    const { children } = this.props;
+    const { children, mainDB } = this.props;
     return (
       <div className={fPlus('button-group', 'small', 'exporter')}>
         <a
           className={fPlus('button', 'dropdown')}
+          style={{ backgroundColor: colors[mainDB] ? colors[mainDB] : null }}
           onClick={() => {
             this.setState({ isOpen: !this.state.isOpen });
           }}
@@ -53,4 +74,8 @@ class Exporter extends Component {
     );
   }
 }
-export default Exporter;
+const mapStateToProps = createSelector(
+  state => state.newLocation.description.mainDB,
+  mainDB => ({ mainDB }),
+);
+export default connect(mapStateToProps)(Exporter);
