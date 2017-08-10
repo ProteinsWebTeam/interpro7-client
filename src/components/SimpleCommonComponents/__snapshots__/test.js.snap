@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 1`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 2`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 3`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 4`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 5`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 6`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 7`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 8`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 9`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 10`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 11`] = `null`;
+
+exports[`Simple Common Components <ExtOriginDB /> should render external origin database link 12`] = `null`;
+
+exports[`Simple Common Components <Name /> should render name information 1`] = `
+<div>
+  <h3>
+    name
+     (
+    accession
+    )
+  </h3>
+  <p
+    style={
+      Object {
+        "color": "gray",
+      }
+    }
+  >
+    Short name: 
+    short
+  </p>
+</div>
+`;
+
+exports[`Simple Common Components <Name /> should render name information 2`] = `
+<div>
+  <h3>
+    name
+     (
+    accession
+    )
+  </h3>
+</div>
+`;
+
+exports[`Simple Common Components <SourceOrganism /> should render source organism information 1`] = `
+<p>
+  Source Organism: 
+  <TaxLink
+    id={12345}
+  >
+    organism name
+     (
+    12345
+    )
+  </TaxLink>
+</p>
+`;

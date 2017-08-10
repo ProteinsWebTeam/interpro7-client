@@ -23,6 +23,7 @@ const plugins = ['react'];
 const env = {
   browser: true,
   es6: true,
+  jest: true,
 };
 
 const rules = {
