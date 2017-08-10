@@ -987,11 +987,7 @@ a.go {
   .offc-nav {
     width: 12rem;
   } /*reduce width off-canvas menu*/
-  table th,
-  table td {
-    font-size: 90%;
-    word-break: break-all;
-  }
+
   /*remove the main menu - shouldn't this be done using foundation?*/
   /*.local-masthead nav ul.dropdown.menu.float-left > li:first-child {display: inline-block; border-right: none;}*/
   /*.local-masthead nav ul.dropdown.menu.float-left > li {display: none;}*/
