@@ -1,6 +1,7 @@
 /* eslint-env node */
 const fs = require('fs');
 const path = require('path');
+const childProcess = require('child_process');
 
 const webpack = require('webpack');
 const url = require('url');
@@ -93,6 +94,9 @@ module.exports = (env = { dev: true }) => {
             path.resolve('node_modules', 'lodash-es'),
             path.resolve('node_modules', 'color-hash'),
             path.resolve('node_modules', 'timing-functions'),
+            // path.resolve('node_modules', 'data-loader'),
+            // path.resolve('node_modules', 'interpro-components'),
+            // path.resolve('node_modules', 'pdb-web-components'),
           ],
           use: [
             {
@@ -100,22 +104,22 @@ module.exports = (env = { dev: true }) => {
             },
           ],
         },
-        {
-          test: /\.js$/i,
-          include: [
-            path.resolve('node_modules', 'data-loader'),
-            path.resolve('node_modules', 'interpro-components'),
-            path.resolve('node_modules', 'pdb-web-components'),
-          ],
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                presets: ['stage-2'],
-              },
-            },
-          ],
-        },
+        // {
+        //   test: /\.js$/i,
+        //   include: [
+        //     path.resolve('node_modules', 'data-loader'),
+        //     path.resolve('node_modules', 'interpro-components'),
+        //     path.resolve('node_modules', 'pdb-web-components'),
+        //   ],
+        //   use: [
+        //     {
+        //       loader: 'babel-loader',
+        //       options: {
+        //         presets: ['stage-2'],
+        //       },
+        //     },
+        //   ],
+        // },
         {
           test: /\.json$/i,
           use: [
@@ -319,6 +323,25 @@ module.exports = (env = { dev: true }) => {
               PERF: JSON.stringify(!!env.performance),
               NODE_ENV: env.production ? JSON.stringify('production') : null,
             },
+            'process.info': JSON.stringify({
+              git: {
+                branch: childProcess
+                  .execSync('git rev-parse --abbrev-ref HEAD')
+                  .toString()
+                  .trim(),
+                commit: childProcess
+                  .execSync('git rev-parse HEAD')
+                  .toString()
+                  .trim(),
+                tag: childProcess
+                  .execSync('git rev-parse --tags HEAD')
+                  .toString()
+                  .trim(),
+              },
+              build: {
+                time: Date.now(),
+              },
+            }),
           })
         : null,
       env.dashboard ? new DashboardPlugin(new Dashboard().setData) : null,
@@ -356,7 +379,7 @@ module.exports = (env = { dev: true }) => {
           })
         : null,
       env.production || env.staging ? extractTextPlugin : null,
-    ].filter(x => x), // filter out empty values
+    ].filter(Boolean), // filter out empty values
   };
 
   // Overwrite for tests
@@ -366,10 +389,10 @@ module.exports = (env = { dev: true }) => {
 
   // Sourcemaps
   if (env.dev) {
-    config.devtool = '#inline-source-map';
+    config.devtool = 'inline-source-map';
   }
   if (env.test || env.staging) {
-    config.devtool = '#cheap-module-source-map';
+    config.devtool = 'cheap-module-source-map';
   }
 
   // devServer

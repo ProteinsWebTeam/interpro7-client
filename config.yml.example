@@ -11,7 +11,6 @@ pages:
   protein: null
   structure: null
   proteome: null
-  pathway: null
 pagination:
   pageSize: 10
 cache:
