@@ -17,7 +17,7 @@
   border-left: 3px solid currentColor;
   /*border-radius: 5px 0 0 5px;*/
   font-size: 0.9rem;
-  padding: .7rem .7rem;
+  padding: .68rem .68rem; /*not 0.7 for firefox*/
   position: relative;
   display: flex;
   overflow: hidden;
@@ -64,6 +64,10 @@
     transform: translateX(-80%);
   }
 }
+
+.tabs-title span {
+  z-index: 1;
+} /*show labels on top of animation*/
 
 /*custom active number label - temp?*/
 .tabs-title a.InterPro.is-active .number-label {
@@ -168,7 +172,7 @@
   color: var(--colors-graydark);
 }
 
-.is-active span:first-child {
+.is-active .db-label {
   font-weight: bold;
 }
 
