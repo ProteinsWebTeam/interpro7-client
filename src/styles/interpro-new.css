@@ -1,42 +1,26 @@
-/******************************Overwritting EBI  global***************************/
-ul#global-nav {
-  padding-top: 0;
-} /****IMPORTANT TO FIX****remove space on top of page for EBI menu**********/
-.local-masthead nav ul#secondary-menu-links.menu li a:hover:after,
-.local-masthead nav ul#global-nav.menu li a:hover:after,
-.local-masthead nav ul.menu li a:hover:after {
-  top: 0px;
-  border-left: 0px solid transparent;
-  border-right: 0px solid transparent;
-} /*****remove arrows in the menu*****/
-.local-masthead nav ul li a:active {
-  border-bottom: 3px white solid;
-} /*****remove arrows in the menu - fill the gap when menu click when no arrow*****/
-
+/******************************Overw EBI  global***************************/
+/*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
 a,
 a:visited {
   border-bottom-width: 0;
-} /*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
-#content {
+}
+
+/*add some space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer not needed anymore?*/
+main {
   padding-top: 1rem;
-  padding-bottom: 0;
-} /*add some more space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer*/
-#local-masthead nav ul.menu li {
+  /*padding-bottom: 0;*/
+}
+
+/*STYLE - slightly hide division between menu items */
+.masthead nav ul.menu li {
   border-right: 1px solid rgba(248, 248, 248, 0.2);
-} /*STYLE - slightly hide division between menu items - need to keep ID specificity to override EBI style TILL they change the ID in EBI-GLOBAL */
-#local-masthead ul li.is-active a,
-#local-masthead ul li a:hover,
-#local-masthead nav ul li a.hover,
-#local-masthead nav ul li a:hover {
+}
+
+/*STYLE - make menu items hover slightly darker*/
+.local-masthead nav ul li a:hover {
   color: #000;
-} /*STYLE - make menu items hover slightly darker*/
-.pagination .current {
-  background: #3798a7;
-} /*STYLE - custom color for table pagination MISSING in THEME-EBI*/
-.callout {
-  background: #eaeaea;
-} /*redefining a darker bgd for callout as they use to be*/
-/****************************** END Overwritting EBI  global**********************/
+}
+/****************************** END Overw EBI  global**********************/
 
 /******************************Local style***************************************/
 /*ICONS*/
@@ -259,19 +243,11 @@ a:hover.noline {
   border-bottom-color: transparent;
 } /* CROSS ICON PBM - to make all menu items same height*/
 
-#local-masthead .menu a {
-  height: 100%;
-}
-#local-masthead a.active {
-  color: #0a0a0a;
-} /*define the colour for active tab link*/
 .masthead .menu .active {
   color: #0a0a0a;
   background: #fff;
   border: none;
-  font-weight: bold; /*temp while we replace the active class on <li> and not <a> element*/
-} /*this should be defined in the default ebi css*/
-/*#local-masthead .menu > li > a {border-bottom-style: solid; border-bottom-color:transparent;}!*important to make all menu items same height otherwise buggy effect on click*!*/
+} /*active is used on li element in ebi css*/
 .badge {
   background: rgba(0, 0, 0, 0.23);
   border-radius: 1em;
@@ -359,7 +335,6 @@ IMAGE BANNER
   background-position: top right, left;
   background-size: 100%, 1027px;
 }
-#local-masthead,
 .local-masthead {
   background-image: linear-gradient(
       to right,
@@ -988,13 +963,6 @@ a.go {
     width: 12rem;
   } /*reduce width off-canvas menu*/
 
-  /*remove the main menu - shouldn't this be done using foundation?*/
-  /*.local-masthead nav ul.dropdown.menu.float-left > li:first-child {display: inline-block; border-right: none;}*/
-  /*.local-masthead nav ul.dropdown.menu.float-left > li {display: none;}*/
-  .local-masthead nav ul#global-nav.menu li:nth-child(6),
-  .local-masthead nav ul#global-nav.menu li:nth-child(7) {
-    display: none;
-  } /*remove 2 list items from EBI-global, as it collapse on two rows*/
   .local-masthead nav ul li a:active {
     border-bottom: 0px white solid;
   } /* !*important to keep - remove  gap when Entry menu click otherwise banner is moving*!*/
