@@ -7,7 +7,9 @@ import { frame } from 'timing-functions/src';
 
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import interproTheme from 'styles/theme-interpro.css';
+const f = foundationPartial(interproTheme);
 
 const Example = ({ value }) =>
   <a style={{ cursor: 'pointer' }} data-search={value}>
