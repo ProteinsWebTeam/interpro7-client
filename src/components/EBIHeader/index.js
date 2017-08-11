@@ -28,9 +28,11 @@ const styleBundle = foundationPartial(
 /*
  EMBL-EBI button and hidden div behaviour
  */
+// TODO: remove height when bug on EBI side is fixed
 const _EmblButton = ({ toggleEMBLMapNav }) =>
   <button
     className={styleBundle('button', 'float-right')}
+    style={{ height: '36px' }}
     type="button"
     aria-expanded="false"
     onClick={toggleEMBLMapNav}
