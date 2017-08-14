@@ -11,7 +11,10 @@ import description2path from 'utils/processLocation/description2path';
 
 import { goToNewLocation } from 'actions/creators';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+
+const f = foundationPartial(style);
 
 const label = {
   swissprot: 'Reviewed',
@@ -73,7 +76,7 @@ class CurationFilter extends Component {
       <div>
         {Object.keys(databases).sort().map(db =>
           <div key={db} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
                 name="curated_filter"
