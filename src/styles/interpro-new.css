@@ -1,3 +1,4 @@
+@import "../styles/colors.css";
 /******************************Overw EBI  global***************************/
 /*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
 a,
@@ -25,47 +26,50 @@ main {
   font-family: 'EBI-generic', arial, sans-serif;
 }
 .md-cg .md-color {
-  fill: #a88cc3;
+  fill: var(--colors-gene3d);
 }
 .md-cd .md-color {
-  fill: #addc58;
+  fill: var(--colors-cdd);
 }
 .md-ha .md-color {
-  fill: #1ad8d8;
+  fill: var(--colors-hamap);
+}
+.md-mo .md-color {
+  fill: var(--colors-modi);
 }
 .md-pa .md-color {
-  fill: #bfac92;
+  fill: var(--colors-panther);
 }
 .md-pf .md-color {
-  fill: #6287b1; /*was 9bbbe0*/
+  fill: var(--colors-pfam);
 }
 .md-pi .md-color {
-  fill: #e299e2;
+  fill: var(--colors-pirsf);
 }
 .md-pri .md-color {
-  fill: #4fd829;
+  fill: var(--colors-prints);
 }
 .md-pro .md-color {
-  fill: #8d99e4;
+  fill: var(--colors-prodom);
 }
 .md-prpro .md-color,
 .md-pr .md-color {
-  fill: #ff9229;
+  fill: var(--colors-profile);
 }
 .md-prpat .md-color {
-  fill: #ffc300; /*was 8899a6*/
+  fill: var(--colors-prosite); /*was 8899a6*/
 }
 .md-sf .md-color {
-  fill: #00b1d3;
+  fill: var(--colors-sfld);
 }
 .md-sm .md-color {
-  fill: #ff7a76;
+  fill: var(--colors-smart);
 }
 .md-su .md-color {
-  fill: #686868;
+  fill: var(--colors-ssf);
 }
 .md-ti .md-color {
-  fill: #b37977;
+  fill: var(--colors-tigrfams);
 }
 /*/MEMBER DATABASE SVG icons*/
 
