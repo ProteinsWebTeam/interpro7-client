@@ -15,10 +15,13 @@ const styleBundle = foundationPartial(
 
 const EBIFooter = () =>
   <footer>
-    <div id={styleBundle('global-footer')}>
+    <div
+      id={styleBundle('global-footer')}
+      className={styleBundle('global-footer')}
+    >
       <nav
         id={styleBundle('global-nav-expanded')}
-        className={styleBundle('row')}
+        className={styleBundle('global-nav-expanded', 'row')}
       >
         <div
           className={styleBundle({
@@ -238,7 +241,7 @@ const EBIFooter = () =>
 
       <section
         id={styleBundle('ebi-footer-meta')}
-        className={styleBundle('row')}
+        className={styleBundle('ebi-footer-meta', 'row')}
       >
         <div className={styleBundle('columns')}>
           <p className={styleBundle('address')}>
@@ -246,7 +249,7 @@ const EBIFooter = () =>
             UK. +44 (0)1223 49 44 44
           </p>
           <p className={styleBundle('legal')}>
-            Copyright © EMBL-EBI 2016 | EMBL-EBI is&nbsp;
+            Copyright © EMBL-EBI 2017 | EMBL-EBI is&nbsp;
             <a href="http://www.embl.org/" rel="noopener">
               part of the European Molecular Biology Laboratory
             </a>{' '}
