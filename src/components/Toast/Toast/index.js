@@ -1,11 +1,11 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 import localStyles from './style.css';
 const s = foundationPartial(localStyles);
 
-const GRANULARITY = 250;// 250ms, time frequency of ttl update
+const GRANULARITY = 250; // 250ms, time frequency of ttl update
 
 export default class Toast extends PureComponent {
   static propTypes = {
@@ -14,6 +14,7 @@ export default class Toast extends PureComponent {
     className: T.string,
     title: T.string,
     body: T.string,
+    link: T.object,
     ttl: T.number,
     handleClose: T.func.isRequired,
   };
@@ -44,9 +45,15 @@ export default class Toast extends PureComponent {
 
   render() {
     const {
-      toastId, title, body, className, // used, or transformed before passed
-      paused, ttl, handleClose, // ignored
-      ...props// passed
+      toastId,
+      title,
+      body,
+      link,
+      className,
+      paused,
+      ttl,
+      handleClose,
+      ...props // passed
     } = this.props;
     return (
       <li
@@ -54,8 +61,14 @@ export default class Toast extends PureComponent {
         onClick={this._close}
         {...props}
       >
-        {title && <strong>{title} ({toastId})</strong>}
-        <p>{body}</p>
+        {title &&
+          <strong>
+            {title}
+          </strong>}
+        <p>
+          {body}
+        </p>
+        {link && <a {...link} />}
       </li>
     );
   }
