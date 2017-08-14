@@ -12,8 +12,8 @@ exports[`External links <DOILink /> should render simple links 1`] = `
 
 exports[`External links <GoLink /> should render simple links 1`] = `
 <BaseLink
-  id="GO_0003676"
-  pattern="http://www.ebi.ac.uk/ols/beta/ontologies/go/terms?iri=http://purl.obolibrary.org/obo/{id}"
+  id="GO:0003676"
+  pattern="https://www.ebi.ac.uk/QuickGO/GTerm?id={id}"
   target="_blank"
 >
   GO:0003676
@@ -22,8 +22,8 @@ exports[`External links <GoLink /> should render simple links 1`] = `
 
 exports[`External links <GoLink /> should render simple links 2`] = `
 <BaseLink
-  id="GO_0003676"
-  pattern="http://www.ebi.ac.uk/ols/beta/ontologies/go/terms?iri=http://purl.obolibrary.org/obo/{id}"
+  id="GO:0003676"
+  pattern="https://www.ebi.ac.uk/QuickGO/GTerm?id={id}"
   target="_blank"
 >
   GO:0003676

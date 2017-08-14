@@ -87,6 +87,7 @@ describe('External links', () => {
     test('should render simple links', () => {
       renderer.render(<PDBeLink id="101m" />);
       expect(renderer.getRenderOutput()).toMatchSnapshot();
+    });
   });
 
   describe('<UniProtLink />', () => {
