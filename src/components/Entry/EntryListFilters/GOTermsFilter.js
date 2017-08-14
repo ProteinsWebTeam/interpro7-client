@@ -11,7 +11,10 @@ import description2path from 'utils/processLocation/description2path';
 
 import { goToNewLocation } from 'actions/creators';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+
+const f = foundationPartial(style);
 
 const categories = {
   'Biological Process': 'P',
@@ -53,14 +56,7 @@ class GOTermsFilter extends Component {
       <div className={f('list-go')}>
         {terms.map(([term, count]) =>
           <div key={term} className={f('column')}>
-            <label
-              className={f('row')}
-              style={{
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
+            <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
                 name="go_category"
