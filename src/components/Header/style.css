@@ -15,11 +15,11 @@
 }
 
 .header {
-  //position: sticky;
-  //top: -150px;/*!* -34px (EBI header); *!*/
+  /*position: sticky;*/
+  /* top: -150px;*/ /*!* -34px (EBI header); *!*/
   left: 0;
   right: 0;
-  //height: 238px; /*magic --- SP for what use ?*/
+  /*height: 238px;*/ /*magic --- SP for what use ?*/
   z-index: 3;
 }
 
@@ -34,6 +34,15 @@
   background-repeat: no-repeat, repeat;
   background-position: left, top right;
   background-size: 100%, 1400px;
+}
+
+/*STYLE - make menu items hover slightly darker*/
+.local-masthead nav ul li a:hover {
+  color: #000;
+}
+/*STYLE - slightly hide division between menu items */
+.masthead nav ul.menu li {
+  border-right: 1px solid rgba(248, 248, 248, 0.2);
 }
 
 .header_background {
