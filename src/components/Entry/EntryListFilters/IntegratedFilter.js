@@ -66,7 +66,14 @@ class IntegratedFilter extends Component {
       <div>
         {Object.keys(types).sort().map(type =>
           <div key={type} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label
+              className={f('row')}
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
               <input
                 type="radio"
                 name="interpro_state"
