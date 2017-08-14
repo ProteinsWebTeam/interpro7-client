@@ -12,7 +12,10 @@ import description2path from 'utils/processLocation/description2path';
 import { goToNewLocation } from 'actions/creators';
 import loadWebComponent from 'utils/loadWebComponent';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+
+const f = foundationPartial(style);
 
 class EntryTypeFilter extends Component {
   static propTypes = {
