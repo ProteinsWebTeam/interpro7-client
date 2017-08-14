@@ -10,16 +10,6 @@ main {
   padding-top: 1rem;
   /*padding-bottom: 0;*/
 }
-
-/*STYLE - slightly hide division between menu items */
-.masthead nav ul.menu li {
-  border-right: 1px solid rgba(248, 248, 248, 0.2);
-}
-
-/*STYLE - make menu items hover slightly darker*/
-.local-masthead nav ul li a:hover {
-  color: #000;
-}
 /****************************** END Overw EBI  global**********************/
 
 /******************************Local style***************************************/
