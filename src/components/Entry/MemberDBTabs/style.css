@@ -6,14 +6,18 @@
   padding-bottom: 1em;
 }
 
+.tabs-title span:first-child {
+  color: #4b555b;
+}
+
 .tabs-title > a,
 .tabs-title > span {
   /*border: 2px solid transparent;*/
-  //border-right: 2px solid #7ba3b6;
+  /*border-right: 2px solid #7ba3b6;*/
   border-left: 3px solid currentColor;
   /*border-radius: 5px 0 0 5px;*/
-  font-size: 1rem;
-  padding: .7rem .7rem;
+  font-size: 0.9rem;
+  padding: .66rem; /*not 0.7 for firefox*/
   position: relative;
   display: flex;
   overflow: hidden;
@@ -31,41 +35,85 @@
   }
 
   &::before {
-    background: currentColor;
+    background: #cacaca;
     left: 0;
   }
 
   &::after {
     border: 1px solid currentColor;
     left: 100%;
-    width: 120%;
+    width: 130%;
   }
 
   &:hover::before {
     transform: translateX(calc(100% - 1ch));
   }
-
-  & > span {
-    color: initial;
-  }
 }
 
 .tabs-title > a.is-active-tab {
   background: white;
-  //border: 2px solid #7ba3b6;
-  //border-right: 2px solid transparent;
-  //border-left-width: 14px;
 
   &::before,
   &::after,
   &:hover::before {
     transition-delay: var(--timing-medium);
-    transform: translateX(calc(-100% + 1ch));
+    transform: translateX(calc(-100% + 0.7ch));
   }
 
   &::after {
     transform: translateX(-80%);
   }
+}
+
+.tabs-title span {
+  z-index: 1;
+} /*show labels on top of animation*/
+
+/*custom active number label - temp?*/
+.tabs-title a.InterPro.is-active .number-label {
+  background-color: var(--colors-interpro);
+}
+.tabs-title a.gene3d.is-active .number-label {
+  background-color: var(--colors-gene3d);
+}
+.tabs-title a.cdd.is-active .number-label {
+  background-color: var(--colors-cdd);
+}
+.tabs-title a.hamap.is-active .number-label {
+  background-color: var(--colors-hamap);
+}
+.tabs-title a.panther.is-active .number-label {
+  background-color: var(--colors-panther);
+}
+.tabs-title a.pfam.is-active .number-label {
+  background-color: var(--colors-pfam);
+}
+.tabs-title a.pirsf.is-active .number-label {
+  background-color: var(--colors-pirsf);
+}
+.tabs-title a.prints.is-active .number-label {
+  background-color: var(--colors-prints);
+}
+.tabs-title a.prodom.is-active .number-label {
+  background-color: var(--colors-prodom);
+}
+.tabs-title a.profile.is-active .number-label {
+  background-color: var(--colors-profile);
+}
+.tabs-title a.prosite.is-active .number-label {
+  background-color: var(--colors-prosite);
+}
+.tabs-title a.sfld.is-active .number-label {
+  background-color: var(--colors-sfld);
+}
+.tabs-title a.smart.is-active .number-label {
+  background-color: var(--colors-smart);
+}
+.tabs-title a.ssf.is-active .number-label {
+  background-color: var(--colors-ssf);
+}
+.tabs-title a.tigrfams.is-active .number-label {
+  background-color: var(--colors-tigrfams);
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
@@ -79,35 +127,77 @@
 }
 
 .expand-button {
-  border: 1px solid lightgray;
-  position: relative;
-  left: 90%;
+  padding: 0.2em 0.4em;
+  margin-bottom: 0;
 }
 .collapsed .tabs-title {
-  margin-left: -140px;
-
   & a,
   & span {
     display: none;
   }
 }
+/*target the div - increase width - that come immediatly after collapsed - doesn't work using class*/
+.collapsed + div {
+  flex: 0 0 93%;
+  max-width: 93%;
+}
 
+/*onglet appearing on collapsed - not used */
 .collapsed .tabs-title a.is-active-tab {
-  color: black;
-  padding: 0;
-  position: relative;
-  left: 60px;
-  top: 53px;
+  display: none; /*flex*/
+  position: absolute;
+  left: 0;
+  top: 0;
   text-align: center;
   transform: rotate(-90deg) scaleX(1);
   transform-origin: top center 0;
-  border: 2px solid #7ba3b6;
+  border: 0px solid #7ba3b6;
   border-bottom: 0;
-  border-radius: 5px 5px 0 0;
+  padding: 0.22rem 0.8rem;
+  & span {
+    display: inline-block;
+  }
+}
+
+.collapsed.columns {
+  flex: 0 0 auto;
+  padding-right: 0;
+}
+
+.db-label {
+  text-transform: capitalize;
 }
 
 .number-label {
-  background: rgba(0, 0, 0, 0.07);
   color: var(--colors-graydark);
-  font-size: 0.8rem;
+}
+
+.is-active .db-label {
+  font-weight: bold;
+}
+
+.is-active .number-label {
+  color: white;
+  background: #71818a;
+}
+
+.tabs-title > a.is-active:before {
+  background: currentColor;
+}
+
+button.hollow.light {
+  color: #92989c;
+  border: 1px solid #d1d9de;
+  outline: 0;
+}
+button.hollow.light:hover,
+button.hollow.light:focus {
+  color: #4b555b;
+  border: 1px solid #92989c;
+}
+@media screen and (max-width: 39.9375em) {
+  /*temp while we replace MD menu by select */
+  .tabs-title:last-child {
+    border-bottom: 1px #cacaca solid;
+  }
 }

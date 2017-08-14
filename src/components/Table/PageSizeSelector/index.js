@@ -44,14 +44,14 @@ class PageSizeSelector extends Component {
   };
 
   render() {
-    let options = [10, 15, 30, 100];
+    let options = [10, 25, 50, 100];
     if (options.indexOf(this.state.pageSize * 1) === -1) {
       options = Array.from(new Set([...options, this.state.pageSize])).sort(
         (a, b) => a - b,
       );
     }
     return (
-      <div className={f('float-left')}>
+      <div className={f('table-length')}>
         Show{' '}
         <select
           className={f('small')}
@@ -66,13 +66,6 @@ class PageSizeSelector extends Component {
           )}
         </select>{' '}
         results
-        <a
-          className={f('icon', 'icon-functional', 'primary', 'apply-all')}
-          data-icon="s"
-          onClick={this.applyAll}
-        >
-          <div>Apply to all tables</div>
-        </a>
       </div>
     );
   }

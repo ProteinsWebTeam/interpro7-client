@@ -8,3 +8,71 @@
   user-select: none;
   opacity: 0.5;
 }
+
+.acc-row {
+  font-size: 0.8rem;
+}
+
+.sign-row {
+  background: rgba(185, 215, 239, 0.2);
+  margin-bottom: 1px;
+  font-size: 0.8rem;
+}
+
+.sign-cell {
+  display: table-cell;
+  width: 100%;
+  padding: 4px 6px;
+}
+
+.sign-label {
+  display: inline-block;
+  min-width: 70px;
+  border-radius: 2px;
+  text-align: center;
+  background: #b9d7ef;
+}
+
+.go-row {
+  margin-bottom: 1px;
+  font-size: 0.8rem;
+}
+
+.go-cell {
+  display: table-cell;
+  width: 100%;
+  padding: 4px 6px;
+}
+
+.sign-label-head {
+  border-radius: 2px;
+  background: #b9d7ef;
+  padding: 0.1rem 0.4rem;
+  color: #71818a;
+}
+.sign-label-head.bp {
+  background: #c2e6ec; /*cce7f3*/
+}
+.sign-label-head.mf {
+  background: #e5f5d7;
+}
+.sign-label-head.cc {
+  background: #fbdcd0;
+}
+
+/* Medium screen only*/
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  .col-go {
+    display: none;
+  } /*remove GO terms*/
+}
+
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  /*table.light th {word-break: break-all;}*/
+  /*remove  GO terms and entry type columns*/
+  .col-go,
+  .col-type {
+    display: none;
+  }
+}

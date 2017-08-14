@@ -1,6 +1,6 @@
 :root {
   --colors-main: #007c82;
-  --colors-nearly-white: #fff;
+  --colors-nearly-white: #eee;
   --colors-nearly-black: #111;
   --colors-dark: #333;
   --colors-graydark: #676767;
@@ -10,4 +10,21 @@
   --colors-domain: #59d417;
   --colors-repeat: #ff9000;
   --colors-site: #ce70e2;
+
+  --colors-interpro: #2daec1;
+  --colors-gene3d: #a88cc3;
+  --colors-cdd: #addc58;
+  --colors-hamap: #2cd6d6;
+  --colors-modi: #d6dc94;
+  --colors-panther: #bfac92;
+  --colors-pfam: #6287b1;
+  --colors-pirsf: #dfafdf;
+  --colors-prints: #71ce79;
+  --colors-prodom: #8d99e4;
+  --colors-profile: #f69f74;
+  --colors-prosite: #f3c766;
+  --colors-sfld: #00b1d3;
+  --colors-smart: #ff7a76;
+  --colors-ssf: #686868;
+  --colors-tigrfams: #4f9294;
 }

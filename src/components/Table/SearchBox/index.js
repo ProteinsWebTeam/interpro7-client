@@ -3,8 +3,11 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import debounce from 'lodash-es/debounce';
+import { foundationPartial } from 'styles/foundation';
 
-import f from 'styles/foundation';
+import s from './style.css';
+const f = foundationPartial(s);
+
 import { goToNewLocation } from 'actions/creators';
 
 const DEBOUNCE_RATE = 500; // In ms
@@ -39,17 +42,8 @@ class SearchBox extends Component {
 
   render() {
     return (
-      <div className={f('float-right')} style={{ position: 'relative' }}>
-        {this.props.children || 'Search:'}
-        <div style={{ display: 'inline-block', marginLeft: '1ch' }}>
-          <button
-            className={f('close-button')}
-            type="button"
-            style={{ right: '0.5rem', top: '0' }}
-            onClick={this.handleReset}
-          >
-            <span>&times;</span>
-          </button>
+      <div className={f('table-filter')}>
+        <div className={f('filter-box')}>
           <input
             id="table-filter-text"
             type="text"
@@ -57,6 +51,14 @@ class SearchBox extends Component {
             onChange={this.handleChange}
             placeholder="Filter table"
           />
+          <button
+            className={f('cancel-button')}
+            type="button"
+            aria-label="Cancel button"
+            onClick={this.handleReset}
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
       </div>
     );

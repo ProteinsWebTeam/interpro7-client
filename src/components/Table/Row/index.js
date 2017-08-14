@@ -32,8 +32,18 @@ const Row = class extends Component {
     return (
       <tr ref={node => (this._node = node)}>
         {columns.map(
-          ({ accessKey, defaultKey, cellStyle, renderer = defaultRenderer }) =>
-            <td key={defaultKey || accessKey} style={cellStyle}>
+          ({
+            accessKey,
+            defaultKey,
+            cellStyle,
+            className,
+            renderer = defaultRenderer,
+          }) =>
+            <td
+              key={defaultKey || accessKey}
+              style={cellStyle}
+              className={className}
+            >
               {renderer(lodashGet(row, accessKey, '∅'), row)}
             </td>,
         )}

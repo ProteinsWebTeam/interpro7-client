@@ -50,10 +50,13 @@ class GOTermsFilter extends Component {
       terms.unshift(['Any']);
     }
     return (
-      <div>
+      <div className={f('list-go')}>
         {terms.map(([term, count]) =>
           <div key={term} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label
+              className={f('row', 'align-middle')}
+              style={{ cursor: 'pointer' }}
+            >
               <input
                 type="radio"
                 name="go_category"

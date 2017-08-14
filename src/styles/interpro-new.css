@@ -1,4 +1,4 @@
-/******************************Overwritting EBI  global****************************/
+/******************************Overwritting EBI  global***************************/
 ul#global-nav {
   padding-top: 0;
 } /****IMPORTANT TO FIX****remove space on top of page for EBI menu**********/
@@ -237,7 +237,20 @@ input:focus:-ms-input-placeholder {
 a:hover.noline {
   border-bottom: 0 solid transparent;
 }
-/***** /LOCAL BUTTONS + LINKS *** /
+/*****LOCAL BUTTONS + LINKS ***/
+/* SEARCH*/
+.search-eg,
+.search-eg a {
+  font-size: 90%;
+  color: #777;
+}
+.search-eg a:hover {
+  border-bottom: 1px #777 solid;
+}
+/*Member database list*/
+.md-list a:not(.button) {
+  color: #0a0a0a;
+} /*all except font button*/
 
 /* MENU*/
 .horizontal.menu > li > a {
@@ -974,11 +987,7 @@ a.go {
   .offc-nav {
     width: 12rem;
   } /*reduce width off-canvas menu*/
-  table th,
-  table td {
-    font-size: 90%;
-    word-break: break-all;
-  }
+
   /*remove the main menu - shouldn't this be done using foundation?*/
   /*.local-masthead nav ul.dropdown.menu.float-left > li:first-child {display: inline-block; border-right: none;}*/
   /*.local-masthead nav ul.dropdown.menu.float-left > li {display: none;}*/

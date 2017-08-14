@@ -1,7 +1,6 @@
 .tabs {
-  margin: 1em;
-  border: 0;
-  border-bottom: 1px solid #e6e6e6;
+  border: 0; /*needed to remove foundation style*/
+  margin-bottom: 1rem;
   display: flex;
   align-items: stretch;
   flex-wrap: wrap;
@@ -12,22 +11,20 @@
   display: flex;
   align-items: stretch;
   margin-right: 1em;
-
-  &:last-child {
-    margin-right: 0;
-  }
 }
 
 .tabs-title a {
-  font-size: 1rem;
-  background: #ccc;
+  font-size: 0.9rem; /*same size as submenu*/
+  padding: 0.7rem 1rem; /*to make it similar to EBI leaf menu*/
+  color: #222;
 }
 
 .tabs-title a:hover {
-  background: #aaa;
+  color: #1779ba;
 }
 
 .tabs-title a.is-active-tab {
-  background: #999;
-  color: whitesmoke;
+  font-weight: bold;
+  background: #1779ba;
+  color: white;
 }
