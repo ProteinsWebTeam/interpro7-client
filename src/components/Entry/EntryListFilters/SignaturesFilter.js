@@ -51,8 +51,12 @@ class SignaturesFilter extends Component {
         {signatureDBs.map(([signatureDB, count]) =>
           <div key={signatureDB} className={f('column')}>
             <label
-              className={f('row', 'align-middle')}
-              style={{ cursor: 'pointer' }}
+              className={f('row')}
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+              }}
             >
               <input
                 type="radio"
