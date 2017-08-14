@@ -8,7 +8,7 @@ const f = foundationPartial(style);
 
 const FilterPanel = ({ label, collapsed, onCollapse, children }) =>
   <div className={f('columns', 'small-12', 'medium-4', 'large-3')}>
-    <h6 onClick={onCollapse} style={{ cursor: 'pointer' }}>
+    <h6 onClick={onCollapse}>
       {collapsed ? '▸' : '▾'} {label}
     </h6>
     <div className={f('filter-panel', { collapsed })}>
