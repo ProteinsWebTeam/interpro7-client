@@ -11,7 +11,10 @@ import description2path from 'utils/processLocation/description2path';
 
 import { goToNewLocation } from 'actions/creators';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+
+const f = foundationPartial(style);
 
 class IntegratedFilter extends Component {
   static propTypes = {
@@ -66,14 +69,7 @@ class IntegratedFilter extends Component {
       <div>
         {Object.keys(types).sort().map(type =>
           <div key={type} className={f('column')}>
-            <label
-              className={f('row')}
-              style={{
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
+            <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
                 name="interpro_state"
