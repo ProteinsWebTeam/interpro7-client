@@ -12,7 +12,10 @@ import description2path from 'utils/processLocation/description2path';
 
 import { goToNewLocation } from 'actions/creators';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+
+const f = foundationPartial(style);
 
 class ExperimentTypeFilter extends Component {
   static propTypes = {
@@ -48,7 +51,7 @@ class ExperimentTypeFilter extends Component {
       <div style={{ overflowX: 'hidden' }}>
         {types.map(([type, count]) =>
           <div key={type} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
                 name="experiment_type"
