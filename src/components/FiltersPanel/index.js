@@ -66,7 +66,7 @@ class FiltersPanel extends Component {
         <div className={f('columns', 'large-2', 'show-for-large')}>
           <h6>Filter By</h6>
           <button className={f('but-collapse')} onClick={this.clearAll}>
-            Clear |
+            Clear |&nbsp;
           </button>
           <button className={f('but-collapse')} onClick={this.toggleAll}>
             {toCollapse ? 'Show All ' : 'Collapse All'}
