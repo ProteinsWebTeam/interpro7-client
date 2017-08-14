@@ -10,7 +10,7 @@
     "test": "npm-run-all test:*",
     "test:flow": "flow check",
     "test:lint": "esw --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
-    "test:unit": "mocha-webpack --webpack-config webpack.test.config.js --growl --reporter dot \"src/**/*test?(s).js\"",
+    "test:unit": "jest --notify",
     "test:functional": "echo \"Warning, no functional test specified yet, passing\" && exit 0",
     "dev": "webpack-dev-server",
     "dev:test": "npm-run-all -rp dev:test:*",
@@ -69,8 +69,29 @@
           "babili"
         ],
         "comments": false
+      },
+      "test": {
+        "plugins": [
+          "transform-es2015-modules-commonjs"
+        ]
       }
     }
+  },
+  "jest": {
+    "verbose": true,
+    "rootDir": "src",
+    "moduleNameMapper": {
+      "config.yml$": "<rootDir>/__mocks__/configMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "collectCoverageFrom": [
+      "**/*.js"
+    ]
   },
   "lint-staged": {
     "concurrent": false,
@@ -124,6 +145,7 @@
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-plugin-transform-react-constant-elements": "^6.23.0",
     "babel-plugin-transform-react-jsx-source": "^6.22.0",
     "babel-preset-babili": "^0.1.4",
@@ -131,7 +153,6 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.24.1",
-    "chai": "^4.1.1",
     "classnames": "^2.2.5",
     "css-loader": "^0.28.4",
     "empty": "^0.10.1",
@@ -148,21 +169,21 @@
     "glob-loader": "^0.3.0",
     "html-webpack-plugin": "^2.30.0",
     "husky": "^0.14.3",
+    "identity-obj-proxy": "^3.0.0",
     "img-loader": "^2.0.0",
+    "jest": "^20.0.4",
+    "js-yaml": "^3.9.1",
     "jsx-chai": "^4.0.0",
     "lint-staged": "^4.0.3",
-    "mocha": "^3.4.2",
-    "mocha-webpack": "^0.7.0",
     "node-sass": "^4.5.3",
     "npm-run-all": "^4.0.2",
     "postcss-cssnext": "^3.0.0",
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.6",
     "prettier": "^1.5.3",
+    "react-test-renderer": "^15.6.1",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
-    "sinon": "^2.4.1",
-    "sinon-chai": "^2.12.0",
     "source-map": "^0.5.6",
     "style-loader": "^0.18.2",
     "uglify-js": "^3.0.27",

@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Badge /> should render the badge component 1`] = `
+<span
+  className="badge"
+  title="text"
+>
+  text
+</span>
+`;
+
+exports[`<Badge /> should render the badge component 2`] = `
+<span
+  className="badge"
+  title={12345}
+>
+  12345
+</span>
+`;
+
+exports[`<Badge /> should render the badge component 3`] = `
+<span
+  className="badge"
+  title="test title"
+>
+  text with title
+</span>
+`;

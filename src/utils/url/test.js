@@ -1,39 +1,34 @@
 // @flow
-/* eslint-env mocha */
-import 'babel-polyfill';
-
-import {expect} from 'chai';
-import {removeLastSlash, buildLink, buildAnchorLink} from '.';
+import { removeLastSlash, buildLink, buildAnchorLink } from '.';
 
 describe('url utils', () => {
   describe('removeLastSlash', () => {
-    it('should remove last slash of a string', () => {
-      expect(removeLastSlash('')).to.equal('');
-      expect(removeLastSlash('/')).to.equal('');
-      expect(removeLastSlash('///')).to.equal('');
-      expect(removeLastSlash('/some/url')).to.equal('/some/url');
-      expect(removeLastSlash('/some/url/')).to.equal('/some/url');
+    test('should remove last slash of a string', () => {
+      expect(removeLastSlash('')).toBe('');
+      expect(removeLastSlash('/')).toBe('');
+      expect(removeLastSlash('///')).toBe('');
+      expect(removeLastSlash('/some/url')).toBe('/some/url');
+      expect(removeLastSlash('/some/url/')).toBe('/some/url');
     });
   });
 
   describe('buildLink', () => {
-    it('should build a valid link href', () => {
+    test('should build a valid link href', () => {
       for (const path of ['/some/path', '/some/path/', '/some/path//']) {
-        expect(buildLink(path)).to.equal('/some/path/');
+        expect(buildLink(path)).toBe('/some/path/');
         for (const [from, o] of [['path', '/some/path/'], ['some', '/some/']]) {
-          expect(buildLink(path, from)).to.equal(o);
-          expect(buildLink(path, from, 'a')).to.equal(`${o}a/`);
-          expect(buildLink(path, from, 'a', 'b', 'c')).to.equal(`${o}a/b/c/`);
+          expect(buildLink(path, from)).toBe(o);
+          expect(buildLink(path, from, 'a')).toBe(`${o}a/`);
+          expect(buildLink(path, from, 'a', 'b', 'c')).toBe(`${o}a/b/c/`);
         }
       }
     });
   });
 
   describe('buildAnchorLink', () => {
-    it('should build a valid anchor link href', () => {
-      expect(buildAnchorLink('/some/url/')).to.equal('/some/url/#');
-      expect(buildAnchorLink('/some/url/', 'anchor'))
-        .to.equal('/some/url/#anchor');
+    test('should build a valid anchor link href', () => {
+      expect(buildAnchorLink('/some/url/')).toBe('/some/url/#');
+      expect(buildAnchorLink('/some/url/', 'anchor')).toBe('/some/url/#anchor');
     });
   });
 });
