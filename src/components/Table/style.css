@@ -96,12 +96,12 @@ table.light .subheader {
 .table-view select {
   color: #505f74;
   margin: 0;
-  height: inherit;
+  height: 2.2rem;
 }
 
 .table-view input {
   margin-bottom: 0;
-  height: inherit;
+  height: 2.2rem;
 }
 
 .table-view .table-results-filtering .icon-view {
