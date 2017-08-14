@@ -3,7 +3,7 @@ import React from 'react';
 
 import { foundationPartial } from 'styles/foundation';
 import styles from './style.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import interproTheme from 'styles/theme-interpro.css';
 const styleBundle = foundationPartial(
