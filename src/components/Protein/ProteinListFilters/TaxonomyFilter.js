@@ -11,7 +11,9 @@ import description2path from 'utils/processLocation/description2path';
 
 import { goToNewLocation } from 'actions/creators';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+const f = foundationPartial(style);
 
 class TaxonomyFilter extends Component {
   static propTypes = {
@@ -48,7 +50,7 @@ class TaxonomyFilter extends Component {
       <div style={{ overflowX: 'hidden' }}>
         {taxes.map(([taxId, count]) =>
           <div key={taxId} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
                 name="entry_type"
