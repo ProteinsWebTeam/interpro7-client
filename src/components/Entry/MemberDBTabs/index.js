@@ -31,7 +31,7 @@ const colors = {
   sfld: '#00b1d3',
   smart: '#ff7a76',
   ssf: '#686868',
-  tigrfams: '#4f9294',
+  tigrfams: '#56b9a6',
   InterPro: '#2daec1',
 };
 
