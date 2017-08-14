@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+// foundation.css is the most up-to date
 // import foundation from 'foundation-sites/dist/css/foundation.css';
 import foundation from 'foundation-sites/dist/css/foundation-float.css';
 
