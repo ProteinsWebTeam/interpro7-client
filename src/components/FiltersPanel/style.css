@@ -12,10 +12,12 @@
 
 .filters-panel h6 {
   font-size: 120%;
+  cursor: pointer;
 }
 .filters-panel .but-collapse {
   font-size: 80%;
   outline: 0;
+  cursor: pointer;
 }
 .filter-title-arrow {
   font-size: 150%;
@@ -43,6 +45,11 @@ interpro-type {
 hr {
   margin: 0;
 }
+/*overrride foundation - just for filter -  that is doing a float-right on last elements*/
+.filters-panel .foundation-float .columns:last-child:not(:first-child) {
+  float: none;
+}
+
 /* Medium + */
 @media screen and (min-width: 40em) and (max-width: 56em) {
   .filter-panel label span {
