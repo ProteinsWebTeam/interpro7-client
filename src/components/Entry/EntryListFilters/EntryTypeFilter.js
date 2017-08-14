@@ -56,14 +56,7 @@ class EntryTypeFilter extends Component {
       <div className={f('list-entries')}>
         {types.map(([type, count]) =>
           <div key={type} className={f('column')}>
-            <label
-              className={f('row')}
-              style={{
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
+            <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
                 name="entry_type"
