@@ -4,7 +4,7 @@
   & .dropdown-content {
     position: absolute;
     top: 100%;
-    right: 24%; /*temp value while popup position is working better*/
+    right: 28px; /*temp value while popup position is working better*/
     overflow: auto;
     width: initial;
     min-width: 180%; /*temp value*/
@@ -13,12 +13,21 @@
     /*transform-origin: top;*/
     /*transition: transform 300ms ease-in-out;*/
     visibility: visible;
+    display: block;
   }
 }
 .exporter .dropdown-pane {
   z-index: 2;
 } /* so sticky header stay on top*/
+
 .exporter .icon-settings {
   padding: 0.3em 0.4em;
   color: #71818a;
+  border: none;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+  text-align: center;
+  background-color: transparent;
+  font-size: 0.9rem;
 }
