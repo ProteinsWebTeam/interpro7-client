@@ -15,9 +15,8 @@
   }
 
   @nest & th {
-    top: 88px;
+    top: 85px;
     position: sticky;
-    background: rgba(228, 228, 228, 0.8);
   }
 }
 
