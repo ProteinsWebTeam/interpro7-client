@@ -7,7 +7,7 @@ import style from './style.css';
 const f = foundationPartial(style);
 
 const FilterPanel = ({ label, collapsed, onCollapse, children }) =>
-  <div className={f('columns', 'small-12', 'medium-4', 'large-3')}>
+  <div className={f('columns', 'small-12', 'medium-4', 'large-3', 'end')}>
     <h6 onClick={onCollapse}>
       {collapsed ? '▸' : '▾'} {label}
     </h6>
