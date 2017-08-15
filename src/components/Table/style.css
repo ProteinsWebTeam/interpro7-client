@@ -150,3 +150,20 @@ table.light .subheader {
 .table-footer ul li.current {
   background: #71818a; /*b4cad8*/
 }
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  table.light th,
+  table.light tr,
+  table.light td {
+    display: block;
+  }
+  table.light th {
+    display: none;
+  }
+  table.light tbody tr {
+    border-bottom: 6px #d4dddf solid;
+  }
+  table.light tbody tr td {
+    border: 0;
+  }
+}
