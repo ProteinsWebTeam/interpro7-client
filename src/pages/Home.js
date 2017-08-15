@@ -449,7 +449,7 @@ const Home = () =>
           <h5>Tools </h5>
 
           <div className={f('row')}>
-            <div className={f('columns', 'medium-6', 'medium-push-6')}>
+            <div className={f('columns', 'medium-6')}>
               <h5>IDA</h5>
               <img src={idaLogo} style={{ marginLeft: 40, marginBottom: 10 }} />
               <p>
@@ -468,7 +468,7 @@ const Home = () =>
                 </Link>
               </p>
             </div>
-            <div className={f('columns', 'medium-6', 'medium-push-6')}>
+            <div className={f('columns', 'medium-6')}>
               <h5>InterProScan</h5>
               <img src={iscanLogo} style={{ marginBottom: 2 }} />
               <p>
