@@ -9,13 +9,7 @@ import { foundationPartial } from 'styles/foundation';
 import styles from './style.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import interproTheme from 'styles/theme-interpro.css';
-const styleBundle = foundationPartial(
-  styles,
-  fonts,
-  interproTheme,
-  ebiGlobalStyles,
-);
+const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 
 /**
  * EBI global header component
@@ -28,7 +22,7 @@ const styleBundle = foundationPartial(
 /*
  EMBL-EBI button and hidden div behaviour
  */
-// TODO: remove height when bug on EBI side is fixed
+// TODO: SP remove height when bug on EBI side is fixed
 const _EmblButton = ({ toggleEMBLMapNav }) =>
   <button
     className={styleBundle('button', 'float-right')}
@@ -110,7 +104,7 @@ const EBIHeader = () =>
   </div>;
 
 // Skip to div
-// TODO: Check why we have to put that
+// TODO: Check why we have to put that in particular now that we don't use ids
 export const EbiSkipToDiv = () =>
   <div id="skip-to">
     <ul>
