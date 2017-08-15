@@ -45,9 +45,11 @@ interpro-type {
 hr {
   margin: 0;
 }
-/*overrride foundation - just for filter -  that is doing a float-right on last elements*/
-.filters-panel .foundation-float .columns:last-child:not(:first-child) {
-  float: none;
+
+.filter-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 /* Medium + */
