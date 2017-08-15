@@ -51,7 +51,7 @@ class Exporter extends Component {
             className={fPlus('icon', 'icon-functional')}
             data-icon="="
           />{' '}
-          Export {' '}
+          <span className={fPlus('hide-for-small-only')}>Export</span> {' '}
         </a>
         <Link
           newTo={{ description: { other: 'settings' } }}
