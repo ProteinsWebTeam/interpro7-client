@@ -161,9 +161,14 @@ table.light .subheader {
     display: none;
   }
   table.light tbody tr {
-    border-bottom: 6px #d4dddf solid;
+    border-bottom: 1px #d4dddf solid;
   }
   table.light tbody tr td {
     border: 0;
+  }
+  /*works for all table and shows accession/Entry type + name (entry - protein - structure) */
+  table.light tbody tr td:nth-child(1),
+  table.light tbody tr td:nth-child(2) {
+    display: inline-block;
   }
 }
