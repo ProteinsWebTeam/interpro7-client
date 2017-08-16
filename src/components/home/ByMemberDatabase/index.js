@@ -45,7 +45,7 @@ class ByMemberDatabase extends PureComponent {
               )}
               key={name}
             >
-              <Link newTo={newTo}>
+              <Link newTo={newTo} className={name}>
                 <MemberSymbol type={type} />
                 <h6 data-tooltip title={title}>
                   {name}
