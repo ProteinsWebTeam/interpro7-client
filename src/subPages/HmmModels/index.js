@@ -11,8 +11,8 @@ import HmmModelSection from 'components/Entry/HmmModels';
 
 const HmmModels = ({ data, maintype }) => {
   if (data.loading) return <div>Loading...</div>;
-  var temp = data;
-  debugger;
+  const temp = data;
+
   return (
     <div>
       <h1>Subpage HMM</h1>
@@ -42,7 +42,7 @@ const getUrlFor = createSelector(
 
 const mapStateToProps = createSelector(
   state => {
-    var temp = state;
+    const temp = state;
     return temp;
   },
   mainType => ({ mainType }),

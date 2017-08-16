@@ -1,0 +1,1763 @@
+/* eslint-disable */
+/** @license
+ * Scroller
+ * http://github.com/zynga/scroller
+ *
+ * Copyright 2011, Zynga Inc.
+ * Licensed under the MIT License.
+ * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
+ *
+ * Based on the work of: Unify Project (unify-project.org)
+ * http://unify-project.org
+ * Copyright 2011, Deutsche Telekom AG
+ * License: MIT + Apache (V2)
+ *
+ * Inspired by: https://github.com/inexorabletash/raf-shim/blob/master/raf.js
+ */
+(function(global) {
+  if (global.requestAnimationFrame) {
+    return;
+  }
+
+  // Basic emulation of native methods for internal use
+
+  const now =
+    Date.now ||
+    function() {
+      return +new Date();
+    };
+
+  const getKeys =
+    Object.keys ||
+    function(obj) {
+      const keys = {};
+      for (const key in obj) {
+        keys[key] = true;
+      }
+
+      return keys;
+    };
+
+  const isEmpty =
+    Object.empty ||
+    function(obj) {
+      for (const key in obj) {
+        return false;
+      }
+
+      return true;
+    };
+
+  // requestAnimationFrame polyfill
+  // http://webstuff.nfshost.com/anim-timing/Overview.html
+
+  const postfix = 'RequestAnimationFrame';
+  const prefix = (function() {
+    const all = 'webkit,moz,o,ms'.split(',');
+    for (let i = 0; i < 4; i++) {
+      if (global[all[i] + postfix] != null) {
+        return all[i];
+      }
+    }
+  })();
+
+  // Vendor specific implementation
+  if (prefix) {
+    global.requestAnimationFrame = global[prefix + postfix];
+    global.cancelRequestAnimationFrame = global[`${prefix}Cancel${postfix}`];
+    return;
+  }
+
+  // Custom implementation
+  const TARGET_FPS = 60;
+  let requests = {};
+  let rafHandle = 1;
+  let timeoutHandle = null;
+
+  global.requestAnimationFrame = function(callback, root) {
+    const callbackHandle = rafHandle++;
+
+    // Store callback
+    requests[callbackHandle] = callback;
+
+    // Create timeout at first request
+    if (timeoutHandle === null) {
+      timeoutHandle = setTimeout(() => {
+        const time = now();
+        const currentRequests = requests;
+        const keys = getKeys(currentRequests);
+
+        // Reset data structure before executing callbacks
+        requests = {};
+        timeoutHandle = null;
+
+        // Process all callbacks
+        for (let i = 0, l = keys.length; i < l; i++) {
+          currentRequests[keys[i]](time);
+        }
+      }, 1000 / TARGET_FPS);
+    }
+
+    return callbackHandle;
+  };
+
+  global.cancelRequestAnimationFrame = function(handle) {
+    delete requests[handle];
+
+    // Stop timeout if all where removed
+    if (isEmpty(requests)) {
+      clearTimeout(timeoutHandle);
+      timeoutHandle = null;
+    }
+  };
+})(
+  this,
+); /*
+ * Scroller
+ * http://github.com/zynga/scroller
+ *
+ * Copyright 2011, Zynga Inc.
+ * Licensed under the MIT License.
+ * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
+ *
+ * Based on the work of: Unify Project (unify-project.org)
+ * http://unify-project.org
+ * Copyright 2011, Deutsche Telekom AG
+ * License: MIT + Apache (V2)
+ */
+
+/**
+ * Generic animation class with support for dropped frames both optional easing and duration.
+ *
+ * Optional duration is useful when the lifetime is defined by another condition than time
+ * e.g. speed of an animating object, etc.
+ *
+ * Dropped frame logic allows to keep using the same updater logic independent from the actual
+ * rendering. This eases a lot of cases where it might be pretty complex to break down a state
+ * based on the pure time difference.
+ */
+(function(global) {
+  const time =
+    Date.now ||
+    function() {
+      return +new Date();
+    };
+  const desiredFrames = 60;
+  const millisecondsPerSecond = 1000;
+  let running = {};
+  let counter = 1;
+
+  // Create namespaces
+  if (!global.core) {
+    global.core = { effect: {} };
+  } else if (!core.effect) {
+    core.effect = {};
+  }
+
+  core.effect.Animate = {
+    /**
+     * Stops the given animation.
+     *
+     * @param id {Integer} Unique animation ID
+     * @return {Boolean} Whether the animation was stopped (aka, was running before)
+     */
+    stop(id) {
+      const cleared = running[id] != null;
+      if (cleared) {
+        running[id] = null;
+      }
+
+      return cleared;
+    },
+
+    /**
+     * Whether the given animation is still running.
+     *
+     * @param id {Integer} Unique animation ID
+     * @return {Boolean} Whether the animation is still running
+     */
+    isRunning(id) {
+      return running[id] != null;
+    },
+
+    /**
+     * Start the animation.
+     *
+     * @param stepCallback {Function} Pointer to function which is executed on every step.
+     *   Signature of the method should be `function(percent, now, virtual) { return continueWithAnimation; }`
+     * @param verifyCallback {Function} Executed before every animation step.
+     *   Signature of the method should be `function() { return continueWithAnimation; }`
+     * @param completedCallback {Function}
+     *   Signature of the method should be `function(droppedFrames, finishedAnimation) {}`
+     * @param duration {Integer} Milliseconds to run the animation
+     * @param easingMethod {Function} Pointer to easing function
+     *   Signature of the method should be `function(percent) { return modifiedValue; }`
+     * @param root {Element ? document.body} Render root, when available. Used for internal
+     *   usage of requestAnimationFrame.
+     * @return {Integer} Identifier of animation. Can be used to stop it any time.
+     */
+    start(
+      stepCallback,
+      verifyCallback,
+      completedCallback,
+      duration,
+      easingMethod,
+      root,
+    ) {
+      const start = time();
+      let lastFrame = start;
+      let percent = 0;
+      let dropCounter = 0;
+      const id = counter++;
+
+      if (!root) {
+        root = document.body;
+      }
+
+      // Compacting running db automatically every few new animations
+      if (id % 20 === 0) {
+        const newRunning = {};
+        for (const usedId in running) {
+          newRunning[usedId] = true;
+        }
+        running = newRunning;
+      }
+
+      // This is the internal step method which is called every few milliseconds
+      var step = function(virtual) {
+        // Normalize virtual value
+        const render = virtual !== true;
+
+        // Get current time
+        const now = time();
+
+        // Verification is executed before next animation step
+        if (!running[id] || (verifyCallback && !verifyCallback(id))) {
+          running[id] = null;
+          completedCallback &&
+            completedCallback(
+              desiredFrames -
+                dropCounter / ((now - start) / millisecondsPerSecond),
+              id,
+              false,
+            );
+          return;
+        }
+
+        // For the current rendering to apply let's update omitted steps in memory.
+        // This is important to bring internal state variables up-to-date with progress in time.
+        if (render) {
+          const droppedFrames =
+            Math.round(
+              (now - lastFrame) / (millisecondsPerSecond / desiredFrames),
+            ) - 1;
+          for (let j = 0; j < Math.min(droppedFrames, 4); j++) {
+            step(true);
+            dropCounter++;
+          }
+        }
+
+        // Compute percent value
+        if (duration) {
+          percent = (now - start) / duration;
+          if (percent > 1) {
+            percent = 1;
+          }
+        }
+
+        // Execute step callback, then...
+        const value = easingMethod ? easingMethod(percent) : percent;
+        if (
+          (stepCallback(value, now, render) === false || percent === 1) &&
+          render
+        ) {
+          running[id] = null;
+          completedCallback &&
+            completedCallback(
+              desiredFrames -
+                dropCounter / ((now - start) / millisecondsPerSecond),
+              id,
+              percent === 1 || duration == null,
+            );
+        } else if (render) {
+          lastFrame = now;
+          requestAnimationFrame(step, root);
+        }
+      };
+
+      // Mark as running
+      running[id] = true;
+
+      // Init first step
+      requestAnimationFrame(step, root);
+
+      // Return unique animation ID
+      return id;
+    },
+  };
+})(this);
+
+var EasyScroller = function(content, options) {
+  this.content = content;
+  this.container = content.parentNode;
+  this.options = options || {};
+
+  // create Scroller instance
+  const that = this;
+  this.scroller = new Scroller((left, top, zoom) => {
+    that.render(left, top, zoom);
+  }, options);
+
+  // bind events
+  this.bindEvents();
+
+  // the content element needs a correct transform origin for zooming
+  this.content.style[`${EasyScroller.vendorPrefix}TransformOrigin`] =
+    'left top';
+
+  // reflow for the first time
+  this.reflow();
+};
+
+EasyScroller.prototype.render = (function() {
+  const docStyle = document.documentElement.style;
+
+  let engine;
+  if (
+    window.opera &&
+    Object.prototype.toString.call(opera) === '[object Opera]'
+  ) {
+    engine = 'presto';
+  } else if ('MozAppearance' in docStyle) {
+    engine = 'gecko';
+  } else if ('WebkitAppearance' in docStyle) {
+    engine = 'webkit';
+  } else if (typeof navigator.cpuClass === 'string') {
+    engine = 'trident';
+  }
+
+  const vendorPrefix = (EasyScroller.vendorPrefix = {
+    trident: 'ms',
+    gecko: 'Moz',
+    webkit: 'Webkit',
+    presto: 'O',
+  }[engine]);
+
+  const helperElem = document.createElement('div');
+  let undef;
+
+  const perspectiveProperty = `${vendorPrefix}Perspective`;
+  const transformProperty = `${vendorPrefix}Transform`;
+
+  if (helperElem.style[perspectiveProperty] !== undef) {
+    return function(left, top, zoom) {
+      this.content.style[
+        transformProperty
+      ] = `translate3d(${-left}px,${-top}px,0) scale(${zoom})`;
+    };
+  } else if (helperElem.style[transformProperty] !== undef) {
+    return function(left, top, zoom) {
+      this.content.style[
+        transformProperty
+      ] = `translate(${-left}px,${-top}px) scale(${zoom})`;
+    };
+  }
+
+  return function(left, top, zoom) {
+    this.content.style.marginLeft = left ? `${-left / zoom}px` : '';
+    this.content.style.marginTop = top ? `${-top / zoom}px` : '';
+    this.content.style.zoom = zoom || '';
+  };
+})();
+
+EasyScroller.prototype.reflow = function() {
+  // set the right scroller dimensions
+  this.scroller.setDimensions(
+    this.container.clientWidth,
+    this.container.clientHeight,
+    this.content.offsetWidth,
+    this.content.offsetHeight,
+  );
+
+  // refresh the position for zooming purposes
+  const rect = this.container.getBoundingClientRect();
+  this.scroller.setPosition(
+    rect.left + this.container.clientLeft,
+    rect.top + this.container.clientTop,
+  );
+};
+
+EasyScroller.prototype.bindEvents = function() {
+  const that = this;
+
+  // reflow handling
+  $(window).bind('resize', () => {
+    that.reflow();
+  });
+
+  // added this here, not ideal, but it makes sure that the logo will
+  // scroll correctly when the model tab is revealed.
+  $('#modelTab').bind('click', () => {
+    that.reflow();
+  });
+
+  // touch devices bind touch events
+  if ('ontouchstart' in window) {
+    this.container.addEventListener(
+      'touchstart',
+      e => {
+        // Don't react if initial down happens on a form element
+        if (
+          e.touches[0] &&
+          e.touches[0].target &&
+          e.touches[0].target.tagName.match(/input|textarea|select/i)
+        ) {
+          return;
+        }
+
+        that.scroller.doTouchStart(e.touches, new Date().getTime());
+        e.preventDefault();
+      },
+      false,
+    );
+
+    document.addEventListener(
+      'touchmove',
+      e => {
+        that.scroller.doTouchMove(e.touches, new Date().getTime(), e.scale);
+      },
+      false,
+    );
+
+    document.addEventListener(
+      'touchend',
+      e => {
+        that.scroller.doTouchEnd(new Date().getTime());
+      },
+      false,
+    );
+
+    document.addEventListener(
+      'touchcancel',
+      e => {
+        that.scroller.doTouchEnd(new Date().getTime());
+      },
+      false,
+    );
+
+    // non-touch bind mouse events
+  } else {
+    let mousedown = false;
+
+    $(this.container).bind('mousedown', e => {
+      if (e.target.tagName.match(/input|textarea|select/i)) {
+        return;
+      }
+
+      that.scroller.doTouchStart(
+        [
+          {
+            pageX: e.pageX,
+            pageY: e.pageY,
+          },
+        ],
+        new Date().getTime(),
+      );
+
+      mousedown = true;
+      e.preventDefault();
+    });
+
+    $(document).bind('mousemove', e => {
+      if (!mousedown) {
+        return;
+      }
+
+      that.scroller.doTouchMove(
+        [
+          {
+            pageX: e.pageX,
+            pageY: e.pageY,
+          },
+        ],
+        new Date().getTime(),
+      );
+
+      mousedown = true;
+    });
+
+    $(document).bind('mouseup', e => {
+      if (!mousedown) {
+        return;
+      }
+
+      that.scroller.doTouchEnd(new Date().getTime());
+
+      mousedown = false;
+    });
+
+    $(this.container).bind('mousewheel', e => {
+      if (that.options.zooming) {
+        that.scroller.doMouseZoom(
+          e.wheelDelta,
+          new Date().getTime(),
+          e.pageX,
+          e.pageY,
+        );
+        e.preventDefault();
+      }
+    });
+  }
+};
+
+/*
+ * Scroller
+ * http://github.com/zynga/scroller
+ *
+ * Copyright 2011, Zynga Inc.
+ * Licensed under the MIT License.
+ * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
+ *
+ * Based on the work of: Unify Project (unify-project.org)
+ * http://unify-project.org
+ * Copyright 2011, Deutsche Telekom AG
+ * License: MIT + Apache (V2)
+ */
+
+let Scroller;
+
+(function() {
+  /**
+   * A pure logic 'component' for 'virtual' scrolling/zooming.
+   */
+  Scroller = function(callback, options) {
+    this.__callback = callback;
+
+    this.options = {
+      /** Enable scrolling on x-axis */
+      scrollingX: true,
+
+      /** Enable scrolling on y-axis */
+      scrollingY: true,
+
+      /** Enable animations for deceleration, snap back, zooming and scrolling */
+      animating: true,
+
+      /** Enable bouncing (content can be slowly moved outside and jumps back after releasing) */
+      bouncing: true,
+
+      /** Enable locking to the main axis if user moves only slightly on one of them at start */
+      locking: true,
+
+      /** Enable pagination mode (switching between full page content panes) */
+      paging: false,
+
+      /** Enable snapping of content to a configured pixel grid */
+      snapping: false,
+
+      /** Enable zooming of content via API, fingers and mouse wheel */
+      zooming: false,
+
+      /** Minimum zoom level */
+      minZoom: 0.5,
+
+      /** Maximum zoom level */
+      maxZoom: 3,
+
+      /** event target **/
+      eventTarget: null,
+    };
+
+    for (const key in options) {
+      this.options[key] = options[key];
+    }
+  };
+
+  // Easing Equations (c) 2003 Robert Penner, all rights reserved.
+  // Open source under the BSD License.
+
+  /**
+   * @param pos {Number} position between 0 (start of effect) and 1 (end of effect)
+   **/
+  const easeOutCubic = function(pos) {
+    return Math.pow(pos - 1, 3) + 1;
+  };
+
+  /**
+   * @param pos {Number} position between 0 (start of effect) and 1 (end of effect)
+   **/
+  const easeInOutCubic = function(pos) {
+    if ((pos /= 0.5) < 1) {
+      return 0.5 * Math.pow(pos, 3);
+    }
+
+    return 0.5 * (Math.pow(pos - 2, 3) + 2);
+  };
+
+  const members = {
+    /*
+     ---------------------------------------------------------------------------
+     INTERNAL FIELDS :: STATUS
+     ---------------------------------------------------------------------------
+     */
+
+    /** {Boolean} Whether only a single finger is used in touch handling */
+    __isSingleTouch: false,
+
+    /** {Boolean} Whether a touch event sequence is in progress */
+    __isTracking: false,
+
+    /**
+     * {Boolean} Whether a gesture zoom/rotate event is in progress. Activates when
+     * a gesturestart event happens. This has higher priority than dragging.
+     */
+    __isGesturing: false,
+
+    /**
+     * {Boolean} Whether the user has moved by such a distance that we have enabled
+     * dragging mode. Hint: It's only enabled after some pixels of movement to
+     * not interrupt with clicks etc.
+     */
+    __isDragging: false,
+
+    /**
+     * {Boolean} Not touching and dragging anymore, and smoothly animating the
+     * touch sequence using deceleration.
+     */
+    __isDecelerating: false,
+
+    /**
+     * {Boolean} Smoothly animating the currently configured change
+     */
+    __isAnimating: false,
+
+    /*
+     ---------------------------------------------------------------------------
+     INTERNAL FIELDS :: DIMENSIONS
+     ---------------------------------------------------------------------------
+     */
+
+    /** {Integer} Available outer left position (from document perspective) */
+    __clientLeft: 0,
+
+    /** {Integer} Available outer top position (from document perspective) */
+    __clientTop: 0,
+
+    /** {Integer} Available outer width */
+    __clientWidth: 0,
+
+    /** {Integer} Available outer height */
+    __clientHeight: 0,
+
+    /** {Integer} Outer width of content */
+    __contentWidth: 0,
+
+    /** {Integer} Outer height of content */
+    __contentHeight: 0,
+
+    /** {Integer} Snapping width for content */
+    __snapWidth: 100,
+
+    /** {Integer} Snapping height for content */
+    __snapHeight: 100,
+
+    /** {Integer} Height to assign to refresh area */
+    __refreshHeight: null,
+
+    /** {Boolean} Whether the refresh process is enabled when the event is released now */
+    __refreshActive: false,
+
+    /** {Function} Callback to execute on activation. This is for signalling the user about a refresh is about to happen when he release */
+    __refreshActivate: null,
+
+    /** {Function} Callback to execute on deactivation. This is for signalling the user about the refresh being cancelled */
+    __refreshDeactivate: null,
+
+    /** {Function} Callback to execute to start the actual refresh. Call {@link #refreshFinish} when done */
+    __refreshStart: null,
+
+    /** {Number} Zoom level */
+    __zoomLevel: 1,
+
+    /** {Number} Scroll position on x-axis */
+    __scrollLeft: 0,
+
+    /** {Number} Scroll position on y-axis */
+    __scrollTop: 0,
+
+    /** {Integer} Maximum allowed scroll position on x-axis */
+    __maxScrollLeft: 0,
+
+    /** {Integer} Maximum allowed scroll position on y-axis */
+    __maxScrollTop: 0,
+
+    /* {Number} Scheduled left position (final position when animating) */
+    __scheduledLeft: 0,
+
+    /* {Number} Scheduled top position (final position when animating) */
+    __scheduledTop: 0,
+
+    /* {Number} Scheduled zoom level (final scale when animating) */
+    __scheduledZoom: 0,
+
+    /*
+     ---------------------------------------------------------------------------
+     INTERNAL FIELDS :: LAST POSITIONS
+     ---------------------------------------------------------------------------
+     */
+
+    /** {Number} Left position of finger at start */
+    __lastTouchLeft: null,
+
+    /** {Number} Top position of finger at start */
+    __lastTouchTop: null,
+
+    /** {Date} Timestamp of last move of finger. Used to limit tracking range for deceleration speed. */
+    __lastTouchMove: null,
+
+    /** {Array} List of positions, uses three indexes for each state: left, top, timestamp */
+    __positions: null,
+
+    /*
+     ---------------------------------------------------------------------------
+     INTERNAL FIELDS :: DECELERATION SUPPORT
+     ---------------------------------------------------------------------------
+     */
+
+    /** {Integer} Minimum left scroll position during deceleration */
+    __minDecelerationScrollLeft: null,
+
+    /** {Integer} Minimum top scroll position during deceleration */
+    __minDecelerationScrollTop: null,
+
+    /** {Integer} Maximum left scroll position during deceleration */
+    __maxDecelerationScrollLeft: null,
+
+    /** {Integer} Maximum top scroll position during deceleration */
+    __maxDecelerationScrollTop: null,
+
+    /** {Number} Current factor to modify horizontal scroll position with on every step */
+    __decelerationVelocityX: null,
+
+    /** {Number} Current factor to modify vertical scroll position with on every step */
+    __decelerationVelocityY: null,
+
+    /*
+     ---------------------------------------------------------------------------
+     PUBLIC API
+     ---------------------------------------------------------------------------
+     */
+
+    /**
+     * Configures the dimensions of the client (outer) and content (inner) elements.
+     * Requires the available space for the outer element and the outer size of the inner element.
+     * All values which are falsy (null or zero etc.) are ignored and the old value is kept.
+     *
+     * @param clientWidth {Integer ? null} Inner width of outer element
+     * @param clientHeight {Integer ? null} Inner height of outer element
+     * @param contentWidth {Integer ? null} Outer width of inner element
+     * @param contentHeight {Integer ? null} Outer height of inner element
+     */
+    setDimensions(clientWidth, clientHeight, contentWidth, contentHeight) {
+      const self = this;
+
+      // Only update values which are defined
+      if (clientWidth) {
+        self.__clientWidth = clientWidth;
+      }
+
+      if (clientHeight) {
+        self.__clientHeight = clientHeight;
+      }
+
+      if (contentWidth) {
+        self.__contentWidth = contentWidth;
+      }
+
+      if (contentHeight) {
+        self.__contentHeight = contentHeight;
+      }
+
+      // Refresh maximums
+      self.__computeScrollMax();
+
+      // Refresh scroll position
+      self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+    },
+
+    /**
+     * Sets the client coordinates in relation to the document.
+     *
+     * @param left {Integer ? 0} Left position of outer element
+     * @param top {Integer ? 0} Top position of outer element
+     */
+    setPosition(left, top) {
+      const self = this;
+
+      self.__clientLeft = left || 0;
+      self.__clientTop = top || 0;
+    },
+
+    /**
+     * Configures the snapping (when snapping is active)
+     *
+     * @param width {Integer} Snapping width
+     * @param height {Integer} Snapping height
+     */
+    setSnapSize(width, height) {
+      const self = this;
+
+      self.__snapWidth = width;
+      self.__snapHeight = height;
+    },
+
+    /**
+     * Activates pull-to-refresh. A special zone on the top of the list to start a list refresh whenever
+     * the user event is released during visibility of this zone. This was introduced by some apps on iOS like
+     * the official Twitter client.
+     *
+     * @param height {Integer} Height of pull-to-refresh zone on top of rendered list
+     * @param activateCallback {Function} Callback to execute on activation. This is for signalling the user about a refresh is about to happen when he release.
+     * @param deactivateCallback {Function} Callback to execute on deactivation. This is for signalling the user about the refresh being cancelled.
+     * @param startCallback {Function} Callback to execute to start the real async refresh action. Call {@link #finishPullToRefresh} after finish of refresh.
+     */
+    activatePullToRefresh(
+      height,
+      activateCallback,
+      deactivateCallback,
+      startCallback,
+    ) {
+      const self = this;
+
+      self.__refreshHeight = height;
+      self.__refreshActivate = activateCallback;
+      self.__refreshDeactivate = deactivateCallback;
+      self.__refreshStart = startCallback;
+    },
+
+    /**
+     * Signalizes that pull-to-refresh is finished.
+     */
+    finishPullToRefresh() {
+      const self = this;
+
+      self.__refreshActive = false;
+      if (self.__refreshDeactivate) {
+        self.__refreshDeactivate();
+      }
+
+      self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+    },
+
+    /**
+     * Returns the scroll position and zooming values
+     *
+     * @return {Map} `left` and `top` scroll position and `zoom` level
+     */
+    getValues() {
+      const self = this;
+
+      return {
+        left: self.__scrollLeft,
+        top: self.__scrollTop,
+        zoom: self.__zoomLevel,
+      };
+    },
+
+    /**
+     * Returns the maximum scroll values
+     *
+     * @return {Map} `left` and `top` maximum scroll values
+     */
+    getScrollMax() {
+      const self = this;
+
+      return {
+        left: self.__maxScrollLeft,
+        top: self.__maxScrollTop,
+      };
+    },
+
+    /**
+     * Zooms to the given level. Supports optional animation. Zooms
+     * the center when no coordinates are given.
+     *
+     * @param level {Number} Level to zoom to
+     * @param animate {Boolean ? false} Whether to use animation
+     * @param originLeft {Number ? null} Zoom in at given left coordinate
+     * @param originTop {Number ? null} Zoom in at given top coordinate
+     */
+    zoomTo(level, animate, originLeft, originTop) {
+      const self = this;
+
+      if (!self.options.zooming) {
+        throw new Error('Zooming is not enabled!');
+      }
+
+      // Stop deceleration
+      if (self.__isDecelerating) {
+        core.effect.Animate.stop(self.__isDecelerating);
+        self.__isDecelerating = false;
+      }
+
+      const oldLevel = self.__zoomLevel;
+
+      // Normalize input origin to center of viewport if not defined
+      if (originLeft == null) {
+        originLeft = self.__clientWidth / 2;
+      }
+
+      if (originTop == null) {
+        originTop = self.__clientHeight / 2;
+      }
+
+      // Limit level according to configuration
+      level = Math.max(
+        Math.min(level, self.options.maxZoom),
+        self.options.minZoom,
+      );
+
+      // Recompute maximum values while temporary tweaking maximum scroll ranges
+      self.__computeScrollMax(level);
+
+      // Recompute left and top coordinates based on new zoom level
+      let left =
+        (originLeft + self.__scrollLeft) * level / oldLevel - originLeft;
+      let top = (originTop + self.__scrollTop) * level / oldLevel - originTop;
+
+      // Limit x-axis
+      if (left > self.__maxScrollLeft) {
+        left = self.__maxScrollLeft;
+      } else if (left < 0) {
+        left = 0;
+      }
+
+      // Limit y-axis
+      if (top > self.__maxScrollTop) {
+        top = self.__maxScrollTop;
+      } else if (top < 0) {
+        top = 0;
+      }
+
+      // Push values out
+      self.__publish(left, top, level, animate);
+    },
+
+    /**
+     * Zooms the content by the given factor.
+     *
+     * @param factor {Number} Zoom by given factor
+     * @param animate {Boolean ? false} Whether to use animation
+     * @param originLeft {Number ? 0} Zoom in at given left coordinate
+     * @param originTop {Number ? 0} Zoom in at given top coordinate
+     */
+    zoomBy(factor, animate, originLeft, originTop) {
+      const self = this;
+
+      self.zoomTo(self.__zoomLevel * factor, animate, originLeft, originTop);
+    },
+
+    /**
+     * Scrolls to the given position. Respect limitations and snapping automatically.
+     *
+     * @param left {Number?null} Horizontal scroll position, keeps current if value is <code>null</code>
+     * @param top {Number?null} Vertical scroll position, keeps current if value is <code>null</code>
+     * @param animate {Boolean?false} Whether the scrolling should happen using an animation
+     * @param zoom {Number?null} Zoom level to go to
+     */
+    scrollTo(left, top, animate, zoom) {
+      $(document).trigger(`${this.options.eventTarget.attr('id')}.scrolledTo`, [
+        left,
+        top,
+        zoom,
+      ]);
+
+      const self = this;
+
+      // Stop deceleration
+      if (self.__isDecelerating) {
+        core.effect.Animate.stop(self.__isDecelerating);
+        self.__isDecelerating = false;
+      }
+
+      // Correct coordinates based on new zoom level
+      if (zoom != null && zoom !== self.__zoomLevel) {
+        if (!self.options.zooming) {
+          throw new Error('Zooming is not enabled!');
+        }
+
+        left *= zoom;
+        top *= zoom;
+
+        // Recompute maximum values while temporary tweaking maximum scroll ranges
+        self.__computeScrollMax(zoom);
+      } else {
+        // Keep zoom when not defined
+        zoom = self.__zoomLevel;
+      }
+
+      if (!self.options.scrollingX) {
+        left = self.__scrollLeft;
+      } else {
+        if (self.options.paging) {
+          left = Math.round(left / self.__clientWidth) * self.__clientWidth;
+        } else if (self.options.snapping) {
+          left = Math.round(left / self.__snapWidth) * self.__snapWidth;
+        }
+      }
+
+      if (!self.options.scrollingY) {
+        top = self.__scrollTop;
+      } else {
+        if (self.options.paging) {
+          top = Math.round(top / self.__clientHeight) * self.__clientHeight;
+        } else if (self.options.snapping) {
+          top = Math.round(top / self.__snapHeight) * self.__snapHeight;
+        }
+      }
+
+      // Limit for allowed ranges
+      left = Math.max(Math.min(self.__maxScrollLeft, left), 0);
+      top = Math.max(Math.min(self.__maxScrollTop, top), 0);
+
+      // Don't animate when no change detected, still call publish to make sure
+      // that rendered position is really in-sync with internal data
+      if (left === self.__scrollLeft && top === self.__scrollTop) {
+        animate = false;
+      }
+
+      // Publish new values
+      self.__publish(left, top, zoom, animate);
+    },
+
+    /**
+     * Scroll by the given offset
+     *
+     * @param left {Number ? 0} Scroll x-axis by given offset
+     * @param top {Number ? 0} Scroll x-axis by given offset
+     * @param animate {Boolean ? false} Whether to animate the given change
+     */
+    scrollBy(left, top, animate) {
+      const self = this;
+
+      const startLeft = self.__isAnimating
+        ? self.__scheduledLeft
+        : self.__scrollLeft;
+      const startTop = self.__isAnimating
+        ? self.__scheduledTop
+        : self.__scrollTop;
+
+      self.scrollTo(startLeft + (left || 0), startTop + (top || 0), animate);
+    },
+
+    /*
+     ---------------------------------------------------------------------------
+     EVENT CALLBACKS
+     ---------------------------------------------------------------------------
+     */
+
+    /**
+     * Mouse wheel handler for zooming support
+     */
+    doMouseZoom(wheelDelta, timeStamp, pageX, pageY) {
+      const self = this;
+      const change = wheelDelta > 0 ? 0.97 : 1.03;
+
+      return self.zoomTo(
+        self.__zoomLevel * change,
+        false,
+        pageX - self.__clientLeft,
+        pageY - self.__clientTop,
+      );
+    },
+
+    /**
+     * Touch start handler for scrolling support
+     */
+    doTouchStart(touches, timeStamp) {
+      // Array-like check is enough here
+      if (touches.length == null) {
+        throw new Error(`Invalid touch list: ${touches}`);
+      }
+
+      if (timeStamp instanceof Date) {
+        timeStamp = timeStamp.valueOf();
+      }
+      if (typeof timeStamp !== 'number') {
+        throw new Error(`Invalid timestamp value: ${timeStamp}`);
+      }
+
+      const self = this;
+
+      // Stop deceleration
+      if (self.__isDecelerating) {
+        core.effect.Animate.stop(self.__isDecelerating);
+        self.__isDecelerating = false;
+      }
+
+      // Stop animation
+      if (self.__isAnimating) {
+        core.effect.Animate.stop(self.__isAnimating);
+        self.__isAnimating = false;
+      }
+
+      // Use center point when dealing with two fingers
+      let currentTouchLeft, currentTouchTop;
+      const isSingleTouch = touches.length === 1;
+      if (isSingleTouch) {
+        currentTouchLeft = touches[0].pageX;
+        currentTouchTop = touches[0].pageY;
+      } else {
+        currentTouchLeft = Math.abs(touches[0].pageX + touches[1].pageX) / 2;
+        currentTouchTop = Math.abs(touches[0].pageY + touches[1].pageY) / 2;
+      }
+
+      // Store initial positions
+      self.__initialTouchLeft = currentTouchLeft;
+      self.__initialTouchTop = currentTouchTop;
+
+      // Store current zoom level
+      self.__zoomLevelStart = self.__zoomLevel;
+
+      // Store initial touch positions
+      self.__lastTouchLeft = currentTouchLeft;
+      self.__lastTouchTop = currentTouchTop;
+
+      // Store initial move time stamp
+      self.__lastTouchMove = timeStamp;
+
+      // Reset initial scale
+      self.__lastScale = 1;
+
+      // Reset locking flags
+      self.__enableScrollX = !isSingleTouch && self.options.scrollingX;
+      self.__enableScrollY = !isSingleTouch && self.options.scrollingY;
+
+      // Reset tracking flag
+      self.__isTracking = true;
+
+      // Dragging starts directly with two fingers, otherwise lazy with an offset
+      self.__isDragging = !isSingleTouch;
+
+      // Some features are disabled in multi touch scenarios
+      self.__isSingleTouch = isSingleTouch;
+
+      // Clearing data structure
+      self.__positions = [];
+    },
+
+    /**
+     * Touch move handler for scrolling support
+     */
+    doTouchMove(touches, timeStamp, scale) {
+      // Array-like check is enough here
+      if (touches.length == null) {
+        throw new Error(`Invalid touch list: ${touches}`);
+      }
+
+      if (timeStamp instanceof Date) {
+        timeStamp = timeStamp.valueOf();
+      }
+      if (typeof timeStamp !== 'number') {
+        throw new Error(`Invalid timestamp value: ${timeStamp}`);
+      }
+
+      const self = this;
+
+      // Ignore event when tracking is not enabled (event might be outside of element)
+      if (!self.__isTracking) {
+        return;
+      }
+
+      let currentTouchLeft, currentTouchTop;
+
+      // Compute move based around of center of fingers
+      if (touches.length === 2) {
+        currentTouchLeft = Math.abs(touches[0].pageX + touches[1].pageX) / 2;
+        currentTouchTop = Math.abs(touches[0].pageY + touches[1].pageY) / 2;
+      } else {
+        currentTouchLeft = touches[0].pageX;
+        currentTouchTop = touches[0].pageY;
+      }
+
+      const positions = self.__positions;
+
+      // Are we already in dragging mode?
+      if (self.__isDragging) {
+        // Compute move distance
+        const moveX = currentTouchLeft - self.__lastTouchLeft;
+        const moveY = currentTouchTop - self.__lastTouchTop;
+
+        // Read previous scroll position and zooming
+        let scrollLeft = self.__scrollLeft;
+        let scrollTop = self.__scrollTop;
+        let level = self.__zoomLevel;
+
+        // Work with scaling
+        if (scale != null && self.options.zooming) {
+          const oldLevel = level;
+
+          // Recompute level based on previous scale and new scale
+          level = level / self.__lastScale * scale;
+
+          // Limit level according to configuration
+          level = Math.max(
+            Math.min(level, self.options.maxZoom),
+            self.options.minZoom,
+          );
+
+          // Only do further compution when change happened
+          if (oldLevel !== level) {
+            // Compute relative event position to container
+            const currentTouchLeftRel = currentTouchLeft - self.__clientLeft;
+            const currentTouchTopRel = currentTouchTop - self.__clientTop;
+
+            // Recompute left and top coordinates based on new zoom level
+            scrollLeft =
+              (currentTouchLeftRel + scrollLeft) * level / oldLevel -
+              currentTouchLeftRel;
+            scrollTop =
+              (currentTouchTopRel + scrollTop) * level / oldLevel -
+              currentTouchTopRel;
+
+            // Recompute max scroll values
+            self.__computeScrollMax(level);
+          }
+        }
+
+        if (self.__enableScrollX) {
+          scrollLeft -= moveX;
+          const maxScrollLeft = self.__maxScrollLeft;
+
+          if (scrollLeft > maxScrollLeft || scrollLeft < 0) {
+            // Slow down on the edges
+            if (self.options.bouncing) {
+              scrollLeft += moveX / 2;
+            } else if (scrollLeft > maxScrollLeft) {
+              scrollLeft = maxScrollLeft;
+            } else {
+              scrollLeft = 0;
+            }
+          }
+        }
+
+        // Compute new vertical scroll position
+        if (self.__enableScrollY) {
+          scrollTop -= moveY;
+          const maxScrollTop = self.__maxScrollTop;
+
+          if (scrollTop > maxScrollTop || scrollTop < 0) {
+            // Slow down on the edges
+            if (self.options.bouncing) {
+              scrollTop += moveY / 2;
+
+              // Support pull-to-refresh (only when only y is scrollable)
+              if (!self.__enableScrollX && self.__refreshHeight != null) {
+                if (
+                  !self.__refreshActive &&
+                  scrollTop <= -self.__refreshHeight
+                ) {
+                  self.__refreshActive = true;
+                  if (self.__refreshActivate) {
+                    self.__refreshActivate();
+                  }
+                } else if (
+                  self.__refreshActive &&
+                  scrollTop > -self.__refreshHeight
+                ) {
+                  self.__refreshActive = false;
+                  if (self.__refreshDeactivate) {
+                    self.__refreshDeactivate();
+                  }
+                }
+              }
+            } else if (scrollTop > maxScrollTop) {
+              scrollTop = maxScrollTop;
+            } else {
+              scrollTop = 0;
+            }
+          }
+        }
+
+        // Keep list from growing infinitely (holding min 10, max 20 measure points)
+        if (positions.length > 60) {
+          positions.splice(0, 30);
+        }
+
+        // Track scroll movement for decleration
+        positions.push(scrollLeft, scrollTop, timeStamp);
+
+        // Sync scroll position
+        self.__publish(scrollLeft, scrollTop, level);
+
+        // Otherwise figure out whether we are switching into dragging mode now.
+      } else {
+        const minimumTrackingForScroll = self.options.locking ? 3 : 0;
+        const minimumTrackingForDrag = 5;
+
+        const distanceX = Math.abs(currentTouchLeft - self.__initialTouchLeft);
+        const distanceY = Math.abs(currentTouchTop - self.__initialTouchTop);
+
+        self.__enableScrollX =
+          self.options.scrollingX && distanceX >= minimumTrackingForScroll;
+        self.__enableScrollY =
+          self.options.scrollingY && distanceY >= minimumTrackingForScroll;
+
+        positions.push(self.__scrollLeft, self.__scrollTop, timeStamp);
+
+        self.__isDragging =
+          (self.__enableScrollX || self.__enableScrollY) &&
+          (distanceX >= minimumTrackingForDrag ||
+            distanceY >= minimumTrackingForDrag);
+      }
+
+      // Update last touch positions and time stamp for next event
+      self.__lastTouchLeft = currentTouchLeft;
+      self.__lastTouchTop = currentTouchTop;
+      self.__lastTouchMove = timeStamp;
+      self.__lastScale = scale;
+    },
+
+    /**
+     * Touch end handler for scrolling support
+     */
+    doTouchEnd(timeStamp) {
+      if (timeStamp instanceof Date) {
+        timeStamp = timeStamp.valueOf();
+      }
+      if (typeof timeStamp !== 'number') {
+        throw new Error(`Invalid timestamp value: ${timeStamp}`);
+      }
+
+      const self = this;
+
+      // Ignore event when tracking is not enabled (no touchstart event on element)
+      // This is required as this listener ('touchmove') sits on the document and not on the element itself.
+      if (!self.__isTracking) {
+        return;
+      }
+
+      // Not touching anymore (when two finger hit the screen there are two touch end events)
+      self.__isTracking = false;
+
+      // Be sure to reset the dragging flag now. Here we also detect whether
+      // the finger has moved fast enough to switch into a deceleration animation.
+      if (self.__isDragging) {
+        // Reset dragging flag
+        self.__isDragging = false;
+
+        // Start deceleration
+        // Verify that the last move detected was in some relevant time frame
+        if (
+          self.__isSingleTouch &&
+          self.options.animating &&
+          timeStamp - self.__lastTouchMove <= 100
+        ) {
+          // Then figure out what the scroll position was about 100ms ago
+          const positions = self.__positions;
+          const endPos = positions.length - 1;
+          let startPos = endPos;
+
+          // Move pointer to position measured 100ms ago
+          for (
+            let i = endPos;
+            i > 0 && positions[i] > self.__lastTouchMove - 100;
+            i -= 3
+          ) {
+            startPos = i;
+          }
+
+          // If start and stop position is identical in a 100ms timeframe,
+          // we cannot compute any useful deceleration.
+          if (startPos !== endPos) {
+            // Compute relative movement between these two points
+            const timeOffset = positions[endPos] - positions[startPos];
+            const movedLeft = self.__scrollLeft - positions[startPos - 2];
+            const movedTop = self.__scrollTop - positions[startPos - 1];
+
+            // Based on 50ms compute the movement to apply for each render step
+            self.__decelerationVelocityX = movedLeft / timeOffset * (1000 / 60);
+            self.__decelerationVelocityY = movedTop / timeOffset * (1000 / 60);
+
+            // How much velocity is required to start the deceleration
+            const minVelocityToStartDeceleration =
+              self.options.paging || self.options.snapping ? 4 : 1;
+
+            // Verify that we have enough velocity to start deceleration
+            if (
+              Math.abs(self.__decelerationVelocityX) >
+                minVelocityToStartDeceleration ||
+              Math.abs(self.__decelerationVelocityY) >
+                minVelocityToStartDeceleration
+            ) {
+              // Deactivate pull-to-refresh when decelerating
+              if (!self.__refreshActive) {
+                self.__startDeceleration(timeStamp);
+              }
+            }
+          }
+        }
+      }
+
+      // If this was a slower move it is per default non decelerated, but this
+      // still means that we want snap back to the bounds which is done here.
+      // This is placed outside the condition above to improve edge case stability
+      // e.g. touchend fired without enabled dragging. This should normally do not
+      // have modified the scroll positions or even showed the scrollbars though.
+      if (!self.__isDecelerating) {
+        if (self.__refreshActive && self.__refreshStart) {
+          // Use publish instead of scrollTo to allow scrolling to out of boundary position
+          // We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
+          self.__publish(
+            self.__scrollLeft,
+            -self.__refreshHeight,
+            self.__zoomLevel,
+            true,
+          );
+
+          if (self.__refreshStart) {
+            self.__refreshStart();
+          }
+        } else {
+          self.scrollTo(
+            self.__scrollLeft,
+            self.__scrollTop,
+            true,
+            self.__zoomLevel,
+          );
+
+          // Directly signalize deactivation (nothing todo on refresh?)
+          if (self.__refreshActive) {
+            self.__refreshActive = false;
+            if (self.__refreshDeactivate) {
+              self.__refreshDeactivate();
+            }
+          }
+        }
+      }
+
+      // Fully cleanup list
+      self.__positions.length = 0;
+    },
+
+    /*
+     ---------------------------------------------------------------------------
+     PRIVATE API
+     ---------------------------------------------------------------------------
+     */
+
+    /**
+     * Applies the scroll position to the content element
+     *
+     * @param left {Number} Left scroll position
+     * @param top {Number} Top scroll position
+     * @param animate {Boolean?false} Whether animation should be used to move to the new coordinates
+     */
+    __publish(left, top, zoom, animate) {
+      const self = this;
+
+      // Remember whether we had an animation, then we try to continue based on the current "drive" of the animation
+      const wasAnimating = self.__isAnimating;
+      if (wasAnimating) {
+        core.effect.Animate.stop(wasAnimating);
+        self.__isAnimating = false;
+      }
+
+      if (animate && self.options.animating) {
+        // Keep scheduled positions for scrollBy/zoomBy functionality
+        self.__scheduledLeft = left;
+        self.__scheduledTop = top;
+        self.__scheduledZoom = zoom;
+
+        const oldLeft = self.__scrollLeft;
+        const oldTop = self.__scrollTop;
+        const oldZoom = self.__zoomLevel;
+
+        const diffLeft = left - oldLeft;
+        const diffTop = top - oldTop;
+        const diffZoom = zoom - oldZoom;
+
+        const step = function(percent, now, render) {
+          if (render) {
+            self.__scrollLeft = oldLeft + diffLeft * percent;
+            self.__scrollTop = oldTop + diffTop * percent;
+            self.__zoomLevel = oldZoom + diffZoom * percent;
+
+            // Push values out
+            if (self.__callback) {
+              self.__callback(
+                self.__scrollLeft,
+                self.__scrollTop,
+                self.__zoomLevel,
+              );
+            }
+          }
+        };
+
+        const verify = function(id) {
+          return self.__isAnimating === id;
+        };
+
+        const completed = function(
+          renderedFramesPerSecond,
+          animationId,
+          wasFinished,
+        ) {
+          if (animationId === self.__isAnimating) {
+            self.__isAnimating = false;
+          }
+
+          if (self.options.zooming) {
+            self.__computeScrollMax();
+          }
+        };
+
+        // When continuing based on previous animation we choose an ease-out animation instead of ease-in-out
+        self.__isAnimating = core.effect.Animate.start(
+          step,
+          verify,
+          completed,
+          250,
+          wasAnimating ? easeOutCubic : easeInOutCubic,
+        );
+      } else {
+        self.__scheduledLeft = self.__scrollLeft = left;
+        self.__scheduledTop = self.__scrollTop = top;
+        self.__scheduledZoom = self.__zoomLevel = zoom;
+
+        // Push values out
+        if (self.__callback) {
+          self.__callback(left, top, zoom);
+        }
+
+        // Fix max scroll ranges
+        if (self.options.zooming) {
+          self.__computeScrollMax();
+        }
+      }
+    },
+
+    /**
+     * Recomputes scroll minimum values based on client dimensions and content dimensions.
+     */
+    __computeScrollMax(zoomLevel) {
+      const self = this;
+
+      if (zoomLevel == null) {
+        zoomLevel = self.__zoomLevel;
+      }
+
+      self.__maxScrollLeft = Math.max(
+        self.__contentWidth * zoomLevel - self.__clientWidth,
+        0,
+      );
+      self.__maxScrollTop = Math.max(
+        self.__contentHeight * zoomLevel - self.__clientHeight,
+        0,
+      );
+    },
+
+    /*
+     ---------------------------------------------------------------------------
+     ANIMATION (DECELERATION) SUPPORT
+     ---------------------------------------------------------------------------
+     */
+
+    /**
+     * Called when a touch sequence end and the speed of the finger was high enough
+     * to switch into deceleration mode.
+     */
+    __startDeceleration(timeStamp) {
+      const self = this;
+
+      if (self.options.paging) {
+        const scrollLeft = Math.max(
+          Math.min(self.__scrollLeft, self.__maxScrollLeft),
+          0,
+        );
+        const scrollTop = Math.max(
+          Math.min(self.__scrollTop, self.__maxScrollTop),
+          0,
+        );
+        const clientWidth = self.__clientWidth;
+        const clientHeight = self.__clientHeight;
+
+        // We limit deceleration not to the min/max values of the allowed range, but to the size of the visible client area.
+        // Each page should have exactly the size of the client area.
+        self.__minDecelerationScrollLeft =
+          Math.floor(scrollLeft / clientWidth) * clientWidth;
+        self.__minDecelerationScrollTop =
+          Math.floor(scrollTop / clientHeight) * clientHeight;
+        self.__maxDecelerationScrollLeft =
+          Math.ceil(scrollLeft / clientWidth) * clientWidth;
+        self.__maxDecelerationScrollTop =
+          Math.ceil(scrollTop / clientHeight) * clientHeight;
+      } else {
+        self.__minDecelerationScrollLeft = 0;
+        self.__minDecelerationScrollTop = 0;
+        self.__maxDecelerationScrollLeft = self.__maxScrollLeft;
+        self.__maxDecelerationScrollTop = self.__maxScrollTop;
+      }
+
+      // Wrap class method
+      const step = function(percent, now, render) {
+        self.__stepThroughDeceleration(render);
+      };
+
+      // How much velocity is required to keep the deceleration running
+      const minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.1;
+
+      // Detect whether it's still worth to continue animating steps
+      // If we are already slow enough to not being user perceivable anymore, we stop the whole process here.
+      const verify = function() {
+        return (
+          Math.abs(self.__decelerationVelocityX) >=
+            minVelocityToKeepDecelerating ||
+          Math.abs(self.__decelerationVelocityY) >=
+            minVelocityToKeepDecelerating
+        );
+      };
+
+      const completed = function(
+        renderedFramesPerSecond,
+        animationId,
+        wasFinished,
+      ) {
+        self.__isDecelerating = false;
+
+        // Animate to grid when snapping is active, otherwise just fix out-of-boundary positions
+        self.scrollTo(
+          self.__scrollLeft,
+          self.__scrollTop,
+          self.options.snapping,
+        );
+      };
+
+      // Start animation and switch on flag
+      self.__isDecelerating = core.effect.Animate.start(
+        step,
+        verify,
+        completed,
+      );
+    },
+
+    /**
+     * Called on every step of the animation
+     *
+     * @param inMemory {Boolean?false} Whether to not render the current step, but keep it in memory only. Used internally only!
+     */
+    __stepThroughDeceleration(render) {
+      const self = this;
+
+      //
+      // COMPUTE NEXT SCROLL POSITION
+      //
+
+      // Add deceleration to scroll position
+      let scrollLeft = self.__scrollLeft + self.__decelerationVelocityX;
+      let scrollTop = self.__scrollTop + self.__decelerationVelocityY;
+
+      //
+      // HARD LIMIT SCROLL POSITION FOR NON BOUNCING MODE
+      //
+
+      if (!self.options.bouncing) {
+        const scrollLeftFixed = Math.max(
+          Math.min(self.__maxScrollLeft, scrollLeft),
+          0,
+        );
+        if (scrollLeftFixed !== scrollLeft) {
+          scrollLeft = scrollLeftFixed;
+          self.__decelerationVelocityX = 0;
+        }
+
+        const scrollTopFixed = Math.max(
+          Math.min(self.__maxScrollTop, scrollTop),
+          0,
+        );
+        if (scrollTopFixed !== scrollTop) {
+          scrollTop = scrollTopFixed;
+          self.__decelerationVelocityY = 0;
+        }
+      }
+
+      //
+      // UPDATE SCROLL POSITION
+      //
+
+      if (render) {
+        self.__publish(scrollLeft, scrollTop, self.__zoomLevel);
+      } else {
+        self.__scrollLeft = scrollLeft;
+        self.__scrollTop = scrollTop;
+      }
+
+      //
+      // SLOW DOWN
+      //
+
+      // Slow down velocity on every iteration
+      if (!self.options.paging) {
+        // This is the factor applied to every iteration of the animation
+        // to slow down the process. This should emulate natural behavior where
+        // objects slow down when the initiator of the movement is removed
+        const frictionFactor = 0.95;
+
+        self.__decelerationVelocityX *= frictionFactor;
+        self.__decelerationVelocityY *= frictionFactor;
+      }
+
+      //
+      // BOUNCING SUPPORT
+      //
+
+      if (self.options.bouncing) {
+        let scrollOutsideX = 0;
+        let scrollOutsideY = 0;
+
+        // This configures the amount of change applied to deceleration/acceleration when reaching boundaries
+        const penetrationDeceleration = 0.03;
+        const penetrationAcceleration = 0.08;
+
+        // Check limits
+        if (scrollLeft < self.__minDecelerationScrollLeft) {
+          scrollOutsideX = self.__minDecelerationScrollLeft - scrollLeft;
+        } else if (scrollLeft > self.__maxDecelerationScrollLeft) {
+          scrollOutsideX = self.__maxDecelerationScrollLeft - scrollLeft;
+        }
+
+        if (scrollTop < self.__minDecelerationScrollTop) {
+          scrollOutsideY = self.__minDecelerationScrollTop - scrollTop;
+        } else if (scrollTop > self.__maxDecelerationScrollTop) {
+          scrollOutsideY = self.__maxDecelerationScrollTop - scrollTop;
+        }
+
+        // Slow down until slow enough, then flip back to snap position
+        if (scrollOutsideX !== 0) {
+          if (scrollOutsideX * self.__decelerationVelocityX <= 0) {
+            self.__decelerationVelocityX +=
+              scrollOutsideX * penetrationDeceleration;
+          } else {
+            self.__decelerationVelocityX =
+              scrollOutsideX * penetrationAcceleration;
+          }
+        }
+
+        if (scrollOutsideY !== 0) {
+          if (scrollOutsideY * self.__decelerationVelocityY <= 0) {
+            self.__decelerationVelocityY +=
+              scrollOutsideY * penetrationDeceleration;
+          } else {
+            self.__decelerationVelocityY =
+              scrollOutsideY * penetrationAcceleration;
+          }
+        }
+      }
+    },
+  };
+
+  // Copy over members to prototype
+  for (const key in members) {
+    Scroller.prototype[key] = members[key];
+  }
+})();
