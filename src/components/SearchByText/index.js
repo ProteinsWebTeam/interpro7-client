@@ -92,7 +92,14 @@ class SearchByText extends Component {
               </div>
 
               <div className={f('row')} style={{ marginTop: '1em' }}>
-                <div className={f('large-12', 'columns')}>
+                <div
+                  className={f(
+                    'large-12',
+                    'columns',
+                    'stacked-for-small',
+                    'button-group',
+                  )}
+                >
                   <a className={f('button')} onClick={this.handleSubmitClick}>
                     Search
                   </a>
