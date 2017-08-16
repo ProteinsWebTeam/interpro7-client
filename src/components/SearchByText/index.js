@@ -9,7 +9,8 @@ import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
 import { foundationPartial } from 'styles/foundation';
 import interproTheme from 'styles/theme-interpro.css';
-const f = foundationPartial(interproTheme);
+import s from './style.css';
+const f = foundationPartial(interproTheme, s);
 
 const Example = ({ value }) =>
   <a style={{ cursor: 'pointer' }} data-search={value}>
