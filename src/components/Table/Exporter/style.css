@@ -31,3 +31,9 @@
   background-color: transparent;
   font-size: 0.9rem;
 }
+
+@media screen and (max-width: 39.9375em) {
+  .exporter .dropdown::after {
+    border: none;
+  }
+}
