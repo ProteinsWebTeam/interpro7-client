@@ -629,9 +629,9 @@ ul.chevron > li:before {
 /*/Entry page - md info next title*/
 
 /*homepage gal*/
-.browse-by .columns:hover {
+.browse-by .column:hover {
   background-color: #e4f3ff;
-} /*add a light mouse over effect*/
+}
 #content .browse-by .tabs-title a:hover,
 #content .entry-list .tabs-title a:hover,
 #content .browse-by .tabs-title a:focus,
@@ -698,6 +698,27 @@ ul.chevron > li:before {
 .md-list {
   font-size: 80%;
 }
+.md-list .row {
+  display: flex;
+  flex-flow: row wrap;
+} /*temp replace the float css while update to latest foundation*/
+.md-list .column {
+  flex: 0 0 25%;
+  max-width: 25%;
+} /*temp replace the float css while update to latest foundation*/
+@media screen and (max-width: 40em) {
+  .md-list .column {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+@media screen and (max-width: 20em) {
+  .md-list .column {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
 .species-list a:hover:not(.button),
 .go-list a:hover:not(.button),
 .md-list a:hover:not(.button) {
@@ -753,7 +774,7 @@ ul.chevron > li:before {
 .md-list a h6 {
   margin-bottom: 0;
 } /*remove space around title*/
-.md-list a.md-cg h6 {
+.md-list a.CATH-GENE3D h6 {
   white-space: nowrap;
 } /*avoid  text collapse for cathgene*/
 .md-list small {
