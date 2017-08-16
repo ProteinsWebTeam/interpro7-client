@@ -1,22 +1,27 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 import {
-  Editor, EditorState, ContentState, CompositeDecorator, convertToRaw,
+  Editor,
+  EditorState,
+  ContentState,
+  CompositeDecorator,
+  convertToRaw,
 } from 'draft-js';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import url from 'url';
 
 import config from 'config';
-import {addToast} from 'actions/creators';
+import { addToast } from 'actions/creators';
 
 import id from 'utils/cheapUniqueId';
 import blockEvent from 'utils/blockEvent';
 
 import getTableAccess from 'storage/idb';
 
-import {foundationPartial} from 'styles/foundation';
-import styles from './style.css';
-const s = foundationPartial(styles);
+import { foundationPartial } from 'styles/foundation';
+import interproTheme from 'styles/theme-interpro.css';
+import f from './style.css';
+const s = foundationPartial(interproTheme, f);
 
 const strategy = re => (block, cb) => {
   const text = block.getText();
@@ -27,9 +32,10 @@ const strategy = re => (block, cb) => {
 };
 
 const classedSpan = className => {
-  const Span = ({offsetKey, children}) => (
-    <span className={className} data-offset-key={offsetKey}>{children}</span>
-  );
+  const Span = ({ offsetKey, children }) =>
+    <span className={className} data-offset-key={offsetKey}>
+      {children}
+    </span>;
   Span.propTypes = {
     offsetKey: T.string.isRequired,
     children: T.any,
@@ -37,11 +43,11 @@ const classedSpan = className => {
   return Span;
 };
 
-const checkValidity = (({comment, IUPACProt}) => lines => (
-  lines.reduce((acc, line) => (
-    acc && (comment.test(line) || IUPACProt.test(line))
-  ), true))
-)({comment: /^\s*[>;].*$/m, IUPACProt: /^[a-z* -]*$/mi});
+const checkValidity = (({ comment, IUPACProt }) => lines =>
+  lines.reduce(
+    (acc, line) => acc && (comment.test(line) || IUPACProt.test(line)),
+    true,
+  ))({ comment: /^\s*[>;].*$/m, IUPACProt: /^[a-z* -]*$/im });
 
 const compositeDecorator = new CompositeDecorator([
   {
@@ -76,7 +82,7 @@ class IPScanSearch extends Component {
     return jobsTA.set(job, jobId);
   };
 
-  _createAndStoreJob = async ({value}) => {
+  _createAndStoreJob = async ({ value }) => {
     const blobsTA = await this._blobsTA;
     const now = Date.now();
     // Stores the sequence
@@ -105,19 +111,19 @@ class IPScanSearch extends Component {
       await blobsTA.delete(blobId);
       throw err;
     }
-    return {jobId, job};
+    return { jobId, job };
   };
 
-  _submitSearch = async ({value}) => {
+  _submitSearch = async ({ value }) => {
     const body = new FormData();
     body.set('email', config.IPScan.contactEmail);
     body.set('sequence', value);
     const r = await fetch(
       url.resolve(
-        url.format({...this.props.ipScan, pathname: this.props.ipScan.root}),
-        'run'
+        url.format({ ...this.props.ipScan, pathname: this.props.ipScan.root }),
+        'run',
       ),
-      {method: 'POST', body}
+      { method: 'POST', body },
     );
     console.log(r);
     const text = await r.text();
@@ -126,7 +132,7 @@ class IPScanSearch extends Component {
     return text;
   };
 
-  _storeSubmittedJob = async ({jobId, job}) => {
+  _storeSubmittedJob = async ({ jobId, job }) => {
     const jobsTA = await this._jobsTA;
     // eslint-disable-next-line no-param-reassign
     job.times.submitted = job.times.lastUpdate = Date.now();
@@ -135,19 +141,21 @@ class IPScanSearch extends Component {
     return jobsTA.set(job, jobId);
   };
 
-  _handleReset = text => this.setState(
-    {
-      editorState: (text && typeof text === 'string') ?
-        EditorState.createWithContent(
-          ContentState.createFromText(text),
-          compositeDecorator
-        ) :
-        EditorState.createEmpty(compositeDecorator),
-      valid: true,
-      dragging: false,
-    },
-    () => this.editor.focus()
-  );
+  _handleReset = text =>
+    this.setState(
+      {
+        editorState:
+          text && typeof text === 'string'
+            ? EditorState.createWithContent(
+                ContentState.createFromText(text),
+                compositeDecorator,
+              )
+            : EditorState.createEmpty(compositeDecorator),
+        valid: true,
+        dragging: false,
+      },
+      () => this.editor.focus(),
+    );
 
   _handleSubmitFail = err => {
     // An error happened during job submission
@@ -155,32 +163,38 @@ class IPScanSearch extends Component {
     // Focuses back to the editor to modify the sequence
     this.editor.focus();
     // Displays message and bails
-    this.props.addToast({
-      title: 'Job submission failed',
-      body: 'Something wrong happened while trying to submit your job',
-      className: s('alert'),
-      ttl: 5000,
-    }, id());
+    this.props.addToast(
+      {
+        title: 'Job submission failed',
+        body: 'Something wrong happened while trying to submit your job',
+        className: s('alert'),
+        ttl: 5000,
+      },
+      id(),
+    );
   };
 
-  _handleSubmitSuccess = ({job, jobId}) => {
+  _handleSubmitSuccess = ({ job, jobId }) => {
     // If job successfully submitted, resets input field
     this._handleReset();
     // Stores the job
-    this._storeSubmittedJob({job, jobId});
+    this._storeSubmittedJob({ job, jobId });
     // And notifies user
-    this.props.addToast({
-      title: 'Job submitted',
-      body: `Your job has been successfully submitted with an id of ${job.id}`,
-      className: s('success'),
-      ttl: 5000,
-    }, id());
+    this.props.addToast(
+      {
+        title: 'Job submitted',
+        body: `Your job has been successfully submitted with an id of ${job.id}`,
+        className: s('success'),
+        ttl: 5000,
+      },
+      id(),
+    );
   };
 
   _handleSubmit = async event => {
     event.preventDefault();
     const lines = convertToRaw(
-      this.state.editorState.getCurrentContent()
+      this.state.editorState.getCurrentContent(),
     ).blocks.map(block => block.text);
     if (!lines.length) return;
     const value = lines.join('\n');
@@ -189,13 +203,13 @@ class IPScanSearch extends Component {
     let IPScanId;
     try {
       [jobAndJobId, IPScanId] = await Promise.all([
-        this._createAndStoreJob({value}),
-        this._submitSearch({value}),
+        this._createAndStoreJob({ value }),
+        this._submitSearch({ value }),
       ]);
     } catch (err) {
       return this._handleSubmitFail(err);
     }
-    console.log({jobAndJobId, IPScanId});
+    console.log({ jobAndJobId, IPScanId });
     jobAndJobId.job.id = IPScanId;
     this._handleSubmitSuccess(jobAndJobId);
   };
@@ -208,8 +222,9 @@ class IPScanSearch extends Component {
     fr.readAsText(file);
   };
 
-  _loadExample = () => this._handleReset(
-    `>example protein sequence
+  _loadExample = () =>
+    this._handleReset(
+      `>example protein sequence
 MITIDGNGAV ASVAFRTSEV IAIYPITPSST MAEQADAWAGN GLKNVWGDTP RVVEMQSEAG
 AIATVHGALQ TGALSTSFTS SQGLLLMIPTL YKLAGELTPFV LHVAARTVAT HALSIFGDHS
 DVMAVRQTGC AMLCAANVQE AQDFALISQIA TLKSRVPFIHF FDGFRTSHEI NKIVPLADDT
@@ -228,18 +243,18 @@ PAWANSLFED NAEFGLGFRL TVDQHRVRVLR LLDQFADKIPA ELLTALKSDA TPEVRREQVA
 ALRQQLNDVA EAHELLRDAD ALVEKSIWLIG GDGWAYDIGFG GLDHVLSLTE NVNILVLDTQ
 CYSNTGGQAS KATPLGAVTK FGEHGKRKARK DLGVSMMMYGH VYVAQISLGA QLNQTVKAIQ
 EAEAYPGPSL IIAYSPCEEH GYDLALSHDQM RQLTATGFWPL YRFDPRRADE GKLPLALDSR
-PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
+PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim(),
+    );
+
+  _handleDroppedFiles = blockEvent(({ dataTransfer: { files: [file] } }) =>
+    this._handleFile(file),
   );
 
-  _handleDroppedFiles = blockEvent(
-    ({dataTransfer: {files: [file]}}) => this._handleFile(file)
-  );
+  _handleDragging = blockEvent(() => this.setState({ dragging: true }));
 
-  _handleDragging = blockEvent(() => this.setState({dragging: true}));
+  _handleUndragging = blockEvent(() => this.setState({ dragging: false }));
 
-  _handleUndragging = blockEvent(() => this.setState({dragging: false}));
-
-  _handleFileChange = ({target}) => {
+  _handleFileChange = ({ target }) => {
     this._handleFile(target.files[0]);
     // eslint-disable-next-line no-param-reassign
     target.value = null;
@@ -248,8 +263,9 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
   _handleEditorClick = () => this.editor.focus();
 
   _handleChange = editorState => {
-    const lines = convertToRaw(editorState.getCurrentContent()).blocks
-      .map(block => block.text);
+    const lines = convertToRaw(editorState.getCurrentContent()).blocks.map(
+      block => block.text,
+    );
     this.setState({
       editorState,
       valid: checkValidity(lines),
@@ -257,7 +273,7 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
   };
 
   render() {
-    const {editorState, valid, dragging} = this.state;
+    const { editorState, valid, dragging } = this.state;
     return (
       <div className={s('row')}>
         <div className={s('large-12', 'columns')}>
@@ -271,34 +287,31 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
             onDragEnter={this._handleDragging}
             onDragExit={this._handleUndragging}
             onDragLeave={this._handleUndragging}
-            className={s('search-form', {dragging})}
+            className={s('search-form', { dragging })}
           >
             <div>
               <div className={s('secondary', 'callout')}>
                 <div className={s('row')}>
-                  <div
-                    className={s('large-12', 'columns')}
-                  >
+                  <div className={s('large-12', 'columns')}>
                     <label onClick={this._handleEditorClick}>
                       Sequence, in FASTA format
                       <div
                         type="text"
-                        className={s('editor', {'invalid-block': !valid})}
+                        className={s('editor', { 'invalid-block': !valid })}
                       >
                         <Editor
                           placeholder="Enter your sequence"
                           editorState={editorState}
                           handleDroppedFiles={this._handleDroppedFiles}
                           onChange={this._handleChange}
-                          ref={editor => this.editor = editor}
+                          ref={editor => (this.editor = editor)}
                         />
                       </div>
                     </label>
                     <div className={s('button-group', 'line-with-buttons')}>
-                      <span>or</span>
                       <label className={s('file-input-label')}>
                         <a type="button" className={s('hollow', 'button')}>
-                          load from a file…
+                          Choose file
                         </a>
                         <input
                           type="file"
@@ -311,28 +324,35 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
                         className={s('hollow', 'button', 'secondary')}
                         onClick={this._loadExample}
                       >
-                        example protein sequence
+                        Example protein sequence
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <div className={s('row')} style={{marginTop: '1em'}}>
-                  <div className={s('large-12', 'columns')}>
+                <div className={s('row')} style={{ marginTop: '1em' }}>
+                  <div
+                    className={s(
+                      'large-12',
+                      'columns',
+                      'stacked-for-small',
+                      'button-group',
+                    )}
+                  >
                     <input
                       type="submit"
-                      className={s('button', {disabled: !valid})}
+                      className={s('button', { disabled: !valid })}
                       disabled={!valid}
                       value="Search"
                     />
-                    <button
-                      type="button"
+                    <a
                       className={s('secondary', 'hollow', 'button')}
                       onClick={this._handleReset}
-                    >Clear</button>
+                    >
+                      Clear
+                    </a>
                   </div>
                 </div>
-
               </div>
             </div>
             <div className={s('dragging-overlay')}>Drop your file here</div>
@@ -343,7 +363,6 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
   }
 }
 
-export default connect(
-  ({settings: {ipScan}}) => ({ipScan}),
-  {addToast}
-)(IPScanSearch);
+export default connect(({ settings: { ipScan } }) => ({ ipScan }), {
+  addToast,
+})(IPScanSearch);
