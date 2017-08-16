@@ -1,0 +1,9 @@
+.search-eg,
+.search-eg a {
+  font-size: 90%;
+  color: #777;
+}
+.search-eg a:hover {
+  color: #777;
+  border-bottom: 1px #777 solid;
+}
