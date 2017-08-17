@@ -11,7 +11,6 @@ import Link from 'components/generic/Link';
 import InterproMenu from 'components/Menu/InterproMenu';
 import Title from './Title';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
-import EBIHeader, { EbiSkipToDiv } from 'components/EBIHeader';
 
 import { sticky as supportsSticky } from 'utils/support';
 
@@ -171,13 +170,11 @@ class Header extends PureComponent {
     const { stickyMenuOffset: offset, stuck } = this.props;
     return (
       <header
-        id={ebiGlobalStyles['local-masthead']}
-        className={styleBundle('header', 'local-masthead')}
+        id={ebiGlobalStyles['masthead']}
+        className={styleBundle('masthead', 'local-masthead')}
         style={styleForHeader(false && supportsSticky, offset, stuck)}
       >
-        <EbiSkipToDiv />
-        <EBIHeader />
-        <div className={styleBundle('masthead', 'row')}>
+        <div className={styleBundle('masthead-inner', 'row')}>
           <Title reduced={false} />
           <SideIcons reduced={false} stuck={stuck} />
           <InterproMenu className={styleBundle('menu', 'interpro-menu')} />
