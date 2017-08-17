@@ -25,6 +25,7 @@ table.light {
   color: #4b555b;
   font-size: 0.93em;
   margin-bottom: 0;
+  border-collapse: collapse;
 }
 
 table.light thead {
