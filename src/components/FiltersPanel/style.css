@@ -6,7 +6,8 @@
 }
 .filters-panel,
 .filters-panel h6,
-.filters-panel label {
+.filters-panel label,
+.filters-panel button {
   color: #4b555b;
 }
 
