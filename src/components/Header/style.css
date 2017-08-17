@@ -364,6 +364,6 @@
   }
 }
 /*Navigation - remove icons*/
-.interpro-menu i {
+.interpro-menu > li > a i {
   display: none;
 }
