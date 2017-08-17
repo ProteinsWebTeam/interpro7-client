@@ -8,7 +8,7 @@ import { schedule } from 'timing-functions/src';
 import 'styles/foundation';
 import 'ebi-framework/css/ebi-global.scss';
 import 'styles/global.css';
-import 'styles/theme-interpro.css';
+// import 'styles/theme-interpro.css';
 import 'styles/interpro-new.css';
 
 import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
@@ -16,6 +16,8 @@ import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
 import Overlay from 'components/Overlay';
 
 import Sentinel from 'components/Sentinel';
+import { EbiSkipToDiv } from 'components/EBIHeader';
+import EBIHeader from 'components/EBIHeader';
 import Header from 'components/Header';
 // import Breadcrumb from 'components/Breadcrumb';
 
@@ -95,6 +97,8 @@ const Root = () =>
     <Overlay />
     <EMBLDropdownAsync />
     <SideMenuAsync />
+    <EbiSkipToDiv />
+    <EBIHeader />
     <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
     <Sentinel top={STICKY_MENU_OFFSET} />
     {/* <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} /> */}
