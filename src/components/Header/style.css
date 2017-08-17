@@ -14,7 +14,7 @@
   }
 }
 
-.header {
+.masthead {
   /*position: sticky;*/
   /* top: -150px;*/ /*!* -34px (EBI header); *!*/
   left: 0;
@@ -37,7 +37,7 @@
 }
 
 /*STYLE - make menu items hover slightly darker*/
-.local-masthead nav ul li a:hover {
+.masthead nav ul li a:hover {
   color: #000;
 }
 /*STYLE - slightly hide division between menu items */
