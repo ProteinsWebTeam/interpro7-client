@@ -41,65 +41,56 @@ const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
 
 const EBIHeader = () =>
   <div
-    id="global-masthead"
+    id="masthead-black-bar"
     className={styleBundle('clearfix', 'masthead-black-bar')}
   >
-    <a
-      href="//www.ebi.ac.uk"
-      title="Go to the EMBL-EBI homepage"
-      rel="noopener"
-    >
-      <span className={styleBundle('ebi-logo')} />
-    </a>
-    <nav>
-      <div className={styleBundle('row')}>
-        <ul id="global-nav" className={styleBundle('menu')}>
-          <li id="home-mobile">
-            <a href="//www.ebi.ac.uk" rel="noopener" />
-          </li>
+    <nav className={styleBundle('row')}>
+      <ul id="global-nav" className={styleBundle('menu')}>
+        <li id="home-mobile">
+          <a href="//www.ebi.ac.uk" rel="noopener" />
+        </li>
 
-          <li id="home" className={styleBundle('home')}>
-            <a href="//www.ebi.ac.uk" rel="noopener">
-              EMBL-EBI
-            </a>
-          </li>
+        <li id="home" className={styleBundle('home')}>
+          <a href="//www.ebi.ac.uk" rel="noopener">
+            EMBL-EBI
+          </a>
+        </li>
 
-          <li id="services" className={styleBundle('services', 'active')}>
-            <a href="//www.ebi.ac.uk/services" rel="noopener">
-              Services
-            </a>
-          </li>
+        <li id="services" className={styleBundle('services', 'active')}>
+          <a href="//www.ebi.ac.uk/services" rel="noopener">
+            Services
+          </a>
+        </li>
 
-          <li id="research" className={styleBundle('research')}>
-            <a href="//www.ebi.ac.uk/research" rel="noopener">
-              Research
-            </a>
-          </li>
+        <li id="research" className={styleBundle('research')}>
+          <a href="//www.ebi.ac.uk/research" rel="noopener">
+            Research
+          </a>
+        </li>
 
-          <li id="training" className={styleBundle('training')}>
-            <a href="//www.ebi.ac.uk/training" rel="noopener">
-              Training
-            </a>
-          </li>
+        <li id="training" className={styleBundle('training')}>
+          <a href="//www.ebi.ac.uk/training" rel="noopener">
+            Training
+          </a>
+        </li>
 
-          <li id="about" className={styleBundle('about')}>
-            <a href="//www.ebi.ac.uk/about" rel="noopener">
-              About us
-            </a>
-          </li>
+        <li id="about" className={styleBundle('about')}>
+          <a href="//www.ebi.ac.uk/about" rel="noopener">
+            About us
+          </a>
+        </li>
 
-          <li
-            className={styleBundle(
-              'float-right',
-              'show-for-medium',
-              'embl-selector',
-            )}
-            style={{ flexGrow: 1 }}
-          >
-            <EmblButton />
-          </li>
-        </ul>
-      </div>
+        <li
+          className={styleBundle(
+            'float-right',
+            'show-for-medium',
+            'embl-selector',
+          )}
+          style={{ flexGrow: 1 }}
+        >
+          <EmblButton />
+        </li>
+      </ul>
     </nav>
   </div>;
 
