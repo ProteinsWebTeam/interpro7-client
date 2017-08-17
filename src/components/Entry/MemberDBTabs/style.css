@@ -138,8 +138,9 @@
 }
 /*target the div - increase width - that come immediatly after collapsed - doesn't work using class*/
 .collapsed + div {
-  flex: 0 0 93%;
-  max-width: 93%;
+  flex: 0 0 94%;
+  max-width: 94%;
+  width: 94%;
 }
 
 /*onglet appearing on collapsed - not used */
@@ -161,9 +162,14 @@
 
 .collapsed.columns {
   flex: 0 0 auto;
-  padding-right: 0;
+  padding: 0;
+  width: auto;
+  margin-left: 1rem;
 }
-
+.collapsed ul {
+  padding: 0;
+  margin: 0;
+}
 .db-label {
   text-transform: capitalize;
 }
