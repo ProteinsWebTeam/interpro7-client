@@ -40,41 +40,41 @@ _EmblButton.propTypes = {
 const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
 
 const EBIHeader = () =>
-  <div
+  <header
     id="masthead-black-bar"
     className={styleBundle('clearfix', 'masthead-black-bar')}
   >
     <nav className={styleBundle('row')}>
       <ul id="global-nav" className={styleBundle('menu')}>
-        <li id="home-mobile">
+        <li className={styleBundle('home-mobile')}>
           <a href="//www.ebi.ac.uk" rel="noopener" />
         </li>
 
-        <li id="home" className={styleBundle('home')}>
+        <li className={styleBundle('home')}>
           <a href="//www.ebi.ac.uk" rel="noopener">
             EMBL-EBI
           </a>
         </li>
 
-        <li id="services" className={styleBundle('services', 'active')}>
+        <li className={styleBundle('services', 'active')}>
           <a href="//www.ebi.ac.uk/services" rel="noopener">
             Services
           </a>
         </li>
 
-        <li id="research" className={styleBundle('research')}>
+        <li className={styleBundle('research')}>
           <a href="//www.ebi.ac.uk/research" rel="noopener">
             Research
           </a>
         </li>
 
-        <li id="training" className={styleBundle('training')}>
+        <li className={styleBundle('training')}>
           <a href="//www.ebi.ac.uk/training" rel="noopener">
             Training
           </a>
         </li>
 
-        <li id="about" className={styleBundle('about')}>
+        <li className={styleBundle('about')}>
           <a href="//www.ebi.ac.uk/about" rel="noopener">
             About us
           </a>
@@ -92,7 +92,7 @@ const EBIHeader = () =>
         </li>
       </ul>
     </nav>
-  </div>;
+  </header>;
 
 // Skip to div
 // TODO: Check why we have to put that in particular now that we don't use ids
