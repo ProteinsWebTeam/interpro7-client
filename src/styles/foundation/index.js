@@ -1,7 +1,8 @@
 import classNames from 'classnames/bind';
 // foundation.css is the most up-to date
 // import foundation from 'foundation-sites/dist/css/foundation.css';
-import foundation from 'foundation-sites/dist/css/foundation-float.css';
+// import foundation from 'foundation-sites/dist/css/foundation-float.css';
+import foundation from './foundation-ebi.css';
 
 /**
  * Use the default when only foundation is required
