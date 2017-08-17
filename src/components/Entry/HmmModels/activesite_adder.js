@@ -61,4 +61,5 @@ ActiveSitesAdder.prototype.whatShouldBeDraw = function(column) {
 ActiveSitesAdder.prototype.setColumns = function(columns) {
   this.columns = columns.sort((a, b) => a.col - b.col);
 };
-if (typeof module !== 'undefined') module.exports = ActiveSitesAdder;
+
+export default ActiveSitesAdder;

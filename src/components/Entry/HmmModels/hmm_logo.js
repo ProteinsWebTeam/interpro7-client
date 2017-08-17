@@ -12,6 +12,9 @@
 /* eslint-disable no-param-reassign */
 
 import ActiveSitesAdder from './activesite_adder';
+import EasyScroller from './scroller';
+import styles from './logo.css';
+
 const $ = require('./jquery');
 
 // checking for canvas support and caching result

@@ -1,4 +1,7 @@
 /* eslint-disable */
+
+const $ = require('./jquery');
+
 /** @license
  * Scroller
  * http://github.com/zynga/scroller
@@ -295,7 +298,7 @@
       return id;
     },
   };
-})(this);
+})(window);
 
 var EasyScroller = function(content, options) {
   this.content = content;
@@ -1761,3 +1764,5 @@ let Scroller;
     Scroller.prototype[key] = members[key];
   }
 })();
+
+export default EasyScroller;

@@ -8,7 +8,7 @@ import Link from 'components/generic/Link';
 import hmm_logo from './hmm_logo';
 
 const $ = require('./jquery');
-import './logo.css';
+import styles from './logo.css';
 
 class LogoSection extends Component {
   static propTypes = {
@@ -37,15 +37,15 @@ class LogoSection extends Component {
 
   render() {
     let data_string = JSON.stringify(this.state.data);
-    return <div className="logo" id="logo" data-logo={data_string} />;
+    return <div className={styles.logo} id="logo" data-logo={data_string} />;
   }
 }
 
 const HmmModelSection = function(data) {
-  //const temp = data;
+  const cleafix_class = 'clearfix';
   return (
-    <div className="content">
-      <div className="logo_wrapper clearfix">
+    <div className={styles.content}>
+      <div className={styles.logo_wrapper + ' ' + cleafix_class}>
         <LogoSection data={data.logo} />
       </div>
     </div>
