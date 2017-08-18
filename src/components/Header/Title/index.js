@@ -18,10 +18,7 @@ const Title = ({ loading, mainDB, mainAccession, stuck }) => {
     mainAccession || mainDB || 'Classification of protein families';
 
   return (
-    <div
-      className={styles('columns', 'small-6', 'medium-8', 'anim')}
-      id="local-title"
-    >
+    <div className={styles('columns', 'small-6', 'medium-8')} id="local-title">
       <h1 className={styles('main-title', { stuck })}>
         <Link newTo={{ description: {} }} title="Back to InterPro homepage">
           <div className={styles('logo-text')}>
