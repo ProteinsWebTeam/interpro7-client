@@ -21,8 +21,8 @@ const Title = ({ loading, mainDB, mainAccession, stuck }) => {
     <div className={styles('columns', 'small-6', 'medium-8')} id="local-title">
       <h1 className={styles('main-title', { stuck })}>
         <Link newTo={{ description: {} }} title="Back to InterPro homepage">
-          <div className={styles('logo-text')}>
-            <div className={styles('logo-flex-item', 'main-logo', { stuck })}>
+          <div className={styles('logo-flex')}>
+            <div className={styles('logo-flex-item', 'logo-icon', { stuck })}>
               <svg className={styles('icon')} viewBox="0 0 88 88" width="62">
                 <defs>
                   <mask id="logo-mask">
@@ -59,7 +59,9 @@ const Title = ({ loading, mainDB, mainAccession, stuck }) => {
                 </g>
               </svg>
             </div>
-            <div className={styles('logo-flex-item')}>InterPro</div>
+            <div className={styles('logo-flex-item', 'logo-text')}>
+              InterPro
+            </div>
           </div>
         </Link>
       </h1>
