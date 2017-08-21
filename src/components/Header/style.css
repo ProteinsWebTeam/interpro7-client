@@ -22,15 +22,14 @@
   /*height: 238px;*/ /*magic --- SP for what use ?*/
   z-index: 3;
 }
-
-.local_masthead {
+.masthead {
   background-image: linear-gradient(
       to right,
       rgba(0, 85, 158, 0.9),
       rgba(45, 174, 193, 0.5),
       rgba(0, 85, 158, 0.9)
     ),
-    url("images/banner/fondation-morse-header.jpg");
+    url(images/backgrounds/fondation-morse-header.jpg);
   background-repeat: no-repeat, repeat;
   background-position: left, top right;
   background-size: 100%, 1400px;
@@ -43,31 +42,6 @@
 /*STYLE - slightly hide division between menu items */
 .masthead nav ul.menu li {
   border-right: 1px solid rgba(248, 248, 248, 0.2);
-}
-
-.header_background {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-  /*background-color: black;
-  background-image: url("images/banner/banner.jpg"), radial-gradient(
-    circle at 35%, white 0%, #0eb2a4 5%, black 30%
-  );
-  background-position: 25% center;
-  background-repeat: no-repeat;
-  background-size: auto 100%;*/
-
-  background: #00559e;
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 85, 158, 0.9),
-      rgba(45, 174, 193, 0.5),
-      rgba(0, 85, 158, 0.9)
-    ),
-    url(images/banner/fondation-morse-header.jpg);
 }
 
 .container {
