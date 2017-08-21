@@ -64,8 +64,9 @@ class Exporter extends Component {
           data-icon="s"
         />
         <div
-          className={fPlus('dropdown-pane', 'left', 'dropdown-content')}
+          className={fPlus('dropdown-pane', 'left', 'dropdown-content', mainDB)}
           style={{
+            borderColor: colors[mainDB] ? colors[mainDB] : null,
             transform: `scaleY(${this.state.isOpen ? 1 : 0})`,
           }}
         >
