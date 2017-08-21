@@ -171,7 +171,7 @@ class Header extends PureComponent {
     return (
       <header
         id={ebiGlobalStyles['masthead']}
-        className={styleBundle('masthead', 'local-masthead')}
+        className={styleBundle('masthead')}
         style={styleForHeader(false && supportsSticky, offset, stuck)}
       >
         <div className={styleBundle('masthead-inner', 'row')}>
