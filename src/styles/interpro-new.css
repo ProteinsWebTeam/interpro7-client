@@ -325,13 +325,6 @@ a:hover.noline {
   position: fixed;
   margin-top: -10.5em !important;
 }
-.smaller #local-title h1 {
-  transform: translate(28px, 74px);
-  font-size: 170%;
-} /*move logo reduce logo text*/
-.smaller #local-title h1 img {
-  width: 40px;
-} /*reduce logo image*/
 .smaller  h4 {
   transform: translate(156px, 32px);
   font-size: 133%;
@@ -362,7 +355,7 @@ a:hover.noline {
 
 /*Foundation sticky*/
 /*transform logo*/
-.masthead.is-stuck div#local-title h1 {
+.masthead.is-stuck h1 {
   transform: scale(0.6) translate(-350px, 131px);
 }
 
