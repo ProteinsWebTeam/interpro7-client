@@ -42,9 +42,13 @@
   }
 }
 
-.main-logo {
+.logo-icon {
   transition: transform var(--timing-fast) ease-in-out;
 }
+
+.logo-icon.stuck ~ div.logo-text {
+  font-size: 3rem;
+} /*keep same font-size for "InterPro" when banner is sticky*/
 
 .domain.loading {
   animation-duration: var(--timing-slow), var(--timing-really-slow);
@@ -61,53 +65,19 @@
 
   &.stuck {
     transform: translate(18ch, 18px);
+    font-size: 113%;
+    margin-bottom: 1rem;
   }
 }
 
-.logo-text {
+.logo-flex {
   display: flex;
-  align-items: center;
   margin-left: -82px;
-  margin-right: 4px;
 }
 
-.logo-text svg {
+.logo-flex svg {
   width: 62px;
   margin-right: 0.9rem; /*to be aligned with tagline, aslo depends on svg width*/
-}
-
-/*change EBI global font effect to happen at 63em instead of 75em*/
-@media screen and (min-width: 64em) and (max-width: 75em) {
-  body h1 {
-    font-size: 3rem;
-  }
-}
-
-/*med-large only*/
-@media screen and (min-width: 64em) and (max-width: 75em) {
-  .logo-text  svg {
-    /*border:1px grey solid;*/
-  }
-}
-/*medium only*/
-@media screen and (min-width: 40em) and (max-width: 63.9375em) {
-  .logo-text  svg {
-    width: 50px;
-  }
-  .local-masthead h1 {
-    font-size: 2.4rem;
-  }
-}
-
-/*small only*/
-@media screen and (max-width: 39.9375em) {
-  .logo-text  svg {
-    width: 40px;
-  }
-
-  .logo-text {
-    transform: translateX(82px);
-  }
 }
 
 .logo-flex-item {
@@ -115,6 +85,53 @@
   align-items: center;
 }
 
-.logo-color {
-  fill: white;
+/*move offset logo to the left edge otherwise disappear*/
+@media screen and (max-width: 89em) {
+  h1.main-title {
+    transform: translateX(80px);
+  }
+}
+
+@media screen and (max-width: 39.9375em) {
+  h1.main-title {
+    font-size: 1.8rem;
+    transform: translateX(0px);
+  }
+}
+
+/*text reduc*/
+@media screen and (min-width: 64em) and (max-width: 75em) {
+  .logo-icon svg {
+    font-size: 2.5rem;
+  } /*reduce icon at the same time as text*/
+}
+
+/*medium only*/
+@media screen and (min-width: 40em) and (max-width: 75em) {
+  .logo-icon  svg {
+    width: 50px;
+  }
+  .logo-icon.stuck svg {
+    width: 62px;
+  } /*force icon to keep same size when sticky*/
+}
+
+/*small only*/
+@media screen and (max-width: 39.9375em) {
+  .logo-icon  svg {
+    width: 40px;
+    margin-right: 0.4rem;
+  }
+  .logo-icon.stuck svg {
+    width: 62px;
+  }
+  .logo-flex {
+    margin-left: 0px;
+  }
+}
+@media screen and (max-width: 52em) {
+  /*not the best solution I guess*/
+  .main-title.stuck {
+    transform: translateX(0) translateY(100%) scale(0.64);
+  }
 }
