@@ -4,7 +4,7 @@
   & .dropdown-content {
     position: absolute;
     top: 100%;
-    right: 28px; /*temp value while popup position is working better*/
+    right: 27px; /*temp value while popup position is working better*/
     overflow: auto;
     width: initial;
     min-width: 180%; /*temp value*/
@@ -19,6 +19,19 @@
 .exporter .dropdown-pane {
   z-index: 2;
 } /* so sticky header stay on top*/
+.exporter .dropdown-pane ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.exporter .dropdown-pane ul li a {
+  display: block;
+  padding: 0.3rem 1rem;
+}
+.exporter .dropdown-pane ul li a:hover {
+  background-color: #2daec1; /*#85b6d3*/
+  color: white;
+}
 
 .exporter .icon-settings {
   padding: 0.3em 0.4em;
