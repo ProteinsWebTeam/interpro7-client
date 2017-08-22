@@ -6,10 +6,9 @@ a:visited {
   border-bottom-width: 0;
 }
 
-/*add some space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer not needed anymore?*/
+/*add some space on top between banner and breadcrumb - should be in EBI-GLobal*/
 main {
   padding-top: 1rem;
-  /*padding-bottom: 0;*/
 }
 /*override EBI foundation css that overrides foundation*/
 .fieldset {
