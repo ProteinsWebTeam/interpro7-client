@@ -180,7 +180,7 @@ LatestEntry.propTypes = {
 };
 
 const Home = () =>
-  <div style={{ marginTop: '1em' }}>
+  <div>
     <div className={f('row')}>
       <div className={f('columns', 'large-12')}>
         <div
