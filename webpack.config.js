@@ -76,7 +76,7 @@ module.exports = (env = { dev: true }) => {
       publicPath: websiteURL.pathname || '/interpro7/',
       filename:
         env.production || env.staging
-          ? '[id].[name].[chunkhash:3].js'
+          ? '[id].[name].[hash:3].js'
           : '[id].[name].js',
       chunkFilename:
         env.production || env.staging
@@ -85,9 +85,18 @@ module.exports = (env = { dev: true }) => {
     },
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
+      extensions: ['.js', '.json', '.worker.js'],
     },
     module: {
       rules: [
+        {
+          test: /\.worker\.js/i,
+          use: [
+            {
+              loader: 'worker-loader',
+            },
+          ],
+        },
         {
           test: /\.js$/i,
           include: [

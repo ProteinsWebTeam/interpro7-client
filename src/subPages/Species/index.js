@@ -1,11 +1,12 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
 
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
+import ProteinFile from 'subPages/Species/ProteinFile';
 
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
@@ -40,127 +41,18 @@ const lut = new Map([
   ['282301', { name: 'Macrostomum lignano' }],
 ]);
 
-const mapStateToProps = createSelector(
-  state => state.newLocation.description.mainAccession,
-  accession => ({ accession }),
-);
+const ProteinAccessionsRenderer = taxId =>
+  <ProteinFile taxId={taxId} type="accession" />;
 
-const mapStateToUrlForProteinIDsFor = createSelector(
-  taxId => taxId,
-  taxId =>
-    createSelector(
-      state => state.settings.api,
-      state => state.newLocation.description,
-      ({ protocol, hostname, port, root }, description) => {
-        const _description = {
-          mainType: 'protein',
-          // TODO: change when 'uniprot' will work on the API
-          mainDB: 'swissprot',
-          focusType: description.mainType,
-          focusDB: description.mainDB,
-          focusAccession: description.mainAccession,
-        };
-        return `${protocol}//${hostname}:${port}${root}${description2path(
-          _description,
-        )}?${qsStringify({ tax_id: taxId, page_size: 200 })}`.replace(
-          /\?$/,
-          '',
-        );
-      },
-    ),
-);
-
-const payloadToFastaBlobUrl = createSelector(
-  payload => payload.results,
-  results =>
-    URL.createObjectURL(
-      new Blob(
-        [
-          results
-            .map(r => `>${r.metadata.accession}\n  ...sequence`)
-            .join('\n'),
-        ],
-        { type: 'text/x-fasta' },
-      ),
-    ),
-);
-
-const ProteinFastas = connect(
-  mapStateToProps,
-)(({ accession, taxId, data: { loading, payload } }) => {
-  if (loading || !payload) return null;
-  return (
-    <a
-      download={`${accession}-${taxId}.fasta`}
-      href={payloadToFastaBlobUrl(payload)}
-    >
-      FASTA
-    </a>
-  );
-});
-ProteinFastas.propTypes = {
-  taxId: T.string.isRequired,
-  data: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.object,
-  }).isRequired,
-};
-
-const ProteinFastasRenderer = taxId => {
-  const Wrapped = loadData(mapStateToUrlForProteinIDsFor(taxId))(ProteinFastas);
-  return <Wrapped taxId={taxId} />;
-};
-ProteinFastasRenderer.propTypes = {
-  taxId: T.string.isRequired,
-};
-
-const payloadToAccessionBlobUrl = createSelector(
-  payload => payload.results,
-  results =>
-    URL.createObjectURL(
-      new Blob([results.map(r => r.metadata.accession).join('\n')], {
-        type: 'text/plain',
-      }),
-    ),
-);
-
-const ProteinAccessions = connect(
-  mapStateToProps,
-)(({ accession, taxId, data: { loading, payload } }) => {
-  if (loading || !payload) return null;
-  return (
-    <a
-      download={`${accession}-${taxId}.txt`}
-      href={payloadToAccessionBlobUrl(payload)}
-    >
-      Accessions
-    </a>
-  );
-});
-ProteinAccessions.propTypes = {
-  taxId: T.string.isRequired,
-  data: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.object,
-  }).isRequired,
-};
-
-const ProteinAccessionsRenderer = taxId => {
-  const Wrapped = loadData(mapStateToUrlForProteinIDsFor(taxId))(
-    ProteinAccessions,
-  );
-  return <Wrapped taxId={taxId} />;
-};
-ProteinAccessionsRenderer.propTypes = {
-  taxId: T.string.isRequired,
-};
+const ProteinFastasRenderer = taxId =>
+  <ProteinFile taxId={taxId} type="FASTA" />;
 
 const payloadToProcessed = createSelector(
   payload => payload,
-  payload =>
+  (payload /*: {|[key: string]: number |} */) =>
     Object.entries(payload || {})
       .map(([taxId, count]) => ({ taxId, count }))
-      .sort(({ count: a }, { count: b }) => b - a),
+      .sort(({ count: a }, { count: b }) => +b - +a),
 );
 
 class SpeciesSub extends PureComponent {
@@ -215,7 +107,7 @@ class SpeciesSub extends PureComponent {
               defaultKey="proteinFastas"
               renderer={ProteinFastasRenderer}
             >
-              FASTA (not working yet)
+              FASTA
             </Column>
             <Column
               accessKey="taxId"
@@ -237,7 +129,7 @@ const mapStateToUrl = createSelector(
   ({ protocol, hostname, port, root }, description) => {
     const _description = {
       mainType: 'protein',
-      mainDB: 'uniprot',
+      mainDB: 'UniProt',
       focusType: description.mainType,
       focusDB: description.mainDB,
       focusAccession: description.mainAccession,
