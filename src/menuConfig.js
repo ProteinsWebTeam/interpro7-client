@@ -209,7 +209,7 @@ export const InterPro /*: Array<Object> */ = [
   {
     newTo: { description: { other: 'release_notes' } },
     icon: '0',
-    name: 'Release Notes',
+    name: 'Release\xa0Notes',
     iconClass: 'functional',
   },
   {

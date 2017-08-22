@@ -9,6 +9,7 @@ import { InterPro } from 'menuConfig';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import styles from './styles.css';
 
 const iconStyle = foundationPartial(fonts);
 
@@ -19,8 +20,8 @@ const InterproMenu = (
     children,
   } /*: {pathname: string, className?: string, includeSubMenus?: boolean, children?: any} */,
 ) =>
-  <nav>
-    <ul className={className}>
+  <nav className={styles['nav']}>
+    <ul className={`${className || ''} ${styles['interpro-menu']}`}>
       {children}
       {InterPro.map(
         ({ newTo, name, icon, iconClass = 'generic', activeClass, options }) =>

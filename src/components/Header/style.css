@@ -337,7 +337,3 @@
     opacity: 0;
   }
 }
-/*Navigation - remove icons*/
-.interpro-menu > li > a i {
-  display: none;
-}
