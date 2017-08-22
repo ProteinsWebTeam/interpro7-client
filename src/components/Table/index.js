@@ -99,7 +99,7 @@ const Table = ({
               </table>
             </div>
           </div>
-          <div className={f('row')}>
+          <div className={f('row', 'table-footer-container')}>
             <div className={f('columns')}>
               <div className={f('table-footer')}>
                 {pageSize &&

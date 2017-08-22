@@ -131,6 +131,12 @@ table.light .subheader {
   display: flex;
 }
 
+.table-footer-container {
+  position: sticky;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+}
+
 .table-footer {
   display: flex;
   justify-content: space-between;
