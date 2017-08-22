@@ -50,7 +50,7 @@ const MaskSvgIcons = () =>
   >
     <defs>
       <clipPath id="cut-off-center">
-        <rect x="33%" y="33%" width="70" height="70" />
+        <rect x="33%" y="37%" width="68" height="68" />
       </clipPath>
       <clipPath id="cut-off-bottom">
         <polygon points="0,68 68,0 68,68" />
