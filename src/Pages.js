@@ -59,7 +59,7 @@ const pages = new Set([
 ]);
 
 const Pages = ({ stuck, top, ...props } /*: Object */) =>
-  <main style={{ marginTop: stuck ? '198.75px' : 0 }}>
+  <main style={{ marginTop: stuck ? '174px' : 0 }}>
     <Switch
       {...props}
       indexRoute={() => null}
