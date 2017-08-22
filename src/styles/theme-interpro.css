@@ -2,20 +2,12 @@
   Colour palette: Interpro
 */
 
-a {
-  color: rgb(0, 112, 187);
-}
-
 a.label,
 .label,
 a:hover,
 a:focus,
 a:active {
   color: #2199e8;
-}
-
-a:visited {
-  color: rgb(0, 112, 187);
 }
 
 h1 {

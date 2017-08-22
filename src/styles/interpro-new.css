@@ -6,6 +6,14 @@ a:visited {
   border-bottom-width: 0;
 }
 
+main a {
+  color: rgb(0, 112, 187);
+}
+
+main a:visited {
+  color: rgb(0, 112, 187);
+}
+
 /*add some space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer not needed anymore?*/
 main {
   padding-top: 1rem;
