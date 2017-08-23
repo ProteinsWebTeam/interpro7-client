@@ -42,7 +42,7 @@ const defaultPlaceHolder = () => <div>Loading...</div>;
 export const createAsyncComponent = (
   importFn /* : function */,
   placeHolder,
-  displayName
+  displayName,
 ) => {
   let imported;
   return class AsyncComponent extends Component {
@@ -70,7 +70,9 @@ export const createAsyncComponent = (
       AsyncComponent.preload();
       this._moduleP = cancelable(imported);
       this._moduleP.promise
-        .then(module => this.setState({ Component: module.default || module }))
+        .then(module => {
+          if (module) this.setState({ Component: module.default || module });
+        })
         .catch(error => {
           if (!error.canceled) throw error;
         });
