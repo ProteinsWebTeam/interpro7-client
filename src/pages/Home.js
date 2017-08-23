@@ -20,11 +20,12 @@ import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
+import style from './style.css';
 
 import iscanLogo from 'images/logo_interproscan_ext.png';
 import idaLogo from 'images/logo_ida_100.png';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
 const SearchByText = createAsyncComponent(() =>
   import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
@@ -60,64 +61,82 @@ const MaskSvgIcons = () =>
 
 const InterproGraphic = () =>
   <svg viewBox="0 0 150 120">
-    <line x1="20" y1="0" x2="20" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="50" y1="0" x2="50" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="80" y1="0" x2="80" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="110" y1="0" x2="110" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="140" y1="0" x2="140" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="10" y1="0" x2="10" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="40" y1="0" x2="40" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="70" y1="0" x2="70" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="100" y1="0" x2="100" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="130" y1="0" x2="130" y2="130" strokeWidth="3" stroke="#cacaca" />
 
     <line
-      x1="20"
+      x1="10"
       y1="-100"
-      x2="20"
+      x2="10"
       y2="200"
       strokeLinecap="round"
       stroke="#abd6ba"
       strokeWidth="16"
     />
     <line
-      x1="50"
+      x1="40"
       y1="-100"
-      x2="50"
+      x2="40"
       y2="200"
       strokeLinecap="round"
       stroke="#2d7d95"
       strokeWidth="16"
     />
     <line
-      x1="80"
+      x1="70"
       y1="90"
-      x2="80"
+      x2="70"
       y2="200"
       strokeLinecap="round"
-      stroke="#2d7d95"
+      stroke="#1d91b6"
       strokeWidth="16"
     />
     <line
-      x1="80"
+      x1="70"
       y1="-100"
-      x2="80"
+      x2="70"
       y2="44"
       strokeLinecap="round"
       stroke="#abd6ba"
       strokeWidth="16"
     />
     <line
-      x1="110"
+      x1="100"
       y1="-100"
-      x2="110"
+      x2="100"
       y2="200"
       strokeLinecap="round"
-      stroke="#2d7d95"
+      stroke="#1d91b6"
       strokeWidth="16"
     />
     <line
-      x1="140"
+      x1="130"
       y1="-100"
-      x2="140"
+      x2="130"
       y2="60"
       strokeLinecap="round"
       stroke="#abd6ba"
+      strokeWidth="16"
+    />
+    <line
+      x1="130"
+      y1="86"
+      x2="130"
+      y2="86"
+      strokeLinecap="round"
+      stroke="burlywood"
+      strokeWidth="16"
+    />
+    <line
+      x1="130"
+      y1="106"
+      x2="130"
+      y2="106"
+      strokeLinecap="round"
+      stroke="burlywood"
       strokeWidth="16"
     />
   </svg>;
@@ -184,19 +203,17 @@ const Home = () =>
     <div className={f('row')}>
       <div className={f('columns', 'large-12')}>
         <div
-          className={'fig-container'}
+          className={f('fig-container', 'fig-proteins')}
           data-tooltip
           title="This is what InterPro does"
-        >
-          <InterproGraphic />
-        </div>
+        />
 
         <h3>Classification of protein families</h3>
 
         <Description
           title=""
           extraTextForButton="about InterPro"
-          heightToHide={100}
+          heightToHide={106}
           textBlocks={[
             `InterPro provides functional analysis of proteins by classifying them into
              families and predicting domains and important sites. We combine protein
