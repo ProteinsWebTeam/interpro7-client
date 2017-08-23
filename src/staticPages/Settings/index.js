@@ -79,16 +79,16 @@ CacheSettings.propTypes = {
   handleChange: T.func.isRequired,
 };
 
-const getStatusText = (loading, response) => {
+const getStatusText = (loading, ok) => {
   if (loading) return 'Unknown';
-  return response ? 'Reachable' : 'Unreachable';
+  return ok ? 'Reachable' : 'Unreachable';
 };
 
 const EndpointSettings = ({
   handleChange,
   category,
   endpointDetails: { hostname, port, root },
-  data: { loading, payload },
+  data: { loading, ok, status },
   children,
 }) =>
   <form data-category={category}>
@@ -131,11 +131,12 @@ const EndpointSettings = ({
           <output
             className={f('button', 'output', 'hollow', {
               secondary: loading,
-              success: !loading && payload,
-              alert: !loading && !payload,
+              success: !loading && ok,
+              alert: !loading && !ok,
             })}
+            title={`Status: ${status}`}
           >
-            {getStatusText(loading, payload)}
+            {getStatusText(loading, ok)}
           </output>
         </label>
       </div>
@@ -156,16 +157,12 @@ EndpointSettings.propTypes = {
   }),
 };
 
-const getUrlForEndpoint = createSelector(
-  // this one is just to memoize it
-  endpoint => endpoint,
-  endpoint =>
-    createSelector(
-      state => state.settings[endpoint],
-      ({ protocol, hostname, port, root }) =>
-        `${protocol}//${hostname}:${port}${root}`,
-    ),
-);
+const getUrlForEndpoint = endpoint =>
+  createSelector(
+    state => state.settings[endpoint],
+    ({ protocol, hostname, port, root }) =>
+      `${protocol}//${hostname}:${port}${root}`,
+  );
 
 const fetchOptions = { method: 'HEAD', cache: 'no-store', noCache: true };
 const APIEndpointSettings = loadData({

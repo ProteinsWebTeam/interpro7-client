@@ -7,7 +7,7 @@ import * as types from 'actions/types';
 // location
 export const goToNewLocation = (
   location /*: string | Location */,
-  replace /*: ?boolean */
+  replace /*: ?boolean */,
 ) => ({
   type: types.NEW_NEW_LOCATION,
   location,
@@ -105,6 +105,7 @@ export const loadedData = (key /*: string */, response /*: Object */) => ({
   key,
   payload: response.payload,
   status: response.status,
+  ok: response.ok,
 });
 
 export const progressData = (key /*: string */, progress /*: number */) => ({
