@@ -32,7 +32,7 @@ class ByMemberDatabase extends PureComponent {
     const { data: { payload } } = this.props;
     const counts = payload && payload.entries.member_databases;
     return (
-      <div>
+      <div className={f('md-list')}>
         <AnimatedEntry className={f('row')} element="div">
           {memberDB.map(({ name, newTo, type, title, version, apiType }) =>
             <div
