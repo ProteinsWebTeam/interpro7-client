@@ -224,10 +224,6 @@ a:hover.noline {
   border-bottom: 0 solid transparent;
 }
 /*****LOCAL BUTTONS + LINKS ***/
-/*Member database list*/
-.md-list a:not(.button) {
-  color: #0a0a0a;
-} /*all except font button*/
 
 /* MENU*/
 .horizontal.menu > li > a {
@@ -561,160 +557,12 @@ ul.chevron > li:before {
 }
 /*/Entry page - md info next title*/
 
-/*homepage gal*/
-.browse-by .column:hover {
-  background-color: #e4f3ff;
-}
-#content .browse-by .tabs-title a:hover,
-#content .entry-list .tabs-title a:hover,
-#content .browse-by .tabs-title a:focus,
-#content .entry-list .tabs-title a:focus {
-  border-bottom-width: 0;
-} /*remove dark line that appear on tabs*/
-#content .browse-by a.button:hover,
-#content .entry-list a.button:hover {
-  border: 1px solid transparent;
-} /*remove dark line that appear on button*/
-/*/homepage gal*/
-
-/*homepage figures*/
-.fig-container {
-  float: left;
-  width: 17%;
-  margin: 0 2em 1em 0;
-  overflow: hidden;
-}
-.fig-sqc {
-  background: url(../images/sqc.png) no-repeat -23% 136%;
-  background-size: 65%;
-  height: 16em;
-  width: 20em;
-  margin-bottom: -78px;
-  margin-top: 15px;
-}
-.fig-sqcbig {
-  background: url(../images/sqc.png) no-repeat 0% 0%;
-  background-size: 111%;
-  background-position-y: 74%;
-  background-position-x: 145%;
-  height: 16em;
-  width: 30em;
-  margin-bottom: -78px;
-  margin-top: 15px;
-}
-.fig-proteins {
-  background: url(../images/proteins.png) no-repeat 0% 0%;
-  background-size: 55%;
-  height: 16em;
-  width: 20em;
-  margin-bottom: -68px;
-}
-.fig-protban {
-  background: url(../images/backgrounds/protein3d_02.png) repeat 85% 9%;
-  background-size: 353%;
-  height: 16em;
-  width: 20em;
-  margin-bottom: -68px;
-}
-.fig-sqcban {
-  background: url(../images/backgrounds/composite_03.png) no-repeat 85% 9%;
-  background-size: 503%;
-  height: 16em;
-  width: 20em;
-  margin-bottom: -68px;
-}
-/*/homepage figures*/
-
 /*homepage components gal*/
 .species-list,
-.go-list,
-.md-list {
+.go-list {
   font-size: 80%;
 }
-.md-list .row {
-  display: flex;
-  flex-flow: row wrap;
-} /*temp replace the float css while update to latest foundation*/
-.md-list .column {
-  flex: 0 0 25%;
-  max-width: 25%;
-} /*temp replace the float css while update to latest foundation*/
-@media screen and (max-width: 40em) {
-  .md-list .column {
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
-}
-@media screen and (max-width: 20em) {
-  .md-list .column {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-}
-
-.species-list a:hover:not(.button),
-.go-list a:hover:not(.button),
-.md-list a:hover:not(.button) {
-  border-bottom: 0px deeppink solid;
-}
 /*/homepage components gal*/
-
-/*homepage entry-list component*/
-.entry-list .svg-container {
-  width: 5%;
-  margin-right: 0.8em;
-  padding-top: 4px;
-  float: left;
-} /*svg icon size*/
-.entry-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-size: 94%;
-}
-.list-vertical-scrol {
-  position: relative;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto; /*height: 378px;*/
-  margin-bottom: 1rem;
-}
-.entry-list .list-item {
-  display: flex;
-  flex-wrap: nowrap;
-}
-.entry-list .list-vertical-scrol ul li {
-  padding: 0.4em 0;
-  border-radius: 6px;
-}
-.entry-list .list-vertical-scrol ul li:hover {
-  background-color: #e4f3ff;
-}
-.entry-list .list-vertical-scrol a {
-  color: #0a0a0a;
-}
-.entry-list .md-small {
-  width: 29px;
-  float: left;
-}
-/*/homepage entry-list component*/
-
-/*homepage member database list component*/
-.md-list svg {
-  margin-bottom: -15px;
-  margin-top: -15px; /*temp reposition the view port without changing the coordinates of all svg*/
-}
-.md-list a h6 {
-  margin-bottom: 0;
-} /*remove space around title*/
-.md-list a.CATH-GENE3D h6 {
-  white-space: nowrap;
-} /*avoid  text collapse for cathgene*/
-.md-list small {
-  color: #0a0a0a;
-  font-weight: bold;
-}
-/*/homepage member database list component*/
 
 /*homepage species list component*/
 .species-list span:before {
