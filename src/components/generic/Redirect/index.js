@@ -1,11 +1,20 @@
 // @flow
-import {Component} from 'react';
+import { PureComponent } from 'react';
 import T from 'prop-types';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {goToNewLocation} from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
-const Redirect = class extends Component {
+/*:: type Props = {
+  goToNewLocation: function,
+  to: {
+    description: Object,
+    search: ?Object,
+    hash: ?string,
+  },
+}; */
+
+const Redirect = class extends PureComponent /*:: <Props> */ {
   static propTypes = {
     goToNewLocation: T.func.isRequired,
     to: T.shape({
@@ -24,4 +33,4 @@ const Redirect = class extends Component {
   }
 };
 
-export default connect(null, {goToNewLocation})(Redirect);
+export default connect(null, { goToNewLocation })(Redirect);

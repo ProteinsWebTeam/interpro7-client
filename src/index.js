@@ -1,5 +1,4 @@
 // @flow
-/* eslint-env node */
 // Polyfills
 import 'babel-polyfill';
 
@@ -10,6 +9,8 @@ import App from 'App';
 
 import config, { DEV, PERF } from 'config';
 import ready from 'utils/ready';
+
+import hmr from 'index-hmr';
 
 const schemaOrgManager = (...args) =>
   import(/* webpackChunkName: "schemaOrg" */ 'schema_org').then(
@@ -42,16 +43,8 @@ const main = async () => {
   // Main render function
   render(<App />, DOM_ROOT);
 
-  // This block enables HMR if needed
-  if (DEV && module.hot && typeof module.hot.accept === 'function') {
-    // If any change in App or its dependency tree
-    module.hot.accept('App', () => {
-      // Reloads App
-      const NextApp = require('App').default;
-      // Re-renders App
-      render(<NextApp />, DOM_ROOT);
-    });
-  }
+  // enables hot module reloading if needed
+  if (DEV) hmr(DOM_ROOT);
 };
 
 const handleError = e => {

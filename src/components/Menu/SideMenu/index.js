@@ -63,7 +63,13 @@ const mapStateToPropsForOldLink = createSelector(
 
 const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
 
-class SideMenu extends PureComponent {
+/*:: type Props = {
+  visible: boolean,
+  mainAccession: ?string,
+  closeSideNav: function,
+}; */
+
+class SideMenu extends PureComponent /*:: <Props> */ {
   static propTypes = {
     visible: T.bool.isRequired,
     mainAccession: T.string,

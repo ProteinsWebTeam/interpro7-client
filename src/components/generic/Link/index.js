@@ -44,7 +44,26 @@ const generateClassName = (
   return `${className || ''} ${activeClass}`;
 };
 
-class Link extends PureComponent {
+/*:: type Props = {
+  onClick: ?function,
+  location: {
+    description: Object,
+    search: Object,
+    hash: string,
+  },
+  href: ?string,
+  goToNewLocation: function,
+  target: ?string,
+  newTo: ?function | {
+    description: Object,
+    search: ?Object,
+    hash: ?string,
+  },
+  className: ?string,
+  activeClass: ?function | string,
+}; */
+
+class Link extends PureComponent /*:: <Props> */ {
   static propTypes = {
     onClick: T.func,
     location: T.shape({
@@ -101,7 +120,7 @@ class Link extends PureComponent {
       href,
       ...props
     } = this.props;
-    const nextLocation = getNextLocation(location, newTo);
+    const nextLocation = getNextLocation(location, newTo) || {};
     const _href = generateHref(nextLocation, href);
     const _className =
       generateClassName(className, activeClass, location, nextLocation, href) ||

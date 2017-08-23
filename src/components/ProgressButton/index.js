@@ -16,7 +16,14 @@ const RADIUS = 48;
 const STROKE_WIDTH = CENTER - RADIUS;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-class ProgressButton extends PureComponent {
+/*:: type Props = {
+  downloading: boolean,
+  success: boolean,
+  failed: boolean,
+  progress: number,
+}; */
+
+class ProgressButton extends PureComponent /*:: <Props> */ {
   static propTypes = {
     downloading: T.bool.isRequired,
     success: T.bool.isRequired,
