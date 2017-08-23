@@ -6,3 +6,59 @@
     opacity: 1;
   }
 }
+
+.md-list {
+  font-size: 80%;
+}
+
+.md-list .column:hover {
+  background-color: #e4f3ff;
+}
+
+.md-list small {
+  color: #0a0a0a;
+  font-weight: bold;
+}
+
+.md-list svg {
+  margin-bottom: -15px;
+  margin-top: -15px; /*temp reposition the view port without changing the coordinates of all svg*/
+}
+
+/*all except font button*/
+.md-list a:not(.button) {
+  color: #0a0a0a;
+}
+
+.md-list a h6 {
+  margin-bottom: 0;
+}
+
+/*avoid  text collapse for cathgene*/
+.md-list a.CATH-GENE3D h6 {
+  white-space: nowrap;
+}
+
+.md-list .row {
+  display: flex;
+  flex-flow: row wrap;
+} /*temp replace the float css while update to latest foundation*/
+
+.md-list .column {
+  flex: 0 0 25%;
+  max-width: 25%;
+} /*temp replace the float css while update to latest foundation*/
+
+@media screen and (max-width: 40em) {
+  .md-list .column {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+@media screen and (max-width: 20em) {
+  .md-list .column {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
