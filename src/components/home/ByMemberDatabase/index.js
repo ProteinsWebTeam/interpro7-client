@@ -17,11 +17,17 @@ import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
-import local from './styles.css';
+import local from '../styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
-class ByMemberDatabase extends PureComponent {
+/*:: type Props = {
+  data: {
+    payload: ?Object,
+  },
+}; */
+
+class ByMemberDatabase extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,

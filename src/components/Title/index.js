@@ -16,7 +16,7 @@ const formatter = new Intl.DateTimeFormat('en-UK', {
 
 // TODO: Not specific to here, maybe move that somewhere else?
 export const Time = (
-  { date, children } /*: {date: string, children?: Node} */,
+  { date, children } /*: {date: string, children?: string} */,
 ) =>
   <time dateTime={date} title={date}>
     {children || formatter.format(Date.parse(date))}

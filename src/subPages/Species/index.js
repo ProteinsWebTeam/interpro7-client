@@ -49,13 +49,20 @@ const ProteinFastasRenderer = taxId =>
 
 const payloadToProcessed = createSelector(
   payload => payload,
-  (payload /*: {|[key: string]: number |} */) =>
+  (payload /*: ?{|[key: string]: number |} */) =>
     Object.entries(payload || {})
       .map(([taxId, count]) => ({ taxId, count }))
       .sort(({ count: a }, { count: b }) => +b - +a),
 );
 
-class SpeciesSub extends PureComponent {
+/*:: type Props = {
+  data: {
+    loading: boolean,
+    payload: ?Object,
+  }
+}; */
+
+class SpeciesSub extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

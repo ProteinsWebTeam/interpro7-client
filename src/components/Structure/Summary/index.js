@@ -16,7 +16,16 @@ const embedStyle = { width: '100%', height: '50vh' };
 
 const webComponents = [];
 
-class SummaryStructure extends PureComponent {
+/*:: type Props = {
+  data: {
+    metadata: Object,
+  },
+  location: {
+    description: Object,
+  },
+}; */
+
+class SummaryStructure extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       metadata: T.object.isRequired,

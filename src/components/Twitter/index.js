@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import cancelable from 'utils/cancelable';
 import loadResource from 'utils/loadResource';
@@ -17,7 +17,7 @@ let bound = false;
 
 const noPadding = { padding: 0 };
 
-class Twitter extends Component {
+class Twitter extends PureComponent /*:: <{}> */ {
   /* ::
     _node: ?Element
     _twitterScript: ?{
