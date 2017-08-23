@@ -249,7 +249,7 @@ const Home = () =>
           <MaskSvgIcons />
 
           <Tabs>
-            <div title="by member database" className={f('md-list')}>
+            <div title="by member database" className={f('md-list-wrapper')}>
               <ByMemberDatabase />
             </div>
 
@@ -314,7 +314,7 @@ const Home = () =>
         </div>
       </div>
 
-      <div className={f('columns', 'entry-list')}>
+      <div className={f('columns')}>
         {
           // Browse by latest entries or most popular
         }
