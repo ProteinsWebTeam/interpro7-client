@@ -24,7 +24,7 @@ const colors = {
   panther: '#bfac92',
   pfam: '#6287b1',
   pirsf: '#dfafdf',
-  prints: '#71ce79',
+  prints: '#54c75f',
   prodom: '#8d99e4',
   profile: '#f69f74',
   prosite: '#f3c766',

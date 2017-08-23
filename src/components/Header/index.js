@@ -166,6 +166,7 @@ class Header extends PureComponent {
     stuck: T.bool.isRequired,
   };
 
+  // TODO: check why position:sticky banner in the page works just on top - pbm with container
   render() {
     const { stickyMenuOffset: offset, stuck } = this.props;
     return (
