@@ -1,0 +1,11 @@
+.species-list {
+  font-size: 80%;
+}
+
+.species-list .column:hover {
+  background-color: #e4f3ff;
+}
+
+.species-list span:before {
+  font-size: 520%;
+}
