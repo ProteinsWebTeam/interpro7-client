@@ -117,10 +117,13 @@
   left: 50%;
   z-index: 5;
 }
-.logo_col_info div {
-  height: 1em;
-  width: 0.5em;
+.logo_col_info {
   float: left;
+  margin: 0.3em 0.3em 0.3em 1em;
+  padding: 0.3em;
+  border: 1px solid #ccc;
+  display: none;
+  border-radius: 5px;
 }
 .logo_settings {
   display: none;

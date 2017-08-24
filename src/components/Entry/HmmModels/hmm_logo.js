@@ -11,9 +11,7 @@
 /* eslint-env node */
 /* eslint-disable no-param-reassign */
 
-import ActiveSitesAdder from './activesite_adder';
 import EasyScroller from './scroller';
-import classNames from 'classnames';
 import styles from './logo.css';
 import React from 'react';
 
@@ -812,11 +810,15 @@ function HMMLogo(element, options) {
       canvas.id = `canv_${id}`;
       canvas.classList.add(styles.canvas_logo);
       canvas.style.left = `${canv_width * id}px`;
+      canvas.setAttribute('width', width);
+      canvas.setAttribute('height', height);
+
       $(DOMid).append(
         `<canvas className=${styles.canvas_logo} id="canv_${id}"  height="${height}" width="${width}" style="left:${canv_width *
           id}px"></canvas>`,
       );
-      //DOMid.appendChild(canvas);
+
+      //DOMid.appendChild(canvas); //TODO remove the final reference to jquery above
       canvas = DOMid.querySelector(`#canv_${id}`);
     }
 
@@ -2042,10 +2044,10 @@ let hmm_logo = function(logoElement, options) {
         let hmm_logo = logo,
           header = '<tr>',
           tbody = '',
-          offset = (offset = {
+          offset = {
             top: this.offsetTop,
             left: this.offsetLeft,
-          }),
+          },
           x = parseInt(e.pageX - offset.left, 10),
           // get mouse position in the window
           window_position = e.pageX - this.parentNode.offsetLeft,
@@ -2113,7 +2115,7 @@ let hmm_logo = function(logoElement, options) {
           .data.delete_probs[col - 1]}</p><p>Insert Probability: ${logo.data
           .insert_probs[col - 1]}</p><p>Insert Length: ${logo.data
           .insert_lengths[col - 1]}</p></div>`;
-        column_info.innerHTML += info_tab;
+        column_info.appendChild(info_tab);
         const existing_column_info = logoElement.querySelector(
           '#logo_column_info',
         );
@@ -2146,7 +2148,7 @@ let hmm_logo = function(logoElement, options) {
     });
   } else {
     document.replaceChild(
-      getElementById('logo'),
+      document.querySelector('#logo'),
       document.querySelector('#no_canvas'),
     );
   }
