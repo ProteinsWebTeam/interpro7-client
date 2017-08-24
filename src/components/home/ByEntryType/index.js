@@ -30,7 +30,7 @@ const ByEntryType = ({ data: { payload } }) => {
       return out;
     }, {});
   return (
-    <div>
+    <div className={f('entry-type')}>
       <AnimatedEntry className={f('row')} element="div">
         {entryType.map(({ type, title, description }) =>
           <div
