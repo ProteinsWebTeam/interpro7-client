@@ -1,11 +1,11 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import foundation from 'styles/foundation';
 
-class CookieBanner extends Component /*:: <{}, { display: ?boolean }> */ {
+class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
   /* ::
     _banner: ?any
   */
@@ -13,7 +13,7 @@ class CookieBanner extends Component /*:: <{}, { display: ?boolean }> */ {
     if (document) {
       this.setState({
         // If cookies are already accepted, display -> false
-        display: !(document.cookie.match(/cookies-accepted=(true)/i) || [])[1],
+        display: !(document.cookie.match(/cookies-accepted=true/i) || [])[1],
       });
     }
   }
