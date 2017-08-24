@@ -256,7 +256,7 @@ const Home = () =>
         </div>
       </div>
 
-      <div className={f('columns')}>
+      <div className={f('columns', 'stat-by')}>
         {
           // Browse by latest entries or most popular
         }
