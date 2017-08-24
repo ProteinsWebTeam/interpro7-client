@@ -85,7 +85,7 @@ class ByLatestEntries extends PureComponent {
 
   render() {
     return (
-      <div className={f('entry-list')}>
+      <div title="Latest entries" className={f('entry-list')}>
         <div className={f('row')}>
           <div className={f('columns')}>
             <h5>
