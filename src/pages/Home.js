@@ -262,7 +262,7 @@ const Home = () =>
         }
         <div className={f('callout')} data-equalizer-watch>
           <Tabs>
-            <div title="Latest entries" className={f('entry-list')}>
+            <div title="Latest entries" className={f('entry-list-wrapper')}>
               <ByLatestEntries />
             </div>
             {
