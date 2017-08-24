@@ -67,7 +67,8 @@ export const memberDB = [
     to: 'entry/mobidblt',
     newTo: { description: { mainType: 'entry', mainDB: 'mobidblt' } },
     className: f('md-mo'),
-    title: `MobiDB offers a centralized resource for annotations of intrinsic protein disorder. The database features three levels of annotation: manually curated, indirect and predicted. The different sources present a clear tradeoff between quality and coverage. By combining them all into a consensus annotation, MobiDB aims at giving the best possible picture of the "disorder landscape" of a given protein of interest.`,
+    title:
+      'MobiDB offers a centralized resource for annotations of intrinsic protein disorder. The database features three levels of annotation: manually curated, indirect and predicted. The different sources present a clear tradeoff between quality and coverage. By combining them all into a consensus annotation, MobiDB aims at giving the best possible picture of the "disorder landscape" of a given protein of interest.',
     name: 'MOBIDB',
     version: '1.0',
     counter: 1,

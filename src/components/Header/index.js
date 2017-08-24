@@ -171,7 +171,7 @@ class Header extends PureComponent {
     const { stickyMenuOffset: offset, stuck } = this.props;
     return (
       <header
-        id={ebiGlobalStyles['masthead']}
+        id={ebiGlobalStyles.masthead}
         className={styleBundle('masthead')}
         style={styleForHeader(false && supportsSticky, offset, stuck)}
       >

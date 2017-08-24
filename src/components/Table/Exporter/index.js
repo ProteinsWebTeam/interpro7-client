@@ -10,7 +10,7 @@ const fPlus = foundationPartial(s, fonts);
 const colors = {
   gene3d: '#a88cc3',
   cdd: '#addc58',
-  hamap: '#2cd6d6' /*00e2e2*/,
+  hamap: '#2cd6d6' /* 00e2e2*/,
   mobidblt: '#d6dc94',
   panther: '#bfac92',
   pfam: '#6287b1',

@@ -20,7 +20,7 @@ const InterproMenu = (
     children,
   } /*: {pathname: string, className?: string, includeSubMenus?: boolean, children?: any} */,
 ) =>
-  <nav className={styles['nav']}>
+  <nav className={styles.nav}>
     <ul className={`${className || ''} ${styles['interpro-menu']}`}>
       {children}
       {InterPro.map(

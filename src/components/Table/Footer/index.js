@@ -25,96 +25,93 @@ const getPageLabels = (page, lastPage) => {
   return pages;
 };
 
-const Footer = ({ data, actualSize, pagination }) =>
-  /*: {data: Object, pagination: Object, actualSize: number} */
-  {
-    const page = parseInt(pagination.page || 1, 10);
-    const pageSize = parseInt(
-      pagination.page_size || config.pagination.pageSize,
-      10,
-    );
-    const lastPage = Math.ceil(actualSize / pageSize) || 1;
-    const pages = getPageLabels(page, lastPage);
+const Footer = ({ actualSize /*: number */, pagination /*: Object */ }) => {
+  const page = parseInt(pagination.page || 1, 10);
+  const pageSize = parseInt(
+    pagination.page_size || config.pagination.pageSize,
+    10,
+  );
+  const lastPage = Math.ceil(actualSize / pageSize) || 1;
+  const pages = getPageLabels(page, lastPage);
 
-    return (
-      <div className={f('pagination-box')}>
-        <ul
-          className={f('pagination', 'text-right')}
-          role="navigation"
-          aria-label="Pagination"
-        >
-          {page === 1
-            ? <li className={f('disabled')}>
-                Previous{' '}
-                <span className={f('show-for-sr')}>You're on page</span>
-              </li>
-            : <li>
-                <Link
-                  newTo={({ description, search, hash }) => ({
-                    description,
-                    search: {
-                      ...search,
-                      page: search.page - 1,
-                      page_size: pageSize,
-                      search: pagination.search,
-                    },
-                    hash,
-                  })}
-                >
-                  Previous
-                </Link>
-              </li>}
-          {pages.map(e => {
-            if (e === '…') {
-              return <li key={e} className={f('ellipsis')} />;
-            } else if (page === e) {
-              return (
-                <li key={e} className={f('current')}>
-                  <span className={f('show-for-sr')}>You're on page</span>
-                  {e}
-                </li>
-              );
-            }
+  return (
+    <div className={f('pagination-box')}>
+      <ul
+        className={f('pagination', 'text-right')}
+        role="navigation"
+        aria-label="Pagination"
+      >
+        {page === 1
+          ? <li className={f('disabled')}>
+              Previous <span className={f('show-for-sr')}>You're on page</span>
+            </li>
+          : <li>
+              <Link
+                newTo={({ description, search, hash }) => ({
+                  description,
+                  search: {
+                    ...search,
+                    page: search.page - 1,
+                    page_size: pageSize,
+                    search: pagination.search,
+                  },
+                  hash,
+                })}
+              >
+                Previous
+              </Link>
+            </li>}
+        {pages.map(e => {
+          if (e === '…') {
+            return <li key={e} className={f('ellipsis')} />;
+          } else if (page === e) {
             return (
-              <li key={e} className={page === e ? f('current') : ''}>
-                <Link
-                  newTo={({ description, search, hash }) => ({
-                    description,
-                    search: {
-                      ...search,
-                      page: e,
-                      page_size: pageSize,
-                      search: pagination.search,
-                    },
-                    hash,
-                  })}
-                >
-                  {e}
-                </Link>
+              <li key={e} className={f('current')}>
+                <span className={f('show-for-sr')}>You're on page</span>
+                {e}
               </li>
             );
-          })}
-          {page === lastPage
-            ? <li className={f('disabled')}>
-                Next <span className={f('show-for-sr')}>You're on page</span>
-              </li>
-            : <li>
-                <Link
-                  newTo={location => ({
-                    ...location,
-                    search: {
-                      ...location.search,
-                      page: (location.search.page || 1) + 1,
-                    },
-                  })}
-                >
-                  Next
-                </Link>
-              </li>}
-        </ul>
-      </div>
-    );
-  };
+          }
+          return (
+            <li key={e} className={page === e ? f('current') : ''}>
+              <Link
+                newTo={({ description, search, hash }) => ({
+                  description,
+                  search: {
+                    ...search,
+                    page: e,
+                    page_size: pageSize,
+                    search: pagination.search,
+                  },
+                  hash,
+                })}
+              >
+                {e}
+              </Link>
+            </li>
+          );
+        })}
+        {page === lastPage
+          ? <li className={f('disabled')}>
+              Next <span className={f('show-for-sr')}>You're on page</span>
+            </li>
+          : <li>
+              <Link
+                newTo={location => ({
+                  ...location,
+                  search: {
+                    ...location.search,
+                    page: (location.search.page || 1) + 1,
+                  },
+                })}
+              >
+                Next
+              </Link>
+            </li>}
+      </ul>
+    </div>
+  );
+};
 Footer.propTypes = {
   data: T.array,
   actualSize: T.number,

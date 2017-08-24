@@ -1,7 +1,6 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4] }]*/
 import React from 'react';
 import T from 'prop-types';
-import Link from 'components/generic/Link';
 
 import config from 'config';
 
@@ -16,7 +15,7 @@ const TotalNb = ({ data, actualSize, pagination, notFound }) => {
     10,
   );
   const index = (page - 1) * pageSize + 1;
-  const lastPage = Math.ceil(actualSize / pageSize) || 1;
+  // const lastPage = Math.ceil(actualSize / pageSize) || 1;
 
   let textLabel = 'Loading data';
   if (notFound) {

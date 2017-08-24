@@ -4,9 +4,8 @@ import ByMemberDatabase from 'components/home/ByMemberDatabase';
 import ByEntryType from 'components/home/ByEntryType';
 import BySpecies from 'components/home/BySpecies';
 import ByLatestEntries from 'components/home/ByLatestEntries';
-import { InterproSymbol } from 'components/Title';
 import Link from 'components/generic/Link';
-import { latests, GoList } from 'staticData/home';
+import { GoList } from 'staticData/home';
 import Tabs from 'components/Tabs';
 import { schedule } from 'timing-functions/src';
 import AsyncComponent, {
@@ -56,88 +55,6 @@ const MaskSvgIcons = () =>
         <polygon points="0,68 68,0 68,68" />
       </clipPath>
     </defs>
-  </svg>;
-
-const InterproGraphic = () =>
-  <svg viewBox="0 0 150 120">
-    <line x1="10" y1="0" x2="10" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="40" y1="0" x2="40" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="70" y1="0" x2="70" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="100" y1="0" x2="100" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="130" y1="0" x2="130" y2="130" strokeWidth="3" stroke="#cacaca" />
-
-    <line
-      x1="10"
-      y1="-100"
-      x2="10"
-      y2="200"
-      strokeLinecap="round"
-      stroke="#abd6ba"
-      strokeWidth="16"
-    />
-    <line
-      x1="40"
-      y1="-100"
-      x2="40"
-      y2="200"
-      strokeLinecap="round"
-      stroke="#2d7d95"
-      strokeWidth="16"
-    />
-    <line
-      x1="70"
-      y1="90"
-      x2="70"
-      y2="200"
-      strokeLinecap="round"
-      stroke="#1d91b6"
-      strokeWidth="16"
-    />
-    <line
-      x1="70"
-      y1="-100"
-      x2="70"
-      y2="44"
-      strokeLinecap="round"
-      stroke="#abd6ba"
-      strokeWidth="16"
-    />
-    <line
-      x1="100"
-      y1="-100"
-      x2="100"
-      y2="200"
-      strokeLinecap="round"
-      stroke="#1d91b6"
-      strokeWidth="16"
-    />
-    <line
-      x1="130"
-      y1="-100"
-      x2="130"
-      y2="60"
-      strokeLinecap="round"
-      stroke="#abd6ba"
-      strokeWidth="16"
-    />
-    <line
-      x1="130"
-      y1="86"
-      x2="130"
-      y2="86"
-      strokeLinecap="round"
-      stroke="burlywood"
-      strokeWidth="16"
-    />
-    <line
-      x1="130"
-      y1="106"
-      x2="130"
-      y2="106"
-      strokeLinecap="round"
-      stroke="burlywood"
-      strokeWidth="16"
-    />
   </svg>;
 
 const Home = () =>
