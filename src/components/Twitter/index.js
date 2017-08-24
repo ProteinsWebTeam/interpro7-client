@@ -52,8 +52,8 @@ class Twitter extends Component {
     return (
       <div className={f('expanded', 'row')}>
         <div className={f('columns')} style={noPadding}>
-          <div className={'jumbo-news'}>
-            <div className={'jumbo-news-container'}>
+          <div className={f('jumbo-news')}>
+            <div className={f('jumbo-news-container')}>
               <h3
                 className={f('icon', 'icon-socialmedia', 'icon-s2')}
                 data-icon="T"
@@ -65,7 +65,7 @@ class Twitter extends Component {
                   'nofooter noborders noheader noscrollbar transparent'
                 }
                 data-tweet-limit="1"
-                className="twitter-timeline"
+                className={f('twitter-timeline')}
                 href="https://twitter.com/InterProDB"
                 target="_blank"
                 rel="noopener"
