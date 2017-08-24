@@ -805,23 +805,29 @@ function HMMLogo(element, options) {
   }
 
   function attach_canvas(DOMid, height, width, id, canv_width) {
-    let canvas = $(DOMid).find(`#canv_${id}`);
+    let canvas = DOMid.querySelector(`#canv_${id}`);
 
-    if (!canvas.length) {
+    if (!canvas) {
+      canvas = document.createElement('canvas');
+      canvas.id = `canv_${id}`;
+      canvas.classList.add(styles.canvas_logo);
+      canvas.style.left = `${canv_width * id}px`;
       $(DOMid).append(
         `<canvas className=${styles.canvas_logo} id="canv_${id}"  height="${height}" width="${width}" style="left:${canv_width *
           id}px"></canvas>`,
       );
-      canvas = $(DOMid).find(`#canv_${id}`);
+      //DOMid.appendChild(canvas);
+      canvas = DOMid.querySelector(`#canv_${id}`);
     }
 
-    $(canvas).attr('width', width).attr('height', height);
+    canvas.setAttribute('width', width);
+    canvas.setAttribute('height', height);
 
     if (!canvasSupport()) {
-      canvas[0] = G_vmlCanvasManager.initElement(canvas[0]);
+      canvas = G_vmlCanvasManager.initElement(canvas);
     }
 
-    return canvas[0];
+    return canvas;
   }
 
   // the main render function that draws the logo based on the provided options.
@@ -1551,7 +1557,11 @@ function HMMLogo(element, options) {
     // with the new heights
     this.rendered = [];
     // update the y-axis
-    $(this.called_on).find('.logo_yaxis').remove();
+    for (let element of this.called_on.getElementsByClassNames(
+      styles.logo_yaxis,
+    )) {
+      element.remove();
+    }
     this.render_y_axis_label();
 
     // re-flow and re-render the content
@@ -1996,10 +2006,13 @@ let hmm_logo = function(logoElement, options) {
     logo_graphic.addEventListener('dblclick', function(e) {
       // need to get coordinates of mouse click
       let hmm_logo = logo,
-        offset = $(this).offset(),
+        offset = {
+          top: this.offsetTop,
+          left: this.offsetLeft,
+        },
         x = parseInt(e.pageX - offset.left, 10),
         // get mouse position in the window
-        window_position = e.pageX - $(this).parent().offset().left,
+        window_position = e.pageX - this.parentNode.offsetLeft,
         // get column number
         col = hmm_logo.columnFromCoordinates(x),
         // choose new zoom level and zoom in.
@@ -2024,14 +2037,18 @@ let hmm_logo = function(logoElement, options) {
 
     if (options.column_info) {
       logo_graphic.addEventListener('click', function(e) {
+        let info_tab = document.createElement('table');
+        info_tab.classList.add(styles.logo_col_info);
         let hmm_logo = logo,
-          info_tab = $('<table class="logo_col_info"></table>'),
           header = '<tr>',
           tbody = '',
-          offset = $(this).offset(),
+          offset = (offset = {
+            top: this.offsetTop,
+            left: this.offsetLeft,
+          }),
           x = parseInt(e.pageX - offset.left, 10),
           // get mouse position in the window
-          window_position = e.pageX - $(this).parent().offset().left,
+          window_position = e.pageX - this.parentNode.offsetLeft,
           // get column number
           col = hmm_logo.columnFromCoordinates(x),
           // clone the column data before reversal or the column gets messed
@@ -2063,7 +2080,7 @@ let hmm_logo = function(logoElement, options) {
         }
 
         header += '</tr>';
-        info_tab.append($(header));
+        info_tab.innerHTML = header;
 
         // add the data for each column
         for (i = 0; i < 5; i++) {
@@ -2088,32 +2105,33 @@ let hmm_logo = function(logoElement, options) {
           tbody += '</tr>';
         }
 
-        info_tab.append($(tbody));
+        info_tab.innerHTML += tbody;
 
-        $(options.column_info)
-          .empty()
-          .append(
-            $(
-              `<p> Column:${col}</p><div><p>Occupancy: ${logo.data.delete_probs[
-                col - 1
-              ]}</p><p>Insert Probability: ${logo.data.insert_probs[
-                col - 1
-              ]}</p><p>Insert Length: ${logo.data.insert_lengths[
-                col - 1
-              ]}</p></div>`,
-            ),
-          )
-          .append(info_tab)
-          .show();
+        let column_info = document.createElement('div');
+        column_info.id = 'logo_column_info';
+        column_info.innerHTML = `<p> Column:${col}</p><div><p>Occupancy: ${logo
+          .data.delete_probs[col - 1]}</p><p>Insert Probability: ${logo.data
+          .insert_probs[col - 1]}</p><p>Insert Length: ${logo.data
+          .insert_lengths[col - 1]}</p></div>`;
+        column_info.innerHTML += info_tab;
+        const existing_column_info = logoElement.querySelector(
+          '#logo_column_info',
+        );
+        if (existing_column_info) {
+          existing_column_info.remove();
+        }
+        logoElement.appendChild(column_info);
       });
     }
 
-    /*
-    document.addEventListener(`${this.attr('id')}.scrolledTo`, (e, left, top, zoom) => {
-      const hmm_logo = logo;
-      hmm_logo.render({ target: left });
-    });
-    */
+    document.addEventListener(
+      `${logoElement.id}.scrolledTo`,
+      (e, left, top, zoom) => {
+        const hmm_logo = logo;
+        hmm_logo.render({ target: left });
+      },
+    );
+
     document.addEventListener('keydown', e => {
       if (!e.ctrlKey) {
         if (e.which === 61 || e.which === 107) {
@@ -2127,7 +2145,10 @@ let hmm_logo = function(logoElement, options) {
       }
     });
   } else {
-    document.getElementById('logo').replaceWith($('#no_canvas').html());
+    document.replaceChild(
+      getElementById('logo'),
+      document.querySelector('#no_canvas'),
+    );
   }
 
   return logo;

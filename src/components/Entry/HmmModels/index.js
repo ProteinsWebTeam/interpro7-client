@@ -23,7 +23,7 @@ class LogoSection extends Component {
 
   componentDidMount() {
     let logo = document.getElementById('logo');
-    hmm_logo(logo, null);
+    hmm_logo(logo, { column_info: true });
   }
 
   shouldComponentUpdate() {
