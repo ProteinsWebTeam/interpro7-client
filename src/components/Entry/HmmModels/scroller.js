@@ -114,7 +114,7 @@ const $ = require('./jquery');
     }
   };
 })(
-  this,
+  window,
 ); /*
  * Scroller
  * http://github.com/zynga/scroller
@@ -969,7 +969,7 @@ let Scroller;
      * @param zoom {Number?null} Zoom level to go to
      */
     scrollTo(left, top, animate, zoom) {
-      $(document).trigger(`${this.options.eventTarget.attr('id')}.scrolledTo`, [
+      $(document).trigger(`${this.options.eventTarget.id}.scrolledTo`, [
         left,
         top,
         zoom,

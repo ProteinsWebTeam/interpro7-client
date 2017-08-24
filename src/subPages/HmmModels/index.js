@@ -15,7 +15,6 @@ const HmmModels = ({ data, maintype }) => {
 
   return (
     <div>
-      <h1>Subpage HMM</h1>
       <HmmModelSection logo={data.payload} />
     </div>
   );

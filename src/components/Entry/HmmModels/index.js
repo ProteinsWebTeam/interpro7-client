@@ -3,11 +3,10 @@
  */
 import React, { Component } from 'react';
 import T from 'prop-types';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import Link from 'components/generic/Link';
 import hmm_logo from './hmm_logo';
-
-const $ = require('./jquery');
 import styles from './logo.css';
 
 class LogoSection extends Component {
@@ -23,8 +22,8 @@ class LogoSection extends Component {
   }
 
   componentDidMount() {
-    var logo = $('#logo');
-    $('#logo').hmm_logo();
+    let logo = document.getElementById('logo');
+    hmm_logo(logo, null);
   }
 
   shouldComponentUpdate() {
@@ -42,10 +41,9 @@ class LogoSection extends Component {
 }
 
 const HmmModelSection = function(data) {
-  const cleafix_class = 'clearfix';
   return (
     <div className={styles.content}>
-      <div className={styles.logo_wrapper + ' ' + cleafix_class}>
+      <div className={classNames(styles.logo_wrapper, 'clearfix')}>
         <LogoSection data={data.logo} />
       </div>
     </div>

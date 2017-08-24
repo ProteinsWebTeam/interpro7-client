@@ -85,8 +85,24 @@
   background-size: 50px 50px;
   cursor: pointer;
 }
+.logo_xaxis {
+  display: block;
+  margin-left: 40px;
+}
+.xaxis_text {
+  width: 10em;
+  margin: 1em auto;
+}
 .logo_yaxis {
   position: absolute;
+  draggable: true;
+}
+.logo_wrapper {
+  background: #eee;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  padding: 0 1em;
+  margin: 1em 0;
 }
 .canvas_logo {
   position: absolute;
@@ -108,6 +124,42 @@
 }
 .logo_settings {
   display: none;
+}
+.logo_settings_switch {
+}
+.logo_scale {
+}
+.logo_ali_map {
+}
+.logo_zoomout {
+}
+.logo_zoomin {
+}
+.logo_color {
+}
+.logo_form {
+  margin-left: 39px;
+}
+.logo_form fieldset {
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 0.3em 1em;
+  padding: 0.3em;
+}
+.logo_position {
+}
+.logo_change {
+}
+.logo_controls {
+  position: absolute;
+  left: 3.1em;
+  top: 0;
+}
+.button {
+  border: 1px solid #999;
+}
+.close {
 }
 .aa_A div {
   background: #ff9966;
