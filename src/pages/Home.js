@@ -1,10 +1,9 @@
 import React from 'react';
-import T from 'prop-types';
 import Description from 'components/Description';
-import MemberSymbol from 'components/Entry/MemberSymbol';
 import ByMemberDatabase from 'components/home/ByMemberDatabase';
 import ByEntryType from 'components/home/ByEntryType';
 import BySpecies from 'components/home/BySpecies';
+import ByLatestEntries from 'components/home/ByLatestEntries';
 import { InterproSymbol } from 'components/Title';
 import Link from 'components/generic/Link';
 import { latests, GoList } from 'staticData/home';
@@ -51,7 +50,7 @@ const MaskSvgIcons = () =>
   >
     <defs>
       <clipPath id="cut-off-center">
-        <rect x="33%" y="37%" width="68" height="68" />
+        <rect x="33%" y="38%" width="68" height="68" />
       </clipPath>
       <clipPath id="cut-off-bottom">
         <polygon points="0,68 68,0 68,68" />
@@ -140,63 +139,6 @@ const InterproGraphic = () =>
       strokeWidth="16"
     />
   </svg>;
-
-const LatestEntry = ({ entry }) =>
-  // this should change depending on entry type
-  <li className={f('list-item')} data-tooltip title="Domain entry">
-    <div className={f('svg-container')}>
-      <InterproSymbol type={entry.type} className={f('icon-list')} />
-    </div>
-    <div className={f('list-body')}>
-      <Link
-        newTo={{
-          description: {
-            mainType: 'entry',
-            mainDB: 'InterPro',
-            mainAccession: entry.accession,
-          },
-        }}
-      >
-        <div className={f('list-title')}>
-          {entry.name}
-          <span>({entry.accession})</span> —{' '}
-          <i>{entry.counter} proteins matched</i>
-          <br />
-        </div>
-      </Link>
-      {entry.contributing.map(c =>
-        <div className={f('list-more')} key={c.accession}>
-          <MemberSymbol type={c.source_database} className={f('md-small')} />
-          <small>
-            {c.source_database}:
-            <Link
-              newTo={{
-                description: {
-                  mainType: 'entry',
-                  mainDB: 'interpro',
-                  mainMemberDB: c.source_database,
-                  mainMemberDBAccession: c.accession,
-                },
-              }}
-              className={f('list-sign')}
-            >
-              {c.accession}
-            </Link>{' '}
-            ({entry.contributing.length} contributing signature{entry.contributing.length > 1 ? 's' : ''})
-          </small>
-        </div>,
-      )}
-    </div>
-  </li>;
-LatestEntry.propTypes = {
-  entry: T.shape({
-    accession: T.string,
-    type: T.string,
-    name: T.string,
-    counter: T.number,
-    contributing: T.array,
-  }),
-};
 
 const Home = () =>
   <div>
@@ -321,32 +263,7 @@ const Home = () =>
         <div className={f('callout')} data-equalizer-watch>
           <Tabs>
             <div title="Latest entries" className={f('entry-list')}>
-              <div className={f('row')}>
-                <div className={f('columns')}>
-                  <h5>
-                    <small> Total : 29415 entries</small>
-                  </h5>
-                  <div className={f('list-vertical-scrol')}>
-                    <ul>
-                      {latests.map(e =>
-                        <LatestEntry entry={e} key={e.accession} />,
-                      )}
-                    </ul>
-                  </div>
-                  {
-                    // end list-vertical-scrol
-                  }
-                  <Link
-                    newTo={{ description: { mainType: 'entry' } }}
-                    className={f('button')}
-                  >
-                    View all entries
-                  </Link>
-                </div>
-              </div>
-              {
-                // end row
-              }
+              <ByLatestEntries />
             </div>
             {
               // end panel01
