@@ -108,7 +108,6 @@ class Link extends PureComponent /*:: <Props> */ {
     goToNewLocation(getNextLocation(location, newTo));
   };
 
-  // TODO: remove eslint ignore after complete refactoring
   render() {
     const {
       onClick,

@@ -23,6 +23,10 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 const BySpecies = ({ data: { payload } }) =>
   <AnimatedEntry className={f('row')} element="div">
     {// TODO: Include number of entries
+    // The result in the tab counts the number of proteins.
+    // This comes from a /proteins?group_by=tax_id
+    // A similar query but for entries needs to be supported in the API.
+    // Once there an update of this component is rquired
     speciesFeat.map(e =>
       <div
         className={f('column', 'small-3', 'medium-2', 'large-4', 'text-center')}

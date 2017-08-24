@@ -12,10 +12,6 @@ const StructureOnProtein = ({
   options: { baseSize = 10, offset = 30, niceRatio = 6 } = {},
 }) => {
   const protein = matches[0].protein;
-  // TODO: Define the format of the coordinates field, it should include coordinates
-  // in both entities and the length of the base one, eg a protein of 500aa maps
-  // the structure in 100 to 200, which corrspond to the coordinate 0-99 in the structure.
-  protein.length = protein.length || 500;
   const main = 'entry_protein_locations' in protein ? 'protein' : 'structure';
   return (
     <div className={style.svgContainer}>
