@@ -9,9 +9,8 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import theme from 'styles/theme-interpro.css';
-
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
+import local from './style.css';
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro, local);
 
 let bound = false;
 
