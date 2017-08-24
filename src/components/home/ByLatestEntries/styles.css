@@ -1,0 +1,37 @@
+.entry-list .svg-container {
+  width: 5%;
+  margin-right: 0.8em;
+  padding-top: 4px;
+  float: left;
+} /*svg icon size*/
+.entry-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 94%;
+}
+.list-vertical-scrol {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto; /*height: 378px;*/
+  margin-bottom: 1rem;
+}
+.entry-list .list-item {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.entry-list .list-vertical-scrol ul li {
+  padding: 0.4em 0;
+  border-radius: 6px;
+}
+.entry-list .list-vertical-scrol ul li:hover {
+  background-color: #e4f3ff;
+}
+.entry-list .list-vertical-scrol a {
+  color: #0a0a0a;
+}
+.entry-list .md-small {
+  width: 29px;
+  float: left;
+}
