@@ -110,7 +110,7 @@ class Description extends Component {
       heightToHide,
     } = this.props;
     return (
-      <div className={f('content')}>
+      <div className={f('desc-wrapper')}>
         <h4>
           {title}
         </h4>
@@ -140,7 +140,6 @@ class Description extends Component {
           ref={e => {
             this.moreButton = e;
           }}
-          style={{ marginTop: '1em' }}
         >
           Read {this.state.isOpen ? 'less' : 'more'} {extraTextForButton}
         </button>

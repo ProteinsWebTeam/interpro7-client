@@ -1,10 +1,9 @@
 import React from 'react';
-import T from 'prop-types';
 import Description from 'components/Description';
-import MemberSymbol from 'components/Entry/MemberSymbol';
 import ByMemberDatabase from 'components/home/ByMemberDatabase';
 import ByEntryType from 'components/home/ByEntryType';
 import BySpecies from 'components/home/BySpecies';
+import ByLatestEntries from 'components/home/ByLatestEntries';
 import { InterproSymbol } from 'components/Title';
 import Link from 'components/generic/Link';
 import { latests, GoList } from 'staticData/home';
@@ -20,11 +19,12 @@ import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
+import style from './style.css';
 
 import iscanLogo from 'images/logo_interproscan_ext.png';
 import idaLogo from 'images/logo_ida_100.png';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
 const SearchByText = createAsyncComponent(() =>
   import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
@@ -50,7 +50,7 @@ const MaskSvgIcons = () =>
   >
     <defs>
       <clipPath id="cut-off-center">
-        <rect x="33%" y="37%" width="68" height="68" />
+        <rect x="33%" y="38%" width="68" height="68" />
       </clipPath>
       <clipPath id="cut-off-bottom">
         <polygon points="0,68 68,0 68,68" />
@@ -60,143 +60,102 @@ const MaskSvgIcons = () =>
 
 const InterproGraphic = () =>
   <svg viewBox="0 0 150 120">
-    <line x1="20" y1="0" x2="20" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="50" y1="0" x2="50" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="80" y1="0" x2="80" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="110" y1="0" x2="110" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="140" y1="0" x2="140" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="10" y1="0" x2="10" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="40" y1="0" x2="40" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="70" y1="0" x2="70" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="100" y1="0" x2="100" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="130" y1="0" x2="130" y2="130" strokeWidth="3" stroke="#cacaca" />
 
     <line
-      x1="20"
+      x1="10"
       y1="-100"
-      x2="20"
+      x2="10"
       y2="200"
       strokeLinecap="round"
       stroke="#abd6ba"
       strokeWidth="16"
     />
     <line
-      x1="50"
+      x1="40"
       y1="-100"
-      x2="50"
+      x2="40"
       y2="200"
       strokeLinecap="round"
       stroke="#2d7d95"
       strokeWidth="16"
     />
     <line
-      x1="80"
+      x1="70"
       y1="90"
-      x2="80"
+      x2="70"
       y2="200"
       strokeLinecap="round"
-      stroke="#2d7d95"
+      stroke="#1d91b6"
       strokeWidth="16"
     />
     <line
-      x1="80"
+      x1="70"
       y1="-100"
-      x2="80"
+      x2="70"
       y2="44"
       strokeLinecap="round"
       stroke="#abd6ba"
       strokeWidth="16"
     />
     <line
-      x1="110"
+      x1="100"
       y1="-100"
-      x2="110"
+      x2="100"
       y2="200"
       strokeLinecap="round"
-      stroke="#2d7d95"
+      stroke="#1d91b6"
       strokeWidth="16"
     />
     <line
-      x1="140"
+      x1="130"
       y1="-100"
-      x2="140"
+      x2="130"
       y2="60"
       strokeLinecap="round"
       stroke="#abd6ba"
       strokeWidth="16"
     />
+    <line
+      x1="130"
+      y1="86"
+      x2="130"
+      y2="86"
+      strokeLinecap="round"
+      stroke="burlywood"
+      strokeWidth="16"
+    />
+    <line
+      x1="130"
+      y1="106"
+      x2="130"
+      y2="106"
+      strokeLinecap="round"
+      stroke="burlywood"
+      strokeWidth="16"
+    />
   </svg>;
-
-const LatestEntry = ({ entry }) =>
-  // this should change depending on entry type
-  <li className={f('list-item')} data-tooltip title="Domain entry">
-    <div className={f('svg-container')}>
-      <InterproSymbol type={entry.type} className={f('icon-list')} />
-    </div>
-    <div className={f('list-body')}>
-      <Link
-        newTo={{
-          description: {
-            mainType: 'entry',
-            mainDB: 'InterPro',
-            mainAccession: entry.accession,
-          },
-        }}
-      >
-        <div className={f('list-title')}>
-          {entry.name}
-          <span>({entry.accession})</span> —{' '}
-          <i>{entry.counter} proteins matched</i>
-          <br />
-        </div>
-      </Link>
-      {entry.contributing.map(c =>
-        <div className={f('list-more')} key={c.accession}>
-          <MemberSymbol type={c.source_database} className={f('md-small')} />
-          <small>
-            {c.source_database}:
-            <Link
-              newTo={{
-                description: {
-                  mainType: 'entry',
-                  mainDB: 'interpro',
-                  mainMemberDB: c.source_database,
-                  mainMemberDBAccession: c.accession,
-                },
-              }}
-              className={f('list-sign')}
-            >
-              {c.accession}
-            </Link>{' '}
-            ({entry.contributing.length} contributing signature{entry.contributing.length > 1 ? 's' : ''})
-          </small>
-        </div>,
-      )}
-    </div>
-  </li>;
-LatestEntry.propTypes = {
-  entry: T.shape({
-    accession: T.string,
-    type: T.string,
-    name: T.string,
-    counter: T.number,
-    contributing: T.array,
-  }),
-};
 
 const Home = () =>
   <div>
     <div className={f('row')}>
       <div className={f('columns', 'large-12')}>
         <div
-          className={'fig-container'}
+          className={f('fig-container', 'fig-proteins')}
           data-tooltip
           title="This is what InterPro does"
-        >
-          <InterproGraphic />
-        </div>
+        />
 
         <h3>Classification of protein families</h3>
 
         <Description
           title=""
           extraTextForButton="about InterPro"
-          heightToHide={100}
+          heightToHide={106}
           textBlocks={[
             `InterPro provides functional analysis of proteins by classifying them into
              families and predicting domains and important sites. We combine protein
@@ -232,7 +191,7 @@ const Home = () =>
           <MaskSvgIcons />
 
           <Tabs>
-            <div title="by member database" className={f('md-list')}>
+            <div title="by member database" className={f('md-list-wrapper')}>
               <ByMemberDatabase />
             </div>
 
@@ -297,39 +256,14 @@ const Home = () =>
         </div>
       </div>
 
-      <div className={f('columns', 'entry-list')}>
+      <div className={f('columns', 'stat-by')}>
         {
           // Browse by latest entries or most popular
         }
         <div className={f('callout')} data-equalizer-watch>
           <Tabs>
-            <div title="Latest entries" className={f('entry-list')}>
-              <div className={f('row')}>
-                <div className={f('columns')}>
-                  <h5>
-                    <small> Total : 29415 entries</small>
-                  </h5>
-                  <div className={f('list-vertical-scrol')}>
-                    <ul>
-                      {latests.map(e =>
-                        <LatestEntry entry={e} key={e.accession} />,
-                      )}
-                    </ul>
-                  </div>
-                  {
-                    // end list-vertical-scrol
-                  }
-                  <Link
-                    newTo={{ description: { mainType: 'entry' } }}
-                    className={f('button')}
-                  >
-                    View all entries
-                  </Link>
-                </div>
-              </div>
-              {
-                // end row
-              }
+            <div title="Latest entries" className={f('entry-list-wrapper')}>
+              <ByLatestEntries />
             </div>
             {
               // end panel01
