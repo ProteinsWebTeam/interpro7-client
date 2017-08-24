@@ -1,0 +1,23 @@
+/*entry page - go term etiquette*/
+a.go-terms,
+a.goterm:focus {
+  cursor: pointer;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+a.go-terms:hover {
+  border-bottom: 1px #666 solid;
+}
+
+.bp {
+  background-color: #058dc7;
+}
+.mf {
+  background-color: #50b432;
+}
+.cc {
+  background-color: #ed561b;
+}
+
+/*/entry page - go term etiquette*/
