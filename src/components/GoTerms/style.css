@@ -1,13 +1,13 @@
 /*entry page - go term etiquette*/
 a.go-terms,
-a.goterm:focus {
+a.go-terms:focus {
   cursor: pointer;
-  color: #666;
+  color: #222;
   font-size: 0.9rem;
 }
 
 a.go-terms:hover {
-  border-bottom: 1px #666 solid;
+  border-bottom: 1px #222 solid;
 }
 
 .bp {
