@@ -17,9 +17,10 @@ import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
-import local from '../styles.css';
+import byX from '../styles.css';
+import local from './styles.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, byX, local);
 
 const ByEntryType = ({ data: { payload } }) => {
   const counts =
@@ -30,7 +31,7 @@ const ByEntryType = ({ data: { payload } }) => {
       return out;
     }, {});
   return (
-    <div>
+    <div className={f('entry-type')}>
       <AnimatedEntry className={f('row')} element="div">
         {entryType.map(({ type, title, description }) =>
           <div

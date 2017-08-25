@@ -115,13 +115,13 @@ const Home = () =>
             {
               // panel2 - by entry type
             }
-            <div title="by entry type" className={f('entry-type')}>
+            <div title="by entry type" className={f('entry-type-wrapper')}>
               <ByEntryType />
             </div>
             {
               // panel 3 - by species
             }
-            <div title="by species" className={f('species-list')}>
+            <div title="by species" className={f('species-list-wrapper')}>
               <BySpecies />
             </div>
             {

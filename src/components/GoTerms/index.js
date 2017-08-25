@@ -6,8 +6,9 @@ import AnimatedEntry from 'components/AnimatedEntry';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import ipro from 'styles/interpro-new.css';
+import local from './style.css';
 import { foundationPartial } from 'styles/foundation';
-const f = foundationPartial(ebiStyles, ipro);
+const f = foundationPartial(ebiStyles, ipro, local);
 
 const getDefaultPayload = () => ({
   'Biological Process': [],
@@ -36,24 +37,24 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
       <div className={f('row')}>
         {Object.entries(_terms).map(([key, values]) =>
           <div key={key} className={f('medium-6', 'large-4', 'columns')}>
-            <h5>
+            <span className={f(key)}>
               {key.replace('_', ' ')}
-            </h5>
+            </span>
             <AnimatedEntry duration={500} className={f('no-bullet')}>
               {values && values.length
                 ? values.map(({ identifier, name }) =>
                     <li key={identifier}>
                       <GoLink
                         id={identifier}
-                        className={f('label', 'go', key)}
-                        title={identifier}
+                        className={f('go-terms')}
+                        title={`${name} (${identifier})`}
                       >
                         {name || identifier}
                       </GoLink>
                     </li>,
                   )
                 : <li>
-                    <span className={f('secondary', 'label')}>None</span>
+                    <span style={{ fontSize: '0.9rem' }}>None</span>
                   </li>}
             </AnimatedEntry>
           </div>,

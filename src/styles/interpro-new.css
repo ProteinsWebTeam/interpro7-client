@@ -35,9 +35,11 @@ textarea::placeholder {
 .tabs-panel.is-active {
   display: block;
 }
+
 button {
   cursor: pointer;
 } /*used for tabs*/
+
 /****************************** END Override EBI  global**********************/
 
 /******************************Local style***************************************/
@@ -131,6 +133,14 @@ button {
 /******************************BANNER*********************************/
 .masthead h1 span {
   font-size: 41%;
+}
+
+/*************************
+*cross components features*
+**************************/
+.browse-by .button,
+.stat-by .button {
+  margin: 0;
 }
 
 /***** LOCAL BUTTONS  + LINKS*****/
@@ -345,18 +355,6 @@ a:hover.noline {
   font-size: 30px;
 } /*icon size and position*/
 
-/*solve bug offset title with sticky*/
-.anchor {
-  display: block;
-  position: relative;
-  width: 0;
-  height: 0;
-  z-index: -1;
-  visibility: hidden;
-  left: 0;
-  top: -84px; /*change depending on banner width*/
-}
-
 /*Foundation sticky*/
 /*transform logo*/
 .masthead.is-stuck h1 {
@@ -567,17 +565,10 @@ ul.chevron > li:before {
 /*/Entry page - md info next title*/
 
 /*homepage components gal*/
-.species-list,
 .go-list {
   font-size: 80%;
 }
 /*/homepage components gal*/
-
-/*homepage species list component*/
-.species-list span:before {
-  font-size: 520%;
-}
-/*/homepage species list component*/
 
 /*homepage Go list component*/
 .go-list span.bullet-icon {
@@ -586,56 +577,32 @@ ul.chevron > li:before {
 }
 /*/homepage Go list component*/
 
-/*homepage entry type list component*/
-.entry-type .svg-container {
-  width: 60%;
-  margin: 0 auto;
-  float: none;
+/*to move on GOTerms/style.css - temp not working*/
+.bp-title,
+.mc-title,
+.cc-title,
+.Cellular,
+.Biological,
+.Molecular {
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
 }
-/*/homepage entry type list component*/
-
-/*homepage twit component*/
-.jumbo-news {
-  text-align: center;
-  background-color: #eee;
-  padding: 2em 0 1em 0;
+.cc-title,
+.Cellular {
+  background-color: rgb(251, 220, 208);
 }
-.jumbo-news-container {
-  padding: 0;
-  color: #454545;
-  font-size: 130%;
-  width: 38%;
-  margin: 0 auto;
-
-  @nest & > h3 {
-    font-size: 270%;
-  }
-
-  @nest & > iframe {
-    opacity: 0;
-    transform: translateX(50%);
-    transition-property: opacity, transform;
-    transition-duration: 750ms;
-    transition-timing-function: ease-in-out;
-  }
+.bp-title,
+.Biological {
+  background-color: rgb(194, 230, 236);
 }
-/*/homepage twit component*/
-
-/*entry page - go term etiquette*/
-a.go {
-  cursor: pointer;
-  color: white;
+.mc-title,
+.Molecular {
+  background-color: rgb(229, 245, 215);
 }
-.biological_process {
-  background-color: #058dc7;
-}
-.molecular_function {
-  background-color: #50b432;
-}
-.cellular_component {
-  background-color: #ed561b;
-}
-/*/entry page - go term etiquette*/
+/*temp to move on GOTerms/style.css - not working*/
 
 /*back to top button*/
 #back-top {
@@ -738,9 +705,6 @@ a.go {
     float: none;
     margin: 0 auto;
   }
-  .anchor {
-    top: -144px;
-  } /*change anchor position as no sticky for small screens*/
 }
 
 @media screen and (max-width: 20em) {

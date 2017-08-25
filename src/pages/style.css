@@ -1,6 +1,5 @@
 @import "../styles/timing.css";
 /************************************home.js************************************/
-
 /*homepage figures - temp while there is a specific component*/
 .fig-container {
   float: left;
@@ -37,7 +36,6 @@
   width: 13rem;
   filter: hue-rotate(36deg) contrast(110%) brightness(141%);
 }
-/*/homepage figures*/
 /* Small screen only */
 @media screen and (max-width: 39.9375em) {
   .fig-container {
@@ -47,6 +45,7 @@
     float: none;
   }
 }
+/*/homepage figures*/
 /************************************entry.js************************************/
 
 .with-data {

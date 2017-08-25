@@ -1,0 +1,37 @@
+.species-list {
+  font-size: 80%;
+}
+
+.species-list .column:hover {
+  background-color: #e4f3ff;
+}
+
+.species-list span:before {
+  font-size: 520%;
+}
+
+/*temp replace the float css while update to latest foundation*/
+.species-list .row {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.species-list .column {
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+
+@media screen and (max-width: 40em) {
+  .species-list .column {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+@media screen and (max-width: 20em) {
+  .species-list .column {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+/*/temp replace the float css while update to latest foundation*/
