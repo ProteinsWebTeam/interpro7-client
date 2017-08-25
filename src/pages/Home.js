@@ -1,30 +1,34 @@
 import React from 'react';
-import Description from 'components/Description';
-import ByMemberDatabase from 'components/home/ByMemberDatabase';
-import ByEntryType from 'components/home/ByEntryType';
-import BySpecies from 'components/home/BySpecies';
-import ByLatestEntries from 'components/home/ByLatestEntries';
-import Link from 'components/generic/Link';
-import { GoList } from 'staticData/home';
-import Tabs from 'components/Tabs';
-import { schedule } from 'timing-functions/src';
+
+// Components
 import AsyncComponent, {
   createAsyncComponent,
 } from 'utilityComponents/AsyncComponent';
+import Link from 'components/generic/Link';
+import Tabs from 'components/Tabs';
+import Description from 'components/Description';
 
+// Functions
+import { schedule } from 'timing-functions/src';
+
+// Style
 import { foundationPartial } from 'styles/foundation';
-
+// CSS
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import style from './style.css';
 
+// Images
 import iscanLogo from 'images/logo_interproscan_ext.png';
 import idaLogo from 'images/logo_ida_100.png';
 
+// Bind css with style object
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
+// Generate async components
+// Search box
 const SearchByText = createAsyncComponent(() =>
   import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
 );
@@ -33,6 +37,22 @@ const IPScanSearch = createAsyncComponent(() =>
 );
 const IPScanStatus = createAsyncComponent(() =>
   import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus'),
+);
+// Browse by X box
+const ByMemberDatabase = createAsyncComponent(() =>
+  import(/* webpackChunkName: "by-member-database" */ 'components/home/ByMemberDatabase'),
+);
+const ByEntryType = createAsyncComponent(() =>
+  import(/* webpackChunkName: "by-entry-type" */ 'components/home/ByEntryType'),
+);
+const BySpecies = createAsyncComponent(() =>
+  import(/* webpackChunkName: "by-species" */ 'components/home/BySpecies'),
+);
+const ByLatestEntries = createAsyncComponent(() =>
+  import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByLatestEntries'),
+);
+const ByGOTerms = createAsyncComponent(() =>
+  import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms'),
 );
 
 const MaskSvgIcons = () =>
@@ -108,66 +128,17 @@ const Home = () =>
           <MaskSvgIcons />
 
           <Tabs>
-            <div title="by member database" className={f('md-list-wrapper')}>
+            <div title="by member database">
               <ByMemberDatabase />
             </div>
-
-            {
-              // panel2 - by entry type
-            }
-            <div title="by entry type" className={f('entry-type-wrapper')}>
+            <div title="by entry type">
               <ByEntryType />
             </div>
-            {
-              // panel 3 - by species
-            }
-            <div title="by species" className={f('species-list-wrapper')}>
+            <div title="by species">
               <BySpecies />
             </div>
-            {
-              // panel4- By Go terms
-            }
             <div title="by GO terms" className={f('go-list')}>
-              <div className={f('row')}>
-                {GoList.map(e =>
-                  <div
-                    className={f(
-                      'columns',
-                      'medium-3',
-                      'large-3',
-                      'text-center',
-                    )}
-                    key={e.title}
-                  >
-                    <a href="#" data-tooltip title={e.description}>
-                      <span
-                        style={{ color: e.color }}
-                        className={f('small', 'bullet-icon')}
-                        data-tooltip
-                        title={e.category}
-                      >
-                        &bull;
-                      </span>
-                      <h6>
-                        {e.title}&nbsp;
-                        <span
-                          className={f('small', 'icon', 'icon-generic')}
-                          data-icon="i"
-                          data-tooltip
-                          title={e.description}
-                        />
-                      </h6>
-                      <p>
-                        {e.counterD} entries <br />
-                        <small>({e.counterS} proteins)</small>
-                      </p>
-                    </a>
-                  </div>,
-                )}
-              </div>
-              <Link href="interpro7/browse/Goterms" className={f('button')}>
-                View all Go terms
-              </Link>
+              <ByGOTerms />
             </div>
           </Tabs>
         </div>
@@ -179,20 +150,14 @@ const Home = () =>
         }
         <div className={f('callout')} data-equalizer-watch>
           <Tabs>
-            <div title="Latest entries" className={f('entry-list-wrapper')}>
+            <div title="Latest entries">
               <ByLatestEntries />
             </div>
-            {
-              // end panel01
-            }
             <div title="Featured">
               <div className={f('row')}>
                 <div className={f('columns')}>Featured: Under development</div>
               </div>
             </div>
-            {
-              // end panel02
-            }
             <div title="Most Popular">
               <div className={f('row')}>
                 <div className={f('columns')}>
@@ -201,9 +166,6 @@ const Home = () =>
               </div>
             </div>
           </Tabs>
-          {
-            // end anotherexample-tabs
-          }
         </div>
         {
           // end callout

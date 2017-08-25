@@ -1,15 +1,19 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import MemberSymbol from 'components/Entry/MemberSymbol';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import { InterproSymbol } from 'components/Title';
+
+import AnimatedEntry from 'components/AnimatedEntry';
 import Link from 'components/generic/Link';
+import MemberSymbol from 'components/Entry/MemberSymbol';
+
+import { InterproSymbol } from 'components/Title';
 import { latests } from 'staticData/home';
 
 import loadData from 'higherOrder/loadData';
 
 import { foundationPartial } from 'styles/foundation';
+
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -91,14 +95,12 @@ class ByLatestEntries extends PureComponent {
             <h5>
               <small> Total : 29415 entries</small>
             </h5>
-            <div className={f('list-vertical-scrol')}>
-              <ul>
+            <div className={f('list-vertical-scroll')}>
+              <AnimatedEntry>
+                >
                 {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
-              </ul>
+              </AnimatedEntry>
             </div>
-            {
-              // end list-vertical-scrol
-            }
             <Link
               newTo={{ description: { mainType: 'entry' } }}
               className={f('button')}
