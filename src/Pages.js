@@ -21,6 +21,9 @@ const Protein = createAsyncComponent(() =>
 const Structure = createAsyncComponent(() =>
   import(/* webpackChunkName: "structure-page" */ 'pages/Structure'),
 );
+const Organism = createAsyncComponent(() =>
+  import(/* webpackChunkName: "structure-page" */ 'pages/Organism'),
+);
 
 // Static pages
 const Search = createAsyncComponent(() =>
@@ -50,6 +53,7 @@ const pages = new Set([
   { value: 'entry', component: Entry },
   { value: 'protein', component: Protein },
   { value: 'structure', component: Structure },
+  { value: 'organism', component: Organism },
   { value: 'search', component: Search },
   { value: 'about', component: About },
   { value: 'browse', component: Browse },

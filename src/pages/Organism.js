@@ -6,8 +6,6 @@ import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
 import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
-import ColorHash from 'color-hash/lib/color-hash';
 
 import Table, {
   Column,
@@ -15,8 +13,6 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
-import ProteinListFilters from 'components/Protein/ProteinListFilters';
 
 import classname from 'classnames/bind';
 import pageStyle from './style.css';
@@ -24,9 +20,6 @@ const ps = classname.bind(pageStyle);
 
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
-
-const SVG_WIDTH = 100;
-const colorHash = new ColorHash();
 
 const propTypes = {
   data: T.shape({
@@ -40,13 +33,7 @@ const propTypes = {
   match: T.string,
 };
 
-const defaultPayload = {
-  proteins: {
-    uniprot: null,
-    reviewed: null,
-    unreviewed: null,
-  },
-};
+const defaultPayload = {};
 
 const Overview = ({ data: { payload = defaultPayload } }) =>
   <ul className={styles.card}>
@@ -74,16 +61,9 @@ const List = ({
       results: [],
     };
   }
-  const maxLength = _payload.results.reduce(
-    (max, result) => Math.max(max, (result.metadata || result).length),
-    0,
-  );
   return (
     <div className={f('row')}>
-      <MemberDBTabs />
-
-      <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-        <ProteinListFilters />
+      <div className={f('columns')}>
         <hr />
         <Table
           dataTable={_payload.results}
@@ -119,17 +99,17 @@ const List = ({
                   description: {
                     mainType: location.description.mainType,
                     mainDB: location.description.mainDB,
-                    mainAccession: accession,
+                    mainAccession: `${accession}`,
                   },
                 })}
               >
                 {accession}
               </Link>}
           >
-            Accession
+            TaxID
           </Column>
           <Column
-            accessKey="name"
+            accessKey="full_name"
             renderer={(
               name /*: string */,
               { accession } /*: {accession: string} */,
@@ -140,7 +120,7 @@ const List = ({
                   description: {
                     mainType: location.description.mainType,
                     mainDB: location.description.mainDB,
-                    mainAccession: accession,
+                    mainAccession: `${accession}`,
                   },
                 })}
               >
@@ -148,45 +128,6 @@ const List = ({
               </Link>}
           >
             Name
-          </Column>
-          <Column
-            accessKey="source_database"
-            renderer={(db /*: string */) =>
-              <Link
-                newTo={location => ({
-                  ...location,
-                  description: {
-                    mainType: location.description.mainType,
-                    mainDB: location.description.mainDB,
-                  },
-                })}
-              >
-                {db}
-              </Link>}
-          >
-            Source Database
-          </Column>
-          <Column accessKey="source_organism.fullname">Species</Column>
-          <Column
-            accessKey="length"
-            renderer={(length /*: number */, row) =>
-              <div
-                title={`${length} amino-acids`}
-                style={{
-                  width: `${length / maxLength * SVG_WIDTH}%`,
-                  padding: '0.2rem',
-                  backgroundColor: colorHash.hex(row.accession),
-                  borderRadius: '0.2rem',
-                  textAlign: 'start',
-                  overflowX: 'hidden',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'clip',
-                }}
-              >
-                {length} amino-acids
-              </div>}
-          >
-            Length
           </Column>
         </Table>
       </div>
@@ -196,17 +137,14 @@ const List = ({
 List.propTypes = propTypes;
 
 const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'),
+  import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
 );
-const StructureAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
-);
-const EntryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
-);
-const DomainAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
-);
+// const StructureAsync = createAsyncComponent(() =>
+//   import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
+// );
+// const EntryAsync = createAsyncComponent(() =>
+//   import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
+// );
 
 const SummaryComponent = ({ data: { payload }, location }) =>
   <SummaryAsync data={payload} location={location} />;
@@ -217,11 +155,12 @@ SummaryComponent.propTypes = {
   location: T.object.isRequired,
 };
 
-const pages = new Set([
-  { value: 'structure', component: StructureAsync },
-  { value: 'entry', component: EntryAsync },
-  { value: 'domain_architecture', component: DomainAsync },
-]);
+const pages = new Set(
+  [
+    // { value: 'structure', component: StructureAsync },
+    // { value: 'entry', component: EntryAsync },
+  ],
+);
 const Summary = props => {
   const { data: { loading, payload } } = props;
   if (loading || !payload.metadata) return <div>Loading…</div>;
@@ -244,7 +183,7 @@ Summary.propTypes = {
   location: T.object.isRequired,
 };
 
-const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
+const acc = /(UP\d{9})|(\d+)|(all)/i;
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props =>
   <Switch
@@ -256,7 +195,7 @@ const InnerSwitch = props =>
     catchAll={List}
   />;
 
-const Protein = props =>
+const Organism = props =>
   <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
     <Switch
       {...props}
@@ -265,10 +204,8 @@ const Protein = props =>
       catchAll={InnerSwitch}
     />
   </div>;
-Protein.propTypes = {
+Organism.propTypes = {
   isStale: T.bool.isRequired,
 };
 
-export default loadData((...args) =>
-  getUrlForApi(...args).replace('domain_architecture', 'entry'),
-)(Protein);
+export default loadData()(Organism);

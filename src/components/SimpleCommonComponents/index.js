@@ -1,19 +1,25 @@
 // @flow
-import React, {createElement} from 'react';
+import React, { createElement } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 
-import {TaxLink, PDBeLink, UniProtLink} from 'components/ExtLink';
+import { TaxLink, PDBeLink, UniProtLink } from 'components/ExtLink';
 
 export const Name = (
-  {name: {name, short}, accession}
-  /*: {name: {name: string, short: ?string}, accession: string} */
-) => (
+  {
+    name: { name, short },
+    accession,
+  } /*: {name: {name: string, short: ?string}, accession: string} */,
+) =>
   <div>
-    <h3>{name} ({accession})</h3>
-    {short && <p style={{color: 'gray'}}>Short name: {short}</p>}
-  </div>
-);
+    <h3>
+      {name} ({accession})
+    </h3>
+    {short &&
+      <p style={{ color: 'gray' }}>
+        Short name: {short}
+      </p>}
+  </div>;
 Name.propTypes = {
   name: T.shape({
     short: T.string,
@@ -27,26 +33,24 @@ const extOriginDBLookup = {
     nicerName: 'PDBe',
     component: PDBeLink,
   },
-  swissprot: {
-    nicerName: 'SwissProt',
+  reviewed: {
+    nicerName: 'reviewed',
     component: UniProtLink,
   },
-  trembl: {
-    nicerName: 'TrEMBL',
+  unreviewed: {
+    nicerName: 'unreviewed',
     component: UniProtLink,
   },
 };
 
 export const ExtOriginDB = (
-  {source, accession}/*: {source: string, accession: string | number} */
+  { source, accession } /*: {source: string, accession: string | number} */,
 ) => {
   const desc = extOriginDBLookup[source.toLowerCase()];
   if (!desc) return null;
-  return createElement(
-    desc.component,
-    {id: accession},
-    [`(${desc.nicerName || source} external link)`]
-  );
+  return createElement(desc.component, { id: accession }, [
+    `(${desc.nicerName || source} external link)`,
+  ]);
 };
 ExtOriginDB.propTypes = {
   source: T.string.isRequired,
@@ -54,9 +58,8 @@ ExtOriginDB.propTypes = {
 };
 
 export const OriginDB = (
-  {source, accession}
-  /*: {source: string, accession: string | number} */
-) => (
+  { source, accession } /*: {source: string, accession: string | number} */,
+) =>
   <p>
     Source DB:{' '}
     <Link
@@ -69,21 +72,23 @@ export const OriginDB = (
       })}
     >
       {source}
-    </Link> <ExtOriginDB source={source} accession={accession} />
-  </p>
-);
+    </Link>{' '}
+    <ExtOriginDB source={source} accession={accession} />
+  </p>;
 OriginDB.propTypes = {
   source: T.string.isRequired,
   accession: T.oneOfType([T.string, T.number]).isRequired,
 };
 
 export const SourceOrganism = (
-  {taxid, name}/*: {taxid: number, name: string} */
-) => (
+  { taxid, name } /*: {taxid: number, name: string} */,
+) =>
   <p>
-    Source Organism: <TaxLink id={taxid}>{name} ({taxid})</TaxLink>
-  </p>
-);
+    Source Organism:{' '}
+    <TaxLink id={taxid}>
+      {name} ({taxid})
+    </TaxLink>
+  </p>;
 SourceOrganism.propTypes = {
   taxid: T.number.isRequired,
   name: T.string.isRequired,

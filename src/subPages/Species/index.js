@@ -7,6 +7,8 @@ import { stringify as qsStringify } from 'query-string';
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
 import ProteinFile from 'subPages/Species/ProteinFile';
+import Metadata from 'wrappers/Metadata';
+import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
@@ -81,7 +83,15 @@ class SpeciesSub extends PureComponent /*:: <Props> */ {
             <Column
               accessKey="taxId"
               renderer={taxId =>
-                <Link href={`http://www.uniprot.org/taxonomy/${taxId}`}>
+                <Link
+                  newTo={{
+                    description: {
+                      mainType: 'organism',
+                      mainDB: 'taxonomy',
+                      mainAccession: taxId,
+                    },
+                  }}
+                >
                   {taxId}
                 </Link>}
             >
@@ -92,16 +102,22 @@ class SpeciesSub extends PureComponent /*:: <Props> */ {
               defaultKey="organism"
               renderer={taxId => {
                 const value = lut.get(taxId);
-                if (!value) return null;
                 return (
                   <span>
-                    {value.icon &&
+                    {value &&
+                      value.icon &&
                       <span
                         className={f('icon', 'icon-species')}
                         data-icon={value.icon}
                       />}
                     &nbsp;
-                    {value.name}
+                    <Metadata
+                      endpoint="organism"
+                      db="taxonomy"
+                      accession={taxId}
+                    >
+                      <TaxIdOrName />
+                    </Metadata>
                   </span>
                 );
               }}

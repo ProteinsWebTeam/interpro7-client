@@ -103,7 +103,7 @@ const Title = (
   } /*: {
     metadata: {
       name: { name: string, short: ?string },
-      accession: string,
+      accession: string | number,
       source_database: string,
       type: string,
       gene?: string,
@@ -124,7 +124,7 @@ const Title = (
         </div>}
       <Helmet>
         <title>
-          {metadata.accession}
+          {metadata.accession.toString()}
         </title>
       </Helmet>
       <h3>

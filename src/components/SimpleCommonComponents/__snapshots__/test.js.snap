@@ -58,7 +58,8 @@ exports[`Simple Common Components <Name /> should render name information 2`] = 
 
 exports[`Simple Common Components <SourceOrganism /> should render source organism information 1`] = `
 <p>
-  Source Organism: 
+  Source Organism:
+   
   <TaxLink
     id={12345}
   >

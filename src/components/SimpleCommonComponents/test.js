@@ -49,7 +49,7 @@ describe('Simple Common Components', () => {
   describe.skip('<OriginDB />', () => {
     test('should render origin database information', () => {
       const fixtureTuples = [
-        ['protein', 'trembl', 'A0JUS0'],
+        ['protein', 'unreviewed', 'A0JUS0'],
         ['entry', 'interpro', 'IPR000001'],
         ['structure', 'pdb', '9xim'],
       ];
