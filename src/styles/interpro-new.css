@@ -641,38 +641,10 @@ ul.chevron > li:before {
 
 /*animation*/
 .anim {
-  -webkit-transition: all .3s; /* Safari */
-  -moz-transition: all .3s;
-  -o-transition: all .3s;
-  -ms-transition: all .3s;
   transition: all .3s;
 }
 .animtxt {
   transition: font 0.3s ease;
-}
-@-webkit-keyframes bg-shift {
-  0% {
-    background-position: 0px;
-  }
-  100% {
-    background-position: 800px;
-  }
-}
-@-moz-keyframes bg-shift {
-  0% {
-    background-position: 0px;
-  }
-  100% {
-    background-position: 800px;
-  }
-}
-@-ms-keyframes bg-shift {
-  0% {
-    background-position: 0px;
-  }
-  100% {
-    background-position: 800px;
-  }
 }
 /*/animation*/
 

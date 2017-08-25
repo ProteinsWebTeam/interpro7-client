@@ -86,12 +86,15 @@ class Sequence extends PureComponent {
           </div>
           <div className={f('large-2', 'columns')}>
             <Link
-              className={f('button')}
+              className={f('button', 'hollow', 'hmmer-link')}
               href="https://www.ebi.ac.uk/Tools/hmmer/search/phmmer"
               onClick={this._handleClick}
               target="_blank"
             >
-              Search selection in Hmmer
+              <div className={f('hmmer-shape', 'yellow')} />
+              <div className={f('hmmer-shape', 'red')} />
+              <div className={f('hmmer-shape', 'blue')} />
+              <span>Search selection with HMMER website</span>
             </Link>
           </div>
         </div>
