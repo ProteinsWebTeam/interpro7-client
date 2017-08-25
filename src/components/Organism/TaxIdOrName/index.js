@@ -15,7 +15,8 @@ class TaxIdOrName extends PureComponent {
       (data &&
         data.payload &&
         data.payload.metadata &&
-        data.payload.metadata.scientific_name) ||
+        data.payload.metadata.name &&
+        data.payload.metadata.name.name) ||
       accession;
     const newTo = {
       description: {

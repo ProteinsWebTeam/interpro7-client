@@ -90,6 +90,9 @@ BySpecies.propTypes = {
   data: T.shape({
     payload: T.object,
   }).isRequired,
+  dataEntry: T.shape({
+    payload: T.object,
+  }).isRequired,
 };
 
 const mapStateToUrl = endpoint =>
