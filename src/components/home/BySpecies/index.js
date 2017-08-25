@@ -21,7 +21,7 @@ import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, byX, local);
 
-const BySpecies = ({ data: { payload } }) =>
+const BySpecies = ({ data: { payload }, dataEntry: { payload: payloadE } }) =>
   <div className={f('species-list')}>
     <AnimatedEntry className={f('row')} element="div">
       {// TODO: Include number of entries
@@ -40,33 +40,47 @@ const BySpecies = ({ data: { payload } }) =>
           )}
           key={e.tax_id}
         >
-          <Link
-            newTo={location => ({
-              description: {
-                mainType: 'protein',
-                mainDB: 'uniprot',
-              },
-              search: {
-                ...location.search,
-                tax_id: e.tax_id,
-              },
-              hash: location.hash,
-            })}
-          >
-            <span
-              style={{ color: e.color }}
-              className={f('small', 'icon', 'icon-species')}
-              data-icon={e.icon}
-              data-tooltip
-            />
-            <h6>
-              {e.title}
-            </h6>
-            <p>
+          <span
+            style={{ color: e.color }}
+            className={f('small', 'icon', 'icon-species')}
+            data-icon={e.icon}
+            data-tooltip
+          />
+          <h6>
+            {e.title}
+          </h6>
+          <p>
+            <Link
+              newTo={location => ({
+                description: {
+                  mainType: 'entry',
+                  mainDB: 'interpro',
+                  // TODO: uncomment when the client supports organism as an endpoint
+                  // focusType: 'organism',
+                  // focusDB: 'taxonomy',
+                  // focusAccession: e.tax_id,
+                },
+                hash: location.hash,
+              })}
+            >
+              {payloadE && payloadE[e.tax_id] ? payloadE[e.tax_id] : '...'}{' '}
+              entries
+            </Link>
+            <br />
+            <Link
+              newTo={location => ({
+                description: { mainType: 'protein', mainDB: 'uniprot' },
+                search: {
+                  ...location.search,
+                  tax_id: e.tax_id,
+                },
+                hash: location.hash,
+              })}
+            >
               {payload && payload[e.tax_id] ? payload[e.tax_id] : '...'}{' '}
               proteins
-            </p>
-          </Link>
+            </Link>
+          </p>
         </div>,
       )}
     </AnimatedEntry>
@@ -78,16 +92,20 @@ BySpecies.propTypes = {
   }).isRequired,
 };
 
-const mapStateToUrl = createSelector(
-  state => state.settings.api,
-  ({ protocol, hostname, port, root }) =>
-    format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}/protein`,
-      query: { group_by: 'tax_id' },
-    }),
-);
+const mapStateToUrl = endpoint =>
+  createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}/${endpoint}`,
+        query: { group_by: 'tax_id' },
+      }),
+  );
 
-export default loadData(mapStateToUrl)(BySpecies);
+export default loadData({
+  getUrl: mapStateToUrl('entry'),
+  propNamespace: 'Entry',
+})(loadData(mapStateToUrl('protein'))(BySpecies));
