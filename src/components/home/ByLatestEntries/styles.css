@@ -10,7 +10,7 @@
   margin: 0;
   font-size: 94%;
 }
-.list-vertical-scrol {
+.list-vertical-scroll {
   position: relative;
   width: 100%;
   overflow-x: hidden;
@@ -21,14 +21,14 @@
   display: flex;
   flex-wrap: nowrap;
 }
-.entry-list .list-vertical-scrol ul li {
+.entry-list .list-vertical-scroll ul li {
   padding: 0.4em 0;
   border-radius: 6px;
 }
-.entry-list .list-vertical-scrol ul li:hover {
+.entry-list .list-vertical-scroll ul li:hover {
   background-color: #e4f3ff;
 }
-.entry-list .list-vertical-scrol a {
+.entry-list .list-vertical-scroll a {
   color: #0a0a0a;
 }
 .entry-list .md-small {

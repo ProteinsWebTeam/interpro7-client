@@ -97,7 +97,6 @@ class ByLatestEntries extends PureComponent {
             </h5>
             <div className={f('list-vertical-scroll')}>
               <AnimatedEntry>
-                >
                 {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
               </AnimatedEntry>
             </div>
