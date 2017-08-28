@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EBIHeader /> should render 1`] = `
+<header
+  className="clearfix masthead-black-bar"
+  id="masthead-black-bar"
+>
+  <nav
+    className="row"
+  >
+    <ul
+      className="menu"
+      id="global-nav"
+    >
+      <li
+        className="home-mobile"
+      >
+        <a
+          href="//www.ebi.ac.uk"
+          rel="noopener"
+        />
+      </li>
+      <li
+        className="home"
+      >
+        <a
+          href="//www.ebi.ac.uk"
+          rel="noopener"
+        >
+          EMBL-EBI
+        </a>
+      </li>
+      <li
+        className="services active"
+      >
+        <a
+          href="//www.ebi.ac.uk/services"
+          rel="noopener"
+        >
+          Services
+        </a>
+      </li>
+      <li
+        className="research"
+      >
+        <a
+          href="//www.ebi.ac.uk/research"
+          rel="noopener"
+        >
+          Research
+        </a>
+      </li>
+      <li
+        className="training"
+      >
+        <a
+          href="//www.ebi.ac.uk/training"
+          rel="noopener"
+        >
+          Training
+        </a>
+      </li>
+      <li
+        className="about"
+      >
+        <a
+          href="//www.ebi.ac.uk/about"
+          rel="noopener"
+        >
+          About us
+        </a>
+      </li>
+      <li
+        className="float-right show-for-medium embl-selector"
+        style={
+          Object {
+            "flexGrow": 1,
+          }
+        }
+      >
+        <Connect(_EmblButton) />
+      </li>
+    </ul>
+  </nav>
+</header>
+`;

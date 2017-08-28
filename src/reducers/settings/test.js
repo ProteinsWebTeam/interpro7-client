@@ -1,4 +1,4 @@
-import reducer, { getDefaultSettings } from './index';
+import reducer, { getDefaultSettings } from '.';
 import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
 
 describe('reducer for settings', () => {

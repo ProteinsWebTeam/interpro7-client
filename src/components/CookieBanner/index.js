@@ -72,7 +72,12 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
             </a>.
           </span>
           <button
-            style={{ fontWeight: 'bold', padding: '0.5em' }}
+            style={{
+              fontWeight: 'bold',
+              padding: '0.5em',
+              color: '#fff',
+              float: 'right',
+            }}
             onClick={this.handleClick}
           >
             ×

@@ -83,7 +83,7 @@
     "moduleNameMapper": {
       "config.yml$": "<rootDir>/__mocks__/configMock.js",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$": "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy"
+      "\\.(css|less|scss)$": "identity-obj-proxy"
     },
     "moduleDirectories": [
       "node_modules",

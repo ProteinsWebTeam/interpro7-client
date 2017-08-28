@@ -9,7 +9,7 @@ export const Name = (
   {
     name: { name, short },
     accession,
-  } /*: {name: {name: string, short: ?string}, accession: string} */,
+  } /*: {name: {name: string, short?: string}, accession: string} */,
 ) =>
   <div>
     <h3>

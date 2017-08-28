@@ -1,4 +1,4 @@
-import reducer from './index';
+import reducer from '.';
 import { ADD_TOAST, REMOVE_TOAST } from 'actions/types';
 
 describe('reducer for toast messages', () => {

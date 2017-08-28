@@ -1,4 +1,4 @@
-import parseValueFromInput from './index';
+import parseValueFromInput from '.';
 
 describe('action creator helper function to extract value from input', () => {
   let input;

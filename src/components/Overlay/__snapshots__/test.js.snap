@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Overlay /> should render as invisible 1`] = `
+<div
+  className="overlay"
+  onClick={[Function]}
+/>
+`;
+
+exports[`<Overlay /> should render as visible 1`] = `
+<div
+  className="overlay visible"
+  onClick={[Function]}
+/>
+`;

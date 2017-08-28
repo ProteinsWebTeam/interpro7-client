@@ -1,0 +1,233 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EMBLDropdown /> should render as invisible 1`] = `
+<div
+  className="masthead-black-bar"
+>
+  <div
+    className="dropdown-pane bottom embl-dropdown"
+    id="embl-dropdown"
+  >
+    <p>
+      EMBL-EBI in Hinxton is one of six EMBL locations across Europe.
+      <br />
+      <a
+        className="small readmore"
+        href="https://www.ebi.ac.uk/about"
+        rel="noopener"
+      >
+        More about EMBL-EBI
+      </a>
+    </p>
+    <h6>
+      Connect to another EMBL location
+    </h6>
+    <div
+      className="row small-collapse clearfix padding-bottom-large"
+    >
+      <div
+        className="columns small-5 padding-bottom-medium"
+      >
+        <a
+          href="https://www.embl.de/"
+          rel="noopener"
+        >
+          Heidelberg
+        </a>
+        <div
+          className="small"
+        >
+          Main Laboratory
+        </div>
+      </div>
+      <div
+        className="columns small-7 padding-bottom-medium"
+      >
+        <a
+          href="http://www.embl-barcelona.es/"
+          rel="noopener"
+        >
+          Barcelona
+        </a>
+        <div
+          className="small"
+        >
+          Tissue biology and disease modelling
+        </div>
+      </div>
+      <div
+        className="columns small-5 padding-bottom-medium"
+      >
+        <a
+          href="https://www.embl.fr/"
+          rel="noopener"
+        >
+          Grenoble
+        </a>
+        <div
+          className="small"
+        >
+          Structural Biology
+        </div>
+      </div>
+      <div
+        className="columns small-7 padding-bottom-medium"
+      >
+        <a
+          href="https://www.embl-hamburg.de/"
+          rel="noopener"
+        >
+          Hamburg
+        </a>
+        <div
+          className="small"
+        >
+          Structural Biology
+        </div>
+      </div>
+      <div
+        className="columns small-5 padding-bottom-medium"
+      >
+        <a
+          href="https://www.embl.it/"
+          rel="noopener"
+        >
+          Rome
+        </a>
+        <div
+          className="small"
+        >
+          Epigenetics and neurology
+        </div>
+      </div>
+      <div
+        className="columns small-7 padding-bottom-medium"
+      >
+        <a
+          className="readmore"
+          href="http://embl.org/"
+          rel="noopener"
+        >
+          More about EMBL
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<EMBLDropdown /> should render as visible 1`] = `
+<div
+  className="masthead-black-bar"
+>
+  <div
+    className="dropdown-pane bottom embl-dropdown is-open"
+    id="embl-dropdown"
+  >
+    <p>
+      EMBL-EBI in Hinxton is one of six EMBL locations across Europe.
+      <br />
+      <a
+        className="small readmore"
+        href="https://www.ebi.ac.uk/about"
+        rel="noopener"
+      >
+        More about EMBL-EBI
+      </a>
+    </p>
+    <h6>
+      Connect to another EMBL location
+    </h6>
+    <div
+      className="row small-collapse clearfix padding-bottom-large"
+    >
+      <div
+        className="columns small-5 padding-bottom-medium"
+      >
+        <a
+          href="https://www.embl.de/"
+          rel="noopener"
+        >
+          Heidelberg
+        </a>
+        <div
+          className="small"
+        >
+          Main Laboratory
+        </div>
+      </div>
+      <div
+        className="columns small-7 padding-bottom-medium"
+      >
+        <a
+          href="http://www.embl-barcelona.es/"
+          rel="noopener"
+        >
+          Barcelona
+        </a>
+        <div
+          className="small"
+        >
+          Tissue biology and disease modelling
+        </div>
+      </div>
+      <div
+        className="columns small-5 padding-bottom-medium"
+      >
+        <a
+          href="https://www.embl.fr/"
+          rel="noopener"
+        >
+          Grenoble
+        </a>
+        <div
+          className="small"
+        >
+          Structural Biology
+        </div>
+      </div>
+      <div
+        className="columns small-7 padding-bottom-medium"
+      >
+        <a
+          href="https://www.embl-hamburg.de/"
+          rel="noopener"
+        >
+          Hamburg
+        </a>
+        <div
+          className="small"
+        >
+          Structural Biology
+        </div>
+      </div>
+      <div
+        className="columns small-5 padding-bottom-medium"
+      >
+        <a
+          href="https://www.embl.it/"
+          rel="noopener"
+        >
+          Rome
+        </a>
+        <div
+          className="small"
+        >
+          Epigenetics and neurology
+        </div>
+      </div>
+      <div
+        className="columns small-7 padding-bottom-medium"
+      >
+        <a
+          className="readmore"
+          href="http://embl.org/"
+          rel="noopener"
+        >
+          More about EMBL
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

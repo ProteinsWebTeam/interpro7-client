@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 
 import styles from './styles.css';
 
-class LoadingBar extends PureComponent {
+export class LoadingBar extends PureComponent {
   /* ::
     props: {
       progress: number,

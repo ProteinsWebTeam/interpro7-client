@@ -1,4 +1,4 @@
-import reducer, { getDefaultDescription } from './index';
+import reducer, { getDefaultDescription } from '.';
 import { NEW_PROCESSED_NEW_LOCATION } from 'actions/types';
 
 describe('reducer for location description', () => {

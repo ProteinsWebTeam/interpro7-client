@@ -11,7 +11,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 
-class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
+export class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
   static propTypes = {
     visible: T.bool.isRequired,
   };

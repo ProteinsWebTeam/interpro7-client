@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: [1, {ignore: [12345]}]*/
+// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
@@ -7,6 +7,8 @@ import { Name, ExtOriginDB, OriginDB, SourceOrganism } from '.';
 const renderer = new ShallowRenderer();
 
 describe('Simple Common Components', () => {
+  const exampleTaxID = 12345;
+
   describe('<Name />', () => {
     test('should render name information', () => {
       renderer.render(
@@ -28,7 +30,7 @@ describe('Simple Common Components', () => {
         'trembl',
         'TrEMBL',
       ];
-      for (const accession of ['accession', 12345]) {
+      for (const accession of ['accession', exampleTaxID]) {
         for (const [source] of sourceComponentTuples) {
           renderer.render(
             <ExtOriginDB source={source} accession={accession} />,
@@ -68,7 +70,9 @@ describe('Simple Common Components', () => {
 
   describe('<SourceOrganism />', () => {
     test('should render source organism information', () => {
-      renderer.render(<SourceOrganism taxid={12345} name="organism name" />);
+      renderer.render(
+        <SourceOrganism taxid={exampleTaxID} name="organism name" />,
+      );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
     });
   });

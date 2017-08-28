@@ -1,5 +1,5 @@
+// @flow
 /* eslint react/jsx-key: 0 */
-
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 

@@ -1,4 +1,4 @@
-import reducer from './index';
+import reducer from '.';
 import { TOGGLE_EMBL_MAP_NAV, CLOSE_EVERYTHING } from 'actions/types';
 
 describe('reducer for EMBL map nav open state', () => {

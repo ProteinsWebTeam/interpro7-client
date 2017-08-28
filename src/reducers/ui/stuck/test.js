@@ -1,4 +1,4 @@
-import reducer from './index';
+import reducer from '.';
 import { STUCK, UNSTUCK } from 'actions/types';
 
 describe('reducer for header stickyness', () => {

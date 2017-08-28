@@ -1,4 +1,4 @@
-import reducer, { alreadyLoadingError } from './index';
+import reducer, { alreadyLoadingError } from '.';
 import {
   LOADING_DATA,
   LOADED_DATA,

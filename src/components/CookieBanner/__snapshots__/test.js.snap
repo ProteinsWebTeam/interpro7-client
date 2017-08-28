@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CookieBanner /> should render 1`] = `
+<AnimatedEntry
+  animateSelf={true}
+  delay={0}
+  duration={250}
+  element="div"
+  itemDelay={25}
+  keyframes={
+    Object {
+      "opacity": Array [
+        0,
+        1,
+      ],
+      "transform": Array [
+        "translateY(100%)",
+        "translateY(0)",
+      ],
+    }
+  }
+  style={
+    Object {
+      "background": "rgba(0, 0, 0, 0.85)",
+      "bottom": 0,
+      "color": "#eee",
+      "padding": "0.75em",
+      "position": "fixed",
+      "width": "100vw",
+      "zIndex": 101,
+    }
+  }
+>
+  <div
+    className="row"
+  >
+    <span
+      style={
+        Object {
+          "flex": 1,
+          "marginRight": "2em",
+        }
+      }
+    >
+      This website uses cookies. By continuing to browse this site, you are agreeing to the use of our site cookies. To find out more, see our
+       
+      <a
+        href="https://www.ebi.ac.uk/about/terms-of-use"
+        rel="noopener"
+        style={
+          Object {
+            "borderBottom": "1px dotted",
+            "color": "#f8f8f8",
+          }
+        }
+        target="_blank"
+      >
+        Terms of Use
+      </a>
+      .
+    </span>
+    <button
+      onClick={[Function]}
+      style={
+        Object {
+          "color": "#fff",
+          "float": "right",
+          "fontWeight": "bold",
+          "padding": "0.5em",
+        }
+      }
+    >
+      ×
+    </button>
+  </div>
+</AnimatedEntry>
+`;

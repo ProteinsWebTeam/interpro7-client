@@ -1,4 +1,4 @@
-import reducer from './index';
+import reducer from '.';
 import { NEW_PROCESSED_NEW_LOCATION } from 'actions/types';
 
 describe('reducer for location hash', () => {

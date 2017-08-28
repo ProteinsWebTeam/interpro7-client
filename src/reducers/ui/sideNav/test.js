@@ -1,4 +1,4 @@
-import reducer from './index';
+import reducer from '.';
 import { TOGGLE_SIDE_NAV, CLOSE_EVERYTHING } from 'actions/types';
 
 describe('reducer for side menu open state', () => {
