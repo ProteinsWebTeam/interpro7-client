@@ -2,6 +2,7 @@ npm-debug.log
 package-lock.json
 node_modules/
 dist/
+coverage/
 .*/
 config.yml
 config.json

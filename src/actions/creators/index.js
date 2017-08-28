@@ -1,5 +1,6 @@
 // @flow
 import * as types from 'actions/types';
+import parseValueFromInput from './parse-value-from-input';
 
 //:: type Location = {pathname: string, search: Object, hash: string};
 
@@ -11,7 +12,7 @@ export const goToNewLocation = (
 ) => ({
   type: types.NEW_NEW_LOCATION,
   location,
-  replace,
+  replace: !!replace,
 });
 
 export const newLocationChangeFromHistory = (newLocation /*: Object */) => ({
@@ -61,35 +62,25 @@ export const unstick = () => ({
 });
 
 // settings
-const parseValue = target => {
-  switch (target.type) {
-    case 'range':
-      return parseFloat(target.value);
-    case 'checkbox':
-      return target.checked;
-    default:
-      return target.value;
-  }
-};
-
 export const changePageSize = (pageSize /* :number */) => ({
   type: types.CHANGE_SETTINGS,
   category: 'pagination',
   key: 'pageSize',
   value: +pageSize,
 });
+
 export const changeSettings = (event /* :Event */) => {
   if (event.target instanceof HTMLInputElement) {
     return {
       type: types.CHANGE_SETTINGS,
       category: event.target.form && event.target.form.dataset.category,
       key: event.target.name,
-      value: parseValue(event.target),
+      value: parseValueFromInput(event.target),
     };
   }
 };
 
-export const resetSettings = (value /*: string | number | null */ = null) => ({
+export const resetSettings = (value /*: ?Object */) => ({
   type: types.RESET_SETTINGS,
   value,
 });
