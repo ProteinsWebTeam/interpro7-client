@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import { findDOMNode } from 'react-dom';
+
 import { transformFormatted } from 'utils/text';
+
 import { foundationPartial } from 'styles/foundation';
+
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import styles from './style.css';
 import theme from 'styles/theme-interpro.css';
+
 const f = foundationPartial(ebiStyles, styles, theme);
 
 const ParagraphWithCites = ({ p, literature = {} }) =>
@@ -68,6 +71,7 @@ class Description extends Component {
     this.moreButton = null;
     this.divContent = null;
   }
+
   componentDidMount = () => {
     window.addEventListener('resize', this.recheckHeight);
     this.recheckHeight();
@@ -80,16 +84,19 @@ class Description extends Component {
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.recheckHeight);
   };
+
   handleClick() {
     this.setState({ isOpen: !this.state.isOpen });
   }
+
   onResize() {
     this.recheckHeight();
   }
+
   recheckHeight() {
     if (this.moreButton && this.divContent) {
-      const moreDiv = findDOMNode(this.moreButton);
-      const contentDiv = findDOMNode(this.divContent);
+      const moreDiv = this.moreButton;
+      const contentDiv = this.divContent;
       const { heightToHide } = this.props;
       if (moreDiv.offsetTop - contentDiv.offsetTop < heightToHide) {
         this.moreButton.style.visibility = 'hidden';
@@ -101,6 +108,7 @@ class Description extends Component {
       // })});
     }
   }
+
   render() {
     const {
       textBlocks,
@@ -121,9 +129,7 @@ class Description extends Component {
               ? this.state.contentSize
               : heightToHide}px`,
           }}
-          ref={e => {
-            this.divContent = e;
-          }}
+          ref={e => (this.divContent = e)}
         >
           {textBlocks.map((b, i) =>
             <div key={i}>
@@ -137,9 +143,7 @@ class Description extends Component {
           className={f('button')}
           id="show-more"
           onClick={this.handleClick}
-          ref={e => {
-            this.moreButton = e;
-          }}
+          ref={e => (this.moreButton = e)}
         >
           Read {this.state.isOpen ? 'less' : 'more'} {extraTextForButton}
         </button>

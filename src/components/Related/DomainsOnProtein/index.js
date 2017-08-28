@@ -122,7 +122,7 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   return out;
 };
 
-let DomainOnProtein = class extends Component {
+class _DomainOnProtein extends Component {
   static propTypes = {
     mainData: T.object.isRequired,
     dataInterPro: T.object.isRequired,
@@ -157,14 +157,20 @@ let DomainOnProtein = class extends Component {
       </div>
     );
   }
-};
-DomainOnProtein = ['Integrated', 'InterPro', 'Residues', 'Unintegrated'].reduce(
+}
+
+const DomainOnProtein = [
+  'Integrated',
+  'InterPro',
+  'Residues',
+  'Unintegrated',
+].reduce(
   (Index, db) =>
     loadData({
       getUrl: getUrlFor(db),
       propNamespace: db,
     })(Index),
-  DomainOnProtein,
+  _DomainOnProtein,
 );
 
 export default DomainOnProtein;

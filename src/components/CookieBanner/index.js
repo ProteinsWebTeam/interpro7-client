@@ -62,7 +62,7 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
             <a
               target="_blank"
               href="https://www.ebi.ac.uk/about/terms-of-use"
-              rel="noopener"
+              rel="noopener noreferrer"
               style={{
                 color: '#f8f8f8',
                 borderBottom: '1px dotted',

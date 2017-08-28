@@ -13,12 +13,13 @@ const parserOptions = {
 
 const extending = [
   'plugin:react/recommended',
+  // 'plugin:jsx-a11y/recommended',
   'prettier',
   'prettier/flowtype',
   'prettier/react',
 ];
 
-const plugins = ['react'];
+const plugins = ['react', 'jsx-a11y'];
 
 const env = {
   browser: true,
@@ -409,4 +410,11 @@ const rules = {
   yoda: 1,
 };
 
-module.exports = { parser, parserOptions, plugins, env, rules };
+module.exports = {
+  parser,
+  parserOptions,
+  extends: extending,
+  plugins,
+  env,
+  rules,
+};

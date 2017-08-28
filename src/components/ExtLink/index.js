@@ -28,8 +28,9 @@ export const BaseLink = ({
   if (className) props.className = className;
   if (rel) {
     props.rel = rel.includes('noopener') ? rel : `${rel} noopener`;
+    props.rel = rel.includes('noreferrer') ? rel : `${rel} noreferrer`;
   } else {
-    props.rel = 'noopener';
+    props.rel = 'noopener noreferrer';
   }
   return (
     <Link {...rest} {...props}>

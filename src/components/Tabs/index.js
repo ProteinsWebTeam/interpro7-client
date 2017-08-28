@@ -8,7 +8,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
-export default class extends Component {
+export default class Tabs extends Component {
   static propTypes = {
     children: T.any,
   };

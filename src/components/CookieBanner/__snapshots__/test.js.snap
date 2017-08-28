@@ -46,7 +46,7 @@ exports[`<CookieBanner /> should render 1`] = `
        
       <a
         href="https://www.ebi.ac.uk/about/terms-of-use"
-        rel="noopener"
+        rel="noopener noreferrer"
         style={
           Object {
             "borderBottom": "1px dotted",

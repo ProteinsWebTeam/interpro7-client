@@ -28,7 +28,7 @@ exports[`<Twitter /> should render 1`] = `
           data-dnt="true"
           data-tweet-limit="1"
           href="https://twitter.com/InterProDB"
-          rel="noopener"
+          rel="noopener noreferrer"
           target="_blank"
         >
           Tweets by @InterProDB

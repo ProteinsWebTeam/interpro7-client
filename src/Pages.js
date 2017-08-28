@@ -32,9 +32,6 @@ const Search = createAsyncComponent(() =>
 const About = createAsyncComponent(() =>
   import(/* webpackChunkName: "about" */ 'staticPages/About'),
 );
-const Browse = createAsyncComponent(() =>
-  import(/* webpackChunkName: "browse" */ 'staticPages/Browse'),
-);
 const Help = createAsyncComponent(() =>
   import(/* webpackChunkName: "help" */ 'staticPages/Help'),
 );
@@ -56,7 +53,6 @@ const pages = new Set([
   { value: 'organism', component: Organism },
   { value: 'search', component: Search },
   { value: 'about', component: About },
-  { value: 'browse', component: Browse },
   { value: 'help', component: Help },
   { value: 'contact', component: Contact },
   { value: 'settings', component: Settings },

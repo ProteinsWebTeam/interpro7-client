@@ -43,7 +43,7 @@ const Footer = ({ actualSize /*: number */, pagination /*: Object */ }) => {
       >
         {page === 1
           ? <li className={f('disabled')}>
-              Previous <span className={f('show-for-sr')}>You're on page</span>
+              Previous <span className={f('show-for-sr')}>You’re on page</span>
             </li>
           : <li>
               <Link
@@ -67,7 +67,7 @@ const Footer = ({ actualSize /*: number */, pagination /*: Object */ }) => {
           } else if (page === e) {
             return (
               <li key={e} className={f('current')}>
-                <span className={f('show-for-sr')}>You're on page</span>
+                <span className={f('show-for-sr')}>You’re on page</span>
                 {e}
               </li>
             );
@@ -93,7 +93,7 @@ const Footer = ({ actualSize /*: number */, pagination /*: Object */ }) => {
         })}
         {page === lastPage
           ? <li className={f('disabled')}>
-              Next <span className={f('show-for-sr')}>You're on page</span>
+              Next <span className={f('show-for-sr')}>You’re on page</span>
             </li>
           : <li>
               <Link

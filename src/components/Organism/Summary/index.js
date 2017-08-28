@@ -36,7 +36,7 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
                   Rank: {metadata.rank}
                 </div>}
               <Lineage lineage={metadata.lineage} />
-              <Children children={metadata.children} />
+              <Children taxChildren={metadata.children} />
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>
               <div className={f('panel')}>

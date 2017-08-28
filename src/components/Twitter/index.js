@@ -68,7 +68,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
                 className={f('twitter-timeline')}
                 href="https://twitter.com/InterProDB"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 Tweets by @InterProDB
               </a>

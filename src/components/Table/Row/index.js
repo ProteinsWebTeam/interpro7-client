@@ -8,7 +8,7 @@ const defaultRenderer = (value /*: string | number */) =>
     {value}
   </div>;
 
-const Row = class extends Component {
+class Row extends Component {
   static propTypes = {
     row: T.object.isRequired,
     columns: T.array.isRequired,
@@ -50,6 +50,6 @@ const Row = class extends Component {
       </tr>
     );
   }
-};
+}
 
 export default Row;

@@ -6,16 +6,16 @@ import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
 class Children extends PureComponent {
   static propTypes = {
-    children: T.array.isRequired,
+    taxChildren: T.array.isRequired,
   };
 
   render() {
-    const { children } = this.props;
+    const { taxChildren } = this.props;
     return (
       <ul>
         Children:
-        {children.length
-          ? children.map(taxId =>
+        {taxChildren.length
+          ? taxChildren.map(taxId =>
               <li key={taxId}>
                 <Metadata
                   endpoint={'organism'}

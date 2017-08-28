@@ -1,11 +1,15 @@
 // @flow
-import React from 'react';
-import styles from './styles.css';
-import { foundationPartial } from 'styles/foundation';
-import info from './info';
-import { pkg } from 'config';
+import React, { PureComponent } from 'react';
+
 import Link from 'components/generic/Link';
+
+import { pkg } from 'config';
+import info from './info';
 import DiskUsage from './disk-usage';
+
+import { foundationPartial } from 'styles/foundation';
+
+import styles from './styles.css';
 const f = foundationPartial(styles);
 // remove last “.git”
 const url = pkg.repository.url.replace('.git', '');
@@ -57,13 +61,18 @@ const DeveloperInfo = () =>
     </div>
   </div>;
 
-export default () =>
-  <div className={f('row')}>
-    <div className={f('columns', 'large-12')}>
-      <section>
-        <h4>About this website</h4>
-        <DiskUsage />
-        <DeveloperInfo />
-      </section>
-    </div>
-  </div>;
+export default class About extends PureComponent /*:: <{}> */ {
+  render() {
+    return (
+      <div className={f('row')}>
+        <div className={f('columns', 'large-12')}>
+          <section>
+            <h4>About this website</h4>
+            <DiskUsage />
+            <DeveloperInfo />
+          </section>
+        </div>
+      </div>
+    );
+  }
+}
