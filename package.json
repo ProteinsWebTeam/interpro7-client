@@ -97,7 +97,7 @@
   "lint-staged": {
     "concurrent": false,
     "linters": {
-      "*.(js|css)": [
+      "*.+(js|css)": [
         "prettier --write",
         "git add"
       ]
