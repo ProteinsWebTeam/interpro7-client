@@ -59,7 +59,7 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                 'large-4',
                 'text-center'
               )}
-              key={e.tax_id}
+              key={e.tax_id || 'unclassified'}
             >
               <span
                 style={{ color: e.color }}

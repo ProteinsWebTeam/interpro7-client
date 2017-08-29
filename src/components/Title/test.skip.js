@@ -18,7 +18,7 @@ describe.skip('<Title />', () => {
             accession: 'PF02171',
             source_database: 'pfam',
           }}
-        />,
+        />
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
     });
@@ -27,7 +27,6 @@ describe.skip('<Title />', () => {
     test('should render a title component correctly', () => {
       renderer.render(
         <Title
-          pathname="/some/pathname/"
           metadata={{
             length: 462,
             description: ["Created on Monday 13 August 2007 by user 'UJJWAL'"],
@@ -40,7 +39,7 @@ describe.skip('<Title />', () => {
             id: 'VATB_METVS',
             accession: 'A6UP55',
           }}
-        />,
+        />
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
     });
@@ -49,7 +48,6 @@ describe.skip('<Title />', () => {
     test('should render a title component correctly', () => {
       renderer.render(
         <Title
-          pathname="/some/pathname/1JM7/"
           metadata={{
             name: {
               name: 'RING-domain heterodimer',
@@ -60,7 +58,7 @@ describe.skip('<Title />', () => {
             release_date: '2009-02-24',
             chains: ['A', 'B'],
           }}
-        />,
+        />
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
     });

@@ -4,14 +4,15 @@ import T from 'prop-types';
 import { format } from 'url';
 import { createSelector } from 'reselect';
 
-import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
-import { InterproSymbol } from 'components/Title';
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadData from 'higherOrder/loadData';
+import loadWebComponent from 'utils/loadWebComponent';
 
 import { entryType } from 'staticData/home';
+
+import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
@@ -35,6 +36,14 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
     }).isRequired,
   };
 
+  componentWillMount() {
+    loadWebComponent(() =>
+      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
+        m => m.InterproType
+      )
+    ).as('interpro-type');
+  }
+
   render() {
     const counts =
       this.props.data.payload &&
@@ -54,9 +63,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
               <Link
                 newTo={{ description: { mainType: 'entry' }, search: { type } }}
               >
-                <div className={f('svg-container')}>
-                  <InterproSymbol type={type} />
-                </div>
+                <interpro-type type={type} size="4em" />
                 <h5 data-tooltip title={title}>
                   {type}
                   &nbsp;

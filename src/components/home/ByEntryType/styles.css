@@ -7,11 +7,6 @@
   }
 }
 
-.entry-type .svg-container {
-  width: 60%;
-  margin: 0 auto;
-}
-
 .entry-type .columns:hover {
   background-color: #e4f3ff;
 }

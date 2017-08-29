@@ -7,10 +7,10 @@ import AnimatedEntry from 'components/AnimatedEntry';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
-import { InterproSymbol } from 'components/Title';
 import { latests } from 'staticData/home';
 
 import loadData from 'higherOrder/loadData';
+import loadWebComponent from 'utils/loadWebComponent';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -22,63 +22,77 @@ import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
-const LatestEntry = ({ entry }) =>
-  // this should change depending on entry type
-  <li className={f('list-item')} data-tooltip title="Domain entry">
-    <div className={f('svg-container')}>
-      <InterproSymbol type={entry.type} className={f('icon-list')} />
-    </div>
-    <div className={f('list-body')}>
-      <Link
-        newTo={{
-          description: {
-            mainType: 'entry',
-            mainDB: 'InterPro',
-            mainAccession: entry.accession,
-          },
-        }}
-      >
-        <div className={f('list-title')}>
-          {entry.name}
-          <span>({entry.accession})</span> —{' '}
-          <i>{entry.counter} proteins matched</i>
-          <br />
-        </div>
-      </Link>
-      {entry.contributing.map(c =>
-        <div className={f('list-more')} key={c.accession}>
-          <MemberSymbol type={c.source_database} className={f('md-small')} />
-          <small>
-            {c.source_database}:
-            <Link
-              newTo={{
-                description: {
-                  mainType: 'entry',
-                  mainDB: 'interpro',
-                  mainMemberDB: c.source_database,
-                  mainMemberDBAccession: c.accession,
-                },
-              }}
-              className={f('list-sign')}
-            >
-              {c.accession}
-            </Link>{' '}
-            ({entry.contributing.length} contributing signature{entry.contributing.length > 1 ? 's' : ''})
-          </small>
-        </div>,
-      )}
-    </div>
-  </li>;
+class LatestEntry extends PureComponent {
+  static propTypes = {
+    entry: T.shape({
+      accession: T.string,
+      type: T.string,
+      name: T.string,
+      counter: T.number,
+      contributing: T.array,
+    }),
+  };
 
-LatestEntry.propTypes = {
-  entry: T.shape({
-    accession: T.string,
-    type: T.string,
-    name: T.string,
-    counter: T.number,
-    contributing: T.array,
-  }),
-};
+  componentWillMount() {
+    loadWebComponent(() =>
+      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
+        m => m.InterproType
+      )
+    ).as('interpro-type');
+  }
+
+  render() {
+    const { entry } = this.props;
+    return (
+      <li className={f('list-item')} data-tooltip title="Domain entry">
+        <interpro-type type={entry.type} />
+        <div className={f('list-body')}>
+          <Link
+            newTo={{
+              description: {
+                mainType: 'entry',
+                mainDB: 'InterPro',
+                mainAccession: entry.accession,
+              },
+            }}
+          >
+            <div className={f('list-title')}>
+              {entry.name}
+              <span>({entry.accession})</span> —{' '}
+              <i>{entry.counter} proteins matched</i>
+              <br />
+            </div>
+          </Link>
+          {entry.contributing.map(c => (
+            <div className={f('list-more')} key={c.accession}>
+              <MemberSymbol
+                type={c.source_database}
+                className={f('md-small')}
+              />
+              <small>
+                {c.source_database}:
+                <Link
+                  newTo={{
+                    description: {
+                      mainType: 'entry',
+                      mainDB: 'interpro',
+                      mainMemberDB: c.source_database,
+                      mainMemberDBAccession: c.accession,
+                    },
+                  }}
+                  className={f('list-sign')}
+                >
+                  {c.accession}
+                </Link>{' '}
+                ({entry.contributing.length} contributing signature{entry.contributing.length > 1 ? 's' : ''})
+              </small>
+            </div>
+          ))}
+        </div>
+      </li>
+    );
+  }
+}
 
 class ByLatestEntries extends PureComponent {
   static propTypes = {
@@ -121,7 +135,7 @@ const mapStateToUrl = createSelector(
       hostname,
       port,
       pathname: `${root}/entry`,
-    }),
+    })
 );
 
 export default loadData(mapStateToUrl)(ByLatestEntries);

@@ -1,4 +1,4 @@
-@import "../styles/colors.css";
+@import '../styles/colors.css';
 /******************************Override EBI  global***************************/
 /*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
 a,
@@ -178,7 +178,7 @@ html.fontface .local-site-search .icon-functional:before,
   width: 70%;
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform .3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
   display: block;
   float: right;
   padding: 0; /*background-color: rgba(255, 255, 255, 0.07);*/
@@ -307,29 +307,6 @@ a:hover.noline {
   }
 }
 /*/RD - Breakpoints for menu to collapse into dropdown*/
-
-/*/MENU*/
-
-/*image entry*/
-.my-svg-container {
-  float: left;
-  width: 15%; /*19%*/
-  vertical-align: middle;
-  margin-right: 2rem;
-  margin-bottom: 0.5rem;
-}
-#my-svg-icon,
-#my-svg-icon-sm {
-  background-image: linear-gradient(
-      to right,
-      rgba(58, 95, 125, 0.6),
-      rgba(152, 216, 186, 0.6)
-    ),
-    url(../images/backgrounds/fondation-morse-header.jpg);
-  height: 8rem;
-  width: 8rem;
-  border: 1px solid #ccc;
-} /*specific style for MD icon*/
 /************************ END BANNER**********************************/
 
 /************************ STICKY BANNER**********************************/
@@ -339,7 +316,7 @@ a:hover.noline {
   position: fixed;
   margin-top: -10.5em !important;
 }
-.smaller  h4 {
+.smaller h4 {
   transform: translate(156px, 32px);
   font-size: 133%;
 } /*transform tagline*/
@@ -419,9 +396,9 @@ h6 small {
   padding: 15px;
 }
 
-ul.domaintree  li,
-ul.familytree  li,
-ul.chevron  li {
+ul.domaintree li,
+ul.familytree li,
+ul.chevron li {
   list-style: none;
 }
 ul.domaintree,
@@ -528,16 +505,16 @@ ul.chevron > li:before {
   font-size: 0.9rem;
   border-top: 0px solid white;
 }
-.local_footer.masthead  ul.off-canvas-list a:visited.active {
+.local_footer.masthead ul.off-canvas-list a:visited.active {
   color: rgba(68, 68, 68, 0.6);
 }
-.local_footer.masthead  img.logo_faint {
+.local_footer.masthead img.logo_faint {
   margin-left: 0;
   margin-right: 0;
   width: 170px;
   opacity: 0.4;
 }
-.local_footer.masthead  h1 {
+.local_footer.masthead h1 {
   color: black;
   opacity: 0.4;
 }
@@ -641,7 +618,7 @@ ul.chevron > li:before {
 
 /*animation*/
 .anim {
-  transition: all .3s;
+  transition: all 0.3s;
 }
 .animtxt {
   transition: font 0.3s ease;
