@@ -6,22 +6,22 @@ import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import SearchResults from 'components/SearchResults';
 
-import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
+import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import styles from 'styles/blocks.css';
 
 const f = foundationPartial(ipro);
 
-const SearchByText = createAsyncComponent(() => import(
-  /* webpackChunkName: "search-by-text" */'components/SearchByText'
-));
-const IPScanSearch = createAsyncComponent(
-  () => import(/* webpackChunkName: "ipscan-search" */'components/IPScanSearch')
+const SearchByText = createAsyncComponent(() =>
+  import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText')
 );
-const IPScanStatus = createAsyncComponent(
-  () => import(/* webpackChunkName: "ipscan-status" */'components/IPScanStatus')
+const IPScanSearch = createAsyncComponent(() =>
+  import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch')
+);
+const IPScanStatus = createAsyncComponent(() =>
+  import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus')
 );
 
 const IPScanSearchAndStatus = () => (
@@ -36,12 +36,12 @@ IPScanSearchAndStatus.preload = () => {
 };
 
 const routes = new Set([
-  {value: 'text', component: SearchByText},
-  {value: 'sequence', component: IPScanSearchAndStatus},
+  { value: 'text', component: SearchByText },
+  { value: 'sequence', component: IPScanSearchAndStatus },
 ]);
 
 const RedirectToText = () => (
-  <Redirect to={{description: {mainType: 'search', mainDB: 'text'}}} />
+  <Redirect to={{ description: { mainType: 'search', mainDB: 'text' } }} />
 );
 
 const Search = () => (
@@ -53,9 +53,10 @@ const Search = () => (
           <li
             className={f('tabs-title')}
             onMouseOver={SearchByText.preload}
+            onFocus={SearchByText.preload}
           >
             <Link
-              newTo={{description: {mainType: 'search', mainDB: 'text'}}}
+              newTo={{ description: { mainType: 'search', mainDB: 'text' } }}
               activeClass={f('is-active', 'is-active-tab')}
             >
               by text
@@ -64,9 +65,12 @@ const Search = () => (
           <li
             className={f('tabs-title')}
             onMouseOver={IPScanSearchAndStatus.preload}
+            onFocus={IPScanSearchAndStatus.preload}
           >
             <Link
-              newTo={{description: {mainType: 'search', mainDB: 'sequence'}}}
+              newTo={{
+                description: { mainType: 'search', mainDB: 'sequence' },
+              }}
               activeClass={f('is-active', 'is-active-tab')}
             >
               by sequence

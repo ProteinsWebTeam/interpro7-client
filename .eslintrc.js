@@ -13,7 +13,7 @@ const parserOptions = {
 
 const extending = [
   'plugin:react/recommended',
-  // 'plugin:jsx-a11y/recommended',
+  'plugin:jsx-a11y/recommended',
   'prettier',
   'prettier/flowtype',
   'prettier/react',
@@ -74,6 +74,8 @@ const rules = {
   'generator-star-spacing': [1, 'after'],
   // Make sure for-in loops have an if statement
   'guard-for-in': 2,
+  // Enforce label tags to have associated control
+  'jsx-a11y/label-has-for': [2, { required: { every: ['nesting'] } }],
   // Specify quote type in JSX attributes
   'jsx-quotes': [1, 'prefer-double'],
   // Enforce spacing style for keys and values in object literal properties

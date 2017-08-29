@@ -25,7 +25,12 @@ export class Overlay extends PureComponent /*:: <Props> */ {
   render() {
     const { closeEverything, visible } = this.props;
     return (
-      <div onClick={closeEverything} className={s('overlay', { visible })} />
+      <div
+        aria-hidden="true"
+        className={s('overlay', { visible })}
+        onClick={closeEverything}
+        onKeyPress={closeEverything}
+      />
     );
   }
 }
@@ -33,7 +38,7 @@ export class Overlay extends PureComponent /*:: <Props> */ {
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
   state => state.ui.emblMapNav,
-  (sideNav, emblMapNav) => ({ visible: sideNav || emblMapNav }),
+  (sideNav, emblMapNav) => ({ visible: sideNav || emblMapNav })
 );
 
 export default connect(mapStateToProps, { closeEverything })(Overlay);

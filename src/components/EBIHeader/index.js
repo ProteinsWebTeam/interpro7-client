@@ -6,9 +6,11 @@ import { connect } from 'react-redux';
 import { toggleEMBLMapNav } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
+
 import styles from './style.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+
 const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 
 /**
@@ -23,7 +25,7 @@ const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
  EMBL-EBI button and hidden div behaviour
  */
 // TODO: SP remove height when bug on EBI side is fixed
-const _EmblButton = ({ toggleEMBLMapNav }) =>
+const _EmblButton = ({ toggleEMBLMapNav }) => (
   <button
     className={styleBundle('button', 'float-right')}
     style={{ height: '36px' }}
@@ -32,14 +34,15 @@ const _EmblButton = ({ toggleEMBLMapNav }) =>
     onClick={toggleEMBLMapNav}
   >
     Hinxton
-  </button>;
+  </button>
+);
 _EmblButton.propTypes = {
   toggleEMBLMapNav: T.func.isRequired,
 };
 
 const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
 
-const EBIHeader = () =>
+const EBIHeader = () => (
   <header
     id="masthead-black-bar"
     className={styleBundle('clearfix', 'masthead-black-bar')}
@@ -47,7 +50,9 @@ const EBIHeader = () =>
     <nav className={styleBundle('row')}>
       <ul id="global-nav" className={styleBundle('menu')}>
         <li className={styleBundle('home-mobile')}>
-          <a href="//www.ebi.ac.uk" rel="noopener" />
+          <a href="//www.ebi.ac.uk" rel="noopener">
+            EMBL-EBI Home page
+          </a>
         </li>
 
         <li className={styleBundle('home')}>
@@ -84,7 +89,7 @@ const EBIHeader = () =>
           className={styleBundle(
             'float-right',
             'show-for-medium',
-            'embl-selector',
+            'embl-selector'
           )}
           style={{ flexGrow: 1 }}
         >
@@ -92,11 +97,12 @@ const EBIHeader = () =>
         </li>
       </ul>
     </nav>
-  </header>;
+  </header>
+);
 
 // Skip to div
 // TODO: Check why we have to put that in particular now that we don't use ids
-export const EbiSkipToDiv = () =>
+export const EbiSkipToDiv = () => (
   <div id="skip-to">
     <ul>
       <li>
@@ -115,6 +121,7 @@ export const EbiSkipToDiv = () =>
         </a>
       </li>
     </ul>
-  </div>;
+  </div>
+);
 
 export default EBIHeader;

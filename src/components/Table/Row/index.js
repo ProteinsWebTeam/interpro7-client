@@ -3,10 +3,7 @@ import T from 'prop-types';
 
 import lodashGet from 'lodash-es/get';
 
-const defaultRenderer = (value /*: string | number */) =>
-  <div>
-    {value}
-  </div>;
+const defaultRenderer = (value /*: string | number */) => <div>{value}</div>;
 
 class Row extends Component {
   static propTypes = {
@@ -23,7 +20,7 @@ class Row extends Component {
     // );
     this._node.animate(
       { opacity: [0, 1] },
-      { duration: 1000, easing: 'ease-in-out' },
+      { duration: 1000, easing: 'ease-in-out' }
     );
   }
 
@@ -33,19 +30,20 @@ class Row extends Component {
       <tr ref={node => (this._node = node)}>
         {columns.map(
           ({
-            accessKey,
+            dataKey,
             defaultKey,
             cellStyle,
             className,
             renderer = defaultRenderer,
-          }) =>
+          }) => (
             <td
-              key={defaultKey || accessKey}
+              key={defaultKey || dataKey}
               style={cellStyle}
               className={className}
             >
-              {renderer(lodashGet(row, accessKey, '∅'), row)}
-            </td>,
+              {renderer(lodashGet(row, dataKey, '∅'), row)}
+            </td>
+          )
         )}
       </tr>
     );

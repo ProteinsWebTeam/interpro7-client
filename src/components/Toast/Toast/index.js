@@ -58,17 +58,15 @@ export default class Toast extends PureComponent {
     return (
       <li
         className={s('callout', 'toast', className || 'primary')}
+        role="presentation"
         onClick={this._close}
+        onKeyPress={this._close}
         {...props}
       >
-        {title &&
-          <strong>
-            {title}
-          </strong>}
-        <p>
-          {body}
-        </p>
-        {link && <a {...link} />}
+        {title && <strong>{title}</strong>}
+        <p>{body}</p>
+        {link && <a {...link} /> // eslint-disable-line jsx-a11y/anchor-has-content
+        }
       </li>
     );
   }

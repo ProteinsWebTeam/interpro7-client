@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 
 import getTableAccess from 'storage/idb';
@@ -9,7 +9,7 @@ import getTableAccess from 'storage/idb';
   },
 } */
 
-export default class SequenceSearch extends PureComponent /*:: <Props> */ {
+export default class SequenceSearch extends Component /*:: <Props> */ {
   static propTypes = {
     params: T.shape({
       job: T.string.isRequired,
@@ -35,18 +35,14 @@ export default class SequenceSearch extends PureComponent /*:: <Props> */ {
   render() {
     const [, job] =
       Object.entries(this.state).find(
-        ([, { id }]) => id === this.props.params.job,
+        ([, { id }]) => id === this.props.params.job
       ) || [];
     console.log(job);
     if (!job) return null;
     return (
       <section>
-        <h2>
-          Job: {job.id}
-        </h2>
-        <h3>
-          Status: {job.status}
-        </h3>
+        <h2>Job: {job.id}</h2>
+        <h3>Status: {job.status}</h3>
       </section>
     );
   }

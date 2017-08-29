@@ -6,15 +6,14 @@ import style from './style.css';
 
 const f = foundationPartial(style);
 
-const FilterPanel = ({ label, collapsed, onCollapse, children }) =>
+const FilterPanel = ({ label, collapsed, onCollapse, children }) => (
   <div className={f('columns', 'small-12', 'medium-4', 'large-3', 'end')}>
-    <h6 onClick={onCollapse}>
+    <button className={f('toggle')} onClick={onCollapse}>
       {collapsed ? '▸' : '▾'} {label}
-    </h6>
-    <div className={f('filter-panel', { collapsed })}>
-      {children}
-    </div>
-  </div>;
+    </button>
+    <div className={f('filter-panel', { collapsed })}>{children}</div>
+  </div>
+);
 FilterPanel.propTypes = {
   label: T.string.isRequired,
   collapsed: T.bool,
@@ -42,7 +41,7 @@ class FiltersPanel extends Component {
   toggleAll = () => {
     const toCollapse = Object.values(this.state.filters).reduce(
       (acc, v) => v && acc,
-      true,
+      true
     );
     this.setState({ filters: this.props.children.map(() => !toCollapse) });
   };
@@ -59,7 +58,7 @@ class FiltersPanel extends Component {
       : [this.props.children];
     const toCollapse = Object.values(this.state.filters).reduce(
       (acc, v) => v && acc,
-      true,
+      true
     );
     return (
       <div className={f('row', 'filters-panel')}>
@@ -76,7 +75,7 @@ class FiltersPanel extends Component {
           </button>
         </div>
 
-        {children.map((child, i) =>
+        {children.map((child, i) => (
           <FilterPanel
             key={i}
             label={child.props.label}
@@ -84,8 +83,8 @@ class FiltersPanel extends Component {
             collapsed={this.state.filters[i]}
           >
             {child}
-          </FilterPanel>,
-        )}
+          </FilterPanel>
+        ))}
       </div>
     );
   }

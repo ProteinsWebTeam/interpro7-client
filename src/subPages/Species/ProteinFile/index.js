@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -13,10 +13,10 @@ const getDownloadName = createSelector(
   props => props.taxId,
   props => props.type,
   (accession, taxId, type) =>
-    `${accession}-${taxId}.${type === 'FASTA' ? 'fasta' : 'txt'}`,
+    `${accession}-${taxId}.${type === 'FASTA' ? 'fasta' : 'txt'}`
 );
 
-class ProteinFile extends PureComponent {
+class ProteinFile extends Component {
   static propTypes = {
     description: T.object.isRequired,
     api: T.object.isRequired,
@@ -115,7 +115,7 @@ class ProteinFile extends PureComponent {
 const mapStateToProps = createSelector(
   state => state.settings.api,
   state => state.newLocation.description,
-  (api, description) => ({ api, description }),
+  (api, description) => ({ api, description })
 );
 
 export default connect(mapStateToProps)(ProteinFile);

@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
-import Link from 'components/generic/Link';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import fonts from 'EBI-Icon-fonts/fonts.css';
+
+import Link from 'components/generic/Link';
+
 import { foundationPartial } from 'styles/foundation';
+
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import s from './style.css';
+
 const fPlus = foundationPartial(s, fonts);
+
 const colors = {
   gene3d: '#a88cc3',
   cdd: '#addc58',
@@ -36,11 +41,12 @@ class Exporter extends Component {
     super(props);
     this.state = { isOpen: false };
   }
+
   render() {
     const { children, mainDB } = this.props;
     return (
       <div className={fPlus('button-group', 'small', 'exporter')}>
-        <a
+        <button
           className={fPlus('button', 'dropdown')}
           style={{ backgroundColor: colors[mainDB] ? colors[mainDB] : null }}
           onClick={() => {
@@ -52,17 +58,19 @@ class Exporter extends Component {
             data-icon="="
           />{' '}
           <span className={fPlus('hide-for-small-only')}>Export</span> {' '}
-        </a>
+        </button>
         <Link
           newTo={{ description: { other: 'settings' } }}
           className={fPlus(
             'icon',
             'icon-functional',
             'icon-settings',
-            'show-for-large',
+            'show-for-large'
           )}
           data-icon="s"
-        />
+        >
+          Settings
+        </Link>
         <div
           className={fPlus('dropdown-pane', 'left', 'dropdown-content', mainDB)}
           style={{
@@ -78,6 +86,6 @@ class Exporter extends Component {
 }
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainDB,
-  mainDB => ({ mainDB }),
+  mainDB => ({ mainDB })
 );
 export default connect(mapStateToProps)(Exporter);

@@ -1,17 +1,17 @@
-@import "../../styles/timing.css";
+@import '../../styles/timing.css';
 
 .filters-panel {
   max-height: 250px;
   flex-flow: row nowrap; /*make it work with Firefox*/
 }
 .filters-panel,
-.filters-panel h6,
+.filters-panel .toggle,
 .filters-panel label,
 .filters-panel button {
   color: #4b555b;
 }
 
-.filters-panel h6 {
+.filters-panel .toggle {
   font-size: 120%;
   cursor: pointer;
 }
@@ -61,7 +61,7 @@ hr {
   .filter-panel label input + span {
     display: block;
   }
-  input[value="ALL"] + span {
+  input[value='ALL'] + span {
     visibility: hidden;
   } /*target the remaining label for first panel entry type: all*/
 }

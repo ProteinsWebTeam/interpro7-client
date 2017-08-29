@@ -1,21 +1,23 @@
 import React from 'react';
 import T from 'prop-types';
 
-const Header = ({ columns } /*: {columns: Array<Object>} */) =>
+const Header = ({ columns } /*: {columns: Array<Object>} */) => (
   <thead>
     <tr>
       {columns.map(
-        ({ accessKey, defaultKey, name, headerStyle, children, className }) =>
+        ({ dataKey, defaultKey, name, headerStyle, children, className }) => (
           <th
-            key={defaultKey || accessKey}
+            key={defaultKey || dataKey}
             style={headerStyle}
             className={className}
           >
-            {children || name || accessKey}
-          </th>,
+            {children || name || dataKey}
+          </th>
+        )
       )}
     </tr>
-  </thead>;
+  </thead>
+);
 Header.propTypes = {
   columns: T.arrayOf(T.object).isRequired,
 };

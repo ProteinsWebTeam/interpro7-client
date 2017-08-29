@@ -77,10 +77,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
             <div className={f('columns')}>
               <div className={f('table-results-filtering')}>
                 <div className={f('pagesize-wrapper')}>
-                  {title &&
-                    <h4>
-                      {title}
-                    </h4>}
+                  {title && <h4>{title}</h4>}
                   <_TotalNb
                     data={dataTable}
                     actualSize={actualSize}
@@ -90,12 +87,14 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   />
                 </div>
                 <div className={f('show-for-large')} style={{ lineHeight: 0 }}>
-                  <a
+                  <button
                     className={f('icon-view', 'table-view')}
                     title="View your results as a table"
                   />
-                  <a
+                  <button
                     className={f('icon-view', 'list-view', 'disabled')}
+                    aria-disabled="true"
+                    disabled
                     data-icon="i"
                     title="View your results as a list"
                   />
@@ -118,8 +117,9 @@ export default class Table extends PureComponent /*:: <Props> */ {
           <div className={f('row', 'table-footer-container')}>
             <div className={f('columns')}>
               <div className={f('table-footer')}>
-                {pageSize &&
-                  <_PageSizeSelector search={_query} pathname={pathname} />}
+                {pageSize && (
+                  <_PageSizeSelector search={_query} pathname={pathname} />
+                )}
                 <_Footer
                   actualSize={actualSize}
                   pagination={_query}

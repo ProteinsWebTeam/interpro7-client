@@ -26,7 +26,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
   */
   componentDidMount() {
     this._twitterScript = cancelable(
-      loadResource('//platform.twitter.com/widgets.js'),
+      loadResource('//platform.twitter.com/widgets.js')
     );
     this._twitterScript.promise.then(() => {
       if (!window.twttr) return;
@@ -54,7 +54,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
         <div className={f('columns')} style={noPadding}>
           <div className={f('jumbo-news')}>
             <div className={f('jumbo-news-container')}>
-              <h3
+              <div
                 className={f('icon', 'icon-socialmedia', 'icon-s2')}
                 data-icon="T"
               />

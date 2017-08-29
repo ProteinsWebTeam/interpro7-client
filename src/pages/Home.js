@@ -30,32 +30,32 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 // Generate async components
 // Search box
 const SearchByText = createAsyncComponent(() =>
-  import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
+  import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText')
 );
 const IPScanSearch = createAsyncComponent(() =>
-  import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch'),
+  import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch')
 );
 const IPScanStatus = createAsyncComponent(() =>
-  import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus'),
+  import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus')
 );
 // Browse by X box
 const ByMemberDatabase = createAsyncComponent(() =>
-  import(/* webpackChunkName: "by-member-database" */ 'components/home/ByMemberDatabase'),
+  import(/* webpackChunkName: "by-member-database" */ 'components/home/ByMemberDatabase')
 );
 const ByEntryType = createAsyncComponent(() =>
-  import(/* webpackChunkName: "by-entry-type" */ 'components/home/ByEntryType'),
+  import(/* webpackChunkName: "by-entry-type" */ 'components/home/ByEntryType')
 );
 const BySpecies = createAsyncComponent(() =>
-  import(/* webpackChunkName: "by-species" */ 'components/home/BySpecies'),
+  import(/* webpackChunkName: "by-species" */ 'components/home/BySpecies')
 );
 const ByLatestEntries = createAsyncComponent(() =>
-  import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByLatestEntries'),
+  import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByLatestEntries')
 );
 const ByGOTerms = createAsyncComponent(() =>
-  import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms'),
+  import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms')
 );
 
-const MaskSvgIcons = () =>
+const MaskSvgIcons = () => (
   <svg
     viewBox="0 0 200 200"
     style={{
@@ -75,9 +75,10 @@ const MaskSvgIcons = () =>
         <polygon points="0,68 68,0 68,68" />
       </clipPath>
     </defs>
-  </svg>;
+  </svg>
+);
 
-const Home = () =>
+const Home = () => (
   <div>
     <div className={f('row')}>
       <div className={f('columns', 'large-12')}>
@@ -264,7 +265,11 @@ const Home = () =>
           <div className={f('row')}>
             <div className={f('columns', 'medium-6')}>
               <h5>IDA</h5>
-              <img src={idaLogo} style={{ marginLeft: 40, marginBottom: 10 }} />
+              <img
+                alt="IDA logo"
+                src={idaLogo}
+                style={{ marginLeft: 40, marginBottom: 10 }}
+              />
               <p>
                 The InterPro Domain Architecture (IDA) tool allows you to search
                 the InterPro database with a particular set of domains, and
@@ -283,7 +288,11 @@ const Home = () =>
             </div>
             <div className={f('columns', 'medium-6')}>
               <h5>InterProScan</h5>
-              <img src={iscanLogo} style={{ marginBottom: 2 }} />
+              <img
+                alt="InterProScan logo"
+                src={iscanLogo}
+                style={{ marginBottom: 2 }}
+              />
               <p>
                 InterProScan is a sequence analysis application (nucleotide and
                 protein sequences) that combines different protein signature
@@ -310,6 +319,7 @@ const Home = () =>
         return import(/* webpackChunkName: "twitter" */ 'components/Twitter');
       }}
     />
-  </div>;
+  </div>
+);
 
 export default Home;

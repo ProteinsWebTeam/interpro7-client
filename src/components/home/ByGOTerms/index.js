@@ -21,12 +21,19 @@ class ByMemberDatabase extends PureComponent /*:: <{}> */ {
     return (
       <div className={f('md-list')}>
         <AnimatedEntry className={f('row')} element="div">
-          {GoList.map(e =>
+          {GoList.map(e => (
             <div
               className={f('columns', 'medium-3', 'large-3', 'text-center')}
               key={e.title}
             >
-              <a href="#" data-tooltip title={e.description}>
+              <Link
+                newTo={{
+                  description: { mainType: 'search', mainDB: 'text' },
+                  search: { search: e.accession },
+                }}
+                title={e.description}
+                data-tooltip
+              >
                 <span
                   style={{ color: e.color }}
                   className={f('small', 'bullet-icon')}
@@ -48,9 +55,9 @@ class ByMemberDatabase extends PureComponent /*:: <{}> */ {
                   {e.counterD} entries <br />
                   <small>({e.counterS} proteins)</small>
                 </p>
-              </a>
-            </div>,
-          )}
+              </Link>
+            </div>
+          ))}
         </AnimatedEntry>
         <Link href="interpro7/browse/Goterms" className={f('button')}>
           View all Go terms

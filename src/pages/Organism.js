@@ -35,21 +35,22 @@ const propTypes = {
 
 const defaultPayload = {};
 
-const Overview = ({ data: { payload = defaultPayload } }) =>
+const Overview = ({ data: { payload = defaultPayload } }) => (
   <ul className={styles.card}>
-    {Object.entries(payload.proteins || {}).map(([name, count]) =>
+    {Object.entries(payload.proteins || {}).map(([name, count]) => (
       <li key={name}>
         <Link newTo={{ description: { mainType: 'protein', mainDB: name } }}>
           {name}
           {Number.isFinite(count) ? ` (${count})` : ''}
         </Link>
-      </li>,
-    )}
-  </ul>;
+      </li>
+    ))}
+  </ul>
+);
 Overview.propTypes = propTypes;
 
 const List = ({
-  data: { payload, loading, status },
+  data: { payload, loading, url, status },
   isStale,
   location: { search },
 }) => {
@@ -76,13 +77,19 @@ const List = ({
           <Exporter>
             <ul>
               <li>
-                <a href={`${''}&format=json`} download="proteins.json">
+                <a href={url} download="organisms.json">
                   JSON
                 </a>
-                <br />
               </li>
               <li>
-                <a href={`${''}`}>Open in API web view</a>
+                <a href={url} download="organisms.tsv">
+                  TSV
+                </a>
+              </li>
+              <li>
+                <a target="_blank" rel="noopener noreferrer" href={url}>
+                  Open in API web view
+                </a>
               </li>
             </ul>
           </Exporter>
@@ -91,8 +98,8 @@ const List = ({
             Search proteins
           </SearchBox>
           <Column
-            accessKey="accession"
-            renderer={(accession /*: string */) =>
+            dataKey="accession"
+            renderer={(accession /*: string */) => (
               <Link
                 newTo={location => ({
                   ...location,
@@ -104,16 +111,17 @@ const List = ({
                 })}
               >
                 {accession}
-              </Link>}
+              </Link>
+            )}
           >
             TaxID
           </Column>
           <Column
-            accessKey="full_name"
+            dataKey="full_name"
             renderer={(
               name /*: string */,
-              { accession } /*: {accession: string} */,
-            ) =>
+              { accession } /*: {accession: string} */
+            ) => (
               <Link
                 newTo={location => ({
                   ...location,
@@ -125,7 +133,8 @@ const List = ({
                 })}
               >
                 {name}
-              </Link>}
+              </Link>
+            )}
           >
             Name
           </Column>
@@ -137,7 +146,7 @@ const List = ({
 List.propTypes = propTypes;
 
 const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
+  import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary')
 );
 // const StructureAsync = createAsyncComponent(() =>
 //   import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
@@ -146,8 +155,9 @@ const SummaryAsync = createAsyncComponent(() =>
 //   import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
 // );
 
-const SummaryComponent = ({ data: { payload }, location }) =>
-  <SummaryAsync data={payload} location={location} />;
+const SummaryComponent = ({ data: { payload }, location }) => (
+  <SummaryAsync data={payload} location={location} />
+);
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.any,
@@ -159,7 +169,7 @@ const pages = new Set(
   [
     // { value: 'structure', component: StructureAsync },
     // { value: 'entry', component: EntryAsync },
-  ],
+  ]
 );
 const Summary = props => {
   const { data: { loading, payload } } = props;
@@ -185,7 +195,7 @@ Summary.propTypes = {
 
 const acc = /(UP\d{9})|(\d+)|(all)/i;
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = props =>
+const InnerSwitch = props => (
   <Switch
     {...props}
     locationSelector={l =>
@@ -193,9 +203,10 @@ const InnerSwitch = props =>
     indexRoute={List}
     childRoutes={[{ value: acc, component: Summary }]}
     catchAll={List}
-  />;
+  />
+);
 
-const Organism = props =>
+const Organism = props => (
   <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
     <Switch
       {...props}
@@ -203,7 +214,8 @@ const Organism = props =>
       indexRoute={Overview}
       catchAll={InnerSwitch}
     />
-  </div>;
+  </div>
+);
 Organism.propTypes = {
   isStale: T.bool.isRequired,
 };

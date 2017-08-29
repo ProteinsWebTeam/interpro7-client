@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 
 const defaultLoadingStyle = {
@@ -10,10 +10,11 @@ const defaultLoadingStyle = {
   justifyContent: 'center',
 };
 
-const Loading = () =>
+const Loading = () => (
   <div style={defaultLoadingStyle}>
     <span>Loading…</span>
-  </div>;
+  </div>
+);
 
 const containerStyle = {
   position: 'relative',
@@ -30,9 +31,10 @@ const placeholderStyle = {
   justifyContent: 'center',
 };
 
-class Embed extends PureComponent {
+class Embed extends Component {
   static propTypes = {
     children: T.element,
+    title: T.string,
   };
 
   constructor(props) {
@@ -42,9 +44,16 @@ class Embed extends PureComponent {
 
   componentDidMount() {
     this._iframe.addEventListener('load', this._onLoad, { once: true });
+    this._mounted = true;
+  }
+
+  componentWillUnmount() {
+    this._iframe.removeEventListener('load', this._onLoad);
+    this._mounted = false;
   }
 
   _onLoad = () => {
+    if (!this._mounted) return;
     this._placeholderContainer.style.pointerEvents = 'none';
     this._placeholderContainer.animate(
       { opacity: [1, 0] },
@@ -52,25 +61,32 @@ class Embed extends PureComponent {
         duration: 1000,
         easing: 'ease-in-out',
         fill: 'both',
-      },
-    ).onfinish = () => this.setState({ loading: false });
+      }
+    ).onfinish = () => {
+      if (this._mounted) this.setState({ loading: false });
+    };
     // remove eventListener, in case {once: true} isn't supported
     this._iframe.removeEventListener('load', this._onLoad);
   };
 
   render() {
-    const { children, ...props } = this.props;
+    const { children, title, ...props } = this.props;
     const { loading } = this.state;
     return (
       <div style={containerStyle}>
-        {loading &&
+        {loading && (
           <span
             style={placeholderStyle}
             ref={node => (this._placeholderContainer = node)}
           >
             {children || <Loading />}
-          </span>}
-        <iframe ref={node => (this._iframe = node)} {...props} />
+          </span>
+        )}
+        <iframe
+          ref={node => (this._iframe = node)}
+          {...props}
+          title={`embedded iframe${title ? `: ${title}` : ''}`}
+        />
       </div>
     );
   }

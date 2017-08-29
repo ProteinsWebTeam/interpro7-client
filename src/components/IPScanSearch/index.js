@@ -32,10 +32,11 @@ const strategy = re => (block, cb) => {
 };
 
 const classedSpan = className => {
-  const Span = ({ offsetKey, children }) =>
+  const Span = ({ offsetKey, children }) => (
     <span className={className} data-offset-key={offsetKey}>
       {children}
-    </span>;
+    </span>
+  );
   Span.propTypes = {
     offsetKey: T.string.isRequired,
     children: T.any,
@@ -46,7 +47,7 @@ const classedSpan = className => {
 const checkValidity = (({ comment, IUPACProt }) => lines =>
   lines.reduce(
     (acc, line) => acc && (comment.test(line) || IUPACProt.test(line)),
-    true,
+    true
   ))({ comment: /^\s*[>;].*$/m, IUPACProt: /^[a-z* -]*$/im });
 
 const compositeDecorator = new CompositeDecorator([
@@ -121,9 +122,9 @@ class IPScanSearch extends Component {
     const r = await fetch(
       url.resolve(
         url.format({ ...this.props.ipScan, pathname: this.props.ipScan.root }),
-        'run',
+        'run'
       ),
-      { method: 'POST', body },
+      { method: 'POST', body }
     );
     console.log(r);
     const text = await r.text();
@@ -148,13 +149,13 @@ class IPScanSearch extends Component {
           text && typeof text === 'string'
             ? EditorState.createWithContent(
                 ContentState.createFromText(text),
-                compositeDecorator,
+                compositeDecorator
               )
             : EditorState.createEmpty(compositeDecorator),
         valid: true,
         dragging: false,
       },
-      () => this.editor.focus(),
+      () => this.editor.focus()
     );
 
   _handleSubmitFail = err => {
@@ -170,7 +171,7 @@ class IPScanSearch extends Component {
         className: s('alert'),
         ttl: 5000,
       },
-      id(),
+      id()
     );
   };
 
@@ -187,14 +188,14 @@ class IPScanSearch extends Component {
         className: s('success'),
         ttl: 5000,
       },
-      id(),
+      id()
     );
   };
 
   _handleSubmit = async event => {
     event.preventDefault();
     const lines = convertToRaw(
-      this.state.editorState.getCurrentContent(),
+      this.state.editorState.getCurrentContent()
     ).blocks.map(block => block.text);
     if (!lines.length) return;
     const value = lines.join('\n');
@@ -243,11 +244,11 @@ PAWANSLFED NAEFGLGFRL TVDQHRVRVLR LLDQFADKIPA ELLTALKSDA TPEVRREQVA
 ALRQQLNDVA EAHELLRDAD ALVEKSIWLIG GDGWAYDIGFG GLDHVLSLTE NVNILVLDTQ
 CYSNTGGQAS KATPLGAVTK FGEHGKRKARK DLGVSMMMYGH VYVAQISLGA QLNQTVKAIQ
 EAEAYPGPSL IIAYSPCEEH GYDLALSHDQM RQLTATGFWPL YRFDPRRADE GKLPLALDSR
-PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim(),
+PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
     );
 
   _handleDroppedFiles = blockEvent(({ dataTransfer: { files: [file] } }) =>
-    this._handleFile(file),
+    this._handleFile(file)
   );
 
   _handleDragging = blockEvent(() => this.setState({ dragging: true }));
@@ -264,7 +265,7 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim(),
 
   _handleChange = editorState => {
     const lines = convertToRaw(editorState.getCurrentContent()).blocks.map(
-      block => block.text,
+      block => block.text
     );
     this.setState({
       editorState,
@@ -293,7 +294,11 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim(),
               <div className={s('secondary', 'callout')}>
                 <div className={s('row')}>
                   <div className={s('large-12', 'columns')}>
-                    <label onClick={this._handleEditorClick}>
+                    <label
+                      onClick={this._handleEditorClick}
+                      onKeyPress={this._handleEditorClick}
+                      role="presentation"
+                    >
                       Sequence, in FASTA format
                       <div
                         type="text"
@@ -310,9 +315,9 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim(),
                     </label>
                     <div className={s('button-group', 'line-with-buttons')}>
                       <label className={s('file-input-label')}>
-                        <a type="button" className={s('hollow', 'button')}>
+                        <button type="button" className={s('hollow', 'button')}>
                           Choose file
-                        </a>
+                        </button>
                         <input
                           type="file"
                           onChange={this._handleFileChange}
@@ -336,7 +341,7 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim(),
                       'large-12',
                       'columns',
                       'stacked-for-small',
-                      'button-group',
+                      'button-group'
                     )}
                   >
                     <input
@@ -345,12 +350,12 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim(),
                       disabled={!valid}
                       value="Search"
                     />
-                    <a
+                    <button
                       className={s('secondary', 'hollow', 'button')}
                       onClick={this._handleReset}
                     >
                       Clear
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>

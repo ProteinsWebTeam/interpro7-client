@@ -20,7 +20,7 @@ const mapStateToProps = getUrl =>
   createSelector(
     state => state,
     state => state.data[getUrl(state)] || {},
-    (appState, data) => ({ appState, data }),
+    (appState, data) => ({ appState, data })
   );
 const getBaseURL = url => (url ? url.slice(0, url.indexOf('?')) : '');
 
@@ -32,7 +32,7 @@ const load = (
   unloadingData,
   failedLoadingData,
   fetchFun,
-  fetchOptions,
+  fetchOptions
 ) => key => {
   try {
     loadingData(key);
@@ -48,7 +48,7 @@ const load = (
   // Eventually changes the state according to response
   c.promise.then(
     response => loadedData(key, response),
-    error => (error.canceled ? unloadingData : failedLoadingData)(key, error),
+    error => (error.canceled ? unloadingData : failedLoadingData)(key, error)
   );
   return c;
 };
@@ -70,7 +70,9 @@ const loadData = params => {
         unloadingData: T.func.isRequired,
         data: T.shape({
           loading: T.bool,
+          progress: T.number,
           payload: T.any,
+          url: T.string,
           status: T.number,
           ok: T.boolean,
         }),
@@ -104,7 +106,7 @@ const loadData = params => {
             unloadingData,
             failedLoadingData,
             fetchFun,
-            fetchOptions,
+            fetchOptions
           );
         }
 
@@ -162,7 +164,7 @@ const loadData = params => {
             unloadingData,
             failedLoadingData,
             fetchFun,
-            fetchOptions,
+            fetchOptions
           );
         }
         this._cancelableFetch = this._load(key);

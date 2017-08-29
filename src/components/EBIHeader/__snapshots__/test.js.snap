@@ -18,7 +18,9 @@ exports[`<EBIHeader /> should render 1`] = `
         <a
           href="//www.ebi.ac.uk"
           rel="noopener"
-        />
+        >
+          EMBL-EBI Home page
+        </a>
       </li>
       <li
         className="home"

@@ -50,7 +50,9 @@ const Overview = ({
     <div>
       Member databases:
       <ul className={styles.card}>
-        {Object.entries(payload.entries.member_databases).map(([name, count]) =>
+        {Object.entries(
+          payload.entries.member_databases
+        ).map(([name, count]) => (
           <li key={name}>
             <Link
               newTo={{
@@ -60,8 +62,8 @@ const Overview = ({
             >
               {name} ({count})
             </Link>
-          </li>,
-        )}
+          </li>
+        ))}
       </ul>
       <ul className={styles.card}>
         <li>
@@ -99,8 +101,8 @@ class List extends Component {
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+        m => m.InterproType
+      )
     ).as('interpro-type');
   }
 
@@ -141,17 +143,19 @@ class List extends Component {
             <Exporter>
               <ul>
                 <li>
-                  <a href={`${''}&format=json`} download="entries.json">
+                  <a href={data.url} download="entries.json">
                     JSON
                   </a>
                 </li>
                 <li>
-                  <a href={`${''}&format=tsv`} download="entries.tsv">
+                  <a href={data.url} download="entries.tsv">
                     TSV
                   </a>
                 </li>
                 <li>
-                  <a href={`${''}`}>Open in API web view</a>
+                  <a target="_blank" rel="noopener noreferrer" href={data.url}>
+                    Open in API web view
+                  </a>
                 </li>
               </ul>
             </Exporter>
@@ -160,25 +164,26 @@ class List extends Component {
               &nbsp;
             </SearchBox>
             <Column
-              accessKey="type"
+              dataKey="type"
               className={ps('col-type')}
-              renderer={type =>
+              renderer={type => (
                 <interpro-type
                   type={type.replace('_', ' ')}
                   title={type}
                   size="26px"
                 >
                   {type}
-                </interpro-type>}
+                </interpro-type>
+              )}
             >
               Type
             </Column>
             <Column
-              accessKey="name"
+              dataKey="name"
               renderer={(
                 name /*: string */,
-                { accession } /*: {accession: string} */,
-              ) =>
+                { accession } /*: {accession: string} */
+              ) => (
                 <Link
                   title={`${name} (${accession})`}
                   newTo={location => ({
@@ -191,13 +196,14 @@ class List extends Component {
                   })}
                 >
                   {name}
-                </Link>}
+                </Link>
+              )}
             >
               Name
             </Column>
             <Column
-              accessKey="accession"
-              renderer={(accession /*: string */) =>
+              dataKey="accession"
+              renderer={(accession /*: string */) => (
                 <Link
                   title={accession}
                   newTo={location => ({
@@ -209,70 +215,70 @@ class List extends Component {
                     },
                   })}
                 >
-                  <span className={ps('acc-row')}>
-                    {accession}
-                  </span>
-                </Link>}
+                  <span className={ps('acc-row')}>{accession}</span>
+                </Link>
+              )}
             >
               Accession
             </Column>
-            {mainDB === 'InterPro'
-              ? <Column
-                  accessKey="member_databases"
-                  renderer={(mdb /*: string */) =>
-                    Object.keys(mdb).map(db =>
-                      <div key={db} className={ps('sign-row')}>
-                        <span className={ps('sign-cell')}>
-                          {db}
-                        </span>
-                        <span className={ps('sign-cell')}>
-                          {mdb[db].map(accession =>
-                            <span key={accession} className={ps('sign-label')}>
-                              <Link
-                                title={`${accession} signature`}
-                                newTo={{
-                                  description: {
-                                    mainType: 'entry',
-                                    mainDB: db,
-                                    mainAccession: accession,
-                                  },
-                                }}
-                              >
-                                {accession}
-                              </Link>
-                            </span>,
-                          )}
-                        </span>
-                      </div>,
-                    )}
-                >
-                  Signatures{' '}
-                  <span className={ps('sign-label-head')} title="Signature ID">
-                    ID
-                  </span>
-                </Column>
-              : <Column
-                  accessKey="integrated"
-                  renderer={(accession /*: string */) =>
-                    <Link
-                      newTo={{
-                        description: {
-                          mainType: 'entry',
-                          mainDB: 'InterPro',
-                          mainAccession: accession,
-                        },
-                      }}
-                    >
-                      {accession}
-                    </Link>}
-                >
-                  Integrated
-                </Column>}
+            {mainDB === 'InterPro' ? (
+              <Column
+                dataKey="member_databases"
+                renderer={(mdb /*: string */) =>
+                  Object.keys(mdb).map(db => (
+                    <div key={db} className={ps('sign-row')}>
+                      <span className={ps('sign-cell')}>{db}</span>
+                      <span className={ps('sign-cell')}>
+                        {mdb[db].map(accession => (
+                          <span key={accession} className={ps('sign-label')}>
+                            <Link
+                              title={`${accession} signature`}
+                              newTo={{
+                                description: {
+                                  mainType: 'entry',
+                                  mainDB: db,
+                                  mainAccession: accession,
+                                },
+                              }}
+                            >
+                              {accession}
+                            </Link>
+                          </span>
+                        ))}
+                      </span>
+                    </div>
+                  ))}
+              >
+                Signatures{' '}
+                <span className={ps('sign-label-head')} title="Signature ID">
+                  ID
+                </span>
+              </Column>
+            ) : (
+              <Column
+                dataKey="integrated"
+                renderer={(accession /*: string */) => (
+                  <Link
+                    newTo={{
+                      description: {
+                        mainType: 'entry',
+                        mainDB: 'InterPro',
+                        mainAccession: accession,
+                      },
+                    }}
+                  >
+                    {accession}
+                  </Link>
+                )}
+              >
+                Integrated
+              </Column>
+            )}
             <Column
-              accessKey="go_terms"
+              dataKey="go_terms"
               className={ps('col-go')}
               renderer={(gos /*: Array<Object> */) =>
-                gos.map(go =>
+                gos.map(go => (
                   <div
                     className={ps('go-row')}
                     key={go.identifier}
@@ -291,8 +297,8 @@ class List extends Component {
                         {go.name ? go.name : 'None'}
                       </GoLink>
                     </span>
-                  </div>,
-                )}
+                  </div>
+                ))}
             >
               GO Terms{' '}
               <span
@@ -322,25 +328,25 @@ class List extends Component {
 }
 
 const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-summary" */ 'components/Entry/Summary'),
+  import(/* webpackChunkName: "entry-summary" */ 'components/Entry/Summary')
 );
 const StructureAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
+  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure')
 );
 const ProteinAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein'),
+  import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein')
 );
 const SpeciesAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Species'),
+  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Species')
 );
 const DomainAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
+  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture')
 );
 
 const SchemaOrgData = createAsyncComponent(
   () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   () => null,
-  'SchemaOrgData',
+  'SchemaOrgData'
 );
 
 const pages = new Set([
@@ -350,8 +356,9 @@ const pages = new Set([
   { value: 'domain_architecture', component: DomainAsync },
 ]);
 
-const SummaryComponent = ({ data: { payload }, isStale, location }) =>
-  <SummaryAsync data={payload} isStale={isStale} location={location} />;
+const SummaryComponent = ({ data: { payload }, isStale, location }) => (
+  <SummaryAsync data={payload} isStale={isStale} location={location} />
+);
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.object,
@@ -388,11 +395,11 @@ const dbAccs = new RegExp(
     .map(db => db.accession)
     .filter(db => db)
     .join('|')}|IPR[0-9]{6})`,
-  'i',
+  'i'
 );
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = props =>
+const InnerSwitch = props => (
   <Switch
     {...props}
     locationSelector={l =>
@@ -400,7 +407,8 @@ const InnerSwitch = props =>
     indexRoute={List}
     childRoutes={[{ value: dbAccs, component: Summary }]}
     catchAll={List}
-  />;
+  />
+);
 
 const schemaProcessData = data => ({
   '@type': 'ProteinEntity',
@@ -415,21 +423,23 @@ const schemaProcessData = data => ({
   isBaseFor: '@isBaseFor',
 });
 
-const Entry = props =>
+const Entry = props => (
   <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
     {props.data.payload &&
-      props.data.payload.accession &&
+    props.data.payload.accession && (
       <SchemaOrgData
         data={props.data.payload}
         processData={schemaProcessData}
-      />}
+      />
+    )}
     <Switch
       {...props}
       locationSelector={l => l.description.mainDB}
       indexRoute={Overview}
       catchAll={InnerSwitch}
     />
-  </div>;
+  </div>
+);
 Entry.propTypes = {
   data: T.shape({
     payload: T.object,
@@ -439,5 +449,5 @@ Entry.propTypes = {
 export default loadData((...args) =>
   getUrlForApi(...args)
     .replace('species', '')
-    .replace('domain_architecture', ''),
+    .replace('domain_architecture', '')
 )(Entry);

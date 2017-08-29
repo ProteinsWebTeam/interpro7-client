@@ -43,18 +43,20 @@ const lut = new Map([
   ['282301', { name: 'Macrostomum lignano' }],
 ]);
 
-const ProteinAccessionsRenderer = taxId =>
-  <ProteinFile taxId={taxId} type="accession" />;
+const ProteinAccessionsRenderer = taxId => (
+  <ProteinFile taxId={taxId} type="accession" />
+);
 
-const ProteinFastasRenderer = taxId =>
-  <ProteinFile taxId={taxId} type="FASTA" />;
+const ProteinFastasRenderer = taxId => (
+  <ProteinFile taxId={taxId} type="FASTA" />
+);
 
 const payloadToProcessed = createSelector(
   payload => payload,
   (payload /*: ?{|[key: string]: number |} */) =>
     Object.entries(payload || {})
       .map(([taxId, count]) => ({ taxId, count }))
-      .sort(({ count: a }, { count: b }) => +b - +a),
+      .sort(({ count: a }, { count: b }) => +b - +a)
 );
 
 /*:: type Props = {
@@ -81,8 +83,8 @@ class SpeciesSub extends PureComponent /*:: <Props> */ {
         <div className={f('column')}>
           <Table dataTable={processed} pathname={''}>
             <Column
-              accessKey="taxId"
-              renderer={taxId =>
+              dataKey="taxId"
+              renderer={taxId => (
                 <Link
                   newTo={{
                     description: {
@@ -93,23 +95,25 @@ class SpeciesSub extends PureComponent /*:: <Props> */ {
                   }}
                 >
                   {taxId}
-                </Link>}
+                </Link>
+              )}
             >
               Tax ID
             </Column>
             <Column
-              accessKey="taxId"
+              dataKey="taxId"
               defaultKey="organism"
               renderer={taxId => {
                 const value = lut.get(taxId);
                 return (
                   <span>
                     {value &&
-                      value.icon &&
+                    value.icon && (
                       <span
                         className={f('icon', 'icon-species')}
                         data-icon={value.icon}
-                      />}
+                      />
+                    )}
                     &nbsp;
                     <Metadata
                       endpoint="organism"
@@ -124,16 +128,16 @@ class SpeciesSub extends PureComponent /*:: <Props> */ {
             >
               Organism
             </Column>
-            <Column accessKey="count">Protein count</Column>
+            <Column dataKey="count">Protein count</Column>
             <Column
-              accessKey="taxId"
+              dataKey="taxId"
               defaultKey="proteinFastas"
               renderer={ProteinFastasRenderer}
             >
               FASTA
             </Column>
             <Column
-              accessKey="taxId"
+              dataKey="taxId"
               defaultKey="proteinAccessions"
               renderer={ProteinAccessionsRenderer}
             >
@@ -158,9 +162,9 @@ const mapStateToUrl = createSelector(
       focusAccession: description.mainAccession,
     };
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      _description,
+      _description
     )}?${qsStringify({ group_by: 'tax_id' })}`;
-  },
+  }
 );
 
 export default loadData(mapStateToUrl)(SpeciesSub);

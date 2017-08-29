@@ -38,29 +38,27 @@ class SubMenu extends Component /*:: <Props, { isActive: boolean }> */ {
     const { options, className = '', children } = this.props;
     return (
       <li className={f('is-drilldown-submenu-parent')}>
-        <a className={f('menu-item')} onClick={this.handleClick}>
+        <button className={f('menu-item')} onClick={this.handleClick}>
           {children}
-        </a>
+        </button>
         <ul
           className={`${f('is-drilldown-submenu', 'submenu', {
             'is-active': this.state.isActive,
           })} ${className}`}
         >
           <li className={f('js-drilldown-back')}>
-            <a
+            <button
               className={f('menu-label', 'menu-item')}
               onClick={this.handleClick}
             >
               Back to InterPro menu
-            </a>
+            </button>
           </li>
-          {options.map(({ newTo, name }) =>
+          {options.map(({ newTo, name }) => (
             <li key={name}>
-              <MenuItem newTo={newTo}>
-                {name}
-              </MenuItem>
-            </li>,
-          )}
+              <MenuItem newTo={newTo}>{name}</MenuItem>
+            </li>
+          ))}
         </ul>
       </li>
     );
@@ -76,7 +74,7 @@ SubMenu.propTypes = {
 
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
-  visible => ({ visible }),
+  visible => ({ visible })
 );
 
 export default connect(mapStateToProps)(SubMenu);

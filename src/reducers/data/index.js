@@ -10,6 +10,7 @@ import {
 /*:: type Datum = {
   payload: any,
   loading: boolean,
+  url: string,
   progress: number,
   error: any,
 } */
@@ -18,12 +19,15 @@ export const alreadyLoadingError = 'Already Loading';
 
 export default (
   state /*: {[key: string]: Datum} */ = {},
-  action /*: Object */,
+  action /*: Object */
 ) => {
   switch (action.type) {
     case LOADING_DATA:
       if (state[action.key]) throw new Error(alreadyLoadingError);
-      return { ...state, [action.key]: { loading: true, progress: 0 } };
+      return {
+        ...state,
+        [action.key]: { loading: true, progress: 0, url: action.key },
+      };
     case LOADED_DATA:
       return {
         ...state,
