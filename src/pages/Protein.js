@@ -5,7 +5,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 import ColorHash from 'color-hash/lib/color-hash';
 
@@ -206,18 +206,22 @@ const List = ({
 };
 List.propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "protein-summary" */ 'components/Protein/Summary')
-);
-const StructureAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure')
-);
-const EntryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry')
-);
-const DomainAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture')
-);
+const SummaryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'),
+});
+const StructureAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
+});
+const EntryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
+});
+const DomainAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
+});
 
 const SummaryComponent = ({ data: { payload }, location }) => (
   <SummaryAsync data={payload} location={location} />

@@ -5,46 +5,50 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Switch from 'components/generic/Switch';
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 
 import BrowseTabs from 'components/BrowseTabs';
 // Main pages
-const Home = createAsyncComponent(() =>
-  import(/* webpackChunkName: "home" */ 'pages/Home'),
-);
-const Entry = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-page" */ 'pages/Entry'),
-);
-const Protein = createAsyncComponent(() =>
-  import(/* webpackChunkName: "protein-page" */ 'pages/Protein'),
-);
-const Structure = createAsyncComponent(() =>
-  import(/* webpackChunkName: "structure-page" */ 'pages/Structure'),
-);
-const Organism = createAsyncComponent(() =>
-  import(/* webpackChunkName: "structure-page" */ 'pages/Organism'),
-);
+const Home = loadable({
+  loader: () => import(/* webpackChunkName: "home" */ 'pages/Home'),
+});
+const Entry = loadable({
+  loader: () => import(/* webpackChunkName: "entry-page" */ 'pages/Entry'),
+});
+const Protein = loadable({
+  loader: () => import(/* webpackChunkName: "protein-page" */ 'pages/Protein'),
+});
+const Structure = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "structure-page" */ 'pages/Structure'),
+});
+const Organism = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "structure-page" */ 'pages/Organism'),
+});
 
 // Static pages
-const Search = createAsyncComponent(() =>
-  import(/* webpackChunkName: "search" */ 'staticPages/Search'),
-);
-const About = createAsyncComponent(() =>
-  import(/* webpackChunkName: "about" */ 'staticPages/About'),
-);
-const Help = createAsyncComponent(() =>
-  import(/* webpackChunkName: "help" */ 'staticPages/Help'),
-);
-const Contact = createAsyncComponent(() =>
-  import(/* webpackChunkName: "contact" */ 'staticPages/Contact'),
-);
-const Settings = createAsyncComponent(() =>
-  import(/* webpackChunkName: "settings" */ 'staticPages/Settings'),
-);
+const Search = loadable({
+  loader: () => import(/* webpackChunkName: "search" */ 'staticPages/Search'),
+});
+const About = loadable({
+  loader: () => import(/* webpackChunkName: "about" */ 'staticPages/About'),
+});
+const Help = loadable({
+  loader: () => import(/* webpackChunkName: "help" */ 'staticPages/Help'),
+});
+const Contact = loadable({
+  loader: () => import(/* webpackChunkName: "contact" */ 'staticPages/Contact'),
+});
+const Settings = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "settings" */ 'staticPages/Settings'),
+});
 
-const NotFound = createAsyncComponent(() =>
-  import(/* webpackChunkName: "not-found" */ 'staticPages/error/NotFound'),
-);
+const NotFound = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "not-found" */ 'staticPages/error/NotFound'),
+});
 
 const pages = new Set([
   { value: 'entry', component: Entry },
@@ -58,7 +62,7 @@ const pages = new Set([
   { value: 'settings', component: Settings },
 ]);
 
-const Pages = ({ stuck, top, ...props } /*: Object */) =>
+const Pages = ({ stuck, top, ...props } /*: Object */) => (
   <main style={{ marginTop: stuck ? '174px' : 0 }}>
     <Switch
       {...props}
@@ -73,7 +77,8 @@ const Pages = ({ stuck, top, ...props } /*: Object */) =>
       childRoutes={pages}
       catchAll={NotFound}
     />
-  </main>;
+  </main>
+);
 Pages.propTypes = {
   stuck: T.bool.isRequired,
   top: T.number.isRequired,
@@ -81,7 +86,7 @@ Pages.propTypes = {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  stuck => ({ stuck }),
+  stuck => ({ stuck })
 );
 
 export default connect(mapStateToProps)(Pages);

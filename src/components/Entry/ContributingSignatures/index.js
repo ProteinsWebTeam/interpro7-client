@@ -4,16 +4,15 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
-import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 
 import styles from 'styles/blocks.css';
 import ipro from 'styles/interpro-new.css';
 
-const SchemaOrgData = createAsyncComponent(
-  () => import(/* webpackChunkName: "schemaOrg" */'schema_org'),
-  () => null,
-  'SchemaOrgData'
-);
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const schemaProcessData = data => ({
   '@type': 'ProteinEntity',
@@ -22,26 +21,30 @@ const schemaProcessData = data => ({
   name: data.name,
 });
 
-const ContributingSignatures = ({contr}/*: {contr: Object} */) => (
-  <div className={styles.card} style={{flex: '0 0 auto'}}>
+const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
+  <div className={styles.card} style={{ flex: '0 0 auto' }}>
     <h5>Contributing signatures:</h5>
     <AnimatedEntry className={ipro.chevron}>
       {Object.entries(contr).map(([db, accessions]) => (
         <li key={db}>
-          <Link newTo={{description: {mainType: 'entry', mainDB: db}}}>
+          <Link newTo={{ description: { mainType: 'entry', mainDB: db } }}>
             {db}
           </Link>:
           <ul>
             {accessions.map(accession => (
               <li key={accession}>
                 <SchemaOrgData
-                  data={{db, name: accession}}
+                  data={{ db, name: accession }}
                   processData={schemaProcessData}
                 />
                 <Link
-                  newTo={{description: {
-                    mainType: 'entry', mainDB: db, mainAccession: accession,
-                  }}}
+                  newTo={{
+                    description: {
+                      mainType: 'entry',
+                      mainDB: db,
+                      mainAccession: accession,
+                    },
+                  }}
                 >
                   {accession}
                 </Link>

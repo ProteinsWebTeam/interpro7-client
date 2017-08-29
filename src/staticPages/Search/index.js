@@ -6,7 +6,7 @@ import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import SearchResults from 'components/SearchResults';
 
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
@@ -14,15 +14,18 @@ import styles from 'styles/blocks.css';
 
 const f = foundationPartial(ipro);
 
-const SearchByText = createAsyncComponent(() =>
-  import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText')
-);
-const IPScanSearch = createAsyncComponent(() =>
-  import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch')
-);
-const IPScanStatus = createAsyncComponent(() =>
-  import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus')
-);
+const SearchByText = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
+});
+const IPScanSearch = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch'),
+});
+const IPScanStatus = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus'),
+});
 
 const IPScanSearchAndStatus = () => (
   <div>

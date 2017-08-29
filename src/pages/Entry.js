@@ -7,7 +7,7 @@ import { GoLink } from 'components/ExtLink';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
 import Table, {
@@ -327,27 +327,31 @@ class List extends Component {
   }
 }
 
-const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-summary" */ 'components/Entry/Summary')
-);
-const StructureAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure')
-);
-const ProteinAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein')
-);
-const SpeciesAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Species')
-);
-const DomainAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture')
-);
+const SummaryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-summary" */ 'components/Entry/Summary'),
+});
+const StructureAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
+});
+const ProteinAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein'),
+});
+const SpeciesAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-subpage" */ 'subPages/Species'),
+});
+const DomainAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
+});
 
-const SchemaOrgData = createAsyncComponent(
-  () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  () => null,
-  'SchemaOrgData'
-);
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const pages = new Set([
   { value: 'structure', component: StructureAsync },

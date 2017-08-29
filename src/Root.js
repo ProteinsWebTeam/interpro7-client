@@ -10,7 +10,7 @@ import 'ebi-framework/css/ebi-global.scss';
 // import 'styles/theme-interpro.css';
 import 'styles/interpro-new.css';
 
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 
 import Overlay from 'components/Overlay';
 
@@ -27,53 +27,48 @@ const DEFAULT_SCHEDULE_DELAY = 1000;
 
 const NullComponent = () => null;
 
-const LoadingBarAsync = createAsyncComponent(
-  () =>
+const LoadingBarAsync = loadable({
+  loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "loading-bar" */ 'components/LoadingBar'),
+      import(/* webpackChunkName: "loading-bar" */ 'components/LoadingBar')
     ),
-  NullComponent,
-  'LoadingBar',
-);
+  loading: NullComponent,
+});
 
-const SideMenuAsync = createAsyncComponent(
-  () =>
+const SideMenuAsync = loadable({
+  loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "side-menu" */ 'components/Menu/SideMenu'),
+      import(/* webpackChunkName: "side-menu" */ 'components/Menu/SideMenu')
     ),
-  NullComponent,
-  'SideMenu',
-);
+  loading: NullComponent,
+});
 
-const EMBLDropdownAsync = createAsyncComponent(
-  () =>
+const EMBLDropdownAsync = loadable({
+  loader: () =>
     schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "cookie-banner" */ 'components/EMBLDropdown'),
+      import(/* webpackChunkName: "cookie-banner" */ 'components/EMBLDropdown')
     ),
-  NullComponent,
-  'EMBLDropdown',
-);
+  loading: NullComponent,
+});
 
-const EBIFooterAsync = createAsyncComponent(
-  () =>
+const EBIFooterAsync = loadable({
+  loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "ebi-footer" */ 'components/EBIFooter'),
+      import(/* webpackChunkName: "ebi-footer" */ 'components/EBIFooter')
     ),
-  NullComponent,
-  'EBIFooter',
-);
+  loading: NullComponent,
+});
 
-const ToastDisplayAsync = createAsyncComponent(
-  () =>
+const ToastDisplayAsync = loadable({
+  loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "toast-display" */ 'components/Toast/ToastDisplay'),
+      import(/* webpackChunkName: "toast-display" */ 'components/Toast/ToastDisplay')
     ),
-  NullComponent,
-  'ToastDisplay',
-);
+  loading: NullComponent,
+});
 
-const CookieFooterAsync = createAsyncComponent(
-  () =>
+const CookieFooterAsync = loadable({
+  loader: () =>
     schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
       try {
         if (
@@ -85,11 +80,10 @@ const CookieFooterAsync = createAsyncComponent(
         return import(/* webpackChunkName: "cookie-banner" */ 'components/CookieBanner');
       }
     }),
-  NullComponent,
-  'CookieFooter',
-);
+  loading: NullComponent,
+});
 
-const Root = () =>
+const Root = () => (
   <div>
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
     <LoadingBarAsync />
@@ -105,6 +99,7 @@ const Root = () =>
     <EBIFooterAsync />
     <ToastDisplayAsync />
     <CookieFooterAsync />
-  </div>;
+  </div>
+);
 
 export default Root;

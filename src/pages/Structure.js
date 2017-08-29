@@ -5,7 +5,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 
 import Table, {
   Column,
@@ -26,15 +26,18 @@ const ps = classname.bind(pageStyle);
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
-const EntryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry')
-);
-const ProteinAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein')
-);
-const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "structure-summary" */ 'components/Structure/Summary')
-);
+const EntryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
+});
+const ProteinAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein'),
+});
+const SummaryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'),
+});
 
 const propTypes = {
   data: T.shape({

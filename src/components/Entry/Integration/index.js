@@ -2,16 +2,15 @@ import React from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 
 import styles from 'styles/blocks.css';
 import ipro from 'styles/interpro-new.css';
 
-const SchemaOrgData = createAsyncComponent(
-  () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  () => null,
-  'SchemaOrgData',
-);
+const SchemaOrgData = loadable({
+  loader: import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const schemaProcessData = data => ({
   '@type': 'ProteinEntity',
@@ -20,7 +19,7 @@ const schemaProcessData = data => ({
   name: data,
 });
 
-const Integration = ({ intr }) =>
+const Integration = ({ intr }) => (
   <div className={styles.card} style={{ flex: '0 0 auto' }}>
     <h5>Integrated to</h5>
     <ul className={ipro.chevron}>
@@ -39,7 +38,8 @@ const Integration = ({ intr }) =>
         </Link>
       </li>
     </ul>
-  </div>;
+  </div>
+);
 Integration.propTypes = {
   intr: T.string.isRequired,
 };

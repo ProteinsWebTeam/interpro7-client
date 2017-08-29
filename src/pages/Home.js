@@ -1,9 +1,7 @@
 import React from 'react';
 
 // Components
-import AsyncComponent, {
-  createAsyncComponent,
-} from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
@@ -29,31 +27,46 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
 // Generate async components
 // Search box
-const SearchByText = createAsyncComponent(() =>
-  import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText')
-);
-const IPScanSearch = createAsyncComponent(() =>
-  import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch')
-);
-const IPScanStatus = createAsyncComponent(() =>
-  import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus')
-);
+const SearchByText = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
+});
+const IPScanSearch = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch'),
+});
+const IPScanStatus = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus'),
+});
 // Browse by X box
-const ByMemberDatabase = createAsyncComponent(() =>
-  import(/* webpackChunkName: "by-member-database" */ 'components/home/ByMemberDatabase')
-);
-const ByEntryType = createAsyncComponent(() =>
-  import(/* webpackChunkName: "by-entry-type" */ 'components/home/ByEntryType')
-);
-const BySpecies = createAsyncComponent(() =>
-  import(/* webpackChunkName: "by-species" */ 'components/home/BySpecies')
-);
-const ByLatestEntries = createAsyncComponent(() =>
-  import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByLatestEntries')
-);
-const ByGOTerms = createAsyncComponent(() =>
-  import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms')
-);
+const ByMemberDatabase = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-member-database" */ 'components/home/ByMemberDatabase'),
+});
+const ByEntryType = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-entry-type" */ 'components/home/ByEntryType'),
+});
+const BySpecies = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-species" */ 'components/home/BySpecies'),
+});
+const ByLatestEntries = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByLatestEntries'),
+});
+const ByGOTerms = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms'),
+});
+
+const Twitter = loadable({
+  loader: () =>
+    schedule(10000).then(() =>
+      import(/* webpackChunkName: "twitter" */ 'components/Twitter')
+    ),
+});
 
 const MaskSvgIcons = () => (
   <svg
@@ -312,13 +325,7 @@ const Home = () => (
         </div>
       </div>
     </div>
-    <AsyncComponent
-      getComponent={async () => {
-        // eslint-disable-next-line no-magic-numbers
-        await schedule(10000); // Schedule asap, but do it anyway after 10s
-        return import(/* webpackChunkName: "twitter" */ 'components/Twitter');
-      }}
-    />
+    <Twitter />
   </div>
 );
 

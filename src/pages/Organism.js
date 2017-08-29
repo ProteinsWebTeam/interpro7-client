@@ -5,7 +5,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 
 import Table, {
   Column,
@@ -145,9 +145,10 @@ const List = ({
 };
 List.propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary')
-);
+const SummaryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
+});
 // const StructureAsync = createAsyncComponent(() =>
 //   import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
 // );
