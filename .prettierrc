@@ -1,0 +1,9 @@
+singleQuote: true
+trailingComma: es5
+overrides:
+- files: "*.css"
+  options:
+    singleQuotes: false
+- files: "src/**/*.js"
+  options:
+    trailingComma: all

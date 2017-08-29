@@ -97,22 +97,14 @@
   "lint-staged": {
     "concurrent": false,
     "linters": {
-      "*.js": [
-        "prettier --single-quote --trailing-comma es5 --write",
-        "git add"
-      ],
-      "*.css": [
+      "*.(js|css)": [
         "prettier --write",
-        "git add"
-      ],
-      "src/**/*.js": [
-        "prettier --single-quote --trailing-comma all --write",
         "git add"
       ]
     }
   },
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "^1.0.8",
+    "@webcomponents/webcomponentsjs": "^1.0.9",
     "EBI-Icon-fonts": "^1.2.0",
     "babel-polyfill": "^6.26.0",
     "color-hash": "^1.0.3",
@@ -183,7 +175,7 @@
     "postcss-cssnext": "^3.0.0",
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.6",
-    "prettier": "^1.5.3",
+    "prettier": "^1.6.0",
     "react-test-renderer": "^15.6.1",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
