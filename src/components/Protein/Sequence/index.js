@@ -18,20 +18,19 @@ const formatSequence = sequence =>
     .replace(comment, '')
     .replace(whiteSpaces, '')
     .match(chunkOfTen)
-    .map((e, i, { length }) =>
+    .map((e, i, { length }) => (
       <span
         key={i}
         className={f('sequence_word')}
         style={{ zIndex: length - i }}
       >
         {e}
-      </span>,
-    );
+      </span>
+    ));
 
-const Inner = ({ sequence }) =>
-  <div className={f('sequence')}>
-    {sequence && formatSequence(sequence)}
-  </div>;
+const Inner = ({ sequence }) => (
+  <div className={f('sequence')}>{sequence && formatSequence(sequence)}</div>
+);
 Inner.propTypes = {
   sequence: T.string.isRequired,
 };
@@ -43,8 +42,8 @@ class Sequence extends PureComponent {
   };
 
   _handleClick = event => {
-    const { target } = event;
-    const oldHref = target.href;
+    const { currentTarget } = event;
+    const oldHref = currentTarget.href;
     if (!this._node) return;
     let sequenceToSearch = this.props.sequence;
     if ('getSelection' in window) {
@@ -63,9 +62,9 @@ class Sequence extends PureComponent {
       }
     }
     // Add the sequence as querystring to Hmmer link href
-    target.href += `?seq=${sequenceToSearch}`;
+    currentTarget.href += `?seq=${sequenceToSearch}`;
     // Reset href, but after the click was done
-    setTimeout(() => (target.href = oldHref));
+    setTimeout(() => (currentTarget.href = oldHref));
   };
 
   render() {
