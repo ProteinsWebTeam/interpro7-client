@@ -334,33 +334,37 @@ module.exports = (env = { dev: true }) => {
       //       minChunks: 3,
       //     }),
       env.dev ? new webpack.HotModuleReplacementPlugin() : null,
-      env.dev
-        ? new webpack.DefinePlugin({
-            'process.env': {
-              PERF: JSON.stringify(!!env.performance),
-              NODE_ENV: env.production ? JSON.stringify('production') : null,
-            },
-            'process.info': JSON.stringify({
-              git: {
-                branch: childProcess
-                  .execSync('git rev-parse --abbrev-ref HEAD')
-                  .toString()
-                  .trim(),
-                commit: childProcess
-                  .execSync('git rev-parse HEAD')
-                  .toString()
-                  .trim(),
-                tag: childProcess
-                  .execSync('git rev-parse --tags HEAD')
-                  .toString()
-                  .trim(),
-              },
-              build: {
-                time: Date.now(),
-              },
-            }),
-          })
-        : null,
+      new webpack.DefinePlugin({
+        'process.env': {
+          PERF: JSON.stringify(!!env.performance),
+          NODE_ENV: env.production ? JSON.stringify('production') : null,
+        },
+        'process.info': JSON.stringify(
+          (() => {
+            const branch = childProcess
+              .execSync('git rev-parse --abbrev-ref HEAD')
+              .toString()
+              .trim();
+            const commit = childProcess
+              .execSync('git rev-parse HEAD')
+              .toString()
+              .trim();
+            let tag = null;
+            try {
+              tag = childProcess
+                .execSync(`git describe --exact-match ${commit}`)
+                .toString()
+                .trim();
+            } catch (_) {
+              // no tag for this commit
+            }
+            return {
+              git: { branch, commit, tag },
+              build: { time: Date.now() },
+            };
+          })()
+        ),
+      }),
       env.dashboard ? new DashboardPlugin(new Dashboard().setData) : null,
       env.production || env.staging
         ? new FaviconsWebpackPlugin({
