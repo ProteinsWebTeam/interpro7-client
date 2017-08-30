@@ -5,6 +5,7 @@ import T from 'prop-types';
 import f from 'styles/foundation';
 
 export const LoadingMessage = () => <div>Loading…</div>;
+LoadingMessage.displayName = 'LoadingMessage';
 
 export const ErrorMessage = () => (
   <div>
@@ -15,6 +16,7 @@ export const ErrorMessage = () => (
     </button>
   </div>
 );
+ErrorMessage.displayName = 'ErrorMessage';
 
 /*:: type Props = {
   isLoading: boolean,
