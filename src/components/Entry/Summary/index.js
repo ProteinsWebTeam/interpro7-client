@@ -133,8 +133,10 @@ class SummaryEntry extends Component {
         )}
         {Object.keys(metadata.cross_references || {}).length > 0 && (
           <section id="cross_references">
-            <div>
-              <h4>Cross References</h4>
+            <div className={f('row')}>
+              <div className={f('large-12', 'columns')}>
+                <h4>Cross References</h4>
+              </div>
             </div>
             <CrossReferences xRefs={metadata.cross_references} />
           </section>

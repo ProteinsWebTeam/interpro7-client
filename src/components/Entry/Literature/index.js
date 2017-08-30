@@ -8,16 +8,12 @@ import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadable from 'higherOrder/loadable';
 
+import { foundationPartial } from 'styles/foundation';
+
 import refStyles from './style.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
-import { foundationPartial } from 'styles/foundation';
-const f = foundationPartial(refStyles, ebiStyles);
-// TODO: check the "partial" binding.
-// The partial binding is not cascading the styles,
-// in this case is taking row from ebi.css but is not
-// using the foundation that has been defined
 
-// import {buildAnchorLink} from 'utils/url';
+const f = foundationPartial(refStyles, ebiStyles);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -84,9 +80,9 @@ const Literature = (
   return (
     <div className={f('row')}>
       <div className={f('large-12', 'columns')}>
+        {included.length ? <h5>Used in this entry</h5> : null}
         {included.length ? (
           <AnimatedEntry className={f('list')} itemDelay={100} duration={500}>
-            <h5>Used in this entry</h5>
             {included.map(([pubID, ref], i) => (
               <LiteratureItem
                 pubID={pubID}
@@ -98,9 +94,9 @@ const Literature = (
             ))}
           </AnimatedEntry>
         ) : null}
+        {extra.length ? <h5>Further reading</h5> : null}
         {extra.length ? (
           <AnimatedEntry className={f('list')} itemDelay={100} duration={500}>
-            <h5>Further reading</h5>
             {extra.map(([pubID, ref]) => (
               <LiteratureItem pubID={pubID} key={pubID} reference={ref} />
             ))}
