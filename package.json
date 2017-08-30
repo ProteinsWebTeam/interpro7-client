@@ -1,6 +1,6 @@
 {
   "name": "interpro7-client",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/ProteinsWebTeam/interpro7-client.git"
@@ -122,13 +122,13 @@
     "isomorphic-fetch": "^2.2.1",
     "lodash-es": "^4.17.4",
     "pdb-web-components": "^0.2.0",
-    "popper.js": "^1.12.4",
+    "popper.js": "^1.12.5",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react": "^15.6.1",
     "react-addons-transition-group": "^15.6.0",
     "react-dom": "^15.6.1",
-    "react-helmet": "^5.1.3",
+    "react-helmet": "^5.2.0",
     "react-loadable": "^4.0.5",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
@@ -176,7 +176,7 @@
     "postcss-cssnext": "^3.0.0",
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.6",
-    "prettier": "^1.6.0",
+    "prettier": "^1.6.1",
     "react-test-renderer": "^15.6.1",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",

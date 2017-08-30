@@ -25,6 +25,8 @@ import idaLogo from 'images/logo_ida_100.png';
 // Bind css with style object
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
+const MAX_DELAY_FOR_TWITTER = 10000;
+
 // Generate async components
 // Search box
 const SearchByText = loadable({
@@ -63,7 +65,7 @@ const ByGOTerms = loadable({
 
 const Twitter = loadable({
   loader: () =>
-    schedule(10000).then(() =>
+    schedule(MAX_DELAY_FOR_TWITTER).then(() =>
       import(/* webpackChunkName: "twitter" */ 'components/Twitter')
     ),
 });

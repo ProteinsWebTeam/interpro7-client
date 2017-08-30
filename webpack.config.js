@@ -300,8 +300,11 @@ module.exports = (env = { dev: true }) => {
       ],
     },
     performance: {
+      hints: 'warning',
       // eslint-disable-next-line no-magic-numbers
       maxAssetSize: 5 * kB * kB, // 5MB
+      // eslint-disable-next-line no-magic-numbers
+      maxEntrypointSize: 1 * kB * kB, // 1MB TODO: reduce this eventually!
     },
     plugins: [
       // new webpack.optimize.ModuleConcatenationPlugin(),
