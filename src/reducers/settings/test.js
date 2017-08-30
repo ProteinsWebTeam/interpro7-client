@@ -6,18 +6,18 @@ describe('reducer for settings', () => {
 
   beforeAll(() => (defaultSettings = getDefaultSettings()));
 
-  it('should return the initial state', () => {
+  test('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual(defaultSettings);
   });
 
-  it('should handle CHANGE_SETTINGS action', () => {
+  test('should handle CHANGE_SETTINGS action', () => {
     expect(
       reducer(defaultSettings, {
         type: CHANGE_SETTINGS,
         category: 'cache',
         key: 'enabled',
         value: true,
-      }).cache.enabled,
+      }).cache.enabled
     ).toBe(true);
     expect(
       reducer(defaultSettings, {
@@ -25,18 +25,18 @@ describe('reducer for settings', () => {
         category: 'cache',
         key: 'enabled',
         value: false,
-      }).cache.enabled,
+      }).cache.enabled
     ).toBe(false);
   });
 
-  it('should handle RESET_SETTINGS action', () => {
+  test('should handle RESET_SETTINGS action', () => {
     expect(reducer({}, { type: RESET_SETTINGS })).toEqual(defaultSettings);
     expect(
-      reducer({}, { type: RESET_SETTINGS, value: { setting: 'value' } }),
+      reducer({}, { type: RESET_SETTINGS, value: { setting: 'value' } })
     ).toEqual({ setting: 'value' });
   });
 
-  it('should ignore everything else', () => {
+  test('should ignore everything else', () => {
     const untouched = {};
     expect(reducer(untouched, {})).toBe(untouched);
   });

@@ -3,7 +3,7 @@ import * as types from '../types';
 
 describe('actions', () => {
   describe('location', () => {
-    it('should create an action to go to new location', () => {
+    test('should create an action to go to new location', () => {
       const expected = {
         type: types.NEW_NEW_LOCATION,
         location: 'new_location',
@@ -12,28 +12,28 @@ describe('actions', () => {
       expect(actions.goToNewLocation('new_location')).toEqual(expected);
     });
 
-    it('should create an action to go to new location (processed)', () => {
+    test('should create an action to go to new location (processed)', () => {
       const newLocation = { description: { mainType: 'entry' } };
       const expected = {
         type: types.NEW_PROCESSED_NEW_LOCATION,
         newLocation,
       };
       expect(actions.newLocationChangeFromHistory(newLocation)).toEqual(
-        expected,
+        expected
       );
     });
   });
 
   describe('UI', () => {
     describe('EMBL map', () => {
-      it('should create an action to toggle EMBL map nav', () => {
+      test('should create an action to toggle EMBL map nav', () => {
         const expected = {
           type: types.TOGGLE_EMBL_MAP_NAV,
         };
         expect(actions.toggleEMBLMapNav()).toEqual(expected);
       });
 
-      it('should create an action to open EMBL map nav', () => {
+      test('should create an action to open EMBL map nav', () => {
         const expected = {
           type: types.TOGGLE_EMBL_MAP_NAV,
           status: 'open',
@@ -41,7 +41,7 @@ describe('actions', () => {
         expect(actions.openEMBLMapNav()).toEqual(expected);
       });
 
-      it('should create an action to close EMBL map nav', () => {
+      test('should create an action to close EMBL map nav', () => {
         const expected = {
           type: types.TOGGLE_EMBL_MAP_NAV,
           status: 'close',
@@ -51,14 +51,14 @@ describe('actions', () => {
     });
 
     describe('side nav', () => {
-      it('should create an action to toggle side nav', () => {
+      test('should create an action to toggle side nav', () => {
         const expected = {
           type: types.TOGGLE_SIDE_NAV,
         };
         expect(actions.toggleSideNav()).toEqual(expected);
       });
 
-      it('should create an action to open side nav', () => {
+      test('should create an action to open side nav', () => {
         const expected = {
           type: types.TOGGLE_SIDE_NAV,
           status: 'open',
@@ -66,7 +66,7 @@ describe('actions', () => {
         expect(actions.openSideNav()).toEqual(expected);
       });
 
-      it('should create an action to close side nav', () => {
+      test('should create an action to close side nav', () => {
         const expected = {
           type: types.TOGGLE_SIDE_NAV,
           status: 'close',
@@ -75,7 +75,7 @@ describe('actions', () => {
       });
     });
 
-    it('should create an action to close everything', () => {
+    test('should create an action to close everything', () => {
       const expected = {
         type: types.CLOSE_EVERYTHING,
       };
@@ -83,14 +83,14 @@ describe('actions', () => {
     });
 
     describe('sticky header', () => {
-      it('should create an action to stick the header', () => {
+      test('should create an action to stick the header', () => {
         const expected = {
           type: types.STUCK,
         };
         expect(actions.stick()).toEqual(expected);
       });
 
-      it('should create an action to unstick the header', () => {
+      test('should create an action to unstick the header', () => {
         const expected = {
           type: types.UNSTUCK,
         };
@@ -100,7 +100,7 @@ describe('actions', () => {
   });
 
   describe('settings', () => {
-    it('should create an action to change page size', () => {
+    test('should create an action to change page size', () => {
       const expected = {
         type: types.CHANGE_SETTINGS,
         category: 'pagination',
@@ -113,7 +113,7 @@ describe('actions', () => {
     });
 
     // TODO: check problem. It seems like jsdom is not accepting "dataset" atm.
-    it.skip('should create an action to change settings', () => {
+    test.skip('should create an action to change settings', () => {
       const category = 'my-category';
       const name = 'my-name';
       const value = 'my-value';
@@ -133,7 +133,7 @@ describe('actions', () => {
       expect(actions.changeSettings({ target: input })).toEqual(expected);
     });
 
-    it('should create an action to reset settings', () => {
+    test('should create an action to reset settings', () => {
       const defaultSettings = { whatever: 'value' };
       const expectedwithValue = {
         type: types.RESET_SETTINGS,
@@ -149,7 +149,7 @@ describe('actions', () => {
     const key = 'my-unique-url-as-key';
     const payload = { whatever: 'value' };
 
-    it('should create an action to mark data as loading', () => {
+    test('should create an action to mark data as loading', () => {
       const expected = {
         type: types.LOADING_DATA,
         key,
@@ -157,7 +157,7 @@ describe('actions', () => {
       expect(actions.loadingData(key)).toEqual(expected);
     });
 
-    it('should create an action to mark data as loaded', () => {
+    test('should create an action to mark data as loaded', () => {
       const status = 200;
       const ok = true;
       const expected = {
@@ -168,11 +168,11 @@ describe('actions', () => {
         ok,
       };
       expect(actions.loadedData(key, { payload, status, ok })).toEqual(
-        expected,
+        expected
       );
     });
 
-    it('should create an action to mark progress data', () => {
+    test('should create an action to mark progress data', () => {
       const progress = 0.5;
       const expected = {
         type: types.PROGRESS_DATA,
@@ -182,7 +182,7 @@ describe('actions', () => {
       expect(actions.progressData(key, progress)).toEqual(expected);
     });
 
-    it('should create an action to unload data', () => {
+    test('should create an action to unload data', () => {
       const expected = {
         type: types.UNLOADING_DATA,
         key,
@@ -190,7 +190,7 @@ describe('actions', () => {
       expect(actions.unloadingData(key)).toEqual(expected);
     });
 
-    it('should create an action to mark data as failed', () => {
+    test('should create an action to mark data as failed', () => {
       const error = new Error('A problem happened when loading data');
       const expected = {
         type: types.FAILED_LOADING_DATA,
@@ -204,7 +204,7 @@ describe('actions', () => {
   describe('toast messages', () => {
     const id = '12345';
 
-    it('should create an action to add a toast', () => {
+    test('should create an action to add a toast', () => {
       const toast = { whatever: 'info' };
       const expected = {
         type: types.ADD_TOAST,
@@ -214,7 +214,7 @@ describe('actions', () => {
       expect(actions.addToast(toast, id)).toEqual(expected);
     });
 
-    it('should create an action to remove a toast', () => {
+    test('should create an action to remove a toast', () => {
       const expected = {
         type: types.REMOVE_TOAST,
         id,

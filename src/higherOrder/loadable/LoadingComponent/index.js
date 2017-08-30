@@ -2,9 +2,9 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-const Loading = () => <div>Loading…</div>;
+export const LoadingMessage = () => <div>Loading…</div>;
 
-const Error = () => (
+export const ErrorMessage = () => (
   <div>
     <p>An error happened while try to load a component of this page</p>
     <p>If you really want this part of the page you might want to reload it</p>
@@ -33,19 +33,19 @@ class LoadingComponent extends PureComponent /*:: <Props> */ {
       // Component is loading…
       if (timedOut) {
         // … but the timeout has ellapsed, maybe something bad happened…
-        return <Error />;
+        return <ErrorMessage />;
       } else if (pastDelay) {
         // … but it's taking a bit of time, better display loading info to user
-        return <Loading />;
+        return <LoadingMessage />;
       }
       // … but still within normal delay, just relax and wait.
       return null;
     } else if (error) {
-      console.error(error);
-      return <Error />;
+      // console.error(error);
+      return <ErrorMessage />;
     }
     // If we haven't returned here, it means that something strange happened…
-    console.warn('Something strange is happening…');
+    // console.warn('Something strange is happening…');
     return null;
   }
 }

@@ -10,11 +10,11 @@ import {
 describe('reducer for data handling in state', () => {
   const payload = { whatever: 'value' };
 
-  it('should return the initial state', () => {
+  test('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual({});
   });
 
-  it('should handle LOADING_DATA action', () => {
+  test('should handle LOADING_DATA action', () => {
     expect(reducer({}, { type: LOADING_DATA, key: 'a' })).toEqual({
       a: { loading: true, progress: 0, url: 'a' },
     });
@@ -27,7 +27,7 @@ describe('reducer for data handling in state', () => {
     );
   });
 
-  it('should handle LOADED_DATA action', () => {
+  test('should handle LOADED_DATA action', () => {
     expect(
       reducer(
         { a: { loading: true, progress: 0, url: 'a' } },
@@ -61,7 +61,7 @@ describe('reducer for data handling in state', () => {
     });
   });
 
-  it('should handle PROGRESS_DATA action', () => {
+  test('should handle PROGRESS_DATA action', () => {
     expect(
       reducer(
         { a: { loading: true, progress: 0.3, url: 'a' } },
@@ -76,7 +76,7 @@ describe('reducer for data handling in state', () => {
     ).toEqual({ a: {}, b: { loading: true, progress: 0.8, url: 'b' } });
   });
 
-  it('should handle FAILED_LOADING_DATA action', () => {
+  test('should handle FAILED_LOADING_DATA action', () => {
     expect(
       reducer(
         { a: { loading: true, progress: 0.3, url: 'a' } },
@@ -108,7 +108,7 @@ describe('reducer for data handling in state', () => {
     });
   });
 
-  it('should handle UNLOADING_DATA action', () => {
+  test('should handle UNLOADING_DATA action', () => {
     expect(reducer({ a: {} }, { type: UNLOADING_DATA, key: 'a' })).toEqual({});
     expect(
       reducer({ a: {}, b: {} }, { type: UNLOADING_DATA, key: 'b' })
@@ -118,7 +118,7 @@ describe('reducer for data handling in state', () => {
     });
   });
 
-  it('should ignore everything else', () => {
+  test('should ignore everything else', () => {
     const untouched = {};
     expect(reducer(untouched, {})).toBe(untouched);
   });
