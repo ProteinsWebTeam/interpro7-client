@@ -44,7 +44,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
     });
   }
 
-  comnponentWillUnmount() {
+  componentWillUnmount() {
     if (this._twitterScript) this._twitterScript.cancel();
   }
 
