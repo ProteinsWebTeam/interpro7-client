@@ -2,13 +2,17 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+import f from 'styles/foundation';
+
 export const LoadingMessage = () => <div>Loading…</div>;
 
 export const ErrorMessage = () => (
   <div>
     <p>An error happened while try to load a component of this page</p>
     <p>If you really want this part of the page you might want to reload it</p>
-    <button onClick={location.reload}>Reload this page</button>
+    <button onClick={location.reload} className={f('button')}>
+      Reload this page
+    </button>
   </div>
 );
 

@@ -1,6 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ErrorMessage /> should render error message 1`] = `null`;
+exports[`<ErrorMessage /> should render error message 1`] = `
+<div>
+  <p>
+    An error happened while try to load a component of this page
+  </p>
+  <p>
+    If you really want this part of the page you might want to reload it
+  </p>
+  <button
+    className="button"
+    onClick={[Function]}
+  >
+    Reload this page
+  </button>
+</div>
+`;
 
 exports[`<LoadingComponent /> should render in loading state after delay and time out 1`] = `<LoadingMessage />`;
 
@@ -8,4 +23,8 @@ exports[`<LoadingComponent /> should render in loading state after delay but bef
 
 exports[`<LoadingComponent /> should render in with error 1`] = `<ErrorMessage />`;
 
-exports[`<LoadingMessage /> should render loading message 1`] = `null`;
+exports[`<LoadingMessage /> should render loading message 1`] = `
+<div>
+  Loading…
+</div>
+`;

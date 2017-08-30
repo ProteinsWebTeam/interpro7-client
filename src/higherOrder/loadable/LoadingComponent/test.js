@@ -4,9 +4,9 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 import LoadingComponent, { LoadingMessage, ErrorMessage } from '.';
 
-const renderer = new ShallowRenderer();
-
 describe('<LoadingComponent />', () => {
+  const renderer = new ShallowRenderer();
+
   test('should render in loading state before delay and time out', () => {
     renderer.render(
       <LoadingComponent isLoading={true} timedOut={false} pastDelay={false} />
@@ -49,6 +49,8 @@ describe('<LoadingComponent />', () => {
 });
 
 describe('<LoadingMessage />', () => {
+  const renderer = new ShallowRenderer();
+
   test('should render loading message', () => {
     renderer.render(<LoadingMessage />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
@@ -56,6 +58,8 @@ describe('<LoadingMessage />', () => {
 });
 
 describe('<ErrorMessage />', () => {
+  const renderer = new ShallowRenderer();
+
   test('should render error message', () => {
     renderer.render(<ErrorMessage />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
