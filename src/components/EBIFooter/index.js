@@ -1,39 +1,41 @@
 // @flow
 import React from 'react';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 import styles from './style.css';
-import ebiGlobalStyles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css';
-import ebiTheme from 'styles/theme-template.css';
-import ebiPetrolTheme from 'styles/theme-embl-petrol.css';
-const styleBundle = foundationPartial(
-  styles, fonts, ebiPetrolTheme, ebiTheme, ebiGlobalStyles
-);
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+
+const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 
 const EBIFooter = () => (
   <footer>
-    <div id={styleBundle('global-footer')}>
+    <div
+      id={styleBundle('global-footer')}
+      className={styleBundle('global-footer')}
+    >
       <nav
         id={styleBundle('global-nav-expanded')}
-        className={styleBundle('row')}
+        className={styleBundle('global-nav-expanded', 'row')}
       >
-        <div className={styleBundle({
-          columns: 'true',
-          'small-6': 'true',
-          'medium-2': 'true',
-        })}
+        <div
+          className={styleBundle({
+            columns: 'true',
+            'small-6': 'true',
+            'medium-2': 'true',
+          })}
         >
           <a href="//www.ebi.ac.uk" title="EMBL-EBI" rel="noopener">
             <span className={styleBundle('ebi-logo')} />
           </a>
           <ul />
         </div>
-        <div className={styleBundle({
-          columns: 'true',
-          'small-6': 'true',
-          'medium-2': 'true',
-        })}
+        <div
+          className={styleBundle({
+            columns: 'true',
+            'small-6': 'true',
+            'medium-2': 'true',
+          })}
         >
           <h5 className={styleBundle('services')}>
             <a
@@ -46,7 +48,9 @@ const EBIFooter = () => (
           </h5>
           <ul>
             <li className={styleBundle('first')}>
-              <a href="//www.ebi.ac.uk/services" rel="noopener">By topic</a>
+              <a href="//www.ebi.ac.uk/services" rel="noopener">
+                By topic
+              </a>
             </li>
             <li>
               <a href="//www.ebi.ac.uk/services/all" rel="noopener">
@@ -61,11 +65,12 @@ const EBIFooter = () => (
           </ul>
         </div>
 
-        <div className={styleBundle({
-          columns: 'true',
-          'small-6': 'true',
-          'medium-2': 'true',
-        })}
+        <div
+          className={styleBundle({
+            columns: 'true',
+            'small-6': 'true',
+            'medium-2': 'true',
+          })}
         >
           <h5 className={styleBundle('research')}>
             <a
@@ -92,16 +97,19 @@ const EBIFooter = () => (
                 Postdocs
               </a>
               &nbsp;&&nbsp;
-              <a href="//www.ebi.ac.uk/research/eipp" rel="noopener">PhDs</a>
+              <a href="//www.ebi.ac.uk/research/eipp" rel="noopener">
+                PhDs
+              </a>
             </li>
           </ul>
         </div>
 
-        <div className={styleBundle({
-          columns: 'true',
-          'small-6': 'true',
-          'medium-2': 'true',
-        })}
+        <div
+          className={styleBundle({
+            columns: 'true',
+            'small-6': 'true',
+            'medium-2': 'true',
+          })}
         >
           <h5 className={styleBundle('training')}>
             <a
@@ -136,11 +144,12 @@ const EBIFooter = () => (
           </ul>
         </div>
 
-        <div className={styleBundle({
-          columns: 'true',
-          'small-6': 'true',
-          'medium-2': 'true',
-        })}
+        <div
+          className={styleBundle({
+            columns: 'true',
+            'small-6': 'true',
+            'medium-2': 'true',
+          })}
         >
           <h5 className={styleBundle('industry')}>
             <a
@@ -175,11 +184,12 @@ const EBIFooter = () => (
           </ul>
         </div>
 
-        <div className={styleBundle({
-          columns: 'true',
-          'small-6': 'true',
-          'medium-2': 'true',
-        })}
+        <div
+          className={styleBundle({
+            columns: 'true',
+            'small-6': 'true',
+            'medium-2': 'true',
+          })}
         >
           <h5 className={styleBundle('about')}>
             <a
@@ -197,7 +207,9 @@ const EBIFooter = () => (
               </a>
             </li>
             <li>
-              <a href="//www.ebi.ac.uk/about/events" rel="noopener">Events</a>
+              <a href="//www.ebi.ac.uk/about/events" rel="noopener">
+                Events
+              </a>
             </li>
             <li>
               <a
@@ -209,7 +221,9 @@ const EBIFooter = () => (
               </a>
             </li>
             <li>
-              <a href="//www.ebi.ac.uk/about/news" rel="noopener">News</a>
+              <a href="//www.ebi.ac.uk/about/news" rel="noopener">
+                News
+              </a>
             </li>
             <li>
               <a href="//www.ebi.ac.uk/about/people" rel="noopener">
@@ -218,23 +232,24 @@ const EBIFooter = () => (
             </li>
           </ul>
         </div>
-
       </nav>
 
       <section
         id={styleBundle('ebi-footer-meta')}
-        className={styleBundle('row')}
+        className={styleBundle('ebi-footer-meta', 'row')}
       >
         <div className={styleBundle('columns')}>
           <p className={styleBundle('address')}>
-            EMBL-EBI, Wellcome Genome Campus, Hinxton, Cambridgeshire,
-            CB10 1SD, UK. +44 (0)1223 49 44 44
+            EMBL-EBI, Wellcome Genome Campus, Hinxton, Cambridgeshire, CB10 1SD,
+            UK. +44 (0)1223 49 44 44
           </p>
           <p className={styleBundle('legal')}>
-            Copyright © EMBL-EBI 2016 | EMBL-EBI is&nbsp;
+            Copyright © EMBL-EBI 2017 | EMBL-EBI is&nbsp;
             <a href="http://www.embl.org/" rel="noopener">
               part of the European Molecular Biology Laboratory
-            </a> | <a href="//www.ebi.ac.uk/about/terms-of-use" rel="noopener">
+            </a>{' '}
+            |{' '}
+            <a href="//www.ebi.ac.uk/about/terms-of-use" rel="noopener">
               Terms of use
             </a>
             <a
@@ -247,7 +262,6 @@ const EBIFooter = () => (
           </p>
         </div>
       </section>
-
     </div>
   </footer>
 );

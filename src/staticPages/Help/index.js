@@ -1,4 +1,10 @@
 // @flow
-import React from 'react';
+import React, { PureComponent } from 'react';
 
-export default () => <section>Help page</section>;
+export default class extends PureComponent /*:: <{}> */ {
+  static displayName = 'Help';
+
+  render() {
+    return <section>Help page</section>;
+  }
+}

@@ -12,7 +12,10 @@ import description2path from 'utils/processLocation/description2path';
 
 import { goToNewLocation } from 'actions/creators';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+
+const f = foundationPartial(style);
 
 class ExperimentTypeFilter extends Component {
   static propTypes = {
@@ -39,16 +42,16 @@ class ExperimentTypeFilter extends Component {
   render() {
     const { data: { loading, payload }, location: { search } } = this.props;
     const types = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
     if (!loading) {
       types.unshift(['ALL', NaN]);
     }
     return (
       <div style={{ overflowX: 'hidden' }}>
-        {types.map(([type, count]) =>
+        {types.map(([type, count]) => (
           <div key={type} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
                 name="experiment_type"
@@ -60,13 +63,11 @@ class ExperimentTypeFilter extends Component {
                 }
                 style={{ margin: '0.25em' }}
               />
-              <span>
-                {type}
-              </span>
+              <span>{type}</span>
               <NumberLabel value={count} />
             </label>
-          </div>,
-        )}
+          </div>
+        ))}
       </div>
     );
   }
@@ -83,16 +84,16 @@ const getUrlFor = createSelector(
     _search.group_by = 'experiment_type';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description,
+      description
     )}?${qsStringify(_search)}`;
-  },
+  }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  loadData(getUrlFor)(ExperimentTypeFilter),
+  loadData(getUrlFor)(ExperimentTypeFilter)
 );

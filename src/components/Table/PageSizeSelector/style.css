@@ -1,5 +1,4 @@
-@import "../../../styles/ebi/fonts.css";
-@import "../../../styles/timing.css";
+@import '../../../styles/timing.css';
 
 .apply-all {
   margin-left: 1rem;
@@ -21,4 +20,8 @@
     opacity: 0;
     transition: opacity var(--timing-fast) ease-in-out;
   }
+}
+.table-length,
+.table-length select {
+  font-size: 0.9rem;
 }

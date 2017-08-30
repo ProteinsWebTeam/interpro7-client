@@ -70,8 +70,11 @@ const loadData = params => {
         unloadingData: T.func.isRequired,
         data: T.shape({
           loading: T.bool,
+          progress: T.number,
           payload: T.any,
+          url: T.string,
           status: T.number,
+          ok: T.boolean,
         }),
       };
 
@@ -124,7 +127,6 @@ const loadData = params => {
         }
       }
 
-      // eslint-disable-next-line max-statements
       componentWillUpdate({
         appState: nextAppState,
         loadingData,
@@ -137,7 +139,10 @@ const loadData = params => {
           getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState));
 
         // Same location, no need to reload data
-        if (nextAppState.newLocation === this.props.appState.newLocation) {
+        if (
+          nextAppState.newLocation === this.props.appState.newLocation &&
+          nextAppState.settings === this.props.appState.settings
+        ) {
           return;
         }
 

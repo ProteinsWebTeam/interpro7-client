@@ -1,7 +1,7 @@
-@import "../../styles/colors.css";
-@import "../../styles/spacing.css";
-@import "../../styles/fonts.css";
-@import "../../styles/timing.css";
+@import '../../styles/colors.css';
+@import '../../styles/spacing.css';
+@import '../../styles/fonts.css';
+@import '../../styles/timing.css';
 
 .standard {
   /* width: 100vw; */ /*removed as it clashed with foundation grid*/
@@ -14,51 +14,34 @@
   }
 }
 
-.header {
+.masthead {
   /*position: sticky;*/
-  /*top: -150px;!* -34px (EBI header); *!*/
+  /* top: -150px;*/ /*!* -34px (EBI header); *!*/
   left: 0;
   right: 0;
-  height: 238px; /*magic --- SP for what use ?*/
+  /*height: 238px;*/ /*magic --- SP for what use ?*/
   z-index: 3;
 }
-
-.local_masthead {
+.masthead {
   background-image: linear-gradient(
       to right,
       rgba(0, 85, 158, 0.9),
       rgba(45, 174, 193, 0.5),
       rgba(0, 85, 158, 0.9)
     ),
-    url("images/banner/fondation-morse-header.jpg");
+    url(images/backgrounds/fondation-morse-header.jpg);
   background-repeat: no-repeat, repeat;
   background-position: left, top right;
   background-size: 100%, 1400px;
 }
 
-.header_background {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-  /*background-color: black;
-  background-image: url("images/banner/banner.jpg"), radial-gradient(
-    circle at 35%, white 0%, #0eb2a4 5%, black 30%
-  );
-  background-position: 25% center;
-  background-repeat: no-repeat;
-  background-size: auto 100%;*/
-
-  background: #00559e;
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 85, 158, 0.9),
-      rgba(45, 174, 193, 0.5),
-      rgba(0, 85, 158, 0.9)
-    ),
-    url(images/banner/fondation-morse-header.jpg);
+/*STYLE - make menu items hover slightly darker*/
+.masthead nav ul li a:hover {
+  color: #000;
+}
+/*STYLE - slightly hide division between menu items */
+.masthead nav ul.menu li {
+  border-right: 1px solid rgba(248, 248, 248, 0.2);
 }
 
 .container {
@@ -155,17 +138,17 @@
 .hamb_1,
 .hamb_2,
 .hamb_3 {
-  transition: transform .3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 }
 
 .hamb_1_open {
   transform: rotate(45deg) translate(1.9px, 1.3px);
-  transition: transform .3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 }
 
 .hamb_2_open {
   opacity: 0;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 
 .hamb_3_open {
@@ -196,7 +179,7 @@
       }
 
       &::before {
-        content: "";
+        content: '';
         z-index: 0;
         position: absolute;
         left: 0;
@@ -214,7 +197,7 @@
       }
 
       &::after {
-        content: "";
+        content: '';
         z-index: -1;
         position: absolute;
         height: 100%;
@@ -224,7 +207,7 @@
         right: 0;
         background-color: var(--colors-nearly-white);
         transform: translateY(100%);
-        transition: transform .2s ease-out;
+        transition: transform 0.2s ease-out;
       }
 
       &.active {
@@ -251,7 +234,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-end;
-  transition: transform .3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
   transform: translateX(0);
 }
 
@@ -334,7 +317,7 @@
   border: none;
   box-shadow: none;
   border-bottom: 3px solid currentColor;
-  transition: border-color .2s ease-in-out, background-color .2s ease-in-out;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
 /*use when off canvas is open and icons need to move left*/
@@ -350,14 +333,7 @@
 
 @media screen and (max-width: 20em) {
   .side-icons {
-    transition: opacity .3s;
+    transition: opacity 0.3s;
     opacity: 0;
   }
-}
-/*Navigation - remove icons*/
-ul.interpro-menu {
-  border: 2px transparent solid;
-} /*important just .interpro-menu  doesn't work - remove border that appears when sticky - temp?*/
-.interpro-menu i {
-  display: none;
 }

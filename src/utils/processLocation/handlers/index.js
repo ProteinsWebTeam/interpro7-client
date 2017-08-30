@@ -221,6 +221,60 @@ export const structureHandler /*: Handler */ = Object.create(handler, {
   },
 });
 
+export const proteomeAccessionHandler /*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: (description /*: Description */) => {
+      const position = description.focusType ? 'focus' : 'main';
+      return `${position}${description[`${position}Accession`]
+        ? 'MemberDB'
+        : ''}Accession`;
+    },
+  },
+  cleanUp: {
+    value: (value /*: string */) => value.toUpperCase(),
+  },
+  match: {
+    value: (current /*: string */, _description /*: Description */) =>
+      /UP\d{9}/i.test(current),
+  },
+});
+
+export const proteomeHandler /*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: (description /*: Description */) => {
+      const position = description.focusType ? 'focus' : 'main';
+      return `${position}${description[`${position}Accession`]
+        ? 'Member'
+        : ''}DB`;
+    },
+  },
+  match: {
+    value: (current /*: string */, _description /*: Description */) =>
+      current.toLowerCase() === 'proteome',
+  },
+});
+
+export const taxonomyAccessionHandler /*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: ({ focusDB } /*: Description */) =>
+      `${focusDB ? 'focus' : 'main'}Accession`,
+  },
+  match: {
+    value: (current /*: string */, _description /*: Description */) =>
+      /(all)|(\d+)/i.test(current),
+  },
+});
+
+export const taxonomyHandler /*: Handler */ = Object.create(handler, {
+  getKey: {
+    value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
+  },
+  match: {
+    value: (current /*: string */, _description /*: Description */) =>
+      current.toLowerCase() === 'taxonomy',
+  },
+});
+
 export const proteinAccessionHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: ({ focusDB } /*: Description */) =>
@@ -233,7 +287,7 @@ export const proteinAccessionHandler /*: Handler */ = Object.create(handler, {
     value: (current /*: string */) =>
       // eslint-disable-next-line max-len
       /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i.test(
-        current,
+        current
       ),
   },
 });
@@ -244,7 +298,7 @@ export const proteinDBHandler /*: Handler */ = Object.create(handler, {
   },
   match: {
     value: (current /*: string */) =>
-      /^((uni|swiss\-?)prot|trembl)$/i.test(current),
+      /^((un)?reviewed)|(uniprot)$/i.test(current),
   },
 });
 
@@ -259,14 +313,14 @@ export const proteinHandler /*: Handler */ = Object.create(handler, {
   },
 });
 
-export const proteomeHandler /*: Handler */ = Object.create(handler, {
+export const organismHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: ({ mainType } /*: Description */) =>
       `${mainType ? 'focus' : 'main'}Type`,
   },
   match: {
     value: (current /*: string */, { mainType } /*: Description */) =>
-      mainType !== 'proteome' && current.toLowerCase() === 'proteome',
+      mainType !== 'organism' && current.toLowerCase() === 'organism',
   },
 });
 

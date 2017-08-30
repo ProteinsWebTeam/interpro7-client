@@ -1,9 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 
 import getTableAccess from 'storage/idb';
 
-export default class extends Component {
+/*:: type Props = {
+  params: {
+    job: string,
+  },
+} */
+
+export default class SequenceSearch extends Component /*:: <Props> */ {
   static propTypes = {
     params: T.shape({
       job: T.string.isRequired,
@@ -27,8 +33,10 @@ export default class extends Component {
   };
 
   render() {
-    const [, job] = Object.entries(this.state)
-      .find(([, {id}]) => id === this.props.params.job) || [];
+    const [, job] =
+      Object.entries(this.state).find(
+        ([, { id }]) => id === this.props.params.job
+      ) || [];
     console.log(job);
     if (!job) return null;
     return (

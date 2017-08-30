@@ -1,39 +1,30 @@
-/* eslint-env mocha */
 /* eslint max-statements: [1, 20] */
-import 'babel-polyfill';
-
-import chai, {expect} from 'chai';
-import {spy} from 'sinon';
-import sinonChai from 'sinon-chai';
-
 import Listener from '.';
 
-chai.use(sinonChai);
-
 describe('custom event listener', () => {
-  it('should subscribe to window', () => {
+  test('should subscribe to window', () => {
     const window = {
-      addEventListener: spy(),
-      removeEventListener: spy(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
     };
     const listener = new Listener('test', window);
-    expect(window.addEventListener).to.not.have.been.called;
-    expect(window.removeEventListener).to.not.have.been.called;
-    const [cb1, cb2] = [spy(), spy()];
+    expect(window.addEventListener.mock.calls.length).toBe(0);
+    expect(window.removeEventListener.mock.calls.length).toBe(0);
+    const [cb1, cb2] = [jest.fn(), jest.fn()];
     const unsubscribes = [cb1, cb2].map(cb => listener.subscribe(cb));
-    expect(window.addEventListener).to.have.been.calledWith('test');
-    expect(window.removeEventListener).to.not.have.been.called;
+    expect(window.addEventListener.mock.calls[0][0]).toBe('test');
+    expect(window.removeEventListener.mock.calls.length).toBe(0);
     unsubscribes[1]();
-    expect(window.addEventListener).to.have.been.calledOnce;
-    expect(window.removeEventListener).to.not.have.been.called;
+    expect(window.addEventListener.mock.calls.length).toBe(1);
+    expect(window.removeEventListener.mock.calls.length).toBe(0);
     unsubscribes[0]();
-    expect(window.addEventListener).to.have.been.calledOnce;
-    expect(window.removeEventListener).to.have.been.calledOnce;
-    expect(cb1).to.not.have.been.called;
-    expect(cb2).to.not.have.been.called;
+    expect(window.addEventListener.mock.calls.length).toBe(1);
+    expect(window.removeEventListener.mock.calls.length).toBe(1);
+    expect(cb1.mock.calls.length).toBe(0);
+    expect(cb2.mock.calls.length).toBe(0);
   });
 
-  it.skip('should call function callbacks', () => {
+  test.skip('should call function callbacks', () => {
     //
   });
 });

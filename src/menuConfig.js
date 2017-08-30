@@ -51,7 +51,7 @@ export const entities /*: Array<Object> */ = [
     newTo: {
       description: {
         mainType: 'protein',
-        mainDB: 'SwissProt',
+        mainDB: 'reviewed',
       },
     },
     name: 'Protein',
@@ -68,10 +68,11 @@ export const entities /*: Array<Object> */ = [
   {
     newTo: {
       description: {
-        mainType: 'proteome',
+        mainType: 'organism',
+        mainDB: 'taxonomy',
       },
     },
-    name: 'Proteome',
+    name: 'Organism',
   },
 ];
 
@@ -209,7 +210,7 @@ export const InterPro /*: Array<Object> */ = [
   {
     newTo: { description: { other: 'release_notes' } },
     icon: '0',
-    name: 'Release Notes',
+    name: 'Release\xa0Notes',
     iconClass: 'functional',
   },
   {

@@ -11,14 +11,13 @@ import Link from 'components/generic/Link';
 import InterproMenu from 'components/Menu/InterproMenu';
 import Title from './Title';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
-import EBIHeader, { EbiSkipToDiv } from 'components/EBIHeader';
 
 import { sticky as supportsSticky } from 'utils/support';
 
 import { foundationPartial } from 'styles/foundation';
 import styles from './style.css';
-import ebiGlobalStyles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 
 const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
@@ -80,7 +79,7 @@ class _HamburgerBtn extends PureComponent {
 const getSideNav = state => state.ui.sideNav;
 const mapStateToPropsHamburger = createSelector(getSideNav, open => ({ open }));
 const HamburgerBtn = connect(mapStateToPropsHamburger, { openSideNav })(
-  _HamburgerBtn,
+  _HamburgerBtn
 );
 
 class _SideIcons extends PureComponent {
@@ -167,20 +166,19 @@ class Header extends PureComponent {
     stuck: T.bool.isRequired,
   };
 
+  // TODO: check why position:sticky banner in the page works just on top - pbm with container
   render() {
     const { stickyMenuOffset: offset, stuck } = this.props;
     return (
       <header
-        id={ebiGlobalStyles['local-masthead']}
-        className={styleBundle('header', 'local-masthead')}
+        id={ebiGlobalStyles.masthead}
+        className={styleBundle('masthead')}
         style={styleForHeader(false && supportsSticky, offset, stuck)}
       >
-        <EbiSkipToDiv />
-        <EBIHeader />
-        <div className={styleBundle('masthead', 'row')}>
+        <div className={styleBundle('masthead-inner', 'row')}>
           <Title reduced={false} />
           <SideIcons reduced={false} stuck={stuck} />
-          <InterproMenu className={styleBundle('menu', 'interpro-menu')} />
+          <InterproMenu className={styleBundle('menu')} />
         </div>
       </header>
     );
@@ -189,6 +187,6 @@ class Header extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  stuck => ({ stuck }),
+  stuck => ({ stuck })
 );
 export default connect(mapStateToProps)(Header);

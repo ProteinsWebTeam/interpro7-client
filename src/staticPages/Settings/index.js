@@ -12,7 +12,7 @@ import { foundationPartial } from 'styles/foundation';
 
 const f = foundationPartial(styles);
 
-const PaginationSettings = ({ pagination, handleChange }) =>
+const PaginationSettings = ({ pagination, handleChange }) => (
   <form data-category="pagination">
     <h4>Pagination settings</h4>
     <div className={f('row')}>
@@ -32,29 +32,29 @@ const PaginationSettings = ({ pagination, handleChange }) =>
                 style={{ width: '100%' }}
               />
             </div>
-            <div className={f('medium-1', 'column')}>
-              {pagination.pageSize}
-            </div>
+            <div className={f('medium-1', 'column')}>{pagination.pageSize}</div>
           </div>
         </label>
       </div>
     </div>
-  </form>;
+  </form>
+);
 PaginationSettings.propTypes = {
   pagination: T.object.isRequired,
   handleChange: T.func.isRequired,
 };
 
-const UISettings = (/* {ui, handleChange}*/) =>
+const UISettings = (/* {ui, handleChange}*/) => (
   <form data-category="ui">
     <h4>UI settings</h4>
-  </form>;
+  </form>
+);
 UISettings.propTypes = {
   ui: T.object.isRequired,
   handleChange: T.func.isRequired,
 };
 
-const CacheSettings = ({ cache: { enabled }, handleChange }) =>
+const CacheSettings = ({ cache: { enabled }, handleChange }) => (
   <form data-category="cache">
     <h4>Cache settings</h4>
     <div className={f('row')}>
@@ -73,28 +73,27 @@ const CacheSettings = ({ cache: { enabled }, handleChange }) =>
         </label>
       </div>
     </div>
-  </form>;
+  </form>
+);
 CacheSettings.propTypes = {
   cache: T.object.isRequired,
   handleChange: T.func.isRequired,
 };
 
-const getStatusText = (loading, response) => {
+const getStatusText = (loading, ok) => {
   if (loading) return 'Unknown';
-  return response ? 'Reachable' : 'Unreachable';
+  return ok ? 'Reachable' : 'Unreachable';
 };
 
 const EndpointSettings = ({
   handleChange,
   category,
   endpointDetails: { hostname, port, root },
-  data: { loading, payload },
+  data: { loading, ok, status },
   children,
-}) =>
+}) => (
   <form data-category={category}>
-    <h4>
-      {children}
-    </h4>
+    <h4>{children}</h4>
     <div className={f('row')}>
       <div className={f('medium-3', 'column')}>
         <label>
@@ -131,16 +130,18 @@ const EndpointSettings = ({
           <output
             className={f('button', 'output', 'hollow', {
               secondary: loading,
-              success: !loading && payload,
-              alert: !loading && !payload,
+              success: !loading && ok,
+              alert: !loading && !ok,
             })}
+            title={`Status: ${status}`}
           >
-            {getStatusText(loading, payload)}
+            {getStatusText(loading, ok)}
           </output>
         </label>
       </div>
     </div>
-  </form>;
+  </form>
+);
 EndpointSettings.propTypes = {
   handleChange: T.func.isRequired,
   category: T.string.isRequired,
@@ -156,16 +157,12 @@ EndpointSettings.propTypes = {
   }),
 };
 
-const getUrlForEndpoint = createSelector(
-  // this one is just to memoize it
-  endpoint => endpoint,
-  endpoint =>
-    createSelector(
-      state => state.settings[endpoint],
-      ({ protocol, hostname, port, root }) =>
-        `${protocol}//${hostname}:${port}${root}`,
-    ),
-);
+const getUrlForEndpoint = endpoint =>
+  createSelector(
+    state => state.settings[endpoint],
+    ({ protocol, hostname, port, root }) =>
+      `${protocol}//${hostname}:${port}${root}`
+  );
 
 const fetchOptions = { method: 'HEAD', cache: 'no-store', noCache: true };
 const APIEndpointSettings = loadData({
@@ -194,37 +191,46 @@ const Settings = ({
   },
   changeSettings,
   resetSettings,
-}) =>
-  <section onChange={changeSettings}>
-    <h3>Settings</h3>
-    <PaginationSettings pagination={pagination} handleChange={changeSettings} />
-    <UISettings ui={ui} handleChange={changeSettings} />
-    <CacheSettings cache={cache} handleChange={changeSettings} />
-    <APIEndpointSettings
-      handleChange={changeSettings}
-      category="api"
-      endpointDetails={api}
-    >
-      API Settings
-    </APIEndpointSettings>
-    <EBIEndpointSettings
-      handleChange={changeSettings}
-      category="ebi"
-      endpointDetails={ebi}
-    >
-      EBI Search Settings
-    </EBIEndpointSettings>
-    <IPScanEndpointSettings
-      handleChange={changeSettings}
-      category="ipScan"
-      endpointDetails={ipScan}
-    >
-      InterProScan Settings
-    </IPScanEndpointSettings>
-    <button onClick={resetSettings} className={f('button')}>
-      Reset settings to default values
-    </button>
-  </section>;
+}) => (
+  <div className={f('row')}>
+    <div className={f('columns', 'large-12')}>
+      <section onChange={changeSettings}>
+        <h3>Settings</h3>
+
+        <PaginationSettings
+          pagination={pagination}
+          handleChange={changeSettings}
+        />
+        <UISettings ui={ui} handleChange={changeSettings} />
+        <CacheSettings cache={cache} handleChange={changeSettings} />
+        <APIEndpointSettings
+          handleChange={changeSettings}
+          category="api"
+          endpointDetails={api}
+        >
+          API Settings
+        </APIEndpointSettings>
+        <EBIEndpointSettings
+          handleChange={changeSettings}
+          category="ebi"
+          endpointDetails={ebi}
+        >
+          EBI Search Settings
+        </EBIEndpointSettings>
+        <IPScanEndpointSettings
+          handleChange={changeSettings}
+          category="ipScan"
+          endpointDetails={ipScan}
+        >
+          InterProScan Settings
+        </IPScanEndpointSettings>
+        <button onClick={resetSettings} className={f('button')}>
+          Reset settings to default values
+        </button>
+      </section>
+    </div>
+  </div>
+);
 Settings.propTypes = {
   settings: T.shape({
     pagination: T.object.isRequired,
@@ -239,9 +245,9 @@ Settings.propTypes = {
 
 const mapStateToProps = createSelector(
   state => state.settings,
-  settings => ({ settings }),
+  settings => ({ settings })
 );
 
 export default connect(mapStateToProps, { changeSettings, resetSettings })(
-  Settings,
+  Settings
 );

@@ -1,20 +1,19 @@
 // @flow
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import foundation from 'styles/foundation';
 
-class CookieBanner extends Component {
+class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
   /* ::
-    state: {display: ?bool}
     _banner: ?any
   */
   componentWillMount() {
     if (document) {
       this.setState({
         // If cookies are already accepted, display -> false
-        display: !(document.cookie.match(/cookies-accepted=(true)/i) || [])[1],
+        display: !(document.cookie.match(/cookies-accepted=true/i) || [])[1],
       });
     }
   }
@@ -22,19 +21,20 @@ class CookieBanner extends Component {
   handleClick = () => {
     document.cookie = 'cookies-accepted=true';
     if (this._banner && this._banner.animate) {
-      this._banner
-        .animate([
-          {transform: 'translateY(0)', opacity: 1},
-          {transform: 'translateY(100%)', opacity: 0.5},
-        ], {duration: 300, fill: 'forwards', easing: 'ease-in'})
-        .onfinish = () => this.setState({display: false});
+      this._banner.animate(
+        [
+          { transform: 'translateY(0)', opacity: 1 },
+          { transform: 'translateY(100%)', opacity: 0.5 },
+        ],
+        { duration: 300, fill: 'forwards', easing: 'ease-in' }
+      ).onfinish = () => this.setState({ display: false });
     } else {
-      this.setState({display: false});
+      this.setState({ display: false });
     }
   };
 
   render() {
-    const {display = false} = this.state;
+    const { display = false } = this.state;
     if (!display) return null;
     return (
       <AnimatedEntry
@@ -55,28 +55,32 @@ class CookieBanner extends Component {
         }}
       >
         <div className={foundation('row')}>
-          <span style={{marginRight: '2em', flex: 1}}>
-            This website uses cookies.
-            By continuing to browse this site,
-            you are agreeing to the use of our site cookies.
-            To find out more, see our{' '}
+          <span style={{ marginRight: '2em', flex: 1 }}>
+            This website uses cookies. By continuing to browse this site, you
+            are agreeing to the use of our site cookies. To find out more, see
+            our{' '}
             <a
               target="_blank"
               href="https://www.ebi.ac.uk/about/terms-of-use"
-              rel="noopener"
+              rel="noopener noreferrer"
               style={{
                 color: '#f8f8f8',
                 borderBottom: '1px dotted',
               }}
             >
-            Terms of Use
+              Terms of Use
             </a>.
           </span>
           <button
-            style={{fontWeight: 'bold', padding: '0.5em'}}
+            style={{
+              fontWeight: 'bold',
+              padding: '0.5em',
+              color: '#fff',
+              float: 'right',
+            }}
             onClick={this.handleClick}
           >
-          ×
+            ×
           </button>
         </div>
       </AnimatedEntry>

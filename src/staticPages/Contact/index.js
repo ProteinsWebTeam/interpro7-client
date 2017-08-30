@@ -1,4 +1,8 @@
 // @flow
-import React from 'react';
+import React, { PureComponent } from 'react';
 
-export default () => <section>Contact page</section>;
+export class Contact extends PureComponent /*:: <{}> */ {
+  render() {
+    return <section>Contact page</section>;
+  }
+}

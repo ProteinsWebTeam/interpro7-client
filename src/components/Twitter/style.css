@@ -1,6 +1,26 @@
-@import "../../styles/colors.css";
-@import "../../styles/spacing.css";
-@import "../../styles/fonts.css";
+/*this doesn't work on my local*/
+.jumbo-news {
+  text-align: center;
+  background-color: #eee;
+  padding: 2em 0 1em 0;
+}
 
-.test {color:limegreen}
+.jumbo-news-container {
+  padding: 0;
+  color: #454545;
+  font-size: 130%;
+  width: 38%;
+  margin: 0 auto;
+}
 
+.jumbo-news-container .icon-socialmedia {
+  font-size: 270%;
+}
+
+.jumbo-news-container iframe {
+  opacity: 0;
+  transform: translateX(50%);
+  transition-property: opacity, transform;
+  transition-duration: 750ms;
+  transition-timing-function: ease-in-out;
+}

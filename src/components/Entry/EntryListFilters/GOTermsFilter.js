@@ -11,7 +11,10 @@ import description2path from 'utils/processLocation/description2path';
 
 import { goToNewLocation } from 'actions/creators';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+
+const f = foundationPartial(style);
 
 const categories = {
   'Biological Process': 'P',
@@ -44,16 +47,16 @@ class GOTermsFilter extends Component {
   render() {
     const { data: { loading, payload }, location: { search } } = this.props;
     const terms = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
     if (!loading) {
       terms.unshift(['Any']);
     }
     return (
-      <div>
-        {terms.map(([term, count]) =>
+      <div className={f('list-go')}>
+        {terms.map(([term, count]) => (
           <div key={term} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
                 name="go_category"
@@ -65,15 +68,13 @@ class GOTermsFilter extends Component {
                 }
                 style={{ margin: '0.25em' }}
               />
-              <span>
-                {term}
-              </span>
-              {typeof count === 'undefined'
-                ? null
-                : <NumberLabel value={count} />}
+              <span>{term}</span>
+              {typeof count === 'undefined' ? null : (
+                <NumberLabel value={count} />
+              )}
             </label>
-          </div>,
-        )}
+          </div>
+        ))}
       </div>
     );
   }
@@ -90,18 +91,18 @@ const getUrlFor = createSelector(
     _search.group_by = 'go_terms';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description,
+      description
     )}?${qsStringify(_search)}`;
-  },
+  }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(GOTermsFilter),
+  })(GOTermsFilter)
 );

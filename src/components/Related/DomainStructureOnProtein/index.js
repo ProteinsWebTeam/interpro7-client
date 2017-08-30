@@ -29,10 +29,10 @@ const getUrlFor = createSelector(
         }
         // build URL
         return `${protocol}//${hostname}:${port}${root}${description2path(
-          _description,
+          _description
         )}?${qsStringify(search)}`.replace(/\?$/, '');
-      },
-    ),
+      }
+    )
 );
 const formatStructureInfoObj = obj => {
   const out = [];
@@ -86,7 +86,7 @@ const mergeData = (interpro, structures, structureInfo) => {
   return out;
 };
 
-let StructureOnProtein = class extends Component {
+class _StructureOnProtein extends Component {
   static propTypes = {
     structures: T.array.isRequired,
     dataInterPro: T.object,
@@ -102,7 +102,7 @@ let StructureOnProtein = class extends Component {
     const mergedData = mergeData(
       dataInterPro.payload.entries,
       structures,
-      dataStructureInfo.payload,
+      dataStructureInfo.payload
     );
     return (
       <div>
@@ -110,14 +110,15 @@ let StructureOnProtein = class extends Component {
       </div>
     );
   }
-};
-StructureOnProtein = ['InterPro', 'StructureInfo'].reduce(
+}
+
+const StructureOnProtein = ['InterPro', 'StructureInfo'].reduce(
   (Index, db) =>
     loadData({
       getUrl: getUrlFor(db),
       propNamespace: db,
     })(Index),
-  StructureOnProtein,
+  _StructureOnProtein
 );
 
 export default StructureOnProtein;

@@ -1,42 +1,46 @@
-/******************************Overwritting EBI  global****************************/
-ul#global-nav {
-  padding-top: 0;
-} /****IMPORTANT TO FIX****remove space on top of page for EBI menu**********/
-.local-masthead nav ul#secondary-menu-links.menu li a:hover:after,
-.local-masthead nav ul#global-nav.menu li a:hover:after,
-.local-masthead nav ul.menu li a:hover:after {
-  top: 0px;
-  border-left: 0px solid transparent;
-  border-right: 0px solid transparent;
-} /*****remove arrows in the menu*****/
-.local-masthead nav ul li a:active {
-  border-bottom: 3px white solid;
-} /*****remove arrows in the menu - fill the gap when menu click when no arrow*****/
-
+@import '../styles/colors.css';
+/******************************Override EBI  global***************************/
+/*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
 a,
 a:visited {
   border-bottom-width: 0;
-} /*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
-#content {
+}
+
+/*add some space on top between banner and breadcrumb - should be in EBI-GLobal*/
+main a {
+  color: rgb(0, 112, 187);
+}
+
+main a:visited {
+  color: rgb(0, 112, 187);
+}
+
+/*add some space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer not needed anymore?*/
+main {
   padding-top: 1rem;
-  padding-bottom: 0;
-} /*add some more space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer*/
-#local-masthead nav ul.menu li {
-  border-right: 1px solid rgba(248, 248, 248, 0.2);
-} /*STYLE - slightly hide division between menu items - need to keep ID specificity to override EBI style TILL they change the ID in EBI-GLOBAL */
-#local-masthead ul li.is-active a,
-#local-masthead ul li a:hover,
-#local-masthead nav ul li a.hover,
-#local-masthead nav ul li a:hover {
-  color: #000;
-} /*STYLE - make menu items hover slightly darker*/
-.pagination .current {
-  background: #3798a7;
-} /*STYLE - custom color for table pagination MISSING in THEME-EBI*/
-.callout {
-  background: #eaeaea;
-} /*redefining a darker bgd for callout as they use to be*/
-/****************************** END Overwritting EBI  global**********************/
+}
+/*override EBI foundation css that overrides foundation*/
+.fieldset {
+  border: 1px solid #cacaca;
+}
+[type='text'] {
+  border: 1px solid #cacaca;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #cacaca;
+}
+
+/*missing in custom foundation.EBI.css - TEMP ?*/
+.tabs-panel.is-active {
+  display: block;
+}
+
+button {
+  cursor: pointer;
+} /*used for tabs*/
+
+/****************************** END Override EBI  global**********************/
 
 /******************************Local style***************************************/
 /*ICONS*/
@@ -51,47 +55,50 @@ a:visited {
   font-family: 'EBI-generic', arial, sans-serif;
 }
 .md-cg .md-color {
-  fill: #a88cc3;
+  fill: var(--colors-gene3d);
 }
 .md-cd .md-color {
-  fill: #addc58;
+  fill: var(--colors-cdd);
 }
 .md-ha .md-color {
-  fill: #1ad8d8;
+  fill: var(--colors-hamap);
+}
+.md-mo .md-color {
+  fill: var(--colors-modi);
 }
 .md-pa .md-color {
-  fill: #bfac92;
+  fill: var(--colors-panther);
 }
 .md-pf .md-color {
-  fill: #6287b1; /*was 9bbbe0*/
+  fill: var(--colors-pfam);
 }
 .md-pi .md-color {
-  fill: #e299e2;
+  fill: var(--colors-pirsf);
 }
 .md-pri .md-color {
-  fill: #4fd829;
+  fill: var(--colors-prints);
 }
 .md-pro .md-color {
-  fill: #8d99e4;
+  fill: var(--colors-prodom);
 }
 .md-prpro .md-color,
 .md-pr .md-color {
-  fill: #ff9229;
+  fill: var(--colors-profile);
 }
 .md-prpat .md-color {
-  fill: #ffc300; /*was 8899a6*/
+  fill: var(--colors-prosite); /*was 8899a6*/
 }
 .md-sf .md-color {
-  fill: #00b1d3;
+  fill: var(--colors-sfld);
 }
 .md-sm .md-color {
-  fill: #ff7a76;
+  fill: var(--colors-smart);
 }
 .md-su .md-color {
-  fill: #686868;
+  fill: var(--colors-ssf);
 }
 .md-ti .md-color {
-  fill: #b37977;
+  fill: var(--colors-tigrfams);
 }
 /*/MEMBER DATABASE SVG icons*/
 
@@ -124,18 +131,16 @@ a:visited {
 /*}*/
 
 /******************************BANNER*********************************/
-.main-header {
-  width: 100%;
-  height: 260px; /*better to define size here than in the #content padding*/
-}
-.main-header.sm {
-  position: relative;
-} /*mobile - remove sticky*/
-.local-masthead h1 {
-  white-space: nowrap;
-} /*remove space between logo and text so it doesn't break on two lines*/
-.local-masthead h1 span {
+.masthead h1 span {
   font-size: 41%;
+}
+
+/*************************
+*cross components features*
+**************************/
+.browse-by .button,
+.stat-by .button {
+  margin: 0;
 }
 
 /***** LOCAL BUTTONS  + LINKS*****/
@@ -173,7 +178,7 @@ html.fontface .local-site-search .icon-functional:before,
   width: 70%;
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform .3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
   display: block;
   float: right;
   padding: 0; /*background-color: rgba(255, 255, 255, 0.07);*/
@@ -237,7 +242,7 @@ input:focus:-ms-input-placeholder {
 a:hover.noline {
   border-bottom: 0 solid transparent;
 }
-/***** /LOCAL BUTTONS + LINKS *** /
+/*****LOCAL BUTTONS + LINKS ***/
 
 /* MENU*/
 .horizontal.menu > li > a {
@@ -246,19 +251,12 @@ a:hover.noline {
   border-bottom-color: transparent;
 } /* CROSS ICON PBM - to make all menu items same height*/
 
-#local-masthead .menu a {
-  height: 100%;
-}
-#local-masthead a.active {
-  color: #0a0a0a;
-} /*define the colour for active tab link*/
+/*Active tab - active is used on li element in ebi css*/
 .masthead .menu .active {
   color: #0a0a0a;
   background: #fff;
-  border: none;
-  font-weight: bold; /*temp while we replace the active class on <li> and not <a> element*/
-} /*this should be defined in the default ebi css*/
-/*#local-masthead .menu > li > a {border-bottom-style: solid; border-bottom-color:transparent;}!*important to make all menu items same height otherwise buggy effect on click*!*/
+}
+
 .badge {
   background: rgba(0, 0, 0, 0.23);
   border-radius: 1em;
@@ -272,14 +270,16 @@ a:hover.noline {
   display: none;
 } /*hide different menu version collapsed*/
 
-.local-masthead nav ul.dropdown.menu.float-left li a:hover:after {
+.masthead nav ul.dropdown.menu.float-left li a:hover:after {
   display: none;
   border-bottom: 3px;
 } /*important for collapse button remove foundation "bar" after that bug and makes the elements move*/ /*remove extra space that makes the banner move just for small screen*/
-.local-masthead ul.submenu li a:hover {
+
+/*dropdown menu style - button collapse*/
+.masthead ul.submenu li a:hover {
   background-color: #85b6d3; /*was 79b4d4*/
-  color: white; /*border-bottom: 3px #85b6d3 solid;*/
-} /*dropdown menu style - button collapse*/
+  color: white;
+}
 
 /*RD - Breakpoints for menu to collapse into dropdown*/
 /*large*/
@@ -307,79 +307,6 @@ a:hover.noline {
   }
 }
 /*/RD - Breakpoints for menu to collapse into dropdown*/
-
-/*/MENU*/
-
-/*
-IMAGE BANNER
-*/
-.local-masthead.md {
-  background-repeat: no-repeat, no-repeat;
-  background-position: top left, top left;
-  background-size: 100%, 2000px;
-}
-.local-masthead.md-sm {
-  background-repeat: no-repeat, no-repeat;
-  background-position: top right, left;
-  background-size: 100%, 100% 518px;
-}
-
-.local-masthead.md-gp {
-  background-repeat: no-repeat, repeat;
-  background-position: top right, left;
-  background-size: 100%, 10%;
-}
-
-.local-masthead img {
-  margin-left: -82px;
-  margin-right: 0.9rem; /*useful on sticky to hide logo totally*/
-  width: 65px;
-} /*to make logo look like an icon -IMPORTANT limit width of image or banner show black bgd at bottom*/
-.local-masthead.md-smart {
-  background-image: linear-gradient(
-      to right,
-      #325578,
-      rgba(249, 255, 182, 0.53),
-      rgb(43, 111, 128)
-    ),
-    url(../images/backgrounds/fondation-morse-header.jpg);
-  background-position: top right, left;
-  background-size: 100%, 1027px;
-}
-#local-masthead,
-.local-masthead {
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 85, 158, 0.9),
-      rgba(45, 174, 193, 0.5),
-      rgba(0, 85, 158, 0.9)
-    ),
-    url(../images/backgrounds/fondation-morse-header.jpg);
-  background-repeat: no-repeat, repeat;
-  background-position: left, top right;
-  background-size: 100%, 1400px;
-}
-
-/*image entry*/
-.my-svg-container {
-  float: left;
-  width: 15%; /*19%*/
-  vertical-align: middle;
-  margin-right: 2rem;
-  margin-bottom: 0.5rem;
-}
-#my-svg-icon,
-#my-svg-icon-sm {
-  background-image: linear-gradient(
-      to right,
-      rgba(58, 95, 125, 0.6),
-      rgba(152, 216, 186, 0.6)
-    ),
-    url(../images/backgrounds/fondation-morse-header.jpg);
-  height: 8rem;
-  width: 8rem;
-  border: 1px solid #ccc;
-} /*specific style for MD icon*/
 /************************ END BANNER**********************************/
 
 /************************ STICKY BANNER**********************************/
@@ -389,17 +316,7 @@ IMAGE BANNER
   position: fixed;
   margin-top: -10.5em !important;
 }
-.smaller .local-masthead div#local-title {
-  margin: 1.2rem 0 2rem 0;
-}
-.smaller #local-title h1 {
-  transform: translate(28px, 74px);
-  font-size: 170%;
-} /*move logo reduce logo text*/
-.smaller #local-title h1 img {
-  width: 40px;
-} /*reduce logo image*/
-.smaller  h4 {
+.smaller h4 {
   transform: translate(156px, 32px);
   font-size: 133%;
 } /*transform tagline*/
@@ -415,37 +332,15 @@ IMAGE BANNER
   font-size: 30px;
 } /*icon size and position*/
 
-/*solve bug offset title with sticky*/
-.anchor {
-  display: block;
-  position: relative;
-  width: 0;
-  height: 0;
-  z-index: -1;
-  visibility: hidden;
-  left: 0;
-  top: -84px; /*change depending on banner width*/
+/*Foundation sticky*/
+/*transform logo*/
+.masthead.is-stuck h1 {
+  transform: scale(0.6) translate(-350px, 131px);
 }
 
-/*Foundation sticky*/
-.local-masthead.is-stuck .off-canvas {
-  border: 1px tan solid;
-}
-/*.local-masthead.is-stuck header .masthead {padding-top: 4.2rem;}*/ /*hack to give more height to the banner ?*/
-/*.local-masthead.is-stuck div#local-title  {margin-bottom:0.2rem;}*/ /*reduce space between title and menu when sticky*/
-.local-masthead.is-stuck div#local-title h1 {
-  transform: scale(0.6) translate(-350px, 131px);
-} /*transform logo*/
-.local-masthead.is-stuck h4 {
+/*transform tagline*/
+.masthead.is-stuck h4 {
   transform: scale(0.8) translate(96px, 24px);
-} /*transform tagline*/
-/*.local-masthead.is-stuck .extra {box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1) }*/ /*add a border and shadow*/
-.local-masthead.is-stuck .local-site-search {
-  top: 164px;
-  right: 72px;
-}
-.local-masthead.is-stuck .local-offcanvas-menu {
-  top: 164px;
 }
 /*/Foundation sticky*/
 /************************ END STICKY BANNER**********************************/
@@ -465,18 +360,18 @@ h6 small {
   white-space: inherit;
 } /*labels for go terms were long and clashing with grid*/
 /*.has-tip {border-bottom-width: 0px;} not needed  anymore for go terms?*/
-.local-masthead h1 small,
-.local-masthead h2 small,
-.local-masthead h3 small,
-.local-masthead h4 small,
-.local-masthead h5 small,
-.local-masthead h6 small {
+.masthead h1 small,
+.masthead h2 small,
+.masthead h3 small,
+.masthead h4 small,
+.masthead h5 small,
+.masthead h6 small {
   color: #cacaca;
 } /*style - banner subtitle*/
-.local-masthead.md h4 small {
+.masthead.md h4 small {
   color: #416b80;
 } /*specific to md */
-.local-masthead.md-smart h4 small {
+.masthead.md-smart h4 small {
   color: #a2d7b9;
 }
 /*/Overwritting Foundation*/
@@ -501,9 +396,9 @@ h6 small {
   padding: 15px;
 }
 
-ul.domaintree  li,
-ul.familytree  li,
-ul.chevron  li {
+ul.domaintree li,
+ul.familytree li,
+ul.chevron li {
   list-style: none;
 }
 ul.domaintree,
@@ -610,23 +505,23 @@ ul.chevron > li:before {
   font-size: 0.9rem;
   border-top: 0px solid white;
 }
-.local_footer.local-masthead  ul.off-canvas-list a:visited.active {
+.local_footer.masthead ul.off-canvas-list a:visited.active {
   color: rgba(68, 68, 68, 0.6);
 }
-.local_footer.local-masthead  img.logo_faint {
+.local_footer.masthead img.logo_faint {
   margin-left: 0;
   margin-right: 0;
   width: 170px;
   opacity: 0.4;
 }
-.local_footer.local-masthead  h1 {
+.local_footer.masthead h1 {
   color: black;
   opacity: 0.4;
 }
 .local_footer .is-drilldown-submenu {
   background-color: #509394;
 }
-.local_footer.local-masthead {
+.local_footer.masthead {
   background-size: 130%, 110%;
 }
 /*Entry page - md info next title*/
@@ -646,145 +541,11 @@ ul.chevron > li:before {
 }
 /*/Entry page - md info next title*/
 
-/*homepage gal*/
-.browse-by .columns:hover {
-  background-color: #e4f3ff;
-} /*add a light mouse over effect*/
-#content .browse-by .tabs-title a:hover,
-#content .entry-list .tabs-title a:hover,
-#content .browse-by .tabs-title a:focus,
-#content .entry-list .tabs-title a:focus {
-  border-bottom-width: 0;
-} /*remove dark line that appear on tabs*/
-#content .browse-by a.button:hover,
-#content .entry-list a.button:hover {
-  border: 1px solid transparent;
-} /*remove dark line that appear on button*/
-/*/homepage gal*/
-
-/*homepage figures*/
-.fig-container {
-  float: left;
-  width: 17%;
-  margin: 0 2em 1em 0;
-  overflow: hidden;
-}
-.fig-sqc {
-  background: url(../images/sqc.png) no-repeat -23% 136%;
-  background-size: 65%;
-  height: 16em;
-  width: 20em;
-  margin-bottom: -78px;
-  margin-top: 15px;
-}
-.fig-sqcbig {
-  background: url(../images/sqc.png) no-repeat 0% 0%;
-  background-size: 111%;
-  background-position-y: 74%;
-  background-position-x: 145%;
-  height: 16em;
-  width: 30em;
-  margin-bottom: -78px;
-  margin-top: 15px;
-}
-.fig-proteins {
-  background: url(../images/proteins.png) no-repeat 0% 0%;
-  background-size: 55%;
-  height: 16em;
-  width: 20em;
-  margin-bottom: -68px;
-}
-.fig-protban {
-  background: url(../images/backgrounds/protein3d_02.png) repeat 85% 9%;
-  background-size: 353%;
-  height: 16em;
-  width: 20em;
-  margin-bottom: -68px;
-}
-.fig-sqcban {
-  background: url(../images/backgrounds/composite_03.png) no-repeat 85% 9%;
-  background-size: 503%;
-  height: 16em;
-  width: 20em;
-  margin-bottom: -68px;
-}
-/*/homepage figures*/
-
 /*homepage components gal*/
-.species-list,
-.go-list,
-.md-list {
+.go-list {
   font-size: 80%;
 }
-.species-list a:hover:not(.button),
-.go-list a:hover:not(.button),
-.md-list a:hover:not(.button) {
-  border-bottom: 0px deeppink solid;
-}
 /*/homepage components gal*/
-
-/*homepage entry-list component*/
-.entry-list .svg-container {
-  width: 5%;
-  margin-right: 0.8em;
-  padding-top: 4px;
-  float: left;
-} /*svg icon size*/
-.entry-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-size: 94%;
-}
-.list-vertical-scrol {
-  position: relative;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto; /*height: 378px;*/
-  margin-bottom: 1rem;
-}
-.entry-list .list-item {
-  display: flex;
-  flex-wrap: nowrap;
-}
-.entry-list .list-vertical-scrol ul li {
-  padding: 0.4em 0;
-  border-radius: 6px;
-}
-.entry-list .list-vertical-scrol ul li:hover {
-  background-color: #e4f3ff;
-}
-.entry-list .list-vertical-scrol a {
-  color: #0a0a0a;
-}
-.entry-list .md-small {
-  width: 29px;
-  float: left;
-}
-/*/homepage entry-list component*/
-
-/*homepage member database list component*/
-.md-list svg {
-  margin-bottom: -15px;
-  margin-top: -15px; /*temp reposition the view port without changing the coordinates of all svg*/
-}
-.md-list a h6 {
-  margin-bottom: 0;
-} /*remove space around title*/
-.md-list a.md-cg h6 {
-  white-space: nowrap;
-} /*avoid  text collapse for cathgene*/
-.md-list small {
-  color: #0a0a0a;
-  font-weight: bold;
-}
-/*/homepage member database list component*/
-
-/*homepage species list component*/
-.species-list span:before {
-  font-size: 520%;
-}
-/*/homepage species list component*/
 
 /*homepage Go list component*/
 .go-list span.bullet-icon {
@@ -793,56 +554,32 @@ ul.chevron > li:before {
 }
 /*/homepage Go list component*/
 
-/*homepage entry type list component*/
-.entry-type .svg-container {
-  width: 60%;
-  margin: 0 auto;
-  float: none;
+/*to move on GOTerms/style.css - temp not working*/
+.bp-title,
+.mc-title,
+.cc-title,
+.Cellular,
+.Biological,
+.Molecular {
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
 }
-/*/homepage entry type list component*/
-
-/*homepage twit component*/
-.jumbo-news {
-  text-align: center;
-  background-color: #eee;
-  padding: 2em 0 1em 0;
+.cc-title,
+.Cellular {
+  background-color: rgb(251, 220, 208);
 }
-.jumbo-news-container {
-  padding: 0;
-  color: #454545;
-  font-size: 130%;
-  width: 38%;
-  margin: 0 auto;
-
-  @nest & > h3 {
-    font-size: 270%;
-  }
-
-  @nest & > iframe {
-    opacity: 0;
-    transform: translateX(50%);
-    transition-property: opacity, transform;
-    transition-duration: 750ms;
-    transition-timing-function: ease-in-out;
-  }
+.bp-title,
+.Biological {
+  background-color: rgb(194, 230, 236);
 }
-/*/homepage twit component*/
-
-/*entry page - go term etiquette*/
-a.go {
-  cursor: pointer;
-  color: white;
+.mc-title,
+.Molecular {
+  background-color: rgb(229, 245, 215);
 }
-.biological_process {
-  background-color: #058dc7;
-}
-.molecular_function {
-  background-color: #50b432;
-}
-.cellular_component {
-  background-color: #ed561b;
-}
-/*/entry page - go term etiquette*/
+/*temp to move on GOTerms/style.css - not working*/
 
 /*back to top button*/
 #back-top {
@@ -881,88 +618,26 @@ a.go {
 
 /*animation*/
 .anim {
-  -webkit-transition: all .3s; /* Safari */
-  -moz-transition: all .3s;
-  -o-transition: all .3s;
-  -ms-transition: all .3s;
-  transition: all .3s;
+  transition: all 0.3s;
 }
 .animtxt {
   transition: font 0.3s ease;
 }
-/*.local-masthead:hover {-webkit-animation: bg-shift 10s infinite linear;}*/
-@-webkit-keyframes bg-shift {
-  0% {
-    background-position: 0px;
-  }
-  100% {
-    background-position: 800px;
-  }
-}
-@-moz-keyframes bg-shift {
-  0% {
-    background-position: 0px;
-  }
-  100% {
-    background-position: 800px;
-  }
-}
-@-ms-keyframes bg-shift {
-  0% {
-    background-position: 0px;
-  }
-  100% {
-    background-position: 800px;
-  }
-}
 /*/animation*/
 
 /*RESPONSIVE DESIGN*/
-@media screen and (max-width: 86em) {
-  /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large devices*!*/
-  .local-masthead h1 {
-    transform: translateX(80px);
-  } /*this should be added to EBI style move the logo +text inside banner area for smaller screens*/
-}
 
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-  .local-masthead h4 {
-    font-size: 110%;
-    margin-bottom: 1.2rem;
-  } /*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
 }
 
 /* Small screen only */
 @media screen and (max-width: 39.9375em) {
-  .local-masthead {
+  /*reduce bgd image*/
+  .masthead {
     background-size: 100%, 600px;
-  } /*reduce bgd image*/
-  .main-header {
-    height: auto;
-  } /*important - removed height banner defined when sticky*/
-  .local-masthead h1 {
-    font-size: 1.8rem;
-    transform: translateX(0px);
-  } /*title logo small + remove translation*/
-  .local-masthead img {
-    margin-left: 0;
-    margin-right: 0.4rem;
-    width: 40px;
   }
-  .local-masthead h1 svg {
-    margin-left: 0;
-    margin-right: 0.4rem;
-    width: 40px;
-  }
-  .local-masthead .masthead {
-    padding-top: 1.4rem;
-  } /*align logo with menu icon on right*/
-  /*.offc-nav.expand ~ .main-header {transform: translateX(0px);}!*no need to compensate for scrollbar disappearing on small, medium and large  devices*!*/
-  .offc-nav.expand ~ .main-header .local-offcanvas-menu,
-  .offc-nav.expand ~ .main-header .local-site-search {
-    transform: translateX(-12em);
-  } /*translation of the buttons is reduced for small screens*/
+
   .local-site-search .icon-functional:before,
   .local-offcanvas-menu .icon-functional:before {
     font-size: 30px;
@@ -974,29 +649,11 @@ a.go {
   .offc-nav {
     width: 12rem;
   } /*reduce width off-canvas menu*/
-  table th,
-  table td {
-    font-size: 90%;
-    word-break: break-all;
-  }
-  /*remove the main menu - shouldn't this be done using foundation?*/
-  /*.local-masthead nav ul.dropdown.menu.float-left > li:first-child {display: inline-block; border-right: none;}*/
-  /*.local-masthead nav ul.dropdown.menu.float-left > li {display: none;}*/
-  .local-masthead nav ul#global-nav.menu li:nth-child(6),
-  .local-masthead nav ul#global-nav.menu li:nth-child(7) {
-    display: none;
-  } /*remove 2 list items from EBI-global, as it collapse on two rows*/
-  .local-masthead nav ul li a:active {
-    border-bottom: 0px white solid;
-  } /* !*important to keep - remove  gap when Entry menu click otherwise banner is moving*!*/
   .my-svg-container {
     width: 36%;
     float: none;
     margin: 0 auto;
   }
-  .anchor {
-    top: -144px;
-  } /*change anchor position as no sticky for small screens*/
 }
 
 @media screen and (max-width: 20em) {
@@ -1004,9 +661,4 @@ a.go {
   .local-site-search {
     opacity: 0;
   } /*make the buttons disappear for very small screens so they don't overlap with title*/
-}
-@media screen and (min-width: 40em) {
-  .local-masthead h4 {
-    font-size: 110%;
-  } /*reduce subtitle size and add margin so the banner is not changing size in height otherwise it add sapce on top of breadcrumbs*/
 }

@@ -5,7 +5,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 import ColorHash from 'color-hash/lib/color-hash';
 
@@ -42,26 +42,28 @@ const propTypes = {
 
 const defaultPayload = {
   proteins: {
-    swissprot: null,
-    trembl: null,
+    uniprot: null,
+    reviewed: null,
+    unreviewed: null,
   },
 };
 
-const Overview = ({ data: { payload = defaultPayload } }) =>
+const Overview = ({ data: { payload = defaultPayload } }) => (
   <ul className={styles.card}>
-    {Object.entries(payload.proteins || {}).map(([name, count]) =>
+    {Object.entries(payload.proteins || {}).map(([name, count]) => (
       <li key={name}>
         <Link newTo={{ description: { mainType: 'protein', mainDB: name } }}>
           {name}
           {Number.isFinite(count) ? ` (${count})` : ''}
         </Link>
-      </li>,
-    )}
-  </ul>;
+      </li>
+    ))}
+  </ul>
+);
 Overview.propTypes = propTypes;
 
 const List = ({
-  data: { payload, loading, status },
+  data: { payload, loading, url, status },
   isStale,
   location: { search },
 }) => {
@@ -75,14 +77,13 @@ const List = ({
   }
   const maxLength = _payload.results.reduce(
     (max, result) => Math.max(max, (result.metadata || result).length),
-    0,
+    0
   );
   return (
     <div className={f('row')}>
-      <div className={f('shrink', 'columns')}>
-        <MemberDBTabs />
-      </div>
-      <div className={f('columns')}>
+      <MemberDBTabs />
+
+      <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
         <ProteinListFilters />
         <hr />
         <Table
@@ -96,13 +97,19 @@ const List = ({
           <Exporter>
             <ul>
               <li>
-                <a href={`${''}&format=json`} download="proteins.json">
+                <a href={url} download="proteins.json">
                   JSON
                 </a>
-                <br />
               </li>
               <li>
-                <a href={`${''}`}>Open in API web view</a>
+                <a href={url} download="proteins.tsv">
+                  TSV
+                </a>
+              </li>
+              <li>
+                <a target="_blank" rel="noopener noreferrer" href={url}>
+                  Open in API web view
+                </a>
               </li>
             </ul>
           </Exporter>
@@ -111,8 +118,8 @@ const List = ({
             Search proteins
           </SearchBox>
           <Column
-            accessKey="accession"
-            renderer={(accession /*: string */) =>
+            dataKey="accession"
+            renderer={(accession /*: string */) => (
               <Link
                 newTo={location => ({
                   ...location,
@@ -124,16 +131,17 @@ const List = ({
                 })}
               >
                 {accession}
-              </Link>}
+              </Link>
+            )}
           >
             Accession
           </Column>
           <Column
-            accessKey="name"
+            dataKey="name"
             renderer={(
               name /*: string */,
-              { accession } /*: {accession: string} */,
-            ) =>
+              { accession } /*: {accession: string} */
+            ) => (
               <Link
                 newTo={location => ({
                   ...location,
@@ -145,13 +153,14 @@ const List = ({
                 })}
               >
                 {name}
-              </Link>}
+              </Link>
+            )}
           >
             Name
           </Column>
           <Column
-            accessKey="source_database"
-            renderer={(db /*: string */) =>
+            dataKey="source_database"
+            renderer={(db /*: string */) => (
               <Link
                 newTo={location => ({
                   ...location,
@@ -162,14 +171,15 @@ const List = ({
                 })}
               >
                 {db}
-              </Link>}
+              </Link>
+            )}
           >
             Source Database
           </Column>
-          <Column accessKey="source_organism.fullname">Species</Column>
+          <Column dataKey="source_organism.fullname">Species</Column>
           <Column
-            accessKey="length"
-            renderer={(length /*: number */, row) =>
+            dataKey="length"
+            renderer={(length /*: number */, row) => (
               <div
                 title={`${length} amino-acids`}
                 style={{
@@ -184,7 +194,8 @@ const List = ({
                 }}
               >
                 {length} amino-acids
-              </div>}
+              </div>
+            )}
           >
             Length
           </Column>
@@ -195,21 +206,26 @@ const List = ({
 };
 List.propTypes = propTypes;
 
-const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'),
-);
-const StructureAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
-);
-const EntryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
-);
-const DomainAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
-);
+const SummaryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'),
+});
+const StructureAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
+});
+const EntryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
+});
+const DomainAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
+});
 
-const SummaryComponent = ({ data: { payload }, location }) =>
-  <SummaryAsync data={payload} location={location} />;
+const SummaryComponent = ({ data: { payload }, location }) => (
+  <SummaryAsync data={payload} location={location} />
+);
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.any,
@@ -246,7 +262,7 @@ Summary.propTypes = {
 
 const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = props =>
+const InnerSwitch = props => (
   <Switch
     {...props}
     locationSelector={l =>
@@ -254,9 +270,10 @@ const InnerSwitch = props =>
     indexRoute={List}
     childRoutes={[{ value: acc, component: Summary }]}
     catchAll={List}
-  />;
+  />
+);
 
-const Protein = props =>
+const Protein = props => (
   <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
     <Switch
       {...props}
@@ -264,11 +281,12 @@ const Protein = props =>
       indexRoute={Overview}
       catchAll={InnerSwitch}
     />
-  </div>;
+  </div>
+);
 Protein.propTypes = {
   isStale: T.bool.isRequired,
 };
 
 export default loadData((...args) =>
-  getUrlForApi(...args).replace('domain_architecture', 'entry'),
+  getUrlForApi(...args).replace('domain_architecture', 'entry')
 )(Protein);

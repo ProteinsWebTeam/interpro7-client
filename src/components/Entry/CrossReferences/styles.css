@@ -1,0 +1,26 @@
+@import '../../../styles/colors.css';
+
+.xref-section {
+  margin-top: 1em;
+  padding-bottom: 1em;
+  border-bottom: solid var(--colors-nearly-white) 1px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  columns: 25em;
+  column-rule: solid var(--colors-nearly-white) 1px;
+
+  @nest & > * {
+    break-inside: avoid;
+  }
+}

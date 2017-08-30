@@ -1,17 +1,19 @@
-@import "../../../styles/fonts.css";
-@import "../../../styles/colors.css";
+@import '../../../styles/fonts.css';
+@import '../../../styles/colors.css';
+@import '../../../styles/timing.css';
 
 .sequence {
   font-family: var(--fonts-mono-alt);
   font-size: 0.8em;
-  padding-left: 4em;
-  color: #000;
-  z-index: 1;
+  padding-left: 8ch;
+  width: calc(100% - 8ch);
+  color: black;
   counter-reset: sequence -10;
 }
 
 .sequence_word {
   position: relative;
+  margin-right: 1ch;
   background: white;
 }
 
@@ -22,5 +24,65 @@
   color: var(--colors-main);
   position: absolute;
   left: -4em;
-  z-index: -1;
+}
+
+.hmmer-link {
+  display: block;
+  position: relative;
+  overflow: hidden;
+
+  & > span {
+    position: relative;
+  }
+}
+
+.hmmer-link:hover,
+.hmmer-link:focus {
+  & > .hmmer-shape {
+    transform: translate(0, 0) rotate(0);
+  }
+}
+
+.hmmer-shape {
+  position: absolute;
+  height: 1em;
+  width: 1em;
+  transition: transform var(--timing-medium) ease-in-out;
+
+  &.yellow {
+    background: #e2c14f;
+    border-radius: 50%;
+    top: 10%;
+    left: 5%;
+    transform: translate(-1em, -1em) rotate(90deg);
+    transform-origin: 50% -100%;
+    transition-delay: var(--timing-instant);
+  }
+
+  &.red {
+    bottom: 0;
+    left: 50%;
+    transform: translate(1em, 1.5em) rotate(90deg);
+  }
+
+  &.red::after {
+    content: '\00a0';
+    display: block;
+    background: #d26d6d;
+    transform: rotate(45deg);
+  }
+
+  &.blue {
+    background: #56bde8;
+    top: 5%;
+    right: 10%;
+    transform: translate(1em, -2em) rotate(40deg);
+    transition-delay: var(--timing-fast);
+  }
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .hmmer-shape {
+    transform: none !important;
+  }
 }

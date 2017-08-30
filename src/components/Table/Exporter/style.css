@@ -1,15 +1,59 @@
-div.exporter {
-  margin-left: 10px;
+.exporter {
+  margin: 0 0 0 0.5rem;
   position: relative;
-  & > .dropdown-content {
+  & .dropdown-content {
+    position: absolute;
     top: 100%;
-    right: 0;
-    overflow:auto;
+    right: 27px; /*temp value while popup position is working better*/
+    overflow: auto;
     width: initial;
-    min-width: 220%;
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 300ms ease-in-out;
+    min-width: 180%; /*temp value*/
+    padding: 1rem 0.5rem;
+    /*transform: scaleY(0);*/
+    /*transform-origin: top;*/
+    /*transition: transform 300ms ease-in-out;*/
     visibility: visible;
+    display: block;
+  }
+}
+.exporter .dropdown-pane {
+  z-index: 2;
+} /* so sticky header stay on top*/
+.exporter .dropdown-pane ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.exporter .dropdown-pane ul li a {
+  display: block;
+  padding: 0.3rem 1rem;
+}
+.exporter .dropdown-pane ul li a:hover {
+  background-color: #2daec1; /*#85b6d3*/
+  color: white;
+}
+
+.exporter .icon-settings {
+  width: 0;
+  margin: 0.5em;
+  margin-right: 1em;
+  color: transparent;
+  border: none;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+  text-align: center;
+  background-color: transparent;
+  font-size: 0.9rem;
+  user-select: none;
+
+  &::before {
+    color: #71818a;
+  }
+}
+
+@media screen and (max-width: 39.9375em) {
+  .exporter .dropdown::after {
+    border: none;
   }
 }

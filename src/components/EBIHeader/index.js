@@ -6,18 +6,12 @@ import { connect } from 'react-redux';
 import { toggleEMBLMapNav } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
+
 import styles from './style.css';
-import ebiGlobalStyles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css';
-import ebiTheme from 'styles/theme-template.css';
-import ebiPetrolTheme from 'styles/theme-embl-petrol.css';
-const styleBundle = foundationPartial(
-  styles,
-  fonts,
-  ebiPetrolTheme,
-  ebiTheme,
-  ebiGlobalStyles
-);
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+
+const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 
 /**
  * EBI global header component
@@ -30,91 +24,85 @@ const styleBundle = foundationPartial(
 /*
  EMBL-EBI button and hidden div behaviour
  */
-const _EmblButton = ({ toggleEMBLMapNav }) =>
+// TODO: SP remove height when bug on EBI side is fixed
+const _EmblButton = ({ toggleEMBLMapNav }) => (
   <button
-    className={styleBundle({
-      button: true,
-      'float-right': true,
-    })}
+    className={styleBundle('button', 'float-right')}
+    style={{ height: '36px' }}
     type="button"
+    aria-expanded="false"
     onClick={toggleEMBLMapNav}
   >
     Hinxton
-  </button>;
+  </button>
+);
 _EmblButton.propTypes = {
   toggleEMBLMapNav: T.func.isRequired,
 };
 
 const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
 
-const iconClasses = styleBundle({
-  icon: true,
-  'icon-generic': true,
-});
+const EBIHeader = () => (
+  <header
+    id="masthead-black-bar"
+    className={styleBundle('clearfix', 'masthead-black-bar')}
+  >
+    <nav className={styleBundle('row')}>
+      <ul id="global-nav" className={styleBundle('menu')}>
+        <li className={styleBundle('home-mobile')}>
+          <a href="//www.ebi.ac.uk" rel="noopener">
+            EMBL-EBI Home page
+          </a>
+        </li>
 
-const emblSelectorClasses = styleBundle({
-  'float-right': true,
-  'show-for-medium': true,
-  'embl-selector': true,
-});
+        <li className={styleBundle('home')}>
+          <a href="//www.ebi.ac.uk" rel="noopener">
+            EMBL-EBI
+          </a>
+        </li>
 
-const EBIHeader = () =>
-  <div id="global-masthead" className={styleBundle('clearfix')}>
-    <a
-      href="//www.ebi.ac.uk"
-      title="Go to the EMBL-EBI homepage"
-      rel="noopener"
-    >
-      <span className={styleBundle('ebi-logo')} />
-    </a>
-    <nav>
-      <div className={styleBundle('row')}>
-        <ul id="global-nav" className={styleBundle('menu')}>
-          <li id="home-mobile">
-            <a href="//www.ebi.ac.uk" rel="noopener" />
-          </li>
+        <li className={styleBundle('services', 'active')}>
+          <a href="//www.ebi.ac.uk/services" rel="noopener">
+            Services
+          </a>
+        </li>
 
-          <li id="home">
-            <a href="//www.ebi.ac.uk" rel="noopener">
-              <i className={iconClasses} data-icon="H" />EMBL-EBI
-            </a>
-          </li>
+        <li className={styleBundle('research')}>
+          <a href="//www.ebi.ac.uk/research" rel="noopener">
+            Research
+          </a>
+        </li>
 
-          <li id="services" className={styleBundle('active')}>
-            <a href="//www.ebi.ac.uk/services" rel="noopener">
-              <i className={iconClasses} data-icon="(" />Services
-            </a>
-          </li>
+        <li className={styleBundle('training')}>
+          <a href="//www.ebi.ac.uk/training" rel="noopener">
+            Training
+          </a>
+        </li>
 
-          <li id="research">
-            <a href="//www.ebi.ac.uk/research" rel="noopener">
-              <i className={iconClasses} data-icon=")" />Research
-            </a>
-          </li>
+        <li className={styleBundle('about')}>
+          <a href="//www.ebi.ac.uk/about" rel="noopener">
+            About us
+          </a>
+        </li>
 
-          <li id="training">
-            <a href="//www.ebi.ac.uk/training" rel="noopener">
-              <i className={iconClasses} data-icon="t" />Training
-            </a>
-          </li>
-
-          <li id="about">
-            <a href="//www.ebi.ac.uk/about" rel="noopener">
-              <i className={iconClasses} data-icon="i" />About us
-            </a>
-          </li>
-
-          <li className={emblSelectorClasses} style={{ flexGrow: 1 }}>
-            <EmblButton />
-          </li>
-        </ul>
-      </div>
+        <li
+          className={styleBundle(
+            'float-right',
+            'show-for-medium',
+            'embl-selector'
+          )}
+          style={{ flexGrow: 1 }}
+        >
+          <EmblButton />
+        </li>
+      </ul>
     </nav>
-  </div>;
+  </header>
+);
 
 // Skip to div
-// TODO: Check why we have to put that
-export const EbiSkipToDiv = () =>
+// TODO: Check why we have to put that in particular now that we don't use ids
+export const EbiSkipToDiv = () => (
   <div id="skip-to">
     <ul>
       <li>
@@ -133,6 +121,7 @@ export const EbiSkipToDiv = () =>
         </a>
       </li>
     </ul>
-  </div>;
+  </div>
+);
 
 export default EBIHeader;

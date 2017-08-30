@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 15, 30, 100]}] */
+/* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 25, 50, 15, 30, 100]}] */
 import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -27,7 +27,7 @@ class PageSizeSelector extends Component {
     this.state = { pageSize };
   }
 
-  handleChange = event => {
+  _handleChange = event => {
     this.setState({ pageSize: event.target.value });
     this.props.goToNewLocation({
       ...this.props.location,
@@ -39,40 +39,30 @@ class PageSizeSelector extends Component {
     });
   };
 
-  applyAll = () => {
-    this.props.changePageSize(this.state.pageSize);
-  };
-
   render() {
-    let options = [10, 15, 30, 100];
+    let options = [10, 25, 50, 100];
     if (options.indexOf(this.state.pageSize * 1) === -1) {
       options = Array.from(new Set([...options, this.state.pageSize])).sort(
-        (a, b) => a - b,
+        (a, b) => a - b
       );
     }
     return (
-      <div className={f('float-left')}>
+      <div className={f('table-length')}>
         Show{' '}
         <select
           className={f('small')}
           style={{ width: 'auto' }}
           value={this.state.pageSize}
-          onChange={this.handleChange}
+          onChange={this._handleChange}
+          onBlur={this._handleChange}
         >
-          {options.map(opt =>
+          {options.map(opt => (
             <option key={opt} value={opt}>
               {opt}
-            </option>,
-          )}
+            </option>
+          ))}
         </select>{' '}
         results
-        <a
-          className={f('icon', 'icon-functional', 'primary', 'apply-all')}
-          data-icon="s"
-          onClick={this.applyAll}
-        >
-          <div>Apply to all tables</div>
-        </a>
       </div>
     );
   }
@@ -81,9 +71,9 @@ class PageSizeSelector extends Component {
 const mapStateToProps = createSelector(
   state => state.settings.pagination.pageSize,
   state => state.newLocation,
-  (pageSize, location) => ({ pageSize, location }),
+  (pageSize, location) => ({ pageSize, location })
 );
 
 export default connect(mapStateToProps, { changePageSize, goToNewLocation })(
-  PageSizeSelector,
+  PageSizeSelector
 );

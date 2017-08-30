@@ -1,5 +1,8 @@
 import classNames from 'classnames/bind';
-import foundation from 'foundation-sites/dist/foundation-flex.css';
+// foundation.css is the most up-to date
+// import foundation from 'foundation-sites/dist/css/foundation.css';
+// import foundation from 'foundation-sites/dist/css/foundation-float.css';
+import foundation from 'ebi-framework/libraries/foundation-6/css/foundation.css';
 /**
  * Use the default when only foundation is required
  * @example
@@ -22,17 +25,6 @@ export default classNames.bind(foundation);
  * @returns {object} a classNames object that can be used to define classes
  */
 export const foundationPartial = (...otherStyles) => {
-  // classNames.bind(Object.assign({}, foundation, ...otherStyles))
-  // [foundation, ...otherStyles].reduce((acc, style) => {
-  //   return Object.entries(style).reduce((acc, [rule, hash]) => {
-  //     if (acc[rule]) {
-  //       acc[rule] += ' ' + hash;
-  //     } else {
-  //       acc[rule] = hash;
-  //     }
-  //     return acc;
-  //   }, acc);
-  // }, {})
   const output = {};
   for (const style of [foundation, ...otherStyles]) {
     for (const [rule, hash] of Object.entries(style)) {

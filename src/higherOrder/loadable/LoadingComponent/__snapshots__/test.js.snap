@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ErrorMessage /> should render error message 1`] = `null`;
+
+exports[`<LoadingComponent /> should render in loading state after delay and time out 1`] = `<LoadingMessage />`;
+
+exports[`<LoadingComponent /> should render in loading state after delay but before time out 1`] = `<LoadingMessage />`;
+
+exports[`<LoadingComponent /> should render in with error 1`] = `<ErrorMessage />`;
+
+exports[`<LoadingMessage /> should render loading message 1`] = `null`;

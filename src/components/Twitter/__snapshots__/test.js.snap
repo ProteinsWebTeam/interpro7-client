@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Twitter /> should render 1`] = `
+<div
+  className="expanded row"
+>
+  <div
+    className="columns"
+    style={
+      Object {
+        "padding": 0,
+      }
+    }
+  >
+    <div
+      className="jumbo-news"
+    >
+      <div
+        className="jumbo-news-container"
+      >
+        <div
+          className="icon icon-socialmedia icon-s2"
+          data-icon="T"
+        />
+        <a
+          className="twitter-timeline"
+          data-chrome="nofooter noborders noheader noscrollbar transparent"
+          data-dnt="true"
+          data-tweet-limit="1"
+          href="https://twitter.com/InterProDB"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Tweets by @InterProDB
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

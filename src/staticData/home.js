@@ -1,10 +1,10 @@
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css';
-import theme from 'styles/theme-interpro.css';
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
+// import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+// import fonts from 'EBI-Icon-fonts/fonts.css';
+// import theme from 'styles/theme-interpro.css';
+const f = foundationPartial(ipro);
 
 export const memberDB = [
   {
@@ -60,6 +60,20 @@ export const memberDB = [
     counter: 2087,
     integrated: 2081,
     accession: 'MF_[0-9]{5}(_(A|B){1})?',
+  },
+  {
+    type: 'MOBIDBLT',
+    apiType: 'mobidblt',
+    to: 'entry/mobidblt',
+    newTo: { description: { mainType: 'entry', mainDB: 'mobidblt' } },
+    className: f('md-mo'),
+    title:
+      'MobiDB offers a centralized resource for annotations of intrinsic protein disorder. The database features three levels of annotation: manually curated, indirect and predicted. The different sources present a clear tradeoff between quality and coverage. By combining them all into a consensus annotation, MobiDB aims at giving the best possible picture of the "disorder landscape" of a given protein of interest.',
+    name: 'MOBIDB',
+    version: '1.0',
+    counter: 1,
+    integrated: 0,
+    accession: '',
   },
   {
     type: 'PANTHER',
@@ -324,7 +338,7 @@ export const speciesFeat = [
     counterD: 7750,
     counterS: 6718,
     coverage: 74,
-    icon: '',
+    icon: 'Y',
     color: '#5bc0de',
     tax_id: 559292,
   },
@@ -335,7 +349,7 @@ export const speciesFeat = [
     counterD: 7276,
     counterS: 5121,
     coverage: 87,
-    icon: '',
+    icon: 'Y',
     color: '#5bc0de',
     tax_id: 284812,
   },
@@ -375,7 +389,8 @@ export const speciesFeat = [
 export const GoList = [
   {
     title: 'Catalytic activity',
-    Category: 'Molecular function',
+    accession: 'GO:0003824',
+    category: 'Molecular function',
     description: 'Description from Go website',
     counterD: 12545,
     counterS: 386,
@@ -383,7 +398,8 @@ export const GoList = [
   },
   {
     title: 'DNA binding',
-    Category: 'Molecular function',
+    accession: 'GO:0003677',
+    category: 'Molecular function',
     description: 'Description from Go website',
     counterD: 12450,
     counterS: 450,
@@ -391,6 +407,7 @@ export const GoList = [
   },
   {
     title: 'Metabolic process',
+    accession: 'GO:0008152',
     category: 'Biological process',
     description: 'Description from Go website',
     counterD: 12429,
@@ -398,7 +415,8 @@ export const GoList = [
     color: '#5bc0de',
   },
   {
-    title: 'Oxidation-reduction process ',
+    title: 'Oxidation-reduction process',
+    accession: 'GO:0055114',
     category: 'Molecular function',
     description: 'Description from Go website',
     counterD: 12429,
@@ -407,6 +425,7 @@ export const GoList = [
   },
   {
     title: 'Outer membrane',
+    accession: 'GO:0019867',
     description: 'Description from Go website',
     counterD: 12429,
     counterS: 386,
@@ -415,6 +434,7 @@ export const GoList = [
   },
   {
     title: 'ATP binding',
+    accession: 'GO:0005524',
     description: 'Description from Go website',
     counterD: 12429,
     counterS: 42,
@@ -423,6 +443,7 @@ export const GoList = [
   },
   {
     title: 'Oxidoreductase activity',
+    accession: 'GO:0016491',
     description: 'Description from Go website',
     counterD: 12193,
     counterS: 93,
@@ -431,6 +452,7 @@ export const GoList = [
   },
   {
     title: 'Transport',
+    accession: 'GO:0006810',
     description: 'Description from Go website',
     counterD: 12093,
     counterS: 10,
@@ -439,6 +461,7 @@ export const GoList = [
   },
   {
     title: 'DNA replication',
+    accession: 'GO:0006260',
     description: 'Description from Go website',
     counterD: 12089,
     counterS: 564,
@@ -447,6 +470,7 @@ export const GoList = [
   },
   {
     title: 'Integral component of membrane',
+    accession: 'GO:0016021',
     description: 'Description from Go website',
     counterD: 120,
     counterS: 36,
@@ -455,6 +479,7 @@ export const GoList = [
   },
   {
     title: 'Cofactor bindind',
+    accession: 'GO:0048037',
     description: 'Description from Go website',
     counterD: 1276,
     counterS: 36,
@@ -463,6 +488,7 @@ export const GoList = [
   },
   {
     title: 'DNA polymerase complex',
+    accession: 'GO:0042575',
     description: 'Description from Go website',
     counterD: 206,
     counterS: 36,
@@ -471,14 +497,7 @@ export const GoList = [
   },
   {
     title: 'Cell projection assembly',
-    description: 'Description from Go website',
-    counterD: 6,
-    counterS: 36,
-    category: 'Biological process',
-    color: '#5bc0de',
-  },
-  {
-    title: 'Cell projection assembly',
+    accession: 'GO:0030031',
     description: 'Description from Go website',
     counterD: 6,
     counterS: 36,
@@ -487,6 +506,7 @@ export const GoList = [
   },
   {
     title: 'Cellular component organization',
+    accession: 'GO:0016043',
     description: 'Description from Go website',
     counterD: 6,
     counterS: 36,
@@ -495,75 +515,12 @@ export const GoList = [
   },
   {
     title: 'Cell growth',
+    accession: 'GO:0016049',
     description: 'Description from Go website',
     counterD: 6,
     counterS: 36,
     category: 'Biological process',
     color: '#5bc0de',
-    // },{
-    //   title: 'Cell projection assembly',
-    //   description:
-    //     `Description from Go website`,
-    //   counterD: 6,
-    //   counterS: 36,
-    //   category: 'Biological process',
-    //   color: '#5bc0de',
-    // },{
-    //   title: 'Cell projection assembly',
-    //   description:
-    //     `Description from Go website`,
-    //   counterD: 6,
-    //   counterS: 36,
-    //   category: 'Biological process',
-    //   color: '#5bc0de',
-    // },{
-    //   title: 'Cellular component organization',
-    //   description:
-    //     `Description from Go website`,
-    //   counterD: 6,
-    //   counterS: 36,
-    //   category: 'Biological process',
-    //   color: '#5bc0de',
-    // },{
-    //   title: 'Cell growth',
-    //   description:
-    //     `Description from Go website`,
-    //   counterD: 6,
-    //   counterS: 36,
-    //   category: 'Biological process',
-    //   color: '#5bc0de',
-    // },{
-    //   title: 'ATPase activity',
-    //   description:
-    //     `Description from Go website`,
-    //   counterD: 6,
-    //   counterS: 36,
-    //   category: 'Molecular function',
-    //   color: '#5cb85c',
-    // },{
-    //   title: 'GTPase activity',
-    //   description:
-    //     `Description from Go website`,
-    //   counterD: 6,
-    //   counterS: 36,
-    //   category: 'Molecular function',
-    //   color: '#5cb85c',
-    // },{
-    //   title: 'Helicase activity',
-    //   description:
-    //     `Description from Go website`,
-    //   counterD: 6,
-    //   counterS: 36,
-    //   category: 'Molecular function',
-    //   color: '#5cb85c',
-    // },{
-    //   title: 'Hydrolase activity',
-    //   description:
-    //     `Description from Go website`,
-    //   counterD: 6,
-    //   counterS: 36,
-    //   category: 'Molecular function',
-    //   color: '#5cb85c',
   },
 ];
 export const entryType = [

@@ -1,42 +1,76 @@
 import React from 'react';
-import T from 'prop-types';
-import Description from 'components/Description';
-import MemberSymbol from 'components/Entry/MemberSymbol';
-import ByMemberDatabase from 'components/home/ByMemberDatabase';
-import ByEntryType from 'components/home/ByEntryType';
-import BySpecies from 'components/home/BySpecies';
-import { InterproSymbol } from 'components/Title';
+
+// Components
+import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
-import { latests, GoList } from 'staticData/home';
 import Tabs from 'components/Tabs';
+import Description from 'components/Description';
+
+// Functions
 import { schedule } from 'timing-functions/src';
-import AsyncComponent, {
-  createAsyncComponent,
-} from 'utilityComponents/AsyncComponent';
 
+// Style
 import { foundationPartial } from 'styles/foundation';
-
+// CSS
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
+import style from './style.css';
 
+// Images
 import iscanLogo from 'images/logo_interproscan_ext.png';
 import idaLogo from 'images/logo_ida_100.png';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
+// Bind css with style object
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
-const SearchByText = createAsyncComponent(() =>
-  import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
-);
-const IPScanSearch = createAsyncComponent(() =>
-  import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch'),
-);
-const IPScanStatus = createAsyncComponent(() =>
-  import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus'),
-);
+const MAX_DELAY_FOR_TWITTER = 10000;
 
-const MaskSvgIcons = () =>
+// Generate async components
+// Search box
+const SearchByText = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
+});
+const IPScanSearch = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch'),
+});
+const IPScanStatus = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus'),
+});
+// Browse by X box
+const ByMemberDatabase = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-member-database" */ 'components/home/ByMemberDatabase'),
+});
+const ByEntryType = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-entry-type" */ 'components/home/ByEntryType'),
+});
+const BySpecies = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-species" */ 'components/home/BySpecies'),
+});
+const ByLatestEntries = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByLatestEntries'),
+});
+const ByGOTerms = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms'),
+});
+
+const Twitter = loadable({
+  loader: () =>
+    schedule(MAX_DELAY_FOR_TWITTER).then(() =>
+      import(/* webpackChunkName: "twitter" */ 'components/Twitter')
+    ),
+});
+
+const MaskSvgIcons = () => (
   <svg
     viewBox="0 0 200 200"
     style={{
@@ -50,153 +84,31 @@ const MaskSvgIcons = () =>
   >
     <defs>
       <clipPath id="cut-off-center">
-        <rect x="33%" y="33%" width="70" height="70" />
+        <rect x="33%" y="38%" width="68" height="68" />
       </clipPath>
       <clipPath id="cut-off-bottom">
         <polygon points="0,68 68,0 68,68" />
       </clipPath>
     </defs>
-  </svg>;
+  </svg>
+);
 
-const InterproGraphic = () =>
-  <svg viewBox="0 0 150 120">
-    <line x1="20" y1="0" x2="20" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="50" y1="0" x2="50" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="80" y1="0" x2="80" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="110" y1="0" x2="110" y2="130" strokeWidth="3" stroke="#cacaca" />
-    <line x1="140" y1="0" x2="140" y2="130" strokeWidth="3" stroke="#cacaca" />
-
-    <line
-      x1="20"
-      y1="-100"
-      x2="20"
-      y2="200"
-      strokeLinecap="round"
-      stroke="#abd6ba"
-      strokeWidth="16"
-    />
-    <line
-      x1="50"
-      y1="-100"
-      x2="50"
-      y2="200"
-      strokeLinecap="round"
-      stroke="#2d7d95"
-      strokeWidth="16"
-    />
-    <line
-      x1="80"
-      y1="90"
-      x2="80"
-      y2="200"
-      strokeLinecap="round"
-      stroke="#2d7d95"
-      strokeWidth="16"
-    />
-    <line
-      x1="80"
-      y1="-100"
-      x2="80"
-      y2="44"
-      strokeLinecap="round"
-      stroke="#abd6ba"
-      strokeWidth="16"
-    />
-    <line
-      x1="110"
-      y1="-100"
-      x2="110"
-      y2="200"
-      strokeLinecap="round"
-      stroke="#2d7d95"
-      strokeWidth="16"
-    />
-    <line
-      x1="140"
-      y1="-100"
-      x2="140"
-      y2="60"
-      strokeLinecap="round"
-      stroke="#abd6ba"
-      strokeWidth="16"
-    />
-  </svg>;
-
-const LatestEntry = ({ entry }) =>
-  // this should change depending on entry type
-  <li className={f('list-item')} data-tooltip title="Domain entry">
-    <div className={f('svg-container')}>
-      <InterproSymbol type={entry.type} className={f('icon-list')} />
-    </div>
-    <div className={f('list-body')}>
-      <Link
-        newTo={{
-          description: {
-            mainType: 'entry',
-            mainDB: 'InterPro',
-            mainAccession: entry.accession,
-          },
-        }}
-      >
-        <div className={f('list-title')}>
-          {entry.name}
-          <span>({entry.accession})</span> —{' '}
-          <i>{entry.counter} proteins matched</i>
-          <br />
-        </div>
-      </Link>
-      {entry.contributing.map(c =>
-        <div className={f('list-more')} key={c.accession}>
-          <MemberSymbol type={c.source_database} className={f('md-small')} />
-          <small>
-            {c.source_database}:
-            <Link
-              newTo={{
-                description: {
-                  mainType: 'entry',
-                  mainDB: 'interpro',
-                  mainMemberDB: c.source_database,
-                  mainMemberDBAccession: c.accession,
-                },
-              }}
-              className={f('list-sign')}
-            >
-              {c.accession}
-            </Link>{' '}
-            ({entry.contributing.length} contributing signature{entry.contributing.length > 1 ? 's' : ''})
-          </small>
-        </div>,
-      )}
-    </div>
-  </li>;
-LatestEntry.propTypes = {
-  entry: T.shape({
-    accession: T.string,
-    type: T.string,
-    name: T.string,
-    counter: T.number,
-    contributing: T.array,
-  }),
-};
-
-const Home = () =>
+const Home = () => (
   <div>
     <div className={f('row')}>
       <div className={f('columns', 'large-12')}>
         <div
-          className={'fig-container'}
+          className={f('fig-container', 'fig-proteins')}
           data-tooltip
           title="This is what InterPro does"
-        >
-          <InterproGraphic />
-        </div>
+        />
 
         <h3>Classification of protein families</h3>
 
         <Description
           title=""
           extraTextForButton="about InterPro"
-          heightToHide={100}
+          heightToHide={106}
           textBlocks={[
             `InterPro provides functional analysis of proteins by classifying them into
              families and predicting domains and important sites. We combine protein
@@ -232,116 +144,36 @@ const Home = () =>
           <MaskSvgIcons />
 
           <Tabs>
-            <div title="by member database" className={f('md-list')}>
+            <div title="by member database">
               <ByMemberDatabase />
             </div>
-
-            {
-              // panel2 - by entry type
-            }
-            <div title="by entry type" className={f('entry-type')}>
+            <div title="by entry type">
               <ByEntryType />
             </div>
-            {
-              // panel 3 - by species
-            }
-            <div title="by species" className={f('species-list')}>
+            <div title="by species">
               <BySpecies />
             </div>
-            {
-              // panel4- By Go terms
-            }
             <div title="by GO terms" className={f('go-list')}>
-              <div className={f('row')}>
-                {GoList.map(e =>
-                  <div
-                    className={f(
-                      'columns',
-                      'medium-3',
-                      'large-3',
-                      'text-center',
-                    )}
-                    key={e.title}
-                  >
-                    <a href="#" data-tooltip title={e.description}>
-                      <span
-                        style={{ color: e.color }}
-                        className={f('small', 'bullet-icon')}
-                        data-tooltip
-                        title={e.category}
-                      >
-                        &bull;
-                      </span>
-                      <h6>
-                        {e.title}&nbsp;
-                        <span
-                          className={f('small', 'icon', 'icon-generic')}
-                          data-icon="i"
-                          data-tooltip
-                          title={e.description}
-                        />
-                      </h6>
-                      <p>
-                        {e.counterD} entries <br />
-                        <small>({e.counterS} proteins)</small>
-                      </p>
-                    </a>
-                  </div>,
-                )}
-              </div>
-              <Link href="interpro7/browse/Goterms" className={f('button')}>
-                View all Go terms
-              </Link>
+              <ByGOTerms />
             </div>
           </Tabs>
         </div>
       </div>
 
-      <div className={f('columns', 'entry-list')}>
+      <div className={f('columns', 'stat-by')}>
         {
           // Browse by latest entries or most popular
         }
         <div className={f('callout')} data-equalizer-watch>
           <Tabs>
-            <div title="Latest entries" className={f('entry-list')}>
-              <div className={f('row')}>
-                <div className={f('columns')}>
-                  <h5>
-                    <small> Total : 29415 entries</small>
-                  </h5>
-                  <div className={f('list-vertical-scrol')}>
-                    <ul>
-                      {latests.map(e =>
-                        <LatestEntry entry={e} key={e.accession} />,
-                      )}
-                    </ul>
-                  </div>
-                  {
-                    // end list-vertical-scrol
-                  }
-                  <Link
-                    newTo={{ description: { mainType: 'entry' } }}
-                    className={f('button')}
-                  >
-                    View all entries
-                  </Link>
-                </div>
-              </div>
-              {
-                // end row
-              }
+            <div title="Latest entries">
+              <ByLatestEntries />
             </div>
-            {
-              // end panel01
-            }
             <div title="Featured">
               <div className={f('row')}>
                 <div className={f('columns')}>Featured: Under development</div>
               </div>
             </div>
-            {
-              // end panel02
-            }
             <div title="Most Popular">
               <div className={f('row')}>
                 <div className={f('columns')}>
@@ -350,9 +182,6 @@ const Home = () =>
               </div>
             </div>
           </Tabs>
-          {
-            // end anotherexample-tabs
-          }
         </div>
         {
           // end callout
@@ -449,9 +278,13 @@ const Home = () =>
           <h5>Tools </h5>
 
           <div className={f('row')}>
-            <div className={f('columns', 'medium-6', 'medium-push-6')}>
+            <div className={f('columns', 'medium-6')}>
               <h5>IDA</h5>
-              <img src={idaLogo} style={{ marginLeft: 40, marginBottom: 10 }} />
+              <img
+                alt="IDA logo"
+                src={idaLogo}
+                style={{ marginLeft: 40, marginBottom: 10 }}
+              />
               <p>
                 The InterPro Domain Architecture (IDA) tool allows you to search
                 the InterPro database with a particular set of domains, and
@@ -468,9 +301,13 @@ const Home = () =>
                 </Link>
               </p>
             </div>
-            <div className={f('columns', 'medium-6', 'medium-push-6')}>
+            <div className={f('columns', 'medium-6')}>
               <h5>InterProScan</h5>
-              <img src={iscanLogo} style={{ marginBottom: 2 }} />
+              <img
+                alt="InterProScan logo"
+                src={iscanLogo}
+                style={{ marginBottom: 2 }}
+              />
               <p>
                 InterProScan is a sequence analysis application (nucleotide and
                 protein sequences) that combines different protein signature
@@ -490,13 +327,8 @@ const Home = () =>
         </div>
       </div>
     </div>
-    <AsyncComponent
-      getComponent={async () => {
-        // eslint-disable-next-line no-magic-numbers
-        await schedule(10000); // Schedule asap, but do it anyway after 10s
-        return import(/* webpackChunkName: "twitter" */ 'components/Twitter');
-      }}
-    />
-  </div>;
+    <Twitter />
+  </div>
+);
 
 export default Home;

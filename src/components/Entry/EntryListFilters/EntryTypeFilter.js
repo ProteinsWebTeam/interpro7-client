@@ -12,7 +12,10 @@ import description2path from 'utils/processLocation/description2path';
 import { goToNewLocation } from 'actions/creators';
 import loadWebComponent from 'utils/loadWebComponent';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+
+const f = foundationPartial(style);
 
 class EntryTypeFilter extends Component {
   static propTypes = {
@@ -29,8 +32,8 @@ class EntryTypeFilter extends Component {
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+        m => m.InterproType
+      )
     ).as('interpro-type');
   }
 
@@ -47,16 +50,16 @@ class EntryTypeFilter extends Component {
   render() {
     const { data: { loading, payload }, location: { search } } = this.props;
     const types = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
     if (!loading) {
       types.unshift(['ALL', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
     return (
-      <div>
-        {types.map(([type, count]) =>
+      <div className={f('list-entries')}>
+        {types.map(([type, count]) => (
           <div key={type} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
                 name="entry_type"
@@ -65,17 +68,23 @@ class EntryTypeFilter extends Component {
                 checked={
                   (!search.type && type === 'ALL') || search.type === type
                 }
-                style={{ margin: '0.25em' }}
+                style={{ margin: '0.25em ' }}
               />
-              {type === 'ALL'
-                ? type
-                : <interpro-type type={type.replace('_', ' ')} expanded>
-                    {type}
-                  </interpro-type>}
+              {type === 'ALL' ? (
+                type
+              ) : (
+                <interpro-type
+                  type={type.replace('_', ' ')}
+                  expanded
+                  size="17px"
+                >
+                  {type}
+                </interpro-type>
+              )}
               <NumberLabel value={count} />
             </label>
-          </div>,
-        )}
+          </div>
+        ))}
       </div>
     );
   }
@@ -92,18 +101,18 @@ const getUrlFor = createSelector(
     _search.group_by = 'type';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description,
+      description
     )}?${qsStringify(_search)}`;
-  },
+  }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(EntryTypeFilter),
+  })(EntryTypeFilter)
 );

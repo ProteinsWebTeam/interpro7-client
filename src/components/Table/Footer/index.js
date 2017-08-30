@@ -5,13 +5,15 @@ import Link from 'components/generic/Link';
 
 import config from 'config';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import s from '../style.css';
+const f = foundationPartial(s);
 
 const getPageLabels = (page, lastPage) => {
   let pages = [...Array(lastPage).keys()];
   const maxPagesDisplayed = 7;
   pages.splice(0, 1);
-  if (lastPage > maxPagesDisplayed){
+  if (lastPage > maxPagesDisplayed) {
     if (page < maxPagesDisplayed / 2) {
       pages = [1, 2, 3, 4, '…', lastPage];
     } else if (page > lastPage - maxPagesDisplayed / 2) {
@@ -23,42 +25,30 @@ const getPageLabels = (page, lastPage) => {
   return pages;
 };
 
-const Footer = (
-  {data, actualSize, pagination, notFound}
-  /*: {data: Object, pagination: Object, actualSize: number} */
-) => {
+const Footer = ({ actualSize /*: number */, pagination /*: Object */ }) => {
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
-    pagination.page_size || config.pagination.pageSize, 10
+    pagination.page_size || config.pagination.pageSize,
+    10
   );
-  const index = (page - 1) * pageSize + 1;
   const lastPage = Math.ceil(actualSize / pageSize) || 1;
   const pages = getPageLabels(page, lastPage);
-  let bottomLabel = 'Loading data';
-  if (notFound) {
-    bottomLabel = 'No data available';
-  } else if (actualSize) {
-    bottomLabel = (
-      `Showing ${index} to ${index + data.length - 1} of ${actualSize} results`
-    );
-  }
+
   return (
-    <div>
-      <div className={f('float-left')}>
-        {bottomLabel}
-      </div>
+    <div className={f('pagination-box')}>
       <ul
         className={f('pagination', 'text-right')}
         role="navigation"
         aria-label="Pagination"
       >
-        {(page === 1) ?
+        {page === 1 ? (
           <li className={f('disabled')}>
-              Previous <span className={f('show-for-sr')}>You're on page</span>
-          </li> :
+            Previous <span className={f('show-for-sr')}>You’re on page</span>
+          </li>
+        ) : (
           <li>
             <Link
-              newTo={({description, search, hash}) => ({
+              newTo={({ description, search, hash }) => ({
                 description,
                 search: {
                   ...search,
@@ -69,45 +59,45 @@ const Footer = (
                 hash,
               })}
             >
-                Previous
+              Previous
             </Link>
           </li>
-        }
-        {
-          pages.map(e => {
-            if (e === '…') {
-              return <li key={e} className={f('ellipsis')}/>;
-            } else if (page === e) {
-              return (
-                <li key={e} className={f('current')}>
-                  <span className={f('show-for-sr')}>You're on page</span>{e}
-                </li>
-              );
-            }
+        )}
+        {pages.map(e => {
+          if (e === '…') {
+            return <li key={e} className={f('ellipsis')} />;
+          } else if (page === e) {
             return (
-              <li key={e} className={page === e ? f('current') : ''}>
-                <Link
-                  newTo={({description, search, hash}) => ({
-                    description,
-                    search: {
-                      ...search,
-                      page: e,
-                      page_size: pageSize,
-                      search: pagination.search,
-                    },
-                    hash,
-                  })}
-                >
-                  {e}
-                </Link>
+              <li key={e} className={f('current')}>
+                <span className={f('show-for-sr')}>You’re on page</span>
+                {e}
               </li>
             );
-          })
-        }
-        {(page === lastPage) ?
+          }
+          return (
+            <li key={e} className={page === e ? f('current') : ''}>
+              <Link
+                newTo={({ description, search, hash }) => ({
+                  description,
+                  search: {
+                    ...search,
+                    page: e,
+                    page_size: pageSize,
+                    search: pagination.search,
+                  },
+                  hash,
+                })}
+              >
+                {e}
+              </Link>
+            </li>
+          );
+        })}
+        {page === lastPage ? (
           <li className={f('disabled')}>
-            Next <span className={f('show-for-sr')}>You're on page</span>
-          </li> :
+            Next <span className={f('show-for-sr')}>You’re on page</span>
+          </li>
+        ) : (
           <li>
             <Link
               newTo={location => ({
@@ -121,7 +111,7 @@ const Footer = (
               Next
             </Link>
           </li>
-        }
+        )}
       </ul>
     </div>
   );

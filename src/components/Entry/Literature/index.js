@@ -3,27 +3,22 @@ import React from 'react';
 import T from 'prop-types';
 import partition from 'lodash-es/partition';
 
-import {PMCLink, DOILink} from 'components/ExtLink';
+import { PMCLink, DOILink } from 'components/ExtLink';
 import AnimatedEntry from 'components/AnimatedEntry';
 
-import {createAsyncComponent} from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
+
+import { foundationPartial } from 'styles/foundation';
 
 import refStyles from './style.css';
-import ebiStyles from 'styles/ebi-global.css';
-import {foundationPartial} from 'styles/foundation';
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+
 const f = foundationPartial(refStyles, ebiStyles);
-// TODO: check the "partial" binding.
-// The partial binding is not cascading the styles,
-// in this case is taking row from ebi.css but is not
-// using the foundation that has been defined
 
-// import {buildAnchorLink} from 'utils/url';
-
-const SchemaOrgData = createAsyncComponent(
-  () => import(/* webpackChunkName: "schemaOrg" */'schema_org'),
-  () => null,
-  'SchemaOrgData'
-);
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const schemaProcessData = data => ({
   '@type': 'ScholarlyArticle',
@@ -32,23 +27,31 @@ const schemaProcessData = data => ({
   author: data.authors,
 });
 
-const description2IDs = description => description.reduce((acc, part) => ([
-  ...acc,
-  ...(part.match(/"(PUB\d+)"/ig) || []).map(t => t.replace(/(^")|("$)/g, '')),
-]), []);
+const description2IDs = description =>
+  description.reduce(
+    (acc, part) => [
+      ...acc,
+      ...(part.match(/"(PUB\d+)"/gi) || [])
+        .map(t => t.replace(/(^")|("$)/g, '')),
+    ],
+    []
+  );
 
 const LiteratureItem = (
-  {pubID, reference: r, i, included}
-  /*: {pubID: string, reference: Object, i?: number, included?: boolean} */
+  {
+    pubID,
+    reference: r,
+    i,
+    included,
+  } /*: {pubID: string, reference: Object, i?: number, included?: boolean} */
 ) => (
   <li className={f('reference', 'small')} id={included ? pubID : null}>
-    <SchemaOrgData data={r} processData={schemaProcessData}/>
+    <SchemaOrgData data={r} processData={schemaProcessData} />
     {included && <span className={f('index')}>[{i}]</span>}
     <span className={f('authors')}>{r.authors}</span>
     <span className={f('year')}>({r.year})</span>.
     <span className={f('title')}>{r.title}</span>
-    {r.ISOJournal &&
-    <span className={f('journal')}>{r.ISOJournal}, </span>}
+    {r.ISOJournal && <span className={f('journal')}>{r.ISOJournal}, </span>}
     {r.issue && <span className={f('issue')}>{r.issue}, </span>}
     {r.rawPages && <span className={f('pages')}>{r.rawPages}. </span>}
     <span className={f('reference_id')}>{pubID}.</span>
@@ -65,20 +68,21 @@ LiteratureItem.propTypes = {
 };
 
 const Literature = (
-  {references, description}
-  /*: {|references: Object, description: Array<string>|} */
+  {
+    references,
+    description,
+  } /*: {|references: Object, description: Array<string>|} */
 ) => {
   const citations = description2IDs(description);
-  const [included, extra] = partition(
-    Object.entries(references),
-    ([id]) => citations.includes(id),
+  const [included, extra] = partition(Object.entries(references), ([id]) =>
+    citations.includes(id)
   );
   return (
-    <div className={f('row')}><div className={f('large-12', 'columns')}>
-      {
-        included.length ?
+    <div className={f('row')}>
+      <div className={f('large-12', 'columns')}>
+        {included.length ? <h5>Used in this entry</h5> : null}
+        {included.length ? (
           <AnimatedEntry className={f('list')} itemDelay={100} duration={500}>
-            <h5>Used in this entry</h5>
             {included.map(([pubID, ref], i) => (
               <LiteratureItem
                 pubID={pubID}
@@ -88,20 +92,18 @@ const Literature = (
                 included
               />
             ))}
-          </AnimatedEntry> :
-          null
-      }
-      {
-        extra.length ?
+          </AnimatedEntry>
+        ) : null}
+        {extra.length ? <h5>Further reading</h5> : null}
+        {extra.length ? (
           <AnimatedEntry className={f('list')} itemDelay={100} duration={500}>
-            <h5>Further reading</h5>
             {extra.map(([pubID, ref]) => (
               <LiteratureItem pubID={pubID} key={pubID} reference={ref} />
             ))}
-          </AnimatedEntry> :
-          null
-      }
-    </div></div>
+          </AnimatedEntry>
+        ) : null}
+      </div>
+    </div>
   );
 };
 Literature.propTypes = {

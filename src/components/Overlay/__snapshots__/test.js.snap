@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Overlay /> should render as invisible 1`] = `
+<div
+  aria-hidden="true"
+  className="overlay"
+  onClick={[Function]}
+  onKeyPress={[Function]}
+/>
+`;
+
+exports[`<Overlay /> should render as visible 1`] = `
+<div
+  aria-hidden="true"
+  className="overlay visible"
+  onClick={[Function]}
+  onKeyPress={[Function]}
+/>
+`;

@@ -1,0 +1,94 @@
+@import '../../styles/timing.css';
+@import '../../styles/colors.css';
+
+.container {
+  width: 2em;
+  height: 2em;
+  display: flex;
+  justify-content: center;
+}
+
+.svg {
+  margin: auto;
+}
+
+.failed {
+  cursor: not-allowed;
+}
+
+@keyframes pulsing {
+  0% {
+    transform: rotate(0) scale(1);
+  }
+
+  33% {
+    transform: rotate(-180deg) scale(0.95);
+  }
+
+  100% {
+    transform: rotate(-360deg) scale(1);
+  }
+}
+
+.group {
+  transform-origin: center;
+  transform: scale(1);
+
+  &.downloading {
+    animation-duration: var(--timing-slow);
+    animation-timing-function: linear;
+    animation-delay: var(--timing-medium);
+    animation-iteration-count: infinite;
+    animation-direction: reverse;
+    animation-name: pulsing;
+  }
+}
+
+.shadow {
+  transform-origin: center;
+  transition: transform var(--timing-medium) ease-in-out;
+  transform: scale(0.8);
+  stroke: var(--colors-main);
+  opacity: 0.2;
+
+  &.downloading {
+    transform: scale(1);
+  }
+}
+
+.progress {
+  transition: stroke-dashoffset var(--timing-instant) ease-in-out;
+  stroke: var(--colors-main);
+}
+
+.card {
+  perspective: 500px;
+
+  & > * {
+    backface-visibility: hidden;
+    transform-origin: center;
+    transition: transform var(--timing-fast) linear;
+  }
+
+  &.flipped {
+    & > .front {
+      transform: rotateY(90deg);
+      transition-delay: 0s;
+    }
+
+    & > .back {
+      transform: rotateY(0);
+      transition-delay: var(--timing-fast);
+    }
+  }
+}
+
+.front {
+  transform: rotateY(0);
+  transition-delay: var(--timing-fast);
+}
+
+.back {
+  transform: rotateY(90deg);
+  transition-delay: 0s;
+}

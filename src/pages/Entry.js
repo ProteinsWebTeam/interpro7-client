@@ -3,10 +3,11 @@ import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import { GoLink } from 'components/ExtLink';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
 import Table, {
@@ -49,7 +50,9 @@ const Overview = ({
     <div>
       Member databases:
       <ul className={styles.card}>
-        {Object.entries(payload.entries.member_databases).map(([name, count]) =>
+        {Object.entries(
+          payload.entries.member_databases
+        ).map(([name, count]) => (
           <li key={name}>
             <Link
               newTo={{
@@ -59,8 +62,8 @@ const Overview = ({
             >
               {name} ({count})
             </Link>
-          </li>,
-        )}
+          </li>
+        ))}
       </ul>
       <ul className={styles.card}>
         <li>
@@ -98,8 +101,8 @@ class List extends Component {
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+        m => m.InterproType
+      )
     ).as('interpro-type');
   }
 
@@ -113,9 +116,9 @@ class List extends Component {
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
     const goColors = {
-      P: 'rgb(220, 254, 210)',
-      F: 'rgb(254, 220, 210)',
-      C: 'rgb(220, 210, 254)',
+      P: '#c2e6ec',
+      F: '#e5f5d7',
+      C: '#fbdcd0',
     };
     if (data.loading || notFound) {
       _payload = {
@@ -124,10 +127,9 @@ class List extends Component {
     }
     return (
       <div className={f('row')}>
-        <div className={f('shrink', 'columns')}>
-          <MemberDBTabs />
-        </div>
-        <div className={f('columns')}>
+        <MemberDBTabs />
+
+        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
           <Table
@@ -141,36 +143,49 @@ class List extends Component {
             <Exporter>
               <ul>
                 <li>
-                  <a href={`${''}&format=json`} download="entries.json">
+                  <a href={data.url} download="entries.json">
                     JSON
                   </a>
-                  <br />
                 </li>
                 <li>
-                  <a href={`${''}`}>Open in API web view</a>
+                  <a href={data.url} download="entries.tsv">
+                    TSV
+                  </a>
+                </li>
+                <li>
+                  <a target="_blank" rel="noopener noreferrer" href={data.url}>
+                    Open in API web view
+                  </a>
                 </li>
               </ul>
             </Exporter>
             <PageSizeSelector />
             <SearchBox search={search.search} pathname={''}>
-              Search entries:
+              &nbsp;
             </SearchBox>
             <Column
-              accessKey="type"
-              renderer={type =>
-                <interpro-type type={type.replace('_', ' ')} title={type}>
+              dataKey="type"
+              className={ps('col-type')}
+              renderer={type => (
+                <interpro-type
+                  type={type.replace('_', ' ')}
+                  title={type}
+                  size="26px"
+                >
                   {type}
-                </interpro-type>}
+                </interpro-type>
+              )}
             >
               Type
             </Column>
             <Column
-              accessKey="name"
+              dataKey="name"
               renderer={(
                 name /*: string */,
-                { accession } /*: {accession: string} */,
-              ) =>
+                { accession } /*: {accession: string} */
+              ) => (
                 <Link
+                  title={`${name} (${accession})`}
                   newTo={location => ({
                     ...location,
                     description: {
@@ -181,14 +196,16 @@ class List extends Component {
                   })}
                 >
                   {name}
-                </Link>}
+                </Link>
+              )}
             >
               Name
             </Column>
             <Column
-              accessKey="accession"
-              renderer={(accession /*: string */) =>
+              dataKey="accession"
+              renderer={(accession /*: string */) => (
                 <Link
+                  title={accession}
                   newTo={location => ({
                     ...location,
                     description: {
@@ -198,32 +215,24 @@ class List extends Component {
                     },
                   })}
                 >
-                  {accession}
-                </Link>}
+                  <span className={ps('acc-row')}>{accession}</span>
+                </Link>
+              )}
             >
               Accession
             </Column>
-            {mainDB === 'InterPro'
-              ? <Column
-                  accessKey="member_databases"
-                  renderer={(mdb /*: string */) =>
-                    Object.keys(mdb).map(db =>
-                      <div
-                        key={db}
-                        style={{
-                          backgroundColor: '#DDDDDD',
-                          padding: '1px',
-                          marginBottom: '1px',
-                        }}
-                      >
-                        {db}
-                        {mdb[db].map(accession =>
-                          <span
-                            key={accession}
-                            className={f('label')}
-                            style={{ float: 'right' }}
-                          >
+            {mainDB === 'InterPro' ? (
+              <Column
+                dataKey="member_databases"
+                renderer={(mdb /*: string */) =>
+                  Object.keys(mdb).map(db => (
+                    <div key={db} className={ps('sign-row')}>
+                      <span className={ps('sign-cell')}>{db}</span>
+                      <span className={ps('sign-cell')}>
+                        {mdb[db].map(accession => (
+                          <span key={accession} className={ps('sign-label')}>
                             <Link
+                              title={`${accession} signature`}
                               newTo={{
                                 description: {
                                   mainType: 'entry',
@@ -234,49 +243,82 @@ class List extends Component {
                             >
                               {accession}
                             </Link>
-                          </span>,
-                        )}
-                      </div>,
-                    )}
-                >
-                  Signatures <span className={f('label')}>Sign ID</span>
-                </Column>
-              : <Column
-                  accessKey="integrated"
-                  renderer={(accession /*: string */) =>
-                    <Link
-                      newTo={{
-                        description: {
-                          mainType: 'entry',
-                          mainDB: 'InterPro',
-                          mainAccession: accession,
-                        },
-                      }}
-                    >
-                      {accession}
-                    </Link>}
-                >
-                  Integrated
-                </Column>}
+                          </span>
+                        ))}
+                      </span>
+                    </div>
+                  ))}
+              >
+                Signatures{' '}
+                <span className={ps('sign-label-head')} title="Signature ID">
+                  ID
+                </span>
+              </Column>
+            ) : (
+              <Column
+                dataKey="integrated"
+                renderer={(accession /*: string */) => (
+                  <Link
+                    newTo={{
+                      description: {
+                        mainType: 'entry',
+                        mainDB: 'InterPro',
+                        mainAccession: accession,
+                      },
+                    }}
+                  >
+                    {accession}
+                  </Link>
+                )}
+              >
+                Integrated
+              </Column>
+            )}
             <Column
-              accessKey="go_terms"
+              dataKey="go_terms"
+              className={ps('col-go')}
               renderer={(gos /*: Array<Object> */) =>
-                gos.map(go =>
+                gos.map(go => (
                   <div
+                    className={ps('go-row')}
                     key={go.identifier}
                     style={{
                       backgroundColor: go.category
                         ? goColors[go.category]
                         : '#DDDDDD',
-                      padding: '1px',
-                      marginBottom: '1px',
                     }}
                   >
-                    {go.name ? go.name : 'None'}
-                  </div>,
-                )}
+                    <span className={ps('go-cell')}>
+                      <GoLink
+                        id={go.identifier}
+                        className={f('go')}
+                        title={`${go.name} (${go.identifier})`}
+                      >
+                        {go.name ? go.name : 'None'}
+                      </GoLink>
+                    </span>
+                  </div>
+                ))}
             >
-              GO Terms
+              GO Terms{' '}
+              <span
+                className={ps('sign-label-head', 'bp')}
+                title="Biological process term"
+              >
+                BP
+              </span>{' '}
+              <span
+                className={ps('sign-label-head', 'mf')}
+                title="Molecular function term"
+              >
+                MF
+              </span>{' '}
+              <span
+                className={ps('sign-label-head', 'cc')}
+                title="Cellular component term"
+              >
+                CC
+              </span>
             </Column>
           </Table>
         </div>
@@ -285,31 +327,35 @@ class List extends Component {
   }
 }
 
-const SummaryAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-summary" */ 'components/Entry/Summary'),
-);
-const StructureAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
-);
-const ProteinAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein'),
-);
-const SpeciesAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/Species'),
-);
-const DomainAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
-);
+const SummaryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-summary" */ 'components/Entry/Summary'),
+});
+const StructureAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
+});
+const ProteinAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein'),
+});
+const SpeciesAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-subpage" */ 'subPages/Species'),
+});
+const DomainAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
+});
+const HmmModelsAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "entry-subpage" */ 'subPages/HmmModels'),
+});
 
-const HmmModelsAsync = createAsyncComponent(() =>
-  import(/* webpackChunkName: "entry-subpage" */ 'subPages/HmmModels'),
-);
-
-const SchemaOrgData = createAsyncComponent(
-  () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  () => null,
-  'SchemaOrgData',
-);
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const pages = new Set([
   { value: 'structure', component: StructureAsync },
@@ -319,8 +365,9 @@ const pages = new Set([
   { value: 'hmm_models', component: HmmModelsAsync },
 ]);
 
-const SummaryComponent = ({ data: { payload }, isStale, location }) =>
-  <SummaryAsync data={payload} isStale={isStale} location={location} />;
+const SummaryComponent = ({ data: { payload }, isStale, location }) => (
+  <SummaryAsync data={payload} isStale={isStale} location={location} />
+);
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.object,
@@ -357,11 +404,11 @@ const dbAccs = new RegExp(
     .map(db => db.accession)
     .filter(db => db)
     .join('|')}|IPR[0-9]{6})`,
-  'i',
+  'i'
 );
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = props =>
+const InnerSwitch = props => (
   <Switch
     {...props}
     locationSelector={l =>
@@ -369,7 +416,8 @@ const InnerSwitch = props =>
     indexRoute={List}
     childRoutes={[{ value: dbAccs, component: Summary }]}
     catchAll={List}
-  />;
+  />
+);
 
 const schemaProcessData = data => ({
   '@type': 'ProteinEntity',
@@ -384,21 +432,23 @@ const schemaProcessData = data => ({
   isBaseFor: '@isBaseFor',
 });
 
-const Entry = props =>
+const Entry = props => (
   <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
     {props.data.payload &&
-      props.data.payload.accession &&
+    props.data.payload.accession && (
       <SchemaOrgData
         data={props.data.payload}
         processData={schemaProcessData}
-      />}
+      />
+    )}
     <Switch
       {...props}
       locationSelector={l => l.description.mainDB}
       indexRoute={Overview}
       catchAll={InnerSwitch}
     />
-  </div>;
+  </div>
+);
 Entry.propTypes = {
   data: T.shape({
     payload: T.object,
@@ -409,5 +459,5 @@ export default loadData((...args) =>
   getUrlForApi(...args)
     .replace('species', '')
     .replace('hmm_models', '')
-    .replace('domain_architecture', ''),
+    .replace('domain_architecture', '')
 )(Entry);

@@ -1,0 +1,257 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProgressButton /> should render, first step 1`] = `
+<span
+  className="container"
+>
+  <svg
+    className="svg"
+    height="2em"
+    viewBox="0 0 120 120"
+    width="2em"
+  >
+    <g
+      className="group downloading"
+    >
+      <circle
+        className="shadow downloading"
+        cx={60}
+        cy={60}
+        fill="none"
+        r={48}
+        strokeWidth={11}
+      />
+      <circle
+        className="progress"
+        cx={60}
+        cy={60}
+        fill="none"
+        r={48}
+        strokeDasharray={301.59289474462014}
+        strokeDashoffset={301.59289474462014}
+        strokeLinecap="round"
+        strokeWidth={12}
+        transform="rotate(-90 60 60)"
+      />
+    </g>
+    <circle
+      cx={60}
+      cy={60}
+      fill="#e6e6e6"
+      r={43}
+    />
+    <g
+      className="card"
+    >
+      <image
+        className="back"
+        height="100"
+        href={Object {}}
+        width="60"
+        x="30"
+        y="10"
+      />
+      <image
+        className="front"
+        height="100"
+        href={Object {}}
+        width="60"
+        x="30"
+        y="10"
+      />
+    </g>
+  </svg>
+</span>
+`;
+
+exports[`<ProgressButton /> should render, with failure 1`] = `
+<span
+  className="container failed"
+>
+  <svg
+    className="svg"
+    height="2em"
+    viewBox="0 0 120 120"
+    width="2em"
+  >
+    <g
+      className="group"
+    >
+      <circle
+        className="shadow"
+        cx={60}
+        cy={60}
+        fill="none"
+        r={48}
+        strokeWidth={11}
+      />
+      <circle
+        className="progress"
+        cx={60}
+        cy={60}
+        fill="none"
+        r={48}
+        strokeDasharray={301.59289474462014}
+        strokeDashoffset={60.318578948924014}
+        strokeLinecap="round"
+        strokeWidth={12}
+        transform="rotate(-90 60 60)"
+      />
+    </g>
+    <circle
+      cx={60}
+      cy={60}
+      fill="#e6e6e6"
+      r={43}
+    />
+    <g
+      className="card flipped"
+    >
+      <image
+        className="back"
+        height="100"
+        href={Object {}}
+        width="60"
+        x="30"
+        y="10"
+      />
+      <image
+        className="front"
+        height="100"
+        href={Object {}}
+        width="60"
+        x="30"
+        y="10"
+      />
+    </g>
+  </svg>
+</span>
+`;
+
+exports[`<ProgressButton /> should render, with progress 1`] = `
+<span
+  className="container"
+>
+  <svg
+    className="svg"
+    height="2em"
+    viewBox="0 0 120 120"
+    width="2em"
+  >
+    <g
+      className="group downloading"
+    >
+      <circle
+        className="shadow downloading"
+        cx={60}
+        cy={60}
+        fill="none"
+        r={48}
+        strokeWidth={11}
+      />
+      <circle
+        className="progress"
+        cx={60}
+        cy={60}
+        fill="none"
+        r={48}
+        strokeDasharray={301.59289474462014}
+        strokeDashoffset={150.79644737231007}
+        strokeLinecap="round"
+        strokeWidth={12}
+        transform="rotate(-90 60 60)"
+      />
+    </g>
+    <circle
+      cx={60}
+      cy={60}
+      fill="#e6e6e6"
+      r={43}
+    />
+    <g
+      className="card"
+    >
+      <image
+        className="back"
+        height="100"
+        href={Object {}}
+        width="60"
+        x="30"
+        y="10"
+      />
+      <image
+        className="front"
+        height="100"
+        href={Object {}}
+        width="60"
+        x="30"
+        y="10"
+      />
+    </g>
+  </svg>
+</span>
+`;
+
+exports[`<ProgressButton /> should render, with success 1`] = `
+<span
+  className="container"
+>
+  <svg
+    className="svg"
+    height="2em"
+    viewBox="0 0 120 120"
+    width="2em"
+  >
+    <g
+      className="group"
+    >
+      <circle
+        className="shadow"
+        cx={60}
+        cy={60}
+        fill="none"
+        r={48}
+        strokeWidth={11}
+      />
+      <circle
+        className="progress"
+        cx={60}
+        cy={60}
+        fill="none"
+        r={48}
+        strokeDasharray={301.59289474462014}
+        strokeDashoffset={0}
+        strokeLinecap="round"
+        strokeWidth={12}
+        transform="rotate(-90 60 60)"
+      />
+    </g>
+    <circle
+      cx={60}
+      cy={60}
+      fill="#e6e6e6"
+      r={43}
+    />
+    <g
+      className="card flipped"
+    >
+      <image
+        className="back"
+        height="100"
+        href={Object {}}
+        width="60"
+        x="30"
+        y="10"
+      />
+      <image
+        className="front"
+        height="100"
+        href={Object {}}
+        width="60"
+        x="30"
+        y="10"
+      />
+    </g>
+  </svg>
+</span>
+`;

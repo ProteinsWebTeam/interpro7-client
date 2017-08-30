@@ -1,23 +1,22 @@
 // @flow
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 
 import cancelable from 'utils/cancelable';
 import loadResource from 'utils/loadResource';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'styles/ebi-global.css';
-import fonts from 'styles/ebi/fonts.css';
-import theme from 'styles/theme-interpro.css';
-
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro, local);
 
 let bound = false;
 
-const noPadding = {padding: 0};
+const noPadding = { padding: 0 };
 
-class Twitter extends Component {
+class Twitter extends PureComponent /*:: <{}> */ {
   /* ::
     _node: ?Element
     _twitterScript: ?{
@@ -33,7 +32,7 @@ class Twitter extends Component {
       if (!window.twttr) return;
       if (!bound) {
         // Only need to bind this once
-        window.twttr.events.bind('rendered', ({target}) => {
+        window.twttr.events.bind('rendered', ({ target }) => {
           // eslint-disable-next-line no-param-reassign
           target.style.opacity = 1;
           // eslint-disable-next-line no-param-reassign
@@ -45,7 +44,7 @@ class Twitter extends Component {
     });
   }
 
-  comnponentWillUnmount() {
+  componentWillUnmount() {
     if (this._twitterScript) this._twitterScript.cancel();
   }
 
@@ -53,23 +52,23 @@ class Twitter extends Component {
     return (
       <div className={f('expanded', 'row')}>
         <div className={f('columns')} style={noPadding}>
-          <div className={'jumbo-news'} >
-            <div className={'jumbo-news-container'} >
-              <h3
+          <div className={f('jumbo-news')}>
+            <div className={f('jumbo-news-container')}>
+              <div
                 className={f('icon', 'icon-socialmedia', 'icon-s2')}
                 data-icon="T"
               />
               <a
-                ref={node => this._node = node}
+                ref={node => (this._node = node)}
                 data-dnt="true"
                 data-chrome={
                   'nofooter noborders noheader noscrollbar transparent'
                 }
                 data-tweet-limit="1"
-                className="twitter-timeline"
+                className={f('twitter-timeline')}
                 href="https://twitter.com/InterProDB"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 Tweets by @InterProDB
               </a>

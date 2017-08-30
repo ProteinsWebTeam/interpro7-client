@@ -10,9 +10,10 @@
   @nest & :global(.public-DraftEditorPlaceholder-root) {
     color: #cacaca;
     position: absolute;
+    font-family: var(--fonts-ebi);
   }
 
-  @nest & div[data-block="true"] {
+  @nest & div[data-block='true'] {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 }
@@ -26,16 +27,8 @@
 }
 
 .file-input-label {
-  display: flex;
-  align-items: baseline;
-
-  @nest & > span {
-    margin-right: 1ch;
-  }
-
-  @nest & > .button {
-    user-select: none;
-  }
+  font-size: inherit;
+  display: inline-block;
 }
 
 .search-form {

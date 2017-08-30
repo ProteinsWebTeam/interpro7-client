@@ -10,14 +10,17 @@ import IntegratedFilter from './IntegratedFilter';
 import SignaturesFilter from './SignaturesFilter';
 import GOTermsFilter from './GOTermsFilter';
 
-const EntryListFilter = ({ mainDB }) =>
+const EntryListFilter = ({ mainDB }) => (
   <FiltersPanel>
     <EntryTypeFilter label="Entry Type" />
-    {mainDB === 'InterPro'
-      ? <SignaturesFilter label="Signatures in" />
-      : <IntegratedFilter label="InterPro State" />}
+    {mainDB === 'InterPro' ? (
+      <SignaturesFilter label="Signatures" />
+    ) : (
+      <IntegratedFilter label="InterPro State" />
+    )}
     <GOTermsFilter label="GO Terms" />
-  </FiltersPanel>;
+  </FiltersPanel>
+);
 EntryListFilter.propTypes = {
   mainDB: T.string,
 };

@@ -1,10 +1,10 @@
-import {CHANGE_SETTINGS, RESET_SETTINGS} from 'actions/types';
+import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
 // import settingsStorage from 'storage/settings';
 import config from 'config';
 
 const DEFAULT_HTTP_PORT = 80;
 
-const getDefaultSettings = () => ({
+export const getDefaultSettings = () => ({
   pagination: {
     pageSize: config.pagination.pageSize,
   },
@@ -31,11 +31,11 @@ const getDefaultSettings = () => ({
     root: config.root.IPScan.pathname,
   },
 });
+
 // TODO: find a way to use the default when this has been changed in code
 export default (
-  state/*: Object */ = // settingsStorage.getValue() ||
-  getDefaultSettings(),
-  action/*: Object */
+  state /*: Object */ = getDefaultSettings(), // settingsStorage.getValue() ||
+  action /*: Object */
 ) => {
   switch (action.type) {
     case CHANGE_SETTINGS:

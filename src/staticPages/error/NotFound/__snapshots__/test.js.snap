@@ -1,0 +1,122 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NotFound /> should render 1`] = `
+<section
+  className="error-msg"
+>
+  <div
+    className="row"
+  >
+    <div
+      className="small-12 columns small-centered"
+    >
+      <h5>
+        404: Page Not Found
+      </h5>
+      <h1
+        className="oversized"
+      >
+        Keep searching...
+      </h1>
+      <h5
+        className="lead"
+      >
+        We are sorry, the page you were trying to access doesn’t exist.
+      </h5>
+      <br />
+      <p>
+         
+        Double check the URL or go back to the
+         
+        <Connect(Link)
+          newTo={
+            Object {
+              "description": Object {},
+            }
+          }
+        >
+          homepage.
+        </Connect(Link)>
+         If you continue to get this page, contact us using the
+        <Connect(Link)
+          href="http://www.ebi.ac.uk/support/interpro-general-query"
+          target="_blank"
+        >
+          EMBL-EBI feedback form
+        </Connect(Link)>
+      </p>
+      <br />
+      <h3>
+        Or try one of these:
+      </h3>
+      <ul>
+        <li>
+          <Connect(Link)
+            newTo={
+              Object {
+                "description": Object {
+                  "other": "release_notes",
+                },
+              }
+            }
+          >
+            What’s new in InterPro?
+          </Connect(Link)>
+        </li>
+        <li>
+          <Connect(Link)
+            newTo={
+              Object {
+                "description": Object {
+                  "other": "help",
+                },
+              }
+            }
+          >
+            InterPro Training and tutorial material
+          </Connect(Link)>
+        </li>
+        <li>
+          <Connect(Link)
+            newTo={
+              Object {
+                "description": Object {
+                  "other": "help",
+                },
+              }
+            }
+          >
+            InterPro FAQs
+          </Connect(Link)>
+        </li>
+        <li>
+          <Connect(Link)
+            newTo={
+              Object {
+                "description": Object {
+                  "other": "help",
+                },
+              }
+            }
+          >
+            InterPro Documentation
+          </Connect(Link)>
+        </li>
+        <li>
+          <Connect(Link)
+            newTo={
+              Object {
+                "description": Object {
+                  "other": "help",
+                },
+              }
+            }
+          >
+            InterPro Help/support
+          </Connect(Link)>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+`;

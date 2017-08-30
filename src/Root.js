@@ -6,73 +6,69 @@ import { schedule } from 'timing-functions/src';
 
 // Global stylesheets loaded here
 import 'styles/foundation';
-import 'styles/ebi-global.css';
-import 'styles/global.css';
-import 'styles/theme-interpro.css';
+import 'ebi-framework/css/ebi-global.scss';
+// import 'styles/theme-interpro.css';
 import 'styles/interpro-new.css';
 
-import { createAsyncComponent } from 'utilityComponents/AsyncComponent';
+import loadable from 'higherOrder/loadable';
 
 import Overlay from 'components/Overlay';
 
 import Sentinel from 'components/Sentinel';
+import { EbiSkipToDiv } from 'components/EBIHeader';
+import EBIHeader from 'components/EBIHeader';
 import Header from 'components/Header';
-import Breadcrumb from 'components/Breadcrumb';
+// import Breadcrumb from 'components/Breadcrumb';
 
 import Pages from 'Pages';
 
-const STICKY_MENU_OFFSET = 150;
+const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 
 const NullComponent = () => null;
 
-const LoadingBarAsync = createAsyncComponent(
-  () =>
+const LoadingBarAsync = loadable({
+  loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
       import(/* webpackChunkName: "loading-bar" */ 'components/LoadingBar')
     ),
-  NullComponent,
-  'LoadingBar'
-);
+  loading: NullComponent,
+});
 
-const SideMenuAsync = createAsyncComponent(
-  () =>
+const SideMenuAsync = loadable({
+  loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
       import(/* webpackChunkName: "side-menu" */ 'components/Menu/SideMenu')
     ),
-  NullComponent,
-  'SideMenu'
-);
+  loading: NullComponent,
+});
 
-const EMBLDropdownAsync = createAsyncComponent(
-  () =>
+const EMBLDropdownAsync = loadable({
+  loader: () =>
     schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() =>
       import(/* webpackChunkName: "cookie-banner" */ 'components/EMBLDropdown')
     ),
-  NullComponent,
-  'EMBLDropdown'
-);
+  loading: NullComponent,
+});
 
-const EBIFooterAsync = createAsyncComponent(
-  () =>
+const EBIFooterAsync = loadable({
+  loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
       import(/* webpackChunkName: "ebi-footer" */ 'components/EBIFooter')
     ),
-  NullComponent,
-  'EBIFooter'
-);
+  loading: NullComponent,
+});
 
-const ToastDisplayAsync = createAsyncComponent(
-  () =>
+const ToastDisplayAsync = loadable({
+  loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
       import(/* webpackChunkName: "toast-display" */ 'components/Toast/ToastDisplay')
     ),
-  NullComponent,
-  'ToastDisplay'
-);
+  loading: NullComponent,
+});
 
-const CookieFooterAsync = createAsyncComponent(
-  () =>
+const CookieFooterAsync = loadable({
+  loader: () =>
     schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
       try {
         if (
@@ -84,24 +80,26 @@ const CookieFooterAsync = createAsyncComponent(
         return import(/* webpackChunkName: "cookie-banner" */ 'components/CookieBanner');
       }
     }),
-  NullComponent,
-  'CookieFooter'
-);
+  loading: NullComponent,
+});
 
-const Root = () =>
+const Root = () => (
   <div>
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
     <LoadingBarAsync />
     <Overlay />
     <EMBLDropdownAsync />
     <SideMenuAsync />
+    <EbiSkipToDiv />
+    <EBIHeader />
     <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
     <Sentinel top={STICKY_MENU_OFFSET} />
-    <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} />
-    <Pages />
+    {/* <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} /> */}
+    <Pages top={STICKY_MENU_OFFSET} />
     <EBIFooterAsync />
     <ToastDisplayAsync />
     <CookieFooterAsync />
-  </div>;
+  </div>
+);
 
 export default Root;

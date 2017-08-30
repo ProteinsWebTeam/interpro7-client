@@ -1,4 +1,52 @@
-@import "../styles/timing.css";
+@import '../styles/timing.css';
+/************************************home.js************************************/
+/*homepage figures - temp while there is a specific component*/
+.fig-container {
+  float: left;
+  width: 17%;
+  margin: 0 2em 1em 0;
+  overflow: hidden;
+}
+.fig-sqc {
+  background: url(http://localhost:8000/interpro/sqc.2b6.png) no-repeat -12% 69%;
+  height: 12.4rem;
+  width: 19rem;
+  margin-top: 0.5rem;
+}
+
+.fig-proteins {
+  background: url(../images/proteins.png) no-repeat 0% 0%;
+  background-size: 94%;
+  height: 12rem;
+  width: 12rem;
+}
+
+.fig-protban {
+  background: url(../images/backgrounds/protein3d_02.png) repeat 75% 99%;
+  background-size: 633%;
+  height: 12.4rem;
+  width: 20rem;
+  margin-top: 0.5rem;
+}
+
+.fig-sqcfasta {
+  background: url(../images/backgrounds/composite_03.png) no-repeat 85% 9%;
+  background-size: 943%;
+  height: 13rem;
+  width: 13rem;
+  filter: hue-rotate(36deg) contrast(110%) brightness(141%);
+}
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  .fig-container {
+    margin: 0 auto;
+    width: 12rem;
+    height: 12rem;
+    float: none;
+  }
+}
+/*/homepage figures*/
+/************************************entry.js************************************/
 
 .with-data {
   transition: opacity var(--timing-fast) ease-in-out;
@@ -7,4 +55,72 @@
 .with-stale-data {
   user-select: none;
   opacity: 0.5;
+}
+
+.acc-row {
+  font-size: 0.8rem;
+}
+
+.sign-row {
+  background: rgba(185, 215, 239, 0.2);
+  margin-bottom: 1px;
+  font-size: 0.8rem;
+}
+
+.sign-cell {
+  display: table-cell;
+  width: 100%;
+  padding: 4px 6px;
+}
+
+.sign-label {
+  display: inline-block;
+  min-width: 70px;
+  border-radius: 2px;
+  text-align: center;
+  background: #b9d7ef;
+}
+
+.go-row {
+  margin-bottom: 1px;
+  font-size: 0.8rem;
+}
+
+.go-cell {
+  display: table-cell;
+  width: 100%;
+  padding: 4px 6px;
+}
+
+.sign-label-head {
+  border-radius: 2px;
+  background: #b9d7ef;
+  padding: 0.1rem 0.4rem;
+  color: #71818a;
+}
+.sign-label-head.bp {
+  background: #c2e6ec; /*cce7f3*/
+}
+.sign-label-head.mf {
+  background: #e5f5d7;
+}
+.sign-label-head.cc {
+  background: #fbdcd0;
+}
+
+/* Medium screen only*/
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  .col-go {
+    display: none;
+  } /*remove GO terms*/
+}
+
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  /*table.light th {word-break: break-all;}*/
+  /*remove  GO terms and entry type columns*/
+  .col-go,
+  .col-type {
+    display: none;
+  }
 }

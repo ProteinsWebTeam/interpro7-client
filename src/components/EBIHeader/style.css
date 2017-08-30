@@ -1,0 +1,8 @@
+.masthead-black-bar a:visited {
+  color: white;
+}
+
+.home-mobile a {
+  color: transparent !important;
+  user-select: none;
+}

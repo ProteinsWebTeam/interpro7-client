@@ -11,16 +11,32 @@ const types = {
 };
 
 export const BaseLink = ({
-  id, pattern, href, newTo, to, rel, className, children, activeClass, ...rest
+  id,
+  pattern,
+  href,
+  newTo,
+  to,
+  rel,
+  className,
+  children,
+  activeClass,
+  ...rest
 }) => {
-  const props = {href: href || newTo || to || (pattern || '').replace('{id}', id)};
+  const props = {
+    href: href || newTo || to || (pattern || '').replace('{id}', id),
+  };
   if (className) props.className = className;
   if (rel) {
-    props.rel = (rel.includes('noopener')) ? rel : `${rel} noopener`;
+    props.rel = rel.includes('noopener') ? rel : `${rel} noopener`;
+    props.rel = rel.includes('noreferrer') ? rel : `${rel} noreferrer`;
   } else {
-    props.rel = 'noopener';
+    props.rel = 'noopener noreferrer';
   }
-  return <Link {...rest} {...props}>{children}</Link>;
+  return (
+    <Link {...rest} {...props}>
+      {children}
+    </Link>
+  );
 };
 BaseLink.propTypes = {
   id: T.oneOfType([T.string, T.number]),
@@ -36,7 +52,7 @@ BaseLink.propTypes = {
 };
 
 const patternLinkWrapper = pattern => {
-  const Wrapped = ({id, target, children, ...props}) => (
+  const Wrapped = ({ id, target, children, ...props }) => (
     <BaseLink id={id} target={target || '_blank'} pattern={pattern} {...props}>
       {children || id}
     </BaseLink>
@@ -45,7 +61,7 @@ const patternLinkWrapper = pattern => {
   return Wrapped;
 };
 
-export const TaxLink = ({id, target, children, ...props}) => (
+export const TaxLink = ({ id, target, children, ...props }) => (
   <BaseLink
     id={id}
     target={target || '_blank'}
@@ -60,7 +76,7 @@ TaxLink.propTypes = {
   id: T.number.isRequired,
 };
 
-export const PMCLink = ({id, target, children, ...props}) => (
+export const PMCLink = ({ id, target, children, ...props }) => (
   <BaseLink
     id={id}
     target={target || '_blank'}
@@ -77,17 +93,14 @@ PMCLink.propTypes = {
 
 export const DOILink = patternLinkWrapper('{id}');
 
-export const GoLink = ({id, target, className, children, ...props}) => {
-  const pattern = (
-    'http://www.ebi.ac.uk/ols/beta/ontologies/go/terms?iri=' +
-    'http://purl.obolibrary.org/obo/{id}'
-  );
+export const GoLink = ({ id, target, className, children, ...props }) => {
+  const pattern = 'https://www.ebi.ac.uk/QuickGO/GTerm?id={id}';
   return (
     <BaseLink
-      id={id.replace(':', '_')}
+      id={id.replace('_', ':')}
       target={target || '_blank'}
       pattern={pattern}
-      {...(className ? {className} : {})}
+      {...(className ? { className } : {})}
       {...props}
     >
       {children || id.replace('_', ':')}
@@ -101,17 +114,21 @@ export const PDBeLink = patternLinkWrapper(
 );
 export const PDBe3DLink = patternLinkWrapper(
   'https://www.ebi.ac.uk/pdbe/entry/view3D/{id}/' +
-  '?view=entry_index&viewer=jmol&controls=codename_hero'
+    '?view=entry_index&viewer=jmol&controls=codename_hero'
 );
 
 export const UniProtLink = patternLinkWrapper(
   'http://www.uniprot.org/uniprot/{id}'
 );
 
-const ExtLink = ({id, children, ...props}) => {
+const ExtLink = ({ id, children, ...props }) => {
   switch (true) {
     case id.startsWith('PUB'):
-      return <PMCLink id={id.slice(3)} {...props}>{children}</PMCLink>;
+      return (
+        <PMCLink id={id.slice(3)} {...props}>
+          {children}
+        </PMCLink>
+      );
     default:
       throw Error('Not a supported reference link');
   }

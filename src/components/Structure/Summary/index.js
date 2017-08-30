@@ -16,7 +16,16 @@ const embedStyle = { width: '100%', height: '50vh' };
 
 const webComponents = [];
 
-class SummaryStructure extends PureComponent {
+/*:: type Props = {
+  data: {
+    metadata: Object,
+  },
+  location: {
+    description: Object,
+  },
+}; */
+
+class SummaryStructure extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       metadata: T.object.isRequired,
@@ -35,13 +44,13 @@ class SummaryStructure extends PureComponent {
     webComponents.push(loadWebComponent(() => dataLoader()).as('data-loader'));
     webComponents.push(
       loadWebComponent(() => pdbComponents().then(m => m.PdbDataLoader)).as(
-        'pdb-data-loader',
-      ),
+        'pdb-data-loader'
+      )
     );
     webComponents.push(
       loadWebComponent(() => pdbComponents().then(m => m.PdbPrints)).as(
-        'pdb-prints',
-      ),
+        'pdb-prints'
+      )
     );
   }
 
@@ -57,10 +66,10 @@ class SummaryStructure extends PureComponent {
               <pdb-prints size="48">
                 <pdb-data-loader pdbid={metadata.accession} />
               </pdb-prints>
-              {metadata.chains &&
+              {metadata.chains && (
                 <div>
                   <h4>Chains:</h4>
-                  {metadata.chains.map(chain =>
+                  {metadata.chains.map(chain => (
                     <Link
                       key={chain}
                       newTo={location => ({
@@ -74,9 +83,10 @@ class SummaryStructure extends PureComponent {
                       })}
                     >
                       {chain}
-                    </Link>,
-                  )}
-                </div>}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>
               <div className={f('panel')}>
@@ -107,7 +117,7 @@ class SummaryStructure extends PureComponent {
             >
               <img
                 src={`//www.ebi.ac.uk/pdbe/static/entry/${metadata.accession.toLowerCase()}_entity_1_front_image-400x400.png`}
-                alt="structure image"
+                alt={`structure with accession ${metadata.accession.toUpperCase()}`}
                 style={{ maxWidth: '100%' }}
               />
             </div>

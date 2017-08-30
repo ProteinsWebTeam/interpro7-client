@@ -12,7 +12,7 @@ import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
-import ebiStyles from 'styles/ebi-global.css';
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import interproStyles from 'styles/interpro-new.css';
 import helperClasses from 'styles/helper-classes.css';
 import style from './style.css';
@@ -41,29 +41,36 @@ const getOldHref = createSelector(
       return `${href}protein/${d.mainAccession}/`;
     }
     return href;
-  },
+  }
 );
 
-const _OldInterProLink = ({ description }) =>
+const _OldInterProLink = ({ description }) => (
   <Link
     style={{ color: 'gray' }}
     href={getOldHref(description)}
     target="_blank"
   >
     See this page in the old InterPro website
-  </Link>;
+  </Link>
+);
 _OldInterProLink.propTypes = {
   description: T.object.isRequired,
 };
 
 const mapStateToPropsForOldLink = createSelector(
   state => state.newLocation.description,
-  description => ({ description }),
+  description => ({ description })
 );
 
 const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
 
-class SideMenu extends PureComponent {
+/*:: type Props = {
+  visible: boolean,
+  mainAccession: ?string,
+  closeSideNav: function,
+}; */
+
+class SideMenu extends PureComponent /*:: <Props> */ {
   static propTypes = {
     visible: T.bool.isRequired,
     mainAccession: T.string,
@@ -88,14 +95,15 @@ class SideMenu extends PureComponent {
             ×
           </button>
           <ul>
-            {mainAccession &&
+            {mainAccession && (
               <SingleEntityMenu className={f('primary')}>
                 <span
                   className={f('menu-label', 'select-none', 'cursor-default')}
                 >
                   {mainAccession}
                 </span>
-              </SingleEntityMenu>}
+              </SingleEntityMenu>
+            )}
             <InterproMenu
               pathname={''}
               className={f('secondary', 'is-drilldown')}
@@ -144,7 +152,7 @@ class SideMenu extends PureComponent {
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
   state => state.newLocation.description.mainAccession,
-  (visible, mainAccession) => ({ visible, mainAccession }),
+  (visible, mainAccession) => ({ visible, mainAccession })
 );
 
 export default connect(mapStateToProps, { closeSideNav })(SideMenu);

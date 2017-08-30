@@ -1,24 +1,26 @@
-// @flow
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 const DEFAULT_ITEM_DELAY = 25;
 const DEFAULT_DURATION = 250;
 
-export default class AnimatedEntry extends PureComponent {
+/*:: type Props = {
+  element: ?Node | string,
+  keyframes: ?Array<Object> | Object,
+  delay: ?number,
+  itemDelay: ?number,
+  duration: ?number,
+  animateSelf: boolean,
+} */
+
+export default class AnimatedEntry extends PureComponent /*:: <Props> */ {
   /* ::
     _node: ?Element
     _animations: ?Array<any>
   */
   static propTypes = {
-    element: T.oneOfType([
-      T.string,
-      T.element,
-    ]),
-    keyframes: T.oneOfType([
-      T.array,
-      T.object,
-    ]),
+    element: T.oneOfType([T.string, T.element]),
+    keyframes: T.oneOfType([T.array, T.object]),
     delay: T.number,
     itemDelay: T.number,
     duration: T.number,
@@ -27,7 +29,7 @@ export default class AnimatedEntry extends PureComponent {
 
   static defaultProps = {
     element: 'ul',
-    keyframes: {opacity: [0, 1]},
+    keyframes: { opacity: [0, 1] },
     delay: 0,
     itemDelay: DEFAULT_ITEM_DELAY,
     duration: DEFAULT_DURATION,
@@ -36,19 +38,18 @@ export default class AnimatedEntry extends PureComponent {
 
   componentDidMount() {
     if (!this._node || !this._node.animate) return;
-    const {keyframes, delay, itemDelay, duration, animateSelf} = this.props;
+    const { keyframes, delay, itemDelay, duration, animateSelf } = this.props;
     const toAnimate = Array.from(
       animateSelf ? [this._node] : this._node.children
     );
-    this._animations = toAnimate.map((element/*: any */, i) => element.animate(
-      keyframes,
-      {
+    this._animations = toAnimate.map((element /*: any */, i) =>
+      element.animate(keyframes, {
         duration,
         delay: delay + itemDelay * (i + 1),
         easing: 'ease-in-out',
         fill: 'both',
-      },
-    ));
+      })
+    );
   }
 
   componentWillUnmount() {
@@ -61,9 +62,13 @@ export default class AnimatedEntry extends PureComponent {
     const {
       element: Element,
       // remove those in next line from props passed
-      keyframes, delay, itemDelay, duration, animateSelf,
+      keyframes,
+      delay,
+      itemDelay,
+      duration,
+      animateSelf,
       ...props
     } = this.props;
-    return <Element ref={node => this._node = node} {...props} />;
+    return <Element ref={node => (this._node = node)} {...props} />;
   }
 }

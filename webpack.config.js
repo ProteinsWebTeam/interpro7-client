@@ -41,6 +41,16 @@ const cssSettings = env => ({
   localIdentName: `${env.production
     ? ''
     : '[folder]_[name]__[local]___'}[hash:base64:3]`,
+  alias: {
+    '../libraries': 'ebi-framework/libraries',
+    'EBI-Conceptual': 'EBI-Icon-fonts/EBI-Conceptual',
+    'EBI-Functional': 'EBI-Icon-fonts/EBI-Functional',
+    'EBI-Generic': 'EBI-Icon-fonts/EBI-Generic',
+    'EBI-Species': 'EBI-Icon-fonts/EBI-Species',
+    'EBI-SocialMedia': 'EBI-Icon-fonts/EBI-SocialMedia',
+    'EBI-FileFormats': 'EBI-Icon-fonts/EBI-FileFormats',
+    'EBI-Chemistry': 'EBI-Icon-fonts/EBI-Chemistry',
+  },
 });
 
 // eslint-disable-next-line complexity
@@ -66,7 +76,7 @@ module.exports = (env = { dev: true }) => {
       publicPath: websiteURL.pathname || '/interpro7/',
       filename:
         env.production || env.staging
-          ? '[id].[name].[chunkhash:3].js'
+          ? '[id].[name].[hash:3].js'
           : '[id].[name].js',
       chunkFilename:
         env.production || env.staging
@@ -75,9 +85,18 @@ module.exports = (env = { dev: true }) => {
     },
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
+      extensions: ['.js', '.json', '.worker.js'],
     },
     module: {
       rules: [
+        {
+          test: /\.worker\.js/i,
+          use: [
+            {
+              loader: 'worker-loader',
+            },
+          ],
+        },
         {
           test: /\.js$/i,
           include: [
@@ -216,7 +235,9 @@ module.exports = (env = { dev: true }) => {
                   use: [
                     {
                       loader: 'css-loader',
-                      options: cssSettings(env),
+                      options: Object.assign({}, cssSettings(env), {
+                        localIdentName: '[local]',
+                      }),
                     },
                     {
                       loader: 'sass-loader',
@@ -228,7 +249,9 @@ module.exports = (env = { dev: true }) => {
                   'style-loader',
                   {
                     loader: 'css-loader',
-                    options: cssSettings(env),
+                    options: Object.assign({}, cssSettings(env), {
+                      localIdentName: '[local]',
+                    }),
                   },
                   {
                     loader: 'sass-loader',
@@ -277,8 +300,11 @@ module.exports = (env = { dev: true }) => {
       ],
     },
     performance: {
+      hints: 'warning',
       // eslint-disable-next-line no-magic-numbers
       maxAssetSize: 5 * kB * kB, // 5MB
+      // eslint-disable-next-line no-magic-numbers
+      maxEntrypointSize: 1 * kB * kB, // 1MB TODO: reduce this eventually!
     },
     plugins: [
       // new webpack.optimize.ModuleConcatenationPlugin(),
@@ -320,12 +346,8 @@ module.exports = (env = { dev: true }) => {
                   .execSync('git rev-parse --abbrev-ref HEAD')
                   .toString()
                   .trim(),
-                hash: childProcess
+                commit: childProcess
                   .execSync('git rev-parse HEAD')
-                  .toString()
-                  .trim(),
-                remote: childProcess
-                  .execSync('git ls-remote --get-url')
                   .toString()
                   .trim(),
                 tag: childProcess

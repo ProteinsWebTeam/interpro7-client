@@ -7,7 +7,7 @@ import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiGlobalStyles from 'styles/ebi-global.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import ipro from 'styles/interpro-new.css';
 import localStyles from './style.css';
 
@@ -18,14 +18,11 @@ const Title = ({ loading, mainDB, mainAccession, stuck }) => {
     mainAccession || mainDB || 'Classification of protein families';
 
   return (
-    <div
-      className={styles('columns', 'small-6', 'medium-8', 'anim')}
-      id="local-title"
-    >
+    <div className={styles('columns', 'small-6', 'medium-8')} id="local-title">
       <h1 className={styles('main-title', { stuck })}>
         <Link newTo={{ description: {} }} title="Back to InterPro homepage">
-          <div className={styles('logo-text')}>
-            <div className={styles('logo-flex-item', 'main-logo', { stuck })}>
+          <div className={styles('logo-flex')}>
+            <div className={styles('logo-flex-item', 'logo-icon', { stuck })}>
               <svg className={styles('icon')} viewBox="0 0 88 88" width="62">
                 <defs>
                   <mask id="logo-mask">
@@ -62,17 +59,15 @@ const Title = ({ loading, mainDB, mainAccession, stuck }) => {
                 </g>
               </svg>
             </div>
-            <div className={styles('logo-flex-item')}>InterPro</div>
+            <div className={styles('logo-flex-item', 'logo-text')}>
+              InterPro
+            </div>
           </div>
         </Link>
       </h1>
       <h4 className={styles('hide-for-small-only', 'subtitle', { stuck })}>
         {subtitle}
-        {mainDB &&
-          mainDB !== subtitle &&
-          <small>
-            {' '}({mainDB})
-          </small>}
+        {mainDB && mainDB !== subtitle && <small> ({mainDB})</small>}
       </h4>
     </div>
   );
@@ -87,7 +82,7 @@ Title.propTypes = {
 const mapStateToProps = createSelector(
   createSelector(
     state => state.data,
-    (data = {}) => Object.values(data).some(datum => datum.loading),
+    (data = {}) => Object.values(data).some(datum => datum.loading)
   ),
   state => state.newLocation.description.mainDB,
   state => state.newLocation.description.mainAccession,
@@ -97,6 +92,6 @@ const mapStateToProps = createSelector(
     mainDB,
     mainAccession,
     stuck,
-  }),
+  })
 );
 export default connect(mapStateToProps)(Title);

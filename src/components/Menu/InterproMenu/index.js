@@ -5,60 +5,55 @@ import T from 'prop-types';
 import MenuItem from 'components/Menu/MenuItem';
 import SubMenu from 'components/Menu/SubMenu';
 
-import {InterPro} from 'menuConfig';
+import { InterPro } from 'menuConfig';
 
-import {foundationPartial} from 'styles/foundation';
-import fonts from 'styles/ebi/fonts.css';
+import { foundationPartial } from 'styles/foundation';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import styles from './styles.css';
 
 const iconStyle = foundationPartial(fonts);
 
 const InterproMenu = (
-  {className, includeSubMenus = false, children}
-  /*: {
-    pathname: string,
-    className?: string,
-    includeSubMenus?: boolean,
-    children?: any
-  } */
+  {
+    className,
+    includeSubMenus = false,
+    children,
+  } /*: {pathname: string, className?: string, includeSubMenus?: boolean, children?: any} */
 ) => (
-  <nav>
-    <ul className={className}>
+  <nav className={styles.nav}>
+    <ul className={`${className || ''} ${styles['interpro-menu']}`}>
       {children}
       {InterPro.map(
-        ({newTo, name, icon, iconClass = 'generic', activeClass, options}) => (
-          includeSubMenus && options ?
+        ({ newTo, name, icon, iconClass = 'generic', activeClass, options }) =>
+          includeSubMenus && options ? (
             <SubMenu
               key={name}
               pathname={''}
               options={options}
               className={className}
             >
-              {
-                icon &&
+              {icon && (
                 <i
                   data-icon={icon}
                   className={iconStyle('icon', `icon-${iconClass}`)}
                 />
-              }
+              )}
               {name}
-            </SubMenu> :
+            </SubMenu>
+          ) : (
             <li key={name}>
               <MenuItem newTo={newTo} activeClass={activeClass}>
-                {
-                  icon !== ('H') &&
+                {icon !== 'H' && (
                   <i
                     data-icon={icon}
                     className={iconStyle('icon', `icon-${iconClass}`)}
                   />
-                }
-                {
-                  icon === ('H') &&
-                  <span/>
-                }
+                )}
+                {icon === 'H' && <span />}
                 {name}
               </MenuItem>
             </li>
-        )
+          )
       )}
     </ul>
   </nav>

@@ -11,7 +11,10 @@ import description2path from 'utils/processLocation/description2path';
 
 import { goToNewLocation } from 'actions/creators';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+
+const f = foundationPartial(style);
 
 class IntegratedFilter extends Component {
   static propTypes = {
@@ -64,24 +67,24 @@ class IntegratedFilter extends Component {
     if (!loading) types.both = payload.integrated + payload.unintegrated;
     return (
       <div>
-        {Object.keys(types).sort().map(type =>
-          <div key={type} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
-              <input
-                type="radio"
-                name="interpro_state"
-                value={type}
-                onChange={this._handleSelection}
-                checked={this.state.value === type}
-                style={{ margin: '0.25em' }}
-              />
-              <span>
-                {type}
-              </span>
-              <NumberLabel value={types[type]} />
-            </label>
-          </div>,
-        )}
+        {Object.keys(types)
+          .sort()
+          .map(type => (
+            <div key={type} className={f('column')}>
+              <label className={f('row', 'filter-button')}>
+                <input
+                  type="radio"
+                  name="interpro_state"
+                  value={type}
+                  onChange={this._handleSelection}
+                  checked={this.state.value === type}
+                  style={{ margin: '0.25em' }}
+                />
+                <span>{type}</span>
+                <NumberLabel value={types[type]} />
+              </label>
+            </div>
+          ))}
       </div>
     );
   }
@@ -100,18 +103,18 @@ const getUrlFor = createSelector(
     _search.interpro_status = null;
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      _description,
+      _description
     )}?${qsStringify(_search)}`;
-  },
+  }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(IntegratedFilter),
+  })(IntegratedFilter)
 );

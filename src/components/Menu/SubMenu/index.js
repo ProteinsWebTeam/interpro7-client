@@ -1,70 +1,62 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import MenuItem from 'components/Menu/MenuItem';
 
-import {foundationPartial} from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 import menuItemStyle from 'components/Menu/MenuItem/style.css';
 import style from './style.css';
 
 const f = foundationPartial(menuItemStyle, style);
 
-/* ::
-   type Props = {
-     pathname: string,
-     visible: boolean,
-     options: Array<Object>,
-     className?: string,
-     children?: any
-   };
- */
-class SubMenu extends Component {
-  /* ::
-   props: Props;
-   state: {isActive: boolean};
-   */
+/*:: type Props = {
+  pathname: string,
+  visible: boolean,
+  options: Array<Object>,
+  className?: string,
+  children?: any
+}; */
 
-  constructor(props/* : Props*/) {
+class SubMenu extends Component /*:: <Props, { isActive: boolean }> */ {
+  constructor(props /* : Props*/) {
     super(props);
-    this.state = {isActive: false};
+    this.state = { isActive: false };
   }
 
-  componentWillReceiveProps({visible}) {
-    if (!visible) this.setState({isActive: false});
+  componentWillReceiveProps({ visible }) {
+    if (!visible) this.setState({ isActive: false });
   }
 
   handleClick = () => {
-    this.setState({isActive: !this.state.isActive});
+    this.setState({ isActive: !this.state.isActive });
   };
 
   render() {
-    const {options, className = '', children} = this.props;
+    const { options, className = '', children } = this.props;
     return (
       <li className={f('is-drilldown-submenu-parent')}>
-        <a className={f('menu-item')} onClick={this.handleClick}>
+        <button className={f('menu-item')} onClick={this.handleClick}>
           {children}
-        </a>
+        </button>
         <ul
           className={`${f('is-drilldown-submenu', 'submenu', {
             'is-active': this.state.isActive,
           })} ${className}`}
         >
           <li className={f('js-drilldown-back')}>
-            <a
+            <button
               className={f('menu-label', 'menu-item')}
               onClick={this.handleClick}
             >
               Back to InterPro menu
-            </a>
+            </button>
           </li>
-          {options.map(({newTo, name}) => (
+          {options.map(({ newTo, name }) => (
             <li key={name}>
-              <MenuItem newTo={newTo}>
-                {name}
-              </MenuItem>
+              <MenuItem newTo={newTo}>{name}</MenuItem>
             </li>
           ))}
         </ul>
@@ -82,7 +74,7 @@ SubMenu.propTypes = {
 
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
-  visible => ({visible})
+  visible => ({ visible })
 );
 
 export default connect(mapStateToProps)(SubMenu);

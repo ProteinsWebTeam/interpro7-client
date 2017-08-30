@@ -9,7 +9,7 @@ import cfg from 'config';
 import { sticky as supportsSticky } from 'utils/support';
 
 import { foundationPartial } from 'styles/foundation';
-import ebiStyles from 'styles/ebi-global.css';
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import interproStyles from 'styles/interpro-new.css';
 import helperClasses from 'styles/helper-classes.css';
 import style from './style.css';
@@ -49,10 +49,11 @@ const positions = new WeakMap();
 const mapPathArrayToLink = paths =>
   paths.map(
     ({ url, name }, i) =>
-      null &&
-      <Link key={url || i} to={url || '#'}>
-        {name}
-      </Link>
+      null && (
+        <Link key={url || i} to={url || '#'}>
+          {name}
+        </Link>
+      )
   );
 
 const formatEndpoints = paths => [
@@ -161,11 +162,11 @@ class Breadcrumb extends Component {
             onMouseLeave={this.reduce}
           >
             <span className={f('groups')}>
-              {endpoints.map((endpoint, i) =>
+              {endpoints.map((endpoint, i) => (
                 <span key={i} className={f({ group: i <= 1, focus: i > 1 })}>
                   {mapPathArrayToLink(endpoint.paths)}
                 </span>
-              )}
+              ))}
             </span>
             <span className={f('hint')}>
               <Link newTo={{ description: { other: 'help' } }} title="help">

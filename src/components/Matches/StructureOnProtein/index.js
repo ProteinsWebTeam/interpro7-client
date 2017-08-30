@@ -12,10 +12,6 @@ const StructureOnProtein = ({
   options: { baseSize = 10, offset = 30, niceRatio = 6 } = {},
 }) => {
   const protein = matches[0].protein;
-  // TODO: Define the format of the coordinates field, it should include coordinates
-  // in both entities and the length of the base one, eg a protein of 500aa maps
-  // the structure in 100 to 200, which corrspond to the coordinate 0-99 in the structure.
-  protein.length = protein.length || 500;
   const main = 'entry_protein_locations' in protein ? 'protein' : 'structure';
   return (
     <div className={style.svgContainer}>
@@ -25,9 +21,7 @@ const StructureOnProtein = ({
         viewBox={`0 0 ${protein.length + offset} 60`}
       >
         <g transform={`translate(0 ${offset - baseSize / 2})`}>
-          <title>
-            {protein.accession}
-          </title>
+          <title>{protein.accession}</title>
           <rect
             x="0"
             y="0"
@@ -41,9 +35,7 @@ const StructureOnProtein = ({
             y="0.8em"
             transform={`translate(${protein.length} 0)`}
           >
-            <tspan>
-              {protein.length}
-            </tspan>
+            <tspan>{protein.length}</tspan>
           </text>
         </g>
         <g>
@@ -53,15 +45,13 @@ const StructureOnProtein = ({
               structure,
             } = match;
             return locations.map((location, i) =>
-              location.fragments.map((fragment, j) =>
+              location.fragments.map((fragment, j) => (
                 <g
                   key={`${structure.accession}-${i}-${j}`}
                   transform={`translate(${fragment.start} ${offset -
                     baseSize})`}
                 >
-                  <title>
-                    {structure.accession}
-                  </title>
+                  <title>{structure.accession}</title>
                   <rect
                     x="0"
                     y="0"
@@ -72,20 +62,16 @@ const StructureOnProtein = ({
                     className={style.secondary}
                   />
                   <text y="-0.2em">
-                    <tspan textAnchor="middle">
-                      {fragment[0]}
-                    </tspan>
+                    <tspan textAnchor="middle">{fragment[0]}</tspan>
                   </text>
                   <text
                     y="-0.2em"
                     transform={`translate(${fragment.end - fragment.start} 0)`}
                   >
-                    <tspan textAnchor="middle">
-                      {fragment[1]}
-                    </tspan>
+                    <tspan textAnchor="middle">{fragment[1]}</tspan>
                   </text>
-                </g>,
-              ),
+                </g>
+              ))
             );
           })}
         </g>
@@ -98,7 +84,7 @@ StructureOnProtein.propTypes = {
     T.shape({
       structure: T.object.isRequired,
       protein: T.object.isRequired,
-    }),
+    })
   ).isRequired,
   options: T.object,
 };

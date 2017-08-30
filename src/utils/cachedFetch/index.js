@@ -1,31 +1,32 @@
 // @flow
 import fetch from 'isomorphic-fetch';
 
-import {pkg} from 'config';
+import { pkg } from 'config';
 
 const SUCCESS_STATUS = 200;
 
 const handleProgress = async (
-  response/*: Response */,
-  onProgress/*: (number) => void */,
+  response /*: Response */,
+  onProgress /*: (number) => void */
 ) => {
   const total = +response.headers.get('Content-Length');
   let received = 0;
-  if (!(response.clone)) return;// bail
+  if (!response.clone) return; // bail
   // Need to clone to create another independent ReadableStream
   const clone = response.clone();
-  if (!(clone.body && clone.body.getReader)) return;// bail
+  if (!(clone.body && clone.body.getReader)) return; // bail
   const reader = clone.body.getReader();
-  while (true) {// eslint-disable-line no-constant-condition
-    const {done, value} = await reader.read();
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const { done, value } = await reader.read();
     if (done || !value) return;
     received += value.length;
     onProgress(received / total);
   }
 };
 
-export const cachedFetch = (url/*: string */, options/*: Object */ = {}) => {
-  const {useCache, ...restOfOptions} = options;
+const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
+  const { useCache, ...restOfOptions } = options;
   const key = `${pkg.name}-cachedFetch-${url}`;
   const cached = sessionStorage.getItem(key);
 
@@ -33,34 +34,35 @@ export const cachedFetch = (url/*: string */, options/*: Object */ = {}) => {
     return Promise.resolve(new Response(new Blob([cached])));
   }
 
-  return fetch(url, restOfOptions).then(res => {
-    if (useCache && res.status === SUCCESS_STATUS) {
-      res.clone().text().then(text => sessionStorage.setItem(key, text));
+  return fetch(url, restOfOptions).then(response => {
+    if (useCache && response.status === SUCCESS_STATUS) {
+      response
+        .clone()
+        .text()
+        .then(text => sessionStorage.setItem(key, text));
     }
-    return res;
+    return response;
   });
 };
 
-const commonCachedFetch = (responseType/*: 'json' | 'text' */ = 'json') =>
-  async (
-    url/*: string */,
-    options/*: Object */,
-    onProgress/*: (number) => void */,
-  ) => {
-    const response = await cachedFetch(url, options);
-    if (onProgress && response.headers.get('Content-Length')) {
-      handleProgress(response, onProgress);
-    }
-    let payloadP;
-    if (responseType === 'text') {
-      payloadP = response.text();
-    } else {
-      payloadP = response.json();
-    }
-    return {payload: await payloadP, status: response.status, ok: response.ok};
-  };
+const commonCachedFetch = (responseType /*: ?string */) => async (
+  url /*: string */,
+  options /*: Object */,
+  onProgress /*: (number) => void */
+) => {
+  // Casting to object to avoid flow error
+  const response /*: Object */ = await cachedFetch(url, options);
+  if (onProgress && response.headers.get('Content-Length')) {
+    handleProgress(response, onProgress);
+  }
+  let payloadP;
+  if (responseType && typeof response[responseType] === 'function') {
+    payloadP = response[responseType]();
+  }
+  return { payload: await payloadP, status: response.status, ok: response.ok };
+};
 
 export const cachedFetchText = commonCachedFetch('text');
 export const cachedFetchJSON = commonCachedFetch('json');
 
-export default cachedFetch;
+export default commonCachedFetch();

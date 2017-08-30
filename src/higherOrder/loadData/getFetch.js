@@ -1,12 +1,19 @@
 // @flow
-import {cachedFetchJSON, cachedFetchText, cachedFetch} from 'utils/cachedFetch';
+import cachedFetch, {
+  cachedFetchJSON,
+  cachedFetchText,
+} from 'utils/cachedFetch';
 
 export default (
-  {method, responseType}/*: {
+  {
+    method,
+    responseType,
+  } /*: {
     method: ?string,
     responseType: ?string,
-  } */) => {
+  } */
+) => {
   if (responseType === 'text') return cachedFetchText;
   if (method !== 'HEAD') return cachedFetchJSON;
-  return (...args/*: any */) => cachedFetch(...args).then(r => r.ok);
+  return cachedFetch;
 };

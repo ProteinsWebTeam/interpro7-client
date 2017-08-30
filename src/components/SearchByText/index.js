@@ -1,23 +1,43 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import TextSearchBox from 'components/SearchByText/TextSearchBox';
+import Link from 'components/generic/Link';
+
 import { frame } from 'timing-functions/src';
 
-import TextSearchBox from 'components/SearchByText/TextSearchBox';
+import { foundationPartial } from 'styles/foundation';
+import interproTheme from 'styles/theme-interpro.css';
+import s from './style.css';
+const f = foundationPartial(interproTheme, s);
 
-import f from 'styles/foundation';
+class Example extends PureComponent {
+  static propTypes = {
+    value: T.string,
+  };
 
-const Example = ({ value }) =>
-  <a style={{ cursor: 'pointer' }} data-search={value}>
-    {' '}{value}
-  </a>;
-Example.propTypes = {
-  value: T.string,
-};
+  render() {
+    const { value } = this.props;
+    return (
+      <Link
+        newTo={{
+          description: { mainType: 'search', mainDB: 'text' },
+          search: { search: value },
+        }}
+      >
+        {value}
+      </Link>
+    );
+  }
+}
+// const Example = ({ value }) =>
+//   <a style={{ cursor: 'pointer' }} data-search={value}>
+//     {' '}{value}
+//   </a>;
 
-class SearchByText extends Component {
+class SearchByText extends PureComponent {
   static propTypes = {
     value: T.string,
     search: T.shape({
@@ -75,11 +95,9 @@ class SearchByText extends Component {
               </div>
 
               <div className={f('row')}>
-                <div
-                  className={f('large-12', 'columns', 'small', 'search-eg')}
-                  onClick={this.handleExampleClick}
-                >
-                  {' '}e.g.
+                <div className={f('large-12', 'columns', 'small', 'search-eg')}>
+                  {' '}
+                  e.g.
                   <Example value="IPR020422" />,
                   <Example value="kinase" />,
                   <Example value="O00167" />,
@@ -90,16 +108,28 @@ class SearchByText extends Component {
               </div>
 
               <div className={f('row')} style={{ marginTop: '1em' }}>
-                <div className={f('large-12', 'columns')}>
-                  <a className={f('button')} onClick={this.handleSubmitClick}>
+                <div
+                  className={f(
+                    'large-12',
+                    'columns',
+                    'stacked-for-small',
+                    'button-group'
+                  )}
+                >
+                  <button
+                    className={f('button')}
+                    onClick={this.handleSubmitClick}
+                    onKeyPress={this.handleSubmitClick}
+                  >
                     Search
-                  </a>
-                  <a
+                  </button>
+                  <button
                     className={f('secondary', 'hollow', 'button')}
                     onClick={this.handleReset}
+                    onKeyPress={this.handleReset}
                   >
                     Clear
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -112,7 +142,7 @@ class SearchByText extends Component {
 
 const mapStateToProps = createSelector(
   state => state.newLocation.search,
-  search => ({ search }),
+  search => ({ search })
 );
 
 export default connect(mapStateToProps)(SearchByText);

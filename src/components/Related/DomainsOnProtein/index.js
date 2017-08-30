@@ -29,34 +29,45 @@ const getUrlFor = createSelector(
         }
         // build URL
         return `${protocol}//${hostname}:${port}${root}${description2path(
-          _description,
+          _description
         )}?${qsStringify(search)}`.replace(/\?$/, '');
-      },
-    ),
-);
-const mergeResidues = residues => {
-  let out = {};
-  for (const key of Object.keys(residues)) {
-    residues[key].reduce((acc, v) => {
-      if (!(v.description in acc)) {
-        acc[v.description] = [];
       }
-      acc[v.description].push(v);
-      return acc;
-    }, out);
-  }
-  out = Object.keys(out).map(a => ({
-    accession: a,
+    )
+);
+const mergeResidues = residues =>
+  Object.values(residues.entry_locations).map(location => ({
+    accession: location.entry_accession,
     type: 'residue',
-    coordinates: [out[a].map(b => [b.from, b.to])],
-    name: out[a].reduce((acc, v) => v.name),
-    entry: out[a].reduce((acc, v) => v.entry),
-    residue: out[a].map(b => b.residue),
-    source_database: out[a].map(b => b.source),
-    interpro_entry: out[a].map(b => b.interProEntry),
+    coordinates: [location.fragments.map(f => [f.start, f.end])], // TODO: check
+    name: location.fragments[0],
+    entry: location.entry_accession,
+    residue: location.fragments.map(f => f.residue),
+    source_database: location.fragments.map(f => f.source),
+    interpro_entry: location.fragments.map(f => f.interProEntry),
   }));
-  return out;
-};
+// const mergeResidues = residues => {
+// TODO: have Matloob check what it was supposed to be doing
+//   for (const key of Object.keys(residues)) {
+//     residues[key].reduce((acc, v) => {
+//       if (!(v.description in acc)) {
+//         acc[v.description] = [];
+//       }
+//       acc[v.description].push(v);
+//       return acc;
+//     }, out);
+//   }
+//   out = Object.keys(out).map(a => ({
+//     accession: a,
+//     type: 'residue',
+//     coordinates: [out[a].map(b => [b.from, b.to])],
+//     name: out[a].reduce((acc, v) => v.name),
+//     entry: out[a].reduce((acc, v) => v.entry),
+//     residue: out[a].map(b => b.residue),
+//     source_database: out[a].map(b => b.source),
+//     interpro_entry: out[a].map(b => b.interProEntry),
+//   }));
+//   return out;
+// };
 
 const toArrayStructure = locations =>
   locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
@@ -91,7 +102,7 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   const { out, ipro } = groupByEntryType(interpro);
   if (unintegrated.length > 0) {
     unintegrated.forEach(
-      u => (u.link = `/entry/${u.source_database}/${u.accession}`),
+      u => (u.link = `/entry/${u.source_database}/${u.accession}`)
     );
     out.unintegrated = unintegrated;
   }
@@ -111,7 +122,7 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   return out;
 };
 
-let DomainOnProtein = class extends Component {
+class _DomainOnProtein extends Component {
   static propTypes = {
     mainData: T.object.isRequired,
     dataInterPro: T.object.isRequired,
@@ -135,7 +146,7 @@ let DomainOnProtein = class extends Component {
       dataInterPro.payload.entries,
       'payload' in dataIntegrated ? dataIntegrated.payload.entries : [],
       'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
-      dataResidues.payload,
+      dataResidues.payload
     );
     return (
       <div>
@@ -146,14 +157,20 @@ let DomainOnProtein = class extends Component {
       </div>
     );
   }
-};
-DomainOnProtein = ['Integrated', 'InterPro', 'Residues', 'Unintegrated'].reduce(
+}
+
+const DomainOnProtein = [
+  'Integrated',
+  'InterPro',
+  'Residues',
+  'Unintegrated',
+].reduce(
   (Index, db) =>
     loadData({
       getUrl: getUrlFor(db),
       propNamespace: db,
     })(Index),
-  DomainOnProtein,
+  _DomainOnProtein
 );
 
 export default DomainOnProtein;

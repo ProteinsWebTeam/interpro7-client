@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import url from 'url';
 import TA from 'timeago.js';
 
@@ -14,7 +14,7 @@ const ONE_MINUTE = 60000;
 
 const getDefinedjobs = state => Object.entries(state).filter(([, j]) => j);
 
-const IPScanStatus = class extends Component {
+class IPScanStatus extends Component {
   static defaultProps = {
     refreshRate: 2 * ONE_MINUTE,
   };
@@ -48,7 +48,7 @@ const IPScanStatus = class extends Component {
   _fetchStatus = async IPScanId => {
     const response = await fetch(
       url.resolve(
-        url.format({...this.props.ipScan, pathname: this.props.ipScan.root}),
+        url.format({ ...this.props.ipScan, pathname: this.props.ipScan.root }),
         `status/${IPScanId}`
       )
     );
@@ -62,13 +62,13 @@ const IPScanStatus = class extends Component {
     this.setState(jobs);
   };
 
-  _checkAllUnfinishedJobs = async (recursive) => {
+  _checkAllUnfinishedJobs = async recursive => {
     const finishedStates = ['finished', 'failure', 'not found'];
     await Promise.all(
       getDefinedjobs(this.state)
-        .filter(([, {status}]) => !finishedStates.includes(status))
+        .filter(([, { status }]) => !finishedStates.includes(status))
         .map(async ([internalId, job]) => {
-          const {id, status} = job;
+          const { id, status } = job;
           let newStatus;
           try {
             // Get status from the API
@@ -82,12 +82,12 @@ const IPScanStatus = class extends Component {
           // Change job status in idb
           try {
             const jobsTA = await this._jobsTableAccess;
-            jobsTA.update(+internalId, job => ({...job, status: newStatus}));
+            jobsTA.update(+internalId, job => ({ ...job, status: newStatus }));
           } catch (err) {
             console.error(err);
           }
           // Change job status in state
-          this.setState({[internalId]: {...job, status: newStatus}});
+          this.setState({ [internalId]: { ...job, status: newStatus } });
         })
     );
     if (!recursive) return;
@@ -98,23 +98,23 @@ const IPScanStatus = class extends Component {
     );
   };
 
-  _handleSave = async ({target: {dataset: {id}}}) => {
+  _handleSave = async ({ target: { dataset: { id } } }) => {
     console.log(`saving job with internal id ${id}`);
     console.warn('not implemented yet');
   };
 
-  _handleDelete = async ({target: {dataset: {id}}}) => {
+  _handleDelete = async ({ target: { dataset: { id } } }) => {
     console.log(`deleting job with internal id ${id}`);
     // Separate job to be deleted from the others
     const removedJob = this.state[id];
     // Do clean-up in IDB, to both tables concurrently
     await Promise.all([
       this._jobsTableAccess.then(ta => ta.delete(+id)),
-      this._blobsTableAccess.then(
-        ta => ta.delete(removedJob.input.sequenceBlobId)
+      this._blobsTableAccess.then(ta =>
+        ta.delete(removedJob.input.sequenceBlobId)
       ),
     ]);
-    this.setState({[id]: null});
+    this.setState({ [id]: null });
   };
 
   render() {
@@ -138,64 +138,85 @@ const IPScanStatus = class extends Component {
               </tr>
             </thead>
             <tbody>
-              {jobs.sort(
-                // Sort by creation time (newest first)
-                ([, {times: {created: a}}], [, {times: {created: b}}]) => b - a
-              ).map((
-                [jobId, {id, status, times: {created, lastUpdate}, saved}]
-              ) => {
-                const lastUpdateDate = new Date(lastUpdate);
-                return (
-                  <tr key={jobId}>
-                    <td>{
-                      id ?
-                        <Link
-                          newTo={{description: {
-                            mainType: 'search',
-                            mainDB: 'sequence',
-                            mainAccession: id,
-                          }}}
-                        >
-                          {id}
-                        </Link> :
-                        'None'
-                    }</td>
-                    <td>
-                      {timeago.format(created)}
-                    </td>
-                    <td>
-                      <time
-                        dateTime={lastUpdateDate.toISOString()}
-                        title={`last update ${timeago.format(lastUpdate)}`}
-                      >
-                        {status}
-                      </time>
-                    </td>
-                    <td className={f('button-group')}>
-                      <button
-                        className={f('button', saved ? 'warning' : 'secondary')}
-                        title={`save job ${id || ''}`}
-                        type="button"
-                        data-id={jobId}
-                        onClick={this._handleSave}
-                      >★</button>
-                      <button
-                        className={f('button', 'alert')}
-                        title={`delete job ${id || ''}`}
-                        type="button"
-                        data-id={jobId}
-                        onClick={this._handleDelete}
-                      >✖</button>
-                    </td>
-                  </tr>
-                );
-              })}
+              {jobs
+                .sort(
+                  // Sort by creation time (newest first)
+                  (
+                    [, { times: { created: a } }],
+                    [, { times: { created: b } }]
+                  ) => b - a
+                )
+                .map(
+                  (
+                    [
+                      jobId,
+                      { id, status, times: { created, lastUpdate }, saved },
+                    ]
+                  ) => {
+                    const lastUpdateDate = new Date(lastUpdate);
+                    return (
+                      <tr key={jobId}>
+                        <td>
+                          {id ? (
+                            <Link
+                              newTo={{
+                                description: {
+                                  mainType: 'search',
+                                  mainDB: 'sequence',
+                                  mainAccession: id,
+                                },
+                              }}
+                            >
+                              {id}
+                            </Link>
+                          ) : (
+                            'None'
+                          )}
+                        </td>
+                        <td>{timeago.format(created)}</td>
+                        <td>
+                          <time
+                            dateTime={lastUpdateDate.toISOString()}
+                            title={`last update ${timeago.format(lastUpdate)}`}
+                          >
+                            {status}
+                          </time>
+                        </td>
+                        <td className={f('button-group')}>
+                          <button
+                            className={f(
+                              'button',
+                              saved ? 'warning' : 'secondary'
+                            )}
+                            title={`save job ${id || ''}`}
+                            type="button"
+                            data-id={jobId}
+                            onClick={this._handleSave}
+                          >
+                            ★
+                          </button>
+                          <button
+                            className={f('button', 'alert')}
+                            title={`delete job ${id || ''}`}
+                            type="button"
+                            data-id={jobId}
+                            onClick={this._handleDelete}
+                          >
+                            ✖
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
             </tbody>
           </table>
         </div>
       </div>
     );
   }
-};
+}
 
-export default connect(({settings: {ipScan}}) => ({ipScan}))(IPScanStatus);
+export default connect(({ settings: { ipScan } }) => ({ ipScan }))(
+  IPScanStatus
+);

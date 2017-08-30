@@ -21,7 +21,7 @@ const getNextLocation = (location, to) =>
 const generateHref = (nextLocation /*: Object */, href /*: ?string */) => {
   if (href) return href;
   return `${config.root.website.pathname}${description2path(
-    description2description(nextLocation.description),
+    description2description(nextLocation.description)
   )}?${qsStringify(nextLocation.search)}`.replace(/\?(#|$)/, '');
 };
 
@@ -30,7 +30,7 @@ const generateClassName = (
   activeClass /*: ?(string | function) */,
   location /*: Object */,
   nextLocation /*: Object */,
-  href /*: ?string */,
+  href /*: ?string */
 ) => {
   if (href || !(activeClass && nextLocation)) return className;
   if (typeof activeClass === 'function') {
@@ -44,7 +44,27 @@ const generateClassName = (
   return `${className || ''} ${activeClass}`;
 };
 
-class Link extends PureComponent {
+/*:: type Props = {
+  onClick: ?function,
+  location: {
+    description: Object,
+    search: Object,
+    hash: string,
+  },
+  children: any,
+  href: ?string,
+  goToNewLocation: function,
+  target: ?string,
+  newTo: ?function | {
+    description: Object,
+    search: ?Object,
+    hash: ?string,
+  },
+  className: ?string,
+  activeClass: ?function | string,
+}; */
+
+class Link extends PureComponent /*:: <Props> */ {
   static propTypes = {
     onClick: T.func,
     location: T.shape({
@@ -52,6 +72,7 @@ class Link extends PureComponent {
       search: T.object.isRequired,
       hash: T.string.isRequired,
     }).isRequired,
+    children: T.any.isRequired,
     href: T.string,
     goToNewLocation: T.func.isRequired,
     target: T.string,
@@ -89,7 +110,6 @@ class Link extends PureComponent {
     goToNewLocation(getNextLocation(location, newTo));
   };
 
-  // TODO: remove eslint ignore after complete refactoring
   render() {
     const {
       onClick,
@@ -99,9 +119,10 @@ class Link extends PureComponent {
       className,
       newTo,
       href,
+      children,
       ...props
     } = this.props;
-    const nextLocation = getNextLocation(location, newTo);
+    const nextLocation = getNextLocation(location, newTo) || {};
     const _href = generateHref(nextLocation, href);
     const _className =
       generateClassName(className, activeClass, location, nextLocation, href) ||
@@ -112,14 +133,16 @@ class Link extends PureComponent {
         href={_href}
         className={_className.trim() || null}
         onClick={this.handleClick}
-      />
+      >
+        {children}
+      </a>
     );
   }
 }
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(Link);

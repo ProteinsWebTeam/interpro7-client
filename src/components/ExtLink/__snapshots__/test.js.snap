@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`External links <DOILink /> should render simple links 1`] = `
+<BaseLink
+  id="1.2.a.b"
+  pattern="{id}"
+  target="_blank"
+>
+  1.2.a.b
+</BaseLink>
+`;
+
+exports[`External links <GoLink /> should render simple links 1`] = `
+<BaseLink
+  id="GO:0003676"
+  pattern="https://www.ebi.ac.uk/QuickGO/GTerm?id={id}"
+  target="_blank"
+>
+  GO:0003676
+</BaseLink>
+`;
+
+exports[`External links <GoLink /> should render simple links 2`] = `
+<BaseLink
+  id="GO:0003676"
+  pattern="https://www.ebi.ac.uk/QuickGO/GTerm?id={id}"
+  target="_blank"
+>
+  GO:0003676
+</BaseLink>
+`;
+
+exports[`External links <PDBeLink /> should render simple links 1`] = `
+<BaseLink
+  id="101m"
+  pattern="https://www.ebi.ac.uk/pdbe/entry/pdb/{id}"
+  target="_blank"
+>
+  101m
+</BaseLink>
+`;
+
+exports[`External links <PMCLink /> should render simple links 1`] = `
+<BaseLink
+  id={12345}
+  pattern="https://europepmc.org/abstract/MED/{id}"
+  target="_blank"
+>
+  PUB12345
+</BaseLink>
+`;
+
+exports[`External links <TaxLink /> should render simple links 1`] = `
+<BaseLink
+  id={12345}
+  pattern="https://www.ebi.ac.uk/ena/data/view/Taxon:{id}"
+  target="_blank"
+>
+  TaxID 12345
+</BaseLink>
+`;
+
+exports[`External links <UniProtLink /> should render simple links 1`] = `
+<BaseLink
+  id="A0A023GPI8"
+  pattern="http://www.uniprot.org/uniprot/{id}"
+  target="_blank"
+>
+  A0A023GPI8
+</BaseLink>
+`;

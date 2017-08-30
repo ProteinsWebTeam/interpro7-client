@@ -11,7 +11,9 @@ import description2path from 'utils/processLocation/description2path';
 
 import { goToNewLocation } from 'actions/creators';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+const f = foundationPartial(style);
 
 class TaxonomyFilter extends Component {
   static propTypes = {
@@ -39,16 +41,16 @@ class TaxonomyFilter extends Component {
   render() {
     const { data: { loading, payload }, location: { search } } = this.props;
     const taxes = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
     if (!loading) {
       taxes.unshift(['ALL', NaN]);
     }
     return (
       <div style={{ overflowX: 'hidden' }}>
-        {taxes.map(([taxId, count]) =>
+        {taxes.map(([taxId, count]) => (
           <div key={taxId} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
+            <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
                 name="entry_type"
@@ -59,13 +61,11 @@ class TaxonomyFilter extends Component {
                 }
                 style={{ margin: '0.25em' }}
               />
-              <span>
-                {taxId}
-              </span>
+              <span>{taxId}</span>
               <NumberLabel value={count} />
             </label>
-          </div>,
-        )}
+          </div>
+        ))}
       </div>
     );
   }
@@ -82,18 +82,18 @@ const getUrlFor = createSelector(
     _search.group_by = 'tax_id';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description,
+      description
     )}?${qsStringify(_search)}`;
-  },
+  }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(TaxonomyFilter),
+  })(TaxonomyFilter)
 );

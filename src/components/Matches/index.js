@@ -53,7 +53,7 @@ const MatchesByPrimary = (
   primary: string,
   secondary: string,
   props: Array<any>,
-} */,
+} */
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
   return <MatchComponent matches={matches} {...props} />;
@@ -78,7 +78,7 @@ const Matches = (
    isStale: boolean,
    search: Object,
    props: Array<any>
-} */,
+} */
 ) => {
   const pathname = '';
   return (
@@ -94,11 +94,11 @@ const Matches = (
         Search
       </SearchBox>
       <Column
-        accessKey="accession"
+        dataKey="accession"
         renderer={(
           acc /*: string */,
-          { source_database: sourceDatabase } /*: {source_database: string} */,
-        ) =>
+          { source_database: sourceDatabase } /*: {source_database: string} */
+        ) => (
           <Link
             newTo={{
               description: {
@@ -109,19 +109,20 @@ const Matches = (
             }}
           >
             {acc}
-          </Link>}
+          </Link>
+        )}
       >
         Accession
       </Column>
       <Column
-        accessKey="name"
+        dataKey="name"
         renderer={(
           name /*: string */,
           {
             accession,
             source_database: sourceDatabase,
-          } /*: {accession: string, source_database: string} */,
-        ) =>
+          } /*: {accession: string, source_database: string} */
+        ) => (
           <Link
             newTo={{
               description: {
@@ -132,22 +133,24 @@ const Matches = (
             }}
           >
             {name}
-          </Link>}
+          </Link>
+        )}
       >
         Name
       </Column>
-      <Column accessKey="source_organism.fullname">Species</Column>
-      <Column accessKey="source_database">Source Database</Column>
+      <Column dataKey="source_organism.fullname">Species</Column>
+      <Column dataKey="source_database">Source Database</Column>
       <Column
-        accessKey="match"
-        renderer={(match /*: Object */) =>
+        dataKey="match"
+        renderer={(match /*: Object */) => (
           <MatchesByPrimary
             matches={[match]}
             primary={primary}
             secondary={secondary}
             location={location}
             {...props}
-          />}
+          />
+        )}
       >
         Architecture
       </Column>
@@ -166,7 +169,7 @@ Matches.propTypes = propTypes;
 
 const mapStateToProps = createSelector(
   state => state.newLocation.search,
-  search => ({ search }),
+  search => ({ search })
 );
 
 export default connect(mapStateToProps)(Matches);

@@ -11,11 +11,14 @@ import description2path from 'utils/processLocation/description2path';
 
 import { goToNewLocation } from 'actions/creators';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import style from 'components/FiltersPanel/style.css';
+
+const f = foundationPartial(style);
 
 const label = {
-  swissprot: 'Reviewed',
-  trembl: 'Unreviewed',
+  reviewed: 'Reviewed',
+  unreviewed: 'Unreviewed',
   uniprot: 'Both',
 };
 
@@ -41,10 +44,10 @@ class CurationFilter extends Component {
 
   componentWillMount() {
     const { mainDB } = this.props.location.description;
-    if (mainDB === 'swissprot') {
-      this.setState({ value: 'swissprot' });
-    } else if (mainDB === 'trembl') {
-      this.setState({ value: 'trembl' });
+    if (mainDB === 'reviewed') {
+      this.setState({ value: 'reviewed' });
+    } else if (mainDB === 'unreviewed') {
+      this.setState({ value: 'unreviewed' });
     } else {
       this.setState({ value: 'uniprot' });
     }
@@ -66,29 +69,29 @@ class CurationFilter extends Component {
     const databases = loading || !payload ? {} : payload;
     if (!loading) {
       databases.uniprot = databases
-        ? (databases.swissprot || 0) + (databases.trembl || 0)
+        ? (databases.reviewed || 0) + (databases.unreviewed || 0)
         : 0;
     }
     return (
       <div>
-        {Object.keys(databases).sort().map(db =>
-          <div key={db} className={f('column')}>
-            <label className={f('row', 'align-middle')}>
-              <input
-                type="radio"
-                name="curated_filter"
-                value={db}
-                onChange={this._handleSelection}
-                checked={this.state.value === db}
-                style={{ margin: '0.25em' }}
-              />
-              <span>
-                {label[db]}
-              </span>
-              <NumberLabel value={databases[db]} />
-            </label>
-          </div>,
-        )}
+        {Object.keys(databases)
+          .sort()
+          .map(db => (
+            <div key={db} className={f('column')}>
+              <label className={f('row', 'filter-button')}>
+                <input
+                  type="radio"
+                  name="curated_filter"
+                  value={db}
+                  onChange={this._handleSelection}
+                  checked={this.state.value === db}
+                  style={{ margin: '0.25em' }}
+                />
+                <span>{label[db]}</span>
+                <NumberLabel value={databases[db]} />
+              </label>
+            </div>
+          ))}
       </div>
     );
   }
@@ -107,16 +110,16 @@ const getUrl = createSelector(
     _search.group_by = 'source_database';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      _description,
+      _description
     )}?${qsStringify(_search)}`;
-  },
+  }
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  loadData(getUrl)(CurationFilter),
+  loadData(getUrl)(CurationFilter)
 );
