@@ -65,12 +65,6 @@
       "transform-react-jsx-source"
     ],
     "env": {
-      "production": {
-        "presets": [
-          "babili"
-        ],
-        "comments": false
-      },
       "test": {
         "plugins": [
           "transform-es2015-modules-commonjs"
@@ -91,7 +85,13 @@
       "src"
     ],
     "collectCoverageFrom": [
-      "**/*.js"
+      "**/*.js",
+      "!**/.*.js"
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text-summary"
     ]
   },
   "lint-staged": {
@@ -104,7 +104,7 @@
     }
   },
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "^1.0.9",
+    "@webcomponents/webcomponentsjs": "^1.0.10",
     "EBI-Icon-fonts": "^1.2.0",
     "babel-polyfill": "^6.26.0",
     "color-hash": "^1.0.3",
@@ -144,13 +144,12 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-plugin-transform-react-constant-elements": "^6.23.0",
     "babel-plugin-transform-react-jsx-source": "^6.22.0",
-    "babel-preset-babili": "^0.1.4",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
     "classnames": "^2.2.5",
-    "css-loader": "^0.28.5",
+    "css-loader": "^0.28.7",
     "empty": "^0.10.1",
     "eslint": "^4.5.0",
     "eslint-config-prettier": "^2.3.0",
