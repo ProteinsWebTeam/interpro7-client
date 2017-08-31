@@ -8,14 +8,15 @@ import TaxIdOrName from 'components/Organism/TaxIdOrName';
 const Species = (
   {
     metadata: { source_organism: { taxid } },
-  } /*: {metadata: {source_organism: {fullname: string, taxid: number}}} */,
-) =>
+  } /*: {metadata: {source_organism: {fullname: string, taxid: number}}} */
+) => (
   <div>
     {'Species: '}
     <Metadata endpoint="organism" db="taxonomy" accession={taxid}>
-      <TaxIdOrName />
+      <TaxIdOrName accession={taxid} />
     </Metadata>
-  </div>;
+  </div>
+);
 
 Species.propTypes = {
   metadata: T.shape({

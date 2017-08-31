@@ -14,7 +14,7 @@ class Lineage extends PureComponent {
     return (
       <div>
         Lineage:
-        {lineage.map(taxId =>
+        {lineage.map(taxId => (
           <span key={taxId}>
             {' → '}
             <Metadata
@@ -23,10 +23,10 @@ class Lineage extends PureComponent {
               accession={taxId}
               key={taxId}
             >
-              <TaxIdOrName />
+              <TaxIdOrName accession={taxId} />
             </Metadata>
-          </span>,
-        )}
+          </span>
+        ))}
       </div>
     );
   }

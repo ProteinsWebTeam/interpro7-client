@@ -14,20 +14,22 @@ class Children extends PureComponent {
     return (
       <ul>
         Children:
-        {taxChildren.length
-          ? taxChildren.map(taxId =>
-              <li key={taxId}>
-                <Metadata
-                  endpoint={'organism'}
-                  db={'taxonomy'}
-                  accession={taxId}
-                  key={taxId}
-                >
-                  <TaxIdOrName />
-                </Metadata>
-              </li>,
-            )
-          : <li>no child</li>}
+        {taxChildren.length ? (
+          taxChildren.map(taxId => (
+            <li key={taxId}>
+              <Metadata
+                endpoint={'organism'}
+                db={'taxonomy'}
+                accession={taxId}
+                key={taxId}
+              >
+                <TaxIdOrName accession={taxId} />
+              </Metadata>
+            </li>
+          ))
+        ) : (
+          <li>no child</li>
+        )}
       </ul>
     );
   }
