@@ -13,17 +13,6 @@ const cssNext = require('postcss-cssnext');
 
 // Webpack plugins
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-
-const extractTextPlugin = new ExtractTextPlugin({
-  filename: 'styles.[contenthash:3].css',
-  allChunks: true,
-});
-
-// Dashboard
-const Dashboard = require('webpack-dashboard');
-const DashboardPlugin = require('webpack-dashboard/plugin');
 
 const pkg = require(path.resolve('package.json'));
 
@@ -307,36 +296,10 @@ module.exports = (env = { dev: true }) => {
       maxEntrypointSize: 1 * kB * kB, // 1MB TODO: reduce this eventually!
     },
     plugins: [
-      // new webpack.optimize.ModuleConcatenationPlugin(),
-      new webpack.LoaderOptionsPlugin({
-        options: {
-          minimize: !!env.production,
-          debug: !env.production,
-          context: __dirname,
-        },
-      }),
-      new webpack.NamedModulesPlugin(),
-      // new WebAppManifestPlugin(),
-      env.test || env.production ? extractTextPlugin : null,
-      env.test
-        ? null
-        : new webpack.optimize.CommonsChunkPlugin({
-            names: ['vendor', 'visual', 'redux', 'polyfills', 'manifest'],
-            filename: env.production ? '[name].[hash:3].js' : '[name].js',
-            minChunks: Infinity,
-          }),
-      // TODO: try to have the next block working again
-      // env.test
-      //   ? null
-      //   : new webpack.optimize.CommonsChunkPlugin({
-      //       children: true,
-      //       async: true,
-      //       minChunks: 3,
-      //     }),
-      env.dev ? new webpack.HotModuleReplacementPlugin() : null,
       new webpack.DefinePlugin({
         'process.env': {
           PERF: JSON.stringify(!!env.performance),
+          STAGING: JSON.stringify(!!env.staging),
           NODE_ENV: env.production ? JSON.stringify('production') : null,
         },
         'process.info': JSON.stringify(
@@ -365,16 +328,59 @@ module.exports = (env = { dev: true }) => {
           })()
         ),
       }),
-      env.dashboard ? new DashboardPlugin(new Dashboard().setData) : null,
       env.production || env.staging
-        ? new FaviconsWebpackPlugin({
+        ? new webpack.optimize.ModuleConcatenationPlugin()
+        : null,
+      new webpack.LoaderOptionsPlugin({
+        options: {
+          minimize: !!env.production,
+          debug: !env.production,
+          context: __dirname,
+        },
+      }),
+      new webpack.NamedModulesPlugin(),
+      // env.production || env.staging
+      //   ? new (require('./plugins/web-app-manifest'))()
+      //   : null,
+      env.test || env.production || env.staging
+        ? new ExtractTextPlugin({
+            filename: 'styles.[contenthash:3].css',
+            allChunks: true,
+          })
+        : null,
+      env.test
+        ? null
+        : new webpack.optimize.CommonsChunkPlugin({
+            names: ['vendor', 'visual', 'redux', 'polyfills', 'manifest'],
+            filename: env.production ? '[name].[hash:3].js' : '[name].js',
+            minChunks: Infinity,
+          }),
+      // TODO: try to have the next block working again
+      // env.test
+      //   ? null
+      //   : new webpack.optimize.CommonsChunkPlugin({
+      //       children: true,
+      //       async: true,
+      //       minChunks: 3,
+      //     }),
+      env.dev ? new webpack.HotModuleReplacementPlugin() : null,
+      env.dashboard
+        ? new (require('webpack-dashboard/plugin'))(
+            new (require('webpack-dashboard'))().setData
+          )
+        : null,
+      env.production || env.staging
+        ? new (require('favicons-webpack-plugin'))({
             logo: path.join('.', 'images', 'logo', 'logo_75x75.png'),
             prefix: 'icon.[hash:3].',
+            emitStats: false,
             minify: true,
+            background: '#007c82',
+            title: pkg.name,
           })
         : null,
       env.production || env.staging || env.dev
-        ? new HtmlWebpackPlugin({
+        ? new (require('html-webpack-plugin'))({
             title: pkg.name,
             template: path.join('.', 'src', 'index.template.html'),
             inject: false,
@@ -399,7 +405,16 @@ module.exports = (env = { dev: true }) => {
             comments: false,
           })
         : null,
-      env.production || env.staging ? extractTextPlugin : null,
+      env.production || env.staging
+        ? new (require('offline-plugin'))({
+            caches: {
+              main: [':rest:'],
+              additional: [/\.(worker\.js)$/i],
+              optional: [/\.(eot|ttf|woff|svg|ico|png|jpe?g)$/i],
+            },
+            AppCache: false,
+          })
+        : null,
     ].filter(Boolean), // filter out empty values
   };
 
