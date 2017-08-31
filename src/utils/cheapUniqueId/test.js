@@ -1,3 +1,4 @@
+// @flow
 import cheapUniqueId from '.';
 
 const LOOP_SIZE = 500;
