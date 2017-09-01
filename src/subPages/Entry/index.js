@@ -3,13 +3,13 @@ import T from 'prop-types';
 
 import Related from 'components/Related';
 
-const EntrySub = ({data}/*: {data: Object} */) => (
+const EntrySubPage = ({ data } /*: {data: Object} */) => (
   <div>
     <Related data={data} />
   </div>
 );
-EntrySub.propTypes = {
+EntrySubPage.propTypes = {
   data: T.object.isRequired,
 };
 
-export default EntrySub;
+export default EntrySubPage;

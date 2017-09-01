@@ -4,13 +4,13 @@ import T from 'prop-types';
 
 import Related from 'components/Related';
 
-const ProteinSub = ({data}/*: {data: Object} */) => (
+const ProteinSubPage = ({ data } /*: {data: Object} */) => (
   <div>
     <Related data={data} />
   </div>
 );
-ProteinSub.propTypes = {
+ProteinSubPage.propTypes = {
   data: T.object.isRequired,
 };
 
-export default ProteinSub;
+export default ProteinSubPage;

@@ -8,10 +8,28 @@ IPScan:
 pages:
   entry:
     plural: entries
-  protein: null
-  structure: null
-  proteome: null
+    subPages:
+      - proteins
+      - structures
+      - organisms
+      - domain architectures
+      - hmm models
+  protein:
+    subPages:
+      - entries
+      - structures
+      - domain architectures
+  structure:
+    subPages:
+      - entries
+      - proteins
+      - domain architectures
+  organism:
+    subPages:
+      - entries
+      - proteins
+      - structures
 pagination:
-  pageSize: 10
+  pageSize: 20
 cache:
   enabled: true

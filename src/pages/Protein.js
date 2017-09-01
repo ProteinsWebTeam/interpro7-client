@@ -1,29 +1,33 @@
 import React from 'react';
 import T from 'prop-types';
+import ColorHash from 'color-hash/lib/color-hash';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-
-import loadData from 'higherOrder/loadData';
-import loadable from 'higherOrder/loadable';
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
-import ColorHash from 'color-hash/lib/color-hash';
-
+import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
   Column,
   SearchBox,
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
-import ProteinListFilters from 'components/Protein/ProteinListFilters';
+
+import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
+import { getUrlForApi } from 'higherOrder/loadData/defaults';
+
+import subPages from 'subPages';
+import config from 'config';
 
 import classname from 'classnames/bind';
-import pageStyle from './style.css';
-const ps = classname.bind(pageStyle);
+
+import f from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
-import f from 'styles/foundation';
+import pageStyle from './style.css';
+
+const ps = classname.bind(pageStyle);
 
 const SVG_WIDTH = 100;
 const colorHash = new ColorHash();
@@ -210,18 +214,14 @@ const SummaryAsync = loadable({
   loader: () =>
     import(/* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'),
 });
-const StructureAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
-});
-const EntryAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
-});
-const DomainAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "domain-architecture-subpage" */ 'subPages/DomainArchitecture'),
-});
+
+const subPagesForProtein = new Set();
+for (const subPage of config.pages.protein.subPages) {
+  subPagesForProtein.add({
+    value: subPage.replace(/\s+/g, '_'),
+    component: subPages.get(subPage),
+  });
+}
 
 const SummaryComponent = ({ data: { payload }, location }) => (
   <SummaryAsync data={payload} location={location} />
@@ -233,11 +233,6 @@ SummaryComponent.propTypes = {
   location: T.object.isRequired,
 };
 
-const pages = new Set([
-  { value: 'structure', component: StructureAsync },
-  { value: 'entry', component: EntryAsync },
-  { value: 'domain_architecture', component: DomainAsync },
-]);
 const Summary = props => {
   const { data: { loading, payload } } = props;
   if (loading || !payload.metadata) return <div>Loading…</div>;
@@ -248,7 +243,7 @@ const Summary = props => {
         locationSelector={l =>
           l.description.mainDetail || l.description.focusType}
         indexRoute={SummaryComponent}
-        childRoutes={pages}
+        childRoutes={subPagesForProtein}
       />
     </div>
   );

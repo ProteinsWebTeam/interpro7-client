@@ -3,10 +3,9 @@ import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-
-import loadData from 'higherOrder/loadData';
-import loadable from 'higherOrder/loadable';
-
+import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import { PDBeLink } from 'components/ExtLink';
+import StructureListFilters from 'components/Structure/StructureListFilters';
 import Table, {
   Column,
   SearchBox,
@@ -14,26 +13,21 @@ import Table, {
   Exporter,
 } from 'components/Table';
 
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
 
-import { PDBeLink } from 'components/ExtLink';
-import StructureListFilters from 'components/Structure/StructureListFilters';
+import subPages from 'subPages';
+import config from 'config';
 
 import classname from 'classnames/bind';
-import pageStyle from './style.css';
-const ps = classname.bind(pageStyle);
 
-import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 
-const EntryAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
-});
-const ProteinAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein'),
-});
+import pageStyle from './style.css';
+import styles from 'styles/blocks.css';
+
+const ps = classname.bind(pageStyle);
+
 const SummaryAsync = loadable({
   loader: () =>
     import(/* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'),
@@ -193,10 +187,14 @@ SummaryComponent.propTypes = {
   location: T.object.isRequired,
 };
 
-const pages = new Set([
-  { value: 'entry', component: EntryAsync },
-  { value: 'protein', component: ProteinAsync },
-]);
+const subPagesForStructure = new Set();
+for (const subPage of config.pages.structure.subPages) {
+  subPagesForStructure.add({
+    value: subPage.replace(/\s+/g, '_'),
+    component: subPages.get(subPage),
+  });
+}
+
 const Summary = props => {
   const { data: { loading } } = props;
   if (loading) return <div>Loading…</div>;
@@ -206,7 +204,7 @@ const Summary = props => {
       locationSelector={l =>
         l.description.mainDetail || l.description.focusType}
       indexRoute={SummaryComponent}
-      childRoutes={pages}
+      childRoutes={subPagesForStructure}
     />
   );
 };

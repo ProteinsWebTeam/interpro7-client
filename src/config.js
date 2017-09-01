@@ -16,7 +16,7 @@ const config /*: {
     EBIsearch: {pathname: string, port: string, protocol: string},
     IPScan: {pathname: string, port: string, protocol: string},
   },
-  pages: {[key: string]: ?{plural: string}},
+  pages: {[key: string]: {plural?: string, subPages: Array<string>}},
   pagination: {pageSize: number}
 } */ = _config;
 

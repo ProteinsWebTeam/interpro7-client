@@ -3,10 +3,6 @@ import T from 'prop-types';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-
-import loadData from 'higherOrder/loadData';
-import loadable from 'higherOrder/loadable';
-
 import Table, {
   Column,
   SearchBox,
@@ -14,12 +10,20 @@ import Table, {
   Exporter,
 } from 'components/Table';
 
-import classname from 'classnames/bind';
-import pageStyle from './style.css';
-const ps = classname.bind(pageStyle);
+import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
 
-import styles from 'styles/blocks.css';
+import subPages from 'subPages';
+import config from 'config';
+
+import classname from 'classnames/bind';
+
 import f from 'styles/foundation';
+
+import pageStyle from './style.css';
+import styles from 'styles/blocks.css';
+
+const ps = classname.bind(pageStyle);
 
 const propTypes = {
   data: T.shape({
@@ -149,12 +153,6 @@ const SummaryAsync = loadable({
   loader: () =>
     import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
 });
-// const StructureAsync = createAsyncComponent(() =>
-//   import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
-// );
-// const EntryAsync = createAsyncComponent(() =>
-//   import(/* webpackChunkName: "entry-subpage" */ 'subPages/Entry'),
-// );
 
 const SummaryComponent = ({ data: { payload }, location }) => (
   <SummaryAsync data={payload} location={location} />
@@ -166,12 +164,14 @@ SummaryComponent.propTypes = {
   location: T.object.isRequired,
 };
 
-const pages = new Set(
-  [
-    // { value: 'structure', component: StructureAsync },
-    // { value: 'entry', component: EntryAsync },
-  ]
-);
+const subPagesForOrganism = new Set();
+for (const subPage of config.pages.organism.subPages) {
+  subPagesForOrganism.add({
+    value: subPage.replace(/\s+/g, '_'),
+    component: subPages.get(subPage),
+  });
+}
+
 const Summary = props => {
   const { data: { loading, payload } } = props;
   if (loading || !payload.metadata) return <div>Loading…</div>;
@@ -182,7 +182,7 @@ const Summary = props => {
         locationSelector={l =>
           l.description.mainDetail || l.description.focusType}
         indexRoute={SummaryComponent}
-        childRoutes={pages}
+        childRoutes={subPagesForOrganism}
       />
     </div>
   );

@@ -6,7 +6,7 @@ import { stringify as qsStringify } from 'query-string';
 
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
-import ProteinFile from 'subPages/Species/ProteinFile';
+import ProteinFile from './ProteinFile';
 import Metadata from 'wrappers/Metadata';
 import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
@@ -66,7 +66,7 @@ const payloadToProcessed = createSelector(
   }
 }; */
 
-class SpeciesSub extends PureComponent /*:: <Props> */ {
+class OrganismSubPage extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -167,4 +167,4 @@ const mapStateToUrl = createSelector(
   }
 );
 
-export default loadData(mapStateToUrl)(SpeciesSub);
+export default loadData(mapStateToUrl)(OrganismSubPage);

@@ -8,12 +8,11 @@ import HmmModelSection from 'components/Entry/HmmModels';
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
 
-const HmmModels = ({ data }) => {
+const HMMModelSubPage = ({ data }) => {
   if (data.loading) return <div>Loading...</div>;
   return <HmmModelSection logo={data.payload} />;
 };
-
-HmmModels.propTypes = {
+HMMModelSubPage.propTypes = {
   data: T.object.isRequired,
 };
 
@@ -32,4 +31,4 @@ const getUrl = createSelector(
   }
 );
 
-export default loadData({ getUrl })(HmmModels);
+export default loadData({ getUrl })(HMMModelSubPage);

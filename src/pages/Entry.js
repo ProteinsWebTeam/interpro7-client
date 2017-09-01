@@ -4,12 +4,8 @@ import T from 'prop-types';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import { GoLink } from 'components/ExtLink';
-
-import loadData from 'higherOrder/loadData';
-import loadWebComponent from 'utils/loadWebComponent';
-import loadable from 'higherOrder/loadable';
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
-
+import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import EntryListFilter from 'components/Entry/EntryListFilters';
 import Table, {
   Column,
   SearchBox,
@@ -17,15 +13,23 @@ import Table, {
   Exporter,
 } from 'components/Table';
 
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
-import EntryListFilter from 'components/Entry/EntryListFilters';
+import loadData from 'higherOrder/loadData';
+import loadWebComponent from 'utils/loadWebComponent';
+import loadable from 'higherOrder/loadable';
+import { getUrlForApi } from 'higherOrder/loadData/defaults';
+
+import subPages from 'subPages';
+import config from 'config';
+
+import { memberDB } from 'staticData/home';
 
 import classname from 'classnames/bind';
+
+import f from 'styles/foundation';
+
 import pageStyle from './style.css';
 
 import styles from 'styles/blocks.css';
-import f from 'styles/foundation';
-import { memberDB } from 'staticData/home';
 
 const ps = classname.bind(pageStyle);
 
@@ -332,39 +336,19 @@ const SummaryAsync = loadable({
   loader: () =>
     import(/* webpackChunkName: "entry-summary" */ 'components/Entry/Summary'),
 });
-const StructureAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "structure-subpage" */ 'subPages/Structure'),
-});
-const ProteinAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "protein-subpage" */ 'subPages/Protein'),
-});
-const SpeciesAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "species-subpage" */ 'subPages/Species'),
-});
-const DomainAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "domain-architecture-subpage" */ 'subPages/DomainArchitecture'),
-});
-const HmmModelsAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "hmm-models-subpage" */ 'subPages/HmmModels'),
-});
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
 
-const pages = new Set([
-  { value: 'structure', component: StructureAsync },
-  { value: 'protein', component: ProteinAsync },
-  { value: 'species', component: SpeciesAsync },
-  { value: 'domain_architecture', component: DomainAsync },
-  { value: 'hmm_models', component: HmmModelsAsync },
-]);
+const subPagesForEntry = new Set();
+for (const subPage of config.pages.entry.subPages) {
+  subPagesForEntry.add({
+    value: subPage.replace(/\s+/g, '_'),
+    component: subPages.get(subPage),
+  });
+}
 
 const SummaryComponent = ({ data: { payload }, isStale, location }) => (
   <SummaryAsync data={payload} isStale={isStale} location={location} />
@@ -388,7 +372,7 @@ const Summary = props => {
       locationSelector={l =>
         l.description.mainDetail || l.description.focusType}
       indexRoute={SummaryComponent}
-      childRoutes={pages}
+      childRoutes={subPagesForEntry}
     />
   );
 };
@@ -458,7 +442,7 @@ Entry.propTypes = {
 };
 export default loadData((...args) =>
   getUrlForApi(...args)
-    .replace('species', '')
-    .replace('hmm_models', '')
+    .replace('organism', '')
+    .replace('hmm_model', '')
     .replace('domain_architecture', '')
 )(Entry);
