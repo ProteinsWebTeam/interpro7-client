@@ -13,7 +13,7 @@ const Species = (
   <div>
     {'Species: '}
     <Metadata endpoint="organism" db="taxonomy" accession={taxid}>
-      <TaxIdOrName />
+      <TaxIdOrName accession={taxid} />
     </Metadata>
   </div>
 );

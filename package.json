@@ -65,12 +65,6 @@
       "transform-react-jsx-source"
     ],
     "env": {
-      "production": {
-        "presets": [
-          "babili"
-        ],
-        "comments": false
-      },
       "test": {
         "plugins": [
           "transform-es2015-modules-commonjs"
@@ -91,7 +85,13 @@
       "src"
     ],
     "collectCoverageFrom": [
-      "**/*.js"
+      "**/*.js",
+      "!**/.*.js"
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text-summary"
     ]
   },
   "lint-staged": {
@@ -104,11 +104,11 @@
     }
   },
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "^1.0.9",
+    "@webcomponents/webcomponentsjs": "^1.0.10",
     "EBI-Icon-fonts": "^1.2.0",
     "babel-polyfill": "^6.26.0",
     "color-hash": "^1.0.3",
-    "core-js": "^2.5.0",
+    "core-js": "^2.5.1",
     "d3": "^4.10.0",
     "data-loader": "^0.2.0",
     "draft-js": "^0.10.1",
@@ -144,13 +144,12 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-plugin-transform-react-constant-elements": "^6.23.0",
     "babel-plugin-transform-react-jsx-source": "^6.22.0",
-    "babel-preset-babili": "^0.1.4",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
     "classnames": "^2.2.5",
-    "css-loader": "^0.28.5",
+    "css-loader": "^0.28.7",
     "empty": "^0.10.1",
     "eslint": "^4.5.0",
     "eslint-config-prettier": "^2.3.0",
@@ -160,7 +159,7 @@
     "extract-text-webpack-plugin": "^3.0.0",
     "favicons-webpack-plugin": "0.0.7",
     "file-loader": "^0.11.2",
-    "flow-bin": "^0.53.1",
+    "flow-bin": "^0.54.0",
     "flow-typed": "^2.1.5",
     "glob": "^7.1.2",
     "glob-loader": "^0.3.0",
@@ -173,6 +172,7 @@
     "lint-staged": "^4.0.4",
     "node-sass": "^4.5.3",
     "npm-run-all": "^4.1.1",
+    "offline-plugin": "^4.8.3",
     "postcss-cssnext": "^3.0.0",
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.6",

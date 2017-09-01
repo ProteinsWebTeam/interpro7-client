@@ -120,7 +120,7 @@ class SpeciesSub extends PureComponent /*:: <Props> */ {
                       db="taxonomy"
                       accession={taxId}
                     >
-                      <TaxIdOrName />
+                      <TaxIdOrName accession={taxId} />
                     </Metadata>
                   </span>
                 );

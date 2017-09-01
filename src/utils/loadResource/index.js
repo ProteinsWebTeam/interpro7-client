@@ -1,7 +1,8 @@
 // @flow
 const map = new Map();
 
-export default (url/*: string */, type/*: string */ = 'text/javascript') => {
+// prettier-ignore
+export default (url /*: string */, type /*: string */ = 'text/javascript')/*: Promise<*> */ => {
   let promise = map.get(url);
   if (promise) return promise;
   promise = new Promise((resolve, reject) => {

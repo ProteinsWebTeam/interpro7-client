@@ -23,7 +23,7 @@ class Children extends PureComponent {
                 accession={taxId}
                 key={taxId}
               >
-                <TaxIdOrName />
+                <TaxIdOrName accession={taxId} />
               </Metadata>
             </li>
           ))

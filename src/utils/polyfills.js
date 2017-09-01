@@ -7,7 +7,8 @@ let response;
 // Tries to get Web Components support somehow (through polyfill if need be)
 // Throws if failed to have Web Component support, even when trying to polyfill
 // Return a boolean, true if native support, false if polyfilled
-export const webComponents = () => {
+// prettier-ignore
+export const webComponents = ()/*: Promise<boolean> */ => {
   if (!response) {
     response = new Promise(async (res, rej) => {
       if (supportsWebComponents) {

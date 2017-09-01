@@ -50,6 +50,7 @@ BaseLink.propTypes = {
   activeClass: T.oneOfType([T.string, T.func]),
   children: T.node.isRequired,
 };
+BaseLink.displayName = 'BaseLink';
 
 const patternLinkWrapper = pattern => {
   const Wrapped = ({ id, target, children, ...props }) => (
@@ -75,6 +76,7 @@ TaxLink.propTypes = {
   ...types,
   id: T.number.isRequired,
 };
+TaxLink.displayName = 'TaxLink';
 
 export const PMCLink = ({ id, target, children, ...props }) => (
   <BaseLink
@@ -90,8 +92,10 @@ PMCLink.propTypes = {
   ...types,
   id: T.number.isRequired,
 };
+PMCLink.displayName = 'PMCLink';
 
 export const DOILink = patternLinkWrapper('{id}');
+DOILink.displayName = 'DOILink';
 
 export const GoLink = ({ id, target, className, children, ...props }) => {
   const pattern = 'https://www.ebi.ac.uk/QuickGO/GTerm?id={id}';
@@ -108,18 +112,23 @@ export const GoLink = ({ id, target, className, children, ...props }) => {
   );
 };
 GoLink.propTypes = types;
+GoLink.displayName = 'GoLink';
 
 export const PDBeLink = patternLinkWrapper(
   'https://www.ebi.ac.uk/pdbe/entry/pdb/{id}'
 );
+PDBeLink.displayName = 'PDBeLink';
+
 export const PDBe3DLink = patternLinkWrapper(
   'https://www.ebi.ac.uk/pdbe/entry/view3D/{id}/' +
     '?view=entry_index&viewer=jmol&controls=codename_hero'
 );
+PDBe3DLink.displayName = 'PDBe3DLink';
 
 export const UniProtLink = patternLinkWrapper(
   'http://www.uniprot.org/uniprot/{id}'
 );
+UniProtLink.displayName = 'UniProtLink';
 
 const ExtLink = ({ id, children, ...props }) => {
   switch (true) {
@@ -134,5 +143,6 @@ const ExtLink = ({ id, children, ...props }) => {
   }
 };
 ExtLink.propTypes = types;
+ExtLink.displayName = 'ExtLink';
 
 export default ExtLink;

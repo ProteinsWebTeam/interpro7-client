@@ -2,25 +2,25 @@
 import { getEmptyDescription } from 'utils/processLocation/utils';
 
 /*:: type Description = {|
- other: ?string,
- mainType: ?string,
- mainIntegration: ?string,
- mainDB: ?string,
- mainAccession: ?string,
- mainChain: ?string,
- mainMemberDB: ?string,
- mainMemberDBAccession: ?string,
- mainDetail: ?string,
- focusType: ?string,
- focusIntegration: ?string,
- focusDB: ?string,
- focusAccession: ?string,
- focusChain: ?string,
- focusMemberDB: ?string,
- focusMemberDBAccession: ?string,
+ other?: ?string,
+ mainType?: ?string,
+ mainIntegration?: ?string,
+ mainDB?: ?string,
+ mainAccession?: ?string,
+ mainChain?: ?string,
+ mainMemberDB?: ?string,
+ mainMemberDBAccession?: ?string,
+ mainDetail?: ?string,
+ focusType?: ?string,
+ focusIntegration?: ?string,
+ focusDB?: ?string,
+ focusAccession?: ?string,
+ focusChain?: ?string,
+ focusMemberDB?: ?string,
+ focusMemberDBAccession?: ?string,
 |}; */
 
-/* :: type Handler = {
+/* :: export type Handler = {
   children: Set<Handler>,
   key: ?string,
   getKey: Description => ?string,

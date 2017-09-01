@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
 
 import NumberLabel from 'components/NumberLabel';
+import Metadata from 'wrappers/Metadata';
+import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
@@ -12,10 +14,12 @@ import description2path from 'utils/processLocation/description2path';
 import { goToNewLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
+
 import style from 'components/FiltersPanel/style.css';
+
 const f = foundationPartial(style);
 
-class TaxonomyFilter extends Component {
+class TaxonomyFilter extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -29,17 +33,23 @@ class TaxonomyFilter extends Component {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    this.props.goToNewLocation({
-      ...this.props.location,
-      search: {
-        ...this.props.location.search,
-        tax_id: value === 'ALL' ? undefined : value,
+    const { goToNewLocation, location } = this.props;
+    goToNewLocation({
+      ...location,
+      description: {
+        ...location.description,
+        focusType: value === 'ALL' ? null : 'organism',
+        focusDB: value === 'ALL' ? null : 'taxonomy',
+        focusAccession: value === 'ALL' ? null : value,
       },
     });
   };
 
   render() {
-    const { data: { loading, payload }, location: { search } } = this.props;
+    const {
+      data: { loading, payload },
+      location: { description: { focusAccession } },
+    } = this.props;
     const taxes = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a
     );
@@ -57,11 +67,22 @@ class TaxonomyFilter extends Component {
                 value={taxId}
                 onChange={this._handleSelection}
                 checked={
-                  (!search.tax_id && taxId === 'ALL') || search.tax_id === taxId
+                  (!focusAccession && taxId === 'ALL') ||
+                  focusAccession === taxId
                 }
                 style={{ margin: '0.25em' }}
               />
-              <span>{taxId}</span>
+              {taxId === 'ALL' ? (
+                <span>All</span>
+              ) : (
+                <Metadata
+                  endpoint={'organism'}
+                  db={'taxonomy'}
+                  accession={taxId === 'ALL' ? 1 : taxId}
+                >
+                  <TaxIdOrName accession={taxId} element="span" />
+                </Metadata>
+              )}
               <NumberLabel value={count} />
             </label>
           </div>

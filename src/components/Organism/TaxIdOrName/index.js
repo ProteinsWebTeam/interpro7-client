@@ -3,14 +3,29 @@ import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 
-class TaxIdOrName extends PureComponent {
+/*:: type Props = {
+  accession: string | number,
+  data: {
+    payload: ?{
+      metadata : ?{
+        name: ?{
+          name: ?string,
+        },
+      },
+    },
+  },
+  element?: any,
+}; */
+
+class TaxIdOrName extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.oneOfType([T.string, T.number]),
     data: T.object,
+    element: T.any,
   };
 
   render() {
-    const { accession, data } = this.props;
+    const { accession, data, element: Element } = this.props;
     const displayedText =
       (data &&
         data.payload &&
@@ -18,6 +33,9 @@ class TaxIdOrName extends PureComponent {
         data.payload.metadata.name &&
         data.payload.metadata.name.name) ||
       accession;
+    if (Element) {
+      return <Element>{displayedText}</Element>;
+    }
     const newTo = {
       description: {
         mainType: 'organism',

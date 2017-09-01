@@ -1,6 +1,6 @@
 // @flow
-import {addToast, removeToast} from 'actions/creators';
-import {DEV} from 'config';
+import { addToast, removeToast } from 'actions/creators';
+import { DEV } from 'config';
 import id from 'utils/cheapUniqueId';
 
 // import type {Store} from 'flow-typed/npm/redux';
@@ -11,20 +11,21 @@ const ToastManager = class {
   /* ::
     _store: Store
   */
-  constructor(store/*: Store */) {
+  constructor(store /*: Store */) {
     this._store = store;
   }
 
-  add = (toast/*: Object */) => {
-    const toastId = `${id()}`;
+  add = (toast /*: Object */) => {
+    const toastId = id();
     this._store.dispatch(addToast(toast, toastId));
     return toastId;
   };
 
-  remove = (toastId/*: string */) => this._store.dispatch(removeToast(toastId));
+  remove = (toastId /*: string */) =>
+    this._store.dispatch(removeToast(toastId));
 };
 
-export const createToastManagerWithStore = (store/*: Store */) => {
+export const createToastManagerWithStore = (store /*: Store */) => {
   if (toastManager) {
     console.warn('Toast manager already instantiated', toastManager);
   } else {
@@ -38,5 +39,5 @@ export const getToastManager = () => {
   if (toastManager) {
     return toastManager;
   }
-  throw new Error('Toast manager doesn\'t exists (yet?)');
+  throw new Error("Toast manager doesn't exists (yet?)");
 };
