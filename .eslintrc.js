@@ -381,11 +381,6 @@ const rules = {
   semi: [1, 'always'],
   // Enforce spacing before and after semicolons
   'semi-spacing': [1, { before: false, after: true }],
-  // Disallow space before function opening parenthesis
-  'space-before-function-paren': [
-    1,
-    { anonymous: 'always', named: 'never', asyncArrow: 'always' },
-  ],
   // Disallow spaces inside parentheses
   'space-in-parens': [1, 'never'],
   // Require spaces around operators

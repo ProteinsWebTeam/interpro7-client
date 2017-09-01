@@ -22,11 +22,12 @@ import EntryListFilter from 'components/Entry/EntryListFilters';
 
 import classname from 'classnames/bind';
 import pageStyle from './style.css';
-const ps = classname.bind(pageStyle);
 
 import styles from 'styles/blocks.css';
 import f from 'styles/foundation';
 import { memberDB } from 'staticData/home';
+
+const ps = classname.bind(pageStyle);
 
 const propTypes = {
   data: T.shape({
@@ -341,15 +342,15 @@ const ProteinAsync = loadable({
 });
 const SpeciesAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "entry-subpage" */ 'subPages/Species'),
+    import(/* webpackChunkName: "species-subpage" */ 'subPages/Species'),
 });
 const DomainAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
+    import(/* webpackChunkName: "domain-architecture-subpage" */ 'subPages/DomainArchitecture'),
 });
 const HmmModelsAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "entry-subpage" */ 'subPages/HmmModels'),
+    import(/* webpackChunkName: "hmm-models-subpage" */ 'subPages/HmmModels'),
 });
 
 const SchemaOrgData = loadable({

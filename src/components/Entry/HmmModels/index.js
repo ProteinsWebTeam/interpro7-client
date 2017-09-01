@@ -1,12 +1,9 @@
-/**
- * Created by maq on 07/08/2017.
- */
 import React, { Component } from 'react';
 import T from 'prop-types';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import Link from 'components/generic/Link';
-import hmm_logo from './hmm_logo';
+
+import hmmLogo from './hmm_logo';
+
 import styles from './logo.css';
 
 class LogoSection extends Component {
@@ -14,16 +11,8 @@ class LogoSection extends Component {
     data: T.object,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: props.data,
-    };
-  }
-
   componentDidMount() {
-    let logo = document.getElementById('logo');
-    hmm_logo(logo, { column_info: true });
+    hmmLogo(this._node, { column_info: true, data: this.props.data });
   }
 
   shouldComponentUpdate() {
@@ -31,23 +20,23 @@ class LogoSection extends Component {
   }
 
   componentWillUnmount() {
-    //this.ec.destructor();
+    // this.ec.destructor();
   }
 
   render() {
-    let data_string = JSON.stringify(this.state.data);
-    return <div className={styles.logo} id="logo" data-logo={data_string} />;
+    return <div className={styles.logo} ref={node => (this._node = node)} />;
   }
 }
 
-const HmmModelSection = function(data) {
-  return (
-    <div className={styles.content}>
-      <div className={classNames(styles.logo_wrapper, 'clearfix')}>
-        <LogoSection data={data.logo} />
-      </div>
+const HmmModelSection = ({ logo }) => (
+  <div className={styles.content}>
+    <div className={classNames(styles.logo_wrapper, 'clearfix')}>
+      <LogoSection data={logo} />
     </div>
-  );
+  </div>
+);
+HmmModelSection.propTypes = {
+  logo: T.object.isRequired,
 };
 
 export default HmmModelSection;

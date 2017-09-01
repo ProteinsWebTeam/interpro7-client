@@ -8,7 +8,7 @@ import styles from 'styles/blocks.css';
 import ipro from 'styles/interpro-new.css';
 
 const SchemaOrgData = loadable({
-  loader: import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
 

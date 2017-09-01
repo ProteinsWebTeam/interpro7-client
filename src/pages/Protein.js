@@ -220,7 +220,7 @@ const EntryAsync = loadable({
 });
 const DomainAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "entry-subpage" */ 'subPages/DomainArchitecture'),
+    import(/* webpackChunkName: "domain-architecture-subpage" */ 'subPages/DomainArchitecture'),
 });
 
 const SummaryComponent = ({ data: { payload }, location }) => (

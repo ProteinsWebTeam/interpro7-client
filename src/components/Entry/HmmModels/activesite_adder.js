@@ -1,13 +1,4 @@
-import module from 'jquery';
-
-('use strict');
-
-let ActiveSitesAdder;
-
-const isNumeric = function(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-};
-ActiveSitesAdder = function(opts) {
+const ActiveSitesAdder = function(opts = {}) {
   const options = opts || {};
   this.cigar = options.cigar || '';
   this.sequence = options.sequence || '';
@@ -22,29 +13,31 @@ ActiveSitesAdder = function(opts) {
 };
 
 ActiveSitesAdder.prototype.getColumnFromResidue = function(residue) {
-  let i = this.seq_start - 1,
-    col = 0;
+  let i = this.seq_start - 1;
+  let col = 0;
 
-  for (let k = 0; k < this.alignment.length; k++) {
-    const c = this.alignment[k];
-    if (c == '.') continue;
-    else if (c == '-') col++;
-    else if (c == c.toUpperCase()) {
+  for (const ali of this.alignment) {
+    const c = ali;
+    if (c === '.') continue;
+    else if (c === '-') col++;
+    else if (c === c.toUpperCase()) {
       col++;
       i++;
     } else {
       i++;
-      if (i == residue) return -1;
+      // eslint-disable-next-line no-magic-numbers
+      if (i === residue) return -1;
     }
-    if (i == residue) return col;
+    if (i === residue) return col;
   }
+  // eslint-disable-next-line no-magic-numbers
   return -1;
 };
 
 ActiveSitesAdder.prototype.whatShouldBeDraw = function(column) {
   if (this.columns.length < 1) return null;
   for (let i = 0; i < this.columns.length; i++) {
-    if (this.columns[i].col == column) {
+    if (this.columns[i].col === column) {
       this.columns[i].type = 'BLOCK';
       return this.columns[i];
     }

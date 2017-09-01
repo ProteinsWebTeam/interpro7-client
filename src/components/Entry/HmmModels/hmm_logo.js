@@ -1,116 +1,90 @@
-/* jslint browser:true */
-/* global G_vmlCanvasManager, EasyScroller */
-/** @license
- * HMM logo
- * https://github.com/Janelia-Farm-Xfam/hmm_logo_js
- * Copyright 2013, Jody Clements.
- * Licensed under the MIT License.
- * https://github.com/Janelia-Farm-Xfam/hmm_logo_js/blob/master/LICENSE.txt
- */
-
-/* eslint-env node */
 /* eslint-disable no-param-reassign */
-
+/* eslint-disable no-magic-numbers */
 import EasyScroller from './scroller';
+
 import styles from './logo.css';
-import React from 'react';
 
-const $ = require('./jquery');
+const FEATURE_HEIGHT = 10;
+const MARGIN_TO_FEATURES = 10;
+const PADDING_BETWEEN_TRACKS = 4;
 
-// checking for canvas support and caching result
-let canv_support = null;
+class Letter {
+  constructor(letter, options = {}) {
+    this.value = letter;
+    this.width = parseInt(options.width, 10) || 100;
 
-let feature_height = 10,
-  margin_to_features = 10,
-  padding_between_tracks = 4;
+    // W is 30% wider than the other letters, so need to make sure
+    // it gets modified accordingly.
+    if (this.value === 'W') {
+      this.width += this.width * 30 / 100;
+    }
 
-function canvasSupport() {
-  if (!canv_support) {
-    const elem = document.createElement('canvas');
-    canv_support = !!(elem.getContext && elem.getContext('2d'));
-  }
-  return canv_support;
-}
+    this.height = parseInt(options.height, 10) || 100;
 
-function Letter(letter, opt) {
-  const options = opt || {};
-  this.value = letter;
-  this.width = parseInt(options.width, 10) || 100;
-
-  // W is 30% wider than the other letters, so need to make sure
-  // it gets modified accordingly.
-  if (this.value === 'W') {
-    this.width += this.width * 30 / 100;
+    this.color = options.color || '#000';
+    // if the height and width are changed from the default, then
+    // this will also need to be changed as it cant be calculated
+    // dynamically.
+    this.fontSize = options.fontSize || 138;
   }
 
-  this.height = parseInt(options.height, 10) || 100;
+  // eslint-disable-next-line max-params
+  draw = (extCtx, targetHeight, targetWidth, x, y, color) => {
+    const hRatio = targetHeight / this.height;
+    const wRatio = targetWidth / this.width;
+    const prevFont = extCtx.font;
+    extCtx.transform(wRatio, 0, 0, hRatio, x, y);
+    extCtx.fillStyle = color || this.color;
+    extCtx.textAlign = 'center';
+    extCtx.font = `bold ${this.fontSize}px Arial`;
 
-  this.color = options.color || '#000000';
-  // if the height and width are changed from the default, then
-  // this will also need to be changed as it cant be calculated
-  // dynamically.
-  this.fontSize = options.fontSize || 138;
-
-  this.scaled = function() {};
-
-  this.draw = function(ext_ctx, target_height, target_width, x, y, color) {
-    let h_ratio = target_height / this.height,
-      w_ratio = target_width / this.width,
-      prev_font = ext_ctx.font;
-    ext_ctx.transform(w_ratio, 0, 0, h_ratio, x, y);
-    ext_ctx.fillStyle = color || this.color;
-    ext_ctx.textAlign = 'center';
-    ext_ctx.font = `bold ${this.fontSize}px Arial`;
-
-    ext_ctx.fillText(this.value, 0, 0);
+    extCtx.fillText(this.value, 0, 0);
     // restore the canvas settings
-    ext_ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ext_ctx.fillStyle = '#000000';
-    ext_ctx.font = prev_font;
+    extCtx.setTransform(1, 0, 0, 1, 0, 0);
+    extCtx.fillStyle = '#000000';
+    extCtx.font = prevFont;
   };
 }
 
-function ConsensusColors() {
+const ConsensusColors = function() {
   this.grey = '#7a7a7a';
 
-  function arbitrate(threshold, scoreref) {
-    let bestclass = '.',
-      bestscore = 0,
-      type = null,
-      a = null,
-      b = null,
-      classSize = {
-        '.': 20,
-        h: 11,
-        '+': 3,
-        '-': 2,
-        o: 2,
-        p: 2,
-      };
+  // eslint-disable-next-line max-statements
+  const arbitrate = (threshold, scoreref) => {
+    let bestclass = '.';
+    let bestscore = 0;
+    let a = null;
+    let b = null;
+    const classSize = {
+      '.': 20,
+      h: 11,
+      '+': 3,
+      '-': 2,
+      o: 2,
+      p: 2,
+    };
 
-    for (type in scoreref) {
-      if (scoreref.hasOwnProperty(type)) {
-        if (scoreref[type] >= threshold) {
-          a = classSize[type] || 1;
-          b = classSize[bestclass] || 1;
+    for (const [type, score] of Object.entries(scoreref)) {
+      if (score >= threshold) {
+        a = classSize[type] || 1;
+        b = classSize[bestclass] || 1;
 
-          if (a < b) {
+        if (a < b) {
+          bestclass = type;
+          bestscore = score;
+        } else if (a === b) {
+          if (score > bestscore) {
             bestclass = type;
             bestscore = scoreref[type];
-          } else if (a === b) {
-            if (scoreref[type] > bestscore) {
-              bestclass = type;
-              bestscore = scoreref[type];
-            }
           }
         }
       }
     }
     return bestclass;
-  }
+  };
 
   this.check_PG = function(pos, consensuses, colorsRef) {
-    colorsRef[pos].P = '#ffff11';
+    colorsRef[pos].P = '#ff1';
     colorsRef[pos].G = '#ff7f11';
     return 1;
   };
@@ -118,12 +92,11 @@ function ConsensusColors() {
   this.check_R = function(pos, consensuses, colorsRef) {
     colorsRef[pos].R = this.grey;
 
-    let red = '#FF9999',
-      letters = ['Q', 'K', 'R'],
-      i = 0;
+    const red = '#F99';
+    const letters = ['Q', 'K', 'R'];
 
-    for (i = 0; i < letters.length; i++) {
-      if (consensuses['0.85'][pos] === letters[i]) {
+    for (const letter of letters) {
+      if (consensuses['0.85'][pos] === letter) {
         colorsRef[pos].R = red;
         return 1;
       }
@@ -143,9 +116,8 @@ function ConsensusColors() {
   this.check_Q = function(pos, consensuses, colorsRef) {
     colorsRef[pos].Q = this.grey;
 
-    let green = '#99FF99',
-      letters = ['Q', 'T', 'K', 'R'],
-      i = 0;
+    const green = '#9F9';
+    const letters = ['Q', 'T', 'K', 'R'];
 
     if (
       consensuses['0.50'][pos] === 'b' ||
@@ -156,8 +128,8 @@ function ConsensusColors() {
       return 1;
     }
 
-    for (i = 0; i < letters.length; i++) {
-      if (consensuses['0.85'][pos] === letters[i]) {
+    for (const letter of letters) {
+      if (consensuses['0.85'][pos] === letter) {
         colorsRef[pos].Q = green;
         return 1;
       }
@@ -178,7 +150,7 @@ function ConsensusColors() {
   this.check_N = function(pos, consensuses, colorsRef) {
     colorsRef[pos].N = this.grey;
 
-    const green = '#99FF99';
+    const green = '#9F9';
 
     if (consensuses['0.50'][pos] === 'N') {
       colorsRef[pos].N = green;
@@ -196,9 +168,8 @@ function ConsensusColors() {
   this.check_K = function(pos, consensuses, colorsRef) {
     colorsRef[pos].K = this.grey;
 
-    let red = '#FF9999',
-      letters = ['K', 'R', 'Q'],
-      i = 0;
+    const red = '#F99';
+    const letters = ['K', 'R', 'Q'];
 
     if (
       consensuses['0.60'][pos] === '+' ||
@@ -209,8 +180,8 @@ function ConsensusColors() {
       return 1;
     }
 
-    for (i = 0; i < letters.length; i++) {
-      if (consensuses['0.85'][pos] === letters[i]) {
+    for (const letter of letters) {
+      if (consensuses['0.85'][pos] === letter) {
         colorsRef[pos].K = red;
         return 1;
       }
@@ -221,9 +192,8 @@ function ConsensusColors() {
   this.check_E = function(pos, consensuses, colorsRef) {
     colorsRef[pos].E = this.grey;
 
-    let red = '#FF9999',
-      letters = ['D', 'E'],
-      i = 0;
+    const red = '#F99';
+    const letters = ['D', 'E'];
 
     if (
       consensuses['0.60'][pos] === '+' ||
@@ -234,8 +204,8 @@ function ConsensusColors() {
       return 1;
     }
 
-    for (i = 0; i < letters.length; i++) {
-      if (consensuses['0.85'][pos] === letters[i]) {
+    for (const letter of letters) {
+      if (consensuses['0.85'][pos] === letter) {
         colorsRef[pos].E = red;
         return 1;
       }
@@ -256,9 +226,8 @@ function ConsensusColors() {
   this.check_D = function(pos, consensuses, colorsRef) {
     colorsRef[pos].D = this.grey;
 
-    let red = '#FF9999',
-      letters = ['D', 'E', 'N'],
-      i = 0;
+    const red = '#F99';
+    const letters = ['D', 'E', 'N'];
 
     if (
       consensuses['0.60'][pos] === '+' ||
@@ -269,8 +238,8 @@ function ConsensusColors() {
       return 1;
     }
 
-    for (i = 0; i < letters.length; i++) {
-      if (consensuses['0.85'][pos] === letters[i]) {
+    for (const letter of letters) {
+      if (consensuses['0.85'][pos] === letter) {
         colorsRef[pos].D = red;
         return 1;
       }
@@ -289,16 +258,28 @@ function ConsensusColors() {
   };
 
   this.check_ACFILMVW = function(pos, consensuses, colorsRef) {
-    let aa = ['A', 'C', 'F', 'L', 'I', 'M', 'V', 'W'],
-      caa = ['A', 'C', 'F', 'H', 'I', 'L', 'M', 'V', 'W', 'Y', 'P', 'Q', 'h'],
-      i = 0,
-      j = 0;
+    const aa = ['A', 'C', 'F', 'L', 'I', 'M', 'V', 'W'];
+    const caa = [
+      'A',
+      'C',
+      'F',
+      'H',
+      'I',
+      'L',
+      'M',
+      'V',
+      'W',
+      'Y',
+      'P',
+      'Q',
+      'h',
+    ];
 
-    for (i = 0; i < aa.length; i++) {
-      colorsRef[pos][aa[i]] = this.grey;
-      for (j = 0; j < caa.length; j++) {
-        if (consensuses['0.60'][pos] === caa[j]) {
-          colorsRef[pos][aa[i]] = '#9999FF';
+    for (const aaLetter of aa) {
+      colorsRef[pos][aaLetter] = this.grey;
+      for (const cssLetter of caa) {
+        if (consensuses['0.60'][pos] === cssLetter) {
+          colorsRef[pos][aaLetter] = '#99F';
         }
       }
     }
@@ -309,23 +290,35 @@ function ConsensusColors() {
     colorsRef[pos].S = this.grey;
     colorsRef[pos].T = this.grey;
 
-    let letters = ['A', 'C', 'F', 'H', 'I', 'L', 'M', 'V', 'W', 'Y', 'P', 'Q'],
-      i = 0;
+    const letters = [
+      'A',
+      'C',
+      'F',
+      'H',
+      'I',
+      'L',
+      'M',
+      'V',
+      'W',
+      'Y',
+      'P',
+      'Q',
+    ];
 
     if (
       consensuses['0.50'][pos] === 'a' ||
       consensuses['0.50'][pos] === 'S' ||
       consensuses['0.50'][pos] === 'T'
     ) {
-      colorsRef[pos].S = '#99FF99';
-      colorsRef[pos].T = '#99FF99';
+      colorsRef[pos].S = '#9F9';
+      colorsRef[pos].T = '#9F9';
       return 1;
     }
 
-    for (i = 0; i < letters.length; i++) {
-      if (consensuses['0.85'][pos] === letters[i]) {
-        colorsRef[pos].S = '#99FF99';
-        colorsRef[pos].T = '#99FF99';
+    for (const letter of letters) {
+      if (consensuses['0.85'][pos] === letter) {
+        colorsRef[pos].S = '#9F9';
+        colorsRef[pos].T = '#9F9';
         return 1;
       }
     }
@@ -335,23 +328,22 @@ function ConsensusColors() {
     colorsRef[pos].H = this.grey;
     colorsRef[pos].Y = this.grey;
 
-    let letters = [
-        'A',
-        'C',
-        'F',
-        'H',
-        'I',
-        'L',
-        'M',
-        'V',
-        'W',
-        'Y',
-        'P',
-        'Q',
-        'h',
-      ],
-      i = 0,
-      cyan = '#99FFFF';
+    const letters = [
+      'A',
+      'C',
+      'F',
+      'H',
+      'I',
+      'L',
+      'M',
+      'V',
+      'W',
+      'Y',
+      'P',
+      'Q',
+      'h',
+    ];
+    const cyan = '#9FF';
 
     if (consensuses['0.60'][pos] === 'h') {
       colorsRef[pos].H = cyan;
@@ -359,8 +351,8 @@ function ConsensusColors() {
       return 1;
     }
 
-    for (i = 0; i < letters.length; i++) {
-      if (consensuses[0.85][pos] === letters[i]) {
+    for (const letter of letters) {
+      if (consensuses[0.85][pos] === letter) {
         colorsRef[pos].H = cyan;
         colorsRef[pos].Y = cyan;
         return 1;
@@ -370,41 +362,34 @@ function ConsensusColors() {
     return 1;
   };
 
-  this.color_map = function(probs_array) {
-    let thresholds = ['0.50', '0.60', '0.80', '0.85'],
-      hydro = {
-        W: 1,
-        L: 1,
-        V: 1,
-        I: 1,
-        M: 1,
-        A: 1,
-        F: 1,
-        C: 1,
-        Y: 1,
-        H: 1,
-        P: 1,
-      },
-      polar = { Q: 1, N: 1 },
-      positive = { K: 1, R: 1, H: 1 },
-      alcohol = { S: 1, T: 1 },
-      negative = { E: 1, D: 1 },
-      cons = {},
-      colors = [],
-      i = 0,
-      c = 0,
-      t = 0,
-      a = 0,
-      aa = [],
-      column = null,
-      score = {},
-      consensusCol = null,
-      threshold = null;
+  // eslint-disable-next-line complexity, max-statements
+  this.color_map = function(probsArray) {
+    const thresholds = ['0.50', '0.60', '0.80', '0.85'];
+    const hydro = {
+      W: 1,
+      L: 1,
+      V: 1,
+      I: 1,
+      M: 1,
+      A: 1,
+      F: 1,
+      C: 1,
+      Y: 1,
+      H: 1,
+      P: 1,
+    };
+    const polar = { Q: 1, N: 1 };
+    const positive = { K: 1, R: 1, H: 1 };
+    const alcohol = { S: 1, T: 1 };
+    const negative = { E: 1, D: 1 };
+    const cons = {};
+    const colors = [];
+    let aa = [];
+    let score = {};
+    let consensusCol = null;
 
-    for (c = 0; c < probs_array.length; c++) {
-      column = probs_array[c];
-      for (t = 0; t < thresholds.length; t++) {
-        threshold = thresholds[t];
+    for (const column of probsArray) {
+      for (const threshold of thresholds) {
         score = {
           p: 0,
           o: 0,
@@ -412,9 +397,8 @@ function ConsensusColors() {
           '+': 0,
           h: 0,
         };
-        for (a = 0; a < column.length; a++) {
-          aa = [];
-          aa = column[a].split(':');
+        for (const _aa of column) {
+          aa = _aa.split(':');
           score[aa[0]] = parseFloat(aa[1], 10);
           if (polar[aa[0]]) {
             score.p += parseFloat(aa[1], 10);
@@ -447,7 +431,7 @@ function ConsensusColors() {
       }
     }
 
-    for (i = 0; i < probs_array.length; i++) {
+    for (let i = 0; i < probsArray.length; i++) {
       colors[i] = {};
       this.check_D(i, cons, colors);
       this.check_R(i, cons, colors);
@@ -465,11 +449,10 @@ function ConsensusColors() {
 
     return colors;
   };
-}
+};
 
-function HMMLogo(element, options) {
-  options = options || {};
-
+// eslint-disable-next-line complexity, max-statements
+const HMMLogo = function(element, options = {}) {
   this.column_width = options.column_width || 34;
   this.height = options.height || 300;
   this.data = options.data || null;
@@ -527,26 +510,26 @@ function HMMLogo(element, options) {
   };
 
   this.aa_colors = {
-    A: '#FF9966',
-    C: '#009999',
-    D: '#FF0000',
-    E: '#CC0033',
-    F: '#00FF00',
+    A: '#F96',
+    C: '#099',
+    D: '#F00',
+    E: '#C03',
+    F: '#0F0',
     G: '#f2f20c',
-    H: '#660033',
-    I: '#CC9933',
-    K: '#663300',
-    L: '#FF9933',
-    M: '#CC99CC',
-    N: '#336666',
-    P: '#0099FF',
-    Q: '#6666CC',
-    R: '#990000',
-    S: '#0000FF',
-    T: '#00FFFF',
-    V: '#FFCC33',
-    W: '#66CC66',
-    Y: '#006600',
+    H: '#603',
+    I: '#C93',
+    K: '#630',
+    L: '#F93',
+    M: '#C9C',
+    N: '#366',
+    P: '#09F',
+    Q: '#66C',
+    R: '#900',
+    S: '#00F',
+    T: '#0FF',
+    V: '#FC3',
+    W: '#6C6',
+    Y: '#060',
   };
 
   // set the color library to use.
@@ -558,16 +541,16 @@ function HMMLogo(element, options) {
 
   this.canvas_width = 5000;
 
-  let letter = null,
-    probs_arr = null,
-    loptions = null,
-    cc = null;
+  let letter = null;
+  let probsArr = null;
+  let loptions = null;
+  let cc = null;
 
   if (this.alphabet === 'aa') {
-    probs_arr = this.data.probs_arr;
-    if (probs_arr) {
+    probsArr = this.data.probs_arr;
+    if (probsArr) {
       cc = new ConsensusColors();
-      this.cmap = cc.color_map(probs_arr);
+      this.cmap = cc.color_map(probsArr);
     }
   }
 
@@ -590,262 +573,242 @@ function HMMLogo(element, options) {
   this.rendered = [];
   this.previous_zoom = 0;
 
-  function draw_small_insert(
+  // eslint-disable-next-line complexity, max-statements, max-params
+  const drawSmallInsert = (
     context,
     x,
     y,
-    col_width,
-    in_odds,
-    in_length,
-    del_odds,
-    show_inserts,
-  ) {
-    let fill = '#ffffff';
-    if (show_inserts) {
-      if (in_odds > 0.1) {
+    colWidth,
+    inOdds,
+    inLength,
+    delOdds,
+    showInserts
+  ) => {
+    let fill = '#fff';
+    if (showInserts) {
+      if (inOdds > 0.1) {
         fill = '#d7301f';
-      } else if (in_odds > 0.05) {
+      } else if (inOdds > 0.05) {
         fill = '#fc8d59';
-      } else if (in_odds > 0.03) {
+      } else if (inOdds > 0.03) {
         fill = '#fdcc8a';
       }
       context.fillStyle = fill;
-      context.fillRect(x, y + 15, col_width, 10);
+      context.fillRect(x, y + 15, colWidth, 10);
 
-      fill = '#ffffff';
+      fill = '#fff';
       // draw insert length
-      if (in_length > 9) {
+      if (inLength > 9) {
         fill = '#d7301f';
-      } else if (in_length > 7) {
+      } else if (inLength > 7) {
         fill = '#fc8d59';
-      } else if (in_length > 4) {
+      } else if (inLength > 4) {
         fill = '#fdcc8a';
       }
       context.fillStyle = fill;
-      context.fillRect(x, y + 30, col_width, 10);
+      context.fillRect(x, y + 30, colWidth, 10);
     } else {
       y += 30;
     }
 
-    fill = '#ffffff';
+    fill = '#fff';
     // draw delete odds
-    if (del_odds < 0.75) {
+    if (delOdds < 0.75) {
       fill = '#2171b5';
-    } else if (del_odds < 0.85) {
+    } else if (delOdds < 0.85) {
       fill = '#6baed6';
-    } else if (del_odds < 0.95) {
+    } else if (delOdds < 0.95) {
       fill = '#bdd7e7';
     }
     context.fillStyle = fill;
-    context.fillRect(x, y, col_width, 10);
-  }
+    context.fillRect(x, y, colWidth, 10);
+  };
 
-  function draw_border(context, y, width) {
+  const drawBorder = (context, y, width) => {
     context.beginPath();
     context.moveTo(0, y);
     context.lineTo(width, y);
     context.lineWidth = 1;
-    context.strokeStyle = '#999999';
+    context.strokeStyle = '#999';
     context.stroke();
-  }
+  };
 
-  function draw_ticks(context, x, y, height, color) {
-    color = color || '#999999';
+  const drawTicks = (context, x, y, height, color) => {
+    color = color || '#999';
     context.beginPath();
     context.moveTo(x, y);
     context.lineTo(x, y + height);
     context.lineWidth = 1;
     context.strokeStyle = color;
     context.stroke();
-  }
-  function draw_box(context, x, y, col_width, color, border) {
-    color = color || 'rgba(100,100,100, 0.2)';
-    border = border || 'rgba(100,100,100, 0.8)';
+  };
+
+  // eslint-disable-next-line max-params
+  const drawBox = (context, x, y, colWidth, color, border) => {
+    color = color || 'rgba(100, 100, 100, 0.2)';
+    border = border || 'rgba(100, 100, 100, 0.8)';
     context.fillStyle = color;
     context.strokeStyle = border;
-    context.fillRect(x, y, col_width, feature_height);
-    context.strokeRect(x, y, col_width, feature_height);
-  }
-  function draw_line(context, x1, y1, x2, y2, color) {
-    color = color || 'rgba(100,100,100, 0.8)';
+    context.fillRect(x, y, colWidth, FEATURE_HEIGHT);
+    context.strokeRect(x, y, colWidth, FEATURE_HEIGHT);
+  };
+
+  // eslint-disable-next-line max-params
+  const drawLine = (context, x1, y1, x2, y2, color) => {
+    color = color || 'rgba(100, 100, 100, 0.8)';
     context.beginPath();
     context.moveTo(x1, y1);
     context.lineTo(x2, y2);
     context.lineWidth = 1;
     context.strokeStyle = color;
     context.stroke();
-  }
+  };
 
-  function draw_rect_with_text(
+  // eslint-disable-next-line max-params
+  const drawRectWithText = (
     context,
     x,
     y,
     text,
     fontsize,
-    col_width,
+    colWidth,
     fill,
-    textfill,
-  ) {
+    textfill
+  ) => {
     context.font = `${fontsize}px Arial`;
     context.fillStyle = fill;
-    context.fillRect(x, y - 10, col_width, 14);
+    context.fillRect(x, y - 10, colWidth, 14);
     context.textAlign = 'center';
     context.fillStyle = textfill;
-    context.fillText(text, x + col_width / 2, y);
-  }
+    context.fillText(text, x + colWidth / 2, y);
+  };
 
-  function draw_insert_odds(context, x, height, col_width, text, fontsize) {
-    let y = height - 20,
-      fill = '#ffffff',
-      textfill = '#555555';
+  // eslint-disable-next-line max-params
+  const drawInsertOdds = (context, x, height, colWidth, text, fontsize) => {
+    const y = height - 20;
+    let fill = '#fff';
+    let textfill = '#555';
 
     if (text > 0.1) {
       fill = '#d7301f';
-      textfill = '#ffffff';
+      textfill = '#fff';
     } else if (text > 0.05) {
       fill = '#fc8d59';
     } else if (text > 0.03) {
       fill = '#fdcc8a';
     }
 
-    draw_rect_with_text(
-      context,
-      x,
-      y,
-      text,
-      fontsize,
-      col_width,
-      fill,
-      textfill,
-    );
+    drawRectWithText(context, x, y, text, fontsize, colWidth, fill, textfill);
 
     // draw vertical line to indicate where the insert would occur
     if (text > 0.03) {
-      draw_ticks(context, x + col_width, height - 30, -30 - height, fill);
+      drawTicks(context, x + colWidth, height - 30, -30 - height, fill);
     }
-  }
+  };
 
-  function draw_insert_length(context, x, y, col_width, text, fontsize) {
-    let fill = '#ffffff',
-      textfill = '#555555';
+  // eslint-disable-next-line max-params
+  const drawInsertLength = (context, x, y, colWidth, text, fontsize) => {
+    let fill = '#fff';
+    let textfill = '#555';
 
     if (text > 9) {
       fill = '#d7301f';
-      textfill = '#ffffff';
+      textfill = '#fff';
     } else if (text > 7) {
       fill = '#fc8d59';
     } else if (text > 4) {
       fill = '#fdcc8a';
     }
-    draw_rect_with_text(
-      context,
-      x,
-      y,
-      text,
-      fontsize,
-      col_width,
-      fill,
-      textfill,
-    );
-  }
+    drawRectWithText(context, x, y, text, fontsize, colWidth, fill, textfill);
+  };
 
-  function draw_delete_odds(
+  // eslint-disable-next-line max-params
+  const drawDeleteOdds = (
     context,
     x,
     height,
-    col_width,
+    colWidth,
     text,
     fontsize,
-    show_inserts,
-  ) {
-    let y = height - 4,
-      fill = '#ffffff',
-      textfill = '#555555';
+    showInserts
+  ) => {
+    let y = height - 4;
+    let fill = '#fff';
+    let textfill = '#555';
 
-    if (show_inserts) {
+    if (showInserts) {
       y = height - 35;
     }
 
     if (text < 0.75) {
       fill = '#2171b5';
-      textfill = '#ffffff';
+      textfill = '#fff';
     } else if (text < 0.85) {
       fill = '#6baed6';
     } else if (text < 0.95) {
       fill = '#bdd7e7';
     }
 
-    draw_rect_with_text(
-      context,
-      x,
-      y,
-      text,
-      fontsize,
-      col_width,
-      fill,
-      textfill,
-    );
-  }
+    drawRectWithText(context, x, y, text, fontsize, colWidth, fill, textfill);
+  };
 
-  function draw_column_number(
+  // eslint-disable-next-line max-params
+  const drawColumnNumber = (
     context,
     x,
     y,
-    col_width,
-    col_num,
+    colWidth,
+    colNum,
     fontsize,
-    right,
-  ) {
+    right
+  ) => {
     context.font = `${fontsize}px Arial`;
     context.textAlign = right ? 'right' : 'center';
-    context.fillStyle = '#666666';
-    context.fillText(col_num, x + col_width / 2, y);
-  }
+    context.fillStyle = '#666';
+    context.fillText(colNum, x + colWidth / 2, y);
+  };
 
-  function attach_canvas(DOMid, height, width, id, canv_width) {
+  const attachCanvas = (DOMid, height, width, id, canvWidth) => {
     let canvas = DOMid.querySelector(`#canv_${id}`);
 
     if (!canvas) {
       canvas = document.createElement('canvas');
       canvas.id = `canv_${id}`;
       canvas.classList.add(styles.canvas_logo);
-      canvas.style.left = `${canv_width * id}px`;
+      canvas.style.left = `${canvWidth * id}px`;
       canvas.setAttribute('width', width);
       canvas.setAttribute('height', height);
 
-      $(DOMid).append(
-        `<canvas className=${styles.canvas_logo} id="canv_${id}"  height="${height}" width="${width}" style="left:${canv_width *
-          id}px"></canvas>`,
-      );
+      DOMid.innerHTML = `
+        <canvas
+          className=${styles.canvas_logo}
+          id="canv_${id}"
+          height="${height}"
+          width="${width}"
+          style="left: ${canvWidth * id}px;"
+        ></canvas>
+      `;
 
-      //DOMid.appendChild(canvas); //TODO remove the final reference to jquery above
+      // DOMid.appendChild(canvas); //TODO remove the final reference to jquery above
       canvas = DOMid.querySelector(`#canv_${id}`);
     }
 
     canvas.setAttribute('width', width);
     canvas.setAttribute('height', height);
 
-    if (!canvasSupport()) {
-      canvas = G_vmlCanvasManager.initElement(canvas);
-    }
-
     return canvas;
-  }
+  };
 
   // the main render function that draws the logo based on the provided options.
-  this.render = function(options) {
-    if (!this.data) {
-      return;
-    }
-    options = options || {};
-    let zoom = options.zoom || this.zoom,
-      target = options.target || 1,
-      scaled = options.scaled || null,
-      parent_width = this.dom_element.parentNode.clientWidth,
-      max_canvas_width = 1,
-      end = null,
-      start = null,
-      i = 0;
+  // eslint-disable-next-line complexity, max-statements
+  this.render = function(options = {}) {
+    if (!this.data) return;
+    let zoom = options.zoom || this.zoom;
+    let target = options.target || 1;
+    const parentWidth = this.dom_element.parentNode.clientWidth;
+    let maxCanvasWidth = 1;
+    let end = null;
+    let start = null;
 
     /*
     TODO not sure about what the behaviour this section is intended to achieve
@@ -883,7 +846,7 @@ function HMMLogo(element, options) {
     // Check to see if the logo will fit on the screen at full zoom.
     this.max_width = this.column_width * (end - start + 1);
     // If it fits then zoom out and disable zooming.
-    if (parent_width > this.max_width) {
+    if (parentWidth > this.max_width) {
       zoom = 1;
       this.zoom_enabled = false;
     }
@@ -896,7 +859,7 @@ function HMMLogo(element, options) {
     // then ramp up the zoom level until it fits, then disable zooming.
     // Then we get a decent logo with out needing to zoom in or out.
     if (zoom < 1) {
-      while (this.total_width < parent_width) {
+      while (this.total_width < parentWidth) {
         this.zoom += 0.1;
         this.zoomed_column = this.column_width * this.zoom;
         this.total_width = this.zoomed_column * (end - start + 1);
@@ -913,12 +876,12 @@ function HMMLogo(element, options) {
     this.dom_element.setAttribute('width', this.total_width);
     this.dom_element.style.width = this.total_width;
 
-    const canvas_count = Math.ceil(this.total_width / this.canvas_width);
+    const canvasCount = Math.ceil(this.total_width / this.canvas_width);
     this.columns_per_canvas = Math.ceil(this.canvas_width / this.zoomed_column);
 
     if (this.previous_zoom !== this.zoom) {
-      for (let canvasElement of this.dom_element.getElementsByTagName(
-        'canvas',
+      for (const canvasElement of this.dom_element.getElementsByTagName(
+        'canvas'
       )) {
         canvasElement.remove();
       }
@@ -929,50 +892,50 @@ function HMMLogo(element, options) {
     this.canvases = [];
     this.contexts = [];
 
-    for (i = 0; i < canvas_count; i++) {
-      let split_start = this.columns_per_canvas * i + start,
-        split_end = split_start + this.columns_per_canvas - 1;
-      if (split_end > end) {
-        split_end = end;
+    for (let i = 0; i < canvasCount; i++) {
+      const splitStart = this.columns_per_canvas * i + start;
+      let splitEnd = splitStart + this.columns_per_canvas - 1;
+      if (splitEnd > end) {
+        splitEnd = end;
       }
 
-      const adjusted_width = (split_end - split_start + 1) * this.zoomed_column;
+      const adjustedWidth = (splitEnd - splitStart + 1) * this.zoomed_column;
 
-      if (adjusted_width > max_canvas_width) {
-        max_canvas_width = adjusted_width;
+      if (adjustedWidth > maxCanvasWidth) {
+        maxCanvasWidth = adjustedWidth;
       }
 
-      let canv_start = max_canvas_width * i,
-        canv_end = canv_start + adjusted_width;
+      const canvStart = maxCanvasWidth * i;
+      const canvEnd = canvStart + adjustedWidth;
 
       if (
-        target < canv_end + canv_end / 2 &&
-        target > canv_start - canv_start / 2
+        target < canvEnd + canvEnd / 2 &&
+        target > canvStart - canvStart / 2
       ) {
         // Check that we aren't redrawing the canvas and if not, then attach it and draw.
         if (this.rendered[i] !== 1) {
-          this.canvases[i] = attach_canvas(
+          this.canvases[i] = attachCanvas(
             this.dom_element,
             this.height,
-            adjusted_width,
+            adjustedWidth,
             i,
-            max_canvas_width,
+            maxCanvasWidth
           );
           this.contexts[i] = this.canvases[i].getContext('2d');
           this.contexts[i].setTransform(1, 0, 0, 1, 0, 0);
-          this.contexts[i].clearRect(0, 0, adjusted_width, this.height);
+          this.contexts[i].clearRect(0, 0, adjustedWidth, this.height);
           this.contexts[i].fillStyle = '#ffffff';
-          this.contexts[i].fillRect(0, 0, canv_end, this.height);
+          this.contexts[i].fillRect(0, 0, canvEnd, this.height);
 
           if (this.zoomed_column > 12) {
             let fontsize = parseInt(10 * zoom, 10);
             fontsize = fontsize > 10 ? 10 : fontsize;
             if (this.debug) {
-              this.render_with_rects(split_start, split_end, i, 1);
+              this.render_with_rects(splitStart, splitEnd, i, 1);
             }
-            this.render_with_text(split_start, split_end, i, fontsize);
+            this.render_with_text(splitStart, splitEnd, i, fontsize);
           } else {
-            this.render_with_rects(split_start, split_end, i);
+            this.render_with_rects(splitStart, splitEnd, i);
           }
           this.rendered[i] = 1;
         }
@@ -986,22 +949,17 @@ function HMMLogo(element, options) {
     // beginning the first time it is scrolled, because it thinks it has a
     // width of 0.
     if (!this.scrollme) {
-      if (canvasSupport()) {
-        let logo_graphic = this.called_on.getElementsByClassName(
-          styles.logo_graphic,
-        )[0];
-        this.scrollme = new EasyScroller(logo_graphic, {
-          scrollingX: 1,
-          scrollingY: 0,
-          eventTarget: this.called_on,
-        });
-      }
+      const logoGraphic = this.called_on.getElementsByClassName(
+        styles.logo_graphic
+      )[0];
+      this.scrollme = new EasyScroller(logoGraphic, {
+        scrollingX: 1,
+        scrollingY: 0,
+        eventTarget: this.called_on,
+      });
     }
 
-    if (target !== 1 && canvasSupport()) {
-      this.scrollme.reflow();
-    }
-    return;
+    if (target !== 1) this.scrollme.reflow();
   };
 
   this.render_x_axis_label = function() {
@@ -1010,50 +968,42 @@ function HMMLogo(element, options) {
       label = 'Alignment Column';
     }
 
-    for (let xElement of this.called_on.getElementsByClassName(
-      styles.logo_xaxis,
+    for (const xElement of this.called_on.getElementsByClassName(
+      styles.logo_xaxis
     )) {
       xElement.remove();
     }
-    let axisDiv = document.createElement('div');
+    const axisDiv = document.createElement('div');
     axisDiv.classList.add(styles.logo_xaxis);
-    let axisP = document.createElement('p');
+    const axisP = document.createElement('p');
     axisP.classList.add(styles.xaxis_text);
     axisP.innerHTML = label;
     axisDiv.appendChild(axisP);
     this.called_on.insertBefore(
       axisDiv,
-      this.called_on.getElementsByClassName(styles.logo_container)[0],
+      this.called_on.getElementsByClassName(styles.logo_container)[0]
     );
   };
 
+  // eslint-disable-next-line max-statements
   this.render_y_axis_label = function() {
     // attach a canvas for the y-axis
-    for (let yElement of this.called_on.getElementsByClassName(
-      styles.logo_yaxis,
+    for (const yElement of this.called_on.getElementsByClassName(
+      styles.logo_yaxis
     )) {
       yElement.remove();
     }
 
-    for (let xAxis of this.called_on.getElementsByClassName(
-      styles.logo_xaxis,
+    for (const xAxis of this.called_on.getElementsByClassName(
+      styles.logo_xaxis
     )) {
-      let canvas = document.createElement('canvas');
+      const canvas = document.createElement('canvas');
       canvas.classList.add(styles.logo_yaxis);
       canvas.height = 302;
       canvas.width = 55;
       xAxis.appendChild(canvas);
-      let top_pix_height = 0,
-        bottom_pix_height = 0,
-        top_height = Math.abs(this.data.max_height),
-        bottom_height = isNaN(this.data.min_height_obs)
-          ? 0
-          : parseInt(this.data.min_height_obs, 10),
-        context = null,
-        axis_label = 'Information Content (bits)';
-      if (!canvasSupport()) {
-        canvas = G_vmlCanvasManager.initElement(canvas);
-      }
+      let context = null;
+      let axisLabel = 'Information Content (bits)';
 
       context = canvas.getContext('2d');
       // draw min/max tick marks
@@ -1067,11 +1017,11 @@ function HMMLogo(element, options) {
       context.moveTo(55, this.info_content_height / 2);
       context.lineTo(40, this.info_content_height / 2);
       context.lineWidth = 1;
-      context.strokeStyle = '#666666';
+      context.strokeStyle = '#666';
       context.stroke();
 
       // draw the label text
-      context.fillStyle = '#666666';
+      context.fillStyle = '#666';
       context.textAlign = 'right';
       context.font = 'bold 10px Arial';
 
@@ -1084,14 +1034,14 @@ function HMMLogo(element, options) {
       context.fillText(
         parseFloat(this.data.max_height / 2).toFixed(1),
         38,
-        this.info_content_height / 2,
+        this.info_content_height / 2
       );
       // draw the min label
       context.fillText('0', 38, this.info_content_height);
 
       // draw the axis label
       if (this.data.height_calc === 'score') {
-        axis_label = 'Score (bits)';
+        axisLabel = 'Score (bits)';
       }
 
       context.save();
@@ -1099,7 +1049,7 @@ function HMMLogo(element, options) {
       context.rotate(-Math.PI / 2);
       context.textAlign = 'center';
       context.font = 'normal 12px Arial';
-      context.fillText(axis_label, 1, 0);
+      context.fillText(axisLabel, 1, 0);
       context.restore();
 
       // draw the insert row labels
@@ -1114,101 +1064,75 @@ function HMMLogo(element, options) {
   this.render_x_axis_label();
   this.render_y_axis_label();
 
-  this.render_with_text = function(start, end, context_num, fontsize) {
-    let x = 0,
-      column_num = start,
-      column_label = null,
-      i = 0,
-      top_height = Math.abs(this.data.max_height),
-      bottom_height = isNaN(this.data.min_height_obs)
-        ? 0
-        : parseInt(this.data.min_height_obs, 10),
-      total_height = top_height + Math.abs(bottom_height),
-      top_percentage = Math.round(
-        Math.abs(this.data.max_height) * 100 / total_height,
-      ),
-      // convert % to pixels
-      top_pix_height = Math.round(
-        this.info_content_height * top_percentage / 100,
-      ),
-      bottom_pix_height = this.info_content_height - top_pix_height,
-      // this is used to transform the 256px high letters into the correct size
-      // when displaying negative values, so that they fit above the 0 line.
-      top_pix_conversion = top_pix_height / this.info_content_height,
-      bottom_pix_conversion = bottom_pix_height / this.info_content_height;
+  // eslint-disable-next-line complexity, max-statements
+  this.render_with_text = function(start, end, contextNum, fontsize) {
+    let x = 0;
+    let columnNum = start;
+    let columnLabel = null;
 
-    // add 3 extra columns so that numbers don't get clipped at the end of a canvas
-    // that ends before a large column. DF0000830 was suffering at zoom level 0.6,
-    // column 2215. This adds a little extra overhead, but is the easiest fix for now.
+    // add 3 extra columns so that numbers don't get clipped at the end of a
+    // canvas that ends before a large column. DF0000830 was suffering at zoom
+    // level 0.6, column 2215. This adds a little extra overhead, but is the
+    // easiest fix for now.
     if (end + 3 <= this.end) {
       end += 3;
     }
 
-    for (i = start; i <= end; i++) {
+    for (let i = start; i <= end; i++) {
       if (this.data.mmline && this.data.mmline[i - 1] === 1) {
-        this.contexts[context_num].fillStyle = '#cccccc';
-        this.contexts[context_num].fillRect(
+        this.contexts[contextNum].fillStyle = '#cccccc';
+        this.contexts[contextNum].fillRect(
           x,
           10,
           this.zoomed_column,
-          this.height - 40,
+          this.height - 40
         );
       } else {
-        let column = this.data.height_arr[i - 1],
-          col_positions = [];
+        const column = this.data.height_arr[i - 1];
+        const colPositions = [];
         if (column) {
-          let previous_height = 0,
-            letters = column.length,
-            previous_neg_height = top_pix_height,
-            j = 0,
-            color = null;
+          let previousHeight = 0;
+          const letters = column.length;
+          let color = null;
 
-          for (j = 0; j < letters; j++) {
-            let letter = column[j],
-              values = letter.split(':', 2),
-              x_pos = x + this.zoomed_column / 2,
-              letter_height = null;
+          for (let j = 0; j < letters; j++) {
+            const letter = column[j];
+            const values = letter.split(':', 2);
+            const xPos = x + this.zoomed_column / 2;
+            let letterHeight = null;
 
             // we don't render anything with a value between 0 and 0.01. These
             // letters would be too small to be meaningful on any scale, so we
             // just squash them out.
+            // eslint-disable-next-line max-depth
             if (values[1] > 0.01) {
-              letter_height = parseFloat(values[1]) / this.data.max_height;
-              let y_pos = this.info_content_height - 2 - previous_height,
-                glyph_height = (this.info_content_height - 2) * letter_height;
+              letterHeight = parseFloat(values[1]) / this.data.max_height;
+              const yPos = this.info_content_height - 2 - previousHeight;
+              const glyphHeight = (this.info_content_height - 2) * letterHeight;
 
-              // The positioning in IE is off, so we need to modify the y_pos when
-              // canvas is not supported and we are using VML instead.
-              if (!canvasSupport()) {
-                y_pos += glyph_height * (letter_height / 2);
-              }
-
-              col_positions[j] = [
-                glyph_height,
-                this.zoomed_column,
-                x_pos,
-                y_pos,
-              ];
-              previous_height += glyph_height;
+              colPositions[j] = [glyphHeight, this.zoomed_column, xPos, yPos];
+              previousHeight += glyphHeight;
             }
           }
 
           // render the letters in reverse order so that the larger letters on the top
           // don't clobber the smaller letters below them.
-          for (j = letters; j >= 0; j--) {
-            if (col_positions[j] && this.letters[column[j][0]]) {
+          for (let j = letters; j >= 0; j--) {
+            // eslint-disable-next-line max-depth
+            if (colPositions[j] && this.letters[column[j][0]]) {
+              // eslint-disable-next-line max-depth
               if (this.colorscheme === 'consensus') {
                 color = this.cmap[i - 1][column[j][0]] || '#7a7a7a';
               } else {
                 color = null;
               }
               this.letters[column[j][0]].draw(
-                this.contexts[context_num],
-                col_positions[j][0],
-                col_positions[j][1],
-                col_positions[j][2],
-                col_positions[j][3],
-                color,
+                this.contexts[contextNum],
+                colPositions[j][0],
+                colPositions[j][1],
+                colPositions[j][2],
+                colPositions[j][3],
+                color
               );
             }
           }
@@ -1218,184 +1142,165 @@ function HMMLogo(element, options) {
       // if ali_coordinates exist and toggle is set then display the
       // alignment coordinates and not the model coordinates.
       if (this.display_ali_map) {
-        column_label = this.data.ali_map[i - 1];
+        columnLabel = this.data.ali_map[i - 1];
       } else {
-        column_label = column_num;
+        columnLabel = columnNum;
       }
 
       if (this.zoom < 0.7) {
         if (i % 5 === 0) {
           this.draw_column_divider({
-            context_num,
+            contextNum,
             x,
             fontsize: 10,
-            column_num: column_label,
+            column_num: columnLabel,
             ralign: true,
           });
         }
       } else {
         this.draw_column_divider({
-          context_num,
+          contextNum,
           x,
           fontsize,
-          column_num: column_label,
+          column_num: columnLabel,
         });
       }
 
-      draw_delete_odds(
-        this.contexts[context_num],
+      drawDeleteOdds(
+        this.contexts[contextNum],
         x,
         this.height,
         this.zoomed_column,
         this.data.delete_probs[i - 1],
         fontsize,
-        this.show_inserts,
+        this.show_inserts
       );
       // draw insert length ticks
-      draw_ticks(this.contexts[context_num], x, this.height - 15, 5);
+      drawTicks(this.contexts[contextNum], x, this.height - 15, 5);
       if (this.show_inserts) {
-        draw_insert_odds(
-          this.contexts[context_num],
+        drawInsertOdds(
+          this.contexts[contextNum],
           x,
           this.height,
           this.zoomed_column,
           this.data.insert_probs[i - 1],
-          fontsize,
+          fontsize
         );
-        draw_insert_length(
-          this.contexts[context_num],
+        drawInsertLength(
+          this.contexts[contextNum],
           x,
           this.height - 5,
           this.zoomed_column,
           this.data.insert_lengths[i - 1],
-          fontsize,
+          fontsize
         );
 
         // draw delete probability ticks
-        draw_ticks(this.contexts[context_num], x, this.height - 45, 5);
+        drawTicks(this.contexts[contextNum], x, this.height - 45, 5);
         // draw insert probability ticks
-        draw_ticks(this.contexts[context_num], x, this.height - 30, 5);
+        drawTicks(this.contexts[contextNum], x, this.height - 30, 5);
       }
 
       if (this.show_active_sites) {
-        this.render_active_sites(context_num, i, x);
+        this.render_active_sites(contextNum, i, x);
       }
 
       x += this.zoomed_column;
-      column_num++;
+      columnNum++;
     }
 
     // draw other dividers
     if (this.show_inserts) {
-      draw_border(
-        this.contexts[context_num],
-        this.height - 30,
-        this.total_width,
-      );
-      draw_border(
-        this.contexts[context_num],
-        this.height - 45,
-        this.total_width,
-      );
+      drawBorder(this.contexts[contextNum], this.height - 30, this.total_width);
+      drawBorder(this.contexts[contextNum], this.height - 45, this.total_width);
     }
-    draw_border(this.contexts[context_num], this.height - 15, this.total_width);
-    draw_border(this.contexts[context_num], 0, this.total_width);
+    drawBorder(this.contexts[contextNum], this.height - 15, this.total_width);
+    drawBorder(this.contexts[contextNum], 0, this.total_width);
   };
 
   this.draw_column_divider = function(opts) {
-    let div_x = opts.ralign ? opts.x + this.zoomed_column : opts.x,
-      num_x = opts.ralign ? opts.x + 2 : opts.x;
+    const divX = opts.ralign ? opts.x + this.zoomed_column : opts.x;
+    const numX = opts.ralign ? opts.x + 2 : opts.x;
     // draw column dividers
-    draw_ticks(
-      this.contexts[opts.context_num],
-      div_x,
+    drawTicks(
+      this.contexts[opts.contextNum],
+      divX,
       this.height - 30,
       -30 - this.height,
-      '#dddddd',
+      '#dddddd'
     );
     // draw top ticks
-    draw_ticks(this.contexts[opts.context_num], div_x, 0, 5);
+    drawTicks(this.contexts[opts.contextNum], divX, 0, 5);
     // draw column numbers
-    draw_column_number(
-      this.contexts[opts.context_num],
-      num_x,
+    drawColumnNumber(
+      this.contexts[opts.contextNum],
+      numX,
       10,
       this.zoomed_column,
       opts.column_num,
       opts.fontsize,
-      opts.ralign,
+      opts.ralign
     );
   };
 
-  this.render_with_rects = function(start, end, context_num, borders) {
-    let x = 0,
-      column_num = start,
-      column_label = null,
-      i = 0,
-      top_height = Math.abs(this.data.max_height),
-      bottom_height = Math.abs(this.data.min_height_obs),
-      total_height = top_height + bottom_height,
-      top_percentage = Math.round(
-        Math.abs(this.data.max_height) * 100 / total_height,
-      ),
-      // convert % to pixels
-      top_pix_height = Math.round(
-        this.info_content_height * top_percentage / 100,
-      ),
-      bottom_pix_height = this.info_content_height - top_pix_height,
-      mod = 10;
+  // eslint-disable-next-line complexity, max-statements
+  this.render_with_rects = function(start, end, contextNum, borders) {
+    let x = 0;
+    let columnNum = start;
+    let columnLabel = null;
+    let mod = 10;
 
-    for (i = start; i <= end; i++) {
+    for (let i = start; i <= end; i++) {
       if (this.data.mmline && this.data.mmline[i - 1] === 1) {
-        this.contexts[context_num].fillStyle = '#cccccc';
-        this.contexts[context_num].fillRect(
+        this.contexts[contextNum].fillStyle = '#ccc';
+        this.contexts[contextNum].fillRect(
           x,
           10,
           this.zoomed_column,
-          this.height - 40,
+          this.height - 40
         );
       } else {
-        let column = this.data.height_arr[i - 1],
-          previous_height = 0,
-          previous_neg_height = top_pix_height,
-          letters = column.length,
-          j = 0;
-        for (j = 0; j < letters; j++) {
-          let letter = column[j],
-            values = letter.split(':', 2);
+        const column = this.data.height_arr[i - 1];
+        let previousHeight = 0;
+        const letters = column.length;
+        for (let j = 0; j < letters; j++) {
+          const letter = column[j];
+          const values = letter.split(':', 2);
           if (values[1] > 0.01) {
-            let letter_height = parseFloat(values[1]) / this.data.max_height,
-              x_pos = x,
-              glyph_height = (this.info_content_height - 2) * letter_height,
-              y_pos =
-                this.info_content_height - 2 - previous_height - glyph_height,
-              color = null;
+            const letterHeight = parseFloat(values[1]) / this.data.max_height;
+            const xPos = x;
+            const glyphHeight = (this.info_content_height - 2) * letterHeight;
+            const yPos =
+              this.info_content_height - 2 - previousHeight - glyphHeight;
+            let color = null;
 
+            // eslint-disable-next-line max-depth
             if (this.colorscheme === 'consensus') {
               color = this.cmap[i - 1][values[0]] || '#7a7a7a';
             } else {
               color = this.colors[values[0]];
             }
 
+            // eslint-disable-next-line max-depth
             if (borders) {
-              this.contexts[context_num].strokeStyle = color;
-              this.contexts[context_num].strokeRect(
-                x_pos,
-                y_pos,
+              this.contexts[contextNum].strokeStyle = color;
+              this.contexts[contextNum].strokeRect(
+                xPos,
+                yPos,
                 this.zoomed_column,
-                glyph_height,
+                glyphHeight
               );
             } else {
-              this.contexts[context_num].fillStyle = color;
-              this.contexts[context_num].fillRect(
-                x_pos,
-                y_pos,
+              this.contexts[contextNum].fillStyle = color;
+              this.contexts[contextNum].fillRect(
+                xPos,
+                yPos,
                 this.zoomed_column,
-                glyph_height,
+                glyphHeight
               );
             }
 
-            previous_height += glyph_height;
+            previousHeight += glyphHeight;
           }
         }
       }
@@ -1408,99 +1313,99 @@ function HMMLogo(element, options) {
 
       if (i % mod === 0) {
         // draw column dividers
-        draw_ticks(
-          this.contexts[context_num],
+        drawTicks(
+          this.contexts[contextNum],
           x + this.zoomed_column,
           this.height - 30,
           parseFloat(this.height),
-          '#dddddd',
+          '#ddd'
         );
         // draw top ticks
-        draw_ticks(this.contexts[context_num], x + this.zoomed_column, 0, 5);
+        drawTicks(this.contexts[contextNum], x + this.zoomed_column, 0, 5);
 
         // if ali_coordinates exist and toggle is set then display the
         // alignment coordinates and not the model coordinates.
         if (this.display_ali_map) {
-          column_label = this.data.ali_map[i - 1];
+          columnLabel = this.data.ali_map[i - 1];
         } else {
-          column_label = column_num;
+          columnLabel = columnNum;
         }
         // draw column numbers
-        draw_column_number(
-          this.contexts[context_num],
+        drawColumnNumber(
+          this.contexts[contextNum],
           x - 2,
           10,
           this.zoomed_column,
-          column_label,
+          columnLabel,
           10,
-          true,
+          true
         );
       }
 
       // draw insert probabilities/lengths
-      draw_small_insert(
-        this.contexts[context_num],
+      drawSmallInsert(
+        this.contexts[contextNum],
         x,
         this.height - 42,
         this.zoomed_column,
         this.data.insert_probs[i - 1],
         this.data.insert_lengths[i - 1],
         this.data.delete_probs[i - 1],
-        this.show_inserts,
+        this.show_inserts
       );
 
       // draw other dividers
       if (this.show_inserts) {
-        draw_border(
-          this.contexts[context_num],
+        drawBorder(
+          this.contexts[contextNum],
           this.height - 45,
-          this.total_width,
+          this.total_width
         );
       } else {
-        draw_border(
-          this.contexts[context_num],
+        drawBorder(
+          this.contexts[contextNum],
           this.height - 15,
-          this.total_width,
+          this.total_width
         );
       }
 
-      draw_border(this.contexts[context_num], 0, this.total_width);
+      drawBorder(this.contexts[contextNum], 0, this.total_width);
 
       if (this.show_active_sites) {
-        this.render_active_sites(context_num, i, x);
+        this.render_active_sites(contextNum, i, x);
       }
 
       x += this.zoomed_column;
-      column_num++;
+      columnNum++;
     }
   };
-  this.render_active_sites = function(context_num, i, x) {
+  this.render_active_sites = function(contextNum, i, x) {
     let track = 1;
     for (let j = 0; j < this.active_sites.length; j++) {
       const wtd = this.active_sites[j].controller.whatShouldBeDraw(i);
-      if (wtd == null) continue;
+      if (!wtd) continue;
       const color = this.aa_colors[wtd.base];
-      if (wtd.type == 'BLOCK') {
-        draw_box(
-          this.contexts[context_num],
+      if (wtd.type === 'BLOCK') {
+        drawBox(
+          this.contexts[contextNum],
           x + 1,
-          margin_to_features +
-            track * (padding_between_tracks + feature_height),
+          MARGIN_TO_FEATURES +
+            track * (PADDING_BETWEEN_TRACKS + FEATURE_HEIGHT),
           this.zoomed_column - 2,
-          color,
+          color
         );
-      } else if (wtd.type == 'LINE') {
-        draw_line(
-          this.contexts[context_num],
+      } else if (wtd.type === 'LINE') {
+        drawLine(
+          this.contexts[contextNum],
           x,
-          margin_to_features +
-            padding_between_tracks * track +
-            (track + 0.5) * feature_height,
+          MARGIN_TO_FEATURES +
+            PADDING_BETWEEN_TRACKS * track +
+            (track + 0.5) * FEATURE_HEIGHT,
           x + this.zoomed_column,
-          margin_to_features +
-            padding_between_tracks * track +
-            (track + 0.5) * feature_height,
-          color,
+          MARGIN_TO_FEATURES +
+            PADDING_BETWEEN_TRACKS * track +
+            (track + 0.5) * FEATURE_HEIGHT,
+          color
         );
       }
       if (this.multiple_tracks) track++;
@@ -1509,7 +1414,7 @@ function HMMLogo(element, options) {
 
   this.toggle_colorscheme = function(scheme) {
     // work out the current column we are on so we can return there
-    const col_total = this.current_column();
+    const colTotal = this.current_column();
 
     if (scheme) {
       if (scheme === 'default') {
@@ -1532,14 +1437,14 @@ function HMMLogo(element, options) {
     // re-flow and re-render the content
     this.scrollme.reflow();
     // scroll off by one to force a render of the canvas.
-    this.scrollToColumn(col_total + 1);
+    this.scrollToColumn(colTotal + 1);
     // scroll back to the location we started at.
-    this.scrollToColumn(col_total);
+    this.scrollToColumn(colTotal);
   };
 
   this.toggle_scale = function(scale) {
     // work out the current column we are on so we can return there
-    const col_total = this.current_column();
+    const colTotal = this.current_column();
 
     if (scale) {
       if (scale === 'obs') {
@@ -1559,8 +1464,8 @@ function HMMLogo(element, options) {
     // with the new heights
     this.rendered = [];
     // update the y-axis
-    for (let element of this.called_on.getElementsByClassNames(
-      styles.logo_yaxis,
+    for (const element of this.called_on.getElementsByClassNames(
+      styles.logo_yaxis
     )) {
       element.remove();
     }
@@ -1569,14 +1474,14 @@ function HMMLogo(element, options) {
     // re-flow and re-render the content
     this.scrollme.reflow();
     // scroll off by one to force a render of the canvas.
-    this.scrollToColumn(col_total + 1);
+    this.scrollToColumn(colTotal + 1);
     // scroll back to the location we started at.
-    this.scrollToColumn(col_total);
+    this.scrollToColumn(colTotal);
   };
 
   this.toggle_ali_map = function(coords) {
     // work out the current column we are on so we can return there
-    const col_total = this.current_column();
+    const colTotal = this.current_column();
 
     if (coords) {
       if (coords === 'model') {
@@ -1601,559 +1506,467 @@ function HMMLogo(element, options) {
     // re-flow and re-render the content
     this.scrollme.reflow();
     // scroll off by one to force a render of the canvas.
-    this.scrollToColumn(col_total + 1);
+    this.scrollToColumn(colTotal + 1);
     // scroll back to the location we started at.
-    this.scrollToColumn(col_total);
+    this.scrollToColumn(colTotal);
   };
 
   this.current_column = function() {
-    let before_left = this.scrollme.scroller.getValues().left,
-      col_width = this.column_width * this.zoom,
-      col_count = before_left / col_width,
-      half_visible_columns =
-        this.called_on.getElementsByClassName(styles.logo_container)[0]
-          .clientWidth /
-        col_width /
-        2,
-      col_total = Math.ceil(col_count + half_visible_columns);
-    return col_total;
+    const beforeLeft = this.scrollme.scroller.getValues().left;
+    const colWidth = this.column_width * this.zoom;
+    const colCount = beforeLeft / colWidth;
+    const halfVisibleColumns =
+      this.called_on.getElementsByClassName(styles.logo_container)[0]
+        .clientWidth /
+      colWidth /
+      2;
+    return Math.ceil(colCount + halfVisibleColumns);
   };
 
+  // eslint-disable-next-line max-statements
   this.change_zoom = function(options) {
-    let zoom_level = 0.3,
-      expected_width = null;
+    let zoomLevel = 0.3;
     if (options.target) {
-      zoom_level = options.target;
+      zoomLevel = options.target;
     } else if (options.distance) {
-      zoom_level = (parseFloat(this.zoom) -
+      zoomLevel = (parseFloat(this.zoom) -
         parseFloat(options.distance)).toFixed(1);
       if (options.direction === '+') {
-        zoom_level = (parseFloat(this.zoom) +
+        zoomLevel = (parseFloat(this.zoom) +
           parseFloat(options.distance)).toFixed(1);
       }
     }
 
-    if (zoom_level > 1) {
-      zoom_level = 1;
-    } else if (zoom_level < 0.1) {
-      zoom_level = 0.1;
+    if (zoomLevel > 1) {
+      zoomLevel = 1;
+    } else if (zoomLevel < 0.1) {
+      zoomLevel = 0.1;
     }
 
     // see if we need to zoom or not
-    let graphicalElement = this.called_on.getElementsByClassName(
-      styles.logo_graphic,
+    const graphicalElement = this.called_on.getElementsByClassName(
+      styles.logo_graphic
     )[0];
-    let containerElement = this.called_on.getElementsByClassName(
-      styles.logo_container,
+    const containerElement = this.called_on.getElementsByClassName(
+      styles.logo_container
     )[0];
-    expected_width = graphicalElement.clientWidth * zoom_level / this.zoom;
-    if (expected_width > containerElement.clientWidth) {
+    const expectedWidth = graphicalElement.clientWidth * zoomLevel / this.zoom;
+    if (expectedWidth > containerElement.clientWidth) {
       // if a center is not specified, then use the current center of the view
-      if (!options.column) {
-        // work out my current position
-        const col_total = this.current_column();
-
-        this.zoom = zoom_level;
-        this.render({ zoom: this.zoom });
-        this.scrollme.reflow();
-
-        // scroll to previous position
-        this.scrollToColumn(col_total);
-      } else {
+      if (options.column) {
         // center around the mouse click position.
-        this.zoom = zoom_level;
+        this.zoom = zoomLevel;
         this.render({ zoom: this.zoom });
         this.scrollme.reflow();
 
         const coords = this.coordinatesFromColumn(options.column);
         this.scrollme.scroller.scrollTo(coords - options.offset);
+      } else {
+        // work out my current position
+        const colTotal = this.current_column();
+
+        this.zoom = zoomLevel;
+        this.render({ zoom: this.zoom });
+        this.scrollme.reflow();
+
+        // scroll to previous position
+        this.scrollToColumn(colTotal);
       }
     }
     return this.zoom;
   };
 
   this.columnFromCoordinates = function(x) {
-    const column = Math.ceil(x / (this.column_width * this.zoom));
-    return column;
+    return Math.ceil(x / (this.column_width * this.zoom));
   };
 
   this.coordinatesFromColumn = function(col) {
-    let new_column = col - 1,
-      x =
-        new_column * (this.column_width * this.zoom) +
-        this.column_width * this.zoom / 2;
-    return x;
+    const newColumn = col - 1;
+
+    return (
+      newColumn * (this.column_width * this.zoom) +
+      this.column_width * this.zoom / 2
+    );
   };
 
   this.scrollToColumn = function(num, animate) {
-    let half_view =
-        this.called_on.getElementsByClassName(styles.logo_container)[0]
-          .clientWidth / 2,
-      new_left = this.coordinatesFromColumn(num);
-    this.scrollme.scroller.scrollTo(new_left - half_view, 0, animate);
+    const halfView =
+      this.called_on.getElementsByClassName(styles.logo_container)[0]
+        .clientWidth / 2;
+    const newLeft = this.coordinatesFromColumn(num);
+    this.scrollme.scroller.scrollTo(newLeft - halfView, 0, animate);
   };
-}
+};
 
-let hmm_logo = function(logoElement, options) {
-  let logo = null;
-  if (canvasSupport()) {
-    options = options || {};
+// eslint-disable-next-line complexity, max-statements
+const hmmLogo = function(logoElement, options = {}) {
+  // add some internal divs for scrolling etc.
+  const logoGraphic = document.createElement('div');
+  logoGraphic.classList.add(styles.logo_graphic);
 
-    // add some internal divs for scrolling etc.
-    let logo_graphic = document.createElement('div');
-    logo_graphic.classList.add(styles.logo_graphic);
+  const logoContainer = document.createElement('div');
+  logoContainer.classList.add(styles.logo_container);
 
-    let logo_container = document.createElement('div');
-    logo_container.classList.add(styles.logo_container);
+  const logoDivider = document.createElement('div');
+  logoDivider.classList.add(styles.logo_divider);
 
-    let logo_divider = document.createElement('div');
-    logo_divider.classList.add(styles.logo_divider);
+  logoElement.appendChild(logoContainer);
+  logoContainer.appendChild(logoGraphic);
+  logoElement.appendChild(logoDivider);
 
-    logoElement.appendChild(logo_container);
-    logo_container.appendChild(logo_graphic);
-    logoElement.appendChild(logo_divider);
+  if (options.data === null) return;
 
-    if (!options.data) {
-      options.data = JSON.parse(logoElement.getAttribute('data-logo'));
+  options.dom_element = logoGraphic;
+  options.called_on = logoElement;
+
+  const fieldset = document.createElement('fieldset');
+
+  const label = document.createElement('label');
+  label.htmlFor = 'position';
+  label.innerHTML = 'Column number';
+  fieldset.appendChild(label);
+
+  const input = document.createElement('input');
+  input.setAttribute('type', 'text');
+  input.id = 'position';
+  input.classList.add(styles.logo_position);
+  fieldset.appendChild(input);
+
+  const logoChangeButton = document.createElement('button');
+  logoChangeButton.classList.add(styles.button);
+  logoChangeButton.classList.add(styles.logo_change);
+  logoChangeButton.innerHTML = 'Go';
+  fieldset.appendChild(logoChangeButton);
+
+  const form = document.createElement('form');
+  form.classList.add(styles.logo_form);
+  form.appendChild(fieldset);
+
+  const controls = document.createElement('div');
+  controls.classList.add(styles.logo_controls);
+  form.appendChild(controls);
+
+  const close = document.createElement('span');
+  close.classList.add(styles.close);
+  close.innerHTML = 'x';
+
+  const settings = document.createElement('div');
+  settings.classList.add(styles.logo_settings);
+  settings.appendChild(close);
+  controls.appendChild(settings);
+
+  const logo = new HMMLogo(logoElement, options);
+  logo.render(options);
+
+  if (logo.zoom_enabled) {
+    const outButton = document.createElement('button');
+    outButton.classList.add(styles.button);
+    outButton.classList.add(styles.logo_zoomout);
+    outButton.innerHTML = '-';
+    const inButton = document.createElement('button');
+    inButton.classList.add(styles.button);
+    inButton.classList.add(styles.logo_zoomin);
+    inButton.innerHTML = '+';
+    controls.appendChild(outButton);
+    controls.appendChild(inButton);
+  }
+
+  /* we don't want to toggle if the max height_obs is greater than max theoretical
+     * as letters will fall off the top.
+     */
+  if (
+    logo.scale_height_enabled &&
+    logo.data.max_height_obs < logo.data.max_height_theory
+  ) {
+    let obsChecked = '';
+    let theoryChecked = '';
+    const theoryHelp = '';
+    const obsHelp = '';
+
+    if (logo.data.max_height_obs === logo.data.max_height) {
+      obsChecked = 'checked';
+    } else {
+      theoryChecked = 'checked';
     }
 
-    if (options.data === null) {
-      return;
+    /*
+    if (options.help) {
+      obsHelp =
+        '<a class="help" href="/help#scale_obs" title="Set the y-axis maximum to the maximum observed height.">' +
+        '<span aria-hidden="true" data-icon="?"></span><span class="reader-text">help</span></a>';
+      theoryHelp =
+        '<a class="help" href="/help#scale_theory" title="Set the y-axis maximum to the theoretical maximum height">' +
+        '<span aria-hidden="true" data-icon="?"></span><span class="reader-text">help</span></a>';
+    }
+    */
+
+    const scaleControls =
+      '<fieldset><legend>Scale</legend>' +
+      `<label><input type="radio" name="scale" class="${styles.logo_scale}" value="obs" ${obsChecked}/>Maximum Observed ${obsHelp}</label></br>` +
+      `<label><input type="radio" name="scale" class="${styles.logo_scale}" value="theory" ${theoryChecked}/>Maximum Theoretical ${theoryHelp}</label>` +
+      '</fieldset>';
+
+    settings.innerHTML = scaleControls;
+  }
+
+  if (
+    logo.data.height_calc !== 'score' &&
+    logo.data.alphabet === 'aa' &&
+    logo.data.probs_arr
+  ) {
+    let defColor = null;
+    let conColor = null;
+
+    if (logo.colorscheme === 'default') {
+      defColor = 'checked';
+    } else {
+      conColor = 'checked';
     }
 
-    options.dom_element = logo_graphic;
-    options.called_on = logoElement;
+    settings.innerHTML += `
+      <fieldset><legend>Color Scheme</legend>
+        <label><input type="radio" name="color" class=${styles.logo_color}" value="default" ${defColor}/>Default</label></br>
+        <label><input type="radio" name="color" class=${styles.logo_color}" value="consensus" ${conColor}/>Consensus Colors</label>
+      </fieldset>
+    `;
+  }
 
-    let zoom = options.zoom || 0.4;
+  if (logo.data.ali_map) {
+    let modChecked = null;
+    let aliChecked = null;
 
-    let fieldset = document.createElement('fieldset');
+    if (logo.display_ali_map === 0) {
+      modChecked = 'checked';
+    } else {
+      aliChecked = 'checked';
+    }
 
-    let label = document.createElement('label');
-    label.htmlFor = 'position';
-    label.innerHTML = 'Column number';
-    fieldset.appendChild(label);
+    const aliControls =
+      '<fieldset><legend>Coordinates</legend>' +
+      `<label><input type="radio" name="coords" class="${styles.logo_ali_map}" value="model" ${modChecked}/>Model</label></br>` +
+      `<label><input type="radio" name="coords" class="${styles.logo_ali_map}" value="alignment" ${aliChecked}/>Alignment</label>` +
+      '</fieldset>';
+    settings.innerHTML += aliControls;
 
-    let input = document.createElement('input');
-    input.setAttribute('type', 'text');
-    input.id = 'position';
-    input.classList.add(styles.logo_position);
-    fieldset.appendChild(input);
+    if (
+      logo.active_sites_sources !== null &&
+      typeof logo.active_sites_sources === 'object'
+    ) {
+      let activeSites =
+        '<fieldset><legend>ActiveSites</legend>' +
+        `<label>Source: <select name="member_db" class="${styles.logo_ali_map}">`;
+      for (const key of Object.keys(logo.active_sites_sources)) {
+        activeSites += `<option value="${key}">${key}</option> `;
+      }
+      activeSites +=
+        '</select></label> ' + // + modHelp +
+        '</br>' +
+        '<label>Accession number: ' +
+        `  <input type="text" name="family_accession" class="${styles.logo_ali_map}" value=""/>` +
+        '</label><br/>' +
+        '<button id="active_sites">Get Active Sites</button>' +
+        '</fieldset>';
 
-    let logoChangeButton = document.createElement('button');
-    logoChangeButton.classList.add(styles.button);
-    logoChangeButton.classList.add(styles.logo_change);
-    logoChangeButton.innerHTML = 'Go';
-    fieldset.appendChild(logoChangeButton);
+      settings.innerHTML += activeSites;
+    }
+  }
 
-    let form = document.createElement('form');
-    form.classList.add(styles.logo_form);
-    form.appendChild(fieldset);
-
-    let controls = document.createElement('div');
-    controls.classList.add(styles.logo_controls);
-    form.appendChild(controls);
-
-    let close = document.createElement('span');
-    close.classList.add(styles.close);
-    close.innerHTML = 'x';
-
-    let settings = document.createElement('div');
-    settings.classList.add(styles.logo_settings);
-    settings.appendChild(close);
+  if (settings.children.length > 0) {
+    const settingsButton = document.createElement('button');
+    settingsButton.innerHTML = 'Settings';
+    settingsButton.classList.add(styles.logo_settings_switch);
+    settingsButton.classList.add(styles.button);
+    -controls.appendChild(settingsButton);
     controls.appendChild(settings);
+  }
 
-    logo = new HMMLogo(logoElement, options);
-    logo.render(options);
+  form.appendChild(controls);
+  logoElement.appendChild(form);
 
-    if (logo.zoom_enabled) {
-      let outButton = document.createElement('button');
-      outButton.classList.add(styles.button);
-      outButton.classList.add(styles.logo_zoomout);
-      outButton.innerHTML = '-';
-      let inButton = document.createElement('button');
-      inButton.classList.add(styles.button);
-      inButton.classList.add(styles.logo_zoomin);
-      inButton.innerHTML = '+';
-      controls.appendChild(outButton);
-      controls.appendChild(inButton);
-    }
-
-    /* we don't want to toggle if the max height_obs is greater than max theoretical
-       * as letters will fall off the top.
-       */
-    if (
-      logo.scale_height_enabled &&
-      logo.data.max_height_obs < logo.data.max_height_theory
-    ) {
-      let obs_checked = '',
-        theory_checked = '',
-        theory_help = '',
-        obs_help = '';
-
-      if (logo.data.max_height_obs === logo.data.max_height) {
-        obs_checked = 'checked';
-      } else {
-        theory_checked = 'checked';
-      }
-
-      /*
-      if (options.help) {
-        obs_help =
-          '<a class="help" href="/help#scale_obs" title="Set the y-axis maximum to the maximum observed height.">' +
-          '<span aria-hidden="true" data-icon="?"></span><span class="reader-text">help</span></a>';
-        theory_help =
-          '<a class="help" href="/help#scale_theory" title="Set the y-axis maximum to the theoretical maximum height">' +
-          '<span aria-hidden="true" data-icon="?"></span><span class="reader-text">help</span></a>';
-      }
-      */
-
-      const scale_controls =
-        '<fieldset><legend>Scale</legend>' +
-        `<label><input type="radio" name="scale" class="${styles.logo_scale}" value="obs" ${obs_checked}/>Maximum Observed ${obs_help}</label></br>` +
-        `<label><input type="radio" name="scale" class="${styles.logo_scale}" value="theory" ${theory_checked}/>Maximum Theoretical ${theory_help}</label>` +
-        '</fieldset>';
-
-      settings.innerHTML = scale_controls;
-    }
-
-    if (
-      logo.data.height_calc !== 'score' &&
-      logo.data.alphabet === 'aa' &&
-      logo.data.probs_arr
-    ) {
-      let def_color = null,
-        con_color = null,
-        def_help = '',
-        con_help = '';
-
-      if (logo.colorscheme === 'default') {
-        def_color = 'checked';
-      } else {
-        con_color = 'checked';
-      }
-
-      /*
-      if (options.help) {
-        def_help =
-          '<a class="help" href="/help#colors_default" title="Each letter receives its own color.">' +
-          '<span aria-hidden="true" data-icon="?"></span><span class="reader-text">help</span></a>';
-        con_help =
-          '<a class="help" href="/help#colors_consensus" title="Letters are colored as in Clustalx and Jalview, with colors depending on composition of the column.">' +
-          '<span aria-hidden="true" data-icon="?"></span><span class="reader-text">help</span></a>';
-      }
-      */
-
-      const color_controls =
-        '<fieldset><legend>Color Scheme</legend>' +
-        `<label><input type="radio" name="color" class=${styles.logo_color}" value="default" ${def_color}/>Default ${def_help}</label></br>` +
-        `<label><input type="radio" name="color" class=${styles.logo_color}" value="consensus" ${con_color}/>Consensus Colors ${con_help}</label>` +
-        '</fieldset>';
-      settings.innerHTML += color_controls;
-    }
-
-    if (logo.data.ali_map) {
-      let mod_checked = null,
-        ali_checked = null,
-        mod_help = '',
-        ali_help = '',
-        family_accession = '';
-
-      if (logo.display_ali_map === 0) {
-        mod_checked = 'checked';
-      } else {
-        ali_checked = 'checked';
-      }
-
-      /*
-      if (options.help) {
-        mod_help =
-          '<a class="help" href="/help#coords_model" title="The coordinates along the top of the plot show the model position.">' +
-          '<span aria-hidden="true" data-icon="?"></span><span class="reader-text">help</span></a>';
-        ali_help =
-          '<a class="help" href="/help#coords_ali" title="The coordinates along the top of the plot show the column in the alignment associated with the model">' +
-          '<span aria-hidden="true" data-icon="?"></span><span class="reader-text">help</span></a>';
-      }
-      */
-
-      const ali_controls =
-        '<fieldset><legend>Coordinates</legend>' +
-        `<label><input type="radio" name="coords" class="${styles.logo_ali_map}" value="model" ${mod_checked}/>Model ${mod_help}</label></br>` +
-        `<label><input type="radio" name="coords" class="${styles.logo_ali_map}" value="alignment" ${ali_checked}/>Alignment ${ali_help}</label>` +
-        '</fieldset>';
-      settings.innerHTML += ali_controls;
-
-      if (
-        logo.active_sites_sources != null &&
-        typeof logo.active_sites_sources === 'object'
-      ) {
-        let active_sites =
-          '<fieldset><legend>ActiveSites</legend>' +
-          `<label>Source: <select name="member_db" class="${styles.logo_ali_map}">`;
-        for (const key of Object.keys(logo.active_sites_sources)) {
-          active_sites += `<option value="${key}">${key}</option> `;
-        }
-        active_sites +=
-          '</select></label> ' + // + mod_help +
-          '</br>' +
-          '<label>Accession number: ' +
-          `   <input type="text" name="family_accession" class="${styles.logo_ali_map}" value="${family_accession}"/>` +
-          '</label><br/>' +
-          '<button id="active_sites">Get Active Sites</button>' +
-          '</fieldset>';
-
-        settings.innerHTML += active_sites;
-      }
-    }
-
-    if (settings.children.length > 0) {
-      let settingsButton = document.createElement('button');
-      settingsButton.innerHTML = 'Settings';
-      settingsButton.classList.add(styles.logo_settings_switch);
-      settingsButton.classList.add(styles.button);
-      -controls.appendChild(settingsButton);
-      controls.appendChild(settings);
-    }
-
-    form.appendChild(controls);
-    logoElement.appendChild(form);
-
-    for (let name of [
-      styles.logo_settings_switch,
-      styles.logo_settings,
-      styles.close,
-    ]) {
-      for (let element of logoElement.getElementsByClassName(name)) {
-        element.addEventListener('click', function(e) {
-          e.preventDefault();
-          if (
-            settings.style.display != 'none' &&
-            settings.style.display != ''
-          ) {
-            settings.style.display = 'none';
-          } else {
-            settings.style.display = 'block';
-          }
-        });
-      }
-    }
-    for (let matchedElement of document.getElementsByClassName(
-      styles.logo_reset,
-    )) {
-      matchedElement.addEventListener('click', function(e) {
+  for (const name of [
+    styles.logo_settings_switch,
+    styles.logo_settings,
+    styles.close,
+  ]) {
+    for (const element of logoElement.getElementsByClassName(name)) {
+      element.addEventListener('click', e => {
         e.preventDefault();
-        const hmm_logo = logo;
-        hmm_logo.change_zoom({ target: hmm_logo.default_zoom });
-      });
-    }
-    for (let matchedElement of document.getElementsByClassName(
-      styles.logo_change,
-    )) {
-      matchedElement.addEventListener('click', function(e) {
-        e.preventDefault();
-      });
-    }
-    for (let matchedElement of document.getElementsByClassName(
-      styles.logo_zoomin,
-    )) {
-      matchedElement.addEventListener('click', function(e) {
-        e.preventDefault();
-        const hmm_logo = logo;
-        hmm_logo.change_zoom({ distance: 0.1, direction: '+' });
-      });
-    }
-    for (let matchedElement of document.getElementsByClassName(
-      styles.logo_zoomout,
-    )) {
-      matchedElement.addEventListener('click', function(e) {
-        e.preventDefault();
-        const hmm_logo = logo;
-        hmm_logo.change_zoom({ distance: 0.1, direction: '-' });
-      });
-    }
-    for (let matchedElement of document.getElementsByClassName(
-      styles.logo_scale,
-    )) {
-      matchedElement.addEventListener('change', function(e) {
-        const hmm_logo = logo;
-        hmm_logo.toggle_scale(this.value); //MAQ pass correct argument
-      });
-    }
-    for (let matchedElement of document.getElementsByClassName(
-      styles.logo_color,
-    )) {
-      matchedElement.addEventListener('change', function(e) {
-        const hmm_logo = logo;
-        hmm_logo.toggle_colorscheme(this.value); //MAQ pass correct argument
-      });
-    }
-    for (let matchedElement of document.getElementsByClassName(
-      styles.logo_ali_map,
-    )) {
-      matchedElement.addEventListener('change', function(e) {
-        const hmm_logo = logo;
-        hmm_logo.toggle_ali_map(this.value);
-      });
-    }
-    for (let matchedElement of document.getElementsByClassName(
-      styles.logo_position,
-    )) {
-      matchedElement.addEventListener('change', function(e) {
-        const hmm_logo = logo;
-        if (!this.value.match(/^\d+$/m)) {
-          return;
-        }
-        hmm_logo.scrollToColumn(this.value, 1);
-      });
-    }
-    logo_graphic.addEventListener('dblclick', function(e) {
-      // need to get coordinates of mouse click
-      let hmm_logo = logo,
-        offset = {
-          top: this.offsetTop,
-          left: this.offsetLeft,
-        },
-        x = parseInt(e.pageX - offset.left, 10),
-        // get mouse position in the window
-        window_position = e.pageX - this.parentNode.offsetLeft,
-        // get column number
-        col = hmm_logo.columnFromCoordinates(x),
-        // choose new zoom level and zoom in.
-        current = hmm_logo.zoom;
-
-      if (current < 1) {
-        hmm_logo.change_zoom({
-          target: 1,
-          offset: window_position,
-          column: col,
-        });
-      } else {
-        hmm_logo.change_zoom({
-          target: 0.3,
-          offset: window_position,
-          column: col,
-        });
-      }
-
-      return;
-    });
-
-    if (options.column_info) {
-      logo_graphic.addEventListener('click', function(e) {
-        let info_tab = document.createElement('table');
-        info_tab.classList.add(styles.logo_col_info);
-        let hmm_logo = logo,
-          header = '<tr>',
-          tbody = '',
-          offset = {
-            top: this.offsetTop,
-            left: this.offsetLeft,
-          },
-          x = parseInt(e.pageX - offset.left, 10),
-          // get mouse position in the window
-          window_position = e.pageX - this.parentNode.offsetLeft,
-          // get column number
-          col = hmm_logo.columnFromCoordinates(x),
-          // clone the column data before reversal or the column gets messed
-          // up in the logo when zoom levels change. Also stops flip-flopping
-          // of the order from ascending to descending.
-          col_data = [],
-          info_cols = 0,
-          i = 0,
-          j = 0,
-          height_header = 'Probability';
-
-        if (logo.data.height_calc && logo.data.height_calc === 'score') {
-          height_header = 'Score';
-          col_data = logo.data.height_arr[col - 1].slice(0).reverse();
+        if (settings.style.display !== 'none' && settings.style.display) {
+          settings.style.display = 'none';
         } else {
-          col_data = logo.data.probs_arr[col - 1].slice(0).reverse();
+          settings.style.display = 'block';
         }
-
-        info_cols = Math.ceil(col_data.length / 5);
-        // add the headers for each column.
-        for (i = 0; i < info_cols; i++) {
-          // using the i < info_cols - 1 check to make sure the last column doesn't
-          // get marked with the odd class so we don't get a border on the edge of the table.
-          if (info_cols > 1 && i < info_cols - 1) {
-            header += `<th>Residue</th><th class="odd">${height_header}</th>`;
-          } else {
-            header += `<th>Residue</th><th>${height_header}</th>`;
-          }
-        }
-
-        header += '</tr>';
-        info_tab.innerHTML = header;
-
-        // add the data for each column
-        for (i = 0; i < 5; i++) {
-          tbody += '<tr>';
-          j = i;
-          while (col_data[j]) {
-            let values = col_data[j].split(':', 2),
-              color = '';
-            if (logo.colorscheme === 'default') {
-              color = `${logo.alphabet}_${values[0]}`;
-            }
-            // using the j < 15 check to make sure the last column doesn't get marked
-            // with the odd class so we don't get a border on the edge of the table.
-            if (info_cols > 1 && j < 15) {
-              tbody += `<td class="${color}"><div></div>${values[0]}</td><td class="odd">${values[1]}</td>`;
-            } else {
-              tbody += `<td class="${color}"><div></div>${values[0]}</td><td>${values[1]}</td>`;
-            }
-
-            j += 5;
-          }
-          tbody += '</tr>';
-        }
-
-        info_tab.innerHTML += tbody;
-
-        let column_info = document.createElement('div');
-        column_info.id = 'logo_column_info';
-        column_info.innerHTML = `<p> Column:${col}</p><div><p>Occupancy: ${logo
-          .data.delete_probs[col - 1]}</p><p>Insert Probability: ${logo.data
-          .insert_probs[col - 1]}</p><p>Insert Length: ${logo.data
-          .insert_lengths[col - 1]}</p></div>`;
-        column_info.appendChild(info_tab);
-        const existing_column_info = logoElement.querySelector(
-          '#logo_column_info',
-        );
-        if (existing_column_info) {
-          existing_column_info.remove();
-        }
-        logoElement.appendChild(column_info);
       });
     }
+  }
+  for (const matchedElement of document.getElementsByClassName(
+    styles.logo_reset
+  )) {
+    matchedElement.addEventListener('click', e => {
+      e.preventDefault();
+      logo.change_zoom({ target: logo.default_zoom });
+    });
+  }
+  for (const matchedElement of document.getElementsByClassName(
+    styles.logo_change
+  )) {
+    matchedElement.addEventListener('click', e => {
+      e.preventDefault();
+    });
+  }
+  for (const matchedElement of document.getElementsByClassName(
+    styles.logo_zoomin
+  )) {
+    matchedElement.addEventListener('click', e => {
+      e.preventDefault();
+      logo.change_zoom({ distance: 0.1, direction: '+' });
+    });
+  }
+  for (const matchedElement of document.getElementsByClassName(
+    styles.logo_zoomout
+  )) {
+    matchedElement.addEventListener('click', e => {
+      e.preventDefault();
+      logo.change_zoom({ distance: 0.1, direction: '-' });
+    });
+  }
+  for (const matchedElement of document.getElementsByClassName(
+    styles.logo_scale
+  )) {
+    matchedElement.addEventListener('change', function() {
+      logo.toggle_scale(this.value); // MAQ pass correct argument
+    });
+  }
+  for (const matchedElement of document.getElementsByClassName(
+    styles.logo_color
+  )) {
+    matchedElement.addEventListener('change', function() {
+      logo.toggle_colorscheme(this.value); // MAQ pass correct argument
+    });
+  }
+  for (const matchedElement of document.getElementsByClassName(
+    styles.logo_ali_map
+  )) {
+    matchedElement.addEventListener('change', function() {
+      logo.toggle_ali_map(this.value);
+    });
+  }
+  for (const matchedElement of document.getElementsByClassName(
+    styles.logo_position
+  )) {
+    matchedElement.addEventListener('change', function() {
+      if (!this.value.match(/^\d+$/m)) {
+        return;
+      }
+      logo.scrollToColumn(this.value, 1);
+    });
+  }
+  logoGraphic.addEventListener('dblclick', function(e) {
+    if (logo.zoom < 1) {
+      logo.change_zoom({
+        target: 1,
+        offset: e.pageX - this.parentNode.offsetLeft,
+        column: logo.columnFromCoordinates(
+          parseInt(e.pageX - this.offsetLeft, 10)
+        ),
+      });
+    } else {
+      logo.change_zoom({
+        target: 0.3,
+        offset: e.pageX - this.parentNode.offsetLeft,
+        column: logo.columnFromCoordinates(
+          parseInt(e.pageX - this.offsetLeft, 10)
+        ),
+      });
+    }
+  });
 
-    document.addEventListener(
-      `${logoElement.id}.scrolledTo`,
-      (e, left, top, zoom) => {
-        const hmm_logo = logo;
-        hmm_logo.render({ target: left });
-      },
-    );
+  if (options.column_info) {
+    // eslint-disable-next-line max-statements
+    logoGraphic.addEventListener('click', function(e) {
+      const infoTab = document.createElement('table');
+      infoTab.classList.add(styles.logo_col_info);
+      const hmmLogo = logo;
+      let header = '<tr>';
+      let tbody = '';
+      const offset = {
+        top: this.offsetTop,
+        left: this.offsetLeft,
+      };
+      const x = parseInt(e.pageX - offset.left, 10);
+      // get column number
+      const col = hmmLogo.columnFromCoordinates(x);
+      // clone the column data before reversal or the column gets messed
+      // up in the logo when zoom levels change. Also stops flip-flopping
+      // of the order from ascending to descending.
+      let colData = [];
+      let infoCols = 0;
+      let heightHeader = 'Probability';
 
-    document.addEventListener('keydown', e => {
-      if (!e.ctrlKey) {
-        if (e.which === 61 || e.which === 107) {
-          zoom += 0.1;
-          logo.change_zoom({ distance: 0.1, direction: '+' });
-        }
-        if (e.which === 109 || e.which === 0) {
-          zoom -= 0.1;
-          logo.change_zoom({ distance: 0.1, direction: '-' });
+      if (logo.data.height_calc && logo.data.height_calc === 'score') {
+        heightHeader = 'Score';
+        colData = logo.data.height_arr[col - 1].slice(0).reverse();
+      } else {
+        colData = logo.data.probs_arr[col - 1].slice(0).reverse();
+      }
+
+      infoCols = Math.ceil(colData.length / 5);
+      // add the headers for each column.
+      for (let i = 0; i < infoCols; i++) {
+        // using the i < infoCols - 1 check to make sure the last column doesn't
+        // get marked with the odd class so we don't get a border on the edge of the table.
+        if (infoCols > 1 && i < infoCols - 1) {
+          header += `<th>Residue</th><th class="odd">${heightHeader}</th>`;
+        } else {
+          header += `<th>Residue</th><th>${heightHeader}</th>`;
         }
       }
+
+      header += '</tr>';
+      infoTab.innerHTML = header;
+
+      // add the data for each column
+      for (let i = 0; i < 5; i++) {
+        tbody += '<tr>';
+        let j = i;
+        while (colData[j]) {
+          const values = colData[j].split(':', 2);
+          let color = '';
+          if (logo.colorscheme === 'default') {
+            color = `${logo.alphabet}_${values[0]}`;
+          }
+          // using the j < 15 check to make sure the last column doesn't get marked
+          // with the odd class so we don't get a border on the edge of the table.
+          if (infoCols > 1 && j < 15) {
+            tbody += `<td class="${color}"><div></div>${values[0]}</td><td class="odd">${values[1]}</td>`;
+          } else {
+            tbody += `<td class="${color}"><div></div>${values[0]}</td><td>${values[1]}</td>`;
+          }
+
+          j += 5;
+        }
+        tbody += '</tr>';
+      }
+
+      infoTab.innerHTML += tbody;
+
+      const columnInfo = document.createElement('div');
+      columnInfo.id = 'logo_column_info';
+      columnInfo.innerHTML = `<p> Column:${col}</p><div><p>Occupancy: ${logo
+        .data.delete_probs[col - 1]}</p><p>Insert Probability: ${logo.data
+        .insert_probs[col - 1]}</p><p>Insert Length: ${logo.data.insert_lengths[
+        col - 1
+      ]}</p></div>`;
+      columnInfo.appendChild(infoTab);
+      const existingColumnInfo = logoElement.querySelector('#logo_column_info');
+      if (existingColumnInfo) {
+        existingColumnInfo.remove();
+      }
+      logoElement.appendChild(columnInfo);
     });
-  } else {
-    document.replaceChild(
-      document.querySelector('#logo'),
-      document.querySelector('#no_canvas'),
-    );
   }
 
   return logo;
 };
 
-export default hmm_logo;
+export default hmmLogo;
