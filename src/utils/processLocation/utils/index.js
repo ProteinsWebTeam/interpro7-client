@@ -1,5 +1,6 @@
 // @flow
 import * as handlers from 'utils/processLocation/handlers';
+/*:: import type { Handler } from 'utils/processLocation/handlers'; */
 
 export const getEmptyDescription = () => ({
   other: null,
@@ -20,99 +21,101 @@ export const getEmptyDescription = () => ({
   focusMemberDBAccession: null,
 });
 
-export const descriptionItemToHandlers = new Map([
-  ['other', new Set([handlers.otherHandler])],
+export const descriptionItemToHandlers /*: Map<string, Set<Handler>> */ = new Map(
   [
-    'mainType',
-    new Set([
-      handlers.structureHandler,
-      handlers.proteinHandler,
-      handlers.entryHandler,
-      handlers.organismHandler,
-      handlers.searchHandler,
-      handlers.otherHandler,
-    ]),
-  ],
-  ['mainIntegration', new Set([handlers.integrationHandler])],
-  [
-    'mainDB',
-    new Set([
-      handlers.memberDBHandler,
-      handlers.interProHandler,
-      handlers.structureDBHandler,
-      handlers.proteinDBHandler,
-      handlers.proteomeHandler,
-      handlers.taxonomyHandler,
-      handlers.sequenceSearchHandler,
-      handlers.textSearchHandler,
-    ]),
-  ],
-  [
-    'mainAccession',
-    new Set([
-      handlers.memberDBAccessionHandler,
-      handlers.interProAccessionHandler,
-      handlers.structureAccessionHandler,
-      handlers.proteinAccessionHandler,
-      handlers.proteomeAccessionHandler,
-      handlers.taxonomyAccessionHandler,
-      handlers.jobSequenceSearchHandler,
-      handlers.valueTextSearchHandler,
-    ]),
-  ],
-  ['mainChain', new Set([handlers.structureChainHandler])],
-  [
-    'mainMemberDB',
-    new Set([handlers.memberDBHandler, handlers.proteomeHandler]),
-  ],
-  [
-    'mainMemberDBAccession',
-    new Set([
-      handlers.memberDBAccessionHandler,
-      handlers.proteomeAccessionHandler,
-    ]),
-  ],
-  ['mainDetail', new Set([handlers.mainDetailHandler])],
-  [
-    'focusType',
-    new Set([
-      handlers.structureHandler,
-      handlers.proteinHandler,
-      handlers.entryHandler,
-      handlers.organismHandler,
-    ]),
-  ],
-  ['focusIntegration', new Set([handlers.integrationHandler])],
-  [
-    'focusDB',
-    new Set([
-      handlers.memberDBHandler,
-      handlers.interProHandler,
-      handlers.structureDBHandler,
-      handlers.proteinDBHandler,
-      handlers.proteomeHandler,
-      handlers.taxonomyHandler,
-    ]),
-  ],
-  [
-    'focusAccession',
-    new Set([
-      handlers.memberDBAccessionHandler,
-      handlers.interProAccessionHandler,
-      handlers.structureAccessionHandler,
-      handlers.proteinAccessionHandler,
-    ]),
-  ],
-  ['focusChain', new Set([handlers.structureChainHandler])],
-  [
-    'focusMemberDB',
-    new Set([handlers.memberDBHandler, handlers.proteomeHandler]),
-  ],
-  [
-    'focusMemberDBAccession',
-    new Set([
-      handlers.memberDBAccessionHandler,
-      handlers.proteomeAccessionHandler,
-    ]),
-  ],
-]);
+    ['other', new Set([handlers.otherHandler])],
+    [
+      'mainType',
+      new Set([
+        handlers.structureHandler,
+        handlers.proteinHandler,
+        handlers.entryHandler,
+        handlers.organismHandler,
+        handlers.searchHandler,
+        handlers.otherHandler,
+      ]),
+    ],
+    ['mainIntegration', new Set([handlers.integrationHandler])],
+    [
+      'mainDB',
+      new Set([
+        handlers.memberDBHandler,
+        handlers.interProHandler,
+        handlers.structureDBHandler,
+        handlers.proteinDBHandler,
+        handlers.proteomeHandler,
+        handlers.taxonomyHandler,
+        handlers.sequenceSearchHandler,
+        handlers.textSearchHandler,
+      ]),
+    ],
+    [
+      'mainAccession',
+      new Set([
+        handlers.memberDBAccessionHandler,
+        handlers.interProAccessionHandler,
+        handlers.structureAccessionHandler,
+        handlers.proteinAccessionHandler,
+        handlers.proteomeAccessionHandler,
+        handlers.taxonomyAccessionHandler,
+        handlers.jobSequenceSearchHandler,
+        handlers.valueTextSearchHandler,
+      ]),
+    ],
+    ['mainChain', new Set([handlers.structureChainHandler])],
+    [
+      'mainMemberDB',
+      new Set([handlers.memberDBHandler, handlers.proteomeHandler]),
+    ],
+    [
+      'mainMemberDBAccession',
+      new Set([
+        handlers.memberDBAccessionHandler,
+        handlers.proteomeAccessionHandler,
+      ]),
+    ],
+    ['mainDetail', new Set([handlers.mainDetailHandler])],
+    [
+      'focusType',
+      new Set([
+        handlers.structureHandler,
+        handlers.proteinHandler,
+        handlers.entryHandler,
+        handlers.organismHandler,
+      ]),
+    ],
+    ['focusIntegration', new Set([handlers.integrationHandler])],
+    [
+      'focusDB',
+      new Set([
+        handlers.memberDBHandler,
+        handlers.interProHandler,
+        handlers.structureDBHandler,
+        handlers.proteinDBHandler,
+        handlers.proteomeHandler,
+        handlers.taxonomyHandler,
+      ]),
+    ],
+    [
+      'focusAccession',
+      new Set([
+        handlers.memberDBAccessionHandler,
+        handlers.interProAccessionHandler,
+        handlers.structureAccessionHandler,
+        handlers.proteinAccessionHandler,
+      ]),
+    ],
+    ['focusChain', new Set([handlers.structureChainHandler])],
+    [
+      'focusMemberDB',
+      new Set([handlers.memberDBHandler, handlers.proteomeHandler]),
+    ],
+    [
+      'focusMemberDBAccession',
+      new Set([
+        handlers.memberDBAccessionHandler,
+        handlers.proteomeAccessionHandler,
+      ]),
+    ],
+  ]
+);

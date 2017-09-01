@@ -8,6 +8,7 @@
 .*/node_modules/draft-js
 .*/node_modules/.*json
 .*/node_modules/eslint-plugin*
+.*/node_modules/timing-functions
 
 [include]
 
