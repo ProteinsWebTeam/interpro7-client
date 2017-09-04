@@ -289,7 +289,7 @@ module.exports = (env = { dev: true }) => {
       ],
     },
     performance: {
-      hints: 'warning',
+      hints: env.production && 'warning',
       // eslint-disable-next-line no-magic-numbers
       maxAssetSize: 5 * kB * kB, // 5MB
       // eslint-disable-next-line no-magic-numbers
@@ -374,7 +374,7 @@ module.exports = (env = { dev: true }) => {
             logo: path.join('.', 'images', 'logo', 'logo_75x75.png'),
             prefix: 'icon.[hash:3].',
             emitStats: false,
-            minify: true,
+            minify: env.production,
             background: '#007c82',
             title: pkg.name,
           })
@@ -413,6 +413,9 @@ module.exports = (env = { dev: true }) => {
               optional: [/\.(eot|ttf|woff|svg|ico|png|jpe?g)$/i],
             },
             AppCache: false,
+            ServiceWorker: {
+              minify: env.production,
+            },
           })
         : null,
     ].filter(Boolean), // filter out empty values
