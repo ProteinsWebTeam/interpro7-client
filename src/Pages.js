@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -62,27 +62,41 @@ const pages = new Set([
   { value: 'settings', component: Settings },
 ]);
 
-const Pages = ({ stuck, top, ...props } /*: Object */) => (
-  <main style={{ marginTop: stuck ? '174px' : 0 }}>
-    <Switch
-      {...props}
-      indexRoute={() => null}
-      locationSelector={l => l.description.mainType}
-      catchAll={BrowseTabs}
-    />
-    <Switch
-      {...props}
-      locationSelector={l => l.description.other || l.description.mainType}
-      indexRoute={Home}
-      childRoutes={pages}
-      catchAll={NotFound}
-    />
-  </main>
-);
-Pages.propTypes = {
-  stuck: T.bool.isRequired,
-  top: T.number.isRequired,
-};
+const Null = () => null;
+
+/*:: type Props = {
+  stuck: boolean,
+  top: number,
+}; */
+
+class Pages extends PureComponent /*:: <Props> */ {
+  static propTypes = {
+    stuck: T.bool.isRequired,
+    top: T.number.isRequired,
+  };
+
+  render() {
+    const { stuck, top, ...props } = this.props;
+    return (
+      <main style={{ marginTop: stuck ? '174px' : 0 }}>
+        <Switch
+          {...props}
+          indexRoute={Null}
+          locationSelector={l => l.description.mainType}
+          childRoutes={[{ value: 'search', component: Null }]}
+          catchAll={BrowseTabs}
+        />
+        <Switch
+          {...props}
+          locationSelector={l => l.description.other || l.description.mainType}
+          indexRoute={Home}
+          childRoutes={pages}
+          catchAll={NotFound}
+        />
+      </main>
+    );
+  }
+}
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,

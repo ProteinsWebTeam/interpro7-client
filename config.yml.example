@@ -9,26 +9,26 @@ pages:
   entry:
     plural: entries
     subPages:
-      - proteins
-      - structures
-      - organisms
-      - domain architectures
-      - hmm models
+      - protein
+      - structure
+      - organism
+      - domain architecture
+      - hmm model
   protein:
     subPages:
-      - entries
-      - structures
-      - domain architectures
+      - entry
+      - structure
+      - domain architecture
   structure:
     subPages:
-      - entries
-      - proteins
-      - domain architectures
+      - entry
+      - protein
+      - domain architecture
   organism:
     subPages:
-      - entries
-      - proteins
-      - structures
+      - entry
+      - protein
+      - structure
 pagination:
   pageSize: 20
 cache:
