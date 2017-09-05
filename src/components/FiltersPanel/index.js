@@ -65,12 +65,12 @@ class FiltersPanel extends Component {
         <div className={f('columns', 'large-2', 'show-for-large')}>
           <h6>Filter By</h6>
           <button className={f('but-collapse')} onClick={this.clearAll}>
-            Clear |&nbsp;
-          </button>
+            Clear
+          </button>&nbsp;|&nbsp;
           <button className={f('but-collapse')} onClick={this.toggleAll}>
-            {toCollapse ? 'Show All ' : 'Collapse All'}
+            {toCollapse ? 'Show All' : 'Collapse All'}
             <span className={f('filter-title-arrow')}>
-              {toCollapse ? '▸  ' : '▾'}
+              {toCollapse ? ' ▸' : ' ▾'}
             </span>
           </button>
         </div>

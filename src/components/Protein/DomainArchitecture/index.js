@@ -114,7 +114,7 @@ class DomainArchitecture extends Component {
         <div className={s('buttons')}>
           <button onClick={this.handleCollapse}>Collapse All</button>
           &nbsp;|&nbsp;
-          <button onClick={this.handleExpand}> Expand All</button>
+          <button onClick={this.handleExpand}>Expand All</button>
           &nbsp;|&nbsp;
           <button onClick={this.handleFullScreen} className={s('fullscreen')}>
             ⇧
@@ -131,9 +131,9 @@ class DomainArchitecture extends Component {
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location }),
+  location => ({ location })
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  DomainArchitecture,
+  DomainArchitecture
 );
