@@ -192,7 +192,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             focusType: null,
             focusDB: null,
-            mainDetail: 'hmm_models',
+            mainDetail: 'hmm_model',
           },
         };
       },

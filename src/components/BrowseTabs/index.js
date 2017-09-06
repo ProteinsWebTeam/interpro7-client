@@ -19,6 +19,7 @@ import { foundationPartial } from 'styles/foundation';
 const f = foundationPartial(styles);
 
 /*:: type CounterProps = {
+  newTo: Object | function,
   name: string,
   data: {
     loading: boolean,
@@ -28,6 +29,7 @@ const f = foundationPartial(styles);
 
 class Counter extends PureComponent /*:: <CounterProps> */ {
   static propTypes = {
+    newTo: T.oneOfType([T.object, T.func]).isRequired,
     name: T.string.isRequired,
     data: T.shape({
       loading: T.bool.isRequired,
@@ -36,26 +38,29 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
   };
 
   render() {
-    const { name, data: { loading, payload } } = this.props;
+    const { newTo, name, data: { loading, payload } } = this.props;
+    let value = null;
     if (
-      loading ||
-      !(
-        payload &&
+      !loading &&
+      (payload &&
         payload.metadata &&
         payload.metadata.counters &&
-        Number.isFinite(payload.metadata.counters[name])
-      )
+        Number.isFinite(payload.metadata.counters[name]))
     ) {
-      return null;
+      value = payload.metadata.counters[name];
     }
     return (
-      <span>
-        <NumberLabel
-          value={payload.metadata.counters[name]}
-          className={f('counter')}
-        />
+      <Link
+        newTo={newTo}
+        activeClass={f('is-active', 'is-active-tab')}
+        disabled={value !== null && !value}
+      >
+        {value !== null && (
+          <NumberLabel value={value} className={f('counter')} />
+        )}
         &nbsp;
-      </span>
+        {name}
+      </Link>
     );
   }
 }
@@ -95,13 +100,7 @@ class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
           <ul className={f('tabs')}>
             {tabs.map(e => (
               <li className={f('tabs-title')} key={e.name}>
-                <Link
-                  newTo={e.newTo}
-                  activeClass={f('is-active', 'is-active-tab')}
-                >
-                  <Counter name={e.name} data={data} />
-                  {e.name}
-                </Link>
+                <Counter newTo={e.newTo} name={e.name} data={data} />
               </li>
             ))}
           </ul>

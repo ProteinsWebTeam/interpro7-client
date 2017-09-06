@@ -60,6 +60,8 @@ const generateClassName = (
     search: ?Object,
     hash: ?string,
   },
+  style?: ?Object,
+  disabled: ?boolean,
   className: ?string,
   activeClass: ?function | string,
 }; */
@@ -84,6 +86,7 @@ class Link extends PureComponent /*:: <Props> */ {
       }),
       T.func,
     ]),
+    disabled: T.bool,
     className: T.string,
     activeClass: T.oneOfType([T.string, T.func]),
   };
@@ -107,6 +110,7 @@ class Link extends PureComponent /*:: <Props> */ {
     if (target) return;
     // OK, now we can handle it
     event.preventDefault();
+    if (this.props.disabled) return;
     goToNewLocation(getNextLocation(location, newTo));
   };
 
@@ -118,6 +122,7 @@ class Link extends PureComponent /*:: <Props> */ {
       activeClass,
       className,
       newTo,
+      disabled,
       href,
       children,
       ...props
@@ -127,6 +132,14 @@ class Link extends PureComponent /*:: <Props> */ {
     const _className =
       generateClassName(className, activeClass, location, nextLocation, href) ||
       '';
+    if (disabled) {
+      props.style = {
+        ...(props.style || {}),
+        userSelect: 'none',
+        pointerEvents: 'none',
+        cursor: 'not-allowed',
+      };
+    }
     return (
       <a
         {...props}

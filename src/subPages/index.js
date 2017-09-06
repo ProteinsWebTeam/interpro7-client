@@ -59,8 +59,8 @@ const subPages = new Map([
   ['protein', loadData(defaultMapStateToProps)(Protein)],
   ['structure', loadData(defaultMapStateToProps)(Structure)],
   ['organism', loadData(defaultMapStateToProps)(Organism)],
-  ['domain architecture', loadData()(DomainArchitecture)],
-  ['hmm model', loadData()(HMMModel)],
+  ['domain_architecture', loadData()(DomainArchitecture)],
+  ['hmm_model', loadData()(HMMModel)],
 ]);
 
 export default subPages;
