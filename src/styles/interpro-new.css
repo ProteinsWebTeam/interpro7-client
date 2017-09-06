@@ -470,27 +470,30 @@ ul.chevron > li:before {
 
 /******************************LOCAL STYLE*********************************/
 /*TABS*/
-.tabs .tabs-title.is-active > a:focus,
-.tabs .tabs-title.is-active > a {
-  color: white;
-  background: #666;
-} /*tabs style - the default tabs style from EBI using aria-selected='true'.is-active doesn't work*/
+.tabs .tabs-title.is-active {
+  & > a,
+  & > a:focus,
+  & > button,
+  & > button:focus {
+    color: white;
+    background: #666;
+  }
+}
 
-.tabs .tabs-title > button {
-  color: #0a0a0a;
-  padding: 1.25rem 1.5rem;
-  font-size: 0.75rem;
-  line-height: 1;
+.tabs .tabs-title {
+  & > button,
+  & > a {
+    color: #0a0a0a;
+    padding: 1.25rem 1.5rem;
+    font-size: 0.75rem;
+    line-height: 1;
+  }
+
+  & > button:hover,
+  & > a:hover {
+    background-color: #ddd;
+  }
 }
-.tabs .tabs-title > button:hover {
-  background-color: #ddd;
-}
-.tabs .tabs-title.is-active > button:focus,
-.tabs .tabs-title.is-active > button,
-.is-active-tab {
-  color: white;
-  background: #666;
-} /*tabs style - the default tabs style from EBI using aria-selected='true'.is-active doesn't work*/
 
 /*footer*/
 .local_footer {
