@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import ColorHash from 'color-hash/lib/color-hash';
 
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
-import ProteinListFilters from 'components/Protein/ProteinListFilters';
+import { PDBeLink } from 'components/ExtLink';
+import StructureListFilters from 'components/Structure/StructureListFilters';
 import Table, {
   Column,
   SearchBox,
@@ -15,7 +15,6 @@ import Table, {
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
 import subPages from 'subPages';
 import config from 'config';
@@ -24,13 +23,15 @@ import classname from 'classnames/bind';
 
 import f from 'styles/foundation';
 
+import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
-import pageStyle from './style.css';
 
 const ps = classname.bind(pageStyle);
 
-const SVG_WIDTH = 100;
-const colorHash = new ColorHash();
+const SummaryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'),
+});
 
 const propTypes = {
   data: T.shape({
@@ -40,30 +41,26 @@ const propTypes = {
   isStale: T.bool.isRequired,
   location: T.shape({
     description: T.object.isRequired,
+    search: T.object.isRequired,
   }).isRequired,
-  match: T.string,
 };
 
-const defaultPayload = {
-  proteins: {
-    uniprot: null,
-    reviewed: null,
-    unreviewed: null,
-  },
+const Overview = ({ data: { payload, loading } }) => {
+  if (loading) return <div>Loading…</div>;
+  return (
+    <ul className={styles.card}>
+      {Object.entries(payload.structures || {}).map(([name, count]) => (
+        <li key={name}>
+          <Link
+            newTo={{ description: { mainType: 'structure', mainDB: name } }}
+          >
+            {name} ({count})
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
 };
-
-const Overview = ({ data: { payload = defaultPayload } }) => (
-  <ul className={styles.card}>
-    {Object.entries(payload.proteins || {}).map(([name, count]) => (
-      <li key={name}>
-        <Link newTo={{ description: { mainType: 'protein', mainDB: name } }}>
-          {name}
-          {Number.isFinite(count) ? ` (${count})` : ''}
-        </Link>
-      </li>
-    ))}
-  </ul>
-);
 Overview.propTypes = propTypes;
 
 const List = ({
@@ -79,17 +76,12 @@ const List = ({
       results: [],
     };
   }
-  const maxLength = _payload.results.reduce(
-    (max, result) => Math.max(max, (result.metadata || result).length),
-    0
-  );
   return (
     <div className={f('row')}>
       <MemberDBTabs />
 
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-        <ProteinListFilters />
-        <hr />
+        <StructureListFilters /> <hr />
         <Table
           dataTable={_payload.results}
           isStale={isStale}
@@ -101,12 +93,12 @@ const List = ({
           <Exporter>
             <ul>
               <li>
-                <a href={url} download="proteins.json">
+                <a href={url} download="structures.json">
                   JSON
                 </a>
               </li>
               <li>
-                <a href={url} download="proteins.tsv">
+                <a href={url} download="structures.tsv">
                   TSV
                 </a>
               </li>
@@ -119,7 +111,7 @@ const List = ({
           </Exporter>
           <PageSizeSelector />
           <SearchBox search={search.search} pathname={''}>
-            Search proteins
+            Search structures
           </SearchBox>
           <Column
             dataKey="accession"
@@ -162,46 +154,21 @@ const List = ({
           >
             Name
           </Column>
+          <Column dataKey="experiment_type">Experiment type</Column>
           <Column
-            dataKey="source_database"
-            renderer={(db /*: string */) => (
-              <Link
-                newTo={location => ({
-                  ...location,
-                  description: {
-                    mainType: location.description.mainType,
-                    mainDB: location.description.mainDB,
-                  },
-                })}
-              >
-                {db}
-              </Link>
+            dataKey="accession"
+            defaultKey="structureAccession"
+            renderer={(accession /*: string */) => (
+              <PDBeLink id={accession}>
+                <img
+                  src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
+                  alt={`structure with accession ${accession.toUpperCase()}`}
+                  style={{ maxWidth: '33%' }}
+                />
+              </PDBeLink>
             )}
           >
-            Source Database
-          </Column>
-          <Column dataKey="source_organism.fullname">Species</Column>
-          <Column
-            dataKey="length"
-            renderer={(length /*: number */, row) => (
-              <div
-                title={`${length} amino-acids`}
-                style={{
-                  width: `${length / maxLength * SVG_WIDTH}%`,
-                  padding: '0.2rem',
-                  backgroundColor: colorHash.hex(row.accession),
-                  borderRadius: '0.2rem',
-                  textAlign: 'start',
-                  overflowX: 'hidden',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'clip',
-                }}
-              >
-                {length} amino-acids
-              </div>
-            )}
-          >
-            Length
+            Structure
           </Column>
         </Table>
       </div>
@@ -209,19 +176,6 @@ const List = ({
   );
 };
 List.propTypes = propTypes;
-
-const SummaryAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'),
-});
-
-const subPagesForProtein = new Set();
-for (const subPage of config.pages.protein.subPages) {
-  subPagesForProtein.add({
-    value: subPage.replace(/\s+/g, '_'),
-    component: subPages.get(subPage),
-  });
-}
 
 const SummaryComponent = ({ data: { payload }, location }) => (
   <SummaryAsync data={payload} location={location} />
@@ -233,19 +187,25 @@ SummaryComponent.propTypes = {
   location: T.object.isRequired,
 };
 
+const subPagesForStructure = new Set();
+for (const subPage of config.pages.structure.subPages) {
+  subPagesForStructure.add({
+    value: subPage,
+    component: subPages.get(subPage),
+  });
+}
+
 const Summary = props => {
-  const { data: { loading, payload } } = props;
-  if (loading || !payload.metadata) return <div>Loading…</div>;
+  const { data: { loading } } = props;
+  if (loading) return <div>Loading…</div>;
   return (
-    <div>
-      <Switch
-        {...props}
-        locationSelector={l =>
-          l.description.mainDetail || l.description.focusType}
-        indexRoute={SummaryComponent}
-        childRoutes={subPagesForProtein}
-      />
-    </div>
+    <Switch
+      {...props}
+      locationSelector={l =>
+        l.description.mainDetail || l.description.focusType}
+      indexRoute={SummaryComponent}
+      childRoutes={subPagesForStructure}
+    />
   );
 };
 Summary.propTypes = {
@@ -255,7 +215,6 @@ Summary.propTypes = {
   location: T.object.isRequired,
 };
 
-const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <Switch
@@ -263,25 +222,34 @@ const InnerSwitch = props => (
     locationSelector={l =>
       l.description.mainAccession || l.description.focusType}
     indexRoute={List}
-    childRoutes={[{ value: acc, component: Summary }]}
+    childRoutes={[{ value: /^[a-z\d]{4}$/i, component: Summary }]}
     catchAll={List}
   />
 );
 
-const Protein = props => (
-  <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
-    <Switch
-      {...props}
-      locationSelector={l => l.description.mainDB}
-      indexRoute={Overview}
-      catchAll={InnerSwitch}
-    />
-  </div>
-);
-Protein.propTypes = {
-  isStale: T.bool.isRequired,
-};
+class Structure extends PureComponent {
+  static propTypes = {
+    isStale: T.bool.isRequired,
+  };
 
-export default loadData((...args) =>
-  getUrlForApi(...args).replace('domain_architecture', 'entry')
-)(Protein);
+  render() {
+    return (
+      <div
+        className={ps('with-data', { ['with-stale-data']: this.props.isStale })}
+      >
+        <Switch
+          {...this.props}
+          locationSelector={l => l.description.mainDB}
+          indexRoute={Overview}
+          catchAll={InnerSwitch}
+        />
+      </div>
+    );
+  }
+}
+
+export default loadData()(Structure);
+// loadData will create an component that wraps Structure.
+// Such component will request content and it will put it in the state and make
+// it available for its children. Because there are not parameters when invoking
+// the method,the data is requested from the api based on the current URL

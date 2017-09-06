@@ -16,7 +16,7 @@ import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
-import style from './style.css';
+import style from '../style.css';
 
 // Images
 import iscanLogo from 'images/logo_interproscan_ext.png';

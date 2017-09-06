@@ -12,18 +12,18 @@ pages:
       - protein
       - structure
       - organism
-      - domain architecture
-      - hmm model
+      - domain_architecture
+      - hmm_model
   protein:
     subPages:
       - entry
       - structure
-      - domain architecture
+      - domain_architecture
   structure:
     subPages:
       - entry
       - protein
-      - domain architecture
+      - domain_architecture
   organism:
     subPages:
       - entry

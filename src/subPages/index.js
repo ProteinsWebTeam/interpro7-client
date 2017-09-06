@@ -1,4 +1,9 @@
+import { createSelector } from 'reselect';
+import { stringify as qsStringify } from 'query-string';
+
 import loadable from 'higherOrder/loadable';
+import loadData from 'higherOrder/loadData';
+import description2path from 'utils/processLocation/description2path';
 
 const Entry = loadable({
   loader: () => import(/* webpackChunkName: "entry-subpage" */ './Entry'),
@@ -27,13 +32,35 @@ const HMMModel = loadable({
     import(/* webpackChunkName: "hmm-model-subpage" */ './HMMModel'),
 });
 
+const defaultMapStateToProps = createSelector(
+  state => state.settings.api,
+  state => state.settings.pagination,
+  state => state.newLocation.description,
+  state => state.newLocation.search,
+  ({ protocol, hostname, port, root }, pagination, _description, _search) => {
+    const search = _search || {};
+    search.page_size = search.page_size || pagination.pageSize;
+    const description = {
+      mainType: _description.mainType,
+      mainDB: _description.mainDB,
+      mainAccession: _description.mainAccession,
+      focusType: _description.focusType,
+      focusDB: _description.focusDB,
+      focusAccession: _description.focusAccession,
+    };
+    return `${protocol}//${hostname}:${port}${root}${description2path(
+      description
+    )}?${qsStringify(search)}`;
+  }
+);
+
 const subPages = new Map([
-  ['entry', Entry],
-  ['protein', Protein],
-  ['structure', Structure],
-  ['organism', Organism],
-  ['domain architecture', DomainArchitecture],
-  ['hmm model', HMMModel],
+  ['entry', loadData(defaultMapStateToProps)(Entry)],
+  ['protein', loadData(defaultMapStateToProps)(Protein)],
+  ['structure', loadData(defaultMapStateToProps)(Structure)],
+  ['organism', loadData(defaultMapStateToProps)(Organism)],
+  ['domain architecture', loadData()(DomainArchitecture)],
+  ['hmm model', loadData()(HMMModel)],
 ]);
 
 export default subPages;

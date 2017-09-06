@@ -1,15 +1,21 @@
-import React from 'react';
+// @flow
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Related from 'components/Related';
 
-const EntrySubPage = ({ data } /*: {data: Object} */) => (
-  <div>
-    <Related data={data} />
-  </div>
-);
-EntrySubPage.propTypes = {
-  data: T.object.isRequired,
-};
+class EntrySubPage extends PureComponent /*:: <{data: Object}> */ {
+  static propTypes = {
+    data: T.object.isRequired,
+  };
+
+  render() {
+    return (
+      <div>
+        <Related data={this.props.data} />
+      </div>
+    );
+  }
+}
 
 export default EntrySubPage;

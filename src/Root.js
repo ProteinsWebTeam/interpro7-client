@@ -20,7 +20,7 @@ import EBIHeader from 'components/EBIHeader';
 import Header from 'components/Header';
 // import Breadcrumb from 'components/Breadcrumb';
 
-import Pages from 'Pages';
+import Pages from 'pages';
 
 const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;

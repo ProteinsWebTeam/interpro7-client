@@ -76,114 +76,130 @@ export const entities /*: Array<Object> */ = [
   },
 ];
 
-export const singleEntity /*: Array<Object> */ = [
-  {
-    newTo(location /*: Location */) {
-      return {
-        ...location,
-        description: {
-          ...location.description,
-          mainDetail: null,
-          focusType: null,
-          focusDB: null,
-        },
-      };
+export const singleEntity /*: Map<string, Object> */ = new Map([
+  [
+    'overview',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            mainDetail: null,
+            focusType: null,
+            focusDB: null,
+          },
+        };
+      },
+      name: 'overview',
     },
-    name: 'overview',
-  },
-  {
-    newTo(location /*: Location */) {
-      return {
-        ...location,
-        description: {
-          ...location.description,
-          mainDetail: null,
-          focusType: 'entry',
-          focusDB: 'InterPro',
-        },
-      };
+  ],
+  [
+    'entry',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            mainDetail: null,
+            focusType: 'entry',
+            focusDB: 'InterPro',
+          },
+        };
+      },
+      name: 'entries',
+      counter: 'entries',
     },
-    type: 'entry',
-    name: 'entries',
-    counter: 'entries',
-  },
-  {
-    newTo(location /*: Location */) {
-      return {
-        ...location,
-        description: {
-          ...location.description,
-          mainDetail: null,
-          focusType: 'protein',
-          focusDB: 'UniProt',
-        },
-      };
+  ],
+  [
+    'protein',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            mainDetail: null,
+            focusType: 'protein',
+            focusDB: 'UniProt',
+          },
+        };
+      },
+      name: 'proteins',
+      counter: 'proteins',
     },
-    type: 'protein',
-    name: 'proteins',
-    counter: 'proteins',
-  },
-  {
-    newTo(location /*: Location */) {
-      return {
-        ...location,
-        description: {
-          ...location.description,
-          mainDetail: null,
-          focusType: 'structure',
-          focusDB: 'PDB',
-        },
-      };
+  ],
+  [
+    'structure',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            mainDetail: null,
+            focusType: 'structure',
+            focusDB: 'PDB',
+          },
+        };
+      },
+      name: 'structures',
+      counter: 'structures',
     },
-    type: 'structure',
-    name: 'structures',
-    counter: 'structures',
-  },
-  {
-    newTo(location /*: Location */) {
-      return {
-        ...location,
-        description: {
-          ...location.description,
-          focusType: null,
-          focusDB: null,
-          mainDetail: 'species',
-        },
-      };
+  ],
+  [
+    'organism',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            focusType: 'organism',
+            focusDB: 'taxonomy',
+          },
+        };
+      },
+      name: 'organisms',
+      counter: 'organisms',
     },
-    type: 'protein',
-    name: 'species',
-    counter: 'species',
-  },
-  {
-    newTo(location /*: Location */) {
-      return {
-        ...location,
-        description: {
-          ...location.description,
-          focusType: null,
-          focusDB: null,
-          mainDetail: 'domain_architecture',
-        },
-      };
+  ],
+  [
+    'domain_architecture',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            focusType: null,
+            focusDB: null,
+            mainDetail: 'domain_architecture',
+          },
+        };
+      },
+      name: 'domain architectures',
     },
-    name: 'domain architectures',
-  },
-  {
-    newTo(location /*: Location */) {
-      return {
-        ...location,
-        description: {
-          ...location.description,
-          focusType: null,
-          focusDB: null,
-          mainDetail: 'hmm_models',
-        },
-      };
+  ],
+  [
+    'hmm_model',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            focusType: null,
+            focusDB: null,
+            mainDetail: 'hmm_models',
+          },
+        };
+      },
+      name: 'hmm model',
     },
-    name: 'hmm models',
-  },
-];
+  ],
+]);
 
 export const InterPro /*: Array<Object> */ = [
   {

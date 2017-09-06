@@ -1,16 +1,21 @@
 // @flow
-import React from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Related from 'components/Related';
 
-const ProteinSubPage = ({ data } /*: {data: Object} */) => (
-  <div>
-    <Related data={data} />
-  </div>
-);
-ProteinSubPage.propTypes = {
-  data: T.object.isRequired,
-};
+class ProteinSubPage extends PureComponent /*:: <{data: Object}> */ {
+  static propTypes = {
+    data: T.object.isRequired,
+  };
+
+  render() {
+    return (
+      <div>
+        <Related data={this.props.data} />
+      </div>
+    );
+  }
+}
 
 export default ProteinSubPage;

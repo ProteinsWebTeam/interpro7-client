@@ -108,6 +108,7 @@ const mapStateToProps = createSelector(
         if (datum && typeof datum === 'object') {
           return datum.loading;
         }
+        return false;
       })
   ),
   state => state.newLocation.description.mainType,

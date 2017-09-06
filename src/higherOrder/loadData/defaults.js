@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
-import description2path from 'utils/processLocation/description2path';
 import { stringify as qsStringify } from 'query-string';
+
+import description2path from 'utils/processLocation/description2path';
 
 export const getUrl = createSelector(
   // this one is just to memoize it

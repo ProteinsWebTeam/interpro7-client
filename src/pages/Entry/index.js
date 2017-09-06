@@ -27,7 +27,7 @@ import classname from 'classnames/bind';
 
 import f from 'styles/foundation';
 
-import pageStyle from './style.css';
+import pageStyle from '../style.css';
 
 import styles from 'styles/blocks.css';
 
@@ -345,7 +345,7 @@ const SchemaOrgData = loadable({
 const subPagesForEntry = new Set();
 for (const subPage of config.pages.entry.subPages) {
   subPagesForEntry.add({
-    value: subPage.replace(/\s+/g, '_'),
+    value: subPage,
     component: subPages.get(subPage),
   });
 }

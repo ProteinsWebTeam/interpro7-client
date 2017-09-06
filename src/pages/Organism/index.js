@@ -20,7 +20,7 @@ import classname from 'classnames/bind';
 
 import f from 'styles/foundation';
 
-import pageStyle from './style.css';
+import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 
 const ps = classname.bind(pageStyle);
@@ -167,7 +167,7 @@ SummaryComponent.propTypes = {
 const subPagesForOrganism = new Set();
 for (const subPage of config.pages.organism.subPages) {
   subPagesForOrganism.add({
-    value: subPage.replace(/\s+/g, '_'),
+    value: subPage,
     component: subPages.get(subPage),
   });
 }
