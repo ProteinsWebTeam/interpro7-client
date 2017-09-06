@@ -4,12 +4,15 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import PopperJS from 'popper.js';
 
+import path2description from 'utils/processLocation/path2description';
 import { goToNewLocation } from 'actions/creators';
 
 import EntryComponent from './entry_component';
 
 import classname from 'classnames/bind';
+
 import styles from './style.css';
+
 const s = classname.bind(styles);
 
 const requestFullScreen = element => {
@@ -35,16 +38,19 @@ class DomainArchitecture extends Component {
     goToNewLocation: T.func.isRequired,
   };
 
-  state = {
-    entryHovered: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      entryHovered: null,
+    };
+  }
 
   componentDidMount() {
     const { protein, data } = this.props;
     this.ec = new EntryComponent(this._container, protein, data);
     this.ec.on('entryclick', e => {
       if (e.link) {
-        this.props.goToNewLocation(e.link);
+        this.props.goToNewLocation({ description: path2description(e.link) });
       }
     });
     this.ec.on('entrymouseover', e => {
@@ -67,21 +73,27 @@ class DomainArchitecture extends Component {
       this._popper.classList.add('hide');
     });
   }
+
   shouldComponentUpdate() {
     return false;
   }
+
   componentWillUnmount() {
     this.ec.destructor();
   }
+
   handleCollapse = () => {
     this.ec.collapseAll();
   };
+
   handleExpand = () => {
     this.ec.expandAll();
   };
+
   handleFullScreen = () => {
     requestFullScreen(this._main);
   };
+
   getElementFromEntry(entry) {
     const tagString = `<div>
         <h4>${entry.label || entry.accession}</h4>
@@ -96,6 +108,7 @@ class DomainArchitecture extends Component {
     range.selectNode(document.getElementsByTagName('div').item(0));
     return range.createContextualFragment(tagString);
   }
+
   getElementFromResidue(residue) {
     const tagString = `<div>
         <h4>${residue.name} (${residue.residue})</h4>
@@ -108,6 +121,7 @@ class DomainArchitecture extends Component {
     range.selectNode(document.getElementsByTagName('div').item(0));
     return range.createContextualFragment(tagString);
   }
+
   render() {
     return (
       <div ref={e => (this._main = e)} className={s('fullscreenable')}>
