@@ -218,7 +218,7 @@ const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
   loadData(
     getReversedUrl
   )(({ data: { payload, loading }, secondaryData, ...props }) => {
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div>Loading…</div>;
     const _secondaryData = payload.results.map(x => {
       const obj = x.metadata;
       const plural = toPlural(props.mainType);
@@ -251,12 +251,12 @@ class Related extends PureComponent {
 
   render() {
     const { data, focusType, ...props } = this.props;
-    if (data.loading) return <div>Loading...</div>;
+    if (data.loading) return <div>Loading…</div>;
     const {
       metadata: mainData,
       [toPlural(focusType)]: secondaryData,
     } = data.payload;
-    if (!secondaryData) return <div>Loading...</div>;
+    if (!secondaryData) return <div>Loading…</div>;
     const RelatedComponent = Array.isArray(secondaryData)
       ? RelatedAdvancedQuery
       : RelatedSimple;

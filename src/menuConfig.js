@@ -156,6 +156,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           ...location,
           description: {
             ...location.description,
+            mainDetail: null,
             focusType: 'organism',
             focusDB: 'taxonomy',
           },

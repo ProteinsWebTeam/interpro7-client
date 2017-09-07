@@ -1,7 +1,7 @@
-import React, {Component, cloneElement} from 'react';
+import React, { Component, cloneElement } from 'react';
 import T from 'prop-types';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import classnames from 'classnames/bind';
 
@@ -27,48 +27,54 @@ class Loading extends Component {
   state = {};
 
   componentWillMount() {
-    const {data, component} = this.props;
-    if (this.shouldSetState({data, component})) this.setState({data, component});
+    const { data, component } = this.props;
+    if (this.shouldSetState({ data, component }))
+      this.setState({ data, component });
   }
 
-  componentWillReceiveProps({data, component}) {
-    if (this.shouldSetState({data, component})) this.setState({data, component});
+  componentWillReceiveProps({ data, component }) {
+    if (this.shouldSetState({ data, component }))
+      this.setState({ data, component });
   }
 
-  shouldSetState({data, component}) {
+  shouldSetState({ data, component }) {
     return (
-      data && component && !data.loading &&
+      data &&
+      component &&
+      !data.loading &&
       (!component.dataUrlMatch || component.dataUrlMatch.test(data.urlKey))
     );
   }
 
   render() {
     const {
-      data: {loading}, children: _, component: Component, ...otherProps
+      data: { loading },
+      children: _,
+      component: Component,
+      ...otherProps
     } = this.props;
-    const {data, children} = this.state;
+    const { data, children } = this.state;
 
     return (
       <div id="content" role="main" className={style.wrapper}>
-        <div className={s('overlay', {loading})}>Loading</div>
-        <div className={s('container', {loading})}>
-          {data && children ?
-            cloneElement(children, {...otherProps, ...data}) :
-            <div>Loading...</div>
-          }
-          {data && Component ?
-            <Component {...otherProps} {...data} /> :
-            <div>Loading...</div>
-          }
+        <div className={s('overlay', { loading })}>Loading</div>
+        <div className={s('container', { loading })}>
+          {data && children ? (
+            cloneElement(children, { ...otherProps, ...data })
+          ) : (
+            <div>Loading…</div>
+          )}
+          {data && Component ? (
+            <Component {...otherProps} {...data} />
+          ) : (
+            <div>Loading…</div>
+          )}
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = createSelector(
-  state => state.data,
-  data => ({data})
-);
+const mapStateToProps = createSelector(state => state.data, data => ({ data }));
 
 export default connect(mapStateToProps)(Loading);

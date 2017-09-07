@@ -121,7 +121,7 @@ const List = ({
             TaxID
           </Column>
           <Column
-            dataKey="full_name"
+            dataKey="name"
             renderer={(
               name /*: string */,
               { accession } /*: {accession: string} */

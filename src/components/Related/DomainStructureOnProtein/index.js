@@ -97,7 +97,7 @@ class _StructureOnProtein extends Component {
   render() {
     const { structures, dataInterPro, dataStructureInfo, protein } = this.props;
     if (dataInterPro.loading || dataStructureInfo.loading) {
-      return <div>Loading...</div>;
+      return <div>Loading…</div>;
     }
     const mergedData = mergeData(
       dataInterPro.payload.entries,

@@ -442,7 +442,6 @@ Entry.propTypes = {
 };
 export default loadData((...args) =>
   getUrlForApi(...args)
-    .replace('organism', '')
     .replace('hmm_model', '')
     .replace('domain_architecture', '')
 )(Entry);

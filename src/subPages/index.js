@@ -54,13 +54,31 @@ const defaultMapStateToProps = createSelector(
   }
 );
 
+const mapStateToPropsForHMMModel = createSelector(
+  state => state.settings.api,
+  state => state.newLocation.description,
+  state => state.newLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    // omit elements from search
+    const { type, search: _, ...restOfSearch } = search;
+    // modify search
+    restOfSearch.annotation = 'logo';
+    // omit elements from description
+    const { mainDetail, ...restOfDescription } = description;
+    // build URL
+    return `${protocol}//${hostname}:${port}${root}${description2path(
+      restOfDescription
+    )}?${qsStringify(restOfSearch)}`;
+  }
+);
+
 const subPages = new Map([
   ['entry', loadData(defaultMapStateToProps)(Entry)],
   ['protein', loadData(defaultMapStateToProps)(Protein)],
   ['structure', loadData(defaultMapStateToProps)(Structure)],
   ['organism', loadData(defaultMapStateToProps)(Organism)],
-  ['domain_architecture', loadData()(DomainArchitecture)],
-  ['hmm_model', loadData()(HMMModel)],
+  ['domain_architecture', loadData(defaultMapStateToProps)(DomainArchitecture)],
+  ['hmm_model', loadData(mapStateToPropsForHMMModel)(HMMModel)],
 ]);
 
 export default subPages;

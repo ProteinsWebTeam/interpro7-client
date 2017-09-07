@@ -138,6 +138,7 @@ class Link extends PureComponent /*:: <Props> */ {
         userSelect: 'none',
         pointerEvents: 'none',
         cursor: 'not-allowed',
+        opacity: 0.5,
       };
     }
     return (

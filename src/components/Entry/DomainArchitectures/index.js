@@ -145,7 +145,7 @@ class DomainArchitectures extends PureComponent {
     if (loading) return <div>Loading…</div>;
     return (
       <div>
-        {payload.results.map(obj => {
+        {(payload.results || []).map(obj => {
           const idaObj = ida2json(obj.IDA);
           return (
             <div key={obj.IDA_FK} style={{ marginTop: '2em' }}>
@@ -188,7 +188,7 @@ class DomainArchitectures extends PureComponent {
               {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
             </div>
           );
-        })};
+        })}
       </div>
     );
   }
