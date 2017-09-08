@@ -25,7 +25,8 @@ class Redirect extends PureComponent /*:: <Props> */ {
   };
 
   componentWillMount() {
-    this.props.goToNewLocation(this.props.to);
+    // Go to the new location, but replacing current location
+    this.props.goToNewLocation(this.props.to, true);
   }
 
   render() {

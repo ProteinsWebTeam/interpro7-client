@@ -26,30 +26,34 @@
   left: -4em;
 }
 
-.hmmer-link {
+.link {
   display: block;
   position: relative;
   overflow: hidden;
+  transform: translateX(-1em); /* TODO: find a way to not need this */
 
   & > span {
     position: relative;
   }
 }
 
-.hmmer-link:hover,
-.hmmer-link:focus {
-  & > .hmmer-shape {
-    transform: translate(0, 0) rotate(0);
+.link:hover,
+.link:focus {
+  & > .shape {
+    transform: translate(0, 0) rotate(0) !important;
+    opacity: 0.4;
   }
 }
 
-.hmmer-shape {
+.shape {
   position: absolute;
   height: 1em;
   width: 1em;
-  transition: transform var(--timing-medium) ease-in-out;
+  transition-property: transform, opacity;
+  transition-duration: var(--timing-medium);
+  transition-timing-function: ease-out;
 
-  &.yellow {
+  &.hmmer.yellow {
     background: #e2c14f;
     border-radius: 50%;
     top: 10%;
@@ -59,30 +63,79 @@
     transition-delay: var(--timing-instant);
   }
 
-  &.red {
+  &.hmmer.red {
     bottom: 0;
     left: 50%;
     transform: translate(1em, 1.5em) rotate(90deg);
   }
 
-  &.red::after {
+  &.hmmer.red::after {
     content: '\00a0';
     display: block;
     background: #d26d6d;
     transform: rotate(45deg);
   }
 
-  &.blue {
+  &.hmmer.blue {
     background: #56bde8;
     top: 5%;
     right: 10%;
     transform: translate(1em, -2em) rotate(40deg);
     transition-delay: var(--timing-fast);
   }
+
+  &.ips.gray {
+    background: #79a4b6;
+    top: calc(50% - 3.5 * 0.4em);
+    left: 10%;
+    height: 0.4em;
+    width: 50%;
+    transform: translateX(-150%);
+    transition-delay: var(--timing-fast);
+  }
+
+  &.ips.green {
+    background: #7cc094;
+    top: calc(50% - 1.5 * 0.4em);
+    right: 20%;
+    height: 0.4em;
+    width: 60%;
+    transform: translateX(150%);
+  }
+
+  &.ips.pale-green {
+    background: #abd6ba;
+    top: calc(50% + 0.5 * 0.4em);
+    left: 22%;
+    height: 0.4em;
+    width: 10%;
+    transform: translateX(-350%);
+    transition-delay: var(--timing-medium);
+  }
+
+  &.ips.red {
+    background: #e75951;
+    top: calc(50% + 0.5 * 0.4em);
+    right: 40%;
+    height: 0.4em;
+    width: 15%;
+    transform: translateX(400%);
+    transition-delay: var(--timing-fast);
+  }
+
+  &.ips.blue {
+    background: #2d7d95;
+    top: calc(50% + 2.5 * 0.4em);
+    right: 40%;
+    height: 0.4em;
+    width: 45%;
+    transform: translateX(200%);
+    transition-delay: var(--timing-instant);
+  }
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  .hmmer-shape {
+  .shape {
     transform: none !important;
   }
 }

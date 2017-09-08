@@ -128,6 +128,14 @@ module.exports = (env = { dev: true }) => {
           ],
         },
         {
+          test: /\.(txt|fast[aq])/i,
+          use: [
+            {
+              loader: 'raw-loader',
+            },
+          ],
+        },
+        {
           test: /\.yml$/i,
           use: [
             {

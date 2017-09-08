@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import T from 'prop-types';
 import {
   Editor,
@@ -8,6 +8,7 @@ import {
   convertToRaw,
 } from 'draft-js';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import url from 'url';
 
 import config from 'config';
@@ -19,8 +20,12 @@ import blockEvent from 'utils/blockEvent';
 import getTableAccess from 'storage/idb';
 
 import { foundationPartial } from 'styles/foundation';
+
 import interproTheme from 'styles/theme-interpro.css';
 import f from './style.css';
+
+import example from './example.fasta';
+
 const s = foundationPartial(interproTheme, f);
 
 const strategy = re => (block, cb) => {
@@ -32,15 +37,22 @@ const strategy = re => (block, cb) => {
 };
 
 const classedSpan = className => {
-  const Span = ({ offsetKey, children }) => (
-    <span className={className} data-offset-key={offsetKey}>
-      {children}
-    </span>
-  );
-  Span.propTypes = {
-    offsetKey: T.string.isRequired,
-    children: T.any,
-  };
+  class Span extends PureComponent {
+    static propTypes = {
+      offsetKey: T.string.isRequired,
+      children: T.any,
+    };
+
+    render() {
+      const { offsetKey, children } = this.props;
+      return (
+        <span className={className} data-offset-key={offsetKey}>
+          {children}
+        </span>
+      );
+    }
+  }
+
   return Span;
 };
 
@@ -66,12 +78,22 @@ class IPScanSearch extends Component {
     addToast: T.func.isRequired,
     value: T.string,
     ipScan: T.object.isRequired,
+    sequence: T.string,
   };
 
   constructor(props) {
     super(props);
+    let editorState;
+    if (props.sequence) {
+      editorState = EditorState.createWithContent(
+        ContentState.createFromText(props.sequence),
+        compositeDecorator
+      );
+    } else {
+      editorState = EditorState.createEmpty(compositeDecorator);
+    }
     this.state = {
-      editorState: EditorState.createEmpty(compositeDecorator),
+      editorState,
       valid: true,
     };
     this._jobsTA = getTableAccess('interproscan-jobs');
@@ -223,29 +245,7 @@ class IPScanSearch extends Component {
     fr.readAsText(file);
   };
 
-  _loadExample = () =>
-    this._handleReset(
-      `>example protein sequence
-MITIDGNGAV ASVAFRTSEV IAIYPITPSST MAEQADAWAGN GLKNVWGDTP RVVEMQSEAG
-AIATVHGALQ TGALSTSFTS SQGLLLMIPTL YKLAGELTPFV LHVAARTVAT HALSIFGDHS
-DVMAVRQTGC AMLCAANVQE AQDFALISQIA TLKSRVPFIHF FDGFRTSHEI NKIVPLADDT
-ILDLMPQVEI DAHRARALNP EHPVIRGTSAN PDTYFQSREAT NPWYNAVYDH VEQAMNDFSA
-ATGRQYQPFE YYGHPQAERV IILMGSAIGTC EEVVDELLTRG EKVGVLKVRL YRPFSAKHLL
-QALPGSVRSV AVLDRTKEPG AQAEPLYLDVM TALAEAFNNGE RETLPRVIGG RYGLSSKEFG
-PDCVLAVFAE LNAAKPKARF TVGIYDDVTNL SLPLPENTLPN SAKLEALFYG LGSDGSVSAT
-KNNIKIIGNS TPWYAQGYFV YDSKKAGGLTV SHLRVSEQPIR SAYLISQADF VGCHQLQFID
-KYQMAERLKP GGIFLLNTPY SADEVWSRLPQ EVQAVLNQKKA RFYVINAAKI ARECGLAARI
-NTVMQMAFFH LTQILPGDSA LAELQGAIAKS YSSKGQDLVER NWQALALARE SVEEVPLQPV
-NPHSANRPPV VSDAAPDFVK TVTAAMLAGLG DALPVSALPPD GTWPMGTTRW EKRNIAEEIP
-IWKEELCTQC NHCVAACPHS AIRAKVVPPEA MENAPASLHSL DVKSRDMRGQ KYVLQVAPED
-CTGCNLCVEV CPAKDRQNPE IKAINMMSRLE HVEEEKINYDF FLNLPEIDRS KLERIDIRTS
-QLITPLFEYS GACSGCGETP YIKLLTQLYGD RMLIANATGCS SIYGGNLPST PYTTDANGRG
-PAWANSLFED NAEFGLGFRL TVDQHRVRVLR LLDQFADKIPA ELLTALKSDA TPEVRREQVA
-ALRQQLNDVA EAHELLRDAD ALVEKSIWLIG GDGWAYDIGFG GLDHVLSLTE NVNILVLDTQ
-CYSNTGGQAS KATPLGAVTK FGEHGKRKARK DLGVSMMMYGH VYVAQISLGA QLNQTVKAIQ
-EAEAYPGPSL IIAYSPCEEH GYDLALSHDQM RQLTATGFWPL YRFDPRRADE GKLPLALDSR
-PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
-    );
+  _loadExample = () => this._handleReset(example);
 
   _handleDroppedFiles = blockEvent(({ dataTransfer: { files: [file] } }) =>
     this._handleFile(file)
@@ -368,6 +368,10 @@ PPSEAPEETL LHEQRFRRLN SQQPEVAEQLW KDAAADLQKRY DFLAQMAGKA EKSNTD`.trim()
   }
 }
 
-export default connect(({ settings: { ipScan } }) => ({ ipScan }), {
-  addToast,
-})(IPScanSearch);
+const mapStateToProps = createSelector(
+  state => state.settings.ipScan,
+  state => state.newLocation.search.sequence,
+  (ipScan, sequence) => ({ ipScan, sequence })
+);
+
+export default connect(mapStateToProps, { addToast })(IPScanSearch);
