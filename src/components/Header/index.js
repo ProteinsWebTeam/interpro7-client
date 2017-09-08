@@ -178,7 +178,9 @@ class Header extends PureComponent {
         <div className={styleBundle('masthead-inner', 'row')}>
           <Title reduced={false} />
           <SideIcons reduced={false} stuck={stuck} />
-          <InterProMenu className={styleBundle('menu')} />
+          <nav>
+            <InterProMenu className={styleBundle('menu')} />
+          </nav>
         </div>
       </header>
     );

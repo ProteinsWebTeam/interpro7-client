@@ -26,27 +26,25 @@ class InterProMenu extends PureComponent /*:: <Props> */ {
   render() {
     const { className, children } = this.props;
     return (
-      <nav className={styles.nav}>
-        <ul className={`${className || ''} ${f('interpro-menu')}`}>
-          {children}
-          {InterPro.map(
-            ({ newTo, name, icon, iconClass = 'generic', activeClass }) => (
-              <li key={name}>
-                <MenuItem newTo={newTo} activeClass={activeClass}>
-                  {icon !== 'H' && (
-                    <i
-                      data-icon={icon}
-                      className={f('icon', `icon-${iconClass}`)}
-                    />
-                  )}
-                  {icon === 'H' && <span />}
-                  {name}
-                </MenuItem>
-              </li>
-            )
-          )}
-        </ul>
-      </nav>
+      <ul className={`${className || ''} ${f('interpro-menu')}`}>
+        {children}
+        {InterPro.map(
+          ({ newTo, name, icon, iconClass = 'generic', activeClass }) => (
+            <li key={name}>
+              <MenuItem newTo={newTo} activeClass={activeClass}>
+                {icon !== 'H' && (
+                  <i
+                    data-icon={icon}
+                    className={f('icon', `icon-${iconClass}`)}
+                  />
+                )}
+                {icon === 'H' && <span />}
+                {name}
+              </MenuItem>
+            </li>
+          )
+        )}
+      </ul>
     );
   }
 }

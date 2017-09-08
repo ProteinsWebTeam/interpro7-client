@@ -94,38 +94,40 @@ class SideMenu extends PureComponent /*:: <Props> */ {
           >
             ×
           </button>
-          <ul>
-            {mainAccession && (
-              <SingleEntityMenu className={f('primary')}>
+          <nav>
+            <ul>
+              {mainAccession && (
+                <SingleEntityMenu className={f('primary')}>
+                  <span
+                    className={f('menu-label', 'select-none', 'cursor-default')}
+                  >
+                    {mainAccession}
+                  </span>
+                </SingleEntityMenu>
+              )}
+              <InterProMenu
+                pathname={''}
+                className={f('secondary', 'is-drilldown')}
+              >
                 <span
                   className={f('menu-label', 'select-none', 'cursor-default')}
                 >
-                  {mainAccession}
+                  InterPro menu
                 </span>
-              </SingleEntityMenu>
-            )}
-            <InterProMenu
-              pathname={''}
-              className={f('secondary', 'is-drilldown')}
-            >
-              <span
-                className={f('menu-label', 'select-none', 'cursor-default')}
-              >
-                InterPro menu
-              </span>
-            </InterProMenu>
-            <EBIMenu className={f('tertiary')}>
-              <span
-                className={f('menu-label', 'select-none', 'cursor-default')}
-              >
-                EBI menu
-              </span>
-            </EBIMenu>
-            <span />
-            <li className={f('menu-label', 'cursor-default', 'tertiary')}>
-              <OldInterProLink />
-            </li>
-          </ul>
+              </InterProMenu>
+              <EBIMenu className={f('tertiary')}>
+                <span
+                  className={f('menu-label', 'select-none', 'cursor-default')}
+                >
+                  EBI menu
+                </span>
+              </EBIMenu>
+              <span />
+              <li className={f('menu-label', 'cursor-default', 'tertiary')}>
+                <OldInterProLink />
+              </li>
+            </ul>
+          </nav>
         </aside>
       </div>
     );
