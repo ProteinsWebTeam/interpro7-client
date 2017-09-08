@@ -7,7 +7,7 @@ import { createSelector } from 'reselect';
 import { closeSideNav } from 'actions/creators';
 
 import EBIMenu from 'components/Menu/EBIMenu';
-import InterproMenu from 'components/Menu/InterproMenu';
+import InterProMenu from 'components/Menu/InterProMenu';
 import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 import Link from 'components/generic/Link';
 
@@ -104,17 +104,16 @@ class SideMenu extends PureComponent /*:: <Props> */ {
                 </span>
               </SingleEntityMenu>
             )}
-            <InterproMenu
+            <InterProMenu
               pathname={''}
               className={f('secondary', 'is-drilldown')}
-              includeSubMenus={true}
             >
               <span
                 className={f('menu-label', 'select-none', 'cursor-default')}
               >
                 InterPro menu
               </span>
-            </InterproMenu>
+            </InterProMenu>
             <EBIMenu className={f('tertiary')}>
               <span
                 className={f('menu-label', 'select-none', 'cursor-default')}

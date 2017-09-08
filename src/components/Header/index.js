@@ -8,7 +8,7 @@ import classnames from 'classnames/bind';
 import { openSideNav } from 'actions/creators';
 
 import Link from 'components/generic/Link';
-import InterproMenu from 'components/Menu/InterproMenu';
+import InterProMenu from 'components/Menu/InterProMenu';
 import Title from './Title';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
@@ -178,7 +178,7 @@ class Header extends PureComponent {
         <div className={styleBundle('masthead-inner', 'row')}>
           <Title reduced={false} />
           <SideIcons reduced={false} stuck={stuck} />
-          <InterproMenu className={styleBundle('menu')} />
+          <InterProMenu className={styleBundle('menu')} />
         </div>
       </header>
     );

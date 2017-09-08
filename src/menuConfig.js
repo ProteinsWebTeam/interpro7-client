@@ -222,7 +222,6 @@ export const InterPro /*: Array<Object> */ = [
     icon: 'b',
     name: 'Browse',
     iconClass: 'functional',
-    options: entities,
   },
   {
     newTo: { description: { other: 'release_notes' } },

@@ -1,0 +1,12 @@
+.nav {
+  overflow-x: auto;
+}
+
+.interpro-menu {
+  display: flex;
+
+  /* Navigation - remove icons */
+  & .icon {
+    display: none;
+  }
+}

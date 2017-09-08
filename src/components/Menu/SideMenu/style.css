@@ -58,7 +58,7 @@
 }
 
 .primary {
-  color: #999999;
+  color: #999;
 
   @nest & a:hover, & a:focus {
     background-color: rgba(0, 0, 0, 0.3);
@@ -67,6 +67,11 @@
 
 .secondary {
   color: #2199e8;
+  flex-direction: column;
+}
+
+.secondary i {
+  display: inline !important;
 }
 
 .container .secondary a:hover,
