@@ -332,7 +332,7 @@ export const speciesFeat = [
     tax_id: 6239,
   },
   {
-    title: 'Baker s yeast',
+    title: 'Baker’s yeast',
     kingdom: 'Eukaryota',
     description: 'Saccharomyces cerevisiae (strain ATCC 204508 / S288c)',
     counterD: 7750,

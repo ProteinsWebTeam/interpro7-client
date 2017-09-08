@@ -9,6 +9,7 @@ import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadData from 'higherOrder/loadData';
+import { toPlural } from 'utils/pages';
 
 import { speciesFeat } from 'staticData/home';
 
@@ -21,11 +22,26 @@ import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, byX, local);
 
+const getCountString = (
+  payload /*: ?Object */,
+  loading /*: boolean */,
+  taxId /*: number */,
+  type /*: string */
+) => {
+  if (loading || !payload) return `… ${toPlural(type)}`;
+  const count = payload[taxId];
+  if (!count) return `no ${type}`;
+  if (count === 1) return `1 ${type}`;
+  return `${count} ${toPlural(type)}`;
+};
+
 /*:: type Props = {
   data: {
+    loading: boolean,
     payload: ?Object,
   },
   dataEntry: {
+    loading: boolean,
     payload: ?Object,
   }
 }; */
@@ -33,15 +49,20 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, byX, local);
 class BySpecies extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
+      loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
     dataEntry: T.shape({
+      loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
   };
 
   render() {
-    const { data: { payload }, dataEntry: { payload: payloadE } } = this.props;
+    const {
+      data: { loading, payload },
+      dataEntry: { loading: loadingE, payload: payloadE },
+    } = this.props;
     return (
       <div className={f('species-list')}>
         <AnimatedEntry className={f('row')} element="div">
@@ -61,51 +82,50 @@ class BySpecies extends PureComponent /*:: <Props> */ {
               )}
               key={e.tax_id || 'unclassified'}
             >
-              <span
-                style={{ color: e.color }}
-                className={f('small', 'icon', 'icon-species')}
-                data-icon={e.icon}
-                data-tooltip
-              />
-              <h6>{e.title}</h6>
+              <Link
+                newTo={{
+                  description: {
+                    mainType: 'organism',
+                    mainDB: 'taxonomy',
+                    mainAccession: `${e.tax_id}`,
+                  },
+                }}
+              >
+                <span
+                  style={{ color: e.color }}
+                  className={f('small', 'icon', 'icon-species')}
+                  data-icon={e.icon}
+                  data-tooltip
+                />
+                <h6>{e.title}</h6>
+              </Link>
               <p>
                 <Link
-                  newTo={location => ({
+                  newTo={{
                     description: {
                       mainType: 'entry',
                       mainDB: 'interpro',
-                      // TODO: uncomment when the client supports organism as an endpoint
-                      // focusType: 'organism',
-                      // focusDB: 'taxonomy',
-                      // focusAccession: e.tax_id,
+                      focusType: 'organism',
+                      focusDB: 'taxonomy',
+                      focusAccession: `${e.tax_id}`,
                     },
-                    hash: location.hash,
-                  })}
+                  }}
                 >
-                  {payloadE && payloadE[e.tax_id] ? (
-                    payloadE[e.tax_id]
-                  ) : (
-                    '...'
-                  )}{' '}
-                  entries
+                  {getCountString(payloadE, loadingE, e.tax_id, 'entry')}
                 </Link>
                 <br />
                 <Link
-                  newTo={location => ({
-                    description: { mainType: 'protein', mainDB: 'uniprot' },
-                    search: {
-                      ...location.search,
-                      tax_id: e.tax_id,
+                  newTo={{
+                    description: {
+                      mainType: 'protein',
+                      mainDB: 'UniProt',
+                      focusType: 'organism',
+                      focusDB: 'taxonomy',
+                      focusAccession: `${e.tax_id}`,
                     },
-                    hash: location.hash,
-                  })}
+                  }}
                 >
-                  {payload && payload[e.tax_id] ? (
-                    payload[e.tax_id]
-                  ) : (
-                    '...'
-                  )}{' '}
-                  proteins
+                  {getCountString(payload, loading, e.tax_id, 'protein')}
                 </Link>
               </p>
             </div>
