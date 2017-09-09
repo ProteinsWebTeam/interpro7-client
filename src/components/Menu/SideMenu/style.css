@@ -117,3 +117,7 @@
   display: block;
   text-transform: uppercase;
 }
+
+.old-interpro-link {
+  color: gray;
+}

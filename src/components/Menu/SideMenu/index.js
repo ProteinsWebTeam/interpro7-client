@@ -12,6 +12,7 @@ import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
+
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import interproStyles from 'styles/interpro-new.css';
 import helperClasses from 'styles/helper-classes.css';
@@ -44,18 +45,28 @@ const getOldHref = createSelector(
   }
 );
 
-const _OldInterProLink = ({ description }) => (
-  <Link
-    style={{ color: 'gray' }}
-    href={getOldHref(description)}
-    target="_blank"
-  >
-    See this page in the old InterPro website
-  </Link>
-);
-_OldInterProLink.propTypes = {
-  description: T.object.isRequired,
-};
+/*:: type OldIPProps = {
+  description: Object,
+}; */
+
+class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
+  static propTypes = {
+    description: T.object.isRequired,
+  };
+
+  render() {
+    return (
+      <Link
+        className={f('old-interpro-link')}
+        href={getOldHref(this.props.description)}
+        target="_blank"
+        rel="noopener noreferer"
+      >
+        See this page in the old InterPro website
+      </Link>
+    );
+  }
+}
 
 const mapStateToPropsForOldLink = createSelector(
   state => state.newLocation.description,

@@ -61,6 +61,7 @@ class TextSearchBox extends Component {
     return (
       <input
         type="text"
+        aria-label="search InterPro"
         onChange={this.handleChange}
         value={value}
         placeholder="Enter your search"

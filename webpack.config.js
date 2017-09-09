@@ -22,14 +22,23 @@ const kB = 1024;
 const iprConfig = yaml.safeLoad(fs.readFileSync('config.yml'));
 const websiteURL = url.parse(iprConfig.root.website, true, true);
 
+const getCompressionPlugin = (() => {
+  let plugin;
+  return () => {
+    if (!plugin) plugin = require('compression-webpack-plugin');
+    return plugin;
+  };
+})();
+
 const cssSettings = env => ({
   modules: true,
   minimize: env.production,
   importLoaders: 1,
   sourceMap: !env.production,
-  localIdentName: `${env.production
-    ? ''
-    : '[folder]_[name]__[local]___'}[hash:base64:3]`,
+  localIdentName: (() => {
+    if (env.production) return 'hash:base64:6';
+    return '[folder]_[name]__[local]___[hash:base64:2]';
+  })(),
   alias: {
     '../libraries': 'ebi-framework/libraries',
     'EBI-Conceptual': 'EBI-Icon-fonts/EBI-Conceptual',
@@ -42,8 +51,15 @@ const cssSettings = env => ({
   },
 });
 
+const fileLoaderNamer = env => {
+  if (env.production) return '[hash:6].[ext]';
+  if (env.staging) return '[name].[hash:3].[ext]';
+  return '[name].[ext]';
+};
+
 // eslint-disable-next-line complexity
 module.exports = (env = { dev: true }) => {
+  const thisFileLoaderName = fileLoaderNamer(env);
   const config = {
     // Entry points for the application and some ext libraries
     // (don't put ES2016 modules enabled libraries here)
@@ -63,14 +79,16 @@ module.exports = (env = { dev: true }) => {
     output: {
       path: path.resolve('dist'),
       publicPath: websiteURL.pathname || '/interpro7/',
-      filename:
-        env.production || env.staging
-          ? '[id].[name].[hash:3].js'
-          : '[id].[name].js',
-      chunkFilename:
-        env.production || env.staging
-          ? '[id].[name].[chunkhash:3].js'
-          : '[id].[name].js',
+      filename: (() => {
+        if (env.production) return '[id].[hash:3].js';
+        if (env.staging) return '[id].[name].[hash:3].js';
+        return '[id].[name].js';
+      })(),
+      chunkFilename: (() => {
+        if (env.production) return '[id].[chunkhash:3].js';
+        if (env.staging) return '[id].[name].[chunkhash:3].js';
+        return '[id].[name].js';
+      })(),
     },
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
@@ -83,6 +101,13 @@ module.exports = (env = { dev: true }) => {
           use: [
             {
               loader: 'worker-loader',
+              options: {
+                name: (() => {
+                  if (env.production) return '[hash:3].worker.js';
+                  if (env.staging) return '[folder].[name].[hash:3].worker.js';
+                  return '[folder].[name].worker.js';
+                })(),
+              },
             },
           ],
         },
@@ -262,8 +287,8 @@ module.exports = (env = { dev: true }) => {
             {
               loader: 'url-loader',
               options: {
-                name: `${env.production ? '' : '[name].'}[hash:3].[ext]`,
-                limit: kB,
+                name: thisFileLoaderName,
+                limit: 1 * kB,
               },
             },
             {
@@ -280,7 +305,8 @@ module.exports = (env = { dev: true }) => {
             {
               loader: 'url-loader',
               options: {
-                limit: 1024,
+                name: thisFileLoaderName,
+                limit: 1 * kB,
                 mimetype: 'application/font-woff',
               },
             },
@@ -291,6 +317,9 @@ module.exports = (env = { dev: true }) => {
           use: [
             {
               loader: 'file-loader',
+              options: {
+                name: thisFileLoaderName,
+              },
             },
           ],
         },
@@ -299,9 +328,12 @@ module.exports = (env = { dev: true }) => {
     performance: {
       hints: env.production && 'warning',
       // eslint-disable-next-line no-magic-numbers
-      maxAssetSize: 5 * kB * kB, // 5MB
+      maxAssetSize: 1 * kB * kB, // 1MB
       // eslint-disable-next-line no-magic-numbers
       maxEntrypointSize: 1 * kB * kB, // 1MB TODO: reduce this eventually!
+    },
+    stats: {
+      children: false,
     },
     plugins: [
       new webpack.DefinePlugin({
@@ -323,7 +355,9 @@ module.exports = (env = { dev: true }) => {
             let tag = null;
             try {
               tag = childProcess
-                .execSync(`git describe --exact-match ${commit}`)
+                .execSync(`git describe --exact-match ${commit}`, {
+                  stdio: ['pipe', 'pipe', 'ignore'],
+                })
                 .toString()
                 .trim();
             } catch (_) {
@@ -401,16 +435,11 @@ module.exports = (env = { dev: true }) => {
           })
         : null,
       env.production
-        ? new webpack.optimize.UglifyJsPlugin({
-            beautify: false,
-            mangle: {
-              screw_ie8: true,
-              keep_fnames: true,
+        ? new (require('uglifyjs-webpack-plugin'))({
+            parallel: {
+              workers: true,
             },
-            compress: {
-              screw_ie8: true,
-            },
-            comments: false,
+            sourceMap: true,
           })
         : null,
       env.production || env.staging
@@ -420,9 +449,37 @@ module.exports = (env = { dev: true }) => {
               additional: [/\.(worker\.js)$/i],
               optional: [/\.(eot|ttf|woff|svg|ico|png|jpe?g)$/i],
             },
+            safeToUseOptionalCaches: true,
             AppCache: false,
             ServiceWorker: {
               minify: env.production,
+            },
+          })
+        : null,
+      // GZIP compression
+      env.production
+        ? new (getCompressionPlugin())({
+            asset: '[path].gz[query]',
+            test: /\.(js|css|html|svg)$/i,
+            algorithm(buffer, options, callback) {
+              require('node-zopfli').gzip(buffer, options, callback);
+            },
+          })
+        : null,
+      // brotli compression
+      env.production
+        ? new (getCompressionPlugin())({
+            asset: '[path].br[query]',
+            test: /\.(js|css|html|svg)$/i,
+            algorithm(buffer, _, callback) {
+              require('iltorb').compress(
+                buffer,
+                {
+                  mode: 1, // text
+                  quality: 11, // goes from 1 (but quick) to 11 (but slow)
+                },
+                callback
+              );
             },
           })
         : null,

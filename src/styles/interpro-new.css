@@ -210,32 +210,10 @@ html.fontface .local-site-search .icon-functional:before,
 .search-box:focus {
   transform: scaleX(1);
 }
-.local-site-search:hover ::-webkit-input-placeholder {
-  opacity: 1;
-} /*animation to make the placeholder appear softly*/
-.local-site-search:hover ::-moz-placeholder {
+.local-site-search:hover ::placeholder {
   opacity: 1;
 }
-.local-site-search:hover :-moz-placeholder {
-  opacity: 1;
-}
-.local-site-search:hover :-ms-input-placeholder {
-  opacity: 1;
-}
-/*::-webkit-input-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;transition: opacity .3s ease-in-out;}*/
-/*::-moz-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;   transition: opacity .3s ease-in-out;}*/
-/*:-moz-placeholder {color: rgba(255,255,255,0.5);opacity:0.1;   transition: opacity .3s ease-in-out;}*/
-/*:-ms-input-placeholder {color: rgba(255,255,255,0.5); opacity:0.1; transition: opacity .3s ease-in-out;}*/
-input:focus::-webkit-input-placeholder {
-  color: transparent;
-} /*css solution to make the placeholder text disappear*/
-input:focus:-moz-placeholder {
-  color: transparent;
-}
-input:focus::-moz-placeholder {
-  color: transparent;
-}
-input:focus:-ms-input-placeholder {
+input:focus::placeholder {
   color: transparent;
 }
 
@@ -396,41 +374,14 @@ h6 small {
   padding: 15px;
 }
 
-ul.domaintree li,
-ul.familytree li,
 ul.chevron li {
   list-style: none;
 }
-ul.domaintree,
-ul.familytree,
+
 ul.chevron {
   margin-left: 0;
 }
 
-ul.familytree > li:before,
-li.familybranch:before {
-  content: '';
-  display: inline-block;
-  height: 1.3em;
-  background-image: url(../images/family_icon.svg);
-  background-size: 100%;
-  background-repeat: no-repeat;
-  padding-left: 1.5em;
-  top: 5px;
-  position: relative;
-}
-ul.domaintree > li:before,
-li.domainbranch:before {
-  content: '';
-  display: inline-block;
-  height: 1.3em;
-  background-image: url(../images/domain_icon.svg);
-  background-size: 100%;
-  background-repeat: no-repeat;
-  padding-left: 1.5em;
-  top: 5px;
-  position: relative;
-}
 ul.chevron > li:before {
   content: '';
   display: inline-block;
@@ -555,34 +506,6 @@ ul.chevron > li:before {
   font-size: 520%;
   line-height: 0.5;
 }
-/*/homepage Go list component*/
-
-/*to move on GOTerms/style.css - temp not working*/
-.bp-title,
-.mc-title,
-.cc-title,
-.Cellular,
-.Biological,
-.Molecular {
-  font-weight: bold;
-  font-size: 0.9rem;
-  padding: 0.5rem 1rem;
-  margin-bottom: 0.5rem;
-  display: inline-block;
-}
-.cc-title,
-.Cellular {
-  background-color: rgb(251, 220, 208);
-}
-.bp-title,
-.Biological {
-  background-color: rgb(194, 230, 236);
-}
-.mc-title,
-.Molecular {
-  background-color: rgb(229, 245, 215);
-}
-/*temp to move on GOTerms/style.css - not working*/
 
 /*back to top button*/
 #back-top {
@@ -618,15 +541,6 @@ ul.chevron > li:before {
   padding-bottom: 14px;
 }
 /*/back to top button*/
-
-/*animation*/
-.anim {
-  transition: all 0.3s;
-}
-.animtxt {
-  transition: font 0.3s ease;
-}
-/*/animation*/
 
 /*RESPONSIVE DESIGN*/
 
