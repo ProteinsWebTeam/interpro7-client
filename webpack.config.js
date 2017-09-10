@@ -36,7 +36,7 @@ const cssSettings = env => ({
   importLoaders: 1,
   sourceMap: !env.production,
   localIdentName: (() => {
-    if (env.production) return 'hash:base64:6';
+    if (env.production) return '[hash:base64:6]';
     return '[folder]_[name]__[local]___[hash:base64:2]';
   })(),
   alias: {
@@ -386,7 +386,9 @@ module.exports = (env = { dev: true }) => {
       //   : null,
       env.test || env.production || env.staging
         ? new ExtractTextPlugin({
-            filename: 'styles.[contenthash:3].css',
+            filename: env.production
+              ? '[contenthash:3].css'
+              : 'styles.[contenthash:3].css',
             allChunks: true,
           })
         : null,
@@ -394,7 +396,7 @@ module.exports = (env = { dev: true }) => {
         ? null
         : new webpack.optimize.CommonsChunkPlugin({
             names: ['vendor', 'visual', 'redux', 'polyfills', 'manifest'],
-            filename: env.production ? '[name].[hash:3].js' : '[name].js',
+            filename: env.production ? '[id].[hash:3].js' : '[name].js',
             minChunks: Infinity,
           }),
       // TODO: try to have the next block working again
@@ -449,11 +451,12 @@ module.exports = (env = { dev: true }) => {
               additional: [/\.(worker\.js)$/i],
               optional: [/\.(eot|ttf|woff|svg|ico|png|jpe?g)$/i],
             },
-            safeToUseOptionalCaches: true,
             AppCache: false,
             ServiceWorker: {
               minify: env.production,
             },
+            safeToUseOptionalCaches: true,
+            excludes: ['**/.*', '**/*.{map,br,gz}'],
           })
         : null,
       // GZIP compression
@@ -466,7 +469,7 @@ module.exports = (env = { dev: true }) => {
             },
           })
         : null,
-      // brotli compression
+      // Brotli compression
       env.production
         ? new (getCompressionPlugin())({
             asset: '[path].br[query]',
