@@ -34,9 +34,7 @@
 }
 
 .exporter .icon-settings {
-  width: 0;
   margin: 0.5em;
-  margin-right: 1em;
   color: transparent;
   border: none;
   display: inline-block;
