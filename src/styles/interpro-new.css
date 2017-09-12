@@ -19,6 +19,13 @@ main a:visited {
 main {
   padding-top: 1rem;
 }
+
+/*remove top-right button - temp while EBI fixing the hscrollbar issue*/
+@media screen and (max-width: 53em) {
+  .embl-selector .button {
+    display: none;
+  }
+}
 /*override EBI foundation css that overrides foundation*/
 .fieldset {
   border: 1px solid #cacaca;
