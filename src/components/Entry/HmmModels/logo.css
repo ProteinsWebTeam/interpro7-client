@@ -122,9 +122,17 @@
   margin: 0.3em 0.3em 0.3em 1em;
   padding: 0.3em;
   border: 1px solid #ccc;
-  display: none;
+  display: table;
   border-radius: 5px;
 }
+
+.logo_col_info div {
+  float: left;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 1em;
+}
+
 .logo_settings {
   display: none;
 }
