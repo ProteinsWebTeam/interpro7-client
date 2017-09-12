@@ -35,13 +35,7 @@
 
 .exporter .icon-settings {
   margin: 0.5em;
-  color: transparent;
-  border: none;
-  display: inline-block;
   vertical-align: middle;
-  line-height: 1;
-  text-align: center;
-  background-color: transparent;
   font-size: 0.9rem;
   user-select: none;
 
