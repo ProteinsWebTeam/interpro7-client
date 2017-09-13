@@ -68,9 +68,8 @@ class Exporter extends Component {
             'show-for-large'
           )}
           data-icon="s"
-        >
-          Settings
-        </Link>
+          aria-label="settings"
+        />
         <div
           className={fPlus('dropdown-pane', 'left', 'dropdown-content', mainDB)}
           style={{

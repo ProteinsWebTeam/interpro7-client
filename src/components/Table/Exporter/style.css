@@ -4,7 +4,7 @@
   & .dropdown-content {
     position: absolute;
     top: 100%;
-    right: 27px; /*temp value while popup position is working better*/
+    right: 30px; /*temp value while popup positioning is working better*/
     overflow: auto;
     width: initial;
     min-width: 180%; /*temp value*/
@@ -34,16 +34,8 @@
 }
 
 .exporter .icon-settings {
-  width: 0;
   margin: 0.5em;
-  margin-right: 1em;
-  color: transparent;
-  border: none;
-  display: inline-block;
   vertical-align: middle;
-  line-height: 1;
-  text-align: center;
-  background-color: transparent;
   font-size: 0.9rem;
   user-select: none;
 
@@ -52,8 +44,19 @@
   }
 }
 
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  .exporter .dropdown-content {
+    right: 1px;
+    width: 212px; /*temp value*/
+  }
+}
+
 @media screen and (max-width: 39.9375em) {
   .exporter .dropdown::after {
-    border: none;
+    border: none; /*remove select arrow for small screens*/
+  }
+  .exporter .dropdown-content {
+    right: 1px;
+    width: 182px; /*temp value*/
   }
 }

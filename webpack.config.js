@@ -73,7 +73,6 @@ module.exports = (env = { dev: true }) => {
         'isomorphic-fetch',
         'history',
       ],
-      visual: ['d3', 'gsap/TweenLite', 'popper.js'],
       redux: ['redux', 'react-redux', 'reselect'],
     },
     output: {
@@ -328,9 +327,9 @@ module.exports = (env = { dev: true }) => {
     performance: {
       hints: env.production && 'warning',
       // eslint-disable-next-line no-magic-numbers
-      maxAssetSize: 1 * kB * kB, // 1MB
+      maxAssetSize: 500 * kB, // 500kB
       // eslint-disable-next-line no-magic-numbers
-      maxEntrypointSize: 1 * kB * kB, // 1MB TODO: reduce this eventually!
+      maxEntrypointSize: 500 * kB, // 500kB TODO: reduce this eventually!
     },
     stats: {
       children: false,
@@ -395,18 +394,17 @@ module.exports = (env = { dev: true }) => {
       env.test
         ? null
         : new webpack.optimize.CommonsChunkPlugin({
-            names: ['vendor', 'visual', 'redux', 'polyfills', 'manifest'],
+            names: ['vendor', 'redux', 'polyfills', 'manifest'],
             filename: env.production ? '[id].[hash:3].js' : '[name].js',
             minChunks: Infinity,
           }),
-      // TODO: try to have the next block working again
-      // env.test
-      //   ? null
-      //   : new webpack.optimize.CommonsChunkPlugin({
-      //       children: true,
-      //       async: true,
-      //       minChunks: 3,
-      //     }),
+      env.test
+        ? null
+        : new webpack.optimize.CommonsChunkPlugin({
+            children: true,
+            async: true,
+            minChunks: 3,
+          }),
       env.dev ? new webpack.HotModuleReplacementPlugin() : null,
       env.dashboard
         ? new (require('webpack-dashboard/plugin'))(

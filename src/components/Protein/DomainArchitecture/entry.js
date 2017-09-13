@@ -1,15 +1,16 @@
 /* eslint-disable no-param-reassign */
-import * as d3 from 'd3';
-import classname from 'classnames/bind';
-import styles from './style.css';
+import { select } from 'd3';
 import ColorHash from 'color-hash/lib/color-hash';
+import classname from 'classnames/bind';
+
+import styles from './style.css';
 
 const s = classname.bind(styles);
 const colorHash = new ColorHash();
 const childrenScale = 0.7;
 
 class EntryRenderer {
-  constructor({trackHeight, trackPadding, padding, xScale, protein, parent}){
+  constructor({ trackHeight, trackPadding, padding, xScale, protein, parent }) {
     this.tPadding = trackPadding;
     this.trackHeight = trackHeight;
     this.padding = padding;
@@ -39,88 +40,109 @@ class EntryRenderer {
   }
   update() {
     this.innerHeight = 0;
-    const interproG = this.group.selectAll(`.${s(this.className)}`)
+    const interproG = this.group
+      .selectAll(`.${s(this.className)}`)
       .data(this.entries, d => d.label || d.accession);
     interproG.each((d, i, c) => {
-      this.updateEntry({d, i, c});
+      this.updateEntry({ d, i, c });
       // this.updateInlineResidues({d, i, c});
     });
-    interproG.enter()
+    interproG
+      .enter()
       .append('g')
       .attr('class', s(this.className))
       .attr('transform', 'scale(1,0)')
-      .each((d, i, c) => this.updateEntry({d, i, c}))
+      .each((d, i, c) => this.updateEntry({ d, i, c }))
       // .each((d, i, c) => this.updateInlineResidues({d, i, c}))
       .append('text')
-      .attr('class', d => s({
-        label: true,
-        link: (typeof d.link !== 'undefined'),
-      }))
+      .attr('class', d =>
+        s({
+          label: true,
+          link: typeof d.link !== 'undefined',
+        })
+      )
       .attr('x', this.tPadding.right + this.x(this.protein.length))
       .attr('y', this.trackHeight)
       .text(d => d.label || d.accession)
       .on('click', e => this.parent.dispatch.call('entryclick', this, e));
-    interproG.selectAll(`.${s(this.className)} .label`)
+    interproG
+      .selectAll(`.${s(this.className)} .label`)
       .attr('x', this.tPadding.right + this.x(this.protein.length));
 
-    interproG.exit()
+    interproG
+      .exit()
       .transition()
       .attr('transform', 'scale(1,0)')
       .remove();
     this.entries.height += this.innerHeight;
   }
 
-  updateEntry({d, i, c}){
-    const g = d3.select(c[i]);
+  updateEntry({ d, i, c }) {
+    const g = select(c[i]);
     const tHeight = this.trackHeight + this.tPadding.bottom + this.tPadding.top;
-    const instanceG = g.selectAll(`.${s(`${this.className}-instance`)}`)
+    const instanceG = g
+      .selectAll(`.${s(`${this.className}-instance`)}`)
       .data(d.coordinates);
     instanceG.each((data, i, c) => {
-      this.updateMatch({d: data, i, c}, d, instanceG);
+      this.updateMatch({ d: data, i, c }, d, instanceG);
     });
-    instanceG.enter()
+    instanceG
+      .enter()
       .append('g')
       .attr('class', s(`${this.className}-instance`))
-      .on('mouseover', (e, i, g) => this.parent.dispatch.call('entrymouseover', this, {
-        entry: d,
-        event: {d: e, i, g},
-      }))
+      .on('mouseover', (e, i, g) =>
+        this.parent.dispatch.call('entrymouseover', this, {
+          entry: d,
+          event: { d: e, i, g },
+        })
+      )
       .on('mouseout', () => this.parent.dispatch.call('entrymouseout', this, d))
       .each((data, i, c) => {
-        this.updateMatch({d: data, i, c}, d, instanceG);
+        this.updateMatch({ d: data, i, c }, d, instanceG);
         // this.updateChildrenBg(instanceG, parentNode, entry, d);
-
       });
     instanceG.exit().remove();
 
-    g.transition()
-      .attr('transform', `scale(1,1)translate(0, ${this.offsetY + this.innerHeight})`);
+    g
+      .transition()
+      .attr(
+        'transform',
+        `scale(1,1)translate(0, ${this.offsetY + this.innerHeight})`
+      );
     this.innerHeight += tHeight;
-    if (d.children){
-      this.childrenRender.render(g,
+    if (d.children) {
+      this.childrenRender.render(
+        g,
         d.children,
         tHeight - this.tPadding.top,
         d.signatures ? 'signature' : 'residue'
       );
       this.innerHeight += this.childrenRender.innerHeight;
     }
-    instanceG.enter()
-      .each((data, i, c) => this.updateChildrenBg({d: data, i, c}, d, instanceG));
     instanceG
-      .each((data, i, c) => this.updateChildrenBg({d: data, i, c}, d, instanceG));
-
+      .enter()
+      .each((data, i, c) =>
+        this.updateChildrenBg({ d: data, i, c }, d, instanceG)
+      );
+    instanceG.each((data, i, c) =>
+      this.updateChildrenBg({ d: data, i, c }, d, instanceG)
+    );
   }
-  getColor(entry, format = 'HEX'){
-    const acc = entry.accession.split('').reverse().join('');
+  getColor(entry, format = 'HEX') {
+    const acc = entry.accession
+      .split('')
+      .reverse()
+      .join('');
     if (format.toUpperCase() === 'RGB') return colorHash.rgb(acc);
     if (format.toUpperCase() === 'HEX') return colorHash.hex(acc);
     if (format.toUpperCase() === 'HSL') return colorHash.hsl(acc);
   }
-  updateMatch({d, i, c}, entry, instanceG) {
-    const g = d3.select(c[i]);
-    const parentNode = instanceG.node() ? d3.select(instanceG.node().parentNode) : null;
-    const matchG = g.selectAll(`.${s(`${this.className}-match`)}`)
-      .data(d);
+  updateMatch({ d, i, c }, entry, instanceG) {
+    const g = select(c[i]);
+    const parentNode = instanceG.node()
+      ? select(instanceG.node().parentNode)
+      : null;
+    const matchG = g.selectAll(`.${s(`${this.className}-match`)}`).data(d);
     // Commented out because current InterPro doesn't support Disjunctive matches.
     //
     // if (instanceG && d.length > 1) {
@@ -140,7 +162,9 @@ class EntryRenderer {
     // }
     matchG.exit().remove();
 
-    matchG.enter().append('rect')
+    matchG
+      .enter()
+      .append('rect')
       .attr('class', s(`${this.className}-match`))
       .attr('width', m => this.x(Math.max(m[1] - m[0], 1)))
       .attr('height', this.trackHeight)
@@ -158,24 +182,32 @@ class EntryRenderer {
         }
         this.parent.render();
       })
-      .on('mouseover', d => this.parent.overFeature = d)
-      .on('mouseout', () => this.parent.overFeature = null);
+      .on('mouseover', d => (this.parent.overFeature = d))
+      .on('mouseout', () => (this.parent.overFeature = null));
     if (parentNode) {
-      parentNode.selectAll(`rect.${s(`${this.className}-match`)}`)
+      parentNode
+        .selectAll(`rect.${s(`${this.className}-match`)}`)
         .attr('x', m => this.x(m[0]))
         .attr('width', m => this.x(Math.max(m[1] - m[0], 1)));
     }
   }
-  updateChildrenBg({d, i, c}, entry, instanceG) {
-    if ((entry.children && entry.children.length) ||
-      (entry._children && entry._children.length)) {
-      const g = d3.select(c[i]);
-      const parentNode = instanceG.node() ? d3.select(instanceG.node().parentNode) : null;
-      const matchBG = g.selectAll(`.${s(`${this.className}-children-bg`)}`)
+  updateChildrenBg({ d, i, c }, entry, instanceG) {
+    if (
+      (entry.children && entry.children.length) ||
+      (entry._children && entry._children.length)
+    ) {
+      const g = select(c[i]);
+      const parentNode = instanceG.node()
+        ? select(instanceG.node().parentNode)
+        : null;
+      const matchBG = g
+        .selectAll(`.${s(`${this.className}-children-bg`)}`)
         .data(d);
       matchBG.exit().remove();
 
-      matchBG.enter().insert('rect', ':first-child')
+      matchBG
+        .enter()
+        .insert('rect', ':first-child')
         .attr('class', s(`${this.className}-children-bg`))
         .attr('x', m => this.x(m[0]))
         .attr('y', this.trackHeight - 1)
@@ -186,44 +218,55 @@ class EntryRenderer {
         .attr('stroke-dasharray', '1,3');
 
       if (parentNode) {
-        parentNode.selectAll(`rect.${s(`${this.className}-children-bg`)}`)
+        parentNode
+          .selectAll(`rect.${s(`${this.className}-children-bg`)}`)
           .attr('x', m => this.x(m[0]))
           .attr('y', this.trackHeight - 1)
           .transition()
-          .attr('height', this.childrenRender.innerHeight + this.tPadding.bottom)
+          .attr(
+            'height',
+            this.childrenRender.innerHeight + this.tPadding.bottom
+          )
           .attr('width', m => this.x(m[1] - m[0]));
       }
     }
   }
-  updateInlineResidues({d, i, c}) {
-    const g = d3.select(c[i]);
-    if (d.residues){
-      const residuesG = g.selectAll(`.${s(`${this.className}-residues`)}`)
+  updateInlineResidues({ d, i, c }) {
+    const g = select(c[i]);
+    if (d.residues) {
+      const residuesG = g
+        .selectAll(`.${s(`${this.className}-residues`)}`)
         .data([d]);
       // instanceG.each((data, i, c) => this.updateMatch({d: data, i, c}, d, instanceG));
-      const resG = residuesG.enter()
+      const resG = residuesG
+        .enter()
         .append('g')
         .attr('class', s(`${this.className}-residues`));
 
-      const residue = resG.selectAll(`.${s(`${this.className}-residue`)}`)
+      const residue = resG
+        .selectAll(`.${s(`${this.className}-residue`)}`)
         .data(d.residues);
 
-      residuesG.selectAll(`.${s(`${this.className}-residue`)}`)
+      residuesG
+        .selectAll(`.${s(`${this.className}-residue`)}`)
         .attr('x', m => this.x(m.from))
         .attr('width', m => this.x(Math.max(m.to - m.from, 1)));
-      residue.enter()
+      residue
+        .enter()
         .append('rect')
         .attr('class', s(`${this.className}-residue`))
         .attr('x', m => this.x(m.from))
         .attr('height', this.trackHeight)
         .attr('width', m => this.x(Math.max(m.to - m.from, 1)))
-        .on('mouseover', (e, i, g) => this.parent.dispatch.call('entrymouseover', this, {
-          residue: e,
-          event: {d: e, i, g: [g[i]]},
-        }))
-        .on('mouseout', () => this.parent.dispatch.call('entrymouseout', this, d))
-      ;
-
+        .on('mouseover', (e, i, g) =>
+          this.parent.dispatch.call('entrymouseover', this, {
+            residue: e,
+            event: { d: e, i, g: [g[i]] },
+          })
+        )
+        .on('mouseout', () =>
+          this.parent.dispatch.call('entrymouseout', this, d)
+        );
     }
   }
 }
