@@ -1,6 +1,6 @@
-@import "../../styles/colors.css";
-@import "../../styles/spacing.css";
-@import "../../styles/timing.css";
+@import '../../styles/colors.css';
+@import '../../styles/spacing.css';
+@import '../../styles/timing.css';
 
 .loading_bar {
   position: fixed;
@@ -9,7 +9,7 @@
   z-index: 100;
   width: 100%;
   height: var(--spacing-small);
-  background-color: var(--colors-main);
+  background-color: var(--color-progress);
   pointer-events: none;
   transform: scaleX(0);
   opacity: 1;
