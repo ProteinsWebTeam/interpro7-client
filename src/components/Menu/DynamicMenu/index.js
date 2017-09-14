@@ -25,19 +25,17 @@ class DynamicMenu extends PureComponent /*:: <Props> */ {
 
   render() {
     return (
-      <nav>
-        <ul className={f('menu')}>
-          {InterPro.map(
-            ({ newTo, name, icon, iconClass = 'generic', activeClass }) => (
-              <li key={name}>
-                <MenuItem newTo={newTo} activeClass={activeClass}>
-                  {name}
-                </MenuItem>
-              </li>
-            )
-          )}
-        </ul>
-      </nav>
+      <ul className={f('menu')}>
+        {InterPro.map(
+          ({ newTo, name, icon, iconClass = 'generic', activeClass }) => (
+            <li key={name}>
+              <MenuItem newTo={newTo} activeClass={activeClass}>
+                {name}
+              </MenuItem>
+            </li>
+          )
+        )}
+      </ul>
     );
   }
 }

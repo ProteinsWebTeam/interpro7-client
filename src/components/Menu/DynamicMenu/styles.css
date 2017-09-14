@@ -1,3 +1,7 @@
 .menu {
   overflow-x: hidden;
+
+  & a {
+    background: rgba(200, 100, 150, 0.5);
+  }
 }

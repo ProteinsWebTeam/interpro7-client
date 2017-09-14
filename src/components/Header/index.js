@@ -180,7 +180,7 @@ class Header extends PureComponent {
         <div className={styleBundle('masthead-inner', 'row')}>
           <Title reduced={false} />
           <SideIcons reduced={false} stuck={stuck} />
-          <ResizeObserver>
+          <ResizeObserver element="nav">
             <DynamicMenu />
           </ResizeObserver>
         </div>
