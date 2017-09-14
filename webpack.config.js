@@ -124,6 +124,9 @@ module.exports = (env = { dev: true }) => {
           use: [
             {
               loader: 'babel-loader',
+              options: {
+                cacheDirectory: true,
+              },
             },
           ],
         },
@@ -139,6 +142,7 @@ module.exports = (env = { dev: true }) => {
         //       loader: 'babel-loader',
         //       options: {
         //         presets: ['stage-2'],
+        //         cacheDirectory: true,
         //       },
         //     },
         //   ],
@@ -395,7 +399,11 @@ module.exports = (env = { dev: true }) => {
         ? null
         : new webpack.optimize.CommonsChunkPlugin({
             names: ['vendor', 'redux', 'polyfills', 'manifest'],
-            filename: env.production ? '[id].[hash:3].js' : '[name].js',
+            filename: (() => {
+              if (env.production) return '[id].[hash:3].js';
+              if (env.staging) return '[id].[name].[hash:3].js';
+              return '[id].[name].js';
+            })(),
             minChunks: Infinity,
           }),
       env.test
