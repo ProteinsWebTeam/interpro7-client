@@ -9,8 +9,9 @@ import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import s from './style.css';
+import theme from 'styles/theme-interpro.css';
 
-const fPlus = foundationPartial(s, fonts);
+const fPlus = foundationPartial(s, fonts, theme);
 
 const colors = {
   gene3d: '#a88cc3',
