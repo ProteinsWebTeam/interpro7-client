@@ -16,7 +16,7 @@ const f = foundationPartial(fonts, styles);
 class DynamicMenu extends PureComponent /*:: <Props> */ {
   constructor(props /*: Props */) {
     super(props);
-    console.log(props);
+    console.log('initial props', props);
   }
 
   componentWillReceiveProps(nextProps /*: Props */) {

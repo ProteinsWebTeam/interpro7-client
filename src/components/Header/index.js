@@ -7,7 +7,7 @@ import classnames from 'classnames/bind';
 
 import { openSideNav } from 'actions/creators';
 
-import ResizeObserver from 'wrappers/ResizeObserver';
+import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import Link from 'components/generic/Link';
 import DynamicMenu from 'components/Menu/DynamicMenu';
@@ -180,9 +180,9 @@ class Header extends PureComponent {
         <div className={styleBundle('masthead-inner', 'row')}>
           <Title reduced={false} />
           <SideIcons reduced={false} stuck={stuck} />
-          <ResizeObserver element="nav">
+          <ResizeObserverComponent element="nav" measurements="width">
             <DynamicMenu />
-          </ResizeObserver>
+          </ResizeObserverComponent>
         </div>
       </header>
     );
