@@ -47,7 +47,7 @@ table.light thead th {
 
 table.light tr:nth-child(even):hover,
 table.light tr:nth-child(odd):hover {
-  background-color: #f9fafb;
+  background-color: #f9fafb; /*darker #d0deeb*/
 }
 
 table.light tbody tr:nth-child(even) {
