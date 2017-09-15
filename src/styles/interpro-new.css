@@ -1,5 +1,17 @@
 @import '../styles/colors.css';
 /******************************Override EBI  global***************************/
+/*to include more systems fonts for windows machines*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
+    sans-serif;
+}
+
 /*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
 a,
 a:visited {
@@ -7,11 +19,9 @@ a:visited {
 }
 
 /*add some space on top between banner and breadcrumb - should be in EBI-GLobal*/
-main a {
-  color: rgb(0, 112, 187);
-}
-
-main a:visited {
+main a,
+main a:visited,
+main a:focus {
   color: rgb(0, 112, 187);
 }
 
