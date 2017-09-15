@@ -5,6 +5,7 @@ import T from 'prop-types';
 import Title from 'components/Title';
 import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Embed from 'components/Embed';
 
 import loadWebComponent from 'utils/loadWebComponent';
@@ -44,13 +45,13 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
     webComponents.push(loadWebComponent(() => dataLoader()).as('data-loader'));
     webComponents.push(
       loadWebComponent(() => pdbComponents().then(m => m.PdbDataLoader)).as(
-        'pdb-data-loader'
-      )
+        'pdb-data-loader',
+      ),
     );
     webComponents.push(
       loadWebComponent(() => pdbComponents().then(m => m.PdbPrints)).as(
-        'pdb-prints'
-      )
+        'pdb-prints',
+      ),
     );
   }
 
@@ -101,27 +102,29 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
               </div>
             </div>
           </div>
-          <Embed
-            style={embedStyle}
-            src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${metadata.accession}/?view=entry_index&viewer=jmol&controls=codename_hero`}
-          >
-            <div
-              style={{
-                background: 'white',
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+          <ErrorBoundary>
+            <Embed
+              style={embedStyle}
+              src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${metadata.accession}/?view=entry_index&viewer=jmol&controls=codename_hero`}
             >
-              <img
-                src={`//www.ebi.ac.uk/pdbe/static/entry/${metadata.accession.toLowerCase()}_entity_1_front_image-400x400.png`}
-                alt={`structure with accession ${metadata.accession.toUpperCase()}`}
-                style={{ maxWidth: '100%' }}
-              />
-            </div>
-          </Embed>
+              <div
+                style={{
+                  background: 'white',
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <img
+                  src={`//www.ebi.ac.uk/pdbe/static/entry/${metadata.accession.toLowerCase()}_entity_1_front_image-400x400.png`}
+                  alt={`structure with accession ${metadata.accession.toUpperCase()}`}
+                  style={{ maxWidth: '100%' }}
+                />
+              </div>
+            </Embed>
+          </ErrorBoundary>
         </section>
       </div>
     );

@@ -1,6 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
@@ -82,11 +83,13 @@ const Search = () => (
         </ul>
         <div className={f('tabs', 'tabs-content')}>
           <div className={f('tabs-panel', 'is-active')}>
-            <Switch
-              locationSelector={l => l.description.mainDB}
-              indexRoute={RedirectToText}
-              childRoutes={routes}
-            />
+            <ErrorBoundary>
+              <Switch
+                locationSelector={l => l.description.mainDB}
+                indexRoute={RedirectToText}
+                childRoutes={routes}
+              />
+            </ErrorBoundary>
           </div>
         </div>
       </fieldset>
