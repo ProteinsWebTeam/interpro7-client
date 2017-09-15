@@ -32,9 +32,18 @@ const colors = {
   InterPro: '#2daec1',
 };
 
+const getcolor = (mainDB, focusDB) => {
+  let color = colors[mainDB];
+  if (!color) {
+    color = colors[focusDB];
+  }
+  return color;
+};
+
 class Exporter extends Component {
   static propTypes = {
     mainDB: T.string.isRequired,
+    focusDB: T.string,
     children: T.any,
   };
 
@@ -44,12 +53,12 @@ class Exporter extends Component {
   }
 
   render() {
-    const { children, mainDB } = this.props;
+    const { children, mainDB, focusDB } = this.props;
     return (
       <div className={fPlus('button-group', 'small', 'exporter')}>
         <button
           className={fPlus('button', 'dropdown')}
-          style={{ backgroundColor: colors[mainDB] ? colors[mainDB] : null }}
+          style={{ backgroundColor: getcolor(mainDB, focusDB) }}
           onClick={() => {
             this.setState({ isOpen: !this.state.isOpen });
           }}
@@ -72,9 +81,14 @@ class Exporter extends Component {
           aria-label="settings"
         />
         <div
-          className={fPlus('dropdown-pane', 'left', 'dropdown-content', mainDB)}
+          className={fPlus(
+            'dropdown-pane',
+            'left',
+            'dropdown-content',
+            focusDB
+          )}
           style={{
-            borderColor: colors[mainDB] ? colors[mainDB] : null,
+            borderColor: getcolor(mainDB, focusDB),
             transform: `scaleY(${this.state.isOpen ? 1 : 0})`,
           }}
         >
@@ -86,6 +100,7 @@ class Exporter extends Component {
 }
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainDB,
-  mainDB => ({ mainDB })
+  state => state.newLocation.description.focusDB,
+  (mainDB, focusDB) => ({ mainDB, focusDB })
 );
 export default connect(mapStateToProps)(Exporter);
