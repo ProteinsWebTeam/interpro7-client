@@ -9,7 +9,7 @@
 .menu-item {
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--timing-medium) ease-in-out;
+  transition: opacity var(--timing-fast) ease-in-out;
 }
 
 .visible {
