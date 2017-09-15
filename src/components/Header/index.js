@@ -7,8 +7,10 @@ import classnames from 'classnames/bind';
 
 import { openSideNav } from 'actions/creators';
 
+import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
+
 import Link from 'components/generic/Link';
-import InterProMenu from 'components/Menu/InterProMenu';
+import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
@@ -178,9 +180,9 @@ class Header extends PureComponent {
         <div className={styleBundle('masthead-inner', 'row')}>
           <Title reduced={false} />
           <SideIcons reduced={false} stuck={stuck} />
-          <nav>
-            <InterProMenu className={styleBundle('menu')} />
-          </nav>
+          <ResizeObserverComponent element="nav" measurements="width">
+            <DynamicMenu />
+          </ResizeObserverComponent>
         </div>
       </header>
     );
