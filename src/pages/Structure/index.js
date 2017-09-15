@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
@@ -136,7 +137,7 @@ const List = ({
             dataKey="name"
             renderer={(
               name /*: string */,
-              { accession } /*: {accession: string} */
+              { accession } /*: {accession: string} */,
             ) => (
               <Link
                 newTo={location => ({
@@ -199,13 +200,15 @@ const Summary = props => {
   const { data: { loading } } = props;
   if (loading) return <div>Loading…</div>;
   return (
-    <Switch
-      {...props}
-      locationSelector={l =>
-        l.description.mainDetail || l.description.focusType}
-      indexRoute={SummaryComponent}
-      childRoutes={subPagesForStructure}
-    />
+    <ErrorBoundary>
+      <Switch
+        {...props}
+        locationSelector={l =>
+          l.description.mainDetail || l.description.focusType}
+        indexRoute={SummaryComponent}
+        childRoutes={subPagesForStructure}
+      />
+    </ErrorBoundary>
   );
 };
 Summary.propTypes = {
@@ -217,14 +220,16 @@ Summary.propTypes = {
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
-  <Switch
-    {...props}
-    locationSelector={l =>
-      l.description.mainAccession || l.description.focusType}
-    indexRoute={List}
-    childRoutes={[{ value: /^[a-z\d]{4}$/i, component: Summary }]}
-    catchAll={List}
-  />
+  <ErrorBoundary>
+    <Switch
+      {...props}
+      locationSelector={l =>
+        l.description.mainAccession || l.description.focusType}
+      indexRoute={List}
+      childRoutes={[{ value: /^[a-z\d]{4}$/i, component: Summary }]}
+      catchAll={List}
+    />
+  </ErrorBoundary>
 );
 
 class Structure extends PureComponent {
@@ -237,12 +242,14 @@ class Structure extends PureComponent {
       <div
         className={ps('with-data', { ['with-stale-data']: this.props.isStale })}
       >
-        <Switch
-          {...this.props}
-          locationSelector={l => l.description.mainDB}
-          indexRoute={Overview}
-          catchAll={InnerSwitch}
-        />
+        <ErrorBoundary>
+          <Switch
+            {...this.props}
+            locationSelector={l => l.description.mainDB}
+            indexRoute={Overview}
+            catchAll={InnerSwitch}
+          />
+        </ErrorBoundary>
       </div>
     );
   }

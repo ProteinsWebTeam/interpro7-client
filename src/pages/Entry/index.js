@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import { GoLink } from 'components/ExtLink';
@@ -56,7 +57,7 @@ const Overview = ({
       Member databases:
       <ul className={styles.card}>
         {Object.entries(
-          payload.entries.member_databases
+          payload.entries.member_databases,
         ).map(([name, count]) => (
           <li key={name}>
             <Link
@@ -106,8 +107,8 @@ class List extends Component {
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType
-      )
+        m => m.InterproType,
+      ),
     ).as('interpro-type');
   }
 
@@ -187,7 +188,7 @@ class List extends Component {
               dataKey="name"
               renderer={(
                 name /*: string */,
-                { accession } /*: {accession: string} */
+                { accession } /*: {accession: string} */,
               ) => (
                 <Link
                   title={`${name} (${accession})`}
@@ -367,13 +368,15 @@ const Summary = props => {
     return <div>Loading…</div>;
   }
   return (
-    <Switch
-      {...props}
-      locationSelector={l =>
-        l.description.mainDetail || l.description.focusType}
-      indexRoute={SummaryComponent}
-      childRoutes={subPagesForEntry}
-    />
+    <ErrorBoundary>
+      <Switch
+        {...props}
+        locationSelector={l =>
+          l.description.mainDetail || l.description.focusType}
+        indexRoute={SummaryComponent}
+        childRoutes={subPagesForEntry}
+      />
+    </ErrorBoundary>
   );
 };
 Summary.propTypes = {
@@ -389,19 +392,21 @@ const dbAccs = new RegExp(
     .map(db => db.accession)
     .filter(db => db)
     .join('|')}|IPR[0-9]{6})`,
-  'i'
+  'i',
 );
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
-  <Switch
-    {...props}
-    locationSelector={l =>
-      l.description.mainAccession || l.description.focusType}
-    indexRoute={List}
-    childRoutes={[{ value: dbAccs, component: Summary }]}
-    catchAll={List}
-  />
+  <ErrorBoundary>
+    <Switch
+      {...props}
+      locationSelector={l =>
+        l.description.mainAccession || l.description.focusType}
+      indexRoute={List}
+      childRoutes={[{ value: dbAccs, component: Summary }]}
+      catchAll={List}
+    />
+  </ErrorBoundary>
 );
 
 const schemaProcessData = data => ({
@@ -420,18 +425,20 @@ const schemaProcessData = data => ({
 const Entry = props => (
   <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
     {props.data.payload &&
-    props.data.payload.accession && (
-      <SchemaOrgData
-        data={props.data.payload}
-        processData={schemaProcessData}
+      props.data.payload.accession && (
+        <SchemaOrgData
+          data={props.data.payload}
+          processData={schemaProcessData}
+        />
+      )}
+    <ErrorBoundary>
+      <Switch
+        {...props}
+        locationSelector={l => l.description.mainDB}
+        indexRoute={Overview}
+        catchAll={InnerSwitch}
       />
-    )}
-    <Switch
-      {...props}
-      locationSelector={l => l.description.mainDB}
-      indexRoute={Overview}
-      catchAll={InnerSwitch}
-    />
+    </ErrorBoundary>
   </div>
 );
 Entry.propTypes = {
@@ -443,5 +450,5 @@ Entry.propTypes = {
 export default loadData((...args) =>
   getUrlForApi(...args)
     .replace('hmm_model', '')
-    .replace('domain_architecture', '')
+    .replace('domain_architecture', ''),
 )(Entry);

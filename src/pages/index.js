@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import loadable from 'higherOrder/loadable';
 
@@ -78,20 +79,25 @@ class Pages extends PureComponent /*:: <Props> */ {
     const { stuck, top, ...props } = this.props;
     return (
       <main style={{ marginTop: stuck ? '174px' : 0 }}>
-        <Switch
-          {...props}
-          indexRoute={Null}
-          locationSelector={l => l.description.mainType}
-          childRoutes={[{ value: 'search', component: Null }]}
-          catchAll={BrowseTabs}
-        />
-        <Switch
-          {...props}
-          locationSelector={l => l.description.other || l.description.mainType}
-          indexRoute={Home}
-          childRoutes={pages}
-          catchAll={NotFound}
-        />
+        <ErrorBoundary>
+          <Switch
+            {...props}
+            indexRoute={Null}
+            locationSelector={l => l.description.mainType}
+            childRoutes={[{ value: 'search', component: Null }]}
+            catchAll={BrowseTabs}
+          />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <Switch
+            {...props}
+            locationSelector={l =>
+              l.description.other || l.description.mainType}
+            indexRoute={Home}
+            childRoutes={pages}
+            catchAll={NotFound}
+          />
+        </ErrorBoundary>
       </main>
     );
   }
@@ -99,7 +105,7 @@ class Pages extends PureComponent /*:: <Props> */ {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  stuck => ({ stuck })
+  stuck => ({ stuck }),
 );
 
 export default connect(mapStateToProps)(Pages);

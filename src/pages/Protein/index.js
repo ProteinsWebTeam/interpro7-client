@@ -2,6 +2,7 @@ import React from 'react';
 import T from 'prop-types';
 import ColorHash from 'color-hash/lib/color-hash';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
@@ -81,7 +82,7 @@ const List = ({
   }
   const maxLength = _payload.results.reduce(
     (max, result) => Math.max(max, (result.metadata || result).length),
-    0
+    0,
   );
   return (
     <div className={f('row')}>
@@ -144,7 +145,7 @@ const List = ({
             dataKey="name"
             renderer={(
               name /*: string */,
-              { accession } /*: {accession: string} */
+              { accession } /*: {accession: string} */,
             ) => (
               <Link
                 newTo={location => ({
@@ -238,13 +239,15 @@ const Summary = props => {
   if (loading || !payload.metadata) return <div>Loading…</div>;
   return (
     <div>
-      <Switch
-        {...props}
-        locationSelector={l =>
-          l.description.mainDetail || l.description.focusType}
-        indexRoute={SummaryComponent}
-        childRoutes={subPagesForProtein}
-      />
+      <ErrorBoundary>
+        <Switch
+          {...props}
+          locationSelector={l =>
+            l.description.mainDetail || l.description.focusType}
+          indexRoute={SummaryComponent}
+          childRoutes={subPagesForProtein}
+        />
+      </ErrorBoundary>
     </div>
   );
 };
@@ -258,24 +261,28 @@ Summary.propTypes = {
 const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
-  <Switch
-    {...props}
-    locationSelector={l =>
-      l.description.mainAccession || l.description.focusType}
-    indexRoute={List}
-    childRoutes={[{ value: acc, component: Summary }]}
-    catchAll={List}
-  />
+  <ErrorBoundary>
+    <Switch
+      {...props}
+      locationSelector={l =>
+        l.description.mainAccession || l.description.focusType}
+      indexRoute={List}
+      childRoutes={[{ value: acc, component: Summary }]}
+      catchAll={List}
+    />
+  </ErrorBoundary>
 );
 
 const Protein = props => (
   <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
-    <Switch
-      {...props}
-      locationSelector={l => l.description.mainDB}
-      indexRoute={Overview}
-      catchAll={InnerSwitch}
-    />
+    <ErrorBoundary>
+      <Switch
+        {...props}
+        locationSelector={l => l.description.mainDB}
+        indexRoute={Overview}
+        catchAll={InnerSwitch}
+      />
+    </ErrorBoundary>
   </div>
 );
 Protein.propTypes = {
@@ -283,5 +290,5 @@ Protein.propTypes = {
 };
 
 export default loadData((...args) =>
-  getUrlForApi(...args).replace('domain_architecture', 'entry')
+  getUrlForApi(...args).replace('domain_architecture', 'entry'),
 )(Protein);
