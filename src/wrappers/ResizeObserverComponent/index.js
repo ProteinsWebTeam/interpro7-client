@@ -66,7 +66,7 @@ class ResizeObserverComponent extends PureComponent /*:: <Props> */ {
     const { children, element: Element, measurements, ...props } = this.props;
     const child = Children.only(children);
     return (
-      <Element {...props} ref={this._setRef} style={{ maxWidth: '640px' }}>
+      <Element {...props} ref={this._setRef}>
         {cloneElement(child, this.state)}
       </Element>
     );

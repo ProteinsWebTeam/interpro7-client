@@ -1,7 +1,18 @@
-.menu {
-  overflow-x: hidden;
+@import '../../../styles/timing.css';
 
-  & a {
-    background: rgba(200, 100, 150, 0.5);
-  }
+.menu {
+  display: table;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.menu-item {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--timing-medium) ease-in-out;
+}
+
+.visible {
+  pointer-events: initial;
+  opacity: 1;
 }
