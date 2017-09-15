@@ -136,6 +136,9 @@
   .logo-flex {
     margin-left: 0px;
   }
+  .subtitle {
+    visibility: hidden;
+  }
 }
 @media screen and (max-width: 52em) {
   /*not the best solution I guess*/
