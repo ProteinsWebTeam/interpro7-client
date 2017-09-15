@@ -1,6 +1,7 @@
-/* global ResizeObserver: false */
 import React, { PureComponent, Children, cloneElement } from 'react';
 import T from 'prop-types';
+
+import ResizeObserver from './ResizeObserver';
 
 //:: type measurement = 'bottom' | 'height' | 'left' | 'right' | 'top' | 'width' | 'x' | 'y';
 
@@ -13,7 +14,7 @@ import T from 'prop-types';
 class ResizeObserverComponent extends PureComponent /*:: <Props> */ {
   /*::
     _node: ?HTMLElement;
-    _resizeObserver: ?any;
+    _resizeObserver: any;
   */
   static defaultProps = {
     element: 'div',
@@ -60,7 +61,9 @@ class ResizeObserverComponent extends PureComponent /*:: <Props> */ {
     }
   }
 
-  _setRef = node => (this._node = node);
+  _setRef = node => {
+    if (node instanceof HTMLElement) this._node = node;
+  };
 
   render() {
     const { children, element: Element, measurements, ...props } = this.props;

@@ -21,10 +21,11 @@ const f = foundationPartial(fonts, styles);
 }; */
 
 class DynamicMenu extends PureComponent /*:: <Props, State> */ {
-  /*::
-    _menuItems: Set<HTMLElement>;
-    _setMenuItemInMap: Element => void;
-  */
+  /*:: _menuItems: Set<HTMLElement>; */
+  static defaultProps = {
+    width: +Infinity,
+  };
+
   static propTypes = {
     width: T.number.isRequired,
   };
