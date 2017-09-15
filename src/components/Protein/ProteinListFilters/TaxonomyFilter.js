@@ -61,26 +61,28 @@ class TaxonomyFilter extends PureComponent {
         {taxes.map(([taxId, count]) => (
           <div key={taxId} className={f('column')}>
             <label className={f('row', 'filter-button')}>
-              <input
-                type="radio"
-                name="entry_type"
-                value={taxId}
-                onChange={this._handleSelection}
-                checked={
-                  (!focusAccession && taxId === 'ALL') ||
-                  focusAccession === taxId
-                }
-                style={{ margin: '0.25em' }}
-              />
+              <div>
+                <input
+                  type="radio"
+                  name="entry_type"
+                  value={taxId}
+                  onChange={this._handleSelection}
+                  checked={
+                    (!focusAccession && taxId === 'ALL') ||
+                    focusAccession === taxId
+                  }
+                  style={{ margin: '0.25em' }}
+                />
+              </div>
               {taxId === 'ALL' ? (
-                <span>All</span>
+                <div>All</div>
               ) : (
                 <Metadata
                   endpoint={'organism'}
                   db={'taxonomy'}
                   accession={taxId === 'ALL' ? 1 : taxId}
                 >
-                  <TaxIdOrName accession={taxId} element="span" />
+                  <TaxIdOrName accession={taxId} element="div" />
                 </Metadata>
               )}
               <NumberLabel value={count} />
