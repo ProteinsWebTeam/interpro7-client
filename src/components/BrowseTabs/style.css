@@ -23,6 +23,10 @@
   color: #1779ba;
 }
 
+.tabs-title > a:focus {
+  color: #2199e8;
+}
+
 .tabs-title a.is-active-tab {
   font-weight: bold;
   background: #1779ba;
