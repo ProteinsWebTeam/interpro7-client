@@ -23,3 +23,9 @@
   transition-duration: 750ms;
   transition-timing-function: ease-in-out;
 }
+
+@media screen and (max-width: 39.9375em) {
+  .jumbo-news-container {
+    width: 90%;
+  }
+}
