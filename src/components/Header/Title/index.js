@@ -91,7 +91,7 @@ class Title extends PureComponent /*:: <Props> */ {
             </div>
           </Link>
         </h1>
-        <h4 className={styles('hide-for-small-only', 'subtitle', { stuck })}>
+        <h4 className={styles('subtitle', { stuck })}>
           {subtitle}
           {detail && <small> ({detail})</small>}
         </h4>
