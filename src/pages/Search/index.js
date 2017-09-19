@@ -49,8 +49,8 @@ const RedirectToText = () => (
 );
 
 const Search = () => (
-  <main>
-    <section className={styles.card}>
+  <div className={f('row')}>
+    <div className={f('columns')}>
       <fieldset className={f('fieldset')}>
         <legend>Search InterPro</legend>
         <ul className={f('tabs')}>
@@ -95,8 +95,8 @@ const Search = () => (
       </fieldset>
       <SearchResults />
       {/* <SearchResults data={data} query={query} />*/}
-    </section>
-  </main>
+    </div>
+  </div>
 );
 
 Search.propTypes = {
