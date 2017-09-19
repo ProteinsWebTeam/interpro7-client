@@ -30,6 +30,16 @@ main {
   padding-top: 1rem;
 }
 
+/*Active tab - active is used on li element in ebi css*/
+.masthead .menu .active {
+  color: #0a0a0a;
+  background: #fff;
+}
+
+.masthead nav ul.menu li {
+  border-right-width: 0;
+} /*remove border for menu items overide ebi-global - can't be component specific as defined from .masthead */
+
 /*remove top-right button - temp while EBI fixing the hscrollbar issue*/
 @media screen and (max-width: 53em) {
   .embl-selector .button {
@@ -245,12 +255,6 @@ a:hover.noline {
   border-bottom-width: 3px;
   border-bottom-color: transparent;
 } /* CROSS ICON PBM - to make all menu items same height*/
-
-/*Active tab - active is used on li element in ebi css*/
-.masthead .menu .active {
-  color: #0a0a0a;
-  background: #fff;
-}
 
 .badge {
   background: rgba(0, 0, 0, 0.23);
