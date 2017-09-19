@@ -9,9 +9,11 @@ import { InterPro } from 'menuConfig';
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
+// import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import interproStyles from 'styles/interpro-new.css';
 import styles from './styles.css';
 
-const f = foundationPartial(fonts, styles);
+const f = foundationPartial(fonts, interproStyles, styles);
 
 /*:: type Props = {
   width: number,
