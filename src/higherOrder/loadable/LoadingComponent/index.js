@@ -2,7 +2,9 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import theme from 'styles/theme-interpro.css';
+const f = foundationPartial(theme);
 
 export const LoadingMessage = () => <div>Loading…</div>;
 LoadingMessage.displayName = 'LoadingMessage';
