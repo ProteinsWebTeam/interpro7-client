@@ -18,14 +18,17 @@ export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
 
   render() {
     return (
-      <div>
-        <p>An error happened while try to load a component of this page</p>
-        <p>
-          If you really want this part of the page you might want to reload it
-        </p>
-        <button onClick={reload} className={f('button')}>
-          Reload this page
-        </button>
+      <div className={f('row')}>
+        <div className={f('columns')}>
+          <p>An error happened while try to load a component of this page.</p>
+          <p>
+            If you really want this part of the page you might want to reload
+            it.
+          </p>
+          <button onClick={reload} className={f('button')}>
+            Reload this page
+          </button>
+        </div>
       </div>
     );
   }
