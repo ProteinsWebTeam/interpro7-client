@@ -20,13 +20,13 @@ import blockEvent from 'utils/blockEvent';
 import getTableAccess from 'storage/idb';
 
 import { foundationPartial } from 'styles/foundation';
-
+import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css';
 import f from './style.css';
 
 import example from './example.fasta';
 
-const s = foundationPartial(interproTheme, f);
+const s = foundationPartial(interproTheme, ipro, f);
 
 const strategy = re => (block, cb) => {
   const text = block.getText();
@@ -59,7 +59,7 @@ const classedSpan = className => {
 const checkValidity = (({ comment, IUPACProt }) => lines =>
   lines.reduce(
     (acc, line) => acc && (comment.test(line) || IUPACProt.test(line)),
-    true
+    true,
   ))({ comment: /^\s*[>;].*$/m, IUPACProt: /^[a-z* -]*$/im });
 
 const compositeDecorator = new CompositeDecorator([
@@ -87,7 +87,7 @@ class IPScanSearch extends Component {
     if (props.sequence) {
       editorState = EditorState.createWithContent(
         ContentState.createFromText(props.sequence),
-        compositeDecorator
+        compositeDecorator,
       );
     } else {
       editorState = EditorState.createEmpty(compositeDecorator);
@@ -144,9 +144,9 @@ class IPScanSearch extends Component {
     const r = await fetch(
       url.resolve(
         url.format({ ...this.props.ipScan, pathname: this.props.ipScan.root }),
-        'run'
+        'run',
       ),
-      { method: 'POST', body }
+      { method: 'POST', body },
     );
     console.log(r);
     const text = await r.text();
@@ -171,13 +171,13 @@ class IPScanSearch extends Component {
           text && typeof text === 'string'
             ? EditorState.createWithContent(
                 ContentState.createFromText(text),
-                compositeDecorator
+                compositeDecorator,
               )
             : EditorState.createEmpty(compositeDecorator),
         valid: true,
         dragging: false,
       },
-      () => this.editor.focus()
+      () => this.editor.focus(),
     );
 
   _handleSubmitFail = err => {
@@ -193,7 +193,7 @@ class IPScanSearch extends Component {
         className: s('alert'),
         ttl: 5000,
       },
-      id()
+      id(),
     );
   };
 
@@ -210,14 +210,14 @@ class IPScanSearch extends Component {
         className: s('success'),
         ttl: 5000,
       },
-      id()
+      id(),
     );
   };
 
   _handleSubmit = async event => {
     event.preventDefault();
     const lines = convertToRaw(
-      this.state.editorState.getCurrentContent()
+      this.state.editorState.getCurrentContent(),
     ).blocks.map(block => block.text);
     if (!lines.length) return;
     const value = lines.join('\n');
@@ -248,7 +248,7 @@ class IPScanSearch extends Component {
   _loadExample = () => this._handleReset(example);
 
   _handleDroppedFiles = blockEvent(({ dataTransfer: { files: [file] } }) =>
-    this._handleFile(file)
+    this._handleFile(file),
   );
 
   _handleDragging = blockEvent(() => this.setState({ dragging: true }));
@@ -265,7 +265,7 @@ class IPScanSearch extends Component {
 
   _handleChange = editorState => {
     const lines = convertToRaw(editorState.getCurrentContent()).blocks.map(
-      block => block.text
+      block => block.text,
     );
     this.setState({
       editorState,
@@ -315,7 +315,10 @@ class IPScanSearch extends Component {
                     </label>
                     <div className={s('button-group', 'line-with-buttons')}>
                       <label className={s('file-input-label')}>
-                        <button type="button" className={s('hollow', 'button')}>
+                        <button
+                          type="button"
+                          className={s('hollow', 'button', 'tertiary')}
+                        >
                           Choose file
                         </button>
                         <input
@@ -341,7 +344,7 @@ class IPScanSearch extends Component {
                       'large-12',
                       'columns',
                       'stacked-for-small',
-                      'button-group'
+                      'button-group',
                     )}
                   >
                     <input
@@ -371,7 +374,7 @@ class IPScanSearch extends Component {
 const mapStateToProps = createSelector(
   state => state.settings.ipScan,
   state => state.newLocation.search.sequence,
-  (ipScan, sequence) => ({ ipScan, sequence })
+  (ipScan, sequence) => ({ ipScan, sequence }),
 );
 
 export default connect(mapStateToProps, { addToast })(IPScanSearch);
