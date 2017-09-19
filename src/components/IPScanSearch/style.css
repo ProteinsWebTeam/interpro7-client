@@ -1,14 +1,5 @@
 @import '../../styles/fonts.css';
 
-.button.hollow.tertiary {
-  border: 1px solid #2daec1;
-  color: #2daec1;
-}
-.button.hollow.tertiary:hover {
-  border: 1px solid #3798a7;
-  color: #3798a7;
-}
-
 .editor {
   height: auto;
   min-height: 10em;
