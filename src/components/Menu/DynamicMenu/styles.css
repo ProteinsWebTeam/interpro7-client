@@ -10,6 +10,11 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity var(--timing-fast) ease-in-out;
+  border-left: 1px solid #fff3;
+
+  &:first-child {
+    border-left: none;
+  }
 }
 
 .visible {
