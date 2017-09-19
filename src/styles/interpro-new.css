@@ -36,9 +36,15 @@ main {
   background: #fff;
 }
 
+/*remove border for menu items overide ebi-global - can't be component specific as defined from .masthead */
 .masthead nav ul.menu li {
   border-right-width: 0;
-} /*remove border for menu items overide ebi-global - can't be component specific as defined from .masthead */
+}
+
+/*remove floating as we are using display: table */
+.masthead nav ul.menu li {
+  float: none;
+}
 
 /*remove top-right button - temp while EBI fixing the hscrollbar issue*/
 @media screen and (max-width: 53em) {
@@ -441,7 +447,7 @@ ul.chevron > li:before {
 /****************************** END TABLE *********************************/
 
 /******************************LOCAL STYLE*********************************/
-/*TABS*/
+/*TABS - home*/
 .tabs .tabs-title.is-active {
   & > a,
   & > a:focus,
@@ -463,8 +469,14 @@ ul.chevron > li:before {
 
   & > button:hover,
   & > a:hover {
-    background-color: #ddd;
+    opacity: 0.9;
+    background: none;
   }
+}
+/*TABS - search page*/
+.tabs .tabs-title a.is-active {
+  color: white;
+  background: #666;
 }
 
 /*footer*/
