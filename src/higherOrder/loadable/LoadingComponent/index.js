@@ -3,8 +3,9 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import { foundationPartial } from 'styles/foundation';
+import ipro from 'styles/interpro-new.css';
 import theme from 'styles/theme-interpro.css';
-const f = foundationPartial(theme);
+const f = foundationPartial(theme, ipro);
 
 export const LoadingMessage = () => <div>Loading…</div>;
 LoadingMessage.displayName = 'LoadingMessage';
@@ -20,7 +21,9 @@ export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
-          <p>An error happened while try to load a component of this page.</p>
+          <div className={f('callout', 'info', 'withicon')}>
+            An error happened while try to load a component of this page.
+          </div>
           <p>
             If you really want this part of the page you might want to reload
             it.
