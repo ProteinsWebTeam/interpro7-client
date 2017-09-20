@@ -134,7 +134,7 @@
   }
 
   .subtitle {
-    display: none;
+    visibility: hidden; /*important when stuck keep banner height the same */
   }
 }
 @media screen and (max-width: 52em) {
