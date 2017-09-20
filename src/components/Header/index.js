@@ -47,9 +47,9 @@ class _HamburgerBtn extends PureComponent {
     return (
       <svg
         onClick={openSideNav}
-        viewBox="0 0 12 10"
-        width="2.5em"
-        height="2.5em"
+        viewBox="0 0 10 10"
+        width="2em"
+        height="2em"
         className={reducedStyleBundle('top_level_hamburger', { stuck })}
       >
         <line
@@ -81,7 +81,7 @@ class _HamburgerBtn extends PureComponent {
 const getSideNav = state => state.ui.sideNav;
 const mapStateToPropsHamburger = createSelector(getSideNav, open => ({ open }));
 const HamburgerBtn = connect(mapStateToPropsHamburger, { openSideNav })(
-  _HamburgerBtn
+  _HamburgerBtn,
 );
 
 class _SideIcons extends PureComponent {
@@ -191,6 +191,6 @@ class Header extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  stuck => ({ stuck })
+  stuck => ({ stuck }),
 );
 export default connect(mapStateToProps)(Header);
