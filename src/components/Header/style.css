@@ -247,11 +247,11 @@
 }
 
 .side-search.stuck {
-  transform: translate(-20%, 50%);
+  transform: translate(-20%, 84%);
   transition-delay: 0s;
 }
 .side-search.stuck svg {
-  transform: Scale(0.8);
+  transform: Scale(0.9);
 }
 .side-search.stuck svg:hover,
 .side-search.stuck > input:hover ~ a svg {
@@ -322,12 +322,6 @@
 /*use when off canvas is open and icons need to move left*/
 .movedAway {
   transform: translateX(-20em);
-}
-
-@media screen and (max-width: 39.9375em) {
-  .side-icons svg {
-    transform: scale(0.8);
-  }
 }
 
 @media screen and (max-width: 20em) {
