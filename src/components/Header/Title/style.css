@@ -103,7 +103,6 @@
 @media screen and (max-width: 39.9375em) {
   h1.main-title {
     font-size: 1.8rem;
-    transform: translateX(0px);
   }
 }
 
@@ -133,11 +132,9 @@
   .logo-icon.stuck svg {
     width: 62px;
   }
-  .logo-flex {
-    margin-left: 0px;
-  }
+
   .subtitle {
-    visibility: hidden;
+    display: none;
   }
 }
 @media screen and (max-width: 52em) {
