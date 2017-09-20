@@ -5,10 +5,12 @@
   min-height: 10em;
   max-height: 42em;
   font-family: var(--fonts-mono-alt);
+  font-size: 0.8rem;
   overflow: auto;
 
   @nest & :global(.public-DraftEditorPlaceholder-root) {
     color: #cacaca;
+    font-size: 1rem;
     position: absolute;
     font-family: var(--fonts-ebi);
   }
