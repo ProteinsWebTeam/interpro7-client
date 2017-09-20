@@ -136,6 +136,9 @@
   .subtitle {
     visibility: hidden; /*important when stuck keep banner height the same */
   }
+  .stuck .logo-flex {
+    margin-left: -35px;
+  }
 }
 @media screen and (max-width: 52em) {
   /*not the best solution I guess*/
