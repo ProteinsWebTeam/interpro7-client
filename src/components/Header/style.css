@@ -255,7 +255,7 @@
 }
 .side-search.stuck svg:hover,
 .side-search.stuck > input:hover ~ a svg {
-  transform: rotate(90deg) Scale(0.8);
+  transform: rotate(90deg) Scale(0.9);
 }
 
 .side-search svg {
@@ -278,7 +278,7 @@
   opacity: 0;
   transform: scaleX(1);
   transform-origin: right;
-  transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+  transition: opacity 0.25s ease-in-out, transform 0.3s ease-in-out;
 
   &:focus,
   &:hover {
