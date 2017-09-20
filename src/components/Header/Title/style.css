@@ -102,7 +102,7 @@
 
 @media screen and (max-width: 39.9375em) {
   h1.main-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
 }
 
@@ -127,14 +127,14 @@
 @media screen and (max-width: 39.9375em) {
   .logo-icon svg {
     width: 40px;
-    margin-right: 0.4rem;
+    margin-right: 0.7rem;
   }
   .logo-icon.stuck svg {
     width: 62px;
   }
 
   .subtitle {
-    visibility: hidden; /*important when stuck keep banner height the same */
+    display: none; /*important when stuck keep banner height the same */
   }
   .stuck .logo-flex {
     margin-left: -35px;
