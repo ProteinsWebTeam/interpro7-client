@@ -301,7 +301,7 @@
 
 .side-search > input:hover {
   border: none;
-  border-bottom: 3px solid currentColor;
+  border-bottom: 2px solid currentColor;
   background-color: transparent;
   box-shadow: none;
   opacity: 1;
@@ -315,7 +315,7 @@
   background-color: rgba(255, 255, 255, 0.1);
   border: none;
   box-shadow: none;
-  border-bottom: 3px solid currentColor;
+  border-bottom: 2px solid currentColor;
   transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
