@@ -4,7 +4,7 @@ import T from 'prop-types';
 
 import MenuItem from 'components/Menu/MenuItem';
 
-import { InterPro } from 'menuConfig';
+import { InterProMin } from 'menuConfig';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -37,7 +37,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
     console.log('initial props', props);
     this._menuItems = new Set();
     this.state = {};
-    for (const { name } of InterPro) {
+    for (const { name } of InterProMin) {
       this.state[name] = true;
     }
   }
@@ -64,7 +64,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
   render() {
     return (
       <ul className={f('menu')}>
-        {InterPro.map(({ newTo, name, activeClass }) => (
+        {InterProMin.map(({ newTo, name, activeClass }) => (
           <li
             key={name}
             ref={this._setMenuItemInMap}
