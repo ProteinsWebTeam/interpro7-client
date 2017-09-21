@@ -73,9 +73,32 @@ button {
   cursor: pointer;
 } /*used for tabs*/
 
+div#local-title {
+  min-height: 116px;
+} /*if you use subtitles that disappear on small screen we need a min-height for very small screens*/
+
 /****************************** END Override EBI  global**********************/
 
 /******************************Local style***************************************/
+
+/*CALLOUT ALERT WARNING MESSAGE - missing in foundation*/
+.callout.alert.withicon::before {
+  content: 'l';
+  font-family: 'EBI-Generic';
+  color: #d1847f;
+  margin-right: 0.5rem;
+}
+.callout.info {
+  background-color: #c6e9ff;
+  color: #222;
+}
+.callout.info.withicon::before {
+  content: 'i';
+  font-family: 'EBI-Generic';
+  color: #7fb0d1;
+  margin-right: 0.5rem;
+}
+
 /*BUTTONS to include in theme-interpro?*/
 
 .button.hollow.tertiary {
@@ -481,9 +504,16 @@ ul.chevron > li:before {
   & > button:hover,
   & > a:hover {
     opacity: 0.9;
-    background: none;
+    background: #ddd;
   }
 }
+/*important to keep otherwise become light grey like other tabs */
+.tabs .tabs-title.is-active {
+  & > button:hover {
+    background: #666;
+  }
+}
+
 /*TABS - search page*/
 .tabs .tabs-title a.is-active {
   color: white;

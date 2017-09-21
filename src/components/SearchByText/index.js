@@ -22,7 +22,7 @@ class Example extends PureComponent {
     const { value } = this.props;
     return (
       <i>
-        &nbsp;
+        {' '}
         <Link
           newTo={{
             description: { mainType: 'search', mainDB: 'text' },

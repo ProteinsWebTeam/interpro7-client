@@ -30,7 +30,7 @@ import pageStyle from '../style.css';
 
 const ps = classname.bind(pageStyle);
 
-const SVG_WIDTH = 100;
+// const SVG_WIDTH = 100;
 const colorHash = new ColorHash();
 
 const propTypes = {
@@ -124,8 +124,12 @@ const List = ({
           </SearchBox>
           <Column
             dataKey="accession"
-            renderer={(accession /*: string */) => (
+            renderer={(accession /*: string */, row) => (
               <Link
+                // style={{
+                // display:'flex',
+                // flexWrap: 'nowrap',
+                // alignItems:'center'}}
                 newTo={location => ({
                   ...location,
                   description: {
@@ -135,6 +139,18 @@ const List = ({
                   },
                 })}
               >
+                {
+                  //<span
+                  // style={{
+                  //   width:'0.6rem',
+                  //   height:'0.6rem',
+                  //   margin: '0 0.2rem 0 0',
+                  //   backgroundColor: colorHash.hex(row.accession),
+                  //   borderRadius: '0.2rem'
+                  //   }}
+                  //>
+                  // </span>
+                }
                 {accession}
               </Link>
             )}
@@ -185,20 +201,8 @@ const List = ({
           <Column
             dataKey="length"
             renderer={(length /*: number */, row) => (
-              <div
-                title={`${length} amino-acids`}
-                style={{
-                  width: `${length / maxLength * SVG_WIDTH}%`,
-                  padding: '0.2rem',
-                  backgroundColor: colorHash.hex(row.accession),
-                  borderRadius: '0.2rem',
-                  textAlign: 'start',
-                  overflowX: 'hidden',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'clip',
-                }}
-              >
-                {length} amino-acids
+              <div title={`${length} amino acids`} className={f('visu-length')}>
+                {length}
               </div>
             )}
           >
