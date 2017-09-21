@@ -8,6 +8,7 @@ import Lineage from 'components/Organism/Lineage';
 import Children from 'components/Organism/Children';
 import { TaxLink } from 'components/ExtLink';
 import f from 'styles/foundation';
+import enaLogo from 'images/ena_small.png';
 
 /*:: type Props = {
   data: {
@@ -40,7 +41,7 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
                 <h5>External Links</h5>
                 <ul className={f('chevron')}>
                   <li>
-                    <TaxLink id={metadata.accession}>ENA Link</TaxLink>
+                    <TaxLink id={metadata.accession}><img src={enaLogo} alt="ENA logo" /></TaxLink>
                   </li>
                 </ul>
               </div>

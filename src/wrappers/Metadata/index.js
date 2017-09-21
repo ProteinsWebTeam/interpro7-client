@@ -26,10 +26,14 @@ class Metadata extends PureComponent {
 
   render() {
     const { children, ...props } = this.props;
-    const child = Children.only(children);
-    const getUrl = getUrlFor(props.endpoint, props.db, props.accession);
-    const Element = loadData(getUrl)(child.type);
-    return <Element {...child.props} {...props} />;
+    return <span>{children}</span>;
+    // TODO: Reenable again, but consider the case of organisms with lots of children.
+    // this logic was triggering > 10000 requests.
+    //
+    // const child = Children.only(children);
+    // const getUrl = getUrlFor(props.endpoint, props.db, props.accession);
+    // const Element = loadData(getUrl)(child.type);
+    // return <Element {...child.props} {...props} />;
   }
 }
 
