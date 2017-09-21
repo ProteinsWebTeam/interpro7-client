@@ -122,6 +122,20 @@ const primariesAndSecondaries = {
       secondary: 'structure',
     },
   },
+  organism: {
+    entry: {
+      primary: 'entry',
+      secondary: 'organism',
+    },
+    protein: {
+      primary: 'protein',
+      secondary: 'organism',
+    },
+    structure: {
+      primary: 'structure',
+      secondary: 'organism',
+    },
+  },
 };
 
 class _RelatedAdvanced extends PureComponent {

@@ -11,7 +11,7 @@ import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
-import styles from 'styles/blocks.css';
+// import styles from 'styles/blocks.css';
 
 const f = foundationPartial(ipro);
 

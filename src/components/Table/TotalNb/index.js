@@ -17,6 +17,8 @@ const TotalNb = ({
   notFound,
   mainType,
   mainDB,
+  focusType,
+  focusDB,
 }) => {
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
@@ -30,12 +32,14 @@ const TotalNb = ({
   if (notFound) {
     textLabel = 'No data available';
   } else if (actualSize) {
+    const type = focusType || mainType;
+    const db = focusDB || mainDB;
     textLabel = (
       <span>
         {index} - {index + data.length - 1} of <strong>{actualSize}</strong>{' '}
-        {actualSize > 1 ? toPlural(mainType) : mainType}
-        {mainDB != 'reviewed' && mainDB != 'uniprot' && mainDB != 'taxonomy' ? (
-          ' in ' + mainDB
+        {actualSize > 1 ? toPlural(type) : type}
+        {db !== 'reviewed' && db !== 'uniprot' && db !== 'taxonomy' ? (
+          ` in ${db}`
         ) : null}
       </span>
     );
@@ -49,10 +53,14 @@ TotalNb.propTypes = {
   notFound: T.bool,
   mainDB: T.string.isRequired,
   mainType: T.string.isRequired,
+  focusDB: T.string.isRequired,
+  focusType: T.string.isRequired,
 };
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainDB,
   state => state.newLocation.description.mainType,
-  (mainDB, mainType) => ({ mainDB, mainType })
+  state => state.newLocation.description.focusDB,
+  state => state.newLocation.description.focusType,
+  (mainDB, mainType, focusDB, focusType) => ({ mainDB, mainType, focusDB, focusType })
 );
 export default connect(mapStateToProps)(TotalNb);

@@ -25,7 +25,6 @@ const propTypes = {
   actualSize: T.number,
   search: T.object,
 };
-
 const componentMatch = {
   protein: {
     entry: EntriesOnProtein,
@@ -140,20 +139,22 @@ const Matches = (
       </Column>
       <Column dataKey="source_organism.fullname">Species</Column>
       <Column dataKey="source_database">Source Database</Column>
-      <Column
-        dataKey="match"
-        renderer={(match /*: Object */) => (
-          <MatchesByPrimary
-            matches={[match]}
-            primary={primary}
-            secondary={secondary}
-            location={location}
-            {...props}
-          />
-        )}
-      >
-        Architecture
-      </Column>
+      { secondary === 'organism' ? null :
+        <Column
+          dataKey="match"
+          renderer={(match /*: Object */) => (
+            <MatchesByPrimary
+              matches={[match]}
+              primary={primary}
+              secondary={secondary}
+              location={location}
+              {...props}
+            />
+          )}
+        >
+          Architecture
+        </Column>
+      }
     </Table>
     // {Object.entries(matchesByPrimary).map(([acc, matches]) => (
     //   <MatchesByPrimary
