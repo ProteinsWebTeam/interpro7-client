@@ -7,9 +7,11 @@ exports[`<ErrorMessage /> should render error message 1`] = `
   <div
     className="columns"
   >
-    <p>
+    <div
+      className="callout info withicon"
+    >
       An error happened while try to load a component of this page.
-    </p>
+    </div>
     <p>
       If you really want this part of the page you might want to reload it.
     </p>
