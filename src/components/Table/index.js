@@ -98,6 +98,13 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     data-icon="i"
                     title="View your results as a list"
                   />
+                  <button
+                    className={f('icon-view', 'thumb-view', 'disabled')}
+                    aria-disabled="true"
+                    disabled
+                    data-icon="i"
+                    title="View your results as a list"
+                  />
                 </div>
                 <div className={f('filter-wrapper')}>
                   {search}
