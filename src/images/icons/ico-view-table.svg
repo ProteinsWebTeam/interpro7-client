@@ -1,86 +1,82 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   width="24"
-   height="24"
-   viewBox="0 0 24 24"
-   id="svg2"
-   version="1.1"
-   sodipodi:docname="icon-view-table.svg">
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  id="svg2"
+  version="1.1">
   <defs
-     id="defs8" />
+    id="defs8" />
   <g
-     id="g4173"
-     style="fill:#1a1a1a"
-     transform="matrix(0.70976546,0,0,0.70976546,3.453299,3.4680568)">
+    id="g4173"
+    transform="matrix(0.70976546,0,0,0.70976546,3.453299,3.4680568)">
     <rect
-       y="-0.44836435"
-       x="23.689209"
-       height="24.305084"
-       width="3.2542372"
-       id="rect4188"
-       style="fill:#71818a;" />
-    <g
-       id="g4226">
-      <rect
-         x="5.6949153"
-         y="-0.10169491"
-         height="24.305084"
-         width="3.2542372"
-         id="rect4141"
-         style="fill:#71818a;"
-      />
-      <rect
-         y="-0.30508474"
-         x="14.949153"
-         height="24.305084"
-         width="3.2542372"
-         id="rect4152"
-         style="fill:#71818a;" />
-      <rect
-         y="-0.10169491"
-         x="-2.7585843"
-         height="24.305084"
-         width="3.2542372"
-         id="rect4214"
-         style="fill:#71818a;"
-      />
-      <rect
-         transform="matrix(0.00719529,0.99997411,-0.99998842,0.00481188,0,0)"
-         y="-26.758802"
-         x="23.307993"
-         height="29.721037"
-         width="3.2542639"
-         id="rect4216"
-         style="fill:#71818a;" />
-      <rect
-         style="fill:#71818a;"
-         id="rect4220"
-         width="3.2542639"
-         height="29.721037"
-         x="14.854569"
-         y="-26.819628"
-         transform="matrix(0.00719529,0.99997411,-0.99998842,0.00481188,0,0)" />
-      <rect
-         transform="matrix(0.00719529,0.99997411,-0.99998842,0.00481188,0,0)"
-         y="-26.880453"
-         x="6.4011464"
-         height="29.721037"
-         width="3.2542639"
-         id="rect4222"
-         style="fill:#71818a;" />
-      <rect
-         id="rect4224"
-         width="3.2542639"
-         height="29.721037"
-         x="-2.0522766"
-         y="-26.941278"
-         transform="matrix(0.00719529,0.99997411,-0.99998842,0.00481188,0,0)"
-         style="fill:#71818a;"/>
-    </g>
+      y="-0.44836435"
+      x="23.689209"
+      height="24.305084"
+      width="3.2542372"
+      id="rect4188"
+      style="fill:#71818a;"
+    />
+    <rect
+      x="5.6949153"
+      y="-0.10169491"
+      height="24.305084"
+      width="3.2542372"
+      id="rect4141"
+      style="fill:#71818a;"
+    />
+    <rect
+      y="-0.30508474"
+      x="14.949153"
+      height="24.305084"
+      width="3.2542372"
+      id="rect4152"
+      style="fill:#71818a;"
+    />
+    <rect
+      y="-0.10169491"
+      x="-2.7585843"
+      height="24.305084"
+      width="3.2542372"
+      id="rect4214"
+      style="fill:#71818a;"
+    />
+    <rect
+      transform="matrix(0.00719529,0.99997411,-0.99998842,0.00481188,0,0)"
+      y="-26.758802"
+      x="23.307993"
+      height="29.721037"
+      width="3.2542639"
+      id="rect4216"
+      style="fill:#71818a;"
+    />
+    <rect
+      height="29.721037"
+      width="3.2542639"
+      x="14.854569"
+      y="-26.819628"
+      transform="matrix(0.00719529,0.99997411,-0.99998842,0.00481188,0,0)"
+      id="rect4220"
+      style="fill:#71818a;"
+    />
+    <rect
+      transform="matrix(0.00719529,0.99997411,-0.99998842,0.00481188,0,0)"
+      y="-26.880453"
+      x="6.4011464"
+      height="29.721037"
+      width="3.2542639"
+      id="rect4222"
+      style="fill:#71818a;"
+    />
+    <rect
+      id="rect4224"
+      width="3.2542639"
+      height="29.721037"
+      x="-2.0522766"
+      y="-26.941278"
+      transform="matrix(0.00719529,0.99997411,-0.99998842,0.00481188,0,0)"
+      style="fill:#71818a;"/>
   </g>
 </svg>
