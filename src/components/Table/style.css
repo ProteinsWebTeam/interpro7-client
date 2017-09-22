@@ -124,6 +124,9 @@ table.light .subheader {
 .table-view .table-results-filtering .icon-view.list-view {
   background: url(../../images/icons/ico-view-list.svg) no-repeat;
 }
+.table-view .table-results-filtering .icon-view.thumb-view {
+  background: url(../../images/icons/ico-view-thumb.svg) no-repeat;
+}
 .table-view .table-results-filtering .icon-view.disabled {
   opacity: 0.2;
   cursor: not-allowed;
