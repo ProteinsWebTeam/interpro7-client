@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,12 +13,8 @@ import { TaxLink, ProteomeLink } from 'components/ExtLink';
 import f from 'styles/foundation';
 import uniprotLogo from 'images/uniprot.png';
 import enaLogo from 'images/ena_small.png';
+// TODO: reinstate @flow
 
-/*:: type Props = {
-  data: {
-    metadata: Object,
-  },
-}; */
 const SummaryTaxonomy = ({metadata}) => (
   <div className={f('row')}>
     <div className={f('medium-8', 'large-8', 'columns')}>
@@ -41,6 +36,9 @@ const SummaryTaxonomy = ({metadata}) => (
     </div>
   </div>
 );
+SummaryTaxonomy.propTypes = {
+  metadata: T.object.isRequired,
+};
 const SummaryProteome = ({metadata}) => (
   <div className={f('row')}>
     <div className={f('medium-8', 'large-8', 'columns')}>
@@ -74,11 +72,25 @@ const SummaryProteome = ({metadata}) => (
     </div>
   </div>
 );
+SummaryProteome.propTypes = {
+  metadata: T.object.isRequired,
+};
 
+/*:: type Props = {
+  data: {
+    metadata: Object,
+    location: Object,
+  },
+}; */
 class SummaryOrganism extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       metadata: T.object.isRequired,
+    }).isRequired,
+    location: T.shape({
+      description: T.shape({
+        mainDB: T.string,
+      }).isRequired,
     }).isRequired,
   };
 
