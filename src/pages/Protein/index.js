@@ -1,6 +1,6 @@
 import React from 'react';
 import T from 'prop-types';
-import ColorHash from 'color-hash/lib/color-hash';
+// import ColorHash from 'color-hash/lib/color-hash';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -30,7 +30,7 @@ import ipro from 'styles/interpro-new.css';
 const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 // const SVG_WIDTH = 100;
-const colorHash = new ColorHash();
+// const colorHash = new ColorHash();
 
 const propTypes = {
   data: T.shape({
@@ -79,10 +79,10 @@ const List = ({
       results: [],
     };
   }
-  const maxLength = _payload.results.reduce(
-    (max, result) => Math.max(max, (result.metadata || result).length),
-    0,
-  );
+  // const maxLength = _payload.results.reduce(
+  //   (max, result) => Math.max(max, (result.metadata || result).length),
+  //   0,
+  // );
   return (
     <div className={f('row')}>
       <MemberDBTabs />
@@ -123,7 +123,7 @@ const List = ({
           </SearchBox>
           <Column
             dataKey="accession"
-            renderer={(accession /*: string */, row) => (
+            renderer={(accession /*: string */) => (
               <Link
                 // style={{
                 // display:'flex',
@@ -139,7 +139,7 @@ const List = ({
                 })}
               >
                 {
-                  //<span
+                  // <span
                   // style={{
                   //   width:'0.6rem',
                   //   height:'0.6rem',
@@ -147,7 +147,7 @@ const List = ({
                   //   backgroundColor: colorHash.hex(row.accession),
                   //   borderRadius: '0.2rem'
                   //   }}
-                  //>
+                  // >
                   // </span>
                 }
                 {accession}
@@ -201,7 +201,7 @@ const List = ({
           <Column dataKey="source_organism.fullname">Species</Column>
           <Column
             dataKey="length"
-            renderer={(length /*: number */, row) => (
+            renderer={(length /*: number */) => (
               <div title={`${length} amino acids`} className={f('visu-length')}>
                 {length}
               </div>
