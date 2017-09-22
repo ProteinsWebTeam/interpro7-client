@@ -4,6 +4,8 @@ import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import OrganismListFilters from 'components/Organism/OrganismListFilters';
 import Table, {
   Column,
   SearchBox,
@@ -69,8 +71,9 @@ const List = ({
   }
   return (
     <div className={f('row')}>
-      <div className={f('columns')}>
-        <hr />
+      <MemberDBTabs />
+      <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
+        <OrganismListFilters /><hr />
         <Table
           dataTable={_payload.results}
           isStale={isStale}

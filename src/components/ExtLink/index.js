@@ -78,6 +78,22 @@ TaxLink.propTypes = {
 };
 TaxLink.displayName = 'TaxLink';
 
+export const ProteomeLink = ({ id, target, children, ...props }) => (
+  <BaseLink
+    id={id}
+    target={target || '_blank'}
+    pattern="http://www.uniprot.org/proteomes/{id}"
+    {...props}
+  >
+    {children || `ProteomeID ${id}`}
+  </BaseLink>
+);
+ProteomeLink.propTypes = {
+  ...types,
+  id: T.number.isRequired,
+};
+ProteomeLink.displayName = 'ProteomeLink';
+
 export const PMCLink = ({ id, target, children, ...props }) => (
   <BaseLink
     id={id}
@@ -90,7 +106,7 @@ export const PMCLink = ({ id, target, children, ...props }) => (
 );
 PMCLink.propTypes = {
   ...types,
-  id: T.number.isRequired,
+  id: T.string.isRequired,
 };
 PMCLink.displayName = 'PMCLink';
 
