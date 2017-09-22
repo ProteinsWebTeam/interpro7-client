@@ -21,7 +21,7 @@ const TotalNb = ({
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,
-    10
+    10,
   );
   const index = (page - 1) * pageSize + 1;
   // const lastPage = Math.ceil(actualSize / pageSize) || 1;
@@ -34,9 +34,9 @@ const TotalNb = ({
       <span>
         {index} - {index + data.length - 1} of <strong>{actualSize}</strong>{' '}
         {actualSize > 1 ? toPlural(mainType) : mainType}
-        {mainDB != 'reviewed' && mainDB != 'uniprot' && mainDB != 'taxonomy' ? (
-          ' in ' + mainDB
-        ) : null}
+        {mainDB !== 'reviewed' && mainDB !== 'uniprot' && mainDB !== 'taxonomy'
+          ? ` in ${mainDB}`
+          : null}
       </span>
     );
   }
@@ -53,6 +53,6 @@ TotalNb.propTypes = {
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainDB,
   state => state.newLocation.description.mainType,
-  (mainDB, mainType) => ({ mainDB, mainType })
+  (mainDB, mainType) => ({ mainDB, mainType }),
 );
 export default connect(mapStateToProps)(TotalNb);
