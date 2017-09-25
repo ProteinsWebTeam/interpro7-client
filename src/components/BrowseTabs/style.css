@@ -17,6 +17,7 @@
 .tabs-title a:visited {
   font-size: 0.9rem; /*same size as submenu*/
   padding: 0.7rem 1rem; /*to make it similar to EBI leaf menu*/
+  line-height: inherit;
   color: #222;
 }
 
