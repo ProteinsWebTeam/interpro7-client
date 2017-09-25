@@ -148,13 +148,11 @@ class DomainArchitectures extends PureComponent {
     if (loading)
       return (
         <div className={f('row')}>
-          {' '}
           <div className={f('columns')}>Loading… </div>
         </div>
       );
     return (
       <div className={f('row')}>
-        {' '}
         <div className={f('columns')}>
           {(payload.results || []).map(obj => {
             const idaObj = ida2json(obj.IDA);
