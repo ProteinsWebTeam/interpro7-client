@@ -91,7 +91,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'overview',
+      name: 'Overview',
     },
   ],
   [
@@ -180,7 +180,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'domain architectures',
+      name: 'Domain Architectures',
     },
   ],
   [
@@ -197,7 +197,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'hmm model',
+      name: 'HMM Model',
     },
   ],
 ]);
