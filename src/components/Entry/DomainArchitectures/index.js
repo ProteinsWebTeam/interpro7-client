@@ -11,7 +11,10 @@ import Link from 'components/generic/Link';
 
 import ColorHash from 'color-hash/lib/color-hash';
 
-import style from './style.css';
+import { foundationPartial } from 'styles/foundation';
+
+import pageStyle from './style.css';
+const f = foundationPartial(pageStyle);
 
 const colorHash = new ColorHash();
 
@@ -47,7 +50,7 @@ const ida2json = ida => {
             .map(acc => `IPR${`0000000${acc}`.substr(-numDigitsInAccession)}`),
           fragment: m[1].split('-').map(Number),
         };
-      })
+      }),
     ),
   };
   return obj;
@@ -73,13 +76,13 @@ class IDAGraphic extends PureComponent {
       numberOfGuides = Math.trunc(idaObj.length / gapBetwenGuidelines);
     }
     return (
-      <div className={style.svgContainer} style={{ height }}>
+      <div className={f('svgContainer')} style={{ height }}>
         <svg
-          className={style.svg}
+          className={f('svg')}
           preserveAspectRatio="none meet"
           viewBox={`0 0 ${idaObj.length} ${height}`}
         >
-          <g className={style.guidelines}>
+          <g className={f('guidelines')}>
             {Array(...{ length: numberOfGuides }).map((x, i) => (
               <g key={i}>
                 <line
@@ -105,11 +108,11 @@ class IDAGraphic extends PureComponent {
             {idaObj.domains.map((domain, t) => (
               <g
                 key={domain.accessions.join()}
-                className="domain"
+                className={f('domain')}
                 transform={`translate(0 ${t * options.trackHeight})`}
               >
                 {domain.locations.map((location, i) => (
-                  <g key={i} className="location">
+                  <g key={i} className={f('location')}>
                     {location.fragments.map((fragment, j) => (
                       <rect
                         key={j}
@@ -142,53 +145,62 @@ class DomainArchitectures extends PureComponent {
       data: { loading, payload },
       description: { mainAccession },
     } = this.props;
-    if (loading) return <div>Loading…</div>;
+    if (loading)
+      return (
+        <div className={f('row')}>
+          {' '}
+          <div className={f('columns')}>Loading… </div>
+        </div>
+      );
     return (
-      <div>
-        {(payload.results || []).map(obj => {
-          const idaObj = ida2json(obj.IDA);
-          return (
-            <div key={obj.IDA_FK} style={{ marginTop: '2em' }}>
-              <Link
-                newTo={{
-                  description: {
-                    mainType: 'protein',
-                    mainDB: 'uniprot',
-                    focusType: 'entry',
-                    focusDB: 'interpro',
-                    focusAccession: mainAccession,
-                  },
-                  search: { ida: obj.IDA_FK },
-                }}
-              >
-                There are {obj.unique_proteins} proteins{' '}
-              </Link>
-              with this architecture:<br />
-              {idaObj.domains.map(d => (
-                <span key={d.accessions.join('|')}>
-                  {d.accessions.map(acc => (
-                    <Link
-                      key={acc}
-                      newTo={{
-                        description: {
-                          mainType: 'entry',
-                          mainDB: 'interpro',
-                          mainAccession: acc,
-                        },
-                      }}
-                    >
-                      {' '}
-                      {acc}{' '}
-                    </Link>
-                  ))}{' '}
-                  -
-                </span>
-              ))}
-              <IDAGraphic idaObj={idaObj} />
-              {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
-            </div>
-          );
-        })}
+      <div className={f('row')}>
+        {' '}
+        <div className={f('columns')}>
+          {(payload.results || []).map(obj => {
+            const idaObj = ida2json(obj.IDA);
+            return (
+              <div key={obj.IDA_FK} style={{ marginTop: '2em' }}>
+                <Link
+                  newTo={{
+                    description: {
+                      mainType: 'protein',
+                      mainDB: 'uniprot',
+                      focusType: 'entry',
+                      focusDB: 'interpro',
+                      focusAccession: mainAccession,
+                    },
+                    search: { ida: obj.IDA_FK },
+                  }}
+                >
+                  There are {obj.unique_proteins} proteins{' '}
+                </Link>
+                with this architecture:<br />
+                {idaObj.domains.map(d => (
+                  <span key={d.accessions.join('|')}>
+                    {d.accessions.map(acc => (
+                      <Link
+                        key={acc}
+                        newTo={{
+                          description: {
+                            mainType: 'entry',
+                            mainDB: 'interpro',
+                            mainAccession: acc,
+                          },
+                        }}
+                      >
+                        {' '}
+                        {acc}{' '}
+                      </Link>
+                    ))}{' '}
+                    -
+                  </span>
+                ))}
+                <IDAGraphic idaObj={idaObj} />
+                {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }
@@ -205,18 +217,18 @@ const getUrlFor = createSelector(
     _search.ida = null;
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description
+      description,
     ).replace('domain_architecture', '')}?${qsStringify(_search)}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation.description,
-  description => ({ description })
+  description => ({ description }),
 );
 
 export default connect(mapStateToProps)(
   loadData({
     getUrl: getUrlFor,
-  })(DomainArchitectures)
+  })(DomainArchitectures),
 );
