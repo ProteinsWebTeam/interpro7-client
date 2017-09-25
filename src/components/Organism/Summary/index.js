@@ -17,9 +17,7 @@ import uniprotLogo from 'images/uniprot.png';
 import enaLogo from 'images/ena_small.png';
 // TODO: reinstate @flow
 
-const SummaryTaxonomy = ({data: { metadata},loading}) => {
-  console.log('tax',metadata, loading);
-  return (
+const SummaryTaxonomy = ({data: { metadata}}) => (
   <div className={f('row')}>
     <div className={f('medium-8', 'large-8', 'columns')}>
       <Title metadata={metadata} mainType={'organism'} />
@@ -39,13 +37,13 @@ const SummaryTaxonomy = ({data: { metadata},loading}) => {
       </div>
     </div>
   </div>
-)};
-// SummaryTaxonomy.propTypes = {
-//   metadata: T.object.isRequired,
-// };
-const SummaryProteome = ({data: { metadata}, loading}) => {
-  console.log('prot',metadata,loading);
-  return (
+);
+SummaryTaxonomy.propTypes = {
+  data: T.shape({
+    metadata: T.object.isRequired,
+  }).isRequired,
+};
+const SummaryProteome = ({data: { metadata}}) => (
   <div className={f('row')}>
     <div className={f('medium-8', 'large-8', 'columns')}>
       <Title metadata={metadata} mainType={'organism'} />
@@ -77,10 +75,12 @@ const SummaryProteome = ({data: { metadata}, loading}) => {
       </div>
     </div>
   </div>
-)};
-// SummaryProteome.propTypes = {
-//   metadata: T.object.isRequired,
-// };
+);
+SummaryProteome.propTypes = {
+  data: T.shape({
+    metadata: T.object.isRequired,
+  }).isRequired,
+};
 
 /*:: type Props = {
   data: {
@@ -101,17 +101,12 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { location: {description} } = this.props;
-    console.log(description.mainDB, this.props);
     return (
       <div className={f('sections')}>
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => {
-              console.log(l);
-              return l.description.mainDB !== 'taxonomy'
-            }}
+            locationSelector={l => l.description.mainDB !== 'taxonomy'}
             indexRoute={SummaryTaxonomy}
             catchAll={SummaryProteome}
           />
