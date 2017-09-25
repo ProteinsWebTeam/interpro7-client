@@ -55,11 +55,10 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
         activeClass={f('is-active', 'is-active-tab')}
         disabled={value !== null && !value}
       >
+        {name} &nbsp;
         {value !== null && (
           <NumberLabel value={value} className={f('counter')} />
         )}
-        &nbsp;
-        {name}
       </Link>
     );
   }
@@ -113,7 +112,7 @@ class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainType,
   state => state.newLocation.description.mainAccession,
-  (mainType, mainAccession) => ({ mainType, mainAccession })
+  (mainType, mainAccession) => ({ mainType, mainAccession }),
 );
 
 const mapStateToUrl = createSelector(
@@ -127,7 +126,7 @@ const mapStateToUrl = createSelector(
     mainType,
     mainDB,
     mainAccession,
-    search
+    search,
   ) => {
     if (!mainAccession) return '';
     return `${protocol}//${hostname}:${port}${root}${description2path({
@@ -135,7 +134,7 @@ const mapStateToUrl = createSelector(
       mainDB,
       mainAccession,
     })}?${qsStringify(search)}`.replace(/\?$/, '');
-  }
+  },
 );
 
 export default loadData(mapStateToUrl)(connect(mapStateToProps)(BrowseTabs));
