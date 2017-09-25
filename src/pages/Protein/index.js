@@ -150,7 +150,7 @@ const List = ({
                   // >
                   // </span>
                 }
-                {accession}
+                <span className={f('acc-row')}>{accession}</span>
               </Link>
             )}
           >
