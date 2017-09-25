@@ -21,14 +21,13 @@ import { getUrlForApi } from 'higherOrder/loadData/defaults';
 import subPages from 'subPages';
 import config from 'config';
 
-import classname from 'classnames/bind';
-
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
-
-const ps = classname.bind(pageStyle);
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import ipro from 'styles/interpro-new.css';
+const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 // const SVG_WIDTH = 100;
 // const colorHash = new ColorHash();
@@ -124,7 +123,7 @@ const List = ({
           </SearchBox>
           <Column
             dataKey="accession"
-            renderer={(accession /*: string *//*  , row*/) => (
+            renderer={(accession /*: string */) => (
               <Link
                 // style={{
                 // display:'flex',
@@ -182,25 +181,27 @@ const List = ({
           <Column
             dataKey="source_database"
             renderer={(db /*: string */) => (
-              <Link
-                newTo={location => ({
-                  ...location,
-                  description: {
-                    mainType: location.description.mainType,
-                    mainDB: location.description.mainDB,
-                  },
-                })}
+              <div
+                className={f('table-center')}
+                title={
+                  db === 'reviewed'
+                    ? `${db} by curators (Swiss-Prot)`
+                    : 'Not reviewed by curators (TrEMBL)'
+                }
               >
-                {db}
-              </Link>
+                <span
+                  className={f('icon', 'icon-functional')}
+                  data-icon={db === 'reviewed' ? '/' : ''}
+                />
+              </div>
             )}
           >
-            Source Database
+            Reviewed
           </Column>
           <Column dataKey="source_organism.fullname">Species</Column>
           <Column
             dataKey="length"
-            renderer={(length /*: number *//* , row*/) => (
+            renderer={(length /*: number */) => (
               <div title={`${length} amino acids`} className={f('visu-length')}>
                 {length}
               </div>
@@ -278,7 +279,7 @@ const InnerSwitch = props => (
 );
 
 const Protein = props => (
-  <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
+  <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
     <ErrorBoundary>
       <Switch
         {...props}

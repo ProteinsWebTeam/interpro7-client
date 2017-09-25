@@ -23,7 +23,7 @@ const TotalNb = ({
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,
-    10
+    10,
   );
   const index = (page - 1) * pageSize + 1;
   // const lastPage = Math.ceil(actualSize / pageSize) || 1;

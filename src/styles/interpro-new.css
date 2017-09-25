@@ -456,6 +456,13 @@ ul.chevron > li:before {
 /****************************** END RIGHT PANEL *****************************/
 
 /****************************** TABLE *********************************/
+.table-center {
+  text-align: center;
+}
+html .table-center .icon-functional::before {
+  color: #71818a;
+}
+
 /*Filter menu option*/
 .sub-nav {
   background-color: #e7f2ff;
