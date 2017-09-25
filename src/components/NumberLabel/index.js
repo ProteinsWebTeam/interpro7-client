@@ -66,7 +66,7 @@ class NumberLabel extends Component {
     if (isNaN(_value)) _value = 'N/A';
     if (Number.isFinite(_value)) _value = _value.toLocaleString();
     return (
-      <span className={f('label-nb', className)} {...props}>
+      <span className={f('label', className)} {...props}>
         {_value}
       </span>
     );
