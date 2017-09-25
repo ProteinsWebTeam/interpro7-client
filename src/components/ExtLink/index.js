@@ -90,7 +90,7 @@ export const ProteomeLink = ({ id, target, children, ...props }) => (
 );
 ProteomeLink.propTypes = {
   ...types,
-  id: T.number.isRequired,
+  id: T.string.isRequired,
 };
 ProteomeLink.displayName = 'ProteomeLink';
 

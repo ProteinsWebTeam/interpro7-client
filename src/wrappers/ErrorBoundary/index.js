@@ -1,6 +1,8 @@
 // @flow
 import { PureComponent, createElement } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
@@ -13,12 +15,13 @@ import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 /*:: type Props = {
   children: React$Node,
   errorComponent: React$ElementType,
+  newLocation: mixed,
 }; */
 /*:: type State = {
   error: ?ReactError,
 }; */
 
-// This clcomponent should be inserted before any possibly “risky” component
+// This component should be inserted before any possibly “risky” component
 // Acts as a try/cacth, preventing the rest of the website to crash
 // Ideally to be inserted before any <Switch> or complex visualisation widget
 class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
@@ -29,13 +32,20 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     children: T.node.isRequired,
     errorComponent: T.element,
+    newLocation: T.object,
   };
 
   constructor(props /*: Props */) {
     super(props);
     this.state = { error: null };
   }
-
+  componentWillReceiveProps(newProps){
+    // If the location is changing, the children should be
+    // rendered again
+    if (this.props !== newProps){
+      this.setState({ error: null });
+    }
+  }
   componentDidCatch(error /*: Error */, info /*: any */) {
     console.error(error);
     console.error(info);
@@ -51,4 +61,8 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
   }
 }
 
-export default ErrorBoundary;
+const mapStateToProps = createSelector(
+  state => state.newLocation,
+  (newLocation) => ({ newLocation })
+);
+export default connect(mapStateToProps)(ErrorBoundary);

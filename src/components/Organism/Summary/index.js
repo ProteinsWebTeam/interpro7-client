@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import ErrorBoundary from 'wrappers/ErrorBoundary';
+import Switch from 'components/generic/Switch';
 
 import Title from 'components/Title';
 import Accession from 'components/Protein/Accession';
@@ -15,7 +17,9 @@ import uniprotLogo from 'images/uniprot.png';
 import enaLogo from 'images/ena_small.png';
 // TODO: reinstate @flow
 
-const SummaryTaxonomy = ({metadata}) => (
+const SummaryTaxonomy = ({data: { metadata},loading}) => {
+  console.log('tax',metadata, loading);
+  return (
   <div className={f('row')}>
     <div className={f('medium-8', 'large-8', 'columns')}>
       <Title metadata={metadata} mainType={'organism'} />
@@ -35,11 +39,13 @@ const SummaryTaxonomy = ({metadata}) => (
       </div>
     </div>
   </div>
-);
-SummaryTaxonomy.propTypes = {
-  metadata: T.object.isRequired,
-};
-const SummaryProteome = ({metadata}) => (
+)};
+// SummaryTaxonomy.propTypes = {
+//   metadata: T.object.isRequired,
+// };
+const SummaryProteome = ({data: { metadata}, loading}) => {
+  console.log('prot',metadata,loading);
+  return (
   <div className={f('row')}>
     <div className={f('medium-8', 'large-8', 'columns')}>
       <Title metadata={metadata} mainType={'organism'} />
@@ -71,10 +77,10 @@ const SummaryProteome = ({metadata}) => (
       </div>
     </div>
   </div>
-);
-SummaryProteome.propTypes = {
-  metadata: T.object.isRequired,
-};
+)};
+// SummaryProteome.propTypes = {
+//   metadata: T.object.isRequired,
+// };
 
 /*:: type Props = {
   data: {
@@ -95,15 +101,21 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { data: { metadata }, location: {description} } = this.props;
+    const { location: {description} } = this.props;
+    console.log(description.mainDB, this.props);
     return (
       <div className={f('sections')}>
-        <section>
-          { description.mainDB === 'taxonomy' ?
-            <SummaryTaxonomy metadata={metadata} /> :
-            <SummaryProteome metadata={metadata} />
-          }
-        </section>
+        <ErrorBoundary>
+          <Switch
+            {...this.props}
+            locationSelector={l => {
+              console.log(l);
+              return l.description.mainDB !== 'taxonomy'
+            }}
+            indexRoute={SummaryTaxonomy}
+            catchAll={SummaryProteome}
+          />
+        </ErrorBoundary>
       </div>
     );
   }

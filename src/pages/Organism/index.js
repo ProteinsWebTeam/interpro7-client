@@ -158,8 +158,8 @@ const SummaryAsync = loadable({
     import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
 });
 
-const SummaryComponent = ({ data: { payload }, location }) => (
-  <SummaryAsync data={payload} location={location} />
+const SummaryComponent = ({ data: { payload, loading }, location }) => (
+  <SummaryAsync data={payload} location={location} loading={loading}/>
 );
 SummaryComponent.propTypes = {
   data: T.shape({
