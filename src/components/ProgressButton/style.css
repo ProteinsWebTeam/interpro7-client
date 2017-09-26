@@ -1,13 +1,6 @@
 @import '../../styles/timing.css';
 @import '../../styles/colors.css';
 
-.container {
-  width: 2em;
-  height: 2em;
-  display: flex;
-  justify-content: center;
-}
-
 .svg {
   margin: auto;
 }
@@ -58,7 +51,7 @@
 
 .progress {
   transition: stroke-dashoffset var(--timing-instant) ease-in-out;
-  stroke: var(--colors-main);
+  stroke: var(--colors-interpro);
 }
 
 .card {
