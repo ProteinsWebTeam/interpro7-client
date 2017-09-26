@@ -56,7 +56,7 @@ const payloadToProcessed = createSelector(
   (payload /*: ?{|[key: string]: number |} */) =>
     Object.entries(payload || {})
       .map(([taxId, count]) => ({ taxId, count }))
-      .sort(({ count: a }, { count: b }) => +b - +a)
+      .sort(({ count: a }, { count: b }) => +b - +a),
 );
 
 /*:: type Props = {
@@ -76,7 +76,12 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
 
   render() {
     const { data: { loading, payload } } = this.props;
-    if (loading) return <span>Loading…</span>;
+    if (loading)
+      return (
+        <div className={f('row')}>
+          <div className={f('columns')}>Loading… </div>
+        </div>
+      );
     const processed = payloadToProcessed(payload);
     return (
       <div className={f('row')}>
@@ -108,12 +113,12 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
                 return (
                   <span>
                     {value &&
-                    value.icon && (
-                      <span
-                        className={f('icon', 'icon-species')}
-                        data-icon={value.icon}
-                      />
-                    )}
+                      value.icon && (
+                        <span
+                          className={f('icon', 'icon-species')}
+                          data-icon={value.icon}
+                        />
+                      )}
                     &nbsp;
                     <Metadata
                       endpoint="organism"
@@ -162,9 +167,9 @@ const mapStateToUrl = createSelector(
       focusAccession: description.mainAccession,
     };
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      _description
+      _description,
     )}?${qsStringify({ group_by: 'tax_id' })}`;
-  }
+  },
 );
 
 export default loadData(mapStateToUrl)(OrganismSubPage);
