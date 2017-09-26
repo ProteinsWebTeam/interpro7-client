@@ -1,4 +1,4 @@
-import React, { PureComponent, createElement } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -12,10 +12,11 @@ import {
   failedLoadingData,
 } from 'actions/creators';
 import { alreadyLoadingError } from 'reducers/data';
-import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
 import extractParams from './extractParams';
 import getFetch from './getFetch';
+
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 const mapStateToProps = getUrl =>
   createSelector(
@@ -61,9 +62,6 @@ const loadData = params => {
   return (Wrapped /*: ReactClass<*> */) => {
     class DataWrapper extends PureComponent {
       static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
-      static defaultProps = {
-        errorComponent: ErrorMessage,
-      };
 
       static propTypes = {
         appState: T.object.isRequired,
@@ -72,7 +70,6 @@ const loadData = params => {
         progressData: T.func.isRequired,
         failedLoadingData: T.func.isRequired,
         unloadingData: T.func.isRequired,
-        errorComponent: T.any,
         data: T.shape({
           loading: T.bool,
           progress: T.number,
@@ -85,7 +82,7 @@ const loadData = params => {
 
       constructor(props) {
         super(props);
-        this.state = { staleData: props.data, error: null };
+        this.state = { staleData: props.data };
         this._url = '';
         this._avoidStaleData = true;
         this._load = null;
@@ -184,17 +181,9 @@ const loadData = params => {
         this._url = null;
       }
 
-      componentDidCatch(error /*: Error */, info /*: any */) {
-        console.error(error);
-        console.error(info);
-        this.setState({ error: { error, info } });
-      }
 
       render() {
-        const { error, staleData } = this.state;
-        if (error && typeof error === 'object') {
-          return createElement(this.props.errorComponent, error);
-        }
+        const { staleData } = this.state;
         const {
           // Remove from props
           appState,
@@ -218,7 +207,7 @@ const loadData = params => {
           [`data${propNamespace}`]: useStaleData ? staleData : data,
           [`isStale${propNamespace}`]: !!useStaleData,
         };
-        return <Wrapped {...passedProps} />;
+        return <ErrorBoundary><Wrapped {...passedProps} /></ErrorBoundary>;
       }
     }
 

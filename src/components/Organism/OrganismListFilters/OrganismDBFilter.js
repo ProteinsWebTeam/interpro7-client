@@ -28,7 +28,6 @@ class OrganismDBFilter extends Component {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    console.log(value);
     this.props.goToNewLocation({
       ...this.props.location,
       description: {

@@ -1,9 +1,6 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
 
 import Title from 'components/Title';
 import Accession from 'components/Protein/Accession';
@@ -15,7 +12,6 @@ import { TaxLink, ProteomeLink } from 'components/ExtLink';
 import f from 'styles/foundation';
 import uniprotLogo from 'images/uniprot.png';
 import enaLogo from 'images/ena_small.png';
-// TODO: reinstate @flow
 
 const SummaryTaxonomy = ({data: { metadata}}) => (
   <div className={f('row')}>
@@ -53,8 +49,8 @@ const SummaryProteome = ({data: { metadata}}) => (
       }
       <Accession metadata={metadata} />
       <div>Strain: {metadata.strain}</div>
-      <div> Taxonomy:
-        <Metadata
+      <div>
+        Taxonomy: <Metadata
           endpoint={'organism'}
           db={'taxonomy'}
           accession={metadata.taxonomy}
@@ -85,7 +81,6 @@ SummaryProteome.propTypes = {
 /*:: type Props = {
   data: {
     metadata: Object,
-    location: Object,
   },
 }; */
 class SummaryOrganism extends PureComponent /*:: <Props> */ {
@@ -93,30 +88,20 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }).isRequired,
-    location: T.shape({
-      description: T.shape({
-        mainDB: T.string,
-      }).isRequired,
-    }).isRequired,
   };
 
   render() {
+    const {data: {metadata: {source_database: db}}} = this.props;
     return (
       <div className={f('sections')}>
-        <ErrorBoundary>
-          <Switch
-            {...this.props}
-            locationSelector={l => l.description.mainDB !== 'taxonomy'}
-            indexRoute={SummaryTaxonomy}
-            catchAll={SummaryProteome}
-          />
-        </ErrorBoundary>
+        { db === 'taxonomy' ?
+          <SummaryTaxonomy {...this.props}/> : null
+        }
+        { db === 'proteome' ?
+          <SummaryProteome {...this.props}/> : null
+        }
       </div>
     );
   }
 }
-const mapStateToProps = createSelector(
-  state => state.newLocation,
-  location => ({ location })
-);
-export default connect(mapStateToProps)(SummaryOrganism);
+export default SummaryOrganism;
