@@ -36,20 +36,12 @@ class ProgressButton extends PureComponent /*:: <Props> */ {
     return (
       <span className={s('container', { failed })}>
         <svg
-          width="2em"
-          height="2em"
+          width="3em"
+          height="3em"
           viewBox={`0 0 ${2 * CENTER} ${2 * CENTER}`}
           className={s('svg')}
         >
           <g className={s('group', { downloading })}>
-            <circle
-              cx={CENTER}
-              cy={CENTER}
-              r={RADIUS}
-              fill="none"
-              className={s('shadow', { downloading })}
-              strokeWidth={STROKE_WIDTH - 1}
-            />
             <circle
               cx={CENTER}
               cy={CENTER}
@@ -68,7 +60,7 @@ class ProgressButton extends PureComponent /*:: <Props> */ {
             cy={CENTER}
             // circle inside the progress circle (+1 to account for interpolat.)
             r={RADIUS - STROKE_WIDTH / 2 + 1}
-            fill="#e6e6e6"
+            fill="none"
           />
           <g className={s('card', { flipped: success })}>
             <image
