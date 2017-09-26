@@ -10,11 +10,7 @@ class ProteinSubPage extends PureComponent /*:: <{data: Object}> */ {
   };
 
   render() {
-    return (
-      <div>
-        <Related data={this.props.data} />
-      </div>
-    );
+    return <Related data={this.props.data} />;
   }
 }
 
