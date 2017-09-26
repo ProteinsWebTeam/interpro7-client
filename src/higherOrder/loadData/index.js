@@ -72,6 +72,7 @@ const loadData = params => {
         progressData: T.func.isRequired,
         failedLoadingData: T.func.isRequired,
         unloadingData: T.func.isRequired,
+        errorComponent: T.any,
         data: T.shape({
           loading: T.bool,
           progress: T.number,
