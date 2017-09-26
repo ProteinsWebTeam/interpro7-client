@@ -118,6 +118,7 @@ class IDAGraphic extends PureComponent {
                         key={j}
                         y={options.trackHeight / 2}
                         x={fragment.start}
+                        title={domain.accessions[0]}
                         width={fragment.end - fragment.start}
                         fill={colorHash.hex(domain.accessions[0])}
                         height={10}
