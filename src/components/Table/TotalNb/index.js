@@ -53,8 +53,8 @@ TotalNb.propTypes = {
   notFound: T.bool,
   mainDB: T.string.isRequired,
   mainType: T.string.isRequired,
-  focusDB: T.string.isRequired,
-  focusType: T.string.isRequired,
+  focusDB: T.string,
+  focusType: T.string,
 };
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainDB,

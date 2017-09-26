@@ -8,8 +8,8 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 const StructureListFilters = () =>
   <FiltersPanel>
-    <ErrorBoundary>
-      <ExperimentTypeFilter label="Experiment Type" />
+    <ErrorBoundary label="Experiment Type">
+      <ExperimentTypeFilter />
     {/* <TaxonomyFilter label="Taxonomy" />*/}
     {/* <LengthFilter label="Protein Length"/>*/}
     </ErrorBoundary>

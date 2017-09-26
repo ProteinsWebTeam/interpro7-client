@@ -31,7 +31,7 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
 
   static propTypes = {
     children: T.node.isRequired,
-    errorComponent: T.element,
+    errorComponent: T.any,
     newLocation: T.object,
   };
 
@@ -39,10 +39,10 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
     super(props);
     this.state = { error: null };
   }
-  componentWillReceiveProps(newProps){
+  componentWillReceiveProps({newLocation}){
     // If the location is changing, the children should be
     // rendered again
-    if (this.props !== newProps){
+    if (this.props.newLocation !== newLocation){
       this.setState({ error: null });
     }
   }
