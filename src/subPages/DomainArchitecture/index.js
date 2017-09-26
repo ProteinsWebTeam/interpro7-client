@@ -6,6 +6,9 @@ import { createSelector } from 'reselect';
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 import DomainArchitectures from 'components/Entry/DomainArchitectures';
 
+import { foundationPartial } from 'styles/foundation';
+
+const f = foundationPartial();
 /*:: type Props = {
   data: Object,
   mainType: string,
@@ -19,10 +22,14 @@ class DomainArchitectureSubPage extends PureComponent /*:: <Props> */ {
 
   render() {
     const { data, mainType } = this.props;
-    if (data.loading) return <div>Loading…</div>;
+    if (data.loading)
+      return (
+        <div className={f('row')}>
+          <div className={f('columns')}>Loading… </div>
+        </div>
+      );
     return (
       <div>
-        <h3>{data.payload.metadata.accession}</h3>
         {mainType === 'entry' && <DomainArchitectures mainData={data} />}
         {mainType === 'protein' && <DomainsOnProtein mainData={data} />}
       </div>
@@ -32,7 +39,7 @@ class DomainArchitectureSubPage extends PureComponent /*:: <Props> */ {
 
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainType,
-  mainType => ({ mainType })
+  mainType => ({ mainType }),
 );
 
 export default connect(mapStateToProps)(DomainArchitectureSubPage);
