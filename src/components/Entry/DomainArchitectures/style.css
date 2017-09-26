@@ -11,9 +11,14 @@
   overflow: visible;
 }
 .guidelines line {
-  stroke: var(--colors-gray);
-  stroke-width: 1px;
+  stroke: var(--colors-lightgray);
+  stroke-width: 0.5px;
 }
+
+.guidelines text {
+  fill: var(--colors-lightgray);
+}
+
 .svg rect:hover {
   opacity: 0.7;
 }
