@@ -114,7 +114,11 @@ const Matches = (
               },
             }}
           >
-            <span className={f('acc-row')}>{acc}</span>
+            {primary === 'protein' ? (
+              <span className={f('acc-row')}>{acc}</span>
+            ) : (
+              <span>{acc}</span>
+            )}
           </Link>
         )}
       >
