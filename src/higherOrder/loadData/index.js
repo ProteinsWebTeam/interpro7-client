@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, createElement } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -12,6 +12,7 @@ import {
   failedLoadingData,
 } from 'actions/creators';
 import { alreadyLoadingError } from 'reducers/data';
+import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
 import extractParams from './extractParams';
 import getFetch from './getFetch';
@@ -60,6 +61,9 @@ const loadData = params => {
   return (Wrapped /*: ReactClass<*> */) => {
     class DataWrapper extends PureComponent {
       static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
+      static defaultProps = {
+        errorComponent: ErrorMessage,
+      };
 
       static propTypes = {
         appState: T.object.isRequired,
@@ -80,7 +84,7 @@ const loadData = params => {
 
       constructor(props) {
         super(props);
-        this.state = { staleData: props.data };
+        this.state = { staleData: props.data, error: null };
         this._url = '';
         this._avoidStaleData = true;
         this._load = null;
@@ -179,7 +183,17 @@ const loadData = params => {
         this._url = null;
       }
 
+      componentDidCatch(error /*: Error */, info /*: any */) {
+        console.error(error);
+        console.error(info);
+        this.setState({ error: { error, info } });
+      }
+
       render() {
+        const { error, staleData } = this.state;
+        if (error && typeof error === 'object') {
+          return createElement(this.props.errorComponent, error);
+        }
         const {
           // Remove from props
           appState,
@@ -194,13 +208,13 @@ const loadData = params => {
         // const data = {...dataFromProps};// maybe useful?..
         if (typeof data.loading === 'undefined') data.loading = true;
         const useStaleData =
-          !this._avoidStaleData && data.loading && this.state.staleData.payload;
+          !this._avoidStaleData && data.loading && staleData.payload;
         if (!data.loading) {
           this._url = getUrl(appState);
         }
         const passedProps = {
           ...rest,
-          [`data${propNamespace}`]: useStaleData ? this.state.staleData : data,
+          [`data${propNamespace}`]: useStaleData ? staleData : data,
           [`isStale${propNamespace}`]: !!useStaleData,
         };
         return <Wrapped {...passedProps} />;
