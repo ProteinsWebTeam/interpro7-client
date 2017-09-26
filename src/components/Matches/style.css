@@ -1,6 +1,6 @@
-@import "../../styles/colors.css";
-@import "../../styles/spacing.css";
-@import "../../styles/timing.css";
+@import '../../styles/colors.css';
+@import '../../styles/spacing.css';
+@import '../../styles/timing.css';
 
 .list {
   padding: 0;
@@ -58,4 +58,8 @@
     opacity: 0.9;
     transform: scaleY(1.2);
   }
+}
+
+.acc-row {
+  font-size: 0.8rem;
 }
