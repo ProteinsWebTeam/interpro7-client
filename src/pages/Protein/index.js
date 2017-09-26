@@ -244,7 +244,6 @@ const Summary = props => {
   if (loading || !payload.metadata)
     return (
       <div className={f('row')}>
-        {' '}
         <div className={f('columns')}>Loading… </div>
       </div>
     );
