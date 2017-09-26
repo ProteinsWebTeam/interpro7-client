@@ -133,16 +133,20 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
             >
               Organism
             </Column>
-            <Column dataKey="count">Protein count</Column>
+            <Column dataKey="count" className={f('table-center')}>
+              Protein count
+            </Column>
             <Column
               dataKey="taxId"
               defaultKey="proteinFastas"
+              className={f('table-center')}
               renderer={ProteinFastasRenderer}
             >
               FASTA
             </Column>
             <Column
               dataKey="taxId"
+              className={f('table-center')}
               defaultKey="proteinAccessions"
               renderer={ProteinAccessionsRenderer}
             >
