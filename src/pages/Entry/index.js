@@ -24,15 +24,11 @@ import config from 'config';
 
 import { memberDB } from 'staticData/home';
 
-import classname from 'classnames/bind';
-
-import f from 'styles/foundation';
-
-import pageStyle from '../style.css';
+import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
-
-const ps = classname.bind(pageStyle);
+import pageStyle from '../style.css';
+const f = foundationPartial(pageStyle, styles);
 
 const propTypes = {
   data: T.shape({
@@ -51,11 +47,16 @@ const Overview = ({
   location: { search: { type } },
   isStale,
 }) => {
-  if (loading || isStale) return <div>Loading…</div>;
+  if (loading || isStale)
+    return (
+      <div className={f('row')}>
+        <div className={f('columns')}>Loading… </div>
+      </div>
+    );
   return (
     <div>
       Member databases:
-      <ul className={styles.card}>
+      <ul className={f('card')}>
         {Object.entries(
           payload.entries.member_databases,
         ).map(([name, count]) => (
@@ -71,7 +72,7 @@ const Overview = ({
           </li>
         ))}
       </ul>
-      <ul className={styles.card}>
+      <ul className={f('card')}>
         <li>
           <Link
             newTo={{
@@ -171,7 +172,7 @@ class List extends Component {
             </SearchBox>
             <Column
               dataKey="type"
-              className={ps('col-type')}
+              className={f('col-type')}
               renderer={type => (
                 <interpro-type
                   type={type.replace('_', ' ')}
@@ -221,7 +222,7 @@ class List extends Component {
                     },
                   })}
                 >
-                  <span className={ps('acc-row')}>{accession}</span>
+                  <span className={f('acc-row')}>{accession}</span>
                 </Link>
               )}
             >
@@ -232,11 +233,11 @@ class List extends Component {
                 dataKey="member_databases"
                 renderer={(mdb /*: string */) =>
                   Object.keys(mdb).map(db => (
-                    <div key={db} className={ps('sign-row')}>
-                      <span className={ps('sign-cell')}>{db}</span>
-                      <span className={ps('sign-cell')}>
+                    <div key={db} className={f('sign-row')}>
+                      <span className={f('sign-cell')}>{db}</span>
+                      <span className={f('sign-cell')}>
                         {mdb[db].map(accession => (
-                          <span key={accession} className={ps('sign-label')}>
+                          <span key={accession} className={f('sign-label')}>
                             <Link
                               title={`${accession} signature`}
                               newTo={{
@@ -256,7 +257,7 @@ class List extends Component {
                   ))}
               >
                 Signatures{' '}
-                <span className={ps('sign-label-head')} title="Signature ID">
+                <span className={f('sign-label-head')} title="Signature ID">
                   ID
                 </span>
               </Column>
@@ -282,11 +283,11 @@ class List extends Component {
             )}
             <Column
               dataKey="go_terms"
-              className={ps('col-go')}
+              className={f('col-go')}
               renderer={(gos /*: Array<Object> */) =>
                 gos.map(go => (
                   <div
-                    className={ps('go-row')}
+                    className={f('go-row')}
                     key={go.identifier}
                     style={{
                       backgroundColor: go.category
@@ -294,7 +295,7 @@ class List extends Component {
                         : '#DDDDDD',
                     }}
                   >
-                    <span className={ps('go-cell')}>
+                    <span className={f('go-cell')}>
                       <GoLink
                         id={go.identifier}
                         className={f('go')}
@@ -308,19 +309,19 @@ class List extends Component {
             >
               GO Terms{' '}
               <span
-                className={ps('sign-label-head', 'bp')}
+                className={f('sign-label-head', 'bp')}
                 title="Biological process term"
               >
                 BP
               </span>{' '}
               <span
-                className={ps('sign-label-head', 'mf')}
+                className={f('sign-label-head', 'mf')}
                 title="Molecular function term"
               >
                 MF
               </span>{' '}
               <span
-                className={ps('sign-label-head', 'cc')}
+                className={f('sign-label-head', 'cc')}
                 title="Cellular component term"
               >
                 CC
@@ -365,7 +366,12 @@ SummaryComponent.propTypes = {
 const Summary = props => {
   const { data: { loading, payload }, isStale } = props;
   if (loading || (isStale && !payload.metadata)) {
-    return <div>Loading…</div>;
+    return (
+      <div className={f('row')}>
+        {' '}
+        <div className={f('columns')}>Loading… </div>
+      </div>
+    );
   }
   return (
     <ErrorBoundary>
@@ -423,7 +429,7 @@ const schemaProcessData = data => ({
 });
 
 const Entry = props => (
-  <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
+  <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
     {props.data.payload &&
       props.data.payload.accession && (
         <SchemaOrgData
