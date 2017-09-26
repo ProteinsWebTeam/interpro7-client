@@ -20,14 +20,11 @@ import loadable from 'higherOrder/loadable';
 import subPages from 'subPages';
 import config from 'config';
 
-import classname from 'classnames/bind';
-
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
-
-const ps = classname.bind(pageStyle);
+const f = foundationPartial(pageStyle, styles);
 
 const SummaryAsync = loadable({
   loader: () =>
@@ -47,9 +44,15 @@ const propTypes = {
 };
 
 const Overview = ({ data: { payload, loading } }) => {
-  if (loading) return <div>Loading…</div>;
+  if (loading)
+    return (
+      <div className={f('row')}>
+        {' '}
+        <div className={f('columns')}>Loading… </div>
+      </div>
+    );
   return (
-    <ul className={styles.card}>
+    <ul className={f('card')}>
       {Object.entries(payload.structures || {}).map(([name, count]) => (
         <li key={name}>
           <Link
@@ -198,7 +201,13 @@ for (const subPage of config.pages.structure.subPages) {
 
 const Summary = props => {
   const { data: { loading } } = props;
-  if (loading) return <div>Loading…</div>;
+  if (loading)
+    return (
+      <div className={f('row')}>
+        {' '}
+        <div className={f('columns')}>Loading… </div>
+      </div>
+    );
   return (
     <ErrorBoundary>
       <Switch
@@ -240,7 +249,7 @@ class Structure extends PureComponent {
   render() {
     return (
       <div
-        className={ps('with-data', { ['with-stale-data']: this.props.isStale })}
+        className={f('with-data', { ['with-stale-data']: this.props.isStale })}
       >
         <ErrorBoundary>
           <Switch
