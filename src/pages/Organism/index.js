@@ -19,14 +19,11 @@ import loadable from 'higherOrder/loadable';
 import subPages from 'subPages';
 import config from 'config';
 
-import classname from 'classnames/bind';
-
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
-
-const ps = classname.bind(pageStyle);
+const f = foundationPartial(pageStyle, styles);
 
 const propTypes = {
   data: T.shape({
@@ -43,7 +40,7 @@ const propTypes = {
 const defaultPayload = {};
 
 const Overview = ({ data: { payload = defaultPayload } }) => (
-  <ul className={styles.card}>
+  <ul className={f('card')}>
     {Object.entries(payload.proteins || {}).map(([name, count]) => (
       <li key={name}>
         <Link newTo={{ description: { mainType: 'protein', mainDB: name } }}>
@@ -73,7 +70,8 @@ const List = ({
     <div className={f('row')}>
       <MemberDBTabs />
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-        <OrganismListFilters /><hr />
+        <OrganismListFilters />
+        <hr />
         <Table
           dataTable={_payload.results}
           isStale={isStale}
@@ -216,7 +214,7 @@ const InnerSwitch = props => (
 );
 
 const Organism = props => (
-  <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
+  <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
     <ErrorBoundary>
       <Switch
         {...props}
