@@ -12,7 +12,10 @@ import Matches from 'components/Matches';
 
 import { toPlural } from 'utils/pages';
 
-import blockStyles from 'styles/blocks.css';
+import { foundationPartial } from 'styles/foundation';
+
+import styles from 'styles/blocks.css';
+const f = foundationPartial(styles);
 
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
@@ -32,7 +35,7 @@ class ObjectToList extends PureComponent {
           .filter(
             ([_, v]) =>
               // value !== 0 or, if object, contains values
-              v && (typeof v !== 'object' || Object.keys(v).length)
+              v && (typeof v !== 'object' || Object.keys(v).length),
           )
           .map(([k, value]) => (
             <li key={k}>
@@ -61,7 +64,7 @@ class _RelatedSimple extends PureComponent {
   render() {
     const { secondaryData, mainType, focusType } = this.props;
     return (
-      <div>
+      <div className={f('row')}>
         <p>This {mainType} is related to this:</p>
         <ObjectToList
           obj={secondaryData}
@@ -87,7 +90,7 @@ class _RelatedSimple extends PureComponent {
 const mapStateToPropsSimple = createSelector(
   state => state.newLocation.description.mainType,
   state => state.newLocation.description.focusType,
-  (mainType, focusType) => ({ mainType, focusType })
+  (mainType, focusType) => ({ mainType, focusType }),
 );
 const RelatedSimple = connect(mapStateToPropsSimple)(_RelatedSimple);
 
@@ -172,14 +175,16 @@ class _RelatedAdvanced extends PureComponent {
         focusDB === 'InterPro' ? (
           <ProteinEntryHierarchy entries={secondaryData} />
         ) : null}
-        <p>
-          This {mainType} is related to
-          {secondaryData.length > 1 ? (
-            ` these ${toPlural(focusType)}:`
-          ) : (
-            ` this ${focusType}:`
-          )}
-        </p>
+        <div className={f('row')}>
+          <div className={f('columns')}>
+            <p>
+              This {mainType} is related to
+              {secondaryData.length > 1
+                ? ` these ${toPlural(focusType)}:`
+                : ` this ${focusType}:`}
+            </p>
+          </div>
+        </div>
         <Matches
           actualSize={actualSize}
           matches={secondaryData.reduce(
@@ -187,7 +192,7 @@ class _RelatedAdvanced extends PureComponent {
               ...prev,
               { [mainType]: mainData, [focusType]: secondaryData, coordinates },
             ],
-            []
+            [],
           )}
           isStale={isStale}
           {...primariesAndSecondaries[mainType][focusType]}
@@ -201,7 +206,7 @@ const mapStateToPropsAdvanced = createSelector(
   state => state.newLocation.description.mainType,
   state => state.newLocation.description.focusType,
   state => state.newLocation.description.focusDB,
-  (mainType, focusType, focusDB) => ({ mainType, focusType, focusDB })
+  (mainType, focusType, focusDB) => ({ mainType, focusType, focusDB }),
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
 
@@ -220,17 +225,17 @@ const getReversedUrl = createSelector(
     }, {});
     const s = search || {};
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      newDesc
+      newDesc,
     )}?${qsStringify(s)}`;
-  }
+  },
 );
 const mapStateToPropsAdvancedQuery = createSelector(
   state => state.newLocation.description.mainType,
-  mainType => ({ mainType })
+  mainType => ({ mainType }),
 );
 const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
   loadData(
-    getReversedUrl
+    getReversedUrl,
   )(({ data: { payload, loading }, secondaryData, ...props }) => {
     if (loading) return <div>Loading…</div>;
     const _secondaryData = payload.results.map(x => {
@@ -254,7 +259,7 @@ const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
         {...props}
       />
     );
-  })
+  }),
 );
 
 class Related extends PureComponent {
@@ -275,20 +280,18 @@ class Related extends PureComponent {
       ? RelatedAdvancedQuery
       : RelatedSimple;
     return (
-      <div className={blockStyles.card}>
-        <RelatedComponent
-          secondaryData={secondaryData}
-          mainData={mainData}
-          {...props}
-        />
-      </div>
+      <RelatedComponent
+        secondaryData={secondaryData}
+        mainData={mainData}
+        {...props}
+      />
     );
   }
 }
 
 const mapStateToPropsDefault = createSelector(
   state => state.newLocation.description.focusType,
-  focusType => ({ focusType })
+  focusType => ({ focusType }),
 );
 
 export default connect(mapStateToPropsDefault)(Related);
