@@ -12,6 +12,13 @@ import StructureOnProtein from './StructureOnProtein';
 
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 
+import { foundationPartial } from 'styles/foundation';
+
+import localStyle from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+
+const f = foundationPartial(fonts, localStyle);
+
 const propTypes = {
   matches: T.arrayOf(T.object).isRequired,
   primary: T.string.isRequired,
@@ -52,7 +59,7 @@ const MatchesByPrimary = (
   primary: string,
   secondary: string,
   props: Array<any>,
-} */
+} */,
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
   return <MatchComponent matches={matches} {...props} />;
@@ -77,7 +84,7 @@ const Matches = (
    isStale: boolean,
    search: Object,
    props: Array<any>
-} */
+} */,
 ) => {
   const pathname = '';
   return (
@@ -96,7 +103,7 @@ const Matches = (
         dataKey="accession"
         renderer={(
           acc /*: string */,
-          { source_database: sourceDatabase } /*: {source_database: string} */
+          { source_database: sourceDatabase } /*: {source_database: string} */,
         ) => (
           <Link
             newTo={{
@@ -107,7 +114,7 @@ const Matches = (
               },
             }}
           >
-            {acc}
+            <span className={f('acc-row')}>{acc}</span>
           </Link>
         )}
       >
@@ -120,7 +127,7 @@ const Matches = (
           {
             accession,
             source_database: sourceDatabase,
-          } /*: {accession: string, source_database: string} */
+          } /*: {accession: string, source_database: string} */,
         ) => (
           <Link
             newTo={{
@@ -138,8 +145,10 @@ const Matches = (
         Name
       </Column>
       <Column dataKey="source_organism.fullname">Species</Column>
-      <Column dataKey="source_database">Source Database</Column>
-      { secondary === 'organism' ? null :
+      <Column dataKey="source_database">
+        {primary === 'protein' ? 'Reviewed' : 'Source database'}
+      </Column>
+      {secondary === 'organism' ? null : (
         <Column
           dataKey="match"
           renderer={(match /*: Object */) => (
@@ -154,7 +163,7 @@ const Matches = (
         >
           Architecture
         </Column>
-      }
+      )}
     </Table>
     // {Object.entries(matchesByPrimary).map(([acc, matches]) => (
     //   <MatchesByPrimary
@@ -170,7 +179,7 @@ Matches.propTypes = propTypes;
 
 const mapStateToProps = createSelector(
   state => state.newLocation.search,
-  search => ({ search })
+  search => ({ search }),
 );
 
 export default connect(mapStateToProps)(Matches);
