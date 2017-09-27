@@ -6,8 +6,8 @@ import classname from 'classnames/bind';
 
 import style from './style.css';
 
-import save from 'styles/ebi/icons/save.svg';
-import download from 'styles/ebi/icons/download.svg';
+import save from 'images/icons/ico-ebi-save.svg';
+import download from 'images/icons/ico-ebi-download.svg';
 
 const s = classname.bind(style);
 
@@ -71,6 +71,7 @@ class ProgressButton extends PureComponent /*:: <Props> */ {
               className={s('back')}
               href={download}
             />
+
             <image
               x="30"
               y="10"
