@@ -17,6 +17,7 @@
 .tabs-title a:visited {
   font-size: 0.9rem; /*same size as submenu*/
   padding: 0.7rem 1rem; /*to make it similar to EBI leaf menu*/
+  line-height: inherit;
   color: #222;
 }
 
@@ -32,4 +33,14 @@
   font-weight: bold;
   background: #1779ba;
   color: white;
+}
+/*remove transition effect that are applied on MMD list*/
+.tabs-title a.is-active-tab span {
+  color: white;
+  transition-delay: 0s, 0s;
+  transition-duration: 0s, 0s;
+}
+.tabs-title a span {
+  transition-delay: 0s, 0s;
+  transition-duration: 0s, 0s;
 }

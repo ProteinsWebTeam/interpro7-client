@@ -53,7 +53,7 @@ const defaultPayload = {
 };
 
 const Overview = ({ data: { payload = defaultPayload } }) => (
-  <ul className={styles.card}>
+  <ul className={f('card')}>
     {Object.entries(payload.proteins || {}).map(([name, count]) => (
       <li key={name}>
         <Link newTo={{ description: { mainType: 'protein', mainDB: name } }}>
@@ -150,7 +150,7 @@ const List = ({
                   // >
                   // </span>
                 }
-                {accession}
+                <span className={f('acc-row')}>{accession}</span>
               </Link>
             )}
           >
@@ -241,7 +241,12 @@ SummaryComponent.propTypes = {
 
 const Summary = props => {
   const { data: { loading, payload } } = props;
-  if (loading || !payload.metadata) return <div>Loading…</div>;
+  if (loading || !payload.metadata)
+    return (
+      <div className={f('row')}>
+        <div className={f('columns')}>Loading… </div>
+      </div>
+    );
   return (
     <div>
       <ErrorBoundary>

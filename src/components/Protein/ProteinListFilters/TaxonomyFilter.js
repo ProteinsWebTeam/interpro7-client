@@ -51,7 +51,7 @@ class TaxonomyFilter extends PureComponent {
       location: { description: { focusAccession } },
     } = this.props;
     const taxes = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a
+      ([, a], [, b]) => b - a,
     );
     if (!loading) {
       taxes.unshift(['ALL', NaN]);
@@ -61,19 +61,17 @@ class TaxonomyFilter extends PureComponent {
         {taxes.map(([taxId, count]) => (
           <div key={taxId} className={f('column')}>
             <label className={f('row', 'filter-button')}>
-              <div>
-                <input
-                  type="radio"
-                  name="entry_type"
-                  value={taxId}
-                  onChange={this._handleSelection}
-                  checked={
-                    (!focusAccession && taxId === 'ALL') ||
-                    focusAccession === taxId
-                  }
-                  style={{ margin: '0.25em' }}
-                />
-              </div>
+              <input
+                type="radio"
+                name="entry_type"
+                value={taxId}
+                onChange={this._handleSelection}
+                checked={
+                  (!focusAccession && taxId === 'ALL') ||
+                  focusAccession === taxId
+                }
+                style={{ margin: '0.25em' }}
+              />
               {taxId === 'ALL' ? (
                 <div>All</div>
               ) : (
@@ -105,18 +103,18 @@ const getUrlFor = createSelector(
     _search.group_by = 'tax_id';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description
+      description,
     )}?${qsStringify(_search)}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(TaxonomyFilter)
+  })(TaxonomyFilter),
 );
