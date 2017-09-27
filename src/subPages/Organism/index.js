@@ -26,8 +26,11 @@ const lut = new Map([
   ['7955', { name: 'Danio rerio (Zebrafish)', icon: 'Z' }],
   ['8078', { name: 'Fundulus heteroclitus (Killifish) (Mummichog)' }],
   ['8355', { name: 'Xenopus laevis (African clawed frog)', icon: 'f' }],
+  ['9430', { name: 'Desmodus rotundus (Vampire bat)', icon: '(' }],
   ['9544', { name: 'Macaca mulatta (Rhesus macaque)', icon: 'r' }],
+  ['9601', { name: 'Pongo abelii (Sumatran orangutan)', icon: '*' }],
   ['9606', { name: 'Homo sapiens (Human)', icon: 'H' }],
+  ['9615', { name: 'Canis lupus familiaris (Dog)', icon: 'd' }],
   ['9823', { name: 'Sus scrofa (Pig)', icon: 'p' }],
   ['9913', { name: 'Bos taurus (Bovine)', icon: 'C' }],
   ['10090', { name: 'Mus musculus (Mouse)', icon: 'M' }],
@@ -118,16 +121,33 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
                           className={f('icon', 'icon-species')}
                           data-icon={value.icon}
                           title={value.name}
+                          style={{ fontSize: '200%' }}
                         />
                       )}
-                    &nbsp;
-                    <Metadata
-                      endpoint="organism"
-                      db="taxonomy"
-                      accession={taxId}
-                    >
-                      <TaxIdOrName accession={taxId} />
-                    </Metadata>
+                  </span>
+                );
+              }}
+            >
+              &nbsp;
+            </Column>
+
+            <Column
+              dataKey="taxId"
+              defaultKey="organism"
+              renderer={taxId => {
+                const value = lut.get(taxId);
+                return (
+                  <span>
+                    {value && value.icon && <span>{value.name}</span>}
+                    {
+                      // <Metadata
+                      //    endpoint="organism"
+                      //   db="taxonomy"
+                      //   accession={taxId}
+                      // >
+                      //  <TaxIdOrName accession={taxId} />
+                      // </Metadata>
+                    }
                   </span>
                 );
               }}
