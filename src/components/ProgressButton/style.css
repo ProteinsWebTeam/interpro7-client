@@ -51,7 +51,7 @@
 
 .progress {
   transition: stroke-dashoffset var(--timing-instant) ease-in-out;
-  stroke: var(--colors-interpro);
+  stroke: var(--colors-progress); /*sat. 8ecddc*/
 }
 
 .card {
