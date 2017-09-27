@@ -117,6 +117,7 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
                         <span
                           className={f('icon', 'icon-species')}
                           data-icon={value.icon}
+                          title={value.name}
                         />
                       )}
                     &nbsp;
