@@ -148,7 +148,15 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
               renderer={taxId => {
                 const value = lut.get(taxId);
                 return (
-                  <span>
+                  <Link
+                    newTo={{
+                      description: {
+                        mainType: 'organism',
+                        mainDB: 'taxonomy',
+                        mainAccession: taxId,
+                      },
+                    }}
+                  >
                     {value && value.icon && <span>{value.name}</span>}
                     {
                       // <Metadata
@@ -159,7 +167,7 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
                       //  <TaxIdOrName accession={taxId} />
                       // </Metadata>
                     }
-                  </span>
+                  </Link>
                 );
               }}
             >
