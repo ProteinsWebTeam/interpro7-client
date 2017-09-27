@@ -146,34 +146,36 @@ const Matches = (
           </Link>
         )}
       />
+      {primary === 'protein' ? (
+        <Column
+          dataKey="source_database"
+          className={f('table-center')}
+          renderer={(db /*: string */) => (
+            <span
+              title={
+                db === 'reviewed'
+                  ? `${db} by curators (Swiss-Prot)`
+                  : 'Not reviewed (TrEMBL)'
+              }
+            >
+              <span className={f('icon', 'icon-functional')} data-icon={'/'} />
+            </span>
+          )}
+        >
+          Reviewed
+        </Column>
+      ) : (
+        <Column
+          dataKey="source_database"
+          className={f('table-center')}
+          renderer={(db /*: string */) => <span>pdb</span>}
+        >
+          Source database
+        </Column>
+      )}
+
       <Column dataKey="source_organism.fullname">Species</Column>
 
-      <Column
-        dataKey="source_database"
-        className={f('table-center')}
-        renderer={(db /*: string */) => (
-          <div>
-            {db === 'reviewed' ? (
-              <div
-                title={
-                  db === 'reviewed'
-                    ? `${db} by curators (Swiss-Prot)`
-                    : 'Not reviewed by curators (TrEMBL)'
-                }
-              >
-                <span
-                  className={f('icon', 'icon-functional')}
-                  data-icon={'/'}
-                />
-              </div>
-            ) : (
-              'pdb'
-            )}
-          </div>
-        )}
-      >
-        {primary === 'protein' ? 'Reviewed' : 'Source database'}
-      </Column>
       {secondary === 'organism' ? null : (
         <Column
           dataKey="match"
