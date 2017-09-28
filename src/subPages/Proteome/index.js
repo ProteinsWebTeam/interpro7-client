@@ -26,6 +26,9 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
         pathname={''}
       >
         <PageSizeSelector />
+        <SearchBox search={search.search} pathname={''}>
+          Search
+        </SearchBox>
         <Column
           dataKey="accession"
           renderer={(

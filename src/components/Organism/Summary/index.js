@@ -55,7 +55,7 @@ const SummaryProteome = ({data: { metadata}}) => (
           db={'taxonomy'}
           accession={metadata.taxonomy}
           key={metadata.taxonomy}
-        >
+                  >
           <TaxIdOrName accession={metadata.taxonomy} />
         </Metadata>
       </div>

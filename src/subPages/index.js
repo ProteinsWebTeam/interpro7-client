@@ -14,10 +14,6 @@ const Proteome = loadable({
 });
 
 
-const Organism = loadable({
-  loader: () => import(/* webpackChunkName: "organism-subpage" */ './Organism'),
-});
-
 const DomainArchitecture = loadable({
   loader: () =>
     import(/* webpackChunkName: "domain-architecture-subpage" */ './DomainArchitecture'),

@@ -9,7 +9,7 @@ import Link from 'components/generic/Link';
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
-
+import ProteinFile from 'subPages/Organism/ProteinFile';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 
 import { foundationPartial } from 'styles/foundation';
@@ -65,6 +65,14 @@ const MatchesByPrimary = (
   return <MatchComponent matches={matches} {...props} />;
 };
 MatchesByPrimary.propTypes = propTypes;
+
+const ProteinAccessionsRenderer = taxId => (
+  <ProteinFile taxId={taxId} type="accession" />
+);
+
+const ProteinFastasRenderer = taxId => (
+  <ProteinFile taxId={taxId} type="FASTA" />
+);
 
 // List of all matches, many to many
 const Matches = (
@@ -150,11 +158,13 @@ const Matches = (
           </Link>
         )}
       />
-      <Column dataKey="source_organism.fullname">Species</Column>
-
+      <Column dataKey="source_organism.fullname" displayIf={primary !== 'organism'}>
+        Species
+      </Column>
       <Column
         dataKey="source_database"
         className={f('table-center')}
+        displayIf={primary !== 'organism'}
         renderer={(db /*: string */) => (
           <div>
             {db === 'reviewed' ? (
@@ -178,31 +188,40 @@ const Matches = (
       >
         {primary === 'protein' ? 'Reviewed' : 'Source database'}
       </Column>
-      {primary === 'organism' || secondary === 'organism' ? null : (
-        <Column
-          dataKey="match"
-          renderer={(match /*: Object */) => (
-            <MatchesByPrimary
-              matches={[match]}
-              primary={primary}
-              secondary={secondary}
-              location={location}
-              {...props}
-            />
-          )}
-        >
-          Architecture
-        </Column>
-      )}
+      <Column
+        dataKey="match"
+        displayIf={primary !== 'organism' && secondary !== 'organism'}
+        renderer={(match /*: Object */) => (
+          <MatchesByPrimary
+            matches={[match]}
+            primary={primary}
+            secondary={secondary}
+            location={location}
+            {...props}
+          />
+        )}
+      >
+        Architecture
+      </Column>
+      <Column
+        dataKey="accession"
+        defaultKey="proteinFastas"
+        className={f('table-center')}
+        displayIf={primary === 'organism'}
+        renderer={ProteinFastasRenderer}
+      >
+        FASTA
+      </Column>
+      <Column
+        dataKey="accession"
+        className={f('table-center')}
+        defaultKey="proteinAccessions"
+        displayIf={primary === 'organism'}
+        renderer={ProteinAccessionsRenderer}
+      >
+        Protein accessions
+      </Column>
     </Table>
-    // {Object.entries(matchesByPrimary).map(([acc, matches]) => (
-    //   <MatchesByPrimary
-    //     key={acc}
-    //     matches={matches}
-    //     primary={primary}
-    //     {...props}
-    //   />
-    // ))}
   );
 };
 Matches.propTypes = propTypes;

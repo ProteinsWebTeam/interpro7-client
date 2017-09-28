@@ -28,7 +28,7 @@ class Row extends Component {
     const { row, columns } = this.props;
     return (
       <tr ref={node => (this._node = node)}>
-        {columns.map(
+        {columns.filter(({displayIf = true}) => displayIf).map(
           ({
             dataKey,
             defaultKey,
