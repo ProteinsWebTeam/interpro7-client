@@ -10,11 +10,12 @@
   width: 100%;
   height: var(--spacing-small);
   background-color: var(--color-progress);
+  box-shadow: 0 0 10px rgba(119, 182, 255, 0.7);
   pointer-events: none;
   transform: scaleX(0);
   opacity: 1;
   transform-origin: 0 0;
-  transition: transform var(--timing-medium) ease-in-out,
-    opacity var(--timing-fast) ease-in-out;
+  transition: transform var(--timing-medium) ease,
+    opacity var(--timing-medium) linear var(--timing-medium);
   will-change: transform, opacity;
 }
