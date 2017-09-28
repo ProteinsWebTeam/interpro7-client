@@ -89,7 +89,11 @@ const Matches = (
   const pathname = '';
   return (
     <Table
-      dataTable={matches.map(e => ({ match: e, ...e[primary] }))}
+      dataTable={matches.map(e => ({
+        ...e[primary],
+        accession: String(e[primary].accession),
+        match: e,
+      }))}
       actualSize={actualSize}
       query={search}
       pathname={pathname}
@@ -167,14 +171,14 @@ const Matches = (
                 />
               </div>
             ) : (
-              'pdb'
+              db
             )}
           </div>
         )}
       >
         {primary === 'protein' ? 'Reviewed' : 'Source database'}
       </Column>
-      {secondary === 'organism' ? null : (
+      {primary === 'organism' || secondary === 'organism' ? null : (
         <Column
           dataKey="match"
           renderer={(match /*: Object */) => (

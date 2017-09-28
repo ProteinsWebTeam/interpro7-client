@@ -296,6 +296,9 @@ export const proteinDBHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
   },
+  cleanUp: {
+    value: v => v.toLowerCase().replace('uniprot', 'UniProt'),
+  },
   match: {
     value: (current /*: string */) =>
       /^((un)?reviewed)|(uniprot)$/i.test(current),

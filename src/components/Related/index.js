@@ -104,6 +104,10 @@ const primariesAndSecondaries = {
       primary: 'structure',
       secondary: 'entry',
     },
+    organism: {
+      primary: 'organism',
+      secondary: 'entry',
+    },
   },
   protein: {
     entry: {
@@ -278,7 +282,7 @@ class Related extends PureComponent {
     if (data.loading)
       return (
         <div className={f('row')}>
-          <div className={f('columns')}>Loading… </div>
+          <div className={f('columns')}>Loading…</div>
         </div>
       );
     const {
@@ -288,7 +292,7 @@ class Related extends PureComponent {
     if (!secondaryData)
       return (
         <div className={f('row')}>
-          <div className={f('columns')}>Loading… </div>
+          <div className={f('columns')}>Loading…</div>
         </div>
       );
     const RelatedComponent = Array.isArray(secondaryData)
