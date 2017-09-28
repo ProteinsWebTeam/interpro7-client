@@ -10,7 +10,6 @@
   width: 100%;
   height: var(--spacing-small);
   background-color: var(--color-progress);
-  box-shadow: 0 0 10px rgba(119, 182, 255, 0.7);
   pointer-events: none;
   transform: scaleX(0);
   opacity: 1;
