@@ -8,7 +8,7 @@ import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 const f = foundationPartial(fonts);
 
-class ProteomeSubPage extends PureComponent /*:: <{data: Object}> */ {
+class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Object}> */ {
   static propTypes = {
     data: T.object.isRequired,
     location: T.object.isRequired,

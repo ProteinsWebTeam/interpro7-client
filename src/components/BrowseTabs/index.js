@@ -66,6 +66,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
 
 /*:: type BrowseTabsProps = {
   mainType: ?string,
+  mainDB: ?string,
   mainAccession: ?string,
   data: {
     loading: boolean,
@@ -76,6 +77,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
 class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
   static propTypes = {
     mainType: T.string,
+    mainDB: T.string,
     mainAccession: T.string,
     data: T.shape({
       loading: T.bool.isRequired,
