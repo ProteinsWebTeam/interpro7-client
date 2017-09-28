@@ -6,21 +6,13 @@ exports[`<ProgressButton /> should render, first step 1`] = `
 >
   <svg
     className="svg"
-    height="2em"
+    height="3em"
     viewBox="0 0 120 120"
-    width="2em"
+    width="3em"
   >
     <g
       className="group downloading"
     >
-      <circle
-        className="shadow downloading"
-        cx={60}
-        cy={60}
-        fill="none"
-        r={48}
-        strokeWidth={11}
-      />
       <circle
         className="progress"
         cx={60}
@@ -37,7 +29,7 @@ exports[`<ProgressButton /> should render, first step 1`] = `
     <circle
       cx={60}
       cy={60}
-      fill="#e6e6e6"
+      fill="none"
       r={43}
     />
     <g
@@ -70,21 +62,13 @@ exports[`<ProgressButton /> should render, with failure 1`] = `
 >
   <svg
     className="svg"
-    height="2em"
+    height="3em"
     viewBox="0 0 120 120"
-    width="2em"
+    width="3em"
   >
     <g
       className="group"
     >
-      <circle
-        className="shadow"
-        cx={60}
-        cy={60}
-        fill="none"
-        r={48}
-        strokeWidth={11}
-      />
       <circle
         className="progress"
         cx={60}
@@ -101,7 +85,7 @@ exports[`<ProgressButton /> should render, with failure 1`] = `
     <circle
       cx={60}
       cy={60}
-      fill="#e6e6e6"
+      fill="none"
       r={43}
     />
     <g
@@ -134,21 +118,13 @@ exports[`<ProgressButton /> should render, with progress 1`] = `
 >
   <svg
     className="svg"
-    height="2em"
+    height="3em"
     viewBox="0 0 120 120"
-    width="2em"
+    width="3em"
   >
     <g
       className="group downloading"
     >
-      <circle
-        className="shadow downloading"
-        cx={60}
-        cy={60}
-        fill="none"
-        r={48}
-        strokeWidth={11}
-      />
       <circle
         className="progress"
         cx={60}
@@ -165,7 +141,7 @@ exports[`<ProgressButton /> should render, with progress 1`] = `
     <circle
       cx={60}
       cy={60}
-      fill="#e6e6e6"
+      fill="none"
       r={43}
     />
     <g
@@ -198,21 +174,13 @@ exports[`<ProgressButton /> should render, with success 1`] = `
 >
   <svg
     className="svg"
-    height="2em"
+    height="3em"
     viewBox="0 0 120 120"
-    width="2em"
+    width="3em"
   >
     <g
       className="group"
     >
-      <circle
-        className="shadow"
-        cx={60}
-        cy={60}
-        fill="none"
-        r={48}
-        strokeWidth={11}
-      />
       <circle
         className="progress"
         cx={60}
@@ -229,7 +197,7 @@ exports[`<ProgressButton /> should render, with success 1`] = `
     <circle
       cx={60}
       cy={60}
-      fill="#e6e6e6"
+      fill="none"
       r={43}
     />
     <g
