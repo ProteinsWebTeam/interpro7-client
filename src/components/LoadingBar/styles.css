@@ -14,7 +14,7 @@
   transform: scaleX(0);
   opacity: 1;
   transform-origin: 0 0;
-  transition: transform var(--timing-medium) ease,
-    opacity var(--timing-medium) linear var(--timing-medium);
+  transition: transform var(--timing-medium) ease-in-out,
+    opacity var(--timing-fast) ease-in-out;
   will-change: transform, opacity;
 }
