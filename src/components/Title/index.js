@@ -34,8 +34,8 @@ export default class Title extends PureComponent /*:: <Props> */ {
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType
-      )
+        m => m.InterproType,
+      ),
     ).as('interpro-type');
   }
 
@@ -52,23 +52,23 @@ export default class Title extends PureComponent /*:: <Props> */ {
           {metadata.name.name} <small>({metadata.accession})</small>
         </h3>
         {isEntry &&
-        metadata.source_database.toLowerCase() !== 'interpro' && (
-          <div className={ipro['md-hlight']}>
-            <h5>
-              Member database:&nbsp;
-              <Link
-                newTo={{
-                  description: {
-                    mainType: 'entry',
-                    mainDB: metadata.source_database,
-                  },
-                }}
-              >
-                {metadata.source_database}
-              </Link>
-            </h5>
-          </div>
-        )}
+          metadata.source_database.toLowerCase() !== 'interpro' && (
+            <div className={ipro['md-hlight']}>
+              <h5>
+                Member database:&nbsp;
+                <Link
+                  newTo={{
+                    description: {
+                      mainType: 'entry',
+                      mainDB: metadata.source_database,
+                    },
+                  }}
+                >
+                  {metadata.source_database}
+                </Link>
+              </h5>
+            </div>
+          )}
         {metadata.name.short && (
           <p>
             Short name:&nbsp;
