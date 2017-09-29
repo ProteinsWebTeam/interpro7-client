@@ -137,6 +137,7 @@
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "reselect": "^3.0.1",
+    "taxonomy-visualisation": "^0.1.1",
     "timeago.js": "^3.0.2",
     "timing-functions": "^0.1.4",
     "url": "^0.11.0"

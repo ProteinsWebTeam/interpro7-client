@@ -106,7 +106,10 @@ export const PMCLink = ({ id, target, children, ...props }) => (
 );
 PMCLink.propTypes = {
   ...types,
-  id: T.string.isRequired,
+  id: T.oneOfType([
+    T.string,
+    T.number,
+  ]).isRequired,
 };
 PMCLink.displayName = 'PMCLink';
 

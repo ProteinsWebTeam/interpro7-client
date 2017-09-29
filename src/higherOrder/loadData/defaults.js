@@ -14,10 +14,11 @@ export const getUrl = createSelector(
       state => state.newLocation.search,
       ({ protocol, hostname, port, root }, pagination, description, search) => {
         const s = search || {};
-        s.page_size = s.page_size || pagination.pageSize;
+        if (!description.mainAccession && !description.focusDB && !description.mainMemberDB)
+          s.page_size = s.page_size || pagination.pageSize;
         return `${protocol}//${hostname}:${port}${root}${description2path(
           description
-        )}?${qsStringify(s)}`;
+        )}?${qsStringify(s)}`.replace(/\?$/, '');
       }
     )
 );
