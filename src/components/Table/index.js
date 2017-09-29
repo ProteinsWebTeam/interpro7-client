@@ -103,7 +103,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     aria-disabled="true"
                     disabled
                     data-icon="i"
-                    title="View your results as a list"
+                    title="View your results as thumbnails"
                   />
                 </div>
                 <div className={f('filter-wrapper')}>
