@@ -1,7 +1,10 @@
-/*entry page - go term etiquette*/
+.go-list {
+  font-size: 90%;
+}
+
 a.go-terms,
+a.go-terms:visited,
 a.go-terms:focus {
-  cursor: pointer;
   color: #222;
   font-size: 0.9rem;
 }
@@ -20,4 +23,27 @@ a.go-terms:hover {
   background-color: #ed561b;
 }
 
+.go-title-bp,
+.go-title-mf,
+.go-title-cc {
+  padding: 0.2rem 0.5rem;
+  color: #4b555b;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.go-title-bp {
+  background: #c2e6ec;
+}
+.go-title-mf {
+  background: #e5f5d7;
+}
+.go-title-cc {
+  background: #fbdcd0;
+}
+
+.go-list {
+  margin-left: 0.5rem;
+}
 /*/entry page - go term etiquette*/
