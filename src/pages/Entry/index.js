@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent, Component } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -416,8 +416,9 @@ const InnerSwitch = props => (
 );
 
 const schemaProcessData = data => ({
-  '@type': 'ProteinEntity',
+  '@type': 'PhysicalEntity',
   '@id': '@mainEntity',
+  additionalType: '???ProteinAnnotation???',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
@@ -425,34 +426,43 @@ const schemaProcessData = data => ({
   biologicalType: data.metadata.type,
   citation: '@citation',
   isBasedOn: '@isBasedOn',
-  isBaseFor: '@isBaseFor',
+  isBasisFor: '@isBasisFor',
 });
 
-const Entry = props => (
-  <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
-    {props.data.payload &&
-      props.data.payload.accession && (
-        <SchemaOrgData
-          data={props.data.payload}
-          processData={schemaProcessData}
-        />
-      )}
-    <ErrorBoundary>
-      <Switch
-        {...props}
-        locationSelector={l => l.description.mainDB}
-        indexRoute={Overview}
-        catchAll={InnerSwitch}
-      />
-    </ErrorBoundary>
-  </div>
-);
-Entry.propTypes = {
-  data: T.shape({
-    payload: T.object,
-  }).isRequired,
-  isStale: T.bool.isRequired,
-};
+class Entry extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      payload: T.object,
+    }).isRequired,
+    isStale: T.bool.isRequired,
+  };
+
+  render() {
+    return (
+      <div
+        className={f('with-data', { ['with-stale-data']: this.props.isStale })}
+      >
+        {this.props.data.payload &&
+          this.props.data.payload.metadata &&
+          this.props.data.payload.metadata.accession && (
+            <SchemaOrgData
+              data={this.props.data.payload}
+              processData={schemaProcessData}
+            />
+          )}
+        <ErrorBoundary>
+          <Switch
+            {...this.props}
+            locationSelector={l => l.description.mainDB}
+            indexRoute={Overview}
+            catchAll={InnerSwitch}
+          />
+        </ErrorBoundary>
+      </div>
+    );
+  }
+}
+
 export default loadData((...args) =>
   getUrlForApi(...args)
     .replace('hmm_model', '')

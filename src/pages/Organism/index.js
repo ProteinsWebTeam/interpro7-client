@@ -156,8 +156,13 @@ const SummaryAsync = loadable({
     import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
 });
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
 const SummaryComponent = ({ data: { payload, loading }, location }) => (
-  <SummaryAsync data={payload} location={location} loading={loading}/>
+  <SummaryAsync data={payload} location={location} loading={loading} />
 );
 SummaryComponent.propTypes = {
   data: T.shape({
@@ -213,8 +218,31 @@ const InnerSwitch = props => (
   </ErrorBoundary>
 );
 
+const schemaProcessData = data => ({
+  '@type': 'PhysicalEntity',
+  '@id': '@mainEntity',
+  additionalType: 'http://semanticscience.org/resource/SIO_010000.rdf',
+  identifier: data.metadata.accession,
+  name: data.metadata.name.name || data.metadata.accession,
+  alternateName: data.metadata.name.long || null,
+  inDataset: data.metadata.source_database,
+  biologicalType:
+    data.metadata.source_database === 'taxonomy' ? 'taxon' : 'proteome',
+  citation: '@citation',
+  isBasedOn: '@isBasedOn',
+  isBasisFor: '@isBasisFor',
+});
+
 const Organism = props => (
   <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
+    {props.data.payload &&
+      props.data.payload.metadata &&
+      props.data.payload.metadata.accession && (
+        <SchemaOrgData
+          data={props.data.payload}
+          processData={schemaProcessData}
+        />
+      )}
     <ErrorBoundary>
       <Switch
         {...props}
