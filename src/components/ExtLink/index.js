@@ -96,7 +96,7 @@ ProteomeLink.displayName = 'ProteomeLink';
 
 export const PMCLink = ({ id, target, children, ...props }) => (
   <BaseLink
-    id={id}
+    id={`${id}`}
     target={target || '_blank'}
     pattern="https://europepmc.org/abstract/MED/{id}"
     {...props}
@@ -106,7 +106,7 @@ export const PMCLink = ({ id, target, children, ...props }) => (
 );
 PMCLink.propTypes = {
   ...types,
-  id: T.string.isRequired,
+  id: T.oneOfType([T.string, T.number]).isRequired,
 };
 PMCLink.displayName = 'PMCLink';
 
@@ -131,18 +131,18 @@ GoLink.propTypes = types;
 GoLink.displayName = 'GoLink';
 
 export const PDBeLink = patternLinkWrapper(
-  'https://www.ebi.ac.uk/pdbe/entry/pdb/{id}'
+  'https://www.ebi.ac.uk/pdbe/entry/pdb/{id}',
 );
 PDBeLink.displayName = 'PDBeLink';
 
 export const PDBe3DLink = patternLinkWrapper(
   'https://www.ebi.ac.uk/pdbe/entry/view3D/{id}/' +
-    '?view=entry_index&viewer=jmol&controls=codename_hero'
+    '?view=entry_index&viewer=jmol&controls=codename_hero',
 );
 PDBe3DLink.displayName = 'PDBe3DLink';
 
 export const UniProtLink = patternLinkWrapper(
-  'http://www.uniprot.org/uniprot/{id}'
+  'http://www.uniprot.org/uniprot/{id}',
 );
 UniProtLink.displayName = 'UniProtLink';
 
