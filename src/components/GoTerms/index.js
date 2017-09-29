@@ -58,7 +58,7 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
             >
               {key}
             </p>
-            <ul className={f('no-bullet', 'go-list')}>
+            <ul className={f('go-list')}>
               {values && values.length ? (
                 values.map(({ identifier, name }) => (
                   <li key={identifier}>
