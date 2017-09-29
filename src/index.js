@@ -5,8 +5,6 @@ import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 
-import * as offlinePluginRuntime from 'offline-plugin/runtime';
-
 import App from 'App';
 
 import config, { PROD, STAGING, DEV, PERF } from 'config';
@@ -15,12 +13,12 @@ import ready from 'utils/ready';
 import hmr from 'index-hmr';
 
 if (PROD || STAGING) {
-  offlinePluginRuntime.install();
+  require('offline-plugin/runtime').install();
 }
 
 const schemaOrgManager = (...args) =>
   import(/* webpackChunkName: "schemaOrg" */ 'schema_org').then(
-    m => new m.Manager(...args)
+    m => new m.Manager(...args),
   );
 
 const main = async () => {
