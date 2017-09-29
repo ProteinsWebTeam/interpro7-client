@@ -65,13 +65,22 @@ export class Manager {
     return stringified;
   }
 
-  // eslint-disable-next-line complexity
+  // eslint-disable-next-line complexity, max-statements
   async _planRender() {
     if (this._plannedRender) return;
     this._plannedRender = true;
     const deadline = await schedule(this._maxDelay);
     if (this._dev) console.groupCollapsed('Schema.org rendering');
     if (this._dev) console.time('schema.org rendering took');
+    if (this._dev) console.groupCollapsed('data maps');
+    if (this._dev) {
+      for (const [id, values] of this._dataMap) {
+        console.group(id);
+        for (const value of values) console.log(value);
+        console.groupEnd();
+      }
+    }
+    if (this._dev) console.groupEnd();
     if (this._dev) console.time('Schema.org merger');
     const mergedData = await merger(this._dataMap, deadline, this._rootData);
     if (this._dev) console.timeEnd('Schema.org merger');
