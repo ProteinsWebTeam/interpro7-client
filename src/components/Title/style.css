@@ -1,9 +1,39 @@
+@import '../../styles/colors.css';
+
 .title {
   display: inline-block;
   width: 100%;
 
   & interpro-type {
     float: left;
-    margin: 1em;
+    margin: 0.5rem 1rem 1.5rem 0;
   }
+}
+.title small {
+  margin-left: 1rem;
+  color: #333;
+  padding: 0 0.5rem;
+}
+.title-id-family {
+  background-color: var(--colors-family-sub);
+}
+.title-id-domain {
+  background-color: var(--colors-domain-sub);
+}
+.title-id-repeat {
+  background-color: var(--colors-repeat-sub);
+}
+.title-id-site {
+  background-color: var(--colors-site-sub);
+}
+.title-id-hh {
+  background-color: var(--colors-homolog-sub);
+}
+.title-id-unknown {
+  background-color: var(--colors-unknown-sub);
+}
+
+.shortname {
+  color: #41647d;
+  font-size: 80%;
 }
