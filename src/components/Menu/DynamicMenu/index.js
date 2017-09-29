@@ -34,7 +34,6 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
 
   constructor(props /*: Props */) {
     super(props);
-    console.log('initial props', props);
     this._menuItems = new Set();
     this.state = {};
     for (const { name } of InterProMin) {
