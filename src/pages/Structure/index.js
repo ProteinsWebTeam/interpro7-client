@@ -247,14 +247,24 @@ const InnerSwitch = props => (
 );
 
 const schemaProcessData = data => ({
-  '@type': 'PhysicalEntity',
+  '@type': 'Record',
+  '@id': '@mainEntityOfPage',
+  additionalType: 'http://semanticscience.org/resource/SIO_011119.rdf',
+  identifier: data.metadata.accession,
+  isPartOf: {
+    '@type': 'Dataset',
+    '@id': data.metadata.source_database,
+  },
+  mainEntity: '@mainEntity',
+});
+
+const schemaProcessData2 = data => ({
+  '@type': ['StructuredValue', 'PhysicalEntity'],
   '@id': '@mainEntity',
   additionalType: 'http://semanticscience.org/resource/SIO_010346.rdf',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
-  inDataset: data.metadata.source_database,
-  biologicalType: 'structure',
 });
 
 class Structure extends PureComponent {
@@ -273,6 +283,14 @@ class Structure extends PureComponent {
             <SchemaOrgData
               data={this.props.data.payload}
               processData={schemaProcessData}
+            />
+          )}
+        {this.props.data.payload &&
+          this.props.data.payload.metadata &&
+          this.props.data.payload.metadata.accession && (
+            <SchemaOrgData
+              data={this.props.data.payload}
+              processData={schemaProcessData2}
             />
           )}
         <ErrorBoundary>

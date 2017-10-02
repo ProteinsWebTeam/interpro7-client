@@ -28,7 +28,7 @@ describe('External links', () => {
               name: 'test3',
             },
           ]}
-        />
+        />,
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
     });

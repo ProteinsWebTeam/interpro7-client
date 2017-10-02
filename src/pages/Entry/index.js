@@ -416,17 +416,28 @@ const InnerSwitch = props => (
 );
 
 const schemaProcessData = data => ({
-  '@type': 'PhysicalEntity',
+  '@type': 'Record',
+  '@id': '@mainEntityOfPage',
+  identifier: data.metadata.accession,
+  isPartOf: {
+    '@type': 'Dataset',
+    '@id': 'InterPro release ??',
+  },
+  additionalType: `Ontology URL for ${data.metadata.type}`,
+  mainEntity: '@mainEntity',
+  citation: '@citation',
+});
+
+const schemaProcessData2 = data => ({
+  '@type': ['StructuredValue', 'PhysicalEntity'],
   '@id': '@mainEntity',
   additionalType: '???ProteinAnnotation???',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
-  inDataset: data.metadata.source_database,
-  biologicalType: data.metadata.type,
-  citation: '@citation',
   isBasedOn: '@isBasedOn',
   isBasisFor: '@isBasisFor',
+  seeAlso: '@seeAlso',
 });
 
 class Entry extends PureComponent {
@@ -448,6 +459,14 @@ class Entry extends PureComponent {
             <SchemaOrgData
               data={this.props.data.payload}
               processData={schemaProcessData}
+            />
+          )}
+        {this.props.data.payload &&
+          this.props.data.payload.metadata &&
+          this.props.data.payload.metadata.accession && (
+            <SchemaOrgData
+              data={this.props.data.payload}
+              processData={schemaProcessData2}
             />
           )}
         <ErrorBoundary>
