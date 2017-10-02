@@ -31,6 +31,11 @@ const SummaryAsync = loadable({
     import(/* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'),
 });
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
 const propTypes = {
   data: T.shape({
     payload: T.object,
@@ -241,6 +246,17 @@ const InnerSwitch = props => (
   </ErrorBoundary>
 );
 
+const schemaProcessData = data => ({
+  '@type': 'PhysicalEntity',
+  '@id': '@mainEntity',
+  additionalType: 'http://semanticscience.org/resource/SIO_010346.rdf',
+  identifier: data.metadata.accession,
+  name: data.metadata.name.name || data.metadata.accession,
+  alternateName: data.metadata.name.long || null,
+  inDataset: data.metadata.source_database,
+  biologicalType: 'structure',
+});
+
 class Structure extends PureComponent {
   static propTypes = {
     isStale: T.bool.isRequired,
@@ -251,6 +267,14 @@ class Structure extends PureComponent {
       <div
         className={f('with-data', { ['with-stale-data']: this.props.isStale })}
       >
+        {this.props.data.payload &&
+          this.props.data.payload.metadata &&
+          this.props.data.payload.metadata.accession && (
+            <SchemaOrgData
+              data={this.props.data.payload}
+              processData={schemaProcessData}
+            />
+          )}
         <ErrorBoundary>
           <Switch
             {...this.props}
