@@ -27,6 +27,7 @@ const singleEntityNames = new Map(Array.from(singleEntity).map(e => [e[1].name, 
     loading: boolean,
     payload?: ?Object,
   },
+  isFirstLevel?: boolean,
 }; */
 
 class Counter extends PureComponent /*:: <CounterProps> */ {
