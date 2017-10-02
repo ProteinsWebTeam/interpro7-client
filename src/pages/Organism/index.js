@@ -181,14 +181,17 @@ for (const subPage of config.pages.organism.subPages) {
 
 const Summary = props => {
   const { data: { loading, payload } } = props;
-  if (loading || !payload.metadata) return <div>Loading…</div>;
+  if (loading || (!payload.metadata && !payload.results))
+    return <div>Loading…</div>;
   return (
     <div>
       <ErrorBoundary>
         <Switch
           {...props}
           locationSelector={l =>
-            l.description.mainDetail || l.description.focusType}
+            l.description.mainDetail ||
+            l.description.focusType ||
+            l.description.mainMemberDB}
           indexRoute={SummaryComponent}
           childRoutes={subPagesForOrganism}
         />

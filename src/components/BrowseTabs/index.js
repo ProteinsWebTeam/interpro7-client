@@ -66,6 +66,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
 
 /*:: type BrowseTabsProps = {
   mainType: ?string,
+  mainDB: ?string,
   mainAccession: ?string,
   data: {
     loading: boolean,
@@ -76,6 +77,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
 class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
   static propTypes = {
     mainType: T.string,
+    mainDB: T.string,
     mainAccession: T.string,
     data: T.shape({
       loading: T.bool.isRequired,
@@ -84,12 +86,13 @@ class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
   };
 
   render() {
-    const { mainType, mainAccession, data } = this.props;
+    const { mainType, mainDB, mainAccession, data } = this.props;
     let tabs = entities;
     if (mainAccession && mainType && config.pages[mainType]) {
       tabs = [singleEntity.get('overview')];
       for (const subPage of config.pages[mainType].subPages) {
-        tabs.push(singleEntity.get(subPage));
+        if (!(mainDB === 'proteome' && subPage === 'proteome'))
+          tabs.push(singleEntity.get(subPage));
       }
       tabs = tabs.filter(Boolean);
     }
@@ -111,8 +114,9 @@ class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
 
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainType,
+  state => state.newLocation.description.mainDB,
   state => state.newLocation.description.mainAccession,
-  (mainType, mainAccession) => ({ mainType, mainAccession }),
+  (mainType, mainDB, mainAccession) => ({ mainType, mainDB, mainAccession }),
 );
 
 const mapStateToUrl = createSelector(

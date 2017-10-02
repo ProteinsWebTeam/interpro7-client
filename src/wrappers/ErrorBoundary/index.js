@@ -1,4 +1,3 @@
-// @flow
 import { PureComponent, createElement } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -12,11 +11,13 @@ import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
     componentStack: string,
   },
 }; */
+
 /*:: type Props = {
   children: React$Node,
   errorComponent: React$ElementType,
   newLocation: mixed,
 }; */
+
 /*:: type State = {
   error: ?ReactError,
 }; */
@@ -39,10 +40,10 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
     super(props);
     this.state = { error: null };
   }
-  componentWillReceiveProps({newLocation}){
+  componentWillReceiveProps({ newLocation }) {
     // If the location is changing, the children should be
     // rendered again
-    if (this.props.newLocation !== newLocation){
+    if (this.props.newLocation !== newLocation) {
       this.setState({ error: null });
     }
   }
@@ -63,6 +64,6 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  (newLocation) => ({ newLocation })
+  newLocation => ({ newLocation }),
 );
 export default connect(mapStateToProps)(ErrorBoundary);

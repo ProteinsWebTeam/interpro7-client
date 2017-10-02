@@ -9,7 +9,7 @@ import Link from 'components/generic/Link';
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
-
+import ProteinFile from 'subPages/Organism/ProteinFile';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 
 import { foundationPartial } from 'styles/foundation';
@@ -66,6 +66,14 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
+const ProteinAccessionsRenderer = taxId => (
+  <ProteinFile taxId={taxId} type="accession" />
+);
+
+const ProteinFastasRenderer = taxId => (
+  <ProteinFile taxId={taxId} type="FASTA" />
+);
+
 // List of all matches, many to many
 const Matches = (
   {
@@ -89,7 +97,11 @@ const Matches = (
   const pathname = '';
   return (
     <Table
-      dataTable={matches.map(e => ({ match: e, ...e[primary] }))}
+      dataTable={matches.map(e => ({
+        ...e[primary],
+        accession: String(e[primary].accession),
+        match: e,
+      }))}
       actualSize={actualSize}
       query={search}
       pathname={pathname}
@@ -146,61 +158,73 @@ const Matches = (
           </Link>
         )}
       />
-      {primary === 'protein' ? (
-        <Column
-          dataKey="source_database"
-          className={f('table-center')}
-          renderer={(db /*: string */) => (
-            <span
-              title={
-                db === 'reviewed'
-                  ? `${db} by curators (Swiss-Prot)`
-                  : 'Not reviewed (TrEMBL)'
-              }
-            >
-              <span className={f('icon', 'icon-functional')} data-icon={'/'} />
-            </span>
-          )}
-        >
-          Reviewed
-        </Column>
-      ) : (
-        <Column
-          dataKey="source_database"
-          className={f('table-center')}
-          renderer={(db /*: string */) => <span>pdb</span>}
-        >
-          Source database
-        </Column>
-      )}
-
-      <Column dataKey="source_organism.fullname">Species</Column>
-
-      {secondary === 'organism' ? null : (
-        <Column
-          dataKey="match"
-          renderer={(match /*: Object */) => (
-            <MatchesByPrimary
-              matches={[match]}
-              primary={primary}
-              secondary={secondary}
-              location={location}
-              {...props}
-            />
-          )}
-        >
-          Architecture
-        </Column>
-      )}
+      <Column
+        dataKey="source_organism.fullname"
+        displayIf={primary !== 'organism'}
+      >
+        Species
+      </Column>
+      <Column
+        dataKey="source_database"
+        className={f('table-center')}
+        displayIf={primary !== 'organism'}
+        renderer={(db /*: string */) => (
+          <div>
+            {db === 'reviewed' ? (
+              <div
+                title={
+                  db === 'reviewed'
+                    ? `${db} by curators (Swiss-Prot)`
+                    : 'Not reviewed by curators (TrEMBL)'
+                }
+              >
+                <span
+                  className={f('icon', 'icon-functional')}
+                  data-icon={'/'}
+                />
+              </div>
+            ) : (
+              db
+            )}
+          </div>
+        )}
+      >
+        {primary === 'protein' ? 'Reviewed' : 'Source database'}
+      </Column>
+      <Column
+        dataKey="match"
+        displayIf={primary !== 'organism' && secondary !== 'organism'}
+        renderer={(match /*: Object */) => (
+          <MatchesByPrimary
+            matches={[match]}
+            primary={primary}
+            secondary={secondary}
+            location={location}
+            {...props}
+          />
+        )}
+      >
+        Architecture
+      </Column>
+      <Column
+        dataKey="accession"
+        defaultKey="proteinFastas"
+        className={f('table-center')}
+        displayIf={primary === 'organism'}
+        renderer={ProteinFastasRenderer}
+      >
+        FASTA
+      </Column>
+      <Column
+        dataKey="accession"
+        className={f('table-center')}
+        defaultKey="proteinAccessions"
+        displayIf={primary === 'organism'}
+        renderer={ProteinAccessionsRenderer}
+      >
+        Protein accessions
+      </Column>
     </Table>
-    // {Object.entries(matchesByPrimary).map(([acc, matches]) => (
-    //   <MatchesByPrimary
-    //     key={acc}
-    //     matches={matches}
-    //     primary={primary}
-    //     {...props}
-    //   />
-    // ))}
   );
 };
 Matches.propTypes = propTypes;

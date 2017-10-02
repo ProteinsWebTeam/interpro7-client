@@ -28,23 +28,25 @@ class Row extends Component {
     const { row, columns } = this.props;
     return (
       <tr ref={node => (this._node = node)}>
-        {columns.map(
-          ({
-            dataKey,
-            defaultKey,
-            cellStyle,
-            className,
-            renderer = defaultRenderer,
-          }) => (
-            <td
-              key={defaultKey || dataKey}
-              style={cellStyle}
-              className={className}
-            >
-              {renderer(lodashGet(row, dataKey, '∅'), row)}
-            </td>
-          )
-        )}
+        {columns
+          .filter(({ displayIf = true }) => displayIf)
+          .map(
+            ({
+              dataKey,
+              defaultKey,
+              cellStyle,
+              className,
+              renderer = defaultRenderer,
+            }) => (
+              <td
+                key={defaultKey || dataKey}
+                style={cellStyle}
+                className={className}
+              >
+                {renderer(lodashGet(row, dataKey, '∅'), row)}
+              </td>
+            ),
+          )}
       </tr>
     );
   }

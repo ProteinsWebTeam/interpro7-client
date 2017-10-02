@@ -22,9 +22,9 @@ const mapStateToProps = getUrl =>
   createSelector(
     state => state,
     state => state.data[getUrl(state)] || {},
-    (appState, data) => ({ appState, data })
+    (appState, data) => ({ appState, data }),
   );
-const getBaseURL = url => (url ? url.slice(0, url.indexOf('?')) : '');
+// const getBaseURL = url => (url ? url.slice(0, url.indexOf('?')) : '');
 
 // eslint-disable-next-line max-params
 const load = (
@@ -34,7 +34,7 @@ const load = (
   unloadingData,
   failedLoadingData,
   fetchFun,
-  fetchOptions
+  fetchOptions,
 ) => key => {
   try {
     loadingData(key);
@@ -50,7 +50,7 @@ const load = (
   // Eventually changes the state according to response
   c.promise.then(
     response => loadedData(key, response),
-    error => (error.canceled ? unloadingData : failedLoadingData)(key, error)
+    error => (error.canceled ? unloadingData : failedLoadingData)(key, error),
   );
   return c;
 };
@@ -84,7 +84,9 @@ const loadData = params => {
         super(props);
         this.state = { staleData: props.data };
         this._url = '';
-        this._avoidStaleData = true;
+        // TODO: _avoidStaleData has been removed(29/09/2017), delete commented lines
+        // if this change hasn't create any problems.
+        // this._avoidStaleData = true;
         this._load = null;
       }
 
@@ -108,7 +110,7 @@ const loadData = params => {
             unloadingData,
             failedLoadingData,
             fetchFun,
-            fetchOptions
+            fetchOptions,
           );
         }
 
@@ -137,8 +139,8 @@ const loadData = params => {
         unloadingData,
         data,
       }) {
-        this._avoidStaleData =
-          getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState));
+        // this._avoidStaleData =
+        //   getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState));
 
         // Same location, no need to reload data
         if (
@@ -166,7 +168,7 @@ const loadData = params => {
             unloadingData,
             failedLoadingData,
             fetchFun,
-            fetchOptions
+            fetchOptions,
           );
         }
         this._cancelableFetch = this._load(key);
@@ -180,7 +182,6 @@ const loadData = params => {
         if (this._cancelableFetch) this._cancelableFetch.cancel();
         this._url = null;
       }
-
 
       render() {
         const { staleData } = this.state;
@@ -197,8 +198,9 @@ const loadData = params => {
         // TODO: remove next line if nothing breaks because of it
         // const data = {...dataFromProps};// maybe useful?..
         if (typeof data.loading === 'undefined') data.loading = true;
-        const useStaleData =
-          !this._avoidStaleData && data.loading && staleData.payload;
+        // const useStaleData =
+        //   !this._avoidStaleData && data.loading && staleData.payload;
+        const useStaleData = data.loading && staleData.payload;
         if (!data.loading) {
           this._url = getUrl(appState);
         }
@@ -207,7 +209,11 @@ const loadData = params => {
           [`data${propNamespace}`]: useStaleData ? staleData : data,
           [`isStale${propNamespace}`]: !!useStaleData,
         };
-        return <ErrorBoundary><Wrapped {...passedProps} /></ErrorBoundary>;
+        return (
+          <ErrorBoundary>
+            <Wrapped {...passedProps} />
+          </ErrorBoundary>
+        );
       }
     }
 

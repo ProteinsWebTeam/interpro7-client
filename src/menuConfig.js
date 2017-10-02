@@ -88,6 +88,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             focusType: null,
             focusDB: null,
+            mainMemberDB: null,
           },
         };
       },
@@ -103,6 +104,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           description: {
             ...location.description,
             mainDetail: null,
+            mainMemberDB: null,
             focusType: 'entry',
             focusDB: 'InterPro',
           },
@@ -121,8 +123,9 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           description: {
             ...location.description,
             mainDetail: null,
+            mainMemberDB: null,
             focusType: 'protein',
-            focusDB: 'UniProt',
+            focusDB: 'reviewed',
           },
         };
       },
@@ -139,6 +142,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           description: {
             ...location.description,
             mainDetail: null,
+            mainMemberDB: null,
             focusType: 'structure',
             focusDB: 'PDB',
           },
@@ -159,6 +163,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             focusType: 'organism',
             focusDB: 'taxonomy',
+            mainMemberDB: null,
           },
         };
       },
@@ -177,6 +182,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             focusType: null,
             focusDB: null,
             mainDetail: 'domain_architecture',
+            mainMemberDB: null,
           },
         };
       },
@@ -194,10 +200,29 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             focusType: null,
             focusDB: null,
             mainDetail: 'hmm_model',
+            mainMemberDB: null,
           },
         };
       },
       name: 'HMM Model',
+    },
+  ],
+  [
+    'proteome',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            focusType: null,
+            focusDB: null,
+            mainDetail: null,
+            mainMemberDB: 'proteome',
+          },
+        };
+      },
+      name: 'proteomes',
     },
   ],
 ]);
