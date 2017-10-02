@@ -265,6 +265,7 @@ const schemaProcessData2 = data => ({
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
+  additionalProperty: '@additionalProperty',
 });
 
 class Structure extends PureComponent {

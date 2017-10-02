@@ -423,7 +423,7 @@ const schemaProcessData = data => ({
     '@type': 'Dataset',
     '@id': 'InterPro release ??',
   },
-  additionalType: `Ontology URL for ${data.metadata.type}`,
+  additionalType: `Ontology URL for type: "${data.metadata.type}"`,
   mainEntity: '@mainEntity',
   citation: '@citation',
 });
@@ -431,13 +431,14 @@ const schemaProcessData = data => ({
 const schemaProcessData2 = data => ({
   '@type': ['StructuredValue', 'PhysicalEntity'],
   '@id': '@mainEntity',
-  additionalType: '???ProteinAnnotation???',
+  additionalType: 'http://semanticscience.org/resource/SIO_001379.rdf',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
   isBasedOn: '@isBasedOn',
   isBasisFor: '@isBasisFor',
   seeAlso: '@seeAlso',
+  additionalProperty: '@additionalProperty',
 });
 
 class Entry extends PureComponent {
