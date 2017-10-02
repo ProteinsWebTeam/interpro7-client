@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`External links <GoTerms /> should render GOTerms component with empty subset 1`] = `
-<section
-  id="go-terms"
->
+<section>
   <div
     className="row"
   >
@@ -19,28 +17,15 @@ exports[`External links <GoTerms /> should render GOTerms component with empty s
     className="row"
   >
     <div
-      className="medium-6 large-4 columns"
+      className="small-12 medium-4 columns margin-bottom-large"
     >
-      <span
-        className="Biological Process"
+      <p
+        className="go-title-bp"
       >
         Biological Process
-      </span>
-      <AnimatedEntry
-        animateSelf={false}
-        className="no-bullet"
-        delay={0}
-        duration={500}
-        element="ul"
-        itemDelay={25}
-        keyframes={
-          Object {
-            "opacity": Array [
-              0,
-              1,
-            ],
-          }
-        }
+      </p>
+      <ul
+        className="go-list"
       >
         <li>
           <span
@@ -53,31 +38,18 @@ exports[`External links <GoTerms /> should render GOTerms component with empty s
             None
           </span>
         </li>
-      </AnimatedEntry>
+      </ul>
     </div>
     <div
-      className="medium-6 large-4 columns"
+      className="small-12 medium-4 columns margin-bottom-large"
     >
-      <span
-        className="Molecular Function"
+      <p
+        className="go-title-mf"
       >
         Molecular Function
-      </span>
-      <AnimatedEntry
-        animateSelf={false}
-        className="no-bullet"
-        delay={0}
-        duration={500}
-        element="ul"
-        itemDelay={25}
-        keyframes={
-          Object {
-            "opacity": Array [
-              0,
-              1,
-            ],
-          }
-        }
+      </p>
+      <ul
+        className="go-list"
       >
         <li>
           <span
@@ -90,31 +62,18 @@ exports[`External links <GoTerms /> should render GOTerms component with empty s
             None
           </span>
         </li>
-      </AnimatedEntry>
+      </ul>
     </div>
     <div
-      className="medium-6 large-4 columns"
+      className="small-12 medium-4 columns margin-bottom-large"
     >
-      <span
-        className="Cellular Component"
+      <p
+        className="go-title-cc"
       >
         Cellular Component
-      </span>
-      <AnimatedEntry
-        animateSelf={false}
-        className="no-bullet"
-        delay={0}
-        duration={500}
-        element="ul"
-        itemDelay={25}
-        keyframes={
-          Object {
-            "opacity": Array [
-              0,
-              1,
-            ],
-          }
-        }
+      </p>
+      <ul
+        className="go-list"
       >
         <li>
           <span
@@ -127,16 +86,14 @@ exports[`External links <GoTerms /> should render GOTerms component with empty s
             None
           </span>
         </li>
-      </AnimatedEntry>
+      </ul>
     </div>
   </div>
 </section>
 `;
 
 exports[`External links <GoTerms /> should render GoTerms component 1`] = `
-<section
-  id="go-terms"
->
+<section>
   <div
     className="row"
   >
@@ -152,28 +109,15 @@ exports[`External links <GoTerms /> should render GoTerms component 1`] = `
     className="row"
   >
     <div
-      className="medium-6 large-4 columns"
+      className="small-12 medium-4 columns margin-bottom-large"
     >
-      <span
-        className="Biological Process"
+      <p
+        className="go-title-bp"
       >
         Biological Process
-      </span>
-      <AnimatedEntry
-        animateSelf={false}
-        className="no-bullet"
-        delay={0}
-        duration={500}
-        element="ul"
-        itemDelay={25}
-        keyframes={
-          Object {
-            "opacity": Array [
-              0,
-              1,
-            ],
-          }
-        }
+      </p>
+      <ul
+        className="go-list"
       >
         <li>
           <span
@@ -186,31 +130,18 @@ exports[`External links <GoTerms /> should render GoTerms component 1`] = `
             None
           </span>
         </li>
-      </AnimatedEntry>
+      </ul>
     </div>
     <div
-      className="medium-6 large-4 columns"
+      className="small-12 medium-4 columns margin-bottom-large"
     >
-      <span
-        className="Molecular Function"
+      <p
+        className="go-title-mf"
       >
         Molecular Function
-      </span>
-      <AnimatedEntry
-        animateSelf={false}
-        className="no-bullet"
-        delay={0}
-        duration={500}
-        element="ul"
-        itemDelay={25}
-        keyframes={
-          Object {
-            "opacity": Array [
-              0,
-              1,
-            ],
-          }
-        }
+      </p>
+      <ul
+        className="go-list"
       >
         <li>
           <span
@@ -223,31 +154,18 @@ exports[`External links <GoTerms /> should render GoTerms component 1`] = `
             None
           </span>
         </li>
-      </AnimatedEntry>
+      </ul>
     </div>
     <div
-      className="medium-6 large-4 columns"
+      className="small-12 medium-4 columns margin-bottom-large"
     >
-      <span
-        className="Cellular Component"
+      <p
+        className="go-title-cc"
       >
         Cellular Component
-      </span>
-      <AnimatedEntry
-        animateSelf={false}
-        className="no-bullet"
-        delay={0}
-        duration={500}
-        element="ul"
-        itemDelay={25}
-        keyframes={
-          Object {
-            "opacity": Array [
-              0,
-              1,
-            ],
-          }
-        }
+      </p>
+      <ul
+        className="go-list"
       >
         <li>
           <span
@@ -260,31 +178,18 @@ exports[`External links <GoTerms /> should render GoTerms component 1`] = `
             None
           </span>
         </li>
-      </AnimatedEntry>
+      </ul>
     </div>
     <div
-      className="medium-6 large-4 columns"
+      className="small-12 medium-4 columns margin-bottom-large"
     >
-      <span
-        className="biological_process"
+      <p
+        className=""
       >
-        biological process
-      </span>
-      <AnimatedEntry
-        animateSelf={false}
-        className="no-bullet"
-        delay={0}
-        duration={500}
-        element="ul"
-        itemDelay={25}
-        keyframes={
-          Object {
-            "opacity": Array [
-              0,
-              1,
-            ],
-          }
-        }
+        biological_process
+      </p>
+      <ul
+        className="go-list"
       >
         <li>
           <GoLink
@@ -313,7 +218,7 @@ exports[`External links <GoTerms /> should render GoTerms component 1`] = `
             test3
           </GoLink>
         </li>
-      </AnimatedEntry>
+      </ul>
     </div>
   </div>
 </section>

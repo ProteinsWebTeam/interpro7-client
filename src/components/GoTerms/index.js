@@ -16,6 +16,12 @@ const getDefaultPayload = () => ({
   'Cellular Component': [],
 });
 
+const mapNameToClass = new Map([
+  ['Biological Process', 'go-title-bp'],
+  ['Molecular Function', 'go-title-mf'],
+  ['Cellular Component', 'go-title-cc'],
+]);
+
 const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
   const _terms = terms.reduce((acc, term) => {
     // eslint-disable-next-line no-param-reassign
@@ -45,19 +51,7 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
               'margin-bottom-large',
             )}
           >
-            <p
-              className={f(
-                key === 'Molecular Function'
-                  ? 'go-title-mf'
-                  : null || key === 'Cellular Component'
-                    ? 'go-title-cc'
-                    : null || key === 'Biological Process'
-                      ? 'go-title-bp'
-                      : null,
-              )}
-            >
-              {key}
-            </p>
+            <p className={f(mapNameToClass.get(key))}>{key}</p>
             <ul className={f('go-list')}>
               {values && values.length ? (
                 values.map(({ identifier, name }) => (

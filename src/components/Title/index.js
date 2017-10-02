@@ -14,6 +14,17 @@ import styles from './style.css';
 
 const f = foundationPartial(ipro, styles);
 
+const mapNameToClass = new Map([
+  ['Domain', 'title-id-domain'],
+  ['Family', 'title-id-family'],
+  ['Repeat', 'title-id-repeat'],
+  ['Unknown', 'title-id-unknown'],
+  ['Conserved_site', 'title-id-site'],
+  ['Binding_site', 'title-id-site'],
+  ['Active_site', 'title-id-site'],
+  ['PTM', 'title-id-site'],
+]);
+
 /*:: type Props = {
   metadata: {
     name: { name: string, short: ?string },
@@ -56,25 +67,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
         </Helmet>
         <h3>
           {metadata.name.name}
-          <small
-            className={f(
-              metadata.type === 'Domain'
-                ? 'title-id-domain'
-                : null || metadata.type === 'Family'
-                  ? 'title-id-family'
-                  : null || metadata.type === 'Repeat'
-                    ? 'title-id-repeat'
-                    : null || metadata.type === 'unknow'
-                      ? 'title-id-unknown'
-                      : null ||
-                        metadata.type === 'Conserved_site' ||
-                        metadata.type === 'Binding_site' ||
-                        metadata.type === 'Active_site' ||
-                        metadata.type === 'PTM'
-                        ? 'title-id-site'
-                        : null,
-            )}
-          >
+          <small className={f(mapNameToClass.get(metadata.type))}>
             {metadata.accession}
           </small>
         </h3>
