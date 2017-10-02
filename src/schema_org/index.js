@@ -74,6 +74,9 @@ export class Manager {
     if (this._dev) console.time('schema.org rendering took');
     if (this._dev) console.groupCollapsed('data maps');
     if (this._dev) {
+      console.group('@@root');
+      console.log(this._rootData);
+      console.groupEnd();
       for (const [id, values] of this._dataMap) {
         console.group(id);
         for (const value of values) console.log(value);
