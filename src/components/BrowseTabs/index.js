@@ -18,6 +18,8 @@ import { foundationPartial } from 'styles/foundation';
 
 const f = foundationPartial(styles);
 
+const singleEntityNames = new Map(Array.from(singleEntity).map(e => [e[1].name, e[0]]));
+
 /*:: type CounterProps = {
   newTo: Object | function,
   name: string,
@@ -35,28 +37,38 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    isFirstLevel: T.bool,
   };
 
   render() {
-    const { newTo, name, data: { loading, payload } } = this.props;
+    const { newTo, name, data: { loading, payload }, isFirstLevel } = this.props;
     let value = null;
-    if (
-      !loading &&
-      (payload &&
-        payload.metadata &&
-        payload.metadata.counters &&
-        Number.isFinite(payload.metadata.counters[name]))
-    ) {
-      value = payload.metadata.counters[name];
+    if (!loading && payload && payload.metadata){
+      if (payload.metadata.counters &&
+          Number.isFinite(payload.metadata.counters[name])
+      ) {
+        value = payload.metadata.counters[name];
+      }
+      // Enabling the menuitems that appear in the entry_annotations array.
+      // i.e. only neble the menu item if there is info for it
+      if (payload.metadata.entry_annotations &&
+        payload.metadata.entry_annotations.indexOf(singleEntityNames.get(name)) >= 0
+      ) {
+        value = 1;
+      }
+      // TODO: find a generic way to deal with this:
+      if (name === 'Overview' || name === 'Domain Architectures')
+        value = 1;
     }
+
     return (
       <Link
         newTo={newTo}
         activeClass={f('is-active', 'is-active-tab')}
-        disabled={value !== null && !value}
+        disabled={!isFirstLevel && !value}
       >
         {name} &nbsp;
-        {value !== null && (
+        {value !== null && value !== 1 && (
           <NumberLabel value={value} className={f('counter')} />
         )}
       </Link>
@@ -102,7 +114,7 @@ class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
           <ul className={f('tabs')}>
             {tabs.map(e => (
               <li className={f('tabs-title')} key={e.name}>
-                <Counter newTo={e.newTo} name={e.name} data={data} />
+                <Counter newTo={e.newTo} name={e.name} data={data} isFirstLevel={!mainAccession} />
               </li>
             ))}
           </ul>

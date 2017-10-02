@@ -465,6 +465,6 @@ class Entry extends PureComponent {
 
 export default loadData((...args) =>
   getUrlForApi(...args)
-    .replace('hmm_model', '')
+    .replace('logo', '')
     .replace('domain_architecture', ''),
 )(Entry);

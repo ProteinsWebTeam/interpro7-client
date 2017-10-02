@@ -190,7 +190,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
-    'hmm_model',
+    'logo',
     {
       newTo(location /*: Location */) {
         return {
@@ -199,7 +199,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             focusType: null,
             focusDB: null,
-            mainDetail: 'hmm_model',
+            mainDetail: 'logo',
             mainMemberDB: null,
           },
         };
