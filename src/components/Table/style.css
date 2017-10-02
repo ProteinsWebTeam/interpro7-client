@@ -112,7 +112,9 @@ table.light .subheader {
   display: inline-block;
 }
 .table-view .table-results-filtering .icon-view:hover {
-  opacity: 0.8;
+  /*opacity: 0.8;*/
+  transform: scale(1.4);
+  transition: transform var(--timing-fast);
 }
 .table-view .table-results-filtering .icon-view:last-child {
   margin-right: 0;

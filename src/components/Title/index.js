@@ -7,8 +7,12 @@ import Link from 'components/generic/Link';
 
 import loadWebComponent from 'utils/loadWebComponent';
 
+import { foundationPartial } from 'styles/foundation';
+
 import ipro from 'styles/interpro-new.css';
-import style from './style.css';
+import styles from './style.css';
+
+const f = foundationPartial(ipro, styles);
 
 /*:: type Props = {
   metadata: {
@@ -34,8 +38,8 @@ export default class Title extends PureComponent /*:: <Props> */ {
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType
-      )
+        m => m.InterproType,
+      ),
     ).as('interpro-type');
   }
 
@@ -43,38 +47,59 @@ export default class Title extends PureComponent /*:: <Props> */ {
     const { metadata, mainType } = this.props;
     const isEntry = mainType === 'entry';
     return (
-      <div className={style.title}>
-        {isEntry && <interpro-type type={metadata.type} size="4em" />}
+      <div className={f('title')}>
+        {isEntry && (
+          <interpro-type type={metadata.type.replace('_', ' ')} size="4em" />
+        )}
         <Helmet>
           <title>{metadata.accession.toString()}</title>
         </Helmet>
         <h3>
-          {metadata.name.name} <small>({metadata.accession})</small>
+          {metadata.name.name}
+          <small
+            className={f(
+              metadata.type === 'Domain'
+                ? 'title-id-domain'
+                : null || metadata.type === 'Family'
+                  ? 'title-id-family'
+                  : null || metadata.type === 'Repeat'
+                    ? 'title-id-repeat'
+                    : null || metadata.type === 'unknow'
+                      ? 'title-id-unknown'
+                      : null ||
+                        metadata.type === 'Conserved_site' ||
+                        metadata.type === 'Binding_site' ||
+                        metadata.type === 'Active_site' ||
+                        metadata.type === 'PTM'
+                        ? 'title-id-site'
+                        : null,
+            )}
+          >
+            {metadata.accession}
+          </small>
         </h3>
         {isEntry &&
-        metadata.source_database.toLowerCase() !== 'interpro' && (
-          <div className={ipro['md-hlight']}>
-            <h5>
-              Member database:&nbsp;
-              <Link
-                newTo={{
-                  description: {
-                    mainType: 'entry',
-                    mainDB: metadata.source_database,
-                  },
-                }}
-              >
-                {metadata.source_database}
-              </Link>
-            </h5>
-          </div>
-        )}
+          metadata.source_database.toLowerCase() !== 'interpro' && (
+            <div className={f('md-hlight')}>
+              <h5>
+                Member database:&nbsp;
+                <Link
+                  newTo={{
+                    description: {
+                      mainType: 'entry',
+                      mainDB: metadata.source_database,
+                    },
+                  }}
+                >
+                  {metadata.source_database}
+                </Link>
+              </h5>
+            </div>
+          )}
         {metadata.name.short && (
           <p>
             Short name:&nbsp;
-            <i className="small" style={{ color: '#41647d' }}>
-              {metadata.name.short}
-            </i>
+            <i className={f('shortname')}>{metadata.name.short}</i>
           </p>
         )}
       </div>

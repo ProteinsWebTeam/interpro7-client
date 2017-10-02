@@ -28,7 +28,7 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
     return acc;
   }, getDefaultPayload());
   return (
-    <section id="go-terms">
+    <section>
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <h4>Go terms</h4>
@@ -36,9 +36,29 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
       </div>
       <div className={f('row')}>
         {Object.entries(_terms).map(([key, values]) => (
-          <div key={key} className={f('medium-6', 'large-4', 'columns')}>
-            <span className={f(key)}>{key.replace('_', ' ')}</span>
-            <AnimatedEntry duration={500} className={f('no-bullet')}>
+          <div
+            key={key}
+            className={f(
+              'small-12',
+              'medium-4',
+              'columns',
+              'margin-bottom-large',
+            )}
+          >
+            <p
+              className={f(
+                key === 'Molecular Function'
+                  ? 'go-title-mf'
+                  : null || key === 'Cellular Component'
+                    ? 'go-title-cc'
+                    : null || key === 'Biological Process'
+                      ? 'go-title-bp'
+                      : null,
+              )}
+            >
+              {key}
+            </p>
+            <ul className={f('go-list')}>
               {values && values.length ? (
                 values.map(({ identifier, name }) => (
                   <li key={identifier}>
@@ -56,7 +76,7 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
                   <span style={{ fontSize: '0.9rem' }}>None</span>
                 </li>
               )}
-            </AnimatedEntry>
+            </ul>
           </div>
         ))}
       </div>

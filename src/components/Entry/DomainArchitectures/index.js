@@ -158,7 +158,7 @@ class DomainArchitectures extends PureComponent {
           {(payload.results || []).map(obj => {
             const idaObj = ida2json(obj.IDA);
             return (
-              <div key={obj.IDA_FK} className={f('margin-top-large')}>
+              <div key={obj.IDA_FK} className={f('margin-bottom-large')}>
                 <Link
                   newTo={{
                     description: {
