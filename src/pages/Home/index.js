@@ -27,6 +27,11 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
 const MAX_DELAY_FOR_TWITTER = 10000;
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
 // Generate async components
 // Search box
 const SearchByText = loadable({
@@ -66,7 +71,7 @@ const ByGOTerms = loadable({
 const Twitter = loadable({
   loader: () =>
     schedule(MAX_DELAY_FOR_TWITTER).then(() =>
-      import(/* webpackChunkName: "twitter" */ 'components/Twitter')
+      import(/* webpackChunkName: "twitter" */ 'components/Twitter'),
     ),
 });
 
@@ -93,10 +98,46 @@ const MaskSvgIcons = () => (
   </svg>
 );
 
+const description = `
+InterPro provides functional analysis of proteins by classifying them into
+families and predicting domains and important sites. We combine protein
+signatures from a number of member databases into a single searchable
+resource, capitalising on their individual strengths to produce a powerful
+integrated database and diagnostic tool. To classify proteins in this way,
+InterPro uses predictive models, known as signatures, provided by several
+different databases (referred to as member databases) that make up the
+InterPro consortium.`.trim();
+
+const schemaProcessData = () => ({
+  '@type': 'DataCatalog',
+  '@id': '@mainEntityOfPage',
+  name: 'InterPro',
+  description,
+  url: window.location.href,
+  keywords: ['InterPro', 'Domain', 'Family', 'Annotation', 'Protein'],
+  provider: {
+    '@type': 'Organization',
+    name: 'European Bioinformatics Institute',
+    url: 'https://www.ebi.ac.uk/',
+  },
+  dataset: '@dataset',
+});
+
+const schemaProcessDataForDB = name => ({
+  '@type': 'Dataset',
+  '@id': '@dataset',
+  name,
+  identifier: name,
+  version: 64,
+  url: `${window.location.href}/entry/${name}`,
+});
+
 const Home = () => (
   <div>
     <div className={f('row')}>
       <div className={f('columns', 'large-12')}>
+        <SchemaOrgData processData={schemaProcessData} />
+        <SchemaOrgData data="InterPro" processData={schemaProcessDataForDB} />
         <div
           className={f('fig-container', 'fig-proteins')}
           data-tooltip
@@ -109,16 +150,7 @@ const Home = () => (
           title=""
           extraTextForButton="about InterPro"
           heightToHide={106}
-          textBlocks={[
-            `InterPro provides functional analysis of proteins by classifying them into
-             families and predicting domains and important sites. We combine protein
-             signatures from a number of member databases into a single searchable
-             resource, capitalising on their individual strengths to produce a powerful
-             integrated database and diagnostic tool. To classify proteins in this way,
-             InterPro uses predictive models, known as signatures, provided by several
-             different databases (referred to as member databases) that make up the
-             InterPro consortium.`,
-          ]}
+          textBlocks={[description]}
         />
 
         <fieldset className={f('fieldset')}>
