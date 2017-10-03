@@ -30,7 +30,7 @@ const SchemaOrgData = loadable({
 });
 
 const schemaProcessData = data => ({
-  '@type': 'Record',
+  '@type': 'DataRecord',
   '@id': '@seeAlso',
   identifier: data,
 });

@@ -117,7 +117,7 @@ const schemaProcessDataTable = mainDB => ({
 });
 
 const schemaProcessDataTableRow = data => ({
-  '@type': 'Record',
+  '@type': 'DataRecord',
   '@id': '@hasPart',
   identifier: data.accession,
   name: data.mainDB,
@@ -443,7 +443,7 @@ const InnerSwitch = props => (
 );
 
 const schemaProcessData = data => ({
-  '@type': 'Record',
+  '@type': 'DataRecord',
   '@id': '@mainEntityOfPage',
   identifier: data.metadata.accession,
   isPartOf: {

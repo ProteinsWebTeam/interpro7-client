@@ -247,7 +247,7 @@ const InnerSwitch = props => (
 );
 
 const schemaProcessData = data => ({
-  '@type': 'Record',
+  '@type': 'DataRecord',
   '@id': '@mainEntityOfPage',
   additionalType: 'http://semanticscience.org/resource/SIO_011119.rdf',
   identifier: data.metadata.accession,
