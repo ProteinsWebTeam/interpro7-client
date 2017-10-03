@@ -102,6 +102,28 @@ const Overview = ({
 };
 Overview.propTypes = propTypes;
 
+const schemaProcessDataTable = mainDB => ({
+  '@type': 'Dataset',
+  '@id': '@mainEntityOfPage',
+  identifier: mainDB,
+  name: mainDB,
+  version: '?',
+  url: window.location.href,
+  hasPart: '@hasPart',
+  includedInDataCatalog: {
+    '@type': 'DataCatalog',
+    '@id': `${window.location.origin}/interpro7/`,
+  },
+});
+
+const schemaProcessDataTableRow = data => ({
+  '@type': 'Record',
+  '@id': '@hasPart',
+  identifier: data.accession,
+  name: data.mainDB,
+  url: `${window.location.href}/${data.accession}`,
+});
+
 class List extends Component {
   static propTypes = propTypes;
 
@@ -139,6 +161,7 @@ class List extends Component {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
+          <SchemaOrgData data={mainDB} processData={schemaProcessDataTable} />
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -210,7 +233,7 @@ class List extends Component {
             </Column>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */) => (
+              renderer={(accession /*: string */, data) => (
                 <Link
                   title={accession}
                   newTo={location => ({
@@ -222,6 +245,10 @@ class List extends Component {
                     },
                   })}
                 >
+                  <SchemaOrgData
+                    data={data}
+                    processData={schemaProcessDataTableRow}
+                  />
                   <span className={f('acc-row')}>{accession}</span>
                 </Link>
               )}
