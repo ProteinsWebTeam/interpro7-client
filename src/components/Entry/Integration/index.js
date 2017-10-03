@@ -13,7 +13,7 @@ const SchemaOrgData = loadable({
 });
 
 const schemaProcessData = data => ({
-  '@type': 'PhysicalEntity',
+  '@type': 'BioChemEntity',
   '@id': '@isBasisFor',
   additionalType: '???ProteinAnnotation???',
   inDataset: 'InterPro',
