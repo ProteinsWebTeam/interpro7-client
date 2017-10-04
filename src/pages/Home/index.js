@@ -161,7 +161,6 @@ const Home = () => (
             </div>
             <div title="by sequence">
               <IPScanSearch />
-              <IPScanStatus refreshRate={120000} />
             </div>
           </Tabs>
         </fieldset>
