@@ -85,7 +85,12 @@ export class Manager {
     }
     if (this._dev) console.groupEnd();
     if (this._dev) console.time('Schema.org merger');
-    const mergedData = await merger(this._dataMap, deadline, this._rootData);
+    const mergedData = await merger(
+      this._dataMap,
+      deadline,
+      this._rootData,
+      this._dev,
+    );
     if (this._dev) console.timeEnd('Schema.org merger');
     this._plannedRender = false;
     if (this._dev) console.time('Schema.org stringify to DOM');

@@ -2,7 +2,6 @@ import React from 'react';
 import T from 'prop-types';
 
 import { GoLink } from 'components/ExtLink';
-import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadable from 'higherOrder/loadable';
 

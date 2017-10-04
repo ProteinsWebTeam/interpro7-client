@@ -42,10 +42,6 @@ const IPScanSearch = loadable({
   loader: () =>
     import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch'),
 });
-const IPScanStatus = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "ipscan-status" */ 'components/IPScanStatus'),
-});
 // Browse by X box
 const ByMemberDatabase = loadable({
   loader: () =>
