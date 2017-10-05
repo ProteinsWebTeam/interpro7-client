@@ -442,6 +442,17 @@ const InnerSwitch = props => (
   </ErrorBoundary>
 );
 
+const mapTypeToOntology = new Map([
+  ['Domain', 'http://semanticscience.org/resource/SIO_001379.rdf'],
+  ['Family', 'http://semanticscience.org/resource/SIO_001380.rdf'],
+  ['Repeat', 'http://semanticscience.org/resource/SIO_000370.rdf'],
+  ['Unknown', 'http://semanticscience.org/resource/SIO_000370.rdf'],
+  ['Conserved_site', 'http://semanticscience.org/resource/SIO_010049.rdf'],
+  ['Binding_site', 'http://semanticscience.org/resource/SIO_010040.rdf'],
+  ['Active_site', 'http://semanticscience.org/resource/SIO_010041.rdf'],
+  ['PTM', 'http://semanticscience.org/resource/SIO_010049.rdf'],
+]);
+
 const schemaProcessData = data => ({
   '@type': 'DataRecord',
   '@id': '@mainEntityOfPage',
@@ -450,8 +461,12 @@ const schemaProcessData = data => ({
     '@type': 'Dataset',
     '@id': 'InterPro release ??',
   },
-  additionalType: `Ontology URL for type: "${data.metadata.type}"`,
+  additionalType:
+    mapTypeToOntology.get(data.metadata.type) ||
+    mapTypeToOntology.get('Unknown'),
   mainEntity: '@mainEntity',
+  isBasedOn: '@isBasedOn',
+  isBasisFor: '@isBasisFor',
   citation: '@citation',
   seeAlso: '@seeAlso',
 });
@@ -459,12 +474,12 @@ const schemaProcessData = data => ({
 const schemaProcessData2 = data => ({
   '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
-  additionalType: 'http://semanticscience.org/resource/SIO_001379.rdf',
+  additionalType:
+    mapTypeToOntology.get(data.metadata.type) ||
+    mapTypeToOntology.get('Unknown'),
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
-  isBasedOn: '@isBasedOn',
-  isBasisFor: '@isBasisFor',
   additionalProperty: '@additionalProperty',
   isContainedIn: '@isContainedIn',
 });
