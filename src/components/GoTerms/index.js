@@ -35,7 +35,10 @@ const schemaProcessData = data => ({
 });
 
 const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
-  const _terms = terms.reduce((acc, term) => {
+  // remove duplicates
+  // TODO: remove duplicates from data, then remove this as will be unnecessary
+  let _terms = new Map(terms.map(term => [term.identifier, term]));
+  _terms = Array.from(_terms.values()).reduce((acc, term) => {
     // eslint-disable-next-line no-param-reassign
     if (!acc[term.category]) acc[term.category] = [];
     if (typeof term === 'string') {
