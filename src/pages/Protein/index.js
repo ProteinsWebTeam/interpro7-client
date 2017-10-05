@@ -273,6 +273,7 @@ const schemaProcessData = data => ({
     '@id': data.metadata.source_database,
   },
   mainEntity: '@mainEntity',
+  seeAlso: '@seeAlso',
 });
 
 const schemaProcessData2 = data => ({
@@ -282,7 +283,6 @@ const schemaProcessData2 = data => ({
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
-  seeAlso: '@seeAlso',
   additionalProperty: '@additionalProperty',
 });
 

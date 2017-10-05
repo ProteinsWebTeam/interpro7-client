@@ -453,6 +453,7 @@ const schemaProcessData = data => ({
   additionalType: `Ontology URL for type: "${data.metadata.type}"`,
   mainEntity: '@mainEntity',
   citation: '@citation',
+  seeAlso: '@seeAlso',
 });
 
 const schemaProcessData2 = data => ({
@@ -464,7 +465,6 @@ const schemaProcessData2 = data => ({
   alternateName: data.metadata.name.long || null,
   isBasedOn: '@isBasedOn',
   isBasisFor: '@isBasisFor',
-  seeAlso: '@seeAlso',
   additionalProperty: '@additionalProperty',
   isContainedIn: '@isContainedIn',
 });
