@@ -259,7 +259,7 @@ const schemaProcessData = data => ({
 });
 
 const schemaProcessData2 = data => ({
-  '@type': ['StructuredValue', 'BioChemEntity'],
+  '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
   additionalType: 'http://semanticscience.org/resource/SIO_010346.rdf',
   identifier: data.metadata.accession,

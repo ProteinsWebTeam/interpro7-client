@@ -222,7 +222,7 @@ const InnerSwitch = props => (
 );
 
 const schemaProcessData = data => ({
-  '@type': 'BioChemEntity',
+  '@type': ['BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
   additionalType: 'http://semanticscience.org/resource/SIO_010000.rdf',
   identifier: data.metadata.accession,

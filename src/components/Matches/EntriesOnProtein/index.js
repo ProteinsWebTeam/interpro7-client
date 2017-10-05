@@ -19,7 +19,7 @@ const schemaProcessData = data => ({
   additionalType: 'http://semanticscience.org/resource/SIO_001379.rdf',
   name: 'domain annotation',
   value: {
-    '@type': ['StructuredValue', 'BioChemEntity'],
+    '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
     additionalType: 'http://semanticscience.org/resource/SIO_010043',
     identifier: data.protein.accession,
     name: data.protein.name,
