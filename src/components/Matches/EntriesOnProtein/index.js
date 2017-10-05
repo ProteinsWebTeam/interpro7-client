@@ -15,7 +15,7 @@ const SchemaOrgData = loadable({
 });
 
 const schemaProcessData = data => ({
-  '@id': '@additionalProperty',
+  '@id': '@isContainedIn',
   additionalType: 'http://semanticscience.org/resource/SIO_001379.rdf',
   name: 'domain annotation',
   value: {

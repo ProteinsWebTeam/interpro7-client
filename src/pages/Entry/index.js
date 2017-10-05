@@ -466,6 +466,7 @@ const schemaProcessData2 = data => ({
   isBasisFor: '@isBasisFor',
   seeAlso: '@seeAlso',
   additionalProperty: '@additionalProperty',
+  isContainedIn: '@isContainedIn',
 });
 
 class Entry extends PureComponent {
