@@ -2,7 +2,6 @@ import React from 'react';
 import T from 'prop-types';
 
 import { GoLink } from 'components/ExtLink';
-import AnimatedEntry from 'components/AnimatedEntry';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import ipro from 'styles/interpro-new.css';
@@ -23,7 +22,10 @@ const mapNameToClass = new Map([
 ]);
 
 const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
-  const _terms = terms.reduce((acc, term) => {
+  // remove duplicates
+  // TODO: remove duplicates from data, then remove this as will be unnecessary
+  let _terms = new Map(terms.map(term => [term.identifier, term]));
+  _terms = Array.from(_terms.values()).reduce((acc, term) => {
     // eslint-disable-next-line no-param-reassign
     if (!acc[term.category]) acc[term.category] = [];
     if (typeof term === 'string') {
