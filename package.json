@@ -23,7 +23,8 @@
     "precommit": "lint-staged",
     "predeploy": "npm-run-all test clean",
     "deploy": "npm run bundle",
-    "deploy:staging": "npm run deploy -- -- --env.staging",
+    "deploy:dev": "npm run deploy -- -- --env.staging",
+    "deploy:staging": "npm run deploy:production",
     "deploy:production": "npm run deploy -- -- --env.production",
     "start": "npm-run-all -rp dev:test dev",
     "stats": "webpack --env.production --profile --json > dist/stats.json"
