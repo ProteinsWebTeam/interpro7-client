@@ -22,7 +22,11 @@
   white-space: nowrap;
 }
 .ext::before {
-  content: ' \21AA ';
+  font-family: 'EBI-Generic';
+  content: 'x';
+  font-size: 80%;
+  margin-right: 0.2rem;
+  /*content: ' \21AA ';*/
 }
 
 .list {
