@@ -85,7 +85,7 @@ const CookieFooterAsync = loadable({
 });
 
 const Root = () => [
-  <Helmet key="header" titleTemplate="%s - InterPro" defaultTitle="InterPro" />,
+  <Helmet key="helmet" titleTemplate="%s - InterPro" defaultTitle="InterPro" />,
   <LoadingBarAsync key="loading-bar" />,
   <Overlay key="overlay" />,
   <EMBLDropdownAsync key="embl-dropdown" />,
