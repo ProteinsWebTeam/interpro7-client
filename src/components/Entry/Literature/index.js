@@ -56,13 +56,16 @@ const LiteratureItem = (
         </Link>{' '}
       </span>
     )}
-    <span className={f('authors')}>{r.authors}</span>
-    <span className={f('year')}>({r.year})</span>.{' '}
+    <span className={f('authors')}>{r.authors}</span>{' '}
     <span className={f('title')}>{r.title}</span>
     {r.ISOJournal && <span className={f('journal')}>{r.ISOJournal}, </span>}
     {r.issue && <span className={f('issue')}> {r.issue}, </span>}
+    <span className={f('year')}>({r.year})</span>.{' '}
     {r.rawPages && <span className={f('pages')}>{r.rawPages}. </span>}
-    <span className={f('reference_id')}>{pubID}.</span>
+    {
+      //not used anywhere on Europe PMC website not even to link to PMCID:PMC
+      //<span className={f('reference_id')}>{pubID}.</span>
+    }
     <br />
     {r.DOI_URL && (
       <DOILink id={r.DOI_URL} className={f('ext')}>
@@ -70,7 +73,8 @@ const LiteratureItem = (
       </DOILink>
     )}
     {r.DOI_URL && <span> | </span>}
-    EuropePMC:<PMCLink id={r.PMID} className={f('ext')}>
+    PMID:{' '}
+    <PMCLink id={r.PMID} className={f('ext')}>
       {r.PMID}
     </PMCLink>
   </li>
