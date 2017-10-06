@@ -41,11 +41,6 @@ main {
   border-right-width: 0;
 }
 
-/*remove floating as we are using display: table */
-.masthead nav ul.menu li {
-  float: none;
-}
-
 /*remove top-right button - temp while EBI fixing the hscrollbar issue*/
 @media screen and (max-width: 53em) {
   .embl-selector .button {
