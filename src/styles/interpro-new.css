@@ -1,5 +1,5 @@
 @import '../styles/colors.css';
-/******************************Override EBI  global***************************/
+/******************************Override EBI global***************************/
 /*to include more systems fonts for windows machines*/
 h1,
 h2,
@@ -11,7 +11,13 @@ h6 {
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
     sans-serif;
 }
-
+/*resize h5 should be included in template*/
+@media screen and (max-width: 75rem) {
+  body h5 {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}
 /*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
 a,
 a:visited {
