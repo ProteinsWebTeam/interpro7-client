@@ -52,7 +52,7 @@ const LiteratureItem = (
       <SchemaOrgData data={r} processData={schemaProcessData} />
       {included && (
         <span className={f('index')}>
-          <Link href={`#${i}`} aria-label="jump up">
+          <Link href={`#` + i} aria-label="jump up">
             {i}.^
           </Link>{' '}
         </span>
