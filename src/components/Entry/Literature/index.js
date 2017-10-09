@@ -50,13 +50,14 @@ const LiteratureItem = (
   <li className={f('reference', 'small')} id={included ? pubID : null}>
     <p className={f('cite')}>
       <SchemaOrgData data={r} processData={schemaProcessData} />
-      {included && (
-        <span className={f('index')}>
-          <Link href={`#` + i} aria-label="jump up">
-            {i}.^
-          </Link>{' '}
-        </span>
-      )}
+      {included &&
+        typeof i !== 'undefined' && (
+          <span className={f('index')}>
+            <Link href={`#${i}`} aria-label="jump up">
+              {i}.^
+            </Link>{' '}
+          </span>
+        )}
       <span className={f('authors')}>{r.authors}</span>{' '}
       <span className={f('title')}>{r.title}</span>
       {r.ISOJournal && <span className={f('journal')}>{r.ISOJournal}, </span>}
@@ -64,8 +65,8 @@ const LiteratureItem = (
       <span className={f('year')}>({r.year})</span>.{' '}
       {r.rawPages && <span className={f('pages')}>{r.rawPages}. </span>}
       {
-        //not used anywhere on Europe PMC website not even to link to PMCID:PMC
-        //<span className={f('reference_id')}>{pubID}.</span>
+        // not used anywhere on Europe PMC website not even to link to PMCID:PMC
+        // <span className={f('reference_id')}>{pubID}.</span>
       }
       <br />
       {r.DOI_URL && (
