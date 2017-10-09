@@ -33,13 +33,6 @@
 .reference a:not([href*='localhost']) {
   white-space: nowrap;
 }
-.ext::before {
-  font-family: 'EBI-Generic';
-  content: 'x';
-  font-size: 80%;
-  margin: 0 0.1rem 0 0;
-  /*content: ' \21AA ';*/
-}
 
 .list {
   list-style: none;
