@@ -13,7 +13,9 @@ const f = foundationPartial(local, ebiStyles);
 
 const ReferenceItem = ({ url, accession }) => (
   <li>
-    <Link href={url}>{accession}</Link>
+    <Link href={url} className={f('ext')}>
+      {accession}
+    </Link>
   </li>
 );
 ReferenceItem.propTypes = {
