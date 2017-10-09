@@ -48,35 +48,37 @@ const LiteratureItem = (
   } /*: {pubID: string, reference: Object, i?: number, included?: boolean} */,
 ) => (
   <li className={f('reference', 'small')} id={included ? pubID : null}>
-    <SchemaOrgData data={r} processData={schemaProcessData} />
-    {included && (
-      <span className={f('index')}>
-        <Link href="#root" aria-label="jump up">
-          {i}.^
-        </Link>{' '}
-      </span>
-    )}
-    <span className={f('authors')}>{r.authors}</span>{' '}
-    <span className={f('title')}>{r.title}</span>
-    {r.ISOJournal && <span className={f('journal')}>{r.ISOJournal}, </span>}
-    {r.issue && <span className={f('issue')}> {r.issue}, </span>}
-    <span className={f('year')}>({r.year})</span>.{' '}
-    {r.rawPages && <span className={f('pages')}>{r.rawPages}. </span>}
-    {
-      //not used anywhere on Europe PMC website not even to link to PMCID:PMC
-      //<span className={f('reference_id')}>{pubID}.</span>
-    }
-    <br />
-    {r.DOI_URL && (
-      <DOILink id={r.DOI_URL} className={f('ext')}>
-        View article
-      </DOILink>
-    )}
-    {r.DOI_URL && <span> | </span>}
-    PMID:{' '}
-    <PMCLink id={r.PMID} className={f('ext')}>
-      {r.PMID}
-    </PMCLink>
+    <p className={f('cite')}>
+      <SchemaOrgData data={r} processData={schemaProcessData} />
+      {included && (
+        <span className={f('index')}>
+          <Link href={`#${i}`} aria-label="jump up">
+            {i}.^
+          </Link>{' '}
+        </span>
+      )}
+      <span className={f('authors')}>{r.authors}</span>{' '}
+      <span className={f('title')}>{r.title}</span>
+      {r.ISOJournal && <span className={f('journal')}>{r.ISOJournal}, </span>}
+      {r.issue && <span className={f('issue')}> {r.issue}, </span>}
+      <span className={f('year')}>({r.year})</span>.{' '}
+      {r.rawPages && <span className={f('pages')}>{r.rawPages}. </span>}
+      {
+        //not used anywhere on Europe PMC website not even to link to PMCID:PMC
+        //<span className={f('reference_id')}>{pubID}.</span>
+      }
+      <br />
+      {r.DOI_URL && (
+        <DOILink id={r.DOI_URL} className={f('ext')}>
+          View article
+        </DOILink>
+      )}
+      {r.DOI_URL && <span> | </span>}
+      PMID:{' '}
+      <PMCLink id={r.PMID} className={f('ext')}>
+        {r.PMID}
+      </PMCLink>
+    </p>
   </li>
 );
 LiteratureItem.propTypes = {
@@ -98,7 +100,7 @@ const Literature = (
   );
   return (
     <div className={f('row')}>
-      <div className={f('large-12', 'columns')}>
+      <div className={f('large-12', 'columns', 'margin-bottom-large')}>
         {included.length ? <h5>Used in this entry</h5> : null}
         {included.length ? (
           <AnimatedEntry className={f('list')} itemDelay={100} duration={500}>
