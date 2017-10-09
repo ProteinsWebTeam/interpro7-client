@@ -68,15 +68,14 @@ const LiteratureItem = (
         // not used anywhere on Europe PMC website not even to link to PMCID:PMC
         // <span className={f('reference_id')}>{pubID}.</span>
       }
-      <br />
       {r.DOI_URL && (
-        <DOILink id={r.DOI_URL} className={f('ext')}>
+        <DOILink id={r.DOI_URL} className={f('ext', 'margin-right-medium')}>
           View article
         </DOILink>
       )}
-      {r.DOI_URL && <span> | </span>}
+      {r.DOI_URL && <span> </span>}
       PMID:{' '}
-      <PMCLink id={r.PMID} className={f('ext')}>
+      <PMCLink id={r.PMID} className={f('ext', 'margin-right-medium')}>
         {r.PMID}
       </PMCLink>
     </p>
