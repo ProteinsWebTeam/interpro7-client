@@ -469,12 +469,13 @@ ul.chevron {
 ul.chevron > li:before {
   content: '';
   display: inline-block;
-  height: 1em;
+  height: 0.8em;
+  background-size: contain;
+  background-position: center;
   background-image: url(../images/chevron.svg);
   background-repeat: no-repeat;
   padding-left: 1em;
   position: relative;
-  top: 3px;
 }
 /****************************** END RIGHT PANEL *****************************/
 
