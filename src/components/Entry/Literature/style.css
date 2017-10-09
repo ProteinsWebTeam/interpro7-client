@@ -1,9 +1,10 @@
 @import '../../../styles/colors.css';
+@import '../../../styles/timing.css';
 
 .reference {
-  padding-top: 1em;
-  text-indent: -1em;
-  padding-left: 1em;
+  padding-top: 0.2rem;
+  text-indent: -1.6em;
+  padding-left: 1.3rem;
 }
 
 .reference span.title {
@@ -13,9 +14,15 @@
   padding-left: 0em;
   color: #9da0a4;
 }
+
+.reference:target .cite {
+  background-color: #fbf8da;
+  transition: background-color var(--timing-slow) ease-in-out;
+}
+
 .reference:target span.index {
   font-weight: bold;
-  color: rgb(65, 100, 125);
+  font-size: 110%;
 }
 
 .reference a:not([href*='localhost']) {
@@ -25,15 +32,15 @@
   font-family: 'EBI-Generic';
   content: 'x';
   font-size: 80%;
-  margin-right: 0.2rem;
+  margin: 0 0.1rem;
   /*content: ' \21AA ';*/
 }
 
 .list {
   list-style: none;
-  margin: 0;
+  margin: 0 0 1rem 0;
   padding: 0;
-  columns: 23em;
+  columns: 19em;
   column-gap: 2rem;
 
   @nest & > * {
