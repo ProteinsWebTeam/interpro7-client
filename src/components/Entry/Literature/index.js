@@ -117,7 +117,11 @@ const Literature = (
         ) : null}
         {extra.length ? <h5>Further reading</h5> : null}
         {extra.length ? (
-          <AnimatedEntry className={f('list')} itemDelay={100} duration={500}>
+          <AnimatedEntry
+            className={f('list', 'further')}
+            itemDelay={100}
+            duration={500}
+          >
             {extra.map(([pubID, ref]) => (
               <LiteratureItem pubID={pubID} key={pubID} reference={ref} />
             ))}
