@@ -110,7 +110,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'entries',
+      name: 'Entries',
       counter: 'entries',
     },
   ],
@@ -129,7 +129,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'proteins',
+      name: 'Proteins',
       counter: 'proteins',
     },
   ],
@@ -148,7 +148,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'structures',
+      name: 'Structures',
       counter: 'structures',
     },
   ],
@@ -167,7 +167,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'organisms',
+      name: 'Organisms',
       counter: 'organisms',
     },
   ],
