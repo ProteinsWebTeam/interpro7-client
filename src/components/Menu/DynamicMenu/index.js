@@ -92,8 +92,8 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
           </li>
         ))}
         <ul
-          ref={node => (this._moreButton = node)}
           className={f('menu-item', 'more', { visible: hiddenItems.length })}
+          role="tree"
           tabIndex="0"
         >
           …
