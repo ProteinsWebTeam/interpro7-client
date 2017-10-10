@@ -4,8 +4,11 @@ import Link from 'components/generic/Link';
 
 import loadable from 'higherOrder/loadable';
 
-import styles from 'styles/blocks.css';
+import { foundationPartial } from 'styles/foundation';
+
 import ipro from 'styles/interpro-new.css';
+
+const f = foundationPartial(ipro);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -21,9 +24,9 @@ const schemaProcessData = data => ({
 });
 
 const Integration = ({ intr }) => (
-  <div className={styles.card} style={{ flex: '0 0 auto' }}>
+  <div>
     <h5>Integrated to</h5>
-    <ul className={ipro.chevron}>
+    <ul className={f('chevron')}>
       <li>
         <SchemaOrgData data={intr} processData={schemaProcessData} />
         <Link
