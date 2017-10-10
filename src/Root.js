@@ -91,8 +91,10 @@ const Root = () => [
   <EMBLDropdownAsync key="embl-dropdown" />,
   <SideMenuAsync key="side-menu" />,
   <EbiSkipToDiv key="ebi-skip-to-div" />,
-  <EBIHeader key="ebi-header" />,
-  <Header key="header" stickyMenuOffset={STICKY_MENU_OFFSET} />,
+  <header key="header">
+    <EBIHeader key="ebi-header" />
+    <Header key="header" stickyMenuOffset={STICKY_MENU_OFFSET} />
+  </header>,
   <Sentinel key="sentinel" top={STICKY_MENU_OFFSET} />,
   // <Breadcrumb key="breadcrumb" stickyMenuOffset={STICKY_MENU_OFFSET} />,
   <Pages key="pages" top={STICKY_MENU_OFFSET} />,

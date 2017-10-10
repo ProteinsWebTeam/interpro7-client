@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<EBIHeader /> should render 1`] = `
-<header
+<div
   className="clearfix masthead-black-bar"
   id="masthead-black-bar"
 >
@@ -84,5 +84,5 @@ exports[`<EBIHeader /> should render 1`] = `
       </li>
     </ul>
   </nav>
-</header>
+</div>
 `;
