@@ -6,8 +6,11 @@ import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadable from 'higherOrder/loadable';
 
-import styles from 'styles/blocks.css';
+import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
+import local from './style.css';
+
+const f = foundationPartial(ipro, local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -23,22 +26,23 @@ const schemaProcessData = data => ({
 });
 
 const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
-  <div className={styles.card} style={{ flex: '0 0 auto' }}>
-    <h5>Contributing signatures:</h5>
-    <AnimatedEntry className={ipro.chevron}>
+  <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
+    <h5>Contributing signatures</h5>
+
+    <div className={f('table-chevron')}>
       {Object.entries(contr).map(([db, accessions]) => (
-        <li key={db}>
-          <Link newTo={{ description: { mainType: 'entry', mainDB: db } }}>
-            {db}
-          </Link>:
-          <ul>
-            {accessions.map(accession => (
-              <li key={accession}>
-                <SchemaOrgData
-                  data={{ db, name: accession }}
-                  processData={schemaProcessData}
-                />
+        <div key={db} className={f('sign-row')}>
+          <span className={f('sign-cell')}>{db}</span>
+
+          {accessions.map(accession => (
+            <span key={accession} className={f('sign-cell')}>
+              <SchemaOrgData
+                data={{ db, name: accession }}
+                processData={schemaProcessData}
+              />
+              <span className={f('sign-label')}>
                 <Link
+                  className={f('neutral')}
                   newTo={{
                     description: {
                       mainType: 'entry',
@@ -49,12 +53,12 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
                 >
                   {accession}
                 </Link>
-              </li>
-            ))}
-          </ul>
-        </li>
+              </span>
+            </span>
+          ))}
+        </div>
       ))}
-    </AnimatedEntry>
+    </div>
   </div>
 );
 ContributingSignatures.propTypes = {
