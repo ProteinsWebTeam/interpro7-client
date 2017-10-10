@@ -440,12 +440,12 @@ h6 small {
 
 /****************************** RIGHT PANEL *********************************/
 main a.neutral {
-  color: #222;
+  color: #4b555b;
   padding-left: 3px;
 } /*neutral link same as font-color*/
 
 main a.neutral:hover {
-  color: #222;
+  color: #4b555b;
   border-bottom: 1px #222 solid;
 }
 .panel a span {
