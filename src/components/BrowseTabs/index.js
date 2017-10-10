@@ -55,7 +55,8 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
         activeClass={f('is-active', 'is-active-tab')}
         disabled={value !== null && !value}
       >
-        {name} &nbsp;
+        {name}
+        {value !== null && ' '}
         {value !== null && (
           <NumberLabel value={value} className={f('counter')} />
         )}
