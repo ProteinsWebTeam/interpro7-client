@@ -4,15 +4,20 @@ import T from 'prop-types';
 
 import { UniProtLink } from 'components/ExtLink';
 
+import { foundationPartial } from 'styles/foundation';
+
+import ipro from 'styles/interpro-new.css';
+const f = foundationPartial(ipro);
+
 const Accession = (
   {
     metadata: { accession, id },
-  } /*: {metadata: {accession: string | number, id: ?string}} */
+  } /*: {metadata: {accession: string | number, id: ?string}} */,
 ) => (
-  <div>
-    Accession: <UniProtLink id={accession} />
+  <span>
+    Accession: <UniProtLink id={accession} className={f('ext')} />
     {id && ` (${id})`}
-  </div>
+  </span>
 );
 
 Accession.propTypes = {
