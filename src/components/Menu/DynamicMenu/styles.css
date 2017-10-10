@@ -31,9 +31,6 @@
   & .menu-item {
     background: var(--colors-main);
     list-style: none;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--timing-fast) ease-in-out;
   }
 
   & a {

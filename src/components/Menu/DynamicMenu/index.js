@@ -98,11 +98,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
         >
           …
           {hiddenItems.map(({ newTo, name, activeClass }) => (
-            <li
-              key={name}
-              data-name={name}
-              className={f('menu-item', 'visible')}
-            >
+            <li key={name} className={f('menu-item')}>
               <MenuItem newTo={newTo} activeClass={activeClass}>
                 {name}
               </MenuItem>
