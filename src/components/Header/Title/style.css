@@ -10,31 +10,37 @@
   }
 }
 
-@keyframes flashing {
-  from {
-    fill-opacity: 1;
-  }
-
-  to {
-    fill-opacity: 0.5;
-  }
-}
-
 @keyframes moving {
   0% {
     transform: translateX(0);
   }
 
+  20% {
+    transform: translateX(33%);
+  }
+
   25% {
-    transform: translateX(25%);
+    transform: translateX(35%);
+  }
+
+  30% {
+    transform: translateX(33%);
   }
 
   50% {
     transform: translateX(0);
   }
 
+  70% {
+    transform: translateX(-33%);
+  }
+
   75% {
-    transform: translateX(-25%);
+    transform: translateX(-35%);
+  }
+
+  80% {
+    transform: translateX(-33%);
   }
 
   100% {
@@ -58,14 +64,7 @@
   animation-direction: normal;
   animation-name: moving;
 }
-/*.domain.loading {*/
-/*animation-duration: var(--timing-slow), var(--timing-really-slow);*/
-/*animation-timing-function: ease-in-out, linear;*/
-/*animation-delay: 0s, var(--timing-slow);*/
-/*animation-iteration-count: infinite;*/
-/*animation-direction: alternate, normal;*/
-/*animation-name: flashing, moving;*/
-/*}*/
+
 .subtitle {
   font-weight: 300;
   opacity: 1;
