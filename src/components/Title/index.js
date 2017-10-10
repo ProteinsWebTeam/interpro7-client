@@ -67,9 +67,13 @@ export default class Title extends PureComponent /*:: <Props> */ {
         </Helmet>
         <h3>
           {metadata.name.name}{' '}
-          <small className={f(mapNameToClass.get(metadata.type))}>
-            {metadata.accession}
-          </small>
+          {isEntry ? (
+            <small className={f(mapNameToClass.get(metadata.type))}>
+              {metadata.accession}
+            </small>
+          ) : (
+            <small className={f('title-id-other')}>{metadata.accession}</small>
+          )}
         </h3>
         {isEntry &&
           metadata.source_database.toLowerCase() !== 'interpro' && (
