@@ -66,7 +66,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
           <title>{metadata.accession.toString()}</title>
         </Helmet>
         <h3>
-          {metadata.name.name}
+          {metadata.name.name}{' '}
           <small className={f(mapNameToClass.get(metadata.type))}>
             {metadata.accession}
           </small>
