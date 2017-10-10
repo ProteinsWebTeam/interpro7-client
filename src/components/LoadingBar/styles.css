@@ -9,7 +9,7 @@
   z-index: 100;
   width: 100%;
   height: var(--spacing-small);
-  background-color: var(--color-progress);
+  background-color: var(--colors-loading-bar);
   pointer-events: none;
   transform: scaleX(0);
   opacity: 1;

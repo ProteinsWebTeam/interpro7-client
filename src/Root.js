@@ -7,6 +7,7 @@ import { schedule } from 'timing-functions/src';
 // Global stylesheets loaded here
 import 'styles/foundation';
 import 'ebi-framework/css/ebi-global.scss';
+import 'styles/global.css';
 // import 'styles/theme-interpro.css';
 import 'styles/interpro-new.css';
 
@@ -30,7 +31,7 @@ const NullComponent = () => null;
 const LoadingBarAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "loading-bar" */ 'components/LoadingBar')
+      import(/* webpackChunkName: "loading-bar" */ 'components/LoadingBar'),
     ),
   loading: NullComponent,
 });
@@ -38,7 +39,7 @@ const LoadingBarAsync = loadable({
 const SideMenuAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "side-menu" */ 'components/Menu/SideMenu')
+      import(/* webpackChunkName: "side-menu" */ 'components/Menu/SideMenu'),
     ),
   loading: NullComponent,
 });
@@ -46,7 +47,7 @@ const SideMenuAsync = loadable({
 const EMBLDropdownAsync = loadable({
   loader: () =>
     schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "cookie-banner" */ 'components/EMBLDropdown')
+      import(/* webpackChunkName: "cookie-banner" */ 'components/EMBLDropdown'),
     ),
   loading: NullComponent,
 });
@@ -54,7 +55,7 @@ const EMBLDropdownAsync = loadable({
 const EBIFooterAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "ebi-footer" */ 'components/EBIFooter')
+      import(/* webpackChunkName: "ebi-footer" */ 'components/EBIFooter'),
     ),
   loading: NullComponent,
 });
@@ -62,7 +63,7 @@ const EBIFooterAsync = loadable({
 const ToastDisplayAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "toast-display" */ 'components/Toast/ToastDisplay')
+      import(/* webpackChunkName: "toast-display" */ 'components/Toast/ToastDisplay'),
     ),
   loading: NullComponent,
 });
@@ -83,23 +84,23 @@ const CookieFooterAsync = loadable({
   loading: NullComponent,
 });
 
-const Root = () => (
-  <div>
-    <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
-    <LoadingBarAsync />
-    <Overlay />
-    <EMBLDropdownAsync />
-    <SideMenuAsync />
-    <EbiSkipToDiv />
-    <EBIHeader />
-    <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
-    <Sentinel top={STICKY_MENU_OFFSET} />
-    {/* <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} /> */}
-    <Pages top={STICKY_MENU_OFFSET} />
-    <EBIFooterAsync />
-    <ToastDisplayAsync />
-    <CookieFooterAsync />
-  </div>
-);
+const Root = () => [
+  <Helmet key="helmet" titleTemplate="%s - InterPro" defaultTitle="InterPro" />,
+  <LoadingBarAsync key="loading-bar" />,
+  <Overlay key="overlay" />,
+  <EMBLDropdownAsync key="embl-dropdown" />,
+  <SideMenuAsync key="side-menu" />,
+  <EbiSkipToDiv key="ebi-skip-to-div" />,
+  <header key="header">
+    <EBIHeader key="ebi-header" />
+    <Header key="header" stickyMenuOffset={STICKY_MENU_OFFSET} />
+  </header>,
+  <Sentinel key="sentinel" top={STICKY_MENU_OFFSET} />,
+  // <Breadcrumb key="breadcrumb" stickyMenuOffset={STICKY_MENU_OFFSET} />,
+  <Pages key="pages" top={STICKY_MENU_OFFSET} />,
+  <EBIFooterAsync key="ebi-footer" />,
+  <ToastDisplayAsync key="toast-display" />,
+  <CookieFooterAsync key="cookie-footer" />,
+];
 
 export default Root;

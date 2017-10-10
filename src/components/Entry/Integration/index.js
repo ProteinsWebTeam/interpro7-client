@@ -13,10 +13,13 @@ const SchemaOrgData = loadable({
 });
 
 const schemaProcessData = data => ({
-  '@type': 'PhysicalEntity',
+  '@type': ['BioChemEntity', 'CreativeWork'],
   '@id': '@isBasisFor',
-  additionalType: '???ProteinAnnotation???',
-  inDataset: 'InterPro',
+  additionalType: 'http://semanticscience.org/resource/SIO_000370.rdf',
+  isPartOf: {
+    '@type': 'Dataset',
+    '@id': 'InterPro release ??',
+  },
   name: data,
 });
 
@@ -30,7 +33,7 @@ const Integration = ({ intr }) => (
           newTo={{
             description: {
               mainType: 'entry',
-              mainDB: 'interPro',
+              mainDB: 'InterPro',
               mainAccession: intr,
             },
           }}

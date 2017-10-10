@@ -4,7 +4,9 @@ import T from 'prop-types';
 
 import MenuItem from 'components/Menu/MenuItem';
 
-import { InterProMin } from 'menuConfig';
+import { schedule } from 'timing-functions/src';
+
+import { InterPro } from 'menuConfig';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -21,6 +23,10 @@ const f = foundationPartial(fonts, interproStyles, styles);
 /*:: type State = {
   [key: string]: boolean,
 }; */
+
+const MAX_DELAY_BEFORE_CHECKING_FIT = 500; // ms
+
+const InterProMin = InterPro.filter(item => item.name !== 'Settings');
 
 class DynamicMenu extends PureComponent /*:: <Props, State> */ {
   /*:: _menuItems: Set<HTMLElement>; */
@@ -41,8 +47,17 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
     }
   }
 
+  componentDidMount() {
+    this._checkSizes(this.props.width);
+  }
+
   componentDidUpdate() {
-    let remainingWidth = this.props.width;
+    this._checkSizes(this.props.width);
+  }
+
+  _checkSizes = async (width /*: number */) => {
+    await schedule(MAX_DELAY_BEFORE_CHECKING_FIT);
+    let remainingWidth = width;
     for (const menuItem of this._menuItems) {
       if (remainingWidth > 0) {
         const { width } = menuItem.getBoundingClientRect();
@@ -54,13 +69,14 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
         this.setState({ [menuItem.dataset.name]: false });
       }
     }
-  }
+  };
 
   _setMenuItemInMap = node => {
     if (node instanceof HTMLElement) this._menuItems.add(node);
   };
 
   render() {
+    const hiddenItems = InterProMin.filter(({ name }) => !this.state[name]);
     return (
       <ul className={f('menu')}>
         {InterProMin.map(({ newTo, name, activeClass }) => (
@@ -75,6 +91,20 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
             </MenuItem>
           </li>
         ))}
+        <ul
+          className={f('menu-item', 'more', { visible: hiddenItems.length })}
+          role="tree"
+          tabIndex="0"
+        >
+          …
+          {hiddenItems.map(({ newTo, name, activeClass }) => (
+            <li key={name} className={f('menu-item')}>
+              <MenuItem newTo={newTo} activeClass={activeClass}>
+                {name}
+              </MenuItem>
+            </li>
+          ))}
+        </ul>
       </ul>
     );
   }
