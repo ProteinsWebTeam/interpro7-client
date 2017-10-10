@@ -33,7 +33,7 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
         .replace(whiteSpaces, '')
         .match(chunkOfTen) || [];
     return (
-      <div className={f('sequence', 'row')}>
+      <div className={f('raw-sqs-viewer', 'row')}>
         {sequenceWords.map((e, i) => (
           <span key={i} className={f('sequence_word')} style={{ zIndex: -i }}>
             {e}
@@ -111,14 +111,14 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
         </div>
         <div className={f('row')}>
           <div
-            className={f('large-10', 'columns')}
+            className={f('medium-10', 'columns', 'margin-bottom-large')}
             ref={node => (this._node = node)}
           >
             <Inner sequence={sequence} />
           </div>
-          <div className={f('large-2', 'columns')}>
+          <div className={f('medium-2', 'columns')}>
             <Link
-              className={f('button', 'hollow', 'link', 'row')}
+              className={f('button', 'primary', 'sqs-link')}
               newTo={{
                 description: {
                   mainType: 'search',
@@ -135,7 +135,7 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
               <span>Search selection with InterProScan</span>
             </Link>
             <Link
-              className={f('button', 'hollow', 'link', 'row')}
+              className={f('button', 'hollow', 'primary', 'sqs-link')}
               href="https://www.ebi.ac.uk/Tools/hmmer/search/phmmer"
               onClick={this._handleHmmerClick}
               target="_blank"
