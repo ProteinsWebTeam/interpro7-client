@@ -21,6 +21,7 @@ const f = foundationPartial(styles);
 /*:: type CounterProps = {
   newTo: Object | function,
   name: string,
+  counter: string,
   data: {
     loading: boolean,
     payload?: ?Object,
@@ -31,6 +32,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
   static propTypes = {
     newTo: T.oneOfType([T.object, T.func]).isRequired,
     name: T.string.isRequired,
+    counter: T.string.isRequired,
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.any,
@@ -38,16 +40,16 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
   };
 
   render() {
-    const { newTo, name, data: { loading, payload } } = this.props;
+    const { newTo, name, counter, data: { loading, payload } } = this.props;
     let value = null;
     if (
       !loading &&
       (payload &&
         payload.metadata &&
         payload.metadata.counters &&
-        Number.isFinite(payload.metadata.counters[name]))
+        Number.isFinite(payload.metadata.counters[counter]))
     ) {
-      value = payload.metadata.counters[name];
+      value = payload.metadata.counters[counter];
     }
     return (
       <Link
@@ -102,7 +104,12 @@ class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
           <ul className={f('tabs')}>
             {tabs.map(e => (
               <li className={f('tabs-title')} key={e.name}>
-                <Counter newTo={e.newTo} name={e.name} data={data} />
+                <Counter
+                  newTo={e.newTo}
+                  name={e.name}
+                  counter={e.counter}
+                  data={data}
+                />
               </li>
             ))}
           </ul>
