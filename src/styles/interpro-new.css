@@ -439,12 +439,14 @@ h6 small {
 /*/Overwritting Foundation*/
 
 /****************************** RIGHT PANEL *********************************/
-.panel a {
-  color: #4c4c4c;
+main a.neutral {
+  color: #222;
   padding-left: 3px;
 } /*neutral link same as font-color*/
-.panel a:hover {
-  color: #4c4c4c;
+
+main a.neutral:hover {
+  color: #222;
+  border-bottom: 1px #222 solid;
 }
 .panel a span {
   color: #bbb;
