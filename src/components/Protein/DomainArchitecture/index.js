@@ -126,18 +126,23 @@ class DomainArchitecture extends Component {
   render() {
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
-        <div className={f('buttons')}>
-          <button onClick={this.handleCollapse}>Collapse All</button>
-          &nbsp;|&nbsp;
-          <button onClick={this.handleExpand}>Expand All</button>
-          &nbsp;|&nbsp;
-          <button
-            onClick={this.handleFullScreen}
-            data-icon="F"
-            className={f('fullscreen', 'icon', 'icon-functional')}
-          />
+        <div className={f('row')}>
+          <div className={f('columns')}>
+            <div className={f('buttons')}>
+              <button onClick={this.handleCollapse}>Collapse All</button>
+              &nbsp;|&nbsp;
+              <button onClick={this.handleExpand}>Expand All</button>
+              &nbsp;|&nbsp;
+              <button
+                onClick={this.handleFullScreen}
+                data-icon="F"
+                title="Full screen"
+                className={f('fullscreen', 'icon', 'icon-functional')}
+              />
+            </div>
+          </div>
         </div>
-        <div ref={e => (this._container = e)} />
+        <div ref={e => (this._container = e)} className={f('row')} />
         <div ref={e => (this._popper = e)} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
         </div>
