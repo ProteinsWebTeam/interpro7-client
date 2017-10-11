@@ -1,13 +1,13 @@
 // @flow
 import fetch from 'isomorphic-fetch';
 
-import { pkg } from 'config';
+import config, { pkg } from 'config';
 
 const SUCCESS_STATUS = 200;
 
 const handleProgress = async (
   response /*: Response */,
-  onProgress /*: (number) => void */
+  onProgress /*: (number) => void */,
 ) => {
   const total = +response.headers.get('Content-Length');
   let received = 0;
@@ -26,7 +26,7 @@ const handleProgress = async (
 };
 
 const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
-  const { useCache, ...restOfOptions } = options;
+  const { useCache = true, ...restOfOptions } = options;
   const key = `${pkg.name}-cachedFetch-${url}`;
   const cached = sessionStorage.getItem(key);
 
@@ -35,7 +35,9 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
   }
 
   return fetch(url, restOfOptions).then(response => {
-    if (useCache && response.status === SUCCESS_STATUS) {
+    const shouldCache =
+      config.cache.enabled && useCache && response.status === SUCCESS_STATUS;
+    if (shouldCache) {
       response
         .clone()
         .text()
@@ -48,7 +50,7 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
 const commonCachedFetch = (responseType /*: ?string */) => async (
   url /*: string */,
   options /*: Object */,
-  onProgress /*: (number) => void */
+  onProgress /*: (number) => void */,
 ) => {
   // Casting to object to avoid flow error
   const response /*: Object */ = await cachedFetch(url, options);
