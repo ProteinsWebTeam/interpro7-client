@@ -78,7 +78,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     const { data: { metadata } } = this.props;
     return (
       <div className={f('row')}>
-        <div className={f('medium-8', 'large-8', 'columns')}>
+        <div className={f('medium-10', 'columns')}>
           <Title metadata={metadata} mainType={'organism'} />
           <Accession metadata={metadata} />
           {metadata.rank && <div>Rank: {metadata.rank}</div>}
@@ -98,10 +98,10 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
             <div ref={node => (this._focus = node)} style={{ height: '5em' }} />
           </div>
         </div>
-        <div className={f('medium-4', 'large-4', 'columns')}>
+        <div className={f('medium-2', 'columns')}>
           <div className={f('panel')}>
             <h5>External Links</h5>
-            <ul className={f('chevron')}>
+            <ul className={f('no-bullet')}>
               <li>
                 <TaxLink id={metadata.accession}>
                   <img src={enaLogo} alt="ENA" />
@@ -126,12 +126,16 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     const { data: { metadata } } = this.props;
     return (
       <div className={f('row')}>
-        <div className={f('medium-8', 'large-8', 'columns')}>
+        <div className={f('medium-10', 'columns')}>
           <Title metadata={metadata} mainType={'organism'} />
           {metadata.is_reference ? (
-            <div className={f('tag')}>Reference Proteome</div>
+            <div className={f('tag', 'margin-bottom-medium')}>
+              Reference Proteome
+            </div>
           ) : null}
-          <Accession metadata={metadata} />
+          <div>
+            <Accession metadata={metadata} />
+          </div>
           <div>Strain: {metadata.strain}</div>
           <div>
             Taxonomy:{' '}
@@ -145,10 +149,10 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             </Metadata>
           </div>
         </div>
-        <div className={f('medium-4', 'large-4', 'columns')}>
+        <div className={f('medium-2', 'columns')}>
           <div className={f('panel')}>
             <h5>External Links</h5>
-            <ul className={f('chevron')}>
+            <ul className={f('no-bullet')}>
               <li>
                 <ProteomeLink id={metadata.accession}>
                   <img src={uniprotLogo} alt="Uniprot" />
