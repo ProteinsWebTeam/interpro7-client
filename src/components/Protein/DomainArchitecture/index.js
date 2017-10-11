@@ -9,11 +9,12 @@ import { goToNewLocation } from 'actions/creators';
 
 import EntryComponent from './entry_component';
 
-import classname from 'classnames/bind';
+import { foundationPartial } from 'styles/foundation';
 
-import styles from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
 
-const s = classname.bind(styles);
+const f = foundationPartial(local, fonts);
 
 const requestFullScreen = element => {
   if ('requestFullscreen' in element) {
@@ -124,19 +125,26 @@ class DomainArchitecture extends Component {
 
   render() {
     return (
-      <div ref={e => (this._main = e)} className={s('fullscreenable')}>
-        <div className={s('buttons')}>
-          <button onClick={this.handleCollapse}>Collapse All</button>
-          &nbsp;|&nbsp;
-          <button onClick={this.handleExpand}>Expand All</button>
-          &nbsp;|&nbsp;
-          <button onClick={this.handleFullScreen} className={s('fullscreen')}>
-            ⇧
-          </button>
+      <div ref={e => (this._main = e)} className={f('fullscreenable')}>
+        <div className={f('row')}>
+          <div className={f('columns')}>
+            <div className={f('buttons')}>
+              <button onClick={this.handleCollapse}>Collapse All</button>
+              &nbsp;|&nbsp;
+              <button onClick={this.handleExpand}>Expand All</button>
+              &nbsp;|&nbsp;
+              <button
+                onClick={this.handleFullScreen}
+                data-icon="F"
+                title="Full screen"
+                className={f('fullscreen', 'icon', 'icon-functional')}
+              />
+            </div>
+          </div>
         </div>
-        <div ref={e => (this._container = e)} />
-        <div ref={e => (this._popper = e)} className={s('popper', 'hide')}>
-          <div className={s('popper__arrow')} />
+        <div ref={e => (this._container = e)} className={f('row')} />
+        <div ref={e => (this._popper = e)} className={f('popper', 'hide')}>
+          <div className={f('popper__arrow')} />
         </div>
       </div>
     );
@@ -145,9 +153,9 @@ class DomainArchitecture extends Component {
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  DomainArchitecture
+  DomainArchitecture,
 );

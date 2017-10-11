@@ -290,6 +290,11 @@ class Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
+      payload: T.shape({
+        metadata: T.shape({
+          accession: T.string.isRequired,
+        }).isRequired,
+      }),
     }).isRequired,
   };
 

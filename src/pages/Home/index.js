@@ -40,7 +40,7 @@ const SearchByText = loadable({
 });
 const IPScanSearch = loadable({
   loader: () =>
-    import(/* webpackChunkName: "ipscan-search" */ 'components/IPScanSearch'),
+    import(/* webpackChunkName: "ipscan-search" */ 'components/IPScan/Search'),
 });
 // Browse by X box
 const ByMemberDatabase = loadable({

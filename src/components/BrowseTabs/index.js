@@ -25,6 +25,7 @@ const singleEntityNames = new Map(
 /*:: type CounterProps = {
   newTo: Object | function,
   name: string,
+  counter: string,
   data: {
     loading: boolean,
     payload?: ?Object,
@@ -36,6 +37,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
   static propTypes = {
     newTo: T.oneOfType([T.object, T.func]).isRequired,
     name: T.string.isRequired,
+    counter: T.string.isRequired,
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.any,
@@ -47,6 +49,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
     const {
       newTo,
       name,
+      counter,
       data: { loading, payload },
       isFirstLevel,
     } = this.props;
@@ -54,11 +57,10 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
     if (!loading && payload && payload.metadata) {
       if (
         payload.metadata.counters &&
-        Number.isFinite(payload.metadata.counters[name])
+        Number.isFinite(payload.metadata.counters[counter])
       ) {
-        value = payload.metadata.counters[name];
-      }
-      // Enabling the menuitems that appear in the entry_annotations array.
+        value = payload.metadata.counters[counter];
+      } // Enabling the menuitems that appear in the entry_annotations array.
       // i.e. only neble the menu item if there is info for it
       if (
         payload.metadata.entry_annotations &&
@@ -68,9 +70,9 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
       ) {
         value = NaN;
       }
-      // TODO: find a generic way to deal with this:
-      if (name === 'Overview' || name === 'Domain Architectures') value = NaN;
     }
+    // TODO: find a generic way to deal with this:
+    if (name === 'Overview' || name === 'Domain Architectures') value = NaN;
 
     return (
       <Link
@@ -131,6 +133,7 @@ class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
                   newTo={e.newTo}
                   name={e.name}
                   data={data}
+                  counter={e.counter}
                   isFirstLevel={!mainAccession}
                 />
               </li>

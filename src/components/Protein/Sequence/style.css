@@ -2,13 +2,17 @@
 @import '../../../styles/colors.css';
 @import '../../../styles/timing.css';
 
-.sequence {
+.raw-sqs-viewer {
   font-family: var(--fonts-mono-alt);
   font-size: 0.8em;
   padding-left: 8ch;
-  width: calc(100% - 8ch);
+  width: calc(100% - 4ch);
   color: black;
   counter-reset: sequence -10;
+  max-height: 210px;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .sequence_word {
@@ -21,24 +25,22 @@
   counter-increment: sequence 10;
   content: counter(sequence);
   user-select: none;
-  color: var(--colors-main);
+  color: var(--colors-lightgray);
   position: absolute;
-  left: -4em;
+  left: -3.8em;
 }
 
-.link {
-  display: block;
+.sqs-link {
   position: relative;
   overflow: hidden;
-  transform: translateX(-1em); /* TODO: find a way to not need this */
 
   & > span {
     position: relative;
   }
 }
 
-.link:hover,
-.link:focus {
+.sqs-link:hover,
+.sqs-link:focus {
   & > .shape {
     transform: translate(0, 0) rotate(0) !important;
     opacity: 0.4;

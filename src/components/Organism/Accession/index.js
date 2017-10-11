@@ -2,22 +2,17 @@
 import React from 'react';
 import T from 'prop-types';
 
-import { UniProtLink } from 'components/ExtLink';
-
-import { foundationPartial } from 'styles/foundation';
-
-import ipro from 'styles/interpro-new.css';
-const f = foundationPartial(ipro);
+import { TaxLink } from 'components/ExtLink';
 
 const Accession = (
   {
     metadata: { accession, id },
   } /*: {metadata: {accession: string | number, id: ?string}} */,
 ) => (
-  <span>
-    Accession: <UniProtLink id={accession} className={f('ext')} />
+  <div>
+    Accession: <TaxLink id={accession}>{accession}</TaxLink>
     {id && ` (${id})`}
-  </span>
+  </div>
 );
 
 Accession.propTypes = {

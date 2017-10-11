@@ -10,7 +10,6 @@
   }
 }
 .title small {
-  margin-left: 1rem;
   color: #333;
   padding: 0 0.5rem;
 }
@@ -31,6 +30,10 @@
 }
 .title-id-unknown {
   background-color: var(--colors-unknown-sub);
+}
+/*used for protein, structure, organism page*/
+.title-id-other {
+  background-color: var(--colors-other-main);
 }
 
 .shortname {

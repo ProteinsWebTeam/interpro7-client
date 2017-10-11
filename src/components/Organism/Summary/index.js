@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { goToNewLocation } from 'actions/creators';
 
 import Title from 'components/Title';
-import Accession from 'components/Protein/Accession';
+import Accession from 'components/Organism/Accession';
 import Lineage from 'components/Organism/Lineage';
 import Children from 'components/Organism/Children';
 import Metadata from 'wrappers/Metadata';
@@ -36,11 +36,14 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }).isRequired,
+    goToNewLocation: T.func.isRequired,
   };
 
   constructor(props) {
     super(props);
-    this._vis = new TaxonomyVisualisation();
+    this._vis = new TaxonomyVisualisation(undefined, {
+      initialMaxNodes: +Infinity,
+    });
     this._vis.addEventListener('focus', this._handleFocus);
   }
 
@@ -57,13 +60,13 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   }
 
   _handleFocus = ({ detail: { id } }) => {
-    // this.props.goToNewLocation({
-    //   description: {
-    //     mainType: 'organism',
-    //     mainDB: 'taxonomy',
-    //     mainAccession: id,
-    //   },
-    // });
+    this.props.goToNewLocation({
+      description: {
+        mainType: 'organism',
+        mainDB: 'taxonomy',
+        mainAccession: id,
+      },
+    });
   };
 
   _populateData = data => {
@@ -94,7 +97,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     const { data: { metadata } } = this.props;
     return (
       <div className={f('row')}>
-        <div className={f('medium-8', 'large-8', 'columns')}>
+        <div className={f('medium-10', 'columns')}>
           <Title metadata={metadata} mainType={'organism'} />
           <Accession metadata={metadata} />
           {metadata.rank && <div>Rank: {metadata.rank}</div>}
@@ -114,10 +117,10 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
             <div ref={node => (this._focus = node)} style={{ height: '5em' }} />
           </div>
         </div>
-        <div className={f('medium-4', 'large-4', 'columns')}>
+        <div className={f('medium-2', 'columns')}>
           <div className={f('panel')}>
             <h5>External Links</h5>
-            <ul className={f('chevron')}>
+            <ul className={f('no-bullet')}>
               <li>
                 <TaxLink id={metadata.accession}>
                   <img src={enaLogo} alt="ENA" />
@@ -143,12 +146,16 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     const { data: { metadata } } = this.props;
     return (
       <div className={f('row')}>
-        <div className={f('medium-8', 'large-8', 'columns')}>
+        <div className={f('medium-10', 'columns')}>
           <Title metadata={metadata} mainType={'organism'} />
           {metadata.is_reference ? (
-            <div className={f('tag')}>Reference Proteome</div>
+            <div className={f('tag', 'margin-bottom-medium')}>
+              Reference Proteome
+            </div>
           ) : null}
-          <Accession metadata={metadata} />
+          <div>
+            <Accession metadata={metadata} />
+          </div>
           <div>Strain: {metadata.strain}</div>
           <div>
             Taxonomy:{' '}
@@ -162,10 +169,10 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             </Metadata>
           </div>
         </div>
-        <div className={f('medium-4', 'large-4', 'columns')}>
+        <div className={f('medium-2', 'columns')}>
           <div className={f('panel')}>
             <h5>External Links</h5>
-            <ul className={f('chevron')}>
+            <ul className={f('no-bullet')}>
               <li>
                 <ProteomeLink id={metadata.accession}>
                   <img src={uniprotLogo} alt="Uniprot" />

@@ -16,14 +16,14 @@
 }
 
 .svgContainer {
-  margin: var(--spacing-small) 0 var(--spacing-small)
-    calc(-1 * var(--spacing-big));
-  height: 60px;
-  overflow-y: hidden;
-  overflow-x: auto;
-  user-select: none;
-  cursor: default;
-  padding: 0 1em 0 1em;
+  /*margin: var(--spacing-small) 0 var(--spacing-small)*/
+  /*calc(-1 * var(--spacing-big));*/
+  height: 46px;
+  /*overflow-y: hidden;*/
+  /*overflow-x: auto;*/
+  /*user-select: none;*/
+  /*cursor: default;*/
+  /*padding: 0 1em 0 1em;*/
 }
 
 .svg {

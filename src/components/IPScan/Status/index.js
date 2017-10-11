@@ -49,8 +49,8 @@ class IPScanStatus extends Component {
     const response = await fetch(
       url.resolve(
         url.format({ ...this.props.ipScan, pathname: this.props.ipScan.root }),
-        `status/${IPScanId}`
-      )
+        `status/${IPScanId}`,
+      ),
     );
     const rawStatus = await response.text();
     return rawStatus.toLowerCase().replace('_', ' ');
@@ -88,13 +88,13 @@ class IPScanStatus extends Component {
           }
           // Change job status in state
           this.setState({ [internalId]: { ...job, status: newStatus } });
-        })
+        }),
     );
     if (!recursive) return;
     // Schedule an other check later
     this._timeout = setTimeout(
       this._checkAllUnfinishedJobs,
-      this.props.refreshRate
+      this.props.refreshRate,
     );
   };
 
@@ -111,7 +111,7 @@ class IPScanStatus extends Component {
     await Promise.all([
       this._jobsTableAccess.then(ta => ta.delete(+id)),
       this._blobsTableAccess.then(ta =>
-        ta.delete(removedJob.input.sequenceBlobId)
+        ta.delete(removedJob.input.sequenceBlobId),
       ),
     ]);
     this.setState({ [id]: null });
@@ -143,15 +143,15 @@ class IPScanStatus extends Component {
                   // Sort by creation time (newest first)
                   (
                     [, { times: { created: a } }],
-                    [, { times: { created: b } }]
-                  ) => b - a
+                    [, { times: { created: b } }],
+                  ) => b - a,
                 )
                 .map(
                   (
                     [
                       jobId,
                       { id, status, times: { created, lastUpdate }, saved },
-                    ]
+                    ],
                   ) => {
                     const lastUpdateDate = new Date(lastUpdate);
                     return (
@@ -186,7 +186,7 @@ class IPScanStatus extends Component {
                           <button
                             className={f(
                               'button',
-                              saved ? 'warning' : 'secondary'
+                              saved ? 'warning' : 'secondary',
                             )}
                             title={`save job ${id || ''}`}
                             type="button"
@@ -207,7 +207,7 @@ class IPScanStatus extends Component {
                         </td>
                       </tr>
                     );
-                  }
+                  },
                 )}
             </tbody>
           </table>
@@ -218,5 +218,5 @@ class IPScanStatus extends Component {
 }
 
 export default connect(({ settings: { ipScan } }) => ({ ipScan }))(
-  IPScanStatus
+  IPScanStatus,
 );

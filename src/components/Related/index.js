@@ -181,12 +181,21 @@ class _RelatedAdvanced extends PureComponent {
         ) : null}
         <div className={f('row')}>
           <div className={f('columns')}>
-            <p>
-              This {mainType} is related to
-              {secondaryData.length > 1
-                ? ` these ${toPlural(focusType)}:`
-                : ` this ${focusType}:`}
-            </p>
+            {mainType === 'protein' && focusType === 'entry' ? (
+              <p>
+                This {mainType} contains
+                {secondaryData.length > 1
+                  ? ` those ${toPlural(focusType)}:`
+                  : ` this ${focusType}:`}
+              </p>
+            ) : (
+              <p>
+                This {mainType} is related to
+                {secondaryData.length > 1
+                  ? ` these ${toPlural(focusType)}:`
+                  : ` this ${focusType}:`}
+              </p>
+            )}
           </div>
         </div>
         <Matches

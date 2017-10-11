@@ -113,8 +113,8 @@ table.light .subheader {
   transition: transform var(--timing-fast);
 }
 .table-view .table-results-filtering .icon-view:hover {
-  /*opacity: 0.8;*/
-  transform: scale(1.4);
+  opacity: 0.8;
+  /*transform: scale(1.4);*/
 }
 .table-view .table-results-filtering .icon-view:last-child {
   margin-right: 0;

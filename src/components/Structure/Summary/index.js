@@ -57,20 +57,21 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
 
   render() {
     const { data: { metadata } } = this.props;
+    const chains = Array.from(new Set(metadata.chains || []));
     return (
       <div className={f('sections')}>
         <section>
           <div className={f('row')}>
-            <div className={f('medium-8', 'large-8', 'columns')}>
+            <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
               <Title metadata={metadata} mainType={'structure'} />
               <h4>Summary</h4>
               <pdb-prints size="48">
                 <pdb-data-loader pdbid={metadata.accession} />
               </pdb-prints>
-              {metadata.chains && (
+              {chains.length && (
                 <div>
                   <h4>Chains:</h4>
-                  {metadata.chains.map(chain => (
+                  {chains.map(chain => (
                     <Link
                       key={chain}
                       newTo={location => ({
@@ -89,10 +90,10 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                 </div>
               )}
             </div>
-            <div className={f('medium-4', 'large-4', 'columns')}>
+            <div className={f('medium-2', 'columns')}>
               <div className={f('panel')}>
                 <h5>External Links</h5>
-                <ul className={f('chevron')}>
+                <ul className={f('no-bullet')}>
                   <li>
                     <PDBeLink id={metadata.accession}>
                       <img src={pdbLogo} alt="Uniprot logo" />
@@ -103,27 +104,31 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
             </div>
           </div>
           <ErrorBoundary>
-            <Embed
-              style={embedStyle}
-              src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${metadata.accession}/?view=entry_index&viewer=jmol&controls=codename_hero`}
-            >
-              <div
-                style={{
-                  background: 'white',
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <img
-                  src={`//www.ebi.ac.uk/pdbe/static/entry/${metadata.accession.toLowerCase()}_entity_1_front_image-400x400.png`}
-                  alt={`structure with accession ${metadata.accession.toUpperCase()}`}
-                  style={{ maxWidth: '100%' }}
-                />
+            <div className={f('row')}>
+              <div className={f('columns')}>
+                <Embed
+                  style={embedStyle}
+                  src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${metadata.accession}/?view=entry_index&viewer=litemol&controls=codename_hero`}
+                >
+                  <div
+                    style={{
+                      background: 'white',
+                      width: '100%',
+                      height: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img
+                      src={`//www.ebi.ac.uk/pdbe/static/entry/${metadata.accession.toLowerCase()}_entity_1_front_image-400x400.png`}
+                      alt={`structure with accession ${metadata.accession.toUpperCase()}`}
+                      style={{ maxWidth: '100%' }}
+                    />
+                  </div>
+                </Embed>
               </div>
-            </Embed>
+            </div>
           </ErrorBoundary>
         </section>
       </div>

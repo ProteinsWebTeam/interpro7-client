@@ -284,7 +284,6 @@ class Organism extends PureComponent {
               processData={schemaProcessData}
             />
           )}
-        {/*(() => console.log(data, isStale))()*/}
         <ErrorBoundary>
           <Switch
             {...this.props}

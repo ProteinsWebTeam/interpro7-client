@@ -17,7 +17,8 @@ const config /*: {
     IPScan: {pathname: string, port: string, protocol: string},
   },
   pages: {[key: string]: {plural?: string, subPages: Array<string>}},
-  pagination: {pageSize: number}
+  pagination: {pageSize: number},
+  cache: {enabled: boolean},
 } */ = _config;
 
 for (const [key, value] of Object.entries(config.root)) {

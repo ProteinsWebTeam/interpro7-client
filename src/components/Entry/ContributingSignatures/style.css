@@ -1,0 +1,26 @@
+.side-panel h5 {
+  /*background-color: #b9d7ef;*/
+  margin-bottom: 0;
+  padding: 0.4rem;
+}
+
+.sign-row {
+  color: #4b555b;
+  background: rgba(185, 215, 239, 0.2);
+  margin-bottom: 1px;
+  font-size: 0.8rem;
+}
+
+.sign-cell {
+  display: table-cell;
+  width: 100%;
+  padding: 4px 6px;
+}
+
+.sign-label {
+  display: inline-block;
+  min-width: 70px;
+  border-radius: 2px;
+  text-align: center;
+  background: #b9d7ef;
+}
