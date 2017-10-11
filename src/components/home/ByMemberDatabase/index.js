@@ -10,6 +10,7 @@ import MemberSymbol from 'components/Entry/MemberSymbol';
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
 
 import { memberDB } from 'staticData/home';
 
@@ -20,6 +21,20 @@ import theme from 'styles/theme-interpro.css';
 import local from '../styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
+const schemaProcessDataForDB = ({ name, version }) => ({
+  '@type': 'Dataset',
+  '@id': '@dataset',
+  name,
+  identifier: name,
+  version,
+  url: `${window.location.href}/entry/${name}`,
+});
 
 /*:: type Props = {
   data: {
@@ -47,10 +62,14 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                 'small-3',
                 'medium-2',
                 'large-4',
-                'text-center'
+                'text-center',
               )}
               key={name}
             >
+              <SchemaOrgData
+                data={{ name, version }}
+                processData={schemaProcessDataForDB}
+              />
               <Link newTo={newTo} className={name}>
                 <MemberSymbol type={type} />
                 <h6 data-tooltip title={title}>
@@ -87,7 +106,7 @@ const mapStateToUrl = createSelector(
       hostname,
       port,
       pathname: `${root}/entry`,
-    })
+    }),
 );
 
 export default loadData(mapStateToUrl)(ByMemberDatabase);

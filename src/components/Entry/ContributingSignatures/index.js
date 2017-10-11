@@ -14,11 +14,15 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessData = data => ({
-  '@type': 'ProteinEntity',
+const schemaProcessData = ({ name, db }) => ({
+  '@type': ['BioChemEntity', 'CreativeWork'],
   '@id': '@isBasedOn',
-  inDataset: data.db,
-  name: data.name,
+  additionalType: 'http://semanticscience.org/resource/SIO_000370.rdf',
+  isPartOf: {
+    '@type': 'Dataset',
+    '@id': db,
+  },
+  name,
 });
 
 const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (

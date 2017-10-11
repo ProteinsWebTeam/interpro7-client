@@ -2,7 +2,10 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import ipro from 'styles/interpro-new.css';
+import theme from 'styles/theme-interpro.css';
+const f = foundationPartial(theme, ipro);
 
 export const LoadingMessage = () => <div>Loading…</div>;
 LoadingMessage.displayName = 'LoadingMessage';
@@ -11,16 +14,28 @@ const reload = () => {
   location.reload();
 };
 
-export const ErrorMessage = () => (
-  <div>
-    <p>An error happened while try to load a component of this page</p>
-    <p>If you really want this part of the page you might want to reload it</p>
-    <button onClick={reload} className={f('button')}>
-      Reload this page
-    </button>
-  </div>
-);
-ErrorMessage.displayName = 'ErrorMessage';
+export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
+  static displayName = 'ErrorMessage';
+
+  render() {
+    return (
+      <div className={f('row')}>
+        <div className={f('columns')}>
+          <div className={f('callout', 'info', 'withicon')}>
+            An error happened while try to load a component of this page.
+          </div>
+          <p>
+            If you really want this part of the page you might want to reload
+            it.
+          </p>
+          <button onClick={reload} className={f('button')}>
+            Reload this page
+          </button>
+        </div>
+      </div>
+    );
+  }
+};
 
 /*:: type Props = {
   isLoading: boolean,

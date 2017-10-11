@@ -16,14 +16,13 @@ class NotFound extends PureComponent /*:: <{}> */ {
         <div className={f('row')}>
           <div className={f('small-12', 'columns', 'small-centered')}>
             <h5>404: Page Not Found</h5>
-            <h1 className={f('oversized')}>Keep searching...</h1>
+            <h1 className={f('oversized')}>Keep searching…</h1>
             <h5 className={f('lead')}>
               We are sorry, the page you were trying to access doesn’t exist.
             </h5>
             <br />
             <p>
-              {' '}
-              Double check the URL or go back to the{' '}
+              {' Double check the URL or go back to the '}
               <Link newTo={{ description: {} }}>homepage.</Link> If you continue
               to get this page, contact us using the
               <Link

@@ -23,13 +23,21 @@ class Metadata extends PureComponent {
     accession: T.oneOfType([T.string, T.number]).isRequired,
     children: T.element.isRequired,
   };
-
-  render() {
+  constructor(){
+    super();
+    this.state = {child: null, element: null};
+  }
+  componentWillMount() {
     const { children, ...props } = this.props;
     const child = Children.only(children);
     const getUrl = getUrlFor(props.endpoint, props.db, props.accession);
-    const Element = loadData(getUrl)(child.type);
-    return <Element {...child.props} {...props} />;
+    const element = loadData(getUrl)(child.type);
+    this.setState({child, element});
+  }
+
+  render() {
+    const Element = this.state.element;
+    return <Element {...this.state.child.props} {...this.props} />;
   }
 }
 

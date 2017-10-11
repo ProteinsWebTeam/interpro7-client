@@ -1,14 +1,7 @@
-@import "../../../styles/spacing.css";
-@import "../../../styles/colors.css";
+@import '../../../styles/spacing.css';
+@import '../../../styles/colors.css';
 
 .svgContainer {
-  margin: var(--spacing-small) 0 var(--spacing-small)
-    calc(-1 * var(--spacing-big));
-  overflow-y: hidden;
-  overflow-x: auto;
-  user-select: none;
-  cursor: default;
-  padding: 0 1em 0 1em;
   background-color: #efefef;
 }
 
@@ -18,9 +11,14 @@
   overflow: visible;
 }
 .guidelines line {
-  stroke: var(--colors-gray);
-  stroke-width: 1px;
+  stroke: var(--colors-lightgray);
+  stroke-width: 0.5px;
 }
+
+.guidelines text {
+  fill: var(--colors-lightgray);
+}
+
 .svg rect:hover {
   opacity: 0.7;
 }

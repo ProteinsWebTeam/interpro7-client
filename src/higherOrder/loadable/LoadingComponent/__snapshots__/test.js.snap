@@ -1,19 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ErrorMessage /> should render error message 1`] = `
-<div>
-  <p>
-    An error happened while try to load a component of this page
-  </p>
-  <p>
-    If you really want this part of the page you might want to reload it
-  </p>
-  <button
-    className="button"
-    onClick={[Function]}
+<div
+  className="row"
+>
+  <div
+    className="columns"
   >
-    Reload this page
-  </button>
+    <div
+      className="callout info withicon"
+    >
+      An error happened while try to load a component of this page.
+    </div>
+    <p>
+      If you really want this part of the page you might want to reload it.
+    </p>
+    <button
+      className="button"
+      onClick={[Function]}
+    >
+      Reload this page
+    </button>
+  </div>
 </div>
 `;
 

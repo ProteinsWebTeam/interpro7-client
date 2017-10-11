@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBTabs from 'components/Entry/MemberDBTabs';
@@ -19,18 +20,20 @@ import loadable from 'higherOrder/loadable';
 import subPages from 'subPages';
 import config from 'config';
 
-import classname from 'classnames/bind';
-
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
-
-const ps = classname.bind(pageStyle);
+const f = foundationPartial(pageStyle, styles);
 
 const SummaryAsync = loadable({
   loader: () =>
     import(/* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'),
+});
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
 });
 
 const propTypes = {
@@ -46,9 +49,15 @@ const propTypes = {
 };
 
 const Overview = ({ data: { payload, loading } }) => {
-  if (loading) return <div>Loading…</div>;
+  if (loading)
+    return (
+      <div className={f('row')}>
+        {' '}
+        <div className={f('columns')}>Loading… </div>
+      </div>
+    );
   return (
-    <ul className={styles.card}>
+    <ul className={f('card')}>
       {Object.entries(payload.structures || {}).map(([name, count]) => (
         <li key={name}>
           <Link
@@ -136,7 +145,7 @@ const List = ({
             dataKey="name"
             renderer={(
               name /*: string */,
-              { accession } /*: {accession: string} */
+              { accession } /*: {accession: string} */,
             ) => (
               <Link
                 newTo={location => ({
@@ -197,15 +206,23 @@ for (const subPage of config.pages.structure.subPages) {
 
 const Summary = props => {
   const { data: { loading } } = props;
-  if (loading) return <div>Loading…</div>;
+  if (loading)
+    return (
+      <div className={f('row')}>
+        {' '}
+        <div className={f('columns')}>Loading… </div>
+      </div>
+    );
   return (
-    <Switch
-      {...props}
-      locationSelector={l =>
-        l.description.mainDetail || l.description.focusType}
-      indexRoute={SummaryComponent}
-      childRoutes={subPagesForStructure}
-    />
+    <ErrorBoundary>
+      <Switch
+        {...props}
+        locationSelector={l =>
+          l.description.mainDetail || l.description.focusType}
+        indexRoute={SummaryComponent}
+        childRoutes={subPagesForStructure}
+      />
+    </ErrorBoundary>
   );
 };
 Summary.propTypes = {
@@ -217,15 +234,39 @@ Summary.propTypes = {
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
-  <Switch
-    {...props}
-    locationSelector={l =>
-      l.description.mainAccession || l.description.focusType}
-    indexRoute={List}
-    childRoutes={[{ value: /^[a-z\d]{4}$/i, component: Summary }]}
-    catchAll={List}
-  />
+  <ErrorBoundary>
+    <Switch
+      {...props}
+      locationSelector={l =>
+        l.description.mainAccession || l.description.focusType}
+      indexRoute={List}
+      childRoutes={[{ value: /^[a-z\d]{4}$/i, component: Summary }]}
+      catchAll={List}
+    />
+  </ErrorBoundary>
 );
+
+const schemaProcessData = data => ({
+  '@type': 'DataRecord',
+  '@id': '@mainEntityOfPage',
+  additionalType: 'http://semanticscience.org/resource/SIO_011119.rdf',
+  identifier: data.metadata.accession,
+  isPartOf: {
+    '@type': 'Dataset',
+    '@id': data.metadata.source_database,
+  },
+  mainEntity: '@mainEntity',
+});
+
+const schemaProcessData2 = data => ({
+  '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
+  '@id': '@mainEntity',
+  additionalType: 'http://semanticscience.org/resource/SIO_010346.rdf',
+  identifier: data.metadata.accession,
+  name: data.metadata.name.name || data.metadata.accession,
+  alternateName: data.metadata.name.long || null,
+  additionalProperty: '@additionalProperty',
+});
 
 class Structure extends PureComponent {
   static propTypes = {
@@ -235,14 +276,32 @@ class Structure extends PureComponent {
   render() {
     return (
       <div
-        className={ps('with-data', { ['with-stale-data']: this.props.isStale })}
+        className={f('with-data', { ['with-stale-data']: this.props.isStale })}
       >
-        <Switch
-          {...this.props}
-          locationSelector={l => l.description.mainDB}
-          indexRoute={Overview}
-          catchAll={InnerSwitch}
-        />
+        {this.props.data.payload &&
+          this.props.data.payload.metadata &&
+          this.props.data.payload.metadata.accession && (
+            <SchemaOrgData
+              data={this.props.data.payload}
+              processData={schemaProcessData}
+            />
+          )}
+        {this.props.data.payload &&
+          this.props.data.payload.metadata &&
+          this.props.data.payload.metadata.accession && (
+            <SchemaOrgData
+              data={this.props.data.payload}
+              processData={schemaProcessData2}
+            />
+          )}
+        <ErrorBoundary>
+          <Switch
+            {...this.props}
+            locationSelector={l => l.description.mainDB}
+            indexRoute={Overview}
+            catchAll={InnerSwitch}
+          />
+        </ErrorBoundary>
       </div>
     );
   }

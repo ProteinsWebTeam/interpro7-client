@@ -100,9 +100,9 @@ class Description extends Component {
       const contentDiv = this.divContent;
       const { heightToHide } = this.props;
       if (moreDiv.offsetTop - contentDiv.offsetTop < heightToHide) {
-        this.moreButton.style.visibility = 'hidden';
+        this.moreButton.style.display = 'none';
       } else {
-        this.moreButton.style.visibility = 'visible';
+        this.moreButton.style.display = 'block';
       }
       // requestAnimationFrame(() => {console.log('setting'); this.setState({
       //   contentSize: contentDiv.firstElementChild.offsetHeight,
@@ -119,7 +119,7 @@ class Description extends Component {
       heightToHide,
     } = this.props;
     return (
-      <div className={f('desc-wrapper')}>
+      <div className={f('description-wrapper', 'margin-bottom-xlarge')}>
         <h4>{title}</h4>
         <div
           className={f('animate-height', { collapsed: !this.state.isOpen })}
@@ -140,7 +140,6 @@ class Description extends Component {
         </div>
         <button
           className={f('button')}
-          id="show-more"
           onClick={this.handleClick}
           ref={e => (this.moreButton = e)}
         >

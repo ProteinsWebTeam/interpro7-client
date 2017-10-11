@@ -6,6 +6,7 @@ Column.propTypes = {
   defaultKey: T.oneOfType([T.string, T.number]),
   name: T.string,
   renderer: T.func,
+  displayIf: T.bool,
   headerStyle: T.object,
   cellStyle: T.object,
   className: T.string,

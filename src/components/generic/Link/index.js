@@ -74,7 +74,7 @@ class Link extends PureComponent /*:: <Props> */ {
       search: T.object.isRequired,
       hash: T.string.isRequired,
     }).isRequired,
-    children: T.any.isRequired,
+    children: T.any,
     href: T.string,
     goToNewLocation: T.func.isRequired,
     target: T.string,

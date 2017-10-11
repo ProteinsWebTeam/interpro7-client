@@ -5,21 +5,12 @@ import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
 
-const Entry = loadable({
-  loader: () => import(/* webpackChunkName: "entry-subpage" */ './Entry'),
+const List = loadable({
+  loader: () => import(/* webpackChunkName: "entry-subpage" */ './ListSubPage'),
 });
 
-const Protein = loadable({
-  loader: () => import(/* webpackChunkName: "protein-subpage" */ './Protein'),
-});
-
-const Structure = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "structure-subpage" */ './Structure'),
-});
-
-const Organism = loadable({
-  loader: () => import(/* webpackChunkName: "organism-subpage" */ './Organism'),
+const Proteome = loadable({
+  loader: () => import(/* webpackChunkName: "entry-subpage" */ './Proteome'),
 });
 
 const DomainArchitecture = loadable({
@@ -49,9 +40,9 @@ const defaultMapStateToProps = createSelector(
       focusAccession: _description.focusAccession,
     };
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description
+      description,
     )}?${qsStringify(search)}`;
-  }
+  },
 );
 
 const mapStateToPropsForHMMModel = createSelector(
@@ -67,18 +58,19 @@ const mapStateToPropsForHMMModel = createSelector(
     const { mainDetail, ...restOfDescription } = description;
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      restOfDescription
+      restOfDescription,
     )}?${qsStringify(restOfSearch)}`;
-  }
+  },
 );
 
 const subPages = new Map([
-  ['entry', loadData(defaultMapStateToProps)(Entry)],
-  ['protein', loadData(defaultMapStateToProps)(Protein)],
-  ['structure', loadData(defaultMapStateToProps)(Structure)],
-  ['organism', loadData(defaultMapStateToProps)(Organism)],
+  ['entry', loadData(defaultMapStateToProps)(List)],
+  ['protein', loadData(defaultMapStateToProps)(List)],
+  ['structure', loadData(defaultMapStateToProps)(List)],
+  ['organism', loadData(defaultMapStateToProps)(List)],
   ['domain_architecture', loadData(defaultMapStateToProps)(DomainArchitecture)],
-  ['hmm_model', loadData(mapStateToPropsForHMMModel)(HMMModel)],
+  ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
+  ['proteome', loadData()(Proteome)],
 ]);
 
 export default subPages;

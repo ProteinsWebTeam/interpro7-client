@@ -47,7 +47,7 @@ table.light thead th {
 
 table.light tr:nth-child(even):hover,
 table.light tr:nth-child(odd):hover {
-  background-color: #f9fafb;
+  background-color: #f9fafb; /*darker #d0deeb*/
 }
 
 table.light tbody tr:nth-child(even) {
@@ -96,7 +96,7 @@ table.light .subheader {
 .table-view select {
   color: #505f74;
   margin: 0;
-  height: 2.2rem;
+  height: 2.1rem;
 }
 
 .table-view input {
@@ -107,12 +107,15 @@ table.light .subheader {
 .table-view .table-results-filtering .icon-view {
   color: #71818a;
   margin-right: 1rem;
-  opacity: 0.5;
   width: 25px;
   height: 25px;
   display: inline-block;
+  transition: transform var(--timing-fast);
 }
-
+.table-view .table-results-filtering .icon-view:hover {
+  /*opacity: 0.8;*/
+  transform: scale(1.4);
+}
 .table-view .table-results-filtering .icon-view:last-child {
   margin-right: 0;
 }
@@ -123,8 +126,11 @@ table.light .subheader {
 .table-view .table-results-filtering .icon-view.list-view {
   background: url(../../images/icons/ico-view-list.svg) no-repeat;
 }
+.table-view .table-results-filtering .icon-view.thumb-view {
+  background: url(../../images/icons/ico-view-thumb.svg) no-repeat;
+}
 .table-view .table-results-filtering .icon-view.disabled {
-  opacity: 0.1;
+  opacity: 0.2;
   cursor: not-allowed;
 }
 .table-view .table-results-filtering .filter-wrapper {
@@ -142,7 +148,6 @@ table.light .subheader {
   justify-content: space-between;
   align-items: center;
   color: #505f74;
-  margin-bottom: 0.5rem;
   padding: 0.4rem 0.5rem;
 }
 

@@ -1,0 +1,55 @@
+@import '../../../styles/timing.css';
+@import '../../../styles/colors.css';
+@import '../../../styles/spacing.css';
+
+.menu {
+  display: flex;
+}
+
+.menu-item {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--timing-fast) ease-in-out;
+  border-left: 1px solid #fff3;
+
+  &:first-child {
+    border-left: none;
+  }
+}
+
+.more {
+  position: absolute;
+  right: 0;
+  height: 2rem;
+  margin: 0 1ch;
+  cursor: pointer;
+  text-align: end;
+  border: none;
+  display: flex;
+  flex-direction: column;
+
+  & .menu-item {
+    background: var(--colors-main);
+    list-style: none;
+  }
+
+  & a {
+    display: block;
+    padding: var(--spacing-small) var(--spacing-medium);
+    text-align: center;
+  }
+
+  &:active,
+  &:focus,
+  &:hover {
+    & .menu-item {
+      pointer-events: initial;
+      opacity: 1;
+    }
+  }
+}
+
+.visible {
+  pointer-events: initial;
+  opacity: 1;
+}

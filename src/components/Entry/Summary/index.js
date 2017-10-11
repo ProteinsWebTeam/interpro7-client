@@ -48,18 +48,18 @@ class SummaryEntry extends Component {
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components');
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then(m => m.InterproHierarchy)
-      ).as('interpro-hierarchy')
+        interproComponents().then(m => m.InterproHierarchy),
+      ).as('interpro-hierarchy'),
     );
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then(m => m.InterproEntry)
-      ).as('interpro-entry')
+        interproComponents().then(m => m.InterproEntry),
+      ).as('interpro-entry'),
     );
     webComponents.push(
       loadWebComponent(() => interproComponents().then(m => m.InterproType)).as(
-        'interpro-type'
-      )
+        'interpro-type',
+      ),
     );
   }
 
@@ -107,14 +107,19 @@ class SummaryEntry extends Component {
                 </div>
               )}
               {metadata.member_databases &&
-              Object.keys(metadata.member_databases).length > 0 && (
-                <div className={f('panel')}>
-                  <ContributingSignatures contr={metadata.member_databases} />
-                </div>
-              )}
+                Object.keys(metadata.member_databases).length > 0 && (
+                  <div className={f('panel')}>
+                    <ContributingSignatures contr={metadata.member_databases} />
+                  </div>
+                )}
             </div>
           </div>
         </section>
+
+        {Object.keys(metadata.go_terms) && (
+          <GoTerms terms={metadata.go_terms} />
+        )}
+
         {Object.keys(metadata.literature).length > 0 && (
           <section id="references">
             <div className={f('row')}>
@@ -128,9 +133,7 @@ class SummaryEntry extends Component {
             />
           </section>
         )}
-        {Object.keys(metadata.go_terms) && (
-          <GoTerms terms={metadata.go_terms} />
-        )}
+
         {Object.keys(metadata.cross_references || {}).length > 0 && (
           <section id="cross_references">
             <div className={f('row')}>

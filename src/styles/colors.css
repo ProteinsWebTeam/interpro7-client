@@ -1,16 +1,19 @@
 :root {
+  /*GAL*/
   --colors-main: #007c82;
   --colors-nearly-white: #eee;
   --colors-nearly-black: #111;
   --colors-dark: #333;
   --colors-graydark: #676767;
   --colors-gray: #888;
-
+  --colors-lightgray: #9f9f9f;
+  --colors-loading-bar: #77b6ff;
   --colors-family: #fe3600;
   --colors-domain: #59d417;
   --colors-repeat: #ff9000;
   --colors-site: #ce70e2;
-
+  --colors-progress: #d4dee5;
+  /*DB*/
   --colors-interpro: #2daec1;
   --colors-gene3d: #a88cc3;
   --colors-cdd: #addc58;
@@ -27,4 +30,17 @@
   --colors-smart: #ff7a76;
   --colors-ssf: #686868;
   --colors-tigrfams: #56b9a6; /*was v2 4f9294 - v1 #b37977;*/
+  /*TYPE*/
+  --colors-family-main: #ec7865;
+  --colors-family-sub: #f4cdc7;
+  --colors-domain-main: #70c770;
+  --colors-domain-sub: #ceefd2;
+  --colors-site-main: #d09ad0;
+  --colors-site-sub: #efd0ef;
+  --colors-repeat-main: #ffb27f;
+  --colors-repeat-sub: #f6dbca;
+  --colors-homolog-main: #6caed4;
+  --colors-homolog-sub: #bbdef3;
+  --colors-unknown-main: #737373;
+  --colors-unknown-sub: #dedede;
 }

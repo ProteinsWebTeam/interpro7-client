@@ -21,14 +21,17 @@ class Example extends PureComponent {
   render() {
     const { value } = this.props;
     return (
-      <Link
-        newTo={{
-          description: { mainType: 'search', mainDB: 'text' },
-          search: { search: value },
-        }}
-      >
-        {value}
-      </Link>
+      <i>
+        {' '}
+        <Link
+          newTo={{
+            description: { mainType: 'search', mainDB: 'text' },
+            search: { search: value },
+          }}
+        >
+          {value}
+        </Link>
+      </i>
     );
   }
 }
@@ -113,7 +116,7 @@ class SearchByText extends PureComponent {
                     'large-12',
                     'columns',
                     'stacked-for-small',
-                    'button-group'
+                    'button-group',
                   )}
                 >
                   <button
@@ -142,7 +145,7 @@ class SearchByText extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.newLocation.search,
-  search => ({ search })
+  search => ({ search }),
 );
 
 export default connect(mapStateToProps)(SearchByText);

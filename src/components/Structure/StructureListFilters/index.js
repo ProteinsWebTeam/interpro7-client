@@ -7,7 +7,7 @@ import ExperimentTypeFilter from './ExperimentTypeFilter';
 
 const StructureListFilters = () =>
   <FiltersPanel>
-    <ExperimentTypeFilter label="Experiment Type" />
+      <ExperimentTypeFilter label="Experiment Type" />
     {/* <TaxonomyFilter label="Taxonomy" />*/}
     {/* <LengthFilter label="Protein Length"/>*/}
   </FiltersPanel>;

@@ -18,6 +18,10 @@ import { foundationPartial } from 'styles/foundation';
 
 const f = foundationPartial(styles);
 
+const singleEntityNames = new Map(
+  Array.from(singleEntity).map(e => [e[1].name, e[0]]),
+);
+
 /*:: type CounterProps = {
   newTo: Object | function,
   name: string,
@@ -25,6 +29,7 @@ const f = foundationPartial(styles);
     loading: boolean,
     payload?: ?Object,
   },
+  isFirstLevel?: boolean,
 }; */
 
 class Counter extends PureComponent /*:: <CounterProps> */ {
@@ -35,31 +40,50 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    isFirstLevel: T.bool,
   };
 
   render() {
-    const { newTo, name, data: { loading, payload } } = this.props;
+    const {
+      newTo,
+      name,
+      data: { loading, payload },
+      isFirstLevel,
+    } = this.props;
     let value = null;
-    if (
-      !loading &&
-      (payload &&
-        payload.metadata &&
+    if (!loading && payload && payload.metadata) {
+      if (
         payload.metadata.counters &&
-        Number.isFinite(payload.metadata.counters[name]))
-    ) {
-      value = payload.metadata.counters[name];
+        Number.isFinite(payload.metadata.counters[name])
+      ) {
+        value = payload.metadata.counters[name];
+      }
+      // Enabling the menuitems that appear in the entry_annotations array.
+      // i.e. only neble the menu item if there is info for it
+      if (
+        payload.metadata.entry_annotations &&
+        payload.metadata.entry_annotations.indexOf(
+          singleEntityNames.get(name),
+        ) >= 0
+      ) {
+        value = NaN;
+      }
+      // TODO: find a generic way to deal with this:
+      if (name === 'Overview' || name === 'Domain Architectures') value = NaN;
     }
+
     return (
       <Link
         newTo={newTo}
         activeClass={f('is-active', 'is-active-tab')}
-        disabled={value !== null && !value}
+        disabled={!isFirstLevel && !isNaN(value) && !value}
       >
-        {value !== null && (
-          <NumberLabel value={value} className={f('counter')} />
-        )}
-        &nbsp;
         {name}
+        {value !== null && ' '}
+        {value !== null &&
+          !isNaN(value) && (
+            <NumberLabel value={value} className={f('counter')} />
+          )}
       </Link>
     );
   }
@@ -67,6 +91,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
 
 /*:: type BrowseTabsProps = {
   mainType: ?string,
+  mainDB: ?string,
   mainAccession: ?string,
   data: {
     loading: boolean,
@@ -77,6 +102,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
 class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
   static propTypes = {
     mainType: T.string,
+    mainDB: T.string,
     mainAccession: T.string,
     data: T.shape({
       loading: T.bool.isRequired,
@@ -85,12 +111,13 @@ class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
   };
 
   render() {
-    const { mainType, mainAccession, data } = this.props;
+    const { mainType, mainDB, mainAccession, data } = this.props;
     let tabs = entities;
     if (mainAccession && mainType && config.pages[mainType]) {
       tabs = [singleEntity.get('overview')];
       for (const subPage of config.pages[mainType].subPages) {
-        tabs.push(singleEntity.get(subPage));
+        if (!(mainDB === 'proteome' && subPage === 'proteome'))
+          tabs.push(singleEntity.get(subPage));
       }
       tabs = tabs.filter(Boolean);
     }
@@ -100,7 +127,12 @@ class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
           <ul className={f('tabs')}>
             {tabs.map(e => (
               <li className={f('tabs-title')} key={e.name}>
-                <Counter newTo={e.newTo} name={e.name} data={data} />
+                <Counter
+                  newTo={e.newTo}
+                  name={e.name}
+                  data={data}
+                  isFirstLevel={!mainAccession}
+                />
               </li>
             ))}
           </ul>
@@ -112,8 +144,9 @@ class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
 
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainType,
+  state => state.newLocation.description.mainDB,
   state => state.newLocation.description.mainAccession,
-  (mainType, mainAccession) => ({ mainType, mainAccession })
+  (mainType, mainDB, mainAccession) => ({ mainType, mainDB, mainAccession }),
 );
 
 const mapStateToUrl = createSelector(
@@ -127,7 +160,7 @@ const mapStateToUrl = createSelector(
     mainType,
     mainDB,
     mainAccession,
-    search
+    search,
   ) => {
     if (!mainAccession) return '';
     return `${protocol}//${hostname}:${port}${root}${description2path({
@@ -135,7 +168,7 @@ const mapStateToUrl = createSelector(
       mainDB,
       mainAccession,
     })}?${qsStringify(search)}`.replace(/\?$/, '');
-  }
+  },
 );
 
 export default loadData(mapStateToUrl)(connect(mapStateToProps)(BrowseTabs));

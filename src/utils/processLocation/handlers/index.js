@@ -287,7 +287,7 @@ export const proteinAccessionHandler /*: Handler */ = Object.create(handler, {
     value: (current /*: string */) =>
       // eslint-disable-next-line max-len
       /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i.test(
-        current
+        current,
       ),
   },
 });
@@ -295,6 +295,9 @@ export const proteinAccessionHandler /*: Handler */ = Object.create(handler, {
 export const proteinDBHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
+  },
+  cleanUp: {
+    value: v => v.toLowerCase().replace('uniprot', 'UniProt'),
   },
   match: {
     value: (current /*: string */) =>

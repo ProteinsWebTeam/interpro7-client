@@ -13,7 +13,7 @@ const getDownloadName = createSelector(
   props => props.taxId,
   props => props.type,
   (accession, taxId, type) =>
-    `${accession}-${taxId}.${type === 'FASTA' ? 'fasta' : 'txt'}`
+    `${accession}-${taxId}.${type === 'FASTA' ? 'fasta' : 'txt'}`,
 );
 
 class ProteinFile extends Component {
@@ -95,6 +95,7 @@ class ProteinFile extends Component {
       <a
         download={getDownloadName(this.props)}
         href={href}
+        style={{ borderBottomWidth: '0' }}
         target="_blank"
         title={`${type === 'FASTA'
           ? 'FASTA file'
@@ -115,7 +116,7 @@ class ProteinFile extends Component {
 const mapStateToProps = createSelector(
   state => state.settings.api,
   state => state.newLocation.description,
-  (api, description) => ({ api, description })
+  (api, description) => ({ api, description }),
 );
 
 export default connect(mapStateToProps)(ProteinFile);

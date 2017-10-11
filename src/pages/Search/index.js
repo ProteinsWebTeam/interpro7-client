@@ -1,6 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
@@ -10,7 +11,6 @@ import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
-import styles from 'styles/blocks.css';
 
 const f = foundationPartial(ipro);
 
@@ -48,8 +48,8 @@ const RedirectToText = () => (
 );
 
 const Search = () => (
-  <main>
-    <section className={styles.card}>
+  <div className={f('row')}>
+    <div className={f('columns')}>
       <fieldset className={f('fieldset')}>
         <legend>Search InterPro</legend>
         <ul className={f('tabs')}>
@@ -82,18 +82,20 @@ const Search = () => (
         </ul>
         <div className={f('tabs', 'tabs-content')}>
           <div className={f('tabs-panel', 'is-active')}>
-            <Switch
-              locationSelector={l => l.description.mainDB}
-              indexRoute={RedirectToText}
-              childRoutes={routes}
-            />
+            <ErrorBoundary>
+              <Switch
+                locationSelector={l => l.description.mainDB}
+                indexRoute={RedirectToText}
+                childRoutes={routes}
+              />
+            </ErrorBoundary>
           </div>
         </div>
       </fieldset>
       <SearchResults />
       {/* <SearchResults data={data} query={query} />*/}
-    </section>
-  </main>
+    </div>
+  </div>
 );
 
 Search.propTypes = {

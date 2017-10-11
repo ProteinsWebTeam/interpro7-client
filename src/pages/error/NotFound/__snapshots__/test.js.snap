@@ -16,7 +16,7 @@ exports[`<NotFound /> should render 1`] = `
       <h1
         className="oversized"
       >
-        Keep searching...
+        Keep searching…
       </h1>
       <h5
         className="lead"
@@ -25,9 +25,7 @@ exports[`<NotFound /> should render 1`] = `
       </h5>
       <br />
       <p>
-         
-        Double check the URL or go back to the
-         
+         Double check the URL or go back to the 
         <Connect(Link)
           newTo={
             Object {

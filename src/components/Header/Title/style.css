@@ -51,15 +51,23 @@
 } /*keep same font-size for "InterPro" when banner is sticky*/
 
 .domain.loading {
-  animation-duration: var(--timing-slow), var(--timing-really-slow);
-  animation-timing-function: ease-in-out, linear;
-  animation-delay: 0s, var(--timing-slow);
+  animation-duration: var(--timing-really-slow);
+  animation-timing-function: linear;
+  animation-delay: var(--timing-slow);
   animation-iteration-count: infinite;
-  animation-direction: alternate, normal;
-  animation-name: flashing, moving;
+  animation-direction: normal;
+  animation-name: moving;
 }
-
+/*.domain.loading {*/
+/*animation-duration: var(--timing-slow), var(--timing-really-slow);*/
+/*animation-timing-function: ease-in-out, linear;*/
+/*animation-delay: 0s, var(--timing-slow);*/
+/*animation-iteration-count: infinite;*/
+/*animation-direction: alternate, normal;*/
+/*animation-name: flashing, moving;*/
+/*}*/
 .subtitle {
+  font-weight: 300;
   opacity: 1;
   transition: transform var(--timing-fast) ease-in-out;
 
@@ -94,8 +102,7 @@
 
 @media screen and (max-width: 39.9375em) {
   h1.main-title {
-    font-size: 1.8rem;
-    transform: translateX(0px);
+    font-size: 2rem;
   }
 }
 
@@ -120,13 +127,17 @@
 @media screen and (max-width: 39.9375em) {
   .logo-icon svg {
     width: 40px;
-    margin-right: 0.4rem;
+    margin-right: 0.7rem;
   }
   .logo-icon.stuck svg {
     width: 62px;
   }
-  .logo-flex {
-    margin-left: 0px;
+
+  .subtitle {
+    display: none; /*important when stuck keep banner height the same */
+  }
+  .stuck .logo-flex {
+    margin-left: -35px;
   }
 }
 @media screen and (max-width: 52em) {

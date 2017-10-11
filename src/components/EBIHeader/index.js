@@ -43,7 +43,7 @@ _EmblButton.propTypes = {
 const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
 
 const EBIHeader = () => (
-  <header
+  <div
     id="masthead-black-bar"
     className={styleBundle('clearfix', 'masthead-black-bar')}
   >
@@ -89,7 +89,7 @@ const EBIHeader = () => (
           className={styleBundle(
             'float-right',
             'show-for-medium',
-            'embl-selector'
+            'embl-selector',
           )}
           style={{ flexGrow: 1 }}
         >
@@ -97,7 +97,7 @@ const EBIHeader = () => (
         </li>
       </ul>
     </nav>
-  </header>
+  </div>
 );
 
 // Skip to div

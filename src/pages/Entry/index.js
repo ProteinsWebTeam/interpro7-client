@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent, Component } from 'react';
 import T from 'prop-types';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import { GoLink } from 'components/ExtLink';
@@ -23,15 +24,11 @@ import config from 'config';
 
 import { memberDB } from 'staticData/home';
 
-import classname from 'classnames/bind';
-
-import f from 'styles/foundation';
-
-import pageStyle from '../style.css';
+import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
-
-const ps = classname.bind(pageStyle);
+import pageStyle from '../style.css';
+const f = foundationPartial(pageStyle, styles);
 
 const propTypes = {
   data: T.shape({
@@ -50,13 +47,18 @@ const Overview = ({
   location: { search: { type } },
   isStale,
 }) => {
-  if (loading || isStale) return <div>Loading…</div>;
+  if (loading || isStale)
+    return (
+      <div className={f('row')}>
+        <div className={f('columns')}>Loading… </div>
+      </div>
+    );
   return (
     <div>
       Member databases:
-      <ul className={styles.card}>
+      <ul className={f('card')}>
         {Object.entries(
-          payload.entries.member_databases
+          payload.entries.member_databases,
         ).map(([name, count]) => (
           <li key={name}>
             <Link
@@ -70,7 +72,7 @@ const Overview = ({
           </li>
         ))}
       </ul>
-      <ul className={styles.card}>
+      <ul className={f('card')}>
         <li>
           <Link
             newTo={{
@@ -100,14 +102,36 @@ const Overview = ({
 };
 Overview.propTypes = propTypes;
 
+const schemaProcessDataTable = mainDB => ({
+  '@type': 'Dataset',
+  '@id': '@mainEntityOfPage',
+  identifier: mainDB,
+  name: mainDB,
+  version: '?',
+  url: window.location.href,
+  hasPart: '@hasPart',
+  includedInDataCatalog: {
+    '@type': 'DataCatalog',
+    '@id': `${window.location.origin}/interpro7/`,
+  },
+});
+
+const schemaProcessDataTableRow = data => ({
+  '@type': 'DataRecord',
+  '@id': '@hasPart',
+  identifier: data.accession,
+  name: data.mainDB,
+  url: `${window.location.href}/${data.accession}`,
+});
+
 class List extends Component {
   static propTypes = propTypes;
 
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType
-      )
+        m => m.InterproType,
+      ),
     ).as('interpro-type');
   }
 
@@ -137,6 +161,7 @@ class List extends Component {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
+          <SchemaOrgData data={mainDB} processData={schemaProcessDataTable} />
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -170,7 +195,7 @@ class List extends Component {
             </SearchBox>
             <Column
               dataKey="type"
-              className={ps('col-type')}
+              className={f('col-type')}
               renderer={type => (
                 <interpro-type
                   type={type.replace('_', ' ')}
@@ -187,7 +212,7 @@ class List extends Component {
               dataKey="name"
               renderer={(
                 name /*: string */,
-                { accession } /*: {accession: string} */
+                { accession } /*: {accession: string} */,
               ) => (
                 <Link
                   title={`${name} (${accession})`}
@@ -208,7 +233,7 @@ class List extends Component {
             </Column>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */) => (
+              renderer={(accession /*: string */, data) => (
                 <Link
                   title={accession}
                   newTo={location => ({
@@ -220,7 +245,11 @@ class List extends Component {
                     },
                   })}
                 >
-                  <span className={ps('acc-row')}>{accession}</span>
+                  <SchemaOrgData
+                    data={data}
+                    processData={schemaProcessDataTableRow}
+                  />
+                  <span className={f('acc-row')}>{accession}</span>
                 </Link>
               )}
             >
@@ -231,11 +260,11 @@ class List extends Component {
                 dataKey="member_databases"
                 renderer={(mdb /*: string */) =>
                   Object.keys(mdb).map(db => (
-                    <div key={db} className={ps('sign-row')}>
-                      <span className={ps('sign-cell')}>{db}</span>
-                      <span className={ps('sign-cell')}>
+                    <div key={db} className={f('sign-row')}>
+                      <span className={f('sign-cell')}>{db}</span>
+                      <span className={f('sign-cell')}>
                         {mdb[db].map(accession => (
-                          <span key={accession} className={ps('sign-label')}>
+                          <span key={accession} className={f('sign-label')}>
                             <Link
                               title={`${accession} signature`}
                               newTo={{
@@ -255,7 +284,7 @@ class List extends Component {
                   ))}
               >
                 Signatures{' '}
-                <span className={ps('sign-label-head')} title="Signature ID">
+                <span className={f('sign-label-head')} title="Signature ID">
                   ID
                 </span>
               </Column>
@@ -281,11 +310,11 @@ class List extends Component {
             )}
             <Column
               dataKey="go_terms"
-              className={ps('col-go')}
+              className={f('col-go')}
               renderer={(gos /*: Array<Object> */) =>
                 gos.map(go => (
                   <div
-                    className={ps('go-row')}
+                    className={f('go-row')}
                     key={go.identifier}
                     style={{
                       backgroundColor: go.category
@@ -293,7 +322,7 @@ class List extends Component {
                         : '#DDDDDD',
                     }}
                   >
-                    <span className={ps('go-cell')}>
+                    <span className={f('go-cell')}>
                       <GoLink
                         id={go.identifier}
                         className={f('go')}
@@ -307,19 +336,19 @@ class List extends Component {
             >
               GO Terms{' '}
               <span
-                className={ps('sign-label-head', 'bp')}
+                className={f('sign-label-head', 'bp')}
                 title="Biological process term"
               >
                 BP
               </span>{' '}
               <span
-                className={ps('sign-label-head', 'mf')}
+                className={f('sign-label-head', 'mf')}
                 title="Molecular function term"
               >
                 MF
               </span>{' '}
               <span
-                className={ps('sign-label-head', 'cc')}
+                className={f('sign-label-head', 'cc')}
                 title="Cellular component term"
               >
                 CC
@@ -364,16 +393,23 @@ SummaryComponent.propTypes = {
 const Summary = props => {
   const { data: { loading, payload }, isStale } = props;
   if (loading || (isStale && !payload.metadata)) {
-    return <div>Loading…</div>;
+    return (
+      <div className={f('row')}>
+        {' '}
+        <div className={f('columns')}>Loading… </div>
+      </div>
+    );
   }
   return (
-    <Switch
-      {...props}
-      locationSelector={l =>
-        l.description.mainDetail || l.description.focusType}
-      indexRoute={SummaryComponent}
-      childRoutes={subPagesForEntry}
-    />
+    <ErrorBoundary>
+      <Switch
+        {...props}
+        locationSelector={l =>
+          l.description.mainDetail || l.description.focusType}
+        indexRoute={SummaryComponent}
+        childRoutes={subPagesForEntry}
+      />
+    </ErrorBoundary>
   );
 };
 Summary.propTypes = {
@@ -389,59 +425,109 @@ const dbAccs = new RegExp(
     .map(db => db.accession)
     .filter(db => db)
     .join('|')}|IPR[0-9]{6})`,
-  'i'
+  'i',
 );
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
-  <Switch
-    {...props}
-    locationSelector={l =>
-      l.description.mainAccession || l.description.focusType}
-    indexRoute={List}
-    childRoutes={[{ value: dbAccs, component: Summary }]}
-    catchAll={List}
-  />
+  <ErrorBoundary>
+    <Switch
+      {...props}
+      locationSelector={l =>
+        l.description.mainAccession || l.description.focusType}
+      indexRoute={List}
+      childRoutes={[{ value: dbAccs, component: Summary }]}
+      catchAll={List}
+    />
+  </ErrorBoundary>
 );
 
+const mapTypeToOntology = new Map([
+  ['Domain', 'http://semanticscience.org/resource/SIO_001379.rdf'],
+  ['Family', 'http://semanticscience.org/resource/SIO_001380.rdf'],
+  ['Repeat', 'http://semanticscience.org/resource/SIO_000370.rdf'],
+  ['Unknown', 'http://semanticscience.org/resource/SIO_000370.rdf'],
+  ['Conserved_site', 'http://semanticscience.org/resource/SIO_010049.rdf'],
+  ['Binding_site', 'http://semanticscience.org/resource/SIO_010040.rdf'],
+  ['Active_site', 'http://semanticscience.org/resource/SIO_010041.rdf'],
+  ['PTM', 'http://semanticscience.org/resource/SIO_010049.rdf'],
+]);
+
 const schemaProcessData = data => ({
-  '@type': 'ProteinEntity',
+  '@type': 'DataRecord',
+  '@id': '@mainEntityOfPage',
+  identifier: data.metadata.accession,
+  isPartOf: {
+    '@type': 'Dataset',
+    '@id': 'InterPro release ??',
+  },
+  additionalType:
+    mapTypeToOntology.get(data.metadata.type) ||
+    mapTypeToOntology.get('Unknown'),
+  mainEntity: '@mainEntity',
+  isBasedOn: '@isBasedOn',
+  isBasisFor: '@isBasisFor',
+  citation: '@citation',
+  seeAlso: '@seeAlso',
+});
+
+const schemaProcessData2 = data => ({
+  '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
+  additionalType:
+    mapTypeToOntology.get(data.metadata.type) ||
+    mapTypeToOntology.get('Unknown'),
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
-  inDataset: data.metadata.source_database,
-  biologicalType: data.metadata.type,
-  citation: '@citation',
-  isBasedOn: '@isBasedOn',
-  isBaseFor: '@isBaseFor',
+  additionalProperty: '@additionalProperty',
+  isContainedIn: '@isContainedIn',
 });
 
-const Entry = props => (
-  <div className={ps('with-data', { ['with-stale-data']: props.isStale })}>
-    {props.data.payload &&
-    props.data.payload.accession && (
-      <SchemaOrgData
-        data={props.data.payload}
-        processData={schemaProcessData}
-      />
-    )}
-    <Switch
-      {...props}
-      locationSelector={l => l.description.mainDB}
-      indexRoute={Overview}
-      catchAll={InnerSwitch}
-    />
-  </div>
-);
-Entry.propTypes = {
-  data: T.shape({
-    payload: T.object,
-  }).isRequired,
-  isStale: T.bool.isRequired,
-};
+class Entry extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      payload: T.object,
+    }).isRequired,
+    isStale: T.bool.isRequired,
+  };
+
+  render() {
+    return (
+      <div
+        className={f('with-data', { ['with-stale-data']: this.props.isStale })}
+      >
+        {this.props.data.payload &&
+          this.props.data.payload.metadata &&
+          this.props.data.payload.metadata.accession && (
+            <SchemaOrgData
+              data={this.props.data.payload}
+              processData={schemaProcessData}
+            />
+          )}
+        {this.props.data.payload &&
+          this.props.data.payload.metadata &&
+          this.props.data.payload.metadata.accession && (
+            <SchemaOrgData
+              data={this.props.data.payload}
+              processData={schemaProcessData2}
+            />
+          )}
+        <ErrorBoundary>
+          <Switch
+            {...this.props}
+            locationSelector={l => l.description.mainDB}
+            indexRoute={Overview}
+            catchAll={InnerSwitch}
+          />
+        </ErrorBoundary>
+      </div>
+    );
+  }
+}
+
 export default loadData((...args) =>
   getUrlForApi(...args)
-    .replace('hmm_model', '')
-    .replace('domain_architecture', '')
+    .replace('logo', '')
+    .replace('domain_architecture', ''),
 )(Entry);

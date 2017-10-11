@@ -9,6 +9,13 @@ import Table, { Column, Exporter } from 'components/Table';
 
 import loadData from 'higherOrder/loadData';
 
+import { foundationPartial } from 'styles/foundation';
+
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ipro from 'styles/interpro-new.css';
+
+const f = foundationPartial(ebiGlobalStyles, ipro);
+
 const MAX_LENGTH = 200;
 const NOT_FOUND = -1;
 
@@ -25,7 +32,11 @@ class SearchResults extends PureComponent {
     if (!payload) {
       return <div />;
     } else if (payload.hitCount === 0) {
-      return <div>There are not matches for the term queried</div>;
+      return (
+        <div className={f('callout', 'info', 'withicon')}>
+          There are not matches for the term queried.
+        </div>
+      );
     } else if (
       payload.hitCount === 1 &&
       payload.entries[0].id === search.search
@@ -119,7 +130,7 @@ class SearchResults extends PureComponent {
 const mapStateToProps = createSelector(
   state => state.data.dataUrl,
   state => state.newLocation.search,
-  (dataUrl, search) => ({ dataUrl, search })
+  (dataUrl, search) => ({ dataUrl, search }),
 );
 
 const getEbiSearchUrl = createSelector(
@@ -133,9 +144,9 @@ const getEbiSearchUrl = createSelector(
     s.page_size = s.page_size || pagination.pageSize;
     const params = `?query=${s.search}&format=json&fields=${fields}`;
     return `${protocol}//${hostname}:${port}${root}${params}`;
-  }
+  },
 );
 
 export default connect(mapStateToProps)(
-  loadData(getEbiSearchUrl)(SearchResults)
+  loadData(getEbiSearchUrl)(SearchResults),
 );

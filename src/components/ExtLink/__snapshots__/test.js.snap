@@ -42,7 +42,7 @@ exports[`External links <PDBeLink /> should render simple links 1`] = `
 
 exports[`External links <PMCLink /> should render simple links 1`] = `
 <BaseLink
-  id={12345}
+  id="12345"
   pattern="https://europepmc.org/abstract/MED/{id}"
   target="_blank"
 >

@@ -7,8 +7,23 @@ import Link from 'components/generic/Link';
 
 import loadWebComponent from 'utils/loadWebComponent';
 
+import { foundationPartial } from 'styles/foundation';
+
 import ipro from 'styles/interpro-new.css';
-import style from './style.css';
+import styles from './style.css';
+
+const f = foundationPartial(ipro, styles);
+
+const mapNameToClass = new Map([
+  ['Domain', 'title-id-domain'],
+  ['Family', 'title-id-family'],
+  ['Repeat', 'title-id-repeat'],
+  ['Unknown', 'title-id-unknown'],
+  ['Conserved_site', 'title-id-site'],
+  ['Binding_site', 'title-id-site'],
+  ['Active_site', 'title-id-site'],
+  ['PTM', 'title-id-site'],
+]);
 
 /*:: type Props = {
   metadata: {
@@ -34,8 +49,8 @@ export default class Title extends PureComponent /*:: <Props> */ {
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType
-      )
+        m => m.InterproType,
+      ),
     ).as('interpro-type');
   }
 
@@ -43,38 +58,41 @@ export default class Title extends PureComponent /*:: <Props> */ {
     const { metadata, mainType } = this.props;
     const isEntry = mainType === 'entry';
     return (
-      <div className={style.title}>
-        {isEntry && <interpro-type type={metadata.type} size="4em" />}
+      <div className={f('title')}>
+        {isEntry && (
+          <interpro-type type={metadata.type.replace('_', ' ')} size="4em" />
+        )}
         <Helmet>
           <title>{metadata.accession.toString()}</title>
         </Helmet>
         <h3>
-          {metadata.name.name} <small>({metadata.accession})</small>
+          {metadata.name.name}
+          <small className={f(mapNameToClass.get(metadata.type))}>
+            {metadata.accession}
+          </small>
         </h3>
         {isEntry &&
-        metadata.source_database.toLowerCase() !== 'interpro' && (
-          <div className={ipro['md-hlight']}>
-            <h5>
-              Member database:&nbsp;
-              <Link
-                newTo={{
-                  description: {
-                    mainType: 'entry',
-                    mainDB: metadata.source_database,
-                  },
-                }}
-              >
-                {metadata.source_database}
-              </Link>
-            </h5>
-          </div>
-        )}
+          metadata.source_database.toLowerCase() !== 'interpro' && (
+            <div className={f('md-hlight')}>
+              <h5>
+                Member database:&nbsp;
+                <Link
+                  newTo={{
+                    description: {
+                      mainType: 'entry',
+                      mainDB: metadata.source_database,
+                    },
+                  }}
+                >
+                  {metadata.source_database}
+                </Link>
+              </h5>
+            </div>
+          )}
         {metadata.name.short && (
           <p>
             Short name:&nbsp;
-            <i className="small" style={{ color: '#41647d' }}>
-              {metadata.name.short}
-            </i>
+            <i className={f('shortname')}>{metadata.name.short}</i>
           </p>
         )}
       </div>

@@ -9,8 +9,15 @@ import Link from 'components/generic/Link';
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
-
+import ProteinFile from 'subPages/Organism/ProteinFile';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
+
+import { foundationPartial } from 'styles/foundation';
+
+import localStyle from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+
+const f = foundationPartial(fonts, localStyle);
 
 const propTypes = {
   matches: T.arrayOf(T.object).isRequired,
@@ -25,7 +32,6 @@ const propTypes = {
   actualSize: T.number,
   search: T.object,
 };
-
 const componentMatch = {
   protein: {
     entry: EntriesOnProtein,
@@ -53,12 +59,20 @@ const MatchesByPrimary = (
   primary: string,
   secondary: string,
   props: Array<any>,
-} */
+} */,
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
   return <MatchComponent matches={matches} {...props} />;
 };
 MatchesByPrimary.propTypes = propTypes;
+
+const ProteinAccessionsRenderer = taxId => (
+  <ProteinFile taxId={taxId} type="accession" />
+);
+
+const ProteinFastasRenderer = taxId => (
+  <ProteinFile taxId={taxId} type="FASTA" />
+);
 
 // List of all matches, many to many
 const Matches = (
@@ -78,12 +92,16 @@ const Matches = (
    isStale: boolean,
    search: Object,
    props: Array<any>
-} */
+} */,
 ) => {
   const pathname = '';
   return (
     <Table
-      dataTable={matches.map(e => ({ match: e, ...e[primary] }))}
+      dataTable={matches.map(e => ({
+        ...e[primary],
+        accession: String(e[primary].accession),
+        match: e,
+      }))}
       actualSize={actualSize}
       query={search}
       pathname={pathname}
@@ -97,7 +115,7 @@ const Matches = (
         dataKey="accession"
         renderer={(
           acc /*: string */,
-          { source_database: sourceDatabase } /*: {source_database: string} */
+          { source_database: sourceDatabase } /*: {source_database: string} */,
         ) => (
           <Link
             newTo={{
@@ -108,7 +126,11 @@ const Matches = (
               },
             }}
           >
-            {acc}
+            {primary === 'protein' ? (
+              <span className={f('acc-row')}>{acc}</span>
+            ) : (
+              <span>{acc}</span>
+            )}
           </Link>
         )}
       >
@@ -121,7 +143,7 @@ const Matches = (
           {
             accession,
             source_database: sourceDatabase,
-          } /*: {accession: string, source_database: string} */
+          } /*: {accession: string, source_database: string} */,
         ) => (
           <Link
             newTo={{
@@ -135,13 +157,43 @@ const Matches = (
             {name}
           </Link>
         )}
+      />
+      <Column
+        dataKey="source_organism.fullname"
+        displayIf={primary !== 'organism'}
       >
-        Name
+        Species
       </Column>
-      <Column dataKey="source_organism.fullname">Species</Column>
-      <Column dataKey="source_database">Source Database</Column>
+      <Column
+        dataKey="source_database"
+        className={f('table-center')}
+        displayIf={primary !== 'organism'}
+        renderer={(db /*: string */) => (
+          <div>
+            {db === 'reviewed' ? (
+              <div
+                title={
+                  db === 'reviewed'
+                    ? `${db} by curators (Swiss-Prot)`
+                    : 'Not reviewed by curators (TrEMBL)'
+                }
+              >
+                <span
+                  className={f('icon', 'icon-functional')}
+                  data-icon={'/'}
+                />
+              </div>
+            ) : (
+              db
+            )}
+          </div>
+        )}
+      >
+        {primary === 'protein' ? 'Reviewed' : 'Source database'}
+      </Column>
       <Column
         dataKey="match"
+        displayIf={primary !== 'organism' && secondary !== 'organism'}
         renderer={(match /*: Object */) => (
           <MatchesByPrimary
             matches={[match]}
@@ -154,22 +206,32 @@ const Matches = (
       >
         Architecture
       </Column>
+      <Column
+        dataKey="accession"
+        defaultKey="proteinFastas"
+        className={f('table-center')}
+        displayIf={primary === 'organism'}
+        renderer={ProteinFastasRenderer}
+      >
+        FASTA
+      </Column>
+      <Column
+        dataKey="accession"
+        className={f('table-center')}
+        defaultKey="proteinAccessions"
+        displayIf={primary === 'organism'}
+        renderer={ProteinAccessionsRenderer}
+      >
+        Protein accessions
+      </Column>
     </Table>
-    // {Object.entries(matchesByPrimary).map(([acc, matches]) => (
-    //   <MatchesByPrimary
-    //     key={acc}
-    //     matches={matches}
-    //     primary={primary}
-    //     {...props}
-    //   />
-    // ))}
   );
 };
 Matches.propTypes = propTypes;
 
 const mapStateToProps = createSelector(
   state => state.newLocation.search,
-  search => ({ search })
+  search => ({ search }),
 );
 
 export default connect(mapStateToProps)(Matches);

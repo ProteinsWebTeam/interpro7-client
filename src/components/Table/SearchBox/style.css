@@ -20,8 +20,12 @@
   font-size: 2em;
   line-height: 1;
   cursor: pointer;
+  outline: 0;
 }
-.filter-box input:hover + .cancel-button,
+.filter-box input:hover + .cancel-button {
+  opacity: 0.3;
+}
+
 .cancel-button:hover {
   opacity: 0.6;
 }

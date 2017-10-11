@@ -1,37 +1,36 @@
-@import "../../../styles/colors.css";
+@import '../../../styles/colors.css';
 
 .reference {
   padding-top: 1em;
   text-indent: -1em;
   padding-left: 1em;
 }
-.reference span {
-  padding-left: 1em;
-}
+
 .reference span.title {
   font-style: italic;
 }
 .reference span.index {
   padding-left: 0em;
-  color: #9DA0A4;
+  color: #9da0a4;
 }
 .reference:target span.index {
   font-weight: bold;
   color: rgb(65, 100, 125);
 }
 
-.reference a:not([href*="localhost"]){
+.reference a:not([href*='localhost']) {
   white-space: nowrap;
 }
-.reference a:not([href*="localhost"])::before {
-  content: " \21AA ";
+.ext::before {
+  content: ' \21AA ';
 }
 
 .list {
   list-style: none;
+  margin: 0;
   padding: 0;
-  columns: 25em;
-  column-rule: solid var(--colors-nearly-white) 1px;
+  columns: 23em;
+  column-gap: 2rem;
 
   @nest & > * {
     break-inside: avoid;

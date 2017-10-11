@@ -7,8 +7,10 @@ import classnames from 'classnames/bind';
 
 import { openSideNav } from 'actions/creators';
 
+import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
+
 import Link from 'components/generic/Link';
-import InterProMenu from 'components/Menu/InterProMenu';
+import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 
@@ -45,9 +47,9 @@ class _HamburgerBtn extends PureComponent {
     return (
       <svg
         onClick={openSideNav}
-        viewBox="0 0 12 10"
-        width="2.5em"
-        height="2.5em"
+        viewBox="0 0 10 10"
+        width="2em"
+        height="2em"
         className={reducedStyleBundle('top_level_hamburger', { stuck })}
       >
         <line
@@ -79,7 +81,7 @@ class _HamburgerBtn extends PureComponent {
 const getSideNav = state => state.ui.sideNav;
 const mapStateToPropsHamburger = createSelector(getSideNav, open => ({ open }));
 const HamburgerBtn = connect(mapStateToPropsHamburger, { openSideNav })(
-  _HamburgerBtn
+  _HamburgerBtn,
 );
 
 class _SideIcons extends PureComponent {
@@ -170,7 +172,7 @@ class Header extends PureComponent {
   render() {
     const { stickyMenuOffset: offset, stuck } = this.props;
     return (
-      <header
+      <div
         id={ebiGlobalStyles.masthead}
         className={styleBundle('masthead')}
         style={styleForHeader(false && supportsSticky, offset, stuck)}
@@ -178,17 +180,17 @@ class Header extends PureComponent {
         <div className={styleBundle('masthead-inner', 'row')}>
           <Title reduced={false} />
           <SideIcons reduced={false} stuck={stuck} />
-          <nav>
-            <InterProMenu className={styleBundle('menu')} />
-          </nav>
+          <ResizeObserverComponent element="nav" measurements="width">
+            <DynamicMenu />
+          </ResizeObserverComponent>
         </div>
-      </header>
+      </div>
     );
   }
 }
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  stuck => ({ stuck })
+  stuck => ({ stuck }),
 );
 export default connect(mapStateToProps)(Header);

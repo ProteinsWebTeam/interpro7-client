@@ -4,6 +4,7 @@ import T from 'prop-types';
 import partition from 'lodash-es/partition';
 
 import { PMCLink, DOILink } from 'components/ExtLink';
+import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadable from 'higherOrder/loadable';
@@ -31,10 +32,11 @@ const description2IDs = description =>
   description.reduce(
     (acc, part) => [
       ...acc,
-      ...(part.match(/"(PUB\d+)"/gi) || [])
-        .map(t => t.replace(/(^")|("$)/g, '')),
+      ...(part.match(/"(PUB\d+)"/gi) || []).map(t =>
+        t.replace(/(^")|("$)/g, ''),
+      ),
     ],
-    []
+    [],
   );
 
 const LiteratureItem = (
@@ -43,21 +45,34 @@ const LiteratureItem = (
     reference: r,
     i,
     included,
-  } /*: {pubID: string, reference: Object, i?: number, included?: boolean} */
+  } /*: {pubID: string, reference: Object, i?: number, included?: boolean} */,
 ) => (
   <li className={f('reference', 'small')} id={included ? pubID : null}>
     <SchemaOrgData data={r} processData={schemaProcessData} />
-    {included && <span className={f('index')}>[{i}]</span>}
+    {included && (
+      <span className={f('index')}>
+        <Link href="#root" aria-label="jump up">
+          {i}.^
+        </Link>{' '}
+      </span>
+    )}
     <span className={f('authors')}>{r.authors}</span>
-    <span className={f('year')}>({r.year})</span>.
+    <span className={f('year')}>({r.year})</span>.{' '}
     <span className={f('title')}>{r.title}</span>
     {r.ISOJournal && <span className={f('journal')}>{r.ISOJournal}, </span>}
-    {r.issue && <span className={f('issue')}>{r.issue}, </span>}
+    {r.issue && <span className={f('issue')}> {r.issue}, </span>}
     {r.rawPages && <span className={f('pages')}>{r.rawPages}. </span>}
     <span className={f('reference_id')}>{pubID}.</span>
-    {r.DOI_URL && <DOILink id={r.DOI_URL}>DOI</DOILink>}
-    {r.DOI_URL && <span>|</span>}
-    <PMCLink id={r.PMID}>EuropePMC</PMCLink>
+    <br />
+    {r.DOI_URL && (
+      <DOILink id={r.DOI_URL} className={f('ext')}>
+        View article
+      </DOILink>
+    )}
+    {r.DOI_URL && <span> | </span>}
+    EuropePMC:<PMCLink id={r.PMID} className={f('ext')}>
+      {r.PMID}
+    </PMCLink>
   </li>
 );
 LiteratureItem.propTypes = {
@@ -71,11 +86,11 @@ const Literature = (
   {
     references,
     description,
-  } /*: {|references: Object, description: Array<string>|} */
+  } /*: {|references: Object, description: Array<string>|} */,
 ) => {
   const citations = description2IDs(description);
   const [included, extra] = partition(Object.entries(references), ([id]) =>
-    citations.includes(id)
+    citations.includes(id),
   );
   return (
     <div className={f('row')}>

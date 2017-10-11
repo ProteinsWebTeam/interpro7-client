@@ -4,9 +4,7 @@ import T from 'prop-types';
 import Related from 'components/Related';
 
 const StructureSubPage = ({ data } /*: {data: Object} */) => (
-  <div>
-    <Related data={data} />
-  </div>
+  <Related data={data} />
 );
 StructureSubPage.propTypes = {
   data: T.object.isRequired,

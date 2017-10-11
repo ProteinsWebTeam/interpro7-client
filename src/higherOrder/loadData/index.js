@@ -16,13 +16,15 @@ import { alreadyLoadingError } from 'reducers/data';
 import extractParams from './extractParams';
 import getFetch from './getFetch';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
+
 const mapStateToProps = getUrl =>
   createSelector(
     state => state,
     state => state.data[getUrl(state)] || {},
-    (appState, data) => ({ appState, data })
+    (appState, data) => ({ appState, data }),
   );
-const getBaseURL = url => (url ? url.slice(0, url.indexOf('?')) : '');
+// const getBaseURL = url => (url ? url.slice(0, url.indexOf('?')) : '');
 
 // eslint-disable-next-line max-params
 const load = (
@@ -32,7 +34,7 @@ const load = (
   unloadingData,
   failedLoadingData,
   fetchFun,
-  fetchOptions
+  fetchOptions,
 ) => key => {
   try {
     loadingData(key);
@@ -48,7 +50,7 @@ const load = (
   // Eventually changes the state according to response
   c.promise.then(
     response => loadedData(key, response),
-    error => (error.canceled ? unloadingData : failedLoadingData)(key, error)
+    error => (error.canceled ? unloadingData : failedLoadingData)(key, error),
   );
   return c;
 };
@@ -82,7 +84,9 @@ const loadData = params => {
         super(props);
         this.state = { staleData: props.data };
         this._url = '';
-        this._avoidStaleData = true;
+        // TODO: _avoidStaleData has been removed(29/09/2017), delete commented lines
+        // if this change hasn't create any problems.
+        // this._avoidStaleData = true;
         this._load = null;
       }
 
@@ -106,7 +110,7 @@ const loadData = params => {
             unloadingData,
             failedLoadingData,
             fetchFun,
-            fetchOptions
+            fetchOptions,
           );
         }
 
@@ -135,8 +139,8 @@ const loadData = params => {
         unloadingData,
         data,
       }) {
-        this._avoidStaleData =
-          getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState));
+        // this._avoidStaleData =
+        //   getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState));
 
         // Same location, no need to reload data
         if (
@@ -152,7 +156,7 @@ const loadData = params => {
         // (if still running, otherwise won't do anything)
         if (this._cancelableFetch) this._cancelableFetch.cancel();
         // Unload previous data
-        unloadingData(this._url);
+        this._unloadDataMaybe();
         // Key is the new URL to fetch
         // (stored in `key` because `this._url` might change)
 
@@ -164,7 +168,7 @@ const loadData = params => {
             unloadingData,
             failedLoadingData,
             fetchFun,
-            fetchOptions
+            fetchOptions,
           );
         }
         this._cancelableFetch = this._load(key);
@@ -172,14 +176,23 @@ const loadData = params => {
 
       componentWillUnmount() {
         // Unload data
-        this.props.unloadingData(this._url);
+        this._unloadDataMaybe();
         // Cancel previous fetch
         // (if still running, otherwise won't do anything)
         if (this._cancelableFetch) this._cancelableFetch.cancel();
         this._url = null;
       }
 
+      _unloadDataMaybe = () => {
+        //TODO: add some logic to do data registration and only remove data if
+        // nobody is registered to it. IMPORTANT!
+        // Put some logic to check that, and, only if it is OK, then
+        const resultOfTheLogic = false;
+        if (resultOfTheLogic) this.props.unloadingData(this._url);
+      };
+
       render() {
+        const { staleData } = this.state;
         const {
           // Remove from props
           appState,
@@ -193,17 +206,22 @@ const loadData = params => {
         // TODO: remove next line if nothing breaks because of it
         // const data = {...dataFromProps};// maybe useful?..
         if (typeof data.loading === 'undefined') data.loading = true;
-        const useStaleData =
-          !this._avoidStaleData && data.loading && this.state.staleData.payload;
+        // const useStaleData =
+        //   !this._avoidStaleData && data.loading && staleData.payload;
+        const useStaleData = data.loading && staleData.payload;
         if (!data.loading) {
           this._url = getUrl(appState);
         }
         const passedProps = {
           ...rest,
-          [`data${propNamespace}`]: useStaleData ? this.state.staleData : data,
+          [`data${propNamespace}`]: useStaleData ? staleData : data,
           [`isStale${propNamespace}`]: !!useStaleData,
         };
-        return <Wrapped {...passedProps} />;
+        return (
+          <ErrorBoundary>
+            <Wrapped {...passedProps} />
+          </ErrorBoundary>
+        );
       }
     }
 
