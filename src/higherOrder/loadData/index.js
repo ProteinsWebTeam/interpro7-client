@@ -184,7 +184,7 @@ const loadData = params => {
       }
 
       _unloadDataMaybe = () => {
-        //TODO: add some logic to do data registration and only remove data if
+        // TODO: add some logic to do data registration and only remove data if
         // nobody is registered to it. IMPORTANT!
         // Put some logic to check that, and, only if it is OK, then
         const resultOfTheLogic = false;

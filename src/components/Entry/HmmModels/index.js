@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import classNames from 'classnames';
 
 import hmmLogo from './hmm_logo';
 

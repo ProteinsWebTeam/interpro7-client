@@ -271,6 +271,13 @@ const schemaProcessData2 = data => ({
 class Structure extends PureComponent {
   static propTypes = {
     isStale: T.bool.isRequired,
+    data: T.shape({
+      payload: T.shape({
+        metadata: T.shape({
+          accession: T.string.isRequired,
+        }).isRequired,
+      }),
+    }).isRequired,
   };
 
   render() {
