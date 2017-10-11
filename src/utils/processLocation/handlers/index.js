@@ -369,7 +369,7 @@ export const jobSequenceSearchHandler /*: Handler */ = Object.create(handler, {
   },
   match: {
     value: (current /*: string */) =>
-      /iprscan5-S\d{8}-\d{6}-\d{4}-\d{8}-(pg|oy)/.test(current),
+      /iprscan5-[SR]\d{8}-\d{6}-\d{4}-\d{8}-(pg|oy)/.test(current),
   },
 });
 
