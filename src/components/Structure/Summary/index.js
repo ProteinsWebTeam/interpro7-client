@@ -105,7 +105,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
           <ErrorBoundary>
             <Embed
               style={embedStyle}
-              src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${metadata.accession}/?view=entry_index&viewer=jmol&controls=codename_hero`}
+              src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${metadata.accession}/?view=entry_index&viewer=litemol&controls=codename_hero`}
             >
               <div
                 style={{
