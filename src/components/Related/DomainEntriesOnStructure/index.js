@@ -3,6 +3,8 @@ import T from 'prop-types';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 
+import f from 'styles/foundation';
+
 const toArrayStructure = locations =>
   locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
 
@@ -36,20 +38,21 @@ const mergeData = secondaryData => {
       link: `/entry/${entry.source_database}/${entry.accession}`,
     });
   }
-  return Object.keys(out).sort((a, b) => a > b).map(k => out[k]);
+  return Object.keys(out)
+    .sort((a, b) => a > b)
+    .map(k => out[k]);
 };
 
-const EntriesOnStructure = ({ entries }) =>
-  <div>
-    {mergeData(entries).map((e, i) =>
-      <div key={i}>
-        <h4>
-          Chain {e.chain}
-        </h4>
+const EntriesOnStructure = ({ entries }) => (
+  <div className={f('row')}>
+    {mergeData(entries).map((e, i) => (
+      <div key={i} className={f('columns')}>
+        <h4>Chain {e.chain}</h4>
         <DomainArchitecture protein={e.protein} data={e.data} />
-      </div>,
-    )}
-  </div>;
+      </div>
+    ))}
+  </div>
+);
 EntriesOnStructure.propTypes = {
   entries: T.array.isRequired,
 };
