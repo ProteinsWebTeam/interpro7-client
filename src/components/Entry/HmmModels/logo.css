@@ -1,11 +1,11 @@
 .logo {
-  border: 5px;
+  /*border: 5px;*/
   position: relative;
-  margin: auto;
-  width: 95%;
+  /*margin: auto;*/
+  /*width: 95%;*/
 }
 .logo form {
-  margin: 0.3em 55px;
+  /*margin: 0.3em 55px;*/
 }
 .logo_container {
   position: relative;
@@ -14,6 +14,7 @@
   margin-left: 55px;
   border: 1px solid #999;
 }
+
 .logo_graphic {
   position: absolute;
   height: 300px;
@@ -87,7 +88,7 @@
 }
 .logo_xaxis {
   display: block;
-  margin-left: 40px;
+  /*margin-left: 40px;*/
 }
 .xaxis_text {
   width: 10em;
@@ -99,8 +100,6 @@
 }
 .logo_wrapper {
   background: #eee;
-  border-top: 2px solid #ccc;
-  border-bottom: 2px solid #ccc;
   padding: 0 1em;
   margin: 1em 0;
 }
@@ -118,19 +117,31 @@
   z-index: 5;
 }
 .logo_col_info {
-  float: left;
-  margin: 0.3em 0.3em 0.3em 1em;
-  padding: 0.3em;
-  border: 1px solid #ccc;
-  display: table;
-  border-radius: 5px;
+  /*float: left;*/
+  /*margin: 0.3em 0.3em 0.3em 1em;*/
+  /*padding: 0.3em;*/
+  /*border: 1px solid #ccc;*/
+  /*display: table;*/
+  /*border-radius: 5px;*/
+}
+.logo_col_hmm {
+  width: 70%;
+  margin: 0 auto;
+  border: 1px #ccc solid;
+}
+.logo_col_hmm tr {
+  background-color: #eee;
+}
+.logo_col_hmm tr td {
+  padding: 0.1rem;
 }
 
 .logo_col_info div {
   float: left;
-  width: 0.5em;
-  height: 1em;
+  width: 0.6em;
+  height: 1.4em;
   margin-left: 1em;
+  margin-right: 0.5em;
 }
 
 .logo_settings {
@@ -158,6 +169,18 @@
   margin: 0.3em 1em;
   padding: 0.3em;
 }
+
+.logo_form label {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.logo_form input {
+  display: inline-block;
+  width: inherit;
+  margin: 0 1em 0 0;
+}
+
 .logo_position {
 }
 .logo_change {
@@ -169,6 +192,7 @@
 }
 .button {
   border: 1px solid #999;
+  padding: 0.2em 0.3em;
 }
 .close {
 }
