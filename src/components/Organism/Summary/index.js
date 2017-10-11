@@ -36,11 +36,14 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }).isRequired,
+    goToNewLocation: T.func.isRequired,
   };
 
   constructor(props) {
     super(props);
-    this._vis = new TaxonomyVisualisation();
+    this._vis = new TaxonomyVisualisation(undefined, {
+      initialMaxNodes: +Infinity,
+    });
     this._vis.addEventListener('focus', this._handleFocus);
   }
 
@@ -57,13 +60,13 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   }
 
   _handleFocus = ({ detail: { id } }) => {
-    // this.props.goToNewLocation({
-    //   description: {
-    //     mainType: 'organism',
-    //     mainDB: 'taxonomy',
-    //     mainAccession: id,
-    //   },
-    // });
+    this.props.goToNewLocation({
+      description: {
+        mainType: 'organism',
+        mainDB: 'taxonomy',
+        mainAccession: id,
+      },
+    });
   };
 
   _populateData = data => {
