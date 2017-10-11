@@ -102,6 +102,28 @@ const Overview = ({
 };
 Overview.propTypes = propTypes;
 
+const schemaProcessDataTable = mainDB => ({
+  '@type': 'Dataset',
+  '@id': '@mainEntityOfPage',
+  identifier: mainDB,
+  name: mainDB,
+  version: '?',
+  url: window.location.href,
+  hasPart: '@hasPart',
+  includedInDataCatalog: {
+    '@type': 'DataCatalog',
+    '@id': `${window.location.origin}/interpro7/`,
+  },
+});
+
+const schemaProcessDataTableRow = data => ({
+  '@type': 'DataRecord',
+  '@id': '@hasPart',
+  identifier: data.accession,
+  name: data.mainDB,
+  url: `${window.location.href}/${data.accession}`,
+});
+
 class List extends Component {
   static propTypes = propTypes;
 
@@ -139,6 +161,7 @@ class List extends Component {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
+          <SchemaOrgData data={mainDB} processData={schemaProcessDataTable} />
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -210,7 +233,7 @@ class List extends Component {
             </Column>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */) => (
+              renderer={(accession /*: string */, data) => (
                 <Link
                   title={accession}
                   newTo={location => ({
@@ -222,6 +245,10 @@ class List extends Component {
                     },
                   })}
                 >
+                  <SchemaOrgData
+                    data={data}
+                    processData={schemaProcessDataTableRow}
+                  />
                   <span className={f('acc-row')}>{accession}</span>
                 </Link>
               )}
@@ -415,18 +442,46 @@ const InnerSwitch = props => (
   </ErrorBoundary>
 );
 
+const mapTypeToOntology = new Map([
+  ['Domain', 'http://semanticscience.org/resource/SIO_001379.rdf'],
+  ['Family', 'http://semanticscience.org/resource/SIO_001380.rdf'],
+  ['Repeat', 'http://semanticscience.org/resource/SIO_000370.rdf'],
+  ['Unknown', 'http://semanticscience.org/resource/SIO_000370.rdf'],
+  ['Conserved_site', 'http://semanticscience.org/resource/SIO_010049.rdf'],
+  ['Binding_site', 'http://semanticscience.org/resource/SIO_010040.rdf'],
+  ['Active_site', 'http://semanticscience.org/resource/SIO_010041.rdf'],
+  ['PTM', 'http://semanticscience.org/resource/SIO_010049.rdf'],
+]);
+
 const schemaProcessData = data => ({
-  '@type': 'PhysicalEntity',
+  '@type': 'DataRecord',
+  '@id': '@mainEntityOfPage',
+  identifier: data.metadata.accession,
+  isPartOf: {
+    '@type': 'Dataset',
+    '@id': 'InterPro release ??',
+  },
+  additionalType:
+    mapTypeToOntology.get(data.metadata.type) ||
+    mapTypeToOntology.get('Unknown'),
+  mainEntity: '@mainEntity',
+  isBasedOn: '@isBasedOn',
+  isBasisFor: '@isBasisFor',
+  citation: '@citation',
+  seeAlso: '@seeAlso',
+});
+
+const schemaProcessData2 = data => ({
+  '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
-  additionalType: '???ProteinAnnotation???',
+  additionalType:
+    mapTypeToOntology.get(data.metadata.type) ||
+    mapTypeToOntology.get('Unknown'),
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
-  inDataset: data.metadata.source_database,
-  biologicalType: data.metadata.type,
-  citation: '@citation',
-  isBasedOn: '@isBasedOn',
-  isBasisFor: '@isBasisFor',
+  additionalProperty: '@additionalProperty',
+  isContainedIn: '@isContainedIn',
 });
 
 class Entry extends PureComponent {
@@ -450,6 +505,14 @@ class Entry extends PureComponent {
               processData={schemaProcessData}
             />
           )}
+        {this.props.data.payload &&
+          this.props.data.payload.metadata &&
+          this.props.data.payload.metadata.accession && (
+            <SchemaOrgData
+              data={this.props.data.payload}
+              processData={schemaProcessData2}
+            />
+          )}
         <ErrorBoundary>
           <Switch
             {...this.props}
@@ -465,6 +528,6 @@ class Entry extends PureComponent {
 
 export default loadData((...args) =>
   getUrlForApi(...args)
-    .replace('hmm_model', '')
+    .replace('logo', '')
     .replace('domain_architecture', ''),
 )(Entry);

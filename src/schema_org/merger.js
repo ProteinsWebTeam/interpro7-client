@@ -1,4 +1,4 @@
-import {schedule} from 'timing-functions/src';
+import { schedule } from 'timing-functions/src';
 
 const DEFAULT_ROOT_DATA = {
   '@context': 'http://schema.org',
@@ -8,17 +8,24 @@ const DEFAULT_ROOT_DATA = {
 
 const DEFAULT_MAX_DELAY = 250;
 
-const checkDeadline = async deadline => {
+const checkDeadline = async (deadline, dev /*?: boolean */) => {
   let _deadline = deadline;
   if (!deadline.timeRemaining()) {
-    console.log('⌛ No more time remaining! Re-schedule work for later');
+    if (dev) {
+      console.log('⌛ No more time remaining! Re-schedule work for later');
+    }
     _deadline = await schedule(DEFAULT_MAX_DELAY);
   }
   return _deadline;
 };
 
-const merger = async (dataMap, deadline, toBeProcessed = DEFAULT_ROOT_DATA) => {
-  const _deadline = await checkDeadline(deadline);
+const merger = async (
+  dataMap,
+  deadline,
+  toBeProcessed = DEFAULT_ROOT_DATA,
+  dev /*?: boolean */,
+) => {
+  const _deadline = await checkDeadline(deadline, dev);
   const schema = {};
   for (const [key, value] of Object.entries(toBeProcessed)) {
     if (value && value[0] === '@') {
@@ -31,10 +38,10 @@ const merger = async (dataMap, deadline, toBeProcessed = DEFAULT_ROOT_DATA) => {
         } else {
           // if multiple data, pass as array
           schema[key] = await Promise.all(
-            data.map(datum => merger(dataMap, deadline, datum))
+            data.map(datum => merger(dataMap, deadline, datum)),
           );
         }
-      }// else don't add
+      } // else don't add
     } else {
       if (value !== null) schema[key] = value;
     }

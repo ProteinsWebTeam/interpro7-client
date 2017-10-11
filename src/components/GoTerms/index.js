@@ -3,6 +3,8 @@ import T from 'prop-types';
 
 import { GoLink } from 'components/ExtLink';
 
+import loadable from 'higherOrder/loadable';
+
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
@@ -20,6 +22,17 @@ const mapNameToClass = new Map([
   ['Molecular Function', 'go-title-mf'],
   ['Cellular Component', 'go-title-cc'],
 ]);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
+const schemaProcessData = data => ({
+  '@type': 'DataRecord',
+  '@id': '@seeAlso',
+  identifier: data,
+});
 
 const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
   // remove duplicates
@@ -58,6 +71,10 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
               {values && values.length ? (
                 values.map(({ identifier, name }) => (
                   <li key={identifier}>
+                    <SchemaOrgData
+                      data={identifier}
+                      processData={schemaProcessData}
+                    />
                     <GoLink
                       id={identifier}
                       className={f('go-terms')}

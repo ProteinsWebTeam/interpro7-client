@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+
+import { goToNewLocation } from 'actions/creators';
 
 import Title from 'components/Title';
-import Accession from 'components/Protein/Accession';
+import Accession from 'components/Organism/Accession';
 import Lineage from 'components/Organism/Lineage';
 import Children from 'components/Organism/Children';
 import Metadata from 'wrappers/Metadata';
@@ -20,6 +23,7 @@ import enaLogo from 'images/ena_small.png';
   data: {
     metadata: Object,
   },
+  goToNewLocation: function,
 }; */
 
 class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
@@ -32,11 +36,15 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }).isRequired,
+    goToNewLocation: T.func.isRequired,
   };
 
   constructor(props) {
     super(props);
-    this._vis = new TaxonomyVisualisation();
+    this._vis = new TaxonomyVisualisation(undefined, {
+      initialMaxNodes: +Infinity,
+    });
+    this._vis.addEventListener('focus', this._handleFocus);
   }
 
   componentDidMount() {
@@ -50,6 +58,16 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
       this._populateData(nextProps.data.metadata);
     }
   }
+
+  _handleFocus = ({ detail: { id } }) => {
+    this.props.goToNewLocation({
+      description: {
+        mainType: 'organism',
+        mainDB: 'taxonomy',
+        mainAccession: id,
+      },
+    });
+  };
 
   _populateData = data => {
     const lineage = data.lineage.trim().split(/\s+/);
@@ -72,6 +90,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
       currentNode.children = data.children.map(id => ({ name: id, id }));
     }
     this._vis.data = root;
+    this._vis.focusNodeWithID(`${data.accession}`);
   };
 
   render() {
@@ -120,6 +139,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }).isRequired,
+    goToNewLocation: T.func.isRequired,
   };
 
   render() {
@@ -183,4 +203,4 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
     );
   }
 }
-export default SummaryOrganism;
+export default connect(null, { goToNewLocation })(SummaryOrganism);

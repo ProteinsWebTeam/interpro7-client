@@ -582,7 +582,7 @@ const HMMLogo = function(element, options = {}) {
     inOdds,
     inLength,
     delOdds,
-    showInserts
+    showInserts,
   ) => {
     let fill = '#fff';
     if (showInserts) {
@@ -673,7 +673,7 @@ const HMMLogo = function(element, options = {}) {
     fontsize,
     colWidth,
     fill,
-    textfill
+    textfill,
   ) => {
     context.font = `${fontsize}px Arial`;
     context.fillStyle = fill;
@@ -730,7 +730,7 @@ const HMMLogo = function(element, options = {}) {
     colWidth,
     text,
     fontsize,
-    showInserts
+    showInserts,
   ) => {
     let y = height - 4;
     let fill = '#fff';
@@ -760,7 +760,7 @@ const HMMLogo = function(element, options = {}) {
     colWidth,
     colNum,
     fontsize,
-    right
+    right,
   ) => {
     context.font = `${fontsize}px Arial`;
     context.textAlign = right ? 'right' : 'center';
@@ -881,7 +881,7 @@ const HMMLogo = function(element, options = {}) {
 
     if (this.previous_zoom !== this.zoom) {
       for (const canvasElement of this.dom_element.getElementsByTagName(
-        'canvas'
+        'canvas',
       )) {
         canvasElement.remove();
       }
@@ -919,7 +919,7 @@ const HMMLogo = function(element, options = {}) {
             this.height,
             adjustedWidth,
             i,
-            maxCanvasWidth
+            maxCanvasWidth,
           );
           this.contexts[i] = this.canvases[i].getContext('2d');
           this.contexts[i].setTransform(1, 0, 0, 1, 0, 0);
@@ -950,7 +950,7 @@ const HMMLogo = function(element, options = {}) {
     // width of 0.
     if (!this.scrollme) {
       const logoGraphic = this.called_on.getElementsByClassName(
-        styles.logo_graphic
+        styles.logo_graphic,
       )[0];
       this.scrollme = new EasyScroller(logoGraphic, {
         scrollingX: 1,
@@ -969,7 +969,7 @@ const HMMLogo = function(element, options = {}) {
     }
 
     for (const xElement of this.called_on.getElementsByClassName(
-      styles.logo_xaxis
+      styles.logo_xaxis,
     )) {
       xElement.remove();
     }
@@ -981,7 +981,7 @@ const HMMLogo = function(element, options = {}) {
     axisDiv.appendChild(axisP);
     this.called_on.insertBefore(
       axisDiv,
-      this.called_on.getElementsByClassName(styles.logo_container)[0]
+      this.called_on.getElementsByClassName(styles.logo_container)[0],
     );
   };
 
@@ -989,13 +989,13 @@ const HMMLogo = function(element, options = {}) {
   this.render_y_axis_label = function() {
     // attach a canvas for the y-axis
     for (const yElement of this.called_on.getElementsByClassName(
-      styles.logo_yaxis
+      styles.logo_yaxis,
     )) {
       yElement.remove();
     }
 
     for (const xAxis of this.called_on.getElementsByClassName(
-      styles.logo_xaxis
+      styles.logo_xaxis,
     )) {
       const canvas = document.createElement('canvas');
       canvas.classList.add(styles.logo_yaxis);
@@ -1034,7 +1034,7 @@ const HMMLogo = function(element, options = {}) {
       context.fillText(
         parseFloat(this.data.max_height / 2).toFixed(1),
         38,
-        this.info_content_height / 2
+        this.info_content_height / 2,
       );
       // draw the min label
       context.fillText('0', 38, this.info_content_height);
@@ -1085,7 +1085,7 @@ const HMMLogo = function(element, options = {}) {
           x,
           10,
           this.zoomed_column,
-          this.height - 40
+          this.height - 40,
         );
       } else {
         const column = this.data.height_arr[i - 1];
@@ -1132,7 +1132,7 @@ const HMMLogo = function(element, options = {}) {
                 colPositions[j][1],
                 colPositions[j][2],
                 colPositions[j][3],
-                color
+                color,
               );
             }
           }
@@ -1173,7 +1173,7 @@ const HMMLogo = function(element, options = {}) {
         this.zoomed_column,
         this.data.delete_probs[i - 1],
         fontsize,
-        this.show_inserts
+        this.show_inserts,
       );
       // draw insert length ticks
       drawTicks(this.contexts[contextNum], x, this.height - 15, 5);
@@ -1184,7 +1184,7 @@ const HMMLogo = function(element, options = {}) {
           this.height,
           this.zoomed_column,
           this.data.insert_probs[i - 1],
-          fontsize
+          fontsize,
         );
         drawInsertLength(
           this.contexts[contextNum],
@@ -1192,7 +1192,7 @@ const HMMLogo = function(element, options = {}) {
           this.height - 5,
           this.zoomed_column,
           this.data.insert_lengths[i - 1],
-          fontsize
+          fontsize,
         );
 
         // draw delete probability ticks
@@ -1227,7 +1227,7 @@ const HMMLogo = function(element, options = {}) {
       divX,
       this.height - 30,
       -30 - this.height,
-      '#dddddd'
+      '#dddddd',
     );
     // draw top ticks
     drawTicks(this.contexts[opts.contextNum], divX, 0, 5);
@@ -1239,7 +1239,7 @@ const HMMLogo = function(element, options = {}) {
       this.zoomed_column,
       opts.column_num,
       opts.fontsize,
-      opts.ralign
+      opts.ralign,
     );
   };
 
@@ -1257,7 +1257,7 @@ const HMMLogo = function(element, options = {}) {
           x,
           10,
           this.zoomed_column,
-          this.height - 40
+          this.height - 40,
         );
       } else {
         const column = this.data.height_arr[i - 1];
@@ -1288,7 +1288,7 @@ const HMMLogo = function(element, options = {}) {
                 xPos,
                 yPos,
                 this.zoomed_column,
-                glyphHeight
+                glyphHeight,
               );
             } else {
               this.contexts[contextNum].fillStyle = color;
@@ -1296,7 +1296,7 @@ const HMMLogo = function(element, options = {}) {
                 xPos,
                 yPos,
                 this.zoomed_column,
-                glyphHeight
+                glyphHeight,
               );
             }
 
@@ -1318,7 +1318,7 @@ const HMMLogo = function(element, options = {}) {
           x + this.zoomed_column,
           this.height - 30,
           parseFloat(this.height),
-          '#ddd'
+          '#ddd',
         );
         // draw top ticks
         drawTicks(this.contexts[contextNum], x + this.zoomed_column, 0, 5);
@@ -1338,7 +1338,7 @@ const HMMLogo = function(element, options = {}) {
           this.zoomed_column,
           columnLabel,
           10,
-          true
+          true,
         );
       }
 
@@ -1351,7 +1351,7 @@ const HMMLogo = function(element, options = {}) {
         this.data.insert_probs[i - 1],
         this.data.insert_lengths[i - 1],
         this.data.delete_probs[i - 1],
-        this.show_inserts
+        this.show_inserts,
       );
 
       // draw other dividers
@@ -1359,13 +1359,13 @@ const HMMLogo = function(element, options = {}) {
         drawBorder(
           this.contexts[contextNum],
           this.height - 45,
-          this.total_width
+          this.total_width,
         );
       } else {
         drawBorder(
           this.contexts[contextNum],
           this.height - 15,
-          this.total_width
+          this.total_width,
         );
       }
 
@@ -1392,7 +1392,7 @@ const HMMLogo = function(element, options = {}) {
           MARGIN_TO_FEATURES +
             track * (PADDING_BETWEEN_TRACKS + FEATURE_HEIGHT),
           this.zoomed_column - 2,
-          color
+          color,
         );
       } else if (wtd.type === 'LINE') {
         drawLine(
@@ -1405,7 +1405,7 @@ const HMMLogo = function(element, options = {}) {
           MARGIN_TO_FEATURES +
             PADDING_BETWEEN_TRACKS * track +
             (track + 0.5) * FEATURE_HEIGHT,
-          color
+          color,
         );
       }
       if (this.multiple_tracks) track++;
@@ -1465,7 +1465,7 @@ const HMMLogo = function(element, options = {}) {
     this.rendered = [];
     // update the y-axis
     for (const element of this.called_on.getElementsByClassNames(
-      styles.logo_yaxis
+      styles.logo_yaxis,
     )) {
       element.remove();
     }
@@ -1529,11 +1529,11 @@ const HMMLogo = function(element, options = {}) {
     if (options.target) {
       zoomLevel = options.target;
     } else if (options.distance) {
-      zoomLevel = (parseFloat(this.zoom) -
-        parseFloat(options.distance)).toFixed(1);
+      zoomLevel = (parseFloat(this.zoom) - parseFloat(options.distance)
+      ).toFixed(1);
       if (options.direction === '+') {
-        zoomLevel = (parseFloat(this.zoom) +
-          parseFloat(options.distance)).toFixed(1);
+        zoomLevel = (parseFloat(this.zoom) + parseFloat(options.distance)
+        ).toFixed(1);
       }
     }
 
@@ -1545,10 +1545,10 @@ const HMMLogo = function(element, options = {}) {
 
     // see if we need to zoom or not
     const graphicalElement = this.called_on.getElementsByClassName(
-      styles.logo_graphic
+      styles.logo_graphic,
     )[0];
     const containerElement = this.called_on.getElementsByClassName(
-      styles.logo_container
+      styles.logo_container,
     )[0];
     const expectedWidth = graphicalElement.clientWidth * zoomLevel / this.zoom;
     if (expectedWidth > containerElement.clientWidth) {
@@ -1800,7 +1800,7 @@ const hmmLogo = function(logoElement, options = {}) {
     }
   }
   for (const matchedElement of document.getElementsByClassName(
-    styles.logo_reset
+    styles.logo_reset,
   )) {
     matchedElement.addEventListener('click', e => {
       e.preventDefault();
@@ -1808,14 +1808,14 @@ const hmmLogo = function(logoElement, options = {}) {
     });
   }
   for (const matchedElement of document.getElementsByClassName(
-    styles.logo_change
+    styles.logo_change,
   )) {
     matchedElement.addEventListener('click', e => {
       e.preventDefault();
     });
   }
   for (const matchedElement of document.getElementsByClassName(
-    styles.logo_zoomin
+    styles.logo_zoomin,
   )) {
     matchedElement.addEventListener('click', e => {
       e.preventDefault();
@@ -1823,7 +1823,7 @@ const hmmLogo = function(logoElement, options = {}) {
     });
   }
   for (const matchedElement of document.getElementsByClassName(
-    styles.logo_zoomout
+    styles.logo_zoomout,
   )) {
     matchedElement.addEventListener('click', e => {
       e.preventDefault();
@@ -1831,28 +1831,28 @@ const hmmLogo = function(logoElement, options = {}) {
     });
   }
   for (const matchedElement of document.getElementsByClassName(
-    styles.logo_scale
+    styles.logo_scale,
   )) {
     matchedElement.addEventListener('change', function() {
       logo.toggle_scale(this.value); // MAQ pass correct argument
     });
   }
   for (const matchedElement of document.getElementsByClassName(
-    styles.logo_color
+    styles.logo_color,
   )) {
     matchedElement.addEventListener('change', function() {
       logo.toggle_colorscheme(this.value); // MAQ pass correct argument
     });
   }
   for (const matchedElement of document.getElementsByClassName(
-    styles.logo_ali_map
+    styles.logo_ali_map,
   )) {
     matchedElement.addEventListener('change', function() {
       logo.toggle_ali_map(this.value);
     });
   }
   for (const matchedElement of document.getElementsByClassName(
-    styles.logo_position
+    styles.logo_position,
   )) {
     matchedElement.addEventListener('change', function() {
       if (!this.value.match(/^\d+$/m)) {
@@ -1867,7 +1867,7 @@ const hmmLogo = function(logoElement, options = {}) {
         target: 1,
         offset: e.pageX - this.parentNode.offsetLeft,
         column: logo.columnFromCoordinates(
-          parseInt(e.pageX - this.offsetLeft, 10)
+          parseInt(e.pageX - this.offsetLeft, 10),
         ),
       });
     } else {
@@ -1875,7 +1875,7 @@ const hmmLogo = function(logoElement, options = {}) {
         target: 0.3,
         offset: e.pageX - this.parentNode.offsetLeft,
         column: logo.columnFromCoordinates(
-          parseInt(e.pageX - this.offsetLeft, 10)
+          parseInt(e.pageX - this.offsetLeft, 10),
         ),
       });
     }
@@ -1886,6 +1886,7 @@ const hmmLogo = function(logoElement, options = {}) {
     logoGraphic.addEventListener('click', function(e) {
       const infoTab = document.createElement('table');
       infoTab.classList.add(styles.logo_col_info);
+      infoTab.classList.add(styles.logo_col_hmm);
       const hmmLogo = logo;
       let header = '<tr>';
       let tbody = '';
@@ -1938,9 +1939,13 @@ const hmmLogo = function(logoElement, options = {}) {
           // using the j < 15 check to make sure the last column doesn't get marked
           // with the odd class so we don't get a border on the edge of the table.
           if (infoCols > 1 && j < 15) {
-            tbody += `<td class="${color}"><div></div>${values[0]}</td><td class="odd">${values[1]}</td>`;
+            tbody += `<td class="${styles[
+              color
+            ]}"><div></div>${values[0]}</td><td class="odd">${values[1]}</td>`;
           } else {
-            tbody += `<td class="${color}"><div></div>${values[0]}</td><td>${values[1]}</td>`;
+            tbody += `<td class="${styles[
+              color
+            ]}"><div></div>${values[0]}</td><td>${values[1]}</td>`;
           }
 
           j += 5;
@@ -1952,11 +1957,12 @@ const hmmLogo = function(logoElement, options = {}) {
 
       const columnInfo = document.createElement('div');
       columnInfo.id = 'logo_column_info';
-      columnInfo.innerHTML = `<p> Column:${col}</p><div><p>Occupancy: ${logo
-        .data.delete_probs[col - 1]}</p><p>Insert Probability: ${logo.data
-        .insert_probs[col - 1]}</p><p>Insert Length: ${logo.data.insert_lengths[
+      columnInfo.innerHTML = `<div style="text-align: center;"><span>Column:${col} &nbsp;</span>
+      <span>Occupancy: ${logo.data.delete_probs[col - 1]}  &nbsp;</span>
+      <span>Insert Probability: ${logo.data.insert_probs[col - 1]} &nbsp;</span>
+      <span>Insert Length: ${logo.data.insert_lengths[
         col - 1
-      ]}</p></div>`;
+      ]}  &nbsp;</span></div>`;
       columnInfo.appendChild(infoTab);
       const existingColumnInfo = logoElement.querySelector('#logo_column_info');
       if (existingColumnInfo) {

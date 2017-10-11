@@ -57,6 +57,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
 
   render() {
     const { data: { metadata } } = this.props;
+    const chains = Array.from(new Set(metadata.chains || []));
     return (
       <div className={f('sections')}>
         <section>
@@ -67,10 +68,10 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
               <pdb-prints size="48">
                 <pdb-data-loader pdbid={metadata.accession} />
               </pdb-prints>
-              {metadata.chains && (
+              {chains.length && (
                 <div>
                   <h4>Chains:</h4>
-                  {metadata.chains.map(chain => (
+                  {chains.map(chain => (
                     <Link
                       key={chain}
                       newTo={location => ({
@@ -107,7 +108,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
               <div className={f('columns')}>
                 <Embed
                   style={embedStyle}
-                  src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${metadata.accession}/?view=entry_index&viewer=jmol&controls=codename_hero`}
+                  src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${metadata.accession}/?view=entry_index&viewer=litemol&controls=codename_hero`}
                 >
                   <div
                     style={{

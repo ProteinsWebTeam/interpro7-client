@@ -264,20 +264,37 @@ class SummaryComponent extends PureComponent {
 }
 
 const schemaProcessData = data => ({
-  '@type': 'PhysicalEntity',
+  '@type': 'DataRecord',
+  '@id': '@mainEntityOfPage',
+  additionalType: 'http://semanticscience.org/resource/SIO_010043',
+  identifier: data.metadata.accession,
+  isPartOf: {
+    '@type': 'Dataset',
+    '@id': data.metadata.source_database,
+  },
+  mainEntity: '@mainEntity',
+  seeAlso: '@seeAlso',
+});
+
+const schemaProcessData2 = data => ({
+  '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
   additionalType: 'http://semanticscience.org/resource/SIO_010043',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
-  inDataset: data.metadata.source_database,
-  biologicalType: 'protein',
+  additionalProperty: '@additionalProperty',
 });
 
 class Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
+      payload: T.shape({
+        metadata: T.shape({
+          accession: T.string.isRequired,
+        }).isRequired,
+      }),
     }).isRequired,
   };
 
@@ -298,6 +315,14 @@ class Summary extends PureComponent {
             <SchemaOrgData
               data={this.props.data.payload}
               processData={schemaProcessData}
+            />
+          )}
+        {this.props.data.payload &&
+          this.props.data.payload.metadata &&
+          this.props.data.payload.metadata.accession && (
+            <SchemaOrgData
+              data={this.props.data.payload}
+              processData={schemaProcessData2}
             />
           )}
         <ErrorBoundary>

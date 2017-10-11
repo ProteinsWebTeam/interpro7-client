@@ -172,7 +172,7 @@ class Header extends PureComponent {
   render() {
     const { stickyMenuOffset: offset, stuck } = this.props;
     return (
-      <header
+      <div
         id={ebiGlobalStyles.masthead}
         className={styleBundle('masthead')}
         style={styleForHeader(false && supportsSticky, offset, stuck)}
@@ -184,7 +184,7 @@ class Header extends PureComponent {
             <DynamicMenu />
           </ResizeObserverComponent>
         </div>
-      </header>
+      </div>
     );
   }
 }

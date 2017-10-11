@@ -190,7 +190,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
-    'hmm_model',
+    'logo',
     {
       newTo(location /*: Location */) {
         return {
@@ -199,7 +199,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             focusType: null,
             focusDB: null,
-            mainDetail: 'hmm_model',
+            mainDetail: 'logo',
             mainMemberDB: null,
           },
         };
@@ -275,50 +275,5 @@ export const InterPro /*: Array<Object> */ = [
     icon: 's',
     name: 'Settings',
     iconClass: 'functional',
-  },
-];
-
-export const InterProMin /*: Array<Object> */ = [
-  {
-    newTo: { description: {} },
-    icon: 'H',
-    name: 'Home',
-    activeClass({ description: { mainType, other } } /*: Location */) {
-      if (!(mainType || other)) return f('is-active');
-    },
-  },
-  {
-    newTo: { description: { mainType: 'search' } },
-    icon: '1',
-    name: 'Search',
-    iconClass: 'functional',
-  },
-  {
-    newTo: { description: { mainType: 'entry', mainDB: 'InterPro' } },
-    icon: 'b',
-    name: 'Browse',
-    iconClass: 'functional',
-  },
-  {
-    newTo: { description: { other: 'release_notes' } },
-    icon: '0',
-    name: 'Release\xa0Notes',
-    iconClass: 'functional',
-  },
-  {
-    newTo: { description: { other: 'download' } },
-    icon: '=',
-    name: 'Download',
-    iconClass: 'functional',
-  },
-  {
-    newTo: { description: { other: 'help' } },
-    icon: '?',
-    name: 'Help',
-  },
-  {
-    newTo: { description: { other: 'about' } },
-    icon: 'i',
-    name: 'About',
   },
 ];

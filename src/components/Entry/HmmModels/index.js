@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import classNames from 'classnames';
 
 import hmmLogo from './hmm_logo';
 
+import { foundationPartial } from 'styles/foundation';
+
 import styles from './logo.css';
+
+const f = foundationPartial(styles);
 
 class LogoSection extends Component {
   static propTypes = {
@@ -24,14 +27,16 @@ class LogoSection extends Component {
   }
 
   render() {
-    return <div className={styles.logo} ref={node => (this._node = node)} />;
+    return <div className={f('logo')} ref={node => (this._node = node)} />;
   }
 }
 
 const HmmModelSection = ({ logo }) => (
-  <div className={styles.content}>
-    <div className={classNames(styles.logo_wrapper, 'clearfix')}>
-      <LogoSection data={logo} />
+  <div className={f('row')}>
+    <div className={f('columns')}>
+      <div className={f('logo_wrapper')}>
+        <LogoSection data={logo} />
+      </div>
     </div>
   </div>
 );

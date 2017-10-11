@@ -74,6 +74,9 @@ export class Manager {
     if (this._dev) console.time('schema.org rendering took');
     if (this._dev) console.groupCollapsed('data maps');
     if (this._dev) {
+      console.group('@@root');
+      console.log(this._rootData);
+      console.groupEnd();
       for (const [id, values] of this._dataMap) {
         console.group(id);
         for (const value of values) console.log(value);
@@ -82,7 +85,12 @@ export class Manager {
     }
     if (this._dev) console.groupEnd();
     if (this._dev) console.time('Schema.org merger');
-    const mergedData = await merger(this._dataMap, deadline, this._rootData);
+    const mergedData = await merger(
+      this._dataMap,
+      deadline,
+      this._rootData,
+      this._dev,
+    );
     if (this._dev) console.timeEnd('Schema.org merger');
     this._plannedRender = false;
     if (this._dev) console.time('Schema.org stringify to DOM');
@@ -126,7 +134,7 @@ export class Manager {
 
 export default class SchemaOrgData extends PureComponent {
   static propTypes = {
-    data: T.any.isRequired,
+    data: T.any,
     processData: T.func.isRequired,
     children: T.node,
   };

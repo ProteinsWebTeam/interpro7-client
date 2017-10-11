@@ -40,7 +40,7 @@ const main = async () => {
       '@context': 'http://schema.org',
       '@type': 'WebSite',
       url: config.root.website.protocol + config.root.website.href,
-      mainEntityOfPage: '@mainEntity',
+      mainEntityOfPage: '@mainEntityOfPage',
     },
   });
 
