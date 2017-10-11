@@ -47,7 +47,6 @@
 div.buttons {
   text-align: right;
   font-size: 0.9em;
-  margin-right: 10%;
 }
 .fullscreenable:-webkit-full-screen .fullscreen {
   display: none;
@@ -76,7 +75,7 @@ div.buttons {
   border-color: white;
 }
 
-.popper[x-placement^="top"] .popper__arrow {
+.popper[x-placement^='top'] .popper__arrow {
   border-width: 5px 5px 0 5px;
   border-left-color: transparent;
   border-right-color: transparent;
@@ -86,10 +85,10 @@ div.buttons {
   margin-top: 0;
   margin-bottom: 0;
 }
-.popper[x-placement^="bottom"] {
+.popper[x-placement^='bottom'] {
   margin-top: 5px;
 }
-.popper[x-placement^="bottom"] .popper__arrow {
+.popper[x-placement^='bottom'] .popper__arrow {
   border-width: 0 5px 5px 5px;
   border-left-color: transparent;
   border-right-color: transparent;
@@ -99,10 +98,10 @@ div.buttons {
   margin-top: 0;
   margin-bottom: 0;
 }
-.popper[x-placement^="right"] {
+.popper[x-placement^='right'] {
   margin-left: 5px;
 }
-.popper[x-placement^="right"] .popper__arrow {
+.popper[x-placement^='right'] .popper__arrow {
   border-width: 5px 5px 5px 0;
   border-left-color: transparent;
   border-top-color: transparent;
@@ -112,10 +111,10 @@ div.buttons {
   margin-left: 0;
   margin-right: 0;
 }
-.popper[x-placement^="left"] {
+.popper[x-placement^='left'] {
   margin-right: 5px;
 }
-.popper[x-placement^="left"] .popper__arrow {
+.popper[x-placement^='left'] .popper__arrow {
   border-width: 5px 0 5px 5px;
   border-top-color: transparent;
   border-right-color: transparent;
