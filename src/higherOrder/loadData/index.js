@@ -156,7 +156,7 @@ const loadData = params => {
         // (if still running, otherwise won't do anything)
         if (this._cancelableFetch) this._cancelableFetch.cancel();
         // Unload previous data
-        unloadingData(this._url);
+        this._unloadDataMaybe();
         // Key is the new URL to fetch
         // (stored in `key` because `this._url` might change)
 
@@ -176,12 +176,20 @@ const loadData = params => {
 
       componentWillUnmount() {
         // Unload data
-        this.props.unloadingData(this._url);
+        this._unloadDataMaybe();
         // Cancel previous fetch
         // (if still running, otherwise won't do anything)
         if (this._cancelableFetch) this._cancelableFetch.cancel();
         this._url = null;
       }
+
+      _unloadDataMaybe = () => {
+        //TODO: add some logic to do data registration and only remove data if
+        // nobody is registered to it. IMPORTANT!
+        // Put some logic to check that, and, only if it is OK, then
+        const resultOfTheLogic = false;
+        if (resultOfTheLogic) this.props.unloadingData(this._url);
+      };
 
       render() {
         const { staleData } = this.state;
