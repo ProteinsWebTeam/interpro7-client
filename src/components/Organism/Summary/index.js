@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { goToNewLocation } from 'actions/creators';
 
 import Title from 'components/Title';
-import Accession from 'components/Protein/Accession';
+import Accession from 'components/Organism/Accession';
 import Lineage from 'components/Organism/Lineage';
 import Children from 'components/Organism/Children';
 import Metadata from 'wrappers/Metadata';
