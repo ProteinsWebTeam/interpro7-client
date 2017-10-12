@@ -1,21 +1,21 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 
 class IPScanResult extends PureComponent {
   static propTypes = {
-    mainAccession: T.string.isRequired,
+    data: T.shape({
+      payload: T.object,
+    }).isRequired,
   };
 
   render() {
-    const { mainAccession, data: { payload } } = this.props;
+    const { data: { payload } } = this.props;
     return (
       <div>
-        {mainAccession}
         {payload && (
           <ul>
             {payload[0].matches.map((match, i) => (
@@ -40,9 +40,4 @@ const mapStateToUrl = createSelector(
     }),
 );
 
-const mapStateToProps = createSelector(
-  state => state.newLocation.description.mainAccession,
-  mainAccession => ({ mainAccession }),
-);
-
-export default loadData(mapStateToUrl)(connect(mapStateToProps)(IPScanResult));
+export default loadData(mapStateToUrl)(IPScanResult);

@@ -37,7 +37,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
   static propTypes = {
     newTo: T.oneOfType([T.object, T.func]).isRequired,
     name: T.string.isRequired,
-    counter: T.string.isRequired,
+    counter: T.string,
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.any,
@@ -101,7 +101,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
   },
 }; */
 
-class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
+export class BrowseTabsWithoutData extends PureComponent /*:: <BrowseTabsProps> */ {
   static propTypes = {
     mainType: T.string,
     mainDB: T.string,
@@ -174,4 +174,6 @@ const mapStateToUrl = createSelector(
   },
 );
 
-export default loadData(mapStateToUrl)(connect(mapStateToProps)(BrowseTabs));
+export default loadData(mapStateToUrl)(
+  connect(mapStateToProps)(BrowseTabsWithoutData),
+);

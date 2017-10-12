@@ -12,7 +12,7 @@ const f = foundationPartial(ipro);
 const Accession = (
   {
     metadata: { accession, id },
-  } /*: {metadata: {accession: string | number, id: ?string}} */,
+  } /*: {metadata: {accession: string | number, id?: string}} */,
 ) => (
   <span>
     Accession: <UniProtLink id={accession} className={f('ext')} />

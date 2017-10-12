@@ -134,7 +134,7 @@ class IPScanStatus extends Component {
                 <th>job ID</th>
                 <th>created</th>
                 <th>status</th>
-                <th width="1">actions</th>
+                <th>actions</th>
               </tr>
             </thead>
             <tbody>
@@ -154,6 +154,7 @@ class IPScanStatus extends Component {
                     ],
                   ) => {
                     const lastUpdateDate = new Date(lastUpdate);
+                    const createdDate = new Date(created);
                     return (
                       <tr key={jobId}>
                         <td>
@@ -166,6 +167,7 @@ class IPScanStatus extends Component {
                                   mainAccession: id,
                                 },
                               }}
+                              disabled={status !== 'finished'}
                             >
                               {id}
                             </Link>
@@ -173,7 +175,14 @@ class IPScanStatus extends Component {
                             'None'
                           )}
                         </td>
-                        <td>{timeago.format(created)}</td>
+                        <td>
+                          <time
+                            dateTime={createdDate.toISOString()}
+                            title={createdDate.toLocaleString()}
+                          >
+                            {timeago.format(created)}
+                          </time>
+                        </td>
                         <td>
                           <time
                             dateTime={lastUpdateDate.toISOString()}
