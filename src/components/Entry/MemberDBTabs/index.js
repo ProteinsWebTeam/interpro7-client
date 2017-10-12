@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-onchange */
 import React, { Component, PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -108,6 +109,7 @@ class MemberDBTabs extends Component {
     }),
     mainType: T.string,
     goToNewLocation: T.func.isRequired,
+    newLocation: T.func.isRequired,
   };
 
   constructor(props) {
@@ -198,7 +200,7 @@ class MemberDBTabs extends Component {
               collapsed,
             })}
           >
-            <label>Which database to browse?</label>
+            <span>Which database to browse?</span>
             <select
               value={this.props.newLocation.description.mainDB}
               onChange={this._handleChange}
