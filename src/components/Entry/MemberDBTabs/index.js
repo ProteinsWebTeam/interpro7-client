@@ -7,6 +7,8 @@ import NumberLabel from 'components/NumberLabel';
 import Link from 'components/generic/Link';
 import { createSelector } from 'reselect';
 
+import { goToNewLocation } from 'actions/creators';
+
 import loadData from 'higherOrder/loadData';
 
 import { toPlural } from 'utils/pages';
@@ -65,6 +67,24 @@ class MemberDBTab extends PureComponent {
     );
   }
 }
+
+class MemberDBTabSlim extends PureComponent {
+  static propTypes = {
+    newTo: T.oneOfType([T.object, T.func]).isRequired,
+    children: T.string.isRequired,
+    value: T.number.isRequired,
+    mainType: T.string.isRequired,
+  };
+
+  render() {
+    const { newTo, children, value } = this.props;
+    return (
+      <option newTo={newTo} value={children}>
+        {children} ({value} entries)
+      </option>
+    );
+  }
+}
 const entryIsMain = ({ description: { mainType } }) => mainType === 'entry';
 const mainOrFocus = location => (entryIsMain(location) ? 'main' : 'focus');
 const getValueFor = ({ entries }, mainType, db) => {
@@ -87,6 +107,7 @@ class MemberDBTabs extends Component {
       payload: T.object,
     }),
     mainType: T.string,
+    goToNewLocation: T.func.isRequired,
   };
 
   constructor(props) {
@@ -96,6 +117,16 @@ class MemberDBTabs extends Component {
 
   _handleExpansion = () => {
     this.setState(({ collapsed }) => ({ collapsed: !collapsed }));
+  };
+
+  _handleChange = e => {
+    this.props.goToNewLocation({
+      ...this.props.newLocation,
+      description: {
+        ...this.props.newLocation.description,
+        mainDB: e.target.value,
+      },
+    });
   };
 
   render() {
@@ -153,15 +184,41 @@ class MemberDBTabs extends Component {
             'large',
             'hollow',
             'float-right',
+            'hide-for-small-only',
             'light',
-            'button'
+            'button',
           )}
         >
           {collapsed ? '»' : '«'}
         </button>
+
+        {tabs && (
+          <div
+            className={f('vertical', 'tabs', 'show-for-small-only', {
+              collapsed,
+            })}
+          >
+            <label>Which database to browse?</label>
+            <select
+              value={this.props.newLocation.description.mainDB}
+              onChange={this._handleChange}
+            >
+              {tabs.map(e => (
+                <MemberDBTabSlim key={e.name} {...e} mainType={mainType}>
+                  {e.name}
+                </MemberDBTabSlim>
+              ))}
+            </select>
+          </div>
+        )}
+
         <span className={f('vertical', 'tabs', { collapsed })} />
         {tabs && (
-          <AnimatedEntry className={f('vertical', 'tabs', { collapsed })}>
+          <AnimatedEntry
+            className={f('vertical', 'tabs', 'hide-for-small-only', {
+              collapsed,
+            })}
+          >
             {tabs.map(e => (
               <MemberDBTab key={e.name} {...e} mainType={mainType}>
                 {e.name}
@@ -175,8 +232,9 @@ class MemberDBTabs extends Component {
 }
 
 const mapStateToProps = createSelector(
+  state => state.newLocation,
   state => state.newLocation.description.mainType,
-  mainType => ({ mainType })
+  (newLocation, mainType) => ({ newLocation, mainType }),
 );
 
 const getMemberDBUrl = createSelector(
@@ -189,7 +247,9 @@ const getMemberDBUrl = createSelector(
         .mainDB}`;
     }
     return output;
-  }
+  },
 );
 
-export default connect(mapStateToProps)(loadData(getMemberDBUrl)(MemberDBTabs));
+export default connect(mapStateToProps, { goToNewLocation })(
+  loadData(getMemberDBUrl)(MemberDBTabs),
+);
