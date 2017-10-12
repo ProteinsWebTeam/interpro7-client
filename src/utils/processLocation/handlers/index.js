@@ -21,6 +21,7 @@ import { getEmptyDescription } from 'utils/processLocation/utils';
 |}; */
 
 /* :: export type Handler = {
+  name: string,
   children: Set<Handler>,
   key: ?string,
   getKey: Description => ?string,
@@ -32,6 +33,7 @@ import { getEmptyDescription } from 'utils/processLocation/utils';
 
 // node templates
 const handler /*: Handler */ = {
+  name: 'defaultHandler',
   children: new Set(),
   key: null,
   getKey: _description => null,
@@ -81,6 +83,9 @@ const memberDB = new Set([
 const interPro = { name: 'interpro', re: /IPR[0-9]{6}/i, type: 'entry' };
 
 export const mainDetailHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'mainDetailHandler',
+  },
   key: {
     value: 'mainDetail',
   },
@@ -91,6 +96,9 @@ export const mainDetailHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const memberDBAccessionHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'memberDBAccessionHandler',
+  },
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
@@ -112,6 +120,9 @@ export const memberDBAccessionHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const memberDBHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'memberDBHandler',
+  },
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
@@ -136,6 +147,9 @@ export const memberDBHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const interProAccessionHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'interProAccessionHandler',
+  },
   getKey: {
     value: ({ focusDB } /*: Description */) =>
       `${focusDB ? 'focus' : 'main'}Accession`,
@@ -150,6 +164,9 @@ export const interProAccessionHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const interProHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'interProHandler',
+  },
   getKey: {
     value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
   },
@@ -163,6 +180,9 @@ export const interProHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const integrationHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'integrationHandler',
+  },
   getKey: {
     value: ({ mainIntegration } /*: Description */) =>
       `${mainIntegration ? 'focus' : 'main'}Integration`,
@@ -174,6 +194,9 @@ export const integrationHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const structureChainHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'structureChainHandler',
+  },
   getKey: {
     value: ({ focusType } /*: Description */) =>
       `${focusType ? 'focus' : 'main'}Chain`,
@@ -188,6 +211,9 @@ export const structureChainHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const structureAccessionHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'structureAccessionHandler',
+  },
   getKey: {
     value: ({ focusDB } /*: Description */) =>
       `${focusDB ? 'focus' : 'main'}Accession`,
@@ -198,6 +224,9 @@ export const structureAccessionHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const structureDBHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'structureDBHandler',
+  },
   getKey: {
     value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
   },
@@ -211,6 +240,9 @@ export const structureDBHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const structureHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'structureHandler',
+  },
   getKey: {
     value: ({ mainType } /*: Description */) =>
       `${mainType ? 'focus' : 'main'}Type`,
@@ -222,6 +254,9 @@ export const structureHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const proteomeAccessionHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'proteomeAccessionHandler',
+  },
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
@@ -240,6 +275,9 @@ export const proteomeAccessionHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const proteomeHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'proteomeHandler',
+  },
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
@@ -255,6 +293,9 @@ export const proteomeHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const taxonomyAccessionHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'taxonomyAccessionHandler',
+  },
   getKey: {
     value: ({ focusDB } /*: Description */) =>
       `${focusDB ? 'focus' : 'main'}Accession`,
@@ -266,6 +307,9 @@ export const taxonomyAccessionHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const taxonomyHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'taxonomyHandler',
+  },
   getKey: {
     value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
   },
@@ -276,6 +320,9 @@ export const taxonomyHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const proteinAccessionHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'proteinAccessionHandler',
+  },
   getKey: {
     value: ({ focusDB } /*: Description */) =>
       `${focusDB ? 'focus' : 'main'}Accession`,
@@ -293,6 +340,9 @@ export const proteinAccessionHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const proteinDBHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'proteinDBHandler',
+  },
   getKey: {
     value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
   },
@@ -306,6 +356,9 @@ export const proteinDBHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const proteinHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'proteinHandler',
+  },
   getKey: {
     value: ({ mainType } /*: Description */) =>
       `${mainType ? 'focus' : 'main'}Type`,
@@ -317,6 +370,9 @@ export const proteinHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const organismHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'organismHandler',
+  },
   getKey: {
     value: ({ mainType } /*: Description */) =>
       `${mainType ? 'focus' : 'main'}Type`,
@@ -328,6 +384,9 @@ export const organismHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const entryHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'entryHandler',
+  },
   getKey: {
     value: ({ mainType } /*: Description */) =>
       `${mainType ? 'focus' : 'main'}Type`,
@@ -339,6 +398,9 @@ export const entryHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const valueTextSearchHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'valueTextSearchHandler',
+  },
   getKey: {
     value: () => 'mainAccession',
   },
@@ -348,6 +410,9 @@ export const valueTextSearchHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const textSearchHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'textSearchHandler',
+  },
   getKey: {
     value: () => 'mainDB',
   },
@@ -361,6 +426,9 @@ export const textSearchHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const jobSequenceSearchHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'jobSequenceSearchHandler',
+  },
   getKey: {
     value: () => 'mainAccession',
   },
@@ -369,11 +437,14 @@ export const jobSequenceSearchHandler /*: Handler */ = Object.create(handler, {
   },
   match: {
     value: (current /*: string */) =>
-      /iprscan5-[SR]\d{8}-\d{6}-\d{4}-\d{8}-(pg|oy)/.test(current),
+      /iprscan5-[RI]\d{8}-\d{6}-\d{4}-\d{8}-(es|pg|oy|p[12]m)/.test(current),
   },
 });
 
 export const sequenceSearchHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'sequenceSearchHandler',
+  },
   getKey: {
     value: () => 'mainDB',
   },
@@ -387,6 +458,9 @@ export const sequenceSearchHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const searchHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'searchHandler',
+  },
   getKey: {
     value: () => 'mainType',
   },
@@ -400,6 +474,9 @@ export const searchHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const otherHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'otherHandler',
+  },
   key: {
     value: 'other',
   },
@@ -410,6 +487,9 @@ export const otherHandler /*: Handler */ = Object.create(handler, {
 });
 
 export const rootHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'rootHandler',
+  },
   handle: {
     value(
       description /*: Description */ = getEmptyDescription(),

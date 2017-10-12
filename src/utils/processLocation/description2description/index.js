@@ -16,7 +16,9 @@ export default (description /*: {[key: string]: string} */) => {
       }
     }
     if (!matchingHandler) {
-      throw new Error(`${key} doesn't allow a value like ${description[key]}`);
+      throw new Error(
+        `"${key}" doesn't allow a value like "${description[key]}"`,
+      );
     }
     _description[key] =
       matchingHandler.cleanedUp || matchingHandler.cleanUp(description[key]);
