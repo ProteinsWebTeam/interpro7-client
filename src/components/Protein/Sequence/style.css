@@ -6,8 +6,8 @@
   font-family: var(--fonts-mono-alt);
   font-size: 0.8em;
   padding-left: 8ch;
+  padding-right: 10ch;
   width: calc(100% - 4ch);
-  color: black;
   counter-reset: sequence -10;
   max-height: 210px;
   position: relative;
