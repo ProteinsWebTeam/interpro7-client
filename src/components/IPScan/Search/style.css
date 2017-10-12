@@ -29,8 +29,9 @@
 }
 
 .file-input-label {
-  font-size: inherit;
-  display: inline-block;
+  line-height: inherit;
+  cursor: pointer;
+  color: currentcolor;
 }
 
 .search-form {
