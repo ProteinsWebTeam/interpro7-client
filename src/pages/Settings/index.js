@@ -7,10 +7,11 @@ import loadData from 'higherOrder/loadData';
 
 import { changeSettings, resetSettings } from 'actions/creators';
 
-import styles from './styles.css';
 import { foundationPartial } from 'styles/foundation';
+import theme from 'styles/theme-interpro.css';
+import styles from './styles.css';
 
-const f = foundationPartial(styles);
+const f = foundationPartial(theme, styles);
 
 const PaginationSettings = ({ pagination, handleChange }) => (
   <form data-category="pagination">
@@ -18,9 +19,9 @@ const PaginationSettings = ({ pagination, handleChange }) => (
     <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
         <label>
-          number of returned results by page:
-          <div className={f.row}>
-            <div className={f('medium-11', 'column')}>
+          Number of results by page:
+          <div className={f('row')}>
+            <div className={f('medium-4', 'column')}>
               <input
                 type="range"
                 min="1"
@@ -32,7 +33,7 @@ const PaginationSettings = ({ pagination, handleChange }) => (
                 style={{ width: '100%' }}
               />
             </div>
-            <div className={f('medium-1', 'column')}>{pagination.pageSize}</div>
+            <div className={f('medium-8', 'column')}>{pagination.pageSize}</div>
           </div>
         </label>
       </div>
@@ -161,7 +162,7 @@ const getUrlForEndpoint = endpoint =>
   createSelector(
     state => state.settings[endpoint],
     ({ protocol, hostname, port, root }) =>
-      `${protocol}//${hostname}:${port}${root}`
+      `${protocol}//${hostname}:${port}${root}`,
   );
 
 const fetchOptions = { method: 'HEAD', cache: 'no-store', noCache: true };
@@ -245,9 +246,9 @@ Settings.propTypes = {
 
 const mapStateToProps = createSelector(
   state => state.settings,
-  settings => ({ settings })
+  settings => ({ settings }),
 );
 
 export default connect(mapStateToProps, { changeSettings, resetSettings })(
-  Settings
+  Settings,
 );
