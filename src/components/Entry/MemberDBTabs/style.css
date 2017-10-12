@@ -207,3 +207,15 @@ button.hollow.light:focus {
     border-bottom: 1px #cacaca solid;
   }
 }
+
+/*remove collapse effect for small screens as we replace the menu by select*/
+@media screen and (max-width: 39.9375em) {
+  .collapsed + div {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+  }
+  .collapsed.columns {
+    margin-left: 0.625rem;
+  }
+}
