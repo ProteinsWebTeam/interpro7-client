@@ -73,7 +73,6 @@ const LiteratureItem = (
           View article
         </DOILink>
       )}
-      {r.DOI_URL && <span> </span>}
       PMID:{' '}
       <PMCLink id={r.PMID} className={f('ext', 'margin-right-medium')}>
         {r.PMID}
