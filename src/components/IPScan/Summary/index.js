@@ -54,7 +54,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
       }
     }
     return (
-      <div className={f('sections')} key="main">
+      <div className={f('sections')}>
         <section>
           <div className={f('row')}>
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>

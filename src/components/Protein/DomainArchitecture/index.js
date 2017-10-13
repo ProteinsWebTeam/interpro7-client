@@ -122,6 +122,7 @@ class DomainArchitecture extends Component {
   }
 
   render() {
+    console.log(this.props.data);
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
         <div className={f('row')}>

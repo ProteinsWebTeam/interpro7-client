@@ -64,16 +64,16 @@ class DomainArchitecture extends PureComponent {
         const entry = data.integrated.get(accession) || {
           accession,
           source_database: 'InterPro',
-          signatures: [],
+          children: [],
         };
-        entry.signatures.push(processedMatch);
+        entry.children.push(processedMatch);
         data.integrated.set(accession, entry);
       } else {
         data.unintegrated.push(processedMatch);
       }
     }
     data.integrated = Array.from(data.integrated.values()).map(m => {
-      const coordinates = flattenDeep(m.signatures.map(s => s.coordinates));
+      const coordinates = flattenDeep(m.children.map(s => s.coordinates));
       return {
         ...m,
         coordinates: [[[Math.min(...coordinates), Math.max(...coordinates)]]],
