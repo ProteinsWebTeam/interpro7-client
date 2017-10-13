@@ -1,16 +1,15 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
-
-import subPages from 'subPages';
-import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -26,24 +25,57 @@ const SummaryAsync = loadable({
     import(/* webpackChunkName: "protein-summary" */ 'components/IPScan/Summary'),
 });
 
-const subPagesForSequence = new Set();
-for (const subPage of config.pages.sequence.subPages) {
-  subPagesForSequence.add({
-    value: subPage,
-    component: subPages.get(subPage),
-  });
+const EntrySubPage = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ips-entry-subpage" */ 'components/IPScan/EntrySubPage'),
+});
+
+const DomainArchitectureWithoutData = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "domain-architecture-subpage" */ 'components/Protein/DomainArchitecture'),
+});
+
+class DomainArchitecture extends PureComponent {
+  static propTypes = {
+    data: T.object.isRequired,
+  };
+
+  render() {
+    const payload = this.props.data.payload[0];
+    const protein = {
+      length: payload.sequenceLength,
+    };
+    const data = {
+      unintegrated: payload.matches
+        .map(m => ({
+          accession: m.signature.accession,
+          source_database: m.signature.signatureLibraryRelease.library,
+          protein_length: payload.sequenceLength,
+          coordinates: [m.locations.map(l => [l.start, l.end])],
+          score: m.score,
+        }))
+        .sort((m1, m2) => m2.score - m1.score),
+    };
+    return <DomainArchitectureWithoutData protein={protein} data={data} />;
+  }
 }
 
-class Summary extends PureComponent {
+const subPagesForSequence = new Set([
+  { value: 'entry', component: EntrySubPage },
+  { value: 'domain_architecture', component: DomainArchitecture },
+]);
+
+class _Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.array,
     }).isRequired,
+    accession: T.string.isRequired,
   };
 
   render() {
-    const { data: { loading } } = this.props;
+    const { data: { loading, payload }, accession } = this.props;
     if (loading) {
       return (
         <div className={f('row')}>
@@ -51,8 +83,24 @@ class Summary extends PureComponent {
         </div>
       );
     }
-    return (
-      <ErrorBoundary>
+    const entries =
+      payload[0].matches.length +
+      new Set(payload[0].matches.map(m => (m.signature.entry || {}).accession))
+        .size;
+    return [
+      <ErrorBoundary key="browse">
+        <BrowseTabsWithoutData
+          key="browse"
+          mainType="sequence"
+          mainDB=""
+          mainAccession={accession}
+          data={{
+            loading: false,
+            payload: { metadata: { counters: { entries } } },
+          }}
+        />
+      </ErrorBoundary>,
+      <ErrorBoundary key="switch">
         <Switch
           {...this.props}
           locationSelector={l =>
@@ -60,10 +108,17 @@ class Summary extends PureComponent {
           indexRoute={SummaryAsync}
           childRoutes={subPagesForSequence}
         />
-      </ErrorBoundary>
-    );
+      </ErrorBoundary>,
+    ];
   }
 }
+
+const mapStateToProps = createSelector(
+  state => state.newLocation.description.mainAccession,
+  accession => ({ accession }),
+);
+
+const Summary = connect(mapStateToProps)(_Summary);
 
 const IPScanResult = props => (
   <ErrorBoundary>

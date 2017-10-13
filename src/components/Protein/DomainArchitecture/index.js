@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import PopperJS from 'popper.js';
 
 import path2description from 'utils/processLocation/path2description';
@@ -35,7 +34,6 @@ class DomainArchitecture extends Component {
   static propTypes = {
     protein: T.object,
     data: T.object,
-    location: T.object.isRequired,
     goToNewLocation: T.func.isRequired,
   };
 
@@ -151,11 +149,4 @@ class DomainArchitecture extends Component {
   }
 }
 
-const mapStateToProps = createSelector(
-  state => state.newLocation,
-  location => ({ location }),
-);
-
-export default connect(mapStateToProps, { goToNewLocation })(
-  DomainArchitecture,
-);
+export default connect(null, { goToNewLocation })(DomainArchitecture);

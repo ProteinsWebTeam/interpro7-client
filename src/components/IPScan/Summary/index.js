@@ -4,7 +4,6 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import GoTerms from 'components/GoTerms';
 import Sequence from 'components/Protein/Sequence';
 import Length from 'components/Protein/Length';
@@ -54,23 +53,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
         });
       }
     }
-    return [
-      <BrowseTabsWithoutData
-        key="browse"
-        mainType="sequence"
-        mainDB=""
-        mainAccession={accession}
-        data={{
-          loading: false,
-          payload: {
-            metadata: {
-              counters: {
-                entries: payload.matches.length,
-              },
-            },
-          },
-        }}
-      />,
+    return (
       <div className={f('sections')} key="main">
         <section>
           <div className={f('row')}>
@@ -83,8 +66,8 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
         </section>
         <Sequence accession={accession} sequence={payload.sequence} />
         <GoTerms terms={Array.from(goTerms.values())} />
-      </div>,
-    ];
+      </div>
+    );
   }
 }
 

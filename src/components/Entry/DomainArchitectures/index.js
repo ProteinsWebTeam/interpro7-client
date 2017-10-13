@@ -163,9 +163,9 @@ class DomainArchitectures extends PureComponent {
                   newTo={{
                     description: {
                       mainType: 'protein',
-                      mainDB: 'uniprot',
+                      mainDB: 'UniProt',
                       focusType: 'entry',
-                      focusDB: 'interpro',
+                      focusDB: 'InterPro',
                       focusAccession: mainAccession,
                     },
                     search: { ida: obj.IDA_FK },
@@ -182,7 +182,7 @@ class DomainArchitectures extends PureComponent {
                         newTo={{
                           description: {
                             mainType: 'entry',
-                            mainDB: 'interpro',
+                            mainDB: 'InterPro',
                             mainAccession: acc,
                           },
                         }}
