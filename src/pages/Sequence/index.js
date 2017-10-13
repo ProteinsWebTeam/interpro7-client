@@ -11,6 +11,8 @@ import Switch from 'components/generic/Switch';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import flattenDeep from 'lodash-es/flattenDeep';
+
 import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
@@ -46,16 +48,38 @@ class DomainArchitecture extends PureComponent {
       length: payload.sequenceLength,
     };
     const data = {
-      unintegrated: payload.matches
-        .map(m => ({
-          accession: m.signature.accession,
-          source_database: m.signature.signatureLibraryRelease.library,
-          protein_length: payload.sequenceLength,
-          coordinates: [m.locations.map(l => [l.start, l.end])],
-          score: m.score,
-        }))
-        .sort((m1, m2) => m2.score - m1.score),
+      integrated: new Map(),
+      unintegrated: [],
     };
+    for (const match of payload.matches) {
+      const processedMatch = {
+        accession: match.signature.accession,
+        source_database: match.signature.signatureLibraryRelease.library,
+        protein_length: payload.sequenceLength,
+        coordinates: [match.locations.map(l => [l.start, l.end])],
+        score: match.score,
+      };
+      if (match.signature.entry) {
+        const accession = match.signature.entry.accession;
+        const entry = data.integrated.get(accession) || {
+          accession,
+          source_database: 'InterPro',
+          signatures: [],
+        };
+        entry.signatures.push(processedMatch);
+        data.integrated.set(accession, entry);
+      } else {
+        data.unintegrated.push(processedMatch);
+      }
+    }
+    data.integrated = Array.from(data.integrated.values()).map(m => {
+      const coordinates = flattenDeep(m.signatures.map(s => s.coordinates));
+      return {
+        ...m,
+        coordinates: [[[Math.min(...coordinates), Math.max(...coordinates)]]],
+      };
+    });
+    data.unintegrated.sort((m1, m2) => m2.score - m1.score);
     return <DomainArchitectureWithoutData protein={protein} data={data} />;
   }
 }
