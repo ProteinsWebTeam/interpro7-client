@@ -2,7 +2,7 @@
 @import '../../../styles/colors.css';
 @import '../../../styles/timing.css';
 
-.raw-sqs-viewer {
+.raw-sequence-viewer {
   font-family: var(--fonts-mono-alt);
   font-size: 0.8em;
   padding-left: 8ch;
@@ -30,20 +30,22 @@
   left: -3.8em;
 }
 
-.sqs-link {
+.sequence-link {
   position: relative;
   overflow: hidden;
 
   & > span {
     position: relative;
   }
-}
 
-.sqs-link:hover,
-.sqs-link:focus {
-  & > .shape {
-    transform: translate(0, 0) rotate(0) !important;
-    opacity: 0.4;
+  &:hover,
+  &:focus {
+    background-color: white;
+
+    & > .shape {
+      transform: translate(0, 0) rotate(0) !important;
+      opacity: 0.4;
+    }
   }
 }
 

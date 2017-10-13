@@ -6,7 +6,7 @@ import GoTerms from 'components/GoTerms';
 import Sequence from 'components/Protein/Sequence';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
-import Accession from 'components/Protein/Accession';
+import Accession from 'components/Accession';
 import Title from 'components/Title';
 import { UniProtLink } from 'components/ExtLink';
 import f from 'styles/foundation';
@@ -33,7 +33,10 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
           <div className={f('row')}>
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
               <Title metadata={metadata} mainType={'protein'} />
-              <Accession metadata={metadata} />
+              <div className={f('tag', 'margin-bottom-medium')}>
+                {metadata.source_database}
+              </div>
+              <Accession accession={metadata.accession} id={metadata.id} />
               <Species taxid={metadata.source_organism.taxid} />
               <Length metadata={metadata} />
             </div>

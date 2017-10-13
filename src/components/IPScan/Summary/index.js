@@ -8,7 +8,7 @@ import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import GoTerms from 'components/GoTerms';
 import Sequence from 'components/Protein/Sequence';
 import Length from 'components/Protein/Length';
-import Accession from 'components/Protein/Accession';
+import Accession from 'components/Accession';
 import Title from 'components/Title';
 
 import f from 'styles/foundation';
@@ -76,7 +76,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
           <div className={f('row')}>
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
               <Title metadata={metadata} mainType={'protein'} />
-              <Accession metadata={{ accession }} />
+              <Accession accession={accession} />
               <Length metadata={metadata} />
             </div>
           </div>
