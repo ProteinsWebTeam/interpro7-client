@@ -35,3 +35,10 @@
 .filter-box input:hover {
   border: 1px #b9d7ef solid;
 }
+@media screen and (max-width: 39.9375em) {
+  .filter-box,
+  .table-filter {
+    display: flex;
+    flex-grow: 1;
+  }
+}
