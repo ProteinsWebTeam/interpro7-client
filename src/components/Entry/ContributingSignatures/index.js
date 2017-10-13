@@ -2,7 +2,6 @@ import React from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadable from 'higherOrder/loadable';
 
