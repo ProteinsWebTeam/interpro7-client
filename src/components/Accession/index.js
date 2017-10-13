@@ -24,7 +24,7 @@ const componentMap = new Map([
   db: string,
 }; */
 
-class Accession extends PureComponent /*:: <Props> */ {
+export class Accession extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.oneOfType([T.string, T.number]).isRequired,
     id: T.string,
