@@ -77,7 +77,7 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
                     />
                     <GoLink
                       id={identifier}
-                      className={f('go-terms')}
+                      className={f('go-terms', 'ext')}
                       title={`${name} (${identifier})`}
                     >
                       {name || identifier}
