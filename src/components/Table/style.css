@@ -168,12 +168,13 @@ table.light .subheader {
   table.light tr,
   table.light td {
     display: block;
+    margin-bottom: 1rem;
   }
-  table.light th {
+  table.light thead {
     display: none;
   }
   table.light tbody tr {
-    border-bottom: 1px #d4dddf solid;
+    border: 2px #d4dddf solid;
   }
   table.light tbody tr td {
     border: 0;
