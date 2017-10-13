@@ -73,10 +73,15 @@ hr {
 /* Small screen only */
 @media screen and (max-width: 39.9375em) {
   .filters-panel {
-    flex-flow: row wrap;
-    max-height: none;
+    flex-flow: row wrap; /*does it do anything?*/
+    max-height: none; /*does it do anything?*/
   }
+
+  .filters-panel > div {
+    margin-bottom: 0.5rem;
+  }
+
   .filter-panel {
-    max-height: 150px;
+    max-height: 124px;
   }
 }
