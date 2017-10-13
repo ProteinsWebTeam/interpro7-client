@@ -3,6 +3,7 @@
 @import '../../../styles/timing.css';
 
 .raw-sequence-viewer {
+  cursor: text;
   font-family: var(--fonts-mono-alt);
   font-size: 0.8em;
   padding-left: 8ch;
@@ -40,8 +41,6 @@
 
   &:hover,
   &:focus {
-    background-color: white;
-
     & > .shape {
       transform: translate(0, 0) rotate(0) !important;
       opacity: 0.4;
