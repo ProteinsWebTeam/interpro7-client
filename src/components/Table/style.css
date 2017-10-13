@@ -167,13 +167,17 @@ table.light .subheader {
 }
 /* Small screen only */
 @media screen and (max-width: 39.9375em) {
+  .table-view .table-results-filtering .filter-wrapper {
+    flex-grow: 1;
+  }
   table.light th,
   table.light tr,
   table.light td {
     display: block;
     margin-bottom: 1rem;
   }
-  table.light thead {
+  table.light thead,
+  .pagesize-wrapper {
     display: none;
   }
   table.light tbody tr {
