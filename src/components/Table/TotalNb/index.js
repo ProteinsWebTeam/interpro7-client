@@ -34,12 +34,11 @@ const TotalNb = ({
   } else if (actualSize) {
     const type = focusType || mainType;
     const db = focusDB || mainDB;
+    const plural = actualSize > 1 ? toPlural(type) : type;
     textLabel = (
       <span>
         {index} - {index + data.length - 1} of <strong>{actualSize}</strong>{' '}
-        {db === 'proteome'
-          ? 'proteomes'
-          : actualSize > 1 ? toPlural(type) : type}
+        {db === 'proteome' ? 'proteomes' : plural}
         {db !== 'reviewed' &&
         db !== 'UniProt' &&
         db !== 'taxonomy' &&
