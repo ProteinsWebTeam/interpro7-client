@@ -37,11 +37,20 @@ class OrganismDBFilter extends Component {
     });
   };
   render() {
-    const { data: { loading, payload }, location: {description}} = this.props;
+    const {
+      data: { loading, payload },
+      location: { description },
+    } = this.props;
     const dbs = [];
     if (!loading) {
-      dbs.push(['taxonomy', payload.organisms.taxonomy.organisms || payload.organisms.taxonomy]);
-      dbs.push(['proteome', payload.organisms.proteome.organisms || payload.organisms.proteome]);
+      dbs.push([
+        'taxonomy',
+        payload.organisms.taxonomy.organisms || payload.organisms.taxonomy,
+      ]);
+      dbs.push([
+        'proteome',
+        payload.organisms.proteome.organisms || payload.organisms.proteome,
+      ]);
     }
     return (
       <div style={{ overflowX: 'hidden' }}>
@@ -56,13 +65,12 @@ class OrganismDBFilter extends Component {
                 checked={description.mainDB === type}
                 style={{ margin: '0.25em' }}
               />
-              <span>{type}</span>
+              <span style={{ textTransform: 'capitalize' }}>{type}</span>
               <NumberLabel value={count} />
             </label>
           </div>
         ))}
       </div>
-
     );
   }
 }
@@ -81,14 +89,14 @@ const getUrlFor = createSelector(
       focusType: description.focusType,
       focusDB: description.focusDB,
     })}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  loadData(getUrlFor)(OrganismDBFilter)
+  loadData(getUrlFor)(OrganismDBFilter),
 );
