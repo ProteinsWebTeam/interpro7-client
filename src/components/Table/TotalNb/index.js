@@ -37,14 +37,21 @@ const TotalNb = ({
     textLabel = (
       <span>
         {index} - {index + data.length - 1} of <strong>{actualSize}</strong>{' '}
-        {actualSize > 1 ? toPlural(type) : type}
-        {db !== 'reviewed' && db !== 'uniprot' && db !== 'taxonomy' ? (
-          ` in ${db}`
-        ) : null}
+        {db === 'proteome'
+          ? 'proteomes'
+          : actualSize > 1 ? toPlural(type) : type}
+        {db !== 'reviewed' &&
+        db !== 'UniProt' &&
+        db !== 'taxonomy' &&
+        db !== 'proteome'
+          ? ` in ${db}`
+          : null}
       </span>
     );
   }
-  return <div className={f('totalnb-box')}>{textLabel}</div>;
+  return (
+    <div className={f('totalnb-box', 'hide-for-small-only')}>{textLabel}</div>
+  );
 };
 TotalNb.propTypes = {
   data: T.array,
@@ -61,6 +68,11 @@ const mapStateToProps = createSelector(
   state => state.newLocation.description.mainType,
   state => state.newLocation.description.focusDB,
   state => state.newLocation.description.focusType,
-  (mainDB, mainType, focusDB, focusType) => ({ mainDB, mainType, focusDB, focusType })
+  (mainDB, mainType, focusDB, focusType) => ({
+    mainDB,
+    mainType,
+    focusDB,
+    focusType,
+  }),
 );
 export default connect(mapStateToProps)(TotalNb);
