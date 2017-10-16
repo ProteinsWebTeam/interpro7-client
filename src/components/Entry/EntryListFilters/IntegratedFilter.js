@@ -80,7 +80,7 @@ class IntegratedFilter extends Component {
                   checked={this.state.value === type}
                   style={{ margin: '0.25em' }}
                 />
-                <span>{type}</span>
+                <span style={{ textTransform: 'capitalize' }}>{type}</span>
                 <NumberLabel value={types[type]} />
               </label>
             </div>
@@ -103,18 +103,18 @@ const getUrlFor = createSelector(
     _search.interpro_status = null;
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      _description
+      _description,
     )}?${qsStringify(_search)}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(IntegratedFilter)
+  })(IntegratedFilter),
 );
