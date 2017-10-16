@@ -18,7 +18,14 @@ const EntryListFilter = ({ mainDB }) => (
     ) : (
       <IntegratedFilter label="InterPro State" />
     )}
-    <GOTermsFilter label="GO Terms" />
+    {
+      // TODO re-insert GO terms - filter for Member databases when data available
+    }
+    {mainDB === 'InterPro' ? (
+      <GOTermsFilter label="GO Terms" />
+    ) : (
+      <span label="" />
+    )}
   </FiltersPanel>
 );
 EntryListFilter.propTypes = {
@@ -27,7 +34,7 @@ EntryListFilter.propTypes = {
 
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainDB,
-  mainDB => ({ mainDB })
+  mainDB => ({ mainDB }),
 );
 
 export default connect(mapStateToProps)(EntryListFilter);
