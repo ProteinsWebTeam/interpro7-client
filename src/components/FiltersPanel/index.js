@@ -8,9 +8,13 @@ const f = foundationPartial(style);
 
 const FilterPanel = ({ label, collapsed, onCollapse, children }) => (
   <div className={f('columns', 'small-12', 'medium-4', 'large-3', 'end')}>
-    <button className={f('toggle')} onClick={onCollapse}>
-      {collapsed ? '▸' : '▾'} {label}
-    </button>
+    {label !== '' ? (
+      <button className={f('toggle')} onClick={onCollapse}>
+        {collapsed ? '▸' : '▾'} {label}
+      </button>
+    ) : (
+      ''
+    )}
     <div className={f('filter-panel', { collapsed })}>{children}</div>
   </div>
 );
@@ -41,7 +45,7 @@ class FiltersPanel extends Component {
   toggleAll = () => {
     const toCollapse = Object.values(this.state.filters).reduce(
       (acc, v) => v && acc,
-      true
+      true,
     );
     this.setState({ filters: this.props.children.map(() => !toCollapse) });
   };
@@ -58,7 +62,7 @@ class FiltersPanel extends Component {
       : [this.props.children];
     const toCollapse = Object.values(this.state.filters).reduce(
       (acc, v) => v && acc,
-      true
+      true,
     );
     return (
       <div className={f('row', 'filters-panel')}>
