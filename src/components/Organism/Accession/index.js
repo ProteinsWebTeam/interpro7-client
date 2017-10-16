@@ -4,13 +4,21 @@ import T from 'prop-types';
 
 import { TaxLink } from 'components/ExtLink';
 
+import { foundationPartial } from 'styles/foundation';
+
+import ipro from 'styles/interpro-new.css';
+const f = foundationPartial(ipro);
+
 const Accession = (
   {
     metadata: { accession, id },
   } /*: {metadata: {accession: string | number, id: ?string}} */,
 ) => (
   <div>
-    Accession: <TaxLink id={accession}>{accession}</TaxLink>
+    Accession:{' '}
+    <TaxLink id={accession} className={f('ext')}>
+      {accession}
+    </TaxLink>
     {id && ` (${id})`}
   </div>
 );
