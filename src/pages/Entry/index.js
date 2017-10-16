@@ -308,52 +308,59 @@ class List extends Component {
                 Integrated
               </Column>
             )}
-            <Column
-              dataKey="go_terms"
-              className={f('col-go')}
-              renderer={(gos /*: Array<Object> */) =>
-                gos.map(go => (
-                  <div
-                    className={f('go-row')}
-                    key={go.identifier}
-                    style={{
-                      backgroundColor: go.category
-                        ? goColors[go.category]
-                        : '#DDDDDD',
-                    }}
-                  >
-                    <span className={f('go-cell')}>
-                      <GoLink
-                        id={go.identifier}
-                        className={f('go')}
-                        title={`${go.name} (${go.identifier})`}
-                      >
-                        {go.name ? go.name : 'None'}
-                      </GoLink>
-                    </span>
-                  </div>
-                ))}
-            >
-              GO Terms{' '}
-              <span
-                className={f('sign-label-head', 'bp')}
-                title="Biological process term"
+
+            {
+              // TODO re-insert GO terms as column in table for Member databases when data available
+            }
+
+            {mainDB === 'InterPro' ? (
+              <Column
+                dataKey="go_terms"
+                className={f('col-go')}
+                renderer={(gos /*: Array<Object> */) =>
+                  gos.map(go => (
+                    <div
+                      className={f('go-row')}
+                      key={go.identifier}
+                      style={{
+                        backgroundColor: go.category
+                          ? goColors[go.category]
+                          : '#DDDDDD',
+                      }}
+                    >
+                      <span className={f('go-cell')}>
+                        <GoLink
+                          id={go.identifier}
+                          className={f('go')}
+                          title={`${go.name} (${go.identifier})`}
+                        >
+                          {go.name ? go.name : 'None'}
+                        </GoLink>
+                      </span>
+                    </div>
+                  ))}
               >
-                BP
-              </span>{' '}
-              <span
-                className={f('sign-label-head', 'mf')}
-                title="Molecular function term"
-              >
-                MF
-              </span>{' '}
-              <span
-                className={f('sign-label-head', 'cc')}
-                title="Cellular component term"
-              >
-                CC
-              </span>
-            </Column>
+                GO Terms{' '}
+                <span
+                  className={f('sign-label-head', 'bp')}
+                  title="Biological process term"
+                >
+                  BP
+                </span>{' '}
+                <span
+                  className={f('sign-label-head', 'mf')}
+                  title="Molecular function term"
+                >
+                  MF
+                </span>{' '}
+                <span
+                  className={f('sign-label-head', 'cc')}
+                  title="Cellular component term"
+                >
+                  CC
+                </span>
+              </Column>
+            ) : null}
           </Table>
         </div>
       </div>
