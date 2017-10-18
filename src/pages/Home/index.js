@@ -94,6 +94,70 @@ const MaskSvgIcons = () => (
   </svg>
 );
 
+const InterproGraphic = () => (
+  <svg viewBox="0 0 150 120">
+    <line x1="20" y1="0" x2="20" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="50" y1="0" x2="50" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="80" y1="0" x2="80" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="110" y1="0" x2="110" y2="130" strokeWidth="3" stroke="#cacaca" />
+    <line x1="140" y1="0" x2="140" y2="130" strokeWidth="3" stroke="#cacaca" />
+
+    <line
+      x1="20"
+      y1="-100"
+      x2="20"
+      y2="200"
+      strokeLinecap="round"
+      stroke="#abd6ba"
+      strokeWidth="16"
+    />
+    <line
+      x1="50"
+      y1="-100"
+      x2="50"
+      y2="200"
+      strokeLinecap="round"
+      stroke="#2d7d95"
+      strokeWidth="16"
+    />
+    <line
+      x1="80"
+      y1="90"
+      x2="80"
+      y2="200"
+      strokeLinecap="round"
+      stroke="#2d7d95"
+      strokeWidth="16"
+    />
+    <line
+      x1="80"
+      y1="-100"
+      x2="80"
+      y2="44"
+      strokeLinecap="round"
+      stroke="#abd6ba"
+      strokeWidth="16"
+    />
+    <line
+      x1="110"
+      y1="-100"
+      x2="110"
+      y2="200"
+      strokeLinecap="round"
+      stroke="#2d7d95"
+      strokeWidth="16"
+    />
+    <line
+      x1="140"
+      y1="-100"
+      x2="140"
+      y2="60"
+      strokeLinecap="round"
+      stroke="#abd6ba"
+      strokeWidth="16"
+    />
+  </svg>
+);
 const description = `
 InterPro provides functional analysis of proteins by classifying them into
 families and predicting domains and important sites. We combine protein
@@ -135,10 +199,12 @@ const Home = () => (
         <SchemaOrgData processData={schemaProcessData} />
         <SchemaOrgData data="InterPro" processData={schemaProcessDataForDB} />
         <div
-          className={f('fig-container', 'fig-proteins')}
+          className={f('fig-container')}
           data-tooltip
           title="This is what InterPro does"
-        />
+        >
+          <InterproGraphic />
+        </div>
 
         <h3>Classification of protein families</h3>
 
