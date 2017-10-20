@@ -88,7 +88,10 @@ class CurationFilter extends Component {
                   style={{ margin: '0.25em' }}
                 />
                 <span>{label[db]}</span>
-                <NumberLabel value={databases[db]} />
+                <NumberLabel
+                  value={databases[db]}
+                  className={f('filter-label')}
+                />
               </label>
             </div>
           ))}
@@ -110,16 +113,16 @@ const getUrl = createSelector(
     _search.group_by = 'source_database';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      _description
+      _description,
     )}?${qsStringify(_search)}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  loadData(getUrl)(CurationFilter)
+  loadData(getUrl)(CurationFilter),
 );
