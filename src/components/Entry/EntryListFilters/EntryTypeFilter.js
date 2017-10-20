@@ -32,8 +32,8 @@ class EntryTypeFilter extends Component {
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType
-      )
+        m => m.InterproType,
+      ),
     ).as('interpro-type');
   }
 
@@ -42,7 +42,7 @@ class EntryTypeFilter extends Component {
       ...this.props.location,
       search: {
         ...this.props.location.search,
-        type: value === 'ALL' ? undefined : value,
+        type: value === 'All' ? undefined : value,
       },
     });
   };
@@ -50,10 +50,10 @@ class EntryTypeFilter extends Component {
   render() {
     const { data: { loading, payload }, location: { search } } = this.props;
     const types = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a
+      ([, a], [, b]) => b - a,
     );
     if (!loading) {
-      types.unshift(['ALL', types.reduce((acc, [, count]) => acc + count, 0)]);
+      types.unshift(['All', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
     return (
       <div className={f('list-entries')}>
@@ -66,11 +66,11 @@ class EntryTypeFilter extends Component {
                 value={type}
                 onChange={this._handleSelection}
                 checked={
-                  (!search.type && type === 'ALL') || search.type === type
+                  (!search.type && type === 'All') || search.type === type
                 }
                 style={{ margin: '0.25em ' }}
               />
-              {type === 'ALL' ? (
+              {type === 'All' ? (
                 type
               ) : (
                 <interpro-type
@@ -81,7 +81,7 @@ class EntryTypeFilter extends Component {
                   {type}
                 </interpro-type>
               )}
-              <NumberLabel value={count} />
+              <NumberLabel value={count} className={f('filter-label')} />
             </label>
           </div>
         ))}
@@ -101,18 +101,18 @@ const getUrlFor = createSelector(
     _search.group_by = 'type';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description
+      description,
     )}?${qsStringify(_search)}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(EntryTypeFilter)
+  })(EntryTypeFilter),
 );
