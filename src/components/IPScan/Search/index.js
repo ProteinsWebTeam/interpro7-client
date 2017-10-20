@@ -350,12 +350,12 @@ class IPScanSearch extends Component {
                       disabled={!valid}
                       value="Search"
                     />
-                    <button
+                    <input
+                      type="button"
                       className={s('secondary', 'hollow', 'button')}
                       onClick={this._handleReset}
-                    >
-                      Clear
-                    </button>
+                      value="Clear"
+                    />
                   </div>
                 </div>
               </div>
