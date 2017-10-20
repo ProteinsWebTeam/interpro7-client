@@ -66,7 +66,7 @@ class OrganismDBFilter extends Component {
                 style={{ margin: '0.25em' }}
               />
               <span style={{ textTransform: 'capitalize' }}>{type}</span>
-              <NumberLabel value={count} />
+              <NumberLabel value={count} className={f('filter-label')} />
             </label>
           </div>
         ))}
