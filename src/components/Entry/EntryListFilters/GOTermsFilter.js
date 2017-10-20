@@ -47,10 +47,10 @@ class GOTermsFilter extends Component {
   render() {
     const { data: { loading, payload }, location: { search } } = this.props;
     const terms = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a
+      ([, a], [, b]) => b - a,
     );
     if (!loading) {
-      terms.unshift(['Any']);
+      terms.unshift(['Any', NaN]);
     }
     return (
       <div className={f('list-go')}>
@@ -70,7 +70,7 @@ class GOTermsFilter extends Component {
               />
               <span>{term}</span>
               {typeof count === 'undefined' ? null : (
-                <NumberLabel value={count} />
+                <NumberLabel value={count} className={f('filter-label')} />
               )}
             </label>
           </div>
@@ -91,18 +91,18 @@ const getUrlFor = createSelector(
     _search.group_by = 'go_terms';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description
+      description,
     )}?${qsStringify(_search)}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(GOTermsFilter)
+  })(GOTermsFilter),
 );
