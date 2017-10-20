@@ -34,7 +34,7 @@ class ExperimentTypeFilter extends Component {
       ...this.props.location,
       search: {
         ...this.props.location.search,
-        experiment_type: value === 'ALL' ? undefined : value,
+        experiment_type: value === 'All' ? undefined : value,
       },
     });
   };
@@ -42,10 +42,10 @@ class ExperimentTypeFilter extends Component {
   render() {
     const { data: { loading, payload }, location: { search } } = this.props;
     const types = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a
+      ([, a], [, b]) => b - a,
     );
     if (!loading) {
-      types.unshift(['ALL', NaN]);
+      types.unshift(['All', NaN]);
     }
     return (
       <div style={{ overflowX: 'hidden' }}>
@@ -58,7 +58,7 @@ class ExperimentTypeFilter extends Component {
                 value={type}
                 onChange={this._handleSelection}
                 checked={
-                  (!search.experiment_type && type === 'ALL') ||
+                  (!search.experiment_type && type === 'All') ||
                   search.experiment_type === type
                 }
                 style={{ margin: '0.25em' }}
@@ -84,16 +84,16 @@ const getUrlFor = createSelector(
     _search.group_by = 'experiment_type';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description
+      description,
     )}?${qsStringify(_search)}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  loadData(getUrlFor)(ExperimentTypeFilter)
+  loadData(getUrlFor)(ExperimentTypeFilter),
 );
