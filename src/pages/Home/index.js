@@ -280,7 +280,7 @@ const InterproGraphicAnim = () => (
           stroke="#3daec0"
           strokeWidth="16"
           className={f('blob', 'line-down', 'high-blob')}
-        />/>
+        />
         <line
           x1="110"
           y1="-100"
@@ -602,7 +602,7 @@ const Home = () => (
             data-tooltip
             title="This is what InterPro does"
           >
-            <InterproGraphic />
+            <InterproGraphicAnim />
           </div>
 
           <h3>Classification of protein families</h3>
