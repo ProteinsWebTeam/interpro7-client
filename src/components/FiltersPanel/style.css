@@ -59,15 +59,12 @@ hr {
 
 /* Medium + */
 @media screen and (min-width: 40em) and (max-width: 56em) {
-  .filter-panel label span {
+  /*.filter-panel label span {display: none;}
+  .filter-panel label input ~ span:last-child {display: block;}*/
+  /*remove label number used for filtering (entry - protein - structure - )*/
+  .filter-label {
     display: none;
   }
-  .filter-panel label input + span {
-    display: block;
-  }
-  input[value='ALL'] + span {
-    visibility: hidden;
-  } /*target the remaining label for first panel entry type: all*/
 }
 
 /* Small screen only */
