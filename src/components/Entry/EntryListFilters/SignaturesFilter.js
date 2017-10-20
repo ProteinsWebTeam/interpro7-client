@@ -44,7 +44,7 @@ class SignaturesFilter extends Component {
       location: { search: { signature_in: signature } },
     } = this.props;
     const signatureDBs = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a
+      ([, a], [, b]) => b - a,
     );
     if (!loading) {
       signatureDBs.unshift(['Any', NaN]);
@@ -66,7 +66,7 @@ class SignaturesFilter extends Component {
                 style={{ margin: '0.25em' }}
               />
               <span>{signatureDB}</span>
-              <NumberLabel value={count} />
+              <NumberLabel value={count} className={f('filter-label')} />
             </label>
           </div>
         ))}
@@ -86,18 +86,18 @@ const getUrlFor = createSelector(
     _search.group_by = 'member_databases';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
-      description
+      description,
     )}?${qsStringify(_search)}`;
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
-  })(SignaturesFilter)
+  })(SignaturesFilter),
 );
