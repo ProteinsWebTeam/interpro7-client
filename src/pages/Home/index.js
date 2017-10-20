@@ -5,6 +5,7 @@ import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
+// import TweenLite from 'gsap/TweenLite';
 
 // Functions
 import { schedule } from 'timing-functions/src';
@@ -94,7 +95,404 @@ const MaskSvgIcons = () => (
   </svg>
 );
 
-const InterproGraphic = () => (
+const InterproGraphicAnim = () => (
+  <svg viewBox="38 4 150 120" width="100%" className={f('container-anim')}>
+    <g transform="rotate(45)" transform-origin="100 100">
+      <g>
+        <line
+          x1="20"
+          y1="-200"
+          x2="20"
+          y2="200"
+          strokeWidth="24"
+          stroke="#dedede"
+          className={f('line')}
+        />
+        <line
+          x1="20"
+          y1="72"
+          x2="20"
+          y2="200"
+          strokeLinecap="round"
+          stroke="#147eaf"
+          strokeWidth="16"
+          className={f('blob', 'line-up')}
+        />
+        <line
+          x1="20"
+          y1="-70"
+          x2="20"
+          y2="-200"
+          strokeLinecap="round"
+          stroke="#3daec0"
+          strokeWidth="16"
+          className={f('blob', 'line-up', 'high-blob')}
+        />
+      </g>
+      <g>
+        <line
+          x1="50"
+          y1="-200"
+          x2="50"
+          y2="200"
+          strokeWidth="24"
+          stroke="#cacaca"
+          className={f('line')}
+        />
+        <line
+          x1="50"
+          y1="260"
+          x2="50"
+          y2="300"
+          strokeLinecap="round"
+          stroke="#2d7d95"
+          strokeWidth="16"
+          className={f('blob', 'line-down')}
+        />
+        <line
+          x1="50"
+          y1="224"
+          x2="50"
+          y2="240"
+          strokeLinecap="round"
+          stroke="#3daec0"
+          strokeWidth="16"
+          className={f('blob', 'line-down', 'high-blob')}
+        />
+        <line
+          x1="50"
+          y1="-120"
+          x2="50"
+          y2="200"
+          strokeLinecap="round"
+          stroke="#2592c5"
+          strokeWidth="16"
+          className={f('blob', 'line-down')}
+        />
+      </g>
+      <g>
+        <line
+          x1="80"
+          y1="-200"
+          x2="80"
+          y2="200"
+          strokeWidth="24"
+          stroke="#dedede"
+          className={f('line')}
+        />
+        <line
+          x1="80"
+          y1="100"
+          x2="80"
+          y2="200"
+          strokeLinecap="round"
+          stroke="#2d7d95"
+          strokeWidth="16"
+          className={f('blob', 'line-up')}
+        />
+        <line
+          x1="80"
+          y1="66"
+          x2="80"
+          y2="80"
+          strokeLinecap="round"
+          stroke="#3daec0"
+          strokeWidth="16"
+          className={f('blob', 'line-up', 'high-blob')}
+        />
+        <line
+          x1="80"
+          y1="-50"
+          x2="80"
+          y2="44"
+          strokeLinecap="round"
+          stroke="#2d7d95"
+          strokeWidth="16"
+          className={f('blob', 'line-up')}
+        />
+        <line
+          x1="80"
+          y1="-100"
+          x2="80"
+          y2="-100"
+          strokeLinecap="round"
+          stroke="#abd6ba"
+          strokeWidth="16"
+          className={f('blob', 'line-up')}
+        />
+        <line
+          x1="80"
+          y1="-80"
+          x2="80"
+          y2="-120"
+          strokeLinecap="round"
+          stroke="#3daec0"
+          strokeWidth="16"
+          className={f('blob', 'line-up')}
+        />
+        <line
+          x1="80"
+          y1="-160"
+          x2="80"
+          y2="-160"
+          strokeLinecap="round"
+          stroke="#abd6ba"
+          strokeWidth="16"
+          className={f('blob', 'line-up')}
+        />
+        <line
+          x1="80"
+          y1="-180"
+          x2="80"
+          y2="-200"
+          strokeLinecap="round"
+          stroke="grey"
+          strokeWidth="16"
+          className={f('blob', 'line-up')}
+        />
+      </g>
+      <g>
+        <line
+          x1="110"
+          y1="-200"
+          x2="110"
+          y2="200"
+          strokeWidth="24"
+          stroke="#cacaca"
+          className={f('line')}
+        />
+        <line
+          x1="110"
+          y1="270"
+          x2="110"
+          y2="270"
+          strokeLinecap="round"
+          stroke="#2592c5"
+          strokeWidth="16"
+          className={f('blob', 'line-down')}
+        />
+        <line
+          x1="110"
+          y1="220"
+          x2="110"
+          y2="230"
+          strokeLinecap="round"
+          stroke="#3daec0"
+          strokeWidth="16"
+          className={f('blob', 'line-down', 'high-blob')}
+        />/>
+        <line
+          x1="110"
+          y1="-100"
+          x2="110"
+          y2="200"
+          strokeLinecap="round"
+          stroke="#2d7d95"
+          strokeWidth="16"
+          className={f('blob', 'line-down')}
+        />
+        <line
+          x1="110"
+          y1="-120"
+          x2="110"
+          y2="-180"
+          strokeLinecap="round"
+          stroke="#2592c5"
+          strokeWidth="16"
+          className={f('blob', 'line-down')}
+        />
+      </g>
+      <g>
+        <line
+          x1="140"
+          y1="-200"
+          x2="140"
+          y2="200"
+          strokeWidth="24"
+          stroke="#dedede"
+          id="line-l05"
+          className={f('line')}
+        />
+        <line
+          x1="140"
+          y1="-60"
+          x2="140"
+          y2="60"
+          strokeLinecap="round"
+          stroke="#abd6ba"
+          strokeWidth="16"
+          className={f('blob', 'line-up')}
+        />
+        <line
+          x1="140"
+          y1="-86"
+          x2="140"
+          y2="-110"
+          strokeLinecap="round"
+          stroke="#3daec0"
+          strokeWidth="16"
+          className={f('blob', 'line-up', 'high-blob')}
+        />
+        <line
+          x1="140"
+          y1="-130"
+          x2="140"
+          y2="-200"
+          strokeLinecap="round"
+          stroke="#147eaf"
+          strokeWidth="16"
+          className={f('blob', 'line-up')}
+        />
+      </g>
+    </g>
+  </svg>
+);
+
+const InterproGraphicStatic = () => (
+  <svg viewBox="10 30 130 110" className={f('svg-anim')}>
+    <g>
+      <g>
+        <line
+          x1="20"
+          y1="0"
+          x2="20"
+          y2="200"
+          strokeWidth="3"
+          stroke="#cacaca"
+          id="line-l01"
+          className={f('line')}
+        />
+        <line
+          x1="20"
+          y1="-100"
+          x2="20"
+          y2="200"
+          strokeLinecap="round"
+          stroke="#147eaf"
+          strokeWidth="16"
+          id="blob-l01"
+          className={f('test-up')}
+        />
+      </g>
+      <g>
+        <line
+          x1="50"
+          y1="0"
+          x2="50"
+          y2="200"
+          strokeWidth="24"
+          stroke="#cacaca"
+          id="line-l02"
+          className={f('line')}
+        />
+        <line
+          x1="50"
+          y1="50"
+          x2="50"
+          y2="200"
+          strokeLinecap="round"
+          stroke="#2592c5"
+          strokeWidth="16"
+          id="blob-l02"
+          className={f('test-down')}
+        />
+      </g>
+      <g>
+        <line
+          x1="80"
+          y1="0"
+          x2="80"
+          y2="200"
+          strokeWidth="24"
+          stroke="#cacaca"
+          id="line-l03"
+          className={f('line')}
+        />
+        <line
+          x1="80"
+          y1="100"
+          x2="80"
+          y2="200"
+          strokeLinecap="round"
+          stroke="#2d7d95"
+          strokeWidth="16"
+          id="blob-l03-1"
+          className={f('test-up')}
+        />
+        <line
+          x1="80"
+          y1="66"
+          x2="80"
+          y2="80"
+          strokeLinecap="round"
+          stroke="#3daec0"
+          strokeWidth="16"
+          id="blob-l03-2"
+          className={f('test-up')}
+        />
+        <line
+          x1="80"
+          y1="-100"
+          x2="80"
+          y2="44"
+          strokeLinecap="round"
+          stroke="#2d7d95"
+          strokeWidth="16"
+          id="blob-l03-3"
+          className={f('test-up')}
+        />
+      </g>
+      <g>
+        <line
+          x1="110"
+          y1="0"
+          x2="110"
+          y2="200"
+          strokeWidth="24"
+          stroke="#cacaca"
+          id="line-l04"
+          className={f('line')}
+        />
+        <line
+          x1="110"
+          y1="-100"
+          x2="110"
+          y2="200"
+          strokeLinecap="round"
+          stroke="#2d7d95"
+          strokeWidth="16"
+          id="blob-l04"
+          className={f('test-down')}
+        />
+      </g>
+      <g>
+        <line
+          x1="140"
+          y1="0"
+          x2="140"
+          y2="200"
+          strokeWidth="24"
+          stroke="#cacaca"
+          id="line-l05"
+          className={f('line')}
+        />
+        <line
+          x1="140"
+          y1="-100"
+          x2="140"
+          y2="60"
+          strokeLinecap="round"
+          stroke="#3daec0"
+          strokeWidth="16"
+          id="blob-l05"
+          className={f('test-up')}
+        />
+      </g>
+    </g>
+  </svg>
+);
+
+const InterproGraphicFirst = () => (
   <svg viewBox="0 0 150 120">
     <line x1="20" y1="0" x2="20" y2="130" strokeWidth="3" stroke="#cacaca" />
     <line x1="50" y1="0" x2="50" y2="130" strokeWidth="3" stroke="#cacaca" />
@@ -198,23 +596,24 @@ const Home = () => (
       <div className={f('columns', 'large-12')}>
         <SchemaOrgData processData={schemaProcessData} />
         <SchemaOrgData data="InterPro" processData={schemaProcessDataForDB} />
-        <div
-          className={f('fig-container')}
-          data-tooltip
-          title="This is what InterPro does"
-        >
-          <InterproGraphic />
+        <div className={f('container-intro')}>
+          <div
+            className={f('fig-container')}
+            data-tooltip
+            title="This is what InterPro does"
+          >
+            <InterproGraphic />
+          </div>
+
+          <h3>Classification of protein families</h3>
+
+          <Description
+            title=""
+            extraTextForButton="about InterPro"
+            heightToHide={106}
+            textBlocks={[description]}
+          />
         </div>
-
-        <h3>Classification of protein families</h3>
-
-        <Description
-          title=""
-          extraTextForButton="about InterPro"
-          heightToHide={106}
-          textBlocks={[description]}
-        />
-
         <fieldset className={f('fieldset')}>
           <legend>Search InterPro</legend>
           <Tabs>
