@@ -64,7 +64,7 @@ class ExperimentTypeFilter extends Component {
                 style={{ margin: '0.25em' }}
               />
               <span>{type}</span>
-              <NumberLabel value={count} />
+              <NumberLabel value={count} className={f('filter-label')} />
             </label>
           </div>
         ))}
