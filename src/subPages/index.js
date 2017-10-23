@@ -6,11 +6,11 @@ import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
 
 const List = loadable({
-  loader: () => import(/* webpackChunkName: "entry-subpage" */ './ListSubPage'),
+  loader: () => import(/* webpackChunkName: "list-subpage" */ './ListSubPage'),
 });
 
 const Proteome = loadable({
-  loader: () => import(/* webpackChunkName: "entry-subpage" */ './Proteome'),
+  loader: () => import(/* webpackChunkName: "proteome-subpage" */ './Proteome'),
 });
 
 const DomainArchitecture = loadable({

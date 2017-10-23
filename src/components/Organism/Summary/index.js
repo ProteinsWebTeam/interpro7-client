@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { goToNewLocation } from 'actions/creators';
 
 import Title from 'components/Title';
-import Accession from 'components/Organism/Accession';
+import Accession from 'components/Accession';
 import Lineage from 'components/Organism/Lineage';
 import Children from 'components/Organism/Children';
 import Metadata from 'wrappers/Metadata';
@@ -99,7 +99,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
       <div className={f('row')}>
         <div className={f('medium-10', 'columns')}>
           <Title metadata={metadata} mainType={'organism'} />
-          <Accession metadata={metadata} />
+          <Accession accession={metadata.accession} id={metadata.id} />
           {metadata.rank && <div>Rank: {metadata.rank}</div>}
           <Lineage lineage={metadata.lineage} />
           <Children taxChildren={metadata.children} />
@@ -154,7 +154,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             </div>
           ) : null}
           <div>
-            <Accession metadata={metadata} />
+            <Accession accession={metadata.accession} id={metadata.id} />
           </div>
           <div>Strain: {metadata.strain}</div>
           <div>
@@ -191,9 +191,17 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }).isRequired,
+    loading: T.bool.isRequired,
   };
 
   render() {
+    if (this.props.loading || !this.props.data || !this.props.data.metadata) {
+      return (
+        <div className={f('row')}>
+          <div className={f('columns')}>Loading…</div>
+        </div>
+      );
+    }
     const { data: { metadata: { source_database: db } } } = this.props;
     return (
       <div className={f('sections')}>

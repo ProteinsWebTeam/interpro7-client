@@ -145,7 +145,7 @@ const primariesAndSecondaries = {
   },
 };
 
-class _RelatedAdvanced extends PureComponent {
+export class _RelatedAdvanced extends PureComponent {
   static propTypes = {
     mainData: T.object.isRequired,
     secondaryData: T.arrayOf(T.object).isRequired,

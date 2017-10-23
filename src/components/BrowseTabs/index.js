@@ -37,7 +37,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
   static propTypes = {
     newTo: T.oneOfType([T.object, T.func]).isRequired,
     name: T.string.isRequired,
-    counter: T.string.isRequired,
+    counter: T.string,
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.any,
@@ -61,7 +61,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
       ) {
         value = payload.metadata.counters[counter];
       } // Enabling the menuitems that appear in the entry_annotations array.
-      // i.e. only neble the menu item if there is info for it
+      // i.e. only enable the menu item if there is info for it
       if (
         payload.metadata.entry_annotations &&
         payload.metadata.entry_annotations.indexOf(
@@ -70,9 +70,13 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
       ) {
         value = NaN;
       }
+      // TODO: find a generic way to deal with this:
+      if (name === 'Overview' || name === 'Domain Architectures') value = NaN;
+      if (name === 'Domain Architectures' && payload.metadata.counters &&
+        !payload.metadata.counters.entries) {
+        value = 0;
+      }
     }
-    // TODO: find a generic way to deal with this:
-    if (name === 'Overview' || name === 'Domain Architectures') value = NaN;
 
     return (
       <Link
@@ -101,7 +105,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
   },
 }; */
 
-class BrowseTabs extends PureComponent /*:: <BrowseTabsProps> */ {
+export class BrowseTabsWithoutData extends PureComponent /*:: <BrowseTabsProps> */ {
   static propTypes = {
     mainType: T.string,
     mainDB: T.string,
@@ -174,4 +178,6 @@ const mapStateToUrl = createSelector(
   },
 );
 
-export default loadData(mapStateToUrl)(connect(mapStateToProps)(BrowseTabs));
+export default loadData(mapStateToUrl)(
+  connect(mapStateToProps)(BrowseTabsWithoutData),
+);

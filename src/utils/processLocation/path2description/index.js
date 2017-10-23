@@ -128,6 +128,10 @@ handlers.textSearchHandler.children = new Set([
 handlers.sequenceSearchHandler.children = new Set([
   handlers.jobSequenceSearchHandler,
 ]);
+handlers.jobSequenceSearchHandler.children = new Set([
+  handlers.entryHandler,
+  handlers.mainDetailHandler,
+]);
 handlers.searchHandler.children = new Set([
   handlers.textSearchHandler,
   handlers.sequenceSearchHandler,

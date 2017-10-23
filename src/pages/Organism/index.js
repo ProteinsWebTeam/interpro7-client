@@ -207,7 +207,7 @@ class Summary extends PureComponent {
 
   render() {
     const { data: { loading, payload } } = this.props;
-    if (loading || !payload.metadata) {
+    if (loading || (!payload && !payload.metadata && !payload.results)) {
       return (
         <div className={f('row')}>
           <div className={f('columns')}>Loading…</div>

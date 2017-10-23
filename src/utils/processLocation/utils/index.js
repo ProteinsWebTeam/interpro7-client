@@ -21,6 +21,7 @@ export const getEmptyDescription = () => ({
   focusMemberDBAccession: null,
 });
 
+// Note: they need to be order from more to less restrictive.
 export const descriptionItemToHandlers /*: Map<string, Set<Handler>> */ = new Map(
   [
     ['other', new Set([handlers.otherHandler])],
@@ -52,13 +53,13 @@ export const descriptionItemToHandlers /*: Map<string, Set<Handler>> */ = new Ma
     [
       'mainAccession',
       new Set([
-        handlers.memberDBAccessionHandler,
+        handlers.jobSequenceSearchHandler,
         handlers.interProAccessionHandler,
+        handlers.memberDBAccessionHandler,
         handlers.structureAccessionHandler,
         handlers.proteinAccessionHandler,
         handlers.proteomeAccessionHandler,
         handlers.taxonomyAccessionHandler,
-        handlers.jobSequenceSearchHandler,
         handlers.valueTextSearchHandler,
       ]),
     ],
@@ -117,5 +118,5 @@ export const descriptionItemToHandlers /*: Map<string, Set<Handler>> */ = new Ma
         handlers.proteomeAccessionHandler,
       ]),
     ],
-  ]
+  ],
 );

@@ -29,10 +29,10 @@ const getUrlFor = createSelector(
         }
         // build URL
         return `${protocol}//${hostname}:${port}${root}${description2path(
-          _description
+          _description,
         )}?${qsStringify(search)}`.replace(/\?$/, '');
-      }
-    )
+      },
+    ),
 );
 const mergeResidues = residues =>
   Object.values(residues.entry_locations).map(location => ({
@@ -102,7 +102,7 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   const { out, ipro } = groupByEntryType(interpro);
   if (unintegrated.length > 0) {
     unintegrated.forEach(
-      u => (u.link = `/entry/${u.source_database}/${u.accession}`)
+      u => (u.link = `/entry/${u.source_database}/${u.accession}`),
     );
     out.unintegrated = unintegrated;
   }
@@ -122,7 +122,7 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   return out;
 };
 
-class _DomainOnProtein extends Component {
+class DomainOnProteinWithoutData extends Component {
   static propTypes = {
     mainData: T.object.isRequired,
     dataInterPro: T.object.isRequired,
@@ -146,7 +146,7 @@ class _DomainOnProtein extends Component {
       dataInterPro.payload.entries,
       'payload' in dataIntegrated ? dataIntegrated.payload.entries : [],
       'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
-      dataResidues.payload
+      dataResidues.payload,
     );
     return (
       <div>
@@ -170,7 +170,7 @@ const DomainOnProtein = [
       getUrl: getUrlFor(db),
       propNamespace: db,
     })(Index),
-  _DomainOnProtein
+  DomainOnProteinWithoutData,
 );
 
 export default DomainOnProtein;

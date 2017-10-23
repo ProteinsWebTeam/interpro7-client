@@ -1,19 +1,26 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-const Length = ({metadata}) => (
-  <div>
-    Length: {metadata.length} amino acids {
-      metadata.fragment === 'N' ? '(complete)' : '(fragment)'
-    }
-  </div>
-);
+class Length extends PureComponent {
+  static propTypes = {
+    metadata: T.shape({
+      length: T.number.isRequired,
+      fragment: T.string,
+    }).isRequired,
+  };
 
-Length.propTypes = {
-  metadata: T.shape({
-    length: T.number.isRequired,
-    fragment: T.string.isRequired,
-  }).isRequired,
-};
+  render() {
+    const { metadata: { length, fragment } } = this.props;
+    let fragmentText;
+    if (fragment) {
+      fragmentText = ` (${fragment === 'N' ? 'complete' : 'fragemnt'})`;
+    }
+    return (
+      <div>
+        Length: {length} amino acids{fragmentText}
+      </div>
+    );
+  }
+}
 
 export default Length;

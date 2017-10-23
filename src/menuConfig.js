@@ -51,7 +51,7 @@ export const entities /*: Array<Object> */ = [
     newTo: {
       description: {
         mainType: 'protein',
-        mainDB: 'reviewed',
+        mainDB: 'uniprot',
       },
     },
     name: 'Protein',
@@ -125,7 +125,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             mainMemberDB: null,
             focusType: 'protein',
-            focusDB: 'reviewed',
+            focusDB: 'uniprot',
           },
         };
       },
@@ -222,7 +222,8 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'proteomes',
+      name: 'Proteomes',
+      counter: 'proteomes',
     },
   ],
 ]);

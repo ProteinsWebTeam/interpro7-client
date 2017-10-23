@@ -29,8 +29,8 @@ const mapNameToClass = new Map([
   metadata: {
     name: { name: string, short: ?string },
     accession: string | number,
-    source_database: string,
-    type: string,
+    source_database?: string,
+    type?: string,
     gene?: string,
     experiment_type?: string,
     source_organism?: Object,
@@ -59,15 +59,16 @@ export default class Title extends PureComponent /*:: <Props> */ {
     const isEntry = mainType === 'entry';
     return (
       <div className={f('title')}>
-        {isEntry && (
-          <interpro-type type={metadata.type.replace('_', ' ')} size="4em" />
-        )}
+        {isEntry &&
+          metadata.type && (
+            <interpro-type type={metadata.type.replace('_', ' ')} size="4em" />
+          )}
         <Helmet>
           <title>{metadata.accession.toString()}</title>
         </Helmet>
         <h3>
           {metadata.name.name}{' '}
-          {isEntry ? (
+          {isEntry && metadata.type ? (
             <small className={f(mapNameToClass.get(metadata.type))}>
               {metadata.accession}
             </small>
@@ -76,6 +77,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
           )}
         </h3>
         {isEntry &&
+          metadata.source_database &&
           metadata.source_database.toLowerCase() !== 'interpro' && (
             <div className={f('md-hlight')}>
               <h5>

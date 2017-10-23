@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -28,14 +28,21 @@ const IPScanStatus = loadable({
 });
 const IPScanResult = loadable({
   loader: () =>
-    import(/* webpackChunkName: "ipscan-result" */ 'components/IPScan/Result'),
+    import(/* webpackChunkName: "sequence-page" */ 'pages/Sequence'),
 });
 
+const TextSearchAndResults = () => (
+  <Wrapper>
+    <SearchByText key="search" />
+    <SearchResults key="results" />
+  </Wrapper>
+);
+
 const IPScanSearchAndStatus = () => (
-  <div>
-    <IPScanSearch />
-    <IPScanStatus refreshRate={120000} />
-  </div>
+  <Wrapper>
+    <IPScanSearch key="search" />
+    <IPScanStatus key="status" refreshRate={120000} />
+  </Wrapper>
 );
 IPScanSearchAndStatus.preload = () => {
   IPScanSearch.preload();
@@ -54,7 +61,7 @@ const InnerSwitch = props => (
 );
 
 const routes = new Set([
-  { value: 'text', component: SearchByText },
+  { value: 'text', component: TextSearchAndResults },
   { value: 'sequence', component: InnerSwitch },
 ]);
 
@@ -62,59 +69,65 @@ const RedirectToText = () => (
   <Redirect to={{ description: { mainType: 'search', mainDB: 'text' } }} />
 );
 
-const Search = () => (
-  <div className={f('row')}>
-    <div className={f('columns')}>
-      <fieldset className={f('fieldset')}>
-        <legend>Search InterPro</legend>
-        <ul className={f('tabs')}>
-          <li
-            className={f('tabs-title')}
-            onMouseOver={SearchByText.preload}
-            onFocus={SearchByText.preload}
-          >
-            <Link
-              newTo={{ description: { mainType: 'search', mainDB: 'text' } }}
-              activeClass={f('is-active', 'is-active-tab')}
-            >
-              by text
-            </Link>
-          </li>
-          <li
-            className={f('tabs-title')}
-            onMouseOver={IPScanSearchAndStatus.preload}
-            onFocus={IPScanSearchAndStatus.preload}
-          >
-            <Link
-              newTo={{
-                description: { mainType: 'search', mainDB: 'sequence' },
-              }}
-              activeClass={f('is-active', 'is-active-tab')}
-            >
-              by sequence
-            </Link>
-          </li>
-        </ul>
-        <div className={f('tabs', 'tabs-content')}>
-          <div className={f('tabs-panel', 'is-active')}>
-            <ErrorBoundary>
-              <Switch
-                locationSelector={l => l.description.mainDB}
-                indexRoute={RedirectToText}
-                childRoutes={routes}
-              />
-            </ErrorBoundary>
-          </div>
-        </div>
-      </fieldset>
-      <SearchResults />
-      {/* <SearchResults data={data} query={query} />*/}
-    </div>
-  </div>
-);
+class Wrapper extends PureComponent {
+  static propTypes = {
+    children: T.node.isRequired,
+  };
 
-Search.propTypes = {
-  children: T.node,
-};
+  render() {
+    return (
+      <div className={f('row')}>
+        <div className={f('columns')}>
+          <fieldset className={f('fieldset')}>
+            <legend>Search InterPro</legend>
+            <ul className={f('tabs')}>
+              <li
+                className={f('tabs-title')}
+                onMouseOver={SearchByText.preload}
+                onFocus={SearchByText.preload}
+              >
+                <Link
+                  newTo={{
+                    description: { mainType: 'search', mainDB: 'text' },
+                  }}
+                  activeClass={f('is-active', 'is-active-tab')}
+                >
+                  by text
+                </Link>
+              </li>
+              <li
+                className={f('tabs-title')}
+                onMouseOver={IPScanSearchAndStatus.preload}
+                onFocus={IPScanSearchAndStatus.preload}
+              >
+                <Link
+                  newTo={{
+                    description: { mainType: 'search', mainDB: 'sequence' },
+                  }}
+                  activeClass={f('is-active', 'is-active-tab')}
+                >
+                  by sequence
+                </Link>
+              </li>
+            </ul>
+            <div className={f('tabs', 'tabs-content')}>
+              <div className={f('tabs-panel', 'is-active')}>
+                <ErrorBoundary>{this.props.children}</ErrorBoundary>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    );
+  }
+}
+
+const Search = () => (
+  <Switch
+    locationSelector={l => l.description.mainDB}
+    indexRoute={RedirectToText}
+    childRoutes={routes}
+  />
+);
 
 export default Search;

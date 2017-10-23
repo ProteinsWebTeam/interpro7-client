@@ -78,9 +78,9 @@ class MemberDBTabSlim extends PureComponent {
   };
 
   render() {
-    const { newTo, children, value } = this.props;
+    const { children, value } = this.props;
     return (
-      <option newTo={newTo} value={children}>
+      <option value={children}>
         {children} ({value} entries)
       </option>
     );
@@ -109,7 +109,7 @@ class MemberDBTabs extends Component {
     }),
     mainType: T.string,
     goToNewLocation: T.func.isRequired,
-    newLocation: T.func.isRequired,
+    newLocation: T.object,
   };
 
   constructor(props) {

@@ -314,19 +314,16 @@ class IPScanSearch extends Component {
                       </div>
                     </label>
                     <div className={s('button-group', 'line-with-buttons')}>
-                      <label className={s('file-input-label')}>
-                        <button
-                          type="button"
-                          className={s('hollow', 'button', 'tertiary')}
-                        >
+                      <button className={s('hollow', 'button', 'tertiary')}>
+                        <label className={s('file-input-label')}>
                           Choose file
-                        </button>
-                        <input
-                          type="file"
-                          onChange={this._handleFileChange}
-                          hidden
-                        />
-                      </label>
+                          <input
+                            type="file"
+                            onChange={this._handleFileChange}
+                            hidden
+                          />
+                        </label>
+                      </button>
                       <button
                         type="button"
                         className={s('hollow', 'button', 'secondary')}
@@ -353,12 +350,12 @@ class IPScanSearch extends Component {
                       disabled={!valid}
                       value="Search"
                     />
-                    <button
+                    <input
+                      type="button"
                       className={s('secondary', 'hollow', 'button')}
                       onClick={this._handleReset}
-                    >
-                      Clear
-                    </button>
+                      value="Clear"
+                    />
                   </div>
                 </div>
               </div>
