@@ -33,7 +33,7 @@ class SignaturesFilter extends Component {
       ...this.props.location,
       search: {
         ...this.props.location.search,
-        signature_in: value === 'Any' ? undefined : value,
+        signature_in: value === 'All' ? undefined : value,
       },
     });
   };
@@ -47,7 +47,7 @@ class SignaturesFilter extends Component {
       ([, a], [, b]) => b - a,
     );
     if (!loading) {
-      signatureDBs.unshift(['Any', NaN]);
+      signatureDBs.unshift(['All', NaN]);
     }
     return (
       <div className={f('list-sign')}>
@@ -60,7 +60,7 @@ class SignaturesFilter extends Component {
                 value={signatureDB}
                 onChange={this._handleSelection}
                 checked={
-                  (signatureDB === 'Any' && !signature) ||
+                  (signatureDB === 'All' && !signature) ||
                   signature === signatureDB
                 }
                 style={{ margin: '0.25em' }}
