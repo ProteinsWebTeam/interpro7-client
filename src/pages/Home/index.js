@@ -129,14 +129,15 @@ class InterProGraphicAnim extends PureComponent {
 
   _handleMouseOver = () => {
     // this._tl.play();
+    TweenLite.to('.blob:not(.high-blob)', 1, {
+      opacity: 0.2,
+    });
     TweenLite.to('.blob.line-up', 2, {
       y: 160,
-      opacity: 0.2,
       ease: Expo.easeOut,
     });
     TweenLite.to('.blob.line-down', 2, {
       y: -160,
-      opacity: 0.2,
       ease: Expo.easeOut,
     });
     TweenLite.to('.high-blob', 1, { opacity: 1, ease: Expo.easeOut });
