@@ -9,11 +9,10 @@ import Description from 'components/Description';
 // Functions
 import { schedule } from 'timing-functions/src';
 
-//
+// Animation
 import 'gsap/TweenMax';
-import Timeline from 'gsap/TimelineLite';
-import TweenLite from 'gsap/TweenLite';
-import Expo from 'gsap/EasePack';
+// import Timeline from 'gsap/TimelineLite';
+import 'gsap/EasePack';
 
 // Style
 import { foundationPartial } from 'styles/foundation';
@@ -101,41 +100,50 @@ const MaskSvgIcons = () => (
 );
 
 class InterProGraphicAnim extends PureComponent {
-  componentDidMount() {
-    this._tl = new Timeline();
-    this._tl.add('start');
-    this._tl.staggerTo(
-      `.${f('blob')}.${f('line-up')}`,
-      1.5,
-      {
-        y: 160,
-        ease: Expo.easeOut,
-      },
-      0.1,
-      'start',
-    );
-    this._tl.staggerTo(
-      `.${f('blob')}.${f('line-down')}`,
-      1.5,
-      {
-        y: -160,
-        ease: Expo.easeOut,
-      },
-      0.05,
-      'start',
-    );
-    this._tl.pause();
-  }
+  // componentDidMount() {
+  //   this._tl = new Timeline();
+  //   this._tl.add('start');
+  //   this._tl.staggerTo(
+  //     `.${f('blob')}.${f('line-up')}`,
+  //     1.5,
+  //     {
+  //       y: 160,
+  //       ease: Expo.easeOut,
+  //     },
+  //     0.1,
+  //     'start',
+  //   );
+  //   this._tl.staggerTo(
+  //     `.${f('blob')}.${f('line-down')}`,
+  //     1.5,
+  //     {
+  //       y: -160,
+  //       ease: Expo.easeOut,
+  //     },
+  //     0.05,
+  //     'start',
+  //   );
+  //   this._tl.pause();
+  // }
 
   _handleMouseOver = () => {
-    this._tl.play();
-    // TweenLite.to('.blob.line-up', 1, {y: 160, ease: Expo.easeOut});
-    // TweenLite.to('.blob.line-down', 1, {y: -160, ease: Expo.easeOut});
+    // this._tl.play();
+    TweenLite.to('.blob.line-up', 2, {
+      y: 160,
+      opacity: 0.2,
+      ease: Expo.easeOut,
+    });
+    TweenLite.to('.blob.line-down', 2, {
+      y: -160,
+      opacity: 0.2,
+      ease: Expo.easeOut,
+    });
+    TweenLite.to('.high-blob', 1, { opacity: 1, ease: Expo.easeOut });
   };
 
   _handleMouseOut = () => {
-    this._tl.reverse();
-    // TweenLite.to('.blob', 1, {y: 0, ease: Expo.easeOut});
+    // this._tl.reverse();
+    TweenLite.to('.blob', 2, { y: 0, opacity: 1, ease: Expo.easeOut });
   };
 
   render() {
@@ -250,7 +258,7 @@ class InterProGraphicAnim extends PureComponent {
               strokeLinecap="round"
               stroke="#3daec0"
               strokeWidth="16"
-              className={f('blob', 'line-up', 'high-blob')}
+              className={f('blob', 'line-up')}
             />
             <line
               x1="80"
@@ -264,21 +272,21 @@ class InterProGraphicAnim extends PureComponent {
             />
             <line
               x1="80"
-              y1="-100"
-              x2="80"
-              y2="-100"
-              strokeLinecap="round"
-              stroke="#abd6ba"
-              strokeWidth="16"
-              className={f('blob', 'line-up')}
-            />
-            <line
-              x1="80"
               y1="-80"
               x2="80"
               y2="-120"
               strokeLinecap="round"
               stroke="#3daec0"
+              strokeWidth="16"
+              className={f('blob', 'line-up', 'high-blob')}
+            />
+            <line
+              x1="80"
+              y1="-140"
+              x2="80"
+              y2="-140"
+              strokeLinecap="round"
+              stroke="#abd6ba"
               strokeWidth="16"
               className={f('blob', 'line-up')}
             />
