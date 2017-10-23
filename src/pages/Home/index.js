@@ -10,7 +10,7 @@ import Description from 'components/Description';
 import { schedule } from 'timing-functions/src';
 
 // Animation
-import 'gsap/TweenMax';
+import TweenLite from 'gsap/TweenMax';
 // import Timeline from 'gsap/TimelineLite';
 import 'gsap/EasePack';
 
