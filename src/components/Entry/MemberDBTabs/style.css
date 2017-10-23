@@ -200,6 +200,12 @@ button.hollow.light:focus {
   color: #4b555b;
   border: 1px solid #92989c;
 }
+
+.browsemd-panel,
+.browsemd-panel select {
+  color: #4b555b;
+}
+
 @media screen and (max-width: 39.9375em) {
   /*temp while we replace MD menu by select */
   .tabs-title:last-child {
