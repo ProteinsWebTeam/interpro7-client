@@ -39,7 +39,7 @@ class GOTermsFilter extends Component {
       ...this.props.location,
       search: {
         ...this.props.location.search,
-        go_term: value === 'Any' ? undefined : value,
+        go_term: value === 'All' ? undefined : value,
       },
     });
   };
@@ -50,7 +50,7 @@ class GOTermsFilter extends Component {
       ([, a], [, b]) => b - a,
     );
     if (!loading) {
-      terms.unshift(['Any', NaN]);
+      terms.unshift(['All', NaN]);
     }
     return (
       <div className={f('list-go')}>
@@ -60,10 +60,10 @@ class GOTermsFilter extends Component {
               <input
                 type="radio"
                 name="go_category"
-                value={categories[term] || 'Any'}
+                value={categories[term] || 'All'}
                 onChange={this._handleSelection}
                 checked={
-                  (term === 'Any' && !search.go_term) ||
+                  (term === 'All' && !search.go_term) ||
                   search.go_term === categories[term]
                 }
                 style={{ margin: '0.25em' }}
