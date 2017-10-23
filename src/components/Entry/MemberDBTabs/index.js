@@ -196,7 +196,7 @@ class MemberDBTabs extends Component {
 
         {tabs && (
           <div
-            className={f('vertical', 'tabs', 'show-for-small-only', {
+            className={f('browsemd-panel', 'show-for-small-only', {
               collapsed,
             })}
           >
@@ -214,7 +214,7 @@ class MemberDBTabs extends Component {
           </div>
         )}
 
-        <span className={f('vertical', 'tabs', { collapsed })} />
+        <span className={f('tabs', { collapsed })} />
         {tabs && (
           <AnimatedEntry
             className={f('vertical', 'tabs', 'hide-for-small-only', {
