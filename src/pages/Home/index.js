@@ -10,9 +10,10 @@ import Description from 'components/Description';
 import { schedule } from 'timing-functions/src';
 
 // Animation
-import TweenLite from 'gsap/TweenMax';
+import 'gsap/TweenMax';
 // import Timeline from 'gsap/TimelineLite';
-import 'gsap/EasePack';
+import TweenLite from 'gsap/TweenLite';
+import { Expo } from 'gsap/EasePack';
 
 // Style
 import { foundationPartial } from 'styles/foundation';
