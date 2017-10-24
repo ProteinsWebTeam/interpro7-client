@@ -79,6 +79,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 <div className={f('pagesize-wrapper')}>
                   {title && <h4>{title}</h4>}
                   <_TotalNb
+                    className={f('hide-for-small-only')}
                     data={dataTable}
                     actualSize={actualSize}
                     pagination={_query}
@@ -115,6 +116,14 @@ export default class Table extends PureComponent /*:: <Props> */ {
           </div>
           <div className={f('row')}>
             <div className={f('columns')}>
+              <_TotalNb
+                className={f('show-for-small-only')}
+                data={dataTable}
+                actualSize={actualSize}
+                pagination={_query}
+                pathname={pathname}
+                notFound={notFound}
+              />
               <table className={f('table', 'light', { isStale })}>
                 <_Header columns={columns} />
                 <_Body rows={dataTable || []} columns={columns} />
