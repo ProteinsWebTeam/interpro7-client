@@ -14,8 +14,8 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const mainData = this.props.data.payload[0];
-    const secondaryData = [];
+    const mainData = this.props.data.payload.results[0];
+    const secondaryData = mainData.matches.map && [];
     return (
       <Related
         mainData={mainData}

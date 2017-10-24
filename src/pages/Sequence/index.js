@@ -93,7 +93,9 @@ class _Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
-      payload: T.array,
+      payload: T.shape({
+        results: T.array,
+      }),
     }).isRequired,
     accession: T.string.isRequired,
   };
@@ -108,9 +110,12 @@ class _Summary extends PureComponent {
       );
     }
     const entries =
-      payload[0].matches.length +
-      new Set(payload[0].matches.map(m => (m.signature.entry || {}).accession))
-        .size;
+      payload.results[0].matches.length +
+      new Set(
+        payload.results[0].matches.map(
+          m => (m.signature.entry || {}).accession,
+        ),
+      ).size;
     return [
       <ErrorBoundary key="browse">
         <BrowseTabsWithoutData

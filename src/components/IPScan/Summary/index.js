@@ -15,7 +15,9 @@ import f from 'styles/foundation';
 /*:: type Props = {
   accession: string,
   data: {
-    payload: Array<Object>,
+    payload: {
+      results: Array<Object>,
+    },
   },
 }; */
 
@@ -29,12 +31,14 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.string.isRequired,
     data: T.shape({
-      payload: T.array.isRequired,
+      payload: T.shape({
+        results: T.array.isRequired,
+      }),
     }).isRequired,
   };
 
   render() {
-    const { data: { payload: [payload] }, accession } = this.props;
+    const { data: { payload: { results: [payload] } }, accession } = this.props;
     const metadata = {
       accession: payload.crossReferences[0].identifier,
       length: payload.sequenceLength,
