@@ -108,6 +108,10 @@ const primariesAndSecondaries = {
       primary: 'organism',
       secondary: 'entry',
     },
+    set: {
+      primary: 'set',
+      secondary: 'entry',
+    },
   },
   protein: {
     entry: {
@@ -141,6 +145,24 @@ const primariesAndSecondaries = {
     structure: {
       primary: 'structure',
       secondary: 'organism',
+    },
+  },
+  set: {
+    entry: {
+      primary: 'entry',
+      secondary: 'set',
+    },
+    protein: {
+      primary: 'protein',
+      secondary: 'set',
+    },
+    structure: {
+      primary: 'structure',
+      secondary: 'set',
+    },
+    organism: {
+      primary: 'organism',
+      secondary: 'set',
     },
   },
 };

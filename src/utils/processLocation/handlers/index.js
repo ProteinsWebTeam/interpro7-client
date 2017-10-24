@@ -82,6 +82,10 @@ const memberDB = new Set([
 ]);
 const interPro = { name: 'interpro', re: /IPR[0-9]{6}/i, type: 'entry' };
 
+export const setDB /*: Set<Object> */ = new Set([
+  { name: 'pfam', re: 'CL[0-9]{4}', url_template: 'http://pfam.xfam.org/clan/{id}' },
+]);
+
 export const mainDetailHandler /*: Handler */ = Object.create(handler, {
   name: {
     value: 'mainDetailHandler',
@@ -380,6 +384,56 @@ export const organismHandler /*: Handler */ = Object.create(handler, {
   match: {
     value: (current /*: string */, { mainType } /*: Description */) =>
       mainType !== 'organism' && current.toLowerCase() === 'organism',
+  },
+});
+
+export const setHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'setHandler',
+  },
+  getKey: {
+    value: ({ mainType } /*: Description */) =>
+      `${mainType ? 'focus' : 'main'}Type`,
+  },
+  match: {
+    value: (current /*: string */, { mainType } /*: Description */) =>
+      mainType !== 'set' && current.toLowerCase() === 'set',
+  },
+});
+
+export const setAccessionHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'setAccessionHandler',
+  },
+  getKey: {
+    value: ({ focusDB } /*: Description */) =>
+      `${focusDB ? 'focus' : 'main'}Accession`,
+  },
+  cleanUp: {
+    value: (value /*: string */) => value.toUpperCase(),
+  },
+  match: {
+    value: (current /*: string */, _description /*: Description */) => {
+      for (const { re } of setDB) {
+        if (new RegExp(re, 'i').test(current)) return true;
+      }
+    },
+  },
+});
+
+export const setDBHandler /*: Handler */ = Object.create(handler, {
+  name: {
+    value: 'setDBHandler',
+  },
+  getKey: {
+    value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
+  },
+  match: {
+    value: (current /*: string */, _description /*: Description */) => {
+      for (const { name } of setDB) {
+        if (name === current) return true;
+      }
+    },
   },
 });
 
