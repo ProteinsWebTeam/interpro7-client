@@ -600,7 +600,7 @@ const Home = () => (
           <div
             className={f('fig-container')}
             data-tooltip
-            title="This is what InterPro does"
+            title="Domain analysis and prediction on multiple protein sequences"
           >
             <InterProGraphicAnim />
           </div>
@@ -608,7 +608,6 @@ const Home = () => (
           <h3>Classification of protein families</h3>
 
           <Description
-            title=""
             extraTextForButton="about InterPro"
             heightToHide={106}
             textBlocks={[description]}
