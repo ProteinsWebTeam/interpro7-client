@@ -78,10 +78,12 @@ class MemberDBTabSlim extends PureComponent {
   };
 
   render() {
-    const { children, value } = this.props;
+    const { children, value, mainType } = this.props;
+    const type = mainType;
+    const plural = toPlural(type);
     return (
       <option value={children}>
-        {children} ({value} entries)
+        {children} ({value} {plural})
       </option>
     );
   }
@@ -122,12 +124,16 @@ class MemberDBTabs extends Component {
   };
 
   _handleChange = e => {
+    const description = { ...this.props.newLocation.description };
+    if (description.mainType === 'entry') {
+      description.mainDB = e.target.value;
+    } else {
+      description.focusType = 'entry';
+      description.focusDB = e.target.value;
+    }
     this.props.goToNewLocation({
       ...this.props.newLocation,
-      description: {
-        ...this.props.newLocation.description,
-        mainDB: e.target.value,
-      },
+      description,
     });
   };
 
@@ -202,7 +208,11 @@ class MemberDBTabs extends Component {
           >
             <span>Which database to browse?</span>
             <select
-              value={this.props.newLocation.description.mainDB}
+              value={
+                this.props.newLocation.description.mainType === 'entry'
+                  ? this.props.newLocation.description.mainDB
+                  : this.props.newLocation.description.focusDB
+              }
               onChange={this._handleChange}
             >
               {tabs.map(e => (
