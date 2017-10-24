@@ -7,10 +7,12 @@ import config from 'config';
 import { toPlural } from 'utils/pages';
 
 import { foundationPartial } from 'styles/foundation';
-import s from '../style.css';
-const f = foundationPartial(s);
+import styles from '../style.css';
+
+const f = foundationPartial(styles);
 
 const TotalNb = ({
+  className,
   data,
   actualSize,
   pagination,
@@ -49,7 +51,9 @@ const TotalNb = ({
     );
   }
   return (
-    <div className={f('totalnb-box', 'hide-for-small-only')}>{textLabel}</div>
+    <p className={className} style={{ color: '#505f74', marginBottom: '0' }}>
+      {textLabel}
+    </p>
   );
 };
 TotalNb.propTypes = {
