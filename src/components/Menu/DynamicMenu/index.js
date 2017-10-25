@@ -101,7 +101,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
           tabIndex="0"
         >
           <span className={f('more-icon-container')}>
-            <img src={dotsvg} width="30px" />
+            <img src={dotsvg} width="30px" alt="view all menu items" />
           </span>
 
           {hiddenItems.map(({ newTo, name, activeClass }) => (
