@@ -4,6 +4,7 @@
 
 .menu {
   display: flex;
+  overflow: hidden; /*needed for menu items that 'disappear' */
 }
 
 .menu-item {
