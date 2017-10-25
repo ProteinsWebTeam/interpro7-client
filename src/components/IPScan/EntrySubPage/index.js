@@ -34,11 +34,7 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
         type,
       };
       entry.children.push({
-        accession: match.signature.accession,
-        source_database: match.signature.signatureLibraryRelease.library,
-        protein_length: mainData.sequenceLength,
         coordinates: [match.locations.map(l => [l.start, l.end])],
-        score: match.score,
       });
       data.integrated.set(accession, entry);
     }
