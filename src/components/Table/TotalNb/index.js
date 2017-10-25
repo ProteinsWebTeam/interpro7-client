@@ -64,6 +64,7 @@ TotalNb.propTypes = {
   mainDB: T.string.isRequired,
   mainType: T.string.isRequired,
   focusDB: T.string,
+  className: T.string,
   focusType: T.string,
 };
 const mapStateToProps = createSelector(
