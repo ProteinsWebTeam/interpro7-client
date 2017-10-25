@@ -160,7 +160,7 @@ const Matches = (
       />
       <Column
         dataKey="source_organism.fullname"
-        displayIf={primary !== 'organism'}
+        displayIf={primary === 'protein' || primary === 'structure'}
       >
         Species
       </Column>
@@ -199,7 +199,6 @@ const Matches = (
             matches={[match]}
             primary={primary}
             secondary={secondary}
-            location={location}
             {...props}
           />
         )}
