@@ -43,10 +43,12 @@ class DomainArchitecture extends PureComponent {
   };
 
   render() {
-    const payload = this.props.data.payload[0];
+    const payload = this.props.data.payload.results[0];
     const protein = {
       length: payload.sequenceLength,
     };
+    // massage data to make it look like what is needed for
+    // a standard domain architecture subpage
     const data = {
       integrated: new Map(),
       unintegrated: [],
