@@ -23,7 +23,9 @@ const schemaProcessData = data => ({
     additionalType: 'http://semanticscience.org/resource/SIO_010043',
     identifier: data.protein.accession,
     name: data.protein.name,
-    location: data.protein.entry_protein_locations.map(loc => ({
+    location: (data.protein.entry_protein_locations ||
+      data.entry.entry_protein_locations
+    ).map(loc => ({
       '@type': 'PropertyValue',
       minValue: loc.fragments[0].start,
       maxValue: loc.fragments[0].end,

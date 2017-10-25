@@ -185,7 +185,7 @@ export class _RelatedAdvanced extends PureComponent {
               <p>
                 This {mainType} contains
                 {secondaryData.length > 1
-                  ? ` those ${toPlural(focusType)}:`
+                  ? ` these ${toPlural(focusType)}:`
                   : ` this ${focusType}:`}
               </p>
             ) : (
