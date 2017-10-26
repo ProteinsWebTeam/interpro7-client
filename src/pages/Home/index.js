@@ -608,6 +608,7 @@ const Home = () => (
           <h3>Classification of protein families</h3>
 
           <Description
+            title=""
             extraTextForButton="about InterPro"
             heightToHide={106}
             textBlocks={[description]}
