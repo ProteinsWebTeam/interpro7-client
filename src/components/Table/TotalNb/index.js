@@ -6,11 +6,6 @@ import { createSelector } from 'reselect';
 import config from 'config';
 import { toPlural } from 'utils/pages';
 
-import { foundationPartial } from 'styles/foundation';
-import styles from '../style.css';
-
-const f = foundationPartial(styles);
-
 const TotalNb = ({
   className,
   data,
