@@ -159,7 +159,7 @@ class InterProGraphicAnim extends PureComponent {
         onMouseOut={this._handleMouseOut}
         onBlur={this._handleMouseOut}
       >
-        <g transform="rotate(45)" transform-origin="100 100">
+        <g transform="rotate(45, 100, 100)">
           <g>
             <line
               x1="20"
