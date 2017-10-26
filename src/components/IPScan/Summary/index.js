@@ -69,7 +69,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
           </div>
         </section>
         <Sequence accession={accession} sequence={payload.sequence} />
-        <GoTerms terms={Array.from(goTerms.values())} />
+        <GoTerms terms={Array.from(goTerms.values())} type="protein" />
       </div>
     );
   }

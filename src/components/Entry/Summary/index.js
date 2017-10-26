@@ -117,7 +117,11 @@ class SummaryEntry extends Component {
         </section>
 
         {Object.keys(metadata.go_terms) && (
-          <GoTerms terms={metadata.go_terms} />
+          <GoTerms
+            terms={metadata.go_terms}
+            type="entry"
+            db={metadata.source_database}
+          />
         )}
 
         {Object.keys(metadata.literature).length > 0 && (
