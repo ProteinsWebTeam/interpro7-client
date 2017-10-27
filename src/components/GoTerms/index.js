@@ -5,10 +5,12 @@ import { GoLink } from 'components/ExtLink';
 
 import loadable from 'higherOrder/loadable';
 
+import { foundationPartial } from 'styles/foundation';
+
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
-import { foundationPartial } from 'styles/foundation';
+
 const f = foundationPartial(ebiStyles, ipro, local);
 
 const getDefaultPayload = () => ({

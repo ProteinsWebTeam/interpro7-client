@@ -14,9 +14,11 @@ import { ProteomeLink } from 'components/ExtLink';
 
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 
-import uniprotLogo from 'images/uniprot.png';
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+
+const f = foundationPartial(ebiStyles);
 
 /*:: type Props = {
   data: {
@@ -161,8 +163,8 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             <h5>External Links</h5>
             <ul className={f('no-bullet')}>
               <li>
-                <ProteomeLink id={metadata.accession}>
-                  <img src={uniprotLogo} alt="Uniprot" />
+                <ProteomeLink id={metadata.accession} className={f('ext')}>
+                  View this proteome in UniProt
                 </ProteomeLink>
               </li>
             </ul>
