@@ -29,11 +29,8 @@ const TotalNb = ({
   );
   const index = (page - 1) * pageSize + 1;
   // const lastPage = Math.ceil(actualSize / pageSize) || 1;
-
-  let textLabel = 'Loading data';
-  if (notFound) {
-    textLabel = 'No data available';
-  } else if (actualSize) {
+  let textLabel = '';
+  if (actualSize) {
     const type = focusType || mainType;
     const db = focusDB || mainDB;
     const plural = actualSize > 1 ? toPlural(type) : type;
