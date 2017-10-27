@@ -8,6 +8,12 @@
     float: left;
     margin: 0.5rem 1rem 1.5rem 0;
   }
+  & .icon-container {
+    /*negative values as the viewbox is not well defined*/
+    float: left;
+    margin: -1.5rem -0.5rem 0rem -1.5rem;
+    width: 24%;
+  }
 }
 .title small {
   color: #333;
