@@ -95,10 +95,12 @@ class SummaryEntry extends Component {
                 ref={node => (this._hierarchy = node)}
               />
               <br />
-              <Description
-                textBlocks={metadata.description}
-                literature={metadata.literature}
-              />
+              {Object.keys(metadata.description).length > 0 && (
+                <Description
+                  textBlocks={metadata.description}
+                  literature={metadata.literature}
+                />
+              )}
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>
               {metadata.integrated && (
