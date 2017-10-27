@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { Helmet } from 'react-helmet';
-
+import MemberSymbol from 'components/Entry/MemberSymbol';
 import Link from 'components/generic/Link';
 
 import loadWebComponent from 'utils/loadWebComponent';
@@ -11,8 +11,32 @@ import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import styles from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ipro, styles);
+const f = foundationPartial(fonts, ipro, styles);
+
+const MaskSvgIcons = () => (
+  <svg
+    viewBox="0 0 200 200"
+    style={{
+      position: 'fixed',
+      width: 0,
+      height: 0,
+      top: -1800,
+      left: -1800,
+      /* to hide SVG on the page as display:none is not working */
+    }}
+  >
+    <defs>
+      <clipPath id="cut-off-center">
+        <rect x="33%" y="38%" width="68" height="68" />
+      </clipPath>
+      <clipPath id="cut-off-bottom">
+        <polygon points="0,68 68,0 68,68" />
+      </clipPath>
+    </defs>
+  </svg>
+);
 
 const mapNameToClass = new Map([
   ['Domain', 'title-id-domain'],
@@ -60,8 +84,19 @@ export default class Title extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('title')}>
         {isEntry &&
-          metadata.type && (
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() === 'interpro' && (
             <interpro-type type={metadata.type.replace('_', ' ')} size="4em" />
+          )}
+        {isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() !== 'interpro' && (
+            <div className={f('icon-container')}>
+              <MaskSvgIcons />
+              <MemberSymbol type={metadata.source_database} />
+            </div>
           )}
         <Helmet>
           <title>{metadata.accession.toString()}</title>
@@ -76,6 +111,12 @@ export default class Title extends PureComponent /*:: <Props> */ {
             <small className={f('title-id-other')}>{metadata.accession}</small>
           )}
         </h3>
+        <p>
+          {' '}
+          This signature is defined as{' '}
+          {metadata.type.replace('_', ' ').toLowerCase()} by{' '}
+          {metadata.source_database}.
+        </p>
         {isEntry &&
           metadata.source_database &&
           metadata.source_database.toLowerCase() !== 'interpro' && (
@@ -90,7 +131,12 @@ export default class Title extends PureComponent /*:: <Props> */ {
                     },
                   }}
                 >
-                  {metadata.source_database}
+                  {metadata.source_database}{' '}
+                  <span
+                    className={f('small', 'icon', 'icon-generic')}
+                    data-icon="i"
+                    title={metadata.source_database}
+                  />
                 </Link>
               </h5>
             </div>
