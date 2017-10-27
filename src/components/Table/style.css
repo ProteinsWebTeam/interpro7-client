@@ -165,6 +165,11 @@ table.light .subheader {
 .table-footer ul li.current {
   background: #71818a; /*b4cad8*/
 }
+
+.warning-msg-table {
+  font-size: 140%;
+}
+
 /* Small screen only */
 @media screen and (max-width: 39.9375em) {
   .table-view .table-results-filtering .filter-wrapper {
