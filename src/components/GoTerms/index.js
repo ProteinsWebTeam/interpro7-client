@@ -5,10 +5,12 @@ import { GoLink } from 'components/ExtLink';
 
 import loadable from 'higherOrder/loadable';
 
+import { foundationPartial } from 'styles/foundation';
+
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
-import { foundationPartial } from 'styles/foundation';
+
 const f = foundationPartial(ebiStyles, ipro, local);
 
 const getDefaultPayload = () => ({
@@ -16,12 +18,6 @@ const getDefaultPayload = () => ({
   'Molecular Function': [],
   'Cellular Component': [],
 });
-
-const mapNameToClass = new Map([
-  ['Biological Process', 'go-title-bp'],
-  ['Molecular Function', 'go-title-mf'],
-  ['Cellular Component', 'go-title-cc'],
-]);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -34,7 +30,9 @@ const schemaProcessData = data => ({
   identifier: data,
 });
 
-const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
+const GoTerms = (
+  { terms, type, db } /*: {terms: Array<Object>, type: string, db?: string} */,
+) => {
   // remove duplicates
   // TODO: remove duplicates from data, then remove this as will be unnecessary
   let _terms = new Map(terms.map(term => [term.identifier, term]));
@@ -48,11 +46,15 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
     acc[term.category].push(term);
     return acc;
   }, getDefaultPayload());
+  let title = 'InterPro2GO';
+  if (type === 'entry' && db.toLowerCase() !== 'interpro') {
+    title = `GO terms (as provided by ${db})`;
+  }
   return (
     <section>
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
-          <h4>Go terms</h4>
+          <h4 title="GO terms">{title}</h4>
         </div>
       </div>
       <div className={f('row')}>
@@ -66,7 +68,7 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
               'margin-bottom-large',
             )}
           >
-            <p className={f(mapNameToClass.get(key))}>{key}</p>
+            <p className={f('go-title')}>{key}</p>
             <ul className={f('go-list')}>
               {values && values.length ? (
                 values.map(({ identifier, name }) => (
@@ -85,9 +87,7 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
                   </li>
                 ))
               ) : (
-                <li>
-                  <span style={{ fontSize: '0.9rem' }}>None</span>
-                </li>
+                <li className={f('none')}>None</li>
               )}
             </ul>
           </div>
@@ -98,6 +98,8 @@ const GoTerms = ({ terms } /*: {terms: Array<Object>} */) => {
 };
 GoTerms.propTypes = {
   terms: T.arrayOf(T.object.isRequired).isRequired,
+  type: T.string.isRequired,
+  db: T.string,
 };
 
 export default GoTerms;

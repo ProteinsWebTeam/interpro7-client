@@ -444,9 +444,7 @@ module.exports = (env = { dev: true }) => {
         : null,
       env.production
         ? new (require('uglifyjs-webpack-plugin'))({
-            parallel: {
-              workers: true,
-            },
+            parallel: 4,
             sourceMap: true,
           })
         : null,

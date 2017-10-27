@@ -162,9 +162,8 @@ handlers.rootHandler.children = new Set([
 ]);
 
 const MULTIPLE_SLASHES = /\/+/;
-const notFalsy = x => x;
 
 export default (path /*: string */) => {
-  const parts = path.split(MULTIPLE_SLASHES).filter(notFalsy);
+  const parts = path.split(MULTIPLE_SLASHES).filter(Boolean);
   return handlers.rootHandler.handle(undefined, ...parts);
 };

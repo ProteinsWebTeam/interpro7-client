@@ -39,8 +39,8 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
   componentWillMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType
-      )
+        m => m.InterproType,
+      ),
     ).as('interpro-type');
   }
 
@@ -61,7 +61,10 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
               key={type}
             >
               <Link
-                newTo={{ description: { mainType: 'entry' }, search: { type } }}
+                newTo={{
+                  description: { mainType: 'entry', mainDB: 'InterPro' },
+                  search: { type },
+                }}
               >
                 <interpro-type type={type} size="4em" />
                 <h5 data-tooltip title={title}>
@@ -106,7 +109,7 @@ const mapStateToUrl = createSelector(
       port,
       pathname: `${root}/entry`,
       query: { group_by: 'type' },
-    })
+    }),
 );
 
 export default loadData(mapStateToUrl)(ByEntryType);

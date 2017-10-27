@@ -9,8 +9,12 @@ import Species from 'components/Protein/Species';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
 import { UniProtLink } from 'components/ExtLink';
-import f from 'styles/foundation';
-import uniprotLogo from 'images/uniprot.png';
+
+import { foundationPartial } from 'styles/foundation';
+
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+
+const f = foundationPartial(ebiStyles);
 
 /*:: type Props = {
   data: {
@@ -45,8 +49,8 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                 <h5>External Links</h5>
                 <ul className={f('no-bullet')}>
                   <li>
-                    <UniProtLink id={metadata.accession}>
-                      <img src={uniprotLogo} alt="Uniprot logo" />
+                    <UniProtLink id={metadata.accession} className={f('ext')}>
+                      View this protein in UniProtKB
                     </UniProtLink>
                   </li>
                 </ul>
@@ -54,8 +58,12 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
             </div>
           </div>
         </section>
-        <Sequence accession={metadata.accession} sequence={metadata.sequence} />
-        <GoTerms terms={metadata.go_terms} />
+        <Sequence
+          accession={metadata.accession}
+          sequence={metadata.sequence}
+          name={metadata.name.name}
+        />
+        <GoTerms terms={metadata.go_terms} type="protein" />
       </div>
     );
   }

@@ -15,6 +15,8 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import interproStyles from 'styles/interpro-new.css';
 import styles from './styles.css';
 
+import dotsvg from 'images/icons/ico-more.svg';
+
 const f = foundationPartial(fonts, interproStyles, styles);
 
 /*:: type Props = {
@@ -24,7 +26,7 @@ const f = foundationPartial(fonts, interproStyles, styles);
   [key: string]: boolean,
 }; */
 
-const MAX_DELAY_BEFORE_CHECKING_FIT = 500; // ms
+const MAX_DELAY_BEFORE_CHECKING_FIT = 200; // ms
 
 const InterProMin = InterPro.filter(item => item.name !== 'Settings');
 
@@ -92,11 +94,16 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
           </li>
         ))}
         <ul
-          className={f('menu-item', 'more', { visible: hiddenItems.length })}
+          className={f('menu-item', 'view-more', {
+            visible: hiddenItems.length,
+          })}
           role="tree"
           tabIndex="0"
         >
-          …
+          <span className={f('more-icon-container')}>
+            <img src={dotsvg} width="30px" alt="view all menu items" />
+          </span>
+
           {hiddenItems.map(({ newTo, name, activeClass }) => (
             <li key={name} className={f('menu-item')}>
               <MenuItem newTo={newTo} activeClass={activeClass}>

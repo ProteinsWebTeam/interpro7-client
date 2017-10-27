@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { TaxLink, UniProtLink, ProteomeLink } from 'components/ExtLink';
+import { UniProtLink, ProteomeLink } from 'components/ExtLink';
 
 const Default = ({ children }) => <span>{children}</span>;
 Default.propTypes = {
@@ -14,7 +14,6 @@ Default.propTypes = {
 const componentMap = new Map([
   ['reviewed', UniProtLink],
   ['unreviewed', UniProtLink],
-  ['taxonomy', TaxLink],
   ['proteome', ProteomeLink],
 ]);
 

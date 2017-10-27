@@ -6,11 +6,8 @@ import { createSelector } from 'reselect';
 import config from 'config';
 import { toPlural } from 'utils/pages';
 
-import { foundationPartial } from 'styles/foundation';
-import s from '../style.css';
-const f = foundationPartial(s);
-
 const TotalNb = ({
+  className,
   data,
   actualSize,
   pagination,
@@ -49,7 +46,9 @@ const TotalNb = ({
     );
   }
   return (
-    <div className={f('totalnb-box', 'hide-for-small-only')}>{textLabel}</div>
+    <p className={className} style={{ color: '#505f74', marginBottom: '0' }}>
+      {textLabel}
+    </p>
   );
 };
 TotalNb.propTypes = {
@@ -60,6 +59,7 @@ TotalNb.propTypes = {
   mainDB: T.string.isRequired,
   mainType: T.string.isRequired,
   focusDB: T.string,
+  className: T.string,
   focusType: T.string,
 };
 const mapStateToProps = createSelector(
