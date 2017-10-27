@@ -58,7 +58,11 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
             </div>
           </div>
         </section>
-        <Sequence accession={metadata.accession} sequence={metadata.sequence} />
+        <Sequence
+          accession={metadata.accession}
+          sequence={metadata.sequence}
+          name={metadata.name.name}
+        />
         <GoTerms terms={metadata.go_terms} type="protein" />
       </div>
     );
