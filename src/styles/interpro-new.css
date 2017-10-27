@@ -173,7 +173,7 @@ div#local-title {
 /*SVG icons*/
 .icon {
   display: inline-block;
-  vertical-align: middle;
+  /*vertical-align: middle;*/
 }
 /*/MEMBER DATABASE icons*/
 /*ICONS*/
