@@ -3,15 +3,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import {
-  BaseLink,
-  TaxLink,
-  PMCLink,
-  DOILink,
-  GoLink,
-  PDBeLink,
-  UniProtLink,
-} from '.';
+import { BaseLink, PMCLink, DOILink, GoLink, PDBeLink, UniProtLink } from '.';
 
 const renderer = new ShallowRenderer();
 
@@ -45,18 +37,11 @@ describe('External links', () => {
           renderer.render(
             <BaseLink id={id} pattern={pattern} target="_blank">
               {child}
-            </BaseLink>
+            </BaseLink>,
           );
           expect(renderer.getRenderOutput()).toMatchSnapshot();
         }
       }
-    });
-  });
-
-  describe('<TaxLink />', () => {
-    test('should render simple links', () => {
-      renderer.render(<TaxLink id={12345} />);
-      expect(renderer.getRenderOutput()).toMatchSnapshot();
     });
   });
 

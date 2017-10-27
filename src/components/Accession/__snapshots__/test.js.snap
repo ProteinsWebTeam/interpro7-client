@@ -71,10 +71,10 @@ exports[`<Accession /> should render the accession component for other 1`] = `
 exports[`<Accession /> should render the accession component for taxon 1`] = `
 <div>
   Accession: 
-  <TaxLink
+  <Default
     id={1}
   >
     1
-  </TaxLink>
+  </Default>
 </div>
 `;

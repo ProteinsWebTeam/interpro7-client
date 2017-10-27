@@ -2,7 +2,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { Name, ExtOriginDB, OriginDB, SourceOrganism } from '.';
+import { Name, ExtOriginDB, OriginDB } from '.';
 
 const renderer = new ShallowRenderer();
 
@@ -12,7 +12,7 @@ describe('Simple Common Components', () => {
   describe('<Name />', () => {
     test('should render name information', () => {
       renderer.render(
-        <Name name={{ name: 'name', short: 'short' }} accession="accession" />
+        <Name name={{ name: 'name', short: 'short' }} accession="accession" />,
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
       renderer.render(<Name name={{ name: 'name' }} accession="accession" />);
@@ -33,7 +33,7 @@ describe('Simple Common Components', () => {
       for (const accession of ['accession', exampleTaxID]) {
         for (const [source] of sourceComponentTuples) {
           renderer.render(
-            <ExtOriginDB source={source} accession={accession} />
+            <ExtOriginDB source={source} accession={accession} />,
           );
           expect(renderer.getRenderOutput()).toMatchSnapshot();
         }
@@ -61,19 +61,10 @@ describe('Simple Common Components', () => {
             source={db}
             pathname={`/${type}/${db}/${accession}/`}
             accession={accession}
-          />
+          />,
         );
         expect(renderer.getRenderOutput()).toMatchSnapshot();
       }
-    });
-  });
-
-  describe('<SourceOrganism />', () => {
-    test('should render source organism information', () => {
-      renderer.render(
-        <SourceOrganism taxid={exampleTaxID} name="organism name" />
-      );
-      expect(renderer.getRenderOutput()).toMatchSnapshot();
     });
   });
 });
