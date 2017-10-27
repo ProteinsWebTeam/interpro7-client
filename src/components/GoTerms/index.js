@@ -85,9 +85,7 @@ const GoTerms = (
                   </li>
                 ))
               ) : (
-                <li>
-                  <span style={{ fontSize: '0.9rem' }}>None</span>
-                </li>
+                <li className={f('none')}>None</li>
               )}
             </ul>
           </div>

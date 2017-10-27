@@ -23,3 +23,9 @@ a.go-terms:hover {
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
+
+.none {
+  font-size: 90%;
+  opacity: 0.75;
+  list-style: none;
+}
