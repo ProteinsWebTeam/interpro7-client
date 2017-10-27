@@ -125,8 +125,12 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 notFound={notFound}
               />
               <table className={f('table', 'light', { isStale })}>
-                <_Header columns={columns} />
-                <_Body rows={dataTable || []} columns={columns} />
+                <_Header columns={columns} notFound={notFound} />
+                <_Body
+                  rows={dataTable || []}
+                  columns={columns}
+                  notFound={notFound}
+                />
               </table>
             </div>
           </div>
@@ -140,7 +144,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   actualSize={actualSize}
                   pagination={_query}
                   pathname={pathname}
-                  notFound={notFound}
                 />
               </div>
             </div>
