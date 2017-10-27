@@ -88,12 +88,14 @@ class SummaryEntry extends Component {
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
               <Title metadata={metadata} mainType={mainType} />
-              <interpro-hierarchy
-                accession={metadata.accession}
-                hideafter="2"
-                hrefroot="/entry/interpro"
-                ref={node => (this._hierarchy = node)}
-              />
+              {metadata.source_database.toLowerCase() === 'interpro' && (
+                <interpro-hierarchy
+                  accession={metadata.accession}
+                  hideafter="2"
+                  hrefroot="/entry/interpro"
+                  ref={node => (this._hierarchy = node)}
+                />
+              )}
               <br />
               <Description
                 textBlocks={metadata.description}
