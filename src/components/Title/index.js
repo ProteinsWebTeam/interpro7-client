@@ -111,16 +111,15 @@ export default class Title extends PureComponent /*:: <Props> */ {
             <small className={f('title-id-other')}>{metadata.accession}</small>
           )}
         </h3>
-        <p>
-          {' '}
-          This signature is defined as{' '}
-          {metadata.type.replace('_', ' ').toLowerCase()} by{' '}
-          {metadata.source_database}.
-        </p>
         {isEntry &&
           metadata.source_database &&
           metadata.source_database.toLowerCase() !== 'interpro' && (
             <div className={f('md-hlight')}>
+              <p>
+                This signature is defined as{' '}
+                {metadata.type.replace('_', ' ').toLowerCase()} by{' '}
+                {metadata.source_database}.
+              </p>
               <h5>
                 Member database:&nbsp;
                 <Link
