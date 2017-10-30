@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import GoTerms from 'components/GoTerms';
-import Sequence from 'components/Protein/Sequence';
 import Length from 'components/Protein/Length';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
@@ -68,7 +67,6 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
             </div>
           </div>
         </section>
-        <Sequence accession={accession} sequence={payload.sequence} />
         <GoTerms terms={Array.from(goTerms.values())} type="protein" />
       </div>
     );
