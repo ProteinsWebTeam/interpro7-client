@@ -115,11 +115,6 @@ export default class Title extends PureComponent /*:: <Props> */ {
           metadata.source_database &&
           metadata.source_database.toLowerCase() !== 'interpro' && (
             <div className={f('md-hlight')}>
-              <p>
-                This signature is defined as{' '}
-                {metadata.type.replace('_', ' ').toLowerCase()} by{' '}
-                {metadata.source_database}.
-              </p>
               <h5>
                 Member database:&nbsp;
                 <Link
@@ -138,14 +133,20 @@ export default class Title extends PureComponent /*:: <Props> */ {
                   />
                 </Link>
               </h5>
+              <p>
+                This signature is defined as{' '}
+                {metadata.type.replace('_', ' ').toLowerCase()} by{' '}
+                {metadata.source_database}.
+              </p>
             </div>
           )}
-        {metadata.name.short && (
-          <p>
-            Short name:&nbsp;
-            <i className={f('shortname')}>{metadata.name.short}</i>
-          </p>
-        )}
+        {metadata.name.short &&
+          metadata.accession !== metadata.name.short && (
+            <p>
+              Short name:&nbsp;
+              <i className={f('shortname')}>{metadata.name.short}</i>
+            </p>
+          )}
       </div>
     );
   }
