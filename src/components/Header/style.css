@@ -34,7 +34,15 @@
   background-position: left, top right;
   background-size: 100%, 1400px;
 }
-
+.masthead.sign {
+  background-image: linear-gradient(
+      to right,
+      #325578,
+      rgba(249, 255, 182, 0.53),
+      rgb(43, 111, 128)
+    ),
+    url(images/backgrounds/fondation-morse-header.jpg);
+}
 /*STYLE - make menu items hover slightly darker*/
 .masthead nav ul li a:hover {
   color: #000;
