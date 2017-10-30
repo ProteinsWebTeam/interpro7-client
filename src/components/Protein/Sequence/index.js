@@ -16,6 +16,7 @@ const f = foundationPartial(pStyles);
 const comment = /^\s*[;>].*$/gm;
 const whiteSpaces = /\s*/g;
 const chunkOfTen = /.{1,10}/g;
+const chunkOfEighty = /(.{1,80})/g;
 
 /*:: type InnerProps = {
   sequence: string,
@@ -35,7 +36,12 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
     return (
       <div className={f('raw-sequence-viewer', 'row')}>
         {sequenceWords.map((e, i) => (
-          <span key={i} className={f('sequence_word')} style={{ zIndex: -i }}>
+          <span
+            key={i}
+            className={f('sequence_word')}
+            style={{ zIndex: -i }}
+            data-index={i}
+          >
             {e}
           </span>
         ))}
@@ -54,10 +60,15 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
   static propTypes = {
     sequence: T.string,
     goToNewLocation: T.func.isRequired,
+    accession: T.string.isRequired,
+    name: T.string,
   };
 
+  // eslint-disable-next-line: max-statements
   _getSelection = () => {
     let sequenceToSearch = this.props.sequence;
+    let start = 1;
+    let end = sequenceToSearch.length;
     if ('getSelection' in window) {
       const selection = window.getSelection();
       if (!this._node) return sequenceToSearch;
@@ -73,9 +84,22 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
         if (selectionString) {
           sequenceToSearch = selectionString;
         }
+        // define start and end value of sequence selection
+        start =
+          +selection.anchorNode.parentElement.dataset.index * 10 +
+          selection.anchorOffset +
+          1;
+        end = sequenceToSearch.length + start - 1;
       }
     }
-    return sequenceToSearch;
+    // Split by line of 80 characters
+    sequenceToSearch = sequenceToSearch.replace(chunkOfEighty, '$1\n');
+    // Prepend metainformation
+    const meta = `>${this.props
+      .accession} mol:protein subsequence:${start}-${end} length:${end -
+      start +
+      1} ${this.props.name || ''}`.trim();
+    return `${meta}\n${sequenceToSearch}`;
   };
 
   _handleIPSClick = event => {

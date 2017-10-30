@@ -89,7 +89,7 @@ class SearchResults extends PureComponent {
         actualSize={payload.hitCount}
         query={search}
         pathname="/search/text"
-        title="Search Results"
+        title="Search Results (powered by EBI Search)"
       >
         <Exporter>
           <a href={dataUrl} download={`SearchResults-${search.search}.json`}>

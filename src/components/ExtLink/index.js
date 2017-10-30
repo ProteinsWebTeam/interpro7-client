@@ -62,22 +62,6 @@ const patternLinkWrapper = pattern => {
   return Wrapped;
 };
 
-export const TaxLink = ({ id, target, children, ...props }) => (
-  <BaseLink
-    id={id}
-    target={target || '_blank'}
-    pattern="https://www.ebi.ac.uk/ena/data/view/Taxon:{id}"
-    {...props}
-  >
-    {children || `TaxID ${id}`}
-  </BaseLink>
-);
-TaxLink.propTypes = {
-  ...types,
-  id: T.number.isRequired,
-};
-TaxLink.displayName = 'TaxLink';
-
 export const ProteomeLink = ({ id, target, children, ...props }) => (
   <BaseLink
     id={id}

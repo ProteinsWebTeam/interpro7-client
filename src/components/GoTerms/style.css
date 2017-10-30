@@ -17,19 +17,7 @@ a.go-terms:hover {
   border-bottom: 1px #222 solid;
 }
 
-.bp {
-  background-color: #058dc7;
-}
-.mf {
-  background-color: #50b432;
-}
-.cc {
-  background-color: #ed561b;
-}
-
-.go-title-bp,
-.go-title-mf,
-.go-title-cc {
+.go-title {
   padding: 0.2rem 0.5rem;
   color: #4b555b;
   font-weight: bold;
@@ -37,13 +25,18 @@ a.go-terms:hover {
   display: inline-block;
 }
 
-.go-title-bp {
+.no-goterm {
+  font-size: 90%;
+  list-style: none;
+  margin-left: -0.5rem; /*to be aligned if list removed*/
+}
+
+.bp {
   background: #c2e6ec;
 }
-.go-title-mf {
+.mf {
   background: #e5f5d7;
 }
-.go-title-cc {
+.cc {
   background: #fbdcd0;
 }
-/*/entry page - go term etiquette*/

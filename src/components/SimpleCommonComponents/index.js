@@ -3,13 +3,13 @@ import React, { createElement } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 
-import { TaxLink, PDBeLink, UniProtLink } from 'components/ExtLink';
+import { PDBeLink, UniProtLink } from 'components/ExtLink';
 
 export const Name = (
   {
     name: { name, short },
     accession,
-  } /*: {name: {name: string, short?: string}, accession: string} */
+  } /*: {name: {name: string, short?: string}, accession: string} */,
 ) => (
   <div>
     <h3>
@@ -42,7 +42,7 @@ const extOriginDBLookup = {
 };
 
 export const ExtOriginDB = (
-  { source, accession } /*: {source: string, accession: string | number} */
+  { source, accession } /*: {source: string, accession: string | number} */,
 ) => {
   const desc = extOriginDBLookup[source.toLowerCase()];
   if (!desc) return null;
@@ -56,7 +56,7 @@ ExtOriginDB.propTypes = {
 };
 
 export const OriginDB = (
-  { source, accession } /*: {source: string, accession: string | number} */
+  { source, accession } /*: {source: string, accession: string | number} */,
 ) => (
   <p>
     Source DB:{' '}
@@ -77,19 +77,4 @@ export const OriginDB = (
 OriginDB.propTypes = {
   source: T.string.isRequired,
   accession: T.oneOfType([T.string, T.number]).isRequired,
-};
-
-export const SourceOrganism = (
-  { taxid, name } /*: {taxid: number, name: string} */
-) => (
-  <p>
-    Source Organism:{' '}
-    <TaxLink id={taxid}>
-      {name} ({taxid})
-    </TaxLink>
-  </p>
-);
-SourceOrganism.propTypes = {
-  taxid: T.number.isRequired,
-  name: T.string.isRequired,
 };

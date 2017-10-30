@@ -33,6 +33,8 @@ pages:
     subPages:
       - entry
       - domain_architecture
+  search:
+    plural: results
 pagination:
   pageSize: 20
 cache:

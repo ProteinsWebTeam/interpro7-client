@@ -10,8 +10,11 @@ import Embed from 'components/Embed';
 
 import loadWebComponent from 'utils/loadWebComponent';
 
-import f from 'styles/foundation';
-import pdbLogo from 'images/pdbe.png';
+import { foundationPartial } from 'styles/foundation';
+
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+
+const f = foundationPartial(ebiStyles);
 
 const embedStyle = { width: '100%', height: '50vh' };
 
@@ -95,8 +98,8 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                 <h5>External Links</h5>
                 <ul className={f('no-bullet')}>
                   <li>
-                    <PDBeLink id={metadata.accession}>
-                      <img src={pdbLogo} alt="Uniprot logo" />
+                    <PDBeLink id={metadata.accession} className={f('ext')}>
+                      View this structure in PDBe
                     </PDBeLink>
                   </li>
                 </ul>

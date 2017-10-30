@@ -8,18 +8,16 @@ const f = foundationPartial(style);
 
 const FilterPanel = ({ label, collapsed, onCollapse, children }) => (
   <div className={f('columns', 'small-12', 'medium-4', 'large-3', 'end')}>
-    {label !== '' ? (
+    {label && (
       <button className={f('toggle')} onClick={onCollapse}>
         {collapsed ? '▸' : '▾'} {label}
       </button>
-    ) : (
-      ''
     )}
     <div className={f('filter-panel', { collapsed })}>{children}</div>
   </div>
 );
 FilterPanel.propTypes = {
-  label: T.string.isRequired,
+  label: T.string,
   collapsed: T.bool,
   onCollapse: T.func,
   children: T.any,

@@ -50,16 +50,6 @@ exports[`External links <PMCLink /> should render simple links 1`] = `
 </BaseLink>
 `;
 
-exports[`External links <TaxLink /> should render simple links 1`] = `
-<BaseLink
-  id={12345}
-  pattern="https://www.ebi.ac.uk/ena/data/view/Taxon:{id}"
-  target="_blank"
->
-  TaxID 12345
-</BaseLink>
-`;
-
 exports[`External links <UniProtLink /> should render simple links 1`] = `
 <BaseLink
   id="A0A023GPI8"

@@ -10,14 +10,15 @@ import Lineage from 'components/Organism/Lineage';
 import Children from 'components/Organism/Children';
 import Metadata from 'wrappers/Metadata';
 import TaxIdOrName from 'components/Organism/TaxIdOrName';
-import { TaxLink, ProteomeLink } from 'components/ExtLink';
+import { ProteomeLink } from 'components/ExtLink';
 
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 
-import uniprotLogo from 'images/uniprot.png';
-import enaLogo from 'images/ena_small.png';
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+
+const f = foundationPartial(ebiStyles);
 
 /*:: type Props = {
   data: {
@@ -97,7 +98,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     const { data: { metadata } } = this.props;
     return (
       <div className={f('row')}>
-        <div className={f('medium-10', 'columns')}>
+        <div className={f('medium-12', 'columns')}>
           <Title metadata={metadata} mainType={'organism'} />
           <Accession accession={metadata.accession} id={metadata.id} />
           {metadata.rank && <div>Rank: {metadata.rank}</div>}
@@ -115,18 +116,6 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
           >
             <svg ref={node => (this._tree = node)} style={{ flex: '1' }} />
             <div ref={node => (this._focus = node)} style={{ height: '5em' }} />
-          </div>
-        </div>
-        <div className={f('medium-2', 'columns')}>
-          <div className={f('panel')}>
-            <h5>External Links</h5>
-            <ul className={f('no-bullet')}>
-              <li>
-                <TaxLink id={metadata.accession}>
-                  <img src={enaLogo} alt="ENA" />
-                </TaxLink>
-              </li>
-            </ul>
           </div>
         </div>
       </div>
@@ -174,8 +163,8 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             <h5>External Links</h5>
             <ul className={f('no-bullet')}>
               <li>
-                <ProteomeLink id={metadata.accession}>
-                  <img src={uniprotLogo} alt="Uniprot" />
+                <ProteomeLink id={metadata.accession} className={f('ext')}>
+                  View this proteome in UniProt
                 </ProteomeLink>
               </li>
             </ul>
