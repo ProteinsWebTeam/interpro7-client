@@ -1,11 +1,17 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+
+import { goToNewLocation } from 'actions/creators';
 
 import Accession from 'components/Accession';
 import Title from 'components/Title';
 import Description from 'components/Description';
 import {BaseLink} from 'components/ExtLink';
+
+import ClanViewer from 'clanviewer';
+import 'clanviewer/css/clanviewer.css';
 
 import f from 'styles/foundation';
 
@@ -22,7 +28,35 @@ class SummarySet extends PureComponent /*:: <Props> */ {
       metadata: T.object.isRequired,
     }).isRequired,
     currentSet: T.object,
+    goToNewLocation: T.func.isRequired,
+    location: T.object.isRequired,
   };
+
+  componentDidMount() {
+    const rootDiv = document.getElementById('clanviewer');
+    this._vis = new ClanViewer({element: rootDiv});
+    const data = this.props.data.metadata.relationships;
+    this._vis.paint(data, false);
+    rootDiv.addEventListener('click', e => {
+      const g = e.path[1];
+      if (g.nodeName === 'g' && g.classList.contains('node')) {
+        this.props.goToNewLocation({
+          description: {
+            mainType: 'entry',
+            mainDB: this.props.location.description.mainDB,
+            mainAccession: g.getAttribute('data-accession'),
+          },
+        });
+      }
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data !== this.props.data) {
+      const data = nextProps.data.metadata.relationships;
+      this._vis.paint(data, false);
+    }
+  }
 
   render() {
     const { data: { metadata }, currentSet } = this.props;
@@ -40,7 +74,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                 heightToHide={106}
                 textBlocks={[metadata.description]}
               />
-
+              <div id="clanviewer" />
             </div>
             <div className={f('medium-2', 'columns')}>
               <div className={f('panel')}>
@@ -67,4 +101,4 @@ class SummarySet extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default SummarySet;
+export default connect(null, { goToNewLocation })(SummarySet);

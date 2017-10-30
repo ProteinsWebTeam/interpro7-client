@@ -112,6 +112,7 @@
     "@webcomponents/webcomponentsjs": "1.0.17",
     "EBI-Icon-fonts": "1.2.0",
     "babel-polyfill": "6.26.0",
+    "clanviewer": "^0.1.2",
     "color-hash": "1.0.3",
     "core-js": "2.5.1",
     "d3": "4.11.0",

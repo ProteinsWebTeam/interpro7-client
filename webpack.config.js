@@ -175,7 +175,7 @@ module.exports = (env = { dev: true }) => {
           ],
         },
         {
-          test: /((ebi-global)|(interpro-new))\.css$/i,
+          test: /((clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
           // Use `loader` instead of `use` for now, otherwise breaks
           // https://github.com/webpack/extract-text-webpack-plugin/issues/282
           use:
@@ -247,7 +247,7 @@ module.exports = (env = { dev: true }) => {
                     },
                   },
                 ],
-          exclude: /((ebi-global)|(interpro-new))\.css$/i,
+          exclude: /((clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
         },
         {
           test: /\.scss$/i,
