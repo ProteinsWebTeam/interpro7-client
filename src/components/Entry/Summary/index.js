@@ -117,11 +117,10 @@ class SummaryEntry extends Component {
             </div>
           </div>
         </section>
-
-        {Object.keys(metadata.go_terms) && (
+        {Object.keys(metadata.go_terms) &&
+        metadata.source_database != 'InterPro' ? null : (
           <GoTerms terms={metadata.go_terms} />
         )}
-
         {Object.keys(metadata.literature).length > 0 && (
           <section id="references">
             <div className={f('row')}>
