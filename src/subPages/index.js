@@ -13,6 +13,10 @@ const Proteome = loadable({
   loader: () => import(/* webpackChunkName: "proteome-subpage" */ './Proteome'),
 });
 
+const Sequence = loadable({
+  loader: () => import(/* webpackChunkName: "sequence-subpage" */ './Sequence'),
+});
+
 const DomainArchitecture = loadable({
   loader: () =>
     import(/* webpackChunkName: "domain-architecture-subpage" */ './DomainArchitecture'),
@@ -68,6 +72,7 @@ const subPages = new Map([
   ['protein', loadData(defaultMapStateToProps)(List)],
   ['structure', loadData(defaultMapStateToProps)(List)],
   ['organism', loadData(defaultMapStateToProps)(List)],
+  ['sequence', Sequence],
   ['domain_architecture', loadData(defaultMapStateToProps)(DomainArchitecture)],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],

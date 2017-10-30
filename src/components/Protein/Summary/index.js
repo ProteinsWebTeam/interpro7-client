@@ -3,11 +3,12 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import GoTerms from 'components/GoTerms';
-import Sequence from 'components/Protein/Sequence';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
+import Sequence from 'components/Protein/Sequence';
+
 import { UniProtLink } from 'components/ExtLink';
 
 import { foundationPartial } from 'styles/foundation';
