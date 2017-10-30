@@ -13,6 +13,7 @@ import { UniProtLink } from 'components/ExtLink';
 import { foundationPartial } from 'styles/foundation';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
 const f = foundationPartial(ebiStyles);
 
@@ -30,7 +31,8 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { data: { metadata } } = this.props;
+    const { data } = this.props;
+    const metadata = data.metadata;
     return (
       <div className={f('sections')}>
         <section>
@@ -55,6 +57,14 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                   </li>
                 </ul>
               </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div className={f('row')}>
+            <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
+              <h4>Domains on Protein</h4>
+              <DomainsOnProtein mainData={data} />
             </div>
           </div>
         </section>

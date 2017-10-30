@@ -9,6 +9,10 @@ import description2path from 'utils/processLocation/description2path';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 
+import { foundationPartial } from 'styles/foundation';
+import ipro from 'styles/interpro-new.css';
+const f = foundationPartial(ipro);
+
 const getUrlFor = createSelector(
   // this one only to memoize it
   db => db,
@@ -42,7 +46,7 @@ const mergeResidues = residues =>
     name: location.fragments[0],
     entry: location.entry_accession,
     residue: location.fragments.map(f => f.residue),
-    source_database: location.fragments.map(f => f.source),
+    source_database: location.fragments.map(f => f.source)[0],
     interpro_entry: location.fragments.map(f => f.interProEntry),
   }));
 // const mergeResidues = residues => {
@@ -143,15 +147,17 @@ class DomainOnProteinWithoutData extends Component {
       return <div>Loading…</div>;
     }
     const mergedData = mergeData(
-      dataInterPro.payload.entries,
+      'payload' in dataInterPro ? dataInterPro.payload.entries : [],
       'payload' in dataIntegrated ? dataIntegrated.payload.entries : [],
       'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
       dataResidues.payload,
     );
+    if (Object.keys(mergedData).length === 0)
+      return <div className={f('callout', 'info', 'withicon')}>There are not available domains for this protein.</div>;
     return (
       <div>
         <DomainArchitecture
-          protein={mainData.payload.metadata}
+          protein={mainData.metadata || mainData.payload.metadata}
           data={mergedData}
         />
       </div>
