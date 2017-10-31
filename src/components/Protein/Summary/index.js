@@ -7,7 +7,6 @@ import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
-import Sequence from 'components/Protein/Sequence';
 
 import { UniProtLink } from 'components/ExtLink';
 
@@ -69,11 +68,6 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
             </div>
           </div>
         </section>
-        <Sequence
-          accession={metadata.accession}
-          sequence={metadata.sequence}
-          name={metadata.name.name}
-        />
         <GoTerms terms={metadata.go_terms} type="protein" />
       </div>
     );
