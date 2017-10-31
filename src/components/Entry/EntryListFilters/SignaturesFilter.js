@@ -54,7 +54,6 @@ class SignaturesFilter extends Component {
     if (!loading) {
       signatureDBs.unshift(['All', NaN]);
     }
-    console.log(signatureDBs);
     return (
       <div className={f('list-sign')}>
         {signatureDBs.map(([signatureDB, count]) => (
