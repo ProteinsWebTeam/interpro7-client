@@ -316,7 +316,6 @@ class EntryComponent {
   changeColorMode(mode){
     this.colorMode = mode;
     this.render();
-
   }
 }
 export default EntryComponent;

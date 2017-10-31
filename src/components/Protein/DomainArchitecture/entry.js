@@ -34,6 +34,7 @@ const colorsByDB = {
 export const EntryColorMode = {
   COLOR_MODE_ACCESSION: 1,
   COLOR_MODE_MEMBERDB: 2,
+  COLOR_MODE_DOMAIN_RELATIONSHIP: 3,
 };
 
 
@@ -46,11 +47,11 @@ class EntryRenderer {
     this.protein = protein;
     this.x = xScale;
     this.parent = parent;
-    this.colorMode = EntryColorMode.COLOR_MODE_MEMBERDB;
+    this.colorMode = EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP;
 
 
   }
-  render(group, entries, offsetY = 0, className = 'entry', colorMode = EntryColorMode.COLOR_MODE_MEMBERDB) {
+  render(group, entries, offsetY = 0, className = 'entry', colorMode = EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP) {
     this.offsetY = offsetY;
     this.group = group;
     this.entries = entries;
@@ -148,7 +149,9 @@ class EntryRenderer {
         g,
         d.children,
         tHeight - this.tPadding.top,
-        d.signatures ? 'signature' : 'residue'
+        d.signatures ? 'signature' : 'residue',
+        this.colorMode
+
       );
       this.innerHeight += this.childrenRender.innerHeight;
     }
@@ -162,22 +165,25 @@ class EntryRenderer {
     );
   }
 
-  getColor(entry, format = 'HEX') {
+  getColor(entry) {
     switch (this.colorMode) {
       case EntryColorMode.COLOR_MODE_ACCESSION: {
         const acc = entry.accession
-          .split('')
-          .reverse()
-          .join('');
-        if (format.toUpperCase() === 'RGB') return colorHash.rgb(acc);
-        if (format.toUpperCase() === 'HEX') return colorHash.hex(acc);
-        if (format.toUpperCase() === 'HSL') return colorHash.hsl(acc);
-        break;
+          .split('').reverse().join('');
+        return colorHash.hex(acc);
       }
       case EntryColorMode.COLOR_MODE_MEMBERDB:
         return colorsByDB[entry.source_database.toLowerCase()];
+      case EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP:
+        if (entry.source_database.toLowerCase() === 'interpro')
+          return colorHash.hex(entry.accession
+            .split('').reverse().join(''));
+        if (entry.entry_integrated){
+          return colorHash.hex(entry.entry_integrated
+            .split('').reverse().join(''));
+        }
       default:
-        return '#0407A4';
+        return '#AAAAAA';
     }
   }
   updateMatch({ d, i, c }, entry, instanceG) {
