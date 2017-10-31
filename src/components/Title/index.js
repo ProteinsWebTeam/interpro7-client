@@ -64,6 +64,8 @@ const mapNameToClass = new Map([
   mainType: string,
 }; */
 
+const accessionDisplay = new Set(['protein', 'structure', 'organism']);
+
 export default class Title extends PureComponent /*:: <Props> */ {
   static propTypes = {
     metadata: T.object.isRequired,
@@ -103,23 +105,35 @@ export default class Title extends PureComponent /*:: <Props> */ {
         </Helmet>
         <h3>
           {metadata.name.name}{' '}
-          {isEntry && metadata.type ? (
-            <small className={f(mapNameToClass.get(metadata.type))}>
-              {metadata.accession}
-            </small>
-          ) : (
-            <small className={f('title-id-other')}>{metadata.accession}</small>
-          )}
+          {///Red, Green for domains and Purple for sites accession: for InterPro page only
+          isEntry &&
+            metadata.type &&
+            metadata.source_database &&
+            metadata.source_database.toLowerCase() === 'interpro' && (
+              <small className={f(mapNameToClass.get(metadata.type))}>
+                {metadata.accession}
+              </small>
+            )}
+          {//Blue accession: for Member Database and Unknown entry-type
+          isEntry &&
+            metadata.type &&
+            metadata.source_database &&
+            metadata.source_database.toLowerCase() !== 'interpro' && (
+              <small className={f('title-id-md')}>{metadata.accession}</small>
+            )}
+          {//greyish accession: for protein , structure, and proteomes and no accession for tax
+          accessionDisplay.has(mainType) &&
+            metadata.source_database !== 'taxonomy' && (
+              //no accession for Taxonomy but in blue for protein (reviewed), structure (pdb), and proteomes (proteome)
+              <small className={f('title-id-other')}>
+                {metadata.accession}
+              </small>
+            )}
         </h3>
         {isEntry &&
           metadata.source_database &&
           metadata.source_database.toLowerCase() !== 'interpro' && (
             <div className={f('md-hlight')}>
-              <p>
-                This signature is defined as{' '}
-                {metadata.type.replace('_', ' ').toLowerCase()} by{' '}
-                {metadata.source_database}.
-              </p>
               <h5>
                 Member database:&nbsp;
                 <Link
@@ -138,14 +152,20 @@ export default class Title extends PureComponent /*:: <Props> */ {
                   />
                 </Link>
               </h5>
+              <p>
+                This signature is defined as{' '}
+                {metadata.type.replace('_', ' ').toLowerCase()} by{' '}
+                {metadata.source_database}.
+              </p>
             </div>
           )}
-        {metadata.name.short && (
-          <p>
-            Short name:&nbsp;
-            <i className={f('shortname')}>{metadata.name.short}</i>
-          </p>
-        )}
+        {metadata.name.short &&
+          metadata.accession !== metadata.name.short && (
+            <p>
+              Short name:&nbsp;
+              <i className={f('shortname')}>{metadata.name.short}</i>
+            </p>
+          )}
       </div>
     );
   }

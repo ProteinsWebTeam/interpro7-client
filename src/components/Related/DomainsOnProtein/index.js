@@ -153,7 +153,11 @@ class DomainOnProteinWithoutData extends Component {
       dataResidues.payload,
     );
     if (Object.keys(mergedData).length === 0)
-      return <div className={f('callout', 'info', 'withicon')}>There are not available domains for this protein.</div>;
+      return (
+        <div className={f('callout', 'info', 'withicon')}>
+          There are not available domains for this protein.
+        </div>
+      );
     return (
       <div>
         <DomainArchitecture

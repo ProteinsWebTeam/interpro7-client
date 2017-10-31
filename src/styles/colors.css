@@ -43,5 +43,8 @@
   --colors-homolog-sub: #bbdef3;
   --colors-unknown-main: #737373;
   --colors-unknown-sub: #dedede;
-  --colors-other-main: #92c7ea;
+  --colors-other-main: #c5d7db;
+  --colors-other-sub: #92c7ea;
+  --colors-md-main: #b9d7ef;
+  --colors-md-sub: #b9d5c6;
 }

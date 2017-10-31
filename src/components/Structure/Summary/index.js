@@ -67,29 +67,35 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
           <div className={f('row')}>
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
               <Title metadata={metadata} mainType={'structure'} />
-              <h4>Summary</h4>
-              <pdb-prints size="48">
+              {
+                //<h4>Summary</h4>
+              }
+              <pdb-prints size="38">
                 <pdb-data-loader pdbid={metadata.accession} />
               </pdb-prints>
               {chains.length && (
-                <div>
-                  <h4>Chains:</h4>
-                  {chains.map(chain => (
-                    <Link
-                      key={chain}
-                      newTo={location => ({
-                        ...location,
-                        description: {
-                          mainType: location.description.mainType,
-                          mainDB: location.description.mainDB,
-                          mainAccession: location.description.mainAccession,
-                          mainChain: chain,
-                        },
-                      })}
-                    >
-                      {chain}
-                    </Link>
-                  ))}
+                <div className={f('margin-top-large')}>
+                  <div>Accession: {metadata.accession}</div>
+                  <div>Experiment type: {metadata.experiment_type}</div>
+                  <div>
+                    Chains:{' '}
+                    {chains.map(chain => (
+                      <Link
+                        key={chain}
+                        newTo={location => ({
+                          ...location,
+                          description: {
+                            mainType: location.description.mainType,
+                            mainDB: location.description.mainDB,
+                            mainAccession: location.description.mainAccession,
+                            mainChain: chain,
+                          },
+                        })}
+                      >
+                        {chain}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

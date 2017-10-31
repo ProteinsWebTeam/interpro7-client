@@ -42,6 +42,10 @@
   background-color: var(--colors-other-main);
 }
 
+.title-id-md {
+  background-color: var(--colors-md-main);
+}
+
 .shortname {
   color: #41647d;
   font-size: 80%;
