@@ -87,13 +87,17 @@ class Title extends PureComponent /*:: <Props> */ {
               </div>
               <div className={styles('logo-flex-item', 'logo-text')}>
                 InterPro
+                {mainType === 'entry' &&
+                  mainDB.toLowerCase() !== 'interpro' &&
+                  mainAccession &&
+                  ' - Member'}
               </div>
             </div>
           </Link>
         </h1>
         <h4 className={styles('subtitle', { stuck })}>
+          {detail && `${detail} - `}
           {subtitle}
-          {detail && <small> ({detail})</small>}
         </h4>
       </div>
     );
@@ -109,7 +113,7 @@ const mapStateToProps = createSelector(
           return datum.loading;
         }
         return false;
-      })
+      }),
   ),
   state => state.newLocation.description.mainType,
   state => state.newLocation.description.mainDB,
@@ -121,7 +125,7 @@ const mapStateToProps = createSelector(
     mainDB,
     mainAccession,
     stuck,
-  })
+  }),
 );
 
 export default connect(mapStateToProps)(Title);
