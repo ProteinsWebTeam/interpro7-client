@@ -137,6 +137,7 @@ class DomainArchitecture extends Component {
                           className={f('select-inline')}
                           value={this.state.colorMode}
                           onChange={this.changeColor}
+                          onBlur={this.changeColor}
                         >
                           <option value={EntryColorMode.COLOR_MODE_ACCESSION}>Accession</option>
                           <option value={EntryColorMode.COLOR_MODE_MEMBERDB}>Member Database</option>

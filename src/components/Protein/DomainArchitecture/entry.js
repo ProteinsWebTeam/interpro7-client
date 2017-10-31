@@ -164,7 +164,7 @@ class EntryRenderer {
 
   getColor(entry, format = 'HEX') {
     switch (this.colorMode) {
-      case EntryColorMode.COLOR_MODE_ACCESSION:
+      case EntryColorMode.COLOR_MODE_ACCESSION: {
         const acc = entry.accession
           .split('')
           .reverse()
@@ -173,8 +173,8 @@ class EntryRenderer {
         if (format.toUpperCase() === 'HEX') return colorHash.hex(acc);
         if (format.toUpperCase() === 'HSL') return colorHash.hsl(acc);
         break;
+      }
       case EntryColorMode.COLOR_MODE_MEMBERDB:
-        if (format.toUpperCase() === 'RGB') return [50, 70, 220];
         return colorsByDB[entry.source_database.toLowerCase()];
       default:
         return '#0407A4';
@@ -258,7 +258,7 @@ class EntryRenderer {
         .attr('y', this.trackHeight - 1)
         .attr('height', this.childrenRender.innerHeight + this.tPadding.bottom)
         .attr('width', m => this.x(m[1] - m[0]))
-        .style('fill', `rgba(${this.getColor(entry, 'RGB').join()},0.0)`)
+        .style('fill', 'rgba(0,0,0,0.0)')
         .style('stroke', '#000')
         .attr('stroke-dasharray', '1,3');
 
