@@ -52,9 +52,9 @@
   transition: transform var(--timing-fast) ease-in-out;
 }
 
-.logo-icon.stuck ~ div.logo-text {
-  font-size: 3rem;
-} /*keep same font-size for "InterPro" when banner is sticky*/
+.logo-text {
+  font-size: 2rem;
+}
 
 .domain.loading {
   animation-duration: var(--timing-really-slow);
@@ -71,7 +71,7 @@
   transition: transform var(--timing-fast) ease-in-out;
 
   &.stuck {
-    transform: translate(18ch, 18px);
+    transform: translate(20ch, 12px);
     font-size: 113%;
     margin-bottom: 1rem;
   }
