@@ -89,6 +89,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             focusType: null,
             focusDB: null,
             mainMemberDB: null,
+            focusIntegration: null,
           },
         };
       },
@@ -106,7 +107,8 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             mainMemberDB: null,
             focusType: 'entry',
-            focusDB: 'InterPro',
+            focusDB: null,
+            focusIntegration: 'all',
           },
         };
       },
@@ -126,6 +128,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainMemberDB: null,
             focusType: 'protein',
             focusDB: 'uniprot',
+            focusIntegration: null,
           },
         };
       },
@@ -145,6 +148,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainMemberDB: null,
             focusType: 'structure',
             focusDB: 'PDB',
+            focusIntegration: null,
           },
         };
       },
@@ -163,6 +167,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             focusType: 'organism',
             focusDB: 'taxonomy',
+            focusIntegration: null,
             mainMemberDB: null,
           },
         };
@@ -181,6 +186,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             focusType: null,
             focusDB: null,
+            focusIntegration: null,
             mainDetail: 'sequence',
             mainMemberDB: null,
           },
@@ -199,6 +205,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             focusType: null,
             focusDB: null,
+            focusIntegration: null,
             mainDetail: 'domain_architecture',
             mainMemberDB: null,
           },
@@ -217,6 +224,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             focusType: null,
             focusDB: null,
+            focusIntegration: null,
             mainDetail: 'logo',
             mainMemberDB: null,
           },
@@ -235,6 +243,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             focusType: null,
             focusDB: null,
+            focusIntegration: null,
             mainDetail: null,
             mainMemberDB: 'proteome',
           },
