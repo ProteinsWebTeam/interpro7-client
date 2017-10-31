@@ -317,8 +317,14 @@ class List extends Component {
               <Column
                 dataKey="go_terms"
                 className={f('col-go')}
-                renderer={(gos /*: Array<Object> */) =>
-                  gos.map(go => (
+                renderer={(gos /*: Array<Object> */) => gos
+                    .sort((a, b) => {
+                      if (a.category > b.category) return 0;
+                      if (a.category < b.category) return 1;
+                      if (a.name > b.name) return 1;
+                      return 0;
+                    })
+                    .map(go => (
                     <div
                       className={f('go-row')}
                       key={go.identifier}

@@ -96,7 +96,7 @@ const getUrlFor = createSelector(
   state => state.newLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from description
-    const { integration, ..._description } = description;
+    const { mainIntegration, ..._description } = description;
     // omit from search
     const { search: _, ..._search } = search;
     // add to search

@@ -86,7 +86,7 @@ const getUrlFor = createSelector(
   state => state.newLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
-    const { page_size, search: _, signature_in, ..._search } = search;
+    const { page_size, search: _, go_term, ..._search } = search;
     // add to search
     _search.group_by = 'go_terms';
     // build URL
