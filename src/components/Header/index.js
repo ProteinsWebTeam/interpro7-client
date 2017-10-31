@@ -166,15 +166,16 @@ class Header extends PureComponent {
   static propTypes = {
     stickyMenuOffset: T.number.isRequired,
     stuck: T.bool.isRequired,
+    issignature: T.bool.isRequired,
   };
 
   // TODO: check why position:sticky banner in the page works just on top - pbm with container
   render() {
-    const { stickyMenuOffset: offset, stuck } = this.props;
+    const { stickyMenuOffset: offset, stuck, issignature } = this.props;
     return (
       <div
         id={ebiGlobalStyles.masthead}
-        className={styleBundle('masthead')}
+        className={styleBundle('masthead', { sign: issignature })}
         style={styleForHeader(false && supportsSticky, offset, stuck)}
       >
         <div className={styleBundle('masthead-inner', 'row')}>
@@ -191,6 +192,11 @@ class Header extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  stuck => ({ stuck }),
+  state => state.newLocation.description.mainType,
+  state => state.newLocation.description.mainDB,
+  (stuck, mainType, mainDB) => ({
+    stuck,
+    issignature: mainType === 'entry' && mainDB.toLowerCase() !== 'interpro',
+  }),
 );
 export default connect(mapStateToProps)(Header);

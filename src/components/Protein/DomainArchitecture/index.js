@@ -7,7 +7,7 @@ import path2description from 'utils/processLocation/path2description';
 import { goToNewLocation } from 'actions/creators';
 
 import EntryComponent from './entry_component';
-import {EntryColorMode} from './entry';
+import { EntryColorMode } from './entry';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -122,27 +122,35 @@ class DomainArchitecture extends Component {
     return range.createContextualFragment(tagString);
   }
 
-  changeColor = (evt) => {
+  changeColor = evt => {
     const newValue = Number(evt.target.value);
-    this.setState({colorMode: newValue});
+    this.setState({ colorMode: newValue });
     this.ec.changeColorMode(newValue);
-  }
+  };
+
   render() {
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
         <div className={f('row')}>
           <div className={f('columns')}>
             <div className={f('buttons')}>
-              Color By: <select
-                          className={f('select-inline')}
-                          value={this.state.colorMode}
-                          onChange={this.changeColor}
-                          onBlur={this.changeColor}
-                        >
-                          <option value={EntryColorMode.COLOR_MODE_ACCESSION}>Accession</option>
-                          <option value={EntryColorMode.COLOR_MODE_MEMBERDB}>Member Database</option>
-                          <option value={EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP}>Domain Relationship</option>
-                        </select>
+              Color By:{' '}
+              <select
+                className={f('select-inline')}
+                value={this.state.colorMode}
+                onChange={this.changeColor}
+                onBlur={this.changeColor}
+              >
+                <option value={EntryColorMode.COLOR_MODE_ACCESSION}>
+                  Accession
+                </option>
+                <option value={EntryColorMode.COLOR_MODE_MEMBERDB}>
+                  Member Database
+                </option>
+                <option value={EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP}>
+                  Domain Relationship
+                </option>
+              </select>
               &nbsp;|&nbsp;
               <button onClick={this.handleCollapse}>Collapse All</button>
               &nbsp;|&nbsp;

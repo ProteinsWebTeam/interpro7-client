@@ -188,8 +188,12 @@ export const integrationHandler /*: Handler */ = Object.create(handler, {
       `${focusType ? 'focus' : 'main'}Integration`,
   },
   match: {
-    value: (current /*: string */, { mainType, focusType } /*: Description */) =>
-      (mainType === 'entry' || focusType === 'entry') && /^(((un)?integrated)|all)$/i.test(current),
+    value: (
+      current /*: string */,
+      { mainType, focusType } /*: Description */,
+    ) =>
+      (mainType === 'entry' || focusType === 'entry') &&
+      /^(((un)?integrated)|all)$/i.test(current),
   },
 });
 

@@ -34,7 +34,6 @@ pages:
     subPages:
       - entry
       - sequence
-      - domain_architecture
   search:
     plural: results
 pagination:
