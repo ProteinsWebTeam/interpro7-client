@@ -42,7 +42,7 @@ class DomainArchitecture extends Component {
     super(props);
     this.state = {
       entryHovered: null,
-      colorMode: EntryColorMode.COLOR_MODE_MEMBERDB,
+      colorMode: EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP,
     };
   }
 
@@ -146,6 +146,9 @@ class DomainArchitecture extends Component {
                 </option>
                 <option value={EntryColorMode.COLOR_MODE_MEMBERDB}>
                   Member Database
+                </option>
+                <option value={EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP}>
+                  Domain Relationship
                 </option>
               </select>
               &nbsp;|&nbsp;

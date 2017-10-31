@@ -103,13 +103,13 @@ class EntryComponent {
         'width',
         this.overFeature
           ? Math.max(this.x(this.overFeature[1] - this.overFeature[0]), 1)
-          : 1
+          : 1,
       )
       .attr(
         'x',
         this.overFeature
           ? padding.left + this.x(this.overFeature[0])
-          : Math.min(this.x(this.protein.length), mouse(this.mainG.node())[0])
+          : Math.min(this.x(this.protein.length), mouse(this.mainG.node())[0]),
       );
   }
   render() {
@@ -134,7 +134,7 @@ class EntryComponent {
     // .each(d => this.addEntriesBlock(d.value, protein, offsetY, d.key))
 
     entriesG.call(selection =>
-      this.updateEntriesBlock(selection, offsetY, false)
+      this.updateEntriesBlock(selection, offsetY, false),
     );
     this.totalHeight =
       offsetY +
@@ -203,9 +203,9 @@ class EntryComponent {
             const evt = d3Event.transform;
             this.mainG.attr(
               'transform',
-              `translate(${evt.x}, 0) scale(${evt.k}, 1)`
+              `translate(${evt.x}, 0) scale(${evt.k}, 1)`,
             );
-          })
+          }),
       );
     prot.selectAll('rect').attr('width', d => this.x(d.length));
 
@@ -265,7 +265,7 @@ class EntryComponent {
         d.value.expanded ? d.value : [],
         trackHeight,
         'entry',
-        this.colorMode
+        this.colorMode,
       );
       // }
     });
@@ -313,10 +313,9 @@ class EntryComponent {
   on(...args) {
     this.dispatch.on(...args);
   }
-  changeColorMode(mode){
+  changeColorMode(mode) {
     this.colorMode = mode;
     this.render();
-
   }
 }
 export default EntryComponent;

@@ -9,7 +9,6 @@ const s = classname.bind(styles);
 const colorHash = new ColorHash();
 const childrenScale = 0.7;
 
-
 // TODO: refactor to have a single place for colors
 const colorsByDB = {
   gene3d: '#a88cc3',
@@ -34,11 +33,10 @@ const colorsByDB = {
 export const EntryColorMode = {
   COLOR_MODE_ACCESSION: 1,
   COLOR_MODE_MEMBERDB: 2,
+  COLOR_MODE_DOMAIN_RELATIONSHIP: 3,
 };
 
-
 class EntryRenderer {
-
   constructor({ trackHeight, trackPadding, padding, xScale, protein, parent }) {
     this.tPadding = trackPadding;
     this.trackHeight = trackHeight;
@@ -46,11 +44,15 @@ class EntryRenderer {
     this.protein = protein;
     this.x = xScale;
     this.parent = parent;
-    this.colorMode = EntryColorMode.COLOR_MODE_MEMBERDB;
-
-
+    this.colorMode = EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP;
   }
-  render(group, entries, offsetY = 0, className = 'entry', colorMode = EntryColorMode.COLOR_MODE_MEMBERDB) {
+  render(
+    group,
+    entries,
+    offsetY = 0,
+    className = 'entry',
+    colorMode = EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP,
+  ) {
     this.offsetY = offsetY;
     this.group = group;
     this.entries = entries;
@@ -92,7 +94,7 @@ class EntryRenderer {
         s({
           label: true,
           link: typeof d.link !== 'undefined',
-        })
+        }),
       )
       .attr('x', this.tPadding.right + this.x(this.protein.length))
       .attr('y', this.trackHeight)
@@ -127,7 +129,7 @@ class EntryRenderer {
         this.parent.dispatch.call('entrymouseover', this, {
           entry: d,
           event: { d: e, i, g },
-        })
+        }),
       )
       .on('mouseout', () => this.parent.dispatch.call('entrymouseout', this, d))
       .each((data, i, c) => {
@@ -140,7 +142,7 @@ class EntryRenderer {
       .transition()
       .attr(
         'transform',
-        `scale(1,1)translate(0, ${this.offsetY + this.innerHeight})`
+        `scale(1,1)translate(0, ${this.offsetY + this.innerHeight})`,
       );
     this.innerHeight += tHeight;
     if (d.children) {
@@ -148,36 +150,50 @@ class EntryRenderer {
         g,
         d.children,
         tHeight - this.tPadding.top,
-        d.signatures ? 'signature' : 'residue'
+        d.signatures ? 'signature' : 'residue',
+        this.colorMode,
       );
       this.innerHeight += this.childrenRender.innerHeight;
     }
     instanceG
       .enter()
       .each((data, i, c) =>
-        this.updateChildrenBg({ d: data, i, c }, d, instanceG)
+        this.updateChildrenBg({ d: data, i, c }, d, instanceG),
       );
     instanceG.each((data, i, c) =>
-      this.updateChildrenBg({ d: data, i, c }, d, instanceG)
+      this.updateChildrenBg({ d: data, i, c }, d, instanceG),
     );
   }
 
-  getColor(entry, format = 'HEX') {
+  getColor(entry) {
     switch (this.colorMode) {
       case EntryColorMode.COLOR_MODE_ACCESSION: {
         const acc = entry.accession
           .split('')
           .reverse()
           .join('');
-        if (format.toUpperCase() === 'RGB') return colorHash.rgb(acc);
-        if (format.toUpperCase() === 'HEX') return colorHash.hex(acc);
-        if (format.toUpperCase() === 'HSL') return colorHash.hsl(acc);
-        break;
+        return colorHash.hex(acc);
       }
       case EntryColorMode.COLOR_MODE_MEMBERDB:
         return colorsByDB[entry.source_database.toLowerCase()];
+      case EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP:
+        if (entry.source_database.toLowerCase() === 'interpro')
+          return colorHash.hex(
+            entry.accession
+              .split('')
+              .reverse()
+              .join(''),
+          );
+        if (entry.entry_integrated) {
+          return colorHash.hex(
+            entry.entry_integrated
+              .split('')
+              .reverse()
+              .join(''),
+          );
+        }
       default:
-        return '#0407A4';
+        return '#AAAAAA';
     }
   }
   updateMatch({ d, i, c }, entry, instanceG) {
@@ -203,8 +219,7 @@ class EntryRenderer {
     //       .attr('x2', this.x(Math.max(...(d.map(x => x[1])))));
     //   }
     // }
-    matchG
-      .attr('fill', this.getColor(entry));
+    matchG.attr('fill', this.getColor(entry));
     matchG.exit().remove();
 
     matchG
@@ -270,7 +285,7 @@ class EntryRenderer {
           .transition()
           .attr(
             'height',
-            this.childrenRender.innerHeight + this.tPadding.bottom
+            this.childrenRender.innerHeight + this.tPadding.bottom,
           )
           .attr('width', m => this.x(m[1] - m[0]));
       }
@@ -307,10 +322,10 @@ class EntryRenderer {
           this.parent.dispatch.call('entrymouseover', this, {
             residue: e,
             event: { d: e, i, g: [g[i]] },
-          })
+          }),
         )
         .on('mouseout', () =>
-          this.parent.dispatch.call('entrymouseout', this, d)
+          this.parent.dispatch.call('entrymouseout', this, d),
         );
     }
   }
