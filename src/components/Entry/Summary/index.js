@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-
+import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
 import Literature from 'components/Entry/Literature';
@@ -78,6 +78,22 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
               {metadata.integrated && (
                 <div className={f('panel')}>
                   <Integration intr={metadata.integrated} />
+                </div>
+              )}
+              {metadata.integrated && (
+                <div className={f('panel')}>
+                  <h5>External links</h5>
+                  {
+                    // TODO implement right MD ext link
+                  }
+                  <Link
+                    className={f('ext')}
+                    newTo={{
+                      description: {},
+                    }}
+                  >
+                    {metadata.source_database} website
+                  </Link>
                 </div>
               )}
               {metadata.member_databases &&
