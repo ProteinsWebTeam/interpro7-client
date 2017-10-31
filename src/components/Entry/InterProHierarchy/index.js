@@ -7,6 +7,12 @@ import { goToNewLocation } from 'actions/creators';
 import loadWebComponent from 'utils/loadWebComponent';
 import path2description from 'utils/processLocation/path2description';
 
+import { foundationPartial } from 'styles/foundation';
+
+import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+
+const f = foundationPartial(ebiStyles);
+
 const webComponents = [];
 
 class InterProHierarchy extends PureComponent {
@@ -54,6 +60,7 @@ class InterProHierarchy extends PureComponent {
   render() {
     return (
       <interpro-hierarchy
+        style={{ display: 'block', marginBottom: '1rem' }}
         accession={this.props.accession}
         hideafter="2"
         hrefroot="/entry/interpro"
