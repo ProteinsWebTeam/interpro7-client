@@ -520,6 +520,7 @@ module.exports = (env = { dev: true }) => {
       quiet: !!env.dashboard,
       historyApiFallback: {
         index: websiteURL.pathname,
+        disableDotRule: true,
       },
       watchOptions: {
         ignored: /node_modules/,
