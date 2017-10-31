@@ -19,7 +19,6 @@ pages:
       - entry
       - structure
       - sequence
-      - domain_architecture
   structure:
     subPages:
       - entry
