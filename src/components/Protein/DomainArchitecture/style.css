@@ -45,8 +45,14 @@
   cursor: pointer;
 }
 div.buttons {
-  text-align: right;
   font-size: 0.9em;
+}
+.select-inline {
+  font-size: 0.9em;
+  width: auto;
+  padding-bottom: 0;
+  border: 0;
+  margin-bottom: 0;
 }
 .fullscreenable:-webkit-full-screen .fullscreen {
   display: none;

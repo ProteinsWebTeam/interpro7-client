@@ -32,6 +32,11 @@ const EntrySubPage = loadable({
     import(/* webpackChunkName: "ips-entry-subpage" */ 'components/IPScan/EntrySubPage'),
 });
 
+const SequenceSubPage = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "sequence-subpage" */ 'subPages/Sequence'),
+});
+
 const DomainArchitectureWithoutData = loadable({
   loader: () =>
     import(/* webpackChunkName: "domain-architecture-subpage" */ 'components/Protein/DomainArchitecture'),
@@ -88,6 +93,7 @@ class DomainArchitecture extends PureComponent {
 
 const subPagesForSequence = new Set([
   { value: 'entry', component: EntrySubPage },
+  { value: 'sequence', component: SequenceSubPage },
   { value: 'domain_architecture', component: DomainArchitecture },
 ]);
 

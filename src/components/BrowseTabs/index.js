@@ -33,6 +33,8 @@ const singleEntityNames = new Map(
   isFirstLevel?: boolean,
 }; */
 
+const whitelist = new Set(['Overview', 'Domain Architectures', 'Sequence']);
+
 class Counter extends PureComponent /*:: <CounterProps> */ {
   static propTypes = {
     newTo: T.oneOfType([T.object, T.func]).isRequired,
@@ -71,7 +73,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
         value = NaN;
       }
       // TODO: find a generic way to deal with this:
-      if (name === 'Overview' || name === 'Domain Architectures') value = NaN;
+      if (whitelist.has(name)) value = NaN;
       if (
         name === 'Domain Architectures' &&
         payload.metadata.counters &&

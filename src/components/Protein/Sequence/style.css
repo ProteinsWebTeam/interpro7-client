@@ -10,7 +10,6 @@
   padding-right: 10ch;
   width: calc(100% - 4ch);
   counter-reset: sequence -10;
-  max-height: 210px;
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;

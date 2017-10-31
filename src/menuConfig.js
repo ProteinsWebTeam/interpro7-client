@@ -172,6 +172,24 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
+    'sequence',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            focusType: null,
+            focusDB: null,
+            mainDetail: 'sequence',
+            mainMemberDB: null,
+          },
+        };
+      },
+      name: 'Sequence',
+    },
+  ],
+  [
     'domain_architecture',
     {
       newTo(location /*: Location */) {

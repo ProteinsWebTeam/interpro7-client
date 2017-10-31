@@ -44,6 +44,7 @@ export const Body = (
 Body.propTypes = {
   rows: T.array.isRequired,
   columns: T.array.isRequired,
+  notFound: T.bool,
 };
 
 export default Body;

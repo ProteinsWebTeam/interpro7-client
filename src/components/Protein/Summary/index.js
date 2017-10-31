@@ -3,16 +3,17 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import GoTerms from 'components/GoTerms';
-import Sequence from 'components/Protein/Sequence';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
+
 import { UniProtLink } from 'components/ExtLink';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
 const f = foundationPartial(ebiStyles);
 
@@ -30,7 +31,8 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { data: { metadata } } = this.props;
+    const { data } = this.props;
+    const metadata = data.metadata;
     return (
       <div className={f('sections')}>
         <section>
@@ -58,11 +60,14 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
             </div>
           </div>
         </section>
-        <Sequence
-          accession={metadata.accession}
-          sequence={metadata.sequence}
-          name={metadata.name.name}
-        />
+        <section>
+          <div className={f('row')}>
+            <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
+              <h4>Domains on Protein</h4>
+              <DomainsOnProtein mainData={data} />
+            </div>
+          </div>
+        </section>
         <GoTerms terms={metadata.go_terms} type="protein" />
       </div>
     );
