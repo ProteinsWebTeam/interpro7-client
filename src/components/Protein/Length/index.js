@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+import Link from 'components/generic/Link';
+
 class Length extends PureComponent {
   static propTypes = {
     metadata: T.shape({
@@ -17,7 +19,14 @@ class Length extends PureComponent {
     }
     return (
       <div>
-        Length: {length} amino acids{fragmentText}
+        {'Length: '}
+        <Link
+          newTo={({ description }) => ({
+            description: { ...description, mainDetail: 'sequence' },
+          })}
+        >
+          {length} amino acids{fragmentText}
+        </Link>
       </div>
     );
   }
