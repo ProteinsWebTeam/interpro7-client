@@ -263,7 +263,9 @@ class EntryComponent {
       entryRenderer.render(
         select(c[i]),
         d.value.expanded ? d.value : [],
-        trackHeight
+        trackHeight,
+        'entry',
+        this.colorMode
       );
       // }
     });
@@ -310,6 +312,11 @@ class EntryComponent {
   }
   on(...args) {
     this.dispatch.on(...args);
+  }
+  changeColorMode(mode){
+    this.colorMode = mode;
+    this.render();
+
   }
 }
 export default EntryComponent;

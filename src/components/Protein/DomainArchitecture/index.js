@@ -7,6 +7,7 @@ import path2description from 'utils/processLocation/path2description';
 import { goToNewLocation } from 'actions/creators';
 
 import EntryComponent from './entry_component';
+import {EntryColorMode} from './entry';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -41,6 +42,7 @@ class DomainArchitecture extends Component {
     super(props);
     this.state = {
       entryHovered: null,
+      colorMode: EntryColorMode.COLOR_MODE_MEMBERDB,
     };
   }
 
@@ -54,7 +56,6 @@ class DomainArchitecture extends Component {
     });
     this.ec.on('entrymouseover', e => {
       this._popper.classList.remove('hide');
-      // console.log(e);
       if (e.hasOwnProperty('entry')) {
         this._popper.appendChild(this.getElementFromEntry(e.entry));
       }
@@ -73,9 +74,9 @@ class DomainArchitecture extends Component {
     });
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
+  // shouldComponentUpdate() {
+  //   return false;
+  // }
 
   componentWillUnmount() {
     this.ec.destructor();
@@ -121,13 +122,27 @@ class DomainArchitecture extends Component {
     return range.createContextualFragment(tagString);
   }
 
+  changeColor = (evt) => {
+    const newValue = Number(evt.target.value);
+    this.setState({colorMode: newValue});
+    this.ec.changeColorMode(newValue);
+  }
   render() {
-    console.log(this.props.data);
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
         <div className={f('row')}>
           <div className={f('columns')}>
             <div className={f('buttons')}>
+              Color By: <select
+                          className={f('select-inline')}
+                          value={this.state.colorMode}
+                          onChange={this.changeColor}
+                          onBlur={this.changeColor}
+                        >
+                          <option value={EntryColorMode.COLOR_MODE_ACCESSION}>Accession</option>
+                          <option value={EntryColorMode.COLOR_MODE_MEMBERDB}>Member Database</option>
+                        </select>
+              &nbsp;|&nbsp;
               <button onClick={this.handleCollapse}>Collapse All</button>
               &nbsp;|&nbsp;
               <button onClick={this.handleExpand}>Expand All</button>

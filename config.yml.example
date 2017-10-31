@@ -30,6 +30,7 @@ pages:
       - entry
       - protein
       - structure
+      - proteome
   sequence:
     subPages:
       - entry

@@ -11,7 +11,6 @@ const TotalNb = ({
   data,
   actualSize,
   pagination,
-  notFound,
   mainType,
   mainDB,
   focusType,

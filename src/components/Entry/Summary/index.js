@@ -89,7 +89,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
           </div>
         </section>
         {Object.keys(metadata.go_terms) &&
-        metadata.source_database != 'InterPro' ? null : (
+        metadata.source_database !== 'InterPro' ? null : (
           <GoTerms
             terms={metadata.go_terms}
             type="entry"

@@ -9,7 +9,36 @@ const s = classname.bind(styles);
 const colorHash = new ColorHash();
 const childrenScale = 0.7;
 
+
+// TODO: refactor to have a single place for colors
+const colorsByDB = {
+  gene3d: '#a88cc3',
+  cdd: '#addc58',
+  hamap: '#2cd6d6',
+  mobidblt: '#d6dc94',
+  panther: '#bfac92',
+  pfam: '#6287b1',
+  pirsf: '#dfafdf',
+  prints: '#54c75f',
+  prodom: '#8d99e4',
+  profile: '#f69f74',
+  prosite: '#f3c766',
+  sfld: '#00b1d3',
+  smart: '#ff7a76',
+  ssf: '#686868',
+  tigrfams: '#56b9a6',
+  interpro: '#2daec1',
+  pdb: '#74b360',
+};
+
+export const EntryColorMode = {
+  COLOR_MODE_ACCESSION: 1,
+  COLOR_MODE_MEMBERDB: 2,
+};
+
+
 class EntryRenderer {
+
   constructor({ trackHeight, trackPadding, padding, xScale, protein, parent }) {
     this.tPadding = trackPadding;
     this.trackHeight = trackHeight;
@@ -17,12 +46,16 @@ class EntryRenderer {
     this.protein = protein;
     this.x = xScale;
     this.parent = parent;
+    this.colorMode = EntryColorMode.COLOR_MODE_MEMBERDB;
+
+
   }
-  render(group, entries, offsetY = 0, className = 'entry') {
+  render(group, entries, offsetY = 0, className = 'entry', colorMode = EntryColorMode.COLOR_MODE_MEMBERDB) {
     this.offsetY = offsetY;
     this.group = group;
     this.entries = entries;
     this.className = className;
+    this.colorMode = colorMode;
     this.childrenRender = new EntryRenderer({
       trackHeight: this.trackHeight * childrenScale,
       trackPadding: {
@@ -128,14 +161,24 @@ class EntryRenderer {
       this.updateChildrenBg({ d: data, i, c }, d, instanceG)
     );
   }
+
   getColor(entry, format = 'HEX') {
-    const acc = entry.accession
-      .split('')
-      .reverse()
-      .join('');
-    if (format.toUpperCase() === 'RGB') return colorHash.rgb(acc);
-    if (format.toUpperCase() === 'HEX') return colorHash.hex(acc);
-    if (format.toUpperCase() === 'HSL') return colorHash.hsl(acc);
+    switch (this.colorMode) {
+      case EntryColorMode.COLOR_MODE_ACCESSION: {
+        const acc = entry.accession
+          .split('')
+          .reverse()
+          .join('');
+        if (format.toUpperCase() === 'RGB') return colorHash.rgb(acc);
+        if (format.toUpperCase() === 'HEX') return colorHash.hex(acc);
+        if (format.toUpperCase() === 'HSL') return colorHash.hsl(acc);
+        break;
+      }
+      case EntryColorMode.COLOR_MODE_MEMBERDB:
+        return colorsByDB[entry.source_database.toLowerCase()];
+      default:
+        return '#0407A4';
+    }
   }
   updateMatch({ d, i, c }, entry, instanceG) {
     const g = select(c[i]);
@@ -160,6 +203,8 @@ class EntryRenderer {
     //       .attr('x2', this.x(Math.max(...(d.map(x => x[1])))));
     //   }
     // }
+    matchG
+      .attr('fill', this.getColor(entry));
     matchG.exit().remove();
 
     matchG
@@ -213,7 +258,7 @@ class EntryRenderer {
         .attr('y', this.trackHeight - 1)
         .attr('height', this.childrenRender.innerHeight + this.tPadding.bottom)
         .attr('width', m => this.x(m[1] - m[0]))
-        .style('fill', `rgba(${this.getColor(entry, 'RGB').join()},0.0)`)
+        .style('fill', 'rgba(0,0,0,0.0)')
         .style('stroke', '#000')
         .attr('stroke-dasharray', '1,3');
 

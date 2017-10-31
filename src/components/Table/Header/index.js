@@ -34,6 +34,7 @@ const Header = ({ columns, notFound } /*: {columns: Array<Object>} */) => {
 };
 Header.propTypes = {
   columns: T.arrayOf(T.object).isRequired,
+  notFound: T.bool,
 };
 
 export default Header;
