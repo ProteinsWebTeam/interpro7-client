@@ -77,7 +77,7 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
       if (
         name === 'Domain Architectures' &&
         payload.metadata.counters &&
-        !payload.metadata.counters.entries
+        !payload.metadata.counters.proteins
       ) {
         value = 0;
       }
