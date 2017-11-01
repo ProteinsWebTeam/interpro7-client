@@ -81,6 +81,13 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
       ) {
         value = 0;
       }
+      // TODO: find a generic way to deal with this:
+      if (
+        name === 'Domain Architectures' &&
+        payload.metadata.source_database.toLowerCase() !== 'interpro'
+      ) {
+        value = null;
+      }
     }
 
     return (
