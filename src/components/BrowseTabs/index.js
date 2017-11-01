@@ -163,7 +163,11 @@ const mapStateToProps = createSelector(
     mainType,
     mainDB,
     mainAccession,
-    issignature: mainType === 'entry' && mainDB.toLowerCase() !== 'interpro',
+    iissignature: !!(
+      mainType === 'entry' &&
+      mainDB.toLowerCase() !== 'interpro' &&
+      mainAccession
+    ),
   }),
 );
 
