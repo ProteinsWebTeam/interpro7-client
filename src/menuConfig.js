@@ -127,7 +127,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             mainMemberDB: null,
             focusType: 'protein',
-            focusDB: 'uniprot',
+            focusDB: 'UniProt',
             focusIntegration: null,
           },
         };
