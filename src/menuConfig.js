@@ -230,7 +230,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'HMM Model',
+      name: 'Signature',
     },
   ],
   [
