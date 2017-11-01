@@ -371,5 +371,7 @@ Protein.propTypes = {
 };
 
 export default loadData((...args) =>
-  getUrlForApi(...args).replace('domain_architecture', 'entry'),
+  getUrlForApi(...args)
+    .replace('domain_architecture', 'entry')
+    .replace('sequence', ''),
 )(Protein);

@@ -8,6 +8,12 @@
     float: left;
     margin: 0.5rem 1rem 1.5rem 0;
   }
+  & .icon-container {
+    /*negative values as the viewbox is not well defined*/
+    float: left;
+    margin: -1.5rem 0 0 -1.5rem;
+    width: 20%;
+  }
 }
 .title small {
   color: #333;
@@ -34,6 +40,10 @@
 /*used for protein, structure, organism page*/
 .title-id-other {
   background-color: var(--colors-other-main);
+}
+
+.title-id-md {
+  background-color: var(--colors-md-main);
 }
 
 .shortname {

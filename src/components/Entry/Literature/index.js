@@ -100,7 +100,6 @@ const Literature = (
   return (
     <div className={f('row')}>
       <div className={f('large-12', 'columns', 'margin-bottom-large')}>
-        {included.length ? <h5>Used in this entry</h5> : null}
         {included.length ? (
           <AnimatedEntry className={f('list')} itemDelay={100} duration={500}>
             {included.map(([pubID, ref], i) => (

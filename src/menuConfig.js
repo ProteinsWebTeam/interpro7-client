@@ -51,7 +51,7 @@ export const entities /*: Array<Object> */ = [
     newTo: {
       description: {
         mainType: 'protein',
-        mainDB: 'uniprot',
+        mainDB: 'UniProt',
       },
     },
     name: 'Protein',
@@ -98,6 +98,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             focusType: null,
             focusDB: null,
             mainMemberDB: null,
+            focusIntegration: null,
           },
         };
       },
@@ -115,7 +116,9 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             mainMemberDB: null,
             focusType: 'entry',
-            focusDB: location.description.mainType === 'set' ? location.description.mainDB : 'InterPro',
+            focusDB: location.description.mainType === 'set' ? location.description.mainDB : null,
+            focusDB: null,
+            focusIntegration: 'all',
           },
         };
       },
@@ -134,7 +137,8 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             mainMemberDB: null,
             focusType: 'protein',
-            focusDB: 'uniprot',
+            focusDB: 'UniProt',
+            focusIntegration: null,
           },
         };
       },
@@ -154,6 +158,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainMemberDB: null,
             focusType: 'structure',
             focusDB: 'PDB',
+            focusIntegration: null,
           },
         };
       },
@@ -172,6 +177,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             focusType: 'organism',
             focusDB: 'taxonomy',
+            focusIntegration: null,
             mainMemberDB: null,
           },
         };
@@ -200,6 +206,25 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
+    'sequence',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            focusType: null,
+            focusDB: null,
+            focusIntegration: null,
+            mainDetail: 'sequence',
+            mainMemberDB: null,
+          },
+        };
+      },
+      name: 'Sequence',
+    },
+  ],
+  [
     'domain_architecture',
     {
       newTo(location /*: Location */) {
@@ -209,6 +234,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             focusType: null,
             focusDB: null,
+            focusIntegration: null,
             mainDetail: 'domain_architecture',
             mainMemberDB: null,
           },
@@ -227,12 +253,13 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             focusType: null,
             focusDB: null,
+            focusIntegration: null,
             mainDetail: 'logo',
             mainMemberDB: null,
           },
         };
       },
-      name: 'HMM Model',
+      name: 'Signature',
     },
   ],
   [
@@ -245,6 +272,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             focusType: null,
             focusDB: null,
+            focusIntegration: null,
             mainDetail: null,
             mainMemberDB: 'proteome',
           },

@@ -82,6 +82,10 @@ div#local-title {
 
 /******************************Local style***************************************/
 
+.tag {
+  border-radius: 4px;
+} /*used on protein and proteome page */
+
 /*CALLOUT ALERT WARNING MESSAGE - missing in foundation*/
 .callout.alert.withicon::before {
   content: 'l';
@@ -173,7 +177,7 @@ div#local-title {
 /*SVG icons*/
 .icon {
   display: inline-block;
-  vertical-align: middle;
+  /*vertical-align: middle;*/
 }
 /*/MEMBER DATABASE icons*/
 /*ICONS*/

@@ -33,6 +33,8 @@ const singleEntityNames = new Map(
   isFirstLevel?: boolean,
 }; */
 
+const whitelist = new Set(['Overview', 'Domain Architectures', 'Sequence']);
+
 class Counter extends PureComponent /*:: <CounterProps> */ {
   static propTypes = {
     newTo: T.oneOfType([T.object, T.func]).isRequired,
@@ -71,9 +73,12 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
         value = NaN;
       }
       // TODO: find a generic way to deal with this:
-      if (name === 'Overview' || name === 'Domain Architectures') value = NaN;
-      if (name === 'Domain Architectures' && payload.metadata.counters &&
-        !payload.metadata.counters.entries) {
+      if (whitelist.has(name)) value = NaN;
+      if (
+        name === 'Domain Architectures' &&
+        payload.metadata.counters &&
+        !payload.metadata.counters.entries
+      ) {
         value = 0;
       }
     }
@@ -110,6 +115,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <BrowseTabsProps> 
     mainType: T.string,
     mainDB: T.string,
     mainAccession: T.string,
+    issignature: T.bool.isRequired,
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.any,
@@ -117,7 +123,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <BrowseTabsProps> 
   };
 
   render() {
-    const { mainType, mainDB, mainAccession, data } = this.props;
+    const { mainType, mainDB, mainAccession, data, issignature } = this.props;
     let tabs = entities;
     if (mainAccession && mainType && config.pages[mainType]) {
       tabs = [singleEntity.get('overview')];
@@ -130,7 +136,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <BrowseTabsProps> 
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
-          <ul className={f('tabs')}>
+          <ul className={f('tabs', { sign: issignature })}>
             {tabs.map(e => (
               <li className={f('tabs-title')} key={e.name}>
                 <Counter
@@ -153,7 +159,12 @@ const mapStateToProps = createSelector(
   state => state.newLocation.description.mainType,
   state => state.newLocation.description.mainDB,
   state => state.newLocation.description.mainAccession,
-  (mainType, mainDB, mainAccession) => ({ mainType, mainDB, mainAccession }),
+  (mainType, mainDB, mainAccession) => ({
+    mainType,
+    mainDB,
+    mainAccession,
+    issignature: mainType === 'entry' && mainDB.toLowerCase() !== 'interpro',
+  }),
 );
 
 const mapStateToUrl = createSelector(

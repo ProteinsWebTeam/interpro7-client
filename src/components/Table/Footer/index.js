@@ -25,15 +25,21 @@ const getPageLabels = (page, lastPage) => {
   return pages;
 };
 
-const Footer = ({ actualSize /*: number */, pagination /*: Object */ }) => {
+const Footer = ({
+  actualSize /*: number */,
+  pagination /*: Object */,
+  notFound,
+}) => {
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,
-    10
+    10,
   );
   const lastPage = Math.ceil(actualSize / pageSize) || 1;
   const pages = getPageLabels(page, lastPage);
-
+  if (notFound) {
+    return null;
+  }
   return (
     <div className={f('pagination-box')}>
       <ul

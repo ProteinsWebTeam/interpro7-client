@@ -13,6 +13,10 @@ const Proteome = loadable({
   loader: () => import(/* webpackChunkName: "proteome-subpage" */ './Proteome'),
 });
 
+const Sequence = loadable({
+  loader: () => import(/* webpackChunkName: "sequence-subpage" */ './Sequence'),
+});
+
 const DomainArchitecture = loadable({
   loader: () =>
     import(/* webpackChunkName: "domain-architecture-subpage" */ './DomainArchitecture'),
@@ -28,17 +32,19 @@ const defaultMapStateToProps = createSelector(
   state => state.settings.pagination,
   state => state.newLocation.description,
   state => state.newLocation.search,
-  ({ protocol, hostname, port, root }, pagination, _description, _search) => {
+  ({ protocol, hostname, port, root }, pagination, description, _search) => {
     const search = _search || {};
     search.page_size = search.page_size || pagination.pageSize;
-    const description = {
-      mainType: _description.mainType,
-      mainDB: _description.mainDB,
-      mainAccession: _description.mainAccession,
-      focusType: _description.focusType,
-      focusDB: _description.focusDB,
-      focusAccession: _description.focusAccession,
-    };
+    // TODO: We were doing a copy of selected field here, but seems that we can use the original
+    // TODO: Delete the comented lines if nothing breaks (31/10/2017)
+    // const description = {
+    //   mainType: _description.mainType,
+    //   mainDB: _description.mainDB,
+    //   mainAccession: _description.mainAccession,
+    //   focusType: _description.focusType,
+    //   focusDB: _description.focusDB,
+    //   focusAccession: _description.focusAccession,
+    // };
     return `${protocol}//${hostname}:${port}${root}${description2path(
       description,
     )}?${qsStringify(search)}`;
@@ -69,6 +75,7 @@ const subPages = new Map([
   ['structure', loadData(defaultMapStateToProps)(List)],
   ['organism', loadData(defaultMapStateToProps)(List)],
   ['set', loadData(defaultMapStateToProps)(List)],
+  ['sequence', Sequence],
   ['domain_architecture', loadData(defaultMapStateToProps)(DomainArchitecture)],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],

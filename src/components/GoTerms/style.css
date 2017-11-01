@@ -22,10 +22,21 @@ a.go-terms:hover {
   color: #4b555b;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  display: inline-block;
 }
 
-.none {
+.no-goterm {
   font-size: 90%;
-  opacity: 0.75;
   list-style: none;
+  margin-left: -0.5rem; /*to be aligned if list removed*/
+}
+
+.bp {
+  background: #c2e6ec;
+}
+.mf {
+  background: #e5f5d7;
+}
+.cc {
+  background: #fbdcd0;
 }

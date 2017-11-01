@@ -18,7 +18,7 @@ pages:
     subPages:
       - entry
       - structure
-      - domain_architecture
+      - sequence
   structure:
     subPages:
       - entry
@@ -29,10 +29,11 @@ pages:
       - entry
       - protein
       - structure
+      - proteome
   sequence:
     subPages:
       - entry
-      - domain_architecture
+      - sequence
   search:
     plural: results
 pagination:

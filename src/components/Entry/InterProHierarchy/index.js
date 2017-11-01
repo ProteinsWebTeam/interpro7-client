@@ -54,6 +54,7 @@ class InterProHierarchy extends PureComponent {
   render() {
     return (
       <interpro-hierarchy
+        style={{ display: 'block', marginBottom: '1rem' }}
         accession={this.props.accession}
         hideafter="2"
         hrefroot="/entry/interpro"

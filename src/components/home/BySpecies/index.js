@@ -103,11 +103,11 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                 <Link
                   newTo={{
                     description: {
-                      mainType: 'entry',
-                      mainDB: 'interpro',
-                      focusType: 'organism',
-                      focusDB: 'taxonomy',
-                      focusAccession: `${e.tax_id}`,
+                      focusType: 'entry',
+                      focusDB: 'interpro',
+                      mainType: 'organism',
+                      mainDB: 'taxonomy',
+                      mainAccession: `${e.tax_id}`,
                     },
                   }}
                 >
@@ -117,11 +117,11 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                 <Link
                   newTo={{
                     description: {
-                      mainType: 'protein',
-                      mainDB: 'UniProt',
-                      focusType: 'organism',
-                      focusDB: 'taxonomy',
-                      focusAccession: `${e.tax_id}`,
+                      focusType: 'protein',
+                      focusDB: 'UniProt',
+                      mainType: 'organism',
+                      mainDB: 'taxonomy',
+                      mainAccession: `${e.tax_id}`,
                     },
                   }}
                 >

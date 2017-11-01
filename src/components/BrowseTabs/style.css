@@ -34,6 +34,10 @@
   background: #1779ba;
   color: white;
 }
+
+.tabs.sign .tabs-title a.is-active-tab {
+  background: #4e7287;
+}
 /*remove transition effect that are applied on MMD list*/
 .tabs-title a.is-active-tab span {
   color: white;

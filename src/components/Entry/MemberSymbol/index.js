@@ -7,6 +7,7 @@ const f = foundationPartial(ipro);
 
 const classNames = {
   CATH: f('md-cg'),
+  GENE3D: f('md-cg'),
   CDD: f('md-cd'),
   HAMAP: f('md-ha'),
   MOBIDBLT: f('md-mo'),
@@ -16,10 +17,13 @@ const classNames = {
   PRINTS: f('md-pri'),
   PRODOM: f('md-pro'),
   PATTERNS: f('md-prpat'),
+  PROSITE: f('md-prpat'),
   PROFILES: f('md-prpro'),
+  PROFILE: f('md-prpro'),
   SFLD: f('md-sf'),
   SMART: f('md-sm'),
   SUPERFAMILIES: f('md-su'),
+  SSF: f('md-su'),
   TIGRFAMS: f('md-ti'),
   NEW: f('md-new'),
 };

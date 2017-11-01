@@ -43,9 +43,14 @@ class SignaturesFilter extends Component {
       data: { loading, payload },
       location: { search: { signature_in: signature } },
     } = this.props;
-    const signatureDBs = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
-    );
+    const signatureDBs = Object.entries(loading ? {} : payload)
+      .sort(
+        ([, a], [, b]) => b - a,
+      )
+      .filter(s => {
+        const text = s[0].toLowerCase();
+        return text !== 'interpro' && text !== 'mobidblt';
+      });
     if (!loading) {
       signatureDBs.unshift(['All', NaN]);
     }

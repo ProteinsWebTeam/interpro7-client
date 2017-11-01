@@ -19,6 +19,12 @@ const getDefaultPayload = () => ({
   'Cellular Component': [],
 });
 
+const mapNameToClass = new Map([
+  ['Biological Process', 'bp'],
+  ['Molecular Function', 'mf'],
+  ['Cellular Component', 'cc'],
+]);
+
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
@@ -68,7 +74,7 @@ const GoTerms = (
               'margin-bottom-large',
             )}
           >
-            <p className={f('go-title')}>{key}</p>
+            <p className={f(mapNameToClass.get(key), 'go-title')}>{key}</p>
             <ul className={f('go-list')}>
               {values && values.length ? (
                 values.map(({ identifier, name }) => (
@@ -87,7 +93,7 @@ const GoTerms = (
                   </li>
                 ))
               ) : (
-                <li className={f('none')}>None</li>
+                <li className={f('no-goterm')}>None</li>
               )}
             </ul>
           </div>

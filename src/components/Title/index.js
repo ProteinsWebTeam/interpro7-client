@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { Helmet } from 'react-helmet';
-
+import MemberSymbol from 'components/Entry/MemberSymbol';
 import Link from 'components/generic/Link';
 
 import loadWebComponent from 'utils/loadWebComponent';
@@ -11,8 +11,32 @@ import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import styles from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ipro, styles);
+const f = foundationPartial(fonts, ipro, styles);
+
+const MaskSvgIcons = () => (
+  <svg
+    viewBox="0 0 200 200"
+    style={{
+      position: 'fixed',
+      width: 0,
+      height: 0,
+      top: -1800,
+      left: -1800,
+      /* to hide SVG on the page as display:none is not working */
+    }}
+  >
+    <defs>
+      <clipPath id="cut-off-center">
+        <rect x="33%" y="38%" width="68" height="68" />
+      </clipPath>
+      <clipPath id="cut-off-bottom">
+        <polygon points="0,68 68,0 68,68" />
+      </clipPath>
+    </defs>
+  </svg>
+);
 
 const mapNameToClass = new Map([
   ['Domain', 'title-id-domain'],
@@ -40,6 +64,8 @@ const mapNameToClass = new Map([
   mainType: string,
 }; */
 
+const accessionDisplay = new Set(['protein', 'structure', 'organism']);
+
 export default class Title extends PureComponent /*:: <Props> */ {
   static propTypes = {
     metadata: T.object.isRequired,
@@ -60,21 +86,49 @@ export default class Title extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('title')}>
         {isEntry &&
-          metadata.type && (
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() === 'interpro' && (
             <interpro-type type={metadata.type.replace('_', ' ')} size="4em" />
+          )}
+        {isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() !== 'interpro' && (
+            <div className={f('icon-container')}>
+              <MaskSvgIcons />
+              <MemberSymbol type={metadata.source_database} />
+            </div>
           )}
         <Helmet>
           <title>{metadata.accession.toString()}</title>
         </Helmet>
         <h3>
           {metadata.name.name}{' '}
-          {isEntry && metadata.type ? (
-            <small className={f(mapNameToClass.get(metadata.type))}>
-              {metadata.accession}
-            </small>
-          ) : (
-            <small className={f('title-id-other')}>{metadata.accession}</small>
-          )}
+          {///Red, Green for domains and Purple for sites accession: for InterPro page only
+          isEntry &&
+            metadata.type &&
+            metadata.source_database &&
+            metadata.source_database.toLowerCase() === 'interpro' && (
+              <small className={f(mapNameToClass.get(metadata.type))}>
+                {metadata.accession}
+              </small>
+            )}
+          {//Blue accession: for Member Database and Unknown entry-type
+          isEntry &&
+            metadata.type &&
+            metadata.source_database &&
+            metadata.source_database.toLowerCase() !== 'interpro' && (
+              <small className={f('title-id-md')}>{metadata.accession}</small>
+            )}
+          {//greyish accession: for protein , structure, and proteomes and no accession for tax
+          accessionDisplay.has(mainType) &&
+            metadata.source_database !== 'taxonomy' && (
+              //no accession for Taxonomy but in blue for protein (reviewed), structure (pdb), and proteomes (proteome)
+              <small className={f('title-id-other')}>
+                {metadata.accession}
+              </small>
+            )}
         </h3>
         {isEntry &&
           metadata.source_database &&
@@ -90,17 +144,28 @@ export default class Title extends PureComponent /*:: <Props> */ {
                     },
                   }}
                 >
-                  {metadata.source_database}
+                  {metadata.source_database}{' '}
+                  <span
+                    className={f('small', 'icon', 'icon-generic')}
+                    data-icon="i"
+                    title={metadata.source_database}
+                  />
                 </Link>
               </h5>
+              <p>
+                This signature is defined as{' '}
+                {metadata.type.replace('_', ' ').toLowerCase()} by{' '}
+                {metadata.source_database}.
+              </p>
             </div>
           )}
-        {metadata.name.short && (
-          <p>
-            Short name:&nbsp;
-            <i className={f('shortname')}>{metadata.name.short}</i>
-          </p>
-        )}
+        {metadata.name.short &&
+          metadata.accession !== metadata.name.short && (
+            <p>
+              Short name:&nbsp;
+              <i className={f('shortname')}>{metadata.name.short}</i>
+            </p>
+          )}
       </div>
     );
   }

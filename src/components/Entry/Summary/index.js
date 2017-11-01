@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-
+import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
 import Literature from 'components/Entry/Literature';
@@ -66,15 +66,34 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   hierarchy={metadata.hierarchy}
                 />
               )}
-              <Description
-                textBlocks={metadata.description}
-                literature={metadata.literature}
-              />
+              {//doesn't work for some HAMAP as they have enpty <P> tag
+              Object.keys(metadata.description).length > 0 && (
+                <Description
+                  textBlocks={metadata.description}
+                  literature={metadata.literature}
+                />
+              )}
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>
               {metadata.integrated && (
                 <div className={f('panel')}>
                   <Integration intr={metadata.integrated} />
+                </div>
+              )}
+              {metadata.integrated && (
+                <div className={f('panel')}>
+                  <h5>External links</h5>
+                  {
+                    // TODO implement right MD ext link
+                  }
+                  <Link
+                    className={f('ext')}
+                    newTo={{
+                      description: {},
+                    }}
+                  >
+                    {metadata.source_database} website
+                  </Link>
                 </div>
               )}
               {metadata.member_databases &&
@@ -86,15 +105,14 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
             </div>
           </div>
         </section>
-
-        {Object.keys(metadata.go_terms) && (
+        {Object.keys(metadata.go_terms) &&
+        metadata.source_database !== 'InterPro' ? null : (
           <GoTerms
             terms={metadata.go_terms}
             type="entry"
             db={metadata.source_database}
           />
         )}
-
         {Object.keys(metadata.literature).length > 0 && (
           <section id="references">
             <div className={f('row')}>

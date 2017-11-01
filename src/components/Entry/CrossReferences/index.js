@@ -6,10 +6,11 @@ import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 
-const f = foundationPartial(local, ebiStyles);
+const f = foundationPartial(fonts, ebiStyles, local);
 
 const ReferenceItem = ({ url, accession }) => (
   <li>
@@ -25,8 +26,15 @@ ReferenceItem.propTypes = {
 
 const ReferenceSection = ({ accessions, name, description }) => (
   <li className={f('xref-section', 'small')}>
-    <h5>{name}</h5>
-    <span>{description}</span>
+    <h5>
+      {name}{' '}
+      <span
+        className={f('small', 'icon', 'icon-generic')}
+        data-icon="i"
+        title={description}
+      />
+    </h5>
+
     <ul>
       {accessions.map(({ accession, url }) => (
         <ReferenceItem key={accession} accession={accession} url={url} />
