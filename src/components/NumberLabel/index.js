@@ -72,6 +72,8 @@ class NumberLabel extends Component {
     const { value, duration, lowGraphics, className, ...props } = this.props;
     let { value: _value } = this.state;
     if (isNaN(_value)) _value = 'N/A';
+    // this will print the number according to locale preference
+    // like a coma as thousand-separator in english
     if (Number.isFinite(_value)) _value = _value.toLocaleString();
     return (
       <span className={f('label', className, { lowGraphics })} {...props}>
