@@ -116,6 +116,14 @@
   background-color: var(--colors-tigrfams);
 }
 
+.lowGraphics .tabs-title > a,
+.lowGraphics .tabs-title > span {
+  &::before,
+  &::after {
+    transition: none;
+  }
+}
+
 @media screen and (prefers-reduced-motion: reduce) {
   .tabs-title > a,
   .tabs-title > span {

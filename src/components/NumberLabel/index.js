@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+
 import TweenLite from 'gsap/TweenLite';
 
 import { foundationPartial } from 'styles/foundation';
@@ -19,6 +22,7 @@ class NumberLabel extends Component {
     value: T.number,
     duration: T.number,
     className: T.string,
+    lowGraphics: T.bool.isRequired,
   };
 
   static defaultProps = {
@@ -48,7 +52,11 @@ class NumberLabel extends Component {
   _animate = (from, to) => {
     if (this._animation) this._animation.kill();
     const canAnimate =
-      from !== to && Number.isFinite(from) && Number.isFinite(to);
+      !this.props.lowGraphics &&
+      from !== to &&
+      Number.isFinite(from) &&
+      Number.isFinite(to);
+    // if (!canAnimate) debugger;
     if (!canAnimate) return this.setState({ value: to });
 
     const animatable = { value: this.state.value };
@@ -61,16 +69,21 @@ class NumberLabel extends Component {
   };
 
   render() {
-    const { value: _, duration: __, className, ...props } = this.props;
+    const { value, duration, lowGraphics, className, ...props } = this.props;
     let { value: _value } = this.state;
     if (isNaN(_value)) _value = 'N/A';
     if (Number.isFinite(_value)) _value = _value.toLocaleString();
     return (
-      <span className={f('label', className)} {...props}>
+      <span className={f('label', className, { lowGraphics })} {...props}>
         {_value}
       </span>
     );
   }
 }
 
-export default NumberLabel;
+const mapStateToProps = createSelector(
+  state => state.settings.ui.lowGraphics,
+  lowGraphics => ({ lowGraphics }),
+);
+
+export default connect(mapStateToProps)(NumberLabel);

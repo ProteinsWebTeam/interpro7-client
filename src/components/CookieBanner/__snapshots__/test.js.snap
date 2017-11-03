@@ -1,12 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<CookieBanner /> should render 1`] = `
-<AnimatedEntry
+<Connect(AnimatedEntry)
   animateSelf={true}
-  delay={0}
-  duration={250}
   element="div"
-  itemDelay={25}
   keyframes={
     Object {
       "opacity": Array [
@@ -73,5 +70,5 @@ exports[`<CookieBanner /> should render 1`] = `
       ×
     </button>
   </div>
-</AnimatedEntry>
+</Connect(AnimatedEntry)>
 `;
