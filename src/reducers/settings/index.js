@@ -8,7 +8,9 @@ export const getDefaultSettings = () => ({
   pagination: {
     pageSize: config.pagination.pageSize,
   },
-  ui: {},
+  ui: {
+    lowGraphics: false,
+  },
   cache: {
     enabled: config.cache.enabled,
   },
@@ -35,7 +37,7 @@ export const getDefaultSettings = () => ({
 // TODO: find a way to use the default when this has been changed in code
 export default (
   state /*: Object */ = getDefaultSettings(), // settingsStorage.getValue() ||
-  action /*: Object */
+  action /*: Object */,
 ) => {
   switch (action.type) {
     case CHANGE_SETTINGS:
