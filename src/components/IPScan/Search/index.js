@@ -247,6 +247,19 @@ class IPScanSearch extends Component {
 
   _loadExample = () => this._handleReset(example);
 
+  _cleanUp = () =>
+    this._handleReset(
+      convertToRaw(this.state.editorState.getCurrentContent())
+        .blocks.map(({ text }) => {
+          const line = text.trim();
+          if (!line) return null;
+          if (/^[;>]/.test(line)) return line;
+          return line.replace(/[^a-z* -]/gi, '').trim();
+        })
+        .filter(Boolean)
+        .join('\n'),
+    );
+
   _handleDroppedFiles = blockEvent(({ dataTransfer: { files: [file] } }) =>
     this._handleFile(file),
   );
@@ -330,6 +343,15 @@ class IPScanSearch extends Component {
                         onClick={this._loadExample}
                       >
                         Example protein sequence
+                      </button>
+                      <button
+                        type="button"
+                        className={s('hollow', 'button', 'warning', {
+                          hidden: valid,
+                        })}
+                        onClick={this._cleanUp}
+                      >
+                        Automatic input clean up
                       </button>
                     </div>
                   </div>
