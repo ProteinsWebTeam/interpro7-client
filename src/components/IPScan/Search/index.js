@@ -5,6 +5,7 @@ import {
   EditorState,
   ContentState,
   CompositeDecorator,
+  Modifier,
   convertToRaw,
 } from 'draft-js';
 import { connect } from 'react-redux';
@@ -274,6 +275,21 @@ class IPScanSearch extends Component {
     target.value = null;
   };
 
+  _handlePastedText = pasted => {
+    const blockMap = ContentState.createFromText(pasted).getBlockMap();
+    const editorState = EditorState.push(
+      this.state.editorState,
+      Modifier.replaceWithFragment(
+        this.state.editorState.getCurrentContent(),
+        this.state.editorState.getSelection(),
+        blockMap,
+      ),
+      'insert-fragment',
+    );
+    this._handleChange(editorState);
+    return true;
+  };
+
   _handleEditorClick = () => this.editor.focus();
 
   _handleChange = editorState => {
@@ -322,6 +338,7 @@ class IPScanSearch extends Component {
                           editorState={editorState}
                           handleDroppedFiles={this._handleDroppedFiles}
                           onChange={this._handleChange}
+                          handlePastedText={this._handlePastedText}
                           ref={editor => (this.editor = editor)}
                         />
                       </div>
