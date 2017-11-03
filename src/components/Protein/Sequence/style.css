@@ -4,7 +4,7 @@
 
 .raw-sequence-viewer {
   cursor: text;
-  font-family: var(--fonts-mono-alt);
+  font-family: var(--fonts-mono);
   font-size: 0.8em;
   padding-left: 8ch;
   padding-right: 10ch;
