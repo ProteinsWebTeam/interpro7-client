@@ -27,7 +27,7 @@ export default class Tabs extends Component {
     const _child = _children[activeTab];
     return (
       <div>
-        <ul className={f('tabs')}>
+        <ul className={f('tabs', 'main-style')}>
           {_children.map((child, i) => (
             <li
               className={f('tabs-title', { 'is-active': activeTab === i })}
