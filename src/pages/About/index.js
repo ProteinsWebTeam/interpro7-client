@@ -36,14 +36,14 @@ const DeveloperInfo = () => (
           </Link>
         </li>
         {info.git.tag !== info.git.commit &&
-        info.git.tag && (
-          <li>
-            tag:
-            <Link target="_blank" href={`${url}/tree/${info.git.tag}`}>
-              <code>{info.git.tag}</code>
-            </Link>
-          </li>
-        )}
+          info.git.tag && (
+            <li>
+              tag:
+              <Link target="_blank" href={`${url}/tree/${info.git.tag}`}>
+                <code>{info.git.tag}</code>
+              </Link>
+            </li>
+          )}
         <li>
           commit:
           <Link target="_blank" href={`${url}/tree/${info.git.commit}`}>
@@ -61,7 +61,7 @@ export default class About extends PureComponent /*:: <{}> */ {
       <div className={f('row')}>
         <div className={f('columns', 'large-12')}>
           <section>
-            <h4>About this website</h4>
+            <h3>About this website</h3>
             <DiskUsage />
             <DeveloperInfo />
           </section>
