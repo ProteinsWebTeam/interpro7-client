@@ -519,6 +519,49 @@ html .table-center .icon-functional::before {
 
 /******************************LOCAL STYLE*********************************/
 /*TABS - home*/
+
+/*Tabs style main*/
+.tabs.main-style {
+  border-bottom: 1px solid #e6e6e6;
+  border-right-width: 0;
+  border-top-width: 0;
+}
+.tabs.main-style .tabs-title {
+  margin-bottom: -1px;
+
+  & > button,
+  & > a {
+    color: var(--colors-graydark);
+    background: rgba(221, 221, 221, 0.54);
+    border-top: rgba(221, 221, 221, 0.54) 3px solid;
+  }
+  & > button:hover,
+  & > a:hover {
+    opacity: 1;
+    background: #ddd;
+  }
+}
+
+.tabs.main-style .tabs-title:last-of-type {
+  border-right: 1px #e6e6e6 solid;
+}
+
+.tabs.main-style .tabs-title.is-active {
+  & > a,
+  & > a:focus,
+  & > button,
+  & > button:focus {
+    border-top: #36aac0 3px solid;
+    background: #fff;
+    color: #222;
+    outline: none;
+  }
+  & > button:hover {
+    background: white;
+  }
+}
+/*/Tabs style main*/
+
 .tabs .tabs-title.is-active {
   & > a,
   & > a:focus,
