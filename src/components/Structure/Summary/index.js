@@ -68,7 +68,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
               <Title metadata={metadata} mainType={'structure'} />
               {
-                //<h4>Summary</h4>
+                // <h4>Summary</h4>
               }
               <pdb-prints size="38">
                 <pdb-data-loader pdbid={metadata.accession} />
