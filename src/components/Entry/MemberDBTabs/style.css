@@ -19,6 +19,7 @@
   padding: 0.66rem; /*not 0.7 for firefox*/
   position: relative;
   display: flex;
+  align-items: center;
   overflow: hidden;
 
   &::before,
@@ -113,6 +114,14 @@
 }
 .tabs-title a.tigrfams.is-active .number-label {
   background-color: var(--colors-tigrfams);
+}
+
+.lowGraphics .tabs-title > a,
+.lowGraphics .tabs-title > span {
+  &::before,
+  &::after {
+    transition: none;
+  }
 }
 
 @media screen and (prefers-reduced-motion: reduce) {

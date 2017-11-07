@@ -197,10 +197,11 @@ const mapStateToProps = createSelector(
   state => state.newLocation.description.mainAccession,
   (stuck, mainType, mainDB, mainAccession) => ({
     stuck,
-    issignature:
+    issignature: !!(
       mainType === 'entry' &&
       mainDB.toLowerCase() !== 'interpro' &&
-      mainAccession,
+      mainAccession
+    ),
   }),
 );
 export default connect(mapStateToProps)(Header);

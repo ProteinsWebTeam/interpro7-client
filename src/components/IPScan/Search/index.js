@@ -5,6 +5,7 @@ import {
   EditorState,
   ContentState,
   CompositeDecorator,
+  Modifier,
   convertToRaw,
 } from 'draft-js';
 import { connect } from 'react-redux';
@@ -247,6 +248,19 @@ class IPScanSearch extends Component {
 
   _loadExample = () => this._handleReset(example);
 
+  _cleanUp = () =>
+    this._handleReset(
+      convertToRaw(this.state.editorState.getCurrentContent())
+        .blocks.map(({ text }) => {
+          const line = text.trim();
+          if (!line) return null;
+          if (/^[;>]/.test(line)) return line;
+          return line.replace(/[^a-z* -]/gi, '').trim();
+        })
+        .filter(Boolean)
+        .join('\n'),
+    );
+
   _handleDroppedFiles = blockEvent(({ dataTransfer: { files: [file] } }) =>
     this._handleFile(file),
   );
@@ -259,6 +273,21 @@ class IPScanSearch extends Component {
     this._handleFile(target.files[0]);
     // eslint-disable-next-line no-param-reassign
     target.value = null;
+  };
+
+  _handlePastedText = pasted => {
+    const blockMap = ContentState.createFromText(pasted).getBlockMap();
+    const editorState = EditorState.push(
+      this.state.editorState,
+      Modifier.replaceWithFragment(
+        this.state.editorState.getCurrentContent(),
+        this.state.editorState.getSelection(),
+        blockMap,
+      ),
+      'insert-fragment',
+    );
+    this._handleChange(editorState);
+    return true;
   };
 
   _handleEditorClick = () => this.editor.focus();
@@ -309,6 +338,7 @@ class IPScanSearch extends Component {
                           editorState={editorState}
                           handleDroppedFiles={this._handleDroppedFiles}
                           onChange={this._handleChange}
+                          handlePastedText={this._handlePastedText}
                           ref={editor => (this.editor = editor)}
                         />
                       </div>
@@ -330,6 +360,15 @@ class IPScanSearch extends Component {
                         onClick={this._loadExample}
                       >
                         Example protein sequence
+                      </button>
+                      <button
+                        type="button"
+                        className={s('hollow', 'button', 'warning', {
+                          hidden: valid,
+                        })}
+                        onClick={this._cleanUp}
+                      >
+                        Automatic input clean up
                       </button>
                     </div>
                   </div>

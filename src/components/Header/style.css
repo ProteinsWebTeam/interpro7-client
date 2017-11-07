@@ -82,29 +82,6 @@
   align-items: center;
 }
 
-.top_level_title {
-  font-family: var(--fonts-header);
-  transform-origin: bottom left;
-  transition: transform 0.5s ease-in-out;
-  transform: scaleY(1);
-  flex: 1;
-
-  & .scrolled {
-    transform: scale(0.5);
-  }
-
-  @nest & * {
-    margin: 0;
-  }
-
-  @nest & > * {
-    padding: var(--spacing-huge) 0;
-  }
-
-  @nest & img {
-    padding: var(--spacing-big);
-  }
-}
 .masthead button {
   outline: 0;
 }

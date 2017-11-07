@@ -23,7 +23,6 @@ pages:
     subPages:
       - entry
       - protein
-      - domain_architecture
   organism:
     subPages:
       - entry

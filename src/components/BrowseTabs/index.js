@@ -77,9 +77,16 @@ class Counter extends PureComponent /*:: <CounterProps> */ {
       if (
         name === 'Domain Architectures' &&
         payload.metadata.counters &&
-        !payload.metadata.counters.entries
+        !payload.metadata.counters.proteins
       ) {
         value = 0;
+      }
+      // TODO: find a generic way to deal with this:
+      if (
+        name === 'Domain Architectures' &&
+        payload.metadata.source_database.toLowerCase() !== 'interpro'
+      ) {
+        value = null;
       }
     }
 
@@ -163,7 +170,11 @@ const mapStateToProps = createSelector(
     mainType,
     mainDB,
     mainAccession,
-    issignature: mainType === 'entry' && mainDB.toLowerCase() !== 'interpro',
+    issignature: !!(
+      mainType === 'entry' &&
+      mainDB.toLowerCase() !== 'interpro' &&
+      mainAccession
+    ),
   }),
 );
 

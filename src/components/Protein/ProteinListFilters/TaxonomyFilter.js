@@ -83,7 +83,9 @@ class TaxonomyFilter extends PureComponent {
                   <TaxIdOrName accession={taxId} element="div" />
                 </Metadata>
               )}
-              <NumberLabel value={count} className={f('filter-label')} />
+              {typeof count === 'undefined' || isNaN(count) ? null : (
+                <NumberLabel value={count} className={f('filter-label')} />
+              )}
             </label>
           </div>
         ))}

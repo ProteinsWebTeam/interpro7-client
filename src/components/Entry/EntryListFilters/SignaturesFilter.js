@@ -44,9 +44,7 @@ class SignaturesFilter extends Component {
       location: { search: { signature_in: signature } },
     } = this.props;
     const signatureDBs = Object.entries(loading ? {} : payload)
-      .sort(
-        ([, a], [, b]) => b - a,
-      )
+      .sort(([, a], [, b]) => b - a)
       .filter(s => {
         const text = s[0].toLowerCase();
         return text !== 'interpro' && text !== 'mobidblt';
@@ -71,7 +69,9 @@ class SignaturesFilter extends Component {
                 style={{ margin: '0.25em' }}
               />
               <span>{signatureDB}</span>
-              <NumberLabel value={count} className={f('filter-label')} />
+              {typeof count === 'undefined' || isNaN(count) ? null : (
+                <NumberLabel value={count} className={f('filter-label')} />
+              )}
             </label>
           </div>
         ))}

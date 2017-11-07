@@ -111,7 +111,8 @@ class MemberDBTabs extends Component {
     }),
     mainType: T.string,
     goToNewLocation: T.func.isRequired,
-    newLocation: T.object,
+    newLocation: T.object.isRequired,
+    lowGraphics: T.bool.isRequired,
   };
 
   constructor(props) {
@@ -138,7 +139,7 @@ class MemberDBTabs extends Component {
   };
 
   render() {
-    const { data: { loading, payload }, mainType } = this.props;
+    const { data: { loading, payload }, mainType, lowGraphics } = this.props;
     const { collapsed } = this.state;
     if (!loading) {
       tabs = [
@@ -183,6 +184,7 @@ class MemberDBTabs extends Component {
     return (
       <div
         className={f('columns', 'small-12', 'medium-3', 'large-2', {
+          lowGraphics,
           collapsed,
         })}
       >
@@ -247,7 +249,12 @@ class MemberDBTabs extends Component {
 const mapStateToProps = createSelector(
   state => state.newLocation,
   state => state.newLocation.description.mainType,
-  (newLocation, mainType) => ({ newLocation, mainType }),
+  state => state.settings.ui.lowGraphics,
+  (newLocation, mainType, lowGraphics) => ({
+    newLocation,
+    mainType,
+    lowGraphics,
+  }),
 );
 
 const getMemberDBUrl = createSelector(

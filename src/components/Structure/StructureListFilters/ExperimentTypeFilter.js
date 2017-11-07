@@ -64,7 +64,9 @@ class ExperimentTypeFilter extends Component {
                 style={{ margin: '0.25em' }}
               />
               <span>{type}</span>
-              <NumberLabel value={count} className={f('filter-label')} />
+              {typeof count === 'undefined' || isNaN(count) ? null : (
+                <NumberLabel value={count} className={f('filter-label')} />
+              )}
             </label>
           </div>
         ))}

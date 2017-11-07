@@ -34,7 +34,7 @@ class SearchResults extends PureComponent {
     } else if (payload.hitCount === 0) {
       return (
         <div className={f('callout', 'info', 'withicon')}>
-          There are not matches for the term queried.
+          There is no match for the term queried.
         </div>
       );
     } else if (

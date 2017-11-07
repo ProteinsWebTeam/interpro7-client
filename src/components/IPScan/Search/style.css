@@ -4,7 +4,7 @@
   height: auto;
   min-height: 10em;
   max-height: 42em;
-  font-family: var(--fonts-mono-alt);
+  font-family: var(--fonts-mono);
   font-size: 0.8rem;
   overflow: auto;
 
@@ -12,7 +12,7 @@
     color: #cacaca;
     font-size: 1rem;
     position: absolute;
-    font-family: var(--fonts-ebi);
+    font-family: var(--fonts-mono);
   }
 
   @nest & div[data-block='true'] {
