@@ -66,7 +66,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   hierarchy={metadata.hierarchy}
                 />
               )}
-              {//doesn't work for some HAMAP as they have enpty <P> tag
+              {// doesn't work for some HAMAP as they have enpty <P> tag
               Object.keys(metadata.description).length > 0 && (
                 <Description
                   textBlocks={metadata.description}
