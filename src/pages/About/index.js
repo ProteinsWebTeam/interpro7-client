@@ -99,8 +99,8 @@ export default class About extends PureComponent /*:: <{}> */ {
                   indirect and predicted. The different sources present a clear
                   tradeoff between quality and coverage. By combining them all
                   into a consensus annotation, MobiDB aims at giving the best
-                  possible picture of the "disorder landscape" of a given
-                  protein of interest.
+                  possible picture of the &ldquo;disorder landscape&rdquo; of a
+                  given protein of interest.
                 </li>
                 <li>
                   <strong>HAMAP</strong> stands for High-quality Automated and
