@@ -105,7 +105,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
         </Helmet>
         <h3>
           {metadata.name.name}{' '}
-          {///Red, Green for domains and Purple for sites accession: for InterPro page only
+          {// Red, Green for domains and Purple for sites accession: for InterPro page only
           isEntry &&
             metadata.type &&
             metadata.source_database &&
@@ -114,17 +114,17 @@ export default class Title extends PureComponent /*:: <Props> */ {
                 {metadata.accession}
               </small>
             )}
-          {//Blue accession: for Member Database and Unknown entry-type
+          {// Blue accession: for Member Database and Unknown entry-type
           isEntry &&
             metadata.type &&
             metadata.source_database &&
             metadata.source_database.toLowerCase() !== 'interpro' && (
               <small className={f('title-id-md')}>{metadata.accession}</small>
             )}
-          {//greyish accession: for protein , structure, and proteomes and no accession for tax
+          {// greyish accession: for protein , structure, and proteomes and no accession for tax
           accessionDisplay.has(mainType) &&
             metadata.source_database !== 'taxonomy' && (
-              //no accession for Taxonomy but in blue for protein (reviewed), structure (pdb), and proteomes (proteome)
+              // no accession for Taxonomy but in blue for protein (reviewed), structure (pdb), and proteomes (proteome)
               <small className={f('title-id-other')}>
                 {metadata.accession}
               </small>
