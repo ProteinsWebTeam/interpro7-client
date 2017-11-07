@@ -3,11 +3,17 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import { foundationPartial } from 'styles/foundation';
+
 import ipro from 'styles/interpro-new.css';
 import theme from 'styles/theme-interpro.css';
+
 const f = foundationPartial(theme, ipro);
 
-export const LoadingMessage = () => <div>Loading…</div>;
+export const LoadingMessage = () => (
+  <div className={f('row')}>
+    <div className={f('columns')}>Loading… </div>
+  </div>
+);
 LoadingMessage.displayName = 'LoadingMessage';
 
 const reload = () => {
