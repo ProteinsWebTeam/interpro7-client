@@ -520,7 +520,7 @@ html .table-center .icon-functional::before {
 /******************************LOCAL STYLE*********************************/
 /*TABS - home*/
 
-/*Tabs style main*/
+/*Tabs style main - homepage*/
 .tabs.main-style {
   border-bottom: 1px solid #e6e6e6;
   border-right-width: 0;
@@ -560,6 +560,15 @@ html .table-center .icon-functional::before {
     background: white;
   }
 }
+
+/*Search page tabs*/
+.tabs.main-style .tabs-title a.is-active {
+  border-top: #36aac0 3px solid;
+  background: #fff;
+  color: #222;
+  outline: none;
+}
+
 /*/Tabs style main*/
 
 .tabs .tabs-title.is-active {
