@@ -306,7 +306,7 @@ class MemberDBTabs2 extends PureComponent {
     } = this.props;
     const value = mainType === 'entry' ? mainDB : focusDB;
     return (
-      <label>
+      <label className={f('browsemd-panel', 'show-for-small-only')}>
         Select a database to filter these {toPlural(mainType)}:
         <select value={value || 'all'} onChange={this._handleChange}>
           {Array.from(menuOptions)
