@@ -15,6 +15,7 @@ import loadData from 'higherOrder/loadData';
 import { toPlural } from 'utils/pages';
 
 import { foundationPartial } from 'styles/foundation';
+
 import styles from './style.css';
 
 const f = foundationPartial(styles);
@@ -37,6 +38,25 @@ const colors = {
   tigrfams: '#56b9a6',
   InterPro: '#2daec1',
 };
+
+const menuOptions = new Map([
+  ['All', 'all'],
+  ['InterPro', 'InterPro'],
+  ['CDD', 'cdd'],
+  ['GENE3D', 'gene3d'],
+  ['HAMAP', 'hamap'],
+  ['PANTHER', 'panther'],
+  ['Pfam', 'pfam'],
+  ['PIRSF', 'pirsf'],
+  ['PRINTS', 'prints'],
+  ['PRODOM', 'prodom'],
+  ['PROFILE', 'profile'],
+  ['PROSITE', 'prosite'],
+  ['SFLD', 'sfld'],
+  ['SMART', 'smart'],
+  ['SSF', 'ssf'],
+  ['TIGRFams', 'tigrfams'],
+]);
 
 class MemberDBTab extends PureComponent {
   static propTypes = {
@@ -92,13 +112,13 @@ const entryIsMain = ({ description: { mainType } }) => mainType === 'entry';
 const mainOrFocus = location => (entryIsMain(location) ? 'main' : 'focus');
 const getValueFor = ({ entries }, mainType, db) => {
   let extract;
-  if (db === 'interpro') {
+  if (db === 'InterPro') {
     extract = entries.interpro;
   } else {
-    extract = entries.member_databases[db];
+    extract = entries.member_databases[db] || null;
   }
   if (mainType === 'entry') return extract;
-  return extract[toPlural(mainType)];
+  return (extract || {})[toPlural(mainType)] || null;
 };
 
 let tabs;
@@ -204,7 +224,7 @@ class MemberDBTabs extends Component {
         </button>
 
         {tabs && (
-          <div
+          <label
             className={f('browsemd-panel', 'show-for-small-only', {
               collapsed,
             })}
@@ -224,7 +244,7 @@ class MemberDBTabs extends Component {
                 </MemberDBTabSlim>
               ))}
             </select>
-          </div>
+          </label>
         )}
 
         <span className={f('tabs', { collapsed })} />
@@ -246,15 +266,72 @@ class MemberDBTabs extends Component {
   }
 }
 
+class MemberDBTabs2 extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      loading: T.bool.isRequired,
+      payload: T.object,
+    }).isRequired,
+    newLocation: T.shape({
+      description: T.shape({
+        mainType: T.string.isRequired,
+        mainDB: T.string.isRequired,
+        focusDB: T.string,
+      }).isRequired,
+    }).isRequired,
+    lowGraphics: T.bool.isRequired,
+    goToNewLocation: T.func.isRequired,
+  };
+
+  _handleChange = ({ target: { value } }) => {
+    const description = { ...this.props.newLocation.description };
+    if (description.mainType === 'entry') {
+      description.mainDB = value;
+    } else {
+      const isNotAll = value !== 'all';
+      description.focusType = isNotAll && 'entry';
+      description.focusDB = isNotAll && value;
+    }
+    this.props.goToNewLocation({
+      ...this.props.newLocation,
+      description,
+    });
+  };
+
+  render() {
+    const {
+      data: { loading, payload },
+      newLocation: { description: { mainType, mainDB, focusDB } },
+      lowGraphics,
+    } = this.props;
+    const value = mainType === 'entry' ? mainDB : focusDB;
+    return (
+      <label>
+        Select a database to filter these {toPlural(mainType)}:
+        <select value={value || 'all'} onChange={this._handleChange}>
+          {Array.from(menuOptions)
+            .filter(([, value]) => !(mainType === 'entry' && value === 'all'))
+            .map(([name, value]) => {
+              const count = loading
+                ? null
+                : getValueFor(payload, mainType, value);
+              return (
+                <option value={value} key={value}>
+                  {name}
+                  {count === null ? null : ` (${count} ${toPlural(mainType)})`}
+                </option>
+              );
+            })}
+        </select>
+      </label>
+    );
+  }
+}
+
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  state => state.newLocation.description.mainType,
   state => state.settings.ui.lowGraphics,
-  (newLocation, mainType, lowGraphics) => ({
-    newLocation,
-    mainType,
-    lowGraphics,
-  }),
+  (newLocation, lowGraphics) => ({ newLocation, lowGraphics }),
 );
 
 const getMemberDBUrl = createSelector(
@@ -271,5 +348,5 @@ const getMemberDBUrl = createSelector(
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  loadData(getMemberDBUrl)(MemberDBTabs),
+  loadData(getMemberDBUrl)(MemberDBTabs2),
 );

@@ -122,7 +122,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <BrowseTabsProps> 
     mainType: T.string,
     mainDB: T.string,
     mainAccession: T.string,
-    issignature: T.bool.isRequired,
+    isSignature: T.bool.isRequired,
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.any,
@@ -130,7 +130,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <BrowseTabsProps> 
   };
 
   render() {
-    const { mainType, mainDB, mainAccession, data, issignature } = this.props;
+    const { mainType, mainDB, mainAccession, data, isSignature } = this.props;
     let tabs = entities;
     if (mainAccession && mainType && config.pages[mainType]) {
       tabs = [singleEntity.get('overview')];
@@ -143,7 +143,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <BrowseTabsProps> 
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
-          <ul className={f('tabs', { sign: issignature })}>
+          <ul className={f('tabs', { sign: isSignature })}>
             {tabs.map(e => (
               <li className={f('tabs-title')} key={e.name}>
                 <Counter
@@ -170,9 +170,9 @@ const mapStateToProps = createSelector(
     mainType,
     mainDB,
     mainAccession,
-    issignature: !!(
+    isSignature: !!(
       mainType === 'entry' &&
-      mainDB.toLowerCase() !== 'interpro' &&
+      mainDB !== 'InterPro' &&
       mainAccession
     ),
   }),
@@ -191,7 +191,7 @@ const mapStateToUrl = createSelector(
     mainAccession,
     search,
   ) => {
-    if (!mainAccession) return '';
+    if (!mainAccession) return;
     return `${protocol}//${hostname}:${port}${root}${description2path({
       mainType,
       mainDB,

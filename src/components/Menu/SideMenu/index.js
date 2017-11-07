@@ -28,7 +28,7 @@ const getOldHref = createSelector(
     if (d.mainType === 'entry') {
       if (!d.mainDB) {
         return href;
-      } else if (d.mainDB.toLowerCase() === 'interpro') {
+      } else if (d.mainDB === 'InterPro') {
         if (d.mainAccession) {
           return `${href}entry/${d.mainAccession}/`;
         }
@@ -42,7 +42,7 @@ const getOldHref = createSelector(
       return `${href}protein/${d.mainAccession}/`;
     }
     return href;
-  }
+  },
 );
 
 /*:: type OldIPProps = {
@@ -70,7 +70,7 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
 
 const mapStateToPropsForOldLink = createSelector(
   state => state.newLocation.description,
-  description => ({ description })
+  description => ({ description }),
 );
 
 const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
@@ -164,7 +164,7 @@ class SideMenu extends PureComponent /*:: <Props> */ {
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
   state => state.newLocation.description.mainAccession,
-  (visible, mainAccession) => ({ visible, mainAccession })
+  (visible, mainAccession) => ({ visible, mainAccession }),
 );
 
 export default connect(mapStateToProps, { closeSideNav })(SideMenu);

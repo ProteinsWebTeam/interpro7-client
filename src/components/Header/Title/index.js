@@ -88,7 +88,7 @@ class Title extends PureComponent /*:: <Props> */ {
               <div className={styles('logo-flex-item', 'logo-text')}>
                 InterPro
                 {mainType === 'entry' &&
-                  mainDB.toLowerCase() !== 'interpro' &&
+                  mainDB !== 'InterPro' &&
                   mainAccession && <span>&nbsp;- Member</span>}
               </div>
             </div>
