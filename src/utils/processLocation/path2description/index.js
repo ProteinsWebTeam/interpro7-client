@@ -45,6 +45,7 @@ handlers.memberDBAccessionHandler.children = new Set([
   handlers.proteinHandler,
   handlers.structureHandler,
   handlers.organismHandler,
+  handlers.setHandler,
   handlers.mainDetailHandler,
 ]);
 handlers.memberDBHandler.children = new Set([
@@ -58,6 +59,7 @@ handlers.interProAccessionHandler.children = new Set([
   handlers.proteinHandler,
   handlers.structureHandler,
   handlers.organismHandler,
+  handlers.setHandler,
   handlers.mainDetailHandler,
 ]);
 handlers.interProHandler.children = new Set([
@@ -136,11 +138,25 @@ handlers.searchHandler.children = new Set([
   handlers.textSearchHandler,
   handlers.sequenceSearchHandler,
 ]);
+handlers.setAccessionHandler.children = new Set([
+  handlers.structureHandler,
+  handlers.entryHandler,
+  handlers.proteinHandler,
+  handlers.organismHandler,
+]);
+
+handlers.setDBHandler.children = new Set([
+  handlers.setAccessionHandler,
+]);
+handlers.setHandler.children = new Set([
+  handlers.setDBHandler,
+]);
 handlers.rootHandler.children = new Set([
   handlers.entryHandler,
   handlers.proteinHandler,
   handlers.structureHandler,
   handlers.organismHandler,
+  handlers.setHandler,
   handlers.searchHandler,
   handlers.otherHandler,
 ]);

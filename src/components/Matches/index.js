@@ -193,7 +193,7 @@ const Matches = (
       </Column>
       <Column
         dataKey="match"
-        displayIf={primary !== 'organism' && secondary !== 'organism'}
+        displayIf={primary !== 'organism' && secondary !== 'organism' && primary !== 'set' && secondary !== 'set'}
         renderer={(match /*: Object */) => (
           <MatchesByPrimary
             matches={[match]}

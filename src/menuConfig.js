@@ -120,6 +120,15 @@ export const entities /*: Array<Object> */ = [
     },
     name: 'Organism',
   },
+  {
+    newTo: {
+      description: {
+        mainType: 'set',
+        mainDB: 'pfam',
+      },
+    },
+    name: 'Set',
+  },
 ];
 
 export const singleEntity /*: Map<string, Object> */ = new Map([
@@ -153,6 +162,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             mainMemberDB: null,
             focusType: 'entry',
+            focusDB: location.description.mainType === 'set' ? location.description.mainDB : null,
             focusDB: null,
             focusIntegration: 'all',
           },
@@ -220,6 +230,25 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
       },
       name: 'Organisms',
       counter: 'organisms',
+    },
+  ],
+  [
+    'set',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            mainDetail: null,
+            focusType: 'set',
+            focusDB: 'pfam',
+            mainMemberDB: null,
+          },
+        };
+      },
+      name: 'Sets',
+      counter: 'sets',
     },
   ],
   [

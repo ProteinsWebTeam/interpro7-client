@@ -12,6 +12,7 @@ pages:
       - protein
       - structure
       - organism
+      - set
       - domain_architecture
       - logo
   protein:
@@ -33,6 +34,12 @@ pages:
     subPages:
       - entry
       - sequence
+  set:
+    subPages:
+      - entry
+      - protein
+      - structure
+      - organism
   search:
     plural: results
 pagination:
