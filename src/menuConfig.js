@@ -48,6 +48,8 @@ export const entities /*: Array<Object> */ = [
           mainDB:
             location.description.focusIntegration ||
             location.description.focusDB ||
+            (location.description.mainType === 'entry' &&
+              location.description.mainDB) ||
             'InterPro',
           focusType: null,
           focusDB: null,
