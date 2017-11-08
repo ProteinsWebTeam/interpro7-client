@@ -4,8 +4,9 @@ import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import Table, {
   Column,
@@ -28,79 +29,8 @@ import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
+
 const f = foundationPartial(pageStyle, styles);
-
-const propTypes = {
-  data: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-  }).isRequired,
-  isStale: T.bool.isRequired,
-  location: T.shape({
-    description: T.object.isRequired,
-    search: T.object.isRequired,
-  }).isRequired,
-};
-
-const Overview = ({
-  data: { payload, loading },
-  location: { search: { type } },
-  isStale,
-}) => {
-  if (loading || isStale)
-    return (
-      <div className={f('row')}>
-        <div className={f('columns')}>Loading… </div>
-      </div>
-    );
-  return (
-    <div>
-      Member databases:
-      <ul className={f('card')}>
-        {Object.entries(
-          payload.entries.member_databases,
-        ).map(([name, count]) => (
-          <li key={name}>
-            <Link
-              newTo={{
-                description: { mainType: 'entry', mainDB: name },
-                search: { type },
-              }}
-            >
-              {name} ({count})
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <ul className={f('card')}>
-        <li>
-          <Link
-            newTo={{
-              description: { mainType: 'entry', mainDB: 'InterPro' },
-              search: { type },
-            }}
-          >
-            InterPro ({payload.entries ? payload.entries.interpro : 0})
-          </Link>
-        </li>
-        <li>
-          <Link
-            newTo={{
-              description: {
-                mainType: 'entry',
-                mainIntegration: 'Unintegrated',
-              },
-              search: { type },
-            }}
-          >
-            Unintegrated ({payload.entries ? payload.entries.unintegrated : 0})
-          </Link>
-        </li>
-      </ul>
-    </div>
-  );
-};
-Overview.propTypes = propTypes;
 
 const schemaProcessDataTable = mainDB => ({
   '@type': 'Dataset',
@@ -125,7 +55,17 @@ const schemaProcessDataTableRow = data => ({
 });
 
 class List extends Component {
-  static propTypes = propTypes;
+  static propTypes = {
+    data: T.shape({
+      payload: T.object,
+      loading: T.bool.isRequired,
+    }).isRequired,
+    isStale: T.bool.isRequired,
+    location: T.shape({
+      description: T.object.isRequired,
+      search: T.object.isRequired,
+    }).isRequired,
+  };
 
   componentWillMount() {
     loadWebComponent(() =>
@@ -317,7 +257,8 @@ class List extends Component {
               <Column
                 dataKey="go_terms"
                 className={f('col-go')}
-                renderer={(gos /*: Array<Object> */) => gos
+                renderer={(gos /*: Array<Object> */) =>
+                  gos
                     .sort((a, b) => {
                       if (a.category > b.category) return 0;
                       if (a.category < b.category) return 1;
@@ -325,26 +266,26 @@ class List extends Component {
                       return 0;
                     })
                     .map(go => (
-                    <div
-                      className={f('go-row')}
-                      key={go.identifier}
-                      style={{
-                        backgroundColor: go.category
-                          ? goColors[go.category]
-                          : '#DDDDDD',
-                      }}
-                    >
-                      <span className={f('go-cell')}>
-                        <GoLink
-                          id={go.identifier}
-                          className={f('go')}
-                          title={`${go.name} (${go.identifier})`}
-                        >
-                          {go.name ? go.name : 'None'}
-                        </GoLink>
-                      </span>
-                    </div>
-                  ))}
+                      <div
+                        className={f('go-row')}
+                        key={go.identifier}
+                        style={{
+                          backgroundColor: go.category
+                            ? goColors[go.category]
+                            : '#DDDDDD',
+                        }}
+                      >
+                        <span className={f('go-cell')}>
+                          <GoLink
+                            id={go.identifier}
+                            className={f('go')}
+                            title={`${go.name} (${go.identifier})`}
+                          >
+                            {go.name ? go.name : 'None'}
+                          </GoLink>
+                        </span>
+                      </div>
+                    ))}
               >
                 GO Terms{' '}
                 <span
@@ -432,6 +373,17 @@ Summary.propTypes = {
   }).isRequired,
   isStale: T.bool.isRequired,
 };
+
+const RedirectToInterPro = () => (
+  <Redirect
+    to={{
+      description: {
+        mainType: 'entry',
+        mainDB: 'InterPro',
+      },
+    }}
+  />
+);
 
 const dbAccs = new RegExp(
   `(${memberDB
@@ -530,7 +482,7 @@ class Entry extends PureComponent {
           <Switch
             {...this.props}
             locationSelector={l => l.description.mainDB}
-            indexRoute={Overview}
+            indexRoute={RedirectToInterPro}
             catchAll={InnerSwitch}
           />
         </ErrorBoundary>

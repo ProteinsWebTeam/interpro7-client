@@ -36,6 +36,7 @@ const load = (
   fetchFun,
   fetchOptions,
 ) => key => {
+  if (!key) return cancelable(Promise.resolve());
   try {
     loadingData(key);
   } catch (err) {
@@ -205,7 +206,7 @@ const loadData = params => {
         } = this.props;
         // TODO: remove next line if nothing breaks because of it
         // const data = {...dataFromProps};// maybe useful?..
-        if (typeof data.loading === 'undefined') data.loading = true;
+        if (typeof data.loading === 'undefined') data.loading = !!this._url;
         // const useStaleData =
         //   !this._avoidStaleData && data.loading && staleData.payload;
         const useStaleData = data.loading && staleData.payload;

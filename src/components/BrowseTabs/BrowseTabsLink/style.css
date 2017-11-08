@@ -1,0 +1,35 @@
+a.browse-tabs-link {
+  &,
+  &:visited {
+    font-size: 0.9rem; /*same size as submenu*/
+    padding: 0.7rem 1rem; /*to make it similar to EBI leaf menu*/
+    line-height: inherit;
+    color: black;
+  }
+
+  &:hover {
+    color: #1779ba;
+  }
+
+  &:focus {
+    color: #2199e8;
+  }
+}
+
+a.is-active-tab {
+  &,
+  &:focus,
+  &:hover {
+    font-weight: bold;
+    background: #1779ba;
+    color: white;
+  }
+
+  &.is-signature {
+    background: #4e7287;
+  }
+
+  & span {
+    color: white;
+  }
+}

@@ -4,7 +4,7 @@ import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import MemberDBTabs from 'components/MemberDBTabs';
 import { PDBeLink } from 'components/ExtLink';
 import StructureListFilters from 'components/Structure/StructureListFilters';
 import Table, {

@@ -69,7 +69,14 @@ class NumberLabel extends Component {
   };
 
   render() {
-    const { value, duration, lowGraphics, className, ...props } = this.props;
+    const {
+      value,
+      duration,
+      lowGraphics,
+      className,
+      dispatch,
+      ...props
+    } = this.props;
     let { value: _value } = this.state;
     if (isNaN(_value)) _value = 'N/A';
     // this will print the number according to locale preference

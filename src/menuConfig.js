@@ -39,38 +39,84 @@ export const EBI /*: Array<Object> */ = [
 
 export const entities /*: Array<Object> */ = [
   {
-    newTo: {
-      description: {
-        mainType: 'entry',
-        mainDB: 'InterPro',
-      },
+    newTo(location) {
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainType: 'entry',
+          mainDB:
+            location.description.focusIntegration ||
+            location.description.focusDB ||
+            'InterPro',
+          focusType: null,
+          focusDB: null,
+          focusIntegration: null,
+        },
+      };
     },
     name: 'Entry',
   },
   {
-    newTo: {
-      description: {
-        mainType: 'protein',
-        mainDB: 'UniProt',
-      },
+    newTo(location) {
+      let { focusType, focusDB, focusIntegration } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainType: 'protein',
+          mainDB: 'UniProt',
+          focusType,
+          focusDB,
+          focusIntegration,
+        },
+      };
     },
     name: 'Protein',
   },
   {
-    newTo: {
-      description: {
-        mainType: 'structure',
-        mainDB: 'PDB',
-      },
+    newTo(location) {
+      let { focusType, focusDB, focusIntegration } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainType: 'structure',
+          mainDB: 'PDB',
+          focusType,
+          focusDB,
+          focusIntegration,
+        },
+      };
     },
     name: 'Structure',
   },
   {
-    newTo: {
-      description: {
-        mainType: 'organism',
-        mainDB: 'taxonomy',
-      },
+    newTo(location) {
+      let { focusType, focusDB, focusIntegration } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainType: 'organism',
+          mainDB: 'taxonomy',
+          focusType,
+          focusDB,
+          focusIntegration,
+        },
+      };
     },
     name: 'Organism',
   },
