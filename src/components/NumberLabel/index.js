@@ -58,7 +58,6 @@ class NumberLabel extends PureComponent {
       from !== to &&
       Number.isFinite(from) &&
       Number.isFinite(to);
-    // if (!canAnimate) debugger;
     if (!canAnimate) return this.setState({ value: to });
 
     const animatable = { value: this.state.value };

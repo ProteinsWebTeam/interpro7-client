@@ -96,9 +96,10 @@
   transform: translateY(0);
   transition-duration: var(--timing-fast);
   transition-timing-function: ease-in-out;
-}
-.top_level_hamburger.stuck {
-  transform: translateY(220%) Scale(0.9);
+
+  &.stuck {
+    transform: translateY(220%) Scale(0.9);
+  }
 }
 
 .hamb_line {
@@ -236,11 +237,11 @@
   transition-delay: 0s;
 }
 .side-search.stuck svg {
-  transform: Scale(0.9);
+  transform: scale(0.9);
 }
 .side-search.stuck svg:hover,
 .side-search.stuck > input:hover ~ a svg {
-  transform: rotate(90deg) Scale(0.9);
+  transform: rotate(90deg) scale(0.9);
 }
 
 .side-search svg {
@@ -251,6 +252,27 @@
   transition-timing-function: ease-in-out;
   transition-duration: var(--timing-fast);
   transform: rotate(90deg);
+}
+
+.lowGraphics {
+  & .side-search.stuck,
+  & .side-search.stuck svg,
+  & .side-search.stuck svg:hover,
+  & .side-search.stuck > input:hover ~ a svg,
+  & .side-search svg:hover,
+  & .side-search > input,
+  & .side-search > input:focus,
+  & .side-search > input:hover {
+    transform: none;
+
+    & ~ * > svg {
+      transform: none;
+    }
+  }
+}
+
+.lowGraphics {
+  transition: none;
 }
 
 .side-search > input {

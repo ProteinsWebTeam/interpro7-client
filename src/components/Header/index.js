@@ -34,7 +34,7 @@ class _HamburgerBtn extends PureComponent {
   };
 
   render() {
-    const { openSideNav, open, svg, stuck } = this.props;
+    const { openSideNav, open, svg, stuck, lowGraphics } = this.props;
     if (!svg) {
       return (
         <span>
@@ -88,12 +88,17 @@ class _SideIcons extends PureComponent {
   static propTypes = {
     movedAway: T.bool.isRequired,
     stuck: T.bool.isRequired,
+    lowGraphics: T.bool.isRequired,
   };
 
   render() {
-    const { movedAway, stuck } = this.props;
+    const { movedAway, stuck, lowGraphics } = this.props;
     return (
-      <div className={styleBundle('columns', 'small-6', 'medium-4')}>
+      <div
+        className={styleBundle('columns', 'small-6', 'medium-4', {
+          lowGraphics,
+        })}
+      >
         <div className={reducedStyleBundle('side-icons', { movedAway })}>
           <HamburgerBtn svg={true} stuck={stuck} />
           <label className={reducedStyleBundle('side-search', { stuck })}>
@@ -122,9 +127,11 @@ class _SideIcons extends PureComponent {
   }
 }
 
-const mapStateToPropsSideIcons = createSelector(getSideNav, movedAway => ({
-  movedAway,
-}));
+const mapStateToPropsSideIcons = createSelector(
+  getSideNav,
+  state => state.settings.ui.lowGraphics,
+  (movedAway, lowGraphics) => ({ movedAway, lowGraphics }),
+);
 const SideIcons = connect(mapStateToPropsSideIcons)(_SideIcons);
 
 // const SubMediumLevel = ({pages, pageType}) => (
