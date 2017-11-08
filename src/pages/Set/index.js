@@ -4,7 +4,7 @@ import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import MemberDBTabs from 'components/MemberDBTabs';
 import Table, {
   Column,
   SearchBox,
@@ -24,7 +24,7 @@ import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
-import {setDB} from 'utils/processLocation/handlers';
+import { setDB } from 'utils/processLocation/handlers';
 const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 // const SVG_WIDTH = 100;
@@ -43,15 +43,14 @@ const propTypes = {
 };
 
 const defaultPayload = {
-  sets: {
-  },
+  sets: {},
 };
 
 class Overview extends PureComponent {
   static propTypes = propTypes;
 
   render() {
-    if (this.props.loading){
+    if (this.props.loading) {
       return (
         <div className={f('row')}>
           <div className={f('columns')}>Loading…</div>
@@ -61,17 +60,16 @@ class Overview extends PureComponent {
     const { data: { payload = defaultPayload } } = this.props;
     return (
       <ul className={f('card')}>
-        {Object.entries(payload.sets || {}).filter(set => set[0] !== 'kegg')
+        {Object.entries(payload.sets || {})
+          .filter(set => set[0] !== 'kegg')
           .map(([name, count]) => (
-          <li key={name}>
-            <Link
-              newTo={{ description: { mainType: 'set', mainDB: name } }}
-            >
-              {name}
-              {Number.isFinite(count) ? ` (${count})` : ''}
-            </Link>
-          </li>
-        ))}
+            <li key={name}>
+              <Link newTo={{ description: { mainType: 'set', mainDB: name } }}>
+                {name}
+                {Number.isFinite(count) ? ` (${count})` : ''}
+              </Link>
+            </li>
+          ))}
       </ul>
     );
   }
@@ -260,10 +258,9 @@ class Summary extends PureComponent {
       );
     }
     let currentSet = null;
-    Array.from(setDB).forEach(
-      db => {
-        if (db.name === 'pfam') currentSet = db;
-      });
+    Array.from(setDB).forEach(db => {
+      if (db.name === 'pfam') currentSet = db;
+    });
     return (
       <div>
         {this.props.data.payload &&

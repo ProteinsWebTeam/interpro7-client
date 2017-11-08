@@ -40,7 +40,7 @@ const menuOptions = new Map([
   ['All', 'all'],
   ['InterPro', 'InterPro'],
   ['CDD', 'cdd'],
-  ['GENE3D', 'gene3d'],
+  ['Gene3D', 'gene3d'],
   ['HAMAP', 'hamap'],
   ['PANTHER', 'panther'],
   ['Pfam', 'pfam'],
@@ -90,7 +90,7 @@ class MemberDBTab extends PureComponent {
         >
           <span className={f('db-label')}>{children}&nbsp;</span>
           <NumberLabel
-            value={count}
+            value={count || 0}
             className={f('number-label')}
             title={
               count === null
