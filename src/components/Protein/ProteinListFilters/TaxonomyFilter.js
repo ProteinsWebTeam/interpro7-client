@@ -42,6 +42,10 @@ class TaxonomyFilter extends PureComponent {
         focusDB: value === 'ALL' ? null : 'taxonomy',
         focusAccession: value === 'ALL' ? null : value,
       },
+      search: {
+        ...location.search,
+        page: undefined,
+      },
     });
   };
 

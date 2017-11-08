@@ -116,8 +116,10 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             mainMemberDB: null,
             focusType: 'entry',
-            focusDB: location.description.mainType === 'set' ? location.description.mainDB : null,
-            focusDB: null,
+            focusDB:
+              location.description.mainType === 'set'
+                ? location.description.mainDB
+                : null,
             focusIntegration: 'all',
           },
         };

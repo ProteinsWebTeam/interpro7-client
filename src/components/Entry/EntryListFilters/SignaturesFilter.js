@@ -34,6 +34,7 @@ class SignaturesFilter extends Component {
       search: {
         ...this.props.location.search,
         signature_in: value === 'All' ? undefined : value,
+        page: undefined,
       },
     });
   };

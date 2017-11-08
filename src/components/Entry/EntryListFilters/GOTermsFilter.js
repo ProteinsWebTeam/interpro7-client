@@ -40,6 +40,7 @@ class GOTermsFilter extends Component {
       search: {
         ...this.props.location.search,
         go_term: value === 'All' ? undefined : value,
+        page: undefined,
       },
     });
   };

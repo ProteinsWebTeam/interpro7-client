@@ -43,7 +43,15 @@ class CurationFilter extends Component {
   }
 
   componentWillMount() {
-    const { mainDB } = this.props.location.description;
+    this.location2state(this.props.location);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.location2state(nextProps.location);
+  }
+
+  location2state(location) {
+    const { mainDB } = location.description;
     if (mainDB === 'reviewed') {
       this.setState({ value: 'reviewed' });
     } else if (mainDB === 'unreviewed') {
@@ -52,7 +60,6 @@ class CurationFilter extends Component {
       this.setState({ value: 'uniprot' });
     }
   }
-
   _handleSelection = ({ target: { value } }) => {
     this.setState({ value });
     this.props.goToNewLocation({
@@ -60,6 +67,10 @@ class CurationFilter extends Component {
       description: {
         ...this.props.location.description,
         mainDB: value,
+      },
+      search: {
+        ...this.props.location.search,
+        page: undefined,
       },
     });
   };

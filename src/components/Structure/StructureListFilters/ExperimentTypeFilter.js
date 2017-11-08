@@ -35,6 +35,7 @@ class ExperimentTypeFilter extends Component {
       search: {
         ...this.props.location.search,
         experiment_type: value === 'All' ? undefined : value,
+        page: undefined,
       },
     });
   };
