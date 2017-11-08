@@ -102,8 +102,6 @@ class MemberDBTab extends PureComponent {
   }
 }
 
-const entryIsMain = ({ description: { mainType } }) => mainType === 'entry';
-
 const getValueFor = ({ entries }, mainType, db) => {
   let extract;
   if (db === 'InterPro') {
@@ -242,7 +240,7 @@ const getMemberDBUrl = createSelector(
   state => state.newLocation,
   ({ protocol, hostname, port, root }, location) => {
     let output = `${protocol}//${hostname}:${port}${root}/entry`;
-    if (!entryIsMain(location)) {
+    if (location.description.mainType !== 'entry') {
       output += `/${location.description.mainType}/${location.description
         .mainDB}`;
     }
