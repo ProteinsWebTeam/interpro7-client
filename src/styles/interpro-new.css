@@ -452,17 +452,6 @@ main a.neutral:hover {
   color: #4b555b;
   border-bottom: 1px #222 solid;
 }
-.panel a span {
-  color: #bbb;
-  font-size: 79%;
-}
-
-.panel .mdlink {
-  background: #dde4e9;
-  border-left: 5px solid #558abb;
-  color: #4d4e53;
-  padding: 15px;
-}
 
 ul.chevron li {
   list-style: none;
