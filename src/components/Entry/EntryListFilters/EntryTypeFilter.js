@@ -43,6 +43,7 @@ class EntryTypeFilter extends Component {
       search: {
         ...this.props.location.search,
         type: value === 'All' ? undefined : value,
+        page: undefined,
       },
     });
   };

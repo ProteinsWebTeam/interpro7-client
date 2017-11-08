@@ -23,6 +23,7 @@ class OrganismDBFilter extends Component {
     }).isRequired,
     goToNewLocation: T.func.isRequired,
     location: T.shape({
+      search: T.object.isRequired,
       description: T.object.isRequired,
     }).isRequired,
   };
@@ -33,6 +34,10 @@ class OrganismDBFilter extends Component {
       description: {
         ...this.props.location.description,
         mainDB: value,
+      },
+      search: {
+        ...this.props.location.search,
+        page: undefined,
       },
     });
   };

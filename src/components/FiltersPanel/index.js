@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
 
 import { foundationPartial } from 'styles/foundation';
 import style from './style.css';
+import { createSelector } from 'reselect';
+import { goToNewLocation } from 'actions/creators';
 
 const f = foundationPartial(style);
 
@@ -26,6 +29,12 @@ FilterPanel.propTypes = {
 class FiltersPanel extends Component {
   static propTypes = {
     children: T.any,
+    goToNewLocation: T.func.isRequired,
+    location: T.shape({
+      search: T.object.isRequired,
+      description: T.object.isRequired,
+      hash: T.string.isRequired,
+    }).isRequired,
   };
 
   constructor() {
@@ -45,8 +54,28 @@ class FiltersPanel extends Component {
       (acc, v) => v && acc,
       true,
     );
-    const children = (Array.isArray(this.props.children)) ? this.props.children : [this.props.children];
+    const children = Array.isArray(this.props.children)
+      ? this.props.children
+      : [this.props.children];
     this.setState({ filters: children.map(() => !toCollapse) });
+  };
+
+  clearAll = () => {
+    const { description, hash, search } = this.props.location;
+    let mainDB =
+      description.mainType === 'protein' ? 'UniProt' : description.mainDB;
+    if (description.mainType === 'organism') mainDB = 'taxonomy';
+    this.props.goToNewLocation({
+      description: {
+        ...description,
+        mainDB,
+        mainIntegration: null,
+      },
+      search: {
+        page_size: search.page_size,
+      },
+      hash,
+    });
   };
 
   toggleFilter = i => {
@@ -92,5 +121,9 @@ class FiltersPanel extends Component {
     );
   }
 }
+const mapStateToProps = createSelector(
+  state => state.newLocation,
+  location => ({ location }),
+);
 
-export default FiltersPanel;
+export default connect(mapStateToProps, { goToNewLocation })(FiltersPanel);
