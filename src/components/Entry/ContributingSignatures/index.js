@@ -6,9 +6,12 @@ import MemberSymbol from 'components/Entry/MemberSymbol';
 import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
+
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
-// import {MaskSvgIcons} from 'pages/Home'
+
+const f = foundationPartial(ipro, local);
+
 const MaskSvgIcons = () => (
   <svg
     viewBox="0 0 200 200"
@@ -31,7 +34,6 @@ const MaskSvgIcons = () => (
     </defs>
   </svg>
 );
-const f = foundationPartial(ipro, local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
