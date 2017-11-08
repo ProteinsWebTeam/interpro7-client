@@ -76,8 +76,8 @@ class MemberDBTab extends PureComponent {
         nextLocation.description.mainDB = cleanName;
       } else {
         const isNotAll = cleanName !== 'all';
-        nextLocation.description.focusType = isNotAll && 'entry';
-        nextLocation.description.focusDB = isNotAll && cleanName;
+        nextLocation.description.focusType = isNotAll ? 'entry' : null;
+        nextLocation.description.focusDB = isNotAll ? cleanName : null;
       }
       return nextLocation;
     };
