@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+// @flow
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -17,12 +18,13 @@ TweenLite.ticker.fps(MAX_FPS);
 
 const DELAY_RANGE = 0.1;
 
-class NumberLabel extends Component {
+class NumberLabel extends PureComponent {
   static propTypes = {
     value: T.number,
     duration: T.number,
     className: T.string,
     lowGraphics: T.bool.isRequired,
+    dispatch: T.func.isRequired,
   };
 
   static defaultProps = {

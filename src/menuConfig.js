@@ -59,7 +59,7 @@ export const entities /*: Array<Object> */ = [
   },
   {
     newTo(location) {
-      let { focusType, focusDB, focusIntegration } = location.description;
+      let { focusType, focusDB } = location.description;
       if (location.description.mainType === 'entry') {
         focusType = 'entry';
         focusDB = location.description.mainDB;
@@ -72,7 +72,6 @@ export const entities /*: Array<Object> */ = [
           mainDB: 'UniProt',
           focusType,
           focusDB,
-          focusIntegration,
         },
       };
     },
@@ -80,7 +79,7 @@ export const entities /*: Array<Object> */ = [
   },
   {
     newTo(location) {
-      let { focusType, focusDB, focusIntegration } = location.description;
+      let { focusType, focusDB } = location.description;
       if (location.description.mainType === 'entry') {
         focusType = 'entry';
         focusDB = location.description.mainDB;
@@ -93,7 +92,6 @@ export const entities /*: Array<Object> */ = [
           mainDB: 'PDB',
           focusType,
           focusDB,
-          focusIntegration,
         },
       };
     },
@@ -101,7 +99,7 @@ export const entities /*: Array<Object> */ = [
   },
   {
     newTo(location) {
-      let { focusType, focusDB, focusIntegration } = location.description;
+      let { focusType, focusDB } = location.description;
       if (location.description.mainType === 'entry') {
         focusType = 'entry';
         focusDB = location.description.mainDB;
@@ -114,7 +112,6 @@ export const entities /*: Array<Object> */ = [
           mainDB: 'taxonomy',
           focusType,
           focusDB,
-          focusIntegration,
         },
       };
     },
@@ -162,8 +159,10 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             mainMemberDB: null,
             focusType: 'entry',
-            focusDB: location.description.mainType === 'set' ? location.description.mainDB : null,
-            focusDB: null,
+            focusDB:
+              location.description.mainType === 'set'
+                ? location.description.mainDB
+                : null,
             focusIntegration: 'all',
           },
         };

@@ -1,11 +1,12 @@
+// @flow
 /* eslint-disable jsx-a11y/no-onchange */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import NumberLabel from 'components/NumberLabel';
-import Link from 'components/generic/Link';
+import MemberDBTab from './MemberDBTab';
+
 import { goToNewLocation } from 'actions/creators';
 
 import loadData from 'higherOrder/loadData';
@@ -17,24 +18,6 @@ import { foundationPartial } from 'styles/foundation';
 import styles from './style.css';
 
 const f = foundationPartial(styles);
-
-const colors = new Map([
-  ['gene3d', '#a88cc3'],
-  ['cdd', '#addc58'],
-  ['hamap', '#2cd6d6'],
-  ['panther', '#bfac92'],
-  ['pfam', '#6287b1'],
-  ['pirsf', '#dfafdf'],
-  ['prints', '#54c75f'],
-  ['prodom', '#8d99e4'],
-  ['profile', '#f69f74'],
-  ['prosite', '#f3c766'],
-  ['sfld', '#00b1d3'],
-  ['smart', '#ff7a76'],
-  ['ssf', '#686868'],
-  ['tigrfams', '#56b9a6'],
-  ['InterPro', '#2daec1'],
-]);
 
 const menuOptions = new Map([
   ['All', 'all'],
@@ -55,55 +38,6 @@ const menuOptions = new Map([
   ['TIGRFams', 'tigrfams'],
 ]);
 
-class MemberDBTab extends PureComponent {
-  static propTypes = {
-    children: T.string.isRequired,
-    count: T.number,
-    mainType: T.string.isRequired,
-    cleanName: T.string.isRequired,
-  };
-
-  render() {
-    const { children, count, mainType, cleanName } = this.props;
-    const newTo = ({ description, restOfLocation }) => {
-      const nextLocation = {
-        ...restOfLocation,
-        description: {
-          ...description,
-        },
-      };
-      if (description.mainType === 'entry') {
-        nextLocation.description.mainDB = cleanName;
-      } else {
-        const isNotAll = cleanName !== 'all';
-        nextLocation.description.focusType = isNotAll ? 'entry' : null;
-        nextLocation.description.focusDB = isNotAll ? cleanName : null;
-      }
-      return nextLocation;
-    };
-    return (
-      <li className={f('tabs-title')}>
-        <Link
-          newTo={newTo}
-          activeClass={f('is-active', 'is-active-tab')}
-          style={{ color: colors.get(cleanName) }}
-        >
-          <span className={f('db-label')}>{children}&nbsp;</span>
-          <NumberLabel
-            value={count || 0}
-            className={f('number-label')}
-            title={
-              count === null
-                ? null
-                : `${count} ${toPlural(mainType, count)} found`
-            }
-          />
-        </Link>
-      </li>
-    );
-  }
-}
-
 const getValueFor = ({ entries }, mainType, db) => {
   let extract;
   if (db === 'InterPro') {
@@ -115,7 +49,24 @@ const getValueFor = ({ entries }, mainType, db) => {
   return (extract || {})[toPlural(mainType)] || null;
 };
 
-class MemberDBTabs2 extends PureComponent {
+/* type Props = {
+  data: {
+    loading: boolean,
+    payload?: Object,
+  },
+  newLocation: {
+    description: {
+      mainType: string,
+      mainDB: string,
+      focusDB: ?string,
+    },
+    search: Object,
+  },
+  lowGraphics: boolean,
+  goToNewLocation: function,
+}; */
+
+class MemberDBTabs extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -127,6 +78,7 @@ class MemberDBTabs2 extends PureComponent {
         mainDB: T.string.isRequired,
         focusDB: T.string,
       }).isRequired,
+      search: T.object,
     }).isRequired,
     lowGraphics: T.bool.isRequired,
     goToNewLocation: T.func.isRequired,
@@ -154,7 +106,7 @@ class MemberDBTabs2 extends PureComponent {
       ...this.props.newLocation,
       description,
       search: {
-        ...this.props.search,
+        ...this.props.newLocation.search,
         page: null,
       },
     });
@@ -220,6 +172,7 @@ class MemberDBTabs2 extends PureComponent {
                 mainType={mainType}
                 count={count}
                 cleanName={value}
+                lowGraphics={lowGraphics}
               >
                 {name}
               </MemberDBTab>
@@ -251,5 +204,5 @@ const getMemberDBUrl = createSelector(
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(
-  loadData(getMemberDBUrl)(MemberDBTabs2),
+  loadData(getMemberDBUrl)(MemberDBTabs),
 );

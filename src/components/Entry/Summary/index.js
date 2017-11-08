@@ -66,7 +66,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   hierarchy={metadata.hierarchy}
                 />
               )}
-              {//doesn't work for some HAMAP as they have enpty <P> tag
+              {// doesn't work for some HAMAP as they have empty <p> tag
               Object.keys(metadata.description).length > 0 && (
                 <Description
                   textBlocks={metadata.description}
@@ -83,9 +83,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
               {metadata.integrated && (
                 <div className={f('panel')}>
                   <h5>External links</h5>
-                  {
-                    // TODO implement right MD ext link
-                  }
+                  {/* TODO implement right MD ext link */}
                   <Link
                     className={f('ext')}
                     newTo={{
