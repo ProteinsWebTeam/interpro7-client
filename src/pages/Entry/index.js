@@ -6,7 +6,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import Table, {
   Column,
