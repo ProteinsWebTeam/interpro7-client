@@ -101,7 +101,7 @@ const Literature = (
     <div className={f('row')}>
       <div className={f('large-12', 'columns', 'margin-bottom-large')}>
         {included.length ? (
-          <AnimatedEntry className={f('list')} itemDelay={100} duration={500}>
+          <div className={f('list')}>
             {included.map(([pubID, ref], i) => (
               <LiteratureItem
                 pubID={pubID}
@@ -111,19 +111,15 @@ const Literature = (
                 included
               />
             ))}
-          </AnimatedEntry>
+          </div>
         ) : null}
         {extra.length ? <h5>Further reading</h5> : null}
         {extra.length ? (
-          <AnimatedEntry
-            className={f('list', 'further')}
-            itemDelay={100}
-            duration={500}
-          >
+          <div className={f('list', 'further')}>
             {extra.map(([pubID, ref]) => (
               <LiteratureItem pubID={pubID} key={pubID} reference={ref} />
             ))}
-          </AnimatedEntry>
+          </div>
         ) : null}
       </div>
     </div>
