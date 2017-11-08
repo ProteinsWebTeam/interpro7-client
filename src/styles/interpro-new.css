@@ -238,6 +238,17 @@ div#local-title {
 /*content: ' \21AA ';*/
 /*}*/
 /*/EXTERNAL LINKS*/
+/*NEUTRAL LINKS*/
+main a.neutral {
+  color: #4b555b;
+}
+
+main a.neutral:hover {
+  border-bottom: 1px #222 solid;
+}
+
+/*/NEUTRAL LINKS*/
+
 .local-site-search .icon-functional:before,
 .local-offcanvas-menu .icon-functional:before {
   font-size: 2.5em;
@@ -314,7 +325,7 @@ input:focus::placeholder {
 a:hover.noline {
   border-bottom: 0 solid transparent;
 }
-/*****LOCAL BUTTONS + LINKS ***/
+/*/****LOCAL BUTTONS + LINKS ***/
 
 /* MENU*/
 .horizontal.menu > li > a {
@@ -329,12 +340,6 @@ a:hover.noline {
   padding: 0.5em;
   font-weight: normal; /*avoid bold on badge when activated*/
 }
-.entry-menu-medium-step-01,
-.entry-menu-medium-step-02,
-.entry-menu-medium-step-03,
-.main-menu-all {
-  display: none;
-} /*hide different menu version collapsed*/
 
 .masthead nav ul.dropdown.menu.float-left li a:hover:after {
   display: none;
@@ -347,32 +352,6 @@ a:hover.noline {
   color: white;
 }
 
-/*RD - Breakpoints for menu to collapse into dropdown*/
-/*large*/
-@media screen and (min-width: 1296px) {
-  .main-menu-all {
-    display: block;
-  }
-}
-/*medium large*/
-@media screen and (min-width: 1236px) and (max-width: 1295.9375px) {
-  .entry-menu-medium-step-01 {
-    display: block;
-  }
-}
-/*medium*/
-@media screen and (min-width: 916px) and (max-width: 1235.9375px) {
-  .entry-menu-medium-step-02 {
-    display: block;
-  }
-}
-/*small medium*/
-@media screen and (min-width: 40em) and (max-width: 915.9375px) {
-  .entry-menu-medium-step-03 {
-    display: block;
-  }
-}
-/*/RD - Breakpoints for menu to collapse into dropdown*/
 /************************ END BANNER**********************************/
 
 /************************ STICKY BANNER**********************************/
@@ -441,38 +420,6 @@ h6 small {
   color: #a2d7b9;
 }
 /*/Overwritting Foundation*/
-
-/****************************** RIGHT PANEL *********************************/
-main a.neutral {
-  color: #4b555b;
-  padding-left: 3px;
-} /*neutral link same as font-color*/
-
-main a.neutral:hover {
-  color: #4b555b;
-  border-bottom: 1px #222 solid;
-}
-
-ul.chevron li {
-  list-style: none;
-}
-
-ul.chevron {
-  margin-left: 0;
-}
-
-ul.chevron > li:before {
-  content: '';
-  display: inline-block;
-  height: 0.8em;
-  background-size: contain;
-  background-position: center;
-  background-image: url(../images/chevron.svg);
-  background-repeat: no-repeat;
-  padding-left: 1em;
-  position: relative;
-}
-/****************************** END RIGHT PANEL *****************************/
 
 /****************************** TABLE *********************************/
 .table-center {
