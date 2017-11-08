@@ -5,7 +5,6 @@ import partition from 'lodash-es/partition';
 
 import { PMCLink, DOILink } from 'components/ExtLink';
 import Link from 'components/generic/Link';
-import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadable from 'higherOrder/loadable';
 
