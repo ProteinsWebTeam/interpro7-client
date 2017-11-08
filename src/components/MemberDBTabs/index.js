@@ -93,7 +93,9 @@ class MemberDBTab extends PureComponent {
             value={count}
             className={f('number-label')}
             title={
-              count !== null && `${count} ${toPlural(mainType, count)} found`
+              count === null
+                ? null
+                : `${count} ${toPlural(mainType, count)} found`
             }
           />
         </Link>
