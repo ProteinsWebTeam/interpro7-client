@@ -20,7 +20,8 @@
 
 .more-icon-container {
   align-self: flex-end;
-  padding: 0.8ch 1ch;
+  padding: 0.8ch 0;
+  margin-right: 0.8rem;
 }
 
 .view-more {
