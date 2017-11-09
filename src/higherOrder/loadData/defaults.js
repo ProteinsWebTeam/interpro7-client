@@ -13,7 +13,7 @@ export const getUrl = createSelector(
       state => state.newLocation.description,
       state => state.newLocation.search,
       ({ protocol, hostname, port, root }, pagination, description, search) => {
-        const s = search || {};
+        const s = description.mainAccession ? {} : search || {};
         if (
           !description.mainAccession &&
           !description.focusDB &&

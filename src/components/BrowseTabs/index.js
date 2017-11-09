@@ -95,20 +95,13 @@ const mapStateToUrl = createSelector(
   state => state.newLocation.description.mainType,
   state => state.newLocation.description.mainDB,
   state => state.newLocation.description.mainAccession,
-  state => state.newLocation.search,
-  (
-    { protocol, hostname, port, root },
-    mainType,
-    mainDB,
-    mainAccession,
-    search,
-  ) => {
+  ({ protocol, hostname, port, root }, mainType, mainDB, mainAccession) => {
     if (!mainAccession) return;
     return `${protocol}//${hostname}:${port}${root}${description2path({
       mainType,
       mainDB,
       mainAccession,
-    })}?${qsStringify(search)}`.replace(/\?$/, '');
+    })}`.replace(/\?$/, '');
   },
 );
 

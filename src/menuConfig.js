@@ -41,7 +41,6 @@ export const entities /*: Array<Object> */ = [
   {
     newTo(location) {
       return {
-        ...location,
         description: {
           ...location.description,
           mainType: 'entry',
@@ -67,7 +66,6 @@ export const entities /*: Array<Object> */ = [
         focusDB = location.description.mainDB;
       }
       return {
-        ...location,
         description: {
           ...location.description,
           mainType: 'protein',
@@ -87,7 +85,6 @@ export const entities /*: Array<Object> */ = [
         focusDB = location.description.mainDB;
       }
       return {
-        ...location,
         description: {
           ...location.description,
           mainType: 'structure',
@@ -107,7 +104,6 @@ export const entities /*: Array<Object> */ = [
         focusDB = location.description.mainDB;
       }
       return {
-        ...location,
         description: {
           ...location.description,
           mainType: 'organism',
@@ -136,7 +132,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     {
       newTo(location /*: Location */) {
         return {
-          ...location,
           description: {
             ...location.description,
             mainDetail: null,
@@ -155,7 +150,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     {
       newTo(location /*: Location */) {
         return {
-          ...location,
           description: {
             ...location.description,
             mainDetail: null,
@@ -178,7 +172,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     {
       newTo(location /*: Location */) {
         return {
-          ...location,
           description: {
             ...location.description,
             mainDetail: null,
@@ -198,7 +191,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     {
       newTo(location /*: Location */) {
         return {
-          ...location,
           description: {
             ...location.description,
             mainDetail: null,
@@ -218,7 +210,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     {
       newTo(location /*: Location */) {
         return {
-          ...location,
           description: {
             ...location.description,
             mainDetail: null,
@@ -238,7 +229,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     {
       newTo(location /*: Location */) {
         return {
-          ...location,
           description: {
             ...location.description,
             mainDetail: null,
@@ -257,7 +247,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     {
       newTo(location /*: Location */) {
         return {
-          ...location,
           description: {
             ...location.description,
             focusType: null,
@@ -276,7 +265,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     {
       newTo(location /*: Location */) {
         return {
-          ...location,
           description: {
             ...location.description,
             focusType: null,
@@ -295,7 +283,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     {
       newTo(location /*: Location */) {
         return {
-          ...location,
           description: {
             ...location.description,
             focusType: null,
@@ -314,7 +301,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     {
       newTo(location /*: Location */) {
         return {
-          ...location,
           description: {
             ...location.description,
             focusType: null,

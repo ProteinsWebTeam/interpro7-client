@@ -33,7 +33,8 @@ const defaultMapStateToProps = createSelector(
   state => state.newLocation.description,
   state => state.newLocation.search,
   ({ protocol, hostname, port, root }, pagination, description, _search) => {
-    const search = _search || {};
+    // const search = _search || {};
+    const search = description.mainAccession ? {} : _search || {};
     search.page_size = search.page_size || pagination.pageSize;
     // TODO: We were doing a copy of selected field here, but seems that we can use the original
     // TODO: Delete the comented lines if nothing breaks (31/10/2017)

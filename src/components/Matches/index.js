@@ -106,6 +106,7 @@ const Matches = (
       query={search}
       pathname={pathname}
       isStale={isStale}
+      notFound={matches.length === 0}
     >
       <PageSizeSelector />
       <SearchBox search={search.search} pathname={pathname}>
