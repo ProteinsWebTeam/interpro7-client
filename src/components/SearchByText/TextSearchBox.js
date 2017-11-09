@@ -19,11 +19,16 @@ class TextSearchBox extends Component {
     this.state = { value: props.value };
   }
 
+  componentWillMount() {
+    if (this.props.search) this.setState({ value: this.props.search.search });
+  }
+
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps, this.props);
     const { value = '', toSubmit = false } = nextProps;
     if (this.props.value === value && this.props.toSubmit === toSubmit) return;
-    if (toSubmit) this.routerPush();
     this.setState({ value });
+    if (toSubmit) this.routerPush();
   }
 
   routerPush = () => {
@@ -74,7 +79,7 @@ class TextSearchBox extends Component {
 
 const mapStateToProps = createSelector(
   state => state.settings.pagination.pageSize,
-  pageSize => ({ pageSize })
+  pageSize => ({ pageSize }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(TextSearchBox);
