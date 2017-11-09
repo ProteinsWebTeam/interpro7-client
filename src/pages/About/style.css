@@ -1,3 +1,7 @@
 .list li {
   margin-bottom: 1rem;
 }
+.md-small {
+  width: 50%;
+  margin-left: 4rem;
+}
