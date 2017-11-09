@@ -34,7 +34,7 @@ class _HamburgerBtn extends PureComponent {
   };
 
   render() {
-    const { openSideNav, open, svg, stuck, lowGraphics } = this.props;
+    const { openSideNav, open, svg, stuck } = this.props;
     if (!svg) {
       return (
         <span>

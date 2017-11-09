@@ -40,10 +40,15 @@ const menuOptions = new Map([
 
 const getValueFor = ({ entries }, mainType, db) => {
   let extract;
-  if (db === 'InterPro') {
-    extract = entries.interpro;
-  } else {
-    extract = entries.member_databases[db] || null;
+  switch (db) {
+    case 'InterPro':
+      extract = entries.interpro;
+      break;
+    case 'all':
+      extract = entries.all;
+      break;
+    default:
+      extract = entries.member_databases[db] || null;
   }
   if (mainType === 'entry') return extract;
   return (extract || {})[toPlural(mainType)] || null;
@@ -196,8 +201,9 @@ const getMemberDBUrl = createSelector(
   ({ protocol, hostname, port, root }, location) => {
     let output = `${protocol}//${hostname}:${port}${root}/entry`;
     if (location.description.mainType !== 'entry') {
-      output += `/${location.description.mainType}/${location.description
-        .mainDB}`;
+      output += `/${location.description.mainType}/${
+        location.description.mainDB
+      }`;
     }
     return output;
   },
