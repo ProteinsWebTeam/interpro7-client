@@ -73,7 +73,12 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
           activeClass={f('is-active', 'is-active-tab')}
           style={{ color: colors.get(cleanName) }}
         >
-          <span className={f('db-label')}>{children}&nbsp;</span>
+          <span className={f('db-label')}>
+            {children}
+            {children === 'All'
+              ? ` ${toPlural(mainType).toLowerCase()}`
+              : ''}&nbsp;
+          </span>
           <NumberLabel
             value={count || 0}
             className={f('number-label')}
