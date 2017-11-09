@@ -42,7 +42,6 @@ class Example extends PureComponent {
 
 class SearchByText extends PureComponent {
   static propTypes = {
-    value: T.string,
     search: T.shape({
       search: T.string,
     }).isRequired,
@@ -56,8 +55,8 @@ class SearchByText extends PureComponent {
     };
   }
 
-  componentWillReceiveProps({ query = '' }) {
-    this.setState({ query });
+  componentWillReceiveProps({ search }) {
+    this.setState({ value: search.search });
   }
 
   handleExampleClick = event => {
