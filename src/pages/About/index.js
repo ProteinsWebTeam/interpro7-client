@@ -1,6 +1,5 @@
 // @flow
 import React, { PureComponent } from 'react';
-
 import Link from 'components/generic/Link';
 
 import { pkg } from 'config';
@@ -36,14 +35,14 @@ const DeveloperInfo = () => (
           </Link>
         </li>
         {info.git.tag !== info.git.commit &&
-        info.git.tag && (
-          <li>
-            tag:
-            <Link target="_blank" href={`${url}/tree/${info.git.tag}`}>
-              <code>{info.git.tag}</code>
-            </Link>
-          </li>
-        )}
+          info.git.tag && (
+            <li>
+              tag:
+              <Link target="_blank" href={`${url}/tree/${info.git.tag}`}>
+                <code>{info.git.tag}</code>
+              </Link>
+            </li>
+          )}
         <li>
           commit:
           <Link target="_blank" href={`${url}/tree/${info.git.commit}`}>
