@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-// import ColorHash from 'color-hash/lib/color-hash';
-
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
@@ -13,6 +11,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
+import { HighligtedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -148,6 +147,7 @@ class List extends PureComponent {
                       mainDB: location.description.mainDB,
                       mainAccession: accession,
                     },
+                    search: {},
                   })}
                 >
                   {
@@ -182,9 +182,10 @@ class List extends PureComponent {
                       mainDB: location.description.mainDB,
                       mainAccession: accession,
                     },
+                    search: {},
                   })}
                 >
-                  {name}
+                  <HighligtedText text={name} textToHighlight={search.search} />
                 </Link>
               )}
             >

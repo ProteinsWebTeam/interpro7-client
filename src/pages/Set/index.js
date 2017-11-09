@@ -11,6 +11,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
+import { HighligtedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -168,7 +169,7 @@ class List extends PureComponent {
                     },
                   })}
                 >
-                  {name}
+                  <HighligtedText text={name} textToHighlight={search.search} />
                 </Link>
               )}
             >
