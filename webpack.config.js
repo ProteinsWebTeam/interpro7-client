@@ -456,8 +456,11 @@ module.exports = (env = { dev: true }) => {
               optional: [/\.(eot|ttf|woff|svg|ico|png|jpe?g)$/i],
             },
             AppCache: false,
+            // TODO: Check whats the best way to do this autoupdate.
+            // autoUpdate: 60000,
             ServiceWorker: {
               minify: env.production,
+              events: true,
             },
             safeToUseOptionalCaches: true,
             excludes: ['**/.*', '**/*.{map,br,gz}'],

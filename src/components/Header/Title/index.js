@@ -89,8 +89,7 @@ class Title extends PureComponent /*:: <Props> */ {
                 InterPro
                 {mainType === 'entry' &&
                   mainDB.toLowerCase() !== 'interpro' &&
-                  mainAccession &&
-                  ' - Member'}
+                  mainAccession && <span>&nbsp;- Member</span>}
               </div>
             </div>
           </Link>

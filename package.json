@@ -1,6 +1,6 @@
 {
   "name": "interpro7-client",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/ProteinsWebTeam/interpro7-client.git"

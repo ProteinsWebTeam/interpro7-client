@@ -23,7 +23,6 @@ pages:
     subPages:
       - entry
       - protein
-      - domain_architecture
   organism:
     subPages:
       - entry
@@ -34,7 +33,6 @@ pages:
     subPages:
       - entry
       - sequence
-      - domain_architecture
   search:
     plural: results
 pagination:

@@ -11,8 +11,6 @@ import Switch from 'components/generic/Switch';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
-import flattenDeep from 'lodash-es/flattenDeep';
-
 import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
@@ -37,64 +35,9 @@ const SequenceSubPage = loadable({
     import(/* webpackChunkName: "sequence-subpage" */ 'subPages/Sequence'),
 });
 
-const DomainArchitectureWithoutData = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "domain-architecture-subpage" */ 'components/Protein/DomainArchitecture'),
-});
-
-class DomainArchitecture extends PureComponent {
-  static propTypes = {
-    data: T.object.isRequired,
-  };
-
-  render() {
-    const payload = this.props.data.payload.results[0];
-    const protein = {
-      length: payload.sequenceLength,
-    };
-    // massage data to make it look like what is needed for
-    // a standard domain architecture subpage
-    const data = {
-      integrated: new Map(),
-      unintegrated: [],
-    };
-    for (const match of payload.matches) {
-      const processedMatch = {
-        accession: match.signature.accession,
-        source_database: match.signature.signatureLibraryRelease.library,
-        protein_length: payload.sequenceLength,
-        coordinates: [match.locations.map(l => [l.start, l.end])],
-        score: match.score,
-      };
-      if (match.signature.entry) {
-        const accession = match.signature.entry.accession;
-        const entry = data.integrated.get(accession) || {
-          accession,
-          source_database: 'InterPro',
-          children: [],
-        };
-        entry.children.push(processedMatch);
-        data.integrated.set(accession, entry);
-      } else {
-        data.unintegrated.push(processedMatch);
-      }
-    }
-    data.integrated = Array.from(data.integrated.values()).map(m => {
-      const coordinates = flattenDeep(m.children.map(s => s.coordinates));
-      return {
-        ...m,
-        coordinates: [[[Math.min(...coordinates), Math.max(...coordinates)]]],
-      };
-    });
-    data.unintegrated.sort((m1, m2) => m2.score - m1.score);
-    return <DomainArchitectureWithoutData protein={protein} data={data} />;
-  }
-}
-
 const subPagesForSequence = new Set([
   { value: 'entry', component: EntrySubPage },
   { value: 'sequence', component: SequenceSubPage },
-  { value: 'domain_architecture', component: DomainArchitecture },
 ]);
 
 class _Summary extends PureComponent {

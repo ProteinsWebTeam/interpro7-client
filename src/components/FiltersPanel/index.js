@@ -45,7 +45,10 @@ class FiltersPanel extends Component {
       (acc, v) => v && acc,
       true,
     );
-    this.setState({ filters: this.props.children.map(() => !toCollapse) });
+    const children = Array.isArray(this.props.children)
+      ? this.props.children
+      : [this.props.children];
+    this.setState({ filters: children.map(() => !toCollapse) });
   };
 
   toggleFilter = i => {

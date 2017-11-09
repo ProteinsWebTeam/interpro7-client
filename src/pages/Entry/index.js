@@ -318,27 +318,34 @@ class List extends Component {
                 dataKey="go_terms"
                 className={f('col-go')}
                 renderer={(gos /*: Array<Object> */) =>
-                  gos.map(go => (
-                    <div
-                      className={f('go-row')}
-                      key={go.identifier}
-                      style={{
-                        backgroundColor: go.category
-                          ? goColors[go.category]
-                          : '#DDDDDD',
-                      }}
-                    >
-                      <span className={f('go-cell')}>
-                        <GoLink
-                          id={go.identifier}
-                          className={f('go')}
-                          title={`${go.name} (${go.identifier})`}
-                        >
-                          {go.name ? go.name : 'None'}
-                        </GoLink>
-                      </span>
-                    </div>
-                  ))}
+                  gos
+                    .sort((a, b) => {
+                      if (a.category > b.category) return 0;
+                      if (a.category < b.category) return 1;
+                      if (a.name > b.name) return 1;
+                      return 0;
+                    })
+                    .map(go => (
+                      <div
+                        className={f('go-row')}
+                        key={go.identifier}
+                        style={{
+                          backgroundColor: go.category
+                            ? goColors[go.category]
+                            : '#DDDDDD',
+                        }}
+                      >
+                        <span className={f('go-cell')}>
+                          <GoLink
+                            id={go.identifier}
+                            className={f('go')}
+                            title={`${go.name} (${go.identifier})`}
+                          >
+                            {go.name ? go.name : 'None'}
+                          </GoLink>
+                        </span>
+                      </div>
+                    ))}
               >
                 GO Terms{' '}
                 <span

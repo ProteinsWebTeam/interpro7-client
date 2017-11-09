@@ -158,6 +158,7 @@ class MemberDBTabs extends Component {
           value: getValueFor(payload, mainType, 'interpro'),
         },
         ...Object.keys(payload.entries.member_databases)
+          .filter(k => k !== 'mobidblt')
           .sort()
           .map(e => ({
             name: e,

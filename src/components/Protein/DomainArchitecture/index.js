@@ -127,6 +127,7 @@ class DomainArchitecture extends Component {
     this.setState({ colorMode: newValue });
     this.ec.changeColorMode(newValue);
   };
+
   render() {
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>

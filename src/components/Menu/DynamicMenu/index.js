@@ -32,6 +32,7 @@ const InterProMin = InterPro.filter(item => item.name !== 'Settings');
 
 class DynamicMenu extends PureComponent /*:: <Props, State> */ {
   /*:: _menuItems: Set<HTMLElement>; */
+  /*:: _dotdotdot: HTMLElement; */
   static defaultProps = {
     width: +Infinity,
   };
@@ -59,7 +60,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
 
   _checkSizes = async (width /*: number */) => {
     await schedule(MAX_DELAY_BEFORE_CHECKING_FIT);
-    let remainingWidth = width;
+    let remainingWidth = width - this._dotdotdot.getBoundingClientRect().width;
     for (const menuItem of this._menuItems) {
       if (remainingWidth > 0) {
         const { width } = menuItem.getBoundingClientRect();
@@ -100,7 +101,10 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
           role="tree"
           tabIndex="0"
         >
-          <span className={f('more-icon-container')}>
+          <span
+            className={f('more-icon-container')}
+            ref={node => (this._dotdotdot = node)}
+          >
             <img src={dotsvg} width="30px" alt="view all menu items" />
           </span>
 

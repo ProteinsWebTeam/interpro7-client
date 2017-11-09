@@ -19,6 +19,7 @@
   padding: 0.66rem; /*not 0.7 for firefox*/
   position: relative;
   display: flex;
+  align-items: center;
   overflow: hidden;
 
   &::before,
