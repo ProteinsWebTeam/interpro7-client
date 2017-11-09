@@ -12,6 +12,9 @@ class TextSearchBox extends Component {
     className: T.string,
     toSubmit: T.bool,
     goToNewLocation: T.func,
+    search: T.shape({
+      search: T.string,
+    }),
   };
 
   constructor(props) {
@@ -24,7 +27,6 @@ class TextSearchBox extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps, this.props);
     const { value = '', toSubmit = false } = nextProps;
     if (this.props.value === value && this.props.toSubmit === toSubmit) return;
     this.setState({ value });
