@@ -1,0 +1,19 @@
+ul.chevron {
+  margin-left: 0;
+}
+
+ul.chevron li {
+  list-style: none;
+}
+
+ul.chevron > li:before {
+  content: '';
+  display: inline-block;
+  height: 0.8em;
+  background-size: contain;
+  background-position: center;
+  background-image: url(../../../images/chevron.svg);
+  background-repeat: no-repeat;
+  padding-left: 1em;
+  position: relative;
+}

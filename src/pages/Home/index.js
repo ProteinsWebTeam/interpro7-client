@@ -470,25 +470,34 @@ const Home = () => (
             textBlocks={[description]}
           />
         </div>
-        <fieldset className={f('fieldset')}>
-          <legend>Search InterPro</legend>
-          <Tabs>
-            <div title="by text">
-              <SearchByText />
-            </div>
-            <div title="by sequence">
-              <IPScanSearch />
-            </div>
-          </Tabs>
-        </fieldset>
+      </div>
+    </div>
+    <div className={f('row')}>
+      <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
+        <Tabs>
+          <div title="Search by text">
+            <SearchByText />
+          </div>
+          <div title="by sequence">
+            <IPScanSearch />
+          </div>
+        </Tabs>
       </div>
     </div>
     {
       // Browse entry & entry list
     }
-    <div className={f('row', 'small-up-1', 'medium-up-1', 'large-up-2')}>
+    <div
+      className={f(
+        'row',
+        'small-up-1',
+        'medium-up-1',
+        'large-up-2',
+        'margin-bottom-large',
+      )}
+    >
       <div className={f('columns', 'browse-by')}>
-        <div className={f('callout')} data-equalizer-watch>
+        <div className={f('callout-box')}>
           <MaskSvgIcons />
 
           <Tabs>
@@ -512,7 +521,7 @@ const Home = () => (
         {
           // Browse by latest entries or most popular
         }
-        <div className={f('callout')} data-equalizer-watch>
+        <div className={f('callout-box')}>
           <Tabs>
             <div title="Latest entries">
               <ByLatestEntries />
@@ -542,12 +551,9 @@ const Home = () => (
     {
       // end Browse entry & entry list
     }
-    <div
-      className={f('row', 'small-up-1', 'medium-up-1', 'large-up-2')}
-      data-equalizer
-    >
+    <div className={f('row', 'small-up-1', 'medium-up-1', 'large-up-2')}>
       <div className={f('columns', 'publication-list')}>
-        <div className={f('callout')} data-equalizer-watch>
+        <div className={f('callout')}>
           <h5>Publications </h5>
           <Link href="http://nar.oxfordjournals.org/content/43/D1/D213">
             <div className={f('media-object')}>
@@ -622,7 +628,7 @@ const Home = () => (
         {
           // Tools
         }
-        <div className={f('callout')} data-equalizer-watch>
+        <div className={f('callout')}>
           <h5>Tools </h5>
 
           <div className={f('row')}>

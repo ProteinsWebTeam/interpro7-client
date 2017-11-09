@@ -9,6 +9,10 @@ import description2path from 'utils/processLocation/description2path';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 
+import { foundationPartial } from 'styles/foundation';
+
+const f = foundationPartial();
+
 const getUrlFor = createSelector(
   // this one only to memoize it
   db => db,
@@ -29,10 +33,10 @@ const getUrlFor = createSelector(
         }
         // build URL
         return `${protocol}//${hostname}:${port}${root}${description2path(
-          _description
+          _description,
         )}?${qsStringify(search)}`.replace(/\?$/, '');
-      }
-    )
+      },
+    ),
 );
 const formatStructureInfoObj = obj => {
   const out = [];
@@ -97,12 +101,16 @@ class _StructureOnProtein extends Component {
   render() {
     const { structures, dataInterPro, dataStructureInfo, protein } = this.props;
     if (dataInterPro.loading || dataStructureInfo.loading) {
-      return <div>Loading…</div>;
+      return (
+        <div className={f('row')}>
+          <div className={f('columns')}>Loading… </div>
+        </div>
+      );
     }
     const mergedData = mergeData(
       dataInterPro.payload.entries,
       structures,
-      dataStructureInfo.payload
+      dataStructureInfo.payload,
     );
     return (
       <div>
@@ -118,7 +126,7 @@ const StructureOnProtein = ['InterPro', 'StructureInfo'].reduce(
       getUrl: getUrlFor(db),
       propNamespace: db,
     })(Index),
-  _StructureOnProtein
+  _StructureOnProtein,
 );
 
 export default StructureOnProtein;

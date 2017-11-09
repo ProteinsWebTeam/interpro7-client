@@ -10,7 +10,9 @@ import description2path from 'utils/processLocation/description2path';
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 
 import { foundationPartial } from 'styles/foundation';
+
 import ipro from 'styles/interpro-new.css';
+
 const f = foundationPartial(ipro);
 
 const getUrlFor = createSelector(
@@ -144,7 +146,11 @@ class DomainOnProteinWithoutData extends Component {
       dataUnintegrated,
     } = this.props;
     if (dataInterPro.loading || dataIntegrated.loading) {
-      return <div>Loading…</div>;
+      return (
+        <div className={f('row')}>
+          <div className={f('columns')}>Loading… </div>
+        </div>
+      );
     }
     const mergedData = mergeData(
       'payload' in dataInterPro ? dataInterPro.payload.entries : [],
