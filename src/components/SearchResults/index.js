@@ -122,12 +122,15 @@ class SearchResults extends PureComponent {
             <div>
               {d.description[0]
                 .slice(0, MAX_LENGTH)
-                .split(new RegExp(search.search, 'i'))
-                .reduce((acc, e) => {
-                  acc.push(e, <mark>{search.search}</mark>);
-                  return acc;
-                }, [])
-                .slice(0, LAST_INDEX)}…
+                .split(new RegExp(`(${search.search})`, 'i'))
+                .map(
+                  e =>
+                    e.toLowerCase() === search.search.toLowerCase() ? (
+                      <mark>{e}</mark>
+                    ) : (
+                      <span>{e}</span>
+                    ),
+                )}…
             </div>
           )}
           cellStyle={{ textAlign: 'justify' }}

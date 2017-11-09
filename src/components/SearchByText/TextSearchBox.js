@@ -5,6 +5,9 @@ import { createSelector } from 'reselect';
 
 import { goToNewLocation } from 'actions/creators';
 
+const MAX_PAD = 6;
+const pad = n => (n.length < MAX_PAD ? pad(`0${n}`) : n);
+
 class TextSearchBox extends Component {
   static propTypes = {
     pageSize: T.number,
@@ -40,7 +43,13 @@ class TextSearchBox extends Component {
       page_size: pageSize,
     };
     const { value: search } = this.state;
-    if (search) query.search = search;
+    if (search) {
+      if (isNaN(Number(search))) {
+        query.search = search;
+      } else {
+        query.search = `IPR${pad(search)}`;
+      }
+    }
     // this.setState({redirecting: {pathname, query}});
     this.props.goToNewLocation({
       description: {
