@@ -37,7 +37,7 @@ import f from 'styles/foundation';
 */
 
 class SummaryEntry extends PureComponent /*:: <Props> */ {
-  static propTypes = {
+  propTypes = {
     goToNewLocation: T.func.isRequired,
     data: T.shape({
       metadata: T.object.isRequired,
@@ -66,7 +66,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   hierarchy={metadata.hierarchy}
                 />
               )}
-              {// doesn't work for some HAMAP as they have empty <p> tag
+              {// doesn't work for some HAMAP as they have enpty <P> tag
               Object.keys(metadata.description).length > 0 && (
                 <Description
                   textBlocks={metadata.description}
@@ -76,14 +76,14 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>
               {metadata.integrated && (
-                <div className={f('panel')}>
-                  <Integration intr={metadata.integrated} />
-                </div>
+                <Integration intr={metadata.integrated} />
               )}
               {metadata.integrated && (
-                <div className={f('panel')}>
+                <div>
                   <h5>External links</h5>
-                  {/* TODO implement right MD ext link */}
+                  {
+                    // TODO implement right MD ext link
+                  }
                   <Link
                     className={f('ext')}
                     newTo={{
@@ -96,9 +96,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
               )}
               {metadata.member_databases &&
                 Object.keys(metadata.member_databases).length > 0 && (
-                  <div className={f('panel')}>
-                    <ContributingSignatures contr={metadata.member_databases} />
-                  </div>
+                  <ContributingSignatures contr={metadata.member_databases} />
                 )}
             </div>
           </div>

@@ -7,8 +7,9 @@ import loadable from 'higherOrder/loadable';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
+import local from './style.css';
 
-const f = foundationPartial(ipro);
+const f = foundationPartial(ipro, local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),

@@ -78,44 +78,42 @@ class Wrapper extends PureComponent {
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
-          <fieldset className={f('fieldset')}>
-            <legend>Search InterPro</legend>
-            <ul className={f('tabs')}>
-              <li
-                className={f('tabs-title')}
-                onMouseOver={SearchByText.preload}
-                onFocus={SearchByText.preload}
+          <h3>Search InterPro</h3>
+          <ul className={f('tabs', 'main-style', 'margin-top-large')}>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={SearchByText.preload}
+              onFocus={SearchByText.preload}
+            >
+              <Link
+                newTo={{
+                  description: { mainType: 'search', mainDB: 'text' },
+                }}
+                activeClass={f('is-active', 'is-active-tab')}
               >
-                <Link
-                  newTo={{
-                    description: { mainType: 'search', mainDB: 'text' },
-                  }}
-                  activeClass={f('is-active', 'is-active-tab')}
-                >
-                  by text
-                </Link>
-              </li>
-              <li
-                className={f('tabs-title')}
-                onMouseOver={IPScanSearchAndStatus.preload}
-                onFocus={IPScanSearchAndStatus.preload}
+                by text
+              </Link>
+            </li>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={IPScanSearchAndStatus.preload}
+              onFocus={IPScanSearchAndStatus.preload}
+            >
+              <Link
+                newTo={{
+                  description: { mainType: 'search', mainDB: 'sequence' },
+                }}
+                activeClass={f('is-active', 'is-active-tab')}
               >
-                <Link
-                  newTo={{
-                    description: { mainType: 'search', mainDB: 'sequence' },
-                  }}
-                  activeClass={f('is-active', 'is-active-tab')}
-                >
-                  by sequence
-                </Link>
-              </li>
-            </ul>
-            <div className={f('tabs', 'tabs-content')}>
-              <div className={f('tabs-panel', 'is-active')}>
-                <ErrorBoundary>{this.props.children}</ErrorBoundary>
-              </div>
+                by sequence
+              </Link>
+            </li>
+          </ul>
+          <div className={f('tabs', 'tabs-content')}>
+            <div className={f('tabs-panel', 'is-active')}>
+              <ErrorBoundary>{this.props.children}</ErrorBoundary>
             </div>
-          </fieldset>
+          </div>
         </div>
       </div>
     );

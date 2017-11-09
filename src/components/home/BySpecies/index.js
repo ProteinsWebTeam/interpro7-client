@@ -26,7 +26,7 @@ const getCountString = (
   payload /*: ?Object */,
   loading /*: boolean */,
   taxId /*: number */,
-  type /*: string */
+  type /*: string */,
 ) => {
   if (loading || !payload) return `… ${toPlural(type)}`;
   const count = payload[taxId];
@@ -78,7 +78,7 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                 'small-3',
                 'medium-2',
                 'large-4',
-                'text-center'
+                'text-center',
               )}
               key={e.tax_id || 'unclassified'}
             >
@@ -146,7 +146,7 @@ const mapStateToUrl = endpoint =>
         port,
         pathname: `${root}/${endpoint}`,
         query: { group_by: 'tax_id' },
-      })
+      }),
   );
 
 export default loadData({
