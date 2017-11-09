@@ -147,10 +147,9 @@ handlers.setAccessionHandler.children = new Set([
 
 handlers.setDBHandler.children = new Set([
   handlers.setAccessionHandler,
+  handlers.entryHandler,
 ]);
-handlers.setHandler.children = new Set([
-  handlers.setDBHandler,
-]);
+handlers.setHandler.children = new Set([handlers.setDBHandler]);
 handlers.rootHandler.children = new Set([
   handlers.entryHandler,
   handlers.proteinHandler,

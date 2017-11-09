@@ -83,7 +83,11 @@ const memberDB = new Set([
 const interPro = { name: 'interpro', re: /IPR[0-9]{6}/i, type: 'entry' };
 
 export const setDB /*: Set<Object> */ = new Set([
-  { name: 'pfam', re: 'CL[0-9]{4}', url_template: 'http://pfam.xfam.org/clan/{id}' },
+  {
+    name: 'pfam',
+    re: /CL[0-9]{4}/,
+    url_template: 'http://pfam.xfam.org/clan/{id}',
+  },
 ]);
 
 export const mainDetailHandler /*: Handler */ = Object.create(handler, {
@@ -106,9 +110,9 @@ export const memberDBAccessionHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
-      return `${position}${description[`${position}Accession`]
-        ? 'MemberDB'
-        : ''}Accession`;
+      return `${position}${
+        description[`${position}Accession`] ? 'MemberDB' : ''
+      }Accession`;
     },
   },
   cleanUp: {
@@ -130,9 +134,9 @@ export const memberDBHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
-      return `${position}${description[`${position}Accession`]
-        ? 'Member'
-        : ''}DB`;
+      return `${position}${
+        description[`${position}Accession`] ? 'Member' : ''
+      }DB`;
     },
   },
   match: {
@@ -268,9 +272,9 @@ export const proteomeAccessionHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
-      return `${position}${description[`${position}Accession`]
-        ? 'MemberDB'
-        : ''}Accession`;
+      return `${position}${
+        description[`${position}Accession`] ? 'MemberDB' : ''
+      }Accession`;
     },
   },
   cleanUp: {
@@ -289,9 +293,9 @@ export const proteomeHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
-      return `${position}${description[`${position}Accession`]
-        ? 'Member'
-        : ''}DB`;
+      return `${position}${
+        description[`${position}Accession`] ? 'Member' : ''
+      }DB`;
     },
   },
   match: {
@@ -419,7 +423,7 @@ export const setAccessionHandler /*: Handler */ = Object.create(handler, {
   match: {
     value: (current /*: string */, _description /*: Description */) => {
       for (const { re } of setDB) {
-        if (new RegExp(re, 'i').test(current)) return true;
+        if (re.test(current)) return true;
       }
     },
   },
@@ -433,11 +437,7 @@ export const setDBHandler /*: Handler */ = Object.create(handler, {
     value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
   },
   match: {
-    value: (current /*: string */, _description /*: Description */) => {
-      for (const { name } of setDB) {
-        if (name === current) return true;
-      }
-    },
+    value: (current /*: string */) => /^all$/i.test(current),
   },
 });
 

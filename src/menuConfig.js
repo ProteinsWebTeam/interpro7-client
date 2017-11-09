@@ -116,11 +116,21 @@ export const entities /*: Array<Object> */ = [
     name: 'Organism',
   },
   {
-    newTo: {
-      description: {
-        mainType: 'set',
-        mainDB: 'pfam',
-      },
+    newTo(location) {
+      let { focusType, focusDB } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
+      return {
+        ...location,
+        description: {
+          mainType: 'set',
+          mainDB: 'all',
+          focusType,
+          focusDB,
+        },
+      };
     },
     name: 'Set',
   },
