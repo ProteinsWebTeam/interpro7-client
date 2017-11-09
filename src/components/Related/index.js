@@ -263,7 +263,7 @@ const getReversedUrl = createSelector(
     let url = `${protocol}//${hostname}:${port}${root}${description2path(
       newDesc,
     )}?${qsStringify(s)}`;
-    if (!url.includes('protein')) {
+    if (url.includes('organism')) {
       url = url.replace('/entry/', '/protein/entry/');
     }
     return url;
