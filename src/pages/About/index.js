@@ -7,6 +7,8 @@ import { pkg } from 'config';
 import info from './info';
 import DiskUsage from './disk-usage';
 
+import MemberSymbol from 'components/Entry/MemberSymbol';
+
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
@@ -14,7 +16,27 @@ import entry from '../../components/Entry/Literature/style.css';
 const f = foundationPartial(styles, entry);
 // remove last “.git”
 const url = pkg.repository.url.replace('.git', '');
-
+const MaskSvgIcons = () => (
+  <svg
+    viewBox="0 0 200 200"
+    style={{
+      position: 'fixed',
+      width: 0,
+      height: 0,
+      top: -1800,
+      left: -1800,
+    }}
+  >
+    <defs>
+      <clipPath id="cut-off-center">
+        <rect x="33%" y="38%" width="68" height="68" />
+      </clipPath>
+      <clipPath id="cut-off-bottom">
+        <polygon points="0,68 68,0 68,68" />
+      </clipPath>
+    </defs>
+  </svg>
+);
 const DeveloperInfo = () => (
   <div>
     <h5>Developer information</h5>
@@ -70,6 +92,9 @@ export default class About extends PureComponent /*:: <{}> */ {
 
               <ul className={f('list')}>
                 <li>
+                  {' '}
+                  <MaskSvgIcons />
+                  <MemberSymbol type="cath" className={f('md-small')} />
                   <strong>CATH-Gene3D</strong> database describes protein
                   families and domain architectures in complete genomes. Protein
                   families are formed using a Markov clustering algorithm,
@@ -80,6 +105,7 @@ export default class About extends PureComponent /*:: <{}> */ {
                   University College, London, UK.
                 </li>
                 <li>
+                  <MemberSymbol type="cdd" className={f('md-small')} />
                   <strong>CDD</strong> is a protein annotation resource that
                   consists of a collection of annotated multiple sequence
                   alignment models for ancient domains and full-length proteins.
@@ -93,6 +119,7 @@ export default class About extends PureComponent /*:: <{}> */ {
                   databases.
                 </li>
                 <li>
+                  <MemberSymbol type="mobidb" className={f('md-small')} />
                   <strong>MobiDB</strong> offers a centralized resource for
                   annotations of intrinsic protein disorder. The database
                   features three levels of annotation: manually curated,
@@ -103,6 +130,7 @@ export default class About extends PureComponent /*:: <{}> */ {
                   given protein of interest.
                 </li>
                 <li>
+                  <MemberSymbol type="hamap" className={f('md-small')} />
                   <strong>HAMAP</strong> stands for High-quality Automated and
                   Manual Annotation of Proteins. HAMAP profiles are manually
                   created by expert curators. They identify proteins that are
@@ -111,6 +139,7 @@ export default class About extends PureComponent /*:: <{}> */ {
                   Switzerland.
                 </li>
                 <li>
+                  <MemberSymbol type="panther" className={f('md-small')} />
                   <strong>PANTHER</strong> is a large collection of protein
                   families that have been subdivided into functionally related
                   subfamilies, using human expertise. These subfamilies model
@@ -123,6 +152,7 @@ export default class About extends PureComponent /*:: <{}> */ {
                   US.
                 </li>
                 <li>
+                  <MemberSymbol type="pirsf" className={f('md-small')} />
                   <strong>PIRSF</strong> protein classification system is a
                   network with multiple levels of sequence diversity from
                   superfamilies to subfamilies that reflects the evolutionary
@@ -131,12 +161,14 @@ export default class About extends PureComponent /*:: <{}> */ {
                   University Medical Centre, Washington DC, US.
                 </li>
                 <li>
+                  <MemberSymbol type="prints" className={f('md-small')} />
                   <strong>PRINTS</strong> is a compendium of protein
                   fingerprints. A fingerprint is a group of conserved motifs
                   used to characterise a protein family or domain. PRINTS is
                   based at the University of Manchester, UK.
                 </li>
                 <li>
+                  <MemberSymbol type="prodom" className={f('md-small')} />
                   <strong>ProDom</strong> protein domain database consists of an
                   automatic compilation of homologous domains. Current versions
                   of ProDom are built using a novel procedure based on recursive
@@ -144,6 +176,7 @@ export default class About extends PureComponent /*:: <{}> */ {
                   France.
                 </li>
                 <li>
+                  <MemberSymbol type="prosite" className={f('md-small')} />
                   <strong>PROSITE</strong> is a database of protein families and
                   domains. It consists of biologically significant sites,
                   patterns and profiles that help to reliably identify to which
@@ -152,17 +185,20 @@ export default class About extends PureComponent /*:: <{}> */ {
                   Switzerland.
                 </li>
                 <li>
+                  <MemberSymbol type="sfld" className={f('md-small')} />
                   <strong>SFLD</strong> (Structure-Function Linkage Database) is
                   a hierarchical classification of enzymes that relates specific
                   sequence-structure features to specific chemical capabilities.
                 </li>
                 <li>
+                  <MemberSymbol type="smart" className={f('md-small')} />
                   <strong>SMART</strong> (a Simple Modular Architecture Research
                   Tool) allows the identification and annotation of genetically
                   mobile domains and the analysis of domain architectures. SMART
                   is based at at EMBL, Heidelberg, Germany.
                 </li>
                 <li>
+                  <MemberSymbol type="ssf" className={f('md-small')} />
                   <strong>SUPERFAMILY</strong> is a library of profile hidden
                   Markov models that represent all proteins of known structure.
                   The library is based on the SCOP classification of proteins:
@@ -171,6 +207,7 @@ export default class About extends PureComponent /*:: <{}> */ {
                   SUPERFAMILY is based at the University of Bristol, UK.
                 </li>
                 <li>
+                  <MemberSymbol type="tigrfams" className={f('md-small')} />
                   <strong>TIGRFAMs</strong> is a collection of protein families,
                   featuring curated multiple sequence alignments, hidden Markov
                   models (HMMs) and annotation, which provides a tool for
