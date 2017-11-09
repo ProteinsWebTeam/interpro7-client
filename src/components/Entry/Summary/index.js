@@ -37,7 +37,7 @@ import f from 'styles/foundation';
 */
 
 class SummaryEntry extends PureComponent /*:: <Props> */ {
-  propTypes = {
+  static propTypes = {
     goToNewLocation: T.func.isRequired,
     data: T.shape({
       metadata: T.object.isRequired,
