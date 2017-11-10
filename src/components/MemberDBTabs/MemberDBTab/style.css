@@ -143,6 +143,7 @@
 
 .db-label {
   text-transform: capitalize;
+  flex: 1;
 }
 
 .number-label {

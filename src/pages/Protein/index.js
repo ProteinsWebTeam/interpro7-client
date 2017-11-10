@@ -214,13 +214,9 @@ class List extends PureComponent {
             <Column dataKey="source_organism.fullname">Species</Column>
             <Column
               dataKey="length"
+              className={f('text-right')}
               renderer={(length /*: number */) => (
-                <div
-                  title={`${length} amino acids`}
-                  className={f('visu-length')}
-                >
-                  {length}
-                </div>
+                <div title={`${length} amino acids`}>{length}</div>
               )}
             >
               Length
@@ -330,7 +326,8 @@ class Summary extends PureComponent {
           <Switch
             {...this.props}
             locationSelector={l =>
-              l.description.mainDetail || l.description.focusType}
+              l.description.mainDetail || l.description.focusType
+            }
             indexRoute={SummaryComponent}
             childRoutes={subPagesForProtein}
           />
@@ -347,7 +344,8 @@ const InnerSwitch = props => (
     <Switch
       {...props}
       locationSelector={l =>
-        l.description.mainAccession || l.description.focusType}
+        l.description.mainAccession || l.description.focusType
+      }
       indexRoute={List}
       childRoutes={[{ value: acc, component: Summary }]}
       catchAll={List}
