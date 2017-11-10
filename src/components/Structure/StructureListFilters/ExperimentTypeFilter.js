@@ -41,7 +41,11 @@ class ExperimentTypeFilter extends Component {
   };
 
   render() {
-    const { data: { loading, payload }, location: { search } } = this.props;
+    const {
+      data: { loading, payload },
+      location: { description, search },
+    } = this.props;
+    if (description.focusType) return <div>Not available.</div>;
     const types = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,
     );
