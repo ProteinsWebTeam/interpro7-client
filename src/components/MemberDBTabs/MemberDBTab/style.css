@@ -41,6 +41,11 @@
     width: 130%;
   }
 
+  &.special::after {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+  }
+
   &:hover::before {
     transform: translateX(calc(100% - 1ch));
   }

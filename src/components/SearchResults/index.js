@@ -29,7 +29,6 @@ class SearchResults extends PureComponent {
 
   render() {
     const { data: { payload, loading }, search, dataUrl } = this.props;
-    const LAST_INDEX = -1;
     if (loading) return <div>Loading…</div>;
     if (!payload) {
       return <div />;

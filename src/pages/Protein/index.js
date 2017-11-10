@@ -27,6 +27,7 @@ import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
+
 const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 // const SVG_WIDTH = 100;
@@ -199,20 +200,18 @@ class List extends PureComponent {
             </Column>
             <Column
               dataKey="source_database"
+              className={f('table-center')}
               renderer={(db /*: string */) => (
-                <div
-                  className={f('table-center')}
+                <span
+                  key="1"
+                  className={f('icon', 'icon-functional')}
+                  data-icon={db === 'reviewed' ? '/' : ''}
                   title={
                     db === 'reviewed'
                       ? `${db} by curators (Swiss-Prot)`
                       : 'Not reviewed by curators (TrEMBL)'
                   }
-                >
-                  <span
-                    className={f('icon', 'icon-functional')}
-                    data-icon={db === 'reviewed' ? '/' : ''}
-                  />
-                </div>
+                />
               )}
             >
               Reviewed
