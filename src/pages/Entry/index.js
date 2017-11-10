@@ -192,7 +192,12 @@ class List extends Component {
                     data={data}
                     processData={schemaProcessDataTableRow}
                   />
-                  <span className={f('acc-row')}>{accession}</span>
+                  <span className={f('acc-row')}>
+                    <HighligtedText
+                      text={accession}
+                      textToHighlight={search.search}
+                    />
+                  </span>
                 </Link>
               )}
             >

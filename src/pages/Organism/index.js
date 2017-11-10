@@ -129,7 +129,10 @@ class List extends PureComponent {
                     },
                   })}
                 >
-                  {accession}
+                  <HighligtedText
+                    text={accession}
+                    textToHighlight={search.search}
+                  />
                 </Link>
               )}
             >

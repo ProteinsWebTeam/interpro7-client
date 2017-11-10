@@ -123,7 +123,6 @@ export const entities /*: Array<Object> */ = [
         focusDB = location.description.mainDB;
       }
       return {
-        ...location,
         description: {
           mainType: 'set',
           mainDB: 'all',
