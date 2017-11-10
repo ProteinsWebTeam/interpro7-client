@@ -17,6 +17,8 @@ import TaxonomyVisualisation from 'taxonomy-visualisation';
 import { foundationPartial } from 'styles/foundation';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import { getUrlForApi } from 'higherOrder/loadData/defaults';
+import loadData from 'higherOrder/loadData';
 
 const f = foundationPartial(ebiStyles);
 
@@ -35,7 +37,10 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   */
   static propTypes = {
     data: T.shape({
-      metadata: T.object.isRequired,
+      payload: T.shape({
+        metadata: T.object.isRequired,
+        names: T.object,
+      }).isRequired,
     }).isRequired,
     goToNewLocation: T.func.isRequired,
   };
@@ -51,12 +56,12 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   componentDidMount() {
     this._vis.tree = this._tree;
     this._vis.focus = this._focus;
-    this._populateData(this.props.data.metadata);
+    this._populateData(this.props.data.payload);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data !== this.props.data) {
-      this._populateData(nextProps.data.metadata);
+      this._populateData(nextProps.data.payload);
     }
   }
 
@@ -70,13 +75,13 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     });
   };
 
-  _populateData = data => {
+  _populateData = ({ metadata: data, names }) => {
     const lineage = data.lineage.trim().split(/\s+/);
     let root;
     let currentNode;
     for (const node of lineage) {
       const newNode = {
-        name: node,
+        name: names[node].short,
         id: node,
       };
       if (currentNode) {
@@ -88,22 +93,26 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     }
     currentNode.name = data.name.short || data.name.name || data.accession;
     if (data.children) {
-      currentNode.children = data.children.map(id => ({ name: id, id }));
+      currentNode.children = data.children.map(id => ({
+        name: names[id].short,
+        id,
+      }));
     }
     this._vis.data = root;
     this._vis.focusNodeWithID(`${data.accession}`);
   };
 
   render() {
-    const { data: { metadata } } = this.props;
+    // const { data: { metadata } } = this.props;
+    const { metadata, names } = this.props.data.payload;
     return (
       <div className={f('row')}>
         <div className={f('medium-12', 'columns')}>
           <Title metadata={metadata} mainType={'organism'} />
           <Accession accession={metadata.accession} id={metadata.id} />
           {metadata.rank && <div>Rank: {metadata.rank}</div>}
-          <Lineage lineage={metadata.lineage} />
-          <Children taxChildren={metadata.children} />
+          <Lineage lineage={metadata.lineage} names={names} />
+          <Children taxChildren={metadata.children} names={names} />
           <div
             style={{
               width: '100%',
@@ -178,20 +187,22 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
 class SummaryOrganism extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
-      metadata: T.object.isRequired,
+      payload: T.shape({
+        metadata: T.object.isRequired,
+      }),
     }).isRequired,
     loading: T.bool.isRequired,
   };
 
   render() {
-    if (this.props.loading || !this.props.data || !this.props.data.metadata) {
+    if (this.props.loading || !this.props.data || !this.props.data.payload) {
       return (
         <div className={f('row')}>
           <div className={f('columns')}>Loading…</div>
         </div>
       );
     }
-    const { data: { metadata: { source_database: db } } } = this.props;
+    const { metadata: { source_database: db } } = this.props.data.payload;
     return (
       <div className={f('sections')}>
         {db === 'taxonomy' ? <SummaryTaxonomy {...this.props} /> : null}
@@ -200,4 +211,6 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
     );
   }
 }
-export default connect(null, { goToNewLocation })(SummaryOrganism);
+export default loadData((...args) => `${getUrlForApi(...args)}?with_names`)(
+  connect(null, { goToNewLocation })(SummaryOrganism),
+);
