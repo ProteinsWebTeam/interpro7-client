@@ -84,16 +84,16 @@ export const HighligtedText = ({ text, textToHighlight = '' }) => (
     {text
       .split(new RegExp(`(${textToHighlight})`, 'i'))
       .map(
-        e =>
+        (e, i) =>
           e.toLowerCase() === textToHighlight.toLowerCase() ? (
-            <mark>{e}</mark>
+            <mark key={i}>{e}</mark>
           ) : (
-            <span>{e}</span>
+            <span key={i}>{e}</span>
           ),
       )}
   </span>
 );
 HighligtedText.propTypes = {
   text: T.string.isRequired,
-  textToHighlight: T.string.isRequired,
+  textToHighlight: T.string,
 };

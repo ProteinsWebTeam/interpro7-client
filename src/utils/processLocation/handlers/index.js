@@ -110,9 +110,9 @@ export const memberDBAccessionHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
-      return `${position}${
-        description[`${position}Accession`] ? 'MemberDB' : ''
-      }Accession`;
+      return `${position}${description[`${position}Accession`]
+        ? 'MemberDB'
+        : ''}Accession`;
     },
   },
   cleanUp: {
@@ -134,9 +134,9 @@ export const memberDBHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
-      return `${position}${
-        description[`${position}Accession`] ? 'Member' : ''
-      }DB`;
+      return `${position}${description[`${position}Accession`]
+        ? 'Member'
+        : ''}DB`;
     },
   },
   match: {
@@ -272,9 +272,9 @@ export const proteomeAccessionHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
-      return `${position}${
-        description[`${position}Accession`] ? 'MemberDB' : ''
-      }Accession`;
+      return `${position}${description[`${position}Accession`]
+        ? 'MemberDB'
+        : ''}Accession`;
     },
   },
   cleanUp: {
@@ -293,9 +293,9 @@ export const proteomeHandler /*: Handler */ = Object.create(handler, {
   getKey: {
     value: (description /*: Description */) => {
       const position = description.focusType ? 'focus' : 'main';
-      return `${position}${
-        description[`${position}Accession`] ? 'Member' : ''
-      }DB`;
+      return `${position}${description[`${position}Accession`]
+        ? 'Member'
+        : ''}DB`;
     },
   },
   match: {
@@ -437,7 +437,13 @@ export const setDBHandler /*: Handler */ = Object.create(handler, {
     value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
   },
   match: {
-    value: (current /*: string */) => /^all$/i.test(current),
+    value: (current /*: string */) =>
+      new RegExp(
+        Array.of(setDB)
+          .map(db => db.name)
+          .join('|') + '|all',
+        'i',
+      ).test(current),
   },
 });
 

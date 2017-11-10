@@ -136,13 +136,13 @@ class List extends PureComponent {
             </SearchBox>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */) => (
+              renderer={(accession /*: string */, { source_database }) => (
                 <Link
                   newTo={location => ({
                     ...location,
                     description: {
                       mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
+                      mainDB: source_database,
                       mainAccession: accession,
                     },
                   })}
@@ -297,7 +297,7 @@ class Summary extends PureComponent {
 
 const dbAccs = new RegExp(
   Array.from(setDB)
-    .map(db => db.re)
+    .map(db => db.re.source)
     .filter(db => db)
     .join('|'),
   'i',

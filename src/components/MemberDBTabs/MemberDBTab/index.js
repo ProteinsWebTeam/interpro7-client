@@ -55,6 +55,7 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
         ...restOfLocation,
         description: {
           ...description,
+          // mainDB: description.description.mainType ==
         },
       };
       if (description.mainType === 'entry') {
