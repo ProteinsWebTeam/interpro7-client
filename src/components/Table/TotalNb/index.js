@@ -30,7 +30,8 @@ const TotalNb = ({
     const plural = actualSize > 1 ? toPlural(type) : type;
     textLabel = (
       <span>
-        {index} - {index + data.length - 1} of <strong>{actualSize}</strong>{' '}
+        {index} - {index + data.length - 1} of{' '}
+        <strong>{actualSize.toLocaleString()}</strong>{' '}
         {db === 'proteome' ? 'proteomes' : plural}
         {db !== 'reviewed' &&
         db !== 'UniProt' &&

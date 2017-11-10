@@ -72,7 +72,7 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
         <Link
           newTo={newTo}
           activeClass={f('is-active', 'is-active-tab')}
-          style={{ color: colors.get(cleanName) }}
+          style={{ color: colors.get(cleanName) || '#6e818a' }}
         >
           <span className={f('db-label')}>
             {children}
@@ -86,8 +86,9 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
             title={
               count === null
                 ? null
-                : `${count} ${toPlural(mainType, count)} found`
+                : `${count.toLocaleString()} ${toPlural(mainType, count)} found`
             }
+            abbr={true}
           />
         </Link>
       </li>

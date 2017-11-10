@@ -3,6 +3,7 @@ import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import NumberLabel from 'components/NumberLabel';
 import MemberDBTabs from 'components/MemberDBTabs';
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
@@ -219,13 +220,12 @@ class List extends PureComponent {
             <Column dataKey="source_organism.fullname">Species</Column>
             <Column
               dataKey="length"
+              className={f('text-right')}
               renderer={(length /*: number */) => (
-                <div
-                  title={`${length} amino acids`}
-                  className={f('visu-length')}
-                >
-                  {length}
-                </div>
+                <NumberLabel
+                  value={length}
+                  title={`${length.toLocaleString()} amino acids`}
+                />
               )}
             >
               Length
@@ -335,7 +335,8 @@ class Summary extends PureComponent {
           <Switch
             {...this.props}
             locationSelector={l =>
-              l.description.mainDetail || l.description.focusType}
+              l.description.mainDetail || l.description.focusType
+            }
             indexRoute={SummaryComponent}
             childRoutes={subPagesForProtein}
           />
@@ -352,7 +353,8 @@ const InnerSwitch = props => (
     <Switch
       {...props}
       locationSelector={l =>
-        l.description.mainAccession || l.description.focusType}
+        l.description.mainAccession || l.description.focusType
+      }
       indexRoute={List}
       childRoutes={[{ value: acc, component: Summary }]}
       catchAll={List}
