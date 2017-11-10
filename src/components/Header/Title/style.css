@@ -52,6 +52,10 @@
   transition: transform var(--timing-fast) ease-in-out;
 }
 
+.stuck .logo-text {
+  font-size: 2.5rem; /*keep min size for logo on small screens when stuck*/
+}
+
 .domain.loading {
   animation-duration: var(--timing-really-slow);
   animation-timing-function: linear;
