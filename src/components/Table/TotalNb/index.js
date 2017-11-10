@@ -11,10 +11,7 @@ const TotalNb = ({
   data,
   actualSize,
   pagination,
-  mainType,
-  mainDB,
-  focusType,
-  focusDB,
+  description: { mainAccession, mainType, mainDB, focusType, focusDB },
 }) => {
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
@@ -25,7 +22,7 @@ const TotalNb = ({
   // const lastPage = Math.ceil(actualSize / pageSize) || 1;
   let textLabel = '';
   if (actualSize) {
-    const type = focusType || mainType;
+    const type = mainAccession ? focusType : mainType;
     const db = focusDB || mainDB;
     const plural = actualSize > 1 ? toPlural(type) : type;
     textLabel = (
@@ -53,22 +50,15 @@ TotalNb.propTypes = {
   actualSize: T.number,
   pagination: T.object.isRequired,
   notFound: T.bool,
-  mainDB: T.string.isRequired,
-  mainType: T.string.isRequired,
-  focusDB: T.string,
+  // mainDB: T.string.isRequired,
+  // mainType: T.string.isRequired,
+  // focusDB: T.string,
   className: T.string,
-  focusType: T.string,
+  // focusType: T.string,
+  description: T.object,
 };
 const mapStateToProps = createSelector(
-  state => state.newLocation.description.mainDB,
-  state => state.newLocation.description.mainType,
-  state => state.newLocation.description.focusDB,
-  state => state.newLocation.description.focusType,
-  (mainDB, mainType, focusDB, focusType) => ({
-    mainDB,
-    mainType,
-    focusDB,
-    focusType,
-  }),
+  state => state.newLocation.description,
+  description => ({ description }),
 );
 export default connect(mapStateToProps)(TotalNb);
