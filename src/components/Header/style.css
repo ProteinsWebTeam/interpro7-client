@@ -19,7 +19,6 @@
   /* top: -150px;*/ /*!* -34px (EBI header); *!*/
   left: 0;
   right: 0;
-  /*height: 238px;*/ /*magic --- SP for what use ?*/
   z-index: 3;
 }
 .masthead {
@@ -121,7 +120,7 @@
   transition-timing-function: ease-in-out;
 }
 .top_level_hamburger.stuck {
-  transform: translateY(220%) Scale(0.9);
+  transform: translateY(220%) Scale(0.8);
 }
 
 .hamb_line {
@@ -249,82 +248,65 @@
 .side-search {
   display: flex;
   font-size: 1.3rem;
-  transform: translate(0, 0);
+  transform: translate(0, 0); /*transition move zoom icon when stuck*/
   transition-duration: var(--timing-fast);
   transition-timing-function: ease-in-out;
 }
 
 .side-search.stuck {
-  transform: translate(-20%, 84%);
+  transform: translate(-40px, 41px);
   transition-delay: 0s;
 }
 .side-search.stuck svg {
   transform: Scale(0.9);
 }
 .side-search.stuck svg:hover,
-.side-search.stuck > input:hover ~ a svg {
+.side-search.stuck > div:hover ~ a div svg {
   transform: rotate(90deg) Scale(0.9);
-}
+} /*keep the zoom icon same size when rotating and stuck*/
 
 .side-search svg {
   transition-timing-function: ease-in-out;
   transition-duration: var(--timing-fast);
 }
+
 .side-search svg:hover {
-  transition-timing-function: ease-in-out;
-  transition-duration: var(--timing-fast);
   transform: rotate(90deg);
 }
 
-.side-search > input {
-  margin: 0.25rem;
+.side-search input {
+  margin: 0.25rem 0;
   border: none;
-  border-bottom: 3px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
   background-color: transparent;
   box-shadow: none;
   color: rgba(255, 255, 255, 0.5);
   opacity: 0;
-  transform: scaleX(1);
-  transform-origin: right;
-  transition: opacity 0.25s ease-in-out, transform 0.3s ease-in-out;
-
-  &:focus,
+  transition: opacity 0.25s ease-in-out;
   &:hover {
-    border: none;
-    border-bottom: 3px solid currentColor;
-    background-color: transparent;
-    box-shadow: none;
     opacity: 1;
-    transform: scaleX(1);
-
-    & ~ * > svg {
-      transform: rotate(90deg);
-    }
+    -webkit-filter: blur(0); /*remove blur effect on chrome*/
   }
 }
 
-.side-search > input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+.side-search input:focus {
+  opacity: 1;
+  -webkit-filter: blur(0);
+  color: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  box-shadow: none;
+  border-bottom: 2px solid currentColor;
+  transition: border-color 0.2s ease-in-out, background 0.2s ease-in-out;
 }
 
-.side-search > input:hover {
-  border: none;
-  border-bottom: 2px solid currentColor;
-  background-color: transparent;
-  box-shadow: none;
-  opacity: 1;
-  transform: scaleX(1);
-}
-.side-search > input:hover ~ a svg {
+/*rotate zoomicon when mouse-over input*/
+.side-search > div:hover ~ a div svg {
   transform: rotate(90deg);
 }
-.side-search > input[type='text']:focus {
-  color: rgba(255, 255, 255, 1);
-  background-color: rgba(255, 255, 255, 0.1);
-  border: none;
-  box-shadow: none;
-  border-bottom: 2px solid currentColor;
-  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+
+.side-search input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /*use when off canvas is open and icons need to move left*/
