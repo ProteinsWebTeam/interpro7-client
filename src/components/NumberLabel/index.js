@@ -29,7 +29,7 @@ class NumberLabel extends PureComponent {
     className: T.string,
     lowGraphics: T.bool.isRequired,
     dispatch: T.func.isRequired,
-    abbr: T.number,
+    abbr: T.bool,
     title: T.oneOfType([T.string, T.number]),
   };
 
