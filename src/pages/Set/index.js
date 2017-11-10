@@ -147,7 +147,12 @@ class List extends PureComponent {
                     },
                   })}
                 >
-                  <span className={f('acc-row')}>{accession}</span>
+                  <span className={f('acc-row')}>
+                    <HighligtedText
+                      text={accession}
+                      textToHighlight={search.search}
+                    />
+                  </span>
                 </Link>
               )}
             >
@@ -157,14 +162,14 @@ class List extends PureComponent {
               dataKey="name"
               renderer={(
                 name /*: string */,
-                { accession } /*: {accession: string} */,
+                { accession, source_database } /*: {accession: string} */,
               ) => (
                 <Link
                   newTo={location => ({
                     ...location,
                     description: {
                       mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
+                      mainDB: source_database,
                       mainAccession: accession,
                     },
                   })}

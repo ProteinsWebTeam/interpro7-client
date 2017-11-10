@@ -79,20 +79,24 @@ OriginDB.propTypes = {
   accession: T.oneOfType([T.string, T.number]).isRequired,
 };
 
-export const HighligtedText = ({ text, textToHighlight = '' }) => (
-  <span>
-    {text
-      .split(new RegExp(`(${textToHighlight})`, 'i'))
-      .map(
-        (e, i) =>
-          e.toLowerCase() === textToHighlight.toLowerCase() ? (
-            <mark key={i}>{e}</mark>
-          ) : (
-            <span key={i}>{e}</span>
-          ),
-      )}
-  </span>
-);
+export const HighligtedText = ({ text, textToHighlight = '' }) =>
+  textToHighlight ? (
+    <span>
+      {text
+        .toString()
+        .split(new RegExp(`(${textToHighlight})`, 'i'))
+        .map(
+          (e, i) =>
+            e.toLowerCase() === textToHighlight.toLowerCase() ? (
+              <mark key={i}>{e}</mark>
+            ) : (
+              <span key={i}>{e}</span>
+            ),
+        )}
+    </span>
+  ) : (
+    text
+  );
 HighligtedText.propTypes = {
   text: T.string.isRequired,
   textToHighlight: T.string,

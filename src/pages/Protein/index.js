@@ -162,7 +162,12 @@ class List extends PureComponent {
                     // >
                     // </span>
                   }
-                  <span className={f('acc-row')}>{accession}</span>
+                  <span className={f('acc-row')}>
+                    <HighligtedText
+                      text={accession}
+                      textToHighlight={search.search}
+                    />
+                  </span>
                 </Link>
               )}
             >

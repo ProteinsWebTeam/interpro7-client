@@ -136,7 +136,10 @@ const List = ({
                   },
                 })}
               >
-                {accession}
+                <HighligtedText
+                  text={accession}
+                  textToHighlight={search.search}
+                />
               </Link>
             )}
           >
