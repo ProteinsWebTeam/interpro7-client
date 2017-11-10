@@ -72,6 +72,9 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
         <Link
           newTo={newTo}
           activeClass={f('is-active', 'is-active-tab')}
+          className={f({
+            special: cleanName === 'InterPro' || cleanName === 'all',
+          })}
           style={{ color: colors.get(cleanName) || '#6e818a' }}
         >
           <span className={f('db-label')}>
