@@ -2,44 +2,42 @@
 import React from 'react';
 
 import { foundationPartial } from 'styles/foundation';
-import styles from './style.css';
+
+import local from './style.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
+const f = foundationPartial(ebiGlobalStyles, fonts, local);
 
 const EBIFooter = () => (
   <footer>
-    <div
-      id={styleBundle('global-footer')}
-      className={styleBundle('global-footer')}
-    >
+    <div id={f('global-footer')} className={f('global-footer')}>
       <nav
-        id={styleBundle('global-nav-expanded')}
-        className={styleBundle('global-nav-expanded', 'row')}
+        id={f('global-nav-expanded')}
+        className={f('global-nav-expanded', 'row')}
       >
         <div
-          className={styleBundle({
+          className={f({
             columns: 'true',
             'small-6': 'true',
             'medium-2': 'true',
           })}
         >
           <a href="//www.ebi.ac.uk" title="EMBL-EBI" rel="noopener">
-            <span className={styleBundle('ebi-logo')} />
+            <span className={f('ebi-logo')} />
           </a>
           <ul />
         </div>
         <div
-          className={styleBundle({
+          className={f({
             columns: 'true',
             'small-6': 'true',
             'medium-2': 'true',
           })}
         >
-          <h5 className={styleBundle('services')}>
+          <h5 className={f('services')}>
             <a
-              className={styleBundle('services-color')}
+              className={f('services-color')}
               href="//www.ebi.ac.uk/services"
               rel="noopener"
             >
@@ -47,7 +45,7 @@ const EBIFooter = () => (
             </a>
           </h5>
           <ul>
-            <li className={styleBundle('first')}>
+            <li className={f('first')}>
               <a href="//www.ebi.ac.uk/services" rel="noopener">
                 By topic
               </a>
@@ -57,7 +55,7 @@ const EBIFooter = () => (
                 By name (A-Z)
               </a>
             </li>
-            <li className={styleBundle('last')}>
+            <li className={f('last')}>
               <a href="//www.ebi.ac.uk/support" rel="noopener">
                 Help & Support
               </a>
@@ -66,15 +64,15 @@ const EBIFooter = () => (
         </div>
 
         <div
-          className={styleBundle({
+          className={f({
             columns: 'true',
             'small-6': 'true',
             'medium-2': 'true',
           })}
         >
-          <h5 className={styleBundle('research')}>
+          <h5 className={f('research')}>
             <a
-              className={styleBundle('research-color')}
+              className={f('research-color')}
               href="//www.ebi.ac.uk/research"
               rel="noopener"
             >
@@ -92,7 +90,7 @@ const EBIFooter = () => (
                 Research groups
               </a>
             </li>
-            <li className={styleBundle('last')}>
+            <li className={f('last')}>
               <a href="//www.ebi.ac.uk/research/postdocs" rel="noopener">
                 Postdocs
               </a>
@@ -105,15 +103,15 @@ const EBIFooter = () => (
         </div>
 
         <div
-          className={styleBundle({
+          className={f({
             columns: 'true',
             'small-6': 'true',
             'medium-2': 'true',
           })}
         >
-          <h5 className={styleBundle('training')}>
+          <h5 className={f('training')}>
             <a
-              className={styleBundle('training-color')}
+              className={f('training-color')}
               href="//www.ebi.ac.uk/training"
               rel="noopener"
             >
@@ -136,7 +134,7 @@ const EBIFooter = () => (
                 Train online
               </a>
             </li>
-            <li className={styleBundle('last')}>
+            <li className={f('last')}>
               <a href="//www.ebi.ac.uk/training/contact-us" rel="noopener">
                 Contact organisers
               </a>
@@ -145,15 +143,15 @@ const EBIFooter = () => (
         </div>
 
         <div
-          className={styleBundle({
+          className={f({
             columns: 'true',
             'small-6': 'true',
             'medium-2': 'true',
           })}
         >
-          <h5 className={styleBundle('industry')}>
+          <h5 className={f('industry')}>
             <a
-              className={styleBundle('industry-color')}
+              className={f('industry-color')}
               href="//www.ebi.ac.uk/industry"
               rel="noopener"
             >
@@ -176,7 +174,7 @@ const EBIFooter = () => (
                 <abbr title="Small Medium Enterprise">SME</abbr> Forum
               </a>
             </li>
-            <li className={styleBundle('last')}>
+            <li className={f('last')}>
               <a href="//www.ebi.ac.uk/industry/contact" rel="noopener">
                 Contact Industry programme
               </a>
@@ -185,15 +183,15 @@ const EBIFooter = () => (
         </div>
 
         <div
-          className={styleBundle({
+          className={f({
             columns: 'true',
             'small-6': 'true',
             'medium-2': 'true',
           })}
         >
-          <h5 className={styleBundle('about')}>
+          <h5 className={f('about')}>
             <a
-              className={styleBundle('ebi-color')}
+              className={f('ebi-color')}
               href="//www.ebi.ac.uk/about"
               rel="noopener"
             >
@@ -235,15 +233,15 @@ const EBIFooter = () => (
       </nav>
 
       <section
-        id={styleBundle('ebi-footer-meta')}
-        className={styleBundle('ebi-footer-meta', 'row')}
+        id={f('ebi-footer-meta')}
+        className={f('ebi-footer-meta', 'row')}
       >
-        <div className={styleBundle('columns')}>
-          <p className={styleBundle('address')}>
+        <div className={f('columns')}>
+          <p className={f('address')}>
             EMBL-EBI, Wellcome Genome Campus, Hinxton, Cambridgeshire, CB10 1SD,
             UK. +44 (0)1223 49 44 44
           </p>
-          <p className={styleBundle('legal')}>
+          <p className={f('legal')}>
             Copyright © EMBL-EBI 2017 | EMBL-EBI is&nbsp;
             <a href="http://www.embl.org/" rel="noopener">
               part of the European Molecular Biology Laboratory
@@ -253,7 +251,7 @@ const EBIFooter = () => (
               Terms of use
             </a>
             <a
-              className={styleBundle('readmore', 'float-right')}
+              className={f('readmore', 'float-right')}
               href="http://intranet.ebi.ac.uk"
               rel="noopener"
             >
