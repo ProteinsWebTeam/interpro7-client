@@ -1,10 +1,13 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { format } from 'url';
+import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import { GoList } from 'staticData/home';
+import loadData from 'higherOrder/loadData';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -16,8 +19,10 @@ import local from '../styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
-class ByMemberDatabase extends PureComponent /*:: <{}> */ {
+class ByGoTerm extends PureComponent /*:: <{}> */ {
   render() {
+    const countsE = this.props.data.payload;
+    const countsP = this.props.dataProtein.payload;
     return (
       <div className={f('md-list')}>
         <AnimatedEntry className={f('row')} element="div">
@@ -26,45 +31,69 @@ class ByMemberDatabase extends PureComponent /*:: <{}> */ {
               className={f('columns', 'medium-3', 'large-3', 'text-center')}
               key={e.title}
             >
-              <Link
-                newTo={{
-                  description: { mainType: 'search', mainDB: 'text' },
-                  search: { search: e.accession },
-                }}
-                title={e.description}
+              <span
+                style={{ color: e.color }}
+                className={f('small', 'bullet-icon')}
                 data-tooltip
+                title={e.category}
               >
+                &bull;
+              </span>
+              <h6>
+                {e.title}&nbsp;
                 <span
-                  style={{ color: e.color }}
-                  className={f('small', 'bullet-icon')}
+                  className={f('small', 'icon', 'icon-generic')}
+                  data-icon="i"
                   data-tooltip
-                  title={e.category}
+                  title={e.description}
+                />
+              </h6>
+              <p>
+                <Link
+                  newTo={{
+                    description: { mainType: 'entry', mainDB: 'InterPro' },
+                    search: { go_term: e.accession },
+                  }}
+                  title={e.description}
+                  data-tooltip
                 >
-                  &bull;
-                </span>
-                <h6>
-                  {e.title}&nbsp;
-                  <span
-                    className={f('small', 'icon', 'icon-generic')}
-                    data-icon="i"
-                    data-tooltip
-                    title={e.description}
-                  />
-                </h6>
-                <p>
-                  {e.counterD} entries <br />
-                  <small>({e.counterS} proteins)</small>
-                </p>
-              </Link>
+                  {(countsE && e.accession && countsE[e.accession]) || '-'}{' '}
+                  entries
+                </Link>
+                <br />
+                <Link
+                  newTo={{
+                    description: { mainType: 'protein', mainDB: 'uniprot' },
+                    search: { go_term: e.accession },
+                  }}
+                  title={e.description}
+                  data-tooltip
+                >
+                  {(countsP && e.accession && countsP[e.accession]) || '-'}{' '}
+                  proteins
+                </Link>
+              </p>
             </div>
           ))}
         </AnimatedEntry>
-        <Link href="interpro7/browse/Goterms" className={f('button')}>
-          View all Go terms
-        </Link>
       </div>
     );
   }
 }
+const mapStateToUrl = endpoint =>
+  createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}/${endpoint}`,
+        query: { group_by: 'go_terms' },
+      }),
+  );
 
-export default ByMemberDatabase;
+export default loadData({
+  getUrl: mapStateToUrl('protein'),
+  propNamespace: 'Protein',
+})(loadData(mapStateToUrl('entry'))(ByGoTerm));

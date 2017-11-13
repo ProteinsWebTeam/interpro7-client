@@ -131,6 +131,17 @@ class BySpecies extends PureComponent /*:: <Props> */ {
             </div>
           ))}
         </AnimatedEntry>
+        <Link
+          newTo={{
+            description: {
+              mainType: 'organism',
+              mainDB: 'taxonomy',
+            },
+          }}
+          className={f('button')}
+        >
+          View all Organism
+        </Link>
       </div>
     );
   }
