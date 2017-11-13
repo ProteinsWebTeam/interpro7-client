@@ -39,6 +39,11 @@ a:visited {
   border-bottom: 1px #222 solid;
 }
 
+/*NEUTRAL LINKS*/
+.main a.button {
+  color: white;
+}
+
 /*add some space on top between banner and breadcrumb - IMPORTANT DON'tUSE <MAIN> tag AS it doesn't work on IE11 even if specifying it as display:block element*/
 .main {
   padding-top: 1rem;
