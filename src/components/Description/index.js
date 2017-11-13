@@ -14,7 +14,7 @@ const f = foundationPartial(ebiStyles, styles, theme);
 const ParagraphWithCites = ({ p, literature = {} }) => (
   <p className={styles.paragraph}>
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
-      const refCounter = Object.keys(literature).indexOf(part) + 1;
+      const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
       return i % 2 ? (
         <a key={i} id={refCounter} href={`${location.pathname}#${part}`}>
           {refCounter}
@@ -34,7 +34,7 @@ const defaultHeightToHide = 200;
 /* ::
  type Props = {
    textBlocks: Array<string> ,
-   literature?: Object,
+   literature?: Array,
    title?: string,
    extraTextForButton?: string,
    heightToHide?: number,
@@ -50,7 +50,7 @@ class Description extends Component {
   */
   static propTypes = {
     textBlocks: T.array.isRequired,
-    literature: T.object,
+    literature: T.array,
     title: T.string.isRequired,
     extraTextForButton: T.string.isRequired,
     heightToHide: T.number,
