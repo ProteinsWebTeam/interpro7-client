@@ -17,7 +17,7 @@ const comment = /^\s*[;>].*$/gm;
 const whiteSpaces = /\s*/g;
 const chunkOfTen = /.{1,10}/g;
 const chunkOfEighty = /(.{1,80})/g;
-
+const CHUNK_SIZE = 10;
 /*:: type InnerProps = {
   sequence: string,
 }; */
@@ -64,21 +64,22 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
     name: T.string,
   };
 
-  // eslint-disable-next-line: max-statements
+  _isSelectionInSequence = selection => {
+    if (!this._node) return false;
+    // Beginning of selection is in the sequence element
+    const selectionIsInSequence = this._node.contains(selection.anchorNode);
+    if (!this._node) return false;
+    // End of selection is in the sequence element
+    return selectionIsInSequence && this._node.contains(selection.focusNode);
+  };
+
   _getSelection = () => {
     let sequenceToSearch = this.props.sequence;
     let start = 1;
     let end = sequenceToSearch.length;
     if ('getSelection' in window) {
       const selection = window.getSelection();
-      if (!this._node) return sequenceToSearch;
-      // Beginning of selection is in the sequence element
-      let selectionIsInSequence = this._node.contains(selection.anchorNode);
-      if (!this._node) return sequenceToSearch;
-      selectionIsInSequence =
-        // End of selection is in the sequence element
-        selectionIsInSequence && this._node.contains(selection.focusNode);
-      if (selectionIsInSequence) {
+      if (this._isSelectionInSequence(selection)) {
         // Get the text in the selection
         const selectionString = selection.toString().trim();
         if (selectionString) {
@@ -86,10 +87,12 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
         }
         // define start and end value of sequence selection
         start =
-          +selection.anchorNode.parentElement.dataset.index * 10 +
+          +selection.anchorNode.parentElement.dataset.index * CHUNK_SIZE +
           selection.anchorOffset +
           1;
         end = sequenceToSearch.length + start - 1;
+      } else {
+        return sequenceToSearch;
       }
     }
     // Split by line of 80 characters

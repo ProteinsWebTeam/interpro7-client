@@ -1,5 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
+import T from 'prop-types';
+
 import { format } from 'url';
 import { createSelector } from 'reselect';
 
@@ -20,6 +22,10 @@ import local from '../styles.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
 class ByGoTerm extends PureComponent /*:: <{}> */ {
+  static propTypes = {
+    data: T.object,
+    dataProtein: T.object,
+  };
   render() {
     const countsE = this.props.data.payload;
     const countsP = this.props.dataProtein.payload;
