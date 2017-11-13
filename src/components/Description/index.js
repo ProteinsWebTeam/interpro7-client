@@ -11,7 +11,7 @@ import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiStyles, styles, theme);
 
-const ParagraphWithCites = ({ p, literature = {} }) => (
+const ParagraphWithCites = ({ p, literature = [] }) => (
   <p className={styles.paragraph}>
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
@@ -27,7 +27,7 @@ const ParagraphWithCites = ({ p, literature = {} }) => (
 );
 ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
-  literature: T.object,
+  literature: T.array,
 };
 
 const defaultHeightToHide = 200;
