@@ -24,15 +24,23 @@ a:visited {
   border-bottom-width: 0;
 }
 
-/*add some space on top between banner and breadcrumb - should be in EBI-GLobal*/
-main a,
-main a:visited,
-main a:focus {
+/*links color - should be in EBI-GLobal*/
+.main a,
+.main a:visited,
+.main a:focus {
   color: rgb(0, 112, 187);
 }
+/*NEUTRAL LINKS*/
+.main a.neutral {
+  color: #4b555b;
+}
 
-/*add some space on top between banner and breadcrumb - remove padding bottom to have thetwitter component stick to footer not needed anymore?*/
-main {
+.main a.neutral:hover {
+  border-bottom: 1px #222 solid;
+}
+
+/*add some space on top between banner and breadcrumb - IMPORTANT DON'tUSE <MAIN> tag AS it doesn't work on IE11 even if specifying it as display:block element*/
+.main {
   padding-top: 1rem;
 }
 
@@ -238,14 +246,6 @@ div#local-title {
 /*content: ' \21AA ';*/
 /*}*/
 /*/EXTERNAL LINKS*/
-/*NEUTRAL LINKS*/
-main a.neutral {
-  color: #4b555b;
-}
-
-main a.neutral:hover {
-  border-bottom: 1px #222 solid;
-}
 
 /*/NEUTRAL LINKS*/
 
