@@ -9,6 +9,14 @@ import Switch from 'components/generic/Switch';
 import loadable from 'higherOrder/loadable';
 
 import BrowseTabs from 'components/BrowseTabs';
+
+import { foundationPartial } from 'styles/foundation';
+
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ipro from 'styles/interpro-new.css';
+
+const f = foundationPartial(ebiGlobalStyles, ipro);
+
 // Main pages
 const Home = loadable({
   loader: () => import(/* webpackChunkName: "home-page" */ './Home'),
@@ -78,7 +86,7 @@ class Pages extends PureComponent /*:: <Props> */ {
   render() {
     const { stuck, top, ...props } = this.props;
     return (
-      <main style={{ marginTop: stuck ? '174px' : 0 }}>
+      <div className={f('main')} style={{ marginTop: stuck ? '174px' : 0 }}>
         <ErrorBoundary>
           <Switch
             {...props}
@@ -98,7 +106,7 @@ class Pages extends PureComponent /*:: <Props> */ {
             catchAll={NotFound}
           />
         </ErrorBoundary>
-      </main>
+      </div>
     );
   }
 }
