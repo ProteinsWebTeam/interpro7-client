@@ -134,7 +134,7 @@ const Matches = (
           </Link>
         )}
       >
-        Accession
+        {primary === 'organism' ? 'Tax Id' : 'Accession'}
       </Column>
       <Column
         dataKey="name"

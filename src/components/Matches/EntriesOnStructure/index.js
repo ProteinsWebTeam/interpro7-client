@@ -32,24 +32,20 @@ const EntriesOnStructure = ({
             className={style.primary}
           />
           <text y="-0.2em" transform={`translate(${length} 0)`}>
-            <tspan textAnchor="end">
-              {length}
-            </tspan>
+            <tspan textAnchor="end">{length}</tspan>
           </text>
         </g>
         <g>
           {matches.map(
             ({ [main]: { entry_protein_locations: locations }, entry }) =>
               locations.map((location, i) =>
-                location.fragments.map((fragment, j) =>
+                location.fragments.map((fragment, j) => (
                   <g
                     key={`${entry.accession}-${i}-${j}`}
                     transform={`translate(${fragment.start} ${offset -
                       baseSize / 2})`}
                   >
-                    <title>
-                      {entry.accession}
-                    </title>
+                    <title>{entry.accession}</title>
                     <rect
                       x="0"
                       y="0"
@@ -60,21 +56,17 @@ const EntriesOnStructure = ({
                       className={style.secondary}
                     />
                     <text y="-0.2em">
-                      <tspan textAnchor="middle">
-                        {fragment.start}
-                      </tspan>
+                      <tspan textAnchor="middle">{fragment.start}</tspan>
                     </text>
                     <text
                       y="-0.2em"
                       transform={`translate(${fragment.end -
                         fragment.start} 0)`}
                     >
-                      <tspan textAnchor="middle">
-                        {fragment.end}
-                      </tspan>
+                      <tspan textAnchor="middle">{fragment.end}</tspan>
                     </text>
-                  </g>,
-                ),
+                  </g>
+                )),
               ),
           )}
         </g>
@@ -82,40 +74,36 @@ const EntriesOnStructure = ({
           {matches.map(
             ({ [main]: { protein_structure_locations: locations } }) =>
               locations.map((location, i) =>
-                location.fragments.map((fragment, j) =>
+                location.fragments.map((fragment, j) => (
                   <g
                     key={`${structure.accession}-${i}-${j}`}
                     transform={`translate(${fragment.start} ${offset -
                       baseSize})`}
                   >
-                    <title>
-                      {structure.accession}
-                    </title>
+                    <title>{structure.accession}</title>
                     <rect
                       x="0"
                       y="0"
                       rx={baseSize * 2 / niceRatio}
                       width={fragment.end - fragment.start}
                       height={baseSize * 2}
-                      fill={colorHash.hex(structure.accession)}
+                      fill="rgba(30,10,10,0.2)"
+                      stroke="#343"
+                      strokeWidth="2px"
                       className={style.secondary}
                     />
                     <text y="-0.2em">
-                      <tspan textAnchor="middle">
-                        {fragment.start}
-                      </tspan>
+                      <tspan textAnchor="middle">{fragment.start}</tspan>
                     </text>
                     <text
                       y="-0.2em"
                       transform={`translate(${fragment.end -
                         fragment.start} 0)`}
                     >
-                      <tspan textAnchor="middle">
-                        {fragment.end}
-                      </tspan>
+                      <tspan textAnchor="middle">{fragment.end}</tspan>
                     </text>
-                  </g>,
-                ),
+                  </g>
+                )),
               ),
           )}
         </g>

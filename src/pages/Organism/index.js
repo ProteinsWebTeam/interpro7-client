@@ -136,7 +136,7 @@ class List extends PureComponent {
                 </Link>
               )}
             >
-              TaxID
+              Tax ID
             </Column>
             <Column
               dataKey="name"
