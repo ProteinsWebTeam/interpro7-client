@@ -77,27 +77,6 @@ const Twitter = loadable({
     ),
 });
 
-const MaskSvgIcons = () => (
-  // IMPORTANT: need to be kept on homepage otherwise TAB switch make the mask disappear on latest entries tab
-  <svg
-    viewBox="0 0 200 200"
-    style={{
-      position: 'fixed',
-      width: 0,
-      height: 0,
-      top: -1800,
-      left: -1800,
-      /* to hide SVG on the page as display:none is not working */
-    }}
-  >
-    <defs>
-      <clipPath id="stripe-mdcolor-clip">
-        <rect x="33%" y="38%" width="68" height="68" />
-      </clipPath>
-    </defs>
-  </svg>
-);
-
 class InterProGraphicAnim extends PureComponent {
   // componentDidMount() {
   //   this._tl = new Timeline();
@@ -496,8 +475,6 @@ const Home = () => (
     >
       <div className={f('columns', 'browse-by')}>
         <div className={f('callout-box')}>
-          <MaskSvgIcons />
-
           <Tabs>
             <div title="by member database">
               <ByMemberDatabase />
