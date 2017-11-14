@@ -78,6 +78,7 @@ const Twitter = loadable({
 });
 
 const MaskSvgIcons = () => (
+  // IMPORTANT: need to be kept on homepage otherwise TAB switch make the mask disappear on latest entries tab
   <svg
     viewBox="0 0 200 200"
     style={{
@@ -90,11 +91,8 @@ const MaskSvgIcons = () => (
     }}
   >
     <defs>
-      <clipPath id="cut-off-center">
+      <clipPath id="stripe-mdcolor-clip">
         <rect x="33%" y="38%" width="68" height="68" />
-      </clipPath>
-      <clipPath id="cut-off-bottom">
-        <polygon points="0,68 68,0 68,68" />
       </clipPath>
     </defs>
   </svg>
