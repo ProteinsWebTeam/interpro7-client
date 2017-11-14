@@ -12,29 +12,6 @@ import local from './style.css';
 
 const f = foundationPartial(ipro, local);
 
-const MaskSvgIcons = () => (
-  <svg
-    viewBox="0 0 200 200"
-    style={{
-      position: 'fixed',
-      width: 0,
-      height: 0,
-      top: -1800,
-      left: -1800,
-      /* to hide SVG on the page as display:none is not working */
-    }}
-  >
-    <defs>
-      <clipPath id="cut-off-center">
-        <rect x="33%" y="38%" width="68" height="68" />
-      </clipPath>
-      <clipPath id="cut-off-bottom">
-        <polygon points="0,68 68,0 68,68" />
-      </clipPath>
-    </defs>
-  </svg>
-);
-
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
@@ -58,8 +35,6 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
       <ul className={f('md-list')}>
         {Object.entries(contr).map(([db, accessions]) => (
           <li key={db}>
-            <MaskSvgIcons />
-
             <MemberSymbol type={db} className={f('md-small')} />
             {accessions.map(accession => (
               <Link
