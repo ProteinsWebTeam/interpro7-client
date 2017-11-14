@@ -68,10 +68,12 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
       location: { description: { mainType } },
     } = this.props;
     const citations = description2IDs(metadata.description);
+    const desc = metadata.description.reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(
       Object.entries(metadata.literature),
       ([id]) => citations.includes(id),
     );
+    included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
 
     return (
       <div className={f('sections')}>
