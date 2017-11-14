@@ -11,7 +11,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-import { HighligtedText } from 'components/SimpleCommonComponents';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -148,7 +148,7 @@ class List extends PureComponent {
                   })}
                 >
                   <span className={f('acc-row')}>
-                    <HighligtedText
+                    <HighlightedText
                       text={accession}
                       textToHighlight={search.search}
                     />
@@ -174,7 +174,10 @@ class List extends PureComponent {
                     },
                   })}
                 >
-                  <HighligtedText text={name} textToHighlight={search.search} />
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
                 </Link>
               )}
             >

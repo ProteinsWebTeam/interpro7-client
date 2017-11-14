@@ -24,7 +24,7 @@ import subPages from 'subPages';
 import config from 'config';
 
 import { memberDB } from 'staticData/home';
-import { HighligtedText } from 'components/SimpleCommonComponents';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -167,7 +167,10 @@ class List extends Component {
                     search: {},
                   })}
                 >
-                  <HighligtedText text={name} textToHighlight={search.search} />
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
                 </Link>
               )}
             >
@@ -193,7 +196,7 @@ class List extends Component {
                     processData={schemaProcessDataTableRow}
                   />
                   <span className={f('acc-row')}>
-                    <HighligtedText
+                    <HighlightedText
                       text={accession}
                       textToHighlight={search.search}
                     />

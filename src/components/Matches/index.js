@@ -11,7 +11,7 @@ import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
 import ProteinFile from 'subPages/Organism/ProteinFile';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
-import { HighligtedText } from 'components/SimpleCommonComponents';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -129,7 +129,7 @@ const Matches = (
             }}
           >
             <span className={f('acc-row')}>
-              <HighligtedText text={acc} textToHighlight={search.search} />
+              <HighlightedText text={acc} textToHighlight={search.search} />
             </span>
           </Link>
         )}
@@ -154,7 +154,7 @@ const Matches = (
               },
             }}
           >
-            <HighligtedText text={name} textToHighlight={search.search} />
+            <HighlightedText text={name} textToHighlight={search.search} />
           </Link>
         )}
       />

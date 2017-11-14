@@ -79,7 +79,7 @@ OriginDB.propTypes = {
   accession: T.oneOfType([T.string, T.number]).isRequired,
 };
 
-export const HighligtedText = ({ text, textToHighlight = '' }) =>
+export const HighlightedText = ({ text, textToHighlight = '' }) =>
   textToHighlight ? (
     <span>
       {text
@@ -97,7 +97,7 @@ export const HighligtedText = ({ text, textToHighlight = '' }) =>
   ) : (
     text
   );
-HighligtedText.propTypes = {
-  text: T.string.isRequired,
+HighlightedText.propTypes = {
+  text: T.oneOfType([T.string, T.number]).isRequired,
   textToHighlight: T.string,
 };

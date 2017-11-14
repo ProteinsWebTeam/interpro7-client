@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import Table, { Column, Exporter } from 'components/Table';
-import { HighligtedText } from 'components/SimpleCommonComponents';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 
@@ -120,7 +120,7 @@ class SearchResults extends PureComponent {
           dataKey="fields"
           renderer={d => (
             <div>
-              <HighligtedText
+              <HighlightedText
                 text={d.description[0].slice(0, MAX_LENGTH)}
                 textToHighlight={search.search}
               />…

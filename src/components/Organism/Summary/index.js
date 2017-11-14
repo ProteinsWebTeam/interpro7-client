@@ -56,23 +56,28 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   componentDidMount() {
     this._vis.tree = this._tree;
     this._vis.focus = this._focus;
+    this.loadingVis = true;
     this._populateData(this.props.data.payload);
+    this.loadingVis = false;
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data !== this.props.data) {
+      this.loadingVis = true;
       this._populateData(nextProps.data.payload);
+      this.loadingVis = false;
     }
   }
 
   _handleFocus = ({ detail: { id } }) => {
-    this.props.goToNewLocation({
-      description: {
-        mainType: 'organism',
-        mainDB: 'taxonomy',
-        mainAccession: id,
-      },
-    });
+    if (!this.loadingVis)
+      this.props.goToNewLocation({
+        description: {
+          mainType: 'organism',
+          mainDB: 'taxonomy',
+          mainAccession: id,
+        },
+      });
   };
 
   _populateData = ({ metadata: data, names }) => {

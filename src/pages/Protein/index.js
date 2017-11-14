@@ -12,7 +12,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-import { HighligtedText } from 'components/SimpleCommonComponents';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -165,7 +165,7 @@ class List extends PureComponent {
                     // </span>
                   }
                   <span className={f('acc-row')}>
-                    <HighligtedText
+                    <HighlightedText
                       text={accession}
                       textToHighlight={search.search}
                     />
@@ -192,7 +192,10 @@ class List extends PureComponent {
                     search: {},
                   })}
                 >
-                  <HighligtedText text={name} textToHighlight={search.search} />
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
                 </Link>
               )}
             >
@@ -334,8 +337,7 @@ class Summary extends PureComponent {
           <Switch
             {...this.props}
             locationSelector={l =>
-              l.description.mainDetail || l.description.focusType
-            }
+              l.description.mainDetail || l.description.focusType}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForProtein}
           />
@@ -352,8 +354,7 @@ const InnerSwitch = props => (
     <Switch
       {...props}
       locationSelector={l =>
-        l.description.mainAccession || l.description.focusType
-      }
+        l.description.mainAccession || l.description.focusType}
       indexRoute={List}
       childRoutes={[{ value: acc, component: Summary }]}
       catchAll={List}
