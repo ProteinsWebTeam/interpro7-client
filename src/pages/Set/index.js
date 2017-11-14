@@ -265,7 +265,7 @@ class Summary extends PureComponent {
     }
     let currentSet = null;
     Array.from(setDB).forEach(db => {
-      if (db.name === 'pfam') currentSet = db;
+      if (db.name === payload.metadata.source_database) currentSet = db;
     });
     return (
       <div>

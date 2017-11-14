@@ -242,7 +242,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             ...location.description,
             mainDetail: null,
             focusType: 'set',
-            focusDB: 'pfam',
+            focusDB: location.description.mainDB,
             mainMemberDB: null,
           },
         };
