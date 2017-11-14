@@ -1,9 +1,11 @@
+/* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import T from 'prop-types';
 
 import { transformFormatted } from 'utils/text';
 
 import { foundationPartial } from 'styles/foundation';
+import Link from 'components/generic/Link';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import styles from './style.css';
@@ -20,7 +22,13 @@ const ParagraphWithCites = ({ p, literature = [] }) => (
           {refCounter}
         </a>
       ) : (
-        <span key={i}>{part === ', ' ? ',\u00a0' : part}</span>
+        <span key={i}>
+          {part === ', ' ? (
+            ',\u00a0'
+          ) : (
+            <ParagraphWithTags>{part}</ParagraphWithTags>
+          )}
+        </span>
       );
     })}
   </p>
@@ -28,6 +36,64 @@ const ParagraphWithCites = ({ p, literature = [] }) => (
 ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
   literature: T.array,
+};
+
+const _getAttributesFromStringTag = text =>
+  text
+    .split(/\s|\/|>/)
+    .map(e => (e.indexOf('=') <= 0 ? null : e.split('=')))
+    .filter(Boolean)
+    .reduce((acc, e) => {
+      acc[e[0]] = e[1].replace(/"/g, '');
+      return acc;
+    }, {});
+const _getTextFromStringTag = text => text.split(/>([^<]+)/)[1];
+const ParagraphWithTags = ({ children }) => (
+  <span>
+    {// Checking for the TAG dbxref
+    children.split(/(<dbxref [^>]+?\/>)/i).map((part, i) => {
+      if (i % 2) {
+        const attrs = _getAttributesFromStringTag(part);
+        return (
+          <Link
+            newTo={{
+              description: {
+                mainType: 'entry',
+                mainDB: attrs.db,
+                mainAccession: attrs.id,
+              },
+            }}
+          >
+            {attrs.id}
+          </Link>
+        );
+      }
+      // Checking for the TAG taxon
+      return part.split(/(<taxon [^>]+>[^<]+<\/taxon>)/i).map((part, i) => {
+        if (i % 2) {
+          const text = _getTextFromStringTag(part);
+          const attrs = _getAttributesFromStringTag(part);
+          return (
+            <Link
+              newTo={{
+                description: {
+                  mainType: 'organism',
+                  mainDB: 'taxonomy',
+                  mainAccession: attrs.tax_id,
+                },
+              }}
+            >
+              {text}
+            </Link>
+          );
+        }
+        return part;
+      });
+    })}
+  </span>
+);
+ParagraphWithTags.propTypes = {
+  children: T.any,
 };
 
 const defaultHeightToHide = 200;
