@@ -18,27 +18,6 @@ import entry from '../../components/Entry/Literature/style.css';
 const f = foundationPartial(fonts, styles, entry);
 // remove last “.git”
 const url = pkg.repository.url.replace('.git', '');
-const MaskSvgIcons = () => (
-  <svg
-    viewBox="0 0 200 200"
-    style={{
-      position: 'fixed',
-      width: 0,
-      height: 0,
-      top: -1800,
-      left: -1800,
-    }}
-  >
-    <defs>
-      <clipPath id="cut-off-center">
-        <rect x="33%" y="38%" width="68" height="68" />
-      </clipPath>
-      <clipPath id="cut-off-bottom">
-        <polygon points="0,68 68,0 68,68" />
-      </clipPath>
-    </defs>
-  </svg>
-);
 const DeveloperInfo = () => (
   <div>
     <h5>Developer information</h5>
@@ -95,7 +74,6 @@ export default class About extends PureComponent /*:: <{}> */ {
               <ul className={f('list')}>
                 <li>
                   {' '}
-                  <MaskSvgIcons />
                   <MemberSymbol type="cath" className={f('md-small')} />
                   <strong>CATH-Gene3D</strong> database describes protein
                   families and domain architectures in complete genomes. Protein
