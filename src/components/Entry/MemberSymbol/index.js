@@ -40,6 +40,12 @@ const MemberSymbol = ({ type, className = '' }) => (
       id={`md-${type}`}
       className={`${className} ${classNames[type.toUpperCase()]}`}
     >
+      <defs>
+        <clipPath id="stripe-mdcolor-clip">
+          <rect x="33%" y="38%" width="68" height="68" />
+        </clipPath>
+      </defs>
+
       <text
         x="50%"
         y="50%"
@@ -50,38 +56,20 @@ const MemberSymbol = ({ type, className = '' }) => (
       >
         D
       </text>
-      {// interesting to try text "&"
-      type === 'new' ? (
-        <text
-          x="50%"
-          y="50%"
-          textAnchor="middle"
-          dx="-0.01em"
-          dy="0.4em"
-          fill="#222"
-          style={{
-            fontFamily: 'Montserrat, arial, serif',
-            fontSize: 120,
-            fontWeight: 700,
-          }}
-        >
-          ?
-        </text>
-      ) : (
-        <text
-          x="50%"
-          y="50%"
-          textAnchor="middle"
-          dx="-0.01em"
-          dy="0.4em"
-          className={f('md-color')}
-          clipPath="url(#cut-off-center)"
-        >
-          D
-        </text>
-      )
-      // interesting to try text "&"
-      }
+
+      <text
+        x="50%"
+        y="50%"
+        textAnchor="middle"
+        dx="-0.01em"
+        dy="0.4em"
+        className={f('md-color')}
+        style={{
+          clipPath: 'url(#stripe-mdcolor-clip)',
+        }}
+      >
+        D
+      </text>
     </svg>
   </div>
 );
