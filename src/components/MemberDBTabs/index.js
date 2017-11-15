@@ -38,24 +38,38 @@ const menuOptions = new Map([
   ['TIGRFAM', 'tigrfams'],
 ]);
 
-const getValueFor = ({ entries }, mainType, db) => {
+const defaultDBFor = new Map([
+  ['protein', 'uniprot'],
+  ['structure', 'pdb'],
+  ['organism', 'taxonomy'],
+]);
+
+const getValueFor = (data, mainType, db) => {
+  if (data.loading) return null;
   let extract;
   switch (db) {
     case 'InterPro':
-      extract = entries.interpro;
+      extract = data.payload.entries.interpro;
       break;
     case 'all':
-      extract = entries.all;
-      break;
+      extract = data.payload[toPlural(mainType)];
+      if (defaultDBFor.has(mainType)) {
+        return extract[defaultDBFor.get(mainType)];
+      }
+      return Object.values(extract).reduce((a, b) => a + b, 0);
     default:
-      extract = entries.member_databases[db] || null;
+      extract = data.payload.entries.member_databases[db] || null;
   }
   if (mainType === 'entry') return extract;
   return (extract || {})[toPlural(mainType)] || null;
 };
 
 /* type Props = {
-  data: {
+  dataDB: {
+    loading: boolean,
+    payload?: Object,
+  },
+  dataAll: {
     loading: boolean,
     payload?: Object,
   },
@@ -73,7 +87,11 @@ const getValueFor = ({ entries }, mainType, db) => {
 
 class MemberDBTabs extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    data: T.shape({
+    dataDB: T.shape({
+      loading: T.bool.isRequired,
+      payload: T.object,
+    }).isRequired,
+    dataAll: T.shape({
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
@@ -119,7 +137,8 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
 
   render() {
     const {
-      data: { loading, payload },
+      dataDB,
+      dataAll,
       newLocation: { description: { mainType, mainDB, focusDB } },
       lowGraphics,
     } = this.props;
@@ -153,9 +172,11 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
           Select a database to filter these {toPlural(mainType)}:
           <select value={value || 'all'} onChange={this._handleChange}>
             {options.map(([name, value]) => {
-              const count = loading
-                ? null
-                : getValueFor(payload, mainType, value);
+              const count = getValueFor(
+                value === 'all' ? dataAll : dataDB,
+                mainType,
+                value,
+              );
               return (
                 <option value={value} key={value}>
                   {name}
@@ -168,9 +189,11 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
         <span className={f('tabs', { collapsed })} />
         <ul className={f('vertical', 'tabs', 'hide-for-small-only')}>
           {options.map(([name, value]) => {
-            const count = loading
-              ? null
-              : getValueFor(payload, mainType, value);
+            const count = getValueFor(
+              value === 'all' ? dataAll : dataDB,
+              mainType,
+              value,
+            );
             return (
               <MemberDBTab
                 key={name}
@@ -195,7 +218,7 @@ const mapStateToProps = createSelector(
   (newLocation, lowGraphics) => ({ newLocation, lowGraphics }),
 );
 
-const getMemberDBUrl = createSelector(
+const getUrlForMemberDB = createSelector(
   state => state.settings.api,
   state => state.newLocation,
   ({ protocol, hostname, port, root }, location) => {
@@ -209,6 +232,19 @@ const getMemberDBUrl = createSelector(
   },
 );
 
-export default connect(mapStateToProps, { goToNewLocation })(
-  loadData(getMemberDBUrl)(MemberDBTabs),
+const getUrlForAll = createSelector(
+  state => state.settings.api,
+  state => state.newLocation.description.mainType,
+  ({ protocol, hostname, port, root }, mainType) => {
+    return `${protocol}//${hostname}:${port}${root}/${mainType}`;
+  },
 );
+
+let exported = MemberDBTabs;
+exported = loadData({ getUrl: getUrlForAll, propNamespace: 'All' })(exported);
+exported = loadData({ getUrl: getUrlForMemberDB, propNamespace: 'DB' })(
+  exported,
+);
+exported = connect(mapStateToProps, { goToNewLocation })(exported);
+
+export default exported;
