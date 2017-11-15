@@ -47,19 +47,46 @@ const _getAttributesFromStringTag = text =>
       acc[e[0]] = e[1].replace(/"/g, '');
       return acc;
     }, {});
+
 const _getTextFromStringTag = text => text.split(/>([^<]+)/)[1];
+
+const xReferenceURL = {
+  intact: 'https://www.ebi.ac.uk/intact/interaction/{}',
+  ec: 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec={}',
+  prositedoc: 'https://prosite.expasy.org/cgi-bin/prosite/prosite-search-ac?{}',
+  cazy: 'http://www.cazy.org/{}.html',
+  cog: 'ftp://ftp.ncbi.nih.gov/pub/COG/COG2014/static/byCOG/{}.html',
+  tc: 'http://www.tcdb.org/search/result.php?tc={}',
+};
+
 const ParagraphWithTags = ({ children }) => (
   <span>
     {// Checking for the TAG dbxref
     children.split(/(<dbxref [^>]+?\/>)/i).map((part, i) => {
       if (i % 2) {
         const attrs = _getAttributesFromStringTag(part);
+        const mainType =
+          attrs.db.toLowerCase() === 'swissprot' ? 'protein' : 'entry';
+        const mainDB =
+          attrs.db.toLowerCase() === 'swissprot'
+            ? 'uniprot'
+            : attrs.db.toLowerCase();
+        if (mainDB in xReferenceURL) {
+          return (
+            <Link
+              href={xReferenceURL[mainDB].replace('{}', attrs.id)}
+              className={f('ext')}
+            >
+              {attrs.id}
+            </Link>
+          );
+        }
         return (
           <Link
             newTo={{
               description: {
-                mainType: 'entry',
-                mainDB: attrs.db,
+                mainType,
+                mainDB,
                 mainAccession: attrs.id,
               },
             }}
@@ -96,14 +123,12 @@ ParagraphWithTags.propTypes = {
   children: T.any,
 };
 
-const defaultHeightToHide = 200;
 /* ::
  type Props = {
    textBlocks: Array<string> ,
    literature?: Array,
    title?: string,
    extraTextForButton?: string,
-   heightToHide?: number,
  }
  */
 class Description extends Component {
@@ -119,98 +144,56 @@ class Description extends Component {
     literature: T.array,
     title: T.string.isRequired,
     extraTextForButton: T.string.isRequired,
-    heightToHide: T.number,
   };
 
   static defaultProps = {
     title: 'Description',
     extraTextForButton: '',
-    heightToHide: defaultHeightToHide,
   };
 
   constructor(props /* : Props*/) {
     super(props);
     this.state = {
       isOpen: false,
-      contentSize: 5000,
     };
     this.handleClick = this.handleClick.bind(this);
     this.moreButton = null;
     this.divContent = null;
   }
 
-  componentDidMount = () => {
-    window.addEventListener('resize', this.recheckHeight);
-    this.recheckHeight();
-  };
-
-  componentDidUpdate() {
-    this.recheckHeight();
-  }
-
-  componentWillUnmount = () => {
-    window.removeEventListener('resize', this.recheckHeight);
-  };
-
   handleClick() {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
-  onResize() {
-    this.recheckHeight();
-  }
-
-  recheckHeight() {
-    if (this.moreButton && this.divContent) {
-      const moreDiv = this.moreButton;
-      const contentDiv = this.divContent;
-      const { heightToHide } = this.props;
-      if (moreDiv.offsetTop - contentDiv.offsetTop < heightToHide) {
-        this.moreButton.style.display = 'none';
-      } else {
-        this.moreButton.style.display = 'block';
-      }
-      // requestAnimationFrame(() => {console.log('setting'); this.setState({
-      //   contentSize: contentDiv.firstElementChild.offsetHeight,
-      // })});
-    }
-  }
-
   render() {
-    const {
-      textBlocks,
-      literature,
-      title,
-      extraTextForButton,
-      heightToHide,
-    } = this.props;
+    const { textBlocks, literature, title, extraTextForButton } = this.props;
+    const isOpen = this.state.isOpen;
+    const paragraphs = textBlocks.reduce((acc, e) => {
+      transformFormatted(e).forEach(p => acc.push(p));
+      return acc;
+    }, []);
     return (
       <div className={f('description-wrapper', 'margin-bottom-xlarge')}>
         <h4>{title}</h4>
         <div
-          className={f('animate-height', { collapsed: !this.state.isOpen })}
-          style={{
-            maxHeight: `${
-              this.state.isOpen ? this.state.contentSize : heightToHide
-            }px`,
-          }}
+          className={f('animate-height', { collapsed: !isOpen })}
           ref={e => (this.divContent = e)}
         >
-          {textBlocks.map((b, i) => (
-            <div key={i}>
-              {transformFormatted(b).map((p, i) => (
-                <ParagraphWithCites key={i} p={p} literature={literature} />
-              ))}
-            </div>
-          ))}
+          {paragraphs
+            .slice(0, isOpen ? undefined : 1)
+            .map((p, i) => (
+              <ParagraphWithCites key={i} p={p} literature={literature} />
+            ))}
         </div>
-        <button
-          className={f('button')}
-          onClick={this.handleClick}
-          ref={e => (this.moreButton = e)}
-        >
-          Read {this.state.isOpen ? 'less' : 'more'} {extraTextForButton}
-        </button>
+        {paragraphs.length > 1 ? (
+          <button
+            className={f('button')}
+            onClick={this.handleClick}
+            ref={e => (this.moreButton = e)}
+          >
+            Read {this.state.isOpen ? 'less' : 'more'} {extraTextForButton}
+          </button>
+        ) : null}
       </div>
     );
   }
