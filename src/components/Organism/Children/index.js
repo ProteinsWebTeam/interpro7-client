@@ -3,6 +3,12 @@ import T from 'prop-types';
 
 import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
+import { foundationPartial } from 'styles/foundation';
+
+import local from './style.css';
+
+const f = foundationPartial(local);
+
 class Children extends PureComponent {
   static propTypes = {
     taxChildren: T.array.isRequired,
@@ -12,18 +18,20 @@ class Children extends PureComponent {
   render() {
     const { taxChildren, names } = this.props;
     return (
-      <ul>
+      <div className={f('')}>
         Children:
-        {taxChildren.length ? (
-          taxChildren.map(taxId => (
-            <li key={taxId}>
-              <TaxIdOrName accession={taxId} name={names[taxId]} />
-            </li>
-          ))
-        ) : (
-          <li>no child</li>
-        )}
-      </ul>
+        <div className={f('list')}>
+          {taxChildren.length ? (
+            taxChildren.map(taxId => (
+              <div key={taxId}>
+                <TaxIdOrName accession={taxId} name={names[taxId]} />
+              </div>
+            ))
+          ) : (
+            <span> no child</span>
+          )}
+        </div>
+      </div>
     );
   }
 }
