@@ -3,6 +3,8 @@ import T from 'prop-types';
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 
+import uniqueId from 'utils/cheapUniqueId';
+
 const f = foundationPartial(ipro);
 
 const classNames = {
@@ -28,51 +30,54 @@ const classNames = {
   NEW: f('md-new'),
 };
 
-const MemberSymbol = ({ type, className = '' }) => (
-  /*: {
-   type: string
-   className?: string
-   }*/
-  <div>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 200 200"
-      id={`md-${type}`}
-      className={`${className} ${classNames[type.toUpperCase()]}`}
-    >
-      <defs>
-        <clipPath id="stripe-mdcolor-clip">
-          <rect x="33%" y="38%" width="68" height="68" />
-        </clipPath>
-      </defs>
-
-      <text
-        x="50%"
-        y="50%"
-        textAnchor="middle"
-        dx="-0.01em"
-        dy="0.4em"
-        className={f('md-server')}
+const MemberSymbol = ({ type, className = '' }) => {
+  const id = uniqueId();
+  return (
+    /*: {
+     type: string
+     className?: string
+     }*/
+    <div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 200 200"
+        id={`md-${type}`}
+        className={`${className} ${classNames[type.toUpperCase()]}`}
       >
-        D
-      </text>
+        <defs>
+          <clipPath id={`clip-${id}`}>
+            <rect x="33%" y="38%" width="68" height="68" />
+          </clipPath>
+        </defs>
 
-      <text
-        x="50%"
-        y="50%"
-        textAnchor="middle"
-        dx="-0.01em"
-        dy="0.4em"
-        className={f('md-color')}
-        style={{
-          clipPath: 'url(#stripe-mdcolor-clip)',
-        }}
-      >
-        D
-      </text>
-    </svg>
-  </div>
-);
+        <text
+          x="50%"
+          y="50%"
+          textAnchor="middle"
+          dx="-0.01em"
+          dy="0.4em"
+          className={f('md-server')}
+        >
+          D
+        </text>
+
+        <text
+          x="50%"
+          y="50%"
+          textAnchor="middle"
+          dx="-0.01em"
+          dy="0.4em"
+          className={f('md-color')}
+          style={{
+            clipPath: `url(#clip-${id})`,
+          }}
+        >
+          D
+        </text>
+      </svg>
+    </div>
+  );
+};
 MemberSymbol.propTypes = {
   type: T.string.isRequired,
   className: T.string,
