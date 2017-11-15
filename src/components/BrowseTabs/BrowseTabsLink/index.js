@@ -88,12 +88,14 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
       }
     }
 
+    if (!isFirstLevel && !isNaN(value) && !value) return null;
+
     return (
       <Link
         newTo={newTo}
         className={f('browse-tabs-link', { ['is-signature']: isSignature })}
         activeClass={f('is-active', 'is-active-tab')}
-        disabled={!isFirstLevel && !isNaN(value) && !value}
+        // disabled={!isFirstLevel && !isNaN(value) && !value}
       >
         {name}
         {value !== null && ' '}

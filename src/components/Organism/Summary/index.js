@@ -33,7 +33,6 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   /*::
     _vis: any;
     _tree: ?HTMLElement;
-    _focus: ?HTMLElement;
   */
   static propTypes = {
     data: T.shape({
@@ -55,7 +54,6 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 
   componentDidMount() {
     this._vis.tree = this._tree;
-    this._vis.focus = this._focus;
     this.loadingVis = true;
     this._populateData(this.props.data.payload);
     this.loadingVis = false;
@@ -129,7 +127,6 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
             }}
           >
             <svg ref={node => (this._tree = node)} style={{ flex: '1' }} />
-            <div ref={node => (this._focus = node)} style={{ height: '5em' }} />
           </div>
         </div>
       </div>
@@ -146,7 +143,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { data: { metadata } } = this.props;
+    const { data: { payload: { metadata } } } = this.props;
     return (
       <div className={f('row')}>
         <div className={f('medium-10', 'columns')}>

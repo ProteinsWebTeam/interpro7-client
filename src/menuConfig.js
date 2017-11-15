@@ -342,7 +342,24 @@ export const InterPro /*: Array<Object> */ = [
     iconClass: 'functional',
   },
   {
-    newTo: { description: { mainType: 'entry', mainDB: 'InterPro' } },
+    newTo(location) {
+      let mainType = 'entry';
+      let mainDB = 'InterPro';
+      if (
+        location.description.mainType &&
+        location.description.mainType !== 'search'
+      ) {
+        mainType = location.description.mainType;
+        mainDB = location.description.mainDB || 'InterPro';
+      }
+      return {
+        ...location,
+        description: { mainType, mainDB },
+      };
+    },
+    activeClass({ description: { mainType } } /*: Location */) {
+      if (mainType && mainType !== 'search') return f('is-active');
+    },
     icon: 'b',
     name: 'Browse',
     iconClass: 'functional',

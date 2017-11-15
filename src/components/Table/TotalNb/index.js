@@ -22,7 +22,8 @@ const TotalNb = ({
   // const lastPage = Math.ceil(actualSize / pageSize) || 1;
   let textLabel = '';
   if (actualSize) {
-    const type = mainAccession ? focusType : mainType;
+    const type =
+      mainAccession && mainType !== 'organism' ? focusType : mainType;
     const db = focusDB || mainDB;
     const plural = actualSize > 1 ? toPlural(type) : type;
     textLabel = (
