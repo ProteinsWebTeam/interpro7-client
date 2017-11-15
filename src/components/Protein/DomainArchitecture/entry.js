@@ -192,6 +192,7 @@ class EntryRenderer {
               .join(''),
           );
         }
+      // eslint-disable-next-line no-fallthrough
       default:
         return '#AAAAAA';
     }

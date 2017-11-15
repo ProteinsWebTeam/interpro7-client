@@ -3,6 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
+import omit from 'lodash-es/omit';
 
 import Link from 'components/generic/Link';
 import description2path from 'utils/processLocation/description2path';
@@ -108,6 +109,10 @@ const primariesAndSecondaries = {
       primary: 'organism',
       secondary: 'entry',
     },
+    set: {
+      primary: 'set',
+      secondary: 'entry',
+    },
   },
   protein: {
     entry: {
@@ -141,6 +146,24 @@ const primariesAndSecondaries = {
     structure: {
       primary: 'structure',
       secondary: 'organism',
+    },
+  },
+  set: {
+    entry: {
+      primary: 'entry',
+      secondary: 'set',
+    },
+    protein: {
+      primary: 'protein',
+      secondary: 'set',
+    },
+    structure: {
+      primary: 'structure',
+      secondary: 'set',
+    },
+    organism: {
+      primary: 'organism',
+      secondary: 'set',
     },
   },
 };
@@ -237,9 +260,13 @@ const getReversedUrl = createSelector(
       return acc;
     }, {});
     const s = search || {};
-    return `${protocol}//${hostname}:${port}${root}${description2path(
+    let url = `${protocol}//${hostname}:${port}${root}${description2path(
       newDesc,
     )}?${qsStringify(s)}`;
+    if (url.includes('organism')) {
+      url = url.replace('/entry/', '/protein/entry/');
+    }
+    return url;
   },
 );
 const mapStateToPropsAdvancedQuery = createSelector(
@@ -247,37 +274,38 @@ const mapStateToPropsAdvancedQuery = createSelector(
   mainType => ({ mainType }),
 );
 const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
-  loadData(
-    getReversedUrl,
-  )(({ data: { payload, loading }, secondaryData, ...props }) => {
-    if (loading)
+  loadData(getReversedUrl)(
+    ({ data: { payload, loading }, secondaryData, ...props }) => {
+      if (loading)
+        return (
+          <div className={f('row')}>
+            <div className={f('columns')}>Loading… </div>
+          </div>
+        );
+      const _secondaryData = payload.results.map(x => {
+        const { ...obj } = x.metadata;
+        const plural = toPlural(props.mainType);
+        obj.counters = omit(x, ['metadata', plural]);
+        // Given the reverse of the URL, and that we are querying by an accession
+        // we can assume is only one, hence [0]
+        obj.entry_protein_locations = x[plural][0].entry_protein_locations;
+        obj.protein_length = x[plural][0].protein_length;
+        obj.protein_structure_locations =
+          x[plural][0].protein_structure_locations;
+        if (x[plural][0].chain) {
+          obj.chain = x[plural][0].chain;
+        }
+        return obj;
+      });
       return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading… </div>
-        </div>
+        <RelatedAdvanced
+          secondaryData={_secondaryData}
+          actualSize={payload.count}
+          {...props}
+        />
       );
-    const _secondaryData = payload.results.map(x => {
-      const obj = x.metadata;
-      const plural = toPlural(props.mainType);
-      // Given the reverse of the URL, and that we are querying by an accession
-      // we can assume is only one, hence [0]
-      obj.entry_protein_locations = x[plural][0].entry_protein_locations;
-      obj.protein_length = x[plural][0].protein_length;
-      obj.protein_structure_locations =
-        x[plural][0].protein_structure_locations;
-      if (x[plural][0].chain) {
-        obj.chain = x[plural][0].chain;
-      }
-      return obj;
-    });
-    return (
-      <RelatedAdvanced
-        secondaryData={_secondaryData}
-        actualSize={payload.count}
-        {...props}
-      />
-    );
-  }),
+    },
+  ),
 );
 
 class Related extends PureComponent {

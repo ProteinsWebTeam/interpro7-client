@@ -88,12 +88,17 @@ class _SideIcons extends PureComponent {
   static propTypes = {
     movedAway: T.bool.isRequired,
     stuck: T.bool.isRequired,
+    lowGraphics: T.bool.isRequired,
   };
 
   render() {
-    const { movedAway, stuck } = this.props;
+    const { movedAway, stuck, lowGraphics } = this.props;
     return (
-      <div className={styleBundle('columns', 'small-6', 'medium-4')}>
+      <div
+        className={styleBundle('columns', 'small-6', 'medium-4', {
+          lowGraphics,
+        })}
+      >
         <div className={reducedStyleBundle('side-icons', { movedAway })}>
           <HamburgerBtn svg={true} stuck={stuck} />
           <label className={reducedStyleBundle('side-search', { stuck })}>
@@ -126,9 +131,11 @@ class _SideIcons extends PureComponent {
   }
 }
 
-const mapStateToPropsSideIcons = createSelector(getSideNav, movedAway => ({
-  movedAway,
-}));
+const mapStateToPropsSideIcons = createSelector(
+  getSideNav,
+  state => state.settings.ui.lowGraphics,
+  (movedAway, lowGraphics) => ({ movedAway, lowGraphics }),
+);
 const SideIcons = connect(mapStateToPropsSideIcons)(_SideIcons);
 
 // const SubMediumLevel = ({pages, pageType}) => (
@@ -170,16 +177,16 @@ class Header extends PureComponent {
   static propTypes = {
     stickyMenuOffset: T.number.isRequired,
     stuck: T.bool.isRequired,
-    issignature: T.bool.isRequired,
+    isSignature: T.bool.isRequired,
   };
 
   // TODO: check why position:sticky banner in the page works just on top - pbm with container
   render() {
-    const { stickyMenuOffset: offset, stuck, issignature } = this.props;
+    const { stickyMenuOffset: offset, stuck, isSignature } = this.props;
     return (
       <div
         id={ebiGlobalStyles.masthead}
-        className={styleBundle('masthead', { sign: issignature })}
+        className={styleBundle('masthead', { sign: isSignature })}
         style={styleForHeader(false && supportsSticky, offset, stuck)}
       >
         <div className={styleBundle('masthead-inner', 'row')}>
@@ -201,9 +208,9 @@ const mapStateToProps = createSelector(
   state => state.newLocation.description.mainAccession,
   (stuck, mainType, mainDB, mainAccession) => ({
     stuck,
-    issignature: !!(
+    isSignature: !!(
       mainType === 'entry' &&
-      mainDB.toLowerCase() !== 'interpro' &&
+      mainDB !== 'InterPro' &&
       mainAccession
     ),
   }),

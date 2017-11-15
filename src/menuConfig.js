@@ -39,40 +39,94 @@ export const EBI /*: Array<Object> */ = [
 
 export const entities /*: Array<Object> */ = [
   {
-    newTo: {
-      description: {
-        mainType: 'entry',
-        mainDB: 'InterPro',
-      },
+    newTo(location) {
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainType: 'entry',
+          mainDB:
+            location.description.focusIntegration ||
+            location.description.focusDB ||
+            (location.description.mainType === 'entry' &&
+              location.description.mainDB) ||
+            'InterPro',
+          focusType: null,
+          focusDB: null,
+          focusIntegration: null,
+        },
+      };
     },
     name: 'Entry',
   },
   {
-    newTo: {
-      description: {
-        mainType: 'protein',
-        mainDB: 'UniProt',
-      },
+    newTo(location) {
+      let { focusType, focusDB } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainType: 'protein',
+          mainDB: 'UniProt',
+          focusType,
+          focusDB,
+        },
+      };
     },
     name: 'Protein',
   },
   {
-    newTo: {
-      description: {
-        mainType: 'structure',
-        mainDB: 'PDB',
-      },
+    newTo(location) {
+      let { focusType, focusDB } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainType: 'structure',
+          mainDB: 'PDB',
+          focusType,
+          focusDB,
+        },
+      };
     },
     name: 'Structure',
   },
   {
-    newTo: {
-      description: {
-        mainType: 'organism',
-        mainDB: 'taxonomy',
-      },
+    newTo(location) {
+      let { focusType, focusDB } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
+      return {
+        ...location,
+        description: {
+          ...location.description,
+          mainType: 'organism',
+          mainDB: 'taxonomy',
+          focusType,
+          focusDB,
+        },
+      };
     },
     name: 'Organism',
+  },
+  {
+    newTo: {
+      description: {
+        mainType: 'set',
+        mainDB: 'pfam',
+      },
+    },
+    name: 'Set',
   },
 ];
 
@@ -107,7 +161,10 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             mainDetail: null,
             mainMemberDB: null,
             focusType: 'entry',
-            focusDB: null,
+            focusDB:
+              location.description.mainType === 'set'
+                ? location.description.mainDB
+                : null,
             focusIntegration: 'all',
           },
         };
@@ -174,6 +231,25 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
       },
       name: 'Organisms',
       counter: 'organisms',
+    },
+  ],
+  [
+    'set',
+    {
+      newTo(location /*: Location */) {
+        return {
+          ...location,
+          description: {
+            ...location.description,
+            mainDetail: null,
+            focusType: 'set',
+            focusDB: 'pfam',
+            mainMemberDB: null,
+          },
+        };
+      },
+      name: 'Sets',
+      counter: 'sets',
     },
   ],
   [

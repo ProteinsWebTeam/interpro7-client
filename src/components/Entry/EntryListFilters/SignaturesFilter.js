@@ -34,6 +34,7 @@ class SignaturesFilter extends Component {
       search: {
         ...this.props.location.search,
         signature_in: value === 'All' ? undefined : value,
+        page: undefined,
       },
     });
   };
@@ -69,7 +70,9 @@ class SignaturesFilter extends Component {
                 style={{ margin: '0.25em' }}
               />
               <span>{signatureDB}</span>
-              <NumberLabel value={count} className={f('filter-label')} />
+              {typeof count === 'undefined' || isNaN(count) ? null : (
+                <NumberLabel value={count} className={f('filter-label')} />
+              )}
             </label>
           </div>
         ))}

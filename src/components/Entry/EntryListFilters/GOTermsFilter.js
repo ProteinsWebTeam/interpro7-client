@@ -40,6 +40,7 @@ class GOTermsFilter extends Component {
       search: {
         ...this.props.location.search,
         go_term: value === 'All' ? undefined : value,
+        page: undefined,
       },
     });
   };
@@ -69,7 +70,7 @@ class GOTermsFilter extends Component {
                 style={{ margin: '0.25em' }}
               />
               <span>{term}</span>
-              {typeof count === 'undefined' ? null : (
+              {typeof count === 'undefined' || isNaN(count) ? null : (
                 <NumberLabel value={count} className={f('filter-label')} />
               )}
             </label>

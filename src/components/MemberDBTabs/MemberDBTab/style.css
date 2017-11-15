@@ -1,10 +1,6 @@
 @import '../../../styles/colors.css';
 @import '../../../styles/timing.css';
 
-.tabs {
-  border: 0;
-}
-
 .tabs-title span:first-child {
   color: #4b555b;
 }
@@ -15,7 +11,7 @@
   /*border-right: 2px solid #7ba3b6;*/
   border-left: 3px solid currentColor;
   /*border-radius: 5px 0 0 5px;*/
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   padding: 0.66rem; /*not 0.7 for firefox*/
   position: relative;
   display: flex;
@@ -116,6 +112,14 @@
   background-color: var(--colors-tigrfams);
 }
 
+.lowGraphics.tabs-title > a,
+.lowGraphics.tabs-title > span {
+  &::before,
+  &::after {
+    transition: none;
+  }
+}
+
 @media screen and (prefers-reduced-motion: reduce) {
   .tabs-title > a,
   .tabs-title > span {
@@ -126,50 +130,17 @@
   }
 }
 
-.expand-button {
-  padding: 0.2em 0.4em;
-  margin-bottom: 0;
-}
 .collapsed .tabs-title {
   & a,
   & span {
     display: none;
   }
 }
-/*target the div - increase width - that come immediatly after collapsed - doesn't work using class*/
-.collapsed + div {
-  flex: 0 0 94%;
-  max-width: 94%;
-  width: 94%;
+
+.tabs-title > a.is-active:before {
+  background: currentColor;
 }
 
-/*onglet appearing on collapsed - not used */
-.collapsed .tabs-title a.is-active-tab {
-  display: none; /*flex*/
-  position: absolute;
-  left: 0;
-  top: 0;
-  text-align: center;
-  transform: rotate(-90deg) scaleX(1);
-  transform-origin: top center 0;
-  border: 0px solid #7ba3b6;
-  border-bottom: 0;
-  padding: 0.22rem 0.8rem;
-  & span {
-    display: inline-block;
-  }
-}
-
-.collapsed.columns {
-  flex: 0 0 auto;
-  padding: 0;
-  width: auto;
-  margin-left: 1rem;
-}
-.collapsed ul {
-  padding: 0;
-  margin: 0;
-}
 .db-label {
   text-transform: capitalize;
 }
@@ -187,41 +158,9 @@
   background: #71818a;
 }
 
-.tabs-title > a.is-active:before {
-  background: currentColor;
-}
-
-button.hollow.light {
-  color: #92989c;
-  border: 1px solid #d1d9de;
-  outline: 0;
-}
-button.hollow.light:hover,
-button.hollow.light:focus {
-  color: #4b555b;
-  border: 1px solid #92989c;
-}
-
-.browsemd-panel,
-.browsemd-panel select {
-  color: #4b555b;
-}
-
 @media screen and (max-width: 39.9375em) {
   /*temp while we replace MD menu by select */
   .tabs-title:last-child {
     border-bottom: 1px #cacaca solid;
-  }
-}
-
-/*remove collapse effect for small screens as we replace the menu by select*/
-@media screen and (max-width: 39.9375em) {
-  .collapsed + div {
-    flex: 0 0 100%;
-    max-width: 100%;
-    width: 100%;
-  }
-  .collapsed.columns {
-    margin-left: 0.625rem;
   }
 }

@@ -81,29 +81,6 @@
   align-items: center;
 }
 
-.top_level_title {
-  font-family: var(--fonts-header);
-  transform-origin: bottom left;
-  transition: transform 0.5s ease-in-out;
-  transform: scaleY(1);
-  flex: 1;
-
-  & .scrolled {
-    transform: scale(0.5);
-  }
-
-  @nest & * {
-    margin: 0;
-  }
-
-  @nest & > * {
-    padding: var(--spacing-huge) 0;
-  }
-
-  @nest & img {
-    padding: var(--spacing-big);
-  }
-}
 .masthead button {
   outline: 0;
 }
@@ -118,9 +95,10 @@
   transform: translateY(0);
   transition-duration: var(--timing-fast);
   transition-timing-function: ease-in-out;
-}
-.top_level_hamburger.stuck {
-  transform: translateY(220%) Scale(0.8);
+
+  &.stuck {
+    transform: translateY(220%) Scale(0.8);
+  }
 }
 
 .hamb_line {
@@ -258,11 +236,11 @@
   transition-delay: 0s;
 }
 .side-search.stuck svg {
-  transform: Scale(0.9);
+  transform: scale(0.9);
 }
 .side-search.stuck svg:hover,
 .side-search.stuck > div:hover ~ a div svg {
-  transform: rotate(90deg) Scale(0.9);
+  transform: rotate(90deg) scale(0.9);
 } /*keep the zoom icon same size when rotating and stuck*/
 
 .side-search svg {
@@ -272,6 +250,27 @@
 
 .side-search svg:hover {
   transform: rotate(90deg);
+}
+
+.lowGraphics {
+  & .side-search.stuck,
+  & .side-search.stuck svg,
+  & .side-search.stuck svg:hover,
+  & .side-search.stuck > input:hover ~ a svg,
+  & .side-search svg:hover,
+  & .side-search > input,
+  & .side-search > input:focus,
+  & .side-search > input:hover {
+    transform: none;
+
+    & ~ * > svg {
+      transform: none;
+    }
+  }
+}
+
+.lowGraphics {
+  transition: none;
 }
 
 .side-search input {

@@ -4,7 +4,7 @@ import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import MemberDBTabs from 'components/MemberDBTabs';
 import OrganismListFilters from 'components/Organism/OrganismListFilters';
 import Table, {
   Column,
@@ -222,7 +222,8 @@ class Summary extends PureComponent {
             locationSelector={l =>
               l.description.mainDetail ||
               l.description.focusType ||
-              l.description.mainMemberDB}
+              l.description.mainMemberDB
+            }
             indexRoute={SummaryComponent}
             childRoutes={subPagesForOrganism}
           />
@@ -241,7 +242,8 @@ class InnerSwitch extends PureComponent {
         <Switch
           {...this.props}
           locationSelector={l =>
-            l.description.mainAccession || l.description.focusType}
+            l.description.mainAccession || l.description.focusType
+          }
           indexRoute={List}
           childRoutes={[{ value: acc, component: Summary }]}
           catchAll={List}

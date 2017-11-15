@@ -34,9 +34,16 @@ class IntegratedFilter extends Component {
   }
 
   componentWillMount() {
+    this.location2state(this.props.location);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.location2state(nextProps.location);
+  }
+  location2state(location) {
     const integration =
-      this.props.location.description.mainIntegration ||
-      this.props.location.description.focusIntegration;
+      location.description.mainIntegration ||
+      location.description.focusIntegration;
     if (integration === 'unintegrated') {
       this.setState({ value: 'unintegrated' });
     } else if (integration === 'integrated') {

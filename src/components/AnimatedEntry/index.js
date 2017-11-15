@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 const DEFAULT_ITEM_DELAY = 25;
 const DEFAULT_DURATION = 250;
@@ -13,7 +15,7 @@ const DEFAULT_DURATION = 250;
   animateSelf: boolean,
 } */
 
-export default class AnimatedEntry extends PureComponent /*:: <Props> */ {
+class AnimatedEntry extends PureComponent /*:: <Props> */ {
   /* ::
     _node: ?Element
     _animations: ?Array<any>
@@ -25,6 +27,7 @@ export default class AnimatedEntry extends PureComponent /*:: <Props> */ {
     itemDelay: T.number,
     duration: T.number,
     animateSelf: T.bool,
+    lowGraphics: T.bool.isRequired,
   };
 
   static defaultProps = {
@@ -37,10 +40,10 @@ export default class AnimatedEntry extends PureComponent /*:: <Props> */ {
   };
 
   componentDidMount() {
-    if (!this._node || !this._node.animate) return;
+    if (this.props.lowGraphics || !this._node || !this._node.animate) return;
     const { keyframes, delay, itemDelay, duration, animateSelf } = this.props;
     const toAnimate = Array.from(
-      animateSelf ? [this._node] : this._node.children
+      animateSelf ? [this._node] : this._node.children,
     );
     this._animations = toAnimate.map((element /*: any */, i) =>
       element.animate(keyframes, {
@@ -48,7 +51,7 @@ export default class AnimatedEntry extends PureComponent /*:: <Props> */ {
         delay: delay + itemDelay * (i + 1),
         easing: 'ease-in-out',
         fill: 'both',
-      })
+      }),
     );
   }
 
@@ -67,8 +70,16 @@ export default class AnimatedEntry extends PureComponent /*:: <Props> */ {
       itemDelay,
       duration,
       animateSelf,
+      lowGraphics,
       ...props
     } = this.props;
     return <Element ref={node => (this._node = node)} {...props} />;
   }
 }
+
+const mapStateToProps = createSelector(
+  state => state.settings.ui.lowGraphics,
+  lowGraphics => ({ lowGraphics }),
+);
+
+export default connect(mapStateToProps)(AnimatedEntry);

@@ -13,7 +13,7 @@ import styles from './styles.css';
 
 const f = foundationPartial(theme, styles);
 
-const PaginationSettings = ({ pagination, handleChange }) => (
+const PaginationSettings = ({ pagination: { pageSize } }) => (
   <form data-category="pagination">
     <h4>Pagination settings</h4>
     <div className={f('row')}>
@@ -27,13 +27,12 @@ const PaginationSettings = ({ pagination, handleChange }) => (
                 min="1"
                 max="200"
                 step="1"
-                value={pagination.pageSize}
+                value={pageSize}
                 name="pageSize"
-                onChange={handleChange}
                 style={{ width: '100%' }}
               />
             </div>
-            <div className={f('medium-8', 'column')}>{pagination.pageSize}</div>
+            <div className={f('medium-8', 'column')}>{pageSize}</div>
           </div>
         </label>
       </div>
@@ -41,44 +40,81 @@ const PaginationSettings = ({ pagination, handleChange }) => (
   </form>
 );
 PaginationSettings.propTypes = {
-  pagination: T.object.isRequired,
+  pagination: T.shape({
+    pageSize: T.number.isRequired,
+  }).isRequired,
   handleChange: T.func.isRequired,
 };
 
-const UISettings = (/* {ui, handleChange}*/) => (
+const UISettings = ({ ui: { lowGraphics } }) => (
   <form data-category="ui">
     <h4>UI settings</h4>
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        <p>Low graphics mode:</p>
+        <p>
+          <small>Recommended for low-end devices</small>
+        </p>
+        <div className={f('switch', 'large')}>
+          <input
+            type="checkbox"
+            checked={lowGraphics}
+            className={f('switch-input')}
+            name="lowGraphics"
+            id="lowGraphics-input"
+          />
+          <label className={f('switch-paddle')} htmlFor="lowGraphics-input">
+            <span className={f('show-for-sr')}>Low graphics mode:</span>
+            <span className={f('switch-active')} aria-hidden="true">
+              On
+            </span>
+            <span className={f('switch-inactive')} aria-hidden="true">
+              Off
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
   </form>
 );
 UISettings.propTypes = {
-  ui: T.object.isRequired,
-  handleChange: T.func.isRequired,
+  ui: T.shape({
+    lowGraphics: T.bool.isRequired,
+  }).isRequired,
 };
 
-const CacheSettings = ({ cache: { enabled }, handleChange }) => (
+const CacheSettings = ({ cache: { enabled } }) => (
   <form data-category="cache">
     <h4>Cache settings</h4>
     <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
-        <label>
-          Caching:
+        <p>Caching:</p>
+        <div className={f('switch', 'large')}>
           <input
             type="checkbox"
             checked={enabled}
+            className={f('switch-input')}
             name="enabled"
-            onChange={handleChange}
+            id="cache-input"
           />
-          <span className={f('label', { warning: !enabled })}>
-            {enabled ? 'enabled' : 'disabled'}
-          </span>
-        </label>
+          <label className={f('switch-paddle')} htmlFor="cache-input">
+            <span className={f('show-for-sr')}>Caching:</span>
+            <span className={f('switch-active')} aria-hidden="true">
+              On
+            </span>
+            <span className={f('switch-inactive')} aria-hidden="true">
+              Off
+            </span>
+          </label>
+        </div>
       </div>
     </div>
   </form>
 );
 CacheSettings.propTypes = {
-  cache: T.object.isRequired,
-  handleChange: T.func.isRequired,
+  cache: T.shape({
+    enabled: T.bool.isRequired,
+  }).isRequired,
 };
 
 const getStatusText = (loading, ok) => {
@@ -87,7 +123,6 @@ const getStatusText = (loading, ok) => {
 };
 
 const EndpointSettings = ({
-  handleChange,
   category,
   endpointDetails: { hostname, port, root },
   data: { loading, ok, status },
@@ -99,30 +134,19 @@ const EndpointSettings = ({
       <div className={f('medium-3', 'column')}>
         <label>
           Hostname:
-          <input
-            type="text"
-            value={hostname}
-            name="hostname"
-            onChange={handleChange}
-          />
+          <input type="text" value={hostname} name="hostname" />
         </label>
       </div>
       <div className={f('medium-3', 'column')}>
         <label>
           Port:
-          <input
-            type="number"
-            min="1"
-            value={port}
-            name="port"
-            onChange={handleChange}
-          />
+          <input type="number" min="1" value={port} name="port" />
         </label>
       </div>
       <div className={f('medium-3', 'column')}>
         <label>
           Root:
-          <input type="text" value={root} name="root" onChange={handleChange} />
+          <input type="text" value={root} name="root" />
         </label>
       </div>
       <div className={f('medium-3', 'column')}>
@@ -144,7 +168,6 @@ const EndpointSettings = ({
   </form>
 );
 EndpointSettings.propTypes = {
-  handleChange: T.func.isRequired,
   category: T.string.isRequired,
   endpointDetails: T.shape({
     hostname: T.string.isRequired,
@@ -202,27 +225,15 @@ const Settings = ({
           pagination={pagination}
           handleChange={changeSettings}
         />
-        <UISettings ui={ui} handleChange={changeSettings} />
-        <CacheSettings cache={cache} handleChange={changeSettings} />
-        <APIEndpointSettings
-          handleChange={changeSettings}
-          category="api"
-          endpointDetails={api}
-        >
+        <UISettings ui={ui} />
+        <CacheSettings cache={cache} />
+        <APIEndpointSettings category="api" endpointDetails={api}>
           API Settings
         </APIEndpointSettings>
-        <EBIEndpointSettings
-          handleChange={changeSettings}
-          category="ebi"
-          endpointDetails={ebi}
-        >
+        <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
           EBI Search Settings
         </EBIEndpointSettings>
-        <IPScanEndpointSettings
-          handleChange={changeSettings}
-          category="ipScan"
-          endpointDetails={ipScan}
-        >
+        <IPScanEndpointSettings category="ipScan" endpointDetails={ipScan}>
           InterProScan Settings
         </IPScanEndpointSettings>
         <button onClick={resetSettings} className={f('button')}>

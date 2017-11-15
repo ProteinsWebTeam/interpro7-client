@@ -4,8 +4,9 @@ import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import Table, {
   Column,
@@ -28,79 +29,8 @@ import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
+
 const f = foundationPartial(pageStyle, styles);
-
-const propTypes = {
-  data: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-  }).isRequired,
-  isStale: T.bool.isRequired,
-  location: T.shape({
-    description: T.object.isRequired,
-    search: T.object.isRequired,
-  }).isRequired,
-};
-
-const Overview = ({
-  data: { payload, loading },
-  location: { search: { type } },
-  isStale,
-}) => {
-  if (loading || isStale)
-    return (
-      <div className={f('row')}>
-        <div className={f('columns')}>Loading… </div>
-      </div>
-    );
-  return (
-    <div>
-      Member databases:
-      <ul className={f('card')}>
-        {Object.entries(
-          payload.entries.member_databases,
-        ).map(([name, count]) => (
-          <li key={name}>
-            <Link
-              newTo={{
-                description: { mainType: 'entry', mainDB: name },
-                search: { type },
-              }}
-            >
-              {name} ({count})
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <ul className={f('card')}>
-        <li>
-          <Link
-            newTo={{
-              description: { mainType: 'entry', mainDB: 'InterPro' },
-              search: { type },
-            }}
-          >
-            InterPro ({payload.entries ? payload.entries.interpro : 0})
-          </Link>
-        </li>
-        <li>
-          <Link
-            newTo={{
-              description: {
-                mainType: 'entry',
-                mainIntegration: 'Unintegrated',
-              },
-              search: { type },
-            }}
-          >
-            Unintegrated ({payload.entries ? payload.entries.unintegrated : 0})
-          </Link>
-        </li>
-      </ul>
-    </div>
-  );
-};
-Overview.propTypes = propTypes;
 
 const schemaProcessDataTable = mainDB => ({
   '@type': 'Dataset',
@@ -125,7 +55,17 @@ const schemaProcessDataTableRow = data => ({
 });
 
 class List extends Component {
-  static propTypes = propTypes;
+  static propTypes = {
+    data: T.shape({
+      payload: T.object,
+      loading: T.bool.isRequired,
+    }).isRequired,
+    isStale: T.bool.isRequired,
+    location: T.shape({
+      description: T.object.isRequired,
+      search: T.object.isRequired,
+    }).isRequired,
+  };
 
   componentWillMount() {
     loadWebComponent(() =>
@@ -281,7 +221,8 @@ class List extends Component {
                         ))}
                       </span>
                     </div>
-                  ))}
+                  ))
+                }
               >
                 Signatures{' '}
                 <span className={f('sign-label-head')} title="Signature ID">
@@ -345,7 +286,8 @@ class List extends Component {
                           </GoLink>
                         </span>
                       </div>
-                    ))}
+                    ))
+                }
               >
                 GO Terms{' '}
                 <span
@@ -419,7 +361,8 @@ const Summary = props => {
       <Switch
         {...props}
         locationSelector={l =>
-          l.description.mainDetail || l.description.focusType}
+          l.description.mainDetail || l.description.focusType
+        }
         indexRoute={SummaryComponent}
         childRoutes={subPagesForEntry}
       />
@@ -433,6 +376,17 @@ Summary.propTypes = {
   }).isRequired,
   isStale: T.bool.isRequired,
 };
+
+const RedirectToInterPro = () => (
+  <Redirect
+    to={{
+      description: {
+        mainType: 'entry',
+        mainDB: 'InterPro',
+      },
+    }}
+  />
+);
 
 const dbAccs = new RegExp(
   `(${memberDB
@@ -448,7 +402,8 @@ const InnerSwitch = props => (
     <Switch
       {...props}
       locationSelector={l =>
-        l.description.mainAccession || l.description.focusType}
+        l.description.mainAccession || l.description.focusType
+      }
       indexRoute={List}
       childRoutes={[{ value: dbAccs, component: Summary }]}
       catchAll={List}
@@ -531,7 +486,7 @@ class Entry extends PureComponent {
           <Switch
             {...this.props}
             locationSelector={l => l.description.mainDB}
-            indexRoute={Overview}
+            indexRoute={RedirectToInterPro}
             catchAll={InnerSwitch}
           />
         </ErrorBoundary>

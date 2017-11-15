@@ -1,6 +1,5 @@
 // @flow
 import React, { PureComponent } from 'react';
-
 import Link from 'components/generic/Link';
 
 import { pkg } from 'config';
@@ -215,7 +214,8 @@ export default class About extends PureComponent /*:: <{}> */ {
                     <h5>INTERPRO</h5>
                   </span>
                   <span className={f('cite-text')}>
-                    To cite InterPro, please refer to the following publication:<br />
+                    To cite InterPro, please refer to the following publication:<br
+                    />
                     <i>
                       Robert D. Finn, Teresa K. Attwood, Patricia C. Babbitt,
                       Alex Bateman, Peer Bork, Alan J. Bridge, Hsin-Yu Chang,
@@ -258,7 +258,7 @@ export default class About extends PureComponent /*:: <{}> */ {
                       Maslen, Alex Mitchell, Gift Nuka, Sebastien Pesseat,
                       Antony F. Quinn, Amaia Sangrador-Vegas, Maxim
                       Scheremetjew, Siew-Yit Yong, Rodrigo Lopez, and Sarah
-                      Hunter {' '}
+                      Hunter{' '}
                     </i>(2014).{' '}
                     <strong>
                       InterProScan 5: genome-scale protein function

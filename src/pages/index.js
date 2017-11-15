@@ -33,6 +33,9 @@ const Structure = loadable({
 const Organism = loadable({
   loader: () => import(/* webpackChunkName: "organism-page" */ './Organism'),
 });
+const EntrySet = loadable({
+  loader: () => import(/* webpackChunkName: "organism-page" */ './Set'),
+});
 
 // Static pages
 const Search = loadable({
@@ -62,6 +65,7 @@ const pages = new Set([
   { value: 'protein', component: Protein },
   { value: 'structure', component: Structure },
   { value: 'organism', component: Organism },
+  { value: 'set', component: EntrySet },
   // static pages
   { value: 'search', component: Search },
   { value: 'about', component: About },
@@ -100,7 +104,8 @@ class Pages extends PureComponent /*:: <Props> */ {
           <Switch
             {...props}
             locationSelector={l =>
-              l.description.other || l.description.mainType}
+              l.description.other || l.description.mainType
+            }
             indexRoute={Home}
             childRoutes={pages}
             catchAll={NotFound}

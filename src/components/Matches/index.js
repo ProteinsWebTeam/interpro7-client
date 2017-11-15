@@ -193,7 +193,12 @@ const Matches = (
       </Column>
       <Column
         dataKey="match"
-        displayIf={primary !== 'organism' && secondary !== 'organism'}
+        displayIf={
+          primary !== 'organism' &&
+          secondary !== 'organism' &&
+          primary !== 'set' &&
+          secondary !== 'set'
+        }
         renderer={(match /*: Object */) => (
           <MatchesByPrimary
             matches={[match]}
@@ -204,6 +209,14 @@ const Matches = (
         )}
       >
         Architecture
+      </Column>
+      <Column
+        dataKey="counters.proteins.uniprot"
+        defaultKey="protein-count"
+        className={f('table-center')}
+        displayIf={primary === 'organism'}
+      >
+        protein count
       </Column>
       <Column
         dataKey="accession"

@@ -2,16 +2,12 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
-import { stringify as qsStringify } from 'query-string';
 
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
 import ProteinFile from './ProteinFile';
 // import Metadata from 'wrappers/Metadata';
 // import TaxIdOrName from 'components/Organism/TaxIdOrName';
-
-import loadData from 'higherOrder/loadData';
-import description2path from 'utils/processLocation/description2path';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -199,21 +195,4 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToUrl = createSelector(
-  state => state.settings.api,
-  state => state.newLocation.description,
-  ({ protocol, hostname, port, root }, description) => {
-    const _description = {
-      mainType: 'protein',
-      mainDB: 'UniProt',
-      focusType: description.mainType,
-      focusDB: description.mainDB,
-      focusAccession: description.mainAccession,
-    };
-    return `${protocol}//${hostname}:${port}${root}${description2path(
-      _description,
-    )}?${qsStringify({ group_by: 'tax_id' })}`;
-  },
-);
-
-export default loadData(mapStateToUrl)(OrganismSubPage);
+export default OrganismSubPage;

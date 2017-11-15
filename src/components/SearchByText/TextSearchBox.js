@@ -5,6 +5,9 @@ import { createSelector } from 'reselect';
 
 import { goToNewLocation } from 'actions/creators';
 
+const MAX_PAD = 6;
+const pad = n => (n.length < MAX_PAD ? pad(`0${n}`) : n);
+
 class TextSearchBox extends Component {
   static propTypes = {
     pageSize: T.number,
@@ -12,6 +15,9 @@ class TextSearchBox extends Component {
     className: T.string,
     toSubmit: T.bool,
     goToNewLocation: T.func,
+    search: T.shape({
+      search: T.string,
+    }),
   };
 
   constructor(props) {
@@ -19,11 +25,15 @@ class TextSearchBox extends Component {
     this.state = { value: props.value };
   }
 
+  componentWillMount() {
+    if (this.props.search) this.setState({ value: this.props.search.search });
+  }
+
   componentWillReceiveProps(nextProps) {
     const { value = '', toSubmit = false } = nextProps;
     if (this.props.value === value && this.props.toSubmit === toSubmit) return;
-    if (toSubmit) this.routerPush();
     this.setState({ value });
+    if (toSubmit) this.routerPush();
   }
 
   routerPush = () => {
@@ -33,7 +43,13 @@ class TextSearchBox extends Component {
       page_size: pageSize,
     };
     const { value: search } = this.state;
-    if (search) query.search = search;
+    if (search) {
+      if (isNaN(Number(search))) {
+        query.search = search;
+      } else {
+        query.search = `IPR${pad(search)}`;
+      }
+    }
     // this.setState({redirecting: {pathname, query}});
     this.props.goToNewLocation({
       description: {
@@ -74,7 +90,7 @@ class TextSearchBox extends Component {
 
 const mapStateToProps = createSelector(
   state => state.settings.pagination.pageSize,
-  pageSize => ({ pageSize })
+  pageSize => ({ pageSize }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(TextSearchBox);

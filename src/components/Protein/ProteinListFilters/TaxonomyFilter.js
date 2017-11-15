@@ -42,6 +42,10 @@ class TaxonomyFilter extends PureComponent {
         focusDB: value === 'ALL' ? null : 'taxonomy',
         focusAccession: value === 'ALL' ? null : value,
       },
+      search: {
+        ...location.search,
+        page: undefined,
+      },
     });
   };
 
@@ -83,7 +87,9 @@ class TaxonomyFilter extends PureComponent {
                   <TaxIdOrName accession={taxId} element="div" />
                 </Metadata>
               )}
-              <NumberLabel value={count} className={f('filter-label')} />
+              {typeof count === 'undefined' || isNaN(count) ? null : (
+                <NumberLabel value={count} className={f('filter-label')} />
+              )}
             </label>
           </div>
         ))}

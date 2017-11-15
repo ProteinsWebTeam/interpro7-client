@@ -41,28 +41,6 @@ const getcolor = db => {
   }
   return color;
 };
-const MaskSvgIcons = () => (
-  <svg
-    viewBox="0 0 200 200"
-    style={{
-      position: 'fixed',
-      width: 0,
-      height: 0,
-      top: -1800,
-      left: -1800,
-      /* to hide SVG on the page as display:none is not working */
-    }}
-  >
-    <defs>
-      <clipPath id="cut-off-center">
-        <rect x="33%" y="38%" width="68" height="68" />
-      </clipPath>
-      <clipPath id="cut-off-bottom">
-        <polygon points="0,68 68,0 68,68" />
-      </clipPath>
-    </defs>
-  </svg>
-);
 
 const mapNameToClass = new Map([
   ['Domain', 'title-id-domain'],
@@ -122,7 +100,6 @@ export default class Title extends PureComponent /*:: <Props> */ {
           metadata.source_database &&
           metadata.source_database.toLowerCase() !== 'interpro' && (
             <div className={f('icon-container')}>
-              <MaskSvgIcons />
               <MemberSymbol type={metadata.source_database} />
             </div>
           )}

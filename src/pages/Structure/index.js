@@ -4,7 +4,7 @@ import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import MemberDBTabs from 'components/Entry/MemberDBTabs';
+import MemberDBTabs from 'components/MemberDBTabs';
 import { PDBeLink } from 'components/ExtLink';
 import StructureListFilters from 'components/Structure/StructureListFilters';
 import Table, {
@@ -170,7 +170,9 @@ const List = ({
             renderer={(accession /*: string */) => (
               <PDBeLink id={accession}>
                 <img
-                  src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
+                  src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${
+                    accession
+                  }/traces.jpg`}
                   alt={`structure with accession ${accession.toUpperCase()}`}
                   style={{ maxWidth: '33%' }}
                 />
@@ -218,7 +220,8 @@ const Summary = props => {
       <Switch
         {...props}
         locationSelector={l =>
-          l.description.mainDetail || l.description.focusType}
+          l.description.mainDetail || l.description.focusType
+        }
         indexRoute={SummaryComponent}
         childRoutes={subPagesForStructure}
       />
@@ -238,7 +241,8 @@ const InnerSwitch = props => (
     <Switch
       {...props}
       locationSelector={l =>
-        l.description.mainAccession || l.description.focusType}
+        l.description.mainAccession || l.description.focusType
+      }
       indexRoute={List}
       childRoutes={[{ value: /^[a-z\d]{4}$/i, component: Summary }]}
       catchAll={List}
