@@ -1,9 +1,11 @@
+/* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import T from 'prop-types';
 
 import { transformFormatted } from 'utils/text';
 
 import { foundationPartial } from 'styles/foundation';
+import Link from 'components/generic/Link';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import styles from './style.css';
@@ -11,30 +13,94 @@ import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiStyles, styles, theme);
 
-const ParagraphWithCites = ({ p, literature = {} }) => (
+const ParagraphWithCites = ({ p, literature = [] }) => (
   <p className={styles.paragraph}>
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
-      const refCounter = Object.keys(literature).indexOf(part) + 1;
+      const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
       return i % 2 ? (
         <a key={i} id={refCounter} href={`${location.pathname}#${part}`}>
           {refCounter}
         </a>
       ) : (
-        <span key={i}>{part === ', ' ? ',\u00a0' : part}</span>
+        <span key={i}>
+          {part === ', ' ? (
+            ',\u00a0'
+          ) : (
+            <ParagraphWithTags>{part}</ParagraphWithTags>
+          )}
+        </span>
       );
     })}
   </p>
 );
 ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
-  literature: T.object,
+  literature: T.array,
+};
+
+const _getAttributesFromStringTag = text =>
+  text
+    .split(/\s|\/|>/)
+    .map(e => (e.indexOf('=') <= 0 ? null : e.split('=')))
+    .filter(Boolean)
+    .reduce((acc, e) => {
+      acc[e[0]] = e[1].replace(/"/g, '');
+      return acc;
+    }, {});
+const _getTextFromStringTag = text => text.split(/>([^<]+)/)[1];
+const ParagraphWithTags = ({ children }) => (
+  <span>
+    {// Checking for the TAG dbxref
+    children.split(/(<dbxref [^>]+?\/>)/i).map((part, i) => {
+      if (i % 2) {
+        const attrs = _getAttributesFromStringTag(part);
+        return (
+          <Link
+            newTo={{
+              description: {
+                mainType: 'entry',
+                mainDB: attrs.db,
+                mainAccession: attrs.id,
+              },
+            }}
+          >
+            {attrs.id}
+          </Link>
+        );
+      }
+      // Checking for the TAG taxon
+      return part.split(/(<taxon [^>]+>[^<]+<\/taxon>)/i).map((part, i) => {
+        if (i % 2) {
+          const text = _getTextFromStringTag(part);
+          const attrs = _getAttributesFromStringTag(part);
+          return (
+            <Link
+              newTo={{
+                description: {
+                  mainType: 'organism',
+                  mainDB: 'taxonomy',
+                  mainAccession: attrs.tax_id,
+                },
+              }}
+            >
+              {text}
+            </Link>
+          );
+        }
+        return part;
+      });
+    })}
+  </span>
+);
+ParagraphWithTags.propTypes = {
+  children: T.any,
 };
 
 const defaultHeightToHide = 200;
 /* ::
  type Props = {
    textBlocks: Array<string> ,
-   literature?: Object,
+   literature?: Array,
    title?: string,
    extraTextForButton?: string,
    heightToHide?: number,
@@ -50,7 +116,7 @@ class Description extends Component {
   */
   static propTypes = {
     textBlocks: T.array.isRequired,
-    literature: T.object,
+    literature: T.array,
     title: T.string.isRequired,
     extraTextForButton: T.string.isRequired,
     heightToHide: T.number,
@@ -124,9 +190,9 @@ class Description extends Component {
         <div
           className={f('animate-height', { collapsed: !this.state.isOpen })}
           style={{
-            maxHeight: `${this.state.isOpen
-              ? this.state.contentSize
-              : heightToHide}px`,
+            maxHeight: `${
+              this.state.isOpen ? this.state.contentSize : heightToHide
+            }px`,
           }}
           ref={e => (this.divContent = e)}
         >

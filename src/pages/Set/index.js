@@ -11,6 +11,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -135,18 +136,23 @@ class List extends PureComponent {
             </SearchBox>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */) => (
+              renderer={(accession /*: string */, { source_database }) => (
                 <Link
                   newTo={location => ({
                     ...location,
                     description: {
                       mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
+                      mainDB: source_database,
                       mainAccession: accession,
                     },
                   })}
                 >
-                  <span className={f('acc-row')}>{accession}</span>
+                  <span className={f('acc-row')}>
+                    <HighlightedText
+                      text={accession}
+                      textToHighlight={search.search}
+                    />
+                  </span>
                 </Link>
               )}
             >
@@ -156,19 +162,22 @@ class List extends PureComponent {
               dataKey="name"
               renderer={(
                 name /*: string */,
-                { accession } /*: {accession: string} */,
+                { accession, source_database } /*: {accession: string} */,
               ) => (
                 <Link
                   newTo={location => ({
                     ...location,
                     description: {
                       mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
+                      mainDB: source_database,
                       mainAccession: accession,
                     },
                   })}
                 >
-                  {name}
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
                 </Link>
               )}
             >
@@ -259,7 +268,7 @@ class Summary extends PureComponent {
     }
     let currentSet = null;
     Array.from(setDB).forEach(db => {
-      if (db.name === 'pfam') currentSet = db;
+      if (db.name === payload.metadata.source_database) currentSet = db;
     });
     return (
       <div>
@@ -297,7 +306,7 @@ class Summary extends PureComponent {
 
 const dbAccs = new RegExp(
   Array.from(setDB)
-    .map(db => db.re)
+    .map(db => db.re.source)
     .filter(db => db)
     .join('|'),
   'i',

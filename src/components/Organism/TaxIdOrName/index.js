@@ -22,16 +22,20 @@ class TaxIdOrName extends PureComponent /*:: <Props> */ {
     accession: T.oneOfType([T.string, T.number]),
     data: T.object,
     element: T.any,
+    name: T.shape({
+      short: T.string,
+    }),
   };
 
   render() {
-    const { accession, data, element: Element } = this.props;
+    const { accession, data, name, element: Element } = this.props;
     const displayedText =
       (data &&
         data.payload &&
         data.payload.metadata &&
         data.payload.metadata.name &&
         data.payload.metadata.name.name) ||
+      (name && name.short) ||
       accession;
     if (Element) {
       return <Element>{displayedText}</Element>;

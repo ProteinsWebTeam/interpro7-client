@@ -11,7 +11,20 @@ import ContributingSignatures from 'components/Entry/ContributingSignatures';
 import Title from 'components/Title';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
 
+import partition from 'lodash-es/partition';
+
 import f from 'styles/foundation';
+
+const description2IDs = description =>
+  description.reduce(
+    (acc, part) => [
+      ...acc,
+      ...(part.match(/"(PUB\d+)"/gi) || []).map(t =>
+        t.replace(/(^")|("$)/g, ''),
+      ),
+    ],
+    [],
+  );
 
 /* :: type Props = {
     data: {
@@ -54,6 +67,14 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
       data: { metadata },
       location: { description: { mainType } },
     } = this.props;
+    const citations = description2IDs(metadata.description);
+    const desc = metadata.description.reduce((e, acc) => e + acc, '');
+    const [included, extra] = partition(
+      Object.entries(metadata.literature),
+      ([id]) => citations.includes(id),
+    );
+    included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
+
     return (
       <div className={f('sections')}>
         <section>
@@ -70,7 +91,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
               Object.keys(metadata.description).length > 0 && (
                 <Description
                   textBlocks={metadata.description}
-                  literature={metadata.literature}
+                  literature={included}
                 />
               )}
             </div>
@@ -116,10 +137,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 <h4>References</h4>
               </div>
             </div>
-            <Literature
-              references={metadata.literature}
-              description={metadata.description}
-            />
+            <Literature included={included} extra={extra} />
           </section>
         )}
 

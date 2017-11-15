@@ -39,7 +39,7 @@ class GOTermsFilter extends Component {
       ...this.props.location,
       search: {
         ...this.props.location.search,
-        go_term: value === 'All' ? undefined : value,
+        go_category: value === 'All' ? undefined : value,
         page: undefined,
       },
     });
@@ -64,8 +64,8 @@ class GOTermsFilter extends Component {
                 value={categories[term] || 'All'}
                 onChange={this._handleSelection}
                 checked={
-                  (term === 'All' && !search.go_term) ||
-                  search.go_term === categories[term]
+                  (term === 'All' && !search.go_category) ||
+                  search.go_category === categories[term]
                 }
                 style={{ margin: '0.25em' }}
               />
@@ -87,9 +87,9 @@ const getUrlFor = createSelector(
   state => state.newLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
-    const { page_size, search: _, go_term, ..._search } = search;
+    const { page_size, search: _, go_category, ..._search } = search;
     // add to search
-    _search.group_by = 'go_terms';
+    _search.group_by = 'go_categories';
     // build URL
     return `${protocol}//${hostname}:${port}${root}${description2path(
       description,

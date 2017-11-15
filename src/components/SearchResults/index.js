@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import Table, { Column, Exporter } from 'components/Table';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 
@@ -28,7 +29,6 @@ class SearchResults extends PureComponent {
 
   render() {
     const { data: { payload, loading }, search, dataUrl } = this.props;
-    const LAST_INDEX = -1;
     if (loading) return <div>Loading…</div>;
     if (!payload) {
       return <div />;
@@ -120,17 +120,10 @@ class SearchResults extends PureComponent {
           dataKey="fields"
           renderer={d => (
             <div>
-              {d.description[0]
-                .slice(0, MAX_LENGTH)
-                .split(new RegExp(`(${search.search})`, 'i'))
-                .map(
-                  e =>
-                    e.toLowerCase() === search.search.toLowerCase() ? (
-                      <mark>{e}</mark>
-                    ) : (
-                      <span>{e}</span>
-                    ),
-                )}…
+              <HighlightedText
+                text={d.description[0].slice(0, MAX_LENGTH)}
+                textToHighlight={search.search}
+              />…
             </div>
           )}
           cellStyle={{ textAlign: 'justify' }}

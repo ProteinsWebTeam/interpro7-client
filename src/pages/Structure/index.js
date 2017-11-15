@@ -13,6 +13,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -135,7 +136,10 @@ const List = ({
                   },
                 })}
               >
-                {accession}
+                <HighlightedText
+                  text={accession}
+                  textToHighlight={search.search}
+                />
               </Link>
             )}
           >
@@ -157,7 +161,7 @@ const List = ({
                   },
                 })}
               >
-                {name}
+                <HighlightedText text={name} textToHighlight={search.search} />
               </Link>
             )}
           >

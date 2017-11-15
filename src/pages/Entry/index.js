@@ -24,6 +24,7 @@ import subPages from 'subPages';
 import config from 'config';
 
 import { memberDB } from 'staticData/home';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -163,9 +164,13 @@ class List extends Component {
                       mainDB: location.description.mainDB,
                       mainAccession: accession,
                     },
+                    search: {},
                   })}
                 >
-                  {name}
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
                 </Link>
               )}
             >
@@ -183,13 +188,19 @@ class List extends Component {
                       mainDB: location.description.mainDB,
                       mainAccession: accession,
                     },
+                    search: {},
                   })}
                 >
                   <SchemaOrgData
                     data={data}
                     processData={schemaProcessDataTableRow}
                   />
-                  <span className={f('acc-row')}>{accession}</span>
+                  <span className={f('acc-row')}>
+                    <HighlightedText
+                      text={accession}
+                      textToHighlight={search.search}
+                    />
+                  </span>
                 </Link>
               )}
             >
@@ -213,6 +224,7 @@ class List extends Component {
                                   mainDB: db,
                                   mainAccession: accession,
                                 },
+                                search: {},
                               }}
                             >
                               {accession}
@@ -240,6 +252,7 @@ class List extends Component {
                         mainDB: 'InterPro',
                         mainAccession: accession,
                       },
+                      search: {},
                     }}
                   >
                     {accession}

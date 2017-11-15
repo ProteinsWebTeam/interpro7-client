@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-// import ColorHash from 'color-hash/lib/color-hash';
-
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import NumberLabel from 'components/NumberLabel';
 import MemberDBTabs from 'components/MemberDBTabs';
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
@@ -13,6 +12,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -27,6 +27,7 @@ import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
+
 const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 // const SVG_WIDTH = 100;
@@ -148,6 +149,7 @@ class List extends PureComponent {
                       mainDB: location.description.mainDB,
                       mainAccession: accession,
                     },
+                    search: {},
                   })}
                 >
                   {
@@ -162,7 +164,12 @@ class List extends PureComponent {
                     // >
                     // </span>
                   }
-                  <span className={f('acc-row')}>{accession}</span>
+                  <span className={f('acc-row')}>
+                    <HighlightedText
+                      text={accession}
+                      textToHighlight={search.search}
+                    />
+                  </span>
                 </Link>
               )}
             >
@@ -182,9 +189,13 @@ class List extends PureComponent {
                       mainDB: location.description.mainDB,
                       mainAccession: accession,
                     },
+                    search: {},
                   })}
                 >
-                  {name}
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
                 </Link>
               )}
             >
@@ -192,20 +203,18 @@ class List extends PureComponent {
             </Column>
             <Column
               dataKey="source_database"
+              className={f('table-center')}
               renderer={(db /*: string */) => (
-                <div
-                  className={f('table-center')}
+                <span
+                  key="1"
+                  className={f('icon', 'icon-functional')}
+                  data-icon={db === 'reviewed' ? '/' : ''}
                   title={
                     db === 'reviewed'
                       ? `${db} by curators (Swiss-Prot)`
                       : 'Not reviewed by curators (TrEMBL)'
                   }
-                >
-                  <span
-                    className={f('icon', 'icon-functional')}
-                    data-icon={db === 'reviewed' ? '/' : ''}
-                  />
-                </div>
+                />
               )}
             >
               Reviewed
@@ -213,13 +222,12 @@ class List extends PureComponent {
             <Column dataKey="source_organism.fullname">Species</Column>
             <Column
               dataKey="length"
+              className={f('text-right')}
               renderer={(length /*: number */) => (
-                <div
-                  title={`${length} amino acids`}
-                  className={f('visu-length')}
-                >
-                  {length}
-                </div>
+                <NumberLabel
+                  value={length}
+                  title={`${length.toLocaleString()} amino acids`}
+                />
               )}
             >
               Length

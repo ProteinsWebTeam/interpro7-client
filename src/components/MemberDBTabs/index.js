@@ -29,13 +29,13 @@ const menuOptions = new Map([
   ['Pfam', 'pfam'],
   ['PIRSF', 'pirsf'],
   ['PRINTS', 'prints'],
-  ['PRODOM', 'prodom'],
-  ['PROFILE', 'profile'],
-  ['PROSITE', 'prosite'],
+  ['ProDom', 'prodom'],
+  ['Prosite-Profile', 'profile'],
+  ['Prosite-Patterns', 'prosite'],
   ['SFLD', 'sfld'],
   ['SMART', 'smart'],
-  ['SSF', 'ssf'],
-  ['TIGRFams', 'tigrfams'],
+  ['Superfamily', 'ssf'],
+  ['TIGRFAM', 'tigrfams'],
 ]);
 
 const getValueFor = ({ entries }, mainType, db) => {

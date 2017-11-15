@@ -12,6 +12,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -128,11 +129,14 @@ class List extends PureComponent {
                     },
                   })}
                 >
-                  {accession}
+                  <HighlightedText
+                    text={accession}
+                    textToHighlight={search.search}
+                  />
                 </Link>
               )}
             >
-              TaxID
+              Tax ID
             </Column>
             <Column
               dataKey="name"
@@ -150,7 +154,10 @@ class List extends PureComponent {
                     },
                   })}
                 >
-                  {name}
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
                 </Link>
               )}
             >

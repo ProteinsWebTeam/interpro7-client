@@ -11,7 +11,7 @@
   /*border-right: 2px solid #7ba3b6;*/
   border-left: 3px solid currentColor;
   /*border-radius: 5px 0 0 5px;*/
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   padding: 0.66rem; /*not 0.7 for firefox*/
   position: relative;
   display: flex;
@@ -39,6 +39,11 @@
     border: 1px solid currentColor;
     left: 100%;
     width: 130%;
+  }
+
+  &.special::after {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
   }
 
   &:hover::before {
@@ -143,9 +148,11 @@
 
 .db-label {
   text-transform: capitalize;
+  flex: 1;
 }
 
 .number-label {
+  font-size: 0.9em;
   color: var(--colors-graydark);
 }
 

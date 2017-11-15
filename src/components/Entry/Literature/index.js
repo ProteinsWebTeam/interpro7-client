@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import T from 'prop-types';
-import partition from 'lodash-es/partition';
 
 import { PMCLink, DOILink } from 'components/ExtLink';
 import Link from 'components/generic/Link';
@@ -26,17 +25,6 @@ const schemaProcessData = data => ({
   identifier: `http://identifiers.org/pubmed/${data.PMID}`,
   author: data.authors,
 });
-
-const description2IDs = description =>
-  description.reduce(
-    (acc, part) => [
-      ...acc,
-      ...(part.match(/"(PUB\d+)"/gi) || []).map(t =>
-        t.replace(/(^")|("$)/g, ''),
-      ),
-    ],
-    [],
-  );
 
 const LiteratureItem = (
   {
@@ -87,46 +75,37 @@ LiteratureItem.propTypes = {
 };
 
 const Literature = (
-  {
-    references,
-    description,
-  } /*: {|references: Object, description: Array<string>|} */,
-) => {
-  const citations = description2IDs(description);
-  const [included, extra] = partition(Object.entries(references), ([id]) =>
-    citations.includes(id),
-  );
-  return (
-    <div className={f('row')}>
-      <div className={f('large-12', 'columns', 'margin-bottom-large')}>
-        {included.length ? (
-          <div className={f('list')}>
-            {included.map(([pubID, ref], i) => (
-              <LiteratureItem
-                pubID={pubID}
-                key={pubID}
-                reference={ref}
-                i={i + 1}
-                included
-              />
-            ))}
-          </div>
-        ) : null}
-        {extra.length ? <h5>Further reading</h5> : null}
-        {extra.length ? (
-          <div className={f('list', 'further')}>
-            {extra.map(([pubID, ref]) => (
-              <LiteratureItem pubID={pubID} key={pubID} reference={ref} />
-            ))}
-          </div>
-        ) : null}
-      </div>
+  { included, extra } /*: {|included: Array, extra: Array|} */,
+) => (
+  <div className={f('row')}>
+    <div className={f('large-12', 'columns', 'margin-bottom-large')}>
+      {included.length ? (
+        <div className={f('list')}>
+          {included.map(([pubID, ref], i) => (
+            <LiteratureItem
+              pubID={pubID}
+              key={pubID}
+              reference={ref}
+              i={i + 1}
+              included
+            />
+          ))}
+        </div>
+      ) : null}
+      {extra.length ? <h5>Further reading</h5> : null}
+      {extra.length ? (
+        <div className={f('list', 'further')}>
+          {extra.map(([pubID, ref]) => (
+            <LiteratureItem pubID={pubID} key={pubID} reference={ref} />
+          ))}
+        </div>
+      ) : null}
     </div>
-  );
-};
+  </div>
+);
 Literature.propTypes = {
-  references: T.objectOf(T.object.isRequired).isRequired,
-  description: T.arrayOf(T.string),
+  included: T.arrayOf(T.array),
+  extra: T.arrayOf(T.array),
 };
 
 export default Literature;

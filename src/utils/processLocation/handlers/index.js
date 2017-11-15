@@ -85,8 +85,14 @@ const interPro = { name: 'interpro', re: /IPR[0-9]{6}/i, type: 'entry' };
 export const setDB /*: Set<Object> */ = new Set([
   {
     name: 'pfam',
-    re: 'CL[0-9]{4}',
+    re: /CL[0-9]{4}/,
     url_template: 'http://pfam.xfam.org/clan/{id}',
+  },
+  {
+    name: 'cdd',
+    re: /cl[0-9]{5}/,
+    url_template:
+      'https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={id}',
   },
 ]);
 
@@ -423,7 +429,7 @@ export const setAccessionHandler /*: Handler */ = Object.create(handler, {
   match: {
     value: (current /*: string */, _description /*: Description */) => {
       for (const { re } of setDB) {
-        if (new RegExp(re, 'i').test(current)) return true;
+        if (re.test(current)) return true;
       }
     },
   },
@@ -437,11 +443,13 @@ export const setDBHandler /*: Handler */ = Object.create(handler, {
     value: ({ mainDB } /*: Description */) => `${mainDB ? 'focus' : 'main'}DB`,
   },
   match: {
-    value: (current /*: string */, _description /*: Description */) => {
-      for (const { name } of setDB) {
-        if (name === current) return true;
-      }
-    },
+    value: (current /*: string */) =>
+      new RegExp(
+        `${Array.of(setDB)
+          .map(db => db.name)
+          .join('|')}|all`,
+        'i',
+      ).test(current),
   },
 });
 

@@ -11,6 +11,10 @@ import style from './style.css';
 
 const f = foundationPartial(style);
 
+const UNITS = ['', 'k+', 'M+', 'G+'];
+const UNIT_SCALE = 1000;
+const UNIT_SCALE_MARGIN = 100;
+
 // Avoid doing too much work
 // This is to update a number value, not style, so no need re-render every frame
 const MAX_FPS = 10;
@@ -25,10 +29,13 @@ class NumberLabel extends PureComponent {
     className: T.string,
     lowGraphics: T.bool.isRequired,
     dispatch: T.func.isRequired,
+    abbr: T.bool,
+    title: T.oneOfType([T.string, T.number]),
   };
 
   static defaultProps = {
     duration: 1,
+    abbr: false,
   };
 
   constructor(props /*: ?any */) {
@@ -76,15 +83,33 @@ class NumberLabel extends PureComponent {
       lowGraphics,
       className,
       dispatch,
+      abbr,
+      title,
       ...props
     } = this.props;
     let { value: _value } = this.state;
     if (isNaN(_value)) _value = 'N/A';
-    // this will print the number according to locale preference
-    // like a coma as thousand-separator in english
-    if (Number.isFinite(_value)) _value = _value.toLocaleString();
+    if (Number.isFinite(_value)) {
+      if (abbr) {
+        let unitIndex = 0;
+        while (_value > UNIT_SCALE * UNIT_SCALE_MARGIN) {
+          unitIndex++;
+          _value = Math.floor(_value / UNIT_SCALE);
+        }
+        _value = `${_value.toLocaleString()}${UNITS[unitIndex]}`;
+      } else {
+        // this will print the number according to locale preference
+        // like a coma as thousand-separator in english
+        if (Number.isFinite(_value)) _value = _value.toLocaleString();
+      }
+    }
+    const _title = title || this.props.value.toLocaleString();
     return (
-      <span className={f('label', className, { lowGraphics })} {...props}>
+      <span
+        className={f('label', className, { lowGraphics })}
+        title={_title}
+        {...props}
+      >
         {_value}
       </span>
     );

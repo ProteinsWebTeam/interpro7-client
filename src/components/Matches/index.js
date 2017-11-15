@@ -11,6 +11,7 @@ import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
 import ProteinFile from 'subPages/Organism/ProteinFile';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
+import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -106,6 +107,7 @@ const Matches = (
       query={search}
       pathname={pathname}
       isStale={isStale}
+      notFound={matches.length === 0}
     >
       <PageSizeSelector />
       <SearchBox search={search.search} pathname={pathname}>
@@ -126,15 +128,13 @@ const Matches = (
               },
             }}
           >
-            {primary === 'protein' ? (
-              <span className={f('acc-row')}>{acc}</span>
-            ) : (
-              <span>{acc}</span>
-            )}
+            <span className={f('acc-row')}>
+              <HighlightedText text={acc} textToHighlight={search.search} />
+            </span>
           </Link>
         )}
       >
-        Accession
+        {primary === 'organism' ? 'Tax Id' : 'Accession'}
       </Column>
       <Column
         dataKey="name"
@@ -154,7 +154,7 @@ const Matches = (
               },
             }}
           >
-            {name}
+            <HighlightedText text={name} textToHighlight={search.search} />
           </Link>
         )}
       />
