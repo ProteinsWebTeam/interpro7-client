@@ -145,7 +145,7 @@
 .hamb_1,
 .hamb_2,
 .hamb_3 {
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /*opacity and transform*/
 }
 
 .hamb_1_open {
