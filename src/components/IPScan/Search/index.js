@@ -365,9 +365,7 @@ class IPScanSearch extends Component {
                       </button>
                       <button
                         type="button"
-                        className={s('hollow', 'button', 'warning', {
-                          hidden: valid,
-                        })}
+                        className={s('button', 'warning', { hidden: valid })}
                         onClick={this._cleanUp}
                       >
                         Automatic input clean up
