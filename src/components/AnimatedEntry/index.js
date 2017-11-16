@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,6 +14,8 @@ const DEFAULT_DURATION = 250;
   itemDelay: ?number,
   duration: ?number,
   animateSelf: boolean,
+  lowGraphics: boolean,
+  dispatch: function,
 } */
 
 class AnimatedEntry extends PureComponent /*:: <Props> */ {
@@ -28,6 +31,7 @@ class AnimatedEntry extends PureComponent /*:: <Props> */ {
     duration: T.number,
     animateSelf: T.bool,
     lowGraphics: T.bool.isRequired,
+    dispatch: T.func.isRequired,
   };
 
   static defaultProps = {
@@ -64,13 +68,14 @@ class AnimatedEntry extends PureComponent /*:: <Props> */ {
   render() {
     const {
       element: Element,
-      // remove those in next line from props passed
+      // remove those in next lines from props passed
       keyframes,
       delay,
       itemDelay,
       duration,
       animateSelf,
       lowGraphics,
+      dispatch,
       ...props
     } = this.props;
     return <Element ref={node => (this._node = node)} {...props} />;
@@ -82,4 +87,4 @@ const mapStateToProps = createSelector(
   lowGraphics => ({ lowGraphics }),
 );
 
-export default connect(mapStateToProps)(AnimatedEntry);
+export default connect(mapStateToProps, undefined)(AnimatedEntry);

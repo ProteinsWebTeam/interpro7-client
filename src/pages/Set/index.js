@@ -252,7 +252,7 @@ class Summary extends PureComponent {
       payload: T.shape({
         metadata: T.shape({
           accession: T.string.isRequired,
-        }).isRequired,
+        }),
       }),
     }).isRequired,
   };
