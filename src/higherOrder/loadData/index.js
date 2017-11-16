@@ -48,7 +48,9 @@ const load = (
   }
   const onProgress = progress => progressData(key, progress);
   // Starts the fetch
-  const c = cancelable(fetchFun(key, fetchOptions, onProgress));
+  const c = cancelable(signal =>
+    fetchFun(key, { ...fetchOptions, signal }, onProgress),
+  );
   // Eventually changes the state according to response
   c.promise.then(
     response => loadedData(key, response),
