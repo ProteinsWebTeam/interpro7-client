@@ -55,7 +55,7 @@ class DomainArchitecture extends Component {
       }
     });
     this.ec.on('entrymouseover', e => {
-      this._popper.classList.remove('hide');
+      this._popper.classList.remove(f('hide'));
       if (e.hasOwnProperty('entry')) {
         this._popper.appendChild(this.getElementFromEntry(e.entry));
       }
@@ -70,7 +70,7 @@ class DomainArchitecture extends Component {
     this.ec.on('entrymouseout', () => {
       this._popper.removeChild(this._popper.lastChild);
       this.popper.destroy();
-      this._popper.classList.add('hide');
+      this._popper.classList.add(f('hide'));
     });
   }
 
