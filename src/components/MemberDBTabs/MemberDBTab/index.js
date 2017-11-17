@@ -71,7 +71,7 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
       <li className={f('tabs-title', { lowGraphics })}>
         <Link
           newTo={newTo}
-          activeClass={f('is-active', 'is-active-tab')}
+          activeClass={f('is-active', 'is-active-tab', cleanName)}
           className={f({
             special: cleanName === 'InterPro' || cleanName === 'all',
           })}
