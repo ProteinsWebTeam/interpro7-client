@@ -30,6 +30,17 @@ const requestFullScreen = element => {
     element.msRequestFullscreen();
   }
 };
+const areMergedDataTheSame = (prev, next) => {
+  if (Object.keys(prev).length !== Object.keys(next).length) return false;
+  for (const key in prev) {
+    if (prev[key].length !== next[key].length) return false;
+    for (let i = 0; i < prev[key].length; i++) {
+      if (JSON.stringify(prev[key][i]) !== JSON.stringify(next[key][i]))
+        return false;
+    }
+  }
+  return true;
+};
 
 class DomainArchitecture extends Component {
   static propTypes = {
@@ -77,6 +88,11 @@ class DomainArchitecture extends Component {
   // shouldComponentUpdate() {
   //   return false;
   // }
+  componentWillReceiveProps(nextProps) {
+    if (!areMergedDataTheSame(this.props.data, nextProps.data)) {
+      this.ec.data = nextProps.data;
+    }
+  }
 
   componentWillUnmount() {
     this.ec.destructor();
@@ -98,9 +114,11 @@ class DomainArchitecture extends Component {
     const tagString = `<div>
         <h4>${entry.label || entry.accession}</h4>
         <p>${entry.entry_type || ''}</p>
-        <p>${Array.isArray(entry.source_database)
-          ? entry.source_database[0]
-          : entry.source_database}
+        <p>${
+          Array.isArray(entry.source_database)
+            ? entry.source_database[0]
+            : entry.source_database
+        }
           ${entry.entry ? `(${entry.entry})` : ''}
         </p>
       </div>`;
@@ -112,9 +130,11 @@ class DomainArchitecture extends Component {
   getElementFromResidue(residue) {
     const tagString = `<div>
         <h4>${residue.name} (${residue.residue})</h4>
-        <p>${residue.from === residue.to
-          ? residue.from
-          : `${residue.from}-${residue.to}`}</p>
+        <p>${
+          residue.from === residue.to
+            ? residue.from
+            : `${residue.from}-${residue.to}`
+        }</p>
         <p>${residue.description}</p>
       </div>`;
     const range = document.createRange();

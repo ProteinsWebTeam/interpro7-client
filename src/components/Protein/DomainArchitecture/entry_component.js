@@ -49,8 +49,17 @@ class EntryComponent {
     this.x = scaleLinear()
       .domain([0, protein.length])
       .range([0, proteinWidth]);
+
+    this.protein = protein;
+    this.dispatch = dispatch('entryclick', 'entrymouseover', 'entrymouseout');
+
     this.data = data;
-    this.sortedData = entries(this.data).sort((a, b) => {
+    this.addGuideRect();
+    // Redraw based on the new size whenever the browser window is resized.
+    window.addEventListener('resize', this.windowResizer);
+  }
+  set data(value) {
+    this.sortedData = entries(value).sort((a, b) => {
       const firsts = ['family', 'domain'];
       const lasts = ['residues', 'features', 'predictions'];
       for (const label of firsts) {
@@ -63,14 +72,7 @@ class EntryComponent {
       }
       return a.key > b.key ? 1 : 0;
     });
-
-    this.protein = protein;
-    this.dispatch = dispatch('entryclick', 'entrymouseover', 'entrymouseout');
-
-    this.render();
-    this.addGuideRect();
-    // Redraw based on the new size whenever the browser window is resized.
-    window.addEventListener('resize', this.windowResizer);
+    this.render(true);
   }
   windowResizer = () => {
     requestAnimationFrame(() => {
@@ -112,7 +114,7 @@ class EntryComponent {
           : Math.min(this.x(this.protein.length), mouse(this.mainG.node())[0]),
       );
   }
-  render() {
+  render(reset = false) {
     let offsetY = padding.top;
     this.addAxis();
     offsetY += this.updateProtein();
@@ -133,6 +135,11 @@ class EntryComponent {
       .call(selection => this.updateEntriesBlock(selection, offsetY));
     // .each(d => this.addEntriesBlock(d.value, protein, offsetY, d.key))
 
+    if (reset)
+      entriesG.each(d => {
+        d.value.expanded = true;
+        d.value.height = 0;
+      });
     entriesG.call(selection =>
       this.updateEntriesBlock(selection, offsetY, false),
     );
