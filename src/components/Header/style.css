@@ -66,10 +66,7 @@ background-size: 100%, 100%;
       rgba(249, 255, 182, 0.53),
       rgb(43, 111, 128)
     ),
-    url(images/backgrounds/fondation-morse-header.jpg);
-  background-repeat: no-repeat, repeat;
-  background-position: left, top right;
-  background-size: 100%, 1400px;
+    url(images/backgrounds/bgd-banner.svg);
 }
 /*STYLE - make menu items hover slightly darker*/
 .masthead nav ul li a:hover {
