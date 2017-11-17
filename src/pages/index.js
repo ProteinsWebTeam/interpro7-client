@@ -14,8 +14,9 @@ import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import ipro from 'styles/interpro-new.css';
+import style from './style.css';
 
-const f = foundationPartial(ebiGlobalStyles, ipro);
+const f = foundationPartial(ebiGlobalStyles, ipro, style);
 
 // Main pages
 const Home = loadable({
@@ -90,7 +91,7 @@ class Pages extends PureComponent /*:: <Props> */ {
   render() {
     const { stuck, top, ...props } = this.props;
     return (
-      <div className={f('main')} style={{ marginTop: stuck ? '174px' : 0 }}>
+      <main className={f('main', { stuck })}>
         <ErrorBoundary>
           <Switch
             {...props}
@@ -111,7 +112,7 @@ class Pages extends PureComponent /*:: <Props> */ {
             catchAll={NotFound}
           />
         </ErrorBoundary>
-      </div>
+      </main>
     );
   }
 }
