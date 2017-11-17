@@ -5,7 +5,7 @@
   width="1000"
   height="1000"
   version="1.1"
-  style='background-color: #12AFC1;'
+  style='background-color: #12AFC1; filter: blur(1px);'
 >
   <g transform="rotate(90, 100, 100)">
     <g id="line-01">
