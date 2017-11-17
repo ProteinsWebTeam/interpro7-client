@@ -80,16 +80,32 @@ const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
   mainAccession: ?string,
   closeSideNav: function,
 }; */
+/*:: type State = {
+  hasRendered: boolean,
+}; */
 
-class SideMenu extends PureComponent /*:: <Props> */ {
+class SideMenu extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     visible: T.bool.isRequired,
     mainAccession: T.string,
     closeSideNav: T.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasRendered: false,
+    };
+  }
+
+  componentWillReceiveProps({ visible }) {
+    if (!this.state.hasRendered && visible)
+      this.setState({ hasRendered: true });
+  }
+
   render() {
     const { visible, mainAccession, closeSideNav } = this.props;
+    if (!(this.state.hasRendered || visible)) return null;
     return (
       <aside className={f('container', { visible })} role="menu" id="main-nav">
         <button
