@@ -69,22 +69,27 @@ class _Summary extends PureComponent {
       ).size;
     return [
       <ErrorBoundary key="browse">
-        <BrowseTabsWithoutData
-          key="browse"
-          mainType="sequence"
-          mainDB=""
-          mainAccession={accession}
-          data={{
-            loading: false,
-            payload: { metadata: { counters: { entries } } },
-          }}
-        />
+        <div className={f('row')}>
+          <div className={f('large-12', 'columns')}>
+            <BrowseTabsWithoutData
+              key="browse"
+              mainType="sequence"
+              mainDB=""
+              mainAccession={accession}
+              data={{
+                loading: false,
+                payload: { metadata: { counters: { entries } } },
+              }}
+            />
+          </div>
+        </div>
       </ErrorBoundary>,
       <ErrorBoundary key="switch">
         <Switch
           {...this.props}
           locationSelector={l =>
-            l.description.mainDetail || l.description.focusType}
+            l.description.mainDetail || l.description.focusType
+          }
           indexRoute={SummaryAsync}
           childRoutes={subPagesForSequence}
         />

@@ -1,13 +1,14 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 
-import MenuItem from 'components/Menu/MenuItem';
+import BrowseTabs from 'components/BrowseTabs';
 
-import config from 'config';
-import { singleEntity } from 'menuConfig';
+import { foundationPartial } from 'styles/foundation';
+
+import style from './style.css';
+
+const f = foundationPartial(style);
 
 /*:: type Props = {
   className: ?string,
@@ -25,34 +26,13 @@ class SingleEntityMenu extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { className, children, mainAccession, mainType } = this.props;
-    let tabs = [];
-    if (mainAccession && mainType && config.pages[mainType]) {
-      tabs.push(singleEntity.get('overview'));
-      for (const subPage of config.pages[mainType].subPages) {
-        tabs.push(singleEntity.get(subPage));
-      }
-    }
-    tabs = tabs.filter(Boolean);
+    const { className, children } = this.props;
     return (
-      <ul className={className}>
+      <BrowseTabs className={f(className, 'single-entity-menu', 'tabs')}>
         {children}
-        {tabs.map(e => (
-          <li key={e.name}>
-            <MenuItem newTo={e.newTo} disabled={false}>
-              {e.name}
-            </MenuItem>
-          </li>
-        ))}
-      </ul>
+      </BrowseTabs>
     );
   }
 }
 
-const mapStateToProps = createSelector(
-  state => state.newLocation.description.mainAccess,
-  state => state.newLocation.description.mainType,
-  (mainAccession, mainType) => ({ mainAccession, mainType })
-);
-
-export default connect(mapStateToProps)(SingleEntityMenu);
+export default SingleEntityMenu;

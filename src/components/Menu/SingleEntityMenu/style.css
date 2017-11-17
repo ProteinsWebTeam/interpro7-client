@@ -1,0 +1,17 @@
+.tabs.single-entity-menu {
+  display: flex;
+  flex-direction: column;
+  background: rgba(59, 59, 59, 1);
+
+  & > li {
+    margin: 0;
+  }
+
+  & a {
+    width: 100%;
+
+    & > span {
+      float: right;
+    }
+  }
+}

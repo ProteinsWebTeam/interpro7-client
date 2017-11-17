@@ -93,13 +93,17 @@ class Pages extends PureComponent /*:: <Props> */ {
     return (
       <main className={f('main', { stuck })}>
         <ErrorBoundary>
-          <Switch
-            {...props}
-            indexRoute={Null}
-            locationSelector={l => l.description.mainType}
-            childRoutes={[{ value: 'search', component: Null }]}
-            catchAll={BrowseTabs}
-          />
+          <div className={f('row')}>
+            <div className={f('large-12', 'columns')}>
+              <Switch
+                {...props}
+                indexRoute={Null}
+                locationSelector={l => l.description.mainType}
+                childRoutes={[{ value: 'search', component: Null }]}
+                catchAll={BrowseTabs}
+              />
+            </div>
+          </div>
         </ErrorBoundary>
         <ErrorBoundary>
           <Switch
