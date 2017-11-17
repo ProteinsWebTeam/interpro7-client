@@ -14,21 +14,8 @@
   width: 94%;
 }
 
-/*onglet appearing on collapsed - not used */
-.collapsed .tabs-title a.is-active-tab {
-  display: none; /*flex*/
-  position: absolute;
-  left: 0;
-  top: 0;
-  text-align: center;
-  transform: rotate(-90deg) scaleX(1);
-  transform-origin: top center 0;
-  border: 0px solid #7ba3b6;
-  border-bottom: 0;
-  padding: 0.22rem 0.8rem;
-  & span {
-    display: inline-block;
-  }
+.collapsed .vertical {
+  display: none;
 }
 
 .collapsed.columns {
@@ -36,10 +23,6 @@
   padding: 0;
   width: auto;
   margin-left: 1rem;
-}
-.collapsed ul {
-  padding: 0;
-  margin: 0;
 }
 
 button.hollow.light {
@@ -56,16 +39,4 @@ button.hollow.light:focus {
 .browsemd-panel,
 .browsemd-panel select {
   color: #4b555b;
-}
-
-/*remove collapse effect for small screens as we replace the menu by select*/
-@media screen and (max-width: 39.9375em) {
-  .collapsed + div {
-    flex: 0 0 100%;
-    max-width: 100%;
-    width: 100%;
-  }
-  .collapsed.columns {
-    margin-left: 0.625rem;
-  }
 }
