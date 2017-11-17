@@ -28,11 +28,37 @@
       rgba(45, 174, 193, 0.5),
       rgba(0, 85, 158, 0.9)
     ),
-    url(images/backgrounds/fondation-morse-header.jpg);
+    url(images/backgrounds/bgd-banner.svg);
+  background-repeat: no-repeat, repeat;
+  background-position: 0, 100% -1.6%;
+  background-size: 100%, 2030px;
+}
+/*fallback*/
+/*
+.masthead {
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 85, 158, 0.9),
+      rgba(45, 174, 193, 0.5),
+      rgba(0, 85, 158, 0.9)
+    ),
+url(images/backgrounds/bgd-banner-multiple.svg);
+background-repeat: no-repeat, repeat;
+background-position: left, top right;
+background-size: 100%, 100%;
+}
+.masthead {
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 85, 158, 0.9),
+    rgba(45, 174, 193, 0.5),
+    rgba(52, 123, 148, 0.9)
+  ),
+  url(images/backgrounds/banner-sqc-comparison.jpg);
   background-repeat: no-repeat, repeat;
   background-position: left, top right;
-  background-size: 100%, 1400px;
-}
+  background-size: 100%, 50%;
+}*/
 .masthead.sign {
   background-image: linear-gradient(
       to right,
@@ -41,6 +67,9 @@
       rgb(43, 111, 128)
     ),
     url(images/backgrounds/fondation-morse-header.jpg);
+  background-repeat: no-repeat, repeat;
+  background-position: left, top right;
+  background-size: 100%, 1400px;
 }
 /*STYLE - make menu items hover slightly darker*/
 .masthead nav ul li a:hover {
