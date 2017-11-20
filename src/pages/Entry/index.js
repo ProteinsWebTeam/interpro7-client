@@ -113,7 +113,7 @@ class List extends Component {
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
-            pathname={''}
+            pathname=""
             notFound={notFound}
           >
             <Exporter>
@@ -136,7 +136,7 @@ class List extends Component {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search} pathname={''}>
+            <SearchBox search={search.search} pathname="">
               &nbsp;
             </SearchBox>
             <Column

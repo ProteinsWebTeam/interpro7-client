@@ -97,7 +97,7 @@ const List = ({
           isStale={isStale}
           actualSize={_payload.count}
           query={search}
-          pathname={''}
+          pathname=""
           notFound={notFound}
         >
           <Exporter>
@@ -120,7 +120,7 @@ const List = ({
             </ul>
           </Exporter>
           <PageSizeSelector />
-          <SearchBox search={search.search} pathname={''}>
+          <SearchBox search={search.search} pathname="">
             Search structures
           </SearchBox>
           <Column

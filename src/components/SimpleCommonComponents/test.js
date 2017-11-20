@@ -42,7 +42,7 @@ describe('Simple Common Components', () => {
 
     test('should render nothing if not an external database', () => {
       for (const notExternalDB of ['InterPro', 'interpro', 'randomString']) {
-        renderer.render(<ExtOriginDB source={notExternalDB} accession={''} />);
+        renderer.render(<ExtOriginDB source={notExternalDB} accession="" />);
         expect(renderer.getRenderOutput()).toEqual(null);
       }
     });

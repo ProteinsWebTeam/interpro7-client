@@ -75,7 +75,7 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
             <MemberSymbol type={db} className={f('md-small')} />
             {accessions.map(accession => (
               <Metadata
-                endpoint={'entry'}
+                endpoint="entry"
                 db={db}
                 accession={accession}
                 key={accession}

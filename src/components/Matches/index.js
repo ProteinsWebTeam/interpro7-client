@@ -178,10 +178,7 @@ const Matches = (
                     : 'Not reviewed by curators (TrEMBL)'
                 }
               >
-                <span
-                  className={f('icon', 'icon-functional')}
-                  data-icon={'/'}
-                />
+                <span className={f('icon', 'icon-functional')} data-icon="/" />
               </div>
             ) : (
               db

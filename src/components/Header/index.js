@@ -190,8 +190,8 @@ class Header extends PureComponent {
         style={styleForHeader(false && supportsSticky, offset, stuck)}
       >
         <div className={styleBundle('masthead-inner', 'row')}>
-          <Title reduced={false} />
-          <SideIcons reduced={false} stuck={stuck} />
+          <Title />
+          <SideIcons stuck={stuck} />
           <ResizeObserverComponent element="nav" measurements="width">
             <DynamicMenu />
           </ResizeObserverComponent>

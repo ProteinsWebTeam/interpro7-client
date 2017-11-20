@@ -111,7 +111,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('row')}>
         <div className={f('medium-12', 'columns')}>
-          <Title metadata={metadata} mainType={'organism'} />
+          <Title metadata={metadata} mainType="organism" />
           <Accession accession={metadata.accession} id={metadata.id} />
           {metadata.rank && <div>Rank: {metadata.rank}</div>}
           <Lineage lineage={metadata.lineage} names={names} />
@@ -147,7 +147,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('row')}>
         <div className={f('medium-10', 'columns')}>
-          <Title metadata={metadata} mainType={'organism'} />
+          <Title metadata={metadata} mainType="organism" />
           {metadata.is_reference ? (
             <div className={f('tag', 'secondary', 'margin-bottom-large')}>
               Reference Proteome
@@ -160,8 +160,8 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
           <div>
             Taxonomy:{' '}
             <Metadata
-              endpoint={'organism'}
-              db={'taxonomy'}
+              endpoint="organism"
+              db="taxonomy"
               accession={metadata.taxonomy}
               key={metadata.taxonomy}
             >
