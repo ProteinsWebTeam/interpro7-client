@@ -479,16 +479,16 @@ const Home = () => (
       <div className={f('columns', 'browse-by')}>
         <div className={f('callout-box')}>
           <Tabs>
-            <div title="by member database">
+            <div title="by member DB">
               <ByMemberDatabase />
             </div>
             <div title="by entry type">
               <ByEntryType />
             </div>
-            <div title="by species">
+            <div title="by specie">
               <BySpecies />
             </div>
-            <div title="by GO terms" className={f('go-list')}>
+            <div title="by GO term" className={f('go-list')}>
               <ByGOTerms />
             </div>
           </Tabs>
