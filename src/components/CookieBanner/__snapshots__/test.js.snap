@@ -61,9 +61,11 @@ exports[`<CookieBanner /> should render 1`] = `
       style={
         Object {
           "color": "#fff",
-          "float": "right",
           "fontWeight": "bold",
           "padding": "0.5em",
+          "position": "absolute",
+          "right": "1ch",
+          "top": "1ch",
         }
       }
     >

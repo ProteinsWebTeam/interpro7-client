@@ -26,7 +26,7 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
           { transform: 'translateY(0)', opacity: 1 },
           { transform: 'translateY(100%)', opacity: 0.5 },
         ],
-        { duration: 300, fill: 'forwards', easing: 'ease-in' }
+        { duration: 300, fill: 'forwards', easing: 'ease-in' },
       ).onfinish = () => this.setState({ display: false });
     } else {
       this.setState({ display: false });
@@ -76,7 +76,9 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
               fontWeight: 'bold',
               padding: '0.5em',
               color: '#fff',
-              float: 'right',
+              position: 'absolute',
+              top: '1ch',
+              right: '1ch',
             }}
             onClick={this.handleClick}
           >
