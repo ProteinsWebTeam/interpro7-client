@@ -28,13 +28,13 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessDataForDB = ({ name, version }) => ({
+const schemaProcessDataForDB = ({ name, version, location }) => ({
   '@type': 'Dataset',
   '@id': '@dataset',
   name,
   identifier: name,
   version,
-  url: `${window.location.href}/entry/${name}`,
+  url: `${location.href}/entry/${name}`,
 });
 
 /*:: type Props = {
@@ -68,7 +68,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
               key={name}
             >
               <SchemaOrgData
-                data={{ name, version }}
+                data={{ name, version, location: window.location }}
                 processData={schemaProcessDataForDB}
               />
               <Link newTo={newTo} className={name}>
