@@ -87,7 +87,7 @@ class IPScanSearch extends Component {
     let editorState;
     if (props.sequence) {
       editorState = EditorState.createWithContent(
-        ContentState.createFromText(props.sequence),
+        ContentState.createFromText(decodeURIComponent(props.sequence)),
         compositeDecorator,
       );
     } else {
