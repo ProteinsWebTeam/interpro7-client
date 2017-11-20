@@ -8,7 +8,6 @@ import Literature from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
 import Integration from 'components/Entry/Integration';
 import ContributingSignatures from 'components/Entry/ContributingSignatures';
-import Title from 'components/Title';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
 
 import partition from 'lodash-es/partition';
@@ -79,7 +78,6 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
-              <Title metadata={metadata} mainType={mainType} />
               {metadata.hierarchy && (
                 <InterProHierarchy
                   accession={metadata.accession}

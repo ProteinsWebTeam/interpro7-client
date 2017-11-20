@@ -24,6 +24,8 @@ import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
 import subPages from 'subPages';
 import config from 'config';
+import BrowseTabs from 'components/BrowseTabs';
+import Title from 'components/Title';
 
 import { memberDB } from 'staticData/home';
 import { HighlightedText } from 'components/SimpleCommonComponents';
@@ -393,6 +395,9 @@ const Summary = props => {
   }
   return (
     <ErrorBoundary>
+      <Title metadata={payload.metadata} mainType="entry" />
+
+      <BrowseTabs />
       <Switch
         {...props}
         locationSelector={l =>
