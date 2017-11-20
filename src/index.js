@@ -29,8 +29,7 @@ const main = async () => {
 
   // If “PERF” is defined in the environment, activate “why-did-you-update” tool
   if (DEV && PERF) {
-    // if (DEV) {
-    // require('why-did-you-update').whyDidYouUpdate(React, { include: /.*/ });
+    require('why-did-you-update').whyDidYouUpdate(React, { include: /.*/ });
   }
 
   // Instantiates schema.org manager

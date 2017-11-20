@@ -341,7 +341,10 @@ module.exports = (env = { dev: true }) => {
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
-          PERF: JSON.stringify(!!env.performance),
+          PERF: JSON.stringify(
+            // eslint-disable-next-line no-process-env
+            !!(env.perf || (process.env && process.env.PERF))
+          ),
           STAGING: JSON.stringify(!!env.staging),
           NODE_ENV: env.production ? JSON.stringify('production') : null,
         },
