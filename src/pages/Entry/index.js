@@ -144,11 +144,7 @@ class List extends Component {
               className={f('col-type')}
               renderer={type => (
                 <Tooltip title={type}>
-                  <interpro-type
-                    type={type.replace('_', ' ')}
-                    title={type}
-                    size="26px"
-                  >
+                  <interpro-type type={type.replace('_', ' ')} size="26px">
                     {type}
                   </interpro-type>
                 </Tooltip>
@@ -164,7 +160,6 @@ class List extends Component {
               ) => (
                 <Tooltip title={`${name} (${accession})`}>
                   <Link
-                    title={`${name} (${accession})`}
                     newTo={location => ({
                       ...location,
                       description: {
@@ -230,7 +225,6 @@ class List extends Component {
                           >
                             <span className={f('sign-label')}>
                               <Link
-                                title={`${accession} signature`}
                                 newTo={{
                                   description: {
                                     mainType: 'entry',
@@ -305,11 +299,7 @@ class List extends Component {
                       >
                         <span className={f('go-cell')}>
                           <Tooltip title={`${go.name} (${go.identifier})`}>
-                            <GoLink
-                              id={go.identifier}
-                              className={f('go')}
-                              title={`${go.name} (${go.identifier})`}
-                            >
+                            <GoLink id={go.identifier} className={f('go')}>
                               {go.name ? go.name : 'None'}
                             </GoLink>
                           </Tooltip>
@@ -320,28 +310,13 @@ class List extends Component {
               >
                 GO Terms{' '}
                 <Tooltip title="Biological process term">
-                  <span
-                    className={f('sign-label-head', 'bp')}
-                    title="Biological process term"
-                  >
-                    BP
-                  </span>
+                  <span className={f('sign-label-head', 'bp')}>BP</span>
                 </Tooltip>{' '}
                 <Tooltip title="Molecular function term">
-                  <span
-                    className={f('sign-label-head', 'mf')}
-                    title="Molecular function term"
-                  >
-                    MF
-                  </span>
+                  <span className={f('sign-label-head', 'mf')}>MF</span>
                 </Tooltip>{' '}
                 <Tooltip title="Cellular component term">
-                  <span
-                    className={f('sign-label-head', 'cc')}
-                    title="Cellular component term"
-                  >
-                    CC
-                  </span>
+                  <span className={f('sign-label-head', 'cc')}>CC</span>
                 </Tooltip>
               </Column>
             ) : null}

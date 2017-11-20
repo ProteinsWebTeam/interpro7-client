@@ -4,6 +4,8 @@ import T from 'prop-types';
 import { format } from 'url';
 import { createSelector } from 'reselect';
 
+import { Tooltip } from 'react-tippy';
+
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
@@ -67,16 +69,18 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
                 }}
               >
                 <interpro-type type={type} size="4em" />
-                <h5 data-tooltip title={title}>
-                  {type}
-                  &nbsp;
-                  <span
-                    className={f('small', 'icon', 'icon-generic')}
-                    data-icon="i"
-                    data-tooltip
-                    title={description}
-                  />
-                </h5>
+                <Tooltip title={title}>
+                  <h5>
+                    {type}
+                    &nbsp;
+                    <Tooltip title={description}>
+                      <span
+                        className={f('small', 'icon', 'icon-generic')}
+                        data-icon="i"
+                      />
+                    </Tooltip>
+                  </h5>
+                </Tooltip>
                 <p>
                   <span
                     className={f('count', { visible: this.props.data.payload })}

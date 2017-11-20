@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 
 // Components
+import { Tooltip } from 'react-tippy';
+
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
@@ -438,13 +440,11 @@ class Home extends PureComponent {
               processData={schemaProcessDataForDB}
             />
             <div className={f('container-intro')}>
-              <div
-                className={f('fig-container')}
-                data-tooltip
-                title="Domain analysis and prediction on multiple protein sequences"
-              >
-                <InterProGraphicAnim />
-              </div>
+              <Tooltip title="Domain analysis and prediction on multiple protein sequences">
+                <div className={f('fig-container')}>
+                  <InterProGraphicAnim />
+                </div>
+              </Tooltip>
 
               <h3>Classification of protein families</h3>
 
@@ -638,7 +638,7 @@ class Home extends PureComponent {
                     The InterPro Domain Architecture (IDA) tool allows you to
                     search the InterPro database with a particular set of
                     domains, and returns all of the domain architectures and
-                    associated proteins that match the query.
+                    associated proteins that match the query.{' '}
                     <Link
                       newTo={{
                         description: { other: 'about' },
@@ -660,7 +660,7 @@ class Home extends PureComponent {
                   <p>
                     InterProScan is a sequence analysis application (nucleotide
                     and protein sequences) that combines different protein
-                    signature recognition methods into one resource.
+                    signature recognition methods into one resource.{' '}
                     <Link
                       newTo={{
                         description: { other: 'about' },

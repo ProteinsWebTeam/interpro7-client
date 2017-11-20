@@ -22,6 +22,16 @@ TweenLite.ticker.fps(MAX_FPS);
 
 const DELAY_RANGE = 0.1;
 
+const getAbbr = (value /*: number */) => {
+  let _value = value;
+  let unitIndex = 0;
+  while (_value > UNIT_SCALE * UNIT_SCALE_MARGIN) {
+    unitIndex++;
+    _value = Math.floor(_value / UNIT_SCALE);
+  }
+  return `${_value.toLocaleString()}${UNITS[unitIndex]}`;
+};
+
 class NumberLabel extends PureComponent {
   static propTypes = {
     value: T.number,
@@ -91,23 +101,23 @@ class NumberLabel extends PureComponent {
     if (isNaN(_value)) _value = 'N/A';
     if (Number.isFinite(_value)) {
       if (abbr) {
-        let unitIndex = 0;
-        while (_value > UNIT_SCALE * UNIT_SCALE_MARGIN) {
-          unitIndex++;
-          _value = Math.floor(_value / UNIT_SCALE);
-        }
-        _value = `${_value.toLocaleString()}${UNITS[unitIndex]}`;
+        _value = getAbbr(_value);
       } else {
         // this will print the number according to locale preference
         // like a coma as thousand-separator in english
         if (Number.isFinite(_value)) _value = _value.toLocaleString();
       }
     }
-    const _title = title || this.props.value.toLocaleString();
+    let _title = title;
+    if (!_title && abbr) {
+      const potentialTitle = this.props.value.toLocaleString();
+      // Should only happen if value has been shortened
+      if (potentialTitle !== _value) _title = potentialTitle;
+    }
     return (
       <span
         className={f('label', className, { lowGraphics })}
-        title={_title}
+        title={_title || ''}
         {...props}
       >
         {_value}

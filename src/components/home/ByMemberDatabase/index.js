@@ -4,6 +4,8 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import { Tooltip } from 'react-tippy';
+
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -72,9 +74,9 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
               />
               <Link newTo={newTo} className={name}>
                 <MemberSymbol type={type} />
-                <h6 data-tooltip title={title}>
-                  {name}
-                </h6>
+                <Tooltip title={title}>
+                  <h6>{name}</h6>
+                </Tooltip>
                 <p>
                   <small>{version}</small>
                   <br />
