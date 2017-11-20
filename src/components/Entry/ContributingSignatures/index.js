@@ -4,11 +4,14 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import loadable from 'higherOrder/loadable';
+import Metadata from 'wrappers/Metadata';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
+
+import { Tooltip } from 'react-tippy';
 
 const f = foundationPartial(ipro, local);
 
@@ -27,6 +30,41 @@ const schemaProcessData = ({ name, db }) => ({
   name,
 });
 
+const SignatureLink = ({ accession, db, data }) => {
+  const tooltipContent =
+    (data &&
+      data.payload &&
+      data.payload.metadata &&
+      data.payload.metadata.name &&
+      data.payload.metadata.name.name) ||
+    accession;
+  return (
+    <Link
+      newTo={{
+        description: {
+          mainType: 'entry',
+          mainDB: db,
+          mainAccession: accession,
+        },
+      }}
+    >
+      <div className={f('md-list-text')}>
+        <small>
+          <span style={{ color: '#4b555b' }}>{db}:</span>{' '}
+          <Tooltip title={tooltipContent}>
+            <span>{accession}</span>
+          </Tooltip>
+        </small>
+      </div>
+    </Link>
+  );
+};
+SignatureLink.propTypes = {
+  accession: T.string.isRequired,
+  db: T.string.isRequired,
+  data: T.object,
+};
+
 const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
   <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
     <div className={f('md-icon-list-box', 'margin-bottom-large')}>
@@ -36,23 +74,14 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
           <li key={db}>
             <MemberSymbol type={db} className={f('md-small')} />
             {accessions.map(accession => (
-              <Link
+              <Metadata
+                endpoint={'entry'}
+                db={db}
+                accession={accession}
                 key={accession}
-                newTo={{
-                  description: {
-                    mainType: 'entry',
-                    mainDB: db,
-                    mainAccession: accession,
-                  },
-                }}
               >
-                <div className={f('md-list-text')}>
-                  <small>
-                    <span style={{ color: '#4b555b' }}>{db}:</span>{' '}
-                    <span>{accession}</span>
-                  </small>
-                </div>
-              </Link>
+                <SignatureLink key={accession} db={db} accession={accession} />
+              </Metadata>
             ))}
           </li>
         ))}
