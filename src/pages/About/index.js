@@ -214,8 +214,8 @@ export default class About extends PureComponent /*:: <{}> */ {
                     <h5>INTERPRO</h5>
                   </span>
                   <span className={f('cite-text')}>
-                    To cite InterPro, please refer to the following publication:<br
-                    />
+                    To cite InterPro, please refer to the following publication:
+                    <br />
                     <i>
                       Robert D. Finn, Teresa K. Attwood, Patricia C. Babbitt,
                       Alex Bateman, Peer Bork, Alan J. Bridge, Hsin-Yu Chang,

@@ -8,7 +8,6 @@ import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import AnimatedEntry from 'components/AnimatedEntry';
-import { MaskSvgIcons } from 'components/home/ByEntryType';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';

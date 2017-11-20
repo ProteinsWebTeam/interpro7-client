@@ -236,9 +236,8 @@ const getUrlForMemberDB = createSelector(
 const getUrlForAll = createSelector(
   state => state.settings.api,
   state => state.newLocation.description.mainType,
-  ({ protocol, hostname, port, root }, mainType) => {
-    return `${protocol}//${hostname}:${port}${root}/${mainType}`;
-  },
+  ({ protocol, hostname, port, root }, mainType) =>
+    `${protocol}//${hostname}:${port}${root}/${mainType}`,
 );
 
 let exported = MemberDBTabs;
