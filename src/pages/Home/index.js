@@ -399,12 +399,12 @@ InterPro uses predictive models, known as signatures, provided by several
 different databases (referred to as member databases) that make up the
 InterPro consortium.`.trim();
 
-const schemaProcessData = () => ({
+const schemaProcessData = location => ({
   '@type': 'DataCatalog',
   '@id': '@mainEntityOfPage',
   name: 'InterPro',
   description,
-  url: window.location.href,
+  url: location.href,
   keywords: ['InterPro', 'Domain', 'Family', 'Annotation', 'Protein'],
   provider: {
     '@type': 'Organization',
@@ -414,21 +414,24 @@ const schemaProcessData = () => ({
   dataset: '@dataset',
 });
 
-const schemaProcessDataForDB = name => ({
+const schemaProcessDataForDB = ({ name, location }) => ({
   '@type': 'Dataset',
   '@id': '@dataset',
   name,
   identifier: name,
   version: 64,
-  url: `${window.location.href}/entry/${name}`,
+  url: `${location.href}/entry/${name}`,
 });
 
 const Home = () => (
   <div>
     <div className={f('row')}>
       <div className={f('columns', 'large-12')}>
-        <SchemaOrgData processData={schemaProcessData} />
-        <SchemaOrgData data="InterPro" processData={schemaProcessDataForDB} />
+        <SchemaOrgData data={window.location} processData={schemaProcessData} />
+        <SchemaOrgData
+          data={{ name: 'InterPro', location: window.location }}
+          processData={schemaProcessDataForDB}
+        />
         <div className={f('container-intro')}>
           <div
             className={f('fig-container')}
@@ -476,16 +479,16 @@ const Home = () => (
       <div className={f('columns', 'browse-by')}>
         <div className={f('callout-box')}>
           <Tabs>
-            <div title="by member database">
+            <div title="by member DB">
               <ByMemberDatabase />
             </div>
             <div title="by entry type">
               <ByEntryType />
             </div>
-            <div title="by species">
+            <div title="by specie">
               <BySpecies />
             </div>
-            <div title="by GO terms" className={f('go-list')}>
+            <div title="by GO term" className={f('go-list')}>
               <ByGOTerms />
             </div>
           </Tabs>

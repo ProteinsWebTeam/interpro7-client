@@ -35,26 +35,26 @@ import pageStyle from '../style.css';
 
 const f = foundationPartial(pageStyle, styles);
 
-const schemaProcessDataTable = mainDB => ({
+const schemaProcessDataTable = ({ mainDB, location }) => ({
   '@type': 'Dataset',
   '@id': '@mainEntityOfPage',
   identifier: mainDB,
   name: mainDB,
   version: '?',
-  url: window.location.href,
+  url: location.href,
   hasPart: '@hasPart',
   includedInDataCatalog: {
     '@type': 'DataCatalog',
-    '@id': `${window.location.origin}/interpro7/`,
+    '@id': `${location.origin}/interpro7/`,
   },
 });
 
-const schemaProcessDataTableRow = data => ({
+const schemaProcessDataTableRow = ({ data, location }) => ({
   '@type': 'DataRecord',
   '@id': '@hasPart',
   identifier: data.accession,
   name: data.mainDB,
-  url: `${window.location.href}/${data.accession}`,
+  url: `${location.href}/${data.accession}`,
 });
 
 class List extends Component {
@@ -104,7 +104,10 @@ class List extends Component {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
-          <SchemaOrgData data={mainDB} processData={schemaProcessDataTable} />
+          <SchemaOrgData
+            data={{ mainDB, location: window.location }}
+            processData={schemaProcessDataTable}
+          />
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -198,7 +201,7 @@ class List extends Component {
                   })}
                 >
                   <SchemaOrgData
-                    data={data}
+                    data={{ data, location: window.location }}
                     processData={schemaProcessDataTableRow}
                   />
                   <span className={f('acc-row')}>

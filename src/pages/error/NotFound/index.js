@@ -22,9 +22,9 @@ class NotFound extends PureComponent /*:: <{}> */ {
             </h5>
             <br />
             <p>
-              {' Double check the URL or go back to the '}
-              <Link newTo={{ description: {} }}>homepage.</Link> If you continue
-              to get this page, contact us using the
+              {'Double check the URL or go back to the '}
+              <Link newTo={{ description: {} }}>homepage</Link>
+              {'. If you continue to get this page, contact us using the '}
               <Link
                 target="_blank"
                 href="http://www.ebi.ac.uk/support/interpro-general-query"
