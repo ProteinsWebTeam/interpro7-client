@@ -223,9 +223,8 @@ class SummaryComponent extends PureComponent {
 }
 
 const schemaProcessData = data => ({
-  '@type': 'DataRecord',
+  '@type': ['Protein', 'DataRecord'],
   '@id': '@mainEntityOfPage',
-  additionalType: 'http://semanticscience.org/resource/SIO_010043',
   identifier: data.metadata.accession,
   isPartOf: {
     '@type': 'Dataset',

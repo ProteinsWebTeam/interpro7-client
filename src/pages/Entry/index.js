@@ -447,14 +447,14 @@ const InnerSwitch = props => (
 );
 
 const mapTypeToOntology = new Map([
-  ['Domain', 'http://semanticscience.org/resource/SIO_001379.rdf'],
-  ['Family', 'http://semanticscience.org/resource/SIO_001380.rdf'],
-  ['Repeat', 'http://semanticscience.org/resource/SIO_000370.rdf'],
-  ['Unknown', 'http://semanticscience.org/resource/SIO_000370.rdf'],
-  ['Conserved_site', 'http://semanticscience.org/resource/SIO_010049.rdf'],
-  ['Binding_site', 'http://semanticscience.org/resource/SIO_010040.rdf'],
-  ['Active_site', 'http://semanticscience.org/resource/SIO_010041.rdf'],
-  ['PTM', 'http://semanticscience.org/resource/SIO_010049.rdf'],
+  ['Domain', 'DomainAnnotation'],
+  ['Family', 'FamilyAnnotation'],
+  ['Repeat', 'RepeatAnnotation'],
+  ['Unknown', 'UnknownAnnotation'],
+  ['Conserved_site', 'ConservedSiteAnnotation'],
+  ['Binding_site', 'BindingSiteAnnotation'],
+  ['Active_site', 'ActiveSiteAnnotation'],
+  ['PTM', 'PTMAnnotation'],
 ]);
 
 const schemaProcessData = data => ({

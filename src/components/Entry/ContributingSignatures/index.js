@@ -18,9 +18,8 @@ const SchemaOrgData = loadable({
 });
 
 const schemaProcessData = ({ name, db }) => ({
-  '@type': ['BioChemEntity', 'CreativeWork'],
+  '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
   '@id': '@isBasedOn',
-  additionalType: 'http://semanticscience.org/resource/SIO_000370.rdf',
   isPartOf: {
     '@type': 'Dataset',
     '@id': db,

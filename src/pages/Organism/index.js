@@ -261,9 +261,8 @@ class InnerSwitch extends PureComponent {
 }
 
 const schemaProcessData = data => ({
-  '@type': ['BioChemEntity', 'CreativeWork'],
+  '@type': ['Organism', 'BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
-  additionalType: 'http://semanticscience.org/resource/SIO_010000.rdf',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
