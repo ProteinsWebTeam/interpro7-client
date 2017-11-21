@@ -8,6 +8,7 @@ import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
+import { Loading } from 'components/SimpleCommonComponents';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -146,11 +147,7 @@ class DomainOnProteinWithoutData extends Component {
       dataUnintegrated,
     } = this.props;
     if (dataInterPro.loading || dataIntegrated.loading) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading… </div>
-        </div>
-      );
+      return <Loading />;
     }
     const mergedData = mergeData(
       'payload' in dataInterPro ? dataInterPro.payload.entries : [],
