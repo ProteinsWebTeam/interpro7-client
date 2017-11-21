@@ -8,6 +8,7 @@ import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
 import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
+import { Loading } from 'components/SimpleCommonComponents';
 import Table, {
   Column,
   SearchBox,
@@ -362,12 +363,7 @@ SummaryComponent.propTypes = {
 const Summary = props => {
   const { data: { loading, payload }, isStale } = props;
   if (loading || (isStale && !payload.metadata)) {
-    return (
-      <div className={f('row')}>
-        {' '}
-        <div className={f('columns')}>Loading… </div>
-      </div>
-    );
+    return <Loading />;
   }
   return (
     <ErrorBoundary>
