@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 import DomainArchitectures from 'components/Entry/DomainArchitectures';
+import { Loading } from 'components/SimpleCommonComponents';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -22,12 +23,7 @@ class DomainArchitectureSubPage extends PureComponent /*:: <Props> */ {
 
   render() {
     const { data, mainType } = this.props;
-    if (data.loading)
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading… </div>
-        </div>
-      );
+    if (data.loading) return <Loading />;
     return (
       <div>
         {mainType === 'entry' && <DomainArchitectures mainData={data} />}
