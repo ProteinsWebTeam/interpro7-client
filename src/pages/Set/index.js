@@ -53,17 +53,7 @@ class Overview extends PureComponent {
 
   render() {
     if (this.props.loading) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>
-            <div className={f('loading-spinner')}>
-              <div className={f('rd1')} />
-              <div className={f('rd2')} />
-              <div className={f('rd3')} />
-            </div>
-          </div>
-        </div>
-      );
+      return <Loading />;
     }
     const { data: { payload = defaultPayload } } = this.props;
     return (
