@@ -1,5 +1,6 @@
 import React from 'react';
 import T from 'prop-types';
+import { Tooltip } from 'react-tippy';
 
 import { GoLink } from 'components/ExtLink';
 
@@ -83,13 +84,11 @@ const GoTerms = (
                       data={identifier}
                       processData={schemaProcessData}
                     />
-                    <GoLink
-                      id={identifier}
-                      className={f('go-terms', 'ext')}
-                      title={`${name} (${identifier})`}
-                    >
-                      {name || identifier}
-                    </GoLink>
+                    <Tooltip title={`${name} (${identifier})`}>
+                      <GoLink id={identifier} className={f('go-terms', 'ext')}>
+                        {name || identifier}
+                      </GoLink>
+                    </Tooltip>
                   </li>
                 ))
               ) : (
