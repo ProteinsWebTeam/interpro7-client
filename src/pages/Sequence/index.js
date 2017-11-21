@@ -8,17 +8,19 @@ import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 
+import { Loading } from 'components/SimpleCommonComponents';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
+import global from 'styles/global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(fonts, pageStyle, ipro, styles);
+const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
 
 const SummaryAsync = loadable({
   loader: () =>
@@ -54,11 +56,7 @@ class _Summary extends PureComponent {
   render() {
     const { data: { loading, payload }, accession } = this.props;
     if (loading) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+      return <Loading />;
     }
     const entries =
       payload.results[0].matches.length +

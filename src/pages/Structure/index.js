@@ -13,7 +13,9 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
+
 import { HighlightedText } from 'components/SimpleCommonComponents';
+import { Loading } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -50,13 +52,7 @@ const propTypes = {
 };
 
 const Overview = ({ data: { payload, loading } }) => {
-  if (loading)
-    return (
-      <div className={f('row')}>
-        {' '}
-        <div className={f('columns')}>Loading… </div>
-      </div>
-    );
+  if (loading) return <Loading />;
   return (
     <ul className={f('card')}>
       {Object.entries(payload.structures || {}).map(([name, count]) => (
@@ -212,13 +208,7 @@ for (const subPage of config.pages.structure.subPages) {
 
 const Summary = props => {
   const { data: { loading } } = props;
-  if (loading)
-    return (
-      <div className={f('row')}>
-        {' '}
-        <div className={f('columns')}>Loading… </div>
-      </div>
-    );
+  if (loading) return <Loading />;
   return (
     <ErrorBoundary>
       <Switch

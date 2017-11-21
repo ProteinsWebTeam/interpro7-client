@@ -34,7 +34,7 @@ const LiteratureItem = (
     included,
   } /*: {pubID: string, reference: Object, i?: number, included?: boolean} */,
 ) => (
-  <li className={f('reference', 'small')} id={included ? pubID : null}>
+  <div className={f('reference', 'small')} id={included ? pubID : null}>
     <p className={f('cite')}>
       <SchemaOrgData data={r} processData={schemaProcessData} />
       {included &&
@@ -65,7 +65,7 @@ const LiteratureItem = (
         {r.PMID}
       </PMCLink>
     </p>
-  </li>
+  </div>
 );
 LiteratureItem.propTypes = {
   pubID: T.string.isRequired,

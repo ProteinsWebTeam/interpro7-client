@@ -12,6 +12,7 @@ import Table, {
   Exporter,
 } from 'components/Table';
 import { HighlightedText } from 'components/SimpleCommonComponents';
+import { Loading } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -21,12 +22,12 @@ import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
 
-import styles from 'styles/blocks.css';
+import global from 'styles/global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import { setDB } from 'utils/processLocation/handlers';
-const f = foundationPartial(fonts, pageStyle, ipro, styles);
+const f = foundationPartial(fonts, pageStyle, ipro, global);
 
 // const SVG_WIDTH = 100;
 // const colorHash = new ColorHash();
@@ -52,11 +53,7 @@ class Overview extends PureComponent {
 
   render() {
     if (this.props.loading) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+      return <Loading />;
     }
     const { data: { payload = defaultPayload } } = this.props;
     return (
@@ -259,11 +256,7 @@ class Summary extends PureComponent {
   render() {
     const { data: { loading, payload } } = this.props;
     if (loading || !payload.metadata) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+      return <Loading />;
     }
     let currentSet = null;
     Array.from(setDB).forEach(db => {

@@ -11,8 +11,8 @@ pages:
     subPages:
       - protein
       - domain_architecture
-      - structure
       - organism
+      - structure
       - set
       - logo
   protein:

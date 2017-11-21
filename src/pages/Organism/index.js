@@ -12,7 +12,9 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
+
 import { HighlightedText } from 'components/SimpleCommonComponents';
+import { Loading } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -215,11 +217,7 @@ class Summary extends PureComponent {
   render() {
     const { data: { loading, payload } } = this.props;
     if (loading || (!payload && !payload.metadata && !payload.results)) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+      return <Loading />;
     }
     return (
       <div>

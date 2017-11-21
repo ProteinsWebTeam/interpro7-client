@@ -12,3 +12,59 @@ html {
     flex: 1;
   }
 }
+
+/*Loading animation*/
+.loading-spinner {
+  margin: 100px auto;
+  width: 200px;
+  height: 50px;
+  text-align: center;
+  font-size: 10px; /*was 10*/
+}
+
+.loading-spinner > div {
+  background-color: rgba(0, 0, 0, 1);
+  height: 40%;
+  width: 21px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 0.2rem;
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+
+.loading-spinner .rd2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.loading-spinner .rd3 {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+
+@-webkit-keyframes stretchdelay {
+  0%,
+  40%,
+  100% {
+    -webkit-transform: scale(0.5);
+  }
+  20% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes stretchdelay {
+  0%,
+  40%,
+  100% {
+    transform: scale(0.5);
+    -webkit-transform: scale(0.5);
+    opacity: 0.3;
+  }
+  20% {
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    opacity: 0.6;
+  }
+}

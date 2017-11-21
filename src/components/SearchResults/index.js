@@ -7,6 +7,7 @@ import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import Table, { Column, Exporter } from 'components/Table';
 import { HighlightedText } from 'components/SimpleCommonComponents';
+import { Loading } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 
@@ -29,7 +30,7 @@ class SearchResults extends PureComponent {
 
   render() {
     const { data: { payload, loading }, search, dataUrl } = this.props;
-    if (loading) return <div>Loading…</div>;
+    if (loading) return <Loading />;
     if (!payload) {
       return <div />;
     } else if (payload.hitCount === 0) {
@@ -90,7 +91,6 @@ class SearchResults extends PureComponent {
         actualSize={payload.hitCount}
         query={search}
         pathname="/search/text"
-        title="Search Results (powered by EBI Search)"
       >
         <Exporter>
           <a href={dataUrl} download={`SearchResults-${search.search}.json`}>

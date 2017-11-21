@@ -4,6 +4,10 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 
 import { PDBeLink, UniProtLink } from 'components/ExtLink';
+import { foundationPartial } from 'styles/foundation';
+
+import global from 'styles/global.css';
+const f = foundationPartial(global);
 
 export const Name = (
   {
@@ -101,3 +105,15 @@ HighlightedText.propTypes = {
   text: T.oneOfType([T.string, T.number]).isRequired,
   textToHighlight: T.string,
 };
+
+export const Loading = () => (
+  <div className={f('row')}>
+    <div className={f('columns')}>
+      <div className={f('loading-spinner')}>
+        <div className={f('rd1')} />
+        <div className={f('rd2')} />
+        <div className={f('rd3')} />
+      </div>
+    </div>
+  </div>
+);
