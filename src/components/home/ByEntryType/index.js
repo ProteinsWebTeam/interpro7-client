@@ -69,18 +69,17 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
                 }}
               >
                 <interpro-type type={type} size="4em" />
-                <Tooltip title={title}>
-                  <h5>
-                    {type}
-                    &nbsp;
-                    <Tooltip title={description}>
-                      <span
-                        className={f('small', 'icon', 'icon-generic')}
-                        data-icon="i"
-                      />
-                    </Tooltip>
-                  </h5>
-                </Tooltip>
+                <h5>
+                  {type}
+                  &nbsp;
+                  <Tooltip title={description}>
+                    <span
+                      className={f('small', 'icon', 'icon-generic')}
+                      data-icon="i"
+                      aria-label="Information about this entry"
+                    />
+                  </Tooltip>
+                </h5>
                 <p>
                   <span
                     className={f('count', { visible: this.props.data.payload })}
