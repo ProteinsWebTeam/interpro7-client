@@ -46,57 +46,57 @@ class LatestEntry extends PureComponent {
   render() {
     const { entry } = this.props;
     return (
-      <Tooltip title="Domain entry">
-        <li className={f('list-item')}>
-          <interpro-type type={entry.type} />
-          <div className={f('list-body')}>
-            <Link
-              newTo={{
-                description: {
-                  mainType: 'entry',
-                  mainDB: 'InterPro',
-                  mainAccession: entry.accession,
-                },
-              }}
-            >
-              <div className={f('list-title')}>
-                {entry.name}
-                <span>({entry.accession})</span> —{' '}
-                <i>{entry.counter} proteins matched</i>
-                <br />
-              </div>
-            </Link>
-            {entry.contributing.map(c => (
-              <div className={f('list-more')} key={c.accession}>
-                <MemberSymbol
-                  type={c.source_database}
-                  className={f('md-small')}
-                />
-                <small>
-                  {c.source_database}:
-                  <Link
-                    newTo={{
-                      description: {
-                        mainType: 'entry',
-                        mainDB: 'interpro',
-                        mainMemberDB: c.source_database,
-                        mainMemberDBAccession: c.accession,
-                      },
-                    }}
-                    className={f('list-sign')}
-                  >
-                    {c.accession}
-                  </Link>{' '}
-                  ({entry.contributing.length} contributing signature{entry
-                    .contributing.length > 1
-                    ? 's'
-                    : ''})
-                </small>
-              </div>
-            ))}
-          </div>
-        </li>
-      </Tooltip>
+      <li className={f('list-item')}>
+        <Tooltip title={`${entry.type} entry type`}>
+          <interpro-type type={entry.type} aria-label="Entry type" />
+        </Tooltip>
+        <div className={f('list-body')}>
+          <Link
+            newTo={{
+              description: {
+                mainType: 'entry',
+                mainDB: 'InterPro',
+                mainAccession: entry.accession,
+              },
+            }}
+          >
+            <div className={f('list-title')}>
+              {entry.name}
+              <span>({entry.accession})</span> —{' '}
+              <i>{entry.counter} proteins matched</i>
+              <br />
+            </div>
+          </Link>
+          {entry.contributing.map(c => (
+            <div className={f('list-more')} key={c.accession}>
+              <MemberSymbol
+                type={c.source_database}
+                className={f('md-small')}
+              />
+              <small>
+                {c.source_database}:
+                <Link
+                  newTo={{
+                    description: {
+                      mainType: 'entry',
+                      mainDB: 'interpro',
+                      mainMemberDB: c.source_database,
+                      mainMemberDBAccession: c.accession,
+                    },
+                  }}
+                  className={f('list-sign')}
+                >
+                  {c.accession}
+                </Link>{' '}
+                ({entry.contributing.length} contributing signature{entry
+                  .contributing.length > 1
+                  ? 's'
+                  : ''})
+              </small>
+            </div>
+          ))}
+        </div>
+      </li>
     );
   }
 }
