@@ -1,6 +1,7 @@
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
+import { Tooltip } from 'react-tippy';
 
 import _Header from './Header';
 import _Exporter from './Exporter';
@@ -88,24 +89,30 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   />
                 </div>
                 <div className={f('show-for-large')} style={{ lineHeight: 0 }}>
-                  <button
-                    className={f('icon-view', 'table-view')}
-                    title="View your results as a table"
-                  />
-                  <button
-                    className={f('icon-view', 'list-view', 'disabled')}
-                    aria-disabled="true"
-                    disabled
-                    data-icon="i"
-                    title="View your results as a list"
-                  />
-                  <button
-                    className={f('icon-view', 'thumb-view', 'disabled')}
-                    aria-disabled="true"
-                    disabled
-                    data-icon="i"
-                    title="View your results as thumbnails"
-                  />
+                  <Tooltip title="View your results as a table">
+                    <button
+                      className={f('icon-view', 'table-view')}
+                      aria-label="view your results as a table"
+                    />
+                  </Tooltip>{' '}
+                  <Tooltip title="View your results as a list">
+                    <button
+                      className={f('icon-view', 'list-view', 'disabled')}
+                      aria-disabled="true"
+                      disabled
+                      data-icon="i"
+                      aria-label="view your results as a list"
+                    />
+                  </Tooltip>{' '}
+                  <Tooltip title="View your results as thumbnails">
+                    <button
+                      className={f('icon-view', 'thumb-view', 'disabled')}
+                      aria-disabled="true"
+                      disabled
+                      data-icon="i"
+                      aria-label="view your results as thumbnails"
+                    />
+                  </Tooltip>
                 </div>
                 <div className={f('filter-wrapper')}>
                   {search}
