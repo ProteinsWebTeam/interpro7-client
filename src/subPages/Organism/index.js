@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
+import { Loading } from 'components/SimpleCommonComponents';
 import ProteinFile from './ProteinFile';
 // import Metadata from 'wrappers/Metadata';
 // import TaxIdOrName from 'components/Organism/TaxIdOrName';
@@ -86,12 +87,7 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
 
   render() {
     const { data: { loading, payload } } = this.props;
-    if (loading)
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading… </div>
-        </div>
-      );
+    if (loading) return <Loading />;
     const processed = payloadToProcessed(payload);
     return (
       <div className={f('row')}>
