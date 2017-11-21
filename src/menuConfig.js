@@ -345,16 +345,28 @@ export const InterPro /*: Array<Object> */ = [
     newTo(location) {
       let mainType = 'entry';
       let mainDB = 'InterPro';
+      let focusType = null;
+      let focusDB = null;
       if (
         location.description.mainType &&
         location.description.mainType !== 'search'
       ) {
-        mainType = location.description.mainType;
-        mainDB = location.description.mainDB || 'InterPro';
+        if (
+          location.description.mainType === 'set' &&
+          location.description.mainAccession
+        ) {
+          mainType = 'set';
+          mainDB = 'all';
+          focusType = 'entry';
+          focusDB = location.description.mainDB;
+        } else {
+          mainType = location.description.mainType;
+          mainDB = location.description.mainDB || 'InterPro';
+        }
       }
       return {
         ...location,
-        description: { mainType, mainDB },
+        description: { mainType, mainDB, focusType, focusDB },
       };
     },
     activeClass({ description: { mainType } } /*: Location */) {
