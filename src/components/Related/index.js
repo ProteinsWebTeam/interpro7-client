@@ -10,13 +10,14 @@ import description2path from 'utils/processLocation/description2path';
 import loadData from 'higherOrder/loadData';
 
 import Matches from 'components/Matches';
+import { Loading } from 'components/SimpleCommonComponents';
 
 import { toPlural } from 'utils/pages';
 
 import { foundationPartial } from 'styles/foundation';
 
-import styles from 'styles/blocks.css';
-const f = foundationPartial(styles);
+import global from 'styles/global.css';
+const f = foundationPartial(global);
 
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
@@ -279,12 +280,7 @@ const mapStateToPropsAdvancedQuery = createSelector(
 const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
   loadData(getReversedUrl)(
     ({ data: { payload, loading }, secondaryData, ...props }) => {
-      if (loading)
-        return (
-          <div className={f('row')}>
-            <div className={f('columns')}>Loading… </div>
-          </div>
-        );
+      if (loading) return <Loading />;
       const _secondaryData =
         payload && payload.results
           ? payload.results.map(x => {
@@ -324,22 +320,12 @@ class Related extends PureComponent {
 
   render() {
     const { data, focusType, ...props } = this.props;
-    if (data.loading)
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+    if (data.loading) return <Loading />;
     const {
       metadata: mainData,
       [toPlural(focusType)]: secondaryData,
     } = data.payload;
-    if (!secondaryData)
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+    if (!secondaryData) return <Loading />;
     const RelatedComponent = Array.isArray(secondaryData)
       ? RelatedAdvancedQuery
       : RelatedSimple;
