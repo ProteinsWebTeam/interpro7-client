@@ -17,6 +17,8 @@ import { HighlightedText } from 'components/SimpleCommonComponents';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import BrowseTabs from 'components/BrowseTabs';
+import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
@@ -214,7 +216,7 @@ class Summary extends PureComponent {
 
   render() {
     const { data: { loading, payload } } = this.props;
-    if (loading || (!payload && !payload.metadata && !payload.results)) {
+    if (loading || !payload) {
       return (
         <div className={f('row')}>
           <div className={f('columns')}>Loading…</div>
@@ -224,6 +226,14 @@ class Summary extends PureComponent {
     return (
       <div>
         <ErrorBoundary>
+          {payload && payload.metadata ? (
+            <div className={f('row')}>
+              <div className={f('medium-12', 'large-12', 'columns')}>
+                <Title metadata={payload.metadata} mainType="organism" />
+                <BrowseTabs />
+              </div>
+            </div>
+          ) : null}
           <Switch
             {...this.props}
             locationSelector={l =>

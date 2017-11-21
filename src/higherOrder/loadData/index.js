@@ -88,9 +88,6 @@ const loadData = params => {
         super(props);
         this.state = { staleData: props.data };
         this._url = '';
-        // TODO: _avoidStaleData has been removed(29/09/2017), delete commented lines
-        // if this change hasn't create any problems.
-        // this._avoidStaleData = true;
         this._load = null;
       }
 
@@ -144,14 +141,16 @@ const loadData = params => {
         unloadingData,
         data,
       }) {
-        // this._avoidStaleData =
-        //   getBaseURL(this._url) !== getBaseURL(getUrl(nextAppState));
-
         // Same location, no need to reload data
         if (
           nextAppState.newLocation === this.props.appState.newLocation &&
           nextAppState.settings === this.props.appState.settings
         ) {
+          // In case the change is of data in the same page
+          if (this._url !== data.url) {
+            this._unloadDataMaybe();
+            subscribe(data.url, this);
+          }
           return;
         }
 

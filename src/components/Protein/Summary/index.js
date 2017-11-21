@@ -6,7 +6,6 @@ import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
 import Accession from 'components/Accession';
-import Title from 'components/Title';
 
 import { UniProtLink } from 'components/ExtLink';
 
@@ -38,7 +37,6 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
-              <Title metadata={metadata} mainType={'protein'} />
               <div className={f('tag', 'secondary', 'margin-bottom-large')}>
                 Protein {metadata.source_database}
               </div>

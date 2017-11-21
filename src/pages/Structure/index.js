@@ -18,6 +18,8 @@ import { HighlightedText } from 'components/SimpleCommonComponents';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import BrowseTabs from 'components/BrowseTabs';
+import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
@@ -211,8 +213,8 @@ for (const subPage of config.pages.structure.subPages) {
 }
 
 const Summary = props => {
-  const { data: { loading } } = props;
-  if (loading)
+  const { data: { loading, payload } } = props;
+  if (loading || !payload || !payload.metadata)
     return (
       <div className={f('row')}>
         {' '}
@@ -221,6 +223,12 @@ const Summary = props => {
     );
   return (
     <ErrorBoundary>
+      <div className={f('row')}>
+        <div className={f('medium-12', 'large-12', 'columns')}>
+          <Title metadata={payload.metadata} mainType="structure" />
+          <BrowseTabs />
+        </div>
+      </div>
       <Switch
         {...props}
         locationSelector={l =>

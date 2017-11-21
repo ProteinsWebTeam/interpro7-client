@@ -395,9 +395,12 @@ const Summary = props => {
   }
   return (
     <ErrorBoundary>
-      <Title metadata={payload.metadata} mainType="entry" />
-
-      <BrowseTabs />
+      <div className={f('row')}>
+        <div className={f('medium-12', 'large-12', 'columns')}>
+          <Title metadata={payload.metadata} mainType="entry" />
+          <BrowseTabs />
+        </div>
+      </div>
       <Switch
         {...props}
         locationSelector={l =>

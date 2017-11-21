@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import { goToNewLocation } from 'actions/creators';
 
-import Title from 'components/Title';
 import Accession from 'components/Accession';
 import Lineage from 'components/Organism/Lineage';
 import Children from 'components/Organism/Children';
@@ -108,10 +107,11 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   render() {
     // const { data: { metadata } } = this.props;
     const { metadata, names } = this.props.data.payload;
+    857786;
+
     return (
       <div className={f('row')}>
         <div className={f('medium-12', 'columns')}>
-          <Title metadata={metadata} mainType={'organism'} />
           <Accession accession={metadata.accession} id={metadata.id} />
           {metadata.rank && <div>Rank: {metadata.rank}</div>}
           <Lineage lineage={metadata.lineage} names={names} />
@@ -147,7 +147,6 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('row')}>
         <div className={f('medium-10', 'columns')}>
-          <Title metadata={metadata} mainType={'organism'} />
           {metadata.is_reference ? (
             <div className={f('tag', 'secondary', 'margin-bottom-large')}>
               Reference Proteome
