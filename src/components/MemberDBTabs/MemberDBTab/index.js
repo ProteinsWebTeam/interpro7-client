@@ -2,6 +2,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+import { Tooltip } from 'react-tippy';
+
 import Link from 'components/generic/Link';
 import NumberLabel from 'components/NumberLabel';
 
@@ -71,7 +73,7 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
       <li className={f('tabs-title', { lowGraphics })}>
         <Link
           newTo={newTo}
-          activeClass={f('is-active', 'is-active-tab')}
+          activeClass={f('is-active', 'is-active-tab', cleanName)}
           className={f({
             special: cleanName === 'InterPro' || cleanName === 'all',
           })}
@@ -83,16 +85,19 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
               ? ` ${toPlural(mainType).toLowerCase()}`
               : ''}&nbsp;
           </span>
-          <NumberLabel
-            value={count || 0}
-            className={f('number-label')}
+          <Tooltip
             title={
               count === null
                 ? null
                 : `${count.toLocaleString()} ${toPlural(mainType, count)} found`
             }
-            abbr={true}
-          />
+          >
+            <NumberLabel
+              value={count || 0}
+              className={f('number-label')}
+              abbr={true}
+            />
+          </Tooltip>
         </Link>
       </li>
     );

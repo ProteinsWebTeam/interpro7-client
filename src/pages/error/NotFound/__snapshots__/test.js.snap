@@ -25,7 +25,7 @@ exports[`<NotFound /> should render 1`] = `
       </h5>
       <br />
       <p>
-         Double check the URL or go back to the 
+        Double check the URL or go back to the 
         <Connect(Link)
           newTo={
             Object {
@@ -33,9 +33,9 @@ exports[`<NotFound /> should render 1`] = `
             }
           }
         >
-          homepage.
+          homepage
         </Connect(Link)>
-         If you continue to get this page, contact us using the
+        . If you continue to get this page, contact us using the 
         <Connect(Link)
           href="http://www.ebi.ac.uk/support/interpro-general-query"
           target="_blank"

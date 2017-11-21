@@ -80,8 +80,8 @@ class TaxonomyFilter extends PureComponent {
                 <div>All</div>
               ) : (
                 <Metadata
-                  endpoint={'organism'}
-                  db={'taxonomy'}
+                  endpoint="organism"
+                  db="taxonomy"
                   accession={taxId === 'ALL' ? 1 : taxId}
                 >
                   <TaxIdOrName accession={taxId} element="div" />

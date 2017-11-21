@@ -31,7 +31,6 @@ export const descriptionItemToHandlers /*: Map<string, Set<Handler>> */ = new Ma
         handlers.structureHandler,
         handlers.proteinHandler,
         handlers.entryHandler,
-        handlers.setHandler,
         handlers.organismHandler,
         handlers.setHandler,
         handlers.searchHandler,

@@ -50,8 +50,7 @@ const description2IDs = description =>
 */
 
 class SummaryEntry extends PureComponent /*:: <Props> */ {
-  propTypes = {
-    goToNewLocation: T.func.isRequired,
+  static propTypes = {
     data: T.shape({
       metadata: T.object.isRequired,
     }),

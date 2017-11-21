@@ -4,11 +4,12 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import { Tooltip } from 'react-tippy';
+
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import AnimatedEntry from 'components/AnimatedEntry';
-import { MaskSvgIcons } from 'components/home/ByEntryType';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -28,13 +29,13 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessDataForDB = ({ name, version }) => ({
+const schemaProcessDataForDB = ({ name, version, location }) => ({
   '@type': 'Dataset',
   '@id': '@dataset',
   name,
   identifier: name,
   version,
-  url: `${window.location.href}/entry/${name}`,
+  url: `${location.href}/entry/${name}`,
 });
 
 /*:: type Props = {
@@ -68,14 +69,14 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
               key={name}
             >
               <SchemaOrgData
-                data={{ name, version }}
+                data={{ name, version, location: window.location }}
                 processData={schemaProcessDataForDB}
               />
               <Link newTo={newTo} className={name}>
                 <MemberSymbol type={type} />
-                <h6 data-tooltip title={title}>
-                  {name}
-                </h6>
+                <Tooltip title={title}>
+                  <h6>{name}</h6>
+                </Tooltip>
                 <p>
                   <small>{version}</small>
                   <br />

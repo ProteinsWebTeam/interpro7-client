@@ -175,7 +175,7 @@ module.exports = (env = { dev: true }) => {
           ],
         },
         {
-          test: /((clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          test: /((tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
           // Use `loader` instead of `use` for now, otherwise breaks
           // https://github.com/webpack/extract-text-webpack-plugin/issues/282
           use:
@@ -247,7 +247,7 @@ module.exports = (env = { dev: true }) => {
                     },
                   },
                 ],
-          exclude: /((clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          exclude: /((tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
         },
         {
           test: /\.scss$/i,
@@ -341,7 +341,10 @@ module.exports = (env = { dev: true }) => {
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
-          PERF: JSON.stringify(!!env.performance),
+          PERF: JSON.stringify(
+            // eslint-disable-next-line no-process-env
+            !!(env.perf || (process.env && process.env.PERF))
+          ),
           STAGING: JSON.stringify(!!env.staging),
           NODE_ENV: env.production ? JSON.stringify('production') : null,
         },

@@ -80,67 +80,77 @@ const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
   mainAccession: ?string,
   closeSideNav: function,
 }; */
+/*:: type State = {
+  hasRendered: boolean,
+}; */
 
-class SideMenu extends PureComponent /*:: <Props> */ {
+class SideMenu extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     visible: T.bool.isRequired,
     mainAccession: T.string,
     closeSideNav: T.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasRendered: false,
+    };
+  }
+
+  componentWillReceiveProps({ visible }) {
+    if (!this.state.hasRendered && visible)
+      this.setState({ hasRendered: true });
+  }
+
   render() {
     const { visible, mainAccession, closeSideNav } = this.props;
+    if (!(this.state.hasRendered || visible)) return null;
     return (
-      <div>
-        <aside
-          className={f('container', { visible })}
-          role="menu"
-          id="main-nav"
+      <aside className={f('container', { visible })} role="menu" id="main-nav">
+        <button
+          className={f('exit')}
+          title="Close side menu"
+          onClick={closeSideNav}
+          aria-hidden="true"
         >
-          <button
-            className={f('exit')}
-            title="Close side menu"
-            onClick={closeSideNav}
-            aria-hidden="true"
-          >
-            ×
-          </button>
-          <nav>
-            <ul>
-              {mainAccession && (
-                <SingleEntityMenu className={f('primary')}>
-                  <span
-                    className={f('menu-label', 'select-none', 'cursor-default')}
-                  >
-                    {mainAccession}
-                  </span>
-                </SingleEntityMenu>
-              )}
-              <InterProMenu
-                pathname={''}
-                className={f('secondary', 'is-drilldown')}
+          ×
+        </button>
+        <nav>
+          <ul>
+            {mainAccession && (
+              <SingleEntityMenu className={f('primary')}>
+                <span
+                  className={f('menu-label', 'select-none', 'cursor-default')}
+                >
+                  {mainAccession}
+                </span>
+              </SingleEntityMenu>
+            )}
+            <InterProMenu
+              pathname=""
+              className={f('secondary', 'is-drilldown')}
+            >
+              <span
+                className={f('menu-label', 'select-none', 'cursor-default')}
               >
-                <span
-                  className={f('menu-label', 'select-none', 'cursor-default')}
-                >
-                  InterPro menu
-                </span>
-              </InterProMenu>
-              <EBIMenu className={f('tertiary')}>
-                <span
-                  className={f('menu-label', 'select-none', 'cursor-default')}
-                >
-                  EBI menu
-                </span>
-              </EBIMenu>
-              <span />
-              <li className={f('menu-label', 'cursor-default', 'tertiary')}>
-                <OldInterProLink />
-              </li>
-            </ul>
-          </nav>
-        </aside>
-      </div>
+                InterPro menu
+              </span>
+            </InterProMenu>
+            <EBIMenu className={f('tertiary')}>
+              <span
+                className={f('menu-label', 'select-none', 'cursor-default')}
+              >
+                EBI menu
+              </span>
+            </EBIMenu>
+            <span />
+            <li className={f('menu-label', 'cursor-default', 'tertiary')}>
+              <OldInterProLink />
+            </li>
+          </ul>
+        </nav>
+      </aside>
     );
   }
 }

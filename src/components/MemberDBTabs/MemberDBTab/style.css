@@ -135,13 +135,6 @@
   }
 }
 
-.collapsed .tabs-title {
-  & a,
-  & span {
-    display: none;
-  }
-}
-
 .tabs-title > a.is-active:before {
   background: currentColor;
 }

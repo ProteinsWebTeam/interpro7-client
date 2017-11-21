@@ -1,6 +1,8 @@
 import React, { PureComponent, Component } from 'react';
 import T from 'prop-types';
 
+import { Tooltip } from 'react-tippy';
+
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
@@ -33,26 +35,26 @@ import pageStyle from '../style.css';
 
 const f = foundationPartial(pageStyle, styles);
 
-const schemaProcessDataTable = mainDB => ({
+const schemaProcessDataTable = ({ mainDB, location }) => ({
   '@type': 'Dataset',
   '@id': '@mainEntityOfPage',
   identifier: mainDB,
   name: mainDB,
   version: '?',
-  url: window.location.href,
+  url: location.href,
   hasPart: '@hasPart',
   includedInDataCatalog: {
     '@type': 'DataCatalog',
-    '@id': `${window.location.origin}/interpro7/`,
+    '@id': `${location.origin}/interpro7/`,
   },
 });
 
-const schemaProcessDataTableRow = data => ({
+const schemaProcessDataTableRow = ({ data, location }) => ({
   '@type': 'DataRecord',
   '@id': '@hasPart',
   identifier: data.accession,
   name: data.mainDB,
-  url: `${window.location.href}/${data.accession}`,
+  url: `${location.href}/${data.accession}`,
 });
 
 class List extends Component {
@@ -102,13 +104,16 @@ class List extends Component {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
-          <SchemaOrgData data={mainDB} processData={schemaProcessDataTable} />
+          <SchemaOrgData
+            data={{ mainDB, location: window.location }}
+            processData={schemaProcessDataTable}
+          />
           <Table
             dataTable={_payload.results}
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
-            pathname={''}
+            pathname=""
             notFound={notFound}
           >
             <Exporter>
@@ -131,20 +136,18 @@ class List extends Component {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search} pathname={''}>
+            <SearchBox search={search.search} pathname="">
               &nbsp;
             </SearchBox>
             <Column
               dataKey="type"
               className={f('col-type')}
               renderer={type => (
-                <interpro-type
-                  type={type.replace('_', ' ')}
-                  title={type}
-                  size="26px"
-                >
-                  {type}
-                </interpro-type>
+                <Tooltip title={type}>
+                  <interpro-type type={type.replace('_', ' ')} size="26px">
+                    {type}
+                  </interpro-type>
+                </Tooltip>
               )}
             >
               Type
@@ -155,23 +158,24 @@ class List extends Component {
                 name /*: string */,
                 { accession } /*: {accession: string} */,
               ) => (
-                <Link
-                  title={`${name} (${accession})`}
-                  newTo={location => ({
-                    ...location,
-                    description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: accession,
-                    },
-                    search: {},
-                  })}
-                >
-                  <HighlightedText
-                    text={name}
-                    textToHighlight={search.search}
-                  />
-                </Link>
+                <Tooltip title={`${name} (${accession})`}>
+                  <Link
+                    newTo={location => ({
+                      ...location,
+                      description: {
+                        mainType: location.description.mainType,
+                        mainDB: location.description.mainDB,
+                        mainAccession: accession,
+                      },
+                      search: {},
+                    })}
+                  >
+                    <HighlightedText
+                      text={name}
+                      textToHighlight={search.search}
+                    />
+                  </Link>
+                </Tooltip>
               )}
             >
               Name
@@ -192,7 +196,7 @@ class List extends Component {
                   })}
                 >
                   <SchemaOrgData
-                    data={data}
+                    data={{ data, location: window.location }}
                     processData={schemaProcessDataTableRow}
                   />
                   <span className={f('acc-row')}>
@@ -215,21 +219,25 @@ class List extends Component {
                       <span className={f('sign-cell')}>{db}</span>
                       <span className={f('sign-cell')}>
                         {mdb[db].map(accession => (
-                          <span key={accession} className={f('sign-label')}>
-                            <Link
-                              title={`${accession} signature`}
-                              newTo={{
-                                description: {
-                                  mainType: 'entry',
-                                  mainDB: db,
-                                  mainAccession: accession,
-                                },
-                                search: {},
-                              }}
-                            >
-                              {accession}
-                            </Link>
-                          </span>
+                          <Tooltip
+                            key={accession}
+                            title={`${accession} signature`}
+                          >
+                            <span className={f('sign-label')}>
+                              <Link
+                                newTo={{
+                                  description: {
+                                    mainType: 'entry',
+                                    mainDB: db,
+                                    mainAccession: accession,
+                                  },
+                                  search: {},
+                                }}
+                              >
+                                {accession}
+                              </Link>
+                            </span>
+                          </Tooltip>
                         ))}
                       </span>
                     </div>
@@ -290,37 +298,26 @@ class List extends Component {
                         }}
                       >
                         <span className={f('go-cell')}>
-                          <GoLink
-                            id={go.identifier}
-                            className={f('go')}
-                            title={`${go.name} (${go.identifier})`}
-                          >
-                            {go.name ? go.name : 'None'}
-                          </GoLink>
+                          <Tooltip title={`${go.name} (${go.identifier})`}>
+                            <GoLink id={go.identifier} className={f('go')}>
+                              {go.name ? go.name : 'None'}
+                            </GoLink>
+                          </Tooltip>
                         </span>
                       </div>
                     ))
                 }
               >
                 GO Terms{' '}
-                <span
-                  className={f('sign-label-head', 'bp')}
-                  title="Biological process term"
-                >
-                  BP
-                </span>{' '}
-                <span
-                  className={f('sign-label-head', 'mf')}
-                  title="Molecular function term"
-                >
-                  MF
-                </span>{' '}
-                <span
-                  className={f('sign-label-head', 'cc')}
-                  title="Cellular component term"
-                >
-                  CC
-                </span>
+                <Tooltip title="Biological process term">
+                  <span className={f('sign-label-head', 'bp')}>BP</span>
+                </Tooltip>{' '}
+                <Tooltip title="Molecular function term">
+                  <span className={f('sign-label-head', 'mf')}>MF</span>
+                </Tooltip>{' '}
+                <Tooltip title="Cellular component term">
+                  <span className={f('sign-label-head', 'cc')}>CC</span>
+                </Tooltip>
               </Column>
             ) : null}
           </Table>
@@ -425,14 +422,14 @@ const InnerSwitch = props => (
 );
 
 const mapTypeToOntology = new Map([
-  ['Domain', 'http://semanticscience.org/resource/SIO_001379.rdf'],
-  ['Family', 'http://semanticscience.org/resource/SIO_001380.rdf'],
-  ['Repeat', 'http://semanticscience.org/resource/SIO_000370.rdf'],
-  ['Unknown', 'http://semanticscience.org/resource/SIO_000370.rdf'],
-  ['Conserved_site', 'http://semanticscience.org/resource/SIO_010049.rdf'],
-  ['Binding_site', 'http://semanticscience.org/resource/SIO_010040.rdf'],
-  ['Active_site', 'http://semanticscience.org/resource/SIO_010041.rdf'],
-  ['PTM', 'http://semanticscience.org/resource/SIO_010049.rdf'],
+  ['Domain', 'DomainAnnotation'],
+  ['Family', 'FamilyAnnotation'],
+  ['Repeat', 'RepeatAnnotation'],
+  ['Unknown', 'UnknownAnnotation'],
+  ['Conserved_site', 'ConservedSiteAnnotation'],
+  ['Binding_site', 'BindingSiteAnnotation'],
+  ['Active_site', 'ActiveSiteAnnotation'],
+  ['PTM', 'PTMAnnotation'],
 ]);
 
 const schemaProcessData = data => ({

@@ -108,7 +108,7 @@ class List extends PureComponent {
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
-            pathname={''}
+            pathname=""
             notFound={notFound}
           >
             <Exporter>
@@ -131,7 +131,7 @@ class List extends PureComponent {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search} pathname={''}>
+            <SearchBox search={search.search} pathname="">
               Search Entry Sets
             </SearchBox>
             <Column
@@ -223,9 +223,8 @@ class SummaryComponent extends PureComponent {
 }
 
 const schemaProcessData = data => ({
-  '@type': 'DataRecord',
+  '@type': ['Protein', 'DataRecord'],
   '@id': '@mainEntityOfPage',
-  additionalType: 'http://semanticscience.org/resource/SIO_010043',
   identifier: data.metadata.accession,
   isPartOf: {
     '@type': 'Dataset',

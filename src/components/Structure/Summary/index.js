@@ -66,7 +66,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
-              <Title metadata={metadata} mainType={'structure'} />
+              <Title metadata={metadata} mainType="structure" />
               <pdb-prints size="36">
                 <pdb-data-loader pdbid={metadata.accession} />
               </pdb-prints>
@@ -114,7 +114,9 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
               <div className={f('columns')}>
                 <Embed
                   style={embedStyle}
-                  src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${metadata.accession}/?view=entry_index&viewer=litemol&controls=codename_hero`}
+                  src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${
+                    metadata.accession
+                  }/?view=entry_index&viewer=litemol&controls=codename_hero`}
                 >
                   <div
                     style={{

@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 :global(#root) {
   display: flex;
   flex-direction: column;

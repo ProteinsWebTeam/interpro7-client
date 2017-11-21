@@ -22,14 +22,9 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
       location: { search },
     } = this.props;
     return (
-      <Table
-        dataTable={results}
-        actualSize={count}
-        query={search}
-        pathname={''}
-      >
+      <Table dataTable={results} actualSize={count} query={search} pathname="">
         <PageSizeSelector />
-        <SearchBox search={search.search} pathname={''}>
+        <SearchBox search={search.search} pathname="">
           Search
         </SearchBox>
         <Column
@@ -96,7 +91,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
                 <div title="Proteome reference">
                   <span
                     className={f('icon', 'icon-functional')}
-                    data-icon={'/'}
+                    data-icon="/"
                   />
                 </div>
               ) : null}

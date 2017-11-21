@@ -1,5 +1,4 @@
 // @flow
-/* eslint no-magic-numbers: [1, {ignore: [0, 1, 2]}] */
 import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -178,10 +177,7 @@ const Matches = (
                     : 'Not reviewed by curators (TrEMBL)'
                 }
               >
-                <span
-                  className={f('icon', 'icon-functional')}
-                  data-icon={'/'}
-                />
+                <span className={f('icon', 'icon-functional')} data-icon="/" />
               </div>
             ) : (
               db

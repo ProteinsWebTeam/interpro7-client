@@ -90,7 +90,7 @@ class List extends PureComponent {
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
-            pathname={''}
+            pathname=""
             notFound={notFound}
           >
             <Exporter>
@@ -113,7 +113,7 @@ class List extends PureComponent {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search} pathname={''}>
+            <SearchBox search={search.search} pathname="">
               Search proteins
             </SearchBox>
             <Column
@@ -261,9 +261,8 @@ class InnerSwitch extends PureComponent {
 }
 
 const schemaProcessData = data => ({
-  '@type': ['BioChemEntity', 'CreativeWork'],
+  '@type': ['Organism', 'BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
-  additionalType: 'http://semanticscience.org/resource/SIO_010000.rdf',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,

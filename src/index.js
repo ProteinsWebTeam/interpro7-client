@@ -13,26 +13,7 @@ import ready from 'utils/ready';
 import hmr from 'index-hmr';
 
 if (PROD || STAGING) {
-  const runtime = require('offline-plugin/runtime');
-  runtime.install({
-    onUpdating: () => {
-      console.log('SW Event:', 'onUpdating');
-    },
-    onUpdateReady: () => {
-      console.log('SW Event:', 'onUpdateReady');
-      // Tells to new SW to take control immediately
-      runtime.applyUpdate();
-    },
-    onUpdated: () => {
-      console.log('SW Event:', 'onUpdated');
-      // Reload the webpage to load into the new version
-      window.location.reload();
-    },
-
-    onUpdateFailed: () => {
-      console.log('SW Event:', 'onUpdateFailed');
-    },
-  });
+  import(/* webpackChunkName: offline */ './offline').then(m => m.default());
 }
 
 const schemaOrgManager = (...args) =>
@@ -48,15 +29,55 @@ const main = async () => {
 
   // If “PERF” is defined in the environment, activate “why-did-you-update” tool
   if (DEV && PERF) {
-    // if (DEV) {
-    // require('why-did-you-update').whyDidYouUpdate(React, { include: /.*/ });
+    require('why-did-you-update').whyDidYouUpdate(React, { include: /.*/ });
   }
 
   // Instantiates schema.org manager
   schemaOrgManager({
     dev: DEV,
     root: {
-      '@context': 'http://schema.org',
+      '@context': [
+        'http://schema.org',
+        {
+          Entry: {
+            '@id': 'http://semanticscience.org/resource/SIO_000370.rdf',
+          },
+          DomainAnnotation: {
+            '@id': 'http://semanticscience.org/resource/SIO_001379.rdf',
+          },
+          FamilyAnnotation: {
+            '@id': 'http://semanticscience.org/resource/SIO_001380.rdf',
+          },
+          RepeatAnnotation: {
+            '@id': 'http://semanticscience.org/resource/SIO_000370.rdf',
+          },
+          UnknownAnnotation: {
+            '@id': 'http://semanticscience.org/resource/SIO_000370.rdf',
+          },
+          ConservedSiteAnnotation: {
+            '@id': 'http://semanticscience.org/resource/SIO_010049.rdf',
+          },
+          BindingSiteAnnotation: {
+            '@id': 'http://semanticscience.org/resource/SIO_010040.rdf',
+          },
+          ActiveSiteAnnotation: {
+            '@id': 'http://semanticscience.org/resource/SIO_010041.rdf',
+          },
+          PTMAnnotation: {
+            '@id': 'http://semanticscience.org/resource/SIO_010049.rdf',
+          },
+          Protein: {
+            '@id': 'http://semanticscience.org/resource/SIO_010043',
+          },
+          Structure: {
+            '@id': 'http://semanticscience.org/resource/SIO_011119.rdf',
+          },
+          Organism: {
+            '@id': 'http://semanticscience.org/resource/SIO_010000.rdf',
+          },
+        },
+        { '@base': 'http://schema.org' },
+      ],
       '@type': 'WebSite',
       url: config.root.website.protocol + config.root.website.href,
       mainEntityOfPage: '@mainEntityOfPage',

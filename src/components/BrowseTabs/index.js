@@ -25,6 +25,8 @@ const f = foundationPartial(styles);
     loading: boolean,
     payload?: ?Object,
   },
+  children: ?any,
+  className: ?string,
 }; */
 
 export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
@@ -37,10 +39,20 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    children: T.any,
+    className: T.string,
   };
 
   render() {
-    const { mainType, mainDB, mainAccession, data, isSignature } = this.props;
+    const {
+      mainType,
+      mainDB,
+      mainAccession,
+      data,
+      isSignature,
+      children,
+      className,
+    } = this.props;
     let tabs = entities;
     if (mainAccession && mainType && config.pages[mainType]) {
       tabs = [singleEntity.get('overview')];
@@ -51,24 +63,21 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
       tabs = tabs.filter(Boolean);
     }
     return (
-      <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
-          <ul className={f('tabs', { sign: isSignature })}>
-            {tabs.map(e => (
-              <li className={f('tabs-title')} key={e.name}>
-                <BrowseTabsLink
-                  newTo={e.newTo}
-                  name={e.name}
-                  data={data}
-                  counter={e.counter}
-                  isFirstLevel={!mainAccession}
-                  isSignature={isSignature}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <ul className={f('tabs', className, { sign: isSignature })}>
+        {children}
+        {tabs.map(e => (
+          <li className={f('tabs-title')} key={e.name}>
+            <BrowseTabsLink
+              newTo={e.newTo}
+              name={e.name}
+              data={data}
+              counter={e.counter}
+              isFirstLevel={!mainAccession}
+              isSignature={isSignature}
+            />
+          </li>
+        ))}
+      </ul>
     );
   }
 }

@@ -87,7 +87,7 @@ class IPScanSearch extends Component {
     let editorState;
     if (props.sequence) {
       editorState = EditorState.createWithContent(
-        ContentState.createFromText(props.sequence),
+        ContentState.createFromText(decodeURIComponent(props.sequence)),
         compositeDecorator,
       );
     } else {
@@ -177,6 +177,7 @@ class IPScanSearch extends Component {
             : EditorState.createEmpty(compositeDecorator),
         valid: true,
         dragging: false,
+        uploading: false,
       },
       () => this.editor.focus(),
     );
@@ -219,6 +220,7 @@ class IPScanSearch extends Component {
 
   _handleSubmit = async event => {
     event.preventDefault();
+    this.setState({ uploading: true });
     const lines = convertToRaw(
       this.state.editorState.getCurrentContent(),
     ).blocks.map(block => block.text);
@@ -238,6 +240,7 @@ class IPScanSearch extends Component {
     console.log({ jobAndJobId, IPScanId });
     jobAndJobId.job.id = IPScanId;
     this._handleSubmitSuccess(jobAndJobId);
+    this.setState({ uploading: false });
   };
 
   _handleFile = file => {
@@ -305,7 +308,7 @@ class IPScanSearch extends Component {
   };
 
   render() {
-    const { editorState, valid, dragging } = this.state;
+    const { editorState, valid, dragging, uploading } = this.state;
     return (
       <div className={s('row')}>
         <div className={s('large-12', 'columns')}>
@@ -333,7 +336,10 @@ class IPScanSearch extends Component {
                       Sequence, in FASTA format
                       <div
                         type="text"
-                        className={s('editor', { 'invalid-block': !valid })}
+                        className={s('editor', {
+                          'invalid-block': !valid,
+                          busy: uploading,
+                        })}
                       >
                         <Editor
                           placeholder="Enter your sequence"
@@ -342,6 +348,7 @@ class IPScanSearch extends Component {
                           onChange={this._handleChange}
                           handlePastedText={this._handlePastedText}
                           ref={editor => (this.editor = editor)}
+                          readOnly={uploading}
                         />
                       </div>
                     </label>

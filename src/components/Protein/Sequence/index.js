@@ -91,8 +91,6 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
           selection.anchorOffset +
           1;
         end = sequenceToSearch.length + start - 1;
-      } else {
-        return sequenceToSearch;
       }
     }
     // Split by line of 80 characters
@@ -101,7 +99,7 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
     const meta = `>${this.props.accession} mol:protein subsequence:${start}-${
       end
     } length:${end - start + 1} ${this.props.name || ''}`.trim();
-    return `${meta}\n${sequenceToSearch}`;
+    return encodeURIComponent(`${meta}\n${sequenceToSearch}`);
   };
 
   _handleIPSClick = event => {

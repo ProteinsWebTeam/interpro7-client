@@ -108,7 +108,7 @@ class _StructureOnProtein extends Component {
       );
     }
     const mergedData = mergeData(
-      dataInterPro.payload.entries,
+      dataInterPro.payload ? dataInterPro.payload.entries : [],
       structures,
       dataStructureInfo.payload,
     );

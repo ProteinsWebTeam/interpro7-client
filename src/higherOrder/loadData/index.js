@@ -15,6 +15,7 @@ import { alreadyLoadingError } from 'reducers/data';
 
 import extractParams from './extractParams';
 import getFetch from './getFetch';
+import { subscribe, unsubscribe } from './subscriptions';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 
@@ -47,7 +48,9 @@ const load = (
   }
   const onProgress = progress => progressData(key, progress);
   // Starts the fetch
-  const c = cancelable(fetchFun(key, fetchOptions, onProgress));
+  const c = cancelable(signal =>
+    fetchFun(key, { ...fetchOptions, signal }, onProgress),
+  );
   // Eventually changes the state according to response
   c.promise.then(
     response => loadedData(key, response),
@@ -114,6 +117,7 @@ const loadData = params => {
             fetchOptions,
           );
         }
+        subscribe(key, this);
 
         // If data is already there, or loading, don't do anything
         if (data.loading || data.payload) return;
@@ -172,6 +176,7 @@ const loadData = params => {
             fetchOptions,
           );
         }
+        subscribe(key, this);
         this._cancelableFetch = this._load(key);
       }
 
@@ -185,11 +190,8 @@ const loadData = params => {
       }
 
       _unloadDataMaybe = () => {
-        // TODO: add some logic to do data registration and only remove data if
-        // nobody is registered to it. IMPORTANT!
-        // Put some logic to check that, and, only if it is OK, then
-        const resultOfTheLogic = false;
-        if (resultOfTheLogic) this.props.unloadingData(this._url);
+        const needUnload = unsubscribe(this._url, this);
+        if (needUnload) this.props.unloadingData(this._url);
       };
 
       render() {

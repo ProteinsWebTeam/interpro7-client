@@ -38,7 +38,7 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
-              <Title metadata={metadata} mainType={'protein'} />
+              <Title metadata={metadata} mainType="protein" />
               <div className={f('tag', 'secondary', 'margin-bottom-large')}>
                 Protein {metadata.source_database}
               </div>

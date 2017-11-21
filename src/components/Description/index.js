@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import { transformFormatted } from 'utils/text';
@@ -131,7 +131,7 @@ ParagraphWithTags.propTypes = {
    extraTextForButton?: string,
  }
  */
-class Description extends Component {
+class Description extends PureComponent {
   /* ::
     props: Props;
     state: {
