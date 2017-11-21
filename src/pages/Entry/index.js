@@ -433,16 +433,18 @@ const mapTypeToOntology = new Map([
 ]);
 
 const schemaProcessData = data => ({
-  '@type': 'DataRecord',
+  '@type': [
+    'DataRecord',
+    'Entry',
+    mapTypeToOntology.get(data.metadata.type) ||
+      mapTypeToOntology.get('Unknown'),
+  ],
   '@id': '@mainEntityOfPage',
   identifier: data.metadata.accession,
   isPartOf: {
     '@type': 'Dataset',
     '@id': 'InterPro release ??',
   },
-  additionalType:
-    mapTypeToOntology.get(data.metadata.type) ||
-    mapTypeToOntology.get('Unknown'),
   mainEntity: '@mainEntity',
   isBasedOn: '@isBasedOn',
   isBasisFor: '@isBasisFor',
@@ -451,11 +453,15 @@ const schemaProcessData = data => ({
 });
 
 const schemaProcessData2 = data => ({
-  '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  additionalType:
+  '@type': [
+    'StructuredValue',
+    'CreativeWork',
+    'BioChemEntity',
+    'Entry',
     mapTypeToOntology.get(data.metadata.type) ||
-    mapTypeToOntology.get('Unknown'),
+      mapTypeToOntology.get('Unknown'),
+  ],
+  '@id': '@mainEntity',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
