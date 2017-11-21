@@ -23,12 +23,14 @@ import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
 
+import global from 'styles/global.css';
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
+import { Loading } from 'components/SimpleCommonComponents';
 
-const f = foundationPartial(fonts, pageStyle, ipro, styles);
+const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
 
 // const SVG_WIDTH = 100;
 // const colorHash = new ColorHash();
@@ -309,11 +311,7 @@ class Summary extends PureComponent {
   render() {
     const { data: { loading, payload } } = this.props;
     if (loading || !payload.metadata) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+      return <Loading />;
     }
     return (
       <div>
