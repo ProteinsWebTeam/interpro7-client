@@ -8,7 +8,7 @@ import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 
-import { Loading } from 'components/SimpleCommonComponents';
+import Loading from 'components/SimpleCommonComponents/Loading';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 

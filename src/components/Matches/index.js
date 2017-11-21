@@ -10,7 +10,7 @@ import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
 import ProteinFile from 'subPages/Organism/ProteinFile';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
-import { HighlightedText } from 'components/SimpleCommonComponents';
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import { foundationPartial } from 'styles/foundation';
 

@@ -8,7 +8,7 @@ import { stringify as qsStringify } from 'query-string';
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
 import Link from 'components/generic/Link';
-import { Loading } from 'components/SimpleCommonComponents';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import ColorHash from 'color-hash/lib/color-hash';
 

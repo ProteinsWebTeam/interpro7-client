@@ -6,8 +6,8 @@ import { createSelector } from 'reselect';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import Table, { Column, Exporter } from 'components/Table';
-import { HighlightedText } from 'components/SimpleCommonComponents';
-import { Loading } from 'components/SimpleCommonComponents';
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 

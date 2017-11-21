@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 import DomainArchitectures from 'components/Entry/DomainArchitectures';
-import { Loading } from 'components/SimpleCommonComponents';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 /*:: type Props = {
   data: Object,

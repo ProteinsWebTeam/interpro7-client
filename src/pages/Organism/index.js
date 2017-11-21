@@ -13,8 +13,8 @@ import Table, {
   Exporter,
 } from 'components/Table';
 
-import { HighlightedText } from 'components/SimpleCommonComponents';
-import { Loading } from 'components/SimpleCommonComponents';
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';

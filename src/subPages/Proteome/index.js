@@ -4,7 +4,7 @@ import T from 'prop-types';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import Link from 'components/generic/Link';
 import { foundationPartial } from 'styles/foundation';
-import { Loading } from 'components/SimpleCommonComponents';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import global from 'styles/global.css';

@@ -12,7 +12,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-import { HighlightedText } from 'components/SimpleCommonComponents';
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -28,7 +28,7 @@ import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
-import { Loading } from 'components/SimpleCommonComponents';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
 

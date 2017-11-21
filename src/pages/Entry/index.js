@@ -10,7 +10,7 @@ import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
 import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
-import { Loading } from 'components/SimpleCommonComponents';
+import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, {
   Column,
   SearchBox,
@@ -27,7 +27,7 @@ import subPages from 'subPages';
 import config from 'config';
 
 import { memberDB } from 'staticData/home';
-import { HighlightedText } from 'components/SimpleCommonComponents';
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -109,6 +109,7 @@ class List extends Component {
             data={{ mainDB, location: window.location }}
             processData={schemaProcessDataTable}
           />
+          <Loading />
           <Table
             dataTable={_payload.results}
             isStale={isStale}

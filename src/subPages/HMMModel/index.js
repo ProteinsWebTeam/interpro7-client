@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import HmmModelSection from 'components/Entry/HmmModels';
-import { Loading } from 'components/SimpleCommonComponents';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 class HMMModelSubPage extends PureComponent /*:: <{ data: Object }> */ {
   static propTypes = {

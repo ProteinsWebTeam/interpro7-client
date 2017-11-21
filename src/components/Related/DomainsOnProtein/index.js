@@ -8,7 +8,7 @@ import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
-import { Loading } from 'components/SimpleCommonComponents';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import { foundationPartial } from 'styles/foundation';
 

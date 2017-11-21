@@ -11,7 +11,7 @@ import Children from 'components/Organism/Children';
 import Metadata from 'wrappers/Metadata';
 import TaxIdOrName from 'components/Organism/TaxIdOrName';
 import { ProteomeLink } from 'components/ExtLink';
-import { Loading } from 'components/SimpleCommonComponents';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 

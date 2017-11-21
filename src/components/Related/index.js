@@ -10,7 +10,7 @@ import description2path from 'utils/processLocation/description2path';
 import loadData from 'higherOrder/loadData';
 
 import Matches from 'components/Matches';
-import { Loading } from 'components/SimpleCommonComponents';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import { toPlural } from 'utils/pages';
 
