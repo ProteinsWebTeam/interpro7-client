@@ -1,7 +1,7 @@
 @import '../../../styles/colors.css';
 @import '../../../styles/timing.css';
 
-.tabs-title span:first-child {
+.tabs-title .db-label {
   color: #4b555b;
 }
 
@@ -147,6 +147,7 @@
 .number-label {
   font-size: 0.9em;
   color: var(--colors-graydark);
+  transition-delay: var(--timing-medium);
 }
 
 .is-active .db-label {
@@ -155,6 +156,7 @@
 
 .is-active .number-label {
   color: white;
+  font-weight: bold;
   background: #71818a;
 }
 
