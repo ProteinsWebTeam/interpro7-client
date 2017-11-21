@@ -109,8 +109,6 @@ HighlightedText.propTypes = {
 export const Loading = () => (
   <div className={f('row')}>
     <div className={f('columns')}>
-      {' '}
-      LOADING!!!!
       <div className={f('loading-spinner')}>
         <div className={f('rd1')} />
         <div className={f('rd2')} />
