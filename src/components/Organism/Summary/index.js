@@ -11,16 +11,19 @@ import Children from 'components/Organism/Children';
 import Metadata from 'wrappers/Metadata';
 import TaxIdOrName from 'components/Organism/TaxIdOrName';
 import { ProteomeLink } from 'components/ExtLink';
+import { Loading } from 'components/SimpleCommonComponents';
 
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 
 import { foundationPartial } from 'styles/foundation';
 
+import global from 'styles/global.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 import loadData from 'higherOrder/loadData';
 
-const f = foundationPartial(ebiStyles);
+const f = foundationPartial(ebiStyles, global);
 
 /*:: type Props = {
   data: {
@@ -201,11 +204,7 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
 
   render() {
     if (this.props.loading || !this.props.data || !this.props.data.payload) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+      return <Loading />;
     }
     const { metadata: { source_database: db } } = this.props.data.payload;
     return (
