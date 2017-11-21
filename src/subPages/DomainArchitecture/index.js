@@ -7,9 +7,6 @@ import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 import DomainArchitectures from 'components/Entry/DomainArchitectures';
 import { Loading } from 'components/SimpleCommonComponents';
 
-import { foundationPartial } from 'styles/foundation';
-
-const f = foundationPartial();
 /*:: type Props = {
   data: Object,
   mainType: string,

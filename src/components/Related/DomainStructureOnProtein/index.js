@@ -10,10 +10,6 @@ import description2path from 'utils/processLocation/description2path';
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 import { Loading } from 'components/SimpleCommonComponents';
 
-import { foundationPartial } from 'styles/foundation';
-
-const f = foundationPartial();
-
 const getUrlFor = createSelector(
   // this one only to memoize it
   db => db,
