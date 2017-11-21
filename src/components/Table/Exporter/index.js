@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Tooltip } from 'react-tippy';
 
 import Link from 'components/generic/Link';
 
@@ -63,29 +64,28 @@ class Exporter extends Component {
             this.setState({ isOpen: !this.state.isOpen });
           }}
         >
-          <span
-            className={fPlus('icon', 'icon-functional')}
-            data-icon="="
-          />{' '}
-          <span className={fPlus('hide-for-small-only')}>Export</span> {' '}
+          <span className={fPlus('icon', 'icon-functional')} data-icon="=" />{' '}
+          <span className={fPlus('hide-for-small-only')}>Export</span>{' '}
         </button>
-        <Link
-          newTo={{ description: { other: 'settings' } }}
-          className={fPlus(
-            'icon',
-            'icon-functional',
-            'icon-settings',
-            'show-for-large'
-          )}
-          data-icon="s"
-          aria-label="settings"
-        />
+        <Tooltip title="Settings (customise number of results by page ...)">
+          <Link
+            newTo={{ description: { other: 'settings' } }}
+            className={fPlus(
+              'icon',
+              'icon-functional',
+              'icon-settings',
+              'show-for-large',
+            )}
+            data-icon="s"
+            aria-label="settings"
+          />
+        </Tooltip>
         <div
           className={fPlus(
             'dropdown-pane',
             'left',
             'dropdown-content',
-            focusDB
+            focusDB,
           )}
           style={{
             borderColor: getcolor(mainDB, focusDB),
@@ -101,6 +101,6 @@ class Exporter extends Component {
 const mapStateToProps = createSelector(
   state => state.newLocation.description.mainDB,
   state => state.newLocation.description.focusDB,
-  (mainDB, focusDB) => ({ mainDB, focusDB })
+  (mainDB, focusDB) => ({ mainDB, focusDB }),
 );
 export default connect(mapStateToProps)(Exporter);
