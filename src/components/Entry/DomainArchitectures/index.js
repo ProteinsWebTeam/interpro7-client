@@ -8,6 +8,7 @@ import { stringify as qsStringify } from 'query-string';
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
 import Link from 'components/generic/Link';
+import { Loading } from 'components/SimpleCommonComponents';
 
 import ColorHash from 'color-hash/lib/color-hash';
 
@@ -146,12 +147,7 @@ class DomainArchitectures extends PureComponent {
       data: { loading, payload },
       description: { mainAccession },
     } = this.props;
-    if (loading)
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading… </div>
-        </div>
-      );
+    if (loading) return <Loading />;
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
