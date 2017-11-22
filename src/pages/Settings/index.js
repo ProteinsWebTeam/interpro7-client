@@ -3,11 +3,14 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import noop from 'lodash-es/noop';
+
 import loadData from 'higherOrder/loadData';
 
 import { changeSettings, resetSettings } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
+
 import theme from 'styles/theme-interpro.css';
 import styles from './styles.css';
 
@@ -24,12 +27,13 @@ const PaginationSettings = ({ pagination: { pageSize } }) => (
             <div className={f('medium-4', 'column')}>
               <input
                 type="range"
-                min="1"
+                min="5"
                 max="200"
-                step="1"
+                step="5"
                 value={pageSize}
                 name="pageSize"
                 style={{ width: '100%' }}
+                onChange={noop}
               />
             </div>
             <div className={f('medium-8', 'column')}>{pageSize}</div>
@@ -134,19 +138,25 @@ const EndpointSettings = ({
       <div className={f('medium-3', 'column')}>
         <label>
           Hostname:
-          <input type="text" value={hostname} name="hostname" />
+          <input type="text" value={hostname} name="hostname" onChange={noop} />
         </label>
       </div>
       <div className={f('medium-3', 'column')}>
         <label>
           Port:
-          <input type="number" min="1" value={port} name="port" />
+          <input
+            type="number"
+            min="1"
+            value={port}
+            name="port"
+            onChange={noop}
+          />
         </label>
       </div>
       <div className={f('medium-3', 'column')}>
         <label>
           Root:
-          <input type="text" value={root} name="root" />
+          <input type="text" value={root} name="root" onChange={noop} />
         </label>
       </div>
       <div className={f('medium-3', 'column')}>
