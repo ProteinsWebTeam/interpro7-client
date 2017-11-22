@@ -222,13 +222,14 @@ _Title.propTypes = {
 };
 const mapStateToAccessionUrl = createSelector(
   state => state.settings.api,
+  state => state.newLocation.description.mainDB,
   state => state.newLocation.description.mainAccession,
-  ({ protocol, hostname, port, root }, mainAccession) =>
+  ({ protocol, hostname, port, root }, mainDB, mainAccession) =>
     format({
       protocol,
       hostname,
       port,
-      pathname: `${root}/organism/taxonomy/${mainAccession}`,
+      pathname: `${root}/organism/${mainDB}/${mainAccession}`,
     }),
 );
 

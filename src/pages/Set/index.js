@@ -16,6 +16,8 @@ import { HighlightedText } from 'components/SimpleCommonComponents';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import BrowseTabs from 'components/BrowseTabs';
+import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
@@ -289,6 +291,12 @@ class Summary extends PureComponent {
             />
           )}
         <ErrorBoundary>
+          <div className={f('row')}>
+            <div className={f('medium-12', 'large-12', 'columns')}>
+              <Title metadata={payload.metadata} mainType="set" />
+              <BrowseTabs />
+            </div>
+          </div>
           <Switch
             {...this.props}
             currentSet={currentSet}
