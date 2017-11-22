@@ -78,7 +78,7 @@ class AnimatedEntry extends PureComponent /*:: <Props> */ {
       dispatch,
       ...props
     } = this.props;
-    return <Element ref={node => (this._node = node)} {...props} />;
+    return <Element {...props} ref={node => (this._node = node)} />;
   }
 }
 
