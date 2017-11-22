@@ -28,7 +28,7 @@ const getInitialState = history => {
   const { location: { pathname, search, hash } } = history;
   let settings;
   if (settingsStorage) {
-    settings = settingsStorage.getValue();
+    settings = settingsStorage.getValue() || undefined;
   }
   return {
     newLocation: {
