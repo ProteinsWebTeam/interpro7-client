@@ -1,0 +1,52 @@
+@import '../../../styles/timing.css';
+
+.loading-spinner {
+  margin: 100px auto;
+  width: 200px;
+  height: 50px;
+  text-align: center;
+  font-size: 10px; /*was 10*/
+  animation: appear var(--timing-medium) ease-in-out var(--timing-fast) 1 normal
+    both;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.loading-spinner > div {
+  background-color: rgba(0, 0, 0, 1);
+  height: 40%;
+  width: 21px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 0.2rem;
+  animation: stretchdelay 1.1s infinite ease-in-out;
+
+  &:first-child {
+    animation-delay: -1.2s;
+  }
+
+  &:last-child {
+    animation-delay: -1s;
+  }
+}
+
+@keyframes stretchdelay {
+  0%,
+  40%,
+  100% {
+    transform: scale(0.5);
+    opacity: 0.3;
+  }
+  20% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+}

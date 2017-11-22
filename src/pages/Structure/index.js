@@ -13,7 +13,9 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-import { HighlightedText } from 'components/SimpleCommonComponents';
+
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -52,13 +54,7 @@ const propTypes = {
 };
 
 const Overview = ({ data: { payload, loading } }) => {
-  if (loading)
-    return (
-      <div className={f('row')}>
-        {' '}
-        <div className={f('columns')}>Loading… </div>
-      </div>
-    );
+  if (loading) return <Loading />;
   return (
     <ul className={f('card')}>
       {Object.entries(payload.structures || {}).map(([name, count]) => (
@@ -99,7 +95,7 @@ const List = ({
           isStale={isStale}
           actualSize={_payload.count}
           query={search}
-          pathname={''}
+          pathname=""
           notFound={notFound}
         >
           <Exporter>
@@ -122,7 +118,7 @@ const List = ({
             </ul>
           </Exporter>
           <PageSizeSelector />
-          <SearchBox search={search.search} pathname={''}>
+          <SearchBox search={search.search} pathname="">
             Search structures
           </SearchBox>
           <Column
@@ -214,13 +210,7 @@ for (const subPage of config.pages.structure.subPages) {
 
 const Summary = props => {
   const { data: { loading, payload } } = props;
-  if (loading || !payload || !payload.metadata)
-    return (
-      <div className={f('row')}>
-        {' '}
-        <div className={f('columns')}>Loading… </div>
-      </div>
-    );
+  if (loading || !payload || !payload.metadata) return <Loading />;
   return (
     <ErrorBoundary>
       <div className={f('row')}>
@@ -263,9 +253,8 @@ const InnerSwitch = props => (
 );
 
 const schemaProcessData = data => ({
-  '@type': 'DataRecord',
+  '@type': ['Structure', 'DataRecord'],
   '@id': '@mainEntityOfPage',
-  additionalType: 'http://semanticscience.org/resource/SIO_011119.rdf',
   identifier: data.metadata.accession,
   isPartOf: {
     '@type': 'Dataset',

@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Tooltip } from 'react-tippy';
 
 import MemberDBTab from './MemberDBTab';
 
@@ -155,20 +156,44 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
           collapsed,
         })}
       >
-        <button
-          onClick={this._handleCollapseToggle}
-          className={f(
-            'expand-button',
-            'large',
-            'hollow',
-            'float-right',
-            'hide-for-small-only',
-            'light',
-            'button',
-          )}
-        >
-          {collapsed ? '»' : '«'}
-        </button>
+        {collapsed ? (
+          <Tooltip title="Expand panel">
+            <button
+              onClick={this._handleCollapseToggle}
+              className={f(
+                'expand-button',
+                'large',
+                'hollow',
+                'float-right',
+                'hide-for-small-only',
+                'light',
+                'button',
+              )}
+              aria-label="Expand panel"
+            >
+              »
+            </button>
+          </Tooltip>
+        ) : (
+          <Tooltip title="collapse panel">
+            <button
+              onClick={this._handleCollapseToggle}
+              className={f(
+                'expand-button',
+                'large',
+                'hollow',
+                'float-right',
+                'hide-for-small-only',
+                'light',
+                'button',
+              )}
+              aria-label="collapse panel"
+            >
+              «
+            </button>
+          </Tooltip>
+        )}
+
         <label className={f('browsemd-panel', 'show-for-small-only')}>
           Select a database to filter these {toPlural(mainType)}:
           <select value={value || 'all'} onChange={this._handleChange}>
@@ -236,9 +261,8 @@ const getUrlForMemberDB = createSelector(
 const getUrlForAll = createSelector(
   state => state.settings.api,
   state => state.newLocation.description.mainType,
-  ({ protocol, hostname, port, root }, mainType) => {
-    return `${protocol}//${hostname}:${port}${root}/${mainType}`;
-  },
+  ({ protocol, hostname, port, root }, mainType) =>
+    `${protocol}//${hostname}:${port}${root}/${mainType}`,
 );
 
 let exported = MemberDBTabs;

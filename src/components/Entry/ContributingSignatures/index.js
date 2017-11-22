@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -21,9 +22,8 @@ const SchemaOrgData = loadable({
 });
 
 const schemaProcessData = ({ name, db }) => ({
-  '@type': ['BioChemEntity', 'CreativeWork'],
+  '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
   '@id': '@isBasedOn',
-  additionalType: 'http://semanticscience.org/resource/SIO_000370.rdf',
   isPartOf: {
     '@type': 'Dataset',
     '@id': db,
@@ -76,7 +76,7 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
             <MemberSymbol type={db} className={f('md-small')} />
             {accessions.map(accession => (
               <Metadata
-                endpoint={'entry'}
+                endpoint="entry"
                 db={db}
                 accession={accession}
                 key={accession}

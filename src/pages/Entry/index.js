@@ -10,6 +10,7 @@ import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
 import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
+import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, {
   Column,
   SearchBox,
@@ -28,7 +29,7 @@ import BrowseTabs from 'components/BrowseTabs';
 import Title from 'components/Title';
 
 import { memberDB } from 'staticData/home';
-import { HighlightedText } from 'components/SimpleCommonComponents';
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -115,7 +116,7 @@ class List extends Component {
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
-            pathname={''}
+            pathname=""
             notFound={notFound}
           >
             <Exporter>
@@ -138,7 +139,7 @@ class List extends Component {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search} pathname={''}>
+            <SearchBox search={search.search} pathname="">
               &nbsp;
             </SearchBox>
             <Column
@@ -146,11 +147,7 @@ class List extends Component {
               className={f('col-type')}
               renderer={type => (
                 <Tooltip title={type}>
-                  <interpro-type
-                    type={type.replace('_', ' ')}
-                    title={type}
-                    size="26px"
-                  >
+                  <interpro-type type={type.replace('_', ' ')} size="26px">
                     {type}
                   </interpro-type>
                 </Tooltip>
@@ -166,7 +163,6 @@ class List extends Component {
               ) => (
                 <Tooltip title={`${name} (${accession})`}>
                   <Link
-                    title={`${name} (${accession})`}
                     newTo={location => ({
                       ...location,
                       description: {
@@ -232,7 +228,6 @@ class List extends Component {
                           >
                             <span className={f('sign-label')}>
                               <Link
-                                title={`${accession} signature`}
                                 newTo={{
                                   description: {
                                     mainType: 'entry',
@@ -307,11 +302,7 @@ class List extends Component {
                       >
                         <span className={f('go-cell')}>
                           <Tooltip title={`${go.name} (${go.identifier})`}>
-                            <GoLink
-                              id={go.identifier}
-                              className={f('go')}
-                              title={`${go.name} (${go.identifier})`}
-                            >
+                            <GoLink id={go.identifier} className={f('go')}>
                               {go.name ? go.name : 'None'}
                             </GoLink>
                           </Tooltip>
@@ -322,28 +313,13 @@ class List extends Component {
               >
                 GO Terms{' '}
                 <Tooltip title="Biological process term">
-                  <span
-                    className={f('sign-label-head', 'bp')}
-                    title="Biological process term"
-                  >
-                    BP
-                  </span>
+                  <span className={f('sign-label-head', 'bp')}>BP</span>
                 </Tooltip>{' '}
                 <Tooltip title="Molecular function term">
-                  <span
-                    className={f('sign-label-head', 'mf')}
-                    title="Molecular function term"
-                  >
-                    MF
-                  </span>
+                  <span className={f('sign-label-head', 'mf')}>MF</span>
                 </Tooltip>{' '}
                 <Tooltip title="Cellular component term">
-                  <span
-                    className={f('sign-label-head', 'cc')}
-                    title="Cellular component term"
-                  >
-                    CC
-                  </span>
+                  <span className={f('sign-label-head', 'cc')}>CC</span>
                 </Tooltip>
               </Column>
             ) : null}
@@ -386,12 +362,7 @@ SummaryComponent.propTypes = {
 const Summary = props => {
   const { data: { loading, payload }, isStale } = props;
   if (loading || (isStale && !payload.metadata)) {
-    return (
-      <div className={f('row')}>
-        {' '}
-        <div className={f('columns')}>Loading… </div>
-      </div>
-    );
+    return <Loading />;
   }
   return (
     <ErrorBoundary>
@@ -455,27 +426,29 @@ const InnerSwitch = props => (
 );
 
 const mapTypeToOntology = new Map([
-  ['Domain', 'http://semanticscience.org/resource/SIO_001379.rdf'],
-  ['Family', 'http://semanticscience.org/resource/SIO_001380.rdf'],
-  ['Repeat', 'http://semanticscience.org/resource/SIO_000370.rdf'],
-  ['Unknown', 'http://semanticscience.org/resource/SIO_000370.rdf'],
-  ['Conserved_site', 'http://semanticscience.org/resource/SIO_010049.rdf'],
-  ['Binding_site', 'http://semanticscience.org/resource/SIO_010040.rdf'],
-  ['Active_site', 'http://semanticscience.org/resource/SIO_010041.rdf'],
-  ['PTM', 'http://semanticscience.org/resource/SIO_010049.rdf'],
+  ['Domain', 'DomainAnnotation'],
+  ['Family', 'FamilyAnnotation'],
+  ['Repeat', 'RepeatAnnotation'],
+  ['Unknown', 'UnknownAnnotation'],
+  ['Conserved_site', 'ConservedSiteAnnotation'],
+  ['Binding_site', 'BindingSiteAnnotation'],
+  ['Active_site', 'ActiveSiteAnnotation'],
+  ['PTM', 'PTMAnnotation'],
 ]);
 
 const schemaProcessData = data => ({
-  '@type': 'DataRecord',
+  '@type': [
+    'DataRecord',
+    'Entry',
+    mapTypeToOntology.get(data.metadata.type) ||
+      mapTypeToOntology.get('Unknown'),
+  ],
   '@id': '@mainEntityOfPage',
   identifier: data.metadata.accession,
   isPartOf: {
     '@type': 'Dataset',
     '@id': 'InterPro release ??',
   },
-  additionalType:
-    mapTypeToOntology.get(data.metadata.type) ||
-    mapTypeToOntology.get('Unknown'),
   mainEntity: '@mainEntity',
   isBasedOn: '@isBasedOn',
   isBasisFor: '@isBasisFor',
@@ -484,11 +457,15 @@ const schemaProcessData = data => ({
 });
 
 const schemaProcessData2 = data => ({
-  '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  additionalType:
+  '@type': [
+    'StructuredValue',
+    'CreativeWork',
+    'BioChemEntity',
+    'Entry',
     mapTypeToOntology.get(data.metadata.type) ||
-    mapTypeToOntology.get('Unknown'),
+      mapTypeToOntology.get('Unknown'),
+  ],
+  '@id': '@mainEntity',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,

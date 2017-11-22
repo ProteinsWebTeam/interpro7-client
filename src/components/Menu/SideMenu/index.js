@@ -128,7 +128,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
               </SingleEntityMenu>
             )}
             <InterProMenu
-              pathname={''}
+              pathname=""
               className={f('secondary', 'is-drilldown')}
             >
               <span

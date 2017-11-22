@@ -10,16 +10,19 @@ import Children from 'components/Organism/Children';
 import Metadata from 'wrappers/Metadata';
 import TaxIdOrName from 'components/Organism/TaxIdOrName';
 import { ProteomeLink } from 'components/ExtLink';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 
 import { foundationPartial } from 'styles/foundation';
 
+import global from 'styles/global.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 import loadData from 'higherOrder/loadData';
 
-const f = foundationPartial(ebiStyles);
+const f = foundationPartial(ebiStyles, global);
 
 /*:: type Props = {
   data: {
@@ -107,8 +110,6 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   render() {
     // const { data: { metadata } } = this.props;
     const { metadata, names } = this.props.data.payload;
-    857786;
-
     return (
       <div className={f('row')}>
         <div className={f('medium-12', 'columns')}>
@@ -159,8 +160,8 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
           <div>
             Taxonomy:{' '}
             <Metadata
-              endpoint={'organism'}
-              db={'taxonomy'}
+              endpoint="organism"
+              db="taxonomy"
               accession={metadata.taxonomy}
               key={metadata.taxonomy}
             >
@@ -197,11 +198,7 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
 
   render() {
     if (this.props.loading || !this.props.data || !this.props.data.payload) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+      return <Loading />;
     }
     const { metadata: { source_database: db } } = this.props.data.payload;
     return (

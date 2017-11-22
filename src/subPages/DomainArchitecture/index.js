@@ -5,10 +5,8 @@ import { createSelector } from 'reselect';
 
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 import DomainArchitectures from 'components/Entry/DomainArchitectures';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
-import { foundationPartial } from 'styles/foundation';
-
-const f = foundationPartial();
 /*:: type Props = {
   data: Object,
   mainType: string,
@@ -22,12 +20,7 @@ class DomainArchitectureSubPage extends PureComponent /*:: <Props> */ {
 
   render() {
     const { data, mainType } = this.props;
-    if (data.loading)
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading… </div>
-        </div>
-      );
+    if (data.loading) return <Loading />;
     return (
       <div>
         {mainType === 'entry' && <DomainArchitectures mainData={data} />}

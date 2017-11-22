@@ -19,12 +19,11 @@ const schemaProcessData = data => ({
   additionalType: 'http://semanticscience.org/resource/SIO_001379.rdf',
   name: 'domain annotation',
   value: {
-    '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
-    additionalType: 'http://semanticscience.org/resource/SIO_010043',
+    '@type': ['Protein', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
     identifier: data.protein.accession,
     name: data.protein.name,
-    location: (data.protein.entry_protein_locations ||
-      data.entry.entry_protein_locations
+    location: (
+      data.protein.entry_protein_locations || data.entry.entry_protein_locations
     ).map(loc => ({
       '@type': 'PropertyValue',
       minValue: loc.fragments[0].start,

@@ -95,7 +95,6 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                   style={{ color: e.color }}
                   className={f('small', 'icon', 'icon-species')}
                   data-icon={e.icon}
-                  data-tooltip
                 />
                 <h6>{e.title}</h6>
               </Link>

@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,7 +14,7 @@ class InterProHierarchy extends PureComponent {
   static propTypes = {
     accession: T.string.isRequired,
     hierarchy: T.oneOfType([T.string, T.object]).isRequired,
-    goToNewLocation: T.func.isRequired,
+    goToNewLocation: T.object.isRequired,
   };
 
   componentWillMount() {

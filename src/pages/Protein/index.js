@@ -12,7 +12,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-import { HighlightedText } from 'components/SimpleCommonComponents';
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -25,12 +25,14 @@ import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
 
+import global from 'styles/global.css';
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
-const f = foundationPartial(fonts, pageStyle, ipro, styles);
+const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
 
 // const SVG_WIDTH = 100;
 // const colorHash = new ColorHash();
@@ -110,7 +112,7 @@ class List extends PureComponent {
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
-            pathname={''}
+            pathname=""
             notFound={notFound}
           >
             <Exporter>
@@ -133,7 +135,7 @@ class List extends PureComponent {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search} pathname={''}>
+            <SearchBox search={search.search} pathname="">
               Search proteins
             </SearchBox>
             <Column
@@ -274,9 +276,8 @@ class SummaryComponent extends PureComponent {
 }
 
 const schemaProcessData = data => ({
-  '@type': 'DataRecord',
+  '@type': ['Protein', 'DataRecord'],
   '@id': '@mainEntityOfPage',
-  additionalType: 'http://semanticscience.org/resource/SIO_010043',
   identifier: data.metadata.accession,
   isPartOf: {
     '@type': 'Dataset',
@@ -311,11 +312,7 @@ class Summary extends PureComponent {
   render() {
     const { data: { loading, payload } } = this.props;
     if (loading || !payload.metadata) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+      return <Loading />;
     }
     return (
       <div>

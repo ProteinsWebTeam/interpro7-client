@@ -38,7 +38,11 @@ class _HamburgerBtn extends PureComponent {
     if (!svg) {
       return (
         <span>
-          <button className={styles.top_level_hamburger} onClick={openSideNav}>
+          <button
+            className={styles.top_level_hamburger}
+            onClick={openSideNav}
+            aria-label="Show the InterPro Menu"
+          >
             ☰
           </button>
         </span>
@@ -100,13 +104,17 @@ class _SideIcons extends PureComponent {
         })}
       >
         <div className={reducedStyleBundle('side-icons', { movedAway })}>
-          <HamburgerBtn svg={true} stuck={stuck} />
+          <HamburgerBtn
+            svg={true}
+            stuck={stuck}
+            aria-label="Show the InterPro Menu"
+          />
           <label className={reducedStyleBundle('side-search', { stuck })}>
             <div>
               <TextSearchBox maxLength="255" value="" name="search" />
             </div>
             <Link newTo={{ description: { other: 'search' } }}>
-              <div>
+              <div aria-label="Search InterPro">
                 <svg
                   width="2.2em"
                   height="2.2em"
@@ -190,8 +198,8 @@ class Header extends PureComponent {
         style={styleForHeader(false && supportsSticky, offset, stuck)}
       >
         <div className={styleBundle('masthead-inner', 'row')}>
-          <Title reduced={false} />
-          <SideIcons reduced={false} stuck={stuck} />
+          <Title />
+          <SideIcons stuck={stuck} />
           <ResizeObserverComponent element="nav" measurements="width">
             <DynamicMenu />
           </ResizeObserverComponent>

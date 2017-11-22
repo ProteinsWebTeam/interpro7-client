@@ -10,10 +10,10 @@ pages:
     plural: entries
     subPages:
       - protein
-      - structure
-      - organism
-      - set
       - domain_architecture
+      - organism
+      - structure
+      - set
       - logo
   protein:
     subPages:

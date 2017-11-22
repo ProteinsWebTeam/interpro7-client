@@ -119,7 +119,7 @@ table.light .subheader {
   opacity: 0.8;
   /*transform: scale(1.4);*/
 }
-.table-view .table-results-filtering .icon-view:last-child {
+.table-view .table-results-filtering div > div:last-child .icon-view {
   margin-right: 0;
 }
 

@@ -4,9 +4,11 @@ import T from 'prop-types';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import Link from 'components/generic/Link';
 import { foundationPartial } from 'styles/foundation';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
-const f = foundationPartial(fonts);
+import global from 'styles/global.css';
+const f = foundationPartial(fonts, global);
 
 class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Object}> */ {
   static propTypes = {
@@ -15,21 +17,15 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
   };
 
   render() {
-    if (this.props.data.loading)
-      return <div className={f('columns')}>Loading…</div>;
+    if (this.props.data.loading) return <Loading />;
     const {
       data: { payload: { results, count } },
       location: { search },
     } = this.props;
     return (
-      <Table
-        dataTable={results}
-        actualSize={count}
-        query={search}
-        pathname={''}
-      >
+      <Table dataTable={results} actualSize={count} query={search} pathname="">
         <PageSizeSelector />
-        <SearchBox search={search.search} pathname={''}>
+        <SearchBox search={search.search} pathname="">
           Search
         </SearchBox>
         <Column
@@ -96,7 +92,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
                 <div title="Proteome reference">
                   <span
                     className={f('icon', 'icon-functional')}
-                    data-icon={'/'}
+                    data-icon="/"
                   />
                 </div>
               ) : null}

@@ -8,10 +8,7 @@ import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
-
-import { foundationPartial } from 'styles/foundation';
-
-const f = foundationPartial();
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 const getUrlFor = createSelector(
   // this one only to memoize it
@@ -101,11 +98,7 @@ class _StructureOnProtein extends Component {
   render() {
     const { structures, dataInterPro, dataStructureInfo, protein } = this.props;
     if (dataInterPro.loading || dataStructureInfo.loading) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading… </div>
-        </div>
-      );
+      return <Loading />;
     }
     const mergedData = mergeData(
       dataInterPro.payload ? dataInterPro.payload.entries : [],

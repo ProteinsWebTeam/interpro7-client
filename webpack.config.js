@@ -341,7 +341,10 @@ module.exports = (env = { dev: true }) => {
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
-          PERF: JSON.stringify(!!env.performance),
+          PERF: JSON.stringify(
+            // eslint-disable-next-line no-process-env
+            !!(env.perf || (process.env && process.env.PERF))
+          ),
           STAGING: JSON.stringify(!!env.staging),
           NODE_ENV: env.production ? JSON.stringify('production') : null,
         },
@@ -435,11 +438,13 @@ module.exports = (env = { dev: true }) => {
             template: path.join('.', 'src', 'index.template.html'),
             inject: false,
             // chunksSortMode: 'dependency',
-            minify: env.dev && {
-              removeComments: true,
-              collapseWhitespace: true,
-              conservativeCollapse: true,
-            },
+            minify: env.dev
+              ? false
+              : {
+                  removeComments: true,
+                  collapseWhitespace: true,
+                  conservativeCollapse: true,
+                },
           })
         : null,
       env.production

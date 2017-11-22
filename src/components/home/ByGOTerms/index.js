@@ -5,6 +5,8 @@ import T from 'prop-types';
 import { format } from 'url';
 import { createSelector } from 'reselect';
 
+import { Tooltip } from 'react-tippy';
+
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
@@ -37,47 +39,47 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
               className={f('columns', 'medium-3', 'large-3', 'text-center')}
               key={e.title}
             >
-              <span
-                style={{ color: e.color }}
-                className={f('small', 'bullet-icon')}
-                data-tooltip
-                title={e.category}
-              >
-                &bull;
-              </span>
+              <Tooltip title={e.category}>
+                <span
+                  style={{ color: e.color }}
+                  className={f('small', 'bullet-icon')}
+                >
+                  &bull;
+                </span>
+              </Tooltip>
               <h6>
                 {e.title}&nbsp;
-                <span
-                  className={f('small', 'icon', 'icon-generic')}
-                  data-icon="i"
-                  data-tooltip
-                  title={e.description}
-                />
+                <Tooltip title={e.description}>
+                  <span
+                    className={f('small', 'icon', 'icon-generic')}
+                    data-icon="i"
+                  />
+                </Tooltip>
               </h6>
               <p>
-                <Link
-                  newTo={{
-                    description: { mainType: 'entry', mainDB: 'InterPro' },
-                    search: { go_term: e.accession },
-                  }}
-                  title={e.description}
-                  data-tooltip
-                >
-                  {(countsE && e.accession && countsE[e.accession]) || '-'}{' '}
-                  entries
-                </Link>
+                <Tooltip title={e.description}>
+                  <Link
+                    newTo={{
+                      description: { mainType: 'entry', mainDB: 'InterPro' },
+                      search: { go_term: e.accession },
+                    }}
+                  >
+                    {(countsE && e.accession && countsE[e.accession]) || '-'}{' '}
+                    entries
+                  </Link>
+                </Tooltip>
                 <br />
-                <Link
-                  newTo={{
-                    description: { mainType: 'protein', mainDB: 'uniprot' },
-                    search: { go_term: e.accession },
-                  }}
-                  title={e.description}
-                  data-tooltip
-                >
-                  {(countsP && e.accession && countsP[e.accession]) || '-'}{' '}
-                  proteins
-                </Link>
+                <Tooltip title={e.description}>
+                  <Link
+                    newTo={{
+                      description: { mainType: 'protein', mainDB: 'uniprot' },
+                      search: { go_term: e.accession },
+                    }}
+                  >
+                    {(countsP && e.accession && countsP[e.accession]) || '-'}{' '}
+                    proteins
+                  </Link>
+                </Tooltip>
               </p>
             </div>
           ))}

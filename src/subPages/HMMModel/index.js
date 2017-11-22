@@ -3,10 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import HmmModelSection from 'components/Entry/HmmModels';
-
-import { foundationPartial } from 'styles/foundation';
-
-const f = foundationPartial();
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 class HMMModelSubPage extends PureComponent /*:: <{ data: Object }> */ {
   static propTypes = {
@@ -14,12 +11,7 @@ class HMMModelSubPage extends PureComponent /*:: <{ data: Object }> */ {
   };
 
   render() {
-    if (this.props.data.loading)
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading… </div>
-        </div>
-      );
+    if (this.props.data.loading) return <Loading />;
     return <HmmModelSection logo={this.props.data.payload} />;
   }
 }

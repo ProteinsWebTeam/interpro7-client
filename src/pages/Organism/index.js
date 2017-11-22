@@ -12,7 +12,9 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-import { HighlightedText } from 'components/SimpleCommonComponents';
+
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -94,7 +96,7 @@ class List extends PureComponent {
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
-            pathname={''}
+            pathname=""
             notFound={notFound}
           >
             <Exporter>
@@ -117,7 +119,7 @@ class List extends PureComponent {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search} pathname={''}>
+            <SearchBox search={search.search} pathname="">
               Search proteins
             </SearchBox>
             <Column
@@ -246,11 +248,7 @@ class Summary extends PureComponent {
   render() {
     const { data: { loading, payload } } = this.props;
     if (loading || !payload) {
-      return (
-        <div className={f('row')}>
-          <div className={f('columns')}>Loading…</div>
-        </div>
-      );
+      return <Loading />;
     }
     return (
       <div>
@@ -298,9 +296,8 @@ class InnerSwitch extends PureComponent {
 }
 
 const schemaProcessData = data => ({
-  '@type': ['BioChemEntity', 'CreativeWork'],
+  '@type': ['Organism', 'BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
-  additionalType: 'http://semanticscience.org/resource/SIO_010000.rdf',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,

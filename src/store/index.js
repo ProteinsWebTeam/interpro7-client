@@ -1,3 +1,4 @@
+// @flow
 import { createStore } from 'redux';
 import qs from 'query-string';
 
@@ -23,17 +24,26 @@ const persist = (store, storage) =>
     };
   })();
 
-export default history => {
+const getInitialState = history => {
   const { location: { pathname, search, hash } } = history;
+  let settings;
+  if (settingsStorage) {
+    settings = settingsStorage.getValue();
+  }
+  return {
+    newLocation: {
+      description: path2description(pathname),
+      search: qs.parse(search),
+      hash,
+    },
+    settings,
+  };
+};
+
+export default history => {
   const store = createStore(
     rootReducer,
-    {
-      newLocation: {
-        description: path2description(pathname),
-        search: qs.parse(search),
-        hash,
-      },
-    },
+    getInitialState(history),
     enhancer(history),
   );
   if (settingsStorage) {
