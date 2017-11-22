@@ -109,7 +109,6 @@ class List extends Component {
             data={{ mainDB, location: window.location }}
             processData={schemaProcessDataTable}
           />
-          <Loading />
           <Table
             dataTable={_payload.results}
             isStale={isStale}
