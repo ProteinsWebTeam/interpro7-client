@@ -3,6 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Tooltip } from 'react-tippy';
 import Link from 'components/generic/Link';
 
 import EntriesOnProtein from './EntriesOnProtein';
@@ -177,7 +178,13 @@ const Matches = (
                     : 'Not reviewed by curators (TrEMBL)'
                 }
               >
-                <span className={f('icon', 'icon-functional')} data-icon="/" />
+                <Tooltip title={`${db} by curators (Swiss-Prot)`}>
+                  <span
+                    className={f('icon', 'icon-functional')}
+                    data-icon="/"
+                    aria-label="reviewed"
+                  />
+                </Tooltip>
               </div>
             ) : (
               db
