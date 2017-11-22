@@ -16,6 +16,8 @@ import { HighlightedText } from 'components/SimpleCommonComponents';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
+import { createSelector } from 'reselect';
+import { format } from 'url';
 
 import BrowseTabs from 'components/BrowseTabs';
 import Title from 'components/Title';
@@ -206,6 +208,32 @@ for (const subPage of config.pages.organism.subPages) {
   });
 }
 
+const _Title = ({ data: { loading, payload } }) =>
+  loading ? (
+    <div>loading</div>
+  ) : (
+    <Title metadata={payload.metadata} mainType="organism" />
+  );
+_Title.propTypes = {
+  data: T.shape({
+    loading: T.bool,
+    payload: T.object,
+  }).isRequired,
+};
+const mapStateToAccessionUrl = createSelector(
+  state => state.settings.api,
+  state => state.newLocation.description.mainAccession,
+  ({ protocol, hostname, port, root }, mainAccession) =>
+    format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}/organism/taxonomy/${mainAccession}`,
+    }),
+);
+
+const LoadedTitle = loadData(mapStateToAccessionUrl)(_Title);
+
 class Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -226,14 +254,12 @@ class Summary extends PureComponent {
     return (
       <div>
         <ErrorBoundary>
-          {payload && payload.metadata ? (
-            <div className={f('row')}>
-              <div className={f('medium-12', 'large-12', 'columns')}>
-                <Title metadata={payload.metadata} mainType="organism" />
-                <BrowseTabs />
-              </div>
+          <div className={f('row')}>
+            <div className={f('medium-12', 'large-12', 'columns')}>
+              <LoadedTitle />
+              <BrowseTabs />
             </div>
-          ) : null}
+          </div>
           <Switch
             {...this.props}
             locationSelector={l =>
