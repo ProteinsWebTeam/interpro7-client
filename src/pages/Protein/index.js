@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { Tooltip } from 'react-tippy';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
@@ -207,16 +208,14 @@ class List extends PureComponent {
               dataKey="source_database"
               className={f('table-center')}
               renderer={(db /*: string */) => (
-                <span
-                  key="1"
-                  className={f('icon', 'icon-functional')}
-                  data-icon={db === 'reviewed' ? '/' : ''}
-                  title={
-                    db === 'reviewed'
-                      ? `${db} by curators (Swiss-Prot)`
-                      : 'Not reviewed by curators (TrEMBL)'
-                  }
-                />
+                <Tooltip title={`${db} by curators (Swiss-Prot)`}>
+                  <span
+                    key="1"
+                    className={f('icon', 'icon-functional')}
+                    data-icon={db === 'reviewed' ? '/' : ''}
+                    aria-label="reviewed"
+                  />
+                </Tooltip>
               )}
             >
               Reviewed
