@@ -1,8 +1,10 @@
+// @flow
 import Storage from 'utils/storage';
-import {resetSettings} from 'actions/creators';
+import { resetSettings } from 'actions/creators';
 
 const THROTTLE_DELAY = 1000;
 let storage;
+
 try {
   storage = new Storage('settings', 'local', THROTTLE_DELAY);
 } catch (error) {
