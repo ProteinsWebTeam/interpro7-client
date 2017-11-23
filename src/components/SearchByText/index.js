@@ -82,7 +82,7 @@ class SearchByText extends PureComponent {
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <form onSubmit={this.handleSubmit}>
-            <div className={f('secondary', 'callout')}>
+            <div className={f('secondary', 'callout', 'margin-bottom-none')}>
               <div className={f('row')}>
                 <div className={f('large-12', 'columns', 'search-input')}>
                   <h3>Search families, domains or GO terms</h3>
