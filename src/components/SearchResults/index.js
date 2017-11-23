@@ -36,7 +36,8 @@ class SearchResults extends PureComponent {
     } else if (payload.hitCount === 0) {
       return (
         <div className={f('callout', 'info', 'withicon')}>
-          There is no match for the term queried.
+          Your search for <strong>{search.search}</strong> did not match any
+          records in our database.
         </div>
       );
     } else if (
