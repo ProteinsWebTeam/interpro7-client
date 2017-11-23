@@ -11,7 +11,7 @@ export default () /*: Description */ => Object.freeze({
     db: null,
     accession: null,
     memberDB: null,
-    memberAccession: null,
+    memberDBAccession: null,
     detail: null,
   }),
   protein: Object.seal({
@@ -26,8 +26,8 @@ export default () /*: Description */ => Object.freeze({
     detail: null,
   }),
   organism: Object.seal({
-    db: null,
-    accession: null,
+    taxonomyDB: null,
+    taxonomyAccession: null,
     proteomeDB: null,
     proteomeAccession: null,
   }),
