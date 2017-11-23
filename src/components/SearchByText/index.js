@@ -84,20 +84,19 @@ class SearchByText extends PureComponent {
           <form onSubmit={this.handleSubmit}>
             <div className={f('secondary', 'callout')}>
               <div className={f('row')}>
-                <div className={f('large-12', 'columns')}>
-                  <label>
-                    Family, domains or GO terms
-                    <TextSearchBox
-                      value={value}
-                      toSubmit={submit}
-                      ref={input => (this.searchInput = input)}
-                    />
-                  </label>
+                <div className={f('large-12', 'columns', 'search-input')}>
+                  <h3>Search families, domains or GO terms</h3>
+
+                  <TextSearchBox
+                    value={value}
+                    toSubmit={submit}
+                    ref={input => (this.searchInput = input)}
+                  />
                 </div>
               </div>
 
               <div className={f('row')}>
-                <div className={f('large-12', 'columns', 'small', 'search-eg')}>
+                <div className={f('large-12', 'columns', 'small', 'search-ex')}>
                   {' '}
                   e.g.
                   <Example value="IPR020422" />,
@@ -116,6 +115,7 @@ class SearchByText extends PureComponent {
                     'columns',
                     'stacked-for-small',
                     'button-group',
+                    'margin-bottom-none',
                   )}
                 >
                   <button
