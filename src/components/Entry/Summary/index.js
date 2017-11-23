@@ -53,18 +53,10 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }),
-    location: T.shape({
-      description: T.shape({
-        mainAccession: T.string.isRequired,
-      }).isRequired,
-    }).isRequired,
   };
 
   render() {
-    const {
-      data: { metadata },
-      location: { description: { mainType } },
-    } = this.props;
+    const { data: { metadata } } = this.props;
     const citations = description2IDs(metadata.description);
     const desc = metadata.description.reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(
