@@ -5,6 +5,14 @@ import { createSelector } from 'reselect';
 
 import { goToNewLocation } from 'actions/creators';
 
+import { foundationPartial } from 'styles/foundation';
+
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import interproTheme from 'styles/theme-interpro.css';
+import local from './style.css';
+
+const f = foundationPartial(interproTheme, fonts, local);
+
 const MAX_PAD = 6;
 const pad = n => (n.length < MAX_PAD ? pad(`0${n}`) : n);
 
@@ -75,15 +83,30 @@ class TextSearchBox extends Component {
     const { value } = this.state;
     // if (redirecting) return <Redirect to={redirecting} />;
     return (
-      <input
-        type="text"
-        aria-label="search InterPro"
-        onChange={this.handleChange}
-        value={value}
-        placeholder="Enter your search"
-        onKeyPress={this.handleKeyPress}
-        className={this.props.className}
-      />
+      <div className={f('input-group', 'margin-bottom-small')}>
+        <div className={f('search-input-box')}>
+          <input
+            type="text"
+            aria-label="search InterPro"
+            onChange={this.handleChange}
+            value={value}
+            placeholder="Enter your search"
+            onKeyPress={this.handleKeyPress}
+            className={this.props.className}
+            required
+          />
+          {
+            // <button className={f('close-icon')} onClick={this.handleReset} onKeyPress={this.handleReset}></button>
+          }
+        </div>
+        {
+          // <div className={f('input-group-button',  'margin-top-none')}>
+          //  <input className={f('button','icon','icon-functional')} type="submit" name="submit" value="1"
+          //        onClick={this.handleSubmitClick}
+          //       onKeyPress={this.handleSubmitClick}/>
+          // </div>
+        }
+      </div>
     );
   }
 }
