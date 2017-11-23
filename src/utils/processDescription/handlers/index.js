@@ -553,3 +553,21 @@ export const rootHandler /*: Handler */ = handlerConstructor({
     },
   },
 });
+
+// Define edges of the directed graph of path part handlers
+// -> link all handlers to their possible children
+// Handler.children = new Set([
+
+// ]);
+rootHandler.children = new Set([
+  entryHandler,
+  proteinHandler,
+  structureHandler,
+  organismHandler,
+  setHandler,
+  searchHandler,
+  jobHandler,
+  otherHandler,
+]);
+
+otherHandler.children = new Set([otherHandler]);
