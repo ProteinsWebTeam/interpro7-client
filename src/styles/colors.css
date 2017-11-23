@@ -21,13 +21,13 @@
   --colors-modi: #d6dc94;
   --colors-panther: #bfac92;
   --colors-pfam: #6287b1; /*was v1 #9bbbe0*/
-  --colors-pirsf: #dfafdf; /*was v1 #e299e2*/
+  --colors-pirsf: #fbbddd; /*was v2 #dfafdf v1 #e299e2*/
   --colors-prints: #54c75f; /*#71ce79*/
   --colors-prodom: #8d99e4;
   --colors-profile: #f69f74;
   --colors-prosite: #f3c766;
   --colors-sfld: #00b1d3;
-  --colors-smart: #ff7a76;
+  --colors-smart: #ff8d8d; /*more saturated #ff7a76*/
   --colors-ssf: #686868;
   --colors-tigrfams: #56b9a6; /*was v2 4f9294 - v1 #b37977;*/
   /*TYPE*/
