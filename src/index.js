@@ -40,7 +40,7 @@ const main = async () => {
         'http://schema.org',
         {
           Entry: {
-            '@id': 'http://semanticscience.org/resource/SIO_000370.rdf',
+            '@id': 'http://semanticscience.org/resource/SIO_010471.rdf',
           },
           DomainAnnotation: {
             '@id': 'http://semanticscience.org/resource/SIO_001379.rdf',
@@ -49,10 +49,10 @@ const main = async () => {
             '@id': 'http://semanticscience.org/resource/SIO_001380.rdf',
           },
           RepeatAnnotation: {
-            '@id': 'http://semanticscience.org/resource/SIO_000370.rdf',
+            '@id': 'http://semanticscience.org/resource/SIO_010471.rdf',
           },
           UnknownAnnotation: {
-            '@id': 'http://semanticscience.org/resource/SIO_000370.rdf',
+            '@id': 'http://semanticscience.org/resource/SIO_010471.rdf',
           },
           ConservedSiteAnnotation: {
             '@id': 'http://semanticscience.org/resource/SIO_010049.rdf',
@@ -67,7 +67,7 @@ const main = async () => {
             '@id': 'http://semanticscience.org/resource/SIO_010049.rdf',
           },
           Protein: {
-            '@id': 'http://semanticscience.org/resource/SIO_010043',
+            '@id': 'http://semanticscience.org/resource/SIO_010043.rdf',
           },
           Structure: {
             '@id': 'http://semanticscience.org/resource/SIO_011119.rdf',

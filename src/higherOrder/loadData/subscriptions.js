@@ -18,8 +18,13 @@ export const unsubscribe = (
   subscriptor/*: any */,
 )/*: boolean */ => {
   if (!key) return false;
-  const set = subscriptions.get(key);
-  set.delete(subscriptor);
+  const set = subscriptions.get(key) || new Set();
+  if (set.has(subscriptor))
+    set.delete(subscriptor);
+  else {
+    console.error(`Trying to delete an unexisting subscriptor for the URL ${key}`);
+    return false;
+  }
   if (set.size) return false;
   subscriptions.delete(key);
   return true;

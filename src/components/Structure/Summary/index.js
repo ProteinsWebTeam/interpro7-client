@@ -2,7 +2,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import Title from 'components/Title';
 import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -66,7 +65,6 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
-              <Title metadata={metadata} mainType="structure" />
               <pdb-prints size="36">
                 <pdb-data-loader pdbid={metadata.accession} />
               </pdb-prints>

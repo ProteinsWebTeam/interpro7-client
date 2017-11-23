@@ -20,6 +20,8 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import BrowseTabs from 'components/BrowseTabs';
+import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
@@ -207,10 +209,16 @@ for (const subPage of config.pages.structure.subPages) {
 }
 
 const Summary = props => {
-  const { data: { loading } } = props;
-  if (loading) return <Loading />;
+  const { data: { loading, payload } } = props;
+  if (loading || !payload || !payload.metadata) return <Loading />;
   return (
     <ErrorBoundary>
+      <div className={f('row')}>
+        <div className={f('medium-12', 'large-12', 'columns')}>
+          <Title metadata={payload.metadata} mainType="structure" />
+          <BrowseTabs />
+        </div>
+      </div>
       <Switch
         {...props}
         locationSelector={l =>
@@ -256,9 +264,8 @@ const schemaProcessData = data => ({
 });
 
 const schemaProcessData2 = data => ({
-  '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
+  '@type': ['Structure', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
-  additionalType: 'http://semanticscience.org/resource/SIO_010346.rdf',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,

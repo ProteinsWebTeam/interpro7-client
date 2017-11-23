@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { goToNewLocation } from 'actions/creators';
 
 import Accession from 'components/Accession';
-import Title from 'components/Title';
 import Description from 'components/Description';
 import { BaseLink } from 'components/ExtLink';
 
@@ -65,7 +64,6 @@ class SummarySet extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
-              <Title metadata={metadata} mainType="set" />
               <div className={f('tag', 'margin-bottom-medium')}>
                 {metadata.source_database}
               </div>
@@ -74,7 +72,6 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                 heightToHide={106}
                 textBlocks={[metadata.description]}
               />
-              <div id="clanviewer" />
             </div>
             <div className={f('medium-2', 'columns')}>
               <div className={f('panel')}>
@@ -95,6 +92,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
               </div>
             </div>
           </div>
+          <div id="clanviewer" style={{ border: '1px solid #aaa' }} />
         </section>
       </div>
     );
