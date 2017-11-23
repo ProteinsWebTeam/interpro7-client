@@ -1,9 +1,57 @@
-.search-eg,
-.search-eg a {
+.search-ex,
+.search-ex a,
+.search-ex,
+.search-ex a:visited {
   font-size: 90%;
   color: #777;
 }
-.search-eg a:hover {
+.search-ex a:hover {
   color: #777;
   border-bottom: 1px #777 solid;
+}
+
+.search-input h3 {
+  font-size: 150%;
+  margin-bottom: 0.5rem;
+}
+@media screen and (max-width: 75rem) {
+  .search-input h3 {
+    font-size: 130%;
+  }
+}
+.search-input-box {
+  position: relative;
+}
+
+.search-input [type='text'] {
+  height: 2.5rem; /*to match height with right-hand side search button*/
+  margin-bottom: 0;
+}
+
+.close-icon {
+  top: 20px;
+  right: 0;
+  position: absolute;
+}
+.close-icon:after {
+  content: 'X';
+  display: block;
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  z-index: 1;
+  right: 6px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  padding: 2px;
+  border-radius: 50%;
+  text-align: center;
+  color: grey;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.search-input input:invalid ~ .close-icon {
+  display: none; /*hide the cross icon when no data entered*/
 }
