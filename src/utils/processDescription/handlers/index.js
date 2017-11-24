@@ -175,7 +175,7 @@ const typeConstructor = (type /*: PossibleMain */) /*: Handler */ =>
     },
     match: {
       value: (current, { [type]: typeObject }) =>
-        (() => {console.log(typeObject)})() || current.toLowerCase() === type && isEmpty(typeObject),
+        current.toLowerCase() === type && isEmpty(typeObject),
     },
   });
 
