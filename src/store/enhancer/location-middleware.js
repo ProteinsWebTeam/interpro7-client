@@ -41,14 +41,14 @@ export default history => ({ dispatch }) => {
     }
     dispatch(
       customLocationChangeFromHistory({
-        description: path2description(pathname),
+        description: pathToDescription(pathname),
         search: _search,
         hash,
       }),
     );
     dispatch(
       newLocationChangeFromHistory({
-        description: pathToDescription(pathname),
+        description: path2description(pathname),
         search: _search,
         hash,
       }),

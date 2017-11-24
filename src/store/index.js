@@ -4,6 +4,7 @@ import qs from 'query-string';
 
 import rootReducer from 'reducers';
 import settingsStorage from 'storage/settings';
+import pathToDescription from 'utils/processDescription/pathToDescription';
 import path2description from 'utils/processLocation/path2description';
 
 import enhancer from 'store/enhancer';
@@ -31,6 +32,11 @@ const getInitialState = history => {
     settings = settingsStorage.getValue() || undefined;
   }
   return {
+    customLocation: {
+      description: pathToDescription(pathname),
+      search: qs.parse(search),
+      hash,
+    },
     newLocation: {
       description: path2description(pathname),
       search: qs.parse(search),

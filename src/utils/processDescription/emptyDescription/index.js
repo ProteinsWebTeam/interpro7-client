@@ -45,5 +45,5 @@ export default () /*: Description */ => Object.freeze({
     accession: null,
     detail: null,
   }),
-  other: Object.seal([]),
+  other: [],
 });
