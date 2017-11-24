@@ -96,15 +96,27 @@ class SearchByText extends PureComponent {
               </div>
 
               <div className={f('row')}>
-                <div className={f('large-12', 'columns', 'small', 'search-ex')}>
-                  {' '}
-                  e.g.
-                  <Example value="IPR020422" />,
-                  <Example value="kinase" />,
-                  <Example value="O00167" />,
-                  <Example value="PF02932" />,
-                  <Example value="GO:0007165" />,
-                  <Example value="1t2v" />
+                <div className={f('medium-8', 'columns', 'search-ex')}>
+                  <span>
+                    {' '}
+                    e.g.
+                    <Example value="IPR020422" />,
+                    <Example value="kinase" />,
+                    <Example value="O00167" />,
+                    <Example value="PF02932" />,
+                    <Example value="GO:0007165" />,
+                    <Example value="1t2v" />
+                  </span>
+                </div>
+                <div
+                  className={f(
+                    'medium-4',
+                    'columns',
+                    'show-for-medium',
+                    'search-adv',
+                  )}
+                >
+                  <span>Powered by EBI search</span>
                 </div>
               </div>
 
