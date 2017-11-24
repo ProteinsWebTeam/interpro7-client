@@ -135,7 +135,7 @@ const memberDB = new Set([
   { name: 'smart', re: /^SM[0-9]{5}$/i },
   { name: 'ssf', re: /^SSF[0-9]{5,6}$/i },
   { name: 'tigrfams', re: /^TIGR[0-9]{5}$/i },
-  { name: 'mobidblt', re: /^\w$+/ },
+  { name: 'mobidblt', re: /^\w+$/ },
 ]);
 const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
 
@@ -168,14 +168,14 @@ const typeConstructor = (type /*: PossibleMain */) /*: Handler */ =>
       value: `${type}Handler`,
     },
     getKey: {
-      value: ({ main }) => (main ? null : ['main']),
+      value: ({ main }) => (main ? null : ['main', 'key']),
     },
     cleanedUp: {
       value: type,
     },
     match: {
-      value: (current, { [type]: _type }) =>
-        current.toLowerCase() === _type && isEmpty(_type),
+      value: (current, { [type]: typeObject }) =>
+        (() => {console.log(typeObject)})() || current.toLowerCase() === type && isEmpty(typeObject),
     },
   });
 

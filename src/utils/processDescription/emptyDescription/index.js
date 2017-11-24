@@ -1,5 +1,5 @@
 // @flow
-/*:: import type { Description } from 'utils/processDescription/handlers'; */
+//:: import type { Description } from 'utils/processDescription/handlers';
 
 // prettier-ignore
 export default () /*: Description */ => Object.freeze({
