@@ -556,9 +556,124 @@ export const rootHandler /*: Handler */ = handlerConstructor({
 
 // Define edges of the directed graph of path part handlers
 // -> link all handlers to their possible children
-// Handler.children = new Set([
 
-// ]);
+// Entry
+entryHandler.children = new Set([
+  integrationHandler,
+  interProHandler,
+  memberDBAccessionHandler,
+]);
+
+integrationHandler.children = new Set([memberDBHandler]);
+
+interProHandler.children = new Set([interProAccessionHandler]);
+
+memberDBHandler.children = new Set([memberDBAccessionHandler]);
+
+interProAccessionHandler.children = new Set([
+  proteinHandler,
+  structureHandler,
+  organismHandler,
+  setHandler,
+  memberDBHandler,
+  detailHandler,
+]);
+
+memberDBAccessionHandler.children = new Set([
+  proteinHandler,
+  structureHandler,
+  organismHandler,
+  setHandler,
+  detailHandler,
+]);
+
+// Protein
+proteinHandler.children = new Set([proteinDBHandler]);
+
+proteinDBHandler.children = new Set([proteinAccessionHandler]);
+
+proteinAccessionHandler.children = new Set([
+  entryHandler,
+  structureHandler,
+  organismHandler,
+  setHandler,
+  detailHandler,
+]);
+
+// Structure
+structureHandler.children = new Set([structureDBHandler]);
+
+structureDBHandler.children = new Set([structureAccessionHandler]);
+
+structureAccessionHandler.children = new Set([
+  entryHandler,
+  proteinHandler,
+  organismHandler,
+  setHandler,
+  structureChainHandler,
+  detailHandler,
+]);
+
+structureChainHandler.children = new Set([
+  entryHandler,
+  proteinHandler,
+  organismHandler,
+  setHandler,
+  detailHandler,
+]);
+
+// Organism
+organismHandler.children = new Set([taxonomyDBHandler, proteomeDBHandler]);
+
+taxonomyDBHandler.children = new Set([taxonomyAccessionHandler]);
+
+taxonomyAccessionHandler.children = new Set([
+  proteomeDBHandler,
+  entryHandler,
+  proteinHandler,
+  structureHandler,
+  setHandler,
+  detailHandler,
+]);
+
+proteomeDBHandler.children = new Set([proteomeAccessionHandler]);
+
+proteomeAccessionHandler.children = new Set([
+  entryHandler,
+  proteinHandler,
+  structureHandler,
+  setHandler,
+  detailHandler,
+]);
+
+// Set
+setHandler.children = new Set([setDBHandler]);
+
+setDBHandler.children = new Set([setAccessionHandler]);
+
+setAccessionHandler.children = new Set([
+  entryHandler,
+  proteinHandler,
+  structureHandler,
+  organismHandler,
+  detailHandler,
+]);
+
+// Search
+searchHandler.children = new Set([searchTypeHandler]);
+
+searchTypeHandler.children = new Set([searchValueHandler]);
+
+// Job
+jobHandler.children = new Set([jobTypeHandler]);
+
+jobTypeHandler.children = new Set([jobAccessionHandler]);
+
+jobAccessionHandler.children = new Set([entryHandler, detailHandler]);
+
+// Common and other
+otherHandler.children = new Set([otherHandler]);
+
 rootHandler.children = new Set([
   entryHandler,
   proteinHandler,
@@ -569,5 +684,3 @@ rootHandler.children = new Set([
   jobHandler,
   otherHandler,
 ]);
-
-otherHandler.children = new Set([otherHandler]);
