@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
-import Link from 'components/generic/Link';
+import { OldSwitch } from 'components/generic/Switch';
+import { OldLink } from 'components/generic/Link';
 import MemberDBTabs from 'components/MemberDBTabs';
 import Table, {
   Column,
@@ -64,10 +64,12 @@ class Overview extends PureComponent {
           .filter(set => set[0] !== 'kegg')
           .map(([name, count]) => (
             <li key={name}>
-              <Link newTo={{ description: { mainType: 'set', mainDB: name } }}>
+              <OldLink
+                newTo={{ description: { mainType: 'set', mainDB: name } }}
+              >
                 {name}
                 {Number.isFinite(count) ? ` (${count})` : ''}
-              </Link>
+              </OldLink>
             </li>
           ))}
       </ul>
@@ -136,7 +138,7 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, { source_database }) => (
-                <Link
+                <OldLink
                   newTo={location => ({
                     ...location,
                     description: {
@@ -152,7 +154,7 @@ class List extends PureComponent {
                       textToHighlight={search.search}
                     />
                   </span>
-                </Link>
+                </OldLink>
               )}
             >
               Accession
@@ -163,7 +165,7 @@ class List extends PureComponent {
                 name /*: string */,
                 { accession, source_database } /*: {accession: string} */,
               ) => (
-                <Link
+                <OldLink
                   newTo={location => ({
                     ...location,
                     description: {
@@ -177,7 +179,7 @@ class List extends PureComponent {
                     text={name}
                     textToHighlight={search.search}
                   />
-                </Link>
+                </OldLink>
               )}
             >
               Name
@@ -288,7 +290,7 @@ class Summary extends PureComponent {
               <BrowseTabs />
             </div>
           </div>
-          <Switch
+          <OldSwitch
             {...this.props}
             currentSet={currentSet}
             locationSelector={l =>
@@ -313,7 +315,7 @@ const dbAccs = new RegExp(
 
 const InnerSwitch = props => (
   <ErrorBoundary>
-    <Switch
+    <OldSwitch
       {...props}
       locationSelector={l =>
         l.description.mainAccession || l.description.focusType
@@ -328,7 +330,7 @@ const InnerSwitch = props => (
 const EntrySet = props => (
   <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
     <ErrorBoundary>
-      <Switch
+      <OldSwitch
         {...props}
         locationSelector={l => l.description.mainDB}
         indexRoute={Overview}

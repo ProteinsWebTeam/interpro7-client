@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: [1, {ignore: [3]}] */
 import React from 'react';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import T from 'prop-types';
 
 const types = {
@@ -33,9 +33,9 @@ export const BaseLink = ({
     props.rel = 'noopener noreferrer';
   }
   return (
-    <Link {...rest} {...props}>
+    <OldLink {...rest} {...props}>
       {children}
-    </Link>
+    </OldLink>
   );
 };
 BaseLink.propTypes = {

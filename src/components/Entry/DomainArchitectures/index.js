@@ -7,7 +7,7 @@ import { stringify as qsStringify } from 'query-string';
 
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import ColorHash from 'color-hash/lib/color-hash';
@@ -155,7 +155,7 @@ class DomainArchitectures extends PureComponent {
             const idaObj = ida2json(obj.IDA);
             return (
               <div key={obj.IDA_FK} className={f('margin-bottom-large')}>
-                <Link
+                <OldLink
                   newTo={{
                     description: {
                       mainType: 'protein',
@@ -168,12 +168,12 @@ class DomainArchitectures extends PureComponent {
                   }}
                 >
                   There are {obj.unique_proteins} proteins{' '}
-                </Link>
+                </OldLink>
                 with this architecture:<br />
                 {idaObj.domains.map(d => (
                   <span key={d.accessions.join('|')}>
                     {d.accessions.map(acc => (
-                      <Link
+                      <OldLink
                         key={acc}
                         newTo={{
                           description: {
@@ -185,7 +185,7 @@ class DomainArchitectures extends PureComponent {
                       >
                         {' '}
                         {acc}{' '}
-                      </Link>
+                      </OldLink>
                     ))}{' '}
                     -
                   </span>

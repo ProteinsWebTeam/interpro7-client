@@ -14,7 +14,7 @@ import { goToNewLocation } from 'actions/creators';
   },
 }; */
 
-class Redirect extends PureComponent /*:: <Props> */ {
+class _OldRedirect extends PureComponent /*:: <Props> */ {
   static propTypes = {
     goToNewLocation: T.func.isRequired,
     to: T.shape({
@@ -34,4 +34,6 @@ class Redirect extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(null, { goToNewLocation })(Redirect);
+export const OldRedirect = connect(null, { goToNewLocation })(_OldRedirect);
+
+// export default connect(null, { goToNewLocation })(Redirect);

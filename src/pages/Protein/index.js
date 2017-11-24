@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
-import Link from 'components/generic/Link';
+import { OldSwitch } from 'components/generic/Switch';
+import { OldLink } from 'components/generic/Link';
 import NumberLabel from 'components/NumberLabel';
 import MemberDBTabs from 'components/MemberDBTabs';
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
@@ -66,12 +66,12 @@ class Overview extends PureComponent {
       <ul className={f('card')}>
         {Object.entries(payload.proteins || {}).map(([name, count]) => (
           <li key={name}>
-            <Link
+            <OldLink
               newTo={{ description: { mainType: 'protein', mainDB: name } }}
             >
               {name}
               {Number.isFinite(count) ? ` (${count})` : ''}
-            </Link>
+            </OldLink>
           </li>
         ))}
       </ul>
@@ -141,7 +141,7 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */) => (
-                <Link
+                <OldLink
                   // style={{
                   // display:'flex',
                   // flexWrap: 'nowrap',
@@ -174,7 +174,7 @@ class List extends PureComponent {
                       textToHighlight={search.search}
                     />
                   </span>
-                </Link>
+                </OldLink>
               )}
             >
               Accession
@@ -185,7 +185,7 @@ class List extends PureComponent {
                 name /*: string */,
                 { accession } /*: {accession: string} */,
               ) => (
-                <Link
+                <OldLink
                   newTo={location => ({
                     ...location,
                     description: {
@@ -200,7 +200,7 @@ class List extends PureComponent {
                     text={name}
                     textToHighlight={search.search}
                   />
-                </Link>
+                </OldLink>
               )}
             >
               Name
@@ -338,7 +338,7 @@ class Summary extends PureComponent {
             />
           )}
         <ErrorBoundary>
-          <Switch
+          <OldSwitch
             {...this.props}
             locationSelector={l =>
               l.description.mainDetail || l.description.focusType
@@ -356,7 +356,7 @@ const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
-    <Switch
+    <OldSwitch
       {...props}
       locationSelector={l =>
         l.description.mainAccession || l.description.focusType
@@ -371,7 +371,7 @@ const InnerSwitch = props => (
 const Protein = props => (
   <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
     <ErrorBoundary>
-      <Switch
+      <OldSwitch
         {...props}
         locationSelector={l => l.description.mainDB}
         indexRoute={Overview}

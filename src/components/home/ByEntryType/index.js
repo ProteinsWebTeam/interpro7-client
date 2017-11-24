@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 
 import { Tooltip } from 'react-tippy';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadData from 'higherOrder/loadData';
@@ -62,7 +62,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
               className={f('columns', 'medium-4', 'large-4', 'text-center')}
               key={type}
             >
-              <Link
+              <OldLink
                 newTo={{
                   description: { mainType: 'entry', mainDB: 'InterPro' },
                   search: { type },
@@ -89,16 +89,16 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
                     {type === 'new' ? ' ' : ' entries'}
                   </span>
                 </p>
-              </Link>
+              </OldLink>
             </div>
           ))}
         </AnimatedEntry>
-        <Link
+        <OldLink
           newTo={{ description: { mainType: 'entry' } }}
           className={f('button')}
         >
           View all entries
-        </Link>
+        </OldLink>
       </div>
     );
   }

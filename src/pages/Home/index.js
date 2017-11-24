@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { Tooltip } from 'react-tippy';
 
 import loadable from 'higherOrder/loadable';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
 
@@ -540,7 +540,7 @@ class Home extends PureComponent {
           <div className={f('columns', 'publication-list')}>
             <div className={f('callout')}>
               <h5>Publications </h5>
-              <Link href="http://nar.oxfordjournals.org/content/43/D1/D213">
+              <OldLink href="http://nar.oxfordjournals.org/content/43/D1/D213">
                 <div className={f('media-object')}>
                   <div className={f('media-object-section')}>
                     <span
@@ -558,9 +558,9 @@ class Home extends PureComponent {
                     </p>
                   </div>
                 </div>
-              </Link>
+              </OldLink>
 
-              <Link href="http://database.oxfordjournals.org/content/2016/baw027.full">
+              <OldLink href="http://database.oxfordjournals.org/content/2016/baw027.full">
                 <div className={f('media-object')}>
                   <div className={f('media-object-section')}>
                     <span
@@ -578,9 +578,9 @@ class Home extends PureComponent {
                     </p>
                   </div>
                 </div>
-              </Link>
+              </OldLink>
 
-              <Link href="http://bioinformatics.oxfordjournals.org/content/30/9/1236">
+              <OldLink href="http://bioinformatics.oxfordjournals.org/content/30/9/1236">
                 <div className={f('media-object')}>
                   <div className={f('media-object-section')}>
                     <span
@@ -599,9 +599,9 @@ class Home extends PureComponent {
                     </p>
                   </div>
                 </div>
-              </Link>
+              </OldLink>
 
-              <Link
+              <OldLink
                 newTo={{
                   description: { other: 'about' },
                   hash: 'publications',
@@ -609,7 +609,7 @@ class Home extends PureComponent {
                 className={f('button')}
               >
                 View all publications
-              </Link>
+              </OldLink>
             </div>
             {
               // end callout
@@ -639,7 +639,7 @@ class Home extends PureComponent {
                     search the InterPro database with a particular set of
                     domains, and returns all of the domain architectures and
                     associated proteins that match the query.{' '}
-                    <Link
+                    <OldLink
                       newTo={{
                         description: { other: 'about' },
                         hash: 'tools-ida',
@@ -647,7 +647,7 @@ class Home extends PureComponent {
                       className={f('readmore')}
                     >
                       Read more
-                    </Link>
+                    </OldLink>
                   </p>
                 </div>
                 <div className={f('columns', 'medium-6')}>
@@ -661,7 +661,7 @@ class Home extends PureComponent {
                     InterProScan is a sequence analysis application (nucleotide
                     and protein sequences) that combines different protein
                     signature recognition methods into one resource.{' '}
-                    <Link
+                    <OldLink
                       newTo={{
                         description: { other: 'about' },
                         hash: 'tools-interproscan',
@@ -669,7 +669,7 @@ class Home extends PureComponent {
                       className={f('readmore')}
                     >
                       Read more
-                    </Link>
+                    </OldLink>
                   </p>
                 </div>
               </div>

@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Embed from 'components/Embed';
@@ -75,7 +75,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                   <div>
                     Chains:{' '}
                     {chains.map(chain => (
-                      <Link
+                      <OldLink
                         key={chain}
                         newTo={location => ({
                           ...location,
@@ -88,7 +88,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                         })}
                       >
                         {chain}
-                      </Link>
+                      </OldLink>
                     ))}
                   </div>
                 </div>

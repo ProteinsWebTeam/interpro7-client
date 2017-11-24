@@ -4,9 +4,9 @@ import T from 'prop-types';
 import { Tooltip } from 'react-tippy';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
-import Link from 'components/generic/Link';
-import Redirect from 'components/generic/Redirect';
+import { OldSwitch } from 'components/generic/Switch';
+import { OldLink } from 'components/generic/Link';
+import { OldRedirect } from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
 import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
@@ -162,7 +162,7 @@ class List extends Component {
                 { accession } /*: {accession: string} */,
               ) => (
                 <Tooltip title={`${name} (${accession})`}>
-                  <Link
+                  <OldLink
                     newTo={location => ({
                       ...location,
                       description: {
@@ -177,7 +177,7 @@ class List extends Component {
                       text={name}
                       textToHighlight={search.search}
                     />
-                  </Link>
+                  </OldLink>
                 </Tooltip>
               )}
             >
@@ -186,7 +186,7 @@ class List extends Component {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, data) => (
-                <Link
+                <OldLink
                   title={accession}
                   newTo={location => ({
                     ...location,
@@ -208,7 +208,7 @@ class List extends Component {
                       textToHighlight={search.search}
                     />
                   </span>
-                </Link>
+                </OldLink>
               )}
             >
               Accession
@@ -227,7 +227,7 @@ class List extends Component {
                             title={`${accession} signature`}
                           >
                             <span className={f('sign-label')}>
-                              <Link
+                              <OldLink
                                 newTo={{
                                   description: {
                                     mainType: 'entry',
@@ -238,7 +238,7 @@ class List extends Component {
                                 }}
                               >
                                 {accession}
-                              </Link>
+                              </OldLink>
                             </span>
                           </Tooltip>
                         ))}
@@ -256,7 +256,7 @@ class List extends Component {
               <Column
                 dataKey="integrated"
                 renderer={(accession /*: string */) => (
-                  <Link
+                  <OldLink
                     newTo={{
                       description: {
                         mainType: 'entry',
@@ -267,7 +267,7 @@ class List extends Component {
                     }}
                   >
                     {accession}
-                  </Link>
+                  </OldLink>
                 )}
               >
                 Integrated
@@ -372,7 +372,7 @@ const Summary = props => {
           <BrowseTabs />
         </div>
       </div>
-      <Switch
+      <OldSwitch
         {...props}
         locationSelector={l =>
           l.description.mainDetail || l.description.focusType
@@ -392,7 +392,7 @@ Summary.propTypes = {
 };
 
 const RedirectToInterPro = () => (
-  <Redirect
+  <OldRedirect
     to={{
       description: {
         mainType: 'entry',
@@ -413,7 +413,7 @@ const dbAccs = new RegExp(
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
-    <Switch
+    <OldSwitch
       {...props}
       locationSelector={l =>
         l.description.mainAccession || l.description.focusType
@@ -498,7 +498,7 @@ class Entry extends PureComponent {
             />
           )}
         <ErrorBoundary>
-          <Switch
+          <OldSwitch
             {...this.props}
             locationSelector={l => l.description.mainDB}
             indexRoute={RedirectToInterPro}

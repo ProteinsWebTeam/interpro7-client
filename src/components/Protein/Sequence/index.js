@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import { goToNewLocation } from 'actions/creators';
 
@@ -141,7 +141,7 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
             <Inner sequence={sequence} />
           </div>
           <div className={f('medium-2', 'columns')}>
-            <Link
+            <OldLink
               className={f('button', 'primary', 'sequence-link')}
               newTo={{
                 description: {
@@ -157,8 +157,8 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
               <div className={f('shape', 'ips', 'red')} />
               <div className={f('shape', 'ips', 'blue')} />
               <span>Search selection with InterProScan</span>
-            </Link>
-            <Link
+            </OldLink>
+            <OldLink
               className={f('button', 'hollow', 'primary', 'sequence-link')}
               href="https://www.ebi.ac.uk/Tools/hmmer/search/phmmer"
               onClick={this._handleHmmerClick}
@@ -168,7 +168,7 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
               <div className={f('shape', 'hmmer', 'red')} />
               <div className={f('shape', 'hmmer', 'blue')} />
               <span>Search selection with HMMER website</span>
-            </Link>
+            </OldLink>
           </div>
         </div>
         <br />

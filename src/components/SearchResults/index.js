@@ -3,8 +3,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import Link from 'components/generic/Link';
-import Redirect from 'components/generic/Redirect';
+import { OldLink } from 'components/generic/Link';
+import { OldRedirect } from 'components/generic/Redirect';
 import Table, { Column, Exporter } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -44,7 +44,7 @@ class SearchResults extends PureComponent {
       payload.entries[0].id === search.search
     ) {
       return (
-        <Redirect
+        <OldRedirect
           to={{
             description: {
               mainType: 'entry',
@@ -59,7 +59,7 @@ class SearchResults extends PureComponent {
       payload.entries[0].fields.PDB.indexOf(search.search) !== NOT_FOUND
     ) {
       return (
-        <Redirect
+        <OldRedirect
           to={{
             description: {
               mainType: 'structure',
@@ -74,7 +74,7 @@ class SearchResults extends PureComponent {
       payload.entries[0].fields.UNIPROT.indexOf(search.search) !== NOT_FOUND
     ) {
       return (
-        <Redirect
+        <OldRedirect
           to={{
             description: {
               mainType: 'protein',
@@ -100,7 +100,7 @@ class SearchResults extends PureComponent {
         <Column
           dataKey="id"
           renderer={id => (
-            <Link
+            <OldLink
               newTo={{
                 description: {
                   mainType: 'entry',
@@ -110,7 +110,7 @@ class SearchResults extends PureComponent {
               }}
             >
               {id}
-            </Link>
+            </OldLink>
           )}
           headerStyle={{ width: '200px' }}
         >

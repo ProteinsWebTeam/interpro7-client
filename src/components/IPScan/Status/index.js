@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import { connect } from 'react-redux';
 import url from 'url';
 import TA from 'timeago.js';
@@ -159,7 +159,7 @@ class IPScanStatus extends Component {
                       <tr key={jobId}>
                         <td>
                           {id ? (
-                            <Link
+                            <OldLink
                               newTo={{
                                 description: {
                                   mainType: 'search',
@@ -170,7 +170,7 @@ class IPScanStatus extends Component {
                               disabled={status !== 'finished'}
                             >
                               {id}
-                            </Link>
+                            </OldLink>
                           ) : (
                             'None'
                           )}

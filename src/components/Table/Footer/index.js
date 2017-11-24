@@ -1,7 +1,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4] }]*/
 import React from 'react';
 import T from 'prop-types';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import config from 'config';
 
@@ -53,7 +53,7 @@ const Footer = ({
           </li>
         ) : (
           <li>
-            <Link
+            <OldLink
               newTo={({ description, search, hash }) => ({
                 description,
                 search: {
@@ -66,7 +66,7 @@ const Footer = ({
               })}
             >
               Previous
-            </Link>
+            </OldLink>
           </li>
         )}
         {pages.map(e => {
@@ -82,7 +82,7 @@ const Footer = ({
           }
           return (
             <li key={e} className={page === e ? f('current') : ''}>
-              <Link
+              <OldLink
                 newTo={({ description, search, hash }) => ({
                   description,
                   search: {
@@ -95,7 +95,7 @@ const Footer = ({
                 })}
               >
                 {e}
-              </Link>
+              </OldLink>
             </li>
           );
         })}
@@ -105,7 +105,7 @@ const Footer = ({
           </li>
         ) : (
           <li>
-            <Link
+            <OldLink
               newTo={location => ({
                 ...location,
                 search: {
@@ -115,7 +115,7 @@ const Footer = ({
               })}
             >
               Next
-            </Link>
+            </OldLink>
           </li>
         )}
       </ul>

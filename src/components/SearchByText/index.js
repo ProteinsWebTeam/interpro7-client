@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import { frame } from 'timing-functions/src';
 
@@ -23,14 +23,14 @@ class Example extends PureComponent {
     return (
       <i>
         {' '}
-        <Link
+        <OldLink
           newTo={{
             description: { mainType: 'search', mainDB: 'text' },
             search: { search: value },
           }}
         >
           {value}
-        </Link>
+        </OldLink>
       </i>
     );
   }

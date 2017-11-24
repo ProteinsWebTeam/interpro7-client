@@ -6,7 +6,7 @@ import { format } from 'url';
 import { Tooltip } from 'react-tippy';
 
 import AnimatedEntry from 'components/AnimatedEntry';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import { latests } from 'staticData/home';
@@ -50,7 +50,7 @@ class LatestEntry extends PureComponent {
         <li className={f('list-item')}>
           <interpro-type type={entry.type} />
           <div className={f('list-body')}>
-            <Link
+            <OldLink
               newTo={{
                 description: {
                   mainType: 'entry',
@@ -65,7 +65,7 @@ class LatestEntry extends PureComponent {
                 <i>{entry.counter} proteins matched</i>
                 <br />
               </div>
-            </Link>
+            </OldLink>
             {entry.contributing.map(c => (
               <div className={f('list-more')} key={c.accession}>
                 <MemberSymbol
@@ -74,7 +74,7 @@ class LatestEntry extends PureComponent {
                 />
                 <small>
                   {c.source_database}:
-                  <Link
+                  <OldLink
                     newTo={{
                       description: {
                         mainType: 'entry',
@@ -86,7 +86,7 @@ class LatestEntry extends PureComponent {
                     className={f('list-sign')}
                   >
                     {c.accession}
-                  </Link>{' '}
+                  </OldLink>{' '}
                   ({entry.contributing.length} contributing signature{entry
                     .contributing.length > 1
                     ? 's'
@@ -121,12 +121,12 @@ class ByLatestEntries extends PureComponent {
                 {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
               </AnimatedEntry>
             </div>
-            <Link
+            <OldLink
               newTo={{ description: { mainType: 'entry' } }}
               className={f('button')}
             >
               View all entries
-            </Link>
+            </OldLink>
           </div>
         </div>
       </div>

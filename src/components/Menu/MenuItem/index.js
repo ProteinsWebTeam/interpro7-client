@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import { connect } from 'react-redux';
 
 import { BaseLink } from 'components/ExtLink';
@@ -54,7 +54,7 @@ class MenuItem extends PureComponent {
       closeEverything,
       ...props
     } = this.props;
-    const CustomLink = !newTo && isExternal(to || href) ? BaseLink : Link;
+    const CustomLink = !newTo && isExternal(to || href) ? BaseLink : OldLink;
     let _activeClass = s('active');
     if (typeof activeClass === 'string') {
       _activeClass += ` ${activeClass || ''}`;

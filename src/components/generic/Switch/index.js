@@ -20,7 +20,7 @@ const match = (childRoutes, indexRoute, valueFromLocation) => {
   }
 };
 
-class Switch extends PureComponent {
+class _OldSwitch extends PureComponent {
   static propTypes = {
     indexRoute: T.func.isRequired,
     locationSelector: T.func.isRequired,
@@ -50,9 +50,11 @@ class Switch extends PureComponent {
   }
 }
 
-const mapStateToProps = createSelector(
+const oldMapStateToProps = createSelector(
   state => state.newLocation,
   location => ({ location }),
 );
 
-export default connect(mapStateToProps)(Switch);
+export const OldSwitch = connect(oldMapStateToProps)(_OldSwitch);
+
+// export default connect(mapStateToProps)(Switch);

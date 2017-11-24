@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
-import Link from 'components/generic/Link';
+import { OldSwitch } from 'components/generic/Switch';
+import { OldLink } from 'components/generic/Link';
 import MemberDBTabs from 'components/MemberDBTabs';
 import { PDBeLink } from 'components/ExtLink';
 import StructureListFilters from 'components/Structure/StructureListFilters';
@@ -59,11 +59,11 @@ const Overview = ({ data: { payload, loading } }) => {
     <ul className={f('card')}>
       {Object.entries(payload.structures || {}).map(([name, count]) => (
         <li key={name}>
-          <Link
+          <OldLink
             newTo={{ description: { mainType: 'structure', mainDB: name } }}
           >
             {name} ({count})
-          </Link>
+          </OldLink>
         </li>
       ))}
     </ul>
@@ -124,7 +124,7 @@ const List = ({
           <Column
             dataKey="accession"
             renderer={(accession /*: string */) => (
-              <Link
+              <OldLink
                 newTo={location => ({
                   ...location,
                   description: {
@@ -138,7 +138,7 @@ const List = ({
                   text={accession}
                   textToHighlight={search.search}
                 />
-              </Link>
+              </OldLink>
             )}
           >
             Accession
@@ -149,7 +149,7 @@ const List = ({
               name /*: string */,
               { accession } /*: {accession: string} */,
             ) => (
-              <Link
+              <OldLink
                 newTo={location => ({
                   ...location,
                   description: {
@@ -160,7 +160,7 @@ const List = ({
                 })}
               >
                 <HighlightedText text={name} textToHighlight={search.search} />
-              </Link>
+              </OldLink>
             )}
           >
             Name
@@ -219,7 +219,7 @@ const Summary = props => {
           <BrowseTabs />
         </div>
       </div>
-      <Switch
+      <OldSwitch
         {...props}
         locationSelector={l =>
           l.description.mainDetail || l.description.focusType
@@ -240,7 +240,7 @@ Summary.propTypes = {
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
-    <Switch
+    <OldSwitch
       {...props}
       locationSelector={l =>
         l.description.mainAccession || l.description.focusType
@@ -306,7 +306,7 @@ class Structure extends PureComponent {
             />
           )}
         <ErrorBoundary>
-          <Switch
+          <OldSwitch
             {...this.props}
             locationSelector={l => l.description.mainDB}
             indexRoute={Overview}

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 class Length extends PureComponent {
   static propTypes = {
@@ -20,13 +20,13 @@ class Length extends PureComponent {
     return (
       <div>
         {'Length: '}
-        <Link
+        <OldLink
           newTo={({ description }) => ({
             description: { ...description, mainDetail: 'sequence' },
           })}
         >
           {length} amino acids{fragmentText}
-        </Link>
+        </OldLink>
       </div>
     );
   }

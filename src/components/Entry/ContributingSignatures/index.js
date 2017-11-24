@@ -2,7 +2,7 @@
 import React from 'react';
 import T from 'prop-types';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import loadable from 'higherOrder/loadable';
 import Metadata from 'wrappers/Metadata';
@@ -40,7 +40,7 @@ const SignatureLink = ({ accession, db, data }) => {
       data.payload.metadata.name.name) ||
     accession;
   return (
-    <Link
+    <OldLink
       newTo={{
         description: {
           mainType: 'entry',
@@ -57,7 +57,7 @@ const SignatureLink = ({ accession, db, data }) => {
           </Tooltip>
         </small>
       </div>
-    </Link>
+    </OldLink>
   );
 };
 SignatureLink.propTypes = {
@@ -103,7 +103,7 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
                   processData={schemaProcessData}
                 />
                 <span className={f('sign-label')}>
-                  <Link
+                  <OldLink
                     className={f('neutral')}
                     newTo={{
                       description: {
@@ -114,7 +114,7 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
                     }}
                   >
                     {accession}
-                  </Link>
+                  </OldLink>
                 </span>
               </span>
             ))}

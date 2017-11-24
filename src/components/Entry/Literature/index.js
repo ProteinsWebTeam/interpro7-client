@@ -3,7 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 
 import { PMCLink, DOILink } from 'components/ExtLink';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import loadable from 'higherOrder/loadable';
 
@@ -40,9 +40,9 @@ const LiteratureItem = (
       {included &&
         typeof i !== 'undefined' && (
           <span className={f('index')}>
-            <Link href={`#${i}`} aria-label="jump up">
+            <OldLink href={`#${i}`} aria-label="jump up">
               {i}.^
-            </Link>{' '}
+            </OldLink>{' '}
           </span>
         )}
       <span className={f('authors')}>{r.authors}</span>{' '}

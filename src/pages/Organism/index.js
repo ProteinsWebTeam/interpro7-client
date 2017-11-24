@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
-import Link from 'components/generic/Link';
+import { OldSwitch } from 'components/generic/Switch';
+import { OldLink } from 'components/generic/Link';
 import MemberDBTabs from 'components/MemberDBTabs';
 import OrganismListFilters from 'components/Organism/OrganismListFilters';
 import Table, {
@@ -55,12 +55,12 @@ class Overview extends PureComponent {
       <ul className={f('card')}>
         {Object.entries(payload.proteins || {}).map(([name, count]) => (
           <li key={name}>
-            <Link
+            <OldLink
               newTo={{ description: { mainType: 'protein', mainDB: name } }}
             >
               {name}
               {Number.isFinite(count) ? ` (${count})` : ''}
-            </Link>
+            </OldLink>
           </li>
         ))}
       </ul>
@@ -125,7 +125,7 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */) => (
-                <Link
+                <OldLink
                   newTo={location => ({
                     ...location,
                     description: {
@@ -139,7 +139,7 @@ class List extends PureComponent {
                     text={accession}
                     textToHighlight={search.search}
                   />
-                </Link>
+                </OldLink>
               )}
             >
               Tax ID
@@ -150,7 +150,7 @@ class List extends PureComponent {
                 name /*: string */,
                 { accession } /*: {accession: string} */,
               ) => (
-                <Link
+                <OldLink
                   newTo={location => ({
                     ...location,
                     description: {
@@ -164,7 +164,7 @@ class List extends PureComponent {
                     text={name}
                     textToHighlight={search.search}
                   />
-                </Link>
+                </OldLink>
               )}
             >
               Name
@@ -259,7 +259,7 @@ class Summary extends PureComponent {
               <BrowseTabs />
             </div>
           </div>
-          <Switch
+          <OldSwitch
             {...this.props}
             locationSelector={l =>
               l.description.mainDetail ||
@@ -281,7 +281,7 @@ class InnerSwitch extends PureComponent {
   render() {
     return (
       <ErrorBoundary>
-        <Switch
+        <OldSwitch
           {...this.props}
           locationSelector={l =>
             l.description.mainAccession || l.description.focusType
@@ -328,7 +328,7 @@ class Organism extends PureComponent {
             />
           )}
         <ErrorBoundary>
-          <Switch
+          <OldSwitch
             {...this.props}
             locationSelector={l => l.description.mainDB}
             indexRoute={Overview}

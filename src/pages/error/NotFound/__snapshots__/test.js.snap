@@ -26,7 +26,7 @@ exports[`<NotFound /> should render 1`] = `
       <br />
       <p>
         Double check the URL or go back to the 
-        <Connect(Link)
+        <Connect(_OldLink)
           newTo={
             Object {
               "description": Object {},
@@ -34,14 +34,14 @@ exports[`<NotFound /> should render 1`] = `
           }
         >
           homepage
-        </Connect(Link)>
+        </Connect(_OldLink)>
         . If you continue to get this page, contact us using the 
-        <Connect(Link)
+        <Connect(_OldLink)
           href="http://www.ebi.ac.uk/support/interpro-general-query"
           target="_blank"
         >
           EMBL-EBI feedback form
-        </Connect(Link)>
+        </Connect(_OldLink)>
       </p>
       <br />
       <h3>
@@ -49,7 +49,7 @@ exports[`<NotFound /> should render 1`] = `
       </h3>
       <ul>
         <li>
-          <Connect(Link)
+          <Connect(_OldLink)
             newTo={
               Object {
                 "description": Object {
@@ -59,10 +59,10 @@ exports[`<NotFound /> should render 1`] = `
             }
           >
             What’s new in InterPro?
-          </Connect(Link)>
+          </Connect(_OldLink)>
         </li>
         <li>
-          <Connect(Link)
+          <Connect(_OldLink)
             newTo={
               Object {
                 "description": Object {
@@ -72,10 +72,10 @@ exports[`<NotFound /> should render 1`] = `
             }
           >
             InterPro Training and tutorial material
-          </Connect(Link)>
+          </Connect(_OldLink)>
         </li>
         <li>
-          <Connect(Link)
+          <Connect(_OldLink)
             newTo={
               Object {
                 "description": Object {
@@ -85,10 +85,10 @@ exports[`<NotFound /> should render 1`] = `
             }
           >
             InterPro FAQs
-          </Connect(Link)>
+          </Connect(_OldLink)>
         </li>
         <li>
-          <Connect(Link)
+          <Connect(_OldLink)
             newTo={
               Object {
                 "description": Object {
@@ -98,10 +98,10 @@ exports[`<NotFound /> should render 1`] = `
             }
           >
             InterPro Documentation
-          </Connect(Link)>
+          </Connect(_OldLink)>
         </li>
         <li>
-          <Connect(Link)
+          <Connect(_OldLink)
             newTo={
               Object {
                 "description": Object {
@@ -111,7 +111,7 @@ exports[`<NotFound /> should render 1`] = `
             }
           >
             InterPro Help/support
-          </Connect(Link)>
+          </Connect(_OldLink)>
         </li>
       </ul>
     </div>

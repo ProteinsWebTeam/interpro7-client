@@ -7,7 +7,7 @@ import { format } from 'url';
 import { Tooltip } from 'react-tippy';
 
 import { foundationPartial } from 'styles/foundation';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import AnimatedEntry from 'components/AnimatedEntry';
 
@@ -72,7 +72,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                 data={{ name, version, location: window.location }}
                 processData={schemaProcessDataForDB}
               />
-              <Link newTo={newTo} className={name}>
+              <OldLink newTo={newTo} className={name}>
                 <MemberSymbol type={type} />
                 <Tooltip title={title}>
                   <h6>{name}</h6>
@@ -85,16 +85,16 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                     {type === 'new' ? ' ' : ' entries'}
                   </span>
                 </p>
-              </Link>
+              </OldLink>
             </div>
           ))}
         </AnimatedEntry>
-        <Link
+        <OldLink
           newTo={{ description: { mainType: 'entry' } }}
           className={f('button')}
         >
           View all entries
-        </Link>
+        </OldLink>
       </div>
     );
   }

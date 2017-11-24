@@ -5,7 +5,7 @@ import T from 'prop-types';
 import { transformFormatted } from 'utils/text';
 
 import { foundationPartial } from 'styles/foundation';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import styles from './style.css';
@@ -73,16 +73,16 @@ const ParagraphWithTags = ({ children }) => (
             : attrs.db.toLowerCase();
         if (mainDB in xReferenceURL) {
           return (
-            <Link
+            <OldLink
               href={xReferenceURL[mainDB].replace('{}', attrs.id)}
               className={f('ext')}
             >
               {attrs.id}
-            </Link>
+            </OldLink>
           );
         }
         return (
-          <Link
+          <OldLink
             newTo={{
               description: {
                 mainType,
@@ -92,7 +92,7 @@ const ParagraphWithTags = ({ children }) => (
             }}
           >
             {attrs.id}
-          </Link>
+          </OldLink>
         );
       }
       // Checking for the TAG taxon
@@ -101,7 +101,7 @@ const ParagraphWithTags = ({ children }) => (
           const text = _getTextFromStringTag(part);
           const attrs = _getAttributesFromStringTag(part);
           return (
-            <Link
+            <OldLink
               newTo={{
                 description: {
                   mainType: 'organism',
@@ -111,7 +111,7 @@ const ParagraphWithTags = ({ children }) => (
               }}
             >
               {text}
-            </Link>
+            </OldLink>
           );
         }
         return part;

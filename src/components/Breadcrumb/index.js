@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import cfg from 'config';
 import { sticky as supportsSticky } from 'utils/support';
@@ -50,10 +50,10 @@ const mapPathArrayToLink = paths =>
   paths.map(
     ({ url, name }, i) =>
       null && (
-        <Link key={url || i} to={url || '#'}>
+        <OldLink key={url || i} to={url || '#'}>
           {name}
-        </Link>
-      )
+        </OldLink>
+      ),
   );
 
 const formatEndpoints = paths => [
@@ -113,7 +113,7 @@ class Breadcrumb extends Component {
       const prev = positions.get(node);
       if (prev) {
         console.log(
-          `translate(${prev.left - curr.left}px, ${prev.top - curr.top}px)`
+          `translate(${prev.left - curr.left}px, ${prev.top - curr.top}px)`,
         );
         node.animate(
           [
@@ -123,7 +123,7 @@ class Breadcrumb extends Component {
             },
             { transform: 'translate(0, 0)' },
           ],
-          { duration: 500, easing: 'ease-out' }
+          { duration: 500, easing: 'ease-out' },
         );
       }
       positions.set(node, curr);
@@ -169,10 +169,10 @@ class Breadcrumb extends Component {
               ))}
             </span>
             <span className={f('hint')}>
-              <Link newTo={{ description: { other: 'help' } }} title="help">
+              <OldLink newTo={{ description: { other: 'help' } }} title="help">
                 <div>main view</div>
                 <div>focus</div>
-              </Link>
+              </OldLink>
             </span>
           </nav>
         </div>
@@ -184,7 +184,7 @@ class Breadcrumb extends Component {
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
   state => state.newLocation.description,
-  (stuck, description) => ({ stuck, description })
+  (stuck, description) => ({ stuck, description }),
 );
 
 export default connect(mapStateToProps)(Breadcrumb);

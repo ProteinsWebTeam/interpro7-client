@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
+import { OldSwitch } from 'components/generic/Switch';
 import loadable from 'higherOrder/loadable';
 
 import BrowseTabs from 'components/BrowseTabs';
@@ -95,7 +95,7 @@ class Pages extends PureComponent /*:: <Props> */ {
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('large-12', 'columns')}>
-              <Switch
+              <OldSwitch
                 {...props}
                 indexRoute={Null}
                 locationSelector={l =>
@@ -108,7 +108,7 @@ class Pages extends PureComponent /*:: <Props> */ {
           </div>
         </ErrorBoundary>
         <ErrorBoundary>
-          <Switch
+          <OldSwitch
             {...props}
             locationSelector={l =>
               l.description.other || l.description.mainType

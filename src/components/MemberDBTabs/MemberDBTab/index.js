@@ -4,7 +4,7 @@ import T from 'prop-types';
 
 import { Tooltip } from 'react-tippy';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import NumberLabel from 'components/NumberLabel';
 
 import { toPlural } from 'utils/pages';
@@ -71,7 +71,7 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
     };
     return (
       <li className={f('tabs-title', { lowGraphics })}>
-        <Link
+        <OldLink
           newTo={newTo}
           activeClass={f('is-active', 'is-active-tab', cleanName)}
           className={f({
@@ -98,7 +98,7 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
               abbr={true}
             />
           </Tooltip>
-        </Link>
+        </OldLink>
       </li>
     );
   }

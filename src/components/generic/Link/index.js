@@ -21,7 +21,7 @@ const getNextLocation = (location, to) =>
 const generateHref = (nextLocation /*: Object */, href /*: ?string */) => {
   if (href) return href;
   return `${config.root.website.pathname}${description2path(
-    description2description(nextLocation.description)
+    description2description(nextLocation.description),
   )}?${qsStringify(nextLocation.search)}`.replace(/\?(#|$)/, '');
 };
 
@@ -30,7 +30,7 @@ const generateClassName = (
   activeClass /*: ?(string | function) */,
   location /*: Object */,
   nextLocation /*: Object */,
-  href /*: ?string */
+  href /*: ?string */,
 ) => {
   if (href || !(activeClass && nextLocation)) return className;
   if (typeof activeClass === 'function') {
@@ -66,7 +66,7 @@ const generateClassName = (
   activeClass: ?function | string,
 }; */
 
-class Link extends PureComponent /*:: <Props> */ {
+class _OldLink extends PureComponent /*:: <Props> */ {
   static propTypes = {
     onClick: T.func,
     location: T.shape({
@@ -154,9 +154,13 @@ class Link extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToProps = createSelector(
+const oldMapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, { goToNewLocation })(Link);
+export const OldLink = connect(oldMapStateToProps, { goToNewLocation })(
+  _OldLink,
+);
+
+// export default connect(mapStateToProps, { goToNewLocation })(Link);

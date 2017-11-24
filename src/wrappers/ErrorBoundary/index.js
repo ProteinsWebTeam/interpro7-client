@@ -24,7 +24,7 @@ import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
 // This component should be inserted before any possibly “risky” component
 // Acts as a try/cacth, preventing the rest of the website to crash
-// Ideally to be inserted before any <Switch> or complex visualisation widget
+// Ideally to be inserted before any <OldSwitch> or complex visualisation widget
 class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
   static defaultProps = {
     errorComponent: ErrorMessage,

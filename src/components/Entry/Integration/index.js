@@ -1,6 +1,6 @@
 import React from 'react';
 import T from 'prop-types';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import loadable from 'higherOrder/loadable';
 
@@ -32,7 +32,7 @@ const Integration = ({ intr }) => (
     <ul className={f('chevron')}>
       <li>
         <SchemaOrgData data={intr} processData={schemaProcessData} />
-        <Link
+        <OldLink
           newTo={{
             description: {
               mainType: 'entry',
@@ -42,7 +42,7 @@ const Integration = ({ intr }) => (
           }}
         >
           {intr}
-        </Link>
+        </OldLink>
       </li>
     </ul>
   </div>

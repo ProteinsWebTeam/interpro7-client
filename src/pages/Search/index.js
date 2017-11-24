@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
-import Link from 'components/generic/Link';
-import Redirect from 'components/generic/Redirect';
+import { OldSwitch } from 'components/generic/Switch';
+import { OldLink } from 'components/generic/Link';
+import { OldRedirect } from 'components/generic/Redirect';
 import SearchResults from 'components/SearchResults';
 
 import loadable from 'higherOrder/loadable';
@@ -51,7 +51,7 @@ IPScanSearchAndStatus.preload = () => {
 
 const InnerSwitch = props => (
   <ErrorBoundary>
-    <Switch
+    <OldSwitch
       {...props}
       locationSelector={l => l.description.mainAccession}
       indexRoute={IPScanSearchAndStatus}
@@ -66,7 +66,7 @@ const routes = new Set([
 ]);
 
 const RedirectToText = () => (
-  <Redirect to={{ description: { mainType: 'search', mainDB: 'text' } }} />
+  <OldRedirect to={{ description: { mainType: 'search', mainDB: 'text' } }} />
 );
 
 class Wrapper extends PureComponent {
@@ -85,28 +85,28 @@ class Wrapper extends PureComponent {
               onMouseOver={SearchByText.preload}
               onFocus={SearchByText.preload}
             >
-              <Link
+              <OldLink
                 newTo={{
                   description: { mainType: 'search', mainDB: 'text' },
                 }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 by text
-              </Link>
+              </OldLink>
             </li>
             <li
               className={f('tabs-title')}
               onMouseOver={IPScanSearchAndStatus.preload}
               onFocus={IPScanSearchAndStatus.preload}
             >
-              <Link
+              <OldLink
                 newTo={{
                   description: { mainType: 'search', mainDB: 'sequence' },
                 }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 by sequence
-              </Link>
+              </OldLink>
             </li>
           </ul>
           <div className={f('tabs', 'tabs-content')}>
@@ -121,7 +121,7 @@ class Wrapper extends PureComponent {
 }
 
 const Search = () => (
-  <Switch
+  <OldSwitch
     locationSelector={l => l.description.mainDB}
     indexRoute={RedirectToText}
     childRoutes={routes}

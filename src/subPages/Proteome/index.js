@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import { foundationPartial } from 'styles/foundation';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -31,7 +31,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
         <Column
           dataKey="accession"
           renderer={(acc /*: string */) => (
-            <Link
+            <OldLink
               newTo={{
                 description: {
                   mainType: 'organism',
@@ -41,7 +41,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
               }}
             >
               <span>{acc}</span>
-            </Link>
+            </OldLink>
           )}
         >
           Accession
@@ -52,7 +52,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
             name /*: string */,
             { accession } /*: {accession: string, source_database: string} */,
           ) => (
-            <Link
+            <OldLink
               newTo={{
                 description: {
                   mainType: 'organism',
@@ -62,13 +62,13 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
               }}
             >
               {name}
-            </Link>
+            </OldLink>
           )}
         />
         <Column
           dataKey="taxonomy"
           renderer={(taxID /*: string */) => (
-            <Link
+            <OldLink
               newTo={{
                 description: {
                   mainType: 'organism',
@@ -78,7 +78,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
               }}
             >
               {taxID}
-            </Link>
+            </OldLink>
           )}
         >
           Taxonomy ID

@@ -5,7 +5,7 @@ import { format } from 'url';
 import { createSelector } from 'reselect';
 
 import { foundationPartial } from 'styles/foundation';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadData from 'higherOrder/loadData';
@@ -82,7 +82,7 @@ class BySpecies extends PureComponent /*:: <Props> */ {
               )}
               key={e.tax_id || 'unclassified'}
             >
-              <Link
+              <OldLink
                 newTo={{
                   description: {
                     mainType: 'organism',
@@ -97,9 +97,9 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                   data-icon={e.icon}
                 />
                 <h6>{e.title}</h6>
-              </Link>
+              </OldLink>
               <p>
-                <Link
+                <OldLink
                   newTo={{
                     description: {
                       focusType: 'entry',
@@ -111,9 +111,9 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                   }}
                 >
                   {getCountString(payloadE, loadingE, e.tax_id, 'entry')}
-                </Link>
+                </OldLink>
                 <br />
-                <Link
+                <OldLink
                   newTo={{
                     description: {
                       focusType: 'protein',
@@ -125,12 +125,12 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                   }}
                 >
                   {getCountString(payload, loading, e.tax_id, 'protein')}
-                </Link>
+                </OldLink>
               </p>
             </div>
           ))}
         </AnimatedEntry>
-        <Link
+        <OldLink
           newTo={{
             description: {
               mainType: 'organism',
@@ -140,7 +140,7 @@ class BySpecies extends PureComponent /*:: <Props> */ {
           className={f('button')}
         >
           View all Organism
-        </Link>
+        </OldLink>
       </div>
     );
   }

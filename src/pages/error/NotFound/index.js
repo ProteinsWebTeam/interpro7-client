@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -23,42 +23,42 @@ class NotFound extends PureComponent /*:: <{}> */ {
             <br />
             <p>
               {'Double check the URL or go back to the '}
-              <Link newTo={{ description: {} }}>homepage</Link>
+              <OldLink newTo={{ description: {} }}>homepage</OldLink>
               {'. If you continue to get this page, contact us using the '}
-              <Link
+              <OldLink
                 target="_blank"
                 href="http://www.ebi.ac.uk/support/interpro-general-query"
               >
                 EMBL-EBI feedback form
-              </Link>
+              </OldLink>
             </p>
             <br />
             <h3>Or try one of these:</h3>
             <ul>
               <li>
-                <Link newTo={{ description: { other: 'release_notes' } }}>
+                <OldLink newTo={{ description: { other: 'release_notes' } }}>
                   What’s new in InterPro?
-                </Link>
+                </OldLink>
               </li>
               <li>
-                <Link newTo={{ description: { other: 'help' } }}>
+                <OldLink newTo={{ description: { other: 'help' } }}>
                   InterPro Training and tutorial material
-                </Link>
+                </OldLink>
               </li>
               <li>
-                <Link newTo={{ description: { other: 'help' } }}>
+                <OldLink newTo={{ description: { other: 'help' } }}>
                   InterPro FAQs
-                </Link>
+                </OldLink>
               </li>
               <li>
-                <Link newTo={{ description: { other: 'help' } }}>
+                <OldLink newTo={{ description: { other: 'help' } }}>
                   InterPro Documentation
-                </Link>
+                </OldLink>
               </li>
               <li>
-                <Link newTo={{ description: { other: 'help' } }}>
+                <OldLink newTo={{ description: { other: 'help' } }}>
                   InterPro Help/support
-                </Link>
+                </OldLink>
               </li>
             </ul>
           </div>

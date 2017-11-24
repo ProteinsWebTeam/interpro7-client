@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import NumberLabel from 'components/NumberLabel';
 
 import { singleEntity } from 'menuConfig';
@@ -91,7 +91,7 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
     if (!isFirstLevel && !isNaN(value) && !value) return null;
 
     return (
-      <Link
+      <OldLink
         newTo={newTo}
         className={f('browse-tabs-link', { ['is-signature']: isSignature })}
         activeClass={f('is-active', 'is-active-tab')}
@@ -100,7 +100,7 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
         {name}
         {value !== null && ' '}
         {value !== null && !isNaN(value) && <NumberLabel value={value} />}
-      </Link>
+      </OldLink>
     );
   }
 }

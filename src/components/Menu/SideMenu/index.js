@@ -9,7 +9,7 @@ import { closeSideNav } from 'actions/creators';
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterProMenu from 'components/Menu/InterProMenu';
 import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -56,14 +56,14 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
 
   render() {
     return (
-      <Link
+      <OldLink
         className={f('old-interpro-link')}
         href={getOldHref(this.props.description)}
         target="_blank"
         rel="noopener noreferer"
       >
         See this page in the old InterPro website
-      </Link>
+      </OldLink>
     );
   }
 }

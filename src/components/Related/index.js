@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
 import omit from 'lodash-es/omit';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import description2path from 'utils/processLocation/description2path';
 import loadData from 'higherOrder/loadData';
 
@@ -71,7 +71,7 @@ class _RelatedSimple extends PureComponent {
         <ObjectToList
           obj={secondaryData}
           component={({ k: db, value }) => (
-            <Link
+            <OldLink
               newTo={location => ({
                 ...location,
                 description: {
@@ -81,7 +81,7 @@ class _RelatedSimple extends PureComponent {
               })}
             >
               {db}: {value}
-            </Link>
+            </OldLink>
           )}
         />
       </div>

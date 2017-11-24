@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 
 import Table, { Column } from 'components/Table';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import ProteinFile from './ProteinFile';
 // import Metadata from 'wrappers/Metadata';
@@ -96,7 +96,7 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
             <Column
               dataKey="taxId"
               renderer={taxId => (
-                <Link
+                <OldLink
                   newTo={{
                     description: {
                       mainType: 'organism',
@@ -106,7 +106,7 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
                   }}
                 >
                   {taxId}
-                </Link>
+                </OldLink>
               )}
             >
               Tax ID
@@ -140,7 +140,7 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
               renderer={taxId => {
                 const value = lut.get(taxId);
                 return (
-                  <Link
+                  <OldLink
                     newTo={{
                       description: {
                         mainType: 'organism',
@@ -159,7 +159,7 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
                       //  <TaxIdOrName accession={taxId} />
                       // </Metadata>
                     }
-                  </Link>
+                  </OldLink>
                 );
               }}
             >

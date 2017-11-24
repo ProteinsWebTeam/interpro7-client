@@ -34,7 +34,7 @@ export default class Tabs extends Component {
               key={i}
             >
               <button onClick={this._handleChangeTab(i)}>
-                {/* {activeTab === i && <Redirect to={_child.props.to} push />}*/}
+                {/* {activeTab === i && <OldRedirect to={_child.props.to} push />}*/}
                 {child.props.title}
               </button>
             </li>

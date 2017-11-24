@@ -3,7 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
@@ -118,7 +118,7 @@ const Matches = (
           acc /*: string */,
           { source_database: sourceDatabase } /*: {source_database: string} */,
         ) => (
-          <Link
+          <OldLink
             newTo={{
               description: {
                 mainType: primary,
@@ -130,7 +130,7 @@ const Matches = (
             <span className={f('acc-row')}>
               <HighlightedText text={acc} textToHighlight={search.search} />
             </span>
-          </Link>
+          </OldLink>
         )}
       >
         {primary === 'organism' ? 'Tax Id' : 'Accession'}
@@ -144,7 +144,7 @@ const Matches = (
             source_database: sourceDatabase,
           } /*: {accession: string, source_database: string} */,
         ) => (
-          <Link
+          <OldLink
             newTo={{
               description: {
                 mainType: primary,
@@ -154,7 +154,7 @@ const Matches = (
             }}
           >
             <HighlightedText text={name} textToHighlight={search.search} />
-          </Link>
+          </OldLink>
         )}
       />
       <Column

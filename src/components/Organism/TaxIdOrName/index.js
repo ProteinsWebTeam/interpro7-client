@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 /*:: type Props = {
   accession: string | number,
@@ -47,7 +47,7 @@ class TaxIdOrName extends PureComponent /*:: <Props> */ {
         mainAccession: accession.toString(),
       },
     };
-    return <Link newTo={newTo}>{displayedText}</Link>;
+    return <OldLink newTo={newTo}>{displayedText}</OldLink>;
   }
 }
 

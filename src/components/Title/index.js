@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { Helmet } from 'react-helmet';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import Link from 'components/generic/Link';
+import { OldLink } from 'components/generic/Link';
 
 import loadWebComponent from 'utils/loadWebComponent';
 
@@ -144,7 +144,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
             <div className={f('md-hlight')}>
               <h5>
                 Member database:&nbsp;
-                <Link
+                <OldLink
                   newTo={{
                     description: {
                       mainType: 'entry',
@@ -158,7 +158,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
                     data-icon="i"
                     title={metadata.source_database}
                   />
-                </Link>
+                </OldLink>
               </h5>
               <p>
                 This signature is defined as{' '}
