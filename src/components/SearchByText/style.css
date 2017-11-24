@@ -1,12 +1,29 @@
+@import '../../styles/colors.css';
+
+.search-adv {
+  text-align: right;
+}
+.search-adv span {
+  font-style: italic;
+  font-size: 80%;
+  color: var(--colors-gray);
+  margin-right: 0.2rem; /*to align with border form*/
+}
+
+.search-ex span {
+  margin-left: 0.1rem;
+} /*to align with border form*/
+
 .search-ex,
 .search-ex a,
 .search-ex,
 .search-ex a:visited {
   font-size: 90%;
-  color: #777;
+  color: var(--colors-gray);
 }
+
 .search-ex a:hover {
-  color: #777;
+  color: var(--colors-gray);
   border-bottom: 1px #777 solid;
 }
 
@@ -14,6 +31,7 @@
   font-size: 150%;
   margin-bottom: 0.5rem;
 }
+
 @media screen and (max-width: 75rem) {
   .search-input h3 {
     font-size: 130%;
@@ -47,7 +65,7 @@
   padding: 2px;
   border-radius: 50%;
   text-align: center;
-  color: grey;
+  color: var(--colors-gray);
   font-weight: normal;
   cursor: pointer;
 }
