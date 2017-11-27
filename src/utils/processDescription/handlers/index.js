@@ -536,7 +536,12 @@ export const otherHandler /*: Handler */ = handlerConstructor({
     value: 'otherHandler',
   },
   getKey: {
-    value: ({ other: { length: nextIndex } }) => ['other', nextIndex],
+    // if level 1 is already defined, send to second level
+    value: ({ other: [first] }) => ['other', first ? 1 : 0],
+  },
+  match: {
+    // stop at (arbitrary defined) second level, to avoid looping indefinitely
+    value: (_, { other: [, second] }) => !second,
   },
 });
 
