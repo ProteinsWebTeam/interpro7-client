@@ -9,9 +9,11 @@ import Link from 'components/generic/Link';
 import { frame } from 'timing-functions/src';
 
 import { foundationPartial } from 'styles/foundation';
+
 import interproTheme from 'styles/theme-interpro.css';
-import s from './style.css';
-const f = foundationPartial(interproTheme, s);
+import local from './style.css';
+
+const f = foundationPartial(interproTheme, local);
 
 class Example extends PureComponent {
   static propTypes = {
