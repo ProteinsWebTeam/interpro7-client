@@ -91,7 +91,7 @@ class Pages extends PureComponent /*:: <Props> */ {
   render() {
     const { stuck, top, ...props } = this.props;
     return (
-      <main className={f('main', { stuck })}>
+      <div className={f('main', { stuck })}>
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('large-12', 'columns')}>
@@ -116,7 +116,7 @@ class Pages extends PureComponent /*:: <Props> */ {
             catchAll={NotFound}
           />
         </ErrorBoundary>
-      </main>
+      </div>
     );
   }
 }
