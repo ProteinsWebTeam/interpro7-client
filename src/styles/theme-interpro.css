@@ -42,14 +42,16 @@ a.special {
     opacity: 0.25;
   }
 }
-
+.warning {
+  background-color: #2daec1;
+}
 .button.primary:hover,
 .button.primary:focus,
 .button:hover,
 .button:focus,
 .button:active {
   background-color: #3798a7;
-  opacity: 1;
+  /*opacity: 1; SP not sure where this is needed*/
 }
 
 div.local-masthead {
