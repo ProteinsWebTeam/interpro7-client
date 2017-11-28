@@ -75,6 +75,14 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
   [string]: {|value: any|},
 |}; */
 
+const replacer = (_, v) => {
+  if (v) {
+    if (typeof v !== 'object' || Object.values(v).filter(Boolean).length) {
+      return v;
+    }
+  }
+};
+
 // node templates
 const templateHandler /*: Handler */ = {
   // can be used for debugging
@@ -103,6 +111,11 @@ const templateHandler /*: Handler */ = {
     if (key && current) {
       // eslint-disable-next-line no-param-reassign
       set(description, key, this.cleanedUp || this.cleanUp(current));
+    }
+    if (!next) {
+      // about to return description
+      console.log('new description:');
+      console.log(JSON.stringify(description, replacer, 2));
     }
     if (!next) return description;
     for (const child of this.children) {
@@ -168,7 +181,7 @@ const typeConstructor = (type /*: PossibleMain */) /*: Handler */ =>
       value: `${type}Handler`,
     },
     getKey: {
-      value: ({ main }) => (main ? null : ['main', 'key']),
+      value: ({ main: { key } }) => (key ? null : ['main', 'key']),
     },
     cleanedUp: {
       value: type,
@@ -221,7 +234,7 @@ export const memberDBHandler /*: Handler */ = handlerConstructor({
   },
   match: {
     value(current) {
-      const _current = this.cleanedUp(current);
+      const _current = this.cleanUp(current);
       for (const { name } of memberDB) {
         if (name === _current) return true;
       }
@@ -527,7 +540,7 @@ export const detailHandler /*: Handler */ = handlerConstructor({
     value: 'detailHandler',
   },
   getKey: {
-    value: ({ main }) => [main, 'detail'],
+    value: ({ main: { key } }) => [key, 'detail'],
   },
 });
 
@@ -566,14 +579,26 @@ export const rootHandler /*: Handler */ = handlerConstructor({
 entryHandler.children = new Set([
   integrationHandler,
   interProHandler,
-  memberDBAccessionHandler,
+  memberDBHandler,
 ]);
 
 integrationHandler.children = new Set([memberDBHandler]);
 
-interProHandler.children = new Set([interProAccessionHandler]);
+interProHandler.children = new Set([
+  proteinHandler,
+  structureHandler,
+  organismHandler,
+  setHandler,
+  interProAccessionHandler,
+]);
 
-memberDBHandler.children = new Set([memberDBAccessionHandler]);
+memberDBHandler.children = new Set([
+  proteinHandler,
+  structureHandler,
+  organismHandler,
+  setHandler,
+  memberDBAccessionHandler,
+]);
 
 interProAccessionHandler.children = new Set([
   proteinHandler,
@@ -595,7 +620,13 @@ memberDBAccessionHandler.children = new Set([
 // Protein
 proteinHandler.children = new Set([proteinDBHandler]);
 
-proteinDBHandler.children = new Set([proteinAccessionHandler]);
+proteinDBHandler.children = new Set([
+  entryHandler,
+  structureHandler,
+  organismHandler,
+  setHandler,
+  proteinAccessionHandler,
+]);
 
 proteinAccessionHandler.children = new Set([
   entryHandler,
@@ -608,7 +639,13 @@ proteinAccessionHandler.children = new Set([
 // Structure
 structureHandler.children = new Set([structureDBHandler]);
 
-structureDBHandler.children = new Set([structureAccessionHandler]);
+structureDBHandler.children = new Set([
+  entryHandler,
+  proteinHandler,
+  organismHandler,
+  setHandler,
+  structureAccessionHandler,
+]);
 
 structureAccessionHandler.children = new Set([
   entryHandler,
@@ -630,7 +667,13 @@ structureChainHandler.children = new Set([
 // Organism
 organismHandler.children = new Set([taxonomyDBHandler, proteomeDBHandler]);
 
-taxonomyDBHandler.children = new Set([taxonomyAccessionHandler]);
+taxonomyDBHandler.children = new Set([
+  entryHandler,
+  proteinHandler,
+  structureHandler,
+  setHandler,
+  taxonomyAccessionHandler,
+]);
 
 taxonomyAccessionHandler.children = new Set([
   proteomeDBHandler,
@@ -641,7 +684,13 @@ taxonomyAccessionHandler.children = new Set([
   detailHandler,
 ]);
 
-proteomeDBHandler.children = new Set([proteomeAccessionHandler]);
+proteomeDBHandler.children = new Set([
+  entryHandler,
+  proteinHandler,
+  structureHandler,
+  setHandler,
+  proteomeAccessionHandler,
+]);
 
 proteomeAccessionHandler.children = new Set([
   entryHandler,
@@ -654,7 +703,13 @@ proteomeAccessionHandler.children = new Set([
 // Set
 setHandler.children = new Set([setDBHandler]);
 
-setDBHandler.children = new Set([setAccessionHandler]);
+setDBHandler.children = new Set([
+  entryHandler,
+  proteinHandler,
+  structureHandler,
+  organismHandler,
+  setAccessionHandler,
+]);
 
 setAccessionHandler.children = new Set([
   entryHandler,
