@@ -8,6 +8,9 @@
   --colors-gray: #888;
   --colors-lightgray: #9f9f9f;
   --colors-loading-bar: #77b6ff;
+  --colors-alert-box: #ff918e;
+  --colors-alert-txt: tomato;
+  /*ENTRY*/
   --colors-family: #fe3600;
   --colors-domain: #59d417;
   --colors-repeat: #ff9000;
