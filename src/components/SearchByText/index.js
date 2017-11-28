@@ -82,7 +82,7 @@ class SearchByText extends PureComponent {
     const { value, submit } = this.state;
     return (
       <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
+        <div className={f('large-12', 'columns', 'margin-bottom-medium')}>
           <form onSubmit={this.handleSubmit}>
             <div className={f('secondary', 'callout', 'margin-bottom-none')}>
               <div className={f('row')}>
