@@ -30,9 +30,19 @@ a.special {
 .button.primary {
   background-color: rgb(0, 124, 130);
 }
+/*custom color for button*/
 .button {
   background-color: #2daec1;
-} /*STYLE - custom color for button*/
+}
+/*custom color for disabled buttons*/
+.button.disabled {
+  background-color: #2daec1;
+  &:hover {
+    background-color: #2daec1;
+    opacity: 0.25;
+  }
+}
+
 .button.primary:hover,
 .button.primary:focus,
 .button:hover,
