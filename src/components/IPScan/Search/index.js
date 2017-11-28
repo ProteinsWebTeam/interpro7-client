@@ -21,13 +21,14 @@ import blockEvent from 'utils/blockEvent';
 import getTableAccess from 'storage/idb';
 
 import { foundationPartial } from 'styles/foundation';
+
 import ipro from 'styles/interpro-new.css';
-import interproTheme from 'styles/theme-interpro.css';
-import f from './style.css';
+import interproTheme from 'styles/theme-interpro.css'; /*needed for custom button color*/
+import local from './style.css';
 
 import example from './example.fasta';
 
-const s = foundationPartial(interproTheme, ipro, f);
+const f = foundationPartial(interproTheme, ipro, local);
 
 const strategy = re => (block, cb) => {
   const text = block.getText();
@@ -66,11 +67,11 @@ const checkValidity = (({ comment, IUPACProt }) => lines =>
 const compositeDecorator = new CompositeDecorator([
   {
     strategy: strategy(/^\s*[>;].*$/gm),
-    component: classedSpan(s('comment')),
+    component: classedSpan(f('comment')),
   },
   {
     strategy: strategy(/[^a-z* -]+/gi),
-    component: classedSpan(s('invalid-letter')),
+    component: classedSpan(f('invalid-letter')),
   },
 ]);
 
@@ -192,7 +193,7 @@ class IPScanSearch extends Component {
       {
         title: 'Job submission failed',
         body: 'Something wrong happened while trying to submit your job',
-        className: s('alert'),
+        className: f('alert'),
         ttl: 5000,
       },
       id(),
@@ -211,7 +212,7 @@ class IPScanSearch extends Component {
         body: `Your job has been successfully submitted with an id of ${
           job.id
         }`,
-        className: s('success'),
+        className: f('success'),
         ttl: 5000,
       },
       id(),
@@ -310,8 +311,8 @@ class IPScanSearch extends Component {
   render() {
     const { editorState, valid, dragging, uploading } = this.state;
     return (
-      <div className={s('row')}>
-        <div className={s('large-12', 'columns')}>
+      <div className={f('row', 'margin-bottom-medium')}>
+        <div className={f('large-12', 'columns')}>
           <form
             onSubmit={this._handleSubmit}
             onDrop={this._handleDroppedFiles}
@@ -322,21 +323,28 @@ class IPScanSearch extends Component {
             onDragEnter={this._handleDragging}
             onDragExit={this._handleUndragging}
             onDragLeave={this._handleUndragging}
-            className={s('search-form', { dragging })}
+            className={f('search-form', { dragging })}
           >
             <div>
-              <div className={s('secondary', 'callout')}>
-                <div className={s('row')}>
-                  <div className={s('large-12', 'columns')}>
-                    <label
+              <div
+                className={f(
+                  'secondary',
+                  'callout',
+                  'border',
+                  'margin-bottom-none',
+                )}
+              >
+                <div className={f('row')}>
+                  <div className={f('large-12', 'columns', 'sqc-search-input')}>
+                    <h3>Sequence, in FASTA format</h3>
+                    <div
                       onClick={this._handleEditorClick}
                       onKeyPress={this._handleEditorClick}
                       role="presentation"
                     >
-                      Sequence, in FASTA format
                       <div
                         type="text"
-                        className={s('editor', {
+                        className={f('editor', {
                           'invalid-block': !valid,
                           busy: uploading,
                         })}
@@ -351,10 +359,21 @@ class IPScanSearch extends Component {
                           readOnly={uploading}
                         />
                       </div>
-                    </label>
-                    <div className={s('button-group', 'line-with-buttons')}>
-                      <button className={s('hollow', 'button', 'tertiary')}>
-                        <label className={s('file-input-label')}>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={f('row')}>
+                  <div className={f('medium-8', 'columns')}>
+                    <div
+                      className={f(
+                        'button-group',
+                        'line-with-buttons',
+                        'margin-bottom-none',
+                      )}
+                    >
+                      <button className={f('hollow', 'button', 'tertiary')}>
+                        <label className={f('file-input-label')}>
                           Choose file
                           <input
                             type="file"
@@ -365,40 +384,51 @@ class IPScanSearch extends Component {
                       </button>
                       <button
                         type="button"
-                        className={s('hollow', 'button', 'secondary')}
+                        className={f('hollow', 'button', 'secondary')}
                         onClick={this._loadExample}
                       >
                         Example protein sequence
                       </button>
                       <button
                         type="button"
-                        className={s('button', 'warning', { hidden: valid })}
+                        className={f('button', 'alert', { hidden: valid })}
                         onClick={this._cleanUp}
                       >
-                        Automatic input clean up
+                        Automatic FASTA clean up
                       </button>
                     </div>
                   </div>
+                  <div
+                    className={f(
+                      'medium-4',
+                      'columns',
+                      'show-for-medium',
+                      'search-adv',
+                    )}
+                  >
+                    <span>Powered by InterProScan</span>
+                  </div>
                 </div>
 
-                <div className={s('row')} style={{ marginTop: '1em' }}>
+                <div className={f('row')} style={{ marginTop: '1em' }}>
                   <div
-                    className={s(
+                    className={f(
                       'large-12',
                       'columns',
                       'stacked-for-small',
                       'button-group',
+                      'margin-bottom-none',
                     )}
                   >
                     <input
                       type="submit"
-                      className={s('button', { disabled: !valid })}
+                      className={f('button', { disabled: !valid })}
                       disabled={!valid}
                       value="Search"
                     />
                     <input
                       type="button"
-                      className={s('secondary', 'hollow', 'button')}
+                      className={f('secondary', 'hollow', 'button')}
                       onClick={this._handleReset}
                       value="Clear"
                     />
@@ -406,7 +436,7 @@ class IPScanSearch extends Component {
                 </div>
               </div>
             </div>
-            <div className={s('dragging-overlay')}>Drop your file here</div>
+            <div className={f('dragging-overlay')}>Drop your file here</div>
           </form>
         </div>
       </div>
