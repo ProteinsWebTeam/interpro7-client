@@ -50,7 +50,7 @@ a.special {
 .button:hover,
 .button:focus,
 .button:active {
-  background-color: #3798a7;
+  background-color: #2daec1;
   /*opacity: 1; SP not sure where this is needed*/
 }
 
