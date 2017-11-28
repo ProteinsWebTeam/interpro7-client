@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 import cfg from 'config';
 import { sticky as supportsSticky } from 'utils/support';
@@ -50,9 +50,9 @@ const mapPathArrayToLink = paths =>
   paths.map(
     ({ url, name }, i) =>
       null && (
-        <OldLink key={url || i} to={url || '#'}>
+        <Link key={url || i} to={url || '#'}>
           {name}
-        </OldLink>
+        </Link>
       ),
   );
 
@@ -169,10 +169,10 @@ class Breadcrumb extends Component {
               ))}
             </span>
             <span className={f('hint')}>
-              <OldLink newTo={{ description: { other: 'help' } }} title="help">
+              <Link to={{ description: { other: ['help'] } }} title="help">
                 <div>main view</div>
                 <div>focus</div>
-              </OldLink>
+              </Link>
             </span>
           </nav>
         </div>

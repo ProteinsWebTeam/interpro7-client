@@ -5,7 +5,7 @@ import T from 'prop-types';
 import { transformFormatted } from 'utils/text';
 
 import { foundationPartial } from 'styles/foundation';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import styles from './style.css';
@@ -73,26 +73,25 @@ const ParagraphWithTags = ({ children }) => (
             : attrs.db.toLowerCase();
         if (mainDB in xReferenceURL) {
           return (
-            <OldLink
+            <Link
               href={xReferenceURL[mainDB].replace('{}', attrs.id)}
               className={f('ext')}
             >
               {attrs.id}
-            </OldLink>
+            </Link>
           );
         }
         return (
-          <OldLink
-            newTo={{
+          <Link
+            to={{
               description: {
-                mainType,
-                mainDB,
-                mainAccession: attrs.id,
+                main: { key: mainType },
+                [mainType]: { db: mainDB, accession: attrs.id },
               },
             }}
           >
             {attrs.id}
-          </OldLink>
+          </Link>
         );
       }
       // Checking for the TAG taxon
@@ -101,17 +100,19 @@ const ParagraphWithTags = ({ children }) => (
           const text = _getTextFromStringTag(part);
           const attrs = _getAttributesFromStringTag(part);
           return (
-            <OldLink
-              newTo={{
+            <Link
+              to={{
                 description: {
-                  mainType: 'organism',
-                  mainDB: 'taxonomy',
-                  mainAccession: attrs.tax_id,
+                  main: { key: 'organism ' },
+                  organism: {
+                    taxonomyDB: 'taxonomy',
+                    taxonomyAccession: attrs.tax_id,
+                  },
                 },
               }}
             >
               {text}
-            </OldLink>
+            </Link>
           );
         }
         return part;

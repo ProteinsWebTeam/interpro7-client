@@ -6,7 +6,7 @@ import { format } from 'url';
 import { Tooltip } from 'react-tippy';
 
 import AnimatedEntry from 'components/AnimatedEntry';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import { latests } from 'staticData/home';
@@ -50,12 +50,11 @@ class LatestEntry extends PureComponent {
         <li className={f('list-item')}>
           <interpro-type type={entry.type} />
           <div className={f('list-body')}>
-            <OldLink
-              newTo={{
+            <Link
+              to={{
                 description: {
-                  mainType: 'entry',
-                  mainDB: 'InterPro',
-                  mainAccession: entry.accession,
+                  main: { key: 'entry' },
+                  entry: { db: 'InterPro', accession: entry.accession },
                 },
               }}
             >
@@ -65,7 +64,7 @@ class LatestEntry extends PureComponent {
                 <i>{entry.counter} proteins matched</i>
                 <br />
               </div>
-            </OldLink>
+            </Link>
             {entry.contributing.map(c => (
               <div className={f('list-more')} key={c.accession}>
                 <MemberSymbol
@@ -74,19 +73,20 @@ class LatestEntry extends PureComponent {
                 />
                 <small>
                   {c.source_database}:
-                  <OldLink
-                    newTo={{
+                  <Link
+                    to={{
                       description: {
-                        mainType: 'entry',
-                        mainDB: 'interpro',
-                        mainMemberDB: c.source_database,
-                        mainMemberDBAccession: c.accession,
+                        main: { key: 'entry' },
+                        entry: {
+                          memberDB: c.source_database,
+                          memberDBAccession: c.accession,
+                        },
                       },
                     }}
                     className={f('list-sign')}
                   >
                     {c.accession}
-                  </OldLink>{' '}
+                  </Link>{' '}
                   ({entry.contributing.length} contributing signature{entry
                     .contributing.length > 1
                     ? 's'
@@ -121,12 +121,14 @@ class ByLatestEntries extends PureComponent {
                 {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
               </AnimatedEntry>
             </div>
-            <OldLink
-              newTo={{ description: { mainType: 'entry' } }}
+            <Link
+              to={{
+                description: { main: { key: 'entry' } },
+              }}
               className={f('button')}
             >
               View all entries
-            </OldLink>
+            </Link>
           </div>
         </div>
       </div>

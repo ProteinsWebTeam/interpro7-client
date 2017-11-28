@@ -2,7 +2,7 @@
 import React from 'react';
 import T from 'prop-types';
 
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import loadable from 'higherOrder/loadable';
 import Metadata from 'wrappers/Metadata';
@@ -21,7 +21,7 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessData = ({ name, db }) => ({
+const schemaProcessData = ({ db, name }) => ({
   '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
   '@id': '@isBasedOn',
   isPartOf: {
@@ -40,12 +40,11 @@ const SignatureLink = ({ accession, db, data }) => {
       data.payload.metadata.name.name) ||
     accession;
   return (
-    <OldLink
-      newTo={{
+    <Link
+      to={{
         description: {
-          mainType: 'entry',
-          mainDB: db,
-          mainAccession: accession,
+          main: { key: 'entry' },
+          entry: { db, accession },
         },
       }}
     >
@@ -57,7 +56,7 @@ const SignatureLink = ({ accession, db, data }) => {
           </Tooltip>
         </small>
       </div>
-    </OldLink>
+    </Link>
   );
 };
 SignatureLink.propTypes = {
@@ -74,53 +73,24 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
         {Object.entries(contr).map(([db, accessions]) => (
           <li key={db}>
             <MemberSymbol type={db} className={f('md-small')} />
-            {accessions.map(accession => (
+            {accessions.map(accession => [
+              <SchemaOrgData
+                key={`schema.org for ${accession}`}
+                data={{ db, name: accession }}
+                processData={schemaProcessData}
+              />,
               <Metadata
+                key={accession}
                 endpoint="entry"
                 db={db}
                 accession={accession}
-                key={accession}
               >
                 <SignatureLink key={accession} db={db} accession={accession} />
-              </Metadata>
-            ))}
+              </Metadata>,
+            ])}
           </li>
         ))}
       </ul>
-    </div>
-
-    <div className={f('md-list-box', 'margin-bottom-large')}>
-      <h5>Contributing signatures</h5>
-      <div className={f('table-chevron')}>
-        {Object.entries(contr).map(([db, accessions]) => (
-          <div key={db} className={f('sign-row')}>
-            <span className={f('sign-cell')}>{db}</span>
-
-            {accessions.map(accession => (
-              <span key={accession} className={f('sign-cell')}>
-                <SchemaOrgData
-                  data={{ db, name: accession }}
-                  processData={schemaProcessData}
-                />
-                <span className={f('sign-label')}>
-                  <OldLink
-                    className={f('neutral')}
-                    newTo={{
-                      description: {
-                        mainType: 'entry',
-                        mainDB: db,
-                        mainAccession: accession,
-                      },
-                    }}
-                  >
-                    {accession}
-                  </OldLink>
-                </span>
-              </span>
-            ))}
-          </div>
-        ))}
-      </div>
     </div>
   </div>
 );

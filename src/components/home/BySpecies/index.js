@@ -5,7 +5,7 @@ import { format } from 'url';
 import { createSelector } from 'reselect';
 
 import { foundationPartial } from 'styles/foundation';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import loadData from 'higherOrder/loadData';
@@ -82,12 +82,14 @@ class BySpecies extends PureComponent /*:: <Props> */ {
               )}
               key={e.tax_id || 'unclassified'}
             >
-              <OldLink
-                newTo={{
+              <Link
+                to={{
                   description: {
-                    mainType: 'organism',
-                    mainDB: 'taxonomy',
-                    mainAccession: `${e.tax_id}`,
+                    main: { key: 'organism' },
+                    organism: {
+                      taxonomyDB: 'taxonomy',
+                      taxonomyAccession: e.tax_id,
+                    },
                   },
                 }}
               >
@@ -97,50 +99,52 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                   data-icon={e.icon}
                 />
                 <h6>{e.title}</h6>
-              </OldLink>
+              </Link>
               <p>
-                <OldLink
-                  newTo={{
+                <Link
+                  to={{
                     description: {
-                      focusType: 'entry',
-                      focusDB: 'interpro',
-                      mainType: 'organism',
-                      mainDB: 'taxonomy',
-                      mainAccession: `${e.tax_id}`,
+                      main: { key: 'organism' },
+                      organism: {
+                        taxonomyDB: 'taxonomy',
+                        taxonomyAccession: e.tax_id,
+                      },
+                      entry: { db: 'InterPro' },
                     },
                   }}
                 >
                   {getCountString(payloadE, loadingE, e.tax_id, 'entry')}
-                </OldLink>
+                </Link>
                 <br />
-                <OldLink
-                  newTo={{
+                <Link
+                  to={{
                     description: {
-                      focusType: 'protein',
-                      focusDB: 'UniProt',
-                      mainType: 'organism',
-                      mainDB: 'taxonomy',
-                      mainAccession: `${e.tax_id}`,
+                      main: { key: 'organism' },
+                      organism: {
+                        taxonomyDB: 'taxonomy',
+                        taxonomyAccession: e.tax_id,
+                      },
+                      protein: { db: 'UniProt' },
                     },
                   }}
                 >
                   {getCountString(payload, loading, e.tax_id, 'protein')}
-                </OldLink>
+                </Link>
               </p>
             </div>
           ))}
         </AnimatedEntry>
-        <OldLink
-          newTo={{
+        <Link
+          to={{
             description: {
-              mainType: 'organism',
-              mainDB: 'taxonomy',
+              main: { key: 'organism' },
+              organism: { taxonomyDB: 'taxonomy' },
             },
           }}
           className={f('button')}
         >
           View all Organism
-        </OldLink>
+        </Link>
       </div>
     );
   }

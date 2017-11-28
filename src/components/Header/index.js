@@ -9,7 +9,7 @@ import { openSideNav } from 'actions/creators';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
@@ -113,7 +113,7 @@ class _SideIcons extends PureComponent {
             <div>
               <TextSearchBox maxLength="255" value="" name="search" />
             </div>
-            <OldLink newTo={{ description: { other: 'search' } }}>
+            <Link to={{ description: { other: ['search'] } }}>
               <div aria-label="Search InterPro">
                 <svg
                   width="2.2em"
@@ -131,7 +131,7 @@ class _SideIcons extends PureComponent {
                   />
                 </svg>
               </div>
-            </OldLink>
+            </Link>
           </label>
         </div>
       </div>

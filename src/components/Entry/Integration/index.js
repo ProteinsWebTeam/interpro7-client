@@ -1,6 +1,6 @@
 import React from 'react';
 import T from 'prop-types';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 import loadable from 'higherOrder/loadable';
 
@@ -32,17 +32,16 @@ const Integration = ({ intr }) => (
     <ul className={f('chevron')}>
       <li>
         <SchemaOrgData data={intr} processData={schemaProcessData} />
-        <OldLink
-          newTo={{
+        <Link
+          to={{
             description: {
-              mainType: 'entry',
-              mainDB: 'InterPro',
-              mainAccession: intr,
+              main: { key: 'entry' },
+              entry: { db: 'InterPro', accession: intr },
             },
           }}
         >
           {intr}
-        </OldLink>
+        </Link>
       </li>
     </ul>
   </div>

@@ -89,7 +89,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
             data-name={name}
             className={f('menu-item', { visible: this.state[name] || false })}
           >
-            <MenuItem newTo={newTo} activeClass={activeClass}>
+            <MenuItem to={newTo} activeClass={activeClass}>
               {name}
             </MenuItem>
           </li>

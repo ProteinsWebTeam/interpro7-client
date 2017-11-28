@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 /*:: type Props = {
   accession: string | number,
@@ -40,14 +40,18 @@ class TaxIdOrName extends PureComponent /*:: <Props> */ {
     if (Element) {
       return <Element>{displayedText}</Element>;
     }
-    const newTo = {
-      description: {
-        mainType: 'organism',
-        mainDB: 'taxonomy',
-        mainAccession: accession.toString(),
-      },
-    };
-    return <OldLink newTo={newTo}>{displayedText}</OldLink>;
+    return (
+      <Link
+        to={{
+          description: {
+            main: { key: 'organism' },
+            organism: { taxonomyDB: 'taxonomy', taxonomyAccession: accession },
+          },
+        }}
+      >
+        {displayedText}
+      </Link>
+    );
   }
 }
 

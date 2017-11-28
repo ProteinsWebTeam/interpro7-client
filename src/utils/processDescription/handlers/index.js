@@ -1,4 +1,5 @@
 // @flow
+import get from 'lodash-es/set';
 import set from 'lodash-es/set';
 
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
@@ -18,6 +19,7 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
     key: ?PossibleMain,
   |},
   entry: {|
+    isUsed?: boolean,
     integration: ?string,
     db: ?string,
     accession: ?string,
@@ -26,23 +28,27 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
     detail: ?string,
   |},
   protein: {|
+    isUsed?: boolean,
     db: ?string,
     accession: ?string,
     detail: ?string,
   |},
   structure: {|
+    isUsed?: boolean,
     db: ?string,
     accession: ?string,
     chain: ?string,
     detail: ?string,
   |},
   organism: {|
+    isUsed?: boolean,
     taxonomyDB: ?string,
     taxonomyAccession: ?string,
     proteomeDB: ?string,
     proteomeAccession: ?string,
   |},
   set: {|
+    isUsed?: boolean,
     db: ?string,
     accession: ?string,
     detail: ?string,
@@ -65,7 +71,7 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
   key: ?Array<string>,
   getKey: Description => ?Array<string>,
   cleanedUp: ?string,
-  cleanUp: string => ?string,
+  cleanUp: (string, ?Description) => ?string,
   regexp: RegExp,
   match: (string, Description) => ?boolean,
   handle: (Description, string, ?string, Array<string>) => Description,
@@ -96,7 +102,7 @@ const templateHandler /*: Handler */ = {
   // cleaned up version of the value for this handler
   cleanedUp: null,
   // returns cleaned up value
-  cleanUp: value => value.toLowerCase(),
+  cleanUp: (value, _description) => value.toLowerCase(),
   regexp: /.*/,
   // match function for this handler,
   // used after processing parent handler to choose which child
@@ -110,7 +116,11 @@ const templateHandler /*: Handler */ = {
     const key = this.key || this.getKey(description);
     if (key && current) {
       // eslint-disable-next-line no-param-reassign
-      set(description, key, this.cleanedUp || this.cleanUp(current));
+      set(
+        description,
+        key,
+        this.cleanedUp || this.cleanUp(current, description),
+      );
     }
     if (!next) {
       // about to return description
@@ -181,10 +191,10 @@ const typeConstructor = (type /*: PossibleMain */) /*: Handler */ =>
       value: `${type}Handler`,
     },
     getKey: {
-      value: ({ main: { key } }) => (key ? null : ['main', 'key']),
+      value: ({ main: { key } }) => (key ? [type, 'isUsed'] : ['main', 'key']),
     },
-    cleanedUp: {
-      value: type,
+    cleanUp: {
+      value: (_, description) => get(description, ['main', 'key']) ? true : type,
     },
     match: {
       value: (current, { [type]: typeObject }) =>
@@ -513,6 +523,9 @@ export const jobTypeHandler /*: Handler */ = handlerConstructor({
   },
   key: {
     value: ['job', 'type'],
+  },
+  cleanedUp: {
+    value: 'InterProScan',
   },
   regexp: {
     value: /interproscan/i,

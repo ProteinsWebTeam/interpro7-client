@@ -21,7 +21,8 @@ export default (description /*: {[key: string]: string} */) => {
       );
     }
     _description[key] =
-      matchingHandler.cleanedUp || matchingHandler.cleanUp(description[key]);
+      matchingHandler.cleanedUp ||
+      matchingHandler.cleanUp(description[key], description);
   }
   return _description;
 };

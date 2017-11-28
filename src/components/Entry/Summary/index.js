@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
 import Literature from 'components/Entry/Literature';
@@ -94,14 +94,14 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   {
                     // TODO implement right MD ext link
                   }
-                  <OldLink
+                  <Link
                     className={f('ext')}
                     newTo={{
                       description: {},
                     }}
                   >
                     {metadata.source_database} website
-                  </OldLink>
+                  </Link>
                 </div>
               )}
               {metadata.member_databases &&

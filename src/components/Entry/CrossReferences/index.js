@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import AnimatedEntry from 'components/AnimatedEntry';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -14,9 +14,9 @@ const f = foundationPartial(fonts, ebiStyles, local);
 
 const ReferenceItem = ({ url, accession }) => (
   <li>
-    <OldLink href={url} className={f('ext')}>
+    <Link href={url} className={f('ext')}>
       {accession}
-    </OldLink>
+    </Link>
   </li>
 );
 ReferenceItem.propTypes = {

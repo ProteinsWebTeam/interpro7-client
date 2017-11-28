@@ -7,18 +7,27 @@ import { createSelector } from 'reselect';
 
 import description2description from 'utils/processLocation/description2description';
 import description2path from 'utils/processLocation/description2path';
+import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import config from 'config';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToNewLocation, goToCustomLocation } from 'actions/creators';
 
 const happenedWithModifierKey = event =>
   !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 const happenedWithLeftClick = event => event.button === 0;
 
-const getNextLocation = (location, to) =>
-  typeof to === 'function' ? to(location) : to;
+const getNextLocation = (customLocation, to) =>
+  typeof to === 'function' ? to(customLocation) : to;
 
-const generateHref = (nextLocation /*: Object */, href /*: ?string */) => {
+const generateHref = (nextLocation /*: Object */, href /*?: string */) => {
+  if (href) return href;
+  return `${config.root.website.pathname}${descriptionToPath(
+    descriptionToDescription(nextLocation.description),
+  )}?${qsStringify(nextLocation.search)}`.replace(/\?(#|$)/, '');
+};
+
+const oldGenerateHref = (nextLocation /*: Object */, href /*: ?string */) => {
   if (href) return href;
   return `${config.root.website.pathname}${description2path(
     description2description(nextLocation.description),
@@ -44,7 +53,7 @@ const generateClassName = (
   return `${className || ''} ${activeClass}`;
 };
 
-/*:: type Props = {
+/*:: type OldProps = {
   onClick: ?function,
   location: {
     description: Object,
@@ -66,7 +75,7 @@ const generateClassName = (
   activeClass: ?function | string,
 }; */
 
-class _OldLink extends PureComponent /*:: <Props> */ {
+class _OldLink extends PureComponent /*:: <OldProps> */ {
   static propTypes = {
     onClick: T.func,
     location: T.shape({
@@ -128,7 +137,7 @@ class _OldLink extends PureComponent /*:: <Props> */ {
       ...props
     } = this.props;
     const nextLocation = getNextLocation(location, newTo) || {};
-    const _href = generateHref(nextLocation, href);
+    const _href = oldGenerateHref(nextLocation, href);
     const _className =
       generateClassName(className, activeClass, location, nextLocation, href) ||
       '';
@@ -163,4 +172,124 @@ export const OldLink = connect(oldMapStateToProps, { goToNewLocation })(
   _OldLink,
 );
 
-// export default connect(mapStateToProps, { goToNewLocation })(Link);
+/*:: type Props = {
+  onClick: ?function,
+  customLocation: {
+    description: Object,
+    search: Object,
+    hash: string,
+  },
+  children: any,
+  href: ?string,
+  goToCustomLocation: function,
+  target: ?string,
+  to: ?function | {
+    description: Object,
+    search: ?Object,
+    hash: ?string,
+  },
+  style?: ?Object,
+  disabled: ?boolean,
+  className: ?string,
+  activeClass: ?function | string,
+}; */
+
+class Link extends PureComponent /*:: <Props> */ {
+  static propTypes = {
+    onClick: T.func,
+    customLocation: T.shape({
+      description: T.object.isRequired,
+      search: T.object.isRequired,
+      hash: T.string.isRequired,
+    }).isRequired,
+    children: T.any,
+    href: T.string,
+    goToCustomLocation: T.func.isRequired,
+    target: T.string,
+    to: T.oneOfType([
+      T.shape({
+        description: T.object.isRequired,
+        search: T.object,
+        hash: T.string,
+      }),
+      T.func,
+    ]),
+    disabled: T.bool,
+    className: T.string,
+    activeClass: T.oneOfType([T.string, T.func]),
+  };
+
+  handleClick = event => {
+    const {
+      onClick,
+      target,
+      goToCustomLocation,
+      to,
+      href,
+      customLocation,
+    } = this.props;
+    // pass it on to an externally defined handler
+    if (onClick) onClick(event);
+    if (!to && href) return;
+    if (event.defaultPrevented) return;
+    // conditions to ignore handling
+    if (!happenedWithLeftClick(event)) return;
+    if (happenedWithModifierKey(event)) return;
+    if (target) return;
+    // OK, now we can handle it
+    event.preventDefault();
+    if (this.props.disabled) return;
+    goToCustomLocation(getNextLocation(customLocation, to));
+  };
+
+  render() {
+    const {
+      onClick,
+      customLocation,
+      goToCustomLocation,
+      activeClass,
+      className,
+      to,
+      disabled,
+      href,
+      children,
+      ...props
+    } = this.props;
+    const nextLocation = getNextLocation(customLocation, to) || {};
+    const _href = generateHref(nextLocation, href);
+    const _className =
+      generateClassName(
+        className,
+        activeClass,
+        customLocation,
+        nextLocation,
+        href,
+      ) || '';
+    if (disabled) {
+      props.style = {
+        ...(props.style || {}),
+        userSelect: 'none',
+        pointerEvents: 'none',
+        cursor: 'not-allowed',
+        opacity: 0.5,
+      };
+    }
+    return (
+      <a
+        {...props}
+        href={_href}
+        className={_className.trim() || null}
+        onClick={this.handleClick}
+      >
+        {children}
+      </a>
+    );
+  }
+}
+
+const mapStateToProps = createSelector(
+  state => state.customLocation,
+  customLocation => ({ customLocation }),
+);
+
+export default connect(mapStateToProps, { goToCustomLocation })(Link);

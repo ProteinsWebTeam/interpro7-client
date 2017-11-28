@@ -7,7 +7,7 @@ import { stringify as qsStringify } from 'query-string';
 
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import ColorHash from 'color-hash/lib/color-hash';
@@ -155,37 +155,34 @@ class DomainArchitectures extends PureComponent {
             const idaObj = ida2json(obj.IDA);
             return (
               <div key={obj.IDA_FK} className={f('margin-bottom-large')}>
-                <OldLink
-                  newTo={{
+                <Link
+                  to={{
                     description: {
-                      mainType: 'protein',
-                      mainDB: 'UniProt',
-                      focusType: 'entry',
-                      focusDB: 'InterPro',
-                      focusAccession: mainAccession,
+                      main: { key: 'protein' },
+                      protein: { db: 'UniProt' },
+                      entry: { db: 'InterPro', accession: mainAccession },
                     },
                     search: { ida: obj.IDA_FK },
                   }}
                 >
                   There are {obj.unique_proteins} proteins{' '}
-                </OldLink>
+                </Link>
                 with this architecture:<br />
                 {idaObj.domains.map(d => (
                   <span key={d.accessions.join('|')}>
                     {d.accessions.map(acc => (
-                      <OldLink
+                      <Link
                         key={acc}
-                        newTo={{
+                        to={{
                           description: {
-                            mainType: 'entry',
-                            mainDB: 'InterPro',
-                            mainAccession: acc,
+                            main: { key: 'entry' },
+                            entry: { db: 'InterPro', accession: acc },
                           },
                         }}
                       >
                         {' '}
                         {acc}{' '}
-                      </OldLink>
+                      </Link>
                     ))}{' '}
                     -
                   </span>

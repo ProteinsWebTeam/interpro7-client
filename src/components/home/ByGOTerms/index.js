@@ -7,7 +7,7 @@ import { createSelector } from 'reselect';
 
 import { Tooltip } from 'react-tippy';
 
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 
 import { GoList } from 'staticData/home';
@@ -58,19 +58,22 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
               </h6>
               <p>
                 <Tooltip title={e.description}>
-                  <OldLink
-                    newTo={{
-                      description: { mainType: 'entry', mainDB: 'InterPro' },
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: { db: 'InterPro' },
+                      },
                       search: { go_term: e.accession },
                     }}
                   >
                     {(countsE && e.accession && countsE[e.accession]) || '-'}{' '}
                     entries
-                  </OldLink>
+                  </Link>
                 </Tooltip>
                 <br />
                 <Tooltip title={e.description}>
-                  <OldLink
+                  <Link
                     newTo={{
                       description: { mainType: 'protein', mainDB: 'uniprot' },
                       search: { go_term: e.accession },
@@ -78,7 +81,7 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
                   >
                     {(countsP && e.accession && countsP[e.accession]) || '-'}{' '}
                     proteins
-                  </OldLink>
+                  </Link>
                 </Tooltip>
               </p>
             </div>

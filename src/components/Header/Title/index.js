@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -47,11 +47,7 @@ class Title extends PureComponent /*:: <Props> */ {
       >
         <h1 className={styles('main-title', { stuck })}>
           <div className={styles('logo-flex')}>
-            <OldLink
-              newTo={{ description: {} }}
-              title="Back to InterPro homepage"
-              style={{ display: 'flex' }}
-            >
+            <Link to={{ description: {} }} title="Back to InterPro homepage">
               <div className={styles('logo-flex-item', 'logo-icon', { stuck })}>
                 <svg className={styles('icon')} viewBox="0 0 88 88" width="62">
                   <defs>
@@ -96,7 +92,7 @@ class Title extends PureComponent /*:: <Props> */ {
                   mainDB !== 'InterPro' &&
                   mainAccession && <span>&nbsp;- Member</span>}
               </div>
-            </OldLink>
+            </Link>
           </div>
         </h1>
         <h4 className={styles('subtitle', { stuck })}>
