@@ -7,7 +7,11 @@ import TA from 'timeago.js';
 
 import getTableAccess from 'storage/idb';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+
+import ipro from 'styles/interpro-new.css';
+
+const f = foundationPartial(ipro);
 
 let timeago;
 const ONE_MINUTE = 60000;
@@ -123,7 +127,7 @@ class IPScanStatus extends Component {
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
-          <h3>Your InterProScan searches:</h3>
+          <h3>Your InterProScan searches</h3>
           {/* <button
             className={f('button', 'secondary')}
             onClick={this._checkAllUnfinishedJobs}
