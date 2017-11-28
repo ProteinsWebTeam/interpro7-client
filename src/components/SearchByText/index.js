@@ -10,10 +10,11 @@ import { frame } from 'timing-functions/src';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css';
 import local from './style.css';
 
-const f = foundationPartial(interproTheme, local);
+const f = foundationPartial(interproTheme, ipro, local);
 
 class Example extends PureComponent {
   static propTypes = {
@@ -84,7 +85,14 @@ class SearchByText extends PureComponent {
       <div className={f('row')}>
         <div className={f('large-12', 'columns', 'margin-bottom-medium')}>
           <form onSubmit={this.handleSubmit}>
-            <div className={f('secondary', 'callout', 'margin-bottom-none')}>
+            <div
+              className={f(
+                'secondary',
+                'callout',
+                'border',
+                'margin-bottom-none',
+              )}
+            >
               <div className={f('row')}>
                 <div className={f('large-12', 'columns', 'search-input')}>
                   <h3>Search families, domains or GO terms</h3>
