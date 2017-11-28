@@ -77,7 +77,7 @@ class Wrapper extends PureComponent {
   render() {
     return (
       <div className={f('row')}>
-        <div className={f('columns')}>
+        <div className={f('columns', 'margin-bottom-large')}>
           <h3>Search InterPro</h3>
           <ul className={f('tabs', 'main-style', 'margin-top-large')}>
             <li
