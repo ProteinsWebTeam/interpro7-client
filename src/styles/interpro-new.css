@@ -76,6 +76,33 @@ mark {
   background-color: #fcf655;
 }
 
+/* buttons (secondary, alert, hollow) - redefine foundation style*/
+.button.alert {
+  background-color: tomato;
+}
+.button.alert:hover,
+.button.alert:active,
+.button.alert:focus {
+  background-color: #ff6246;
+}
+.button.secondary {
+  background-color: #909090;
+}
+.button.secondary:hover,
+.button.secondary:active,
+.button.secondary:focus {
+  background-color: #909090;
+}
+
+.button.hollow {
+  background-color: transparent;
+}
+.button.hollow:hover,
+.button.hollow:active,
+.button.hollow:focus {
+  background-color: transparent;
+}
+
 .fieldset {
   border: 1px solid #cacaca;
 }
