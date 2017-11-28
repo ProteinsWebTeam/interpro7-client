@@ -21,7 +21,7 @@ const getNextLocation = (location, to) =>
 const generateHref = (nextLocation /*: Object */, href /*: ?string */) => {
   if (href) return href;
   return `${config.root.website.pathname}${description2path(
-    description2description(nextLocation.description)
+    description2description(nextLocation.description),
   )}?${qsStringify(nextLocation.search)}`.replace(/\?(#|$)/, '');
 };
 
@@ -30,7 +30,7 @@ const generateClassName = (
   activeClass /*: ?(string | function) */,
   location /*: Object */,
   nextLocation /*: Object */,
-  href /*: ?string */
+  href /*: ?string */,
 ) => {
   if (href || !(activeClass && nextLocation)) return className;
   if (typeof activeClass === 'function') {
@@ -136,7 +136,7 @@ class Link extends PureComponent /*:: <Props> */ {
       props.style = {
         ...(props.style || {}),
         userSelect: 'none',
-        pointerEvents: 'none',
+        // pointerEvents: 'none',
         cursor: 'not-allowed',
         opacity: 0.5,
       };
@@ -156,7 +156,7 @@ class Link extends PureComponent /*:: <Props> */ {
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(Link);
