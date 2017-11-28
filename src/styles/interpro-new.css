@@ -136,6 +136,9 @@ div#local-title {
 } /*used on protein and proteome page */
 
 /*CALLOUT ALERT WARNING MESSAGE - missing in foundation*/
+.callout.border {
+  border: 1px solid rgba(10, 10, 10, 0.25);
+}
 .callout.alert.withicon::before {
   content: 'l';
   font-family: 'EBI-Generic';
