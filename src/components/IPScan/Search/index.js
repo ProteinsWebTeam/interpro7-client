@@ -23,7 +23,7 @@ import getTableAccess from 'storage/idb';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import interproTheme from 'styles/theme-interpro.css'; /*needed for custom button color*/
+import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
 import local from './style.css';
 
 import example from './example.fasta';
