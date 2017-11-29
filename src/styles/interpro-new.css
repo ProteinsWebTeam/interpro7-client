@@ -233,7 +233,7 @@ div#local-title {
   color: #2eab9f;
 }
 .ico-progress::before {
-  color: #ffb259;
+  color: grey;
 }
 .ico-notfound::before {
   color: tomato;
