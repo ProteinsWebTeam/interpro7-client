@@ -202,7 +202,7 @@ class IPScanStatus extends Component {
                         <td className={f('table-center')}>
                           <Tooltip title={`Job ${status}`}>
                             <time dateTime={lastUpdateDate.toISOString()}>
-                              {status === 'running' ? (
+                              {status === 'running' && (
                                 <span
                                   style={{ fontSize: '200%' }}
                                   className={f(
@@ -212,7 +212,9 @@ class IPScanStatus extends Component {
                                   )}
                                   data-icon="{"
                                 />
-                              ) : status === 'not found' ||
+                              )}
+
+                              {status === 'not found' ||
                               status === 'failure' ? (
                                 <span
                                   style={{ fontSize: '160%' }}
@@ -223,7 +225,9 @@ class IPScanStatus extends Component {
                                   )}
                                   data-icon="x"
                                 />
-                              ) : status === 'finished' ? (
+                              ) : null}
+
+                              {status === 'finished' && (
                                 <span
                                   style={{ fontSize: '160%' }}
                                   className={f(
@@ -233,14 +237,12 @@ class IPScanStatus extends Component {
                                   )}
                                   data-icon="/"
                                 />
-                              ) : (
-                                status
                               )}
                             </time>
                           </Tooltip>
                         </td>
                         <td className={f('button-group')}>
-                          <Tooltip title={`Save job`}>
+                          <Tooltip title="Save job">
                             <button
                               className={f(
                                 'button',
@@ -253,7 +255,7 @@ class IPScanStatus extends Component {
                               ★
                             </button>
                           </Tooltip>
-                          <Tooltip title={`Delete job`}>
+                          <Tooltip title="Delete job">
                             <button
                               className={f('button', 'alert')}
                               title={`delete job`}
