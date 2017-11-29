@@ -4,14 +4,15 @@ import Link from 'components/generic/Link';
 import { connect } from 'react-redux';
 import url from 'url';
 import TA from 'timeago.js';
+import { Tooltip } from 'react-tippy';
 
 import getTableAccess from 'storage/idb';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-
-const f = foundationPartial(ipro);
+import fonts from 'EBI-Icon-fonts/fonts.css';
+const f = foundationPartial(fonts, ipro);
 
 let timeago;
 const ONE_MINUTE = 60000;
@@ -135,10 +136,11 @@ class IPScanStatus extends Component {
           <table className={f('hover')}>
             <thead>
               <tr>
-                <th>job ID</th>
-                <th>created</th>
-                <th>status</th>
-                <th>actions</th>
+                <th>Job ID</th>
+                <th>Date</th>
+                <th>Created</th>
+                <th className={f('table-center')}>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -180,43 +182,88 @@ class IPScanStatus extends Component {
                           )}
                         </td>
                         <td>
-                          <time
-                            dateTime={createdDate.toISOString()}
-                            title={createdDate.toLocaleString()}
-                          >
-                            {timeago.format(created)}
-                          </time>
+                          <Tooltip title={`Created ${timeago.format(created)}`}>
+                            <time dateTime={createdDate.toISOString()}>
+                              {createdDate.toLocaleString()}
+                            </time>
+                          </Tooltip>
                         </td>
                         <td>
-                          <time
-                            dateTime={lastUpdateDate.toISOString()}
-                            title={`last update ${timeago.format(lastUpdate)}`}
+                          <Tooltip
+                            title={`Last modified ${timeago.format(
+                              lastUpdate,
+                            )}`}
                           >
-                            {status}
-                          </time>
+                            <time dateTime={createdDate.toISOString()}>
+                              {timeago.format(lastUpdate)}
+                            </time>
+                          </Tooltip>
+                        </td>
+                        <td className={f('table-center')}>
+                          <Tooltip title={`Job ${status}`}>
+                            <time dateTime={lastUpdateDate.toISOString()}>
+                              {status === 'running' ? (
+                                <span
+                                  style={{ fontSize: '200%' }}
+                                  className={f(
+                                    'icon',
+                                    'icon-generic',
+                                    'ico-progress',
+                                  )}
+                                  data-icon="{"
+                                />
+                              ) : status === 'not found' ||
+                              status === 'failure' ? (
+                                <span
+                                  style={{ fontSize: '160%' }}
+                                  className={f(
+                                    'icon',
+                                    'icon-functional',
+                                    'ico-notfound',
+                                  )}
+                                  data-icon="x"
+                                />
+                              ) : status === 'finished' ? (
+                                <span
+                                  style={{ fontSize: '160%' }}
+                                  className={f(
+                                    'icon',
+                                    'icon-functional',
+                                    'ico-confirmed',
+                                  )}
+                                  data-icon="/"
+                                />
+                              ) : (
+                                status
+                              )}
+                            </time>
+                          </Tooltip>
                         </td>
                         <td className={f('button-group')}>
-                          <button
-                            className={f(
-                              'button',
-                              saved ? 'warning' : 'secondary',
-                            )}
-                            title={`save job ${id || ''}`}
-                            type="button"
-                            data-id={jobId}
-                            onClick={this._handleSave}
-                          >
-                            ★
-                          </button>
-                          <button
-                            className={f('button', 'alert')}
-                            title={`delete job ${id || ''}`}
-                            type="button"
-                            data-id={jobId}
-                            onClick={this._handleDelete}
-                          >
-                            ✖
-                          </button>
+                          <Tooltip title={`Save job`}>
+                            <button
+                              className={f(
+                                'button',
+                                saved ? 'warning' : 'secondary',
+                              )}
+                              type="button"
+                              data-id={jobId}
+                              onClick={this._handleSave}
+                            >
+                              ★
+                            </button>
+                          </Tooltip>
+                          <Tooltip title={`Delete job`}>
+                            <button
+                              className={f('button', 'alert')}
+                              title={`delete job`}
+                              type="button"
+                              data-id={jobId}
+                              onClick={this._handleDelete}
+                            >
+                              ✖
+                            </button>
+                          </Tooltip>
                         </td>
                       </tr>
                     );
