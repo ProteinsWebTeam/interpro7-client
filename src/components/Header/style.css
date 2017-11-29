@@ -85,7 +85,7 @@ background-size: 100%, 100%;
 
 .ebi {
   composes: standard;
-  background-color: var(--colors-dark);
+  background-color: var(--colors-ebidark);
   color: var(--colors-nearly-white);
 
   @nest & > * {
