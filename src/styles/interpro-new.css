@@ -138,7 +138,6 @@ div#local-title {
 /****************************** END Override EBI  global**********************/
 
 /******************************Local style***************************************/
-
 .tag {
   border-radius: 4px;
 } /*used on protein and proteome page */
@@ -229,27 +228,18 @@ div#local-title {
   /*vertical-align: middle;*/
 }
 /*/MEMBER DATABASE icons*/
-/*ICONS*/
-/*.nav-toggle {position: absolute; top: 28px;  right: 55px;}*/
-/*.nav-toggle span, .nav-toggle span:before, .nav-toggle span:after { cursor: pointer; border-radius: 1px; height: 5px; width: 35px;  background: white;  position: absolute; display: block; content: '';*/
-/*}*/
-/*.nav-toggle span:before {top: -10px;}*/
-/*.nav-toggle span:after {bottom: -10px;}*/
-/*.nav-toggle span, .nav-toggle span:before, .nav-toggle span:after {*/
-/*transition: all 500ms ease-in-out;*/
-/*}*/
-/*.nav-toggle.active span {*/
-/*background-color: transparent;*/
-/*}*/
-/*.nav-toggle.active span:before, .nav-toggle.active span:after {*/
-/*top: 0;*/
-/*}*/
-/*.nav-toggle.active span:before {*/
-/*transform: rotate(45deg);*/
-/*}*/
-/*.nav-toggle.active span:after {*/
-/*transform: rotate(-45deg);*/
-/*}*/
+/*I5 result page icons*/
+.ico-confirmed::before {
+  color: #2eab9f;
+}
+.ico-progress::before {
+  color: #ffb259;
+}
+.ico-notfound::before {
+  color: tomato;
+}
+/*/I5 result page icons*/
+/*/ICONS*/
 
 /******************************BANNER*********************************/
 .masthead h1 span {
@@ -465,9 +455,6 @@ h6 small {
 /****************************** TABLE *********************************/
 .table-center {
   text-align: center;
-}
-html .table-center .icon-functional::before {
-  color: #71818a;
 }
 
 /*Filter menu option*/
