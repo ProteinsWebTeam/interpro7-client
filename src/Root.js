@@ -9,8 +9,8 @@ import 'styles/foundation';
 import 'ebi-framework/css/ebi-global.scss';
 import 'styles/global.css';
 // import 'styles/theme-interpro.css';
-import 'styles/interpro-new.css';
 import 'react-tippy/dist/tippy.css';
+import 'styles/interpro-new.css';
 
 import loadable from 'higherOrder/loadable';
 
