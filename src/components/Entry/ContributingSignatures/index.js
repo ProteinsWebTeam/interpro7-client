@@ -52,7 +52,7 @@ const SignatureLink = ({ accession, db, data }) => {
       <div className={f('md-list-text')}>
         <small>
           <span style={{ color: '#4b555b' }}>{db}:</span>{' '}
-          <Tooltip title={tooltipContent}>
+          <Tooltip title={`${tooltipContent} (${accession})`}>
             <span>{accession}</span>
           </Tooltip>
         </small>
