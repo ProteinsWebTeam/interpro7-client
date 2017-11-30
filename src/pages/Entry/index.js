@@ -6,7 +6,7 @@ import { Tooltip } from 'react-tippy';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import { OldSwitch } from 'components/generic/Switch';
 import { OldLink } from 'components/generic/Link';
-import { OldRedirect } from 'components/generic/Redirect';
+import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
 import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
@@ -392,11 +392,11 @@ Summary.propTypes = {
 };
 
 const RedirectToInterPro = () => (
-  <OldRedirect
+  <Redirect
     to={{
       description: {
-        mainType: 'entry',
-        mainDB: 'InterPro',
+        main: { key: 'entry' },
+        entry: { db: 'InterPro' },
       },
     }}
   />

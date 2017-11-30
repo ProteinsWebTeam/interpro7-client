@@ -19,7 +19,7 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
     key: ?PossibleMain,
   |},
   entry: {|
-    isUsed?: boolean,
+    isFilter?: boolean,
     integration: ?string,
     db: ?string,
     accession: ?string,
@@ -28,27 +28,27 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
     detail: ?string,
   |},
   protein: {|
-    isUsed?: boolean,
+    isFilter?: boolean,
     db: ?string,
     accession: ?string,
     detail: ?string,
   |},
   structure: {|
-    isUsed?: boolean,
+    isFilter?: boolean,
     db: ?string,
     accession: ?string,
     chain: ?string,
     detail: ?string,
   |},
   organism: {|
-    isUsed?: boolean,
+    isFilter?: boolean,
     db: ?string,
     accession: ?string,
     proteomeDB: ?string,
     proteomeAccession: ?string,
   |},
   set: {|
-    isUsed?: boolean,
+    isFilter?: boolean,
     db: ?string,
     accession: ?string,
     detail: ?string,
@@ -191,7 +191,7 @@ const typeConstructor = (type /*: PossibleMain */) /*: Handler */ =>
       value: `${type}Handler`,
     },
     getKey: {
-      value: ({ main: { key } }) => (key ? [type, 'isUsed'] : ['main', 'key']),
+      value: ({ main: { key } }) => (key ? [type, 'isFilter'] : ['main', 'key']),
     },
     cleanUp: {
       value: (_, description) => get(description, ['main', 'key']) ? true : type,

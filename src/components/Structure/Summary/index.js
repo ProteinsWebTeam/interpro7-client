@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Embed from 'components/Embed';
@@ -75,20 +75,21 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                   <div>
                     Chains:{' '}
                     {chains.map(chain => (
-                      <OldLink
+                      <Link
                         key={chain}
-                        newTo={location => ({
+                        to={location => ({
                           ...location,
                           description: {
-                            mainType: location.description.mainType,
-                            mainDB: location.description.mainDB,
-                            mainAccession: location.description.mainAccession,
-                            mainChain: chain,
+                            ...location.description,
+                            structure: {
+                              ...location.description.structure,
+                              chain,
+                            },
                           },
                         })}
                       >
                         {chain}
-                      </OldLink>
+                      </Link>
                     ))}
                   </div>
                 </div>

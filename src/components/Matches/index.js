@@ -3,7 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
@@ -118,19 +118,18 @@ const Matches = (
           acc /*: string */,
           { source_database: sourceDatabase } /*: {source_database: string} */,
         ) => (
-          <OldLink
-            newTo={{
+          <Link
+            to={{
               description: {
-                mainType: primary,
-                mainDB: sourceDatabase,
-                mainAccession: acc,
+                main: { key: primary },
+                [primary]: { db: sourceDatabase, accession: acc },
               },
             }}
           >
             <span className={f('acc-row')}>
               <HighlightedText text={acc} textToHighlight={search.search} />
             </span>
-          </OldLink>
+          </Link>
         )}
       >
         {primary === 'organism' ? 'Tax Id' : 'Accession'}
@@ -144,17 +143,16 @@ const Matches = (
             source_database: sourceDatabase,
           } /*: {accession: string, source_database: string} */,
         ) => (
-          <OldLink
-            newTo={{
+          <Link
+            to={{
               description: {
-                mainType: primary,
-                mainDB: sourceDatabase,
-                mainAccession: accession,
+                main: { key: primary },
+                [primary]: { db: sourceDatabase, accession },
               },
             }}
           >
             <HighlightedText text={name} textToHighlight={search.search} />
-          </OldLink>
+          </Link>
         )}
       />
       <Column

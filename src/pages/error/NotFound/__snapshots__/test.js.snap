@@ -26,22 +26,22 @@ exports[`<NotFound /> should render 1`] = `
       <br />
       <p>
         Double check the URL or go back to the 
-        <Connect(_OldLink)
-          newTo={
+        <Connect(Link)
+          to={
             Object {
               "description": Object {},
             }
           }
         >
           homepage
-        </Connect(_OldLink)>
+        </Connect(Link)>
         . If you continue to get this page, contact us using the 
-        <Connect(_OldLink)
+        <Connect(Link)
           href="http://www.ebi.ac.uk/support/interpro-general-query"
           target="_blank"
         >
           EMBL-EBI feedback form
-        </Connect(_OldLink)>
+        </Connect(Link)>
       </p>
       <br />
       <h3>
@@ -49,69 +49,83 @@ exports[`<NotFound /> should render 1`] = `
       </h3>
       <ul>
         <li>
-          <Connect(_OldLink)
-            newTo={
+          <Connect(Link)
+            to={
               Object {
                 "description": Object {
-                  "other": "release_notes",
+                  "other": Array [
+                    "release_notes",
+                  ],
                 },
               }
             }
           >
             What’s new in InterPro?
-          </Connect(_OldLink)>
+          </Connect(Link)>
         </li>
         <li>
-          <Connect(_OldLink)
-            newTo={
+          <Connect(Link)
+            to={
               Object {
                 "description": Object {
-                  "other": "help",
+                  "other": Array [
+                    "help",
+                    "training",
+                  ],
                 },
               }
             }
           >
             InterPro Training and tutorial material
-          </Connect(_OldLink)>
+          </Connect(Link)>
         </li>
         <li>
-          <Connect(_OldLink)
-            newTo={
+          <Connect(Link)
+            to={
               Object {
                 "description": Object {
-                  "other": "help",
+                  "other": Array [
+                    "help",
+                    "faq",
+                  ],
                 },
               }
             }
           >
             InterPro FAQs
-          </Connect(_OldLink)>
+          </Connect(Link)>
         </li>
         <li>
-          <Connect(_OldLink)
-            newTo={
+          <Connect(Link)
+            to={
               Object {
                 "description": Object {
-                  "other": "help",
+                  "other": Array [
+                    "help",
+                    "documentation",
+                  ],
                 },
               }
             }
           >
             InterPro Documentation
-          </Connect(_OldLink)>
+          </Connect(Link)>
         </li>
         <li>
-          <Connect(_OldLink)
-            newTo={
+          <Connect(Link)
+            to={
               Object {
                 "description": Object {
-                  "other": "help",
+                  "other": Array [
+                    "help",
+                    "support",
+                  ],
                 },
               }
             }
           >
-            InterPro Help/support
-          </Connect(_OldLink)>
+            InterPro Help/Support
+          </Connect(Link)>
         </li>
       </ul>
     </div>

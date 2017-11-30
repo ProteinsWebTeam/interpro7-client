@@ -3,8 +3,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { OldLink } from 'components/generic/Link';
-import { OldRedirect } from 'components/generic/Redirect';
+import Link from 'components/generic/Link';
+import Redirect from 'components/generic/Redirect';
 import Table, { Column, Exporter } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -44,12 +44,11 @@ class SearchResults extends PureComponent {
       payload.entries[0].id === search.search
     ) {
       return (
-        <OldRedirect
+        <Redirect
           to={{
             description: {
-              mainType: 'entry',
-              mainDB: 'InterPro',
-              mainAccession: search.search,
+              main: { key: 'entry' },
+              entry: { db: 'InterPro', accession: search.search },
             },
           }}
         />
@@ -59,12 +58,11 @@ class SearchResults extends PureComponent {
       payload.entries[0].fields.PDB.indexOf(search.search) !== NOT_FOUND
     ) {
       return (
-        <OldRedirect
+        <Redirect
           to={{
             description: {
-              mainType: 'structure',
-              mainDB: 'PDB',
-              mainAccession: search.search,
+              main: { key: 'structure' },
+              entry: { db: 'PDB', accession: search.search },
             },
           }}
         />
@@ -74,12 +72,11 @@ class SearchResults extends PureComponent {
       payload.entries[0].fields.UNIPROT.indexOf(search.search) !== NOT_FOUND
     ) {
       return (
-        <OldRedirect
+        <Redirect
           to={{
             description: {
-              mainType: 'protein',
-              mainDB: 'UniProt',
-              mainAccession: search.search,
+              main: { key: 'protein' },
+              protein: { db: 'UniProt', accession: search.search },
             },
           }}
         />
@@ -100,17 +97,16 @@ class SearchResults extends PureComponent {
         <Column
           dataKey="id"
           renderer={id => (
-            <OldLink
-              newTo={{
+            <Link
+              to={{
                 description: {
-                  mainType: 'entry',
-                  mainDB: 'InterPro',
-                  mainAccession: id,
+                  main: { key: 'entry' },
+                  entry: { db: 'InterPro', accession: id },
                 },
               }}
             >
               {id}
-            </OldLink>
+            </Link>
           )}
           headerStyle={{ width: '200px' }}
         >

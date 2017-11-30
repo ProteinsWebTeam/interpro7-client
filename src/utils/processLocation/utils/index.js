@@ -1,6 +1,6 @@
 // @flow
 import * as handlers from 'utils/processLocation/handlers';
-/*:: import type { Handler } from 'utils/processLocation/handlers'; */
+//:: import type { Handler } from 'utils/processLocation/handlers';
 
 export const getEmptyDescription = () => ({
   other: null,

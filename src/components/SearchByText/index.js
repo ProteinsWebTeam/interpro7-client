@@ -4,13 +4,15 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 import { frame } from 'timing-functions/src';
 
 import { foundationPartial } from 'styles/foundation';
+
 import interproTheme from 'styles/theme-interpro.css';
 import s from './style.css';
+
 const f = foundationPartial(interproTheme, s);
 
 class Example extends PureComponent {
@@ -23,14 +25,16 @@ class Example extends PureComponent {
     return (
       <i>
         {' '}
-        <OldLink
-          newTo={{
-            description: { mainType: 'search', mainDB: 'text' },
-            search: { search: value },
+        <Link
+          to={{
+            description: {
+              main: { key: 'search' },
+              search: { type: 'text', value },
+            },
           }}
         >
           {value}
-        </OldLink>
+        </Link>
       </i>
     );
   }

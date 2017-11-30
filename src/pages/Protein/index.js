@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import { OldSwitch } from 'components/generic/Switch';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import NumberLabel from 'components/NumberLabel';
 import MemberDBTabs from 'components/MemberDBTabs';
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
@@ -66,12 +66,17 @@ class Overview extends PureComponent {
       <ul className={f('card')}>
         {Object.entries(payload.proteins || {}).map(([name, count]) => (
           <li key={name}>
-            <OldLink
-              newTo={{ description: { mainType: 'protein', mainDB: name } }}
+            <Link
+              to={{
+                description: {
+                  main: { key: 'protein' },
+                  protein: { db: name },
+                },
+              }}
             >
               {name}
               {Number.isFinite(count) ? ` (${count})` : ''}
-            </OldLink>
+            </Link>
           </li>
         ))}
       </ul>
@@ -141,40 +146,26 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */) => (
-                <OldLink
-                  // style={{
-                  // display:'flex',
-                  // flexWrap: 'nowrap',
-                  // alignItems:'center'}}
-                  newTo={location => ({
+                <Link
+                  to={location => ({
                     ...location,
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: accession,
+                      main: { key: location.description.mainType },
+                      [location.description.mainType]: {
+                        db: location.description.mainDB,
+                        accession,
+                      },
                     },
                     search: {},
                   })}
                 >
-                  {
-                    // <span
-                    // style={{
-                    //   width:'0.6rem',
-                    //   height:'0.6rem',
-                    //   margin: '0 0.2rem 0 0',
-                    //   backgroundColor: colorHash.hex(row.accession),
-                    //   borderRadius: '0.2rem'
-                    //   }}
-                    // >
-                    // </span>
-                  }
                   <span className={f('acc-row')}>
                     <HighlightedText
                       text={accession}
                       textToHighlight={search.search}
                     />
                   </span>
-                </OldLink>
+                </Link>
               )}
             >
               Accession
@@ -185,13 +176,15 @@ class List extends PureComponent {
                 name /*: string */,
                 { accession } /*: {accession: string} */,
               ) => (
-                <OldLink
-                  newTo={location => ({
+                <Link
+                  to={location => ({
                     ...location,
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: accession,
+                      main: { key: location.description.mainType },
+                      [location.description.mainType]: {
+                        db: location.description.mainDB,
+                        accession,
+                      },
                     },
                     search: {},
                   })}
@@ -200,7 +193,7 @@ class List extends PureComponent {
                     text={name}
                     textToHighlight={search.search}
                   />
-                </OldLink>
+                </Link>
               )}
             >
               Name

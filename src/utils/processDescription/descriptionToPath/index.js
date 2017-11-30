@@ -3,9 +3,19 @@ import get from 'lodash-es/get';
 
 import descriptionItemToHandlers from 'utils/processDescription/descriptionItemToHandlers';
 
-export default (description /*: {[key: string]: ?string} */) => {
+/*:: import type { Description } from 'utils/processDescription/handlers'; */
+
+// prettier-ignore
+const pathForPart = (
+  type/*: string */,
+  values/*: {|[key: string]: ?(string | boolean)|} */
+)/*: string */ => {
+  return [type, ...Object.values(values)].filter(part => typeof part === 'string').join('/');
+};
+
+export default (description /*: Description */) => {
   let output = '/';
-  if (!description.main.key) {
+  if (!(description.main && description.main.key)) {
     return (
       output +
       Object.values(description.other)
@@ -13,21 +23,13 @@ export default (description /*: {[key: string]: ?string} */) => {
         .join('/')
     );
   }
-  return '';
-  // const {[description.main.key]: main, other, main: _, ...filter} = description;
-  // debugger;
-  // for (const key of descriptionItemToHandlers.keys()) {
-  //   const value = get(description, key);
-  //   if (value) {
-  //     // filter out empty values
-  //     output += value + '/'; // eslint-disable-line prefer-template
-  //     if (key === 'other' || key === 'mainDetail') {
-  //       // break before if dead end
-  //       break;
-  //     }
-  //   }
-  // }
-  // output += mainParts.filter(Boolean).join('/');
-  // if (filterParts.length) output += `/${filterParts.filter(Boolean).join('/')}`;
-  // return output;
+  const main = description.main.key;
+  output += `${pathForPart(main, description[main])}/`;
+  const filters = Object.entries(description).filter(
+    ([, { isFilter }]) => isFilter,
+  );
+  return filters.reduce(
+    (acc, [key, values]) => `${output}${pathForPart(key, values)}/`,
+    output,
+  );
 };

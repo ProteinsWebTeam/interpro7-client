@@ -1,7 +1,7 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4] }]*/
 import React from 'react';
 import T from 'prop-types';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 import config from 'config';
 
@@ -53,20 +53,19 @@ const Footer = ({
           </li>
         ) : (
           <li>
-            <OldLink
-              newTo={({ description, search, hash }) => ({
-                description,
+            <Link
+              to={location => ({
+                ...location,
                 search: {
-                  ...search,
-                  page: search.page - 1,
+                  ...location.search,
+                  page: (location.search.page || 1) - 1,
                   page_size: pageSize,
                   search: pagination.search,
                 },
-                hash,
               })}
             >
               Previous
-            </OldLink>
+            </Link>
           </li>
         )}
         {pages.map(e => {
@@ -82,20 +81,19 @@ const Footer = ({
           }
           return (
             <li key={e} className={page === e ? f('current') : ''}>
-              <OldLink
-                newTo={({ description, search, hash }) => ({
-                  description,
+              <Link
+                to={location => ({
+                  ...location,
                   search: {
-                    ...search,
+                    ...location.search,
                     page: e,
                     page_size: pageSize,
                     search: pagination.search,
                   },
-                  hash,
                 })}
               >
                 {e}
-              </OldLink>
+              </Link>
             </li>
           );
         })}
@@ -105,8 +103,8 @@ const Footer = ({
           </li>
         ) : (
           <li>
-            <OldLink
-              newTo={location => ({
+            <Link
+              to={location => ({
                 ...location,
                 search: {
                   ...location.search,
@@ -115,7 +113,7 @@ const Footer = ({
               })}
             >
               Next
-            </OldLink>
+            </Link>
           </li>
         )}
       </ul>

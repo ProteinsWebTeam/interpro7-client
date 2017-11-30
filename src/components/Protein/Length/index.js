@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 class Length extends PureComponent {
   static propTypes = {
@@ -15,18 +15,24 @@ class Length extends PureComponent {
     const { metadata: { length, fragment } } = this.props;
     let fragmentText;
     if (fragment) {
-      fragmentText = ` (${fragment === 'N' ? 'complete' : 'fragemnt'})`;
+      fragmentText = ` (${fragment === 'N' ? 'complete' : 'fragment'})`;
     }
     return (
       <div>
         {'Length: '}
-        <OldLink
-          newTo={({ description }) => ({
-            description: { ...description, mainDetail: 'sequence' },
+        <Link
+          to={({ description }) => ({
+            description: {
+              ...description,
+              [description.main.key]: {
+                ...description[description.main.key],
+                detail: 'sequence',
+              },
+            },
           })}
         >
           {length} amino acids{fragmentText}
-        </OldLink>
+        </Link>
       </div>
     );
   }

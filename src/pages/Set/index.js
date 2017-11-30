@@ -3,7 +3,7 @@ import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import { OldSwitch } from 'components/generic/Switch';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import MemberDBTabs from 'components/MemberDBTabs';
 import Table, {
   Column,
@@ -22,13 +22,15 @@ import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
+import { setDB } from 'utils/processLocation/handlers';
+
 import { foundationPartial } from 'styles/foundation';
 
 import global from 'styles/global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
-import { setDB } from 'utils/processLocation/handlers';
+
 const f = foundationPartial(fonts, pageStyle, ipro, global);
 
 // const SVG_WIDTH = 100;
@@ -64,12 +66,14 @@ class Overview extends PureComponent {
           .filter(set => set[0] !== 'kegg')
           .map(([name, count]) => (
             <li key={name}>
-              <OldLink
-                newTo={{ description: { mainType: 'set', mainDB: name } }}
+              <Link
+                to={{
+                  description: { main: { key: 'set' }, set: { db: name } },
+                }}
               >
                 {name}
                 {Number.isFinite(count) ? ` (${count})` : ''}
-              </OldLink>
+              </Link>
             </li>
           ))}
       </ul>
@@ -125,9 +129,7 @@ class List extends PureComponent {
                   </a>
                 </li>
                 <li>
-                  <a target="_blank" rel="noopener noreferrer" href={url}>
-                    Open in API web view
-                  </a>
+                  <Link href={url}>Open in API web view</Link>
                 </li>
               </ul>
             </Exporter>
@@ -138,13 +140,15 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, { source_database }) => (
-                <OldLink
-                  newTo={location => ({
+                <Link
+                  to={location => ({
                     ...location,
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: source_database,
-                      mainAccession: accession,
+                      main: { key: location.description.mainType },
+                      [location.description.mainType]: {
+                        db: source_database,
+                        accession,
+                      },
                     },
                   })}
                 >
@@ -154,7 +158,7 @@ class List extends PureComponent {
                       textToHighlight={search.search}
                     />
                   </span>
-                </OldLink>
+                </Link>
               )}
             >
               Accession
@@ -165,13 +169,15 @@ class List extends PureComponent {
                 name /*: string */,
                 { accession, source_database } /*: {accession: string} */,
               ) => (
-                <OldLink
-                  newTo={location => ({
+                <Link
+                  to={location => ({
                     ...location,
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: source_database,
-                      mainAccession: accession,
+                      main: { key: location.description.mainType },
+                      [location.description.mainType]: {
+                        db: source_database,
+                        accession,
+                      },
                     },
                   })}
                 >
@@ -179,7 +185,7 @@ class List extends PureComponent {
                     text={name}
                     textToHighlight={search.search}
                   />
-                </OldLink>
+                </Link>
               )}
             >
               Name

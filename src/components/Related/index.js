@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
 import omit from 'lodash-es/omit';
 
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import description2path from 'utils/processLocation/description2path';
 import loadData from 'higherOrder/loadData';
 
@@ -14,14 +14,14 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import { toPlural } from 'utils/pages';
 
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
+import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
+import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
+
 import { foundationPartial } from 'styles/foundation';
 
 import global from 'styles/global.css';
 const f = foundationPartial(global);
-
-import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
-import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
-import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
 
 class ObjectToList extends PureComponent {
   static propTypes = {
@@ -71,17 +71,17 @@ class _RelatedSimple extends PureComponent {
         <ObjectToList
           obj={secondaryData}
           component={({ k: db, value }) => (
-            <OldLink
-              newTo={location => ({
+            <Link
+              to={location => ({
                 ...location,
                 description: {
-                  mainType: focusType,
-                  mainDB: db,
+                  main: { key: focusType },
+                  [focusType]: { db },
                 },
               })}
             >
               {db}: {value}
-            </OldLink>
+            </Link>
           )}
         />
       </div>

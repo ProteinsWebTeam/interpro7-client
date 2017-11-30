@@ -2,7 +2,7 @@
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
 
-//:: import type { Description } from 'utils/processDescription/handlers'; */
+//:: import type { Description } from 'utils/processDescription/handlers';
 
 //:: type Location = {pathname: string, search: Object, hash: string};
 /*:: export type CustomLocation = {|

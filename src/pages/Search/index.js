@@ -3,8 +3,8 @@ import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import { OldSwitch } from 'components/generic/Switch';
-import { OldLink } from 'components/generic/Link';
-import { OldRedirect } from 'components/generic/Redirect';
+import Link from 'components/generic/Link';
+import Redirect from 'components/generic/Redirect';
 import SearchResults from 'components/SearchResults';
 
 import loadable from 'higherOrder/loadable';
@@ -66,7 +66,9 @@ const routes = new Set([
 ]);
 
 const RedirectToText = () => (
-  <OldRedirect to={{ description: { mainType: 'search', mainDB: 'text' } }} />
+  <Redirect
+    to={{ description: { main: { key: 'search' }, search: { type: 'text' } } }}
+  />
 );
 
 class Wrapper extends PureComponent {
@@ -85,28 +87,34 @@ class Wrapper extends PureComponent {
               onMouseOver={SearchByText.preload}
               onFocus={SearchByText.preload}
             >
-              <OldLink
-                newTo={{
-                  description: { mainType: 'search', mainDB: 'text' },
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'search' },
+                    search: { type: 'text' },
+                  },
                 }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 by text
-              </OldLink>
+              </Link>
             </li>
             <li
               className={f('tabs-title')}
               onMouseOver={IPScanSearchAndStatus.preload}
               onFocus={IPScanSearchAndStatus.preload}
             >
-              <OldLink
-                newTo={{
-                  description: { mainType: 'search', mainDB: 'sequence' },
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'search' },
+                    search: { type: 'sequence' },
+                  },
                 }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 by sequence
-              </OldLink>
+              </Link>
             </li>
           </ul>
           <div className={f('tabs', 'tabs-content')}>
