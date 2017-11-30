@@ -72,7 +72,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
                 <h5>
                   {type}
                   &nbsp;
-                  <Tooltip title={description}>
+                  <Tooltip animation="shift" arrow="true" title={description}>
                     <span
                       className={f('small', 'icon', 'icon-generic')}
                       data-icon="i"
