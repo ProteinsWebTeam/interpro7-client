@@ -19,7 +19,7 @@ import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
-import local from '../styles.css';
+import local from './style.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
@@ -32,14 +32,18 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
     const countsE = this.props.data.payload;
     const countsP = this.props.dataProtein.payload;
     return (
-      <div className={f('md-list')}>
+      <div className={f('go-list')}>
         <AnimatedEntry className={f('row')} element="div">
           {GoList.map(e => (
             <div
               className={f('columns', 'medium-3', 'large-3', 'text-center')}
               key={e.title}
             >
-              <Tooltip title={e.category}>
+              <Tooltip
+                animation="shift"
+                arrow="true"
+                title={`${e.category} category`}
+              >
                 <span
                   style={{ color: e.color }}
                   className={f('small', 'bullet-icon')}
@@ -49,7 +53,11 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
               </Tooltip>
               <h6>
                 {e.title}&nbsp;
-                <Tooltip title={e.description}>
+                <Tooltip
+                  animation="shift"
+                  arrow="true"
+                  title={`${e.description} for ${e.title}`}
+                >
                   <span
                     className={f('small', 'icon', 'icon-generic')}
                     data-icon="i"
@@ -57,26 +65,36 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
                 </Tooltip>
               </h6>
               <p>
-                <Tooltip title={e.description}>
+                <Tooltip
+                  animation="shift"
+                  arrow="true"
+                  title={`${(countsE && e.accession && countsE[e.accession]) ||
+                    'no'} entries matching ${e.title}`}
+                >
                   <Link
                     newTo={{
                       description: { mainType: 'entry', mainDB: 'InterPro' },
                       search: { go_term: e.accession },
                     }}
                   >
-                    {(countsE && e.accession && countsE[e.accession]) || '-'}{' '}
+                    {(countsE && e.accession && countsE[e.accession]) || 'no'}{' '}
                     entries
                   </Link>
                 </Tooltip>
                 <br />
-                <Tooltip title={e.description}>
+                <Tooltip
+                  animation="shift"
+                  arrow="true"
+                  title={`${(countsP && e.accession && countsP[e.accession]) ||
+                    'no'} proteins matching ${e.title}`}
+                >
                   <Link
                     newTo={{
                       description: { mainType: 'protein', mainDB: 'uniprot' },
                       search: { go_term: e.accession },
                     }}
                   >
-                    {(countsP && e.accession && countsP[e.accession]) || '-'}{' '}
+                    {(countsP && e.accession && countsP[e.accession]) || 'no'}{' '}
                     proteins
                   </Link>
                 </Tooltip>
