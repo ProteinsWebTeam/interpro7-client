@@ -211,6 +211,7 @@ class IPScanStatus extends Component {
                                     'ico-progress',
                                   )}
                                   data-icon="{"
+                                  aria-label="Job running"
                                 />
                               )}
 
@@ -224,6 +225,7 @@ class IPScanStatus extends Component {
                                     'ico-notfound',
                                   )}
                                   data-icon="x"
+                                  aria-label="Job failed or not found"
                                 />
                               ) : null}
 
@@ -236,6 +238,7 @@ class IPScanStatus extends Component {
                                     'ico-confirmed',
                                   )}
                                   data-icon="/"
+                                  aria-label="Job finished"
                                 />
                               )}
                             </time>
@@ -251,6 +254,7 @@ class IPScanStatus extends Component {
                               type="button"
                               data-id={jobId}
                               onClick={this._handleSave}
+                              aria-label="Save job"
                             >
                               ★
                             </button>
@@ -258,10 +262,10 @@ class IPScanStatus extends Component {
                           <Tooltip title="Delete job">
                             <button
                               className={f('button', 'alert')}
-                              title={`delete job`}
                               type="button"
                               data-id={jobId}
                               onClick={this._handleDelete}
+                              aria-label="Delete job"
                             >
                               ✖
                             </button>
