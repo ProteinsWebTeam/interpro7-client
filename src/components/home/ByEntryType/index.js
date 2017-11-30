@@ -63,12 +63,17 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
               key={type}
             >
               <Link
+                className={f('block')}
                 newTo={{
                   description: { mainType: 'entry', mainDB: 'InterPro' },
                   search: { type },
                 }}
               >
-                <interpro-type type={type} size="4em" />
+                <interpro-type
+                  type={type}
+                  size="4em"
+                  style={{ display: 'block', paddingTop: '1rem' }}
+                />
                 <h5>
                   {type}
                   &nbsp;
