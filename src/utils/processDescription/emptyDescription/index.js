@@ -26,8 +26,8 @@ export default () /*: Description */ => Object.freeze({
     detail: null,
   }),
   organism: Object.seal({
-    taxonomyDB: null,
-    taxonomyAccession: null,
+    db: null,
+    accession: null,
     proteomeDB: null,
     proteomeAccession: null,
   }),

@@ -105,8 +105,8 @@ const ParagraphWithTags = ({ children }) => (
                 description: {
                   main: { key: 'organism ' },
                   organism: {
-                    taxonomyDB: 'taxonomy',
-                    taxonomyAccession: attrs.tax_id,
+                    db: 'taxonomy',
+                    accession: attrs.tax_id,
                   },
                 },
               }}

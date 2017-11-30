@@ -42,8 +42,8 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
   |},
   organism: {|
     isUsed?: boolean,
-    taxonomyDB: ?string,
-    taxonomyAccession: ?string,
+    db: ?string,
+    accession: ?string,
     proteomeDB: ?string,
     proteomeAccession: ?string,
   |},
@@ -381,7 +381,7 @@ export const taxonomyDBHandler /*: Handler */ = handlerConstructor({
     value: 'taxonomyDBHandler',
   },
   key: {
-    value: ['organism', 'taxonomyDB'],
+    value: ['organism', 'db'],
   },
   cleanedUp: {
     value: 'taxonomy',
@@ -398,7 +398,7 @@ export const taxonomyAccessionHandler /*: Handler */ = handlerConstructor({
     value: 'taxonomyAccessionHandler',
   },
   key: {
-    value: ['organism', 'taxonomyAccession'],
+    value: ['organism', 'accession'],
   },
   cleanUp: {
     value: value => value,

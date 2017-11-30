@@ -87,8 +87,8 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                   description: {
                     main: { key: 'organism' },
                     organism: {
-                      taxonomyDB: 'taxonomy',
-                      taxonomyAccession: e.tax_id,
+                      db: 'taxonomy',
+                      accession: e.tax_id,
                     },
                   },
                 }}
@@ -106,8 +106,8 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                     description: {
                       main: { key: 'organism' },
                       organism: {
-                        taxonomyDB: 'taxonomy',
-                        taxonomyAccession: e.tax_id,
+                        db: 'taxonomy',
+                        accession: e.tax_id,
                       },
                       entry: { db: 'InterPro' },
                     },
@@ -121,8 +121,8 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                     description: {
                       main: { key: 'organism' },
                       organism: {
-                        taxonomyDB: 'taxonomy',
-                        taxonomyAccession: e.tax_id,
+                        db: 'taxonomy',
+                        accession: e.tax_id,
                       },
                       protein: { db: 'UniProt' },
                     },
@@ -138,7 +138,7 @@ class BySpecies extends PureComponent /*:: <Props> */ {
           to={{
             description: {
               main: { key: 'organism' },
-              organism: { taxonomyDB: 'taxonomy' },
+              organism: { db: 'taxonomy' },
             },
           }}
           className={f('button')}
