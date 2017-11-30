@@ -74,7 +74,12 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
               />
               <Link newTo={newTo} className={name}>
                 <MemberSymbol type={type} />
-                <Tooltip title={title}>
+                <Tooltip
+                  animation="shift"
+                  arrow="true"
+                  position="top"
+                  title={title}
+                >
                   <span
                     className={f('small', 'icon', 'icon-generic')}
                     data-icon="i"
