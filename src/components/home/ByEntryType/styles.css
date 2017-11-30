@@ -6,9 +6,9 @@
     opacity: 1;
   }
 }
-.entry-type a {
+.entry-type a.block {
   display: block;
 }
-.entry-type a:hover {
+.entry-type a.block:hover {
   background-color: #e4f3ff;
 }
