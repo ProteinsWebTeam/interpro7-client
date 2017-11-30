@@ -138,6 +138,12 @@ div#local-title {
 /****************************** END Override EBI  global**********************/
 
 /******************************Local style***************************************/
+/*TOOLTIP*/
+.tippy-tooltip {
+  text-align: left;
+}
+/*/TOOLTIP*/
+
 .tag {
   border-radius: 4px;
 } /*used on protein and proteome page */
