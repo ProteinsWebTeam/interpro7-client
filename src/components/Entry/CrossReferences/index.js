@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { Tooltip } from 'react-tippy';
 
 import AnimatedEntry from 'components/AnimatedEntry';
 import Link from 'components/generic/Link';
@@ -28,11 +29,9 @@ const ReferenceSection = ({ accessions, name, description }) => (
   <li className={f('xref-section', 'small')}>
     <h5>
       {name}{' '}
-      <span
-        className={f('small', 'icon', 'icon-generic')}
-        data-icon="i"
-        title={description}
-      />
+      <Tooltip title={description}>
+        <span className={f('small', 'icon', 'icon-generic')} data-icon="i" />
+      </Tooltip>
     </h5>
 
     <ul>
