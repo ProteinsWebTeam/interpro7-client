@@ -72,7 +72,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                 data={{ name, version, location: window.location }}
                 processData={schemaProcessDataForDB}
               />
-              <Link newTo={newTo} className={name}>
+              <Link newTo={newTo} className={f('block')}>
                 <MemberSymbol type={type} />
                 <Tooltip
                   animation="shift"
