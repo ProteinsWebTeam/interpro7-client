@@ -75,13 +75,20 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
               <Link newTo={newTo} className={name}>
                 <MemberSymbol type={type} />
                 <Tooltip title={title}>
-                  <h6>{name}</h6>
+                  <span
+                    className={f('small', 'icon', 'icon-generic')}
+                    data-icon="i"
+                    aria-label={title}
+                  />
                 </Tooltip>
-                <p>
-                  <small>{version}</small>
-                  <br />
+
+                <h6>{name}</h6>
+
+                <small>{version}</small>
+
+                <p className={f('margin-bottom-medium')}>
                   <span className={f('count', { visible: payload })}>
-                    {(counts && apiType && counts[apiType]) || ''}
+                    <span>{(counts && apiType && counts[apiType]) || ''}</span>
                     {type === 'new' ? ' ' : ' entries'}
                   </span>
                 </p>
