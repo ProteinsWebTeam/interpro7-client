@@ -9,7 +9,7 @@ import NumberLabel from 'components/NumberLabel';
 import loadData from 'higherOrder/loadData';
 import description2path from 'utils/processLocation/description2path';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
@@ -28,14 +28,14 @@ class GOTermsFilter extends Component {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
-    goToNewLocation: T.func.isRequired,
+    goToCustomLocation: T.func.isRequired,
     location: T.shape({
       search: T.object.isRequired,
     }).isRequired,
   };
 
   _handleSelection = ({ target: { value } }) => {
-    this.props.goToNewLocation({
+    this.props.goToCustomLocation({
       ...this.props.location,
       search: {
         ...this.props.location.search,
@@ -102,7 +102,7 @@ const mapStateToProps = createSelector(
   location => ({ location }),
 );
 
-export default connect(mapStateToProps, { goToNewLocation })(
+export default connect(mapStateToProps, { goToCustomLocation })(
   loadData({
     getUrl: getUrlFor,
   })(GOTermsFilter),

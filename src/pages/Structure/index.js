@@ -3,7 +3,7 @@ import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import { OldSwitch } from 'components/generic/Switch';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import MemberDBTabs from 'components/MemberDBTabs';
 import { PDBeLink } from 'components/ExtLink';
 import StructureListFilters from 'components/Structure/StructureListFilters';
@@ -59,11 +59,16 @@ const Overview = ({ data: { payload, loading } }) => {
     <ul className={f('card')}>
       {Object.entries(payload.structures || {}).map(([name, count]) => (
         <li key={name}>
-          <OldLink
-            newTo={{ description: { mainType: 'structure', mainDB: name } }}
+          <Link
+            to={{
+              description: {
+                main: { key: 'structure' },
+                structure: { db: name },
+              },
+            }}
           >
             {name} ({count})
-          </OldLink>
+          </Link>
         </li>
       ))}
     </ul>
@@ -124,13 +129,14 @@ const List = ({
           <Column
             dataKey="accession"
             renderer={(accession /*: string */) => (
-              <OldLink
-                newTo={location => ({
-                  ...location,
+              <Link
+                to={location => ({
                   description: {
-                    mainType: location.description.mainType,
-                    mainDB: location.description.mainDB,
-                    mainAccession: accession,
+                    ...location.description,
+                    [location.description.main.key]: {
+                      ...location.description[location.description.main.key],
+                      accession,
+                    },
                   },
                 })}
               >
@@ -138,7 +144,7 @@ const List = ({
                   text={accession}
                   textToHighlight={search.search}
                 />
-              </OldLink>
+              </Link>
             )}
           >
             Accession
@@ -149,18 +155,19 @@ const List = ({
               name /*: string */,
               { accession } /*: {accession: string} */,
             ) => (
-              <OldLink
-                newTo={location => ({
-                  ...location,
+              <Link
+                to={location => ({
                   description: {
-                    mainType: location.description.mainType,
-                    mainDB: location.description.mainDB,
-                    mainAccession: accession,
+                    ...location.description,
+                    [location.description.main.key]: {
+                      ...location.description[location.description.main.key],
+                      accession,
+                    },
                   },
                 })}
               >
                 <HighlightedText text={name} textToHighlight={search.search} />
-              </OldLink>
+              </Link>
             )}
           >
             Name

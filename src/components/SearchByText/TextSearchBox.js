@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 const MAX_PAD = 6;
 const pad = n => (n.length < MAX_PAD ? pad(`0${n}`) : n);
@@ -14,7 +14,7 @@ class TextSearchBox extends Component {
     value: T.string,
     className: T.string,
     toSubmit: T.bool,
-    goToNewLocation: T.func,
+    goToCustomLocation: T.func,
     search: T.shape({
       search: T.string,
     }),
@@ -51,12 +51,11 @@ class TextSearchBox extends Component {
       }
     }
     // this.setState({redirecting: {pathname, query}});
-    this.props.goToNewLocation({
+    this.props.goToCustomLocation({
       description: {
-        mainType: 'search',
-        mainDB: 'text',
+        main: { key: 'search' },
+        search: { type: 'text', value: query },
       },
-      search: query,
     });
   };
 
@@ -73,7 +72,6 @@ class TextSearchBox extends Component {
 
   render() {
     const { value } = this.state;
-    // if (redirecting) return <OldRedirect to={redirecting} />;
     return (
       <input
         type="text"
@@ -93,4 +91,4 @@ const mapStateToProps = createSelector(
   pageSize => ({ pageSize }),
 );
 
-export default connect(mapStateToProps, { goToNewLocation })(TextSearchBox);
+export default connect(mapStateToProps, { goToCustomLocation })(TextSearchBox);

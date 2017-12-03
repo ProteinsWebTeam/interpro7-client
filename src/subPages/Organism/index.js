@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 
 import Table, { Column } from 'components/Table';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import ProteinFile from './ProteinFile';
 // import Metadata from 'wrappers/Metadata';
@@ -96,17 +96,16 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
             <Column
               dataKey="taxId"
               renderer={taxId => (
-                <OldLink
-                  newTo={{
+                <Link
+                  to={{
                     description: {
-                      mainType: 'organism',
-                      mainDB: 'taxonomy',
-                      mainAccession: taxId,
+                      main: { key: 'organism' },
+                      organism: { db: 'taxonomy', accession: taxId },
                     },
                   }}
                 >
                   {taxId}
-                </OldLink>
+                </Link>
               )}
             >
               Tax ID
@@ -140,26 +139,16 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
               renderer={taxId => {
                 const value = lut.get(taxId);
                 return (
-                  <OldLink
-                    newTo={{
+                  <Link
+                    to={{
                       description: {
-                        mainType: 'organism',
-                        mainDB: 'taxonomy',
-                        mainAccession: taxId,
+                        main: { key: 'organism' },
+                        organism: { db: 'taxonomy', accession: taxId },
                       },
                     }}
                   >
                     {value && value.icon && <span>{value.name}</span>}
-                    {
-                      // <Metadata
-                      //    endpoint="organism"
-                      //   db="taxonomy"
-                      //   accession={taxId}
-                      // >
-                      //  <TaxIdOrName accession={taxId} />
-                      // </Metadata>
-                    }
-                  </OldLink>
+                  </Link>
                 );
               }}
             >

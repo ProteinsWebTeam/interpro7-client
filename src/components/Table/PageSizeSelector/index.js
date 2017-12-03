@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { foundationPartial } from 'styles/foundation';
-import { goToNewLocation, changePageSize } from 'actions/creators';
+import { goToCustomLocation, changePageSize } from 'actions/creators';
 
 import s from './style.css';
 
@@ -16,7 +16,7 @@ class PageSizeSelector extends Component {
     location: T.object.isRequired,
     pageSize: T.number,
     changePageSize: T.func,
-    goToNewLocation: T.func,
+    goToCustomLocation: T.func,
   };
 
   constructor(props) {
@@ -29,7 +29,7 @@ class PageSizeSelector extends Component {
 
   _handleChange = event => {
     this.setState({ pageSize: event.target.value });
-    this.props.goToNewLocation({
+    this.props.goToCustomLocation({
       ...this.props.location,
       search: {
         ...this.props.location.search,
@@ -43,7 +43,7 @@ class PageSizeSelector extends Component {
     let options = [10, 25, 50, 100];
     if (options.indexOf(this.state.pageSize * 1) === -1) {
       options = Array.from(new Set([...options, this.state.pageSize])).sort(
-        (a, b) => a - b
+        (a, b) => a - b,
       );
     }
     return (
@@ -71,9 +71,9 @@ class PageSizeSelector extends Component {
 const mapStateToProps = createSelector(
   state => state.settings.pagination.pageSize,
   state => state.newLocation,
-  (pageSize, location) => ({ pageSize, location })
+  (pageSize, location) => ({ pageSize, location }),
 );
 
-export default connect(mapStateToProps, { changePageSize, goToNewLocation })(
-  PageSizeSelector
+export default connect(mapStateToProps, { changePageSize, goToCustomLocation })(
+  PageSizeSelector,
 );

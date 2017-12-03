@@ -3,7 +3,7 @@ import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import { OldSwitch } from 'components/generic/Switch';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import MemberDBTabs from 'components/MemberDBTabs';
 import OrganismListFilters from 'components/Organism/OrganismListFilters';
 import Table, {
@@ -55,12 +55,17 @@ class Overview extends PureComponent {
       <ul className={f('card')}>
         {Object.entries(payload.proteins || {}).map(([name, count]) => (
           <li key={name}>
-            <OldLink
-              newTo={{ description: { mainType: 'protein', mainDB: name } }}
+            <Link
+              to={{
+                description: {
+                  main: { key: 'protein' },
+                  protein: { db: name },
+                },
+              }}
             >
               {name}
               {Number.isFinite(count) ? ` (${count})` : ''}
-            </OldLink>
+            </Link>
           </li>
         ))}
       </ul>
@@ -125,13 +130,14 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */) => (
-                <OldLink
-                  newTo={location => ({
-                    ...location,
+                <Link
+                  to={location => ({
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: `${accession}`,
+                      ...location.description,
+                      [location.description.main.key]: {
+                        ...location.description[location.description.main.key],
+                        accession,
+                      },
                     },
                   })}
                 >
@@ -139,7 +145,7 @@ class List extends PureComponent {
                     text={accession}
                     textToHighlight={search.search}
                   />
-                </OldLink>
+                </Link>
               )}
             >
               Tax ID
@@ -150,13 +156,14 @@ class List extends PureComponent {
                 name /*: string */,
                 { accession } /*: {accession: string} */,
               ) => (
-                <OldLink
-                  newTo={location => ({
-                    ...location,
+                <Link
+                  to={location => ({
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: `${accession}`,
+                      ...location.description,
+                      [location.description.main.key]: {
+                        ...location.description[location.description.main.key],
+                        accession,
+                      },
                     },
                   })}
                 >
@@ -164,7 +171,7 @@ class List extends PureComponent {
                     text={name}
                     textToHighlight={search.search}
                   />
-                </OldLink>
+                </Link>
               )}
             >
               Name

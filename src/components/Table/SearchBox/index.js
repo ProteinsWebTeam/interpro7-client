@@ -3,19 +3,21 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import debounce from 'lodash-es/debounce';
+
 import { foundationPartial } from 'styles/foundation';
 
 import s from './style.css';
+
 const f = foundationPartial(s);
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 const DEBOUNCE_RATE = 500; // In ms
 
 class SearchBox extends Component {
   static propTypes = {
     location: T.object,
-    goToNewLocation: T.func,
+    goToCustomLocation: T.func,
     children: T.any,
   };
 
@@ -31,7 +33,7 @@ class SearchBox extends Component {
     this.setState({ search }, this.routerPush);
 
   routerPush = () =>
-    this.props.goToNewLocation({
+    this.props.goToCustomLocation({
       ...this.props.location,
       search: {
         ...this.props.location.search,
@@ -67,7 +69,7 @@ class SearchBox extends Component {
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, { goToNewLocation })(SearchBox);
+export default connect(mapStateToProps, { goToCustomLocation })(SearchBox);

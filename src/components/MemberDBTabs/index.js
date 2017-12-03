@@ -8,7 +8,7 @@ import { Tooltip } from 'react-tippy';
 
 import MemberDBTab from './MemberDBTab';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 import loadData from 'higherOrder/loadData';
 
@@ -84,7 +84,7 @@ const getValueFor = (data, mainType, db) => {
     search: Object,
   },
   lowGraphics: boolean,
-  goToNewLocation: function,
+  goToCustomLocation: function,
 }; */
 
 class MemberDBTabs extends PureComponent /*:: <Props> */ {
@@ -106,7 +106,7 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
       search: T.object,
     }).isRequired,
     lowGraphics: T.bool.isRequired,
-    goToNewLocation: T.func.isRequired,
+    goToCustomLocation: T.func.isRequired,
   };
 
   constructor(props) {
@@ -127,7 +127,7 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
       description.focusType = isNotAll && 'entry';
       description.focusDB = isNotAll && value;
     }
-    this.props.goToNewLocation({
+    this.props.goToCustomLocation({
       ...this.props.newLocation,
       description,
       search: {
@@ -270,6 +270,6 @@ exported = loadData({ getUrl: getUrlForAll, propNamespace: 'All' })(exported);
 exported = loadData({ getUrl: getUrlForMemberDB, propNamespace: 'DB' })(
   exported,
 );
-exported = connect(mapStateToProps, { goToNewLocation })(exported);
+exported = connect(mapStateToProps, { goToCustomLocation })(exported);
 
 export default exported;

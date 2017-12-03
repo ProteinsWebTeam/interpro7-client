@@ -4,7 +4,8 @@ import React, { PureComponent } from 'react';
 import { Tooltip } from 'react-tippy';
 
 import loadable from 'higherOrder/loadable';
-import { OldLink } from 'components/generic/Link';
+
+import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
 
@@ -540,7 +541,7 @@ class Home extends PureComponent {
           <div className={f('columns', 'publication-list')}>
             <div className={f('callout')}>
               <h5>Publications </h5>
-              <OldLink href="http://nar.oxfordjournals.org/content/43/D1/D213">
+              <Link href="http://nar.oxfordjournals.org/content/43/D1/D213">
                 <div className={f('media-object')}>
                   <div className={f('media-object-section')}>
                     <span
@@ -558,9 +559,9 @@ class Home extends PureComponent {
                     </p>
                   </div>
                 </div>
-              </OldLink>
+              </Link>
 
-              <OldLink href="http://database.oxfordjournals.org/content/2016/baw027.full">
+              <Link href="http://database.oxfordjournals.org/content/2016/baw027.full">
                 <div className={f('media-object')}>
                   <div className={f('media-object-section')}>
                     <span
@@ -578,9 +579,9 @@ class Home extends PureComponent {
                     </p>
                   </div>
                 </div>
-              </OldLink>
+              </Link>
 
-              <OldLink href="http://bioinformatics.oxfordjournals.org/content/30/9/1236">
+              <Link href="http://bioinformatics.oxfordjournals.org/content/30/9/1236">
                 <div className={f('media-object')}>
                   <div className={f('media-object-section')}>
                     <span
@@ -599,17 +600,17 @@ class Home extends PureComponent {
                     </p>
                   </div>
                 </div>
-              </OldLink>
+              </Link>
 
-              <OldLink
-                newTo={{
-                  description: { other: 'about' },
+              <Link
+                to={{
+                  description: { other: ['about'] },
                   hash: 'publications',
                 }}
                 className={f('button')}
               >
                 View all publications
-              </OldLink>
+              </Link>
             </div>
             {
               // end callout
@@ -639,15 +640,15 @@ class Home extends PureComponent {
                     search the InterPro database with a particular set of
                     domains, and returns all of the domain architectures and
                     associated proteins that match the query.{' '}
-                    <OldLink
-                      newTo={{
-                        description: { other: 'about' },
+                    <Link
+                      to={{
+                        description: { other: ['about'] },
                         hash: 'tools-ida',
                       }}
                       className={f('readmore')}
                     >
                       Read more
-                    </OldLink>
+                    </Link>
                   </p>
                 </div>
                 <div className={f('columns', 'medium-6')}>
@@ -661,15 +662,15 @@ class Home extends PureComponent {
                     InterProScan is a sequence analysis application (nucleotide
                     and protein sequences) that combines different protein
                     signature recognition methods into one resource.{' '}
-                    <OldLink
+                    <Link
                       newTo={{
-                        description: { other: 'about' },
+                        description: { other: ['about'] },
                         hash: 'tools-interproscan',
                       }}
                       className={f('readmore')}
                     >
                       Read more
-                    </OldLink>
+                    </Link>
                   </p>
                 </div>
               </div>

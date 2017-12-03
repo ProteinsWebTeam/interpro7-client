@@ -5,7 +5,7 @@ import { Tooltip } from 'react-tippy';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import { OldSwitch } from 'components/generic/Switch';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
 import MemberDBTabs from 'components/MemberDBTabs';
@@ -162,13 +162,16 @@ class List extends Component {
                 { accession } /*: {accession: string} */,
               ) => (
                 <Tooltip title={`${name} (${accession})`}>
-                  <OldLink
-                    newTo={location => ({
-                      ...location,
+                  <Link
+                    to={location => ({
                       description: {
-                        mainType: location.description.mainType,
-                        mainDB: location.description.mainDB,
-                        mainAccession: accession,
+                        ...location.description,
+                        [location.description.main.key]: {
+                          ...location.description[
+                            location.description.main.key
+                          ],
+                          accession,
+                        },
                       },
                       search: {},
                     })}
@@ -177,7 +180,7 @@ class List extends Component {
                       text={name}
                       textToHighlight={search.search}
                     />
-                  </OldLink>
+                  </Link>
                 </Tooltip>
               )}
             >
@@ -186,16 +189,16 @@ class List extends Component {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, data) => (
-                <OldLink
+                <Link
                   title={accession}
-                  newTo={location => ({
-                    ...location,
+                  to={location => ({
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: accession,
+                      ...location.description,
+                      [location.description.main.key]: {
+                        ...location.description[location.description.main.key],
+                        accession,
+                      },
                     },
-                    search: {},
                   })}
                 >
                   <SchemaOrgData
@@ -208,7 +211,7 @@ class List extends Component {
                       textToHighlight={search.search}
                     />
                   </span>
-                </OldLink>
+                </Link>
               )}
             >
               Accession
@@ -227,18 +230,17 @@ class List extends Component {
                             title={`${accession} signature`}
                           >
                             <span className={f('sign-label')}>
-                              <OldLink
-                                newTo={{
+                              <Link
+                                to={{
                                   description: {
-                                    mainType: 'entry',
-                                    mainDB: db,
-                                    mainAccession: accession,
+                                    main: { key: 'entry' },
+                                    entry: { db, accession },
                                   },
                                   search: {},
                                 }}
                               >
                                 {accession}
-                              </OldLink>
+                              </Link>
                             </span>
                           </Tooltip>
                         ))}
@@ -256,18 +258,17 @@ class List extends Component {
               <Column
                 dataKey="integrated"
                 renderer={(accession /*: string */) => (
-                  <OldLink
-                    newTo={{
+                  <Link
+                    to={{
                       description: {
-                        mainType: 'entry',
-                        mainDB: 'InterPro',
-                        mainAccession: accession,
+                        main: { key: 'entry' },
+                        entry: { db: 'InterPro', accession },
                       },
                       search: {},
                     }}
                   >
                     {accession}
-                  </OldLink>
+                  </Link>
                 )}
               >
                 Integrated

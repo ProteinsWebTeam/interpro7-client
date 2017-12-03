@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 
 import { pkg } from 'config';
 import info from './info';
@@ -28,30 +28,30 @@ const DeveloperInfo = () => (
       It has been built from the repository at:
       <ul>
         <li>
-          <OldLink target="_blank" href={url}>
+          <Link target="_blank" href={url}>
             <code>{url}</code>
-          </OldLink>
+          </Link>
         </li>
         <li>
           branch:
-          <OldLink target="_blank" href={`${url}/tree/${info.git.branch}`}>
+          <Link target="_blank" href={`${url}/tree/${info.git.branch}`}>
             <code>{info.git.branch}</code>
-          </OldLink>
+          </Link>
         </li>
         {info.git.tag !== info.git.commit &&
           info.git.tag && (
             <li>
               tag:
-              <OldLink target="_blank" href={`${url}/tree/${info.git.tag}`}>
+              <Link target="_blank" href={`${url}/tree/${info.git.tag}`}>
                 <code>{info.git.tag}</code>
-              </OldLink>
+              </Link>
             </li>
           )}
         <li>
           commit:
-          <OldLink target="_blank" href={`${url}/tree/${info.git.commit}`}>
+          <Link target="_blank" href={`${url}/tree/${info.git.commit}`}>
             <code>{info.git.commit}</code>
-          </OldLink>
+          </Link>
         </li>
       </ul>
     </div>

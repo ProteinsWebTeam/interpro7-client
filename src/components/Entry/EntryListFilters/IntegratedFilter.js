@@ -40,6 +40,7 @@ class IntegratedFilter extends Component {
   componentWillReceiveProps(nextProps) {
     this.location2state(nextProps.location);
   }
+
   location2state(location) {
     const integration =
       location.description.mainIntegration ||

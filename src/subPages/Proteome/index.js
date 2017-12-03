@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import { foundationPartial } from 'styles/foundation';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -31,17 +31,19 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
         <Column
           dataKey="accession"
           renderer={(acc /*: string */) => (
-            <OldLink
-              newTo={{
+            <Link
+              to={{
                 description: {
-                  mainType: 'organism',
-                  mainDB: 'proteome',
-                  mainAccession: acc,
+                  main: { key: 'organism' },
+                  organism: {
+                    proteomeDB: 'proteome',
+                    proteomeAccession: acc,
+                  },
                 },
               }}
             >
               <span>{acc}</span>
-            </OldLink>
+            </Link>
           )}
         >
           Accession
@@ -52,33 +54,37 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Objec
             name /*: string */,
             { accession } /*: {accession: string, source_database: string} */,
           ) => (
-            <OldLink
-              newTo={{
+            <Link
+              to={{
                 description: {
-                  mainType: 'organism',
-                  mainDB: 'proteome',
-                  mainAccession: accession,
+                  main: { key: 'organism' },
+                  organism: {
+                    proteomeDB: 'proteome',
+                    proteomeAccession: accession,
+                  },
                 },
               }}
             >
               {name}
-            </OldLink>
+            </Link>
           )}
         />
         <Column
           dataKey="taxonomy"
           renderer={(taxID /*: string */) => (
-            <OldLink
-              newTo={{
+            <Link
+              to={{
                 description: {
-                  mainType: 'organism',
-                  mainDB: 'taxonomy',
-                  mainAccession: String(taxID),
+                  main: { key: 'organism' },
+                  organism: {
+                    db: 'taxonomy',
+                    accession: taxID,
+                  },
                 },
               }}
             >
               {taxID}
-            </OldLink>
+            </Link>
           )}
         >
           Taxonomy ID
