@@ -6,9 +6,9 @@ import { createSelector } from 'reselect';
 import NumberLabel from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
-import description2path from 'utils/processLocation/description2path';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
@@ -21,22 +21,22 @@ class OrganismDBFilter extends Component {
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
-    goToNewLocation: T.func.isRequired,
-    location: T.shape({
+    goToCustomLocation: T.func.isRequired,
+    customLocation: T.shape({
       search: T.object.isRequired,
       description: T.object.isRequired,
     }).isRequired,
   };
 
   _handleSelection = ({ target: { value } }) => {
-    this.props.goToNewLocation({
-      ...this.props.location,
+    this.props.goToCustomLocation({
+      ...this.props.customLocation,
       description: {
-        ...this.props.location.description,
-        mainDB: value,
+        ...this.props.customLocation.description,
+        main: { key: value },
       },
       search: {
-        ...this.props.location.search,
+        ...this.props.customLocation.search,
         page: undefined,
       },
     });
@@ -44,7 +44,7 @@ class OrganismDBFilter extends Component {
   render() {
     const {
       data: { loading, payload },
-      location: { description },
+      customLocation: { description },
     } = this.props;
     const dbs = [];
     if (!loading) {
@@ -67,7 +67,7 @@ class OrganismDBFilter extends Component {
                 name="organism_db"
                 value={type}
                 onChange={this._handleSelection}
-                checked={description.mainDB === type}
+                checked={description.main.key === type}
                 style={{ margin: '0.25em' }}
               />
               <span style={{ textTransform: 'capitalize' }}>{type}</span>
@@ -81,27 +81,26 @@ class OrganismDBFilter extends Component {
 }
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.newLocation.description,
-  state => state.newLocation.search,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     const { experiment_type, search: _, ..._search } = search;
     // add to search
     _search.group_by = 'experiment_type';
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${description2path({
-      mainType: 'organism',
-      focusType: description.focusType,
-      focusDB: description.focusDB,
+    return `${protocol}//${hostname}:${port}${root}${descriptionToPath({
+      ...description,
+      main: { key: 'organism' },
     })}`;
   },
 );
 
 const mapStateToProps = createSelector(
-  state => state.newLocation,
-  location => ({ location }),
+  state => state.customLocation,
+  customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToNewLocation })(
+export default connect(mapStateToProps, { goToCustomLocation })(
   loadData(getUrlFor)(OrganismDBFilter),
 );

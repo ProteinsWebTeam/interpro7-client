@@ -30,15 +30,6 @@ export const customLocationChangeFromHistory = (
 });
 
 // location
-export const goToNewLocation = (
-  location /*: string | Location */,
-  replace /*: ?boolean */,
-) => ({
-  type: types.NEW_NEW_LOCATION,
-  location,
-  replace: !!replace,
-});
-
 export const newLocationChangeFromHistory = (newLocation /*: Object */) => ({
   type: types.NEW_PROCESSED_NEW_LOCATION,
   newLocation,
