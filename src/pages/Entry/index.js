@@ -25,6 +25,8 @@ import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
 import subPages from 'subPages';
 import config from 'config';
+import BrowseTabs from 'components/BrowseTabs';
+import Title from 'components/Title';
 
 import { memberDB } from 'staticData/home';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
@@ -109,7 +111,6 @@ class List extends Component {
             data={{ mainDB, location: window.location }}
             processData={schemaProcessDataTable}
           />
-          <Loading />
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -365,6 +366,12 @@ const Summary = props => {
   }
   return (
     <ErrorBoundary>
+      <div className={f('row')}>
+        <div className={f('medium-12', 'large-12', 'columns')}>
+          <Title metadata={payload.metadata} mainType="entry" />
+          <BrowseTabs />
+        </div>
+      </div>
       <Switch
         {...props}
         locationSelector={l =>
@@ -430,12 +437,7 @@ const mapTypeToOntology = new Map([
 ]);
 
 const schemaProcessData = data => ({
-  '@type': [
-    'DataRecord',
-    'Entry',
-    mapTypeToOntology.get(data.metadata.type) ||
-      mapTypeToOntology.get('Unknown'),
-  ],
+  '@type': 'DataRecord',
   '@id': '@mainEntityOfPage',
   identifier: data.metadata.accession,
   isPartOf: {

@@ -18,6 +18,8 @@ import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
+import BrowseTabs from 'components/BrowseTabs';
+import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
@@ -271,7 +273,7 @@ class SummaryComponent extends PureComponent {
 }
 
 const schemaProcessData = data => ({
-  '@type': ['Protein', 'DataRecord'],
+  '@type': 'DataRecord',
   '@id': '@mainEntityOfPage',
   identifier: data.metadata.accession,
   isPartOf: {
@@ -283,9 +285,8 @@ const schemaProcessData = data => ({
 });
 
 const schemaProcessData2 = data => ({
-  '@type': ['StructuredValue', 'BioChemEntity', 'CreativeWork'],
+  '@type': ['Protein', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
   '@id': '@mainEntity',
-  additionalType: 'http://semanticscience.org/resource/SIO_010043',
   identifier: data.metadata.accession,
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
@@ -311,6 +312,12 @@ class Summary extends PureComponent {
     }
     return (
       <div>
+        <div className={f('row')}>
+          <div className={f('medium-12', 'large-12', 'columns')}>
+            <Title metadata={payload.metadata} mainType="protein" />
+            <BrowseTabs />
+          </div>
+        </div>
         {this.props.data.payload &&
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (

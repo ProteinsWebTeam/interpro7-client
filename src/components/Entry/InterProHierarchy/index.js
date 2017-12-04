@@ -13,8 +13,8 @@ const webComponents = [];
 class InterProHierarchy extends PureComponent {
   static propTypes = {
     accession: T.string.isRequired,
-    hierarchy: T.string.isRequired,
-    goToNewLocation: T.object.isRequired,
+    hierarchy: T.oneOfType([T.string, T.object]).isRequired,
+    goToNewLocation: T.func.isRequired,
   };
 
   componentWillMount() {

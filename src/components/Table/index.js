@@ -165,7 +165,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
 }
 
 export const Header = _Header;
-// export const Search = _Search;
 export const PageSizeSelector = _PageSizeSelector;
 export const Exporter = _Exporter;
 export const SearchBox = _SearchBox;

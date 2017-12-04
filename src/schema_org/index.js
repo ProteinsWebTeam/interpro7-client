@@ -55,7 +55,8 @@ export class Manager {
 
   _render(mergedData) {
     if (!this._node) return;
-    const stringified = JSON.stringify(mergedData, null, this._dev ? 2 : 0);
+    // const stringified = JSON.stringify(mergedData, null, this._dev ? 2 : 0);
+    const stringified = JSON.stringify(mergedData, null, 2);
     this._node.textContent = stringified;
     // This should happen the first time it is rendered
     if (!this._node.parentNode && document.head) {

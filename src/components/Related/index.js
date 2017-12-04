@@ -176,7 +176,7 @@ export class _RelatedAdvanced extends PureComponent {
     isStale: T.bool.isRequired,
     mainType: T.string.isRequired,
     focusType: T.string.isRequired,
-    focusDB: T.string.isRequired,
+    focusDB: T.string,
     actualSize: T.number,
   };
 

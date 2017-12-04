@@ -438,11 +438,13 @@ module.exports = (env = { dev: true }) => {
             template: path.join('.', 'src', 'index.template.html'),
             inject: false,
             // chunksSortMode: 'dependency',
-            minify: env.dev && {
-              removeComments: true,
-              collapseWhitespace: true,
-              conservativeCollapse: true,
-            },
+            minify: env.dev
+              ? false
+              : {
+                  removeComments: true,
+                  collapseWhitespace: true,
+                  conservativeCollapse: true,
+                },
           })
         : null,
       env.production
