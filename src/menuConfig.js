@@ -1,4 +1,6 @@
 // @flow
+import getEmptyDescription from 'utils/processDescription/emptyDescription';
+
 import f from 'styles/foundation';
 
 /* ::
@@ -56,6 +58,19 @@ export const entities /*: Array<Object> */ = [
         },
       };
     },
+    to(location) {
+      return {
+        description: {
+          main: { key: 'entry' },
+          entry: {
+            db:
+              location.description.entry.integration ||
+              location.description.entry.db ||
+              'InterPro',
+          },
+        },
+      };
+    },
     name: 'Entry',
   },
   {
@@ -72,6 +87,15 @@ export const entities /*: Array<Object> */ = [
           mainDB: 'UniProt',
           focusType,
           focusDB,
+        },
+      };
+    },
+    to(location) {
+      return {
+        description: {
+          ...location.description,
+          main: { key: 'protein' },
+          protein: { db: 'UniProt' },
         },
       };
     },
@@ -94,6 +118,15 @@ export const entities /*: Array<Object> */ = [
         },
       };
     },
+    to(location) {
+      return {
+        description: {
+          ...location.description,
+          main: { key: 'structure' },
+          protein: { db: 'PDB' },
+        },
+      };
+    },
     name: 'Structure',
   },
   {
@@ -110,6 +143,15 @@ export const entities /*: Array<Object> */ = [
           mainDB: 'taxonomy',
           focusType,
           focusDB,
+        },
+      };
+    },
+    to(location) {
+      return {
+        description: {
+          ...location.description,
+          main: { key: 'organism' },
+          protein: { db: 'taxonomy' },
         },
       };
     },
@@ -131,6 +173,15 @@ export const entities /*: Array<Object> */ = [
         },
       };
     },
+    to(location) {
+      return {
+        description: {
+          ...location.description,
+          main: { key: 'set' },
+          protein: { db: 'all' },
+        },
+      };
+    },
     name: 'Set',
   },
 ];
@@ -148,6 +199,19 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             focusDB: null,
             mainMemberDB: null,
             focusIntegration: null,
+          },
+        };
+      },
+      to(location) {
+        const { key } = location.description.main.key;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...location.description[key],
+              detail: null,
+            },
           },
         };
       },
@@ -172,6 +236,23 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
+      to(location) {
+        const { key } = location.description.main.key;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...location.description[key],
+              detail: null,
+            },
+            entry: {
+              isFilter: true,
+              db: key === 'set' ? location.description[key].db : 'all',
+            },
+          },
+        };
+      },
       name: 'Entries',
       counter: 'entries',
     },
@@ -188,6 +269,23 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             focusType: 'protein',
             focusDB: 'UniProt',
             focusIntegration: null,
+          },
+        };
+      },
+      to(location) {
+        const { key } = location.description.main.key;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...location.description[key],
+              detail: null,
+            },
+            protein: {
+              isFilter: true,
+              db: 'UniProt',
+            },
           },
         };
       },
@@ -210,6 +308,23 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
+      to(location) {
+        const { key } = location.description.main.key;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...location.description[key],
+              detail: null,
+            },
+            structure: {
+              isFilter: true,
+              db: 'PDB',
+            },
+          },
+        };
+      },
       name: 'Structures',
       counter: 'structures',
     },
@@ -229,6 +344,23 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
+      to(location) {
+        const { key } = location.description.main.key;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...location.description[key],
+              detail: null,
+            },
+            organism: {
+              isFilter: true,
+              db: 'taxonomy',
+            },
+          },
+        };
+      },
       name: 'Organisms',
       counter: 'organisms',
     },
@@ -244,6 +376,23 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             focusType: 'set',
             focusDB: location.description.mainDB,
             mainMemberDB: null,
+          },
+        };
+      },
+      to(location) {
+        const { key } = location.description.main.key;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...location.description[key],
+              detail: null,
+            },
+            set: {
+              isFilter: true,
+              db: location.description[key].db,
+            },
           },
         };
       },
@@ -266,6 +415,19 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
+      to(location) {
+        const { key } = location.description.main.key;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...location.description[key],
+              detail: 'sequence',
+            },
+          },
+        };
+      },
       name: 'Sequence',
     },
   ],
@@ -281,6 +443,19 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             focusIntegration: null,
             mainDetail: 'domain_architecture',
             mainMemberDB: null,
+          },
+        };
+      },
+      to(location) {
+        const { key } = location.description.main.key;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...location.description[key],
+              detail: 'domain_architecture',
+            },
           },
         };
       },
@@ -302,6 +477,19 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
+      to(location) {
+        const { key } = location.description.main.key;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...location.description[key],
+              detail: 'logo',
+            },
+          },
+        };
+      },
       name: 'Signature',
     },
   ],
@@ -320,6 +508,19 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
+      to(location) {
+        const { key } = location.description.main.key;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...location.description[key],
+              proteomeDB: 'proteome',
+            },
+          },
+        };
+      },
       name: 'Proteomes',
       counter: 'proteomes',
     },
@@ -328,14 +529,16 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
 
 export const InterPro /*: Array<Object> */ = [
   {
+    to: { description: {} },
     newTo: { description: {} },
     icon: 'H',
     name: 'Home',
-    activeClass({ description: { mainType, other } } /*: Location */) {
-      if (!(mainType || other)) return f('is-active');
+    activeClass({ description: { main, other } } /*: Location */) {
+      if (!(main.key || other.length)) return f('is-active');
     },
   },
   {
+    to: { description: { main: { key: 'search' } } },
     newTo: { description: { mainType: 'search' } },
     icon: '1',
     name: 'Search',
@@ -369,8 +572,41 @@ export const InterPro /*: Array<Object> */ = [
         description: { mainType, mainDB, focusType, focusDB },
       };
     },
-    activeClass({ description: { mainType } } /*: Location */) {
-      if (mainType && mainType !== 'search') return f('is-active');
+    to(location) {
+      const { key } = location.description.main;
+      if (!key || key === 'search' || key === 'job') {
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key: 'entry' },
+            entry: { db: 'InterPro' },
+          },
+        };
+      }
+      if (location.description.set.accession) {
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            set: { db: 'all' },
+            entry: { isFilter: true, db: location.description.set.db },
+          },
+        };
+      }
+      return {
+        description: {
+          ...getEmptyDescription(),
+          main: { key },
+          [key]: { db: location.description[key].db },
+          entry: {
+            isFilter: true,
+            db: location.description.entry.db || 'InterPro',
+          },
+        },
+      };
+    },
+    activeClass({ description: { main } } /*: Location */) {
+      if (main.key && main.key !== 'search') return f('is-active');
     },
     icon: 'b',
     name: 'Browse',
@@ -378,28 +614,33 @@ export const InterPro /*: Array<Object> */ = [
   },
   {
     newTo: { description: { other: 'release_notes' } },
+    to: { description: { other: ['release_notes'] } },
     icon: '0',
     name: 'Release\xa0Notes',
     iconClass: 'functional',
   },
   {
     newTo: { description: { other: 'download' } },
+    to: { description: { other: ['download'] } },
     icon: '=',
     name: 'Download',
     iconClass: 'functional',
   },
   {
     newTo: { description: { other: 'help' } },
+    to: { description: { other: ['help'] } },
     icon: '?',
     name: 'Help',
   },
   {
     newTo: { description: { other: 'about' } },
+    to: { description: { other: ['about'] } },
     icon: 'i',
     name: 'About',
   },
   {
     newTo: { description: { other: 'settings' } },
+    to: { description: { other: ['settings'] } },
     icon: 's',
     name: 'Settings',
     iconClass: 'functional',

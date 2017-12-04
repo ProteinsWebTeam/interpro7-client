@@ -7,7 +7,7 @@ import { format } from 'url';
 import { Tooltip } from 'react-tippy';
 
 import { foundationPartial } from 'styles/foundation';
-import Link, { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import AnimatedEntry from 'components/AnimatedEntry';
 
@@ -57,7 +57,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('md-list')}>
         <AnimatedEntry className={f('row')} element="div">
-          {memberDB.map(({ name, newTo, type, title, version, apiType }) => (
+          {memberDB.map(({ name, to, type, title, version, apiType }) => (
             <div
               className={f(
                 'column',
@@ -72,7 +72,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                 data={{ name, version, location: window.location }}
                 processData={schemaProcessDataForDB}
               />
-              <OldLink newTo={newTo} className={name}>
+              <Link to={to} className={name}>
                 <MemberSymbol type={type} />
                 <Tooltip title={title}>
                   <h6>{name}</h6>
@@ -85,7 +85,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                     {type === 'new' ? ' ' : ' entries'}
                   </span>
                 </p>
-              </OldLink>
+              </Link>
             </div>
           ))}
         </AnimatedEntry>

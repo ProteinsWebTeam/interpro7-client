@@ -74,7 +74,7 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
                 <br />
                 <Tooltip title={e.description}>
                   <Link
-                    newTo={{
+                    to={{
                       description: { mainType: 'protein', mainDB: 'uniprot' },
                       search: { go_term: e.accession },
                     }}

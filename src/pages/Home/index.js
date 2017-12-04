@@ -663,7 +663,7 @@ class Home extends PureComponent {
                     and protein sequences) that combines different protein
                     signature recognition methods into one resource.{' '}
                     <Link
-                      newTo={{
+                      to={{
                         description: { other: ['about'] },
                         hash: 'tools-interproscan',
                       }}

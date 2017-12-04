@@ -70,7 +70,6 @@ class Exporter extends Component {
         <Tooltip title="Settings (customise number of results by page…)">
           <Link
             to={{ description: { other: ['settings'] } }}
-            newTo={{ description: { other: 'settings' } }}
             className={fPlus(
               'icon',
               'icon-functional',

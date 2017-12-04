@@ -4,7 +4,7 @@ import T from 'prop-types';
 
 import { Tooltip } from 'react-tippy';
 
-import { OldLink } from 'components/generic/Link';
+import Link from 'components/generic/Link';
 import NumberLabel from 'components/NumberLabel';
 
 import { toPlural } from 'utils/pages';
@@ -52,27 +52,27 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
 
   render() {
     const { children, count, mainType, cleanName, lowGraphics } = this.props;
-    const newTo = ({ description, restOfLocation }) => {
+    const to = ({ description, ...location }) => {
       const nextLocation = {
-        ...restOfLocation,
+        ...location,
         description: {
           ...description,
-          // mainDB: description.description.mainType ==
+          entry: { ...description.entry },
         },
       };
-      if (description.mainType === 'entry') {
-        nextLocation.description.mainDB = cleanName;
+      if (description.main.key === 'entry') {
+        nextLocation.description.entry.db = cleanName;
       } else {
         const isNotAll = cleanName !== 'all';
-        nextLocation.description.focusType = isNotAll ? 'entry' : null;
-        nextLocation.description.focusDB = isNotAll ? cleanName : null;
+        nextLocation.description.entry.isFilter = isNotAll;
+        nextLocation.description.entry.db = isNotAll ? cleanName : null;
       }
       return nextLocation;
     };
     return (
       <li className={f('tabs-title', { lowGraphics })}>
-        <OldLink
-          newTo={newTo}
+        <Link
+          to={to}
           activeClass={f('is-active', 'is-active-tab', cleanName)}
           className={f({
             special: cleanName === 'InterPro' || cleanName === 'all',
@@ -98,7 +98,7 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
               abbr={true}
             />
           </Tooltip>
-        </OldLink>
+        </Link>
       </li>
     );
   }

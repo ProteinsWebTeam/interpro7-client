@@ -68,7 +68,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
         {tabs.map(e => (
           <li className={f('tabs-title')} key={e.name}>
             <BrowseTabsLink
-              newTo={e.newTo}
+              to={e.to}
               name={e.name}
               data={data}
               counter={e.counter}
