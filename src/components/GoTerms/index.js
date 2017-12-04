@@ -1,6 +1,6 @@
 import React from 'react';
 import T from 'prop-types';
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { GoLink } from 'components/ExtLink';
 
