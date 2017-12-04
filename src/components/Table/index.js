@@ -1,7 +1,7 @@
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import _Header from './Header';
 import _Exporter from './Exporter';
@@ -92,23 +92,13 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   className={f('show-for-large')}
                   style={{ lineHeight: 0, display: 'flex' }}
                 >
-                  <Tooltip
-                    animation="shift"
-                    arrow="true"
-                    position="top"
-                    title="View your results as a table"
-                  >
+                  <Tooltip title="View your results as a table">
                     <button
                       className={f('icon-view', 'table-view')}
                       aria-label="view your results as a table"
                     />
                   </Tooltip>{' '}
-                  <Tooltip
-                    animation="shift"
-                    arrow="true"
-                    position="top"
-                    title="View your results as a list"
-                  >
+                  <Tooltip title="View your results as a list">
                     <button
                       className={f('icon-view', 'list-view', 'disabled')}
                       aria-disabled="true"
@@ -117,12 +107,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       aria-label="view your results as a list"
                     />
                   </Tooltip>{' '}
-                  <Tooltip
-                    animation="shift"
-                    arrow="true"
-                    position="top"
-                    title="View your results as thumbnails"
-                  >
+                  <Tooltip title="View your results as thumbnails">
                     <button
                       className={f('icon-view', 'thumb-view', 'disabled')}
                       aria-disabled="true"
