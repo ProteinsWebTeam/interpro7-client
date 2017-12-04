@@ -7,6 +7,7 @@ import { createSelector } from 'reselect';
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import loadData from 'higherOrder/loadData';
 import { toPlural } from 'utils/pages';
@@ -98,35 +99,53 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                 />
                 <h6>{e.title}</h6>
               </Link>
-              <p>
-                <Link
-                  newTo={{
-                    description: {
-                      focusType: 'entry',
-                      focusDB: 'interpro',
-                      mainType: 'organism',
-                      mainDB: 'taxonomy',
-                      mainAccession: `${e.tax_id}`,
-                    },
-                  }}
+              <div className={f('list-detail')}>
+                <Tooltip
+                  title={`${getCountString(
+                    payloadE,
+                    loadingE,
+                    e.tax_id,
+                    'entry',
+                  )} matching ${e.title}`}
                 >
-                  {getCountString(payloadE, loadingE, e.tax_id, 'entry')}
-                </Link>
+                  <Link
+                    newTo={{
+                      description: {
+                        focusType: 'entry',
+                        focusDB: 'interpro',
+                        mainType: 'organism',
+                        mainDB: 'taxonomy',
+                        mainAccession: `${e.tax_id}`,
+                      },
+                    }}
+                  >
+                    {getCountString(payloadE, loadingE, e.tax_id, 'entry')}
+                  </Link>
+                </Tooltip>
                 <br />
-                <Link
-                  newTo={{
-                    description: {
-                      focusType: 'protein',
-                      focusDB: 'UniProt',
-                      mainType: 'organism',
-                      mainDB: 'taxonomy',
-                      mainAccession: `${e.tax_id}`,
-                    },
-                  }}
+                <Tooltip
+                  title={`${getCountString(
+                    payload,
+                    loading,
+                    e.tax_id,
+                    'protein',
+                  )} matching ${e.title}`}
                 >
-                  {getCountString(payload, loading, e.tax_id, 'protein')}
-                </Link>
-              </p>
+                  <Link
+                    newTo={{
+                      description: {
+                        focusType: 'protein',
+                        focusDB: 'UniProt',
+                        mainType: 'organism',
+                        mainDB: 'taxonomy',
+                        mainAccession: `${e.tax_id}`,
+                      },
+                    }}
+                  >
+                    {getCountString(payload, loading, e.tax_id, 'protein')}
+                  </Link>
+                </Tooltip>
+              </div>
             </div>
           ))}
         </AnimatedEntry>
