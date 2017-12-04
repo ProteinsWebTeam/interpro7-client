@@ -1,7 +1,7 @@
 import React, { PureComponent, Component } from 'react';
 import T from 'prop-types';
 
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -145,7 +145,7 @@ class List extends Component {
               dataKey="type"
               className={f('col-type')}
               renderer={type => (
-                <Tooltip title={type}>
+                <Tooltip title={`${type} type`}>
                   <interpro-type type={type.replace('_', ' ')} size="26px">
                     {type}
                   </interpro-type>
@@ -247,9 +247,9 @@ class List extends Component {
                 }
               >
                 Signatures{' '}
-                <span className={f('sign-label-head')} title="Signature ID">
-                  ID
-                </span>
+                <Tooltip title="Signature ID">
+                  <span className={f('sign-label-head')}>ID</span>
+                </Tooltip>
               </Column>
             ) : (
               <Column
@@ -311,13 +311,13 @@ class List extends Component {
                 }
               >
                 GO Terms{' '}
-                <Tooltip title="Biological process term">
+                <Tooltip title="Biological process category">
                   <span className={f('sign-label-head', 'bp')}>BP</span>
                 </Tooltip>{' '}
-                <Tooltip title="Molecular function term">
+                <Tooltip title="Molecular function category">
                   <span className={f('sign-label-head', 'mf')}>MF</span>
                 </Tooltip>{' '}
-                <Tooltip title="Cellular component term">
+                <Tooltip title="Cellular component category">
                   <span className={f('sign-label-head', 'cc')}>CC</span>
                 </Tooltip>
               </Column>
