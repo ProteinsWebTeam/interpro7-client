@@ -484,16 +484,16 @@ class Home extends PureComponent {
           <div className={f('columns', 'browse-by')}>
             <div className={f('callout-box')}>
               <Tabs>
-                <div title="by member DB">
+                <div title="Member Database">
                   <ByMemberDatabase />
                 </div>
-                <div title="by entry type">
+                <div title="Entry type">
                   <ByEntryType />
                 </div>
-                <div title="by species">
+                <div title="Species">
                   <BySpecies />
                 </div>
-                <div title="by GO term" className={f('go-list')}>
+                <div title="GO term" className={f('go-list')}>
                   <ByGOTerms />
                 </div>
               </Tabs>
