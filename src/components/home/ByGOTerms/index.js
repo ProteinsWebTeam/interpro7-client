@@ -5,7 +5,7 @@ import T from 'prop-types';
 import { format } from 'url';
 import { createSelector } from 'reselect';
 
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
@@ -39,11 +39,7 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
               className={f('columns', 'medium-3', 'large-3', 'text-center')}
               key={e.title}
             >
-              <Tooltip
-                animation="shift"
-                arrow="true"
-                title={`${e.category} category`}
-              >
+              <Tooltip title={`${e.category} category`}>
                 <span
                   style={{ color: e.color }}
                   className={f('small', 'bullet-icon')}
@@ -53,11 +49,7 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
               </Tooltip>
               <h6>
                 {e.title}&nbsp;
-                <Tooltip
-                  animation="shift"
-                  arrow="true"
-                  title={`${e.description} for ${e.title}`}
-                >
+                <Tooltip title={`${e.description} for ${e.title}`}>
                   <span
                     className={f('small', 'icon', 'icon-generic')}
                     data-icon="i"
@@ -66,8 +58,6 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
               </h6>
               <p>
                 <Tooltip
-                  animation="shift"
-                  arrow="true"
                   title={`${(countsE && e.accession && countsE[e.accession]) ||
                     'no'} entries matching ${e.title}`}
                 >
@@ -83,8 +73,6 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
                 </Tooltip>
                 <br />
                 <Tooltip
-                  animation="shift"
-                  arrow="true"
                   title={`${(countsP && e.accession && countsP[e.accession]) ||
                     'no'} proteins matching ${e.title}`}
                 >
