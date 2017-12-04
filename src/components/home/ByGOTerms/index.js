@@ -36,7 +36,7 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
         <AnimatedEntry className={f('row')} element="div">
           {GoList.map(e => (
             <div
-              className={f('columns', 'medium-3', 'large-3', 'text-center')}
+              className={f('column', 'medium-3', 'large-3', 'text-center')}
               key={e.title}
             >
               <Tooltip title={`${e.category} category`}>
