@@ -19,6 +19,10 @@
   max-width: 25%;
 }
 
+.go-list .column:hover {
+  background-color: #e4f3ff;
+}
+
 @media screen and (max-width: 40em) {
   .go-list .column {
     flex: 0 0 50%;
