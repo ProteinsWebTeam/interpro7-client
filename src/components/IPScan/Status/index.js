@@ -4,7 +4,7 @@ import Link from 'components/generic/Link';
 import { connect } from 'react-redux';
 import url from 'url';
 import TA from 'timeago.js';
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import getTableAccess from 'storage/idb';
 
@@ -244,7 +244,10 @@ class IPScanStatus extends Component {
                             </time>
                           </Tooltip>
                         </td>
-                        <td className={f('button-group')}>
+                        <td
+                          className={f('button-group')}
+                          style={{ display: 'flex' }}
+                        >
                           <Tooltip title="Save job">
                             <button
                               className={f(
