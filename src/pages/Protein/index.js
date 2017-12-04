@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
