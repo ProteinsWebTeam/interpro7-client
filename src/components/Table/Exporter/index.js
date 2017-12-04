@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 
@@ -67,7 +67,7 @@ class Exporter extends Component {
           <span className={fPlus('icon', 'icon-functional')} data-icon="=" />{' '}
           <span className={fPlus('hide-for-small-only')}>Export</span>{' '}
         </button>
-        <Tooltip title="Settings (customise number of results by page ...)">
+        <Tooltip title="Settings (customise results by page ...)">
           <Link
             newTo={{ description: { other: 'settings' } }}
             className={fPlus(
