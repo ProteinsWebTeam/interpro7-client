@@ -14,11 +14,11 @@ import parseValueFromInput from './parse-value-from-input';
 // Action creators
 // custom location
 export const goToCustomLocation = (
-  location /*: string | Location */,
+  customLocation /*: CustomLocation */,
   replace /*?: boolean */,
 ) => ({
   type: types.NEW_CUSTOM_LOCATION,
-  location,
+  customLocation,
   replace: !!replace,
 });
 
