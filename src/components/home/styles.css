@@ -14,10 +14,6 @@
   font-size: 80%;
 }
 
-.md-list .column:hover {
-  background-color: #e4f3ff;
-}
-
 .md-list small {
   color: var(--colors-lightgray);
 }
@@ -27,18 +23,18 @@
   margin-top: -15px; /*temp reposition the view port without changing the coordinates of all svg*/
 }
 
-/*all except font button*/
-.md-list a:not(.button) {
+/*all except button*/
+.md-list a.block {
   color: #0a0a0a;
+  display: block;
+}
+
+.md-list a.block:hover {
+  background-color: #e4f3ff;
 }
 
 .md-list h6 {
   margin-bottom: 0;
-}
-
-/*avoid  text collapse 2 lines for md names - in particular prosite*/
-.md-list h6 {
-  white-space: nowrap;
 }
 
 /*temp replace the float css while update to latest foundation*/
