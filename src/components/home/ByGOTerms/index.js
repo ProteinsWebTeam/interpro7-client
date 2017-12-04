@@ -56,7 +56,7 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
                   />
                 </Tooltip>
               </h6>
-              <p>
+              <div className={f('list-detail')}>
                 <Tooltip
                   title={`${(countsE && e.accession && countsE[e.accession]) ||
                     'no'} entries matching ${e.title}`}
@@ -86,7 +86,7 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
                     proteins
                   </Link>
                 </Tooltip>
-              </p>
+              </div>
             </div>
           ))}
         </AnimatedEntry>
