@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
@@ -77,7 +77,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
 
                 <h6>
                   {name}{' '}
-                  <Tooltip animation="shift" arrow="true" title={title}>
+                  <Tooltip title={title}>
                     <span
                       className={f('small', 'icon', 'icon-generic')}
                       data-icon="i"
