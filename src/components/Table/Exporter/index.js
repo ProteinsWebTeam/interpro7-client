@@ -56,7 +56,10 @@ class Exporter extends Component {
   render() {
     const { children, mainDB, focusDB } = this.props;
     return (
-      <div className={fPlus('button-group', 'small', 'exporter')}>
+      <div
+        className={fPlus('button-group', 'small', 'exporter')}
+        style={{ display: 'flex' }}
+      >
         <button
           className={fPlus('button', 'dropdown')}
           style={{ backgroundColor: getcolor(mainDB, focusDB) }}
@@ -68,17 +71,19 @@ class Exporter extends Component {
           <span className={fPlus('hide-for-small-only')}>Export</span>{' '}
         </button>
         <Tooltip title="Settings (customise results by page ...)">
-          <Link
-            newTo={{ description: { other: 'settings' } }}
-            className={fPlus(
-              'icon',
-              'icon-functional',
-              'icon-settings',
-              'show-for-large',
-            )}
-            data-icon="s"
-            aria-label="settings"
-          />
+          <div style={{ display: 'flex' }}>
+            <Link
+              newTo={{ description: { other: 'settings' } }}
+              className={fPlus(
+                'icon',
+                'icon-functional',
+                'icon-settings',
+                'show-for-large',
+              )}
+              data-icon="s"
+              aria-label="settings"
+            />
+          </div>
         </Tooltip>
         <div
           className={fPlus(
