@@ -440,14 +440,12 @@ class Home extends PureComponent {
               processData={schemaProcessDataForDB}
             />
             <div className={f('container-intro')}>
-              <Tooltip title="Domain analysis and prediction on multiple protein sequences">
-                <div className={f('fig-container')}>
+              <div className={f('fig-container')}>
+                <Tooltip title="Domain analysis and prediction on multiple protein sequences">
                   <InterProGraphicAnim />
-                </div>
-              </Tooltip>
-
+                </Tooltip>
+              </div>
               <h3>Classification of protein families</h3>
-
               <Description
                 title=""
                 extraTextForButton="about InterPro"
