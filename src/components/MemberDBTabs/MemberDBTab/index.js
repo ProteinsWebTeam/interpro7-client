@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import NumberLabel from 'components/NumberLabel';
