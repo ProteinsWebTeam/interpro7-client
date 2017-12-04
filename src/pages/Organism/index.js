@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import { OldSwitch } from 'components/generic/Switch';
+import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBTabs from 'components/MemberDBTabs';
 import OrganismListFilters from 'components/Organism/OrganismListFilters';
@@ -30,6 +30,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
+
 const f = foundationPartial(pageStyle, styles);
 
 const propTypes = {
@@ -266,13 +267,16 @@ class Summary extends PureComponent {
               <BrowseTabs />
             </div>
           </div>
-          <OldSwitch
+          <Switch
             {...this.props}
-            locationSelector={l =>
-              l.description.mainDetail ||
-              l.description.focusType ||
-              l.description.mainMemberDB
-            }
+            locationSelector={l => {
+              const { key } = l.description.main;
+              return (
+                l.description[key].detail ||
+                Object.entries().find(([key, value]) => value.isFilter)[0] ||
+                l.description[key].memberDB
+              );
+            }}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForOrganism}
           />
@@ -288,11 +292,15 @@ class InnerSwitch extends PureComponent {
   render() {
     return (
       <ErrorBoundary>
-        <OldSwitch
+        <Switch
           {...this.props}
-          locationSelector={l =>
-            l.description.mainAccession || l.description.focusType
-          }
+          locationSelector={l => {
+            const { key } = l.description.main;
+            return (
+              l.description[key].accession ||
+              Object.entries().find(([key, value]) => value.isFilter)[0]
+            );
+          }}
           indexRoute={List}
           childRoutes={[{ value: acc, component: Summary }]}
           catchAll={List}
@@ -335,9 +343,9 @@ class Organism extends PureComponent {
             />
           )}
         <ErrorBoundary>
-          <OldSwitch
+          <Switch
             {...this.props}
-            locationSelector={l => l.description.mainDB}
+            locationSelector={l => l.description[l.description.main.key].db}
             indexRoute={Overview}
             catchAll={InnerSwitch}
           />

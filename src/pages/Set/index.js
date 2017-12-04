@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import { OldSwitch } from 'components/generic/Switch';
+import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBTabs from 'components/MemberDBTabs';
 import Table, {
@@ -296,12 +296,16 @@ class Summary extends PureComponent {
               <BrowseTabs />
             </div>
           </div>
-          <OldSwitch
+          <Switch
             {...this.props}
             currentSet={currentSet}
-            locationSelector={l =>
-              l.description.mainDetail || l.description.focusType
-            }
+            locationSelector={l => {
+              const { key } = l.description.main;
+              return (
+                l.description[key].detail ||
+                Object.entries().find(([key, value]) => value.isFilter)[0]
+              );
+            }}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForSet}
           />
@@ -321,11 +325,15 @@ const dbAccs = new RegExp(
 
 const InnerSwitch = props => (
   <ErrorBoundary>
-    <OldSwitch
+    <Switch
       {...props}
-      locationSelector={l =>
-        l.description.mainAccession || l.description.focusType
-      }
+      locationSelector={l => {
+        const { key } = l.description.main;
+        return (
+          l.description[key].accession ||
+          Object.entries().find(([key, value]) => value.isFilter)[0]
+        );
+      }}
       indexRoute={List}
       childRoutes={[{ value: dbAccs, component: Summary }]}
       catchAll={List}
@@ -336,9 +344,9 @@ const InnerSwitch = props => (
 const EntrySet = props => (
   <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
     <ErrorBoundary>
-      <OldSwitch
+      <Switch
         {...props}
-        locationSelector={l => l.description.mainDB}
+        locationSelector={l => l.description[l.description.main.key].db}
         indexRoute={Overview}
         catchAll={InnerSwitch}
       />

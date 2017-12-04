@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { Tooltip } from 'react-tippy';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import { OldSwitch } from 'components/generic/Switch';
+import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
@@ -373,11 +373,15 @@ const Summary = props => {
           <BrowseTabs />
         </div>
       </div>
-      <OldSwitch
+      <Switch
         {...props}
-        locationSelector={l =>
-          l.description.mainDetail || l.description.focusType
-        }
+        locationSelector={l => {
+          const { key } = l.description.main;
+          return (
+            l.description[key].detail ||
+            Object.entries().find(([key, value]) => value.isFilter)[0]
+          );
+        }}
         indexRoute={SummaryComponent}
         childRoutes={subPagesForEntry}
       />
@@ -414,11 +418,15 @@ const dbAccs = new RegExp(
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
-    <OldSwitch
+    <Switch
       {...props}
-      locationSelector={l =>
-        l.description.mainAccession || l.description.focusType
-      }
+      locationSelector={l => {
+        const { key } = l.description.main;
+        return (
+          l.description[key].accession ||
+          Object.entries().find(([key, value]) => value.isFilter)[0]
+        );
+      }}
       indexRoute={List}
       childRoutes={[{ value: dbAccs, component: Summary }]}
       catchAll={List}
@@ -499,9 +507,9 @@ class Entry extends PureComponent {
             />
           )}
         <ErrorBoundary>
-          <OldSwitch
+          <Switch
             {...this.props}
-            locationSelector={l => l.description.mainDB}
+            locationSelector={l => l.description[l.description.main.key].db}
             indexRoute={RedirectToInterPro}
             catchAll={InnerSwitch}
           />

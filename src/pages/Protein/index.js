@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import { OldSwitch } from 'components/generic/Switch';
+import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import NumberLabel from 'components/NumberLabel';
 import MemberDBTabs from 'components/MemberDBTabs';
@@ -331,11 +331,15 @@ class Summary extends PureComponent {
             />
           )}
         <ErrorBoundary>
-          <OldSwitch
+          <Switch
             {...this.props}
-            locationSelector={l =>
-              l.description.mainDetail || l.description.focusType
-            }
+            locationSelector={l => {
+              const { key } = l.description.main;
+              return (
+                l.description[key].detail ||
+                Object.entries().find(([key, value]) => value.isFilter)[0]
+              );
+            }}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForProtein}
           />
@@ -349,11 +353,15 @@ const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
-    <OldSwitch
+    <Switch
       {...props}
-      locationSelector={l =>
-        l.description.mainAccession || l.description.focusType
-      }
+      locationSelector={l => {
+        const { key } = l.description.main;
+        return (
+          l.description[key].accession ||
+          Object.entries().find(([key, value]) => value.isFilter)[0]
+        );
+      }}
       indexRoute={List}
       childRoutes={[{ value: acc, component: Summary }]}
       catchAll={List}
@@ -364,9 +372,9 @@ const InnerSwitch = props => (
 const Protein = props => (
   <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
     <ErrorBoundary>
-      <OldSwitch
+      <Switch
         {...props}
-        locationSelector={l => l.description.mainDB}
+        locationSelector={l => l.description[l.description.main.key].db}
         indexRoute={Overview}
         catchAll={InnerSwitch}
       />

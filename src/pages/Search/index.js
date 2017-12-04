@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import { OldSwitch } from 'components/generic/Switch';
+import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import SearchResults from 'components/SearchResults';
@@ -51,9 +51,9 @@ IPScanSearchAndStatus.preload = () => {
 
 const InnerSwitch = props => (
   <ErrorBoundary>
-    <OldSwitch
+    <Switch
       {...props}
-      locationSelector={l => l.description.mainAccession}
+      locationSelector={l => l.description[l.description.main.key].accession}
       indexRoute={IPScanSearchAndStatus}
       catchAll={IPScanResult}
     />
@@ -129,8 +129,8 @@ class Wrapper extends PureComponent {
 }
 
 const Search = () => (
-  <OldSwitch
-    locationSelector={l => l.description.mainDB}
+  <Switch
+    locationSelector={l => l.description[l.description.main.key].db}
     indexRoute={RedirectToText}
     childRoutes={routes}
   />

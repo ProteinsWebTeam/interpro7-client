@@ -6,7 +6,7 @@ import { format } from 'url';
 
 import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import { OldSwitch } from 'components/generic/Switch';
+import Switch from 'components/generic/Switch';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import loadData from 'higherOrder/loadData';
@@ -83,11 +83,15 @@ class _Summary extends PureComponent {
         </div>
       </ErrorBoundary>,
       <ErrorBoundary key="switch">
-        <OldSwitch
+        <Switch
           {...this.props}
-          locationSelector={l =>
-            l.description.mainDetail || l.description.focusType
-          }
+          locationSelector={l => {
+            const { key } = l.description.main;
+            return (
+              l.description[key].detail ||
+              Object.entries().find(([key, value]) => value.isFilter)[0]
+            );
+          }}
           indexRoute={SummaryAsync}
           childRoutes={subPagesForSequence}
         />
@@ -105,9 +109,9 @@ const Summary = connect(mapStateToProps)(_Summary);
 
 const IPScanResult = props => (
   <ErrorBoundary>
-    <OldSwitch
+    <Switch
       {...props}
-      locationSelector={l => l.description.mainAccession}
+      locationSelector={l => l.description[l.description.main.key].accession}
       indexRoute={() => null}
       catchAll={Summary}
     />
