@@ -1,6 +1,9 @@
 import React from 'react';
 import { Tooltip } from 'react-tippy';
 
-export default ({ ...rest }) => {
-  return <Tooltip animation="shift" arrow="true" position="bottom" {...rest} />;
-};
+const _Tooltip = ({ ...rest }) => (
+  <Tooltip animation="shift" arrow="true" position="bottom" {...rest} />
+);
+_Tooltip.displayName = 'Tooltip';
+
+export default _Tooltip;
