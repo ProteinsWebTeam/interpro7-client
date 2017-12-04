@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { format } from 'url';
 import { createSelector } from 'reselect';
 
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
@@ -77,7 +77,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
                 <h5>
                   {type}
                   &nbsp;
-                  <Tooltip animation="shift" arrow="true" title={description}>
+                  <Tooltip title={description}>
                     <span
                       className={f('small', 'icon', 'icon-generic')}
                       data-icon="i"
