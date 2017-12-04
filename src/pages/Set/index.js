@@ -303,7 +303,7 @@ class Summary extends PureComponent {
               const { key } = l.description.main;
               return (
                 l.description[key].detail ||
-                Object.entries().find(([key, value]) => value.isFilter)[0]
+                Object.entries().find(([_key, value]) => value.isFilter)[0]
               );
             }}
             indexRoute={SummaryComponent}
@@ -331,7 +331,7 @@ const InnerSwitch = props => (
         const { key } = l.description.main;
         return (
           l.description[key].accession ||
-          Object.entries().find(([key, value]) => value.isFilter)[0]
+          Object.entries().find(([_key, value]) => value.isFilter)[0]
         );
       }}
       indexRoute={List}
