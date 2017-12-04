@@ -47,7 +47,7 @@ class LatestEntry extends PureComponent {
     const { entry } = this.props;
     return (
       <li className={f('list-item')}>
-        <Tooltip title={`${entry.type}`}>
+        <Tooltip title={`${entry.type} type`}>
           <interpro-type type={entry.type} aria-label="Entry type" />
         </Tooltip>
         <div className={f('list-body')}>
