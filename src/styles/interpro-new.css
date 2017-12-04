@@ -628,12 +628,6 @@ h6 small {
 }
 /*/Entry page - md info next title*/
 
-/*homepage Go list component*/
-.go-list span.bullet-icon {
-  font-size: 520%;
-  line-height: 0.5;
-}
-
 /*back to top button*/
 #back-top {
   position: fixed;
