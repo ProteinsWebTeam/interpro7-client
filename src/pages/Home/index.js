@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
 // Components
-import { Tooltip } from 'react-tippy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
