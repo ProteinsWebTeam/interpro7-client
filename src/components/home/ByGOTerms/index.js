@@ -39,17 +39,15 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
               className={f('column', 'medium-3', 'large-3', 'text-center')}
               key={e.title}
             >
-              <Tooltip title={`${e.category} category`}>
-                <span
-                  style={{ color: e.color }}
-                  className={f('small', 'bullet-icon')}
-                >
-                  &bull;
-                </span>
-              </Tooltip>
+              <span
+                style={{ color: e.color }}
+                className={f('small', 'bullet-icon')}
+              >
+                &bull;
+              </span>
               <h6>
                 {e.title}&nbsp;
-                <Tooltip title={`${e.description} for ${e.title}`}>
+                <Tooltip title={`${e.title} (${e.category})`}>
                   <span
                     className={f('small', 'icon', 'icon-generic')}
                     data-icon="i"
