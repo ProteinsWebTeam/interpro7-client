@@ -1,0 +1,47 @@
+@import '../../../styles/colors.css';
+
+a.browse-tabs-link {
+  &,
+  &:focus,
+  &:hover,
+  &:visited {
+    font-size: 0.9rem; /*same size as submenu*/
+    padding: 0.7rem 0.2rem 0.5rem 0.2rem;
+    line-height: inherit;
+    color: black;
+    background-color: transparent;
+  }
+}
+
+a.is-active-tab {
+  &,
+  &:focus,
+  &:hover,
+  &:visited {
+    font-weight: bold;
+    color: black;
+    border-bottom-color: inherit;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+  }
+
+  &.is-signature {
+    background: #4e7287;
+  }
+}
+
+a.is-active-tab.menu-family {
+  border-bottom-color: var(--colors-family-main);
+}
+
+a.is-active-tab.menu-domain {
+  border-bottom-color: var(--colors-domain-main);
+}
+
+a.is-active-tab.menu-site {
+  border-bottom-color: var(--colors-site-main);
+}
+
+a.is-active-tab.menu-repeat {
+  border-bottom-color: var(--colors-repeat-main);
+}
