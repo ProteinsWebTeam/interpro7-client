@@ -3,7 +3,7 @@ import { stringify as qsStringify } from 'query-string';
 
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
-import description2path from 'utils/processLocation/description2path';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const List = loadable({
   loader: () => import(/* webpackChunkName: "list-subpage" */ './ListSubPage'),
@@ -30,14 +30,17 @@ const HMMModel = loadable({
 const defaultMapStateToProps = createSelector(
   state => state.settings.api,
   state => state.settings.pagination,
-  state => state.newLocation.description,
-  state => state.newLocation.search,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
   ({ protocol, hostname, port, root }, pagination, description, _search) => {
     // const search = _search || {};
-    const search = description.mainAccession ? {} : _search || {};
+    const search =
+      description.main.key && description[description.main.key].accession
+        ? {}
+        : _search || {};
     search.page_size = search.page_size || pagination.pageSize;
     // TODO: We were doing a copy of selected field here, but seems that we can use the original
-    // TODO: Delete the comented lines if nothing breaks (31/10/2017)
+    // TODO: Delete the commented lines if nothing breaks (31/10/2017)
     // const description = {
     //   mainType: _description.mainType,
     //   mainDB: _description.mainDB,
@@ -46,7 +49,7 @@ const defaultMapStateToProps = createSelector(
     //   focusDB: _description.focusDB,
     //   focusAccession: _description.focusAccession,
     // };
-    return `${protocol}//${hostname}:${port}${root}${description2path(
+    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
       description,
     )}?${qsStringify(search)}`;
   },
@@ -54,18 +57,24 @@ const defaultMapStateToProps = createSelector(
 
 const mapStateToPropsForHMMModel = createSelector(
   state => state.settings.api,
-  state => state.newLocation.description,
-  state => state.newLocation.search,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit elements from search
     const { type, search: _, ...restOfSearch } = search;
     // modify search
     restOfSearch.annotation = 'logo';
     // omit elements from description
-    const { mainDetail, ...restOfDescription } = description;
+    const { ...copyOfDescription } = description;
+    if (description.main.key) {
+      copyOfDescription[description.main.key] = {
+        ...description[description.main.key],
+        detail: null,
+      };
+    }
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${description2path(
-      restOfDescription,
+    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
+      copyOfDescription,
     )}?${qsStringify(restOfSearch)}`;
   },
 );

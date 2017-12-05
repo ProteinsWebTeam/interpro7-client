@@ -13,7 +13,7 @@ const f = foundationPartial(s);
 
 class PageSizeSelector extends Component {
   static propTypes = {
-    location: T.object.isRequired,
+    customLocation: T.object.isRequired,
     pageSize: T.number,
     changePageSize: T.func,
     goToCustomLocation: T.func,
@@ -21,8 +21,8 @@ class PageSizeSelector extends Component {
 
   constructor(props) {
     super(props);
-    const pageSize = props.location.search.page_size
-      ? props.location.search.page_size
+    const pageSize = props.customLocation.search.page_size
+      ? props.customLocation.search.page_size
       : props.pageSize;
     this.state = { pageSize };
   }
@@ -30,9 +30,9 @@ class PageSizeSelector extends Component {
   _handleChange = event => {
     this.setState({ pageSize: event.target.value });
     this.props.goToCustomLocation({
-      ...this.props.location,
+      ...this.props.customLocation,
       search: {
-        ...this.props.location.search,
+        ...this.props.customLocation.search,
         page_size: event.target.value,
         page: 1,
       },
@@ -70,8 +70,8 @@ class PageSizeSelector extends Component {
 
 const mapStateToProps = createSelector(
   state => state.settings.pagination.pageSize,
-  state => state.newLocation,
-  (pageSize, location) => ({ pageSize, location }),
+  state => state.customLocation,
+  (pageSize, customLocation) => ({ pageSize, customLocation }),
 );
 
 export default connect(mapStateToProps, { changePageSize, goToCustomLocation })(

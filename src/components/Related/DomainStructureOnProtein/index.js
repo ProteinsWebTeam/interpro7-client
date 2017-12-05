@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
 
 import loadData from 'higherOrder/loadData';
-import description2path from 'utils/processLocation/description2path';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -16,20 +16,23 @@ const getUrlFor = createSelector(
   db =>
     createSelector(
       state => state.settings.api,
-      state => state.newLocation.description,
+      state => state.customLocation.description,
       ({ protocol, hostname, port, root }, description) => {
-        // omit from description
-        const { focusType, focusDB, ..._description } = description;
+        // copy description
+        const _description = {};
+        for (const [key, value] of Object.entries(description)) {
+          _description[key] = value.isFilter ? {} : { ...value };
+        }
         // brand new search
         const search = {};
         if (db === 'StructureInfo') {
           search.structureinfo = null;
         } else {
-          _description.focusType = 'entry';
-          _description.focusDB = db;
+          _description.entry.isFilter = true;
+          _description.entry.db = db;
         }
         // build URL
-        return `${protocol}//${hostname}:${port}${root}${description2path(
+        return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
           _description,
         )}?${qsStringify(search)}`.replace(/\?$/, '');
       },

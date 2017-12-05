@@ -211,15 +211,15 @@ class Header extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  state => state.newLocation.description.mainType,
-  state => state.newLocation.description.mainDB,
-  state => state.newLocation.description.mainAccession,
-  (stuck, mainType, mainDB, mainAccession) => ({
+  state => state.customLocation.description.main.key,
+  state => state.customLocation.description.entry.db,
+  state => state.customLocation.description.entry.accession,
+  (stuck, mainType, entryDB, entryAccession) => ({
     stuck,
     isSignature: !!(
       mainType === 'entry' &&
-      mainDB !== 'InterPro' &&
-      mainAccession
+      entryDB !== 'InterPro' &&
+      entryAccession
     ),
   }),
 );

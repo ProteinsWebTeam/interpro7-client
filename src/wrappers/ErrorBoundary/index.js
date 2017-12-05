@@ -33,20 +33,22 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     children: T.node.isRequired,
     errorComponent: T.any,
-    newLocation: T.object,
+    customLocation: T.object,
   };
 
   constructor(props /*: Props */) {
     super(props);
     this.state = { error: null };
   }
-  componentWillReceiveProps({ newLocation }) {
+
+  componentWillReceiveProps({ customLocation }) {
     // If the location is changing, the children should be
     // rendered again
-    if (this.props.newLocation !== newLocation) {
+    if (this.props.customLocation !== customLocation) {
       this.setState({ error: null });
     }
   }
+
   componentDidCatch(error /*: Error */, info /*: any */) {
     console.error(error);
     console.error(info);
@@ -63,7 +65,7 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.newLocation,
-  newLocation => ({ newLocation }),
+  state => state.customLocation,
+  customLocation => ({ customLocation }),
 );
 export default connect(mapStateToProps)(ErrorBoundary);

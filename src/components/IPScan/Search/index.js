@@ -79,15 +79,15 @@ class IPScanSearch extends Component {
     addToast: T.func.isRequired,
     value: T.string,
     ipScan: T.object.isRequired,
-    sequence: T.string,
+    value: T.string,
   };
 
   constructor(props) {
     super(props);
     let editorState;
-    if (props.sequence) {
+    if (props.value) {
       editorState = EditorState.createWithContent(
-        ContentState.createFromText(decodeURIComponent(props.sequence)),
+        ContentState.createFromText(decodeURIComponent(props.value)),
         compositeDecorator,
       );
     } else {
@@ -416,8 +416,8 @@ class IPScanSearch extends Component {
 
 const mapStateToProps = createSelector(
   state => state.settings.ipScan,
-  state => state.newLocation.search.sequence,
-  (ipScan, sequence) => ({ ipScan, sequence }),
+  state => state.customLocation.description.search.value,
+  (ipScan, value) => ({ ipScan, value }),
 );
 
 export default connect(mapStateToProps, { addToast })(IPScanSearch);

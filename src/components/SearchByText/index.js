@@ -39,34 +39,23 @@ class Example extends PureComponent {
     );
   }
 }
-// const Example = ({ value }) =>
-//   <a style={{ cursor: 'pointer' }} data-search={value}>
-//     {' '}{value}
-//   </a>;
 
 class SearchByText extends PureComponent {
   static propTypes = {
-    search: T.shape({
-      search: T.string,
-    }).isRequired,
+    value: T.string,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      value: props.search.search || '',
+      value: props.value || '',
       submit: false,
     };
   }
 
-  componentWillReceiveProps({ search }) {
-    this.setState({ value: search.search });
+  componentWillReceiveProps({ value }) {
+    this.setState({ value });
   }
-
-  handleExampleClick = event => {
-    const value = event.target.dataset.search;
-    if (value) this.setState({ value });
-  };
 
   handleReset = () => this.setState({ value: '' });
 
@@ -147,8 +136,8 @@ class SearchByText extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.newLocation.search,
-  search => ({ search }),
+  state => state.customLocation.description.search.value,
+  value => ({ value }),
 );
 
 export default connect(mapStateToProps)(SearchByText);

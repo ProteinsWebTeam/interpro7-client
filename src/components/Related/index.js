@@ -90,8 +90,11 @@ class _RelatedSimple extends PureComponent {
 }
 
 const mapStateToPropsSimple = createSelector(
-  state => state.newLocation.description.mainType,
-  state => state.newLocation.description.focusType,
+  state => state.customLocation.description.main.key,
+  state =>
+    (Object.entries(state.customLocation.description).find(
+      ([key, value]) => value.isFilter,
+    ) || [])[0],
   (mainType, focusType) => ({ mainType, focusType }),
 );
 const RelatedSimple = connect(mapStateToPropsSimple)(_RelatedSimple);
@@ -240,41 +243,45 @@ export class _RelatedAdvanced extends PureComponent {
 }
 
 const mapStateToPropsAdvanced = createSelector(
-  state => state.newLocation.description.mainType,
-  state => state.newLocation.description.focusType,
-  state => state.newLocation.description.focusDB,
-  (mainType, focusType, focusDB) => ({ mainType, focusType, focusDB }),
+  state => state.customLocation.description.main.key,
+  state =>
+    Object.entries(state.customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ),
+  (mainType, [focusType, { db: focusDB }]) => ({
+    mainType,
+    focusType,
+    focusDB,
+  }),
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
 
 const getReversedUrl = createSelector(
   state => state.settings.api,
-  state => state.newLocation.description,
-  state => state.newLocation.search,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
-    const newDesc = Object.entries(description).reduce((acc, [key, value]) => {
-      let newKey = key;
-      if (key.startsWith('focus')) newKey = newKey.replace('focus', 'main');
-      if (key.startsWith('main')) newKey = newKey.replace('main', 'focus');
-      // eslint-disable-next-line no-param-reassign
-      acc[newKey] = value;
-      return acc;
-    }, {});
+    // copy of description, to modify it after
+    const newDesc = {};
+    let newMain;
+    for (const [key, value] of Object.entries(description)) {
+      newDesc[key] = { ...value };
+      if (value.isFilter) newMain = key;
+    }
+    newDesc[description.main.key].isFilter = true;
+    newDesc.main.key = newMain;
     const s = search || {};
     let url = `${protocol}//${hostname}:${port}${root}${description2path(
       newDesc,
     )}?${qsStringify(s)}`;
-    if (
-      description.mainType === 'entry' &&
-      description.focusType === 'organism'
-    ) {
+    if (description.main.key === 'entry' && newMain === 'organism') {
       url = url.replace('/entry/', '/protein/entry/');
     }
     return url;
   },
 );
 const mapStateToPropsAdvancedQuery = createSelector(
-  state => state.newLocation.description.mainType,
+  state => state.customLocation.description.main.key,
   mainType => ({ mainType }),
 );
 const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
@@ -340,7 +347,10 @@ class Related extends PureComponent {
 }
 
 const mapStateToPropsDefault = createSelector(
-  state => state.newLocation.description.focusType,
+  state =>
+    (Object.entries(state.customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0],
   focusType => ({ focusType }),
 );
 

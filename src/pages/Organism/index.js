@@ -232,14 +232,14 @@ _Title.propTypes = {
 };
 const mapStateToAccessionUrl = createSelector(
   state => state.settings.api,
-  state => state.newLocation.description.mainDB,
-  state => state.newLocation.description.mainAccession,
-  ({ protocol, hostname, port, root }, mainDB, mainAccession) =>
+  state => state.customLocation.organism.db,
+  state => state.customLocation.organism.accession,
+  ({ protocol, hostname, port, root }, db, accession) =>
     format({
       protocol,
       hostname,
       port,
-      pathname: `${root}/organism/${mainDB}/${mainAccession}`,
+      pathname: `${root}/organism/${db}/${accession}`,
     }),
 );
 
@@ -273,9 +273,9 @@ class Summary extends PureComponent {
               const { key } = l.description.main;
               return (
                 l.description[key].detail ||
-                Object.entries(l.description).find(
+                (Object.entries(l.description).find(
                   ([_key, value]) => value.isFilter,
-                )[0] ||
+                ) || [])[0] ||
                 l.description[key].memberDB
               );
             }}
@@ -300,9 +300,9 @@ class InnerSwitch extends PureComponent {
             const { key } = l.description.main;
             return (
               l.description[key].accession ||
-              Object.entries(l.description).find(
+              (Object.entries(l.description).find(
                 ([_key, value]) => value.isFilter,
-              )[0]
+              ) || [])[0]
             );
           }}
           indexRoute={List}

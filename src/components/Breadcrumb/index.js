@@ -183,7 +183,7 @@ class Breadcrumb extends Component {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  state => state.newLocation.description,
+  state => state.customLocation.description,
   (stuck, description) => ({ stuck, description }),
 );
 

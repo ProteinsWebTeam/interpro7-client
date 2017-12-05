@@ -236,7 +236,7 @@ const Matches = (
 Matches.propTypes = propTypes;
 
 const mapStateToProps = createSelector(
-  state => state.newLocation.search,
+  state => state.customLocation.search,
   search => ({ search }),
 );
 

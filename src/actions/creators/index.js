@@ -29,12 +29,6 @@ export const customLocationChangeFromHistory = (
   customLocation,
 });
 
-// location
-export const newLocationChangeFromHistory = (newLocation /*: Object */) => ({
-  type: types.NEW_PROCESSED_NEW_LOCATION,
-  newLocation,
-});
-
 // UI
 export const toggleEMBLMapNav = () => ({
   type: types.TOGGLE_EMBL_MAP_NAV,

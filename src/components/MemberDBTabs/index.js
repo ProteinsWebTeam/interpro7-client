@@ -75,11 +75,9 @@ const getValueFor = (data, mainType, db) => {
     loading: boolean,
     payload?: Object,
   },
-  newLocation: {
+  customLocation: {
     description: {
-      mainType: string,
-      mainDB: string,
-      focusDB: ?string,
+      main: { key: ?string },
     },
     search: Object,
   },
@@ -97,13 +95,9 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
-    newLocation: T.shape({
-      description: T.shape({
-        mainType: T.string.isRequired,
-        mainDB: T.string.isRequired,
-        focusDB: T.string,
-      }).isRequired,
-      search: T.object,
+    customLocation: T.shape({
+      description: T.object.isRequired,
+      search: T.object.isRequired,
     }).isRequired,
     lowGraphics: T.bool.isRequired,
     goToCustomLocation: T.func.isRequired,
@@ -119,7 +113,7 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
   };
 
   _handleChange = ({ target: { value } }) => {
-    const description = { ...this.props.newLocation.description };
+    const description = { ...this.props.customLocation.description };
     if (description.mainType === 'entry') {
       description.mainDB = value;
     } else {
@@ -128,10 +122,10 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
       description.focusDB = isNotAll && value;
     }
     this.props.goToCustomLocation({
-      ...this.props.newLocation,
+      ...this.props.customLocation,
       description,
       search: {
-        ...this.props.newLocation.search,
+        ...this.props.customLocation.search,
         page: null,
       },
     });
@@ -141,11 +135,12 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
     const {
       dataDB,
       dataAll,
-      newLocation: { description: { mainType, mainDB, focusDB } },
+      customLocation: {
+        description: { main: { key: mainType }, entry: { db: value } },
+      },
       lowGraphics,
     } = this.props;
     const { collapsed } = this.state;
-    const value = mainType === 'entry' ? mainDB : focusDB;
     const options = Array.from(menuOptions).filter(
       ([, value]) => !(mainType === 'entry' && value === 'all'),
     );
@@ -239,19 +234,19 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.newLocation,
+  state => state.customLocation,
   state => state.settings.ui.lowGraphics,
-  (newLocation, lowGraphics) => ({ newLocation, lowGraphics }),
+  (customLocation, lowGraphics) => ({ customLocation, lowGraphics }),
 );
 
 const getUrlForMemberDB = createSelector(
   state => state.settings.api,
-  state => state.newLocation,
-  ({ protocol, hostname, port, root }, location) => {
+  state => state.customLocation.description,
+  ({ protocol, hostname, port, root }, description) => {
     let output = `${protocol}//${hostname}:${port}${root}/entry`;
-    if (location.description.mainType !== 'entry') {
-      output += `/${location.description.mainType}/${
-        location.description.mainDB
+    if (description.main.key && description.main.key !== 'entry') {
+      output += `/${description.main.key}/${
+        description[description.main.key].db
       }`;
     }
     return output;
@@ -260,7 +255,7 @@ const getUrlForMemberDB = createSelector(
 
 const getUrlForAll = createSelector(
   state => state.settings.api,
-  state => state.newLocation.description.mainType,
+  state => state.customLocation.description.main.key,
   ({ protocol, hostname, port, root }, mainType) =>
     `${protocol}//${hostname}:${port}${root}/${mainType}`,
 );

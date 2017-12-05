@@ -24,12 +24,12 @@ const NOT_FOUND = -1;
 class SearchResults extends PureComponent {
   static propTypes = {
     data: T.object,
-    search: T.object,
+    searchValue: T.string,
     dataUrl: T.string,
   };
 
   render() {
-    const { data: { payload, loading }, search, dataUrl } = this.props;
+    const { data: { payload, loading }, searchValue, dataUrl } = this.props;
     if (loading) return <Loading />;
     if (!payload) {
       return <div />;
@@ -41,42 +41,42 @@ class SearchResults extends PureComponent {
       );
     } else if (
       payload.hitCount === 1 &&
-      payload.entries[0].id === search.search
+      payload.entries[0].id === searchValue
     ) {
       return (
         <Redirect
           to={{
             description: {
               main: { key: 'entry' },
-              entry: { db: 'InterPro', accession: search.search },
+              entry: { db: 'InterPro', accession: searchValue },
             },
           }}
         />
       );
     } else if (
       payload.hitCount > 0 &&
-      payload.entries[0].fields.PDB.indexOf(search.search) !== NOT_FOUND
+      payload.entries[0].fields.PDB.indexOf(searchValue) !== NOT_FOUND
     ) {
       return (
         <Redirect
           to={{
             description: {
               main: { key: 'structure' },
-              entry: { db: 'PDB', accession: search.search },
+              entry: { db: 'PDB', accession: searchValue },
             },
           }}
         />
       );
     } else if (
       payload.hitCount > 0 &&
-      payload.entries[0].fields.UNIPROT.indexOf(search.search) !== NOT_FOUND
+      payload.entries[0].fields.UNIPROT.indexOf(searchValue) !== NOT_FOUND
     ) {
       return (
         <Redirect
           to={{
             description: {
               main: { key: 'protein' },
-              protein: { db: 'UniProt', accession: search.search },
+              protein: { db: 'UniProt', accession: searchValue },
             },
           }}
         />
@@ -86,11 +86,11 @@ class SearchResults extends PureComponent {
       <Table
         dataTable={payload.entries}
         actualSize={payload.hitCount}
-        query={search}
+        query={{ search: { search: searchValue } }}
         pathname="/search/text"
       >
         <Exporter>
-          <a href={dataUrl} download={`SearchResults-${search.search}.json`}>
+          <a href={dataUrl} download={`SearchResults-${searchValue}.json`}>
             JSON
           </a>
         </Exporter>
@@ -118,7 +118,7 @@ class SearchResults extends PureComponent {
             <div>
               <HighlightedText
                 text={d.description[0].slice(0, MAX_LENGTH)}
-                textToHighlight={search.search}
+                textToHighlight={searchValue}
               />…
             </div>
           )}
@@ -133,19 +133,21 @@ class SearchResults extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.data.dataUrl,
-  state => state.newLocation.search,
-  (dataUrl, search) => ({ dataUrl, search }),
+  state => state.customLocation.description.search.value,
+  (dataUrl, searchValue) => ({ dataUrl, searchValue }),
 );
 
 const getEbiSearchUrl = createSelector(
   state => state.settings.ebi,
   state => state.settings.pagination,
-  state => state.newLocation.search,
-  ({ protocol, hostname, port, root }, pagination, search) => {
+  state => state.customLocation.search,
+  state => state.customLocation.description.search.value,
+  ({ protocol, hostname, port, root }, pagination, search, searchValue) => {
     const s = search || {};
-    if (!s.search) return null;
+    if (!searchValue) return null;
     const fields = 'PDB,UNIPROT,description';
     s.page_size = s.page_size || pagination.pageSize;
+    s.search = searchValue;
     const params = `?query=${s.search}&format=json&fields=${fields}`;
     return `${protocol}//${hostname}:${port}${root}${params}`;
   },

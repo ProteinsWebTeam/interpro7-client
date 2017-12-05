@@ -115,9 +115,15 @@ const mapStateToProps = createSelector(
         return false;
       }),
   ),
-  state => state.newLocation.description.mainType,
-  state => state.newLocation.description.mainDB,
-  state => state.newLocation.description.mainAccession,
+  state => state.customLocation.description.main.key,
+  state =>
+    state.customLocation.description.main.key &&
+    state.customLocation.description[state.customLocation.description.main.key]
+      .db,
+  state =>
+    state.customLocation.description.main.key &&
+    state.customLocation.description[state.customLocation.description.main.key]
+      .accession,
   state => state.ui.stuck,
   (loading, mainType, mainDB, mainAccession, stuck) => ({
     loading,
