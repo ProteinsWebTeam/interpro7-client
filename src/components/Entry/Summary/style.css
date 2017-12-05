@@ -1,0 +1,14 @@
+/*Entry page - md info next title*/
+.md-hlight {
+  display: block;
+  overflow: auto;
+}
+
+.md-hlight h5 {
+  color: #41647d;
+}
+.md-hlight a,
+.md-hlight a:visited {
+  color: #41647d;
+}
+/*/Entry page - md info next title*/
