@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { Helmet } from 'react-helmet';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import Link from 'components/generic/Link';
 
 import loadWebComponent from 'utils/loadWebComponent';
 
@@ -11,9 +10,8 @@ import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import styles from './style.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(fonts, ipro, styles);
+const f = foundationPartial(ipro, styles);
 
 const softcolors = {
   // opacity 0.6 normal colors
@@ -138,35 +136,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
               </small>
             )}
         </h3>
-        {isEntry &&
-          metadata.source_database &&
-          metadata.source_database.toLowerCase() !== 'interpro' && (
-            <div className={f('md-hlight')}>
-              <h5>
-                Member database:&nbsp;
-                <Link
-                  newTo={{
-                    description: {
-                      mainType: 'entry',
-                      mainDB: metadata.source_database,
-                    },
-                  }}
-                >
-                  {metadata.source_database}{' '}
-                  <span
-                    className={f('small', 'icon', 'icon-generic')}
-                    data-icon="i"
-                    title={metadata.source_database}
-                  />
-                </Link>
-              </h5>
-              <p>
-                This signature is defined as{' '}
-                {metadata.type.replace('_', ' ').toLowerCase()} by{' '}
-                {metadata.source_database}.
-              </p>
-            </div>
-          )}
+
         {metadata.name.short &&
           metadata.accession !== metadata.name.short && (
             <p>
