@@ -611,22 +611,6 @@ h6 small {
 .local_footer.masthead {
   background-size: 130%, 110%;
 }
-/*Entry page - md info next title*/
-.md-hlight {
-  display: block;
-  overflow: auto;
-}
-.md-hlight div {
-  float: left;
-}
-.md-hlight h5 {
-  color: #41647d;
-}
-.md-hlight a,
-.md-hlight a:visited {
-  color: #41647d;
-}
-/*/Entry page - md info next title*/
 
 /*back to top button*/
 #back-top {
