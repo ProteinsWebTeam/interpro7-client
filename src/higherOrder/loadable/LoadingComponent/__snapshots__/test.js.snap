@@ -31,14 +31,4 @@ exports[`<LoadingComponent /> should render in loading state after delay but bef
 
 exports[`<LoadingComponent /> should render in with error 1`] = `<ErrorMessage />`;
 
-exports[`<LoadingMessage /> should render loading message 1`] = `
-<div
-  className="row"
->
-  <div
-    className="columns"
-  >
-    Loading… 
-  </div>
-</div>
-`;
+exports[`<LoadingMessage /> should render loading message 1`] = `<Loading />`;
