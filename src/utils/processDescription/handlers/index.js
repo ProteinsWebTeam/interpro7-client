@@ -197,8 +197,11 @@ const typeConstructor = (type /*: PossibleMain */) /*: Handler */ =>
       value: (_, description) => get(description, ['main', 'key']) ? true : type,
     },
     match: {
-      value: (current, { [type]: typeObject }) =>
-        current.toLowerCase() === type && isEmpty(typeObject),
+      value: (current, { [type]: typeObject }) => (
+        typeof current === 'string' &&
+        current.toLowerCase() === type &&
+        isEmpty(typeObject)
+      ),
     },
   });
 

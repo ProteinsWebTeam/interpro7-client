@@ -1,7 +1,5 @@
 // @flow
-import get from 'lodash-es/get';
-
-import descriptionItemToHandlers from 'utils/processDescription/descriptionItemToHandlers';
+import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 
 /*:: import type { Description } from 'utils/processDescription/handlers'; */
 
@@ -9,23 +7,23 @@ import descriptionItemToHandlers from 'utils/processDescription/descriptionItemT
 const pathForPart = (
   type/*: string */,
   values/*: {|[key: string]: ?(string | boolean)|} */
-)/*: string */ => {
-  return [type, ...Object.values(values)].filter(part => typeof part === 'string').join('/');
-};
+)/*: string */ => [type, ...Object.values(values)]
+  .filter(part => typeof part === 'string').join('/');
 
 export default (description /*: Description */) => {
+  const _description = descriptionToDescription(description);
   let output = '/';
-  if (!(description.main && description.main.key)) {
+  if (!_description.main.key) {
     return (
       output +
-      Object.values(description.other)
+      Object.values(_description.other)
         .filter(Boolean)
         .join('/')
     );
   }
-  const main = description.main.key;
-  output += `${pathForPart(main, description[main])}/`;
-  const filters = Object.entries(description).filter(
+  const main = _description.main.key;
+  output += `${pathForPart(main, _description[main])}/`;
+  const filters = Object.entries(_description).filter(
     ([, { isFilter }]) => isFilter,
   );
   return filters.reduce(

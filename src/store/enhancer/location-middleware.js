@@ -47,7 +47,9 @@ export default history => ({ dispatch }) => {
     // if NEW_CUSTOM_LOCATION don't process and update history, it'll eventually
     // result in another action being dispatched through callback
     if (action.type === NEW_CUSTOM_LOCATION) {
-      const { description, search, hash } = processLocation(action.location);
+      const { description, search, hash } = processLocation(
+        action.customLocation,
+      );
       const pathname = descriptionToPath(description);
       history[action.replace ? 'replace' : 'push']({
         pathname,

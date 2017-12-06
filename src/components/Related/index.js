@@ -93,7 +93,7 @@ const mapStateToPropsSimple = createSelector(
   state => state.customLocation.description.main.key,
   state =>
     (Object.entries(state.customLocation.description).find(
-      ([key, value]) => value.isFilter,
+      ([_key, value]) => value.isFilter,
     ) || [])[0],
   (mainType, focusType) => ({ mainType, focusType }),
 );
