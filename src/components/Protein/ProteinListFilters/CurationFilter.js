@@ -50,7 +50,7 @@ class CurationFilter extends Component {
     this.locationToState(nextProps.customLocation);
   }
 
-  locationToSstate(customLocation) {
+  locationToState(customLocation) {
     const { db } = customLocation.description[
       customLocation.description.main.key
     ].db;
