@@ -46,7 +46,9 @@ class _Switch extends PureComponent {
     const valueFromLocation = locationSelector(customLocation);
     const { Component = catchAll, matched = valueFromLocation } =
       match(childRoutes, indexRoute, valueFromLocation) || {};
-    return <Component {...props} matched={matched} location={location} />;
+    return (
+      <Component {...props} matched={matched} customLocation={customLocation} />
+    );
   }
 }
 

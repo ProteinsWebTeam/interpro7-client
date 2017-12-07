@@ -47,7 +47,7 @@ const propTypes = {
     loading: T.bool.isRequired,
   }).isRequired,
   isStale: T.bool.isRequired,
-  location: T.shape({
+  customLocation: T.shape({
     description: T.object.isRequired,
     search: T.object.isRequired,
   }).isRequired,
@@ -79,7 +79,7 @@ Overview.propTypes = propTypes;
 const List = ({
   data: { payload, loading, url, status },
   isStale,
-  location: { search },
+  customLocation: { search },
 }) => {
   let _payload = payload;
   const HTTP_OK = 200;
@@ -130,11 +130,13 @@ const List = ({
             dataKey="accession"
             renderer={(accession /*: string */) => (
               <Link
-                to={location => ({
+                to={customLocation => ({
                   description: {
-                    ...location.description,
-                    [location.description.main.key]: {
-                      ...location.description[location.description.main.key],
+                    ...customLocation.description,
+                    [customLocation.description.main.key]: {
+                      ...customLocation.description[
+                        customLocation.description.main.key
+                      ],
                       accession,
                     },
                   },
@@ -156,11 +158,13 @@ const List = ({
               { accession } /*: {accession: string} */,
             ) => (
               <Link
-                to={location => ({
+                to={customLocation => ({
                   description: {
-                    ...location.description,
-                    [location.description.main.key]: {
-                      ...location.description[location.description.main.key],
+                    ...customLocation.description,
+                    [customLocation.description.main.key]: {
+                      ...customLocation.description[
+                        customLocation.description.main.key
+                      ],
                       accession,
                     },
                   },
@@ -197,14 +201,14 @@ const List = ({
 };
 List.propTypes = propTypes;
 
-const SummaryComponent = ({ data: { payload }, location }) => (
-  <SummaryAsync data={payload} location={location} />
+const SummaryComponent = ({ data: { payload }, customLocation }) => (
+  <SummaryAsync data={payload} customLocation={customLocation} />
 );
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.any,
   }).isRequired,
-  location: T.object.isRequired,
+  customLocation: T.object.isRequired,
 };
 
 const subPagesForStructure = new Set();
@@ -247,7 +251,7 @@ Summary.propTypes = {
   data: T.shape({
     loading: T.bool.isRequired,
   }).isRequired,
-  location: T.object.isRequired,
+  customLocation: T.object.isRequired,
 };
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch

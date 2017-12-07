@@ -72,8 +72,8 @@ class _RelatedSimple extends PureComponent {
           obj={secondaryData}
           component={({ k: db, value }) => (
             <Link
-              to={location => ({
-                ...location,
+              to={customLocation => ({
+                ...customLocation,
                 description: {
                   main: { key: focusType },
                   [focusType]: { db },

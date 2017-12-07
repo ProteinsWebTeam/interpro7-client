@@ -23,7 +23,7 @@ const webComponents = [];
   data: {
     metadata: Object,
   },
-  location: {
+  customLocation: {
     description: Object,
   },
 }; */
@@ -33,7 +33,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }).isRequired,
-    location: T.shape({
+    customLocation: T.shape({
       description: T.object.isRequired,
     }).isRequired,
   };
@@ -77,12 +77,12 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                     {chains.map(chain => (
                       <Link
                         key={chain}
-                        to={location => ({
-                          ...location,
+                        to={customLocation => ({
+                          ...customLocation,
                           description: {
-                            ...location.description,
+                            ...customLocation.description,
                             structure: {
-                              ...location.description.structure,
+                              ...customLocation.description.structure,
                               chain,
                             },
                           },

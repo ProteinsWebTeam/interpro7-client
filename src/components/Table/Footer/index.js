@@ -54,11 +54,11 @@ const Footer = ({
         ) : (
           <li>
             <Link
-              to={location => ({
-                ...location,
+              to={customLocation => ({
+                ...customLocation,
                 search: {
-                  ...location.search,
-                  page: (location.search.page || 1) - 1,
+                  ...customLocation.search,
+                  page: (customLocation.search.page || 1) - 1,
                   page_size: pageSize,
                   search: pagination.search,
                 },
@@ -82,10 +82,10 @@ const Footer = ({
           return (
             <li key={e} className={page === e ? f('current') : ''}>
               <Link
-                to={location => ({
-                  ...location,
+                to={customLocation => ({
+                  ...customLocation,
                   search: {
-                    ...location.search,
+                    ...customLocation.search,
                     page: e,
                     page_size: pageSize,
                     search: pagination.search,
@@ -104,11 +104,11 @@ const Footer = ({
         ) : (
           <li>
             <Link
-              to={location => ({
-                ...location,
+              to={customLocation => ({
+                ...customLocation,
                 search: {
-                  ...location.search,
-                  page: (location.search.page || 1) + 1,
+                  ...customLocation.search,
+                  page: (customLocation.search.page || 1) + 1,
                 },
               })}
             >

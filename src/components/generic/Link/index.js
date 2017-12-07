@@ -28,17 +28,22 @@ const generateHref = (nextLocation /*: Object */, href /*?: string */) => {
 const generateClassName = (
   className /*: ?string */,
   activeClass /*: ?(string | function) */,
-  location /*: Object */,
-  nextLocation /*: Object */,
+  customLocation /*: Object */,
+  nextCustomLocation /*: Object */,
   href /*: ?string */,
 ) => {
-  if (href || !(activeClass && nextLocation)) return className;
+  if (href || !(activeClass && nextCustomLocation)) return className;
   if (typeof activeClass === 'function') {
-    return `${className || ''} ${activeClass(location) || ''}`;
+    return `${className || ''} ${activeClass(customLocation) || ''}`;
   }
-  for (const [key, value] of Object.entries(nextLocation.description)) {
-    // If it is ever true, it means we don't have a match
-    if (location.description[key] !== value) return className;
+  for (const [keyLevel1, intermediateValue] of Object.entries(
+    nextCustomLocation.description,
+  )) {
+    for (const [keyLevel2, value] of Object.entries(intermediateValue)) {
+      // If it is ever true, it means we don't have a match
+      if (customLocation.description[keyLevel1][keyLevel2] !== value)
+        return className;
+    }
   }
   // If we arrive here, we have a match
   return `${className || ''} ${activeClass}`;
@@ -127,14 +132,14 @@ class Link extends PureComponent /*:: <Props> */ {
       children,
       ...props
     } = this.props;
-    const nextLocation = getNextLocation(customLocation, to) || {};
-    const _href = generateHref(nextLocation, href);
+    const nextCustomLocation = getNextLocation(customLocation, to) || {};
+    const _href = generateHref(nextCustomLocation, href);
     const _className =
       generateClassName(
         className,
         activeClass,
         customLocation,
-        nextLocation,
+        nextCustomLocation,
         href,
       ) || '';
     if (disabled) {

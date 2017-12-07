@@ -43,7 +43,7 @@ const propTypes = {
     loading: T.bool.isRequired,
   }).isRequired,
   isStale: T.bool.isRequired,
-  location: T.shape({
+  customLocation: T.shape({
     description: T.object.isRequired,
   }).isRequired,
   match: T.string,
@@ -91,7 +91,7 @@ class List extends PureComponent {
     const {
       data: { payload, loading, url, status },
       isStale,
-      location: { search },
+      customLocation: { search },
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
@@ -147,12 +147,12 @@ class List extends PureComponent {
               dataKey="accession"
               renderer={(accession /*: string */) => (
                 <Link
-                  to={location => ({
-                    ...location,
+                  to={customLocation => ({
+                    ...customLocation,
                     description: {
-                      main: { key: location.description.mainType },
-                      [location.description.mainType]: {
-                        db: location.description.mainDB,
+                      main: { key: customLocation.description.mainType },
+                      [customLocation.description.mainType]: {
+                        db: customLocation.description.mainDB,
                         accession,
                       },
                     },
@@ -177,12 +177,12 @@ class List extends PureComponent {
                 { accession } /*: {accession: string} */,
               ) => (
                 <Link
-                  to={location => ({
-                    ...location,
+                  to={customLocation => ({
+                    ...customLocation,
                     description: {
-                      main: { key: location.description.mainType },
-                      [location.description.mainType]: {
-                        db: location.description.mainDB,
+                      main: { key: customLocation.description.mainType },
+                      [customLocation.description.mainType]: {
+                        db: customLocation.description.mainDB,
                         accession,
                       },
                     },
@@ -259,12 +259,12 @@ class SummaryComponent extends PureComponent {
     data: T.shape({
       payload: T.any,
     }).isRequired,
-    location: T.object.isRequired,
+    customLocation: T.object.isRequired,
   };
 
   render() {
-    const { data: { payload }, location } = this.props;
-    return <SummaryAsync data={payload} location={location} />;
+    const { data: { payload }, customLocation } = this.props;
+    return <SummaryAsync data={payload} customLocation={customLocation} />;
   }
 }
 

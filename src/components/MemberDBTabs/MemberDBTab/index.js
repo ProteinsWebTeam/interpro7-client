@@ -52,9 +52,9 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
 
   render() {
     const { children, count, mainType, cleanName, lowGraphics } = this.props;
-    const to = ({ description, ...location }) => {
+    const to = ({ description, ...customLocation }) => {
       const nextLocation = {
-        ...location,
+        ...customLocation,
         description: {
           ...description,
           entry: { ...description.entry },
