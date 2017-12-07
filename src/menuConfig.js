@@ -41,23 +41,6 @@ export const EBI /*: Array<Object> */ = [
 
 export const entities /*: Array<Object> */ = [
   {
-    newTo(location) {
-      return {
-        description: {
-          ...location.description,
-          mainType: 'entry',
-          mainDB:
-            location.description.focusIntegration ||
-            location.description.focusDB ||
-            (location.description.mainType === 'entry' &&
-              location.description.mainDB) ||
-            'InterPro',
-          focusType: null,
-          focusDB: null,
-          focusIntegration: null,
-        },
-      };
-    },
     to(location) {
       return {
         description: {
@@ -74,26 +57,9 @@ export const entities /*: Array<Object> */ = [
     name: 'Entry',
   },
   {
-    newTo(location) {
-      let { focusType, focusDB } = location.description;
-      if (location.description.mainType === 'entry') {
-        focusType = 'entry';
-        focusDB = location.description.mainDB;
-      }
-      return {
-        description: {
-          ...location.description,
-          mainType: 'protein',
-          mainDB: 'UniProt',
-          focusType,
-          focusDB,
-        },
-      };
-    },
     to(location) {
       return {
         description: {
-          ...location.description,
           main: { key: 'protein' },
           protein: { db: 'UniProt' },
         },
@@ -102,83 +68,33 @@ export const entities /*: Array<Object> */ = [
     name: 'Protein',
   },
   {
-    newTo(location) {
-      let { focusType, focusDB } = location.description;
-      if (location.description.mainType === 'entry') {
-        focusType = 'entry';
-        focusDB = location.description.mainDB;
-      }
-      return {
-        description: {
-          ...location.description,
-          mainType: 'structure',
-          mainDB: 'PDB',
-          focusType,
-          focusDB,
-        },
-      };
-    },
     to(location) {
       return {
         description: {
-          ...location.description,
           main: { key: 'structure' },
-          protein: { db: 'PDB' },
+          structure: { db: 'PDB' },
         },
       };
     },
     name: 'Structure',
   },
   {
-    newTo(location) {
-      let { focusType, focusDB } = location.description;
-      if (location.description.mainType === 'entry') {
-        focusType = 'entry';
-        focusDB = location.description.mainDB;
-      }
-      return {
-        description: {
-          ...location.description,
-          mainType: 'organism',
-          mainDB: 'taxonomy',
-          focusType,
-          focusDB,
-        },
-      };
-    },
     to(location) {
       return {
         description: {
-          ...location.description,
           main: { key: 'organism' },
-          protein: { db: 'taxonomy' },
+          organism: { db: 'taxonomy' },
         },
       };
     },
     name: 'Organism',
   },
   {
-    newTo(location) {
-      let { focusType, focusDB } = location.description;
-      if (location.description.mainType === 'entry') {
-        focusType = 'entry';
-        focusDB = location.description.mainDB;
-      }
-      return {
-        description: {
-          mainType: 'set',
-          mainDB: 'all',
-          focusType,
-          focusDB,
-        },
-      };
-    },
     to(location) {
       return {
         description: {
-          ...location.description,
           main: { key: 'set' },
-          protein: { db: 'all' },
+          set: { db: 'all' },
         },
       };
     },
@@ -190,18 +106,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'overview',
     {
-      newTo(location /*: Location */) {
-        return {
-          description: {
-            ...location.description,
-            mainDetail: null,
-            focusType: null,
-            focusDB: null,
-            mainMemberDB: null,
-            focusIntegration: null,
-          },
-        };
-      },
       to(location) {
         const { key } = location.description.main.key;
         return {
@@ -221,21 +125,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'entry',
     {
-      newTo(location /*: Location */) {
-        return {
-          description: {
-            ...location.description,
-            mainDetail: null,
-            mainMemberDB: null,
-            focusType: 'entry',
-            focusDB:
-              location.description.mainType === 'set'
-                ? location.description.mainDB
-                : null,
-            focusIntegration: 'all',
-          },
-        };
-      },
       to(location) {
         const { key } = location.description.main.key;
         return {
@@ -260,18 +149,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'protein',
     {
-      newTo(location /*: Location */) {
-        return {
-          description: {
-            ...location.description,
-            mainDetail: null,
-            mainMemberDB: null,
-            focusType: 'protein',
-            focusDB: 'UniProt',
-            focusIntegration: null,
-          },
-        };
-      },
       to(location) {
         const { key } = location.description.main.key;
         return {
@@ -296,18 +173,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'structure',
     {
-      newTo(location /*: Location */) {
-        return {
-          description: {
-            ...location.description,
-            mainDetail: null,
-            mainMemberDB: null,
-            focusType: 'structure',
-            focusDB: 'PDB',
-            focusIntegration: null,
-          },
-        };
-      },
       to(location) {
         const { key } = location.description.main.key;
         return {
@@ -332,18 +197,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'organism',
     {
-      newTo(location /*: Location */) {
-        return {
-          description: {
-            ...location.description,
-            mainDetail: null,
-            focusType: 'organism',
-            focusDB: 'taxonomy',
-            focusIntegration: null,
-            mainMemberDB: null,
-          },
-        };
-      },
       to(location) {
         const { key } = location.description.main.key;
         return {
@@ -368,17 +221,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'set',
     {
-      newTo(location /*: Location */) {
-        return {
-          description: {
-            ...location.description,
-            mainDetail: null,
-            focusType: 'set',
-            focusDB: location.description.mainDB,
-            mainMemberDB: null,
-          },
-        };
-      },
       to(location) {
         const { key } = location.description.main.key;
         return {
@@ -403,18 +245,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'sequence',
     {
-      newTo(location /*: Location */) {
-        return {
-          description: {
-            ...location.description,
-            focusType: null,
-            focusDB: null,
-            focusIntegration: null,
-            mainDetail: 'sequence',
-            mainMemberDB: null,
-          },
-        };
-      },
       to(location) {
         const { key } = location.description.main.key;
         return {
@@ -434,18 +264,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'domain_architecture',
     {
-      newTo(location /*: Location */) {
-        return {
-          description: {
-            ...location.description,
-            focusType: null,
-            focusDB: null,
-            focusIntegration: null,
-            mainDetail: 'domain_architecture',
-            mainMemberDB: null,
-          },
-        };
-      },
       to(location) {
         const { key } = location.description.main.key;
         return {
@@ -465,18 +283,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'logo',
     {
-      newTo(location /*: Location */) {
-        return {
-          description: {
-            ...location.description,
-            focusType: null,
-            focusDB: null,
-            focusIntegration: null,
-            mainDetail: 'logo',
-            mainMemberDB: null,
-          },
-        };
-      },
       to(location) {
         const { key } = location.description.main.key;
         return {
@@ -496,18 +302,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'proteome',
     {
-      newTo(location /*: Location */) {
-        return {
-          description: {
-            ...location.description,
-            focusType: null,
-            focusDB: null,
-            focusIntegration: null,
-            mainDetail: null,
-            mainMemberDB: 'proteome',
-          },
-        };
-      },
       to(location) {
         const { key } = location.description.main.key;
         return {
@@ -530,7 +324,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
 export const InterPro /*: Array<Object> */ = [
   {
     to: { description: {} },
-    newTo: { description: {} },
     icon: 'H',
     name: 'Home',
     activeClass({ description: { main, other } } /*: Location */) {
@@ -539,39 +332,11 @@ export const InterPro /*: Array<Object> */ = [
   },
   {
     to: { description: { main: { key: 'search' } } },
-    newTo: { description: { mainType: 'search' } },
     icon: '1',
     name: 'Search',
     iconClass: 'functional',
   },
   {
-    newTo(location) {
-      let mainType = 'entry';
-      let mainDB = 'InterPro';
-      let focusType = null;
-      let focusDB = null;
-      if (
-        location.description.mainType &&
-        location.description.mainType !== 'search'
-      ) {
-        if (
-          location.description.mainType === 'set' &&
-          location.description.mainAccession
-        ) {
-          mainType = 'set';
-          mainDB = 'all';
-          focusType = 'entry';
-          focusDB = location.description.mainDB;
-        } else {
-          mainType = location.description.mainType;
-          mainDB = location.description.mainDB || 'InterPro';
-        }
-      }
-      return {
-        ...location,
-        description: { mainType, mainDB, focusType, focusDB },
-      };
-    },
     to(location) {
       const { key } = location.description.main;
       if (!key || key === 'search' || key === 'job') {
@@ -613,33 +378,28 @@ export const InterPro /*: Array<Object> */ = [
     iconClass: 'functional',
   },
   {
-    newTo: { description: { other: 'release_notes' } },
     to: { description: { other: ['release_notes'] } },
     icon: '0',
     name: 'Release\xa0Notes',
     iconClass: 'functional',
   },
   {
-    newTo: { description: { other: 'download' } },
     to: { description: { other: ['download'] } },
     icon: '=',
     name: 'Download',
     iconClass: 'functional',
   },
   {
-    newTo: { description: { other: 'help' } },
     to: { description: { other: ['help'] } },
     icon: '?',
     name: 'Help',
   },
   {
-    newTo: { description: { other: 'about' } },
     to: { description: { other: ['about'] } },
     icon: 'i',
     name: 'About',
   },
   {
-    newTo: { description: { other: 'settings' } },
     to: { description: { other: ['settings'] } },
     icon: 's',
     name: 'Settings',

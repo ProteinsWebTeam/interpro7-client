@@ -6,7 +6,7 @@ import { stringify as qsStringify } from 'query-string';
 import omit from 'lodash-es/omit';
 
 import Link from 'components/generic/Link';
-import description2path from 'utils/processLocation/description2path';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
 import Matches from 'components/Matches';
@@ -271,7 +271,7 @@ const getReversedUrl = createSelector(
     newDesc[description.main.key].isFilter = true;
     newDesc.main.key = newMain;
     const s = search || {};
-    let url = `${protocol}//${hostname}:${port}${root}${description2path(
+    let url = `${protocol}//${hostname}:${port}${root}${descriptionToPath(
       newDesc,
     )}?${qsStringify(s)}`;
     if (description.main.key === 'entry' && newMain === 'organism') {

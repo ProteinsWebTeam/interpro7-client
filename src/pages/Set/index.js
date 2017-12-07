@@ -22,7 +22,7 @@ import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
-import { setDB } from 'utils/processLocation/handlers';
+import { setDBs } from 'utils/processDescription/handlers';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -268,9 +268,12 @@ class Summary extends PureComponent {
       return <Loading />;
     }
     let currentSet = null;
-    Array.from(setDB).forEach(db => {
-      if (db.name === payload.metadata.source_database) currentSet = db;
-    });
+    for (const setDB of setDBs) {
+      if (setDB.name === payload.metadata.source_database) {
+        currentSet = setDB;
+        break;
+      }
+    }
     return (
       <div>
         {this.props.data.payload &&
@@ -318,7 +321,7 @@ class Summary extends PureComponent {
 }
 
 const dbAccs = new RegExp(
-  Array.from(setDB)
+  Array.from(setDBs)
     .map(db => db.re.source)
     .filter(db => db)
     .join('|'),

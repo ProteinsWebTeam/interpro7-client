@@ -53,7 +53,7 @@ const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => l.description[l.description.main.key].accession}
+      locationSelector={l => l.description.search.accession}
       indexRoute={IPScanSearchAndStatus}
       catchAll={IPScanResult}
     />
@@ -130,7 +130,7 @@ class Wrapper extends PureComponent {
 
 const Search = () => (
   <Switch
-    locationSelector={l => l.description[l.description.main.key].db}
+    locationSelector={l => l.description.search.type}
     indexRoute={RedirectToText}
     childRoutes={routes}
   />

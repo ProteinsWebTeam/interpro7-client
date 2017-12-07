@@ -1,5 +1,5 @@
 // @flow
-import get from 'lodash-es/set';
+import get from 'lodash-es/get';
 import set from 'lodash-es/set';
 
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
@@ -162,7 +162,7 @@ const memberDB = new Set([
 ]);
 const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
 
-export const setDB /*: Set<Object> */ = new Set([
+export const setDBs /*: Set<Object> */ = new Set([
   {
     name: 'pfam',
     re: /^CL[0-9]{4}$/,
@@ -459,7 +459,7 @@ export const setDBHandler /*: Handler */ = handlerConstructor({
   match: {
     value(current) {
       const _current = this.cleanUp(current);
-      for (const { name } of setDB) {
+      for (const { name } of setDBs) {
         if (name === _current) return true;
       }
       return _current === 'all' || _current === 'InterPro';
@@ -480,7 +480,7 @@ export const setAccessionHandler /*: Handler */ = handlerConstructor({
   match: {
     value(current) {
       const _current = this.cleanedUp(current);
-      for (const { re } of setDB) {
+      for (const { re } of setDBs) {
         if (re.test(_current)) return true;
       }
     },
