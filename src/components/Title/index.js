@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { Helmet } from 'react-helmet';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadWebComponent from 'utils/loadWebComponent';
 
 import { foundationPartial } from 'styles/foundation';
@@ -91,7 +91,12 @@ export default class Title extends PureComponent /*:: <Props> */ {
           metadata.type &&
           metadata.source_database &&
           metadata.source_database.toLowerCase() === 'interpro' && (
-            <interpro-type type={metadata.type.replace('_', ' ')} size="4em" />
+            <Tooltip title={`${metadata.type.replace('_', ' ')} type`}>
+              <interpro-type
+                type={metadata.type.replace('_', ' ')}
+                size="4em"
+              />
+            </Tooltip>
           )}
         {isEntry &&
           metadata.type &&
