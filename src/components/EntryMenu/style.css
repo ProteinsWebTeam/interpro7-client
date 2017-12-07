@@ -5,9 +5,3 @@
   align-items: stretch;
   flex-wrap: wrap;
 }
-
-.tabs-title {
-  display: flex;
-  align-items: stretch;
-  margin-right: 3rem;
-}
