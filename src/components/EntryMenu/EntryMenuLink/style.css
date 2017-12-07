@@ -7,9 +7,10 @@ a.browse-tabs-link {
   &:visited {
     font-size: 0.9rem; /*same size as submenu*/
     padding: 0.7rem 0.2rem 0.5rem 0.2rem;
-    line-height: inherit;
     color: black;
-    background-color: transparent;
+    line-height: inherit;
+    background-color: transparent; /*to keep*/
+    border-bottom: 3px solid white; /*just for animation*/
   }
 }
 
@@ -23,10 +24,11 @@ a.is-active-tab {
     border-bottom-color: inherit;
     border-bottom-width: 3px;
     border-bottom-style: solid;
+    transition: border-bottom-color 0.5s ease-in-out;
   }
 
   &.is-signature {
-    background: #4e7287;
+    border-bottom-color: #4e7287;
   }
 }
 
@@ -44,4 +46,10 @@ a.is-active-tab.menu-site {
 
 a.is-active-tab.menu-repeat {
   border-bottom-color: var(--colors-repeat-main);
+}
+
+.tabs-title {
+  display: flex;
+  align-items: stretch;
+  margin-right: 3rem;
 }
