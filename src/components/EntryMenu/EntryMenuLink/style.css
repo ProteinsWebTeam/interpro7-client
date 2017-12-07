@@ -21,7 +21,9 @@ a.is-active-tab {
   &:visited {
     font-weight: bold;
     color: black;
-    border-bottom-color: inherit;
+    border-bottom-color: var(
+      --colors-submain
+    ); /*color used for Protein, structure, Organism , taxon, set*/
     border-bottom-width: 3px;
     border-bottom-style: solid;
     transition: border-bottom-color 0.5s ease-in-out;
