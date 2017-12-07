@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import EntryMenuLink from './EntryMenuLink';
-
+import Loading from 'components/SimpleCommonComponents/Loading';
 import config from 'config';
 import { entities, singleEntity } from 'menuConfig';
 import loadData from 'higherOrder/loadData';
@@ -51,7 +51,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       data,
       isSignature,
       children,
-      data: { payload },
+      data: { loading, payload },
       className,
     } = this.props;
     let tabs = entities;
@@ -63,21 +63,23 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       }
       tabs = tabs.filter(Boolean);
     }
+    if (loading || !payload.metadata) {
+      return <Loading />;
+    }
     return (
       <ul className={f('tabs', className, { sign: isSignature })}>
         {children}
         {tabs.map(e => (
-          <li className={f('tabs-title')} key={e.name}>
-            <EntryMenuLink
-              metadata={payload.metadata}
-              newTo={e.newTo}
-              name={e.name}
-              data={data}
-              counter={e.counter}
-              isFirstLevel={!mainAccession}
-              isSignature={isSignature}
-            />
-          </li>
+          <EntryMenuLink
+            key={e.name}
+            metadata={payload.metadata}
+            newTo={e.newTo}
+            name={e.name}
+            data={data}
+            counter={e.counter}
+            isFirstLevel={!mainAccession}
+            isSignature={isSignature}
+          />
         ))}
       </ul>
     );
