@@ -67,7 +67,9 @@ class SummarySet extends PureComponent /*:: <Props> */ {
               <div className={f('tag', 'margin-bottom-medium')}>
                 {metadata.source_database}
               </div>
-              <Accession accession={metadata.accession} id={metadata.id} />
+              <p>
+                <Accession accession={metadata.accession} id={metadata.id} />
+              </p>
               <Description
                 heightToHide={106}
                 textBlocks={[metadata.description]}
@@ -81,10 +83,11 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                     {currentSet ? (
                       <BaseLink
                         id={metadata.accession}
+                        className={f('ext')}
                         target="_blank"
                         pattern={currentSet.url_template}
                       >
-                        See this set in {currentSet.name}
+                        View this set in {currentSet.name}
                       </BaseLink>
                     ) : null}
                   </li>
@@ -92,7 +95,9 @@ class SummarySet extends PureComponent /*:: <Props> */ {
               </div>
             </div>
           </div>
-          <div id="clanviewer" style={{ border: '1px solid #aaa' }} />
+          <div className={f('row', 'columns')}>
+            <div id="clanviewer" />
+          </div>
         </section>
       </div>
     );
