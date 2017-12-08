@@ -102,20 +102,24 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     if (!isFirstLevel && !isNaN(value) && !value) return null;
 
     return (
-      <Link
-        newTo={newTo}
-        className={f(
-          mapNameToClass.get(payload.metadata.type),
-          'browse-tabs-link',
-          { ['is-signature']: isSignature },
-        )}
-        activeClass={f('is-active', 'is-active-tab')}
-        // disabled={!isFirstLevel && !isNaN(value) && !value}
-      >
-        {name}
-        {value !== null && ' '}
-        {value !== null && !isNaN(value) && <NumberLabel value={value} />}
-      </Link>
+      <li className={f('tabs-title')}>
+        <Link
+          newTo={newTo}
+          className={f(
+            payload.metadata.source_database.toLowerCase() === 'interpro'
+              ? mapNameToClass.get(payload.metadata.type)
+              : null,
+            'browse-tabs-link',
+            { ['is-signature']: isSignature },
+          )}
+          activeClass={f('is-active', 'is-active-tab')}
+          // disabled={!isFirstLevel && !isNaN(value) && !value}
+        >
+          {name}
+          {value !== null && ' '}
+          {value !== null && !isNaN(value) && <NumberLabel value={value} />}
+        </Link>
+      </li>
     );
   }
 }
