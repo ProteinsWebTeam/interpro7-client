@@ -212,7 +212,7 @@ for (const subPage of config.pages.organism.subPages) {
 
 const _Title = ({ data: { loading, payload } }) =>
   loading ? (
-    <div>loading</div>
+    <Loading />
   ) : (
     <Title metadata={payload.metadata} mainType="organism" />
   );
