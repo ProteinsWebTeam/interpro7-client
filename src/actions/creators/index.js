@@ -16,17 +16,21 @@ import parseValueFromInput from './parse-value-from-input';
 export const goToCustomLocation = (
   customLocation /*: CustomLocation */,
   replace /*?: boolean */,
+  state /*?: any */,
 ) => ({
   type: types.NEW_CUSTOM_LOCATION,
   customLocation,
   replace: !!replace,
+  state,
 });
 
 export const customLocationChangeFromHistory = (
   customLocation /*: CustomLocation */,
+  state /*?: any */,
 ) => ({
   type: types.NEW_PROCESSED_CUSTOM_LOCATION,
   customLocation,
+  state,
 });
 
 // UI

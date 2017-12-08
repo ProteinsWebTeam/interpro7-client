@@ -52,20 +52,19 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
 
   render() {
     const { children, count, mainType, cleanName, lowGraphics } = this.props;
-    const to = ({ description, ...customLocation }) => {
+    const to = customLocation => {
       const nextLocation = {
         ...customLocation,
         description: {
-          ...description,
-          entry: { ...description.entry },
+          ...customLocation.description,
+          entry: {},
         },
       };
-      if (description.main.key === 'entry') {
-        nextLocation.description.entry.db = cleanName;
-      } else {
-        const isNotAll = cleanName !== 'all';
-        nextLocation.description.entry.isFilter = isNotAll;
-        nextLocation.description.entry.db = isNotAll ? cleanName : null;
+      if (cleanName !== 'all') {
+        nextLocation.description.entry = {
+          isFilter: nextLocation.description.main.key !== 'entry',
+          db: cleanName,
+        };
       }
       return nextLocation;
     };

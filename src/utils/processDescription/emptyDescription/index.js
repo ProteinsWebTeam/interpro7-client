@@ -7,6 +7,7 @@ export default () /*: Description */ => Object.freeze({
     key: null,
   }),
   entry: Object.seal({
+    isFilter: null,
     integration: null,
     db: null,
     accession: null,
@@ -15,23 +16,28 @@ export default () /*: Description */ => Object.freeze({
     detail: null,
   }),
   protein: Object.seal({
+    isFilter: null,
     db: null,
     accession: null,
     detail: null,
   }),
   structure: Object.seal({
+    isFilter: null,
     db: null,
     accession: null,
     chain: null,
     detail: null,
   }),
   organism: Object.seal({
+    isFilter: null,
     db: null,
     accession: null,
     proteomeDB: null,
     proteomeAccession: null,
+    detail: null,
   }),
   set: Object.seal({
+    isFilter: null,
     db: null,
     accession: null,
     detail: null,

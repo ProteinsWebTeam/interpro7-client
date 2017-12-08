@@ -7,6 +7,7 @@ Object {
     "db": null,
     "detail": null,
     "integration": null,
+    "isFilter": null,
     "memberDB": null,
     "memberDBAccession": null,
   },
@@ -21,6 +22,8 @@ Object {
   "organism": Object {
     "accession": null,
     "db": null,
+    "detail": null,
+    "isFilter": null,
     "proteomeAccession": null,
     "proteomeDB": null,
   },
@@ -32,6 +35,7 @@ Object {
     "accession": null,
     "db": null,
     "detail": null,
+    "isFilter": null,
   },
   "search": Object {
     "type": null,
@@ -41,12 +45,14 @@ Object {
     "accession": null,
     "db": null,
     "detail": null,
+    "isFilter": null,
   },
   "structure": Object {
     "accession": null,
     "chain": null,
     "db": null,
     "detail": null,
+    "isFilter": null,
   },
 }
 `;

@@ -18,9 +18,11 @@ const happenedWithLeftClick = event => event.button === 0;
 const getNextLocation = (customLocation, to) =>
   typeof to === 'function' ? to(customLocation) : to;
 
+const rootPathname = config.root.website.pathname.replace(/\/$/, '');
+
 const generateHref = (nextLocation /*: Object */, href /*?: string */) => {
   if (href) return href;
-  return `${config.root.website.pathname}${descriptionToPath(
+  return `${rootPathname}${descriptionToPath(
     descriptionToDescription(nextLocation.description),
   )}?${qsStringify(nextLocation.search)}`.replace(/\?(#|$)/, '');
 };

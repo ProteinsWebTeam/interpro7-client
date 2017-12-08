@@ -4,13 +4,15 @@ import { merge, mergeWith, cloneDeep, toPlainObject } from 'lodash-es';
 import descriptionToDescription from '.';
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 
-const arrayToObject = (objValue, srcValue) => {
+// Transforms an array into an object with keys corresponding to the array's
+// indices, and merges it with existing object. to be used in 'mergeWith'
+const arrayToObject = (objValue /*: Object */, srcValue /*: any */) => {
   if (Array.isArray(srcValue)) {
     return merge(objValue, toPlainObject(srcValue));
   }
 };
 
-describe('descriptionToDescription', () => {
+describe('descriptionToDescription()', () => {
   const originalD = getEmptyDescription();
   let d;
 
@@ -47,5 +49,24 @@ describe('descriptionToDescription', () => {
       const part = { main: { key: 'search' }, search: { type: 'text' } };
       expect(descriptionToDescription(part)).toEqual(merge(d, part));
     });
+  });
+
+  test('keep isFilter', () => {
+    const types = ['entry', 'protein', 'structure', 'organism', 'set'];
+    for (const key of types) {
+      const d = { main: { key } };
+      expect(Object.values(descriptionToDescription(d)).find(v => v.isFilter))
+        .toBeUndefined;
+      for (const type of types) {
+        const description = { ...d, [type]: { isFilter: true } };
+        if (key === type) {
+          expect(() => descriptionToDescription(description)).toThrow();
+        } else {
+          expect(descriptionToDescription(description)[type].isFilter).toBe(
+            true,
+          );
+        }
+      }
+    }
   });
 });

@@ -14,12 +14,9 @@ export default (description /*: Description */) => {
   const _description = descriptionToDescription(description);
   let output = '/';
   if (!_description.main.key) {
-    return (
-      output +
-      Object.values(_description.other)
-        .filter(Boolean)
-        .join('/')
-    );
+    const others = Object.values(_description.other).filter(Boolean);
+    if (!others.length) return output;
+    return `${output}${others.join('/')}/`;
   }
   const main = _description.main.key;
   output += `${pathForPart(main, _description[main])}/`;
@@ -27,7 +24,7 @@ export default (description /*: Description */) => {
     ([, { isFilter }]) => isFilter,
   );
   return filters.reduce(
-    (acc, [key, values]) => `${output}${pathForPart(key, values)}/`,
+    (acc, [key, values]) => `${acc}${pathForPart(key, values)}/`,
     output,
   );
 };

@@ -39,16 +39,22 @@ export const EBI /*: Array<Object> */ = [
   },
 ];
 
+const getEntryForFilter = ({ entry }) => {
+  if (entry.db) {
+    return { ...entry, isFilter: true };
+  }
+};
+
 export const entities /*: Array<Object> */ = [
   {
-    to(location) {
+    to(customLocation) {
       return {
         description: {
           main: { key: 'entry' },
           entry: {
             db:
-              location.description.entry.integration ||
-              location.description.entry.db ||
+              customLocation.description.entry.integration ||
+              customLocation.description.entry.db ||
               'InterPro',
           },
         },
@@ -57,44 +63,48 @@ export const entities /*: Array<Object> */ = [
     name: 'Entry',
   },
   {
-    to(location) {
+    to(customLocation) {
       return {
         description: {
           main: { key: 'protein' },
           protein: { db: 'UniProt' },
+          entry: getEntryForFilter(customLocation.description),
         },
       };
     },
     name: 'Protein',
   },
   {
-    to(location) {
+    to(customLocation) {
       return {
         description: {
           main: { key: 'structure' },
           structure: { db: 'PDB' },
+          entry: getEntryForFilter(customLocation.description),
         },
       };
     },
     name: 'Structure',
   },
   {
-    to(location) {
+    to(customLocation) {
       return {
         description: {
           main: { key: 'organism' },
           organism: { db: 'taxonomy' },
+          entry: getEntryForFilter(customLocation.description),
         },
       };
     },
     name: 'Organism',
   },
   {
-    to(location) {
+    to(customLocation) {
       return {
         description: {
           main: { key: 'set' },
           set: { db: 'all' },
+          entry: getEntryForFilter(customLocation.description),
         },
       };
     },
@@ -106,14 +116,14 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'overview',
     {
-      to(location) {
-        const { key } = location.description.main.key;
+      to(customLocation) {
+        const { key } = customLocation.description.main.key;
         return {
           description: {
             ...getEmptyDescription(),
             main: { key },
             [key]: {
-              ...location.description[key],
+              ...customLocation.description[key],
               detail: null,
             },
           },
@@ -125,19 +135,19 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'entry',
     {
-      to(location) {
-        const { key } = location.description.main.key;
+      to(customLocation) {
+        const { key } = customLocation.description.main.key;
         return {
           description: {
             ...getEmptyDescription(),
             main: { key },
             [key]: {
-              ...location.description[key],
+              ...customLocation.description[key],
               detail: null,
             },
             entry: {
               isFilter: true,
-              db: key === 'set' ? location.description[key].db : 'all',
+              db: key === 'set' ? customLocation.description[key].db : 'all',
             },
           },
         };
@@ -149,14 +159,14 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'protein',
     {
-      to(location) {
-        const { key } = location.description.main.key;
+      to(customLocation) {
+        const { key } = customLocation.description.main.key;
         return {
           description: {
             ...getEmptyDescription(),
             main: { key },
             [key]: {
-              ...location.description[key],
+              ...customLocation.description[key],
               detail: null,
             },
             protein: {
@@ -173,14 +183,14 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'structure',
     {
-      to(location) {
-        const { key } = location.description.main.key;
+      to(customLocation) {
+        const { key } = customLocation.description.main.key;
         return {
           description: {
             ...getEmptyDescription(),
             main: { key },
             [key]: {
-              ...location.description[key],
+              ...customLocation.description[key],
               detail: null,
             },
             structure: {
@@ -197,14 +207,14 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'organism',
     {
-      to(location) {
-        const { key } = location.description.main.key;
+      to(customLocation) {
+        const { key } = customLocation.description.main.key;
         return {
           description: {
             ...getEmptyDescription(),
             main: { key },
             [key]: {
-              ...location.description[key],
+              ...customLocation.description[key],
               detail: null,
             },
             organism: {
@@ -221,19 +231,19 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'set',
     {
-      to(location) {
-        const { key } = location.description.main.key;
+      to(customLocation) {
+        const { key } = customLocation.description.main.key;
         return {
           description: {
             ...getEmptyDescription(),
             main: { key },
             [key]: {
-              ...location.description[key],
+              ...customLocation.description[key],
               detail: null,
             },
             set: {
               isFilter: true,
-              db: location.description[key].db,
+              db: customLocation.description[key].db,
             },
           },
         };
@@ -245,14 +255,14 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'sequence',
     {
-      to(location) {
-        const { key } = location.description.main.key;
+      to(customLocation) {
+        const { key } = customLocation.description.main.key;
         return {
           description: {
             ...getEmptyDescription(),
             main: { key },
             [key]: {
-              ...location.description[key],
+              ...customLocation.description[key],
               detail: 'sequence',
             },
           },
@@ -264,14 +274,14 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'domain_architecture',
     {
-      to(location) {
-        const { key } = location.description.main.key;
+      to(customLocation) {
+        const { key } = customLocation.description.main.key;
         return {
           description: {
             ...getEmptyDescription(),
             main: { key },
             [key]: {
-              ...location.description[key],
+              ...customLocation.description[key],
               detail: 'domain_architecture',
             },
           },
@@ -283,14 +293,14 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'logo',
     {
-      to(location) {
-        const { key } = location.description.main.key;
+      to(customLocation) {
+        const { key } = customLocation.description.main.key;
         return {
           description: {
             ...getEmptyDescription(),
             main: { key },
             [key]: {
-              ...location.description[key],
+              ...customLocation.description[key],
               detail: 'logo',
             },
           },
@@ -302,14 +312,14 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'proteome',
     {
-      to(location) {
-        const { key } = location.description.main.key;
+      to(customLocation) {
+        const { key } = customLocation.description.main.key;
         return {
           description: {
             ...getEmptyDescription(),
             main: { key },
             [key]: {
-              ...location.description[key],
+              ...customLocation.description[key],
               proteomeDB: 'proteome',
             },
           },
@@ -337,8 +347,8 @@ export const InterPro /*: Array<Object> */ = [
     iconClass: 'functional',
   },
   {
-    to(location) {
-      const { key } = location.description.main;
+    to(customLocation) {
+      const { key } = customLocation.description.main;
       if (!key || key === 'search' || key === 'job') {
         return {
           description: {
@@ -348,13 +358,13 @@ export const InterPro /*: Array<Object> */ = [
           },
         };
       }
-      if (location.description.set.accession) {
+      if (customLocation.description.set.accession) {
         return {
           description: {
             ...getEmptyDescription(),
-            main: { key },
+            main: { key: 'set' },
             set: { db: 'all' },
-            entry: { isFilter: true, db: location.description.set.db },
+            entry: { isFilter: true, db: customLocation.description.set.db },
           },
         };
       }
@@ -362,10 +372,10 @@ export const InterPro /*: Array<Object> */ = [
         description: {
           ...getEmptyDescription(),
           main: { key },
-          [key]: { db: location.description[key].db },
+          [key]: { db: customLocation.description[key].db },
           entry: {
-            isFilter: true,
-            db: location.description.entry.db || 'InterPro',
+            isFilter: key !== 'entry',
+            db: customLocation.description.entry.db || 'InterPro',
           },
         },
       };

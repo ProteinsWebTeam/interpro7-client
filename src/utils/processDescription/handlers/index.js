@@ -19,7 +19,7 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
     key: ?PossibleMain,
   |},
   entry: {|
-    isFilter?: boolean,
+    isFilter: ?boolean,
     integration: ?string,
     db: ?string,
     accession: ?string,
@@ -28,27 +28,27 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
     detail: ?string,
   |},
   protein: {|
-    isFilter?: boolean,
+    isFilter: ?boolean,
     db: ?string,
     accession: ?string,
     detail: ?string,
   |},
   structure: {|
-    isFilter?: boolean,
+    isFilter: ?boolean,
     db: ?string,
     accession: ?string,
     chain: ?string,
     detail: ?string,
   |},
   organism: {|
-    isFilter?: boolean,
+    isFilter: ?boolean,
     db: ?string,
     accession: ?string,
     proteomeDB: ?string,
     proteomeAccession: ?string,
   |},
   set: {|
-    isFilter?: boolean,
+    isFilter: ?boolean,
     db: ?string,
     accession: ?string,
     detail: ?string,
@@ -80,14 +80,6 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
 /*:: type PropertiesObject = {|
   [string]: {|value: any|},
 |}; */
-
-const replacer = (_, v) => {
-  if (v) {
-    if (typeof v !== 'object' || Object.values(v).filter(Boolean).length) {
-      return v;
-    }
-  }
-};
 
 // node templates
 const templateHandler /*: Handler */ = {
@@ -121,11 +113,6 @@ const templateHandler /*: Handler */ = {
         key,
         this.cleanedUp || this.cleanUp(current, description),
       );
-    }
-    if (!next) {
-      // about to return description
-      console.log('new description:');
-      console.log(JSON.stringify(description, replacer, 2));
     }
     if (!next) return description;
     for (const child of this.children) {
@@ -197,11 +184,16 @@ const typeConstructor = (type /*: PossibleMain */) /*: Handler */ =>
       value: (_, description) => get(description, ['main', 'key']) ? true : type,
     },
     match: {
-      value: (current, { [type]: typeObject }) => (
-        typeof current === 'string' &&
-        current.toLowerCase() === type &&
-        isEmpty(typeObject)
-      ),
+      value: (current, { main: { key }, [type]: typeObject }) => {
+        switch (typeof current) {
+          case 'string':
+            return current.toLowerCase() === type && isEmpty(typeObject);
+          case 'boolean':
+            return !!key && key !== type;
+          default:
+            return false;
+        }
+      },
     },
   });
 
@@ -353,9 +345,6 @@ export const structureAccessionHandler /*: Handler */ = handlerConstructor({
   key: {
     value: ['structure', 'accession'],
   },
-  cleanUp: {
-    value: value => value.toUpperCase(),
-  },
   regexp: {
     value: /^[A-Z0-9]{4}$/i,
   },
@@ -418,7 +407,7 @@ export const proteomeDBHandler /*: Handler */ = handlerConstructor({
   key: {
     value: ['organism', 'proteomeDB'],
   },
-  cleanUp: {
+  cleanedUp: {
     value: 'proteome',
   },
   match: {
@@ -479,7 +468,7 @@ export const setAccessionHandler /*: Handler */ = handlerConstructor({
   },
   match: {
     value(current) {
-      const _current = this.cleanedUp(current);
+      const _current = this.cleanUp(current);
       for (const { re } of setDBs) {
         if (re.test(_current)) return true;
       }
@@ -511,9 +500,6 @@ export const searchValueHandler /*: Handler */ = handlerConstructor({
   },
   cleanUp: {
     value: value => value,
-  },
-  match: {
-    value: (_, { search: { type } }) => type === 'text',
   },
 });
 
