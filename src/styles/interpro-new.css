@@ -73,7 +73,11 @@ a:visited {
 }
 /*override EBI foundation css that overrides foundation*/
 mark {
-  background-color: #fcf655;
+  background-color: var(--colors-marktext);
+}
+
+.tag.secondary {
+  background-color: var(--colors-tag);
 }
 
 /* buttons (secondary, alert, hollow) - redefine foundation style*/
