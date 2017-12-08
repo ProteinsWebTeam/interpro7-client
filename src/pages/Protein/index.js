@@ -18,7 +18,6 @@ import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
-import BrowseTabs from 'components/BrowseTabs';
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 import subPages from 'subPages';
