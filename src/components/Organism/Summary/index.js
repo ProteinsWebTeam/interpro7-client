@@ -146,11 +146,13 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('row')}>
         <div className={f('medium-10', 'columns')}>
-          {metadata.is_reference ? (
-            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-              Reference Proteome
-            </div>
-          ) : null}
+          {
+            // metadata.is_reference ? (
+            // <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+            //  Reference Proteome
+            // </div>
+            // ) : null
+          }
           <div>
             <Accession accession={metadata.accession} id={metadata.id} />
           </div>

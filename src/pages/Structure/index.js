@@ -20,7 +20,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
-import BrowseTabs from 'components/BrowseTabs';
+import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
@@ -183,9 +183,7 @@ const List = ({
             renderer={(accession /*: string */) => (
               <PDBeLink id={accession}>
                 <img
-                  src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${
-                    accession
-                  }/traces.jpg`}
+                  src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
                   alt={`structure with accession ${accession.toUpperCase()}`}
                   style={{ maxWidth: '33%' }}
                 />
@@ -227,7 +225,7 @@ const Summary = props => {
       <div className={f('row')}>
         <div className={f('medium-12', 'large-12', 'columns')}>
           <Title metadata={payload.metadata} mainType="structure" />
-          <BrowseTabs />
+          <EntryMenu metadata={payload.metadata} />
         </div>
       </div>
       <Switch

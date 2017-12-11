@@ -9,10 +9,16 @@ import CrossReferences from 'components/Entry/CrossReferences';
 import Integration from 'components/Entry/Integration';
 import ContributingSignatures from 'components/Entry/ContributingSignatures';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import partition from 'lodash-es/partition';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
+
+const f = foundationPartial(fonts, local);
 
 const description2IDs = description =>
   description.reduce(
@@ -76,6 +82,46 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   hierarchy={metadata.hierarchy}
                 />
               )}
+
+              {//member database only - summary info
+              metadata.source_database &&
+                metadata.source_database.toLowerCase() !== 'interpro' && (
+                  <div className={f('md-hlight')}>
+                    <h5>
+                      Member database:&nbsp;
+                      <Link
+                        newTo={{
+                          description: {
+                            mainType: 'entry',
+                            mainDB: metadata.source_database,
+                          },
+                        }}
+                      >
+                        {metadata.source_database}{' '}
+                        <Tooltip title={metadata.source_database}>
+                          <span
+                            className={f('small', 'icon', 'icon-generic')}
+                            data-icon="i"
+                          />
+                        </Tooltip>
+                      </Link>
+                    </h5>
+                    <p className={f('margin-bottom-medium')}>
+                      {metadata.source_database} type:{' '}
+                      {metadata.type.replace('_', ' ').toLowerCase()}
+                    </p>
+                    {metadata.name.short &&
+                      metadata.accession !== metadata.name.short && (
+                        <p>
+                          Short name:&nbsp;
+                          <i className={f('shortname')}>
+                            {metadata.name.short}
+                          </i>
+                        </p>
+                      )}
+                  </div>
+                )}
+
               {// doesn't work for some HAMAP as they have enpty <P> tag
               Object.keys(metadata.description).length > 0 && (
                 <Description
@@ -83,6 +129,15 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   literature={included}
                 />
               )}
+              {metadata.source_database &&
+                metadata.source_database.toLowerCase() === 'interpro' &&
+                metadata.name.short &&
+                metadata.accession !== metadata.name.short && (
+                  <p>
+                    Short name:&nbsp;
+                    <i className={f('shortname')}>{metadata.name.short}</i>
+                  </p>
+                )}
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>
               {metadata.integrated && (
