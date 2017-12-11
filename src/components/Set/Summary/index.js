@@ -64,9 +64,11 @@ class SummarySet extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
-              <div className={f('tag', 'margin-bottom-medium')}>
-                {metadata.source_database}
-              </div>
+              {
+                // <div className={f('tag', 'margin-bottom-medium')}>
+                // {metadata.source_database}
+                // </div>
+              }
               <p>
                 <Accession accession={metadata.accession} id={metadata.id} />
               </p>
