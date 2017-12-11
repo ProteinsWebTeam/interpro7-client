@@ -83,11 +83,10 @@ const ParagraphWithTags = ({ children }) => (
         }
         return (
           <Link
-            newTo={{
+            to={{
               description: {
-                mainType,
-                mainDB,
-                mainAccession: attrs.id,
+                main: { key: mainType },
+                [mainType]: { db: mainDB, accession: attrs.id },
               },
             }}
           >
@@ -102,11 +101,13 @@ const ParagraphWithTags = ({ children }) => (
           const attrs = _getAttributesFromStringTag(part);
           return (
             <Link
-              newTo={{
+              to={{
                 description: {
-                  mainType: 'organism',
-                  mainDB: 'taxonomy',
-                  mainAccession: attrs.tax_id,
+                  main: { key: 'organism ' },
+                  organism: {
+                    db: 'taxonomy',
+                    accession: attrs.tax_id,
+                  },
                 },
               }}
             >

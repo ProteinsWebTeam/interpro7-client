@@ -23,7 +23,7 @@ class NotFound extends PureComponent /*:: <{}> */ {
             <br />
             <p>
               {'Double check the URL or go back to the '}
-              <Link newTo={{ description: {} }}>homepage</Link>
+              <Link to={{ description: {} }}>homepage</Link>
               {'. If you continue to get this page, contact us using the '}
               <Link
                 target="_blank"
@@ -36,28 +36,30 @@ class NotFound extends PureComponent /*:: <{}> */ {
             <h3>Or try one of these:</h3>
             <ul>
               <li>
-                <Link newTo={{ description: { other: 'release_notes' } }}>
+                <Link to={{ description: { other: ['release_notes'] } }}>
                   What’s new in InterPro?
                 </Link>
               </li>
               <li>
-                <Link newTo={{ description: { other: 'help' } }}>
+                <Link to={{ description: { other: ['help', 'training'] } }}>
                   InterPro Training and tutorial material
                 </Link>
               </li>
               <li>
-                <Link newTo={{ description: { other: 'help' } }}>
+                <Link to={{ description: { other: ['help', 'faq'] } }}>
                   InterPro FAQs
                 </Link>
               </li>
               <li>
-                <Link newTo={{ description: { other: 'help' } }}>
+                <Link
+                  to={{ description: { other: ['help', 'documentation'] } }}
+                >
                   InterPro Documentation
                 </Link>
               </li>
               <li>
-                <Link newTo={{ description: { other: 'help' } }}>
-                  InterPro Help/support
+                <Link to={{ description: { other: ['help', 'support'] } }}>
+                  InterPro Help/Support
                 </Link>
               </li>
             </ul>

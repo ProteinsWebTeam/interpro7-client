@@ -64,8 +64,11 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
             >
               <Link
                 className={f('block')}
-                newTo={{
-                  description: { mainType: 'entry', mainDB: 'InterPro' },
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: { db: 'InterPro' },
+                  },
                   search: { type },
                 }}
               >
@@ -98,7 +101,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
           ))}
         </AnimatedEntry>
         <Link
-          newTo={{ description: { mainType: 'entry' } }}
+          to={{ description: { main: { key: 'entry' } } }}
           className={f('button')}
         >
           View all entries

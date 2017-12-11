@@ -10,8 +10,12 @@ export const memberDB = [
   {
     type: 'CATH',
     apiType: 'gene3d',
-    to: 'entry/gene3d',
-    newTo: { description: { mainType: 'entry', mainDB: 'gene3d' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'gene3d' },
+      },
+    },
     className: f('md-cg'),
     title: `CATH-Gene3D database describes protein families and domain architectures in
       complete genomes. Protein families are formed using a Markov clustering algorithm,
@@ -28,8 +32,12 @@ export const memberDB = [
   {
     type: 'CDD',
     apiType: 'cdd',
-    to: 'entry/cdd',
-    newTo: { description: { mainType: 'entry', mainDB: 'cdd' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'cdd' },
+      },
+    },
     className: f('md-cd'),
     title: `CDD is a protein annotation resource that consists of a collection of annotated
       multiple sequence alignment models for ancient domains and full-length proteins.
@@ -48,8 +56,12 @@ export const memberDB = [
   {
     type: 'HAMAP',
     apiType: 'hamap',
-    to: 'entry/hamap',
-    newTo: { description: { mainType: 'entry', mainDB: 'hamap' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'hamap' },
+      },
+    },
     className: f('md-ha'),
     title: `HAMAP stands for High-quality Automated and Manual Annotation of Proteins. HAMAP
       profiles are manually created by expert curators. They identify proteins that are
@@ -64,8 +76,12 @@ export const memberDB = [
   {
     type: 'PANTHER',
     apiType: 'panther',
-    to: 'entry/panther',
-    newTo: { description: { mainType: 'entry', mainDB: 'panther' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'panther' },
+      },
+    },
     className: f('md-pa'),
     title: `PANTHER is a large collection of protein families that have been subdivided into
       functionally related subfamilies, using human expertise. These subfamilies model
@@ -83,8 +99,12 @@ export const memberDB = [
   {
     type: 'PFAM',
     apiType: 'pfam',
-    to: 'entry/pfam',
-    newTo: { description: { mainType: 'entry', mainDB: 'pfam' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'pfam' },
+      },
+    },
     className: f('md-pf'),
     title: `Pfam is a large collection of multiple sequence alignments and hidden Markov
       models covering many common protein domains. Pfam is based at EMBL-EBI,
@@ -98,8 +118,12 @@ export const memberDB = [
   {
     type: 'PIRSF',
     apiType: 'pirsf',
-    to: 'entry/pirsf',
-    newTo: { description: { mainType: 'entry', mainDB: 'pirsf' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'pirsf' },
+      },
+    },
     className: f('md-pi'),
     title: `PIRSF protein classification system is a network with multiple levels of
       sequence diversity from superfamilies to subfamilies that reflects the
@@ -115,8 +139,12 @@ export const memberDB = [
   {
     type: 'PRINTS',
     apiType: 'prints',
-    to: 'entry/prints',
-    newTo: { description: { mainType: 'entry', mainDB: 'prints' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'prints' },
+      },
+    },
     className: f('md-pri'),
     title: `PRINTS is a compendium of protein fingerprints. A fingerprint is a group
       of conserved motifs used to characterise a protein family or domain. PRINTS is
@@ -130,8 +158,12 @@ export const memberDB = [
   {
     type: 'PRODOM',
     apiType: 'prodom',
-    to: 'entry/prodom',
-    newTo: { description: { mainType: 'entry', mainDB: 'prodom' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'prodom' },
+      },
+    },
     className: f('md-pro'),
     title: `ProDom protein domain database consists of an automatic compilation of homologous
       domains. Current versions of ProDom are built using a novel procedure based on
@@ -145,8 +177,12 @@ export const memberDB = [
   {
     type: 'PATTERNS',
     apiType: 'prosite',
-    to: 'entry/prosite',
-    newTo: { description: { mainType: 'entry', mainDB: 'prosite' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'prosite' },
+      },
+    },
     className: f('md-prpat'),
     title: `PROSITE is a database of protein families and domains. It consists of biologically
       significant sites, patterns and profiles that help to reliably identify to which
@@ -161,8 +197,12 @@ export const memberDB = [
   {
     type: 'PROFILES',
     apiType: 'profile',
-    to: 'entry/profile',
-    newTo: { description: { mainType: 'entry', mainDB: 'profile' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'profile' },
+      },
+    },
     className: f('md-prpro'),
     title: `PROSITE is a database of protein families and domains. It consists of biologically
       significant sites, patterns and profiles that help to reliably identify to which
@@ -177,8 +217,12 @@ export const memberDB = [
   {
     type: 'SFLD',
     apiType: 'sfld',
-    to: 'entry/sfld',
-    newTo: { description: { mainType: 'entry', mainDB: 'sfld' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'sfld' },
+      },
+    },
     className: f('md-sf'),
     title: `SFLD (Structure-Function Linkage Database) is a hierarchical classification of
       enzymes that relates specific sequence-structure features to specific chemical
@@ -192,8 +236,12 @@ export const memberDB = [
   {
     type: 'SMART',
     apiType: 'smart',
-    to: 'entry/smart',
-    newTo: { description: { mainType: 'entry', mainDB: 'smart' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'smart' },
+      },
+    },
     className: f('md-sm'),
     title: `SMART (a Simple Modular Architecture Research Tool) allows the identification
       and annotation of genetically mobile domains and the analysis of domain
@@ -207,8 +255,12 @@ export const memberDB = [
   {
     type: 'SUPERFAMILIES',
     apiType: 'ssf',
-    to: 'entry/ssf',
-    newTo: { description: { mainType: 'entry', mainDB: 'ssf' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'ssf' },
+      },
+    },
     className: f('md-su'),
     title: `SUPERFAMILY is a library of profile hidden Markov models that represent all
       proteins of known structure. The library is based on the SCOP classification of
@@ -224,8 +276,12 @@ export const memberDB = [
   {
     type: 'TIGRFAMS',
     apiType: 'tigrfams',
-    to: 'entry/tigrfams',
-    newTo: { description: { mainType: 'entry', mainDB: 'tigrfams' } },
+    to: {
+      description: {
+        main: { key: 'entry' },
+        entry: { db: 'tigrfams' },
+      },
+    },
     className: f('md-ti'),
     title: `TIGRFAMs is a collection of protein families, featuring curated multiple sequence
       alignments, hidden Markov models (HMMs) and annotation, which provides a tool for
@@ -511,7 +567,6 @@ export const GoList = [
 ];
 export const entryType = [
   {
-    title: 'This icon represent a domain type of InterPro entry',
     type: 'Domain',
     description: `Domains are distinct functional, structural or sequence units
                        that may exist in a variety of biological contexts. A match to
@@ -520,7 +575,6 @@ export const entryType = [
     counter: 2025,
   },
   {
-    title: 'This icon represent a Family type of InterPro entry',
     type: 'Family',
     description: `A protein family is a group of proteins that share a common
                       evolutionary origin reflected by their related functions,
@@ -530,27 +584,23 @@ export const entryType = [
     counter: 1843,
   },
   {
-    title: 'This icon represent a repeat type of InterPro entry',
     type: 'Repeat',
     description: `It identifies a short sequence that is typically repeated within
                       a protein.`,
     counter: 755,
   },
   {
-    title: 'This icon represent a Clan type of InterPro entry',
     type: 'Clans',
     description: 'Clans are a collection of families',
     counter: 184,
   },
   {
-    title: 'This icon represent an unintegrated type of InterPro entry',
     type: 'Unintegrated',
     description: `Signatures that doesn't belong to any type are what we call
                       unintegrated`,
     counter: 12143,
   },
   {
-    title: 'This icon represent a site type of InterPro entry',
     type: 'Site',
     description: `A short sequence that contains one or more conserved residues.
                       The type of sites covered by InterPro are active sites, binding

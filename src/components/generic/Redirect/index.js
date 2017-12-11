@@ -3,10 +3,10 @@ import { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 /*:: type Props = {
-  goToNewLocation: function,
+  goToCustomLocation: function,
   to: {
     description: Object,
     search: ?Object,
@@ -16,7 +16,7 @@ import { goToNewLocation } from 'actions/creators';
 
 class Redirect extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    goToNewLocation: T.func.isRequired,
+    goToCustomLocation: T.func.isRequired,
     to: T.shape({
       description: T.object.isRequired,
       search: T.object,
@@ -26,7 +26,7 @@ class Redirect extends PureComponent /*:: <Props> */ {
 
   componentWillMount() {
     // Go to the new location, but replacing current location
-    this.props.goToNewLocation(this.props.to, true);
+    this.props.goToCustomLocation(this.props.to, true);
   }
 
   render() {
@@ -34,4 +34,4 @@ class Redirect extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(null, { goToNewLocation })(Redirect);
+export default connect(null, { goToCustomLocation })(Redirect);

@@ -151,7 +151,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   }
                   <Link
                     className={f('ext')}
-                    newTo={{
+                    to={{
                       description: {},
                     }}
                   >

@@ -20,7 +20,7 @@ const singleEntityNames = new Map(
 const whitelist = new Set(['Overview', 'Domain Architectures', 'Sequence']);
 
 /*:: type Props = {
-  newTo: Object | function,
+  to: Object | function,
   name: string,
   counter: string,
   data: {
@@ -33,7 +33,7 @@ const whitelist = new Set(['Overview', 'Domain Architectures', 'Sequence']);
 
 class BrowseTabsLink extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    newTo: T.oneOfType([T.object, T.func]).isRequired,
+    to: T.oneOfType([T.object, T.func]).isRequired,
     name: T.string.isRequired,
     counter: T.string,
     data: T.shape({
@@ -46,7 +46,7 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
 
   render() {
     const {
-      newTo,
+      to,
       name,
       counter,
       data: { loading, payload },
@@ -92,7 +92,7 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
 
     return (
       <Link
-        newTo={newTo}
+        to={to}
         className={f('browse-tabs-link', { ['is-signature']: isSignature })}
         activeClass={f('is-active', 'is-active-tab')}
         // disabled={!isFirstLevel && !isNaN(value) && !value}
