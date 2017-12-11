@@ -347,15 +347,19 @@ for (const subPage of config.pages.entry.subPages) {
   });
 }
 
-const SummaryComponent = ({ data: { payload }, isStale, location }) => (
-  <SummaryAsync data={payload} isStale={isStale} location={location} />
+const SummaryComponent = ({ data: { payload }, isStale, customLocation }) => (
+  <SummaryAsync
+    data={payload}
+    isStale={isStale}
+    customLocation={customLocation}
+  />
 );
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.object,
   }).isRequired,
   isStale: T.bool.isRequired,
-  location: T.object.isRequired,
+  customLocation: T.object.isRequired,
 };
 
 const Summary = props => {

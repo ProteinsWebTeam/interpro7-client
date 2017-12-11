@@ -143,7 +143,7 @@ const loadData = params => {
       }) {
         // Same location, no need to reload data
         if (
-          nextAppState.newLocation === this.props.appState.newLocation &&
+          nextAppState.customLocation === this.props.appState.customLocation &&
           nextAppState.settings === this.props.appState.settings
         ) {
           // In case the change is of data in the same page

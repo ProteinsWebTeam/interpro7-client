@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -15,7 +15,7 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-class OrganismDBFilter extends Component {
+class OrganismDBFilter extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -33,7 +33,7 @@ class OrganismDBFilter extends Component {
       ...this.props.customLocation,
       description: {
         ...this.props.customLocation.description,
-        main: { key: value },
+        organism: { db: value },
       },
       search: {
         ...this.props.customLocation.search,
@@ -41,6 +41,7 @@ class OrganismDBFilter extends Component {
       },
     });
   };
+
   render() {
     const {
       data: { loading, payload },
@@ -67,7 +68,7 @@ class OrganismDBFilter extends Component {
                 name="organism_db"
                 value={type}
                 onChange={this._handleSelection}
-                checked={description.main.key === type}
+                checked={description.organism.db === type}
                 style={{ margin: '0.25em' }}
               />
               <span style={{ textTransform: 'capitalize' }}>{type}</span>
@@ -79,21 +80,16 @@ class OrganismDBFilter extends Component {
     );
   }
 }
+
 const getUrlFor = createSelector(
   state => state.settings.api,
   state => state.customLocation.description,
-  state => state.customLocation.search,
-  ({ protocol, hostname, port, root }, description, search) => {
-    // omit from search
-    const { experiment_type, search: _, ..._search } = search;
-    // add to search
-    _search.group_by = 'experiment_type';
-    // build URL
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath({
+  ({ protocol, hostname, port, root }, description) =>
+    `${protocol}//${hostname}:${port}${root}${descriptionToPath({
       ...description,
+      organism: {},
       main: { key: 'organism' },
-    })}`;
-  },
+    })}`,
 );
 
 const mapStateToProps = createSelector(

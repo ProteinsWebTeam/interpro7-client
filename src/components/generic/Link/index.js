@@ -23,7 +23,7 @@ const rootPathname = config.root.website.pathname.replace(/\/$/, '');
 const generateHref = (nextLocation /*: Object */, href /*?: string */) => {
   if (href) return href;
   return `${rootPathname}${descriptionToPath(
-    descriptionToDescription(nextLocation.description),
+    nextLocation.description,
   )}?${qsStringify(nextLocation.search)}`.replace(/\?(#|$)/, '');
 };
 
@@ -41,7 +41,7 @@ const generateClassName = (
   for (const [keyLevel1, intermediateValue] of Object.entries(
     nextCustomLocation.description,
   )) {
-    for (const [keyLevel2, value] of Object.entries(intermediateValue)) {
+    for (const [keyLevel2, value] of Object.entries(intermediateValue || {})) {
       // If it is ever true, it means we don't have a match
       if (customLocation.description[keyLevel1][keyLevel2] !== value)
         return className;
@@ -135,6 +135,9 @@ class Link extends PureComponent /*:: <Props> */ {
       ...props
     } = this.props;
     const nextCustomLocation = getNextLocation(customLocation, to) || {};
+    nextCustomLocation.description = descriptionToDescription(
+      nextCustomLocation.description,
+    );
     const _href = generateHref(nextCustomLocation, href);
     const _className =
       generateClassName(

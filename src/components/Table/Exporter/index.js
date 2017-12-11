@@ -35,7 +35,7 @@ const colors = new Map([
 
 class Exporter extends Component {
   static propTypes = {
-    entryDB: T.string.isRequired,
+    entryDB: T.string,
     children: T.any,
   };
 

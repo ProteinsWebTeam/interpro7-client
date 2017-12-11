@@ -39,8 +39,17 @@ export default new Map([
   ['structure.chain', new Set([handlers.structureChainHandler])],
   ['structure.detail', new Set([handlers.detailHandler])],
   ['organism.isFilter', new Set([handlers.organismHandler])],
-  ['organism.db', new Set([handlers.taxonomyDBHandler])],
-  ['organism.accession', new Set([handlers.taxonomyAccessionHandler])],
+  [
+    'organism.db',
+    new Set([handlers.taxonomyDBHandler, handlers.proteomeDBHandler]),
+  ],
+  [
+    'organism.accession',
+    new Set([
+      handlers.taxonomyAccessionHandler,
+      handlers.proteomeAccessionHandler,
+    ]),
+  ],
   ['organism.proteomeDB', new Set([handlers.proteomeDBHandler])],
   ['organism.proteomeAccession', new Set([handlers.proteomeAccessionHandler])],
   ['organism.detail', new Set([handlers.detailHandler])],

@@ -15,7 +15,7 @@ import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 /*:: type Props = {
   children: React$Node,
   errorComponent: React$ElementType,
-  newLocation: mixed,
+  customLocation: Object,
 }; */
 
 /*:: type State = {

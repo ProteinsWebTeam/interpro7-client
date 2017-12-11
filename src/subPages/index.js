@@ -86,7 +86,7 @@ const subPages = new Map([
   ['organism', loadData(defaultMapStateToProps)(List)],
   ['set', loadData(defaultMapStateToProps)(List)],
   ['sequence', Sequence],
-  ['domain_architecture', loadData(defaultMapStateToProps)(DomainArchitecture)],
+  ['domain_architecture', DomainArchitecture],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
 ]);

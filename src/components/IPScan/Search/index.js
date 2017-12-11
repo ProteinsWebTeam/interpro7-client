@@ -1,5 +1,9 @@
 import React, { Component, PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import url from 'url';
+
 import {
   Editor,
   EditorState,
@@ -8,9 +12,7 @@ import {
   Modifier,
   convertToRaw,
 } from 'draft-js';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import url from 'url';
+import Redirect from 'components/generic/Redirect';
 
 import config from 'config';
 import { addToast } from 'actions/creators';
@@ -307,6 +309,17 @@ class IPScanSearch extends Component {
   };
 
   render() {
+    if (this.props.value)
+      return (
+        <Redirect
+          to={{
+            description: {
+              main: { key: 'search' },
+              search: { type: 'sequence' },
+            },
+          }}
+        />
+      );
     const { editorState, valid, dragging, uploading } = this.state;
     return (
       <div className={s('row')}>

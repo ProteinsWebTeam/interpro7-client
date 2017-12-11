@@ -28,7 +28,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     }).isRequired,
     currentSet: T.object,
     goToCustomLocation: T.func.isRequired,
-    location: T.object.isRequired,
+    customLocation: T.object.isRequired,
   };
 
   componentDidMount() {
@@ -43,7 +43,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
           description: {
             main: { key: 'entry' },
             entry: {
-              db: this.props.location.description.mainDB,
+              db: this.props.customLocation.description.mainDB,
               accession: g.getAttribute('data-accession'),
             },
           },

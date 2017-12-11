@@ -98,11 +98,14 @@ class Pages extends PureComponent /*:: <Props> */ {
               <Switch
                 {...props}
                 indexRoute={Null}
-                locationSelector={l =>
-                  l.description.main.key &&
-                  !l.description[l.description.main.key].accession
-                }
-                childRoutes={[{ value: 'search', component: Null }]}
+                locationSelector={l => {
+                  if (
+                    l.description.main.key &&
+                    !l.description[l.description.main.key].accession
+                  )
+                    return l.description.main.key;
+                }}
+                childRoutes={[{ value: /^search|job$/, component: Null }]}
                 catchAll={BrowseTabs}
               />
             </div>

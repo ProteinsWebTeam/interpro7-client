@@ -236,8 +236,8 @@ _Title.propTypes = {
 };
 const mapStateToAccessionUrl = createSelector(
   state => state.settings.api,
-  state => state.customLocation.organism.db,
-  state => state.customLocation.organism.accession,
+  state => state.customLocation.description.organism.db,
+  state => state.customLocation.description.organism.accession,
   ({ protocol, hostname, port, root }, db, accession) =>
     format({
       protocol,

@@ -150,9 +150,9 @@ class List extends PureComponent {
                   to={customLocation => ({
                     ...customLocation,
                     description: {
-                      main: { key: customLocation.description.mainType },
-                      [customLocation.description.mainType]: {
-                        db: customLocation.description.mainDB,
+                      main: { key: 'protein' },
+                      protein: {
+                        db: customLocation.description.protein.db,
                         accession,
                       },
                     },
@@ -180,9 +180,9 @@ class List extends PureComponent {
                   to={customLocation => ({
                     ...customLocation,
                     description: {
-                      main: { key: customLocation.description.mainType },
-                      [customLocation.description.mainType]: {
-                        db: customLocation.description.mainDB,
+                      main: { key: 'protein' },
+                      protein: {
+                        db: customLocation.description.protein.db,
                         accession,
                       },
                     },

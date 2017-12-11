@@ -36,7 +36,7 @@ const getUrlFor = createSelector(
           search.residues = null;
         } else {
           _description.entry.isFilter = true;
-          _description.entry.db = db;
+          _description.entry[db === 'InterPro' ? 'db' : 'integration'] = db;
         }
         // build URL
         return `${protocol}//${hostname}:${port}${root}${descriptionToPath(

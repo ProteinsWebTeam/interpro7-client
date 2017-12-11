@@ -68,11 +68,18 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
       }
       return nextLocation;
     };
+    let activeClass;
+    if (cleanName === 'all') {
+      activeClass = ({ description: { entry } }) =>
+        !entry.db && f('is-active', 'is-active-tab', cleanName);
+    } else {
+      activeClass = f('is-active', 'is-active-tab', cleanName);
+    }
     return (
       <li className={f('tabs-title', { lowGraphics })}>
         <Link
           to={to}
-          activeClass={f('is-active', 'is-active-tab', cleanName)}
+          activeClass={activeClass}
           className={f({
             special: cleanName === 'InterPro' || cleanName === 'all',
           })}

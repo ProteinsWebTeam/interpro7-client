@@ -91,7 +91,9 @@ export const entities /*: Array<Object> */ = [
       return {
         description: {
           main: { key: 'organism' },
-          organism: { db: 'taxonomy' },
+          organism: {
+            db: customLocation.description.organism.db || 'taxonomy',
+          },
           entry: getEntryForFilter(customLocation.description),
         },
       };
@@ -117,7 +119,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     'overview',
     {
       to(customLocation) {
-        const { key } = customLocation.description.main.key;
+        const { key } = customLocation.description.main;
         return {
           description: {
             ...getEmptyDescription(),
@@ -136,7 +138,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     'entry',
     {
       to(customLocation) {
-        const { key } = customLocation.description.main.key;
+        const { key } = customLocation.description.main;
         return {
           description: {
             ...getEmptyDescription(),
@@ -147,7 +149,8 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             },
             entry: {
               isFilter: true,
-              db: key === 'set' ? customLocation.description[key].db : 'all',
+              db:
+                key === 'set' ? customLocation.description[key].db : 'InterPro',
             },
           },
         };
@@ -160,7 +163,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     'protein',
     {
       to(customLocation) {
-        const { key } = customLocation.description.main.key;
+        const { key } = customLocation.description.main;
         return {
           description: {
             ...getEmptyDescription(),
@@ -184,7 +187,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     'structure',
     {
       to(customLocation) {
-        const { key } = customLocation.description.main.key;
+        const { key } = customLocation.description.main;
         return {
           description: {
             ...getEmptyDescription(),
@@ -208,7 +211,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     'organism',
     {
       to(customLocation) {
-        const { key } = customLocation.description.main.key;
+        const { key } = customLocation.description.main;
         return {
           description: {
             ...getEmptyDescription(),
@@ -232,7 +235,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     'set',
     {
       to(customLocation) {
-        const { key } = customLocation.description.main.key;
+        const { key } = customLocation.description.main;
         return {
           description: {
             ...getEmptyDescription(),
@@ -256,7 +259,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     'sequence',
     {
       to(customLocation) {
-        const { key } = customLocation.description.main.key;
+        const { key } = customLocation.description.main;
         return {
           description: {
             ...getEmptyDescription(),
@@ -275,7 +278,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     'domain_architecture',
     {
       to(customLocation) {
-        const { key } = customLocation.description.main.key;
+        const { key } = customLocation.description.main;
         return {
           description: {
             ...getEmptyDescription(),
@@ -294,7 +297,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     'logo',
     {
       to(customLocation) {
-        const { key } = customLocation.description.main.key;
+        const { key } = customLocation.description.main;
         return {
           description: {
             ...getEmptyDescription(),
@@ -313,7 +316,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     'proteome',
     {
       to(customLocation) {
-        const { key } = customLocation.description.main.key;
+        const { key } = customLocation.description.main;
         return {
           description: {
             ...getEmptyDescription(),
