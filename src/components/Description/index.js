@@ -173,7 +173,7 @@ class Description extends PureComponent {
       return acc;
     }, []);
     return (
-      <div className={f('description-wrapper', 'margin-bottom-xlarge')}>
+      <div className={f('description-wrapper', 'margin-bottom-large')}>
         <h4>{title}</h4>
         <div
           className={f('animate-height', { collapsed: !isOpen })}
