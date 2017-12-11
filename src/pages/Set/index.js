@@ -22,13 +22,15 @@ import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
+import { setDBs } from 'utils/processDescription/handlers';
+
 import { foundationPartial } from 'styles/foundation';
 
 import global from 'styles/global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
-import { setDB } from 'utils/processLocation/handlers';
+
 const f = foundationPartial(fonts, pageStyle, ipro, global);
 
 // const SVG_WIDTH = 100;
@@ -41,7 +43,7 @@ const propTypes = {
   }).isRequired,
   loading: T.bool,
   isStale: T.bool.isRequired,
-  location: T.shape({
+  customLocation: T.shape({
     description: T.object.isRequired,
   }).isRequired,
 };
@@ -64,7 +66,11 @@ class Overview extends PureComponent {
           .filter(set => set[0] !== 'kegg')
           .map(([name, count]) => (
             <li key={name}>
-              <Link newTo={{ description: { mainType: 'set', mainDB: name } }}>
+              <Link
+                to={{
+                  description: { main: { key: 'set' }, set: { db: name } },
+                }}
+              >
                 {name}
                 {Number.isFinite(count) ? ` (${count})` : ''}
               </Link>
@@ -82,7 +88,7 @@ class List extends PureComponent {
     const {
       data: { payload, loading, url, status },
       isStale,
-      location: { search },
+      customLocation: { search },
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
@@ -123,9 +129,7 @@ class List extends PureComponent {
                   </a>
                 </li>
                 <li>
-                  <a target="_blank" rel="noopener noreferrer" href={url}>
-                    Open in API web view
-                  </a>
+                  <Link href={url}>Open in API web view</Link>
                 </li>
               </ul>
             </Exporter>
@@ -137,12 +141,14 @@ class List extends PureComponent {
               dataKey="accession"
               renderer={(accession /*: string */, { source_database }) => (
                 <Link
-                  newTo={location => ({
-                    ...location,
+                  to={customLocation => ({
+                    ...customLocation,
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: source_database,
-                      mainAccession: accession,
+                      main: { key: customLocation.description.mainType },
+                      [customLocation.description.mainType]: {
+                        db: source_database,
+                        accession,
+                      },
                     },
                   })}
                 >
@@ -164,12 +170,14 @@ class List extends PureComponent {
                 { accession, source_database } /*: {accession: string} */,
               ) => (
                 <Link
-                  newTo={location => ({
-                    ...location,
+                  to={customLocation => ({
+                    ...customLocation,
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: source_database,
-                      mainAccession: accession,
+                      main: { key: customLocation.description.mainType },
+                      [customLocation.description.mainType]: {
+                        db: source_database,
+                        accession,
+                      },
                     },
                   })}
                 >
@@ -212,12 +220,18 @@ class SummaryComponent extends PureComponent {
     data: T.shape({
       payload: T.any,
     }).isRequired,
-    location: T.object.isRequired,
+    customLocation: T.object.isRequired,
   };
 
   render() {
-    const { data: { payload }, location } = this.props;
-    return <SummaryAsync {...this.props} data={payload} location={location} />;
+    const { data: { payload }, customLocation } = this.props;
+    return (
+      <SummaryAsync
+        {...this.props}
+        data={payload}
+        customLocation={customLocation}
+      />
+    );
   }
 }
 
@@ -260,9 +274,12 @@ class Summary extends PureComponent {
       return <Loading />;
     }
     let currentSet = null;
-    Array.from(setDB).forEach(db => {
-      if (db.name === payload.metadata.source_database) currentSet = db;
-    });
+    for (const setDB of setDBs) {
+      if (setDB.name === payload.metadata.source_database) {
+        currentSet = setDB;
+        break;
+      }
+    }
     return (
       <div>
         {this.props.data.payload &&
@@ -291,9 +308,15 @@ class Summary extends PureComponent {
           <Switch
             {...this.props}
             currentSet={currentSet}
-            locationSelector={l =>
-              l.description.mainDetail || l.description.focusType
-            }
+            locationSelector={l => {
+              const { key } = l.description.main;
+              return (
+                l.description[key].detail ||
+                (Object.entries(l.description).find(
+                  ([_key, value]) => value.isFilter,
+                ) || [])[0]
+              );
+            }}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForSet}
           />
@@ -304,7 +327,7 @@ class Summary extends PureComponent {
 }
 
 const dbAccs = new RegExp(
-  Array.from(setDB)
+  Array.from(setDBs)
     .map(db => db.re.source)
     .filter(db => db)
     .join('|'),
@@ -315,9 +338,15 @@ const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l =>
-        l.description.mainAccession || l.description.focusType
-      }
+      locationSelector={l => {
+        const { key } = l.description.main;
+        return (
+          l.description[key].accession ||
+          (Object.entries(l.description).find(
+            ([_key, value]) => value.isFilter,
+          ) || [])[0]
+        );
+      }}
       indexRoute={List}
       childRoutes={[{ value: dbAccs, component: Summary }]}
       catchAll={List}
@@ -330,7 +359,7 @@ const EntrySet = props => (
     <ErrorBoundary>
       <Switch
         {...props}
-        locationSelector={l => l.description.mainDB}
+        locationSelector={l => l.description[l.description.main.key].db}
         indexRoute={Overview}
         catchAll={InnerSwitch}
       />

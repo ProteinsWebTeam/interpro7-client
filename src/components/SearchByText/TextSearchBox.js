@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -22,7 +22,7 @@ class TextSearchBox extends Component {
     value: T.string,
     className: T.string,
     toSubmit: T.bool,
-    goToNewLocation: T.func,
+    goToCustomLocation: T.func,
     search: T.shape({
       search: T.string,
     }),
@@ -59,12 +59,11 @@ class TextSearchBox extends Component {
       }
     }
     // this.setState({redirecting: {pathname, query}});
-    this.props.goToNewLocation({
+    this.props.goToCustomLocation({
       description: {
-        mainType: 'search',
-        mainDB: 'text',
+        main: { key: 'search' },
+        search: { type: 'text', value: query },
       },
-      search: query,
     });
   };
 
@@ -81,7 +80,6 @@ class TextSearchBox extends Component {
 
   render() {
     const { value } = this.state;
-    // if (redirecting) return <Redirect to={redirecting} />;
     return (
       <div className={f('input-group', 'margin-bottom-small')}>
         <div className={f('search-input-box')}>
@@ -116,4 +114,4 @@ const mapStateToProps = createSelector(
   pageSize => ({ pageSize }),
 );
 
-export default connect(mapStateToProps, { goToNewLocation })(TextSearchBox);
+export default connect(mapStateToProps, { goToCustomLocation })(TextSearchBox);

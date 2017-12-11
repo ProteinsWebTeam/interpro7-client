@@ -57,15 +57,18 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('entry-type')}>
         <AnimatedEntry className={f('row')} element="div">
-          {entryType.map(({ type, title, description }) => (
+          {entryType.map(({ type, description }) => (
             <div
               className={f('columns', 'medium-4', 'large-4', 'text-center')}
               key={type}
             >
               <Link
                 className={f('block')}
-                newTo={{
-                  description: { mainType: 'entry', mainDB: 'InterPro' },
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: { db: 'InterPro' },
+                  },
                   search: { type },
                 }}
               >
@@ -98,7 +101,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
           ))}
         </AnimatedEntry>
         <Link
-          newTo={{ description: { mainType: 'entry' } }}
+          to={{ description: { main: { key: 'entry' } } }}
           className={f('button')}
         >
           View all entries

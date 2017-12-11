@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import loadable from 'higherOrder/loadable';
+
 import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
@@ -600,8 +601,8 @@ class Home extends PureComponent {
               </Link>
 
               <Link
-                newTo={{
-                  description: { other: 'about' },
+                to={{
+                  description: { other: ['about'] },
                   hash: 'publications',
                 }}
                 className={f('button')}
@@ -638,8 +639,8 @@ class Home extends PureComponent {
                     domains, and returns all of the domain architectures and
                     associated proteins that match the query.{' '}
                     <Link
-                      newTo={{
-                        description: { other: 'about' },
+                      to={{
+                        description: { other: ['about'] },
                         hash: 'tools-ida',
                       }}
                       className={f('readmore')}
@@ -660,8 +661,8 @@ class Home extends PureComponent {
                     and protein sequences) that combines different protein
                     signature recognition methods into one resource.{' '}
                     <Link
-                      newTo={{
-                        description: { other: 'about' },
+                      to={{
+                        description: { other: ['about'] },
                         hash: 'tools-interproscan',
                       }}
                       className={f('readmore')}

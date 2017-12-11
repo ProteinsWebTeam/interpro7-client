@@ -3,7 +3,7 @@ import T from 'prop-types';
 
 import { connect } from 'react-redux';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 import classname from 'classnames/bind';
 import styles from './style.css';
@@ -15,7 +15,7 @@ class LengthFilter extends Component {
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
-    goToNewLocation: T.func.isRequired,
+    goToCustomLocation: T.func.isRequired,
     description: T.object,
     search: T.object,
   };
@@ -42,7 +42,7 @@ class LengthFilter extends Component {
         (a, b) => a - b,
       );
       this.setState({ from: vals[0], to: vals[1] });
-      this.props.goToNewLocation(location => ({
+      this.props.goToCustomLocation(location => ({
         ...location,
         search: {
           ...location.search,
@@ -85,4 +85,4 @@ class LengthFilter extends Component {
   }
 }
 
-export default connect(null, { goToNewLocation })(LengthFilter);
+export default connect(null, { goToCustomLocation })(LengthFilter);

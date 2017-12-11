@@ -120,11 +120,10 @@ const Matches = (
           { source_database: sourceDatabase } /*: {source_database: string} */,
         ) => (
           <Link
-            newTo={{
+            to={{
               description: {
-                mainType: primary,
-                mainDB: sourceDatabase,
-                mainAccession: acc,
+                main: { key: primary },
+                [primary]: { db: sourceDatabase, accession: acc },
               },
             }}
           >
@@ -146,11 +145,10 @@ const Matches = (
           } /*: {accession: string, source_database: string} */,
         ) => (
           <Link
-            newTo={{
+            to={{
               description: {
-                mainType: primary,
-                mainDB: sourceDatabase,
-                mainAccession: accession,
+                main: { key: primary },
+                [primary]: { db: sourceDatabase, accession },
               },
             }}
           >
@@ -245,7 +243,7 @@ const Matches = (
 Matches.propTypes = propTypes;
 
 const mapStateToProps = createSelector(
-  state => state.newLocation.search,
+  state => state.customLocation.search,
   search => ({ search }),
 );
 

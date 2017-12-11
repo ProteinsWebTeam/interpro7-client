@@ -60,8 +60,11 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
                     'no'} entries matching ${e.title}`}
                 >
                   <Link
-                    newTo={{
-                      description: { mainType: 'entry', mainDB: 'InterPro' },
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: { db: 'InterPro' },
+                      },
                       search: { go_term: e.accession },
                     }}
                   >
@@ -75,7 +78,7 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
                     'no'} proteins matching ${e.title}`}
                 >
                   <Link
-                    newTo={{
+                    to={{
                       description: { mainType: 'protein', mainDB: 'uniprot' },
                       search: { go_term: e.accession },
                     }}

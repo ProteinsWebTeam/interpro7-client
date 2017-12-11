@@ -3,10 +3,10 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 import loadWebComponent from 'utils/loadWebComponent';
-import path2description from 'utils/processLocation/path2description';
+import pathToDescription from 'utils/processDescription/pathToDescription';
 
 const webComponents = [];
 
@@ -14,7 +14,7 @@ class InterProHierarchy extends PureComponent {
   static propTypes = {
     accession: T.string.isRequired,
     hierarchy: T.oneOfType([T.string, T.object]).isRequired,
-    goToNewLocation: T.func.isRequired,
+    goToCustomLocation: T.func.isRequired,
   };
 
   componentWillMount() {
@@ -45,8 +45,8 @@ class InterProHierarchy extends PureComponent {
     this._hierarchy.addEventListener('click', e => {
       if (e.path[0].classList.contains('link')) {
         e.preventDefault();
-        this.props.goToNewLocation({
-          description: path2description(e.path[0].getAttribute('href')),
+        this.props.goToCustomLocation({
+          description: pathToDescription(e.path[0].getAttribute('href')),
         });
       }
     });
@@ -65,4 +65,4 @@ class InterProHierarchy extends PureComponent {
   }
 }
 
-export default connect(null, { goToNewLocation })(InterProHierarchy);
+export default connect(null, { goToCustomLocation })(InterProHierarchy);
