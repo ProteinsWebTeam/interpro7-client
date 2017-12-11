@@ -106,10 +106,19 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                         </Tooltip>
                       </Link>
                     </h5>
-                    <p>
+                    <p className={f('margin-bottom-medium')}>
                       {metadata.source_database} type:{' '}
                       {metadata.type.replace('_', ' ').toLowerCase()}
                     </p>
+                    {metadata.name.short &&
+                      metadata.accession !== metadata.name.short && (
+                        <p>
+                          Short name:&nbsp;
+                          <i className={f('shortname')}>
+                            {metadata.name.short}
+                          </i>
+                        </p>
+                      )}
                   </div>
                 )}
 
@@ -120,6 +129,15 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   literature={included}
                 />
               )}
+              {metadata.source_database &&
+                metadata.source_database.toLowerCase() === 'interpro' &&
+                metadata.name.short &&
+                metadata.accession !== metadata.name.short && (
+                  <p>
+                    Short name:&nbsp;
+                    <i className={f('shortname')}>{metadata.name.short}</i>
+                  </p>
+                )}
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>
               {metadata.integrated && (
