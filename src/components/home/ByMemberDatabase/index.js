@@ -57,7 +57,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('md-list')}>
         <AnimatedEntry className={f('row')} element="div">
-          {memberDB.map(({ name, to, type, title, version, apiType }) => (
+          {memberDB.map(({ name, newTo, type, title, version, apiType }) => (
             <div
               className={f(
                 'column',
@@ -72,7 +72,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                 data={{ name, version, location: window.location }}
                 processData={schemaProcessDataForDB}
               />
-              <Link to={to} className={f('block')}>
+              <Link newTo={newTo} className={f('block')}>
                 <MemberSymbol type={type} />
 
                 <h6>
@@ -99,9 +99,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
           ))}
         </AnimatedEntry>
         <Link
-          to={{
-            description: { main: { key: 'entry' } },
-          }}
+          newTo={{ description: { mainType: 'entry' } }}
           className={f('button')}
         >
           View all entries

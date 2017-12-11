@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import Accession from 'components/Accession';
 import Description from 'components/Description';
@@ -27,8 +27,8 @@ class SummarySet extends PureComponent /*:: <Props> */ {
       metadata: T.object.isRequired,
     }).isRequired,
     currentSet: T.object,
-    goToCustomLocation: T.func.isRequired,
-    customLocation: T.object.isRequired,
+    goToNewLocation: T.func.isRequired,
+    location: T.object.isRequired,
   };
 
   componentDidMount() {
@@ -39,13 +39,11 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     rootDiv.addEventListener('click', e => {
       const g = e.path[1];
       if (g.nodeName === 'g' && g.classList.contains('node')) {
-        this.props.goToCustomLocation({
+        this.props.goToNewLocation({
           description: {
-            main: { key: 'entry' },
-            entry: {
-              db: this.props.customLocation.description.mainDB,
-              accession: g.getAttribute('data-accession'),
-            },
+            mainType: 'entry',
+            mainDB: this.props.location.description.mainDB,
+            mainAccession: g.getAttribute('data-accession'),
           },
         });
       }
@@ -108,4 +106,4 @@ class SummarySet extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(null, { goToCustomLocation })(SummarySet);
+export default connect(null, { goToNewLocation })(SummarySet);

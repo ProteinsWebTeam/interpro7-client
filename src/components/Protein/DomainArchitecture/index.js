@@ -3,8 +3,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import PopperJS from 'popper.js';
 
-import pathToDescription from 'utils/processDescription/pathToDescription';
-import { goToCustomLocation } from 'actions/creators';
+import path2description from 'utils/processLocation/path2description';
+import { goToNewLocation } from 'actions/creators';
 
 import EntryComponent from './entry_component';
 import { EntryColorMode } from './entry';
@@ -46,7 +46,7 @@ class DomainArchitecture extends Component {
   static propTypes = {
     protein: T.object,
     data: T.object,
-    goToCustomLocation: T.func.isRequired,
+    goToNewLocation: T.func.isRequired,
   };
 
   constructor(props) {
@@ -62,9 +62,7 @@ class DomainArchitecture extends Component {
     this.ec = new EntryComponent(this._container, protein, data);
     this.ec.on('entryclick', e => {
       if (e.link) {
-        this.props.goToCustomLocation({
-          description: pathToDescription(e.link),
-        });
+        this.props.goToNewLocation({ description: path2description(e.link) });
       }
     });
     this.ec.on('entrymouseover', e => {
@@ -196,4 +194,4 @@ class DomainArchitecture extends Component {
   }
 }
 
-export default connect(null, { goToCustomLocation })(DomainArchitecture);
+export default connect(null, { goToNewLocation })(DomainArchitecture);

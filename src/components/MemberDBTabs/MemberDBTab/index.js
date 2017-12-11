@@ -52,34 +52,28 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
 
   render() {
     const { children, count, mainType, cleanName, lowGraphics } = this.props;
-    const to = customLocation => {
+    const newTo = ({ description, restOfLocation }) => {
       const nextLocation = {
-        ...customLocation,
+        ...restOfLocation,
         description: {
-          ...customLocation.description,
-          entry: {},
+          ...description,
+          // mainDB: description.description.mainType ==
         },
       };
-      if (cleanName !== 'all') {
-        nextLocation.description.entry = {
-          isFilter: nextLocation.description.main.key !== 'entry',
-          db: cleanName,
-        };
+      if (description.mainType === 'entry') {
+        nextLocation.description.mainDB = cleanName;
+      } else {
+        const isNotAll = cleanName !== 'all';
+        nextLocation.description.focusType = isNotAll ? 'entry' : null;
+        nextLocation.description.focusDB = isNotAll ? cleanName : null;
       }
       return nextLocation;
     };
-    let activeClass;
-    if (cleanName === 'all') {
-      activeClass = ({ description: { entry } }) =>
-        !entry.db && f('is-active', 'is-active-tab', cleanName);
-    } else {
-      activeClass = f('is-active', 'is-active-tab', cleanName);
-    }
     return (
       <li className={f('tabs-title', { lowGraphics })}>
         <Link
-          to={to}
-          activeClass={activeClass}
+          newTo={newTo}
+          activeClass={f('is-active', 'is-active-tab', cleanName)}
           className={f({
             special: cleanName === 'InterPro' || cleanName === 'all',
           })}

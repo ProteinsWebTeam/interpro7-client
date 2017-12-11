@@ -33,10 +33,7 @@ EntryListFilter.propTypes = {
 };
 
 const mapStateToProps = createSelector(
-  state =>
-    state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .db,
+  state => state.newLocation.description.mainDB,
   mainDB => ({ mainDB }),
 );
 

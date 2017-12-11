@@ -15,20 +15,14 @@ class Length extends PureComponent {
     const { metadata: { length, fragment } } = this.props;
     let fragmentText;
     if (fragment) {
-      fragmentText = ` (${fragment === 'N' ? 'complete' : 'fragment'})`;
+      fragmentText = ` (${fragment === 'N' ? 'complete' : 'fragemnt'})`;
     }
     return (
       <div>
         {'Length: '}
         <Link
-          to={({ description }) => ({
-            description: {
-              ...description,
-              [description.main.key]: {
-                ...description[description.main.key],
-                detail: 'sequence',
-              },
-            },
+          newTo={({ description }) => ({
+            description: { ...description, mainDetail: 'sequence' },
           })}
         >
           {length} amino acids{fragmentText}

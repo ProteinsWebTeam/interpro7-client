@@ -29,9 +29,9 @@ class InterProMenu extends PureComponent /*:: <Props> */ {
       <ul className={`${className || ''} ${f('interpro-menu')}`}>
         {children}
         {InterPro.map(
-          ({ to, name, icon, iconClass = 'generic', activeClass }) => (
+          ({ newTo, name, icon, iconClass = 'generic', activeClass }) => (
             <li key={name}>
-              <MenuItem to={to} activeClass={activeClass}>
+              <MenuItem newTo={newTo} activeClass={activeClass}>
                 {icon !== 'H' && (
                   <i
                     data-icon={icon}

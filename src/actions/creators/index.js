@@ -2,35 +2,22 @@
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
 
-//:: import type { Description } from 'utils/processDescription/handlers';
-
 //:: type Location = {pathname: string, search: Object, hash: string};
-/*:: export type CustomLocation = {|
-  description: Description,
-  search?: {[key: string]: string},
-  hash?: string,
-|}; */
 
 // Action creators
-// custom location
-export const goToCustomLocation = (
-  customLocation /*: CustomLocation */,
-  replace /*?: boolean */,
-  state /*?: any */,
+// location
+export const goToNewLocation = (
+  location /*: string | Location */,
+  replace /*: ?boolean */,
 ) => ({
-  type: types.NEW_CUSTOM_LOCATION,
-  customLocation,
+  type: types.NEW_NEW_LOCATION,
+  location,
   replace: !!replace,
-  state,
 });
 
-export const customLocationChangeFromHistory = (
-  customLocation /*: CustomLocation */,
-  state /*?: any */,
-) => ({
-  type: types.NEW_PROCESSED_CUSTOM_LOCATION,
-  customLocation,
-  state,
+export const newLocationChangeFromHistory = (newLocation /*: Object */) => ({
+  type: types.NEW_PROCESSED_NEW_LOCATION,
+  newLocation,
 });
 
 // UI

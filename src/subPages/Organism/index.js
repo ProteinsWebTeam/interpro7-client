@@ -97,10 +97,11 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
               dataKey="taxId"
               renderer={taxId => (
                 <Link
-                  to={{
+                  newTo={{
                     description: {
-                      main: { key: 'organism' },
-                      organism: { db: 'taxonomy', accession: taxId },
+                      mainType: 'organism',
+                      mainDB: 'taxonomy',
+                      mainAccession: taxId,
                     },
                   }}
                 >
@@ -140,14 +141,24 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
                 const value = lut.get(taxId);
                 return (
                   <Link
-                    to={{
+                    newTo={{
                       description: {
-                        main: { key: 'organism' },
-                        organism: { db: 'taxonomy', accession: taxId },
+                        mainType: 'organism',
+                        mainDB: 'taxonomy',
+                        mainAccession: taxId,
                       },
                     }}
                   >
                     {value && value.icon && <span>{value.name}</span>}
+                    {
+                      // <Metadata
+                      //    endpoint="organism"
+                      //   db="taxonomy"
+                      //   accession={taxId}
+                      // >
+                      //  <TaxIdOrName accession={taxId} />
+                      // </Metadata>
+                    }
                   </Link>
                 );
               }}

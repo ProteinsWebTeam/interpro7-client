@@ -27,11 +27,9 @@ class Example extends PureComponent {
       <i>
         {' '}
         <Link
-          to={{
-            description: {
-              main: { key: 'search' },
-              search: { type: 'text', value },
-            },
+          newTo={{
+            description: { mainType: 'search', mainDB: 'text' },
+            search: { search: value },
           }}
         >
           {value}
@@ -40,23 +38,34 @@ class Example extends PureComponent {
     );
   }
 }
+// const Example = ({ value }) =>
+//   <a style={{ cursor: 'pointer' }} data-search={value}>
+//     {' '}{value}
+//   </a>;
 
 class SearchByText extends PureComponent {
   static propTypes = {
-    value: T.string,
+    search: T.shape({
+      search: T.string,
+    }).isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value || '',
+      value: props.search.search || '',
       submit: false,
     };
   }
 
-  componentWillReceiveProps({ value }) {
-    this.setState({ value });
+  componentWillReceiveProps({ search }) {
+    this.setState({ value: search.search });
   }
+
+  handleExampleClick = event => {
+    const value = event.target.dataset.search;
+    if (value) this.setState({ value });
+  };
 
   handleReset = () => this.setState({ value: '' });
 
@@ -156,8 +165,8 @@ class SearchByText extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.search.value,
-  value => ({ value }),
+  state => state.newLocation.search,
+  search => ({ search }),
 );
 
 export default connect(mapStateToProps)(SearchByText);

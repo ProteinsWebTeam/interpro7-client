@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -52,16 +52,14 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
 
 /*:: type SequenceProps = {
   sequence: string,
-  goToCustomLocation: function,
-  accession: string,
-  name: ?string,
+  goToNewLocation: function,
 }; */
 
 class Sequence extends PureComponent /*:: <SequenceProps> */ {
   /*:: _node: ?HTMLElement; */
   static propTypes = {
     sequence: T.string,
-    goToCustomLocation: T.func.isRequired,
+    goToNewLocation: T.func.isRequired,
     accession: T.string.isRequired,
     name: T.string,
   };
@@ -106,10 +104,13 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
 
   _handleIPSClick = event => {
     event.preventDefault();
-    this.props.goToCustomLocation({
+    this.props.goToNewLocation({
       description: {
-        main: { key: 'search' },
-        search: { type: 'sequence', value: this._getSelection() },
+        mainType: 'search',
+        mainDB: 'sequence',
+      },
+      search: {
+        sequence: this._getSelection(),
       },
     });
   };
@@ -142,10 +143,10 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
           <div className={f('medium-2', 'columns')}>
             <Link
               className={f('button', 'primary', 'sequence-link')}
-              to={{
+              newTo={{
                 description: {
-                  main: { key: 'search' },
-                  search: { type: 'sequence' },
+                  mainType: 'search',
+                  mainDB: 'sequence',
                 },
               }}
               onClick={this._handleIPSClick}
@@ -176,4 +177,4 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
   }
 }
 
-export default connect(undefined, { goToCustomLocation })(Sequence);
+export default connect(undefined, { goToNewLocation })(Sequence);

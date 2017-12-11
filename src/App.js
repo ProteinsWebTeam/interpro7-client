@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import createHistory from 'history/es/createBrowserHistory';
 
 import Root from 'Root';
-import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 import config from 'config';
 import createStore from 'store';
@@ -18,9 +17,7 @@ createToastManagerWithStore(store);
 
 const App = () => (
   <Provider store={store}>
-    <ErrorBoundary>
-      <Root />
-    </ErrorBoundary>
+    <Root />
   </Provider>
 );
 

@@ -25,22 +25,21 @@ const getOldHref = createSelector(
   description => description,
   d => {
     const href = 'https://www.ebi.ac.uk/interpro/';
-    const { key } = d.main;
-    if (key === 'entry') {
-      if (!d.entry.db) {
+    if (d.mainType === 'entry') {
+      if (!d.mainDB) {
         return href;
-      } else if (d.entry.db === 'InterPro') {
-        if (d.entry.accession) {
-          return `${href}entry/${d.entry.accession}/`;
+      } else if (d.mainDB === 'InterPro') {
+        if (d.mainAccession) {
+          return `${href}entry/${d.mainAccession}/`;
         }
         return `${href}search/`;
       }
-      if (d.entry.accession) {
-        return `${href}signature/${d.entry.accession}/`;
+      if (!d.mainAccession) {
+        return `${href}signature/${d.mainAccession}/`;
       }
-      return `${href}member-database/${d.entry.db}/`;
-    } else if (key === 'protein' && d.entry.accession) {
-      return `${href}protein/${d.entry.accession}/`;
+      return `${href}member-database/${d.mainDB}/`;
+    } else if (d.mainType === 'protein' && d.mainAccession) {
+      return `${href}protein/${d.mainAccession}/`;
     }
     return href;
   },
@@ -70,7 +69,7 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
 }
 
 const mapStateToPropsForOldLink = createSelector(
-  state => state.customLocation.description,
+  state => state.newLocation.description,
   description => ({ description }),
 );
 
@@ -161,23 +160,20 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
 // const mapStateToUrl = createSelector(
 //   state => state.settings,
 //   state => state.location,
-//   state => state.customLocation,
-//   (settings, location, customLocation) => {
+//   state => state.newLocation,
+//   (settings, location, newLocation) => {
 //     for (const blacklist of urlBlacklist) {
 //       if (location.pathname.toLowerCase().includes(blacklist)) {
-//         return getUrlForApi({settings, location: {pathname: ''}, customLocation});
+//         return getUrlForApi({settings, location: {pathname: ''}, newLocation});
 //       }
 //     }
-//     return getUrlForApi({settings, location, customLocation});
+//     return getUrlForApi({settings, location, newLocation});
 //   }
 // );
 
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
-  state =>
-    state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
+  state => state.newLocation.description.mainAccession,
   (visible, mainAccession) => ({ visible, mainAccession }),
 );
 

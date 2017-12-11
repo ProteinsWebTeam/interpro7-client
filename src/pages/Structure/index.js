@@ -47,7 +47,7 @@ const propTypes = {
     loading: T.bool.isRequired,
   }).isRequired,
   isStale: T.bool.isRequired,
-  customLocation: T.shape({
+  location: T.shape({
     description: T.object.isRequired,
     search: T.object.isRequired,
   }).isRequired,
@@ -60,12 +60,7 @@ const Overview = ({ data: { payload, loading } }) => {
       {Object.entries(payload.structures || {}).map(([name, count]) => (
         <li key={name}>
           <Link
-            to={{
-              description: {
-                main: { key: 'structure' },
-                structure: { db: name },
-              },
-            }}
+            newTo={{ description: { mainType: 'structure', mainDB: name } }}
           >
             {name} ({count})
           </Link>
@@ -79,7 +74,7 @@ Overview.propTypes = propTypes;
 const List = ({
   data: { payload, loading, url, status },
   isStale,
-  customLocation: { search },
+  location: { search },
 }) => {
   let _payload = payload;
   const HTTP_OK = 200;
@@ -130,15 +125,12 @@ const List = ({
             dataKey="accession"
             renderer={(accession /*: string */) => (
               <Link
-                to={customLocation => ({
+                newTo={location => ({
+                  ...location,
                   description: {
-                    ...customLocation.description,
-                    [customLocation.description.main.key]: {
-                      ...customLocation.description[
-                        customLocation.description.main.key
-                      ],
-                      accession,
-                    },
+                    mainType: location.description.mainType,
+                    mainDB: location.description.mainDB,
+                    mainAccession: accession,
                   },
                 })}
               >
@@ -158,15 +150,12 @@ const List = ({
               { accession } /*: {accession: string} */,
             ) => (
               <Link
-                to={customLocation => ({
+                newTo={location => ({
+                  ...location,
                   description: {
-                    ...customLocation.description,
-                    [customLocation.description.main.key]: {
-                      ...customLocation.description[
-                        customLocation.description.main.key
-                      ],
-                      accession,
-                    },
+                    mainType: location.description.mainType,
+                    mainDB: location.description.mainDB,
+                    mainAccession: accession,
                   },
                 })}
               >
@@ -201,14 +190,14 @@ const List = ({
 };
 List.propTypes = propTypes;
 
-const SummaryComponent = ({ data: { payload }, customLocation }) => (
-  <SummaryAsync data={payload} customLocation={customLocation} />
+const SummaryComponent = ({ data: { payload }, location }) => (
+  <SummaryAsync data={payload} location={location} />
 );
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.any,
   }).isRequired,
-  customLocation: T.object.isRequired,
+  location: T.object.isRequired,
 };
 
 const subPagesForStructure = new Set();
@@ -232,15 +221,9 @@ const Summary = props => {
       </div>
       <Switch
         {...props}
-        locationSelector={l => {
-          const { key } = l.description.main;
-          return (
-            l.description[key].detail ||
-            (Object.entries(l.description).find(
-              ([_key, value]) => value.isFilter,
-            ) || [])[0]
-          );
-        }}
+        locationSelector={l =>
+          l.description.mainDetail || l.description.focusType
+        }
         indexRoute={SummaryComponent}
         childRoutes={subPagesForStructure}
       />
@@ -251,7 +234,7 @@ Summary.propTypes = {
   data: T.shape({
     loading: T.bool.isRequired,
   }).isRequired,
-  customLocation: T.object.isRequired,
+  location: T.object.isRequired,
 };
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
@@ -259,15 +242,9 @@ const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => {
-        const { key } = l.description.main;
-        return (
-          l.description[key].accession ||
-          (Object.entries(l.description).find(
-            ([_key, value]) => value.isFilter,
-          ) || [])[0]
-        );
-      }}
+      locationSelector={l =>
+        l.description.mainAccession || l.description.focusType
+      }
       indexRoute={List}
       childRoutes={[{ value: /^[a-z\d]{4}$/i, component: Summary }]}
       catchAll={List}
@@ -331,7 +308,7 @@ class Structure extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => l.description[l.description.main.key].db}
+            locationSelector={l => l.description.mainDB}
             indexRoute={Overview}
             catchAll={InnerSwitch}
           />

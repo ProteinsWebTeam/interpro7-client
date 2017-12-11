@@ -1,18 +1,18 @@
 import reducer from '.';
-import { NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
+import { NEW_PROCESSED_NEW_LOCATION } from 'actions/types';
 
 describe('reducer for location search', () => {
   test('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual({});
   });
 
-  test('should handle NEW_PROCESSED_CUSTOM_LOCATION action', () => {
+  test('should handle NEW_PROCESSED_NEW_LOCATION action', () => {
     expect(
       reducer(
         {},
         {
-          type: NEW_PROCESSED_CUSTOM_LOCATION,
-          customLocation: { search: { query: 'a' } },
+          type: NEW_PROCESSED_NEW_LOCATION,
+          newLocation: { search: { query: 'a' } },
         },
       ),
     ).toEqual({ query: 'a' });
@@ -20,18 +20,18 @@ describe('reducer for location search', () => {
       reducer(
         { query: 'a' },
         {
-          type: NEW_PROCESSED_CUSTOM_LOCATION,
-          customLocation: { search: { query: 'a' } },
+          type: NEW_PROCESSED_NEW_LOCATION,
+          newLocation: { search: { query: 'a' } },
         },
       ),
     ).toEqual({ query: 'a' });
     expect(
-      reducer({}, { type: NEW_PROCESSED_CUSTOM_LOCATION, customLocation: {} }),
+      reducer({}, { type: NEW_PROCESSED_NEW_LOCATION, newLocation: {} }),
     ).toEqual({});
     expect(
       reducer(
         { query: 'a' },
-        { type: NEW_PROCESSED_CUSTOM_LOCATION, customLocation: {} },
+        { type: NEW_PROCESSED_NEW_LOCATION, newLocation: {} },
       ),
     ).toEqual({});
   });

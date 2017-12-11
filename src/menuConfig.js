@@ -1,6 +1,4 @@
 // @flow
-import getEmptyDescription from 'utils/processDescription/emptyDescription';
-
 import f from 'styles/foundation';
 
 /* ::
@@ -39,74 +37,97 @@ export const EBI /*: Array<Object> */ = [
   },
 ];
 
-const getEntryForFilter = ({ entry }) => {
-  if (entry.db) {
-    return { ...entry, isFilter: true };
-  }
-};
-
 export const entities /*: Array<Object> */ = [
   {
-    to(customLocation) {
+    newTo(location) {
       return {
         description: {
-          main: { key: 'entry' },
-          entry: {
-            db:
-              customLocation.description.entry.integration ||
-              customLocation.description.entry.db ||
-              'InterPro',
-          },
+          ...location.description,
+          mainType: 'entry',
+          mainDB:
+            location.description.focusIntegration ||
+            location.description.focusDB ||
+            (location.description.mainType === 'entry' &&
+              location.description.mainDB) ||
+            'InterPro',
+          focusType: null,
+          focusDB: null,
+          focusIntegration: null,
         },
       };
     },
     name: 'Entry',
   },
   {
-    to(customLocation) {
+    newTo(location) {
+      let { focusType, focusDB } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
       return {
         description: {
-          main: { key: 'protein' },
-          protein: { db: 'UniProt' },
-          entry: getEntryForFilter(customLocation.description),
+          ...location.description,
+          mainType: 'protein',
+          mainDB: 'UniProt',
+          focusType,
+          focusDB,
         },
       };
     },
     name: 'Protein',
   },
   {
-    to(customLocation) {
+    newTo(location) {
+      let { focusType, focusDB } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
       return {
         description: {
-          main: { key: 'structure' },
-          structure: { db: 'PDB' },
-          entry: getEntryForFilter(customLocation.description),
+          ...location.description,
+          mainType: 'structure',
+          mainDB: 'PDB',
+          focusType,
+          focusDB,
         },
       };
     },
     name: 'Structure',
   },
   {
-    to(customLocation) {
+    newTo(location) {
+      let { focusType, focusDB } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
       return {
         description: {
-          main: { key: 'organism' },
-          organism: {
-            db: customLocation.description.organism.db || 'taxonomy',
-          },
-          entry: getEntryForFilter(customLocation.description),
+          ...location.description,
+          mainType: 'organism',
+          mainDB: 'taxonomy',
+          focusType,
+          focusDB,
         },
       };
     },
     name: 'Organism',
   },
   {
-    to(customLocation) {
+    newTo(location) {
+      let { focusType, focusDB } = location.description;
+      if (location.description.mainType === 'entry') {
+        focusType = 'entry';
+        focusDB = location.description.mainDB;
+      }
       return {
         description: {
-          main: { key: 'set' },
-          set: { db: 'all' },
-          entry: getEntryForFilter(customLocation.description),
+          mainType: 'set',
+          mainDB: 'all',
+          focusType,
+          focusDB,
         },
       };
     },
@@ -118,16 +139,15 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'overview',
     {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
+      newTo(location /*: Location */) {
         return {
           description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: null,
-            },
+            ...location.description,
+            mainDetail: null,
+            focusType: null,
+            focusDB: null,
+            mainMemberDB: null,
+            focusIntegration: null,
           },
         };
       },
@@ -137,21 +157,18 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'entry',
     {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
+      newTo(location /*: Location */) {
         return {
           description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: null,
-            },
-            entry: {
-              isFilter: true,
-              db:
-                key === 'set' ? customLocation.description[key].db : 'InterPro',
-            },
+            ...location.description,
+            mainDetail: null,
+            mainMemberDB: null,
+            focusType: 'entry',
+            focusDB:
+              location.description.mainType === 'set'
+                ? location.description.mainDB
+                : null,
+            focusIntegration: 'all',
           },
         };
       },
@@ -162,20 +179,15 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'protein',
     {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
+      newTo(location /*: Location */) {
         return {
           description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: null,
-            },
-            protein: {
-              isFilter: true,
-              db: 'UniProt',
-            },
+            ...location.description,
+            mainDetail: null,
+            mainMemberDB: null,
+            focusType: 'protein',
+            focusDB: 'UniProt',
+            focusIntegration: null,
           },
         };
       },
@@ -186,20 +198,15 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'structure',
     {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
+      newTo(location /*: Location */) {
         return {
           description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: null,
-            },
-            structure: {
-              isFilter: true,
-              db: 'PDB',
-            },
+            ...location.description,
+            mainDetail: null,
+            mainMemberDB: null,
+            focusType: 'structure',
+            focusDB: 'PDB',
+            focusIntegration: null,
           },
         };
       },
@@ -210,20 +217,15 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'organism',
     {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
+      newTo(location /*: Location */) {
         return {
           description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: null,
-            },
-            organism: {
-              isFilter: true,
-              db: 'taxonomy',
-            },
+            ...location.description,
+            mainDetail: null,
+            focusType: 'organism',
+            focusDB: 'taxonomy',
+            focusIntegration: null,
+            mainMemberDB: null,
           },
         };
       },
@@ -234,20 +236,14 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'set',
     {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
+      newTo(location /*: Location */) {
         return {
           description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: null,
-            },
-            set: {
-              isFilter: true,
-              db: customLocation.description[key].db,
-            },
+            ...location.description,
+            mainDetail: null,
+            focusType: 'set',
+            focusDB: location.description.mainDB,
+            mainMemberDB: null,
           },
         };
       },
@@ -258,16 +254,15 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'sequence',
     {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
+      newTo(location /*: Location */) {
         return {
           description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: 'sequence',
-            },
+            ...location.description,
+            focusType: null,
+            focusDB: null,
+            focusIntegration: null,
+            mainDetail: 'sequence',
+            mainMemberDB: null,
           },
         };
       },
@@ -277,16 +272,15 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'domain_architecture',
     {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
+      newTo(location /*: Location */) {
         return {
           description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: 'domain_architecture',
-            },
+            ...location.description,
+            focusType: null,
+            focusDB: null,
+            focusIntegration: null,
+            mainDetail: 'domain_architecture',
+            mainMemberDB: null,
           },
         };
       },
@@ -296,16 +290,15 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'logo',
     {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
+      newTo(location /*: Location */) {
         return {
           description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: 'logo',
-            },
+            ...location.description,
+            focusType: null,
+            focusDB: null,
+            focusIntegration: null,
+            mainDetail: 'logo',
+            mainMemberDB: null,
           },
         };
       },
@@ -315,16 +308,15 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'proteome',
     {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
+      newTo(location /*: Location */) {
         return {
           description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              proteomeDB: 'proteome',
-            },
+            ...location.description,
+            focusType: null,
+            focusDB: null,
+            focusIntegration: null,
+            mainDetail: null,
+            mainMemberDB: 'proteome',
           },
         };
       },
@@ -336,84 +328,78 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
 
 export const InterPro /*: Array<Object> */ = [
   {
-    to: { description: {} },
+    newTo: { description: {} },
     icon: 'H',
     name: 'Home',
-    activeClass({ description: { main, other } } /*: Location */) {
-      if (!(main.key || other.length)) return f('is-active');
+    activeClass({ description: { mainType, other } } /*: Location */) {
+      if (!(mainType || other)) return f('is-active');
     },
   },
   {
-    to: { description: { main: { key: 'search' } } },
+    newTo: { description: { mainType: 'search' } },
     icon: '1',
     name: 'Search',
     iconClass: 'functional',
   },
   {
-    to(customLocation) {
-      const { key } = customLocation.description.main;
-      if (!key || key === 'search' || key === 'job') {
-        return {
-          description: {
-            ...getEmptyDescription(),
-            main: { key: 'entry' },
-            entry: { db: 'InterPro' },
-          },
-        };
-      }
-      if (customLocation.description.set.accession) {
-        return {
-          description: {
-            ...getEmptyDescription(),
-            main: { key: 'set' },
-            set: { db: 'all' },
-            entry: { isFilter: true, db: customLocation.description.set.db },
-          },
-        };
+    newTo(location) {
+      let mainType = 'entry';
+      let mainDB = 'InterPro';
+      let focusType = null;
+      let focusDB = null;
+      if (
+        location.description.mainType &&
+        location.description.mainType !== 'search'
+      ) {
+        if (
+          location.description.mainType === 'set' &&
+          location.description.mainAccession
+        ) {
+          mainType = 'set';
+          mainDB = 'all';
+          focusType = 'entry';
+          focusDB = location.description.mainDB;
+        } else {
+          mainType = location.description.mainType;
+          mainDB = location.description.mainDB || 'InterPro';
+        }
       }
       return {
-        description: {
-          ...getEmptyDescription(),
-          main: { key },
-          [key]: { db: customLocation.description[key].db },
-          entry: {
-            isFilter: key !== 'entry',
-            db: customLocation.description.entry.db || 'InterPro',
-          },
-        },
+        ...location,
+        description: { mainType, mainDB, focusType, focusDB },
       };
     },
-    activeClass({ description: { main } } /*: Location */) {
-      if (main.key && main.key !== 'search') return f('is-active');
+    activeClass({ description: { mainType } } /*: Location */) {
+      if (mainType && mainType !== 'search') return f('is-active');
     },
     icon: 'b',
     name: 'Browse',
     iconClass: 'functional',
   },
   {
-    to: { description: { other: ['release_notes'] } },
+    newTo: { description: { other: 'release_notes' } },
     icon: '0',
     name: 'Release\xa0Notes',
     iconClass: 'functional',
   },
   {
-    to: { description: { other: ['download'] } },
+    newTo: { description: { other: 'download' } },
     icon: '=',
     name: 'Download',
     iconClass: 'functional',
   },
   {
-    to: { description: { other: ['help'] } },
+    newTo: { description: { other: 'help' } },
     icon: '?',
     name: 'Help',
   },
   {
-    to: { description: { other: ['about'] } },
+    newTo: { description: { other: 'about' } },
     icon: 'i',
     name: 'About',
   },
   {
-    to: { description: { other: ['settings'] } },
+    newTo: { description: { other: 'settings' } },
     icon: 's',
     name: 'Settings',
     iconClass: 'functional',

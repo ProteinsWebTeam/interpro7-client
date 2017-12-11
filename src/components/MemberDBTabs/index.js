@@ -8,7 +8,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import MemberDBTab from './MemberDBTab';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import loadData from 'higherOrder/loadData';
 
@@ -75,14 +75,16 @@ const getValueFor = (data, mainType, db) => {
     loading: boolean,
     payload?: Object,
   },
-  customLocation: {
+  newLocation: {
     description: {
-      main: { key: ?string },
+      mainType: string,
+      mainDB: string,
+      focusDB: ?string,
     },
     search: Object,
   },
   lowGraphics: boolean,
-  goToCustomLocation: function,
+  goToNewLocation: function,
 }; */
 
 class MemberDBTabs extends PureComponent /*:: <Props> */ {
@@ -95,12 +97,16 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
-    customLocation: T.shape({
-      description: T.object.isRequired,
-      search: T.object.isRequired,
+    newLocation: T.shape({
+      description: T.shape({
+        mainType: T.string.isRequired,
+        mainDB: T.string.isRequired,
+        focusDB: T.string,
+      }).isRequired,
+      search: T.object,
     }).isRequired,
     lowGraphics: T.bool.isRequired,
-    goToCustomLocation: T.func.isRequired,
+    goToNewLocation: T.func.isRequired,
   };
 
   constructor(props) {
@@ -113,7 +119,7 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
   };
 
   _handleChange = ({ target: { value } }) => {
-    const description = { ...this.props.customLocation.description };
+    const description = { ...this.props.newLocation.description };
     if (description.mainType === 'entry') {
       description.mainDB = value;
     } else {
@@ -121,11 +127,11 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
       description.focusType = isNotAll && 'entry';
       description.focusDB = isNotAll && value;
     }
-    this.props.goToCustomLocation({
-      ...this.props.customLocation,
+    this.props.goToNewLocation({
+      ...this.props.newLocation,
       description,
       search: {
-        ...this.props.customLocation.search,
+        ...this.props.newLocation.search,
         page: null,
       },
     });
@@ -135,12 +141,11 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
     const {
       dataDB,
       dataAll,
-      customLocation: {
-        description: { main: { key: mainType }, entry: { db: value } },
-      },
+      newLocation: { description: { mainType, mainDB, focusDB } },
       lowGraphics,
     } = this.props;
     const { collapsed } = this.state;
+    const value = mainType === 'entry' ? mainDB : focusDB;
     const options = Array.from(menuOptions).filter(
       ([, value]) => !(mainType === 'entry' && value === 'all'),
     );
@@ -234,19 +239,19 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  state => state.newLocation,
   state => state.settings.ui.lowGraphics,
-  (customLocation, lowGraphics) => ({ customLocation, lowGraphics }),
+  (newLocation, lowGraphics) => ({ newLocation, lowGraphics }),
 );
 
 const getUrlForMemberDB = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description,
-  ({ protocol, hostname, port, root }, description) => {
+  state => state.newLocation,
+  ({ protocol, hostname, port, root }, location) => {
     let output = `${protocol}//${hostname}:${port}${root}/entry`;
-    if (description.main.key && description.main.key !== 'entry') {
-      output += `/${description.main.key}/${
-        description[description.main.key].db
+    if (location.description.mainType !== 'entry') {
+      output += `/${location.description.mainType}/${
+        location.description.mainDB
       }`;
     }
     return output;
@@ -255,7 +260,7 @@ const getUrlForMemberDB = createSelector(
 
 const getUrlForAll = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description.main.key,
+  state => state.newLocation.description.mainType,
   ({ protocol, hostname, port, root }, mainType) =>
     `${protocol}//${hostname}:${port}${root}/${mainType}`,
 );
@@ -265,6 +270,6 @@ exported = loadData({ getUrl: getUrlForAll, propNamespace: 'All' })(exported);
 exported = loadData({ getUrl: getUrlForMemberDB, propNamespace: 'DB' })(
   exported,
 );
-exported = connect(mapStateToProps, { goToCustomLocation })(exported);
+exported = connect(mapStateToProps, { goToNewLocation })(exported);
 
 export default exported;

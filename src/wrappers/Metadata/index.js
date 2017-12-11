@@ -3,18 +3,16 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2path from 'utils/processLocation/description2path';
 
 const getUrlFor = (mainType, mainDB, mainAccession) =>
   createSelector(
     state => state.settings.api,
     ({ protocol, hostname, port, root }) =>
-      `${protocol}//${hostname}:${port}${root}${descriptionToPath({
-        main: { key: mainType },
-        [mainType]: {
-          db: mainDB,
-          accession: mainAccession,
-        },
+      `${protocol}//${hostname}:${port}${root}${description2path({
+        mainType,
+        mainDB,
+        mainAccession,
       })}`,
   );
 
@@ -25,12 +23,10 @@ class Metadata extends PureComponent {
     accession: T.oneOfType([T.string, T.number]).isRequired,
     children: T.element.isRequired,
   };
-
   constructor() {
     super();
     this.state = { child: null, element: null };
   }
-
   componentWillMount() {
     const { children, ...props } = this.props;
     const child = Children.only(children);

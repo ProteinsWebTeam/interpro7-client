@@ -1,14 +1,13 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import Link from 'components/generic/Link';
 import { connect } from 'react-redux';
 
-import Link from 'components/generic/Link';
 import { BaseLink } from 'components/ExtLink';
 
 import { closeEverything } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
-
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import helperClasses from 'styles/helper-classes.css';
 import styles from './style.css';
@@ -35,7 +34,8 @@ class MenuItem extends PureComponent {
   static propTypes = {
     children: T.node.isRequired,
     href: T.string,
-    to: T.oneOfType([T.object, T.func]),
+    to: T.string,
+    newTo: T.oneOfType([T.object, T.func]),
     closeEverything: T.func.isRequired,
     disabled: T.bool,
     className: T.string,
@@ -47,13 +47,14 @@ class MenuItem extends PureComponent {
       children,
       href,
       to,
+      newTo,
       disabled = false,
       className,
       activeClass,
       closeEverything,
       ...props
     } = this.props;
-    const CustomLink = !to && isExternal(to || href) ? BaseLink : Link;
+    const CustomLink = !newTo && isExternal(to || href) ? BaseLink : Link;
     let _activeClass = s('active');
     if (typeof activeClass === 'string') {
       _activeClass += ` ${activeClass || ''}`;
@@ -65,7 +66,7 @@ class MenuItem extends PureComponent {
     }
     return (
       <CustomLink
-        to={to}
+        newTo={newTo}
         href={href}
         onClick={closeEverything}
         activeClass={_activeClass}

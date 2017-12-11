@@ -7,9 +7,9 @@ import { stringify as qsStringify } from 'query-string';
 import NumberLabel from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2path from 'utils/processLocation/description2path';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
@@ -22,17 +22,17 @@ class SignaturesFilter extends Component {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
-    goToCustomLocation: T.func.isRequired,
-    customLocation: T.shape({
+    goToNewLocation: T.func.isRequired,
+    location: T.shape({
       search: T.object.isRequired,
     }).isRequired,
   };
 
   _handleSelection = ({ target: { value } }) => {
-    this.props.goToCustomLocation({
-      ...this.props.customLocation,
+    this.props.goToNewLocation({
+      ...this.props.location,
       search: {
-        ...this.props.customLocation.search,
+        ...this.props.location.search,
         signature_in: value === 'All' ? undefined : value,
         page: undefined,
       },
@@ -42,7 +42,7 @@ class SignaturesFilter extends Component {
   render() {
     const {
       data: { loading, payload },
-      customLocation: { search: { signature_in: signature } },
+      location: { search: { signature_in: signature } },
     } = this.props;
     const signatureDBs = Object.entries(loading ? {} : payload)
       .sort(([, a], [, b]) => b - a)
@@ -83,26 +83,26 @@ class SignaturesFilter extends Component {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  state => state.newLocation.description,
+  state => state.newLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     const { signature_in, search: _, page_size, ..._search } = search;
     // add to search
     _search.group_by = 'member_databases';
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
+    return `${protocol}//${hostname}:${port}${root}${description2path(
       description,
     )}?${qsStringify(_search)}`;
   },
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
-  customLocation => ({ customLocation }),
+  state => state.newLocation,
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(
+export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
   })(SignaturesFilter),

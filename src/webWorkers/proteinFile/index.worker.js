@@ -3,7 +3,7 @@ import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
 import { stringify as qsStringify } from 'query-string';
 
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2path from 'utils/processLocation/description2path';
 
 // Max page size provided by the server
 // to maximise the number of results sent by the server at once
@@ -23,23 +23,20 @@ const progress = (value /*: number */) => {
 };
 
 // eslint-disable-next-line max-statements
-const processEvent = async ({
-  data: { entryDescription, api, taxId, type },
-}) => {
+const processEvent = async ({ data: { description, api, taxId, type } }) => {
   const content = [];
   const pathname = `${api.protocol}//${api.hostname}:${api.port}${
     api.root
-  }${descriptionToPath({
-    main: { key: 'protein' },
-    protein: { db: 'UniProt' },
-    entry: { ...entryDescription, isFilter: true },
+  }${description2path({
+    mainType: 'protein',
+    mainDB: 'UniProt',
+    focusType: description.mainType,
+    focusDB: description.mainDB,
+    focusAccession: description.mainAccession,
   })}`;
   const proteinPath = `${api.protocol}//${api.hostname}:${api.port}${
     api.root
-  }${descriptionToPath({
-    main: { key: 'protein' },
-    protein: { db: 'UniProt' },
-  })}`;
+  }${description2path({ mainType: 'protein', mainDB: 'UniProt' })}`;
   let page = 1;
   let current = 0;
   let totalCount;
@@ -87,8 +84,8 @@ self.addEventListener(
     self.postMessage({ type: 'success', details: url });
     // Don't close it now, otherwise the blob will disappear
     // Let it be terminated by the main thread on component unmount
-    // NOTE: should maybe transfer the blob back to main thread to be able to
-    // kill the worker without losing the file
+    // NOTE: should maybe transfer the blob back to main thread to be able to kill
+    // the worker without losing the file
   },
   { once: true },
 );

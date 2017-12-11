@@ -27,7 +27,7 @@ exports[`<NotFound /> should render 1`] = `
       <p>
         Double check the URL or go back to the 
         <Connect(Link)
-          to={
+          newTo={
             Object {
               "description": Object {},
             }
@@ -50,12 +50,10 @@ exports[`<NotFound /> should render 1`] = `
       <ul>
         <li>
           <Connect(Link)
-            to={
+            newTo={
               Object {
                 "description": Object {
-                  "other": Array [
-                    "release_notes",
-                  ],
+                  "other": "release_notes",
                 },
               }
             }
@@ -65,13 +63,10 @@ exports[`<NotFound /> should render 1`] = `
         </li>
         <li>
           <Connect(Link)
-            to={
+            newTo={
               Object {
                 "description": Object {
-                  "other": Array [
-                    "help",
-                    "training",
-                  ],
+                  "other": "help",
                 },
               }
             }
@@ -81,13 +76,10 @@ exports[`<NotFound /> should render 1`] = `
         </li>
         <li>
           <Connect(Link)
-            to={
+            newTo={
               Object {
                 "description": Object {
-                  "other": Array [
-                    "help",
-                    "faq",
-                  ],
+                  "other": "help",
                 },
               }
             }
@@ -97,13 +89,10 @@ exports[`<NotFound /> should render 1`] = `
         </li>
         <li>
           <Connect(Link)
-            to={
+            newTo={
               Object {
                 "description": Object {
-                  "other": Array [
-                    "help",
-                    "documentation",
-                  ],
+                  "other": "help",
                 },
               }
             }
@@ -113,18 +102,15 @@ exports[`<NotFound /> should render 1`] = `
         </li>
         <li>
           <Connect(Link)
-            to={
+            newTo={
               Object {
                 "description": Object {
-                  "other": Array [
-                    "help",
-                    "support",
-                  ],
+                  "other": "help",
                 },
               }
             }
           >
-            InterPro Help/Support
+            InterPro Help/support
           </Connect(Link)>
         </li>
       </ul>

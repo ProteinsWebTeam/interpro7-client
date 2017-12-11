@@ -166,13 +166,11 @@ class IPScanStatus extends Component {
                         <td>
                           {id ? (
                             <Link
-                              to={{
+                              newTo={{
                                 description: {
-                                  main: { key: 'job' },
-                                  search: {
-                                    type: 'InterProScan',
-                                    accession: id,
-                                  },
+                                  mainType: 'search',
+                                  mainDB: 'sequence',
+                                  mainAccession: id,
                                 },
                               }}
                               disabled={status !== 'finished'}

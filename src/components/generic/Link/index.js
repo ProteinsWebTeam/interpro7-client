@@ -5,47 +5,40 @@ import { stringify as qsStringify } from 'query-string';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2description from 'utils/processLocation/description2description';
+import description2path from 'utils/processLocation/description2path';
 import config from 'config';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 const happenedWithModifierKey = event =>
   !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 const happenedWithLeftClick = event => event.button === 0;
 
-const getNextLocation = (customLocation, to) =>
-  typeof to === 'function' ? to(customLocation) : to;
+const getNextLocation = (location, to) =>
+  typeof to === 'function' ? to(location) : to;
 
-const rootPathname = config.root.website.pathname.replace(/\/$/, '');
-
-const generateHref = (nextLocation /*: Object */, href /*?: string */) => {
+const generateHref = (nextLocation /*: Object */, href /*: ?string */) => {
   if (href) return href;
-  return `${rootPathname}${descriptionToPath(
-    nextLocation.description,
+  return `${config.root.website.pathname}${description2path(
+    description2description(nextLocation.description),
   )}?${qsStringify(nextLocation.search)}`.replace(/\?(#|$)/, '');
 };
 
 const generateClassName = (
   className /*: ?string */,
   activeClass /*: ?(string | function) */,
-  customLocation /*: Object */,
-  nextCustomLocation /*: Object */,
+  location /*: Object */,
+  nextLocation /*: Object */,
   href /*: ?string */,
 ) => {
-  if (href || !(activeClass && nextCustomLocation)) return className;
+  if (href || !(activeClass && nextLocation)) return className;
   if (typeof activeClass === 'function') {
-    return `${className || ''} ${activeClass(customLocation) || ''}`;
+    return `${className || ''} ${activeClass(location) || ''}`;
   }
-  for (const [keyLevel1, intermediateValue] of Object.entries(
-    nextCustomLocation.description,
-  )) {
-    for (const [keyLevel2, value] of Object.entries(intermediateValue || {})) {
-      // If it is ever true, it means we don't have a match
-      if (customLocation.description[keyLevel1][keyLevel2] !== value)
-        return className;
-    }
+  for (const [key, value] of Object.entries(nextLocation.description)) {
+    // If it is ever true, it means we don't have a match
+    if (location.description[key] !== value) return className;
   }
   // If we arrive here, we have a match
   return `${className || ''} ${activeClass}`;
@@ -53,16 +46,16 @@ const generateClassName = (
 
 /*:: type Props = {
   onClick: ?function,
-  customLocation: {
+  location: {
     description: Object,
     search: Object,
     hash: string,
   },
   children: any,
   href: ?string,
-  goToCustomLocation: function,
+  goToNewLocation: function,
   target: ?string,
-  to: ?function | {
+  newTo: ?function | {
     description: Object,
     search: ?Object,
     hash: ?string,
@@ -76,16 +69,16 @@ const generateClassName = (
 class Link extends PureComponent /*:: <Props> */ {
   static propTypes = {
     onClick: T.func,
-    customLocation: T.shape({
+    location: T.shape({
       description: T.object.isRequired,
       search: T.object.isRequired,
       hash: T.string.isRequired,
     }).isRequired,
     children: T.any,
     href: T.string,
-    goToCustomLocation: T.func.isRequired,
+    goToNewLocation: T.func.isRequired,
     target: T.string,
-    to: T.oneOfType([
+    newTo: T.oneOfType([
       T.shape({
         description: T.object.isRequired,
         search: T.object,
@@ -102,14 +95,14 @@ class Link extends PureComponent /*:: <Props> */ {
     const {
       onClick,
       target,
-      goToCustomLocation,
-      to,
+      goToNewLocation,
+      newTo,
       href,
-      customLocation,
+      location,
     } = this.props;
     // pass it on to an externally defined handler
     if (onClick) onClick(event);
-    if (!to && href) return;
+    if (!newTo && href) return;
     if (event.defaultPrevented) return;
     // conditions to ignore handling
     if (!happenedWithLeftClick(event)) return;
@@ -118,35 +111,27 @@ class Link extends PureComponent /*:: <Props> */ {
     // OK, now we can handle it
     event.preventDefault();
     if (this.props.disabled) return;
-    goToCustomLocation(getNextLocation(customLocation, to));
+    goToNewLocation(getNextLocation(location, newTo));
   };
 
   render() {
     const {
       onClick,
-      customLocation,
-      goToCustomLocation,
+      location,
+      goToNewLocation,
       activeClass,
       className,
-      to,
+      newTo,
       disabled,
       href,
       children,
       ...props
     } = this.props;
-    const nextCustomLocation = getNextLocation(customLocation, to) || {};
-    nextCustomLocation.description = descriptionToDescription(
-      nextCustomLocation.description,
-    );
-    const _href = generateHref(nextCustomLocation, href);
+    const nextLocation = getNextLocation(location, newTo) || {};
+    const _href = generateHref(nextLocation, href);
     const _className =
-      generateClassName(
-        className,
-        activeClass,
-        customLocation,
-        nextCustomLocation,
-        href,
-      ) || '';
+      generateClassName(className, activeClass, location, nextLocation, href) ||
+      '';
     if (disabled) {
       props.style = {
         ...(props.style || {}),
@@ -170,8 +155,8 @@ class Link extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
-  customLocation => ({ customLocation }),
+  state => state.newLocation,
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(Link);
+export default connect(mapStateToProps, { goToNewLocation })(Link);

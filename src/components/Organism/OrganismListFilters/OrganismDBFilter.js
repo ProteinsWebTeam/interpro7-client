@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -6,46 +6,45 @@ import { createSelector } from 'reselect';
 import NumberLabel from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2path from 'utils/processLocation/description2path';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-class OrganismDBFilter extends PureComponent {
+class OrganismDBFilter extends Component {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
-    goToCustomLocation: T.func.isRequired,
-    customLocation: T.shape({
+    goToNewLocation: T.func.isRequired,
+    location: T.shape({
       search: T.object.isRequired,
       description: T.object.isRequired,
     }).isRequired,
   };
 
   _handleSelection = ({ target: { value } }) => {
-    this.props.goToCustomLocation({
-      ...this.props.customLocation,
+    this.props.goToNewLocation({
+      ...this.props.location,
       description: {
-        ...this.props.customLocation.description,
-        organism: { db: value },
+        ...this.props.location.description,
+        mainDB: value,
       },
       search: {
-        ...this.props.customLocation.search,
+        ...this.props.location.search,
         page: undefined,
       },
     });
   };
-
   render() {
     const {
       data: { loading, payload },
-      customLocation: { description },
+      location: { description },
     } = this.props;
     const dbs = [];
     if (!loading) {
@@ -68,7 +67,7 @@ class OrganismDBFilter extends PureComponent {
                 name="organism_db"
                 value={type}
                 onChange={this._handleSelection}
-                checked={description.organism.db === type}
+                checked={description.mainDB === type}
                 style={{ margin: '0.25em' }}
               />
               <span style={{ textTransform: 'capitalize' }}>{type}</span>
@@ -80,23 +79,29 @@ class OrganismDBFilter extends PureComponent {
     );
   }
 }
-
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description,
-  ({ protocol, hostname, port, root }, description) =>
-    `${protocol}//${hostname}:${port}${root}${descriptionToPath({
-      ...description,
-      organism: {},
-      main: { key: 'organism' },
-    })}`,
+  state => state.newLocation.description,
+  state => state.newLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    // omit from search
+    const { experiment_type, search: _, ..._search } = search;
+    // add to search
+    _search.group_by = 'experiment_type';
+    // build URL
+    return `${protocol}//${hostname}:${port}${root}${description2path({
+      mainType: 'organism',
+      focusType: description.focusType,
+      focusDB: description.focusDB,
+    })}`;
+  },
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
-  customLocation => ({ customLocation }),
+  state => state.newLocation,
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(
+export default connect(mapStateToProps, { goToNewLocation })(
   loadData(getUrlFor)(OrganismDBFilter),
 );

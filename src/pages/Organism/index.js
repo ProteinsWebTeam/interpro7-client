@@ -30,7 +30,6 @@ import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
-
 const f = foundationPartial(pageStyle, styles);
 
 const propTypes = {
@@ -39,7 +38,7 @@ const propTypes = {
     loading: T.bool.isRequired,
   }).isRequired,
   isStale: T.bool.isRequired,
-  customLocation: T.shape({
+  location: T.shape({
     description: T.object.isRequired,
   }).isRequired,
   match: T.string,
@@ -57,12 +56,7 @@ class Overview extends PureComponent {
         {Object.entries(payload.proteins || {}).map(([name, count]) => (
           <li key={name}>
             <Link
-              to={{
-                description: {
-                  main: { key: 'protein' },
-                  protein: { db: name },
-                },
-              }}
+              newTo={{ description: { mainType: 'protein', mainDB: name } }}
             >
               {name}
               {Number.isFinite(count) ? ` (${count})` : ''}
@@ -81,7 +75,7 @@ class List extends PureComponent {
     const {
       data: { payload, loading, url, status },
       isStale,
-      customLocation: { search },
+      location: { search },
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
@@ -132,13 +126,12 @@ class List extends PureComponent {
               dataKey="accession"
               renderer={(accession /*: string */) => (
                 <Link
-                  to={customLocation => ({
+                  newTo={location => ({
+                    ...location,
                     description: {
-                      ...customLocation.description,
-                      organism: {
-                        ...customLocation.description.organism,
-                        accession,
-                      },
+                      mainType: location.description.mainType,
+                      mainDB: location.description.mainDB,
+                      mainAccession: `${accession}`,
                     },
                   })}
                 >
@@ -158,13 +151,12 @@ class List extends PureComponent {
                 { accession } /*: {accession: string} */,
               ) => (
                 <Link
-                  to={customLocation => ({
+                  newTo={location => ({
+                    ...location,
                     description: {
-                      ...customLocation.description,
-                      organism: {
-                        ...customLocation.description.organism,
-                        accession,
-                      },
+                      mainType: location.description.mainType,
+                      mainDB: location.description.mainDB,
+                      mainAccession: `${accession}`,
                     },
                   })}
                 >
@@ -199,17 +191,13 @@ class SummaryComponent extends PureComponent {
     data: T.shape({
       payload: T.any,
     }).isRequired,
-    customLocation: T.object.isRequired,
+    location: T.object.isRequired,
   };
 
   render() {
-    const { data: { payload, loading }, customLocation } = this.props;
+    const { data: { payload, loading }, location } = this.props;
     return (
-      <SummaryAsync
-        data={payload}
-        customLocation={customLocation}
-        loading={loading}
-      />
+      <SummaryAsync data={payload} location={location} loading={loading} />
     );
   }
 }
@@ -236,14 +224,14 @@ _Title.propTypes = {
 };
 const mapStateToAccessionUrl = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description.organism.db,
-  state => state.customLocation.description.organism.accession,
-  ({ protocol, hostname, port, root }, db, accession) =>
+  state => state.newLocation.description.mainDB,
+  state => state.newLocation.description.mainAccession,
+  ({ protocol, hostname, port, root }, mainDB, mainAccession) =>
     format({
       protocol,
       hostname,
       port,
-      pathname: `${root}/organism/${db}/${accession}`,
+      pathname: `${root}/organism/${mainDB}/${mainAccession}`,
     }),
 );
 
@@ -254,7 +242,7 @@ class Summary extends PureComponent {
     data: T.shape({
       loading: T.bool.isRequired,
     }).isRequired,
-    customLocation: T.object.isRequired,
+    location: T.object.isRequired,
   };
 
   render() {
@@ -273,16 +261,11 @@ class Summary extends PureComponent {
           </div>
           <Switch
             {...this.props}
-            locationSelector={l => {
-              const { key } = l.description.main;
-              return (
-                l.description[key].detail ||
-                (Object.entries(l.description).find(
-                  ([_key, value]) => value.isFilter,
-                ) || [])[0] ||
-                l.description[key].memberDB
-              );
-            }}
+            locationSelector={l =>
+              l.description.mainDetail ||
+              l.description.focusType ||
+              l.description.mainMemberDB
+            }
             indexRoute={SummaryComponent}
             childRoutes={subPagesForOrganism}
           />
@@ -300,15 +283,9 @@ class InnerSwitch extends PureComponent {
       <ErrorBoundary>
         <Switch
           {...this.props}
-          locationSelector={l => {
-            const { key } = l.description.main;
-            return (
-              l.description[key].accession ||
-              (Object.entries(l.description).find(
-                ([_key, value]) => value.isFilter,
-              ) || [])[0]
-            );
-          }}
+          locationSelector={l =>
+            l.description.mainAccession || l.description.focusType
+          }
           indexRoute={List}
           childRoutes={[{ value: acc, component: Summary }]}
           catchAll={List}
@@ -353,7 +330,7 @@ class Organism extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => l.description[l.description.main.key].db}
+            locationSelector={l => l.description.mainDB}
             indexRoute={Overview}
             catchAll={InnerSwitch}
           />

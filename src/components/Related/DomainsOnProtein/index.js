@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
 
 import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2path from 'utils/processLocation/description2path';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -22,30 +22,25 @@ const getUrlFor = createSelector(
   db =>
     createSelector(
       state => state.settings.api,
-      state => state.customLocation.description,
+      state => state.newLocation.description,
       ({ protocol, hostname, port, root }, description) => {
-        const _description = {};
-        for (const [key, value] of Object.entries(description)) {
-          _description[key] = { ...value };
-        }
-        // omit detail from description
-        _description[description.main.key].detail = null;
+        // omit from description
+        const { mainDetail: _, ..._description } = description;
         // brand new search
         const search = {};
         if (db === 'Residues') {
           search.residues = null;
         } else {
-          _description.entry.isFilter = true;
-          _description.entry[db === 'InterPro' ? 'db' : 'integration'] = db;
+          _description.focusType = 'entry';
+          _description.focusDB = db;
         }
         // build URL
-        return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
+        return `${protocol}//${hostname}:${port}${root}${description2path(
           _description,
         )}?${qsStringify(search)}`.replace(/\?$/, '');
       },
     ),
 );
-
 const mergeResidues = residues =>
   Object.values(residues.entry_locations).map(location => ({
     accession: location.entry_accession,
@@ -57,7 +52,6 @@ const mergeResidues = residues =>
     source_database: location.fragments.map(f => f.source)[0],
     interpro_entry: location.fragments.map(f => f.interProEntry),
   }));
-
 // const mergeResidues = residues => {
 // TODO: have Matloob check what it was supposed to be doing
 //   for (const key of Object.keys(residues)) {
@@ -101,7 +95,6 @@ const groupByEntryType = interpro => {
   }, {});
   return { out, ipro };
 };
-
 const addSignature = (entry, ipro, integrated) => {
   if (entry.entry_integrated in ipro) {
     entry.link = `/entry/${entry.source_database}/${entry.accession}`;

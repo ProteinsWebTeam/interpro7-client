@@ -169,7 +169,7 @@ class Breadcrumb extends Component {
               ))}
             </span>
             <span className={f('hint')}>
-              <Link to={{ description: { other: ['help'] } }} title="help">
+              <Link newTo={{ description: { other: 'help' } }} title="help">
                 <div>main view</div>
                 <div>focus</div>
               </Link>
@@ -183,7 +183,7 @@ class Breadcrumb extends Component {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  state => state.customLocation.description,
+  state => state.newLocation.description,
   (stuck, description) => ({ stuck, description }),
 );
 

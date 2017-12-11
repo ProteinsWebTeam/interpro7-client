@@ -15,7 +15,7 @@ import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 /*:: type Props = {
   children: React$Node,
   errorComponent: React$ElementType,
-  customLocation: Object,
+  newLocation: mixed,
 }; */
 
 /*:: type State = {
@@ -23,7 +23,7 @@ import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 }; */
 
 // This component should be inserted before any possibly “risky” component
-// Acts as a try/catch, preventing the rest of the website to crash
+// Acts as a try/cacth, preventing the rest of the website to crash
 // Ideally to be inserted before any <Switch> or complex visualisation widget
 class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
   static defaultProps = {
@@ -33,22 +33,20 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     children: T.node.isRequired,
     errorComponent: T.any,
-    customLocation: T.object,
+    newLocation: T.object,
   };
 
   constructor(props /*: Props */) {
     super(props);
     this.state = { error: null };
   }
-
-  componentWillReceiveProps({ customLocation }) {
+  componentWillReceiveProps({ newLocation }) {
     // If the location is changing, the children should be
     // rendered again
-    if (this.props.customLocation !== customLocation) {
+    if (this.props.newLocation !== newLocation) {
       this.setState({ error: null });
     }
   }
-
   componentDidCatch(error /*: Error */, info /*: any */) {
     console.error(error);
     console.error(info);
@@ -65,7 +63,7 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
-  customLocation => ({ customLocation }),
+  state => state.newLocation,
+  newLocation => ({ newLocation }),
 );
 export default connect(mapStateToProps)(ErrorBoundary);

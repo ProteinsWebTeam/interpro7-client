@@ -2,34 +2,23 @@ import * as actions from '.';
 import * as types from '../types';
 
 describe('actions', () => {
-  describe('custom location', () => {
-    const customLocation = { description: { main: { key: 'entry' } } };
+  describe('location', () => {
     test('should create an action to go to new location', () => {
-      const expected1 = {
-        type: types.NEW_CUSTOM_LOCATION,
-        customLocation,
+      const expected = {
+        type: types.NEW_NEW_LOCATION,
+        location: 'new_location',
         replace: false,
       };
-      const expected2 = {
-        type: types.NEW_CUSTOM_LOCATION,
-        customLocation,
-        replace: true,
-      };
-      expect(actions.goToCustomLocation(customLocation)).toEqual(expected1);
-      expect(actions.goToCustomLocation(customLocation, false)).toEqual(
-        expected1,
-      );
-      expect(actions.goToCustomLocation(customLocation, true)).toEqual(
-        expected2,
-      );
+      expect(actions.goToNewLocation('new_location')).toEqual(expected);
     });
 
     test('should create an action to go to new location (processed)', () => {
+      const newLocation = { description: { mainType: 'entry' } };
       const expected = {
-        type: types.NEW_PROCESSED_CUSTOM_LOCATION,
-        customLocation,
+        type: types.NEW_PROCESSED_NEW_LOCATION,
+        newLocation,
       };
-      expect(actions.customLocationChangeFromHistory(customLocation)).toEqual(
+      expect(actions.newLocationChangeFromHistory(newLocation)).toEqual(
         expected,
       );
     });
