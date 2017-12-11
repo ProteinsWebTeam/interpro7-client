@@ -340,7 +340,7 @@ export const InterPro /*: Array<Object> */ = [
     icon: 'H',
     name: 'Home',
     activeClass({ description: { main, other } } /*: Location */) {
-      if (!(main.key || other.length)) return f('is-active');
+      if (!(main.key || other[0])) return f('is-active');
     },
   },
   {
