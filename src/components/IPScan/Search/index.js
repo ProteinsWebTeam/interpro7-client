@@ -1,9 +1,5 @@
 import React, { Component, PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import url from 'url';
-
 import {
   Editor,
   EditorState,
@@ -12,7 +8,9 @@ import {
   Modifier,
   convertToRaw,
 } from 'draft-js';
-import Redirect from 'components/generic/Redirect';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import url from 'url';
 
 import config from 'config';
 import { addToast } from 'actions/creators';
@@ -80,16 +78,17 @@ const compositeDecorator = new CompositeDecorator([
 class IPScanSearch extends Component {
   static propTypes = {
     addToast: T.func.isRequired,
-    ipScan: T.object.isRequired,
     value: T.string,
+    ipScan: T.object.isRequired,
+    sequence: T.string,
   };
 
   constructor(props) {
     super(props);
     let editorState;
-    if (props.value) {
+    if (props.sequence) {
       editorState = EditorState.createWithContent(
-        ContentState.createFromText(decodeURIComponent(props.value)),
+        ContentState.createFromText(decodeURIComponent(props.sequence)),
         compositeDecorator,
       );
     } else {
@@ -310,17 +309,6 @@ class IPScanSearch extends Component {
   };
 
   render() {
-    if (this.props.value)
-      return (
-        <Redirect
-          to={{
-            description: {
-              main: { key: 'search' },
-              search: { type: 'sequence' },
-            },
-          }}
-        />
-      );
     const { editorState, valid, dragging, uploading } = this.state;
     return (
       <div className={f('row', 'margin-bottom-medium')}>
@@ -458,8 +446,8 @@ class IPScanSearch extends Component {
 
 const mapStateToProps = createSelector(
   state => state.settings.ipScan,
-  state => state.customLocation.description.search.value,
-  (ipScan, value) => ({ ipScan, value }),
+  state => state.newLocation.search.sequence,
+  (ipScan, sequence) => ({ ipScan, sequence }),
 );
 
 export default connect(mapStateToProps, { addToast })(IPScanSearch);

@@ -53,7 +53,7 @@ const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => l.description.search.accession}
+      locationSelector={l => l.description.mainAccession}
       indexRoute={IPScanSearchAndStatus}
       catchAll={IPScanResult}
     />
@@ -66,9 +66,7 @@ const routes = new Set([
 ]);
 
 const RedirectToText = () => (
-  <Redirect
-    to={{ description: { main: { key: 'search' }, search: { type: 'text' } } }}
-  />
+  <Redirect to={{ description: { mainType: 'search', mainDB: 'text' } }} />
 );
 
 class Wrapper extends PureComponent {
@@ -88,11 +86,8 @@ class Wrapper extends PureComponent {
               onFocus={SearchByText.preload}
             >
               <Link
-                to={{
-                  description: {
-                    main: { key: 'search' },
-                    search: { type: 'text' },
-                  },
+                newTo={{
+                  description: { mainType: 'search', mainDB: 'text' },
                 }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
@@ -105,11 +100,8 @@ class Wrapper extends PureComponent {
               onFocus={IPScanSearchAndStatus.preload}
             >
               <Link
-                to={{
-                  description: {
-                    main: { key: 'search' },
-                    search: { type: 'sequence' },
-                  },
+                newTo={{
+                  description: { mainType: 'search', mainDB: 'sequence' },
                 }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
@@ -130,7 +122,7 @@ class Wrapper extends PureComponent {
 
 const Search = () => (
   <Switch
-    locationSelector={l => l.description.search.type}
+    locationSelector={l => l.description.mainDB}
     indexRoute={RedirectToText}
     childRoutes={routes}
   />

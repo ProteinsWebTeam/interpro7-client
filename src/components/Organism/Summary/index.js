@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import Accession from 'components/Accession';
 import Lineage from 'components/Organism/Lineage';
@@ -28,7 +28,7 @@ const f = foundationPartial(ebiStyles, global);
   data: {
     metadata: Object,
   },
-  goToCustomLocation: function,
+  goToNewLocation: function,
 }; */
 
 class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
@@ -43,7 +43,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
         names: T.object,
       }).isRequired,
     }).isRequired,
-    goToCustomLocation: T.func.isRequired,
+    goToNewLocation: T.func.isRequired,
   };
 
   constructor(props) {
@@ -71,10 +71,11 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 
   _handleFocus = ({ detail: { id } }) => {
     if (!this.loadingVis)
-      this.props.goToCustomLocation({
+      this.props.goToNewLocation({
         description: {
-          main: { key: 'organism' },
-          organism: { db: 'taxonomy', accession: id },
+          mainType: 'organism',
+          mainDB: 'taxonomy',
+          mainAccession: id,
         },
       });
   };
@@ -139,6 +140,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }).isRequired,
+    goToNewLocation: T.func.isRequired,
   };
 
   render() {
@@ -207,7 +209,6 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
     );
   }
 }
-
 export default loadData((...args) => `${getUrlForApi(...args)}?with_names`)(
-  connect(null, { goToCustomLocation })(SummaryOrganism),
+  connect(null, { goToNewLocation })(SummaryOrganism),
 );

@@ -38,11 +38,11 @@ import pageStyle from '../style.css';
 
 const f = foundationPartial(pageStyle, styles);
 
-const schemaProcessDataTable = ({ db, location }) => ({
+const schemaProcessDataTable = ({ mainDB, location }) => ({
   '@type': 'Dataset',
   '@id': '@mainEntityOfPage',
-  identifier: db,
-  name: db,
+  identifier: mainDB,
+  name: mainDB,
   version: '?',
   url: location.href,
   hasPart: '@hasPart',
@@ -56,7 +56,7 @@ const schemaProcessDataTableRow = ({ data, location }) => ({
   '@type': 'DataRecord',
   '@id': '@hasPart',
   identifier: data.accession,
-  name: data.db,
+  name: data.mainDB,
   url: `${location.href}/${data.accession}`,
 });
 
@@ -67,7 +67,7 @@ class List extends Component {
       loading: T.bool.isRequired,
     }).isRequired,
     isStale: T.bool.isRequired,
-    customLocation: T.shape({
+    location: T.shape({
       description: T.object.isRequired,
       search: T.object.isRequired,
     }).isRequired,
@@ -85,7 +85,7 @@ class List extends Component {
     const {
       data,
       isStale,
-      customLocation: { description: { entry: { db } }, search },
+      location: { description: { mainDB }, search },
     } = this.props;
     let _payload = data.payload;
     const HTTP_OK = 200;
@@ -108,7 +108,7 @@ class List extends Component {
           <EntryListFilter />
           <hr />
           <SchemaOrgData
-            data={{ db, location: window.location }}
+            data={{ mainDB, location: window.location }}
             processData={schemaProcessDataTable}
           />
           <Table
@@ -163,13 +163,12 @@ class List extends Component {
               ) => (
                 <Tooltip title={`${name} (${accession})`}>
                   <Link
-                    to={customLocation => ({
+                    newTo={location => ({
+                      ...location,
                       description: {
-                        ...customLocation.description,
-                        entry: {
-                          ...customLocation.description.entry,
-                          accession,
-                        },
+                        mainType: location.description.mainType,
+                        mainDB: location.description.mainDB,
+                        mainAccession: accession,
                       },
                       search: {},
                     })}
@@ -189,14 +188,14 @@ class List extends Component {
               renderer={(accession /*: string */, data) => (
                 <Link
                   title={accession}
-                  to={customLocation => ({
+                  newTo={location => ({
+                    ...location,
                     description: {
-                      ...customLocation.description,
-                      entry: {
-                        ...customLocation.description.entry,
-                        accession,
-                      },
+                      mainType: location.description.mainType,
+                      mainDB: location.description.mainDB,
+                      mainAccession: accession,
                     },
+                    search: {},
                   })}
                 >
                   <SchemaOrgData
@@ -214,7 +213,7 @@ class List extends Component {
             >
               Accession
             </Column>
-            {db === 'InterPro' ? (
+            {mainDB === 'InterPro' ? (
               <Column
                 dataKey="member_databases"
                 renderer={(mdb /*: string */) =>
@@ -229,10 +228,11 @@ class List extends Component {
                           >
                             <span className={f('sign-label')}>
                               <Link
-                                to={{
+                                newTo={{
                                   description: {
-                                    main: { key: 'entry' },
-                                    entry: { db, accession },
+                                    mainType: 'entry',
+                                    mainDB: db,
+                                    mainAccession: accession,
                                   },
                                   search: {},
                                 }}
@@ -257,10 +257,11 @@ class List extends Component {
                 dataKey="integrated"
                 renderer={(accession /*: string */) => (
                   <Link
-                    to={{
+                    newTo={{
                       description: {
-                        main: { key: 'entry' },
-                        entry: { db: 'InterPro', accession },
+                        mainType: 'entry',
+                        mainDB: 'InterPro',
+                        mainAccession: accession,
                       },
                       search: {},
                     }}
@@ -277,7 +278,7 @@ class List extends Component {
               // TODO re-insert GO terms as column in table for Member databases when data available
             }
 
-            {db === 'InterPro' ? (
+            {mainDB === 'InterPro' ? (
               <Column
                 dataKey="go_terms"
                 className={f('col-go')}
@@ -347,19 +348,15 @@ for (const subPage of config.pages.entry.subPages) {
   });
 }
 
-const SummaryComponent = ({ data: { payload }, isStale, customLocation }) => (
-  <SummaryAsync
-    data={payload}
-    isStale={isStale}
-    customLocation={customLocation}
-  />
+const SummaryComponent = ({ data: { payload }, isStale, location }) => (
+  <SummaryAsync data={payload} isStale={isStale} location={location} />
 );
 SummaryComponent.propTypes = {
   data: T.shape({
     payload: T.object,
   }).isRequired,
   isStale: T.bool.isRequired,
-  customLocation: T.object.isRequired,
+  location: T.object.isRequired,
 };
 
 const Summary = props => {
@@ -377,15 +374,9 @@ const Summary = props => {
       </div>
       <Switch
         {...props}
-        locationSelector={l => {
-          const { key } = l.description.main;
-          return (
-            l.description[key].detail ||
-            (Object.entries(l.description).find(
-              ([_key, value]) => value.isFilter,
-            ) || [])[0]
-          );
-        }}
+        locationSelector={l =>
+          l.description.mainDetail || l.description.focusType
+        }
         indexRoute={SummaryComponent}
         childRoutes={subPagesForEntry}
       />
@@ -404,8 +395,8 @@ const RedirectToInterPro = () => (
   <Redirect
     to={{
       description: {
-        main: { key: 'entry' },
-        entry: { db: 'InterPro' },
+        mainType: 'entry',
+        mainDB: 'InterPro',
       },
     }}
   />
@@ -424,15 +415,9 @@ const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => {
-        const { key } = l.description.main;
-        return (
-          l.description[key].accession ||
-          (Object.entries(l.description).find(
-            ([_key, value]) => value.isFilter,
-          ) || [])[0]
-        );
-      }}
+      locationSelector={l =>
+        l.description.mainAccession || l.description.focusType
+      }
       indexRoute={List}
       childRoutes={[{ value: dbAccs, component: Summary }]}
       catchAll={List}
@@ -515,7 +500,7 @@ class Entry extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => l.description[l.description.main.key].db}
+            locationSelector={l => l.description.mainDB}
             indexRoute={RedirectToInterPro}
             catchAll={InnerSwitch}
           />

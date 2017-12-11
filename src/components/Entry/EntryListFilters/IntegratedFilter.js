@@ -7,9 +7,9 @@ import { stringify as qsStringify } from 'query-string';
 import NumberLabel from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2path from 'utils/processLocation/description2path';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
@@ -22,8 +22,8 @@ class IntegratedFilter extends Component {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
-    goToCustomLocation: T.func.isRequired,
-    customLocation: T.shape({
+    goToNewLocation: T.func.isRequired,
+    location: T.shape({
       description: T.object,
     }).isRequired,
   };
@@ -34,15 +34,16 @@ class IntegratedFilter extends Component {
   }
 
   componentWillMount() {
-    this.locationToState(this.props.customLocation);
+    this.location2state(this.props.location);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.locationToState(nextProps.customLocation);
+    this.location2state(nextProps.location);
   }
-
-  locationToState(customLocation) {
-    const { integration } = customLocation.description.entry;
+  location2state(location) {
+    const integration =
+      location.description.mainIntegration ||
+      location.description.focusIntegration;
     if (integration === 'unintegrated') {
       this.setState({ value: 'unintegrated' });
     } else if (integration === 'integrated') {
@@ -54,15 +55,15 @@ class IntegratedFilter extends Component {
 
   _handleSelection = ({ target: { value } }) => {
     this.setState({ value });
-    const { goToCustomLocation, customLocation } = this.props;
-    goToCustomLocation({
-      ...customLocation,
+    const integrationKey =
+      this.props.location.description.mainType === 'entry'
+        ? 'mainIntegration'
+        : 'focusIntegration';
+    this.props.goToNewLocation({
+      ...this.props.location,
       description: {
-        ...customLocation.description,
-        entry: {
-          ...customLocation.description.entry,
-          integration: value === 'both' ? null : value,
-        },
+        ...this.props.location.description,
+        [integrationKey]: value === 'both' ? null : value,
       },
     });
   };
@@ -98,29 +99,28 @@ class IntegratedFilter extends Component {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  state => state.newLocation.description,
+  state => state.newLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from description
-    const { entry: { integration, ...entry }, ..._description } = description;
-    _description.entry = entry;
+    const { mainIntegration, ..._description } = description;
     // omit from search
     const { search: _, ..._search } = search;
     // add to search
     _search.interpro_status = null;
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
+    return `${protocol}//${hostname}:${port}${root}${description2path(
       _description,
     )}?${qsStringify(_search)}`;
   },
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
-  customLocation => ({ customLocation }),
+  state => state.newLocation,
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(
+export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
   })(IntegratedFilter),

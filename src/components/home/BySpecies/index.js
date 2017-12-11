@@ -84,13 +84,11 @@ class BySpecies extends PureComponent /*:: <Props> */ {
               key={e.tax_id || 'unclassified'}
             >
               <Link
-                to={{
+                newTo={{
                   description: {
-                    main: { key: 'organism' },
-                    organism: {
-                      db: 'taxonomy',
-                      accession: e.tax_id,
-                    },
+                    mainType: 'organism',
+                    mainDB: 'taxonomy',
+                    mainAccession: `${e.tax_id}`,
                   },
                 }}
               >
@@ -111,14 +109,13 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                   )} matching ${e.title}`}
                 >
                   <Link
-                    to={{
+                    newTo={{
                       description: {
-                        main: { key: 'organism' },
-                        organism: {
-                          db: 'taxonomy',
-                          accession: e.tax_id,
-                        },
-                        entry: { db: 'InterPro' },
+                        focusType: 'entry',
+                        focusDB: 'interpro',
+                        mainType: 'organism',
+                        mainDB: 'taxonomy',
+                        mainAccession: `${e.tax_id}`,
                       },
                     }}
                   >
@@ -135,14 +132,13 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                   )} matching ${e.title}`}
                 >
                   <Link
-                    to={{
+                    newTo={{
                       description: {
-                        main: { key: 'organism' },
-                        organism: {
-                          db: 'taxonomy',
-                          accession: e.tax_id,
-                        },
-                        protein: { db: 'UniProt' },
+                        focusType: 'protein',
+                        focusDB: 'UniProt',
+                        mainType: 'organism',
+                        mainDB: 'taxonomy',
+                        mainAccession: `${e.tax_id}`,
                       },
                     }}
                   >
@@ -154,10 +150,10 @@ class BySpecies extends PureComponent /*:: <Props> */ {
           ))}
         </AnimatedEntry>
         <Link
-          to={{
+          newTo={{
             description: {
-              main: { key: 'organism' },
-              organism: { db: 'taxonomy' },
+              mainType: 'organism',
+              mainDB: 'taxonomy',
             },
           }}
           className={f('button')}

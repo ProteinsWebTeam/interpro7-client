@@ -9,9 +9,9 @@ import Metadata from 'wrappers/Metadata';
 import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
 import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2path from 'utils/processLocation/description2path';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToNewLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -25,27 +25,25 @@ class TaxonomyFilter extends PureComponent {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
-    customLocation: T.shape({
+    location: T.shape({
       search: T.object.isRequired,
     }).isRequired,
-    goToCustomLocation: T.func.isRequired,
+    goToNewLocation: T.func.isRequired,
     search: T.object,
   };
 
   _handleSelection = ({ target: { value } }) => {
-    const { goToCustomLocation, customLocation } = this.props;
-    goToCustomLocation({
-      ...customLocation,
+    const { goToNewLocation, location } = this.props;
+    goToNewLocation({
+      ...location,
       description: {
-        ...customLocation.description,
-        organism: {
-          isFilter: true,
-          db: value === 'ALL' ? null : 'taxonomy',
-          accession: value === 'ALL' ? null : value,
-        },
+        ...location.description,
+        focusType: value === 'ALL' ? null : 'organism',
+        focusDB: value === 'ALL' ? null : 'taxonomy',
+        focusAccession: value === 'ALL' ? null : value,
       },
       search: {
-        ...customLocation.search,
+        ...location.search,
         page: undefined,
       },
     });
@@ -54,7 +52,7 @@ class TaxonomyFilter extends PureComponent {
   render() {
     const {
       data: { loading, payload },
-      customLocation: { description: { organism: { accession } } },
+      location: { description: { focusAccession } },
     } = this.props;
     const taxes = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,
@@ -72,7 +70,10 @@ class TaxonomyFilter extends PureComponent {
                 name="entry_type"
                 value={taxId}
                 onChange={this._handleSelection}
-                checked={(!accession && taxId === 'ALL') || accession === taxId}
+                checked={
+                  (!focusAccession && taxId === 'ALL') ||
+                  focusAccession === taxId
+                }
                 style={{ margin: '0.25em' }}
               />
               {taxId === 'ALL' ? (
@@ -99,26 +100,26 @@ class TaxonomyFilter extends PureComponent {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  state => state.newLocation.description,
+  state => state.newLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     const { tax_id, search: _, ..._search } = search;
     // add to search
     _search.group_by = 'tax_id';
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
+    return `${protocol}//${hostname}:${port}${root}${description2path(
       description,
     )}?${qsStringify(_search)}`;
   },
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
-  customLocation => ({ customLocation }),
+  state => state.newLocation,
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(
+export default connect(mapStateToProps, { goToNewLocation })(
   loadData({
     getUrl: getUrlFor,
   })(TaxonomyFilter),

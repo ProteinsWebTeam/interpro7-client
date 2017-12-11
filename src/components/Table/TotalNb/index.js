@@ -3,11 +3,16 @@ import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-
 import config from 'config';
 import { toPlural } from 'utils/pages';
 
-const TotalNb = ({ className, data, actualSize, pagination, description }) => {
+const TotalNb = ({
+  className,
+  data,
+  actualSize,
+  pagination,
+  description: { mainAccession, mainType, mainDB, focusType, focusDB },
+}) => {
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,
@@ -17,12 +22,15 @@ const TotalNb = ({ className, data, actualSize, pagination, description }) => {
   // const lastPage = Math.ceil(actualSize / pageSize) || 1;
   let textLabel = '';
   if (actualSize) {
-    const db = description[description.main.key].db;
+    const type =
+      mainAccession && mainType !== 'organism' ? focusType : mainType;
+    const db = focusDB || mainDB;
+    const plural = actualSize > 1 ? toPlural(type) : type;
     textLabel = (
       <span>
         {index} - {index + data.length - 1} of{' '}
         <strong>{actualSize.toLocaleString()}</strong>{' '}
-        {toPlural(description.main.key, actualSize)}
+        {db === 'proteome' ? 'proteomes' : plural}
         {db !== 'reviewed' &&
         db !== 'UniProt' &&
         db !== 'taxonomy' &&
@@ -38,19 +46,20 @@ const TotalNb = ({ className, data, actualSize, pagination, description }) => {
     </p>
   );
 };
-
 TotalNb.propTypes = {
   data: T.array,
   actualSize: T.number,
   pagination: T.object.isRequired,
   notFound: T.bool,
+  // mainDB: T.string.isRequired,
+  // mainType: T.string.isRequired,
+  // focusDB: T.string,
   className: T.string,
+  // focusType: T.string,
   description: T.object,
 };
-
 const mapStateToProps = createSelector(
-  state => state.customLocation.description,
+  state => state.newLocation.description,
   description => ({ description }),
 );
-
 export default connect(mapStateToProps)(TotalNb);

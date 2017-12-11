@@ -2,33 +2,26 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import Link from 'components/generic/Link';
+import Metadata from 'wrappers/Metadata';
+import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
 /*:: type Props = {
-  taxID: string,
+  taxid: number,
 }; */
 
 class Species extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    taxID: T.number.isRequired,
+    taxid: T.number.isRequired,
   };
 
   render() {
-    const { taxID } = this.props;
+    const { taxid } = this.props;
     return (
       <div>
         {'Species: '}
-        <Link
-          to={{
-            description: {
-              main: { key: 'organism' },
-              // TODO: remove stringification of taxID when API returns strings
-              organism: { db: 'taxonomy', accession: `${taxID}` },
-            },
-          }}
-        >
-          {taxID}
-        </Link>
+        <Metadata endpoint="organism" db="taxonomy" accession={taxid}>
+          <TaxIdOrName accession={taxid} />
+        </Metadata>
       </div>
     );
   }

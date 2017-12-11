@@ -1,51 +1,64 @@
 import qs from 'query-string';
 
-// import config from 'config';
+import config from 'config';
 
-import { NEW_CUSTOM_LOCATION } from 'actions/types';
-import { customLocationChangeFromHistory } from 'actions/creators';
+import { NEW_NEW_LOCATION } from 'actions/types';
+import { newLocationChangeFromHistory } from 'actions/creators';
+import processLocation from 'utils/location';
+import path2description from 'utils/processLocation/path2description';
+import description2path from 'utils/processLocation/description2path';
 
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+const pageAsNumber = value => {
+  const _value = +value;
+  if (!value || isNaN(_value)) {
+    return 1;
+  }
+  return _value;
+};
+
+const pageSizeAsNumber = value => {
+  const _value = +value;
+  if (!value || isNaN(_value)) {
+    return config.pagination.pageSize;
+  }
+  return _value;
+};
 
 // Middleware to handle history change events
-export default history => store => {
-  // Hook into history
-  history.listen(
-    // Dispatch new action only when history actually changes
-    // Build new action from scratch
-    ({ state: { customLocation, state } }) =>
-      store.dispatch(customLocationChangeFromHistory(customLocation, state)),
-  );
-
-  const historyDispatch = ({ customLocation, replace, state }) =>
-    history[replace ? 'replace' : 'push']({
-      pathname: descriptionToPath(customLocation.description),
-      search: qs.stringify(customLocation.search),
-      hash: customLocation.hash,
-      state: { customLocation, state },
-    });
-
-  let firstTime = true;
-
-  // Hijack normal Redux flow
-  return next => action => {
-    if (firstTime) {
-      firstTime = false;
-      historyDispatch({
-        customLocation: store.getState().customLocation,
-        replace: true,
-      });
+export default history => ({ dispatch }) => {
+  // Dispatch new action only when history actually changes
+  // Build new action from scratch
+  history.listen(({ pathname, search, hash, state: _ }) => {
+    const _search = qs.parse(search);
+    if (_search.page !== undefined) _search.page = pageAsNumber(_search.page);
+    if (_search.pageSize !== undefined) {
+      _search.pageSize = pageSizeAsNumber(_search.pageSize);
     }
-
-    // if NEW_CUSTOM_LOCATION don't process and update history, it will
-    // eventually result in another action being dispatched through callback
-    if (action.type === NEW_CUSTOM_LOCATION) {
-      historyDispatch(action);
+    dispatch(
+      newLocationChangeFromHistory({
+        description: path2description(pathname),
+        search: _search,
+        hash,
+      }),
+    );
+  });
+  return next => action => {
+    // if NEW_NEW_LOCATION don't process and update history, it'll eventually
+    // result in another action being dispatched through callback
+    if (action.type === NEW_NEW_LOCATION) {
+      const { description, search, hash } = processLocation(action.location);
+      const pathname = description2path(description);
+      history[action.replace ? 'replace' : 'push']({
+        pathname,
+        search: qs.stringify(search),
+        hash,
+        state: description,
+      });
       return;
     }
 
     // If anything but NEW_LOCATION, process normally
-    // If anything but NEW_CUSTOM_LOCATION, process normally
+    // If anything but NEW_NEW_LOCATION, process normally
     next(action);
   };
 };

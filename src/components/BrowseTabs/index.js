@@ -9,7 +9,7 @@ import BrowseTabsLink from './BrowseTabsLink';
 import config from 'config';
 import { entities, singleEntity } from 'menuConfig';
 import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2path from 'utils/processLocation/description2path';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -25,7 +25,6 @@ const f = foundationPartial(styles);
     loading: boolean,
     payload?: ?Object,
   },
-  isSignature: boolean,
   children: ?any,
   className: ?string,
 }; */
@@ -69,7 +68,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
         {tabs.map(e => (
           <li className={f('tabs-title')} key={e.name}>
             <BrowseTabsLink
-              to={e.to}
+              newTo={e.newTo}
               name={e.name}
               data={data}
               counter={e.counter}
@@ -84,15 +83,9 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.main.key,
-  state =>
-    state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .db,
-  state =>
-    state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
+  state => state.newLocation.description.mainType,
+  state => state.newLocation.description.mainDB,
+  state => state.newLocation.description.mainAccession,
   (mainType, mainDB, mainAccession) => ({
     mainType,
     mainDB,
@@ -107,20 +100,15 @@ const mapStateToProps = createSelector(
 
 const mapStateToUrl = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description.main.key,
-  state =>
-    state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .db,
-  state =>
-    state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
-  ({ protocol, hostname, port, root }, key, db, accession) => {
-    if (!accession) return;
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath({
-      main: { key },
-      [key]: { db, accession },
+  state => state.newLocation.description.mainType,
+  state => state.newLocation.description.mainDB,
+  state => state.newLocation.description.mainAccession,
+  ({ protocol, hostname, port, root }, mainType, mainDB, mainAccession) => {
+    if (!mainAccession) return;
+    return `${protocol}//${hostname}:${port}${root}${description2path({
+      mainType,
+      mainDB,
+      mainAccession,
     })}`.replace(/\?$/, '');
   },
 );

@@ -43,9 +43,7 @@ export class Accession extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state =>
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
+  state => state.newLocation.description.mainDB,
   db => ({ db }),
 );
 

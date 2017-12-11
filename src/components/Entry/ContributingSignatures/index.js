@@ -21,7 +21,7 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessData = ({ db, name }) => ({
+const schemaProcessData = ({ name, db }) => ({
   '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
   '@id': '@isBasedOn',
   isPartOf: {
@@ -41,10 +41,11 @@ const SignatureLink = ({ accession, db, data }) => {
     accession;
   return (
     <Link
-      to={{
+      newTo={{
         description: {
-          main: { key: 'entry' },
-          entry: { db, accession },
+          mainType: 'entry',
+          mainDB: db,
+          mainAccession: accession,
         },
       }}
     >
@@ -73,24 +74,53 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
         {Object.entries(contr).map(([db, accessions]) => (
           <li key={db}>
             <MemberSymbol type={db} className={f('md-small')} />
-            {accessions.map(accession => [
-              <SchemaOrgData
-                key={`schema.org for ${accession}`}
-                data={{ db, name: accession }}
-                processData={schemaProcessData}
-              />,
+            {accessions.map(accession => (
               <Metadata
-                key={accession}
                 endpoint="entry"
                 db={db}
                 accession={accession}
+                key={accession}
               >
                 <SignatureLink key={accession} db={db} accession={accession} />
-              </Metadata>,
-            ])}
+              </Metadata>
+            ))}
           </li>
         ))}
       </ul>
+    </div>
+
+    <div className={f('md-list-box', 'margin-bottom-large')}>
+      <h5>Contributing signatures</h5>
+      <div className={f('table-chevron')}>
+        {Object.entries(contr).map(([db, accessions]) => (
+          <div key={db} className={f('sign-row')}>
+            <span className={f('sign-cell')}>{db}</span>
+
+            {accessions.map(accession => (
+              <span key={accession} className={f('sign-cell')}>
+                <SchemaOrgData
+                  data={{ db, name: accession }}
+                  processData={schemaProcessData}
+                />
+                <span className={f('sign-label')}>
+                  <Link
+                    className={f('neutral')}
+                    newTo={{
+                      description: {
+                        mainType: 'entry',
+                        mainDB: db,
+                        mainAccession: accession,
+                      },
+                    }}
+                  >
+                    {accession}
+                  </Link>
+                </span>
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 );

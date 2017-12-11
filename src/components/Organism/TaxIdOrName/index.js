@@ -40,18 +40,14 @@ class TaxIdOrName extends PureComponent /*:: <Props> */ {
     if (Element) {
       return <Element>{displayedText}</Element>;
     }
-    return (
-      <Link
-        to={{
-          description: {
-            main: { key: 'organism' },
-            organism: { db: 'taxonomy', accession },
-          },
-        }}
-      >
-        {displayedText}
-      </Link>
-    );
+    const newTo = {
+      description: {
+        mainType: 'organism',
+        mainDB: 'taxonomy',
+        mainAccession: accession.toString(),
+      },
+    };
+    return <Link newTo={newTo}>{displayedText}</Link>;
   }
 }
 

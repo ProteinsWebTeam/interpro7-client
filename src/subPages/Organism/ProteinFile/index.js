@@ -9,7 +9,7 @@ const getWorker = () =>
   import('webWorkers/proteinFile').then(Worker => new Worker());
 
 const getDownloadName = createSelector(
-  props => props.entryDescription.accession,
+  props => props.description.mainAccession,
   props => props.taxId,
   props => props.type,
   (accession, taxId, type) =>
@@ -18,7 +18,7 @@ const getDownloadName = createSelector(
 
 class ProteinFile extends Component {
   static propTypes = {
-    entryDescription: T.object.isRequired,
+    description: T.object.isRequired,
     api: T.object.isRequired,
     taxId: T.string.isRequired,
     type: T.string.isRequired,
@@ -57,8 +57,8 @@ class ProteinFile extends Component {
     getWorker().then(worker => {
       this._worker = worker;
       this._worker.addEventListener('message', this._workerMessage);
-      const { entryDescription, api, taxId, type } = this.props;
-      this._worker.postMessage({ entryDescription, api, taxId, type });
+      const { description, api, taxId, type } = this.props;
+      this._worker.postMessage({ description, api, taxId, type });
     });
   };
 
@@ -89,7 +89,7 @@ class ProteinFile extends Component {
   };
 
   render() {
-    const { taxId, entryDescription: { accession }, type } = this.props;
+    const { taxId, description: { mainAccession }, type } = this.props;
     const { downloading, success, failed, progress, href } = this.state;
     return (
       <a
@@ -97,9 +97,9 @@ class ProteinFile extends Component {
         href={href}
         style={{ borderBottomWidth: '0' }}
         target="_blank"
-        title={`${type === 'FASTA' ? 'FASTA file' : 'Protein accessions'} for ${
-          accession
-        } for tax ID ${taxId}`}
+        title={`${type === 'FASTA'
+          ? 'FASTA file'
+          : 'Protein accessions'} for ${mainAccession} for tax ID ${taxId}`}
         onClick={this._handleClick}
       >
         <ProgressButton
@@ -115,8 +115,8 @@ class ProteinFile extends Component {
 
 const mapStateToProps = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description.entry,
-  (api, entryDescription) => ({ api, entryDescription }),
+  state => state.newLocation.description,
+  (api, description) => ({ api, description }),
 );
 
 export default connect(mapStateToProps)(ProteinFile);

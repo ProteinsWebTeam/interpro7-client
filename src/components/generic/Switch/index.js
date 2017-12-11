@@ -20,7 +20,7 @@ const match = (childRoutes, indexRoute, valueFromLocation) => {
   }
 };
 
-class _Switch extends PureComponent {
+class Switch extends PureComponent {
   static propTypes = {
     indexRoute: T.func.isRequired,
     locationSelector: T.func.isRequired,
@@ -31,7 +31,7 @@ class _Switch extends PureComponent {
       T.array,
     ]) /* any Iterable, like a Set or an Array */,
     catchAll: T.func,
-    customLocation: T.object.isRequired,
+    location: T.object.isRequired,
   };
 
   render() {
@@ -40,21 +40,19 @@ class _Switch extends PureComponent {
       locationSelector,
       childRoutes = [],
       catchAll = defaultCatchAll,
-      customLocation,
+      location,
       ...props
     } = this.props;
-    const valueFromLocation = locationSelector(customLocation);
+    const valueFromLocation = locationSelector(location);
     const { Component = catchAll, matched = valueFromLocation } =
       match(childRoutes, indexRoute, valueFromLocation) || {};
-    return (
-      <Component {...props} matched={matched} customLocation={customLocation} />
-    );
+    return <Component {...props} matched={matched} location={location} />;
   }
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
-  customLocation => ({ customLocation }),
+  state => state.newLocation,
+  location => ({ location }),
 );
 
-export default connect(mapStateToProps)(_Switch);
+export default connect(mapStateToProps)(Switch);

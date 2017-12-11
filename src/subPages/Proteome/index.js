@@ -10,17 +10,17 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import global from 'styles/global.css';
 const f = foundationPartial(fonts, global);
 
-class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation: Object}> */ {
+class ProteomeSubPage extends PureComponent /*:: <{data: Object, location: Object}> */ {
   static propTypes = {
     data: T.object.isRequired,
-    customLocation: T.object.isRequired,
+    location: T.object.isRequired,
   };
 
   render() {
     if (this.props.data.loading) return <Loading />;
     const {
       data: { payload: { results, count } },
-      customLocation: { search },
+      location: { search },
     } = this.props;
     return (
       <Table dataTable={results} actualSize={count} query={search} pathname="">
@@ -32,13 +32,11 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation:
           dataKey="accession"
           renderer={(acc /*: string */) => (
             <Link
-              to={{
+              newTo={{
                 description: {
-                  main: { key: 'organism' },
-                  organism: {
-                    proteomeDB: 'proteome',
-                    proteomeAccession: acc,
-                  },
+                  mainType: 'organism',
+                  mainDB: 'proteome',
+                  mainAccession: acc,
                 },
               }}
             >
@@ -55,13 +53,11 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation:
             { accession } /*: {accession: string, source_database: string} */,
           ) => (
             <Link
-              to={{
+              newTo={{
                 description: {
-                  main: { key: 'organism' },
-                  organism: {
-                    proteomeDB: 'proteome',
-                    proteomeAccession: accession,
-                  },
+                  mainType: 'organism',
+                  mainDB: 'proteome',
+                  mainAccession: accession,
                 },
               }}
             >
@@ -73,13 +69,11 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation:
           dataKey="taxonomy"
           renderer={(taxID /*: string */) => (
             <Link
-              to={{
+              newTo={{
                 description: {
-                  main: { key: 'organism' },
-                  organism: {
-                    db: 'taxonomy',
-                    accession: taxID,
-                  },
+                  mainType: 'organism',
+                  mainDB: 'taxonomy',
+                  mainAccession: String(taxID),
                 },
               }}
             >

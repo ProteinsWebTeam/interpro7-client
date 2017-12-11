@@ -33,10 +33,11 @@ const Integration = ({ intr }) => (
       <li>
         <SchemaOrgData data={intr} processData={schemaProcessData} />
         <Link
-          to={{
+          newTo={{
             description: {
-              main: { key: 'entry' },
-              entry: { db: 'InterPro', accession: intr },
+              mainType: 'entry',
+              mainDB: 'InterPro',
+              mainAccession: intr,
             },
           }}
         >

@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
 
 import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2path from 'utils/processLocation/description2path';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -15,7 +15,6 @@ import ColorHash from 'color-hash/lib/color-hash';
 import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from './style.css';
-
 const f = foundationPartial(pageStyle);
 
 const colorHash = new ColorHash();
@@ -140,11 +139,14 @@ class IDAGraphic extends PureComponent {
 class DomainArchitectures extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,
-    mainAccession: T.string,
+    description: T.object.isRequired,
   };
 
   render() {
-    const { data: { loading, payload }, mainAccession } = this.props;
+    const {
+      data: { loading, payload },
+      description: { mainAccession },
+    } = this.props;
     if (loading) return <Loading />;
     return (
       <div className={f('row')}>
@@ -154,11 +156,13 @@ class DomainArchitectures extends PureComponent {
             return (
               <div key={obj.IDA_FK} className={f('margin-bottom-large')}>
                 <Link
-                  to={{
+                  newTo={{
                     description: {
-                      main: { key: 'protein' },
-                      protein: { db: 'UniProt' },
-                      entry: { db: 'InterPro', accession: mainAccession },
+                      mainType: 'protein',
+                      mainDB: 'UniProt',
+                      focusType: 'entry',
+                      focusDB: 'InterPro',
+                      focusAccession: mainAccession,
                     },
                     search: { ida: obj.IDA_FK },
                   }}
@@ -171,10 +175,11 @@ class DomainArchitectures extends PureComponent {
                     {d.accessions.map(acc => (
                       <Link
                         key={acc}
-                        to={{
+                        newTo={{
                           description: {
-                            main: { key: 'entry' },
-                            entry: { db: 'InterPro', accession: acc },
+                            mainType: 'entry',
+                            mainDB: 'InterPro',
+                            mainAccession: acc,
                           },
                         }}
                       >
@@ -198,26 +203,23 @@ class DomainArchitectures extends PureComponent {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  state => state.newLocation.description,
+  state => state.newLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     const { type, search: _, ..._search } = search;
     // add to search
     _search.ida = null;
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
+    return `${protocol}//${hostname}:${port}${root}${description2path(
       description,
     ).replace('domain_architecture', '')}?${qsStringify(_search)}`;
   },
 );
 
 const mapStateToProps = createSelector(
-  state =>
-    state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
-  mainAccession => ({ mainAccession }),
+  state => state.newLocation.description,
+  description => ({ description }),
 );
 
 export default connect(mapStateToProps)(

@@ -114,7 +114,7 @@ const loadData = params => {
             fetchOptions,
           );
         }
-        // subscribe(key, this);
+        subscribe(key, this);
 
         // If data is already there, or loading, don't do anything
         if (data.loading || data.payload) return;
@@ -143,13 +143,13 @@ const loadData = params => {
       }) {
         // Same location, no need to reload data
         if (
-          nextAppState.customLocation === this.props.appState.customLocation &&
+          nextAppState.newLocation === this.props.appState.newLocation &&
           nextAppState.settings === this.props.appState.settings
         ) {
           // In case the change is of data in the same page
           if (this._url !== data.url) {
             this._unloadDataMaybe();
-            // subscribe(data.url, this);
+            subscribe(data.url, this);
           }
           return;
         }
@@ -175,7 +175,7 @@ const loadData = params => {
             fetchOptions,
           );
         }
-        // subscribe(key, this);
+        subscribe(key, this);
         this._cancelableFetch = this._load(key);
       }
 
@@ -189,8 +189,8 @@ const loadData = params => {
       }
 
       _unloadDataMaybe = () => {
-        // const needUnload = unsubscribe(this._url, this);
-        // if (needUnload) this.props.unloadingData(this._url);
+        const needUnload = unsubscribe(this._url, this);
+        if (needUnload) this.props.unloadingData(this._url);
       };
 
       render() {

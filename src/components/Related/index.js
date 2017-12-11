@@ -6,7 +6,7 @@ import { stringify as qsStringify } from 'query-string';
 import omit from 'lodash-es/omit';
 
 import Link from 'components/generic/Link';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import description2path from 'utils/processLocation/description2path';
 import loadData from 'higherOrder/loadData';
 
 import Matches from 'components/Matches';
@@ -14,14 +14,14 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import { toPlural } from 'utils/pages';
 
-import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
-import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
-import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
-
 import { foundationPartial } from 'styles/foundation';
 
 import global from 'styles/global.css';
 const f = foundationPartial(global);
+
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
+import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
+import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
 
 class ObjectToList extends PureComponent {
   static propTypes = {
@@ -72,11 +72,11 @@ class _RelatedSimple extends PureComponent {
           obj={secondaryData}
           component={({ k: db, value }) => (
             <Link
-              to={customLocation => ({
-                ...customLocation,
+              newTo={location => ({
+                ...location,
                 description: {
-                  main: { key: focusType },
-                  [focusType]: { db },
+                  mainType: focusType,
+                  mainDB: db,
                 },
               })}
             >
@@ -90,11 +90,8 @@ class _RelatedSimple extends PureComponent {
 }
 
 const mapStateToPropsSimple = createSelector(
-  state => state.customLocation.description.main.key,
-  state =>
-    (Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0],
+  state => state.newLocation.description.mainType,
+  state => state.newLocation.description.focusType,
   (mainType, focusType) => ({ mainType, focusType }),
 );
 const RelatedSimple = connect(mapStateToPropsSimple)(_RelatedSimple);
@@ -243,48 +240,41 @@ export class _RelatedAdvanced extends PureComponent {
 }
 
 const mapStateToPropsAdvanced = createSelector(
-  state => state.customLocation.description.main.key,
-  state =>
-    Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ),
-  (mainType, [focusType, { db: focusDB }]) => ({
-    mainType,
-    focusType,
-    focusDB,
-  }),
+  state => state.newLocation.description.mainType,
+  state => state.newLocation.description.focusType,
+  state => state.newLocation.description.focusDB,
+  (mainType, focusType, focusDB) => ({ mainType, focusType, focusDB }),
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
 
 const getReversedUrl = createSelector(
   state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  state => state.newLocation.description,
+  state => state.newLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
-    // copy of description, to modify it after
-    const newDesc = {};
-    let newMain;
-    for (const [key, value] of Object.entries(description)) {
-      newDesc[key] = { ...value };
-      if (value.isFilter) {
-        newMain = key;
-        newDesc[key].isFilter = false;
-      }
-    }
-    newDesc[description.main.key].isFilter = true;
-    newDesc.main.key = newMain;
+    const newDesc = Object.entries(description).reduce((acc, [key, value]) => {
+      let newKey = key;
+      if (key.startsWith('focus')) newKey = newKey.replace('focus', 'main');
+      if (key.startsWith('main')) newKey = newKey.replace('main', 'focus');
+      // eslint-disable-next-line no-param-reassign
+      acc[newKey] = value;
+      return acc;
+    }, {});
     const s = search || {};
-    let url = `${protocol}//${hostname}:${port}${root}${descriptionToPath(
+    let url = `${protocol}//${hostname}:${port}${root}${description2path(
       newDesc,
     )}?${qsStringify(s)}`;
-    if (description.main.key === 'entry' && newMain === 'organism') {
+    if (
+      description.mainType === 'entry' &&
+      description.focusType === 'organism'
+    ) {
       url = url.replace('/entry/', '/protein/entry/');
     }
     return url;
   },
 );
 const mapStateToPropsAdvancedQuery = createSelector(
-  state => state.customLocation.description.main.key,
+  state => state.newLocation.description.mainType,
   mainType => ({ mainType }),
 );
 const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
@@ -350,10 +340,7 @@ class Related extends PureComponent {
 }
 
 const mapStateToPropsDefault = createSelector(
-  state =>
-    (Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0],
+  state => state.newLocation.description.focusType,
   focusType => ({ focusType }),
 );
 
