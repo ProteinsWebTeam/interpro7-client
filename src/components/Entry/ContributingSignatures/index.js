@@ -90,7 +90,7 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
     </div>
 
     <div className={f('md-list-box', 'margin-bottom-large')}>
-      <h5>Contributing signatures</h5>
+      <h5>Contributing entries</h5>
       <div className={f('table-chevron')}>
         {Object.entries(contr).map(([db, accessions]) => (
           <div key={db} className={f('sign-row')}>
