@@ -71,6 +71,9 @@ const RedirectToText = () => (
   />
 );
 
+const activeClassFn = ({ description: { search: { type } } }) =>
+  type === 'text' && f('is-active', 'is-active-tab');
+
 class Wrapper extends PureComponent {
   static propTypes = {
     children: T.node.isRequired,
@@ -94,7 +97,7 @@ class Wrapper extends PureComponent {
                     search: { type: 'text' },
                   },
                 }}
-                activeClass={f('is-active', 'is-active-tab')}
+                activeClass={activeClassFn}
               >
                 by text
               </Link>

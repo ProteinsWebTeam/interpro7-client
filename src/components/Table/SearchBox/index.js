@@ -23,6 +23,7 @@ class SearchBox extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = { search: this.props.customLocation.search.search };
     this.routerPush = debounce(this.routerPush, DEBOUNCE_RATE);
   }

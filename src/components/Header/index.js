@@ -111,7 +111,7 @@ class _SideIcons extends PureComponent {
           />
           <label className={reducedStyleBundle('side-search', { stuck })}>
             <div>
-              <TextSearchBox maxLength="255" value="" name="search" />
+              <TextSearchBox name="search" />
             </div>
             <Link to={{ description: { other: ['search'] } }}>
               <div aria-label="Search InterPro">
