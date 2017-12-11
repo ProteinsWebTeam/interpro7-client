@@ -107,9 +107,8 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       </Link>
                     </h5>
                     <p>
-                      This signature is defined as{' '}
-                      {metadata.type.replace('_', ' ').toLowerCase()} by{' '}
-                      {metadata.source_database}.
+                      {metadata.source_database} type:{' '}
+                      {metadata.type.replace('_', ' ').toLowerCase()}
                     </p>
                   </div>
                 )}
