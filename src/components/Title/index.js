@@ -8,10 +8,11 @@ import loadWebComponent from 'utils/loadWebComponent';
 
 import { foundationPartial } from 'styles/foundation';
 
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import styles from './style.css';
 
-const f = foundationPartial(ipro, styles);
+const f = foundationPartial(fonts, ipro, styles);
 
 const softcolors = {
   // opacity 0.6 normal colors
@@ -87,7 +88,8 @@ export default class Title extends PureComponent /*:: <Props> */ {
     const isEntry = mainType === 'entry';
     return (
       <div className={f('title')}>
-        {isEntry &&
+        {// Entry icon
+        isEntry &&
           metadata.type &&
           metadata.source_database &&
           metadata.source_database.toLowerCase() === 'interpro' && (
@@ -98,7 +100,9 @@ export default class Title extends PureComponent /*:: <Props> */ {
               />
             </Tooltip>
           )}
-        {isEntry &&
+
+        {// MD icon
+        isEntry &&
           metadata.type &&
           metadata.source_database &&
           metadata.source_database.toLowerCase() !== 'interpro' && (
@@ -106,6 +110,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
               <MemberSymbol type={metadata.source_database} />
             </div>
           )}
+
         <Helmet>
           <title>{metadata.accession.toString()}</title>
         </Helmet>
@@ -142,12 +147,72 @@ export default class Title extends PureComponent /*:: <Props> */ {
             )}
         </h3>
 
-        {metadata.name.short &&
-          metadata.accession !== metadata.name.short && (
-            <p>
-              Short name:&nbsp;
-              <i className={f('shortname')}>{metadata.name.short}</i>
-            </p>
+        {// Proteome
+        metadata.is_reference ? (
+          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+            Reference proteome{' '}
+            <Tooltip title="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny.">
+              <span
+                className={f('small', 'icon', 'icon-generic')}
+                data-icon="i"
+                aria-label="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny."
+              />
+            </Tooltip>
+          </div>
+        ) : null}
+
+        {// Species
+        metadata.source_database !== 'proteome' &&
+          mainType === 'organism' && (
+            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+              {metadata.source_database}
+            </div>
+          )}
+
+        {// Set
+        mainType === 'set' && (
+          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+            Set {metadata.source_database}{' '}
+            <Tooltip title="A Set is defined as a group of related entries">
+              <span
+                className={f('small', 'icon', 'icon-generic')}
+                data-icon="i"
+              />
+            </Tooltip>
+          </div>
+        )}
+
+        {// Structure
+        mainType === 'structure' && (
+          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+            Structure
+          </div>
+        )}
+        {// protein page
+        metadata.source_database &&
+          metadata.source_database.toLowerCase() === 'reviewed' && (
+            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+              Protein {metadata.source_database}
+            </div>
+          )}
+
+        {// MD Entry -signature
+        isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() !== 'interpro' && (
+            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+              {metadata.source_database} entry
+            </div>
+          )}
+        {// InterPro Entry
+        isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() === 'interpro' && (
+            <div className={f('tag', 'secondary')}>
+              {metadata.source_database} entry
+            </div>
           )}
       </div>
     );
