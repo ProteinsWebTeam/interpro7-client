@@ -145,10 +145,10 @@ export default class Title extends PureComponent /*:: <Props> */ {
               <h5>
                 Member database:&nbsp;
                 <Link
-                  newTo={{
+                  to={{
                     description: {
-                      mainType: 'entry',
-                      mainDB: metadata.source_database,
+                      main: { key: 'entry' },
+                      entry: { db: metadata.source_database },
                     },
                   }}
                 >

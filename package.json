@@ -81,7 +81,7 @@
     }
   },
   "jest": {
-    "verbose": true,
+    "verbose": false,
     "rootDir": "src",
     "moduleNameMapper": {
       "config.yml$": "<rootDir>/__mocks__/configMock.js",
@@ -100,7 +100,8 @@
       "json",
       "lcov",
       "text-summary"
-    ]
+    ],
+    "transformIgnorePatterns": ["/node_modules/(?!lodash-es)"]
   },
   "lint-staged": {
     "*.+(js|css)": [

@@ -31,7 +31,7 @@ class DomainArchitectureSubPage extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.newLocation.description.mainType,
+  state => state.customLocation.description.main.key,
   mainType => ({ mainType }),
 );
 

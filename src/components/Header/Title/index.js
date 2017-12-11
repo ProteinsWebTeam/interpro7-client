@@ -47,11 +47,7 @@ class Title extends PureComponent /*:: <Props> */ {
       >
         <h1 className={styles('main-title', { stuck })}>
           <div className={styles('logo-flex')}>
-            <Link
-              newTo={{ description: {} }}
-              title="Back to InterPro homepage"
-              style={{ display: 'flex' }}
-            >
+            <Link to={{ description: {} }} title="Back to InterPro homepage">
               <div className={styles('logo-flex-item', 'logo-icon', { stuck })}>
                 <svg className={styles('icon')} viewBox="0 0 88 88" width="62">
                   <defs>
@@ -119,9 +115,15 @@ const mapStateToProps = createSelector(
         return false;
       }),
   ),
-  state => state.newLocation.description.mainType,
-  state => state.newLocation.description.mainDB,
-  state => state.newLocation.description.mainAccession,
+  state => state.customLocation.description.main.key,
+  state =>
+    state.customLocation.description.main.key &&
+    state.customLocation.description[state.customLocation.description.main.key]
+      .db,
+  state =>
+    state.customLocation.description.main.key &&
+    state.customLocation.description[state.customLocation.description.main.key]
+      .accession,
   state => state.ui.stuck,
   (loading, mainType, mainDB, mainAccession, stuck) => ({
     loading,

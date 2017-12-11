@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -52,14 +52,16 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
 
 /*:: type SequenceProps = {
   sequence: string,
-  goToNewLocation: function,
+  goToCustomLocation: function,
+  accession: string,
+  name: ?string,
 }; */
 
 class Sequence extends PureComponent /*:: <SequenceProps> */ {
   /*:: _node: ?HTMLElement; */
   static propTypes = {
     sequence: T.string,
-    goToNewLocation: T.func.isRequired,
+    goToCustomLocation: T.func.isRequired,
     accession: T.string.isRequired,
     name: T.string,
   };
@@ -104,13 +106,10 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
 
   _handleIPSClick = event => {
     event.preventDefault();
-    this.props.goToNewLocation({
+    this.props.goToCustomLocation({
       description: {
-        mainType: 'search',
-        mainDB: 'sequence',
-      },
-      search: {
-        sequence: this._getSelection(),
+        main: { key: 'search' },
+        search: { type: 'sequence', value: this._getSelection() },
       },
     });
   };
@@ -143,10 +142,10 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
           <div className={f('medium-2', 'columns')}>
             <Link
               className={f('button', 'primary', 'sequence-link')}
-              newTo={{
+              to={{
                 description: {
-                  mainType: 'search',
-                  mainDB: 'sequence',
+                  main: { key: 'search' },
+                  search: { type: 'sequence' },
                 },
               }}
               onClick={this._handleIPSClick}
@@ -177,4 +176,4 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
   }
 }
 
-export default connect(undefined, { goToNewLocation })(Sequence);
+export default connect(undefined, { goToCustomLocation })(Sequence);

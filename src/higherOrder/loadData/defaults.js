@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
 
-import description2path from 'utils/processLocation/description2path';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 export const getUrl = createSelector(
   // this one is just to memoize it
@@ -10,17 +10,22 @@ export const getUrl = createSelector(
     createSelector(
       state => state.settings[key],
       state => state.settings.pagination,
-      state => state.newLocation.description,
-      state => state.newLocation.search,
+      state => state.customLocation.description,
+      state => state.customLocation.search,
       ({ protocol, hostname, port, root }, pagination, description, search) => {
-        const s = description.mainAccession ? {} : search || {};
+        const s =
+          description.main.key && description[description.main.key].accession
+            ? {}
+            : { ...search } || {};
         if (
-          !description.mainAccession &&
-          !description.focusDB &&
-          !description.mainMemberDB
+          !description[description.main.key].accession &&
+          !Object.values(description).find(
+            ({ isFilter, db }) => isFilter && db,
+          ) &&
+          !description.entry.memberDB
         )
           s.page_size = s.page_size || pagination.pageSize;
-        return `${protocol}//${hostname}:${port}${root}${description2path(
+        return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
           description,
         )}?${qsStringify(s)}`.replace(/\?$/, '');
       },

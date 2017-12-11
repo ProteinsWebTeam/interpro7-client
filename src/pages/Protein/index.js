@@ -43,7 +43,7 @@ const propTypes = {
     loading: T.bool.isRequired,
   }).isRequired,
   isStale: T.bool.isRequired,
-  location: T.shape({
+  customLocation: T.shape({
     description: T.object.isRequired,
   }).isRequired,
   match: T.string,
@@ -67,7 +67,12 @@ class Overview extends PureComponent {
         {Object.entries(payload.proteins || {}).map(([name, count]) => (
           <li key={name}>
             <Link
-              newTo={{ description: { mainType: 'protein', mainDB: name } }}
+              to={{
+                description: {
+                  main: { key: 'protein' },
+                  protein: { db: name },
+                },
+              }}
             >
               {name}
               {Number.isFinite(count) ? ` (${count})` : ''}
@@ -86,7 +91,7 @@ class List extends PureComponent {
     const {
       data: { payload, loading, url, status },
       isStale,
-      location: { search },
+      customLocation: { search },
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
@@ -142,32 +147,18 @@ class List extends PureComponent {
               dataKey="accession"
               renderer={(accession /*: string */) => (
                 <Link
-                  // style={{
-                  // display:'flex',
-                  // flexWrap: 'nowrap',
-                  // alignItems:'center'}}
-                  newTo={location => ({
-                    ...location,
+                  to={customLocation => ({
+                    ...customLocation,
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: accession,
+                      main: { key: 'protein' },
+                      protein: {
+                        db: customLocation.description.protein.db,
+                        accession,
+                      },
                     },
                     search: {},
                   })}
                 >
-                  {
-                    // <span
-                    // style={{
-                    //   width:'0.6rem',
-                    //   height:'0.6rem',
-                    //   margin: '0 0.2rem 0 0',
-                    //   backgroundColor: colorHash.hex(row.accession),
-                    //   borderRadius: '0.2rem'
-                    //   }}
-                    // >
-                    // </span>
-                  }
                   <span className={f('acc-row')}>
                     <HighlightedText
                       text={accession}
@@ -186,12 +177,14 @@ class List extends PureComponent {
                 { accession } /*: {accession: string} */,
               ) => (
                 <Link
-                  newTo={location => ({
-                    ...location,
+                  to={customLocation => ({
+                    ...customLocation,
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: accession,
+                      main: { key: 'protein' },
+                      protein: {
+                        db: customLocation.description.protein.db,
+                        accession,
+                      },
                     },
                     search: {},
                   })}
@@ -263,12 +256,12 @@ class SummaryComponent extends PureComponent {
     data: T.shape({
       payload: T.any,
     }).isRequired,
-    location: T.object.isRequired,
+    customLocation: T.object.isRequired,
   };
 
   render() {
-    const { data: { payload }, location } = this.props;
-    return <SummaryAsync data={payload} location={location} />;
+    const { data: { payload }, customLocation } = this.props;
+    return <SummaryAsync data={payload} customLocation={customLocation} />;
   }
 }
 
@@ -337,9 +330,15 @@ class Summary extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l =>
-              l.description.mainDetail || l.description.focusType
-            }
+            locationSelector={l => {
+              const { key } = l.description.main;
+              return (
+                l.description[key].detail ||
+                (Object.entries(l.description).find(
+                  ([_key, value]) => value.isFilter,
+                ) || [])[0]
+              );
+            }}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForProtein}
           />
@@ -355,9 +354,15 @@ const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l =>
-        l.description.mainAccession || l.description.focusType
-      }
+      locationSelector={l => {
+        const { key } = l.description.main;
+        return (
+          l.description[key].accession ||
+          (Object.entries(l.description).find(
+            ([_key, value]) => value.isFilter,
+          ) || [])[0]
+        );
+      }}
       indexRoute={List}
       childRoutes={[{ value: acc, component: Summary }]}
       catchAll={List}
@@ -370,7 +375,7 @@ const Protein = props => (
     <ErrorBoundary>
       <Switch
         {...props}
-        locationSelector={l => l.description.mainDB}
+        locationSelector={l => l.description[l.description.main.key].db}
         indexRoute={Overview}
         catchAll={InnerSwitch}
       />

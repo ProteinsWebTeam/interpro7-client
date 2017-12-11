@@ -30,13 +30,13 @@ class IPScanResult extends PureComponent {
 
 const mapStateToUrl = createSelector(
   state => state.settings.ipScan,
-  state => state.newLocation.description.mainAccession,
-  ({ protocol, hostname, port, root }, mainAccession) =>
+  state => state.customLocation.description.job.accession,
+  ({ protocol, hostname, port, root }, accession) =>
     format({
       protocol,
       hostname,
       port,
-      pathname: `${root}/result/${mainAccession}/json`,
+      pathname: `${root}/result/${accession}/json`,
     }),
 );
 

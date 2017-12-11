@@ -9,13 +9,13 @@ import { entities } from 'menuConfig';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 
 const EntitiesMenu = (
-  { className, children } /*: {className?: string, children?: any} */
+  { className, children } /*: {className?: string, children?: any} */,
 ) => (
   <ul className={className}>
     {children}
-    {entities.map(({ newTo, name }) => (
+    {entities.map(({ to, name }) => (
       <li key={name}>
-        <MenuItem newTo={newTo} activeClass={ebiStyles.active}>
+        <MenuItem to={to} activeClass={ebiStyles.active}>
           {name}
         </MenuItem>
       </li>

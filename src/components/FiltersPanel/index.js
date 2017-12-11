@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { foundationPartial } from 'styles/foundation';
 import style from './style.css';
 import { createSelector } from 'reselect';
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 const f = foundationPartial(style);
 
@@ -29,8 +29,8 @@ FilterPanel.propTypes = {
 class FiltersPanel extends Component {
   static propTypes = {
     children: T.any,
-    goToNewLocation: T.func.isRequired,
-    location: T.shape({
+    goToCustomLocation: T.func.isRequired,
+    customLocation: T.shape({
       search: T.object.isRequired,
       description: T.object.isRequired,
       hash: T.string.isRequired,
@@ -61,19 +61,21 @@ class FiltersPanel extends Component {
   };
 
   clearAll = () => {
-    const { description, hash, search } = this.props.location;
-    let mainDB =
-      description.mainType === 'protein' ? 'UniProt' : description.mainDB;
-    if (description.mainType === 'organism') mainDB = 'taxonomy';
-    this.props.goToNewLocation({
-      description: {
-        ...description,
-        mainDB,
-        mainIntegration: null,
+    const { description, hash, search } = this.props.customLocation;
+    const { key } = description.main;
+    let db = key === 'protein' ? 'UniProt' : description[key].db;
+    if (key === 'organism') db = 'taxonomy';
+    const newDescription = {
+      ...description,
+      [key]: {
+        ...description[key],
+        db,
       },
-      search: {
-        page_size: search.page_size,
-      },
+    };
+    newDescription.entry.integration = null;
+    this.props.goToCustomLocation({
+      description: newDescription,
+      search: { page_size: search.page_size },
       hash,
     });
   };
@@ -122,8 +124,8 @@ class FiltersPanel extends Component {
   }
 }
 const mapStateToProps = createSelector(
-  state => state.newLocation,
-  location => ({ location }),
+  state => state.customLocation,
+  customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToNewLocation })(FiltersPanel);
+export default connect(mapStateToProps, { goToCustomLocation })(FiltersPanel);
