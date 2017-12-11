@@ -224,7 +224,7 @@ class List extends Component {
                         {mdb[db].map(accession => (
                           <Tooltip
                             key={accession}
-                            title={`${accession} signature`}
+                            title={`${accession} contributing entry`}
                           >
                             <span className={f('sign-label')}>
                               <Link
@@ -247,8 +247,8 @@ class List extends Component {
                   ))
                 }
               >
-                Signatures{' '}
-                <Tooltip title="Signature ID">
+                Database{' '}
+                <Tooltip title="Contributing entry ID">
                   <span className={f('sign-label-head')}>ID</span>
                 </Tooltip>
               </Column>
