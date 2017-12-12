@@ -9,9 +9,10 @@ import { goToNewLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
-import pStyles from './style.css';
+import local from './style.css';
+import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(pStyles);
+const f = foundationPartial(ipro, local);
 
 const comment = /^\s*[;>].*$/gm;
 const whiteSpaces = /\s*/g;
