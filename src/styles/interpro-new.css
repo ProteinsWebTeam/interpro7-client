@@ -80,6 +80,10 @@ mark {
   background-color: var(--colors-tag);
 }
 
+.tag.md-p {
+  background-color: var(--colors-md-sub);
+} /*tag used on md page*/
+
 /* buttons (secondary, alert, hollow) - redefine foundation style*/
 .button.alert {
   background-color: tomato;
