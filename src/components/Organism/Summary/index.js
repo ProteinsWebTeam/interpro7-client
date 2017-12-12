@@ -147,7 +147,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     const { data: { payload: { metadata } } } = this.props;
     return (
       <div className={f('row')}>
-        <div className={f('medium-10', 'columns')}>
+        <div className={f('medium-9', 'columns')}>
           {
             // metadata.is_reference ? (
             // <div className={f('tag', 'secondary', 'margin-bottom-large')}>
@@ -171,7 +171,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             </Metadata>
           </div>
         </div>
-        <div className={f('medium-2', 'columns')}>
+        <div className={f('medium-3', 'columns')}>
           <div className={f('panel')}>
             <h5>External Links</h5>
             <ul className={f('no-bullet')}>
