@@ -52,6 +52,7 @@ a:visited {
 /*NEUTRAL LINKS*/
 .main a.button {
   color: white;
+  white-space: inherit; /*override EBI global style where default is nowrap*/
 }
 
 /*Active tab - active is used on li element in ebi css*/
