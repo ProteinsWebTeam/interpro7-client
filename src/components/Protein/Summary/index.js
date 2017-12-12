@@ -5,7 +5,6 @@ import T from 'prop-types';
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
-import Accession from 'components/Accession';
 
 import { UniProtLink } from 'components/ExtLink';
 
