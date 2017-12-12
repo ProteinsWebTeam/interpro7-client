@@ -64,7 +64,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
       <div className={f('sections')}>
         <section>
           <div className={f('row')}>
-            <div className={f('medium-10', 'columns', 'margin-bottom-large')}>
+            <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
               <pdb-prints size="36">
                 <pdb-data-loader pdbid={metadata.accession} />
               </pdb-prints>
@@ -94,7 +94,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                 </div>
               )}
             </div>
-            <div className={f('medium-2', 'columns')}>
+            <div className={f('medium-3', 'columns')}>
               <div className={f('panel')}>
                 <h5>External Links</h5>
                 <ul className={f('no-bullet')}>
