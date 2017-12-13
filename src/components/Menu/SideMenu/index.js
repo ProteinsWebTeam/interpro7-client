@@ -107,7 +107,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
     const { visible, mainAccession, closeSideNav } = this.props;
     if (!(this.state.hasRendered || visible)) return null;
     return (
-      <aside className={f('container', { visible })} role="menu" id="main-nav">
+      <aside className={f('container', { visible })} role="menu">
         <button
           className={f('exit')}
           title="Close side menu"
@@ -120,9 +120,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
           <ul>
             {mainAccession && (
               <SingleEntityMenu className={f('primary')}>
-                <span
-                  className={f('menu-label', 'select-none', 'cursor-default')}
-                >
+                <span className={f('menu-label', 'cursor-default')}>
                   {mainAccession}
                 </span>
               </SingleEntityMenu>
@@ -131,16 +129,12 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
               pathname=""
               className={f('secondary', 'is-drilldown')}
             >
-              <span
-                className={f('menu-label', 'select-none', 'cursor-default')}
-              >
+              <span className={f('menu-label', 'cursor-default')}>
                 InterPro menu
               </span>
             </InterProMenu>
             <EBIMenu className={f('tertiary')}>
-              <span
-                className={f('menu-label', 'select-none', 'cursor-default')}
-              >
+              <span className={f('menu-label', 'cursor-default')}>
                 EBI menu
               </span>
             </EBIMenu>
