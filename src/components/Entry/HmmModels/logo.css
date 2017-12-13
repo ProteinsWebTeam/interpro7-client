@@ -146,6 +146,12 @@
 
 .logo_settings {
   display: none;
+  z-index: 6;
+  position: relative;
+  background: #fff;
+  margin: 1em;
+  padding: 0;
+  border: 2px solid #ccc;
 }
 .logo_settings_switch {
 }
