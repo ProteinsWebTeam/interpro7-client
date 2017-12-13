@@ -88,6 +88,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     visible: T.bool.isRequired,
     mainAccession: T.string,
+    mainType: T.string,
     closeSideNav: T.func.isRequired,
   };
 
@@ -104,7 +105,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
   }
 
   render() {
-    const { visible, mainAccession, closeSideNav } = this.props;
+    const { visible, mainAccession, mainType, closeSideNav } = this.props;
     if (!(this.state.hasRendered || visible)) return null;
     return (
       <aside className={f('container', { visible })} role="menu">
@@ -121,7 +122,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
             {mainAccession && (
               <SingleEntityMenu className={f('primary')}>
                 <span className={f('menu-label', 'cursor-default')}>
-                  {mainAccession}
+                  {mainType} menu ({mainAccession})
                 </span>
               </SingleEntityMenu>
             )}
@@ -168,7 +169,8 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
   state => state.newLocation.description.mainAccession,
-  (visible, mainAccession) => ({ visible, mainAccession }),
+  state => state.newLocation.description.mainType,
+  (visible, mainAccession, mainType) => ({ visible, mainAccession, mainType }),
 );
 
 export default connect(mapStateToProps, { closeSideNav })(SideMenu);
