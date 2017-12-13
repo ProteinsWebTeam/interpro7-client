@@ -20,11 +20,11 @@
 }
 
 .active {
-  color: #74abd0;
+  color: #2199e8;
   border-bottom: 0; /*temp while waiting for menu to redefine active class on <li> element */
 
   &:visited {
-    color: #74abd0;
+    color: #2199e8;
   }
 }
 /*off-canvas interpro home icon*/
