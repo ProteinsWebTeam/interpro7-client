@@ -103,13 +103,18 @@ mark {
   background-color: #909090;
 }
 
-.button.hollow {
+.button.hollow,
+.button.hollow.primary {
   background-color: transparent;
-}
-.button.hollow:hover,
-.button.hollow:active,
-.button.hollow:focus {
-  background-color: transparent;
+  @nest &:hover {
+    background-color: transparent;
+  }
+  @nest &:active {
+    background-color: transparent;
+  }
+  @nest &:focus {
+    background-color: transparent;
+  }
 }
 
 .button.hollow.tertiary {
