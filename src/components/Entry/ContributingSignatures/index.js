@@ -69,7 +69,7 @@ SignatureLink.propTypes = {
 const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
   <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
     <div className={f('md-icon-list-box', 'margin-bottom-large')}>
-      <h5>Contributing signatures</h5>
+      <h5>Contributing entries</h5>
       <ul className={f('md-list')}>
         {Object.entries(contr).map(([db, accessions]) => (
           <li key={db}>
@@ -90,7 +90,7 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
     </div>
 
     <div className={f('md-list-box', 'margin-bottom-large')}>
-      <h5>Contributing signatures</h5>
+      <h5>Contributing entries</h5>
       <div className={f('table-chevron')}>
         {Object.entries(contr).map(([db, accessions]) => (
           <div key={db} className={f('sign-row')}>

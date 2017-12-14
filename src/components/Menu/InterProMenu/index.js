@@ -42,7 +42,7 @@ class InterProMenu extends PureComponent /*:: <Props> */ {
                 {name}
               </MenuItem>
             </li>
-          )
+          ),
         )}
       </ul>
     );

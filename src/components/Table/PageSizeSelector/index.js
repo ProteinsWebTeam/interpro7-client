@@ -43,7 +43,7 @@ class PageSizeSelector extends Component {
     let options = [10, 25, 50, 100];
     if (options.indexOf(this.state.pageSize * 1) === -1) {
       options = Array.from(new Set([...options, this.state.pageSize])).sort(
-        (a, b) => a - b
+        (a, b) => a - b,
       );
     }
     return (
@@ -71,9 +71,9 @@ class PageSizeSelector extends Component {
 const mapStateToProps = createSelector(
   state => state.settings.pagination.pageSize,
   state => state.newLocation,
-  (pageSize, location) => ({ pageSize, location })
+  (pageSize, location) => ({ pageSize, location }),
 );
 
 export default connect(mapStateToProps, { changePageSize, goToNewLocation })(
-  PageSizeSelector
+  PageSizeSelector,
 );

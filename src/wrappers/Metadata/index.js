@@ -13,7 +13,7 @@ const getUrlFor = (mainType, mainDB, mainAccession) =>
         mainType,
         mainDB,
         mainAccession,
-      })}`
+      })}`,
   );
 
 class Metadata extends PureComponent {
@@ -23,16 +23,16 @@ class Metadata extends PureComponent {
     accession: T.oneOfType([T.string, T.number]).isRequired,
     children: T.element.isRequired,
   };
-  constructor(){
+  constructor() {
     super();
-    this.state = {child: null, element: null};
+    this.state = { child: null, element: null };
   }
   componentWillMount() {
     const { children, ...props } = this.props;
     const child = Children.only(children);
     const getUrl = getUrlFor(props.endpoint, props.db, props.accession);
     const element = loadData(getUrl)(child.type);
-    this.setState({child, element});
+    this.setState({ child, element });
   }
 
   render() {

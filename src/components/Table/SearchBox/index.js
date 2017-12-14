@@ -67,7 +67,7 @@ class SearchBox extends Component {
 
 const mapStateToProps = createSelector(
   state => state.newLocation,
-  location => ({ location })
+  location => ({ location }),
 );
 
 export default connect(mapStateToProps, { goToNewLocation })(SearchBox);

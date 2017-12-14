@@ -15,13 +15,13 @@ describe('reducer for location description', () => {
       reducer(defaultDescription, {
         type: NEW_PROCESSED_NEW_LOCATION,
         newLocation: { description: { mainType: 'entry' } },
-      })
+      }),
     ).toEqual({ ...defaultDescription, mainType: 'entry' });
     expect(
       reducer(defaultDescription, {
         type: NEW_PROCESSED_NEW_LOCATION,
         newLocation: { description: {} },
-      })
+      }),
     ).toEqual(defaultDescription);
   });
 

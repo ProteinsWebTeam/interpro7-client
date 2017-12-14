@@ -19,7 +19,7 @@ describe('actions', () => {
         newLocation,
       };
       expect(actions.newLocationChangeFromHistory(newLocation)).toEqual(
-        expected
+        expected,
       );
     });
   });
@@ -168,7 +168,7 @@ describe('actions', () => {
         ok,
       };
       expect(actions.loadedData(key, { payload, status, ok })).toEqual(
-        expected
+        expected,
       );
     });
 

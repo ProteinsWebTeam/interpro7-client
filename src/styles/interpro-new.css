@@ -73,7 +73,11 @@ a:visited {
 }
 /*override EBI foundation css that overrides foundation*/
 mark {
-  background-color: #fcf655;
+  background-color: var(--colors-marktext);
+}
+
+.tag.secondary {
+  background-color: var(--colors-tag);
 }
 
 /* buttons (secondary, alert, hollow) - redefine foundation style*/
@@ -611,22 +615,6 @@ h6 small {
 .local_footer.masthead {
   background-size: 130%, 110%;
 }
-/*Entry page - md info next title*/
-.md-hlight {
-  display: block;
-  overflow: auto;
-}
-.md-hlight div {
-  float: left;
-}
-.md-hlight h5 {
-  color: #41647d;
-}
-.md-hlight a,
-.md-hlight a:visited {
-  color: #41647d;
-}
-/*/Entry page - md info next title*/
 
 /*back to top button*/
 #back-top {

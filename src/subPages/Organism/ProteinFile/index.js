@@ -97,9 +97,9 @@ class ProteinFile extends Component {
         href={href}
         style={{ borderBottomWidth: '0' }}
         target="_blank"
-        title={`${type === 'FASTA'
-          ? 'FASTA file'
-          : 'Protein accessions'} for ${mainAccession} for tax ID ${taxId}`}
+        title={`${type === 'FASTA' ? 'FASTA file' : 'Protein accessions'} for ${
+          mainAccession
+        } for tax ID ${taxId}`}
         onClick={this._handleClick}
       >
         <ProgressButton

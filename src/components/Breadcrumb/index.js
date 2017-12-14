@@ -53,7 +53,7 @@ const mapPathArrayToLink = paths =>
         <Link key={url || i} to={url || '#'}>
           {name}
         </Link>
-      )
+      ),
   );
 
 const formatEndpoints = paths => [
@@ -113,7 +113,7 @@ class Breadcrumb extends Component {
       const prev = positions.get(node);
       if (prev) {
         console.log(
-          `translate(${prev.left - curr.left}px, ${prev.top - curr.top}px)`
+          `translate(${prev.left - curr.left}px, ${prev.top - curr.top}px)`,
         );
         node.animate(
           [
@@ -123,7 +123,7 @@ class Breadcrumb extends Component {
             },
             { transform: 'translate(0, 0)' },
           ],
-          { duration: 500, easing: 'ease-out' }
+          { duration: 500, easing: 'ease-out' },
         );
       }
       positions.set(node, curr);
@@ -184,7 +184,7 @@ class Breadcrumb extends Component {
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
   state => state.newLocation.description,
-  (stuck, description) => ({ stuck, description })
+  (stuck, description) => ({ stuck, description }),
 );
 
 export default connect(mapStateToProps)(Breadcrumb);

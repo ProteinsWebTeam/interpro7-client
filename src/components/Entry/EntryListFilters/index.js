@@ -14,7 +14,7 @@ const EntryListFilter = ({ mainDB }) => (
   <FiltersPanel>
     <EntryTypeFilter label="Entry Type" />
     {mainDB === 'InterPro' ? (
-      <SignaturesFilter label="Signatures" />
+      <SignaturesFilter label="Integrated Database" />
     ) : (
       <IntegratedFilter label="InterPro State" />
     )}

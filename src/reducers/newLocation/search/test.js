@@ -13,8 +13,8 @@ describe('reducer for location search', () => {
         {
           type: NEW_PROCESSED_NEW_LOCATION,
           newLocation: { search: { query: 'a' } },
-        }
-      )
+        },
+      ),
     ).toEqual({ query: 'a' });
     expect(
       reducer(
@@ -22,17 +22,17 @@ describe('reducer for location search', () => {
         {
           type: NEW_PROCESSED_NEW_LOCATION,
           newLocation: { search: { query: 'a' } },
-        }
-      )
+        },
+      ),
     ).toEqual({ query: 'a' });
     expect(
-      reducer({}, { type: NEW_PROCESSED_NEW_LOCATION, newLocation: {} })
+      reducer({}, { type: NEW_PROCESSED_NEW_LOCATION, newLocation: {} }),
     ).toEqual({});
     expect(
       reducer(
         { query: 'a' },
-        { type: NEW_PROCESSED_NEW_LOCATION, newLocation: {} }
-      )
+        { type: NEW_PROCESSED_NEW_LOCATION, newLocation: {} },
+      ),
     ).toEqual({});
   });
 

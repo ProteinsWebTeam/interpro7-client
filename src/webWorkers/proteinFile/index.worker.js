@@ -25,18 +25,18 @@ const progress = (value /*: number */) => {
 // eslint-disable-next-line max-statements
 const processEvent = async ({ data: { description, api, taxId, type } }) => {
   const content = [];
-  const pathname = `${api.protocol}//${api.hostname}:${api.port}${api.root}${description2path(
-    {
-      mainType: 'protein',
-      mainDB: 'UniProt',
-      focusType: description.mainType,
-      focusDB: description.mainDB,
-      focusAccession: description.mainAccession,
-    }
-  )}`;
-  const proteinPath = `${api.protocol}//${api.hostname}:${api.port}${api.root}${description2path(
-    { mainType: 'protein', mainDB: 'UniProt' }
-  )}`;
+  const pathname = `${api.protocol}//${api.hostname}:${api.port}${
+    api.root
+  }${description2path({
+    mainType: 'protein',
+    mainDB: 'UniProt',
+    focusType: description.mainType,
+    focusDB: description.mainDB,
+    focusAccession: description.mainAccession,
+  })}`;
+  const proteinPath = `${api.protocol}//${api.hostname}:${api.port}${
+    api.root
+  }${description2path({ mainType: 'protein', mainDB: 'UniProt' })}`;
   let page = 1;
   let current = 0;
   let totalCount;
@@ -87,5 +87,5 @@ self.addEventListener(
     // NOTE: should maybe transfer the blob back to main thread to be able to kill
     // the worker without losing the file
   },
-  { once: true }
+  { once: true },
 );

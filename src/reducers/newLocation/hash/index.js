@@ -1,4 +1,4 @@
-import {NEW_PROCESSED_NEW_LOCATION} from 'actions/types';
+import { NEW_PROCESSED_NEW_LOCATION } from 'actions/types';
 
 const getDefaultState = () => '';
 

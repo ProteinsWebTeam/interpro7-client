@@ -21,7 +21,7 @@ import loadable from 'higherOrder/loadable';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import BrowseTabs from 'components/BrowseTabs';
+import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
@@ -212,7 +212,7 @@ for (const subPage of config.pages.organism.subPages) {
 
 const _Title = ({ data: { loading, payload } }) =>
   loading ? (
-    <div>loading</div>
+    <Loading />
   ) : (
     <Title metadata={payload.metadata} mainType="organism" />
   );
@@ -256,7 +256,7 @@ class Summary extends PureComponent {
           <div className={f('row')}>
             <div className={f('medium-12', 'large-12', 'columns')}>
               <LoadedTitle />
-              <BrowseTabs />
+              <EntryMenu metadata={payload.metadata} />
             </div>
           </div>
           <Switch

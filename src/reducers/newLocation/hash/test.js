@@ -11,13 +11,13 @@ describe('reducer for location hash', () => {
       reducer('old_hash', {
         type: NEW_PROCESSED_NEW_LOCATION,
         newLocation: { hash: 'new_hash' },
-      })
+      }),
     ).toBe('new_hash');
     expect(
       reducer('old_hash', {
         type: NEW_PROCESSED_NEW_LOCATION,
         newLocation: {},
-      })
+      }),
     ).toBe('');
   });
 

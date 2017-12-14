@@ -18,7 +18,7 @@ import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
-import BrowseTabs from 'components/BrowseTabs';
+import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
@@ -315,7 +315,7 @@ class Summary extends PureComponent {
         <div className={f('row')}>
           <div className={f('medium-12', 'large-12', 'columns')}>
             <Title metadata={payload.metadata} mainType="protein" />
-            <BrowseTabs />
+            <EntryMenu metadata={payload.metadata} />
           </div>
         </div>
         {this.props.data.payload &&

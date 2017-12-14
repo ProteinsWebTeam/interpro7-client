@@ -8,7 +8,7 @@ import parseValueFromInput from './parse-value-from-input';
 // location
 export const goToNewLocation = (
   location /*: string | Location */,
-  replace /*: ?boolean */
+  replace /*: ?boolean */,
 ) => ({
   type: types.NEW_NEW_LOCATION,
   location,

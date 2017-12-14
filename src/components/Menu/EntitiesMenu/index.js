@@ -9,7 +9,7 @@ import { entities } from 'menuConfig';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 
 const EntitiesMenu = (
-  { className, children } /*: {className?: string, children?: any} */
+  { className, children } /*: {className?: string, children?: any} */,
 ) => (
   <ul className={className}>
     {children}

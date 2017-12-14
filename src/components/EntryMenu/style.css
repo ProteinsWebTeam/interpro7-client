@@ -1,0 +1,7 @@
+.tabs {
+  border: 0; /*needed to remove foundation style*/
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+}

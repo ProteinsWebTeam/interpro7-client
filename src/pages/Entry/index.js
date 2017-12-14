@@ -25,7 +25,7 @@ import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
 import subPages from 'subPages';
 import config from 'config';
-import BrowseTabs from 'components/BrowseTabs';
+import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 
 import { memberDB } from 'staticData/home';
@@ -146,7 +146,7 @@ class List extends Component {
               dataKey="type"
               className={f('col-type')}
               renderer={type => (
-                <Tooltip title={`${type} type`}>
+                <Tooltip title={`${type.replace('_', ' ')} type`}>
                   <interpro-type type={type.replace('_', ' ')} size="26px">
                     {type}
                   </interpro-type>
@@ -224,7 +224,7 @@ class List extends Component {
                         {mdb[db].map(accession => (
                           <Tooltip
                             key={accession}
-                            title={`${accession} signature`}
+                            title={`${accession} contributing entry`}
                           >
                             <span className={f('sign-label')}>
                               <Link
@@ -247,8 +247,8 @@ class List extends Component {
                   ))
                 }
               >
-                Signatures{' '}
-                <Tooltip title="Signature ID">
+                Database{' '}
+                <Tooltip title="Contributing entry ID">
                   <span className={f('sign-label-head')}>ID</span>
                 </Tooltip>
               </Column>
@@ -369,7 +369,7 @@ const Summary = props => {
       <div className={f('row')}>
         <div className={f('medium-12', 'large-12', 'columns')}>
           <Title metadata={payload.metadata} mainType="entry" />
-          <BrowseTabs />
+          <EntryMenu metadata={payload.metadata} />
         </div>
       </div>
       <Switch
