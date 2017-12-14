@@ -1412,6 +1412,14 @@ const HMMLogo = function(element, options = {}) {
     }
   };
 
+  this.toggle_visibility = function(element) {
+    if (element.style.display !== 'none' && element.style.display) {
+      element.style.display = 'none';
+    } else {
+      element.style.display = 'block';
+    }
+  };
+
   this.toggle_colorscheme = function(scheme) {
     // work out the current column we are on so we can return there
     const colTotal = this.current_column();
@@ -1437,9 +1445,10 @@ const HMMLogo = function(element, options = {}) {
     // re-flow and re-render the content
     this.scrollme.reflow();
     // scroll off by one to force a render of the canvas.
-    this.scrollToColumn(colTotal + 1);
+    this.scrollToColumn(colTotal + 10);
     // scroll back to the location we started at.
     this.scrollToColumn(colTotal);
+    this.render();
   };
 
   this.toggle_scale = function(scale) {
@@ -1464,9 +1473,7 @@ const HMMLogo = function(element, options = {}) {
     // with the new heights
     this.rendered = [];
     // update the y-axis
-    for (const element of this.called_on.getElementsByClassNames(
-      styles.logo_yaxis,
-    )) {
+    for (const element of document.getElementsByClassName(styles.logo_yaxis)) {
       element.remove();
     }
     this.render_y_axis_label();
@@ -1477,6 +1484,7 @@ const HMMLogo = function(element, options = {}) {
     this.scrollToColumn(colTotal + 1);
     // scroll back to the location we started at.
     this.scrollToColumn(colTotal);
+    this.render();
   };
 
   this.toggle_ali_map = function(coords) {
@@ -1509,6 +1517,7 @@ const HMMLogo = function(element, options = {}) {
     this.scrollToColumn(colTotal + 1);
     // scroll back to the location we started at.
     this.scrollToColumn(colTotal);
+    this.render();
   };
 
   this.current_column = function() {
@@ -1733,10 +1742,10 @@ const hmmLogo = function(logoElement, options = {}) {
 
     settings.innerHTML += `
       <fieldset><legend>Color Scheme</legend>
-        <label><input type="radio" name="color" class=${
+        <label><input type="radio" name="color" class="${
           styles.logo_color
         }" value="default" ${defColor}/>Default</label></br>
-        <label><input type="radio" name="color" class=${
+        <label><input type="radio" name="color" class="${
           styles.logo_color
         }" value="consensus" ${conColor}/>Consensus Colors</label>
       </fieldset>
@@ -1807,11 +1816,7 @@ const hmmLogo = function(logoElement, options = {}) {
     for (const element of logoElement.getElementsByClassName(name)) {
       element.addEventListener('click', e => {
         e.preventDefault();
-        if (settings.style.display !== 'none' && settings.style.display) {
-          settings.style.display = 'none';
-        } else {
-          settings.style.display = 'block';
-        }
+        logo.toggle_visibility(settings);
       });
     }
   }
