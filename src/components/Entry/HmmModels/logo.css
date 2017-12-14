@@ -201,6 +201,15 @@
   padding: 0.2em 0.3em;
 }
 .close {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 20px;
+  color: #000000;
+  text-shadow: 0 1px 0 #ffffff;
+  opacity: 0.2;
+  padding-right: 5px;
+  cursor: pointer;
 }
 .aa_A div {
   background: #ff9966;
