@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import PopperJS from 'popper.js';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import path2description from 'utils/processLocation/path2description';
 import { goToNewLocation } from 'actions/creators';
@@ -12,9 +13,11 @@ import { EntryColorMode } from './entry';
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import theme from 'styles/theme-interpro.css';
+import ipro from 'styles/interpro-new.css';
 import local from './style.css';
 
-const f = foundationPartial(local, fonts);
+const f = foundationPartial(local, theme, ipro, fonts);
 
 const requestFullScreen = element => {
   if ('requestFullscreen' in element) {
@@ -47,11 +50,13 @@ class DomainArchitecture extends Component {
     protein: T.object,
     data: T.object,
     goToNewLocation: T.func.isRequired,
+    children: T.any,
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      collapsed: false,
       entryHovered: null,
       colorMode: EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP,
     };
@@ -148,40 +153,120 @@ class DomainArchitecture extends Component {
     this.ec.changeColorMode(newValue);
   };
 
+  _handleCollapseToggle = () => {
+    this.setState(({ collapsed }) => ({ collapsed: !collapsed }));
+  };
+
+  toggleAll = () => {
+    const toCollapse = Object.values(this.state.filters).reduce(
+      (acc, v) => v && acc,
+      true,
+    );
+    const children = Array.isArray(this.props.children)
+      ? this.props.children
+      : [this.props.children];
+    this.setState({ filters: children.map(() => !toCollapse) });
+  };
+
+  _combiCol = () => {
+    this.handleCollapse();
+    this._handleCollapseToggle();
+  };
+
+  _combiExp = () => {
+    this.handleExpand();
+    this._handleCollapseToggle();
+  };
+
   render() {
+    const { collapsed } = this.state;
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
         <div className={f('row')}>
-          <div className={f('columns')}>
-            <div className={f('buttons')}>
-              Color By:{' '}
-              <select
-                className={f('select-inline')}
-                value={this.state.colorMode}
-                onChange={this.changeColor}
-                onBlur={this.changeColor}
-              >
-                <option value={EntryColorMode.COLOR_MODE_ACCESSION}>
-                  Accession
-                </option>
-                <option value={EntryColorMode.COLOR_MODE_MEMBERDB}>
-                  Member Database
-                </option>
-                <option value={EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP}>
-                  Domain Relationship
-                </option>
-              </select>
-              &nbsp;|&nbsp;
-              <button onClick={this.handleCollapse}>Collapse All</button>
-              &nbsp;|&nbsp;
-              <button onClick={this.handleExpand}>Expand All</button>
-              &nbsp;|&nbsp;
-              <button
-                onClick={this.handleFullScreen}
-                data-icon="F"
-                title="Full screen"
-                className={f('fullscreen', 'icon', 'icon-functional')}
-              />
+          <div className={f('columns', { collapsed })}>
+            <div className={f('view-options-wrap')}>
+              <div className={f('view-options-title')}>Domains on protein</div>
+              <div className={f('view-options')}>
+                <div className={f('option-color', 'margin-right-large')}>
+                  Color By:{' '}
+                  <select
+                    className={f('select-inline')}
+                    value={this.state.colorMode}
+                    onChange={this.changeColor}
+                    onBlur={this.changeColor}
+                  >
+                    <option
+                      value={EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP}
+                    >
+                      Domain Relationship
+                    </option>
+                    <option value={EntryColorMode.COLOR_MODE_MEMBERDB}>
+                      Member Database
+                    </option>
+                    <option value={EntryColorMode.COLOR_MODE_ACCESSION}>
+                      Accession
+                    </option>
+                  </select>
+                </div>
+                <div className={f('option-collapse')}>
+                  {collapsed ? (
+                    <Tooltip title="Expand all tracks">
+                      <button
+                        data-icon="9"
+                        // onClick={this.handleExpand}
+                        onClick={this._combiExp}
+                        // onClick={function(event){ this._handleCollapseToggle(); this.handleExpand();}}
+                        // onClick={(event) => { this._handleCollapseToggle; this.handleExpand;}}
+                        style={{ outline: '0' }}
+                        className={f(
+                          'icon',
+                          'icon-functional',
+                          'margin-right-large',
+                          'margin-bottom-none',
+                        )}
+                        aria-label="Expand all tracks"
+                      >
+                        {' '}
+                        Expand all
+                      </button>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Collapse all tracks">
+                      <button
+                        data-icon="8"
+                        onClick={this._combiCol}
+                        style={{ outline: '0' }}
+                        className={f(
+                          'icon',
+                          'icon-functional',
+                          'margin-right-large',
+                          'margin-bottom-none',
+                        )}
+                        aria-label="collapse all tracks"
+                      >
+                        {' '}
+                        Collapse all
+                      </button>
+                    </Tooltip>
+                  )}
+                </div>
+
+                <div className={f('option-fullscreen')}>
+                  <Tooltip title="View the domain viewer in full screen mode">
+                    <button
+                      onClick={this.handleFullScreen}
+                      data-icon="F"
+                      title="Full screen"
+                      className={f(
+                        'margin-bottom-none',
+                        'icon',
+                        'icon-functional',
+                      )}
+                      style={{ marginRight: '5.3rem' }}
+                    />
+                  </Tooltip>
+                </div>
+              </div>
             </div>
           </div>
         </div>
