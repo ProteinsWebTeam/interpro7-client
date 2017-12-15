@@ -101,7 +101,9 @@
       "lcov",
       "text-summary"
     ],
-    "transformIgnorePatterns": ["/node_modules/(?!lodash-es)"]
+    "transformIgnorePatterns": [
+      "/node_modules/(?!lodash-es)"
+    ]
   },
   "lint-staged": {
     "*.+(js|css)": [

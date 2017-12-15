@@ -20,7 +20,7 @@ const singleEntityNames = new Map(
 const whitelist = new Set(['Overview', 'Domain Architectures', 'Sequence']);
 
 /*:: type Props = {
-  newTo: Object | function,
+  to: Object | function,
   name: string,
   counter: string,
   data: {
@@ -44,7 +44,7 @@ const mapNameToClass = new Map([
 
 class EntryMenuLink extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    newTo: T.oneOfType([T.object, T.func]).isRequired,
+    to: T.oneOfType([T.object, T.func]).isRequired,
     name: T.string.isRequired,
     counter: T.string,
     data: T.shape({
@@ -57,7 +57,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
 
   render() {
     const {
-      newTo,
+      to,
       name,
       counter,
       data: { loading, payload },
@@ -104,7 +104,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     return (
       <li className={f('tabs-title')}>
         <Link
-          newTo={newTo}
+          to={to}
           className={f(
             payload.metadata.source_database.toLowerCase() === 'interpro'
               ? mapNameToClass.get(payload.metadata.type)

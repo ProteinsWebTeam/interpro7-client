@@ -149,8 +149,8 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             },
             entry: {
               isFilter: true,
-              db:
-                key === 'set' ? customLocation.description[key].db : 'InterPro',
+              db: key === 'set' ? customLocation.description[key].db : null,
+              integration: key === 'set' ? null : 'all',
             },
           },
         };

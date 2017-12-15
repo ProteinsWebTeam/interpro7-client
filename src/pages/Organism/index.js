@@ -280,7 +280,7 @@ class Summary extends PureComponent {
                 (Object.entries(l.description).find(
                   ([_key, value]) => value.isFilter,
                 ) || [])[0] ||
-                l.description[key].memberDB
+                l.description[key].proteomeDB
               );
             }}
             indexRoute={SummaryComponent}
