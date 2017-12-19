@@ -39,6 +39,7 @@
 .residue:hover > text {
   font-weight: bold;
 }
+
 .residues .entry-instance > rect {
   stroke-width: 0;
 }
@@ -69,7 +70,7 @@
 }
 
 .view-options-title {
-  font-size: 150%;
+  font-size: 140%;
   font-family: var(--fonts-system);
 }
 
@@ -93,6 +94,10 @@
 /*sequence viewer - right links*/
 .link {
   cursor: pointer;
+}
+.link:hover {
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 .select-inline,
