@@ -144,8 +144,8 @@ class List extends PureComponent {
                   to={customLocation => ({
                     ...customLocation,
                     description: {
-                      main: { key: customLocation.description.mainType },
-                      [customLocation.description.mainType]: {
+                      main: { key: 'set' },
+                      set: {
                         db: source_database,
                         accession,
                       },
@@ -173,8 +173,8 @@ class List extends PureComponent {
                   to={customLocation => ({
                     ...customLocation,
                     description: {
-                      main: { key: customLocation.description.mainType },
-                      [customLocation.description.mainType]: {
+                      main: { key: 'set' },
+                      set: {
                         db: source_database,
                         accession,
                       },
