@@ -104,7 +104,9 @@ mark {
 }
 
 .button.hollow,
-.button.hollow.primary {
+.button.hollow.primary,
+.button.hollow.secondary,
+.button.hollow.neutral {
   background-color: transparent;
   @nest &:hover {
     background-color: transparent;
@@ -115,6 +117,16 @@ mark {
   @nest &:focus {
     background-color: transparent;
   }
+}
+
+.button.hollow.neutral {
+  border: 1px solid #222;
+  color: #222;
+}
+
+.button.hollow.neutral:hover {
+  border: 1px solid #0a0a0a;
+  color: #0a0a0a;
 }
 
 .button.hollow.tertiary {
