@@ -275,7 +275,6 @@ class EntryRenderer {
         .attr('y', this.trackHeight - 1)
         .attr('height', this.childrenRender.innerHeight + this.tPadding.bottom)
         .attr('width', m => this.x(m[1] - m[0]))
-        .style('fill', 'rgba(0,0,0,0.1)')
         // .style('stroke', '#000000a6')
         .attr('stroke-dasharray', '0,2');
 
