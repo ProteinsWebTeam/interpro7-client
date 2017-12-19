@@ -145,7 +145,7 @@ const memberDB = new Set([
   { name: 'smart', re: /^SM[0-9]{5}$/i },
   { name: 'ssf', re: /^SSF[0-9]{5,6}$/i },
   { name: 'tigrfams', re: /^TIGR[0-9]{5}$/i },
-  { name: 'mobidblt', re: /^\w+$/ },
+  { name: 'mobidblt', re: /^(\w|-)+$/ },
 ]);
 const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
 

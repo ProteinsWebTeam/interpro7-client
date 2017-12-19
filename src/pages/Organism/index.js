@@ -54,7 +54,7 @@ class Overview extends PureComponent {
     const { data: { payload = defaultPayload } } = this.props;
     return (
       <ul className={f('card')}>
-        {Object.entries(payload.proteins || {}).map(([name, count]) => (
+        {Object.entries(payload.organisms || {}).map(([name, count]) => (
           <li key={name}>
             <Link
               to={{
@@ -134,10 +134,16 @@ class List extends PureComponent {
                 <Link
                   to={customLocation => ({
                     description: {
-                      ...customLocation.description,
+                      main: { key: 'organism' },
                       organism: {
                         ...customLocation.description.organism,
-                        accession,
+                        accession: customLocation.description.organism.db
+                          ? accession.toString()
+                          : null,
+                        proteomeAccession: customLocation.description.organism
+                          .proteomeDB
+                          ? accession.toString()
+                          : null,
                       },
                     },
                   })}
@@ -160,10 +166,10 @@ class List extends PureComponent {
                 <Link
                   to={customLocation => ({
                     description: {
-                      ...customLocation.description,
+                      main: { key: 'organism' },
                       organism: {
                         ...customLocation.description.organism,
-                        accession,
+                        accession: accession.toString(),
                       },
                     },
                   })}
@@ -238,12 +244,22 @@ const mapStateToAccessionUrl = createSelector(
   state => state.settings.api,
   state => state.customLocation.description.organism.db,
   state => state.customLocation.description.organism.accession,
-  ({ protocol, hostname, port, root }, db, accession) =>
+  state => state.customLocation.description.organism.proteomeDB,
+  state => state.customLocation.description.organism.proteomeAccession,
+  (
+    { protocol, hostname, port, root },
+    db,
+    accession,
+    proteomeDB,
+    proteomeAccession,
+  ) =>
     format({
       protocol,
       hostname,
       port,
-      pathname: `${root}/organism/${db}/${accession}`,
+      pathname: `${root}/organism/${db || ''}/${accession || ''}/${
+        proteomeAccession ? proteomeDB : ''
+      }/${proteomeAccession || ''}`,
     }),
 );
 
@@ -280,7 +296,7 @@ class Summary extends PureComponent {
                 (Object.entries(l.description).find(
                   ([_key, value]) => value.isFilter,
                 ) || [])[0] ||
-                l.description[key].proteomeDB
+                (l.description[key].accession && l.description[key].proteomeDB)
               );
             }}
             indexRoute={SummaryComponent}
@@ -303,6 +319,7 @@ class InnerSwitch extends PureComponent {
           locationSelector={l => {
             const { key } = l.description.main;
             return (
+              l.description[key].proteomeAccession ||
               l.description[key].accession ||
               (Object.entries(l.description).find(
                 ([_key, value]) => value.isFilter,
@@ -353,7 +370,10 @@ class Organism extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => l.description[l.description.main.key].db}
+            locationSelector={l =>
+              l.description[l.description.main.key].db ||
+              l.description[l.description.main.key].proteomeDB
+            }
             indexRoute={Overview}
             catchAll={InnerSwitch}
           />

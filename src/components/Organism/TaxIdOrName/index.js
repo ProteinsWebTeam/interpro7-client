@@ -45,7 +45,7 @@ class TaxIdOrName extends PureComponent /*:: <Props> */ {
         to={{
           description: {
             main: { key: 'organism' },
-            organism: { db: 'taxonomy', accession },
+            organism: { db: 'taxonomy', accession: accession.toString() },
           },
         }}
       >

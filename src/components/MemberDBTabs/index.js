@@ -245,9 +245,8 @@ const getUrlForMemberDB = createSelector(
   ({ protocol, hostname, port, root }, description) => {
     let output = `${protocol}//${hostname}:${port}${root}/entry`;
     if (description.main.key && description.main.key !== 'entry') {
-      output += `/${description.main.key}/${
-        description[description.main.key].db
-      }`;
+      output += `/${description.main.key}/${description[description.main.key]
+        .proteomeDB || description[description.main.key].db}`;
     }
     return output;
   },

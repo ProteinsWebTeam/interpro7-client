@@ -127,6 +127,9 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             [key]: {
               ...customLocation.description[key],
               detail: null,
+              proteomeDB: customLocation.description[key].proteomeAccession
+                ? 'proteome'
+                : null,
             },
           },
         };
@@ -146,6 +149,9 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             [key]: {
               ...customLocation.description[key],
               detail: null,
+              proteomeDB: customLocation.description[key].proteomeAccession
+                ? 'proteome'
+                : null,
             },
             entry: {
               isFilter: true,
@@ -171,6 +177,9 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             [key]: {
               ...customLocation.description[key],
               detail: null,
+              proteomeDB: customLocation.description[key].proteomeAccession
+                ? 'proteome'
+                : null,
             },
             protein: {
               isFilter: true,
@@ -195,6 +204,9 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             [key]: {
               ...customLocation.description[key],
               detail: null,
+              proteomeDB: customLocation.description[key].proteomeAccession
+                ? 'proteome'
+                : null,
             },
             structure: {
               isFilter: true,
@@ -243,6 +255,9 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             [key]: {
               ...customLocation.description[key],
               detail: null,
+              proteomeDB: customLocation.description[key].proteomeAccession
+                ? 'proteome'
+                : null,
             },
             set: {
               isFilter: true,

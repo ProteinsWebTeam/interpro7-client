@@ -137,10 +137,11 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 class SummaryProteome extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
-      metadata: T.object.isRequired,
+      payload: T.shape({
+        metadata: T.object.isRequired,
+      }),
     }).isRequired,
   };
-
   render() {
     const { data: { payload: { metadata } } } = this.props;
     return (
@@ -154,7 +155,10 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             // ) : null
           }
           <div>
-            <Accession accession={metadata.accession} id={metadata.id} />
+            <Accession
+              id={metadata.id}
+              accession={metadata.proteomeAccession || metadata.accession}
+            />
           </div>
           <div>Strain: {metadata.strain}</div>
           <div>
@@ -194,10 +198,16 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
       }),
     }).isRequired,
     loading: T.bool.isRequired,
+    isStale: T.bool.isRequired,
   };
 
   render() {
-    if (this.props.loading || !this.props.data || !this.props.data.payload) {
+    if (
+      this.props.loading ||
+      !this.props.data ||
+      !this.props.data.payload ||
+      this.props.isStale
+    ) {
       return <Loading />;
     }
     const { metadata: { source_database: db } } = this.props.data.payload;
@@ -210,6 +220,7 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default loadData((...args) => `${getUrlForApi(...args)}?with_names`)(
-  connect(null, { goToCustomLocation })(SummaryOrganism),
-);
+export default loadData((...args) => {
+  const url = getUrlForApi(...args);
+  return `${url}${url.indexOf('?') < 0 ? '?' : '&'}with_names`;
+})(connect(null, { goToCustomLocation })(SummaryOrganism));
