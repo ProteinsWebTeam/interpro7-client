@@ -87,7 +87,7 @@ mark {
 
 /* buttons (secondary, alert, hollow) - redefine foundation style*/
 .button.alert {
-  background-color: tomato;
+  background-color: var(--colors-alert-main);
 }
 .button.alert:hover,
 .button.alert:active,
@@ -195,6 +195,19 @@ div#local-title {
   margin-right: 0.5rem;
 }
 
+.callout.slk {
+  background-color: transparent;
+  border: 1px solid var(--colors-nearly-white);
+  border-left: #d72b3f 4px solid;
+  border-radius: 0.25rem;
+  color: #222;
+}
+.callout.slk.withicon::before {
+  content: 'l';
+  font-family: 'EBI-Generic';
+  color: #d72b3f;
+  margin-right: 0.5rem;
+}
 /*ICONS*/
 /*MEMBER DATABASE SVG icons*/
 .svg-mask {
@@ -268,7 +281,7 @@ div#local-title {
   color: grey;
 }
 .ico-notfound::before {
-  color: tomato;
+  color: var(--colors-alert-main);
 }
 /*/I5 result page icons*/
 /*/ICONS*/
