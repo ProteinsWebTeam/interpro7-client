@@ -116,16 +116,19 @@ class DomainArchitecture extends Component {
   };
 
   getElementFromEntry(entry) {
-    const tagString = `<div>
-        <h4>${entry.label || entry.accession}</h4>
-        <p>${entry.entry_type || ''}</p>
-        <p>${
+    const tagString = `<div className={f('info-win')}>
+        <h5 style="text-transform: uppercase; font-weight: bold;">${
+          entry.accession
+        }</h5>
+        <p style="text-transform: capitalize;">${entry.entry_type || ''}</p>
+        <p style="text-transform: uppercase;">
+        <small>${
           Array.isArray(entry.source_database)
             ? entry.source_database[0]
             : entry.source_database
         }
           ${entry.entry ? `(${entry.entry})` : ''}
-        </p>
+        </small></p>
       </div>`;
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));
