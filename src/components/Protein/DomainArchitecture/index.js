@@ -187,7 +187,7 @@ class DomainArchitecture extends Component {
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
         <div className={f('row')}>
           <div className={f('columns', { collapsed })}>
-            <div className={f('view-options-wrap')}>
+            <div className={f('view-options-wrap', 'margin-top-medium')}>
               <div className={f('view-options-title')}>Domains on protein</div>
               <div className={f('view-options')}>
                 <div className={f('option-color', 'margin-right-large')}>
