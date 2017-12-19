@@ -57,7 +57,9 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
-              <h4>Domains on Protein</h4>
+              {
+                // <h4>Domains on Protein</h4>
+              }
               <DomainsOnProtein mainData={data} />
             </div>
           </div>
