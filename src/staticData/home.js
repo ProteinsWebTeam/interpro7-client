@@ -305,7 +305,7 @@ export const speciesFeat = [
     coverage: 54,
     icon: '6',
     color: '#5cb85c',
-    tax_id: 39947,
+    tax_id: '39947',
   },
   {
     title: 'Mouse-ear cress',
@@ -316,7 +316,7 @@ export const speciesFeat = [
     coverage: 79,
     icon: 'B',
     color: '#5cb85c',
-    tax_id: 3702,
+    tax_id: '3702',
   },
   {
     title: 'Human',
@@ -327,7 +327,7 @@ export const speciesFeat = [
     coverage: 70,
     icon: 'H',
     color: '#d9534f',
-    tax_id: 9606,
+    tax_id: '9606',
   },
   {
     title: 'Zebrafish',
@@ -338,7 +338,7 @@ export const speciesFeat = [
     coverage: 87,
     icon: 'Z',
     color: '#d9534f',
-    tax_id: 7955,
+    tax_id: '7955',
   },
   {
     title: 'Mouse',
@@ -349,7 +349,7 @@ export const speciesFeat = [
     coverage: 80,
     icon: 'M',
     color: '#d9534f',
-    tax_id: 10090,
+    tax_id: '10090',
   },
   {
     title: 'Fruit fly',
@@ -360,7 +360,7 @@ export const speciesFeat = [
     coverage: 80,
     icon: 'F',
     color: '#d9534f',
-    tax_id: 7227,
+    tax_id: '7227',
   },
   {
     title: 'Caenorhabditis elegans',
@@ -371,7 +371,7 @@ export const speciesFeat = [
     coverage: 67,
     icon: 'W',
     color: '#d9534f',
-    tax_id: 6239,
+    tax_id: '6239',
   },
   {
     title: 'Baker’s yeast',
@@ -382,7 +382,7 @@ export const speciesFeat = [
     coverage: 74,
     icon: 'Y',
     color: '#5bc0de',
-    tax_id: 559292,
+    tax_id: '559292',
   },
   {
     title: 'Fission yeast',
@@ -393,7 +393,7 @@ export const speciesFeat = [
     coverage: 87,
     icon: 'Y',
     color: '#5bc0de',
-    tax_id: 284812,
+    tax_id: '284812',
   },
   {
     title: 'Escherichia coli',
@@ -404,7 +404,7 @@ export const speciesFeat = [
     coverage: 73,
     icon: 'L',
     color: '#5bc0de',
-    tax_id: 83333,
+    tax_id: '83333',
   },
   {
     title: 'Caulobacter phage phiCbK',
@@ -415,7 +415,7 @@ export const speciesFeat = [
     coverage: 13,
     icon: 'v',
     color: '#5bc0de',
-    tax_id: 1204537,
+    tax_id: '1204537',
   },
   {
     title: 'Unclassified',

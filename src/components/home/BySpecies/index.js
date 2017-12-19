@@ -113,10 +113,11 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                   <Link
                     to={{
                       description: {
-                        main: { key: 'organism' },
+                        main: { key: 'entry' },
                         organism: {
                           db: 'taxonomy',
                           accession: e.tax_id,
+                          isFilter: true,
                         },
                         entry: { db: 'InterPro' },
                       },
@@ -137,10 +138,11 @@ class BySpecies extends PureComponent /*:: <Props> */ {
                   <Link
                     to={{
                       description: {
-                        main: { key: 'organism' },
+                        main: { key: 'protein' },
                         organism: {
                           db: 'taxonomy',
                           accession: e.tax_id,
+                          isFilter: true,
                         },
                         protein: { db: 'UniProt' },
                       },
