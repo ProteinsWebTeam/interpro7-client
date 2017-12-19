@@ -185,8 +185,8 @@ class DomainArchitecture extends Component {
     const { collapsed } = this.state;
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
-        <div className={f('row')}>
-          <div className={f('columns', { collapsed })}>
+        <div className={f('row', { collapsed })}>
+          <div className={f('columns')}>
             <div className={f('view-options-wrap', 'margin-top-medium')}>
               <div className={f('view-options-title')}>Domains on protein</div>
               <div className={f('view-options')}>
