@@ -59,9 +59,12 @@
 .signature-match {
   stroke-dasharray: 3, 2;
 } /*if we want signature blobs to be differenc*/
-.entry-children-bg {
-  fill: transparent;
+
+.entry-children-bg,
+.signature-children-bg {
+  fill: rgba(0, 0, 0, 0.1);
 }
+
 /*top option*/
 .view-options-wrap {
   display: flex;
