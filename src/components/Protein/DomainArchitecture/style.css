@@ -63,7 +63,12 @@
 .entry-children-bg,
 .signature-children-bg {
   fill: rgba(0, 0, 0, 0.1);
+  transition: fill 0.2s ease-in-out;
 }
+
+.collapsed + .row .entry-children-bg {
+  fill: transparent;
+} /*remove bgd children when collapsed - otherwsie grey bar stays*/
 
 /*top option*/
 .view-options-wrap {
