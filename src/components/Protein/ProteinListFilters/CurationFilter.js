@@ -51,9 +51,8 @@ class CurationFilter extends Component {
   }
 
   locationToState(customLocation) {
-    const { db } = customLocation.description[
-      customLocation.description.main.key
-    ].db;
+    const db =
+      customLocation.description[customLocation.description.main.key].db;
     if (db === 'reviewed') {
       this.setState({ value: 'reviewed' });
     } else if (db === 'unreviewed') {
@@ -69,7 +68,7 @@ class CurationFilter extends Component {
       ...this.props.customLocation,
       description: {
         ...this.props.customLocation.description,
-        main: { key: value },
+        protein: { db: value },
       },
       search: {
         ...this.props.customLocation.search,

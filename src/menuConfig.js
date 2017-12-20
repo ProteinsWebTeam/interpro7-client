@@ -52,10 +52,8 @@ export const entities /*: Array<Object> */ = [
         description: {
           main: { key: 'entry' },
           entry: {
-            db:
-              customLocation.description.entry.integration ||
-              customLocation.description.entry.db ||
-              'InterPro',
+            db: customLocation.description.entry.db || 'InterPro',
+            integration: customLocation.description.entry.integration,
           },
         },
       };
