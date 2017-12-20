@@ -39,7 +39,7 @@ class TaxonomyFilter extends PureComponent {
       description: {
         ...customLocation.description,
         organism: {
-          isFilter: true,
+          isFilter: value !== 'ALL',
           db: value === 'ALL' ? null : 'taxonomy',
           accession: value === 'ALL' ? null : value,
         },

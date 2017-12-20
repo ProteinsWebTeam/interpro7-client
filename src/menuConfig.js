@@ -44,6 +44,11 @@ const getEntryForFilter = ({ entry }) => {
     return { ...entry, isFilter: true };
   }
 };
+const getOrganismForFilter = ({ organism }) => {
+  if (organism.db) {
+    return { ...organism, isFilter: true };
+  }
+};
 
 export const entities /*: Array<Object> */ = [
   {
@@ -65,8 +70,9 @@ export const entities /*: Array<Object> */ = [
       return {
         description: {
           main: { key: 'protein' },
-          protein: { db: 'UniProt' },
+          protein: { db: customLocation.description.protein.db || 'UniProt' },
           entry: getEntryForFilter(customLocation.description),
+          organism: getOrganismForFilter(customLocation.description),
         },
       };
     },
