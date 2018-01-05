@@ -29,16 +29,21 @@ const HMMModel = loadable({
 
 const defaultMapStateToProps = createSelector(
   state => state.settings.api,
-  state => state.settings.pagination,
+  state => state.settings.navigation.pageSize,
   state => state.customLocation.description,
   state => state.customLocation.search,
-  ({ protocol, hostname, port, root }, pagination, description, _search) => {
+  (
+    { protocol, hostname, port, root },
+    settingsPageSize,
+    description,
+    _search,
+  ) => {
     // const search = _search || {};
     const search =
       description.main.key && description[description.main.key].accession
         ? {}
         : _search || {};
-    search.page_size = search.page_size || pagination.pageSize;
+    search.page_size = search.page_size || settingsPageSize;
     // TODO: We were doing a copy of selected field here, but seems that we can use the original
     // TODO: Delete the commented lines if nothing breaks (31/10/2017)
     // const description = {

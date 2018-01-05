@@ -69,7 +69,7 @@ class PageSizeSelector extends Component {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.pagination.pageSize,
+  state => state.settings.navigation.pageSize,
   state => state.customLocation,
   (pageSize, customLocation) => ({ pageSize, customLocation }),
 );

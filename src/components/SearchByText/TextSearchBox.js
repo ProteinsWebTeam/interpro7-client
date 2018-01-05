@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,7 +15,6 @@ import local from './style.css';
 
 const f = foundationPartial(interproTheme, fonts, local);
 
-const INTERPRO_ACCESSION_PADDING = 6;
 const DEBOUNCE_RATE = 1000; // 1s
 
 class TextSearchBox extends Component {
@@ -43,16 +43,12 @@ class TextSearchBox extends Component {
       page: 1,
       page_size: pageSize,
     };
-    let { value } = this.state;
-    if (!replace && Number.isFinite(+value)) {
-      value = `IPR${value.padStart(INTERPRO_ACCESSION_PADDING, '0')}`;
-    }
     // this.setState({redirecting: {pathname, query}});
     this.props.goToCustomLocation(
       {
         description: {
           main: { key: 'search' },
-          search: { type: 'text', value },
+          search: { type: 'text', value: this.state.value },
         },
         search: query,
       },
@@ -93,7 +89,7 @@ class TextSearchBox extends Component {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.pagination.pageSize,
+  state => state.settings.navigation.pageSize,
   state => state.customLocation.description.search.value,
   (pageSize, value) => ({ pageSize, value }),
 );

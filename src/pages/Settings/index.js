@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -16,9 +17,9 @@ import styles from './styles.css';
 
 const f = foundationPartial(theme, styles);
 
-const PaginationSettings = ({ pagination: { pageSize } }) => (
-  <form data-category="pagination">
-    <h4>Pagination settings</h4>
+const NavigationSettings = ({ navigation: { pageSize, autoRedirect } }) => (
+  <form data-category="navigation">
+    <h4>Navigation settings</h4>
     <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
         <label>
@@ -41,11 +42,39 @@ const PaginationSettings = ({ pagination: { pageSize } }) => (
         </label>
       </div>
     </div>
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        <p>
+          Redirect automatically to an entity page if an exact match has been
+          found:
+        </p>
+        <div className={f('switch', 'large')}>
+          <input
+            type="checkbox"
+            checked={autoRedirect}
+            className={f('switch-input')}
+            name="autoRedirect"
+            id="autoRedirect-input"
+            onChange={noop}
+          />
+          <label className={f('switch-paddle')} htmlFor="autoRedirect-input">
+            <span className={f('show-for-sr')}>Automatic redirect:</span>
+            <span className={f('switch-active')} aria-hidden="true">
+              On
+            </span>
+            <span className={f('switch-inactive')} aria-hidden="true">
+              Off
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
   </form>
 );
-PaginationSettings.propTypes = {
-  pagination: T.shape({
+NavigationSettings.propTypes = {
+  navigation: T.shape({
     pageSize: T.number.isRequired,
+    autoRedirect: T.bool.isRequired,
   }).isRequired,
   handleChange: T.func.isRequired,
 };
@@ -66,6 +95,7 @@ const UISettings = ({ ui: { lowGraphics } }) => (
             className={f('switch-input')}
             name="lowGraphics"
             id="lowGraphics-input"
+            onChange={noop}
           />
           <label className={f('switch-paddle')} htmlFor="lowGraphics-input">
             <span className={f('show-for-sr')}>Low graphics mode:</span>
@@ -100,6 +130,7 @@ const CacheSettings = ({ cache: { enabled } }) => (
             className={f('switch-input')}
             name="enabled"
             id="cache-input"
+            onChange={noop}
           />
           <label className={f('switch-paddle')} htmlFor="cache-input">
             <span className={f('show-for-sr')}>Caching:</span>
@@ -216,7 +247,7 @@ const IPScanEndpointSettings = loadData({
 
 const Settings = ({
   settings: {
-    pagination = {},
+    navigation = {},
     ui = {},
     cache = {},
     api = {},
@@ -231,8 +262,8 @@ const Settings = ({
       <section onChange={changeSettings}>
         <h3>Settings</h3>
 
-        <PaginationSettings
-          pagination={pagination}
+        <NavigationSettings
+          navigation={navigation}
           handleChange={changeSettings}
         />
         <UISettings ui={ui} />
@@ -255,7 +286,7 @@ const Settings = ({
 );
 Settings.propTypes = {
   settings: T.shape({
-    pagination: T.object.isRequired,
+    navigation: T.object.isRequired,
     ui: T.object.isRequired,
     cache: T.object.isRequired,
     api: T.object.isRequired,

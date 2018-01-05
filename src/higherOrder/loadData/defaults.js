@@ -9,10 +9,15 @@ export const getUrl = createSelector(
   key =>
     createSelector(
       state => state.settings[key],
-      state => state.settings.pagination,
+      state => state.settings.navigation.pageSize,
       state => state.customLocation.description,
       state => state.customLocation.search,
-      ({ protocol, hostname, port, root }, pagination, description, search) => {
+      (
+        { protocol, hostname, port, root },
+        settingsPageSize,
+        description,
+        search,
+      ) => {
         const s =
           description.main.key && description[description.main.key].accession
             ? {}
@@ -24,7 +29,7 @@ export const getUrl = createSelector(
           ) &&
           !description.entry.memberDB
         )
-          s.page_size = s.page_size || pagination.pageSize;
+          s.page_size = s.page_size || settingsPageSize;
         return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
           description,
         )}?${qsStringify(s)}`.replace(/\?$/, '');

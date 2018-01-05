@@ -1,0 +1,22 @@
+@import '../../../styles/colors.css';
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings {
+  flex-direction: column;
+}
+
+.switch {
+  margin: 1ch;
+}
+
+.link-in-tooltip {
+  &,
+  &:visited {
+    color: var(--colors-interpro);
+  }
+}

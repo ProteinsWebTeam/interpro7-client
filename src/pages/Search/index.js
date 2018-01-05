@@ -5,7 +5,6 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
-import SearchResults from 'components/SearchResults';
 
 import loadable from 'higherOrder/loadable';
 
@@ -17,6 +16,10 @@ const f = foundationPartial(ipro);
 const SearchByText = loadable({
   loader: () =>
     import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
+});
+const SearchResults = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "search-results" */ 'components/SearchResults'),
 });
 const IPScanSearch = loadable({
   loader: () =>
@@ -37,6 +40,10 @@ const TextSearchAndResults = () => (
     <SearchResults key="results" />
   </Wrapper>
 );
+TextSearchAndResults.preload = () => {
+  SearchByText.preload();
+  SearchResults.preload();
+};
 
 const IPScanSearchAndStatus = () => (
   <Wrapper>
@@ -87,8 +94,8 @@ class Wrapper extends PureComponent {
           <ul className={f('tabs', 'main-style', 'margin-top-large')}>
             <li
               className={f('tabs-title')}
-              onMouseOver={SearchByText.preload}
-              onFocus={SearchByText.preload}
+              onMouseOver={TextSearchAndResults.preload}
+              onFocus={TextSearchAndResults.preload}
             >
               <Link
                 to={{
