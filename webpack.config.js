@@ -476,6 +476,7 @@ module.exports = (env = { dev: true }) => {
         ? new (getCompressionPlugin())({
             asset: '[path].gz[query]',
             test: /\.(js|css|html|svg)$/i,
+            cache: true,
             algorithm(buffer, options, callback) {
               require('node-zopfli').gzip(buffer, options, callback);
             },
@@ -486,6 +487,7 @@ module.exports = (env = { dev: true }) => {
         ? new (getCompressionPlugin())({
             asset: '[path].br[query]',
             test: /\.(js|css|html|svg)$/i,
+            cache: true,
             algorithm(buffer, _, callback) {
               require('iltorb').compress(
                 buffer,
