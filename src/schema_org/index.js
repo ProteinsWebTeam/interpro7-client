@@ -1,3 +1,4 @@
+// @flow
 import { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -23,10 +24,11 @@ export class Manager {
     _dataMap: Map<string, Object>
     _plannedRender: boolean
   */
-  constructor(
-    { maxDelay = DEFAULT_MAX_DELAY, dev, root } = {},
-    /*: {maxDelay: number, dev: ?boolean} */
-  ) {
+  constructor({
+    maxDelay = DEFAULT_MAX_DELAY,
+    dev,
+    root,
+  } /*: {maxDelay: number, dev: ?boolean} */ = {}) {
     // Skip if no document present
     if (!document) return;
     // Create container script node

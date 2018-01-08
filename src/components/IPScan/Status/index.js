@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
@@ -153,12 +154,10 @@ class IPScanStatus extends Component {
                   ) => b - a,
                 )
                 .map(
-                  (
-                    [
-                      jobId,
-                      { id, status, times: { created, lastUpdate }, saved },
-                    ],
-                  ) => {
+                  ([
+                    jobId,
+                    { id, status, times: { created, lastUpdate }, saved },
+                  ]) => {
                     const lastUpdateDate = new Date(lastUpdate);
                     const createdDate = new Date(created);
                     return (

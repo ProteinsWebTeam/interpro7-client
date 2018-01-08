@@ -3,7 +3,7 @@ import { addToast, removeToast } from 'actions/creators';
 import { DEV } from 'config';
 import id from 'utils/cheapUniqueId';
 
-// import type {Store} from 'flow-typed/npm/redux';
+// import type { Store } from 'flow-typed/npm/redux';
 
 let toastManager;
 

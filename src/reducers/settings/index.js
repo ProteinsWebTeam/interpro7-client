@@ -1,3 +1,4 @@
+// @flow
 import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
 // import settingsStorage from 'storage/settings';
 import config from 'config';

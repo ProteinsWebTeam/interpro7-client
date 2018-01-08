@@ -1,3 +1,4 @@
+// @flow
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';

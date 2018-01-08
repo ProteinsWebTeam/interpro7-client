@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-param-reassign */
 import { select } from 'd3';
 import ColorHash from 'color-hash/lib/color-hash';

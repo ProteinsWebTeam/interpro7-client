@@ -1,3 +1,4 @@
+// @flow
 /* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 25, 50, 15, 30, 100]}] */
 import React, { Component } from 'react';
 import T from 'prop-types';

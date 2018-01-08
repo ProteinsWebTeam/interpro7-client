@@ -17,6 +17,7 @@
     "dev:test:lint": "npm run test:lint -- --watch",
     "dev:test:unit": "npm run test:unit -- --watch",
     "flow-typed:install": "npx flow-typed install",
+    "flow-coverage": "npx flow-coverage-report -i 'src/**/*.js'",
     "lint:fix": "npm run test:lint -- --fix",
     "clean": "rimraf dist",
     "bundle": "webpack --progress",

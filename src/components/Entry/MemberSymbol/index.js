@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import { foundationPartial } from 'styles/foundation';
@@ -30,13 +31,11 @@ const classNames = {
   NEW: f('md-new'),
 };
 
-const MemberSymbol = ({ type, className = '' }) => {
+const MemberSymbol = (
+  { type, className = '' } /*: { type: string, className?: string }*/,
+) => {
   const id = uniqueId();
   return (
-    /*: {
-     type: string
-     className?: string
-     }*/
     <div>
       <svg
         xmlns="http://www.w3.org/2000/svg"

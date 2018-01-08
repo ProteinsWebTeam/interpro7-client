@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import filesize from 'filesize';
 
@@ -31,7 +32,7 @@ class DiskUsage extends PureComponent {
     } else {
       const ratio = Math.round(usage / quota * PERCENT);
       content = `Using approximately ${getFileSize(usage)} out of ${getFileSize(
-        quota
+        quota,
       )} of available quota (${ratio ? 'about' : 'less than'} ${ratio}%)`;
     }
     return (

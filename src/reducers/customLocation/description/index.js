@@ -1,3 +1,4 @@
+// @flow
 import { NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 import getEmptyDescription from 'utils/processDescription/emptyDescription';

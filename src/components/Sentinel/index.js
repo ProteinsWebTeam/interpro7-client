@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,7 +15,7 @@ const listenScrolledIO = (element, { stick, unstick }) => {
       // If the EBI header is visible, display full banner
       notStuck ? unstick() : stick();
     },
-    { threshold: [1] }
+    { threshold: [1] },
   );
   io.observe(element);
   return {

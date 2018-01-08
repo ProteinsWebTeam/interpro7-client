@@ -1,7 +1,8 @@
+// @flow
 /* eslint-env node */
-import {DEV} from 'config';
+import { DEV } from 'config';
 
-export default (store/*: Store */) => {
+export default (store /*: Store */) => {
   if (!(DEV && module && module.hot)) return;
   // If any change to the root reducer or its dependency tree
   module.hot.accept('reducers', () => {

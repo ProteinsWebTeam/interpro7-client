@@ -20,9 +20,11 @@ const DEBOUNCE_RATE = 1000; // 1s
 class TextSearchBox extends Component {
   static propTypes = {
     pageSize: T.number,
+    main: T.string,
     value: T.string,
     className: T.string,
     goToCustomLocation: T.func,
+    inputRef: T.func,
   };
 
   constructor(props) {
@@ -68,6 +70,10 @@ class TextSearchBox extends Component {
     this.debouncedPush(true);
   };
 
+  focus = () => {
+    if (this._input) this._input.focus();
+  };
+
   render() {
     return (
       <div className={f('input-group', 'margin-bottom-small')}>
@@ -81,6 +87,7 @@ class TextSearchBox extends Component {
             onKeyPress={this.handleKeyPress}
             className={this.props.className}
             required
+            ref={this.props.inputRef}
           />
         </div>
       </div>
@@ -90,8 +97,9 @@ class TextSearchBox extends Component {
 
 const mapStateToProps = createSelector(
   state => state.settings.navigation.pageSize,
+  state => state.customLocation.description.main.key,
   state => state.customLocation.description.search.value,
-  (pageSize, value) => ({ pageSize, value }),
+  (pageSize, main, value) => ({ pageSize, main, value }),
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(TextSearchBox);

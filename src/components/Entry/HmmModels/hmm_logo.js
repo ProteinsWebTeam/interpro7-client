@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-magic-numbers */
 import EasyScroller from './scroller';
@@ -1718,9 +1719,7 @@ const hmmLogo = function(logoElement, options = {}) {
       }" value="obs" ${obsChecked}/>Maximum Observed ${obsHelp}</label></br>` +
       `<label><input type="radio" name="scale" class="${
         styles.logo_scale
-      }" value="theory" ${theoryChecked}/>Maximum Theoretical ${
-        theoryHelp
-      }</label>` +
+      }" value="theory" ${theoryChecked}/>Maximum Theoretical ${theoryHelp}</label>` +
       '</fieldset>';
 
     settings.innerHTML += scaleControls;
@@ -1978,9 +1977,7 @@ const hmmLogo = function(logoElement, options = {}) {
 
       const columnInfo = document.createElement('div');
       columnInfo.id = 'logo_column_info';
-      columnInfo.innerHTML = `<div style="text-align: center;"><span>Column:${
-        col
-      } &nbsp;</span>
+      columnInfo.innerHTML = `<div style="text-align: center;"><span>Column:${col} &nbsp;</span>
       <span>Occupancy: ${logo.data.delete_probs[col - 1]}  &nbsp;</span>
       <span>Insert Probability: ${logo.data.insert_probs[col - 1]} &nbsp;</span>
       <span>Insert Length: ${

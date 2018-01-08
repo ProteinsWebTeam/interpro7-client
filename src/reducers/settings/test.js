@@ -1,3 +1,4 @@
+// @flow
 import reducer, { getDefaultSettings } from '.';
 import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
 
@@ -17,7 +18,7 @@ describe('reducer for settings', () => {
         category: 'cache',
         key: 'enabled',
         value: true,
-      }).cache.enabled
+      }).cache.enabled,
     ).toBe(true);
     expect(
       reducer(defaultSettings, {
@@ -25,14 +26,14 @@ describe('reducer for settings', () => {
         category: 'cache',
         key: 'enabled',
         value: false,
-      }).cache.enabled
+      }).cache.enabled,
     ).toBe(false);
   });
 
   test('should handle RESET_SETTINGS action', () => {
     expect(reducer({}, { type: RESET_SETTINGS })).toEqual(defaultSettings);
     expect(
-      reducer({}, { type: RESET_SETTINGS, value: { setting: 'value' } })
+      reducer({}, { type: RESET_SETTINGS, value: { setting: 'value' } }),
     ).toEqual({ setting: 'value' });
   });
 

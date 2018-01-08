@@ -13,27 +13,22 @@ describe('reducer for location search', () => {
         {},
         {
           type: NEW_PROCESSED_CUSTOM_LOCATION,
-          customLocation: { search: { query: 'a' } },
+          state: { someValue: true },
         },
       ),
-    ).toEqual({ query: 'a' });
+    ).toEqual({ someValue: true });
     expect(
       reducer(
-        { query: 'a' },
+        { someValue: true },
         {
           type: NEW_PROCESSED_CUSTOM_LOCATION,
-          customLocation: { search: { query: 'a' } },
+          state: { someValue: false },
         },
       ),
-    ).toEqual({ query: 'a' });
+    ).toEqual({ someValue: false });
+    expect(reducer({}, { type: NEW_PROCESSED_CUSTOM_LOCATION })).toEqual({});
     expect(
-      reducer({}, { type: NEW_PROCESSED_CUSTOM_LOCATION, customLocation: {} }),
-    ).toEqual({});
-    expect(
-      reducer(
-        { query: 'a' },
-        { type: NEW_PROCESSED_CUSTOM_LOCATION, customLocation: {} },
-      ),
+      reducer({ someValue: true }, { type: NEW_PROCESSED_CUSTOM_LOCATION }),
     ).toEqual({});
   });
 

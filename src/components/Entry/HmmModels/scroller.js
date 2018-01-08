@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable */
 
 /** @license
@@ -104,7 +105,7 @@
     }
   };
 })(
-  window
+  window,
 ); /*
  * Scroller
  * http://github.com/zynga/scroller
@@ -193,7 +194,7 @@
       completedCallback,
       duration,
       easingMethod,
-      root
+      root,
     ) {
       const start = time();
       let lastFrame = start;
@@ -230,7 +231,7 @@
               desiredFrames -
                 dropCounter / ((now - start) / millisecondsPerSecond),
               id,
-              false
+              false,
             );
           return;
         }
@@ -240,7 +241,7 @@
         if (render) {
           const droppedFrames =
             Math.round(
-              (now - lastFrame) / (millisecondsPerSecond / desiredFrames)
+              (now - lastFrame) / (millisecondsPerSecond / desiredFrames),
             ) - 1;
           for (let j = 0; j < Math.min(droppedFrames, 4); j++) {
             step(true);
@@ -268,7 +269,7 @@
               desiredFrames -
                 dropCounter / ((now - start) / millisecondsPerSecond),
               id,
-              percent === 1 || duration == null
+              percent === 1 || duration == null,
             );
         } else if (render) {
           lastFrame = now;
@@ -367,14 +368,14 @@ EasyScroller.prototype.reflow = function() {
     this.container.clientWidth,
     this.container.clientHeight,
     this.content.offsetWidth,
-    this.content.offsetHeight
+    this.content.offsetHeight,
   );
 
   // refresh the position for zooming purposes
   const rect = this.container.getBoundingClientRect();
   this.scroller.setPosition(
     rect.left + this.container.clientLeft,
-    rect.top + this.container.clientTop
+    rect.top + this.container.clientTop,
   );
 };
 
@@ -404,7 +405,7 @@ EasyScroller.prototype.bindEvents = function() {
         this.scroller.doTouchStart(e.touches, new Date().getTime());
         e.preventDefault();
       },
-      false
+      false,
     );
 
     document.addEventListener(
@@ -412,7 +413,7 @@ EasyScroller.prototype.bindEvents = function() {
       e => {
         this.scroller.doTouchMove(e.touches, new Date().getTime(), e.scale);
       },
-      false
+      false,
     );
 
     document.addEventListener(
@@ -420,7 +421,7 @@ EasyScroller.prototype.bindEvents = function() {
       e => {
         this.scroller.doTouchEnd(new Date().getTime());
       },
-      false
+      false,
     );
 
     document.addEventListener(
@@ -428,7 +429,7 @@ EasyScroller.prototype.bindEvents = function() {
       e => {
         this.scroller.doTouchEnd(new Date().getTime());
       },
-      false
+      false,
     );
 
     // non-touch bind mouse events
@@ -445,7 +446,7 @@ EasyScroller.prototype.bindEvents = function() {
             pageY: e.pageY,
           },
         ],
-        new Date().getTime()
+        new Date().getTime(),
       );
 
       mousedown = true;
@@ -462,7 +463,7 @@ EasyScroller.prototype.bindEvents = function() {
             pageY: e.pageY,
           },
         ],
-        new Date().getTime()
+        new Date().getTime(),
       );
 
       mousedown = true;
@@ -482,7 +483,7 @@ EasyScroller.prototype.bindEvents = function() {
           e.wheelDelta,
           new Date().getTime(),
           e.pageX,
-          e.pageY
+          e.pageY,
         );
         e.preventDefault();
       }
@@ -799,7 +800,7 @@ let Scroller;
       height,
       activateCallback,
       deactivateCallback,
-      startCallback
+      startCallback,
     ) {
       this.__refreshHeight = height;
       this.__refreshActivate = activateCallback;
@@ -878,7 +879,7 @@ let Scroller;
       // Limit level according to configuration
       level = Math.max(
         Math.min(level, this.options.maxZoom),
-        this.options.minZoom
+        this.options.minZoom,
       );
 
       // Recompute maximum values while temporary tweaking maximum scroll ranges
@@ -1018,7 +1019,7 @@ let Scroller;
         this.__zoomLevel * change,
         false,
         pageX - this.__clientLeft,
-        pageY - this.__clientTop
+        pageY - this.__clientTop,
       );
     },
 
@@ -1150,7 +1151,7 @@ let Scroller;
           // Limit level according to configuration
           level = Math.max(
             Math.min(level, this.options.maxZoom),
-            this.options.minZoom
+            this.options.minZoom,
           );
 
           // Only do further compution when change happened
@@ -1357,7 +1358,7 @@ let Scroller;
             this.__scrollLeft,
             -this.__refreshHeight,
             this.__zoomLevel,
-            true
+            true,
           );
 
           if (this.__refreshStart) {
@@ -1368,7 +1369,7 @@ let Scroller;
             this.__scrollLeft,
             this.__scrollTop,
             true,
-            this.__zoomLevel
+            this.__zoomLevel,
           );
 
           // Directly signalize deactivation (nothing todo on refresh?)
@@ -1431,7 +1432,7 @@ let Scroller;
               this.__callback(
                 this.__scrollLeft,
                 this.__scrollTop,
-                this.__zoomLevel
+                this.__zoomLevel,
               );
             }
           }
@@ -1442,7 +1443,7 @@ let Scroller;
         const completed = (
           renderedFramesPerSecond,
           animationId,
-          wasFinished
+          wasFinished,
         ) => {
           if (animationId === this.__isAnimating) {
             this.__isAnimating = false;
@@ -1459,7 +1460,7 @@ let Scroller;
           verify,
           completed,
           250,
-          wasAnimating ? easeOutCubic : easeInOutCubic
+          wasAnimating ? easeOutCubic : easeInOutCubic,
         );
       } else {
         this.__scheduledLeft = this.__scrollLeft = left;
@@ -1488,11 +1489,11 @@ let Scroller;
 
       this.__maxScrollLeft = Math.max(
         this.__contentWidth * zoomLevel - this.__clientWidth,
-        0
+        0,
       );
       this.__maxScrollTop = Math.max(
         this.__contentHeight * zoomLevel - this.__clientHeight,
-        0
+        0,
       );
     },
 
@@ -1510,11 +1511,11 @@ let Scroller;
       if (this.options.paging) {
         const scrollLeft = Math.max(
           Math.min(this.__scrollLeft, this.__maxScrollLeft),
-          0
+          0,
         );
         const scrollTop = Math.max(
           Math.min(this.__scrollTop, this.__maxScrollTop),
-          0
+          0,
         );
         const clientWidth = this.__clientWidth;
         const clientHeight = this.__clientHeight;
@@ -1558,7 +1559,7 @@ let Scroller;
         this.scrollTo(
           this.__scrollLeft,
           this.__scrollTop,
-          this.options.snapping
+          this.options.snapping,
         );
       };
 
@@ -1566,7 +1567,7 @@ let Scroller;
       this.__isDecelerating = core.effect.Animate.start(
         step,
         verify,
-        completed
+        completed,
       );
     },
 
@@ -1591,7 +1592,7 @@ let Scroller;
       if (!this.options.bouncing) {
         const scrollLeftFixed = Math.max(
           Math.min(this.__maxScrollLeft, scrollLeft),
-          0
+          0,
         );
         if (scrollLeftFixed !== scrollLeft) {
           scrollLeft = scrollLeftFixed;
@@ -1600,7 +1601,7 @@ let Scroller;
 
         const scrollTopFixed = Math.max(
           Math.min(this.__maxScrollTop, scrollTop),
-          0
+          0,
         );
         if (scrollTopFixed !== scrollTop) {
           scrollTop = scrollTopFixed;

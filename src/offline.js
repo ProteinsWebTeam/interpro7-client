@@ -1,3 +1,4 @@
+// @flow
 import * as runtime from 'offline-plugin/runtime';
 
 export default () => {

@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import T from 'prop-types';
 
@@ -61,7 +62,7 @@ class Embed extends Component {
         duration: 1000,
         easing: 'ease-in-out',
         fill: 'both',
-      }
+      },
     ).onfinish = () => {
       if (this._mounted) this.setState({ loading: false });
     };
