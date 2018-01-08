@@ -19,6 +19,33 @@ const singleEntityNames = new Map(
 
 const whitelist = new Set(['Overview', 'Domain Architectures', 'Sequence']);
 
+const getValue = (loading, payload, counter, name) => {
+  if (loading || !payload || !payload.metadata) return null;
+  if (name === 'Domain Architectures') {
+    if (payload.metadata.source_database.toLowerCase() !== 'interpro') return 0;
+    // TODO: find a generic way to deal with this:
+    if (payload.metadata.counters && !payload.metadata.counters.proteins) {
+      return null;
+    }
+  }
+  // TODO: find a generic way to deal with this:
+  if (whitelist.has(name)) return NaN;
+  if (
+    payload.metadata.counters &&
+    Number.isFinite(payload.metadata.counters[counter])
+  ) {
+    return payload.metadata.counters[counter];
+  } // Enabling the menuitems that appear in the entry_annotations array.
+  // i.e. only enable the menu item if there is info for it
+  if (
+    payload.metadata.entry_annotations &&
+    payload.metadata.entry_annotations.includes(singleEntityNames.get(name))
+  ) {
+    return NaN;
+  }
+  return null;
+};
+
 /*:: type Props = {
   to: Object | function,
   name: string,
@@ -53,40 +80,8 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
       isFirstLevel,
       isSignature,
     } = this.props;
-    let value = null;
-    if (!loading && payload && payload.metadata) {
-      if (
-        payload.metadata.counters &&
-        Number.isFinite(payload.metadata.counters[counter])
-      ) {
-        value = payload.metadata.counters[counter];
-      } // Enabling the menuitems that appear in the entry_annotations array.
-      // i.e. only enable the menu item if there is info for it
-      if (
-        payload.metadata.entry_annotations &&
-        payload.metadata.entry_annotations.indexOf(
-          singleEntityNames.get(name),
-        ) >= 0
-      ) {
-        value = NaN;
-      }
-      // TODO: find a generic way to deal with this:
-      if (whitelist.has(name)) value = NaN;
-      if (
-        name === 'Domain Architectures' &&
-        payload.metadata.counters &&
-        !payload.metadata.counters.proteins
-      ) {
-        value = 0;
-      }
-      // TODO: find a generic way to deal with this:
-      if (
-        name === 'Domain Architectures' &&
-        payload.metadata.source_database.toLowerCase() !== 'interpro'
-      ) {
-        value = null;
-      }
-    }
+
+    const value = getValue(loading, payload, counter, name);
 
     if (!isFirstLevel && !isNaN(value) && !value) return null;
 

@@ -75,9 +75,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       // i.e. only enable the menu item if there is info for it
       if (
         payload.metadata.entry_annotations &&
-        payload.metadata.entry_annotations.indexOf(
-          singleEntityNames.get(name),
-        ) >= 0
+        payload.metadata.entry_annotations.includes(singleEntityNames.get(name))
       ) {
         value = NaN;
       }

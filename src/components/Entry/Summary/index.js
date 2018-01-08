@@ -83,7 +83,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 />
               )}
 
-              {//member database only - summary info
+              {// member database only - summary info
               metadata.source_database &&
                 metadata.source_database.toLowerCase() !== 'interpro' && (
                   <div className={f('md-hlight')}>

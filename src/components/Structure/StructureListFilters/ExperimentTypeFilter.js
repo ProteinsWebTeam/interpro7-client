@@ -91,6 +91,7 @@ const getUrlFor = createSelector(
   state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
+    // eslint-disable-next-line camelcase
     const { experiment_type, search: _, ..._search } = search;
     // add to search
     _search.group_by = 'experiment_type';

@@ -103,6 +103,7 @@ const getUrlFor = createSelector(
   state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
+    // eslint-disable-next-line camelcase
     const { tax_id, search: _, ..._search } = search;
     // add to search
     _search.group_by = 'tax_id';
