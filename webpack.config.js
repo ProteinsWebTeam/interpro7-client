@@ -35,7 +35,7 @@ const cssSettings = env => ({
   modules: true,
   minimize: env.production,
   importLoaders: 1,
-  sourceMap: !env.production,
+  sourceMap: true,
   localIdentName: (() => {
     if (env.production) return '[hash:base64:6]';
     return '[folder]_[name]__[local]___[hash:base64:2]';
@@ -271,7 +271,7 @@ module.exports = (env = { dev: true }) => {
                     },
                     {
                       loader: 'sass-loader',
-                      options: { sourceMap: !env.production },
+                      options: { sourceMap: true },
                     },
                   ],
                 })
@@ -285,7 +285,7 @@ module.exports = (env = { dev: true }) => {
                   },
                   {
                     loader: 'sass-loader',
-                    options: { sourceMap: !env.production },
+                    options: { sourceMap: true },
                   },
                 ],
         },
@@ -459,6 +459,7 @@ module.exports = (env = { dev: true }) => {
       env.production
         ? new (require('uglifyjs-webpack-plugin'))({
             parallel: 4,
+            cache: true,
             sourceMap: true,
           })
         : null,
@@ -518,12 +519,13 @@ module.exports = (env = { dev: true }) => {
   }
 
   // Sourcemaps
+  config.devtool = 'source-map';
   if (env.dev) {
-    config.devtool = 'inline-source-map';
+    config.devtool = 'eval-source-map';
   }
-  if (env.test || env.staging) {
-    config.devtool = 'cheap-module-source-map';
-  }
+  // if (env.test || env.staging) {
+  //   config.devtool = 'cheap-module-source-map';
+  // }
 
   // devServer
   if (env.dev) {

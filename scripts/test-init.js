@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import tf from 'timing-functions';
+import { sleep } from 'timing-functions';
 
 export const APP = 'http://0.0.0.0:8888/interpro/';
 
@@ -24,7 +24,7 @@ export default () =>
         return page;
       },
       async cleanup() {
-        await tf['timing-functions'].sleep(1000);
+        await sleep(1000);
         browser.close();
       },
     };
