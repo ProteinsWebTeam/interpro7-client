@@ -52,6 +52,7 @@ a:visited {
 /*NEUTRAL LINKS*/
 .main a.button {
   color: white;
+  white-space: inherit; /*override EBI global style where default is nowrap*/
 }
 
 /*Active tab - active is used on li element in ebi css*/
@@ -80,9 +81,13 @@ mark {
   background-color: var(--colors-tag);
 }
 
+.tag.md-p {
+  background-color: var(--colors-md-sub);
+} /*tag used on md page*/
+
 /* buttons (secondary, alert, hollow) - redefine foundation style*/
 .button.alert {
-  background-color: tomato;
+  background-color: var(--colors-alert-main);
 }
 .button.alert:hover,
 .button.alert:active,
@@ -98,13 +103,30 @@ mark {
   background-color: #909090;
 }
 
-.button.hollow {
+.button.hollow,
+.button.hollow.primary,
+.button.hollow.secondary,
+.button.hollow.neutral {
   background-color: transparent;
+  @nest &:hover {
+    background-color: transparent;
+  }
+  @nest &:active {
+    background-color: transparent;
+  }
+  @nest &:focus {
+    background-color: transparent;
+  }
 }
-.button.hollow:hover,
-.button.hollow:active,
-.button.hollow:focus {
-  background-color: transparent;
+
+.button.hollow.neutral {
+  border: 1px solid #222;
+  color: #222;
+}
+
+.button.hollow.neutral:hover {
+  border: 1px solid #0a0a0a;
+  color: #0a0a0a;
 }
 
 .button.hollow.tertiary {
@@ -173,6 +195,19 @@ div#local-title {
   margin-right: 0.5rem;
 }
 
+.callout.slk {
+  background-color: transparent;
+  border: 1px solid var(--colors-nearly-white);
+  border-left: #d72b3f 4px solid;
+  border-radius: 0.25rem;
+  color: #222;
+}
+.callout.slk.withicon::before {
+  content: 'l';
+  font-family: 'EBI-Generic';
+  color: #d72b3f;
+  margin-right: 0.5rem;
+}
 /*ICONS*/
 /*MEMBER DATABASE SVG icons*/
 .svg-mask {
@@ -246,7 +281,7 @@ div#local-title {
   color: grey;
 }
 .ico-notfound::before {
-  color: tomato;
+  color: var(--colors-alert-main);
 }
 /*/I5 result page icons*/
 /*/ICONS*/

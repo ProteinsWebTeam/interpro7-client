@@ -60,11 +60,17 @@
 }
 
 .primary {
-  color: #999;
+  color: #34b5b5; /*domain color*/
+  flex-direction: column;
+}
 
-  @nest & a:hover, & a:focus {
-    background-color: rgba(0, 0, 0, 0.3);
-  }
+.primary i {
+  display: inline !important;
+}
+
+.container .primary li > a:hover,
+.container .primary li > a:focus {
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .secondary {
@@ -82,7 +88,7 @@
 }
 
 .tertiary {
-  color: #34b5b5;
+  color: #85bf7b;
 }
 
 .container .tertiary a:hover,
@@ -111,7 +117,7 @@
 .menu-label {
   background: #444;
   border-top: 1px solid #5e5e5e;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: bold;
   margin: 0;
   padding: 0.5rem 0.8rem;

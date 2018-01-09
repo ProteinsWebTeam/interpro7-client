@@ -89,6 +89,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     visible: T.bool.isRequired,
     mainAccession: T.string,
+    mainType: T.string,
     closeSideNav: T.func.isRequired,
   };
 
@@ -105,10 +106,10 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
   }
 
   render() {
-    const { visible, mainAccession, closeSideNav } = this.props;
+    const { visible, mainAccession, mainType, closeSideNav } = this.props;
     if (!(this.state.hasRendered || visible)) return null;
     return (
-      <aside className={f('container', { visible })} role="menu" id="main-nav">
+      <aside className={f('container', { visible })} role="menu">
         <button
           className={f('exit')}
           title="Close side menu"
@@ -121,10 +122,8 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
           <ul>
             {mainAccession && (
               <SingleEntityMenu className={f('primary')}>
-                <span
-                  className={f('menu-label', 'select-none', 'cursor-default')}
-                >
-                  {mainAccession}
+                <span className={f('menu-label', 'cursor-default')}>
+                  {mainType} menu ({mainAccession})
                 </span>
               </SingleEntityMenu>
             )}
@@ -132,16 +131,12 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
               pathname=""
               className={f('secondary', 'is-drilldown')}
             >
-              <span
-                className={f('menu-label', 'select-none', 'cursor-default')}
-              >
+              <span className={f('menu-label', 'cursor-default')}>
                 InterPro menu
               </span>
             </InterProMenu>
             <EBIMenu className={f('tertiary')}>
-              <span
-                className={f('menu-label', 'select-none', 'cursor-default')}
-              >
+              <span className={f('menu-label', 'cursor-default')}>
                 EBI menu
               </span>
             </EBIMenu>
@@ -174,11 +169,12 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
+  state => state.customLocation.description.main.key,
   state =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  (visible, mainAccession) => ({ visible, mainAccession }),
+  (visible, mainType, mainAccession) => ({ visible, mainType, mainAccession }),
 );
 
 export default connect(mapStateToProps, { closeSideNav })(SideMenu);

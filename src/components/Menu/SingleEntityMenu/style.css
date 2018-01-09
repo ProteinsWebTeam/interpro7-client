@@ -15,3 +15,9 @@
     }
   }
 }
+.tabs.single-entity-menu li a {
+  color: #ccc;
+}
+.tabs.single-entity-menu li a {
+  background: transparent;
+}

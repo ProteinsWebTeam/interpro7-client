@@ -302,7 +302,10 @@ class List extends Component {
                       >
                         <span className={f('go-cell')}>
                           <Tooltip title={`${go.name} (${go.identifier})`}>
-                            <GoLink id={go.identifier} className={f('go')}>
+                            <GoLink
+                              id={go.identifier}
+                              className={f('go', 'ext')}
+                            >
                               {go.name ? go.name : 'None'}
                             </GoLink>
                           </Tooltip>

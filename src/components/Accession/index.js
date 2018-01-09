@@ -27,16 +27,17 @@ export class Accession extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.oneOfType([T.string, T.number]).isRequired,
     id: T.string,
+    title: T.string,
     db: T.string.isRequired,
   };
 
   render() {
-    const { accession, id, db } = this.props;
-    console.log(db);
+    const { accession, id, db, title } = this.props;
     const Link = componentMap.get(db) || Default;
     return (
       <div>
-        Accession: <Link id={accession}>{accession}</Link>
+        {title == null ? 'Accession' : title}:{' '}
+        <Link id={accession}>{accession}</Link>
         {id && ` (${id})`}
       </div>
     );

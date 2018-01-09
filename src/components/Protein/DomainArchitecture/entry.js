@@ -8,7 +8,7 @@ import styles from './style.css';
 
 const s = classname.bind(styles);
 const colorHash = new ColorHash();
-const childrenScale = 0.7;
+const childrenScale = 1; /*was 0.7*/
 
 // TODO: refactor to have a single place for colors
 const colorsByDB = {
@@ -40,7 +40,8 @@ export const EntryColorMode = {
 class EntryRenderer {
   constructor({ trackHeight, trackPadding, padding, xScale, protein, parent }) {
     this.tPadding = trackPadding;
-    this.trackHeight = trackHeight;
+    // this.trackHeight = trackHeight;
+    this.trackHeight = 14;
     this.padding = padding;
     this.protein = protein;
     this.x = xScale;
@@ -50,7 +51,7 @@ class EntryRenderer {
   render(
     group,
     entries,
-    offsetY = 0,
+    offsetY = 4,
     className = 'entry',
     colorMode = EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP,
   ) {
@@ -232,8 +233,8 @@ class EntryRenderer {
       .attr('height', this.trackHeight)
       .attr('x', m => this.x(m[0]))
       .attr('fill', this.getColor(entry))
-      .attr('rx', 2)
-      .attr('ry', 2)
+      .attr('rx', 6)
+      .attr('ry', 6)
       .on('click', () => {
         if (entry.children && entry.children.length) {
           entry._children = entry.children;
@@ -275,9 +276,8 @@ class EntryRenderer {
         .attr('y', this.trackHeight - 1)
         .attr('height', this.childrenRender.innerHeight + this.tPadding.bottom)
         .attr('width', m => this.x(m[1] - m[0]))
-        .style('fill', 'rgba(0,0,0,0.0)')
-        .style('stroke', '#000')
-        .attr('stroke-dasharray', '1,3');
+        // .style('stroke', '#000000a6')
+        .attr('stroke-dasharray', '0,2');
 
       if (parentNode) {
         parentNode

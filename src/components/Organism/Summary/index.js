@@ -113,7 +113,11 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('row')}>
         <div className={f('medium-12', 'columns')}>
-          <Accession accession={metadata.accession} id={metadata.id} />
+          <Accession
+            accession={metadata.accession}
+            id={metadata.id}
+            title="Tax ID"
+          />
           {metadata.rank && <div>Rank: {metadata.rank}</div>}
           <Lineage lineage={metadata.lineage} names={names} />
           <Children taxChildren={metadata.children} names={names} />
@@ -147,7 +151,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     const { data: { payload: { metadata } } } = this.props;
     return (
       <div className={f('row')}>
-        <div className={f('medium-10', 'columns')}>
+        <div className={f('medium-9', 'columns')}>
           {
             // metadata.is_reference ? (
             // <div className={f('tag', 'secondary', 'margin-bottom-large')}>
@@ -159,6 +163,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             <Accession
               id={metadata.id}
               accession={metadata.proteomeAccession || metadata.accession}
+              title="Proteome ID"
             />
           </div>
           <div>Strain: {metadata.strain}</div>
@@ -174,7 +179,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             </Metadata>
           </div>
         </div>
-        <div className={f('medium-2', 'columns')}>
+        <div className={f('medium-3', 'columns')}>
           <div className={f('panel')}>
             <h5>External Links</h5>
             <ul className={f('no-bullet')}>
