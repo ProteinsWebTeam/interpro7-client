@@ -10,14 +10,14 @@
     "test": "npm-run-all -p --aggregate-output test:*",
     "test:flow": "flow check",
     "test:lint": "esw --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
-    "test:unit": "jest --notify",
-    "test:functional": "echo \"Warning, no functional test specified yet, passing\" && exit 0",
+    "test:unit": "jest --notify src",
+    "test:functional": "#npm run deploy && node scripts/serve.js && jest --notify scripts",
     "dev": "webpack-dev-server",
     "dev:test": "npm-run-all -rp dev:test:*",
     "dev:test:lint": "npm run test:lint -- --watch",
     "dev:test:unit": "npm run test:unit -- --watch",
     "flow-typed:install": "npx flow-typed install",
-    "flow-coverage": "npx flow-coverage-report -i 'src/**/*.js'",
+    "flow-coverage": "npx flow-coverage-report",
     "lint:fix": "npm run test:lint -- --fix",
     "clean": "rimraf dist",
     "bundle": "webpack --progress",
@@ -83,10 +83,9 @@
   },
   "jest": {
     "verbose": false,
-    "rootDir": "src",
     "moduleNameMapper": {
-      "config.yml$": "<rootDir>/__mocks__/configMock.js",
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$": "<rootDir>/__mocks__/fileMock.js",
+      "config.yml$": "<rootDir>/src/__mocks__/configMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$": "<rootDir>/src/__mocks__/fileMock.js",
       "\\.(css|less|scss)$": "identity-obj-proxy"
     },
     "moduleDirectories": [
@@ -94,7 +93,7 @@
       "src"
     ],
     "collectCoverageFrom": [
-      "**/*.js",
+      "src/**/*.js",
       "!**/.*.js"
     ],
     "coverageReporters": [
@@ -111,6 +110,13 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "flow-coverage-report": {
+    "includeGlob": [
+      "src/**/*.js"
+    ],
+    "concurrentFiles": 4,
+    "threshold": 50
   },
   "dependencies": {
     "@webcomponents/webcomponentsjs": "1.0.22",
@@ -151,7 +157,7 @@
   },
   "devDependencies": {
     "babel-core": "6.26.0",
-    "babel-eslint": "8.1.2",
+    "babel-eslint": "8.2.1",
     "babel-loader": "7.1.2",
     "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
     "babel-plugin-transform-react-constant-elements": "6.23.0",
@@ -170,12 +176,14 @@
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "7.5.1",
     "eslint-watch": "3.1.3",
+    "express": "4.16.2",
     "extract-text-webpack-plugin": "3.0.2",
     "favicons-webpack-plugin": "0.0.7",
     "file-loader": "1.1.6",
     "flow-bin": "0.63.1",
     "glob": "7.1.2",
     "glob-loader": "0.3.0",
+    "hard-source-webpack-plugin": "^0.5.15",
     "html-webpack-plugin": "2.30.1",
     "husky": "0.14.3",
     "identity-obj-proxy": "3.0.0",
@@ -192,6 +200,7 @@
     "postcss-import": "11.0.0",
     "postcss-loader": "2.0.10",
     "prettier": "1.9.2",
+    "puppeteer": "0.13.0",
     "raw-loader": "0.5.1",
     "react-test-renderer": "16.2.0",
     "rimraf": "2.6.2",

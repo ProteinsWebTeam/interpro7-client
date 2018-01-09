@@ -12,6 +12,7 @@ const postCSSImport = require('postcss-import');
 const cssNext = require('postcss-cssnext');
 
 // Webpack plugins
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const pkg = require(path.resolve('package.json'));
@@ -61,6 +62,7 @@ const fileLoaderNamer = env => {
 module.exports = (env = { dev: true }) => {
   const thisFileLoaderName = fileLoaderNamer(env);
   const config = {
+    // ENTRY
     // Entry points for the application and some ext libraries
     // (don't put ES2016 modules enabled libraries here)
     entry: {
@@ -75,6 +77,7 @@ module.exports = (env = { dev: true }) => {
       ],
       redux: ['redux', 'react-redux', 'reselect'],
     },
+    // OUTPUT
     output: {
       path: path.resolve('dist'),
       publicPath: websiteURL.pathname || '/interpro7/',
@@ -89,10 +92,12 @@ module.exports = (env = { dev: true }) => {
         return '[id].[name].js';
       })(),
     },
+    // RESOLVE
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
       extensions: ['.js', '.json', '.worker.js'],
     },
+    // MODULE
     module: {
       rules: [
         {
@@ -328,6 +333,7 @@ module.exports = (env = { dev: true }) => {
         },
       ],
     },
+    // PERFORMANCE
     performance: {
       hints: env.production && 'warning',
       // eslint-disable-next-line no-magic-numbers
@@ -335,9 +341,11 @@ module.exports = (env = { dev: true }) => {
       // eslint-disable-next-line no-magic-numbers
       maxEntrypointSize: 500 * kB, // 500kB TODO: reduce this eventually!
     },
+    // STATS
     stats: {
       children: false,
     },
+    // PLUGINS
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
@@ -390,6 +398,7 @@ module.exports = (env = { dev: true }) => {
       // env.production || env.staging
       //   ? new (require('./plugins/web-app-manifest'))()
       //   : null,
+      new HardSourceWebpackPlugin(),
       env.test || env.production || env.staging
         ? new ExtractTextPlugin({
             filename: env.production
