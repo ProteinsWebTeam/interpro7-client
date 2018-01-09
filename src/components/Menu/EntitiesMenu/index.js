@@ -13,9 +13,9 @@ const EntitiesMenu = (
 ) => (
   <ul className={className}>
     {children}
-    {entities.map(({ newTo, name }) => (
+    {entities.map(({ to, name }) => (
       <li key={name}>
-        <MenuItem newTo={newTo} activeClass={ebiStyles.active}>
+        <MenuItem to={to} activeClass={ebiStyles.active}>
           {name}
         </MenuItem>
       </li>

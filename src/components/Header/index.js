@@ -111,9 +111,9 @@ class _SideIcons extends PureComponent {
           />
           <label className={reducedStyleBundle('side-search', { stuck })}>
             <div>
-              <TextSearchBox maxLength="255" value="" name="search" />
+              <TextSearchBox name="search" />
             </div>
-            <Link newTo={{ description: { other: 'search' } }}>
+            <Link to={{ description: { other: ['search'] } }}>
               <div aria-label="Search InterPro">
                 <svg
                   width="2.2em"
@@ -211,15 +211,15 @@ class Header extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.ui.stuck,
-  state => state.newLocation.description.mainType,
-  state => state.newLocation.description.mainDB,
-  state => state.newLocation.description.mainAccession,
-  (stuck, mainType, mainDB, mainAccession) => ({
+  state => state.customLocation.description.main.key,
+  state => state.customLocation.description.entry.db,
+  state => state.customLocation.description.entry.accession,
+  (stuck, mainType, entryDB, entryAccession) => ({
     stuck,
     isSignature: !!(
       mainType === 'entry' &&
-      mainDB !== 'InterPro' &&
-      mainAccession
+      entryDB !== 'InterPro' &&
+      entryAccession
     ),
   }),
 );

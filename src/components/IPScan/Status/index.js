@@ -153,12 +153,10 @@ class IPScanStatus extends Component {
                   ) => b - a,
                 )
                 .map(
-                  (
-                    [
-                      jobId,
-                      { id, status, times: { created, lastUpdate }, saved },
-                    ],
-                  ) => {
+                  ([
+                    jobId,
+                    { id, status, times: { created, lastUpdate }, saved },
+                  ]) => {
                     const lastUpdateDate = new Date(lastUpdate);
                     const createdDate = new Date(created);
                     return (
@@ -166,11 +164,13 @@ class IPScanStatus extends Component {
                         <td>
                           {id ? (
                             <Link
-                              newTo={{
+                              to={{
                                 description: {
-                                  mainType: 'search',
-                                  mainDB: 'sequence',
-                                  mainAccession: id,
+                                  main: { key: 'job' },
+                                  search: {
+                                    type: 'InterProScan',
+                                    accession: id,
+                                  },
                                 },
                               }}
                               disabled={status !== 'finished'}

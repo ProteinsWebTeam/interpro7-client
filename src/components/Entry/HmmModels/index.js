@@ -15,7 +15,11 @@ class LogoSection extends Component {
   };
 
   componentDidMount() {
-    hmmLogo(this._node, { column_info: true, data: this.props.data });
+    hmmLogo(this._node, {
+      column_info: true,
+      data: this.props.data,
+      height_toggle: true,
+    });
   }
 
   shouldComponentUpdate() {

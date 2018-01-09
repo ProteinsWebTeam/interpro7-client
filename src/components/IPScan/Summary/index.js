@@ -133,7 +133,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.newLocation.description.mainAccession,
+  state => state.customLocation.description.job.accession,
   accession => ({ accession }),
 );
 

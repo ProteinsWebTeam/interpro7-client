@@ -30,6 +30,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
+
 const f = foundationPartial(pageStyle, styles);
 
 const propTypes = {
@@ -38,7 +39,7 @@ const propTypes = {
     loading: T.bool.isRequired,
   }).isRequired,
   isStale: T.bool.isRequired,
-  location: T.shape({
+  customLocation: T.shape({
     description: T.object.isRequired,
   }).isRequired,
   match: T.string,
@@ -53,10 +54,15 @@ class Overview extends PureComponent {
     const { data: { payload = defaultPayload } } = this.props;
     return (
       <ul className={f('card')}>
-        {Object.entries(payload.proteins || {}).map(([name, count]) => (
+        {Object.entries(payload.organisms || {}).map(([name, count]) => (
           <li key={name}>
             <Link
-              newTo={{ description: { mainType: 'protein', mainDB: name } }}
+              to={{
+                description: {
+                  main: { key: 'protein' },
+                  protein: { db: name },
+                },
+              }}
             >
               {name}
               {Number.isFinite(count) ? ` (${count})` : ''}
@@ -75,7 +81,7 @@ class List extends PureComponent {
     const {
       data: { payload, loading, url, status },
       isStale,
-      location: { search },
+      customLocation: { search },
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
@@ -126,12 +132,19 @@ class List extends PureComponent {
               dataKey="accession"
               renderer={(accession /*: string */) => (
                 <Link
-                  newTo={location => ({
-                    ...location,
+                  to={customLocation => ({
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: `${accession}`,
+                      main: { key: 'organism' },
+                      organism: {
+                        ...customLocation.description.organism,
+                        accession: customLocation.description.organism.db
+                          ? accession.toString()
+                          : null,
+                        proteomeAccession: customLocation.description.organism
+                          .proteomeDB
+                          ? accession.toString()
+                          : null,
+                      },
                     },
                   })}
                 >
@@ -151,12 +164,13 @@ class List extends PureComponent {
                 { accession } /*: {accession: string} */,
               ) => (
                 <Link
-                  newTo={location => ({
-                    ...location,
+                  to={customLocation => ({
                     description: {
-                      mainType: location.description.mainType,
-                      mainDB: location.description.mainDB,
-                      mainAccession: `${accession}`,
+                      main: { key: 'organism' },
+                      organism: {
+                        ...customLocation.description.organism,
+                        accession: accession.toString(),
+                      },
                     },
                   })}
                 >
@@ -191,13 +205,17 @@ class SummaryComponent extends PureComponent {
     data: T.shape({
       payload: T.any,
     }).isRequired,
-    location: T.object.isRequired,
+    customLocation: T.object.isRequired,
   };
 
   render() {
-    const { data: { payload, loading }, location } = this.props;
+    const { data: { payload, loading }, customLocation } = this.props;
     return (
-      <SummaryAsync data={payload} location={location} loading={loading} />
+      <SummaryAsync
+        data={payload}
+        customLocation={customLocation}
+        loading={loading}
+      />
     );
   }
 }
@@ -224,14 +242,24 @@ _Title.propTypes = {
 };
 const mapStateToAccessionUrl = createSelector(
   state => state.settings.api,
-  state => state.newLocation.description.mainDB,
-  state => state.newLocation.description.mainAccession,
-  ({ protocol, hostname, port, root }, mainDB, mainAccession) =>
+  state => state.customLocation.description.organism.db,
+  state => state.customLocation.description.organism.accession,
+  state => state.customLocation.description.organism.proteomeDB,
+  state => state.customLocation.description.organism.proteomeAccession,
+  (
+    { protocol, hostname, port, root },
+    db,
+    accession,
+    proteomeDB,
+    proteomeAccession,
+  ) =>
     format({
       protocol,
       hostname,
       port,
-      pathname: `${root}/organism/${mainDB}/${mainAccession}`,
+      pathname: `${root}/organism/${db || ''}/${accession || ''}/${
+        proteomeAccession ? proteomeDB : ''
+      }/${proteomeAccession || ''}`,
     }),
 );
 
@@ -242,7 +270,7 @@ class Summary extends PureComponent {
     data: T.shape({
       loading: T.bool.isRequired,
     }).isRequired,
-    location: T.object.isRequired,
+    customLocation: T.object.isRequired,
   };
 
   render() {
@@ -261,11 +289,16 @@ class Summary extends PureComponent {
           </div>
           <Switch
             {...this.props}
-            locationSelector={l =>
-              l.description.mainDetail ||
-              l.description.focusType ||
-              l.description.mainMemberDB
-            }
+            locationSelector={l => {
+              const { key } = l.description.main;
+              return (
+                l.description[key].detail ||
+                (Object.entries(l.description).find(
+                  ([_key, value]) => value.isFilter,
+                ) || [])[0] ||
+                (l.description[key].accession && l.description[key].proteomeDB)
+              );
+            }}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForOrganism}
           />
@@ -283,9 +316,16 @@ class InnerSwitch extends PureComponent {
       <ErrorBoundary>
         <Switch
           {...this.props}
-          locationSelector={l =>
-            l.description.mainAccession || l.description.focusType
-          }
+          locationSelector={l => {
+            const { key } = l.description.main;
+            return (
+              l.description[key].proteomeAccession ||
+              l.description[key].accession ||
+              (Object.entries(l.description).find(
+                ([_key, value]) => value.isFilter,
+              ) || [])[0]
+            );
+          }}
           indexRoute={List}
           childRoutes={[{ value: acc, component: Summary }]}
           catchAll={List}
@@ -330,7 +370,10 @@ class Organism extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => l.description.mainDB}
+            locationSelector={l =>
+              l.description[l.description.main.key].db ||
+              l.description[l.description.main.key].proteomeDB
+            }
             indexRoute={Overview}
             catchAll={InnerSwitch}
           />

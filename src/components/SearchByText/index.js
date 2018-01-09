@@ -1,12 +1,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 import Link from 'components/generic/Link';
-
-import { frame } from 'timing-functions/src';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -27,9 +23,11 @@ class Example extends PureComponent {
       <i>
         {' '}
         <Link
-          newTo={{
-            description: { mainType: 'search', mainDB: 'text' },
-            search: { search: value },
+          to={{
+            description: {
+              main: { key: 'search' },
+              search: { type: 'text', value },
+            },
           }}
         >
           {value}
@@ -38,53 +36,13 @@ class Example extends PureComponent {
     );
   }
 }
-// const Example = ({ value }) =>
-//   <a style={{ cursor: 'pointer' }} data-search={value}>
-//     {' '}{value}
-//   </a>;
 
 class SearchByText extends PureComponent {
-  static propTypes = {
-    search: T.shape({
-      search: T.string,
-    }).isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.search.search || '',
-      submit: false,
-    };
-  }
-
-  componentWillReceiveProps({ search }) {
-    this.setState({ value: search.search });
-  }
-
-  handleExampleClick = event => {
-    const value = event.target.dataset.search;
-    if (value) this.setState({ value });
-  };
-
-  handleReset = () => this.setState({ value: '' });
-
-  handleSubmit = event => {
-    event.preventDefault();
-  };
-
-  handleSubmitClick = async () => {
-    await new Promise(res => this.setState({ submit: true }, res));
-    await frame();
-    this.setState({ submit: false });
-  };
-
   render() {
-    const { value, submit } = this.state;
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns', 'margin-bottom-medium')}>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={e => e.preventDefault()}>
             <div
               className={f(
                 'secondary',
@@ -97,11 +55,7 @@ class SearchByText extends PureComponent {
                 <div className={f('large-12', 'columns', 'search-input')}>
                   <h3>Search families, domains or GO terms</h3>
 
-                  <TextSearchBox
-                    value={value}
-                    toSubmit={submit}
-                    ref={input => (this.searchInput = input)}
-                  />
+                  <TextSearchBox />
                 </div>
               </div>
 
@@ -140,20 +94,18 @@ class SearchByText extends PureComponent {
                     'margin-bottom-none',
                   )}
                 >
-                  <button
-                    className={f('button')}
-                    onClick={this.handleSubmitClick}
-                    onKeyPress={this.handleSubmitClick}
-                  >
-                    Search
-                  </button>
-                  <button
+                  <button className={f('button')}>Search</button>
+                  <Link
                     className={f('secondary', 'hollow', 'button')}
-                    onClick={this.handleReset}
-                    onKeyPress={this.handleReset}
+                    to={{
+                      description: {
+                        main: { key: 'search' },
+                        search: { type: 'text' },
+                      },
+                    }}
                   >
                     Clear
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -164,9 +116,4 @@ class SearchByText extends PureComponent {
   }
 }
 
-const mapStateToProps = createSelector(
-  state => state.newLocation.search,
-  search => ({ search }),
-);
-
-export default connect(mapStateToProps)(SearchByText);
+export default SearchByText;

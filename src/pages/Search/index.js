@@ -5,7 +5,6 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
-import SearchResults from 'components/SearchResults';
 
 import loadable from 'higherOrder/loadable';
 
@@ -17,6 +16,10 @@ const f = foundationPartial(ipro);
 const SearchByText = loadable({
   loader: () =>
     import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
+});
+const SearchResults = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "search-results" */ 'components/SearchResults'),
 });
 const IPScanSearch = loadable({
   loader: () =>
@@ -37,6 +40,10 @@ const TextSearchAndResults = () => (
     <SearchResults key="results" />
   </Wrapper>
 );
+TextSearchAndResults.preload = () => {
+  SearchByText.preload();
+  SearchResults.preload();
+};
 
 const IPScanSearchAndStatus = () => (
   <Wrapper>
@@ -53,7 +60,7 @@ const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => l.description.mainAccession}
+      locationSelector={l => l.description.search.accession}
       indexRoute={IPScanSearchAndStatus}
       catchAll={IPScanResult}
     />
@@ -66,8 +73,13 @@ const routes = new Set([
 ]);
 
 const RedirectToText = () => (
-  <Redirect to={{ description: { mainType: 'search', mainDB: 'text' } }} />
+  <Redirect
+    to={{ description: { main: { key: 'search' }, search: { type: 'text' } } }}
+  />
 );
+
+const activeClassFn = ({ description: { search: { type } } }) =>
+  type === 'text' && f('is-active', 'is-active-tab');
 
 class Wrapper extends PureComponent {
   static propTypes = {
@@ -82,14 +94,17 @@ class Wrapper extends PureComponent {
           <ul className={f('tabs', 'main-style', 'margin-top-large')}>
             <li
               className={f('tabs-title')}
-              onMouseOver={SearchByText.preload}
-              onFocus={SearchByText.preload}
+              onMouseOver={TextSearchAndResults.preload}
+              onFocus={TextSearchAndResults.preload}
             >
               <Link
-                newTo={{
-                  description: { mainType: 'search', mainDB: 'text' },
+                to={{
+                  description: {
+                    main: { key: 'search' },
+                    search: { type: 'text' },
+                  },
                 }}
-                activeClass={f('is-active', 'is-active-tab')}
+                activeClass={activeClassFn}
               >
                 by text
               </Link>
@@ -100,8 +115,11 @@ class Wrapper extends PureComponent {
               onFocus={IPScanSearchAndStatus.preload}
             >
               <Link
-                newTo={{
-                  description: { mainType: 'search', mainDB: 'sequence' },
+                to={{
+                  description: {
+                    main: { key: 'search' },
+                    search: { type: 'sequence' },
+                  },
                 }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
@@ -122,7 +140,7 @@ class Wrapper extends PureComponent {
 
 const Search = () => (
   <Switch
-    locationSelector={l => l.description.mainDB}
+    locationSelector={l => l.description.search.type}
     indexRoute={RedirectToText}
     childRoutes={routes}
   />

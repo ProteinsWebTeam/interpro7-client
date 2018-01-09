@@ -80,6 +80,10 @@
 .logo-flex {
   display: flex;
   margin-left: -82px;
+
+  & > a {
+    display: flex;
+  }
 }
 
 .logo-flex svg {

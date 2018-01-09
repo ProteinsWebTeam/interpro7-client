@@ -40,8 +40,6 @@ pages:
       - protein
       - structure
       - organism
-  search:
-    plural: results
 pagination:
   pageSize: 20
 cache:

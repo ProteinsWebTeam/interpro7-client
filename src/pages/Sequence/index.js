@@ -85,9 +85,15 @@ class _Summary extends PureComponent {
       <ErrorBoundary key="switch">
         <Switch
           {...this.props}
-          locationSelector={l =>
-            l.description.mainDetail || l.description.focusType
-          }
+          locationSelector={l => {
+            const { key } = l.description.main;
+            return (
+              l.description[key].detail ||
+              (Object.entries(l.description).find(
+                ([_key, value]) => value.isFilter,
+              ) || [])[0]
+            );
+          }}
           indexRoute={SummaryAsync}
           childRoutes={subPagesForSequence}
         />
@@ -97,7 +103,10 @@ class _Summary extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.newLocation.description.mainAccession,
+  state =>
+    state.customLocation.description.main.key &&
+    state.customLocation.description[state.customLocation.description.main.key]
+      .accession,
   accession => ({ accession }),
 );
 
@@ -107,7 +116,7 @@ const IPScanResult = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => l.description.mainAccession}
+      locationSelector={l => l.description[l.description.main.key].accession}
       indexRoute={() => null}
       catchAll={Summary}
     />
@@ -116,7 +125,10 @@ const IPScanResult = props => (
 
 const mapStateToUrl = createSelector(
   state => state.settings.ipScan,
-  state => state.newLocation.description.mainAccession,
+  state =>
+    state.customLocation.description.main.key &&
+    state.customLocation.description[state.customLocation.description.main.key]
+      .accession,
   ({ protocol, hostname, port, root }, mainAccession) =>
     format({
       protocol,

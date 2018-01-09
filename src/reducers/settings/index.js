@@ -5,8 +5,9 @@ import config from 'config';
 const DEFAULT_HTTP_PORT = 80;
 
 export const getDefaultSettings = () => ({
-  pagination: {
+  navigation: {
     pageSize: config.pagination.pageSize,
+    autoRedirect: false,
   },
   ui: {
     lowGraphics: false,

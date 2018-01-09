@@ -1412,6 +1412,14 @@ const HMMLogo = function(element, options = {}) {
     }
   };
 
+  this.toggle_visibility = function(element) {
+    if (element.style.display !== 'none' && element.style.display) {
+      element.style.display = 'none';
+    } else {
+      element.style.display = 'block';
+    }
+  };
+
   this.toggle_colorscheme = function(scheme) {
     // work out the current column we are on so we can return there
     const colTotal = this.current_column();
@@ -1437,9 +1445,10 @@ const HMMLogo = function(element, options = {}) {
     // re-flow and re-render the content
     this.scrollme.reflow();
     // scroll off by one to force a render of the canvas.
-    this.scrollToColumn(colTotal + 1);
+    this.scrollToColumn(colTotal + 10);
     // scroll back to the location we started at.
     this.scrollToColumn(colTotal);
+    this.render();
   };
 
   this.toggle_scale = function(scale) {
@@ -1464,9 +1473,7 @@ const HMMLogo = function(element, options = {}) {
     // with the new heights
     this.rendered = [];
     // update the y-axis
-    for (const element of this.called_on.getElementsByClassNames(
-      styles.logo_yaxis,
-    )) {
+    for (const element of document.getElementsByClassName(styles.logo_yaxis)) {
       element.remove();
     }
     this.render_y_axis_label();
@@ -1477,6 +1484,7 @@ const HMMLogo = function(element, options = {}) {
     this.scrollToColumn(colTotal + 1);
     // scroll back to the location we started at.
     this.scrollToColumn(colTotal);
+    this.render();
   };
 
   this.toggle_ali_map = function(coords) {
@@ -1509,6 +1517,7 @@ const HMMLogo = function(element, options = {}) {
     this.scrollToColumn(colTotal + 1);
     // scroll back to the location we started at.
     this.scrollToColumn(colTotal);
+    this.render();
   };
 
   this.current_column = function() {
@@ -1529,10 +1538,12 @@ const HMMLogo = function(element, options = {}) {
     if (options.target) {
       zoomLevel = options.target;
     } else if (options.distance) {
-      zoomLevel = (parseFloat(this.zoom) - parseFloat(options.distance)
+      zoomLevel = (
+        parseFloat(this.zoom) - parseFloat(options.distance)
       ).toFixed(1);
       if (options.direction === '+') {
-        zoomLevel = (parseFloat(this.zoom) + parseFloat(options.distance)
+        zoomLevel = (
+          parseFloat(this.zoom) + parseFloat(options.distance)
         ).toFixed(1);
       }
     }
@@ -1702,11 +1713,15 @@ const hmmLogo = function(logoElement, options = {}) {
 
     const scaleControls =
       '<fieldset><legend>Scale</legend>' +
-      `<label><input type="radio" name="scale" class="${styles.logo_scale}" value="obs" ${obsChecked}/>Maximum Observed ${obsHelp}</label></br>` +
-      `<label><input type="radio" name="scale" class="${styles.logo_scale}" value="theory" ${theoryChecked}/>Maximum Theoretical ${theoryHelp}</label>` +
+      `<label><input type="radio" name="scale" class="${
+        styles.logo_scale
+      }" value="obs" ${obsChecked}/>Maximum Observed ${obsHelp}</label></br>` +
+      `<label><input type="radio" name="scale" class="${
+        styles.logo_scale
+      }" value="theory" ${theoryChecked}/>Maximum Theoretical ${theoryHelp}</label>` +
       '</fieldset>';
 
-    settings.innerHTML = scaleControls;
+    settings.innerHTML += scaleControls;
   }
 
   if (
@@ -1725,8 +1740,12 @@ const hmmLogo = function(logoElement, options = {}) {
 
     settings.innerHTML += `
       <fieldset><legend>Color Scheme</legend>
-        <label><input type="radio" name="color" class=${styles.logo_color}" value="default" ${defColor}/>Default</label></br>
-        <label><input type="radio" name="color" class=${styles.logo_color}" value="consensus" ${conColor}/>Consensus Colors</label>
+        <label><input type="radio" name="color" class="${
+          styles.logo_color
+        }" value="default" ${defColor}/>Default</label></br>
+        <label><input type="radio" name="color" class="${
+          styles.logo_color
+        }" value="consensus" ${conColor}/>Consensus Colors</label>
       </fieldset>
     `;
   }
@@ -1743,8 +1762,12 @@ const hmmLogo = function(logoElement, options = {}) {
 
     const aliControls =
       '<fieldset><legend>Coordinates</legend>' +
-      `<label><input type="radio" name="coords" class="${styles.logo_ali_map}" value="model" ${modChecked}/>Model</label></br>` +
-      `<label><input type="radio" name="coords" class="${styles.logo_ali_map}" value="alignment" ${aliChecked}/>Alignment</label>` +
+      `<label><input type="radio" name="coords" class="${
+        styles.logo_ali_map
+      }" value="model" ${modChecked}/>Model</label></br>` +
+      `<label><input type="radio" name="coords" class="${
+        styles.logo_ali_map
+      }" value="alignment" ${aliChecked}/>Alignment</label>` +
       '</fieldset>';
     settings.innerHTML += aliControls;
 
@@ -1754,7 +1777,9 @@ const hmmLogo = function(logoElement, options = {}) {
     ) {
       let activeSites =
         '<fieldset><legend>ActiveSites</legend>' +
-        `<label>Source: <select name="member_db" class="${styles.logo_ali_map}">`;
+        `<label>Source: <select name="member_db" class="${
+          styles.logo_ali_map
+        }">`;
       for (const key of Object.keys(logo.active_sites_sources)) {
         activeSites += `<option value="${key}">${key}</option> `;
       }
@@ -1762,7 +1787,9 @@ const hmmLogo = function(logoElement, options = {}) {
         '</select></label> ' + // + modHelp +
         '</br>' +
         '<label>Accession number: ' +
-        `  <input type="text" name="family_accession" class="${styles.logo_ali_map}" value=""/>` +
+        `  <input type="text" name="family_accession" class="${
+          styles.logo_ali_map
+        }" value=""/>` +
         '</label><br/>' +
         '<button id="active_sites">Get Active Sites</button>' +
         '</fieldset>';
@@ -1783,19 +1810,11 @@ const hmmLogo = function(logoElement, options = {}) {
   form.appendChild(controls);
   logoElement.appendChild(form);
 
-  for (const name of [
-    styles.logo_settings_switch,
-    styles.logo_settings,
-    styles.close,
-  ]) {
+  for (const name of [styles.logo_settings_switch, styles.close]) {
     for (const element of logoElement.getElementsByClassName(name)) {
       element.addEventListener('click', e => {
         e.preventDefault();
-        if (settings.style.display !== 'none' && settings.style.display) {
-          settings.style.display = 'none';
-        } else {
-          settings.style.display = 'block';
-        }
+        logo.toggle_visibility(settings);
       });
     }
   }
@@ -1939,13 +1958,13 @@ const hmmLogo = function(logoElement, options = {}) {
           // using the j < 15 check to make sure the last column doesn't get marked
           // with the odd class so we don't get a border on the edge of the table.
           if (infoCols > 1 && j < 15) {
-            tbody += `<td class="${styles[
-              color
-            ]}"><div></div>${values[0]}</td><td class="odd">${values[1]}</td>`;
+            tbody += `<td class="${styles[color]}"><div></div>${
+              values[0]
+            }</td><td class="odd">${values[1]}</td>`;
           } else {
-            tbody += `<td class="${styles[
-              color
-            ]}"><div></div>${values[0]}</td><td>${values[1]}</td>`;
+            tbody += `<td class="${styles[color]}"><div></div>${
+              values[0]
+            }</td><td>${values[1]}</td>`;
           }
 
           j += 5;
@@ -1960,9 +1979,9 @@ const hmmLogo = function(logoElement, options = {}) {
       columnInfo.innerHTML = `<div style="text-align: center;"><span>Column:${col} &nbsp;</span>
       <span>Occupancy: ${logo.data.delete_probs[col - 1]}  &nbsp;</span>
       <span>Insert Probability: ${logo.data.insert_probs[col - 1]} &nbsp;</span>
-      <span>Insert Length: ${logo.data.insert_lengths[
-        col - 1
-      ]}  &nbsp;</span></div>`;
+      <span>Insert Length: ${
+        logo.data.insert_lengths[col - 1]
+      }  &nbsp;</span></div>`;
       columnInfo.appendChild(infoTab);
       const existingColumnInfo = logoElement.querySelector('#logo_column_info');
       if (existingColumnInfo) {

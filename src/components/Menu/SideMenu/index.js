@@ -25,21 +25,22 @@ const getOldHref = createSelector(
   description => description,
   d => {
     const href = 'https://www.ebi.ac.uk/interpro/';
-    if (d.mainType === 'entry') {
-      if (!d.mainDB) {
+    const { key } = d.main;
+    if (key === 'entry') {
+      if (!d.entry.db) {
         return href;
-      } else if (d.mainDB === 'InterPro') {
-        if (d.mainAccession) {
-          return `${href}entry/${d.mainAccession}/`;
+      } else if (d.entry.db === 'InterPro') {
+        if (d.entry.accession) {
+          return `${href}entry/${d.entry.accession}/`;
         }
         return `${href}search/`;
       }
-      if (!d.mainAccession) {
-        return `${href}signature/${d.mainAccession}/`;
+      if (d.entry.accession) {
+        return `${href}signature/${d.entry.accession}/`;
       }
-      return `${href}member-database/${d.mainDB}/`;
-    } else if (d.mainType === 'protein' && d.mainAccession) {
-      return `${href}protein/${d.mainAccession}/`;
+      return `${href}member-database/${d.entry.db}/`;
+    } else if (key === 'protein' && d.entry.accession) {
+      return `${href}protein/${d.entry.accession}/`;
     }
     return href;
   },
@@ -69,7 +70,7 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
 }
 
 const mapStateToPropsForOldLink = createSelector(
-  state => state.newLocation.description,
+  state => state.customLocation.description,
   description => ({ description }),
 );
 
@@ -155,22 +156,25 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
 // const mapStateToUrl = createSelector(
 //   state => state.settings,
 //   state => state.location,
-//   state => state.newLocation,
-//   (settings, location, newLocation) => {
+//   state => state.customLocation,
+//   (settings, location, customLocation) => {
 //     for (const blacklist of urlBlacklist) {
 //       if (location.pathname.toLowerCase().includes(blacklist)) {
-//         return getUrlForApi({settings, location: {pathname: ''}, newLocation});
+//         return getUrlForApi({settings, location: {pathname: ''}, customLocation});
 //       }
 //     }
-//     return getUrlForApi({settings, location, newLocation});
+//     return getUrlForApi({settings, location, customLocation});
 //   }
 // );
 
 const mapStateToProps = createSelector(
   state => state.ui.sideNav,
-  state => state.newLocation.description.mainAccession,
-  state => state.newLocation.description.mainType,
-  (visible, mainAccession, mainType) => ({ visible, mainAccession, mainType }),
+  state => state.customLocation.description.main.key,
+  state =>
+    state.customLocation.description.main.key &&
+    state.customLocation.description[state.customLocation.description.main.key]
+      .accession,
+  (visible, mainType, mainAccession) => ({ visible, mainType, mainAccession }),
 );
 
 export default connect(mapStateToProps, { closeSideNav })(SideMenu);

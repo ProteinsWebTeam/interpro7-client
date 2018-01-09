@@ -76,6 +76,7 @@ const ParagraphWithTags = ({ children }) => (
             <Link
               href={xReferenceURL[mainDB].replace('{}', attrs.id)}
               className={f('ext')}
+              key={i}
             >
               {attrs.id}
             </Link>
@@ -83,30 +84,33 @@ const ParagraphWithTags = ({ children }) => (
         }
         return (
           <Link
-            newTo={{
+            to={{
               description: {
-                mainType,
-                mainDB,
-                mainAccession: attrs.id,
+                main: { key: mainType },
+                [mainType]: { db: mainDB, accession: attrs.id },
               },
             }}
+            key={i}
           >
             {attrs.id}
           </Link>
         );
       }
       // Checking for the TAG taxon
-      return part.split(/(<taxon [^>]+>[^<]+<\/taxon>)/i).map((part, i) => {
-        if (i % 2) {
+      return part.split(/(<taxon [^>]+>[^<]+<\/taxon>)/i).map((part, j) => {
+        if (j % 2) {
           const text = _getTextFromStringTag(part);
           const attrs = _getAttributesFromStringTag(part);
           return (
             <Link
-              newTo={{
+              key={`${i}-${j}`}
+              to={{
                 description: {
-                  mainType: 'organism',
-                  mainDB: 'taxonomy',
-                  mainAccession: attrs.tax_id,
+                  main: { key: 'organism' },
+                  organism: {
+                    db: 'taxonomy',
+                    accession: attrs.tax_id,
+                  },
                 },
               }}
             >

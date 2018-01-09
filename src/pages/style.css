@@ -125,6 +125,7 @@
    it as display:block element */
 .main {
   padding-top: 1rem;
+  flex: 1;
   margin-bottom: 1rem;
 }
 

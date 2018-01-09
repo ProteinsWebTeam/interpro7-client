@@ -8,9 +8,9 @@ import { stringify as qsStringify } from 'query-string';
 import NumberLabel from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
-import description2path from 'utils/processLocation/description2path';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
@@ -23,17 +23,18 @@ class ExperimentTypeFilter extends Component {
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
-    goToNewLocation: T.func.isRequired,
-    location: T.shape({
+    goToCustomLocation: T.func.isRequired,
+    customLocation: T.shape({
+      description: T.object.isRequired,
       search: T.object.isRequired,
     }).isRequired,
   };
 
   _handleSelection = ({ target: { value } }) => {
-    this.props.goToNewLocation({
-      ...this.props.location,
+    this.props.goToCustomLocation({
+      ...this.props.customLocation,
       search: {
-        ...this.props.location.search,
+        ...this.props.customLocation.search,
         experiment_type: value === 'All' ? undefined : value,
         page: undefined,
       },
@@ -43,9 +44,13 @@ class ExperimentTypeFilter extends Component {
   render() {
     const {
       data: { loading, payload },
-      location: { description, search },
+      customLocation: { description, search },
     } = this.props;
-    if (description.focusType) return <div>Not available.</div>;
+    if (
+      (Object.entries(description).find(([_key, value]) => value.isFilter) ||
+        [])[0]
+    )
+      return <div>Not available.</div>;
     const types = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,
     );
@@ -82,25 +87,25 @@ class ExperimentTypeFilter extends Component {
 
 const getUrlFor = createSelector(
   state => state.settings.api,
-  state => state.newLocation.description,
-  state => state.newLocation.search,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     const { experiment_type, search: _, ..._search } = search;
     // add to search
     _search.group_by = 'experiment_type';
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${description2path(
+    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
       description,
     )}?${qsStringify(_search)}`;
   },
 );
 
 const mapStateToProps = createSelector(
-  state => state.newLocation,
-  location => ({ location }),
+  state => state.customLocation,
+  customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToNewLocation })(
+export default connect(mapStateToProps, { goToCustomLocation })(
   loadData(getUrlFor)(ExperimentTypeFilter),
 );

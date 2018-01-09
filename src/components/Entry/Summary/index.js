@@ -90,7 +90,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                     <h5>
                       Member database:&nbsp;
                       <Link
-                        newTo={{
+                        to={{
                           description: {
                             mainType: 'entry',
                             mainDB: metadata.source_database,
@@ -150,7 +150,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   }
                   <Link
                     className={f('ext')}
-                    newTo={{
+                    to={{
                       description: {},
                     }}
                   >

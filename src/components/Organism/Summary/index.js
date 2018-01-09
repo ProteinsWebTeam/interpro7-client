@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 import Accession from 'components/Accession';
 import Lineage from 'components/Organism/Lineage';
@@ -28,7 +28,7 @@ const f = foundationPartial(ebiStyles, global);
   data: {
     metadata: Object,
   },
-  goToNewLocation: function,
+  goToCustomLocation: function,
 }; */
 
 class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
@@ -43,7 +43,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
         names: T.object,
       }).isRequired,
     }).isRequired,
-    goToNewLocation: T.func.isRequired,
+    goToCustomLocation: T.func.isRequired,
   };
 
   constructor(props) {
@@ -71,11 +71,10 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 
   _handleFocus = ({ detail: { id } }) => {
     if (!this.loadingVis)
-      this.props.goToNewLocation({
+      this.props.goToCustomLocation({
         description: {
-          mainType: 'organism',
-          mainDB: 'taxonomy',
-          mainAccession: id,
+          main: { key: 'organism' },
+          organism: { db: 'taxonomy', accession: id },
         },
       });
   };
@@ -142,11 +141,11 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 class SummaryProteome extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
-      metadata: T.object.isRequired,
+      payload: T.shape({
+        metadata: T.object.isRequired,
+      }),
     }).isRequired,
-    goToNewLocation: T.func.isRequired,
   };
-
   render() {
     const { data: { payload: { metadata } } } = this.props;
     return (
@@ -161,8 +160,8 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
           }
           <div>
             <Accession
-              accession={metadata.accession}
               id={metadata.id}
+              accession={metadata.proteomeAccession || metadata.accession}
               title="Proteome ID"
             />
           </div>
@@ -204,10 +203,16 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
       }),
     }).isRequired,
     loading: T.bool.isRequired,
+    isStale: T.bool.isRequired,
   };
 
   render() {
-    if (this.props.loading || !this.props.data || !this.props.data.payload) {
+    if (
+      this.props.loading ||
+      !this.props.data ||
+      !this.props.data.payload ||
+      this.props.isStale
+    ) {
       return <Loading />;
     }
     const { metadata: { source_database: db } } = this.props.data.payload;
@@ -219,6 +224,8 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
     );
   }
 }
-export default loadData((...args) => `${getUrlForApi(...args)}?with_names`)(
-  connect(null, { goToNewLocation })(SummaryOrganism),
-);
+
+export default loadData((...args) => {
+  const url = getUrlForApi(...args);
+  return `${url}${url.indexOf('?') < 0 ? '?' : '&'}with_names`;
+})(connect(null, { goToCustomLocation })(SummaryOrganism));

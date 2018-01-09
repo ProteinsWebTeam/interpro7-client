@@ -52,11 +52,13 @@ class LatestEntry extends PureComponent {
         </Tooltip>
         <div className={f('list-body')}>
           <Link
-            newTo={{
+            to={{
               description: {
-                mainType: 'entry',
-                mainDB: 'InterPro',
-                mainAccession: entry.accession,
+                main: { key: 'entry' },
+                entry: {
+                  db: 'InterPro',
+                  accession: entry.accession,
+                },
               },
             }}
           >
@@ -76,12 +78,13 @@ class LatestEntry extends PureComponent {
               <small>
                 {c.source_database}:
                 <Link
-                  newTo={{
+                  to={{
                     description: {
-                      mainType: 'entry',
-                      mainDB: 'interpro',
-                      mainMemberDB: c.source_database,
-                      mainMemberDBAccession: c.accession,
+                      main: { key: 'entry' },
+                      entry: {
+                        db: c.source_database,
+                        accession: c.accession,
+                      },
                     },
                   }}
                   className={f('list-sign')}
@@ -119,7 +122,9 @@ class ByLatestEntries extends PureComponent {
               </AnimatedEntry>
             </div>
             <Link
-              newTo={{ description: { mainType: 'entry' } }}
+              to={{
+                description: { main: { key: 'entry' } },
+              }}
               className={f('button')}
             >
               View all entries

@@ -7,9 +7,9 @@ import { stringify as qsStringify } from 'query-string';
 import NumberLabel from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
-import description2path from 'utils/processLocation/description2path';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import { goToNewLocation } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
@@ -28,8 +28,8 @@ class CurationFilter extends Component {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
-    goToNewLocation: T.func.isRequired,
-    location: T.shape({
+    goToCustomLocation: T.func.isRequired,
+    customLocation: T.shape({
       description: T.shape({
         mainDB: T.string,
       }).isRequired,
@@ -43,33 +43,35 @@ class CurationFilter extends Component {
   }
 
   componentWillMount() {
-    this.location2state(this.props.location);
+    this.locationToState(this.props.customLocation);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.location2state(nextProps.location);
+    this.locationToState(nextProps.customLocation);
   }
 
-  location2state(location) {
-    const { mainDB } = location.description;
-    if (mainDB === 'reviewed') {
+  locationToState(customLocation) {
+    const db =
+      customLocation.description[customLocation.description.main.key].db;
+    if (db === 'reviewed') {
       this.setState({ value: 'reviewed' });
-    } else if (mainDB === 'unreviewed') {
+    } else if (db === 'unreviewed') {
       this.setState({ value: 'unreviewed' });
     } else {
       this.setState({ value: 'uniprot' });
     }
   }
+
   _handleSelection = ({ target: { value } }) => {
     this.setState({ value });
-    this.props.goToNewLocation({
-      ...this.props.location,
+    this.props.goToCustomLocation({
+      ...this.props.customLocation,
       description: {
-        ...this.props.location.description,
-        mainDB: value,
+        ...this.props.customLocation.description,
+        protein: { db: value },
       },
       search: {
-        ...this.props.location.search,
+        ...this.props.customLocation.search,
         page: undefined,
       },
     });
@@ -113,27 +115,30 @@ class CurationFilter extends Component {
 
 const getUrl = createSelector(
   state => state.settings.api,
-  state => state.newLocation.description,
-  state => state.newLocation.search,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // transform description
-    const _description = { ...description, mainDB: 'UniProt' };
+    const _description = {
+      ...description,
+      protein: { db: 'UniProt' },
+    };
     // omit from search
     const { search: _, ..._search } = search;
     // add to search
     _search.group_by = 'source_database';
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${description2path(
+    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
       _description,
     )}?${qsStringify(_search)}`;
   },
 );
 
 const mapStateToProps = createSelector(
-  state => state.newLocation,
-  location => ({ location }),
+  state => state.customLocation,
+  customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToNewLocation })(
+export default connect(mapStateToProps, { goToCustomLocation })(
   loadData(getUrl)(CurationFilter),
 );
