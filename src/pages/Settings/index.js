@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -245,56 +245,63 @@ const IPScanEndpointSettings = loadData({
   fetchOptions,
 })(EndpointSettings);
 
-const Settings = ({
-  settings: {
-    navigation = {},
-    ui = {},
-    cache = {},
-    api = {},
-    ebi = {},
-    ipScan = {},
-  },
-  changeSettings,
-  resetSettings,
-}) => (
-  <div className={f('row')}>
-    <div className={f('columns', 'large-12')}>
-      <section onChange={changeSettings}>
-        <h3>Settings</h3>
+class Settings extends PureComponent {
+  static propTypes = {
+    settings: T.shape({
+      navigation: T.object.isRequired,
+      ui: T.object.isRequired,
+      cache: T.object.isRequired,
+      api: T.object.isRequired,
+      ebi: T.object.isRequired,
+    }).isRequired,
+    changeSettings: T.func.isRequired,
+    resetSettings: T.func.isRequired,
+  };
 
-        <NavigationSettings
-          navigation={navigation}
-          handleChange={changeSettings}
-        />
-        <UISettings ui={ui} />
-        <CacheSettings cache={cache} />
-        <APIEndpointSettings category="api" endpointDetails={api}>
-          API Settings
-        </APIEndpointSettings>
-        <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
-          EBI Search Settings
-        </EBIEndpointSettings>
-        <IPScanEndpointSettings category="ipScan" endpointDetails={ipScan}>
-          InterProScan Settings
-        </IPScanEndpointSettings>
-        <button onClick={resetSettings} className={f('button')}>
-          Reset settings to default values
-        </button>
-      </section>
-    </div>
-  </div>
-);
-Settings.propTypes = {
-  settings: T.shape({
-    navigation: T.object.isRequired,
-    ui: T.object.isRequired,
-    cache: T.object.isRequired,
-    api: T.object.isRequired,
-    ebi: T.object.isRequired,
-  }).isRequired,
-  changeSettings: T.func.isRequired,
-  resetSettings: T.func.isRequired,
-};
+  _handleReset = () => this.props.resetSettings();
+
+  render() {
+    const {
+      settings: {
+        navigation = {},
+        ui = {},
+        cache = {},
+        api = {},
+        ebi = {},
+        ipScan = {},
+      },
+      changeSettings,
+    } = this.props;
+    return (
+      <div className={f('row')}>
+        <div className={f('columns', 'large-12')}>
+          <section onChange={changeSettings}>
+            <h3>Settings</h3>
+
+            <NavigationSettings
+              navigation={navigation}
+              handleChange={changeSettings}
+            />
+            <UISettings ui={ui} />
+            <CacheSettings cache={cache} />
+            <APIEndpointSettings category="api" endpointDetails={api}>
+              API Settings
+            </APIEndpointSettings>
+            <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
+              EBI Search Settings
+            </EBIEndpointSettings>
+            <IPScanEndpointSettings category="ipScan" endpointDetails={ipScan}>
+              InterProScan Settings
+            </IPScanEndpointSettings>
+            <button onClick={this._handleReset} className={f('button')}>
+              Reset settings to default values
+            </button>
+          </section>
+        </div>
+      </div>
+    );
+  }
+}
 
 const mapStateToProps = createSelector(
   state => state.settings,
