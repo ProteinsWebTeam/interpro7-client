@@ -36,8 +36,7 @@ export class Accession extends PureComponent /*:: <Props> */ {
     const Link = componentMap.get(db) || Default;
     return (
       <div>
-        {title == null ? 'Accession' : title}:{' '}
-        <Link id={accession}>{accession}</Link>
+        {title || 'Accession'}: <Link id={accession}>{accession}</Link>
         {id && ` (${id})`}
       </div>
     );

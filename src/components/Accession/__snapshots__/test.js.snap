@@ -3,8 +3,7 @@
 exports[`<Accession /> should render the accession component for UniProt proteome 1`] = `
 <div>
   Accession
-  :
-   
+  : 
   <ProteomeLink
     id="UP000000278"
   >
@@ -16,8 +15,7 @@ exports[`<Accession /> should render the accession component for UniProt proteom
 exports[`<Accession /> should render the accession component for UniProt reviewed 1`] = `
 <div>
   Accession
-  :
-   
+  : 
   <UniProtLink
     id="A0A023GPI8"
   >
@@ -30,8 +28,7 @@ exports[`<Accession /> should render the accession component for UniProt reviewe
 exports[`<Accession /> should render the accession component for UniProt reviewed 2`] = `
 <div>
   Accession
-  :
-   
+  : 
   <UniProtLink
     id="A0A023GPI8"
   >
@@ -43,8 +40,7 @@ exports[`<Accession /> should render the accession component for UniProt reviewe
 exports[`<Accession /> should render the accession component for UniProt unreviewed 1`] = `
 <div>
   Accession
-  :
-   
+  : 
   <UniProtLink
     id="A0A1S2IFJ5"
   >
@@ -57,8 +53,7 @@ exports[`<Accession /> should render the accession component for UniProt unrevie
 exports[`<Accession /> should render the accession component for UniProt unreviewed 2`] = `
 <div>
   Accession
-  :
-   
+  : 
   <UniProtLink
     id="A0A1S2IFJ5"
   >
@@ -70,8 +65,7 @@ exports[`<Accession /> should render the accession component for UniProt unrevie
 exports[`<Accession /> should render the accession component for other 1`] = `
 <div>
   Accession
-  :
-   
+  : 
   <Default
     id="iprscan5-R20171012-151028-0135-99171282-p1m"
   >
@@ -83,8 +77,7 @@ exports[`<Accession /> should render the accession component for other 1`] = `
 exports[`<Accession /> should render the accession component for taxon 1`] = `
 <div>
   Accession
-  :
-   
+  : 
   <Default
     id={1}
   >

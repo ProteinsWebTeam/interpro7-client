@@ -3,7 +3,7 @@ import testInit from './test-init';
 import { sleep } from 'timing-functions';
 
 describe('tests', () => {
-  let testSetup = testInit();
+  const testSetup = testInit();
   let page;
 
   beforeAll(async () => {
@@ -19,7 +19,7 @@ describe('tests', () => {
 
   test.skip('search', async () => {
     await page.type('input[type="text"', 'IPR000001');
-    await sleep(2000);
+    await sleep(2000); // eslint-disable-line no-magic-numbers
     // This is failing, check why. Because redirect is indeed working 🤔
     expect(page.url()).toEqual(
       expect.stringContaining('/search/text/IPR0000001')

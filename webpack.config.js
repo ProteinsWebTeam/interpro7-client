@@ -197,6 +197,7 @@ module.exports = (env = { dev: true }) => {
                     {
                       loader: 'postcss-loader',
                       options: {
+                        ident: 'postcss',
                         plugins: [postCSSImport(), cssNext()],
                       },
                     },
@@ -213,6 +214,7 @@ module.exports = (env = { dev: true }) => {
                   {
                     loader: 'postcss-loader',
                     options: {
+                      ident: 'postcss',
                       plugins: [postCSSImport(), cssNext()],
                     },
                   },
@@ -234,6 +236,7 @@ module.exports = (env = { dev: true }) => {
                     {
                       loader: 'postcss-loader',
                       options: {
+                        ident: 'postcss',
                         plugins: [postCSSImport(), cssNext()],
                       },
                     },
@@ -248,6 +251,7 @@ module.exports = (env = { dev: true }) => {
                   {
                     loader: 'postcss-loader',
                     options: {
+                      ident: 'postcss',
                       plugins: [postCSSImport(), cssNext()],
                     },
                   },

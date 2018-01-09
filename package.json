@@ -20,7 +20,7 @@
     "lint:fix": "npm run test:lint -- --fix",
     "clean": "rimraf dist",
     "bundle": "webpack --progress",
-    "postbundle": "#node scripts/serve.js & jest --notify scripts",
+    "postbundle": "jest --notify scripts",
     "precommit": "lint-staged",
     "predeploy": "npm-run-all test clean",
     "deploy": "npm run bundle",

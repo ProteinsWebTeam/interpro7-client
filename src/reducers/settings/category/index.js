@@ -42,6 +42,8 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         port: config.root.IPScan.port || DEFAULT_HTTP_PORT,
         root: config.root.IPScan.pathname,
       };
+    default:
+      return null;
   }
 };
 
