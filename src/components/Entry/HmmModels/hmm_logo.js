@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-magic-numbers */
 import EasyScroller from './scroller';

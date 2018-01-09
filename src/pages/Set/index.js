@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -139,6 +140,7 @@ class List extends PureComponent {
             </SearchBox>
             <Column
               dataKey="accession"
+              // eslint-disable-next-line camelcase
               renderer={(accession /*: string */, { source_database }) => (
                 <Link
                   to={customLocation => ({
@@ -167,6 +169,7 @@ class List extends PureComponent {
               dataKey="name"
               renderer={(
                 name /*: string */,
+                // eslint-disable-next-line camelcase
                 { accession, source_database } /*: {accession: string} */,
               ) => (
                 <Link

@@ -1,3 +1,4 @@
+// @flow
 import T from 'prop-types';
 
 const Column = () => null;

@@ -1,3 +1,4 @@
+// @flow
 /* eslint no-magic-numbers: 0 */
 import React from 'react';
 import T from 'prop-types';
@@ -71,7 +72,7 @@ const StructureOnProtein = ({
                     <tspan textAnchor="middle">{fragment[1]}</tspan>
                   </text>
                 </g>
-              ))
+              )),
             );
           })}
         </g>
@@ -84,7 +85,7 @@ StructureOnProtein.propTypes = {
     T.shape({
       structure: T.object.isRequired,
       protein: T.object.isRequired,
-    })
+    }),
   ).isRequired,
   options: T.object,
 };

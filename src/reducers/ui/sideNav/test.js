@@ -1,3 +1,4 @@
+// @flow
 import reducer from '.';
 import { TOGGLE_SIDE_NAV, CLOSE_EVERYTHING } from 'actions/types';
 

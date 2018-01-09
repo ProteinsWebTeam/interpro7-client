@@ -1,8 +1,14 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 import Link from 'components/generic/Link';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+
+import { changeSettings } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -37,12 +43,91 @@ class Example extends PureComponent {
   }
 }
 
+class _Settings extends PureComponent {
+  static propTypes = {
+    autoRedirect: T.bool.isRequired,
+    changeSettings: T.func.isRequired,
+  };
+
+  render() {
+    return (
+      <div className={f('large-3', 'columns', 'settings')}>
+        <Tooltip
+          interactive
+          useContext
+          className={f('float-right')}
+          html={
+            <React.Fragment>
+              <span>
+                This will take you to the corresponding page if there is an
+                exact match.
+              </span>
+              <br />
+              <span>
+                {'This can also be changed in the '}
+                <Link
+                  className={f('link-in-tooltip')}
+                  to={{ description: { other: ['settings'] } }}
+                >
+                  Settings
+                </Link>
+                {' page'}
+              </span>
+            </React.Fragment>
+          }
+        >
+          <span className={f('visible-label')}>auto redirect</span>
+          <span className={f('switch', 'tiny')}>
+            <input
+              onChange={this.props.changeSettings}
+              type="checkbox"
+              checked={this.props.autoRedirect}
+              className={f('switch-input')}
+              name="autoRedirect"
+              id="autoRedirect-input"
+            />
+            <label className={f('switch-paddle')} htmlFor="autoRedirect-input">
+              <span className={f('show-for-sr')}>Automatic redirect:</span>
+              <span className={f('switch-active')} aria-hidden="true">
+                On
+              </span>
+              <span className={f('switch-inactive')} aria-hidden="true">
+                Off
+              </span>
+            </label>
+          </span>
+        </Tooltip>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = createSelector(
+  state => state.settings.navigation.autoRedirect,
+  autoRedirect => ({ autoRedirect }),
+);
+
+const Settings = connect(mapStateToProps, { changeSettings })(_Settings);
+
 class SearchByText extends PureComponent {
+  static propTypes = {
+    main: T.string,
+  };
+
+  componentDidMount() {
+    // Only focus if on the search page (not on home page)
+    if (this._input && this.props.main === 'search') {
+      const { length } = this._input.value;
+      this._input.focus();
+      this._input.setSelectionRange(length, length);
+    }
+  }
+
   render() {
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns', 'margin-bottom-medium')}>
-          <form onSubmit={e => e.preventDefault()}>
+          <form onSubmit={e => e.preventDefault()} data-category="navigation">
             <div
               className={f(
                 'secondary',
@@ -55,7 +140,7 @@ class SearchByText extends PureComponent {
                 <div className={f('large-12', 'columns', 'search-input')}>
                   <h3>Search families, domains or GO terms</h3>
 
-                  <TextSearchBox />
+                  <TextSearchBox inputRef={node => (this._input = node)} />
                 </div>
               </div>
 
@@ -84,14 +169,14 @@ class SearchByText extends PureComponent {
                 </div>
               </div>
 
-              <div className={f('row')} style={{ marginTop: '1em' }}>
+              <div className={f('row', 'action-row')}>
                 <div
                   className={f(
-                    'large-12',
+                    'large-9',
                     'columns',
                     'stacked-for-small',
-                    'button-group',
                     'margin-bottom-none',
+                    'button-group',
                   )}
                 >
                   <button className={f('button')}>Search</button>
@@ -107,6 +192,8 @@ class SearchByText extends PureComponent {
                     Clear
                   </Link>
                 </div>
+
+                <Settings />
               </div>
             </div>
           </form>
@@ -116,4 +203,9 @@ class SearchByText extends PureComponent {
   }
 }
 
-export default SearchByText;
+const mapStateToProps2 = createSelector(
+  state => state.customLocation.description.main.key,
+  main => ({ main }),
+);
+
+export default connect(mapStateToProps2)(SearchByText);

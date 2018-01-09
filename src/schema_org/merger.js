@@ -1,3 +1,4 @@
+// @flow
 import { schedule } from 'timing-functions/src';
 
 const DEFAULT_ROOT_DATA = {

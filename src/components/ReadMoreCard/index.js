@@ -1,11 +1,18 @@
-import React, {Component} from 'react';
+// @flow
+import React, { Component } from 'react';
 import T from 'prop-types';
 
 import styles from './style.css';
 import _DOMAttributeChecker from 'higherOrder/DOMAttributeChecker';
 
-const Content = ({clientWidth, clientHeight, scrollWidth,
-  scrollHeight, isOverflowing, children}) => {
+const Content = ({
+  clientWidth,
+  clientHeight,
+  scrollWidth,
+  scrollHeight,
+  isOverflowing,
+  children,
+}) => {
   isOverflowing(scrollHeight > clientHeight || scrollWidth > clientWidth);
   return <div>{children}</div>;
 };
@@ -19,7 +26,10 @@ Content.propTypes = {
 };
 
 const Wrapped = _DOMAttributeChecker(
-  'clientWidth', 'clientHeight', 'scrollWidth', 'scrollHeight'
+  'clientWidth',
+  'clientHeight',
+  'scrollWidth',
+  'scrollHeight',
 )(Content);
 
 class ReadMoreCard extends Component {
@@ -33,17 +43,17 @@ class ReadMoreCard extends Component {
   };
 
   toggleCollapse = () => {
-    this.setState({collapsed: !this.state.collapsed});
+    this.setState({ collapsed: !this.state.collapsed });
   };
-  setVisibility = (visibility) => {
+  setVisibility = visibility => {
     if (visibility === this.state.displayButton && this.state.collapsed) {
-      this.setState({displayButton: !visibility});
+      this.setState({ displayButton: !visibility });
     }
   };
 
   render() {
-    const {collapsed, displayButton} = this.state;
-    const {children} = this.props;
+    const { collapsed, displayButton } = this.state;
+    const { children } = this.props;
     return (
       <div className={collapsed ? styles.collapsed : styles.opened}>
         <Wrapped isOverflowing={this.setVisibility}>{children}</Wrapped>

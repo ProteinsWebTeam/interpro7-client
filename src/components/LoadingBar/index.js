@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -51,7 +52,7 @@ export class LoadingBar extends PureComponent {
 
 const reducer = (
   acc /*: number */,
-  { loading, progress } /*: {loading: boolean, progress: number} */
+  { loading, progress } /*: {loading: boolean, progress: number} */,
 ) => acc + 1 / (loading ? 2 : 1) + progress;
 
 const mapStateToProps = createSelector(
@@ -60,7 +61,7 @@ const mapStateToProps = createSelector(
     const values = Object.values(data);
     const progress = values.reduce(reducer, 0) / (2 * values.length);
     return { progress: isNaN(progress) ? 1 : progress };
-  }
+  },
 );
 
 export default connect(mapStateToProps)(LoadingBar);

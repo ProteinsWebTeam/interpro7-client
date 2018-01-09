@@ -1,3 +1,4 @@
+// @flow
 import reducer from '.';
 import { STUCK, UNSTUCK } from 'actions/types';
 

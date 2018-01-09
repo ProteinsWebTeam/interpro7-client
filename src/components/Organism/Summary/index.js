@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -227,5 +228,5 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
 
 export default loadData((...args) => {
   const url = getUrlForApi(...args);
-  return `${url}${url.indexOf('?') < 0 ? '?' : '&'}with_names`;
+  return `${url}${url.includes('?') ? '&' : '?'}with_names`;
 })(connect(null, { goToCustomLocation })(SummaryOrganism));

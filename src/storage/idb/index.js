@@ -1,3 +1,4 @@
+// @flow
 import idb from 'idb';
 
 let initialized = false;
@@ -11,8 +12,10 @@ const init = () => {
     // eslint-disable-next-line default-case
     switch (upgradeDb.oldVersion) {
       case 0:
-        upgradeDb.createObjectStore('blobs', {autoIncrement: true});
-        upgradeDb.createObjectStore('interproscan-jobs', {autoIncrement: true});
+        upgradeDb.createObjectStore('blobs', { autoIncrement: true });
+        upgradeDb.createObjectStore('interproscan-jobs', {
+          autoIncrement: true,
+        });
     }
   });
   tableAccesses = new Map();
@@ -26,7 +29,10 @@ const TableAccess = class {
   }
 
   async get(key) {
-    return this._db.transaction(this._table).objectStore(this._table).get(key);
+    return this._db
+      .transaction(this._table)
+      .objectStore(this._table)
+      .get(key);
   }
 
   async set(value, key) {
@@ -66,7 +72,7 @@ const TableAccess = class {
         values.push(objectStore.get(cursor.key));
         keys.push(cursor.key);
         cursor.continue();
-      }
+      },
     );
 
     await tr.complete;
@@ -88,7 +94,7 @@ const TableAccess = class {
         if (!cursor) return;
         keys.push(cursor.key);
         cursor.continue();
-      }
+      },
     );
 
     await tr.complete;

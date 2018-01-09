@@ -1,3 +1,4 @@
+// @flow
 import reactLoadable from 'react-loadable';
 
 import LoadingComponent from './LoadingComponent';

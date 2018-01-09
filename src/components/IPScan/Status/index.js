@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';

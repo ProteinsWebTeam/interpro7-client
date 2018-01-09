@@ -1,3 +1,4 @@
+// @flow
 import { createSelector } from 'reselect';
 import { stringify as qsStringify } from 'query-string';
 

@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent, Children, cloneElement } from 'react';
 import T from 'prop-types';
 
@@ -30,7 +31,7 @@ class ResizeObserverComponent extends PureComponent /*:: <Props> */ {
     super(props);
     this.state = {};
     this._resizeObserver = new ResizeObserver(
-      this._handleResizeEvent.bind(this)
+      this._handleResizeEvent.bind(this),
     );
   }
 

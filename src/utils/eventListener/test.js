@@ -1,3 +1,4 @@
+// @flow
 /* eslint max-statements: [1, 20] */
 import Listener from '.';
 

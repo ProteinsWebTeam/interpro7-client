@@ -1,3 +1,4 @@
+// @flow
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
@@ -34,7 +35,7 @@ const f = foundationPartial(styles, fonts);
   pathname: string,
   title: string,
   notFound: ?boolean,
-  children: children?: any,
+  children?: any,
 } */
 
 export default class Table extends PureComponent /*:: <Props> */ {
