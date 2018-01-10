@@ -17,12 +17,11 @@ describe('tests', () => {
     expect(title).toBe('InterPro');
   });
 
-  test.skip('search', async () => {
+  test('search', async () => {
     await page.type('input[type="text"', 'IPR000001');
-    await sleep(2000); // eslint-disable-line no-magic-numbers
+    await sleep(1500); // eslint-disable-line no-magic-numbers
     // This is failing, check why. Because redirect is indeed working 🤔
-    expect(page.url()).toEqual(
-      expect.stringContaining('/search/text/IPR0000001')
-    );
+    const url = await page.evaluate(() => window.location.href);
+    expect(url).toEqual(expect.stringContaining('/search/text/IPR000001'));
   });
 });
