@@ -36,13 +36,13 @@ class Row extends Component {
               dataKey,
               defaultKey,
               cellStyle,
-              className,
+              cellClassName,
               renderer = defaultRenderer,
             }) => (
               <td
                 key={defaultKey || dataKey}
                 style={cellStyle}
-                className={className}
+                className={cellClassName}
               >
                 {renderer(lodashGet(row, dataKey, '∅'), row)}
               </td>

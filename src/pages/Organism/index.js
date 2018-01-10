@@ -103,7 +103,6 @@ class List extends PureComponent {
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
-            pathname=""
             notFound={notFound}
           >
             <Exporter>
@@ -126,9 +125,7 @@ class List extends PureComponent {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search} pathname="">
-              Search proteins
-            </SearchBox>
+            <SearchBox search={search.search}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */) => (

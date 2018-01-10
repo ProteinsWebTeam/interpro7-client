@@ -23,11 +23,9 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation:
       customLocation: { search },
     } = this.props;
     return (
-      <Table dataTable={results} actualSize={count} query={search} pathname="">
+      <Table dataTable={results} actualSize={count} query={search}>
         <PageSizeSelector />
-        <SearchBox search={search.search} pathname="">
-          Search
-        </SearchBox>
+        <SearchBox search={search.search}>Search</SearchBox>
         <Column
           dataKey="accession"
           renderer={(acc /*: string */) => (
@@ -91,7 +89,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation:
         </Column>
         <Column
           dataKey="is_reference"
-          className={f('table-center')}
+          headerClassName={f('table-center')}
           renderer={(isReference /*: string */) => (
             <div>
               {isReference ? (

@@ -10,7 +10,8 @@ Column.propTypes = {
   displayIf: T.bool,
   headerStyle: T.object,
   cellStyle: T.object,
-  className: T.string,
+  headerClassName: T.string,
+  cellClassName: T.string,
   children: T.any,
 };
 

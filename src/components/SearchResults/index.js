@@ -51,7 +51,6 @@ class SearchResults extends PureComponent {
           dataTable={payload.entries}
           actualSize={payload.hitCount}
           query={{ search: { search: searchValue } }}
-          pathname="/search/text"
         >
           <Exporter>
             <a href={dataUrl} download={`SearchResults-${searchValue}.json`}>
