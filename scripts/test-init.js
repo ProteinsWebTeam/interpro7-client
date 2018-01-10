@@ -12,7 +12,13 @@ export const config = {
   // headless: false,
   // slowMo: 40,
   headless: true,
-  args: [`--window-size=${width},${height}`],
+  args: [
+    `--window-size=${width},${height}`,
+    // TODO: next two lines should eventually be removed, since they are not
+    // TODO: recommended for security reasons
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+  ],
 };
 
 export default () =>
