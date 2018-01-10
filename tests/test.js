@@ -1,5 +1,4 @@
-import testInit from './test-init';
-// TODO: fix this module's export for node
+import testInit from '../scripts/test-init';
 import { sleep } from 'timing-functions';
 
 describe('tests', () => {
@@ -20,8 +19,7 @@ describe('tests', () => {
   test('search', async () => {
     await page.type('input[type="text"', 'IPR000001');
     await sleep(1500); // eslint-disable-line no-magic-numbers
-    // This is failing, check why. Because redirect is indeed working 🤔
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringContaining('/search/text/IPR000001'));
+    expect(url).toEqual(expect.stringContaining('/search/text/IPR000001/'));
   });
 });
