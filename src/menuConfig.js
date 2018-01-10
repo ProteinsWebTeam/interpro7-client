@@ -364,6 +364,9 @@ export const InterPro /*: Array<Object> */ = [
   },
   {
     to: { description: { main: { key: 'search' } } },
+    activeClass({ description: { main } } /*: Location */) {
+      if (main.key === 'search' || main.key === 'job') return f('is-active');
+    },
     icon: '1',
     name: 'Search',
     iconClass: 'functional',
@@ -403,7 +406,9 @@ export const InterPro /*: Array<Object> */ = [
       };
     },
     activeClass({ description: { main } } /*: Location */) {
-      if (main.key && main.key !== 'search') return f('is-active');
+      if (main.key && main.key !== 'search' && main.key !== 'job') {
+        return f('is-active');
+      }
     },
     icon: 'b',
     name: 'Browse',
