@@ -67,7 +67,7 @@
 }
 
 .invalid-block {
-  border-color: var(--colors-alert-box);
+  border-color: var(--colors-alert-main);
 }
 
 .comment {

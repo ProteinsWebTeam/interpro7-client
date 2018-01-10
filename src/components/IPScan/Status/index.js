@@ -168,7 +168,7 @@ class IPScanStatus extends Component {
                               to={{
                                 description: {
                                   main: { key: 'job' },
-                                  search: {
+                                  job: {
                                     type: 'InterProScan',
                                     accession: id,
                                   },
@@ -217,7 +217,8 @@ class IPScanStatus extends Component {
                               )}
 
                               {status === 'not found' ||
-                              status === 'failure' ? (
+                              status === 'failure' ||
+                              status === 'error' ? (
                                 <span
                                   style={{ fontSize: '160%' }}
                                   className={f(
