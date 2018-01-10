@@ -16,7 +16,7 @@ const server = require('./serve');
 const BAD = 45;
 const MEH = 75;
 
-const app = (port /*: number */) => `http://0.0.0.0:${port}/interpro/`;
+const app = (port /*: number */) => `http://localhost:${port}/interpro/`;
 
 const getColorFor = (score /*: number */) => {
   if (score < BAD) {

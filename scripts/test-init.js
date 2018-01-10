@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer';
 
 import server from './serve';
 
-export const app = (port /*: number */) => `http://0.0.0.0:${port}/interpro/`;
+export const app = (port /*: number */) => `http://localhost:${port}/interpro/`;
 
 const width = 1024;
 const height = 800;

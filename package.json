@@ -22,7 +22,7 @@
     "lint:fix": "npm run test:lint -- --fix",
     "clean": "rimraf dist",
     "bundle": "webpack --progress",
-    "postbundle": "npm-run-all -p --aggregate-output test:functional test:lighthouse",
+    "postbundle": "npm-run-all -p --aggregate-output test:functional #test:lighthouse",
     "precommit": "lint-staged",
     "predeploy": "npm-run-all test clean",
     "deploy": "npm run bundle",
