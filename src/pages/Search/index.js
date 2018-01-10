@@ -30,10 +30,6 @@ const IPScanStatus = loadable({
   loader: () =>
     import(/* webpackChunkName: "ipscan-status" */ 'components/IPScan/Status'),
 });
-const IPScanResult = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "sequence-page" */ 'pages/Sequence'),
-});
 
 const TextSearchAndResults = () => (
   <Wrapper>
@@ -57,20 +53,9 @@ IPScanSearchAndStatus.preload = () => {
   IPScanStatus.preload();
 };
 
-const InnerSwitch = props => (
-  <ErrorBoundary>
-    <Switch
-      {...props}
-      locationSelector={l => l.description.search.accession}
-      indexRoute={IPScanSearchAndStatus}
-      catchAll={IPScanResult}
-    />
-  </ErrorBoundary>
-);
-
 const routes = new Set([
   { value: 'text', component: TextSearchAndResults },
-  { value: 'sequence', component: InnerSwitch },
+  { value: 'sequence', component: IPScanSearchAndStatus },
 ]);
 
 const RedirectToText = () => (
