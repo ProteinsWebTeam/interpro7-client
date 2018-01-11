@@ -148,7 +148,7 @@ class IPScanStatus extends Component {
           >
             <Column
               dataKey="jobId"
-              renderer={(jobId /*: string */, row /*: object */) => (
+              renderer={(jobId /*: string */, row /*: Object */) => (
                 <Link
                   to={{
                     description: {
