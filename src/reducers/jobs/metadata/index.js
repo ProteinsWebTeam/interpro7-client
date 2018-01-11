@@ -14,7 +14,7 @@ import { CREATE_JOB, UPDATE_JOB } from 'actions/types';
   |},
 |} */
 
-const createJobMetadata = () => /*: JobMetadata */ ({
+const createJobMetadata = () => ({
   localID: null,
   status: null,
   remoteID: null,
@@ -25,7 +25,7 @@ const createJobMetadata = () => /*: JobMetadata */ ({
   },
 });
 
-export const updateJob = (update /*: Object */ /*: JobMetadata */) => {
+export const updateJob = (update /*: Object */) => {
   const base = createJobMetadata();
   const now = Date.now();
   const times = base.times;
@@ -33,10 +33,7 @@ export const updateJob = (update /*: Object */ /*: JobMetadata */) => {
   return { ...base, ...update, times };
 };
 
-export default (
-  state /*: JobMetadata */,
-  action /*: Object */ /*: JobMetadata */,
-) => {
+export default (state /*: JobMetadata */, action /*: Object */) => {
   switch (action.type) {
     case CREATE_JOB:
       return updateJob({ ...action.job.metadata, status: 'created' });

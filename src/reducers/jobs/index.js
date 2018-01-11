@@ -16,7 +16,7 @@ import {
 
 export default (
   state /*: {[key: string]: Job } */ = {},
-  action /*: Object */ /*: {[key: string]: Job } */,
+  action /*: Object */,
 ) => {
   switch (action.type) {
     case CREATE_JOB:

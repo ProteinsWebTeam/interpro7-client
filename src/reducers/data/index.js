@@ -19,7 +19,7 @@ export const alreadyLoadingError = 'Already Loading';
 
 export default (
   state /*: {[key: string]: Datum} */ = {},
-  action /*: Object */ /*: {[key: string]: Datum} */,
+  action /*: Object */,
 ) => {
   switch (action.type) {
     case LOADING_DATA:
