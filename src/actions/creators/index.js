@@ -129,6 +129,12 @@ export const failedLoadingData = (key /*: string */, error /*: Error */) => ({
   error,
 });
 
+// jobs
+export const rehydrateJobs = (jobs /*: { [key: string]: Object } */) => ({
+  type: types.REHYDRATE_JOBS,
+  jobs,
+});
+
 // toast messages
 export const addToast = (toast /*: Object */, id /*: string */) => ({
   type: types.ADD_TOAST,

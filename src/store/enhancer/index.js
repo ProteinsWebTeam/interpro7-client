@@ -1,10 +1,11 @@
 // @flow
 import { applyMiddleware, compose } from 'redux';
 
-import location from 'store/enhancer/location-middleware';
+import location from './location-middleware';
+import jobs from './jobs-middleware';
 
 export default (history /*: History */) => {
-  const middlewares = [location(history)];
+  const middlewares = [location(history), jobs];
 
   return compose(
     applyMiddleware(...middlewares),

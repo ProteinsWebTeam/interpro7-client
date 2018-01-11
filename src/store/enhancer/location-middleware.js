@@ -9,13 +9,13 @@ import { customLocationChangeFromHistory } from 'actions/creators';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 // Middleware to handle history change events
-export default history => store => {
+export default history => ({ dispatch, getState }) => {
   // Hook into history
   history.listen(
     // Dispatch new action only when history actually changes
     // Build new action from scratch
     ({ state: { customLocation, state } }) =>
-      store.dispatch(customLocationChangeFromHistory(customLocation, state)),
+      dispatch(customLocationChangeFromHistory(customLocation, state)),
   );
 
   const historyDispatch = ({ customLocation, replace, state }) =>
@@ -26,18 +26,14 @@ export default history => store => {
       state: { customLocation, state },
     });
 
-  let firstTime = true;
+  // Just run once on startup
+  historyDispatch({
+    customLocation: getState().customLocation,
+    replace: true,
+  });
 
   // Hijack normal Redux flow
   return next => action => {
-    if (firstTime) {
-      firstTime = false;
-      historyDispatch({
-        customLocation: store.getState().customLocation,
-        replace: true,
-      });
-    }
-
     // if NEW_CUSTOM_LOCATION don't process and update history, it will
     // eventually result in another action being dispatched through callback
     if (action.type === NEW_CUSTOM_LOCATION) {
@@ -47,6 +43,6 @@ export default history => store => {
 
     // If anything but NEW_LOCATION, process normally
     // If anything but NEW_CUSTOM_LOCATION, process normally
-    next(action);
+    return next(action);
   };
 };

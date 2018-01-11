@@ -1,6 +1,6 @@
 // @flow
 import reducer from '.';
-import { DELETE_JOB } from 'actions/types';
+import { DELETE_JOB, REHYDRATE_JOBS } from 'actions/types';
 
 describe('reducer for job', () => {
   test('should return the initial state', () => {
@@ -35,6 +35,24 @@ describe('reducer for job', () => {
         },
       ),
     ).toEqual({ 'local-id-1': {} });
+  });
+
+  test('should handle REHYDRATE_JOBS action', () => {
+    expect(
+      reducer(undefined, {
+        type: REHYDRATE_JOBS,
+        jobs: { 'local-id-1': {}, 'local-id-2': {} },
+      }),
+    ).toEqual({ 'local-id-1': {}, 'local-id-2': {} });
+    expect(
+      reducer(
+        { 'local-id-1': {} },
+        {
+          type: REHYDRATE_JOBS,
+          jobs: { 'local-id-2': {} },
+        },
+      ),
+    ).toEqual({ 'local-id-1': {}, 'local-id-2': {} });
   });
 
   test('should ignore everything else', () => {

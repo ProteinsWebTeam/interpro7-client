@@ -21,7 +21,7 @@ import { addToast } from 'actions/creators';
 import id from 'utils/cheapUniqueId';
 import blockEvent from 'utils/blockEvent';
 
-import getTableAccess from 'storage/idb';
+import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -100,8 +100,8 @@ class IPScanSearch extends Component {
       editorState,
       valid: true,
     };
-    this._jobsTA = getTableAccess('interproscan-jobs');
-    this._blobsTA = getTableAccess('blobs');
+    this._jobsTA = getTableAccess(IPScanJobsMeta);
+    this._blobsTA = getTableAccess(IPScanJobsData);
   }
 
   _storeJob = async (job, jobId) => {

@@ -5,6 +5,7 @@ import {
   CREATE_JOB,
   UPDATE_JOB,
   DELETE_JOB,
+  REHYDRATE_JOBS,
   LOAD_DATA_JOB,
   UNLOAD_DATA_JOB,
 } from 'actions/types';
@@ -35,6 +36,8 @@ export default (
     case DELETE_JOB: // eslint-disable-line no-case-declarations
       const { [action.job.metadata.localID]: _, ...newState } = state;
       return newState;
+    case REHYDRATE_JOBS:
+      return { ...state, ...action.jobs };
     default:
       return state;
   }

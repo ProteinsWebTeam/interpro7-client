@@ -11,7 +11,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import url from 'url';
 import TA from 'timeago.js';
 
-import getTableAccess from 'storage/idb';
+import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -38,8 +38,8 @@ class IPScanStatus extends Component {
     super(props);
     this.state = {};
     // Promises to table accesses
-    this._jobsTableAccess = getTableAccess('interproscan-jobs');
-    this._blobsTableAccess = getTableAccess('blobs');
+    this._jobsTableAccess = getTableAccess(IPScanJobsMeta);
+    this._blobsTableAccess = getTableAccess(IPScanJobsData);
     // Only create one instance, and only when it is needed
     if (!timeago) timeago = new TA();
     // Reference to timeout (to cancel it on unmount)
