@@ -2,8 +2,6 @@
 import reducer, { updateJob } from '.';
 import { CREATE_JOB, UPDATE_JOB } from 'actions/types';
 
-const TIMESTAMP_MARGIN = 2000; // 2 seconds margin
-
 describe('reducer for job metadata', () => {
   const testPartMetadata1 = { localID: '1', status: 'created' };
   let testMetadata1;
@@ -24,15 +22,17 @@ describe('reducer for job metadata', () => {
       job: { metadata: testPartMetadata1 },
     });
     for (const [key, value] of Object.entries(result1)) {
-      if (key === 'times') {
-        for (const [key, time] of Object.entries(value)) {
-          expect(Math.floor(time / TIMESTAMP_MARGIN)).toBe(
-            Math.floor(testMetadata1.times[key] / TIMESTAMP_MARGIN),
-          );
-        }
+      if (key !== 'times') {
+        expect(value).toBe(testMetadata1[key]);
         continue;
       }
-      expect(value).toBe(testMetadata1[key]);
+      for (const [key, time] of Object.entries(value)) {
+        if (testMetadata1.times[key]) {
+          expect(time).toBeGreaterThan(0);
+        } else {
+          expect(time).toBe(null);
+        }
+      }
     }
   });
 
@@ -42,15 +42,17 @@ describe('reducer for job metadata', () => {
       job: { metadata: { ...testPartMetadata1, status: 'submitted' } },
     });
     for (const [key, value] of Object.entries(result1)) {
-      if (key === 'times') {
-        for (const [key, time] of Object.entries(value)) {
-          expect(Math.floor(time / TIMESTAMP_MARGIN)).toBe(
-            Math.floor(testMetadata2.times[key] / TIMESTAMP_MARGIN),
-          );
-        }
+      if (key !== 'times') {
+        expect(value).toBe(testMetadata2[key]);
         continue;
       }
-      expect(value).toBe(testMetadata2[key]);
+      for (const [key, time] of Object.entries(value)) {
+        if (testMetadata2.times[key]) {
+          expect(time).toBeGreaterThan(0);
+        } else {
+          expect(time).toBe(null);
+        }
+      }
     }
   });
 
