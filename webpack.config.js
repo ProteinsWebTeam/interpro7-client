@@ -117,6 +117,7 @@ module.exports = (env = { dev: true }) => {
             path.resolve('node_modules', 'lodash-es'),
             path.resolve('node_modules', 'color-hash'),
             path.resolve('node_modules', 'timing-functions'),
+            // /protvista-track/i,
             // path.resolve('node_modules', 'data-loader'),
             // path.resolve('node_modules', 'interpro-components'),
             // path.resolve('node_modules', 'pdb-web-components'),

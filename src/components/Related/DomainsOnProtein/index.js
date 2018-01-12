@@ -9,6 +9,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Protvista from 'components/Protvista';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -130,9 +131,9 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
     }
     addSignature(entry, ipro, integrated);
   }
-  if (Object.keys(residues).length > 0) {
-    out.residues = mergeResidues(residues);
-  }
+  // if (Object.keys(residues).length > 0) {
+  //   out.residues = mergeResidues(residues);
+  // }
   return out;
 };
 
@@ -162,17 +163,38 @@ class DomainOnProteinWithoutData extends Component {
       'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
       dataResidues.payload,
     );
+    const domains =
+      'payload' in dataInterPro ? dataInterPro.payload.entries : [];
+
     if (Object.keys(mergedData).length === 0)
       return (
         <div className={f('callout', 'info', 'withicon')}>
           There is no available domain for this protein.
         </div>
       );
+    const sortedData = Object.entries(mergedData).sort((a, b) => {
+      const firsts = ['family', 'domain'];
+      const lasts = ['residues', 'features', 'predictions'];
+      for (const label of firsts) {
+        if (a[0].toLowerCase() === label) return 0;
+        if (b[0].toLowerCase() === label) return 1;
+      }
+      for (const l of lasts) {
+        if (a[0].toLowerCase() === l) return 1;
+        if (b[0].toLowerCase() === l) return 0;
+      }
+      return a.key > b.key ? 1 : 0;
+    });
+    console.log(sortedData);
     return (
       <div>
         <DomainArchitecture
           protein={mainData.metadata || mainData.payload.metadata}
           data={mergedData}
+        />
+        <Protvista
+          protein={mainData.metadata || mainData.payload.metadata}
+          data={sortedData}
         />
       </div>
     );

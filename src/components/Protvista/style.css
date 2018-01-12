@@ -1,0 +1,46 @@
+@import '../../styles/fonts.css';
+@import '../../styles/colors.css';
+
+.protvista {
+  font-size: 12px;
+}
+.track-group {
+  width: 100%;
+  display: block;
+}
+.tracks-container {
+  background: rgb(221, 221, 238);
+  color: rgb(102, 102, 102);
+}
+
+.tracks-container header {
+  fill: var(--colors-dark);
+  text-transform: capitalize;
+  font-size: 90%;
+  font-family: var(--fonts-system);
+  font-weight: 300;
+}
+.track-container {
+  background: rgba(255, 255, 255, 0.4);
+  margin-bottom: 3px;
+  padding-left: 1em;
+}
+div.buttons {
+  font-size: 0.9em;
+}
+.select-inline {
+  font-size: 0.9em;
+  width: auto;
+  padding-bottom: 0;
+  border: 0;
+  margin-bottom: 0;
+}
+.hideCategory {
+  display: none;
+}
+.fullscreenable:-webkit-full-screen .fullscreen {
+  display: none;
+}
+.fullscreenable:-webkit-full-screen {
+  width: 100%;
+}
