@@ -129,10 +129,10 @@ const getEbiSearchUrl = createSelector(
     const s = search || {};
     if (!searchValue) return null;
     const fields = 'PDB,UNIPROT,description';
-    s.page_size = s.page_size || settingsPageSize;
+    const size = s.page_size || settingsPageSize;
     s.search = searchValue;
     const query = getQueryTerm(s.search);
-    const params = `?query=${query}&format=json&fields=${fields}`;
+    const params = `?query=${query}&format=json&fields=${fields}&size=${size}`;
     return `${protocol}//${hostname}:${port}${root}${params}`;
   },
 );
