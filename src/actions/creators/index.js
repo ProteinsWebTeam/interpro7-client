@@ -130,6 +130,11 @@ export const failedLoadingData = (key /*: string */, error /*: Error */) => ({
 });
 
 // jobs
+export const createJob = (job /*: { metadata: Object, data: Object } */) => ({
+  type: types.CREATE_JOB,
+  job,
+});
+
 export const rehydrateJobs = (jobs /*: { [key: string]: Object } */) => ({
   type: types.REHYDRATE_JOBS,
   jobs,

@@ -15,24 +15,33 @@ const rehydrateStoredJobs = async dispatch => {
   await schedule(DEFAULT_SCHEDULE_DELAY);
   const metaT = await metaTA;
   const meta = await metaT.getAll();
-  if (Object.keys(meta).length) {
-    dispatch(rehydrateJobs(meta));
+  const entries = Object.entries(meta);
+  if (!entries.length) return;
+  const jobs = {};
+  for (const [localID, metadata] of entries) {
+    jobs[localID] = { metadata };
   }
+  dispatch(rehydrateJobs(jobs));
 };
 
-const deleteJob = async job => {
+const deleteJob = async localID => {
   const dataT = await dataTA;
-  dataT.delete(job.localID);
+  dataT.delete(localID);
   const metaT = await metaTA;
-  metaT.delete(job.localID);
+  metaT.delete(localID);
 };
 
 const createJob = async (dispatch, job) => {
+  const { localID } = job.metadata;
   try {
     // add data and metadata to idb
+    const dataT = await dataTA;
+    await dataT.set(job.data, localID);
+    const metaT = await metaTA;
+    await metaT.set(job.metadata, localID);
   } catch (error) {
     // cleanup if anything bad happens
-    deleteJob(job);
+    deleteJob(localID);
   }
 };
 
@@ -41,10 +50,10 @@ export default ({ dispatch, getState }) => {
 
   return next => action => {
     if (action.type === CREATE_JOB) {
-      createJob(action.job);
+      createJob(dispatch, action.job);
     }
     if (action.type === DELETE_JOB) {
-      deleteJob(action.job);
+      deleteJob(action.job.metadata.localID);
     }
     return next(action);
   };

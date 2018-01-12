@@ -1,4 +1,5 @@
 // @flow
 let i = 0;
 
-export default () => `${i++}`;
+export default (ns /*?: string | number */) =>
+  `${ns}${ns === undefined ? '' : '-'}${i++}`;
