@@ -29,7 +29,6 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    console.warn(JSON.stringify(this.props.data));
     const { data } = this.props;
     const metadata = data.metadata;
     return (
