@@ -29,6 +29,7 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
   };
 
   render() {
+    console.warn(JSON.stringify(this.props.data));
     const { data } = this.props;
     const metadata = data.metadata;
     return (
@@ -37,7 +38,7 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
               Short name: {metadata.id}
-              <Species taxid={metadata.source_organism.taxid} />
+              <Species taxID={metadata.source_organism.taxid} />
               <Length metadata={metadata} />
             </div>
             <div className={f('medium-3', 'columns')}>
