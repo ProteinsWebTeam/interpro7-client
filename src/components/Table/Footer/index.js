@@ -60,8 +60,6 @@ const Footer = ({
                 search: {
                   ...customLocation.search,
                   page: (customLocation.search.page || 1) - 1,
-                  page_size: pageSize,
-                  search: pagination.search,
                 },
               })}
             >
@@ -88,8 +86,6 @@ const Footer = ({
                   search: {
                     ...customLocation.search,
                     page: e,
-                    page_size: pageSize,
-                    search: pagination.search,
                   },
                 })}
               >
@@ -108,7 +104,6 @@ const Footer = ({
               to={customLocation => ({
                 ...customLocation,
                 search: {
-                  ...customLocation.search,
                   page: (customLocation.search.page || 1) + 1,
                 },
               })}

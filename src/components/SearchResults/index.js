@@ -29,11 +29,17 @@ class SearchResults extends PureComponent {
       loading: T.bool.isRequired,
     }),
     searchValue: T.string,
+    query: T.object,
     dataUrl: T.string,
   };
 
   render() {
-    const { data: { payload, loading }, searchValue, dataUrl } = this.props;
+    const {
+      data: { payload, loading },
+      searchValue,
+      query,
+      dataUrl,
+    } = this.props;
     if (loading) return <Loading />;
     if (!payload) return null;
     if (payload.hitCount === 0) {
@@ -50,7 +56,7 @@ class SearchResults extends PureComponent {
         <Table
           dataTable={payload.entries}
           actualSize={payload.hitCount}
-          query={{ search: { search: searchValue } }}
+          query={query}
         >
           <Exporter>
             <a href={dataUrl} download={`SearchResults-${searchValue}.json`}>
@@ -98,7 +104,8 @@ class SearchResults extends PureComponent {
 const mapStateToProps = createSelector(
   state => state.data.dataUrl,
   state => state.customLocation.description.search.value,
-  (dataUrl, searchValue) => ({ dataUrl, searchValue }),
+  state => state.customLocation.search,
+  (dataUrl, searchValue, query) => ({ dataUrl, searchValue, query }),
 );
 
 const getQueryTerm = createSelector(
@@ -126,13 +133,12 @@ const getEbiSearchUrl = createSelector(
     search,
     searchValue,
   ) => {
-    const s = search || {};
     if (!searchValue) return null;
     const fields = 'PDB,UNIPROT,description';
-    const size = s.page_size || settingsPageSize;
-    s.search = searchValue;
-    const query = getQueryTerm(s.search);
-    const params = `?query=${query}&format=json&fields=${fields}&size=${size}`;
+    const size = search.page_size || settingsPageSize;
+    const start = ((search.page || 1) - 1) * size;
+    const query = getQueryTerm(searchValue);
+    const params = `?query=${query}&format=json&fields=${fields}&start=${start}&size=${size}`;
     return `${protocol}//${hostname}:${port}${root}${params}`;
   },
 );

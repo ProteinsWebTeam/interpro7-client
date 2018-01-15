@@ -41,7 +41,7 @@ class TextSearchBox extends Component {
 
   routerPush = replace => {
     const { pageSize } = this.props;
-    const query /*: {page: number, page_size: number, search?: string} */ = {
+    const query /*: { page: number, page_size: number } */ = {
       page: 1,
       page_size: pageSize,
     };
