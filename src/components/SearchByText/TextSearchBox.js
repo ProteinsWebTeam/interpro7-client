@@ -96,10 +96,10 @@ class TextSearchBox extends Component {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.navigation.pageSize,
   state => state.customLocation.description.main.key,
   state => state.customLocation.description.search.value,
-  (pageSize, main, value) => ({ pageSize, main, value }),
+  state => state.customLocation.search.page_size,
+  (main, value, pageSize) => ({ main, value, pageSize }),
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(TextSearchBox);

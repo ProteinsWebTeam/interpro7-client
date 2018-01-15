@@ -164,15 +164,6 @@ class SearchByText extends PureComponent {
                         search: { type: 'text' },
                       },
                     }}
-                    // to={l => {
-                    //   debugger;
-                    //   return {
-                    //     description: {
-                    //       main: { key: 'search' },
-                    //       search: { type: 'text' },
-                    //     },
-                    //   };
-                    // }}
                   >
                     Clear
                   </Link>
