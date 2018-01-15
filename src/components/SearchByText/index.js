@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
+import Example from 'components/SearchByText/Example';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -17,31 +18,6 @@ import interproTheme from 'styles/theme-interpro.css';
 import local from './style.css';
 
 const f = foundationPartial(interproTheme, ipro, local);
-
-class Example extends PureComponent {
-  static propTypes = {
-    value: T.string,
-  };
-
-  render() {
-    const { value } = this.props;
-    return (
-      <i>
-        {' '}
-        <Link
-          to={{
-            description: {
-              main: { key: 'search' },
-              search: { type: 'text', value },
-            },
-          }}
-        >
-          {value}
-        </Link>
-      </i>
-    );
-  }
-}
 
 class _Settings extends PureComponent {
   static propTypes = {
@@ -149,12 +125,12 @@ class SearchByText extends PureComponent {
                   <span>
                     {' '}
                     e.g.
-                    <Example value="IPR020422" />,
-                    <Example value="kinase" />,
-                    <Example value="O00167" />,
-                    <Example value="PF02932" />,
-                    <Example value="GO:0007165" />,
-                    <Example value="1t2v" />
+                    <Example>IPR020422</Example>,
+                    <Example>kinase</Example>,
+                    <Example>O00167</Example>,
+                    <Example>PF02932</Example>,
+                    <Example>GO:0007165</Example>,
+                    <Example>1t2v</Example>
                   </span>
                 </div>
                 <div

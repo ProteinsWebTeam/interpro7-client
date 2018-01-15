@@ -66,10 +66,10 @@ class SingleMatch extends PureComponent {
   render() {
     const { searchValue, payload } = this.props;
     const searchRE = new RegExp(
-      `^${searchValue}|IPR${searchValue.padStart(
+      `^(${searchValue}|IPR${searchValue.padStart(
         INTERPRO_ACCESSION_PADDING,
         '0',
-      )}`,
+      )})$`,
       'i',
     );
     for (const accession of payload.entries.map(entry => entry.id)) {

@@ -23,7 +23,7 @@ const NavigationSettings = ({ navigation: { pageSize, autoRedirect } }) => (
     <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
         <label>
-          Number of results by page:
+          Number of results per page:
           <div className={f('row')}>
             <div className={f('medium-4', 'column')}>
               <input
