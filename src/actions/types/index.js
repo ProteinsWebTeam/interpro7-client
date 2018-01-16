@@ -25,6 +25,7 @@ export const UNLOADING_DATA = 'UNLOADING_DATA';
 export const CREATE_JOB = 'CREATE_JOB';
 export const UPDATE_JOB = 'UPDATE_JOB';
 export const DELETE_JOB = 'DELETE_JOB';
+export const UPDATE_JOB_STATUS = 'UPDATE_JOB_STATUS';
 export const REHYDRATE_JOBS = 'REHYDRATE_JOBS';
 export const LOAD_DATA_JOB = 'LOAD_DATA_JOB';
 export const UNLOAD_DATA_JOB = 'UNLOAD_DATA_JOB';

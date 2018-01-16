@@ -5,22 +5,22 @@ import { CREATE_JOB, UPDATE_JOB } from 'actions/types';
 
 /*:: type JobMetadata = {|
   localID: ?string,
+  type: 'InterProScan',
   status: ?JobStatus,
   remoteID: ?string,
   times: {|
-    created: ?number,
-    submitted: ?number,
+    created?: number,
+    submitted?: number,
     lastUpdate: ?number,
   |},
 |} */
 
 const createJobMetadata = () => ({
   localID: null,
+  type: 'InterProScan',
   status: null,
   remoteID: null,
   times: {
-    created: null,
-    submitted: null,
     lastUpdate: null,
   },
 });
@@ -28,7 +28,7 @@ const createJobMetadata = () => ({
 export const updateJob = (update /*: Object */) => {
   const base = createJobMetadata();
   const now = Date.now();
-  const times = base.times;
+  const times = { ...base.times, ...(update.times || {}) };
   times[update.status] = times.lastUpdate = now;
   return { ...base, ...update, times };
 };

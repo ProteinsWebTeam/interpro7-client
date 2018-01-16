@@ -532,7 +532,7 @@ export const jobAccessionHandler /*: Handler */ = handlerConstructor({
     value: value => value,
   },
   regexp: {
-    value: /(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d{8}-(es|hx|pg|oy|p[12]m)|internal-[1-9]\d*)/,
+    value: /(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-(es|hx|pg|oy|p[12]m)|internal-[1-9]\d*-\d+)/,
   },
 });
 

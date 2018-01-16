@@ -39,7 +39,7 @@ const InnerSwitch = props => (
       <Switch
         {...props}
         locationSelector={l => l.description.job.accession}
-        indexRoute={RedirectToIPScan}
+        indexRoute={IPScanStatus}
         catchAll={IPScanResult}
       />
     </ErrorBoundary>

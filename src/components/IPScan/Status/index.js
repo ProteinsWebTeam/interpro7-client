@@ -1,15 +1,15 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 import Table, { Column } from 'components/Table';
+import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import url from 'url';
-import TA from 'timeago.js';
+import { updateJobStatus } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -17,94 +17,15 @@ import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 const f = foundationPartial(fonts, ipro);
 
-let timeago;
-const ONE_MINUTE = 60000;
-
-// const getDefinedjobs = state => Object.entries(state).filter(([, j]) => j);
-
-class IPScanStatus extends Component {
-  static defaultProps = {
-    refreshRate: 2 * ONE_MINUTE,
-  };
-
+class IPScanStatus extends PureComponent {
   static propTypes = {
-    refreshRate: T.number,
-    ipScan: T.object.isRequired,
+    jobs: T.arrayOf(T.object).isRequired,
+    updateJobStatus: T.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-    // Promises to table accesses
-    // this._jobsTableAccess = getTableAccess(IPScanJobsMeta);
-    // this._blobsTableAccess = getTableAccess(IPScanJobsData);
-    // Only create one instance, and only when it is needed
-    if (!timeago) timeago = new TA();
-    // Reference to timeout (to cancel it on unmount)
-    this._timeout = null;
+  componentDidMount() {
+    this.props.updateJobStatus();
   }
-
-  // async componentWillMount() {
-  //   await this._getAllJobs();
-  //   this._checkAllUnfinishedJobs(true);
-  // }
-
-  componentWillUnmount() {
-    clearTimeout(this._timeout);
-  }
-
-  // _fetchStatus = async IPScanId => {
-  //   const response = await fetch(
-  //     url.resolve(
-  //       url.format({ ...this.props.ipScan, pathname: this.props.ipScan.root }),
-  //       `status/${IPScanId}`,
-  //     ),
-  //   );
-  //   const rawStatus = await response.text();
-  //   return rawStatus.toLowerCase().replace('_', ' ');
-  // };
-
-  // _getAllJobs = async () => {
-  //   const jobsTableAccess = await this._jobsTableAccess;
-  //   const jobs = await jobsTableAccess.getAll();
-  //   this.setState(jobs);
-  // };
-
-  // _checkAllUnfinishedJobs = async recursive => {
-  //   const finishedStates = ['finished', 'failure', 'not found'];
-  //   await Promise.all(
-  //     getDefinedjobs(this.state)
-  //       .filter(([, { status }]) => !finishedStates.includes(status))
-  //       .map(async ([internalId, job]) => {
-  //         const { id, status } = job;
-  //         let newStatus;
-  //         try {
-  //           // Get status from the API
-  //           newStatus = await this._fetchStatus(id);
-  //         } catch (err) {
-  //           // Might be offline, of API might be down, just ignore
-  //           return;
-  //         }
-  //         // If status didn't change, return
-  //         if (status === newStatus) return;
-  //         // Change job status in idb
-  //         try {
-  //           const jobsTA = await this._jobsTableAccess;
-  //           jobsTA.update(+internalId, job => ({ ...job, status: newStatus }));
-  //         } catch (err) {
-  //           console.error(err);
-  //         }
-  //         // Change job status in state
-  //         this.setState({ [internalId]: { ...job, status: newStatus } });
-  //       }),
-  //   );
-  //   if (!recursive) return;
-  //   // Schedule an other check later
-  //   this._timeout = setTimeout(
-  //     this._checkAllUnfinishedJobs,
-  //     this.props.refreshRate,
-  //   );
-  // };
 
   _handleSave = async ({ target: { dataset: { id } } }) => {
     console.log(`saving job with internal id ${id}`);
@@ -113,38 +34,18 @@ class IPScanStatus extends Component {
 
   _handleDelete = async ({ target: { dataset: { id } } }) => {
     console.log(`deleting job with internal id ${id}`);
-    // // Separate job to be deleted from the others
-    // const removedJob = this.state[id];
-    // // Do clean-up in IDB, to both tables concurrently
-    // await Promise.all([
-    //   this._jobsTableAccess.then(ta => ta.delete(+id)),
-    //   this._blobsTableAccess.then(ta =>
-    //     ta.delete(removedJob.input.sequenceBlobId),
-    //   ),
-    // ]);
-    // this.setState({ [id]: null });
   };
 
   render() {
-    // const jobs = getDefinedjobs(this.state);
     const { jobs } = this.props;
     if (!jobs.length) return null;
-    [...jobs].sort(
-      // Sort by creation time (newest first)
-      ({ times: { created: a } }, { times: { created: b } }) => b - a,
-    );
-    console.log(jobs);
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <h3>Your InterProScan searches</h3>
-          {/* <button
-            className={f('button', 'secondary')}
-            onClick={this._checkAllUnfinishedJobs}
-          >Refresh</button> */}
           <Table dataTable={jobs} actualSize={jobs.length}>
             <Column
-              dataKey="metadata.localID"
+              dataKey="localID"
               renderer={(localID /*: string */, row /*: Object */) => (
                 <Link
                   to={{
@@ -152,58 +53,47 @@ class IPScanStatus extends Component {
                       main: { key: 'job' },
                       job: {
                         type: 'InterProScan',
-                        accession: row.metadata.remoteID || localID,
+                        accession: row.remoteID || localID,
                       },
                     },
                   }}
                 >
-                  {row.metadata.remoteID || localID}
+                  {row.remoteID || localID}
                 </Link>
               )}
             >
               Job ID
             </Column>
             <Column
-              dataKey="metadata.times.created"
-              defaultKey="date"
-              renderer={(created /*: string */) => (
-                <Tooltip title={`Created ${timeago.format(created)}`}>
-                  <time dateTime={new Date(created).toISOString()}>
-                    {new Date(created).toLocaleString()}
-                  </time>
-                </Tooltip>
-              )}
-            >
-              Date
-            </Column>
-            <Column
-              dataKey="metadata.times.created"
-              renderer={(
-                created /*: string */,
-                {
-                  metadata: { times: { lastUpdate } },
-                } /*: { metadata: { times: { lastUpdate: string } } } */,
-              ) => (
-                <Tooltip title={`Last modified ${timeago.format(lastUpdate)}`}>
-                  <time dateTime={new Date(created).toISOString()}>
-                    {timeago.format(lastUpdate)}
-                  </time>
-                </Tooltip>
-              )}
+              dataKey="times.created"
+              renderer={(created /*: string */) => {
+                const parsed = new Date(created);
+                return (
+                  <Tooltip
+                    title={`Created on ${parsed.toLocaleDateString()} at ${parsed.toLocaleTimeString()}`}
+                  >
+                    <time dateTime={parsed.toISOString()}>
+                      <TimeAgo date={parsed} />
+                    </time>
+                  </Tooltip>
+                );
+              }}
             >
               Created
             </Column>
             <Column
-              dataKey="metadata.status"
+              dataKey="status"
               cellClassName={f('table-center')}
               renderer={(status /*: string */) => (
                 <Tooltip title={`Job ${status}`}>
-                  {status === 'running' && (
+                  {(status === 'running' ||
+                    status === 'created' ||
+                    status === 'submitted') && (
                     <span
                       style={{ fontSize: '200%' }}
                       className={f('icon', 'icon-generic', 'ico-progress')}
                       data-icon="{"
-                      aria-label="Job running"
+                      aria-label={`Job ${status}`}
                     />
                   )}
 
@@ -231,7 +121,7 @@ class IPScanStatus extends Component {
               Status
             </Column>
             <Column
-              dataKey="metadata.localID"
+              dataKey="localID"
               defaultKey="actions"
               renderer={(
                 localID /*: string */,
@@ -273,9 +163,11 @@ class IPScanStatus extends Component {
 }
 
 const mapsStateToProps = createSelector(
-  state => state.settings.ipScan,
-  state => Object.entries(state.jobs),
-  (ipScan, jobs) => ({ ipScan, jobs }),
+  state =>
+    Object.values(state.jobs)
+      .map(j => j.metadata)
+      .sort((a, b) => b.times.created - a.times.created),
+  jobs => ({ jobs }),
 );
 
-export default connect(mapsStateToProps)(IPScanStatus);
+export default connect(mapsStateToProps, { updateJobStatus })(IPScanStatus);
