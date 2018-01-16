@@ -1,3 +1,4 @@
+// @flow
 import qs from 'query-string';
 
 // import config from 'config';

@@ -1,3 +1,4 @@
+// @flow
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4] }]*/
 import React from 'react';
 import T from 'prop-types';
@@ -59,8 +60,6 @@ const Footer = ({
                 search: {
                   ...customLocation.search,
                   page: (customLocation.search.page || 1) - 1,
-                  page_size: pageSize,
-                  search: pagination.search,
                 },
               })}
             >
@@ -87,8 +86,6 @@ const Footer = ({
                   search: {
                     ...customLocation.search,
                     page: e,
-                    page_size: pageSize,
-                    search: pagination.search,
                   },
                 })}
               >
@@ -107,7 +104,6 @@ const Footer = ({
               to={customLocation => ({
                 ...customLocation,
                 search: {
-                  ...customLocation.search,
                   page: (customLocation.search.page || 1) + 1,
                 },
               })}

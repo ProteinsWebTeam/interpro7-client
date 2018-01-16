@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent, Component } from 'react';
 import T from 'prop-types';
 
@@ -116,7 +117,6 @@ class List extends Component {
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
-            pathname=""
             notFound={notFound}
           >
             <Exporter>
@@ -139,12 +139,10 @@ class List extends Component {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search} pathname="">
-              &nbsp;
-            </SearchBox>
+            <SearchBox search={search.search}>&nbsp;</SearchBox>
             <Column
               dataKey="type"
-              className={f('col-type')}
+              headerClassName={f('col-type')}
               renderer={type => (
                 <Tooltip title={`${type.replace('_', ' ')} type`}>
                   <interpro-type type={type.replace('_', ' ')} size="26px">
@@ -280,7 +278,7 @@ class List extends Component {
             {db === 'InterPro' ? (
               <Column
                 dataKey="go_terms"
-                className={f('col-go')}
+                headerClassName={f('col-go')}
                 renderer={(gos /*: Array<Object> */) =>
                   gos
                     .sort((a, b) => {
@@ -301,7 +299,10 @@ class List extends Component {
                       >
                         <span className={f('go-cell')}>
                           <Tooltip title={`${go.name} (${go.identifier})`}>
-                            <GoLink id={go.identifier} className={f('go')}>
+                            <GoLink
+                              id={go.identifier}
+                              className={f('go', 'ext')}
+                            >
                               {go.name ? go.name : 'None'}
                             </GoLink>
                           </Tooltip>

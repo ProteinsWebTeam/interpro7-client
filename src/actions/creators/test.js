@@ -1,3 +1,4 @@
+// @flow
 import * as actions from '.';
 import * as types from '../types';
 

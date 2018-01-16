@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -69,7 +70,7 @@ class MenuItem extends PureComponent {
         href={href}
         onClick={closeEverything}
         activeClass={_activeClass}
-        className={`${className || ''} ${s('select-none', 'menu-item', {
+        className={`${className || ''} ${s('menu-item', {
           disabled,
         })}`.trim()}
         {...(disabled

@@ -1,12 +1,9 @@
-// flow-typed signature: c5fac64666f9589a0c1b2de956dc7919
-// flow-typed version: 81d6274128/react-redux_v5.x.x/flow_>=v0.53.x
+// flow-typed signature: 59b0c4be0e1408f21e2446be96c79804
+// flow-typed version: 9092387fd2/react-redux_v5.x.x/flow_>=v0.54.x
 
-// flow-typed signature: 8db7b853f57c51094bf0ab8b2650fd9c
-// flow-typed version: ab8db5f14d/react-redux_v5.x.x/flow_>=v0.30.x
+import type { Dispatch, Store } from "redux";
 
-import type { Dispatch, Store } from 'redux';
-
-declare module 'react-redux' {
+declare module "react-redux" {
   /*
 
     S = State
@@ -20,7 +17,7 @@ declare module 'react-redux' {
   declare type MapStateToProps<S, OP: Object, SP: Object> = (
     state: S,
     ownProps: OP
-  ) => SP | MapStateToProps<S, OP, SP>;
+  ) => ((state: S, ownProps: OP) => SP) | SP;
 
   declare type MapDispatchToProps<A, OP: Object, DP: Object> =
     | ((dispatch: Dispatch<A>, ownProps: OP) => DP)
@@ -34,24 +31,45 @@ declare module 'react-redux' {
 
   declare type Context = { store: Store<*, *> };
 
+  declare type ComponentWithDefaultProps<DP: {}, P: {}, CP: P> = Class<
+    React$Component<CP>
+  > & { defaultProps: DP };
+
+  declare class ConnectedComponentWithDefaultProps<
+    OP,
+    DP,
+    CP
+  > extends React$Component<OP> {
+    static defaultProps: DP, // <= workaround for https://github.com/facebook/flow/issues/4644
+    static WrappedComponent: Class<React$Component<CP>>,
+    getWrappedInstance(): React$Component<CP>,
+    props: OP,
+    state: void
+  }
+
   declare class ConnectedComponent<OP, P> extends React$Component<OP> {
     static WrappedComponent: Class<React$Component<P>>,
     getWrappedInstance(): React$Component<P>,
     props: OP,
-    state: void,
+    state: void
   }
+
+  declare type ConnectedComponentWithDefaultPropsClass<OP, DP, CP> = Class<
+    ConnectedComponentWithDefaultProps<OP, DP, CP>
+  >;
 
   declare type ConnectedComponentClass<OP, P> = Class<
     ConnectedComponent<OP, P>
   >;
 
-  declare type Connector<OP, P> = (
-    component: React$ComponentType<P>
-  ) => ConnectedComponentClass<OP, P>;
+  declare type Connector<OP, P> = (<DP: {}, CP: {}>(
+    component: ComponentWithDefaultProps<DP, P, CP>
+  ) => ConnectedComponentWithDefaultPropsClass<OP, DP, CP>) &
+    ((component: React$ComponentType<P>) => ConnectedComponentClass<OP, P>);
 
   declare class Provider<S, A> extends React$Component<{
     store: Store<S, A>,
-    children?: any,
+    children?: any
   }> {}
 
   declare function createProvider(
@@ -61,7 +79,7 @@ declare module 'react-redux' {
 
   declare type ConnectOptions = {
     pure?: boolean,
-    withRef?: boolean,
+    withRef?: boolean
   };
 
   declare type Null = null | void;

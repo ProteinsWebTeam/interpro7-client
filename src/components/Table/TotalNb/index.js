@@ -1,3 +1,4 @@
+// @flow
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4] }]*/
 import React from 'react';
 import T from 'prop-types';
@@ -6,6 +7,24 @@ import { createSelector } from 'reselect';
 
 import config from 'config';
 import { toPlural } from 'utils/pages';
+
+const entityText = (entity, count) => {
+  if (entity === 'search') {
+    return `result${count > 1 ? 's' : ''}`;
+  }
+  return toPlural(entity, count);
+};
+
+const dbText = db => {
+  if (
+    db &&
+    db !== 'reviewed' &&
+    db !== 'UniProt' &&
+    db !== 'taxonomy' &&
+    db !== 'proteome'
+  )
+    return ` in ${db}`;
+};
 
 const TotalNb = ({ className, data, actualSize, pagination, description }) => {
   const page = parseInt(pagination.page || 1, 10);
@@ -22,13 +41,8 @@ const TotalNb = ({ className, data, actualSize, pagination, description }) => {
       <span>
         {index} - {index + data.length - 1} of{' '}
         <strong>{actualSize.toLocaleString()}</strong>{' '}
-        {toPlural(description.main.key, actualSize)}
-        {db !== 'reviewed' &&
-        db !== 'UniProt' &&
-        db !== 'taxonomy' &&
-        db !== 'proteome'
-          ? ` in ${db}`
-          : null}
+        {entityText(description.main.key, actualSize)}
+        {dbText(db)}
       </span>
     );
   }

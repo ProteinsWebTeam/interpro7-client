@@ -1,3 +1,4 @@
+// @flow
 import reducer from '.';
 import { NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
 import getEmptyDescription from 'utils/processDescription/emptyDescription';

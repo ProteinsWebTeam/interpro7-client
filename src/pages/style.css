@@ -8,7 +8,7 @@
   overflow: hidden;
 }
 .fig-sqc {
-  background: url(http://localhost:8000/interpro/sqc.2b6.png) no-repeat -12% 69%;
+  background: url(../images/sqc.png) no-repeat -12% 69%;
   height: 12.4rem;
   width: 19rem;
   margin-top: 0.5rem;
@@ -120,12 +120,13 @@
   width: 100%;
 }
 
-/* add some space on top between banner and breadcrumb */
+/* add some space on top between banner and breadcrumb and at bottom too otherwise content si stuck on footer*/
 /* IMPORTANT DON'T USE <MAIN> tag AS it doesn't work on IE11 even if specifying
    it as display:block element */
 .main {
   padding-top: 1rem;
   flex: 1;
+  margin-bottom: 1rem;
 }
 
 .stuck {

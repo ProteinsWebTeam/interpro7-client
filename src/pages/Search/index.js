@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -5,7 +6,6 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
-import SearchResults from 'components/SearchResults';
 
 import loadable from 'higherOrder/loadable';
 
@@ -18,6 +18,10 @@ const SearchByText = loadable({
   loader: () =>
     import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
 });
+const SearchResults = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "search-results" */ 'components/SearchResults'),
+});
 const IPScanSearch = loadable({
   loader: () =>
     import(/* webpackChunkName: "ipscan-search" */ 'components/IPScan/Search'),
@@ -26,10 +30,6 @@ const IPScanStatus = loadable({
   loader: () =>
     import(/* webpackChunkName: "ipscan-status" */ 'components/IPScan/Status'),
 });
-const IPScanResult = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "sequence-page" */ 'pages/Sequence'),
-});
 
 const TextSearchAndResults = () => (
   <Wrapper>
@@ -37,6 +37,10 @@ const TextSearchAndResults = () => (
     <SearchResults key="results" />
   </Wrapper>
 );
+TextSearchAndResults.preload = () => {
+  SearchByText.preload();
+  SearchResults.preload();
+};
 
 const IPScanSearchAndStatus = () => (
   <Wrapper>
@@ -49,20 +53,9 @@ IPScanSearchAndStatus.preload = () => {
   IPScanStatus.preload();
 };
 
-const InnerSwitch = props => (
-  <ErrorBoundary>
-    <Switch
-      {...props}
-      locationSelector={l => l.description.search.accession}
-      indexRoute={IPScanSearchAndStatus}
-      catchAll={IPScanResult}
-    />
-  </ErrorBoundary>
-);
-
 const routes = new Set([
   { value: 'text', component: TextSearchAndResults },
-  { value: 'sequence', component: InnerSwitch },
+  { value: 'sequence', component: IPScanSearchAndStatus },
 ]);
 
 const RedirectToText = () => (
@@ -87,8 +80,8 @@ class Wrapper extends PureComponent {
           <ul className={f('tabs', 'main-style', 'margin-top-large')}>
             <li
               className={f('tabs-title')}
-              onMouseOver={SearchByText.preload}
-              onFocus={SearchByText.preload}
+              onMouseOver={TextSearchAndResults.preload}
+              onFocus={TextSearchAndResults.preload}
             >
               <Link
                 to={{

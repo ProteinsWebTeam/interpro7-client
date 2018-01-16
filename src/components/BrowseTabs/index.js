@@ -124,19 +124,14 @@ const mapStateToUrl = createSelector(
       .accession,
   state =>
     state.customLocation.description.main.key === 'organism'
-      ? state.customLocation.description.organism.proteomeDB
-      : null,
-  state =>
-    state.customLocation.description.main.key === 'organism'
-      ? state.customLocation.description.organism.proteomeAccession
-      : null,
+      ? state.customLocation.description.organism
+      : {},
   (
     { protocol, hostname, port, root },
     key,
     db,
     accession,
-    proteomeDB,
-    proteomeAccession,
+    { proteomeDB, proteomeAccession },
   ) => {
     if (!accession) return;
     return `${protocol}//${hostname}:${port}${root}${descriptionToPath({

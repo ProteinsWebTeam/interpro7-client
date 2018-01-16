@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -117,7 +118,6 @@ class List extends PureComponent {
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
-            pathname=""
             notFound={notFound}
           >
             <Exporter>
@@ -140,9 +140,7 @@ class List extends PureComponent {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search} pathname="">
-              Search proteins
-            </SearchBox>
+            <SearchBox search={search.search}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */) => (
@@ -200,7 +198,7 @@ class List extends PureComponent {
             </Column>
             <Column
               dataKey="source_database"
-              className={f('table-center')}
+              headerClassName={f('table-center')}
               renderer={(db /*: string */) => (
                 <Tooltip title={`${db} by curators (Swiss-Prot)`}>
                   <span
@@ -217,7 +215,7 @@ class List extends PureComponent {
             <Column dataKey="source_organism.fullname">Species</Column>
             <Column
               dataKey="length"
-              className={f('text-right')}
+              headerClassName={f('text-right')}
               renderer={(length /*: number */) => (
                 <Tooltip title={`${length.toLocaleString()} amino acids`}>
                   <span aria-label="amino acids length">{length}</span>

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';

@@ -1,3 +1,4 @@
+// @flow
 import reducer, { alreadyLoadingError } from '.';
 import {
   LOADING_DATA,
@@ -23,7 +24,7 @@ describe('reducer for data handling in state', () => {
       b: { loading: true, progress: 0, url: 'b' },
     });
     expect(() => reducer({ a: {} }, { type: LOADING_DATA, key: 'a' })).toThrow(
-      alreadyLoadingError
+      alreadyLoadingError,
     );
   });
 
@@ -31,8 +32,8 @@ describe('reducer for data handling in state', () => {
     expect(
       reducer(
         { a: { loading: true, progress: 0, url: 'a' } },
-        { type: LOADED_DATA, key: 'a', payload, status: 200, ok: true }
-      )
+        { type: LOADED_DATA, key: 'a', payload, status: 200, ok: true },
+      ),
     ).toEqual({
       a: {
         loading: false,
@@ -46,8 +47,8 @@ describe('reducer for data handling in state', () => {
     expect(
       reducer(
         { a: {}, b: { loading: true, progress: 0, url: 'b' } },
-        { type: LOADED_DATA, key: 'b', payload, status: 204, ok: true }
-      )
+        { type: LOADED_DATA, key: 'b', payload, status: 204, ok: true },
+      ),
     ).toEqual({
       a: {},
       b: {
@@ -65,14 +66,14 @@ describe('reducer for data handling in state', () => {
     expect(
       reducer(
         { a: { loading: true, progress: 0.3, url: 'a' } },
-        { type: PROGRESS_DATA, key: 'a', progress: 0.5 }
-      )
+        { type: PROGRESS_DATA, key: 'a', progress: 0.5 },
+      ),
     ).toEqual({ a: { loading: true, progress: 0.5, url: 'a' } });
     expect(
       reducer(
         { a: {}, b: { loading: true, progress: 0.2, url: 'b' } },
-        { type: PROGRESS_DATA, key: 'b', progress: 0.8 }
-      )
+        { type: PROGRESS_DATA, key: 'b', progress: 0.8 },
+      ),
     ).toEqual({ a: {}, b: { loading: true, progress: 0.8, url: 'b' } });
   });
 
@@ -80,8 +81,8 @@ describe('reducer for data handling in state', () => {
     expect(
       reducer(
         { a: { loading: true, progress: 0.3, url: 'a' } },
-        { type: FAILED_LOADING_DATA, key: 'a', error: new Error() }
-      )
+        { type: FAILED_LOADING_DATA, key: 'a', error: new Error() },
+      ),
     ).toEqual({
       a: {
         loading: false,
@@ -94,8 +95,8 @@ describe('reducer for data handling in state', () => {
     expect(
       reducer(
         { a: {}, b: { loading: true, progress: 0.2, url: 'b' } },
-        { type: FAILED_LOADING_DATA, key: 'b', error: new Error(), url: 'b' }
-      )
+        { type: FAILED_LOADING_DATA, key: 'b', error: new Error(), url: 'b' },
+      ),
     ).toEqual({
       a: {},
       b: {
@@ -111,7 +112,7 @@ describe('reducer for data handling in state', () => {
   test('should handle UNLOADING_DATA action', () => {
     expect(reducer({ a: {} }, { type: UNLOADING_DATA, key: 'a' })).toEqual({});
     expect(
-      reducer({ a: {}, b: {} }, { type: UNLOADING_DATA, key: 'b' })
+      reducer({ a: {}, b: {} }, { type: UNLOADING_DATA, key: 'b' }),
     ).toEqual({ a: {} });
     expect(reducer({ b: {} }, { type: UNLOADING_DATA, key: 'a' })).toEqual({
       b: {},

@@ -1,3 +1,4 @@
+// @flow
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
@@ -31,10 +32,9 @@ const f = foundationPartial(styles, fonts);
   isStale: ?boolean,
   actualSize: number,
   query: Object,
-  pathname: string,
   title: string,
   notFound: ?boolean,
-  children: children?: any,
+  children?: any,
 } */
 
 export default class Table extends PureComponent /*:: <Props> */ {
@@ -43,7 +43,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
     isStale: T.bool,
     actualSize: T.number,
     query: T.object,
-    pathname: T.string.isRequired,
     title: T.string,
     notFound: T.bool,
     children: T.any,
@@ -55,7 +54,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
       isStale,
       actualSize,
       query,
-      pathname,
       title,
       notFound,
       children,
@@ -84,7 +82,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     data={dataTable}
                     actualSize={actualSize}
                     pagination={_query}
-                    pathname={pathname}
                     notFound={notFound}
                   />
                 </div>
@@ -131,7 +128,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 data={dataTable}
                 actualSize={actualSize}
                 pagination={_query}
-                pathname={pathname}
                 notFound={notFound}
               />
               <table className={f('table', 'light', { isStale })}>
@@ -147,14 +143,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
           <div className={f('row', 'table-footer-container')}>
             <div className={f('columns')}>
               <div className={f('table-footer')}>
-                {pageSize && (
-                  <_PageSizeSelector search={_query} pathname={pathname} />
-                )}
-                <_Footer
-                  actualSize={actualSize}
-                  pagination={_query}
-                  pathname={pathname}
-                />
+                {pageSize && <_PageSizeSelector search={_query} />}
+                <_Footer actualSize={actualSize} pagination={_query} />
               </div>
             </div>
           </div>

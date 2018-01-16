@@ -83,7 +83,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 />
               )}
 
-              {//member database only - summary info
+              {// member database only - summary info
               metadata.source_database &&
                 metadata.source_database.toLowerCase() !== 'interpro' && (
                   <div className={f('md-hlight')}>
@@ -121,14 +121,6 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       )}
                   </div>
                 )}
-
-              {// doesn't work for some HAMAP as they have enpty <P> tag
-              Object.keys(metadata.description).length > 0 && (
-                <Description
-                  textBlocks={metadata.description}
-                  literature={included}
-                />
-              )}
               {metadata.source_database &&
                 metadata.source_database.toLowerCase() === 'interpro' &&
                 metadata.name.short &&
@@ -138,6 +130,13 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                     <i className={f('shortname')}>{metadata.name.short}</i>
                   </p>
                 )}
+              {// doesn't work for some HAMAP as they have enpty <P> tag
+              Object.keys(metadata.description).length > 0 && (
+                <Description
+                  textBlocks={metadata.description}
+                  literature={included}
+                />
+              )}
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>
               {metadata.integrated && (

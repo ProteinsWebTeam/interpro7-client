@@ -1,10 +1,15 @@
-import reducer, { getDefaultSettings } from '.';
-import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
+// @flow
+import getReducerFor, { getDefaultSettingsFor } from './index';
+import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types/index';
 
 describe('reducer for settings', () => {
   let defaultSettings;
+  let reducer;
 
-  beforeAll(() => (defaultSettings = getDefaultSettings()));
+  beforeAll(() => {
+    defaultSettings = getDefaultSettingsFor('cache');
+    reducer = getReducerFor('cache');
+  });
 
   test('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual(defaultSettings);
@@ -17,7 +22,7 @@ describe('reducer for settings', () => {
         category: 'cache',
         key: 'enabled',
         value: true,
-      }).cache.enabled
+      }).enabled,
     ).toBe(true);
     expect(
       reducer(defaultSettings, {
@@ -25,14 +30,14 @@ describe('reducer for settings', () => {
         category: 'cache',
         key: 'enabled',
         value: false,
-      }).cache.enabled
+      }).enabled,
     ).toBe(false);
   });
 
   test('should handle RESET_SETTINGS action', () => {
     expect(reducer({}, { type: RESET_SETTINGS })).toEqual(defaultSettings);
     expect(
-      reducer({}, { type: RESET_SETTINGS, value: { setting: 'value' } })
+      reducer({}, { type: RESET_SETTINGS, value: { setting: 'value' } }),
     ).toEqual({ setting: 'value' });
   });
 

@@ -1,11 +1,12 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
-import Redirect from 'components/generic/Redirect';
 import Table, { Column, Exporter } from 'components/Table';
+import SingleMatch from 'components/SearchResults/SingleMatch';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -18,116 +19,84 @@ import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);
 
+const INTERPRO_ACCESSION_PADDING = 6;
 const MAX_LENGTH = 200;
-const NOT_FOUND = -1;
 
 class SearchResults extends PureComponent {
   static propTypes = {
-    data: T.object,
+    data: T.shape({
+      payload: T.object,
+      loading: T.bool.isRequired,
+    }),
     searchValue: T.string,
+    query: T.object,
     dataUrl: T.string,
   };
 
   render() {
-    const { data: { payload, loading }, searchValue, dataUrl } = this.props;
+    const {
+      data: { payload, loading },
+      searchValue,
+      query,
+      dataUrl,
+    } = this.props;
     if (loading) return <Loading />;
-    if (!payload) {
-      return <div />;
-    } else if (payload.hitCount === 0) {
+    if (!payload) return null;
+    if (payload.hitCount === 0) {
       return (
         <div className={f('callout', 'info', 'withicon')}>
           Your search for <strong>{searchValue}</strong> did not match any
           records in our database.
         </div>
       );
-    } else if (
-      payload.hitCount === 1 &&
-      payload.entries[0].id === searchValue
-    ) {
-      return (
-        <Redirect
-          to={{
-            description: {
-              main: { key: 'entry' },
-              entry: { db: 'InterPro', accession: searchValue },
-            },
-          }}
-        />
-      );
-    } else if (
-      payload.hitCount > 0 &&
-      payload.entries[0].fields.PDB.indexOf(searchValue) !== NOT_FOUND
-    ) {
-      return (
-        <Redirect
-          to={{
-            description: {
-              main: { key: 'structure' },
-              entry: { db: 'PDB', accession: searchValue },
-            },
-          }}
-        />
-      );
-    } else if (
-      payload.hitCount > 0 &&
-      payload.entries[0].fields.UNIPROT.indexOf(searchValue) !== NOT_FOUND
-    ) {
-      return (
-        <Redirect
-          to={{
-            description: {
-              main: { key: 'protein' },
-              protein: { db: 'UniProt', accession: searchValue },
-            },
-          }}
-        />
-      );
     }
     return (
-      <Table
-        dataTable={payload.entries}
-        actualSize={payload.hitCount}
-        query={{ search: { search: searchValue } }}
-        pathname="/search/text"
-      >
-        <Exporter>
-          <a href={dataUrl} download={`SearchResults-${searchValue}.json`}>
-            JSON
-          </a>
-        </Exporter>
-        <Column
-          dataKey="id"
-          renderer={id => (
-            <Link
-              to={{
-                description: {
-                  main: { key: 'entry' },
-                  entry: { db: 'InterPro', accession: id },
-                },
-              }}
-            >
-              {id}
-            </Link>
-          )}
-          headerStyle={{ width: '200px' }}
+      <React.Fragment>
+        <SingleMatch payload={payload} searchValue={searchValue} />
+        <Table
+          dataTable={payload.entries}
+          actualSize={payload.hitCount}
+          query={query}
         >
-          Accession
-        </Column>
-        <Column
-          dataKey="fields"
-          renderer={d => (
-            <div>
-              <HighlightedText
-                text={d.description[0].slice(0, MAX_LENGTH)}
-                textToHighlight={searchValue}
-              />…
-            </div>
-          )}
-          cellStyle={{ textAlign: 'justify' }}
-        >
-          Description
-        </Column>
-      </Table>
+          <Exporter>
+            <a href={dataUrl} download={`SearchResults-${searchValue}.json`}>
+              JSON
+            </a>
+          </Exporter>
+          <Column
+            dataKey="id"
+            renderer={id => (
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: { db: 'InterPro', accession: id },
+                  },
+                }}
+              >
+                {id}
+              </Link>
+            )}
+            headerStyle={{ width: '200px' }}
+          >
+            Accession
+          </Column>
+          <Column
+            dataKey="fields"
+            renderer={d => (
+              <React.Fragment>
+                <HighlightedText
+                  text={d.description[0].slice(0, MAX_LENGTH)}
+                  textToHighlight={searchValue}
+                />…
+              </React.Fragment>
+            )}
+            cellStyle={{ textAlign: 'justify' }}
+          >
+            Description
+          </Column>
+        </Table>
+      </React.Fragment>
     );
   }
 }
@@ -135,21 +104,41 @@ class SearchResults extends PureComponent {
 const mapStateToProps = createSelector(
   state => state.data.dataUrl,
   state => state.customLocation.description.search.value,
-  (dataUrl, searchValue) => ({ dataUrl, searchValue }),
+  state => state.customLocation.search,
+  (dataUrl, searchValue, query) => ({ dataUrl, searchValue, query }),
+);
+
+const getQueryTerm = createSelector(
+  query => query,
+  query => {
+    const number = +query;
+    if (!Number.isInteger(number)) return query;
+    const stringified = number.toString();
+    if (stringified.length > INTERPRO_ACCESSION_PADDING) return query;
+    return `IPR${stringified.padStart(
+      INTERPRO_ACCESSION_PADDING,
+      '0',
+    )} OR ${query}`;
+  },
 );
 
 const getEbiSearchUrl = createSelector(
   state => state.settings.ebi,
-  state => state.settings.pagination,
+  state => state.settings.navigation.pageSize,
   state => state.customLocation.search,
   state => state.customLocation.description.search.value,
-  ({ protocol, hostname, port, root }, pagination, search, searchValue) => {
-    const s = search || {};
+  (
+    { protocol, hostname, port, root },
+    settingsPageSize,
+    search,
+    searchValue,
+  ) => {
     if (!searchValue) return null;
     const fields = 'PDB,UNIPROT,description';
-    s.page_size = s.page_size || pagination.pageSize;
-    s.search = searchValue;
-    const params = `?query=${s.search}&format=json&fields=${fields}`;
+    const size = search.page_size || settingsPageSize;
+    const start = ((search.page || 1) - 1) * size;
+    const query = getQueryTerm(searchValue);
+    const params = `?query=${query}&format=json&fields=${fields}&start=${start}&size=${size}`;
     return `${protocol}//${hostname}:${port}${root}${params}`;
   },
 );

@@ -95,7 +95,6 @@ const Matches = (
    props: Array<any>
 } */,
 ) => {
-  const pathname = '';
   return (
     <Table
       dataTable={matches.map(e => ({
@@ -105,14 +104,11 @@ const Matches = (
       }))}
       actualSize={actualSize}
       query={search}
-      pathname={pathname}
       isStale={isStale}
       notFound={matches.length === 0}
     >
       <PageSizeSelector />
-      <SearchBox search={search.search} pathname={pathname}>
-        Search
-      </SearchBox>
+      <SearchBox search={search.search}>Search</SearchBox>
       <Column
         dataKey="accession"
         renderer={(
@@ -164,7 +160,7 @@ const Matches = (
       </Column>
       <Column
         dataKey="source_database"
-        className={f('table-center')}
+        headerClassName={f('table-center')}
         displayIf={primary !== 'organism'}
         renderer={(db /*: string */) => (
           <div>
@@ -214,7 +210,7 @@ const Matches = (
       <Column
         dataKey="counters.proteins.uniprot"
         defaultKey="protein-count"
-        className={f('table-center')}
+        headerClassName={f('table-center')}
         displayIf={primary === 'organism'}
       >
         protein count
@@ -222,7 +218,7 @@ const Matches = (
       <Column
         dataKey="accession"
         defaultKey="proteinFastas"
-        className={f('table-center')}
+        headerClassName={f('table-center')}
         displayIf={primary === 'organism'}
         renderer={ProteinFastasRenderer}
       >
@@ -230,7 +226,7 @@ const Matches = (
       </Column>
       <Column
         dataKey="accession"
-        className={f('table-center')}
+        headerClassName={f('table-center')}
         defaultKey="proteinAccessions"
         displayIf={primary === 'organism'}
         renderer={ProteinAccessionsRenderer}

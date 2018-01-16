@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -100,7 +101,6 @@ const List = ({
           isStale={isStale}
           actualSize={_payload.count}
           query={search}
-          pathname=""
           notFound={notFound}
         >
           <Exporter>
@@ -123,9 +123,7 @@ const List = ({
             </ul>
           </Exporter>
           <PageSizeSelector />
-          <SearchBox search={search.search} pathname="">
-            Search structures
-          </SearchBox>
+          <SearchBox search={search.search}>Search structures</SearchBox>
           <Column
             dataKey="accession"
             renderer={(accession /*: string */) => (

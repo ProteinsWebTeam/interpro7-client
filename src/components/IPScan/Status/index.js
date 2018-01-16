@@ -1,10 +1,15 @@
+// @flow
 import React, { Component } from 'react';
 import T from 'prop-types';
-import Link from 'components/generic/Link';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+
+import Link from 'components/generic/Link';
+import Table, { Column } from 'components/Table';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+
 import url from 'url';
 import TA from 'timeago.js';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import getTableAccess from 'storage/idb';
 
@@ -125,6 +130,10 @@ class IPScanStatus extends Component {
   render() {
     const jobs = getDefinedjobs(this.state);
     if (!jobs.length) return null;
+    jobs.sort(
+      // Sort by creation time (newest first)
+      ([, { times: { created: a } }], [, { times: { created: b } }]) => b - a,
+    );
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
@@ -133,161 +142,142 @@ class IPScanStatus extends Component {
             className={f('button', 'secondary')}
             onClick={this._checkAllUnfinishedJobs}
           >Refresh</button> */}
-          <table className={f('hover')}>
-            <thead>
-              <tr>
-                <th>Job ID</th>
-                <th>Date</th>
-                <th>Created</th>
-                <th className={f('table-center')}>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {jobs
-                .sort(
-                  // Sort by creation time (newest first)
-                  (
-                    [, { times: { created: a } }],
-                    [, { times: { created: b } }],
-                  ) => b - a,
-                )
-                .map(
-                  (
-                    [
-                      jobId,
-                      { id, status, times: { created, lastUpdate }, saved },
-                    ],
-                  ) => {
-                    const lastUpdateDate = new Date(lastUpdate);
-                    const createdDate = new Date(created);
-                    return (
-                      <tr key={jobId}>
-                        <td>
-                          {id ? (
-                            <Link
-                              to={{
-                                description: {
-                                  main: { key: 'job' },
-                                  search: {
-                                    type: 'InterProScan',
-                                    accession: id,
-                                  },
-                                },
-                              }}
-                              disabled={status !== 'finished'}
-                            >
-                              {id}
-                            </Link>
-                          ) : (
-                            'None'
-                          )}
-                        </td>
-                        <td>
-                          <Tooltip title={`Created ${timeago.format(created)}`}>
-                            <time dateTime={createdDate.toISOString()}>
-                              {createdDate.toLocaleString()}
-                            </time>
-                          </Tooltip>
-                        </td>
-                        <td>
-                          <Tooltip
-                            title={`Last modified ${timeago.format(
-                              lastUpdate,
-                            )}`}
-                          >
-                            <time dateTime={createdDate.toISOString()}>
-                              {timeago.format(lastUpdate)}
-                            </time>
-                          </Tooltip>
-                        </td>
-                        <td className={f('table-center')}>
-                          <Tooltip title={`Job ${status}`}>
-                            <time dateTime={lastUpdateDate.toISOString()}>
-                              {status === 'running' && (
-                                <span
-                                  style={{ fontSize: '200%' }}
-                                  className={f(
-                                    'icon',
-                                    'icon-generic',
-                                    'ico-progress',
-                                  )}
-                                  data-icon="{"
-                                  aria-label="Job running"
-                                />
-                              )}
+          <Table
+            dataTable={jobs.map(([jobId, rest]) => ({ jobId, ...rest }))}
+            actualSize={jobs.length}
+          >
+            <Column
+              dataKey="jobId"
+              renderer={(jobId /*: string */, row /*: object */) => (
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'job' },
+                      job: {
+                        type: 'InterProScan',
+                        accession: row.id || jobId,
+                      },
+                    },
+                  }}
+                >
+                  {row.id || jobId}
+                </Link>
+              )}
+            >
+              Job ID
+            </Column>
+            <Column
+              dataKey="times.created"
+              defaultKey="date"
+              renderer={(created /*: string */) => (
+                <Tooltip title={`Created ${timeago.format(created)}`}>
+                  <time dateTime={new Date(created).toISOString()}>
+                    {new Date(created).toLocaleString()}
+                  </time>
+                </Tooltip>
+              )}
+            >
+              Date
+            </Column>
+            <Column
+              dataKey="times.created"
+              renderer={(
+                created /*: string */,
+                {
+                  times: { lastUpdate },
+                } /*: { times: { lastUpdate: string } } */,
+              ) => (
+                <Tooltip title={`Last modified ${timeago.format(lastUpdate)}`}>
+                  <time dateTime={new Date(created).toISOString()}>
+                    {timeago.format(lastUpdate)}
+                  </time>
+                </Tooltip>
+              )}
+            >
+              Created
+            </Column>
+            <Column
+              dataKey="status"
+              cellClassName={f('table-center')}
+              renderer={(status /*: string */) => (
+                <Tooltip title={`Job ${status}`}>
+                  {status === 'running' && (
+                    <span
+                      style={{ fontSize: '200%' }}
+                      className={f('icon', 'icon-generic', 'ico-progress')}
+                      data-icon="{"
+                      aria-label="Job running"
+                    />
+                  )}
 
-                              {status === 'not found' ||
-                              status === 'failure' ? (
-                                <span
-                                  style={{ fontSize: '160%' }}
-                                  className={f(
-                                    'icon',
-                                    'icon-functional',
-                                    'ico-notfound',
-                                  )}
-                                  data-icon="x"
-                                  aria-label="Job failed or not found"
-                                />
-                              ) : null}
-
-                              {status === 'finished' && (
-                                <span
-                                  style={{ fontSize: '160%' }}
-                                  className={f(
-                                    'icon',
-                                    'icon-functional',
-                                    'ico-confirmed',
-                                  )}
-                                  data-icon="/"
-                                  aria-label="Job finished"
-                                />
-                              )}
-                            </time>
-                          </Tooltip>
-                        </td>
-                        <td
-                          className={f('button-group')}
-                          style={{ display: 'flex' }}
-                        >
-                          <Tooltip title="Save job">
-                            <button
-                              className={f(
-                                'button',
-                                saved ? 'warning' : 'secondary',
-                              )}
-                              type="button"
-                              data-id={jobId}
-                              onClick={this._handleSave}
-                              aria-label="Save job"
-                            >
-                              ★
-                            </button>
-                          </Tooltip>
-                          <Tooltip title="Delete job">
-                            <button
-                              className={f('button', 'alert')}
-                              type="button"
-                              data-id={jobId}
-                              onClick={this._handleDelete}
-                              aria-label="Delete job"
-                            >
-                              ✖
-                            </button>
-                          </Tooltip>
-                        </td>
-                      </tr>
-                    );
-                  },
-                )}
-            </tbody>
-          </table>
+                  {status === 'not found' ||
+                  status === 'failure' ||
+                  status === 'error' ? (
+                    <span
+                      style={{ fontSize: '160%' }}
+                      className={f('icon', 'icon-functional', 'ico-notfound')}
+                      data-icon="x"
+                      aria-label="Job failed or not found"
+                    />
+                  ) : null}
+                  {status === 'finished' && (
+                    <span
+                      style={{ fontSize: '160%' }}
+                      className={f('icon', 'icon-functional', 'ico-confirmed')}
+                      data-icon="/"
+                      aria-label="Job finished"
+                    />
+                  )}
+                </Tooltip>
+              )}
+            >
+              Status
+            </Column>
+            <Column
+              dataKey="jobId"
+              defaultKey="actions"
+              renderer={(
+                jobId /*: string */,
+                { saved } /*: {saved: boolean } */,
+              ) => (
+                <React.Fragment>
+                  <Tooltip title="Save job">
+                    <button
+                      className={f('button', saved ? 'warning' : 'secondary')}
+                      type="button"
+                      data-id={jobId}
+                      onClick={this._handleSave}
+                      aria-label="Save job"
+                    >
+                      ★
+                    </button>
+                  </Tooltip>
+                  <Tooltip title="Delete job">
+                    <button
+                      className={f('button', 'alert')}
+                      type="button"
+                      data-id={jobId}
+                      onClick={this._handleDelete}
+                      aria-label="Delete job"
+                    >
+                      ✖
+                    </button>
+                  </Tooltip>
+                </React.Fragment>
+              )}
+            >
+              Actions
+            </Column>
+          </Table>
         </div>
       </div>
     );
   }
 }
 
-export default connect(({ settings: { ipScan } }) => ({ ipScan }))(
-  IPScanStatus,
+const mapsStateToProps = createSelector(
+  state => state.settings.ipScan,
+  ipScan => ({ ipScan }),
 );
+
+export default connect(mapsStateToProps)(IPScanStatus);

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
@@ -18,7 +19,7 @@ describe.skip('<Title />', () => {
             accession: 'PF02171',
             source_database: 'pfam',
           }}
-        />
+        />,
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
     });
@@ -39,7 +40,7 @@ describe.skip('<Title />', () => {
             id: 'VATB_METVS',
             accession: 'A6UP55',
           }}
-        />
+        />,
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
     });
@@ -58,7 +59,7 @@ describe.skip('<Title />', () => {
             release_date: '2009-02-24',
             chains: ['A', 'B'],
           }}
-        />
+        />,
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
     });

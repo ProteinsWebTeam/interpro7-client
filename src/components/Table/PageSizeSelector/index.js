@@ -1,3 +1,4 @@
+// @flow
 /* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 25, 50, 15, 30, 100]}] */
 import React, { Component } from 'react';
 import T from 'prop-types';
@@ -41,7 +42,7 @@ class PageSizeSelector extends Component {
 
   render() {
     let options = [10, 25, 50, 100];
-    if (options.indexOf(this.state.pageSize * 1) === -1) {
+    if (!options.includes(this.state.pageSize * 1)) {
       options = Array.from(new Set([...options, this.state.pageSize])).sort(
         (a, b) => a - b,
       );
@@ -69,7 +70,7 @@ class PageSizeSelector extends Component {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.pagination.pageSize,
+  state => state.settings.navigation.pageSize,
   state => state.customLocation,
   (pageSize, customLocation) => ({ pageSize, customLocation }),
 );

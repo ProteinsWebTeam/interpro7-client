@@ -1,4 +1,5 @@
-import React from 'react';
+// @flow
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -16,13 +17,13 @@ import styles from './styles.css';
 
 const f = foundationPartial(theme, styles);
 
-const PaginationSettings = ({ pagination: { pageSize } }) => (
-  <form data-category="pagination">
-    <h4>Pagination settings</h4>
+const NavigationSettings = ({ navigation: { pageSize, autoRedirect } }) => (
+  <form data-category="navigation">
+    <h4>Navigation settings</h4>
     <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
         <label>
-          Number of results by page:
+          Number of results per page:
           <div className={f('row')}>
             <div className={f('medium-4', 'column')}>
               <input
@@ -41,11 +42,39 @@ const PaginationSettings = ({ pagination: { pageSize } }) => (
         </label>
       </div>
     </div>
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        <p>
+          Redirect automatically to an entity page if an exact match has been
+          found:
+        </p>
+        <div className={f('switch', 'large')}>
+          <input
+            type="checkbox"
+            checked={autoRedirect}
+            className={f('switch-input')}
+            name="autoRedirect"
+            id="autoRedirect-input"
+            onChange={noop}
+          />
+          <label className={f('switch-paddle')} htmlFor="autoRedirect-input">
+            <span className={f('show-for-sr')}>Automatic redirect:</span>
+            <span className={f('switch-active')} aria-hidden="true">
+              On
+            </span>
+            <span className={f('switch-inactive')} aria-hidden="true">
+              Off
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
   </form>
 );
-PaginationSettings.propTypes = {
-  pagination: T.shape({
+NavigationSettings.propTypes = {
+  navigation: T.shape({
     pageSize: T.number.isRequired,
+    autoRedirect: T.bool.isRequired,
   }).isRequired,
   handleChange: T.func.isRequired,
 };
@@ -66,6 +95,7 @@ const UISettings = ({ ui: { lowGraphics } }) => (
             className={f('switch-input')}
             name="lowGraphics"
             id="lowGraphics-input"
+            onChange={noop}
           />
           <label className={f('switch-paddle')} htmlFor="lowGraphics-input">
             <span className={f('show-for-sr')}>Low graphics mode:</span>
@@ -100,6 +130,7 @@ const CacheSettings = ({ cache: { enabled } }) => (
             className={f('switch-input')}
             name="enabled"
             id="cache-input"
+            onChange={noop}
           />
           <label className={f('switch-paddle')} htmlFor="cache-input">
             <span className={f('show-for-sr')}>Caching:</span>
@@ -214,56 +245,63 @@ const IPScanEndpointSettings = loadData({
   fetchOptions,
 })(EndpointSettings);
 
-const Settings = ({
-  settings: {
-    pagination = {},
-    ui = {},
-    cache = {},
-    api = {},
-    ebi = {},
-    ipScan = {},
-  },
-  changeSettings,
-  resetSettings,
-}) => (
-  <div className={f('row')}>
-    <div className={f('columns', 'large-12')}>
-      <section onChange={changeSettings}>
-        <h3>Settings</h3>
+class Settings extends PureComponent {
+  static propTypes = {
+    settings: T.shape({
+      navigation: T.object.isRequired,
+      ui: T.object.isRequired,
+      cache: T.object.isRequired,
+      api: T.object.isRequired,
+      ebi: T.object.isRequired,
+    }).isRequired,
+    changeSettings: T.func.isRequired,
+    resetSettings: T.func.isRequired,
+  };
 
-        <PaginationSettings
-          pagination={pagination}
-          handleChange={changeSettings}
-        />
-        <UISettings ui={ui} />
-        <CacheSettings cache={cache} />
-        <APIEndpointSettings category="api" endpointDetails={api}>
-          API Settings
-        </APIEndpointSettings>
-        <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
-          EBI Search Settings
-        </EBIEndpointSettings>
-        <IPScanEndpointSettings category="ipScan" endpointDetails={ipScan}>
-          InterProScan Settings
-        </IPScanEndpointSettings>
-        <button onClick={resetSettings} className={f('button')}>
-          Reset settings to default values
-        </button>
-      </section>
-    </div>
-  </div>
-);
-Settings.propTypes = {
-  settings: T.shape({
-    pagination: T.object.isRequired,
-    ui: T.object.isRequired,
-    cache: T.object.isRequired,
-    api: T.object.isRequired,
-    ebi: T.object.isRequired,
-  }).isRequired,
-  changeSettings: T.func.isRequired,
-  resetSettings: T.func.isRequired,
-};
+  _handleReset = () => this.props.resetSettings();
+
+  render() {
+    const {
+      settings: {
+        navigation = {},
+        ui = {},
+        cache = {},
+        api = {},
+        ebi = {},
+        ipScan = {},
+      },
+      changeSettings,
+    } = this.props;
+    return (
+      <div className={f('row')}>
+        <div className={f('columns', 'large-12')}>
+          <section onChange={changeSettings}>
+            <h3>Settings</h3>
+
+            <NavigationSettings
+              navigation={navigation}
+              handleChange={changeSettings}
+            />
+            <UISettings ui={ui} />
+            <CacheSettings cache={cache} />
+            <APIEndpointSettings category="api" endpointDetails={api}>
+              API Settings
+            </APIEndpointSettings>
+            <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
+              EBI Search Settings
+            </EBIEndpointSettings>
+            <IPScanEndpointSettings category="ipScan" endpointDetails={ipScan}>
+              InterProScan Settings
+            </IPScanEndpointSettings>
+            <button onClick={this._handleReset} className={f('button')}>
+              Reset settings to default values
+            </button>
+          </section>
+        </div>
+      </div>
+    );
+  }
+}
 
 const mapStateToProps = createSelector(
   state => state.settings,

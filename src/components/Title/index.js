@@ -147,6 +147,49 @@ export default class Title extends PureComponent /*:: <Props> */ {
             )}
         </h3>
 
+        {// InterPro Entry
+        isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() === 'interpro' && (
+            <div className={f('tag', 'secondary')}>
+              {metadata.source_database} entry
+            </div>
+          )}
+
+        {// MD Entry -signature
+        isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() !== 'interpro' && (
+            <div className={f('tag', 'md-p')}>
+              {metadata.source_database} entry
+            </div>
+          )}
+
+        {// protein page
+        metadata.source_database &&
+          metadata.source_database.toLowerCase() === 'reviewed' && (
+            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+              Protein {metadata.source_database}
+            </div>
+          )}
+
+        {// Structure
+        mainType === 'structure' && (
+          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+            Structure
+          </div>
+        )}
+
+        {// Species
+        metadata.source_database !== 'proteome' &&
+          mainType === 'organism' && (
+            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+              {metadata.source_database}
+            </div>
+          )}
+
         {// Proteome
         metadata.is_reference ? (
           <div className={f('tag', 'secondary', 'margin-bottom-large')}>
@@ -161,14 +204,6 @@ export default class Title extends PureComponent /*:: <Props> */ {
           </div>
         ) : null}
 
-        {// Species
-        metadata.source_database !== 'proteome' &&
-          mainType === 'organism' && (
-            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-              {metadata.source_database}
-            </div>
-          )}
-
         {// Set
         mainType === 'set' && (
           <div className={f('tag', 'secondary', 'margin-bottom-large')}>
@@ -181,39 +216,6 @@ export default class Title extends PureComponent /*:: <Props> */ {
             </Tooltip>
           </div>
         )}
-
-        {// Structure
-        mainType === 'structure' && (
-          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-            Structure
-          </div>
-        )}
-        {// protein page
-        metadata.source_database &&
-          metadata.source_database.toLowerCase() === 'reviewed' && (
-            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-              Protein {metadata.source_database}
-            </div>
-          )}
-
-        {// MD Entry -signature
-        isEntry &&
-          metadata.type &&
-          metadata.source_database &&
-          metadata.source_database.toLowerCase() !== 'interpro' && (
-            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-              {metadata.source_database} entry
-            </div>
-          )}
-        {// InterPro Entry
-        isEntry &&
-          metadata.type &&
-          metadata.source_database &&
-          metadata.source_database.toLowerCase() === 'interpro' && (
-            <div className={f('tag', 'secondary')}>
-              {metadata.source_database} entry
-            </div>
-          )}
       </div>
     );
   }

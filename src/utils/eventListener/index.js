@@ -1,7 +1,8 @@
+// @flow
 const p = Symbol('private');
 
 export default class Listener {
-  constructor(type/*: string */, scopedWindow = window) {
+  constructor(type /*: string */, scopedWindow = window) {
     this[p] = {
       type,
       subscribedSet: new Set(),
@@ -22,7 +23,7 @@ export default class Listener {
     };
   }
 
-  subscribe(fn/*: function */) {
+  subscribe(fn /*: function */) {
     this[p].subscribedSet.add(fn);
     this[p].startListenerIfNeeded();
     return () => {

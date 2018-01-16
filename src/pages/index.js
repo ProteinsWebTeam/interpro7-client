@@ -38,10 +38,15 @@ const EntrySet = loadable({
   loader: () => import(/* webpackChunkName: "organism-page" */ './Set'),
 });
 
-// Static pages
+// Other
 const Search = loadable({
   loader: () => import(/* webpackChunkName: "search-page" */ './Search'),
 });
+const Job = loadable({
+  loader: () => import(/* webpackChunkName: "job-page" */ './Job'),
+});
+
+// Static pages
 const About = loadable({
   loader: () => import(/* webpackChunkName: "about-page" */ './About'),
 });
@@ -67,8 +72,10 @@ const pages = new Set([
   { value: 'structure', component: Structure },
   { value: 'organism', component: Organism },
   { value: 'set', component: EntrySet },
-  // static pages
+  // other
   { value: 'search', component: Search },
+  { value: 'job', component: Job },
+  // static pages
   { value: 'about', component: About },
   { value: 'help', component: Help },
   { value: 'contact', component: Contact },

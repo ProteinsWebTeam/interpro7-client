@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -17,12 +18,12 @@ const Header = ({ columns, notFound } /*: {columns: Array<Object>} */) => {
               name,
               headerStyle,
               children,
-              className,
+              headerClassName,
             }) => (
               <th
                 key={defaultKey || dataKey}
                 style={headerStyle}
-                className={className}
+                className={headerClassName}
               >
                 {children || name || dataKey}
               </th>

@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-param-reassign */
 import {
   select,
@@ -18,19 +19,19 @@ import styles from './style.css';
 
 const s = classname.bind(styles);
 
-const proteinHeight = 4;
+const proteinHeight = 2;
 let proteinWidth = 0;
 const height = 2000;
 const numberOfTicks = 10;
 const padding = {
-  top: 30,
+  top: 20,
   bottom: 0,
   left: 10,
   right: 100,
 };
 const trackPadding = {
   top: 4,
-  bottom: 2,
+  bottom: 4,
   left: 5,
   right: 5,
 };
@@ -93,7 +94,9 @@ class EntryComponent {
       .attr('width', 1)
       .attr('height', 1)
       // .style('stroke', 'rgb(151, 151, 168)');
-      .style('fill', 'rgba(137, 140, 77, 0.4)');
+      // .style('fill', 'rgba(137, 140, 77, 0.9)');
+      // .style('fill', 'rgba(0, 0, 0, 0.1)');
+      .style('fill', 'rgba(255, 235, 59, 0.5)');
     this.overFeature = null;
     this.mainG.on('mousemove', () => this.renderGuide());
   }
@@ -115,7 +118,7 @@ class EntryComponent {
       );
   }
   render(reset = false) {
-    let offsetY = padding.top;
+    let offsetY = 10;
     this.addAxis();
     offsetY += this.updateProtein();
 
@@ -158,7 +161,7 @@ class EntryComponent {
       g.call(xAxis);
       g
         .selectAll('.tick line')
-        .attr('stroke', '#BBB')
+        .attr('stroke', '#dddddd')
         .attr('stroke-dasharray', '4,2');
       g.select('.tick:first-of-type line').remove();
       g.select('.domain').remove();
@@ -171,7 +174,7 @@ class EntryComponent {
       .attr('height', height)
       .attr('x', padding.left)
       .attr('y', padding.top)
-      .style('fill', '#DDE');
+      .style('fill', 'rgba(0,0,0,0.08)');
     bg.attr('width', proteinWidth);
     const axis = this.mainG.selectAll('g').data([this.protein]);
 
@@ -232,7 +235,7 @@ class EntryComponent {
         .append('rect')
         .attr('class', 'bg-section')
         .attr('width', this.x(this.protein.length))
-        .style('fill', 'rgba(255,255,255,0.4)');
+        .style('fill', 'rgba(0,0,0,0.05)');
 
       entriesG
         .append('text')
@@ -247,7 +250,7 @@ class EntryComponent {
     }
     entriesG
       .selectAll(`text.${s('header-section')}`)
-      .text(d => `${d.value.expanded ? '▽' : '△'} ${d.key}`);
+      .text(d => `${d.value.expanded ? '▾' : '▸'} ${d.key}`);
     const trackHeight = select(`text.${s('header-section')}`)
       .node()
       .getBBox().height;

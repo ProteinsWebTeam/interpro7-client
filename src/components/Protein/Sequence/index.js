@@ -9,9 +9,10 @@ import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
-import pStyles from './style.css';
+import local from './style.css';
+import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(pStyles);
+const f = foundationPartial(ipro, local);
 
 const comment = /^\s*[;>].*$/gm;
 const whiteSpaces = /\s*/g;
@@ -98,9 +99,10 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
     // Split by line of 80 characters
     sequenceToSearch = sequenceToSearch.replace(chunkOfEighty, '$1\n');
     // Prepend metainformation
-    const meta = `>${this.props.accession} mol:protein subsequence:${start}-${
-      end
-    } length:${end - start + 1} ${this.props.name || ''}`.trim();
+    const meta = `>${
+      this.props.accession
+    } mol:protein subsequence:${start}-${end} length:${end - start + 1} ${this
+      .props.name || ''}`.trim();
     return encodeURIComponent(`${meta}\n${sequenceToSearch}`);
   };
 

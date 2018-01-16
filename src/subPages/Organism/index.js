@@ -92,7 +92,7 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('row')}>
         <div className={f('column')}>
-          <Table dataTable={processed} pathname="">
+          <Table dataTable={processed}>
             <Column
               dataKey="taxId"
               renderer={taxId => (
@@ -154,20 +154,20 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
             >
               Organism
             </Column>
-            <Column dataKey="count" className={f('table-center')}>
+            <Column dataKey="count" headerClassName={f('table-center')}>
               Protein count
             </Column>
             <Column
               dataKey="taxId"
               defaultKey="proteinFastas"
-              className={f('table-center')}
+              headerClassName={f('table-center')}
               renderer={ProteinFastasRenderer}
             >
               FASTA
             </Column>
             <Column
               dataKey="taxId"
-              className={f('table-center')}
+              headerClassName={f('table-center')}
               defaultKey="proteinAccessions"
               renderer={ProteinAccessionsRenderer}
             >

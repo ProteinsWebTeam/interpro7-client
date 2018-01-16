@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -89,12 +90,9 @@ class LatestEntry extends PureComponent {
                   }}
                   className={f('list-sign')}
                 >
+                  {' '}
                   {c.accession}
-                </Link>{' '}
-                ({entry.contributing.length} contributing signature{entry
-                  .contributing.length > 1
-                  ? 's'
-                  : ''})
+                </Link>
               </small>
             </div>
           ))}
