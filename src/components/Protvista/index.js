@@ -11,6 +11,7 @@ import local from './style.css';
 const f = foundationPartial(local, fonts);
 
 import { EntryColorMode } from 'components/Protein/DomainArchitecture/entry';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 const webComponents = [];
 
@@ -63,7 +64,7 @@ class Protvista extends Component {
     this.web_tracks = {};
     this.state = {
       entryHovered: null,
-      colorMode: EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP,
+      colorMode: EntryColorMode.COLOR_MODE_ACCESSION,
       hideCategory: {},
     };
   }
@@ -71,7 +72,7 @@ class Protvista extends Component {
   componentWillMount() {
     if (webComponents.length) return;
     const protvistaManager = () =>
-      import(/* webpackChunkName: "protvista-manager" */ 'protvista-manager');
+      import(/* webpackChunkName: "protvista-manager" */ 'protvista-manager/src/protvista-manager.js');
     webComponents.push(
       loadWebComponent(() => protvistaManager().then(m => m.default)).as(
         'protvista-manager',
@@ -79,21 +80,21 @@ class Protvista extends Component {
     );
 
     const protvistaSequence = () =>
-      import(/* webpackChunkName: "protvista-sequence" */ 'protvista-sequence');
+      import(/* webpackChunkName: "protvista-sequence" */ 'protvista-sequence/src/protvista-sequence.js');
     webComponents.push(
       loadWebComponent(() => protvistaSequence().then(m => m.default)).as(
         'protvista-sequence',
       ),
     );
     const protvistaNavigation = () =>
-      import(/* webpackChunkName: "protvista-navigation" */ 'protvista-navigation');
+      import(/* webpackChunkName: "protvista-navigation" */ 'protvista-navigation/src/protvista-navigation.js');
     webComponents.push(
       loadWebComponent(() => protvistaNavigation().then(m => m.default)).as(
         'protvista-navigation',
       ),
     );
     const protvistaInterproTrack = () =>
-      import(/* webpackChunkName: "protvista-interpro-track" */ 'protvista-interpro-track');
+      import(/* webpackChunkName: "protvista-interpro-track" */ 'protvista-interpro-track/src/protvista-interpro-track.js');
     webComponents.push(
       loadWebComponent(() => protvistaInterproTrack().then(m => m.default)).as(
         'protvista-interpro-track',
@@ -123,11 +124,16 @@ class Protvista extends Component {
       for (const d of type[1]) {
         const tmp = d.entry_protein_locations.map(loc => ({
           accession: d.accession,
+          source_database: d.source_database,
           locations: [loc],
+          color: this.getTrackColor(d),
           children: d.children
             ? d.children.map(child => ({
                 accession: child.accession,
+                source_database: child.source_database,
                 locations: child.entry_protein_locations,
+                parent: d,
+                color: this.getTrackColor(child),
               }))
             : null,
         }));
@@ -158,24 +164,59 @@ class Protvista extends Component {
   };
 
   changeColor = evt => {
-    // TODO: implement the color modes
-    const newValue = Number(evt.target.value);
-    this.setState({ colorMode: newValue });
-    this.ec.changeColorMode(newValue);
+    const colorMode = Number(evt.target.value);
+    for (const track of Object.values(this.web_tracks)) {
+      const data = track._data;
+      for (const d of data) {
+        d.color = this.getTrackColor(d, colorMode);
+        for (const child of d.children)
+          child.color = this.getTrackColor(child, colorMode);
+      }
+      track.data = data;
+    }
+    this.setState({ colorMode });
+
+    // this.ec.changeColorMode(newValue);
   };
 
-  getTrackColor(entry) {
-    if (entry.source_database.toLowerCase() === 'interpro') {
-      const acc = entry.accession
-        .split('')
-        .reverse()
-        .join('');
-      return colorHash.hex(acc);
+  getTrackColor(entry, colorMode = null) {
+    const mode = colorMode || this.state.colorMode;
+    switch (mode) {
+      case EntryColorMode.COLOR_MODE_ACCESSION:
+        const acc = entry.accession
+          .split('')
+          .reverse()
+          .join('');
+        return colorHash.hex(acc);
+      case EntryColorMode.COLOR_MODE_MEMBERDB:
+        return colorsByDB[entry.source_database.toLowerCase()];
+      case EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP:
+        if (entry.source_database.toLowerCase() === 'interpro') {
+          const acc = entry.accession
+            .split('')
+            .reverse()
+            .join('');
+          return colorHash.hex(acc);
+        }
+        if (entry.parent) {
+          const acc = entry.parent.accession
+            .split('')
+            .reverse()
+            .join('');
+          return colorHash.hex(acc);
+        }
+        break;
+      default:
+        return 'rgb(170,170,170)';
     }
     return 'rgb(170,170,170)';
   }
   render() {
     const { protein: { length }, data } = this.props;
+    if (!length || !data) {
+      return <Loading />;
+    }
+
     const hiddenState = this.state.hideCategory;
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
@@ -259,7 +300,6 @@ class Protvista extends Component {
                             id={`track_${entry.accession}`}
                             key={entry.accession}
                             ref={e => (this.web_tracks[entry.accession] = e)}
-                            color={this.getTrackColor(entry)}
                             expanded
                           />
                         ))}

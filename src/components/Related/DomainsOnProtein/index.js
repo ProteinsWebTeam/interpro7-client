@@ -185,13 +185,13 @@ class DomainOnProteinWithoutData extends Component {
       }
       return a.key > b.key ? 1 : 0;
     });
-    console.log(sortedData);
+    // console.log(sortedData);
     return (
       <div>
-        <DomainArchitecture
-          protein={mainData.metadata || mainData.payload.metadata}
-          data={mergedData}
-        />
+        {/*<DomainArchitecture*/}
+        {/*protein={mainData.metadata || mainData.payload.metadata}*/}
+        {/*data={mergedData}*/}
+        {/*/>*/}
         <Protvista
           protein={mainData.metadata || mainData.payload.metadata}
           data={sortedData}
