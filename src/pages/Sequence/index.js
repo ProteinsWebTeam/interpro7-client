@@ -3,17 +3,18 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { format } from 'url';
 
 import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 
+import Redirect from 'components/generic/Redirect';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
+
+import getTableAccess, { IPScanJobsData } from 'storage/idb';
 
 import styles from 'styles/blocks.css';
 import global from 'styles/global.css';
@@ -43,29 +44,57 @@ const subPagesForSequence = new Set([
   { value: 'sequence', component: SequenceSubPage },
 ]);
 
-class _Summary extends PureComponent {
+class IPScanResult extends PureComponent {
   static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.shape({
-        results: T.array,
-      }),
-    }).isRequired,
+    metadata: T.object,
     accession: T.string.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this._dataTA = getTableAccess(IPScanJobsData);
+  }
+
+  _getJobData = async () => {
+    const { metadata: { localID, hasData } } = this.props;
+    if (!(localID && hasData)) return;
+    const dataT = await this._dataTA;
+    this.setState({ data: await dataT.get(localID) });
+  };
+
+  componentDidMount() {
+    this._getJobData();
+  }
+
+  componentWillReceiveProps() {
+    this._getJobData();
+  }
+
   render() {
-    const { data: { loading, payload }, accession } = this.props;
-    if (loading) {
-      return <Loading />;
+    const { metadata, accession } = this.props;
+    const { data } = this.state;
+    if (!data) return <Loading />;
+    if (accession === metadata.localID && metadata.remoteID) {
+      return (
+        <Redirect
+          to={{
+            description: {
+              main: { key: 'job' },
+              job: { type: 'InterProScan', accession: metadata.remoteID },
+            },
+          }}
+        />
+      );
     }
-    const entries =
-      payload.results[0].matches.length +
-      new Set(
-        payload.results[0].matches.map(
-          m => (m.signature.entry || {}).accession,
-        ),
-      ).size;
+    let entries = NaN;
+    if (data && data.entries) {
+      entries =
+        data.results[0].matches.length +
+        new Set(
+          data.results[0].matches.map(m => (m.signature.entry || {}).accession),
+        ).size;
+    }
     return [
       <ErrorBoundary key="browse">
         <div className={f('row')}>
@@ -104,39 +133,18 @@ class _Summary extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state =>
-    state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
-  accession => ({ accession }),
+  state => state.customLocation.description.job.accession,
+  state => state.jobs,
+  (accession, jobs) => {
+    let job = jobs[accession];
+    if (!job) {
+      job = Object.values(jobs).find(
+        job => job && job.metadata && job.metadata.remoteID === accession,
+      );
+    }
+    job = job || {};
+    return { accession, metadata: job.metadata || {} };
+  },
 );
 
-const Summary = connect(mapStateToProps)(_Summary);
-
-const IPScanResult = props => (
-  <ErrorBoundary>
-    <Switch
-      {...props}
-      locationSelector={l => l.description[l.description.main.key].accession}
-      indexRoute={() => null}
-      catchAll={Summary}
-    />
-  </ErrorBoundary>
-);
-
-const mapStateToUrl = createSelector(
-  state => state.settings.ipScan,
-  state =>
-    state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
-  ({ protocol, hostname, port, root }, mainAccession) =>
-    format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}/result/${mainAccession}/json`,
-    }),
-);
-
-export default loadData(mapStateToUrl)(IPScanResult);
+export default connect(mapStateToProps)(IPScanResult);

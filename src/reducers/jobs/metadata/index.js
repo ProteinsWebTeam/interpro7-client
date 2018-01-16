@@ -1,5 +1,5 @@
 // @flow
-import { CREATE_JOB, UPDATE_JOB } from 'actions/types';
+import { CREATE_JOB, UPDATE_JOB, LOAD_DATA_JOB } from 'actions/types';
 
 /*:: type JobStatus = 'created' | 'submitted'; */
 
@@ -19,6 +19,7 @@ const createJobMetadata = () => ({
   localID: null,
   type: 'InterProScan',
   status: null,
+  saved: false,
   remoteID: null,
   times: {
     lastUpdate: null,
@@ -29,7 +30,7 @@ export const updateJob = (update /*: Object */) => {
   const base = createJobMetadata();
   const now = Date.now();
   const times = { ...base.times, ...(update.times || {}) };
-  times[update.status] = times.lastUpdate = now;
+  if (update.status) times[update.status] = times.lastUpdate = now;
   return { ...base, ...update, times };
 };
 

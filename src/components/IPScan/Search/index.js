@@ -77,7 +77,6 @@ const compositeDecorator = new CompositeDecorator([
 
 class IPScanSearch extends Component {
   static propTypes = {
-    addToast: T.func.isRequired,
     createJob: T.func.isRequired,
     goToCustomLocation: T.func.isRequired,
     ipScan: T.object.isRequired,

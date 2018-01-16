@@ -9,7 +9,7 @@ import Table, { Column } from 'components/Table';
 import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import { updateJobStatus } from 'actions/creators';
+import { updateJobStatus, updateJob, deleteJob } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -21,24 +21,42 @@ class IPScanStatus extends PureComponent {
   static propTypes = {
     jobs: T.arrayOf(T.object).isRequired,
     updateJobStatus: T.func.isRequired,
+    updateJob: T.func.isRequired,
+    deleteJob: T.func.isRequired,
   };
 
   componentDidMount() {
     this.props.updateJobStatus();
   }
 
-  _handleSave = async ({ target: { dataset: { id } } }) => {
-    console.log(`saving job with internal id ${id}`);
-    console.warn('not implemented yet');
+  _handleSaveToggle = ({ target: { dataset: { id } } }) => {
+    const meta = this.props.jobs.find(({ localID }) => localID === id);
+    this.props.updateJob({ metadata: { ...meta, saved: !meta.saved } });
   };
 
-  _handleDelete = async ({ target: { dataset: { id } } }) => {
-    console.log(`deleting job with internal id ${id}`);
+  _handleDelete = ({ target: { dataset: { id } } }) => {
+    this.props.deleteJob({ metadata: { localID: id } });
   };
 
   render() {
     const { jobs } = this.props;
-    if (!jobs.length) return null;
+    if (!jobs.length)
+      return (
+        <div>
+          <p>Nothing to see here.</p>
+          <Link
+            to={{
+              description: {
+                main: { key: 'search' },
+                search: { type: 'sequence' },
+              },
+            }}
+            className={f('button')}
+          >
+            Submit a new search
+          </Link>
+        </div>
+      );
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
@@ -133,7 +151,7 @@ class IPScanStatus extends PureComponent {
                       className={f('button', saved ? 'warning' : 'secondary')}
                       type="button"
                       data-id={localID}
-                      onClick={this._handleSave}
+                      onClick={this._handleSaveToggle}
                       aria-label="Save job"
                     >
                       ★
@@ -170,4 +188,8 @@ const mapsStateToProps = createSelector(
   jobs => ({ jobs }),
 );
 
-export default connect(mapsStateToProps, { updateJobStatus })(IPScanStatus);
+export default connect(mapsStateToProps, {
+  updateJobStatus,
+  updateJob,
+  deleteJob,
+})(IPScanStatus);

@@ -140,6 +140,11 @@ export const updateJob = (job /*: { metadata: Object, data: Object } */) => ({
   job,
 });
 
+export const deleteJob = (job /*: { metadata: Object, data: Object } */) => ({
+  type: types.DELETE_JOB,
+  job,
+});
+
 export const updateJobStatus = () => ({
   type: types.UPDATE_JOB_STATUS,
 });
@@ -147,6 +152,18 @@ export const updateJobStatus = () => ({
 export const rehydrateJobs = (jobs /*: { [key: string]: Object } */) => ({
   type: types.REHYDRATE_JOBS,
   jobs,
+});
+
+export const loadDataJob = (job /*: { metadata: Object, data: Object } */) => ({
+  type: types.LOAD_DATA_JOB,
+  job,
+});
+
+export const unloadDataJob = (
+  job /*: { metadata: Object, data: Object } */,
+) => ({
+  type: types.UNLOAD_DATA_JOB,
+  job,
 });
 
 // toast messages
