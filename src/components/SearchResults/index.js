@@ -28,6 +28,7 @@ class SearchResults extends PureComponent {
       payload: T.object,
       loading: T.bool.isRequired,
     }),
+    isStale: T.bool.isRequired,
     searchValue: T.string,
     query: T.object,
     dataUrl: T.string,
@@ -36,6 +37,7 @@ class SearchResults extends PureComponent {
   render() {
     const {
       data: { payload, loading },
+      isStale,
       searchValue,
       query,
       dataUrl,
@@ -57,6 +59,7 @@ class SearchResults extends PureComponent {
           dataTable={payload.entries}
           actualSize={payload.hitCount}
           query={query}
+          isStale={isStale}
         >
           <Exporter>
             <a href={dataUrl} download={`SearchResults-${searchValue}.json`}>
