@@ -4,26 +4,87 @@
 .protvista {
   font-size: 12px;
 }
+/*top option*/
+.view-options-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.view-options-title {
+  font-size: 140%;
+  font-family: var(--fonts-system);
+}
+
+@media screen and (max-width: 75rem) {
+  .view-options-title {
+    font-size: 1.23rem;
+    font-weight: 500;
+  }
+}
+.view-options {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 90%;
+}
+.view-options select {
+  font-size: 100%;
+  padding: 0 1rem 0 0.5rem;
+}
+
 .track-group {
   width: 100%;
   display: block;
 }
 .tracks-container {
-  background: rgb(221, 221, 238);
   color: rgb(102, 102, 102);
 }
 
 .tracks-container header {
+  border-top: 6px solid rgba(255, 255, 255, 0.4);
+}
+.tracks-container header button {
   fill: var(--colors-dark);
   text-transform: capitalize;
-  font-size: 90%;
+  font-size: 110%;
   font-family: var(--fonts-system);
   font-weight: 300;
 }
 .track-container {
-  background: rgba(255, 255, 255, 0.4);
-  margin-bottom: 3px;
   padding-left: 1em;
+}
+
+.track-row {
+  display: flex;
+}
+.track-component {
+  width: 90%;
+  background: rgba(0, 0, 0, 0.14);
+}
+.track-component path {
+  opacity: 0.7;
+  stroke: rgba(0, 0, 0, 0.3);
+  stroke-width: 2;
+}
+.track-component path:hover {
+  opacity: 1;
+}
+.aligned-to-track-component {
+  width: 90%;
+  line-height: 0;
+}
+.track-accession {
+  width: 10%;
+  overflow: hidden;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding-left: 0.5em;
+  color: var(--colors-dark);
+}
+.track-accession-child {
+  font-size: 0.9em;
+  font-weight: normal;
 }
 div.buttons {
   font-size: 0.9em;
@@ -43,4 +104,75 @@ div.buttons {
 }
 .fullscreenable:-webkit-full-screen {
   width: 100%;
+}
+
+.popper {
+  position: absolute;
+  background: white;
+  color: black;
+  min-width: 150px;
+  border-radius: 3px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  text-align: left;
+  margin: 6px;
+  border: 1px #dedede solid;
+}
+.popper .popper__arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  position: absolute;
+  margin: 5px;
+  border-color: white;
+}
+
+.popper[x-placement^='top'] .popper__arrow {
+  border-width: 5px 5px 0 5px;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  bottom: -5px;
+  left: calc(50% - 5px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.popper[x-placement^='bottom'] {
+  margin-top: 5px;
+}
+.popper[x-placement^='bottom'] .popper__arrow {
+  border-width: 0 5px 5px 5px;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  top: -5px;
+  left: calc(50% - 5px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.popper[x-placement^='right'] {
+  margin-left: 5px;
+}
+.popper[x-placement^='right'] .popper__arrow {
+  border-width: 5px 5px 5px 0;
+  border-left-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  left: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
+}
+.popper[x-placement^='left'] {
+  margin-right: 5px;
+}
+.popper[x-placement^='left'] .popper__arrow {
+  border-width: 5px 0 5px 5px;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  right: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
 }

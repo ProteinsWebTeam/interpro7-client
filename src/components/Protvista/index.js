@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+
 import { foundationPartial } from 'styles/foundation';
 import loadWebComponent from 'utils/loadWebComponent';
 import ColorHash from 'color-hash/lib/color-hash';
@@ -10,8 +12,8 @@ import local from './style.css';
 
 const f = foundationPartial(local, fonts);
 
-import { EntryColorMode } from 'components/Protein/DomainArchitecture/entry';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import PopperJS from 'popper.js';
 
 const webComponents = [];
 
@@ -37,6 +39,12 @@ const colorsByDB = {
   interpro: '#2daec1',
   pdb: '#74b360',
 };
+export const EntryColorMode = {
+  COLOR_MODE_ACCESSION: 1,
+  COLOR_MODE_MEMBERDB: 2,
+  COLOR_MODE_DOMAIN_RELATIONSHIP: 3,
+};
+
 const requestFullScreen = element => {
   if ('requestFullscreen' in element) {
     element.requestFullscreen();
@@ -52,6 +60,13 @@ const requestFullScreen = element => {
   }
 };
 
+const removeAllChildrenFromNode = node => {
+  if (node.lastChild) {
+    node.removeChild(node.lastChild);
+    removeAllChildrenFromNode(node);
+  }
+};
+
 class Protvista extends Component {
   static propTypes = {
     protein: T.object,
@@ -64,8 +79,10 @@ class Protvista extends Component {
     this.web_tracks = {};
     this.state = {
       entryHovered: null,
-      colorMode: EntryColorMode.COLOR_MODE_ACCESSION,
+      colorMode: EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP,
       hideCategory: {},
+      expandedTrack: {},
+      collapsed: false,
     };
   }
 
@@ -116,48 +133,113 @@ class Protvista extends Component {
     // );
   }
 
-  async componentDidMount() {
-    await Promise.all(webComponents);
-    const { data, protein } = this.props;
-    this.web_protein.data = protein;
+  updateTracksWithData(data) {
     for (const type of data) {
       for (const d of type[1]) {
-        const tmp = d.entry_protein_locations.map(loc => ({
+        const tmp = (d.entry_protein_locations || d.locations).map(loc => ({
           accession: d.accession,
           source_database: d.source_database,
           locations: [loc],
           color: this.getTrackColor(d),
+          entry_type: d.entry_type,
           children: d.children
             ? d.children.map(child => ({
                 accession: child.accession,
                 source_database: child.source_database,
+                entry_type: child.entry_type,
                 locations: child.entry_protein_locations,
                 parent: d,
-                color: this.getTrackColor(child),
+                color: this.getTrackColor(Object.assign(child, { parent: d })),
               }))
             : null,
         }));
+        const isNewElement = !this.web_tracks[d.accession]._data;
         this.web_tracks[d.accession].data = tmp;
+        if (isNewElement) {
+          this.web_tracks[d.accession].addEventListener('entrymouseout', () => {
+            removeAllChildrenFromNode(this._popper_content);
+            this.popper.destroy();
+            this._popper.classList.add(f('hide'));
+          });
+          this.web_tracks[d.accession].addEventListener('entrymouseover', e => {
+            this._popper.classList.remove(f('hide'));
+            if (e.detail.feature.source_database) {
+              removeAllChildrenFromNode(this._popper_content);
+              this._popper_content.appendChild(
+                this.getElementFromEntry(e.detail.feature),
+              );
+            }
+            // if (e.hasOwnProperty('residue')) {
+            //   this._popper.appendChild(this.getElementFromResidue(d));
+            // }
+            this.popper = new PopperJS(e.detail.target, this._popper, {
+              placement: 'top',
+              applyStyle: { enabled: false },
+            });
+          });
+        }
+        this.setObjectValueInState(
+          'expandedTrack',
+          d.accession,
+          this.web_tracks[d.accession]._expanded,
+        );
       }
-      this.setHiddenState(type[0], false);
+      this.setObjectValueInState('hideCategory', type[0], false);
     }
   }
-  setHiddenState = (type, value) => {
-    const hideCategory = { ...this.state.hideCategory };
-    hideCategory[type] = value;
-    this.setState({ hideCategory });
+
+  async componentDidMount() {
+    await Promise.all(webComponents);
+    const { data, protein } = this.props;
+    this.web_protein.data = protein;
+    this.updateTracksWithData(data);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data !== this.props.data) {
+      this.updateTracksWithData(this.props.data);
+    }
+  }
+
+  getElementFromEntry(entry) {
+    const tagString = `<div className={f('info-win')}>
+        <h5 style="text-transform: uppercase; font-weight: bold;">${
+          entry.accession
+        }</h5>
+        <p style="text-transform: capitalize;">${entry.entry_type || ''}</p>
+        <p style="text-transform: uppercase;">
+        <small>${
+          Array.isArray(entry.source_database)
+            ? entry.source_database[0]
+            : entry.source_database
+        }
+          ${entry.entry ? `(${entry.entry})` : ''}
+        </small></p>
+      </div>`;
+    const range = document.createRange();
+    range.selectNode(document.getElementsByTagName('div').item(0));
+    return range.createContextualFragment(tagString);
+  }
+
+  setObjectValueInState = (objectName, type, value) => {
+    const obj = { ...this.state[objectName] };
+    obj[type] = value;
+    this.setState({ [objectName]: obj });
   };
 
-  handleCollapse = () => {
+  toggleCollapseAll = () => {
+    const { collapsed } = this.state;
     for (const track of Object.values(this.web_tracks)) {
-      track.removeAttribute('expanded');
+      if (collapsed) track.setAttribute('expanded', true);
+      else track.removeAttribute('expanded');
     }
+    this.setState({ collapsed: !collapsed });
   };
-
-  handleExpand = () => {
-    for (const track of Object.values(this.web_tracks)) {
-      track.setAttribute('expanded', true);
-    }
+  handleCollapseLabels = accession => {
+    this.setObjectValueInState(
+      'expandedTrack',
+      accession,
+      this.web_tracks[accession]._expanded,
+    );
   };
   handleFullScreen = () => {
     requestFullScreen(this._main);
@@ -217,91 +299,171 @@ class Protvista extends Component {
       return <Loading />;
     }
 
-    const hiddenState = this.state.hideCategory;
+    const { collapsed, hideCategory, expandedTrack } = this.state;
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
         <div className={f('row')}>
           <div className={f('columns')}>
-            <div className={f('buttons')}>
-              Color By:{' '}
-              <select
-                className={f('select-inline')}
-                value={this.state.colorMode}
-                onChange={this.changeColor}
-                onBlur={this.changeColor}
-              >
-                <option value={EntryColorMode.COLOR_MODE_ACCESSION}>
-                  Accession
-                </option>
-                <option value={EntryColorMode.COLOR_MODE_MEMBERDB}>
-                  Member Database
-                </option>
-                <option value={EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP}>
-                  Domain Relationship
-                </option>
-              </select>
-              &nbsp;|&nbsp;
-              <button onClick={this.handleCollapse}>Collapse All</button>
-              &nbsp;|&nbsp;
-              <button onClick={this.handleExpand}>Expand All</button>
-              &nbsp;|&nbsp;
-              <button
-                onClick={this.handleFullScreen}
-                data-icon="F"
-                title="Full screen"
-                className={f('fullscreen', 'icon', 'icon-functional')}
-              />
+            <div className={f('track-row')}>
+              <div className={f('aligned-to-track-component')}>
+                <div className={f('view-options-title')}>
+                  Domains on protein
+                </div>
+                <div className={f('view-options')}>
+                  <div className={f('option-color', 'margin-right-large')}>
+                    Color By:{' '}
+                    <select
+                      className={f('select-inline')}
+                      value={this.state.colorMode}
+                      onChange={this.changeColor}
+                      onBlur={this.changeColor}
+                    >
+                      <option value={EntryColorMode.COLOR_MODE_ACCESSION}>
+                        Accession
+                      </option>
+                      <option value={EntryColorMode.COLOR_MODE_MEMBERDB}>
+                        Member Database
+                      </option>
+                      <option
+                        value={EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP}
+                      >
+                        Domain Relationship
+                      </option>
+                    </select>
+                  </div>
+                  <div className={f('option-collapse')}>
+                    &nbsp;|&nbsp;
+                    <Tooltip
+                      title={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}
+                    >
+                      <button
+                        onClick={this.toggleCollapseAll}
+                        aria-label={`${
+                          collapsed ? 'Expand' : 'Collapse'
+                        } all tracks`}
+                      >
+                        {collapsed ? '▸ Expand' : '▾ Collapse'} All
+                      </button>
+                    </Tooltip>
+                    &nbsp;|&nbsp;
+                  </div>
+
+                  <div className={f('option-fullscreen')}>
+                    <Tooltip title="View the domain viewer in full screen mode">
+                      <button
+                        onClick={this.handleFullScreen}
+                        data-icon="F"
+                        title="Full screen"
+                        className={f(
+                          'margin-bottom-none',
+                          'icon',
+                          'icon-functional',
+                        )}
+                      />
+                    </Tooltip>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div ref={e => (this._popper = e)} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
+          <div ref={e => (this._popper_content = e)} />
         </div>
         <div className={f('row', 'protvista')}>
           <protvista-manager
             attributes="length displaystart displayend highlightstart highlightend"
             id="pv-manager"
           >
-            <protvista-navigation
-              length={length}
-              displaystart="1"
-              displayend={length}
-            />
-            <protvista-sequence
-              ref={e => (this.web_protein = e)}
-              length={length}
-              displaystart="1"
-              displayend={length}
-            />
+            <div className={f('track-container')}>
+              <div className={f('track-row')}>
+                <div className={f('aligned-to-track-component')}>
+                  <protvista-navigation
+                    length={length}
+                    displaystart="1"
+                    displayend={length}
+                  />
+                </div>
+              </div>
+              <div className={f('track-row')}>
+                <div className={f('aligned-to-track-component')}>
+                  <protvista-sequence
+                    ref={e => (this.web_protein = e)}
+                    length={length}
+                    displaystart="1"
+                    displayend={length}
+                  />
+                </div>
+              </div>
+            </div>
             <div className={f('tracks-container')}>
               {data &&
                 data.map(([type, entries]) => (
                   <div key={type} className={f('track-container')}>
-                    <header>
-                      <button
-                        onClick={() =>
-                          this.setHiddenState(type, !hiddenState[type])
-                        }
+                    <div className={f('track-row')}>
+                      <div
+                        className={f('track-component')}
+                        style={{ borderBottom: 0 }}
                       >
-                        {hiddenState[type] ? '▾' : '▸'} {type}
-                      </button>
-                    </header>
+                        <header>
+                          <button
+                            onClick={() =>
+                              this.setObjectValueInState(
+                                'hideCategory',
+                                type,
+                                !hideCategory[type],
+                              )
+                            }
+                          >
+                            {hideCategory[type] ? '▾' : '▸'} {type}
+                          </button>
+                        </header>
+                      </div>
+                    </div>
                     <div
                       className={f('track-group', {
-                        hideCategory: hiddenState[type],
+                        hideCategory: hideCategory[type],
                       })}
                     >
                       {entries &&
                         entries.map(entry => (
-                          <protvista-interpro-track
-                            length={length}
-                            displaystart="1"
-                            displayend={length}
-                            id={`track_${entry.accession}`}
-                            key={entry.accession}
-                            ref={e => (this.web_tracks[entry.accession] = e)}
-                            expanded
-                          />
+                          <div key={entry.accession} className={f('track-row')}>
+                            <div className={f('track-component')}>
+                              <protvista-interpro-track
+                                length={length}
+                                displaystart="1"
+                                displayend={length}
+                                id={`track_${entry.accession}`}
+                                ref={e =>
+                                  (this.web_tracks[entry.accession] = e)
+                                }
+                                shape="roundRectangle"
+                                expanded
+                                onClick={() =>
+                                  this.handleCollapseLabels(entry.accession)
+                                }
+                              />
+                            </div>
+                            <div className={f('track-accession')}>
+                              {entry.accession}
+                              <div
+                                className={f({
+                                  hide: !expandedTrack[entry.accession],
+                                })}
+                              >
+                                {entry.children &&
+                                  entry.children.map(d => (
+                                    <div
+                                      key={d.accession}
+                                      className={f('track-accession-child')}
+                                    >
+                                      {d.accession}
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
+                          </div>
                         ))}
                     </div>
                   </div>

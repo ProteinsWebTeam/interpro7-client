@@ -303,6 +303,7 @@ const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
               obj.entry_protein_locations =
                 x[plural][0].entry_protein_locations;
               obj.protein_length = x[plural][0].protein_length;
+              obj.protein = x[plural][0].protein;
               obj.protein_structure_locations =
                 x[plural][0].protein_structure_locations;
               if (x[plural][0].chain) {
