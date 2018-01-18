@@ -162,7 +162,6 @@ table.light span::before {
   }
 
   & li.current {
-    padding: 0;
     background: #71818a; /*b4cad8*/
   }
 

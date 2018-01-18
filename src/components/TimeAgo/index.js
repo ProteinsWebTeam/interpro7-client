@@ -7,6 +7,8 @@ import { sleep, schedule } from 'timing-functions/src';
 let timeago;
 const ONE_MINUTE = 60000;
 
+const mounted = new WeakSet();
+
 class TimeAgo extends PureComponent {
   static propTypes = {
     date: T.instanceOf(Date).isRequired,
@@ -19,11 +21,11 @@ class TimeAgo extends PureComponent {
   }
 
   async componentDidMount() {
-    this._mounted = true;
+    mounted.add(this);
     await sleep(this._delay);
     await schedule();
     // infinite loop while mounted
-    while (this._mounted) {
+    while (mounted.has(this)) {
       this.forceUpdate();
       await sleep(this._delay);
       await schedule();
@@ -31,7 +33,7 @@ class TimeAgo extends PureComponent {
   }
 
   componentWillUnmount() {
-    this._mounted = false;
+    mounted.delete(this);
   }
 
   // delay before re-rendering will slowly grow everytime by up to 1 minute

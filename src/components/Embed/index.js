@@ -32,6 +32,8 @@ const placeholderStyle = {
   justifyContent: 'center',
 };
 
+const mounted = new WeakSet();
+
 class Embed extends Component {
   static propTypes = {
     children: T.element,
@@ -45,16 +47,16 @@ class Embed extends Component {
 
   componentDidMount() {
     this._iframe.addEventListener('load', this._onLoad, { once: true });
-    this._mounted = true;
+    mounted.add(this);
   }
 
   componentWillUnmount() {
     this._iframe.removeEventListener('load', this._onLoad);
-    this._mounted = false;
+    mounted.delete(this);
   }
 
   _onLoad = () => {
-    if (!this._mounted) return;
+    if (!mounted.has(this)) return;
     this._placeholderContainer.style.pointerEvents = 'none';
     this._placeholderContainer.animate(
       { opacity: [1, 0] },
@@ -64,7 +66,7 @@ class Embed extends Component {
         fill: 'both',
       },
     ).onfinish = () => {
-      if (this._mounted) this.setState({ loading: false });
+      if (mounted.has(this)) this.setState({ loading: false });
     };
     // remove eventListener, in case {once: true} isn't supported
     this._iframe.removeEventListener('load', this._onLoad);

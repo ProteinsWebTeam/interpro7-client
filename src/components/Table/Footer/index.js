@@ -12,26 +12,26 @@ import s from '../style.css';
 
 const f = foundationPartial(s);
 
+const toFunctionFor = page => customLocation => ({
+  ...customLocation,
+  search: { ...customLocation.search, page },
+});
+
 class PaginationItem extends PureComponent {
   static propTypes = {
     className: T.string,
     value: T.number,
+    noLink: T.bool,
     children: T.oneOfType([T.number, T.string]),
   };
 
   render() {
-    const { className, value, children } = this.props;
-    const LinkOrFragment = value ? Link : React.Fragment;
+    const { className, value, noLink, children } = this.props;
+    const LinkOrFragment = !value || noLink ? React.Fragment : Link;
     return (
       <li className={className}>
         <LinkOrFragment
-          to={customLocation => ({
-            ...customLocation,
-            search: {
-              ...customLocation.search,
-              page: value,
-            },
-          })}
+          {...(!value || noLink ? {} : { to: toFunctionFor(value) })}
         >
           {(value && children) || value}
         </LinkOrFragment>
@@ -98,7 +98,11 @@ class Current extends PureComponent {
 
   render() {
     return (
-      <PaginationItem className={f('current')} value={this.props.current} />
+      <PaginationItem
+        className={f('current')}
+        value={this.props.current}
+        noLink
+      />
     );
   }
 }
@@ -169,8 +173,6 @@ const Footer = ({
   const previous = Math.max(current - 1, first);
   const next = Math.min(current + 1, last);
 
-  const props = { first, previous, current, next, last };
-
   return (
     <div className={f('pagination-box')}>
       <ul
@@ -178,15 +180,15 @@ const Footer = ({
         role="navigation"
         aria-label="Pagination"
       >
-        <PreviousText {...props} />
-        <First {...props} />
-        <PreviousDotDotDot {...props} />
-        <Previous {...props} />
-        <Current {...props} />
-        <Next {...props} />
-        <NextDotDotDot {...props} />
-        <Last {...props} />
-        <NextText {...props} />
+        <PreviousText previous={previous} />
+        <First first={first} current={current} />
+        <PreviousDotDotDot first={first} previous={previous} />
+        <Previous first={first} previous={previous} current={current} />
+        <Current current={current} />
+        <Next current={current} next={next} last={last} />
+        <NextDotDotDot next={next} last={last} />
+        <Last current={current} last={last} />
+        <NextText next={next} />
       </ul>
     </div>
   );
