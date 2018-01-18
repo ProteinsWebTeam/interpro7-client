@@ -3,10 +3,10 @@ import qs from 'query-string';
 
 // import config from 'config';
 
-import { NEW_CUSTOM_LOCATION } from 'actions/types';
-import { customLocationChangeFromHistory } from 'actions/creators';
+import { NEW_CUSTOM_LOCATION } from 'actions/types/index';
+import { customLocationChangeFromHistory } from 'actions/creators/index';
 
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import descriptionToPath from 'utils/processDescription/descriptionToPath/index';
 
 // Middleware to handle history change events
 export default history => ({ dispatch, getState }) => {

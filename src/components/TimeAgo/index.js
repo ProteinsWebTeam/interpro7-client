@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import T from 'prop-types';
 import TA from 'timeago.js';
 import { sleep, schedule } from 'timing-functions/src';
@@ -18,12 +18,6 @@ class TimeAgo extends PureComponent {
     if (!timeago) timeago = new TA();
   }
 
-  // delay before re-rendering will slowly grow everytime by up to 1 minute
-  get _delay() {
-    this.__delay = (this.__delay || 0) + ONE_MINUTE * Math.random();
-    return this.__delay;
-  }
-
   async componentDidMount() {
     this._mounted = true;
     await sleep(this._delay);
@@ -38,6 +32,12 @@ class TimeAgo extends PureComponent {
 
   componentWillUnmount() {
     this._mounted = false;
+  }
+
+  // delay before re-rendering will slowly grow everytime by up to 1 minute
+  get _delay() {
+    this.__delay = (this.__delay || 0) + ONE_MINUTE * Math.random();
+    return this.__delay;
   }
 
   render() {

@@ -1,7 +1,7 @@
 // @flow
 import { applyMiddleware, compose } from 'redux';
 
-import location from './location-middleware';
+import location from './location-middleware/index';
 import jobs from './jobs-middleware';
 
 export default (history /*: History */) => {

@@ -10,13 +10,10 @@ import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 
-import Redirect from 'components/generic/Redirect';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
-
-import getTableAccess, { IPScanJobsData } from 'storage/idb';
 
 import styles from 'styles/blocks.css';
 import global from 'styles/global.css';
