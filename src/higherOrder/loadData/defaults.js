@@ -24,11 +24,11 @@ export const getUrl = createSelector(
             ? {}
             : { ...search } || {};
         if (
-          !description[description.main.key].accession &&
-          !Object.values(description).find(
+          !description[description.main.key].accession ||
+          Object.values(description).find(
             ({ isFilter, db }) => isFilter && db,
-          ) &&
-          !description.entry.memberDB
+          ) ||
+          description.entry.memberDB
         )
           s.page_size = s.page_size || settingsPageSize;
         return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
