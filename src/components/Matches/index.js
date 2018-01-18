@@ -94,148 +94,146 @@ const Matches = (
    search: Object,
    props: Array<any>
 } */,
-) => {
-  return (
-    <Table
-      dataTable={matches.map(e => ({
-        ...e[primary],
-        accession: String(e[primary].accession),
-        match: e,
-      }))}
-      actualSize={actualSize}
-      query={search}
-      isStale={isStale}
-      notFound={matches.length === 0}
+) => (
+  <Table
+    dataTable={matches.map(e => ({
+      ...e[primary],
+      accession: String(e[primary].accession),
+      match: e,
+    }))}
+    actualSize={actualSize}
+    query={search}
+    isStale={isStale}
+    notFound={matches.length === 0}
+  >
+    <PageSizeSelector />
+    <SearchBox search={search.search}>Search</SearchBox>
+    <Column
+      dataKey="accession"
+      renderer={(
+        acc /*: string */,
+        { source_database: sourceDatabase } /*: {source_database: string} */,
+      ) => (
+        <Link
+          to={{
+            description: {
+              main: { key: primary },
+              [primary]: { db: sourceDatabase, accession: acc },
+            },
+          }}
+        >
+          <span className={f('acc-row')}>
+            <HighlightedText text={acc} textToHighlight={search.search} />
+          </span>
+        </Link>
+      )}
     >
-      <PageSizeSelector />
-      <SearchBox search={search.search}>Search</SearchBox>
-      <Column
-        dataKey="accession"
-        renderer={(
-          acc /*: string */,
-          { source_database: sourceDatabase } /*: {source_database: string} */,
-        ) => (
-          <Link
-            to={{
-              description: {
-                main: { key: primary },
-                [primary]: { db: sourceDatabase, accession: acc },
-              },
-            }}
-          >
-            <span className={f('acc-row')}>
-              <HighlightedText text={acc} textToHighlight={search.search} />
-            </span>
-          </Link>
-        )}
-      >
-        {primary === 'organism' ? 'Tax Id' : 'Accession'}
-      </Column>
-      <Column
-        dataKey="name"
-        renderer={(
-          name /*: string */,
-          {
-            accession,
-            source_database: sourceDatabase,
-          } /*: {accession: string, source_database: string} */,
-        ) => (
-          <Link
-            to={{
-              description: {
-                main: { key: primary },
-                [primary]: { db: sourceDatabase, accession },
-              },
-            }}
-          >
-            <HighlightedText text={name} textToHighlight={search.search} />
-          </Link>
-        )}
-      />
-      <Column
-        dataKey="source_organism.fullname"
-        displayIf={primary === 'protein' || primary === 'structure'}
-      >
-        Species
-      </Column>
-      <Column
-        dataKey="source_database"
-        headerClassName={f('table-center')}
-        displayIf={primary !== 'organism'}
-        renderer={(db /*: string */) => (
-          <div>
-            {db === 'reviewed' ? (
-              <div
-                title={
-                  db === 'reviewed'
-                    ? `${db} by curators (Swiss-Prot)`
-                    : 'Not reviewed by curators (TrEMBL)'
-                }
-              >
-                <Tooltip title={`${db} by curators (Swiss-Prot)`}>
-                  <span
-                    className={f('icon', 'icon-functional')}
-                    data-icon="/"
-                    aria-label="reviewed"
-                  />
-                </Tooltip>
-              </div>
-            ) : (
-              db
-            )}
-          </div>
-        )}
-      >
-        {primary === 'protein' ? 'Reviewed' : 'Source database'}
-      </Column>
-      <Column
-        dataKey="match"
-        displayIf={
-          primary !== 'organism' &&
-          secondary !== 'organism' &&
-          primary !== 'set' &&
-          secondary !== 'set'
-        }
-        renderer={(match /*: Object */) => (
-          <MatchesByPrimary
-            matches={[match]}
-            primary={primary}
-            secondary={secondary}
-            {...props}
-          />
-        )}
-      >
-        Architecture
-      </Column>
-      <Column
-        dataKey="counters.proteins.uniprot"
-        defaultKey="protein-count"
-        headerClassName={f('table-center')}
-        displayIf={primary === 'organism'}
-      >
-        protein count
-      </Column>
-      <Column
-        dataKey="accession"
-        defaultKey="proteinFastas"
-        headerClassName={f('table-center')}
-        displayIf={primary === 'organism'}
-        renderer={ProteinFastasRenderer}
-      >
-        FASTA
-      </Column>
-      <Column
-        dataKey="accession"
-        headerClassName={f('table-center')}
-        defaultKey="proteinAccessions"
-        displayIf={primary === 'organism'}
-        renderer={ProteinAccessionsRenderer}
-      >
-        Protein accessions
-      </Column>
-    </Table>
-  );
-};
+      {primary === 'organism' ? 'Tax Id' : 'Accession'}
+    </Column>
+    <Column
+      dataKey="name"
+      renderer={(
+        name /*: string */,
+        {
+          accession,
+          source_database: sourceDatabase,
+        } /*: {accession: string, source_database: string} */,
+      ) => (
+        <Link
+          to={{
+            description: {
+              main: { key: primary },
+              [primary]: { db: sourceDatabase, accession },
+            },
+          }}
+        >
+          <HighlightedText text={name} textToHighlight={search.search} />
+        </Link>
+      )}
+    />
+    <Column
+      dataKey="source_organism.fullname"
+      displayIf={primary === 'protein' || primary === 'structure'}
+    >
+      Species
+    </Column>
+    <Column
+      dataKey="source_database"
+      headerClassName={f('table-center')}
+      displayIf={primary !== 'organism'}
+      renderer={(db /*: string */) => (
+        <div>
+          {db === 'reviewed' ? (
+            <div
+              title={
+                db === 'reviewed'
+                  ? `${db} by curators (Swiss-Prot)`
+                  : 'Not reviewed by curators (TrEMBL)'
+              }
+            >
+              <Tooltip title={`${db} by curators (Swiss-Prot)`}>
+                <span
+                  className={f('icon', 'icon-functional')}
+                  data-icon="/"
+                  aria-label="reviewed"
+                />
+              </Tooltip>
+            </div>
+          ) : (
+            db
+          )}
+        </div>
+      )}
+    >
+      {primary === 'protein' ? 'Reviewed' : 'Source database'}
+    </Column>
+    <Column
+      dataKey="match"
+      displayIf={
+        primary !== 'organism' &&
+        secondary !== 'organism' &&
+        primary !== 'set' &&
+        secondary !== 'set'
+      }
+      renderer={(match /*: Object */) => (
+        <MatchesByPrimary
+          matches={[match]}
+          primary={primary}
+          secondary={secondary}
+          {...props}
+        />
+      )}
+    >
+      Architecture
+    </Column>
+    <Column
+      dataKey="counters.proteins.uniprot"
+      defaultKey="protein-count"
+      headerClassName={f('table-center')}
+      displayIf={primary === 'organism'}
+    >
+      protein count
+    </Column>
+    <Column
+      dataKey="accession"
+      defaultKey="proteinFastas"
+      headerClassName={f('table-center')}
+      displayIf={primary === 'organism'}
+      renderer={ProteinFastasRenderer}
+    >
+      FASTA
+    </Column>
+    <Column
+      dataKey="accession"
+      headerClassName={f('table-center')}
+      defaultKey="proteinAccessions"
+      displayIf={primary === 'organism'}
+      renderer={ProteinAccessionsRenderer}
+    >
+      Protein accessions
+    </Column>
+  </Table>
+);
 Matches.propTypes = propTypes;
 
 const mapStateToProps = createSelector(

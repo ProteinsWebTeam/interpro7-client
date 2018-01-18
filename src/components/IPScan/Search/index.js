@@ -137,7 +137,7 @@ class IPScanSearch extends Component {
     this.props.goToCustomLocation({
       description: {
         main: { key: 'job' },
-        job: { type: 'InterProScan' /*, accession: localID */ },
+        job: { type: 'InterProScan' /* , accession: localID */ },
       },
     });
   };

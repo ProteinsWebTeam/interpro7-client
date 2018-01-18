@@ -1,5 +1,5 @@
 // @flow
-import { CREATE_JOB, UPDATE_JOB, LOAD_DATA_JOB } from 'actions/types';
+import { CREATE_JOB, UPDATE_JOB } from 'actions/types';
 
 /*:: type JobStatus = 'created' | 'submitted'; */
 
