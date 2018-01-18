@@ -1,46 +1,176 @@
 // @flow
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4] }]*/
-import React from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 
 import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
+
 import s from '../style.css';
+
 const f = foundationPartial(s);
 
-const getPageLabels = (page, lastPage) => {
-  let pages = [...Array(lastPage).keys()];
-  const maxPagesDisplayed = 7;
-  pages.splice(0, 1);
-  if (lastPage > maxPagesDisplayed) {
-    if (page < maxPagesDisplayed / 2) {
-      pages = [1, 2, 3, 4, '…', lastPage];
-    } else if (page > lastPage - maxPagesDisplayed / 2) {
-      pages = [1, '…', lastPage - 3, lastPage - 2, lastPage - 1, lastPage];
-    } else {
-      pages = [1, '…', page - 1, page, page + 1, '…', lastPage];
-    }
+class PaginationItem extends PureComponent {
+  static propTypes = {
+    className: T.string,
+    value: T.number,
+    children: T.oneOfType([T.number, T.string]),
+  };
+
+  render() {
+    const { className, value, children } = this.props;
+    const LinkOrFragment = value ? Link : React.Fragment;
+    return (
+      <li className={className}>
+        <LinkOrFragment
+          to={customLocation => ({
+            ...customLocation,
+            search: {
+              ...customLocation.search,
+              page: value,
+            },
+          })}
+        >
+          {(value && children) || value}
+        </LinkOrFragment>
+      </li>
+    );
   }
-  return pages;
-};
+}
+
+class PreviousText extends PureComponent {
+  static propTypes = {
+    previous: T.number.isRequired,
+  };
+
+  render() {
+    return (
+      <PaginationItem value={this.props.previous}>Previous</PaginationItem>
+    );
+  }
+}
+
+class First extends PureComponent {
+  static propTypes = {
+    first: T.number.isRequired,
+    current: T.number.isRequired,
+  };
+
+  render() {
+    const { first, current } = this.props;
+    if (first === current) return null;
+    return <PaginationItem value={first} />;
+  }
+}
+
+class PreviousDotDotDot extends PureComponent {
+  static propTypes = {
+    first: T.number.isRequired,
+    previous: T.number.isRequired,
+  };
+
+  render() {
+    if (this.props.previous - 1 <= this.props.first) return null;
+    return <PaginationItem className={f('ellipsis')} />;
+  }
+}
+
+class Previous extends PureComponent {
+  static propTypes = {
+    first: T.number.isRequired,
+    previous: T.number.isRequired,
+    current: T.number.isRequired,
+  };
+
+  render() {
+    const { first, previous, current } = this.props;
+    if (previous === current || previous === first) return null;
+    return <PaginationItem value={previous} />;
+  }
+}
+
+class Current extends PureComponent {
+  static propTypes = {
+    current: T.number.isRequired,
+  };
+
+  render() {
+    return (
+      <PaginationItem className={f('current')} value={this.props.current} />
+    );
+  }
+}
+
+class Next extends PureComponent {
+  static propTypes = {
+    current: T.number.isRequired,
+    next: T.number.isRequired,
+    last: T.number.isRequired,
+  };
+
+  render() {
+    const { current, next, last } = this.props;
+    if (next === current || next === last) return null;
+    return <PaginationItem value={next} />;
+  }
+}
+
+class NextDotDotDot extends PureComponent {
+  static propTypes = {
+    next: T.number.isRequired,
+    last: T.number.isRequired,
+  };
+
+  render() {
+    if (this.props.next + 1 >= this.props.last) return null;
+    return <PaginationItem className={f('ellipsis')} />;
+  }
+}
+
+class Last extends PureComponent {
+  static propTypes = {
+    current: T.number.isRequired,
+    last: T.number.isRequired,
+  };
+
+  render() {
+    const { current, last } = this.props;
+    if (last === current) return null;
+    return <PaginationItem value={last} />;
+  }
+}
+
+class NextText extends PureComponent {
+  static propTypes = {
+    next: T.number.isRequired,
+  };
+
+  render() {
+    return <PaginationItem value={this.props.next}>Next</PaginationItem>;
+  }
+}
 
 const Footer = ({
   actualSize /*: number */,
   pagination /*: Object */,
   notFound,
 }) => {
-  const page = parseInt(pagination.page || 1, 10);
+  if (notFound) return null;
+
+  const first = 1;
+  const current = parseInt(pagination.page || first, 10);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,
     10,
   );
-  const lastPage = Math.ceil(actualSize / pageSize) || 1;
-  const pages = getPageLabels(page, lastPage);
-  if (notFound) {
-    return null;
-  }
+  const last = Math.ceil(actualSize / pageSize) || 1;
+  const previous = Math.max(current - 1, first);
+  const next = Math.min(current + 1, last);
+
+  const props = { first, previous, current, next, last };
+
   return (
     <div className={f('pagination-box')}>
       <ul
@@ -48,70 +178,15 @@ const Footer = ({
         role="navigation"
         aria-label="Pagination"
       >
-        {page === 1 ? (
-          <li className={f('disabled')}>
-            Previous <span className={f('show-for-sr')}>You’re on page</span>
-          </li>
-        ) : (
-          <li>
-            <Link
-              to={customLocation => ({
-                ...customLocation,
-                search: {
-                  ...customLocation.search,
-                  page: (customLocation.search.page || 1) - 1,
-                },
-              })}
-            >
-              Previous
-            </Link>
-          </li>
-        )}
-        {pages.map(e => {
-          if (e === '…') {
-            return <li key={e} className={f('ellipsis')} />;
-          } else if (page === e) {
-            return (
-              <li key={e} className={f('current')}>
-                <span className={f('show-for-sr')}>You’re on page</span>
-                {e}
-              </li>
-            );
-          }
-          return (
-            <li key={e} className={page === e ? f('current') : ''}>
-              <Link
-                to={customLocation => ({
-                  ...customLocation,
-                  search: {
-                    ...customLocation.search,
-                    page: e,
-                  },
-                })}
-              >
-                {e}
-              </Link>
-            </li>
-          );
-        })}
-        {page === lastPage ? (
-          <li className={f('disabled')}>
-            Next <span className={f('show-for-sr')}>You’re on page</span>
-          </li>
-        ) : (
-          <li>
-            <Link
-              to={customLocation => ({
-                ...customLocation,
-                search: {
-                  page: (customLocation.search.page || 1) + 1,
-                },
-              })}
-            >
-              Next
-            </Link>
-          </li>
-        )}
+        <PreviousText {...props} />
+        <First {...props} />
+        <PreviousDotDotDot {...props} />
+        <Previous {...props} />
+        <Current {...props} />
+        <Next {...props} />
+        <NextDotDotDot {...props} />
+        <Last {...props} />
+        <NextText {...props} />
       </ul>
     </div>
   );
