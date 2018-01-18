@@ -87,15 +87,16 @@ class DomainArchitecture extends PureComponent {
 class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.string.isRequired,
-    job: T.shape({
-      data: T.shape({
-        results: T.array.isRequired,
+    data: T.shape({
+      loading: T.bool.isRequired,
+      payload: T.shape({
+        results: T.array,
       }),
-    }).isRequired,
+    }),
   };
 
   render() {
-    const { job: { data: { results: [payload] } }, accession } = this.props;
+    const { data: { payload: { results: [payload] } }, accession } = this.props;
     const metadata = {
       accession: payload.crossReferences[0].identifier,
       length: payload.sequenceLength,

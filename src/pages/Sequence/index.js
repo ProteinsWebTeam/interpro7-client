@@ -1,8 +1,10 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { format } from 'url';
+
+import loadData from 'higherOrder/loadData';
 
 import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -46,105 +48,76 @@ const subPagesForSequence = new Set([
 
 class IPScanResult extends PureComponent {
   static propTypes = {
-    metadata: T.object,
-    accession: T.string.isRequired,
+    data: T.shape({
+      loading: T.bool.isRequired,
+      payload: T.shape({
+        results: T.array,
+      }),
+    }).isRequired,
+    matched: T.string.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this._dataTA = getTableAccess(IPScanJobsData);
-  }
-
-  _getJobData = async () => {
-    const { metadata: { localID, hasData } } = this.props;
-    if (!(localID && hasData)) return;
-    const dataT = await this._dataTA;
-    this.setState({ data: await dataT.get(localID) });
-  };
-
-  componentDidMount() {
-    this._getJobData();
-  }
-
-  componentWillReceiveProps() {
-    this._getJobData();
-  }
 
   render() {
-    const { metadata, accession } = this.props;
-    const { data } = this.state;
-    if (!data) return <Loading />;
-    if (accession === metadata.localID && metadata.remoteID) {
-      return (
-        <Redirect
-          to={{
-            description: {
-              main: { key: 'job' },
-              job: { type: 'InterProScan', accession: metadata.remoteID },
-            },
-          }}
-        />
-      );
+    const { data: { loading, payload }, matched } = this.props;
+    if (loading) {
+      return <Loading />;
     }
-    let entries = NaN;
-    if (data && data.entries) {
-      entries =
-        data.results[0].matches.length +
-        new Set(
-          data.results[0].matches.map(m => (m.signature.entry || {}).accession),
-        ).size;
-    }
-    return [
-      <ErrorBoundary key="browse">
-        <div className={f('row')}>
-          <div className={f('large-12', 'columns')}>
-            <BrowseTabsWithoutData
-              key="browse"
-              mainType="sequence"
-              mainDB=""
-              mainAccession={accession}
-              data={{
-                loading: false,
-                payload: { metadata: { counters: { entries } } },
-              }}
-            />
+    const entries =
+      payload.results[0].matches.length +
+      new Set(
+        payload.results[0].matches.map(
+          m => (m.signature.entry || {}).accession,
+        ),
+      ).size;
+    return (
+      <React.Fragment>
+        <ErrorBoundary>
+          <div className={f('row')}>
+            <div className={f('large-12', 'columns')}>
+              <BrowseTabsWithoutData
+                key="browse"
+                mainType="sequence"
+                mainDB=""
+                mainAccession={matched}
+                data={{
+                  loading: false,
+                  payload: { metadata: { counters: { entries } } },
+                }}
+              />
+            </div>
           </div>
-        </div>
-      </ErrorBoundary>,
-      <ErrorBoundary key="switch">
-        <Switch
-          {...this.props}
-          locationSelector={l => {
-            const { key } = l.description.main;
-            return (
-              l.description[key].detail ||
-              (Object.entries(l.description).find(
-                ([_key, value]) => value.isFilter,
-              ) || [])[0]
-            );
-          }}
-          indexRoute={SummaryAsync}
-          childRoutes={subPagesForSequence}
-        />
-      </ErrorBoundary>,
-    ];
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <Switch
+            {...this.props}
+            locationSelector={l => {
+              const { key } = l.description.main;
+              return (
+                l.description[key].detail ||
+                (Object.entries(l.description).find(
+                  ([_key, value]) => value.isFilter,
+                ) || [])[0]
+              );
+            }}
+            indexRoute={SummaryAsync}
+            childRoutes={subPagesForSequence}
+          />
+        </ErrorBoundary>
+      </React.Fragment>
+    );
   }
 }
 
-const mapStateToProps = createSelector(
+const mapStateToUrl = createSelector(
+  state => state.settings.ipScan,
   state => state.customLocation.description.job.accession,
-  state => state.jobs,
-  (accession, jobs) => {
-    let job = jobs[accession];
-    if (!job) {
-      job = Object.values(jobs).find(
-        job => job && job.metadata && job.metadata.remoteID === accession,
-      );
-    }
-    job = job || {};
-    return { accession, metadata: job.metadata || {} };
-  },
+  ({ protocol, hostname, port, root }, accession) =>
+    format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}/result/${accession}/json`,
+    }),
 );
 
-export default connect(mapStateToProps)(IPScanResult);
+export default loadData(mapStateToUrl)(IPScanResult);
