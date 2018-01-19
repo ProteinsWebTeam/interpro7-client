@@ -136,6 +136,9 @@ table.light span::before {
 .table-view .table-results-filtering .icon-view.thumb-view {
   background: url(../../images/icons/ico-view-thumb.svg) no-repeat;
 }
+.table-view .table-results-filtering .icon-view.tree-view {
+  background: url(../../images/icons/ico-view-tree.svg) no-repeat;
+}
 .table-view .table-results-filtering .icon-view.disabled {
   opacity: 0.2;
   cursor: not-allowed;

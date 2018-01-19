@@ -46,6 +46,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     title: T.string,
     notFound: T.bool,
     children: T.any,
+    withTree: T.boolean,
   };
 
   render() {
@@ -57,6 +58,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       title,
       notFound,
       children,
+      withTree,
     } = this.props;
 
     const _query = query || {};
@@ -100,7 +102,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       className={f('icon-view', 'list-view', 'disabled')}
                       aria-disabled="true"
                       disabled
-                      data-icon="i"
                       aria-label="view your results as a list"
                     />
                   </Tooltip>{' '}
@@ -109,8 +110,17 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       className={f('icon-view', 'thumb-view', 'disabled')}
                       aria-disabled="true"
                       disabled
-                      data-icon="i"
                       aria-label="view your results as thumbnails"
+                    />
+                  </Tooltip>
+                  <Tooltip title="View your results as a tree">
+                    <button
+                      className={f('icon-view', 'tree-view', {
+                        disabled: !withTree,
+                      })}
+                      aria-disabled={withTree ? 'false' : 'true'}
+                      disabled={!withTree}
+                      aria-label="view your results as a tree"
                     />
                   </Tooltip>
                 </div>
