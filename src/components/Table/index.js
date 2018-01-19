@@ -2,7 +2,9 @@
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
+
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import Link from 'components/generic/Link';
 
 import _Header from './Header';
 import _Exporter from './Exporter';
@@ -46,7 +48,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     title: T.string,
     notFound: T.bool,
     children: T.any,
-    withTree: T.boolean,
+    withTree: T.bool,
   };
 
   render() {
@@ -92,13 +94,15 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   style={{ lineHeight: 0, display: 'flex' }}
                 >
                   <Tooltip title="View your results as a table">
-                    <button
+                    <Link
+                      to={l => ({ ...l, hash: 'table' })}
                       className={f('icon-view', 'table-view')}
                       aria-label="view your results as a table"
                     />
                   </Tooltip>{' '}
                   <Tooltip title="View your results as a list">
-                    <button
+                    <Link
+                      to={l => ({ ...l, hash: 'list' })}
                       className={f('icon-view', 'list-view', 'disabled')}
                       aria-disabled="true"
                       disabled
@@ -106,7 +110,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     />
                   </Tooltip>{' '}
                   <Tooltip title="View your results as thumbnails">
-                    <button
+                    <Link
+                      to={l => ({ ...l, hash: 'thumbnail' })}
                       className={f('icon-view', 'thumb-view', 'disabled')}
                       aria-disabled="true"
                       disabled
@@ -114,7 +119,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     />
                   </Tooltip>
                   <Tooltip title="View your results as a tree">
-                    <button
+                    <Link
+                      to={l => ({ ...l, hash: 'tree' })}
                       className={f('icon-view', 'tree-view', {
                         disabled: !withTree,
                       })}
