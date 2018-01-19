@@ -66,7 +66,9 @@ export default class Table extends PureComponent /*:: <Props> */ {
       .filter(child => child.type === _Column)
       .map(child => child.props);
     const search = _children.find(child => child.type === _SearchBox);
-    const pageSize = _children.find(child => child.type === _PageSizeSelector);
+    const withPageSizeSelector = !!_children.find(
+      child => child.type === _PageSizeSelector,
+    );
     const exporter = _children.find(child => child.type === _Exporter);
 
     return (
@@ -137,15 +139,12 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   columns={columns}
                   notFound={notFound}
                 />
+                <_Footer
+                  withPageSizeSelector={withPageSizeSelector}
+                  actualSize={actualSize}
+                  pagination={_query}
+                />
               </table>
-            </div>
-          </div>
-          <div className={f('row', 'table-footer-container')}>
-            <div className={f('columns')}>
-              <div className={f('table-footer')}>
-                {pageSize && <_PageSizeSelector search={_query} />}
-                <_Footer actualSize={actualSize} pagination={_query} />
-              </div>
             </div>
           </div>
         </div>
