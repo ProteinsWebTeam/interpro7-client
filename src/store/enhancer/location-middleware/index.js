@@ -1,5 +1,5 @@
 // @flow
-import qs from 'query-string';
+import { format } from 'url';
 
 // import config from 'config';
 
@@ -21,7 +21,7 @@ export default history => ({ dispatch, getState }) => {
   const historyDispatch = ({ customLocation, replace, state }) =>
     history[replace ? 'replace' : 'push']({
       pathname: descriptionToPath(customLocation.description),
-      search: qs.stringify(customLocation.search),
+      search: format(customLocation.search),
       hash: customLocation.hash,
       state: { customLocation, state },
     });

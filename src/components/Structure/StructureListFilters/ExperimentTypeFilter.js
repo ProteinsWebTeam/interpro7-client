@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { stringify as qsStringify } from 'query-string';
+import { format } from 'url';
 
 import NumberLabel from 'components/NumberLabel';
 
@@ -97,9 +97,13 @@ const getUrlFor = createSelector(
     // add to search
     _search.group_by = 'experiment_type';
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
-      description,
-    )}?${qsStringify(_search)}`;
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(description),
+      query: _search,
+    });
   },
 );
 

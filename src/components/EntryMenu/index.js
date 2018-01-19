@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { format } from 'url';
 
 import EntryMenuLink from './EntryMenuLink';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -158,15 +159,22 @@ const mapStateToUrl = createSelector(
     proteomeAccession,
   ) => {
     if (!accession && !proteomeAccession) return;
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath({
-      main: { key: mainType },
-      [mainType]: {
-        db,
-        accession,
-        proteomeDB: proteomeAccession ? proteomeDB : null,
-        proteomeAccession,
-      },
-    })}`.replace(/\?$/, '');
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname:
+        root +
+        descriptionToPath({
+          main: { key: mainType },
+          [mainType]: {
+            db,
+            accession,
+            proteomeDB: proteomeAccession ? proteomeDB : null,
+            proteomeAccession,
+          },
+        }),
+    });
   },
 );
 

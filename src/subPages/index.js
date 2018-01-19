@@ -1,6 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
-import { stringify as qsStringify } from 'query-string';
+import { format } from 'url';
 
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
@@ -55,9 +55,13 @@ const defaultMapStateToProps = createSelector(
     //   focusDB: _description.focusDB,
     //   focusAccession: _description.focusAccession,
     // };
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
-      description,
-    )}?${qsStringify(search)}`;
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(description),
+      query: search,
+    });
   },
 );
 
@@ -79,9 +83,13 @@ const mapStateToPropsForHMMModel = createSelector(
       };
     }
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
-      copyOfDescription,
-    )}?${qsStringify(restOfSearch)}`;
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(copyOfDescription),
+      query: restOfSearch,
+    });
   },
 );
 

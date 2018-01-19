@@ -1,6 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
-import { stringify as qsStringify } from 'query-string';
+import { format } from 'url';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
@@ -19,7 +19,7 @@ export const getUrl = createSelector(
         description,
         search,
       ) => {
-        const s =
+        const _search =
           description.main.key && description[description.main.key].accession
             ? {}
             : { ...search } || {};
@@ -30,10 +30,14 @@ export const getUrl = createSelector(
           ) ||
           description.entry.memberDB
         )
-          s.page_size = s.page_size || settingsPageSize;
-        return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
-          description,
-        )}?${qsStringify(s)}`.replace(/\?$/, '');
+          _search.page_size = _search.page_size || settingsPageSize;
+        return format({
+          protocol,
+          hostname,
+          port,
+          pathname: root + descriptionToPath(description),
+          query: _search,
+        });
       },
     ),
 );
