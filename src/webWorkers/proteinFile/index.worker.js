@@ -1,7 +1,7 @@
 // @flow
 import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
-import { stringify as qsStringify } from 'query-string';
+import { format } from 'url';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
@@ -11,11 +11,14 @@ const MAX_PAGE_SIZE = 200;
 
 // From a pathname and search parameter, generates a full URL
 const getUrl = (pathname, taxId, page) =>
-  `${pathname}?${qsStringify({
-    tax_id: taxId,
-    page,
-    page_size: MAX_PAGE_SIZE,
-  })}`;
+  format({
+    pathname,
+    query: {
+      tax_id: taxId,
+      page,
+      page_size: MAX_PAGE_SIZE,
+    },
+  });
 
 // Helper function to send progress information back to the main thread
 const progress = (value /*: number */) => {

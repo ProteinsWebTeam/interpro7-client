@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { stringify as qsStringify } from 'query-string';
+import { format } from 'url';
 import omit from 'lodash-es/omit';
 
 import Link from 'components/generic/Link';
@@ -274,10 +274,13 @@ const getReversedUrl = createSelector(
     }
     newDesc[description.main.key].isFilter = true;
     newDesc.main.key = newMain;
-    const s = search || {};
-    let url = `${protocol}//${hostname}:${port}${root}${descriptionToPath(
-      newDesc,
-    )}?${qsStringify(s)}`;
+    let url = format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(newDesc),
+      query: search,
+    });
     if (description.main.key === 'entry' && newMain === 'organism') {
       url = url.replace('/entry/', '/protein/entry/');
     }

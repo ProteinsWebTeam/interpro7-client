@@ -1,6 +1,6 @@
 // @flow
 import { createStore } from 'redux';
-import qs from 'query-string';
+import { parse } from 'url';
 
 import rootReducer from 'reducers';
 import settingsStorage from 'storage/settings';
@@ -33,7 +33,7 @@ const getInitialState = history => {
   return {
     customLocation: {
       description: pathToDescription(pathname),
-      search: qs.parse(search),
+      search: parse(search, true).query,
       hash,
     },
     settings,

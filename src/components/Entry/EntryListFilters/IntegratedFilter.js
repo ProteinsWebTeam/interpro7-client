@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { stringify as qsStringify } from 'query-string';
+import { format } from 'url';
 
 import NumberLabel from 'components/NumberLabel';
 
@@ -110,9 +110,13 @@ const getUrlFor = createSelector(
     // add to search
     _search.interpro_status = null;
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
-      _description,
-    )}?${qsStringify(_search)}`;
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(_description),
+      query: _search,
+    });
   },
 );
 
