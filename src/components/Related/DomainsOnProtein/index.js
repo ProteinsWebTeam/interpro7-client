@@ -168,7 +168,6 @@ class DomainOnProteinWithoutData extends Component {
       'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
       dataResidues.payload,
     );
-    console.log(mergedData);
     const domains =
       'payload' in dataInterPro ? dataInterPro.payload.entries : [];
 
