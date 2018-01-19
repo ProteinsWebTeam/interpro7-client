@@ -21,6 +21,15 @@ export const PROGRESS_DATA = 'PROGRESS_DATA';
 export const FAILED_LOADING_DATA = 'FAILED_LOADING_DATA';
 export const UNLOADING_DATA = 'UNLOADING_DATA';
 
+// jobs
+export const CREATE_JOB = 'CREATE_JOB';
+export const UPDATE_JOB = 'UPDATE_JOB';
+export const DELETE_JOB = 'DELETE_JOB';
+export const UPDATE_JOB_STATUS = 'UPDATE_JOB_STATUS';
+export const REHYDRATE_JOBS = 'REHYDRATE_JOBS';
+export const LOAD_DATA_JOB = 'LOAD_DATA_JOB';
+export const UNLOAD_DATA_JOB = 'UNLOAD_DATA_JOB';
+
 // toast messages
 export const ADD_TOAST = 'ADD_TOAST';
 export const REMOVE_TOAST = 'REMOVE_TOAST';

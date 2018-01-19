@@ -53,6 +53,14 @@ const EMBLDropdownAsync = loadable({
   loading: NullComponent,
 });
 
+const ElixirFooterAsync = loadable({
+  loader: () =>
+    schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
+      import(/* webpackChunkName: "elixir-footer" */ 'components/ElixirFooter'),
+    ),
+  loading: NullComponent,
+});
+
 const EBIFooterAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
@@ -85,23 +93,28 @@ const CookieFooterAsync = loadable({
   loading: NullComponent,
 });
 
-const Root = () => [
-  <Helmet key="helmet" titleTemplate="%s - InterPro" defaultTitle="InterPro" />,
-  <LoadingBarAsync key="loading-bar" />,
-  <Overlay key="overlay" />,
-  <EMBLDropdownAsync key="embl-dropdown" />,
-  <SideMenuAsync key="side-menu" />,
-  <EbiSkipToDiv key="ebi-skip-to-div" />,
-  <header key="header">
-    <EBIHeader key="ebi-header" />
-    <Header key="header" stickyMenuOffset={STICKY_MENU_OFFSET} />
-  </header>,
-  <Sentinel key="sentinel" top={STICKY_MENU_OFFSET} />,
-  // <Breadcrumb key="breadcrumb" stickyMenuOffset={STICKY_MENU_OFFSET} />,
-  <Pages key="pages" top={STICKY_MENU_OFFSET} />,
-  <EBIFooterAsync key="ebi-footer" />,
-  <ToastDisplayAsync key="toast-display" />,
-  <CookieFooterAsync key="cookie-footer" />,
-];
+const Root = () => (
+  <React.Fragment>
+    <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
+    <LoadingBarAsync />
+    <Overlay />
+    <EMBLDropdownAsync />
+    <SideMenuAsync />
+    <EbiSkipToDiv />
+    <header>
+      <EBIHeader />
+      <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
+    </header>
+    <Sentinel top={STICKY_MENU_OFFSET} />
+    {/* <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} /> */}
+    <Pages top={STICKY_MENU_OFFSET} />
+    <footer>
+      <ElixirFooterAsync />
+      <EBIFooterAsync />
+    </footer>
+    <ToastDisplayAsync />
+    <CookieFooterAsync />
+  </React.Fragment>
+);
 
 export default Root;

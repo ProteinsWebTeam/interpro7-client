@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { stringify as qsStringify } from 'query-string';
+import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -207,9 +207,15 @@ const getUrlFor = createSelector(
     // add to search
     _search.ida = null;
     // build URL
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
-      description,
-    ).replace('domain_architecture', '')}?${qsStringify(_search)}`;
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname:
+        root +
+        descriptionToPath(description).replace('domain_architecture', ''),
+      query: _search,
+    });
   },
 );
 

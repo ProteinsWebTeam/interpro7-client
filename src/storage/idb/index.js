@@ -5,17 +5,18 @@ let initialized = false;
 let dbPromise;
 let tableAccesses;
 
+export const IPScanJobsMeta = 'IPScan-jobs-meta';
+export const IPScanJobsData = 'IPScan-jobs-data';
+
 const init = () => {
-  dbPromise = idb.open('interpro', 1, upgradeDb => {
+  dbPromise = idb.open('InterPro', 1, upgradeDb => {
     // do not put 'break;', keep fall-through,
     // it is to apply all the updates, one after the other
     // eslint-disable-next-line default-case
     switch (upgradeDb.oldVersion) {
       case 0:
-        upgradeDb.createObjectStore('blobs', { autoIncrement: true });
-        upgradeDb.createObjectStore('interproscan-jobs', {
-          autoIncrement: true,
-        });
+        upgradeDb.createObjectStore(IPScanJobsMeta, { autoIncrement: true });
+        upgradeDb.createObjectStore(IPScanJobsData, { autoIncrement: true });
     }
   });
   tableAccesses = new Map();

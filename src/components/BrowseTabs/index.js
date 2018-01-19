@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { format } from 'url';
 
 import BrowseTabsLink from './BrowseTabsLink';
 
@@ -134,10 +135,17 @@ const mapStateToUrl = createSelector(
     { proteomeDB, proteomeAccession },
   ) => {
     if (!accession) return;
-    return `${protocol}//${hostname}:${port}${root}${descriptionToPath({
-      main: { key },
-      [key]: { db, accession, proteomeDB, proteomeAccession },
-    })}`.replace(/\?$/, '');
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname:
+        root +
+        descriptionToPath({
+          main: { key },
+          [key]: { db, accession, proteomeDB, proteomeAccession },
+        }),
+    });
   },
 );
 

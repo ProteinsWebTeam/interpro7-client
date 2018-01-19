@@ -19,7 +19,7 @@ export const alreadyLoadingError = 'Already Loading';
 
 export default (
   state /*: {[key: string]: Datum} */ = {},
-  action /*: Object */
+  action /*: Object */,
 ) => {
   switch (action.type) {
     case LOADING_DATA:
@@ -59,8 +59,7 @@ export default (
           progress: 1,
         },
       };
-    // eslint-disable-next-line no-case-declarations
-    case UNLOADING_DATA:
+    case UNLOADING_DATA: // eslint-disable-line no-case-declarations
       const { [action.key]: _, ...newState } = state;
       return newState;
     default:

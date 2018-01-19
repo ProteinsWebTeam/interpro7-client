@@ -40,6 +40,7 @@ pages:
       - protein
       - structure
       - organism
+  job:
 pagination:
   pageSize: 20
 cache:

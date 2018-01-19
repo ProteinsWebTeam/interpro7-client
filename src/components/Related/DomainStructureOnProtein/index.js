@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
-import { stringify as qsStringify } from 'query-string';
+import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -34,9 +34,13 @@ const getUrlFor = createSelector(
           _description.entry.db = db;
         }
         // build URL
-        return `${protocol}//${hostname}:${port}${root}${descriptionToPath(
-          _description,
-        )}?${qsStringify(search)}`.replace(/\?$/, '');
+        return format({
+          protocol,
+          hostname,
+          port,
+          pathname: root + descriptionToPath(_description),
+          query: search,
+        });
       },
     ),
 );

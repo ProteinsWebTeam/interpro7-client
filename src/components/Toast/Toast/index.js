@@ -2,8 +2,11 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+import Link from 'components/generic/Link';
+
 import { foundationPartial } from 'styles/foundation';
 import localStyles from './style.css';
+
 const s = foundationPartial(localStyles);
 
 const GRANULARITY = 250; // 250ms, time frequency of ttl update
@@ -66,7 +69,7 @@ export default class Toast extends PureComponent {
       >
         {title && <strong>{title}</strong>}
         <p>{body}</p>
-        {link && <a {...link} /> // eslint-disable-line jsx-a11y/anchor-has-content
+        {link && <Link {...link} /> // eslint-disable-line jsx-a11y/anchor-has-content
         }
       </li>
     );

@@ -88,10 +88,11 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.string.isRequired,
     data: T.shape({
+      loading: T.bool.isRequired,
       payload: T.shape({
-        results: T.array.isRequired,
+        results: T.array,
       }),
-    }).isRequired,
+    }),
   };
 
   render() {

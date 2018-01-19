@@ -8,7 +8,7 @@ const renderer = new ShallowRenderer();
 
 describe('<EMBLDropdown />', () => {
   test('should render as visible', () => {
-    renderer.render(<EMBLDropdown visible={true} />);
+    renderer.render(<EMBLDropdown visible />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 

@@ -8,7 +8,7 @@ const renderer = new ShallowRenderer();
 
 describe('<Overlay />', () => {
   test('should render as visible', () => {
-    renderer.render(<Overlay visible={true} closeEverything={() => {}} />);
+    renderer.render(<Overlay visible closeEverything={() => {}} />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 

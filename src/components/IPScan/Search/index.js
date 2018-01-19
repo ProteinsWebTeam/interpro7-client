@@ -3,7 +3,6 @@ import React, { Component, PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import url from 'url';
 
 import {
   Editor,
@@ -13,15 +12,13 @@ import {
   Modifier,
   convertToRaw,
 } from 'draft-js';
+
 import Redirect from 'components/generic/Redirect';
 
-import config from 'config';
-import { addToast } from 'actions/creators';
+import { createJob, goToCustomLocation } from 'actions/creators';
 
 import id from 'utils/cheapUniqueId';
 import blockEvent from 'utils/blockEvent';
-
-import getTableAccess from 'storage/idb';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -80,7 +77,8 @@ const compositeDecorator = new CompositeDecorator([
 
 class IPScanSearch extends Component {
   static propTypes = {
-    addToast: T.func.isRequired,
+    createJob: T.func.isRequired,
+    goToCustomLocation: T.func.isRequired,
     ipScan: T.object.isRequired,
     value: T.string,
   };
@@ -100,73 +98,7 @@ class IPScanSearch extends Component {
       editorState,
       valid: true,
     };
-    this._jobsTA = getTableAccess('interproscan-jobs');
-    this._blobsTA = getTableAccess('blobs');
   }
-
-  _storeJob = async (job, jobId) => {
-    const jobsTA = await this._jobsTA;
-    return jobsTA.set(job, jobId);
-  };
-
-  _createAndStoreJob = async ({ value }) => {
-    const blobsTA = await this._blobsTA;
-    const now = Date.now();
-    // Stores the sequence
-    const blobId = await blobsTA.set({
-      value,
-      created: now,
-      saved: false,
-    });
-    // job object
-    const job = {
-      input: {
-        sequenceBlobId: blobId,
-      },
-      times: {
-        created: now,
-        lastUpdate: now,
-      },
-      status: 'created',
-    };
-    let jobId;
-    try {
-      // Stores the job
-      jobId = await this._storeJob(job);
-    } catch (err) {
-      // If job storage errors, remove sequence from storage
-      await blobsTA.delete(blobId);
-      throw err;
-    }
-    return { jobId, job };
-  };
-
-  _submitSearch = async ({ value }) => {
-    const body = new FormData();
-    body.set('email', config.IPScan.contactEmail);
-    body.set('sequence', value);
-    const r = await fetch(
-      url.resolve(
-        url.format({ ...this.props.ipScan, pathname: this.props.ipScan.root }),
-        'run',
-      ),
-      { method: 'POST', body },
-    );
-    console.log(r);
-    const text = await r.text();
-    if (!r.ok) throw new Error(text);
-    console.log(text);
-    return text;
-  };
-
-  _storeSubmittedJob = async ({ jobId, job }) => {
-    const jobsTA = await this._jobsTA;
-    // eslint-disable-next-line no-param-reassign
-    job.times.submitted = job.times.lastUpdate = Date.now();
-    // eslint-disable-next-line no-param-reassign
-    job.status = 'running';
-    return jobsTA.set(job, jobId);
-  };
 
   _handleReset = text =>
     this.setState(
@@ -185,65 +117,29 @@ class IPScanSearch extends Component {
       () => this.editor.focus(),
     );
 
-  _handleSubmitFail = err => {
-    // An error happened during job submission
-    console.error(err);
-    // Focuses back to the editor to modify the sequence
-    this.editor.focus();
-    // Displays message and bails
-    this.props.addToast(
-      {
-        title: 'Job submission failed',
-        body: 'Something wrong happened while trying to submit your job',
-        className: f('alert'),
-        ttl: 5000,
-      },
-      id(),
-    );
-  };
-
-  _handleSubmitSuccess = ({ job, jobId }) => {
-    // If job successfully submitted, resets input field
-    this._handleReset();
-    // Stores the job
-    this._storeSubmittedJob({ job, jobId });
-    // And notifies user
-    this.props.addToast(
-      {
-        title: 'Job submitted',
-        body: `Your job has been successfully submitted with an id of ${
-          job.id
-        }`,
-        className: f('success'),
-        ttl: 5000,
-      },
-      id(),
-    );
-  };
-
   _handleSubmit = async event => {
     event.preventDefault();
-    this.setState({ uploading: true });
     const lines = convertToRaw(
       this.state.editorState.getCurrentContent(),
     ).blocks.map(block => block.text);
     if (!lines.length) return;
     const value = lines.join('\n');
-    // console.log(`POSTing ${value}`);
-    let jobAndJobId;
-    let IPScanId;
-    try {
-      [jobAndJobId, IPScanId] = await Promise.all([
-        this._createAndStoreJob({ value }),
-        this._submitSearch({ value }),
-      ]);
-    } catch (err) {
-      return this._handleSubmitFail(err);
-    }
-    console.log({ jobAndJobId, IPScanId });
-    jobAndJobId.job.id = IPScanId;
-    this._handleSubmitSuccess(jobAndJobId);
-    this.setState({ uploading: false });
+    const localID = id(`internal-${Date.now()}`);
+    this.props.createJob({
+      metadata: {
+        localID,
+        type: 'InterProScan',
+      },
+      data: {
+        input: value,
+      },
+    });
+    this.props.goToCustomLocation({
+      description: {
+        main: { key: 'job' },
+        job: { type: 'InterProScan' /* , accession: localID */ },
+      },
+    });
   };
 
   _handleFile = file => {
@@ -311,6 +207,8 @@ class IPScanSearch extends Component {
   };
 
   render() {
+    // If we had a value, we used it in the constructor
+    // But we don't want to have it in the url, so remove the value from it.
     if (this.props.value)
       return (
         <Redirect
@@ -322,7 +220,7 @@ class IPScanSearch extends Component {
           }}
         />
       );
-    const { editorState, valid, dragging, uploading } = this.state;
+    const { editorState, valid, dragging } = this.state;
     return (
       <div className={f('row', 'margin-bottom-medium')}>
         <div className={f('large-12', 'columns')}>
@@ -359,7 +257,6 @@ class IPScanSearch extends Component {
                         type="text"
                         className={f('editor', {
                           'invalid-block': !valid,
-                          busy: uploading,
                         })}
                       >
                         <Editor
@@ -369,7 +266,6 @@ class IPScanSearch extends Component {
                           onChange={this._handleChange}
                           handlePastedText={this._handlePastedText}
                           ref={editor => (this.editor = editor)}
-                          readOnly={uploading}
                         />
                       </div>
                     </div>
@@ -463,4 +359,7 @@ const mapStateToProps = createSelector(
   (ipScan, value) => ({ ipScan, value }),
 );
 
-export default connect(mapStateToProps, { addToast })(IPScanSearch);
+export default connect(mapStateToProps, {
+  createJob,
+  goToCustomLocation,
+})(IPScanSearch);

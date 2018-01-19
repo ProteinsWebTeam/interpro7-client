@@ -10,6 +10,7 @@ import Redirect from 'components/generic/Redirect';
 import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
+
 import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ipro);
@@ -26,15 +27,11 @@ const IPScanSearch = loadable({
   loader: () =>
     import(/* webpackChunkName: "ipscan-search" */ 'components/IPScan/Search'),
 });
-const IPScanStatus = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "ipscan-status" */ 'components/IPScan/Status'),
-});
 
 const TextSearchAndResults = () => (
   <Wrapper>
-    <SearchByText key="search" />
-    <SearchResults key="results" />
+    <SearchByText />
+    <SearchResults />
   </Wrapper>
 );
 TextSearchAndResults.preload = () => {
@@ -42,20 +39,15 @@ TextSearchAndResults.preload = () => {
   SearchResults.preload();
 };
 
-const IPScanSearchAndStatus = () => (
+const WrappedIPScanSearch = () => (
   <Wrapper>
-    <IPScanSearch key="search" />
-    <IPScanStatus key="status" refreshRate={120000} />
+    <IPScanSearch />
   </Wrapper>
 );
-IPScanSearchAndStatus.preload = () => {
-  IPScanSearch.preload();
-  IPScanStatus.preload();
-};
 
 const routes = new Set([
   { value: 'text', component: TextSearchAndResults },
-  { value: 'sequence', component: IPScanSearchAndStatus },
+  { value: 'sequence', component: WrappedIPScanSearch },
 ]);
 
 const RedirectToText = () => (
@@ -63,9 +55,6 @@ const RedirectToText = () => (
     to={{ description: { main: { key: 'search' }, search: { type: 'text' } } }}
   />
 );
-
-const activeClassFn = ({ description: { search: { type } } }) =>
-  type === 'text' && f('is-active', 'is-active-tab');
 
 class Wrapper extends PureComponent {
   static propTypes = {
@@ -90,15 +79,17 @@ class Wrapper extends PureComponent {
                     search: { type: 'text' },
                   },
                 }}
-                activeClass={activeClassFn}
+                activeClass={({ description: { search: { type } } }) =>
+                  type === 'text' && f('is-active', 'is-active-tab')
+                }
               >
                 by text
               </Link>
             </li>
             <li
               className={f('tabs-title')}
-              onMouseOver={IPScanSearchAndStatus.preload}
-              onFocus={IPScanSearchAndStatus.preload}
+              onMouseOver={WrappedIPScanSearch.preload}
+              onFocus={WrappedIPScanSearch.preload}
             >
               <Link
                 to={{

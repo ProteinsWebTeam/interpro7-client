@@ -33,14 +33,6 @@ class Title extends PureComponent /*:: <Props> */ {
 
   render() {
     const { loading, mainType, mainDB, mainAccession, stuck } = this.props;
-    let subtitle =
-      // mainAccession || mainDB ||
-      'Classification of protein families';
-    // if (mainType === 'search') subtitle += ' search';
-    // let detail;
-    // if (mainDB && mainDB !== subtitle && mainType !== 'search') {
-    //  detail = mainDB;
-    // }
     return (
       <div
         className={styles('columns', 'small-6', 'medium-8')}
@@ -97,10 +89,7 @@ class Title extends PureComponent /*:: <Props> */ {
           </div>
         </h1>
         <h4 className={styles('subtitle', { stuck })}>
-          {
-            //detail && `${detail} - `
-          }
-          {subtitle}
+          Classification of protein families
         </h4>
       </div>
     );

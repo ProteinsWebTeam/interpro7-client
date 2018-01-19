@@ -12,7 +12,6 @@ const postCSSImport = require('postcss-import');
 const cssNext = require('postcss-cssnext');
 
 // Webpack plugins
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const pkg = require(path.resolve('package.json'));
@@ -403,7 +402,9 @@ module.exports = (env = { dev: true }) => {
       // env.production || env.staging
       //   ? new (require('./plugins/web-app-manifest'))()
       //   : null,
-      new HardSourceWebpackPlugin(),
+      env.production || env.staging
+        ? new (require('hard-source-webpack-plugin'))()
+        : null,
       env.test || env.production || env.staging
         ? new ExtractTextPlugin({
             filename: env.production

@@ -83,31 +83,6 @@ input:disabled {
   background: gray;
 }
 
-.busy {
-  background-color: lightgray;
-  color: #888;
-  position: relative;
-  overflow: hidden;
-}
-
-.busy::after {
-  content: '⇪';
-  color: white;
-  font-size: 50vh;
-  position: absolute;
-  top: 0.5em;
-  overflow: hidden;
-  animation: uploading 1s infinite;
-}
-@keyframes uploading {
-  0% {
-    top: 0.5em;
-  }
-  100% {
-    top: -1.5em;
-  }
-}
-
 .sqc-search-input h3 {
   font-size: 150%;
   margin-bottom: 0.5rem;

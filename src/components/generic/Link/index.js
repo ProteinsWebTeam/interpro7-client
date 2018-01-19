@@ -1,9 +1,9 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { stringify as qsStringify } from 'query-string';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { format } from 'url';
 
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -22,9 +22,11 @@ const rootPathname = config.root.website.pathname.replace(/\/$/, '');
 
 const generateHref = (nextLocation /*: Object */, href /*?: string */) => {
   if (href) return href;
-  return `${rootPathname}${descriptionToPath(
-    nextLocation.description,
-  )}?${qsStringify(nextLocation.search)}`.replace(/\?(#|$)/, '');
+  return format({
+    pathname: rootPathname + descriptionToPath(nextLocation.description),
+    query: nextLocation.search,
+    hash: nextLocation.hash,
+  });
 };
 
 const generateClassName = (
@@ -123,15 +125,18 @@ class Link extends PureComponent /*:: <Props> */ {
 
   render() {
     const {
+      // unused (to prevent passing down)
       onClick,
-      customLocation,
       goToCustomLocation,
+      // used
+      customLocation,
       activeClass,
       className,
       to,
       disabled,
       href,
       children,
+      // passed down
       ...props
     } = this.props;
     const nextCustomLocation = getNextLocation(customLocation, to) || {};

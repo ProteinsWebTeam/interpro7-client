@@ -42,8 +42,8 @@ const EntrySet = loadable({
 const Search = loadable({
   loader: () => import(/* webpackChunkName: "search-page" */ './Search'),
 });
-const Job = loadable({
-  loader: () => import(/* webpackChunkName: "job-page" */ './Job'),
+const Jobs = loadable({
+  loader: () => import(/* webpackChunkName: "jobs-page" */ './Jobs'),
 });
 
 // Static pages
@@ -74,7 +74,7 @@ const pages = new Set([
   { value: 'set', component: EntrySet },
   // other
   { value: 'search', component: Search },
-  { value: 'job', component: Job },
+  { value: 'job', component: Jobs },
   // static pages
   { value: 'about', component: About },
   { value: 'help', component: Help },

@@ -128,7 +128,7 @@ const templateHandler /*: Handler */ = {
 const memberDB = new Set([
   {
     name: 'gene3d',
-    re: /^G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{2,4}$/i,
+    re: /^G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{2,5}$/i,
   },
   { name: 'cdd', re: /^(?:c|s)d[0-9]{5}$/i },
   { name: 'hamap', re: /^MF_[0-9]{5}(_(A|B){1})?$/i },
@@ -532,7 +532,7 @@ export const jobAccessionHandler /*: Handler */ = handlerConstructor({
     value: value => value,
   },
   regexp: {
-    value: /(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d{8}-(es|hx|pg|oy|p[12]m)|internal-[1-9]\d*)/,
+    value: /(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-(es|hx|pg|oy|p[12]m)|internal-[1-9]\d*-\d+)/,
   },
 });
 

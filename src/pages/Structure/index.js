@@ -129,15 +129,15 @@ const List = ({
             renderer={(accession /*: string */) => (
               <Link
                 to={customLocation => ({
+                  ...customLocation,
                   description: {
-                    ...customLocation.description,
-                    [customLocation.description.main.key]: {
-                      ...customLocation.description[
-                        customLocation.description.main.key
-                      ],
+                    main: { key: 'structure' },
+                    structure: {
+                      db: customLocation.description.structure.db,
                       accession,
                     },
                   },
+                  search: {},
                 })}
               >
                 <HighlightedText
@@ -157,15 +157,15 @@ const List = ({
             ) => (
               <Link
                 to={customLocation => ({
+                  ...customLocation,
                   description: {
-                    ...customLocation.description,
-                    [customLocation.description.main.key]: {
-                      ...customLocation.description[
-                        customLocation.description.main.key
-                      ],
+                    main: { key: 'structure' },
+                    structure: {
+                      db: customLocation.description.structure.db,
                       accession,
                     },
                   },
+                  search: {},
                 })}
               >
                 <HighlightedText text={name} textToHighlight={search.search} />
