@@ -21,7 +21,7 @@ export default history => ({ dispatch, getState }) => {
   const historyDispatch = ({ customLocation, replace, state }) =>
     history[replace ? 'replace' : 'push']({
       pathname: descriptionToPath(customLocation.description),
-      search: format(customLocation.search),
+      search: format({ query: customLocation.search }),
       hash: customLocation.hash,
       state: { customLocation, state },
     });
