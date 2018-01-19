@@ -4,6 +4,8 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 
+import PageSizeSelector from '../PageSizeSelector';
+
 import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
@@ -157,6 +159,7 @@ class NextText extends PureComponent {
 }
 
 const Footer = ({
+  withPageSizeSelector /*: boolean */,
   actualSize /*: number */,
   pagination /*: Object */,
   notFound,
@@ -174,27 +177,36 @@ const Footer = ({
   const next = Math.min(current + 1, last);
 
   return (
-    <div className={f('pagination-box')}>
-      <ul
-        className={f('pagination', 'text-right')}
-        role="navigation"
-        aria-label="Pagination"
-      >
-        <PreviousText previous={previous} />
-        <First first={first} current={current} />
-        <PreviousDotDotDot first={first} previous={previous} />
-        <Previous first={first} previous={previous} current={current} />
-        <Current current={current} />
-        <Next current={current} next={next} last={last} />
-        <NextDotDotDot next={next} last={last} />
-        <Last current={current} last={last} />
-        <NextText next={next} />
-      </ul>
-    </div>
+    <tfoot className={f('table-footer')}>
+      <tr>
+        <td colSpan="100%">
+          <div className={f('table-footer-content')}>
+            {withPageSizeSelector && <PageSizeSelector search={pagination} />}
+            <div className={f('pagination-box')}>
+              <ul
+                className={f('pagination', 'text-right')}
+                role="navigation"
+                aria-label="Pagination"
+              >
+                <PreviousText previous={previous} />
+                <First first={first} current={current} />
+                <PreviousDotDotDot first={first} previous={previous} />
+                <Previous first={first} previous={previous} current={current} />
+                <Current current={current} />
+                <Next current={current} next={next} last={last} />
+                <NextDotDotDot next={next} last={last} />
+                <Last current={current} last={last} />
+                <NextText next={next} />
+              </ul>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
   );
 };
 Footer.propTypes = {
-  data: T.array,
+  withPageSizeSelector: T.bool.isRequired,
   actualSize: T.number,
   pagination: T.object.isRequired,
   notFound: T.bool,
