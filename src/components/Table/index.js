@@ -4,6 +4,7 @@ import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 
 import _Header from './Header';
@@ -38,6 +39,25 @@ const f = foundationPartial(styles, fonts);
   notFound: ?boolean,
   children?: any,
 } */
+
+class TableView extends PureComponent {
+  static propTypes = {
+    isStale: T.bool,
+    columns: T.array,
+    notFound: T.bool,
+    dataTable: T.array,
+  };
+
+  render() {
+    const { isStale, columns, notFound, dataTable } = this.props;
+    return (
+      <table className={f('table', 'light', { isStale })}>
+        <_Header columns={columns} notFound={notFound} />
+        <_Body rows={dataTable || []} columns={columns} notFound={notFound} />
+      </table>
+    );
+  }
+}
 
 export default class Table extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -111,13 +131,13 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       aria-label="view your results as a list"
                     />
                   </Tooltip>{' '}
-                  <Tooltip title="View your results as thumbnails">
+                  <Tooltip title="View your results in a grid">
                     <Link
                       to={l => ({ ...l, hash: 'thumbnail' })}
-                      className={f('icon-view', 'thumb-view', 'disabled')}
+                      className={f('icon-view', 'grid-view', 'disabled')}
                       aria-disabled="true"
                       disabled
-                      aria-label="view your results as thumbnails"
+                      aria-label="view your results in a grid"
                     />
                   </Tooltip>
                   <Tooltip title="View your results as a tree">
@@ -148,14 +168,22 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 pagination={_query}
                 notFound={notFound}
               />
-              <table className={f('table', 'light', { isStale })}>
-                <_Header columns={columns} notFound={notFound} />
-                <_Body
-                  rows={dataTable || []}
-                  columns={columns}
-                  notFound={notFound}
-                />
-              </table>
+              <Switch
+                locationSelector={({ hash }) => hash}
+                indexRoute={TableView}
+                childRoutes={[
+                  { value: 'table', component: TableView },
+                  // { value: 'list', component: () => 'LIST!' },
+                  // { value: 'grid', component: () => 'GRID!' },
+                  // { value: 'tree', component: () => 'TREE!' },
+                ]}
+                catchAll={TableView}
+                // passed down props
+                isStale={isStale}
+                columns={columns}
+                notFound={notFound}
+                dataTable={dataTable}
+              />
               <_Footer
                 withPageSizeSelector={withPageSizeSelector}
                 actualSize={actualSize}

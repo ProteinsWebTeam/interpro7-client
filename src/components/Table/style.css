@@ -133,8 +133,8 @@ table.light span::before {
 .table-view .table-results-filtering .icon-view.list-view {
   background: url(../../images/icons/ico-view-list.svg) no-repeat;
 }
-.table-view .table-results-filtering .icon-view.thumb-view {
-  background: url(../../images/icons/ico-view-thumb.svg) no-repeat;
+.table-view .table-results-filtering .icon-view.grid-view {
+  background: url(../../images/icons/ico-view-grid.svg) no-repeat;
 }
 .table-view .table-results-filtering .icon-view.tree-view {
   background: url(../../images/icons/ico-view-tree.svg) no-repeat;
