@@ -155,12 +155,12 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   columns={columns}
                   notFound={notFound}
                 />
-                <_Footer
-                  withPageSizeSelector={withPageSizeSelector}
-                  actualSize={actualSize}
-                  pagination={_query}
-                />
               </table>
+              <_Footer
+                withPageSizeSelector={withPageSizeSelector}
+                actualSize={actualSize}
+                pagination={_query}
+              />
             </div>
           </div>
         </div>

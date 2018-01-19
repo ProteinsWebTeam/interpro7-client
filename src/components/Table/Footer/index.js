@@ -177,32 +177,28 @@ const Footer = ({
   const next = Math.min(current + 1, last);
 
   return (
-    <tfoot className={f('table-footer')}>
-      <tr>
-        <td colSpan="100%">
-          <div className={f('table-footer-content')}>
-            {withPageSizeSelector && <PageSizeSelector search={pagination} />}
-            <div className={f('pagination-box')}>
-              <ul
-                className={f('pagination', 'text-right')}
-                role="navigation"
-                aria-label="Pagination"
-              >
-                <PreviousText previous={previous} />
-                <First first={first} current={current} />
-                <PreviousDotDotDot first={first} previous={previous} />
-                <Previous first={first} previous={previous} current={current} />
-                <Current current={current} />
-                <Next current={current} next={next} last={last} />
-                <NextDotDotDot next={next} last={last} />
-                <Last current={current} last={last} />
-                <NextText next={next} />
-              </ul>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
+    <div className={f('table-footer')}>
+      <div className={f('table-footer-content')}>
+        {withPageSizeSelector && <PageSizeSelector search={pagination} />}
+        <div className={f('pagination-box')}>
+          <ul
+            className={f('pagination', 'text-right')}
+            role="navigation"
+            aria-label="Pagination"
+          >
+            <PreviousText previous={previous} />
+            <First first={first} current={current} />
+            <PreviousDotDotDot first={first} previous={previous} />
+            <Previous first={first} previous={previous} current={current} />
+            <Current current={current} />
+            <Next current={current} next={next} last={last} />
+            <NextDotDotDot next={next} last={last} />
+            <Last current={current} last={last} />
+            <NextText next={next} />
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 };
 Footer.propTypes = {
