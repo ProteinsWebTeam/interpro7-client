@@ -45,7 +45,7 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
     if (!display) return null;
     return (
       <AnimatedEntry
-        animateSelf={true}
+        animateSelf
         keyframes={{
           opacity: [0, 1],
           transform: ['translateY(100%)', 'translateY(0)'],

@@ -101,7 +101,7 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
             <NumberLabel
               value={count || 0}
               className={f('number-label')}
-              abbr={true}
+              abbr
             />
           </Tooltip>
         </Link>
