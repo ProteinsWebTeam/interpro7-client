@@ -62,9 +62,9 @@ class SearchResults extends PureComponent {
           isStale={isStale}
         >
           <Exporter>
-            <a href={dataUrl} download={`SearchResults-${searchValue}.json`}>
+            <Link href={dataUrl} download={`SearchResults-${searchValue}.json`}>
               JSON
-            </a>
+            </Link>
           </Exporter>
           <Column
             dataKey="id"

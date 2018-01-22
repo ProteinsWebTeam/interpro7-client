@@ -123,19 +123,19 @@ class List extends PureComponent {
             <Exporter>
               <ul>
                 <li>
-                  <a href={url} download="proteins.json">
+                  <Link href={url} download="proteins.json">
                     JSON
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href={url} download="proteins.tsv">
+                  <Link href={url} download="proteins.tsv">
                     TSV
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a target="_blank" rel="noopener noreferrer" href={url}>
+                  <Link target="_blank" href={url}>
                     Open in API web view
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </Exporter>

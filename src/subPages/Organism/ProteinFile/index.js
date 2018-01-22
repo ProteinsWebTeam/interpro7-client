@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import ProgressButton from 'components/ProgressButton';
+import Link from 'components/generic/Link';
 
 const getWorker = () =>
   import('webWorkers/proteinFile').then(Worker => new Worker());
@@ -93,7 +94,7 @@ class ProteinFile extends Component {
     const { taxId, entryDescription: { accession }, type } = this.props;
     const { downloading, success, failed, progress, href } = this.state;
     return (
-      <a
+      <Link
         download={getDownloadName(this.props)}
         href={href}
         style={{ borderBottomWidth: '0' }}
@@ -109,7 +110,7 @@ class ProteinFile extends Component {
           failed={failed}
           progress={progress}
         />
-      </a>
+      </Link>
     );
   }
 }

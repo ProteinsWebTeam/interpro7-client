@@ -11,13 +11,12 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
     <p>
       EMBL-EBI in Hinxton is one of six EMBL locations across Europe.
       <br />
-      <a
+      <Connect(Link)
         className="small readmore"
         href="https://www.ebi.ac.uk/about"
-        rel="noopener"
       >
         More about EMBL-EBI
-      </a>
+      </Connect(Link)>
     </p>
     <h6>
       Connect to another EMBL location
@@ -28,12 +27,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
       <div
         className="columns small-5 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           href="https://www.embl.de/"
-          rel="noopener"
         >
           Heidelberg
-        </a>
+        </Connect(Link)>
         <div
           className="small"
         >
@@ -43,12 +41,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
       <div
         className="columns small-7 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           href="http://www.embl-barcelona.es/"
-          rel="noopener"
         >
           Barcelona
-        </a>
+        </Connect(Link)>
         <div
           className="small"
         >
@@ -58,12 +55,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
       <div
         className="columns small-5 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           href="https://www.embl.fr/"
-          rel="noopener"
         >
           Grenoble
-        </a>
+        </Connect(Link)>
         <div
           className="small"
         >
@@ -73,12 +69,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
       <div
         className="columns small-7 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           href="https://www.embl-hamburg.de/"
-          rel="noopener"
         >
           Hamburg
-        </a>
+        </Connect(Link)>
         <div
           className="small"
         >
@@ -88,12 +83,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
       <div
         className="columns small-5 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           href="https://www.embl.it/"
-          rel="noopener"
         >
           Rome
-        </a>
+        </Connect(Link)>
         <div
           className="small"
         >
@@ -103,13 +97,12 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
       <div
         className="columns small-7 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           className="readmore"
-          href="http://embl.org/"
-          rel="noopener"
+          href="https://embl.org/"
         >
           More about EMBL
-        </a>
+        </Connect(Link)>
       </div>
     </div>
   </div>
@@ -127,13 +120,12 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
     <p>
       EMBL-EBI in Hinxton is one of six EMBL locations across Europe.
       <br />
-      <a
+      <Connect(Link)
         className="small readmore"
         href="https://www.ebi.ac.uk/about"
-        rel="noopener"
       >
         More about EMBL-EBI
-      </a>
+      </Connect(Link)>
     </p>
     <h6>
       Connect to another EMBL location
@@ -144,12 +136,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
       <div
         className="columns small-5 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           href="https://www.embl.de/"
-          rel="noopener"
         >
           Heidelberg
-        </a>
+        </Connect(Link)>
         <div
           className="small"
         >
@@ -159,12 +150,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
       <div
         className="columns small-7 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           href="http://www.embl-barcelona.es/"
-          rel="noopener"
         >
           Barcelona
-        </a>
+        </Connect(Link)>
         <div
           className="small"
         >
@@ -174,12 +164,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
       <div
         className="columns small-5 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           href="https://www.embl.fr/"
-          rel="noopener"
         >
           Grenoble
-        </a>
+        </Connect(Link)>
         <div
           className="small"
         >
@@ -189,12 +178,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
       <div
         className="columns small-7 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           href="https://www.embl-hamburg.de/"
-          rel="noopener"
         >
           Hamburg
-        </a>
+        </Connect(Link)>
         <div
           className="small"
         >
@@ -204,12 +192,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
       <div
         className="columns small-5 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           href="https://www.embl.it/"
-          rel="noopener"
         >
           Rome
-        </a>
+        </Connect(Link)>
         <div
           className="small"
         >
@@ -219,13 +206,12 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
       <div
         className="columns small-7 padding-bottom-medium"
       >
-        <a
+        <Connect(Link)
           className="readmore"
-          href="http://embl.org/"
-          rel="noopener"
+          href="https://embl.org/"
         >
           More about EMBL
-        </a>
+        </Connect(Link)>
       </div>
     </div>
   </div>

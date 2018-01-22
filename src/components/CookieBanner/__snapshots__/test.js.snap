@@ -41,9 +41,8 @@ exports[`<CookieBanner /> should render 1`] = `
     >
       This website uses cookies. By continuing to browse this site, you are agreeing to the use of our site cookies. To find out more, see our
        
-      <a
+      <Connect(Link)
         href="https://www.ebi.ac.uk/about/terms-of-use"
-        rel="noopener noreferrer"
         style={
           Object {
             "borderBottom": "1px dotted",
@@ -53,7 +52,7 @@ exports[`<CookieBanner /> should render 1`] = `
         target="_blank"
       >
         Terms of Use
-      </a>
+      </Connect(Link)>
       .
     </span>
     <button

@@ -122,19 +122,19 @@ class List extends Component {
             <Exporter>
               <ul>
                 <li>
-                  <a href={data.url} download="entries.json">
+                  <Link href={data.url} download="entries.json">
                     JSON
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href={data.url} download="entries.tsv">
+                  <Link href={data.url} download="entries.tsv">
                     TSV
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a target="_blank" rel="noopener noreferrer" href={data.url}>
+                  <Link target="_blank" href={data.url}>
                     Open in API web view
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </Exporter>

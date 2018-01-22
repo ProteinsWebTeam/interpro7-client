@@ -14,7 +14,10 @@ class ElixirFooter extends PureComponent {
     return (
       <div className={f('elixir-ribbon')}>
         <div className={f('row')}>
-          <Link href="https://www.elixir-europe.org/about-us/who-we-are/nodes/embl-ebi">
+          <Link
+            href="https://www.elixir-europe.org/about-us/who-we-are/nodes/embl-ebi"
+            target="_blank"
+          >
             <div className={f('elixir-logo-kite')} />
             <h5>
               <span className={f('elixir-banner-name')}>This service</span> is

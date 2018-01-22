@@ -106,19 +106,19 @@ const List = ({
           <Exporter>
             <ul>
               <li>
-                <a href={url} download="structures.json">
+                <Link href={url} download="structures.json">
                   JSON
-                </a>
+                </Link>
               </li>
               <li>
-                <a href={url} download="structures.tsv">
+                <Link href={url} download="structures.tsv">
                   TSV
-                </a>
+                </Link>
               </li>
               <li>
-                <a target="_blank" rel="noopener noreferrer" href={url}>
+                <Link target="_blank" href={url}>
                   Open in API web view
-                </a>
+                </Link>
               </li>
             </ul>
           </Exporter>
