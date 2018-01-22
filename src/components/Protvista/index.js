@@ -12,6 +12,7 @@ import local from './style.css';
 
 const f = foundationPartial(local, fonts);
 
+import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import PopperJS from 'popper.js';
 
@@ -436,7 +437,19 @@ class Protvista extends Component {
                               />
                             </div>
                             <div className={f('track-accession')}>
-                              {entry.accession}
+                              <Link
+                                to={{
+                                  description: {
+                                    main: { key: 'entry' },
+                                    entry: {
+                                      db: entry.source_database,
+                                      accession: entry.accession,
+                                    },
+                                  },
+                                }}
+                              >
+                                {entry.accession}
+                              </Link>
                               <div
                                 className={f({
                                   hide: !expandedTrack[entry.accession],
@@ -448,7 +461,19 @@ class Protvista extends Component {
                                       key={d.accession}
                                       className={f('track-accession-child')}
                                     >
-                                      {d.accession}
+                                      <Link
+                                        to={{
+                                          description: {
+                                            main: { key: 'entry' },
+                                            entry: {
+                                              db: d.source_database,
+                                              accession: d.accession,
+                                            },
+                                          },
+                                        }}
+                                      >
+                                        {d.accession}
+                                      </Link>
                                     </div>
                                   ))}
                               </div>
