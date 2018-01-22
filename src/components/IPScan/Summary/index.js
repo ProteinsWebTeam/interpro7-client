@@ -86,7 +86,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
           accession,
           source_database: 'InterPro',
           children: [],
-          type: match.signature.entry.type.toLowerCase(),
+          type: match.signature.entry.type.toLowerCase().replace(/_/g, ' '),
         };
         entry.children.push(processedMatch);
         integrated.set(accession, entry);
