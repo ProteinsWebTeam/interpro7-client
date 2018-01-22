@@ -32,14 +32,13 @@ class ExperimentTypeFilter extends Component {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    this.props.goToCustomLocation({
-      ...this.props.customLocation,
-      search: {
-        ...this.props.customLocation.search,
-        experiment_type: value === 'All' ? undefined : value,
-        page: undefined,
-      },
-    });
+    const {
+      page,
+      experiment_type,
+      ...search
+    } = this.props.customLocation.search;
+    if (value !== 'All') search.experiment_type = value;
+    this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
   render() {

@@ -30,14 +30,9 @@ class SignaturesFilter extends Component {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    this.props.goToCustomLocation({
-      ...this.props.customLocation,
-      search: {
-        ...this.props.customLocation.search,
-        signature_in: value === 'All' ? undefined : value,
-        page: undefined,
-      },
-    });
+    const { page, signature_in, ...search } = this.props.customLocation.search;
+    if (value !== 'All') search.signature_in = value;
+    this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
   render() {
