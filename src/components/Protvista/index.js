@@ -147,7 +147,7 @@ class Protvista extends Component {
                 accession: child.accession,
                 source_database: child.source_database,
                 entry_type: child.entry_type,
-                locations: child.entry_protein_locations,
+                locations: child.entry_protein_locations || child.locations,
                 parent: d,
                 color: this.getTrackColor(Object.assign(child, { parent: d })),
               }))
@@ -194,6 +194,7 @@ class Protvista extends Component {
     this.web_protein.data = protein;
     this.updateTracksWithData(data);
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data !== this.props.data) {
       this.updateTracksWithData(this.props.data);
@@ -201,20 +202,23 @@ class Protvista extends Component {
   }
 
   getElementFromEntry(entry) {
-    const tagString = `<div className={f('info-win')}>
-        <h5 style="text-transform: uppercase; font-weight: bold;">${
+    const tagString = `
+      <div className={f('info-win')}>
+        <h5 style={{ textTransform: 'uppercase', fontWeight: 'bold' }}>${
           entry.accession
         }</h5>
-        <p style="text-transform: capitalize;">${entry.entry_type || ''}</p>
-        <p style="text-transform: uppercase;">
-        <small>${
-          Array.isArray(entry.source_database)
-            ? entry.source_database[0]
-            : entry.source_database
-        }
-          ${entry.entry ? `(${entry.entry})` : ''}
-        </small></p>
-      </div>`;
+        <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
+        <p style={{ textTransform: 'uppercase' }}>
+          <small>${
+            Array.isArray(entry.source_database)
+              ? entry.source_database[0]
+              : entry.source_database
+          }
+            ${entry.entry ? `(${entry.entry})` : ''}
+          </small>
+        </p>
+      </div>
+    `.trim();
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));
     return range.createContextualFragment(tagString);
@@ -234,6 +238,7 @@ class Protvista extends Component {
     }
     this.setState({ collapsed: !collapsed });
   };
+
   handleCollapseLabels = accession => {
     this.setObjectValueInState(
       'expandedTrack',
@@ -241,6 +246,7 @@ class Protvista extends Component {
       this.web_tracks[accession]._expanded,
     );
   };
+
   handleFullScreen = () => {
     requestFullScreen(this._main);
   };
@@ -293,11 +299,11 @@ class Protvista extends Component {
     }
     return 'rgb(170,170,170)';
   }
+
   render() {
     const { protein: { length }, data } = this.props;
-    if (!length || !data) {
-      return <Loading />;
-    }
+
+    if (!(length && data)) return <Loading />;
 
     const { collapsed, hideCategory, expandedTrack } = this.state;
     return (

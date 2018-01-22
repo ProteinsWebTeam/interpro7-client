@@ -8,72 +8,17 @@ import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
-
-import loadable from 'higherOrder/loadable';
+import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
 
 import flattenDeep from 'lodash-es/flattenDeep';
 
 import f from 'styles/foundation';
-
-const DomainArchitectureWithoutData = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "domain-architecture-subpage" */ 'components/Protein/DomainArchitecture'),
-});
 
 const goCategoryMap = new Map([
   ['BIOLOGICAL_PROCESS', 'Biological Process'],
   ['MOLECULAR_FUNCTION', 'Molecular Function'],
   ['CELLULAR_COMPONENT', 'Cellular Component'],
 ]);
-
-class DomainArchitecture extends PureComponent {
-  static propTypes = {
-    payload: T.object.isRequired,
-  };
-
-  render() {
-    const { payload } = this.props;
-    const protein = {
-      length: payload.sequenceLength,
-    };
-    // massage data to make it look like what is needed for
-    // a standard domain architecture subpage
-    const data = {
-      integrated: new Map(),
-      unintegrated: [],
-    };
-    for (const match of payload.matches) {
-      const processedMatch = {
-        accession: match.signature.accession,
-        source_database: match.signature.signatureLibraryRelease.library,
-        protein_length: payload.sequenceLength,
-        coordinates: [match.locations.map(l => [l.start, l.end])],
-        score: match.score,
-      };
-      if (match.signature.entry) {
-        const accession = match.signature.entry.accession;
-        const entry = data.integrated.get(accession) || {
-          accession,
-          source_database: 'InterPro',
-          children: [],
-        };
-        entry.children.push(processedMatch);
-        data.integrated.set(accession, entry);
-      } else {
-        data.unintegrated.push(processedMatch);
-      }
-    }
-    data.integrated = Array.from(data.integrated.values()).map(m => {
-      const coordinates = flattenDeep(m.children.map(s => s.coordinates));
-      return {
-        ...m,
-        coordinates: [[[Math.min(...coordinates), Math.max(...coordinates)]]],
-      };
-    });
-    data.unintegrated.sort((m1, m2) => m2.score - m1.score);
-    return <DomainArchitectureWithoutData protein={protein} data={data} />;
-  }
-}
 
 /*:: type Props = {
   accession: string,
@@ -100,11 +45,13 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
     const metadata = {
       accession: payload.crossReferences[0].identifier,
       length: payload.sequenceLength,
+      sequence: payload.sequence,
       name: {
         name: 'InterProScan Search',
         short: payload.crossReferences[0].name,
       },
     };
+
     const goTerms = new Map();
     for (const match of payload.matches) {
       for (const go of (match.signature.entry || {}).goXRefs || []) {
@@ -115,6 +62,61 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
         });
       }
     }
+
+    const mergedData = { unintegrated: [] };
+    let integrated = new Map();
+    for (const match of payload.matches) {
+      const processedMatch = {
+        accession: match.signature.accession,
+        source_database: match.signature.signatureLibraryRelease.library,
+        protein_length: payload.sequenceLength,
+        locations: [
+          {
+            fragments: match.locations.map(l => ({
+              start: l.start,
+              end: l.end,
+            })),
+          },
+        ],
+        score: match.score,
+      };
+      if (match.signature.entry) {
+        const accession = match.signature.entry.accession;
+        const entry = integrated.get(accession) || {
+          accession,
+          source_database: 'InterPro',
+          children: [],
+          type: match.signature.entry.type.toLowerCase(),
+        };
+        entry.children.push(processedMatch);
+        integrated.set(accession, entry);
+      } else {
+        mergedData.unintegrated.push(processedMatch);
+      }
+    }
+    integrated = Array.from(integrated.values()).map(m => {
+      const locations = flattenDeep(
+        m.children.map(s =>
+          s.locations.map(l => l.fragments.map(f => [f.start, f.end])),
+        ),
+      );
+      return {
+        ...m,
+        locations: [
+          {
+            fragments: [
+              { start: Math.min(...locations), end: Math.max(...locations) },
+            ],
+          },
+        ],
+      };
+    });
+    mergedData.unintegrated.sort((m1, m2) => m2.score - m1.score);
+    for (const entry of integrated) {
+      if (!mergedData[entry.type]) mergedData[entry.type] = [];
+      mergedData[entry.type].push(entry);
+    }
+
     return (
       <div className={f('sections')}>
         <section>
@@ -126,7 +128,10 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
             </div>
           </div>
         </section>
-        <DomainArchitecture payload={payload} />
+        <DomainOnProteinWithoutMergedData
+          mainData={{ metadata }}
+          dataMerged={mergedData}
+        />
         <GoTerms terms={Array.from(goTerms.values())} type="protein" />
       </div>
     );

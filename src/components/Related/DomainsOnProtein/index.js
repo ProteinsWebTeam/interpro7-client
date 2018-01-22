@@ -8,7 +8,6 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import DomainArchitecture from 'components/Protein/DomainArchitecture';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Protvista from 'components/Protvista';
 
@@ -114,7 +113,7 @@ const addSignature = (entry, ipro, integrated) => {
     ipro[entry.entry_integrated].signatures.push(entry);
     ipro[entry.entry_integrated].children.push(entry);
   } else if (entry in integrated) {
-    console.error('integrated entry without interpro:', entry);
+    console.error('integrated entry without InterPro: ', entry);
   }
 };
 
@@ -136,48 +135,18 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
     }
     addSignature(entry, ipro, integrated);
   }
-  // if (Object.keys(residues).length > 0) {
-  //   out.residues = mergeResidues(residues);
-  // }
   return out;
 };
 
-class DomainOnProteinWithoutData extends Component {
+export class DomainOnProteinWithoutMergedData extends Component {
   static propTypes = {
     mainData: T.object.isRequired,
-    dataInterPro: T.object.isRequired,
-    dataIntegrated: T.object.isRequired,
-    dataUnintegrated: T.object.isRequired,
-    dataResidues: T.object.isRequired,
+    dataMerged: T.object.isRequired,
   };
 
   render() {
-    const {
-      mainData,
-      dataInterPro,
-      dataIntegrated,
-      dataResidues,
-      dataUnintegrated,
-    } = this.props;
-    if (dataInterPro.loading || dataIntegrated.loading) {
-      return <Loading />;
-    }
-    const mergedData = mergeData(
-      'payload' in dataInterPro ? dataInterPro.payload.entries : [],
-      'payload' in dataIntegrated ? dataIntegrated.payload.entries : [],
-      'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
-      dataResidues.payload,
-    );
-    const domains =
-      'payload' in dataInterPro ? dataInterPro.payload.entries : [];
-
-    if (Object.keys(mergedData).length === 0)
-      return (
-        <div className={f('callout', 'info', 'withicon')}>
-          There is no available domain for this protein.
-        </div>
-      );
-    const sortedData = Object.entries(mergedData).sort((a, b) => {
+    const { mainData, dataMerged } = this.props;
+    const sortedData = Object.entries(dataMerged).sort((a, b) => {
       const firsts = ['family', 'domain'];
       const lasts = ['residues', 'features', 'predictions'];
       for (const label of firsts) {
@@ -190,18 +159,59 @@ class DomainOnProteinWithoutData extends Component {
       }
       return a.key > b.key ? 1 : 0;
     });
-    // console.log(sortedData);
+
     return (
-      <div>
-        {/*<DomainArchitecture*/}
-        {/*protein={mainData.metadata || mainData.payload.metadata}*/}
-        {/*data={mergedData}*/}
-        {/*/>*/}
-        <Protvista
-          protein={mainData.metadata || mainData.payload.metadata}
-          data={sortedData}
-        />
-      </div>
+      <Protvista
+        protein={mainData.metadata || mainData.payload.metadata}
+        data={sortedData}
+      />
+    );
+  }
+}
+
+export class DomainOnProteinWithoutData extends Component {
+  static propTypes = {
+    mainData: T.object.isRequired,
+    dataInterPro: T.object.isRequired,
+    dataIntegrated: T.object.isRequired,
+    dataUnintegrated: T.object.isRequired,
+    dataResidues: T.object.isRequired,
+    dataMerged: T.object,
+  };
+
+  render() {
+    const {
+      mainData,
+      dataInterPro,
+      dataIntegrated,
+      dataResidues,
+      dataUnintegrated,
+    } = this.props;
+
+    if (dataInterPro.loading || dataIntegrated.loading) {
+      return <Loading />;
+    }
+
+    const mergedData = mergeData(
+      'payload' in dataInterPro ? dataInterPro.payload.entries : [],
+      'payload' in dataIntegrated ? dataIntegrated.payload.entries : [],
+      'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
+      dataResidues.payload,
+    );
+
+    if (Object.keys(mergedData).length === 0) {
+      return (
+        <div className={f('callout', 'info', 'withicon')}>
+          There is no available domain for this protein.
+        </div>
+      );
+    }
+
+    return (
+      <DomainOnProteinWithoutMergedData
+        mainData={mainData}
+        dataMerged={mergedData}
+      />
     );
   }
 }

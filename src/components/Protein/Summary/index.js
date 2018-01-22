@@ -5,13 +5,12 @@ import T from 'prop-types';
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
-
 import { UniProtLink } from 'components/ExtLink';
+import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
-import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
 const f = foundationPartial(ebiStyles);
 
