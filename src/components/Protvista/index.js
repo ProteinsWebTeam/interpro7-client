@@ -117,20 +117,19 @@ class Protvista extends Component {
         'protvista-interpro-track',
       ),
     );
-    // const protvistaTrack = () =>
-    //   import(/* webpackChunkName: "protvista-track" */ 'protvista-track');
-    // webComponents.push(
-    //   loadWebComponent(() =>
-    //     protvistaTrack().then(m => m.default),
-    //   ).as('protvista-track'),
-    // );
-    // const protvistaInterproTrack = () =>
-    //   import(/* webpackChunkName: "protvista-interpro-track" */ 'protvista-interpro-track');
-    // webComponents.push(
-    //   loadWebComponent(() =>
-    //     protvistaInterproTrack().then(m => m.default),
-    //   ).as('protvista-interpro-track'),
-    // );
+  }
+
+  async componentDidMount() {
+    await Promise.all(webComponents);
+    const { data, protein } = this.props;
+    this.web_protein.data = protein;
+    this.updateTracksWithData(data);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data !== this.props.data) {
+      this.updateTracksWithData(this.props.data);
+    }
   }
 
   updateTracksWithData(data) {
@@ -188,20 +187,8 @@ class Protvista extends Component {
     }
   }
 
-  async componentDidMount() {
-    await Promise.all(webComponents);
-    const { data, protein } = this.props;
-    this.web_protein.data = protein;
-    this.updateTracksWithData(data);
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.data !== this.props.data) {
-      this.updateTracksWithData(this.props.data);
-    }
-  }
-
   getElementFromEntry(entry) {
-    const tagString = `<div className={f('info-win')}>
+    const tagString = `<div class="${f('info-win')}">
         <h5 style="text-transform: uppercase; font-weight: bold;">${
           entry.accession
         }</h5>
@@ -228,11 +215,14 @@ class Protvista extends Component {
 
   toggleCollapseAll = () => {
     const { collapsed } = this.state;
+    const expandedTrack = {};
     for (const track of Object.values(this.web_tracks)) {
       if (collapsed) track.setAttribute('expanded', true);
       else track.removeAttribute('expanded');
+
+      expandedTrack[track._data[0].accession] = collapsed;
     }
-    this.setState({ collapsed: !collapsed });
+    this.setState({ collapsed: !collapsed, expandedTrack });
   };
   handleCollapseLabels = accession => {
     this.setObjectValueInState(
