@@ -142,19 +142,20 @@ class Protvista extends Component {
           locations: [loc],
           color: this.getTrackColor(d),
           entry_type: d.entry_type,
-          children: d.children
-            ? d.children.map(child => ({
-                accession: child.accession,
-                source_database: child.source_database,
-                entry_type: child.entry_type,
-                locations: child.entry_protein_locations,
-                parent: d,
-                color: this.getTrackColor(Object.assign(child, { parent: d })),
-              }))
-            : null,
         }));
+        const children = d.children
+          ? d.children.map(child => ({
+              accession: child.accession,
+              source_database: child.source_database,
+              entry_type: child.entry_type,
+              locations: child.entry_protein_locations,
+              parent: d,
+              color: this.getTrackColor(Object.assign(child, { parent: d })),
+            }))
+          : null;
         const isNewElement = !this.web_tracks[d.accession]._data;
         this.web_tracks[d.accession].data = tmp;
+        if (children) this.web_tracks[d.accession].contributors = children;
         if (isNewElement) {
           this.web_tracks[d.accession].addEventListener('entrymouseout', () => {
             removeAllChildrenFromNode(this._popper_content);
