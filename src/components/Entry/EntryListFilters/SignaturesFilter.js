@@ -30,7 +30,11 @@ class SignaturesFilter extends PureComponent {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    const { page, signature_in, ...search } = this.props.customLocation.search;
+    const {
+      page,
+      signature_in: _,
+      ...search
+    } = this.props.customLocation.search;
     if (value !== 'All') search.signature_in = value;
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };

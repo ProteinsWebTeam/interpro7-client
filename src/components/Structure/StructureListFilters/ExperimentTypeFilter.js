@@ -34,7 +34,7 @@ class ExperimentTypeFilter extends PureComponent {
   _handleSelection = ({ target: { value } }) => {
     const {
       page,
-      experiment_type,
+      experiment_type: _,
       ...search
     } = this.props.customLocation.search;
     if (value !== 'All') search.experiment_type = value;

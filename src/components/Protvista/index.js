@@ -127,7 +127,7 @@ class Protvista extends PureComponent {
     this.updateTracksWithData(data);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.data) {
       this.updateTracksWithData(this.props.data);
     }
@@ -259,9 +259,10 @@ class Protvista extends PureComponent {
 
   getTrackColor(entry, colorMode = null) {
     const mode = colorMode || this.state.colorMode;
+    let acc;
     switch (mode) {
       case EntryColorMode.COLOR_MODE_ACCESSION:
-        const acc = entry.accession
+        acc = entry.accession
           .split('')
           .reverse()
           .join('');
@@ -270,14 +271,14 @@ class Protvista extends PureComponent {
         return colorsByDB[entry.source_database.toLowerCase()];
       case EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP:
         if (entry.source_database.toLowerCase() === 'interpro') {
-          const acc = entry.accession
+          acc = entry.accession
             .split('')
             .reverse()
             .join('');
           return colorHash.hex(acc);
         }
         if (entry.parent) {
-          const acc = entry.parent.accession
+          acc = entry.parent.accession
             .split('')
             .reverse()
             .join('');

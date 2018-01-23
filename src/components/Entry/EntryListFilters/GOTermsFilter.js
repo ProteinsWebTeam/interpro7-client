@@ -36,7 +36,11 @@ class GOTermsFilter extends PureComponent {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    const { page, go_category, ...search } = this.props.customLocation.search;
+    const {
+      page,
+      go_category: _,
+      ...search
+    } = this.props.customLocation.search;
     if (value !== 'All') search.go_category = value;
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };

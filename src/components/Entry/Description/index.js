@@ -11,7 +11,7 @@ import { transformFormatted } from 'utils/text';
 
 const ParagraphWithCites = ({ p }) => (
   <p>
-    {p.split(/* /<cite id="([^"]+)" ?\/>/i */ /\[(PUB\d+)\]/i).map(
+    {p.split(/* /<cite id="([^"]+)" ?\/>/i */ /\[(PUB\d+)]/i).map(
       (part, i) =>
         i % 2 ? (
           <a key={i} href={`${location.pathname}#${part}`}>

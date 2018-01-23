@@ -9,7 +9,6 @@
 }
 
 .header-section {
-  font-weight: bold;
   fill: var(--colors-dark);
   text-transform: capitalize;
   font-size: 130%;
@@ -140,10 +139,9 @@
 .popper .popper__arrow {
   width: 0;
   height: 0;
-  border-style: solid;
   position: absolute;
   margin: 5px;
-  border-color: white;
+  border: solid white;
 }
 
 .popper[x-placement^='top'] .popper__arrow {

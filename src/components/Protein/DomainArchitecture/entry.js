@@ -8,7 +8,7 @@ import styles from './style.css';
 
 const s = classname.bind(styles);
 const colorHash = new ColorHash();
-const childrenScale = 1; /*was 0.7*/
+const childrenScale = 1; /* was 0.7*/
 
 // TODO: refactor to have a single place for colors
 const colorsByDB = {
@@ -31,6 +31,9 @@ const colorsByDB = {
   pdb: '#74b360',
 };
 
+const DEFAULT_OFFSET_Y = 4;
+const DEFAULT_RADIUS = 6;
+
 export const EntryColorMode = {
   COLOR_MODE_ACCESSION: 1,
   COLOR_MODE_MEMBERDB: 2,
@@ -38,7 +41,7 @@ export const EntryColorMode = {
 };
 
 class EntryRenderer {
-  constructor({ trackHeight, trackPadding, padding, xScale, protein, parent }) {
+  constructor({ trackPadding, padding, xScale, protein, parent }) {
     this.tPadding = trackPadding;
     // this.trackHeight = trackHeight;
     this.trackHeight = 14;
@@ -51,7 +54,7 @@ class EntryRenderer {
   render(
     group,
     entries,
-    offsetY = 4,
+    offsetY = DEFAULT_OFFSET_Y,
     className = 'entry',
     colorMode = EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP,
   ) {
@@ -233,8 +236,8 @@ class EntryRenderer {
       .attr('height', this.trackHeight)
       .attr('x', m => this.x(m[0]))
       .attr('fill', this.getColor(entry))
-      .attr('rx', 6)
-      .attr('ry', 6)
+      .attr('rx', DEFAULT_RADIUS)
+      .attr('ry', DEFAULT_RADIUS)
       .on('click', () => {
         if (entry.children && entry.children.length) {
           entry._children = entry.children;
