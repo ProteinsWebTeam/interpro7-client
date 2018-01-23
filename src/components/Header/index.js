@@ -107,9 +107,7 @@ class _SideIcons extends PureComponent {
         <div className={reducedStyleBundle('side-icons', { movedAway })}>
           <HamburgerBtn svg stuck={stuck} aria-label="Show the InterPro Menu" />
           <label className={reducedStyleBundle('side-search', { stuck })}>
-            <div>
-              <TextSearchBox name="search" />
-            </div>
+            <TextSearchBox name="search" />
             <Link to={{ description: { other: ['search'] } }}>
               <div aria-label="Search InterPro">
                 <svg

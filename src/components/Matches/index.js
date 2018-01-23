@@ -161,29 +161,25 @@ const Matches = (
       dataKey="source_database"
       headerClassName={f('table-center')}
       displayIf={primary !== 'organism'}
-      renderer={(db /*: string */) => (
-        <div>
-          {db === 'reviewed' ? (
-            <div
-              title={
-                db === 'reviewed'
-                  ? `${db} by curators (Swiss-Prot)`
-                  : 'Not reviewed by curators (TrEMBL)'
-              }
-            >
-              <Tooltip title={`${db} by curators (Swiss-Prot)`}>
-                <span
-                  className={f('icon', 'icon-functional')}
-                  data-icon="/"
-                  aria-label="reviewed"
-                />
-              </Tooltip>
-            </div>
-          ) : (
-            db
-          )}
-        </div>
-      )}
+      renderer={(db /*: string */) =>
+        db === 'reviewed' ? (
+          <Tooltip
+            title={
+              db === 'reviewed'
+                ? `${db} by curators (Swiss-Prot)`
+                : 'Not reviewed by curators (TrEMBL)'
+            }
+          >
+            <span
+              className={f('icon', 'icon-functional')}
+              data-icon="/"
+              aria-label="reviewed"
+            />
+          </Tooltip>
+        ) : (
+          db
+        )
+      }
     >
       {primary === 'protein' ? 'Reviewed' : 'Source database'}
     </Column>
