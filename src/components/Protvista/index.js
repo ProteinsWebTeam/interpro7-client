@@ -446,8 +446,15 @@ class Protvista extends PureComponent {
                               <Link
                                 to={{
                                   description: {
-                                    main: { key: 'entry' },
-                                    entry: {
+                                    main: {
+                                      key:
+                                        entry.source_database === 'pdb'
+                                          ? 'structure'
+                                          : 'entry',
+                                    },
+                                    [entry.source_database === 'pdb'
+                                      ? 'structure'
+                                      : 'entry']: {
                                       db: entry.source_database,
                                       accession: entry.accession,
                                     },

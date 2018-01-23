@@ -82,6 +82,8 @@ const mergeData = (interpro, structures) => {
   return out;
 };
 
+const UNDERSCORE = /_/g;
+
 class _StructureOnProtein extends PureComponent {
   static propTypes = {
     structures: T.array.isRequired,
@@ -95,16 +97,14 @@ class _StructureOnProtein extends PureComponent {
     if (dataInterPro.loading || dataStructureInfo.loading) {
       return <Loading />;
     }
-    const mergedData = mergeData(
-      dataInterPro.payload ? dataInterPro.payload.entries : [],
-      structures,
-      dataStructureInfo.payload,
-    );
-    return (
-      <div>
-        <Protvista protein={protein} data={Object.entries(mergedData)} />
-      </div>
-    );
+    const mergedData = Object.entries(
+      mergeData(
+        dataInterPro.payload ? dataInterPro.payload.entries : [],
+        structures,
+        dataStructureInfo.payload,
+      ),
+    ).map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
+    return <Protvista protein={protein} data={mergedData} />;
   }
 }
 

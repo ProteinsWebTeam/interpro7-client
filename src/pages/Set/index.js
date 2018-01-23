@@ -281,7 +281,7 @@ class Summary extends PureComponent {
       }
     }
     return (
-      <div>
+      <React.Fragment>
         {this.props.data.payload &&
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (
@@ -321,7 +321,7 @@ class Summary extends PureComponent {
             childRoutes={subPagesForSet}
           />
         </ErrorBoundary>
-      </div>
+      </React.Fragment>
     );
   }
 }

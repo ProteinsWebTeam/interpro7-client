@@ -61,7 +61,7 @@ const DeveloperInfo = () => (
 export default class About extends PureComponent /*:: <{}> */ {
   render() {
     return (
-      <div>
+      <React.Fragment>
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <h3>About this website</h3>
@@ -287,7 +287,7 @@ export default class About extends PureComponent /*:: <{}> */ {
             <DeveloperInfo />
           </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

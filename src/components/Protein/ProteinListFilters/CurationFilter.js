@@ -54,7 +54,7 @@ class CurationFilter extends PureComponent {
         : 0;
     }
     return (
-      <div>
+      <React.Fragment>
         {Object.entries(databases).map(([db, value]) => (
           <div key={db} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -71,7 +71,7 @@ class CurationFilter extends PureComponent {
             </label>
           </div>
         ))}
-      </div>
+      </React.Fragment>
     );
   }
 }

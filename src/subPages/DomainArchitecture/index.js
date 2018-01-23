@@ -23,10 +23,10 @@ class DomainArchitectureSubPage extends PureComponent /*:: <Props> */ {
     const { data, mainType } = this.props;
     if (data.loading) return <Loading />;
     return (
-      <div>
+      <React.Fragment>
         {mainType === 'entry' && <DomainArchitectures mainData={data} />}
         {mainType === 'protein' && <DomainsOnProtein mainData={data} />}
-      </div>
+      </React.Fragment>
     );
   }
 }
