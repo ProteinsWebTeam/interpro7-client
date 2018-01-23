@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -18,7 +18,7 @@ const getDownloadName = createSelector(
     `${accession}-${taxId}.${type === 'FASTA' ? 'fasta' : 'txt'}`,
 );
 
-class ProteinFile extends Component {
+class ProteinFile extends PureComponent {
   static propTypes = {
     entryDescription: T.object.isRequired,
     api: T.object.isRequired,

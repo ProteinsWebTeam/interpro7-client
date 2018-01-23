@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -67,7 +67,7 @@ const removeAllChildrenFromNode = node => {
   }
 };
 
-class Protvista extends Component {
+class Protvista extends PureComponent {
   static propTypes = {
     protein: T.object,
     data: T.array,

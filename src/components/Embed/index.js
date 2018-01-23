@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 const defaultLoadingStyle = {
@@ -34,7 +34,7 @@ const placeholderStyle = {
 
 const mounted = new WeakSet();
 
-class Embed extends Component {
+class Embed extends PureComponent {
   static propTypes = {
     children: T.element,
     title: T.string,

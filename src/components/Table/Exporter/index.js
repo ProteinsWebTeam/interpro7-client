@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -34,7 +34,7 @@ const colors = new Map([
   ['InterPro', '#2daec1'],
 ]);
 
-class Exporter extends Component {
+class Exporter extends PureComponent {
   static propTypes = {
     entryDB: T.string,
     children: T.any,

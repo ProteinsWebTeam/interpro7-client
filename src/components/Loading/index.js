@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, cloneElement } from 'react';
+import React, { PureComponent, cloneElement } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -13,7 +13,7 @@ const s = classnames.bind(style);
 // const HALF_VISIBLE = 0.5;
 // const VISIBLE = 1;
 
-class Loading extends Component {
+class Loading extends PureComponent {
   static propTypes = {
     data: T.shape({
       keyUrl: T.string,

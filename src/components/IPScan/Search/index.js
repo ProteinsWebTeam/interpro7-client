@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -75,7 +75,7 @@ const compositeDecorator = new CompositeDecorator([
   },
 ]);
 
-class IPScanSearch extends Component {
+class IPScanSearch extends PureComponent {
   static propTypes = {
     createJob: T.func.isRequired,
     goToCustomLocation: T.func.isRequired,
