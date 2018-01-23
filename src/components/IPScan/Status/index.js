@@ -42,7 +42,7 @@ class IPScanStatus extends PureComponent {
     const { jobs } = this.props;
     if (!jobs.length)
       return (
-        <div>
+        <React.Fragment>
           <p>Nothing to see here.</p>
           <Link
             to={{
@@ -55,7 +55,7 @@ class IPScanStatus extends PureComponent {
           >
             Submit a new search
           </Link>
-        </div>
+        </React.Fragment>
       );
     return (
       <div className={f('row')}>

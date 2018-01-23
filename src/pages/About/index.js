@@ -18,7 +18,7 @@ const f = foundationPartial(fonts, styles, entry);
 // remove last “.git”
 const url = pkg.repository.url.replace('.git', '');
 const DeveloperInfo = () => (
-  <div>
+  <section>
     <h5>Developer information</h5>
     <div>
       This website has been built at{' '}
@@ -55,7 +55,7 @@ const DeveloperInfo = () => (
         </li>
       </ul>
     </div>
-  </div>
+  </section>
 );
 
 export default class About extends PureComponent /*:: <{}> */ {
@@ -64,9 +64,8 @@ export default class About extends PureComponent /*:: <{}> */ {
       <div>
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
+            <h3>About this website</h3>
             <section>
-              <h3>About this website</h3>
-
               <h4>The InterPro Consortium</h4>
               <p>The following databases make up the InterPro Consortium:</p>
 
@@ -201,74 +200,78 @@ export default class About extends PureComponent /*:: <{}> */ {
 
         <div className={f('row')}>
           <div className={f('columns')}>
-            <h4>How to cite </h4>
+            <section>
+              <h4>How to cite </h4>
 
-            <div className={f('row')}>
-              <div className={f('columns', 'large-6', 'margin-bottom-large')}>
-                <div className={f('cite-box')}>
-                  <span
-                    className={f('cite-icon', 'icon', 'icon-conceptual')}
-                    data-icon="l"
-                  />
-                  <span className={f('cite-title')}>
-                    <h5>INTERPRO</h5>
-                  </span>
-                  <span className={f('cite-text')}>
-                    To cite InterPro, please refer to the following publication:
-                    <br />
-                    <i>
-                      Robert D. Finn, Teresa K. Attwood, Patricia C. Babbitt,
-                      Alex Bateman, Peer Bork, Alan J. Bridge, Hsin-Yu Chang,
-                      Zsuzsanna Dosztányi, Sara El-Gebali, Matthew Fraser,
-                      Julian Gough, David Haft, Gemma L. Holliday, Hongzhan
-                      Huang, Xiaosong Huang, Ivica Letunic, Rodrigo Lopez,
-                      Shennan Lu, Aron Marchler-Bauer, Huaiyu Mi, Jaina Mistry,
-                      Darren A. Natale, Marco Necci, Gift Nuka, Christine A.
-                      Orengo, Youngmi Park, Sebastien Pesseat, Damiano Piovesan,
-                      Simon C. Potter, Neil D. Rawlings, Nicole Redaschi, Lorna
-                      Richardson, Catherine Rivoire, Amaia Sangrador-Vegas,
-                      Christian Sigrist, Ian Sillitoe, Ben Smithers, Silvano
-                      Squizzato, Granger Sutton, Narmada Thanki, Paul D Thomas,
-                      Silvio C. E. Tosatto, Cathy H. Wu, Ioannis Xenarios,
-                      Lai-Su Yeh, Siew-Yit Young and Alex L. Mitchell{' '}
-                    </i>(2017).{' '}
-                    <strong>
-                      InterPro in 2017 — beyond protein family and domain
-                      annotations
-                    </strong>. Nucleic Acids Research, Jan 2017; doi:
-                    10.1093/nar/gkw1107
-                  </span>
+              <div className={f('row')}>
+                <div className={f('columns', 'large-6', 'margin-bottom-large')}>
+                  <div className={f('cite-box')}>
+                    <span
+                      className={f('cite-icon', 'icon', 'icon-conceptual')}
+                      data-icon="l"
+                    />
+                    <span className={f('cite-title')}>
+                      <h5>INTERPRO</h5>
+                    </span>
+                    <span className={f('cite-text')}>
+                      To cite InterPro, please refer to the following
+                      publication:
+                      <br />
+                      <i>
+                        Robert D. Finn, Teresa K. Attwood, Patricia C. Babbitt,
+                        Alex Bateman, Peer Bork, Alan J. Bridge, Hsin-Yu Chang,
+                        Zsuzsanna Dosztányi, Sara El-Gebali, Matthew Fraser,
+                        Julian Gough, David Haft, Gemma L. Holliday, Hongzhan
+                        Huang, Xiaosong Huang, Ivica Letunic, Rodrigo Lopez,
+                        Shennan Lu, Aron Marchler-Bauer, Huaiyu Mi, Jaina
+                        Mistry, Darren A. Natale, Marco Necci, Gift Nuka,
+                        Christine A. Orengo, Youngmi Park, Sebastien Pesseat,
+                        Damiano Piovesan, Simon C. Potter, Neil D. Rawlings,
+                        Nicole Redaschi, Lorna Richardson, Catherine Rivoire,
+                        Amaia Sangrador-Vegas, Christian Sigrist, Ian Sillitoe,
+                        Ben Smithers, Silvano Squizzato, Granger Sutton, Narmada
+                        Thanki, Paul D Thomas, Silvio C. E. Tosatto, Cathy H.
+                        Wu, Ioannis Xenarios, Lai-Su Yeh, Siew-Yit Young and
+                        Alex L. Mitchell{' '}
+                      </i>(2017).{' '}
+                      <strong>
+                        InterPro in 2017 — beyond protein family and domain
+                        annotations
+                      </strong>. Nucleic Acids Research, Jan 2017; doi:
+                      10.1093/nar/gkw1107
+                    </span>
+                  </div>
+                </div>
+
+                <div className={f('columns', 'large-6', 'margin-bottom-large')}>
+                  <div className={f('cite-box')}>
+                    <span
+                      className={f('cite-icon', 'icon', 'icon-conceptual')}
+                      data-icon="l"
+                    />
+                    <span className={f('cite-title')}>
+                      <h5>INTERPROSCAN</h5>
+                    </span>
+                    <span className={f('cite-text')}>
+                      To cite InterProScan, please refer to:<br />
+                      <i>
+                        Philip Jones, David Binns, Hsin-Yu Chang, Matthew
+                        Fraser, Weizhong Li, Craig McAnulla, Hamish McWilliam,
+                        John Maslen, Alex Mitchell, Gift Nuka, Sebastien
+                        Pesseat, Antony F. Quinn, Amaia Sangrador-Vegas, Maxim
+                        Scheremetjew, Siew-Yit Yong, Rodrigo Lopez, and Sarah
+                        Hunter{' '}
+                      </i>(2014).{' '}
+                      <strong>
+                        InterProScan 5: genome-scale protein function
+                        classification
+                      </strong>. Bioinformatics, Jan 2014;
+                      doi:10.1093/bioinformatics/btu031
+                    </span>
+                  </div>
                 </div>
               </div>
-
-              <div className={f('columns', 'large-6', 'margin-bottom-large')}>
-                <div className={f('cite-box')}>
-                  <span
-                    className={f('cite-icon', 'icon', 'icon-conceptual')}
-                    data-icon="l"
-                  />
-                  <span className={f('cite-title')}>
-                    <h5>INTERPROSCAN</h5>
-                  </span>
-                  <span className={f('cite-text')}>
-                    To cite InterProScan, please refer to:<br />
-                    <i>
-                      Philip Jones, David Binns, Hsin-Yu Chang, Matthew Fraser,
-                      Weizhong Li, Craig McAnulla, Hamish McWilliam, John
-                      Maslen, Alex Mitchell, Gift Nuka, Sebastien Pesseat,
-                      Antony F. Quinn, Amaia Sangrador-Vegas, Maxim
-                      Scheremetjew, Siew-Yit Yong, Rodrigo Lopez, and Sarah
-                      Hunter{' '}
-                    </i>(2014).{' '}
-                    <strong>
-                      InterProScan 5: genome-scale protein function
-                      classification
-                    </strong>. Bioinformatics, Jan 2014;
-                    doi:10.1093/bioinformatics/btu031
-                  </span>
-                </div>
-              </div>
-            </div>
+            </section>
           </div>
         </div>
         <div className={f('row')}>
