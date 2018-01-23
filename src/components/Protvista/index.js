@@ -12,6 +12,7 @@ import local from './style.css';
 
 const f = foundationPartial(local, fonts);
 
+import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import PopperJS from 'popper.js';
 
@@ -117,20 +118,19 @@ class Protvista extends Component {
         'protvista-interpro-track',
       ),
     );
-    // const protvistaTrack = () =>
-    //   import(/* webpackChunkName: "protvista-track" */ 'protvista-track');
-    // webComponents.push(
-    //   loadWebComponent(() =>
-    //     protvistaTrack().then(m => m.default),
-    //   ).as('protvista-track'),
-    // );
-    // const protvistaInterproTrack = () =>
-    //   import(/* webpackChunkName: "protvista-interpro-track" */ 'protvista-interpro-track');
-    // webComponents.push(
-    //   loadWebComponent(() =>
-    //     protvistaInterproTrack().then(m => m.default),
-    //   ).as('protvista-interpro-track'),
-    // );
+  }
+
+  async componentDidMount() {
+    await Promise.all(webComponents);
+    const { data, protein } = this.props;
+    this.web_protein.data = protein;
+    this.updateTracksWithData(data);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data !== this.props.data) {
+      this.updateTracksWithData(this.props.data);
+    }
   }
 
   updateTracksWithData(data) {
@@ -142,19 +142,20 @@ class Protvista extends Component {
           locations: [loc],
           color: this.getTrackColor(d),
           entry_type: d.entry_type,
-          children: d.children
-            ? d.children.map(child => ({
-                accession: child.accession,
-                source_database: child.source_database,
-                entry_type: child.entry_type,
-                locations: child.entry_protein_locations || child.locations,
-                parent: d,
-                color: this.getTrackColor(Object.assign(child, { parent: d })),
-              }))
-            : null,
         }));
+        const children = d.children
+          ? d.children.map(child => ({
+              accession: child.accession,
+              source_database: child.source_database,
+              entry_type: child.entry_type,
+              locations: child.entry_protein_locations,
+              parent: d,
+              color: this.getTrackColor(Object.assign(child, { parent: d })),
+            }))
+          : null;
         const isNewElement = !this.web_tracks[d.accession]._data;
         this.web_tracks[d.accession].data = tmp;
+        if (children) this.web_tracks[d.accession].contributors = children;
         if (isNewElement) {
           this.web_tracks[d.accession].addEventListener('entrymouseout', () => {
             removeAllChildrenFromNode(this._popper_content);
@@ -188,23 +189,9 @@ class Protvista extends Component {
     }
   }
 
-  async componentDidMount() {
-    await Promise.all(webComponents);
-    const { data, protein } = this.props;
-    this.web_protein.data = protein;
-    this.updateTracksWithData(data);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.data !== this.props.data) {
-      this.updateTracksWithData(this.props.data);
-    }
-  }
-
   getElementFromEntry(entry) {
-    const tagString = `
-      <div className={f('info-win')}>
-        <h5 style={{ textTransform: 'uppercase', fontWeight: 'bold' }}>${
+    const tagString = `<div class="${f('info-win')}">
+        <h5 style="text-transform: uppercase; font-weight: bold;">${
           entry.accession
         }</h5>
         <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
@@ -232,11 +219,14 @@ class Protvista extends Component {
 
   toggleCollapseAll = () => {
     const { collapsed } = this.state;
+    const expandedTrack = {};
     for (const track of Object.values(this.web_tracks)) {
       if (collapsed) track.setAttribute('expanded', true);
       else track.removeAttribute('expanded');
+
+      expandedTrack[track._data[0].accession] = collapsed;
     }
-    this.setState({ collapsed: !collapsed });
+    this.setState({ collapsed: !collapsed, expandedTrack });
   };
 
   handleCollapseLabels = accession => {
@@ -452,7 +442,19 @@ class Protvista extends Component {
                               />
                             </div>
                             <div className={f('track-accession')}>
-                              {entry.accession}
+                              <Link
+                                to={{
+                                  description: {
+                                    main: { key: 'entry' },
+                                    entry: {
+                                      db: entry.source_database,
+                                      accession: entry.accession,
+                                    },
+                                  },
+                                }}
+                              >
+                                {entry.accession}
+                              </Link>
                               <div
                                 className={f({
                                   hide: !expandedTrack[entry.accession],
@@ -464,7 +466,19 @@ class Protvista extends Component {
                                       key={d.accession}
                                       className={f('track-accession-child')}
                                     >
-                                      {d.accession}
+                                      <Link
+                                        to={{
+                                          description: {
+                                            main: { key: 'entry' },
+                                            entry: {
+                                              db: d.source_database,
+                                              accession: d.accession,
+                                            },
+                                          },
+                                        }}
+                                      >
+                                        {d.accession}
+                                      </Link>
                                     </div>
                                   ))}
                               </div>

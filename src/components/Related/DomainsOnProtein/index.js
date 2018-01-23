@@ -56,6 +56,7 @@ const mergeResidues = residues =>
     accession: location.entry_accession,
     type: 'residue',
     coordinates: [location.fragments.map(f => [f.start, f.end])], // TODO: check
+    locations: [location],
     name: location.fragments[0],
     entry: location.entry_accession,
     residue: location.fragments.map(f => f.residue),
@@ -134,6 +135,9 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
       delete residues[entry.accession];
     }
     addSignature(entry, ipro, integrated);
+  }
+  if (Object.keys(residues).length > 0) {
+    out.residues = mergeResidues(residues);
   }
   return out;
 };
