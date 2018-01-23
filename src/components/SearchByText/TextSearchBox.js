@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -17,7 +17,7 @@ const f = foundationPartial(interproTheme, fonts, local);
 
 const DEBOUNCE_RATE = 1000; // 1s
 
-class TextSearchBox extends Component {
+class TextSearchBox extends PureComponent {
   static propTypes = {
     pageSize: T.number,
     main: T.string,
