@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, Children } from 'react';
+import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
 
 import { foundationPartial } from 'styles/foundation';
@@ -9,7 +9,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
-export default class Tabs extends Component {
+export default class Tabs extends PureComponent {
   static propTypes = {
     children: T.any,
   };

@@ -24,6 +24,12 @@ const persist = (store, storage) =>
     };
   })();
 
+const parseParamToNumber = param => search => {
+  const { [param]: value, ...rest } = search;
+  if (typeof value !== 'undefined') rest[param] = +value;
+  return rest;
+};
+
 const getInitialState = history => {
   const { location: { pathname, search, hash } } = history;
   let settings;
@@ -33,7 +39,9 @@ const getInitialState = history => {
   return {
     customLocation: {
       description: pathToDescription(pathname),
-      search: parse(search, true).query,
+      search: parseParamToNumber('page_size')(
+        parseParamToNumber('page')(parse(search, true).query),
+      ),
       hash,
     },
     settings,

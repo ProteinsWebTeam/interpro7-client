@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -17,7 +17,7 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-class CurationFilter extends Component {
+class CurationFilter extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

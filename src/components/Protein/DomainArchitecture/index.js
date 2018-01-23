@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import PopperJS from 'popper.js';
@@ -46,7 +46,7 @@ const areMergedDataTheSame = (prev, next) => {
   return true;
 };
 
-class DomainArchitecture extends Component {
+class DomainArchitecture extends PureComponent {
   static propTypes = {
     protein: T.object,
     data: T.object,

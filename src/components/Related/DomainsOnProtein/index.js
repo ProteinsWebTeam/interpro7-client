@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-param-reassign */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -142,7 +142,22 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   return out;
 };
 
-export class DomainOnProteinWithoutMergedData extends Component {
+const UNDERSCORE = /_/g;
+const sortFunction = ([a], [b]) => {
+  const firsts = ['family', 'domain'];
+  const lasts = ['residues', 'features', 'predictions'];
+  for (const label of firsts) {
+    if (a.toLowerCase() === label) return 0;
+    if (b.toLowerCase() === label) return 1;
+  }
+  for (const l of lasts) {
+    if (a.toLowerCase() === l) return 1;
+    if (b.toLowerCase() === l) return 0;
+  }
+  return a > b ? 1 : 0;
+};
+
+export class DomainOnProteinWithoutMergedData extends PureComponent {
   static propTypes = {
     mainData: T.object.isRequired,
     dataMerged: T.object.isRequired,
@@ -150,19 +165,10 @@ export class DomainOnProteinWithoutMergedData extends Component {
 
   render() {
     const { mainData, dataMerged } = this.props;
-    const sortedData = Object.entries(dataMerged).sort((a, b) => {
-      const firsts = ['family', 'domain'];
-      const lasts = ['residues', 'features', 'predictions'];
-      for (const label of firsts) {
-        if (a[0].toLowerCase() === label) return 0;
-        if (b[0].toLowerCase() === label) return 1;
-      }
-      for (const l of lasts) {
-        if (a[0].toLowerCase() === l) return 1;
-        if (b[0].toLowerCase() === l) return 0;
-      }
-      return a.key > b.key ? 1 : 0;
-    });
+    const sortedData = Object.entries(dataMerged)
+      .sort(sortFunction)
+      // “Binding_site” -> “Binding site”
+      .map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
 
     return (
       <Protvista
@@ -173,7 +179,7 @@ export class DomainOnProteinWithoutMergedData extends Component {
   }
 }
 
-export class DomainOnProteinWithoutData extends Component {
+export class DomainOnProteinWithoutData extends PureComponent {
   static propTypes = {
     mainData: T.object.isRequired,
     dataInterPro: T.object.isRequired,

@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-param-reassign */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -98,7 +98,7 @@ const mergeData = (interpro, structures, structureInfo) => {
   return out;
 };
 
-class _StructureOnProtein extends Component {
+class _StructureOnProtein extends PureComponent {
   static propTypes = {
     structures: T.array.isRequired,
     dataInterPro: T.object,

@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -27,7 +27,7 @@ FilterPanel.propTypes = {
   children: T.any,
 };
 
-class FiltersPanel extends Component {
+class FiltersPanel extends PureComponent {
   static propTypes = {
     children: T.any,
     goToCustomLocation: T.func.isRequired,

@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import styles from './style.css';
@@ -32,7 +32,7 @@ const Wrapped = _DOMAttributeChecker(
   'scrollHeight',
 )(Content);
 
-class ReadMoreCard extends Component {
+class ReadMoreCard extends PureComponent {
   static propTypes = {
     children: T.node,
   };
