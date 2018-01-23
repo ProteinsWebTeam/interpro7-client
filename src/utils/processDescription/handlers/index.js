@@ -139,8 +139,7 @@ const memberDB = new Set([
   { name: 'prodom', re: /^PD[A-Z0-9]{6}$/i },
   { name: 'prosite', re: /^PS[0-9]{5}$/i },
   { name: 'patterns', re: /^PS[0-9]{5}$/i },
-  { name: 'profiles', re: /^PS[0-9]{5}$/i }, // TODO: check which one
-  { name: 'profile', re: /^PS[0-9]{5}$/i }, // TODO: is correct
+  { name: 'profile', re: /^PS[0-9]{5}$/i },
   { name: 'sfld', re: /^sfld[gf]\d{5}$/i },
   { name: 'smart', re: /^SM[0-9]{5}$/i },
   { name: 'ssf', re: /^SSF[0-9]{5,6}$/i },

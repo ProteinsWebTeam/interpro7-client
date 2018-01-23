@@ -148,7 +148,7 @@ class Protvista extends PureComponent {
               accession: child.accession,
               source_database: child.source_database,
               entry_type: child.entry_type,
-              locations: child.entry_protein_locations,
+              locations: child.entry_protein_locations || child.locations,
               parent: d,
               color: this.getTrackColor(Object.assign(child, { parent: d })),
             }))

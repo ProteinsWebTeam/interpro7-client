@@ -29,6 +29,15 @@ const goCategoryMap = new Map([
   },
 }; */
 
+// TODO: have consistent data to eventually remove this
+const LUT = new Map([
+  ['TIGRFAM', 'tigrfams'],
+  ['PROSITE_PROFILES', 'profile'],
+  ['PROSITE_PATTERNS', 'patterns'],
+  ['SUPERFAMILY', 'ssf'],
+  ['COILS', 'gene3d'],
+]);
+
 class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.string.isRequired,
@@ -66,9 +75,10 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
     const mergedData = { unintegrated: [] };
     let integrated = new Map();
     for (const match of payload.matches) {
+      const { library } = match.signature.signatureLibraryRelease;
       const processedMatch = {
         accession: match.signature.accession,
-        source_database: match.signature.signatureLibraryRelease.library,
+        source_database: LUT.get(library) || library,
         protein_length: payload.sequenceLength,
         locations: [
           {
