@@ -239,6 +239,7 @@ _Title.propTypes = {
     payload: T.object,
   }).isRequired,
 };
+
 const mapStateToAccessionUrl = createSelector(
   state => state.settings.api,
   state => state.customLocation.description.organism.db,

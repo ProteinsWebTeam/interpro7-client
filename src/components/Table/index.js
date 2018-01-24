@@ -18,8 +18,11 @@ import _Row from './Row';
 import _Footer from './Footer';
 import _TotalNb from './TotalNb';
 
-import fonts from 'EBI-Icon-fonts/fonts.css';
+import loadable from 'higherOrder/loadable';
+
 import { foundationPartial } from 'styles/foundation';
+
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from './style.css';
 
 const f = foundationPartial(styles, fonts);
@@ -40,24 +43,21 @@ const f = foundationPartial(styles, fonts);
   children?: any,
 } */
 
-class TableView extends PureComponent {
-  static propTypes = {
-    isStale: T.bool,
-    columns: T.array,
-    notFound: T.bool,
-    dataTable: T.array,
-  };
+const TableView = loadable({
+  loader: () => import(/* webpackChunkName: "table-view" */ './views/Table'),
+});
 
-  render() {
-    const { isStale, columns, notFound, dataTable } = this.props;
-    return (
-      <table className={f('table', 'light', { isStale })}>
-        <_Header columns={columns} notFound={notFound} />
-        <_Body rows={dataTable || []} columns={columns} notFound={notFound} />
-      </table>
-    );
-  }
-}
+// const ListView = loadable({
+//   loader: () => import(/* webpackChunkName: "list-view" */ './views/List'),
+// });
+
+// const GridView = loadable({
+//   loader: () => import(/* webpackChunkName: "grid-view" */ './views/Grid'),
+// });
+
+const TreeView = loadable({
+  loader: () => import(/* webpackChunkName: "tree-view" */ './views/Tree'),
+});
 
 export default class Table extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -120,6 +120,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       to={l => ({ ...l, hash: 'table' })}
                       className={f('icon-view', 'table-view')}
                       aria-label="view your results as a table"
+                      onMouseOver={TableView.preload}
+                      onFocus={TableView.preload}
                     />
                   </Tooltip>{' '}
                   <Tooltip title="View your results as a list">
@@ -129,15 +131,19 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       aria-disabled="true"
                       disabled
                       aria-label="view your results as a list"
+                      // onMouseOver={ListView.preload}
+                      // onFocus={ListView.preload}
                     />
                   </Tooltip>{' '}
                   <Tooltip title="View your results in a grid">
                     <Link
-                      to={l => ({ ...l, hash: 'thumbnail' })}
+                      to={l => ({ ...l, hash: 'grid' })}
                       className={f('icon-view', 'grid-view', 'disabled')}
                       aria-disabled="true"
                       disabled
                       aria-label="view your results in a grid"
+                      // onMouseOver={GridView.preload}
+                      // onFocus={GridView.preload}
                     />
                   </Tooltip>
                   <Tooltip title="View your results as a tree">
@@ -149,6 +155,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       aria-disabled={withTree ? 'false' : 'true'}
                       disabled={!withTree}
                       aria-label="view your results as a tree"
+                      onMouseOver={TreeView.preload}
+                      onFocus={TreeView.preload}
                     />
                   </Tooltip>
                 </div>
@@ -175,7 +183,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   { value: 'table', component: TableView },
                   // { value: 'list', component: () => 'LIST!' },
                   // { value: 'grid', component: () => 'GRID!' },
-                  // { value: 'tree', component: () => 'TREE!' },
+                  { value: 'tree', component: TreeView },
                 ]}
                 catchAll={TableView}
                 // passed down props
