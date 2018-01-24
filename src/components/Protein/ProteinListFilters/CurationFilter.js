@@ -17,12 +17,6 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-const label = {
-  reviewed: 'Reviewed',
-  unreviewed: 'Unreviewed',
-  uniprot: 'Both',
-};
-
 class CurationFilter extends Component {
   static propTypes = {
     data: T.shape({
@@ -31,55 +25,28 @@ class CurationFilter extends Component {
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
-      description: T.shape({
-        mainDB: T.string,
-      }).isRequired,
+      description: T.object.isRequired,
       search: T.object.isRequired,
     }).isRequired,
   };
 
-  constructor() {
-    super();
-    this.state = { value: null };
-  }
-
-  componentWillMount() {
-    this.locationToState(this.props.customLocation);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.locationToState(nextProps.customLocation);
-  }
-
-  locationToState(customLocation) {
-    const db =
-      customLocation.description[customLocation.description.main.key].db;
-    if (db === 'reviewed') {
-      this.setState({ value: 'reviewed' });
-    } else if (db === 'unreviewed') {
-      this.setState({ value: 'unreviewed' });
-    } else {
-      this.setState({ value: 'uniprot' });
-    }
-  }
-
   _handleSelection = ({ target: { value } }) => {
-    this.setState({ value });
+    const { page, ...search } = this.props.customLocation.search;
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       description: {
         ...this.props.customLocation.description,
         protein: { db: value },
       },
-      search: {
-        ...this.props.customLocation.search,
-        page: undefined,
-      },
+      search,
     });
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const {
+      data: { loading, payload },
+      customLocation: { description },
+    } = this.props;
     const databases = loading || !payload ? {} : payload;
     if (!loading) {
       databases.uniprot = databases
@@ -88,27 +55,22 @@ class CurationFilter extends Component {
     }
     return (
       <div>
-        {Object.keys(databases)
-          .sort()
-          .map(db => (
-            <div key={db} className={f('column')}>
-              <label className={f('row', 'filter-button')}>
-                <input
-                  type="radio"
-                  name="curated_filter"
-                  value={db}
-                  onChange={this._handleSelection}
-                  checked={this.state.value === db}
-                  style={{ margin: '0.25em' }}
-                />
-                <span>{label[db]}</span>
-                <NumberLabel
-                  value={databases[db]}
-                  className={f('filter-label')}
-                />
-              </label>
-            </div>
-          ))}
+        {Object.entries(databases).map(([db, value]) => (
+          <div key={db} className={f('column')}>
+            <label className={f('row', 'filter-button')}>
+              <input
+                type="radio"
+                name="curated_filter"
+                value={db}
+                onChange={this._handleSelection}
+                checked={description.protein.db.toLowerCase() === db}
+                style={{ margin: '0.25em' }}
+              />
+              <span>{db === 'uniprot' ? 'both' : db}</span>
+              <NumberLabel value={value} className={f('filter-label')} />
+            </label>
+          </div>
+        ))}
       </div>
     );
   }

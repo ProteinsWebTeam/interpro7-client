@@ -10,6 +10,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import DomainArchitecture from 'components/Protein/DomainArchitecture';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Protvista from 'components/Protvista';
 
 const getUrlFor = createSelector(
   // this one only to memoize it
@@ -68,6 +69,7 @@ const mergeData = (interpro, structures, structureInfo) => {
     val.signatures = [];
     val.children = [];
     val.coordinates = toArrayStructure(val.entry_protein_locations);
+    val.locations = val.entry_protein_locations;
     val.link = `/entry/${val.source_database}/${val.accession}`;
     ipro[val.accession] = val;
     if (!(val.entry_type in acc)) {
@@ -81,17 +83,18 @@ const mergeData = (interpro, structures, structureInfo) => {
       .map(({ ...obj }) => ({
         label: `${obj.accession}: ${obj.chain}`,
         coordinates: toArrayStructure(obj.protein_structure_locations),
+        locations: obj.protein_structure_locations,
         link: `/structure/${obj.source_database}/${obj.accession}`,
         ...obj,
       }))
       .sort((a, b) => a.label > b.label);
   }
-  if (structureInfo && structureInfo.prediction) {
-    out.predictions = formatStructureInfoObj(structureInfo.prediction);
-  }
-  if (structureInfo && structureInfo.feature) {
-    out.features = formatStructureInfoObj(structureInfo.feature);
-  }
+  // if (structureInfo && structureInfo.prediction) {
+  //   out.predictions = formatStructureInfoObj(structureInfo.prediction);
+  // }
+  // if (structureInfo && structureInfo.feature) {
+  //   out.features = formatStructureInfoObj(structureInfo.feature);
+  // }
   return out;
 };
 
@@ -115,7 +118,8 @@ class _StructureOnProtein extends Component {
     );
     return (
       <div>
-        <DomainArchitecture protein={protein} data={mergedData} />
+        {/*<DomainArchitecture protein={protein} data={mergedData} />*/}
+        <Protvista protein={protein} data={Object.entries(mergedData)} />
       </div>
     );
   }

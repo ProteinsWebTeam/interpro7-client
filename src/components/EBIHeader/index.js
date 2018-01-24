@@ -3,6 +3,8 @@ import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
+import Link from 'components/generic/Link';
+
 import { toggleEMBLMapNav } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
@@ -50,39 +52,27 @@ const EBIHeader = () => (
     <nav className={styleBundle('row')}>
       <ul id="global-nav" className={styleBundle('menu')}>
         <li className={styleBundle('home-mobile')}>
-          <a href="//www.ebi.ac.uk" rel="noopener">
-            EMBL-EBI Home page
-          </a>
+          <Link href="https://www.ebi.ac.uk">EMBL-EBI Home page</Link>
         </li>
 
         <li className={styleBundle('home')}>
-          <a href="//www.ebi.ac.uk" rel="noopener">
-            EMBL-EBI
-          </a>
+          <Link href="https://www.ebi.ac.uk">EMBL-EBI</Link>
         </li>
 
         <li className={styleBundle('services', 'active')}>
-          <a href="//www.ebi.ac.uk/services" rel="noopener">
-            Services
-          </a>
+          <Link href="https://www.ebi.ac.uk/services">Services</Link>
         </li>
 
         <li className={styleBundle('research')}>
-          <a href="//www.ebi.ac.uk/research" rel="noopener">
-            Research
-          </a>
+          <Link href="https://www.ebi.ac.uk/research">Research</Link>
         </li>
 
         <li className={styleBundle('training')}>
-          <a href="//www.ebi.ac.uk/training" rel="noopener">
-            Training
-          </a>
+          <Link href="https://www.ebi.ac.uk/training">Training</Link>
         </li>
 
         <li className={styleBundle('about')}>
-          <a href="//www.ebi.ac.uk/about" rel="noopener">
-            About us
-          </a>
+          <Link href="https://www.ebi.ac.uk/about">About us</Link>
         </li>
 
         <li

@@ -28,7 +28,7 @@ export class Accession extends PureComponent /*:: <Props> */ {
     accession: T.oneOfType([T.string, T.number]).isRequired,
     id: T.string,
     title: T.string,
-    db: T.string.isRequired,
+    db: T.string,
   };
 
   render() {

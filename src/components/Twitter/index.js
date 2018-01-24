@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 
 import cancelable from 'utils/cancelable';
 import loadResource from 'utils/loadResource';
+import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -26,7 +27,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
   */
   componentDidMount() {
     this._twitterScript = cancelable(
-      loadResource('//platform.twitter.com/widgets.js')
+      loadResource('//platform.twitter.com/widgets.js'),
     );
     this._twitterScript.promise.then(() => {
       if (!window.twttr) return;
@@ -58,7 +59,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
                 className={f('icon', 'icon-socialmedia', 'icon-s2')}
                 data-icon="T"
               />
-              <a
+              <Link
                 ref={node => (this._node = node)}
                 data-dnt="true"
                 data-chrome={
@@ -68,10 +69,9 @@ class Twitter extends PureComponent /*:: <{}> */ {
                 className={f('twitter-timeline')}
                 href="https://twitter.com/InterProDB"
                 target="_blank"
-                rel="noopener noreferrer"
               >
                 Tweets by @InterProDB
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -39,14 +39,9 @@ class EntryTypeFilter extends Component {
   }
 
   _handleSelection = ({ target: { value } }) => {
-    this.props.goToCustomLocation({
-      ...this.props.customLocation,
-      search: {
-        ...this.props.customLocation.search,
-        type: value === 'All' ? undefined : value,
-        page: undefined,
-      },
-    });
+    const { page, type, ...search } = this.props.customLocation.search;
+    if (value !== 'All') search.type = value;
+    this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
   render() {

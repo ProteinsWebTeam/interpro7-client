@@ -27,6 +27,7 @@ class TaxonomyFilter extends PureComponent {
       payload: T.any,
     }).isRequired,
     customLocation: T.shape({
+      description: T.object.isRequired,
       search: T.object.isRequired,
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
@@ -34,21 +35,18 @@ class TaxonomyFilter extends PureComponent {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    const { goToCustomLocation, customLocation } = this.props;
-    goToCustomLocation({
-      ...customLocation,
+    const { page, ...search } = this.props.customLocation.search;
+    this.props.goToCustomLocation({
+      ...this.props.customLocation,
       description: {
-        ...customLocation.description,
+        ...this.props.customLocation.description,
         organism: {
           isFilter: value !== 'ALL',
           db: value === 'ALL' ? null : 'taxonomy',
           accession: value === 'ALL' ? null : value,
         },
       },
-      search: {
-        ...customLocation.search,
-        page: undefined,
-      },
+      search,
     });
   };
 

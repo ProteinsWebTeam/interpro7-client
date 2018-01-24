@@ -26,7 +26,7 @@ const f = foundationPartial(styles);
     loading: boolean,
     payload?: ?Object,
   },
-  isSignature: boolean,
+  isSignature?: boolean,
   children: ?any,
   className: ?string,
 }; */
@@ -36,7 +36,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
     mainType: T.string,
     mainDB: T.string,
     mainAccession: T.string,
-    isSignature: T.bool.isRequired,
+    isSignature: T.bool,
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.any,

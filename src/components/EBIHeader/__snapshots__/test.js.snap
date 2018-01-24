@@ -15,62 +15,56 @@ exports[`<EBIHeader /> should render 1`] = `
       <li
         className="home-mobile"
       >
-        <a
-          href="//www.ebi.ac.uk"
-          rel="noopener"
+        <Connect(Link)
+          href="https://www.ebi.ac.uk"
         >
           EMBL-EBI Home page
-        </a>
+        </Connect(Link)>
       </li>
       <li
         className="home"
       >
-        <a
-          href="//www.ebi.ac.uk"
-          rel="noopener"
+        <Connect(Link)
+          href="https://www.ebi.ac.uk"
         >
           EMBL-EBI
-        </a>
+        </Connect(Link)>
       </li>
       <li
         className="services active"
       >
-        <a
-          href="//www.ebi.ac.uk/services"
-          rel="noopener"
+        <Connect(Link)
+          href="https://www.ebi.ac.uk/services"
         >
           Services
-        </a>
+        </Connect(Link)>
       </li>
       <li
         className="research"
       >
-        <a
-          href="//www.ebi.ac.uk/research"
-          rel="noopener"
+        <Connect(Link)
+          href="https://www.ebi.ac.uk/research"
         >
           Research
-        </a>
+        </Connect(Link)>
       </li>
       <li
         className="training"
       >
-        <a
-          href="//www.ebi.ac.uk/training"
-          rel="noopener"
+        <Connect(Link)
+          href="https://www.ebi.ac.uk/training"
         >
           Training
-        </a>
+        </Connect(Link)>
       </li>
       <li
         className="about"
       >
-        <a
-          href="//www.ebi.ac.uk/about"
-          rel="noopener"
+        <Connect(Link)
+          href="https://www.ebi.ac.uk/about"
         >
           About us
-        </a>
+        </Connect(Link)>
       </li>
       <li
         className="float-right show-for-medium embl-selector"

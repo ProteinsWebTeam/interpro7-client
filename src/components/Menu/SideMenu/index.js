@@ -61,7 +61,6 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
         className={f('old-interpro-link')}
         href={getOldHref(this.props.description)}
         target="_blank"
-        rel="noopener noreferer"
       >
         See this page in the old InterPro website
       </Link>

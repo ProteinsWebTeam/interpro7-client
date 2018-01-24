@@ -68,7 +68,7 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
       payload: T.any,
     }).isRequired,
     isFirstLevel: T.bool,
-    isSignature: T.bool.isRequired,
+    isSignature: T.bool,
   };
 
   render() {

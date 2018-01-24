@@ -12,15 +12,14 @@ exports[`<EBIFooter /> should render 1`] = `
     <div
       className="columns small-6 medium-2"
     >
-      <a
-        href="//www.ebi.ac.uk"
-        rel="noopener"
+      <Connect(Link)
+        href="https://www.ebi.ac.uk"
         title="EMBL-EBI"
       >
         <span
           className="ebi-logo"
         />
-      </a>
+      </Connect(Link)>
       <ul />
     </div>
     <div
@@ -29,42 +28,38 @@ exports[`<EBIFooter /> should render 1`] = `
       <h5
         className="services"
       >
-        <a
+        <Connect(Link)
           className="services-color"
-          href="//www.ebi.ac.uk/services"
-          rel="noopener"
+          href="https://www.ebi.ac.uk/services"
         >
           Services
-        </a>
+        </Connect(Link)>
       </h5>
       <ul>
         <li
           className="first"
         >
-          <a
-            href="//www.ebi.ac.uk/services"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/services"
           >
             By topic
-          </a>
+          </Connect(Link)>
         </li>
         <li>
-          <a
-            href="//www.ebi.ac.uk/services/all"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/services/all"
           >
             By name (A-Z)
-          </a>
+          </Connect(Link)>
         </li>
         <li
           className="last"
         >
-          <a
-            href="//www.ebi.ac.uk/support"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/support"
           >
             Help & Support
-          </a>
+          </Connect(Link)>
         </li>
       </ul>
     </div>
@@ -74,47 +69,42 @@ exports[`<EBIFooter /> should render 1`] = `
       <h5
         className="research"
       >
-        <a
+        <Connect(Link)
           className="research-color"
-          href="//www.ebi.ac.uk/research"
-          rel="noopener"
+          href="https://www.ebi.ac.uk/research"
         >
           Research
-        </a>
+        </Connect(Link)>
       </h5>
       <ul>
         <li>
-          <a
-            href="//www.ebi.ac.uk/research/publications"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/research/publications"
           >
             Publications
-          </a>
+          </Connect(Link)>
         </li>
         <li>
-          <a
-            href="//www.ebi.ac.uk/research/groups"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/research/groups"
           >
             Research groups
-          </a>
+          </Connect(Link)>
         </li>
         <li
           className="last"
         >
-          <a
-            href="//www.ebi.ac.uk/research/postdocs"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/research/postdocs"
           >
             Postdocs
-          </a>
+          </Connect(Link)>
            & 
-          <a
-            href="//www.ebi.ac.uk/research/eipp"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/research/eipp"
           >
             PhDs
-          </a>
+          </Connect(Link)>
         </li>
       </ul>
     </div>
@@ -124,48 +114,43 @@ exports[`<EBIFooter /> should render 1`] = `
       <h5
         className="training"
       >
-        <a
+        <Connect(Link)
           className="training-color"
-          href="//www.ebi.ac.uk/training"
-          rel="noopener"
+          href="https://www.ebi.ac.uk/training"
         >
           Training
-        </a>
+        </Connect(Link)>
       </h5>
       <ul>
         <li>
-          <a
-            href="//www.ebi.ac.uk/training/handson"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/training/handson"
           >
             Train at EBI
-          </a>
+          </Connect(Link)>
         </li>
         <li>
-          <a
-            href="//www.ebi.ac.uk/training/roadshow"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/training/roadshow"
           >
             Train outside EBI
-          </a>
+          </Connect(Link)>
         </li>
         <li>
-          <a
-            href="//www.ebi.ac.uk/training/online"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/training/online"
           >
             Train online
-          </a>
+          </Connect(Link)>
         </li>
         <li
           className="last"
         >
-          <a
-            href="//www.ebi.ac.uk/training/contact-us"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/training/contact-us"
           >
             Contact organisers
-          </a>
+          </Connect(Link)>
         </li>
       </ul>
     </div>
@@ -175,35 +160,31 @@ exports[`<EBIFooter /> should render 1`] = `
       <h5
         className="industry"
       >
-        <a
+        <Connect(Link)
           className="industry-color"
-          href="//www.ebi.ac.uk/industry"
-          rel="noopener"
+          href="https://www.ebi.ac.uk/industry"
         >
           Industry
-        </a>
+        </Connect(Link)>
       </h5>
       <ul>
         <li>
-          <a
-            href="//www.ebi.ac.uk/industry/private"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/industry/private"
           >
             Members Area
-          </a>
+          </Connect(Link)>
         </li>
         <li>
-          <a
-            href="//www.ebi.ac.uk/industry/workshops"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/industry/workshops"
           >
             Workshops
-          </a>
+          </Connect(Link)>
         </li>
         <li>
-          <a
-            href="//www.ebi.ac.uk/industry/sme-forum"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/industry/sme-forum"
           >
             <abbr
               title="Small Medium Enterprise"
@@ -211,17 +192,16 @@ exports[`<EBIFooter /> should render 1`] = `
               SME
             </abbr>
              Forum
-          </a>
+          </Connect(Link)>
         </li>
         <li
           className="last"
         >
-          <a
-            href="//www.ebi.ac.uk/industry/contact"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/industry/contact"
           >
             Contact Industry programme
-          </a>
+          </Connect(Link)>
         </li>
       </ul>
     </div>
@@ -231,55 +211,49 @@ exports[`<EBIFooter /> should render 1`] = `
       <h5
         className="about"
       >
-        <a
+        <Connect(Link)
           className="ebi-color"
-          href="//www.ebi.ac.uk/about"
-          rel="noopener"
+          href="https://www.ebi.ac.uk/about"
         >
           About EMBL-EBI
-        </a>
+        </Connect(Link)>
       </h5>
       <ul>
         <li>
-          <a
-            href="//www.ebi.ac.uk/about/contact"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/about/contact"
           >
             Contact us
-          </a>
+          </Connect(Link)>
         </li>
         <li>
-          <a
-            href="//www.ebi.ac.uk/about/events"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/about/events"
           >
             Events
-          </a>
+          </Connect(Link)>
         </li>
         <li>
-          <a
-            href="//www.ebi.ac.uk/about/jobs"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/about/jobs"
             title="Jobs, postdocs, PhDs…"
           >
             Jobs
-          </a>
+          </Connect(Link)>
         </li>
         <li>
-          <a
-            href="//www.ebi.ac.uk/about/news"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/about/news"
           >
             News
-          </a>
+          </Connect(Link)>
         </li>
         <li>
-          <a
-            href="//www.ebi.ac.uk/about/people"
-            rel="noopener"
+          <Connect(Link)
+            href="https://www.ebi.ac.uk/about/people"
           >
             People & groups
-          </a>
+          </Connect(Link)>
         </li>
       </ul>
     </div>
@@ -300,28 +274,26 @@ exports[`<EBIFooter /> should render 1`] = `
         className="legal"
       >
         Copyright © EMBL-EBI 2017 | EMBL-EBI is 
-        <a
-          href="http://www.embl.org/"
+        <Connect(Link)
+          href="https://www.embl.org/"
           rel="noopener"
         >
           part of the European Molecular Biology Laboratory
-        </a>
+        </Connect(Link)>
          
         |
          
-        <a
-          href="//www.ebi.ac.uk/about/terms-of-use"
-          rel="noopener"
+        <Connect(Link)
+          href="https://www.ebi.ac.uk/about/terms-of-use"
         >
           Terms of use
-        </a>
-        <a
+        </Connect(Link)>
+        <Connect(Link)
           className="readmore float-right"
           href="http://intranet.ebi.ac.uk"
-          rel="noopener"
         >
           Intranet
-        </a>
+        </Connect(Link)>
       </p>
     </div>
   </section>

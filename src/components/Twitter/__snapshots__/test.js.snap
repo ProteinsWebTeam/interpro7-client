@@ -22,17 +22,16 @@ exports[`<Twitter /> should render 1`] = `
           className="icon icon-socialmedia icon-s2"
           data-icon="T"
         />
-        <a
+        <Connect(Link)
           className="twitter-timeline"
           data-chrome="nofooter noborders noheader noscrollbar transparent"
           data-dnt="true"
           data-tweet-limit="1"
           href="https://twitter.com/InterProDB"
-          rel="noopener noreferrer"
           target="_blank"
         >
           Tweets by @InterProDB
-        </a>
+        </Connect(Link)>
       </div>
     </div>
   </div>

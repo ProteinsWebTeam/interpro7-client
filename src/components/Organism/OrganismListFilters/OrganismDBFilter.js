@@ -30,16 +30,14 @@ class OrganismDBFilter extends PureComponent {
   };
 
   _handleSelection = ({ target: { value } }) => {
+    const { page, ...search } = this.props.customLocation.search;
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       description: {
         ...this.props.customLocation.description,
         organism: { db: value },
       },
-      search: {
-        ...this.props.customLocation.search,
-        page: undefined,
-      },
+      search,
     });
   };
 

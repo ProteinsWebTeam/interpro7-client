@@ -53,6 +53,18 @@ const generateClassName = (
   return `${className || ''} ${activeClass}`;
 };
 
+const generateRel = (
+  rel /*?: string */,
+  target /*?: string */,
+  href /*?: string*/,
+) => {
+  if (!href) return rel;
+  const relSet = new Set((rel || '').split(' ').filter(Boolean));
+  relSet.add('noreferrer');
+  if (target) relSet.add('noopener');
+  return Array.from(relSet).join(' ');
+};
+
 /*:: type Props = {
   onClick: ?function,
   customLocation: {
@@ -84,6 +96,7 @@ class Link extends PureComponent /*:: <Props> */ {
       hash: T.string.isRequired,
     }).isRequired,
     children: T.any,
+    rel: T.string,
     href: T.string,
     goToCustomLocation: T.func.isRequired,
     target: T.string,
@@ -128,7 +141,7 @@ class Link extends PureComponent /*:: <Props> */ {
       // unused (to prevent passing down)
       onClick,
       goToCustomLocation,
-      // used
+      // used or changed
       customLocation,
       activeClass,
       className,
@@ -136,6 +149,8 @@ class Link extends PureComponent /*:: <Props> */ {
       disabled,
       href,
       children,
+      rel,
+      target,
       // passed down
       ...props
     } = this.props;
@@ -165,6 +180,8 @@ class Link extends PureComponent /*:: <Props> */ {
       <a
         {...props}
         href={_href}
+        rel={generateRel(rel, target, href)}
+        target={target}
         className={_className.trim() || null}
         onClick={this.handleClick}
       >

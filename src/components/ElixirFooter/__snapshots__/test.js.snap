@@ -9,6 +9,7 @@ exports[`<ElixirFooter /> should render 1`] = `
   >
     <Connect(Link)
       href="https://www.elixir-europe.org/about-us/who-we-are/nodes/embl-ebi"
+      target="_blank"
     >
       <div
         className="elixir-logo-kite"

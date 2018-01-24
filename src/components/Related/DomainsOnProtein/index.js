@@ -8,8 +8,8 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import DomainArchitecture from 'components/Protein/DomainArchitecture';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Protvista from 'components/Protvista';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -113,7 +113,7 @@ const addSignature = (entry, ipro, integrated) => {
     ipro[entry.entry_integrated].signatures.push(entry);
     ipro[entry.entry_integrated].children.push(entry);
   } else if (entry in integrated) {
-    console.error('integrated entry without interpro:', entry);
+    console.error('integrated entry without InterPro: ', entry);
   }
 };
 
@@ -135,19 +135,48 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
     }
     addSignature(entry, ipro, integrated);
   }
-  if (Object.keys(residues).length > 0) {
-    out.residues = mergeResidues(residues);
-  }
   return out;
 };
 
-class DomainOnProteinWithoutData extends Component {
+export class DomainOnProteinWithoutMergedData extends Component {
+  static propTypes = {
+    mainData: T.object.isRequired,
+    dataMerged: T.object.isRequired,
+  };
+
+  render() {
+    const { mainData, dataMerged } = this.props;
+    const sortedData = Object.entries(dataMerged).sort((a, b) => {
+      const firsts = ['family', 'domain'];
+      const lasts = ['residues', 'features', 'predictions'];
+      for (const label of firsts) {
+        if (a[0].toLowerCase() === label) return 0;
+        if (b[0].toLowerCase() === label) return 1;
+      }
+      for (const l of lasts) {
+        if (a[0].toLowerCase() === l) return 1;
+        if (b[0].toLowerCase() === l) return 0;
+      }
+      return a.key > b.key ? 1 : 0;
+    });
+
+    return (
+      <Protvista
+        protein={mainData.metadata || mainData.payload.metadata}
+        data={sortedData}
+      />
+    );
+  }
+}
+
+export class DomainOnProteinWithoutData extends Component {
   static propTypes = {
     mainData: T.object.isRequired,
     dataInterPro: T.object.isRequired,
     dataIntegrated: T.object.isRequired,
     dataUnintegrated: T.object.isRequired,
     dataResidues: T.object.isRequired,
+    dataMerged: T.object,
   };
 
   render() {
@@ -158,28 +187,31 @@ class DomainOnProteinWithoutData extends Component {
       dataResidues,
       dataUnintegrated,
     } = this.props;
+
     if (dataInterPro.loading || dataIntegrated.loading) {
       return <Loading />;
     }
+
     const mergedData = mergeData(
       'payload' in dataInterPro ? dataInterPro.payload.entries : [],
       'payload' in dataIntegrated ? dataIntegrated.payload.entries : [],
       'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
       dataResidues.payload,
     );
-    if (Object.keys(mergedData).length === 0)
+
+    if (Object.keys(mergedData).length === 0) {
       return (
         <div className={f('callout', 'info', 'withicon')}>
           There is no available domain for this protein.
         </div>
       );
+    }
+
     return (
-      <div>
-        <DomainArchitecture
-          protein={mainData.metadata || mainData.payload.metadata}
-          data={mergedData}
-        />
-      </div>
+      <DomainOnProteinWithoutMergedData
+        mainData={mainData}
+        dataMerged={mergedData}
+      />
     );
   }
 }

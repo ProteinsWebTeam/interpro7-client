@@ -1,6 +1,5 @@
 .elixir-ribbon {
   padding: 1rem 0;
-  background-color: rgb(77, 77, 72);
   font-family: Helvetica, Arial, FreeSans, 'Liberation Sans', sans-serif;
 
   & h5 {
@@ -12,7 +11,7 @@
   & a,
   & a:active,
   & a:hover {
-    color: #fff;
+    color: rgb(77, 77, 72);
     text-decoration: none;
   }
 

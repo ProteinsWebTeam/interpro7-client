@@ -4,11 +4,14 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import Link from 'components/generic/Link';
+
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+
 const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 
 export class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
@@ -29,13 +32,12 @@ export class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
           <p>
             EMBL-EBI in Hinxton is one of six EMBL locations across Europe.
             <br />
-            <a
+            <Link
               href="https://www.ebi.ac.uk/about"
               className={styleBundle('small', 'readmore')}
-              rel="noopener"
             >
               More about EMBL-EBI
-            </a>
+            </Link>
           </p>
           <h6>Connect to another EMBL location</h6>
           <div
@@ -43,31 +45,27 @@ export class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
               'row',
               'small-collapse',
               'clearfix',
-              'padding-bottom-large'
+              'padding-bottom-large',
             )}
           >
             <div
               className={styleBundle(
                 'columns',
                 'small-5',
-                'padding-bottom-medium'
+                'padding-bottom-medium',
               )}
             >
-              <a href="https://www.embl.de/" rel="noopener">
-                Heidelberg
-              </a>
+              <Link href="https://www.embl.de/">Heidelberg</Link>
               <div className={styleBundle('small')}>Main Laboratory</div>
             </div>
             <div
               className={styleBundle(
                 'columns',
                 'small-7',
-                'padding-bottom-medium'
+                'padding-bottom-medium',
               )}
             >
-              <a href="http://www.embl-barcelona.es/" rel="noopener">
-                Barcelona
-              </a>
+              <Link href="http://www.embl-barcelona.es/">Barcelona</Link>
               <div className={styleBundle('small')}>
                 Tissue biology and disease modelling
               </div>
@@ -76,36 +74,30 @@ export class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
               className={styleBundle(
                 'columns',
                 'small-5',
-                'padding-bottom-medium'
+                'padding-bottom-medium',
               )}
             >
-              <a href="https://www.embl.fr/" rel="noopener">
-                Grenoble
-              </a>
+              <Link href="https://www.embl.fr/">Grenoble</Link>
               <div className={styleBundle('small')}>Structural Biology</div>
             </div>
             <div
               className={styleBundle(
                 'columns',
                 'small-7',
-                'padding-bottom-medium'
+                'padding-bottom-medium',
               )}
             >
-              <a href="https://www.embl-hamburg.de/" rel="noopener">
-                Hamburg
-              </a>
+              <Link href="https://www.embl-hamburg.de/">Hamburg</Link>
               <div className={styleBundle('small')}>Structural Biology</div>
             </div>
             <div
               className={styleBundle(
                 'columns',
                 'small-5',
-                'padding-bottom-medium'
+                'padding-bottom-medium',
               )}
             >
-              <a href="https://www.embl.it/" rel="noopener">
-                Rome
-              </a>
+              <Link href="https://www.embl.it/">Rome</Link>
               <div className={styleBundle('small')}>
                 Epigenetics and neurology
               </div>
@@ -114,16 +106,15 @@ export class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
               className={styleBundle(
                 'columns',
                 'small-7',
-                'padding-bottom-medium'
+                'padding-bottom-medium',
               )}
             >
-              <a
-                href="http://embl.org/"
-                rel="noopener"
+              <Link
+                href="https://embl.org/"
                 className={styleBundle('readmore')}
               >
                 More about EMBL
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -134,7 +125,7 @@ export class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
 
 const mapStateToProps = createSelector(
   state => state.ui.emblMapNav,
-  visible => ({ visible })
+  visible => ({ visible }),
 );
 
 export default connect(mapStateToProps)(EMBLDropdown);

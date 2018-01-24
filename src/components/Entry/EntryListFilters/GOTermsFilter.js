@@ -36,14 +36,9 @@ class GOTermsFilter extends Component {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    this.props.goToCustomLocation({
-      ...this.props.customLocation,
-      search: {
-        ...this.props.customLocation.search,
-        go_category: value === 'All' ? undefined : value,
-        page: undefined,
-      },
-    });
+    const { page, go_category, ...search } = this.props.customLocation.search;
+    if (value !== 'All') search.go_category = value;
+    this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
   render() {
