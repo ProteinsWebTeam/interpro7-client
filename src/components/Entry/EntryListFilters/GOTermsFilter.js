@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -23,7 +23,7 @@ const categories = {
   'Molecular Function': 'F',
 };
 
-class GOTermsFilter extends Component {
+class GOTermsFilter extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -36,7 +36,11 @@ class GOTermsFilter extends Component {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    const { page, go_category, ...search } = this.props.customLocation.search;
+    const {
+      page,
+      go_category: _,
+      ...search
+    } = this.props.customLocation.search;
     if (value !== 'All') search.go_category = value;
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };

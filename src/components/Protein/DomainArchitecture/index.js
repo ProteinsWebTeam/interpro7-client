@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import PopperJS from 'popper.js';
@@ -36,17 +36,17 @@ const requestFullScreen = element => {
 };
 const areMergedDataTheSame = (prev, next) => {
   if (Object.keys(prev).length !== Object.keys(next).length) return false;
-  for (const key in prev) {
-    if (prev[key].length !== next[key].length) return false;
-    for (let i = 0; i < prev[key].length; i++) {
-      if (JSON.stringify(prev[key][i]) !== JSON.stringify(next[key][i]))
+  for (const [key, value] of Object.entries(prev)) {
+    if (value.length !== next[key].length) return false;
+    for (let i = 0; i < value.length; i++) {
+      if (JSON.stringify(value[i]) !== JSON.stringify(next[key][i]))
         return false;
     }
   }
   return true;
 };
 
-class DomainArchitecture extends Component {
+class DomainArchitecture extends PureComponent {
   static propTypes = {
     protein: T.object,
     data: T.object,
@@ -160,17 +160,6 @@ class DomainArchitecture extends Component {
 
   _handleCollapseToggle = () => {
     this.setState(({ collapsed }) => ({ collapsed: !collapsed }));
-  };
-
-  toggleAll = () => {
-    const toCollapse = Object.values(this.state.filters).reduce(
-      (acc, v) => v && acc,
-      true,
-    );
-    const children = Array.isArray(this.props.children)
-      ? this.props.children
-      : [this.props.children];
-    this.setState({ filters: children.map(() => !toCollapse) });
   };
 
   _combiCol = () => {

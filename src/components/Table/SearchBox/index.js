@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -15,7 +15,7 @@ import { goToCustomLocation } from 'actions/creators';
 
 const DEBOUNCE_RATE = 500; // In ms
 
-class SearchBox extends Component {
+class SearchBox extends PureComponent {
   static propTypes = {
     customLocation: T.object,
     goToCustomLocation: T.func,
@@ -34,15 +34,14 @@ class SearchBox extends Component {
   handleChange = ({ target: { value: search } }) =>
     this.setState({ search }, this.routerPush);
 
-  routerPush = () =>
+  routerPush = () => {
+    const { page, search, ...rest } = this.props.customLocation.search;
+    if (this.state.search) rest.search = this.state.search;
     this.props.goToCustomLocation({
       ...this.props.customLocation,
-      search: {
-        ...this.props.customLocation.search,
-        page: 1,
-        search: this.state.search,
-      },
+      search: rest,
     });
+  };
 
   render() {
     return (

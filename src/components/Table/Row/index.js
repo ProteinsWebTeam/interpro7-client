@@ -1,12 +1,12 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import lodashGet from 'lodash-es/get';
 
 const defaultRenderer = (value /*: string | number */) => <div>{value}</div>;
 
-class Row extends Component {
+class Row extends PureComponent {
   static propTypes = {
     row: T.object.isRequired,
     columns: T.array.isRequired,

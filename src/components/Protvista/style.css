@@ -77,14 +77,25 @@
 .track-accession {
   width: 10%;
   overflow: hidden;
+  padding-left: 0.5em;
+}
+.track-accession > a,
+.track-accession > a:focus,
+.track-accession > a:visited {
   text-transform: uppercase;
   font-weight: bold;
-  padding-left: 0.5em;
   color: var(--colors-dark);
 }
 .track-accession-child {
+  line-height: 1.2;
+}
+.track-accession-child > a,
+.track-accession-child > a:focus,
+.track-accession-child > a:visited {
+  text-transform: uppercase;
   font-size: 0.9em;
   font-weight: normal;
+  color: var(--colors-dark);
 }
 div.buttons {
   font-size: 0.9em;
@@ -121,10 +132,9 @@ div.buttons {
 .popper .popper__arrow {
   width: 0;
   height: 0;
-  border-style: solid;
   position: absolute;
   margin: 5px;
-  border-color: white;
+  border: solid white;
 }
 
 .popper[x-placement^='top'] .popper__arrow {

@@ -278,31 +278,29 @@ class Summary extends PureComponent {
       return <Loading />;
     }
     return (
-      <div>
-        <ErrorBoundary>
-          <div className={f('row')}>
-            <div className={f('medium-12', 'large-12', 'columns')}>
-              <LoadedTitle />
-              <EntryMenu metadata={payload.metadata} />
-            </div>
+      <ErrorBoundary>
+        <div className={f('row')}>
+          <div className={f('medium-12', 'large-12', 'columns')}>
+            <LoadedTitle />
+            <EntryMenu metadata={payload.metadata} />
           </div>
-          <Switch
-            {...this.props}
-            locationSelector={l => {
-              const { key } = l.description.main;
-              return (
-                l.description[key].detail ||
-                (Object.entries(l.description).find(
-                  ([_key, value]) => value.isFilter,
-                ) || [])[0] ||
-                (l.description[key].accession && l.description[key].proteomeDB)
-              );
-            }}
-            indexRoute={SummaryComponent}
-            childRoutes={subPagesForOrganism}
-          />
-        </ErrorBoundary>
-      </div>
+        </div>
+        <Switch
+          {...this.props}
+          locationSelector={l => {
+            const { key } = l.description.main;
+            return (
+              l.description[key].detail ||
+              (Object.entries(l.description).find(
+                ([_key, value]) => value.isFilter,
+              ) || [])[0] ||
+              (l.description[key].accession && l.description[key].proteomeDB)
+            );
+          }}
+          indexRoute={SummaryComponent}
+          childRoutes={subPagesForOrganism}
+        />
+      </ErrorBoundary>
     );
   }
 }

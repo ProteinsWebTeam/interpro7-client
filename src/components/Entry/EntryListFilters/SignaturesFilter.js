@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -17,7 +17,7 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-class SignaturesFilter extends Component {
+class SignaturesFilter extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -30,7 +30,11 @@ class SignaturesFilter extends Component {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    const { page, signature_in, ...search } = this.props.customLocation.search;
+    const {
+      page,
+      signature_in: _,
+      ...search
+    } = this.props.customLocation.search;
     if (value !== 'All') search.signature_in = value;
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };

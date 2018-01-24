@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-param-reassign */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -8,7 +8,6 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import DomainArchitecture from 'components/Protein/DomainArchitecture';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Protvista from 'components/Protvista';
 
@@ -44,26 +43,11 @@ const getUrlFor = createSelector(
       },
     ),
 );
-const formatStructureInfoObj = obj => {
-  const out = [];
-  for (const db of Object.keys(obj)) {
-    if (db.toLowerCase() !== 'pdbe') {
-      for (const acc of Object.keys(obj[db])) {
-        out.push({
-          accession: acc,
-          source_database: db,
-          coordinates: [obj[db][acc].coordinates.map(x => [x.start, x.end])],
-        });
-      }
-    }
-  }
-  return out;
-};
 
 const toArrayStructure = locations =>
   locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
 
-const mergeData = (interpro, structures, structureInfo) => {
+const mergeData = (interpro, structures) => {
   const ipro = {};
   const out = interpro.reduce((acc, val) => {
     val.signatures = [];
@@ -98,7 +82,9 @@ const mergeData = (interpro, structures, structureInfo) => {
   return out;
 };
 
-class _StructureOnProtein extends Component {
+const UNDERSCORE = /_/g;
+
+class _StructureOnProtein extends PureComponent {
   static propTypes = {
     structures: T.array.isRequired,
     dataInterPro: T.object,
@@ -111,17 +97,14 @@ class _StructureOnProtein extends Component {
     if (dataInterPro.loading || dataStructureInfo.loading) {
       return <Loading />;
     }
-    const mergedData = mergeData(
-      dataInterPro.payload ? dataInterPro.payload.entries : [],
-      structures,
-      dataStructureInfo.payload,
-    );
-    return (
-      <div>
-        {/*<DomainArchitecture protein={protein} data={mergedData} />*/}
-        <Protvista protein={protein} data={Object.entries(mergedData)} />
-      </div>
-    );
+    const mergedData = Object.entries(
+      mergeData(
+        dataInterPro.payload ? dataInterPro.payload.entries : [],
+        structures,
+        dataStructureInfo.payload,
+      ),
+    ).map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
+    return <Protvista protein={protein} data={mergedData} />;
   }
 }
 

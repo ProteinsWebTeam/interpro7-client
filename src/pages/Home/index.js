@@ -430,7 +430,7 @@ const schemaProcessDataForDB = ({ name, location }) => ({
 class Home extends PureComponent {
   render() {
     return (
-      <div>
+      <React.Fragment>
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <SchemaOrgData
@@ -677,7 +677,7 @@ class Home extends PureComponent {
           </div>
         </div>
         <Twitter />
-      </div>
+      </React.Fragment>
     );
   }
 }

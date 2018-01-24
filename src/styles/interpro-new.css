@@ -521,7 +521,7 @@ h6 small {
   padding: 0.16667rem 0.88889rem;
 }
 #content .sub-nav a {
-  border-bottom: 0px solid red;
+  border-bottom: 0 solid red;
 }
 /*/filter menu option*/
 /****************************** END TABLE *********************************/
@@ -629,7 +629,7 @@ h6 small {
   background-color: transparent;
   color: #baf7d5;
   font-size: 0.9rem;
-  border-top: 0px solid white;
+  border-top: 0 solid white;
 }
 .local_footer.masthead ul.off-canvas-list a:visited.active {
   color: rgba(68, 68, 68, 0.6);
@@ -671,7 +671,7 @@ h6 small {
 #back-top a:hover,
 #back-top a:focus,
 #back-top a:active {
-  border-bottom: 0px solid #8c8c8c;
+  border-bottom: 0 solid #8c8c8c;
 }
 #back-top span.text {
   opacity: 0;

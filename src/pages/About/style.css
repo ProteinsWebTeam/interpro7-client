@@ -1,10 +1,12 @@
 .list li {
   margin-bottom: 1rem;
 }
+
 .md-small {
   width: 50%;
   margin-left: 5rem;
 }
+
 .cite-box {
   display: flex;
   flex-wrap: wrap;

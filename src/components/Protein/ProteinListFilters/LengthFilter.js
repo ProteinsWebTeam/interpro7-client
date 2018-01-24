@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import { connect } from 'react-redux';
@@ -10,7 +10,7 @@ import classname from 'classnames/bind';
 import styles from './style.css';
 const s = classname.bind(styles);
 
-class LengthFilter extends Component {
+class LengthFilter extends PureComponent {
   static propTypes = {
     dataReviewed: T.shape({
       loading: T.bool.isRequired,

@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -63,7 +63,7 @@ const formatEndpoints = paths => [
   ...paths.focus.map(f => ({ paths: [...f, { name: '…' }], type: 'focus' })),
 ];
 
-class Breadcrumb extends Component {
+class Breadcrumb extends PureComponent {
   static propTypes = {
     description: T.object.isRequired,
     stuck: T.bool.isRequired,

@@ -36,10 +36,10 @@ class DiskUsage extends PureComponent {
       )} of available quota (${ratio ? 'about' : 'less than'} ${ratio}%)`;
     }
     return (
-      <div>
+      <section>
         <h5>Disk usage</h5>
         <p>{content}</p>
-      </div>
+      </section>
     );
   }
 }

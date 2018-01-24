@@ -1,6 +1,6 @@
 // @flow
 /* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 25, 50, 15, 30, 100]}] */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -12,7 +12,7 @@ import s from './style.css';
 
 const f = foundationPartial(s);
 
-class PageSizeSelector extends Component {
+class PageSizeSelector extends PureComponent {
   static propTypes = {
     customLocation: T.object.isRequired,
     pageSize: T.number,

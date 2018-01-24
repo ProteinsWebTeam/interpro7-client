@@ -302,7 +302,7 @@ class Summary extends PureComponent {
       return <Loading />;
     }
     return (
-      <div>
+      <React.Fragment>
         <div className={f('row')}>
           <div className={f('medium-12', 'large-12', 'columns')}>
             <Title metadata={payload.metadata} mainType="protein" />
@@ -341,7 +341,7 @@ class Summary extends PureComponent {
             childRoutes={subPagesForProtein}
           />
         </ErrorBoundary>
-      </div>
+      </React.Fragment>
     );
   }
 }

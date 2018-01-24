@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-param-reassign */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -18,7 +18,7 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-class ExperimentTypeFilter extends Component {
+class ExperimentTypeFilter extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -34,7 +34,7 @@ class ExperimentTypeFilter extends Component {
   _handleSelection = ({ target: { value } }) => {
     const {
       page,
-      experiment_type,
+      experiment_type: _,
       ...search
     } = this.props.customLocation.search;
     if (value !== 'All') search.experiment_type = value;

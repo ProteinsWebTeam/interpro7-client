@@ -130,8 +130,8 @@ const memberDB = new Set([
     name: 'gene3d',
     re: /^G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{2,5}$/i,
   },
-  { name: 'cdd', re: /^(?:c|s)d[0-9]{5}$/i },
-  { name: 'hamap', re: /^MF_[0-9]{5}(_(A|B){1})?$/i },
+  { name: 'cdd', re: /^(?:[cs])d[0-9]{5}$/i },
+  { name: 'hamap', re: /^MF_[0-9]{5}(_([AB]){1})?$/i },
   { name: 'panther', re: /^PTHR[0-9]{5}(:SF[0-9]{1,3})?$/i },
   { name: 'pfam', re: /^PF[0-9]{5}$/i },
   { name: 'pirsf', re: /^PIRSF[0-9]{6}$/i },
@@ -139,8 +139,7 @@ const memberDB = new Set([
   { name: 'prodom', re: /^PD[A-Z0-9]{6}$/i },
   { name: 'prosite', re: /^PS[0-9]{5}$/i },
   { name: 'patterns', re: /^PS[0-9]{5}$/i },
-  { name: 'profiles', re: /^PS[0-9]{5}$/i }, // TODO: check which one
-  { name: 'profile', re: /^PS[0-9]{5}$/i }, // TODO: is correct
+  { name: 'profile', re: /^PS[0-9]{5}$/i },
   { name: 'sfld', re: /^sfld[gf]\d{5}$/i },
   { name: 'smart', re: /^SM[0-9]{5}$/i },
   { name: 'ssf', re: /^SSF[0-9]{5,6}$/i },

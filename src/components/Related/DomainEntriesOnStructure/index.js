@@ -2,14 +2,10 @@
 import React from 'react';
 import T from 'prop-types';
 
-import DomainArchitecture from 'components/Protein/DomainArchitecture';
-
 import f from 'styles/foundation';
 import Protvista from 'components/Protvista';
 import loadData from 'higherOrder/loadData';
 import { createSelector } from 'reselect';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import { stringify as qsStringify } from 'query-string';
 
 const toArrayStructure = locations =>
   locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
@@ -55,6 +51,16 @@ const ProtvistaLoaded = ({ dataprotein, tracks }) => {
   if (dataprotein.loading) return <div>loading</div>;
   return <Protvista protein={dataprotein.payload.metadata} data={tracks} />;
 };
+ProtvistaLoaded.propTypes = {
+  dataprotein: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.shape({
+      metadata: T.object.isRequired,
+    }),
+  }).isRequired,
+  tracks: T.object,
+};
+
 const includeProtein = accession =>
   loadData({
     getUrl: createSelector(
@@ -65,28 +71,23 @@ const includeProtein = accession =>
     propNamespace: 'protein',
   })(ProtvistaLoaded);
 const protvistaPerChain = {};
-const EntriesOnStructure = ({ entries }) => {
-  return (
-    <div className={f('row')}>
-      {mergeData(entries).map((e, i) => {
-        if (!protvistaPerChain[e.chain])
-          protvistaPerChain[e.chain] = includeProtein(e.protein.accession);
-        const ProtvistaPlusProtein = protvistaPerChain[e.chain];
-        return (
-          <div key={i} className={f('columns')}>
-            <h4>Chain {e.chain}</h4>
-            {/*<DomainArchitecture protein={e.protein} data={e.data} />*/}
-            <ProtvistaPlusProtein
-              tracks={Object.entries(e.data).sort(
-                ([a], [b]) => (a > b ? 1 : -1),
-              )}
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+const EntriesOnStructure = ({ entries }) => (
+  <div className={f('row')}>
+    {mergeData(entries).map((e, i) => {
+      if (!protvistaPerChain[e.chain])
+        protvistaPerChain[e.chain] = includeProtein(e.protein.accession);
+      const ProtvistaPlusProtein = protvistaPerChain[e.chain];
+      return (
+        <div key={i} className={f('columns')}>
+          <h4>Chain {e.chain}</h4>
+          <ProtvistaPlusProtein
+            tracks={Object.entries(e.data).sort(([a], [b]) => (a > b ? 1 : 0))}
+          />
+        </div>
+      );
+    })}
+  </div>
+);
 EntriesOnStructure.propTypes = {
   entries: T.array.isRequired,
 };

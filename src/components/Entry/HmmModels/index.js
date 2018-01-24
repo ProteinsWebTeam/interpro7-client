@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import hmmLogo from './hmm_logo';
@@ -10,7 +10,7 @@ import styles from './logo.css';
 
 const f = foundationPartial(styles);
 
-class LogoSection extends Component {
+class LogoSection extends PureComponent {
   static propTypes = {
     data: T.object,
   };

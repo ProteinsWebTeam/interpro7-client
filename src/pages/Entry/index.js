@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent, Component } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -61,7 +61,7 @@ const schemaProcessDataTableRow = ({ data, location }) => ({
   url: `${location.href}/${data.accession}`,
 });
 
-class List extends Component {
+class List extends PureComponent {
   static propTypes = {
     data: T.shape({
       payload: T.object,

@@ -7,8 +7,7 @@
 }
 
 .tabs-title {
-  margin: 1px 0;
   display: flex;
   align-items: stretch;
-  margin-right: 1em;
+  margin: 1px 1em 1px 0;
 }
