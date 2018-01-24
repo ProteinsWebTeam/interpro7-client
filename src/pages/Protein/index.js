@@ -212,7 +212,26 @@ class List extends PureComponent {
             >
               Reviewed
             </Column>
-            <Column dataKey="source_organism.fullname">Species</Column>
+            <Column
+              dataKey="source_organism"
+              renderer={({ fullname, taxid }) => (
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'organism' },
+                      organism: {
+                        db: 'taxonomy',
+                        accession: `${taxid}`,
+                      },
+                    },
+                  }}
+                >
+                  {fullname}
+                </Link>
+              )}
+            >
+              Species
+            </Column>
             <Column
               dataKey="length"
               headerClassName={f('text-right')}
