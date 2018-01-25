@@ -154,21 +154,25 @@ const Matches = (
     <Column
       dataKey="source_organism"
       displayIf={primary === 'protein' || primary === 'structure'}
-      renderer={({ fullname, taxid }) => (
-        <Link
-          to={{
-            description: {
-              main: { key: 'organism' },
-              organism: {
-                db: 'taxonomy',
-                accession: `${taxid}`,
+      renderer={sourceOrganism =>
+        sourceOrganism.taxid ? (
+          <Link
+            to={{
+              description: {
+                main: { key: 'organism' },
+                organism: {
+                  db: 'taxonomy',
+                  accession: `${sourceOrganism.taxid}`,
+                },
               },
-            },
-          }}
-        >
-          {fullname}
-        </Link>
-      )}
+            }}
+          >
+            {sourceOrganism.fullname}
+          </Link>
+        ) : (
+          sourceOrganism
+        )
+      }
     >
       Species
     </Column>
