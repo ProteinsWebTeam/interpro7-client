@@ -47,7 +47,7 @@ const colorsByDB = {
   pdb: '#74b360',
 };
 
-export const EntryColorMode = {
+const EntryColorMode = {
   COLOR_MODE_ACCESSION: 1,
   COLOR_MODE_MEMBERDB: 2,
   COLOR_MODE_DOMAIN_RELATIONSHIP: 3,

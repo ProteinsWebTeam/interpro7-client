@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
-import loadable from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
