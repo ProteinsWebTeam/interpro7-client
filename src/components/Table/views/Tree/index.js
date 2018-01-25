@@ -1,13 +1,22 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+
+import Link from 'components/generic/Link';
 
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import loadData from 'higherOrder/loadData';
+
+import { foundationPartial } from 'styles/foundation';
+
+import styles from './style.css';
+
+const f = foundationPartial(styles);
 
 const mapStateToUrlFor = createSelector(
   taxID => taxID,
@@ -68,7 +77,7 @@ class DataProvider extends PureComponent {
 class GraphicalView extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,
-    focused: T.string,
+    focused: T.string.isRequired,
     changeFocus: T.func.isRequired,
   };
 
@@ -77,6 +86,7 @@ class GraphicalView extends PureComponent {
     this._vis = new TaxonomyVisualisation(undefined, {
       initialMaxNodes: +Infinity,
     });
+    window.vis = this._vis;
     this._vis.addEventListener('focus', this._handleFocus);
   }
 
@@ -98,12 +108,17 @@ class GraphicalView extends PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    this._vis.cleanup();
+  }
+
   _handleFocus = ({ detail: { id } }) => {
     if (!this._loadingVis) this.props.changeFocus(id);
   };
 
   _populateData = (data, focused) => {
     this._vis.data = data;
+    // debugger;
     this._vis.focusNodeWithID(focused);
   };
 
@@ -145,8 +160,6 @@ const mergeData = (root, update, names) => {
 };
 
 class TreeView extends PureComponent {
-  static propTypes = {};
-
   constructor(props) {
     super(props);
     this.state = {
@@ -160,15 +173,12 @@ class TreeView extends PureComponent {
     this._CDPMap.clear();
   }
 
-  _handleNewData = (taxID, payload) => {
-    console.log('new data!', taxID, payload);
+  _handleNewData = (taxID, payload) =>
     this.setState(({ data }) => ({
       data: { ...mergeData(data, payload.metadata, payload.names) },
     }));
-  };
 
   _handleNewFocus = taxID => {
-    console.log('new focus!', taxID);
     if (taxID) this.setState({ focused: taxID });
   };
 
@@ -181,10 +191,23 @@ class TreeView extends PureComponent {
     }
     return (
       <React.Fragment>
+        <div>
+          <Link
+            className={f('button', 'hollow')}
+            to={{
+              description: {
+                main: { key: 'organism' },
+                organism: { db: 'taxonomy', accession: focused },
+              },
+            }}
+          >
+            Go to taxonomy page for “{findNodeWithId(focused, data).name}”
+          </Link>
+        </div>
         <ConnectedDataProvider sendData={this._handleNewData} taxID={focused} />
         <GraphicalView
           data={data}
-          focuses={focused}
+          focused={focused}
           changeFocus={this._handleNewFocus}
         />
       </React.Fragment>

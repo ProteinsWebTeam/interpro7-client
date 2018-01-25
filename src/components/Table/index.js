@@ -181,8 +181,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 indexRoute={TableView}
                 childRoutes={[
                   { value: 'table', component: TableView },
-                  // { value: 'list', component: () => 'LIST!' },
-                  // { value: 'grid', component: () => 'GRID!' },
+                  { value: 'list', component: () => 'LIST!' },
+                  { value: 'grid', component: () => 'GRID!' },
                   { value: 'tree', component: TreeView },
                 ]}
                 catchAll={TableView}
