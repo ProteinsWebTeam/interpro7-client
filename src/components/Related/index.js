@@ -259,9 +259,15 @@ const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
 
 const getReversedUrl = createSelector(
   state => state.settings.api,
+  state => state.settings.navigation.pageSize,
   state => state.customLocation.description,
   state => state.customLocation.search,
-  ({ protocol, hostname, port, root }, description, search) => {
+  (
+    { protocol, hostname, port, root },
+    settingsPageSize,
+    description,
+    search,
+  ) => {
     // copy of description, to modify it after
     const newDesc = {};
     let newMain;
@@ -279,7 +285,7 @@ const getReversedUrl = createSelector(
       hostname,
       port,
       pathname: root + descriptionToPath(newDesc),
-      query: search,
+      query: { ...search, page_size: search.page_size || settingsPageSize },
     });
     if (description.main.key === 'entry' && newMain === 'organism') {
       url = url.replace('/entry/', '/protein/entry/');
