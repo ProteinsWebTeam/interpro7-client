@@ -14,6 +14,12 @@ const f = foundationPartial(local, fonts);
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+
+import ProtVistaManager from 'protvista-manager/src/protvista-manager.js';
+import ProtVistaSequence from 'protvista-sequence/src/protvista-sequence.js';
+import ProtVistaNavigation from 'protvista-navigation/src/protvista-navigation.js';
+import ProtVistaInterProTrack from 'protvista-interpro-track/src/protvista-interpro-track.js';
+
 import PopperJS from 'popper.js';
 
 const webComponents = [];
@@ -40,6 +46,7 @@ const colorsByDB = {
   interpro: '#2daec1',
   pdb: '#74b360',
 };
+
 export const EntryColorMode = {
   COLOR_MODE_ACCESSION: 1,
   COLOR_MODE_MEMBERDB: 2,
@@ -68,7 +75,7 @@ const removeAllChildrenFromNode = node => {
   }
 };
 
-class Protvista extends PureComponent {
+class ProtVista extends PureComponent {
   static propTypes = {
     protein: T.object,
     data: T.array,
@@ -89,32 +96,20 @@ class Protvista extends PureComponent {
 
   componentWillMount() {
     if (webComponents.length) return;
-    const protvistaManager = () =>
-      import(/* webpackChunkName: "protvista-manager" */ 'protvista-manager/src/protvista-manager.js');
     webComponents.push(
-      loadWebComponent(() => protvistaManager().then(m => m.default)).as(
-        'protvista-manager',
-      ),
+      loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
     );
 
-    const protvistaSequence = () =>
-      import(/* webpackChunkName: "protvista-sequence" */ 'protvista-sequence/src/protvista-sequence.js');
     webComponents.push(
-      loadWebComponent(() => protvistaSequence().then(m => m.default)).as(
-        'protvista-sequence',
-      ),
+      loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
     );
-    const protvistaNavigation = () =>
-      import(/* webpackChunkName: "protvista-navigation" */ 'protvista-navigation/src/protvista-navigation.js');
+
     webComponents.push(
-      loadWebComponent(() => protvistaNavigation().then(m => m.default)).as(
-        'protvista-navigation',
-      ),
+      loadWebComponent(() => ProtVistaNavigation).as('protvista-navigation'),
     );
-    const protvistaInterproTrack = () =>
-      import(/* webpackChunkName: "protvista-interpro-track" */ 'protvista-interpro-track/src/protvista-interpro-track.js');
+
     webComponents.push(
-      loadWebComponent(() => protvistaInterproTrack().then(m => m.default)).as(
+      loadWebComponent(() => ProtVistaInterProTrack).as(
         'protvista-interpro-track',
       ),
     );
@@ -503,4 +498,5 @@ class Protvista extends PureComponent {
     );
   }
 }
-export default Protvista;
+
+export default ProtVista;

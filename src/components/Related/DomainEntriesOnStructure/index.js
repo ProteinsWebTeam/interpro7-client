@@ -1,11 +1,17 @@
 // @flow
 import React from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
+
+import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
 
 import f from 'styles/foundation';
-import Protvista from 'components/Protvista';
-import loadData from 'higherOrder/loadData';
-import { createSelector } from 'reselect';
+
+const ProtVista = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
+});
 
 const toArrayStructure = locations =>
   locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
@@ -47,11 +53,11 @@ const mergeData = secondaryData => {
     .map(k => out[k]);
 };
 
-const ProtvistaLoaded = ({ dataprotein, tracks }) => {
+const ProtVistaLoaded = ({ dataprotein, tracks }) => {
   if (dataprotein.loading) return <div>loading</div>;
-  return <Protvista protein={dataprotein.payload.metadata} data={tracks} />;
+  return <ProtVista protein={dataprotein.payload.metadata} data={tracks} />;
 };
-ProtvistaLoaded.propTypes = {
+ProtVistaLoaded.propTypes = {
   dataprotein: T.shape({
     loading: T.bool.isRequired,
     payload: T.shape({
@@ -69,18 +75,18 @@ const includeProtein = accession =>
         `${protocol}//${hostname}:${port}${root}/protein/uniprot/${accession}`,
     ),
     propNamespace: 'protein',
-  })(ProtvistaLoaded);
+  })(ProtVistaLoaded);
 const protvistaPerChain = {};
 const EntriesOnStructure = ({ entries }) => (
   <div className={f('row')}>
     {mergeData(entries).map((e, i) => {
       if (!protvistaPerChain[e.chain])
         protvistaPerChain[e.chain] = includeProtein(e.protein.accession);
-      const ProtvistaPlusProtein = protvistaPerChain[e.chain];
+      const ProtVistaPlusProtein = protvistaPerChain[e.chain];
       return (
         <div key={i} className={f('columns')}>
           <h4>Chain {e.chain}</h4>
-          <ProtvistaPlusProtein
+          <ProtVistaPlusProtein
             tracks={Object.entries(e.data).sort(([a], [b]) => (a > b ? 1 : 0))}
           />
         </div>

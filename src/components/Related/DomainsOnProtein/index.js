@@ -9,13 +9,19 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
-import Protvista from 'components/Protvista';
+
+import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ipro);
+
+const ProtVista = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
+});
 
 const getUrlFor = createSelector(
   // this one only to memoize it
@@ -171,7 +177,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent {
       .map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
 
     return (
-      <Protvista
+      <ProtVista
         protein={mainData.metadata || mainData.payload.metadata}
         data={sortedData}
       />

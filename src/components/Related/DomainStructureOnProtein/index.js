@@ -6,10 +6,16 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadData';
+
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
-import Protvista from 'components/Protvista';
+
+const ProtVista = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
+});
 
 const getUrlFor = createSelector(
   // this one only to memoize it
@@ -104,7 +110,7 @@ class _StructureOnProtein extends PureComponent {
         dataStructureInfo.payload,
       ),
     ).map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
-    return <Protvista protein={protein} data={mergedData} />;
+    return <ProtVista protein={protein} data={mergedData} />;
   }
 }
 
