@@ -42,7 +42,7 @@ const getInitialState = history => {
       search: parseParamToNumber('page_size')(
         parseParamToNumber('page')(parse(search, true).query),
       ),
-      hash,
+      hash: hash.replace(/^#/, ''),
     },
     settings,
   };
