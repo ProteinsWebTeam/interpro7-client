@@ -35,6 +35,7 @@ const getAbbr = (value /*: number */) => {
 class NumberLabel extends PureComponent {
   static propTypes = {
     value: T.number,
+    loading: T.bool,
     duration: T.number,
     className: T.string,
     lowGraphics: T.bool.isRequired,
@@ -89,6 +90,7 @@ class NumberLabel extends PureComponent {
   render() {
     const {
       value,
+      loading,
       duration,
       lowGraphics,
       className,
@@ -116,7 +118,7 @@ class NumberLabel extends PureComponent {
     }
     return (
       <span
-        className={f('label', className, { lowGraphics })}
+        className={f('label', className, { loading, lowGraphics })}
         title={_title || ''}
         {...props}
       >
