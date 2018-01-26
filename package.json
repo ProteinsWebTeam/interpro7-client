@@ -162,7 +162,7 @@
     "reselect": "3.0.1",
     "taxonomy-visualisation": "0.1.6",
     "timeago.js": "^3.0.2",
-    "timing-functions": "0.2.0",
+    "timing-functions": "0.2.2",
     "url": "0.11.0"
   },
   "devDependencies": {
