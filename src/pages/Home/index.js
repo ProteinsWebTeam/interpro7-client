@@ -460,11 +460,11 @@ class Home extends PureComponent {
         <div className={f('row')}>
           <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
             <Tabs>
+              <div title="Search by sequence">
+                <IPScanSearch />
+              </div>
               <div title="Search by text">
                 <SearchByText />
-              </div>
-              <div title="by sequence">
-                <IPScanSearch />
               </div>
             </Tabs>
           </div>
