@@ -214,19 +214,19 @@ class List extends PureComponent {
             </Column>
             <Column
               dataKey="source_organism"
-              renderer={({ fullname, taxid }) => (
+              renderer={({ fullName, taxId }) => (
                 <Link
                   to={{
                     description: {
                       main: { key: 'organism' },
                       organism: {
                         db: 'taxonomy',
-                        accession: `${taxid}`,
+                        accession: `${taxId}`,
                       },
                     },
                   }}
                 >
-                  {fullname}
+                  {fullName}
                 </Link>
               )}
             >

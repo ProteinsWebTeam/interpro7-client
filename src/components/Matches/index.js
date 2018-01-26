@@ -155,19 +155,19 @@ const Matches = (
       dataKey="source_organism"
       displayIf={primary === 'protein' || primary === 'structure'}
       renderer={sourceOrganism =>
-        sourceOrganism.taxid ? (
+        sourceOrganism.taxId ? (
           <Link
             to={{
               description: {
                 main: { key: 'organism' },
                 organism: {
                   db: 'taxonomy',
-                  accession: `${sourceOrganism.taxid}`,
+                  accession: `${sourceOrganism.taxId}`,
                 },
               },
             }}
           >
-            {sourceOrganism.fullname}
+            {sourceOrganism.fullName}
           </Link>
         ) : (
           sourceOrganism

@@ -31,7 +31,7 @@ const schemaProcessData = ({ db, name }) => ({
   name,
 });
 
-const SignatureLink = ({ accession, db, data }) => {
+const SignatureLink = ({ accession, db, data, label = null }) => {
   const tooltipContent =
     (data &&
       data.payload &&
@@ -52,7 +52,7 @@ const SignatureLink = ({ accession, db, data }) => {
         <small>
           <span style={{ color: '#4b555b' }}>{db}:</span>{' '}
           <Tooltip title={`${tooltipContent} (${accession})`}>
-            <span>{accession}</span>
+            <span>{label || accession}</span>
           </Tooltip>
         </small>
       </div>
@@ -73,7 +73,7 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
         {Object.entries(contr).map(([db, accessions]) => (
           <li key={db}>
             <MemberSymbol type={db} className={f('md-small')} />
-            {accessions.map(accession => [
+            {Object.keys(accessions).map(accession => [
               <SchemaOrgData
                 key={`schema.org for ${accession}`}
                 data={{ db, name: accession }}
@@ -85,7 +85,12 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
                 db={db}
                 accession={accession}
               >
-                <SignatureLink key={accession} db={db} accession={accession} />
+                <SignatureLink
+                  key={accession}
+                  db={db}
+                  accession={accession}
+                  label={accessions[accession]}
+                />
               </Metadata>,
             ])}
           </li>
