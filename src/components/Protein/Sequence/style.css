@@ -13,6 +13,7 @@
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  z-index: 0;
 }
 
 .sequence_word {
