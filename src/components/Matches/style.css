@@ -63,3 +63,8 @@
 .acc-row {
   font-size: 0.8rem;
 }
+
+.number-label {
+  background: transparent;
+  padding: 0;
+}

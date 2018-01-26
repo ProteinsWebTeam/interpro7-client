@@ -81,7 +81,11 @@ class EntryTypeFilter extends PureComponent {
                   {type}
                 </interpro-type>
               )}
-              <NumberLabel value={count} className={f('filter-label')} />
+              <NumberLabel
+                value={count}
+                loading={loading}
+                className={f('filter-label')}
+              />
             </label>
           </div>
         ))}

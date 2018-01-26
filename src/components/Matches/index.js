@@ -12,6 +12,7 @@ import StructureOnProtein from './StructureOnProtein';
 import ProteinFile from 'subPages/Organism/ProteinFile';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
+import NumberLabel from 'components/NumberLabel';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -68,7 +69,7 @@ const MatchesByPrimary = (
 MatchesByPrimary.propTypes = propTypes;
 
 const ProteinAccessionsRenderer = taxId => (
-  <ProteinFile taxId={taxId} type="accession" />
+  <ProteinFile taxId={taxId} type="protein-accession" />
 );
 
 const ProteinFastasRenderer = taxId => (
@@ -225,7 +226,11 @@ const Matches = (
       dataKey="counters.proteins.uniprot"
       defaultKey="protein-count"
       headerClassName={f('table-center')}
+      cellClassName={f('table-center')}
       displayIf={primary === 'organism'}
+      renderer={count => (
+        <NumberLabel className={f('number-label')} value={count} abbr />
+      )}
     >
       protein count
     </Column>
@@ -233,6 +238,7 @@ const Matches = (
       dataKey="accession"
       defaultKey="proteinFastas"
       headerClassName={f('table-center')}
+      cellClassName={f('table-center')}
       displayIf={primary === 'organism'}
       renderer={ProteinFastasRenderer}
     >
@@ -241,6 +247,7 @@ const Matches = (
     <Column
       dataKey="accession"
       headerClassName={f('table-center')}
+      cellClassName={f('table-center')}
       defaultKey="proteinAccessions"
       displayIf={primary === 'organism'}
       renderer={ProteinAccessionsRenderer}

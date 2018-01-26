@@ -18,7 +18,14 @@ export default new Map([
   ],
   ['entry.isFilter', new Set([handlers.entryHandler])],
   ['entry.integration', new Set([handlers.integrationHandler])],
-  ['entry.db', new Set([handlers.interProHandler, handlers.memberDBHandler])],
+  [
+    'entry.db',
+    new Set([
+      handlers.interProHandler,
+      handlers.memberDBHandler,
+      handlers.allEntriesHandler,
+    ]),
+  ],
   [
     'entry.accession',
     new Set([

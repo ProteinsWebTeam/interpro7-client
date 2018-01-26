@@ -1,6 +1,9 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { format } from 'url';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -13,14 +16,16 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
+import ProteinFile from 'subPages/Organism/ProteinFile';
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import NumberLabel from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
-import { createSelector } from 'reselect';
-import { format } from 'url';
+
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
@@ -33,6 +38,18 @@ import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 
 const f = foundationPartial(pageStyle, styles);
+
+const EntryAccessionsRenderer = taxId => (
+  <ProteinFile taxId={`${taxId}`} type="entry-accession" />
+);
+
+const ProteinAccessionsRenderer = taxId => (
+  <ProteinFile taxId={`${taxId}`} type="protein-accession" />
+);
+
+const ProteinFastasRenderer = taxId => (
+  <ProteinFile taxId={`${taxId}`} type="FASTA" />
+);
 
 const propTypes = {
   data: T.shape({
@@ -74,6 +91,84 @@ class Overview extends PureComponent {
     );
   }
 }
+
+// TODO: remove need for all of that. Might cause memory leaks?
+const dataProviders = new Map();
+class PlainDataProvider extends PureComponent {
+  static propTypes = {
+    dataEntry: T.shape({
+      loading: T.bool.isRequired,
+      payload: T.object,
+    }),
+    dataProtein: T.shape({
+      loading: T.bool.isRequired,
+      payload: T.object,
+    }),
+    db: T.string,
+    renderer: T.func.isRequired,
+  };
+
+  render() {
+    return this.props.renderer(
+      this.props.dataEntry,
+      this.props.dataProtein,
+      this.props.db,
+    );
+  }
+}
+const dataProviderFor = accession => {
+  let DataProvider = dataProviders.get(accession);
+  if (DataProvider) return DataProvider;
+  // create new one if not already existing
+  const mapStateToUrlForEntry = createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname:
+          root +
+          descriptionToPath({
+            main: { key: 'organism' },
+            entry: { isFilter: true },
+            protein: { isFilter: true },
+            organism: { db: 'taxonomy', accession },
+          }),
+      }),
+  );
+  const mapStateToUrlForProtein = createSelector(
+    state => state.settings.api,
+    state => state.customLocation.description.entry.db,
+    ({ protocol, hostname, port, root }, entryDB) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname:
+          root +
+          descriptionToPath({
+            main: { key: 'organism' },
+            entry: { isFilter: true, db: entryDB },
+            protein: { isFilter: true },
+            organism: { db: 'taxonomy', accession },
+          }),
+      }),
+  );
+  const mapStateToProps = createSelector(
+    state => state.customLocation.description.entry.db,
+    db => ({ db }),
+  );
+  DataProvider = connect(mapStateToProps)(
+    loadData({ getUrl: mapStateToUrlForEntry, propNamespace: 'Entry' })(
+      loadData({ getUrl: mapStateToUrlForProtein, propNamespace: 'Protein' })(
+        PlainDataProvider,
+      ),
+    ),
+  );
+  dataProviders.set(accession, DataProvider);
+  return DataProvider;
+};
 
 class List extends PureComponent {
   static propTypes = propTypes;
@@ -181,6 +276,123 @@ class List extends PureComponent {
               )}
             >
               Name
+            </Column>
+            <Column
+              dataKey="accession"
+              headerClassName={f('table-center')}
+              cellClassName={f('table-center')}
+              defaultKey="entry-count"
+              renderer={accession => {
+                const DataProvider = dataProviderFor(`${accession}`);
+                return (
+                  <DataProvider
+                    renderer={({ loading, payload }, _, db) => {
+                      let count = 0;
+                      if (payload) {
+                        if (db && db in payload.entries.member_databases) {
+                          count = payload.entries.member_databases[db];
+                        } else {
+                          count = payload.entries[(db || 'all').toLowerCase()];
+                        }
+                      }
+                      return (
+                        <Link
+                          className={f('no-decoration')}
+                          to={{
+                            description: {
+                              main: { key: 'organism' },
+                              organism: {
+                                db: 'taxonomy',
+                                accession: `${accession}`,
+                              },
+                              entry: { isFilter: true, db: db || 'all' },
+                            },
+                          }}
+                        >
+                          <NumberLabel
+                            className={f('number-label')}
+                            value={count}
+                            loading={loading}
+                            abbr
+                          />
+                        </Link>
+                      );
+                    }}
+                  />
+                );
+              }}
+            >
+              Entry count
+            </Column>
+            <Column
+              dataKey="accession"
+              headerClassName={f('table-center')}
+              cellClassName={f('table-center')}
+              defaultKey="entryAccessions"
+              renderer={EntryAccessionsRenderer}
+            >
+              Entry accessions
+            </Column>
+            <Column
+              dataKey="accession"
+              headerClassName={f('table-center')}
+              cellClassName={f('table-center')}
+              defaultKey="protein-count"
+              renderer={accession => {
+                const DataProvider = dataProviderFor(`${accession}`);
+                return (
+                  <DataProvider
+                    renderer={(_, { payload, loading }) => {
+                      let count = 0;
+                      if (payload) {
+                        count = payload.proteins.uniprot;
+                        if (typeof count === 'object') count = count.proteins;
+                      }
+                      return (
+                        <Link
+                          to={{
+                            description: {
+                              main: { key: 'organism' },
+                              organism: {
+                                db: 'taxonomy',
+                                accession: `${accession}`,
+                              },
+                              protein: { isFilter: true, db: 'UniProt' },
+                            },
+                          }}
+                        >
+                          <NumberLabel
+                            className={f('number-label')}
+                            value={count}
+                            loading={loading}
+                            abbr
+                          />
+                        </Link>
+                      );
+                    }}
+                  />
+                );
+              }}
+            >
+              Protein count
+            </Column>
+            <Column
+              dataKey="accession"
+              defaultKey="proteinFastas"
+              headerClassName={f('table-center')}
+              cellClassName={f('table-center')}
+              renderer={ProteinFastasRenderer}
+            >
+              FASTA
+            </Column>
+            <Column
+              dataKey="accession"
+              headerClassName={f('table-center')}
+              cellClassName={f('table-center')}
+              defaultKey="proteinAccessions"
+              renderer={ProteinAccessionsRenderer}
+            >
+              Protein accessions
             </Column>
           </Table>
         </div>

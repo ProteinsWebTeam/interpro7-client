@@ -2,6 +2,7 @@
 import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
 import { format } from 'url';
+import throttle from 'lodash-es/throttle';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
@@ -10,56 +11,79 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 const MAX_PAGE_SIZE = 200;
 
 // From a pathname and search parameter, generates a full URL
-const getUrl = (pathname, taxId, page) =>
+const getUrl = (pathname, page) =>
   format({
     pathname,
     query: {
-      tax_id: taxId,
       page,
       page_size: MAX_PAGE_SIZE,
     },
   });
 
+const THROTTLE_TIME = 500; // half a second
+
 // Helper function to send progress information back to the main thread
-const progress = (value /*: number */) => {
+// Throttled to avoid sending to much progress info at once
+const progress = throttle((value /*: number */) => {
   self.postMessage({ type: 'progress', details: value });
-};
+}, THROTTLE_TIME);
 
 // eslint-disable-next-line max-statements
 const processEvent = async ({
-  data: { entryDescription, api, taxId, type },
+  data: {
+    entryDescription,
+    api: { protocol, hostname, port, root },
+    taxId,
+    type,
+  },
 }) => {
   const content = [];
-  const pathname = `${api.protocol}//${api.hostname}:${api.port}${
-    api.root
-  }${descriptionToPath({
-    main: { key: 'protein' },
-    protein: { db: 'UniProt' },
-    entry: { ...entryDescription, isFilter: true },
-  })}`;
-  const proteinPath = `${api.protocol}//${api.hostname}:${api.port}${
-    api.root
-  }${descriptionToPath({
-    main: { key: 'protein' },
-    protein: { db: 'UniProt' },
-  })}`;
+  const pathname = format({
+    protocol,
+    hostname,
+    port,
+    pathname:
+      root +
+      descriptionToPath({
+        main: { key: type === 'entry-accession' ? 'entry' : 'protein' },
+        protein: { db: 'UniProt', isFilter: type === 'entry-accession' },
+        entry: {
+          ...entryDescription,
+          isFilter: type === 'protein-accession',
+          db: (type === 'entry-accession' && entryDescription.db) || 'all',
+        },
+        organism: { isFilter: true, db: 'taxonomy', accession: taxId },
+      }),
+  });
+  const proteinPathFor = accession =>
+    format({
+      protocol,
+      hostname,
+      port,
+      pathname:
+        root +
+        descriptionToPath({
+          main: { key: 'protein' },
+          protein: { db: 'UniProt', accession },
+        }),
+    });
   let page = 1;
   let current = 0;
   let totalCount;
-  let next = getUrl(pathname, taxId, page);
+  let next = getUrl(pathname, page);
   while (next) {
     const response = await fetch(next);
     const obj = await response.json();
     totalCount = obj.count + 1;
-    next = obj.next && getUrl(pathname, taxId, ++page);
+    next = obj.next && getUrl(pathname, ++page);
     for (const {
       metadata: { accession, source_database: db, name },
     } of obj.results) {
-      if (type === 'accession') {
+      if (type.endsWith('-accession')) {
         content.push(accession);
       } else {
         // FASTA
-        const response = await fetch(`${proteinPath}${accession}/`);
+        const response = await fetch(proteinPathFor(accession));
         const { metadata: { sequence } } = await response.json();
         content.push(`>${accession}|${db}|${name}`);
         for (const line of sequence.match(/.{1,80}/g)) {

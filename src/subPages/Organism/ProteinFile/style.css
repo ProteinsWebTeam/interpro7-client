@@ -1,0 +1,11 @@
+.link {
+  border-bottom-width: 0 !important;
+}
+
+.downloading {
+  cursor: progress !important;
+}
+
+.failed {
+  cursor: not-allowed !important;
+}

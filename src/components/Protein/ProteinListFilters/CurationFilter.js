@@ -67,7 +67,11 @@ class CurationFilter extends PureComponent {
                 style={{ margin: '0.25em' }}
               />
               <span>{db === 'uniprot' ? 'both' : db}</span>
-              <NumberLabel value={value} className={f('filter-label')} />
+              <NumberLabel
+                value={value}
+                loading={loading}
+                className={f('filter-label')}
+              />
             </label>
           </div>
         ))}
