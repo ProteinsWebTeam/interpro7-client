@@ -115,6 +115,7 @@ class Link extends PureComponent /*:: <Props> */ {
 
   handleClick = event => {
     const {
+      disabled,
       onClick,
       target,
       goToCustomLocation,
@@ -123,6 +124,10 @@ class Link extends PureComponent /*:: <Props> */ {
       customLocation,
     } = this.props;
     // pass it on to an externally defined handler
+    if (disabled) {
+      event.preventDefault();
+      return;
+    }
     if (onClick) onClick(event);
     if (!to && href) return;
     if (event.defaultPrevented) return;
