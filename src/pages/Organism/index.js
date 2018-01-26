@@ -17,6 +17,7 @@ import Table, {
   Exporter,
 } from 'components/Table';
 import ProteinFile from 'subPages/Organism/ProteinFile';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -374,7 +375,9 @@ class List extends PureComponent {
                 );
               }}
             >
-              Protein count
+              <Tooltip title="All the proteins for this organism containing an entry from the selected database">
+                Protein count
+              </Tooltip>
             </Column>
             <Column
               dataKey="accession"
