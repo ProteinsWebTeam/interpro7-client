@@ -1,21 +1,5 @@
 @import '../../styles/timing.css';
 
-.animate-height {
-  /*transition: max-height var(--timing-fast) ease-in-out;*/
-  overflow: hidden;
-}
-
-main .paragraph a,
-main .paragraph a:focus {
-  transition: background-color 1s ease-in-out;
-}
-
-main .paragraph a:target {
-  font-weight: bold;
-  background-color: rgb(255, 249, 195);
-  padding: 0.1rem 0.4rem;
-}
-
 @supports (initial-letter: 2) {
   .paragraph::first-letter {
     font-weight: bold;

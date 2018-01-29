@@ -448,12 +448,7 @@ class Home extends PureComponent {
                 </Tooltip>
               </div>
               <h3>Classification of protein families</h3>
-              <Description
-                title=""
-                extraTextForButton="about InterPro"
-                heightToHide={106}
-                textBlocks={[description]}
-              />
+              <Description textBlocks={[description]} />
             </div>
           </div>
         </div>
