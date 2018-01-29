@@ -95,7 +95,7 @@ const GoTerms = (
                           id={identifier}
                           className={f('go-terms', 'ext')}
                         >
-                          {name || identifier}
+                          {name} ({identifier})
                         </GoLink>
                       </Tooltip>
                     </li>

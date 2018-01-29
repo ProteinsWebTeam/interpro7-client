@@ -238,7 +238,7 @@ const Matches = (
         />
       )}
     >
-      Architecture
+      {primary === 'protein' ? 'Domain Architecture' : 'Matches'}
     </Column>
     <Column
       dataKey="counters.proteins.uniprot"

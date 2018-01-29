@@ -132,6 +132,7 @@
     "core-js": "2.5.3",
     "d3": "4.12.2",
     "data-loader": "0.3.0",
+    "dompurify": "^1.0.3",
     "draft-js": "0.10.5",
     "ebi-framework": "1.2.0",
     "filesize": "3.5.11",

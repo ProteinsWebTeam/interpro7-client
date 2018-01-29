@@ -13,7 +13,9 @@ import GOTermsFilter from './GOTermsFilter';
 
 const EntryListFilter = ({ mainDB }) => (
   <FiltersPanel>
-    <EntryTypeFilter label="Entry Type" />
+    <EntryTypeFilter
+      label={`${mainDB === 'InterPro' ? 'InterPro' : 'Member Database'} Type`}
+    />
     {mainDB === 'InterPro' ? (
       <SignaturesFilter label="Integrated Database" />
     ) : (
