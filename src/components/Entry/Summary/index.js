@@ -135,10 +135,13 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 )}
               {// doesn't work for some HAMAP as they have enpty <P> tag
               Object.keys(metadata.description).length > 0 && (
-                <Description
-                  textBlocks={metadata.description}
-                  literature={included}
-                />
+                <React.Fragment>
+                  <h4>Description</h4>
+                  <Description
+                    textBlocks={metadata.description}
+                    literature={included}
+                  />
+                </React.Fragment>
               )}
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>

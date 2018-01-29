@@ -128,77 +128,27 @@ ParagraphWithTags.propTypes = {
   children: T.any,
 };
 
-/* ::
- type Props = {
-   textBlocks: Array<string> ,
-   literature?: Array,
-   title?: string,
-   extraTextForButton?: string,
- }
- */
-class Description extends PureComponent {
-  /* ::
-    props: Props;
-    state: {
-      isOpen: boolean,
-    };
-    handleClick: () => void;
-  */
+/* :: type Props = {
+  textBlocks: Array<string> ,
+  literature?: Array,
+}; */
+class Description extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    textBlocks: T.array.isRequired,
+    textBlocks: T.arrayOf(T.string).isRequired,
     literature: T.array,
-    title: T.string.isRequired,
-    extraTextForButton: T.string.isRequired,
   };
-
-  static defaultProps = {
-    title: 'Description',
-    extraTextForButton: '',
-  };
-
-  constructor(props /* : Props*/) {
-    super(props);
-    this.state = {
-      isOpen: false,
-    };
-    this.handleClick = this.handleClick.bind(this);
-    this.moreButton = null;
-    this.divContent = null;
-  }
-
-  handleClick() {
-    this.setState({ isOpen: !this.state.isOpen });
-  }
 
   render() {
-    const { textBlocks, literature, title, extraTextForButton } = this.props;
-    const isOpen = this.state.isOpen;
+    const { textBlocks, literature } = this.props;
     const paragraphs = textBlocks.reduce((acc, e) => {
       transformFormatted(e).forEach(p => acc.push(p));
       return acc;
     }, []);
     return (
-      <div className={f('description-wrapper', 'margin-bottom-large')}>
-        <h4>{title}</h4>
-        <div
-          className={f('animate-height', { collapsed: !isOpen })}
-          ref={e => (this.divContent = e)}
-        >
-          {paragraphs
-            .slice(0, isOpen ? undefined : 1)
-            .map((p, i) => (
-              <ParagraphWithCites key={i} p={p} literature={literature} />
-            ))}
-        </div>
-        {paragraphs.length > 1 ? (
-          <button
-            className={f('button')}
-            onClick={this.handleClick}
-            ref={e => (this.moreButton = e)}
-          >
-            Read {this.state.isOpen ? 'less' : 'more'} {extraTextForButton}
-          </button>
-        ) : null}
+      <div className={f('margin-bottom-large')}>
+        {paragraphs.map((p, i) => (
+          <ParagraphWithCites key={i} p={p} literature={literature} />
+        ))}
       </div>
     );
   }

@@ -8,35 +8,26 @@ import Link from 'components/generic/Link';
 import Table, { Column } from 'components/Table';
 import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import Actions from 'components/IPScan/Actions';
 
-import { updateJobStatus, updateJob, deleteJob } from 'actions/creators';
+import { updateJobStatus } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+
 const f = foundationPartial(fonts, ipro);
 
 class IPScanStatus extends PureComponent {
   static propTypes = {
     jobs: T.arrayOf(T.object).isRequired,
     updateJobStatus: T.func.isRequired,
-    updateJob: T.func.isRequired,
-    deleteJob: T.func.isRequired,
   };
 
   componentDidMount() {
     this.props.updateJobStatus();
   }
-
-  _handleSaveToggle = ({ target: { dataset: { id } } }) => {
-    const meta = this.props.jobs.find(({ localID }) => localID === id);
-    this.props.updateJob({ metadata: { ...meta, saved: !meta.saved } });
-  };
-
-  _handleDelete = ({ target: { dataset: { id } } }) => {
-    this.props.deleteJob({ metadata: { localID: id } });
-  };
 
   render() {
     const { jobs } = this.props;
@@ -141,34 +132,8 @@ class IPScanStatus extends PureComponent {
             <Column
               dataKey="localID"
               defaultKey="actions"
-              renderer={(
-                localID /*: string */,
-                { saved } /*: {saved: boolean } */,
-              ) => (
-                <React.Fragment>
-                  <Tooltip title="Save job">
-                    <button
-                      className={f('button', saved ? 'warning' : 'secondary')}
-                      type="button"
-                      data-id={localID}
-                      onClick={this._handleSaveToggle}
-                      aria-label="Save job"
-                    >
-                      ★
-                    </button>
-                  </Tooltip>
-                  <Tooltip title="Delete job">
-                    <button
-                      className={f('button', 'alert')}
-                      type="button"
-                      data-id={localID}
-                      onClick={this._handleDelete}
-                      aria-label="Delete job"
-                    >
-                      ✖
-                    </button>
-                  </Tooltip>
-                </React.Fragment>
+              renderer={(localID /*: string */) => (
+                <Actions localID={localID} />
               )}
             >
               Actions
@@ -188,8 +153,4 @@ const mapsStateToProps = createSelector(
   jobs => ({ jobs }),
 );
 
-export default connect(mapsStateToProps, {
-  updateJobStatus,
-  updateJob,
-  deleteJob,
-})(IPScanStatus);
+export default connect(mapsStateToProps, { updateJobStatus })(IPScanStatus);

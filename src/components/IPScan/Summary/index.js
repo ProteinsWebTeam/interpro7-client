@@ -9,6 +9,7 @@ import Length from 'components/Protein/Length';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
+import Actions from 'components/IPScan/Actions';
 
 import flattenDeep from 'lodash-es/flattenDeep';
 
@@ -41,6 +42,7 @@ const LUT = new Map([
 class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.string.isRequired,
+    localID: T.string,
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.shape({
@@ -50,7 +52,11 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { data: { payload: { results: [payload] } }, accession } = this.props;
+    const {
+      data: { payload: { results: [payload] } },
+      accession,
+      localID,
+    } = this.props;
     const metadata = {
       accession: payload.crossReferences[0].identifier,
       length: payload.sequenceLength,
@@ -135,6 +141,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
               <Title metadata={metadata} mainType="protein" />
               <Accession accession={accession} title="Job ID" />
               <Length metadata={metadata} />
+              {localID && <Actions localID={localID} withTitle />}
             </div>
           </div>
         </section>
@@ -148,9 +155,24 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
   }
 }
 
+const jobMapSelector = state => state.jobs;
+const accessionSelector = state =>
+  state.customLocation.description.job.accession;
+
+const jobSelector = createSelector(
+  accessionSelector,
+  jobMapSelector,
+  (accession, jobMap) =>
+    Object.values(jobMap).find(job => job.metadata.remoteID === accession),
+);
+
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.job.accession,
-  accession => ({ accession }),
+  accessionSelector,
+  jobSelector,
+  (accession, job) => ({
+    accession,
+    localID: (job || { metadata: {} }).metadata.localID,
+  }),
 );
 
 export default connect(mapStateToProps)(SummaryIPScanJob);
