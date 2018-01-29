@@ -48,12 +48,13 @@ const colorsByDB = {
 };
 
 const EntryColorMode = {
-  COLOR_MODE_ACCESSION: 1,
-  COLOR_MODE_MEMBERDB: 2,
-  COLOR_MODE_DOMAIN_RELATIONSHIP: 3,
+  ACCESSION: 'ACCESSION',
+  MEMBER_DB: 'MEMBER_DB',
+  DOMAIN_RELATIONSHIP: 'DOMAIN_RELATIONSHIP',
 };
 
 const requestFullScreen = element => {
+  if (!element) return;
   if ('requestFullscreen' in element) {
     element.requestFullscreen();
   }
@@ -79,7 +80,6 @@ class ProtVista extends PureComponent {
   static propTypes = {
     protein: T.object,
     data: T.array,
-    // goToCustomLocation: T.func.isRequired,
   };
 
   constructor(props) {
@@ -87,7 +87,7 @@ class ProtVista extends PureComponent {
     this.web_tracks = {};
     this.state = {
       entryHovered: null,
-      colorMode: EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP,
+      colorMode: EntryColorMode.DOMAIN_RELATIONSHIP,
       hideCategory: {},
       expandedTrack: {},
       collapsed: false,
@@ -206,11 +206,10 @@ class ProtVista extends PureComponent {
     return range.createContextualFragment(tagString);
   }
 
-  setObjectValueInState = (objectName, type, value) => {
-    const obj = { ...this.state[objectName] };
-    obj[type] = value;
-    this.setState({ [objectName]: obj });
-  };
+  setObjectValueInState = (objectName, type, value) =>
+    this.setState(({ [objectName]: obj }) => ({
+      [objectName]: { ...obj, [type]: value },
+    }));
 
   toggleCollapseAll = () => {
     const { collapsed } = this.state;
@@ -232,39 +231,30 @@ class ProtVista extends PureComponent {
     );
   };
 
-  handleFullScreen = () => {
-    requestFullScreen(this._main);
-  };
+  handleFullScreen = () => requestFullScreen(this._main);
 
-  changeColor = evt => {
-    const colorMode = Number(evt.target.value);
+  changeColor = ({ target: { value: colorMode } }) => {
     for (const track of Object.values(this.web_tracks)) {
-      const data = track._data;
-      for (const d of data) {
+      for (const d of [...track._data, ...(track._contributors || [])]) {
         d.color = this.getTrackColor(d, colorMode);
-        for (const child of d.children)
-          child.color = this.getTrackColor(child, colorMode);
       }
-      track.data = data;
+      track.refresh();
     }
     this.setState({ colorMode });
-
-    // this.ec.changeColorMode(newValue);
   };
 
   getTrackColor(entry, colorMode = null) {
-    const mode = colorMode || this.state.colorMode;
     let acc;
-    switch (mode) {
-      case EntryColorMode.COLOR_MODE_ACCESSION:
+    switch (colorMode || this.state.colorMode) {
+      case EntryColorMode.ACCESSION:
         acc = entry.accession
           .split('')
           .reverse()
           .join('');
         return colorHash.hex(acc);
-      case EntryColorMode.COLOR_MODE_MEMBERDB:
+      case EntryColorMode.MEMBER_DB:
         return colorsByDB[entry.source_database.toLowerCase()];
-      case EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP:
+      case EntryColorMode.DOMAIN_RELATIONSHIP:
         if (entry.source_database.toLowerCase() === 'interpro') {
           acc = entry.accession
             .split('')
@@ -310,15 +300,13 @@ class ProtVista extends PureComponent {
                       onChange={this.changeColor}
                       onBlur={this.changeColor}
                     >
-                      <option value={EntryColorMode.COLOR_MODE_ACCESSION}>
+                      <option value={EntryColorMode.ACCESSION}>
                         Accession
                       </option>
-                      <option value={EntryColorMode.COLOR_MODE_MEMBERDB}>
+                      <option value={EntryColorMode.MEMBER_DB}>
                         Member Database
                       </option>
-                      <option
-                        value={EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP}
-                      >
+                      <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
                         Domain Relationship
                       </option>
                     </select>
