@@ -143,27 +143,38 @@ class List extends PureComponent {
             <SearchBox search={search.search}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */) => (
-                <Link
-                  to={customLocation => ({
-                    ...customLocation,
-                    description: {
-                      main: { key: 'protein' },
-                      protein: {
-                        db: customLocation.description.protein.db,
-                        accession,
+              renderer={(accession /*: string */, { source_database }) => (
+                <React.Fragment>
+                  <Link
+                    to={customLocation => ({
+                      ...customLocation,
+                      description: {
+                        main: { key: 'protein' },
+                        protein: {
+                          db: customLocation.description.protein.db,
+                          accession,
+                        },
                       },
-                    },
-                    search: {},
-                  })}
-                >
-                  <span className={f('acc-row')}>
-                    <HighlightedText
-                      text={accession}
-                      textToHighlight={search.search}
-                    />
-                  </span>
-                </Link>
+                      search: {},
+                    })}
+                  >
+                    <span className={f('acc-row')}>
+                      <HighlightedText
+                        text={accession}
+                        textToHighlight={search.search}
+                      />{' '}
+                    </span>
+                  </Link>
+                  {source_database === 'reviewed' ? (
+                    <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                      <span
+                        className={f('icon', 'icon-functional')}
+                        data-icon="/"
+                        aria-label="reviewed"
+                      />
+                    </Tooltip>
+                  ) : null}
+                </React.Fragment>
               )}
             >
               Accession
@@ -195,22 +206,6 @@ class List extends PureComponent {
               )}
             >
               Name
-            </Column>
-            <Column
-              dataKey="source_database"
-              headerClassName={f('table-center')}
-              renderer={(db /*: string */) => (
-                <Tooltip title={`${db} by curators (Swiss-Prot)`}>
-                  <span
-                    key="1"
-                    className={f('icon', 'icon-functional')}
-                    data-icon={db === 'reviewed' ? '/' : ''}
-                    aria-label="reviewed"
-                  />
-                </Tooltip>
-              )}
-            >
-              Reviewed
             </Column>
             <Column
               dataKey="source_organism"
