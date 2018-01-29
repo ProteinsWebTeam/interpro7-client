@@ -58,46 +58,55 @@ const GoTerms = (
   if (type === 'entry' && db.toLowerCase() !== 'interpro') {
     title = `GO terms (as provided by ${db})`;
   }
+  const goTermEntries = Object.entries(_terms);
+  const none = goTermEntries.every(([, category]) => !category.length);
   return (
-    <section>
+    <section className={f('margin-top-large')}>
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <h4 title="GO terms">{title}</h4>
         </div>
       </div>
       <div className={f('row')}>
-        {Object.entries(_terms).map(([key, values]) => (
-          <div
-            key={key}
-            className={f(
-              'small-12',
-              'medium-4',
-              'columns',
-              'margin-bottom-large',
-            )}
-          >
-            <p className={f(mapNameToClass.get(key), 'go-title')}>{key}</p>
-            <ul className={f('go-list')}>
-              {values && values.length ? (
-                values.map(({ identifier, name }) => (
-                  <li key={identifier}>
-                    <SchemaOrgData
-                      data={identifier}
-                      processData={schemaProcessData}
-                    />
-                    <Tooltip title={`${name} (${identifier})`}>
-                      <GoLink id={identifier} className={f('go-terms', 'ext')}>
-                        {name || identifier}
-                      </GoLink>
-                    </Tooltip>
-                  </li>
-                ))
-              ) : (
-                <li className={f('no-goterm')}>None</li>
+        {none ? (
+          <p className={f('columns')}>No GO Terms</p>
+        ) : (
+          goTermEntries.map(([key, values]) => (
+            <div
+              key={key}
+              className={f(
+                'small-12',
+                'medium-4',
+                'columns',
+                'margin-bottom-large',
               )}
-            </ul>
-          </div>
-        ))}
+            >
+              <p className={f(mapNameToClass.get(key), 'go-title')}>{key}</p>
+              <ul className={f('go-list')}>
+                {values && values.length ? (
+                  values.map(({ identifier, name }) => (
+                    <li key={identifier}>
+                      <SchemaOrgData
+                        data={identifier}
+                        processData={schemaProcessData}
+                      />
+                      <Tooltip title={`${name} (${identifier})`}>
+                        <GoLink
+                          id={identifier}
+                          className={f('go-terms', 'ext')}
+                        >
+                          {name || identifier}
+                        </GoLink>
+                      </Tooltip>
+                    </li>
+                  ))
+                ) : (
+                  <li className={f('no-goterm')}>None</li>
+                )}
+              </ul>
+            </div>
+          ))
+        )}
       </div>
     </section>
   );
