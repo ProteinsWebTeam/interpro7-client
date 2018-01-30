@@ -188,6 +188,7 @@ class List extends PureComponent {
         results: [],
       };
     }
+    const urlHasParameter = url && url.indexOf('?') !== -1;
     return (
       <div className={f('row')}>
         <MemberDBTabs />
@@ -210,7 +211,10 @@ class List extends PureComponent {
                   </Link>
                 </li>
                 <li>
-                  <Link href={url} download="organisms.tsv">
+                  <Link
+                    href={`${url}${urlHasParameter ? '&' : '?'}format=tsv`}
+                    download="organisms.tsv"
+                  >
                     TSV
                   </Link>
                 </li>

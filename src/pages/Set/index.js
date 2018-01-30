@@ -99,10 +99,7 @@ class List extends PureComponent {
         results: [],
       };
     }
-    // const maxLength = _payload.results.reduce(
-    //   (max, result) => Math.max(max, (result.metadata || result).length),
-    //   0,
-    // );
+    const urlHasParameter = url && url.indexOf('?') !== -1;
     return (
       <div className={f('row')}>
         <MemberDBTabs />
@@ -124,7 +121,10 @@ class List extends PureComponent {
                   </Link>
                 </li>
                 <li>
-                  <Link href={url} download="sets.tsv">
+                  <Link
+                    href={`${url}${urlHasParameter ? '&' : '?'}format=tsv`}
+                    download="sets.tsv"
+                  >
                     TSV
                   </Link>
                 </li>

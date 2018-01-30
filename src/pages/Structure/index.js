@@ -90,6 +90,7 @@ const List = ({
       results: [],
     };
   }
+  const urlHasParameter = url && url.indexOf('?') !== -1;
   return (
     <div className={f('row')}>
       <MemberDBTabs />
@@ -111,7 +112,10 @@ const List = ({
                 </Link>
               </li>
               <li>
-                <Link href={url} download="structures.tsv">
+                <Link
+                  href={`${url}${urlHasParameter ? '&' : '?'}format=tsv`}
+                  download="structures.tsv"
+                >
                   TSV
                 </Link>
               </li>
