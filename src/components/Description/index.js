@@ -3,6 +3,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+import DOMPurify from 'dompurify';
+
 import { transformFormatted } from 'utils/text';
 
 import { foundationPartial } from 'styles/foundation';
@@ -119,7 +121,15 @@ const ParagraphWithTags = ({ children }) => (
             </Link>
           );
         }
-        return part;
+        // TODO: change the way descriptions work from the backend side.
+        // eslint-disable-next-line react/no-danger
+        return (
+          <div
+            style={{ display: 'inline' }}
+            key={`${i}-${j}`}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(part) }}
+          />
+        );
       });
     })}
   </span>

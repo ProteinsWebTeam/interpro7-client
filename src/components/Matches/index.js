@@ -114,20 +114,38 @@ const Matches = (
       renderer={(
         acc /*: string */,
         { source_database: sourceDatabase } /*: {source_database: string} */,
-      ) => (
-        <Link
-          to={{
-            description: {
-              main: { key: primary },
-              [primary]: { db: sourceDatabase, accession: acc },
-            },
-          }}
-        >
-          <span className={f('acc-row')}>
-            <HighlightedText text={acc} textToHighlight={search.search} />
-          </span>
-        </Link>
-      )}
+      ) => {
+        // let reviewed =null;
+        // if (primary === 'protein' && sourceDatabase === 'reviewed')
+        //   reviewed = (
+        //
+        //   )
+        return (
+          <React.Fragment>
+            <Link
+              to={{
+                description: {
+                  main: { key: primary },
+                  [primary]: { db: sourceDatabase, accession: acc },
+                },
+              }}
+            >
+              <span className={f('acc-row')}>
+                <HighlightedText text={acc} textToHighlight={search.search} />
+              </span>
+            </Link>{' '}
+            {primary === 'protein' && sourceDatabase === 'reviewed' ? (
+              <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                <span
+                  className={f('icon', 'icon-functional')}
+                  data-icon="/"
+                  aria-label="reviewed"
+                />
+              </Tooltip>
+            ) : null}
+          </React.Fragment>
+        );
+      }}
     >
       {primary === 'organism' ? 'Tax Id' : 'Accession'}
     </Column>
@@ -180,7 +198,7 @@ const Matches = (
     <Column
       dataKey="source_database"
       headerClassName={f('table-center')}
-      displayIf={primary !== 'organism'}
+      displayIf={primary !== 'organism' && primary !== 'protein'}
       renderer={(db /*: string */) =>
         db === 'reviewed' ? (
           <Tooltip
@@ -220,7 +238,7 @@ const Matches = (
         />
       )}
     >
-      Architecture
+      {primary === 'protein' ? 'Domain Architecture' : 'Matches'}
     </Column>
     <Column
       dataKey="counters.proteins.uniprot"

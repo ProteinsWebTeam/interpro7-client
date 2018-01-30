@@ -116,10 +116,6 @@
   background: #fbdcd0;
 }
 
-.icon {
-  width: 100%;
-}
-
 /* add some space on top between banner and breadcrumb and at bottom too otherwise content si stuck on footer*/
 /* IMPORTANT DON'T USE <MAIN> tag AS it doesn't work on IE11 even if specifying
    it as display:block element */

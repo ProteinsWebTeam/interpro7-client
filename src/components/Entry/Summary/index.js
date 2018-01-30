@@ -77,10 +77,13 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
               {metadata.hierarchy && (
-                <InterProHierarchy
-                  accession={metadata.accession}
-                  hierarchy={metadata.hierarchy}
-                />
+                <div>
+                  <h4>{metadata.type} Relationships</h4>
+                  <InterProHierarchy
+                    accession={metadata.accession}
+                    hierarchy={metadata.hierarchy}
+                  />
+                </div>
               )}
 
               {// member database only - summary info
