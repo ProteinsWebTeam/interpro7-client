@@ -20,6 +20,20 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(fonts, ipro);
 
+const GoToNewSearch = () => (
+  <Link
+    to={{
+      description: {
+        main: { key: 'search' },
+        search: { type: 'sequence' },
+      },
+    }}
+    className={f('button')}
+  >
+    Submit a new search
+  </Link>
+);
+
 class IPScanStatus extends PureComponent {
   static propTypes = {
     jobs: T.arrayOf(T.object).isRequired,
@@ -32,31 +46,17 @@ class IPScanStatus extends PureComponent {
 
   render() {
     const { jobs } = this.props;
-    if (!jobs.length)
-      return (
-        <React.Fragment>
-          <p>Nothing to see here.</p>
-          <Link
-            to={{
-              description: {
-                main: { key: 'search' },
-                search: { type: 'sequence' },
-              },
-            }}
-            className={f('button')}
-          >
-            Submit a new search
-          </Link>
-        </React.Fragment>
-      );
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <div className={f('row')}>
-            <h3 className={f('large-11', 'columns')}>
+            <h3 className={f('large-9', 'columns')}>
               Your InterProScan searches
             </h3>
-            <RefreshButton />
+            <div className={f('button-group', 'columns', 'large-3')}>
+              <GoToNewSearch />
+              <RefreshButton />
+            </div>
           </div>
           <Table dataTable={jobs} actualSize={jobs.length}>
             <Column

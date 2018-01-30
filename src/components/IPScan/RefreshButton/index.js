@@ -13,6 +13,8 @@ import local from './style.css';
 
 const f = foundationPartial(fonts, local);
 
+const TITLE = 'Manually refresh job information';
+
 class RefreshButton extends PureComponent {
   static propTypes = {
     updateJobStatus: T.func.isRequired,
@@ -31,22 +33,19 @@ class RefreshButton extends PureComponent {
 
   render() {
     return (
-      <Tooltip
-        className={f('large-1', 'columns')}
-        title="Manually refresh job information"
+      <button
+        className={f('button')}
+        aria-label={TITLE}
+        onClick={this._handleClick}
       >
-        <button
-          className={f('button', 'medium', 'float-right')}
-          aria-label="Manually refresh job information"
-          onClick={this._handleClick}
-        >
+        <Tooltip title={TITLE}>
           <span
             className={f('icon', 'icon-functional')}
             data-icon="R"
             ref={node => (this._icon = node)}
           />
-        </button>
-      </Tooltip>
+        </Tooltip>
+      </button>
     );
   }
 }

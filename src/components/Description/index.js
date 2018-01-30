@@ -122,11 +122,11 @@ const ParagraphWithTags = ({ children }) => (
           );
         }
         // TODO: change the way descriptions work from the backend side.
-        // eslint-disable-next-line react/no-danger
         return (
           <div
             style={{ display: 'inline' }}
             key={`${i}-${j}`}
+            // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(part) }}
           />
         );
