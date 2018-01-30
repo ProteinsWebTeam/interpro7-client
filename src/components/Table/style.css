@@ -178,6 +178,8 @@ table.light span::before {
 }
 
 .warning-msg-table {
+  display: flex;
+  justify-content: center;
   font-size: 140%;
 }
 

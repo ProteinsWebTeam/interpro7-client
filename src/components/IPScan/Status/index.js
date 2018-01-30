@@ -8,6 +8,7 @@ import Link from 'components/generic/Link';
 import Table, { Column } from 'components/Table';
 import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import RefreshButton from 'components/IPScan/RefreshButton';
 import Actions from 'components/IPScan/Actions';
 
 import { updateJobStatus } from 'actions/creators';
@@ -18,6 +19,20 @@ import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(fonts, ipro);
+
+const GoToNewSearch = () => (
+  <Link
+    to={{
+      description: {
+        main: { key: 'search' },
+        search: { type: 'sequence' },
+      },
+    }}
+    className={f('button')}
+  >
+    Submit a new search
+  </Link>
+);
 
 class IPScanStatus extends PureComponent {
   static propTypes = {
@@ -31,27 +46,18 @@ class IPScanStatus extends PureComponent {
 
   render() {
     const { jobs } = this.props;
-    if (!jobs.length)
-      return (
-        <React.Fragment>
-          <p>Nothing to see here.</p>
-          <Link
-            to={{
-              description: {
-                main: { key: 'search' },
-                search: { type: 'sequence' },
-              },
-            }}
-            className={f('button')}
-          >
-            Submit a new search
-          </Link>
-        </React.Fragment>
-      );
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
-          <h3>Your InterProScan searches</h3>
+          <div className={f('row')}>
+            <h3 className={f('large-9', 'columns')}>
+              Your InterProScan searches
+            </h3>
+            <div className={f('button-group', 'columns', 'large-3')}>
+              <GoToNewSearch />
+              <RefreshButton />
+            </div>
+          </div>
           <Table dataTable={jobs} actualSize={jobs.length}>
             <Column
               dataKey="localID"
@@ -92,6 +98,7 @@ class IPScanStatus extends PureComponent {
             </Column>
             <Column
               dataKey="status"
+              headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               renderer={(status /*: string */) => (
                 <Tooltip title={`Job ${status}`}>

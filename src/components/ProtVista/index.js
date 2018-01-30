@@ -133,6 +133,7 @@ class ProtVista extends PureComponent {
       for (const d of type[1]) {
         const tmp = (d.entry_protein_locations || d.locations).map(loc => ({
           accession: d.accession,
+          name: d.name,
           source_database: d.source_database,
           locations: [loc],
           color: this.getTrackColor(d),
@@ -141,6 +142,7 @@ class ProtVista extends PureComponent {
         const children = d.children
           ? d.children.map(child => ({
               accession: child.accession,
+              name: child.name,
               source_database: child.source_database,
               entry_type: child.entry_type,
               locations: child.entry_protein_locations || child.locations,
@@ -185,10 +187,9 @@ class ProtVista extends PureComponent {
   }
 
   getElementFromEntry(entry) {
-    const tagString = `<div class="${f('info-win')}">
-        <h5 style="text-transform: uppercase; font-weight: bold;">${
-          entry.accession
-        }</h5>
+    const tagString = `<div>
+        <h5>${entry.accession}</h5>
+        ${entry.name ? `<h4>${entry.name}</h4>` : ''}
         <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
         <p style={{ textTransform: 'uppercase' }}>
           <small>${

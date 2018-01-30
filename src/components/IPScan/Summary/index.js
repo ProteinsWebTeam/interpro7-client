@@ -84,6 +84,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
       const { library } = match.signature.signatureLibraryRelease;
       const processedMatch = {
         accession: match.signature.accession,
+        name: match.signature.name,
         source_database: LUT.get(library) || library,
         protein_length: payload.sequenceLength,
         locations: [
@@ -100,6 +101,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
         const accession = match.signature.entry.accession;
         const entry = integrated.get(accession) || {
           accession,
+          name: match.signature.entry.name,
           source_database: 'InterPro',
           children: [],
           type: match.signature.entry.type.toLowerCase(),

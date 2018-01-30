@@ -118,23 +118,33 @@ div.buttons {
 }
 
 .popper {
+  & h5 {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  & h5,
+  & h4 {
+    color: white;
+  }
+}
+
+.popper {
   position: absolute;
-  background: white;
-  color: black;
+  background: #333;
+  text-align: center;
+  color: white;
   min-width: 150px;
-  border-radius: 3px;
+  border-radius: 4px;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-  padding: 10px;
-  text-align: left;
+  padding: 0.4rem 0.8rem;
   margin: 6px;
-  border: 1px #dedede solid;
 }
 .popper .popper__arrow {
   width: 0;
   height: 0;
   position: absolute;
   margin: 5px;
-  border: solid white;
+  border: solid #333;
 }
 
 .popper[x-placement^='top'] .popper__arrow {
