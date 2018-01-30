@@ -143,7 +143,7 @@ class List extends PureComponent {
             <SearchBox search={search.search}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */, { source_database }) => (
+              renderer={(accession /*: string */, { source_database: db }) => (
                 <React.Fragment>
                   <Link
                     to={customLocation => ({
@@ -165,7 +165,7 @@ class List extends PureComponent {
                       />{' '}
                     </span>
                   </Link>
-                  {source_database === 'reviewed' ? (
+                  {db === 'reviewed' ? (
                     <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
                       <span
                         className={f('icon', 'icon-functional')}

@@ -114,38 +114,36 @@ const Matches = (
       renderer={(
         acc /*: string */,
         { source_database: sourceDatabase } /*: {source_database: string} */,
-      ) => {
+      ) => (
         // let reviewed =null;
         // if (primary === 'protein' && sourceDatabase === 'reviewed')
         //   reviewed = (
         //
         //   )
-        return (
-          <React.Fragment>
-            <Link
-              to={{
-                description: {
-                  main: { key: primary },
-                  [primary]: { db: sourceDatabase, accession: acc },
-                },
-              }}
-            >
-              <span className={f('acc-row')}>
-                <HighlightedText text={acc} textToHighlight={search.search} />
-              </span>
-            </Link>{' '}
-            {primary === 'protein' && sourceDatabase === 'reviewed' ? (
-              <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-                <span
-                  className={f('icon', 'icon-functional')}
-                  data-icon="/"
-                  aria-label="reviewed"
-                />
-              </Tooltip>
-            ) : null}
-          </React.Fragment>
-        );
-      }}
+        <React.Fragment>
+          <Link
+            to={{
+              description: {
+                main: { key: primary },
+                [primary]: { db: sourceDatabase, accession: acc },
+              },
+            }}
+          >
+            <span className={f('acc-row')}>
+              <HighlightedText text={acc} textToHighlight={search.search} />
+            </span>
+          </Link>{' '}
+          {primary === 'protein' && sourceDatabase === 'reviewed' ? (
+            <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+              <span
+                className={f('icon', 'icon-functional')}
+                data-icon="/"
+                aria-label="reviewed"
+              />
+            </Tooltip>
+          ) : null}
+        </React.Fragment>
+      )}
     >
       {primary === 'organism' ? 'Tax Id' : 'Accession'}
     </Column>
