@@ -59,7 +59,12 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
           ...customLocation.description,
           entry: {},
         },
+        search: {},
       };
+      if (customLocation.search.page_size)
+        nextLocation.search.page_size = customLocation.search.page_size;
+      if (customLocation.description.main.key === 'protein')
+        nextLocation.description.organism = {};
       if (cleanName !== 'all') {
         nextLocation.description.entry = {
           isFilter: nextLocation.description.main.key !== 'entry',
@@ -73,7 +78,8 @@ class MemberDBTab extends PureComponent /*:: <Props> */ {
       activeClass = ({ description: { entry } }) =>
         !entry.db && f('is-active', 'is-active-tab', cleanName);
     } else {
-      activeClass = f('is-active', 'is-active-tab', cleanName);
+      activeClass = ({ description: { entry } }) =>
+        entry.db === cleanName && f('is-active', 'is-active-tab', cleanName);
     }
     return (
       <li className={f('tabs-title', { lowGraphics })}>
