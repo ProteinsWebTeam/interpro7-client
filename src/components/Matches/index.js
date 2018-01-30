@@ -12,6 +12,7 @@ import StructureOnProtein from './StructureOnProtein';
 import ProteinFile from 'subPages/Organism/ProteinFile';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
+import NumberLabel from 'components/NumberLabel';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -68,7 +69,7 @@ const MatchesByPrimary = (
 MatchesByPrimary.propTypes = propTypes;
 
 const ProteinAccessionsRenderer = taxId => (
-  <ProteinFile taxId={taxId} type="accession" />
+  <ProteinFile taxId={taxId} type="protein-accession" />
 );
 
 const ProteinFastasRenderer = taxId => (
@@ -114,18 +115,34 @@ const Matches = (
         acc /*: string */,
         { source_database: sourceDatabase } /*: {source_database: string} */,
       ) => (
-        <Link
-          to={{
-            description: {
-              main: { key: primary },
-              [primary]: { db: sourceDatabase, accession: acc },
-            },
-          }}
-        >
-          <span className={f('acc-row')}>
-            <HighlightedText text={acc} textToHighlight={search.search} />
-          </span>
-        </Link>
+        // let reviewed =null;
+        // if (primary === 'protein' && sourceDatabase === 'reviewed')
+        //   reviewed = (
+        //
+        //   )
+        <React.Fragment>
+          <Link
+            to={{
+              description: {
+                main: { key: primary },
+                [primary]: { db: sourceDatabase, accession: acc },
+              },
+            }}
+          >
+            <span className={f('acc-row')}>
+              <HighlightedText text={acc} textToHighlight={search.search} />
+            </span>
+          </Link>{' '}
+          {primary === 'protein' && sourceDatabase === 'reviewed' ? (
+            <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+              <span
+                className={f('icon', 'icon-functional')}
+                data-icon="/"
+                aria-label="reviewed"
+              />
+            </Tooltip>
+          ) : null}
+        </React.Fragment>
       )}
     >
       {primary === 'organism' ? 'Tax Id' : 'Accession'}
@@ -179,7 +196,7 @@ const Matches = (
     <Column
       dataKey="source_database"
       headerClassName={f('table-center')}
-      displayIf={primary !== 'organism'}
+      displayIf={primary !== 'organism' && primary !== 'protein'}
       renderer={(db /*: string */) =>
         db === 'reviewed' ? (
           <Tooltip
@@ -219,13 +236,17 @@ const Matches = (
         />
       )}
     >
-      Architecture
+      {primary === 'protein' ? 'Domain Architecture' : 'Matches'}
     </Column>
     <Column
       dataKey="counters.proteins.uniprot"
       defaultKey="protein-count"
       headerClassName={f('table-center')}
+      cellClassName={f('table-center')}
       displayIf={primary === 'organism'}
+      renderer={count => (
+        <NumberLabel className={f('number-label')} value={count} abbr />
+      )}
     >
       protein count
     </Column>
@@ -233,6 +254,7 @@ const Matches = (
       dataKey="accession"
       defaultKey="proteinFastas"
       headerClassName={f('table-center')}
+      cellClassName={f('table-center')}
       displayIf={primary === 'organism'}
       renderer={ProteinFastasRenderer}
     >
@@ -241,6 +263,7 @@ const Matches = (
     <Column
       dataKey="accession"
       headerClassName={f('table-center')}
+      cellClassName={f('table-center')}
       defaultKey="proteinAccessions"
       displayIf={primary === 'organism'}
       renderer={ProteinAccessionsRenderer}

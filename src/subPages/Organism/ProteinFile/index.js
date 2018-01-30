@@ -7,6 +7,12 @@ import { createSelector } from 'reselect';
 import ProgressButton from 'components/ProgressButton';
 import Link from 'components/generic/Link';
 
+import classnames from 'classnames/bind';
+
+import styles from './style.css';
+
+const s = classnames.bind(styles);
+
 const getWorker = () =>
   import('webWorkers/proteinFile').then(Worker => new Worker());
 
@@ -17,6 +23,19 @@ const getDownloadName = createSelector(
   (accession, taxId, type) =>
     `${accession}-${taxId}.${type === 'FASTA' ? 'fasta' : 'txt'}`,
 );
+
+const getTitle = type => {
+  switch (type) {
+    case 'FASTA':
+      return 'FASTA file';
+    case 'protein-accession':
+      return 'Protein accessions';
+    case 'entry-accession':
+      return 'Entry accessions';
+    default:
+      throw new Error(`“${type}” is not a supported type`);
+  }
+};
 
 class ProteinFile extends PureComponent {
   static propTypes = {
@@ -91,17 +110,25 @@ class ProteinFile extends PureComponent {
   };
 
   render() {
-    const { taxId, entryDescription: { accession }, type } = this.props;
+    const {
+      taxId,
+      entryDescription: { accession: entryAccession },
+      type,
+    } = this.props;
     const { downloading, success, failed, progress, href } = this.state;
+    let title = getTitle(type);
+    if (entryAccession) {
+      title += ` for ${entryAccession}`;
+    }
+    title += ` for tax ID ${taxId}`;
     return (
       <Link
         download={getDownloadName(this.props)}
         href={href}
-        style={{ borderBottomWidth: '0' }}
+        disabled={downloading}
+        className={s('link', { downloading, failed })}
         target="_blank"
-        title={`${
-          type === 'FASTA' ? 'FASTA file' : 'Protein accessions'
-        } for ${accession} for tax ID ${taxId}`}
+        title={title}
         onClick={this._handleClick}
       >
         <ProgressButton

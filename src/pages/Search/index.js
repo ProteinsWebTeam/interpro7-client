@@ -50,9 +50,11 @@ const routes = new Set([
   { value: 'sequence', component: WrappedIPScanSearch },
 ]);
 
-const RedirectToText = () => (
+const RedirectToDefault = () => (
   <Redirect
-    to={{ description: { main: { key: 'search' }, search: { type: 'text' } } }}
+    to={{
+      description: { main: { key: 'search' }, search: { type: 'sequence' } },
+    }}
   />
 );
 
@@ -67,6 +69,23 @@ class Wrapper extends PureComponent {
         <div className={f('columns', 'margin-bottom-large')}>
           <h3>Search InterPro</h3>
           <ul className={f('tabs', 'main-style', 'margin-top-large')}>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={WrappedIPScanSearch.preload}
+              onFocus={WrappedIPScanSearch.preload}
+            >
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'search' },
+                    search: { type: 'sequence' },
+                  },
+                }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                by sequence
+              </Link>
+            </li>
             <li
               className={f('tabs-title')}
               onMouseOver={TextSearchAndResults.preload}
@@ -86,23 +105,6 @@ class Wrapper extends PureComponent {
                 by text
               </Link>
             </li>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={WrappedIPScanSearch.preload}
-              onFocus={WrappedIPScanSearch.preload}
-            >
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'search' },
-                    search: { type: 'sequence' },
-                  },
-                }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                by sequence
-              </Link>
-            </li>
           </ul>
           <div className={f('tabs', 'tabs-content')}>
             <div className={f('tabs-panel', 'is-active')}>
@@ -118,7 +120,7 @@ class Wrapper extends PureComponent {
 const Search = () => (
   <Switch
     locationSelector={l => l.description.search.type}
-    indexRoute={RedirectToText}
+    indexRoute={RedirectToDefault}
     childRoutes={routes}
   />
 );

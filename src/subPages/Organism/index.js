@@ -7,14 +7,14 @@ import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import ProteinFile from './ProteinFile';
-// import Metadata from 'wrappers/Metadata';
-// import TaxIdOrName from 'components/Organism/TaxIdOrName';
+import NumberLabel from 'components/NumberLabel';
 
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
 
-const f = foundationPartial(fonts);
+const f = foundationPartial(fonts, local);
 
 const lut = new Map([
   ['3702', { name: 'Arabidopsis thaliana (Mouse-ear cress)' }],
@@ -55,7 +55,7 @@ const lut = new Map([
 ]);
 
 const ProteinAccessionsRenderer = taxId => (
-  <ProteinFile taxId={taxId} type="accession" />
+  <ProteinFile taxId={taxId} type="protein-accession" />
 );
 
 const ProteinFastasRenderer = taxId => (
@@ -132,10 +132,11 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
             >
               &nbsp;
             </Column>
-
             <Column
               dataKey="taxId"
               defaultKey="organism"
+              headerClassName={f('table-center')}
+              cellClassName={f('table-center')}
               renderer={taxId => {
                 const value = lut.get(taxId);
                 return (
@@ -154,13 +155,20 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
             >
               Organism
             </Column>
-            <Column dataKey="count" headerClassName={f('table-center')}>
+            <Column
+              dataKey="count"
+              headerClassName={f('table-center')}
+              renderer={count => (
+                <NumberLabel className={f('number-label')} value={count} abbr />
+              )}
+            >
               Protein count
             </Column>
             <Column
               dataKey="taxId"
               defaultKey="proteinFastas"
               headerClassName={f('table-center')}
+              cellClassName={f('table-center')}
               renderer={ProteinFastasRenderer}
             >
               FASTA
@@ -168,6 +176,7 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
             <Column
               dataKey="taxId"
               headerClassName={f('table-center')}
+              cellClassName={f('table-center')}
               defaultKey="proteinAccessions"
               renderer={ProteinAccessionsRenderer}
             >

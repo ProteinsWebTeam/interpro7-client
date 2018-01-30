@@ -71,7 +71,11 @@ class SignaturesFilter extends PureComponent {
               />
               <span>{signatureDB}</span>
               {typeof count === 'undefined' || isNaN(count) ? null : (
-                <NumberLabel value={count} className={f('filter-label')} />
+                <NumberLabel
+                  value={count}
+                  loading={loading}
+                  className={f('filter-label')}
+                />
               )}
             </label>
           </div>

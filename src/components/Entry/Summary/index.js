@@ -77,10 +77,13 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
               {metadata.hierarchy && Object.keys(metadata.hierarchy).length ? (
-                <InterProHierarchy
-                  accession={metadata.accession}
-                  hierarchy={metadata.hierarchy}
-                />
+                <div>
+                  <h4>{metadata.type} Relationships</h4>
+                  <InterProHierarchy
+                    accession={metadata.accession}
+                    hierarchy={metadata.hierarchy}
+                  />
+                </div>
               ) : null}
 
               {// member database only - summary info
@@ -132,10 +135,13 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 )}
               {// doesn't work for some HAMAP as they have enpty <P> tag
               Object.keys(metadata.description).length > 0 && (
-                <Description
-                  textBlocks={metadata.description}
-                  literature={included}
-                />
+                <React.Fragment>
+                  <h4>Description</h4>
+                  <Description
+                    textBlocks={metadata.description}
+                    literature={included}
+                  />
+                </React.Fragment>
               )}
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>

@@ -8,12 +8,33 @@
   color: var(--colors-graydark);
   font-size: 0.78rem;
   cursor: pointer;
-  transition-property: background-color, color;
+  transition-property: background-color, color, opacity;
   transition-duration: var(--timing-fast);
+}
+
+@keyframes pulsing {
+  from {
+    opacity: 0.9;
+  }
+
+  to {
+    opacity: 0.5;
+  }
+}
+
+.loading {
+  cursor: progress;
+  animation-duration: var(--timing-slow);
+  animation-timing-function: ease-in-out;
+  animation-delay: var(--timing-instant);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-name: pulsing;
 }
 
 .label.lowGraphics {
   transition: none;
+  animation: none;
 }
 
 /* Medium only */

@@ -246,6 +246,21 @@ export const memberDBHandler /*: Handler */ = handlerConstructor({
   },
 });
 
+export const allEntriesHandler /*: Handler */ = handlerConstructor({
+  name: {
+    value: 'allEntriesHandler',
+  },
+  key: {
+    value: ['entry', 'db'],
+  },
+  cleanedUp: {
+    value: 'all',
+  },
+  regexp: {
+    value: /^all$/i,
+  },
+});
+
 export const interProAccessionHandler /*: Handler */ = handlerConstructor({
   name: {
     value: 'interProAccessionHandler',

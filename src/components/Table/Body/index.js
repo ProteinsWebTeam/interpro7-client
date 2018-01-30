@@ -16,16 +16,15 @@ export const Body = (
     notFound,
   } /*: {rows: Array<Object>, columns: Array<Object>}*/,
 ) => {
-  if (notFound) {
-    let textLabel = 'Loading data';
-    if (notFound) {
-      textLabel = 'No data available';
-    }
+  if (notFound || !rows.length) {
     return (
       <tbody>
         <tr>
-          <td className={f('padding-top-large', 'padding-bottom-large')}>
-            <span className={f('warning-msg-table')}>{textLabel}</span>
+          <td
+            className={f('padding-top-large', 'padding-bottom-large')}
+            colSpan="999"
+          >
+            <span className={f('warning-msg-table')}>No data available</span>
           </td>
         </tr>
       </tbody>

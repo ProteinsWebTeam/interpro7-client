@@ -8,7 +8,7 @@ import TaxonomyFilter from './TaxonomyFilter';
 
 const ProteinListFilters = () => (
   <FiltersPanel>
-    <CurationFilter label="Curation" />
+    <CurationFilter label="UniProt Curation" />
     <TaxonomyFilter label="Taxonomy" />
     {/* <LengthFilter label="Protein Length" /> */}
   </FiltersPanel>

@@ -52,7 +52,7 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
 
   componentDidCatch(error /*: Error */, info /*: any */) {
     console.error(error);
-    console.error(info);
+    console.warn(info);
     this.setState({ error: { error, info } });
   }
 

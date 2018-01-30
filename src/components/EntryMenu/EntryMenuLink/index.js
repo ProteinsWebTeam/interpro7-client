@@ -115,7 +115,8 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
         >
           {name}
           {value !== null && ' '}
-          {value !== null && !isNaN(value) && <NumberLabel value={value} />}
+          {value !== null &&
+            !isNaN(value) && <NumberLabel loading={loading} value={value} />}
         </Link>
       </li>
     );
