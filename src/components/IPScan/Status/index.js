@@ -8,6 +8,7 @@ import Link from 'components/generic/Link';
 import Table, { Column } from 'components/Table';
 import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import RefreshButton from 'components/IPScan/RefreshButton';
 import Actions from 'components/IPScan/Actions';
 
 import { updateJobStatus } from 'actions/creators';
@@ -51,7 +52,12 @@ class IPScanStatus extends PureComponent {
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
-          <h3>Your InterProScan searches</h3>
+          <div className={f('row')}>
+            <h3 className={f('large-11', 'columns')}>
+              Your InterProScan searches
+            </h3>
+            <RefreshButton />
+          </div>
           <Table dataTable={jobs} actualSize={jobs.length}>
             <Column
               dataKey="localID"
@@ -92,6 +98,7 @@ class IPScanStatus extends PureComponent {
             </Column>
             <Column
               dataKey="status"
+              headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               renderer={(status /*: string */) => (
                 <Tooltip title={`Job ${status}`}>
