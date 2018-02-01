@@ -157,22 +157,24 @@ class List extends PureComponent {
                       },
                       search: {},
                     })}
+                    className={f('acc-row')}
                   >
-                    <span className={f('acc-row')}>
-                      <HighlightedText
-                        text={accession}
-                        textToHighlight={search.search}
-                      />{' '}
-                    </span>
+                    <HighlightedText
+                      text={accession}
+                      textToHighlight={search.search}
+                    />
                   </Link>
                   {db === 'reviewed' ? (
-                    <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-                      <span
-                        className={f('icon', 'icon-functional')}
-                        data-icon="/"
-                        aria-label="reviewed"
-                      />
-                    </Tooltip>
+                    <React.Fragment>
+                      {'\u00A0' /* non-breakable space */}
+                      <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                        <span
+                          className={f('icon', 'icon-functional')}
+                          data-icon="/"
+                          aria-label="reviewed"
+                        />
+                      </Tooltip>
+                    </React.Fragment>
                   ) : null}
                 </React.Fragment>
               )}
