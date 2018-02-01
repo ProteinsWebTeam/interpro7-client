@@ -42,6 +42,7 @@ const propTypes = {
   data: T.shape({
     payload: T.object,
     loading: T.bool.isRequired,
+    ok: T.bool,
   }).isRequired,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
@@ -90,7 +91,7 @@ class List extends PureComponent {
 
   render() {
     const {
-      data: { payload, loading, url, status },
+      data: { payload, loading, ok, url, status },
       isStale,
       customLocation: { search },
     } = this.props;
@@ -113,6 +114,8 @@ class List extends PureComponent {
           <Table
             dataTable={_payload.results}
             isStale={isStale}
+            loading={loading}
+            ok={ok}
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
@@ -385,7 +388,7 @@ const InnerSwitch = props => (
 );
 
 const Protein = props => (
-  <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
+  <div>
     <ErrorBoundary>
       <Switch
         {...props}
@@ -396,9 +399,6 @@ const Protein = props => (
     </ErrorBoundary>
   </div>
 );
-Protein.propTypes = {
-  isStale: T.bool.isRequired,
-};
 
 export default loadData((...args) =>
   getUrlForApi(...args)
