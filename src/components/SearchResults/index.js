@@ -8,7 +8,6 @@ import Link from 'components/generic/Link';
 import Table, { Column, Exporter } from 'components/Table';
 import SingleMatch from 'components/SearchResults/SingleMatch';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 
