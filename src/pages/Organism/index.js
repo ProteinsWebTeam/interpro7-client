@@ -188,7 +188,7 @@ class List extends PureComponent {
         results: [],
       };
     }
-    const urlHasParameter = url && url.indexOf('?') !== -1;
+    const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
         <MemberDBTabs />
