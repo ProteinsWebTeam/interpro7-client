@@ -10,7 +10,7 @@ import styles from 'styles/blocks.css';
 import { transformFormatted } from 'utils/text';
 
 const ParagraphWithCites = ({ p }) => (
-  <p>
+  <div>
     {p.split(/* /<cite id="([^"]+)" ?\/>/i */ /\[(PUB\d+)]/i).map(
       (part, i) =>
         i % 2 ? (
@@ -21,7 +21,7 @@ const ParagraphWithCites = ({ p }) => (
           <span key={i}>{part}</span>
         ),
     )}
-  </p>
+  </div>
 );
 ParagraphWithCites.propTypes = {
   p: T.string.isRequired,

@@ -52,7 +52,6 @@ class Actions extends PureComponent {
         <Tooltip title="Save job">
           <button
             className={f('button', saved ? 'warning' : 'secondary')}
-            style={{ marginBottom: '0' }}
             type="button"
             onClick={this._handleSaveToggle}
             aria-label="Save job"
@@ -63,7 +62,6 @@ class Actions extends PureComponent {
         <Tooltip title="Delete job">
           <button
             className={f('button', 'alert')}
-            style={{ marginBottom: '0' }}
             type="button"
             onClick={this._handleDelete}
             aria-label="Delete job"

@@ -4,6 +4,7 @@ import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import cn from 'classnames';
 
 import NumberLabel from 'components/NumberLabel';
 
@@ -58,11 +59,7 @@ const TotalNb = ({ className, data, actualSize, pagination, description }) => {
       </span>
     );
   }
-  return (
-    <p className={className} style={{ color: '#505f74', marginBottom: '0' }}>
-      {textLabel}
-    </p>
-  );
+  return <p className={cn(className, styles.component)}>{textLabel}</p>;
 };
 
 TotalNb.propTypes = {

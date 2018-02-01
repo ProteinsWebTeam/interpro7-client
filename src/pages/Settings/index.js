@@ -13,9 +13,9 @@ import { changeSettings, resetSettings } from 'actions/creators';
 import { foundationPartial } from 'styles/foundation';
 
 import theme from 'styles/theme-interpro.css';
-import styles from './styles.css';
+import local from './styles.css';
 
-const f = foundationPartial(theme, styles);
+const f = foundationPartial(theme, local);
 
 const NavigationSettings = ({ navigation: { pageSize, autoRedirect } }) => (
   <form data-category="navigation">
@@ -33,7 +33,7 @@ const NavigationSettings = ({ navigation: { pageSize, autoRedirect } }) => (
                 step="5"
                 value={pageSize}
                 name="pageSize"
-                style={{ width: '100%' }}
+                className={local.fullwidth}
                 onChange={noop}
               />
             </div>
