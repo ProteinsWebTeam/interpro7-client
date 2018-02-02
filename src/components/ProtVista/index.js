@@ -143,6 +143,7 @@ class ProtVista extends PureComponent {
           ? d.children.map(child => ({
               accession: child.accession,
               name: child.name,
+              residues: child.children,
               source_database: child.source_database,
               entry_type: child.entry_type,
               locations: child.entry_protein_locations || child.locations,
@@ -152,8 +153,22 @@ class ProtVista extends PureComponent {
           : null;
         const isNewElement = !this.web_tracks[d.accession]._data;
         this.web_tracks[d.accession].data = tmp;
-        if (children) this.web_tracks[d.accession].contributors = children;
+        if (children) {
+          this.web_tracks[d.accession].contributors = children;
+          for (const child of children) {
+            if (child.residues) {
+              this.setObjectValueInState(
+                'expandedTrack',
+                child.accession,
+                true,
+              );
+            }
+          }
+        }
         if (isNewElement) {
+          this.web_tracks[d.accession].addEventListener('entryclick', e => {
+            this.handleCollapseLabels(e.detail.feature.accession);
+          });
           this.web_tracks[d.accession].addEventListener('entrymouseout', () => {
             removeAllChildrenFromNode(this._popper_content);
             this.popper.destroy();
@@ -218,18 +233,27 @@ class ProtVista extends PureComponent {
     for (const track of Object.values(this.web_tracks)) {
       if (collapsed) track.setAttribute('expanded', true);
       else track.removeAttribute('expanded');
-
-      expandedTrack[track._data[0].accession] = collapsed;
+    }
+    for (const acc of Object.keys(this.state.expandedTrack)) {
+      expandedTrack[acc] = collapsed;
     }
     this.setState({ collapsed: !collapsed, expandedTrack });
   };
 
   handleCollapseLabels = accession => {
-    this.setObjectValueInState(
-      'expandedTrack',
-      accession,
-      this.web_tracks[accession]._expanded,
-    );
+    if (this.web_tracks[accession]) {
+      this.setObjectValueInState(
+        'expandedTrack',
+        accession,
+        this.web_tracks[accession]._expanded,
+      );
+    } else if (this.state.expandedTrack.hasOwnProperty(accession)) {
+      this.setObjectValueInState(
+        'expandedTrack',
+        accession,
+        !this.state.expandedTrack[accession],
+      );
+    }
   };
 
   handleFullScreen = () => requestFullScreen(this._main);
@@ -421,9 +445,9 @@ class ProtVista extends PureComponent {
                                 }
                                 shape="roundRectangle"
                                 expanded
-                                onClick={() =>
-                                  this.handleCollapseLabels(entry.accession)
-                                }
+                                // onClick={() =>
+                                //   this.handleCollapseLabels(entry.accession)
+                                // }
                               />
                             </div>
                             <div className={f('track-accession')}>
@@ -471,6 +495,39 @@ class ProtVista extends PureComponent {
                                       >
                                         {d.accession}
                                       </Link>
+                                      {d.residues
+                                        ? d.residues.map(residue =>
+                                            residue.locations.map(r => (
+                                              <div
+                                                key={r.accession}
+                                                className={f(
+                                                  'track-accession-child',
+                                                  {
+                                                    hide: !expandedTrack[
+                                                      d.accession
+                                                    ],
+                                                  },
+                                                )}
+                                              >
+                                                <Link
+                                                  r={r}
+                                                  d={d}
+                                                  to={{
+                                                    description: {
+                                                      main: { key: 'entry' },
+                                                      entry: {
+                                                        db: d.source_database,
+                                                        accession: d.accession,
+                                                      },
+                                                    },
+                                                  }}
+                                                >
+                                                  {r.entry_accession}
+                                                </Link>
+                                              </div>
+                                            )),
+                                          )
+                                        : null}
                                     </div>
                                   ))}
                               </div>

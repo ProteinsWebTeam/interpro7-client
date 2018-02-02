@@ -58,8 +58,8 @@ const getUrlFor = createSelector(
 );
 
 const mergeResidues = residues =>
-  Object.values(residues.entry_locations).map(location => ({
-    accession: location.entry_accession,
+  Object.values(residues).map(location => ({
+    accession: `Residues_${location.entry_accession}`,
     type: 'residue',
     coordinates: [location.fragments.map(f => [f.start, f.end])], // TODO: check
     locations: [location],
@@ -134,16 +134,16 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   }
   for (const entry of integrated.concat(unintegrated)) {
     entry.coordinates = toArrayStructure(entry.entry_protein_locations);
-    if (residues.hasOwnProperty(entry.accession)) {
+    if (residues.entry_locations.hasOwnProperty(entry.accession)) {
       entry.children = entry.residues = mergeResidues({
-        [entry.accession]: residues[entry.accession],
+        [entry.accession]: residues.entry_locations[entry.accession],
       });
       delete residues[entry.accession];
     }
     addSignature(entry, ipro, integrated);
   }
   if (Object.keys(residues).length > 0) {
-    out.residues = mergeResidues(residues);
+    out.residues = mergeResidues(residues.entry_locations);
   }
   return out;
 };
