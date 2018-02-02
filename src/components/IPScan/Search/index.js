@@ -31,10 +31,31 @@ import example from './example.fasta';
 const f = foundationPartial(interproTheme, ipro, local);
 
 class AdvancedOptions extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  reset = () =>
+    this.setState(currentState => {
+      const newState = {};
+      for (const key of Object.keys(currentState)) {
+        newState[key] = true;
+      }
+      return newState;
+    });
+
+  _handleChange = ({ target: { value, checked } }) => {
+    this.setState({ [value]: checked });
+  };
+
   render() {
     return (
       <div className={f('row')}>
-        <details className={f('columns', 'details')} open>
+        <details
+          className={f('columns', 'details')}
+          onChange={this._handleChange}
+        >
           <summary>Advanced options</summary>
           <fieldset className={f('fieldset')}>
             <legend>Member databases</legend>
@@ -43,7 +64,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.cdd === false)}
                   type="checkbox"
                   value="cdd"
                 />
@@ -52,7 +73,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.HAMAP === false)}
                   type="checkbox"
                   value="HAMAP"
                 />
@@ -61,7 +82,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.Panther === false)}
                   type="checkbox"
                   value="Panther"
                 />
@@ -70,7 +91,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.PfamA === false)}
                   type="checkbox"
                   value="PfamA"
                 />
@@ -79,7 +100,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.PIRSF === false)}
                   type="checkbox"
                   value="PIRSF"
                 />
@@ -88,7 +109,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.PRINTS === false)}
                   type="checkbox"
                   value="PRINTS"
                 />
@@ -97,7 +118,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.ProDom === false)}
                   type="checkbox"
                   value="ProDom"
                 />
@@ -106,7 +127,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.PrositeProfiles === false)}
                   type="checkbox"
                   value="PrositeProfiles"
                 />
@@ -115,7 +136,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.SMART === false)}
                   type="checkbox"
                   value="SMART"
                 />
@@ -124,7 +145,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.TIGRFAM === false)}
                   type="checkbox"
                   value="TIGRFAM"
                 />
@@ -133,9 +154,9 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.PrositePatterns === false)}
                   type="checkbox"
-                  value="Prosite-Patterns"
+                  value="PrositePatterns"
                 />
                 Prosite-Patterns
               </label>
@@ -145,7 +166,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.Gene3d === false)}
                   type="checkbox"
                   value="Gene3d"
                 />
@@ -154,7 +175,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.SFLD === false)}
                   type="checkbox"
                   value="SFLD"
                 />
@@ -163,7 +184,7 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  defaultChecked
+                  checked={!(this.state.SUPERFAMILY === false)}
                   type="checkbox"
                   value="SUPERFAMILY"
                 />
@@ -176,7 +197,7 @@ class AdvancedOptions extends PureComponent {
             <label>
               <input
                 name="checkedApplications"
-                defaultChecked
+                checked={!(this.state.Coils === false)}
                 type="checkbox"
                 value="Coils"
               />
@@ -185,7 +206,7 @@ class AdvancedOptions extends PureComponent {
             <label>
               <input
                 name="checkedApplications"
-                defaultChecked
+                checked={!(this.state.MobiDBLite === false)}
                 type="checkbox"
                 value="MobiDBLite"
               />
@@ -194,7 +215,7 @@ class AdvancedOptions extends PureComponent {
             <label>
               <input
                 name="checkedApplications"
-                defaultChecked
+                checked={!(this.state.Phobius === false)}
                 type="checkbox"
                 value="Phobius"
               />
@@ -203,7 +224,7 @@ class AdvancedOptions extends PureComponent {
             <label>
               <input
                 name="checkedApplications"
-                defaultChecked
+                checked={!(this.state.SignalP === false)}
                 type="checkbox"
                 value="SignalP"
               />
@@ -212,7 +233,7 @@ class AdvancedOptions extends PureComponent {
             <label>
               <input
                 name="checkedApplications"
-                defaultChecked
+                checked={!(this.state.TMHMM === false)}
                 type="checkbox"
                 value="TMHMM"
               />
@@ -222,11 +243,21 @@ class AdvancedOptions extends PureComponent {
           <fieldset className={f('fieldset')}>
             <legend>Other</legend>
             <label>
-              <input name="goterms" defaultChecked type="checkbox" />
+              <input
+                name="goterms"
+                checked={!(this.state.goterms === false)}
+                type="checkbox"
+                value="goterms"
+              />
               Gene Ontology terms
             </label>
             <label>
-              <input name="pathways" defaultChecked type="checkbox" />
+              <input
+                name="pathways"
+                checked={!(this.state.pathways === false)}
+                type="checkbox"
+                value="pathways"
+              />
               Pathways
             </label>
           </fieldset>
@@ -275,6 +306,7 @@ const isXChecked = x => form =>
 
 const isGoTermsChecked = isXChecked('goterms');
 const isPathwaysChecked = isXChecked('pathways');
+const isStayChecked = isXChecked('stay');
 
 const checkValidity = (({ comment, IUPACProt }) => lines =>
   lines.reduce(
@@ -318,7 +350,8 @@ class IPScanSearch extends PureComponent {
     };
   }
 
-  _handleReset = text =>
+  _handleReset = text => {
+    if (this._advancedSettings && !text) this._advancedSettings.reset();
     this.setState(
       {
         editorState:
@@ -334,6 +367,7 @@ class IPScanSearch extends PureComponent {
       },
       () => this.editor.focus(),
     );
+  };
 
   _handleSubmit = event => {
     event.preventDefault();
@@ -357,12 +391,16 @@ class IPScanSearch extends PureComponent {
         pathways: isPathwaysChecked(this._form),
       },
     });
-    this.props.goToCustomLocation({
-      description: {
-        main: { key: 'job' },
-        job: { type: 'InterProScan' /* , accession: localID */ },
-      },
-    });
+    if (isStayChecked(this._form)) {
+      this._handleReset();
+    } else {
+      this.props.goToCustomLocation({
+        description: {
+          main: { key: 'job' },
+          job: { type: 'InterProScan' /* , accession: localID */ },
+        },
+      });
+    }
   };
 
   _handleFile = file => {
@@ -487,7 +525,9 @@ class IPScanSearch extends PureComponent {
                   </div>
                 </div>
 
-                <AdvancedOptions />
+                <AdvancedOptions
+                  ref={component => (this._advancedSettings = component)}
+                />
 
                 <div className={f('row')}>
                   <div className={f('columns')}>
@@ -541,6 +581,19 @@ class IPScanSearch extends PureComponent {
                       onClick={this._handleReset}
                       value="Clear"
                     />
+                    <label className={f('stay-checkbox')}>
+                      Create another job
+                      <div className={f('switch', 'tiny')}>
+                        <input
+                          className={f('switch-input')}
+                          type="checkbox"
+                          name="stay"
+                        />
+                        <span className={f('switch-paddle')}>
+                          <span />
+                        </span>
+                      </div>
+                    </label>
                   </div>
                   <div
                     className={f(
