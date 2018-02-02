@@ -29,6 +29,16 @@ class SearchBox extends PureComponent {
     this.routerPush = debounce(this.routerPush, DEBOUNCE_RATE);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.props.customLocation.description.entry.db !==
+      nextProps.customLocation.description.entry.db
+    ) {
+      this.routerPush.cancel();
+      this.setState({ search: nextProps.customLocation.search.search });
+    }
+  }
+
   handleReset = () => this.handleChange({ target: { value: null } });
 
   handleChange = ({ target: { value: search } }) =>
