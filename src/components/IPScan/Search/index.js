@@ -64,9 +64,9 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  checked={!(this.state.cdd === false)}
+                  checked={!(this.state.CDD === false)}
                   type="checkbox"
-                  value="cdd"
+                  value="CDD"
                 />
                 CDD
               </label>
@@ -170,7 +170,7 @@ class AdvancedOptions extends PureComponent {
                   type="checkbox"
                   value="Gene3d"
                 />
-                Gene3d
+                Gene3D
               </label>
               <label>
                 <input
@@ -184,11 +184,11 @@ class AdvancedOptions extends PureComponent {
               <label>
                 <input
                   name="checkedApplications"
-                  checked={!(this.state.SUPERFAMILY === false)}
+                  checked={!(this.state.SuperFamily === false)}
                   type="checkbox"
-                  value="SUPERFAMILY"
+                  value="SuperFamily"
                 />
-                SUPERFAMILY
+                SuperFamily
               </label>
             </fieldset>
           </fieldset>
