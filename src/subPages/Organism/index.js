@@ -81,18 +81,19 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
+      ok: T.bool,
       payload: T.object,
     }).isRequired,
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const { data: { loading, ok, payload } } = this.props;
     if (loading) return <Loading />;
     const processed = payloadToProcessed(payload);
     return (
       <div className={f('row')}>
         <div className={f('column')}>
-          <Table dataTable={processed}>
+          <Table dataTable={processed} loading={loading} ok={ok}>
             <Column
               dataKey="taxId"
               renderer={taxId => (

@@ -30,6 +30,212 @@ import example from './example.fasta';
 
 const f = foundationPartial(interproTheme, ipro, local);
 
+class AdvancedOptions extends PureComponent {
+  render() {
+    return (
+      <div className={f('row')}>
+        <details className={f('columns', 'details')} open>
+          <summary>Advanced options</summary>
+          <fieldset className={f('fieldset')}>
+            <legend>Member databases</legend>
+            <fieldset className={f('fieldset')}>
+              <legend>Families, domains, sites & repeats</legend>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="cdd"
+                />
+                CDD
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="HAMAP"
+                />
+                HAMAP
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="Panther"
+                />
+                Panther
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="PfamA"
+                />
+                PfamA
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="PIRSF"
+                />
+                PIRSF
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="PRINTS"
+                />
+                PRINTS
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="ProDom"
+                />
+                ProDom
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="PrositeProfiles"
+                />
+                Prosite-Profiles
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="SMART"
+                />
+                SMART
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="TIGRFAM"
+                />
+                TIGRFAM
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="Prosite-Patterns"
+                />
+                Prosite-Patterns
+              </label>
+            </fieldset>
+            <fieldset className={f('fieldset')}>
+              <legend>Structural domains</legend>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="Gene3d"
+                />
+                Gene3d
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="SFLD"
+                />
+                SFLD
+              </label>
+              <label>
+                <input
+                  name="checkedApplications"
+                  defaultChecked
+                  type="checkbox"
+                  value="SUPERFAMILY"
+                />
+                SUPERFAMILY
+              </label>
+            </fieldset>
+          </fieldset>
+          <fieldset className={f('fieldset')}>
+            <legend>Other sequence features</legend>
+            <label>
+              <input
+                name="checkedApplications"
+                defaultChecked
+                type="checkbox"
+                value="Coils"
+              />
+              Coils
+            </label>
+            <label>
+              <input
+                name="checkedApplications"
+                defaultChecked
+                type="checkbox"
+                value="MobiDBLite"
+              />
+              MobiDB Lite
+            </label>
+            <label>
+              <input
+                name="checkedApplications"
+                defaultChecked
+                type="checkbox"
+                value="Phobius"
+              />
+              Phobius
+            </label>
+            <label>
+              <input
+                name="checkedApplications"
+                defaultChecked
+                type="checkbox"
+                value="SignalP"
+              />
+              SignalIP
+            </label>
+            <label>
+              <input
+                name="checkedApplications"
+                defaultChecked
+                type="checkbox"
+                value="TMHMM"
+              />
+              TMHMM
+            </label>
+          </fieldset>
+          <fieldset className={f('fieldset')}>
+            <legend>Other</legend>
+            <label>
+              <input name="goterms" defaultChecked type="checkbox" />
+              Gene Ontology terms
+            </label>
+            <label>
+              <input name="pathways" defaultChecked type="checkbox" />
+              Pathways
+            </label>
+          </fieldset>
+        </details>
+      </div>
+    );
+  }
+}
+
 const strategy = re => (block, cb) => {
   const text = block.getText();
   let match;
@@ -57,6 +263,18 @@ const classedSpan = className => {
 
   return Span;
 };
+
+const getCheckedApplications = form =>
+  Array.from(
+    form.querySelectorAll('input[name="checkedApplications"]:checked'),
+    input => input.value,
+  );
+
+const isXChecked = x => form =>
+  !!form.querySelector(`input[name="${x}"]:checked`);
+
+const isGoTermsChecked = isXChecked('goterms');
+const isPathwaysChecked = isXChecked('pathways');
 
 const checkValidity = (({ comment, IUPACProt }) => lines =>
   lines.reduce(
@@ -117,8 +335,10 @@ class IPScanSearch extends PureComponent {
       () => this.editor.focus(),
     );
 
-  _handleSubmit = async event => {
+  _handleSubmit = event => {
     event.preventDefault();
+    if (!this._form) return;
+    const applications = getCheckedApplications(this._form);
     const lines = convertToRaw(
       this.state.editorState.getCurrentContent(),
     ).blocks.map(block => block.text);
@@ -132,6 +352,9 @@ class IPScanSearch extends PureComponent {
       },
       data: {
         input: value,
+        applications,
+        goterms: isGoTermsChecked(this._form),
+        pathways: isPathwaysChecked(this._form),
       },
     });
     this.props.goToCustomLocation({
@@ -235,16 +458,10 @@ class IPScanSearch extends PureComponent {
             onDragExit={this._handleUndragging}
             onDragLeave={this._handleUndragging}
             className={f('search-form', { dragging })}
+            ref={form => (this._form = form)}
           >
             <div>
-              <div
-                className={f(
-                  'secondary',
-                  'callout',
-                  'border',
-                  'margin-bottom-none',
-                )}
-              >
+              <div className={f('secondary', 'callout', 'border')}>
                 <div className={f('row')}>
                   <div className={f('large-12', 'columns', 'sqc-search-input')}>
                     <h3>Sequence, in FASTA format</h3>
@@ -255,9 +472,7 @@ class IPScanSearch extends PureComponent {
                     >
                       <div
                         type="text"
-                        className={f('editor', {
-                          'invalid-block': !valid,
-                        })}
+                        className={f('editor', { 'invalid-block': !valid })}
                       >
                         <Editor
                           placeholder="Enter your sequence"
@@ -272,15 +487,11 @@ class IPScanSearch extends PureComponent {
                   </div>
                 </div>
 
+                <AdvancedOptions />
+
                 <div className={f('row')}>
-                  <div className={f('medium-8', 'columns')}>
-                    <div
-                      className={f(
-                        'button-group',
-                        'line-with-buttons',
-                        'margin-bottom-none',
-                      )}
-                    >
+                  <div className={f('columns')}>
+                    <div className={f('button-group', 'line-with-buttons')}>
                       <button className={f('hollow', 'button', 'tertiary')}>
                         <label className={f('file-input-label')}>
                           Choose file
@@ -307,26 +518,15 @@ class IPScanSearch extends PureComponent {
                       </button>
                     </div>
                   </div>
-                  <div
-                    className={f(
-                      'medium-4',
-                      'columns',
-                      'show-for-medium',
-                      'search-adv',
-                    )}
-                  >
-                    <span>Powered by InterProScan</span>
-                  </div>
                 </div>
 
-                <div className={f('row')} style={{ marginTop: '1em' }}>
+                <div className={f('row')}>
                   <div
                     className={f(
-                      'large-12',
+                      'large-8',
                       'columns',
                       'stacked-for-small',
                       'button-group',
-                      'margin-bottom-none',
                     )}
                   >
                     <input
@@ -341,6 +541,16 @@ class IPScanSearch extends PureComponent {
                       onClick={this._handleReset}
                       value="Clear"
                     />
+                  </div>
+                  <div
+                    className={f(
+                      'large-4',
+                      'columns',
+                      'show-for-medium',
+                      'search-adv',
+                    )}
+                  >
+                    <span>Powered by InterProScan</span>
                   </div>
                 </div>
               </div>

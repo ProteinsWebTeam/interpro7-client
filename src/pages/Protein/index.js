@@ -42,6 +42,7 @@ const propTypes = {
   data: T.shape({
     payload: T.object,
     loading: T.bool.isRequired,
+    ok: T.bool,
   }).isRequired,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
@@ -90,7 +91,7 @@ class List extends PureComponent {
 
   render() {
     const {
-      data: { payload, loading, url, status },
+      data: { payload, loading, ok, url, status },
       isStale,
       customLocation: { search },
     } = this.props;
@@ -102,7 +103,7 @@ class List extends PureComponent {
         results: [],
       };
     }
-    const urlHasParameter = url && url.indexOf('?') !== -1;
+    const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
         <MemberDBTabs />
@@ -113,6 +114,8 @@ class List extends PureComponent {
           <Table
             dataTable={_payload.results}
             isStale={isStale}
+            loading={loading}
+            ok={ok}
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
@@ -157,22 +160,24 @@ class List extends PureComponent {
                       },
                       search: {},
                     })}
+                    className={f('acc-row')}
                   >
-                    <span className={f('acc-row')}>
-                      <HighlightedText
-                        text={accession}
-                        textToHighlight={search.search}
-                      />{' '}
-                    </span>
+                    <HighlightedText
+                      text={accession}
+                      textToHighlight={search.search}
+                    />
                   </Link>
                   {db === 'reviewed' ? (
-                    <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-                      <span
-                        className={f('icon', 'icon-functional')}
-                        data-icon="/"
-                        aria-label="reviewed"
-                      />
-                    </Tooltip>
+                    <React.Fragment>
+                      {'\u00A0' /* non-breakable space */}
+                      <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                        <span
+                          className={f('icon', 'icon-functional')}
+                          data-icon="/"
+                          aria-label="reviewed"
+                        />
+                      </Tooltip>
+                    </React.Fragment>
                   ) : null}
                 </React.Fragment>
               )}
@@ -383,7 +388,7 @@ const InnerSwitch = props => (
 );
 
 const Protein = props => (
-  <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
+  <div>
     <ErrorBoundary>
       <Switch
         {...props}
@@ -394,9 +399,6 @@ const Protein = props => (
     </ErrorBoundary>
   </div>
 );
-Protein.propTypes = {
-  isStale: T.bool.isRequired,
-};
 
 export default loadData((...args) =>
   getUrlForApi(...args)

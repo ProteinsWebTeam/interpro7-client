@@ -118,7 +118,6 @@ class GraphicalView extends PureComponent {
 
   _populateData = (data, focused) => {
     this._vis.data = data;
-    // debugger;
     this._vis.focusNodeWithID(focused);
   };
 

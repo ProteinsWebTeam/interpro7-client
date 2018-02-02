@@ -1,3 +1,7 @@
 .output {
   display: block;
 }
+
+.fullwidth {
+  width: 100%;
+}

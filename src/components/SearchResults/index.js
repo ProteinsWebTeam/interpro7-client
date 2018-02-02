@@ -8,7 +8,6 @@ import Link from 'components/generic/Link';
 import Table, { Column, Exporter } from 'components/Table';
 import SingleMatch from 'components/SearchResults/SingleMatch';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 
@@ -27,6 +26,7 @@ class SearchResults extends PureComponent {
     data: T.shape({
       payload: T.object,
       loading: T.bool.isRequired,
+      ok: T.bool,
     }),
     isStale: T.bool.isRequired,
     searchValue: T.string,
@@ -36,15 +36,14 @@ class SearchResults extends PureComponent {
 
   render() {
     const {
-      data: { payload, loading },
+      data: { payload, loading, ok },
       isStale,
       searchValue,
       query,
       dataUrl,
     } = this.props;
-    if (loading) return <Loading />;
-    if (!payload) return null;
-    if (payload.hitCount === 0) {
+    const { entries, hitCount } = payload || {};
+    if (!loading && hitCount === 0) {
       return (
         <div className={f('callout', 'info', 'withicon')}>
           Your search for <strong>{searchValue}</strong> did not match any
@@ -54,12 +53,14 @@ class SearchResults extends PureComponent {
     }
     return (
       <React.Fragment>
-        <SingleMatch payload={payload} searchValue={searchValue} />
+        {payload && <SingleMatch payload={payload} searchValue={searchValue} />}
         <Table
-          dataTable={payload.entries}
-          actualSize={payload.hitCount}
+          dataTable={entries}
+          actualSize={hitCount}
           query={query}
           isStale={isStale}
+          loading={loading}
+          ok={ok}
         >
           <Exporter>
             <Link href={dataUrl} download={`SearchResults-${searchValue}.json`}>

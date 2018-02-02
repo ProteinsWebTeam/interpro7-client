@@ -1,23 +1,6 @@
-@import '../../styles/timing.css';
-
-.table {
-  transition-property: opacity, filter;
-  transition-duration: var(--timing-fast);
-  transition-timing-function: ease-in-out;
-  opacity: 1;
-  filter: grayscale(0);
-
-  &.isStale {
-    user-select: none;
-    pointer-events: none;
-    opacity: 0.5;
-    filter: grayscale(50%);
-  }
-
-  & th {
-    top: 98px;
-    position: sticky;
-  }
+table th {
+  top: 98px;
+  position: sticky;
 }
 
 /*light table style*/
@@ -117,11 +100,9 @@ table.light span::before {
   width: 25px;
   height: 25px;
   display: inline-block;
-  transition: transform var(--timing-fast);
 }
 .table-view .table-results-filtering .icon-view:hover {
   opacity: 0.8;
-  /*transform: scale(1.4);*/
 }
 .table-view .table-results-filtering div > div:last-child .icon-view {
   margin-right: 0;
@@ -175,12 +156,6 @@ table.light span::before {
   & a {
     color: #505f74;
   }
-}
-
-.warning-msg-table {
-  display: flex;
-  justify-content: center;
-  font-size: 140%;
 }
 
 /* Small screen only */

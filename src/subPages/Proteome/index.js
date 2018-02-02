@@ -12,18 +12,28 @@ const f = foundationPartial(fonts, global);
 
 class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation: Object}> */ {
   static propTypes = {
-    data: T.object.isRequired,
+    data: T.shape({
+      loading: T.bool.isRequired,
+      ok: T.bool,
+      payload: T.object,
+    }).isRequired,
     customLocation: T.object.isRequired,
   };
 
   render() {
     if (this.props.data.loading) return <Loading />;
     const {
-      data: { payload: { results, count } },
+      data: { payload: { results, count }, loading, ok },
       customLocation: { search },
     } = this.props;
     return (
-      <Table dataTable={results} actualSize={count} query={search}>
+      <Table
+        dataTable={results}
+        loading={loading}
+        ok={ok}
+        actualSize={count}
+        query={search}
+      >
         <PageSizeSelector />
         <SearchBox search={search.search}>Search</SearchBox>
         <Column

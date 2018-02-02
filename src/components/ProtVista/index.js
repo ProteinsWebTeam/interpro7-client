@@ -205,6 +205,25 @@ class ProtVista extends PureComponent {
     const tagString = `<div>
         <h5>${entry.accession}</h5>
         ${entry.name ? `<h4>${entry.name}</h4>` : ''}
+        <ul>
+          ${entry.locations
+            .map(({ fragments }) =>
+              `
+          <li>location:
+            <ul>
+              ${fragments
+                .map(({ start, end }) =>
+                  `
+                <li>From ${start} to ${end}</li>
+              `.trim(),
+                )
+                .join('')}
+            </ul>
+          </li>
+          `.trim(),
+            )
+            .join('')}
+        </ul>
         <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
         <p style={{ textTransform: 'uppercase' }}>
           <small>${

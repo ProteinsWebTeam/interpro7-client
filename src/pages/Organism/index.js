@@ -56,6 +56,7 @@ const propTypes = {
   data: T.shape({
     payload: T.object,
     loading: T.bool.isRequired,
+    ok: T.bool,
   }).isRequired,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
@@ -176,7 +177,7 @@ class List extends PureComponent {
 
   render() {
     const {
-      data: { payload, loading, url, status },
+      data: { payload, loading, ok, url, status },
       isStale,
       customLocation: { search },
     } = this.props;
@@ -188,7 +189,7 @@ class List extends PureComponent {
         results: [],
       };
     }
-    const urlHasParameter = url && url.indexOf('?') !== -1;
+    const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
         <MemberDBTabs />
@@ -197,6 +198,8 @@ class List extends PureComponent {
           <hr />
           <Table
             dataTable={_payload.results}
+            loading={loading}
+            ok={ok}
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
@@ -568,14 +571,13 @@ const schemaProcessData = data => ({
 
 class Organism extends PureComponent {
   static propTypes = {
-    isStale: T.bool.isRequired,
     data: T.object.isRequired,
   };
 
   render() {
-    const { isStale, data } = this.props;
+    const { data } = this.props;
     return (
-      <div className={f('with-data', { ['with-stale-data']: isStale })}>
+      <div>
         {data.payload &&
           data.payload.metadata &&
           data.payload.metadata.accession && (

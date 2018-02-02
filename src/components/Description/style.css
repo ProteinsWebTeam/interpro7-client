@@ -6,3 +6,7 @@
     initial-letter: 2;
   }
 }
+
+.inline {
+  display: inline;
+}

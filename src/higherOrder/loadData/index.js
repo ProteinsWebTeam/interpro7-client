@@ -81,7 +81,7 @@ const loadData = params => {
           payload: T.any,
           url: T.string,
           status: T.number,
-          ok: T.boolean,
+          ok: T.bool,
         }),
       };
 

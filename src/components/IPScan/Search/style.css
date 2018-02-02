@@ -104,3 +104,20 @@ input:disabled {
   color: var(--colors-gray);
   margin-right: 0.2rem; /*to align with border form*/
 }
+
+.details {
+  margin-bottom: 0.5em;
+
+  & > summary {
+    cursor: pointer;
+  }
+}
+
+.fieldset label {
+  display: inline-block;
+  margin-right: 2em;
+
+  &:last-of-type {
+    margin-right: initial;
+  }
+}
