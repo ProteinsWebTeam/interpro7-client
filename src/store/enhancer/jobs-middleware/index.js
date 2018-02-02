@@ -67,14 +67,19 @@ export default ({ dispatch, getState }) => {
     if (meta.status === 'failed') return;
     if (meta.status === 'created') {
       const dataT = await dataTA;
-      const { input, applications } = await dataT.get(localID);
+      const { input, applications, goterms, pathways } = await dataT.get(
+        localID,
+      );
 
       const body = new FormData();
       body.set('email', config.IPScan.contactEmail);
+      body.set('title', localID);
       body.set('sequence', input);
       for (const application of applications) {
         body.append('appl', application);
       }
+      body.set('goterms', goterms);
+      body.set('pathways', pathways);
 
       const ipScanInfo = getState().settings.ipScan;
 

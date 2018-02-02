@@ -219,6 +219,17 @@ class AdvancedOptions extends PureComponent {
               TMHMM
             </label>
           </fieldset>
+          <fieldset className={f('fieldset')}>
+            <legend>Other</legend>
+            <label>
+              <input name="goterms" defaultChecked type="checkbox" />
+              Gene Ontology terms
+            </label>
+            <label>
+              <input name="pathways" defaultChecked type="checkbox" />
+              Pathways
+            </label>
+          </fieldset>
         </details>
       </div>
     );
@@ -258,6 +269,12 @@ const getCheckedApplications = form =>
     form.querySelectorAll('input[name="checkedApplications"]:checked'),
     input => input.value,
   );
+
+const isXChecked = x => form =>
+  !!form.querySelector(`input[name="${x}"]:checked`);
+
+const isGoTermsChecked = isXChecked('goterms');
+const isPathwaysChecked = isXChecked('pathways');
 
 const checkValidity = (({ comment, IUPACProt }) => lines =>
   lines.reduce(
@@ -318,7 +335,7 @@ class IPScanSearch extends PureComponent {
       () => this.editor.focus(),
     );
 
-  _handleSubmit = async event => {
+  _handleSubmit = event => {
     event.preventDefault();
     if (!this._form) return;
     const applications = getCheckedApplications(this._form);
@@ -336,6 +353,8 @@ class IPScanSearch extends PureComponent {
       data: {
         input: value,
         applications,
+        goterms: isGoTermsChecked(this._form),
+        pathways: isPathwaysChecked(this._form),
       },
     });
     this.props.goToCustomLocation({
