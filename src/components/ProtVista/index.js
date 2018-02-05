@@ -529,8 +529,6 @@ class ProtVista extends PureComponent {
                                                 )}
                                               >
                                                 <Link
-                                                  r={r}
-                                                  d={d}
                                                   to={{
                                                     description: {
                                                       main: { key: 'entry' },

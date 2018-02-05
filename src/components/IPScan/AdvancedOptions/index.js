@@ -179,10 +179,16 @@ class AdvancedOptions extends PureComponent {
             <legend>Applications</legend>
             <p>{payload.description}</p>
             <div className={f('button-group')}>
-              <button className={f('button')} onClick={this._selectAll}>
+              <button
+                className={f('button', 'secondary')}
+                onClick={this._selectAll}
+              >
                 Select all
               </button>
-              <button className={f('button')} onClick={this._unselectAll}>
+              <button
+                className={f('button', 'secondary')}
+                onClick={this._unselectAll}
+              >
                 Unselect all
               </button>
             </div>
