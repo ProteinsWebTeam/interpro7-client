@@ -104,33 +104,3 @@ input:disabled {
   color: var(--colors-gray);
   margin-right: 0.2rem; /*to align with border form*/
 }
-
-.details {
-  margin-bottom: 0.5em;
-
-  & > summary {
-    cursor: pointer;
-  }
-}
-
-.fieldset label {
-  display: inline-block;
-  margin-right: 2em;
-
-  &:last-of-type {
-    margin-right: initial;
-  }
-}
-
-.stay-checkbox {
-  display: inline;
-  vertical-align: middle;
-  margin: auto 1em;
-  color: var(--colors-dark);
-
-  & > .switch {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 1ch;
-  }
-}

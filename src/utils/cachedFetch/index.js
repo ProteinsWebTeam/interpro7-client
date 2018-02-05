@@ -25,13 +25,34 @@ const handleProgress = async (
   }
 };
 
-const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
+const acceptHeaderMap = new Map([['json', 'application/json']]);
+
+const modifyHeaders = (headers = new Headers(), newHeaderMapping) => {
+  for (const [key, value] of newHeaderMapping) {
+    if (!headers.get(key)) headers.set(key, value);
+  }
+  return headers;
+};
+
+const cachedFetch = (
+  url /*: string */,
+  options /*: Object */ = {},
+  responseType /*: ?string */,
+) => {
   const { useCache = true, ...restOfOptions } = options;
   const key = `${pkg.name}-cachedFetch-${url}`;
   const cached = sessionStorage.getItem(key);
 
   if (useCache && cached) {
     return Promise.resolve(new Response(new Blob([cached])));
+  }
+
+  const acceptType = acceptHeaderMap.get(responseType);
+  if (acceptType) {
+    restOfOptions.headers = modifyHeaders(
+      restOfOptions.headers,
+      new Map([['Accept', acceptType], ['Content-Type', acceptType]]),
+    );
   }
 
   return fetch(url, restOfOptions).then(response => {
@@ -53,7 +74,7 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
   onProgress /*: (number) => void */,
 ) => {
   // Casting to object to avoid flow error
-  const response /*: Object */ = await cachedFetch(url, options);
+  const response /*: Object */ = await cachedFetch(url, options, responseType);
   if (onProgress && response.headers.get('Content-Length')) {
     handleProgress(response, onProgress);
   }

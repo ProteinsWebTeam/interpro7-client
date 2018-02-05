@@ -1,0 +1,202 @@
+// @flow
+import React, { PureComponent } from 'react';
+import T from 'prop-types';
+import { createSelector } from 'reselect';
+import { format } from 'url';
+
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+
+import loadData from 'higherOrder/loadData';
+
+import { foundationPartial } from 'styles/foundation';
+
+import local from './style.css';
+
+const f = foundationPartial(local);
+
+class AdvancedOption extends PureComponent {
+  static propTypes = {
+    name: T.string.isRequired,
+    value: T.string.isRequired,
+    children: T.string.isRequired,
+    title: T.string,
+    defaultChecked: T.bool,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      checked: !!props.defaultChecked,
+    };
+  }
+
+  render() {
+    const { name, value, children, title, defaultChecked } = this.props;
+    const output = (
+      <label>
+        <input
+          name={name}
+          defaultChecked={defaultChecked}
+          type="checkbox"
+          value={value}
+          data-defaultchecked={defaultChecked}
+        />
+        {children}
+      </label>
+    );
+    if (!title) return output;
+    return <Tooltip title={title}>{output}</Tooltip>;
+  }
+}
+
+const mdb1Values = new Set([
+  'CDD',
+  'HAMAP',
+  'Panther',
+  'PfamA',
+  'PIRSF',
+  'PRINTS',
+  'ProDom',
+  'PrositeProfiles',
+  'SMART',
+  'TIGRFAM',
+  'PrositePatterns',
+]);
+const mdb2Values = new Set(['Gene3d', 'SFLD', 'SuperFamily']);
+const otherValues = new Set([
+  'Coils',
+  'MobiDBLite',
+  'Phobius',
+  'SignalP',
+  'TMHMM',
+]);
+
+const groupApplications = applications => {
+  const mdb1 = [];
+  const mdb2 = [];
+  const other = [];
+  const noCategory = [];
+  for (const application of applications) {
+    if (mdb1Values.has(application.value)) mdb1.push(application);
+    else if (mdb2Values.has(application.value)) mdb2.push(application);
+    else if (otherValues.has(application.value)) other.push(application);
+    else noCategory.push(application);
+  }
+  return { mdb1, mdb2, other, noCategory };
+};
+
+const applicationToCheckbox = ({ label, value, defaultValue, properties }) => (
+  <AdvancedOption
+    name="appl"
+    value={value}
+    defaultChecked={defaultValue}
+    title={properties && properties.properties[0].value}
+    key={value}
+  >
+    {label}
+  </AdvancedOption>
+);
+applicationToCheckbox.propTypes = {
+  label: T.string.isRequired,
+  value: T.string.isRequired,
+  defaultValue: T.bool.isRequired,
+  properties: T.shape({
+    properties: T.arrayOf(
+      T.shape({
+        value: T.string.isRequired,
+      }),
+    ).isRequired,
+  }),
+};
+
+class AdvancedOptions extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      loading: T.bool.isRequired,
+      payload: T.object,
+      ok: T.bool,
+    }).isRequired,
+  };
+
+  render() {
+    const { data: { loading, payload, ok } } = this.props;
+    if (loading) return 'Loading…';
+    if (!ok) return 'Failed…';
+    const { mdb1, mdb2, other, noCategory } = groupApplications(
+      payload.values.values,
+    );
+    return (
+      <div className={f('row')}>
+        <details className={f('columns', 'details')} open>
+          <summary>Advanced Options</summary>
+          <fieldset className={f('fieldset')}>
+            <legend>Applications</legend>
+            <p>{payload.description}</p>
+            <fieldset className={f('fieldset')}>
+              <legend>Member databases</legend>
+              <fieldset className={f('fieldset')}>
+                <legend>Families, domains, sites & repeats</legend>
+                {mdb1.map(applicationToCheckbox)}
+              </fieldset>
+              <fieldset className={f('fieldset')}>
+                <legend>Structural domains</legend>
+                {mdb2.map(applicationToCheckbox)}
+              </fieldset>
+            </fieldset>
+            <fieldset className={f('fieldset')}>
+              <legend>Other sequence features</legend>
+              {other.map(applicationToCheckbox)}
+            </fieldset>
+            {noCategory.length ? (
+              <fieldset className={f('fieldset')}>
+                <legend>Other category</legend>
+                {noCategory.map(applicationToCheckbox)}
+              </fieldset>
+            ) : null}
+          </fieldset>
+          <fieldset className={f('fieldset')}>
+            <legend>Other</legend>
+            <AdvancedOption name="goterms" value="goterms" defaultChecked>
+              Gene Ontology Terms
+            </AdvancedOption>
+            <AdvancedOption name="pathways" value="pathways" defaultChecked>
+              Pathways
+            </AdvancedOption>
+          </fieldset>
+          <Tooltip
+            className={f('float-right')}
+            title="Stay on this page after submitting a new job?"
+          >
+            <label className={f('stay-checkbox')}>
+              Create another job
+              <div className={f('switch', 'tiny')}>
+                <input
+                  className={f('switch-input')}
+                  type="checkbox"
+                  name="stay"
+                />
+                <span className={f('switch-paddle')}>
+                  <span />
+                </span>
+              </div>
+            </label>
+          </Tooltip>
+        </details>
+      </div>
+    );
+  }
+}
+
+const getUrlFromState = createSelector(
+  state => state.settings.ipScan,
+  ({ protocol, hostname, port, root }) =>
+    format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}/parameterdetails/appl`,
+    }),
+);
+
+export default loadData(getUrlFromState)(AdvancedOptions);

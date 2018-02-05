@@ -1,0 +1,24 @@
+@import '../../../styles/colors.css';
+
+.details {
+  margin-bottom: 0.5em;
+
+  & > summary {
+    cursor: pointer;
+  }
+}
+
+.fieldset label {
+  display: inline-block;
+  margin-right: 2em;
+}
+
+.stay-checkbox {
+  color: var(--colors-dark);
+
+  & > .switch {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 1ch;
+  }
+}

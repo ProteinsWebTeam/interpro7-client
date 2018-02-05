@@ -13,6 +13,7 @@ import {
   convertToRaw,
 } from 'draft-js';
 
+import AdvancedOptions from 'components/IPScan/AdvancedOptions';
 import Redirect from 'components/generic/Redirect';
 
 import { createJob, goToCustomLocation } from 'actions/creators';
@@ -29,243 +30,6 @@ import local from './style.css';
 import example from './example.fasta';
 
 const f = foundationPartial(interproTheme, ipro, local);
-
-class AdvancedOptions extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  reset = () =>
-    this.setState(currentState => {
-      const newState = {};
-      for (const key of Object.keys(currentState)) {
-        newState[key] = true;
-      }
-      return newState;
-    });
-
-  _handleChange = ({ target: { value, checked } }) => {
-    this.setState({ [value]: checked });
-  };
-
-  render() {
-    return (
-      <div className={f('row')}>
-        <details
-          className={f('columns', 'details')}
-          onChange={this._handleChange}
-        >
-          <summary>Advanced options</summary>
-          <fieldset className={f('fieldset')}>
-            <legend>Member databases</legend>
-            <fieldset className={f('fieldset')}>
-              <legend>Families, domains, sites & repeats</legend>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.CDD === false)}
-                  type="checkbox"
-                  value="CDD"
-                />
-                CDD
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.HAMAP === false)}
-                  type="checkbox"
-                  value="HAMAP"
-                />
-                HAMAP
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.Panther === false)}
-                  type="checkbox"
-                  value="Panther"
-                />
-                Panther
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.PfamA === false)}
-                  type="checkbox"
-                  value="PfamA"
-                />
-                PfamA
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.PIRSF === false)}
-                  type="checkbox"
-                  value="PIRSF"
-                />
-                PIRSF
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.PRINTS === false)}
-                  type="checkbox"
-                  value="PRINTS"
-                />
-                PRINTS
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.ProDom === false)}
-                  type="checkbox"
-                  value="ProDom"
-                />
-                ProDom
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.PrositeProfiles === false)}
-                  type="checkbox"
-                  value="PrositeProfiles"
-                />
-                Prosite-Profiles
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.SMART === false)}
-                  type="checkbox"
-                  value="SMART"
-                />
-                SMART
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.TIGRFAM === false)}
-                  type="checkbox"
-                  value="TIGRFAM"
-                />
-                TIGRFAM
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.PrositePatterns === false)}
-                  type="checkbox"
-                  value="PrositePatterns"
-                />
-                Prosite-Patterns
-              </label>
-            </fieldset>
-            <fieldset className={f('fieldset')}>
-              <legend>Structural domains</legend>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.Gene3d === false)}
-                  type="checkbox"
-                  value="Gene3d"
-                />
-                Gene3D
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.SFLD === false)}
-                  type="checkbox"
-                  value="SFLD"
-                />
-                SFLD
-              </label>
-              <label>
-                <input
-                  name="checkedApplications"
-                  checked={!(this.state.SuperFamily === false)}
-                  type="checkbox"
-                  value="SuperFamily"
-                />
-                SuperFamily
-              </label>
-            </fieldset>
-          </fieldset>
-          <fieldset className={f('fieldset')}>
-            <legend>Other sequence features</legend>
-            <label>
-              <input
-                name="checkedApplications"
-                checked={!(this.state.Coils === false)}
-                type="checkbox"
-                value="Coils"
-              />
-              Coils
-            </label>
-            <label>
-              <input
-                name="checkedApplications"
-                checked={!(this.state.MobiDBLite === false)}
-                type="checkbox"
-                value="MobiDBLite"
-              />
-              MobiDB Lite
-            </label>
-            <label>
-              <input
-                name="checkedApplications"
-                checked={!(this.state.Phobius === false)}
-                type="checkbox"
-                value="Phobius"
-              />
-              Phobius
-            </label>
-            <label>
-              <input
-                name="checkedApplications"
-                checked={!(this.state.SignalP === false)}
-                type="checkbox"
-                value="SignalP"
-              />
-              SignalIP
-            </label>
-            <label>
-              <input
-                name="checkedApplications"
-                checked={!(this.state.TMHMM === false)}
-                type="checkbox"
-                value="TMHMM"
-              />
-              TMHMM
-            </label>
-          </fieldset>
-          <fieldset className={f('fieldset')}>
-            <legend>Other</legend>
-            <label>
-              <input
-                name="goterms"
-                checked={!(this.state.goterms === false)}
-                type="checkbox"
-                value="goterms"
-              />
-              Gene Ontology terms
-            </label>
-            <label>
-              <input
-                name="pathways"
-                checked={!(this.state.pathways === false)}
-                type="checkbox"
-                value="pathways"
-              />
-              Pathways
-            </label>
-          </fieldset>
-        </details>
-      </div>
-    );
-  }
-}
 
 const strategy = re => (block, cb) => {
   const text = block.getText();
@@ -295,14 +59,15 @@ const classedSpan = className => {
   return Span;
 };
 
+const checkedSelectorFor = x => `input[name="${x}"]:checked`;
+
 const getCheckedApplications = form =>
   Array.from(
-    form.querySelectorAll('input[name="checkedApplications"]:checked'),
+    form.querySelectorAll(checkedSelectorFor('appl')),
     input => input.value,
   );
 
-const isXChecked = x => form =>
-  !!form.querySelector(`input[name="${x}"]:checked`);
+const isXChecked = x => form => !!form.querySelector(checkedSelectorFor(x));
 
 const isGoTermsChecked = isXChecked('goterms');
 const isPathwaysChecked = isXChecked('pathways');
@@ -351,7 +116,14 @@ class IPScanSearch extends PureComponent {
   }
 
   _handleReset = text => {
-    if (this._advancedSettings && !text) this._advancedSettings.reset();
+    if (this._form && typeof text !== 'string') {
+      const inputsToReset = Array.from(
+        this._form.querySelectorAll('input[name]:not([name="stay"])'),
+      );
+      for (const input of inputsToReset) {
+        input.checked = !!input.dataset.defaultchecked;
+      }
+    }
     this.setState(
       {
         editorState:
@@ -525,9 +297,7 @@ class IPScanSearch extends PureComponent {
                   </div>
                 </div>
 
-                <AdvancedOptions
-                  ref={component => (this._advancedSettings = component)}
-                />
+                <AdvancedOptions ref={node => (this._advancedOptions = node)} />
 
                 <div className={f('row')}>
                   <div className={f('columns')}>
@@ -581,19 +351,6 @@ class IPScanSearch extends PureComponent {
                       onClick={this._handleReset}
                       value="Clear"
                     />
-                    <label className={f('stay-checkbox')}>
-                      Create another job
-                      <div className={f('switch', 'tiny')}>
-                        <input
-                          className={f('switch-input')}
-                          type="checkbox"
-                          name="stay"
-                        />
-                        <span className={f('switch-paddle')}>
-                          <span />
-                        </span>
-                      </div>
-                    </label>
                   </div>
                   <div
                     className={f(
