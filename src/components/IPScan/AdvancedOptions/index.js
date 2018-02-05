@@ -110,6 +110,13 @@ applicationToCheckbox.propTypes = {
   }),
 };
 
+const toggleAll = (toggle, node) => {
+  if (!node) return;
+  for (const checkbox of node.querySelectorAll('input[name="appl"]')) {
+    checkbox.checked = toggle;
+  }
+};
+
 class AdvancedOptions extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -117,6 +124,16 @@ class AdvancedOptions extends PureComponent {
       payload: T.object,
       ok: T.bool,
     }).isRequired,
+  };
+
+  _selectAll = event => {
+    event.preventDefault();
+    toggleAll(true, this._node);
+  };
+
+  _unselectAll = event => {
+    event.preventDefault();
+    toggleAll(false, this._node);
   };
 
   render() {
@@ -128,11 +145,47 @@ class AdvancedOptions extends PureComponent {
     );
     return (
       <div className={f('row')}>
-        <details className={f('columns', 'details')} open>
+        <details className={f('columns', 'details')}>
           <summary>Advanced Options</summary>
           <fieldset className={f('fieldset')}>
+            <legend>Job configuration</legend>
+            <Tooltip title="Stay on this page after submitting a new job?">
+              <label className={f('stay-checkbox')}>
+                <div className={f('switch', 'tiny')}>
+                  <input
+                    className={f('switch-input')}
+                    type="checkbox"
+                    name="stay"
+                  />
+                  <span className={f('switch-paddle')}>
+                    <span />
+                  </span>
+                </div>
+                Create another job after this one
+              </label>
+            </Tooltip>
+            <Tooltip title="Give this job a local title (only visible on this browser)">
+              <label className={f('input-group')}>
+                <span className={f('input-group-label')}>local title</span>
+                <input
+                  type="text"
+                  className={f('input-group-field')}
+                  name="local-title"
+                />
+              </label>
+            </Tooltip>
+          </fieldset>
+          <fieldset className={f('fieldset')} ref={node => (this._node = node)}>
             <legend>Applications</legend>
             <p>{payload.description}</p>
+            <div className={f('button-group')}>
+              <button className={f('button')} onClick={this._selectAll}>
+                Select all
+              </button>
+              <button className={f('button')} onClick={this._unselectAll}>
+                Unselect all
+              </button>
+            </div>
             <fieldset className={f('fieldset')}>
               <legend>Member databases</legend>
               <fieldset className={f('fieldset')}>
@@ -164,24 +217,6 @@ class AdvancedOptions extends PureComponent {
               Pathways
             </AdvancedOption>
           </fieldset>
-          <Tooltip
-            className={f('float-right')}
-            title="Stay on this page after submitting a new job?"
-          >
-            <label className={f('stay-checkbox')}>
-              Create another job
-              <div className={f('switch', 'tiny')}>
-                <input
-                  className={f('switch-input')}
-                  type="checkbox"
-                  name="stay"
-                />
-                <span className={f('switch-paddle')}>
-                  <span />
-                </span>
-              </div>
-            </label>
-          </Tooltip>
         </details>
       </div>
     );

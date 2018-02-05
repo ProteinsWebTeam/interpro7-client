@@ -67,6 +67,9 @@ const getCheckedApplications = form =>
     input => input.value,
   );
 
+const getLocalTitle = form =>
+  form.querySelector('input[name="local-title"').value.trim();
+
 const isXChecked = x => form => !!form.querySelector(checkedSelectorFor(x));
 
 const isGoTermsChecked = isXChecked('goterms');
@@ -144,21 +147,19 @@ class IPScanSearch extends PureComponent {
   _handleSubmit = event => {
     event.preventDefault();
     if (!this._form) return;
-    const applications = getCheckedApplications(this._form);
     const lines = convertToRaw(
       this.state.editorState.getCurrentContent(),
     ).blocks.map(block => block.text);
     if (!lines.length) return;
-    const value = lines.join('\n');
-    const localID = id(`internal-${Date.now()}`);
     this.props.createJob({
       metadata: {
-        localID,
+        localID: id(`internal-${Date.now()}`),
+        localTitle: getLocalTitle(this._form) || null,
         type: 'InterProScan',
       },
       data: {
-        input: value,
-        applications,
+        input: lines.join('\n'),
+        applications: getCheckedApplications(this._form),
         goterms: isGoTermsChecked(this._form),
         pathways: isPathwaysChecked(this._form),
       },
@@ -297,8 +298,6 @@ class IPScanSearch extends PureComponent {
                   </div>
                 </div>
 
-                <AdvancedOptions ref={node => (this._advancedOptions = node)} />
-
                 <div className={f('row')}>
                   <div className={f('columns')}>
                     <div className={f('button-group', 'line-with-buttons')}>
@@ -329,6 +328,8 @@ class IPScanSearch extends PureComponent {
                     </div>
                   </div>
                 </div>
+
+                <AdvancedOptions ref={node => (this._advancedOptions = node)} />
 
                 <div className={f('row')}>
                   <div

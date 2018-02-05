@@ -11,14 +11,19 @@
 .fieldset label {
   display: inline-block;
   margin-right: 2em;
+
+  &.input-group {
+    display: table;
+  }
 }
 
 .stay-checkbox {
   color: var(--colors-dark);
+  margin-bottom: 1em;
 
   & > .switch {
     display: inline-block;
     vertical-align: middle;
-    margin: 0 1ch;
+    margin: 0 1ch 0 0;
   }
 }
