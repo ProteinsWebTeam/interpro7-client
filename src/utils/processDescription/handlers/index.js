@@ -107,7 +107,6 @@ const templateHandler /*: Handler */ = {
   handle(description, current, next, ...rest) {
     const key = this.key || this.getKey(description);
     if (key && current) {
-      // eslint-disable-next-line no-param-reassign
       set(
         description,
         key,

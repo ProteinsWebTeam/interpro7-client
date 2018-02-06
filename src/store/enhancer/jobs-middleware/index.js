@@ -2,6 +2,7 @@
 import url from 'url';
 import { schedule } from 'timing-functions/src';
 
+import { cachedFetchJSON, cachedFetchText } from 'utils/cachedFetch';
 import id from 'utils/cheapUniqueId';
 
 import {
@@ -74,12 +75,13 @@ export default ({ dispatch, getState }) => {
 
       const ipScanInfo = getState().settings.ipScan;
 
-      const response = await fetch(
+      const { payload: remoteID, ok } = await cachedFetchText(
         url.resolve(
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
           'run',
         ),
         {
+          useCache: false,
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: url
@@ -96,8 +98,7 @@ export default ({ dispatch, getState }) => {
             .replace(/^\?/, ''),
         },
       );
-      const remoteID = await response.text();
-      if (response.ok) {
+      if (ok) {
         dispatch(
           updateJob({ metadata: { ...meta, remoteID, status: 'submitted' } }),
         );
@@ -106,16 +107,17 @@ export default ({ dispatch, getState }) => {
     }
     if (meta.status === 'submitted' || meta.status === 'running') {
       const ipScanInfo = getState().settings.ipScan;
-      const response = await fetch(
+      const { payload, ok } = await cachedFetchText(
         url.resolve(
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
           `status/${meta.remoteID}`,
         ),
+        { useCache: false },
       );
-      const newStatus = (await response.text()).toLowerCase().replace('_', ' ');
-      if (response.ok) {
-        dispatch(updateJob({ metadata: { ...meta, status: newStatus } }));
-        if (newStatus === 'finished') {
+      const status = payload.toLowerCase().replace('_', ' ');
+      if (ok) {
+        dispatch(updateJob({ metadata: { ...meta, status } }));
+        if (status === 'finished') {
           const currentDesc = getState().customLocation.description;
           if (
             currentDesc.main.key !== 'job' ||
@@ -126,10 +128,10 @@ export default ({ dispatch, getState }) => {
             dispatch(
               addToast(
                 {
-                  title: `Job ${newStatus}`,
+                  title: `Job ${status}`,
                   body: `Your job with id ${
                     meta.remoteID
-                  } is in a “${newStatus}” state.`,
+                  } is in a “${status}” state.`,
                   ttl: 10000, // eslint-disable-line no-magic-numbers
                   link: {
                     to: {
@@ -150,19 +152,14 @@ export default ({ dispatch, getState }) => {
     }
     if (meta.status === 'finished' && !meta.hasResults) {
       const ipScanInfo = getState().settings.ipScan;
-      const response = await fetch(
+      const { payload: data, ok } = await cachedFetchJSON(
         url.resolve(
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
           `result/${meta.remoteID}/json`,
         ),
       );
-      if (response.ok) {
-        dispatch(
-          updateJob({
-            metadata: { ...meta, hasResults: true },
-            data: await response.json(),
-          }),
-        );
+      if (ok) {
+        dispatch(updateJob({ metadata: { ...meta, hasResults: true }, data }));
       }
     }
   };

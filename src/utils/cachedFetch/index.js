@@ -25,20 +25,7 @@ const handleProgress = async (
   }
 };
 
-const acceptHeaderMap = new Map([['json', 'application/json']]);
-
-const modifyHeaders = (headers = new Headers(), newHeaderMapping) => {
-  for (const [key, value] of newHeaderMapping) {
-    if (!headers.get(key)) headers.set(key, value);
-  }
-  return headers;
-};
-
-const cachedFetch = (
-  url /*: string */,
-  options /*: Object */ = {},
-  responseType /*: ?string */,
-) => {
+const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
   const { useCache = true, ...restOfOptions } = options;
   const key = `${pkg.name}-cachedFetch-${url}`;
   const cached = sessionStorage.getItem(key);
@@ -47,18 +34,10 @@ const cachedFetch = (
     return Promise.resolve(new Response(new Blob([cached])));
   }
 
-  const acceptType = acceptHeaderMap.get(responseType);
-  if (acceptType) {
-    restOfOptions.headers = modifyHeaders(
-      restOfOptions.headers,
-      new Map([['Accept', acceptType], ['Content-Type', acceptType]]),
-    );
-  }
-
   return fetch(url, restOfOptions).then(response => {
     const shouldCache =
       config.cache.enabled && useCache && response.status === SUCCESS_STATUS;
-    if (shouldCache) {
+    if (shouldCache && 'clone' in response) {
       response
         .clone()
         .text()
@@ -70,11 +49,17 @@ const cachedFetch = (
 
 const commonCachedFetch = (responseType /*: ?string */) => async (
   url /*: string */,
-  options /*: Object */,
+  { method = 'GET', headers = new Headers(), ...options } /*: Object */,
   onProgress /*: (number) => void */,
 ) => {
+  // modify options as needed
+  options.method = method;
+  if (responseType === 'json' && !headers.get('Accept')) {
+    headers.set('Accept', 'application/json');
+  }
+  options.headers = headers;
   // Casting to object to avoid flow error
-  const response /*: Object */ = await cachedFetch(url, options, responseType);
+  const response /*: Object */ = await cachedFetch(url, options);
   if (onProgress && response.headers.get('Content-Length')) {
     handleProgress(response, onProgress);
   }

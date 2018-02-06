@@ -209,7 +209,6 @@ class IPScanSearch extends PureComponent {
 
   _handleFileChange = ({ target }) => {
     this._handleFile(target.files[0]);
-    // eslint-disable-next-line no-param-reassign
     target.value = null;
   };
 
