@@ -1,6 +1,7 @@
 // @flow
 import url from 'url';
 import { schedule } from 'timing-functions/src';
+
 import id from 'utils/cheapUniqueId';
 
 import {
@@ -88,7 +89,22 @@ export default ({ dispatch, getState }) => {
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
           'run',
         ),
-        { method: 'POST', body },
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: url
+            .format({
+              query: {
+                email: config.IPScan.contactEmail,
+                title: localID,
+                sequence: input,
+                appl: applications,
+                goterms,
+                pathways,
+              },
+            })
+            .replace(/^\?/, ''),
+        },
       );
       const remoteID = await response.text();
       if (response.ok) {
