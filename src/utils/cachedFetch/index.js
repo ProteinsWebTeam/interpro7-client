@@ -37,7 +37,7 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
   return fetch(url, restOfOptions).then(response => {
     const shouldCache =
       config.cache.enabled && useCache && response.status === SUCCESS_STATUS;
-    if (shouldCache && 'clone' in response) {
+    if (shouldCache && response.clone) {
       response
         .clone()
         .text()
@@ -49,8 +49,8 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
 
 const commonCachedFetch = (responseType /*: ?string */) => async (
   url /*: string */,
-  { method = 'GET', headers = new Headers(), ...options } /*: Object */,
-  onProgress /*: (number) => void */,
+  { method = 'GET', headers = new Headers(), ...options } /*: Object */ = {},
+  onProgress /*?: (number) => void */,
 ) => {
   // modify options as needed
   options.method = method;
