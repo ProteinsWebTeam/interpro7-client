@@ -72,16 +72,6 @@ export default ({ dispatch, getState }) => {
         localID,
       );
 
-      const body = new FormData();
-      body.set('email', config.IPScan.contactEmail);
-      body.set('title', localID);
-      body.set('sequence', input);
-      for (const application of applications) {
-        body.append('appl', application);
-      }
-      body.set('goterms', goterms);
-      body.set('pathways', pathways);
-
       const ipScanInfo = getState().settings.ipScan;
 
       const response = await fetch(
