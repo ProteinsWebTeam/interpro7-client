@@ -45,7 +45,7 @@ const LiteratureItem = (
             </Link>{' '}
           </span>
         )}
-      <span className={f('authors')}>{r.authors}</span>{' '}
+      <span className={f('authors')}>{r.authors.join(', ')}</span>{' '}
       <span className={f('title')}>{r.title}</span>
       {r.ISOJournal && <span className={f('journal')}>{r.ISOJournal}, </span>}
       {r.issue && <span className={f('issue')}> {r.issue}, </span>}
