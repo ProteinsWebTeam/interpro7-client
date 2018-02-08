@@ -50,7 +50,7 @@ class ExperimentTypeFilter extends PureComponent {
       (Object.entries(description).find(([_key, value]) => value.isFilter) ||
         [])[0]
     )
-      return <div>Not available.</div>;
+      return 'Not available.';
     const types = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,
     );

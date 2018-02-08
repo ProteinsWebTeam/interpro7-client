@@ -2,11 +2,15 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+
+import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
+
+import ErrorBoundary from 'wrappers/ErrorBoundary';
+
 import style from './style.css';
-import { createSelector } from 'reselect';
-import { goToCustomLocation } from 'actions/creators';
 
 const f = foundationPartial(style);
 
@@ -110,16 +114,18 @@ class FiltersPanel extends PureComponent {
           </button>
         </div>
 
-        {children.map((child, i) => (
-          <FilterPanel
-            key={i}
-            label={child.props.label}
-            onCollapse={() => this.toggleFilter(i)}
-            collapsed={this.state.filters[i]}
-          >
-            {child}
-          </FilterPanel>
-        ))}
+        <ErrorBoundary>
+          {children.map((child, i) => (
+            <FilterPanel
+              key={i}
+              label={child.props.label}
+              onCollapse={() => this.toggleFilter(i)}
+              collapsed={this.state.filters[i]}
+            >
+              {child}
+            </FilterPanel>
+          ))}
+        </ErrorBoundary>
       </div>
     );
   }

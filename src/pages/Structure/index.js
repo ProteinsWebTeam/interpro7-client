@@ -133,6 +133,8 @@ const List = ({
           <SearchBox search={search.search}>Search structures</SearchBox>
           <Column
             dataKey="accession"
+            headerClassName={f('table-center')}
+            cellClassName={f('table-center')}
             renderer={(accession /*: string */) => (
               <Link
                 to={customLocation => ({
@@ -181,9 +183,27 @@ const List = ({
           >
             Name
           </Column>
-          <Column dataKey="experiment_type">Experiment type</Column>
+          <Column
+            dataKey="experiment_type"
+            headerClassName={f('table-center')}
+            cellClassName={f('table-center')}
+          >
+            Experiment type
+          </Column>
+          <Column
+            dataKey="resolution"
+            headerClassName={f('table-center')}
+            cellClassName={f('table-center')}
+            renderer={(resolution /*: string | number */) =>
+              resolution + (typeof resolution === 'number' ? ' Å' : '')
+            }
+          >
+            Resolution
+          </Column>
           <Column
             dataKey="accession"
+            headerClassName={f('table-center')}
+            cellClassName={f('table-center')}
             defaultKey="structureAccession"
             renderer={(accession /*: string */) => (
               <PDBeLink id={accession}>
