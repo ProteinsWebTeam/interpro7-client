@@ -300,14 +300,15 @@ class Settings extends PureComponent {
             <UISettings ui={ui} />
             <CacheSettings cache={cache} />
             <APIEndpointSettings category="api" endpointDetails={api}>
-              API Settings {!DEV && '(modification temporarily disabled'}
+              API Settings {!DEV && '(modification temporarily disabled)'}
             </APIEndpointSettings>
             <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
-              EBI Search Settings {!DEV && '(modification temporarily disabled'}
+              EBI Search Settings{' '}
+              {!DEV && '(modification temporarily disabled)'}
             </EBIEndpointSettings>
             <IPScanEndpointSettings category="ipScan" endpointDetails={ipScan}>
               InterProScan Settings{' '}
-              {!DEV && '(modification temporarily disabled'}
+              {!DEV && '(modification temporarily disabled)'}
             </IPScanEndpointSettings>
             <button onClick={this._handleReset} className={f('button')}>
               Reset settings to default values
