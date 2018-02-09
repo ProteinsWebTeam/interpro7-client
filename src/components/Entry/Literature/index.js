@@ -45,10 +45,11 @@ const LiteratureItem = (
             </Link>{' '}
           </span>
         )}
-      <span className={f('authors')}>{r.authors.join(', ')}</span>{' '}
-      <span className={f('title')}>{r.title}</span>
-      {r.ISOJournal && <span className={f('journal')}>{r.ISOJournal}, </span>}
-      {r.issue && <span className={f('issue')}> {r.issue}, </span>}
+      <span className={f('title')}>{r.title} </span>
+      <span className={f('authors')}>{r.authors.join(', ')} </span>{' '}
+      {r.ISO_journal && <span className={f('journal')}>{r.ISO_journal} </span>}
+      {r.volume && <span className={f('volume')}> {r.volume}, </span>}
+      {r.raw_pages && <span className={f('pages')}> {r.raw_pages}, </span>}
       <span className={f('year')}>({r.year})</span>.{' '}
       {r.rawPages && <span className={f('pages')}>{r.rawPages}. </span>}
       {
@@ -60,10 +61,14 @@ const LiteratureItem = (
           View article
         </DOILink>
       )}
-      PMID:{' '}
-      <PMCLink id={r.PMID} className={f('ext', 'margin-right-medium')}>
-        {r.PMID}
-      </PMCLink>
+      {r.PMID && (
+        <span>
+          PMID:{' '}
+          <PMCLink id={r.PMID} className={f('ext', 'margin-right-medium')}>
+            {r.PMID}
+          </PMCLink>
+        </span>
+      )}
     </p>
   </div>
 );
@@ -75,7 +80,7 @@ LiteratureItem.propTypes = {
 };
 
 const Literature = (
-  { included, extra } /*: {|included: Array, extra: Array|} */,
+  { included = [], extra = [] } /*: {|included: Array, extra: Array|} */,
 ) => (
   <div className={f('row')}>
     <div className={f('large-12', 'columns', 'margin-bottom-large')}>
@@ -92,7 +97,7 @@ const Literature = (
           ))}
         </div>
       ) : null}
-      {extra.length ? <h5>Further reading</h5> : null}
+      {included.length && extra.length ? <h5>Further reading</h5> : null}
       {extra.length ? (
         <div className={f('list', 'further')}>
           {extra.map(([pubID, ref]) => (
