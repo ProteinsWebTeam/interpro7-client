@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 
 import Link from 'components/generic/Link';

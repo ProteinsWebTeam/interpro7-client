@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -52,7 +51,7 @@ class SearchResults extends PureComponent {
       );
     }
     return (
-      <React.Fragment>
+      <Fragment>
         {payload && <SingleMatch payload={payload} searchValue={searchValue} />}
         <Table
           dataTable={entries}
@@ -88,19 +87,19 @@ class SearchResults extends PureComponent {
           <Column
             dataKey="fields"
             renderer={d => (
-              <React.Fragment>
+              <Fragment>
                 <HighlightedText
                   text={d.description[0].slice(0, MAX_LENGTH)}
                   textToHighlight={searchValue}
                 />…
-              </React.Fragment>
+              </Fragment>
             )}
             cellStyle={{ textAlign: 'justify' }}
           >
             Description
           </Column>
         </Table>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

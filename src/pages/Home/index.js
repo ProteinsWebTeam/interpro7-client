@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 
 // Components
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -432,7 +431,7 @@ const schemaProcessDataForDB = ({ name, location }) => ({
 class Home extends PureComponent {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <SchemaOrgData
@@ -674,7 +673,7 @@ class Home extends PureComponent {
           </div>
         </div>
         <Twitter />
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

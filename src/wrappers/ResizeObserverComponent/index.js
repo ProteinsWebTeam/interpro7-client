@@ -1,10 +1,12 @@
 // @flow
-import React, { PureComponent, Children, cloneElement } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import ResizeObserver from './ResizeObserver';
 
-//:: type measurement = 'bottom' | 'height' | 'left' | 'right' | 'top' | 'width' | 'x' | 'y';
+/*:: type Measurement =
+  'bottom' | 'height' | 'left' | 'right' | 'top' | 'width' | 'x' | 'y';
+*/
 
 /*:: type Props = {
   element: ?string,
@@ -12,23 +14,25 @@ import ResizeObserver from './ResizeObserver';
   measurements: Measurement | Array<Measurement>,
 }; */
 
-class ResizeObserverComponent extends PureComponent /*:: <Props> */ {
+/*:: type State = {} | {|
+  [key: Measurement]: number,
+|}; */
+
+class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
   /*::
     _node: ?HTMLElement;
     _resizeObserver: any;
   */
-  static defaultProps = {
-    element: 'div',
-  };
 
   static propTypes = {
     element: T.string,
-    children: T.any,
+    children: T.any.isRequired,
     measurements: T.oneOfType([T.arrayOf(T.string).isRequired, T.string]),
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
+
     this.state = {};
     this._resizeObserver = new ResizeObserver(
       this._handleResizeEvent.bind(this),
@@ -67,11 +71,11 @@ class ResizeObserverComponent extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { children, element: Element, measurements, ...props } = this.props;
-    const child = Children.only(children);
+    const { children, element, measurements, ...props } = this.props;
+    const Element = element || 'div';
     return (
       <Element {...props} ref={this._setRef}>
-        {cloneElement(child, this.state)}
+        {children(this.state)}
       </Element>
     );
   }

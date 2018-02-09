@@ -1,4 +1,3 @@
-// @flow
 import getReducerFor, { getDefaultSettingsFor } from './index';
 import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types/index';
 

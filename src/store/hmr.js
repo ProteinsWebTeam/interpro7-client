@@ -3,7 +3,10 @@
 import { DEV } from 'config';
 
 export default (store /*: Store */) => {
-  if (!(DEV && module && module.hot)) return;
+  if (!DEV) return;
+  if (!(module && module.hot && typeof module.hot.accept === 'function')) {
+    return;
+  }
   // If any change to the root reducer or its dependency tree
   module.hot.accept('reducers', () => {
     // Reloads the root reducer

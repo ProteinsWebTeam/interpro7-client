@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -33,7 +32,7 @@ class _Settings extends PureComponent {
           useContext
           className={f('float-right')}
           html={
-            <React.Fragment>
+            <Fragment>
               <span>
                 This will take you to the corresponding page if there is an
                 exact match.
@@ -49,7 +48,7 @@ class _Settings extends PureComponent {
                 </Link>
                 {' page'}
               </span>
-            </React.Fragment>
+            </Fragment>
           }
         >
           <span className={f('visible-label')}>auto redirect</span>

@@ -1,4 +1,3 @@
-// @flow
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4] }]*/
 import React, { PureComponent } from 'react';
 import T from 'prop-types';

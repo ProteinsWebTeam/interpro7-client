@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -147,7 +146,7 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, { source_database: db }) => (
-                <React.Fragment>
+                <Fragment>
                   <Link
                     to={customLocation => ({
                       ...customLocation,
@@ -168,7 +167,7 @@ class List extends PureComponent {
                     />
                   </Link>
                   {db === 'reviewed' ? (
-                    <React.Fragment>
+                    <Fragment>
                       {'\u00A0' /* non-breakable space */}
                       <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
                         <span
@@ -177,9 +176,9 @@ class List extends PureComponent {
                           aria-label="reviewed"
                         />
                       </Tooltip>
-                    </React.Fragment>
+                    </Fragment>
                   ) : null}
-                </React.Fragment>
+                </Fragment>
               )}
             >
               Accession
@@ -321,7 +320,7 @@ class Summary extends PureComponent {
       return <Loading />;
     }
     return (
-      <React.Fragment>
+      <Fragment>
         <div className={f('row')}>
           <div className={f('medium-12', 'large-12', 'columns')}>
             <Title metadata={payload.metadata} mainType="protein" />
@@ -360,7 +359,7 @@ class Summary extends PureComponent {
             childRoutes={subPagesForProtein}
           />
         </ErrorBoundary>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

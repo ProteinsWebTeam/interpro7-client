@@ -1,4 +1,3 @@
-// @flow
 /* eslint no-magic-numbers: 0 */
 import React from 'react';
 import T from 'prop-types';

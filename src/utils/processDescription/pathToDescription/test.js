@@ -1,4 +1,3 @@
-// @flow
 import pathToDescription from '.';
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 

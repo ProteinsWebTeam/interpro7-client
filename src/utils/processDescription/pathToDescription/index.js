@@ -1,4 +1,3 @@
-// @flow
 import { rootHandler } from 'utils/processDescription/handlers';
 
 const MULTIPLE_SLASHES = /\/+/;

@@ -1,4 +1,3 @@
-// @flow
 import AbortController from './AbortController';
 
 /*:: type Output = {

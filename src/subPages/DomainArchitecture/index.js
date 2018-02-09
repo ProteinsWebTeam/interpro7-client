@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -23,10 +22,10 @@ class DomainArchitectureSubPage extends PureComponent /*:: <Props> */ {
     const { data, mainType } = this.props;
     if (data.loading) return <Loading />;
     return (
-      <React.Fragment>
+      <Fragment>
         {mainType === 'entry' && <DomainArchitectures mainData={data} />}
         {mainType === 'protein' && <DomainsOnProtein mainData={data} />}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

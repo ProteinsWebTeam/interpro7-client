@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -284,7 +283,7 @@ class Summary extends PureComponent {
       }
     }
     return (
-      <React.Fragment>
+      <Fragment>
         {this.props.data.payload &&
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (
@@ -324,7 +323,7 @@ class Summary extends PureComponent {
             childRoutes={subPagesForSet}
           />
         </ErrorBoundary>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

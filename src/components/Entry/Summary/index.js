@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
@@ -135,13 +134,13 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 )}
               {// doesn't work for some HAMAP as they have enpty <P> tag
               Object.keys(metadata.description).length > 0 && (
-                <React.Fragment>
+                <Fragment>
                   <h4>Description</h4>
                   <Description
                     textBlocks={metadata.description}
                     literature={included}
                   />
-                </React.Fragment>
+                </Fragment>
               )}
             </div>
             <div className={f('medium-4', 'large-4', 'columns')}>

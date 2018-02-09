@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable jsx-a11y/no-onchange */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';

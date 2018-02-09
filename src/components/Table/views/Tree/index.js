@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -189,7 +188,7 @@ class TreeView extends PureComponent {
       this._CDPMap.set(focused, ConnectedDataProvider);
     }
     return (
-      <React.Fragment>
+      <Fragment>
         <div>
           <Link
             className={f('button', 'hollow')}
@@ -209,7 +208,7 @@ class TreeView extends PureComponent {
           focused={focused}
           changeFocus={this._handleNewFocus}
         />
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

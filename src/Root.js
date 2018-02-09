@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 
 import { schedule } from 'timing-functions/src';
@@ -20,7 +20,6 @@ import Sentinel from 'components/Sentinel';
 import { EbiSkipToDiv } from 'components/EBIHeader';
 import EBIHeader from 'components/EBIHeader';
 import Header from 'components/Header';
-// import Breadcrumb from 'components/Breadcrumb';
 
 import Pages from 'pages';
 
@@ -94,7 +93,7 @@ const CookieFooterAsync = loadable({
 });
 
 const Root = () => (
-  <React.Fragment>
+  <Fragment>
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
     <LoadingBarAsync />
     <Overlay />
@@ -106,7 +105,6 @@ const Root = () => (
       <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
     </header>
     <Sentinel top={STICKY_MENU_OFFSET} />
-    {/* <Breadcrumb stickyMenuOffset={STICKY_MENU_OFFSET} /> */}
     <Pages top={STICKY_MENU_OFFSET} />
     <footer>
       <ElixirFooterAsync />
@@ -114,7 +112,7 @@ const Root = () => (
     </footer>
     <ToastDisplayAsync />
     <CookieFooterAsync />
-  </React.Fragment>
+  </Fragment>
 );
 
 export default Root;

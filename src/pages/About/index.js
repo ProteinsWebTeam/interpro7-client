@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import Link from 'components/generic/Link';
 
 import { pkg } from 'config';
@@ -61,7 +60,7 @@ const DeveloperInfo = () => (
 export default class About extends PureComponent /*:: <{}> */ {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <h3>About this website</h3>
@@ -287,7 +286,7 @@ export default class About extends PureComponent /*:: <{}> */ {
             <DeveloperInfo />
           </div>
         </div>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

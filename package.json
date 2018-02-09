@@ -8,7 +8,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "test": "npm-run-all -p --aggregate-output test:flow test:lint test:unit",
-    "test:flow": "flow check",
+    "test:flow": "flow focus-check .",
     "test:lint": "esw --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
     "test:unit": "jest --notify src",
     "test:functional": "jest --notify tests",

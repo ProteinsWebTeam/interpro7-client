@@ -1,4 +1,3 @@
-// @flow
 import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
 import { format } from 'url';

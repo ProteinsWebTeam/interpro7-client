@@ -1,5 +1,4 @@
-// @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -120,7 +119,7 @@ const Matches = (
         //   reviewed = (
         //
         //   )
-        <React.Fragment>
+        <Fragment>
           <Link
             to={{
               description: {
@@ -142,7 +141,7 @@ const Matches = (
               />
             </Tooltip>
           ) : null}
-        </React.Fragment>
+        </Fragment>
       )}
     >
       {primary === 'organism' ? 'Tax Id' : 'Accession'}

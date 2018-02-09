@@ -50,7 +50,7 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
 const commonCachedFetch = (responseType /*: ?string */) => async (
   url /*: string */,
   { method = 'GET', headers = new Headers(), ...options } /*: Object */ = {},
-  onProgress /*?: (number) => void */,
+  onProgress /*:: ?: (number) => void */,
 ) => {
   // modify options as needed
   options.method = method;

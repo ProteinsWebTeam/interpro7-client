@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-param-reassign */
 import {
   select,

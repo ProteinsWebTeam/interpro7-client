@@ -1,9 +1,9 @@
-// @flow
 import url from 'url';
 import { schedule } from 'timing-functions/src';
 
 import { cachedFetchJSON, cachedFetchText } from 'utils/cachedFetch';
 import id from 'utils/cheapUniqueId';
+import objectToFormData from 'utils/objectToFormData';
 
 import {
   CREATE_JOB,
@@ -83,19 +83,15 @@ export default ({ dispatch, getState }) => {
         {
           useCache: false,
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: url
-            .format({
-              query: {
-                email: config.IPScan.contactEmail,
-                title: localID,
-                sequence: input,
-                appl: applications,
-                goterms,
-                pathways,
-              },
-            })
-            .replace(/^\?/, ''),
+          headers: { 'Content-Type': 'multipart/form-data' },
+          body: objectToFormData({
+            email: config.IPScan.contactEmail,
+            title: localID,
+            sequence: input,
+            appl: applications,
+            goterms,
+            pathways,
+          }),
         },
       );
       if (ok) {

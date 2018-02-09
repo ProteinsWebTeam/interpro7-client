@@ -1,4 +1,3 @@
-// @flow
 import { schedule, sleep } from 'timing-functions/src';
 
 /*:: type ResizeObserverEntry = {
