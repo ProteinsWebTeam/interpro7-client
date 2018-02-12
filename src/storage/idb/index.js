@@ -119,7 +119,6 @@ export default async (table /*: string */) => {
   if (!db.objectStoreNames.contains(table)) {
     throw new Error(`table ${table} does not exist`);
   }
-  console.log(db);
   const tableAccess = new TableAccess(table, db);
   tableAccesses.set(table, tableAccess);
   return tableAccess;
