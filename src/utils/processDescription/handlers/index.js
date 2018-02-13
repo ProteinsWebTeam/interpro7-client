@@ -1,7 +1,6 @@
+// @flow
 import get from 'lodash-es/get';
 import set from 'lodash-es/set';
-
-import getEmptyDescription from 'utils/processDescription/emptyDescription';
 
 /*:: type PossibleMain = (
   'entry' |
@@ -73,12 +72,12 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
   cleanUp: (string, ?Description) => ?string,
   regexp: RegExp,
   match: (string, Description) => ?boolean,
-  handle: (Description, string, ?string, Array<string>) => Description,
+  handle: (Description, ?string, ?string, ...args: Array<string>) => Description,
 |}; */
 
-/*:: type PropertiesObject = {|
-  [string]: {|value: any|},
-|}; */
+/*:: type PropertiesObject = {
+  [key: string]: {|value: any|},
+}; */
 
 // node templates
 const templateHandler /*: Handler */ = {
@@ -577,10 +576,7 @@ export const rootHandler /*: Handler */ = handlerConstructor({
     value: 'rootHandler',
   },
   handle: {
-    value(
-      description /*: Description */ = getEmptyDescription(),
-      ...rest /*: Array<string> */
-    ) {
+    value(description /*: Description */, ...rest /*: Array<string> */) {
       return templateHandler.handle.call(this, description, null, ...rest);
     },
   },
