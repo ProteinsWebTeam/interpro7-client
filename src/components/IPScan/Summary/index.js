@@ -71,7 +71,10 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
     for (const match of payload.matches) {
       for (const go of (match.signature.entry || {}).goXRefs || []) {
         goTerms.set(go.identifier, {
-          category: goCategoryMap.get(go.category),
+          category: {
+            name: go.category.toLowerCase(),
+            code: go.category[0],
+          },
           name: go.name,
           identifier: go.identifier,
         });

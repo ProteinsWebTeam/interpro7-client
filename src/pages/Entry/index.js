@@ -286,8 +286,8 @@ class List extends PureComponent {
                 renderer={(gos /*: Array<Object> */) =>
                   gos
                     .sort((a, b) => {
-                      if (a.category_code > b.category_code) return 0;
-                      if (a.category_code < b.category_code) return 1;
+                      if (a.category.code > b.category.code) return 0;
+                      if (a.category.code < b.category.code) return 1;
                       if (a.name > b.name) return 1;
                       return 0;
                     })
@@ -296,8 +296,8 @@ class List extends PureComponent {
                         className={f('go-row')}
                         key={go.identifier}
                         style={{
-                          backgroundColor: go.category_code
-                            ? goColors[go.category_code]
+                          backgroundColor: go.category.code
+                            ? goColors[go.category.code]
                             : '#DDDDDD',
                         }}
                       >
