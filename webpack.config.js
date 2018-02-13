@@ -1,7 +1,6 @@
 /* eslint-env node */
 const fs = require('fs');
 const path = require('path');
-const childProcess = require('child_process');
 
 const webpack = require('webpack');
 const url = require('url');
@@ -14,7 +13,7 @@ const cssNext = require('postcss-cssnext');
 // Webpack plugins
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const pkg = require(path.resolve('package.json'));
+const buildInfo = require('./scripts/build-info');
 
 const DEFAULT_PORT = 80;
 const kB = 1024;
@@ -360,33 +359,10 @@ module.exports = (env = { dev: true }) => {
           STAGING: JSON.stringify(!!env.staging),
           NODE_ENV: env.production ? JSON.stringify('production') : null,
         },
-        'process.info': JSON.stringify(
-          (() => {
-            const branch = childProcess
-              .execSync('git rev-parse --abbrev-ref HEAD')
-              .toString()
-              .trim();
-            const commit = childProcess
-              .execSync('git rev-parse HEAD')
-              .toString()
-              .trim();
-            let tag = null;
-            try {
-              tag = childProcess
-                .execSync(`git describe --exact-match ${commit}`, {
-                  stdio: ['pipe', 'pipe', 'ignore'],
-                })
-                .toString()
-                .trim();
-            } catch (_) {
-              // no tag for this commit
-            }
-            return {
-              git: { branch, commit, tag },
-              build: { time: Date.now() },
-            };
-          })()
-        ),
+        'process.info': JSON.stringify({
+          git: buildInfo.git,
+          build: buildInfo.build,
+        }),
       }),
       env.production || env.staging
         ? new webpack.optimize.ModuleConcatenationPlugin()
@@ -444,12 +420,12 @@ module.exports = (env = { dev: true }) => {
             emitStats: false,
             minify: env.production,
             background: '#007c82',
-            title: pkg.name,
+            title: buildInfo.pkg.name,
           })
         : null,
       env.production || env.staging || env.dev
         ? new (require('html-webpack-plugin'))({
-            title: pkg.name,
+            title: buildInfo.pkg.name,
             template: path.join('.', 'src', 'index.template.html'),
             inject: false,
             // chunksSortMode: 'dependency',

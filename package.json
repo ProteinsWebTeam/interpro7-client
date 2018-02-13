@@ -11,8 +11,11 @@
     "test:flow": "flow focus-check .",
     "test:lint": "esw --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
     "test:unit": "jest --notify src",
-    "test:functional": "jest --notify tests",
-    "test:lighthouse": "node scripts/lighthouse.js",
+    "report": "npm-run-all -s --continue-on-error clean:report report:*",
+    "report:build": "node scripts/report-build-info.js",
+    "report:functional": "jest --notify tests",
+    "report:jest-coverage": "jest src tests --coverage",
+    "report:lighthouse": "node scripts/lighthouse.js",
     "dev": "webpack-dev-server",
     "dev:test": "npm-run-all -rp dev:test:*",
     "dev:test:lint": "npm run test:lint -- --watch",
@@ -21,8 +24,9 @@
     "flow-coverage": "npx flow-coverage-report",
     "lint:fix": "npm run test:lint -- --fix",
     "clean": "rimraf dist",
+    "clean:report": "rimraf report",
     "bundle": "webpack --progress",
-    "postbundle": "#npm-run-all -p --aggregate-output test:functional #test:lighthouse",
+    "postbundle": "npm run deploy",
     "precommit": "lint-staged",
     "predeploy": "npm-run-all test clean",
     "deploy": "npm run bundle",
@@ -103,6 +107,7 @@
       "lcov",
       "text-summary"
     ],
+    "coverageDirectory": "report/jest-coverage",
     "transformIgnorePatterns": [
       "/node_modules/(?!lodash-es)"
     ]
@@ -118,7 +123,12 @@
       "src/**/*.js"
     ],
     "concurrentFiles": 4,
-    "threshold": 50
+    "threshold": 50,
+    "type": [
+      "text",
+      "html"
+    ],
+    "outputDir": "report/flow-coverage"
   },
   "lighthouse": {
     "threshold": 20
@@ -194,6 +204,7 @@
     "favicons-webpack-plugin": "0.0.7",
     "file-loader": "1.1.6",
     "flow-bin": "0.65.0",
+    "flow-coverage-report": "0.4.1",
     "glob": "7.1.2",
     "glob-loader": "0.3.0",
     "hard-source-webpack-plugin": "0.5.18",
@@ -206,6 +217,7 @@
     "js-yaml": "3.10.0",
     "lighthouse": "2.9.1",
     "lint-staged": "6.1.0",
+    "mkdirp": "0.5.1",
     "node-sass": "4.7.2",
     "node-zopfli": "2.0.2",
     "npm-run-all": "4.1.2",

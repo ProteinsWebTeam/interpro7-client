@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { promisify } = require('util');
 
+const mkdirp = require('mkdirp');
 const chalk = require('chalk');
 const chromeLauncher = require('chrome-launcher');
 const ReportGenerator = require('lighthouse/lighthouse-core/report/v2/report-generator');
@@ -17,6 +18,8 @@ const BAD = 45;
 const MEH = 75;
 
 const app = (port /*: number */) => `http://localhost:${port}/interpro/`;
+
+const AUDIT_ROOT = path.resolve('report', 'lighthouse-audit');
 
 const getColorFor = (score /*: number */) => {
   if (score < BAD) {
@@ -56,12 +59,13 @@ const getColorFor = (score /*: number */) => {
       chalk[getColorFor(average)].bold(Math.floor(average))
     );
     // save results
+    mkdirp.sync(AUDIT_ROOT);
     await writeFile(
-      path.resolve('dist', 'lighthouse-audit.json'),
-      JSON.stringify(results)
+      path.resolve(AUDIT_ROOT, 'lighthouse-audit.json'),
+      JSON.stringify(results, null, 2)
     );
     await writeFile(
-      path.resolve('dist', 'lighthouse-audit.html'),
+      path.resolve(AUDIT_ROOT, 'lighthouse-audit.html'),
       new ReportGenerator().generateReportHtml(results)
     );
     // cleanup
