@@ -7,6 +7,7 @@ import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Embed from 'components/Embed';
 import Literature from 'components/Entry/Literature';
+import StructureView from 'components/Structure/Viewer';
 
 import loadWebComponent from 'utils/loadWebComponent';
 
@@ -15,8 +16,6 @@ import { foundationPartial } from 'styles/foundation';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 
 const f = foundationPartial(ebiStyles);
-
-const embedStyle = { width: '100%', height: '50vh' };
 
 const webComponents = [];
 
@@ -68,9 +67,6 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
-              <pdb-prints size="36">
-                <pdb-data-loader pdbid={metadata.accession} />
-              </pdb-prints>
               {chains.length && (
                 <div className={f('margin-top-large')}>
                   <div>Accession: {metadata.accession}</div>
@@ -111,6 +107,9 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                     <PDBeLink id={metadata.accession} className={f('ext')}>
                       View this structure in PDBe
                     </PDBeLink>
+                    <pdb-prints size="36">
+                      <pdb-data-loader pdbid={metadata.accession} />
+                    </pdb-prints>
                   </li>
                 </ul>
               </div>
@@ -119,29 +118,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
           <ErrorBoundary>
             <div className={f('row')}>
               <div className={f('columns')}>
-                <Embed
-                  style={embedStyle}
-                  src={`https://www.ebi.ac.uk/pdbe/entry/view3D/${
-                    metadata.accession
-                  }/?view=entry_index&viewer=litemol&controls=codename_hero`}
-                >
-                  <div
-                    style={{
-                      background: 'white',
-                      width: '100%',
-                      height: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <img
-                      src={`//www.ebi.ac.uk/pdbe/static/entry/${metadata.accession.toLowerCase()}_entity_1_front_image-400x400.png`}
-                      alt={`structure with accession ${metadata.accession.toUpperCase()}`}
-                      style={{ maxWidth: '100%' }}
-                    />
-                  </div>
-                </Embed>
+                <StructureView id={metadata.accession} />
               </div>
             </div>
           </ErrorBoundary>
