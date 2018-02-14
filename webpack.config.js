@@ -378,9 +378,10 @@ module.exports = (env = { dev: true }) => {
       // env.production || env.staging
       //   ? new (require('./plugins/web-app-manifest'))()
       //   : null,
-      env.production || env.staging
-        ? new (require('hard-source-webpack-plugin'))()
-        : null,
+      // Do we need the following plugin if we build from scratch everytime? 🤔
+      // env.production || env.staging
+      //   ? new (require('hard-source-webpack-plugin'))()
+      //   : null,
       env.test || env.production || env.staging
         ? new ExtractTextPlugin({
             filename: env.production

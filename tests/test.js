@@ -1,6 +1,10 @@
 import testInit from '../scripts/test-init';
 import { sleep } from 'timing-functions';
 
+const ONE_MINUTE = 60000; // needed when run in EBI cluster
+
+jest.setTimeout(ONE_MINUTE);
+
 describe('tests', () => {
   const testSetup = testInit();
   let page;
