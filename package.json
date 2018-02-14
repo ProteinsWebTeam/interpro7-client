@@ -8,7 +8,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "test": "npm-run-all -p --aggregate-output test:flow test:lint test:unit",
-    "test:flow": "flow focus-check .",
+    "test:flow": "flow focus-check --merge-timeout=1000 .",
     "test:lint": "esw --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
     "test:unit": "jest --notify src",
     "test:functional": "jest --notify tests",
@@ -207,7 +207,6 @@
     "flow-coverage-report": "0.4.1",
     "glob": "7.1.2",
     "glob-loader": "0.3.0",
-    "hard-source-webpack-plugin": "0.5.18",
     "html-webpack-plugin": "2.30.1",
     "husky": "0.14.3",
     "identity-obj-proxy": "3.0.0",

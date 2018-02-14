@@ -21,7 +21,7 @@ describe('tests', () => {
   });
 
   test('search', async () => {
-    await page.type('input[type="text"', 'IPR000001');
+    await page.type('input[type="text"]', 'IPR000001', { delay: 1 });
     await sleep(1500); // eslint-disable-line no-magic-numbers
     const url = await page.evaluate(() => window.location.href);
     expect(url).toEqual(expect.stringContaining('/search/text/IPR000001/'));
