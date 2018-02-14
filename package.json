@@ -11,11 +11,12 @@
     "test:flow": "flow focus-check .",
     "test:lint": "esw --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
     "test:unit": "jest --notify src",
+    "test:functional": "jest --notify tests",
     "report": "npm-run-all -s --continue-on-error clean:report report:*",
     "report:build": "node scripts/report-build-info.js",
-    "report:functional": "jest --notify tests",
     "report:jest-coverage": "jest src tests --coverage",
     "report:lighthouse": "node scripts/lighthouse.js",
+    "report:stats": "mkdirp reports/webpack-stats && webpack --env.production --profile --json > reports/stats.json",
     "dev": "webpack-dev-server",
     "dev:test": "npm-run-all -rp dev:test:*",
     "dev:test:lint": "npm run test:lint -- --watch",
@@ -24,17 +25,16 @@
     "flow-coverage": "npx flow-coverage-report",
     "lint:fix": "npm run test:lint -- --fix",
     "clean": "rimraf dist",
-    "clean:report": "rimraf report",
+    "clean:report": "rimraf reports",
     "bundle": "webpack --progress",
-    "postbundle": "npm run deploy",
+    "postbundle": "npm run test:functional",
     "precommit": "lint-staged",
     "predeploy": "npm-run-all test clean",
     "deploy": "npm run bundle",
     "deploy:dev": "npm run deploy -- -- --env.staging",
     "deploy:staging": "npm run deploy:production",
     "deploy:production": "npm run deploy -- -- --env.production",
-    "start": "npm-run-all -rp dev:test dev",
-    "stats": "webpack --env.production --profile --json > dist/stats.json"
+    "start": "npm-run-all -rp dev:test dev"
   },
   "contributors": [
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)"
@@ -103,11 +103,11 @@
       "!**/.*.js"
     ],
     "coverageReporters": [
-      "json",
+      "json-summary",
       "lcov",
       "text-summary"
     ],
-    "coverageDirectory": "report/jest-coverage",
+    "coverageDirectory": "reports/jest-coverage",
     "transformIgnorePatterns": [
       "/node_modules/(?!lodash-es)"
     ]
@@ -128,7 +128,7 @@
       "text",
       "html"
     ],
-    "outputDir": "report/flow-coverage"
+    "outputDir": "reports/flow-coverage"
   },
   "lighthouse": {
     "threshold": 20

@@ -19,7 +19,7 @@ const MEH = 75;
 
 const app = (port /*: number */) => `http://localhost:${port}/interpro/`;
 
-const AUDIT_ROOT = path.resolve('report', 'lighthouse-audit');
+const AUDIT_ROOT = path.resolve('reports', 'lighthouse-audit');
 
 const getColorFor = (score /*: number */) => {
   if (score < BAD) {

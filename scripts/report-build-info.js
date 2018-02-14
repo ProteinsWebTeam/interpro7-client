@@ -8,7 +8,7 @@ const buildInfo = require('./build-info');
 
 const writeFile = promisify(fs.writeFile);
 
-const REPORT_ROOT = path.resolve('report', 'build-report');
+const REPORT_ROOT = path.resolve('reports', 'build-report');
 
 (async () => {
   mkdirp.sync(REPORT_ROOT);
