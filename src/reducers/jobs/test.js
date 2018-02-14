@@ -1,4 +1,3 @@
-// @flow
 import reducer from '.';
 import { DELETE_JOB, REHYDRATE_JOBS } from 'actions/types';
 

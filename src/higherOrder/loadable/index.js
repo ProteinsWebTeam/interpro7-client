@@ -6,7 +6,7 @@ import LoadingComponent from './LoadingComponent';
 const DEFAULT_DELAY = 200;
 const DEFAULT_TIMEOUT = 15000;
 
-const loadable = options =>
+const loadable = (options /*: Object */) =>
   reactLoadable({
     loading: LoadingComponent,
     delay: DEFAULT_DELAY,

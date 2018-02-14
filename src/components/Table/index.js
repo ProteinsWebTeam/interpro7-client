@@ -1,4 +1,3 @@
-// @flow
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
@@ -26,12 +25,6 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from './style.css';
 
 const f = foundationPartial(styles, fonts);
-
-// const getData = (data, staleData) => {
-//   if (!data.loading) return data;
-//   if (staleData && staleData.payload) return staleData;
-//   return {payload: {results: [], count: 0}};
-// };
 
 /*:: type Props = {
   dataTable: Array<Object>,
@@ -63,6 +56,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
   static propTypes = {
     dataTable: T.array,
     isStale: T.bool,
+    loading: T.bool,
+    ok: T.bool,
     actualSize: T.number,
     query: T.object,
     title: T.string,
@@ -75,6 +70,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
     const {
       dataTable,
       isStale,
+      loading,
+      ok,
       actualSize,
       query,
       title,
@@ -188,6 +185,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 catchAll={TableView}
                 // passed down props
                 isStale={isStale}
+                loading={loading}
+                ok={ok}
                 columns={columns}
                 notFound={notFound}
                 dataTable={dataTable}

@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -41,11 +40,8 @@ class TextSearchBox extends PureComponent {
 
   routerPush = replace => {
     const { pageSize } = this.props;
-    const query /*: { page: number, page_size: number } */ = {
-      page: 1,
-      page_size: pageSize,
-    };
-    // this.setState({redirecting: {pathname, query}});
+    const query /*: { page: number, page_size?: number } */ = { page: 1 };
+    if (pageSize) query.page_size = pageSize;
     this.props.goToCustomLocation(
       {
         description: {

@@ -1,40 +1,38 @@
 // @flow
-import { PureComponent, createElement } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
-/*:: type ReactError = {
+const defaultRenderOnError = _ => <ErrorMessage />;
+
+/*:: type ReactError = {|
   error: Error,
   info: {
     componentStack: string,
   },
-}; */
+|}; */
 
 /*:: type Props = {
   children: React$Node,
-  errorComponent: React$ElementType,
+  renderOnError?: ?ReactError => React$Node,
   customLocation: Object,
 }; */
 
-/*:: type State = {
+/*:: type State = {|
   error: ?ReactError,
-}; */
+|}; */
 
 // This component should be inserted before any possibly “risky” component
 // Acts as a try/catch, preventing the rest of the website to crash
 // Ideally to be inserted before any <Switch> or complex visualisation widget
 class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
-  static defaultProps = {
-    errorComponent: ErrorMessage,
-  };
-
   static propTypes = {
     children: T.node.isRequired,
-    errorComponent: T.any,
-    customLocation: T.object,
+    renderOnError: T.func,
+    customLocation: T.object.isRequired,
   };
 
   constructor(props /*: Props */) {
@@ -57,11 +55,12 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
   }
 
   render() {
+    const { renderOnError = defaultRenderOnError, children } = this.props;
     const { error } = this.state;
     if (error && typeof error === 'object') {
-      return createElement(this.props.errorComponent, error);
+      return renderOnError(error);
     }
-    return this.props.children;
+    return children;
   }
 }
 

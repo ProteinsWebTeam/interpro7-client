@@ -1,4 +1,3 @@
-// @flow
 import { createStore } from 'redux';
 import { parse } from 'url';
 
@@ -55,7 +54,7 @@ export default history => {
     enhancer(history),
   );
   if (settingsStorage) {
-    // settingsStorage.setLinkedStore(store);
+    settingsStorage.linkedStore = store;
     const persistSubscriber = persist(store, settingsStorage);
     // Run it once at startup
     persistSubscriber();

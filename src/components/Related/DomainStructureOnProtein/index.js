@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-param-reassign */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';

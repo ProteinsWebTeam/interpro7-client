@@ -1,10 +1,9 @@
-// @flow
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
 
-//:: import type { Description } from 'utils/processDescription/handlers';
+/*:: import type { Description } from 'utils/processDescription/handlers'; */
 
-//:: type Location = {pathname: string, search: Object, hash: string};
+/*:: type Location = {pathname: string, search: Object, hash: string}; */
 /*:: export type CustomLocation = {|
   description: Description,
   search?: {[key: string]: string},
@@ -15,8 +14,8 @@ import parseValueFromInput from './parse-value-from-input';
 // custom location
 export const goToCustomLocation = (
   customLocation /*: CustomLocation */,
-  replace /*?: boolean */,
-  state /*?: any */,
+  replace /*:: ?: boolean */,
+  state /*:: ?: any */,
 ) => ({
   type: types.NEW_CUSTOM_LOCATION,
   customLocation,
@@ -26,7 +25,7 @@ export const goToCustomLocation = (
 
 export const customLocationChangeFromHistory = (
   customLocation /*: CustomLocation */,
-  state /*?: any */,
+  state /*:: ?: any */,
 ) => ({
   type: types.NEW_PROCESSED_CUSTOM_LOCATION,
   customLocation,

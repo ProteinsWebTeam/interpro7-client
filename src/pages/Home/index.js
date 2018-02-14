@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 
 // Components
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -28,8 +27,10 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import style from '../style.css';
 
+import local from './style.css';
+
 // Images
-import iscanLogo from 'images/logo_interproscan_ext.png';
+import ipscanLogo from 'images/logo_interproscan_ext.png';
 import idaLogo from 'images/logo_ida_100.png';
 
 // Bind css with style object
@@ -430,7 +431,7 @@ const schemaProcessDataForDB = ({ name, location }) => ({
 class Home extends PureComponent {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <SchemaOrgData
@@ -627,7 +628,7 @@ class Home extends PureComponent {
                   <img
                     alt="IDA logo"
                     src={idaLogo}
-                    style={{ marginLeft: 40, marginBottom: 10 }}
+                    className={local['ida-logo']}
                   />
                   <p>
                     The InterPro Domain Architecture (IDA) tool allows you to
@@ -649,8 +650,8 @@ class Home extends PureComponent {
                   <h5>InterProScan</h5>
                   <img
                     alt="InterProScan logo"
-                    src={iscanLogo}
-                    style={{ marginBottom: 2 }}
+                    src={ipscanLogo}
+                    className={local['ipscan-logo']}
                   />
                   <p>
                     InterProScan is a sequence analysis application (nucleotide
@@ -672,7 +673,7 @@ class Home extends PureComponent {
           </div>
         </div>
         <Twitter />
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

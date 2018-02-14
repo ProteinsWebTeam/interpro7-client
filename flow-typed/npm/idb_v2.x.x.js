@@ -1,5 +1,5 @@
-// flow-typed signature: cfd9dcb9dd3095939862fa46f4e9b7b7
-// flow-typed version: 0b655a2524/idb_v2.x.x/flow_>=v0.34.x
+// flow-typed signature: 266e43152fad31355599ae324f4f5924
+// flow-typed version: 42ca8a9a47/idb_v2.x.x/flow_>=v0.34.x
 
 // Derived from TS typings at https://github.com/jakearchibald/idb/blob/c8bab898f01bacab96097f87c1e42a0c19e01425/lib/idb.d.ts
 
@@ -9,7 +9,8 @@ type IDBValidKey = number | string | Date | IDBArrayKey;
 // TODO: upstream this to Flow DOM definitions
 declare class DOMStringList {
   +length: number;
-  @@iterator(): Iterator<string>;
+  // Comment syntax here as @@iterator is invalid syntax for eslint and babylon
+  /*:: @@iterator(): Iterator<string>; */
   contains(str: string): boolean;
   item(index: number): string | null;
   [index: number]: string;

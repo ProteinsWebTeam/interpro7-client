@@ -1,5 +1,6 @@
 // @flow
 import idb from 'idb';
+/*:: import type { DB } from 'idb'; */
 
 let initialized = false;
 let dbPromise;
@@ -23,7 +24,11 @@ const init = () => {
   initialized = true;
 };
 
-const TableAccess = class {
+class TableAccess {
+  /*::
+    _table: string;
+    _db: DB;
+  */
   constructor(table, db) {
     this._table = table;
     this._db = db;
@@ -101,9 +106,9 @@ const TableAccess = class {
     await tr.complete;
     return keys;
   }
-};
+}
 
-export default async table => {
+export default async (table /*: string */) => {
   if (!initialized) init();
   if (tableAccesses.has(table)) {
     return tableAccesses.get(table);

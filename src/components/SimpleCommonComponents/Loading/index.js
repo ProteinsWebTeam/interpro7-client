@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 
 import { foundationPartial } from 'styles/foundation';

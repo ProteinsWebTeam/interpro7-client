@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-param-reassign */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
@@ -59,7 +58,7 @@ const getUrlFor = createSelector(
 
 const mergeResidues = residues =>
   Object.values(residues).map(location => ({
-    accession: '_' + location.entry_accession,
+    accession: `_${location.entry_accession}`,
     name: location.name,
     type: 'residue',
     residue: location.fragments.map(f => f.residue),
@@ -109,16 +108,20 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   }
   for (const entry of integrated.concat(unintegrated)) {
     entry.coordinates = toArrayStructure(entry.entry_protein_locations);
-    if (residues.hasOwnProperty(entry.accession)) {
+    if (
+      residues &&
+      residues.entry_locations &&
+      residues.entry_locations.hasOwnProperty(entry.accession)
+    ) {
       entry.children = entry.residues = mergeResidues({
-        [entry.accession]: residues[entry.accession],
+        [entry.accession]: residues.entry_locations[entry.accession],
       });
       delete residues[entry.accession];
     }
     addSignature(entry, ipro, integrated);
   }
   if (Object.keys(residues).length > 0) {
-    out.residues = mergeResidues(residues);
+    out.residues = mergeResidues(residues.entry_locations);
   }
   return out;
 };

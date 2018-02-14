@@ -1,4 +1,3 @@
-// @flow
 import { schedule } from 'timing-functions/src';
 
 const DEFAULT_ROOT_DATA = {
@@ -9,7 +8,7 @@ const DEFAULT_ROOT_DATA = {
 
 const DEFAULT_MAX_DELAY = 250;
 
-const checkDeadline = async (deadline, dev /*?: boolean */) => {
+const checkDeadline = async (deadline, dev /*:: ?: boolean */) => {
   let _deadline = deadline;
   if (!deadline.timeRemaining()) {
     if (dev) {
@@ -24,7 +23,7 @@ const merger = async (
   dataMap,
   deadline,
   toBeProcessed = DEFAULT_ROOT_DATA,
-  dev /*?: boolean */,
+  dev /*:: ?: boolean */,
 ) => {
   const _deadline = await checkDeadline(deadline, dev);
   const schema = {};

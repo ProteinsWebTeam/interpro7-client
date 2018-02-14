@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -37,6 +36,11 @@ const GoToNewSearch = () => (
 class IPScanStatus extends PureComponent {
   static propTypes = {
     jobs: T.arrayOf(T.object).isRequired,
+    search: T.shape({
+      page: T.number,
+      page_size: T.number,
+    }).isRequired,
+    defaultPageSize: T.number.isRequired,
     updateJobStatus: T.func.isRequired,
   };
 
@@ -45,7 +49,12 @@ class IPScanStatus extends PureComponent {
   }
 
   render() {
-    const { jobs } = this.props;
+    const { jobs, search, defaultPageSize } = this.props;
+    const pageSize = search.page_size || defaultPageSize;
+    const paginatedJobs = [...jobs].splice(
+      ((search.page || 1) - 1) * pageSize,
+      pageSize,
+    );
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
@@ -58,7 +67,11 @@ class IPScanStatus extends PureComponent {
               <RefreshButton />
             </div>
           </div>
-          <Table dataTable={jobs} actualSize={jobs.length}>
+          <Table
+            dataTable={paginatedJobs}
+            actualSize={jobs.length}
+            query={search}
+          >
             <Column
               dataKey="localID"
               renderer={(localID /*: string */, row /*: Object */) => (
@@ -79,6 +92,7 @@ class IPScanStatus extends PureComponent {
             >
               Job ID
             </Column>
+            <Column dataKey="localTitle">Title</Column>
             <Column
               dataKey="times.created"
               renderer={(created /*: string */) => {
@@ -157,7 +171,9 @@ const mapsStateToProps = createSelector(
     Object.values(state.jobs)
       .map(j => j.metadata)
       .sort((a, b) => b.times.created - a.times.created),
-  jobs => ({ jobs }),
+  state => state.customLocation.search,
+  state => state.settings.navigation.pageSize,
+  (jobs, search, defaultPageSize) => ({ jobs, search, defaultPageSize }),
 );
 
 export default connect(mapsStateToProps, { updateJobStatus })(IPScanStatus);

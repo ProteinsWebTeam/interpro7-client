@@ -1,4 +1,3 @@
-// @flow
 import { PureComponent } from 'react';
 import T from 'prop-types';
 import TA from 'timeago.js';

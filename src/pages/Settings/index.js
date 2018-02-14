@@ -1,8 +1,9 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+
+import { DEV } from 'config';
 
 import noop from 'lodash-es/noop';
 
@@ -13,9 +14,9 @@ import { changeSettings, resetSettings } from 'actions/creators';
 import { foundationPartial } from 'styles/foundation';
 
 import theme from 'styles/theme-interpro.css';
-import styles from './styles.css';
+import local from './styles.css';
 
-const f = foundationPartial(theme, styles);
+const f = foundationPartial(theme, local);
 
 const NavigationSettings = ({ navigation: { pageSize, autoRedirect } }) => (
   <form data-category="navigation">
@@ -33,7 +34,7 @@ const NavigationSettings = ({ navigation: { pageSize, autoRedirect } }) => (
                 step="5"
                 value={pageSize}
                 name="pageSize"
-                style={{ width: '100%' }}
+                className={local.fullwidth}
                 onChange={noop}
               />
             </div>
@@ -169,7 +170,13 @@ const EndpointSettings = ({
       <div className={f('medium-3', 'column')}>
         <label>
           Hostname:
-          <input type="text" value={hostname} name="hostname" onChange={noop} />
+          <input
+            type="text"
+            value={hostname}
+            name="hostname"
+            onChange={noop}
+            readOnly={!DEV}
+          />
         </label>
       </div>
       <div className={f('medium-3', 'column')}>
@@ -181,13 +188,20 @@ const EndpointSettings = ({
             value={port}
             name="port"
             onChange={noop}
+            readOnly={!DEV}
           />
         </label>
       </div>
       <div className={f('medium-3', 'column')}>
         <label>
           Root:
-          <input type="text" value={root} name="root" onChange={noop} />
+          <input
+            type="text"
+            value={root}
+            name="root"
+            onChange={noop}
+            readOnly={!DEV}
+          />
         </label>
       </div>
       <div className={f('medium-3', 'column')}>
@@ -285,13 +299,15 @@ class Settings extends PureComponent {
             <UISettings ui={ui} />
             <CacheSettings cache={cache} />
             <APIEndpointSettings category="api" endpointDetails={api}>
-              API Settings
+              API Settings {!DEV && '(modification temporarily disabled)'}
             </APIEndpointSettings>
             <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
-              EBI Search Settings
+              EBI Search Settings{' '}
+              {!DEV && '(modification temporarily disabled)'}
             </EBIEndpointSettings>
             <IPScanEndpointSettings category="ipScan" endpointDetails={ipScan}>
-              InterProScan Settings
+              InterProScan Settings{' '}
+              {!DEV && '(modification temporarily disabled)'}
             </IPScanEndpointSettings>
             <button onClick={this._handleReset} className={f('button')}>
               Reset settings to default values

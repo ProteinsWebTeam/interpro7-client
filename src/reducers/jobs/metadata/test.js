@@ -1,4 +1,3 @@
-// @flow
 import reducer, { updateJob } from '.';
 import { CREATE_JOB, UPDATE_JOB } from 'actions/types';
 

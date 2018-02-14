@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -66,6 +65,7 @@ class List extends PureComponent {
     data: T.shape({
       payload: T.object,
       loading: T.bool.isRequired,
+      ok: T.bool,
     }).isRequired,
     isStale: T.bool.isRequired,
     customLocation: T.shape({
@@ -101,7 +101,7 @@ class List extends PureComponent {
         results: [],
       };
     }
-    const urlHasParameter = data.url && data.url.indexOf('?') !== -1;
+    const urlHasParameter = data.url && data.url.includes('?');
     return (
       <div className={f('row')}>
         <MemberDBTabs />
@@ -116,6 +116,8 @@ class List extends PureComponent {
           <Table
             dataTable={_payload.results}
             isStale={isStale}
+            loading={data.loading}
+            ok={data.ok}
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
@@ -493,14 +495,11 @@ class Entry extends PureComponent {
     data: T.shape({
       payload: T.object,
     }).isRequired,
-    isStale: T.bool.isRequired,
   };
 
   render() {
     return (
-      <div
-        className={f('with-data', { ['with-stale-data']: this.props.isStale })}
-      >
+      <div>
         {this.props.data.payload &&
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (
@@ -532,6 +531,6 @@ class Entry extends PureComponent {
 
 export default loadData((...args) =>
   getUrlForApi(...args)
-    .replace('logo', '')
+    .replace('/logo', '/')
     .replace('domain_architecture', ''),
 )(Entry);
