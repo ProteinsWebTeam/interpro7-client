@@ -15,6 +15,7 @@ export const config = {
   headless: true,
   args: [
     `--window-size=${width},${height}`,
+    '--disable-dev-shm-usage',
     // TODO: next two lines should eventually be removed, since they are not
     // TODO: recommended for security reasons
     '--no-sandbox',
