@@ -1,3 +1,4 @@
+// @flow
 const childProcess = require('child_process');
 
 const pkg = require('../package.json');
