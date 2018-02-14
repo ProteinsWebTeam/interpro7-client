@@ -16,7 +16,7 @@
     "report:build": "node scripts/report-build-info.js",
     "report:jest-coverage": "jest src tests --coverage",
     "report:lighthouse": "node scripts/lighthouse.js",
-    "report:stats": "mkdirp reports/webpack-stats && webpack --env.production --profile --json > reports/stats.json",
+    "report:stats": "mkdirp reports/webpack-stats && webpack --env.production --profile --json > reports/webpack-stats/stats.json",
     "dev": "webpack-dev-server",
     "dev:test": "npm-run-all -rp dev:test:*",
     "dev:test:lint": "npm run test:lint -- --watch",

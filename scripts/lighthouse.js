@@ -5,6 +5,7 @@ const { promisify } = require('util');
 
 const mkdirp = require('mkdirp');
 const chalk = require('chalk');
+const puppeteer = require('puppeteer');
 const chromeLauncher = require('chrome-launcher');
 const ReportGenerator = require('lighthouse/lighthouse-core/report/v2/report-generator');
 
@@ -36,6 +37,7 @@ const getColorFor = (score /*: number */) => {
     // setup
     const port = await server.start();
     const chrome = await chromeLauncher.launch({
+      chromePath: puppeteer.executablePath(),
       chromeFlags: ['--headless'],
     });
     // audit run
