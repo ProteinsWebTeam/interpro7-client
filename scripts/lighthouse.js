@@ -38,7 +38,13 @@ const getColorFor = (score /*: number */) => {
     const port = await server.start();
     const chrome = await chromeLauncher.launch({
       chromePath: puppeteer.executablePath(),
-      chromeFlags: ['--headless'],
+      chromeFlags: [
+        '--headless',
+        // TODO: next two lines should eventually be removed, since they are not
+        // TODO: recommended for security reasons
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+      ],
     });
     // audit run
     // ignore 'artifacts' from results because it's not serializable;
