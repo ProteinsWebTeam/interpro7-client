@@ -33,10 +33,11 @@ const getColorFor = (score /*: number */) => {
 };
 
 (async () => {
+  let chrome;
   try {
     // setup
     const port = await server.start();
-    const chrome = await chromeLauncher.launch({
+    chrome = await chromeLauncher.launch({
       chromePath: puppeteer.executablePath(),
       chromeFlags: [
         '--headless',
@@ -90,6 +91,12 @@ const getColorFor = (score /*: number */) => {
       process.exit(1);
     }
   } catch (error) {
+    try {
+      await chrome.kill();
+    } catch (_) {}
+    try {
+      await server.close();
+    } catch (_) {}
     console.trace(error);
     process.exit(1);
   }
