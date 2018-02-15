@@ -60,6 +60,12 @@ const schemaProcessDataTableRow = ({ data, location }) => ({
   url: `${location.href}/${data.accession}`,
 });
 
+const GO_COLORS = new Map([
+  ['P', '#c2e6ec'],
+  ['F', '#e5f5d7'],
+  ['C', '#fbdcd0'],
+]);
+
 class List extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -91,11 +97,6 @@ class List extends PureComponent {
     let _payload = data.payload;
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
-    const goColors = {
-      P: '#c2e6ec',
-      F: '#e5f5d7',
-      C: '#fbdcd0',
-    };
     if (data.loading || notFound) {
       _payload = {
         results: [],
@@ -221,40 +222,32 @@ class List extends PureComponent {
             {db === 'InterPro' ? (
               <Column
                 dataKey="member_databases"
-                renderer={(mdb /*: string */) =>
-                  Object.keys(mdb).map(db => (
-                    <div key={db} className={f('sign-row')}>
-                      <span className={f('sign-cell')}>{db}</span>
-                      <span className={f('sign-cell')}>
-                        {Object.keys(mdb[db]).map(accession => (
-                          <Tooltip
-                            key={accession}
-                            title={`${accession} contributing entry`}
+                renderer={(memberDataBases /*: object */) => (
+                  <div className={f('signature-container')}>
+                    {Object.entries(memberDataBases).map(([db, entries]) =>
+                      Object.entries(entries).map(([accession, id]) => (
+                        <Tooltip
+                          key={accession}
+                          title={`${id} (${db})`}
+                          className={f('signature')}
+                        >
+                          <Link
+                            to={{
+                              description: {
+                                main: { key: 'entry' },
+                                entry: { db, accession },
+                              },
+                            }}
                           >
-                            <span className={f('sign-label')}>
-                              <Link
-                                to={{
-                                  description: {
-                                    main: { key: 'entry' },
-                                    entry: { db, accession },
-                                  },
-                                  search: {},
-                                }}
-                              >
-                                {mdb[db][accession]}
-                              </Link>
-                            </span>
-                          </Tooltip>
-                        ))}
-                      </span>
-                    </div>
-                  ))
-                }
+                            {accession}
+                          </Link>
+                        </Tooltip>
+                      )),
+                    )}
+                  </div>
+                )}
               >
-                Database{' '}
-                <Tooltip title="Contributing entry ID">
-                  <span className={f('sign-label-head')}>ID</span>
-                </Tooltip>
+                Database
               </Column>
             ) : (
               <Column
@@ -285,37 +278,33 @@ class List extends PureComponent {
               <Column
                 dataKey="go_terms"
                 headerClassName={f('col-go')}
-                renderer={(gos /*: Array<Object> */) =>
-                  gos
-                    .sort((a, b) => {
-                      if (a.category.code > b.category.code) return 0;
-                      if (a.category.code < b.category.code) return 1;
-                      if (a.name > b.name) return 1;
-                      return 0;
-                    })
-                    .map(go => (
-                      <div
-                        className={f('go-row')}
-                        key={go.identifier}
-                        style={{
-                          backgroundColor: go.category.code
-                            ? goColors[go.category.code]
-                            : '#DDDDDD',
-                        }}
-                      >
-                        <span className={f('go-cell')}>
+                renderer={(goTerms /*: Array<Object> */) => (
+                  <div className={f('go-container')}>
+                    {Array.from(goTerms)
+                      .sort((a, b) => {
+                        if (a.category.code > b.category.code) return 0;
+                        if (a.category.code < b.category.code) return 1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                      })
+                      .map(go => (
+                        <span key={go.identifier} className={f('go')}>
+                          <span
+                            className={f('go-circle')}
+                            style={{
+                              background:
+                                GO_COLORS.get(go.category.code) || '#ddd',
+                            }}
+                          />
                           <Tooltip title={`${go.name} (${go.identifier})`}>
-                            <GoLink
-                              id={go.identifier}
-                              className={f('go', 'ext')}
-                            >
+                            <GoLink id={go.identifier} className={f('ext')}>
                               {go.name ? go.name : 'None'}
                             </GoLink>
                           </Tooltip>
                         </span>
-                      </div>
-                    ))
-                }
+                      ))}
+                  </div>
+                )}
               >
                 GO Terms{' '}
                 <Tooltip title="Biological process category">
