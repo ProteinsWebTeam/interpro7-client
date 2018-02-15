@@ -226,7 +226,7 @@ class List extends PureComponent {
                     <div key={db} className={f('sign-row')}>
                       <span className={f('sign-cell')}>{db}</span>
                       <span className={f('sign-cell')}>
-                        {mdb[db].map(accession => (
+                        {Object.keys(mdb[db]).map(accession => (
                           <Tooltip
                             key={accession}
                             title={`${accession} contributing entry`}
@@ -241,7 +241,7 @@ class List extends PureComponent {
                                   search: {},
                                 }}
                               >
-                                {accession}
+                                {mdb[db][accession]}
                               </Link>
                             </span>
                           </Tooltip>
@@ -288,8 +288,8 @@ class List extends PureComponent {
                 renderer={(gos /*: Array<Object> */) =>
                   gos
                     .sort((a, b) => {
-                      if (a.category > b.category) return 0;
-                      if (a.category < b.category) return 1;
+                      if (a.category.code > b.category.code) return 0;
+                      if (a.category.code < b.category.code) return 1;
                       if (a.name > b.name) return 1;
                       return 0;
                     })
@@ -298,8 +298,8 @@ class List extends PureComponent {
                         className={f('go-row')}
                         key={go.identifier}
                         style={{
-                          backgroundColor: go.category
-                            ? goColors[go.category]
+                          backgroundColor: go.category.code
+                            ? goColors[go.category.code]
                             : '#DDDDDD',
                         }}
                       >
@@ -531,6 +531,6 @@ class Entry extends PureComponent {
 
 export default loadData((...args) =>
   getUrlForApi(...args)
-    .replace('logo', '')
+    .replace('/logo', '/')
     .replace('domain_architecture', ''),
 )(Entry);

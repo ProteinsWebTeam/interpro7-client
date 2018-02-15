@@ -46,7 +46,9 @@ class OrganismDBFilter extends PureComponent {
       customLocation: { description },
     } = this.props;
     const dbs = [];
+    let currentDB = '';
     if (!loading) {
+      currentDB = description.organism.proteomeDB || description.organism.db;
       dbs.push([
         'taxonomy',
         payload.organisms.taxonomy.organisms || payload.organisms.taxonomy,
@@ -66,7 +68,7 @@ class OrganismDBFilter extends PureComponent {
                 name="organism_db"
                 value={type}
                 onChange={this._handleSelection}
-                checked={description.organism.db === type}
+                checked={currentDB === type}
                 style={{ margin: '0.25em' }}
               />
               <span style={{ textTransform: 'capitalize' }}>{type}</span>

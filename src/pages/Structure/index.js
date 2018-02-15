@@ -194,7 +194,9 @@ const List = ({
             headerClassName={f('table-center')}
             cellClassName={f('table-center')}
             renderer={(resolution /*: string | number */) =>
-              resolution + (typeof resolution === 'number' ? ' Å' : '')
+              resolution
+                ? resolution + (typeof resolution === 'number' ? ' Å' : '')
+                : 'ø'
             }
           >
             Resolution

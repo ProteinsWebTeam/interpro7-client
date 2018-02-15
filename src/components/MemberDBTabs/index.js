@@ -23,7 +23,7 @@ const menuOptions = new Map([
   ['All', 'all'],
   ['InterPro', 'InterPro'],
   ['CDD', 'cdd'],
-  ['Gene3D', 'gene3d'],
+  ['Gene3D', 'cathgene3d'],
   ['HAMAP', 'hamap'],
   ['PANTHER', 'panther'],
   ['Pfam', 'pfam'],
@@ -198,10 +198,14 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
                 value,
               );
               return (
-                <option value={value} key={value}>
-                  {name}
-                  {count === null ? null : ` (${count} ${toPlural(mainType)})`}
-                </option>
+                count && (
+                  <option value={value} key={value}>
+                    {name}
+                    {count === null
+                      ? null
+                      : ` (${count} ${toPlural(mainType)})`}
+                  </option>
+                )
               );
             })}
           </select>

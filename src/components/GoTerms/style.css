@@ -23,6 +23,7 @@ a.go-terms:hover {
   font-weight: bold;
   margin-bottom: 0.5rem;
   display: inline-block;
+  text-transform: capitalize;
 }
 
 .no-goterm {

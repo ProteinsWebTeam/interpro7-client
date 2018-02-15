@@ -15,15 +15,15 @@ import local from './style.css';
 const f = foundationPartial(ebiStyles, ipro, local);
 
 const getDefaultPayload = () => ({
-  'Biological Process': [],
-  'Molecular Function': [],
-  'Cellular Component': [],
+  biological_process: [],
+  molecular_function: [],
+  cellular_component: [],
 });
 
 const mapNameToClass = new Map([
-  ['Biological Process', 'bp'],
-  ['Molecular Function', 'mf'],
-  ['Cellular Component', 'cc'],
+  ['biological_process', 'bp'],
+  ['molecular_function', 'mf'],
+  ['cellular_component', 'cc'],
 ]);
 
 const SchemaOrgData = loadable({
@@ -44,12 +44,20 @@ const GoTerms = (
   // TODO: remove duplicates from data, then remove this as will be unnecessary
   let _terms = new Map(terms.map(term => [term.identifier, term]));
   _terms = Array.from(_terms.values()).reduce((acc, term) => {
-    if (!acc[term.category]) acc[term.category] = [];
-    if (typeof term === 'string') {
-      acc[term.category].push({ identifier: term });
-      return acc;
+    if (term.category_name) {
+      // eslint-disable-next-line no-param-reassign
+      term.category = {
+        name: term.category_name,
+        code: term.category_code,
+      };
     }
-    acc[term.category].push(term);
+    // eslint-disable-next-line no-param-reassign
+    if (!acc[term.category.name]) acc[term.category.name] = [];
+    // if (typeof term === 'string') {
+    //   acc[term.category].push({ identifier: term });
+    //   return acc;
+    // }
+    acc[term.category.name].push(term);
     return acc;
   }, getDefaultPayload());
   let title = 'InterPro2GO';
@@ -79,7 +87,9 @@ const GoTerms = (
                 'margin-bottom-large',
               )}
             >
-              <p className={f(mapNameToClass.get(key), 'go-title')}>{key}</p>
+              <p className={f(mapNameToClass.get(key), 'go-title')}>
+                {key.replace('_', ' ')}
+              </p>
               <ul className={f('go-list')}>
                 {values && values.length ? (
                   values.map(({ identifier, name }) => (

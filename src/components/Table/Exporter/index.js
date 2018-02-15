@@ -15,7 +15,7 @@ import theme from 'styles/theme-interpro.css';
 const fPlus = foundationPartial(s, fonts, theme);
 
 const colors = new Map([
-  ['gene3d', '#a88cc3'],
+  ['cathgene3d', '#a88cc3'],
   ['cdd', '#addc58'],
   ['hamap', '#2cd6d6'] /* 00e2e2*/,
   ['mobidblt', '#d6dc94'],

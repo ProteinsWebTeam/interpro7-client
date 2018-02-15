@@ -75,7 +75,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
-              {metadata.hierarchy && (
+              {metadata.hierarchy && Object.keys(metadata.hierarchy).length ? (
                 <div>
                   <h4>{metadata.type} Relationships</h4>
                   <InterProHierarchy
@@ -83,7 +83,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                     hierarchy={metadata.hierarchy}
                   />
                 </div>
-              )}
+              ) : null}
 
               {// member database only - summary info
               metadata.source_database &&
@@ -170,8 +170,8 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
             </div>
           </div>
         </section>
-        {Object.keys(metadata.go_terms) &&
-        metadata.source_database !== 'InterPro' ? null : (
+        {!Object.keys(metadata.go_terms).length ||
+        metadata.source_database.toLowerCase() !== 'interpro' ? null : (
           <GoTerms
             terms={metadata.go_terms}
             type="entry"

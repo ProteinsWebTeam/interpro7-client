@@ -15,7 +15,7 @@ import styles from './style.css';
 const f = foundationPartial(styles);
 
 const colors = new Map([
-  ['gene3d', '#a88cc3'],
+  ['cathgene3d', '#a88cc3'],
   ['cdd', '#addc58'],
   ['hamap', '#2cd6d6'],
   ['panther', '#bfac92'],

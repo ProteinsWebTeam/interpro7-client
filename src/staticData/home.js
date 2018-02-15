@@ -10,11 +10,11 @@ const f = foundationPartial(ipro);
 export const memberDB = [
   {
     type: 'CATH',
-    apiType: 'gene3d',
+    apiType: 'CATHGENE3D',
     to: {
       description: {
         main: { key: 'entry' },
-        entry: { db: 'gene3d' },
+        entry: { db: 'cathgene3d' },
       },
     },
     className: f('md-cg'),

@@ -6,6 +6,7 @@ import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Embed from 'components/Embed';
+import Literature from 'components/Entry/Literature';
 
 import loadWebComponent from 'utils/loadWebComponent';
 
@@ -60,6 +61,8 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
   render() {
     const { data: { metadata } } = this.props;
     const chains = Array.from(new Set(metadata.chains || []));
+    const date = new Date(metadata.release_date);
+    const literature = Object.entries(metadata.literature);
     return (
       <div className={f('sections')}>
         <section>
@@ -72,6 +75,11 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                 <div className={f('margin-top-large')}>
                   <div>Accession: {metadata.accession}</div>
                   <div>Experiment type: {metadata.experiment_type}</div>
+                  <div>Resolution: {metadata.resolution} Å </div>
+                  <div>
+                    Release Date: <time>{date.toLocaleDateString()}</time>
+                  </div>
+
                   <div>
                     Chains:{' '}
                     {chains.map(chain => (
@@ -138,6 +146,18 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
             </div>
           </ErrorBoundary>
         </section>
+        <div>
+          {literature.length && (
+            <section id="references">
+              <div className={f('row')}>
+                <div className={f('large-12', 'columns')}>
+                  <h4>References</h4>
+                </div>
+              </div>
+              <Literature extra={literature} />
+            </section>
+          )}
+        </div>
       </div>
     );
   }

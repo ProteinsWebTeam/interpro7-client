@@ -117,7 +117,7 @@ class PlainDataProvider extends PureComponent {
     );
   }
 }
-const dataProviderFor = accession => {
+const dataProviderFor = (accession, sourceDatabase) => {
   let DataProvider = dataProviders.get(accession);
   if (DataProvider) return DataProvider;
   // create new one if not already existing
@@ -134,7 +134,7 @@ const dataProviderFor = accession => {
             main: { key: 'organism' },
             entry: { isFilter: true },
             protein: { isFilter: true },
-            organism: { db: 'taxonomy', accession },
+            organism: { db: sourceDatabase, accession },
           }),
       }),
   );
@@ -152,7 +152,7 @@ const dataProviderFor = accession => {
             main: { key: 'organism' },
             entry: { isFilter: true, db: entryDB },
             protein: { isFilter: true },
-            organism: { db: 'taxonomy', accession },
+            organism: { db: sourceDatabase, accession },
           }),
       }),
   );
@@ -189,6 +189,7 @@ class List extends PureComponent {
       };
     }
     const urlHasParameter = url && url.includes('?');
+    const includeTree = url && !url.includes('proteome');
     return (
       <div className={f('row')}>
         <MemberDBTabs />
@@ -203,7 +204,7 @@ class List extends PureComponent {
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
-            withTree
+            withTree={includeTree}
           >
             <Exporter>
               <ul>
@@ -289,8 +290,11 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="entry-count"
-              renderer={accession => {
-                const DataProvider = dataProviderFor(`${accession}`);
+              renderer={(accession /*: string */, { source_database }) => {
+                const DataProvider = dataProviderFor(
+                  `${accession}`,
+                  source_database,
+                );
                 return (
                   <DataProvider
                     renderer={({ loading, payload }, _, db) => {
@@ -345,8 +349,11 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="protein-count"
-              renderer={accession => {
-                const DataProvider = dataProviderFor(`${accession}`);
+              renderer={(accession /*: string */, { source_database }) => {
+                const DataProvider = dataProviderFor(
+                  `${accession}`,
+                  source_database,
+                );
                 return (
                   <DataProvider
                     renderer={(_, { payload, loading }) => {

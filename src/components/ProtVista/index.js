@@ -28,7 +28,7 @@ const colorHash = new ColorHash();
 
 // TODO: refactor to have a single place for colors
 const colorsByDB = {
-  gene3d: '#a88cc3',
+  cathgene3d: '#a88cc3',
   cdd: '#addc58',
   hamap: '#2cd6d6',
   mobidblt: '#d6dc94',
@@ -475,11 +475,13 @@ class ProtVista extends PureComponent {
                                   description: {
                                     main: {
                                       key:
-                                        entry.source_database === 'pdb'
+                                        entry.source_database.toLowerCase() ===
+                                        'pdb'
                                           ? 'structure'
                                           : 'entry',
                                     },
-                                    [entry.source_database === 'pdb'
+                                    [entry.source_database.toLowerCase() ===
+                                    'pdb'
                                       ? 'structure'
                                       : 'entry']: {
                                       db: entry.source_database,

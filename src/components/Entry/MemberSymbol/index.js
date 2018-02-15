@@ -10,7 +10,7 @@ const f = foundationPartial(ipro);
 
 const classNames = {
   CATH: f('md-cg'),
-  GENE3D: f('md-cg'),
+  CATHGENE3D: f('md-cg'),
   CDD: f('md-cd'),
   HAMAP: f('md-ha'),
   MOBIDBLT: f('md-mo'),

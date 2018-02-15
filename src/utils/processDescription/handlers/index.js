@@ -124,7 +124,7 @@ const templateHandler /*: Handler */ = {
 // nodes
 const memberDB = new Set([
   {
-    name: 'gene3d',
+    name: 'cathgene3d',
     re: /^G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{2,5}$/i,
   },
   { name: 'cdd', re: /^(?:[cs])d[0-9]{5}$/i },

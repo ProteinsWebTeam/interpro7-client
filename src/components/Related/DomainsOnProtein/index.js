@@ -58,40 +58,15 @@ const getUrlFor = createSelector(
 
 const mergeResidues = residues =>
   Object.values(residues).map(location => ({
-    accession: `Residues_${location.entry_accession}`,
+    accession: `_${location.entry_accession}`,
+    name: location.name,
     type: 'residue',
-    coordinates: [location.fragments.map(f => [f.start, f.end])], // TODO: check
-    locations: [location],
-    name: location.fragments[0],
-    entry: location.entry_accession,
     residue: location.fragments.map(f => f.residue),
-    source_database: location.fragments.map(f => f.source)[0],
-    interpro_entry: location.fragments.map(f => f.interProEntry),
+    source_database: location.source,
+    locations: location.fragments.map(f => ({
+      fragments: [{ start: f.start, end: f.end }],
+    })),
   }));
-
-// const mergeResidues = residues => {
-// TODO: have Matloob check what it was supposed to be doing
-//   for (const key of Object.keys(residues)) {
-//     residues[key].reduce((acc, v) => {
-//       if (!(v.description in acc)) {
-//         acc[v.description] = [];
-//       }
-//       acc[v.description].push(v);
-//       return acc;
-//     }, out);
-//   }
-//   out = Object.keys(out).map(a => ({
-//     accession: a,
-//     type: 'residue',
-//     coordinates: [out[a].map(b => [b.from, b.to])],
-//     name: out[a].reduce((acc, v) => v.name),
-//     entry: out[a].reduce((acc, v) => v.entry),
-//     residue: out[a].map(b => b.residue),
-//     source_database: out[a].map(b => b.source),
-//     interpro_entry: out[a].map(b => b.interProEntry),
-//   }));
-//   return out;
-// };
 
 const toArrayStructure = locations =>
   locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
@@ -133,7 +108,11 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   }
   for (const entry of integrated.concat(unintegrated)) {
     entry.coordinates = toArrayStructure(entry.entry_protein_locations);
-    if (residues.entry_locations.hasOwnProperty(entry.accession)) {
+    if (
+      residues &&
+      residues.entry_locations &&
+      residues.entry_locations.hasOwnProperty(entry.accession)
+    ) {
       entry.children = entry.residues = mergeResidues({
         [entry.accession]: residues.entry_locations[entry.accession],
       });

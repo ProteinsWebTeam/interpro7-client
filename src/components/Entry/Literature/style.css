@@ -12,12 +12,18 @@
   padding-left: 0;
 }
 
-.reference span.title {
+.reference span.journal {
   font-style: italic;
 }
 .reference span.index {
   padding-left: 0;
   color: #9da0a4;
+}
+
+.reference span.volume {
+}
+
+.reference span.pages {
 }
 
 .reference:target .cite {

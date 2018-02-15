@@ -11,7 +11,7 @@ const childrenScale = 1; /* was 0.7*/
 
 // TODO: refactor to have a single place for colors
 const colorsByDB = {
-  gene3d: '#a88cc3',
+  cathgene3d: '#a88cc3',
   cdd: '#addc58',
   hamap: '#2cd6d6',
   mobidblt: '#d6dc94',
