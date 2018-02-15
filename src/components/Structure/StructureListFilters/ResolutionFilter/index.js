@@ -4,14 +4,16 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import debounce from 'lodash-es/debounce';
-import { format } from 'url';
 
-import MultipleInput from 'components/SimpleCommonComponents/MultipleInput';
+import MultipleInput from 'components/SimpleCommonComponents/MultipleInput/index';
 
-import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { goToCustomLocation } from 'actions/creators/index';
 
-import { goToCustomLocation } from 'actions/creators';
+import classnames from 'classnames/bind';
+
+import styles from './style.css';
+
+const s = classnames.bind(styles);
 
 const DEBOUNCE_RATE = 500; // In ms
 
@@ -20,12 +22,8 @@ const MAX = 20;
 
 const RESOLUTION_RANGE_REGEXP = /^(\d*(\.\d+)?)-(\d*(\.\d+)?)$/;
 
-class ExperimentTypeFilter extends PureComponent {
+class ResolutionFilter extends PureComponent {
   static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.object,
-    }).isRequired,
     customLocation: T.shape({
       description: T.object.isRequired,
       search: T.object.isRequired,
@@ -72,6 +70,7 @@ class ExperimentTypeFilter extends PureComponent {
     if (value !== 'All') {
       search.resolution = `${this.state.min}-${this.state.max}`;
     }
+    this.setState({ min: MIN, max: MAX });
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
@@ -89,8 +88,7 @@ class ExperimentTypeFilter extends PureComponent {
     );
 
   render() {
-    const { data: { loading }, customLocation: { search } } = this.props;
-    if (loading) return null;
+    const { customLocation: { search: { resolution } } } = this.props;
     const { min, max } = this.state;
     return (
       <div>
@@ -100,8 +98,8 @@ class ExperimentTypeFilter extends PureComponent {
             name="resolution"
             value="All"
             onChange={this._handleSelection}
-            checked={!search.resolution}
-            style={{ margin: '0.5em' }}
+            checked={!resolution}
+            className={s('radio')}
           />
           <span>All</span>
         </label>
@@ -111,11 +109,13 @@ class ExperimentTypeFilter extends PureComponent {
             name="resolution"
             value="Subset"
             onChange={this._handleSelection}
-            checked={!!search.resolution}
-            style={{ margin: '0.5em' }}
+            checked={!!resolution}
+            className={s('radio')}
           />
           <span>
-            Subset: {min}-{max} Å
+            Subset<span className={s('hideable', { hidden: !resolution })}>
+              : {min}-{max} Å
+            </span>
           </span>
         </label>
         <MultipleInput
@@ -126,32 +126,12 @@ class ExperimentTypeFilter extends PureComponent {
           step="0.05"
           onChange={this._handleChange}
           aria-label="resolution range"
-          style={{ height: '1.5em' }}
+          className={s('range', 'hideable', { hidden: !resolution })}
         />
       </div>
     );
   }
 }
-
-const getUrlFor = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
-  ({ protocol, hostname, port, root }, description, search) => {
-    // omit from search
-    const { resolution, search: _, ..._search } = search;
-    // add to search
-    _search.group_by = 'resolution';
-    // build URL
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: root + descriptionToPath(description),
-      query: _search,
-    });
-  },
-);
 
 const mapStateToProps = createSelector(
   state => state.customLocation,
@@ -159,5 +139,5 @@ const mapStateToProps = createSelector(
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(
-  loadData(getUrlFor)(ExperimentTypeFilter),
+  ResolutionFilter,
 );
