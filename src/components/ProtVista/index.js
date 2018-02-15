@@ -475,11 +475,13 @@ class ProtVista extends PureComponent {
                                   description: {
                                     main: {
                                       key:
-                                        entry.source_database === 'pdb'
+                                        entry.source_database.toLowerCase() ===
+                                        'pdb'
                                           ? 'structure'
                                           : 'entry',
                                     },
-                                    [entry.source_database === 'pdb'
+                                    [entry.source_database.toLowerCase() ===
+                                    'pdb'
                                       ? 'structure'
                                       : 'entry']: {
                                       db: entry.source_database,

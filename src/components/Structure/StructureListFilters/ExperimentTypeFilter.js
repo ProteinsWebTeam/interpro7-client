@@ -45,11 +45,6 @@ class ExperimentTypeFilter extends PureComponent {
       data: { loading, payload },
       customLocation: { description, search },
     } = this.props;
-    if (
-      (Object.entries(description).find(([_key, value]) => value.isFilter) ||
-        [])[0]
-    )
-      return 'Not available.';
     const types = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,
     );
