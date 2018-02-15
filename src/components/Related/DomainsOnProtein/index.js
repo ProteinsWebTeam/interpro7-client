@@ -108,20 +108,16 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   }
   for (const entry of integrated.concat(unintegrated)) {
     entry.coordinates = toArrayStructure(entry.entry_protein_locations);
-    if (
-      residues &&
-      residues.entry_locations &&
-      residues.entry_locations.hasOwnProperty(entry.accession)
-    ) {
+    if (residues && residues.hasOwnProperty(entry.accession)) {
       entry.children = entry.residues = mergeResidues({
-        [entry.accession]: residues.entry_locations[entry.accession],
+        [entry.accession]: residues[entry.accession],
       });
       delete residues[entry.accession];
     }
     addSignature(entry, ipro, integrated);
   }
   if (Object.keys(residues).length > 0) {
-    out.residues = mergeResidues(residues.entry_locations);
+    out.residues = mergeResidues(residues);
   }
   return out;
 };
