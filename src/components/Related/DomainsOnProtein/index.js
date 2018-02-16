@@ -61,7 +61,10 @@ const mergeResidues = residues =>
     accession: `_${location.entry_accession}`,
     name: location.name,
     type: 'residue',
-    residue: location.fragments.map(f => f.residue),
+    location2residue: location.fragments.reduce((acc, fragment) => {
+      acc[fragment.start] = fragment.residue;
+      return acc;
+    }, {}),
     source_database: location.source,
     locations: location.fragments.map(f => ({
       fragments: [{ start: f.start, end: f.end }],

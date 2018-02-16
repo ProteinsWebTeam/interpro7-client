@@ -138,6 +138,7 @@ class ProtVista extends PureComponent {
           locations: [loc],
           color: this.getTrackColor(d),
           entry_type: d.entry_type,
+          type: 'entry',
         }));
         const children = d.children
           ? d.children.map(child => ({
@@ -146,9 +147,11 @@ class ProtVista extends PureComponent {
               residues: child.children,
               source_database: child.source_database,
               entry_type: child.entry_type,
+              type: child.type,
               locations: child.entry_protein_locations || child.locations,
               parent: d,
               color: this.getTrackColor(Object.assign(child, { parent: d })),
+              location2residue: child.location2residue,
             }))
           : null;
         const isNewElement = !this.web_tracks[d.accession]._data;
@@ -176,15 +179,10 @@ class ProtVista extends PureComponent {
           });
           this.web_tracks[d.accession].addEventListener('entrymouseover', e => {
             this._popper.classList.remove(f('hide'));
-            if (e.detail.feature.source_database) {
-              removeAllChildrenFromNode(this._popper_content);
-              this._popper_content.appendChild(
-                this.getElementFromEntry(e.detail.feature),
-              );
-            }
-            // if (e.hasOwnProperty('residue')) {
-            //   this._popper.appendChild(this.getElementFromResidue(d));
-            // }
+            removeAllChildrenFromNode(this._popper_content);
+            this._popper_content.appendChild(
+              this.getElementFromEntry(e.detail),
+            );
             this.popper = new PopperJS(e.detail.target, this._popper, {
               placement: 'top',
               applyStyle: { enabled: false },
@@ -201,14 +199,35 @@ class ProtVista extends PureComponent {
     }
   }
 
-  getElementFromEntry(entry) {
+  getElementFromEntry(detail) {
+    const entry = detail.feature;
     const tagString = `<div>
-        <h5>${entry.accession}</h5>
+        <h5>
+          ${entry.accession}
+          ${
+            entry.location2residue
+              ? `[${entry.location2residue[detail.start]}]`
+              : ''
+          } 
+         </h5>
         ${entry.name ? `<h4>${entry.name}</h4>` : ''}
+        <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
+        <p style={{ textTransform: 'uppercase' }}>
+          <small>${
+            Array.isArray(entry.source_database)
+              ? entry.source_database[0]
+              : entry.source_database
+          }
+            ${entry.entry ? `(${entry.entry})` : ''}
+          </small>
+        </p>
         <ul>
-          ${entry.locations
-            .map(({ fragments }) =>
-              `
+          ${
+            detail.feature.type === 'residue'
+              ? `<li>Position ${detail.start}</li>`
+              : entry.locations
+                  .map(({ fragments }) =>
+                    `
           <li>location:
             <ul>
               ${fragments
@@ -221,19 +240,11 @@ class ProtVista extends PureComponent {
             </ul>
           </li>
           `.trim(),
-            )
-            .join('')}
-        </ul>
-        <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
-        <p style={{ textTransform: 'uppercase' }}>
-          <small>${
-            Array.isArray(entry.source_database)
-              ? entry.source_database[0]
-              : entry.source_database
+                  )
+                  .join('')
           }
-            ${entry.entry ? `(${entry.entry})` : ''}
-          </small>
-        </p>
+        </ul>
+
       </div>
     `.trim();
     const range = document.createRange();
