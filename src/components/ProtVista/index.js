@@ -15,10 +15,10 @@ const f = foundationPartial(local, fonts);
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import ProtVistaManager from 'protvista-manager/src/protvista-manager.js';
-import ProtVistaSequence from 'protvista-sequence/src/protvista-sequence.js';
-import ProtVistaNavigation from 'protvista-navigation/src/protvista-navigation.js';
-import ProtVistaInterProTrack from 'protvista-interpro-track/src/protvista-interpro-track.js';
+import ProtVistaManager from 'protvista-manager';
+import ProtVistaSequence from 'protvista-sequence';
+import ProtVistaNavigation from 'protvista-navigation';
+import ProtVistaInterProTrack from 'protvista-interpro-track';
 
 import PopperJS from 'popper.js';
 
