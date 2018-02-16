@@ -10,6 +10,7 @@ import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
 import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
+import MemberSymbol from 'components/Entry/MemberSymbol';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, {
   Column,
@@ -149,16 +150,21 @@ class List extends PureComponent {
             <SearchBox search={search.search}>&nbsp;</SearchBox>
             <Column
               dataKey="type"
-              headerClassName={f('col-type')}
-              renderer={type => (
-                <Tooltip title={`${type.replace('_', ' ')} type`}>
-                  <interpro-type type={type.replace('_', ' ')} size="26px">
-                    {type}
-                  </interpro-type>
-                </Tooltip>
-              )}
+              headerClassName={f('col-type', 'table-center')}
+              cellClassName={f('table-center')}
+              renderer={type =>
+                db === 'InterPro' ? (
+                  <Tooltip title={`${type.replace('_', ' ')} type`}>
+                    <interpro-type type={type.replace('_', ' ')} size="26px">
+                      {type}
+                    </interpro-type>
+                  </Tooltip>
+                ) : (
+                  type
+                )
+              }
             >
-              Type
+              {`${db !== 'InterPro' ? `${db} ` : ''}Type`}
             </Column>
             <Column
               dataKey="name"
@@ -219,6 +225,28 @@ class List extends PureComponent {
             >
               Accession
             </Column>
+            {db !== 'InterPro' && (
+              <Column
+                dataKey="source_database"
+                headerClassName={f('table-center')}
+                cellClassName={f('table-center')}
+                renderer={(db /*: string */) => (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: { db },
+                      },
+                      search: {},
+                    }}
+                  >
+                    <MemberSymbol type={db} />
+                  </Link>
+                )}
+              >
+                DB
+              </Column>
+            )}
             {db === 'InterPro' ? (
               <Column
                 dataKey="member_databases"
@@ -247,7 +275,7 @@ class List extends PureComponent {
                   </div>
                 )}
               >
-                Database
+                Member DB
               </Column>
             ) : (
               <Column

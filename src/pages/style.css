@@ -83,10 +83,6 @@
   align-items: center;
   margin: 0.1em 0;
   line-height: normal;
-
-  & > * {
-    text-overflow: ellipsis;
-  }
 }
 
 .go-circle {

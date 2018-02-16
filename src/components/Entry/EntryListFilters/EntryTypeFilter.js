@@ -25,6 +25,11 @@ class EntryTypeFilter extends PureComponent {
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
+      description: T.shape({
+        entry: T.shape({
+          db: T.string.isRequired,
+        }).isRequired,
+      }).isRequired,
       search: T.object.isRequired,
     }).isRequired,
   };
@@ -46,7 +51,7 @@ class EntryTypeFilter extends PureComponent {
   render() {
     const {
       data: { loading, payload },
-      customLocation: { search },
+      customLocation: { description: { entry: { db } }, search },
     } = this.props;
     const types = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,
@@ -69,8 +74,8 @@ class EntryTypeFilter extends PureComponent {
                 }
                 style={{ margin: '0.25em ' }}
               />
-              {type === 'All' ? (
-                type
+              {type === 'All' || db !== 'InterPro' ? (
+                type.replace('_', ' ')
               ) : (
                 <interpro-type
                   type={type.replace('_', ' ')}
