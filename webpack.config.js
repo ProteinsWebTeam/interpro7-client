@@ -180,7 +180,7 @@ module.exports = (env = { dev: true }) => {
           ],
         },
         {
-          test: /((LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          test: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
           // Use `loader` instead of `use` for now, otherwise breaks
           // https://github.com/webpack/extract-text-webpack-plugin/issues/282
           use:
@@ -256,7 +256,7 @@ module.exports = (env = { dev: true }) => {
                     },
                   },
                 ],
-          exclude: /((LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          exclude: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
         },
         {
           test: /\.scss$/i,

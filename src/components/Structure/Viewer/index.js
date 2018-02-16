@@ -5,7 +5,7 @@ import loadWebComponent from 'utils/loadWebComponent';
 import LiteMol from './litemol/js/LiteMol-plugin.js';
 import { foundationPartial } from 'styles/foundation';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
-import lmStyles from './litemol/css/LiteMol-plugin-light.css';
+import lmStyles from './litemol/css/LiteMol-plugin-blue.css';
 //import lmStyles from './litemol/css/LiteMol-plugin-light.css';
 
 const embedStyle = { width: '100%', height: '50vh' };
