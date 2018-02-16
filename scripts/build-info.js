@@ -1,8 +1,6 @@
 // @flow
 const childProcess = require('child_process');
 
-const pkg = require('../package.json');
-
 const branch = childProcess
   .execSync('git rev-parse --abbrev-ref HEAD')
   .toString()
@@ -28,5 +26,4 @@ try {
 module.exports = {
   git: { branch, commit, tag },
   build: { time: Date.now() },
-  pkg,
 };

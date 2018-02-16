@@ -290,11 +290,8 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="entry-count"
-              renderer={(accession /*: string */, { source_database }) => {
-                const DataProvider = dataProviderFor(
-                  `${accession}`,
-                  source_database,
-                );
+              renderer={(accession /*: string */, { source_database: db }) => {
+                const DataProvider = dataProviderFor(`${accession}`, db);
                 return (
                   <DataProvider
                     renderer={({ loading, payload }, _, db) => {

@@ -114,16 +114,19 @@ class FiltersPanel extends PureComponent {
         </div>
 
         <ErrorBoundary>
-          {children.map((child, i) => (
-            <FilterPanel
-              key={i}
-              label={child.props.label}
-              onCollapse={() => this.toggleFilter(i)}
-              collapsed={this.state.filters[i]}
-            >
-              {child}
-            </FilterPanel>
-          ))}
+          {children.map(
+            (child, i) =>
+              child && (
+                <FilterPanel
+                  key={i}
+                  label={child.props.label}
+                  onCollapse={() => this.toggleFilter(i)}
+                  collapsed={this.state.filters[i]}
+                >
+                  {child}
+                </FilterPanel>
+              ),
+          )}
         </ErrorBoundary>
       </div>
     );

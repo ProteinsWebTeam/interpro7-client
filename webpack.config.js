@@ -14,6 +14,7 @@ const cssNext = require('postcss-cssnext');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const buildInfo = require('./scripts/build-info');
+const pkg = require('./package.json');
 
 const DEFAULT_PORT = 80;
 const kB = 1024;
@@ -417,12 +418,12 @@ module.exports = (env = { dev: true }) => {
             emitStats: false,
             minify: env.production,
             background: '#007c82',
-            title: buildInfo.pkg.name,
+            title: pkg.name,
           })
         : null,
       env.production || env.staging || env.dev
         ? new (require('html-webpack-plugin'))({
-            title: buildInfo.pkg.name,
+            title: pkg.name,
             template: path.join('.', 'src', 'index.template.html'),
             inject: false,
             // chunksSortMode: 'dependency',
