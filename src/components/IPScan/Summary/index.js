@@ -14,12 +14,6 @@ import flattenDeep from 'lodash-es/flattenDeep';
 
 import f from 'styles/foundation';
 
-const goCategoryMap = new Map([
-  ['BIOLOGICAL_PROCESS', 'Biological Process'],
-  ['MOLECULAR_FUNCTION', 'Molecular Function'],
-  ['CELLULAR_COMPONENT', 'Cellular Component'],
-]);
-
 /*:: type Props = {
   accession: string,
   data: {

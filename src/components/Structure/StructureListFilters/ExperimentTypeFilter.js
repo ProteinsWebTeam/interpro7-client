@@ -25,7 +25,6 @@ class ExperimentTypeFilter extends PureComponent {
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
-      description: T.object.isRequired,
       search: T.object.isRequired,
     }).isRequired,
   };
@@ -43,7 +42,7 @@ class ExperimentTypeFilter extends PureComponent {
   render() {
     const {
       data: { loading, payload },
-      customLocation: { description, search },
+      customLocation: { search },
     } = this.props;
     const types = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,

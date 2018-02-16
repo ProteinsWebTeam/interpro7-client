@@ -164,7 +164,7 @@ class List extends PureComponent {
                 )
               }
             >
-              {`${db !== 'InterPro' ? `${db} ` : ''}Type`}
+              {`${db === 'InterPro' ? '' : `${db} `}Type`}
             </Column>
             <Column
               dataKey="name"

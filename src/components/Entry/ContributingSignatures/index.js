@@ -62,6 +62,7 @@ SignatureLink.propTypes = {
   accession: T.string.isRequired,
   db: T.string.isRequired,
   data: T.object,
+  label: T.string,
 };
 
 const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
