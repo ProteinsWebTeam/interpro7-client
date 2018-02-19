@@ -139,6 +139,10 @@ div.buttons {
   padding: 0.4rem 0.8rem;
   margin: 6px;
 }
+.popper ul {
+  text-align: left;
+  list-style: none;
+}
 .popper .popper__arrow {
   width: 0;
   height: 0;
