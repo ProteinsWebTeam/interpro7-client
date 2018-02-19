@@ -7,8 +7,10 @@ import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { toPlural } from 'utils/pages';
 
 import { speciesFeat } from 'staticData/home';
@@ -35,6 +37,115 @@ const getCountString = (
   return `${count} ${toPlural(type)}`;
 };
 
+class Species extends PureComponent /*:: <SpeciesProps> */ {
+  static propTypes = {
+    species: T.object.isRequired,
+    data: T.shape({
+      loading: T.bool.isRequired,
+      payload: T.object,
+    }).isRequired,
+  };
+
+  render() {
+    const { species, data: { loading, payload } } = this.props;
+    let entries = 0;
+    let proteins = 0;
+    if (!loading && payload && payload.metadata) {
+      entries = payload.metadata.counters.entries;
+      proteins = payload.metadata.counters.proteins;
+    }
+
+    return (
+      <div
+        className={f('column', 'small-3', 'medium-2', 'large-4', 'text-center')}
+        key={species.tax_id || 'unclassified'}
+      >
+        <Link
+          to={{
+            description: {
+              main: { key: 'organism' },
+              organism: {
+                db: 'taxonomy',
+                accession: species.tax_id,
+              },
+            },
+          }}
+        >
+          <span
+            style={{ color: species.color }}
+            className={f('small', 'icon', 'icon-species')}
+            data-icon={species.icon}
+          />
+          <h6>{species.title}</h6>
+        </Link>
+        <div className={f('list-detail')}>
+          <Tooltip title={`${entries} matching ${species.title}`}>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  organism: {
+                    db: 'taxonomy',
+                    accession: species.tax_id,
+                    isFilter: true,
+                  },
+                  entry: { db: 'InterPro' },
+                },
+              }}
+            >
+              <NumberComponent loading={loading} value={entries} />{' '}
+              {toPlural('entry', entries)}
+            </Link>
+          </Tooltip>
+          <br />
+          <Tooltip
+            title={`${getCountString(
+              payload,
+              loading,
+              species.tax_id,
+              'protein',
+            )} matching ${species.title}`}
+          >
+            <Link
+              to={{
+                description: {
+                  main: { key: 'protein' },
+                  organism: {
+                    db: 'taxonomy',
+                    accession: species.tax_id,
+                    isFilter: true,
+                  },
+                  protein: { db: 'UniProt' },
+                },
+              }}
+            >
+              <NumberComponent loading={loading} value={proteins} />{' '}
+              {toPlural('protein', proteins)}
+            </Link>
+          </Tooltip>
+        </div>
+      </div>
+    );
+  }
+}
+
+const mapStateToUrlFor = accession =>
+  createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname:
+          root +
+          descriptionToPath({
+            main: { key: 'organism' },
+            organism: { db: 'taxonomy', accession },
+          }),
+      }),
+  );
+
 /*:: type Props = {
   data: {
     loading: boolean,
@@ -47,112 +158,20 @@ const getCountString = (
 }; */
 
 class BySpecies extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.object,
-    }).isRequired,
-    dataEntry: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.object,
-    }).isRequired,
-  };
-
   render() {
-    const {
-      data: { loading, payload },
-      dataEntry: { loading: loadingE, payload: payloadE },
-    } = this.props;
     return (
       <div className={f('species-list')}>
         <AnimatedEntry className={f('row')} element="div">
-          {// TODO: Include number of entries
-          // The result in the tab counts the number of proteins.
-          // This comes from a /proteins?group_by=tax_id
-          // A similar query but for entries needs to be supported in the API.
-          // Once there an update of this component is required
-          speciesFeat.map(e => (
-            <div
-              className={f(
-                'column',
-                'small-3',
-                'medium-2',
-                'large-4',
-                'text-center',
-              )}
-              key={e.tax_id || 'unclassified'}
-            >
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'organism' },
-                    organism: {
-                      db: 'taxonomy',
-                      accession: e.tax_id,
-                    },
-                  },
-                }}
-              >
-                <span
-                  style={{ color: e.color }}
-                  className={f('small', 'icon', 'icon-species')}
-                  data-icon={e.icon}
-                />
-                <h6>{e.title}</h6>
-              </Link>
-              <div className={f('list-detail')}>
-                <Tooltip
-                  title={`${getCountString(
-                    payloadE,
-                    loadingE,
-                    e.tax_id,
-                    'entry',
-                  )} matching ${e.title}`}
-                >
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        organism: {
-                          db: 'taxonomy',
-                          accession: e.tax_id,
-                          isFilter: true,
-                        },
-                        entry: { db: 'InterPro' },
-                      },
-                    }}
-                  >
-                    {getCountString(payloadE, loadingE, e.tax_id, 'entry')}
-                  </Link>
-                </Tooltip>
-                <br />
-                <Tooltip
-                  title={`${getCountString(
-                    payload,
-                    loading,
-                    e.tax_id,
-                    'protein',
-                  )} matching ${e.title}`}
-                >
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'protein' },
-                        organism: {
-                          db: 'taxonomy',
-                          accession: e.tax_id,
-                          isFilter: true,
-                        },
-                        protein: { db: 'UniProt' },
-                      },
-                    }}
-                  >
-                    {getCountString(payload, loading, e.tax_id, 'protein')}
-                  </Link>
-                </Tooltip>
-              </div>
-            </div>
-          ))}
+          {speciesFeat.map(species => {
+            const { tax_id: taxID } = species;
+            const SpeciesWithData = loadData(mapStateToUrlFor(taxID))(Species);
+            return (
+              <SpeciesWithData
+                species={species}
+                key={taxID || 'unclassified'}
+              />
+            );
+          })}
         </AnimatedEntry>
         <Link
           to={{
@@ -170,20 +189,4 @@ class BySpecies extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToUrl = endpoint =>
-  createSelector(
-    state => state.settings.api,
-    ({ protocol, hostname, port, root }) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname: `${root}/${endpoint}`,
-        query: { group_by: 'tax_id' },
-      }),
-  );
-
-export default loadData({
-  getUrl: mapStateToUrl('entry'),
-  propNamespace: 'Entry',
-})(loadData(mapStateToUrl('protein'))(BySpecies));
+export default BySpecies;

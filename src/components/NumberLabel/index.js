@@ -31,7 +31,7 @@ const getAbbr = (value /*: number */) => {
   return `${_value.toLocaleString()}${UNITS[unitIndex]}`;
 };
 
-class NumberLabel extends PureComponent {
+class _NumberComponent extends PureComponent {
   static propTypes = {
     value: T.number,
     loading: T.bool,
@@ -117,7 +117,7 @@ class NumberLabel extends PureComponent {
     }
     return (
       <span
-        className={f('label', className, { loading, lowGraphics })}
+        className={f(className, { loading, lowGraphics })}
         title={_title || ''}
         {...props}
       >
@@ -132,4 +132,17 @@ const mapStateToProps = createSelector(
   lowGraphics => ({ lowGraphics }),
 );
 
-export default connect(mapStateToProps)(NumberLabel);
+export const NumberComponent = connect(mapStateToProps)(_NumberComponent);
+
+class NumberLabel extends PureComponent {
+  static propTypes = {
+    className: T.string,
+  };
+
+  render() {
+    const { className, ...props } = this.props;
+    return <NumberComponent className={f('label', className)} {...props} />;
+  }
+}
+
+export default NumberLabel;

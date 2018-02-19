@@ -136,7 +136,7 @@
   },
   "dependencies": {
     "@webcomponents/webcomponentsjs": "1.1.0",
-    "EBI-Icon-fonts": "1.2.3",
+    "EBI-Icon-fonts": "1.2.0",
     "babel-polyfill": "6.26.0",
     "clanviewer": "0.1.8",
     "color-hash": "1.0.3",

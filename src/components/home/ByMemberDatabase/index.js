@@ -10,6 +10,7 @@ import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import AnimatedEntry from 'components/AnimatedEntry';
+import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -90,7 +91,9 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
 
                 <p className={f('margin-bottom-medium')}>
                   <span className={f('count', { visible: payload })}>
-                    <span>{(counts && apiType && counts[apiType]) || ''}</span>
+                    <NumberComponent
+                      value={(counts && apiType && counts[apiType]) || 0}
+                    />
                     {type === 'new' ? ' ' : ' entries'}
                   </span>
                 </p>
