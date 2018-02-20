@@ -4,6 +4,7 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 
 import PageSizeSelector from '../PageSizeSelector';
+import { NumberComponent, DEFAULT_DURATION } from 'components/NumberLabel';
 
 import config from 'config';
 
@@ -24,17 +25,20 @@ class PaginationItem extends PureComponent {
     value: T.number,
     noLink: T.bool,
     children: T.oneOfType([T.number, T.string]),
+    duration: T.number,
   };
 
   render() {
-    const { className, value, noLink, children } = this.props;
+    const { className, value, noLink, children, duration } = this.props;
     const LinkOrFragment = !value || noLink ? React.Fragment : Link;
     return (
       <li className={className}>
         <LinkOrFragment
           {...(!value || noLink ? {} : { to: toFunctionFor(value) })}
         >
-          {(value && children) || value}
+          {(value && children) || (
+            <NumberComponent duration={duration || 0} value={value || ''} />
+          )}
         </LinkOrFragment>
       </li>
     );
@@ -143,7 +147,7 @@ class Last extends PureComponent {
   render() {
     const { current, last } = this.props;
     if (last === current) return null;
-    return <PaginationItem value={last} />;
+    return <PaginationItem value={last} duration={DEFAULT_DURATION} />;
   }
 }
 
