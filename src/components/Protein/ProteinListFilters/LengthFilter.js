@@ -44,6 +44,11 @@ class LengthFilter extends PureComponent {
     this._updateLocation.flush();
   }
 
+  componentWillReceiveProps({ customLocation: { search: { length } } }) {
+    console.log(length);
+    if (!length) this.setState({ min: MIN, max: MAX });
+  }
+
   componentWillUnmount() {
     this._updateLocation.cancel();
   }
