@@ -20,7 +20,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import NumberLabel from 'components/NumberLabel';
+import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -317,8 +317,7 @@ class List extends PureComponent {
                             },
                           }}
                         >
-                          <NumberLabel
-                            className={f('number-label')}
+                          <NumberComponent
                             value={count}
                             loading={loading}
                             abbr
@@ -372,8 +371,7 @@ class List extends PureComponent {
                             },
                           }}
                         >
-                          <NumberLabel
-                            className={f('number-label')}
+                          <NumberComponent
                             value={count}
                             loading={loading}
                             abbr

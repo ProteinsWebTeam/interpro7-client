@@ -44,6 +44,10 @@ class LengthFilter extends PureComponent {
     this._updateLocation.flush();
   }
 
+  componentWillReceiveProps({ customLocation: { search: { length } } }) {
+    if (!length) this.setState({ min: MIN, max: MAX });
+  }
+
   componentWillUnmount() {
     this._updateLocation.cancel();
   }
@@ -62,8 +66,8 @@ class LengthFilter extends PureComponent {
       ({ min, max }) => ({
         [name]:
           name === 'min'
-            ? Math.min(max, Math.max(MIN, +value))
-            : Math.max(min, Math.min(MAX, +value)),
+            ? Math.min(max, Math.max(MIN, Math.round(Math.exp(+value))))
+            : Math.max(min, Math.min(MAX, Math.round(Math.exp(+value)))),
       }),
       this._updateLocation,
     );
@@ -75,10 +79,11 @@ class LengthFilter extends PureComponent {
         {min} AA
         <br />
         <MultipleInput
-          min="0"
-          max={MAX}
-          minValue={min}
-          maxValue={max}
+          min={Math.log(MIN)}
+          max={Math.log(MAX)}
+          minValue={Math.log(min)}
+          maxValue={Math.log(max)}
+          step="0.00001"
           onChange={this._handleChange}
           aria-label="length range"
         />

@@ -6,14 +6,13 @@ import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import ProteinFile from './ProteinFile';
-import NumberLabel from 'components/NumberLabel';
+import { NumberComponent } from 'components/NumberLabel';
 
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import local from './style.css';
 
-const f = foundationPartial(fonts, local);
+const f = foundationPartial(fonts);
 
 const lut = new Map([
   ['3702', { name: 'Arabidopsis thaliana (Mouse-ear cress)' }],
@@ -158,9 +157,7 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
             <Column
               dataKey="count"
               headerClassName={f('table-center')}
-              renderer={count => (
-                <NumberLabel className={f('number-label')} value={count} abbr />
-              )}
+              renderer={count => <NumberComponent value={count} abbr />}
             >
               Protein count
             </Column>
