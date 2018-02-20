@@ -35,7 +35,7 @@ const getAbbr = (value /*: number */) => {
 
 class _NumberComponent extends PureComponent {
   static propTypes = {
-    value: T.number,
+    value: T.oneOfType([T.number, T.string]),
     loading: T.bool,
     duration: T.number,
     className: T.string,
