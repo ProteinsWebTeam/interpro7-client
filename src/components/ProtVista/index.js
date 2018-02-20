@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -139,12 +139,13 @@ class ProtVista extends PureComponent {
           color: this.getTrackColor(d),
           entry_type: d.entry_type,
           type: 'entry',
+          residues: d.residues,
         }));
         const children = d.children
           ? d.children.map(child => ({
               accession: child.accession,
               name: child.name,
-              residues: child.children,
+              residues: child.residues,
               source_database: child.source_database,
               entry_type: child.entry_type,
               type: child.type,
@@ -201,14 +202,11 @@ class ProtVista extends PureComponent {
 
   getElementFromEntry(detail) {
     const entry = detail.feature;
+    const isResidue = detail.type === 'residue';
     const tagString = `<div>
         <h5>
           ${entry.accession}
-          ${
-            entry.location2residue
-              ? `[${entry.location2residue[detail.start]}]`
-              : ''
-          } 
+          ${isResidue ? `<br/>[${detail.description}]` : ''} 
          </h5>
         ${entry.name ? `<h4>${entry.name}</h4>` : ''}
         <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
@@ -223,8 +221,11 @@ class ProtVista extends PureComponent {
         </p>
         <ul>
           ${
-            detail.feature.type === 'residue'
-              ? `<li>Position ${detail.start}</li>`
+            isResidue
+              ? `
+              <li>Position: ${detail.start}</li>
+              <li>Residue: ${detail.residue}</li>
+              `
               : entry.locations
                   .map(({ fragments }) =>
                     `
@@ -331,75 +332,146 @@ class ProtVista extends PureComponent {
     return 'rgb(170,170,170)';
   }
 
+  renderLabels(entry) {
+    const { expandedTrack } = this.state;
+    return (
+      <Fragment>
+        <Link
+          to={{
+            description: {
+              main: {
+                key:
+                  entry.source_database.toLowerCase() === 'pdb'
+                    ? 'structure'
+                    : 'entry',
+              },
+              [entry.source_database.toLowerCase() === 'pdb'
+                ? 'structure'
+                : 'entry']: {
+                db: entry.source_database,
+                accession: entry.accession,
+              },
+            },
+          }}
+        >
+          {entry.accession}
+        </Link>
+        <div
+          className={f({
+            hide: !expandedTrack[entry.accession],
+          })}
+        >
+          {this.renderResidueLabels(entry)}
+          {entry.children &&
+            entry.children.map(d => (
+              <div key={d.accession} className={f('track-accession-child')}>
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'entry' },
+                      entry: {
+                        db: d.source_database,
+                        accession: d.accession,
+                      },
+                    },
+                  }}
+                >
+                  {d.accession}
+                </Link>
+                {this.renderResidueLabels(d)}
+              </div>
+            ))}
+        </div>
+      </Fragment>
+    );
+  }
+  renderResidueLabels(entry) {
+    if (!entry.residues) return null;
+    const { expandedTrack } = this.state;
+    return entry.residues.map(residue =>
+      residue.locations.map(r => (
+        <div
+          key={r.accession}
+          className={f('track-accession-child', {
+            hide: !expandedTrack[entry.accession],
+          })}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: entry.source_database,
+                  accession: entry.accession,
+                },
+              },
+            }}
+          >
+            {r.accession}
+          </Link>
+        </div>
+      )),
+    );
+  }
+  renderOptions() {
+    const { collapsed } = this.state;
+    return (
+      <div className={f('aligned-to-track-component')}>
+        <div className={f('view-options-title')}>Domains on protein</div>
+        <div className={f('view-options')}>
+          <div className={f('option-color', 'margin-right-large')}>
+            Color By:{' '}
+            <select
+              className={f('select-inline')}
+              value={this.state.colorMode}
+              onChange={this.changeColor}
+              onBlur={this.changeColor}
+            >
+              <option value={EntryColorMode.ACCESSION}>Accession</option>
+              <option value={EntryColorMode.MEMBER_DB}>Member Database</option>
+              <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
+                Domain Relationship
+              </option>
+            </select>
+          </div>
+          <div className={f('option-collapse')}>
+            &nbsp;|&nbsp;
+            <Tooltip title={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}>
+              <button
+                onClick={this.toggleCollapseAll}
+                aria-label={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}
+              >
+                {collapsed ? '▸ Expand' : '▾ Collapse'} All
+              </button>
+            </Tooltip>
+            &nbsp;|&nbsp;
+          </div>
+          <div className={f('option-fullscreen')}>
+            <Tooltip title="View the domain viewer in full screen mode">
+              <button
+                onClick={this.handleFullScreen}
+                data-icon="F"
+                title="Full screen"
+                className={f('margin-bottom-none', 'icon', 'icon-functional')}
+              />
+            </Tooltip>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { protein: { length }, data } = this.props;
 
     if (!(length && data)) return <Loading />;
 
-    const { collapsed, hideCategory, expandedTrack } = this.state;
+    const { hideCategory, expandedTrack } = this.state;
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
         <div className={f('row')}>
           <div className={f('columns')}>
-            <div className={f('track-row')}>
-              <div className={f('aligned-to-track-component')}>
-                <div className={f('view-options-title')}>
-                  Domains on protein
-                </div>
-                <div className={f('view-options')}>
-                  <div className={f('option-color', 'margin-right-large')}>
-                    Color By:{' '}
-                    <select
-                      className={f('select-inline')}
-                      value={this.state.colorMode}
-                      onChange={this.changeColor}
-                      onBlur={this.changeColor}
-                    >
-                      <option value={EntryColorMode.ACCESSION}>
-                        Accession
-                      </option>
-                      <option value={EntryColorMode.MEMBER_DB}>
-                        Member Database
-                      </option>
-                      <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
-                        Domain Relationship
-                      </option>
-                    </select>
-                  </div>
-                  <div className={f('option-collapse')}>
-                    &nbsp;|&nbsp;
-                    <Tooltip
-                      title={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}
-                    >
-                      <button
-                        onClick={this.toggleCollapseAll}
-                        aria-label={`${
-                          collapsed ? 'Expand' : 'Collapse'
-                        } all tracks`}
-                      >
-                        {collapsed ? '▸ Expand' : '▾ Collapse'} All
-                      </button>
-                    </Tooltip>
-                    &nbsp;|&nbsp;
-                  </div>
-
-                  <div className={f('option-fullscreen')}>
-                    <Tooltip title="View the domain viewer in full screen mode">
-                      <button
-                        onClick={this.handleFullScreen}
-                        data-icon="F"
-                        title="Full screen"
-                        className={f(
-                          'margin-bottom-none',
-                          'icon',
-                          'icon-functional',
-                        )}
-                      />
-                    </Tooltip>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div className={f('track-row')}>{this.renderOptions()}</div>
           </div>
         </div>
         <div ref={e => (this._popper = e)} className={f('popper', 'hide')}>
@@ -475,92 +547,10 @@ class ProtVista extends PureComponent {
                                 }
                                 shape="roundRectangle"
                                 expanded
-                                // onClick={() =>
-                                //   this.handleCollapseLabels(entry.accession)
-                                // }
                               />
                             </div>
                             <div className={f('track-accession')}>
-                              <Link
-                                to={{
-                                  description: {
-                                    main: {
-                                      key:
-                                        entry.source_database.toLowerCase() ===
-                                        'pdb'
-                                          ? 'structure'
-                                          : 'entry',
-                                    },
-                                    [entry.source_database.toLowerCase() ===
-                                    'pdb'
-                                      ? 'structure'
-                                      : 'entry']: {
-                                      db: entry.source_database,
-                                      accession: entry.accession,
-                                    },
-                                  },
-                                }}
-                              >
-                                {entry.accession}
-                              </Link>
-                              <div
-                                className={f({
-                                  hide: !expandedTrack[entry.accession],
-                                })}
-                              >
-                                {entry.children &&
-                                  entry.children.map(d => (
-                                    <div
-                                      key={d.accession}
-                                      className={f('track-accession-child')}
-                                    >
-                                      <Link
-                                        to={{
-                                          description: {
-                                            main: { key: 'entry' },
-                                            entry: {
-                                              db: d.source_database,
-                                              accession: d.accession,
-                                            },
-                                          },
-                                        }}
-                                      >
-                                        {d.accession}
-                                      </Link>
-                                      {d.residues
-                                        ? d.residues.map(residue =>
-                                            residue.locations.map(r => (
-                                              <div
-                                                key={r.accession}
-                                                className={f(
-                                                  'track-accession-child',
-                                                  {
-                                                    hide: !expandedTrack[
-                                                      d.accession
-                                                    ],
-                                                  },
-                                                )}
-                                              >
-                                                <Link
-                                                  to={{
-                                                    description: {
-                                                      main: { key: 'entry' },
-                                                      entry: {
-                                                        db: d.source_database,
-                                                        accession: d.accession,
-                                                      },
-                                                    },
-                                                  }}
-                                                >
-                                                  {r.entry_accession}
-                                                </Link>
-                                              </div>
-                                            )),
-                                          )
-                                        : null}
-                                    </div>
-                                  ))}
-                              </div>
+                              {this.renderLabels(entry)}
                             </div>
                           </div>
                         ))}

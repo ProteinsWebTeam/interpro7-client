@@ -88,6 +88,7 @@
 }
 .track-accession-child {
   line-height: 1.2;
+  white-space: nowrap;
 }
 .track-accession-child > a,
 .track-accession-child > a:focus,

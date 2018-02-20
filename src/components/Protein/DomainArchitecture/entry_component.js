@@ -265,7 +265,7 @@ class EntryComponent {
       });
 
       // if (d.key === 'residues'){
-      //   entryRenderer.renderResidues(
+      //   entryRenderer.renderResidueLabels(
       //     select(c[i]), d.value.expanded ? d.value : [], trackHeight
       //   );
       // } else {

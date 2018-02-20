@@ -56,20 +56,20 @@ const getUrlFor = createSelector(
     ),
 );
 
-const mergeResidues = residues =>
-  Object.values(residues).map(location => ({
-    accession: `_${location.entry_accession}`,
-    name: location.name,
-    type: 'residue',
-    location2residue: location.fragments.reduce((acc, fragment) => {
-      acc[fragment.start] = fragment.residue;
-      return acc;
-    }, {}),
-    source_database: location.source,
-    locations: location.fragments.map(f => ({
-      fragments: [{ start: f.start, end: f.end }],
-    })),
-  }));
+// const mergeResidues = residues =>
+//   Object.values(residues).map(location => ({
+//     accession: `_${location.entry_accession}`,
+//     name: location.name,
+//     type: 'residue',
+//     location2residue: location.fragments.reduce((acc, fragment) => {
+//       acc[fragment.start] = fragment.residue;
+//       return acc;
+//     }, {}),
+//     source_database: location.source,
+//     locations: location.fragments.map(f => ({
+//       fragments: [{ start: f.start, end: f.end }],
+//     })),
+//   }));
 
 const toArrayStructure = locations =>
   locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
@@ -100,7 +100,26 @@ const addSignature = (entry, ipro, integrated) => {
     console.error('integrated entry without InterPro: ', entry);
   }
 };
-
+const groupResidues = residues => {
+  const resTypes = {};
+  for (let fr of residues.fragments) {
+    if (!(fr.description in resTypes)) resTypes[fr.description] = [];
+    resTypes[fr.description].push(fr);
+  }
+  const output = [
+    {
+      accession: residues.name,
+      entry_accession: residues.entry_accession,
+      locations: Object.entries(resTypes).map(([description, fragments]) => ({
+        accession: description.replace(' ', '_'),
+        description,
+        fragments,
+      })),
+    },
+  ];
+  console.log(residues, resTypes, output);
+  return output;
+};
 const mergeData = (interpro, integrated, unintegrated, residues) => {
   const { out, ipro } = groupByEntryType(interpro);
   if (unintegrated.length > 0) {
@@ -112,15 +131,13 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   for (const entry of integrated.concat(unintegrated)) {
     entry.coordinates = toArrayStructure(entry.entry_protein_locations);
     if (residues && residues.hasOwnProperty(entry.accession)) {
-      entry.children = entry.residues = mergeResidues({
-        [entry.accession]: residues[entry.accession],
-      });
+      entry.residues = groupResidues(residues[entry.accession]);
       delete residues[entry.accession];
     }
     addSignature(entry, ipro, integrated);
   }
   if (Object.keys(residues).length > 0) {
-    out.residues = mergeResidues(residues);
+    out.residues = groupResidues(residues);
   }
   return out;
 };
