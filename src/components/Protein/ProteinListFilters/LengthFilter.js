@@ -10,7 +10,7 @@ import { goToCustomLocation } from 'actions/creators';
 
 const DEBOUNCE_RATE = 500; // In ms
 
-const MIN = 0;
+const MIN = 1;
 const MAX = 40000;
 
 const LENGTH_RANGE_REGEXP = /^(\d+)-(\d+)$/;
