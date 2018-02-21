@@ -14,17 +14,17 @@
 
 @keyframes pulsing {
   from {
-    opacity: 0.9;
+    opacity: 0.75;
   }
 
   to {
-    opacity: 0.5;
+    opacity: 0.25;
   }
 }
 
 .loading {
   cursor: progress;
-  animation-duration: var(--timing-slow);
+  animation-duration: var(--timing-medium);
   animation-timing-function: ease-in-out;
   animation-delay: var(--timing-instant);
   animation-iteration-count: infinite;
