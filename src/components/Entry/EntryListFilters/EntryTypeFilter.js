@@ -67,10 +67,11 @@ class EntryTypeFilter extends PureComponent {
               <input
                 type="radio"
                 name="entry_type"
-                value={type}
+                value={type.toLowerCase()}
                 onChange={this._handleSelection}
                 checked={
-                  (!search.type && type === 'All') || search.type === type
+                  (!search.type && type === 'All') ||
+                  search.type === type.toLowerCase()
                 }
                 style={{ margin: '0.25em ' }}
               />

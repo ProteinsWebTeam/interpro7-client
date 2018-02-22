@@ -530,47 +530,64 @@ export const GoList = [
     color: '#5bc0de',
   },
 ];
+
 export const entryType = [
   {
     type: 'Domain',
-    description: `Domains are distinct functional, structural or sequence units
-                       that may exist in a variety of biological contexts. A match to
-                       an InterPro entry of this type indicates the presence of a
-                       domain.`,
-    counter: 2025,
+    description: `
+      Domains are distinct functional, structural or sequence units that may
+      exist in a variety of biological contexts. A match to an InterPro entry of
+      this type indicates the presence of a domain.
+    `,
   },
   {
     type: 'Family',
-    description: `A protein family is a group of proteins that share a common
-                      evolutionary origin reflected by their related functions,
-                      similarities in sequence, or similar primary, secondary or tertiary
-                      structure. A match to an InterPro entry of this type indicates
-                      membership of a protein family.`,
-    counter: 1843,
+    description: `
+      A protein family is a group of proteins that share a common evolutionary
+      origin reflected by their related functions, similarities in sequence, or
+      similar primary, secondary or tertiary structure. A match to an InterPro
+      entry of this type indicates membership of a protein family.
+    `,
+  },
+  {
+    type: 'Homologous Superfamily',
+    description: '',
   },
   {
     type: 'Repeat',
-    description: `It identifies a short sequence that is typically repeated within
-                      a protein.`,
-    counter: 755,
+    description: `
+      It identifies a short sequence that is typically repeated within a
+      protein.
+    `,
   },
   {
-    type: 'Clans',
-    description: 'Clans are a collection of families',
-    counter: 184,
+    type: 'Conserved Site',
+    description: `
+      A short sequence that contains one or more conserved residues.
+    `,
   },
   {
-    type: 'Unintegrated',
-    description: `Signatures that doesn't belong to any type are what we call
-                      unintegrated`,
-    counter: 12143,
+    type: 'Active Site',
+    description: `
+      A short sequence that contains one or more conserved residues.
+    `,
   },
   {
-    type: 'Site',
-    description: `A short sequence that contains one or more conserved residues.
-                      The type of sites covered by InterPro are active sites, binding
-                      sites, post-translational modification sites and conserved sites`,
-    counter: 1843,
+    type: 'Binding Site',
+    description: `
+      A short sequence that contains one or more conserved residues.
+    `,
+  },
+  {
+    type: 'PTM',
+    description: `
+      A short sequence that contains one or more conserved residues.
+      Post-translational modification site.
+    `,
+  },
+  {
+    type: 'Unknown',
+    description: '',
   },
 ];
 

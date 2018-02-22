@@ -8,6 +8,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
+import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
@@ -58,46 +59,47 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
       <div className={f('entry-type')}>
         <AnimatedEntry className={f('row')} element="div">
           {entryType.map(({ type, description }) => (
-            <div
-              className={f('columns', 'medium-4', 'large-4', 'text-center')}
+            <Link
+              className={f(
+                'columns',
+                'medium-4',
+                'large-4',
+                'text-center',
+                'block',
+              )}
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: { db: 'InterPro' },
+                },
+                search: { type: type.toLowerCase().replace(' ', '_') },
+              }}
               key={type}
             >
-              <Link
-                className={f('block')}
-                to={{
-                  description: {
-                    main: { key: 'entry' },
-                    entry: { db: 'InterPro' },
-                  },
-                  search: { type },
-                }}
-              >
+              <Tooltip title={description}>
                 <interpro-type
                   type={type}
                   size="4em"
                   style={{ display: 'block', paddingTop: '1rem' }}
                 />
-                <h5>
-                  {type}
-                  &nbsp;
-                  <Tooltip title={description}>
-                    <span
-                      className={f('small', 'icon', 'icon-generic')}
-                      data-icon="i"
-                      aria-label="Information about this entry"
-                    />
-                  </Tooltip>
-                </h5>
-                <p>
-                  <span
-                    className={f('count', { visible: this.props.data.payload })}
-                  >
-                    {(counts && type && counts[type.toLowerCase()]) || ''}
-                    {type === 'new' ? ' ' : ' entries'}
-                  </span>
-                </p>
-              </Link>
-            </div>
+                <h5>{type}</h5>
+              </Tooltip>
+              <p>
+                <span
+                  className={f('count', { visible: this.props.data.payload })}
+                >
+                  <NumberComponent
+                    value={
+                      (counts &&
+                        type &&
+                        counts[type.toLowerCase().replace(' ', '_')]) ||
+                      null
+                    }
+                  />
+                  {type === 'new' ? ' ' : ' entries'}
+                </span>
+              </p>
+            </Link>
           ))}
         </AnimatedEntry>
         <Link
