@@ -24,19 +24,6 @@ import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, byX, local);
 
-const getCountString = (
-  payload /*: ?Object */,
-  loading /*: boolean */,
-  taxId /*: number */,
-  type /*: string */,
-) => {
-  if (loading || !payload) return `… ${toPlural(type)}`;
-  const count = payload[taxId];
-  if (!count) return `no ${type}`;
-  if (count === 1) return `1 ${type}`;
-  return `${count} ${toPlural(type)}`;
-};
-
 class Species extends PureComponent /*:: <SpeciesProps> */ {
   static propTypes = {
     species: T.object.isRequired,
@@ -79,17 +66,17 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
           <h6>{species.title}</h6>
         </Link>
         <div className={f('list-detail')}>
-          <Tooltip title={`${entries} matching ${species.title}`}>
+          <Tooltip
+            title={`${entries} ${toPlural('entry', entries)} matching ${
+              species.title
+            }`}
+          >
             <Link
               to={{
                 description: {
-                  main: { key: 'entry' },
-                  organism: {
-                    db: 'taxonomy',
-                    accession: species.tax_id,
-                    isFilter: true,
-                  },
-                  entry: { db: 'InterPro' },
+                  main: { key: 'organism' },
+                  organism: { db: 'taxonomy', accession: species.tax_id },
+                  entry: { isFilter: true, db: 'all' },
                 },
               }}
             >
@@ -99,23 +86,16 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
           </Tooltip>
           <br />
           <Tooltip
-            title={`${getCountString(
-              payload,
-              loading,
-              species.tax_id,
-              'protein',
-            )} matching ${species.title}`}
+            title={`${proteins} ${toPlural('protein', proteins)} matching ${
+              species.title
+            }`}
           >
             <Link
               to={{
                 description: {
-                  main: { key: 'protein' },
-                  organism: {
-                    db: 'taxonomy',
-                    accession: species.tax_id,
-                    isFilter: true,
-                  },
-                  protein: { db: 'UniProt' },
+                  main: { key: 'organism' },
+                  organism: { db: 'taxonomy', accession: species.tax_id },
+                  protein: { isFilter: true, db: 'UniProt' },
                 },
               }}
             >
