@@ -74,6 +74,10 @@ const ByGOTerms = loadable({
   loader: () =>
     import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms'),
 });
+const BlogEntries = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "blog-entries" */ 'components/home/BlogEntries'),
+});
 
 const Twitter = loadable({
   loader: () =>
@@ -528,14 +532,15 @@ class Home extends PureComponent {
           {
             // end entry-list
           }
-        </div>{' '}
+        </div>
         {
           // end Browse entry & entry list
         }
+        <BlogEntries />
         <div className={f('row', 'small-up-1', 'medium-up-1', 'large-up-2')}>
           <div className={f('columns', 'publication-list')}>
             <div className={f('callout')}>
-              <h5>Publications </h5>
+              <h5>Publications</h5>
               <Link href="http://nar.oxfordjournals.org/content/43/D1/D213">
                 <div className={f('media-object')}>
                   <div className={f('media-object-section')}>
@@ -620,7 +625,7 @@ class Home extends PureComponent {
               // Tools
             }
             <div className={f('callout')}>
-              <h5>Tools </h5>
+              <h5>Tools</h5>
 
               <div className={f('row')}>
                 <div className={f('columns', 'medium-6')}>
