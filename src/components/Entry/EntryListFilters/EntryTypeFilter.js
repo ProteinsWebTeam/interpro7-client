@@ -73,7 +73,7 @@ class EntryTypeFilter extends PureComponent {
                   (!search.type && type === 'All') ||
                   search.type === type.toLowerCase()
                 }
-                style={{ margin: '0.25em ' }}
+                style={{ margin: '0.25em' }}
               />
               {type === 'All' || db !== 'InterPro' ? (
                 type.replace('_', ' ')

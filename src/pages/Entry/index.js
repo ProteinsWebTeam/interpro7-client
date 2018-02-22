@@ -29,7 +29,7 @@ import config from 'config';
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 
-import { memberDB } from 'staticData/home';
+import { memberDBAccessions } from 'staticData/home';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import { foundationPartial } from 'styles/foundation';
@@ -435,13 +435,7 @@ const RedirectToInterPro = () => (
   />
 );
 
-const dbAccs = new RegExp(
-  `(${memberDB
-    .map(db => db.accession)
-    .filter(db => db)
-    .join('|')}|IPR[0-9]{6})`,
-  'i',
-);
+const dbAccs = new RegExp(`(${memberDBAccessions.join('|')}|IPR[0-9]{6})`, 'i');
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
