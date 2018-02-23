@@ -2,16 +2,20 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import loadWebComponent from 'utils/loadWebComponent';
-import LiteMol from './litemol/js/LiteMol-plugin.js';
+import LiteMol from 'litemol';
 import { foundationPartial } from 'styles/foundation';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
-import lmStyles from './litemol/css/LiteMol-plugin-blue.css';
+import lmStyles from 'litemol/dist/css/LiteMol-plugin-blue.css';
 //import lmStyles from './litemol/css/LiteMol-plugin-light.css';
 
 const embedStyle = { width: '100%', height: '50vh' };
 const f = foundationPartial(ebiStyles);
 
-class StructureView extends PureComponent {
+/*:: type Props = {
+  id: string|number,
+}; */
+
+class StructureView extends PureComponent /*:: <Props> */ {
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
   };
@@ -37,7 +41,7 @@ class StructureView extends PureComponent {
 
   componentDidMount() {
     const pdbid = this.props.id;
-    var plugin = LiteMol.Plugin.create({
+    let plugin = LiteMol.Plugin.create({
       target: '#litemol',
       viewportBackground: '#fff',
       layoutState: {
