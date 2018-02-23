@@ -12,6 +12,7 @@ import ProteinFile from 'subPages/Organism/ProteinFile';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import { NumberComponent } from 'components/NumberLabel';
+import { PDBeLink } from 'components/ExtLink';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -169,7 +170,7 @@ const Matches = (
     />
     <Column
       dataKey="source_organism"
-      displayIf={primary === 'protein' || primary === 'structure'}
+      displayIf={primary === 'protein'}
       renderer={sourceOrganism =>
         sourceOrganism.taxId ? (
           <Link
@@ -195,6 +196,7 @@ const Matches = (
     <Column
       dataKey="source_database"
       headerClassName={f('table-center')}
+      cellClassName={f('table-center')}
       displayIf={primary !== 'organism' && primary !== 'protein'}
       renderer={(db /*: string */) =>
         db === 'reviewed' ? (
@@ -217,6 +219,24 @@ const Matches = (
       }
     >
       {primary === 'protein' ? 'Reviewed' : 'Source database'}
+    </Column>
+    <Column
+      dataKey="accession"
+      headerClassName={f('table-center')}
+      cellClassName={f('table-center')}
+      defaultKey="structureAccession"
+      displayIf={primary === 'structure'}
+      renderer={(accession /*: string */) => (
+        <PDBeLink id={accession}>
+          <img
+            src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
+            alt={`structure with accession ${accession.toUpperCase()}`}
+            style={{ maxWidth: '33%' }}
+          />
+        </PDBeLink>
+      )}
+    >
+      Structure
     </Column>
     <Column
       dataKey="match"
