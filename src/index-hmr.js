@@ -3,7 +3,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-export default DOM_ROOT => {
+export default (DOM_ROOT /*: Element */) => {
   // This block enables HMR if posible
   if (module.hot && typeof module.hot.accept === 'function') {
     // If any change in App or its dependency tree

@@ -1,4 +1,3 @@
-// @flow
 import reducer, { alreadyLoadingError } from '.';
 import {
   LOADING_DATA,

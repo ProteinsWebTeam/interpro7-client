@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -20,7 +19,7 @@ const getNextLocation = (customLocation, to) =>
 
 const rootPathname = config.root.website.pathname.replace(/\/$/, '');
 
-const generateHref = (nextLocation /*: Object */, href /*?: string */) => {
+const generateHref = (nextLocation /*: Object */, href /*:: ?: string */) => {
   if (href) return href;
   return format({
     pathname: rootPathname + descriptionToPath(nextLocation.description),
@@ -54,9 +53,9 @@ const generateClassName = (
 };
 
 const generateRel = (
-  rel /*?: string */,
-  target /*?: string */,
-  href /*?: string*/,
+  rel /*:: ?: string */,
+  target /*:: ?: string */,
+  href /*:: ?: string*/,
 ) => {
   if (!href) return rel;
   const relSet = new Set((rel || '').split(' ').filter(Boolean));

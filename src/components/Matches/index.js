@@ -1,5 +1,4 @@
-// @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -12,7 +11,7 @@ import StructureOnProtein from './StructureOnProtein';
 import ProteinFile from 'subPages/Organism/ProteinFile';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import NumberLabel from 'components/NumberLabel';
+import { NumberComponent } from 'components/NumberLabel';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -120,7 +119,7 @@ const Matches = (
         //   reviewed = (
         //
         //   )
-        <React.Fragment>
+        <Fragment>
           <Link
             to={{
               description: {
@@ -142,7 +141,7 @@ const Matches = (
               />
             </Tooltip>
           ) : null}
-        </React.Fragment>
+        </Fragment>
       )}
     >
       {primary === 'organism' ? 'Tax Id' : 'Accession'}
@@ -244,9 +243,7 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       displayIf={primary === 'organism'}
-      renderer={count => (
-        <NumberLabel className={f('number-label')} value={count} abbr />
-      )}
+      renderer={count => <NumberComponent value={count} abbr />}
     >
       protein count
     </Column>

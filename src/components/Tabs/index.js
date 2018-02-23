@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
 

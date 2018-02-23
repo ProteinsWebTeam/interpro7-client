@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 
 import cancelable from 'utils/cancelable';
@@ -34,9 +33,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
       if (!bound) {
         // Only need to bind this once
         window.twttr.events.bind('rendered', ({ target }) => {
-          // eslint-disable-next-line no-param-reassign
           target.style.opacity = 1;
-          // eslint-disable-next-line no-param-reassign
           target.style.transform = 'translateX(0)';
         });
         bound = true;

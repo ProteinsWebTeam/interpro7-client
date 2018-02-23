@@ -1,4 +1,3 @@
-// @flow
 import { format } from 'url';
 
 // import config from 'config';

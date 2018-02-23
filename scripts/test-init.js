@@ -1,3 +1,4 @@
+// @flow
 import puppeteer from 'puppeteer';
 // import { sleep } from 'timing-functions';
 
@@ -14,6 +15,7 @@ export const config = {
   headless: true,
   args: [
     `--window-size=${width},${height}`,
+    '--disable-dev-shm-usage',
     // TODO: next two lines should eventually be removed, since they are not
     // TODO: recommended for security reasons
     '--no-sandbox',
@@ -27,6 +29,7 @@ export default () =>
     return {
       async setup() {
         const port = await server.start();
+        if (!port) throw new Error("Server didn't start correctly");
         browser = await puppeteer.launch(config);
         const page = await browser.newPage();
         page.setViewport({ width, height });
@@ -35,8 +38,16 @@ export default () =>
       },
       async cleanup() {
         // await sleep(1000);
-        browser.close();
-        server.close();
+        try {
+          if (browser) browser.close();
+        } catch (_) {
+          /**/
+        }
+        try {
+          server.close();
+        } catch (_) {
+          /**/
+        }
       },
     };
   })();

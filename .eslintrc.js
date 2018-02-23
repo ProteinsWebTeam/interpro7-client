@@ -216,8 +216,8 @@ const rules = {
   // Disallow use of octal escape sequences in string literals
   'no-octal-escape': 2,
   // Disallow reassignment of function parameters
-  // Disallow parameter object manipulation
-  'no-param-reassign': [2, { props: true }],
+  // Allow parameter object manipulation
+  'no-param-reassign': [2, { props: false }],
   // Disallow string concatenation when using __dirname and __filename
   'no-path-concat': 1,
   // Disallow use of process.env
@@ -388,11 +388,7 @@ const rules = {
   // Require spaces before/after unary operators
   'space-unary-ops': 1,
   // Require a space immediately following the // or /* in a comment
-  'spaced-comment': [
-    1,
-    'always',
-    { markers: [':', '::', '?:'], exceptions: ['-'] },
-  ],
+  'spaced-comment': [1, 'always', { markers: [':', '::'], exceptions: ['-'] }],
   // Disallow usage of spacing in template strings
   'template-curly-spacing': [1, 'never'],
   // Disallow comparisons with the value NaN

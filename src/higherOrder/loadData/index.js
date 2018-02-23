@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -81,7 +80,7 @@ const loadData = params => {
           payload: T.any,
           url: T.string,
           status: T.number,
-          ok: T.boolean,
+          ok: T.bool,
         }),
       };
 

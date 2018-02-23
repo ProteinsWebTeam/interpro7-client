@@ -1,4 +1,3 @@
-// @flow
 import parseValueFromInput from '.';
 
 describe('action creator helper function to extract value from input', () => {

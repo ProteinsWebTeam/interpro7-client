@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,6 +12,7 @@ import {
   convertToRaw,
 } from 'draft-js';
 
+import AdvancedOptions from 'components/IPScan/AdvancedOptions';
 import Redirect from 'components/generic/Redirect';
 
 import { createJob, goToCustomLocation } from 'actions/creators';
@@ -58,6 +58,23 @@ const classedSpan = className => {
   return Span;
 };
 
+const checkedSelectorFor = x => `input[name="${x}"]:checked`;
+
+const getCheckedApplications = form =>
+  Array.from(
+    form.querySelectorAll(checkedSelectorFor('appl')),
+    input => input.value,
+  );
+
+const getLocalTitle = form =>
+  form.querySelector('input[name="local-title"').value.trim();
+
+const isXChecked = x => form => !!form.querySelector(checkedSelectorFor(x));
+
+const isGoTermsChecked = isXChecked('goterms');
+const isPathwaysChecked = isXChecked('pathways');
+const isStayChecked = isXChecked('stay');
+
 const checkValidity = (({ comment, IUPACProt }) => lines =>
   lines.reduce(
     (acc, line) => acc && (comment.test(line) || IUPACProt.test(line)),
@@ -100,7 +117,15 @@ class IPScanSearch extends PureComponent {
     };
   }
 
-  _handleReset = text =>
+  _handleReset = text => {
+    if (this._form && typeof text !== 'string') {
+      const inputsToReset = Array.from(
+        this._form.querySelectorAll('input[name]:not([name="stay"])'),
+      );
+      for (const input of inputsToReset) {
+        input.checked = !!input.dataset.defaultchecked;
+      }
+    }
     this.setState(
       {
         editorState:
@@ -116,30 +141,38 @@ class IPScanSearch extends PureComponent {
       },
       () => this.editor.focus(),
     );
+  };
 
-  _handleSubmit = async event => {
+  _handleSubmit = event => {
     event.preventDefault();
+    if (!this._form) return;
     const lines = convertToRaw(
       this.state.editorState.getCurrentContent(),
     ).blocks.map(block => block.text);
     if (!lines.length) return;
-    const value = lines.join('\n');
-    const localID = id(`internal-${Date.now()}`);
     this.props.createJob({
       metadata: {
-        localID,
+        localID: id(`internal-${Date.now()}`),
+        localTitle: getLocalTitle(this._form) || null,
         type: 'InterProScan',
       },
       data: {
-        input: value,
+        input: lines.join('\n'),
+        applications: getCheckedApplications(this._form),
+        goterms: isGoTermsChecked(this._form),
+        pathways: isPathwaysChecked(this._form),
       },
     });
-    this.props.goToCustomLocation({
-      description: {
-        main: { key: 'job' },
-        job: { type: 'InterProScan' /* , accession: localID */ },
-      },
-    });
+    if (isStayChecked(this._form)) {
+      this._handleReset();
+    } else {
+      this.props.goToCustomLocation({
+        description: {
+          main: { key: 'job' },
+          job: { type: 'InterProScan' /* , accession: localID */ },
+        },
+      });
+    }
   };
 
   _handleFile = file => {
@@ -175,7 +208,6 @@ class IPScanSearch extends PureComponent {
 
   _handleFileChange = ({ target }) => {
     this._handleFile(target.files[0]);
-    // eslint-disable-next-line no-param-reassign
     target.value = null;
   };
 
@@ -235,16 +267,10 @@ class IPScanSearch extends PureComponent {
             onDragExit={this._handleUndragging}
             onDragLeave={this._handleUndragging}
             className={f('search-form', { dragging })}
+            ref={form => (this._form = form)}
           >
             <div>
-              <div
-                className={f(
-                  'secondary',
-                  'callout',
-                  'border',
-                  'margin-bottom-none',
-                )}
-              >
+              <div className={f('secondary', 'callout', 'border')}>
                 <div className={f('row')}>
                   <div className={f('large-12', 'columns', 'sqc-search-input')}>
                     <h3>Sequence, in FASTA format</h3>
@@ -255,9 +281,7 @@ class IPScanSearch extends PureComponent {
                     >
                       <div
                         type="text"
-                        className={f('editor', {
-                          'invalid-block': !valid,
-                        })}
+                        className={f('editor', { 'invalid-block': !valid })}
                       >
                         <Editor
                           placeholder="Enter your sequence"
@@ -273,14 +297,8 @@ class IPScanSearch extends PureComponent {
                 </div>
 
                 <div className={f('row')}>
-                  <div className={f('medium-8', 'columns')}>
-                    <div
-                      className={f(
-                        'button-group',
-                        'line-with-buttons',
-                        'margin-bottom-none',
-                      )}
-                    >
+                  <div className={f('columns')}>
+                    <div className={f('button-group', 'line-with-buttons')}>
                       <button className={f('hollow', 'button', 'tertiary')}>
                         <label className={f('file-input-label')}>
                           Choose file
@@ -307,26 +325,17 @@ class IPScanSearch extends PureComponent {
                       </button>
                     </div>
                   </div>
-                  <div
-                    className={f(
-                      'medium-4',
-                      'columns',
-                      'show-for-medium',
-                      'search-adv',
-                    )}
-                  >
-                    <span>Powered by InterProScan</span>
-                  </div>
                 </div>
 
-                <div className={f('row')} style={{ marginTop: '1em' }}>
+                <AdvancedOptions ref={node => (this._advancedOptions = node)} />
+
+                <div className={f('row')}>
                   <div
                     className={f(
-                      'large-12',
+                      'large-8',
                       'columns',
                       'stacked-for-small',
                       'button-group',
-                      'margin-bottom-none',
                     )}
                   >
                     <input
@@ -341,6 +350,16 @@ class IPScanSearch extends PureComponent {
                       onClick={this._handleReset}
                       value="Clear"
                     />
+                  </div>
+                  <div
+                    className={f(
+                      'large-4',
+                      'columns',
+                      'show-for-medium',
+                      'search-adv',
+                    )}
+                  >
+                    <span>Powered by InterProScan</span>
                   </div>
                 </div>
               </div>

@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -196,7 +195,7 @@ class Header extends PureComponent {
           <Title />
           <SideIcons stuck={stuck} />
           <ResizeObserverComponent element="nav" measurements="width">
-            <DynamicMenu />
+            {({ width }) => <DynamicMenu width={width} />}
           </ResizeObserverComponent>
         </div>
       </div>

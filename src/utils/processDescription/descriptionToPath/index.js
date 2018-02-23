@@ -1,4 +1,3 @@
-// @flow
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 
 /*:: import type { Description } from 'utils/processDescription/handlers'; */

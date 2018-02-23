@@ -25,7 +25,10 @@ export const plural /*: Array<string> */ = Object.entries(config.pages).map(
  * @param {number} [count = +Infinity] optional count to determine if need plural
  * @returns {*} text in plural
  */
-export const toPlural = (s /*: string */, count /*?: number */ = +Infinity) => {
+export const toPlural = (
+  s /*: string */,
+  count /*:: ?: number */ = +Infinity,
+) => {
   for (let i = 0; i < singular.length; i++) {
     if (singular[i] === s) {
       if (count > 1) return plural[i];

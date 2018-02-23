@@ -1,4 +1,3 @@
-// @flow
 import { combineReducers } from 'redux';
 
 import category from './category';

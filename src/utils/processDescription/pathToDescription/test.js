@@ -5,7 +5,9 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
 describe('pathToDescription()', () => {
   let d;
 
-  beforeEach(() => (d = getEmptyDescription()));
+  beforeEach(() => {
+    d = getEmptyDescription();
+  });
 
   describe('basic pages', () => {
     test('home', () => {
@@ -62,7 +64,9 @@ describe('pathToDescription()', () => {
     });
 
     describe('main entry', () => {
-      beforeEach(() => (d.main.key = 'entry'));
+      beforeEach(() => {
+        d.main.key = 'entry';
+      });
 
       test('basic', () => {
         expect(pathToDescription('/entry/')).toEqual(d);

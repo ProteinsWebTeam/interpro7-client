@@ -1,7 +1,9 @@
-// @flow
 import url from 'url';
 import { schedule } from 'timing-functions/src';
+
+import { cachedFetchJSON, cachedFetchText } from 'utils/cachedFetch';
 import id from 'utils/cheapUniqueId';
+// import objectToFormData from 'utils/objectToFormData';
 
 import {
   CREATE_JOB,
@@ -67,23 +69,45 @@ export default ({ dispatch, getState }) => {
     if (meta.status === 'failed') return;
     if (meta.status === 'created') {
       const dataT = await dataTA;
-      const { input } = await dataT.get(localID);
-
-      const body = new FormData();
-      body.set('email', config.IPScan.contactEmail);
-      body.set('sequence', input);
+      const { input, applications, goterms, pathways } = await dataT.get(
+        localID,
+      );
 
       const ipScanInfo = getState().settings.ipScan;
 
-      const response = await fetch(
+      const { payload: remoteID, ok } = await cachedFetchText(
         url.resolve(
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
           'run',
         ),
-        { method: 'POST', body },
+        {
+          useCache: false,
+          method: 'POST',
+          // headers: { 'Content-Type': 'multipart/form-data' },
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          // body: objectToFormData({
+          //   email: config.IPScan.contactEmail,
+          //   title: localID,
+          //   sequence: input,
+          //   appl: applications,
+          //   goterms,
+          //   pathways,
+          // }),
+          body: url
+            .format({
+              query: {
+                email: config.IPScan.contactEmail,
+                title: localID,
+                sequence: input,
+                appl: applications,
+                goterms,
+                pathways,
+              },
+            })
+            .replace(/^\?/, ''),
+        },
       );
-      const remoteID = await response.text();
-      if (response.ok) {
+      if (ok) {
         dispatch(
           updateJob({ metadata: { ...meta, remoteID, status: 'submitted' } }),
         );
@@ -92,16 +116,17 @@ export default ({ dispatch, getState }) => {
     }
     if (meta.status === 'submitted' || meta.status === 'running') {
       const ipScanInfo = getState().settings.ipScan;
-      const response = await fetch(
+      const { payload, ok } = await cachedFetchText(
         url.resolve(
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
           `status/${meta.remoteID}`,
         ),
+        { useCache: false },
       );
-      const newStatus = (await response.text()).toLowerCase().replace('_', ' ');
-      if (response.ok) {
-        dispatch(updateJob({ metadata: { ...meta, status: newStatus } }));
-        if (newStatus === 'finished') {
+      const status = payload.toLowerCase().replace('_', ' ');
+      if (ok) {
+        dispatch(updateJob({ metadata: { ...meta, status } }));
+        if (status === 'finished') {
           const currentDesc = getState().customLocation.description;
           if (
             currentDesc.main.key !== 'job' ||
@@ -112,10 +137,10 @@ export default ({ dispatch, getState }) => {
             dispatch(
               addToast(
                 {
-                  title: `Job ${newStatus}`,
+                  title: `Job ${status}`,
                   body: `Your job with id ${
                     meta.remoteID
-                  } is in a “${newStatus}” state.`,
+                  } is in a “${status}” state.`,
                   ttl: 10000, // eslint-disable-line no-magic-numbers
                   link: {
                     to: {
@@ -136,19 +161,14 @@ export default ({ dispatch, getState }) => {
     }
     if (meta.status === 'finished' && !meta.hasResults) {
       const ipScanInfo = getState().settings.ipScan;
-      const response = await fetch(
+      const { payload: data, ok } = await cachedFetchJSON(
         url.resolve(
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
           `result/${meta.remoteID}/json`,
         ),
       );
-      if (response.ok) {
-        dispatch(
-          updateJob({
-            metadata: { ...meta, hasResults: true },
-            data: await response.json(),
-          }),
-        );
+      if (ok) {
+        dispatch(updateJob({ metadata: { ...meta, hasResults: true }, data }));
       }
     }
   };

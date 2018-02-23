@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -11,6 +10,7 @@ import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
 import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
+import MemberSymbol from 'components/Entry/MemberSymbol';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, {
   Column,
@@ -29,7 +29,7 @@ import config from 'config';
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 
-import { memberDB } from 'staticData/home';
+import { memberDBAccessions } from 'staticData/home';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import { foundationPartial } from 'styles/foundation';
@@ -61,11 +61,18 @@ const schemaProcessDataTableRow = ({ data, location }) => ({
   url: `${location.href}/${data.accession}`,
 });
 
+const GO_COLORS = new Map([
+  ['P', '#c2e6ec'],
+  ['F', '#e5f5d7'],
+  ['C', '#fbdcd0'],
+]);
+
 class List extends PureComponent {
   static propTypes = {
     data: T.shape({
       payload: T.object,
       loading: T.bool.isRequired,
+      ok: T.bool,
     }).isRequired,
     isStale: T.bool.isRequired,
     customLocation: T.shape({
@@ -91,17 +98,12 @@ class List extends PureComponent {
     let _payload = data.payload;
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
-    const goColors = {
-      P: '#c2e6ec',
-      F: '#e5f5d7',
-      C: '#fbdcd0',
-    };
     if (data.loading || notFound) {
       _payload = {
         results: [],
       };
     }
-    const urlHasParameter = data.url && data.url.indexOf('?') !== -1;
+    const urlHasParameter = data.url && data.url.includes('?');
     return (
       <div className={f('row')}>
         <MemberDBTabs />
@@ -116,6 +118,8 @@ class List extends PureComponent {
           <Table
             dataTable={_payload.results}
             isStale={isStale}
+            loading={data.loading}
+            ok={data.ok}
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
@@ -146,16 +150,21 @@ class List extends PureComponent {
             <SearchBox search={search.search}>&nbsp;</SearchBox>
             <Column
               dataKey="type"
-              headerClassName={f('col-type')}
-              renderer={type => (
-                <Tooltip title={`${type.replace('_', ' ')} type`}>
-                  <interpro-type type={type.replace('_', ' ')} size="26px">
-                    {type}
-                  </interpro-type>
-                </Tooltip>
-              )}
+              headerClassName={f('col-type', 'table-center')}
+              cellClassName={f('table-center')}
+              renderer={type =>
+                db === 'InterPro' ? (
+                  <Tooltip title={`${type.replace('_', ' ')} type`}>
+                    <interpro-type type={type.replace('_', ' ')} size="26px">
+                      {type}
+                    </interpro-type>
+                  </Tooltip>
+                ) : (
+                  type
+                )
+              }
             >
-              Type
+              {`${db === 'InterPro' ? '' : `${db} `}Type`}
             </Column>
             <Column
               dataKey="name"
@@ -216,43 +225,57 @@ class List extends PureComponent {
             >
               Accession
             </Column>
+            {db !== 'InterPro' && (
+              <Column
+                dataKey="source_database"
+                headerClassName={f('table-center')}
+                cellClassName={f('table-center')}
+                renderer={(db /*: string */) => (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: { db },
+                      },
+                      search: {},
+                    }}
+                  >
+                    <MemberSymbol type={db} />
+                  </Link>
+                )}
+              >
+                DB
+              </Column>
+            )}
             {db === 'InterPro' ? (
               <Column
                 dataKey="member_databases"
-                renderer={(mdb /*: string */) =>
-                  Object.keys(mdb).map(db => (
-                    <div key={db} className={f('sign-row')}>
-                      <span className={f('sign-cell')}>{db}</span>
-                      <span className={f('sign-cell')}>
-                        {Object.keys(mdb[db]).map(accession => (
-                          <Tooltip
-                            key={accession}
-                            title={`${accession} contributing entry`}
+                renderer={(memberDataBases /*: object */) => (
+                  <div className={f('signature-container')}>
+                    {Object.entries(memberDataBases).map(([db, entries]) =>
+                      Object.entries(entries).map(([accession, id]) => (
+                        <Tooltip
+                          key={accession}
+                          title={`${id} (${db})`}
+                          className={f('signature')}
+                        >
+                          <Link
+                            to={{
+                              description: {
+                                main: { key: 'entry' },
+                                entry: { db, accession },
+                              },
+                            }}
                           >
-                            <span className={f('sign-label')}>
-                              <Link
-                                to={{
-                                  description: {
-                                    main: { key: 'entry' },
-                                    entry: { db, accession },
-                                  },
-                                  search: {},
-                                }}
-                              >
-                                {mdb[db][accession]}
-                              </Link>
-                            </span>
-                          </Tooltip>
-                        ))}
-                      </span>
-                    </div>
-                  ))
-                }
+                            {accession}
+                          </Link>
+                        </Tooltip>
+                      )),
+                    )}
+                  </div>
+                )}
               >
-                Database{' '}
-                <Tooltip title="Contributing entry ID">
-                  <span className={f('sign-label-head')}>ID</span>
-                </Tooltip>
+                Member DB
               </Column>
             ) : (
               <Column
@@ -283,37 +306,33 @@ class List extends PureComponent {
               <Column
                 dataKey="go_terms"
                 headerClassName={f('col-go')}
-                renderer={(gos /*: Array<Object> */) =>
-                  gos
-                    .sort((a, b) => {
-                      if (a.category_code > b.category_code) return 0;
-                      if (a.category_code < b.category_code) return 1;
-                      if (a.name > b.name) return 1;
-                      return 0;
-                    })
-                    .map(go => (
-                      <div
-                        className={f('go-row')}
-                        key={go.identifier}
-                        style={{
-                          backgroundColor: go.category_code
-                            ? goColors[go.category_code]
-                            : '#DDDDDD',
-                        }}
-                      >
-                        <span className={f('go-cell')}>
+                renderer={(goTerms /*: Array<Object> */) => (
+                  <div className={f('go-container')}>
+                    {Array.from(goTerms)
+                      .sort((a, b) => {
+                        if (a.category.code > b.category.code) return 0;
+                        if (a.category.code < b.category.code) return 1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                      })
+                      .map(go => (
+                        <span key={go.identifier} className={f('go')}>
+                          <span
+                            className={f('go-circle')}
+                            style={{
+                              background:
+                                GO_COLORS.get(go.category.code) || '#ddd',
+                            }}
+                          />
                           <Tooltip title={`${go.name} (${go.identifier})`}>
-                            <GoLink
-                              id={go.identifier}
-                              className={f('go', 'ext')}
-                            >
+                            <GoLink id={go.identifier} className={f('ext')}>
                               {go.name ? go.name : 'None'}
                             </GoLink>
                           </Tooltip>
                         </span>
-                      </div>
-                    ))
-                }
+                      ))}
+                  </div>
+                )}
               >
                 GO Terms{' '}
                 <Tooltip title="Biological process category">
@@ -416,13 +435,7 @@ const RedirectToInterPro = () => (
   />
 );
 
-const dbAccs = new RegExp(
-  `(${memberDB
-    .map(db => db.accession)
-    .filter(db => db)
-    .join('|')}|IPR[0-9]{6})`,
-  'i',
-);
+const dbAccs = new RegExp(`(${memberDBAccessions.join('|')}|IPR[0-9]{6})`, 'i');
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
@@ -493,14 +506,11 @@ class Entry extends PureComponent {
     data: T.shape({
       payload: T.object,
     }).isRequired,
-    isStale: T.bool.isRequired,
   };
 
   render() {
     return (
-      <div
-        className={f('with-data', { ['with-stale-data']: this.props.isStale })}
-      >
+      <div>
         {this.props.data.payload &&
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (
@@ -532,6 +542,6 @@ class Entry extends PureComponent {
 
 export default loadData((...args) =>
   getUrlForApi(...args)
-    .replace('logo', '')
+    .replace('/logo', '/')
     .replace('domain_architecture', ''),
 )(Entry);

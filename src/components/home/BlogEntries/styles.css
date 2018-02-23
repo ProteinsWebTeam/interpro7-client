@@ -1,0 +1,10 @@
+@import '../../../styles/colors.css';
+
+.content {
+  font-style: italic;
+  text-align: justify;
+
+  & > * {
+    color: var(--colors-nearly-black);
+  }
+}

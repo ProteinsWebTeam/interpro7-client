@@ -1,4 +1,3 @@
-// @flow
 const ActiveSitesAdder = function(opts = {}) {
   const options = opts || {};
   this.cigar = options.cigar || '';

@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -15,12 +14,6 @@ import flattenDeep from 'lodash-es/flattenDeep';
 
 import f from 'styles/foundation';
 
-const goCategoryMap = new Map([
-  ['BIOLOGICAL_PROCESS', 'Biological Process'],
-  ['MOLECULAR_FUNCTION', 'Molecular Function'],
-  ['CELLULAR_COMPONENT', 'Cellular Component'],
-]);
-
 /*:: type Props = {
   accession: string,
   data: {
@@ -36,7 +29,8 @@ const LUT = new Map([
   ['PROSITE_PROFILES', 'profile'],
   ['PROSITE_PATTERNS', 'patterns'],
   ['SUPERFAMILY', 'ssf'],
-  ['COILS', 'gene3d'],
+  ['GENE3D', 'cathgene3d'],
+  ['COILS', 'cathgene3d'],
 ]);
 
 class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
@@ -71,7 +65,10 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
     for (const match of payload.matches) {
       for (const go of (match.signature.entry || {}).goXRefs || []) {
         goTerms.set(go.identifier, {
-          category: goCategoryMap.get(go.category),
+          category: {
+            name: go.category.toLowerCase(),
+            code: go.category[0],
+          },
           name: go.name,
           identifier: go.identifier,
         });

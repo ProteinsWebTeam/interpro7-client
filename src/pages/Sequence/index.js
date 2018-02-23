@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -67,7 +66,7 @@ class IPScanResult extends PureComponent {
         ),
       ).size;
     return (
-      <React.Fragment>
+      <Fragment>
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('large-12', 'columns')}>
@@ -100,7 +99,7 @@ class IPScanResult extends PureComponent {
             childRoutes={subPagesForSequence}
           />
         </ErrorBoundary>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

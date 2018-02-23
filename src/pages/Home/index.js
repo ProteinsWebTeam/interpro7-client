@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 
 // Components
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -28,8 +27,10 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import style from '../style.css';
 
+import local from './style.css';
+
 // Images
-import iscanLogo from 'images/logo_interproscan_ext.png';
+import ipscanLogo from 'images/logo_interproscan_ext.png';
 import idaLogo from 'images/logo_ida_100.png';
 
 // Bind css with style object
@@ -72,6 +73,10 @@ const ByLatestEntries = loadable({
 const ByGOTerms = loadable({
   loader: () =>
     import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms'),
+});
+const BlogEntries = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "blog-entries" */ 'components/home/BlogEntries'),
 });
 
 const Twitter = loadable({
@@ -430,7 +435,7 @@ const schemaProcessDataForDB = ({ name, location }) => ({
 class Home extends PureComponent {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <SchemaOrgData
@@ -527,14 +532,15 @@ class Home extends PureComponent {
           {
             // end entry-list
           }
-        </div>{' '}
+        </div>
         {
           // end Browse entry & entry list
         }
+        <BlogEntries />
         <div className={f('row', 'small-up-1', 'medium-up-1', 'large-up-2')}>
           <div className={f('columns', 'publication-list')}>
             <div className={f('callout')}>
-              <h5>Publications </h5>
+              <h5>Publications</h5>
               <Link href="http://nar.oxfordjournals.org/content/43/D1/D213">
                 <div className={f('media-object')}>
                   <div className={f('media-object-section')}>
@@ -619,7 +625,7 @@ class Home extends PureComponent {
               // Tools
             }
             <div className={f('callout')}>
-              <h5>Tools </h5>
+              <h5>Tools</h5>
 
               <div className={f('row')}>
                 <div className={f('columns', 'medium-6')}>
@@ -627,7 +633,7 @@ class Home extends PureComponent {
                   <img
                     alt="IDA logo"
                     src={idaLogo}
-                    style={{ marginLeft: 40, marginBottom: 10 }}
+                    className={local['ida-logo']}
                   />
                   <p>
                     The InterPro Domain Architecture (IDA) tool allows you to
@@ -649,8 +655,8 @@ class Home extends PureComponent {
                   <h5>InterProScan</h5>
                   <img
                     alt="InterProScan logo"
-                    src={iscanLogo}
-                    style={{ marginBottom: 2 }}
+                    src={ipscanLogo}
+                    className={local['ipscan-logo']}
                   />
                   <p>
                     InterProScan is a sequence analysis application (nucleotide
@@ -672,7 +678,7 @@ class Home extends PureComponent {
           </div>
         </div>
         <Twitter />
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

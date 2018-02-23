@@ -1,4 +1,3 @@
-// @flow
 const p = Symbol('private');
 
 export default class Listener {

@@ -74,8 +74,8 @@
 .tabs-title a.InterPro.is-active .number-label {
   background-color: var(--colors-interpro);
 }
-.tabs-title a.gene3d.is-active .number-label {
-  background-color: var(--colors-gene3d);
+.tabs-title a.cathgene3d.is-active .number-label {
+  background-color: var(--colors-cathgene3d);
 }
 .tabs-title a.cdd.is-active .number-label {
   background-color: var(--colors-cdd);

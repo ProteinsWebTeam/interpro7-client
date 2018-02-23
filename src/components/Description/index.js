@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-param-reassign */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
@@ -17,7 +16,7 @@ import theme from 'styles/theme-interpro.css';
 const f = foundationPartial(ebiStyles, styles, theme);
 
 const ParagraphWithCites = ({ p, literature = [] }) => (
-  <p className={styles.paragraph}>
+  <div className={styles.paragraph}>
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
       return i % 2 ? (
@@ -34,7 +33,7 @@ const ParagraphWithCites = ({ p, literature = [] }) => (
         </span>
       );
     })}
-  </p>
+  </div>
 );
 ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
@@ -124,7 +123,7 @@ const ParagraphWithTags = ({ children }) => (
         // TODO: change the way descriptions work from the backend side.
         return (
           <div
-            style={{ display: 'inline' }}
+            className={styles.inline}
             key={`${i}-${j}`}
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(part) }}

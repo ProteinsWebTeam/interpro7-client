@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,6 +13,8 @@ const f = foundationPartial(style);
 const UNITS = ['', 'k+', 'M+', 'G+'];
 const UNIT_SCALE = 1000;
 const UNIT_SCALE_MARGIN = 100;
+
+export const DEFAULT_DURATION = 1;
 
 // Avoid doing too much work
 // This is to update a number value, not style, so no need re-render every frame
@@ -32,9 +33,9 @@ const getAbbr = (value /*: number */) => {
   return `${_value.toLocaleString()}${UNITS[unitIndex]}`;
 };
 
-class NumberLabel extends PureComponent {
+class _NumberComponent extends PureComponent {
   static propTypes = {
-    value: T.number,
+    value: T.oneOfType([T.number, T.string]),
     loading: T.bool,
     duration: T.number,
     className: T.string,
@@ -45,7 +46,7 @@ class NumberLabel extends PureComponent {
   };
 
   static defaultProps = {
-    duration: 1,
+    duration: DEFAULT_DURATION,
     abbr: false,
   };
 
@@ -118,7 +119,7 @@ class NumberLabel extends PureComponent {
     }
     return (
       <span
-        className={f('label', className, { loading, lowGraphics })}
+        className={f(className, { loading, lowGraphics })}
         title={_title || ''}
         {...props}
       >
@@ -133,4 +134,17 @@ const mapStateToProps = createSelector(
   lowGraphics => ({ lowGraphics }),
 );
 
-export default connect(mapStateToProps)(NumberLabel);
+export const NumberComponent = connect(mapStateToProps)(_NumberComponent);
+
+class NumberLabel extends PureComponent {
+  static propTypes = {
+    className: T.string,
+  };
+
+  render() {
+    const { className, ...props } = this.props;
+    return <NumberComponent className={f('label', className)} {...props} />;
+  }
+}
+
+export default NumberLabel;

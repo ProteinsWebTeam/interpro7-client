@@ -4,6 +4,7 @@ dist/
 coverage/
 .*/
 config.yml
+reports
 config.json
 stats.json
 **/.DS_Store

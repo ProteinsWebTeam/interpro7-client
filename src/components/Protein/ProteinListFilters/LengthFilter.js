@@ -1,89 +1,102 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import debounce from 'lodash-es/debounce';
+
+import MultipleInput from 'components/SimpleCommonComponents/MultipleInput';
 
 import { goToCustomLocation } from 'actions/creators';
 
-import classname from 'classnames/bind';
-import styles from './style.css';
-const s = classname.bind(styles);
+const DEBOUNCE_RATE = 500; // In ms
+
+const MIN = 1;
+const MAX = 40000;
+
+const LENGTH_RANGE_REGEXP = /^(\d+)-(\d+)$/;
 
 class LengthFilter extends PureComponent {
   static propTypes = {
-    dataReviewed: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.object,
+    customLocation: T.shape({
+      description: T.object.isRequired,
+      search: T.object.isRequired,
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
-    description: T.object,
-    search: T.object,
   };
 
-  constructor() {
-    super();
-    this.max = 40000;
-    this.state = { from: 0, to: this.max };
+  constructor(props) {
+    super(props);
+
+    const [, min = MIN, max = MAX] =
+      (props.customLocation.search.length || '').match(LENGTH_RANGE_REGEXP) ||
+      [];
+
+    this.state = {
+      min: Math.min(MAX, Math.max(MIN, +min)),
+      max: Math.max(MIN, Math.min(MAX, +max)),
+    };
   }
 
-  componentWillMount() {
-    const { search: { protein_length: pl } } = this.props;
-    const [from, to] = pl ? pl.split('-').map(a => +a) : [0, this.max];
-    this.setState({ from, to });
+  componentDidMount() {
+    // Doing the update location on mount to clamp the values in the URL between
+    // MIN and MAX, possibly entered wrongly by the user
+    this._updateLocation(true);
+    this._updateLocation.flush();
   }
 
-  handleChange = () => {
-    const vals = [+this.input1.value, +this.input2.value].sort((a, b) => a - b);
-    const waitingTime = 500;
-    this.setState({ from: vals[0], to: vals[1] });
-    if (this.timer) clearTimeout(this.timer);
-    this.timer = setTimeout(() => {
-      const vals = [+this.input1.value, +this.input2.value].sort(
-        (a, b) => a - b,
-      );
-      this.setState({ from: vals[0], to: vals[1] });
-      this.props.goToCustomLocation(location => ({
-        ...location,
-        search: {
-          ...location.search,
-          protein_length: `${vals[0]}-${vals[1]}`,
-        },
-      }));
-      this.timer = null;
-    }, waitingTime);
-  };
+  componentWillReceiveProps({ customLocation: { search: { length } } }) {
+    if (!length) this.setState({ min: MIN, max: MAX });
+  }
+
+  componentWillUnmount() {
+    this._updateLocation.cancel();
+  }
+
+  _updateLocation = debounce(fromMount => {
+    const { min, max } = this.state;
+    const { goToCustomLocation, customLocation } = this.props;
+    const { page, length: _, ...search } = customLocation.search;
+    if (fromMount && page) search.page = page;
+    if (min !== MIN || max !== MAX) search.length = `${min}-${max}`;
+    goToCustomLocation({ ...customLocation, search }, true);
+  }, DEBOUNCE_RATE);
+
+  _handleChange = ({ target: { name, value } }) =>
+    this.setState(
+      ({ min, max }) => ({
+        [name]:
+          name === 'min'
+            ? Math.min(max, Math.max(MIN, Math.round(Math.exp(+value))))
+            : Math.max(min, Math.min(MAX, Math.round(Math.exp(+value)))),
+      }),
+      this._updateLocation,
+    );
 
   render() {
+    const { min, max } = this.state;
     return (
       <div>
-        {this.state.from}
+        {min} AA
         <br />
-        <div className={s('multirange')}>
-          <input
-            ref={i => (this.input1 = i)}
-            type="range"
-            min="0"
-            max={this.max}
-            value={this.state.from}
-            onChange={this.handleChange}
-            className={s('original')}
-          />
-          <input
-            ref={i => (this.input2 = i)}
-            type="range"
-            min="0"
-            max={this.max}
-            value={this.state.to}
-            onChange={this.handleChange}
-            className={s('ghost')}
-          />
-        </div>
+        <MultipleInput
+          min={Math.log(MIN)}
+          max={Math.log(MAX)}
+          minValue={Math.log(min)}
+          maxValue={Math.log(max)}
+          step="0.00001"
+          onChange={this._handleChange}
+          aria-label="length range"
+        />
         <br />
-        {this.state.to}
+        {max} AA
       </div>
     );
   }
 }
 
-export default connect(null, { goToCustomLocation })(LengthFilter);
+const mapStateToProps = createSelector(
+  state => state.customLocation,
+  customLocation => ({ customLocation }),
+);
+
+export default connect(mapStateToProps, { goToCustomLocation })(LengthFilter);

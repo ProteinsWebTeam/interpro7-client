@@ -1,4 +1,3 @@
-// @flow
 import metadata from './metadata';
 import data from './data';
 import {

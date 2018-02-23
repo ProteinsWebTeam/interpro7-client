@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -46,6 +45,7 @@ const propTypes = {
   data: T.shape({
     payload: T.object,
     loading: T.bool.isRequired,
+    ok: T.bool,
   }).isRequired,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
@@ -78,7 +78,7 @@ const Overview = ({ data: { payload, loading } }) => {
 Overview.propTypes = propTypes;
 
 const List = ({
-  data: { payload, loading, url, status },
+  data: { payload, loading, ok, url, status },
   isStale,
   customLocation: { search },
 }) => {
@@ -90,7 +90,7 @@ const List = ({
       results: [],
     };
   }
-  const urlHasParameter = url && url.indexOf('?') !== -1;
+  const urlHasParameter = url && url.includes('?');
   return (
     <div className={f('row')}>
       <MemberDBTabs />
@@ -99,6 +99,8 @@ const List = ({
         <StructureListFilters /> <hr />
         <Table
           dataTable={_payload.results}
+          loading={loading}
+          ok={ok}
           isStale={isStale}
           actualSize={_payload.count}
           query={search}
@@ -130,6 +132,8 @@ const List = ({
           <SearchBox search={search.search}>Search structures</SearchBox>
           <Column
             dataKey="accession"
+            headerClassName={f('table-center')}
+            cellClassName={f('table-center')}
             renderer={(accession /*: string */) => (
               <Link
                 to={customLocation => ({
@@ -178,9 +182,29 @@ const List = ({
           >
             Name
           </Column>
-          <Column dataKey="experiment_type">Experiment type</Column>
+          <Column
+            dataKey="experiment_type"
+            headerClassName={f('table-center')}
+            cellClassName={f('table-center')}
+          >
+            Experiment type
+          </Column>
+          <Column
+            dataKey="resolution"
+            headerClassName={f('table-center')}
+            cellClassName={f('table-center')}
+            renderer={(resolution /*: string | number */) =>
+              resolution
+                ? resolution + (typeof resolution === 'number' ? ' Å' : '')
+                : 'ø'
+            }
+          >
+            Resolution
+          </Column>
           <Column
             dataKey="accession"
+            headerClassName={f('table-center')}
+            cellClassName={f('table-center')}
             defaultKey="structureAccession"
             renderer={(accession /*: string */) => (
               <PDBeLink id={accession}>
@@ -297,21 +321,18 @@ const schemaProcessData2 = data => ({
 
 class Structure extends PureComponent {
   static propTypes = {
-    isStale: T.bool.isRequired,
     data: T.shape({
       payload: T.shape({
         metadata: T.shape({
           accession: T.string.isRequired,
-        }).isRequired,
+        }),
       }),
     }).isRequired,
   };
 
   render() {
     return (
-      <div
-        className={f('with-data', { ['with-stale-data']: this.props.isStale })}
-      >
+      <div>
         {this.props.data.payload &&
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (

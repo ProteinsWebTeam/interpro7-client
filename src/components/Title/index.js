@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -17,7 +16,7 @@ const f = foundationPartial(fonts, ipro, styles);
 const softcolors = {
   // opacity 0.6 normal colors
   cdd: '#cbeb98',
-  gene3d: '#c9b6db',
+  cathgene3d: '#c9b6db',
   hamap: '#87e5e6',
   mobidblt: '#d6dc94',
   panther: '#d8ccbb',

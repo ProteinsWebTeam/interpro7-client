@@ -1,4 +1,3 @@
-// @flow
 import { merge, mergeWith, cloneDeep, toPlainObject } from 'lodash-es';
 
 import descriptionToDescription from '.';

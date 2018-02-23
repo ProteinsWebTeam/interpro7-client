@@ -220,7 +220,7 @@ div#local-title {
   font-family: 'EBI-generic', arial, sans-serif;
 }
 .md-cg .md-color {
-  fill: var(--colors-gene3d);
+  fill: var(--colors-cathgene3d);
 }
 .md-cd .md-color {
   fill: var(--colors-cdd);

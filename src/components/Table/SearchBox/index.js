@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -27,6 +26,16 @@ class SearchBox extends PureComponent {
 
     this.state = { search: this.props.customLocation.search.search };
     this.routerPush = debounce(this.routerPush, DEBOUNCE_RATE);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.props.customLocation.description.entry.db !==
+      nextProps.customLocation.description.entry.db
+    ) {
+      this.routerPush.cancel();
+      this.setState({ search: nextProps.customLocation.search.search });
+    }
   }
 
   handleReset = () => this.handleChange({ target: { value: null } });

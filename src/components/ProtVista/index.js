@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -15,10 +15,10 @@ const f = foundationPartial(local, fonts);
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import ProtVistaManager from 'protvista-manager/src/protvista-manager.js';
-import ProtVistaSequence from 'protvista-sequence/src/protvista-sequence.js';
-import ProtVistaNavigation from 'protvista-navigation/src/protvista-navigation.js';
-import ProtVistaInterProTrack from 'protvista-interpro-track/src/protvista-interpro-track.js';
+import ProtVistaManager from 'protvista-manager';
+import ProtVistaSequence from 'protvista-sequence';
+import ProtVistaNavigation from 'protvista-navigation';
+import ProtVistaInterProTrack from 'protvista-interpro-track';
 
 import PopperJS from 'popper.js';
 
@@ -28,7 +28,7 @@ const colorHash = new ColorHash();
 
 // TODO: refactor to have a single place for colors
 const colorsByDB = {
-  gene3d: '#a88cc3',
+  cathgene3d: '#a88cc3',
   cdd: '#addc58',
   hamap: '#2cd6d6',
   mobidblt: '#d6dc94',
@@ -138,22 +138,41 @@ class ProtVista extends PureComponent {
           locations: [loc],
           color: this.getTrackColor(d),
           entry_type: d.entry_type,
+          type: 'entry',
+          residues: d.residues,
         }));
         const children = d.children
           ? d.children.map(child => ({
               accession: child.accession,
               name: child.name,
+              residues: child.residues,
               source_database: child.source_database,
               entry_type: child.entry_type,
+              type: child.type,
               locations: child.entry_protein_locations || child.locations,
               parent: d,
               color: this.getTrackColor(Object.assign(child, { parent: d })),
+              location2residue: child.location2residue,
             }))
           : null;
         const isNewElement = !this.web_tracks[d.accession]._data;
         this.web_tracks[d.accession].data = tmp;
-        if (children) this.web_tracks[d.accession].contributors = children;
+        if (children) {
+          this.web_tracks[d.accession].contributors = children;
+          for (const child of children) {
+            if (child.residues) {
+              this.setObjectValueInState(
+                'expandedTrack',
+                child.accession,
+                true,
+              );
+            }
+          }
+        }
         if (isNewElement) {
+          this.web_tracks[d.accession].addEventListener('entryclick', e => {
+            this.handleCollapseLabels(e.detail.feature.accession);
+          });
           this.web_tracks[d.accession].addEventListener('entrymouseout', () => {
             removeAllChildrenFromNode(this._popper_content);
             this.popper.destroy();
@@ -161,15 +180,10 @@ class ProtVista extends PureComponent {
           });
           this.web_tracks[d.accession].addEventListener('entrymouseover', e => {
             this._popper.classList.remove(f('hide'));
-            if (e.detail.feature.source_database) {
-              removeAllChildrenFromNode(this._popper_content);
-              this._popper_content.appendChild(
-                this.getElementFromEntry(e.detail.feature),
-              );
-            }
-            // if (e.hasOwnProperty('residue')) {
-            //   this._popper.appendChild(this.getElementFromResidue(d));
-            // }
+            removeAllChildrenFromNode(this._popper_content);
+            this._popper_content.appendChild(
+              this.getElementFromEntry(e.detail),
+            );
             this.popper = new PopperJS(e.detail.target, this._popper, {
               placement: 'top',
               applyStyle: { enabled: false },
@@ -186,9 +200,14 @@ class ProtVista extends PureComponent {
     }
   }
 
-  getElementFromEntry(entry) {
+  getElementFromEntry(detail) {
+    const entry = detail.feature;
+    const isResidue = detail.type === 'residue';
     const tagString = `<div>
-        <h5>${entry.accession}</h5>
+        <h5>
+          ${entry.accession}
+          ${isResidue ? `<br/>[${detail.description}]` : ''} 
+         </h5>
         ${entry.name ? `<h4>${entry.name}</h4>` : ''}
         <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
         <p style={{ textTransform: 'uppercase' }}>
@@ -200,6 +219,33 @@ class ProtVista extends PureComponent {
             ${entry.entry ? `(${entry.entry})` : ''}
           </small>
         </p>
+        <ul>
+          ${
+            isResidue
+              ? `
+              <li>Position: ${detail.start}</li>
+              <li>Residue: ${detail.residue}</li>
+              `
+              : entry.locations
+                  .map(({ fragments }) =>
+                    `
+          <li>location:
+            <ul>
+              ${fragments
+                .map(({ start, end }) =>
+                  `
+                <li>From ${start} to ${end}</li>
+              `.trim(),
+                )
+                .join('')}
+            </ul>
+          </li>
+          `.trim(),
+                  )
+                  .join('')
+          }
+        </ul>
+
       </div>
     `.trim();
     const range = document.createRange();
@@ -218,18 +264,27 @@ class ProtVista extends PureComponent {
     for (const track of Object.values(this.web_tracks)) {
       if (collapsed) track.setAttribute('expanded', true);
       else track.removeAttribute('expanded');
-
-      expandedTrack[track._data[0].accession] = collapsed;
+    }
+    for (const acc of Object.keys(this.state.expandedTrack)) {
+      expandedTrack[acc] = collapsed;
     }
     this.setState({ collapsed: !collapsed, expandedTrack });
   };
 
   handleCollapseLabels = accession => {
-    this.setObjectValueInState(
-      'expandedTrack',
-      accession,
-      this.web_tracks[accession]._expanded,
-    );
+    if (this.web_tracks[accession]) {
+      this.setObjectValueInState(
+        'expandedTrack',
+        accession,
+        this.web_tracks[accession]._expanded,
+      );
+    } else if (this.state.expandedTrack.hasOwnProperty(accession)) {
+      this.setObjectValueInState(
+        'expandedTrack',
+        accession,
+        !this.state.expandedTrack[accession],
+      );
+    }
   };
 
   handleFullScreen = () => requestFullScreen(this._main);
@@ -277,75 +332,146 @@ class ProtVista extends PureComponent {
     return 'rgb(170,170,170)';
   }
 
+  renderLabels(entry) {
+    const { expandedTrack } = this.state;
+    return (
+      <Fragment>
+        <Link
+          to={{
+            description: {
+              main: {
+                key:
+                  entry.source_database.toLowerCase() === 'pdb'
+                    ? 'structure'
+                    : 'entry',
+              },
+              [entry.source_database.toLowerCase() === 'pdb'
+                ? 'structure'
+                : 'entry']: {
+                db: entry.source_database,
+                accession: entry.accession,
+              },
+            },
+          }}
+        >
+          {entry.accession}
+        </Link>
+        <div
+          className={f({
+            hide: !expandedTrack[entry.accession],
+          })}
+        >
+          {this.renderResidueLabels(entry)}
+          {entry.children &&
+            entry.children.map(d => (
+              <div key={d.accession} className={f('track-accession-child')}>
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'entry' },
+                      entry: {
+                        db: d.source_database,
+                        accession: d.accession,
+                      },
+                    },
+                  }}
+                >
+                  {d.accession}
+                </Link>
+                {this.renderResidueLabels(d)}
+              </div>
+            ))}
+        </div>
+      </Fragment>
+    );
+  }
+  renderResidueLabels(entry) {
+    if (!entry.residues) return null;
+    const { expandedTrack } = this.state;
+    return entry.residues.map(residue =>
+      residue.locations.map(r => (
+        <div
+          key={r.accession}
+          className={f('track-accession-child', {
+            hide: !expandedTrack[entry.accession],
+          })}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: entry.source_database,
+                  accession: entry.accession,
+                },
+              },
+            }}
+          >
+            {r.accession}
+          </Link>
+        </div>
+      )),
+    );
+  }
+  renderOptions() {
+    const { collapsed } = this.state;
+    return (
+      <div className={f('aligned-to-track-component')}>
+        <div className={f('view-options-title')}>Domains on protein</div>
+        <div className={f('view-options')}>
+          <div className={f('option-color', 'margin-right-large')}>
+            Color By:{' '}
+            <select
+              className={f('select-inline')}
+              value={this.state.colorMode}
+              onChange={this.changeColor}
+              onBlur={this.changeColor}
+            >
+              <option value={EntryColorMode.ACCESSION}>Accession</option>
+              <option value={EntryColorMode.MEMBER_DB}>Member Database</option>
+              <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
+                Domain Relationship
+              </option>
+            </select>
+          </div>
+          <div className={f('option-collapse')}>
+            &nbsp;|&nbsp;
+            <Tooltip title={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}>
+              <button
+                onClick={this.toggleCollapseAll}
+                aria-label={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}
+              >
+                {collapsed ? '▸ Expand' : '▾ Collapse'} All
+              </button>
+            </Tooltip>
+            &nbsp;|&nbsp;
+          </div>
+          <div className={f('option-fullscreen')}>
+            <Tooltip title="View the domain viewer in full screen mode">
+              <button
+                onClick={this.handleFullScreen}
+                data-icon="F"
+                title="Full screen"
+                className={f('margin-bottom-none', 'icon', 'icon-functional')}
+              />
+            </Tooltip>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { protein: { length }, data } = this.props;
 
     if (!(length && data)) return <Loading />;
 
-    const { collapsed, hideCategory, expandedTrack } = this.state;
+    const { hideCategory, expandedTrack } = this.state;
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
         <div className={f('row')}>
           <div className={f('columns')}>
-            <div className={f('track-row')}>
-              <div className={f('aligned-to-track-component')}>
-                <div className={f('view-options-title')}>
-                  Domains on protein
-                </div>
-                <div className={f('view-options')}>
-                  <div className={f('option-color', 'margin-right-large')}>
-                    Color By:{' '}
-                    <select
-                      className={f('select-inline')}
-                      value={this.state.colorMode}
-                      onChange={this.changeColor}
-                      onBlur={this.changeColor}
-                    >
-                      <option value={EntryColorMode.ACCESSION}>
-                        Accession
-                      </option>
-                      <option value={EntryColorMode.MEMBER_DB}>
-                        Member Database
-                      </option>
-                      <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
-                        Domain Relationship
-                      </option>
-                    </select>
-                  </div>
-                  <div className={f('option-collapse')}>
-                    &nbsp;|&nbsp;
-                    <Tooltip
-                      title={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}
-                    >
-                      <button
-                        onClick={this.toggleCollapseAll}
-                        aria-label={`${
-                          collapsed ? 'Expand' : 'Collapse'
-                        } all tracks`}
-                      >
-                        {collapsed ? '▸ Expand' : '▾ Collapse'} All
-                      </button>
-                    </Tooltip>
-                    &nbsp;|&nbsp;
-                  </div>
-
-                  <div className={f('option-fullscreen')}>
-                    <Tooltip title="View the domain viewer in full screen mode">
-                      <button
-                        onClick={this.handleFullScreen}
-                        data-icon="F"
-                        title="Full screen"
-                        className={f(
-                          'margin-bottom-none',
-                          'icon',
-                          'icon-functional',
-                        )}
-                      />
-                    </Tooltip>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div className={f('track-row')}>{this.renderOptions()}</div>
           </div>
         </div>
         <div ref={e => (this._popper = e)} className={f('popper', 'hide')}>
@@ -421,59 +547,10 @@ class ProtVista extends PureComponent {
                                 }
                                 shape="roundRectangle"
                                 expanded
-                                onClick={() =>
-                                  this.handleCollapseLabels(entry.accession)
-                                }
                               />
                             </div>
                             <div className={f('track-accession')}>
-                              <Link
-                                to={{
-                                  description: {
-                                    main: {
-                                      key:
-                                        entry.source_database === 'pdb'
-                                          ? 'structure'
-                                          : 'entry',
-                                    },
-                                    [entry.source_database === 'pdb'
-                                      ? 'structure'
-                                      : 'entry']: {
-                                      db: entry.source_database,
-                                      accession: entry.accession,
-                                    },
-                                  },
-                                }}
-                              >
-                                {entry.accession}
-                              </Link>
-                              <div
-                                className={f({
-                                  hide: !expandedTrack[entry.accession],
-                                })}
-                              >
-                                {entry.children &&
-                                  entry.children.map(d => (
-                                    <div
-                                      key={d.accession}
-                                      className={f('track-accession-child')}
-                                    >
-                                      <Link
-                                        to={{
-                                          description: {
-                                            main: { key: 'entry' },
-                                            entry: {
-                                              db: d.source_database,
-                                              accession: d.accession,
-                                            },
-                                          },
-                                        }}
-                                      >
-                                        {d.accession}
-                                      </Link>
-                                    </div>
-                                  ))}
-                              </div>
+                              {this.renderLabels(entry)}
                             </div>
                           </div>
                         ))}

@@ -1,7 +1,7 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { goToCustomLocation } from 'actions/creators';
 
@@ -18,6 +18,7 @@ import f from 'styles/foundation';
   data: {
     metadata: Object,
   },
+  db: string,
   currentSet: Object
 }; */
 
@@ -26,30 +27,18 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }).isRequired,
+    db: T.string.isRequired,
     currentSet: T.object,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.object.isRequired,
   };
 
   componentDidMount() {
-    const rootDiv = document.getElementById('clanviewer');
-    this._vis = new ClanViewer({ element: rootDiv });
+    if (!this._clanViewer) return;
+    this._vis = new ClanViewer({ element: this._clanViewer });
     const data = this.props.data.metadata.relationships;
     this._vis.paint(data, false);
-    rootDiv.addEventListener('click', e => {
-      const g = e.path[1];
-      if (g.nodeName === 'g' && g.classList.contains('node')) {
-        this.props.goToCustomLocation({
-          description: {
-            main: { key: 'entry' },
-            entry: {
-              db: this.props.customLocation.description.mainDB,
-              accession: g.getAttribute('data-accession'),
-            },
-          },
-        });
-      }
-    });
+    this._clanViewer.addEventListener('click', this._handleClick);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,6 +47,24 @@ class SummarySet extends PureComponent /*:: <Props> */ {
       this._vis.paint(data, false);
     }
   }
+
+  componentWillUnmount() {
+    if (this._clanViewer) {
+      this._clanViewer.removeEventListener('click', this._handleClick);
+    }
+  }
+
+  _handleClick = event => {
+    const g = event.path[1];
+    if (g.nodeName === 'g' && g.classList.contains('node')) {
+      this.props.goToCustomLocation({
+        description: {
+          main: { key: 'entry' },
+          entry: { db: this.props.db, accession: g.dataset.accession },
+        },
+      });
+    }
+  };
 
   render() {
     const { data: { metadata }, currentSet } = this.props;
@@ -71,9 +78,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                 // {metadata.source_database}
                 // </div>
               }
-              <p>
-                <Accession accession={metadata.accession} id={metadata.id} />
-              </p>
+              <Accession accession={metadata.accession} id={metadata.id} />
               <h4>Description</h4>
               <Description textBlocks={[metadata.description]} />
             </div>
@@ -98,7 +103,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
             </div>
           </div>
           <div className={f('row', 'columns')}>
-            <div id="clanviewer" />
+            <div ref={node => (this._clanViewer = node)} />
           </div>
         </section>
       </div>
@@ -106,4 +111,9 @@ class SummarySet extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(null, { goToCustomLocation })(SummarySet);
+const mapStateToProps = createSelector(
+  state => state.customLocation.description.set.db,
+  db => ({ db }),
+);
+
+export default connect(mapStateToProps, { goToCustomLocation })(SummarySet);

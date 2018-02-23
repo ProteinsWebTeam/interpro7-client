@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -54,7 +53,7 @@ class CurationFilter extends PureComponent {
         : 0;
     }
     return (
-      <React.Fragment>
+      <Fragment>
         {Object.entries(databases).map(([db, value]) => (
           <div key={db} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -75,7 +74,7 @@ class CurationFilter extends PureComponent {
             </label>
           </div>
         ))}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

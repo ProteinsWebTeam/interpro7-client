@@ -1,5 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -41,6 +40,7 @@ const propTypes = {
   data: T.shape({
     payload: T.object,
     loading: T.bool.isRequired,
+    ok: T.bool,
   }).isRequired,
   loading: T.bool,
   isStale: T.bool.isRequired,
@@ -87,7 +87,7 @@ class List extends PureComponent {
 
   render() {
     const {
-      data: { payload, loading, url, status },
+      data: { payload, loading, ok, url, status },
       isStale,
       customLocation: { search },
     } = this.props;
@@ -99,7 +99,7 @@ class List extends PureComponent {
         results: [],
       };
     }
-    const urlHasParameter = url && url.indexOf('?') !== -1;
+    const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
         <MemberDBTabs />
@@ -108,6 +108,8 @@ class List extends PureComponent {
           <hr />
           <Table
             dataTable={_payload.results}
+            loading={loading}
+            ok={ok}
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
@@ -281,7 +283,7 @@ class Summary extends PureComponent {
       }
     }
     return (
-      <React.Fragment>
+      <Fragment>
         {this.props.data.payload &&
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (
@@ -321,7 +323,7 @@ class Summary extends PureComponent {
             childRoutes={subPagesForSet}
           />
         </ErrorBoundary>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }
@@ -355,7 +357,7 @@ const InnerSwitch = props => (
 );
 
 const EntrySet = props => (
-  <div className={f('with-data', { ['with-stale-data']: props.isStale })}>
+  <div>
     <ErrorBoundary>
       <Switch
         {...props}
@@ -366,8 +368,5 @@ const EntrySet = props => (
     </ErrorBoundary>
   </div>
 );
-EntrySet.propTypes = {
-  isStale: T.bool.isRequired,
-};
 
 export default loadData()(EntrySet);

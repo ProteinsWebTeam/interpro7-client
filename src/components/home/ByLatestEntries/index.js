@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -49,7 +48,11 @@ class LatestEntry extends PureComponent {
     return (
       <li className={f('list-item')}>
         <Tooltip title={`${entry.type} type`}>
-          <interpro-type type={entry.type} aria-label="Entry type" />
+          <interpro-type
+            size="1.5em"
+            type={entry.type}
+            aria-label="Entry type"
+          />
         </Tooltip>
         <div className={f('list-body')}>
           <Link

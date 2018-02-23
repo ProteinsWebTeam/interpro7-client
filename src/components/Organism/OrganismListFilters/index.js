@@ -9,8 +9,6 @@ import OrganismDBFilter from './OrganismDBFilter';
 const OrganismListFilters = () => (
   <FiltersPanel>
     <OrganismDBFilter label="Organism Type" />
-    {/* <TaxonomyFilter label="Taxonomy" />*/}
-    {/* <LengthFilter label="Protein Length"/>*/}
   </FiltersPanel>
 );
 

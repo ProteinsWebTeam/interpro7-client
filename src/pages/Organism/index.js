@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -21,7 +20,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import NumberLabel from 'components/NumberLabel';
+import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -56,6 +55,7 @@ const propTypes = {
   data: T.shape({
     payload: T.object,
     loading: T.bool.isRequired,
+    ok: T.bool,
   }).isRequired,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
@@ -117,7 +117,7 @@ class PlainDataProvider extends PureComponent {
     );
   }
 }
-const dataProviderFor = accession => {
+const dataProviderFor = (accession, sourceDatabase) => {
   let DataProvider = dataProviders.get(accession);
   if (DataProvider) return DataProvider;
   // create new one if not already existing
@@ -134,7 +134,7 @@ const dataProviderFor = accession => {
             main: { key: 'organism' },
             entry: { isFilter: true },
             protein: { isFilter: true },
-            organism: { db: 'taxonomy', accession },
+            organism: { db: sourceDatabase, accession },
           }),
       }),
   );
@@ -152,7 +152,7 @@ const dataProviderFor = accession => {
             main: { key: 'organism' },
             entry: { isFilter: true, db: entryDB },
             protein: { isFilter: true },
-            organism: { db: 'taxonomy', accession },
+            organism: { db: sourceDatabase, accession },
           }),
       }),
   );
@@ -176,7 +176,7 @@ class List extends PureComponent {
 
   render() {
     const {
-      data: { payload, loading, url, status },
+      data: { payload, loading, ok, url, status },
       isStale,
       customLocation: { search },
     } = this.props;
@@ -188,7 +188,8 @@ class List extends PureComponent {
         results: [],
       };
     }
-    const urlHasParameter = url && url.indexOf('?') !== -1;
+    const urlHasParameter = url && url.includes('?');
+    const includeTree = url && !url.includes('proteome');
     return (
       <div className={f('row')}>
         <MemberDBTabs />
@@ -197,11 +198,13 @@ class List extends PureComponent {
           <hr />
           <Table
             dataTable={_payload.results}
+            loading={loading}
+            ok={ok}
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
-            withTree
+            withTree={includeTree}
           >
             <Exporter>
               <ul>
@@ -287,8 +290,8 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="entry-count"
-              renderer={accession => {
-                const DataProvider = dataProviderFor(`${accession}`);
+              renderer={(accession /*: string */, { source_database: db }) => {
+                const DataProvider = dataProviderFor(`${accession}`, db);
                 return (
                   <DataProvider
                     renderer={({ loading, payload }, _, db) => {
@@ -314,8 +317,7 @@ class List extends PureComponent {
                             },
                           }}
                         >
-                          <NumberLabel
-                            className={f('number-label')}
+                          <NumberComponent
                             value={count}
                             loading={loading}
                             abbr
@@ -343,8 +345,11 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="protein-count"
-              renderer={accession => {
-                const DataProvider = dataProviderFor(`${accession}`);
+              renderer={(accession /*: string */, { source_database }) => {
+                const DataProvider = dataProviderFor(
+                  `${accession}`,
+                  source_database,
+                );
                 return (
                   <DataProvider
                     renderer={(_, { payload, loading }) => {
@@ -366,8 +371,7 @@ class List extends PureComponent {
                             },
                           }}
                         >
-                          <NumberLabel
-                            className={f('number-label')}
+                          <NumberComponent
                             value={count}
                             loading={loading}
                             abbr
@@ -568,14 +572,13 @@ const schemaProcessData = data => ({
 
 class Organism extends PureComponent {
   static propTypes = {
-    isStale: T.bool.isRequired,
     data: T.object.isRequired,
   };
 
   render() {
-    const { isStale, data } = this.props;
+    const { data } = this.props;
     return (
-      <div className={f('with-data', { ['with-stale-data']: isStale })}>
+      <div>
         {data.payload &&
           data.payload.metadata &&
           data.payload.metadata.accession && (

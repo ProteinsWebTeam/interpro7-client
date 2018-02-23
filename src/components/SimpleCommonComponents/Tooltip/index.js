@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import { Tooltip } from 'react-tippy';
 

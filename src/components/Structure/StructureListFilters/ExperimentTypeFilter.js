@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-param-reassign */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
@@ -26,7 +25,6 @@ class ExperimentTypeFilter extends PureComponent {
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
-      description: T.object.isRequired,
       search: T.object.isRequired,
     }).isRequired,
   };
@@ -44,13 +42,8 @@ class ExperimentTypeFilter extends PureComponent {
   render() {
     const {
       data: { loading, payload },
-      customLocation: { description, search },
+      customLocation: { search },
     } = this.props;
-    if (
-      (Object.entries(description).find(([_key, value]) => value.isFilter) ||
-        [])[0]
-    )
-      return <div>Not available.</div>;
     const types = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,
     );

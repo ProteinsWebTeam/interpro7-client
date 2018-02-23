@@ -4,9 +4,14 @@ import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import cn from 'classnames';
+
+import NumberLabel from 'components/NumberLabel';
 
 import config from 'config';
 import { toPlural } from 'utils/pages';
+
+import styles from './style.css';
 
 const entityText = (entity, count) => {
   if (entity === 'search') {
@@ -39,18 +44,22 @@ const TotalNb = ({ className, data, actualSize, pagination, description }) => {
     const db = description[description.main.key].db;
     textLabel = (
       <span>
-        {index} - {index + data.length - 1} of{' '}
-        <strong>{actualSize.toLocaleString()}</strong>{' '}
+        <NumberLabel value={index} className={styles.number} />
+        {' - '}
+        <NumberLabel
+          value={index + data.length - 1}
+          className={styles.number}
+        />
+        {' of '}
+        <strong>
+          <NumberLabel value={actualSize} className={styles.number} />
+        </strong>{' '}
         {entityText(description.main.key, actualSize)}
         {dbText(db)}
       </span>
     );
   }
-  return (
-    <p className={className} style={{ color: '#505f74', marginBottom: '0' }}>
-      {textLabel}
-    </p>
-  );
+  return <p className={cn(className, styles.component)}>{textLabel}</p>;
 };
 
 TotalNb.propTypes = {

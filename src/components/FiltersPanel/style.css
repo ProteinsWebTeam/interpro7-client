@@ -3,6 +3,11 @@
 .filters-panel {
   max-height: 250px;
   flex-flow: row nowrap; /*make it work with Firefox*/
+
+  & label {
+    line-height: normal;
+    margin-top: 0.1em;
+  }
 }
 .filters-panel,
 .filters-panel .toggle,
@@ -38,10 +43,6 @@
     overflow-y: hidden;
   }
 }
-
-interpro-type {
-  line-height: 1.5;
-} /*important to keep: define correct line-height for entry type filter*/
 
 hr {
   margin: 0;
