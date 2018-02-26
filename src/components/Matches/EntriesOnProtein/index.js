@@ -75,7 +75,8 @@ class EntriesOnProtein extends PureComponent {
   async componentDidMount() {
     await Promise.all(webComponents);
     const { matches } = this.props;
-    this.web_protein.data = matches[0].protein;
+    const p = matches[0].protein;
+    this.web_protein.data = p.sequence || ' '.repeat(p.length);
     this.updateTracksWithData(matches);
   }
   componentDidUpdate(prevProps) {
@@ -84,8 +85,14 @@ class EntriesOnProtein extends PureComponent {
     }
   }
   updateTracksWithData(data) {
+    const firstMatch = data[0];
+    let locations = [];
+    if (firstMatch.entry && firstMatch.entry.entry_protein_locations)
+      locations = firstMatch.entry.entry_protein_locations;
+    else if (firstMatch.protein && firstMatch.protein.entry_protein_locations)
+      locations = firstMatch.protein.entry_protein_locations;
     const d = data[0].entry;
-    const tmp = (d.entry_protein_locations || d.locations).map(loc => ({
+    const tmp = locations.map(loc => ({
       accession: d.accession,
       name: d.name,
       source_database: d.source_database,
