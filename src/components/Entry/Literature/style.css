@@ -50,4 +50,12 @@
   @nest & > * {
     break-inside: avoid;
   }
+  /*only structure page*/
+  @nest &.nogap {
+    columns: 100em;
+    @nest & div {
+      padding-left: 0;
+      text-indent: 0;
+    }
+  }
 }
