@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import T from 'prop-types';
 
 import loadWebComponent from 'utils/loadWebComponent';
@@ -35,13 +35,6 @@ class ProtVistaMatches extends PureComponent {
   }
   async componentDidMount() {
     await Promise.all(webComponents);
-    const { matches } = this.props;
-    // if (matches.length > 1) {
-    //   console.error(
-    //     'There are several matches and this component is using only one',
-    //   );
-    //   console.table(matches);
-    // }
     this.updateTracksWithData(this.props);
   }
   componentDidUpdate(prevProps) {

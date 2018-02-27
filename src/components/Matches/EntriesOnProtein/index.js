@@ -44,6 +44,12 @@ class EntriesOnProtein extends ProtVistaMatches {
   };
 
   updateTracksWithData({ matches: data }) {
+    if (data.length > 1) {
+      console.error(
+        'There are several matches and this component is using only one',
+      );
+      console.table(data);
+    }
     const firstMatch = data[0];
     const { entry, protein } = firstMatch;
     let locations = [];

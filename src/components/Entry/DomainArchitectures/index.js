@@ -65,7 +65,7 @@ class IDAProtVista extends ProtVistaMatches {
     const { length, matches } = props;
     if (!this.web_protein.data) this.web_protein.data = ' '.repeat(length);
 
-    for (let domain of matches) {
+    for (const domain of matches) {
       const tmp = [
         {
           accession: domain.accessions.join('-'),
@@ -116,9 +116,8 @@ class IDAProtVista extends ProtVistaMatches {
               </div>
               <div className={f('track-accession')}>
                 {d.accessions.map(acc => (
-                  <Fragment>
+                  <Fragment key={acc}>
                     <Link
-                      key={acc}
                       to={{
                         description: {
                           main: { key: 'entry' },

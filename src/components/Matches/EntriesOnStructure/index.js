@@ -21,6 +21,12 @@ class EntriesOnStructure extends ProtVistaMatches {
     options: T.object,
   };
   updateTracksWithData({ matches: data }) {
+    if (data.length > 1) {
+      console.error(
+        'There are several matches and this component is using only one',
+      );
+      console.table(data);
+    }
     const structure = data[0].structure;
     const entry = data[0].entry;
     const main = 'entry_protein_locations' in structure ? 'structure' : 'entry';
