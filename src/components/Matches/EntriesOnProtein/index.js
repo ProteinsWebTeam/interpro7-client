@@ -1,24 +1,17 @@
 /* eslint no-magic-numbers: 0 */
-import React, { PureComponent } from 'react';
+import React from 'react';
 import T from 'prop-types';
-import ColorHash from 'color-hash/lib/color-hash';
 import { foundationPartial } from 'styles/foundation';
 
 import loadable from 'higherOrder/loadable';
 
-import style from '../style.css';
+import ProtVistaMatches from '../ProtVistaMatches';
+
 import protvista from 'components/ProtVista/style.css';
 
 const f = foundationPartial(protvista);
 
 import { getTrackColor, EntryColorMode } from 'utils/entryColor';
-
-import ProtVistaInterProTrack from 'protvista-interpro-track';
-import loadWebComponent from 'utils/loadWebComponent';
-import ProtVistaManager from 'protvista-manager';
-import ProtVistaSequence from 'protvista-sequence';
-
-const colorHash = new ColorHash();
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -39,9 +32,7 @@ const schemaProcessData = data => ({
   })),
 });
 
-const webComponents = [];
-
-class EntriesOnProtein extends PureComponent {
+class EntriesOnProtein extends ProtVistaMatches {
   static propTypes = {
     matches: T.arrayOf(
       T.shape({
@@ -51,39 +42,7 @@ class EntriesOnProtein extends PureComponent {
     ).isRequired,
     options: T.object,
   };
-  constructor(props) {
-    super(props);
-    this.web_tracks = {};
-  }
 
-  componentWillMount() {
-    if (webComponents.length) return;
-    webComponents.push(
-      loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
-    );
-    webComponents.push(
-      loadWebComponent(() => ProtVistaInterProTrack).as(
-        'protvista-interpro-track',
-      ),
-    );
-  }
-
-  async componentDidMount() {
-    await Promise.all(webComponents);
-    const { matches } = this.props;
-    const p = matches[0].protein;
-    this.web_protein.data = p.sequence || ' '.repeat(p.length);
-    this.updateTracksWithData(matches);
-  }
-  componentDidUpdate(prevProps) {
-    if (prevProps.data !== this.props.matches) {
-      this.updateTracksWithData(this.props.matches);
-    }
-  }
   updateTracksWithData(data) {
     const firstMatch = data[0];
     let locations = [];
