@@ -71,10 +71,11 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                 <div className={f('margin-top-large')}>
                   <div>Accession: {metadata.accession}</div>
                   <div>Experiment type: {metadata.experiment_type}</div>
-                  <div>Resolution: {metadata.resolution} Å </div>
-                  <div>
-                    Release Date: <time>{date.toLocaleDateString()}</time>
-                  </div>
+                  {metadata.resolution !== null ? (
+                    <div>Resolution: {metadata.resolution} Å </div>
+                  ) : (
+                    ''
+                  )}
 
                   <div>
                     Chains:{' '}
@@ -95,6 +96,9 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                         {chain}
                       </Link>
                     ))}
+                  </div>
+                  <div>
+                    Released: <time>{date.toLocaleDateString()}</time>
                   </div>
                 </div>
               )}
