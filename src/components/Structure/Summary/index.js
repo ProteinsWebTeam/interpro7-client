@@ -107,9 +107,12 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                     <PDBeLink id={metadata.accession} className={f('ext')}>
                       View this structure in PDBe
                     </PDBeLink>
-                    <pdb-prints size="36">
-                      <pdb-data-loader pdbid={metadata.accession} />
-                    </pdb-prints>
+                    {
+                      //remove the PDB viewer as we already show info on page (duplication)
+                      // <pdb-prints size="36">
+                      // <pdb-data-loader pdbid={metadata.accession} />
+                      // </pdb-prints>
+                    }
                   </li>
                 </ul>
               </div>
