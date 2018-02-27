@@ -43,26 +43,25 @@ class EntriesOnProtein extends ProtVistaMatches {
     options: T.object,
   };
 
-  updateTracksWithData(data) {
+  updateTracksWithData({ matches: data }) {
     const firstMatch = data[0];
-    const protein = data[0].protein;
+    const { entry, protein } = firstMatch;
     let locations = [];
     if (firstMatch.entry && firstMatch.entry.entry_protein_locations)
       locations = firstMatch.entry.entry_protein_locations;
     else if (firstMatch.protein && firstMatch.protein.entry_protein_locations)
       locations = firstMatch.protein.entry_protein_locations;
-    const d = data[0].entry;
     const tmp = locations.map(loc => ({
-      accession: d.accession,
-      name: d.name,
-      source_database: d.source_database,
+      accession: entry.accession,
+      name: entry.name,
+      source_database: entry.source_database,
       locations: [loc],
-      color: getTrackColor(d, EntryColorMode.ACCESSION),
-      entry_type: d.entry_type,
+      color: getTrackColor(entry, EntryColorMode.ACCESSION),
+      entry_type: entry.entry_type,
       type: 'entry',
     }));
 
-    this.web_tracks[d.accession].data = tmp;
+    this.web_tracks[entry.accession].data = tmp;
     if (!this.web_protein.data)
       this.web_protein.data = protein.sequence || ' '.repeat(protein.length);
   }

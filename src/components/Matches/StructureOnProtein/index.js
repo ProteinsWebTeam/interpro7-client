@@ -20,25 +20,24 @@ class StructureOnProtein extends ProtVistaMatches {
     ).isRequired,
     options: T.object,
   };
-  updateTracksWithData(data) {
-    const protein = data[0].protein;
-    const main = 'entry_protein_locations' in protein ? 'protein' : 'structure';
+  updateTracksWithData({ matches: data }) {
     const firstMatch = data[0];
+    const { structure, protein } = firstMatch;
+    const main = 'entry_protein_locations' in protein ? 'protein' : 'structure';
     const { [main]: { protein_structure_locations: locations } } = firstMatch;
     if (!this.web_protein.data)
       this.web_protein.data = protein.sequence || ' '.repeat(protein.length);
 
-    const d = data[0].structure;
     const tmp = locations.map(loc => ({
-      accession: d.accession,
-      name: d.name,
-      source_database: d.source_database,
+      accession: structure.accession,
+      name: structure.name,
+      source_database: structure.source_database,
       locations: [loc],
-      color: getTrackColor(d, EntryColorMode.ACCESSION),
+      color: getTrackColor(structure, EntryColorMode.ACCESSION),
       type: 'structure',
     }));
 
-    this.web_tracks[d.accession].data = tmp;
+    this.web_tracks[structure.accession].data = tmp;
   }
 
   render() {

@@ -1,24 +1,23 @@
 /* eslint no-magic-numbers: [1, {ignore: [0, 1, 2, 3, 10]}]*/
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+
+import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
+import protvista from 'components/ProtVista/style.css';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import ColorHash from 'color-hash/lib/color-hash';
-
 import { foundationPartial } from 'styles/foundation';
-
 import pageStyle from './style.css';
 
-const f = foundationPartial(pageStyle);
-
-const colorHash = new ColorHash();
+const f = foundationPartial(pageStyle, protvista);
+import { getTrackColor, EntryColorMode } from 'utils/entryColor';
 
 const groupDomains = domains => {
   const groups = {};
@@ -58,80 +57,84 @@ const ida2json = ida => {
   return obj;
 };
 
-class IDAGraphic extends PureComponent {
+class IDAProtVista extends ProtVistaMatches {
   static propTypes = {
-    idaObj: T.object.isRequired,
+    matches: T.object.isRequired,
   };
+  updateTracksWithData(props) {
+    const { length, matches } = props;
+    if (!this.web_protein.data) this.web_protein.data = ' '.repeat(length);
 
-  render() {
-    const { idaObj } = this.props;
-    const options = {
-      trackHeight: 20,
-    };
-    const height =
-      idaObj.domains.length * options.trackHeight + options.trackHeight / 2;
-    const legendHeight = options.trackHeight / 3;
-    let gapBetwenGuidelines = Math.pow(10, `${idaObj.length}`.length - 1);
-    let numberOfGuides = Math.trunc(idaObj.length / gapBetwenGuidelines);
-    if (numberOfGuides < 2) {
-      gapBetwenGuidelines /= 10;
-      numberOfGuides = Math.trunc(idaObj.length / gapBetwenGuidelines);
+    for (let domain of matches) {
+      const tmp = [
+        {
+          accession: domain.accessions.join('-'),
+          name: domain.accessions.join('-'),
+          source_database: 'interpro',
+          locations: domain.locations,
+          color: getTrackColor(
+            { accession: domain.accessions[0] },
+            EntryColorMode.ACCESSION,
+          ),
+          type: 'entry',
+        },
+      ];
+
+      this.web_tracks[domain.accessions[0]].data = tmp;
     }
+  }
+  render() {
+    const { matches, length } = this.props;
     return (
-      <div className={f('svgContainer')} style={{ height }}>
-        <svg
-          className={f('svg')}
-          preserveAspectRatio="none meet"
-          viewBox={`0 0 ${idaObj.length} ${height}`}
+      <div className={f('track-in-table')}>
+        <protvista-manager
+          attributes="length displaystart displayend highlightstart highlightend"
+          id="pv-manager"
         >
-          <g className={f('guidelines')}>
-            {Array(...{ length: numberOfGuides }).map((x, i) => (
-              <g key={i}>
-                <line
-                  x1={(i + 1) * gapBetwenGuidelines}
-                  x2={(i + 1) * gapBetwenGuidelines}
-                  y1="0"
-                  y2={height}
-                  strokeDasharray="4, 2"
-                  vectorEffect="non-scaling-stroke"
+          <div className={f('track-container')}>
+            <div className={f('aligned-to-track-component')}>
+              <protvista-sequence
+                ref={e => (this.web_protein = e)}
+                length={length}
+                displaystart="1"
+                displayend={length}
+              />
+            </div>
+          </div>
+          {matches.map(d => (
+            <div key={d.accessions[0]} className={f('track-row')}>
+              <div className={f('track-component')}>
+                <protvista-interpro-track
+                  length={length}
+                  displaystart="1"
+                  displayend={length}
+                  id={`track_${d.accessions[0]}`}
+                  ref={e => (this.web_tracks[d.accessions[0]] = e)}
+                  shape="roundRectangle"
+                  expanded
                 />
-                <text
-                  x={2 + (i + 1) * gapBetwenGuidelines}
-                  y={legendHeight}
-                  style={{ fontSize: legendHeight }}
-                  fill="black"
-                >
-                  {(i + 1) * gapBetwenGuidelines}
-                </text>
-              </g>
-            ))}
-          </g>
-          <g>
-            {idaObj.domains.map((domain, t) => (
-              <g
-                key={domain.accessions.join()}
-                className={f('domain')}
-                transform={`translate(0 ${t * options.trackHeight})`}
-              >
-                {domain.locations.map((location, i) => (
-                  <g key={i} className={f('location')}>
-                    {location.fragments.map((fragment, j) => (
-                      <rect
-                        key={j}
-                        y={options.trackHeight / 2}
-                        x={fragment.start}
-                        title={domain.accessions[0]}
-                        width={fragment.end - fragment.start}
-                        fill={colorHash.hex(domain.accessions[0])}
-                        height={10}
-                      />
-                    ))}
-                  </g>
+              </div>
+              <div className={f('track-accession')}>
+                {d.accessions.map(acc => (
+                  <Fragment>
+                    <Link
+                      key={acc}
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: { db: 'InterPro', accession: acc },
+                        },
+                      }}
+                    >
+                      {acc}
+                    </Link>{' '}
+                    -
+                  </Fragment>
                 ))}
-              </g>
-            ))}
-          </g>
-        </svg>
+              </div>
+            </div>
+          ))}
+        </protvista-manager>
       </div>
     );
   }
@@ -163,7 +166,8 @@ class DomainArchitectures extends PureComponent {
                     search: { ida: obj.IDA_FK },
                   }}
                 >
-                  There are {obj.unique_proteins} proteins{' '}
+                  There {obj.unique_proteins > 1 ? 'are' : 'is'}{' '}
+                  {obj.unique_proteins} proteins{' '}
                 </Link>
                 with this architecture:<br />
                 {idaObj.domains.map(d => (
@@ -185,7 +189,7 @@ class DomainArchitectures extends PureComponent {
                     -
                   </span>
                 ))}
-                <IDAGraphic idaObj={idaObj} />
+                <IDAProtVista matches={idaObj.domains} length={idaObj.length} />
                 {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
               </div>
             );

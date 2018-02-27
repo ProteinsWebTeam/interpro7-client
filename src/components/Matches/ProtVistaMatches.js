@@ -36,17 +36,17 @@ class ProtVistaMatches extends PureComponent {
   async componentDidMount() {
     await Promise.all(webComponents);
     const { matches } = this.props;
-    if (matches.length > 1) {
-      console.error(
-        'There are several matches and this component is using only one',
-      );
-      console.table(matches);
-    }
-    this.updateTracksWithData(matches);
+    // if (matches.length > 1) {
+    //   console.error(
+    //     'There are several matches and this component is using only one',
+    //   );
+    //   console.table(matches);
+    // }
+    this.updateTracksWithData(this.props);
   }
   componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.matches) {
-      this.updateTracksWithData(this.props.matches);
+      this.updateTracksWithData(this.props);
     }
   }
 }

@@ -10,10 +10,6 @@ const f = foundationPartial(protvista);
 
 import { getTrackColor, EntryColorMode } from 'utils/entryColor';
 
-import ColorHash from 'color-hash/lib/color-hash';
-import style from '../style.css';
-const colorHash = new ColorHash();
-
 class EntriesOnStructure extends ProtVistaMatches {
   static propTypes = {
     matches: T.arrayOf(
@@ -24,7 +20,7 @@ class EntriesOnStructure extends ProtVistaMatches {
     ).isRequired,
     options: T.object,
   };
-  updateTracksWithData(data) {
+  updateTracksWithData({ matches: data }) {
     const structure = data[0].structure;
     const entry = data[0].entry;
     const main = 'entry_protein_locations' in structure ? 'structure' : 'entry';
@@ -34,7 +30,7 @@ class EntriesOnStructure extends ProtVistaMatches {
       [main]: {
         entry_protein_locations: locationsEP,
         protein_structure_locations: locationsPS,
-        protein_length,
+        protein_length: length,
       },
     } = firstMatch;
     const strData = locationsPS.map(loc => ({
@@ -57,8 +53,7 @@ class EntriesOnStructure extends ProtVistaMatches {
 
     this.web_tracks[structure.accession].data = strData;
     this.web_tracks[entry.accession].data = entryData;
-    if (!this.web_protein.data)
-      this.web_protein.data = ' '.repeat(protein_length);
+    if (!this.web_protein.data) this.web_protein.data = ' '.repeat(length);
   }
 
   render() {

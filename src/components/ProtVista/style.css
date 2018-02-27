@@ -77,6 +77,7 @@
 .track-accession {
   width: 10%;
   overflow: hidden;
+  white-space: nowrap;
   padding-left: 0.5em;
 }
 .track-accession > a,
@@ -204,7 +205,9 @@ div.buttons {
 
 .track-in-table {
   min-width: 300px;
+  font-size: 12px;
 }
-.track-in-table .track-component:nth-of-type(2) {
+.track-in-table .track-component:nth-of-type(2),
+.track-in-table .track-row:nth-of-type(2) {
   margin-top: -24px;
 }
