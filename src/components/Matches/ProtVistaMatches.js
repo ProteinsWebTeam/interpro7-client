@@ -42,8 +42,6 @@ class ProtVistaMatches extends PureComponent {
       );
       console.table(matches);
     }
-    const p = matches[0].protein;
-    this.web_protein.data = p.sequence || ' '.repeat(p.length);
     this.updateTracksWithData(matches);
   }
   componentDidUpdate(prevProps) {

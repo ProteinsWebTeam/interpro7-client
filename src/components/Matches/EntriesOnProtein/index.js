@@ -45,6 +45,7 @@ class EntriesOnProtein extends ProtVistaMatches {
 
   updateTracksWithData(data) {
     const firstMatch = data[0];
+    const protein = data[0].protein;
     let locations = [];
     if (firstMatch.entry && firstMatch.entry.entry_protein_locations)
       locations = firstMatch.entry.entry_protein_locations;
@@ -62,6 +63,8 @@ class EntriesOnProtein extends ProtVistaMatches {
     }));
 
     this.web_tracks[d.accession].data = tmp;
+    if (!this.web_protein.data)
+      this.web_protein.data = protein.sequence || ' '.repeat(protein.length);
   }
 
   render() {
