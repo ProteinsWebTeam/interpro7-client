@@ -97,13 +97,20 @@ const Literature = (
         </div>
       ) : null}
       {included.length && extra.length ? <h5>Further reading</h5> : null}
-      {extra.length ? (
+      {included.length && extra.length ? (
         <div className={f('list', 'further')}>
           {extra.map(([pubID, ref]) => (
             <LiteratureItem pubID={pubID} key={pubID} reference={ref} />
           ))}
         </div>
-      ) : null}
+      ) : (
+        // References for structure page (no gap)
+        <div className={f('list', 'nogap')}>
+          {extra.map(([pubID, ref]) => (
+            <LiteratureItem pubID={pubID} key={pubID} reference={ref} />
+          ))}
+        </div>
+      )}
     </div>
   </div>
 );
