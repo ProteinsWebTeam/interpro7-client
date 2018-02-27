@@ -152,17 +152,18 @@ class List extends PureComponent {
               dataKey="type"
               headerClassName={f('col-type', 'table-center')}
               cellClassName={f('table-center')}
-              renderer={type =>
-                db === 'InterPro' ? (
-                  <Tooltip title={`${type.replace('_', ' ')} type`}>
-                    <interpro-type type={type.replace('_', ' ')} size="26px">
-                      {type}
+              renderer={type => {
+                const _type = type.replace('_', ' ');
+                return db === 'InterPro' ? (
+                  <Tooltip title={`${_type} type`}>
+                    <interpro-type type={_type} size="26px">
+                      {_type}
                     </interpro-type>
                   </Tooltip>
                 ) : (
-                  type
-                )
-              }
+                  _type
+                );
+              }}
             >
               {`${db === 'InterPro' ? '' : `${db} `}Type`}
             </Column>
@@ -195,6 +196,28 @@ class List extends PureComponent {
             >
               Name
             </Column>
+            {db !== 'InterPro' && (
+              <Column
+                dataKey="source_database"
+                headerClassName={f('table-center')}
+                cellClassName={f('table-center')}
+                renderer={(db /*: string */) => (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: { db },
+                      },
+                      search: {},
+                    }}
+                  >
+                    <MemberSymbol type={db} />
+                  </Link>
+                )}
+              >
+                DB
+              </Column>
+            )}
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, data) => (
@@ -225,28 +248,6 @@ class List extends PureComponent {
             >
               Accession
             </Column>
-            {db !== 'InterPro' && (
-              <Column
-                dataKey="source_database"
-                headerClassName={f('table-center')}
-                cellClassName={f('table-center')}
-                renderer={(db /*: string */) => (
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: { db },
-                      },
-                      search: {},
-                    }}
-                  >
-                    <MemberSymbol type={db} />
-                  </Link>
-                )}
-              >
-                DB
-              </Column>
-            )}
             {db === 'InterPro' ? (
               <Column
                 dataKey="member_databases"
@@ -280,19 +281,23 @@ class List extends PureComponent {
             ) : (
               <Column
                 dataKey="integrated"
-                renderer={(accession /*: string */) => (
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: { db: 'InterPro', accession },
-                      },
-                      search: {},
-                    }}
-                  >
-                    {accession}
-                  </Link>
-                )}
+                renderer={(accession /*: string */) =>
+                  accession ? (
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: { db: 'InterPro', accession },
+                        },
+                        search: {},
+                      }}
+                    >
+                      {accession}
+                    </Link>
+                  ) : (
+                    <span className={f('not-integrated')}>Not integrated</span>
+                  )
+                }
               >
                 Integrated
               </Column>

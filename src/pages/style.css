@@ -1,4 +1,6 @@
 @import '../styles/timing.css';
+@import '../styles/timing.css';
+
 /************************************home.js************************************/
 /*homepage figures - temp while there is a specific component*/
 .fig-container {
@@ -121,6 +123,15 @@
 
 .stuck {
   margin-top: 174px;
+}
+
+.not-integrated {
+  opacity: 0.1;
+  transition: opacity var(--timing-medium) ease-in-out;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 /* Medium screen only*/

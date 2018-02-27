@@ -201,3 +201,10 @@ div.buttons {
   margin-left: 0;
   margin-right: 0;
 }
+
+.track-in-table {
+  min-width: 300px;
+}
+.track-in-table .track-component {
+  margin-top: -24px;
+}

@@ -5,7 +5,6 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
 import loadWebComponent from 'utils/loadWebComponent';
-import ColorHash from 'color-hash/lib/color-hash';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
@@ -20,38 +19,11 @@ import ProtVistaSequence from 'protvista-sequence';
 import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 
+import { getTrackColor, EntryColorMode } from 'utils/entryColor';
+
 import PopperJS from 'popper.js';
 
 const webComponents = [];
-
-const colorHash = new ColorHash();
-
-// TODO: refactor to have a single place for colors
-const colorsByDB = {
-  cathgene3d: '#a88cc3',
-  cdd: '#addc58',
-  hamap: '#2cd6d6',
-  mobidblt: '#d6dc94',
-  panther: '#bfac92',
-  pfam: '#6287b1',
-  pirsf: '#fbbddd',
-  prints: '#54c75f',
-  prodom: '#8d99e4',
-  profile: '#f69f74',
-  prosite: '#f3c766',
-  sfld: '#00b1d3',
-  smart: '#ff8d8d',
-  ssf: '#686868',
-  tigrfams: '#56b9a6',
-  interpro: '#2daec1',
-  pdb: '#74b360',
-};
-
-const EntryColorMode = {
-  ACCESSION: 'ACCESSION',
-  MEMBER_DB: 'MEMBER_DB',
-  DOMAIN_RELATIONSHIP: 'DOMAIN_RELATIONSHIP',
-};
 
 const requestFullScreen = element => {
   if (!element) return;
@@ -136,7 +108,7 @@ class ProtVista extends PureComponent {
           name: d.name,
           source_database: d.source_database,
           locations: [loc],
-          color: this.getTrackColor(d),
+          color: getTrackColor(d, this.state.colorMode),
           entry_type: d.entry_type,
           type: 'entry',
           residues: d.residues,
@@ -151,7 +123,10 @@ class ProtVista extends PureComponent {
               type: child.type,
               locations: child.entry_protein_locations || child.locations,
               parent: d,
-              color: this.getTrackColor(Object.assign(child, { parent: d })),
+              color: getTrackColor(
+                Object.assign(child, { parent: d }),
+                this.state.colorMode,
+              ),
               location2residue: child.location2residue,
             }))
           : null;
@@ -292,45 +267,12 @@ class ProtVista extends PureComponent {
   changeColor = ({ target: { value: colorMode } }) => {
     for (const track of Object.values(this.web_tracks)) {
       for (const d of [...track._data, ...(track._contributors || [])]) {
-        d.color = this.getTrackColor(d, colorMode);
+        d.color = getTrackColor(d, colorMode);
       }
       track.refresh();
     }
     this.setState({ colorMode });
   };
-
-  getTrackColor(entry, colorMode = null) {
-    let acc;
-    switch (colorMode || this.state.colorMode) {
-      case EntryColorMode.ACCESSION:
-        acc = entry.accession
-          .split('')
-          .reverse()
-          .join('');
-        return colorHash.hex(acc);
-      case EntryColorMode.MEMBER_DB:
-        return colorsByDB[entry.source_database.toLowerCase()];
-      case EntryColorMode.DOMAIN_RELATIONSHIP:
-        if (entry.source_database.toLowerCase() === 'interpro') {
-          acc = entry.accession
-            .split('')
-            .reverse()
-            .join('');
-          return colorHash.hex(acc);
-        }
-        if (entry.parent) {
-          acc = entry.parent.accession
-            .split('')
-            .reverse()
-            .join('');
-          return colorHash.hex(acc);
-        }
-        break;
-      default:
-        return 'rgb(170,170,170)';
-    }
-    return 'rgb(170,170,170)';
-  }
 
   renderLabels(entry) {
     const { expandedTrack } = this.state;

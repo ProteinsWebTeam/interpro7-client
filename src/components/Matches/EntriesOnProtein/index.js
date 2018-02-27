@@ -1,11 +1,22 @@
 /* eslint no-magic-numbers: 0 */
-import React from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import ColorHash from 'color-hash/lib/color-hash';
+import { foundationPartial } from 'styles/foundation';
 
 import loadable from 'higherOrder/loadable';
 
 import style from '../style.css';
+import protvista from 'components/ProtVista/style.css';
+
+const f = foundationPartial(protvista);
+
+import { getTrackColor, EntryColorMode } from 'utils/entryColor';
+
+import ProtVistaInterProTrack from 'protvista-interpro-track';
+import loadWebComponent from 'utils/loadWebComponent';
+import ProtVistaManager from 'protvista-manager';
+import ProtVistaSequence from 'protvista-sequence';
 
 const colorHash = new ColorHash();
 
@@ -28,85 +39,108 @@ const schemaProcessData = data => ({
   })),
 });
 
-const EntriesOnProtein = ({
-  matches,
-  options: { baseSize = 10, offset = 30, niceRatio = 6 /* , scale = 1*/ } = {},
-}) => {
-  const protein = matches[0].protein;
-  const main = 'entry_protein_locations' in protein ? 'protein' : 'entry';
-  return (
-    <div className={style.svgContainer}>
-      <SchemaOrgData data={matches[0]} processData={schemaProcessData} />
-      <svg
-        className={style.svg}
-        preserveAspectRatio="xMinYMid meet"
-        viewBox={`0 0 ${protein.length + offset} 60`}
-      >
-        <g transform={`translate(0 ${offset - baseSize / 2})`}>
-          <title>{protein.accession}</title>
-          <rect
-            x="0"
-            y="0"
-            rx={baseSize / niceRatio}
-            width={protein.length}
-            height={baseSize}
-            className={style.primary}
-          />
-          <text
-            x="0.1em"
-            y="0.8em"
-            transform={`translate(${protein.length} 0)`}
-          >
-            <tspan>{protein.length}</tspan>
-          </text>
-        </g>
-        <g>
-          {matches.map(
-            ({ [main]: { entry_protein_locations: locations }, entry }) =>
-              locations.map((location, i) =>
-                location.fragments.map((fragment, j) => (
-                  <g
-                    key={`${entry.accession}-${i}-${j}`}
-                    transform={`translate(${fragment.start} ${offset -
-                      baseSize})`}
-                  >
-                    <title>{entry.accession}</title>
-                    <rect
-                      x="0"
-                      y="0"
-                      rx={baseSize * 2 / niceRatio}
-                      width={fragment.end - fragment.start}
-                      fill={colorHash.hex(entry.accession)}
-                      height={baseSize * 2}
-                      className={style.secondary}
-                    />
-                    <text y="-0.2em">
-                      <tspan textAnchor="middle">{fragment.start}</tspan>
-                    </text>
-                    <text
-                      y="-0.2em"
-                      transform={`translate(${fragment.end -
-                        fragment.start} 0)`}
-                    >
-                      <tspan textAnchor="middle">{fragment.end}</tspan>
-                    </text>
-                  </g>
-                )),
-              ),
-          )}
-        </g>
-      </svg>
-    </div>
-  );
-};
-EntriesOnProtein.propTypes = {
-  matches: T.arrayOf(
-    T.shape({
-      protein: T.object.isRequired,
-      entry: T.object.isRequired,
-    }),
-  ).isRequired,
-  options: T.object,
-};
+const webComponents = [];
+
+class EntriesOnProtein extends PureComponent {
+  static propTypes = {
+    matches: T.arrayOf(
+      T.shape({
+        protein: T.object.isRequired,
+        entry: T.object.isRequired,
+      }),
+    ).isRequired,
+    options: T.object,
+  };
+  constructor(props) {
+    super(props);
+    this.web_tracks = {};
+  }
+
+  componentWillMount() {
+    if (webComponents.length) return;
+    webComponents.push(
+      loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
+    );
+
+    webComponents.push(
+      loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
+    );
+    webComponents.push(
+      loadWebComponent(() => ProtVistaInterProTrack).as(
+        'protvista-interpro-track',
+      ),
+    );
+  }
+
+  async componentDidMount() {
+    await Promise.all(webComponents);
+    const { matches } = this.props;
+    const p = matches[0].protein;
+    this.web_protein.data = p.sequence || ' '.repeat(p.length);
+    this.updateTracksWithData(matches);
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.matches) {
+      this.updateTracksWithData(this.props.matches);
+    }
+  }
+  updateTracksWithData(data) {
+    const firstMatch = data[0];
+    let locations = [];
+    if (firstMatch.entry && firstMatch.entry.entry_protein_locations)
+      locations = firstMatch.entry.entry_protein_locations;
+    else if (firstMatch.protein && firstMatch.protein.entry_protein_locations)
+      locations = firstMatch.protein.entry_protein_locations;
+    const d = data[0].entry;
+    const tmp = locations.map(loc => ({
+      accession: d.accession,
+      name: d.name,
+      source_database: d.source_database,
+      locations: [loc],
+      color: getTrackColor(d, EntryColorMode.ACCESSION),
+      entry_type: d.entry_type,
+      type: 'entry',
+    }));
+
+    this.web_tracks[d.accession].data = tmp;
+  }
+
+  render() {
+    const { matches } = this.props;
+    const protein = matches[0].protein;
+    const entry = matches[0].entry;
+    return (
+      <div className={f('track-in-table')}>
+        <SchemaOrgData data={matches[0]} processData={schemaProcessData} />
+        <protvista-manager
+          attributes="length displaystart displayend highlightstart highlightend"
+          id="pv-manager"
+        >
+          <div className={f('track-container')}>
+            <div className={f('aligned-to-track-component')}>
+              <protvista-sequence
+                ref={e => (this.web_protein = e)}
+                length={protein.length}
+                displaystart="1"
+                displayend={protein.length}
+              />
+            </div>
+          </div>
+          <div className={f('track-component')}>
+            <protvista-interpro-track
+              length={protein.length}
+              displaystart="1"
+              displayend={protein.length}
+              id={`track_${entry.accession}`}
+              ref={e => (this.web_tracks[entry.accession] = e)}
+              shape="roundRectangle"
+              expanded
+            />
+          </div>
+        </protvista-manager>
+      </div>
+    );
+  }
+}
 
 export default EntriesOnProtein;
