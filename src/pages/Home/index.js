@@ -452,9 +452,6 @@ class Home extends PureComponent {
                   <InterProGraphicAnim />
                 </Tooltip>
               </div>
-              {
-                //test
-              }
               <h3>Classification of protein families</h3>
               <Description textBlocks={[description]} />
             </div>
