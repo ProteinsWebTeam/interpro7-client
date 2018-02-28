@@ -11,7 +11,7 @@
     "test:flow": "flow focus-check --merge-timeout=1000 .",
     "test:lint": "esw --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
     "test:unit": "jest --notify src",
-    "test:functional": "jest --notify tests",
+    "test:functional": "[[ -z $IS_EBI_CLUSTER ]] && { jest --notify tests; return &? } || echo 'skipped functionnal test on EBI cluster'",
     "report": "npm-run-all -s --continue-on-error clean:report report:**",
     "report:build": "node scripts/report-build-info.js",
     "report:coverage:flow": "flow-coverage-report",
