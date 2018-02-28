@@ -25,7 +25,7 @@
     "flow-typed:install": "npx flow-typed install",
     "lint:fix": "npm run test:lint -- --fix",
     "clean": "rimraf dist",
-    "clean:report": "rimraf reports",
+    "clean:report": "rimraf reports && mkdirp reports",
     "bundle": "webpack --progress",
     "postbundle": "npm run test:functional",
     "precommit": "lint-staged",
