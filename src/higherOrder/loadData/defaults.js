@@ -3,6 +3,17 @@ import { format } from 'url';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+export const getUrlForMeta = createSelector(
+  state => state.settings.api,
+  ({ protocol, hostname, port, root }) =>
+    format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}`,
+    }),
+);
+
 export const getUrl = createSelector(
   // this one is just to memoize it
   key => key,
