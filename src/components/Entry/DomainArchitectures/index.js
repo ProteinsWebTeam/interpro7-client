@@ -18,6 +18,24 @@ import pageStyle from './style.css';
 
 const f = foundationPartial(pageStyle, protvista);
 import { getTrackColor, EntryColorMode } from 'utils/entryColor';
+import loadable from 'higherOrder/loadable';
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
+const schemaProcessData = data => ({
+  '@id': '@isContainedIn',
+  '@type': [
+    'DomainArchitecture',
+    'StructuredValue',
+    'BioChemEntity',
+    'CreativeWork',
+  ],
+  identifier: data.IDA_FK,
+  name: data.IDA,
+});
 
 const groupDomains = domains => {
   const groups = {};
@@ -62,8 +80,7 @@ class IDAProtVista extends ProtVistaMatches {
     matches: T.object.isRequired,
   };
   updateTracksWithData(props) {
-    const { length, matches } = props;
-    if (!this.web_protein.data) this.web_protein.data = ' '.repeat(length);
+    const { matches } = props;
 
     for (const domain of matches) {
       const tmp = [
@@ -86,54 +103,38 @@ class IDAProtVista extends ProtVistaMatches {
   render() {
     const { matches, length } = this.props;
     return (
-      <div className={f('track-in-table')}>
-        <protvista-manager
-          attributes="length displaystart displayend highlightstart highlightend"
-          id="pv-manager"
-        >
-          <div className={f('track-container')}>
-            <div className={f('aligned-to-track-component')}>
-              <protvista-sequence
-                ref={e => (this.web_protein = e)}
+      <div>
+        {matches.map(d => (
+          <div key={d.accessions[0]} className={f('track-row')}>
+            <div className={f('track-component')}>
+              <protvista-interpro-track
                 length={length}
                 displaystart="1"
                 displayend={length}
+                id={`track_${d.accessions[0]}`}
+                ref={e => (this.web_tracks[d.accessions[0]] = e)}
+                shape="roundRectangle"
+                expanded
               />
             </div>
-          </div>
-          {matches.map(d => (
-            <div key={d.accessions[0]} className={f('track-row')}>
-              <div className={f('track-component')}>
-                <protvista-interpro-track
-                  length={length}
-                  displaystart="1"
-                  displayend={length}
-                  id={`track_${d.accessions[0]}`}
-                  ref={e => (this.web_tracks[d.accessions[0]] = e)}
-                  shape="roundRectangle"
-                  expanded
-                />
-              </div>
-              <div className={f('track-accession')}>
-                {d.accessions.map(acc => (
-                  <Fragment key={acc}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro', accession: acc },
-                        },
-                      }}
-                    >
-                      {acc}
-                    </Link>{' '}
-                    -
-                  </Fragment>
-                ))}
-              </div>
+            <div className={f('track-accession')}>
+              {d.accessions.map(acc => (
+                <Fragment key={acc}>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: { db: 'InterPro', accession: acc },
+                      },
+                    }}
+                  >
+                    {acc}
+                  </Link>{' '}
+                </Fragment>
+              ))}
             </div>
-          ))}
-        </protvista-manager>
+          </div>
+        ))}
       </div>
     );
   }
@@ -155,6 +156,7 @@ class DomainArchitectures extends PureComponent {
             const idaObj = ida2json(obj.IDA);
             return (
               <div key={obj.IDA_FK} className={f('margin-bottom-large')}>
+                <SchemaOrgData data={obj} processData={schemaProcessData} />
                 <Link
                   to={{
                     description: {

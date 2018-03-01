@@ -20,6 +20,7 @@ import Table, {
 } from 'components/Table';
 
 import loadData from 'higherOrder/loadData';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import loadWebComponent from 'utils/loadWebComponent';
 import loadable from 'higherOrder/loadable';
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
@@ -36,6 +37,8 @@ import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
+
+import toPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(pageStyle, styles);
 
@@ -474,20 +477,30 @@ const mapTypeToOntology = new Map([
   ['PTM', 'PTMAnnotation'],
 ]);
 
-const schemaProcessData = data => ({
-  '@type': 'DataRecord',
-  '@id': '@mainEntityOfPage',
-  identifier: data.metadata.accession,
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': 'InterPro release ??',
-  },
-  mainEntity: '@mainEntity',
-  isBasedOn: '@isBasedOn',
-  isBasisFor: '@isBasisFor',
-  citation: '@citation',
-  seeAlso: '@seeAlso',
-});
+const schemaProcessData = ({ data, base }) => {
+  const dbInfo = base.databases[data.metadata.source_database];
+  return {
+    '@type': 'DataRecord',
+    '@id': '@mainEntityOfPage',
+    identifier: data.metadata.accession,
+    isPartOf: {
+      '@type': 'Dataset',
+      '@id':
+        config.root.website.protocol +
+        config.root.website.href +
+        toPath({
+          main: { key: 'entry' },
+          entry: { db: data.metadata.source_database },
+        }),
+      name: `${dbInfo.name} ${dbInfo.version}`,
+    },
+    mainEntity: '@mainEntity',
+    isBasedOn: '@isBasedOn',
+    isBasisFor: '@isBasisFor',
+    citation: '@citation',
+    seeAlso: '@seeAlso',
+  };
+};
 
 const schemaProcessData2 = data => ({
   '@type': [
@@ -514,14 +527,18 @@ class Entry extends PureComponent {
   };
 
   render() {
+    const dataSchema = {
+      data: this.props.data.payload,
+      base: this.props.dataBase.payload,
+    };
     return (
       <div>
         {this.props.data.payload &&
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (
             <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData}
+              data={dataSchema}
+              processData={(() => schemaProcessData)()}
             />
           )}
         {this.props.data.payload &&
@@ -545,8 +562,10 @@ class Entry extends PureComponent {
   }
 }
 
-export default loadData((...args) =>
-  getUrlForApi(...args)
-    .replace('/logo', '/')
-    .replace('domain_architecture', ''),
-)(Entry);
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  loadData((...args) =>
+    getUrlForApi(...args)
+      .replace('/logo', '/')
+      .replace('domain_architecture', ''),
+  )(Entry),
+);
