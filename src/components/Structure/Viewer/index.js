@@ -8,9 +8,9 @@ import { foundationPartial } from 'styles/foundation';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 //import lmStyles from 'litemol/dist/css/LiteMol-plugin-blue.css';
 import lmStyles from 'litemol/dist/css/LiteMol-plugin-light.css';
+import local from './style.css';
 
-const embedStyle = { width: '100%', height: '50vh' };
-const f = foundationPartial(ebiStyles);
+const f = foundationPartial(ebiStyles, local);
 
 /*:: type Props = {
   id: string|number,
@@ -23,19 +23,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   render() {
     return (
-      <div style={embedStyle}>
-        <div
-          id="litemol"
-          style={{
-            background: 'white',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-          }}
-        />
+      <div className={f('structure-wrapper')}>
+        <div id="litemol" className={f('structure-viewer')} />
       </div>
     );
   }
