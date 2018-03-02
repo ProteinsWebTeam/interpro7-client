@@ -46,7 +46,8 @@ table.light tbody tr td {
 }
 
 table.light tbody a,
-.table.light tbody a:visited {
+.table.light tbody a:visited,
+.table.light tbody a:focus {
   color: #4b555b;
 }
 
