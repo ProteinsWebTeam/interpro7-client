@@ -1,0 +1,8 @@
+.structure-wrapper {
+  height: 50vh;
+  width: 100%;
+}
+.structure-viewer {
+  height: 100%;
+  position: relative;
+}
