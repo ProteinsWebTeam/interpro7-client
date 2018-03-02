@@ -54,4 +54,8 @@
   --colors-other-sub: #92c7ea;
   --colors-md-main: #b9d7ef;
   --colors-md-sub: #4e7287;
+  /*GO*/
+  --colors-go-bp: #b0dce4; /*light #c2e6ec;*/
+  --colors-go-mf: #cae9b1; /*light #e5f5d7;*/
+  --colors-go-cc: #f1c6b5; /*light #fbdcd0;*/
 }
