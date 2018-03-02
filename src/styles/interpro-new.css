@@ -686,6 +686,63 @@ h6 small {
 }
 /*/back to top button*/
 
+/*Customise LiteMole - Structure page*/
+.lm-plugin .lm-btn-link span.lm-icon {
+  font-size: 120%;
+}
+/*update color icons LiteMole*/
+.lm-plugin .lm-viewport-controls-buttons button.lm-btn-link {
+  color: #71818a;
+}
+.lm-plugin .lm-viewport-controls-buttons button.lm-btn-link-toggle-off {
+  color: #71818a;
+}
+.lm-plugin .lm-viewport-controls-buttons button.lm-btn-link:hover {
+  color: #646e74;
+}
+/*update color info window that appear on mouse over*/
+.lm-plugin div.lm-highlight-info {
+  color: #4b555b;
+  background: #ccc; /*not transparent otherwise can't be read properly*/
+  z-index: 2; /*reduce Z-index to stay below sticky banner*/
+}
+/*replace icons LiteMole by EBI icons*/
+.lm-plugin span.lm-icon-expand-layout:before {
+  font-family: EBI-Functional;
+  content: 'F';
+} /*to be consistent*/
+.lm-plugin span.lm-icon-settings:before {
+  font-family: EBI-Functional;
+  content: 's';
+}
+.lm-plugin span.lm-icon-screenshot:before {
+  font-family: EBI-Generic;
+  content: '!';
+}
+.lm-plugin span.lm-icon-help-circle:before {
+  font-family: EBI-Generic;
+  content: '?';
+}
+.lm-plugin span.lm-icon-reset-scene:before {
+  font-family: EBI-Functional;
+  content: 'R';
+}
+/*change color font in control panel*/
+.lm-plugin
+  .lm-entity-tree-entry-current-path
+  button.lm-entity-tree-entry-label {
+  color: #4b555b;
+}
+.lm-plugin .lm-entity-tree-entry-current button.lm-entity-tree-entry-label {
+  color: #4b555b;
+}
+/*z-index so element in the panel goes on top of footer*/
+.lm-plugin .lm-layout-standard-outside .lm-layout-left,
+.lm-plugin .lm-layout-standard-outside .lm-layout-right {
+  z-index: 2;
+}
+/*END customise LiteMole*/
+
 /*RESPONSIVE DESIGN*/
 
 /* Medium only */
