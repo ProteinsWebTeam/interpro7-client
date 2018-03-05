@@ -62,9 +62,9 @@ const schemaProcessDataTableRow = ({ data, location }) => ({
 });
 
 const GO_COLORS = new Map([
-  ['P', '#c2e6ec'],
-  ['F', '#e5f5d7'],
-  ['C', '#fbdcd0'],
+  ['P', '#d1eaef'],
+  ['F', '#e0f2d1'],
+  ['C', '#f5ddd3'],
 ]);
 
 class List extends PureComponent {
