@@ -257,7 +257,7 @@ class List extends PureComponent {
                       Object.entries(entries).map(([accession, id]) => (
                         <Tooltip
                           key={accession}
-                          title={`${id} (${db})`}
+                          title={`${accession} (${db})`}
                           className={f('signature')}
                         >
                           <Link
@@ -276,7 +276,7 @@ class List extends PureComponent {
                   </div>
                 )}
               >
-                Member DB
+                Member Database
               </Column>
             ) : (
               <Column
@@ -321,14 +321,18 @@ class List extends PureComponent {
                         return 0;
                       })
                       .map(go => (
-                        <span key={go.identifier} className={f('go')}>
-                          <span
-                            className={f('go-circle')}
-                            style={{
-                              background:
-                                GO_COLORS.get(go.category.code) || '#ddd',
-                            }}
-                          />
+                        <span key={go.identifier} className={f('go-list')}>
+                          <Tooltip
+                            title={`${go.category.name.replace('_', ' ')} term`}
+                          >
+                            <span
+                              className={f('go-circle')}
+                              style={{
+                                background:
+                                  GO_COLORS.get(go.category.code) || '#ddd',
+                              }}
+                            />
+                          </Tooltip>
                           <Tooltip title={`${go.name} (${go.identifier})`}>
                             <GoLink id={go.identifier} className={f('ext')}>
                               {go.name ? go.name : 'None'}
