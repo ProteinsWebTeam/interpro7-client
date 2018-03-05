@@ -13,24 +13,24 @@ const f = foundationPartial(protvista);
 
 import { getTrackColor, EntryColorMode } from 'utils/entryColor';
 
-const SchemaOrgData = loadable({
-  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  loading: () => null,
-});
-
-const schemaProcessData = data => ({
-  '@id': '@isContainedIn',
-  '@type': ['Protein', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  identifier: data.protein.accession,
-  name: data.protein.name,
-  location: (
-    data.protein.entry_protein_locations || data.entry.entry_protein_locations
-  ).map(loc => ({
-    '@type': 'PropertyValue',
-    minValue: loc.fragments[0].start,
-    maxValue: loc.fragments[0].end,
-  })),
-});
+// const SchemaOrgData = loadable({
+//   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+//   loading: () => null,
+// });
+//
+// const schemaProcessData = data => ({
+//   '@id': '@isContainedIn',
+//   '@type': ['Protein', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
+//   identifier: data.protein.accession,
+//   name: data.protein.name,
+//   location: (
+//     data.protein.entry_protein_locations || data.entry.entry_protein_locations
+//   ).map(loc => ({
+//     '@type': 'PropertyValue',
+//     minValue: loc.fragments[0].start,
+//     maxValue: loc.fragments[0].end,
+//   })),
+// });
 
 class EntriesOnProtein extends ProtVistaMatches {
   static propTypes = {
@@ -78,7 +78,7 @@ class EntriesOnProtein extends ProtVistaMatches {
     const entry = matches[0].entry;
     return (
       <div className={f('track-in-table')}>
-        <SchemaOrgData data={matches[0]} processData={schemaProcessData} />
+        {/*<SchemaOrgData data={matches[0]} processData={schemaProcessData} />*/}
         <protvista-manager
           attributes="length displaystart displayend highlightstart highlightend"
           id="pv-manager"

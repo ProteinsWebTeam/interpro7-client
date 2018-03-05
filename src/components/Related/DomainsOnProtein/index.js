@@ -117,7 +117,6 @@ const groupResidues = residues => {
       })),
     },
   ];
-  console.log(residues, resTypes, output);
   return output;
 };
 const mergeData = (interpro, integrated, unintegrated, residues) => {

@@ -18,8 +18,61 @@ import { foundationPartial } from 'styles/foundation';
 
 import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import loadable from 'higherOrder/loadable';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import config from '../../config';
 
 const f = foundationPartial(fonts, localStyle);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+const schemamap = {
+  entry: {
+    protein: ['@isContainedIn', 'Protein'],
+    organism: ['@isContainedIn', 'Organism'],
+    structure: ['@isContainedIn', 'Structure'],
+    set: ['@isContainedIn', 'Set'],
+  },
+  protein: {
+    entry: ['@contains', 'Entry'],
+    structure: ['@additionalProperty', 'Structure'],
+  },
+  structure: {
+    entry: ['@additionalProperty', 'Entry'],
+    protein: ['@isContainedIn', 'Protein'],
+    organism: ['@isContainedIn', 'Organism'],
+  },
+  organism: {
+    entry: ['@contains', 'Entry'],
+    protein: ['@contains', 'Protein'],
+    structure: ['@contains', 'Structure'],
+    proteome: ['@contains', 'Proteome'],
+  },
+  set: {
+    entry: ['@additionalProperty', 'Entry'],
+    protein: ['@additionalProperty', 'Protein'],
+    structure: ['@additionalProperty', 'Structure'],
+    organism: ['@additionalProperty', 'Organism'],
+  },
+};
+const schemaProcessData = ({ data, primary, secondary }) => {
+  const [id, type] = schemamap[secondary][primary];
+  return {
+    '@id': id,
+    '@type': [type, 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
+    identifier: data.accession,
+    name: data.name,
+    url:
+      config.root.website.protocol +
+      config.root.website.href +
+      descriptionToPath({
+        main: { key: primary },
+        [primary]: { db: data.source_database, accession: data.accession },
+      }),
+  };
+};
 
 const propTypes = {
   matches: T.arrayOf(T.object).isRequired,
@@ -111,39 +164,43 @@ const Matches = (
     <SearchBox search={search.search}>Search</SearchBox>
     <Column
       dataKey="accession"
-      renderer={(
-        acc /*: string */,
-        { source_database: sourceDatabase } /*: {source_database: string} */,
-      ) => (
-        // let reviewed =null;
-        // if (primary === 'protein' && sourceDatabase === 'reviewed')
-        //   reviewed = (
-        //
-        //   )
-        <Fragment>
-          <Link
-            to={{
-              description: {
-                main: { key: primary },
-                [primary]: { db: sourceDatabase, accession: acc },
-              },
-            }}
-          >
-            <span className={f('acc-row')}>
-              <HighlightedText text={acc} textToHighlight={search.search} />
-            </span>
-          </Link>{' '}
-          {primary === 'protein' && sourceDatabase === 'reviewed' ? (
-            <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-              <span
-                className={f('icon', 'icon-functional')}
-                data-icon="/"
-                aria-label="reviewed"
-              />
-            </Tooltip>
-          ) : null}
-        </Fragment>
-      )}
+      renderer={(acc /*: string */, obj /*: {source_database: string} */) => {
+        const { source_database: sourceDatabase } = obj;
+        return (
+          // let reviewed =null;
+          // if (primary === 'protein' && sourceDatabase === 'reviewed')
+          //   reviewed = (
+          //
+          //   )
+          <Fragment>
+            <SchemaOrgData
+              data={{ data: obj, primary, secondary }}
+              processData={schemaProcessData}
+            />
+            <Link
+              to={{
+                description: {
+                  main: { key: primary },
+                  [primary]: { db: sourceDatabase, accession: acc },
+                },
+              }}
+            >
+              <span className={f('acc-row')}>
+                <HighlightedText text={acc} textToHighlight={search.search} />
+              </span>
+            </Link>{' '}
+            {primary === 'protein' && sourceDatabase === 'reviewed' ? (
+              <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                <span
+                  className={f('icon', 'icon-functional')}
+                  data-icon="/"
+                  aria-label="reviewed"
+                />
+              </Tooltip>
+            ) : null}
+          </Fragment>
+        );
+      }}
     >
       {primary === 'organism' ? 'Tax Id' : 'Accession'}
     </Column>

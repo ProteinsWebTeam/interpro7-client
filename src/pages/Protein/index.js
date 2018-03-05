@@ -300,6 +300,7 @@ const schemaProcessData2 = data => ({
   name: data.metadata.name.name || data.metadata.accession,
   alternateName: data.metadata.name.long || null,
   additionalProperty: '@additionalProperty',
+  contains: '@contains',
 });
 
 class Summary extends PureComponent {

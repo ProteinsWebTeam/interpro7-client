@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -450,18 +450,18 @@ for (const subPage of config.pages.organism.subPages) {
   });
 }
 
-const _Title = ({ data: { loading, payload } }) =>
-  loading ? (
-    <Loading />
-  ) : (
-    <Title metadata={payload.metadata} mainType="organism" />
-  );
-_Title.propTypes = {
-  data: T.shape({
-    loading: T.bool,
-    payload: T.object,
-  }).isRequired,
-};
+// const _Title = ({ data: { loading, payload } }) =>
+//   loading ? (
+//     <Loading />
+//   ) : (
+//     <Title metadata={payload.metadata} mainType="organism" />
+//   );
+// _Title.propTypes = {
+//   data: T.shape({
+//     loading: T.bool,
+//     payload: T.object,
+//   }).isRequired,
+// };
 
 const mapStateToAccessionUrl = createSelector(
   state => state.settings.api,
@@ -486,48 +486,108 @@ const mapStateToAccessionUrl = createSelector(
     }),
 );
 
-const LoadedTitle = loadData(mapStateToAccessionUrl)(_Title);
+// const LoadedTitle = loadData(mapStateToAccessionUrl)(_Title);
 
-class Summary extends PureComponent {
+const schemaProcessData = data => ({
+  '@id': '@mainEntityOfPage',
+  '@type': 'DataRecord',
+  identifier: data.metadata.accession,
+  isPartOf: {
+    '@type': 'Dataset',
+    '@id': data.metadata.source_database,
+  },
+  mainEntity: '@mainEntity',
+  seeAlso: '@seeAlso',
+});
+
+const schemaProcessData2 = data => ({
+  '@type': ['Organism', 'BioChemEntity', 'CreativeWork'],
+  '@id': '@mainEntity',
+  identifier: data.metadata.accession,
+  name: data.metadata.name.name || data.metadata.accession,
+  alternateName: data.metadata.name.long || null,
+  inDataset: data.metadata.source_database,
+  biologicalType:
+    data.metadata.source_database === 'taxonomy' ? 'taxon' : 'proteome',
+  citation: '@citation',
+  isBasedOn: '@isBasedOn',
+  isBasisFor: '@isBasisFor',
+  additionalProperty: '@additionalProperty',
+  contains: '@contains',
+});
+
+class _Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
+      loading: T.bool.isRequired,
+    }).isRequired,
+    dataOrganism: T.shape({
       loading: T.bool.isRequired,
     }).isRequired,
     customLocation: T.object.isRequired,
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const {
+      data: { loading, payload },
+      dataOrganism: { loading: loadingOrg, payload: payloadOrg },
+    } = this.props;
     if (loading || !payload) {
       return <Loading />;
     }
     return (
-      <ErrorBoundary>
-        <div className={f('row')}>
-          <div className={f('medium-12', 'large-12', 'columns')}>
-            <LoadedTitle />
-            <EntryMenu metadata={payload.metadata} />
+      <Fragment>
+        {payloadOrg &&
+          payloadOrg.metadata &&
+          payloadOrg.metadata.accession && (
+            <Fragment>
+              <SchemaOrgData
+                data={payloadOrg}
+                processData={schemaProcessData}
+              />
+              <SchemaOrgData
+                data={payloadOrg}
+                processData={schemaProcessData2}
+              />
+            </Fragment>
+          )}
+
+        <ErrorBoundary>
+          <div className={f('row')}>
+            <div className={f('medium-12', 'large-12', 'columns')}>
+              {/*<LoadedTitle />*/}
+              {loadingOrg ? (
+                <Loading />
+              ) : (
+                <Title metadata={payloadOrg.metadata} mainType="organism" />
+              )}
+              <EntryMenu metadata={payload.metadata} />
+            </div>
           </div>
-        </div>
-        <Switch
-          {...this.props}
-          locationSelector={l => {
-            const { key } = l.description.main;
-            return (
-              l.description[key].detail ||
-              (Object.entries(l.description).find(
-                ([_key, value]) => value.isFilter,
-              ) || [])[0] ||
-              (l.description[key].accession && l.description[key].proteomeDB)
-            );
-          }}
-          indexRoute={SummaryComponent}
-          childRoutes={subPagesForOrganism}
-        />
-      </ErrorBoundary>
+          <Switch
+            {...this.props}
+            locationSelector={l => {
+              const { key } = l.description.main;
+              return (
+                l.description[key].detail ||
+                (Object.entries(l.description).find(
+                  ([_key, value]) => value.isFilter,
+                ) || [])[0] ||
+                (l.description[key].accession && l.description[key].proteomeDB)
+              );
+            }}
+            indexRoute={SummaryComponent}
+            childRoutes={subPagesForOrganism}
+          />
+        </ErrorBoundary>
+      </Fragment>
     );
   }
 }
+const Summary = loadData({
+  getUrl: mapStateToAccessionUrl,
+  propNamespace: 'Organism',
+})(loadData()(_Summary));
 
 const acc = /(UP\d{9})|(\d+)|(all)/i;
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
@@ -556,49 +616,24 @@ class InnerSwitch extends PureComponent {
   }
 }
 
-const schemaProcessData = data => ({
-  '@type': ['Organism', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  inDataset: data.metadata.source_database,
-  biologicalType:
-    data.metadata.source_database === 'taxonomy' ? 'taxon' : 'proteome',
-  citation: '@citation',
-  isBasedOn: '@isBasedOn',
-  isBasisFor: '@isBasisFor',
-});
-
 class Organism extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,
   };
 
   render() {
-    const { data } = this.props;
     return (
-      <div>
-        {data.payload &&
-          data.payload.metadata &&
-          data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={data.payload}
-              processData={schemaProcessData}
-            />
-          )}
-        <ErrorBoundary>
-          <Switch
-            {...this.props}
-            locationSelector={l =>
-              l.description[l.description.main.key].db ||
-              l.description[l.description.main.key].proteomeDB
-            }
-            indexRoute={Overview}
-            catchAll={InnerSwitch}
-          />
-        </ErrorBoundary>
-      </div>
+      <ErrorBoundary>
+        <Switch
+          {...this.props}
+          locationSelector={l =>
+            l.description[l.description.main.key].db ||
+            l.description[l.description.main.key].proteomeDB
+          }
+          indexRoute={Overview}
+          catchAll={InnerSwitch}
+        />
+      </ErrorBoundary>
     );
   }
 }
