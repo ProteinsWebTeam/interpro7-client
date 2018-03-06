@@ -32,10 +32,40 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
 const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
 
 // const SVG_WIDTH = 100;
 // const colorHash = new ColorHash();
+
+const schemaProcessDataTable = ({ db, location }) => ({
+  '@type': 'Dataset',
+  '@id': '@mainEntityOfPage',
+  identifier: db,
+  name: db,
+  version: '?',
+  url: location.href,
+  hasPart: '@hasPart',
+  includedInDataCatalog: {
+    '@type': 'DataCatalog',
+    '@id': config.root.website.protocol + config.root.website.href,
+  },
+});
+
+const schemaProcessDataTableRow = ({ data }) => ({
+  '@type': 'DataRecord',
+  '@id': '@hasPart',
+  identifier: data.accession,
+  name: data.db,
+  url:
+    config.root.website.protocol +
+    config.root.website.href +
+    descriptionToPath({
+      main: { key: 'protein' },
+      protein: { db: 'uniprot', accession: data.accession },
+    }),
+});
 
 const propTypes = {
   data: T.shape({
@@ -92,7 +122,7 @@ class List extends PureComponent {
     const {
       data: { payload, loading, ok, url, status },
       isStale,
-      customLocation: { search },
+      customLocation: { description: { entry: { db } }, search },
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
@@ -110,6 +140,10 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />
           <hr />
+          <SchemaOrgData
+            data={{ db, location: window.location }}
+            processData={schemaProcessDataTable}
+          />
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -145,8 +179,12 @@ class List extends PureComponent {
             <SearchBox search={search.search}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */, { source_database: db }) => (
+              renderer={(accession /*: string */, data) => (
                 <Fragment>
+                  <SchemaOrgData
+                    data={{ data, location: window.location }}
+                    processData={schemaProcessDataTableRow}
+                  />
                   <Link
                     to={customLocation => ({
                       ...customLocation,
@@ -166,7 +204,7 @@ class List extends PureComponent {
                       textToHighlight={search.search}
                     />
                   </Link>
-                  {db === 'reviewed' ? (
+                  {data.source_database === 'reviewed' ? (
                     <Fragment>
                       {'\u00A0' /* non-breakable space */}
                       <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
