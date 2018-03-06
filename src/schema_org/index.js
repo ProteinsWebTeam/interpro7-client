@@ -133,7 +133,7 @@ export class Manager {
     }
   }
 }
-const shallow_equals = (obj1, obj2) =>
+const shallowEquals = (obj1, obj2) =>
   Object.keys(obj1).every(key => obj1[key] === obj2[key]);
 
 export default class SchemaOrgData extends PureComponent {
@@ -153,7 +153,7 @@ export default class SchemaOrgData extends PureComponent {
     manager.subscribe({ subscriber: this, data, processData });
   }
   componentWillReceiveProps({ data, processData }) {
-    if (!shallow_equals(data.data, this.props.data.data)) {
+    if (!shallowEquals(data.data, this.props.data.data)) {
       manager.unsubscribe(this);
       manager.subscribe({ subscriber: this, data, processData });
     }

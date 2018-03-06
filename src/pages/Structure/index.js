@@ -20,6 +20,11 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import {
+  schemaProcessDataTable,
+  schemaProcessDataTableRow,
+} from 'schema_org/processors';
+
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 import subPages from 'subPages';
@@ -29,6 +34,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 const f = foundationPartial(pageStyle, styles);
 
 const SummaryAsync = loadable({
@@ -80,11 +86,13 @@ Overview.propTypes = propTypes;
 const List = ({
   data: { payload, loading, ok, url, status },
   isStale,
-  customLocation: { search },
+  customLocation: { description: { structure: { db } }, search },
+  dataBase,
 }) => {
   let _payload = payload;
   const HTTP_OK = 200;
   const notFound = !loading && status !== HTTP_OK;
+  const databases = dataBase && dataBase.payload && dataBase.payload.databases;
   if (loading || notFound) {
     _payload = {
       results: [],
@@ -97,6 +105,17 @@ const List = ({
 
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
         <StructureListFilters /> <hr />
+        {databases &&
+          db &&
+          databases[db.toUpperCase()] && (
+            <SchemaOrgData
+              data={{
+                data: { db: databases[db.toUpperCase()] },
+                location: window.location,
+              }}
+              processData={schemaProcessDataTable}
+            />
+          )}
         <Table
           dataTable={_payload.results}
           loading={loading}
@@ -134,7 +153,7 @@ const List = ({
             dataKey="accession"
             headerClassName={f('table-center')}
             cellClassName={f('table-center')}
-            renderer={(accession /*: string */) => (
+            renderer={(accession /*: string */, row) => (
               <Link
                 to={customLocation => ({
                   ...customLocation,
@@ -148,6 +167,13 @@ const List = ({
                   search: {},
                 })}
               >
+                <SchemaOrgData
+                  data={{
+                    data: { row, endpoint: 'structure' },
+                    location: window.location,
+                  }}
+                  processData={schemaProcessDataTableRow}
+                />
                 <HighlightedText
                   text={accession}
                   textToHighlight={search.search}
@@ -363,8 +389,6 @@ class Structure extends PureComponent {
   }
 }
 
-export default loadData()(Structure);
-// loadData will create an component that wraps Structure.
-// Such component will request content and it will put it in the state and make
-// it available for its children. Because there are not parameters when invoking
-// the method,the data is requested from the api based on the current URL
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  loadData()(Structure),
+);
