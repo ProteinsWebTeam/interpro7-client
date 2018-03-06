@@ -201,19 +201,7 @@ class List extends PureComponent {
                 dataKey="source_database"
                 headerClassName={f('table-center')}
                 cellClassName={f('table-center')}
-                renderer={(db /*: string */) => (
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: { db },
-                      },
-                      search: {},
-                    }}
-                  >
-                    <MemberSymbol type={db} />
-                  </Link>
-                )}
+                renderer={(db /*: string */) => <MemberSymbol type={db} />}
               >
                 DB
               </Column>
