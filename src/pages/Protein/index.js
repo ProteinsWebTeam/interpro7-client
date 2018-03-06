@@ -16,7 +16,7 @@ import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
+import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
@@ -32,40 +32,12 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
-
 const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
 
-// const SVG_WIDTH = 100;
-// const colorHash = new ColorHash();
-
-const schemaProcessDataTable = ({ db, location }) => ({
-  '@type': 'Dataset',
-  '@id': '@mainEntityOfPage',
-  identifier: db,
-  name: db,
-  version: '?',
-  url: location.href,
-  hasPart: '@hasPart',
-  includedInDataCatalog: {
-    '@type': 'DataCatalog',
-    '@id': config.root.website.protocol + config.root.website.href,
-  },
-});
-
-const schemaProcessDataTableRow = ({ data }) => ({
-  '@type': 'DataRecord',
-  '@id': '@hasPart',
-  identifier: data.accession,
-  name: data.db,
-  url:
-    config.root.website.protocol +
-    config.root.website.href +
-    descriptionToPath({
-      main: { key: 'protein' },
-      protein: { db: 'uniprot', accession: data.accession },
-    }),
-});
+import {
+  schemaProcessDataTable,
+  schemaProcessDataTableRow,
+} from 'schema_org/processors';
 
 const propTypes = {
   data: T.shape({
@@ -78,6 +50,10 @@ const propTypes = {
     description: T.object.isRequired,
   }).isRequired,
   match: T.string,
+  dataBase: T.shape({
+    payload: T.object,
+    loading: T.bool.isRequired,
+  }).isRequired,
 };
 
 const defaultPayload = {
@@ -122,11 +98,14 @@ class List extends PureComponent {
     const {
       data: { payload, loading, ok, url, status },
       isStale,
-      customLocation: { description: { entry: { db } }, search },
+      customLocation: { description: { protein: { db } }, search },
+      dataBase,
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
     const notFound = !loading && status !== HTTP_OK;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     if (loading || notFound) {
       _payload = {
         results: [],
@@ -140,10 +119,17 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />
           <hr />
-          <SchemaOrgData
-            data={{ db, location: window.location }}
-            processData={schemaProcessDataTable}
-          />
+          {databases &&
+            db &&
+            databases[db.toUpperCase()] && (
+              <SchemaOrgData
+                data={{
+                  data: { db: databases[db.toUpperCase()] },
+                  location: window.location,
+                }}
+                processData={schemaProcessDataTable}
+              />
+            )}
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -179,10 +165,13 @@ class List extends PureComponent {
             <SearchBox search={search.search}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */, data) => (
+              renderer={(accession /*: string */, row) => (
                 <Fragment>
                   <SchemaOrgData
-                    data={{ data, location: window.location }}
+                    data={{
+                      data: { row, endpoint: 'protein' },
+                      location: window.location,
+                    }}
                     processData={schemaProcessDataTableRow}
                   />
                   <Link
@@ -204,7 +193,7 @@ class List extends PureComponent {
                       textToHighlight={search.search}
                     />
                   </Link>
-                  {data.source_database === 'reviewed' ? (
+                  {row.source_database === 'reviewed' ? (
                     <Fragment>
                       {'\u00A0' /* non-breakable space */}
                       <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
@@ -438,8 +427,10 @@ const Protein = props => (
   </div>
 );
 
-export default loadData((...args) =>
-  getUrlForApi(...args)
-    .replace('domain_architecture', 'entry')
-    .replace('sequence', ''),
-)(Protein);
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  loadData((...args) =>
+    getUrlForApi(...args)
+      .replace('domain_architecture', 'entry')
+      .replace('sequence', ''),
+  )(Protein),
+);
