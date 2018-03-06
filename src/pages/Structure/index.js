@@ -58,6 +58,11 @@ const propTypes = {
     description: T.object.isRequired,
     search: T.object.isRequired,
   }).isRequired,
+  dataBase: T.shape({
+    payload: T.object,
+    loading: T.bool.isRequired,
+    ok: T.bool,
+  }),
 };
 
 const Overview = ({ data: { payload, loading } }) => {

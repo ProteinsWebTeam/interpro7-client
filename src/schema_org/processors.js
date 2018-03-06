@@ -19,12 +19,15 @@ export const schemaProcessDataTableRow = ({ data: { row, endpoint } }) => ({
   '@type': 'DataRecord',
   '@id': '@hasPart',
   identifier: row.accession,
-  name: row.db,
+  name: row.db || row.source_database,
   url:
     config.root.website.protocol +
     config.root.website.href +
     descriptionToPath({
       main: { key: endpoint },
-      [endpoint]: { db: row.db, accession: row.accession },
+      [endpoint]: {
+        db: row.db || row.source_database,
+        accession: row.accession.toString(),
+      },
     }),
 });

@@ -25,6 +25,11 @@ import { NumberComponent } from 'components/NumberLabel';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import {
+  schemaProcessDataTable,
+  schemaProcessDataTableRow,
+} from 'schema_org/processors';
+
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import EntryMenu from 'components/EntryMenu';
@@ -36,6 +41,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 
 const f = foundationPartial(pageStyle, styles);
 
@@ -62,6 +68,11 @@ const propTypes = {
     description: T.object.isRequired,
   }).isRequired,
   match: T.string,
+  dataBase: T.shape({
+    payload: T.object,
+    loading: T.bool.isRequired,
+    ok: T.bool,
+  }),
 };
 
 const defaultPayload = {};
@@ -179,10 +190,13 @@ class List extends PureComponent {
       data: { payload, loading, ok, url, status },
       isStale,
       customLocation: { search },
+      dataBase,
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
     const notFound = !loading && status !== HTTP_OK;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     if (loading || notFound) {
       _payload = {
         results: [],
@@ -196,6 +210,15 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <OrganismListFilters />
           <hr />
+          {databases && (
+            <SchemaOrgData
+              data={{
+                data: { db: databases.UNIPROT },
+                location: window.location,
+              }}
+              processData={schemaProcessDataTable}
+            />
+          )}
           <Table
             dataTable={_payload.results}
             loading={loading}
@@ -232,7 +255,7 @@ class List extends PureComponent {
             <SearchBox search={search.search}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */) => (
+              renderer={(accession /*: string */, row) => (
                 <Link
                   to={customLocation => ({
                     description: {
@@ -250,6 +273,13 @@ class List extends PureComponent {
                     },
                   })}
                 >
+                  <SchemaOrgData
+                    data={{
+                      data: { row, endpoint: 'organism' },
+                      location: window.location,
+                    }}
+                    processData={schemaProcessDataTableRow}
+                  />
                   <HighlightedText
                     text={accession}
                     textToHighlight={search.search}
@@ -638,4 +668,6 @@ class Organism extends PureComponent {
   }
 }
 
-export default loadData()(Organism);
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  loadData()(Organism),
+);
