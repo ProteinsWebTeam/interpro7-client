@@ -69,8 +69,9 @@
 .signature {
   background: #d5eff3;
   border-radius: 4px;
-  padding: 0 6px;
+  padding: 0 4px;
   margin: 2px;
+  flex-basis: 30%; /*3 items by row more or less*/
 }
 
 .go-container {
@@ -136,12 +137,20 @@
     opacity: 0.8;
   }
 }
+/*make the table more consistent  in term of column with fluctuation while navigating*/
+.col-md {
+  width: 26%;
+} /*for 3 signatures a row*/
+.col-go {
+  width: 30%;
+} /*to get most GO terms in single line*/
 
 /* Medium screen only*/
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-  .col-go {
+  /*remove GO terms color legend in table header*/
+  .col-go-head div span {
     display: none;
-  } /*remove GO terms*/
+  }
 }
 
 /* Small screen only */
@@ -149,7 +158,16 @@
   /*table.light th {word-break: break-all;}*/
   /*remove  GO terms and entry type columns*/
   .col-go,
+  .col-md {
+    width: 100%;
+  }
+  .col-go div {
+    margin-left: 0;
+  }
   .col-type {
     display: none;
+  }
+  .col-go div:first-child span {
+    margin-left: 0;
   }
 }
