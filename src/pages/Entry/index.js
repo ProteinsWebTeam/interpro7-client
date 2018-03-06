@@ -517,6 +517,7 @@ const schemaProcessData2 = data => ({
   alternateName: data.metadata.name.long || null,
   additionalProperty: '@additionalProperty',
   isContainedIn: '@isContainedIn',
+  signature: '@signature',
 });
 
 class Entry extends PureComponent {
