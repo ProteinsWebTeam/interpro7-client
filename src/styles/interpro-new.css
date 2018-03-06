@@ -743,6 +743,41 @@ h6 small {
 }
 /*END customise LiteMole*/
 
+/*custom CLAN-VIEWER node module*/
+.clanviewer {
+  width: 100%;
+}
+.clanviewer g text {
+  fill: #09436b;
+}
+.clanviewer g.node circle {
+  fill: #1f77b4;
+  stroke: #186092;
+  stroke-width: 1px;
+}
+.clanviewer g.node:hover circle {
+  stroke: #2199e8;
+  fill: #2199e8;
+  cursor: pointer;
+}
+.clanviewer g.node:hover text {
+  fill: #2199e8;
+  cursor: pointer;
+}
+.clanviewer g.link text {
+  fill: #aaa;
+}
+.clanviewer g.link:hover text {
+  font: 10px sans-serif;
+}
+.clanviewer g.link path {
+  stroke: #aaa;
+}
+.clanviewer g.link:hover path {
+  stroke: #2199e8;
+}
+/*END custom CLAN-VIEWER node module*/
+
 /*RESPONSIVE DESIGN*/
 
 /* Medium only */
