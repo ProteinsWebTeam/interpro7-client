@@ -251,13 +251,14 @@ class List extends PureComponent {
             {db === 'InterPro' ? (
               <Column
                 dataKey="member_databases"
+                cellClassName={f('col-md')}
                 renderer={(memberDataBases /*: object */) => (
                   <div className={f('signature-container')}>
                     {Object.entries(memberDataBases).map(([db, entries]) =>
                       Object.entries(entries).map(([accession, id]) => (
                         <Tooltip
                           key={accession}
-                          title={`${accession} (${db})`}
+                          title={`${id} (${db})`}
                           className={f('signature')}
                         >
                           <Link
@@ -310,7 +311,8 @@ class List extends PureComponent {
             {db === 'InterPro' ? (
               <Column
                 dataKey="go_terms"
-                headerClassName={f('col-go')}
+                headerClassName={f('col-go-head')}
+                cellClassName={f('col-go')}
                 renderer={(goTerms /*: Array<Object> */) => (
                   <div className={f('go-container')}>
                     {Array.from(goTerms)
