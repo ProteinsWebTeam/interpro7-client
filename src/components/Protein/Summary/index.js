@@ -11,6 +11,8 @@ import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 import { foundationPartial } from 'styles/foundation';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import loadable from 'higherOrder/loadable';
+import { isTranscribedFrom } from 'schema_org/processors';
 
 const f = foundationPartial(ebiStyles);
 
@@ -19,6 +21,10 @@ const f = foundationPartial(ebiStyles);
     metadata: Object,
   },
 }; */
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 class SummaryProtein extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -32,6 +38,12 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
     const metadata = data.metadata;
     return (
       <div className={f('sections')}>
+        {metadata.gene && (
+          <SchemaOrgData
+            data={{ gene: metadata.gene }}
+            processData={isTranscribedFrom}
+          />
+        )}
         <section>
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>

@@ -37,6 +37,8 @@ const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
+  isPartOf,
+  isContainedInOrganism,
 } from 'schema_org/processors';
 
 const propTypes = {
@@ -98,7 +100,8 @@ class List extends PureComponent {
     const {
       data: { payload, loading, ok, url, status },
       isStale,
-      customLocation: { description: { protein: { db } }, search },
+      customLocation: { search },
+      // customLocation: { description: { protein: { db } }, search },
       dataBase,
     } = this.props;
     let _payload = payload;
@@ -106,6 +109,7 @@ class List extends PureComponent {
     const notFound = !loading && status !== HTTP_OK;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
+    const db = 'UNIPROT';
     if (loading || notFound) {
       _payload = {
         results: [],
@@ -308,14 +312,11 @@ class SummaryComponent extends PureComponent {
   }
 }
 
-const schemaProcessData = data => ({
+const schemaProcessData = ({ data, version }) => ({
   '@type': 'DataRecord',
   '@id': '@mainEntityOfPage',
   identifier: data.metadata.accession,
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': data.metadata.source_database,
-  },
+  isPartOf: isPartOf('protein', 'UniProt', version),
   mainEntity: '@mainEntity',
   seeAlso: '@seeAlso',
 });
@@ -328,6 +329,7 @@ const schemaProcessData2 = data => ({
   alternateName: data.metadata.name.long || null,
   additionalProperty: '@additionalProperty',
   contains: '@contains',
+  isContainedIn: isContainedInOrganism(data.metadata.source_organism),
 });
 
 class Summary extends PureComponent {
@@ -343,7 +345,9 @@ class Summary extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const { data: { loading, payload }, dataBase } = this.props;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     if (loading || !payload.metadata) {
       return <Loading />;
     }
@@ -359,7 +363,10 @@ class Summary extends PureComponent {
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (
             <SchemaOrgData
-              data={this.props.data.payload}
+              data={{
+                data: this.props.data.payload,
+                version: databases && databases.UNIPROT.version,
+              }}
               processData={schemaProcessData}
             />
           )}

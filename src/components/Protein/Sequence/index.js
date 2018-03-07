@@ -11,6 +11,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
 import ipro from 'styles/interpro-new.css';
+import loadable from 'higherOrder/loadable';
 
 const f = foundationPartial(ipro, local);
 
@@ -22,6 +23,21 @@ const CHUNK_SIZE = 10;
 /*:: type InnerProps = {
   sequence: string,
 }; */
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+export const schemaProcessData = length => ({
+  '@id': '@additionalProperty',
+  '@type': 'PropertyValue',
+  additionalType: 'hhttp://semanticscience.org/resource/SIO_000205',
+  name: 'protein sequence',
+  value: {
+    '@type': ['StructuredValue', 'BioChemEntity'],
+    additionalType: 'http://semanticscience.org/resource/SIO_010015',
+    length,
+  },
+});
 
 class Inner extends PureComponent /*:: <InnerProps> */ {
   static propTypes = {
@@ -36,6 +52,10 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
         .match(chunkOfTen) || [];
     return (
       <div className={f('raw-sequence-viewer', 'row')}>
+        <SchemaOrgData
+          data={this.props.sequence.length}
+          processData={schemaProcessData}
+        />
         {sequenceWords.map((e, i) => (
           <span
             key={i}
