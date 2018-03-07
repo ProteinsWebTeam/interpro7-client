@@ -148,25 +148,23 @@ class List extends PureComponent {
             </Exporter>
             <PageSizeSelector />
             <SearchBox search={search.search}>&nbsp;</SearchBox>
-            <Column
-              dataKey="type"
-              headerClassName={f('col-type', 'table-center')}
-              cellClassName={f('table-center')}
-              renderer={type => {
-                const _type = type.replace('_', ' ');
-                return db === 'InterPro' ? (
-                  <Tooltip title={`${_type} type`}>
-                    <interpro-type type={_type} size="26px">
-                      {_type}
-                    </interpro-type>
-                  </Tooltip>
-                ) : (
-                  _type
-                );
-              }}
-            >
-              {`${db === 'InterPro' ? '' : `${db} `}Type`}
-            </Column>
+            {db === 'InterPro' && (
+              <Column
+                dataKey="type"
+                headerClassName={f('col-type', 'table-center')}
+                cellClassName={f('table-center')}
+                renderer={type => {
+                  const _type = type.replace('_', ' ');
+                  return (
+                    <Tooltip title={`${_type} type`}>
+                      <interpro-type type={_type} size="26px">
+                        {_type}
+                      </interpro-type>
+                    </Tooltip>
+                  );
+                }}
+              />
+            )}
             <Column
               dataKey="name"
               renderer={(
@@ -196,46 +194,72 @@ class List extends PureComponent {
             >
               Name
             </Column>
+
+            <Column
+              dataKey="accession"
+              renderer={(accession /*: string */, data) => (
+                <Tooltip title={accession}>
+                  <Link
+                    to={customLocation => ({
+                      description: {
+                        ...customLocation.description,
+                        entry: {
+                          ...customLocation.description.entry,
+                          accession,
+                        },
+                      },
+                    })}
+                  >
+                    <SchemaOrgData
+                      data={{ data, location: window.location }}
+                      processData={schemaProcessDataTableRow}
+                    />
+                    <span className={f('acc-row')}>
+                      <HighlightedText
+                        text={accession}
+                        textToHighlight={search.search}
+                      />
+                    </span>
+                  </Link>
+                </Tooltip>
+              )}
+            >
+              Accession
+            </Column>
+            {db !== 'InterPro' && (
+              <Column
+                dataKey="type"
+                headerClassName={f('col-type', 'table-center')}
+                cellClassName={f('table-center')}
+                renderer={type => (
+                  <Tooltip
+                    title={`${type.replace(
+                      '_',
+                      ' ',
+                    )} type (as defined by ${db})`}
+                  >
+                    {type.replace('_', ' ')}
+                  </Tooltip>
+                )}
+              >
+                {`${db} Type`}
+              </Column>
+            )}
+
             {db !== 'InterPro' && (
               <Column
                 dataKey="source_database"
                 headerClassName={f('table-center')}
                 cellClassName={f('table-center')}
-                renderer={(db /*: string */) => <MemberSymbol type={db} />}
+                renderer={(db /*: string */) => (
+                  <Tooltip title={`${db} database`}>
+                    <MemberSymbol type={db} className={f('md-small')} />
+                  </Tooltip>
+                )}
               >
                 DB
               </Column>
             )}
-            <Column
-              dataKey="accession"
-              renderer={(accession /*: string */, data) => (
-                <Link
-                  title={accession}
-                  to={customLocation => ({
-                    description: {
-                      ...customLocation.description,
-                      entry: {
-                        ...customLocation.description.entry,
-                        accession,
-                      },
-                    },
-                  })}
-                >
-                  <SchemaOrgData
-                    data={{ data, location: window.location }}
-                    processData={schemaProcessDataTableRow}
-                  />
-                  <span className={f('acc-row')}>
-                    <HighlightedText
-                      text={accession}
-                      textToHighlight={search.search}
-                    />
-                  </span>
-                </Link>
-              )}
-            >
-              Accession
-            </Column>
             {db === 'InterPro' ? (
               <Column
                 dataKey="member_databases"
@@ -281,10 +305,10 @@ class List extends PureComponent {
                         search: {},
                       }}
                     >
-                      {accession}
+                      <Tooltip title={`${accession}`}>{accession}</Tooltip>
                     </Link>
                   ) : (
-                    <span className={f('not-integrated')}>Not integrated</span>
+                    ''
                   )
                 }
               >
