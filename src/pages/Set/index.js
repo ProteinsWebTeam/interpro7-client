@@ -276,27 +276,6 @@ class SummaryComponent extends PureComponent {
   }
 }
 
-const schemaProcessData = data => ({
-  '@type': 'DataRecord',
-  '@id': '@mainEntityOfPage',
-  identifier: data.metadata.accession,
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': data.metadata.source_database,
-  },
-  mainEntity: '@mainEntity',
-  seeAlso: '@seeAlso',
-});
-
-const schemaProcessData2 = data => ({
-  '@type': ['Protein', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  additionalProperty: '@additionalProperty',
-});
-
 class Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
