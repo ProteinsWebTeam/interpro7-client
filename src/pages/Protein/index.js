@@ -37,8 +37,8 @@ const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
-  isPartOf,
-  isContainedInOrganism,
+  schemaProcessDataRecord,
+  schemaProcessMainEntity,
 } from 'schema_org/processors';
 
 const propTypes = {
@@ -312,26 +312,6 @@ class SummaryComponent extends PureComponent {
   }
 }
 
-const schemaProcessData = ({ data, version }) => ({
-  '@type': 'DataRecord',
-  '@id': '@mainEntityOfPage',
-  identifier: data.metadata.accession,
-  isPartOf: isPartOf('protein', 'UniProt', version),
-  mainEntity: '@mainEntity',
-  seeAlso: '@seeAlso',
-});
-
-const schemaProcessData2 = data => ({
-  '@type': ['Protein', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  additionalProperty: '@additionalProperty',
-  contains: '@contains',
-  isContainedIn: isContainedInOrganism(data.metadata.source_organism),
-});
-
 class Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -359,25 +339,25 @@ class Summary extends PureComponent {
             <EntryMenu metadata={payload.metadata} />
           </div>
         </div>
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
+        {payload.metadata.accession && (
+          <Fragment>
             <SchemaOrgData
               data={{
-                data: this.props.data.payload,
+                data: payload,
+                endpoint: 'protein',
                 version: databases && databases.UNIPROT.version,
               }}
-              processData={schemaProcessData}
+              processData={schemaProcessDataRecord}
             />
-          )}
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
             <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData2}
+              data={{
+                data: payload.metadata,
+                type: 'Protein',
+              }}
+              processData={schemaProcessMainEntity}
             />
-          )}
+          </Fragment>
+        )}
         <ErrorBoundary>
           <Switch
             {...this.props}

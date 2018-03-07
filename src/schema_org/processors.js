@@ -59,6 +59,7 @@ export const schemaProcessIntegrated = ({ name, version }) => ({
 });
 
 export const isContainedInOrganism = ({ taxId, fullName = null }) => ({
+  '@id': '@isContainedIn',
   '@type': 'BioChemEntity',
   additionalType: 'http://semanticscience.org/resource/SIO_010000',
   identifier: taxId,
@@ -79,3 +80,45 @@ export const isTranscribedFrom = ({ gene }) => ({
     name: gene,
   },
 });
+const mapTypeToOntology = new Map([
+  ['Domain', 'DomainAnnotation'],
+  ['Family', 'FamilyAnnotation'],
+  ['Repeat', 'RepeatAnnotation'],
+  ['Unknown', 'UnknownAnnotation'],
+  ['Conserved_site', 'ConservedSiteAnnotation'],
+  ['Binding_site', 'BindingSiteAnnotation'],
+  ['Active_site', 'ActiveSiteAnnotation'],
+  ['PTM', 'PTMAnnotation'],
+]);
+
+export const schemaProcessDataRecord = ({ data, endpoint, version }) => ({
+  '@type': 'DataRecord',
+  '@id': '@mainEntityOfPage',
+  identifier: data.metadata.accession,
+  isPartOf: isPartOf(endpoint, data.metadata.source_database, version),
+  mainEntity: '@mainEntity',
+  seeAlso: '@seeAlso',
+  isBasedOn: '@isBasedOn',
+  isBasisFor: '@isBasisFor',
+  citation: '@citation',
+});
+
+export const schemaProcessMainEntity = ({ data, type }) => {
+  const schema = {
+    '@type': [type, 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
+    '@id': '@mainEntity',
+    identifier: data.accession,
+    name: data.name.name || data.accession,
+    alternateName: data.name.long || null,
+    additionalProperty: '@additionalProperty',
+    contains: '@contains',
+    isContainedIn: '@isContainedIn',
+    signature: '@signature',
+  };
+  if (type === 'Entry') {
+    schema['@type'].push(
+      mapTypeToOntology.get(data.type) || mapTypeToOntology.get('Unknown'),
+    );
+  }
+  return schema;
+};

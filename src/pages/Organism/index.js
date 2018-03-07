@@ -28,6 +28,8 @@ import loadable from 'higherOrder/loadable';
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
+  schemaProcessDataRecord,
+  schemaProcessMainEntity,
 } from 'schema_org/processors';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -516,36 +518,6 @@ const mapStateToAccessionUrl = createSelector(
     }),
 );
 
-// const LoadedTitle = loadData(mapStateToAccessionUrl)(_Title);
-
-const schemaProcessData = data => ({
-  '@id': '@mainEntityOfPage',
-  '@type': 'DataRecord',
-  identifier: data.metadata.accession,
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': data.metadata.source_database,
-  },
-  mainEntity: '@mainEntity',
-  seeAlso: '@seeAlso',
-});
-
-const schemaProcessData2 = data => ({
-  '@type': ['Organism', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  inDataset: data.metadata.source_database,
-  biologicalType:
-    data.metadata.source_database === 'taxonomy' ? 'taxon' : 'proteome',
-  citation: '@citation',
-  isBasedOn: '@isBasedOn',
-  isBasisFor: '@isBasisFor',
-  additionalProperty: '@additionalProperty',
-  contains: '@contains',
-});
-
 class _Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -561,10 +533,13 @@ class _Summary extends PureComponent {
     const {
       data: { loading, payload },
       dataOrganism: { loading: loadingOrg, payload: payloadOrg },
+      dataBase,
     } = this.props;
     if (loading || !payload) {
       return <Loading />;
     }
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     return (
       <Fragment>
         {payloadOrg &&
@@ -572,12 +547,19 @@ class _Summary extends PureComponent {
           payloadOrg.metadata.accession && (
             <Fragment>
               <SchemaOrgData
-                data={payloadOrg}
-                processData={schemaProcessData}
+                data={{
+                  data: payloadOrg,
+                  endpoint: 'organism',
+                  version: databases && databases.UNIPROT.version,
+                }}
+                processData={schemaProcessDataRecord}
               />
               <SchemaOrgData
-                data={payloadOrg}
-                processData={schemaProcessData2}
+                data={{
+                  data: payloadOrg.metadata,
+                  type: 'Organism',
+                }}
+                processData={schemaProcessMainEntity}
               />
             </Fragment>
           )}

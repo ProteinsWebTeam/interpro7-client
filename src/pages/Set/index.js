@@ -36,6 +36,10 @@ import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
+import {
+  schemaProcessDataRecord,
+  schemaProcessMainEntity,
+} from '../../schema_org/processors';
 
 const f = foundationPartial(fonts, pageStyle, ipro, global);
 
@@ -306,10 +310,12 @@ class Summary extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const { data: { loading, payload }, dataBase } = this.props;
     if (loading || !payload.metadata) {
       return <Loading />;
     }
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     let currentSet = null;
     for (const setDB of setDBs) {
       if (setDB.name === payload.metadata.source_database) {
@@ -319,21 +325,28 @@ class Summary extends PureComponent {
     }
     return (
       <Fragment>
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData}
-            />
-          )}
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData2}
-            />
+        {payload &&
+          payload.metadata &&
+          payload.metadata.accession && (
+            <Fragment>
+              <SchemaOrgData
+                data={{
+                  data: payload,
+                  endpoint: 'set',
+                  version:
+                    databases &&
+                    databases[payload.metadata.source_database].version,
+                }}
+                processData={schemaProcessDataRecord}
+              />
+              <SchemaOrgData
+                data={{
+                  data: payload.metadata,
+                  type: 'Set',
+                }}
+                processData={schemaProcessMainEntity}
+              />
+            </Fragment>
           )}
         <ErrorBoundary>
           <div className={f('row')}>

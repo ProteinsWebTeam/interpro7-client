@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -44,6 +44,8 @@ const f = foundationPartial(pageStyle, styles);
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
+  schemaProcessMainEntity,
+  schemaProcessDataRecord,
 } from 'schema_org/processors';
 
 const GO_COLORS = new Map([
@@ -465,60 +467,6 @@ const InnerSwitch = props => (
   </ErrorBoundary>
 );
 
-const mapTypeToOntology = new Map([
-  ['Domain', 'DomainAnnotation'],
-  ['Family', 'FamilyAnnotation'],
-  ['Repeat', 'RepeatAnnotation'],
-  ['Unknown', 'UnknownAnnotation'],
-  ['Conserved_site', 'ConservedSiteAnnotation'],
-  ['Binding_site', 'BindingSiteAnnotation'],
-  ['Active_site', 'ActiveSiteAnnotation'],
-  ['PTM', 'PTMAnnotation'],
-]);
-
-const schemaProcessData = ({ data, base }) => {
-  const dbInfo = base.databases[data.metadata.source_database];
-  return {
-    '@type': 'DataRecord',
-    '@id': '@mainEntityOfPage',
-    identifier: data.metadata.accession,
-    isPartOf: {
-      '@type': 'Dataset',
-      '@id':
-        config.root.website.protocol +
-        config.root.website.href +
-        toPath({
-          main: { key: 'entry' },
-          entry: { db: data.metadata.source_database },
-        }),
-      name: `${dbInfo.name} ${dbInfo.version}`,
-    },
-    mainEntity: '@mainEntity',
-    isBasedOn: '@isBasedOn',
-    isBasisFor: '@isBasisFor',
-    citation: '@citation',
-    seeAlso: '@seeAlso',
-  };
-};
-
-const schemaProcessData2 = data => ({
-  '@type': [
-    'StructuredValue',
-    'CreativeWork',
-    'BioChemEntity',
-    'Entry',
-    mapTypeToOntology.get(data.metadata.type) ||
-      mapTypeToOntology.get('Unknown'),
-  ],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  additionalProperty: '@additionalProperty',
-  isContainedIn: '@isContainedIn',
-  signature: '@signature',
-});
-
 class Entry extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -530,27 +478,34 @@ class Entry extends PureComponent {
   };
 
   render() {
-    const dataSchema = {
-      data: this.props.data.payload,
-      base: this.props.dataBase.payload,
-    };
+    const { data: { payload }, dataBase } = this.props;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
+
     return (
       <div>
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={dataSchema}
-              processData={(() => schemaProcessData)()}
-            />
-          )}
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData2}
-            />
+        {payload &&
+          payload.metadata &&
+          payload.metadata.accession && (
+            <Fragment>
+              <SchemaOrgData
+                data={{
+                  data: this.props.data.payload,
+                  endpoint: 'entry',
+                  version:
+                    databases &&
+                    databases[payload.metadata.source_database].version,
+                }}
+                processData={schemaProcessDataRecord}
+              />
+              <SchemaOrgData
+                data={{
+                  data: payload.metadata,
+                  type: 'Entry',
+                }}
+                processData={schemaProcessMainEntity}
+              />
+            </Fragment>
           )}
         <ErrorBoundary>
           <Switch

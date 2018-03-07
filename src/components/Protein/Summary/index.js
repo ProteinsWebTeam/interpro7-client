@@ -12,7 +12,10 @@ import { foundationPartial } from 'styles/foundation';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import loadable from 'higherOrder/loadable';
-import { isTranscribedFrom } from 'schema_org/processors';
+import {
+  isTranscribedFrom,
+  isContainedInOrganism,
+} from 'schema_org/processors';
 
 const f = foundationPartial(ebiStyles);
 
@@ -42,6 +45,12 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
           <SchemaOrgData
             data={{ gene: metadata.gene }}
             processData={isTranscribedFrom}
+          />
+        )}
+        {metadata.source_organism && (
+          <SchemaOrgData
+            data={metadata.source_organism}
+            processData={isContainedInOrganism}
           />
         )}
         <section>

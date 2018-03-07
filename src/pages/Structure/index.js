@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -23,6 +23,8 @@ import loadable from 'higherOrder/loadable';
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
+  schemaProcessDataRecord,
+  schemaProcessMainEntity,
 } from 'schema_org/processors';
 
 import EntryMenu from 'components/EntryMenu';
@@ -34,7 +36,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
-import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 const f = foundationPartial(pageStyle, styles);
 
 const SummaryAsync = loadable({
@@ -329,27 +331,6 @@ const InnerSwitch = props => (
   </ErrorBoundary>
 );
 
-const schemaProcessData = data => ({
-  '@type': ['Structure', 'DataRecord'],
-  '@id': '@mainEntityOfPage',
-  identifier: data.metadata.accession,
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': data.metadata.source_database,
-  },
-  mainEntity: '@mainEntity',
-});
-
-const schemaProcessData2 = data => ({
-  '@type': ['Structure', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  additionalProperty: '@additionalProperty',
-  isContainedIn: '@isContainedIn',
-});
-
 class Structure extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -359,26 +340,39 @@ class Structure extends PureComponent {
         }),
       }),
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
   };
 
   render() {
+    const { dataBase } = this.props;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     return (
       <div>
         {this.props.data.payload &&
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData}
-            />
-          )}
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData2}
-            />
+            <Fragment>
+              <SchemaOrgData
+                data={{
+                  data: this.props.data.payload,
+                  endpoint: 'structure',
+                  version: databases && databases.PDB.version,
+                }}
+                processData={schemaProcessDataRecord}
+              />
+              <SchemaOrgData
+                data={{
+                  data: this.props.data.payload.metadata,
+                  type: 'Structure',
+                }}
+                processData={schemaProcessMainEntity}
+              />
+            </Fragment>
           )}
         <ErrorBoundary>
           <Switch
