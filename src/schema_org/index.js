@@ -135,7 +135,11 @@ export class Manager {
 }
 const shallowEquals = (obj1, obj2) =>
   Object.keys(obj1).every(key => {
-    if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object')
+    if (
+      obj1[key] !== null &&
+      typeof obj1[key] === 'object' &&
+      typeof obj2[key] === 'object'
+    )
       return Object.keys(obj1[key]).every(
         k2 => obj1[key][k2] === obj2[key][k2],
       );
