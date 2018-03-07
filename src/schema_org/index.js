@@ -134,7 +134,13 @@ export class Manager {
   }
 }
 const shallowEquals = (obj1, obj2) =>
-  Object.keys(obj1).every(key => obj1[key] === obj2[key]);
+  Object.keys(obj1).every(key => {
+    if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object')
+      return Object.keys(obj1[key]).every(
+        k2 => obj1[key][k2] === obj2[key][k2],
+      );
+    return obj1[key] === obj2[key];
+  });
 
 export default class SchemaOrgData extends PureComponent {
   static propTypes = {

@@ -61,7 +61,6 @@ const propTypes = {
   dataBase: T.shape({
     payload: T.object,
     loading: T.bool.isRequired,
-    ok: T.bool,
   }),
 };
 
