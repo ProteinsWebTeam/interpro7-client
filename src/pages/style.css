@@ -129,14 +129,6 @@
   margin-top: 174px;
 }
 
-.not-integrated {
-  opacity: 0.1;
-  transition: opacity var(--timing-medium) ease-in-out;
-
-  &:hover {
-    opacity: 0.8;
-  }
-}
 /*make the table more consistent  in term of column with fluctuation while navigating*/
 .col-md {
   width: 26%;
