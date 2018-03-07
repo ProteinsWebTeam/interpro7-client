@@ -159,7 +159,13 @@ export default class SchemaOrgData extends PureComponent {
     manager.subscribe({ subscriber: this, data, processData });
   }
   componentWillReceiveProps({ data, processData }) {
-    if (!shallowEquals(data.data, this.props.data.data)) {
+    if (
+      data &&
+      data.data &&
+      this.props.data &&
+      this.props.data.data &&
+      !shallowEquals(data.data, this.props.data.data)
+    ) {
       manager.unsubscribe(this);
       manager.subscribe({ subscriber: this, data, processData });
     }

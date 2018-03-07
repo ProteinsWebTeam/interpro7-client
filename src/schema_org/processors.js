@@ -31,3 +31,28 @@ export const schemaProcessDataTableRow = ({ data: { row, endpoint } }) => ({
       },
     }),
 });
+
+export const schemaProcessIntegrated = ({ name, version }) => ({
+  '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
+  '@id': '@isBasisFor',
+  isPartOf: {
+    '@type': 'Dataset',
+    '@id':
+      config.root.website.protocol +
+      config.root.website.href +
+      descriptionToPath({
+        main: { key: 'entry' },
+        entry: { db: 'InterPro' },
+      }),
+    version,
+    name: 'InterPro',
+  },
+  name,
+  url:
+    config.root.website.protocol +
+    config.root.website.href +
+    descriptionToPath({
+      main: { key: 'entry' },
+      entry: { db: 'InterPro', accession: name },
+    }),
+});
