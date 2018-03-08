@@ -166,6 +166,16 @@ class List extends PureComponent {
                       textToHighlight={search.search}
                     />
                   </Link>
+                </Fragment>
+              )}
+            >
+              Accession
+            </Column>
+
+            <Column
+              dataKey="" /* no need for this column header */
+              renderer={(accession /*: string */, { source_database: db }) => (
+                <Fragment>
                   {db === 'reviewed' ? (
                     <Fragment>
                       {'\u00A0' /* non-breakable space */}
@@ -180,9 +190,8 @@ class List extends PureComponent {
                   ) : null}
                 </Fragment>
               )}
-            >
-              Accession
-            </Column>
+            />
+
             <Column
               dataKey="name"
               renderer={(
@@ -234,6 +243,7 @@ class List extends PureComponent {
             <Column
               dataKey="length"
               headerClassName={f('text-right')}
+              cellClassName={f('text-right')}
               renderer={(length /*: number */) => (
                 <Tooltip title={`${length.toLocaleString()} amino acids`}>
                   <span aria-label="amino acids length">{length}</span>
