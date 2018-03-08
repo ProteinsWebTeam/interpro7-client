@@ -14,7 +14,7 @@ import style from './style.css';
 const f = foundationPartial(style);
 
 const FilterPanel = ({ label, collapsed, onCollapse, children }) => (
-  <div className={f('columns', 'small-12', 'medium-4', 'large-3', 'end')}>
+  <div className={f('columns', 'small-12', 'medium-4', 'large-4', 'end')}>
     {label && (
       <button className={f('toggle')} onClick={onCollapse}>
         {collapsed ? '▸' : '▾'} {label}
@@ -100,17 +100,26 @@ class FiltersPanel extends PureComponent {
     );
     return (
       <div className={f('row', 'filters-panel')}>
-        <div className={f('columns', 'large-2', 'show-for-large')}>
-          <h6>Filter By</h6>
-          <button className={f('but-collapse')} onClick={this.clearAll}>
-            Clear
-          </button>&nbsp;|&nbsp;
-          <button className={f('but-collapse')} onClick={this.toggleAll}>
-            {toCollapse ? 'Show All' : 'Collapse All'}
-            <span className={f('filter-title-arrow')}>
-              {toCollapse ? ' ▸' : ' ▾'}
-            </span>
-          </button>
+        <div
+          className={f(
+            'columns',
+            'large-12',
+            'show-for-large',
+            'margin-bottom-medium',
+          )}
+        >
+          <span>Filter By</span>
+          <span className={f('filter-buttons')}>
+            <button className={f('but-collapse')} onClick={this.clearAll}>
+              Clear
+            </button>&nbsp;|&nbsp;
+            <button className={f('but-collapse')} onClick={this.toggleAll}>
+              {toCollapse ? 'Show All' : 'Collapse All'}
+              <span className={f('filter-title-arrow')}>
+                {toCollapse ? ' ▸' : ' ▾'}
+              </span>
+            </button>
+          </span>
         </div>
 
         <ErrorBoundary>
