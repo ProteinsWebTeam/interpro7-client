@@ -10,6 +10,8 @@ import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import styles from './style.css';
+import loadData from '../../higherOrder/loadData';
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 
 const f = foundationPartial(fonts, ipro, styles);
 
@@ -64,13 +66,15 @@ const mapNameToClass = new Map([
     chains?: Array<string>,
   },
   mainType: string,
+  dataBase?: Object,
 }; */
 
 const accessionDisplay = new Set(['protein', 'structure', 'organism']);
 
-export default class Title extends PureComponent /*:: <Props> */ {
+class Title extends PureComponent /*:: <Props> */ {
   static propTypes = {
     metadata: T.object.isRequired,
+    dataBase: T.object.isRequired,
     mainType: T.string.isRequired,
   };
 
@@ -83,8 +87,15 @@ export default class Title extends PureComponent /*:: <Props> */ {
   }
 
   render() {
-    const { metadata, mainType } = this.props;
+    const { metadata, mainType, dataBase } = this.props;
     const isEntry = mainType === 'entry';
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
+    const dbLabel =
+      databases && databases[metadata.source_database]
+        ? databases[metadata.source_database].name
+        : metadata.source_database;
+
     return (
       <div className={f('title')}>
         {// Entry icon
@@ -151,9 +162,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
           metadata.type &&
           metadata.source_database &&
           metadata.source_database.toLowerCase() === 'interpro' && (
-            <div className={f('tag', 'secondary')}>
-              {metadata.source_database} entry
-            </div>
+            <div className={f('tag', 'secondary')}>{dbLabel} entry</div>
           )}
 
         {// MD Entry -signature
@@ -161,18 +170,15 @@ export default class Title extends PureComponent /*:: <Props> */ {
           metadata.type &&
           metadata.source_database &&
           metadata.source_database.toLowerCase() !== 'interpro' && (
-            <div className={f('tag', 'md-p')}>
-              {metadata.source_database} entry
-            </div>
+            <div className={f('tag', 'md-p')}>{dbLabel} Entry</div>
           )}
 
         {// protein page
-        metadata.source_database &&
-          metadata.source_database.toLowerCase() === 'reviewed' && (
-            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-              Protein {metadata.source_database}
-            </div>
-          )}
+        mainType === 'protein' && (
+          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+            Protein {dbLabel}
+          </div>
+        )}
 
         {// Structure
         mainType === 'structure' && (
@@ -185,7 +191,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
         metadata.source_database !== 'proteome' &&
           mainType === 'organism' && (
             <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-              {metadata.source_database}
+              {dbLabel}
             </div>
           )}
 
@@ -206,7 +212,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
         {// Set
         mainType === 'set' && (
           <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-            Set {metadata.source_database}{' '}
+            Set {dbLabel}{' '}
             <Tooltip title="A Set is defined as a group of related entries">
               <span
                 className={f('small', 'icon', 'icon-generic')}
@@ -219,3 +225,6 @@ export default class Title extends PureComponent /*:: <Props> */ {
     );
   }
 }
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  Title,
+);
