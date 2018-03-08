@@ -32,7 +32,22 @@ class MultipleInput extends PureComponent {
       ...props
     } = this.props;
     return (
-      <div className={s('multirange', className)} style={style}>
+      <div
+        className={s('multirange', className)}
+        style={{ position: 'relative' }}
+      >
+        <div
+          className={s('small', 'label-min')}
+          style={{ position: 'absolute', top: 12, left: 0 }}
+        >
+          {Math.round(Math.exp(minValue))} AA
+        </div>
+        <div
+          className={s('small', 'label-max')}
+          style={{ position: 'absolute', top: 12, right: 6 }}
+        >
+          {Math.round(Math.exp(maxValue))} AA
+        </div>
         <input
           type="range"
           min={min}
