@@ -93,12 +93,29 @@ class StructureView extends PureComponent /*:: <Props> */ {
     plugin.applyTransform(action).then(() => {
       console.log('Transformed');
       let model = context.select('model')[0];
-      console.log('Model:' + model);
-      var query = Query.everything();
-      console.log('QUERY: ' + query);
+      //let query = Query.chainsById("A");
+      let query = Query.residuesById(
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        107,
+      );
       Command.Molecule.Highlight.dispatch(context.tree.context, {
         model: model,
-        query: Query.everything(),
+        query: query,
         isOn: true,
       });
     });
