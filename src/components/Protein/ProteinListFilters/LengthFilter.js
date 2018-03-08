@@ -8,6 +8,12 @@ import MultipleInput from 'components/SimpleCommonComponents/MultipleInput';
 
 import { goToCustomLocation } from 'actions/creators';
 
+import { foundationPartial } from 'styles/foundation';
+
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+
+const f = foundationPartial(ebiGlobalStyles);
+
 const DEBOUNCE_RATE = 500; // In ms
 
 const MIN = 1;
@@ -76,7 +82,8 @@ class LengthFilter extends PureComponent {
     const { min, max } = this.state;
     return (
       <div>
-        {min} AA
+        <span className={f('small')}>{min} AA </span>
+        <br />
         <br />
         <MultipleInput
           min={Math.log(MIN)}
@@ -88,7 +95,7 @@ class LengthFilter extends PureComponent {
           aria-label="length range"
         />
         <br />
-        {max} AA
+        <span className={f('small')}> {max} AA</span>
       </div>
     );
   }
