@@ -34,8 +34,8 @@
 } /* so column doesn't expand totally when only 1-2 filters*/
 
 .filter-panel {
-  max-height: 146px;
-  margin-bottom: 0.3rem;
+  max-height: 142px;
+  margin-bottom: 0.25rem;
   overflow-y: auto;
 
   &.collapsed {
