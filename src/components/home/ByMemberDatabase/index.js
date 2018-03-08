@@ -27,15 +27,7 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessDataForDB = ({ name, version, releaseDate, location }) => ({
-  '@type': 'Dataset',
-  '@id': '@dataset',
-  name,
-  identifier: name,
-  version,
-  releaseDate,
-  url: `${location.href}/entry/${name}`,
-});
+import { schemaProcessDataForDB } from 'schema_org/processors';
 
 /*:: type Props = {
   data: {

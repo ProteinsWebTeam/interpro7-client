@@ -1,6 +1,39 @@
 import config from 'config';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+export const schemaProcessDataInterpro = ({
+  location,
+  description = null,
+}) => ({
+  '@type': 'DataCatalog',
+  '@id': '@mainEntityOfPage',
+  name: 'InterPro',
+  description,
+  url: location.href,
+  keywords: ['InterPro', 'Domain', 'Family', 'Annotation', 'Protein'],
+  provider: {
+    '@type': 'Organization',
+    name: 'European Bioinformatics Institute',
+    url: 'https://www.ebi.ac.uk/',
+  },
+  citation: '@citation',
+  dataset: '@dataset',
+});
+export const schemaProcessDataForDB = ({
+  name,
+  location,
+  releaseDate = null,
+  version = null,
+}) => ({
+  '@type': 'Dataset',
+  '@id': '@dataset',
+  name,
+  identifier: name,
+  version,
+  releaseDate,
+  url: `${location.href}/entry/${name}`,
+});
+
 export const schemaProcessDataTable = ({ data: { db }, location }) => ({
   '@type': 'Dataset',
   '@id': '@mainEntityOfPage',
@@ -122,3 +155,10 @@ export const schemaProcessMainEntity = ({ data, type }) => {
   }
   return schema;
 };
+
+export const schemaProcessCitations = ({ identifier, author }) => ({
+  '@type': 'ScholarlyArticle',
+  '@id': '@citation',
+  identifier,
+  author,
+});

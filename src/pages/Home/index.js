@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
+import T from 'prop-types';
 
 // Components
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -18,6 +19,11 @@ import 'gsap/TweenMax';
 import TweenLite from 'gsap/TweenLite';
 import { Expo } from 'gsap/EasePack';
 
+import {
+  schemaProcessDataInterpro,
+  schemaProcessDataForDB,
+} from 'schema_org/processors';
+
 // Style
 import { foundationPartial } from 'styles/foundation';
 // CSS
@@ -32,6 +38,9 @@ import local from './style.css';
 // Images
 import ipscanLogo from 'images/logo_interproscan_ext.png';
 import idaLogo from 'images/logo_ida_100.png';
+
+import loadData from 'higherOrder/loadData';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 // Bind css with style object
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
@@ -408,44 +417,38 @@ InterPro uses predictive models, known as signatures, provided by several
 different databases (referred to as member databases) that make up the
 InterPro consortium.`.trim();
 
-const schemaProcessData = location => ({
-  '@type': 'DataCatalog',
-  '@id': '@mainEntityOfPage',
-  name: 'InterPro',
-  description,
-  url: location.href,
-  keywords: ['InterPro', 'Domain', 'Family', 'Annotation', 'Protein'],
-  provider: {
-    '@type': 'Organization',
-    name: 'European Bioinformatics Institute',
-    url: 'https://www.ebi.ac.uk/',
-  },
-  dataset: '@dataset',
-});
-
-const schemaProcessDataForDB = ({ name, location }) => ({
-  '@type': 'Dataset',
-  '@id': '@dataset',
-  name,
-  identifier: name,
-  version: 64,
-  url: `${location.href}/entry/${name}`,
-});
-
 class Home extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
+  };
   render() {
+    const databases =
+      this.props.data &&
+      this.props.data.payload &&
+      this.props.data.payload.databases;
     return (
       <Fragment>
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <SchemaOrgData
-              data={window.location}
-              processData={schemaProcessData}
+              data={{ location: window.location, description }}
+              processData={schemaProcessDataInterpro}
             />
-            <SchemaOrgData
-              data={{ name: 'InterPro', location: window.location }}
-              processData={schemaProcessDataForDB}
-            />
+            {databases && (
+              <SchemaOrgData
+                data={{
+                  name: 'InterPro',
+                  location: window.location,
+                  version: databases && databases.INTERPRO.version,
+                  releaseDate: databases && databases.INTERPRO.releaseDate,
+                }}
+                processData={schemaProcessDataForDB}
+              />
+            )}
             <div className={f('container-intro')}>
               <div className={f('fig-container')}>
                 <Tooltip title="Domain analysis and prediction on multiple protein sequences">
@@ -683,4 +686,4 @@ class Home extends PureComponent {
   }
 }
 
-export default Home;
+export default loadData(getUrlForMeta)(Home);
