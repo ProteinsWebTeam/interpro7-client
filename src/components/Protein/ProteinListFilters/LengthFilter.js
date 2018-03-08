@@ -81,9 +81,7 @@ class LengthFilter extends PureComponent {
   render() {
     const { min, max } = this.state;
     return (
-      <div>
-        <span className={f('small')}>{min} AA </span>
-        <br />
+      <div style={{ display: 'block', height: 100 }}>
         <br />
         <MultipleInput
           min={Math.log(MIN)}
@@ -94,8 +92,6 @@ class LengthFilter extends PureComponent {
           onChange={this._handleChange}
           aria-label="length range"
         />
-        <br />
-        <span className={f('small')}> {max} AA</span>
       </div>
     );
   }
