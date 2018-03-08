@@ -13,6 +13,9 @@ import ClanViewer from 'clanviewer';
 import 'clanviewer/css/clanviewer.css';
 
 import f from 'styles/foundation';
+import loadable from 'higherOrder/loadable';
+import config from 'config';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 /*:: type Props = {
   data: {
@@ -21,6 +24,27 @@ import f from 'styles/foundation';
   db: string,
   currentSet: Object
 }; */
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
+export const schemaProcessData = ({ data: { accession, score }, db }) => ({
+  '@id': '@contains',
+  name: 'entry',
+  value: {
+    '@type': ['Entry', 'StructuredValue', 'BioChemEntity'],
+    name: accession,
+    score,
+    url:
+      config.root.website.protocol +
+      config.root.website.href +
+      descriptionToPath({
+        main: { key: 'entry' },
+        entry: { db, accession },
+      }),
+  },
+});
 
 class SummarySet extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -81,6 +105,15 @@ class SummarySet extends PureComponent /*:: <Props> */ {
               <Accession accession={metadata.accession} id={metadata.id} />
               <h4>Description</h4>
               <Description textBlocks={[metadata.description]} />
+              {metadata.relationships &&
+                metadata.relationships.nodes &&
+                metadata.relationships.nodes.map(m => (
+                  <SchemaOrgData
+                    key={m.accession}
+                    data={{ data: m, db: metadata.source_database }}
+                    processData={schemaProcessData}
+                  />
+                ))}
             </div>
             <div className={f('medium-3', 'columns')}>
               <div className={f('panel')}>
