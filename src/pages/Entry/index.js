@@ -37,8 +37,6 @@ import { foundationPartial } from 'styles/foundation';
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 
-import toPath from 'utils/processDescription/descriptionToPath';
-
 const f = foundationPartial(pageStyle, styles);
 
 import {

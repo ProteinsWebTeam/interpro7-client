@@ -30,7 +30,7 @@ const SchemaOrgData = loadable({
 });
 
 export const schemaProcessData = ({ data: { accession, score }, db }) => ({
-  '@id': '@contains',
+  '@id': '@contains', // maybe 'is member of' http://semanticscience.org/resource/SIO_000095
   name: 'entry',
   value: {
     '@type': ['Entry', 'StructuredValue', 'BioChemEntity'],
