@@ -193,10 +193,11 @@ const List = ({
             dataKey="resolution"
             headerClassName={f('table-center')}
             cellClassName={f('table-center')}
-            renderer={(resolution /*: string | number */) =>
-              resolution
-                ? resolution + (typeof resolution === 'number' ? ' Å' : '')
-                : 'ø'
+            renderer={
+              (resolution /*: string | number */) =>
+                resolution
+                  ? resolution + (typeof resolution === 'number' ? ' Å' : '')
+                  : '' /* replace symbol by nothing to be consistent (with go terms column in browse entry for e.g.) */
             }
           >
             Resolution
