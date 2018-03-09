@@ -49,6 +49,7 @@ const mapNameToClass = new Map([
   ['Binding_site', 'title-id-site'],
   ['Active_site', 'title-id-site'],
   ['PTM', 'title-id-site'],
+  ['Homologous_superfamily', 'title-id-hh'],
 ]);
 
 /*:: type Props = {
@@ -115,7 +116,7 @@ export default class Title extends PureComponent /*:: <Props> */ {
         </Helmet>
         <h3>
           {metadata.name.name}{' '}
-          {// Red, Green for domains and Purple for sites accession: for InterPro page only
+          {// Red, Green for domains,  Purple for sites, and Blue for Homologous accession: for InterPro page only
           isEntry &&
             metadata.type &&
             metadata.source_database &&
