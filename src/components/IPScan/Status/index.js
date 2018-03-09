@@ -10,6 +10,9 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import RefreshButton from 'components/IPScan/RefreshButton';
 import Actions from 'components/IPScan/Actions';
 
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
+
 import { updateJobStatus } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
@@ -18,6 +21,11 @@ import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(fonts, ipro);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const GoToNewSearch = () => (
   <Link
@@ -62,6 +70,15 @@ class IPScanStatus extends PureComponent {
             <h3 className={f('large-9', 'columns')}>
               Your InterProScan searches
             </h3>
+            <SchemaOrgData
+              data={{
+                name: 'Your InterProScan searches',
+                description:
+                  'The status of all the requested InterProScan searches',
+              }}
+              processData={schemaProcessDataPageSection}
+            />
+
             <div className={f('button-group', 'columns', 'large-3')}>
               <GoToNewSearch />
               <RefreshButton />
