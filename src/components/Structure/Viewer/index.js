@@ -3,10 +3,10 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import loadWebComponent from 'utils/loadWebComponent';
 import LiteMol from 'litemol';
-//import LiteMolViewer from 'litemol/dist/js/LiteMol-viewer.js';
+// import LiteMolViewer from 'litemol/dist/js/LiteMol-viewer.js';
 import { foundationPartial } from 'styles/foundation';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
-//import lmStyles from 'litemol/dist/css/LiteMol-plugin-blue.css';
+// import lmStyles from 'litemol/dist/css/LiteMol-plugin-blue.css';
 import lmStyles from 'litemol/dist/css/LiteMol-plugin-light.css';
 
 const embedStyle = { width: '100%', height: '50vh' };
@@ -42,7 +42,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   componentDidMount() {
     const pdbid = this.props.id;
-    let plugin = LiteMol.Plugin.create({
+    const plugin = LiteMol.Plugin.create({
       target: '#litemol',
       viewportBackground: '#fff',
       layoutState: {
@@ -52,7 +52,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     });
     plugin.loadMolecule({
       id: pdbid,
-      url: 'https://www.ebi.ac.uk/pdbe/static/entry/' + pdbid + '_updated.cif',
+      url: `https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_updated.cif`,
       format: 'cif', // default
     });
   }

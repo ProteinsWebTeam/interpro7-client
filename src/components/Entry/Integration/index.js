@@ -54,6 +54,11 @@ const Integration = ({ intr, dataBase }) => {
 };
 Integration.propTypes = {
   intr: T.string.isRequired,
+  dataBase: T.shape({
+    payload: T.shape({
+      databases: T.object,
+    }),
+  }).isRequired,
 };
 
 export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(

@@ -5,7 +5,6 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Embed from 'components/Embed';
 import Literature from 'components/Entry/Literature';
 import StructureView from 'components/Structure/Viewer';
 

@@ -377,11 +377,8 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="protein-count"
-              renderer={(accession /*: string */, { source_database }) => {
-                const DataProvider = dataProviderFor(
-                  `${accession}`,
-                  source_database,
-                );
+              renderer={(accession /*: string */, { source_database: db }) => {
+                const DataProvider = dataProviderFor(`${accession}`, db);
                 return (
                   <DataProvider
                     renderer={(_, { payload, loading }) => {
@@ -526,6 +523,11 @@ class _Summary extends PureComponent {
     dataOrganism: T.shape({
       loading: T.bool.isRequired,
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
     customLocation: T.object.isRequired,
   };
 
@@ -567,7 +569,7 @@ class _Summary extends PureComponent {
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('medium-12', 'large-12', 'columns')}>
-              {/*<LoadedTitle />*/}
+              {/* <LoadedTitle />*/}
               {loadingOrg ? (
                 <Loading />
               ) : (

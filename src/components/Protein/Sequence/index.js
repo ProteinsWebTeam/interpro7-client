@@ -27,7 +27,8 @@ const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
-export const schemaProcessData = length => ({
+
+export const schemaProcessData = (length /*: number */) => ({
   '@id': '@additionalProperty',
   '@type': 'PropertyValue',
   additionalType: 'hhttp://semanticscience.org/resource/SIO_000205',

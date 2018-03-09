@@ -322,6 +322,11 @@ class Summary extends PureComponent {
         }).isRequired,
       }),
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
   };
 
   render() {
