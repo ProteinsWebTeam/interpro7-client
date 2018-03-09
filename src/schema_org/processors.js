@@ -162,3 +162,25 @@ export const schemaProcessCitations = ({ identifier, author }) => ({
   identifier,
   author,
 });
+
+export const schemaProcessDataWebPage = ({ name, description, location }) => ({
+  '@type': 'WebPage',
+  '@id': '@mainEntityOfPage',
+  name,
+  description,
+  url: location.href,
+  keywords: ['InterPro', 'Domain', 'Family', 'Annotation', 'Protein'],
+  provider: {
+    '@type': 'Organization',
+    name: 'European Bioinformatics Institute',
+    url: 'https://www.ebi.ac.uk/',
+  },
+  contains: '@contains',
+});
+
+export const schemaProcessDataPageSection = ({ name, description }) => ({
+  '@type': 'WebPageElement',
+  '@id': '@contains',
+  name,
+  description,
+});

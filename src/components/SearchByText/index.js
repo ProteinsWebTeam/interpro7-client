@@ -9,14 +9,21 @@ import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { changeSettings } from 'actions/creators';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css';
 import local from './style.css';
+import loadable from 'higherOrder/loadable';
 
 const f = foundationPartial(interproTheme, ipro, local);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 class _Settings extends PureComponent {
   static propTypes = {
@@ -101,6 +108,14 @@ class SearchByText extends PureComponent {
   render() {
     return (
       <div className={f('row')}>
+        <SchemaOrgData
+          data={{
+            name: 'Search By Text',
+            description:
+              'Search families, domains, proteins, keywords or GO terms',
+          }}
+          processData={schemaProcessDataPageSection}
+        />
         <div className={f('large-12', 'columns', 'margin-bottom-medium')}>
           <form onSubmit={e => e.preventDefault()} data-category="navigation">
             <div

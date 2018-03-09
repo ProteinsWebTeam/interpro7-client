@@ -2,7 +2,10 @@
 import React, { PureComponent } from 'react';
 import { foundationPartial } from 'styles/foundation';
 import loadable from 'higherOrder/loadable';
-import { schemaProcessDataInterpro } from 'schema_org/processors';
+import {
+  schemaProcessDataWebPage,
+  schemaProcessDataPageSection,
+} from 'schema_org/processors';
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -11,28 +14,6 @@ const SchemaOrgData = loadable({
 
 const f = foundationPartial();
 
-export const schemaProcessDataHelp = ({ location }) => ({
-  '@type': 'AboutPage',
-  '@id': '@mainEntityOfPage',
-  name: 'InterPro Help Page',
-  description: 'Documentation relating to the use of InterPro',
-  url: location.href,
-  keywords: ['InterPro', 'Domain', 'Family', 'Annotation', 'Protein'],
-  provider: {
-    '@type': 'Organization',
-    name: 'European Bioinformatics Institute',
-    url: 'https://www.ebi.ac.uk/',
-  },
-  contains: '@contains',
-});
-
-export const schemaProcessDataHelpSection = ({ name, description }) => ({
-  '@type': 'WebPageElement',
-  '@id': '@contains',
-  name,
-  description,
-});
-
 export default class extends PureComponent /*:: <{}> */ {
   static displayName = 'Help';
 
@@ -40,8 +21,12 @@ export default class extends PureComponent /*:: <{}> */ {
     return (
       <div className={f('row')}>
         <SchemaOrgData
-          data={{ location: window.location }}
-          processData={schemaProcessDataHelp}
+          data={{
+            name: 'InterPro Help Page',
+            description: 'Documentation relating to the use of InterPro',
+            location: window.location,
+          }}
+          processData={schemaProcessDataWebPage}
         />
         <div className={f('columns', 'large-12')}>
           <section>
@@ -55,7 +40,7 @@ export default class extends PureComponent /*:: <{}> */ {
                 description:
                   'Answers to many of the most commonly asked questions',
               }}
-              processData={schemaProcessDataHelpSection}
+              processData={schemaProcessDataPageSection}
             />
             <p>
               All documentation relating to the use of the InterPro has been
@@ -77,7 +62,7 @@ export default class extends PureComponent /*:: <{}> */ {
                 description:
                   'training materials as part of the EBI Train online',
               }}
-              processData={schemaProcessDataHelpSection}
+              processData={schemaProcessDataPageSection}
             />
             <p>
               There are also the following training materials as part of the EBI
@@ -101,7 +86,7 @@ export default class extends PureComponent /*:: <{}> */ {
                 name: 'Support & feedback',
                 description: 'contact us by email',
               }}
-              processData={schemaProcessDataHelpSection}
+              processData={schemaProcessDataPageSection}
             />
             <p>
               You can contact us by email following this link to the EBI contact
