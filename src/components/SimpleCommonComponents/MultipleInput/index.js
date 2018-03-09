@@ -32,10 +32,7 @@ class MultipleInput extends PureComponent {
       ...props
     } = this.props;
     return (
-      <div
-        className={s('multirange', className)}
-        style={{ position: 'relative' }}
-      >
+      <div className={s('multirange', className)}>
         <div
           className={s('small', 'label-min')}
           style={{ position: 'absolute', top: 12, left: 0 }}
