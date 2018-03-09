@@ -7,13 +7,14 @@ input[type='range']:focus {
   outline: none;
 }
 
+/*Chrome custom*/
 input[type='range']::-webkit-slider-runnable-track {
   width: 100%;
   height: 6px;
   border-radius: 3px;
   cursor: pointer;
   background: #b3b3b3;
-  border: 0.2px solid #010101;
+  border-color: transparent;
 }
 
 input[type='range']::-webkit-slider-thumb {
@@ -29,6 +30,70 @@ input[type='range']::-webkit-slider-thumb {
 
 input[type='range']::-webkit-slider-thumb:hover {
   transform: scale(1.1);
+}
+
+/*Firefox custom*/
+input[type='range']::-moz-range-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  background: #b3b3b3;
+  border-color: transparent;
+}
+
+input[type='range']::-moz-range-thumb {
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.3);
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #1779ba;
+  cursor: pointer;
+  margin-top: -8px;
+  border: none;
+}
+
+/*IE custom*/
+input[type='range']::-ms-track {
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type='range']::-ms-fill-lower {
+  background: #b6b6b6;
+  border: 1px solid #8a8a8a;
+  border-radius: 22px;
+  box-shadow: 0px 0px 0px #000000;
+}
+
+input[type='range']::-ms-fill-upper {
+  background: #b6b6b6;
+  border: 1px solid #8a8a8a;
+  border-radius: 22px;
+  box-shadow: 0px 0px 0px #000000;
+}
+
+input[type='range']::-ms-thumb {
+  margin-top: 1px;
+  box-shadow: 1px 1px 1px #828282;
+  border: 1px solid #8a8a8a;
+  height: 26px;
+  width: 26px;
+  border-radius: 18px;
+  background: #dadada;
+  cursor: pointer;
+}
+
+input[type='range']:focus::-ms-fill-lower {
+  background: #b6b6b6;
+}
+input[type='range']:focus::-ms-fill-upper {
+  background: #b6b6b6;
 }
 
 input[type='range']::-ms-track {
@@ -65,10 +130,6 @@ input[type='range'].original::-moz-range-thumb {
   z-index: 1;
 }
 
-input[type='range'].original::-moz-range-track,
-input[type='range'].original::-webkit-slider-runnable-track {
-  border-color: transparent; /* needed to switch FF to "styleable" control */
-}
 input[type='range'].ghost {
   position: absolute;
 }
