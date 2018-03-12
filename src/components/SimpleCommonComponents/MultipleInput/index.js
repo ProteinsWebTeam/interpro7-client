@@ -37,13 +37,42 @@ class MultipleInput extends PureComponent {
           className={s('small', 'label-min')}
           style={{ position: 'absolute', top: 12, left: 0 }}
         >
-          {Math.round(Math.exp(minValue))} AA
+          {arialLabel === 'length range' ? (
+            <span>
+              {Math.round(Math.exp(minValue))}
+              {
+                // AA
+              }
+            </span>
+          ) : (
+            <span>
+              {minValue}
+              {
+                // Å
+              }
+            </span>
+          )}
         </div>
+
         <div
           className={s('small', 'label-max')}
           style={{ position: 'absolute', top: 12, right: 6 }}
         >
-          {Math.round(Math.exp(maxValue))} AA
+          {arialLabel === 'length range' ? (
+            <span>
+              {Math.round(Math.exp(maxValue))}
+              {
+                // AA
+              }
+            </span>
+          ) : (
+            <span>
+              {maxValue}
+              {
+                // Å
+              }
+            </span>
+          )}
         </div>
         <input
           type="range"
