@@ -32,11 +32,8 @@ class MultipleInput extends PureComponent {
       ...props
     } = this.props;
     return (
-      <div className={s('multirange-wrapper', className)}>
-        <div
-          className={s('small', 'label-min')}
-          style={{ position: 'absolute', top: 12, left: 0 }}
-        >
+      <div className={s('multirange-wrapper', 'label-off', className)}>
+        <div className={s('small', 'label-min')} style={{ left: 20 }}>
           {arialLabel === 'length range' ? (
             <span>
               {Math.round(Math.exp(minValue))}
@@ -54,10 +51,7 @@ class MultipleInput extends PureComponent {
           )}
         </div>
 
-        <div
-          className={s('small', 'label-max')}
-          style={{ position: 'absolute', top: 12, right: 6 }}
-        >
+        <div className={s('small', 'label-max')} style={{ right: 16 }}>
           {arialLabel === 'length range' ? (
             <span>
               {Math.round(Math.exp(maxValue))}
