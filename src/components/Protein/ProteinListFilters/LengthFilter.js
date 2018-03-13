@@ -81,7 +81,7 @@ class LengthFilter extends PureComponent {
   render() {
     const { min, max } = this.state;
     return (
-      <div style={{ display: 'block', height: 56 }}>
+      <div style={{ display: 'block', height: 70 }}>
         <br />
         <MultipleInput
           min={Math.log(MIN)}
