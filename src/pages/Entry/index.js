@@ -166,36 +166,6 @@ class List extends PureComponent {
               />
             )}
             <Column
-              dataKey="name"
-              renderer={(
-                name /*: string */,
-                { accession } /*: {accession: string} */,
-              ) => (
-                <Tooltip title={`${name} (${accession})`}>
-                  <Link
-                    to={customLocation => ({
-                      description: {
-                        ...customLocation.description,
-                        entry: {
-                          ...customLocation.description.entry,
-                          accession,
-                        },
-                      },
-                      search: {},
-                    })}
-                  >
-                    <HighlightedText
-                      text={name}
-                      textToHighlight={search.search}
-                    />
-                  </Link>
-                </Tooltip>
-              )}
-            >
-              Name
-            </Column>
-
-            <Column
               dataKey="accession"
               renderer={(accession /*: string */, data) => (
                 <Tooltip title={accession}>
@@ -226,6 +196,37 @@ class List extends PureComponent {
             >
               Accession
             </Column>
+
+            <Column
+              dataKey="name"
+              renderer={(
+                name /*: string */,
+                { accession } /*: {accession: string} */,
+              ) => (
+                <Tooltip title={`${name} (${accession})`}>
+                  <Link
+                    to={customLocation => ({
+                      description: {
+                        ...customLocation.description,
+                        entry: {
+                          ...customLocation.description.entry,
+                          accession,
+                        },
+                      },
+                      search: {},
+                    })}
+                  >
+                    <HighlightedText
+                      text={name}
+                      textToHighlight={search.search}
+                    />
+                  </Link>
+                </Tooltip>
+              )}
+            >
+              Name
+            </Column>
+
             {db !== 'InterPro' && (
               <Column
                 dataKey="type"
