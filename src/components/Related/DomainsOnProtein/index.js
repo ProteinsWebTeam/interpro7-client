@@ -102,7 +102,7 @@ const addSignature = (entry, ipro, integrated) => {
 };
 const groupResidues = residues => {
   const resTypes = {};
-  for (let fr of residues.fragments) {
+  for (const fr of residues.fragments) {
     if (!(fr.description in resTypes)) resTypes[fr.description] = [];
     resTypes[fr.description].push(fr);
   }
@@ -117,7 +117,6 @@ const groupResidues = residues => {
       })),
     },
   ];
-  console.log(residues, resTypes, output);
   return output;
 };
 const mergeData = (interpro, integrated, unintegrated, residues) => {

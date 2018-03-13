@@ -133,6 +133,18 @@ export class Manager {
     }
   }
 }
+const shallowEquals = (obj1, obj2) =>
+  Object.keys(obj1).every(key => {
+    if (
+      obj1[key] !== null &&
+      typeof obj1[key] === 'object' &&
+      typeof obj2[key] === 'object'
+    )
+      return Object.keys(obj1[key]).every(
+        k2 => obj1[key][k2] === obj2[key][k2],
+      );
+    return obj1[key] === obj2[key];
+  });
 
 export default class SchemaOrgData extends PureComponent {
   static propTypes = {
@@ -149,6 +161,18 @@ export default class SchemaOrgData extends PureComponent {
     if (!manager) return;
     const { data, processData } = this.props;
     manager.subscribe({ subscriber: this, data, processData });
+  }
+  componentWillReceiveProps({ data, processData }) {
+    if (
+      data &&
+      data.data &&
+      this.props.data &&
+      this.props.data.data &&
+      !shallowEquals(data.data, this.props.data.data)
+    ) {
+      manager.unsubscribe(this);
+      manager.subscribe({ subscriber: this, data, processData });
+    }
   }
 
   componentWillUnmount() {

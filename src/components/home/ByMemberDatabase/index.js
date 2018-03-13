@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
@@ -13,6 +12,7 @@ import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
@@ -27,15 +27,7 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessDataForDB = ({ name, version, releaseDate, location }) => ({
-  '@type': 'Dataset',
-  '@id': '@dataset',
-  name,
-  identifier: name,
-  version,
-  releaseDate,
-  url: `${location.href}/entry/${name}`,
-});
+import { schemaProcessDataForDB } from 'schema_org/processors';
 
 /*:: type Props = {
   data: {
@@ -141,17 +133,6 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToUrlForMeta = createSelector(
-  state => state.settings.api,
-  ({ protocol, hostname, port, root }) =>
-    format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}`,
-    }),
-);
-
 const mapStateToUrl = createSelector(
   state => state.settings.api,
   ({ protocol, hostname, port, root }) =>
@@ -164,6 +145,6 @@ const mapStateToUrl = createSelector(
 );
 
 export default loadData({
-  getUrl: mapStateToUrlForMeta,
+  getUrl: getUrlForMeta,
   propNamespace: 'Meta',
 })(loadData(mapStateToUrl)(ByMemberDatabase));

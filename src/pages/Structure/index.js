@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -20,6 +20,13 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import {
+  schemaProcessDataTable,
+  schemaProcessDataTableRow,
+  schemaProcessDataRecord,
+  schemaProcessMainEntity,
+} from 'schema_org/processors';
+
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 import subPages from 'subPages';
@@ -29,6 +36,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 const f = foundationPartial(pageStyle, styles);
 
 const SummaryAsync = loadable({
@@ -52,6 +60,10 @@ const propTypes = {
     description: T.object.isRequired,
     search: T.object.isRequired,
   }).isRequired,
+  dataBase: T.shape({
+    payload: T.object,
+    loading: T.bool.isRequired,
+  }),
 };
 
 const Overview = ({ data: { payload, loading } }) => {
@@ -80,11 +92,13 @@ Overview.propTypes = propTypes;
 const List = ({
   data: { payload, loading, ok, url, status },
   isStale,
-  customLocation: { search },
+  customLocation: { description: { structure: { db } }, search },
+  dataBase,
 }) => {
   let _payload = payload;
   const HTTP_OK = 200;
   const notFound = !loading && status !== HTTP_OK;
+  const databases = dataBase && dataBase.payload && dataBase.payload.databases;
   if (loading || notFound) {
     _payload = {
       results: [],
@@ -97,6 +111,17 @@ const List = ({
 
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
         <StructureListFilters /> <hr />
+        {databases &&
+          db &&
+          databases[db.toUpperCase()] && (
+            <SchemaOrgData
+              data={{
+                data: { db: databases[db.toUpperCase()] },
+                location: window.location,
+              }}
+              processData={schemaProcessDataTable}
+            />
+          )}
         <Table
           dataTable={_payload.results}
           loading={loading}
@@ -134,7 +159,7 @@ const List = ({
             dataKey="accession"
             headerClassName={f('table-center')}
             cellClassName={f('table-center')}
-            renderer={(accession /*: string */) => (
+            renderer={(accession /*: string */, row) => (
               <Link
                 to={customLocation => ({
                   ...customLocation,
@@ -148,6 +173,13 @@ const List = ({
                   search: {},
                 })}
               >
+                <SchemaOrgData
+                  data={{
+                    data: { row, endpoint: 'structure' },
+                    location: window.location,
+                  }}
+                  processData={schemaProcessDataTableRow}
+                />
                 <HighlightedText
                   text={accession}
                   textToHighlight={search.search}
@@ -300,26 +332,6 @@ const InnerSwitch = props => (
   </ErrorBoundary>
 );
 
-const schemaProcessData = data => ({
-  '@type': ['Structure', 'DataRecord'],
-  '@id': '@mainEntityOfPage',
-  identifier: data.metadata.accession,
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': data.metadata.source_database,
-  },
-  mainEntity: '@mainEntity',
-});
-
-const schemaProcessData2 = data => ({
-  '@type': ['Structure', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  additionalProperty: '@additionalProperty',
-});
-
 class Structure extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -329,26 +341,39 @@ class Structure extends PureComponent {
         }),
       }),
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
   };
 
   render() {
+    const { dataBase } = this.props;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     return (
       <div>
         {this.props.data.payload &&
           this.props.data.payload.metadata &&
           this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData}
-            />
-          )}
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData2}
-            />
+            <Fragment>
+              <SchemaOrgData
+                data={{
+                  data: this.props.data.payload,
+                  endpoint: 'structure',
+                  version: databases && databases.PDB.version,
+                }}
+                processData={schemaProcessDataRecord}
+              />
+              <SchemaOrgData
+                data={{
+                  data: this.props.data.payload.metadata,
+                  type: 'Structure',
+                }}
+                processData={schemaProcessMainEntity}
+              />
+            </Fragment>
           )}
         <ErrorBoundary>
           <Switch
@@ -363,8 +388,6 @@ class Structure extends PureComponent {
   }
 }
 
-export default loadData()(Structure);
-// loadData will create an component that wraps Structure.
-// Such component will request content and it will put it in the state and make
-// it available for its children. Because there are not parameters when invoking
-// the method,the data is requested from the api based on the current URL
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  loadData()(Structure),
+);

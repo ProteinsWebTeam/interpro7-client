@@ -8,7 +8,20 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import global from 'styles/global.css';
+import loadable from 'higherOrder/loadable';
+
 const f = foundationPartial(fonts, global);
+
+const schemaProcessData = data => ({
+  '@id': '@contains',
+  '@type': ['Proteome', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
+  identifier: data.accession,
+  name: data.name.name || data.accession,
+});
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation: Object}> */ {
   static propTypes = {
@@ -38,7 +51,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation:
         <SearchBox search={search.search}>Search</SearchBox>
         <Column
           dataKey="accession"
-          renderer={(acc /*: string */) => (
+          renderer={(acc /*: string */, obj) => (
             <Link
               to={{
                 description: {
@@ -51,6 +64,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation:
               }}
             >
               <span>{acc}</span>
+              <SchemaOrgData data={obj} processData={schemaProcessData} />
             </Link>
           )}
         >

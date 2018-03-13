@@ -5,6 +5,7 @@ import { PMCLink, DOILink } from 'components/ExtLink';
 import Link from 'components/generic/Link';
 
 import loadable from 'higherOrder/loadable';
+import { schemaProcessCitations } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -18,12 +19,12 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessData = data => ({
-  '@type': 'ScholarlyArticle',
-  '@id': '@citation',
-  identifier: `http://identifiers.org/pubmed/${data.PMID}`,
-  author: data.authors,
-});
+// const schemaProcessData = data => ({
+//   '@type': 'ScholarlyArticle',
+//   '@id': '@citation',
+//   identifier: `http://identifiers.org/pubmed/${data.PMID}`,
+//   author: data.authors,
+// });
 
 const LiteratureItem = (
   {
@@ -35,7 +36,13 @@ const LiteratureItem = (
 ) => (
   <div className={f('reference', 'small')} id={included ? pubID : null}>
     <p className={f('cite')}>
-      <SchemaOrgData data={r} processData={schemaProcessData} />
+      <SchemaOrgData
+        data={{
+          identifier: `http://identifiers.org/pubmed/${r.PMID}`,
+          author: r.authors,
+        }}
+        processData={schemaProcessCitations}
+      />
       {included &&
         typeof i !== 'undefined' && (
           <span className={f('index')}>

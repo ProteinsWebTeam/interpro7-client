@@ -16,7 +16,7 @@ import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
+import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
@@ -34,8 +34,12 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
 
-// const SVG_WIDTH = 100;
-// const colorHash = new ColorHash();
+import {
+  schemaProcessDataTable,
+  schemaProcessDataTableRow,
+  schemaProcessDataRecord,
+  schemaProcessMainEntity,
+} from 'schema_org/processors';
 
 const propTypes = {
   data: T.shape({
@@ -48,6 +52,10 @@ const propTypes = {
     description: T.object.isRequired,
   }).isRequired,
   match: T.string,
+  dataBase: T.shape({
+    payload: T.object,
+    loading: T.bool.isRequired,
+  }).isRequired,
 };
 
 const defaultPayload = {
@@ -93,10 +101,15 @@ class List extends PureComponent {
       data: { payload, loading, ok, url, status },
       isStale,
       customLocation: { search },
+      // customLocation: { description: { protein: { db } }, search },
+      dataBase,
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
     const notFound = !loading && status !== HTTP_OK;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
+    const db = 'UNIPROT';
     if (loading || notFound) {
       _payload = {
         results: [],
@@ -110,6 +123,17 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />
           <hr />
+          {databases &&
+            db &&
+            databases[db.toUpperCase()] && (
+              <SchemaOrgData
+                data={{
+                  data: { db: databases[db.toUpperCase()] },
+                  location: window.location,
+                }}
+                processData={schemaProcessDataTable}
+              />
+            )}
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -145,8 +169,15 @@ class List extends PureComponent {
             <SearchBox search={search.search}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */, { source_database: db }) => (
+              renderer={(accession /*: string */, row) => (
                 <Fragment>
+                  <SchemaOrgData
+                    data={{
+                      data: { row, endpoint: 'protein' },
+                      location: window.location,
+                    }}
+                    processData={schemaProcessDataTableRow}
+                  />
                   <Link
                     to={customLocation => ({
                       ...customLocation,
@@ -166,17 +197,7 @@ class List extends PureComponent {
                       textToHighlight={search.search}
                     />
                   </Link>
-                </Fragment>
-              )}
-            >
-              Accession
-            </Column>
-
-            <Column
-              dataKey="" /* no need for this column header */
-              renderer={(accession /*: string */, { source_database: db }) => (
-                <Fragment>
-                  {db === 'reviewed' ? (
+                  {row.source_database === 'reviewed' ? (
                     <Fragment>
                       {'\u00A0' /* non-breakable space */}
                       <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
@@ -291,27 +312,6 @@ class SummaryComponent extends PureComponent {
   }
 }
 
-const schemaProcessData = data => ({
-  '@type': 'DataRecord',
-  '@id': '@mainEntityOfPage',
-  identifier: data.metadata.accession,
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': data.metadata.source_database,
-  },
-  mainEntity: '@mainEntity',
-  seeAlso: '@seeAlso',
-});
-
-const schemaProcessData2 = data => ({
-  '@type': ['Protein', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  additionalProperty: '@additionalProperty',
-});
-
 class Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -322,10 +322,17 @@ class Summary extends PureComponent {
         }).isRequired,
       }),
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const { data: { loading, payload }, dataBase } = this.props;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     if (loading || !payload.metadata) {
       return <Loading />;
     }
@@ -337,22 +344,25 @@ class Summary extends PureComponent {
             <EntryMenu metadata={payload.metadata} />
           </div>
         </div>
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
+        {payload.metadata.accession && (
+          <Fragment>
             <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData}
+              data={{
+                data: payload,
+                endpoint: 'protein',
+                version: databases && databases.UNIPROT.version,
+              }}
+              processData={schemaProcessDataRecord}
             />
-          )}
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
             <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData2}
+              data={{
+                data: payload.metadata,
+                type: 'Protein',
+              }}
+              processData={schemaProcessMainEntity}
             />
-          )}
+          </Fragment>
+        )}
         <ErrorBoundary>
           <Switch
             {...this.props}
@@ -409,8 +419,10 @@ const Protein = props => (
   </div>
 );
 
-export default loadData((...args) =>
-  getUrlForApi(...args)
-    .replace('domain_architecture', 'entry')
-    .replace('sequence', ''),
-)(Protein);
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  loadData((...args) =>
+    getUrlForApi(...args)
+      .replace('domain_architecture', 'entry')
+      .replace('sequence', ''),
+  )(Protein),
+);

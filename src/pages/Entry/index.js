@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -22,7 +22,7 @@ import Table, {
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
 import loadable from 'higherOrder/loadable';
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
+import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import subPages from 'subPages';
 import config from 'config';
@@ -39,27 +39,12 @@ import pageStyle from '../style.css';
 
 const f = foundationPartial(pageStyle, styles);
 
-const schemaProcessDataTable = ({ db, location }) => ({
-  '@type': 'Dataset',
-  '@id': '@mainEntityOfPage',
-  identifier: db,
-  name: db,
-  version: '?',
-  url: location.href,
-  hasPart: '@hasPart',
-  includedInDataCatalog: {
-    '@type': 'DataCatalog',
-    '@id': `${location.origin}/interpro7/`,
-  },
-});
-
-const schemaProcessDataTableRow = ({ data, location }) => ({
-  '@type': 'DataRecord',
-  '@id': '@hasPart',
-  identifier: data.accession,
-  name: data.db,
-  url: `${location.href}/${data.accession}`,
-});
+import {
+  schemaProcessDataTable,
+  schemaProcessDataTableRow,
+  schemaProcessMainEntity,
+  schemaProcessDataRecord,
+} from 'schema_org/processors';
 
 const GO_COLORS = new Map([
   ['P', '#d1eaef'],
@@ -79,6 +64,10 @@ class List extends PureComponent {
       description: T.object.isRequired,
       search: T.object.isRequired,
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.object,
+      loading: T.bool.isRequired,
+    }),
   };
 
   componentWillMount() {
@@ -94,10 +83,13 @@ class List extends PureComponent {
       data,
       isStale,
       customLocation: { description: { entry: { db } }, search },
+      dataBase,
     } = this.props;
     let _payload = data.payload;
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     if (data.loading || notFound) {
       _payload = {
         results: [],
@@ -111,10 +103,17 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
-          <SchemaOrgData
-            data={{ db, location: window.location }}
-            processData={schemaProcessDataTable}
-          />
+          {databases &&
+            db &&
+            databases[db.toUpperCase()] && (
+              <SchemaOrgData
+                data={{
+                  data: { db: databases[db.toUpperCase()] },
+                  location: window.location,
+                }}
+                processData={schemaProcessDataTable}
+              />
+            )}
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -167,7 +166,7 @@ class List extends PureComponent {
             )}
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */, data) => (
+              renderer={(accession /*: string */, data, row) => (
                 <Tooltip title={accession}>
                   <Link
                     to={customLocation => ({
@@ -181,7 +180,10 @@ class List extends PureComponent {
                     })}
                   >
                     <SchemaOrgData
-                      data={{ data, location: window.location }}
+                      data={{
+                        data: { row, endpoint: 'entry' },
+                        location: window.location,
+                      }}
                       processData={schemaProcessDataTableRow}
                     />
                     <span className={f('acc-row')}>
@@ -482,74 +484,45 @@ const InnerSwitch = props => (
   </ErrorBoundary>
 );
 
-const mapTypeToOntology = new Map([
-  ['Domain', 'DomainAnnotation'],
-  ['Family', 'FamilyAnnotation'],
-  ['Repeat', 'RepeatAnnotation'],
-  ['Unknown', 'UnknownAnnotation'],
-  ['Conserved_site', 'ConservedSiteAnnotation'],
-  ['Binding_site', 'BindingSiteAnnotation'],
-  ['Active_site', 'ActiveSiteAnnotation'],
-  ['PTM', 'PTMAnnotation'],
-]);
-
-const schemaProcessData = data => ({
-  '@type': 'DataRecord',
-  '@id': '@mainEntityOfPage',
-  identifier: data.metadata.accession,
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': 'InterPro release ??',
-  },
-  mainEntity: '@mainEntity',
-  isBasedOn: '@isBasedOn',
-  isBasisFor: '@isBasisFor',
-  citation: '@citation',
-  seeAlso: '@seeAlso',
-});
-
-const schemaProcessData2 = data => ({
-  '@type': [
-    'StructuredValue',
-    'CreativeWork',
-    'BioChemEntity',
-    'Entry',
-    mapTypeToOntology.get(data.metadata.type) ||
-      mapTypeToOntology.get('Unknown'),
-  ],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  additionalProperty: '@additionalProperty',
-  isContainedIn: '@isContainedIn',
-});
-
 class Entry extends PureComponent {
   static propTypes = {
     data: T.shape({
       payload: T.object,
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.object,
+    }).isRequired,
   };
 
   render() {
+    const { data: { payload }, dataBase } = this.props;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
+
     return (
       <div>
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData}
-            />
-          )}
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData2}
-            />
+        {payload &&
+          payload.metadata &&
+          payload.metadata.accession && (
+            <Fragment>
+              <SchemaOrgData
+                data={{
+                  data: this.props.data.payload,
+                  endpoint: 'entry',
+                  version:
+                    databases &&
+                    databases[payload.metadata.source_database].version,
+                }}
+                processData={schemaProcessDataRecord}
+              />
+              <SchemaOrgData
+                data={{
+                  data: payload.metadata,
+                  type: 'Entry',
+                }}
+                processData={schemaProcessMainEntity}
+              />
+            </Fragment>
           )}
         <ErrorBoundary>
           <Switch
@@ -564,8 +537,10 @@ class Entry extends PureComponent {
   }
 }
 
-export default loadData((...args) =>
-  getUrlForApi(...args)
-    .replace('/logo', '/')
-    .replace('domain_architecture', ''),
-)(Entry);
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  loadData((...args) =>
+    getUrlForApi(...args)
+      .replace('/logo', '/')
+      .replace('domain_architecture', ''),
+  )(Entry),
+);

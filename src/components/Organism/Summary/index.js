@@ -21,8 +21,26 @@ import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
 
 const f = foundationPartial(ebiStyles, global);
+
+export const parentRelationship = ({ taxId, name = null }) => ({
+  '@id': '@additionalProperty',
+  '@type': 'PropertyValue',
+  additionalType: 'http://semanticscience.org/resource/SIO_000095',
+  name: 'is member of',
+  value: {
+    '@type': ['Organism', 'StructuredValue', 'BioChemEntity'],
+    identifier: taxId,
+    name,
+  },
+});
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 /*:: type Props = {
   data: {
@@ -118,6 +136,15 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
             title="Tax ID"
           />
           {metadata.rank && <div>Rank: {metadata.rank}</div>}
+          {metadata.parent && (
+            <SchemaOrgData
+              data={{
+                taxId: metadata.parent,
+                name: names[metadata.parent] && names[metadata.parent].name,
+              }}
+              processData={parentRelationship}
+            />
+          )}
           <Lineage lineage={metadata.lineage} names={names} />
           <Children taxChildren={metadata.children} names={names} />
           <div

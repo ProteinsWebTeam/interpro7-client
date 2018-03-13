@@ -16,6 +16,8 @@ import AdvancedOptions from 'components/IPScan/AdvancedOptions';
 import Redirect from 'components/generic/Redirect';
 
 import { createJob, goToCustomLocation } from 'actions/creators';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import id from 'utils/cheapUniqueId';
 import blockEvent from 'utils/blockEvent';
@@ -29,6 +31,11 @@ import local from './style.css';
 import example from './example.fasta';
 
 const f = foundationPartial(interproTheme, ipro, local);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const strategy = re => (block, cb) => {
   const text = block.getText();
@@ -274,6 +281,14 @@ class IPScanSearch extends PureComponent {
                 <div className={f('row')}>
                   <div className={f('large-12', 'columns', 'sqc-search-input')}>
                     <h3>Sequence, in FASTA format</h3>
+                    <SchemaOrgData
+                      data={{
+                        name: 'Search By Sequence',
+                        description:
+                          'Search for InterPro matches in your seqeunce',
+                      }}
+                      processData={schemaProcessDataPageSection}
+                    />
                     <div
                       onClick={this._handleEditorClick}
                       onKeyPress={this._handleEditorClick}

@@ -3,6 +3,11 @@ node_js:
 - '8'
 before_install:
 - cp config.yml.example config.yml
+script:
+- npm run test
+- npm run deploy:production
+- npm run report
+- npm run coveralls
 notifications:
   slack:
     on_success: change
