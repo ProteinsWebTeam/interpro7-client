@@ -1,6 +1,8 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
+import { format } from 'url';
 
 import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
@@ -13,7 +15,11 @@ import loadWebComponent from 'utils/loadWebComponent';
 
 import { foundationPartial } from 'styles/foundation';
 
+import loadData from 'higherOrder/loadData';
+
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(ebiStyles);
 
@@ -30,9 +36,7 @@ const webComponents = [];
 
 class SummaryStructure extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    data: T.shape({
-      metadata: T.object.isRequired,
-    }).isRequired,
+    data: T.shape().isRequired,
     customLocation: T.shape({
       description: T.object.isRequired,
     }).isRequired,
@@ -58,7 +62,13 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
   }
 
   render() {
-    const { data: { metadata } } = this.props;
+    const {
+      data: { loading, payload },
+      dataMatches: { loading: loadingM, payload: payloadM },
+    } = this.props;
+    if (loading || loadingM) return null;
+    const metadata = payload.metadata;
+    const matches = payloadM.entries;
     const chains = Array.from(new Set(metadata.chains || []));
     const date = new Date(metadata.release_date);
     const literature = Object.entries(metadata.literature);
@@ -118,7 +128,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
           <ErrorBoundary>
             <div className={f('row')}>
               <div className={f('columns')}>
-                <StructureView id={metadata.accession} />
+                <StructureView id={metadata.accession} matches={matches} />
               </div>
             </div>
           </ErrorBoundary>
@@ -140,4 +150,23 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default SummaryStructure;
+const getURLForMatches = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description.structure,
+  ({ protocol, hostname, port, root }, { accession }) =>
+    format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}${descriptionToPath({
+        main: { key: 'structure' },
+        structure: { db: 'pdb', accession },
+        entry: { isFilter: true, db: 'all' },
+      })}`,
+    }),
+);
+
+export default loadData({
+  getUrl: getURLForMatches,
+  propNamespace: 'Matches',
+})(loadData()(SummaryStructure));
