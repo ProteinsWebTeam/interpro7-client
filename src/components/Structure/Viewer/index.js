@@ -13,11 +13,14 @@ const f = foundationPartial(ebiStyles);
 
 /*:: type Props = {
   id: string|number,
+  matches: array
 }; */
 
 class StructureView extends PureComponent /*:: <Props> */ {
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
+    matches: T.array,
+    highlight: T.string,
   };
 
   render() {
@@ -45,7 +48,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       target: '#litemol',
       viewportBackground: '#fff',
       layoutState: {
-        hideControls: true,
+        hideControls: false,
         isExpanded: false,
       },
     });
@@ -93,31 +96,60 @@ class StructureView extends PureComponent /*:: <Props> */ {
     plugin.applyTransform(action).then(() => {
       console.log('Transformed');
       let model = context.select('model')[0];
-      //let query = Query.chainsById("A");
-      let query = Query.residuesById(
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        100,
-        101,
-        102,
-        103,
-        104,
-        105,
-        107,
-      );
-      Command.Molecule.Highlight.dispatch(context.tree.context, {
-        model: model,
-        query: query,
-        isOn: true,
-      });
+      //let chainQuery = Query.chainsById("A");
+      //let residueQuery = Query.residuesFromIndices([1,2,3,4,5,50,51,53,54,55,56]);
+      //let query = Query.inside(chainQuery, residueQuery);
+      //Command.Molecule.Highlight.dispatch(context.tree.context, {
+      //  model: model,
+      //  query: query,
+      //  isOn: true,
+      // });
+      let transform = Transform.build();
+      if (this.props.matches != undefined) {
+        transform.add(
+          plugin.context.tree.root,
+          Transformer.Basic.CreateGroup,
+          { label: 'Entries', description: 'Entries mapped to this structure' },
+          { isBinding: false },
+        );
+
+        for (let match of this.props.matches) {
+          let chain = match.chain;
+          let protein = match.protein;
+          let entry = match.accession;
+          let db = match.source_database;
+          //let chainQuery = Query.chainsById({chain});
+          for (let location of match.protein_structure_locations) {
+            let residues = [];
+            for (let fragment of location.fragments) {
+              console.log(fragment);
+              for (let i = fragment.start; i < fragment.end; i++) {
+                residues.push({ authsymId: chain, authSeqNumber: i });
+              }
+            }
+            //let residueQuery = Query.residuesFromIndices(residues);
+            let query = Query.residues(residues);
+            /*
+            transform.then(Transformer.Basic.CreateGroup,
+              {label: entry, description: db}, {ref: entry}
+            );
+            */
+            /*
+            transform.then(Transformer.Molecule.CreateSelectionFromQuery,
+              {name: entry, query: chainQuery}, {isBinding: false}
+            )
+            .then(Transformer.Molecule.CreateVisual,
+              {style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get('Cartoons')});
+            */
+            Command.Molecule.Highlight.dispatch(context.tree.context, {
+              model: model,
+              query: query,
+              isOn: true,
+            });
+          }
+        }
+        plugin.applyTransform(transform);
+      }
     });
   }
 }
