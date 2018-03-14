@@ -138,6 +138,11 @@ const memberDBs = [
                   US.`,
   },
   {
+    type: 'pfam',
+    title: 'PFAM',
+    description: `is a large collection of multiple sequence alignments and hidden Markov models covering many common protein domains. Pfam is based at EMBL-EBI, Hinxton, UK.`,
+  },
+  {
     type: 'pirsf',
     title: 'PIRSF',
     description: `protein classification system is a
