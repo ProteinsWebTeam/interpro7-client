@@ -13,6 +13,7 @@ const classNames = {
   CATHGENE3D: f('md-cg'),
   CDD: f('md-cd'),
   HAMAP: f('md-ha'),
+  INTERPRO: f('md-ip'),
   MOBIDBLT: f('md-mo'),
   PANTHER: f('md-pa'),
   PFAM: f('md-pf'),
