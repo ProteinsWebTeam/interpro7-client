@@ -274,7 +274,12 @@ class List extends PureComponent {
                         <Tooltip
                           key={accession}
                           title={`${id} (${db})`}
-                          className={f('signature')}
+                          className={f('signature', {
+                            'corresponds-to-filter':
+                              search.signature_in &&
+                              search.signature_in.toLowerCase() ===
+                                db.toLowerCase(),
+                          })}
                         >
                           <Link
                             to={{
