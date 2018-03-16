@@ -98,7 +98,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
     plugin.applyTransform(action).then(() => {
       let model = context.select('model')[0];
-
+      let polymer = context.select('polymer-visual')[0];
       if (this.props.matches != undefined) {
         for (let match of this.props.matches) {
           let chain = match.chain;
@@ -114,30 +114,28 @@ class StructureView extends PureComponent /*:: <Props> */ {
             }
           }
           let query = Query.residues(...residues);
-
           let transform = Transform.build();
-          transform.add(
-            context.tree.root,
-            Transformer.Basic.CreateGroup,
-            {
-              label: 'Entries',
-              description: 'Entries mapped to this structure',
-            },
-            { isBinding: false },
-          );
+          transform
+            .add(
+              model,
+              Transformer.Molecule.CreateSelectionFromQuery,
+              { name: entry + ' (' + db + ')', query: query, silent: true },
+              { ref: entry },
+            )
+            .then(Transformer.Molecule.CreateVisual, {
+              style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get(
+                'Cartoons',
+              ),
+            });
+
           /*
-          .then(Transformer.Basic.CreateGroup,
-            {label: entry, description: db}, {ref: entry}
-          )
-          .then(Transformer.Molecule.CreateSelectionFromQuery,
-            {name: entry, query: chainQuery}, {isBinding: false}
-          );
-          */
           Command.Molecule.Highlight.dispatch(context.tree.context, {
             model: model,
             query: query,
             isOn: true,
           });
+          */
+          plugin.applyTransform(transform);
         }
       }
     });
