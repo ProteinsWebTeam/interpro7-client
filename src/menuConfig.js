@@ -5,7 +5,7 @@ import f from 'styles/foundation';
 
 /* ::
   type Location = {|
-    description: {|[key: string]: string|},
+    description: {|[key: string]: {|[key: string | number]: string | boolean|}|},
     search: {|[key: string]: string|},
     hash: string,
   |};
