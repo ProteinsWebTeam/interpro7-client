@@ -17,6 +17,9 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
+const allRE = /^all$/i;
+const isAll = string => allRE.test(string);
+
 class EntryTypeFilter extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -44,7 +47,7 @@ class EntryTypeFilter extends PureComponent {
 
   _handleSelection = ({ target: { value } }) => {
     const { page, type, ...search } = this.props.customLocation.search;
-    if (value !== 'All') search.type = value;
+    if (!isAll(value)) search.type = value;
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
@@ -70,12 +73,12 @@ class EntryTypeFilter extends PureComponent {
                 value={type.toLowerCase()}
                 onChange={this._handleSelection}
                 checked={
-                  (!search.type && type === 'All') ||
+                  (!search.type && isAll(type)) ||
                   search.type === type.toLowerCase()
                 }
                 style={{ margin: '0.25em' }}
               />
-              {type === 'All' || db !== 'InterPro' ? (
+              {isAll(type) || db !== 'InterPro' ? (
                 type.replace('_', ' ')
               ) : (
                 <interpro-type
