@@ -44,6 +44,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   componentDidMount() {
     const pdbid = this.props.id;
+    const InterProSpec = LiteMol.Plugin.getDefaultSpecification();
+
     let plugin = LiteMol.Plugin.create({
       target: '#litemol',
       viewportBackground: '#fff',
@@ -51,6 +53,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         hideControls: false,
         isExpanded: false,
       },
+      customSpecification: InterProSpec,
     });
 
     /*
@@ -69,7 +72,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
     let action = Transform.build();
     action
-      .add(plugin.context.tree.root, Transformer.Data.Download, {
+      .add(context.tree.root, Transformer.Data.Download, {
         url:
           'https://www.ebi.ac.uk/pdbe/static/entry/' + pdbid + '_updated.cif',
         type: 'String',
@@ -94,61 +97,48 @@ class StructureView extends PureComponent /*:: <Props> */ {
       });
 
     plugin.applyTransform(action).then(() => {
-      console.log('Transformed');
       let model = context.select('model')[0];
-      //let chainQuery = Query.chainsById("A");
-      //let residueQuery = Query.residuesFromIndices([1,2,3,4,5,50,51,53,54,55,56]);
-      //let query = Query.inside(chainQuery, residueQuery);
-      //Command.Molecule.Highlight.dispatch(context.tree.context, {
-      //  model: model,
-      //  query: query,
-      //  isOn: true,
-      // });
-      let transform = Transform.build();
-      if (this.props.matches != undefined) {
-        transform.add(
-          plugin.context.tree.root,
-          Transformer.Basic.CreateGroup,
-          { label: 'Entries', description: 'Entries mapped to this structure' },
-          { isBinding: false },
-        );
 
+      if (this.props.matches != undefined) {
         for (let match of this.props.matches) {
           let chain = match.chain;
           let protein = match.protein;
           let entry = match.accession;
           let db = match.source_database;
-          //let chainQuery = Query.chainsById({chain});
+          let residues = [];
           for (let location of match.protein_structure_locations) {
-            let residues = [];
             for (let fragment of location.fragments) {
-              console.log(fragment);
               for (let i = fragment.start; i < fragment.end; i++) {
-                residues.push({ authsymId: chain, authSeqNumber: i });
+                residues.push({ authAsymId: chain, authSeqNumber: i });
               }
             }
-            //let residueQuery = Query.residuesFromIndices(residues);
-            let query = Query.residues(residues);
-            /*
-            transform.then(Transformer.Basic.CreateGroup,
-              {label: entry, description: db}, {ref: entry}
-            );
-            */
-            /*
-            transform.then(Transformer.Molecule.CreateSelectionFromQuery,
-              {name: entry, query: chainQuery}, {isBinding: false}
-            )
-            .then(Transformer.Molecule.CreateVisual,
-              {style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get('Cartoons')});
-            */
-            Command.Molecule.Highlight.dispatch(context.tree.context, {
-              model: model,
-              query: query,
-              isOn: true,
-            });
           }
+          let query = Query.residues(...residues);
+
+          let transform = Transform.build();
+          transform.add(
+            context.tree.root,
+            Transformer.Basic.CreateGroup,
+            {
+              label: 'Entries',
+              description: 'Entries mapped to this structure',
+            },
+            { isBinding: false },
+          );
+          /*
+          .then(Transformer.Basic.CreateGroup,
+            {label: entry, description: db}, {ref: entry}
+          )
+          .then(Transformer.Molecule.CreateSelectionFromQuery,
+            {name: entry, query: chainQuery}, {isBinding: false}
+          );
+          */
+          Command.Molecule.Highlight.dispatch(context.tree.context, {
+            model: model,
+            query: query,
+            isOn: true,
+          });
         }
-        plugin.applyTransform(transform);
       }
     });
   }
