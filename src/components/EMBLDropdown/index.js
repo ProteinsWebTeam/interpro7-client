@@ -15,7 +15,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 
 /*:: type Props = {
-  visible: boolean,
+  visible?: boolean,
 }; */
 
 /*:: type State =  {|
@@ -24,12 +24,12 @@ const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 
 export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
-    visible: T.bool.isRequired,
+    visible: T.bool,
   };
 
   constructor(props /*: Props */) {
     super(props);
-    this.state = { wasRendered: false };
+    this.state = { wasRendered: !!props.visible };
   }
 
   componentWillReceiveProps({ visible } /*: Props */) {

@@ -13,7 +13,7 @@ describe('<EMBLDropdown />', () => {
   });
 
   test('should render as invisible', () => {
-    renderer.render(<EMBLDropdown visible={false} />);
+    renderer.render(<EMBLDropdown />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 });
