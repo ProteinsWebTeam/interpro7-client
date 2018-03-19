@@ -66,6 +66,14 @@
   font-size: 0.72rem;
 }
 
+@supports (display: grid) {
+  .signature-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 0.72rem;
+  }
+}
+
 .signature {
   background-color: #d5eff3;
   border-radius: 4px;
