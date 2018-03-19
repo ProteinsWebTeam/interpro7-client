@@ -35,7 +35,8 @@
     "deploy:dev": "npm run deploy -- -- --mode=development",
     "deploy:staging": "npm run deploy -- -- --env.staging",
     "deploy:production": "npm run deploy",
-    "start": "npm-run-all -rp dev:test dev"
+    "start": "npm-run-all -rp dev:test dev",
+    "warmup": "node scripts/website-warmer.js"
   },
   "contributors": [
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)"
