@@ -16,6 +16,9 @@ const f = foundationPartial(ebiStyles);
   matches: array
 }; */
 
+//Call as follows to highlight pre-selected entry
+//<StructureView id={accession} matches={matches} highlight={"pf00071"}/>
+
 class StructureView extends PureComponent /*:: <Props> */ {
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
@@ -50,7 +53,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       target: '#litemol',
       viewportBackground: '#fff',
       layoutState: {
-        hideControls: false,
+        hideControls: true,
         isExpanded: false,
       },
       customSpecification: InterProSpec,
@@ -100,43 +103,58 @@ class StructureView extends PureComponent /*:: <Props> */ {
       let model = context.select('model')[0];
       let polymer = context.select('polymer-visual')[0];
       if (this.props.matches != undefined) {
-        for (let match of this.props.matches) {
-          let chain = match.chain;
-          let protein = match.protein;
-          let entry = match.accession;
-          let db = match.source_database;
-          let residues = [];
-          for (let location of match.protein_structure_locations) {
-            for (let fragment of location.fragments) {
-              for (let i = fragment.start; i < fragment.end; i++) {
-                residues.push({ authAsymId: chain, authSeqNumber: i });
+        let group = Transform.build();
+        group.add(
+          model,
+          Transformer.Basic.CreateGroup,
+          { label: 'Entries', description: 'Entries mapped to this structure' },
+          { isBinding: false },
+        );
+        let entryResidues = {};
+        //create matches in structure hierarchy
+        if (this.props.matches != undefined) {
+          for (let match of this.props.matches) {
+            let chain = match.chain;
+            let protein = match.protein;
+            let entry = match.accession;
+            let db = match.source_database;
+            let residues = [];
+            for (let location of match.protein_structure_locations) {
+              for (let fragment of location.fragments) {
+                for (let i = fragment.start; i < fragment.end; i++) {
+                  residues.push({ authAsymId: chain, authSeqNumber: i });
+                }
               }
             }
+            entryResidues[entry] = residues;
+            let query = Query.residues(...residues);
+            group
+              .then(
+                Transformer.Molecule.CreateSelectionFromQuery,
+                { name: entry + ' (' + db + ')', query: query, silent: true },
+                { ref: entry },
+              )
+              .then(Transformer.Molecule.CreateVisual, {
+                style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get(
+                  'Cartoons',
+                ),
+              });
           }
-          let query = Query.residues(...residues);
-          let transform = Transform.build();
-          transform
-            .add(
-              model,
-              Transformer.Molecule.CreateSelectionFromQuery,
-              { name: entry + ' (' + db + ')', query: query, silent: true },
-              { ref: entry },
-            )
-            .then(Transformer.Molecule.CreateVisual, {
-              style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get(
-                'Cartoons',
-              ),
-            });
-
-          /*
-          Command.Molecule.Highlight.dispatch(context.tree.context, {
-            model: model,
-            query: query,
-            isOn: true,
-          });
-          */
-          plugin.applyTransform(transform);
         }
+        //highlight pre-selected entry
+        plugin.applyTransform(group).then(() => {
+          if (
+            this.props.highlight != undefined &&
+            entryResidues[this.props.highlight] != undefined
+          ) {
+            let query = Query.residues(...entryResidues[this.props.highlight]);
+            Command.Molecule.Highlight.dispatch(context.tree.context, {
+              model: model,
+              query: query,
+              isOn: true,
+            });
+          }
+        });
       }
     });
   }
