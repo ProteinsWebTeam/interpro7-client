@@ -45,7 +45,6 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 // Bind css with style object
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
-const DELAY_FOR_TWITTER = 2000;
 const MAX_DELAY_FOR_TWITTER = 10000;
 
 const SchemaOrgData = loadable({
@@ -91,7 +90,6 @@ const BlogEntries = loadable({
 
 const Twitter = loadable({
   async loader() {
-    await sleep(DELAY_FOR_TWITTER);
     await schedule(MAX_DELAY_FOR_TWITTER);
     return import(/* webpackChunkName: "twitter" */ 'components/Twitter');
   },
