@@ -9,9 +9,10 @@ import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
+import LazyImage from 'components/LazyImage';
 
 // Functions
-import { schedule, sleep } from 'timing-functions/src';
+import { schedule } from 'timing-functions/src';
 
 // Animation
 import 'gsap/TweenMax';
@@ -633,7 +634,7 @@ class Home extends PureComponent {
               <div className={f('row')}>
                 <div className={f('columns', 'medium-6')}>
                   <h5>IDA</h5>
-                  <img
+                  <LazyImage
                     alt="IDA logo"
                     src={idaLogo}
                     className={local['ida-logo']}
@@ -656,7 +657,7 @@ class Home extends PureComponent {
                 </div>
                 <div className={f('columns', 'medium-6')}>
                   <h5>InterProScan</h5>
-                  <img
+                  <LazyImage
                     alt="InterProScan logo"
                     src={ipscanLogo}
                     className={local['ipscan-logo']}

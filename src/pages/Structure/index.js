@@ -6,6 +6,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBTabs from 'components/MemberDBTabs';
 import { PDBeLink } from 'components/ExtLink';
+import LazyImage from 'components/LazyImage';
 import StructureListFilters from 'components/Structure/StructureListFilters';
 import Table, {
   Column,
@@ -241,7 +242,7 @@ const List = ({
             defaultKey="structureAccession"
             renderer={(accession /*: string */) => (
               <PDBeLink id={accession}>
-                <img
+                <LazyImage
                   src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
                   alt={`structure with accession ${accession.toUpperCase()}`}
                   style={{ maxWidth: '33%' }}

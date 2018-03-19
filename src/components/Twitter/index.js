@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 
-import cancelable from 'utils/cancelable';
-import loadResource from 'utils/loadResource';
 import Link from 'components/generic/Link';
 
+import cancelable from 'utils/cancelable';
+import loadResource from 'utils/loadResource';
 import getsInView from 'utils/getsInView';
 
 import { foundationPartial } from 'styles/foundation';

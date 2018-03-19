@@ -13,6 +13,7 @@ import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import { NumberComponent } from 'components/NumberLabel';
 import { PDBeLink } from 'components/ExtLink';
+import LazyImage from 'components/LazyImage';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -285,7 +286,7 @@ const Matches = (
       displayIf={primary === 'structure'}
       renderer={(accession /*: string */) => (
         <PDBeLink id={accession}>
-          <img
+          <LazyImage
             src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
             alt={`structure with accession ${accession.toUpperCase()}`}
             style={{ maxWidth: '33%' }}
