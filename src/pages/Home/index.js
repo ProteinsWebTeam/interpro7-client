@@ -11,7 +11,7 @@ import Tabs from 'components/Tabs';
 import Description from 'components/Description';
 
 // Functions
-import { schedule } from 'timing-functions/src';
+import { schedule, sleep } from 'timing-functions/src';
 
 // Animation
 import 'gsap/TweenMax';
@@ -45,6 +45,7 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 // Bind css with style object
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
+const DELAY_FOR_TWITTER = 2000;
 const MAX_DELAY_FOR_TWITTER = 10000;
 
 const SchemaOrgData = loadable({
@@ -89,10 +90,11 @@ const BlogEntries = loadable({
 });
 
 const Twitter = loadable({
-  loader: () =>
-    schedule(MAX_DELAY_FOR_TWITTER).then(() =>
-      import(/* webpackChunkName: "twitter" */ 'components/Twitter'),
-    ),
+  async loader() {
+    await sleep(DELAY_FOR_TWITTER);
+    await schedule(MAX_DELAY_FOR_TWITTER);
+    return import(/* webpackChunkName: "twitter" */ 'components/Twitter');
+  },
 });
 
 class InterProGraphicAnim extends PureComponent {

@@ -195,7 +195,6 @@
     "chalk": "2.3.2",
     "chrome-launcher": "0.10.2",
     "classnames": "2.2.5",
-    "clean-webpack-plugin": "0.1.19",
     "compression-webpack-plugin": "1.1.11",
     "css-loader": "0.28.11",
     "empty": "0.10.1",

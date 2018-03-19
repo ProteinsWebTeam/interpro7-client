@@ -24,11 +24,12 @@ class Twitter extends PureComponent /*:: <{}> */ {
       promise: Promise<any>,
     }
   */
-  componentDidMount() {
+  async componentDidMount() {
     this._twitterScript = cancelable(
       loadResource('//platform.twitter.com/widgets.js'),
     );
-    this._twitterScript.promise.then(() => {
+    try {
+      await this._twitterScript.promise;
       if (!window.twttr) return;
       if (!bound) {
         // Only need to bind this once
@@ -39,7 +40,9 @@ class Twitter extends PureComponent /*:: <{}> */ {
         bound = true;
       }
       if (this._node) window.twttr.widgets.load(this._node);
-    });
+    } catch (_) {
+      /**/
+    }
   }
 
   componentWillUnmount() {
