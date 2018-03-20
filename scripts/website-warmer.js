@@ -139,7 +139,7 @@ const checkOrganismBrowse = async page => {
   }
 };
 const checkBrowseSubsection = {
-  // Entry: checkEntryBrowse,
+  Entry: checkEntryBrowse,
   Protein: checkProteinBrowse,
   Structure: checkStructureBrowse,
   Set: checkSetBrowse,

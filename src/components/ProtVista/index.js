@@ -3,14 +3,6 @@ import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import { foundationPartial } from 'styles/foundation';
-import loadWebComponent from 'utils/loadWebComponent';
-
-import fonts from 'EBI-Icon-fonts/fonts.css';
-import local from './style.css';
-
-const f = foundationPartial(local, fonts);
-
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -22,6 +14,14 @@ import ProtVistaInterProTrack from 'protvista-interpro-track';
 import { getTrackColor, EntryColorMode } from 'utils/entryColor';
 
 import PopperJS from 'popper.js';
+
+import loadWebComponent from 'utils/loadWebComponent';
+
+import { foundationPartial } from 'styles/foundation';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
+
+const f = foundationPartial(local, fonts);
 
 const webComponents = [];
 
@@ -181,7 +181,11 @@ class ProtVista extends PureComponent {
     const tagString = `<div>
         <h5>
           ${entry.accession}
-          ${isResidue ? `<br/>[${detail.description}]` : ''} 
+          ${
+            isResidue
+              ? `<br/>[${detail.description || detail.location.description}]`
+              : ''
+          } 
          </h5>
         ${entry.name ? `<h4>${entry.name}</h4>` : ''}
         <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
@@ -199,7 +203,7 @@ class ProtVista extends PureComponent {
             isResidue
               ? `
               <li>Position: ${detail.start}</li>
-              <li>Residue: ${detail.residue}</li>
+              <li>Residue: ${detail.residue || detail.residues}</li>
               `
               : entry.locations
                   .map(({ fragments }) =>
@@ -306,7 +310,10 @@ class ProtVista extends PureComponent {
           {this.renderResidueLabels(entry)}
           {entry.children &&
             entry.children.map(d => (
-              <div key={d.accession} className={f('track-accession-child')}>
+              <div
+                key={`main_${d.accession}`}
+                className={f('track-accession-child')}
+              >
                 <Link
                   to={{
                     description: {
@@ -331,9 +338,9 @@ class ProtVista extends PureComponent {
     if (!entry.residues) return null;
     const { expandedTrack } = this.state;
     return entry.residues.map(residue =>
-      residue.locations.map(r => (
+      residue.locations.map((r, i) => (
         <div
-          key={r.accession}
+          key={`res_${r.accession || i}`}
           className={f('track-accession-child', {
             hide: !expandedTrack[entry.accession],
           })}
@@ -349,7 +356,7 @@ class ProtVista extends PureComponent {
               },
             }}
           >
-            {r.accession}
+            {r.accession || r.description}
           </Link>
         </div>
       )),
