@@ -7,6 +7,7 @@ import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 
 import loadable from 'higherOrder/loadable';
+import { schemaProcessDataWebPage } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -25,6 +26,10 @@ const SearchResults = loadable({
 const IPScanSearch = loadable({
   loader: () =>
     import(/* webpackChunkName: "ipscan-search" */ 'components/IPScan/Search'),
+});
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
 });
 
 const TextSearchAndResults = () => (
@@ -65,6 +70,14 @@ class Wrapper extends PureComponent {
   render() {
     return (
       <div className={f('row')}>
+        <SchemaOrgData
+          data={{
+            name: 'InterPro Search Page',
+            description: 'Search InterPro data and website',
+            location: window.location,
+          }}
+          processData={schemaProcessDataWebPage}
+        />
         <div className={f('columns', 'margin-bottom-large')}>
           <h3>Search InterPro</h3>
           <ul className={f('tabs', 'main-style', 'margin-top-large')}>

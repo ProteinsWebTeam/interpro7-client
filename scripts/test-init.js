@@ -1,6 +1,5 @@
 // @flow
 import puppeteer from 'puppeteer';
-// import { sleep } from 'timing-functions';
 
 import server from './serve';
 
@@ -10,9 +9,9 @@ const width = 1024;
 const height = 800;
 
 export const config = {
-  // headless: false,
-  // slowMo: 40,
   headless: true,
+  // headless: false,
+  // slowMo: 250,
   args: [
     `--window-size=${width},${height}`,
     '--disable-dev-shm-usage',

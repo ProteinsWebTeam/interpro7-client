@@ -1,19 +1,17 @@
-@import '../../../../styles/timing.css';
-
 .radio {
-  margin: 0.5em;
+  margin: 0.25em;
 }
 
 .range {
-  height: 1.5em;
+  height: 3em;
+  margin-top: 0.75rem;
 }
 
 .hideable {
-  opacity: 1;
-  transition: opacity var(--timing-instant) ease-in-out;
+  display: block;
 
   &.hidden {
     user-select: none;
-    opacity: 0;
+    display: none;
   }
 }

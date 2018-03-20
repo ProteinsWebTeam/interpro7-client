@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -22,7 +22,7 @@ import Table, {
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
 import loadable from 'higherOrder/loadable';
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
+import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import subPages from 'subPages';
 import config from 'config';
@@ -39,32 +39,17 @@ import pageStyle from '../style.css';
 
 const f = foundationPartial(pageStyle, styles);
 
-const schemaProcessDataTable = ({ db, location }) => ({
-  '@type': 'Dataset',
-  '@id': '@mainEntityOfPage',
-  identifier: db,
-  name: db,
-  version: '?',
-  url: location.href,
-  hasPart: '@hasPart',
-  includedInDataCatalog: {
-    '@type': 'DataCatalog',
-    '@id': `${location.origin}/interpro7/`,
-  },
-});
-
-const schemaProcessDataTableRow = ({ data, location }) => ({
-  '@type': 'DataRecord',
-  '@id': '@hasPart',
-  identifier: data.accession,
-  name: data.db,
-  url: `${location.href}/${data.accession}`,
-});
+import {
+  schemaProcessDataTable,
+  schemaProcessDataTableRow,
+  schemaProcessMainEntity,
+  schemaProcessDataRecord,
+} from 'schema_org/processors';
 
 const GO_COLORS = new Map([
-  ['P', '#c2e6ec'],
-  ['F', '#e5f5d7'],
-  ['C', '#fbdcd0'],
+  ['P', '#d1eaef'],
+  ['F', '#e0f2d1'],
+  ['C', '#f5ddd3'],
 ]);
 
 class List extends PureComponent {
@@ -79,6 +64,10 @@ class List extends PureComponent {
       description: T.object.isRequired,
       search: T.object.isRequired,
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.object,
+      loading: T.bool.isRequired,
+    }),
   };
 
   componentWillMount() {
@@ -94,10 +83,13 @@ class List extends PureComponent {
       data,
       isStale,
       customLocation: { description: { entry: { db } }, search },
+      dataBase,
     } = this.props;
     let _payload = data.payload;
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     if (data.loading || notFound) {
       _payload = {
         results: [],
@@ -111,10 +103,17 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
-          <SchemaOrgData
-            data={{ db, location: window.location }}
-            processData={schemaProcessDataTable}
-          />
+          {databases &&
+            db &&
+            databases[db.toUpperCase()] && (
+              <SchemaOrgData
+                data={{
+                  data: { db: databases[db.toUpperCase()] },
+                  location: window.location,
+                }}
+                processData={schemaProcessDataTable}
+              />
+            )}
           <Table
             dataTable={_payload.results}
             isStale={isStale}
@@ -148,25 +147,58 @@ class List extends PureComponent {
             </Exporter>
             <PageSizeSelector />
             <SearchBox search={search.search}>&nbsp;</SearchBox>
+            {db === 'InterPro' && (
+              <Column
+                dataKey="type"
+                headerClassName={f('col-type', 'table-center')}
+                cellClassName={f('table-center')}
+                renderer={type => {
+                  const _type = type.replace('_', ' ');
+                  return (
+                    <Tooltip title={`${_type} type`}>
+                      <interpro-type type={_type} size="26px">
+                        {_type}
+                      </interpro-type>
+                    </Tooltip>
+                  );
+                }}
+              />
+            )}
             <Column
-              dataKey="type"
-              headerClassName={f('col-type', 'table-center')}
-              cellClassName={f('table-center')}
-              renderer={type => {
-                const _type = type.replace('_', ' ');
-                return db === 'InterPro' ? (
-                  <Tooltip title={`${_type} type`}>
-                    <interpro-type type={_type} size="26px">
-                      {_type}
-                    </interpro-type>
-                  </Tooltip>
-                ) : (
-                  _type
-                );
-              }}
+              dataKey="accession"
+              renderer={(accession /*: string */, data, row) => (
+                <Tooltip title={accession}>
+                  <Link
+                    to={customLocation => ({
+                      description: {
+                        ...customLocation.description,
+                        entry: {
+                          ...customLocation.description.entry,
+                          accession,
+                        },
+                      },
+                    })}
+                  >
+                    <SchemaOrgData
+                      data={{
+                        data: { row, endpoint: 'entry' },
+                        location: window.location,
+                      }}
+                      processData={schemaProcessDataTableRow}
+                    />
+                    <span className={f('acc-row')}>
+                      <HighlightedText
+                        text={accession}
+                        textToHighlight={search.search}
+                      />
+                    </span>
+                  </Link>
+                </Tooltip>
+              )}
             >
-              {`${db === 'InterPro' ? '' : `${db} `}Type`}
+              Accession
             </Column>
+
             <Column
               dataKey="name"
               renderer={(
@@ -196,61 +228,45 @@ class List extends PureComponent {
             >
               Name
             </Column>
+
+            {db !== 'InterPro' && (
+              <Column
+                dataKey="type"
+                headerClassName={f('col-type', 'table-center')}
+                cellClassName={f('table-center')}
+                renderer={type => (
+                  <Tooltip
+                    title={`${type.replace(
+                      '_',
+                      ' ',
+                    )} type (as defined by ${db})`}
+                  >
+                    {type.replace('_', ' ')}
+                  </Tooltip>
+                )}
+              >
+                {`${db} Type`}
+              </Column>
+            )}
+
             {db !== 'InterPro' && (
               <Column
                 dataKey="source_database"
                 headerClassName={f('table-center')}
                 cellClassName={f('table-center')}
                 renderer={(db /*: string */) => (
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: { db },
-                      },
-                      search: {},
-                    }}
-                  >
-                    <MemberSymbol type={db} />
-                  </Link>
+                  <Tooltip title={`${db} database`}>
+                    <MemberSymbol type={db} className={f('md-small')} />
+                  </Tooltip>
                 )}
               >
                 DB
               </Column>
             )}
-            <Column
-              dataKey="accession"
-              renderer={(accession /*: string */, data) => (
-                <Link
-                  title={accession}
-                  to={customLocation => ({
-                    description: {
-                      ...customLocation.description,
-                      entry: {
-                        ...customLocation.description.entry,
-                        accession,
-                      },
-                    },
-                  })}
-                >
-                  <SchemaOrgData
-                    data={{ data, location: window.location }}
-                    processData={schemaProcessDataTableRow}
-                  />
-                  <span className={f('acc-row')}>
-                    <HighlightedText
-                      text={accession}
-                      textToHighlight={search.search}
-                    />
-                  </span>
-                </Link>
-              )}
-            >
-              Accession
-            </Column>
             {db === 'InterPro' ? (
               <Column
                 dataKey="member_databases"
+                cellClassName={f('col-md')}
                 renderer={(memberDataBases /*: object */) => (
                   <div className={f('signature-container')}>
                     {Object.entries(memberDataBases).map(([db, entries]) =>
@@ -258,7 +274,12 @@ class List extends PureComponent {
                         <Tooltip
                           key={accession}
                           title={`${id} (${db})`}
-                          className={f('signature')}
+                          className={f('signature', {
+                            'corresponds-to-filter':
+                              search.signature_in &&
+                              search.signature_in.toLowerCase() ===
+                                db.toLowerCase(),
+                          })}
                         >
                           <Link
                             to={{
@@ -276,7 +297,7 @@ class List extends PureComponent {
                   </div>
                 )}
               >
-                Member DB
+                Member Database
               </Column>
             ) : (
               <Column
@@ -292,10 +313,10 @@ class List extends PureComponent {
                         search: {},
                       }}
                     >
-                      {accession}
+                      <Tooltip title={`${accession}`}>{accession}</Tooltip>
                     </Link>
                   ) : (
-                    <span className={f('not-integrated')}>Not integrated</span>
+                    ''
                   )
                 }
               >
@@ -310,7 +331,8 @@ class List extends PureComponent {
             {db === 'InterPro' ? (
               <Column
                 dataKey="go_terms"
-                headerClassName={f('col-go')}
+                headerClassName={f('col-go-head')}
+                cellClassName={f('col-go')}
                 renderer={(goTerms /*: Array<Object> */) => (
                   <div className={f('go-container')}>
                     {Array.from(goTerms)
@@ -321,14 +343,18 @@ class List extends PureComponent {
                         return 0;
                       })
                       .map(go => (
-                        <span key={go.identifier} className={f('go')}>
-                          <span
-                            className={f('go-circle')}
-                            style={{
-                              background:
-                                GO_COLORS.get(go.category.code) || '#ddd',
-                            }}
-                          />
+                        <span key={go.identifier} className={f('go-list')}>
+                          <Tooltip
+                            title={`${go.category.name.replace('_', ' ')} term`}
+                          >
+                            <span
+                              className={f('go-circle')}
+                              style={{
+                                background:
+                                  GO_COLORS.get(go.category.code) || '#ddd',
+                              }}
+                            />
+                          </Tooltip>
                           <Tooltip title={`${go.name} (${go.identifier})`}>
                             <GoLink id={go.identifier} className={f('ext')}>
                               {go.name ? go.name : 'None'}
@@ -463,74 +489,45 @@ const InnerSwitch = props => (
   </ErrorBoundary>
 );
 
-const mapTypeToOntology = new Map([
-  ['Domain', 'DomainAnnotation'],
-  ['Family', 'FamilyAnnotation'],
-  ['Repeat', 'RepeatAnnotation'],
-  ['Unknown', 'UnknownAnnotation'],
-  ['Conserved_site', 'ConservedSiteAnnotation'],
-  ['Binding_site', 'BindingSiteAnnotation'],
-  ['Active_site', 'ActiveSiteAnnotation'],
-  ['PTM', 'PTMAnnotation'],
-]);
-
-const schemaProcessData = data => ({
-  '@type': 'DataRecord',
-  '@id': '@mainEntityOfPage',
-  identifier: data.metadata.accession,
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': 'InterPro release ??',
-  },
-  mainEntity: '@mainEntity',
-  isBasedOn: '@isBasedOn',
-  isBasisFor: '@isBasisFor',
-  citation: '@citation',
-  seeAlso: '@seeAlso',
-});
-
-const schemaProcessData2 = data => ({
-  '@type': [
-    'StructuredValue',
-    'CreativeWork',
-    'BioChemEntity',
-    'Entry',
-    mapTypeToOntology.get(data.metadata.type) ||
-      mapTypeToOntology.get('Unknown'),
-  ],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  additionalProperty: '@additionalProperty',
-  isContainedIn: '@isContainedIn',
-});
-
 class Entry extends PureComponent {
   static propTypes = {
     data: T.shape({
       payload: T.object,
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.object,
+    }).isRequired,
   };
 
   render() {
+    const { data: { payload }, dataBase } = this.props;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
+
     return (
       <div>
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData}
-            />
-          )}
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData2}
-            />
+        {payload &&
+          payload.metadata &&
+          payload.metadata.accession && (
+            <Fragment>
+              <SchemaOrgData
+                data={{
+                  data: this.props.data.payload,
+                  endpoint: 'entry',
+                  version:
+                    databases &&
+                    databases[payload.metadata.source_database].version,
+                }}
+                processData={schemaProcessDataRecord}
+              />
+              <SchemaOrgData
+                data={{
+                  data: payload.metadata,
+                  type: 'Entry',
+                }}
+                processData={schemaProcessMainEntity}
+              />
+            </Fragment>
           )}
         <ErrorBoundary>
           <Switch
@@ -545,8 +542,10 @@ class Entry extends PureComponent {
   }
 }
 
-export default loadData((...args) =>
-  getUrlForApi(...args)
-    .replace('/logo', '/')
-    .replace('domain_architecture', ''),
-)(Entry);
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  loadData((...args) =>
+    getUrlForApi(...args)
+      .replace('/logo', '/')
+      .replace('domain_architecture', ''),
+  )(Entry),
+);

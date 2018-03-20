@@ -7,7 +7,6 @@ import { format } from 'url';
 import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Embed from 'components/Embed';
 import Literature from 'components/Entry/Literature';
 import StructureView from 'components/Structure/Viewer';
 
@@ -81,10 +80,11 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                 <div className={f('margin-top-large')}>
                   <div>Accession: {metadata.accession}</div>
                   <div>Experiment type: {metadata.experiment_type}</div>
-                  <div>Resolution: {metadata.resolution} Å </div>
-                  <div>
-                    Release Date: <time>{date.toLocaleDateString()}</time>
-                  </div>
+                  {metadata.resolution !== null ? (
+                    <div>Resolution: {metadata.resolution} Å </div>
+                  ) : (
+                    ''
+                  )}
 
                   <div>
                     Chains:{' '}
@@ -106,6 +106,9 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                       </Link>
                     ))}
                   </div>
+                  <div>
+                    Released: <time>{date.toLocaleDateString()}</time>
+                  </div>
                 </div>
               )}
             </div>
@@ -117,9 +120,12 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                     <PDBeLink id={metadata.accession} className={f('ext')}>
                       View this structure in PDBe
                     </PDBeLink>
-                    <pdb-prints size="36">
-                      <pdb-data-loader pdbid={metadata.accession} />
-                    </pdb-prints>
+                    {
+                      //remove the PDB viewer as we already show info on page (duplication)
+                      // <pdb-prints size="36">
+                      // <pdb-data-loader pdbid={metadata.accession} />
+                      // </pdb-prints>
+                    }
                   </li>
                 </ul>
               </div>

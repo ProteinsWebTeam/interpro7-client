@@ -9,6 +9,8 @@ import SingleMatch from 'components/SearchResults/SingleMatch';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -16,6 +18,11 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const INTERPRO_ACCESSION_PADDING = 6;
 const MAX_LENGTH = 200;
@@ -52,6 +59,13 @@ class SearchResults extends PureComponent {
     }
     return (
       <Fragment>
+        <SchemaOrgData
+          data={{
+            name: 'Search Results',
+            description: 'Text matches found in InterPro database',
+          }}
+          processData={schemaProcessDataPageSection}
+        />
         {payload && <SingleMatch payload={payload} searchValue={searchValue} />}
         <Table
           dataTable={entries}

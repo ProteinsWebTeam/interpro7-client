@@ -9,11 +9,12 @@ import MultipleInput from 'components/SimpleCommonComponents/MultipleInput/index
 
 import { goToCustomLocation } from 'actions/creators/index';
 
-import classnames from 'classnames/bind';
+import { foundationPartial } from 'styles/foundation';
 
+import s from '../../../FiltersPanel/style.css';
 import styles from './style.css';
 
-const s = classnames.bind(styles);
+const f = foundationPartial(styles, s);
 
 const DEBOUNCE_RATE = 500; // In ms
 
@@ -91,31 +92,29 @@ class ResolutionFilter extends PureComponent {
     const { customLocation: { search: { resolution } } } = this.props;
     const { min, max } = this.state;
     return (
-      <div>
-        <label>
+      <div className={f('column')}>
+        <label className={f('row', 'filter-button')}>
           <input
             type="radio"
             name="resolution"
             value="All"
             onChange={this._handleSelection}
             checked={!resolution}
-            className={s('radio')}
+            className={f('radio')}
           />
           <span>All</span>
         </label>
-        <label>
+        <label className={f('row', 'filter-button')}>
           <input
             type="radio"
             name="resolution"
             value="Subset"
             onChange={this._handleSelection}
             checked={!!resolution}
-            className={s('radio')}
+            className={f('radio')}
           />
           <span>
-            Subset<span className={s('hideable', { hidden: !resolution })}>
-              : {min}-{max} Å
-            </span>
+            {min} - {max} Å
           </span>
         </label>
         <MultipleInput
@@ -126,7 +125,7 @@ class ResolutionFilter extends PureComponent {
           step="0.05"
           onChange={this._handleChange}
           aria-label="resolution range"
-          className={s('range', 'hideable', { hidden: !resolution })}
+          className={f('range', 'hideable', { hidden: !resolution })}
         />
       </div>
     );

@@ -17,7 +17,7 @@
 }
 
 .filters-panel .toggle {
-  font-size: 120%;
+  font-size: 110%;
   cursor: pointer;
 }
 .filters-panel .but-collapse {
@@ -34,14 +34,18 @@
 } /* so column doesn't expand totally when only 1-2 filters*/
 
 .filter-panel {
-  max-height: 200px;
-  margin-bottom: 0.3rem;
+  max-height: 142px;
+  margin-bottom: 0.25rem;
   overflow-y: auto;
 
   &.collapsed {
     height: 0;
     overflow-y: hidden;
   }
+}
+
+.filter-buttons {
+  margin-left: 1rem;
 }
 
 hr {

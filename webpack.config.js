@@ -6,12 +6,13 @@ const webpack = require('webpack');
 const url = require('url');
 const yaml = require('js-yaml');
 
+// Webpack plugins
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 // CSS-related
 const postCSSImport = require('postcss-import');
 const cssNext = require('postcss-cssnext');
-
-// Webpack plugins
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const buildInfo = require('./scripts/build-info');
 const pkg = require('./package.json');
@@ -30,17 +31,15 @@ const getCompressionPlugin = (() => {
   };
 })();
 
-const cssSettings = env => ({
+const cssSettings = mode => ({
   modules: true,
-  minimize: env.production,
   importLoaders: 1,
   sourceMap: true,
-  localIdentName: (() => {
-    if (env.production) return '[hash:base64:6]';
-    return '[folder]_[name]__[local]___[hash:base64:2]';
-  })(),
+  minimize: mode === 'production',
+  localIdentName: '[folder]_[name]__[local]___[hash:base64:2]',
   alias: {
-    '../libraries': 'ebi-framework/libraries',
+    '../libraries/tablesorter/css':
+      'ebi-framework/libraries/tablesorter/dist/css',
     'EBI-Conceptual': 'EBI-Icon-fonts/EBI-Conceptual',
     'EBI-Functional': 'EBI-Icon-fonts/EBI-Functional',
     'EBI-Generic': 'EBI-Icon-fonts/EBI-Generic',
@@ -51,45 +50,18 @@ const cssSettings = env => ({
   },
 });
 
-const fileLoaderNamer = env => {
-  if (env.production) return '[hash:6].[ext]';
-  if (env.staging) return '[name].[hash:3].[ext]';
-  return '[name].[ext]';
-};
+const publicPath = websiteURL.pathname || '/interpro/';
 
-// eslint-disable-next-line complexity
-module.exports = (env = { dev: true }) => {
-  const thisFileLoaderName = fileLoaderNamer(env);
+module.exports = (env = { dev: true }, { mode = 'production' }) => {
   const config = {
-    // ENTRY
-    // Entry points for the application and some ext libraries
-    // (don't put ES2016 modules enabled libraries here)
-    entry: {
-      app: ['index'], // src/index.js
-      polyfills: ['core-js'],
-      vendor: [
-        'react',
-        'react-dom',
-        'react-helmet',
-        'isomorphic-fetch',
-        'history',
-      ],
-      redux: ['redux', 'react-redux', 'reselect'],
-    },
+    // MODE
+    mode,
     // OUTPUT
     output: {
       path: path.resolve('dist'),
-      publicPath: websiteURL.pathname || '/interpro7/',
-      filename: (() => {
-        if (env.production) return '[id].[hash:3].js';
-        if (env.staging) return '[id].[name].[hash:3].js';
-        return '[id].[name].js';
-      })(),
-      chunkFilename: (() => {
-        if (env.production) return '[id].[chunkhash:3].js';
-        if (env.staging) return '[id].[name].[chunkhash:3].js';
-        return '[id].[name].js';
-      })(),
+      publicPath,
+      filename: '[id].[name].[hash:3].js',
+      chunkFilename: '[id].[name].[chunkhash:3].js',
     },
     // RESOLVE
     resolve: {
@@ -100,16 +72,12 @@ module.exports = (env = { dev: true }) => {
     module: {
       rules: [
         {
-          test: /\.worker\.js/i,
+          test: /\.worker\.js$/i,
           use: [
             {
               loader: 'worker-loader',
               options: {
-                name: (() => {
-                  if (env.production) return '[hash:3].worker.js';
-                  if (env.staging) return '[folder].[name].[hash:3].worker.js';
-                  return '[folder].[name].worker.js';
-                })(),
+                name: '[folder].[name].[hash:3].worker.js',
               },
             },
           ],
@@ -129,34 +97,6 @@ module.exports = (env = { dev: true }) => {
           use: [
             {
               loader: 'babel-loader',
-              options: {
-                cacheDirectory: true,
-              },
-            },
-          ],
-        },
-        // {
-        //   test: /\.js$/i,
-        //   include: [
-        //     path.resolve('node_modules', 'data-loader'),
-        //     path.resolve('node_modules', 'interpro-components'),
-        //     path.resolve('node_modules', 'pdb-web-components'),
-        //   ],
-        //   use: [
-        //     {
-        //       loader: 'babel-loader',
-        //       options: {
-        //         presets: ['stage-2'],
-        //         cacheDirectory: true,
-        //       },
-        //     },
-        //   ],
-        // },
-        {
-          test: /\.json$/i,
-          use: [
-            {
-              loader: 'json-loader',
             },
           ],
         },
@@ -181,117 +121,69 @@ module.exports = (env = { dev: true }) => {
         },
         {
           test: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
-          // Use `loader` instead of `use` for now, otherwise breaks
-          // https://github.com/webpack/extract-text-webpack-plugin/issues/282
-          use:
-            env.production || env.test || env.staging
-              ? ExtractTextPlugin.extract({
-                  fallback: 'style-loader',
-                  use: [
-                    {
-                      loader: 'css-loader',
-                      options: Object.assign({}, cssSettings(env), {
-                        localIdentName: '[local]',
-                      }),
-                    },
-                    {
-                      loader: 'postcss-loader',
-                      options: {
-                        // ident: 'postcss',
-                        plugins: [postCSSImport(), cssNext()],
-                      },
-                    },
-                  ],
-                })
-              : [
-                  'style-loader',
-                  {
-                    loader: 'css-loader',
-                    options: Object.assign({}, cssSettings(env), {
-                      localIdentName: '[local]',
-                    }),
-                  },
-                  {
-                    loader: 'postcss-loader',
-                    options: {
-                      // ident: 'postcss',
-                      plugins: [postCSSImport(), cssNext()],
-                    },
-                  },
-                ],
+          use: [
+            {
+              loader:
+                mode === 'production'
+                  ? MiniCssExtractPlugin.loader
+                  : 'style-loader',
+            },
+            {
+              loader: 'css-loader',
+              options: Object.assign({}, cssSettings(mode), {
+                localIdentName: '[local]',
+              }),
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: [postCSSImport, cssNext()],
+              },
+            },
+          ],
         },
         {
           test: /\.css$/i,
-          // Use `loader` instead of `use` for now, otherwise breaks
-          // https://github.com/webpack/extract-text-webpack-plugin/issues/282
-          use:
-            env.production || env.test || env.staging
-              ? ExtractTextPlugin.extract({
-                  fallback: 'style-loader',
-                  use: [
-                    {
-                      loader: 'css-loader',
-                      options: cssSettings(env),
-                    },
-                    {
-                      loader: 'postcss-loader',
-                      options: {
-                        // ident: 'postcss',
-                        plugins: [postCSSImport(), cssNext()],
-                      },
-                    },
-                  ],
-                })
-              : [
-                  'style-loader',
-                  {
-                    loader: 'css-loader',
-                    options: cssSettings(env),
-                  },
-                  {
-                    loader: 'postcss-loader',
-                    options: {
-                      // ident: 'postcss',
-                      plugins: [postCSSImport(), cssNext()],
-                    },
-                  },
-                ],
+          use: [
+            {
+              loader:
+                mode === 'production'
+                  ? MiniCssExtractPlugin.loader
+                  : 'style-loader',
+            },
+            {
+              loader: 'css-loader',
+              options: cssSettings(mode),
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: [postCSSImport, cssNext()],
+              },
+            },
+          ],
           exclude: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
         },
         {
           test: /\.scss$/i,
-          // Use `loader` instead of `use` for now, otherwise breaks
-          // https://github.com/webpack/extract-text-webpack-plugin/issues/282
-          use:
-            env.production || env.test || env.staging
-              ? ExtractTextPlugin.extract({
-                  fallback: 'style-loader',
-                  use: [
-                    {
-                      loader: 'css-loader',
-                      options: Object.assign({}, cssSettings(env), {
-                        localIdentName: '[local]',
-                      }),
-                    },
-                    {
-                      loader: 'sass-loader',
-                      options: { sourceMap: true },
-                    },
-                  ],
-                })
-              : [
-                  'style-loader',
-                  {
-                    loader: 'css-loader',
-                    options: Object.assign({}, cssSettings(env), {
-                      localIdentName: '[local]',
-                    }),
-                  },
-                  {
-                    loader: 'sass-loader',
-                    options: { sourceMap: true },
-                  },
-                ],
+          use: [
+            {
+              loader:
+                mode === 'production'
+                  ? MiniCssExtractPlugin.loader
+                  : 'style-loader',
+            },
+            {
+              loader: 'css-loader',
+              options: Object.assign({}, cssSettings(mode), {
+                localIdentName: '[local]',
+              }),
+            },
+            {
+              loader: 'sass-loader',
+              options: { sourceMap: true },
+            },
+          ],
         },
         {
           test: /\.(jpe?g|png|gif|svg)$/i,
@@ -299,14 +191,14 @@ module.exports = (env = { dev: true }) => {
             {
               loader: 'url-loader',
               options: {
-                name: thisFileLoaderName,
+                name: '[name].[hash:3].[ext]',
                 limit: 1 * kB,
               },
             },
             {
               loader: 'img-loader',
               options: {
-                enabled: env.production,
+                enabled: mode === 'production',
               },
             },
           ],
@@ -317,7 +209,7 @@ module.exports = (env = { dev: true }) => {
             {
               loader: 'url-loader',
               options: {
-                name: thisFileLoaderName,
+                name: '[name].[hash:3].[ext]',
                 limit: 1 * kB,
                 mimetype: 'application/font-woff',
               },
@@ -330,120 +222,52 @@ module.exports = (env = { dev: true }) => {
             {
               loader: 'file-loader',
               options: {
-                name: thisFileLoaderName,
+                name: '[name].[hash:3].[ext]',
               },
             },
           ],
         },
       ],
     },
-    // PERFORMANCE
-    performance: {
-      hints: env.production && 'warning',
-      // eslint-disable-next-line no-magic-numbers
-      maxAssetSize: 500 * kB, // 500kB
-      // eslint-disable-next-line no-magic-numbers
-      maxEntrypointSize: 500 * kB, // 500kB TODO: reduce this eventually!
-    },
-    // STATS
-    stats: {
-      children: false,
-    },
     // PLUGINS
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
-          PERF: JSON.stringify(
-            // eslint-disable-next-line no-process-env
-            !!(env.perf || (process.env && process.env.PERF))
-          ),
           STAGING: JSON.stringify(!!env.staging),
-          NODE_ENV: env.production ? JSON.stringify('production') : null,
         },
         'process.info': JSON.stringify({
           git: buildInfo.git,
           build: buildInfo.build,
         }),
       }),
-      env.production || env.staging
-        ? new webpack.optimize.ModuleConcatenationPlugin()
+      mode === 'production'
+        ? new MiniCssExtractPlugin({
+            filename: '[name].[hash:3].css',
+            chunkFilename: '[id].[hash:3].css',
+          })
         : null,
-      new webpack.LoaderOptionsPlugin({
-        options: {
-          minimize: !!env.production,
-          debug: !env.production,
-          context: __dirname,
-        },
+      mode === 'development' ? new webpack.HotModuleReplacementPlugin() : null,
+      new HTMLWebpackPlugin({
+        title: pkg.name,
+        template: path.join('.', 'src', 'index.template.html'),
+        inject: false,
       }),
-      new webpack.NamedModulesPlugin(),
-      // env.production || env.staging
-      //   ? new (require('./plugins/web-app-manifest'))()
-      //   : null,
-      env.test || env.production || env.staging
-        ? new ExtractTextPlugin({
-            filename: env.production
-              ? '[contenthash:3].css'
-              : 'styles.[contenthash:3].css',
-            allChunks: true,
-          })
-        : null,
-      env.test
-        ? null
-        : new webpack.optimize.CommonsChunkPlugin({
-            names: ['vendor', 'redux', 'polyfills', 'manifest'],
-            filename: (() => {
-              if (env.production) return '[id].[hash:3].js';
-              if (env.staging) return '[id].[name].[hash:3].js';
-              return '[id].[name].js';
-            })(),
-            minChunks: Infinity,
-          }),
-      env.test
-        ? null
-        : new webpack.optimize.CommonsChunkPlugin({
-            children: true,
-            async: true,
-            minChunks: 3,
-          }),
-      env.dev ? new webpack.HotModuleReplacementPlugin() : null,
-      env.dashboard
-        ? new (require('webpack-dashboard/plugin'))(
-            new (require('webpack-dashboard'))().setData
-          )
-        : null,
-      env.production || env.staging
-        ? new (require('favicons-webpack-plugin'))({
+      mode === 'production'
+        ? new (require('webapp-webpack-plugin'))({
             logo: path.join('.', 'images', 'logo', 'logo_75x75.png'),
-            prefix: 'icon.[hash:3].',
-            emitStats: false,
-            minify: env.production,
-            background: '#007c82',
-            title: pkg.name,
+            prefix: 'icons.[hash:3].',
+            inject: true,
+            favicons: {
+              background: '#007c82',
+              theme_color: '#007c82',
+              appName: 'InterPro',
+              start_url: `${publicPath}?utm_source=pwa_homescreen`,
+              lang: 'en',
+              version: pkg.version,
+            },
           })
         : null,
-      env.production || env.staging || env.dev
-        ? new (require('html-webpack-plugin'))({
-            title: pkg.name,
-            template: path.join('.', 'src', 'index.template.html'),
-            inject: false,
-            // chunksSortMode: 'dependency',
-            minify: env.dev
-              ? false
-              : {
-                  removeComments: true,
-                  collapseWhitespace: true,
-                  conservativeCollapse: true,
-                },
-          })
-        : null,
-      env.production
-        ? new (require('uglifyjs-webpack-plugin'))({
-            parallel: 4,
-            cache: true,
-            sourceMap: true,
-          })
-        : null,
-      env.production || env.staging
+      mode === 'production'
         ? new (require('offline-plugin'))({
             caches: {
               main: [':rest:'],
@@ -454,7 +278,7 @@ module.exports = (env = { dev: true }) => {
             // TODO: Check whats the best way to do this autoupdate.
             // autoUpdate: 60000,
             ServiceWorker: {
-              minify: env.production,
+              minify: false,
               events: true,
             },
             safeToUseOptionalCaches: true,
@@ -462,7 +286,7 @@ module.exports = (env = { dev: true }) => {
           })
         : null,
       // GZIP compression
-      env.production
+      mode === 'production'
         ? new (getCompressionPlugin())({
             asset: '[path].gz[query]',
             test: /\.(js|css|html|svg)$/i,
@@ -473,7 +297,7 @@ module.exports = (env = { dev: true }) => {
           })
         : null,
       // Brotli compression
-      env.production
+      mode === 'production'
         ? new (getCompressionPlugin())({
             asset: '[path].br[query]',
             test: /\.(js|css|html|svg)$/i,
@@ -490,37 +314,26 @@ module.exports = (env = { dev: true }) => {
             },
           })
         : null,
-    ].filter(Boolean), // filter out empty values
+    ].filter(Boolean),
+    // optimization.minimize: mode === 'production',
+    devtool: ((mode, env) => {
+      if (mode === 'development') return 'eval';
+      if (env.staging) return 'source-map';
+      return false;
+    })(mode, env),
   };
 
-  // Overwrite for tests
-  if (env.test) {
-    config.entry = config.output = null;
-  }
-
-  // Sourcemaps
-  config.devtool = 'source-map';
-  if (env.dev) {
-    config.devtool = 'eval-source-map';
-  }
-  // if (env.test || env.staging) {
-  //   config.devtool = 'cheap-module-source-map';
-  // }
-
   // devServer
-  if (env.dev) {
+  if (mode === 'development') {
     config.devServer = {
-      // contentBase: '',
       stats: 'errors-only',
-      noInfo: true,
-      publicPath: config.output.publicPath,
-      inline: true,
+      contentBase: publicPath,
+      publicPath,
       overlay: true,
       port: websiteURL.port || DEFAULT_PORT,
       hot: true,
-      quiet: !!env.dashboard,
       historyApiFallback: {
-        index: websiteURL.pathname,
+        index: publicPath,
         disableDotRule: true,
       },
       watchOptions: {

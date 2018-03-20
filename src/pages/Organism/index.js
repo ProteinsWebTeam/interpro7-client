@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -25,6 +25,13 @@ import { NumberComponent } from 'components/NumberLabel';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import {
+  schemaProcessDataTable,
+  schemaProcessDataTableRow,
+  schemaProcessDataRecord,
+  schemaProcessMainEntity,
+} from 'schema_org/processors';
+
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import EntryMenu from 'components/EntryMenu';
@@ -36,6 +43,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 
 const f = foundationPartial(pageStyle, styles);
 
@@ -62,6 +70,11 @@ const propTypes = {
     description: T.object.isRequired,
   }).isRequired,
   match: T.string,
+  dataBase: T.shape({
+    payload: T.object,
+    loading: T.bool.isRequired,
+    ok: T.bool,
+  }),
 };
 
 const defaultPayload = {};
@@ -179,10 +192,13 @@ class List extends PureComponent {
       data: { payload, loading, ok, url, status },
       isStale,
       customLocation: { search },
+      dataBase,
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
     const notFound = !loading && status !== HTTP_OK;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     if (loading || notFound) {
       _payload = {
         results: [],
@@ -196,6 +212,15 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <OrganismListFilters />
           <hr />
+          {databases && (
+            <SchemaOrgData
+              data={{
+                data: { db: databases.UNIPROT },
+                location: window.location,
+              }}
+              processData={schemaProcessDataTable}
+            />
+          )}
           <Table
             dataTable={_payload.results}
             loading={loading}
@@ -232,7 +257,7 @@ class List extends PureComponent {
             <SearchBox search={search.search}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */) => (
+              renderer={(accession /*: string */, row) => (
                 <Link
                   to={customLocation => ({
                     description: {
@@ -250,6 +275,13 @@ class List extends PureComponent {
                     },
                   })}
                 >
+                  <SchemaOrgData
+                    data={{
+                      data: { row, endpoint: 'organism' },
+                      location: window.location,
+                    }}
+                    processData={schemaProcessDataTableRow}
+                  />
                   <HighlightedText
                     text={accession}
                     textToHighlight={search.search}
@@ -345,11 +377,8 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="protein-count"
-              renderer={(accession /*: string */, { source_database }) => {
-                const DataProvider = dataProviderFor(
-                  `${accession}`,
-                  source_database,
-                );
+              renderer={(accession /*: string */, { source_database: db }) => {
+                const DataProvider = dataProviderFor(`${accession}`, db);
                 return (
                   <DataProvider
                     renderer={(_, { payload, loading }) => {
@@ -450,18 +479,18 @@ for (const subPage of config.pages.organism.subPages) {
   });
 }
 
-const _Title = ({ data: { loading, payload } }) =>
-  loading ? (
-    <Loading />
-  ) : (
-    <Title metadata={payload.metadata} mainType="organism" />
-  );
-_Title.propTypes = {
-  data: T.shape({
-    loading: T.bool,
-    payload: T.object,
-  }).isRequired,
-};
+// const _Title = ({ data: { loading, payload } }) =>
+//   loading ? (
+//     <Loading />
+//   ) : (
+//     <Title metadata={payload.metadata} mainType="organism" />
+//   );
+// _Title.propTypes = {
+//   data: T.shape({
+//     loading: T.bool,
+//     payload: T.object,
+//   }).isRequired,
+// };
 
 const mapStateToAccessionUrl = createSelector(
   state => state.settings.api,
@@ -486,48 +515,93 @@ const mapStateToAccessionUrl = createSelector(
     }),
 );
 
-const LoadedTitle = loadData(mapStateToAccessionUrl)(_Title);
-
-class Summary extends PureComponent {
+class _Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
+    }).isRequired,
+    dataOrganism: T.shape({
+      loading: T.bool.isRequired,
+    }).isRequired,
+    dataBase: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
     }).isRequired,
     customLocation: T.object.isRequired,
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const {
+      data: { loading, payload },
+      dataOrganism: { loading: loadingOrg, payload: payloadOrg },
+      dataBase,
+    } = this.props;
     if (loading || !payload) {
       return <Loading />;
     }
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     return (
-      <ErrorBoundary>
-        <div className={f('row')}>
-          <div className={f('medium-12', 'large-12', 'columns')}>
-            <LoadedTitle />
-            <EntryMenu metadata={payload.metadata} />
+      <Fragment>
+        {payloadOrg &&
+          payloadOrg.metadata &&
+          payloadOrg.metadata.accession && (
+            <Fragment>
+              <SchemaOrgData
+                data={{
+                  data: payloadOrg,
+                  endpoint: 'organism',
+                  version: databases && databases.UNIPROT.version,
+                }}
+                processData={schemaProcessDataRecord}
+              />
+              <SchemaOrgData
+                data={{
+                  data: payloadOrg.metadata,
+                  type: 'Organism',
+                }}
+                processData={schemaProcessMainEntity}
+              />
+            </Fragment>
+          )}
+
+        <ErrorBoundary>
+          <div className={f('row')}>
+            <div className={f('medium-12', 'large-12', 'columns')}>
+              {/* <LoadedTitle />*/}
+              {loadingOrg ? (
+                <Loading />
+              ) : (
+                <Title metadata={payloadOrg.metadata} mainType="organism" />
+              )}
+              <EntryMenu metadata={payload.metadata} />
+            </div>
           </div>
-        </div>
-        <Switch
-          {...this.props}
-          locationSelector={l => {
-            const { key } = l.description.main;
-            return (
-              l.description[key].detail ||
-              (Object.entries(l.description).find(
-                ([_key, value]) => value.isFilter,
-              ) || [])[0] ||
-              (l.description[key].accession && l.description[key].proteomeDB)
-            );
-          }}
-          indexRoute={SummaryComponent}
-          childRoutes={subPagesForOrganism}
-        />
-      </ErrorBoundary>
+          <Switch
+            {...this.props}
+            locationSelector={l => {
+              const { key } = l.description.main;
+              return (
+                l.description[key].detail ||
+                (Object.entries(l.description).find(
+                  ([_key, value]) => value.isFilter,
+                ) || [])[0] ||
+                (l.description[key].accession && l.description[key].proteomeDB)
+              );
+            }}
+            indexRoute={SummaryComponent}
+            childRoutes={subPagesForOrganism}
+          />
+        </ErrorBoundary>
+      </Fragment>
     );
   }
 }
+const Summary = loadData({
+  getUrl: mapStateToAccessionUrl,
+  propNamespace: 'Organism',
+})(loadData()(_Summary));
 
 const acc = /(UP\d{9})|(\d+)|(all)/i;
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
@@ -556,51 +630,28 @@ class InnerSwitch extends PureComponent {
   }
 }
 
-const schemaProcessData = data => ({
-  '@type': ['Organism', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  inDataset: data.metadata.source_database,
-  biologicalType:
-    data.metadata.source_database === 'taxonomy' ? 'taxon' : 'proteome',
-  citation: '@citation',
-  isBasedOn: '@isBasedOn',
-  isBasisFor: '@isBasisFor',
-});
-
 class Organism extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,
   };
 
   render() {
-    const { data } = this.props;
     return (
-      <div>
-        {data.payload &&
-          data.payload.metadata &&
-          data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={data.payload}
-              processData={schemaProcessData}
-            />
-          )}
-        <ErrorBoundary>
-          <Switch
-            {...this.props}
-            locationSelector={l =>
-              l.description[l.description.main.key].db ||
-              l.description[l.description.main.key].proteomeDB
-            }
-            indexRoute={Overview}
-            catchAll={InnerSwitch}
-          />
-        </ErrorBoundary>
-      </div>
+      <ErrorBoundary>
+        <Switch
+          {...this.props}
+          locationSelector={l =>
+            l.description[l.description.main.key].db ||
+            l.description[l.description.main.key].proteomeDB
+          }
+          indexRoute={Overview}
+          catchAll={InnerSwitch}
+        />
+      </ErrorBoundary>
     );
   }
 }
 
-export default loadData()(Organism);
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  loadData()(Organism),
+);

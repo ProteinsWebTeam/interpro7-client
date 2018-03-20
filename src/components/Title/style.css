@@ -14,6 +14,9 @@
     margin: -0.5rem 0 0 -1.5rem;
     width: 8%;
   }
+  & h3 {
+    margin-bottom: 0.3rem;
+  } /*to align tag element with entry icon*/
 }
 .title small {
   color: #333;

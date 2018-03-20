@@ -156,6 +156,12 @@ table.light span::before {
   & a {
     color: #505f74;
   }
+  & a:focus {
+    color: #505f74;
+  }
+  & a:visited {
+    color: #505f74;
+  }
 }
 
 /* Small screen only */
@@ -164,10 +170,13 @@ table.light span::before {
     flex-grow: 1;
   }
   table.light th,
-  table.light tr,
-  table.light td {
+  table.light tr {
     display: block;
     margin-bottom: 1rem;
+  }
+  table.light td {
+    display: block;
+    margin-bottom: 0;
   }
   table.light thead,
   .pagesize-wrapper {

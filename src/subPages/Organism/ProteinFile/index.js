@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 
 import ProgressButton from 'components/ProgressButton';
 import Link from 'components/generic/Link';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import classnames from 'classnames/bind';
 
@@ -121,22 +122,23 @@ class ProteinFile extends PureComponent {
     }
     title += ` for tax ID ${taxId}`;
     return (
-      <Link
-        download={getDownloadName(this.props)}
-        href={href}
-        disabled={downloading}
-        className={s('link', { downloading, failed })}
-        target="_blank"
-        title={title}
-        onClick={this._handleClick}
-      >
-        <ProgressButton
-          downloading={downloading}
-          success={success}
-          failed={failed}
-          progress={progress}
-        />
-      </Link>
+      <Tooltip title={title}>
+        <Link
+          download={getDownloadName(this.props)}
+          href={href}
+          disabled={downloading}
+          className={s('link', { downloading, failed })}
+          target="_blank"
+          onClick={this._handleClick}
+        >
+          <ProgressButton
+            downloading={downloading}
+            success={success}
+            failed={failed}
+            progress={progress}
+          />
+        </Link>
+      </Tooltip>
     );
   }
 }

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import Link from 'components/generic/Link';
+import LazyImage from 'components/LazyImage';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -17,7 +18,10 @@ class ElixirFooter extends PureComponent {
             href="https://www.elixir-europe.org/about-us/who-we-are/nodes/embl-ebi"
             target="_blank"
           >
-            <div className={f('elixir-logo-kite')} />
+            <LazyImage
+              className={f('elixir-logo-kite')}
+              src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png"
+            />
             <h5>
               <span className={f('elixir-banner-name')}>This service</span> is
               part of the ELIXIR infrastructure

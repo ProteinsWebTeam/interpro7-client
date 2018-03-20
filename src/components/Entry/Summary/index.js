@@ -30,6 +30,123 @@ const description2IDs = description =>
     [],
   );
 
+const MemberDBSubtitle = ({ metadata }) => {
+  if (
+    !metadata.source_database ||
+    metadata.source_database.toLowerCase() === 'interpro'
+  ) {
+    return null;
+  }
+
+  return (
+    <div className={f('md-hlight')}>
+      <h5>
+        Member database:&nbsp;
+        <Link
+          to={{
+            description: {
+              mainType: 'entry',
+              mainDB: metadata.source_database,
+            },
+          }}
+        >
+          {metadata.source_database}{' '}
+          <Tooltip title={metadata.source_database}>
+            <span
+              className={f('small', 'icon', 'icon-generic')}
+              data-icon="i"
+            />
+          </Tooltip>
+        </Link>
+      </h5>
+      <p className={f('margin-bottom-medium')}>
+        {metadata.source_database} type:{' '}
+        {metadata.type.replace('_', ' ').toLowerCase()}
+      </p>
+      {metadata.name.short &&
+        metadata.accession !== metadata.name.short && (
+          <p>
+            Short name:&nbsp;
+            <i className={f('shortname')}>{metadata.name.short}</i>
+          </p>
+        )}
+    </div>
+  );
+};
+MemberDBSubtitle.propTypes = {
+  metadata: T.object.isRequired,
+};
+
+const SidePanel = ({ metadata }) => (
+  <div className={f('medium-4', 'large-4', 'columns')}>
+    {metadata.integrated && <Integration intr={metadata.integrated} />}
+    {metadata.integrated && (
+      <div>
+        <h5>External links</h5>
+        {
+          // TODO implement right MD ext link
+        }
+        <Link
+          className={f('ext')}
+          to={{
+            description: {},
+          }}
+        >
+          {metadata.source_database} website
+        </Link>
+      </div>
+    )}
+    {metadata.member_databases &&
+      Object.keys(metadata.member_databases).length > 0 && (
+        <ContributingSignatures contr={metadata.member_databases} />
+      )}
+  </div>
+);
+SidePanel.propTypes = {
+  metadata: T.object.isRequired,
+};
+
+const OtherSections = ({ metadata, citations: { included, extra } }) => (
+  <Fragment>
+    {!Object.keys(metadata.go_terms).length ||
+    metadata.source_database.toLowerCase() !== 'interpro' ? null : (
+      <GoTerms
+        terms={metadata.go_terms}
+        type="entry"
+        db={metadata.source_database}
+      />
+    )}
+    {Object.keys(metadata.literature).length > 0 && (
+      <section id="references">
+        <div className={f('row')}>
+          <div className={f('large-12', 'columns')}>
+            <h4>References</h4>
+          </div>
+        </div>
+        <Literature included={included} extra={extra} />
+      </section>
+    )}
+
+    {Object.keys(metadata.cross_references || {}).length > 0 && (
+      <section id="cross_references">
+        <div className={f('row')}>
+          <div className={f('large-12', 'columns')}>
+            <h4>Cross References</h4>
+          </div>
+        </div>
+        <CrossReferences xRefs={metadata.cross_references} />
+      </section>
+    )}
+  </Fragment>
+);
+OtherSections.propTypes = {
+  metadata: T.object.isRequired,
+  citations: T.shape({
+    included: T.array,
+    extra: T.array,
+  }),
+};
+
 /* :: type Props = {
     data: {
       metadata: {
@@ -85,44 +202,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 </div>
               ) : null}
 
-              {// member database only - summary info
-              metadata.source_database &&
-                metadata.source_database.toLowerCase() !== 'interpro' && (
-                  <div className={f('md-hlight')}>
-                    <h5>
-                      Member database:&nbsp;
-                      <Link
-                        to={{
-                          description: {
-                            mainType: 'entry',
-                            mainDB: metadata.source_database,
-                          },
-                        }}
-                      >
-                        {metadata.source_database}{' '}
-                        <Tooltip title={metadata.source_database}>
-                          <span
-                            className={f('small', 'icon', 'icon-generic')}
-                            data-icon="i"
-                          />
-                        </Tooltip>
-                      </Link>
-                    </h5>
-                    <p className={f('margin-bottom-medium')}>
-                      {metadata.source_database} type:{' '}
-                      {metadata.type.replace('_', ' ').toLowerCase()}
-                    </p>
-                    {metadata.name.short &&
-                      metadata.accession !== metadata.name.short && (
-                        <p>
-                          Short name:&nbsp;
-                          <i className={f('shortname')}>
-                            {metadata.name.short}
-                          </i>
-                        </p>
-                      )}
-                  </div>
-                )}
+              <MemberDBSubtitle metadata={metadata} />
               {metadata.source_database &&
                 metadata.source_database.toLowerCase() === 'interpro' &&
                 metadata.name.short &&
@@ -143,62 +223,10 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 </Fragment>
               )}
             </div>
-            <div className={f('medium-4', 'large-4', 'columns')}>
-              {metadata.integrated && (
-                <Integration intr={metadata.integrated} />
-              )}
-              {metadata.integrated && (
-                <div>
-                  <h5>External links</h5>
-                  {
-                    // TODO implement right MD ext link
-                  }
-                  <Link
-                    className={f('ext')}
-                    to={{
-                      description: {},
-                    }}
-                  >
-                    {metadata.source_database} website
-                  </Link>
-                </div>
-              )}
-              {metadata.member_databases &&
-                Object.keys(metadata.member_databases).length > 0 && (
-                  <ContributingSignatures contr={metadata.member_databases} />
-                )}
-            </div>
+            <SidePanel metadata={metadata} />
           </div>
         </section>
-        {!Object.keys(metadata.go_terms).length ||
-        metadata.source_database.toLowerCase() !== 'interpro' ? null : (
-          <GoTerms
-            terms={metadata.go_terms}
-            type="entry"
-            db={metadata.source_database}
-          />
-        )}
-        {Object.keys(metadata.literature).length > 0 && (
-          <section id="references">
-            <div className={f('row')}>
-              <div className={f('large-12', 'columns')}>
-                <h4>References</h4>
-              </div>
-            </div>
-            <Literature included={included} extra={extra} />
-          </section>
-        )}
-
-        {Object.keys(metadata.cross_references || {}).length > 0 && (
-          <section id="cross_references">
-            <div className={f('row')}>
-              <div className={f('large-12', 'columns')}>
-                <h4>Cross References</h4>
-              </div>
-            </div>
-            <CrossReferences xRefs={metadata.cross_references} />
-          </section>
-        )}
+        <OtherSections metadata={metadata} citations={{ included, extra }} />
       </div>
     );
   }

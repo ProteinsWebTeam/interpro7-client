@@ -8,7 +8,7 @@ import ResolutionFilter from './ResolutionFilter';
 const StructureListFilters = () => (
   <FiltersPanel>
     <ExperimentTypeFilter label="Experiment Type" />
-    <ResolutionFilter label="Resolution" />
+    <ResolutionFilter label="Resolution (Å)" />
   </FiltersPanel>
 );
 

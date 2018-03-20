@@ -1,6 +1,5 @@
 @import '../styles/timing.css';
-@import '../styles/timing.css';
-
+@import '../styles/colors.css';
 /************************************home.js************************************/
 /*homepage figures - temp while there is a specific component*/
 .fig-container {
@@ -64,14 +63,29 @@
 .signature-container {
   display: flex;
   flex-wrap: wrap;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
+}
+
+@supports (display: grid) {
+  .signature-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 0.72rem;
+  }
 }
 
 .signature {
-  background: #d5eff3;
+  background-color: #d5eff3;
   border-radius: 4px;
-  padding: 0 6px;
+  padding: 0 4px;
   margin: 2px;
+  flex-basis: 30%; /*3 items by row more or less*/
+  text-align: center;
+  transition: background-color var(--timing-fast) ease-in-out;
+
+  &.corresponds-to-filter {
+    background-color: var(--colors-marktext);
+  }
 }
 
 .go-container {
@@ -80,14 +94,14 @@
   font-size: 0.8rem;
 }
 
-.go {
+.go-list {
   display: flex;
   align-items: center;
-  margin: 0.1em 0;
-  line-height: normal;
+  line-height: 1.3;
 }
 
 .go-circle {
+  display: flex;
   width: 1.5ch;
   height: 1.5ch;
   margin-right: 1ch;
@@ -102,14 +116,18 @@
   padding: 0.1rem 0.4rem;
   color: #71818a;
 }
+.col-go div:first-child span {
+  margin-left: 1rem;
+}
+
 .sign-label-head.bp {
-  background: #c2e6ec; /*cce7f3*/
+  background: var(--colors-go-bp);
 }
 .sign-label-head.mf {
-  background: #e5f5d7;
+  background: var(--colors-go-mf);
 }
 .sign-label-head.cc {
-  background: #fbdcd0;
+  background: var(--colors-go-cc);
 }
 
 /* add some space on top between banner and breadcrumb and at bottom too otherwise content si stuck on footer*/
@@ -125,20 +143,24 @@
   margin-top: 174px;
 }
 
-.not-integrated {
-  opacity: 0.1;
-  transition: opacity var(--timing-medium) ease-in-out;
+/*make the table more consistent  in term of column with fluctuation while navigating*/
+.col-md {
+  width: 26%;
+} /*for 3 signatures a row*/
+.col-go {
+  width: 30%;
+} /*to get most GO terms in single line*/
 
-  &:hover {
-    opacity: 0.8;
-  }
+.md-small {
+  width: 50px;
 }
 
 /* Medium screen only*/
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-  .col-go {
+  /*remove GO terms color legend in table header*/
+  .col-go-head div span {
     display: none;
-  } /*remove GO terms*/
+  }
 }
 
 /* Small screen only */
@@ -146,7 +168,16 @@
   /*table.light th {word-break: break-all;}*/
   /*remove  GO terms and entry type columns*/
   .col-go,
+  .col-md {
+    width: 100%;
+  }
+  .col-go div {
+    margin-left: 0;
+  }
   .col-type {
     display: none;
+  }
+  .col-go div:first-child span {
+    margin-left: 0;
   }
 }

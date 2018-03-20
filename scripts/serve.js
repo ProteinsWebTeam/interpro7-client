@@ -5,7 +5,9 @@ const express = require('express');
 const app = express();
 const server = http.createServer(app);
 
-const webpackConfig = require('../webpack.config.js')();
+const webpackConfig = require('../webpack.config.js')(undefined, {
+  mode: 'production',
+});
 
 const DEFAULT_PORT = 8888;
 

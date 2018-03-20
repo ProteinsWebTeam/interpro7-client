@@ -8,6 +8,10 @@ import { DEV } from 'config';
 import noop from 'lodash-es/noop';
 
 import loadData from 'higherOrder/loadData';
+import {
+  schemaProcessDataWebPage,
+  schemaProcessDataPageSection,
+} from 'schema_org/processors';
 
 import { changeSettings, resetSettings } from 'actions/creators';
 
@@ -15,12 +19,20 @@ import { foundationPartial } from 'styles/foundation';
 
 import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
+import loadable from 'higherOrder/loadable';
 
 const f = foundationPartial(theme, local);
 
 const NavigationSettings = ({ navigation: { pageSize, autoRedirect } }) => (
   <form data-category="navigation">
     <h4>Navigation settings</h4>
+    <SchemaOrgData
+      data={{
+        name: 'Navigation settings',
+        description: 'Number of results per page, redirection rules',
+      }}
+      processData={schemaProcessDataPageSection}
+    />
     <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
         <label>
@@ -83,6 +95,13 @@ NavigationSettings.propTypes = {
 const UISettings = ({ ui: { lowGraphics } }) => (
   <form data-category="ui">
     <h4>UI settings</h4>
+    <SchemaOrgData
+      data={{
+        name: 'UI settings',
+        description: 'User Interface options',
+      }}
+      processData={schemaProcessDataPageSection}
+    />
     <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
         <p>Low graphics mode:</p>
@@ -121,6 +140,13 @@ UISettings.propTypes = {
 const CacheSettings = ({ cache: { enabled } }) => (
   <form data-category="cache">
     <h4>Cache settings</h4>
+    <SchemaOrgData
+      data={{
+        name: 'Cache settings',
+        description: 'Options for locally saved data',
+      }}
+      processData={schemaProcessDataPageSection}
+    />
     <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
         <p>Caching:</p>
@@ -149,7 +175,7 @@ const CacheSettings = ({ cache: { enabled } }) => (
 );
 CacheSettings.propTypes = {
   cache: T.shape({
-    enabled: T.bool.isRequired,
+    enabled: T.bool,
   }).isRequired,
 };
 
@@ -166,6 +192,14 @@ const EndpointSettings = ({
 }) => (
   <form data-category={category}>
     <h4>{children}</h4>
+    <SchemaOrgData
+      data={{
+        name: children[0],
+        description: `hostname, port and root ${children[0]}`,
+      }}
+      processData={schemaProcessDataPageSection}
+    />
+
     <div className={f('row')}>
       <div className={f('medium-3', 'column')}>
         <label>
@@ -259,6 +293,11 @@ const IPScanEndpointSettings = loadData({
   fetchOptions,
 })(EndpointSettings);
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
 class Settings extends PureComponent {
   static propTypes = {
     settings: T.shape({
@@ -288,6 +327,14 @@ class Settings extends PureComponent {
     } = this.props;
     return (
       <div className={f('row')}>
+        <SchemaOrgData
+          data={{
+            name: 'InterPro Settings Page',
+            description: 'Configuration options for the website',
+            location: window.location,
+          }}
+          processData={schemaProcessDataWebPage}
+        />
         <div className={f('columns', 'large-12')}>
           <section onChange={changeSettings}>
             <h3>Settings</h3>

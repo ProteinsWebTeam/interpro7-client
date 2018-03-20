@@ -7,19 +7,12 @@
   top: calc(38px + var(--spacing-medium));
   left: initial;
   right: var(--spacing-medium);
-  transition-timing-function: ease-in-out;
-  transition-duration: var(--timing-medium);
-  transition-property: transform, opacity;
-  transform: translateY(-150%);
-  opacity: 0;
   visibility: hidden;
   display: block;
   width: calc(100vw - 2 * var(--spacing-medium));
   max-width: 800px;
 
   &.is-open {
-    transform: translateY(0);
     visibility: visible;
-    opacity: 1;
   }
 }

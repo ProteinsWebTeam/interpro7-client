@@ -7,6 +7,7 @@ import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 
 import loadable from 'higherOrder/loadable';
+import { schemaProcessDataWebPage } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -22,6 +23,10 @@ const IPScanStatus = loadable({
 const IPScanResult = loadable({
   loader: () =>
     import(/* webpackChunkName: "sequence-page" */ 'pages/Sequence'),
+});
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
 });
 
 const RedirectToIPScan = () => (
@@ -57,6 +62,15 @@ class Wrapper extends PureComponent {
       <div className={f('row')}>
         <div className={f('columns', 'margin-bottom-large')}>
           <h3>Jobs</h3>
+          <SchemaOrgData
+            data={{
+              name: 'InterPro Jobs Page',
+              description:
+                'The webpage were the result of job requests can be found',
+              location: window.location,
+            }}
+            processData={schemaProcessDataWebPage}
+          />
           <ul className={f('tabs', 'main-style', 'margin-top-large')}>
             <li
               className={f('tabs-title')}

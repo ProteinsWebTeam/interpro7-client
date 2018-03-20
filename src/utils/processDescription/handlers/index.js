@@ -76,7 +76,7 @@ import set from 'lodash-es/set';
 |}; */
 
 /*:: type PropertiesObject = {
-  [key: string]: {|value: any|},
+  [key: string]: PropertyDescriptor<any>,
 }; */
 
 // node templates

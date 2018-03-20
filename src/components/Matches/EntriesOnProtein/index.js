@@ -1,47 +1,17 @@
 /* eslint no-magic-numbers: 0 */
-import React, { PureComponent } from 'react';
+import React from 'react';
 import T from 'prop-types';
-import ColorHash from 'color-hash/lib/color-hash';
 import { foundationPartial } from 'styles/foundation';
 
-import loadable from 'higherOrder/loadable';
+import ProtVistaMatches from '../ProtVistaMatches';
 
-import style from '../style.css';
 import protvista from 'components/ProtVista/style.css';
 
 const f = foundationPartial(protvista);
 
 import { getTrackColor, EntryColorMode } from 'utils/entryColor';
 
-import ProtVistaInterProTrack from 'protvista-interpro-track';
-import loadWebComponent from 'utils/loadWebComponent';
-import ProtVistaManager from 'protvista-manager';
-import ProtVistaSequence from 'protvista-sequence';
-
-const colorHash = new ColorHash();
-
-const SchemaOrgData = loadable({
-  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  loading: () => null,
-});
-
-const schemaProcessData = data => ({
-  '@id': '@isContainedIn',
-  '@type': ['Protein', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  identifier: data.protein.accession,
-  name: data.protein.name,
-  location: (
-    data.protein.entry_protein_locations || data.entry.entry_protein_locations
-  ).map(loc => ({
-    '@type': 'PropertyValue',
-    minValue: loc.fragments[0].start,
-    maxValue: loc.fragments[0].end,
-  })),
-});
-
-const webComponents = [];
-
-class EntriesOnProtein extends PureComponent {
+class EntriesOnProtein extends ProtVistaMatches {
   static propTypes = {
     matches: T.arrayOf(
       T.shape({
@@ -51,58 +21,34 @@ class EntriesOnProtein extends PureComponent {
     ).isRequired,
     options: T.object,
   };
-  constructor(props) {
-    super(props);
-    this.web_tracks = {};
-  }
 
-  componentWillMount() {
-    if (webComponents.length) return;
-    webComponents.push(
-      loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
-    );
-    webComponents.push(
-      loadWebComponent(() => ProtVistaInterProTrack).as(
-        'protvista-interpro-track',
-      ),
-    );
-  }
-
-  async componentDidMount() {
-    await Promise.all(webComponents);
-    const { matches } = this.props;
-    const p = matches[0].protein;
-    this.web_protein.data = p.sequence || ' '.repeat(p.length);
-    this.updateTracksWithData(matches);
-  }
-  componentDidUpdate(prevProps) {
-    if (prevProps.data !== this.props.matches) {
-      this.updateTracksWithData(this.props.matches);
+  updateTracksWithData({ matches: data }) {
+    if (data.length > 1) {
+      console.error(
+        'There are several matches and this component is using only one',
+      );
+      console.table(data);
     }
-  }
-  updateTracksWithData(data) {
     const firstMatch = data[0];
+    const { entry, protein } = firstMatch;
     let locations = [];
     if (firstMatch.entry && firstMatch.entry.entry_protein_locations)
       locations = firstMatch.entry.entry_protein_locations;
     else if (firstMatch.protein && firstMatch.protein.entry_protein_locations)
       locations = firstMatch.protein.entry_protein_locations;
-    const d = data[0].entry;
     const tmp = locations.map(loc => ({
-      accession: d.accession,
-      name: d.name,
-      source_database: d.source_database,
+      accession: entry.accession,
+      name: entry.name,
+      source_database: entry.source_database,
       locations: [loc],
-      color: getTrackColor(d, EntryColorMode.ACCESSION),
-      entry_type: d.entry_type,
+      color: getTrackColor(entry, EntryColorMode.ACCESSION),
+      entry_type: entry.entry_type,
       type: 'entry',
     }));
 
-    this.web_tracks[d.accession].data = tmp;
+    this.web_tracks[entry.accession].data = tmp;
+    if (!this.web_protein.data)
+      this.web_protein.data = protein.sequence || ' '.repeat(protein.length);
   }
 
   render() {
@@ -111,7 +57,7 @@ class EntriesOnProtein extends PureComponent {
     const entry = matches[0].entry;
     return (
       <div className={f('track-in-table')}>
-        <SchemaOrgData data={matches[0]} processData={schemaProcessData} />
+        {/* <SchemaOrgData data={matches[0]} processData={schemaProcessData} />*/}
         <protvista-manager
           attributes="length displaystart displayend highlightstart highlightend"
           id="pv-manager"

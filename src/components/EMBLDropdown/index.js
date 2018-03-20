@@ -14,13 +14,33 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 
-export class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
+/*:: type Props = {
+  visible?: boolean,
+}; */
+
+/*:: type State =  {|
+  wasRendered: boolean,
+|}; */
+
+export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
-    visible: T.bool.isRequired,
+    visible: T.bool,
   };
+
+  constructor(props /*: Props */) {
+    super(props);
+    this.state = { wasRendered: !!props.visible };
+  }
+
+  componentWillReceiveProps({ visible } /*: Props */) {
+    if (this.state.wasRendered) return;
+    if (visible) this.setState({ wasRendered: true });
+  }
 
   render() {
     const { visible } = this.props;
+    const { wasRendered } = this.state;
+    if (!(visible || wasRendered)) return null;
     return (
       <div className={styleBundle('masthead-black-bar')}>
         <div

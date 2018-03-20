@@ -1,4 +1,3 @@
-// @flow
 /* eslint-env node */
 import { DEV } from 'config';
 

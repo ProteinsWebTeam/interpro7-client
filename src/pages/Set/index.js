@@ -17,6 +17,11 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import {
+  schemaProcessDataTable,
+  schemaProcessDataTableRow,
+} from 'schema_org/processors';
+
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 import subPages from 'subPages';
@@ -30,6 +35,11 @@ import global from 'styles/global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
+import {
+  schemaProcessDataRecord,
+  schemaProcessMainEntity,
+} from '../../schema_org/processors';
 
 const f = foundationPartial(fonts, pageStyle, ipro, global);
 
@@ -47,6 +57,10 @@ const propTypes = {
   customLocation: T.shape({
     description: T.object.isRequired,
   }).isRequired,
+  dataBase: T.shape({
+    payload: T.object,
+    loading: T.bool.isRequired,
+  }),
 };
 
 const defaultPayload = {
@@ -89,11 +103,19 @@ class List extends PureComponent {
     const {
       data: { payload, loading, ok, url, status },
       isStale,
-      customLocation: { search },
+      customLocation: {
+        description: { set: { db: dbS }, entry: { db: dbE } },
+        search,
+      },
+      dataBase,
     } = this.props;
     let _payload = payload;
     const HTTP_OK = 200;
     const notFound = !loading && status !== HTTP_OK;
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
+    const db = (dbE || dbS).toUpperCase();
+    const dbAll = { canonical: 'ALL', name: 'All', version: 'N/A' };
     if (loading || notFound) {
       _payload = {
         results: [],
@@ -106,6 +128,16 @@ class List extends PureComponent {
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <hr />
+          {databases && (
+            <SchemaOrgData
+              data={{
+                data: { db: db === 'ALL' ? dbAll : databases[db] },
+                location: window.location,
+              }}
+              processData={schemaProcessDataTable}
+            />
+          )}
+
           <Table
             dataTable={_payload.results}
             loading={loading}
@@ -140,20 +172,27 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               // eslint-disable-next-line camelcase
-              renderer={(accession /*: string */, { source_database }) => (
+              renderer={(accession /*: string */, row) => (
                 <Link
                   to={customLocation => ({
                     ...customLocation,
                     description: {
                       main: { key: 'set' },
                       set: {
-                        db: source_database,
+                        db: row.source_database,
                         accession,
                       },
                     },
                   })}
                 >
                   <span className={f('acc-row')}>
+                    <SchemaOrgData
+                      data={{
+                        data: { row, endpoint: 'set' },
+                        location: window.location,
+                      }}
+                      processData={schemaProcessDataTableRow}
+                    />
                     <HighlightedText
                       text={accession}
                       textToHighlight={search.search}
@@ -237,27 +276,6 @@ class SummaryComponent extends PureComponent {
   }
 }
 
-const schemaProcessData = data => ({
-  '@type': 'DataRecord',
-  '@id': '@mainEntityOfPage',
-  identifier: data.metadata.accession,
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': data.metadata.source_database,
-  },
-  mainEntity: '@mainEntity',
-  seeAlso: '@seeAlso',
-});
-
-const schemaProcessData2 = data => ({
-  '@type': ['Protein', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@mainEntity',
-  identifier: data.metadata.accession,
-  name: data.metadata.name.name || data.metadata.accession,
-  alternateName: data.metadata.name.long || null,
-  additionalProperty: '@additionalProperty',
-});
-
 class Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -268,13 +286,20 @@ class Summary extends PureComponent {
         }),
       }),
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const { data: { loading, payload }, dataBase } = this.props;
     if (loading || !payload.metadata) {
       return <Loading />;
     }
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
     let currentSet = null;
     for (const setDB of setDBs) {
       if (setDB.name === payload.metadata.source_database) {
@@ -284,21 +309,28 @@ class Summary extends PureComponent {
     }
     return (
       <Fragment>
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData}
-            />
-          )}
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <SchemaOrgData
-              data={this.props.data.payload}
-              processData={schemaProcessData2}
-            />
+        {payload &&
+          payload.metadata &&
+          payload.metadata.accession && (
+            <Fragment>
+              <SchemaOrgData
+                data={{
+                  data: payload,
+                  endpoint: 'set',
+                  version:
+                    databases &&
+                    databases[payload.metadata.source_database].version,
+                }}
+                processData={schemaProcessDataRecord}
+              />
+              <SchemaOrgData
+                data={{
+                  data: payload.metadata,
+                  type: 'Set',
+                }}
+                processData={schemaProcessMainEntity}
+              />
+            </Fragment>
           )}
         <ErrorBoundary>
           <div className={f('row')}>
@@ -369,4 +401,6 @@ const EntrySet = props => (
   </div>
 );
 
-export default loadData()(EntrySet);
+export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
+  loadData()(EntrySet),
+);

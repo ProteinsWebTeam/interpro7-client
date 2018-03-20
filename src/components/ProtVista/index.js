@@ -408,7 +408,7 @@ class ProtVista extends PureComponent {
 
     if (!(length && data)) return <Loading />;
 
-    const { hideCategory, expandedTrack } = this.state;
+    const { hideCategory } = this.state;
     return (
       <div ref={e => (this._main = e)} className={f('fullscreenable')}>
         <div className={f('row')}>
