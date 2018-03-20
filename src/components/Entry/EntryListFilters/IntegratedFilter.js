@@ -72,7 +72,7 @@ class IntegratedFilter extends PureComponent {
     const types = loading ? {} : payload;
     if (!loading) types.both = payload.integrated + payload.unintegrated;
     return (
-      <div>
+      <div className={f('list-integrated')}>
         {Object.keys(types)
           .sort()
           .map(type => (

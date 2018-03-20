@@ -51,7 +51,7 @@ class ExperimentTypeFilter extends PureComponent {
       types.unshift(['All', NaN]);
     }
     return (
-      <div style={{ overflowX: 'hidden' }}>
+      <div style={{ overflowX: 'hidden' }} className={f('list-experiment')}>
         {types.map(([type, count]) => (
           <div key={type} className={f('column')}>
             <label className={f('row', 'filter-button')}>

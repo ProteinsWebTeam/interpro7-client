@@ -61,7 +61,7 @@ class TaxonomyFilter extends PureComponent {
       taxes.unshift(['ALL', NaN]);
     }
     return (
-      <div style={{ overflowX: 'hidden' }}>
+      <div style={{ overflowX: 'hidden' }} className={f('list-taxonomy')}>
         {taxes.map(([taxId, count]) => (
           <div key={taxId} className={f('column')}>
             <label className={f('row', 'filter-button')}>
