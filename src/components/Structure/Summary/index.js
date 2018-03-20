@@ -24,10 +24,14 @@ const f = foundationPartial(ebiStyles);
 
 const webComponents = [];
 
+/*:: type Data = {
+  loading: boolean,
+  payload?: Object,
+} */
+
 /*:: type Props = {
-  data: {
-    metadata: Object,
-  },
+  data: Data,
+  dataMatches: Data,
   customLocation: {
     description: Object,
   },
@@ -35,7 +39,7 @@ const webComponents = [];
 
 class SummaryStructure extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    data: T.shape().isRequired,
+    data: T.shape({}).isRequired,
     customLocation: T.shape({
       description: T.object.isRequired,
     }).isRequired,
@@ -65,7 +69,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
       data: { loading, payload },
       dataMatches: { loading: loadingM, payload: payloadM },
     } = this.props;
-    if (loading || loadingM) return null;
+    if (loading || loadingM || !payload || !payloadM) return null;
     const metadata = payload.metadata;
     const matches = payloadM.results;
     const chains = Array.from(new Set(metadata.chains || []));

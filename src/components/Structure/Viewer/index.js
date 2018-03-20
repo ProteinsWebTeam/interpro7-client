@@ -13,7 +13,8 @@ const f = foundationPartial(ebiStyles);
 
 /*:: type Props = {
   id: string|number,
-  matches: array
+  matches: Array<Object>,
+  highlight?: string
 }; */
 
 //Call as follows to highlight pre-selected entry
