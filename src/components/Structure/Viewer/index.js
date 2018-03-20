@@ -48,6 +48,30 @@ class StructureView extends PureComponent /*:: <Props> */ {
   componentDidMount() {
     const pdbid = this.props.id;
     const InterProSpec = LiteMol.Plugin.getDefaultSpecification();
+    const Behaviour = LiteMol.Bootstrap.Behaviour;
+    const Components = LiteMol.Plugin.Components;
+    const LayoutRegion = LiteMol.Bootstrap.Components.LayoutRegion;
+
+    InterProSpec.behaviours = [
+      Behaviour.SetEntityToCurrentWhenAdded,
+      Behaviour.FocusCameraOnSelect,
+      Behaviour.CreateVisualWhenModelIsAdded,
+    ];
+    InterProSpec.components = [
+      Components.Transform.View(LayoutRegion.Right),
+      Components.Context.Log(LayoutRegion.Bottom, true),
+      Components.Context.Overlay(LayoutRegion.Root),
+      Components.Context.Toast(LayoutRegion.Main, true),
+      Components.Context.BackgroundTasks(LayoutRegion.Main, true),
+    ];
+    /*
+    if (InterProSpec.behaviours.indexOf(Behaviour.ApplySelectionToVisual) != -1) {
+      InterProSpec.behaviours.splice(InterProSpec.behaviours.indexOf(Behaviour.ApplySelectionToVisual), 1);
+    }
+    if (InterProSpec.behaviours.indexOf(Behaviour.HighlightElementInfo) != -1) {
+      InterProSpec.behaviours.splice(InterProSpec.behaviours.indexOf(Behaviour.HighlightElementInfo), 1);
+    }
+    */
 
     let plugin = LiteMol.Plugin.create({
       target: '#litemol',
@@ -59,13 +83,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
       customSpecification: InterProSpec,
     });
 
-    /*
-    plugin.loadMolecule({
-      id: pdbid,
-      url: 'https://www.ebi.ac.uk/pdbe/static/entry/' + pdbid + '_updated.cif',
-      format: 'cif', // default
-    });
-    */
     var Transformer = LiteMol.Bootstrap.Entity.Transformer;
     const Query = LiteMol.Core.Structure.Query;
 
@@ -100,61 +117,76 @@ class StructureView extends PureComponent /*:: <Props> */ {
       });
 
     plugin.applyTransform(action).then(() => {
-      let model = context.select('model')[0];
-      let polymer = context.select('polymer-visual')[0];
+      const model = context.select('model')[0];
+      const polymer = context.select('polymer-visual')[0];
       if (this.props.matches != undefined) {
-        let group = Transform.build();
-        group.add(
-          model,
-          Transformer.Basic.CreateGroup,
-          { label: 'Entries', description: 'Entries mapped to this structure' },
-          { isBinding: false },
-        );
-        let entryResidues = {};
+        const entryResidues = {};
         //create matches in structure hierarchy
-        if (this.props.matches != undefined) {
-          for (let match of this.props.matches) {
-            let chain = match.chain;
-            let protein = match.protein;
-            let entry = match.accession;
-            let db = match.source_database;
-            let residues = [];
-            for (let location of match.protein_structure_locations) {
-              for (let fragment of location.fragments) {
-                for (let i = fragment.start; i < fragment.end; i++) {
+        const queries = [];
+        for (const match of this.props.matches) {
+          const entry = match.metadata.accession;
+          const db = match.metadata.source_database;
+          let chain, protein;
+          const residues = [];
+          for (const structure of match.structures) {
+            chain = structure.chain;
+            protein = structure.protein;
+
+            for (const location of structure.entry_protein_locations) {
+              for (const fragment of location.fragments) {
+                for (let i = fragment.start; i <= fragment.end; i++) {
                   residues.push({ authAsymId: chain, authSeqNumber: i });
                 }
               }
             }
-            entryResidues[entry] = residues;
-            let query = Query.residues(...residues);
-            group
-              .then(
-                Transformer.Molecule.CreateSelectionFromQuery,
-                { name: entry + ' (' + db + ')', query: query, silent: true },
-                { ref: entry },
-              )
-              .then(Transformer.Molecule.CreateVisual, {
-                style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get(
-                  'Cartoons',
-                ),
-              });
           }
+          entryResidues[entry] = residues;
+          queries.push({
+            entry: entry,
+            chain: chain,
+            db: db,
+            query: Query.residues(...residues),
+            length: residues.length,
+          });
         }
+
+        const group = Transform.build();
+        group.add(
+          polymer,
+          Transformer.Basic.CreateGroup,
+          { label: 'Entries', description: 'Entries mapped to this structure' },
+          { isBinding: false },
+        );
+
+        for (const q of queries) {
+          console.log(q.entry + ' len ' + q.length);
+          group.then(
+            Transformer.Molecule.CreateSelectionFromQuery,
+            { name: q.entry + ' (' + q.db + ')', query: q.query, silent: true },
+            { ref: q.entry },
+          );
+          /*
+          .then(Transformer.Molecule.CreateVisual, {
+            style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get(
+            'Cartoons',
+            ),
+          });
+          */
+        }
+        plugin.applyTransform(group);
+
         //highlight pre-selected entry
-        plugin.applyTransform(group).then(() => {
-          if (
-            this.props.highlight != undefined &&
-            entryResidues[this.props.highlight] != undefined
-          ) {
-            let query = Query.residues(...entryResidues[this.props.highlight]);
-            Command.Molecule.Highlight.dispatch(context.tree.context, {
-              model: model,
-              query: query,
-              isOn: true,
-            });
-          }
-        });
+        if (
+          this.props.highlight != undefined &&
+          entryResidues[this.props.highlight] != undefined
+        ) {
+          const query = Query.residues(...entryResidues[this.props.highlight]);
+          Command.Molecule.Highlight.dispatch(context.tree.context, {
+            model: model,
+            query: query,
+            isOn: true,
+          });
+        }
       }
     });
   }

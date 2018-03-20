@@ -68,7 +68,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
     } = this.props;
     if (loading || loadingM) return null;
     const metadata = payload.metadata;
-    const matches = payloadM.entries;
+    const matches = payloadM.results;
     const chains = Array.from(new Set(metadata.chains || []));
     const date = new Date(metadata.release_date);
     const literature = Object.entries(metadata.literature);
@@ -159,11 +159,11 @@ const getURLForMatches = createSelector(
       hostname,
       port,
       pathname: `${root}${descriptionToPath({
-        main: { key: 'structure' },
-        structure: { db: 'pdb', accession },
-        entry: { isFilter: true, db: 'all' },
+        main: { key: 'entry' },
+        structure: { isFilter: true, db: 'pdb', accession },
+        entry: { db: 'all' },
       })}`,
-    }),
+    }) + '?page_size=100',
 );
 
 export default loadData({
