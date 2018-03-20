@@ -57,7 +57,12 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
     // MODE
     mode,
     // OUTPUT
-    output: { publicPath },
+    output: {
+      path: path.resolve('dist'),
+      publicPath,
+      filename: '[id].[name].[hash:3].js',
+      chunkFilename: '[id].[name].[chunkhash:3].js',
+    },
     // RESOLVE
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
@@ -237,8 +242,8 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
       }),
       mode === 'production'
         ? new MiniCssExtractPlugin({
-            filename: '[name].[hash:6].css',
-            chunkFilename: '[id].[hash:6].css',
+            filename: '[name].[hash:3].css',
+            chunkFilename: '[id].[hash:3].css',
           })
         : null,
       mode === 'development' ? new webpack.HotModuleReplacementPlugin() : null,
