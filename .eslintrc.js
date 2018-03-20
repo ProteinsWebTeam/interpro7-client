@@ -388,7 +388,11 @@ const rules = {
   // Require spaces before/after unary operators
   'space-unary-ops': 1,
   // Require a space immediately following the // or /* in a comment
-  'spaced-comment': [1, 'always', { markers: [':', '::'], exceptions: ['-'] }],
+  'spaced-comment': [
+    1,
+    'always',
+    { markers: [':', '::', '?:'], exceptions: ['-'] },
+  ],
   // Disallow usage of spacing in template strings
   'template-curly-spacing': [1, 'never'],
   // Disallow comparisons with the value NaN

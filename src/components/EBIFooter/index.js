@@ -4,11 +4,10 @@ import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
-import local from './style.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, local);
+const f = foundationPartial(ebiGlobalStyles, fonts);
 
 class EBIFooter extends PureComponent {
   render() {

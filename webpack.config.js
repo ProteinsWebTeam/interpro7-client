@@ -31,10 +31,11 @@ const getCompressionPlugin = (() => {
   };
 })();
 
-const cssSettings = () => ({
+const cssSettings = mode => ({
   modules: true,
   importLoaders: 1,
   sourceMap: true,
+  minimize: mode === 'production',
   localIdentName: '[folder]_[name]__[local]___[hash:base64:2]',
   alias: {
     '../libraries/tablesorter/css':
@@ -56,7 +57,12 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
     // MODE
     mode,
     // OUTPUT
-    output: { publicPath },
+    output: {
+      path: path.resolve('dist'),
+      publicPath,
+      filename: '[id].[name].[hash:3].js',
+      chunkFilename: '[id].[name].[chunkhash:3].js',
+    },
     // RESOLVE
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
@@ -124,7 +130,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             },
             {
               loader: 'css-loader',
-              options: Object.assign({}, cssSettings(), {
+              options: Object.assign({}, cssSettings(mode), {
                 localIdentName: '[local]',
               }),
             },
@@ -147,7 +153,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             },
             {
               loader: 'css-loader',
-              options: cssSettings(env),
+              options: cssSettings(mode),
             },
             {
               loader: 'postcss-loader',
@@ -169,7 +175,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             },
             {
               loader: 'css-loader',
-              options: Object.assign({}, cssSettings(), {
+              options: Object.assign({}, cssSettings(mode), {
                 localIdentName: '[local]',
               }),
             },
@@ -192,7 +198,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             {
               loader: 'img-loader',
               options: {
-                enabled: env.production,
+                enabled: mode === 'production',
               },
             },
           ],
@@ -236,12 +242,9 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
       }),
       mode === 'production'
         ? new MiniCssExtractPlugin({
-            filename: '[name].[hash:6].css',
-            chunkFilename: '[id].[hash:6].css',
+            filename: '[name].[hash:3].css',
+            chunkFilename: '[id].[hash:3].css',
           })
-        : null,
-      mode === 'production'
-        ? new (require('clean-webpack-plugin'))(['dist'])
         : null,
       mode === 'development' ? new webpack.HotModuleReplacementPlugin() : null,
       new HTMLWebpackPlugin({
@@ -257,7 +260,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             favicons: {
               background: '#007c82',
               theme_color: '#007c82',
-              appName: pkg.name,
+              appName: 'InterPro',
               start_url: `${publicPath}?utm_source=pwa_homescreen`,
               lang: 'en',
               version: pkg.version,

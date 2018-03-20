@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 
+import Link from 'components/generic/Link';
+
 import cancelable from 'utils/cancelable';
 import loadResource from 'utils/loadResource';
-import Link from 'components/generic/Link';
+import getsInView from 'utils/getsInView';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -18,17 +20,20 @@ const noPadding = { padding: 0 };
 
 class Twitter extends PureComponent /*:: <{}> */ {
   /* ::
+    _domNode: ?Element
     _node: ?Element
     _twitterScript: ?{
       cancel: function,
       promise: Promise<any>,
     }
   */
-  componentDidMount() {
-    this._twitterScript = cancelable(
-      loadResource('//platform.twitter.com/widgets.js'),
-    );
-    this._twitterScript.promise.then(() => {
+  async componentDidMount() {
+    try {
+      await getsInView(this._domNode, { rootMargin: '10px' });
+      this._twitterScript = cancelable(
+        loadResource('//platform.twitter.com/widgets.js'),
+      );
+      await this._twitterScript.promise;
       if (!window.twttr) return;
       if (!bound) {
         // Only need to bind this once
@@ -39,7 +44,9 @@ class Twitter extends PureComponent /*:: <{}> */ {
         bound = true;
       }
       if (this._node) window.twttr.widgets.load(this._node);
-    });
+    } catch (_) {
+      /**/
+    }
   }
 
   componentWillUnmount() {
@@ -51,7 +58,10 @@ class Twitter extends PureComponent /*:: <{}> */ {
       <div className={f('expanded', 'row')}>
         <div className={f('columns')} style={noPadding}>
           <div className={f('jumbo-news')}>
-            <div className={f('jumbo-news-container')}>
+            <div
+              className={f('jumbo-news-container')}
+              ref={node => (this._domNode = node)}
+            >
               <div
                 className={f('icon', 'icon-socialmedia', 'icon-s2')}
                 data-icon="T"
