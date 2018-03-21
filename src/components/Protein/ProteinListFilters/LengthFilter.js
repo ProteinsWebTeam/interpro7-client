@@ -45,7 +45,7 @@ class LengthFilter extends PureComponent {
   render() {
     const { length } = this.props.customLocation.search;
     return (
-      <div className={f('column')} style={{ display: 'block' }}>
+      <div className={f('column', 'list-length')} style={{ display: 'block' }}>
         <label>
           <input
             type="radio"
