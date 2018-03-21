@@ -40,6 +40,7 @@ const webComponents = [];
 class SummaryStructure extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({}).isRequired,
+    dataMatches: T.shape({}).isRequired,
     customLocation: T.shape({
       description: T.object.isRequired,
     }).isRequired,
@@ -125,7 +126,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                       View this structure in PDBe
                     </PDBeLink>
                     {
-                      //remove the PDB viewer as we already show info on page (duplication)
+                      // remove the PDB viewer as we already show info on page (duplication)
                       // <pdb-prints size="36">
                       // <pdb-data-loader pdbid={metadata.accession} />
                       // </pdb-prints>

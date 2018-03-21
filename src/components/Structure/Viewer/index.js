@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import loadWebComponent from 'utils/loadWebComponent';
+//import loadWebComponent from 'utils/loadWebComponent';
 import LiteMol from 'litemol';
 // import LiteMolViewer from 'litemol/dist/js/LiteMol-viewer.js';
 import { foundationPartial } from 'styles/foundation';
@@ -9,7 +9,7 @@ import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 import lmStyles from 'litemol/dist/css/LiteMol-plugin-light.css';
 
 const embedStyle = { width: '100%', height: '50vh' };
-const f = foundationPartial(ebiStyles);
+// const f = foundationPartial(ebiStyles);
 
 /*:: type Props = {
   id: string|number,
@@ -17,8 +17,8 @@ const f = foundationPartial(ebiStyles);
   highlight?: string
 }; */
 
-//Call as follows to highlight pre-selected entry
-//<StructureView id={accession} matches={matches} highlight={"pf00071"}/>
+// Call as follows to highlight pre-selected entry
+// <StructureView id={accession} matches={matches} highlight={"pf00071"}/>
 
 class StructureView extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -27,31 +27,17 @@ class StructureView extends PureComponent /*:: <Props> */ {
     highlight: T.string,
   };
 
-  render() {
-    return (
-      <div style={embedStyle}>
-        <div
-          id="litemol"
-          style={{
-            background: 'white',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-          }}
-        />
-      </div>
-    );
-  }
-
   componentDidMount() {
-    const pdbid = this.props.id;
     const InterProSpec = LiteMol.Plugin.getDefaultSpecification();
     const Behaviour = LiteMol.Bootstrap.Behaviour;
     const Components = LiteMol.Plugin.Components;
     const LayoutRegion = LiteMol.Bootstrap.Components.LayoutRegion;
+    const Transformer = LiteMol.Bootstrap.Entity.Transformer;
+    const Query = LiteMol.Core.Structure.Query;
+    const Command = LiteMol.Bootstrap.Command;
+    const Transform = LiteMol.Bootstrap.Tree.Transform;
+
+    const pdbid = this.props.id;
 
     InterProSpec.behaviours = [
       Behaviour.SetEntityToCurrentWhenAdded,
@@ -74,7 +60,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
     */
 
-    let plugin = LiteMol.Plugin.create({
+    const plugin = LiteMol.Plugin.create({
       target: '#litemol',
       viewportBackground: '#fff',
       layoutState: {
@@ -83,15 +69,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
       },
       customSpecification: InterProSpec,
     });
+    const context = plugin.context;
 
-    var Transformer = LiteMol.Bootstrap.Entity.Transformer;
-    const Query = LiteMol.Core.Structure.Query;
-
-    let context = plugin.context;
-    const Command = LiteMol.Bootstrap.Command;
-    const Transform = LiteMol.Bootstrap.Tree.Transform;
-
-    let action = Transform.build();
+    const action = Transform.build();
     action
       .add(context.tree.root, Transformer.Data.Download, {
         url:
@@ -122,16 +102,15 @@ class StructureView extends PureComponent /*:: <Props> */ {
       const polymer = context.select('polymer-visual')[0];
       if (this.props.matches != undefined) {
         const entryResidues = {};
-        //create matches in structure hierarchy
+        // create matches in structure hierarchy
         const queries = [];
         for (const match of this.props.matches) {
           const entry = match.metadata.accession;
           const db = match.metadata.source_database;
-          let chain, protein;
+          let chain;
           const residues = [];
           for (const structure of match.structures) {
             chain = structure.chain;
-            protein = structure.protein;
 
             for (const location of structure.entry_protein_locations) {
               for (const fragment of location.fragments) {
@@ -143,9 +122,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
           }
           entryResidues[entry] = residues;
           queries.push({
-            entry: entry,
-            chain: chain,
-            db: db,
+            entry,
+            chain,
+            db,
             query: Query.residues(...residues),
             length: residues.length,
           });
@@ -160,36 +139,53 @@ class StructureView extends PureComponent /*:: <Props> */ {
         );
 
         for (const q of queries) {
-          console.log(q.entry + ' len ' + q.length);
-          group.then(
-            Transformer.Molecule.CreateSelectionFromQuery,
-            { name: q.entry + ' (' + q.db + ')', query: q.query, silent: true },
-            { ref: q.entry },
-          );
-          /*
-          .then(Transformer.Molecule.CreateVisual, {
-            style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get(
-            'Cartoons',
-            ),
-          });
-          */
+          group
+            .then(
+              Transformer.Molecule.CreateSelectionFromQuery,
+              { name: `${q.entry} (${q.db})`, query: q.query, silent: true },
+              { ref: q.entry },
+            )
+            .then(Transformer.Molecule.CreateVisual, {
+              style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get(
+                'Cartoons',
+              ),
+            });
         }
         plugin.applyTransform(group);
 
-        //highlight pre-selected entry
+        // highlight pre-selected entry
         if (
           this.props.highlight != undefined &&
           entryResidues[this.props.highlight] != undefined
         ) {
           const query = Query.residues(...entryResidues[this.props.highlight]);
           Command.Molecule.Highlight.dispatch(context.tree.context, {
-            model: model,
-            query: query,
+            model,
+            query,
             isOn: true,
           });
         }
       }
     });
+  }
+
+  render() {
+    return (
+      <div style={embedStyle}>
+        <div
+          id="litemol"
+          style={{
+            background: 'white',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+          }}
+        />
+      </div>
+    );
   }
 }
 export default StructureView;
