@@ -211,7 +211,14 @@ class MemberDBTabs extends PureComponent /*:: <Props> */ {
           </select>
         </label>
         <span className={f('tabs', { collapsed })} />
-        <ul className={f('vertical', 'tabs', 'hide-for-small-only')}>
+        <ul
+          className={f(
+            'vertical',
+            'tabs',
+            'hide-for-small-only',
+            'pp-memberdb-links',
+          )}
+        >
           {options.map(([name, value]) => {
             const count = getValueFor(
               value === 'all' ? dataAll : dataDB,

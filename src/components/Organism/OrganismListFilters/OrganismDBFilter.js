@@ -59,7 +59,7 @@ class OrganismDBFilter extends PureComponent {
       ]);
     }
     return (
-      <div style={{ overflowX: 'hidden' }}>
+      <div style={{ overflowX: 'hidden' }} className={f('list-organism-type')}>
         {dbs.map(([type, count]) => (
           <div key={type} className={f('column')}>
             <label className={f('row', 'filter-button')}>
