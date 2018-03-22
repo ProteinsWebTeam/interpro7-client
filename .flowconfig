@@ -1,6 +1,7 @@
 [ignore]
 <PROJECT_ROOT>/\..*
 <PROJECT_ROOT>/dist/.*
+<PROJECT_ROOT>/reports/.*
 .*/node_modules/flow-typed
 .*/node_modules/editions*
 .*/node_modules/fbjs.*
