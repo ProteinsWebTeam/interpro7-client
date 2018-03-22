@@ -115,9 +115,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
           }
           entryResidues[entry] = residues;
           queries.push({
-            entry,
-            chain,
-            db,
+            entry: entry,
+            chain: chain,
+            db: db,
             query: Query.residues(...residues),
             length: residues.length,
           });
