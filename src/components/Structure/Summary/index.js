@@ -119,11 +119,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
           <ErrorBoundary>
             <div className={f('row')}>
               <div className={f('columns')}>
-                <StructureView
-                  id={metadata.accession}
-                  matches={matches}
-                  highlight={'PF01884'}
-                />
+                <StructureView id={metadata.accession} matches={matches} />
               </div>
             </div>
           </ErrorBoundary>
