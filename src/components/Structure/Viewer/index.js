@@ -17,7 +17,7 @@ const embedStyle = { width: '100%', height: '50vh' };
   highlight?: string
 }; */
 
-// Call as follows to highlight pre-selected entry
+// Call as follows to highlight pre-selected entry (from Structure/Summary)
 // <StructureView id={accession} matches={matches} highlight={"pf00071"}/>
 
 class StructureView extends PureComponent /*:: <Props> */ {
@@ -28,7 +28,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
   };
 
   componentDidMount() {
-    const InterProSpec = LiteMol.Plugin.getDefaultSpecification();
     const Behaviour = LiteMol.Bootstrap.Behaviour;
     const Components = LiteMol.Plugin.Components;
     const LayoutRegion = LiteMol.Bootstrap.Components.LayoutRegion;
@@ -39,6 +38,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
     const pdbid = this.props.id;
 
+    /*
+    const InterProSpec = LiteMol.Plugin.getDefaultSpecification();
     InterProSpec.behaviours = [
       Behaviour.SetEntityToCurrentWhenAdded,
       Behaviour.FocusCameraOnSelect,
@@ -51,15 +52,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       Components.Context.Toast(LayoutRegion.Main, true),
       Components.Context.BackgroundTasks(LayoutRegion.Main, true),
     ];
-    /*
-    if (InterProSpec.behaviours.indexOf(Behaviour.ApplySelectionToVisual) != -1) {
-      InterProSpec.behaviours.splice(InterProSpec.behaviours.indexOf(Behaviour.ApplySelectionToVisual), 1);
-    }
-    if (InterProSpec.behaviours.indexOf(Behaviour.HighlightElementInfo) != -1) {
-      InterProSpec.behaviours.splice(InterProSpec.behaviours.indexOf(Behaviour.HighlightElementInfo), 1);
-    }
     */
-
     const plugin = LiteMol.Plugin.create({
       target: '#litemol',
       viewportBackground: '#fff',
@@ -67,7 +60,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         hideControls: true,
         isExpanded: false,
       },
-      customSpecification: InterProSpec,
+      //customSpecification: InterProSpec,
     });
     const context = plugin.context;
 
@@ -93,8 +86,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
       .then(Transformer.Molecule.CreateMacromoleculeVisual, {
         polymer: true,
         polymerRef: 'polymer-visual',
-        het: true,
-        water: true,
+        het: false,
+        water: false,
       });
 
     plugin.applyTransform(action).then(() => {
@@ -137,7 +130,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
           { label: 'Entries', description: 'Entries mapped to this structure' },
           { isBinding: false },
         );
-
         for (const q of queries) {
           group
             .then(
@@ -151,20 +143,21 @@ class StructureView extends PureComponent /*:: <Props> */ {
               ),
             });
         }
-        plugin.applyTransform(group);
-
-        // highlight pre-selected entry
-        if (
-          this.props.highlight != undefined &&
-          entryResidues[this.props.highlight] != undefined
-        ) {
-          const query = Query.residues(...entryResidues[this.props.highlight]);
-          Command.Molecule.Highlight.dispatch(context.tree.context, {
-            model,
-            query,
-            isOn: true,
-          });
-        }
+        plugin.applyTransform(group).then(() => {
+          if (
+            this.props.highlight != undefined &&
+            entryResidues[this.props.highlight] != undefined
+          ) {
+            const query = Query.residues(
+              ...entryResidues[this.props.highlight],
+            );
+            Command.Molecule.Highlight.dispatch(context.tree.context, {
+              model: model,
+              query: query,
+              isOn: true,
+            });
+          }
+        });
       }
     });
   }
