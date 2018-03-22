@@ -81,20 +81,20 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
-              <div className={f('margin-top-large')}>
-                <div>Accession: {metadata.accession}</div>
-                <div>Experiment type: {metadata.experiment_type}</div>
-                {metadata.resolution !== null ? (
-                  <div>Resolution: {metadata.resolution} Å </div>
-                ) : (
-                  ''
-                )}
-
-                <div>Chains: {chains.join(', ')}</div>
-                <div>
-                  Released: <time>{date.toLocaleDateString()}</time>
+              {chains.length && (
+                <div className={f('margin-top-large')}>
+                  <div>Accession: {metadata.accession}</div>
+                  <div>Experiment type: {metadata.experiment_type}</div>
+                  {metadata.resolution !== null ? (
+                    <div>Resolution: {metadata.resolution} Å </div>
+                  ) : (
+                    ''
+                  )}
+                  <div>Chains: {chains.join(', ')}</div>
+                  <div>
+                    Released: <time>{date.toLocaleDateString()}</time>
+                  </div>
                 </div>
-              </div>
               )}
             </div>
             <div className={f('medium-3', 'columns')}>
