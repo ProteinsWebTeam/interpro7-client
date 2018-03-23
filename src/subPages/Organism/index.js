@@ -91,7 +91,12 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('row')}>
         <div className={f('column')}>
-          <Table dataTable={processed} loading={loading} ok={ok}>
+          <Table
+            dataTable={processed}
+            contentType="organism"
+            loading={loading}
+            ok={ok}
+          >
             <Column
               dataKey="taxId"
               renderer={taxId => (

@@ -21,7 +21,7 @@ import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import loadable from 'higherOrder/loadable';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import config from '../../config';
+import config from 'config';
 
 const f = foundationPartial(fonts, localStyle);
 
@@ -160,6 +160,7 @@ const Matches = (
     query={search}
     isStale={isStale}
     notFound={matches.length === 0}
+    contentType={primary}
   >
     <PageSizeSelector />
     <SearchBox search={search.search}>Search</SearchBox>

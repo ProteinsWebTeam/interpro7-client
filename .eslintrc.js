@@ -181,7 +181,7 @@ const rules = {
   // Disallow creation of functions within loops
   'no-loop-func': 1,
   // Disallow magic numbers
-  'no-magic-numbers': [1, { ignoreArrayIndexes: true, ignore: [0, 1, 2] }],
+  'no-magic-numbers': [1, { ignoreArrayIndexes: true, ignore: [-1, 0, 1, 2] }],
   // Disallow mixed spaces and tabs for indentation
   'no-mixed-spaces-and-tabs': 2,
   // Disallow multiple empty lines and only one newline at the end

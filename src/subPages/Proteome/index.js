@@ -42,6 +42,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation:
     return (
       <Table
         dataTable={results}
+        contentType="organism"
         loading={loading}
         ok={ok}
         actualSize={count}

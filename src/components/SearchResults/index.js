@@ -69,6 +69,7 @@ class SearchResults extends PureComponent {
         {payload && <SingleMatch payload={payload} searchValue={searchValue} />}
         <Table
           dataTable={entries}
+          contentType="search"
           actualSize={hitCount}
           query={query}
           isStale={isStale}

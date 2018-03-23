@@ -11,7 +11,7 @@
     <link href="<%= css %>" rel="stylesheet">
     <% } %>
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <% for (const font of webpack.assets.map(({name}) => name).filter(name => name.endsWith('woff'))) { %>
+    <% for (const font of webpack.assets.map(({name}) => name).filter(name => name.endsWith('woff') && !name.includes('fontello'))) { %>
     <link rel="preload" as="font" href="<%= webpackConfig.output.publicPath %><%= font %>" crossorigin />
     <% } %>
     <% for (const chunk of Object.keys(htmlWebpackPlugin.files.chunks)) { %>

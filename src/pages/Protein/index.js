@@ -4,7 +4,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import MemberDBTabs from 'components/MemberDBTabs';
+import MemberDBSelector from 'components/MemberDBSelector';
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
   Column,
@@ -118,7 +118,7 @@ class List extends PureComponent {
     const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
-        <MemberDBTabs />
+        <MemberDBSelector />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />
@@ -136,6 +136,7 @@ class List extends PureComponent {
             )}
           <Table
             dataTable={_payload.results}
+            contentType="protein"
             isStale={isStale}
             loading={loading}
             ok={ok}
@@ -267,7 +268,9 @@ class List extends PureComponent {
               cellClassName={f('text-right')}
               renderer={(length /*: number */) => (
                 <Tooltip title={`${length.toLocaleString()} amino acids`}>
-                  <span aria-label="amino acids length">{length}</span>
+                  <span aria-label="amino acids length">
+                    {length.toLocaleString()}
+                  </span>
                 </Tooltip>
               )}
             >

@@ -10,16 +10,24 @@ const HTTPS_DEFAULT_PORT = '443';
 const HTTP_DEFAULT_PORT = '80';
 
 const config /*: {
-  root: {
-    website: {pathname: string, port: string, protocol: string, href: string},
-    API: {pathname: string, port: string, protocol: string},
-    EBIsearch: {pathname: string, port: string, protocol: string},
-    IPScan: {pathname: string, port: string, protocol: string},
-  },
-  pages: {[key: string]: {plural?: string, subPages: Array<string>}},
-  pagination: {pageSize: number},
-  cache: {enabled: boolean},
-} */ = _config;
+  root: {|
+    website: {|
+      pathname: string,
+      port: string,
+      protocol: string,
+      href: string,
+    |},
+    API: {| pathname: string, port: string, protocol: string |},
+    EBIsearch: {| pathname: string, port: string, protocol: string |},
+    IPScan: {| pathname: string, port: string, protocol: string |},
+  |},
+  pages: {| [key: string]: {| plural?: string, subPages: Array<string> |} |},
+  pagination: {| pageSize: number |},
+  cache: {| enabled: boolean |},
+  colors: {| get: (string, ?string) => string |}
+} */ = {
+  ..._config,
+};
 
 for (const [key, value] of Object.entries(config.root)) {
   if (typeof value === 'string') {
@@ -34,6 +42,15 @@ for (const [key, value] of Object.entries(config.root)) {
     }
   }
 }
+
+config.colors = {
+  get(key, fallback) {
+    const _key = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return (
+      _config.colors[_key] || fallback || _config.colors.fallback || 'gray'
+    );
+  },
+};
 
 export default config;
 

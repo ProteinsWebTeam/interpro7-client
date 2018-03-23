@@ -1,9 +1,23 @@
+@import '../../../styles/colors.css';
+
 .component {
   color: #505f74;
   margin-bottom: 0;
 }
 
-.number {
-  background: none;
-  padding: 0;
+.text {
+  font-size: 0.75em;
+  padding: 0.5em;
+  border: solid 1px var(--colors-gray);
+  border-radius: 0.5ch;
+
+  &.selector {
+    cursor: pointer;
+
+    &::after {
+      padding-left: 1ch;
+      float: right;
+      content: '▼';
+    }
+  }
 }

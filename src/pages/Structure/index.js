@@ -4,7 +4,7 @@ import T from 'prop-types';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import MemberDBTabs from 'components/MemberDBTabs';
+import MemberDBSelector from 'components/MemberDBSelector';
 import { PDBeLink } from 'components/ExtLink';
 import LazyImage from 'components/LazyImage';
 import StructureListFilters from 'components/Structure/StructureListFilters';
@@ -108,7 +108,7 @@ const List = ({
   const urlHasParameter = url && url.includes('?');
   return (
     <div className={f('row')}>
-      <MemberDBTabs />
+      <MemberDBSelector />
 
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
         <StructureListFilters /> <hr />
@@ -125,6 +125,7 @@ const List = ({
           )}
         <Table
           dataTable={_payload.results}
+          contentType="structure"
           loading={loading}
           ok={ok}
           isStale={isStale}

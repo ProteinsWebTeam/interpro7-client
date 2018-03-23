@@ -7,7 +7,7 @@ import { format } from 'url';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import MemberDBTabs from 'components/MemberDBTabs';
+import MemberDBSelector from 'components/MemberDBSelector';
 import OrganismListFilters from 'components/Organism/OrganismListFilters';
 import Table, {
   Column,
@@ -208,7 +208,7 @@ class List extends PureComponent {
     const includeTree = url && !url.includes('proteome');
     return (
       <div className={f('row')}>
-        <MemberDBTabs />
+        <MemberDBSelector />
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <OrganismListFilters />
           <hr />
@@ -223,6 +223,7 @@ class List extends PureComponent {
           )}
           <Table
             dataTable={_payload.results}
+            contentType="organism"
             loading={loading}
             ok={ok}
             isStale={isStale}

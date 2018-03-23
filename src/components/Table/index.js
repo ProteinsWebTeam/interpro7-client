@@ -33,6 +33,7 @@ const f = foundationPartial(styles, fonts);
   query: Object,
   title: string,
   notFound: ?boolean,
+  contentType? string,
   children?: any,
 } */
 
@@ -62,6 +63,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     query: T.object,
     title: T.string,
     notFound: T.bool,
+    contentType: T.string,
     children: T.any,
     withTree: T.bool,
   };
@@ -76,6 +78,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       query,
       title,
       notFound,
+      contentType,
       children,
       withTree,
     } = this.props;
@@ -105,6 +108,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     data={dataTable}
                     actualSize={actualSize}
                     pagination={_query}
+                    contentType={contentType}
                     notFound={notFound}
                   />
                 </div>

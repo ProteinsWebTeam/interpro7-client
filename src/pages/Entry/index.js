@@ -8,7 +8,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
-import MemberDBTabs from 'components/MemberDBTabs';
+import MemberDBSelector from 'components/MemberDBSelector';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -98,7 +98,7 @@ class List extends PureComponent {
     const urlHasParameter = data.url && data.url.includes('?');
     return (
       <div className={f('row')}>
-        <MemberDBTabs />
+        <MemberDBSelector />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
@@ -116,6 +116,7 @@ class List extends PureComponent {
             )}
           <Table
             dataTable={_payload.results}
+            contentType="entry"
             isStale={isStale}
             loading={data.loading}
             ok={data.ok}
@@ -166,7 +167,7 @@ class List extends PureComponent {
             )}
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */, data, row) => (
+              renderer={(accession /*: string */, row) => (
                 <Tooltip title={accession}>
                   <Link
                     to={customLocation => ({

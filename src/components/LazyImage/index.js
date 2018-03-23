@@ -5,7 +5,7 @@ import cancelable from 'utils/cancelable';
 import getsInView from 'utils/getsInView';
 import { schedule } from 'timing-functions/src';
 
-const TRANSPARENT_1PX_PNG =
+const TRANSPARENT_1PX_GIF =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 class LazyImage extends PureComponent {
@@ -42,7 +42,7 @@ class LazyImage extends PureComponent {
 
   render() {
     const { src, srcSet, ...props } = this.props;
-    const sources = { src: TRANSPARENT_1PX_PNG };
+    const sources = { src: TRANSPARENT_1PX_GIF };
     if (this.state.wasRendered) {
       sources.src = src;
       sources.srcSet = srcSet;
