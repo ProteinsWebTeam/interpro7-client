@@ -20,6 +20,7 @@ class ElixirFooter extends PureComponent {
           >
             <LazyImage
               className={f('elixir-logo-kite')}
+              alt="Elixir logo"
               src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png"
             />
             <h5>
