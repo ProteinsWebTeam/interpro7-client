@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 
 import classnames from 'classnames/bind';
 
+import { stuckSelector } from 'reducers/ui/stuck';
 import { openSideNav } from 'actions/creators';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
@@ -204,7 +205,7 @@ class Header extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.ui.stuck,
+  stuckSelector,
   state => state.customLocation.description.main.key,
   state => state.customLocation.description.entry.db,
   state => state.customLocation.description.entry.accession,

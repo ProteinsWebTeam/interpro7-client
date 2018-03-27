@@ -4,6 +4,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { stuckSelector } from 'reducers/ui/stuck';
+
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
@@ -116,7 +118,7 @@ const mapStateToProps = createSelector(
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  state => state.ui.stuck,
+  stuckSelector,
   (loading, mainType, mainDB, mainAccession, stuck) => ({
     loading,
     mainType,

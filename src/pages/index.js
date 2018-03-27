@@ -10,6 +10,8 @@ import loadable from 'higherOrder/loadable';
 
 import BrowseTabs from 'components/BrowseTabs';
 
+import { stuckSelector } from 'reducers/ui/stuck';
+
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
@@ -134,9 +136,6 @@ class Pages extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToProps = createSelector(
-  state => state.ui.stuck,
-  stuck => ({ stuck }),
-);
+const mapStateToProps = createSelector(stuckSelector, stuck => ({ stuck }));
 
 export default connect(mapStateToProps)(Pages);

@@ -11,3 +11,6 @@ export default (state /*: boolean */ = false, action /*: Object */) => {
       return state;
   }
 };
+
+export const stuckSelector = (state /*: { ui: { stuck: boolean } } */) =>
+  state.ui.stuck;
