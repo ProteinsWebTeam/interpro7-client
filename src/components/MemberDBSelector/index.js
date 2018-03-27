@@ -1,4 +1,4 @@
-import React, { PureComponent, Children } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -10,6 +10,7 @@ import _get from 'lodash-es/get';
 import config from 'config';
 
 import NumberLabel from 'components/NumberLabel';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import loadData from 'higherOrder/loadData';
 
@@ -32,8 +33,8 @@ const defaultDBFor = new Map([
   ['set', 'all'],
 ]);
 
-const MIN_DELAY = 200;
-const DELAY = 1500;
+const MIN_DELAY = 400;
+// const DELAY = 1500;
 
 const getCountFor = (
   db,
@@ -111,7 +112,7 @@ const dataType = T.shape({
 
 class _MemberDBSelector extends PureComponent {
   static propTypes = {
-    children: T.any,
+    children: T.func,
     dataDB: dataType,
     dataAllCount: dataType,
     dataDBCount: dataType,
@@ -178,7 +179,9 @@ class _MemberDBSelector extends PureComponent {
       description,
       search,
     });
-    this._handleExit(DELAY);
+    // this._handleExit(DELAY);
+    /* TODO: if we decide to not close after click on database, remove this, and
+       logic to handle delay in this._handleExit */
   };
 
   _handleOpen = () => {
@@ -187,6 +190,7 @@ class _MemberDBSelector extends PureComponent {
   };
 
   _handleExit = (maybeEvent /*: Event | number */) => {
+    if (!this.state.visible) return;
     const delay = Number.isFinite(maybeEvent) ? maybeEvent : MIN_DELAY;
     this._exit = cancelable(
       sleep(delay).then(() => {
@@ -195,6 +199,7 @@ class _MemberDBSelector extends PureComponent {
         }
       }),
     );
+    this._exit.promise.catch(noop);
   };
 
   render() {
@@ -225,7 +230,9 @@ class _MemberDBSelector extends PureComponent {
       <div
         tabIndex="0"
         role="button"
-        onMouseOver={() => this._exit && this._exit.cancel()}
+        onMouseOver={() =>
+          this._exit && !this._exit.canceled && this._exit.cancel()
+        }
         onClick={this._handleOpen}
         onKeyPress={this._handleOpen}
         onFocus={this._handleOpen}
@@ -239,7 +246,15 @@ class _MemberDBSelector extends PureComponent {
           lowGraphics,
         })}
       >
-        {children ? Children.only(children) : null}
+        <span
+          className={f('child-container')}
+          onClick={this._handleExit}
+          onKeyPress={this._handleExit}
+          role="button"
+          tabIndex="0"
+        >
+          {children ? children(visible) : null}
+        </span>
         <div className={f('potential-popup', { popup: children, visible })}>
           <h6>Select your database:</h6>
           <form
@@ -256,6 +271,7 @@ class _MemberDBSelector extends PureComponent {
                 sub,
               );
               const disabled = count === 0;
+              const loading = count === 'loading';
               const checked = db === selected;
               return (
                 <label
@@ -274,15 +290,21 @@ class _MemberDBSelector extends PureComponent {
                   <span className={f('text')}>
                     {db.name === 'All' ? `All ${toPlural(main)}` : db.name}
                   </span>
-                  <NumberLabel
-                    value={(count !== 'loading' && count) || 0}
-                    loading={count === 'loading'}
-                    className={f('label')}
-                    style={{
-                      background: checked && config.colors.get(db.canonical),
-                    }}
-                    abbr
-                  />
+                  <Tooltip
+                    title={
+                      loading ? 'loading' : `${count} ${toPlural(main, count)}`
+                    }
+                  >
+                    <NumberLabel
+                      value={(!loading && count) || 0}
+                      loading={loading}
+                      className={f('label')}
+                      style={{
+                        background: checked && config.colors.get(db.canonical),
+                      }}
+                      abbr
+                    />
+                  </Tooltip>
                 </label>
               );
             })}

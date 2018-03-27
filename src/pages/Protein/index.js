@@ -118,7 +118,7 @@ class List extends PureComponent {
     const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
-        <MemberDBSelector />
+        <MemberDBSelector contentType="protein" />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />

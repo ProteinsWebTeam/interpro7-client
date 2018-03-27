@@ -317,7 +317,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
     ].filter(Boolean),
     // optimization.minimize: mode === 'production',
     devtool: ((mode, env) => {
-      if (mode === 'development') return 'eval';
+      if (mode === 'development') return 'cheap-module-source-map';
       if (env.staging) return 'source-map';
       return false;
     })(mode, env),

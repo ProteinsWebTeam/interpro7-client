@@ -208,7 +208,7 @@ class List extends PureComponent {
     const includeTree = url && !url.includes('proteome');
     return (
       <div className={f('row')}>
-        <MemberDBSelector />
+        <MemberDBSelector contentType="organism" />
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <OrganismListFilters />
           <hr />

@@ -1,4 +1,5 @@
 @import '../../../styles/colors.css';
+@import '../../../styles/timing.css';
 
 .component {
   color: #505f74;
@@ -15,9 +16,23 @@
     cursor: pointer;
 
     &::after {
-      padding-left: 1ch;
-      float: right;
       content: '▼';
+      opacity: 1;
+      transition: opacity var(--timing-medium) ease-in-out;
+    }
+
+    &.open::after {
+      opacity: 0;
     }
   }
+}
+
+.db {
+  font-weight: bold;
+}
+
+.db-symbol {
+  vertical-align: middle;
+  height: 2rem;
+  width: 2rem;
 }

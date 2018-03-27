@@ -108,7 +108,7 @@ const List = ({
   const urlHasParameter = url && url.includes('?');
   return (
     <div className={f('row')}>
-      <MemberDBSelector />
+      <MemberDBSelector contentType="structure" />
 
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
         <StructureListFilters /> <hr />

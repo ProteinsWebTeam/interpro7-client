@@ -98,7 +98,7 @@ class List extends PureComponent {
     const urlHasParameter = data.url && data.url.includes('?');
     return (
       <div className={f('row')}>
-        <MemberDBSelector />
+        <MemberDBSelector contentType="entry" />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />

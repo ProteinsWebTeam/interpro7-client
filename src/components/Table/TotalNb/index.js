@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import MemberDBSelector from 'components/MemberDBSelector';
+import MemberSymbol from 'components/Entry/MemberSymbol';
 import { NumberComponent } from 'components/NumberLabel';
 
 import cn from 'classnames/bind';
@@ -26,7 +27,19 @@ const entityText = (entity, count) => {
 
 const dbText = (entryDB, setDB, db, isSubPageButMainIsEntry) => {
   if (isSubPageButMainIsEntry || !entryDB) return null;
-  return ` ${entryDB === db || setDB === db ? 'in' : 'matching'} ${entryDB}`;
+  return (
+    <span>
+      {entryDB === db || setDB === db ? ' in ' : ' matching '}
+      <span className={s('db')}>{entryDB}</span>
+      <MemberSymbol type={entryDB} className={s('db-symbol')} />
+    </span>
+  );
+};
+
+const SelectorSpoof = ({ children } /*: { children: function } */) =>
+  children();
+SelectorSpoof.propTypes = {
+  children: T.func.isRequired,
 };
 
 const TotalNb = ({
@@ -57,26 +70,33 @@ const TotalNb = ({
       (contentType !== 'entry' && contentType !== description.main.key)
     );
 
-    const SelectorMaybe = needSelector ? MemberDBSelector : 'span';
+    const SelectorMaybe = needSelector ? MemberDBSelector : SelectorSpoof;
 
     textLabel = (
-      <SelectorMaybe {...(needSelector ? { contentType } : {})}>
-        <span className={s('text', { selector: needSelector })}>
-          <NumberComponent value={index} />
-          {' - '}
-          <NumberComponent value={index + data.length - 1} />
-          {' of '}
-          <strong>
-            <NumberComponent value={actualSize} abbr />
-          </strong>{' '}
-          {entityText(contentType || description.main.key, actualSize)}
-          {dbText(
-            description.entry.db,
-            description.set.db,
-            db,
-            isSubPageButMainIsEntry,
-          )}
-        </span>
+      <SelectorMaybe
+        {...(needSelector ? { contentType } : {})}
+        contentType={contentType}
+      >
+        {open => (
+          <span
+            className={s('text', { selector: typeof open === 'boolean', open })}
+          >
+            <NumberComponent value={index} />
+            {' - '}
+            <NumberComponent value={index + data.length - 1} />
+            {' of '}
+            <strong>
+              <NumberComponent value={actualSize} abbr />
+            </strong>{' '}
+            {entityText(contentType || description.main.key, actualSize)}
+            {dbText(
+              description.entry.db,
+              description.set.db,
+              db,
+              isSubPageButMainIsEntry,
+            )}
+          </span>
+        )}
       </SelectorMaybe>
     );
   }
