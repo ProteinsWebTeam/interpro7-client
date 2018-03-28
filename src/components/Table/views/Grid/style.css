@@ -1,0 +1,121 @@
+.card-wrapper {
+  border: 0px blue solid;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-flex-container {
+  border: 0px solid black;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 0 0 25%; /*4 columns*/
+  /*height: 150px;*/
+}
+
+.card-item {
+  margin: 0.5rem;
+  border: 1px rgba(0, 0, 0, 0.2) solid;
+  padding: 0.5rem 1rem 1rem 1rem;
+  color: #606060;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
+    sans-serif;
+}
+
+.card-item:hover {
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.card-item-t,
+.card-item-m,
+.card-item-b {
+  flex-grow: 1;
+}
+.card-item-t {
+  border: 0px solid blue;
+  text-align: center;
+  width: 100%;
+}
+.card-item-t span::before {
+  font-size: 376%;
+}
+
+.card-item-t h6 {
+  font-weight: 600;
+  font-size: 110%;
+} /*16px*/
+.card-item-m {
+  border: 0px solid green;
+  font-size: 15px;
+  margin: 0.5rem 0;
+}
+
+.count-entries,
+.count-proteins,
+.count-structures,
+.count-proteomes {
+  text-align: center;
+  border: 0px solid lightgreen;
+}
+
+.card-item-b {
+  border: 0px solid pink;
+  display: flex;
+  justify-content: space-between;
+  font-size: 80%;
+}
+
+.card-sum-info {
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+}
+.card-sum-info a,
+.card-sum-info a:visited,
+.card-sum-info a:hover {
+  color: #333;
+  display: block; /*temp? to show tooltip properly on the element*/
+}
+
+.label-off .label-number {
+  display: none;
+}
+.card-sum-info .icon-conceptual::before {
+  font-size: 210%;
+} /*EBI icon size*/
+.big-nb {
+  font-size: 200%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
+    sans-serif;
+}
+.count-proteomes {
+  padding: 0 0.5rem;
+} /*to be consistent with EBI icons */
+.icon-bookmark-temp {
+  width: 18px;
+  height: 47px;
+  background-image: url('../../../../images/icons/ico-proteome.svg');
+  background-position-y: 40%;
+  background-repeat: no-repeat;
+}
+
+.md-small {
+  width: 46px;
+  display: flex;
+}
+/* Medium only */
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  .card-item {
+    flex: 0 0 50%;
+  }
+}
+/*small screens*/
+@media screen and (max-width: 39.9375em) {
+  .card-sum-info {
+    flex-wrap: wrap;
+  }
+  .card-flex-container {
+    flex: 0 0 50%;
+  }
+}
