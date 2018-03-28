@@ -194,3 +194,8 @@ table.light span::before {
     display: inline-block;
   }
 }
+
+.md-small {
+  width: 50px;
+  display: inline-block;
+}
