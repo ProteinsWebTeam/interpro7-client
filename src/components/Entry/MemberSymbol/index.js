@@ -35,7 +35,7 @@ const classNames = new Map([
 ]);
 
 const MemberSymbol = (
-  { type, className = '' } /*: { type: string, className?: string }*/,
+  { type, className = '' } /*: { type: string, className?: string } */,
 ) => {
   const id = uniqueId();
   return (

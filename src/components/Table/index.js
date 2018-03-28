@@ -195,7 +195,12 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 notFound={notFound}
                 dataTable={dataTable}
               />
-              <_Footer
+              <Switch
+                locationSelector={({ hash }) => hash}
+                indexRoute={_Footer}
+                childRoutes={[{ value: 'tree', component: () => null }]}
+                catchAll={_Footer}
+                // passed down props
                 withPageSizeSelector={withPageSizeSelector}
                 actualSize={actualSize}
                 pagination={_query}
