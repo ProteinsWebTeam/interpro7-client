@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { closeSideNav } from 'actions/creators';
+import { sideNavSelector } from 'reducers/ui/sideNav';
 
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterProMenu from 'components/Menu/InterProMenu';
@@ -146,24 +147,8 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
   }
 }
 
-// TODO: change logic for menu loading data
-// const urlBlacklist = new Set(['browse', 'search', 'settings', 'about', 'help']);
-// const mapStateToUrl = createSelector(
-//   state => state.settings,
-//   state => state.location,
-//   state => state.customLocation,
-//   (settings, location, customLocation) => {
-//     for (const blacklist of urlBlacklist) {
-//       if (location.pathname.toLowerCase().includes(blacklist)) {
-//         return getUrlForApi({settings, location: {pathname: ''}, customLocation});
-//       }
-//     }
-//     return getUrlForApi({settings, location, customLocation});
-//   }
-// );
-
 const mapStateToProps = createSelector(
-  state => state.ui.sideNav,
+  sideNavSelector,
   state => state.customLocation.description.main.key,
   state =>
     state.customLocation.description.main.key &&

@@ -19,6 +19,7 @@ import { toPlural } from 'utils/pages';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/customLocation';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -374,7 +375,7 @@ const getUrlForSubPageCount = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   state => state.settings.ui.lowGraphics,
   (customLocation, lowGraphics) => ({ customLocation, lowGraphics }),
 );

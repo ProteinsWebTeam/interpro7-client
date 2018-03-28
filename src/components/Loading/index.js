@@ -3,6 +3,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { dataSelector } from 'reducers/data';
+
 import classnames from 'classnames/bind';
 
 import style from './style.css';
@@ -75,6 +77,6 @@ class Loading extends PureComponent {
   }
 }
 
-const mapStateToProps = createSelector(state => state.data, data => ({ data }));
+const mapStateToProps = createSelector(dataSelector, data => ({ data }));
 
 export default connect(mapStateToProps)(Loading);

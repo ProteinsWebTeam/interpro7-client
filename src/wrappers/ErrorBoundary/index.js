@@ -4,6 +4,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { customLocationSelector } from 'reducers/customLocation';
+
 import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
 const defaultRenderOnError = _ => <ErrorMessage />;
@@ -65,7 +67,7 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 export default connect(mapStateToProps)(ErrorBoundary);

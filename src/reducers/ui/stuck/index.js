@@ -1,7 +1,10 @@
 // @flow
 import { STUCK, UNSTUCK } from 'actions/types';
 
-export default (state /*: boolean */ = false, action /*: Object */) => {
+/*:: export type Stuck = boolean; */
+/*:: import type { State } from 'reducers'; */
+
+export default (state /*: Stuck */ = false, action /*: Object */) => {
   switch (action.type) {
     case STUCK:
       return true;
@@ -12,5 +15,4 @@ export default (state /*: boolean */ = false, action /*: Object */) => {
   }
 };
 
-export const stuckSelector = (state /*: { ui: { stuck: boolean } } */) =>
-  state.ui.stuck;
+export const stuckSelector = (state /*: State */) => state.ui.stuck;

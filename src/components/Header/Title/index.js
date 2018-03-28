@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { dataLoadingSelector } from 'reducers/data';
 import { stuckSelector } from 'reducers/ui/stuck';
 
 import Link from 'components/generic/Link';
@@ -99,16 +100,7 @@ class Title extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  createSelector(
-    state => state.data,
-    (data = {}) =>
-      Object.values(data).some(datum => {
-        if (datum && typeof datum === 'object') {
-          return datum.loading;
-        }
-        return false;
-      }),
-  ),
+  dataLoadingSelector,
   state => state.customLocation.description.main.key,
   state =>
     state.customLocation.description.main.key &&

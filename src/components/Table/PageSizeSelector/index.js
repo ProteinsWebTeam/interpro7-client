@@ -4,8 +4,10 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { foundationPartial } from 'styles/foundation';
 import { goToCustomLocation, changePageSize } from 'actions/creators';
+import { customLocationSelector } from 'reducers/customLocation';
+
+import { foundationPartial } from 'styles/foundation';
 
 import s from './style.css';
 
@@ -70,7 +72,7 @@ class PageSizeSelector extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.settings.navigation.pageSize,
-  state => state.customLocation,
+  customLocationSelector,
   (pageSize, customLocation) => ({ pageSize, customLocation }),
 );
 

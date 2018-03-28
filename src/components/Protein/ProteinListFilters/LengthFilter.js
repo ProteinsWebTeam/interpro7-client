@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/customLocation';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -74,7 +75,7 @@ class LengthFilter extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

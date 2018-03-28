@@ -6,6 +6,8 @@ import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 
+import { emblMapNavSelector } from 'reducers/ui/emblMapNav';
+
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
@@ -143,9 +145,8 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
   }
 }
 
-const mapStateToProps = createSelector(
-  state => state.ui.emblMapNav,
-  visible => ({ visible }),
-);
+const mapStateToProps = createSelector(emblMapNavSelector, visible => ({
+  visible,
+}));
 
 export default connect(mapStateToProps)(EMBLDropdown);

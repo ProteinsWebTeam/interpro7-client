@@ -7,7 +7,8 @@ import debounce from 'lodash-es/debounce';
 
 import MultipleInput from 'components/SimpleCommonComponents/MultipleInput/index';
 
-import { goToCustomLocation } from 'actions/creators/index';
+import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/customLocation';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -133,7 +134,7 @@ class ResolutionFilter extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

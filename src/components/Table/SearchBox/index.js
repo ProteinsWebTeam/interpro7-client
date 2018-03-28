@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import debounce from 'lodash-es/debounce';
 
+import { customLocationSelector } from 'reducers/customLocation';
+
 import { foundationPartial } from 'styles/foundation';
 
 import s from './style.css';
@@ -78,7 +80,7 @@ class SearchBox extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

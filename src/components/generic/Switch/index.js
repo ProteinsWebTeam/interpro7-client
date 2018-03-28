@@ -3,6 +3,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { customLocationSelector } from 'reducers/customLocation';
+
 const defaultCatchAll = () => <div>404</div>;
 
 const match = (childRoutes, indexRoute, valueFromLocation) => {
@@ -53,7 +55,7 @@ class _Switch extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

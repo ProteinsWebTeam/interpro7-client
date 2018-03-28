@@ -9,6 +9,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import config from 'config';
 
 import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/customLocation';
 
 const happenedWithModifierKey = event =>
   !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
@@ -196,7 +197,7 @@ class Link extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

@@ -3,6 +3,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { dataProgressSelector } from 'reducers/data';
+
 import styles from './styles.css';
 
 export class LoadingBar extends PureComponent {
@@ -49,18 +51,8 @@ export class LoadingBar extends PureComponent {
   }
 }
 
-const reducer = (
-  acc /*: number */,
-  { loading, progress } /*: {loading: boolean, progress: number} */,
-) => acc + 1 / (loading ? 2 : 1) + progress;
-
-const mapStateToProps = createSelector(
-  state => state.data,
-  (data = {}) => {
-    const values = Object.values(data);
-    const progress = values.reduce(reducer, 0) / (2 * values.length);
-    return { progress: isNaN(progress) ? 1 : progress };
-  },
-);
+const mapStateToProps = createSelector(dataProgressSelector, progress => ({
+  progress,
+}));
 
 export default connect(mapStateToProps)(LoadingBar);

@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import classnames from 'classnames/bind';
 
 import { stuckSelector } from 'reducers/ui/stuck';
+import { sideNavSelector } from 'reducers/ui/sideNav';
 import { openSideNav } from 'actions/creators';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
@@ -18,6 +19,7 @@ import TextSearchBox from 'components/SearchByText/TextSearchBox';
 import { sticky as supportsSticky } from 'utils/support';
 
 import { foundationPartial } from 'styles/foundation';
+
 import styles from './style.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -83,8 +85,9 @@ class _HamburgerBtn extends PureComponent {
   }
 }
 
-const getSideNav = state => state.ui.sideNav;
-const mapStateToPropsHamburger = createSelector(getSideNav, open => ({ open }));
+const mapStateToPropsHamburger = createSelector(sideNavSelector, open => ({
+  open,
+}));
 const HamburgerBtn = connect(mapStateToPropsHamburger, { openSideNav })(
   _HamburgerBtn,
 );
@@ -135,7 +138,7 @@ class _SideIcons extends PureComponent {
 }
 
 const mapStateToPropsSideIcons = createSelector(
-  getSideNav,
+  sideNavSelector,
   state => state.settings.ui.lowGraphics,
   (movedAway, lowGraphics) => ({ movedAway, lowGraphics }),
 );

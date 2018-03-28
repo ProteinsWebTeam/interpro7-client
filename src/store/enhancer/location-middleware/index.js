@@ -1,7 +1,5 @@
 import { format } from 'url';
 
-// import config from 'config';
-
 import { NEW_CUSTOM_LOCATION } from 'actions/types/index';
 import { customLocationChangeFromHistory } from 'actions/creators/index';
 
