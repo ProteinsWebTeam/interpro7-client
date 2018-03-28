@@ -47,14 +47,12 @@ const SignatureLink = ({ accession, db, data, label = null }) => {
         },
       }}
     >
-      <div className={f('md-list-text')}>
-        <small>
-          <span style={{ color: '#4b555b' }}>{db}:</span>{' '}
-          <Tooltip title={`${tooltipContent} (${accession})`}>
-            <span>{label || accession}</span>
-          </Tooltip>
-        </small>
-      </div>
+      <small>
+        <span className={f('db-name')}>{db}:</span>{' '}
+        <Tooltip title={`${tooltipContent} (${accession})`}>
+          {label || accession}
+        </Tooltip>
+      </small>
     </Link>
   );
 };
@@ -65,40 +63,43 @@ SignatureLink.propTypes = {
   label: T.string,
 };
 
-const ContributingSignatures = ({ contr } /*: {contr: Object} */) => (
-  <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
-    <div className={f('md-icon-list-box', 'margin-bottom-large')}>
-      <h5>Contributing entries</h5>
-      <ul className={f('md-list')}>
-        {Object.entries(contr).map(([db, accessions]) => (
-          <li key={db}>
-            <MemberSymbol type={db} className={f('md-small')} />
-            {Object.keys(accessions).map(accession => [
-              <SchemaOrgData
-                key={`schema.org for ${accession}`}
-                data={{ db, name: accession }}
-                processData={schemaProcessData}
-              />,
-              <Metadata
-                key={accession}
-                endpoint="entry"
-                db={db}
-                accession={accession}
-              >
-                <SignatureLink
+const ContributingSignatures = ({ contr } /*: {contr: Object} */) => {
+  const contrEntries = Object.entries(contr);
+  return (
+    <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
+      <div className={f('md-icon-list-box', 'margin-bottom-large')}>
+        <h5>Contributing entr{contrEntries.length < 2 ? 'y' : 'ies'}</h5>
+        <ul className={f('md-list')}>
+          {contrEntries.map(([db, accessions]) => (
+            <li key={db}>
+              <MemberSymbol type={db} className={f('md-small')} />
+              {Object.keys(accessions).map(accession => [
+                <SchemaOrgData
+                  key={`schema.org for ${accession}`}
+                  data={{ db, name: accession }}
+                  processData={schemaProcessData}
+                />,
+                <Metadata
                   key={accession}
+                  endpoint="entry"
                   db={db}
                   accession={accession}
-                  label={accessions[accession]}
-                />
-              </Metadata>,
-            ])}
-          </li>
-        ))}
-      </ul>
+                >
+                  <SignatureLink
+                    key={accession}
+                    db={db}
+                    accession={accession}
+                    label={accessions[accession]}
+                  />
+                </Metadata>,
+              ])}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 ContributingSignatures.propTypes = {
   contr: T.object.isRequired,
 };

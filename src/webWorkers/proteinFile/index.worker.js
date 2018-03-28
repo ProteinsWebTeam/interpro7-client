@@ -103,10 +103,10 @@ const processEvent = async ({
 
 self.addEventListener(
   'message',
-  async e => {
+  async event => {
     let url;
     try {
-      url = await processEvent(e);
+      url = await processEvent(event);
     } catch (error) {
       self.postMessage({ type: 'failed', details: error });
     }
