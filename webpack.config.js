@@ -36,7 +36,7 @@ const cssSettings = mode => ({
   importLoaders: 1,
   sourceMap: true,
   minimize: mode === 'production',
-  localIdentName: '[folder]_[name]__[local]___[hash:base64:2]',
+  localIdentName: '[folder]_[name]__[local]___[hash:2]',
   alias: {
     '../libraries/tablesorter/css':
       'ebi-framework/libraries/tablesorter/dist/css',
@@ -191,7 +191,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             {
               loader: 'url-loader',
               options: {
-                name: '[name].[hash:3].[ext]',
+                name: '[name].[hash:base62:3].[ext]',
                 limit: 1 * kB,
               },
             },
@@ -209,7 +209,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             {
               loader: 'url-loader',
               options: {
-                name: '[name].[hash:3].[ext]',
+                name: '[name].[hash:base62:3].[ext]',
                 limit: 1 * kB,
                 mimetype: 'application/font-woff',
               },
@@ -222,7 +222,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             {
               loader: 'file-loader',
               options: {
-                name: '[name].[hash:3].[ext]',
+                name: '[name].[hash:base62:3].[ext]',
               },
             },
           ],
@@ -242,8 +242,8 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
       }),
       mode === 'production'
         ? new MiniCssExtractPlugin({
-            filename: '[name].[hash:3].css',
-            chunkFilename: '[id].[hash:3].css',
+            filename: '[name].[contenthash:3].css',
+            chunkFilename: '[id].[contenthash:3].css',
           })
         : null,
       mode === 'development' ? new webpack.HotModuleReplacementPlugin() : null,
@@ -254,8 +254,8 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
       }),
       mode === 'production'
         ? new (require('webapp-webpack-plugin'))({
-            logo: path.join('.', 'images', 'logo', 'logo_75x75.png'),
-            prefix: 'icons.[hash:3].',
+            logo: path.join('.', 'images', 'logo', 'logo_1776x1776.png'),
+            prefix: 'icons.[hash:base62:3].',
             inject: true,
             favicons: {
               background: '#007c82',
