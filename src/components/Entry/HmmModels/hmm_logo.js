@@ -1798,7 +1798,7 @@ const hmmLogo = function(logoElement, options = {}) {
     }
   }
 
-  if (settings.children.length > 0) {
+  if (settings.children.length) {
     const settingsButton = document.createElement('button');
     settingsButton.innerHTML = 'Settings';
     settingsButton.classList.add(styles.logo_settings_switch);

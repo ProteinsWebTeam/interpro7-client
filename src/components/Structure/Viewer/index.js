@@ -1,12 +1,11 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-//import loadWebComponent from 'utils/loadWebComponent';
 import LiteMol from 'litemol';
+
 // import LiteMolViewer from 'litemol/dist/js/LiteMol-viewer.js';
-import { foundationPartial } from 'styles/foundation';
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
-import lmStyles from 'litemol/dist/css/LiteMol-plugin-light.css';
+
+import 'litemol/dist/css/LiteMol-plugin-light.css';
 
 const embedStyle = { width: '100%', height: '50vh' };
 // const f = foundationPartial(ebiStyles);
@@ -21,6 +20,7 @@ const embedStyle = { width: '100%', height: '50vh' };
 // <StructureView id={accession} matches={matches} highlight={"pf00071"}/>
 
 class StructureView extends PureComponent /*:: <Props> */ {
+  /*:: _node: ?HTMLElement; */
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
     matches: T.array,
@@ -28,9 +28,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
   };
 
   componentDidMount() {
-    const Behaviour = LiteMol.Bootstrap.Behaviour;
-    const Components = LiteMol.Plugin.Components;
-    const LayoutRegion = LiteMol.Bootstrap.Components.LayoutRegion;
+    // const Behaviour = LiteMol.Bootstrap.Behaviour;
+    // const Components = LiteMol.Plugin.Components;
+    // const LayoutRegion = LiteMol.Bootstrap.Components.LayoutRegion;
     const Transformer = LiteMol.Bootstrap.Entity.Transformer;
     const Query = LiteMol.Core.Structure.Query;
     const Command = LiteMol.Bootstrap.Command;
@@ -54,21 +54,20 @@ class StructureView extends PureComponent /*:: <Props> */ {
     ];
     */
     const plugin = LiteMol.Plugin.create({
-      target: '#litemol',
+      target: this._node,
       viewportBackground: '#fff',
       layoutState: {
         hideControls: true,
         isExpanded: false,
       },
-      //customSpecification: InterProSpec,
+      // customSpecification: InterProSpec,
     });
     const context = plugin.context;
 
     const action = Transform.build();
     action
       .add(context.tree.root, Transformer.Data.Download, {
-        url:
-          'https://www.ebi.ac.uk/pdbe/static/entry/' + pdbid + '_updated.cif',
+        url: `https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_updated.cif`,
         type: 'String',
         id: pdbid,
       })
@@ -93,7 +92,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     plugin.applyTransform(action).then(() => {
       const model = context.select('model')[0];
       const polymer = context.select('polymer-visual')[0];
-      if (this.props.matches != undefined) {
+      if (this.props.matches) {
         const entryResidues = {};
         // create matches in structure hierarchy
         const queries = [];
@@ -144,10 +143,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
             });
         }
         plugin.applyTransform(group).then(() => {
-          if (
-            this.props.highlight != undefined &&
-            entryResidues[this.props.highlight] != undefined
-          ) {
+          if (this.props.highlight && entryResidues[this.props.highlight]) {
             const query = Query.residues(
               ...entryResidues[this.props.highlight],
             );
@@ -166,6 +162,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return (
       <div style={embedStyle}>
         <div
+          ref={node => (this._node = node)}
           id="litemol"
           style={{
             background: 'white',

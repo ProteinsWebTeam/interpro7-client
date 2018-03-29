@@ -124,7 +124,7 @@ const addSignature = (entry, ipro, integrated) => {
 // };
 const mergeData = (interpro, integrated, unintegrated, residues) => {
   const { out, ipro } = groupByEntryType(interpro);
-  if (unintegrated.length > 0) {
+  if (unintegrated.length) {
     unintegrated.forEach(
       u => (u.link = `/entry/${u.source_database}/${u.accession}`),
     );
@@ -138,8 +138,8 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
     }
     addSignature(entry, ipro, integrated);
   }
-  if (Object.keys(residues).length > 0) {
-    out.residues = [residues]; //groupResidues(residues);
+  if (Object.keys(residues).length) {
+    out.residues = [residues]; // groupResidues(residues);
   }
   return out;
 };

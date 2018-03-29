@@ -97,7 +97,7 @@ const SidePanel = ({ metadata }) => (
       </div>
     )}
     {metadata.member_databases &&
-      Object.keys(metadata.member_databases).length > 0 && (
+      Object.keys(metadata.member_databases).length && (
         <ContributingSignatures contr={metadata.member_databases} />
       )}
   </div>
@@ -116,7 +116,7 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
         db={metadata.source_database}
       />
     )}
-    {Object.keys(metadata.literature).length > 0 && (
+    {Object.keys(metadata.literature).length && (
       <section id="references">
         <div className={f('row')}>
           <div className={f('large-12', 'columns')}>
@@ -127,7 +127,7 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
       </section>
     )}
 
-    {Object.keys(metadata.cross_references || {}).length > 0 && (
+    {Object.keys(metadata.cross_references || {}).length && (
       <section id="cross_references">
         <div className={f('row')}>
           <div className={f('large-12', 'columns')}>
@@ -213,7 +213,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   </p>
                 )}
               {// doesn't work for some HAMAP as they have enpty <P> tag
-              Object.keys(metadata.description).length > 0 && (
+              Object.keys(metadata.description).length && (
                 <Fragment>
                   <h4>Description</h4>
                   <Description

@@ -4,7 +4,6 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
@@ -85,10 +84,8 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                 <div className={f('margin-top-large')}>
                   <div>Accession: {metadata.accession}</div>
                   <div>Experiment type: {metadata.experiment_type}</div>
-                  {metadata.resolution !== null ? (
+                  {metadata.resolution && (
                     <div>Resolution: {metadata.resolution} Å </div>
-                  ) : (
-                    ''
                   )}
                   <div>Chains: {chains.join(', ')}</div>
                   <div>
@@ -154,7 +151,8 @@ const getURLForMatches = createSelector(
         structure: { isFilter: true, db: 'pdb', accession },
         entry: { db: 'all' },
       })}`,
-    }) + '?page_size=100',
+      query: { page_size: 100 },
+    }),
 );
 
 export default loadData({

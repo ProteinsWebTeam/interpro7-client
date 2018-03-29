@@ -293,7 +293,7 @@ const rules = {
   // Disallow use of the with statement
   'no-with': 2,
   // Require method and property shorthand syntax for object literals
-  'object-shorthand': [1, 'always'],
+  'object-shorthand': 0,
   // Enforce variables to be declared either together or separately in functions
   'one-var': [1, 'never'],
   // Require assignment operator shorthand where possible
