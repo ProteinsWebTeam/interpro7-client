@@ -20,16 +20,24 @@ const noPadding = { padding: 0 };
 
 class Twitter extends PureComponent /*:: <{}> */ {
   /* ::
-    _domNode: ?Element
-    _node: ?Element
+    _ref: { current: ?HTMLElement };
+    _linkRef: { current: ?HTMLElement };
     _twitterScript: ?{
       cancel: function,
       promise: Promise<any>,
-    }
+    };
   */
+
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+    this._linkRef = React.createRef();
+  }
+
   async componentDidMount() {
     try {
-      await getsInView(this._domNode, { rootMargin: '10px' });
+      await getsInView(this._ref.current, { rootMargin: '10px' });
       this._twitterScript = cancelable(
         loadResource('//platform.twitter.com/widgets.js'),
       );
@@ -43,7 +51,8 @@ class Twitter extends PureComponent /*:: <{}> */ {
         });
         bound = true;
       }
-      if (this._node) window.twttr.widgets.load(this._node);
+      if (this._LinkRef.current)
+        window.twttr.widgets.load(this._LinkRef.current);
     } catch (_) {
       /**/
     }
@@ -60,14 +69,14 @@ class Twitter extends PureComponent /*:: <{}> */ {
           <div className={f('jumbo-news')}>
             <div
               className={f('jumbo-news-container')}
-              ref={node => (this._domNode = node)}
+              ref={node => (this._ref.current = node)}
             >
               <div
                 className={f('icon', 'icon-socialmedia', 'icon-s2')}
                 data-icon="T"
               />
               <Link
-                ref={node => (this._node = node)}
+                ref={this._LinkRef}
                 data-dnt="true"
                 data-chrome={
                   'nofooter noborders noheader noscrollbar transparent'

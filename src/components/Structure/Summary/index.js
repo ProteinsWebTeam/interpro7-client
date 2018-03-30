@@ -23,6 +23,27 @@ const f = foundationPartial(ebiStyles);
 
 const webComponents = [];
 
+const loadPDBWebComponents = () => {
+  if (!webComponents.length) {
+    const dataLoader = () =>
+      import(/* webpackChunkName: "data-loader" */ 'data-loader');
+    const pdbComponents = () =>
+      import(/* webpackChunkName: "pdb-web-components" */ 'pdb-web-components');
+    webComponents.push(loadWebComponent(() => dataLoader()).as('data-loader'));
+    webComponents.push(
+      loadWebComponent(() => pdbComponents().then(m => m.PdbDataLoader)).as(
+        'pdb-data-loader',
+      ),
+    );
+    webComponents.push(
+      loadWebComponent(() => pdbComponents().then(m => m.PdbPrints)).as(
+        'pdb-prints',
+      ),
+    );
+  }
+  return Promise.all(webComponents);
+};
+
 /*:: type Data = {
   loading: boolean,
   payload?: Object,
@@ -45,23 +66,8 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
     }).isRequired,
   };
 
-  componentWillMount() {
-    if (webComponents.length) return;
-    const dataLoader = () =>
-      import(/* webpackChunkName: "data-loader" */ 'data-loader');
-    const pdbComponents = () =>
-      import(/* webpackChunkName: "pdb-web-components" */ 'pdb-web-components');
-    webComponents.push(loadWebComponent(() => dataLoader()).as('data-loader'));
-    webComponents.push(
-      loadWebComponent(() => pdbComponents().then(m => m.PdbDataLoader)).as(
-        'pdb-data-loader',
-      ),
-    );
-    webComponents.push(
-      loadWebComponent(() => pdbComponents().then(m => m.PdbPrints)).as(
-        'pdb-prints',
-      ),
-    );
+  componentDidMount() {
+    loadPDBWebComponents();
   }
 
   render() {

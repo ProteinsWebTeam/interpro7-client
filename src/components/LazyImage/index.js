@@ -18,7 +18,10 @@ class LazyImage extends PureComponent {
 
   constructor(props) {
     super(props);
+
     this.state = { wasRendered: !!props.visible };
+
+    this._ref = React.createRef();
   }
 
   async componentDidMount() {
@@ -26,7 +29,7 @@ class LazyImage extends PureComponent {
     try {
       this._inView = cancelable(
         schedule().then(() =>
-          getsInView(this._node, this.props.rootMargin || '10px'),
+          getsInView(this._ref.current, this.props.rootMargin || '10px'),
         ),
       );
       await this._inView.promise;
@@ -48,7 +51,7 @@ class LazyImage extends PureComponent {
       sources.srcSet = srcSet;
     }
     // eslint-disable-next-line jsx-a11y/alt-text
-    return <img {...sources} {...props} ref={node => (this._node = node)} />;
+    return <img {...sources} {...props} ref={this._ref} />;
   }
 }
 

@@ -12,15 +12,22 @@ class Row extends PureComponent {
     row: T.object.isRequired,
     columns: T.array.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   // TODO review / fix
   componentDidMount() {
-    if (!this._node || !this._node.animate) return;
+    if (!(this._ref.current && this._ref.current.animate)) return;
     // onenter for this node
-    // this._node.animate(
+    // this._ref.current.animate(
     //   [{transform: 'translateX(100%)'}, {transform: 'translateX(0)'}],
     //   {duration: 500, delay: Math.random() * 100, fill: 'both'},
     // );
-    this._node.animate(
+    this._ref.current.animate(
       { opacity: [0, 1] },
       { duration: DURATION, easing: 'ease-in-out' },
     );
@@ -29,7 +36,7 @@ class Row extends PureComponent {
   render() {
     const { row, columns } = this.props;
     return (
-      <tr ref={node => (this._node = node)}>
+      <tr ref={this._ref}>
         {columns
           .filter(({ displayIf = true }) => displayIf)
           .map(

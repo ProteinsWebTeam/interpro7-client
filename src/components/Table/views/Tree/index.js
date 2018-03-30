@@ -82,15 +82,17 @@ class GraphicalView extends PureComponent {
 
   constructor(props) {
     super(props);
+
     this._vis = new TaxonomyVisualisation(undefined, {
       initialMaxNodes: +Infinity,
     });
-    window.vis = this._vis;
     this._vis.addEventListener('focus', this._handleFocus);
+
+    this._ref = React.createRef();
   }
 
   componentDidMount() {
-    this._vis.tree = this._tree;
+    this._vis.tree = this._ref.current;
     this._loadingVis = true;
     this._populateData(this.props.data, this.props.focused);
     this._loadingVis = false;
@@ -132,7 +134,7 @@ class GraphicalView extends PureComponent {
           justifyContent: 'center',
         }}
       >
-        <svg ref={node => (this._tree = node)} style={{ flex: '1' }} />
+        <svg ref={this._ref} style={{ flex: '1' }} />
       </div>
     );
   }

@@ -26,13 +26,12 @@ class _SingleMatchWrapper extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      triggerRedirect: props.autoRedirect,
-    };
+
+    this.state = { triggerRedirect: props.autoRedirect };
   }
 
-  async componentWillReceiveProps({ autoRedirect }) {
-    if (!autoRedirect) return;
+  async componentDidUpdate() {
+    const { autoRedirect } = this.props;
     await sleep(TOGGLE_DURATION);
     this.setState({ triggerRedirect: autoRedirect });
   }

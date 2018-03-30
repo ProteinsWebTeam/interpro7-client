@@ -29,6 +29,7 @@ const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
+
 const schemamap = {
   entry: {
     protein: ['@isContainedIn', 'Protein'],
@@ -58,6 +59,7 @@ const schemamap = {
     organism: ['@additionalProperty', 'Organism'],
   },
 };
+
 const schemaProcessData = ({ data, primary, secondary }) => {
   const [id, type] = schemamap[secondary][primary];
   return {
@@ -88,6 +90,7 @@ const propTypes = {
   actualSize: T.number,
   search: T.object,
 };
+
 const componentMatch = {
   protein: {
     entry: EntriesOnProtein,

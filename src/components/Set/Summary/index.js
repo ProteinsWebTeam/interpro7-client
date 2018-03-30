@@ -57,12 +57,18 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     customLocation: T.object.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   componentDidMount() {
-    if (!this._clanViewer) return;
-    this._vis = new ClanViewer({ element: this._clanViewer });
+    if (!this._ref.current) return;
+    this._vis = new ClanViewer({ element: this._ref.current });
     const data = this.props.data.metadata.relationships;
     this._vis.paint(data, false);
-    this._clanViewer.addEventListener('click', this._handleClick);
+    this._ref.current.addEventListener('click', this._handleClick);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -73,8 +79,8 @@ class SummarySet extends PureComponent /*:: <Props> */ {
   }
 
   componentWillUnmount() {
-    if (this._clanViewer) {
-      this._clanViewer.removeEventListener('click', this._handleClick);
+    if (this._ref.current) {
+      this._ref.current.removeEventListener('click', this._handleClick);
     }
   }
 
@@ -97,11 +103,6 @@ class SummarySet extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
-              {
-                // <div className={f('tag', 'margin-bottom-medium')}>
-                // {metadata.source_database}
-                // </div>
-              }
               <Accession accession={metadata.accession} id={metadata.id} />
               <h4>Description</h4>
               <Description textBlocks={[metadata.description]} />
@@ -136,7 +137,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
             </div>
           </div>
           <div className={f('row', 'columns')}>
-            <div ref={node => (this._clanViewer = node)} />
+            <div ref={this._ref} />
           </div>
         </section>
       </div>

@@ -1,4 +1,4 @@
-// @flow
+//
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import LiteMol from 'litemol';
@@ -20,12 +20,19 @@ const embedStyle = { width: '100%', height: '50vh' };
 // <StructureView id={accession} matches={matches} highlight={"pf00071"}/>
 
 class StructureView extends PureComponent /*:: <Props> */ {
-  /*:: _node: ?HTMLElement; */
+  /*:: _ref: { current: ?HTMLElement }; */
+
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
     matches: T.array,
     highlight: T.string,
   };
+
+  constructor(props /*: Props */) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
 
   componentDidMount() {
     // const Behaviour = LiteMol.Bootstrap.Behaviour;
@@ -54,7 +61,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     ];
     */
     const plugin = LiteMol.Plugin.create({
-      target: this._node,
+      target: this._ref.current,
       viewportBackground: '#fff',
       layoutState: {
         hideControls: true,
@@ -162,8 +169,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return (
       <div style={embedStyle}>
         <div
-          ref={node => (this._node = node)}
-          id="litemol"
+          ref={this._ref}
           style={{
             background: 'white',
             width: '100%',

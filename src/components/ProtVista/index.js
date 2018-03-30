@@ -23,8 +23,6 @@ import local from './style.css';
 
 const f = foundationPartial(local, fonts);
 
-const webComponents = [];
-
 const requestFullScreen = element => {
   if (!element) return;
   if ('requestFullscreen' in element) {
@@ -41,33 +39,10 @@ const requestFullScreen = element => {
   }
 };
 
-const removeAllChildrenFromNode = node => {
-  if (node.lastChild) {
-    node.removeChild(node.lastChild);
-    removeAllChildrenFromNode(node);
-  }
-};
+const webComponents = [];
 
-class ProtVista extends PureComponent {
-  static propTypes = {
-    protein: T.object,
-    data: T.array,
-  };
-
-  constructor(props) {
-    super(props);
-    this.web_tracks = {};
-    this.state = {
-      entryHovered: null,
-      colorMode: EntryColorMode.DOMAIN_RELATIONSHIP,
-      hideCategory: {},
-      expandedTrack: {},
-      collapsed: false,
-    };
-  }
-
-  componentWillMount() {
-    if (webComponents.length) return;
+const loadProtVistaWebComponents = () => {
+  if (!webComponents.length) {
     webComponents.push(
       loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
     );
@@ -86,11 +61,45 @@ class ProtVista extends PureComponent {
       ),
     );
   }
+  return Promise.all(webComponents);
+};
+
+const removeAllChildrenFromNode = node => {
+  if (node.lastChild) {
+    node.removeChild(node.lastChild);
+    removeAllChildrenFromNode(node);
+  }
+};
+
+class ProtVista extends PureComponent {
+  static propTypes = {
+    protein: T.object,
+    data: T.array,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.web_tracks = {};
+
+    this.state = {
+      entryHovered: null,
+      colorMode: EntryColorMode.DOMAIN_RELATIONSHIP,
+      hideCategory: {},
+      expandedTrack: {},
+      collapsed: false,
+    };
+
+    this._mainRef = React.createRef();
+    this._popperRef = React.createRef();
+    this._popperContentRef = React.createRef();
+    this._webProteinRef = React.createRef();
+  }
 
   async componentDidMount() {
-    await Promise.all(webComponents);
+    await loadProtVistaWebComponents();
     const { data, protein } = this.props;
-    this.web_protein.data = protein;
+    this._webProteinRef.current.data = protein;
     this.updateTracksWithData(data);
   }
 
@@ -149,20 +158,21 @@ class ProtVista extends PureComponent {
             this.handleCollapseLabels(e.detail.feature.accession);
           });
           this.web_tracks[d.accession].addEventListener('entrymouseout', () => {
-            removeAllChildrenFromNode(this._popper_content);
+            removeAllChildrenFromNode(this._popperContentRef.current);
             this.popper.destroy();
-            this._popper.classList.add(f('hide'));
+            this._popperRef.current.classList.add(f('hide'));
           });
           this.web_tracks[d.accession].addEventListener('entrymouseover', e => {
-            this._popper.classList.remove(f('hide'));
-            removeAllChildrenFromNode(this._popper_content);
-            this._popper_content.appendChild(
+            this._popperRef.current.classList.remove(f('hide'));
+            removeAllChildrenFromNode(this._popperContentRef.current);
+            this._popperContentRef.current.appendChild(
               this.getElementFromEntry(e.detail),
             );
-            this.popper = new PopperJS(e.detail.target, this._popper, {
-              placement: 'top',
-              applyStyle: { enabled: false },
-            });
+            this.popper = new PopperJS(
+              e.detail.target,
+              this._popperRef.current,
+              { placement: 'top', applyStyle: { enabled: false } },
+            );
           });
         }
         this.setObjectValueInState(
@@ -266,7 +276,7 @@ class ProtVista extends PureComponent {
     }
   };
 
-  handleFullScreen = () => requestFullScreen(this._main);
+  handleFullScreen = () => requestFullScreen(this._mainRef.current);
 
   changeColor = ({ target: { value: colorMode } }) => {
     for (const track of Object.values(this.web_tracks)) {
@@ -334,6 +344,7 @@ class ProtVista extends PureComponent {
       </Fragment>
     );
   }
+
   renderResidueLabels(entry) {
     if (!entry.residues) return null;
     const { expandedTrack } = this.state;
@@ -362,6 +373,7 @@ class ProtVista extends PureComponent {
       )),
     );
   }
+
   renderOptions() {
     const { collapsed } = this.state;
     return (
@@ -417,15 +429,15 @@ class ProtVista extends PureComponent {
 
     const { hideCategory } = this.state;
     return (
-      <div ref={e => (this._main = e)} className={f('fullscreenable')}>
+      <div ref={this._mainRef} className={f('fullscreenable')}>
         <div className={f('row')}>
           <div className={f('columns')}>
             <div className={f('track-row')}>{this.renderOptions()}</div>
           </div>
         </div>
-        <div ref={e => (this._popper = e)} className={f('popper', 'hide')}>
+        <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
-          <div ref={e => (this._popper_content = e)} />
+          <div ref={this._popperContentRef} />
         </div>
         <div className={f('row', 'protvista')}>
           <protvista-manager
@@ -445,7 +457,7 @@ class ProtVista extends PureComponent {
               <div className={f('track-row')}>
                 <div className={f('aligned-to-track-component')}>
                   <protvista-sequence
-                    ref={e => (this.web_protein = e)}
+                    ref={this._webProteinRef}
                     length={length}
                     displaystart="1"
                     displayend={length}

@@ -35,7 +35,7 @@ class LatestEntry extends PureComponent {
     }),
   };
 
-  componentWillMount() {
+  componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
         m => m.InterproType,

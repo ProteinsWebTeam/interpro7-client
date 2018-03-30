@@ -1,4 +1,4 @@
-// @flow
+//
 import React from 'react';
 import { Provider } from 'react-redux';
 
@@ -14,11 +14,13 @@ const history = createHistory({ basename: config.root.website.pathname });
 const store = createStore(history);
 
 const App = () => (
-  <Provider store={store}>
-    <ErrorBoundary>
-      <Root />
-    </ErrorBoundary>
-  </Provider>
+  <React.StrictMode>
+    <Provider store={store}>
+      <ErrorBoundary>
+        <Root />
+      </ErrorBoundary>
+    </Provider>
+  </React.StrictMode>
 );
 
 export default App;

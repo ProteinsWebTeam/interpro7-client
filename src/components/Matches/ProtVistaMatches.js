@@ -9,21 +9,11 @@ import ProtVistaSequence from 'protvista-sequence';
 
 const webComponents = [];
 
-class ProtVistaMatches extends PureComponent {
-  static propTypes = {
-    matches: T.array.isRequired,
-    options: T.object,
-  };
-  constructor(props) {
-    super(props);
-    this.web_tracks = {};
-  }
-  componentWillMount() {
-    if (webComponents.length) return;
+const loadProtVistaWebComponents = () => {
+  if (!webComponents.length) {
     webComponents.push(
       loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
     );
-
     webComponents.push(
       loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
     );
@@ -33,14 +23,31 @@ class ProtVistaMatches extends PureComponent {
       ),
     );
   }
+  return Promise.all(webComponents);
+};
+
+class ProtVistaMatches extends PureComponent {
+  static propTypes = {
+    matches: T.array.isRequired,
+    options: T.object,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.web_tracks = {};
+  }
+
   async componentDidMount() {
-    await Promise.all(webComponents);
+    await loadProtVistaWebComponents();
     this.updateTracksWithData(this.props);
   }
+
   componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.matches) {
       this.updateTracksWithData(this.props);
     }
   }
 }
+
 export default ProtVistaMatches;

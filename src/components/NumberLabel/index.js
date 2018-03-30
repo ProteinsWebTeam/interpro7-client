@@ -52,15 +52,16 @@ class _NumberComponent extends PureComponent {
 
   constructor(props /*: ?any */) {
     super(props);
+
     this.state = { value: 0 };
   }
 
-  componentWillMount() {
-    this._animate(this.state.value, this.props.value);
+  componentDidMount() {
+    this._animate();
   }
 
-  componentWillReceiveProps({ value }) {
-    this._animate(this.state.value, value);
+  componentDidUpdate() {
+    this._animate();
   }
 
   componentWillUnmount() {
@@ -70,7 +71,9 @@ class _NumberComponent extends PureComponent {
     }
   }
 
-  _animate = (from, to) => {
+  _animate = () => {
+    const { value: from } = this.state;
+    const { value: to } = this.props;
     if (this._animation) this._animation.kill();
     const canAnimate =
       !this.props.lowGraphics &&

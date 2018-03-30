@@ -18,7 +18,7 @@ class DiskUsage extends PureComponent {
     this.state = { usage: NaN, quota: NaN };
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     this.setState(await getEstimate());
   }
 

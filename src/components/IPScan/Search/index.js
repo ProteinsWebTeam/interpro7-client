@@ -109,6 +109,7 @@ class IPScanSearch extends PureComponent {
 
   constructor(props) {
     super(props);
+
     let editorState;
     if (props.value) {
       editorState = EditorState.createWithContent(
@@ -122,12 +123,17 @@ class IPScanSearch extends PureComponent {
       editorState,
       valid: true,
     };
+
+    this._formRef = React.createRef();
+    this._editorRef = React.createRef();
   }
 
   _handleReset = text => {
-    if (this._form && typeof text !== 'string') {
+    if (this._formRef.current && typeof text !== 'string') {
       const inputsToReset = Array.from(
-        this._form.querySelectorAll('input[name]:not([name="stay"])'),
+        this._formRef.current.querySelectorAll(
+          'input[name]:not([name="stay"])',
+        ),
       );
       for (const input of inputsToReset) {
         input.checked = !!input.dataset.defaultchecked;
@@ -146,13 +152,13 @@ class IPScanSearch extends PureComponent {
         dragging: false,
         uploading: false,
       },
-      () => this.editor.focus(),
+      this._focusEditor,
     );
   };
 
   _handleSubmit = event => {
     event.preventDefault();
-    if (!this._form) return;
+    if (!this._formRef.current) return;
     const lines = convertToRaw(
       this.state.editorState.getCurrentContent(),
     ).blocks.map(block => block.text);
@@ -160,17 +166,17 @@ class IPScanSearch extends PureComponent {
     this.props.createJob({
       metadata: {
         localID: id(`internal-${Date.now()}`),
-        localTitle: getLocalTitle(this._form) || null,
+        localTitle: getLocalTitle(this._formRef.current) || null,
         type: 'InterProScan',
       },
       data: {
         input: lines.join('\n'),
-        applications: getCheckedApplications(this._form),
-        goterms: isGoTermsChecked(this._form),
-        pathways: isPathwaysChecked(this._form),
+        applications: getCheckedApplications(this._formRef.current),
+        goterms: isGoTermsChecked(this._formRef.current),
+        pathways: isPathwaysChecked(this._formRef.current),
       },
     });
-    if (isStayChecked(this._form)) {
+    if (isStayChecked(this._formRef.current)) {
       this._handleReset();
     } else {
       this.props.goToCustomLocation({
@@ -233,7 +239,9 @@ class IPScanSearch extends PureComponent {
     return true;
   };
 
-  _handleEditorClick = () => this.editor.focus();
+  _focusEditor = () => {
+    if (this._editorRef.current) this._editorRef.current.focus();
+  };
 
   _handleChange = editorState => {
     const lines = convertToRaw(editorState.getCurrentContent()).blocks.map(
@@ -274,7 +282,7 @@ class IPScanSearch extends PureComponent {
             onDragExit={this._handleUndragging}
             onDragLeave={this._handleUndragging}
             className={f('search-form', { dragging })}
-            ref={form => (this._form = form)}
+            ref={this._formRef}
           >
             <div>
               <div className={f('secondary', 'callout', 'border')}>
@@ -290,8 +298,8 @@ class IPScanSearch extends PureComponent {
                       processData={schemaProcessDataPageSection}
                     />
                     <div
-                      onClick={this._handleEditorClick}
-                      onKeyPress={this._handleEditorClick}
+                      onClick={this._focusEditor}
+                      onKeyPress={this._focusEditor}
                       role="presentation"
                     >
                       <div
@@ -304,7 +312,7 @@ class IPScanSearch extends PureComponent {
                           handleDroppedFiles={this._handleDroppedFiles}
                           onChange={this._handleChange}
                           handlePastedText={this._handlePastedText}
-                          ref={editor => (this.editor = editor)}
+                          ref={this._editorRef}
                         />
                       </div>
                     </div>
@@ -342,7 +350,7 @@ class IPScanSearch extends PureComponent {
                   </div>
                 </div>
 
-                <AdvancedOptions ref={node => (this._advancedOptions = node)} />
+                <AdvancedOptions />
 
                 <div className={f('row')}>
                   <div

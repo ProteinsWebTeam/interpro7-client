@@ -29,28 +29,21 @@ class IntegratedFilter extends PureComponent {
     }).isRequired,
   };
 
-  constructor() {
-    super();
-    this.state = { value: null };
-  }
-
-  componentWillMount() {
-    this.locationToState(this.props.customLocation);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.locationToState(nextProps.customLocation);
-  }
-
-  locationToState(customLocation) {
-    const { integration } = customLocation.description.entry;
-    if (integration === 'unintegrated') {
-      this.setState({ value: 'unintegrated' });
-    } else if (integration === 'integrated') {
-      this.setState({ value: 'integrated' });
-    } else {
-      this.setState({ value: 'both' });
+  static getDerivedStateFromProps({ customLocation }) {
+    const { integration: value } = customLocation.description.entry;
+    switch (value) {
+      case 'unintegrated':
+      case 'integrated':
+        return { value };
+      default:
+        return { value: 'both' };
     }
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = { value: null };
   }
 
   _handleSelection = ({ target: { value } }) => {

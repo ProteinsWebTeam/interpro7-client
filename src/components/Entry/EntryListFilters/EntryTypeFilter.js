@@ -40,7 +40,7 @@ class EntryTypeFilter extends PureComponent {
     }).isRequired,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
         m => m.InterproType,

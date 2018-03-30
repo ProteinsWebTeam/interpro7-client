@@ -9,15 +9,8 @@ import pathToDescription from 'utils/processDescription/pathToDescription';
 
 const webComponents = [];
 
-class InterProHierarchy extends PureComponent {
-  static propTypes = {
-    accession: T.string.isRequired,
-    hierarchy: T.oneOfType([T.string, T.object]).isRequired,
-    goToCustomLocation: T.func.isRequired,
-  };
-
-  componentWillMount() {
-    if (webComponents.length) return;
+const loadInterProWebComponents = () => {
+  if (!webComponents.length) {
     const interproComponents = () =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components');
     webComponents.push(
@@ -36,12 +29,27 @@ class InterProHierarchy extends PureComponent {
       ),
     );
   }
+  return Promise.all(webComponents);
+};
+
+class InterProHierarchy extends PureComponent {
+  static propTypes = {
+    accession: T.string.isRequired,
+    hierarchy: T.oneOfType([T.string, T.object]).isRequired,
+    goToCustomLocation: T.func.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
 
   async componentDidMount() {
-    await Promise.all(webComponents);
+    await loadInterProWebComponents();
     const h = this.props.hierarchy;
-    if (h) this._hierarchy.hierarchy = h;
-    this._hierarchy.addEventListener('click', e => {
+    if (h) this._ref.current.hierarchy = h;
+    this._ref.current.addEventListener('click', e => {
       if (e.path[0].classList.contains('link')) {
         e.preventDefault();
         this.props.goToCustomLocation({
@@ -58,7 +66,7 @@ class InterProHierarchy extends PureComponent {
         accession={this.props.accession}
         hideafter="2"
         hrefroot="/entry/interpro"
-        ref={node => (this._hierarchy = node)}
+        ref={this._ref}
       />
     );
   }

@@ -86,7 +86,9 @@ const loadData = params => {
 
       constructor(props) {
         super(props);
+
         this.state = { staleData: props.data };
+
         this._url = '';
         this._load = null;
       }

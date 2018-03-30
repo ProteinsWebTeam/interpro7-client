@@ -79,7 +79,7 @@ class Title extends PureComponent /*:: <Props> */ {
     mainType: T.string.isRequired,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
         m => m.InterproType,

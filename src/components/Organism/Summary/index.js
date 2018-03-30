@@ -52,7 +52,7 @@ const SchemaOrgData = loadable({
 class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   /*::
     _vis: any;
-    _tree: ?HTMLElement;
+    _ref: { current: ?HTMLElement };
   */
   static propTypes = {
     data: T.shape({
@@ -64,22 +64,25 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     goToCustomLocation: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
+
     this._vis = new TaxonomyVisualisation(undefined, {
       initialMaxNodes: +Infinity,
     });
     this._vis.addEventListener('focus', this._handleFocus);
+
+    this._ref = React.createRef();
   }
 
   componentDidMount() {
-    this._vis.tree = this._tree;
+    this._vis.tree = this._ref.current;
     this.loadingVis = true;
     this._populateData(this.props.data.payload);
     this.loadingVis = false;
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps /*: Props */) {
     if (nextProps.data !== this.props.data) {
       this.loadingVis = true;
       this._populateData(nextProps.data.payload);
@@ -157,7 +160,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
               justifyContent: 'center',
             }}
           >
-            <svg ref={node => (this._tree = node)} style={{ flex: '1' }} />
+            <svg ref={this._ref} style={{ flex: '1' }} />
           </div>
         </div>
       </div>

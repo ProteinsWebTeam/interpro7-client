@@ -8,16 +8,18 @@ import config from 'config';
 import foundation from 'styles/foundation';
 
 class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
-  /* ::
-    _banner: ?any
-  */
-  componentWillMount() {
-    if (document) {
-      this.setState({
-        // If cookies are already accepted, display -> false
-        display: !(document.cookie.match(/cookies-accepted=true/i) || [])[1],
-      });
-    }
+  /*:: _ref: { current: ?HTMLElement }; */
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      // If cookies are already accepted, display -> false
+      display:
+        !!document &&
+        !(document.cookie.match(/cookies-accepted=true/i) || [])[1],
+    };
+
+    this._ref = React.createRef();
   }
 
   handleClick = () => {
@@ -27,8 +29,8 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
     document.cookie = `cookies-accepted=true;expires=${expires.toUTCString()};path=${
       config.root.website.path
     }`;
-    if (this._banner && this._banner.animate) {
-      this._banner.parentElement.animate(
+    if (this._ref.current && this._ref.current.animate) {
+      this._ref.current.parentElement.animate(
         [
           { transform: 'translateY(0)', opacity: 1 },
           { transform: 'translateY(100%)', opacity: 0.5 },
@@ -41,7 +43,7 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
   };
 
   render() {
-    const { display = false } = this.state;
+    const { display } = this.state;
     if (!display) return null;
     return (
       <AnimatedEntry
@@ -61,7 +63,7 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
           zIndex: 101,
         }}
       >
-        <div className={foundation('row')} ref={node => (this._banner = node)}>
+        <div className={foundation('row')} ref={this._ref}>
           <span style={{ marginRight: '2em', flex: 1 }}>
             This website uses cookies. By continuing to browse this site, you
             are agreeing to the use of our site cookies. To find out more, see

@@ -18,9 +18,9 @@ const DEFAULT_DURATION = 250;
 } */
 
 class AnimatedEntry extends PureComponent /*:: <Props> */ {
-  /* ::
-    _node: ?Element
-    _animations: ?Array<any>
+  /*::
+    _ref: { current: ?HTMLElement };
+    _animations: ?Array<any>;
   */
   static propTypes = {
     element: T.oneOfType([T.string, T.element]),
@@ -42,11 +42,22 @@ class AnimatedEntry extends PureComponent /*:: <Props> */ {
     animateSelf: false,
   };
 
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   componentDidMount() {
-    if (this.props.lowGraphics || !this._node || !this._node.animate) return;
+    if (
+      this.props.lowGraphics ||
+      !this._ref.current ||
+      !this._ref.current.animate
+    )
+      return;
     const { keyframes, delay, itemDelay, duration, animateSelf } = this.props;
     const toAnimate = Array.from(
-      animateSelf ? [this._node] : this._node.children,
+      animateSelf ? [this._ref.current] : this._ref.current.children,
     );
     this._animations = toAnimate.map((element /*: any */, i) =>
       element.animate(keyframes, {
@@ -77,7 +88,7 @@ class AnimatedEntry extends PureComponent /*:: <Props> */ {
       dispatch,
       ...props
     } = this.props;
-    return <Element {...props} ref={node => (this._node = node)} />;
+    return <Element {...props} ref={this._ref} />;
   }
 }
 
