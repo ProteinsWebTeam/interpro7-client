@@ -25,7 +25,6 @@ const mapStateToProps = getUrl =>
     state => state.data[getUrl(state)] || {},
     (appState, data) => ({ appState, data }),
   );
-// const getBaseURL = url => (url ? url.slice(0, url.indexOf('?')) : '');
 
 // eslint-disable-next-line max-params
 const load = (
@@ -84,16 +83,27 @@ const loadData = params => {
         }),
       };
 
+      static getDerivedStateFromProps({ data }, { staleData }) {
+        if (
+          !data.loading &&
+          data.payload &&
+          data.payload !== staleData.payload
+        ) {
+          return { staleData: data };
+        }
+        return null;
+      }
+
       constructor(props) {
         super(props);
 
-        this.state = { staleData: props.data };
+        this.state = { staleData: { loading: true } };
 
-        this._url = '';
+        this._url = getUrl(props.appState);
         this._load = null;
       }
 
-      componentWillMount() {
+      componentDidMount() {
         const {
           appState,
           data,
@@ -125,31 +135,14 @@ const loadData = params => {
         this._cancelableFetch = this._load(key);
       }
 
-      componentWillReceiveProps({ data: nextData }) {
-        if (
-          !nextData.loading &&
-          nextData.payload &&
-          nextData.payload !== this.state.staleData.payload
-        ) {
-          this.setState({ staleData: nextData });
-        }
-      }
-
-      componentWillUpdate({
-        appState: nextAppState,
-        loadingData,
-        loadedData,
-        failedLoadingData,
-        unloadingData,
-        data,
-      }) {
+      componentDidUpdate({ appState: prevAppState }) {
         // Same location, no need to reload data
         if (
-          nextAppState.customLocation === this.props.appState.customLocation &&
-          nextAppState.settings === this.props.appState.settings
+          prevAppState.customLocation === this.props.appState.customLocation &&
+          prevAppState.settings === this.props.appState.settings
         ) {
           // In case the change is of data in the same page
-          if (this._url !== data.url) {
+          if (this._url !== this.props.data.url) {
             this._unloadDataMaybe();
             // subscribe(data.url, this);
           }
@@ -157,7 +150,7 @@ const loadData = params => {
         }
 
         // If data is already there, or loading, don't do anything
-        if (data.loading || data.payload) return;
+        if (this.props.data.loading || this.props.data.payload) return;
         // New location, cancel previous fetch
         // (if still running, otherwise won't do anything)
         if (this._cancelableFetch) this._cancelableFetch.cancel();
@@ -166,13 +159,13 @@ const loadData = params => {
         // Key is the new URL to fetch
         // (stored in `key` because `this._url` might change)
 
-        const key = (this._url = getUrl(nextAppState));
+        const key = (this._url = getUrl(this.props.appState));
         if (!this._load) {
           this._load = load(
-            loadingData,
-            loadedData,
-            unloadingData,
-            failedLoadingData,
+            this.props.loadingData,
+            this.props.loadedData,
+            this.props.unloadingData,
+            this.props.failedLoadingData,
             fetchFun,
             fetchOptions,
           );
@@ -204,11 +197,10 @@ const loadData = params => {
           loadedData,
           failedLoadingData,
           // Keep, to pass on
-          data,
+          data: dataFromProps,
           ...rest
         } = this.props;
-        // TODO: remove next line if nothing breaks because of it
-        // const data = {...dataFromProps};// maybe useful?..
+        const data = { ...dataFromProps };
         if (typeof data.loading === 'undefined') data.loading = !!this._url;
         // const useStaleData =
         //   !this._avoidStaleData && data.loading && staleData.payload;
