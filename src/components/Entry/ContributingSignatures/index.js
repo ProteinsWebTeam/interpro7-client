@@ -4,7 +4,6 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import loadable from 'higherOrder/loadable';
-import Metadata from 'wrappers/Metadata';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -30,37 +29,25 @@ const schemaProcessData = ({ db, name }) => ({
   name,
 });
 
-const SignatureLink = ({ accession, db, data, label = null }) => {
-  const tooltipContent =
-    (data &&
-      data.payload &&
-      data.payload.metadata &&
-      data.payload.metadata.name &&
-      data.payload.metadata.name.name) ||
-    accession;
-  return (
-    <Link
-      to={{
-        description: {
-          main: { key: 'entry' },
-          entry: { db, accession },
-        },
-      }}
-    >
-      <small>
-        <span className={f('db-name')}>{db}:</span>{' '}
-        <Tooltip title={`${tooltipContent} (${accession})`}>
-          {label || accession}
-        </Tooltip>
-      </small>
-    </Link>
-  );
-};
+const SignatureLink = ({ accession, db, label }) => (
+  <Link
+    to={{
+      description: {
+        main: { key: 'entry' },
+        entry: { db, accession },
+      },
+    }}
+  >
+    <small>
+      <span className={f('db-name')}>{db}:</span>{' '}
+      <Tooltip title={`${label} (${accession})`}>{label || accession}</Tooltip>
+    </small>
+  </Link>
+);
 SignatureLink.propTypes = {
   accession: T.string.isRequired,
   db: T.string.isRequired,
-  data: T.object,
-  label: T.string,
+  label: T.string.isRequired,
 };
 
 const ContributingSignatures = ({ contr } /*: {contr: Object} */) => {
@@ -70,29 +57,18 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => {
       <div className={f('md-icon-list-box', 'margin-bottom-large')}>
         <h5>Contributing entr{contrEntries.length < 2 ? 'y' : 'ies'}</h5>
         <ul className={f('md-list')}>
-          {contrEntries.map(([db, accessions]) => (
+          {contrEntries.map(([db, signatures]) => (
             <li key={db}>
               <MemberSymbol type={db} className={f('md-small')} />
-              {Object.keys(accessions).map(accession => [
-                <SchemaOrgData
-                  key={`schema.org for ${accession}`}
-                  data={{ db, name: accession }}
-                  processData={schemaProcessData}
-                />,
-                <Metadata
-                  key={accession}
-                  endpoint="entry"
-                  db={db}
-                  accession={accession}
-                >
-                  <SignatureLink
-                    key={accession}
-                    db={db}
-                    accession={accession}
-                    label={accessions[accession]}
+              {Object.entries(signatures).map(([accession, name]) => (
+                <React.Fragment key={accession}>
+                  <SchemaOrgData
+                    data={{ db, name: accession }}
+                    processData={schemaProcessData}
                   />
-                </Metadata>,
-              ])}
+                  <SignatureLink db={db} accession={accession} label={name} />
+                </React.Fragment>
+              ))}
             </li>
           ))}
         </ul>
