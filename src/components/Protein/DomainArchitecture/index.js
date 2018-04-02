@@ -91,12 +91,9 @@ class DomainArchitecture extends PureComponent {
     });
   }
 
-  // shouldComponentUpdate() {
-  //   return false;
-  // }
-  componentWillReceiveProps(nextProps) {
-    if (!areMergedDataTheSame(this.props.data, nextProps.data)) {
-      this.ec.data = nextProps.data;
+  componentDidUpdate(prevProps) {
+    if (!areMergedDataTheSame(prevProps.data, this.props.data)) {
+      this.ec.data = this.props.data;
     }
   }
 

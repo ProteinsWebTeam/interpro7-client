@@ -23,21 +23,20 @@ class SearchBox extends PureComponent {
     children: T.any,
   };
 
+  static getDerivedStateFromProps({ customLocation: { search } }) {
+    return { search: search.search };
+  }
+
   constructor(props) {
     super(props);
 
-    this.state = { search: this.props.customLocation.search.search };
     this.routerPush = debounce(this.routerPush, DEBOUNCE_RATE);
+
+    this.state = { search: this.props.customLocation.search.search };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (
-      this.props.customLocation.description.entry.db !==
-      nextProps.customLocation.description.entry.db
-    ) {
-      this.routerPush.cancel();
-      this.setState({ search: nextProps.customLocation.search.search });
-    }
+  componentDidUpdate() {
+    this.routerPush.cancel();
   }
 
   handleReset = () => this.handleChange({ target: { value: null } });

@@ -71,9 +71,9 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     this._ref.current.addEventListener('click', this._handleClick);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.data !== this.props.data) {
-      const data = nextProps.data.metadata.relationships;
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      const data = this.props.data.metadata.relationships;
       this._vis.paint(data, false);
     }
   }

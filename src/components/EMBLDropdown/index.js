@@ -29,27 +29,29 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
     visible: T.bool,
   };
 
-  constructor(props /*: Props */) {
-    super(props);
-    this.state = { wasRendered: !!props.visible };
+  static getDerivedStateFromProps(
+    { visible } /*: Props */,
+    { wasRendered } /*: State */,
+  ) {
+    if (wasRendered || !visible) return null;
+    return { wasRendered: true };
   }
 
-  componentWillReceiveProps({ visible } /*: Props */) {
-    if (this.state.wasRendered) return;
-    if (visible) this.setState({ wasRendered: true });
+  constructor(props /*: Props */) {
+    super(props);
+
+    this.state = { wasRendered: false };
   }
 
   render() {
     const { visible } = this.props;
     const { wasRendered } = this.state;
-    if (!(visible || wasRendered)) return null;
-    return (
-      <div className={styleBundle('masthead-black-bar')}>
+    let content = null;
+    if (visible || wasRendered) {
+      content = (
         <div
           id="embl-dropdown"
-          className={styleBundle('dropdown-pane', 'bottom', 'embl-dropdown', {
-            'is-open': visible,
-          })}
+          className={styleBundle('dropdown-pane', 'bottom', 'embl-dropdown')}
         >
           <p>
             EMBL-EBI in Hinxton is one of six EMBL locations across Europe.
@@ -140,6 +142,16 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
             </div>
           </div>
         </div>
+      );
+    }
+    if (!(visible || wasRendered)) return null;
+    return (
+      <div
+        inert={visible ? 'false' : 'true'}
+        aria-hidden={!visible}
+        className={styleBundle('masthead-black-bar', { visible })}
+      >
+        {content}
       </div>
     );
   }

@@ -92,56 +92,68 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
     closeSideNav: T.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasRendered: false,
-    };
+  static getDerivedStateFromProps({ visible }, { hasRendered }) {
+    if (hasRendered || !visible) return null;
+    return { hasRendered: true };
   }
 
-  componentWillReceiveProps({ visible }) {
-    if (!this.state.hasRendered && visible)
-      this.setState({ hasRendered: true });
+  constructor(props) {
+    super(props);
+
+    this.state = { hasRendered: false };
   }
 
   render() {
     const { visible, mainAccession, mainType, closeSideNav } = this.props;
-    if (!(this.state.hasRendered || visible)) return null;
-    return (
-      <aside className={f('container', { visible })} role="menu">
-        <button
-          className={f('exit')}
-          title="Close side menu"
-          onClick={closeSideNav}
-          aria-hidden="true"
-        >
-          ×
-        </button>
-        <nav>
-          <ul>
-            {mainAccession && (
-              <SingleEntityMenu className={f('primary')}>
+    const { hasRendered } = this.state;
+    let content = null;
+    if (hasRendered || visible) {
+      content = (
+        <React.Fragment>
+          <button
+            className={f('exit')}
+            title="Close side menu"
+            onClick={closeSideNav}
+            aria-hidden="true"
+          >
+            ×
+          </button>
+          <nav>
+            <ul>
+              {mainAccession && (
+                <SingleEntityMenu className={f('primary')}>
+                  <span className={f('menu-label', 'cursor-default')}>
+                    {mainType} menu ({mainAccession})
+                  </span>
+                </SingleEntityMenu>
+              )}
+              <InterProMenu className={f('secondary', 'is-drilldown')}>
                 <span className={f('menu-label', 'cursor-default')}>
-                  {mainType} menu ({mainAccession})
+                  InterPro menu
                 </span>
-              </SingleEntityMenu>
-            )}
-            <InterProMenu className={f('secondary', 'is-drilldown')}>
-              <span className={f('menu-label', 'cursor-default')}>
-                InterPro menu
-              </span>
-            </InterProMenu>
-            <EBIMenu className={f('tertiary')}>
-              <span className={f('menu-label', 'cursor-default')}>
-                EBI menu
-              </span>
-            </EBIMenu>
-            <span />
-            <li className={f('menu-label', 'cursor-default', 'tertiary')}>
-              <OldInterProLink />
-            </li>
-          </ul>
-        </nav>
+              </InterProMenu>
+              <EBIMenu className={f('tertiary')}>
+                <span className={f('menu-label', 'cursor-default')}>
+                  EBI menu
+                </span>
+              </EBIMenu>
+              <span />
+              <li className={f('menu-label', 'cursor-default', 'tertiary')}>
+                <OldInterProLink />
+              </li>
+            </ul>
+          </nav>
+        </React.Fragment>
+      );
+    }
+    return (
+      <aside
+        inert={visible ? 'false' : 'true'}
+        aria-hidden={!visible}
+        className={f('container', { visible })}
+        role="menu"
+      >
+        {content}
       </aside>
     );
   }

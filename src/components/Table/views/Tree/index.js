@@ -98,14 +98,14 @@ class GraphicalView extends PureComponent {
     this._loadingVis = false;
   }
 
-  componentWillReceiveProps({ data, focused }) {
+  componentDidUpdate({ data, focused }) {
     if (data !== this.props.data) {
       this._loadingVis = true;
-      this._populateData(data, focused);
+      this._populateData(this.props.data, this.props.focused);
       this._loadingVis = false;
     }
     if (focused !== this.props.focused) {
-      this._vis.focusNodeWithID(focused);
+      this._vis.focusNodeWithID(this.props.focused);
     }
   }
 

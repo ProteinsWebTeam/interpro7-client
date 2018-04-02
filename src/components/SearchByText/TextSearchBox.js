@@ -26,16 +26,16 @@ class TextSearchBox extends PureComponent {
     inputRef: T.func,
   };
 
+  static getDerivedStateFromProps({ value }) {
+    return { value: value || '' };
+  }
+
   constructor(props) {
     super(props);
 
     this.state = { value: props.value || '' };
 
     this.debouncedPush = debounce(this.routerPush, DEBOUNCE_RATE);
-  }
-
-  componentWillReceiveProps({ value }) {
-    this.setState({ value: value || '' });
   }
 
   routerPush = replace => {
