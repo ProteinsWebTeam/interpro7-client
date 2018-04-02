@@ -14,13 +14,11 @@ const history = createHistory({ basename: config.root.website.pathname });
 const store = createStore(history);
 
 const App = () => (
-  <React.StrictMode>
-    <Provider store={store}>
-      <ErrorBoundary>
-        <Root />
-      </ErrorBoundary>
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <ErrorBoundary>
+      <Root />
+    </ErrorBoundary>
+  </Provider>
 );
 
 export default App;
