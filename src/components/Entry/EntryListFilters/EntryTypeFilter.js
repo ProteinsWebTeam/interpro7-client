@@ -87,7 +87,7 @@ class EntryTypeFilter extends PureComponent {
                 <interpro-type
                   type={type.replace('_', ' ')}
                   expanded
-                  size="17px"
+                  dimension="17px"
                 >
                   {type}
                 </interpro-type>

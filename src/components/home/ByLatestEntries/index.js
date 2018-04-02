@@ -49,7 +49,7 @@ class LatestEntry extends PureComponent {
       <li className={f('list-item')}>
         <Tooltip title={`${entry.type} type`}>
           <interpro-type
-            size="1.5em"
+            dimension="1.5em"
             type={entry.type}
             aria-label="Entry type"
           />

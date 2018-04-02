@@ -22,7 +22,7 @@ export default (importer /*: Function */) => ({
       throw new Error('Please specify a name for WebComponent');
     }
     // Check again, to avoid race conditions
-    if (window.customElements.get(_ns)) return;
+    if (window.customElements.get(_ns)) return _ns;
     // Actually doing the defining
     window.customElements.define(_ns, webComponent);
     // Returning the name used for the definition, just in case might be useful

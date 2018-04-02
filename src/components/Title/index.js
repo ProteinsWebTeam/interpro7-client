@@ -107,7 +107,7 @@ class Title extends PureComponent /*:: <Props> */ {
             <Tooltip title={`${metadata.type.replace('_', ' ')} type`}>
               <interpro-type
                 type={metadata.type.replace('_', ' ')}
-                size="4em"
+                dimension="4em"
               />
             </Tooltip>
           )}

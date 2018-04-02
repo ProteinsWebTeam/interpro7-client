@@ -154,7 +154,7 @@
     "gsap": "1.20.4",
     "history": "4.7.2",
     "idb": "2.1.1",
-    "interpro-components": "0.5.0",
+    "interpro-components": "0.6.0",
     "isomorphic-fetch": "2.2.1",
     "litemol": "github:dsehnal/LiteMol",
     "lodash-es": "4.17.8",

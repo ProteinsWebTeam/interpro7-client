@@ -157,7 +157,7 @@ class List extends PureComponent {
                   const _type = type.replace('_', ' ');
                   return (
                     <Tooltip title={`${_type} type`}>
-                      <interpro-type type={_type} size="26px">
+                      <interpro-type type={_type} dimension="26px">
                         {_type}
                       </interpro-type>
                     </Tooltip>
