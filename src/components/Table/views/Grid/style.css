@@ -59,11 +59,14 @@
 }
 
 .card-item-b {
-  border: 0px solid pink;
   display: flex;
   justify-content: space-between;
   font-size: 80%;
 }
+
+.card-item-b > div:last-child {
+  text-align: right;
+} /*tax ID*/
 
 .card-sum-info {
   margin-bottom: 0;
@@ -99,6 +102,10 @@
   background-position-y: 40%;
   background-repeat: no-repeat;
 }
+
+.icon-species {
+  color: #e47471;
+} /*default color for most of the icons*/
 
 .md-small {
   width: 46px;
