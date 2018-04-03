@@ -37,7 +37,7 @@ const getUrlFor = accession =>
 
 class Lineage extends PureComponent {
   render() {
-    const { metadata, data: { loading, payload } } = this.props;
+    const { data: { loading, payload } } = this.props;
     const linetree = `${loading ? 0 : payload.metadata.lineage}`;
     let superkingdom = null;
     let nodespot = null;
@@ -85,7 +85,7 @@ class Lineage extends PureComponent {
     } else if (linetree.includes('7898 ')) {
       nodespot = 'Fish';
     } else {
-      /*Actinopterygii - 89593 craniata too general*/
+      /* Actinopterygii - 89593 craniata too general*/
       nodespot = 'N/A';
     }
 
@@ -99,7 +99,7 @@ class Lineage extends PureComponent {
 
 class SpeciesIcon extends PureComponent {
   render() {
-    const { metadata, data: { loading, payload } } = this.props;
+    const { data: { loading, payload } } = this.props;
     const linetree = `${loading ? 0 : payload.metadata.lineage}`;
     let icon = null;
     let nodecolor = null;
@@ -107,68 +107,68 @@ class SpeciesIcon extends PureComponent {
     if (linetree.includes(' 7227 ') || linetree.includes(' 27457 ')) {
       icon = 'F';
     } else if (linetree.includes(' 7215 ')) {
-      /*drosophila melanogaster and Bactrocera dorsalis*/
+      /* drosophila melanogaster and Bactrocera dorsalis*/
       icon = 'F';
     } else if (linetree.includes(' 121224 ')) {
-      /***Node drosophila*/
+      /* Node drosophila*/
       icon = '4';
     } else if (linetree.includes(' 34735 ')) {
       /* Pediculus humanus subsp. corporis (louse)*/
       icon = '$';
     } else if (linetree.includes(' 6855 ')) {
-      /***Node Apoidea (bees)*/
+      /* Node Apoidea (bees)*/
       icon = 's';
     } else if (linetree.includes(' 6935 ')) {
-      /***Node Scorpiones (Scorpion)*/
+      /* Node Scorpiones (Scorpion)*/
       icon = '&';
     } else if (linetree.includes(' 6448 ')) {
-      /***Node Ixodida (Ticks)*/
+      /* Node Ixodida (Ticks)*/
       icon = "'";
     } else if (linetree.includes(' 28376 ')) {
-      /***Node Gastropoda (Snail)*/
+      /* Node Gastropoda (Snail)*/
       icon = '7';
     } else if (linetree.includes(' 9681 ')) {
-      /***Node anolis*/
+      /* Node anolis*/
       icon = 'A';
     } else if (linetree.includes(' 9606 ')) {
-      /***Node felidae*/
+      /* Node felidae*/
       icon = 'H';
     } else if (linetree.includes(' 3702 ')) {
-      /*homo*/
+      /* homo*/
       icon = 'B';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 6239 ')) {
-      /*Mouse-ear cress*/
+      /* Mouse-ear cress*/
       icon = 'W';
     } else if (linetree.includes(' 9031 ')) {
-      /*Caenorhabditis elegans*/
+      /* Caenorhabditis elegans*/
       icon = 'k';
     } else if (linetree.includes(' 9922 ')) {
       /* Chicken*/
       icon = 'm';
     } else if (linetree.includes(' 55153 ')) {
-      /*** Node Capra (goat)*/
+      /* Node Capra (goat)*/
       icon = 'I';
     } else if (linetree.includes(' 9723 ')) {
-      /*** Node Sciuridae (Squirels)*/
+      /* Node Sciuridae (Squirels)*/
       icon = 'D';
     } else if (linetree.includes(' 8292 ')) {
-      /*** Node Platanistidae (Dolphin)*/
+      /* Node Platanistidae (Dolphin)*/
       icon = 'f';
     } else if (linetree.includes(' 8782 ')) {
-      /*** Node Amphibia */
+      /* Node Amphibia */
       icon = 'n';
     } else if (linetree.includes(' 7157 ')) {
-      /*** Node Bird (Finch)*/
+      /* Node Bird (Finch)*/
       icon = '1';
     } else if (linetree.includes(' 6656 ')) {
-      /*** subNode Culicidae (Mosquito) */
+      /* subNode Culicidae (Mosquito) */
       icon = 'S';
     } else if (linetree.includes(' 1639119 ')) {
-      /*** Node Arthropoda (Spider)*/
+      /* Node Arthropoda (Spider)*/
       icon = '@';
     } else if (linetree.includes(' 7955 ')) {
-      /*** Node Plasmodium (Plasmodiidae)*/
+      /* Node Plasmodium (Plasmodiidae)*/
       icon = 'Z';
     } else if (linetree.includes(' 31031 ')) {
       /* Zebrafish */
@@ -177,16 +177,16 @@ class SpeciesIcon extends PureComponent {
       /* Tetraodontidae (Pufferfish) */
       icon = 'Z';
     } else if (linetree.includes(' 10090 ')) {
-      /*** Node Fish (7898 Actinopterygii NOT 7776 Gnathostomata includes mammals -  NOT 7777 Chondrichthyes)*/
+      /* Node Fish (7898 Actinopterygii NOT 7776 Gnathostomata includes mammals -  NOT 7777 Chondrichthyes)*/
       icon = 'M';
     } else if (linetree.includes(' 10088 ')) {
       /* Mouse*/
       icon = 'M';
     } else if (linetree.includes(' 9368 ')) {
-      /*** Node Mouse (?)*/
+      /* Node Mouse (?)*/
       icon = 'o';
     } else if (linetree.includes(' 10116 ')) {
-      /*** Node Erinaceidae (Hedgehog)*/
+      /* Node Erinaceidae (Hedgehog)*/
       icon = 'R';
     } else if (linetree.includes(' 9615 ')) {
       /* Rat*/
@@ -219,16 +219,16 @@ class SpeciesIcon extends PureComponent {
       /* Papio anubis (Olive baboon)*/
       icon = 'i';
     } else if (linetree.includes(' 9527 ')) {
-      /*** Node Pan troglodytes (Chimpanzee)*/
+      /* Node Pan troglodytes (Chimpanzee)*/
       icon = 'r';
     } else if (linetree.includes(' 9430 ')) {
-      /*** Node Cercopithecidae (Monkeys) to check*/
+      /* Node Cercopithecidae (Monkeys) to check*/
       icon = '(';
     } else if (linetree.includes(' 9397 ')) {
       /* Vampire bat*/
       icon = '(';
     } else if (linetree.includes(' 9544 ')) {
-      /*** Node bat Chiroptera*/
+      /* Node bat Chiroptera*/
       icon = 'r';
     } else if (linetree.includes(' 9599 ')) {
       /* Rhesus macaque*/
@@ -237,7 +237,7 @@ class SpeciesIcon extends PureComponent {
       /* Node pongo (orangutan)*/
       icon = 'G';
     } else if (linetree.includes(' 31033 ')) {
-      /*** Node Gorilla*/
+      /* Node Gorilla*/
       icon = 'E';
     } else if (linetree.includes(' 4932 ') || linetree.includes('284812')) {
       /* Fugu rubripes*/
@@ -252,52 +252,52 @@ class SpeciesIcon extends PureComponent {
       icon = 'L';
       nodecolor = '#5bc0de';
     } else if (linetree.includes(' 10239 ')) {
-      /*** Node Bacteria (Ecoli)*/
+      /* Node Bacteria (Ecoli)*/
       icon = 'v';
       nodecolor = '#5bc0de';
     } else if (linetree.includes(' 4751 ')) {
-      /*** Node Virus */
+      /* Node Virus */
       icon = 'u';
       nodecolor = '#5bc0de';
     } else if (linetree.includes(' 4527 ')) {
-      /*** Node Fungus*/
+      /* Node Fungus*/
       icon = '6';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 49274 ')) {
-      /*** Node Rice (Oriza sativa)*/
+      /* Node Rice (Oriza sativa)*/
       icon = ')';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 4512 ')) {
-      /*** Node Lycopersicon (Tomatoes)*/
+      /* Node Lycopersicon (Tomatoes)*/
       icon = '5';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 3700 ')) {
-      /*** Node Barley (Hordeum)*/
+      /* Node Barley (Hordeum)*/
       icon = 'B';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 3603 ')) {
-      /*** Node Brassicaceae ()*/
+      /* Node Brassicaceae ()*/
       icon = 'O';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 1462606 ')) {
-      /*** Node Vitis (grape)*/
+      /* Node Vitis (grape)*/
       icon = '^';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 33090 ')) {
-      /*** Node Soja (Glycine max (Soybean))*/
+      /* Node Soja (Glycine max (Soybean))*/
       icon = '.';
       nodecolor = '#5cb85c';
     } else {
-      /*** Node viridiplantae*/
+      /* Node viridiplantae*/
 
       icon = '.';
     }
 
     return (
-      <Tooltip title="This is a ... icon">
+      <Tooltip title="Related species icon">
         {' '}
         <span
-          style={{ color: nodecolor }} /*bleu #*/
+          style={{ color: nodecolor }}
           className={f('small', 'icon', 'icon-species')}
           data-icon={icon}
         />
@@ -489,9 +489,9 @@ class GridView extends PureComponent {
           );
         })}
       </div>
-    ); //return
-  } //render
-} //gridview
+    );
+  }
+}
 
 const mapStateToProps = createSelector(
   state => state.customLocation.description.entry.db,
