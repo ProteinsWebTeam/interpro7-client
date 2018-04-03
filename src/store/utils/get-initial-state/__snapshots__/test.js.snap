@@ -1,0 +1,385 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getInitialState about 1`] = `
+Object {
+  "customLocation": Object {
+    "description": Object {
+      "entry": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "integration": null,
+        "isFilter": null,
+        "memberDB": null,
+        "memberDBAccession": null,
+      },
+      "job": Object {
+        "accession": null,
+        "detail": null,
+        "type": null,
+      },
+      "main": Object {
+        "key": null,
+      },
+      "organism": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+        "proteomeAccession": null,
+        "proteomeDB": null,
+      },
+      "other": Object {
+        "0": "about",
+        "1": null,
+      },
+      "protein": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "search": Object {
+        "type": null,
+        "value": null,
+      },
+      "set": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "structure": Object {
+        "accession": null,
+        "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+    },
+    "hash": "",
+    "search": Object {},
+  },
+  "settings": undefined,
+}
+`;
+
+exports[`getInitialState browse entries 1`] = `
+Object {
+  "customLocation": Object {
+    "description": Object {
+      "entry": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "integration": null,
+        "isFilter": null,
+        "memberDB": null,
+        "memberDBAccession": null,
+      },
+      "job": Object {
+        "accession": null,
+        "detail": null,
+        "type": null,
+      },
+      "main": Object {
+        "key": "entry",
+      },
+      "organism": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+        "proteomeAccession": null,
+        "proteomeDB": null,
+      },
+      "other": Object {
+        "0": null,
+        "1": null,
+      },
+      "protein": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "search": Object {
+        "type": null,
+        "value": null,
+      },
+      "set": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "structure": Object {
+        "accession": null,
+        "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+    },
+    "hash": "",
+    "search": Object {},
+  },
+  "settings": undefined,
+}
+`;
+
+exports[`getInitialState browse proteins 1`] = `
+Object {
+  "customLocation": Object {
+    "description": Object {
+      "entry": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "integration": null,
+        "isFilter": null,
+        "memberDB": null,
+        "memberDBAccession": null,
+      },
+      "job": Object {
+        "accession": null,
+        "detail": null,
+        "type": null,
+      },
+      "main": Object {
+        "key": "protein",
+      },
+      "organism": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+        "proteomeAccession": null,
+        "proteomeDB": null,
+      },
+      "other": Object {
+        "0": null,
+        "1": null,
+      },
+      "protein": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "search": Object {
+        "type": null,
+        "value": null,
+      },
+      "set": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "structure": Object {
+        "accession": null,
+        "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+    },
+    "hash": "",
+    "search": Object {},
+  },
+  "settings": undefined,
+}
+`;
+
+exports[`getInitialState home 1`] = `
+Object {
+  "customLocation": Object {
+    "description": Object {
+      "entry": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "integration": null,
+        "isFilter": null,
+        "memberDB": null,
+        "memberDBAccession": null,
+      },
+      "job": Object {
+        "accession": null,
+        "detail": null,
+        "type": null,
+      },
+      "main": Object {
+        "key": null,
+      },
+      "organism": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+        "proteomeAccession": null,
+        "proteomeDB": null,
+      },
+      "other": Object {
+        "0": null,
+        "1": null,
+      },
+      "protein": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "search": Object {
+        "type": null,
+        "value": null,
+      },
+      "set": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "structure": Object {
+        "accession": null,
+        "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+    },
+    "hash": "",
+    "search": Object {},
+  },
+  "settings": undefined,
+}
+`;
+
+exports[`getInitialState summary entry 1`] = `
+Object {
+  "customLocation": Object {
+    "description": Object {
+      "entry": Object {
+        "accession": "IPR000001",
+        "db": "InterPro",
+        "detail": null,
+        "integration": null,
+        "isFilter": null,
+        "memberDB": null,
+        "memberDBAccession": null,
+      },
+      "job": Object {
+        "accession": null,
+        "detail": null,
+        "type": null,
+      },
+      "main": Object {
+        "key": "entry",
+      },
+      "organism": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+        "proteomeAccession": null,
+        "proteomeDB": null,
+      },
+      "other": Object {
+        "0": null,
+        "1": null,
+      },
+      "protein": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "search": Object {
+        "type": null,
+        "value": null,
+      },
+      "set": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "structure": Object {
+        "accession": null,
+        "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+    },
+    "hash": "",
+    "search": Object {},
+  },
+  "settings": undefined,
+}
+`;
+
+exports[`getInitialState summary protein 1`] = `
+Object {
+  "customLocation": Object {
+    "description": Object {
+      "entry": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "integration": null,
+        "isFilter": null,
+        "memberDB": null,
+        "memberDBAccession": null,
+      },
+      "job": Object {
+        "accession": null,
+        "detail": null,
+        "type": null,
+      },
+      "main": Object {
+        "key": "protein",
+      },
+      "organism": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+        "proteomeAccession": null,
+        "proteomeDB": null,
+      },
+      "other": Object {
+        "0": null,
+        "1": null,
+      },
+      "protein": Object {
+        "accession": "A0A023GPI8",
+        "db": "reviewed",
+        "detail": null,
+        "isFilter": null,
+      },
+      "search": Object {
+        "type": null,
+        "value": null,
+      },
+      "set": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "structure": Object {
+        "accession": null,
+        "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+    },
+    "hash": "",
+    "search": Object {},
+  },
+  "settings": undefined,
+}
+`;

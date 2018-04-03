@@ -13,7 +13,7 @@ import {
 } from 'actions/creators';
 import { alreadyLoadingError } from 'reducers/data';
 
-import extractParams from './extractParams';
+import extractParams from './extract-params';
 import getFetch from './getFetch';
 // import { subscribe, unsubscribe } from './subscriptions';
 
