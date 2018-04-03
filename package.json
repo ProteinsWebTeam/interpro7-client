@@ -51,19 +51,7 @@
           "useBuiltIns": true,
           "targets": {
             "browsers": "last 1 version, > 10%",
-            "node": true,
-            "exclude": [
-              "typed.data-view",
-              "typed.int8-array",
-              "typed.uint8-array",
-              "typed.uint8-clamped-array",
-              "typed.int16-array",
-              "typed.uint16-array",
-              "typed.int32-array",
-              "typed.uint32-array",
-              "typed.float32-array",
-              "typed.float64-array"
-            ]
+            "node": true
           }
         }
       ],
@@ -111,7 +99,7 @@
     ],
     "coverageDirectory": "reports/jest-coverage",
     "transformIgnorePatterns": [
-      "/node_modules/(?!lodash-es)"
+      "/node_modules/(?!(lodash-es|timing-functions))"
     ]
   },
   "lint-staged": {

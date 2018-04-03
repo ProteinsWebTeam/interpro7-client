@@ -3,15 +3,22 @@ import { format } from 'url';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+const MULTIPLE_SLASHES = /([^:])\/{2,}/g;
+
+export const cleanUpMultipleSlashes = (str = '') =>
+  str.replace(MULTIPLE_SLASHES, '$1/');
+
 export const getUrlForMeta = createSelector(
   state => state.settings.api,
   ({ protocol, hostname, port, root }) =>
-    format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}`,
-    }),
+    cleanUpMultipleSlashes(
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}`,
+      }),
+    ),
 );
 
 export const getUrl = createSelector(
@@ -38,16 +45,18 @@ export const getUrl = createSelector(
           Object.values(description).find(
             ({ isFilter, db }) => isFilter && db,
           ) ||
-          description.entry.memberDB
+          (description.entry && description.entry.memberDB)
         )
           _search.page_size = _search.page_size || settingsPageSize;
-        return format({
-          protocol,
-          hostname,
-          port,
-          pathname: root + descriptionToPath(description),
-          query: _search,
-        });
+        return cleanUpMultipleSlashes(
+          format({
+            protocol,
+            hostname,
+            port,
+            pathname: root + descriptionToPath(description),
+            query: _search,
+          }),
+        );
       },
     ),
 );

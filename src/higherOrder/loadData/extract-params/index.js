@@ -1,5 +1,5 @@
 // @flow
-import * as defaults from './defaults';
+import * as defaults from '../defaults';
 
 // getUrl
 const extractGetUrl = (getUrl = defaults.getUrlForApi) => {
@@ -8,6 +8,7 @@ const extractGetUrl = (getUrl = defaults.getUrlForApi) => {
   }
   return getUrl;
 };
+
 /* ::
   type GetUrl = Object => string;
   type Params = {|

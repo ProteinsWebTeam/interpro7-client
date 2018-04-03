@@ -1,12 +1,11 @@
 import { createStore } from 'redux';
-import { parse } from 'url';
 
 import rootReducer from 'reducers';
 import settingsStorage from 'storage/settings';
-import pathToDescription from 'utils/processDescription/pathToDescription';
 
 import enhancer from 'store/enhancer';
 import hmr from 'store/hmr';
+import getInitialState from 'store/utils/get-initial-state';
 
 // Subscriber Generator
 const persist = (store, storage) =>
@@ -22,30 +21,6 @@ const persist = (store, storage) =>
       storage.setValue(settings);
     };
   })();
-
-const parseParamToNumber = param => search => {
-  const { [param]: value, ...rest } = search;
-  if (typeof value !== 'undefined') rest[param] = +value;
-  return rest;
-};
-
-const getInitialState = history => {
-  const { location: { pathname, search, hash } } = history;
-  let settings;
-  if (settingsStorage) {
-    settings = settingsStorage.getValue() || undefined;
-  }
-  return {
-    customLocation: {
-      description: pathToDescription(pathname),
-      search: parseParamToNumber('page_size')(
-        parseParamToNumber('page')(parse(search, true).query),
-      ),
-      hash: hash.replace(/^#/, ''),
-    },
-    settings,
-  };
-};
 
 export default history => {
   const store = createStore(
