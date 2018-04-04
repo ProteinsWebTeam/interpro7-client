@@ -419,8 +419,8 @@ SummaryComponent.propTypes = {
 };
 
 const Summary = props => {
-  const { data: { loading, payload }, isStale } = props;
-  if (loading || (isStale && !payload.metadata)) {
+  const { data: { loading, payload } } = props;
+  if (loading || !payload.metadata) {
     return <Loading />;
   }
   return (

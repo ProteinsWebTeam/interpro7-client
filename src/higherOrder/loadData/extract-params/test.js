@@ -10,6 +10,7 @@ describe('extractParams', () => {
       getUrl: getUrlForApi,
       fetchOptions: {},
       propNamespace: '',
+      weight: 1,
     });
   });
 
@@ -18,6 +19,7 @@ describe('extractParams', () => {
       getUrl: fakeGetUrl,
       fetchOptions: {},
       propNamespace: '',
+      weight: 1,
     });
   });
 
@@ -27,6 +29,7 @@ describe('extractParams', () => {
         getUrl: fakeGetUrl,
         fetchOptions: {},
         propNamespace: '',
+        weight: 1,
       });
     });
 
@@ -35,6 +38,7 @@ describe('extractParams', () => {
         getUrl: getUrlForApi,
         fetchOptions: { method: 'HEAD' },
         propNamespace: '',
+        weight: 1,
       });
     });
 
@@ -43,6 +47,16 @@ describe('extractParams', () => {
         getUrl: getUrlForApi,
         fetchOptions: {},
         propNamespace: 'Namespace',
+        weight: 1,
+      });
+    });
+
+    test('only weight', () => {
+      expect(extractParams({ weight: 2 })).toEqual({
+        getUrl: getUrlForApi,
+        fetchOptions: {},
+        propNamespace: '',
+        weight: 2,
       });
     });
 
@@ -53,6 +67,7 @@ describe('extractParams', () => {
         getUrl: fakeGetUrl,
         fetchOptions: { method: 'HEAD' },
         propNamespace: '',
+        weight: 1,
       });
     });
 
@@ -63,6 +78,7 @@ describe('extractParams', () => {
         getUrl: fakeGetUrl,
         fetchOptions: {},
         propNamespace: 'Namespace',
+        weight: 1,
       });
     });
 
@@ -76,6 +92,7 @@ describe('extractParams', () => {
         getUrl: getUrlForApi,
         fetchOptions: { method: 'HEAD' },
         propNamespace: 'Namespace',
+        weight: 1,
       });
     });
 
@@ -85,11 +102,13 @@ describe('extractParams', () => {
           getUrl: fakeGetUrl,
           fetchOptions: { method: 'HEAD' },
           propNamespace: 'Namespace',
+          weight: 2,
         }),
       ).toEqual({
         getUrl: fakeGetUrl,
         fetchOptions: { method: 'HEAD' },
         propNamespace: 'Namespace',
+        weight: 2,
       });
     });
   });

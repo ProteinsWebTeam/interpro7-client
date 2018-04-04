@@ -97,35 +97,21 @@ export const resetSettings = (value /*: ?Object */) => ({
   value,
 });
 
-// data
-export const loadingData = (key /*: string */) => ({
-  type: types.LOADING_DATA,
-  key,
-});
-
-export const loadedData = (key /*: string */, response /*: Object */) => ({
-  type: types.LOADED_DATA,
-  key,
-  payload: response.payload,
-  status: response.status,
-  ok: response.ok,
-});
-
-export const progressData = (key /*: string */, progress /*: number */) => ({
+// dataProgress
+export const dataProgressInfo = (
+  key /*: string */,
+  progress /*: number */,
+  weight /*: number */,
+) => ({
   type: types.PROGRESS_DATA,
   key,
   progress,
+  weight,
 });
 
-export const unloadingData = (key /*: string */) => ({
-  type: types.UNLOADING_DATA,
+export const dataProgressUnload = (key /*: string */) => ({
+  type: types.UNLOAD_DATA,
   key,
-});
-
-export const failedLoadingData = (key /*: string */, error /*: Error */) => ({
-  type: types.FAILED_LOADING_DATA,
-  key,
-  error,
 });
 
 // jobs
