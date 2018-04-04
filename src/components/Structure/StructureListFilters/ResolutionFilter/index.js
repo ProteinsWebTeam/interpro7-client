@@ -8,7 +8,7 @@ import debounce from 'lodash-es/debounce';
 import MultipleInput from 'components/SimpleCommonComponents/MultipleInput/index';
 
 import { goToCustomLocation } from 'actions/creators';
-import { customLocationSelector } from 'reducers/customLocation';
+import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 

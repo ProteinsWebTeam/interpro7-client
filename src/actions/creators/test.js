@@ -157,59 +157,21 @@ describe('actions', () => {
     });
   });
 
-  describe('data', () => {
-    const key = 'my-unique-url-as-key';
-    const payload = { whatever: 'value' };
-
-    test('should create an action to mark data as loading', () => {
-      const expected = {
-        type: types.LOADING_DATA,
-        key,
-      };
-      expect(actions.loadingData(key)).toEqual(expected);
-    });
-
-    test('should create an action to mark data as loaded', () => {
-      const status = 200;
-      const ok = true;
-      const expected = {
-        type: types.LOADED_DATA,
-        key,
-        payload,
-        status,
-        ok,
-      };
-      expect(actions.loadedData(key, { payload, status, ok })).toEqual(
-        expected,
-      );
-    });
-
-    test('should create an action to mark progress data', () => {
-      const progress = 0.5;
-      const expected = {
+  describe('data progress', () => {
+    test('should create an action to add/update progress information', () => {
+      const PROGRESS = 0.5;
+      expect(actions.dataProgressInfo('id1', PROGRESS, 1)).toEqual({
         type: types.PROGRESS_DATA,
-        key,
-        progress,
-      };
-      expect(actions.progressData(key, progress)).toEqual(expected);
+        key: 'id1',
+        progress: PROGRESS,
+        weight: 1,
+      });
     });
-
-    test('should create an action to unload data', () => {
-      const expected = {
-        type: types.UNLOADING_DATA,
-        key,
-      };
-      expect(actions.unloadingData(key)).toEqual(expected);
-    });
-
-    test('should create an action to mark data as failed', () => {
-      const error = new Error('A problem happened when loading data');
-      const expected = {
-        type: types.FAILED_LOADING_DATA,
-        key,
-        error,
-      };
-      expect(actions.failedLoadingData(key, error)).toEqual(expected);
+    test('should create an action to remove progress information', () => {
+      expect(actions.dataProgressUnload('id1')).toEqual({
+        type: types.UNLOAD_DATA,
+        key: 'id1',
+      });
     });
   });
 

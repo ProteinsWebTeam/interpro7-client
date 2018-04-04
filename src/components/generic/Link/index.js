@@ -9,7 +9,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import config from 'config';
 
 import { goToCustomLocation } from 'actions/creators';
-import { customLocationSelector } from 'reducers/customLocation';
+import { customLocationSelector } from 'reducers/custom-location';
 
 const happenedWithModifierKey = event =>
   !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
