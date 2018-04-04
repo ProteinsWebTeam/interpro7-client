@@ -1,5 +1,4 @@
-// @flow
-import reducer from '.';
+import reducer, { stuckSelector } from '.';
 import { STUCK, UNSTUCK } from 'actions/types';
 
 describe('reducer for header stickyness', () => {
@@ -20,5 +19,12 @@ describe('reducer for header stickyness', () => {
   test('should ignore everything else', () => {
     expect(reducer(true, {})).toBe(true);
     expect(reducer(false, {})).toBe(false);
+  });
+});
+
+describe('selectors', () => {
+  test('stuckSelector', () => {
+    const state = { ui: { stuck: true } };
+    expect(stuckSelector(state)).toBe(true);
   });
 });
