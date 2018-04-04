@@ -1,5 +1,4 @@
-// @flow
-import reducer from '.';
+import reducer, { emblMapNavSelector } from '.';
 import { TOGGLE_EMBL_MAP_NAV, CLOSE_EVERYTHING } from 'actions/types';
 
 describe('reducer for EMBL map nav open state', () => {
@@ -20,5 +19,12 @@ describe('reducer for EMBL map nav open state', () => {
   test('should ignore everything else', () => {
     expect(reducer(true, {})).toBe(true);
     expect(reducer(false, {})).toBe(false);
+  });
+});
+
+describe('selectors', () => {
+  test('emblMapNavSelector', () => {
+    const state = { ui: { emblMapNav: true } };
+    expect(emblMapNavSelector(state)).toBe(true);
   });
 });

@@ -15,7 +15,7 @@
     "report": "npm-run-all -s --continue-on-error clean:report report:**",
     "report:build": "node scripts/report-build-info.js",
     "report:coverage:flow": "flow-coverage-report",
-    "report:coverage:jest": "jest --runInBand --coverage src tests",
+    "report:coverage:jest": "jest --coverage src tests",
     "report:lighthouse": "node scripts/lighthouse.js",
     "report:stats": "mkdirp reports/webpack-stats && webpack --profile --json > reports/webpack-stats/stats.json",
     "coveralls": "cat reports/jest-coverage/lcov.info | coveralls",

@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ElixirFooter /> should render 1`] = `
+<div
+  className="elixir-ribbon"
+>
+  <div
+    className="row"
+  >
+    <Connect(Link)
+      href="https://www.elixir-europe.org/about-us/who-we-are/nodes/embl-ebi"
+      target="_blank"
+    >
+      <LazyImage
+        alt="Elixir logo"
+        className="elixir-logo-kite"
+        src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png"
+      />
+      <h5>
+        <span
+          className="elixir-banner-name"
+        >
+          This service
+        </span>
+         is part of the ELIXIR infrastructure
+      </h5>
+      <div
+        id="elixir-banner-info"
+      >
+        <small>
+          <span
+            className="elixir-banner-description"
+          >
+            InterPro is an ELIXIR Core Data Resource
+          </span>
+           
+          <span
+            className="readmore"
+          >
+            Learn more ›
+          </span>
+        </small>
+      </div>
+    </Connect(Link)>
+  </div>
+</div>
+`;
