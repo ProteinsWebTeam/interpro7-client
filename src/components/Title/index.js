@@ -67,7 +67,7 @@ const mapNameToClass = new Map([
     chains?: Array<string>,
   },
   mainType: string,
-  dataBase?: Object,
+  data?: Object,
 }; */
 
 const accessionDisplay = new Set(['protein', 'structure', 'organism']);
@@ -75,7 +75,7 @@ const accessionDisplay = new Set(['protein', 'structure', 'organism']);
 class Title extends PureComponent /*:: <Props> */ {
   static propTypes = {
     metadata: T.object.isRequired,
-    dataBase: T.object.isRequired,
+    data: T.object.isRequired,
     mainType: T.string.isRequired,
   };
 
@@ -88,10 +88,9 @@ class Title extends PureComponent /*:: <Props> */ {
   }
 
   render() {
-    const { metadata, mainType, dataBase } = this.props;
+    const { metadata, mainType, data } = this.props;
     const isEntry = mainType === 'entry';
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
+    const databases = data && data.payload && data.payload.databases;
     const dbLabel =
       databases && databases[metadata.source_database]
         ? databases[metadata.source_database].name
@@ -226,6 +225,5 @@ class Title extends PureComponent /*:: <Props> */ {
     );
   }
 }
-export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  Title,
-);
+
+export default loadData(getUrlForMeta)(Title);

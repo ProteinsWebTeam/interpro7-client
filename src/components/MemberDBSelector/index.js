@@ -19,7 +19,7 @@ import { toPlural } from 'utils/pages';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
-import { customLocationSelector } from 'reducers/customLocation';
+import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 

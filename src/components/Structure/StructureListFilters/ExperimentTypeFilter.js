@@ -11,7 +11,7 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
-import { customLocationSelector } from 'reducers/customLocation';
+import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';

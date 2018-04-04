@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { dataProgressSelector } from 'reducers/data';
+import { overallDataProgressSelector } from 'reducers/data-progress';
 
 import styles from './styles.css';
 
@@ -59,8 +59,9 @@ export class LoadingBar extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToProps = createSelector(dataProgressSelector, progress => ({
-  progress,
-}));
+const mapStateToProps = createSelector(
+  overallDataProgressSelector,
+  progress => ({ progress }),
+);
 
 export default connect(mapStateToProps)(LoadingBar);

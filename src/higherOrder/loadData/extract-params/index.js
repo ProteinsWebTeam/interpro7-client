@@ -15,6 +15,7 @@ const extractGetUrl = (getUrl = defaults.getUrlForApi) => {
     getUrl: ?GetUrl,
     fetchOptions: ?Object,
     propNamespace: ?string,
+    weight: ?number,
   |} | string;
 */
 export default (params /*: ?Params */) => {
@@ -22,6 +23,7 @@ export default (params /*: ?Params */) => {
     getUrl: defaults.getUrlForApi,
     fetchOptions: {},
     propNamespace: '',
+    weight: 1,
   };
   if (!params) return extracted;
   if (typeof params !== 'object') {
@@ -32,5 +34,6 @@ export default (params /*: ?Params */) => {
   extracted.getUrl = extractGetUrl(params.getUrl);
   extracted.fetchOptions = params.fetchOptions || extracted.fetchOptions;
   extracted.propNamespace = params.propNamespace || extracted.propNamespace;
+  extracted.weight = params.weight || extracted.weight;
   return extracted;
 };

@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { customLocationSelector } from 'reducers/customLocation';
+import { customLocationSelector } from 'reducers/custom-location';
 
 const defaultCatchAll = () => <div>404</div>;
 

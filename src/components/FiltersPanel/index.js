@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { goToCustomLocation } from 'actions/creators';
-import { customLocationSelector } from 'reducers/customLocation';
+import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 

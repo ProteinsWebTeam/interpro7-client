@@ -3,15 +3,9 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import uniqueId from 'utils/cheapUniqueId';
 import cancelable from 'utils/cancelable';
-import {
-  loadingData,
-  loadedData,
-  progressData,
-  unloadingData,
-  failedLoadingData,
-} from 'actions/creators';
-import { alreadyLoadingError } from 'reducers/data';
+import { dataProgressInfo, dataProgressUnload } from 'actions/creators';
 
 import extractParams from './extract-params';
 import getFetch from './getFetch';
@@ -19,199 +13,123 @@ import getFetch from './getFetch';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 
-const mapStateToProps = getUrl =>
-  createSelector(
-    state => state,
-    state => state.data[getUrl(state)] || {},
-    (appState, data) => ({ appState, data }),
-  );
+const mapStateToProps = createSelector(
+  state => state,
+  appState => ({ appState }),
+);
 
-// eslint-disable-next-line max-params
-const load = (
-  loadingData,
-  loadedData,
-  progressData,
-  unloadingData,
-  failedLoadingData,
-  fetchFun,
-  fetchOptions,
-) => key => {
-  if (!key) return cancelable(Promise.resolve());
-  try {
-    loadingData(key);
-  } catch (err) {
-    if (err.message !== alreadyLoadingError) {
-      console.warn(err);
-    }
-    return cancelable(Promise.resolve());
-  }
-  const onProgress = progress => progressData(key, progress);
-  // Starts the fetch
-  const c = cancelable(signal =>
-    fetchFun(key, { ...fetchOptions, signal }, onProgress),
-  );
-  // Eventually changes the state according to response
-  c.promise.then(
-    response => loadedData(key, response),
-    error => (error.canceled ? unloadingData : failedLoadingData)(key, error),
-  );
-  return c;
-};
+const newData = url => ({
+  loading: true,
+  progress: 0,
+  ok: true,
+  status: null,
+  payload: null,
+  url,
+});
 
 const loadData = params => {
-  const { getUrl, fetchOptions, propNamespace } = extractParams(params);
+  const { getUrl, fetchOptions, propNamespace, weight } = extractParams(params);
   const fetchFun = getFetch(fetchOptions);
 
-  return (Wrapped /*: ReactClass<*> */) => {
+  return Wrapped => {
     class DataWrapper extends PureComponent {
       static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
 
       static propTypes = {
+        dataProgressInfo: T.func.isRequired,
+        dataProgressUnload: T.func.isRequired,
         appState: T.object.isRequired,
-        loadingData: T.func.isRequired,
-        loadedData: T.func.isRequired,
-        progressData: T.func.isRequired,
-        failedLoadingData: T.func.isRequired,
-        unloadingData: T.func.isRequired,
-        data: T.shape({
-          loading: T.bool,
-          progress: T.number,
-          payload: T.any,
-          url: T.string,
-          status: T.number,
-          ok: T.bool,
-        }),
       };
 
-      static getDerivedStateFromProps({ data }, { staleData }) {
-        if (
-          !data.loading &&
-          data.payload &&
-          data.payload !== staleData.payload
-        ) {
-          return { staleData: data };
-        }
-        return null;
+      static getDerivedStateFromProps(nextProps) {
+        console.log('getDerivedStateFromProps');
+        return {
+          url: getUrl(nextProps.appState),
+        };
       }
 
       constructor(props) {
+        console.log('constructor');
         super(props);
 
-        this.state = { staleData: { loading: true } };
+        this._id = uniqueId();
 
-        this._url = getUrl(props.appState);
-        this._load = null;
+        const url = getUrl(props.appState);
+        this.state = {
+          url,
+          data: newData(url),
+          staleData: null,
+        };
+
+        window.newdl = this;
       }
 
       componentDidMount() {
-        const {
-          appState,
-          data,
-          loadingData,
-          loadedData,
-          progressData,
-          failedLoadingData,
-          unloadingData,
-        } = this.props;
-        // (stored in `key` because `this._url` might change)
-        const key = (this._url = getUrl(appState));
-        if (!this._load) {
-          this._load = load(
-            loadingData,
-            loadedData,
-            progressData,
-            unloadingData,
-            failedLoadingData,
-            fetchFun,
-            fetchOptions,
-          );
-        }
-        // subscribe(key, this);
-
-        // If data is already there, or loading, don't do anything
-        if (data.loading || data.payload) return;
-        // Key is the URL to fetch
-        // Changes redux state
-        this._cancelableFetch = this._load(key);
+        console.log('componentDidMount');
+        this._load(this.state.url);
       }
 
-      componentDidUpdate({ appState: prevAppState }) {
-        // Same location, no need to reload data
-        if (
-          prevAppState.customLocation === this.props.appState.customLocation &&
-          prevAppState.settings === this.props.appState.settings
-        ) {
-          // In case the change is of data in the same page
-          if (this._url !== this.props.data.url) {
-            this._unloadDataMaybe();
-            // subscribe(data.url, this);
-          }
-          return;
+      componentDidUpdate(prevProps, prevState) {
+        console.log('componentDidUpdate');
+        if (prevState.url !== this.state.url) {
+          this._cancel();
+          this._load(this.state.url);
         }
-
-        // If data is already there, or loading, don't do anything
-        if (this.props.data.loading || this.props.data.payload) return;
-        // New location, cancel previous fetch
-        // (if still running, otherwise won't do anything)
-        if (this._cancelableFetch) this._cancelableFetch.cancel();
-        // Unload previous data
-        this._unloadDataMaybe();
-        // Key is the new URL to fetch
-        // (stored in `key` because `this._url` might change)
-
-        const key = (this._url = getUrl(this.props.appState));
-        if (!this._load) {
-          this._load = load(
-            this.props.loadingData,
-            this.props.loadedData,
-            this.props.unloadingData,
-            this.props.failedLoadingData,
-            fetchFun,
-            fetchOptions,
-          );
-        }
-        // subscribe(key, this);
-        this._cancelableFetch = this._load(key);
       }
 
       componentWillUnmount() {
-        // Unload data
-        this._unloadDataMaybe();
-        // Cancel previous fetch
-        // (if still running, otherwise won't do anything)
-        if (this._cancelableFetch) this._cancelableFetch.cancel();
-        this._url = null;
+        console.log('componentWillUnmount');
+        this._cancel();
+        this.props.dataProgressUnload(this._id);
       }
 
-      _unloadDataMaybe = () => {
-        // const needUnload = unsubscribe(this._url, this);
-        // if (needUnload) this.props.unloadingData(this._url);
+      _cancel = () => {
+        if (this._request) this._request.cancel();
+      };
+
+      _progress = (progress /*: number */) => {
+        this.setState(({ data }) => ({ data: { ...data, progress } }));
+        this.props.dataProgressInfo(this._id, progress, weight);
+        console.log(`progress: ${progress}`);
+      };
+
+      _load = async (url /*: string */) => {
+        this._request = cancelable(signal =>
+          fetchFun(url, { ...fetchOptions, signal }, this._progress),
+        );
+        // We keep a hold on *this* request, because it might change
+        const request = this._request;
+        try {
+          const response = await request.promise;
+          this.setState(({ data }) => {
+            const nextData = {
+              ...data,
+              ...response,
+              progress: 1,
+              loading: false,
+            };
+            return { data: nextData, staleData: nextData };
+          });
+          this.props.dataProgressInfo(this._id, 1, weight);
+        } catch (error) {
+          if (!request.canceled) {
+            // we have a problem, something bad happened
+            console.error(error);
+            this.setState(({ data }) => ({
+              data: { ...data, loading: false, progress: 1, ok: false },
+            }));
+            this.props.dataProgressInfo(this._id, 1, weight);
+          }
+        }
       };
 
       render() {
-        const { staleData } = this.state;
-        const {
-          // Remove from props
-          appState,
-          loadingData,
-          loadedData,
-          failedLoadingData,
-          // Keep, to pass on
-          data: dataFromProps,
-          ...rest
-        } = this.props;
-        const data = { ...dataFromProps };
-        if (typeof data.loading === 'undefined') data.loading = !!this._url;
-        // const useStaleData =
-        //   !this._avoidStaleData && data.loading && staleData.payload;
-        const useStaleData = data.loading && staleData.payload;
-        if (!data.loading) {
-          this._url = getUrl(appState);
-        }
+        console.log('render');
+        const { appState, ...rest } = this.props;
         const passedProps = {
           ...rest,
-          [`data${propNamespace}`]: useStaleData ? staleData : data,
-          [`isStale${propNamespace}`]: !!useStaleData,
+          [`data${propNamespace}`]: this.state.staleData || this.state.data,
+          [`isStale${propNamespace}`]: this.state.staleData !== this.state.data,
         };
         return (
           <ErrorBoundary>
@@ -221,13 +139,9 @@ const loadData = params => {
       }
     }
 
-    return connect(mapStateToProps(getUrl), {
-      loadingData,
-      loadedData,
-      progressData,
-      unloadingData,
-      failedLoadingData,
-    })(DataWrapper);
+    return connect(mapStateToProps, { dataProgressInfo, dataProgressUnload })(
+      DataWrapper,
+    );
   };
 };
 
