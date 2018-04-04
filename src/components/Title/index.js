@@ -13,34 +13,9 @@ import styles from './style.css';
 import loadData from '../../higherOrder/loadData';
 import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 
+import config from 'config';
+
 const f = foundationPartial(fonts, ipro, styles);
-
-const softcolors = {
-  // opacity 0.6 normal colors
-  cdd: '#cbeb98',
-  cathgene3d: '#c9b6db',
-  hamap: '#87e5e6',
-  mobidblt: '#d6dc94',
-  panther: '#d8ccbb',
-  pfam: '#9fb4cf',
-  pirsf: '#ecccec',
-  prints: '#97de9c',
-  prodom: '#b8bdee',
-  profile: '#fac5a9',
-  prosite: '#f7dea0',
-  sfld: '#79cde3',
-  smart: '#ffadac',
-  ssf: '#a3a3a3',
-  tigrfams: '#99d3c7',
-};
-
-const getcolor = db => {
-  let color = softcolors[db.toLowerCase()];
-  if (!color) {
-    color = softcolors[db];
-  }
-  return color;
-};
 
 const mapNameToClass = new Map([
   ['Domain', 'title-id-domain'],
@@ -142,7 +117,9 @@ class Title extends PureComponent /*:: <Props> */ {
             metadata.source_database &&
             metadata.source_database.toLowerCase() !== 'interpro' && (
               <small
-                style={{ backgroundColor: getcolor(metadata.source_database) }}
+                style={{
+                  backgroundColor: config.colors.get(metadata.source_database),
+                }}
                 className={f('title-id-md')}
               >
                 {metadata.accession}
