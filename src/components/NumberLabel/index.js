@@ -14,7 +14,7 @@ const UNITS = ['', 'k+', 'M+', 'G+'];
 const UNIT_SCALE = 1000;
 const UNIT_SCALE_MARGIN = 100;
 
-export const DEFAULT_DURATION = 1;
+export const DEFAULT_DURATION = 0.5;
 
 // Avoid doing too much work
 // This is to update a number value, not style, so no need re-render every frame
