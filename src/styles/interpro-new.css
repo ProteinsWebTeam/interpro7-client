@@ -270,6 +270,10 @@ div#local-title {
 .md-ti .md-color {
   fill: var(--colors-tigrfams);
 }
+
+.md-all .md-color {
+  fill: var(--colors-all);
+}
 /*/MEMBER DATABASE SVG icons*/
 
 /*SVG icons*/
