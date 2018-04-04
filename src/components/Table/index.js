@@ -9,7 +9,6 @@ import Link from 'components/generic/Link';
 import _Header from './Header';
 import _Exporter from './Exporter';
 import _PageSizeSelector from './PageSizeSelector';
-// import _Search from './Search';
 import _SearchBox from './SearchBox';
 import _Body from './Body';
 import _Column from './Column';
