@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { overallDataProgressSelector } from 'reducers/data-progress';
+import { overallDataLoadingSelector } from 'reducers/data-progress';
 import { stuckSelector } from 'reducers/ui/stuck';
 
 import Link from 'components/generic/Link';
@@ -100,7 +100,7 @@ class Title extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  overallDataProgressSelector,
+  overallDataLoadingSelector,
   state => state.customLocation.description.main.key,
   state =>
     state.customLocation.description.main.key &&
@@ -111,8 +111,8 @@ const mapStateToProps = createSelector(
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
   stuckSelector,
-  (progress, mainType, mainDB, mainAccession, stuck) => ({
-    loading: progress !== 1,
+  (loading, mainType, mainDB, mainAccession, stuck) => ({
+    loading,
     mainType,
     mainDB,
     mainAccession,

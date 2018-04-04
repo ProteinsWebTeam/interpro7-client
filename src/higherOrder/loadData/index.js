@@ -52,7 +52,7 @@ const loadData = params => {
         console.log('constructor');
         super(props);
 
-        this._id = uniqueId();
+        this._id = uniqueId('data-loader');
 
         const url = getUrl(props.appState);
         this.state = {
@@ -60,20 +60,18 @@ const loadData = params => {
           data: newData(url),
           staleData: null,
         };
-
-        window.newdl = this;
       }
 
       componentDidMount() {
         console.log('componentDidMount');
-        this._load(this.state.url);
+        if (this.state.url) this._load(this.state.url);
       }
 
       componentDidUpdate(prevProps, prevState) {
         console.log('componentDidUpdate');
         if (prevState.url !== this.state.url) {
           this._cancel();
-          this._load(this.state.url);
+          if (this.state.url) this._load(this.state.url);
         }
       }
 

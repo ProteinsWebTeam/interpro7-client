@@ -48,3 +48,7 @@ export const overallDataProgressSelector = createSelector(
     return overallProgress;
   },
 );
+export const overallDataLoadingSelector = createSelector(
+  overallDataProgressSelector,
+  progress => progress !== 1,
+);
