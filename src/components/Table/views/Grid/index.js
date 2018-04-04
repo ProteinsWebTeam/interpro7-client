@@ -104,6 +104,7 @@ class SpeciesIcon extends PureComponent {
     const linetree = `${loading ? 0 : payload.metadata.lineage}`;
     let icon = null;
     let nodecolor = null;
+
     // key species in Interpro & EBI
     if (linetree.includes(' 7227 ') || linetree.includes(' 27457 ')) {
       icon = 'F';
@@ -313,23 +314,33 @@ class SummaryCounter extends PureComponent {
     return (
       <div className={f('card-item-m', 'card-sum-info', 'label-off')}>
         <div className={f('count-entries')}>
+          {
+            // counts should change for each db selected but is NOT
+          }
           <Tooltip
             title={`${
               loading ? 0 : payload.metadata.counters.entries
             } ${entryDB} entries matching ${metadata.name}`}
           >
+            {
+              // link to entry change when db selected
+            }
             <Link
               to={{
                 description: {
                   main: { key: 'organism' },
-                  organism: { db: 'taxonomy', accession: metadata.accession },
-                  entry: { isFilter: true, db: 'all' },
+                  organism: {
+                    db: 'taxonomy',
+                    accession: metadata.accession.toString(),
+                  },
+                  entry: { isFilter: true, db: entryDB },
                 },
               }}
             >
               {
-                // get the db icon
+                // db icon
               }
+
               <MemberSymbol type={entryDB} className={f('md-small')} />
               <NumberComponent
                 loading={loading}
@@ -349,7 +360,10 @@ class SummaryCounter extends PureComponent {
               to={{
                 description: {
                   main: { key: 'organism' },
-                  organism: { db: 'taxonomy', accession: metadata.accession },
+                  organism: {
+                    db: 'taxonomy',
+                    accession: metadata.accession.toString(),
+                  },
                   protein: { isFilter: true, db: 'UniProt' },
                 },
               }}
@@ -376,7 +390,10 @@ class SummaryCounter extends PureComponent {
               to={{
                 description: {
                   main: { key: 'organism' },
-                  organism: { db: 'taxonomy', accession: metadata.accession },
+                  organism: {
+                    db: 'taxonomy',
+                    accession: metadata.accession.toString(),
+                  },
                   structure: { isFilter: true, db: 'PDB' },
                 },
               }}
@@ -406,9 +423,9 @@ class SummaryCounter extends PureComponent {
                   main: { key: 'organism' },
                   organism: {
                     db: metadata.source_database,
-                    accession: metadata.accession,
+                    accession: metadata.accession.toString(),
+                    proteomeDB: 'proteome',
                   },
-                  structure: { isFilter: true, db: 'PDB' },
                 },
               }}
             >
@@ -459,7 +476,7 @@ class GridView extends PureComponent {
                         main: { key: 'organism' },
                         organism: {
                           db: 'taxonomy',
-                          accession: metadata.accession,
+                          accession: metadata.accession.toString(),
                         },
                       },
                     }}
