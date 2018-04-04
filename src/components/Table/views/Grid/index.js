@@ -7,6 +7,7 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -463,20 +464,23 @@ class GridView extends PureComponent {
                       },
                     }}
                   >
-                    {
-                      // get the species icon
-                    }
-
                     <SpeciesIconWithData />
-
-                    <h6>{metadata.name}</h6>
+                    {
+                      // TODO make the highlight work with search term
+                    }
+                    <h6>
+                      <HighlightedText
+                        text={metadata.name}
+                        textToHighlight=""
+                      />
+                    </h6>
                   </Link>
                 </div>
 
                 <SummaryCounterWithData entryDB={entryDB} metadata={metadata} />
 
                 <div className={f('card-item-m')}>
-                  Homo sapiens is the systematic name used in taxonomy [...]
+                  Could get a description from wikipedia [...]
                 </div>
 
                 <div className={f('card-item-b')}>

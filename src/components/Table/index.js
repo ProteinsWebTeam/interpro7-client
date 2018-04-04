@@ -44,9 +44,9 @@ const TableView = loadable({
 //   loader: () => import(/* webpackChunkName: "list-view" */ './views/List'),
 // });
 
-// const GridView = loadable({
-//   loader: () => import(/* webpackChunkName: "grid-view" */ './views/Grid'),
-// });
+const GridView = loadable({
+  loader: () => import(/* webpackChunkName: "grid-view" */ './views/Grid'),
+});
 
 const TreeView = loadable({
   loader: () => import(/* webpackChunkName: "tree-view" */ './views/Tree'),
@@ -64,6 +64,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     notFound: T.bool,
     children: T.any,
     withTree: T.bool,
+    withGrid: T.bool,
   };
 
   render() {
@@ -78,6 +79,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       notFound,
       children,
       withTree,
+      withGrid,
     } = this.props;
 
     const _query = query || {};
@@ -121,26 +123,29 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       onFocus={TableView.preload}
                     />
                   </Tooltip>{' '}
-                  <Tooltip title="View your results as a list">
-                    <Link
-                      to={l => ({ ...l, hash: 'list' })}
-                      className={f('icon-view', 'list-view', 'disabled')}
-                      aria-disabled="true"
-                      disabled
-                      aria-label="view your results as a list"
-                      // onMouseOver={ListView.preload}
-                      // onFocus={ListView.preload}
-                    />
-                  </Tooltip>{' '}
+                  {
+                    // <Tooltip title="View your results as a list">
+                    //  <Link
+                    //   to={l => ({ ...l, hash: 'list' })}
+                    //  className={f('icon-view', 'list-view', 'disabled')}
+                    //  aria-disabled="true"
+                    //  disabled
+                    //  aria-label="view your results as a list"
+                    // onMouseOver={ListView.preload}
+                    // onFocus={ListView.preload}
+                    // />
+                    // </Tooltip>
+                  }{' '}
                   <Tooltip title="View your results in a grid">
                     <Link
                       to={l => ({ ...l, hash: 'grid' })}
-                      className={f('icon-view', 'grid-view', 'disabled')}
-                      aria-disabled="true"
-                      disabled
+                      className={f('icon-view', 'grid-view', {
+                        disabled: !withGrid,
+                      })}
+                      aria-disabled={withGrid ? 'false' : 'true'}
                       aria-label="view your results in a grid"
-                      // onMouseOver={GridView.preload}
-                      // onFocus={GridView.preload}
+                      onMouseOver={GridView.preload}
+                      onFocus={GridView.preload}
                     />
                   </Tooltip>
                   <Tooltip title="View your results as a tree">
@@ -179,7 +184,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 childRoutes={[
                   { value: 'table', component: TableView },
                   { value: 'list', component: () => 'LIST!' },
-                  { value: 'grid', component: () => 'GRID!' },
+                  { value: 'grid', component: GridView },
                   { value: 'tree', component: TreeView },
                 ]}
                 catchAll={TableView}
