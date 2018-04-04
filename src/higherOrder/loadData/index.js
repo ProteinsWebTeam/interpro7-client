@@ -42,18 +42,17 @@ const loadData = params => {
       };
 
       static getDerivedStateFromProps(nextProps) {
-        console.log('getDerivedStateFromProps');
-        return {
-          url: getUrl(nextProps.appState),
-        };
+        // update url in state according to props
+        return { url: getUrl(nextProps.appState) };
       }
 
       constructor(props) {
-        console.log('constructor');
         super(props);
 
+        // Identify this specific data loader
         this._id = uniqueId('data-loader');
 
+        // Initialize state
         const url = getUrl(props.appState);
         this.state = {
           url,
@@ -63,35 +62,39 @@ const loadData = params => {
       }
 
       componentDidMount() {
-        console.log('componentDidMount');
-        if (this.state.url) this._load(this.state.url);
+        // start loading data on mount
+        this._load(this.state.url);
       }
 
       componentDidUpdate(prevProps, prevState) {
-        console.log('componentDidUpdate');
+        // if the url has changed
         if (prevState.url !== this.state.url) {
+          // cancel current request
           this._cancel();
-          if (this.state.url) this._load(this.state.url);
+          // and start new one
+          this._load(this.state.url);
         }
       }
 
+      // cancel current request on unmount
       componentWillUnmount() {
-        console.log('componentWillUnmount');
         this._cancel();
-        this.props.dataProgressUnload(this._id);
       }
 
       _cancel = () => {
         if (this._request) this._request.cancel();
+        this.props.dataProgressUnload(this._id);
       };
 
       _progress = (progress /*: number */) => {
         this.setState(({ data }) => ({ data: { ...data, progress } }));
         this.props.dataProgressInfo(this._id, progress, weight);
-        console.log(`progress: ${progress}`);
       };
 
-      _load = async (url /*: string */) => {
+      _load = async (url /*: ?string */) => {
+        if (!url) return;
+        // Progress: 0
+        this.props.dataProgressInfo(this._id, 0, weight);
         this._request = cancelable(signal =>
           fetchFun(url, { ...fetchOptions, signal }, this._progress),
         );
@@ -99,6 +102,7 @@ const loadData = params => {
         const request = this._request;
         try {
           const response = await request.promise;
+          // We have a response 🎉 set it into the local state
           this.setState(({ data }) => {
             const nextData = {
               ...data,
@@ -108,22 +112,31 @@ const loadData = params => {
             };
             return { data: nextData, staleData: nextData };
           });
+          // Progress: 1
           this.props.dataProgressInfo(this._id, 1, weight);
         } catch (error) {
+          // If request has been canceled, it means we did it, on purpose, so
+          // just ignore, otherwise it's a real error
           if (!request.canceled) {
             // we have a problem, something bad happened
-            console.error(error);
             this.setState(({ data }) => ({
-              data: { ...data, loading: false, progress: 1, ok: false },
+              data: { ...data, loading: false, progress: 1, ok: false, error },
             }));
+            // Progress: 1
             this.props.dataProgressInfo(this._id, 1, weight);
           }
         }
       };
 
       render() {
-        console.log('render');
-        const { appState, ...rest } = this.props;
+        const {
+          // props to be removed
+          dataProgressInfo,
+          dataProgressUnload,
+          appState,
+          // rest of props, to be passed down
+          ...rest
+        } = this.props;
         const passedProps = {
           ...rest,
           [`data${propNamespace}`]: this.state.staleData || this.state.data,
