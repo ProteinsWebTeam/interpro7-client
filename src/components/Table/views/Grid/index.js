@@ -364,8 +364,12 @@ class SummaryCounter extends PureComponent {
               {
                 // db icon
               }
-
-              <MemberSymbol type={entryDB} className={f('md-small')} />
+              {entryDB !== null && (
+                <MemberSymbol type={entryDB} className={f('md-small')} />
+              )}
+              {entryDB === null && (
+                <MemberSymbol type="all" className={f('md-small')} />
+              )}
               <NumberComponent
                 loading={loading}
                 value={loading ? 0 : payload.metadata.counters.entries}
