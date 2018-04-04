@@ -37,6 +37,13 @@ const getUrlFor = accession =>
   );
 
 class Lineage extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
+  };
   render() {
     const { data: { loading, payload } } = this.props;
     const linetree = `${loading ? 0 : payload.metadata.lineage}`;
@@ -99,6 +106,13 @@ class Lineage extends PureComponent {
 }
 
 class SpeciesIcon extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
+  };
   render() {
     const { data: { loading, payload } } = this.props;
     const linetree = `${loading ? 0 : payload.metadata.lineage}`;
@@ -309,6 +323,16 @@ class SpeciesIcon extends PureComponent {
 }
 
 class SummaryCounter extends PureComponent {
+  static propTypes = {
+    entryDB: T.string,
+    dataTable: T.array,
+    metadata: T.object.isRequired,
+    data: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
+  };
   render() {
     const { entryDB, metadata, data: { loading, payload } } = this.props;
     return (
@@ -323,7 +347,7 @@ class SummaryCounter extends PureComponent {
             } ${entryDB} entries matching ${metadata.name}`}
           >
             {
-              // link to entry change when db selected
+              // keep db: 'all' while counter are not working (otherwise use db: entryDB)
             }
             <Link
               to={{
@@ -333,7 +357,7 @@ class SummaryCounter extends PureComponent {
                     db: 'taxonomy',
                     accession: metadata.accession.toString(),
                   },
-                  entry: { isFilter: true, db: entryDB },
+                  entry: { isFilter: true, db: 'all' },
                 },
               }}
             >
