@@ -336,140 +336,145 @@ class SummaryCounter extends PureComponent {
   render() {
     const { entryDB, metadata, data: { loading, payload } } = this.props;
     return (
-      <div className={f('card-item-m', 'card-sum-info', 'label-off')}>
-        <div className={f('count-entries')}>
-          {
-            // counts should change for each db selected but is NOT
-          }
-          <Tooltip
-            title={`${
-              loading ? 0 : payload.metadata.counters.entries
-            } ${entryDB} entries matching ${metadata.name}`}
-          >
+      metadata.source_database !== 'proteome' && (
+        <div className={f('card-item-m', 'card-sum-info', 'label-off')}>
+          <div className={f('count-entries')}>
             {
-              // keep db: 'all' while counter are not working (otherwise use db: entryDB)
+              // counts should change for each db selected but is NOT
             }
-            <Link
-              to={{
-                description: {
-                  main: { key: 'organism' },
-                  organism: {
-                    db: 'taxonomy',
-                    accession: metadata.accession.toString(),
-                  },
-                  entry: { isFilter: true, db: 'all' },
-                },
-              }}
+            <Tooltip
+              title={`${
+                loading ? 0 : payload.metadata.counters.entries
+              } ${entryDB} entries matching ${metadata.name}`}
             >
               {
-                // db icon
+                // keep db: 'all' while counter are not working (otherwise use db: entryDB)
               }
-              {entryDB !== null && (
-                <MemberSymbol type={entryDB} className={f('md-small')} />
-              )}
-              {entryDB === null && (
-                <MemberSymbol type="all" className={f('md-small')} />
-              )}
-              <NumberComponent
-                loading={loading}
-                value={loading ? 0 : payload.metadata.counters.entries}
-              />
-              <span className={f('label-number')}>entries</span>
-            </Link>
-          </Tooltip>
-        </div>
-        <div className={f('count-proteins')}>
-          <Tooltip
-            title={`${
-              loading ? 0 : payload.metadata.counters.proteins
-            } proteins matching ${metadata.name}`}
-          >
-            <Link
-              to={{
-                description: {
-                  main: { key: 'organism' },
-                  organism: {
-                    db: 'taxonomy',
-                    accession: metadata.accession.toString(),
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'organism' },
+                    organism: {
+                      db: 'taxonomy',
+                      accession: metadata.accession.toString(),
+                    },
+                    entry: { isFilter: true, db: 'all' },
                   },
-                  protein: { isFilter: true, db: 'UniProt' },
-                },
-              }}
-            >
-              <div
-                className={f('icon', 'icon-conceptual')}
-                data-icon="&#x50;"
-              />{' '}
-              <NumberComponent
-                loading={loading}
-                value={loading ? 0 : payload.metadata.counters.proteins}
-              />
-              <span className={f('label-number')}>proteins</span>
-            </Link>
-          </Tooltip>
-        </div>
-        <div className={f('count-structures')}>
-          <Tooltip
-            title={`${
-              loading ? 0 : payload.metadata.counters.structures
-            } structures matching ${metadata.name}`}
-          >
-            <Link
-              to={{
-                description: {
-                  main: { key: 'organism' },
-                  organism: {
-                    db: 'taxonomy',
-                    accession: metadata.accession.toString(),
-                  },
-                  structure: { isFilter: true, db: 'PDB' },
-                },
-              }}
-            >
-              <div
-                className={f('icon', 'icon-conceptual')}
-                data-icon="&#x73;"
-              />{' '}
-              <NumberComponent
-                loading={loading}
-                value={loading ? 0 : payload.metadata.counters.structures}
-              />{' '}
-              <span className={f('label-number')}>structures</span>
-            </Link>
-          </Tooltip>
-        </div>
+                }}
+              >
+                {
+                  // db icon
+                }
+                {entryDB !== null && (
+                  <MemberSymbol type={entryDB} className={f('md-small')} />
+                )}
+                {entryDB === null && (
+                  <MemberSymbol type="all" className={f('md-small')} />
+                )}
+                <NumberComponent
+                  loading={loading}
+                  value={loading ? 0 : payload.metadata.counters.entries}
+                />
+                <span className={f('label-number')}>entries</span>
+              </Link>
+            </Tooltip>
+          </div>
 
-        <div className={f('count-proteomes')}>
-          <Tooltip
-            title={`${
-              loading ? 0 : payload.metadata.counters.proteomes
-            } proteomes matching ${metadata.name}`}
-          >
-            <Link
-              to={{
-                description: {
-                  main: { key: 'organism' },
-                  organism: {
-                    db: metadata.source_database,
-                    accession: metadata.accession.toString(),
-                    proteomeDB: 'proteome',
-                  },
-                },
-              }}
+          <div className={f('count-proteins')}>
+            <Tooltip
+              title={`${
+                loading ? 0 : payload.metadata.counters.proteins
+              } proteins matching ${metadata.name}`}
             >
-              <div
-                className={f('icon', 'icon-common', 'icon-bookmark-temp')}
-                data-icon="&#x2e;"
-              />
-              <NumberComponent
-                loading={loading}
-                value={loading ? 0 : payload.metadata.counters.proteomes}
-              />{' '}
-              <span className={f('label-number')}>proteomes</span>
-            </Link>
-          </Tooltip>
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'organism' },
+                    organism: {
+                      db: 'taxonomy',
+                      accession: metadata.accession.toString(),
+                    },
+                    protein: { isFilter: true, db: 'UniProt' },
+                  },
+                }}
+              >
+                <div
+                  className={f('icon', 'icon-conceptual')}
+                  data-icon="&#x50;"
+                />{' '}
+                <NumberComponent
+                  loading={loading}
+                  value={loading ? 0 : payload.metadata.counters.proteins}
+                />
+                <span className={f('label-number')}>proteins</span>
+              </Link>
+            </Tooltip>
+          </div>
+
+          <div className={f('count-structures')}>
+            <Tooltip
+              title={`${
+                loading ? 0 : payload.metadata.counters.structures
+              } structures matching ${metadata.name}`}
+            >
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'organism' },
+                    organism: {
+                      db: 'taxonomy',
+                      accession: metadata.accession.toString(),
+                    },
+                    structure: { isFilter: true, db: 'PDB' },
+                  },
+                }}
+              >
+                <div
+                  className={f('icon', 'icon-conceptual')}
+                  data-icon="&#x73;"
+                />{' '}
+                <NumberComponent
+                  loading={loading}
+                  value={loading ? 0 : payload.metadata.counters.structures}
+                />{' '}
+                <span className={f('label-number')}>structures</span>
+              </Link>
+            </Tooltip>
+          </div>
+          {metadata.source_database !== 'proteome' && (
+            <div className={f('count-proteomes')}>
+              <Tooltip
+                title={`${
+                  loading ? 0 : payload.metadata.counters.proteomes
+                } proteomes matching ${metadata.name}`}
+              >
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'organism' },
+                      organism: {
+                        db: metadata.source_database,
+                        accession: metadata.accession.toString(),
+                        proteomeDB: 'proteome',
+                      },
+                    },
+                  }}
+                >
+                  <div
+                    className={f('icon', 'icon-common', 'icon-bookmark-temp')}
+                    data-icon="&#x2e;"
+                  />
+                  <NumberComponent
+                    loading={loading}
+                    value={loading ? 0 : payload.metadata.counters.proteomes}
+                  />{' '}
+                  <span className={f('label-number')}>proteomes</span>
+                </Link>
+              </Tooltip>
+            </div>
+          )}
         </div>
-      </div>
+      ) //no counter found for proteomes - temp
     );
   }
 }
@@ -498,28 +503,52 @@ class GridView extends PureComponent {
             <div className={f('card-flex-container')} key={metadata.accession}>
               <div className={f('card-item')}>
                 <div className={f('card-item-t')}>
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'organism' },
-                        organism: {
-                          db: 'taxonomy',
-                          accession: metadata.accession.toString(),
+                  {metadata.source_database !== 'proteome' && (
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'organism' },
+                          organism: {
+                            db: 'taxonomy',
+                            accession: metadata.accession.toString(),
+                          },
                         },
-                      },
-                    }}
-                  >
-                    <SpeciesIconWithData />
-                    {
-                      // TODO make the highlight work with search term
-                    }
-                    <h6>
-                      <HighlightedText
-                        text={metadata.name}
-                        textToHighlight=""
-                      />
-                    </h6>
-                  </Link>
+                      }}
+                    >
+                      <SpeciesIconWithData />
+
+                      {
+                        // TODO make the highlight work with search term
+                      }
+                      <h6>
+                        <HighlightedText
+                          text={metadata.name}
+                          textToHighlight=""
+                        />
+                      </h6>
+                    </Link>
+                  )}
+
+                  {metadata.source_database === 'proteome' && (
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'organism' },
+                          organism: {
+                            db: 'proteome',
+                            accession: metadata.accession.toString(),
+                          },
+                        },
+                      }}
+                    >
+                      <h6>
+                        <HighlightedText
+                          text={metadata.name}
+                          textToHighlight=""
+                        />
+                      </h6>
+                    </Link>
+                  )}
                 </div>
 
                 <SummaryCounterWithData entryDB={entryDB} metadata={metadata} />
@@ -529,9 +558,16 @@ class GridView extends PureComponent {
                 </div>
 
                 <div className={f('card-item-b')}>
-                  <LineageWithData />
+                  {metadata.source_database !== 'proteome' && (
+                    <LineageWithData />
+                  )}
 
-                  <div>Tax ID: {metadata.accession}</div>
+                  <div>
+                    {metadata.source_database === 'proteome' && 'Proteome ID: '}
+                    {metadata.source_database !== 'proteome' && 'Tax ID:'}
+
+                    {metadata.accession}
+                  </div>
                 </div>
               </div>
             </div>
