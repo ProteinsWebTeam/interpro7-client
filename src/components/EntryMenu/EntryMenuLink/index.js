@@ -20,6 +20,7 @@ const whitelist = new Set(['Overview', 'Domain Architectures', 'Sequence']);
 
 /*:: type Props = {
   to: Object | function,
+  exact: ?boolean,
   name: string,
   counter: string,
   data: {
@@ -44,6 +45,7 @@ const mapNameToClass = new Map([
 class EntryMenuLink extends PureComponent /*:: <Props> */ {
   static propTypes = {
     to: T.oneOfType([T.object, T.func]).isRequired,
+    exact: T.bool,
     name: T.string.isRequired,
     counter: T.string,
     data: T.shape({
@@ -57,6 +59,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
   render() {
     const {
       to,
+      exact,
       name,
       counter,
       data: { loading, payload },
@@ -102,6 +105,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       <li className={f('tabs-title')}>
         <Link
           to={to}
+          exact={exact}
           className={f(
             payload.metadata.source_database.toLowerCase() === 'interpro'
               ? mapNameToClass.get(payload.metadata.type)

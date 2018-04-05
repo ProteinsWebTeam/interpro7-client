@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
+import cn from 'classnames';
 
 import Link from 'components/generic/Link';
 import { BaseLink } from 'components/ExtLink';
@@ -40,6 +41,7 @@ class MenuItem extends PureComponent {
     disabled: T.bool,
     className: T.string,
     activeClass: T.oneOfType([T.string, T.func]),
+    exact: T.bool,
   };
 
   render() {
@@ -50,17 +52,18 @@ class MenuItem extends PureComponent {
       disabled = false,
       className,
       activeClass,
+      exact,
       closeEverything,
       ...props
     } = this.props;
     const CustomLink = !to && isExternal(to || href) ? BaseLink : Link;
     let _activeClass = s('active');
     if (typeof activeClass === 'string') {
-      _activeClass += ` ${activeClass || ''}`;
+      _activeClass = cn(_activeClass, activeClass);
     } else if (typeof activeClass === 'function') {
       _activeClass = (...args) => {
-        const output = (activeClass(...args) || '').trim();
-        if (output) return `${output} ${s('active')}`;
+        const output = activeClass(...args);
+        if (output) return cn(output, s('active'));
       };
     }
     return (
@@ -69,9 +72,8 @@ class MenuItem extends PureComponent {
         href={href}
         onClick={closeEverything}
         activeClass={_activeClass}
-        className={`${className || ''} ${s('menu-item', {
-          disabled,
-        })}`.trim()}
+        exact={exact}
+        className={cn(className, s('menu-item', { disabled }))}
         {...(disabled
           ? { disabled: true, tabIndex: '-1', 'aria-disabled': 'true' }
           : {})}
