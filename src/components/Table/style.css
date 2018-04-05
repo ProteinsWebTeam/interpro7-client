@@ -123,6 +123,7 @@ table.light span::before {
 .table-view .table-results-filtering .icon-view.disabled {
   opacity: 0.2;
   cursor: not-allowed;
+  pointer-events: none; /*avoid click*/
 }
 .table-view .table-results-filtering .filter-wrapper {
   display: flex;
