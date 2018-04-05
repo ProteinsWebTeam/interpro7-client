@@ -85,14 +85,14 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
     const hiddenItems = InterProMin.filter(({ name }) => !this.state[name]);
     return (
       <ul className={f('menu')}>
-        {InterProMin.map(({ to, name, activeClass }) => (
+        {InterProMin.map(({ to, name, activeClass, exact }) => (
           <li
             key={name}
             ref={this._setMenuItemInMap}
             data-name={name}
             className={f('menu-item', { visible: this.state[name] || false })}
           >
-            <MenuItem to={to} activeClass={activeClass}>
+            <MenuItem to={to} activeClass={activeClass} exact={exact}>
               {name}
             </MenuItem>
           </li>
@@ -108,9 +108,9 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
             <img src={dotsvg} width="30px" alt="view all menu items" />
           </span>
 
-          {hiddenItems.map(({ to, name, activeClass }) => (
+          {hiddenItems.map(({ to, name, activeClass, exact }) => (
             <li key={name} className={f('menu-item')}>
-              <MenuItem to={to} activeClass={activeClass}>
+              <MenuItem to={to} activeClass={activeClass} exact={exact}>
                 {name}
               </MenuItem>
             </li>

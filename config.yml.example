@@ -1,8 +1,8 @@
 root:
-  website: //localhost:8080/interpro/
+  website: http://localhost:8080/interpro/
   API: https://wwwdev.ebi.ac.uk/interpro7/api/
-  EBIsearch: //www.ebi.ac.uk/ebisearch/ws/rest/interpro
-  IPScan: //www.ebi.ac.uk/Tools/services/rest/iprscan5/
+  EBIsearch: https://www.ebi.ac.uk/ebisearch/ws/rest/interpro
+  IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
 IPScan:
   contactEmail: example@example.com
 pages:

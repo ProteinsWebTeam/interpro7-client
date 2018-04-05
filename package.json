@@ -15,7 +15,7 @@
     "report": "npm-run-all -s --continue-on-error clean:report report:**",
     "report:build": "node scripts/report-build-info.js",
     "report:coverage:flow": "flow-coverage-report",
-    "report:coverage:jest": "jest --coverage src tests",
+    "report:coverage:jest": "jest --coverage src",
     "report:lighthouse": "node scripts/lighthouse.js",
     "report:stats": "mkdirp reports/webpack-stats && webpack --profile --json > reports/webpack-stats/stats.json",
     "coveralls": "cat reports/jest-coverage/lcov.info | coveralls",
@@ -76,31 +76,6 @@
         ]
       }
     }
-  },
-  "jest": {
-    "verbose": false,
-    "moduleNameMapper": {
-      "config.yml$": "<rootDir>/src/__mocks__/configMock.js",
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$": "<rootDir>/src/__mocks__/fileMock.js",
-      "\\.(css|less|scss)$": "identity-obj-proxy"
-    },
-    "moduleDirectories": [
-      "node_modules",
-      "src"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.js",
-      "!**/.*.js"
-    ],
-    "coverageReporters": [
-      "json-summary",
-      "lcov",
-      "text-summary"
-    ],
-    "coverageDirectory": "reports/jest-coverage",
-    "transformIgnorePatterns": [
-      "/node_modules/(?!(lodash-es|timing-functions))"
-    ]
   },
   "lint-staged": {
     "*.+(js|css)": [

@@ -88,6 +88,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             key={e.name}
             metadata={payload.metadata}
             to={e.to}
+            exact={e.exact}
             activeClass={e.activeClass}
             name={e.name}
             data={data}
