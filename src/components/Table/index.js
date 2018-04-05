@@ -154,7 +154,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                         disabled: !withTree,
                       })}
                       aria-disabled={withTree ? 'false' : 'true'}
-                      disabled={!withTree}
                       aria-label="view your results as a tree"
                       onMouseOver={TreeView.preload}
                       onFocus={TreeView.preload}
