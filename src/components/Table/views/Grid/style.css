@@ -123,9 +123,9 @@
   content: '';
   display: inline-block;
   height: 2em;
-  width: 38px;
+  width: 30px;
   background-image: url('../../../../images/icons/ico-species.svg');
-  background-size: 80%;
+  background-size: 100%;
   background-repeat: no-repeat;
 }
 
