@@ -60,8 +60,8 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
     output: {
       path: path.resolve('dist'),
       publicPath,
-      filename: '[id].[name].[hash:3].js',
-      chunkFilename: '[id].[name].[chunkhash:3].js',
+      filename: path.join('js', '[id].[name].[hash:3].js'),
+      chunkFilename: path.join('js', '[id].[name].[chunkhash:3].js'),
     },
     // RESOLVE
     resolve: {
@@ -77,7 +77,11 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             {
               loader: 'worker-loader',
               options: {
-                name: '[folder].[name].[hash:3].worker.js',
+                name: path.join(
+                  'js',
+                  'workers',
+                  '[folder].[name].[hash:3].worker.js'
+                ),
               },
             },
           ],
@@ -191,7 +195,11 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             {
               loader: 'url-loader',
               options: {
-                name: '[name].[hash:base62:3].[ext]',
+                name: path.join(
+                  'assets',
+                  'images',
+                  '[name].[hash:base62:3].[ext]'
+                ),
                 limit: 1 * kB,
               },
             },
@@ -209,7 +217,11 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             {
               loader: 'url-loader',
               options: {
-                name: '[name].[hash:base62:3].[ext]',
+                name: path.join(
+                  'assets',
+                  'fonts',
+                  '[name].[hash:base62:3].[ext]'
+                ),
                 limit: 1 * kB,
                 mimetype: 'application/font-woff',
               },
@@ -222,7 +234,11 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             {
               loader: 'file-loader',
               options: {
-                name: '[name].[hash:base62:3].[ext]',
+                name: path.join(
+                  'assets',
+                  'fonts',
+                  '[name].[hash:base62:3].[ext]'
+                ),
               },
             },
           ],
@@ -242,8 +258,8 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
       }),
       mode === 'production'
         ? new MiniCssExtractPlugin({
-            filename: '[name].[contenthash:3].css',
-            chunkFilename: '[id].[contenthash:3].css',
+            filename: path.join('css', '[name].[contenthash:3].css'),
+            chunkFilename: path.join('css', '[id].[contenthash:3].css'),
           })
         : null,
       mode === 'development' ? new webpack.HotModuleReplacementPlugin() : null,
@@ -255,7 +271,11 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
       mode === 'production'
         ? new (require('webapp-webpack-plugin'))({
             logo: path.join('.', 'images', 'logo', 'logo_1776x1776.png'),
-            prefix: 'icons.[hash:base62:3].',
+            prefix: path.join(
+              'assets',
+              'icons-and-manifests',
+              '[hash:base62:3]'
+            ),
             inject: true,
             favicons: {
               background: '#007c82',
