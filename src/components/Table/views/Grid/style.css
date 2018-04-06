@@ -53,7 +53,9 @@
 .count-entries,
 .count-proteins,
 .count-structures,
-.count-proteomes {
+.count-proteomes,
+.count-architectures,
+.count-species {
   text-align: center;
   border: 0px solid lightgreen;
 }
