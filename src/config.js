@@ -24,7 +24,7 @@ const config /*: {
   pages: {| [key: string]: {| plural?: string, subPages: Array<string> |} |},
   pagination: {| pageSize: number |},
   cache: {| enabled: boolean |},
-  colors: {| get: (string, ?string) => string |}
+  colors: {| get: (?string, ?string) => string |}
 } */ = {
   ..._config,
 };
@@ -45,10 +45,10 @@ for (const [key, value] of Object.entries(config.root)) {
 
 config.colors = {
   get(key, fallback) {
+    const _fallback = fallback || _config.colors.fallback || 'gray';
+    if (!key) return _fallback;
     const _key = key.toLowerCase().replace(/[^a-z0-9]/g, '');
-    return (
-      _config.colors[_key] || fallback || _config.colors.fallback || 'gray'
-    );
+    return _config.colors[_key] || _fallback;
   },
 };
 
