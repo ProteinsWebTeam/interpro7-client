@@ -41,9 +41,13 @@ const loadData = params => {
         appState: T.object.isRequired,
       };
 
-      static getDerivedStateFromProps(nextProps) {
-        // update url in state according to props
-        return { url: getUrl(nextProps.appState) };
+      static getDerivedStateFromProps(nextProps, prevState) {
+        // get potential new url in state according to props
+        const url = getUrl(nextProps.appState);
+        // if it's the same, don't update the state
+        if (prevState.url === url) return null;
+        // otherwise, update url in state, and create new data object in state
+        return { data: newData(url), url };
       }
 
       constructor(props) {
