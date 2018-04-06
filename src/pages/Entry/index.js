@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -395,12 +396,9 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const subPagesForEntry = new Set();
+const subPagesForEntry = new Map();
 for (const subPage of config.pages.entry.subPages) {
-  subPagesForEntry.add({
-    value: subPage,
-    component: subPages.get(subPage),
-  });
+  subPagesForEntry.set(subPage, subPages.get(subPage));
 }
 
 const SummaryComponent = ({ data: { payload }, isStale, customLocation }) => (
@@ -418,6 +416,15 @@ SummaryComponent.propTypes = {
   customLocation: T.object.isRequired,
 };
 
+const detailSelector = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 const Summary = props => {
   const { data: { loading, payload } } = props;
   if (loading || !payload.metadata) {
@@ -433,15 +440,7 @@ const Summary = props => {
       </div>
       <Switch
         {...props}
-        locationSelector={l => {
-          const { key } = l.description.main;
-          return (
-            l.description[key].detail ||
-            (Object.entries(l.description).find(
-              ([_key, value]) => value.isFilter,
-            ) || [])[0]
-          );
-        }}
+        locationSelector={detailSelector}
         indexRoute={SummaryComponent}
         childRoutes={subPagesForEntry}
       />
@@ -467,27 +466,35 @@ const RedirectToInterPro = () => (
   />
 );
 
-const dbAccs = new RegExp(`(${memberDBAccessions.join('|')}|IPR[0-9]{6})`, 'i');
-
+const childRoutes = new Map([
+  [new RegExp(`(${memberDBAccessions.join('|')}|IPR[0-9]{6})`, 'i'), Summary],
+]);
+const accessionSelector = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].accession ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => {
-        const { key } = l.description.main;
-        return (
-          l.description[key].accession ||
-          (Object.entries(l.description).find(
-            ([_key, value]) => value.isFilter,
-          ) || [])[0]
-        );
-      }}
+      locationSelector={accessionSelector}
       indexRoute={List}
-      childRoutes={[{ value: dbAccs, component: Summary }]}
+      childRoutes={childRoutes}
       catchAll={List}
     />
   </ErrorBoundary>
+);
+
+const dbSelector = createSelector(
+  customLocation =>
+    customLocation.description[customLocation.description.main.key].db,
+  value => value,
 );
 
 class Entry extends PureComponent {
@@ -533,7 +540,7 @@ class Entry extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => l.description[l.description.main.key].db}
+            locationSelector={dbSelector}
             indexRoute={RedirectToInterPro}
             catchAll={InnerSwitch}
           />

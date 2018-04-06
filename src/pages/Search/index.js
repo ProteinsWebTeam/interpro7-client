@@ -49,9 +49,9 @@ const WrappedIPScanSearch = () => (
   </Wrapper>
 );
 
-const routes = new Set([
-  { value: 'text', component: TextSearchAndResults },
-  { value: 'sequence', component: WrappedIPScanSearch },
+const routes = new Map([
+  ['text', TextSearchAndResults],
+  ['sequence', WrappedIPScanSearch],
 ]);
 
 const RedirectToDefault = () => (

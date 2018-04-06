@@ -37,9 +37,9 @@ const SequenceSubPage = loadable({
     import(/* webpackChunkName: "sequence-subpage" */ 'subPages/Sequence'),
 });
 
-const subPagesForSequence = new Set([
-  { value: 'entry', component: EntrySubPage },
-  { value: 'sequence', component: SequenceSubPage },
+const subPagesForSequence = new Map([
+  ['entry', EntrySubPage],
+  ['sequence', SequenceSubPage],
 ]);
 
 class IPScanResult extends PureComponent {

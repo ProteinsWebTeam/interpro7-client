@@ -293,12 +293,9 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const subPagesForProtein = new Set();
+const subPagesForProtein = new Map();
 for (const subPage of config.pages.protein.subPages) {
-  subPagesForProtein.add({
-    value: subPage,
-    component: subPages.get(subPage),
-  });
+  subPagesForProtein.set(subPage, subPages.get(subPage));
 }
 
 class SummaryComponent extends PureComponent {
@@ -387,7 +384,12 @@ class Summary extends PureComponent {
   }
 }
 
-const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
+const childRoutes = new Map([
+  [
+    /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i,
+    Summary,
+  ],
+]);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
@@ -403,7 +405,7 @@ const InnerSwitch = props => (
         );
       }}
       indexRoute={List}
-      childRoutes={[{ value: acc, component: Summary }]}
+      childRoutes={childRoutes}
       catchAll={List}
     />
   </ErrorBoundary>

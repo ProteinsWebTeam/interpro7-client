@@ -50,7 +50,7 @@ const InnerSwitch = props => (
   </Wrapper>
 );
 
-const routes = new Set([{ value: 'InterProScan', component: InnerSwitch }]);
+const routes = new Map([['InterProScan', InnerSwitch]]);
 
 class Wrapper extends PureComponent {
   static propTypes = {

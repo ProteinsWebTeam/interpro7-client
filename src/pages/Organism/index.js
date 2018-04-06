@@ -472,12 +472,9 @@ class SummaryComponent extends PureComponent {
   }
 }
 
-const subPagesForOrganism = new Set();
+const subPagesForOrganism = new Map();
 for (const subPage of config.pages.organism.subPages) {
-  subPagesForOrganism.add({
-    value: subPage,
-    component: subPages.get(subPage),
-  });
+  subPagesForOrganism.set(subPage, subPages.get(subPage));
 }
 
 // const _Title = ({ data: { loading, payload } }) =>
@@ -604,7 +601,7 @@ const Summary = loadData({
   propNamespace: 'Organism',
 })(loadData()(_Summary));
 
-const acc = /(UP\d{9})|(\d+)|(all)/i;
+const childRoutes = new Map([/(UP\d{9})|(\d+)|(all)/i, Summary]);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 class InnerSwitch extends PureComponent {
   render() {
@@ -623,7 +620,7 @@ class InnerSwitch extends PureComponent {
             );
           }}
           indexRoute={List}
-          childRoutes={[{ value: acc, component: Summary }]}
+          childRoutes={childRoutes}
           catchAll={List}
         />
       </ErrorBoundary>
