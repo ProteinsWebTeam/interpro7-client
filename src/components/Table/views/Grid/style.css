@@ -55,7 +55,7 @@
 .count-structures,
 .count-proteomes,
 .count-architectures,
-.count-species {
+.count-organisms {
   text-align: center;
   border: 0px solid lightgreen;
 }
