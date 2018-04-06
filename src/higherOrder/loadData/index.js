@@ -9,7 +9,6 @@ import { dataProgressInfo, dataProgressUnload } from 'actions/creators';
 
 import extractParams from './extract-params';
 import getFetch from './getFetch';
-// import { subscribe, unsubscribe } from './subscriptions';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 
@@ -19,7 +18,7 @@ const mapStateToProps = createSelector(
 );
 
 const newData = url => ({
-  loading: true,
+  loading: !!url,
   progress: 0,
   ok: true,
   status: null,
