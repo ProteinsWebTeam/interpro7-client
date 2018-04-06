@@ -143,7 +143,7 @@ class Link extends PureComponent /*:: <Props> */ {
         href={_href}
         rel={generateRel(rel, target, href)}
         target={target}
-        className={cn(className, activeClassName)}
+        className={cn(className, activeClassName) || null}
         onClick={this.handleClick}
       >
         {children}
