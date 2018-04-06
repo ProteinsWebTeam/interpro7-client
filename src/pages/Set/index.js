@@ -249,12 +249,9 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const subPagesForSet = new Set();
+const subPagesForSet = new Map();
 for (const subPage of config.pages.set.subPages) {
-  subPagesForSet.add({
-    value: subPage,
-    component: subPages.get(subPage),
-  });
+  subPagesForSet.set(subPage, subPages.get(subPage));
 }
 
 class SummaryComponent extends PureComponent {
@@ -369,6 +366,7 @@ const dbAccs = new RegExp(
   'i',
 );
 
+const childRoutes = new Map([[dbAccs, Summary]]);
 const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
@@ -383,7 +381,7 @@ const InnerSwitch = props => (
         );
       }}
       indexRoute={List}
-      childRoutes={[{ value: dbAccs, component: Summary }]}
+      childRoutes={childRoutes}
       catchAll={List}
     />
   </ErrorBoundary>

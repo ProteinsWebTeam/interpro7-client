@@ -1,6 +1,7 @@
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Switch from 'components/generic/Switch';
@@ -52,6 +53,19 @@ const TableView = loadable({
 const TreeView = loadable({
   loader: () => import(/* webpackChunkName: "tree-view" */ './views/Tree'),
 });
+
+const mainChildRoutes = new Map([
+  ['table', TableView],
+  ['list', () => 'LIST!'],
+  ['grid', () => 'GRID!'],
+  ['tree', TreeView],
+]);
+
+const footerChildRoutes = new Map([['tree', () => null]]);
+const hashSelector = createSelector(
+  customLocation => customLocation.hash,
+  value => value,
+);
 
 export default class Table extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -178,14 +192,9 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 notFound={notFound}
               />
               <Switch
-                locationSelector={({ hash }) => hash}
+                locationSelector={hashSelector}
                 indexRoute={TableView}
-                childRoutes={[
-                  { value: 'table', component: TableView },
-                  { value: 'list', component: () => 'LIST!' },
-                  { value: 'grid', component: () => 'GRID!' },
-                  { value: 'tree', component: TreeView },
-                ]}
+                childRoutes={mainChildRoutes}
                 catchAll={TableView}
                 // passed down props
                 isStale={isStale}
@@ -196,9 +205,9 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 dataTable={dataTable}
               />
               <Switch
-                locationSelector={({ hash }) => hash}
+                locationSelector={hashSelector}
                 indexRoute={_Footer}
-                childRoutes={[{ value: 'tree', component: () => null }]}
+                childRoutes={footerChildRoutes}
                 catchAll={_Footer}
                 // passed down props
                 withPageSizeSelector={withPageSizeSelector}

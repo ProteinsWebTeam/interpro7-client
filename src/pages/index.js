@@ -67,21 +67,21 @@ const NotFound = loadable({
     import(/* webpackChunkName: "not-found-page" */ './error/NotFound'),
 });
 
-const pages = new Set([
+const pages = new Map([
   // pages with data from API
-  { value: 'entry', component: Entry },
-  { value: 'protein', component: Protein },
-  { value: 'structure', component: Structure },
-  { value: 'organism', component: Organism },
-  { value: 'set', component: EntrySet },
+  ['entry', Entry],
+  ['protein', Protein],
+  ['structure', Structure],
+  ['organism', Organism],
+  ['set', EntrySet],
   // other
-  { value: 'search', component: Search },
-  { value: 'job', component: Jobs },
+  ['search', Search],
+  ['job', Jobs],
   // static pages
-  { value: 'about', component: About },
-  { value: 'help', component: Help },
-  { value: 'contact', component: Contact },
-  { value: 'settings', component: Settings },
+  ['about', About],
+  ['help', Help],
+  ['contact', Contact],
+  ['settings', Settings],
 ]);
 
 const Null = () => null;
@@ -90,6 +90,20 @@ const Null = () => null;
   stuck: boolean,
   top: number,
 }; */
+
+const childRoutes = new Map([[/^search|job$/, Null]]);
+const locationSelector1 = createSelector(customLocation => {
+  if (
+    customLocation.description.main.key &&
+    !customLocation.description[customLocation.description.main.key].accession
+  )
+    return customLocation.description.main.key;
+}, value => value);
+const locationSelector2 = createSelector(
+  customLocation =>
+    customLocation.description.other[0] || customLocation.description.main.key,
+  value => value,
+);
 
 class Pages extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -107,14 +121,8 @@ class Pages extends PureComponent /*:: <Props> */ {
               <Switch
                 {...props}
                 indexRoute={Null}
-                locationSelector={l => {
-                  if (
-                    l.description.main.key &&
-                    !l.description[l.description.main.key].accession
-                  )
-                    return l.description.main.key;
-                }}
-                childRoutes={[{ value: /^search|job$/, component: Null }]}
+                locationSelector={locationSelector1}
+                childRoutes={childRoutes}
                 catchAll={BrowseTabs}
               />
             </div>
@@ -123,9 +131,7 @@ class Pages extends PureComponent /*:: <Props> */ {
         <ErrorBoundary>
           <Switch
             {...props}
-            locationSelector={l =>
-              l.description.other[0] || l.description.main.key
-            }
+            locationSelector={locationSelector2}
             indexRoute={Home}
             childRoutes={pages}
             catchAll={NotFound}

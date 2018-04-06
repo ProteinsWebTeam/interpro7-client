@@ -270,12 +270,9 @@ SummaryComponent.propTypes = {
   customLocation: T.object.isRequired,
 };
 
-const subPagesForStructure = new Set();
+const subPagesForStructure = new Map();
 for (const subPage of config.pages.structure.subPages) {
-  subPagesForStructure.add({
-    value: subPage,
-    component: subPages.get(subPage),
-  });
+  subPagesForStructure.set(subPage, subPages.get(subPage));
 }
 
 const Summary = props => {
@@ -313,6 +310,7 @@ Summary.propTypes = {
   customLocation: T.object.isRequired,
 };
 
+const childRoutes = new Map([[/^[a-z\d]{4}$/i, Summary]]);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
@@ -328,7 +326,7 @@ const InnerSwitch = props => (
         );
       }}
       indexRoute={List}
-      childRoutes={[{ value: /^[a-z\d]{4}$/i, component: Summary }]}
+      childRoutes={childRoutes}
       catchAll={List}
     />
   </ErrorBoundary>

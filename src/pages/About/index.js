@@ -42,16 +42,16 @@ const Advanced = loadable({
     import(/* webpackChunkName: "about-advanced" */ 'components/About/Advanced'),
 });
 
-const routes = new Set([
-  { value: 'consortium', component: Consortium },
-  { value: 'citation', component: Citation },
-  { value: 'funding', component: Funding },
-  { value: 'advanced', component: Advanced },
+const routes = new Map([
+  ['consortium', Consortium],
+  ['citation', Citation],
+  ['funding', Funding],
+  ['advanced', Advanced],
 ]);
 
 const locationSelector = createSelector(
   customLocation => customLocation.description.other[1],
-  aboutDetail => aboutDetail,
+  value => value,
 );
 
 const RedirectToDefault = () => (
