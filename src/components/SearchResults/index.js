@@ -33,20 +33,19 @@ class SearchResults extends PureComponent {
       payload: T.object,
       loading: T.bool.isRequired,
       ok: T.bool,
+      url: T.string,
     }),
     isStale: T.bool.isRequired,
     searchValue: T.string,
     query: T.object,
-    dataUrl: T.string,
   };
 
   render() {
     const {
-      data: { payload, loading, ok },
+      data: { payload, loading, ok, url },
       isStale,
       searchValue,
       query,
-      dataUrl,
     } = this.props;
     const { entries, hitCount } = payload || {};
     if (!loading && hitCount === 0) {
@@ -77,7 +76,11 @@ class SearchResults extends PureComponent {
           ok={ok}
         >
           <Exporter>
-            <Link href={dataUrl} download={`SearchResults-${searchValue}.json`}>
+            <Link
+              disabled={!url}
+              href={url}
+              download={`SearchResults-${searchValue}.json`}
+            >
               JSON
             </Link>
           </Exporter>
@@ -120,10 +123,9 @@ class SearchResults extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.data.dataUrl,
   state => state.customLocation.description.search.value,
   state => state.customLocation.search,
-  (dataUrl, searchValue, query) => ({ dataUrl, searchValue, query }),
+  (searchValue, query) => ({ searchValue, query }),
 );
 
 const getQueryTerm = createSelector(
