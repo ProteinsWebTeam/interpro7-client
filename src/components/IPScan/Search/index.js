@@ -20,7 +20,7 @@ import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import id from 'utils/cheapUniqueId';
-import blockEvent from 'utils/blockEvent';
+import blockEvent from 'utils/block-event';
 
 import { foundationPartial } from 'styles/foundation';
 

@@ -17,7 +17,7 @@ import { foundationPartial } from 'styles/foundation';
 import pageStyle from './style.css';
 
 const f = foundationPartial(pageStyle, protvista);
-import { getTrackColor, EntryColorMode } from 'utils/entryColor';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import loadable from 'higherOrder/loadable';
 
 const SchemaOrgData = loadable({

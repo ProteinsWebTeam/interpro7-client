@@ -11,7 +11,7 @@ import ProtVistaSequence from 'protvista-sequence';
 import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 
-import { getTrackColor, EntryColorMode } from 'utils/entryColor';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import PopperJS from 'popper.js';
 
