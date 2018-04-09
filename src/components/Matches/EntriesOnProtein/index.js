@@ -9,7 +9,7 @@ import protvista from 'components/ProtVista/style.css';
 
 const f = foundationPartial(protvista);
 
-import { getTrackColor, EntryColorMode } from 'utils/entryColor';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 class EntriesOnProtein extends ProtVistaMatches {
   static propTypes = {

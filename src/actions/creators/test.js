@@ -124,8 +124,7 @@ describe('actions', () => {
       expect(actions.changePageSize(40)).toEqual(expected);
     });
 
-    // TODO: check problem. It seems like jsdom is not accepting "dataset" atm.
-    test.skip('should create an action to change settings', () => {
+    test('should create an action to change settings', () => {
       const category = 'my-category';
       const name = 'my-name';
       const value = 'my-value';
@@ -133,7 +132,6 @@ describe('actions', () => {
       const input = document.createElement('input');
       input.value = value;
       input.name = name;
-      console.log(form);
       form.dataset.category = category;
       form.appendChild(input);
       const expected = {
