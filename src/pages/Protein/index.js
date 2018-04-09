@@ -1,5 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
+
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -13,13 +15,15 @@ import Table, {
   Exporter,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
+import EntryMenu from 'components/EntryMenu';
+import Title from 'components/Title';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 
-import EntryMenu from 'components/EntryMenu';
-import Title from 'components/Title';
+import { mainDBLocationSelector } from 'reducers/custom-location/description';
+
 import subPages from 'subPages';
 import config from 'config';
 
@@ -312,6 +316,16 @@ class SummaryComponent extends PureComponent {
   }
 }
 
+const locationSelector1 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
+
 class Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -366,15 +380,7 @@ class Summary extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => {
-              const { key } = l.description.main;
-              return (
-                l.description[key].detail ||
-                (Object.entries(l.description).find(
-                  ([_key, value]) => value.isFilter,
-                ) || [])[0]
-              );
-            }}
+            locationSelector={locationSelector1}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForProtein}
           />
@@ -390,20 +396,21 @@ const childRoutes = new Map([
     Summary,
   ],
 ]);
+const locationSelector2 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].accession ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => {
-        const { key } = l.description.main;
-        return (
-          l.description[key].accession ||
-          (Object.entries(l.description).find(
-            ([_key, value]) => value.isFilter,
-          ) || [])[0]
-        );
-      }}
+      locationSelector={locationSelector2}
       indexRoute={List}
       childRoutes={childRoutes}
       catchAll={List}
@@ -416,7 +423,7 @@ const Protein = props => (
     <ErrorBoundary>
       <Switch
         {...props}
-        locationSelector={l => l.description[l.description.main.key].db}
+        locationSelector={mainDBLocationSelector}
         indexRoute={Overview}
         catchAll={InnerSwitch}
       />

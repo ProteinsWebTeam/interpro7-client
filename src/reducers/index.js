@@ -14,6 +14,9 @@ import ui from './ui';
 /*:: export type State = {|
   customLocation: CustomLocation,
   dataProgress: DataProgress,
+  jobs: *,
+  settings: *,
+  toasts: *,
   ui: UI,
 |}; */
 

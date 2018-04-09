@@ -29,7 +29,7 @@ describe('reducer for job metadata', () => {
         if (testMetadata1.times[key]) {
           expect(time).toBeGreaterThan(0);
         } else {
-          expect(time).toBe(null);
+          expect(time).toBeNull();
         }
       }
     }
@@ -49,7 +49,7 @@ describe('reducer for job metadata', () => {
         if (testMetadata2.times[key]) {
           expect(time).toBeGreaterThan(0);
         } else {
-          expect(time).toBe(null);
+          expect(time).toBeNull();
         }
       }
     }

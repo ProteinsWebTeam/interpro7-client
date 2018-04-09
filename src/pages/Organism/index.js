@@ -17,13 +17,14 @@ import Table, {
 } from 'components/Table';
 import ProteinFile from 'subPages/Organism/ProteinFile';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
+
+import { mainDBLocationSelector } from 'reducers/custom-location/description';
 
 import {
   schemaProcessDataTable,
@@ -513,6 +514,18 @@ const mapStateToAccessionUrl = createSelector(
     }),
 );
 
+const locationSelector1 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0] ||
+    (customLocation.description[key].accession &&
+      customLocation.description[key].proteomeDB)
+  );
+}, value => value);
+
 class _Summary extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -578,16 +591,7 @@ class _Summary extends PureComponent {
           </div>
           <Switch
             {...this.props}
-            locationSelector={l => {
-              const { key } = l.description.main;
-              return (
-                l.description[key].detail ||
-                (Object.entries(l.description).find(
-                  ([_key, value]) => value.isFilter,
-                ) || [])[0] ||
-                (l.description[key].accession && l.description[key].proteomeDB)
-              );
-            }}
+            locationSelector={locationSelector1}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForOrganism}
           />
@@ -601,6 +605,17 @@ const Summary = loadData({
   propNamespace: 'Organism',
 })(loadData()(_Summary));
 
+const locationSelector2 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].proteomeAccession ||
+    customLocation.description[key].accession ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
+
 const childRoutes = new Map([/(UP\d{9})|(\d+)|(all)/i, Summary]);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 class InnerSwitch extends PureComponent {
@@ -609,16 +624,7 @@ class InnerSwitch extends PureComponent {
       <ErrorBoundary>
         <Switch
           {...this.props}
-          locationSelector={l => {
-            const { key } = l.description.main;
-            return (
-              l.description[key].proteomeAccession ||
-              l.description[key].accession ||
-              (Object.entries(l.description).find(
-                ([_key, value]) => value.isFilter,
-              ) || [])[0]
-            );
-          }}
+          locationSelector={locationSelector2}
           indexRoute={List}
           childRoutes={childRoutes}
           catchAll={List}
@@ -627,6 +633,13 @@ class InnerSwitch extends PureComponent {
     );
   }
 }
+
+const locationSelector3 = createSelector(
+  customLocation =>
+    mainDBLocationSelector(customLocation) ||
+    customLocation.description[customLocation.description.main.key].proteomeDB,
+  value => value,
+);
 
 class Organism extends PureComponent {
   static propTypes = {
@@ -638,10 +651,7 @@ class Organism extends PureComponent {
       <ErrorBoundary>
         <Switch
           {...this.props}
-          locationSelector={l =>
-            l.description[l.description.main.key].db ||
-            l.description[l.description.main.key].proteomeDB
-          }
+          locationSelector={locationSelector3}
           indexRoute={Overview}
           catchAll={InnerSwitch}
         />

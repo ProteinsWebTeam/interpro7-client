@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -129,9 +130,14 @@ class Wrapper extends PureComponent {
   }
 }
 
+const locationSelector = createSelector(
+  customLocation => customLocation.description.search.type,
+  value => value,
+);
+
 const Search = () => (
   <Switch
-    locationSelector={l => l.description.search.type}
+    locationSelector={locationSelector}
     indexRoute={RedirectToDefault}
     childRoutes={routes}
   />
