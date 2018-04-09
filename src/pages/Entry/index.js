@@ -19,19 +19,21 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
+import EntryMenu from 'components/EntryMenu';
+import Title from 'components/Title';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/loadWebComponent';
 import loadable from 'higherOrder/loadable';
 import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 
+import { mainDBLocationSelector } from 'reducers/custom-location/description';
+
 import subPages from 'subPages';
 import config from 'config';
-import EntryMenu from 'components/EntryMenu';
-import Title from 'components/Title';
 
 import { memberDBAccessions } from 'staticData/home';
-import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -491,12 +493,6 @@ const InnerSwitch = props => (
   </ErrorBoundary>
 );
 
-const dbSelector = createSelector(
-  customLocation =>
-    customLocation.description[customLocation.description.main.key].db,
-  value => value,
-);
-
 class Entry extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -540,7 +536,7 @@ class Entry extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={dbSelector}
+            locationSelector={mainDBLocationSelector}
             indexRoute={RedirectToInterPro}
             catchAll={InnerSwitch}
           />

@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -21,6 +22,8 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
+import { mainDBLocationSelector } from 'reducers/custom-location/description';
+
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
@@ -38,6 +41,7 @@ import { foundationPartial } from 'styles/foundation';
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+
 const f = foundationPartial(pageStyle, styles);
 
 const SummaryAsync = loadable({
@@ -275,6 +279,15 @@ for (const subPage of config.pages.structure.subPages) {
   subPagesForStructure.set(subPage, subPages.get(subPage));
 }
 
+const locationSelector1 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 const Summary = props => {
   const { data: { loading, payload } } = props;
   if (loading || !payload || !payload.metadata) return <Loading />;
@@ -288,15 +301,7 @@ const Summary = props => {
       </div>
       <Switch
         {...props}
-        locationSelector={l => {
-          const { key } = l.description.main;
-          return (
-            l.description[key].detail ||
-            (Object.entries(l.description).find(
-              ([_key, value]) => value.isFilter,
-            ) || [])[0]
-          );
-        }}
+        locationSelector={locationSelector1}
         indexRoute={SummaryComponent}
         childRoutes={subPagesForStructure}
       />
@@ -311,20 +316,21 @@ Summary.propTypes = {
 };
 
 const childRoutes = new Map([[/^[a-z\d]{4}$/i, Summary]]);
+const locationSelector2 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].accession ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => {
-        const { key } = l.description.main;
-        return (
-          l.description[key].accession ||
-          (Object.entries(l.description).find(
-            ([_key, value]) => value.isFilter,
-          ) || [])[0]
-        );
-      }}
+      locationSelector={locationSelector2}
       indexRoute={List}
       childRoutes={childRoutes}
       catchAll={List}
@@ -378,7 +384,7 @@ class Structure extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => l.description[l.description.main.key].db}
+            locationSelector={mainDBLocationSelector}
             indexRoute={Overview}
             catchAll={InnerSwitch}
           />
