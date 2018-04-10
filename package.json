@@ -9,7 +9,7 @@
   "scripts": {
     "preanalyze": "npm run report:stats",
     "analyze": "npx webpack-bundle-analyzer reports/webpack-stats/stats.json",
-    "test": "npm-run-all -p --aggregate-output test:flow test:lint test:unit",
+    "test": "npm-run-all test:flow test:lint test:unit",
     "test:flow": "flow focus-check --merge-timeout=1000 .",
     "test:lint": "eslint --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
     "test:unit": "jest --notify src",
