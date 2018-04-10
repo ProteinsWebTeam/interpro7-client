@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HighlightedText /> highlight "e" 1`] = `
+Array [
+  <span>
+    som
+  </span>,
+  <mark>
+    e
+  </mark>,
+  <span>
+     
+  </span>,
+  <mark>
+    e
+  </mark>,
+  <span>
+    xampl
+  </span>,
+  <mark>
+    e
+  </mark>,
+  <span>
+     t
+  </span>,
+  <mark>
+    e
+  </mark>,
+  <span>
+    xt
+  </span>,
+]
+`;
+
+exports[`<HighlightedText /> highlight "example" 1`] = `
+Array [
+  <span>
+    some 
+  </span>,
+  <mark>
+    example
+  </mark>,
+  <span>
+     text
+  </span>,
+]
+`;
+
+exports[`<HighlightedText /> nothing to highlight 1`] = `"some example text"`;
