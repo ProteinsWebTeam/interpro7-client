@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import getFetch from 'higherOrder/loadData/getFetch';
 

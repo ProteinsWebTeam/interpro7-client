@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { goToCustomLocation } from 'actions/creators';
 
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 import pathToDescription from 'utils/processDescription/pathToDescription';
 
 const webComponents = [];

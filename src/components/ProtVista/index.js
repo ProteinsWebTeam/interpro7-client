@@ -15,7 +15,7 @@ import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import PopperJS from 'popper.js';
 
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';

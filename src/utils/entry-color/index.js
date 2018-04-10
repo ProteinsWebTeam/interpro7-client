@@ -25,6 +25,7 @@ export const getTrackColor = (
   colorMode /*: ColorMode */,
 ) => {
   let acc;
+  // eslint-disable-next-line default-case
   switch (colorMode) {
     case EntryColorMode.ACCESSION:
       acc = entry.accession
@@ -50,7 +51,6 @@ export const getTrackColor = (
           .join('');
         return colorHash.hex(acc);
       }
-    default:
-      return config.colors.get();
   }
+  return config.colors.get();
 };

@@ -12,7 +12,7 @@ import MemberSymbol from 'components/Entry/MemberSymbol';
 import { latests } from 'staticData/home';
 
 import loadData from 'higherOrder/loadData';
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import { foundationPartial } from 'styles/foundation';
 
