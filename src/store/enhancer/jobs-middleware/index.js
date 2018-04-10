@@ -1,9 +1,8 @@
 import url from 'url';
 import { schedule } from 'timing-functions/src';
 
-import { cachedFetchJSON, cachedFetchText } from 'utils/cachedFetch';
-import id from 'utils/cheapUniqueId';
-// import objectToFormData from 'utils/objectToFormData';
+import { cachedFetchJSON, cachedFetchText } from 'utils/cached-fetch';
+import id from 'utils/cheap-unique-id';
 
 import {
   CREATE_JOB,
@@ -83,16 +82,7 @@ export default ({ dispatch, getState }) => {
         {
           useCache: false,
           method: 'POST',
-          // headers: { 'Content-Type': 'multipart/form-data' },
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          // body: objectToFormData({
-          //   email: config.IPScan.contactEmail,
-          //   title: localID,
-          //   sequence: input,
-          //   appl: applications,
-          //   goterms,
-          //   pathways,
-          // }),
           body: url
             .format({
               query: {

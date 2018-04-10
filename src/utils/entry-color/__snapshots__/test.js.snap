@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getTrackColor ACCESSION 1`] = `"#2d865f"`;
+
+exports[`getTrackColor DOMAIN_RELATIONSHIP 1`] = `"#2d865f"`;
+
+exports[`getTrackColor MEMBER_DB 1`] = `"#2daec1"`;

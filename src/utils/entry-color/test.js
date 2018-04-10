@@ -17,4 +17,11 @@ describe('getTrackColor', () => {
     expect(getTrackColor(entry, 'whatever')).toBe(fallback);
     expect(getTrackColor(entry, EntryColorMode.whatever)).toBe(fallback);
   });
+
+  for (const colorModeKey of Object.keys(EntryColorMode)) {
+    const colorMode = EntryColorMode[colorModeKey];
+    test(colorMode, () => {
+      expect(getTrackColor(entry, colorMode)).toMatchSnapshot();
+    });
+  }
 });

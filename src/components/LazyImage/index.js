@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import cancelable from 'utils/cancelable';
-import getsInView from 'utils/getsInView';
+import getsInView from 'utils/gets-in-view';
 import { schedule } from 'timing-functions/src';
 
 const TRANSPARENT_1PX_GIF =

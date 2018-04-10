@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import uniqueId from 'utils/cheapUniqueId';
+import uniqueId from 'utils/cheap-unique-id';
 import cancelable from 'utils/cancelable';
 import { dataProgressInfo, dataProgressUnload } from 'actions/creators';
 
