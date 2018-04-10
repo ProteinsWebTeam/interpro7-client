@@ -1,0 +1,321 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HamburgerBtn /> closed, nosvg, stuck 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={[Function]}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<HamburgerBtn /> closed, nosvg, unstuck 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={[Function]}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<HamburgerBtn /> closed, svg, stuck 1`] = `
+<svg
+  className="top_level_hamburger stuck"
+  height="2em"
+  onClick={[Function]}
+  viewBox="0 0 10 10"
+  width="2em"
+>
+  <line
+    className="hamb_1"
+    x1="1"
+    x2="9"
+    y1="2"
+    y2="2"
+  />
+  <line
+    className="hamb_2"
+    x1="1"
+    x2="9"
+    y1="5"
+    y2="5"
+  />
+  <line
+    className="hamb_3"
+    x1="1"
+    x2="9"
+    y1="8"
+    y2="8"
+  />
+</svg>
+`;
+
+exports[`<HamburgerBtn /> closed, svg, unstuck 1`] = `
+<svg
+  className="top_level_hamburger"
+  height="2em"
+  onClick={[Function]}
+  viewBox="0 0 10 10"
+  width="2em"
+>
+  <line
+    className="hamb_1"
+    x1="1"
+    x2="9"
+    y1="2"
+    y2="2"
+  />
+  <line
+    className="hamb_2"
+    x1="1"
+    x2="9"
+    y1="5"
+    y2="5"
+  />
+  <line
+    className="hamb_3"
+    x1="1"
+    x2="9"
+    y1="8"
+    y2="8"
+  />
+</svg>
+`;
+
+exports[`<HamburgerBtn /> open, nosvg, stuck 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={[Function]}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<HamburgerBtn /> open, nosvg, unstuck 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={[Function]}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<HamburgerBtn /> open, svg, stuck 1`] = `
+<svg
+  className="top_level_hamburger stuck"
+  height="2em"
+  onClick={[Function]}
+  viewBox="0 0 10 10"
+  width="2em"
+>
+  <line
+    className="hamb_1_open"
+    x1="1"
+    x2="9"
+    y1="2"
+    y2="2"
+  />
+  <line
+    className="hamb_2_open"
+    x1="1"
+    x2="9"
+    y1="5"
+    y2="5"
+  />
+  <line
+    className="hamb_3_open"
+    x1="1"
+    x2="9"
+    y1="8"
+    y2="8"
+  />
+</svg>
+`;
+
+exports[`<HamburgerBtn /> open, svg, unstuck 1`] = `
+<svg
+  className="top_level_hamburger"
+  height="2em"
+  onClick={[Function]}
+  viewBox="0 0 10 10"
+  width="2em"
+>
+  <line
+    className="hamb_1_open"
+    x1="1"
+    x2="9"
+    y1="2"
+    y2="2"
+  />
+  <line
+    className="hamb_2_open"
+    x1="1"
+    x2="9"
+    y1="5"
+    y2="5"
+  />
+  <line
+    className="hamb_3_open"
+    x1="1"
+    x2="9"
+    y1="8"
+    y2="8"
+  />
+</svg>
+`;
+
+exports[`<Header /> stuck, not signature 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<Header /> stuck, signature 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<Header /> unstuck, not signature 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<Header /> unstuck, signature 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
+
+exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
+<span>
+  <button
+    aria-label="Show the InterPro Menu"
+    className="top_level_hamburger"
+    onClick={undefined}
+  >
+    ☰
+  </button>
+</span>
+`;
