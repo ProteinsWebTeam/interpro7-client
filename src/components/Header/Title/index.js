@@ -25,7 +25,7 @@ const styles = foundationPartial(ebiGlobalStyles, ipro, localStyles);
   stuck: boolean,
 }; */
 
-class Title extends PureComponent /*:: <Props> */ {
+export class Title extends PureComponent /*:: <Props> */ {
   static propTypes = {
     loading: T.bool.isRequired,
     mainType: T.string,
