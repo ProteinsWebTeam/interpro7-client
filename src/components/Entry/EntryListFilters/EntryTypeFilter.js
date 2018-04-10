@@ -12,7 +12,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { goToCustomLocation } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
 
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import { foundationPartial } from 'styles/foundation';
 

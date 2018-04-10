@@ -9,7 +9,7 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
 import StructureView from 'components/Structure/Viewer';
 
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import { foundationPartial } from 'styles/foundation';
 

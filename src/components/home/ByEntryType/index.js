@@ -11,7 +11,7 @@ import AnimatedEntry from 'components/AnimatedEntry';
 import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import { entryType } from 'staticData/home';
 

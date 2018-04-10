@@ -24,7 +24,7 @@ import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 
 import loadData from 'higherOrder/loadData';
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 import loadable from 'higherOrder/loadable';
 import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 

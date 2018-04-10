@@ -1,5 +1,4 @@
 // @flow
-/* eslint max-statements: [1, 20] */
 import Listener from '.';
 
 describe('custom event listener', () => {
@@ -25,7 +24,13 @@ describe('custom event listener', () => {
     expect(cb2.mock.calls.length).toBe(0);
   });
 
-  test.skip('should call function callbacks', () => {
-    //
+  test('should call function callbacks', () => {
+    const listener = new Listener('change', window.document.body);
+    const fn = jest.fn();
+    listener.subscribe(fn);
+    const event = document.createEvent('Event');
+    event.initEvent('change', true, true);
+    window.document.body.dispatchEvent(event);
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 });

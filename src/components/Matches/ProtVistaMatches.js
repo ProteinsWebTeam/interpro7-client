@@ -1,7 +1,7 @@
 import { PureComponent } from 'react';
 import T from 'prop-types';
 
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 import ProtVistaManager from 'protvista-manager';

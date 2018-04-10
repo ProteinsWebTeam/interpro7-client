@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberLabel from 'components/NumberLabel';
+// import MemberDBSelector from 'components/MemberDBSelector';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -13,6 +14,7 @@ import { goToCustomLocation } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
+
 import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
@@ -116,3 +118,5 @@ export default connect(mapStateToProps, { goToCustomLocation })(
     getUrl: getUrlFor,
   })(SignaturesFilter),
 );
+
+// export default () => <MemberDBSelector />;
