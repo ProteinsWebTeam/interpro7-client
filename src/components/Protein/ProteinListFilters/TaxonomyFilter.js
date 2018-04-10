@@ -56,14 +56,15 @@ class TaxonomyFilter extends PureComponent {
       customLocation: { description: { organism: { accession } } },
     } = this.props;
     const taxes = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
+      ([, { value: a }], [, { value: b }]) => b - a,
     );
+    console.log(taxes);
     if (!loading) {
       taxes.unshift(['ALL', NaN]);
     }
     return (
       <div style={{ overflowX: 'hidden' }} className={f('list-taxonomy')}>
-        {taxes.map(([taxId, count]) => (
+        {taxes.map(([taxId, { value: count, title }]) => (
           <div key={taxId} className={f('column')}>
             <label className={f('row', 'filter-button')}>
               <input
@@ -74,17 +75,7 @@ class TaxonomyFilter extends PureComponent {
                 checked={(!accession && taxId === 'ALL') || accession === taxId}
                 style={{ margin: '0.25em' }}
               />
-              {taxId === 'ALL' ? (
-                <div>All</div>
-              ) : (
-                <Metadata
-                  endpoint="organism"
-                  db="taxonomy"
-                  accession={taxId === 'ALL' ? 1 : taxId}
-                >
-                  <TaxIdOrName accession={taxId} element="div" />
-                </Metadata>
-              )}
+              {taxId === 'ALL' ? <div>All</div> : title}
               {typeof count === 'undefined' || isNaN(count) ? null : (
                 <NumberLabel
                   value={count}
