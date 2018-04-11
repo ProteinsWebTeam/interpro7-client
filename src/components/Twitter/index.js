@@ -3,8 +3,8 @@ import React, { PureComponent } from 'react';
 import Link from 'components/generic/Link';
 
 import cancelable from 'utils/cancelable';
-import loadResource from 'utils/loadResource';
-import getsInView from 'utils/getsInView';
+import loadResource from 'utils/load-resource';
+import getsInView from 'utils/gets-in-view';
 
 import { foundationPartial } from 'styles/foundation';
 

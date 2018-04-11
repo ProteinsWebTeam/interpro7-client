@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 
-import uniqueId from 'utils/cheapUniqueId';
+import uniqueId from 'utils/cheap-unique-id';
 
 import cn from 'classnames';
 
