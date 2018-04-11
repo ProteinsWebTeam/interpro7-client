@@ -133,8 +133,12 @@
 
 .md-small {
   width: 46px;
+}
+
+.card-sum-info .md-small {
   display: flex;
 }
+
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
   .card-item {
