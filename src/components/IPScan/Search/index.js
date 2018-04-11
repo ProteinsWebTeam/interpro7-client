@@ -19,7 +19,7 @@ import { createJob, goToCustomLocation } from 'actions/creators';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
-import id from 'utils/cheapUniqueId';
+import id from 'utils/cheap-unique-id';
 import blockEvent from 'utils/block-event';
 
 import { foundationPartial } from 'styles/foundation';

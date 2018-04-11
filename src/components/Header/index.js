@@ -28,7 +28,7 @@ import ipro from 'styles/interpro-new.css';
 const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
 const reducedStyleBundle = classnames.bind(styles);
 
-class _HamburgerBtn extends PureComponent {
+export class _HamburgerBtn extends PureComponent {
   static propTypes = {
     openSideNav: T.func.isRequired,
     open: T.bool.isRequired,
@@ -92,7 +92,7 @@ const HamburgerBtn = connect(mapStateToPropsHamburger, { openSideNav })(
   _HamburgerBtn,
 );
 
-class _SideIcons extends PureComponent {
+export class _SideIcons extends PureComponent {
   static propTypes = {
     movedAway: T.bool.isRequired,
     stuck: T.bool.isRequired,
@@ -179,7 +179,7 @@ const styleForHeader = (supportsSticky, offset, stuck) => {
   return style;
 };
 
-class Header extends PureComponent {
+export class Header extends PureComponent {
   static propTypes = {
     stickyMenuOffset: T.number.isRequired,
     stuck: T.bool.isRequired,

@@ -105,7 +105,7 @@ const locationSelector2 = createSelector(
   value => value,
 );
 
-class Pages extends PureComponent /*:: <Props> */ {
+export class Pages extends PureComponent /*:: <Props> */ {
   static propTypes = {
     stuck: T.bool.isRequired,
     top: T.number.isRequired,
