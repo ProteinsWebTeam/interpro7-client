@@ -616,7 +616,7 @@ const locationSelector2 = createSelector(customLocation => {
   );
 }, value => value);
 
-const childRoutes = new Map([/(UP\d{9})|(\d+)|(all)/i, Summary]);
+const childRoutes = new Map([[/(UP\d{9})|(\d+)|(all)/i, Summary]]);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 class InnerSwitch extends PureComponent {
   render() {
