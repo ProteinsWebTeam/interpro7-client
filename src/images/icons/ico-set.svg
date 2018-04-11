@@ -18,28 +18,6 @@
    sodipodi:docname="clanview-type-02.svg">
   <defs
      id="defs4" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="135.19673"
-     inkscape:cy="165.35629"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer3"
-     showgrid="false"
-     inkscape:window-width="1081"
-     inkscape:window-height="666"
-     inkscape:window-x="4191"
-     inkscape:window-y="94"
-     inkscape:window-maximized="0"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -78,7 +56,7 @@
        r="32.768993"
        transform="matrix(0.97692914,-0.21356372,0.21356372,0.97692914,0,0)" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 267.36316,174.75 69.70052,73.74114 2.02031,2.0203"
        id="path4921"
        inkscape:connector-curvature="0" />
@@ -96,12 +74,12 @@
      style="display:inline"
      transform="translate(-190.59156,-105.44548)">
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.75136697px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 226.80671,287.76813 C 299.8197,249.83238 344.51523,253.24637 344.51523,253.24637"
        id="path4237"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.75136697px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 338.75023,236.92696 c 5.45258,-95.68275 64.60188,-96.52435 64.60188,-96.52435"
        id="path4239"
        inkscape:connector-curvature="0"
