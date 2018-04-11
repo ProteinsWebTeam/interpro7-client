@@ -613,10 +613,11 @@ class GridView extends PureComponent {
   static propTypes = {
     entryDB: T.string,
     dataTable: T.array,
+    search: T.string,
   };
 
   render() {
-    const { dataTable, entryDB } = this.props;
+    const { dataTable, entryDB, search } = this.props;
     return (
       <AnimatedEntry className={f('card-wrapper')} element="div">
         {dataTable.map(({ metadata }) => {
@@ -659,7 +660,7 @@ class GridView extends PureComponent {
                       <h6>
                         <HighlightedText
                           text={metadata.name}
-                          textToHighlight=""
+                          textToHighlight={search}
                         />
                       </h6>
                     </Link>
@@ -692,7 +693,7 @@ class GridView extends PureComponent {
                       <h6>
                         <HighlightedText
                           text={metadata.name}
-                          textToHighlight=""
+                          textToHighlight={search}
                         />
                       </h6>
                     </Link>
@@ -724,7 +725,7 @@ class GridView extends PureComponent {
                         <h6>
                           <HighlightedText
                             text={metadata.name}
-                            textToHighlight=""
+                            textToHighlight={search}
                           />
                         </h6>
                       </Link>
@@ -820,6 +821,7 @@ class GridView extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.customLocation.description.entry.db,
-  entryDB => ({ entryDB }),
+  state => state.customLocation.search.search,
+  (entryDB, search) => ({ entryDB, search }),
 );
 export default connect(mapStateToProps)(GridView);
