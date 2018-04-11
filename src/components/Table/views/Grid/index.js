@@ -9,6 +9,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Link from 'components/generic/Link';
+import AnimatedEntry from 'components/AnimatedEntry';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import { NumberComponent } from 'components/NumberLabel';
@@ -310,7 +311,7 @@ class SpeciesIcon extends PureComponent {
     }
 
     return (
-      <Tooltip title="Related species icon">
+      <Tooltip title="Specie icon for the corresponding node">
         {' '}
         <span
           style={{ color: nodecolor }}
@@ -321,7 +322,137 @@ class SpeciesIcon extends PureComponent {
     );
   }
 }
+class SummaryCounterEntries extends PureComponent {
+  static propTypes = {
+    entryDB: T.string,
+    dataTable: T.array,
+    metadata: T.object.isRequired,
+    data: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
+  };
+  render() {
+    const { entryDB, metadata, data: { loading, payload } } = this.props;
+    return (
+      <div className={f('card-item-m', 'card-sum-info', 'label-off')}>
+        <div className={f('count-proteins')}>
+          <Tooltip title={`... proteins matching ${metadata.name}`}>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: entryDB,
+                    accession: metadata.accession.toString(),
+                  },
+                  protein: { isFilter: true, db: 'UniProt' },
+                },
+              }}
+            >
+              <div
+                className={f('icon', 'icon-conceptual')}
+                data-icon="&#x50;"
+              />{' '}
+              <NumberComponent loading={loading} value="" />
+              <span className={f('label-number')}>protein</span>
+            </Link>
+          </Tooltip>
+        </div>
 
+        <div className={f('count-architectures')}>
+          <Tooltip title={`... domain architectures matching ${metadata.name}`}>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: entryDB,
+                    accession: metadata.accession.toString(),
+                    detail: 'domain_architecture',
+                  },
+                },
+              }}
+            >
+              <div className={f('icon', 'icon-count-ida')} />{' '}
+              <NumberComponent loading={loading} value="" />
+              <span className={f('label-number')}>domain architectures</span>
+            </Link>
+          </Tooltip>
+        </div>
+
+        <div className={f('count-organisms')}>
+          <Tooltip title={`... species matching ${metadata.name}`}>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: entryDB,
+                    accession: metadata.accession.toString(),
+                  },
+                  organism: { isFilter: true, db: 'taxonomy' },
+                },
+              }}
+            >
+              <div className={f('icon', 'icon-count-species')} />{' '}
+              <NumberComponent loading={loading} value="" />
+              <span className={f('label-number')}>species</span>
+            </Link>
+          </Tooltip>
+        </div>
+
+        <div className={f('count-structures')}>
+          <Tooltip title={`... structures matching ${metadata.name}`}>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: entryDB,
+                    accession: metadata.accession.toString(),
+                  },
+                  structure: { isFilter: true, db: 'PDB' },
+                },
+              }}
+            >
+              <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
+              <NumberComponent loading={loading} value="" />
+              <span className={f('label-number')}>structures</span>
+            </Link>
+          </Tooltip>
+        </div>
+
+        {metadata.source_database.toLowerCase() === 'cdd' ||
+        metadata.source_database.toLowerCase() === 'pfam' ? (
+          <div className={f('count-sets')}>
+            <Tooltip title={`... sets matching ${metadata.name}`}>
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: entryDB,
+                      accession: metadata.accession.toString(),
+                    },
+                    set: { isFilter: true, db: entryDB },
+                  },
+                }}
+              >
+                <div className={f('icon', 'icon-count-set')} />{' '}
+                <NumberComponent loading={loading} value="" />
+                <span className={f('label-number')}>sets</span>
+              </Link>
+            </Tooltip>
+          </div>
+        ) : (
+          ''
+        )}
+      </div>
+    );
+  }
+}
 class SummaryCounter extends PureComponent {
   static propTypes = {
     entryDB: T.string,
@@ -487,11 +618,14 @@ class GridView extends PureComponent {
   render() {
     const { dataTable, entryDB } = this.props;
     return (
-      <div className={f('card-wrapper')}>
+      <AnimatedEntry className={f('card-wrapper')} element="div">
         {dataTable.map(({ metadata }) => {
           const SummaryCounterWithData = loadData(
             getUrlFor(`${metadata.accession}`),
           )(SummaryCounter);
+          const SummaryCounterEntriesWithData = loadData(
+            getUrlFor(`${metadata.accession}`),
+          )(SummaryCounterEntries);
           const LineageWithData = loadData(getUrlFor(`${metadata.accession}`))(
             Lineage,
           );
@@ -503,23 +637,58 @@ class GridView extends PureComponent {
             <div className={f('card-flex-container')} key={metadata.accession}>
               <div className={f('card-item')}>
                 <div className={f('card-item-t')}>
-                  {metadata.source_database !== 'proteome' && (
+                  {// TITLE browse organism + proteome
+                  metadata.source_database === 'taxonomy' ||
+                  metadata.source_database === 'proteome' ? (
                     <Link
                       to={{
                         description: {
                           main: { key: 'organism' },
                           organism: {
-                            db: 'taxonomy',
+                            db: metadata.source_database.toLowerCase(),
                             accession: metadata.accession.toString(),
                           },
                         },
                       }}
                     >
-                      <SpeciesIconWithData />
+                      {//Specie ICON  only for taxonomy
+                      metadata.source_database.toLowerCase() === 'taxonomy' && (
+                        <SpeciesIconWithData />
+                      )}
 
-                      {
-                        // TODO make the highlight work with search term
-                      }
+                      <h6>
+                        <HighlightedText
+                          text={metadata.name}
+                          textToHighlight=""
+                        />
+                      </h6>
+                    </Link>
+                  ) : (
+                    ''
+                  )}
+
+                  {// TITLE browse entries - INTERPRO ONLY
+                  metadata.source_database.toLowerCase() === 'interpro' && (
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: {
+                            db: metadata.source_database.toLowerCase(),
+                            accession: metadata.accession.toString(),
+                          },
+                        },
+                      }}
+                    >
+                      <Tooltip
+                        title={`${metadata.type.replace('_', ' ')} type`}
+                      >
+                        <interpro-type
+                          size="2em"
+                          type={metadata.type.replace('_', ' ')}
+                          aria-label="Entry type"
+                        />
+                      </Tooltip>
                       <h6>
                         <HighlightedText
                           text={metadata.name}
@@ -529,51 +698,122 @@ class GridView extends PureComponent {
                     </Link>
                   )}
 
-                  {metadata.source_database === 'proteome' && (
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'organism' },
-                          organism: {
-                            db: 'proteome',
-                            accession: metadata.accession.toString(),
+                  {// TITLE browse entries - all NON interpro MD
+                  metadata.source_database.toLowerCase() !== 'taxonomy' &&
+                    metadata.source_database !== 'proteome' &&
+                    metadata.source_database.toLowerCase() !== 'interpro' && (
+                      <Link
+                        to={{
+                          description: {
+                            main: { key: 'entry' },
+                            entry: {
+                              db: metadata.source_database.toLowerCase(),
+                              accession: metadata.accession.toString(),
+                            },
                           },
-                        },
-                      }}
-                    >
-                      <h6>
-                        <HighlightedText
-                          text={metadata.name}
-                          textToHighlight=""
-                        />
-                      </h6>
-                    </Link>
-                  )}
+                        }}
+                      >
+                        <Tooltip title={`${entryDB} database`}>
+                          <MemberSymbol
+                            size="2em"
+                            type={metadata.source_database.toLowerCase()}
+                            aria-label="Database type"
+                            className={f('md-small')}
+                          />
+                        </Tooltip>
+                        <h6>
+                          <HighlightedText
+                            text={metadata.name}
+                            textToHighlight=""
+                          />
+                        </h6>
+                      </Link>
+                    )}
                 </div>
 
-                <SummaryCounterWithData entryDB={entryDB} metadata={metadata} />
+                {// COUNTER
+                metadata.source_database.toLowerCase() === 'taxonomy' &&
+                  metadata.source_database === 'proteome' &&
+                  metadata.source_database.toLowerCase() !== 'interpro' && (
+                    <SummaryCounterWithData
+                      entryDB={entryDB}
+                      metadata={metadata}
+                    />
+                  )}
+
+                {// COUNTER
+                metadata.source_database.toLowerCase() !== 'taxonomy' &&
+                  metadata.source_database !== 'proteome' && (
+                    <SummaryCounterEntriesWithData
+                      entryDB={entryDB}
+                      metadata={metadata}
+                    />
+                  )}
 
                 <div className={f('card-item-m')}>
-                  Could get a description from wikipedia [...]
+                  This is a {metadata.source_database} description from
+                  wikipedia [...]
                 </div>
 
                 <div className={f('card-item-b')}>
-                  {metadata.source_database !== 'proteome' && (
+                  {// INFO LINEAGE BL - browse organism
+                  metadata.source_database === 'taxonomy' && (
                     <LineageWithData />
                   )}
 
-                  <div>
-                    {metadata.source_database === 'proteome' && 'Proteome ID: '}
-                    {metadata.source_database !== 'proteome' && 'Tax ID:'}
+                  {// INFO TYPE BL - browse entries - Interpro ONLY
+                  metadata.source_database.toLowerCase() === 'interpro' && (
+                    <div>{metadata.type.replace('_', ' ')}</div>
+                  )}
 
-                    {metadata.accession}
-                  </div>
+                  {// INFO ID BR - browse organism + proteome
+                  metadata.source_database === 'proteome' ||
+                  metadata.source_database === 'taxonomy' ? (
+                    <div>
+                      {metadata.source_database === 'proteome' &&
+                        'Proteome ID: '}
+                      {metadata.source_database === 'taxonomy' && 'Tax ID:'}
+                      {metadata.accession}
+                    </div>
+                  ) : (
+                    ''
+                  )}
+
+                  {// INFO INTEGRATION BL - browse entries - all NON interpro MD
+                  metadata.source_database.toLowerCase() !== 'interpro' &&
+                    metadata.source_database !== 'proteome' &&
+                    metadata.source_database !== 'taxonomy' && (
+                      <div>
+                        {metadata.integrated
+                          ? 'Integrated: '
+                          : 'Not integrated'}
+                        <Link
+                          to={{
+                            description: {
+                              main: { key: 'entry' },
+                              entry: {
+                                db: 'interpro',
+                                accession: metadata.integrated,
+                              },
+                            },
+                          }}
+                        >
+                          {metadata.integrated}
+                        </Link>
+                      </div>
+                    )}
+
+                  {// INFO DB BR - all MD
+                  metadata.source_database !== 'proteome' &&
+                    metadata.source_database !== 'taxonomy' && (
+                      <div>{metadata.accession}</div>
+                    )}
                 </div>
               </div>
             </div>
           );
         })}
-      </div>
+      </AnimatedEntry>
     );
   }
 }
