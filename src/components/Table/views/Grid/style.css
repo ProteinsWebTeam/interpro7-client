@@ -124,7 +124,7 @@
   content: '';
   display: inline-block;
   height: 1.7em;
-  width: 28px;
+  width: 26px;
   background-image: url('../../../../images/icons/ico-set.svg');
   background-size: 100%;
   background-repeat: no-repeat;
@@ -141,11 +141,12 @@
 }
 
 .md-small {
-  width: 46px;
+  width: 56px;
 }
 
 .card-sum-info .md-small {
   display: flex;
+  width: 46px;
 }
 
 /* Medium only */
