@@ -99,18 +99,20 @@ export const speciesFeat = [
     tax_id: '83333',
   },
   {
-    title: 'Caulobacter phage phiCbK',
-    kingdom: 'Virus',
-    description: 'Caulobacter phage phiCbK',
+    title: 'Halobacterium salinarum',
+    kingdom: 'Archea',
+    description: 'Escherichia virus T4',
     icon: 'v',
     color: '#5bc0de',
-    tax_id: '1204537',
+    tax_id: '2242',
   },
   {
-    title: 'Unclassified',
-    kingdom: 'Unclassified',
-    description: 'Sequences that matches no species',
-    icon: '?',
+    title: 'Enterobacteria phage T4',
+    kingdom: 'Virus',
+    description: 'Escherichia virus T4',
+    icon: 'v',
+    color: '#5bc0de',
+    tax_id: '10665',
   },
 ];
 

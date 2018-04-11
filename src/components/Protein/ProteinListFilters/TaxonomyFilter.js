@@ -5,8 +5,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberLabel from 'components/NumberLabel';
-import Metadata from 'wrappers/Metadata';
-import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -58,7 +56,6 @@ class TaxonomyFilter extends PureComponent {
     const taxes = Object.entries(loading ? {} : payload).sort(
       ([, { value: a }], [, { value: b }]) => b - a,
     );
-    console.log(taxes);
     if (!loading) {
       taxes.unshift(['ALL', NaN]);
     }

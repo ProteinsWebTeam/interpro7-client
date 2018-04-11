@@ -55,7 +55,10 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
               </h6>
               <div className={f('list-detail')}>
                 <Tooltip
-                  title={`${(countsE && e.accession && countsE[e.accession]) ||
+                  title={`${(countsE &&
+                    e.accession &&
+                    countsE[e.accession] &&
+                    countsE[e.accession].value) ||
                     'no'} entries matching ${e.title}`}
                 >
                   <Link
@@ -67,13 +70,20 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
                       search: { go_term: e.accession },
                     }}
                   >
-                    {(countsE && e.accession && countsE[e.accession]) || 'no'}{' '}
+                    {(countsE &&
+                      e.accession &&
+                      countsE[e.accession] &&
+                      countsE[e.accession].value) ||
+                      'no'}{' '}
                     entries
                   </Link>
                 </Tooltip>
                 <br />
                 <Tooltip
-                  title={`${(countsP && e.accession && countsP[e.accession]) ||
+                  title={`${(countsP &&
+                    e.accession &&
+                    countsP[e.accession] &&
+                    countsP[e.accession].value) ||
                     'no'} proteins matching ${e.title}`}
                 >
                   <Link
@@ -82,7 +92,11 @@ class ByGoTerm extends PureComponent /*:: <{}> */ {
                       search: { go_term: e.accession },
                     }}
                   >
-                    {(countsP && e.accession && countsP[e.accession]) || 'no'}{' '}
+                    {(countsP &&
+                      e.accession &&
+                      countsP[e.accession] &&
+                      countsP[e.accession].value) ||
+                      'no'}{' '}
                     proteins
                   </Link>
                 </Tooltip>
