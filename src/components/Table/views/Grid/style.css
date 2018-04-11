@@ -114,9 +114,18 @@
   content: '';
   display: inline-block;
   height: 1em;
-
   width: 38px;
   background-image: url('../../../../images/icons/ico-ida.svg');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.icon-count-set {
+  content: '';
+  display: inline-block;
+  height: 1.7em;
+  width: 28px;
+  background-image: url('../../../../images/icons/ico-set.svg');
   background-size: 100%;
   background-repeat: no-repeat;
 }
