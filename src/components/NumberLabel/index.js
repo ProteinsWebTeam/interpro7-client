@@ -116,7 +116,8 @@ class _NumberComponent extends PureComponent {
     }
     let _title = title;
     if (!_title && abbr) {
-      const potentialTitle = this.props.value.toLocaleString();
+      const potentialTitle =
+        (this.props.value && this.props.value.toLocaleString()) || '0';
       // Should only happen if value has been shortened
       if (potentialTitle !== _value) _title = potentialTitle;
     }

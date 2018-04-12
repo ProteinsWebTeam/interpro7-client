@@ -99,11 +99,19 @@ const getUrlFor = createSelector(
     // add to search
     _search.group_by = 'tax_id';
     // build URL
+    const desc = {
+      ...description,
+      organism: {
+        ...description.organism,
+        accession: null,
+      },
+    };
+    console.log(desc);
     return format({
       protocol,
       hostname,
       port,
-      pathname: root + descriptionToPath(description),
+      pathname: root + descriptionToPath(desc),
       query: _search,
     });
   },
