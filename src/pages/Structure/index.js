@@ -97,7 +97,12 @@ Overview.propTypes = propTypes;
 const List = ({
   data: { payload, loading, ok, url, status },
   isStale,
-  customLocation: { description: { structure: { db } }, search },
+  customLocation: {
+    description: {
+      structure: { db },
+    },
+    search,
+  },
   dataBase,
 }) => {
   let _payload = payload;
@@ -112,7 +117,10 @@ const List = ({
   const urlHasParameter = url && url.includes('?');
   return (
     <div className={f('row')}>
-      <MemberDBSelector contentType="structure" />
+      <MemberDBSelector
+        contentType="structure"
+        className="left-side-db-selector"
+      />
 
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
         <StructureListFilters /> <hr />
@@ -289,7 +297,9 @@ const locationSelector1 = createSelector(customLocation => {
   );
 }, value => value);
 const Summary = props => {
-  const { data: { loading, payload } } = props;
+  const {
+    data: { loading, payload },
+  } = props;
   if (loading || !payload || !payload.metadata) return <Loading />;
   return (
     <ErrorBoundary>

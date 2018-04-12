@@ -74,7 +74,9 @@ class Overview extends PureComponent {
   static propTypes = propTypes;
 
   render() {
-    const { data: { payload = defaultPayload } } = this.props;
+    const {
+      data: { payload = defaultPayload },
+    } = this.props;
     return (
       <ul className={f('card')}>
         {Object.entries(payload.proteins || {}).map(([name, count]) => (
@@ -122,7 +124,10 @@ class List extends PureComponent {
     const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
-        <MemberDBSelector contentType="protein" />
+        <MemberDBSelector
+          contentType="protein"
+          className="left-side-db-selector"
+        />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />
@@ -311,7 +316,10 @@ class SummaryComponent extends PureComponent {
   };
 
   render() {
-    const { data: { payload }, customLocation } = this.props;
+    const {
+      data: { payload },
+      customLocation,
+    } = this.props;
     return <SummaryAsync data={payload} customLocation={customLocation} />;
   }
 }
@@ -344,7 +352,10 @@ class Summary extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload }, dataBase } = this.props;
+    const {
+      data: { loading, payload },
+      dataBase,
+    } = this.props;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
     if (loading || !payload.metadata) {

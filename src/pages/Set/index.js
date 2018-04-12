@@ -77,7 +77,9 @@ class Overview extends PureComponent {
     if (this.props.loading) {
       return <Loading />;
     }
-    const { data: { payload = defaultPayload } } = this.props;
+    const {
+      data: { payload = defaultPayload },
+    } = this.props;
     return (
       <ul className={f('card')}>
         {Object.entries(payload.sets || {})
@@ -107,7 +109,10 @@ class List extends PureComponent {
       data: { payload, loading, ok, url, status },
       isStale,
       customLocation: {
-        description: { set: { db: dbS }, entry: { db: dbE } },
+        description: {
+          set: { db: dbS },
+          entry: { db: dbE },
+        },
         search,
       },
       dataBase,
@@ -127,7 +132,7 @@ class List extends PureComponent {
     const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
-        <MemberDBSelector contentType="set" />
+        <MemberDBSelector contentType="set" className="left-side-db-selector" />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <hr />
@@ -266,7 +271,10 @@ class SummaryComponent extends PureComponent {
   };
 
   render() {
-    const { data: { payload }, customLocation } = this.props;
+    const {
+      data: { payload },
+      customLocation,
+    } = this.props;
     return (
       <SummaryAsync
         {...this.props}
@@ -305,7 +313,10 @@ class Summary extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload }, dataBase } = this.props;
+    const {
+      data: { loading, payload },
+      dataBase,
+    } = this.props;
     if (loading || !payload.metadata) {
       return <Loading />;
     }

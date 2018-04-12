@@ -125,6 +125,7 @@ class _MemberDBSelector extends PureComponent {
     }).isRequired,
     lowGraphics: T.bool.isRequired,
     goToCustomLocation: T.func.isRequired,
+    className: T.string,
   };
 
   constructor(props) {
@@ -212,6 +213,7 @@ class _MemberDBSelector extends PureComponent {
       dataSubPageCount,
       customLocation,
       lowGraphics,
+      className = '',
     } = this.props;
     const { visible } = this.state;
     const dbs = this._populateDBs(dataDB);
@@ -239,7 +241,7 @@ class _MemberDBSelector extends PureComponent {
         onFocus={this._handleOpen}
         onMouseLeave={this._handleExit}
         onBlur={this._handleExit}
-        className={f('container', {
+        className={f('container', className, {
           columns: !children,
           'small-12': !children,
           'medium-3': !children,

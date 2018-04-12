@@ -28,15 +28,17 @@ const checkHomePage = async page => {
 };
 
 const browseTabsSelector = '.pp-browse-tabs li a';
-const memberDBLinksSelector = '.pp-memberdb-links a';
+const memberDBLinksSelector = '.left-side-db-selector label';
 
 const swipeFilter = async (page, selector, execute = null) => {
   const len = (await page.$$(selector)).length;
   for (let i = 0; i < len; i++) {
+    await page.waitFor(oneSec);
     const option = (await page.$$(selector))[i];
     await page.waitFor(oneSec);
     if (option) {
       await option.click();
+      console.log('✓');
       if (execute) await execute(option);
     }
   }
@@ -46,10 +48,11 @@ const swipeFilter = async (page, selector, execute = null) => {
   }
 };
 const checkEntryBrowse = async page => {
-  const selector = 'a[href="/interpro/entry/cdd/"]';
+  const selector = '.left-side-db-selector h6';
   console.log(`  Click on tab Entry and looking for ${selector}`);
   await page.waitForSelector(selector);
   await page.waitForSelector(memberDBLinksSelector);
+  console.log('  ✓ First Entry selector found');
   const memberDBLinks = await page.$$(memberDBLinksSelector);
   for (const link of memberDBLinks) {
     const linkTitle = await page.evaluate(t => t.innerText, link);
@@ -62,7 +65,7 @@ const checkEntryBrowse = async page => {
         const txt2 = await page.evaluate(t => t.value, option2);
         await swipeFilter(page, '.list-go input', async option3 => {
           const txt3 = await page.evaluate(t => t.value, option3);
-          console.log(`      Filter: ${txt1}-${txt2}-${txt3}`);
+          console.log(`      ✓ Filter: ${txt1}-${txt2}-${txt3}`);
         });
       });
       await swipeFilter(page, '.list-integrated input', async option2 => {
@@ -73,10 +76,11 @@ const checkEntryBrowse = async page => {
   }
 };
 const checkProteinBrowse = async page => {
-  const selector = 'a[href="/interpro/protein/UniProt/"]';
+  const selector = '.left-side-db-selector h6';
   console.log(`  Click on tab Protein and looking for ${selector}`);
   await page.waitForSelector(selector);
   const memberDBLinks = await page.$$(memberDBLinksSelector);
+  console.log('  ✓ First Protein selector found');
   for (const link of memberDBLinks) {
     const linkTitle = await page.evaluate(t => t.innerText, link);
     await page.waitFor(oneSec);
@@ -95,9 +99,10 @@ const checkProteinBrowse = async page => {
   }
 };
 const checkStructureBrowse = async page => {
-  const selector = 'a[href="/interpro/structure/PDB/"]';
+  const selector = '.left-side-db-selector h6';
   console.log(`  Click on tab Structure and looking for ${selector}`);
   await page.waitForSelector(selector);
+  console.log('  ✓ First Structure selector found');
   const memberDBLinks = await page.$$(memberDBLinksSelector);
   for (const link of memberDBLinks) {
     const linkTitle = await page.evaluate(t => t.innerText, link);
@@ -111,10 +116,11 @@ const checkStructureBrowse = async page => {
   }
 };
 const checkSetBrowse = async page => {
-  const selector = 'a[href="/interpro/set/all/"]';
+  const selector = '.left-side-db-selector h6';
   console.log(`  Click on tab Set and looking for ${selector}`);
   await page.waitForSelector(selector);
   const memberDBLinks = await page.$$(memberDBLinksSelector);
+  console.log('  ✓ First Set selector found');
   for (const link of memberDBLinks) {
     const linkTitle = await page.evaluate(t => t.innerText, link);
     await page.waitFor(oneSec);
@@ -123,10 +129,11 @@ const checkSetBrowse = async page => {
   }
 };
 const checkOrganismBrowse = async page => {
-  const selector = 'a[href="/interpro/organism/taxonomy/"]';
+  const selector = '.left-side-db-selector h6';
   console.log(`  Click on tab Organism and looking for ${selector}`);
   await page.waitForSelector(selector);
   const memberDBLinks = await page.$$(memberDBLinksSelector);
+  console.log('  ✓ First Organism selector found');
   for (const link of memberDBLinks) {
     const linkTitle = await page.evaluate(t => t.innerText, link);
     await page.waitFor(oneSec);
@@ -139,8 +146,8 @@ const checkOrganismBrowse = async page => {
   }
 };
 const checkBrowseSubsection = {
-  Entry: checkEntryBrowse,
-  Protein: checkProteinBrowse,
+  // Entry: checkEntryBrowse,
+  // Protein: checkProteinBrowse,
   Structure: checkStructureBrowse,
   Set: checkSetBrowse,
   Organism: checkOrganismBrowse,
@@ -173,7 +180,7 @@ const checkBrowseSection = async page => {
   const mainLinks = await page.$$(mainMenuSelector);
 
   const checkSection = {
-    Home: checkHomePage,
+    // Home: checkHomePage,
     Browse: checkBrowseSection,
   };
 

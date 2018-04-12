@@ -85,7 +85,12 @@ class List extends PureComponent {
     const {
       data,
       isStale,
-      customLocation: { description: { entry: { db } }, search },
+      customLocation: {
+        description: {
+          entry: { db },
+        },
+        search,
+      },
       dataBase,
     } = this.props;
     let _payload = data.payload;
@@ -101,8 +106,10 @@ class List extends PureComponent {
     const urlHasParameter = data.url && data.url.includes('?');
     return (
       <div className={f('row')}>
-        <MemberDBSelector contentType="entry" />
-
+        <MemberDBSelector
+          contentType="entry"
+          className="left-side-db-selector"
+        />
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
@@ -428,7 +435,9 @@ const detailSelector = createSelector(customLocation => {
   );
 }, value => value);
 const Summary = props => {
-  const { data: { loading, payload } } = props;
+  const {
+    data: { loading, payload },
+  } = props;
   if (loading || !payload.metadata) {
     return <Loading />;
   }
@@ -504,7 +513,10 @@ class Entry extends PureComponent {
   };
 
   render() {
-    const { data: { payload }, dataBase } = this.props;
+    const {
+      data: { payload },
+      dataBase,
+    } = this.props;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
 
