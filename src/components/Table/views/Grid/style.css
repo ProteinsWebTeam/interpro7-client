@@ -55,7 +55,8 @@
 .count-structures,
 .count-proteomes,
 .count-architectures,
-.count-organisms {
+.count-organisms,
+.count-sets {
   text-align: center;
   border: 0px solid lightgreen;
 }
@@ -74,7 +75,7 @@
   margin-bottom: 0;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
 }
 .card-sum-info a,
 .card-sum-info a:visited,
@@ -111,32 +112,29 @@
 } /*default color for most of the icons*/
 
 .icon-count-ida {
-  content: '';
-  display: inline-block;
-  height: 1em;
+  height: 3em;
   width: 38px;
   background-image: url('../../../../images/icons/ico-ida.svg');
   background-size: 100%;
+  background-position-y: 59%;
   background-repeat: no-repeat;
 }
 
 .icon-count-set {
-  content: '';
-  display: inline-block;
-  height: 1.7em;
+  height: 3em;
   width: 26px;
   background-image: url('../../../../images/icons/ico-set.svg');
   background-size: 100%;
+  background-position-y: 59%;
   background-repeat: no-repeat;
 }
 
 .icon-count-species {
-  content: '';
-  display: inline-block;
-  height: 2em;
+  height: 3em; /*to align icon*/
   width: 30px;
   background-image: url('../../../../images/icons/ico-species.svg');
   background-size: 100%;
+  background-position-y: 59%;
   background-repeat: no-repeat;
 }
 
