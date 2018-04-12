@@ -1,6 +1,8 @@
 // @flow
 import fetch from 'isomorphic-fetch';
 
+import dropCacheIfVersionMismatch from './utils/drop-cache-if-version-mismatch';
+
 import config, { pkg } from 'config';
 
 const SUCCESS_STATUS = 200;
@@ -38,6 +40,7 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
     const shouldCache =
       config.cache.enabled && useCache && response.status === SUCCESS_STATUS;
     if (shouldCache && response.clone) {
+      dropCacheIfVersionMismatch(response.headers);
       response
         .clone()
         .text()
