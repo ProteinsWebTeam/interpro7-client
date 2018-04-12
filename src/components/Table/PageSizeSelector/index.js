@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 25, 50, 15, 30, 100]}] */
+/* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 20, 50, 100]}] */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
