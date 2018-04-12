@@ -18,8 +18,7 @@
 }
 
 .card-item {
-  border: 0px solid black;
-  padding: 0.5rem 1rem 1rem 1rem;
+  padding: 1rem;
   color: #606060;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
@@ -70,7 +69,12 @@
 .card-item-b > div:last-child {
   text-align: right;
 } /*tax ID*/
-
+.card-sum-wrapper {
+  border: 0px red solid;
+  overflow: hidden;
+  height: 92px;
+  overflow-wrap: break-word;
+}
 .card-sum-info {
   margin-bottom: 0;
   display: flex;
