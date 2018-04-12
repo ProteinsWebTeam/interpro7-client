@@ -51,7 +51,11 @@ class TaxonomyFilter extends PureComponent {
   render() {
     const {
       data: { loading, payload },
-      customLocation: { description: { organism: { accession } } },
+      customLocation: {
+        description: {
+          organism: { accession },
+        },
+      },
     } = this.props;
     const taxes = Object.entries(loading ? {} : payload).sort(
       ([, { value: a }], [, { value: b }]) => b - a,
@@ -106,7 +110,6 @@ const getUrlFor = createSelector(
         accession: null,
       },
     };
-    console.log(desc);
     return format({
       protocol,
       hostname,
