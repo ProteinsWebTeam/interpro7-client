@@ -15,7 +15,7 @@ import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiStyles, styles, theme);
 
-const ParagraphWithCites = ({ p, literature = [] }) => (
+export const ParagraphWithCites = ({ p, literature = [] }) => (
   <div className={styles.paragraph}>
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
