@@ -73,9 +73,10 @@
   border: 0px red solid;
   overflow: hidden;
   height: 92px;
-  overflow-wrap: break-word;
+  width: 207px; /*trick for description not to go behond limits - temp*/
 }
 .card-sum-info {
+  color: #333;
   margin-bottom: 0;
   display: flex;
   justify-content: space-between;
