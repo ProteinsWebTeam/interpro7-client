@@ -14,6 +14,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import { NumberComponent } from 'components/NumberLabel';
 import { ParagraphWithCites } from 'components/Description';
+import loadWebComponent from 'utils/loadWebComponent';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -772,6 +773,12 @@ class GridView extends PureComponent {
     dataTable: T.array,
     search: T.string,
   };
+
+  componentWillMount() {
+    loadWebComponent(() =>
+      import('interpro-components').then(m => m.InterproType),
+    ).as('interpro-type');
+  }
 
   render() {
     const { dataTable, entryDB, search } = this.props;
