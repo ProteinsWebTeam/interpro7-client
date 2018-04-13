@@ -21,7 +21,26 @@ import local from './style.css';
 
 const f = foundationPartial(local, fonts);
 
-const getUrlForOrg = accession =>
+const getUrlForOrg = (accession, db) =>
+  createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname:
+          root +
+          descriptionToPath({
+            main: { key: 'organism' },
+            entry: { isFilter: true, db: db },
+            protein: { isFilter: true },
+            organism: { db: 'taxonomy', accession },
+          }),
+      }),
+  );
+
+const getUrlFor = accession =>
   createSelector(
     state => state.settings.api,
     ({ protocol, hostname, port, root }) =>
@@ -485,7 +504,11 @@ class SummaryCounterEntries extends PureComponent {
               {metadata.source_database.toLowerCase() === 'cdd' ||
               metadata.source_database.toLowerCase() === 'pfam' ? (
                 <div className={f('count-sets')}>
-                  <Tooltip title={`... sets matching ${metadata.name}`}>
+                  <Tooltip
+                    title={`${
+                      loading ? 0 : payload.metadata.counters.sets
+                    } sets matching ${metadata.name}`}
+                  >
                     <Link
                       to={{
                         description: {
@@ -541,7 +564,7 @@ class DescriptionEntries extends PureComponent {
                 {loading ? 0 : payload.metadata.description[0]}
               </div>
               {
-                //<ParagraphWithCites p={loading ? 0 : payload.metadata.description[0]} />
+                // <ParagraphWithCites p={loading ? 0 : payload.metadata.description[0]} />
               }
               <Link
                 to={{
@@ -579,17 +602,11 @@ class SummaryCounterOrg extends PureComponent {
       metadata.source_database !== 'proteome' && (
         <div className={f('card-item-m', 'card-sum-info', 'label-off')}>
           <div className={f('count-entries')}>
-            {
-              // counts should change for each db selected but is NOT
-            }
             <Tooltip
               title={`${
                 loading ? 0 : payload.metadata.counters.entries
               } ${entryDB} entries matching ${metadata.name}`}
             >
-              {
-                // keep db: 'all' while counter are not working (otherwise use db: entryDB)
-              }
               <Link
                 to={{
                   description: {
@@ -598,7 +615,7 @@ class SummaryCounterOrg extends PureComponent {
                       db: 'taxonomy',
                       accession: metadata.accession.toString(),
                     },
-                    entry: { isFilter: true, db: 'all' },
+                    entry: { isFilter: true, db: entryDB },
                   },
                 }}
               >
@@ -762,19 +779,19 @@ class GridView extends PureComponent {
       <AnimatedEntry className={f('card-wrapper')} element="div">
         {dataTable.map(({ metadata }) => {
           const SummaryCounterOrgWithData = loadData(
-            getUrlForOrg(`${metadata.accession}`),
+            getUrlForOrg(`${metadata.accession}`, entryDB),
           )(SummaryCounterOrg);
           const SummaryCounterEntriesWithData = loadData(
             getUrlForEntries(`${metadata.accession}`, entryDB),
           )(SummaryCounterEntries);
-          const LineageWithData = loadData(
-            getUrlForOrg(`${metadata.accession}`),
-          )(Lineage);
+          const LineageWithData = loadData(getUrlFor(`${metadata.accession}`))(
+            Lineage,
+          );
           const DescriptionEntriesWithData = loadData(
             getUrlForEntries(`${metadata.accession}`, entryDB),
           )(DescriptionEntries);
           const SpeciesIconWithData = loadData(
-            getUrlForOrg(`${metadata.accession}`),
+            getUrlFor(`${metadata.accession}`),
           )(SpeciesIcon);
 
           return (
