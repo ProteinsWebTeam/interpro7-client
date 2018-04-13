@@ -1,7 +1,19 @@
+import { format } from 'url';
 import { schedule } from 'timing-functions/src';
 
 const DEFAULT_SCHEDULE_DELAY = 2000; // 2 seconds
 const DEFAULT_LOOP_TIMEOUT = 60000; // one minute
+
+const checkStatus = async ({ status: { servers }, settings }) => {
+  for (const endpoint of Object.keys(servers)) {
+    const endpointSettings = settings[endpoint];
+    const url = format({
+      ...endpointSettings,
+      pathname: endpointSettings.root,
+    });
+    console.log(url);
+  }
+};
 
 export default ({ getState }) => {
   let loopID;
@@ -17,7 +29,7 @@ export default ({ getState }) => {
     await schedule(DEFAULT_SCHEDULE_DELAY);
 
     try {
-      console.log('status loop');
+      checkStatus(getState());
     } catch (error) {
       console.error(error);
     } finally {
