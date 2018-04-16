@@ -71,7 +71,7 @@ const rules = {
   // Enforce use of function declarations or expressions
   'func-style': [1, 'expression'],
   // Enforce the spacing around the * in generator functions
-  'generator-star-spacing': [1, 'after'],
+  'generator-star-spacing': 0,
   // Make sure for-in loops have an if statement
   'guard-for-in': 2,
   // Enforce label tags to have associated control

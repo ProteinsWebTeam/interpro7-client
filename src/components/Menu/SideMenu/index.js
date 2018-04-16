@@ -10,6 +10,7 @@ import EBIMenu from 'components/Menu/EBIMenu';
 import InterProMenu from 'components/Menu/InterProMenu';
 import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 import Link from 'components/generic/Link';
+import ServerStatus from './ServerStatus';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -20,46 +21,21 @@ import style from './style.css';
 
 const f = foundationPartial(ebiStyles, interproStyles, helperClasses, style);
 
-// TODO: eventually remove all of this logic a few releases after initial launch
-const getOldHref = createSelector(
-  description => description,
-  d => {
-    const href = 'https://www.ebi.ac.uk/interpro/';
-    const { key } = d.main;
-    if (key === 'entry') {
-      if (!d.entry.db) {
-        return href;
-      } else if (d.entry.db === 'InterPro') {
-        if (d.entry.accession) {
-          return `${href}entry/${d.entry.accession}/`;
-        }
-        return `${href}search/`;
-      }
-      if (d.entry.accession) {
-        return `${href}signature/${d.entry.accession}/`;
-      }
-      return `${href}member-database/${d.entry.db}/`;
-    } else if (key === 'protein' && d.entry.accession) {
-      return `${href}protein/${d.entry.accession}/`;
-    }
-    return href;
-  },
-);
-
 /*:: type OldIPProps = {
-  description: Object,
+  href: string,
 }; */
 
+// TODO: eventually remove all of this logic a few releases after initial launch
 class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
   static propTypes = {
-    description: T.object.isRequired,
+    href: T.string.isRequired,
   };
 
   render() {
     return (
       <Link
         className={f('old-interpro-link')}
-        href={getOldHref(this.props.description)}
+        href={this.props.href}
         target="_blank"
       >
         See this page in the old InterPro website
@@ -70,7 +46,27 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
 
 const mapStateToPropsForOldLink = createSelector(
   state => state.customLocation.description,
-  description => ({ description }),
+  d => {
+    const href = 'https://www.ebi.ac.uk/interpro/';
+    const { key } = d.main;
+    if (key === 'entry') {
+      if (!d.entry.db) {
+        return { href };
+      } else if (d.entry.db === 'InterPro') {
+        if (d.entry.accession) {
+          return { href: `${href}entry/${d.entry.accession}/` };
+        }
+        return { href: `${href}search/` };
+      }
+      if (d.entry.accession) {
+        return { href: `${href}signature/${d.entry.accession}/` };
+      }
+      return { href: `${href}member-database/${d.entry.db}/` };
+    } else if (key === 'protein' && d.entry.accession) {
+      return { href: `${href}protein/${d.entry.accession}/` };
+    }
+    return { href };
+  },
 );
 
 const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
@@ -141,6 +137,12 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
               <li className={f('menu-label', 'cursor-default', 'tertiary')}>
                 <OldInterProLink />
               </li>
+              <li>
+                <span className={f('menu-label', 'cursor-default', 'tertiary')}>
+                  Connection status
+                </span>
+                <ServerStatus />
+              </li>
             </ul>
           </nav>
         </React.Fragment>
@@ -148,7 +150,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
     }
     return (
       <aside
-        inert={visible ? 'false' : 'true'}
+        inert={visible ? undefined : ''}
         aria-hidden={!visible}
         className={f('container', { visible })}
         role="menu"

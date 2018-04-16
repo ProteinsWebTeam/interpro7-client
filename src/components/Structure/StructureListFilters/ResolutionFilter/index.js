@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import debounce from 'lodash-es/debounce';
 
-import MultipleInput from 'components/SimpleCommonComponents/MultipleInput/index';
+import MultipleInput from 'components/SimpleCommonComponents/MultipleInput';
 
 import { goToCustomLocation } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
@@ -90,7 +90,11 @@ class ResolutionFilter extends PureComponent {
     );
 
   render() {
-    const { customLocation: { search: { resolution } } } = this.props;
+    const {
+      customLocation: {
+        search: { resolution },
+      },
+    } = this.props;
     const { min, max } = this.state;
     return (
       <div className={f('column')}>

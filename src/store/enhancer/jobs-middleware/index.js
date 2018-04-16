@@ -166,7 +166,7 @@ export default ({ dispatch, getState }) => {
   let loopID;
   let running = false;
   const loop = async () => {
-    if (running === true) return;
+    if (running) return;
     // This might have been called before the scheduled run, so clear the
     // corresponding scheduled run first
     clearTimeout(loopID);
@@ -191,7 +191,7 @@ export default ({ dispatch, getState }) => {
 
   // start the logic
   rehydrateStoredJobs(dispatch);
-  loop();
+  running = loop();
 
   return next => action => {
     const previousState = getState();

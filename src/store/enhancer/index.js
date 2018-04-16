@@ -1,11 +1,12 @@
 // @flow
 import { applyMiddleware, compose } from 'redux';
 
-import location from './location-middleware/index';
 import jobs from './jobs-middleware';
+import location from './location-middleware';
+import status from './status-middleware';
 
 export default (history /*: History */) => {
-  const middlewares = [location(history), jobs];
+  const middlewares = [jobs, location(history), status];
 
   return compose(
     applyMiddleware(...middlewares),
