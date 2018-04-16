@@ -4,7 +4,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
 <div
   aria-hidden={true}
   className="masthead-black-bar"
-  inert="true"
+  inert={true}
 >
   <div
     className="dropdown-pane bottom embl-dropdown"
@@ -115,7 +115,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
 <div
   aria-hidden={false}
   className="masthead-black-bar visible"
-  inert="false"
+  inert={false}
 >
   <div
     className="dropdown-pane bottom embl-dropdown"

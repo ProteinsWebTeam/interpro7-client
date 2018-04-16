@@ -10,7 +10,7 @@ import { SERVER_STATUS } from 'actions/types';
 /*:: import type { Action } from 'actions'; */
 
 export default (server /*: Server */) => (
-  state /*: ServerStatus */ = { status: false, lastCheck: null },
+  state /*: ServerStatus */ = { status: null, lastCheck: null },
   action /*: Action */,
 ) => {
   switch (action.type) {
