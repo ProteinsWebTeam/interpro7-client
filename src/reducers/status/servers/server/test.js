@@ -21,20 +21,20 @@ describe('reducer for settings', () => {
 
   test('should return the initial state', () => {
     expect(reducer(undefined, { type: TEST })).toEqual({
-      status: false,
+      status: null,
       lastCheck: null,
     });
   });
 
   test('should handle CHANGE_SETTINGS action', () => {
     let state = reducer(
-      { status: false, lastCheck: null },
+      { status: null, lastCheck: null },
       { type: SERVER_STATUS, server: 'api', status: true },
     );
     expect(state.status).toBe(true);
     expect(state.lastCheck).toBe(Date.now());
     state = reducer(
-      { status: true, lastCheck: null },
+      { status: null, lastCheck: null },
       { type: SERVER_STATUS, server: 'api', status: true },
     );
     expect(state.status).toBe(true);
@@ -54,14 +54,14 @@ describe('reducer for settings', () => {
   });
 
   test('should ignore other server', () => {
-    const untouched = { status: false, lastCheck: null };
+    const untouched = { status: null, lastCheck: null };
     expect(reducer(untouched, { type: SERVER_STATUS, server: 'ebi' })).toBe(
       untouched,
     );
   });
 
   test('should ignore everything else', () => {
-    const untouched = { status: false, lastCheck: null };
+    const untouched = { status: null, lastCheck: null };
     expect(reducer(untouched, { type: TEST })).toBe(untouched);
   });
 });

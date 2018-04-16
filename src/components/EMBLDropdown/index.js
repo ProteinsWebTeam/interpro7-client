@@ -147,7 +147,7 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
     if (!(visible || wasRendered)) return null;
     return (
       <div
-        inert={visible ? 'false' : 'true'}
+        inert={!visible}
         aria-hidden={!visible}
         className={styleBundle('masthead-black-bar', { visible })}
       >

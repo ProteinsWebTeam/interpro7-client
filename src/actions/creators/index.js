@@ -151,6 +151,18 @@ export const unloadDataJob = (
   job,
 });
 
+// status
+export const serverStatus = (server /*: string */, status /*: boolean*/) => ({
+  type: types.SERVER_STATUS,
+  server,
+  status,
+});
+
+export const browserStatus = (status /*: boolean*/) => ({
+  type: types.BROWSER_STATUS,
+  onLine: status,
+});
+
 // toast messages
 export const addToast = (toast /*: Object */, id /*: string */) => ({
   type: types.ADD_TOAST,
