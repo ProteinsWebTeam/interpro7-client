@@ -343,6 +343,9 @@ const getUrlForMemberDBCount = createSelector(
     if (description.main.key && description.main.key !== 'entry') {
       output += `/${description.main.key}/${description[description.main.key]
         .proteomeDB || description[description.main.key].db}`;
+      if (description.main.key === 'protein') {
+        output = output.replace(/(un)?reviewed/i, 'UniProt');
+      }
     }
     return output;
   },
