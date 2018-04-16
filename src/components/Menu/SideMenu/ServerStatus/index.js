@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 
 import cn from 'classnames/bind';
 
+import Link from 'components/generic/Link';
 import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -50,7 +51,6 @@ class ServerStatus extends PureComponent {
     const { browser, endpoint, status, lastCheck } = this.props;
     return (
       <Tooltip
-        useContext
         html={
           <span>
             {`${mapEndpointToName.get(endpoint)} appears ${
@@ -81,14 +81,18 @@ class _ServerStatuses extends PureComponent {
   render() {
     const { statuses, browser } = this.props;
     return (
-      <ul className={styles['connection-statuses']}>
-        <BrowserStatus status={browser} />
-        {Object.entries(statuses).map(([endpoint, status]) => (
-          <li key={endpoint}>
-            <ServerStatus endpoint={endpoint} {...status} browser={browser} />
+      <Link to={{ description: { other: ['settings'] } }}>
+        <ul className={s('connection-statuses')}>
+          <li>
+            <BrowserStatus status={browser} />
           </li>
-        ))}
-      </ul>
+          {Object.entries(statuses).map(([endpoint, status]) => (
+            <li key={endpoint}>
+              <ServerStatus endpoint={endpoint} {...status} browser={browser} />
+            </li>
+          ))}
+        </ul>
+      </Link>
     );
   }
 }
