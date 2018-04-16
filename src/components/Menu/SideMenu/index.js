@@ -150,7 +150,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
     }
     return (
       <aside
-        inert={!visible}
+        inert={visible ? undefined : ''}
         aria-hidden={!visible}
         className={f('container', { visible })}
         role="menu"

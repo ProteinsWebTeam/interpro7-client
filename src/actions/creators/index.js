@@ -82,7 +82,10 @@ export const changePageSize = (pageSize /* :number */) => ({
 });
 
 export const changeSettings = (event /* :Event */) => {
-  if (event.target instanceof HTMLInputElement) {
+  if (
+    event.target instanceof HTMLInputElement ||
+    event.target instanceof HTMLSelectElement
+  ) {
     return {
       type: types.CHANGE_SETTINGS,
       category: event.target.form && event.target.form.dataset.category,

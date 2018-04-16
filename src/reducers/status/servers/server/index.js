@@ -3,7 +3,7 @@ import { SERVER_STATUS } from 'actions/types';
 
 /*:: type Server = 'api' | 'ebi' | 'ipScan'; */
 /*:: export type ServerStatus = {|
-  status: boolean,
+  status: ?boolean,
   lastCheck: ?number,
 |}; */
 /*:: import type { State } from 'reducers'; */

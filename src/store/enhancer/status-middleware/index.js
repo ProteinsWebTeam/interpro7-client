@@ -1,26 +1,27 @@
 import { format } from 'url';
-import { schedule, sleep } from 'timing-functions/src';
+import { schedule } from 'timing-functions/src';
 
 import customFetch from 'utils/cached-fetch';
 
+import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
 import { serverStatus, browserStatus } from 'actions/creators';
 
 const DEFAULT_SCHEDULE_DELAY = 2000; // 2 seconds
 const DEFAULT_LOOP_TIMEOUT = 60000; // one minute
 
-async function* checkStatus({ status: { servers, browser }, settings }) {
+const checkStatus = async function*({
+  status: { servers, browser },
+  settings,
+}) {
   // If we don't have a connection, no need to check for the servers,
   // we'll keep the last know values
   if (!browser) return;
   for (const endpoint of Object.keys(servers)) {
     const endpointSettings = settings[endpoint];
-    let url = format({
+    const url = format({
       ...endpointSettings,
       pathname: endpointSettings.root,
     });
-    if (Math.random() > 0.75) {
-      url += '/jkjljlkjkl/';
-    }
     try {
       const response = await customFetch(url, {
         method: 'HEAD',
@@ -31,7 +32,7 @@ async function* checkStatus({ status: { servers, browser }, settings }) {
       yield serverStatus(endpoint, false);
     }
   }
-}
+};
 
 export default ({ dispatch, getState }) => {
   let loopID;
@@ -53,7 +54,7 @@ export default ({ dispatch, getState }) => {
     } catch (error) {
       console.error(error);
     } finally {
-      loopID = setTimeout(loop, DEFAULT_LOOP_TIMEOUT / 10);
+      loopID = setTimeout(loop, DEFAULT_LOOP_TIMEOUT);
       running = false;
     }
   };
@@ -61,13 +62,20 @@ export default ({ dispatch, getState }) => {
   // start the logic
   running = loop();
 
-  window.addEventListener('online', () => {
-    dispatch(browserStatus(true));
-  });
+  // Browser connection events
+  window.addEventListener('online', () => dispatch(browserStatus(true)));
+  window.addEventListener('offline', () => dispatch(browserStatus(false)));
 
-  window.addEventListener('offline', () => {
-    dispatch(browserStatus(false));
-  });
-
-  return next => action => next(action);
+  return next => action => {
+    switch (action.type) {
+      // In case settings changes, update the server statuses
+      case CHANGE_SETTINGS:
+      case RESET_SETTINGS:
+        running = loop();
+        break;
+      default:
+        break;
+    }
+    return next(action);
+  };
 };
