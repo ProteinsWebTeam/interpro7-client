@@ -105,6 +105,7 @@ const List = ({
     };
   }
   const urlHasParameter = url && url.includes('?');
+  const includeGrid = url;
   return (
     <div className={f('row')}>
       <MemberDBTabs />
@@ -130,6 +131,7 @@ const List = ({
           actualSize={_payload.count}
           query={search}
           notFound={notFound}
+          withGrid={includeGrid}
         >
           <Exporter>
             <ul>
