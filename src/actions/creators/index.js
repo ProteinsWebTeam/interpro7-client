@@ -82,7 +82,10 @@ export const changePageSize = (pageSize /* :number */) => ({
 });
 
 export const changeSettings = (event /* :Event */) => {
-  if (event.target instanceof HTMLInputElement) {
+  if (
+    event.target instanceof HTMLInputElement ||
+    event.target instanceof HTMLSelectElement
+  ) {
     return {
       type: types.CHANGE_SETTINGS,
       category: event.target.form && event.target.form.dataset.category,
@@ -149,6 +152,18 @@ export const unloadDataJob = (
 ) => ({
   type: types.UNLOAD_DATA_JOB,
   job,
+});
+
+// status
+export const serverStatus = (server /*: string */, status /*: boolean*/) => ({
+  type: types.SERVER_STATUS,
+  server,
+  status,
+});
+
+export const browserStatus = (status /*: boolean*/) => ({
+  type: types.BROWSER_STATUS,
+  onLine: status,
 });
 
 // toast messages

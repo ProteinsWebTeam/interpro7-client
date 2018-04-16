@@ -1,9 +1,9 @@
 import { format } from 'url';
 
-import { NEW_CUSTOM_LOCATION } from 'actions/types/index';
-import { customLocationChangeFromHistory } from 'actions/creators/index';
+import { NEW_CUSTOM_LOCATION } from 'actions/types';
+import { customLocationChangeFromHistory } from 'actions/creators';
 
-import descriptionToPath from 'utils/processDescription/descriptionToPath/index';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 // Middleware to handle history change events
 export default history => ({ dispatch, getState }) => {

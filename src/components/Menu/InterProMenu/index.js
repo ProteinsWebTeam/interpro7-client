@@ -7,6 +7,7 @@ import MenuItem from 'components/Menu/MenuItem';
 import { InterPro } from 'menuConfig';
 
 import { foundationPartial } from 'styles/foundation';
+
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from './styles.css';
 
@@ -29,9 +30,9 @@ class InterProMenu extends PureComponent /*:: <Props> */ {
       <ul className={`${className || ''} ${f('interpro-menu')}`}>
         {children}
         {InterPro.map(
-          ({ to, name, icon, iconClass = 'generic', activeClass }) => (
+          ({ to, name, icon, iconClass = 'generic', activeClass, exact }) => (
             <li key={name}>
-              <MenuItem to={to} activeClass={activeClass}>
+              <MenuItem to={to} activeClass={activeClass} exact={exact}>
                 {icon !== 'H' && (
                   <i
                     data-icon={icon}
