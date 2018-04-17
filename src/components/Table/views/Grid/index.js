@@ -438,9 +438,13 @@ class SummaryCounterStructuresDetail extends PureComponent {
     return (
       // TODO get values when more than 2 species
       <div className={f('count-entries')}>
-        Tax ID: {loading ? 0 : payload.results[0].metadata.accession}
-        <br />
-        {loading ? 0 : payload.results[0].metadata.name}
+        <Tooltip
+          title={`${loading ? 0 : payload.results[0].metadata.name}( Tax ID:${
+            loading ? 0 : payload.results[0].metadata.accession
+          })`}
+        >
+          {loading ? 0 : payload.results[0].metadata.name}
+        </Tooltip>
       </div>
     );
   }
@@ -460,7 +464,7 @@ class SummaryCounterStructures extends PureComponent {
   render() {
     const { entryDB, metadata, data: { loading, payload } } = this.props;
     return (
-      <div className={f('card-item-m', 'card-sum-info', 'label-off')}>
+      <div className={f('card-block', 'card-counter', 'label-off')}>
         <div className={f('count-entries')}>
           <Tooltip
             title={`${
@@ -574,7 +578,7 @@ class SummaryCounterEntries extends PureComponent {
   render() {
     const { entryDB, metadata, data: { loading, payload } } = this.props;
     return (
-      <div className={f('card-item-m', 'card-sum-info', 'label-off')}>
+      <div className={f('card-block', 'card-counter', 'label-off')}>
         <div className={f('count-proteins')}>
           <Tooltip
             title={`${
@@ -800,7 +804,7 @@ class SummaryCounterOrg extends PureComponent {
     const { entryDB, metadata, data: { loading, payload } } = this.props;
     return (
       metadata.source_database !== 'proteome' && (
-        <div className={f('card-item-m', 'card-sum-info', 'label-off')}>
+        <div className={f('card-block', 'card-counter', 'label-off')}>
           <div className={f('count-entries')}>
             <Tooltip
               title={`${
@@ -1009,7 +1013,7 @@ class GridView extends PureComponent {
           return (
             <div className={f('card-flex-container')} key={metadata.accession}>
               <div className={f('card-item')}>
-                <div className={f('card-item-t')}>
+                <div className={f('card-header')}>
                   {// TITLE browse organism + proteome
                   metadata.source_database === 'taxonomy' ||
                   metadata.source_database === 'proteome' ? (
@@ -1176,12 +1180,12 @@ class GridView extends PureComponent {
                 {// DESCRIPTION all db
                 metadata.source_database !== 'proteome' &&
                   metadata.source_database !== 'taxonomy' && (
-                    <div className={f('card-item-m')}>
+                    <div className={f('card-block')}>
                       <DescriptionEntriesWithData metadata={metadata} />
                     </div>
                   )}
 
-                <div className={f('card-item-b')}>
+                <div className={f('card-footer')}>
                   {// INFO LINEAGE BL - browse organism
                   metadata.source_database === 'taxonomy' && (
                     <LineageWithData />
