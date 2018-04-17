@@ -15,6 +15,7 @@ import MemberSymbol from 'components/Entry/MemberSymbol';
 import { NumberComponent } from 'components/NumberLabel';
 import { ParagraphWithCites } from 'components/Description';
 import loadWebComponent from 'utils/loadWebComponent';
+import { PDBeLink } from 'components/ExtLink';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -37,6 +38,65 @@ const getUrlForOrg = (accession, db) =>
             entry: { isFilter: true, db: db },
             protein: { isFilter: true },
             organism: { db: 'taxonomy', accession },
+          }),
+      }),
+  );
+
+const getUrlForStruct = (accession, db) =>
+  createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname:
+          root +
+          descriptionToPath({
+            main: { key: 'structure' },
+            structure: { db: 'pdb', accession },
+          }),
+      }),
+  );
+
+const getUrlForStructDetail = (accession, db) =>
+  createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname:
+          root +
+          descriptionToPath({
+            main: { key: 'structure' },
+            structure: { db: 'pdb', accession },
+            organism: { isFilter: true, db: 'taxonomy' },
+          }),
+      }),
+  );
+
+const getUrlForStructTaxname = (accession, db) =>
+  createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname:
+          root +
+          descriptionToPath({
+            main: { key: 'organism' },
+            organism: {
+              db: 'taxonomy',
+            },
+            structure: {
+              isFilter: true,
+              db: 'pdb',
+              accession: accession,
+            },
           }),
       }),
   );
@@ -361,6 +421,145 @@ class SpeciesIcon extends PureComponent {
   }
 }
 
+class SummaryCounterStructuresDetail extends PureComponent {
+  static propTypes = {
+    entryDB: T.string,
+    dataTable: T.array,
+    metadata: T.object.isRequired,
+    data: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
+  };
+  render() {
+    const { entryDB, metadata, data: { loading, payload }, names } = this.props;
+
+    return (
+      // TODO get values when more than 2 species
+      <div className={f('count-entries')}>
+        Tax ID: {loading ? 0 : payload.results[0].metadata.accession}
+        <br />
+        {loading ? 0 : payload.results[0].metadata.name}
+      </div>
+    );
+  }
+}
+
+class SummaryCounterStructures extends PureComponent {
+  static propTypes = {
+    entryDB: T.string,
+    dataTable: T.array,
+    metadata: T.object.isRequired,
+    data: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
+  };
+  render() {
+    const { entryDB, metadata, data: { loading, payload } } = this.props;
+    return (
+      <div className={f('card-item-m', 'card-sum-info', 'label-off')}>
+        <div className={f('count-entries')}>
+          <Tooltip
+            title={`${
+              loading ? 0 : payload.metadata.counters.entries
+            } ${entryDB} entries matching ${metadata.name}`}
+          >
+            <Link
+              to={{
+                description: {
+                  main: { key: 'structure' },
+                  structure: {
+                    db: 'pdb',
+                    accession: metadata.accession.toString(),
+                  },
+                  entry: { isFilter: true, db: entryDB },
+                },
+              }}
+            >
+              {
+                // db icon
+              }
+              {entryDB !== null && (
+                <MemberSymbol type={entryDB} className={f('md-small')} />
+              )}
+              {entryDB === null && (
+                <MemberSymbol type="all" className={f('md-small')} />
+              )}
+              <NumberComponent
+                loading={loading}
+                value={loading ? 0 : payload.metadata.counters.entries}
+              />
+              <span className={f('label-number')}>entries</span>
+            </Link>
+          </Tooltip>
+        </div>
+
+        <div className={f('count-proteins')}>
+          <Tooltip
+            title={`${
+              loading ? 0 : payload.metadata.counters.proteins
+            } proteins matching ${metadata.name}`}
+          >
+            <Link
+              to={{
+                description: {
+                  main: { key: 'structure' },
+                  structure: {
+                    db: 'pdb',
+                    accession: metadata.accession.toString(),
+                  },
+                  protein: { isFilter: true, db: 'UniProt' },
+                },
+              }}
+            >
+              <div
+                className={f('icon', 'icon-conceptual')}
+                data-icon="&#x50;"
+              />{' '}
+              <NumberComponent
+                loading={loading}
+                value={loading ? 0 : payload.metadata.counters.proteins}
+              />
+              <span className={f('label-number')}>protein</span>
+            </Link>
+          </Tooltip>
+        </div>
+
+        <div className={f('count-organisms')}>
+          <Tooltip
+            title={`${
+              loading ? 0 : payload.metadata.counters.organisms
+            } organisms matching ${metadata.name}`}
+          >
+            <Link
+              to={{
+                description: {
+                  main: { key: 'structure' },
+                  structure: {
+                    db: 'pdb',
+                    accession: metadata.accession.toString(),
+                  },
+                  organism: { isFilter: true, db: 'taxonomy' },
+                },
+              }}
+            >
+              <div className={f('icon', 'icon-count-species')} />{' '}
+              <NumberComponent
+                loading={loading}
+                value={loading ? 0 : payload.metadata.counters.organisms}
+              />
+              <span className={f('label-number')}>organisms</span>
+            </Link>
+          </Tooltip>
+        </div>
+      </div>
+    );
+  }
+}
+
 class SummaryCounterEntries extends PureComponent {
   static propTypes = {
     entryDB: T.string,
@@ -432,7 +631,7 @@ class SummaryCounterEntries extends PureComponent {
           <Tooltip
             title={`${
               loading ? 0 : payload.metadata.counters.organisms
-            } species matching ${metadata.name}`}
+            } organisms matching ${metadata.name}`}
           >
             <Link
               to={{
@@ -451,7 +650,7 @@ class SummaryCounterEntries extends PureComponent {
                 loading={loading}
                 value={loading ? 0 : payload.metadata.counters.organisms}
               />
-              <span className={f('label-number')}>species</span>
+              <span className={f('label-number')}>organisms</span>
             </Link>
           </Tooltip>
         </div>
@@ -788,6 +987,12 @@ class GridView extends PureComponent {
           const SummaryCounterOrgWithData = loadData(
             getUrlForOrg(`${metadata.accession}`, entryDB),
           )(SummaryCounterOrg);
+          const SummaryCounterStructuresDetailWithData = loadData(
+            getUrlForStructTaxname(`${metadata.accession}`, entryDB),
+          )(SummaryCounterStructuresDetail);
+          const SummaryCounterStructuresWithData = loadData(
+            getUrlForStruct(`${metadata.accession}`, entryDB),
+          )(SummaryCounterStructures);
           const SummaryCounterEntriesWithData = loadData(
             getUrlForEntries(`${metadata.accession}`, entryDB),
           )(SummaryCounterEntries);
@@ -865,7 +1070,9 @@ class GridView extends PureComponent {
                   )}
 
                   {// TITLE browse entries - all NON interpro MD
-                  metadata.source_database.toLowerCase() !== 'taxonomy' &&
+                  //not protein
+                  metadata.source_database.toLowerCase() !== 'pdb' &&
+                    metadata.source_database.toLowerCase() !== 'taxonomy' &&
                     metadata.source_database !== 'proteome' &&
                     metadata.source_database.toLowerCase() !== 'interpro' && (
                       <Link
@@ -895,6 +1102,40 @@ class GridView extends PureComponent {
                         </h6>
                       </Link>
                     )}
+
+                  {// TITLE browse strutures
+                  metadata.source_database.toLowerCase() === 'pdb' && (
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'structure' },
+                          structure: {
+                            db: metadata.source_database,
+                            accession: metadata.accession,
+                          },
+                        },
+                      }}
+                    >
+                      <Tooltip
+                        title={`3D visualisation for ${metadata.accession.toUpperCase()} structure `}
+                      >
+                        <img
+                          src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${
+                            metadata.accession
+                          }/traces.jpg`}
+                          // src={`//www.ebi.ac.uk/pdbe/static/entry/${metadata.accession}_deposited_chain_front_image-200x200.png`}
+                          alt={`structure with accession ${metadata.accession.toUpperCase()}`}
+                          style={{ maxWidth: '80%' }}
+                        />
+                      </Tooltip>
+                      <h6>
+                        <HighlightedText
+                          text={metadata.name}
+                          textToHighlight={search}
+                        />
+                      </h6>
+                    </Link>
+                  )}
                 </div>
 
                 {// COUNTER  browse organism + proteome
@@ -907,13 +1148,30 @@ class GridView extends PureComponent {
                 ) : null}
 
                 {// COUNTER all db
-                metadata.source_database !== 'proteome' &&
+                //not protein
+                metadata.source_database.toLowerCase() !== 'pdb' &&
+                  metadata.source_database !== 'proteome' &&
                   metadata.source_database !== 'taxonomy' && (
                     <SummaryCounterEntriesWithData
                       entryDB={entryDB}
                       metadata={metadata}
                     />
                   )}
+
+                {// COUNTER structures
+
+                metadata.source_database.toLowerCase() === 'pdb' && (
+                  <div>
+                    <SummaryCounterStructuresDetailWithData
+                      metadata={metadata}
+                      entryDB={entryDB}
+                    />
+                    <SummaryCounterStructuresWithData
+                      metadata={metadata}
+                      entryDB={entryDB}
+                    />
+                  </div>
+                )}
 
                 {// DESCRIPTION all db
                 metadata.source_database !== 'proteome' &&
@@ -929,24 +1187,26 @@ class GridView extends PureComponent {
                     <LineageWithData />
                   )}
 
-                  {// INFO TYPE BL - browse entries - Interpro ONLY
-                  metadata.source_database.toLowerCase() === 'interpro' && (
-                    <div>{metadata.type.replace('_', ' ')}</div>
-                  )}
-
-                  {// INFO ID BR - browse organism + proteome
-                  metadata.source_database === 'proteome' ||
-                  metadata.source_database === 'taxonomy' ? (
-                    <div>
-                      {metadata.source_database === 'proteome' &&
-                        'Proteome ID: '}
-                      {metadata.source_database === 'taxonomy' && 'Tax ID:'}
-                      {metadata.accession}
-                    </div>
-                  ) : null}
+                  {// INFO TYPE BL - browse structures - Xray
+                  metadata.source_database.toLowerCase() === 'pdb' &&
+                    metadata.experiment_type === 'x-ray' && (
+                      <div>
+                        {metadata.experiment_type}
+                        :{' '}
+                        <Tooltip title={`${metadata.resolution} Å resolution`}>
+                          {metadata.resolution}Å
+                        </Tooltip>
+                      </div>
+                    )}
+                  {// INFO TYPE BL - browse structures -NMR
+                  metadata.source_database.toLowerCase() === 'pdb' &&
+                    metadata.experiment_type !== 'x-ray' && (
+                      <div>{metadata.experiment_type}</div>
+                    )}
 
                   {// INFO INTEGRATION BL - browse entries - all NON interpro MD
-                  metadata.source_database.toLowerCase() !== 'interpro' &&
+                  metadata.source_database.toLowerCase() !== 'pdb' &&
+                    metadata.source_database.toLowerCase() !== 'interpro' &&
                     metadata.source_database !== 'proteome' &&
                     metadata.source_database !== 'taxonomy' && (
                       <div>
@@ -968,6 +1228,17 @@ class GridView extends PureComponent {
                         </Link>
                       </div>
                     )}
+
+                  {// INFO ID BR - browse organism + proteome
+                  metadata.source_database === 'proteome' ||
+                  metadata.source_database === 'taxonomy' ? (
+                    <div>
+                      {metadata.source_database === 'proteome' &&
+                        'Proteome ID: '}
+                      {metadata.source_database === 'taxonomy' && 'Tax ID:'}
+                      {metadata.accession}
+                    </div>
+                  ) : null}
 
                   {// INFO DB BR - all MD
                   metadata.source_database !== 'proteome' &&
