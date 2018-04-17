@@ -1244,6 +1244,11 @@ class GridView extends PureComponent {
                     </div>
                   ) : null}
 
+                  {// INFO TYPE BL - InterPro
+                  metadata.source_database.toLowerCase() === 'interpro' && (
+                    <div>{metadata.type.replace('_', ' ')}</div>
+                  )}
+
                   {// INFO DB BR - all MD
                   metadata.source_database !== 'proteome' &&
                     metadata.source_database !== 'taxonomy' && (
