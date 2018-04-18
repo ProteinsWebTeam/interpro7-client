@@ -982,38 +982,70 @@ class GridView extends PureComponent {
 
           return (
             <div className={f('card-flex-container')} key={metadata.accession}>
-              <div className={f('card-item')}>
-                <div className={f('card-header')}>
-                  {// TITLE browse organism + proteome
-                  metadata.source_database === 'taxonomy' ||
-                  metadata.source_database === 'proteome' ? (
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'organism' },
-                          organism: {
-                            db: metadata.source_database.toLowerCase(),
-                            accession: metadata.accession.toString(),
-                          },
+              <div className={f('card-header')}>
+                {// TITLE browse organism + proteome
+                metadata.source_database === 'taxonomy' ||
+                metadata.source_database === 'proteome' ? (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'organism' },
+                        organism: {
+                          db: metadata.source_database.toLowerCase(),
+                          accession: metadata.accession.toString(),
                         },
-                      }}
-                    >
-                      {//Specie ICON  only for taxonomy
-                      metadata.source_database.toLowerCase() === 'taxonomy' && (
-                        <SpeciesIconWithData />
-                      )}
+                      },
+                    }}
+                  >
+                    {//Specie ICON  only for taxonomy
+                    metadata.source_database.toLowerCase() === 'taxonomy' && (
+                      <SpeciesIconWithData />
+                    )}
 
-                      <h6>
-                        <HighlightedText
-                          text={metadata.name}
-                          textToHighlight={search}
-                        />
-                      </h6>
-                    </Link>
-                  ) : null}
+                    <h6>
+                      <HighlightedText
+                        text={metadata.name}
+                        textToHighlight={search}
+                      />
+                    </h6>
+                  </Link>
+                ) : null}
 
-                  {// TITLE browse entries - INTERPRO ONLY
-                  metadata.source_database.toLowerCase() === 'interpro' && (
+                {// TITLE browse entries - INTERPRO ONLY
+                metadata.source_database.toLowerCase() === 'interpro' && (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: metadata.source_database.toLowerCase(),
+                          accession: metadata.accession.toString(),
+                        },
+                      },
+                    }}
+                  >
+                    <Tooltip title={`${metadata.type.replace('_', ' ')} type`}>
+                      <interpro-type
+                        size="2.5em"
+                        type={metadata.type.replace('_', ' ')}
+                        aria-label="Entry type"
+                      />
+                    </Tooltip>
+                    <h6>
+                      <HighlightedText
+                        text={metadata.name}
+                        textToHighlight={search}
+                      />
+                    </h6>
+                  </Link>
+                )}
+
+                {// TITLE browse entries - all NON interpro MD
+                //not protein
+                metadata.source_database.toLowerCase() !== 'pdb' &&
+                  metadata.source_database.toLowerCase() !== 'taxonomy' &&
+                  metadata.source_database !== 'proteome' &&
+                  metadata.source_database.toLowerCase() !== 'interpro' && (
                     <Link
                       to={{
                         description: {
@@ -1025,13 +1057,12 @@ class GridView extends PureComponent {
                         },
                       }}
                     >
-                      <Tooltip
-                        title={`${metadata.type.replace('_', ' ')} type`}
-                      >
-                        <interpro-type
-                          size="2.5em"
-                          type={metadata.type.replace('_', ' ')}
-                          aria-label="Entry type"
+                      <Tooltip title={`${entryDB} database`}>
+                        <MemberSymbol
+                          size="2em"
+                          type={metadata.source_database.toLowerCase()}
+                          aria-label="Database type"
+                          className={f('md-small')}
                         />
                       </Tooltip>
                       <h6>
@@ -1043,202 +1074,160 @@ class GridView extends PureComponent {
                     </Link>
                   )}
 
-                  {// TITLE browse entries - all NON interpro MD
-                  //not protein
-                  metadata.source_database.toLowerCase() !== 'pdb' &&
-                    metadata.source_database.toLowerCase() !== 'taxonomy' &&
-                    metadata.source_database !== 'proteome' &&
-                    metadata.source_database.toLowerCase() !== 'interpro' && (
+                {// TITLE browse strutures
+                metadata.source_database.toLowerCase() === 'pdb' && (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'structure' },
+                        structure: {
+                          db: metadata.source_database,
+                          accession: metadata.accession,
+                        },
+                      },
+                    }}
+                  >
+                    <Tooltip
+                      title={`3D visualisation for ${metadata.accession.toUpperCase()} structure `}
+                    >
+                      <img
+                        src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${
+                          metadata.accession
+                        }/traces.jpg`}
+                        // src={`//www.ebi.ac.uk/pdbe/static/entry/${metadata.accession}_deposited_chain_front_image-200x200.png`}
+                        alt={`structure with accession ${metadata.accession.toUpperCase()}`}
+                      />
+                    </Tooltip>
+                    <h6>
+                      <HighlightedText
+                        text={metadata.name}
+                        textToHighlight={search}
+                      />
+                    </h6>
+                  </Link>
+                )}
+              </div>
+
+              {// COUNTER  browse organism + proteome
+              metadata.source_database === 'proteome' ||
+              metadata.source_database === 'taxonomy' ? (
+                <SummaryCounterOrgWithData
+                  entryDB={entryDB}
+                  metadata={metadata}
+                />
+              ) : null}
+
+              {// COUNTER all db
+              //not protein
+              metadata.source_database.toLowerCase() !== 'pdb' &&
+                metadata.source_database !== 'proteome' &&
+                metadata.source_database !== 'taxonomy' && (
+                  <SummaryCounterEntriesWithData
+                    entryDB={entryDB}
+                    metadata={metadata}
+                  />
+                )}
+
+              {// COUNTER structures
+              metadata.source_database.toLowerCase() === 'pdb' && (
+                <div>
+                  <div className={f('card-subheader')}>
+                    {// INFO RESOLUTION BL - browse structures - Xray
+                    metadata.experiment_type === 'x-ray' && (
+                      <div>
+                        {metadata.experiment_type}
+                        :{' '}
+                        <Tooltip title={`${metadata.resolution} Å resolution`}>
+                          {metadata.resolution}Å
+                        </Tooltip>
+                      </div>
+                    )}
+                    {// INFO TYPE BL - browse structures -NMR
+                    metadata.experiment_type !== 'x-ray' && (
+                      <Tooltip title={`Solution ${metadata.experiment_type}`}>
+                        {metadata.experiment_type}
+                      </Tooltip>
+                    )}
+                  </div>
+                  <div className={f('card-block')}>
+                    <SummaryCounterStructuresWithData
+                      metadata={metadata}
+                      entryDB={entryDB}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {// DESCRIPTION all db
+              metadata.source_database !== 'proteome' &&
+                metadata.source_database !== 'taxonomy' && (
+                  <div className={f('card-block')}>
+                    <DescriptionEntriesWithData metadata={metadata} />
+                  </div>
+                )}
+
+              <div className={f('card-footer')}>
+                {// INFO LINEAGE BL - browse organism
+                metadata.source_database === 'taxonomy' && <LineageWithData />}
+
+                {// INFO RESOLUTION BL - browse structures -NMR
+                metadata.source_database.toLowerCase() === 'pdb' && (
+                  <div>
+                    <TaxnameStructuresWithData metadata={metadata} />
+                  </div>
+                )}
+
+                {// INFO INTEGRATION BL - browse entries - all NON interpro MD
+                metadata.source_database.toLowerCase() !== 'pdb' &&
+                  metadata.source_database.toLowerCase() !== 'interpro' &&
+                  metadata.source_database !== 'proteome' &&
+                  metadata.source_database !== 'taxonomy' && (
+                    <div>
+                      {metadata.integrated ? 'Integrated: ' : 'Not integrated'}
                       <Link
                         to={{
                           description: {
                             main: { key: 'entry' },
                             entry: {
-                              db: metadata.source_database.toLowerCase(),
-                              accession: metadata.accession.toString(),
+                              db: 'interpro',
+                              accession: metadata.integrated,
                             },
                           },
                         }}
                       >
-                        <Tooltip title={`${entryDB} database`}>
-                          <MemberSymbol
-                            size="2em"
-                            type={metadata.source_database.toLowerCase()}
-                            aria-label="Database type"
-                            className={f('md-small')}
-                          />
-                        </Tooltip>
-                        <h6>
-                          <HighlightedText
-                            text={metadata.name}
-                            textToHighlight={search}
-                          />
-                        </h6>
+                        {metadata.integrated}
                       </Link>
-                    )}
-
-                  {// TITLE browse strutures
-                  metadata.source_database.toLowerCase() === 'pdb' && (
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'structure' },
-                          structure: {
-                            db: metadata.source_database,
-                            accession: metadata.accession,
-                          },
-                        },
-                      }}
-                    >
-                      <Tooltip
-                        title={`3D visualisation for ${metadata.accession.toUpperCase()} structure `}
-                      >
-                        <img
-                          src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${
-                            metadata.accession
-                          }/traces.jpg`}
-                          // src={`//www.ebi.ac.uk/pdbe/static/entry/${metadata.accession}_deposited_chain_front_image-200x200.png`}
-                          alt={`structure with accession ${metadata.accession.toUpperCase()}`}
-                        />
-                      </Tooltip>
-                      <h6>
-                        <HighlightedText
-                          text={metadata.name}
-                          textToHighlight={search}
-                        />
-                      </h6>
-                    </Link>
+                    </div>
                   )}
-                </div>
 
-                {// COUNTER  browse organism + proteome
+                {// INFO ID BR - browse organism + proteome
                 metadata.source_database === 'proteome' ||
                 metadata.source_database === 'taxonomy' ? (
-                  <SummaryCounterOrgWithData
-                    entryDB={entryDB}
-                    metadata={metadata}
-                  />
+                  <div>
+                    {metadata.source_database === 'proteome' && 'Proteome ID: '}
+                    {metadata.source_database === 'taxonomy' && 'Tax ID:'}
+                    <HighlightedText
+                      text={metadata.accession}
+                      textToHighlight={search}
+                    />
+                  </div>
                 ) : null}
 
-                {// COUNTER all db
-                //not protein
-                metadata.source_database.toLowerCase() !== 'pdb' &&
-                  metadata.source_database !== 'proteome' &&
-                  metadata.source_database !== 'taxonomy' && (
-                    <SummaryCounterEntriesWithData
-                      entryDB={entryDB}
-                      metadata={metadata}
-                    />
-                  )}
-
-                {// COUNTER structures
-                metadata.source_database.toLowerCase() === 'pdb' && (
-                  <div>
-                    <div className={f('card-subheader')}>
-                      {// INFO RESOLUTION BL - browse structures - Xray
-                      metadata.experiment_type === 'x-ray' && (
-                        <div>
-                          {metadata.experiment_type}
-                          :{' '}
-                          <Tooltip
-                            title={`${metadata.resolution} Å resolution`}
-                          >
-                            {metadata.resolution}Å
-                          </Tooltip>
-                        </div>
-                      )}
-                      {// INFO TYPE BL - browse structures -NMR
-                      metadata.experiment_type !== 'x-ray' && (
-                        <Tooltip title={`Solution ${metadata.experiment_type}`}>
-                          {metadata.experiment_type}
-                        </Tooltip>
-                      )}
-                    </div>
-                    <div className={f('card-block')}>
-                      <SummaryCounterStructuresWithData
-                        metadata={metadata}
-                        entryDB={entryDB}
-                      />
-                    </div>
-                  </div>
+                {// INFO TYPE BL - InterPro
+                metadata.source_database.toLowerCase() === 'interpro' && (
+                  <div>{metadata.type.replace('_', ' ')}</div>
                 )}
 
-                {// DESCRIPTION all db
+                {// INFO DB BR - all MD
                 metadata.source_database !== 'proteome' &&
                   metadata.source_database !== 'taxonomy' && (
-                    <div className={f('card-block')}>
-                      <DescriptionEntriesWithData metadata={metadata} />
-                    </div>
-                  )}
-
-                <div className={f('card-footer')}>
-                  {// INFO LINEAGE BL - browse organism
-                  metadata.source_database === 'taxonomy' && (
-                    <LineageWithData />
-                  )}
-
-                  {// INFO RESOLUTION BL - browse structures -NMR
-                  metadata.source_database.toLowerCase() === 'pdb' && (
                     <div>
-                      <TaxnameStructuresWithData metadata={metadata} />
-                    </div>
-                  )}
-
-                  {// INFO INTEGRATION BL - browse entries - all NON interpro MD
-                  metadata.source_database.toLowerCase() !== 'pdb' &&
-                    metadata.source_database.toLowerCase() !== 'interpro' &&
-                    metadata.source_database !== 'proteome' &&
-                    metadata.source_database !== 'taxonomy' && (
-                      <div>
-                        {metadata.integrated
-                          ? 'Integrated: '
-                          : 'Not integrated'}
-                        <Link
-                          to={{
-                            description: {
-                              main: { key: 'entry' },
-                              entry: {
-                                db: 'interpro',
-                                accession: metadata.integrated,
-                              },
-                            },
-                          }}
-                        >
-                          {metadata.integrated}
-                        </Link>
-                      </div>
-                    )}
-
-                  {// INFO ID BR - browse organism + proteome
-                  metadata.source_database === 'proteome' ||
-                  metadata.source_database === 'taxonomy' ? (
-                    <div>
-                      {metadata.source_database === 'proteome' &&
-                        'Proteome ID: '}
-                      {metadata.source_database === 'taxonomy' && 'Tax ID:'}
                       <HighlightedText
                         text={metadata.accession}
                         textToHighlight={search}
                       />
                     </div>
-                  ) : null}
-
-                  {// INFO TYPE BL - InterPro
-                  metadata.source_database.toLowerCase() === 'interpro' && (
-                    <div>{metadata.type.replace('_', ' ')}</div>
                   )}
-
-                  {// INFO DB BR - all MD
-                  metadata.source_database !== 'proteome' &&
-                    metadata.source_database !== 'taxonomy' && (
-                      <div>
-                        <HighlightedText
-                          text={metadata.accession}
-                          textToHighlight={search}
-                        />
-                      </div>
-                    )}
-                </div>
               </div>
             </div>
           );
