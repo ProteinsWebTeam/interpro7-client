@@ -407,9 +407,8 @@ class SpeciesIcon extends PureComponent {
   }
 }
 
-class SummaryCounterStructuresDetail extends PureComponent {
+class TaxnameStructures extends PureComponent {
   static propTypes = {
-    entryDB: T.string,
     dataTable: T.array,
     metadata: T.object.isRequired,
     data: T.shape({
@@ -423,15 +422,13 @@ class SummaryCounterStructuresDetail extends PureComponent {
 
     return (
       // TODO get values when more than 2 species
-      <div className={f('count-entries')}>
-        <Tooltip
-          title={`${loading ? 0 : payload.results[0].metadata.name}( Tax ID:${
-            loading ? 0 : payload.results[0].metadata.accession
-          })`}
-        >
-          {loading ? 0 : payload.results[0].metadata.name}
-        </Tooltip>
-      </div>
+      <Tooltip
+        title={`${loading ? 0 : payload.results[0].metadata.name}( Tax ID:${
+          loading ? 0 : payload.results[0].metadata.accession
+        })`}
+      >
+        {loading ? 0 : payload.results[0].metadata.name}
+      </Tooltip>
     );
   }
 }
@@ -522,27 +519,14 @@ class SummaryCounterStructures extends PureComponent {
           <Tooltip
             title={`${
               loading ? 0 : payload.metadata.counters.organisms
-            } organisms matching ${metadata.name}`}
+            } organism matching ${metadata.name}`}
           >
-            <Link
-              to={{
-                description: {
-                  main: { key: 'structure' },
-                  structure: {
-                    db: 'pdb',
-                    accession: metadata.accession.toString(),
-                  },
-                  organism: { isFilter: true, db: 'taxonomy' },
-                },
-              }}
-            >
-              <div className={f('icon', 'icon-count-species')} />{' '}
-              <NumberComponent
-                loading={loading}
-                value={loading ? 0 : payload.metadata.counters.organisms}
-              />
-              <span className={f('label-number')}>organisms</span>
-            </Link>
+            <div className={f('icon', 'icon-count-species')} />{' '}
+            <NumberComponent
+              loading={loading}
+              value={loading ? 0 : payload.metadata.counters.organisms}
+            />
+            <span className={f('label-number')}>organisms</span>
           </Tooltip>
         </div>
       </div>
@@ -977,9 +961,9 @@ class GridView extends PureComponent {
           const SummaryCounterOrgWithData = loadData(
             getUrlForOrg(`${metadata.accession}`, entryDB),
           )(SummaryCounterOrg);
-          const SummaryCounterStructuresDetailWithData = loadData(
+          const TaxnameStructuresWithData = loadData(
             getUrlForStructTaxname(`${metadata.accession}`),
-          )(SummaryCounterStructuresDetail);
+          )(TaxnameStructures);
           const SummaryCounterStructuresWithData = loadData(
             getUrlForStruct(`${metadata.accession}`, entryDB),
           )(SummaryCounterStructures);
@@ -1115,7 +1099,6 @@ class GridView extends PureComponent {
                           }/traces.jpg`}
                           // src={`//www.ebi.ac.uk/pdbe/static/entry/${metadata.accession}_deposited_chain_front_image-200x200.png`}
                           alt={`structure with accession ${metadata.accession.toUpperCase()}`}
-                          style={{ maxWidth: '80%' }}
                         />
                       </Tooltip>
                       <h6>
@@ -1151,13 +1134,32 @@ class GridView extends PureComponent {
                 {// COUNTER structures
                 metadata.source_database.toLowerCase() === 'pdb' && (
                   <div>
-                    <SummaryCounterStructuresDetailWithData
-                      metadata={metadata}
-                    />
-                    <SummaryCounterStructuresWithData
-                      metadata={metadata}
-                      entryDB={entryDB}
-                    />
+                    <div className={f('card-subheader')}>
+                      {// INFO RESOLUTION BL - browse structures - Xray
+                      metadata.experiment_type === 'x-ray' && (
+                        <div>
+                          {metadata.experiment_type}
+                          :{' '}
+                          <Tooltip
+                            title={`${metadata.resolution} Å resolution`}
+                          >
+                            {metadata.resolution}Å
+                          </Tooltip>
+                        </div>
+                      )}
+                      {// INFO TYPE BL - browse structures -NMR
+                      metadata.experiment_type !== 'x-ray' && (
+                        <Tooltip title={`Solution ${metadata.experiment_type}`}>
+                          {metadata.experiment_type}
+                        </Tooltip>
+                      )}
+                    </div>
+                    <div className={f('card-block')}>
+                      <SummaryCounterStructuresWithData
+                        metadata={metadata}
+                        entryDB={entryDB}
+                      />
+                    </div>
                   </div>
                 )}
 
@@ -1175,22 +1177,12 @@ class GridView extends PureComponent {
                     <LineageWithData />
                   )}
 
-                  {// INFO TYPE BL - browse structures - Xray
-                  metadata.source_database.toLowerCase() === 'pdb' &&
-                    metadata.experiment_type === 'x-ray' && (
-                      <div>
-                        {metadata.experiment_type}
-                        :{' '}
-                        <Tooltip title={`${metadata.resolution} Å resolution`}>
-                          {metadata.resolution}Å
-                        </Tooltip>
-                      </div>
-                    )}
-                  {// INFO TYPE BL - browse structures -NMR
-                  metadata.source_database.toLowerCase() === 'pdb' &&
-                    metadata.experiment_type !== 'x-ray' && (
-                      <div>{metadata.experiment_type}</div>
-                    )}
+                  {// INFO RESOLUTION BL - browse structures -NMR
+                  metadata.source_database.toLowerCase() === 'pdb' && (
+                    <div>
+                      <TaxnameStructuresWithData metadata={metadata} />
+                    </div>
+                  )}
 
                   {// INFO INTEGRATION BL - browse entries - all NON interpro MD
                   metadata.source_database.toLowerCase() !== 'pdb' &&
@@ -1224,7 +1216,10 @@ class GridView extends PureComponent {
                       {metadata.source_database === 'proteome' &&
                         'Proteome ID: '}
                       {metadata.source_database === 'taxonomy' && 'Tax ID:'}
-                      {metadata.accession}
+                      <HighlightedText
+                        text={metadata.accession}
+                        textToHighlight={search}
+                      />
                     </div>
                   ) : null}
 
@@ -1236,7 +1231,12 @@ class GridView extends PureComponent {
                   {// INFO DB BR - all MD
                   metadata.source_database !== 'proteome' &&
                     metadata.source_database !== 'taxonomy' && (
-                      <div>{metadata.accession}</div>
+                      <div>
+                        <HighlightedText
+                          text={metadata.accession}
+                          textToHighlight={search}
+                        />
+                      </div>
                     )}
                 </div>
               </div>
