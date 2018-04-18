@@ -1,49 +1,58 @@
 .card-wrapper {
-  border: 0px blue solid;
-  display: flex;
-  flex-wrap: wrap;
+  border: 0px pink solid;
+  display: grid;
+  grid-gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 
 .card-flex-container {
-  border: 1px rgba(0, 0, 0, 0.2) solid;
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1 0 22%; /*4 columns*/
-  margin: 0.5rem;
-  justify-content: center;
-}
-
-.card-flex-container:hover {
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-.card-item {
   padding: 1rem;
+  border: 1px rgba(0, 0, 0, 0.2) solid;
+  transition: all 0.2s ease-out;
   color: #606060;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
     sans-serif;
 }
 
-.card-item-t,
-.card-item-m,
-.card-item-b {
+.card-flex-container:hover {
+  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+.card-flex-container:hover .card-header img {
+  transformation: scale(0.5);
+}
+
+.card-header,
+.card-block,
+.card-footer {
   flex-grow: 1;
 }
-.card-item-t {
+.card-header {
   border: 0px solid blue;
   text-align: center;
   width: 100%;
 }
-.card-item-t span::before {
+
+.card-header span::before {
   font-size: 376%;
 }
 
-.card-item-t h6 {
+.card-header h6 {
   font-weight: 600;
   font-size: 110%;
 } /*16px*/
-.card-item-m {
+
+.card-header img {
+  max-width: 60%;
+}
+
+.card-subheader {
+  text-align: center;
+  font-size: 80%;
+}
+
+.card-block {
   border: 0px solid green;
   font-size: 15px;
   margin: 0.5rem 0;
@@ -60,13 +69,15 @@
   border: 0px solid lightgreen;
 }
 
-.card-item-b {
+.card-footer {
   display: flex;
   justify-content: space-between;
   font-size: 80%;
 }
-
-.card-item-b > div:last-child {
+.card-footer > div:first-child {
+  flex-grow: 1;
+}
+.card-footer > div:last-child {
   text-align: right;
 } /*tax ID*/
 .card-sum-wrapper {
@@ -75,16 +86,16 @@
   height: 92px;
   width: 207px; /*trick for description not to go behond limits - temp*/
 }
-.card-sum-info {
+.card-counter {
   color: #333;
   margin-bottom: 0;
   display: flex;
   justify-content: space-between;
   align-items: stretch;
 }
-.card-sum-info a,
-.card-sum-info a:visited,
-.card-sum-info a:hover {
+.card-counter a,
+.card-counter a:visited,
+.card-counter a:hover {
   color: #333;
   display: block; /*temp? to show tooltip properly on the element*/
 }
@@ -92,7 +103,7 @@
 .label-off .label-number {
   display: none;
 }
-.card-sum-info .icon-conceptual::before {
+.card-counter .icon-conceptual::before {
   font-size: 210%;
 } /*EBI icon size*/
 .big-nb {
@@ -147,20 +158,17 @@
   width: 56px;
 }
 
-.card-sum-info .md-small {
+.card-counter .md-small {
   display: flex;
   width: 46px;
 }
 
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-  .card-item {
-    /*flex: 0 0 50%;*/
-  }
 }
 /*small screens*/
 @media screen and (max-width: 39.9375em) {
-  .card-sum-info {
+  .card-counter {
     flex-wrap: wrap;
   }
   .card-flex-container {
