@@ -55,24 +55,10 @@ const getUrlForStruct = (accession, db) =>
           descriptionToPath({
             main: { key: 'structure' },
             structure: { db: 'pdb', accession },
-          }),
-      }),
-  );
-
-const getUrlForStructDetail = (accession, db) =>
-  createSelector(
-    state => state.settings.api,
-    ({ protocol, hostname, port, root }) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname:
-          root +
-          descriptionToPath({
-            main: { key: 'structure' },
-            structure: { db: 'pdb', accession },
-            organism: { isFilter: true, db: 'taxonomy' },
+            entry: {
+              isFilter: true,
+              db: db,
+            },
           }),
       }),
   );
@@ -433,7 +419,7 @@ class SummaryCounterStructuresDetail extends PureComponent {
     }).isRequired,
   };
   render() {
-    const { entryDB, metadata, data: { loading, payload }, names } = this.props;
+    const { metadata, data: { loading, payload } } = this.props;
 
     return (
       // TODO get values when more than 2 species
@@ -756,7 +742,7 @@ class DescriptionEntries extends PureComponent {
     }).isRequired,
   };
   render() {
-    const { entryDB, metadata, data: { loading, payload } } = this.props;
+    const { metadata, data: { loading, payload } } = this.props;
     return (
       <div>
         {payload &&
@@ -992,7 +978,7 @@ class GridView extends PureComponent {
             getUrlForOrg(`${metadata.accession}`, entryDB),
           )(SummaryCounterOrg);
           const SummaryCounterStructuresDetailWithData = loadData(
-            getUrlForStructTaxname(`${metadata.accession}`, entryDB),
+            getUrlForStructTaxname(`${metadata.accession}`),
           )(SummaryCounterStructuresDetail);
           const SummaryCounterStructuresWithData = loadData(
             getUrlForStruct(`${metadata.accession}`, entryDB),
@@ -1163,12 +1149,10 @@ class GridView extends PureComponent {
                   )}
 
                 {// COUNTER structures
-
                 metadata.source_database.toLowerCase() === 'pdb' && (
                   <div>
                     <SummaryCounterStructuresDetailWithData
                       metadata={metadata}
-                      entryDB={entryDB}
                     />
                     <SummaryCounterStructuresWithData
                       metadata={metadata}
