@@ -63,7 +63,7 @@ const getUrlForStruct = (accession, db) =>
       }),
   );
 
-const getUrlForStructTaxname = (accession, db) =>
+const getUrlForStructTaxname = accession =>
   createSelector(
     state => state.settings.api,
     ({ protocol, hostname, port, root }) =>
@@ -465,23 +465,24 @@ class SummaryCounterStructures extends PureComponent {
                     db: 'pdb',
                     accession: metadata.accession.toString(),
                   },
-                  entry: { isFilter: true, db: entryDB },
+                  entry: { isFilter: true, db: entryDB ? entryDB : 'all' },
                 },
               }}
             >
               {
                 // db icon
               }
-              {entryDB !== null && (
+              {entryDB ? (
                 <MemberSymbol type={entryDB} className={f('md-small')} />
-              )}
-              {entryDB === null && (
+              ) : (
                 <MemberSymbol type="all" className={f('md-small')} />
               )}
+
               <NumberComponent
                 loading={loading}
                 value={loading ? 0 : payload.metadata.counters.entries}
               />
+
               <span className={f('label-number')}>entries</span>
             </Link>
           </Tooltip>
@@ -780,9 +781,9 @@ class SummaryCounterOrg extends PureComponent {
         <div className={f('card-block', 'card-counter', 'label-off')}>
           <div className={f('count-entries')}>
             <Tooltip
-              title={`${
-                loading ? 0 : payload.metadata.counters.entries
-              } ${entryDB} entries matching ${metadata.name}`}
+              title={`${loading ? 0 : payload.metadata.counters.entries} ${
+                entryDB !== null ? entryDB : ''
+              }  entries matching ${metadata.name}`}
             >
               <Link
                 to={{
@@ -792,19 +793,19 @@ class SummaryCounterOrg extends PureComponent {
                       db: 'taxonomy',
                       accession: metadata.accession.toString(),
                     },
-                    entry: { isFilter: true, db: entryDB },
+                    entry: { isFilter: true, db: entryDB ? entryDB : 'all' },
                   },
                 }}
               >
                 {
                   // db icon
                 }
-                {entryDB !== null && (
+                {entryDB ? (
                   <MemberSymbol type={entryDB} className={f('md-small')} />
-                )}
-                {entryDB === null && (
+                ) : (
                   <MemberSymbol type="all" className={f('md-small')} />
                 )}
+
                 <NumberComponent
                   loading={loading}
                   value={loading ? 0 : payload.metadata.counters.entries}
