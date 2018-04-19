@@ -80,11 +80,11 @@
 .card-footer > div:last-child {
   text-align: right;
 } /*tax ID*/
+
 .card-sum-wrapper {
   border: 0px red solid;
   overflow: hidden;
   height: 92px;
-  width: 207px; /*trick for description not to go behond limits - temp*/
 }
 .card-counter {
   color: #333;
