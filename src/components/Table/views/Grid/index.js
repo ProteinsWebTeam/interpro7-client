@@ -720,7 +720,6 @@ class SummaryCounterEntries extends PureComponent {
 
 class DescriptionEntries extends PureComponent {
   static propTypes = {
-    entryDB: T.string,
     dataTable: T.array,
     metadata: T.object.isRequired,
     data: T.shape({
@@ -731,6 +730,7 @@ class DescriptionEntries extends PureComponent {
   };
   render() {
     const { metadata, data: { loading, payload } } = this.props;
+    const GetDesc = `${loading ? 0 : payload.metadata.description[0]}`;
     return (
       <div>
         {payload &&
@@ -739,11 +739,8 @@ class DescriptionEntries extends PureComponent {
           payload.metadata.description[0] && (
             <div className={f('card-sum')}>
               <div className={f('card-sum-wrapper')}>
-                {loading ? 0 : payload.metadata.description[0]}
+                <ParagraphWithCites p={GetDesc} />
               </div>
-              {
-                // <ParagraphWithCites p={loading ? 0 : payload.metadata.description[0]} />
-              }
               <Link
                 to={{
                   description: {
