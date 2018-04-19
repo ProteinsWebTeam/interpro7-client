@@ -179,12 +179,15 @@ class Lineage extends PureComponent {
       nodespot = 'Fish';
     } else {
       /* Actinopterygii - 89593 craniata too general*/
-      nodespot = 'N/A';
+      nodespot = null;
     }
 
     return (
       <Tooltip title={`Lineage: ${loading ? 0 : payload.metadata.lineage} `}>
-        {superkingdom} ({nodespot})
+        {
+          // remove parenthesis when nothing defined for nodespot
+        }
+        {superkingdom} {nodespot && `(${nodespot})`}
       </Tooltip>
     );
   }
@@ -346,8 +349,8 @@ class SpeciesIcon extends PureComponent {
       icon = 'Y';
       nodecolor = '#5bc0de';
     } else if (linetree.includes(' 2157 ')) {
-      /* Archea*/
-      icon = 'Y';
+      /* Archaea*/
+      icon = 'L';
       nodecolor = '#5bc0de';
     } else if (linetree.includes(' 2 ')) {
       /* Node Bacteria (Ecoli)*/
