@@ -6,6 +6,7 @@ import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { toPlural } from 'utils/pages';
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Link from 'components/generic/Link';
@@ -449,13 +450,24 @@ class SummaryCounterStructures extends PureComponent {
   };
   render() {
     const { entryDB, metadata, data: { loading, payload } } = this.props;
+
+    let entries = 0;
+    let proteins = 0;
+    let organisms = 0;
+    if (!loading && payload && payload.metadata) {
+      entries = payload.metadata.counters.entries;
+      proteins = payload.metadata.counters.proteins;
+      organisms = payload.metadata.counters.organisms;
+    }
+
     return (
       <div className={f('card-block', 'card-counter', 'label-off')}>
         <div className={f('count-entries')}>
           <Tooltip
-            title={`${
-              loading ? 0 : payload.metadata.counters.entries
-            } ${entryDB} entries matching ${metadata.name}`}
+            title={`${entries} ${entryDB} ${toPlural(
+              'entry',
+              entries,
+            )} matching ${metadata.name}`}
           >
             <Link
               to={{
@@ -478,21 +490,20 @@ class SummaryCounterStructures extends PureComponent {
                 <MemberSymbol type="all" className={f('md-small')} />
               )}
 
-              <NumberComponent
-                loading={loading}
-                value={loading ? 0 : payload.metadata.counters.entries}
-              />
+              <NumberComponent loading={loading} value={entries} />
 
-              <span className={f('label-number')}>entries</span>
+              <span className={f('label-number')}>
+                {toPlural('entry', entries)}
+              </span>
             </Link>
           </Tooltip>
         </div>
 
         <div className={f('count-proteins')}>
           <Tooltip
-            title={`${
-              loading ? 0 : payload.metadata.counters.proteins
-            } proteins matching ${metadata.name}`}
+            title={`${proteins} ${toPlural('protein', proteins)} matching ${
+              metadata.name
+            }`}
           >
             <Link
               to={{
@@ -510,27 +521,25 @@ class SummaryCounterStructures extends PureComponent {
                 className={f('icon', 'icon-conceptual')}
                 data-icon="&#x50;"
               />{' '}
-              <NumberComponent
-                loading={loading}
-                value={loading ? 0 : payload.metadata.counters.proteins}
-              />
-              <span className={f('label-number')}>protein</span>
+              <NumberComponent loading={loading} value={proteins} />
+              <span className={f('label-number')}>
+                {toPlural('protein', proteins)}
+              </span>
             </Link>
           </Tooltip>
         </div>
 
         <div className={f('count-organisms')}>
           <Tooltip
-            title={`${
-              loading ? 0 : payload.metadata.counters.organisms
-            } organism matching ${metadata.name}`}
+            title={`${organisms} ${toPlural('organism', organisms)} matching ${
+              metadata.name
+            }`}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent
-              loading={loading}
-              value={loading ? 0 : payload.metadata.counters.organisms}
-            />
-            <span className={f('label-number')}>organisms</span>
+            <NumberComponent loading={loading} value={organisms} />
+            <span className={f('label-number')}>
+              {toPlural('organism', organisms)}
+            </span>
           </Tooltip>
         </div>
       </div>
@@ -551,13 +560,25 @@ class SummaryCounterEntries extends PureComponent {
   };
   render() {
     const { entryDB, metadata, data: { loading, payload } } = this.props;
+
+    let proteins = 0;
+    let organisms = 0;
+    let structures = 0;
+    let sets = 0;
+    if (!loading && payload && payload.metadata) {
+      proteins = payload.metadata.counters.proteins;
+      organisms = payload.metadata.counters.organisms;
+      structures = payload.metadata.counters.structures;
+      sets = payload.metadata.counters.sets;
+    }
+
     return (
       <div className={f('card-block', 'card-counter', 'label-off')}>
         <div className={f('count-proteins')}>
           <Tooltip
-            title={`${
-              loading ? 0 : payload.metadata.counters.proteins
-            } proteins matching ${metadata.name}`}
+            title={`${proteins} ${toPlural('protein', proteins)} matching ${
+              metadata.name
+            }`}
           >
             <Link
               to={{
@@ -575,11 +596,10 @@ class SummaryCounterEntries extends PureComponent {
                 className={f('icon', 'icon-conceptual')}
                 data-icon="&#x50;"
               />{' '}
-              <NumberComponent
-                loading={loading}
-                value={loading ? 0 : payload.metadata.counters.proteins}
-              />
-              <span className={f('label-number')}>protein</span>
+              <NumberComponent loading={loading} value={proteins} />
+              <span className={f('label-number')}>
+                {toPlural('protein', proteins)}
+              </span>
             </Link>
           </Tooltip>
         </div>
@@ -607,9 +627,9 @@ class SummaryCounterEntries extends PureComponent {
 
         <div className={f('count-organisms')}>
           <Tooltip
-            title={`${
-              loading ? 0 : payload.metadata.counters.organisms
-            } organisms matching ${metadata.name}`}
+            title={`${organisms} ${toPlural('organism', organisms)} matching ${
+              metadata.name
+            }`}
           >
             <Link
               to={{
@@ -624,23 +644,23 @@ class SummaryCounterEntries extends PureComponent {
               }}
             >
               <div className={f('icon', 'icon-count-species')} />{' '}
-              <NumberComponent
-                loading={loading}
-                value={loading ? 0 : payload.metadata.counters.organisms}
-              />
-              <span className={f('label-number')}>organisms</span>
+              <NumberComponent loading={loading} value={organisms} />
+              <span className={f('label-number')}>
+                {toPlural('organism', organisms)}
+              </span>
             </Link>
           </Tooltip>
         </div>
 
         <div className={f('count-structures')}>
           <Tooltip
-            title={`${
-              loading ? 0 : payload.metadata.counters.structures
-            }  structures matching ${metadata.name}`}
+            title={`${structures}  ${toPlural(
+              'structure',
+              structures,
+            )} matching ${metadata.name}`}
           >
             {// link only when value > 0
-            payload && payload.metadata.counters.structures > 0 ? (
+            payload && structures > 0 ? (
               <Link
                 to={{
                   description: {
@@ -654,65 +674,59 @@ class SummaryCounterEntries extends PureComponent {
                 }}
               >
                 <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-                <NumberComponent
-                  loading={loading}
-                  value={loading ? 0 : payload.metadata.counters.structures}
-                />
-                <span className={f('label-number')}>structures</span>
+                <NumberComponent loading={loading} value={structures} />
+                <span className={f('label-number')}>
+                  {toPlural('structure', structures)}
+                </span>
               </Link>
             ) : (
               <div className={f('no-link')}>
                 <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-                <NumberComponent
-                  loading={loading}
-                  value={loading ? 0 : payload.metadata.counters.structures}
-                />
-                <span className={f('label-number')}>structures</span>
+                <NumberComponent loading={loading} value={structures} />
+                <span className={f('label-number')}>
+                  {toPlural('structure', structures)}
+                </span>
               </div>
             )}
           </Tooltip>
         </div>
 
         {// show sets counter + icon only when available
-        payload &&
-          payload.metadata &&
-          payload.metadata.accession &&
-          payload.metadata.counters.sets > 0 && (
-            <div>
-              {metadata.source_database.toLowerCase() === 'cdd' ||
-              metadata.source_database.toLowerCase() === 'pfam' ? (
-                <div className={f('count-sets')}>
-                  <Tooltip
-                    title={`${
-                      loading ? 0 : payload.metadata.counters.sets
-                    } sets matching ${metadata.name}`}
-                  >
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            db: entryDB,
-                            accession: metadata.accession.toString(),
-                          },
-                          set: { isFilter: true, db: entryDB },
+        sets > 0 && (
+          <div>
+            {metadata.source_database.toLowerCase() === 'cdd' ||
+            metadata.source_database.toLowerCase() === 'pfam' ? (
+              <div className={f('count-sets')}>
+                <Tooltip
+                  title={`${sets} ${toPlural('set', sets)} matching ${
+                    metadata.name
+                  }`}
+                >
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: entryDB,
+                          accession: metadata.accession.toString(),
                         },
-                      }}
-                    >
-                      <div className={f('icon', 'icon-count-set')} />{' '}
-                      <NumberComponent
-                        loading={loading}
-                        value={loading ? 0 : payload.metadata.counters.sets}
-                      />
-                      <span className={f('label-number')}>sets</span>
-                    </Link>
-                  </Tooltip>
-                </div>
-              ) : (
-                ''
-              )}
-            </div>
-          )}
+                        set: { isFilter: true, db: entryDB },
+                      },
+                    }}
+                  >
+                    <div className={f('icon', 'icon-count-set')} />{' '}
+                    <NumberComponent loading={loading} value={sets} />
+                    <span className={f('label-number')}>
+                      {toPlural('set', sets)}
+                    </span>
+                  </Link>
+                </Tooltip>
+              </div>
+            ) : (
+              ''
+            )}
+          </div>
+        )}
       </div>
     );
   }
@@ -773,14 +787,28 @@ class SummaryCounterOrg extends PureComponent {
   };
   render() {
     const { entryDB, metadata, data: { loading, payload } } = this.props;
+    let entries = 0;
+    let proteins = 0;
+    let organisms = 0;
+    let structures = 0;
+    let proteomes = 0;
+    if (!loading && payload && payload.metadata) {
+      entries = payload.metadata.counters.entries;
+      proteins = payload.metadata.counters.proteins;
+      organisms = payload.metadata.counters.organisms;
+      structures = payload.metadata.counters.structures;
+      proteomes = payload.metadata.counters.proteomes;
+    }
+
     return (
       metadata.source_database !== 'proteome' && (
         <div className={f('card-block', 'card-counter', 'label-off')}>
           <div className={f('count-entries')}>
             <Tooltip
-              title={`${loading ? 0 : payload.metadata.counters.entries} ${
-                entryDB !== null ? entryDB : ''
-              }  entries matching ${metadata.name}`}
+              title={`${entries} ${entryDB !== null ? entryDB : ''} ${toPlural(
+                'entry',
+                entries,
+              )} matching ${metadata.name}`}
             >
               <Link
                 to={{
@@ -803,20 +831,19 @@ class SummaryCounterOrg extends PureComponent {
                   <MemberSymbol type="all" className={f('md-small')} />
                 )}
 
-                <NumberComponent
-                  loading={loading}
-                  value={loading ? 0 : payload.metadata.counters.entries}
-                />
-                <span className={f('label-number')}>entries</span>
+                <NumberComponent loading={loading} value={entries} />
+                <span className={f('label-number')}>
+                  {toPlural('entry', entries)}
+                </span>
               </Link>
             </Tooltip>
           </div>
 
           <div className={f('count-proteins')}>
             <Tooltip
-              title={`${
-                loading ? 0 : payload.metadata.counters.proteins
-              } proteins matching ${metadata.name}`}
+              title={`${proteins}  ${toPlural('protein', proteins)} matching ${
+                metadata.name
+              }`}
             >
               <Link
                 to={{
@@ -834,20 +861,21 @@ class SummaryCounterOrg extends PureComponent {
                   className={f('icon', 'icon-conceptual')}
                   data-icon="&#x50;"
                 />{' '}
-                <NumberComponent
-                  loading={loading}
-                  value={loading ? 0 : payload.metadata.counters.proteins}
-                />
-                <span className={f('label-number')}>proteins</span>
+                <NumberComponent loading={loading} value={proteins} />
+                <span className={f('label-number')}>
+                  {' '}
+                  {toPlural('protein', proteins)}
+                </span>
               </Link>
             </Tooltip>
           </div>
 
           <div className={f('count-structures')}>
             <Tooltip
-              title={`${
-                loading ? 0 : payload.metadata.counters.structures
-              } structures matching ${metadata.name}`}
+              title={`${structures} ${toPlural(
+                'structure',
+                structures,
+              )} matching ${metadata.name}`}
             >
               {//  link only when value > 0
               payload && payload.metadata.counters.structures > 0 ? (
@@ -867,10 +895,7 @@ class SummaryCounterOrg extends PureComponent {
                     className={f('icon', 'icon-conceptual')}
                     data-icon="&#x73;"
                   />{' '}
-                  <NumberComponent
-                    loading={loading}
-                    value={loading ? 0 : payload.metadata.counters.structures}
-                  />{' '}
+                  <NumberComponent loading={loading} value={structures} />{' '}
                   <span className={f('label-number')}>structures</span>
                 </Link>
               ) : (
@@ -879,63 +904,50 @@ class SummaryCounterOrg extends PureComponent {
                     className={f('icon', 'icon-conceptual')}
                     data-icon="&#x73;"
                   />{' '}
-                  <NumberComponent
-                    loading={loading}
-                    value={loading ? 0 : payload.metadata.counters.structures}
-                  />{' '}
-                  <span className={f('label-number')}>structures</span>
+                  <NumberComponent loading={loading} value={structures} />{' '}
+                  <span className={f('label-number')}>
+                    {toPlural('structure', structures)}
+                  </span>
                 </div>
               )}
             </Tooltip>
           </div>
 
-          {metadata.source_database !== 'proteome' && (
-            <div className={f('count-proteomes')}>
-              <Tooltip
-                title={`${
-                  loading ? 0 : payload.metadata.counters.proteomes
-                } proteomes matching ${metadata.name}`}
-              >
-                {// link only when value > 0
-                payload && payload.metadata.counters.proteomes > 0 ? (
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'organism' },
-                        organism: {
-                          db: metadata.source_database,
-                          accession: metadata.accession.toString(),
-                          proteomeDB: 'proteome',
-                        },
+          <div className={f('count-proteomes')}>
+            <Tooltip title={`${proteomes} proteomes matching ${metadata.name}`}>
+              {// link only when value > 0
+              payload && proteomes > 0 ? (
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'organism' },
+                      organism: {
+                        db: metadata.source_database,
+                        accession: metadata.accession.toString(),
+                        proteomeDB: 'proteome',
                       },
-                    }}
-                  >
-                    <div
-                      className={f('icon', 'icon-common', 'icon-bookmark-temp')}
-                      data-icon="&#x2e;"
-                    />
-                    <NumberComponent
-                      loading={loading}
-                      value={loading ? 0 : payload.metadata.counters.proteomes}
-                    />{' '}
-                    <span className={f('label-number')}>proteomes</span>
-                  </Link>
-                ) : (
-                  <div className={f('no-link')}>
-                    <div
-                      className={f('icon', 'icon-common', 'icon-bookmark-temp')}
-                      data-icon="&#x2e;"
-                    />
-                    <NumberComponent
-                      loading={loading}
-                      value={loading ? 0 : payload.metadata.counters.proteomes}
-                    />{' '}
-                    <span className={f('label-number')}>proteomes</span>
-                  </div>
-                )}
-              </Tooltip>
-            </div>
-          )}
+                    },
+                  }}
+                >
+                  <div
+                    className={f('icon', 'icon-common', 'icon-bookmark-temp')}
+                    data-icon="&#x2e;"
+                  />
+                  <NumberComponent loading={loading} value={proteomes} />{' '}
+                  <span className={f('label-number')}>proteomes</span>
+                </Link>
+              ) : (
+                <div className={f('no-link')}>
+                  <div
+                    className={f('icon', 'icon-common', 'icon-bookmark-temp')}
+                    data-icon="&#x2e;"
+                  />
+                  <NumberComponent loading={loading} value={proteomes} />{' '}
+                  <span className={f('label-number')}>proteomes</span>
+                </div>
+              )}
+            </Tooltip>
+          </div>
         </div>
       ) //no counter found for proteomes for now
     );
@@ -1160,7 +1172,8 @@ class GridView extends PureComponent {
               )}
 
               {// DESCRIPTION all db
-              metadata.source_database !== 'proteome' &&
+              metadata.source_database.toLowerCase() !== 'pdb' &&
+                metadata.source_database !== 'proteome' &&
                 metadata.source_database !== 'taxonomy' && (
                   <div className={f('card-block')}>
                     <DescriptionEntriesWithData metadata={metadata} />
