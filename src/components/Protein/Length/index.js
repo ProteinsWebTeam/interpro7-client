@@ -12,7 +12,9 @@ class Length extends PureComponent {
   };
 
   render() {
-    const { metadata: { length, fragment } } = this.props;
+    const {
+      metadata: { length, fragment },
+    } = this.props;
     let fragmentText;
     if (fragment) {
       fragmentText = ` (${fragment === 'N' ? 'complete' : 'fragment'})`;
