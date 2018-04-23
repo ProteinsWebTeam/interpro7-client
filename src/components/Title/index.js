@@ -97,7 +97,7 @@ class Title extends PureComponent /*:: <Props> */ {
           )}
 
         <Helmet>
-          <title>{metadata.accession.toString()}</title>
+          <title>{metadata.accession}</title>
         </Helmet>
         <h3>
           {metadata.name.name}{' '}

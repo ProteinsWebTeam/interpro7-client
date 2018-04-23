@@ -18,7 +18,7 @@ import Sequence from 'components/Protein/Sequence';
         results: {
           0: {
             sequence: string,
-            crossReferences: {
+            xref: {
               0: {
                 identifier: ?string,
               },
@@ -48,7 +48,7 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
             {
               0: T.shape({
                 sequence: T.string.isRequired,
-                crossReferences: T.shape({
+                xref: T.shape({
                   0: T.shape({
                     identifier: T.string,
                   }).isRequired,
@@ -71,7 +71,7 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
       sequence = payload.metadata.sequence;
       name = payload.metadata.name.name;
     } else {
-      accession = payload.results[0].crossReferences[0].identifier;
+      accession = payload.results[0].xref[0].identifier;
       sequence = payload.results[0].sequence;
     }
     return <Sequence accession={accession} sequence={sequence} name={name} />;
