@@ -12,8 +12,10 @@ export default history => ({ dispatch, getState }) => {
   history.listen(
     // Dispatch new action only when history actually changes
     // Build new action from scratch
-    ({ state: { customLocation, state } }) =>
-      dispatch(customLocationChangeFromHistory(customLocation, state)),
+    async ({ state: { customLocation, state } }) => {
+      await Promise.resolve();
+      return dispatch(customLocationChangeFromHistory(customLocation, state));
+    },
   );
 
   const historyDispatch = ({ customLocation, replace, state }) =>
