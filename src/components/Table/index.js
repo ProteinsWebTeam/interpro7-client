@@ -116,6 +116,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   <Tooltip title="View your results as a table">
                     <Link
                       to={l => ({ ...l, hash: 'table' })}
+                      activeClass={f('active')}
                       className={f('icon-view', 'table-view')}
                       aria-label="view your results as a table"
                       onMouseOver={TableView.preload}
@@ -141,6 +142,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       className={f('icon-view', 'grid-view', {
                         disabled: !withGrid,
                       })}
+                      activeClass={f('active')}
                       aria-disabled={withGrid ? 'false' : 'true'}
                       aria-label="view your results in a grid"
                       onMouseOver={GridView.preload}
