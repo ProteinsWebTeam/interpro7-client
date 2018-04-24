@@ -100,10 +100,13 @@ table.light span::before {
   width: 25px;
   height: 25px;
   display: inline-block;
+  opacity: 0.5;
 }
-.table-view .table-results-filtering .icon-view:hover {
-  opacity: 0.8;
+
+.table-view .table-results-filtering .icon-view.active {
+  opacity: 1;
 }
+
 .table-view .table-results-filtering div > div:last-child .icon-view {
   margin-right: 0;
 }
