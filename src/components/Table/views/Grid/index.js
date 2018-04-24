@@ -179,15 +179,11 @@ class Lineage extends PureComponent {
     } else if (linetree.includes('7898 ')) {
       nodespot = 'Fish';
     } else {
-      /* Actinopterygii - 89593 craniata too general*/
       nodespot = null;
     }
 
     return (
       <Tooltip title={`Lineage: ${loading ? 0 : payload.metadata.lineage} `}>
-        {
-          // remove parenthesis when nothing defined for nodespot
-        }
         {superkingdom} {nodespot && `(${nodespot})`}
       </Tooltip>
     );
@@ -209,14 +205,8 @@ class SpeciesIcon extends PureComponent {
     let nodecolor = null;
 
     // key species in Interpro & EBI
-    /* drosophila melanogaster and Bactrocera dorsalis*/
-    if (linetree.includes(' 7227 ') || linetree.includes(' 27457 ')) {
-      icon = 'F';
-    } else if (linetree.includes(' 7215 ')) {
-      /* Node drosophila*/
-      icon = 'F';
-    } else if (linetree.includes(' 121224 ')) {
-      /* Pediculus humanus subsp. corporis (louse)*/
+    if (linetree.includes(' 121221 ')) {
+      /* Node Pediculidae (body lice, includes 121224 Pediculus humanus subsp. corporis (louse)*/
       icon = '4';
     } else if (linetree.includes(' 34735 ')) {
       /* Node Apoidea (bees)*/
@@ -234,26 +224,26 @@ class SpeciesIcon extends PureComponent {
       /* Node anolis*/
       icon = '7';
     } else if (linetree.includes(' 9681 ')) {
-      /* Node felidae*/
+      /* Node felidae (includes 9685 Felis catus) */
       icon = 'A';
     } else if (linetree.includes(' 9606 ')) {
       /* homo*/
       icon = 'H';
     } else if (linetree.includes(' 3702 ')) {
-      /* Mouse-ear cress*/
+      /* Mouse-ear cress */
       icon = 'B';
       nodecolor = '#5cb85c';
-    } else if (linetree.includes(' 6239 ')) {
-      /* Caenorhabditis elegans*/
+    } else if (linetree.includes(' 6231 ')) {
+      /* Node Nematoda (includes 6239 Caenorhabditis elegans) */
       icon = 'W';
     } else if (linetree.includes(' 9031 ')) {
-      /* Chicken*/
+      /* Gallus gallus (Chicken) */
       icon = 'k';
     } else if (linetree.includes(' 9922 ')) {
-      /* Node Capra (goat)*/
+      /* Node Capra (includes 9925 Capra hircus goat)*/
       icon = 'm';
     } else if (linetree.includes(' 55153 ')) {
-      /* Node Sciuridae (Squirels)*/
+      /* Node Sciuridae (Squirrels)*/
       icon = 'I';
     } else if (linetree.includes(' 9723 ')) {
       /* Node Platanistidae (Dolphin)*/
@@ -267,6 +257,9 @@ class SpeciesIcon extends PureComponent {
     } else if (linetree.includes(' 7157 ')) {
       /* subNode Culicidae (Mosquito) */
       icon = '1';
+    } else if (linetree.includes(' 7147 ')) {
+      /* Node Diptera (includes 7227 drosophila melanogaster)- WARNING HAS TO BE AFTER Mosquitoe node*/
+      icon = 'F';
     } else if (linetree.includes(' 6656 ')) {
       /* Node Arthropoda (Spider)*/
       icon = 'S';
@@ -277,76 +270,64 @@ class SpeciesIcon extends PureComponent {
       /* Zebrafish */
       icon = 'Z';
     } else if (linetree.includes(' 31031 ')) {
-      /* Tetraodontidae (Pufferfish) */
+      /* Node Tetraodontidae (puffers) (includes 31033 Takifugu rubripes) */
       icon = 'E';
     } else if (linetree.includes(' 7898 ')) {
       /* Node Fish (7898 Actinopterygii NOT 7776 Gnathostomata includes mammals -  NOT 7777 Chondrichthyes)*/
       icon = 'Z';
-    } else if (linetree.includes(' 10090 ')) {
-      /* Mouse*/
-      icon = 'M';
     } else if (linetree.includes(' 10088 ')) {
-      /* Node Mouse (?)*/
+      /* Node Mouse (includes 10090 Mus musculus)*/
       icon = 'M';
     } else if (linetree.includes(' 9368 ')) {
       /* Node Erinaceidae (Hedgehog)*/
       icon = 'o';
-    } else if (linetree.includes(' 10116 ')) {
-      /* Rat*/
+    } else if (linetree.includes(' 10114 ')) {
+      /* Node Rattus (includes 10116 Rattus norvegicus)*/
       icon = 'R';
     } else if (linetree.includes(' 9615 ')) {
-      /* Dog*/
+      /* Canis lupus familiaris (Dog)*/
       icon = 'd';
-    } else if (linetree.includes(' 9913 ')) {
-      /* Bovine*/
+    } else if (linetree.includes(' 27592 ')) {
+      /* Node Bovinae (includes Bos taurus (Bovine) 9913)*/
       icon = 'C';
-    } else if (linetree.includes(' 9783 ')) {
-      /* Indian Elephant*/
+    } else if (linetree.includes(' 9779 ')) {
+      /* Node Proboscidea (elephants) (inludes 9783 Indian Elephant)*/
       icon = 'e';
-    } else if (linetree.includes(' 9940 ')) {
-      /* Sheep */
+    } else if (linetree.includes(' 9935 ')) {
+      /* Node Ovis (includes 9940 Sheep) */
       icon = 'x';
-    } else if (linetree.includes(' 9986 ')) {
-      /* Rabbit */
+    } else if (linetree.includes(' 9979 ')) {
+      /* Node Leporidae (includes Oryctolagus cuniculus (Rabbit) 9986*/
       icon = 't';
     } else if (linetree.includes(' 9821 ')) {
       /*  Suidae (Pig)*/
       icon = 'p';
-    } else if (linetree.includes(' 10141 ')) {
-      /* Cavia porcellus (Guinea pig)*/
+    } else if (linetree.includes(' 10140 ')) {
+      /* Node Cavia (includes 10141 Cavia porcellus (Guinea pig))*/
       icon = 'g';
-    } else if (linetree.includes(' 126299 ')) {
-      /*  Monodelphis*/
+    } else if (linetree.includes(' 9265 ')) {
+      /*  Node Didelphidae (opossums) (icnludes 126299 Monodelphis emiliae (Emilia's short-tailed opossum)*/
       icon = '9';
-    } else if (linetree.includes(' 9555 ')) {
-      /* Papio anubis (Olive baboon)*/
+    } else if (linetree.includes(' 9554 ')) {
+      /* Node Papio (includes 9555 Papio anubis (Olive baboon))*/
       icon = '8';
     } else if (linetree.includes(' 9596 ')) {
-      /* Node Pan troglodytes (Chimpanzee)*/
+      /* Node Pan (chimpanzees) (includes 9598 Pan troglodytes)*/
       icon = 'i';
-    } else if (linetree.includes(' 9527 ')) {
-      /* Node Cercopithecidae (Monkeys) to check*/
+    } else if (linetree.includes(' 9539 ')) {
+      /* Node Macaca (includes 9544 Macaca mulatta (Rhesus macaque)*/
       icon = 'r';
-    } else if (linetree.includes(' 9430 ')) {
-      /* Vampire bat*/
-      icon = '(';
     } else if (linetree.includes(' 9397 ')) {
-      /* Node bat Chiroptera*/
+      /* Node Chiroptera (bats) (includes 9430 Desmodus rotundus (Vampire bat)*/
       icon = '(';
-    } else if (linetree.includes(' 9544 ')) {
-      /* Rhesus macaque*/
-      icon = 'r';
     } else if (linetree.includes(' 9599 ')) {
-      /* Node pongo (orangutan)*/
+      /* Node Pongo (orangutan)*/
       icon = '*';
     } else if (linetree.includes(' 9592 ')) {
       /* Node Gorilla*/
       icon = 'G';
-    } else if (linetree.includes(' 31033 ')) {
-      /* Fugu rubripes*/
-      icon = 'E';
     } else if (linetree.includes(' 4932 ') || linetree.includes('4894')) {
-      /* Node Fission yeasts (Schizosaccharomycetaceae)*/
+      /* Saccharomyces cerevisiae (Baker's yeast) or Schizosaccharomycetaceae (fission yeasts)*/
       icon = 'Y';
       nodecolor = '#5bc0de';
     } else if (linetree.includes(' 2157 ')) {
@@ -366,19 +347,23 @@ class SpeciesIcon extends PureComponent {
       icon = 'u';
       nodecolor = '#5bc0de';
     } else if (linetree.includes(' 4527 ')) {
-      /* Node Rice (Oriza sativa)*/
+      /* Node Oryza (includes 4530 (Oriza sativa))*/
       icon = '6';
+      nodecolor = '#5cb85c';
+    } else if (linetree.includes(' 4575 ')) {
+      /* Node Zea (Corn) (includes 4577 Zea mays (Maize))*/
+      icon = 'c';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 49274 ')) {
       /* Node Lycopersicon (Tomatoes)*/
       icon = ')';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 4512 ')) {
-      /* Node Barley (Hordeum)*/
+      /* Node Hordeum (Barley)*/
       icon = '5';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 3700 ')) {
-      /* Node Brassicaceae ()*/
+      /* Node Brassicaceae (mustard family)*/
       icon = 'B';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 3603 ')) {
@@ -386,7 +371,7 @@ class SpeciesIcon extends PureComponent {
       icon = 'O';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 1462606 ')) {
-      /* Node Soja (Glycine max (Soybean))*/
+      /* Node Soja (includes 3847 Glycine max (Soybean))*/
       icon = '^';
       nodecolor = '#5cb85c';
     } else if (linetree.includes(' 33090 ')) {
@@ -399,7 +384,7 @@ class SpeciesIcon extends PureComponent {
     }
 
     return (
-      <Tooltip title="Specy icon for the node">
+      <Tooltip title="Organism for the node">
         {' '}
         <span
           style={{ color: nodecolor }}
@@ -426,13 +411,13 @@ class TaxnameStructures extends PureComponent {
 
     return (
       // TODO get values when more than 2 species
-      <Tooltip
-        title={`${loading ? 0 : payload.results[0].metadata.name}( Tax ID:${
+      <div
+        title={`${loading ? 0 : payload.results[0].metadata.name}( Tax ID: ${
           loading ? 0 : payload.results[0].metadata.accession
         })`}
       >
         {loading ? 0 : payload.results[0].metadata.name}
-      </Tooltip>
+      </div>
     );
   }
 }
@@ -1219,7 +1204,7 @@ class GridView extends PureComponent {
                 metadata.source_database === 'taxonomy' ? (
                   <div>
                     {metadata.source_database === 'proteome' && 'Proteome ID: '}
-                    {metadata.source_database === 'taxonomy' && 'Tax ID:'}
+                    {metadata.source_database === 'taxonomy' && 'Tax ID: '}
                     <HighlightedText
                       text={metadata.accession}
                       textToHighlight={search}
