@@ -1,6 +1,11 @@
 // @flow
 import { parse } from 'url';
 
+const hashRegExp = /^#?(.*)$/;
+
+export const getHashPartWithoutHashSign = (string /*:: ?: ?string */) =>
+  ((string || '').match(hashRegExp) || [])[1] || '';
+
 export default (
   activeClass /*: ?(string | function) */,
   customLocation /*: Object */,
@@ -13,15 +18,21 @@ export default (
   // If we have a function, just depend on the result of that function
   if (typeof activeClass === 'function') return activeClass(customLocation);
   let pathname;
+  let hash;
   try {
     pathname = window.location.pathname;
+    hash = getHashPartWithoutHashSign(location.hash);
   } catch (_) {
     /**/
   }
   // Not running in browser, so, for now, ignore active class
   // TODO: if we start doing server-side rendering we need to re-enable this
   if (!pathname) return;
-  const generatedPathname = parse(generatedHref).pathname;
+  const { pathname: generatedPathname, hash: generatedHash } = parse(
+    generatedHref,
+  );
+  const generatedCleanHash = getHashPartWithoutHashSign(generatedHash);
+  if (hash && generatedCleanHash && hash !== generatedCleanHash) return;
   if (exact) {
     // If we want an exact match
     // We check strict equality
