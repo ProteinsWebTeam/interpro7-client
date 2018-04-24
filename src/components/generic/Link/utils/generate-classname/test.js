@@ -1,5 +1,27 @@
 // @flow
-import generateClassname from '.';
+import generateClassname, { getHashPartWithoutHashSign } from '.';
+
+describe('getHashPartWithoutHashSign', () => {
+  test('undefined', () => {
+    expect(getHashPartWithoutHashSign()).toBe('');
+  });
+
+  test('null', () => {
+    expect(getHashPartWithoutHashSign(null)).toBe('');
+  });
+
+  test('empty string', () => {
+    expect(getHashPartWithoutHashSign('')).toBe('');
+  });
+
+  test('correct hash string', () => {
+    expect(getHashPartWithoutHashSign('#hash')).toBe('hash');
+  });
+
+  test('already clean hash string', () => {
+    expect(getHashPartWithoutHashSign('hash')).toBe('hash');
+  });
+});
 
 describe('generateClassname', () => {
   test('href provided to component', () => {
@@ -161,6 +183,29 @@ describe('generateClassname', () => {
           true,
         ),
       ).toBe('active');
+    });
+
+    test('from entry browse, with hashes', () => {
+      window.history.replaceState(null, null, 'entry/InterPro/#grid');
+      expect(
+        generateClassname('active', {}, undefined, `${home}entry/InterPro/`),
+      ).toBe('active');
+      expect(
+        generateClassname(
+          'active',
+          {},
+          undefined,
+          `${home}entry/InterPro/#grid`,
+        ),
+      ).toBe('active');
+      expect(
+        generateClassname(
+          'active',
+          {},
+          undefined,
+          `${home}entry/InterPro/#table`,
+        ),
+      ).toBeUndefined();
     });
   });
 });
