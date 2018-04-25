@@ -1,10 +1,12 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
+
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import MemberDBTabs from 'components/MemberDBTabs';
+import MemberDBSelector from 'components/MemberDBSelector';
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
   Column,
@@ -13,13 +15,15 @@ import Table, {
   Exporter,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
+import EntryMenu from 'components/EntryMenu';
+import Title from 'components/Title';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 
-import EntryMenu from 'components/EntryMenu';
-import Title from 'components/Title';
+import { mainDBLocationSelector } from 'reducers/custom-location/description';
+
 import subPages from 'subPages';
 import config from 'config';
 
@@ -70,7 +74,9 @@ class Overview extends PureComponent {
   static propTypes = propTypes;
 
   render() {
-    const { data: { payload = defaultPayload } } = this.props;
+    const {
+      data: { payload = defaultPayload },
+    } = this.props;
     return (
       <ul className={f('card')}>
         {Object.entries(payload.proteins || {}).map(([name, count]) => (
@@ -118,7 +124,10 @@ class List extends PureComponent {
     const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
-        <MemberDBTabs />
+        <MemberDBSelector
+          contentType="protein"
+          className="left-side-db-selector"
+        />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />
@@ -136,6 +145,7 @@ class List extends PureComponent {
             )}
           <Table
             dataTable={_payload.results}
+            contentType="protein"
             isStale={isStale}
             loading={loading}
             ok={ok}
@@ -267,7 +277,9 @@ class List extends PureComponent {
               cellClassName={f('text-right')}
               renderer={(length /*: number */) => (
                 <Tooltip title={`${length.toLocaleString()} amino acids`}>
-                  <span aria-label="amino acids length">{length}</span>
+                  <span aria-label="amino acids length">
+                    {length.toLocaleString()}
+                  </span>
                 </Tooltip>
               )}
             >
@@ -290,12 +302,9 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const subPagesForProtein = new Set();
+const subPagesForProtein = new Map();
 for (const subPage of config.pages.protein.subPages) {
-  subPagesForProtein.add({
-    value: subPage,
-    component: subPages.get(subPage),
-  });
+  subPagesForProtein.set(subPage, subPages.get(subPage));
 }
 
 class SummaryComponent extends PureComponent {
@@ -307,10 +316,23 @@ class SummaryComponent extends PureComponent {
   };
 
   render() {
-    const { data: { payload }, customLocation } = this.props;
+    const {
+      data: { payload },
+      customLocation,
+    } = this.props;
     return <SummaryAsync data={payload} customLocation={customLocation} />;
   }
 }
+
+const locationSelector1 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 
 class Summary extends PureComponent {
   static propTypes = {
@@ -330,7 +352,10 @@ class Summary extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload }, dataBase } = this.props;
+    const {
+      data: { loading, payload },
+      dataBase,
+    } = this.props;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
     if (loading || !payload.metadata) {
@@ -366,15 +391,7 @@ class Summary extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => {
-              const { key } = l.description.main;
-              return (
-                l.description[key].detail ||
-                (Object.entries(l.description).find(
-                  ([_key, value]) => value.isFilter,
-                ) || [])[0]
-              );
-            }}
+            locationSelector={locationSelector1}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForProtein}
           />
@@ -384,23 +401,29 @@ class Summary extends PureComponent {
   }
 }
 
-const acc = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
+const childRoutes = new Map([
+  [
+    /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i,
+    Summary,
+  ],
+]);
+const locationSelector2 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].accession ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => {
-        const { key } = l.description.main;
-        return (
-          l.description[key].accession ||
-          (Object.entries(l.description).find(
-            ([_key, value]) => value.isFilter,
-          ) || [])[0]
-        );
-      }}
+      locationSelector={locationSelector2}
       indexRoute={List}
-      childRoutes={[{ value: acc, component: Summary }]}
+      childRoutes={childRoutes}
       catchAll={List}
     />
   </ErrorBoundary>
@@ -411,7 +434,7 @@ const Protein = props => (
     <ErrorBoundary>
       <Switch
         {...props}
-        locationSelector={l => l.description[l.description.main.key].db}
+        locationSelector={mainDBLocationSelector}
         indexRoute={Overview}
         catchAll={InnerSwitch}
       />

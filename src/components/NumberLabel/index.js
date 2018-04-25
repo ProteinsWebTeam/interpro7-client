@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import debounce from 'lodash-es/debounce';
 
 import TweenLite from 'gsap/TweenLite';
 
@@ -14,14 +15,13 @@ const UNITS = ['', 'k+', 'M+', 'G+'];
 const UNIT_SCALE = 1000;
 const UNIT_SCALE_MARGIN = 100;
 
-export const DEFAULT_DURATION = 1;
+// Jump ahead if the animation didn't run because it wasn't visible
+// We don't want transitions to stop and resume later
+TweenLite.lagSmoothing(0);
 
-// Avoid doing too much work
-// This is to update a number value, not style, so no need re-render every frame
-const MAX_FPS = 10;
-TweenLite.ticker.fps(MAX_FPS);
+export const DEFAULT_DURATION = 0.75;
 
-const DELAY_RANGE = 0.1;
+const DELAY_RANGE = 0.25;
 
 const getAbbr = (value /*: number */) => {
   let _value = value;
@@ -52,15 +52,16 @@ class _NumberComponent extends PureComponent {
 
   constructor(props /*: ?any */) {
     super(props);
+
     this.state = { value: 0 };
   }
 
-  componentWillMount() {
-    this._animate(this.state.value, this.props.value);
+  componentDidMount() {
+    this._animate();
   }
 
-  componentWillReceiveProps({ value }) {
-    this._animate(this.state.value, value);
+  componentDidUpdate() {
+    this._animate();
   }
 
   componentWillUnmount() {
@@ -68,10 +69,17 @@ class _NumberComponent extends PureComponent {
       this._animation.kill();
       this._animation = null;
     }
+    if (this._onUpdate) {
+      this._onUpdate.cancel();
+      this._onUpdate = null;
+    }
   }
 
-  _animate = (from, to) => {
+  _animate = () => {
+    const { value: from } = this.state;
+    const { value: to } = this.props;
     if (this._animation) this._animation.kill();
+    if (this._onUpdate) this._onUpdate.cancel();
     const canAnimate =
       !this.props.lowGraphics &&
       from !== to &&
@@ -80,11 +88,19 @@ class _NumberComponent extends PureComponent {
     if (!canAnimate) return this.setState({ value: to });
 
     const animatable = { value: this.state.value };
+    this._onUpdate = debounce(
+      () => this.setState({ value: Math.round(animatable.value) }),
+      16,
+    );
     this._animation = TweenLite.to(animatable, this.props.duration, {
       value: to,
       // between 0 and 10% of full duration
       delay: Math.random() * this.props.duration * DELAY_RANGE,
-      onUpdate: () => this.setState({ value: Math.round(animatable.value) }),
+      onUpdate: this._onUpdate,
+      onComplete: () => {
+        if (this._onUpdate()) this._onUpdate.flush();
+      },
+      ease: TweenLite.Power2.easeIn,
     });
   };
 
@@ -113,7 +129,8 @@ class _NumberComponent extends PureComponent {
     }
     let _title = title;
     if (!_title && abbr) {
-      const potentialTitle = this.props.value.toLocaleString();
+      const potentialTitle =
+        (this.props.value && this.props.value.toLocaleString()) || '0';
       // Should only happen if value has been shortened
       if (potentialTitle !== _value) _title = potentialTitle;
     }

@@ -8,7 +8,7 @@ import protvista from 'components/ProtVista/style.css';
 
 const f = foundationPartial(protvista);
 
-import { getTrackColor, EntryColorMode } from 'utils/entryColor';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 class StructureOnProtein extends ProtVistaMatches {
   static propTypes = {
@@ -30,7 +30,9 @@ class StructureOnProtein extends ProtVistaMatches {
     const firstMatch = data[0];
     const { structure, protein } = firstMatch;
     const main = 'entry_protein_locations' in protein ? 'protein' : 'structure';
-    const { [main]: { protein_structure_locations: locations } } = firstMatch;
+    const {
+      [main]: { protein_structure_locations: locations },
+    } = firstMatch;
     if (!this.web_protein.data)
       this.web_protein.data = protein.sequence || ' '.repeat(protein.length);
 

@@ -57,24 +57,30 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     customLocation: T.object.isRequired,
   };
 
-  componentDidMount() {
-    if (!this._clanViewer) return;
-    this._vis = new ClanViewer({ element: this._clanViewer });
-    const data = this.props.data.metadata.relationships;
-    this._vis.paint(data, false);
-    this._clanViewer.addEventListener('click', this._handleClick);
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.data !== this.props.data) {
-      const data = nextProps.data.metadata.relationships;
+  componentDidMount() {
+    if (!this._ref.current) return;
+    this._vis = new ClanViewer({ element: this._ref.current });
+    const data = this.props.data.metadata.relationships;
+    this._vis.paint(data, false);
+    this._ref.current.addEventListener('click', this._handleClick);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      const data = this.props.data.metadata.relationships;
       this._vis.paint(data, false);
     }
   }
 
   componentWillUnmount() {
-    if (this._clanViewer) {
-      this._clanViewer.removeEventListener('click', this._handleClick);
+    if (this._ref.current) {
+      this._ref.current.removeEventListener('click', this._handleClick);
     }
   }
 
@@ -91,17 +97,15 @@ class SummarySet extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { data: { metadata }, currentSet } = this.props;
+    const {
+      data: { metadata },
+      currentSet,
+    } = this.props;
     return (
       <div className={f('sections')}>
         <section>
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
-              {
-                // <div className={f('tag', 'margin-bottom-medium')}>
-                // {metadata.source_database}
-                // </div>
-              }
               <Accession accession={metadata.accession} id={metadata.id} />
               <h4>Description</h4>
               <Description textBlocks={[metadata.description]} />
@@ -136,7 +140,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
             </div>
           </div>
           <div className={f('row', 'columns')}>
-            <div ref={node => (this._clanViewer = node)} />
+            <div ref={this._ref} />
           </div>
         </section>
       </div>

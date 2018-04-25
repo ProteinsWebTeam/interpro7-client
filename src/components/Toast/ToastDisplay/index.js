@@ -15,14 +15,18 @@ class ToastDisplay extends PureComponent {
     removeToast: T.func.isRequired,
   };
 
-  constructor() {
-    super();
-    this.state = { over: false };
+  static getDerivedStateFromProps({ toasts }) {
+    if (Object.keys(toasts).length) return null;
+    // If no toast, the mouse can't be over
+    return { over: false };
   }
 
-  componentWillReceiveProps({ toasts }) {
-    // If no toast, the mouse can't be over
-    if (!Object.keys(toasts).length) this.setState({ over: false });
+  constructor(props) {
+    super(props);
+
+    this.state = { over: false };
+
+    this._ref = React.createRef();
   }
 
   componentDidUpdate() {
@@ -31,7 +35,12 @@ class ToastDisplay extends PureComponent {
 
     const { x, y } = this._lastMousePos;
     this._lastMousePos = null; // Resets the value, to avoid infinite loop
-    const { top, right, bottom, left } = this.container.getBoundingClientRect();
+    const {
+      top,
+      right,
+      bottom,
+      left,
+    } = this._ref.current.getBoundingClientRect();
     // Detects if outside of the boundaries of the toast container
     if (x < left || x > right || y < top || y > bottom) {
       // Yes, I know what I'm doing
@@ -58,7 +67,7 @@ class ToastDisplay extends PureComponent {
         className={styles['toast-display']}
         onMouseEnter={this._handleMouseEnter}
         onMouseLeave={this._handleMouseLeave}
-        ref={container => (this.container = container)}
+        ref={this._ref}
       >
         {Object.entries(toasts).map(([id, toast]) => (
           <Toast

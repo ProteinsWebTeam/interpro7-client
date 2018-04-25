@@ -3,11 +3,13 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { customLocationSelector } from 'reducers/custom-location';
+
 const defaultCatchAll = () => <div>404</div>;
 
 const match = (childRoutes, indexRoute, valueFromLocation) => {
   if (!valueFromLocation) return { Component: indexRoute };
-  for (const { value, component } of childRoutes) {
+  for (const [value, component] of childRoutes.entries()) {
     if (typeof value === 'string') {
       if (value === valueFromLocation) {
         return { Component: component, matched: valueFromLocation };
@@ -24,12 +26,7 @@ class _Switch extends PureComponent {
   static propTypes = {
     indexRoute: T.func.isRequired,
     locationSelector: T.func.isRequired,
-    childRoutes: T.oneOfType([
-      T.shape({
-        [Symbol.iterator]: T.func.isRequired,
-      }),
-      T.array,
-    ]) /* any Iterable, like a Set or an Array */,
+    childRoutes: T.instanceOf(Map),
     catchAll: T.func,
     customLocation: T.object.isRequired,
   };
@@ -53,7 +50,7 @@ class _Switch extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

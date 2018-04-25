@@ -6,6 +6,8 @@ import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 
+import { emblMapNavSelector } from 'reducers/ui/emblMapNav';
+
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
@@ -14,20 +16,42 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 
-export class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
+/*:: type Props = {
+  visible?: boolean,
+}; */
+
+/*:: type State =  {|
+  wasRendered: boolean,
+|}; */
+
+export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
-    visible: T.bool.isRequired,
+    visible: T.bool,
   };
+
+  static getDerivedStateFromProps(
+    { visible } /*: Props */,
+    { wasRendered } /*: State */,
+  ) {
+    if (wasRendered || !visible) return null;
+    return { wasRendered: true };
+  }
+
+  constructor(props /*: Props */) {
+    super(props);
+
+    this.state = { wasRendered: false };
+  }
 
   render() {
     const { visible } = this.props;
-    return (
-      <div className={styleBundle('masthead-black-bar')}>
+    const { wasRendered } = this.state;
+    let content = null;
+    if (visible || wasRendered) {
+      content = (
         <div
           id="embl-dropdown"
-          className={styleBundle('dropdown-pane', 'bottom', 'embl-dropdown', {
-            'is-open': visible,
-          })}
+          className={styleBundle('dropdown-pane', 'bottom', 'embl-dropdown')}
         >
           <p>
             EMBL-EBI in Hinxton is one of six EMBL locations across Europe.
@@ -118,14 +142,23 @@ export class EMBLDropdown extends PureComponent /*:: <{ visible: boolean }> */ {
             </div>
           </div>
         </div>
+      );
+    }
+    if (!(visible || wasRendered)) return null;
+    return (
+      <div
+        inert={visible ? undefined : ''}
+        aria-hidden={!visible}
+        className={styleBundle('masthead-black-bar', { visible })}
+      >
+        {content}
       </div>
     );
   }
 }
 
-const mapStateToProps = createSelector(
-  state => state.ui.emblMapNav,
-  visible => ({ visible }),
-);
+const mapStateToProps = createSelector(emblMapNavSelector, visible => ({
+  visible,
+}));
 
 export default connect(mapStateToProps)(EMBLDropdown);

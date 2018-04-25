@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-const getUrlFor = (mainType, mainDB, mainAccession) =>
+const getURLFor = (mainType, mainDB, mainAccession) =>
   createSelector(
     state => state.settings.api,
     ({ protocol, hostname, port, root }) =>
@@ -26,21 +26,24 @@ class Metadata extends PureComponent {
     children: T.element.isRequired,
   };
 
-  constructor() {
-    super();
-    this.state = { child: null, element: null };
+  static getDerivedStateFromProps({ children, endpoint, db, accession }) {
+    const child = Children.only(children);
+    const getURL = getURLFor(endpoint, db, accession);
+    return { child, element: loadData(getURL)(child.type) };
   }
 
-  componentWillMount() {
-    const { children, ...props } = this.props;
-    const child = Children.only(children);
-    const getUrl = getUrlFor(props.endpoint, props.db, props.accession);
-    const element = loadData(getUrl)(child.type);
-    this.setState({ child, element });
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      child: Children.only(props.children),
+      element: null,
+    };
   }
 
   render() {
     const Element = this.state.element;
+    if (!Element) return null;
     return <Element {...this.state.child.props} {...this.props} />;
   }
 }

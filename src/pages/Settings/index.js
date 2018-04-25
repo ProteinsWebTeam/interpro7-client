@@ -7,7 +7,6 @@ import { DEV } from 'config';
 
 import noop from 'lodash-es/noop';
 
-import loadData from 'higherOrder/loadData';
 import {
   schemaProcessDataWebPage,
   schemaProcessDataPageSection,
@@ -179,16 +178,16 @@ CacheSettings.propTypes = {
   }).isRequired,
 };
 
-const getStatusText = (loading, ok) => {
-  if (loading) return 'Unknown';
-  return ok ? 'Reachable' : 'Unreachable';
+const getStatusText = status => {
+  if (status === null) return 'Unknown';
+  return status ? 'Reachable' : 'Unreachable';
 };
 
 const EndpointSettings = ({
   category,
-  endpointDetails: { hostname, port, root },
-  data: { loading, ok, status },
+  endpointDetails: { protocol, hostname, port, root },
   children,
+  status,
 }) => (
   <form data-category={category}>
     <h4>{children}</h4>
@@ -201,6 +200,15 @@ const EndpointSettings = ({
     />
 
     <div className={f('row')}>
+      <div className={f('medium-2', 'column')}>
+        <label>
+          Protocol:
+          <select name="protocol" value={protocol} readOnly={!DEV}>
+            <option value="http:">http://</option>
+            <option value="https:">https://</option>
+          </select>
+        </label>
+      </div>
       <div className={f('medium-3', 'column')}>
         <label>
           Hostname:
@@ -213,7 +221,7 @@ const EndpointSettings = ({
           />
         </label>
       </div>
-      <div className={f('medium-3', 'column')}>
+      <div className={f('medium-1', 'column')}>
         <label>
           Port:
           <input
@@ -243,13 +251,13 @@ const EndpointSettings = ({
           Status:
           <output
             className={f('button', 'output', 'hollow', {
-              secondary: loading,
-              success: !loading && ok,
-              alert: !loading && !ok,
+              secondary: status === null,
+              success: status === true,
+              alert: status === false,
             })}
             title={`Status: ${status}`}
           >
-            {getStatusText(loading, ok)}
+            {getStatusText(status)}
           </output>
         </label>
       </div>
@@ -264,11 +272,14 @@ EndpointSettings.propTypes = {
     root: T.string.isRequired,
   }).isRequired,
   children: T.any.isRequired,
-  data: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.bool,
-  }),
+  status: T.bool,
 };
+
+const getStatusForEndpoint = endpoint =>
+  createSelector(
+    state => state.status.servers[endpoint].status,
+    status => ({ status }),
+  );
 
 const getUrlForEndpoint = endpoint =>
   createSelector(
@@ -277,21 +288,15 @@ const getUrlForEndpoint = endpoint =>
       `${protocol}//${hostname}:${port}${root}`,
   );
 
-const fetchOptions = { method: 'HEAD', cache: 'no-store', noCache: true };
-const APIEndpointSettings = loadData({
-  getUrl: getUrlForEndpoint('api'),
-  fetchOptions,
-})(EndpointSettings);
-
-const EBIEndpointSettings = loadData({
-  getUrl: getUrlForEndpoint('ebi'),
-  fetchOptions,
-})(EndpointSettings);
-
-const IPScanEndpointSettings = loadData({
-  getUrl: getUrlForEndpoint('ipScan'),
-  fetchOptions,
-})(EndpointSettings);
+const APIEndpointSettings = connect(getStatusForEndpoint('api'))(
+  EndpointSettings,
+);
+const EBIEndpointSettings = connect(getStatusForEndpoint('ebi'))(
+  EndpointSettings,
+);
+const IPScanEndpointSettings = connect(getStatusForEndpoint('ipScan'))(
+  EndpointSettings,
+);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),

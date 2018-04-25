@@ -5,7 +5,7 @@ import f from 'styles/foundation';
 
 /* ::
   type Location = {|
-    description: {|[key: string]: string|},
+    description: {|[key: string]: {|[key: string | number]: string | boolean|}|},
     search: {|[key: string]: string|},
     hash: string,
   |};
@@ -139,6 +139,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'Overview',
+      exact: true,
     },
   ],
   [
@@ -159,8 +160,8 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             },
             entry: {
               isFilter: true,
-              db: key === 'set' ? customLocation.description[key].db : null,
-              integration: key === 'set' ? null : 'all',
+              db:
+                key === 'set' ? customLocation.description.set.db : 'InterPro',
             },
           },
         };
@@ -358,15 +359,10 @@ export const InterPro /*: Array<Object> */ = [
     to: { description: {} },
     icon: 'H',
     name: 'Home',
-    activeClass({ description: { main, other } } /*: Location */) {
-      if (!(main.key || other[0])) return f('is-active');
-    },
+    exact: true,
   },
   {
     to: { description: { main: { key: 'search' } } },
-    activeClass({ description: { main } } /*: Location */) {
-      if (main.key === 'search') return f('is-active');
-    },
     icon: '1',
     name: 'Search',
     iconClass: 'functional',
@@ -405,7 +401,11 @@ export const InterPro /*: Array<Object> */ = [
         },
       };
     },
-    activeClass({ description: { main } } /*: Location */) {
+    activeClass(
+      {
+        description: { main },
+      } /*: Location */,
+    ) {
       if (main.key && main.key !== 'search' && main.key !== 'job') {
         return f('is-active');
       }
@@ -416,9 +416,6 @@ export const InterPro /*: Array<Object> */ = [
   },
   {
     to: { description: { main: { key: 'job' } } },
-    activeClass({ description: { main } } /*: Location */) {
-      if (main.key === 'job') return f('is-active');
-    },
     icon: '1',
     name: 'Jobs',
     iconClass: 'functional',

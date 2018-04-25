@@ -1,25 +1,28 @@
 @import '../../styles/timing.css';
 @import '../../styles/spacing.css';
 
-.masthead-black-bar .dropdown-pane.embl-dropdown {
+.masthead-black-bar {
   z-index: 101;
-  position: fixed;
-  top: calc(38px + var(--spacing-medium));
-  left: initial;
-  right: var(--spacing-medium);
+  transition-property: opacity, transform;
   transition-timing-function: ease-in-out;
   transition-duration: var(--timing-medium);
-  transition-property: transform, opacity;
-  transform: translateY(-150%);
   opacity: 0;
-  visibility: hidden;
-  display: block;
-  width: calc(100vw - 2 * var(--spacing-medium));
-  max-width: 800px;
+  transform: translateY(-50vh);
 
-  &.is-open {
-    transform: translateY(0);
+  &.visible {
     visibility: visible;
     opacity: 1;
+    transform: translateY(0);
+  }
+
+  & .dropdown-pane.embl-dropdown {
+    position: fixed;
+    top: calc(38px + var(--spacing-medium));
+    left: initial;
+    right: var(--spacing-medium);
+    display: block;
+    width: calc(100vw - 2 * var(--spacing-medium));
+    max-width: 800px;
+    visibility: visible;
   }
 }

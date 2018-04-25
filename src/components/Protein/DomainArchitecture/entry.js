@@ -3,32 +3,13 @@ import { select } from 'd3';
 import ColorHash from 'color-hash/lib/color-hash';
 import classname from 'classnames/bind';
 
+import config from 'config';
+
 import styles from './style.css';
 
 const s = classname.bind(styles);
 const colorHash = new ColorHash();
 const childrenScale = 1; /* was 0.7*/
-
-// TODO: refactor to have a single place for colors
-const colorsByDB = {
-  cathgene3d: '#a88cc3',
-  cdd: '#addc58',
-  hamap: '#2cd6d6',
-  mobidblt: '#d6dc94',
-  panther: '#bfac92',
-  pfam: '#6287b1',
-  pirsf: '#fbbddd',
-  prints: '#54c75f',
-  prodom: '#8d99e4',
-  profile: '#f69f74',
-  prosite: '#f3c766',
-  sfld: '#00b1d3',
-  smart: '#ff8d8d',
-  ssf: '#686868',
-  tigrfams: '#56b9a6',
-  interpro: '#2daec1',
-  pdb: '#74b360',
-};
 
 const DEFAULT_OFFSET_Y = 4;
 const DEFAULT_RADIUS = 6;
@@ -179,7 +160,7 @@ class EntryRenderer {
         return colorHash.hex(acc);
       }
       case EntryColorMode.COLOR_MODE_MEMBERDB:
-        return colorsByDB[entry.source_database.toLowerCase()];
+        return config.colors.get(entry.source_database);
       case EntryColorMode.COLOR_MODE_DOMAIN_RELATIONSHIP:
         if (entry.source_database.toLowerCase() === 'interpro')
           return colorHash.hex(

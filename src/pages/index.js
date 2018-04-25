@@ -10,6 +10,8 @@ import loadable from 'higherOrder/loadable';
 
 import BrowseTabs from 'components/BrowseTabs';
 
+import { stuckSelector } from 'reducers/ui/stuck';
+
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
@@ -65,21 +67,21 @@ const NotFound = loadable({
     import(/* webpackChunkName: "not-found-page" */ './error/NotFound'),
 });
 
-const pages = new Set([
+const pages = new Map([
   // pages with data from API
-  { value: 'entry', component: Entry },
-  { value: 'protein', component: Protein },
-  { value: 'structure', component: Structure },
-  { value: 'organism', component: Organism },
-  { value: 'set', component: EntrySet },
+  ['entry', Entry],
+  ['protein', Protein],
+  ['structure', Structure],
+  ['organism', Organism],
+  ['set', EntrySet],
   // other
-  { value: 'search', component: Search },
-  { value: 'job', component: Jobs },
+  ['search', Search],
+  ['job', Jobs],
   // static pages
-  { value: 'about', component: About },
-  { value: 'help', component: Help },
-  { value: 'contact', component: Contact },
-  { value: 'settings', component: Settings },
+  ['about', About],
+  ['help', Help],
+  ['contact', Contact],
+  ['settings', Settings],
 ]);
 
 const Null = () => null;
@@ -89,7 +91,21 @@ const Null = () => null;
   top: number,
 }; */
 
-class Pages extends PureComponent /*:: <Props> */ {
+const childRoutes = new Map([[/^search|job$/, Null]]);
+const locationSelector1 = createSelector(customLocation => {
+  if (
+    customLocation.description.main.key &&
+    !customLocation.description[customLocation.description.main.key].accession
+  )
+    return customLocation.description.main.key;
+}, value => value);
+const locationSelector2 = createSelector(
+  customLocation =>
+    customLocation.description.other[0] || customLocation.description.main.key,
+  value => value,
+);
+
+export class Pages extends PureComponent /*:: <Props> */ {
   static propTypes = {
     stuck: T.bool.isRequired,
     top: T.number.isRequired,
@@ -105,14 +121,8 @@ class Pages extends PureComponent /*:: <Props> */ {
               <Switch
                 {...props}
                 indexRoute={Null}
-                locationSelector={l => {
-                  if (
-                    l.description.main.key &&
-                    !l.description[l.description.main.key].accession
-                  )
-                    return l.description.main.key;
-                }}
-                childRoutes={[{ value: /^search|job$/, component: Null }]}
+                locationSelector={locationSelector1}
+                childRoutes={childRoutes}
                 catchAll={BrowseTabs}
               />
             </div>
@@ -121,9 +131,7 @@ class Pages extends PureComponent /*:: <Props> */ {
         <ErrorBoundary>
           <Switch
             {...props}
-            locationSelector={l =>
-              l.description.other[0] || l.description.main.key
-            }
+            locationSelector={locationSelector2}
             indexRoute={Home}
             childRoutes={pages}
             catchAll={NotFound}
@@ -134,9 +142,6 @@ class Pages extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToProps = createSelector(
-  state => state.ui.stuck,
-  stuck => ({ stuck }),
-);
+const mapStateToProps = createSelector(stuckSelector, stuck => ({ stuck }));
 
 export default connect(mapStateToProps)(Pages);

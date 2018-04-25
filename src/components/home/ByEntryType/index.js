@@ -11,7 +11,7 @@ import AnimatedEntry from 'components/AnimatedEntry';
 import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import { entryType } from 'staticData/home';
 
@@ -39,7 +39,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
     }).isRequired,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
         m => m.InterproType,
@@ -79,7 +79,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
               <Tooltip title={description}>
                 <interpro-type
                   type={type}
-                  size="4em"
+                  dimension="4em"
                   style={{ display: 'block', paddingTop: '1rem' }}
                 />
                 <h5>{type}</h5>

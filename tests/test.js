@@ -3,7 +3,7 @@ import { sleep } from 'timing-functions';
 
 const ONE_MINUTE = 60000; // needed when run in EBI cluster
 
-jest.setTimeout(ONE_MINUTE);
+jest.setTimeout(ONE_MINUTE / 2);
 
 describe('tests', () => {
   const testSetup = testInit();

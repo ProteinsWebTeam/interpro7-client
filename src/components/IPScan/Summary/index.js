@@ -47,30 +47,35 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
 
   render() {
     const {
-      data: { payload: { results: [payload] } },
+      data: {
+        payload: {
+          results: [payload],
+        },
+      },
       accession,
       localID,
     } = this.props;
     const metadata = {
-      accession: payload.crossReferences[0].identifier,
-      length: payload.sequenceLength,
+      accession,
+      length: payload.sequence.length,
       sequence: payload.sequence,
       name: {
         name: 'InterProScan Search',
-        short: payload.crossReferences[0].name,
+        short: payload.xref[0].name,
       },
     };
 
     const goTerms = new Map();
     for (const match of payload.matches) {
-      for (const go of (match.signature.entry || {}).goXRefs || []) {
-        goTerms.set(go.identifier, {
+      for (const { id, category, name } of (match.signature.entry || {})
+        .goXRefs || []) {
+        goTerms.set(id, {
           category: {
-            name: go.category.toLowerCase(),
-            code: go.category[0],
+            name: category.toLowerCase(),
+            code: category[0],
           },
-          name: go.name,
-          identifier: go.identifier,
+          name,
+          identifier: id,
         });
       }
     }

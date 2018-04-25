@@ -42,11 +42,14 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
 
   constructor(props /*: Props */) {
     super(props);
-    this._menuItems = new Set();
+
     this.state = {};
     for (const { name } of InterProMin) {
       this.state[name] = true;
     }
+
+    this._menuItems = new Set();
+    this._dotdotdotRef = React.createRef();
   }
 
   componentDidMount() {
@@ -59,7 +62,8 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
 
   _checkSizes = async (width /*: number */) => {
     await schedule(MAX_DELAY_BEFORE_CHECKING_FIT);
-    let remainingWidth = width - this._dotdotdot.getBoundingClientRect().width;
+    let remainingWidth =
+      width - this._dotdotdotRef.current.getBoundingClientRect().width;
     for (const menuItem of this._menuItems) {
       if (remainingWidth > 0) {
         const { width } = menuItem.getBoundingClientRect();
@@ -81,14 +85,14 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
     const hiddenItems = InterProMin.filter(({ name }) => !this.state[name]);
     return (
       <ul className={f('menu')}>
-        {InterProMin.map(({ to, name, activeClass }) => (
+        {InterProMin.map(({ to, name, activeClass, exact }) => (
           <li
             key={name}
             ref={this._setMenuItemInMap}
             data-name={name}
             className={f('menu-item', { visible: this.state[name] || false })}
           >
-            <MenuItem to={to} activeClass={activeClass}>
+            <MenuItem to={to} activeClass={activeClass} exact={exact}>
               {name}
             </MenuItem>
           </li>
@@ -100,16 +104,13 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
           role="tree"
           tabIndex="0"
         >
-          <span
-            className={f('more-icon-container')}
-            ref={node => (this._dotdotdot = node)}
-          >
+          <span className={f('more-icon-container')} ref={this._dotdotdotRef}>
             <img src={dotsvg} width="30px" alt="view all menu items" />
           </span>
 
-          {hiddenItems.map(({ to, name, activeClass }) => (
+          {hiddenItems.map(({ to, name, activeClass, exact }) => (
             <li key={name} className={f('menu-item')}>
-              <MenuItem to={to} activeClass={activeClass}>
+              <MenuItem to={to} activeClass={activeClass} exact={exact}>
                 {name}
               </MenuItem>
             </li>

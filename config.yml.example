@@ -1,8 +1,8 @@
 root:
-  website: //localhost:8080/interpro/
+  website: http://localhost:8080/interpro/
   API: https://wwwdev.ebi.ac.uk/interpro7/api/
-  EBIsearch: //www.ebi.ac.uk/ebisearch/ws/rest/interpro
-  IPScan: //www.ebi.ac.uk/Tools/services/rest/iprscan5/
+  EBIsearch: https://www.ebi.ac.uk/ebisearch/ws/rest/interpro
+  IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
 IPScan:
   contactEmail: example@example.com
 pages:
@@ -45,3 +45,22 @@ pagination:
   pageSize: 20
 cache:
   enabled: true
+colors:
+  fallback: '#cacaca'
+  cathgene3d: '#a88cc3'
+  cdd: '#addc58'
+  hamap: '#2cd6d6'
+  mobidblt: '#d6dc94'
+  panther: '#bfac92'
+  pfam: '#6287b1'
+  pirsf: '#fbbddd'
+  prints: '#54c75f'
+  prodom: '#8d99e4'
+  profile: '#f69f74'
+  prosite: '#f3c766'
+  sfld: '#00b1d3'
+  smart: '#ff8d8d'
+  ssf: '#686868'
+  tigrfams: '#56b9a6'
+  interpro: '#2daec1'
+  pdb: '#74b360'

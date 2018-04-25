@@ -20,10 +20,16 @@ class RefreshButton extends PureComponent {
     updateJobStatus: T.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   _handleClick = () => {
-    if (!this._icon) return;
-    if (this._icon.animate) {
-      this._icon.animate(
+    if (!this._ref.current) return;
+    if (this._ref.current.animate) {
+      this._ref.current.animate(
         { transform: ['rotate(0)', 'rotate(360deg)'] },
         { duration: 1000, iterations: 3 },
       );
@@ -42,7 +48,7 @@ class RefreshButton extends PureComponent {
           <span
             className={f('icon', 'icon-functional')}
             data-icon="R"
-            ref={node => (this._icon = node)}
+            ref={this._ref}
           />
         </Tooltip>
       </button>

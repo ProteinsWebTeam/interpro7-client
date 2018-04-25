@@ -1,5 +1,5 @@
-import getReducerFor, { getDefaultSettingsFor } from './index';
-import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types/index';
+import getReducerFor, { getDefaultSettingsFor } from '.';
+import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
 
 describe('reducer for settings', () => {
   let defaultSettings;

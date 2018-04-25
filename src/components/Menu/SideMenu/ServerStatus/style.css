@@ -1,0 +1,34 @@
+.connection-statuses {
+  display: flex;
+  justify-content: center;
+}
+
+.status-light {
+  display: inline-block;
+  margin: 0.5em;
+  width: 1ch;
+  height: 1em;
+  border-radius: 50%;
+  color: gray;
+  background: currentColor;
+  box-shadow: 0 0 1ch 2px currentColor;
+  transition-property: color, opacity;
+  transition-duration: 1s;
+  transition-timing-function: ease-in-out;
+
+  &.online {
+    color: lightgreen;
+  }
+
+  &.offline {
+    color: red;
+  }
+
+  &.browser-offline {
+    opacity: 0.5;
+  }
+}
+
+.browser-light {
+  margin-right: 2ch;
+}

@@ -10,12 +10,18 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
-import loadWebComponent from 'utils/loadWebComponent';
+import { customLocationSelector } from 'reducers/custom-location';
+
+import loadWebComponent from 'utils/load-web-component';
 
 import { foundationPartial } from 'styles/foundation';
+
 import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
+
+const allRE = /^all$/i;
+const isAll = string => allRE.test(string);
 
 class EntryTypeFilter extends PureComponent {
   static propTypes = {
@@ -34,7 +40,7 @@ class EntryTypeFilter extends PureComponent {
     }).isRequired,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
         m => m.InterproType,
@@ -44,14 +50,19 @@ class EntryTypeFilter extends PureComponent {
 
   _handleSelection = ({ target: { value } }) => {
     const { page, type, ...search } = this.props.customLocation.search;
-    if (value !== 'All') search.type = value;
+    if (!isAll(value)) search.type = value;
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
   render() {
     const {
       data: { loading, payload },
-      customLocation: { description: { entry: { db } }, search },
+      customLocation: {
+        description: {
+          entry: { db },
+        },
+        search,
+      },
     } = this.props;
     const types = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,
@@ -70,18 +81,18 @@ class EntryTypeFilter extends PureComponent {
                 value={type.toLowerCase()}
                 onChange={this._handleSelection}
                 checked={
-                  (!search.type && type === 'All') ||
+                  (!search.type && isAll(type)) ||
                   search.type === type.toLowerCase()
                 }
                 style={{ margin: '0.25em' }}
               />
-              {type === 'All' || db !== 'InterPro' ? (
+              {isAll(type) || db !== 'InterPro' ? (
                 type.replace('_', ' ')
               ) : (
                 <interpro-type
                   type={type.replace('_', ' ')}
                   expanded
-                  size="17px"
+                  dimension="17px"
                 >
                   {type}
                 </interpro-type>
@@ -120,7 +131,7 @@ const getUrlFor = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

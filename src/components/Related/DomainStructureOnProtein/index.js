@@ -67,7 +67,7 @@ const mergeData = (interpro, structures) => {
     acc[val.entry_type].push(val);
     return acc;
   }, {});
-  if (structures.length > 0) {
+  if (structures.length) {
     out.structures = structures
       .map(({ ...obj }) => ({
         label: `${obj.accession}: ${obj.chain}`,

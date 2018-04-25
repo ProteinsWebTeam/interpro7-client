@@ -7,6 +7,8 @@ import { sleep } from 'timing-functions/src';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 
+import cancelable from 'utils/cancelable';
+
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
@@ -26,16 +28,24 @@ class _SingleMatchWrapper extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      triggerRedirect: props.autoRedirect,
-    };
+
+    this.state = { triggerRedirect: props.autoRedirect };
   }
 
-  async componentWillReceiveProps({ autoRedirect }) {
-    if (!autoRedirect) return;
-    await sleep(TOGGLE_DURATION);
-    this.setState({ triggerRedirect: autoRedirect });
+  componentDidUpdate() {
+    if (this._trigger) this._trigger.cancel();
+    this._trigger = cancelable(this._triggerRedirect());
   }
+
+  componentWillUnmount() {
+    if (this._trigger) this._trigger.cancel();
+  }
+
+  _triggerRedirect = async () => {
+    await sleep(TOGGLE_DURATION);
+    if (this._trigger.canceled) return;
+    this.setState({ triggerRedirect: this.props.autoRedirect });
+  };
 
   render() {
     const { to, children } = this.props;

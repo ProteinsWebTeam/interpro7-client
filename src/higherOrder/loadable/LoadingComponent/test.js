@@ -11,7 +11,7 @@ describe('<LoadingComponent />', () => {
     renderer.render(
       <LoadingComponent isLoading timedOut={false} pastDelay={false} />,
     );
-    expect(renderer.getRenderOutput()).toBe(null);
+    expect(renderer.getRenderOutput()).toBeNull();
   });
 
   test('should render in loading state after delay but before time out', () => {
@@ -40,7 +40,7 @@ describe('<LoadingComponent />', () => {
     renderer.render(
       <LoadingComponent isLoading={false} timedOut={false} pastDelay={false} />,
     );
-    expect(renderer.getRenderOutput()).toBe(null);
+    expect(renderer.getRenderOutput()).toBeNull();
   });
 });
 

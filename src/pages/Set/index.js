@@ -1,10 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import MemberDBTabs from 'components/MemberDBTabs';
+import MemberDBSelector from 'components/MemberDBSelector';
 import Table, {
   Column,
   SearchBox,
@@ -16,6 +17,8 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
+
+import { mainDBLocationSelector } from 'reducers/custom-location/description';
 
 import {
   schemaProcessDataTable,
@@ -74,7 +77,9 @@ class Overview extends PureComponent {
     if (this.props.loading) {
       return <Loading />;
     }
-    const { data: { payload = defaultPayload } } = this.props;
+    const {
+      data: { payload = defaultPayload },
+    } = this.props;
     return (
       <ul className={f('card')}>
         {Object.entries(payload.sets || {})
@@ -104,7 +109,10 @@ class List extends PureComponent {
       data: { payload, loading, ok, url, status },
       isStale,
       customLocation: {
-        description: { set: { db: dbS }, entry: { db: dbE } },
+        description: {
+          set: { db: dbS },
+          entry: { db: dbE },
+        },
         search,
       },
       dataBase,
@@ -124,7 +132,7 @@ class List extends PureComponent {
     const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
-        <MemberDBTabs />
+        <MemberDBSelector contentType="set" className="left-side-db-selector" />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <hr />
@@ -140,6 +148,7 @@ class List extends PureComponent {
 
           <Table
             dataTable={_payload.results}
+            contentType="set"
             loading={loading}
             ok={ok}
             isStale={isStale}
@@ -248,12 +257,9 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const subPagesForSet = new Set();
+const subPagesForSet = new Map();
 for (const subPage of config.pages.set.subPages) {
-  subPagesForSet.add({
-    value: subPage,
-    component: subPages.get(subPage),
-  });
+  subPagesForSet.set(subPage, subPages.get(subPage));
 }
 
 class SummaryComponent extends PureComponent {
@@ -265,7 +271,10 @@ class SummaryComponent extends PureComponent {
   };
 
   render() {
-    const { data: { payload }, customLocation } = this.props;
+    const {
+      data: { payload },
+      customLocation,
+    } = this.props;
     return (
       <SummaryAsync
         {...this.props}
@@ -275,6 +284,16 @@ class SummaryComponent extends PureComponent {
     );
   }
 }
+
+const locationSelector1 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 
 class Summary extends PureComponent {
   static propTypes = {
@@ -294,7 +313,10 @@ class Summary extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload }, dataBase } = this.props;
+    const {
+      data: { loading, payload },
+      dataBase,
+    } = this.props;
     if (loading || !payload.metadata) {
       return <Loading />;
     }
@@ -342,15 +364,7 @@ class Summary extends PureComponent {
           <Switch
             {...this.props}
             currentSet={currentSet}
-            locationSelector={l => {
-              const { key } = l.description.main;
-              return (
-                l.description[key].detail ||
-                (Object.entries(l.description).find(
-                  ([_key, value]) => value.isFilter,
-                ) || [])[0]
-              );
-            }}
+            locationSelector={locationSelector1}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForSet}
           />
@@ -368,21 +382,23 @@ const dbAccs = new RegExp(
   'i',
 );
 
+const childRoutes = new Map([[dbAccs, Summary]]);
+const locationSelector2 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].accession ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => {
-        const { key } = l.description.main;
-        return (
-          l.description[key].accession ||
-          (Object.entries(l.description).find(
-            ([_key, value]) => value.isFilter,
-          ) || [])[0]
-        );
-      }}
+      locationSelector={locationSelector2}
       indexRoute={List}
-      childRoutes={[{ value: dbAccs, component: Summary }]}
+      childRoutes={childRoutes}
       catchAll={List}
     />
   </ErrorBoundary>
@@ -393,7 +409,7 @@ const EntrySet = props => (
     <ErrorBoundary>
       <Switch
         {...props}
-        locationSelector={l => l.description[l.description.main.key].db}
+        locationSelector={mainDBLocationSelector}
         indexRoute={Overview}
         catchAll={InnerSwitch}
       />

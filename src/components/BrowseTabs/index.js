@@ -64,7 +64,11 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
       tabs = tabs.filter(Boolean);
     }
     return (
-      <ul className={f('tabs', className, { sign: isSignature })}>
+      <ul
+        className={f('tabs', 'pp-browse-tabs', className, {
+          sign: isSignature,
+        })}
+      >
         {children}
         {tabs.map(e => (
           <li className={f('tabs-title')} key={e.name}>

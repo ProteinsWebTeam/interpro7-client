@@ -2,13 +2,16 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { format } from 'url';
+import cn from 'classnames';
 
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import config from 'config';
 
 import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/custom-location';
+
+import generateHref from './utils/generate-href';
+import generateRel from './utils/generate-rel';
+import generateClassName from './utils/generate-classname';
 
 const happenedWithModifierKey = event =>
   !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
@@ -16,53 +19,6 @@ const happenedWithLeftClick = event => event.button === 0;
 
 const getNextLocation = (customLocation, to) =>
   typeof to === 'function' ? to(customLocation) : to;
-
-const rootPathname = config.root.website.pathname.replace(/\/$/, '');
-
-const generateHref = (nextLocation /*: Object */, href /*:: ?: string */) => {
-  if (href) return href;
-  return format({
-    pathname: rootPathname + descriptionToPath(nextLocation.description),
-    query: nextLocation.search,
-    hash: nextLocation.hash,
-  });
-};
-
-const generateClassName = (
-  className /*: ?string */,
-  activeClass /*: ?(string | function) */,
-  customLocation /*: Object */,
-  nextCustomLocation /*: Object */,
-  href /*: ?string */,
-) => {
-  if (href || !(activeClass && nextCustomLocation)) return className;
-  if (typeof activeClass === 'function') {
-    return `${className || ''} ${activeClass(customLocation) || ''}`;
-  }
-  for (const [keyLevel1, intermediateValue] of Object.entries(
-    nextCustomLocation.description,
-  )) {
-    for (const [keyLevel2, value] of Object.entries(intermediateValue || {})) {
-      // If it is ever true, it means we don't have a match
-      if (customLocation.description[keyLevel1][keyLevel2] !== value)
-        return className;
-    }
-  }
-  // If we arrive here, we have a match
-  return `${className || ''} ${activeClass}`;
-};
-
-const generateRel = (
-  rel /*:: ?: string */,
-  target /*:: ?: string */,
-  href /*:: ?: string*/,
-) => {
-  if (!href) return rel;
-  const relSet = new Set((rel || '').split(' ').filter(Boolean));
-  relSet.add('noreferrer');
-  if (target) relSet.add('noopener');
-  return Array.from(relSet).join(' ');
-};
 
 /*:: type Props = {
   onClick: ?function,
@@ -94,6 +50,7 @@ class Link extends PureComponent /*:: <Props> */ {
       search: T.object.isRequired,
       hash: T.string.isRequired,
     }).isRequired,
+    exact: T.bool,
     children: T.any,
     rel: T.string,
     href: T.string,
@@ -146,6 +103,7 @@ class Link extends PureComponent /*:: <Props> */ {
       onClick,
       goToCustomLocation,
       // used or changed
+      exact,
       customLocation,
       activeClass,
       className,
@@ -163,14 +121,13 @@ class Link extends PureComponent /*:: <Props> */ {
       nextCustomLocation.description,
     );
     const _href = generateHref(nextCustomLocation, href);
-    const _className =
-      generateClassName(
-        className,
-        activeClass,
-        customLocation,
-        nextCustomLocation,
-        href,
-      ) || '';
+    const activeClassName = generateClassName(
+      activeClass,
+      customLocation,
+      href,
+      _href,
+      exact,
+    );
     if (disabled) {
       props.style = {
         ...(props.style || {}),
@@ -186,7 +143,7 @@ class Link extends PureComponent /*:: <Props> */ {
         href={_href}
         rel={generateRel(rel, target, href)}
         target={target}
-        className={_className.trim() || null}
+        className={cn(className, activeClassName) || null}
         onClick={this.handleClick}
       >
         {children}
@@ -196,7 +153,7 @@ class Link extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

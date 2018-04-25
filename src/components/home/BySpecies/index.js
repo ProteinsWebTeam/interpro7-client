@@ -10,7 +10,6 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { toPlural } from 'utils/pages';
 
 import { speciesFeat } from 'staticData/home';
@@ -27,20 +26,13 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, byX, local);
 class Species extends PureComponent /*:: <SpeciesProps> */ {
   static propTypes = {
     species: T.object.isRequired,
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.object,
-    }).isRequired,
+    entries: T.oneOfType([T.number, T.string]),
+    proteins: T.oneOfType([T.number, T.string]),
+    loading: T.bool,
   };
 
   render() {
-    const { species, data: { loading, payload } } = this.props;
-    let entries = 0;
-    let proteins = 0;
-    if (!loading && payload && payload.metadata) {
-      entries = payload.metadata.counters.entries;
-      proteins = payload.metadata.counters.proteins;
-    }
+    const { species, entries = 0, proteins = 0, loading = true } = this.props;
 
     return (
       <div
@@ -109,23 +101,6 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
   }
 }
 
-const mapStateToUrlFor = accession =>
-  createSelector(
-    state => state.settings.api,
-    ({ protocol, hostname, port, root }) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname:
-          root +
-          descriptionToPath({
-            main: { key: 'organism' },
-            organism: { db: 'taxonomy', accession },
-          }),
-      }),
-  );
-
 /*:: type Props = {
   data: {
     loading: boolean,
@@ -138,17 +113,34 @@ const mapStateToUrlFor = accession =>
 }; */
 
 class BySpecies extends PureComponent /*:: <Props> */ {
+  static propTypes = {
+    data: T.object,
+    dataProtein: T.object,
+  };
   render() {
+    const countsE = this.props.data.payload;
+    const countsP = this.props.dataProtein.payload;
+    const loading = this.props.data.loading && this.props.dataProtein.loading;
     return (
       <div className={f('species-list')}>
         <AnimatedEntry className={f('row')} element="div">
           {speciesFeat.map(species => {
             const { tax_id: taxID } = species;
-            const SpeciesWithData = loadData(mapStateToUrlFor(taxID))(Species);
             return (
-              <SpeciesWithData
+              <Species
                 species={species}
                 key={taxID || 'unclassified'}
+                loading={loading}
+                entries={
+                  loading
+                    ? '...'
+                    : countsE && countsE[taxID] && countsE[taxID].value
+                }
+                proteins={
+                  loading
+                    ? '...'
+                    : countsP && countsP[taxID] && countsP[taxID].value
+                }
               />
             );
           })}
@@ -169,4 +161,20 @@ class BySpecies extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default BySpecies;
+const mapStateToUrl = endpoint =>
+  createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}/${endpoint}`,
+        query: { group_by: 'tax_id' },
+      }),
+  );
+
+export default loadData({
+  getUrl: mapStateToUrl('protein'),
+  propNamespace: 'Protein',
+})(loadData(mapStateToUrl('entry'))(BySpecies));

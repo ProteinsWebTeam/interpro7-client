@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { Helmet } from 'react-helmet';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -13,34 +13,9 @@ import styles from './style.css';
 import loadData from '../../higherOrder/loadData';
 import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 
+import config from 'config';
+
 const f = foundationPartial(fonts, ipro, styles);
-
-const softcolors = {
-  // opacity 0.6 normal colors
-  cdd: '#cbeb98',
-  cathgene3d: '#c9b6db',
-  hamap: '#87e5e6',
-  mobidblt: '#d6dc94',
-  panther: '#d8ccbb',
-  pfam: '#9fb4cf',
-  pirsf: '#ecccec',
-  prints: '#97de9c',
-  prodom: '#b8bdee',
-  profile: '#fac5a9',
-  prosite: '#f7dea0',
-  sfld: '#79cde3',
-  smart: '#ffadac',
-  ssf: '#a3a3a3',
-  tigrfams: '#99d3c7',
-};
-
-const getcolor = db => {
-  let color = softcolors[db.toLowerCase()];
-  if (!color) {
-    color = softcolors[db];
-  }
-  return color;
-};
 
 const mapNameToClass = new Map([
   ['Domain', 'title-id-domain'],
@@ -67,7 +42,7 @@ const mapNameToClass = new Map([
     chains?: Array<string>,
   },
   mainType: string,
-  dataBase?: Object,
+  data?: Object,
 }; */
 
 const accessionDisplay = new Set(['protein', 'structure', 'organism']);
@@ -75,11 +50,11 @@ const accessionDisplay = new Set(['protein', 'structure', 'organism']);
 class Title extends PureComponent /*:: <Props> */ {
   static propTypes = {
     metadata: T.object.isRequired,
-    dataBase: T.object.isRequired,
+    data: T.object.isRequired,
     mainType: T.string.isRequired,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
         m => m.InterproType,
@@ -88,10 +63,9 @@ class Title extends PureComponent /*:: <Props> */ {
   }
 
   render() {
-    const { metadata, mainType, dataBase } = this.props;
+    const { metadata, mainType, data } = this.props;
     const isEntry = mainType === 'entry';
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
+    const databases = data && data.payload && data.payload.databases;
     const dbLabel =
       databases && databases[metadata.source_database]
         ? databases[metadata.source_database].name
@@ -107,7 +81,7 @@ class Title extends PureComponent /*:: <Props> */ {
             <Tooltip title={`${metadata.type.replace('_', ' ')} type`}>
               <interpro-type
                 type={metadata.type.replace('_', ' ')}
-                size="4em"
+                dimension="4em"
               />
             </Tooltip>
           )}
@@ -123,7 +97,7 @@ class Title extends PureComponent /*:: <Props> */ {
           )}
 
         <Helmet>
-          <title>{metadata.accession.toString()}</title>
+          <title>{metadata.accession}</title>
         </Helmet>
         <h3>
           {metadata.name.name}{' '}
@@ -142,7 +116,9 @@ class Title extends PureComponent /*:: <Props> */ {
             metadata.source_database &&
             metadata.source_database.toLowerCase() !== 'interpro' && (
               <small
-                style={{ backgroundColor: getcolor(metadata.source_database) }}
+                style={{
+                  backgroundColor: config.colors.get(metadata.source_database),
+                }}
                 className={f('title-id-md')}
               >
                 {metadata.accession}
@@ -226,6 +202,5 @@ class Title extends PureComponent /*:: <Props> */ {
     );
   }
 }
-export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  Title,
-);
+
+export default loadData(getUrlForMeta)(Title);

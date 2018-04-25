@@ -17,7 +17,7 @@ import { foundationPartial } from 'styles/foundation';
 import pageStyle from './style.css';
 
 const f = foundationPartial(pageStyle, protvista);
-import { getTrackColor, EntryColorMode } from 'utils/entryColor';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import loadable from 'higherOrder/loadable';
 
 const SchemaOrgData = loadable({
@@ -147,7 +147,10 @@ class DomainArchitectures extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload }, mainAccession } = this.props;
+    const {
+      data: { loading, payload },
+      mainAccession,
+    } = this.props;
     if (loading) return <Loading />;
     return (
       <div className={f('row')}>

@@ -1,5 +1,116 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`External links <BaseLink /> should render simple links 1`] = `
+<Connect(Link)
+  href="http://www.example.com/some_id"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  <div>
+    link
+  </div>
+</Connect(Link)>
+`;
+
+exports[`External links <BaseLink /> should render simple links 2`] = `
+<Connect(Link)
+  href="http://www.example.com/some_id"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  <div>
+    div
+    <span>
+      span
+    </span>
+  </div>
+</Connect(Link)>
+`;
+
+exports[`External links <BaseLink /> should render simple links 3`] = `
+<Connect(Link)
+  href="http://www.example.com/some_id"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  link
+</Connect(Link)>
+`;
+
+exports[`External links <BaseLink /> should render simple links 4`] = `
+<Connect(Link)
+  href="https://example.com/999/something"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  <div>
+    link
+  </div>
+</Connect(Link)>
+`;
+
+exports[`External links <BaseLink /> should render simple links 5`] = `
+<Connect(Link)
+  href="https://example.com/999/something"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  <div>
+    div
+    <span>
+      span
+    </span>
+  </div>
+</Connect(Link)>
+`;
+
+exports[`External links <BaseLink /> should render simple links 6`] = `
+<Connect(Link)
+  href="https://example.com/999/something"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  link
+</Connect(Link)>
+`;
+
+exports[`External links <BaseLink /> should render simple links 7`] = `
+<Connect(Link)
+  href="example.com/id:Identification"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  <div>
+    link
+  </div>
+</Connect(Link)>
+`;
+
+exports[`External links <BaseLink /> should render simple links 8`] = `
+<Connect(Link)
+  href="example.com/id:Identification"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  <div>
+    div
+    <span>
+      span
+    </span>
+  </div>
+</Connect(Link)>
+`;
+
+exports[`External links <BaseLink /> should render simple links 9`] = `
+<Connect(Link)
+  href="example.com/id:Identification"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  link
+</Connect(Link)>
+`;
+
 exports[`External links <DOILink /> should render simple links 1`] = `
 <BaseLink
   id="1.2.a.b"

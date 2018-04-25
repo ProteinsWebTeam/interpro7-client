@@ -1,5 +1,4 @@
-// @flow
-import reducer from '.';
+import reducer, { sideNavSelector } from '.';
 import { TOGGLE_SIDE_NAV, CLOSE_EVERYTHING } from 'actions/types';
 
 describe('reducer for side menu open state', () => {
@@ -20,5 +19,12 @@ describe('reducer for side menu open state', () => {
   test('should ignore everything else', () => {
     expect(reducer(true, {})).toBe(true);
     expect(reducer(false, {})).toBe(false);
+  });
+});
+
+describe('selectors', () => {
+  test('sideNavSelector', () => {
+    const state = { ui: { sideNav: true } };
+    expect(sideNavSelector(state)).toBe(true);
   });
 });

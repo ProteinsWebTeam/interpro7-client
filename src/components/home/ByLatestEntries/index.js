@@ -12,7 +12,7 @@ import MemberSymbol from 'components/Entry/MemberSymbol';
 import { latests } from 'staticData/home';
 
 import loadData from 'higherOrder/loadData';
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -35,7 +35,7 @@ class LatestEntry extends PureComponent {
     }),
   };
 
-  componentWillMount() {
+  componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
         m => m.InterproType,
@@ -49,7 +49,7 @@ class LatestEntry extends PureComponent {
       <li className={f('list-item')}>
         <Tooltip title={`${entry.type} type`}>
           <interpro-type
-            size="1.5em"
+            dimension="1.5em"
             type={entry.type}
             aria-label="Entry type"
           />

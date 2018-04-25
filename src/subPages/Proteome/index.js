@@ -36,12 +36,17 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation:
   render() {
     if (this.props.data.loading) return <Loading />;
     const {
-      data: { payload: { results, count }, loading, ok },
+      data: {
+        payload: { results, count },
+        loading,
+        ok,
+      },
       customLocation: { search },
     } = this.props;
     return (
       <Table
         dataTable={results}
+        contentType="organism"
         loading={loading}
         ok={ok}
         actualSize={count}

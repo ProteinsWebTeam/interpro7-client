@@ -9,20 +9,22 @@ import AbortController from './AbortController';
 export default (
   promiseOrFunction/*: Promise<*> | () => Promise<*> */ = Promise.resolve()
 )/*: Output */ => {
-  let canceled = false;
   let promise = promiseOrFunction;
   const controller = new AbortController();
   if (!('then' in promiseOrFunction)) {// not actually a Promise
     promise = promiseOrFunction(controller.signal);
   }
-  return {
+  const output = {
     promise: promise.then(value => {
-      if (canceled) throw { canceled }; // eslint-disable-line no-throw-literal
+      // eslint-disable-next-line no-throw-literal
+      if (output.canceled) throw { canceled: output.canceled };
       return value;
     }),
+    canceled: false,
     cancel() {
-      canceled = true;
+      output.canceled = true;
       controller.abort();
     },
   };
+  return output;
 };

@@ -1,11 +1,13 @@
-/* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 25, 50, 15, 30, 100]}] */
+/* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 20, 50, 100]}] */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { foundationPartial } from 'styles/foundation';
 import { goToCustomLocation, changePageSize } from 'actions/creators';
+import { customLocationSelector } from 'reducers/custom-location';
+
+import { foundationPartial } from 'styles/foundation';
 
 import s from './style.css';
 
@@ -40,7 +42,7 @@ class PageSizeSelector extends PureComponent {
   };
 
   render() {
-    let options = [10, 25, 50, 100];
+    let options = [20, 50, 100];
     if (!options.includes(this.state.pageSize * 1)) {
       options = Array.from(new Set([...options, this.state.pageSize])).sort(
         (a, b) => a - b,
@@ -70,7 +72,7 @@ class PageSizeSelector extends PureComponent {
 
 const mapStateToProps = createSelector(
   state => state.settings.navigation.pageSize,
-  state => state.customLocation,
+  customLocationSelector,
   (pageSize, customLocation) => ({ pageSize, customLocation }),
 );
 

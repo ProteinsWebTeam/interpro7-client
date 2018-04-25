@@ -82,7 +82,10 @@ export const changePageSize = (pageSize /* :number */) => ({
 });
 
 export const changeSettings = (event /* :Event */) => {
-  if (event.target instanceof HTMLInputElement) {
+  if (
+    event.target instanceof HTMLInputElement ||
+    event.target instanceof HTMLSelectElement
+  ) {
     return {
       type: types.CHANGE_SETTINGS,
       category: event.target.form && event.target.form.dataset.category,
@@ -97,35 +100,21 @@ export const resetSettings = (value /*: ?Object */) => ({
   value,
 });
 
-// data
-export const loadingData = (key /*: string */) => ({
-  type: types.LOADING_DATA,
-  key,
-});
-
-export const loadedData = (key /*: string */, response /*: Object */) => ({
-  type: types.LOADED_DATA,
-  key,
-  payload: response.payload,
-  status: response.status,
-  ok: response.ok,
-});
-
-export const progressData = (key /*: string */, progress /*: number */) => ({
+// dataProgress
+export const dataProgressInfo = (
+  key /*: string */,
+  progress /*: number */,
+  weight /*: number */,
+) => ({
   type: types.PROGRESS_DATA,
   key,
   progress,
+  weight,
 });
 
-export const unloadingData = (key /*: string */) => ({
-  type: types.UNLOADING_DATA,
+export const dataProgressUnload = (key /*: string */) => ({
+  type: types.UNLOAD_DATA,
   key,
-});
-
-export const failedLoadingData = (key /*: string */, error /*: Error */) => ({
-  type: types.FAILED_LOADING_DATA,
-  key,
-  error,
 });
 
 // jobs
@@ -163,6 +152,18 @@ export const unloadDataJob = (
 ) => ({
   type: types.UNLOAD_DATA_JOB,
   job,
+});
+
+// status
+export const serverStatus = (server /*: string */, status /*: boolean*/) => ({
+  type: types.SERVER_STATUS,
+  server,
+  status,
+});
+
+export const browserStatus = (status /*: boolean*/) => ({
+  type: types.BROWSER_STATUS,
+  onLine: status,
 });
 
 // toast messages

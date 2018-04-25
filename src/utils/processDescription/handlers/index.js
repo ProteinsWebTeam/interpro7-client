@@ -76,7 +76,7 @@ import set from 'lodash-es/set';
 |}; */
 
 /*:: type PropertiesObject = {
-  [key: string]: {|value: any|},
+  [key: string]: PropertyDescriptor<any>,
 }; */
 
 // node templates
@@ -543,7 +543,7 @@ export const jobAccessionHandler /*: Handler */ = handlerConstructor({
     value: value => value,
   },
   regexp: {
-    value: /(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-(es|hx|pg|oy|p[12]m)|internal-[1-9]\d*-\d+)/,
+    value: /(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}|internal-[1-9]\d*-\d+)/,
   },
 });
 

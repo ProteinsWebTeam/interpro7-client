@@ -8,7 +8,7 @@ import { BaseLink, PMCLink, DOILink, GoLink, PDBeLink, UniProtLink } from '.';
 const renderer = new ShallowRenderer();
 
 describe('External links', () => {
-  describe.skip('<BaseLink />', () => {
+  describe('<BaseLink />', () => {
     test('should render simple links', () => {
       const examples = new Set([
         {

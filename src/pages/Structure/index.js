@@ -1,11 +1,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import MemberDBTabs from 'components/MemberDBTabs';
+import MemberDBSelector from 'components/MemberDBSelector';
 import { PDBeLink } from 'components/ExtLink';
+import LazyImage from 'components/LazyImage';
 import StructureListFilters from 'components/Structure/StructureListFilters';
 import Table, {
   Column,
@@ -19,6 +21,8 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
+
+import { mainDBLocationSelector } from 'reducers/custom-location/description';
 
 import {
   schemaProcessDataTable,
@@ -37,6 +41,7 @@ import { foundationPartial } from 'styles/foundation';
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+
 const f = foundationPartial(pageStyle, styles);
 
 const SummaryAsync = loadable({
@@ -92,7 +97,12 @@ Overview.propTypes = propTypes;
 const List = ({
   data: { payload, loading, ok, url, status },
   isStale,
-  customLocation: { description: { structure: { db } }, search },
+  customLocation: {
+    description: {
+      structure: { db },
+    },
+    search,
+  },
   dataBase,
 }) => {
   let _payload = payload;
@@ -108,7 +118,10 @@ const List = ({
   const includeGrid = url;
   return (
     <div className={f('row')}>
-      <MemberDBTabs />
+      <MemberDBSelector
+        contentType="structure"
+        className="left-side-db-selector"
+      />
 
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
         <StructureListFilters /> <hr />
@@ -125,6 +138,7 @@ const List = ({
           )}
         <Table
           dataTable={_payload.results}
+          contentType="structure"
           loading={loading}
           ok={ok}
           isStale={isStale}
@@ -243,7 +257,7 @@ const List = ({
             defaultKey="structureAccession"
             renderer={(accession /*: string */) => (
               <PDBeLink id={accession}>
-                <img
+                <LazyImage
                   src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
                   alt={`structure with accession ${accession.toUpperCase()}`}
                   style={{ maxWidth: '33%' }}
@@ -270,16 +284,24 @@ SummaryComponent.propTypes = {
   customLocation: T.object.isRequired,
 };
 
-const subPagesForStructure = new Set();
+const subPagesForStructure = new Map();
 for (const subPage of config.pages.structure.subPages) {
-  subPagesForStructure.add({
-    value: subPage,
-    component: subPages.get(subPage),
-  });
+  subPagesForStructure.set(subPage, subPages.get(subPage));
 }
 
+const locationSelector1 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 const Summary = props => {
-  const { data: { loading, payload } } = props;
+  const {
+    data: { loading, payload },
+  } = props;
   if (loading || !payload || !payload.metadata) return <Loading />;
   return (
     <ErrorBoundary>
@@ -291,15 +313,7 @@ const Summary = props => {
       </div>
       <Switch
         {...props}
-        locationSelector={l => {
-          const { key } = l.description.main;
-          return (
-            l.description[key].detail ||
-            (Object.entries(l.description).find(
-              ([_key, value]) => value.isFilter,
-            ) || [])[0]
-          );
-        }}
+        locationSelector={locationSelector1}
         indexRoute={SummaryComponent}
         childRoutes={subPagesForStructure}
       />
@@ -313,22 +327,24 @@ Summary.propTypes = {
   customLocation: T.object.isRequired,
 };
 
+const childRoutes = new Map([[/^[a-z\d]{4}$/i, Summary]]);
+const locationSelector2 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].accession ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => {
-        const { key } = l.description.main;
-        return (
-          l.description[key].accession ||
-          (Object.entries(l.description).find(
-            ([_key, value]) => value.isFilter,
-          ) || [])[0]
-        );
-      }}
+      locationSelector={locationSelector2}
       indexRoute={List}
-      childRoutes={[{ value: /^[a-z\d]{4}$/i, component: Summary }]}
+      childRoutes={childRoutes}
       catchAll={List}
     />
   </ErrorBoundary>
@@ -380,7 +396,7 @@ class Structure extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => l.description[l.description.main.key].db}
+            locationSelector={mainDBLocationSelector}
             indexRoute={Overview}
             catchAll={InnerSwitch}
           />
