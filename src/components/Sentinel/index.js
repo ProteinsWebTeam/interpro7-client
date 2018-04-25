@@ -67,8 +67,14 @@ class Sentinel extends PureComponent {
     unstick: T.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   componentDidMount() {
-    this._subscription = listenScrolled(this._element, this.props);
+    this._subscription = listenScrolled(this._ref.current, this.props);
   }
 
   componentWillUnmount() {
@@ -81,7 +87,7 @@ class Sentinel extends PureComponent {
       <span
         className={styles.sentinel}
         style={{ top: `${top}px` }}
-        ref={element => (this._element = element)}
+        ref={this._ref}
       />
     );
   }

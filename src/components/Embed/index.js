@@ -41,23 +41,29 @@ class Embed extends PureComponent {
 
   constructor(props) {
     super(props);
+
     this.state = { loading: true };
+
+    this._iframeRef = React.createRef();
+    this._placeholderRef = React.createRef();
   }
 
   componentDidMount() {
-    this._iframe.addEventListener('load', this._onLoad, { once: true });
+    this._iframeRef.current.addEventListener('load', this._onLoad, {
+      once: true,
+    });
     mounted.add(this);
   }
 
   componentWillUnmount() {
-    this._iframe.removeEventListener('load', this._onLoad);
+    this._iframeRef.current.removeEventListener('load', this._onLoad);
     mounted.delete(this);
   }
 
   _onLoad = () => {
     if (!mounted.has(this)) return;
-    this._placeholderContainer.style.pointerEvents = 'none';
-    this._placeholderContainer.animate(
+    this._placeholderRef.current.style.pointerEvents = 'none';
+    this._placeholderRef.current.animate(
       { opacity: [1, 0] },
       {
         duration: 1000,
@@ -67,8 +73,8 @@ class Embed extends PureComponent {
     ).onfinish = () => {
       if (mounted.has(this)) this.setState({ loading: false });
     };
-    // remove eventListener, in case {once: true} isn't supported
-    this._iframe.removeEventListener('load', this._onLoad);
+    // remove eventListener, in case `{ once: true }` isn't supported
+    this._iframeRef.current.removeEventListener('load', this._onLoad);
   };
 
   render() {
@@ -77,15 +83,12 @@ class Embed extends PureComponent {
     return (
       <div style={containerStyle}>
         {loading && (
-          <span
-            style={placeholderStyle}
-            ref={node => (this._placeholderContainer = node)}
-          >
+          <span style={placeholderStyle} ref={this._placeholderRef}>
             {children || <Loading />}
           </span>
         )}
         <iframe
-          ref={node => (this._iframe = node)}
+          ref={this._iframeRef}
           {...props}
           title={`embedded iframe${title ? `: ${title}` : ''}`}
         />

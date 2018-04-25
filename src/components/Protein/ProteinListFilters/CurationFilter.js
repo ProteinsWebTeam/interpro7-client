@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -10,6 +10,7 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
@@ -53,7 +54,7 @@ class CurationFilter extends PureComponent {
         : 0;
     }
     return (
-      <Fragment>
+      <div className={f('list-curation')}>
         {Object.entries(databases).map(([db, value]) => (
           <div key={db} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -74,7 +75,7 @@ class CurationFilter extends PureComponent {
             </label>
           </div>
         ))}
-      </Fragment>
+      </div>
     );
   }
 }
@@ -105,7 +106,7 @@ const getUrl = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

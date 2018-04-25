@@ -83,23 +83,15 @@ const SidePanel = ({ metadata }) => (
     {metadata.integrated && (
       <div>
         <h5>External links</h5>
-        {
-          // TODO implement right MD ext link
-        }
-        <Link
-          className={f('ext')}
-          to={{
-            description: {},
-          }}
-        >
+        <Link className={f('ext')} to={{ description: {} }}>
           {metadata.source_database} website
         </Link>
       </div>
     )}
     {metadata.member_databases &&
-      Object.keys(metadata.member_databases).length > 0 && (
-        <ContributingSignatures contr={metadata.member_databases} />
-      )}
+    Object.keys(metadata.member_databases).length ? (
+      <ContributingSignatures contr={metadata.member_databases} />
+    ) : null}
   </div>
 );
 SidePanel.propTypes = {
@@ -116,7 +108,7 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
         db={metadata.source_database}
       />
     )}
-    {Object.keys(metadata.literature).length > 0 && (
+    {Object.keys(metadata.literature).length ? (
       <section id="references">
         <div className={f('row')}>
           <div className={f('large-12', 'columns')}>
@@ -125,9 +117,9 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
         </div>
         <Literature included={included} extra={extra} />
       </section>
-    )}
+    ) : null}
 
-    {Object.keys(metadata.cross_references || {}).length > 0 && (
+    {Object.keys(metadata.cross_references || {}).length ? (
       <section id="cross_references">
         <div className={f('row')}>
           <div className={f('large-12', 'columns')}>
@@ -136,7 +128,7 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
         </div>
         <CrossReferences xRefs={metadata.cross_references} />
       </section>
-    )}
+    ) : null}
   </Fragment>
 );
 OtherSections.propTypes = {
@@ -178,7 +170,9 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { data: { metadata } } = this.props;
+    const {
+      data: { metadata },
+    } = this.props;
     const citations = description2IDs(metadata.description);
     const desc = metadata.description.reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(
@@ -213,7 +207,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   </p>
                 )}
               {// doesn't work for some HAMAP as they have enpty <P> tag
-              Object.keys(metadata.description).length > 0 && (
+              Object.keys(metadata.description).length && (
                 <Fragment>
                   <h4>Description</h4>
                   <Description

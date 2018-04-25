@@ -10,7 +10,7 @@ const ProteinListFilters = () => (
   <FiltersPanel>
     <CurationFilter label="UniProt Curation" />
     <TaxonomyFilter label="Taxonomy" />
-    <LengthFilter label="Length (AA)" />
+    {/*<LengthFilter label="Length" />*/}
   </FiltersPanel>
 );
 

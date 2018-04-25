@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { closeSideNav } from 'actions/creators';
+import { sideNavSelector } from 'reducers/ui/sideNav';
 
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterProMenu from 'components/Menu/InterProMenu';
 import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 import Link from 'components/generic/Link';
+import ServerStatus from './ServerStatus';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -19,46 +21,21 @@ import style from './style.css';
 
 const f = foundationPartial(ebiStyles, interproStyles, helperClasses, style);
 
-// TODO: eventually remove all of this logic a few releases after initial launch
-const getOldHref = createSelector(
-  description => description,
-  d => {
-    const href = 'https://www.ebi.ac.uk/interpro/';
-    const { key } = d.main;
-    if (key === 'entry') {
-      if (!d.entry.db) {
-        return href;
-      } else if (d.entry.db === 'InterPro') {
-        if (d.entry.accession) {
-          return `${href}entry/${d.entry.accession}/`;
-        }
-        return `${href}search/`;
-      }
-      if (d.entry.accession) {
-        return `${href}signature/${d.entry.accession}/`;
-      }
-      return `${href}member-database/${d.entry.db}/`;
-    } else if (key === 'protein' && d.entry.accession) {
-      return `${href}protein/${d.entry.accession}/`;
-    }
-    return href;
-  },
-);
-
 /*:: type OldIPProps = {
-  description: Object,
+  href: string,
 }; */
 
+// TODO: eventually remove all of this logic a few releases after initial launch
 class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
   static propTypes = {
-    description: T.object.isRequired,
+    href: T.string.isRequired,
   };
 
   render() {
     return (
       <Link
         className={f('old-interpro-link')}
-        href={getOldHref(this.props.description)}
+        href={this.props.href}
         target="_blank"
       >
         See this page in the old InterPro website
@@ -69,7 +46,27 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
 
 const mapStateToPropsForOldLink = createSelector(
   state => state.customLocation.description,
-  description => ({ description }),
+  d => {
+    const href = 'https://www.ebi.ac.uk/interpro/';
+    const { key } = d.main;
+    if (key === 'entry') {
+      if (!d.entry.db) {
+        return { href };
+      } else if (d.entry.db === 'InterPro') {
+        if (d.entry.accession) {
+          return { href: `${href}entry/${d.entry.accession}/` };
+        }
+        return { href: `${href}search/` };
+      }
+      if (d.entry.accession) {
+        return { href: `${href}signature/${d.entry.accession}/` };
+      }
+      return { href: `${href}member-database/${d.entry.db}/` };
+    } else if (key === 'protein' && d.entry.accession) {
+      return { href: `${href}protein/${d.entry.accession}/` };
+    }
+    return { href };
+  },
 );
 
 const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
@@ -91,79 +88,81 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
     closeSideNav: T.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasRendered: false,
-    };
+  static getDerivedStateFromProps({ visible }, { hasRendered }) {
+    if (hasRendered || !visible) return null;
+    return { hasRendered: true };
   }
 
-  componentWillReceiveProps({ visible }) {
-    if (!this.state.hasRendered && visible)
-      this.setState({ hasRendered: true });
+  constructor(props) {
+    super(props);
+
+    this.state = { hasRendered: false };
   }
 
   render() {
     const { visible, mainAccession, mainType, closeSideNav } = this.props;
-    if (!(this.state.hasRendered || visible)) return null;
-    return (
-      <aside className={f('container', { visible })} role="menu">
-        <button
-          className={f('exit')}
-          title="Close side menu"
-          onClick={closeSideNav}
-          aria-hidden="true"
-        >
-          ×
-        </button>
-        <nav>
-          <ul>
-            {mainAccession && (
-              <SingleEntityMenu className={f('primary')}>
+    const { hasRendered } = this.state;
+    let content = null;
+    if (hasRendered || visible) {
+      content = (
+        <React.Fragment>
+          <button
+            className={f('exit')}
+            title="Close side menu"
+            onClick={closeSideNav}
+            aria-hidden="true"
+          >
+            ×
+          </button>
+          <nav>
+            <ul>
+              {mainAccession && (
+                <SingleEntityMenu className={f('primary')}>
+                  <span className={f('menu-label', 'cursor-default')}>
+                    {mainType} menu ({mainAccession})
+                  </span>
+                </SingleEntityMenu>
+              )}
+              <InterProMenu className={f('secondary', 'is-drilldown')}>
                 <span className={f('menu-label', 'cursor-default')}>
-                  {mainType} menu ({mainAccession})
+                  InterPro menu
                 </span>
-              </SingleEntityMenu>
-            )}
-            <InterProMenu className={f('secondary', 'is-drilldown')}>
-              <span className={f('menu-label', 'cursor-default')}>
-                InterPro menu
-              </span>
-            </InterProMenu>
-            <EBIMenu className={f('tertiary')}>
-              <span className={f('menu-label', 'cursor-default')}>
-                EBI menu
-              </span>
-            </EBIMenu>
-            <span />
-            <li className={f('menu-label', 'cursor-default', 'tertiary')}>
-              <OldInterProLink />
-            </li>
-          </ul>
-        </nav>
+              </InterProMenu>
+              <EBIMenu className={f('tertiary')}>
+                <span className={f('menu-label', 'cursor-default')}>
+                  EBI menu
+                </span>
+              </EBIMenu>
+              <span />
+              <li className={f('menu-label', 'cursor-default', 'tertiary')}>
+                <OldInterProLink />
+              </li>
+              <li>
+                <span className={f('menu-label', 'cursor-default', 'tertiary')}>
+                  Connection status
+                </span>
+                <ServerStatus />
+              </li>
+            </ul>
+          </nav>
+        </React.Fragment>
+      );
+    }
+    return (
+      <aside
+        inert={visible ? undefined : ''}
+        aria-hidden={!visible}
+        className={f('container', { visible })}
+        role="menu"
+      >
+        {content}
       </aside>
     );
   }
 }
 
-// TODO: change logic for menu loading data
-// const urlBlacklist = new Set(['browse', 'search', 'settings', 'about', 'help']);
-// const mapStateToUrl = createSelector(
-//   state => state.settings,
-//   state => state.location,
-//   state => state.customLocation,
-//   (settings, location, customLocation) => {
-//     for (const blacklist of urlBlacklist) {
-//       if (location.pathname.toLowerCase().includes(blacklist)) {
-//         return getUrlForApi({settings, location: {pathname: ''}, customLocation});
-//       }
-//     }
-//     return getUrlForApi({settings, location, customLocation});
-//   }
-// );
-
 const mapStateToProps = createSelector(
-  state => state.ui.sideNav,
+  sideNavSelector,
   state => state.customLocation.description.main.key,
   state =>
     state.customLocation.description.main.key &&

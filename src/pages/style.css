@@ -66,13 +66,26 @@
   font-size: 0.72rem;
 }
 
+@supports (display: grid) {
+  .signature-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 0.72rem;
+  }
+}
+
 .signature {
-  background: #d5eff3;
+  background-color: #d5eff3;
   border-radius: 4px;
   padding: 0 4px;
   margin: 2px;
   flex-basis: 30%; /*3 items by row more or less*/
   text-align: center;
+  transition: background-color var(--timing-fast) ease-in-out;
+
+  &.corresponds-to-filter {
+    background-color: var(--colors-marktext);
+  }
 }
 
 .go-container {

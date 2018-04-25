@@ -10,6 +10,7 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
@@ -28,28 +29,21 @@ class IntegratedFilter extends PureComponent {
     }).isRequired,
   };
 
-  constructor() {
-    super();
-    this.state = { value: null };
-  }
-
-  componentWillMount() {
-    this.locationToState(this.props.customLocation);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.locationToState(nextProps.customLocation);
-  }
-
-  locationToState(customLocation) {
-    const { integration } = customLocation.description.entry;
-    if (integration === 'unintegrated') {
-      this.setState({ value: 'unintegrated' });
-    } else if (integration === 'integrated') {
-      this.setState({ value: 'integrated' });
-    } else {
-      this.setState({ value: 'both' });
+  static getDerivedStateFromProps({ customLocation }) {
+    const { integration: value } = customLocation.description.entry;
+    switch (value) {
+      case 'unintegrated':
+      case 'integrated':
+        return { value };
+      default:
+        return { value: 'both' };
     }
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = { value: null };
   }
 
   _handleSelection = ({ target: { value } }) => {
@@ -68,11 +62,13 @@ class IntegratedFilter extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const {
+      data: { loading, payload },
+    } = this.props;
     const types = loading ? {} : payload;
     if (!loading) types.both = payload.integrated + payload.unintegrated;
     return (
-      <div>
+      <div className={f('list-integrated')}>
         {Object.keys(types)
           .sort()
           .map(type => (
@@ -102,7 +98,10 @@ const getUrlFor = createSelector(
   state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from description
-    const { entry: { integration, ...entry }, ..._description } = description;
+    const {
+      entry: { integration, ...entry },
+      ..._description
+    } = description;
     _description.entry = entry;
     // omit from search
     const { search: _, ..._search } = search;
@@ -120,7 +119,7 @@ const getUrlFor = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

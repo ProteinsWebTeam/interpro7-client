@@ -83,7 +83,9 @@ const processEvent = async ({
       } else {
         // FASTA
         const response = await fetch(proteinPathFor(accession));
-        const { metadata: { sequence } } = await response.json();
+        const {
+          metadata: { sequence },
+        } = await response.json();
         content.push(`>${accession}|${db}|${name}`);
         for (const line of sequence.match(/.{1,80}/g)) {
           content.push('\n', line);
@@ -103,10 +105,10 @@ const processEvent = async ({
 
 self.addEventListener(
   'message',
-  async e => {
+  async event => {
     let url;
     try {
-      url = await processEvent(e);
+      url = await processEvent(event);
     } catch (error) {
       self.postMessage({ type: 'failed', details: error });
     }

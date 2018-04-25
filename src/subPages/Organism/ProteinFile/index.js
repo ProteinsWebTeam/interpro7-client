@@ -3,6 +3,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import FileWorker from 'webWorkers/proteinFile';
+
 import ProgressButton from 'components/ProgressButton';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -12,9 +14,6 @@ import classnames from 'classnames/bind';
 import styles from './style.css';
 
 const s = classnames.bind(styles);
-
-const getWorker = () =>
-  import('webWorkers/proteinFile').then(Worker => new Worker());
 
 const getDownloadName = createSelector(
   props => props.entryDescription.accession,
@@ -75,12 +74,10 @@ class ProteinFile extends PureComponent {
     }
     e.preventDefault();
     this.setState({ downloading: true });
-    getWorker().then(worker => {
-      this._worker = worker;
-      this._worker.addEventListener('message', this._workerMessage);
-      const { entryDescription, api, taxId, type } = this.props;
-      this._worker.postMessage({ entryDescription, api, taxId, type });
-    });
+    this._worker = new FileWorker();
+    this._worker.addEventListener('message', this._workerMessage);
+    const { entryDescription, api, taxId, type } = this.props;
+    this._worker.postMessage({ entryDescription, api, taxId, type });
   };
 
   _workerMessage = ({ data: { type, details } }) => {

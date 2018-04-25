@@ -13,6 +13,7 @@ import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import { NumberComponent } from 'components/NumberLabel';
 import { PDBeLink } from 'components/ExtLink';
+import LazyImage from 'components/LazyImage';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -20,7 +21,7 @@ import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import loadable from 'higherOrder/loadable';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import config from '../../config';
+import config from 'config';
 
 const f = foundationPartial(fonts, localStyle);
 
@@ -28,6 +29,7 @@ const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
+
 const schemamap = {
   entry: {
     protein: ['@isContainedIn', 'Protein'],
@@ -57,6 +59,7 @@ const schemamap = {
     organism: ['@additionalProperty', 'Organism'],
   },
 };
+
 const schemaProcessData = ({ data, primary, secondary }) => {
   const [id, type] = schemamap[secondary][primary];
   return {
@@ -87,6 +90,7 @@ const propTypes = {
   actualSize: T.number,
   search: T.object,
 };
+
 const componentMatch = {
   protein: {
     entry: EntriesOnProtein,
@@ -159,6 +163,7 @@ const Matches = (
     query={search}
     isStale={isStale}
     notFound={matches.length === 0}
+    contentType={primary}
   >
     <PageSizeSelector />
     <SearchBox search={search.search}>Search</SearchBox>
@@ -285,7 +290,7 @@ const Matches = (
       displayIf={primary === 'structure'}
       renderer={(accession /*: string */) => (
         <PDBeLink id={accession}>
-          <img
+          <LazyImage
             src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
             alt={`structure with accession ${accession.toUpperCase()}`}
             style={{ maxWidth: '33%' }}

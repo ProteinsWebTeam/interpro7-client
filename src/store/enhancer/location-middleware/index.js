@@ -1,11 +1,10 @@
 import { format } from 'url';
+import { frame } from 'timing-functions/src';
 
-// import config from 'config';
+import { NEW_CUSTOM_LOCATION } from 'actions/types';
+import { customLocationChangeFromHistory } from 'actions/creators';
 
-import { NEW_CUSTOM_LOCATION } from 'actions/types/index';
-import { customLocationChangeFromHistory } from 'actions/creators/index';
-
-import descriptionToPath from 'utils/processDescription/descriptionToPath/index';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 // Middleware to handle history change events
 export default history => ({ dispatch, getState }) => {
@@ -13,8 +12,10 @@ export default history => ({ dispatch, getState }) => {
   history.listen(
     // Dispatch new action only when history actually changes
     // Build new action from scratch
-    ({ state: { customLocation, state } }) =>
-      dispatch(customLocationChangeFromHistory(customLocation, state)),
+    async ({ state: { customLocation, state } }) => {
+      await Promise.resolve();
+      return dispatch(customLocationChangeFromHistory(customLocation, state));
+    },
   );
 
   const historyDispatch = ({ customLocation, replace, state }) =>
@@ -34,13 +35,15 @@ export default history => ({ dispatch, getState }) => {
   // Hijack normal Redux flow
   return next => action => {
     // if NEW_CUSTOM_LOCATION don't process and update history, it will
-    // eventually result in another action being dispatched through callback
+    // eventually result in another NEW_PROCESSED_CUSTOM_LOCATION action being
+    // dispatched through callback
     if (action.type === NEW_CUSTOM_LOCATION) {
       historyDispatch(action);
+      // scroll to top on new location (queued for next frame draw)
+      frame().then(() => window.scrollTo(0, 0));
       return;
     }
 
-    // If anything but NEW_LOCATION, process normally
     // If anything but NEW_CUSTOM_LOCATION, process normally
     return next(action);
   };

@@ -86,6 +86,7 @@ class IPScanStatus extends PureComponent {
           </div>
           <Table
             dataTable={paginatedJobs}
+            contentType="job"
             actualSize={jobs.length}
             query={search}
           >

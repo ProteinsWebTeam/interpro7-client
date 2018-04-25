@@ -1,9 +1,38 @@
+@import '../../../styles/colors.css';
+@import '../../../styles/timing.css';
+
 .component {
   color: #505f74;
   margin-bottom: 0;
 }
 
-.number {
-  background: none;
-  padding: 0;
+.text {
+  font-size: 0.75em;
+  padding: 0.5em;
+  border: solid 1px var(--colors-gray);
+  border-radius: 0.5ch;
+
+  &.selector {
+    cursor: pointer;
+
+    &::after {
+      content: '▼';
+      opacity: 1;
+      transition: opacity var(--timing-medium) ease-in-out;
+    }
+
+    &.open::after {
+      opacity: 0;
+    }
+  }
+}
+
+.db {
+  font-weight: bold;
+}
+
+.db-symbol {
+  vertical-align: middle;
+  height: 2rem;
+  width: 2rem;
 }

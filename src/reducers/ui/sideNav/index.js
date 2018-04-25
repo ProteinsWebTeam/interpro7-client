@@ -1,7 +1,10 @@
 // @flow
 import { TOGGLE_SIDE_NAV, CLOSE_EVERYTHING } from 'actions/types';
 
-export default (state /*: boolean */ = false, action /*: Object */) => {
+/*:: export type SideNav = boolean; */
+/*:: import type { State } from 'reducers'; */
+
+export default (state /*: SideNav */ = false, action /*: Object */) => {
   switch (action.type) {
     case TOGGLE_SIDE_NAV:
       if (!action.status) return !state;
@@ -12,3 +15,5 @@ export default (state /*: boolean */ = false, action /*: Object */) => {
       return state;
   }
 };
+
+export const sideNavSelector = (state /*: State */) => state.ui.sideNav;

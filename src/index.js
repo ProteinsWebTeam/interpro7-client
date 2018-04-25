@@ -6,7 +6,7 @@ import { render } from 'react-dom';
 
 import App from 'App';
 
-import config, { PROD, STAGING, DEV, PERF } from 'config';
+import config, { PROD, STAGING, DEV } from 'config';
 import ready from 'utils/ready';
 
 import hmr from 'index-hmr';
@@ -25,11 +25,6 @@ const main = async () => {
   await ready();
   // Root of the DOM to hook React to
   const DOM_ROOT = document.getElementById('root');
-
-  // If “PERF” is defined in the environment, activate “why-did-you-update” tool
-  if (DEV && PERF) {
-    require('why-did-you-update').whyDidYouUpdate(React, { include: /.*/ });
-  }
 
   // Instantiates schema.org manager
   schemaOrgManager({

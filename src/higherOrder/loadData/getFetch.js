@@ -2,7 +2,7 @@
 import cachedFetch, {
   cachedFetchJSON,
   cachedFetchText,
-} from 'utils/cachedFetch';
+} from 'utils/cached-fetch';
 
 export default (
   {
@@ -11,7 +11,7 @@ export default (
   } /*: {
     method: ?string,
     responseType: ?string,
-  } */
+  } */,
 ) => {
   if (responseType === 'text') return cachedFetchText;
   if (method !== 'HEAD') return cachedFetchJSON;

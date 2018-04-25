@@ -71,7 +71,7 @@ const rules = {
   // Enforce use of function declarations or expressions
   'func-style': [1, 'expression'],
   // Enforce the spacing around the * in generator functions
-  'generator-star-spacing': [1, 'after'],
+  'generator-star-spacing': 0,
   // Make sure for-in loops have an if statement
   'guard-for-in': 2,
   // Enforce label tags to have associated control
@@ -181,7 +181,7 @@ const rules = {
   // Disallow creation of functions within loops
   'no-loop-func': 1,
   // Disallow magic numbers
-  'no-magic-numbers': [1, { ignoreArrayIndexes: true, ignore: [0, 1, 2] }],
+  'no-magic-numbers': [1, { ignoreArrayIndexes: true, ignore: [-1, 0, 1, 2] }],
   // Disallow mixed spaces and tabs for indentation
   'no-mixed-spaces-and-tabs': 2,
   // Disallow multiple empty lines and only one newline at the end
@@ -293,7 +293,7 @@ const rules = {
   // Disallow use of the with statement
   'no-with': 2,
   // Require method and property shorthand syntax for object literals
-  'object-shorthand': [1, 'always'],
+  'object-shorthand': 0,
   // Enforce variables to be declared either together or separately in functions
   'one-var': [1, 'never'],
   // Require assignment operator shorthand where possible
@@ -388,7 +388,11 @@ const rules = {
   // Require spaces before/after unary operators
   'space-unary-ops': 1,
   // Require a space immediately following the // or /* in a comment
-  'spaced-comment': [1, 'always', { markers: [':', '::'], exceptions: ['-'] }],
+  'spaced-comment': [
+    1,
+    'always',
+    { markers: [':', '::', '?:'], exceptions: ['-'] },
+  ],
   // Disallow usage of spacing in template strings
   'template-curly-spacing': [1, 'never'],
   // Disallow comparisons with the value NaN

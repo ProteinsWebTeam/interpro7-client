@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Pages /> should render 1`] = `
+<div
+  className="main stuck"
+>
+  <Connect(ErrorBoundary)>
+    <div
+      className="row"
+    >
+      <div
+        className="large-12 columns"
+      >
+        <Connect(_Switch)
+          catchAll={[Function]}
+          childRoutes={
+            Map {
+              /\\^search\\|job\\$/ => [Function],
+            }
+          }
+          indexRoute={[Function]}
+          locationSelector={[Function]}
+        />
+      </div>
+    </div>
+  </Connect(ErrorBoundary)>
+  <Connect(ErrorBoundary)>
+    <Connect(_Switch)
+      catchAll={[Function]}
+      childRoutes={
+        Map {
+          "entry" => [Function],
+          "protein" => [Function],
+          "structure" => [Function],
+          "organism" => [Function],
+          "set" => [Function],
+          "search" => [Function],
+          "job" => [Function],
+          "about" => [Function],
+          "help" => [Function],
+          "contact" => [Function],
+          "settings" => [Function],
+        }
+      }
+      indexRoute={[Function]}
+      locationSelector={[Function]}
+    />
+  </Connect(ErrorBoundary)>
+</div>
+`;

@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 
-import cancelable from 'utils/cancelable';
-import loadResource from 'utils/loadResource';
 import Link from 'components/generic/Link';
+
+import cancelable from 'utils/cancelable';
+import loadResource from 'utils/load-resource';
+import getsInView from 'utils/gets-in-view';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -18,17 +20,28 @@ const noPadding = { padding: 0 };
 
 class Twitter extends PureComponent /*:: <{}> */ {
   /* ::
-    _node: ?Element
+    _ref: { current: ?HTMLElement };
+    _linkRef: { current: ?HTMLElement };
     _twitterScript: ?{
       cancel: function,
       promise: Promise<any>,
-    }
+    };
   */
-  componentDidMount() {
-    this._twitterScript = cancelable(
-      loadResource('//platform.twitter.com/widgets.js'),
-    );
-    this._twitterScript.promise.then(() => {
+
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+    this._linkRef = React.createRef();
+  }
+
+  async componentDidMount() {
+    try {
+      await getsInView(this._ref.current, { rootMargin: '10px' });
+      this._twitterScript = cancelable(
+        loadResource('//platform.twitter.com/widgets.js'),
+      );
+      await this._twitterScript.promise;
       if (!window.twttr) return;
       if (!bound) {
         // Only need to bind this once
@@ -38,8 +51,11 @@ class Twitter extends PureComponent /*:: <{}> */ {
         });
         bound = true;
       }
-      if (this._node) window.twttr.widgets.load(this._node);
-    });
+      if (this._LinkRef.current)
+        window.twttr.widgets.load(this._LinkRef.current);
+    } catch (_) {
+      /**/
+    }
   }
 
   componentWillUnmount() {
@@ -51,13 +67,16 @@ class Twitter extends PureComponent /*:: <{}> */ {
       <div className={f('expanded', 'row')}>
         <div className={f('columns')} style={noPadding}>
           <div className={f('jumbo-news')}>
-            <div className={f('jumbo-news-container')}>
+            <div
+              className={f('jumbo-news-container')}
+              ref={node => (this._ref.current = node)}
+            >
               <div
                 className={f('icon', 'icon-socialmedia', 'icon-s2')}
                 data-icon="T"
               />
               <Link
-                ref={node => (this._node = node)}
+                ref={this._LinkRef}
                 data-dnt="true"
                 data-chrome={
                   'nofooter noborders noheader noscrollbar transparent'

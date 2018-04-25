@@ -29,8 +29,14 @@ class LogoSection extends PureComponent {
     data: T.object,
   };
 
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   componentDidMount() {
-    hmmLogo(this._node, {
+    hmmLogo(this._ref.current, {
       column_info: true,
       data: this.props.data,
       height_toggle: true,
@@ -42,11 +48,12 @@ class LogoSection extends PureComponent {
   }
 
   componentWillUnmount() {
+    // TODO: check how to do the clean-up
     // this.ec.destructor();
   }
 
   render() {
-    return <div className={f('logo')} ref={node => (this._node = node)} />;
+    return <div className={f('logo')} ref={this._ref} />;
   }
 }
 

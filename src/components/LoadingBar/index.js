@@ -1,36 +1,46 @@
+//
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { overallDataProgressSelector } from 'reducers/data-progress';
+
 import styles from './styles.css';
 
-export class LoadingBar extends PureComponent {
+/*:: type Props = {|
+  progress: number,
+|}; */
+
+export class LoadingBar extends PureComponent /*:: <Props> */ {
   /* ::
-    props: {
-      progress: number,
-    };
-    _node: ?Element;
+    _ref: { current: ?HTMLElement };
   */
 
   static propTypes = {
     progress: T.number.isRequired,
   };
 
+  constructor(props /*: Props */) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   componentDidMount() {
     this._updateProgress(0, this.props.progress);
   }
 
-  componentDidUpdate({ progress }) {
+  componentDidUpdate({ progress } /*: Props */) {
     this._updateProgress(progress, this.props.progress);
   }
 
   _updateProgress = (prevProgress, progress) => {
-    if (!this._node) return;
-    this._node.style.transform = `scaleX(${progress})`;
+    if (!this._ref.current) return;
+    this._ref.current.style.transform = `scaleX(${progress})`;
     if (prevProgress !== progress) {
-      if (progress === 1) this._node.style.opacity = '0';
-      if (prevProgress === 1) this._node.style.opacity = '1';
+      if (progress === 1) this._ref.current.style.opacity = '0';
+      if (prevProgress === 1) this._ref.current.style.opacity = '1';
     }
   };
 
@@ -38,7 +48,7 @@ export class LoadingBar extends PureComponent {
     const { progress } = this.props;
     return (
       <span
-        ref={node => (this._node = node)}
+        ref={this._ref}
         className={styles.loading_bar}
         role="progressbar"
         aria-valuenow={progress}
@@ -49,18 +59,9 @@ export class LoadingBar extends PureComponent {
   }
 }
 
-const reducer = (
-  acc /*: number */,
-  { loading, progress } /*: {loading: boolean, progress: number} */,
-) => acc + 1 / (loading ? 2 : 1) + progress;
-
 const mapStateToProps = createSelector(
-  state => state.data,
-  (data = {}) => {
-    const values = Object.values(data);
-    const progress = values.reduce(reducer, 0) / (2 * values.length);
-    return { progress: isNaN(progress) ? 1 : progress };
-  },
+  overallDataProgressSelector,
+  progress => ({ progress }),
 );
 
 export default connect(mapStateToProps)(LoadingBar);

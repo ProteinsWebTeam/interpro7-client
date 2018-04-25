@@ -1,6 +1,7 @@
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Switch from 'components/generic/Switch';
@@ -32,6 +33,7 @@ const f = foundationPartial(styles, fonts);
   query: Object,
   title: string,
   notFound: ?boolean,
+  contentType? string,
   children?: any,
 } */
 
@@ -51,6 +53,19 @@ const TreeView = loadable({
   loader: () => import(/* webpackChunkName: "tree-view" */ './views/Tree'),
 });
 
+const mainChildRoutes = new Map([
+  ['table', TableView],
+  ['list', () => 'LIST!'],
+  ['grid', () => 'GRID!'],
+  ['tree', TreeView],
+]);
+
+const footerChildRoutes = new Map([['tree', () => null]]);
+const hashSelector = createSelector(
+  customLocation => customLocation.hash,
+  value => value,
+);
+
 export default class Table extends PureComponent /*:: <Props> */ {
   static propTypes = {
     dataTable: T.array,
@@ -61,6 +76,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     query: T.object,
     title: T.string,
     notFound: T.bool,
+    contentType: T.string,
     children: T.any,
     withTree: T.bool,
     withGrid: T.bool,
@@ -76,6 +92,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       query,
       title,
       notFound,
+      contentType,
       children,
       withTree,
       withGrid,
@@ -106,6 +123,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     data={dataTable}
                     actualSize={actualSize}
                     pagination={_query}
+                    contentType={contentType}
                     notFound={notFound}
                   />
                 </div>
@@ -179,14 +197,9 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 notFound={notFound}
               />
               <Switch
-                locationSelector={({ hash }) => hash}
+                locationSelector={hashSelector}
                 indexRoute={TableView}
-                childRoutes={[
-                  { value: 'table', component: TableView },
-                  { value: 'list', component: () => 'LIST!' },
-                  { value: 'grid', component: GridView },
-                  { value: 'tree', component: TreeView },
-                ]}
+                childRoutes={mainChildRoutes}
                 catchAll={TableView}
                 // passed down props
                 isStale={isStale}
@@ -196,7 +209,12 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 notFound={notFound}
                 dataTable={dataTable}
               />
-              <_Footer
+              <Switch
+                locationSelector={hashSelector}
+                indexRoute={_Footer}
+                childRoutes={footerChildRoutes}
+                catchAll={_Footer}
+                // passed down props
                 withPageSizeSelector={withPageSizeSelector}
                 actualSize={actualSize}
                 pagination={_query}

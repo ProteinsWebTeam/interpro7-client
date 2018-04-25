@@ -1,6 +1,7 @@
 [ignore]
 <PROJECT_ROOT>/\..*
 <PROJECT_ROOT>/dist/.*
+<PROJECT_ROOT>/reports/.*
 .*/node_modules/flow-typed
 .*/node_modules/editions*
 .*/node_modules/fbjs.*
@@ -23,9 +24,11 @@ module.name_mapper='^\(.*\).css$' -> 'empty/object'
 module.name_mapper='^\(.*\).scss$' -> 'empty/object'
 module.name_mapper='^\(.*\).yml$' -> 'empty/object'
 module.name_mapper='^timing-functions/src$' -> 'empty/object'
+module.name_mapper='^litemol$' -> 'empty/object'
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=src
 munge_underscores=true
 emoji=true
 esproposal.class_static_fields=enable
 esproposal.class_instance_fields=enable
+suppress_comment= \\(.\\|\n\\)*\\$Flow\\(Ignore\\|FixMe\\)

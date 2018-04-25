@@ -1,9 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -13,10 +14,10 @@ import style from './style.css';
 
 const f = foundationPartial(style);
 
-const FilterPanel = ({ label, collapsed, onCollapse, children }) => (
+const FilterPanel = ({ label, collapsed, toggle, children }) => (
   <div className={f('columns', 'small-12', 'medium-4', 'large-4', 'end')}>
     {label && (
-      <button className={f('toggle')} onClick={onCollapse}>
+      <button className={f('toggle')} onClick={toggle}>
         {collapsed ? '▸' : '▾'} {label}
       </button>
     )}
@@ -26,7 +27,7 @@ const FilterPanel = ({ label, collapsed, onCollapse, children }) => (
 FilterPanel.propTypes = {
   label: T.string,
   collapsed: T.bool,
-  onCollapse: T.func,
+  toggle: T.func,
   children: T.any,
 };
 
@@ -41,16 +42,10 @@ class FiltersPanel extends PureComponent {
     }).isRequired,
   };
 
-  constructor() {
-    super();
-    this.state = { filters: [] };
-  }
+  constructor(props) {
+    super(props);
 
-  componentWillMount() {
-    const children = this.props.children.length
-      ? this.props.children
-      : [this.props.children];
-    this.setState({ filters: children.map(() => false) });
+    this.state = { filters: Children.map(props.children, () => false) };
   }
 
   toggleAll = () => {
@@ -84,10 +79,10 @@ class FiltersPanel extends PureComponent {
     });
   };
 
-  toggleFilter = i => {
-    const state = this.state;
-    state.filters[i] = !state.filters[i];
-    this.setState(state);
+  toggleFilter = i => () => {
+    const [...filters] = this.state.filters;
+    filters[i] = !filters[i];
+    this.setState({ filters });
   };
 
   render() {
@@ -129,7 +124,7 @@ class FiltersPanel extends PureComponent {
                 <FilterPanel
                   key={i}
                   label={child.props.label}
-                  onCollapse={() => this.toggleFilter(i)}
+                  toggle={this.toggleFilter(i)}
                   collapsed={this.state.filters[i]}
                 >
                   {child}
@@ -142,7 +137,7 @@ class FiltersPanel extends PureComponent {
   }
 }
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

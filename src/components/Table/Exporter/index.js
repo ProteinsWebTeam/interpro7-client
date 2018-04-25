@@ -6,6 +6,8 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 
+import config from 'config';
+
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -13,25 +15,6 @@ import s from './style.css';
 import theme from 'styles/theme-interpro.css';
 
 const fPlus = foundationPartial(s, fonts, theme);
-
-const colors = new Map([
-  ['cathgene3d', '#a88cc3'],
-  ['cdd', '#addc58'],
-  ['hamap', '#2cd6d6'] /* 00e2e2*/,
-  ['mobidblt', '#d6dc94'],
-  ['panther', '#bfac92'],
-  ['pfam', '#6287b1'],
-  ['pirsf', '#fbbddd'],
-  ['prints', '#54c75f'],
-  ['prodom', '#8d99e4'],
-  ['profile', '#f69f74'],
-  ['prosite', '#f3c766'],
-  ['sfld', '#00b1d3'],
-  ['smart', '#ff8d8d'],
-  ['ssf', '#686868'],
-  ['tigrfams', '#56b9a6'],
-  ['InterPro', '#2daec1'],
-]);
 
 class Exporter extends PureComponent {
   static propTypes = {
@@ -53,7 +36,7 @@ class Exporter extends PureComponent {
       >
         <button
           className={fPlus('button', 'dropdown')}
-          style={{ backgroundColor: colors.get(entryDB) }}
+          style={{ backgroundColor: config.colors.get(entryDB) }}
           onClick={() => {
             this.setState({ isOpen: !this.state.isOpen });
           }}
@@ -84,7 +67,7 @@ class Exporter extends PureComponent {
             entryDB,
           )}
           style={{
-            borderColor: colors.get(entryDB),
+            borderColor: config.colors.get(entryDB),
             transform: `scaleY(${this.state.isOpen ? 1 : 0})`,
           }}
         >

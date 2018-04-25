@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import getFetch from 'higherOrder/loadData/getFetch';
 
@@ -50,24 +50,8 @@ const getHierarchy = (accs, hierarchies) =>
 
 const webComponents = [];
 
-class ProteinEntryHierarchy extends PureComponent {
-  static propTypes = {
-    entries: T.arrayOf(
-      T.shape({
-        accession: T.string.isRequired,
-        type: T.string.isRequired,
-      }),
-    ),
-    api: T.shape({
-      protocol: T.string.isRequired,
-      hostname: T.string.isRequired,
-      port: T.string.isRequired,
-      root: T.string.isRequired,
-    }),
-  };
-
-  componentWillMount() {
-    if (webComponents.length) return;
+const loadInterProWebComponents = () => {
+  if (!webComponents.length) {
     const interproComponents = () =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components');
     webComponents.push(
@@ -86,9 +70,33 @@ class ProteinEntryHierarchy extends PureComponent {
       ),
     );
   }
+  return Promise.all(webComponents);
+};
+
+class ProteinEntryHierarchy extends PureComponent {
+  static propTypes = {
+    entries: T.arrayOf(
+      T.shape({
+        accession: T.string.isRequired,
+        type: T.string.isRequired,
+      }),
+    ),
+    api: T.shape({
+      protocol: T.string.isRequired,
+      hostname: T.string.isRequired,
+      port: T.string.isRequired,
+      root: T.string.isRequired,
+    }),
+  };
+
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
 
   async componentDidMount() {
-    await Promise.all(webComponents);
+    await loadInterProWebComponents();
     const { entries, api } = this.props;
     const hierarchies = [];
     apiUrl = api;
@@ -98,15 +106,13 @@ class ProteinEntryHierarchy extends PureComponent {
         .map(e => e.accession),
     );
     if (accs.size === 0) return;
-    getHierarchy(accs, hierarchies)
-      .then(() => {
-        (() => {
-          Promise.all(webComponents).then(
-            () => (this._hierarchy.hierarchy = hierarchies),
-          );
-        })();
-      })
-      .catch(reason => console.log(reason.message));
+    try {
+      await getHierarchy(accs, hierarchies);
+      await loadInterProWebComponents();
+      if (this._ref.current) this._ref.current.hierarchy = hierarchies;
+    } catch (error) {
+      console.warn(error.message);
+    }
   }
 
   render() {
@@ -115,7 +121,7 @@ class ProteinEntryHierarchy extends PureComponent {
       <interpro-hierarchy
         accessions={entries.map(e => e.accession)}
         hrefroot="/entry/interpro"
-        ref={node => (this._hierarchy = node)}
+        ref={this._ref}
         displaymode="pruned no-children"
       />
     );

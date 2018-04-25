@@ -162,7 +162,8 @@ export default class SchemaOrgData extends PureComponent {
     const { data, processData } = this.props;
     manager.subscribe({ subscriber: this, data, processData });
   }
-  componentWillReceiveProps({ data, processData }) {
+
+  componentDidUpdate({ data }) {
     if (
       data &&
       data.data &&
@@ -171,7 +172,11 @@ export default class SchemaOrgData extends PureComponent {
       !shallowEquals(data.data, this.props.data.data)
     ) {
       manager.unsubscribe(this);
-      manager.subscribe({ subscriber: this, data, processData });
+      manager.subscribe({
+        subscriber: this,
+        data: this.props.data,
+        processData: this.props.processData,
+      });
     }
   }
 

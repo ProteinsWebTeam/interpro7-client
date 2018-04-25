@@ -125,18 +125,26 @@ class AdvancedOptions extends PureComponent {
     }).isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   _selectAll = event => {
     event.preventDefault();
-    toggleAll(true, this._node);
+    toggleAll(true, this._ref.current);
   };
 
   _unselectAll = event => {
     event.preventDefault();
-    toggleAll(false, this._node);
+    toggleAll(false, this._ref.current);
   };
 
   render() {
-    const { data: { loading, payload, ok } } = this.props;
+    const {
+      data: { loading, payload, ok },
+    } = this.props;
     if (loading) return 'Loading…';
     if (!ok) return 'Failed…';
     const { mdb1, mdb2, other, noCategory } = groupApplications(
@@ -174,7 +182,7 @@ class AdvancedOptions extends PureComponent {
               </label>
             </Tooltip>
           </fieldset>
-          <fieldset className={f('fieldset')} ref={node => (this._node = node)}>
+          <fieldset className={f('fieldset')} ref={this._ref}>
             <legend>Applications</legend>
             <p>{payload.description}</p>
             <div className={f('button-group')}>

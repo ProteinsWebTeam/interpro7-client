@@ -5,13 +5,12 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberLabel from 'components/NumberLabel';
-import Metadata from 'wrappers/Metadata';
-import TaxIdOrName from 'components/Organism/TaxIdOrName';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -52,17 +51,21 @@ class TaxonomyFilter extends PureComponent {
   render() {
     const {
       data: { loading, payload },
-      customLocation: { description: { organism: { accession } } },
+      customLocation: {
+        description: {
+          organism: { accession },
+        },
+      },
     } = this.props;
     const taxes = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
+      ([, { value: a }], [, { value: b }]) => b - a,
     );
     if (!loading) {
       taxes.unshift(['ALL', NaN]);
     }
     return (
-      <div style={{ overflowX: 'hidden' }}>
-        {taxes.map(([taxId, count]) => (
+      <div style={{ overflowX: 'hidden' }} className={f('list-taxonomy')}>
+        {taxes.map(([taxId, { value: count, title }]) => (
           <div key={taxId} className={f('column')}>
             <label className={f('row', 'filter-button')}>
               <input
@@ -73,17 +76,7 @@ class TaxonomyFilter extends PureComponent {
                 checked={(!accession && taxId === 'ALL') || accession === taxId}
                 style={{ margin: '0.25em' }}
               />
-              {taxId === 'ALL' ? (
-                <div>All</div>
-              ) : (
-                <Metadata
-                  endpoint="organism"
-                  db="taxonomy"
-                  accession={taxId === 'ALL' ? 1 : taxId}
-                >
-                  <TaxIdOrName accession={taxId} element="div" />
-                </Metadata>
-              )}
+              {taxId === 'ALL' ? <div>All</div> : title}
               {typeof count === 'undefined' || isNaN(count) ? null : (
                 <NumberLabel
                   value={count}
@@ -110,18 +103,25 @@ const getUrlFor = createSelector(
     // add to search
     _search.group_by = 'tax_id';
     // build URL
+    const desc = {
+      ...description,
+      organism: {
+        ...description.organism,
+        accession: null,
+      },
+    };
     return format({
       protocol,
       hostname,
       port,
-      pathname: root + descriptionToPath(description),
+      pathname: root + descriptionToPath(desc),
       query: _search,
     });
   },
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

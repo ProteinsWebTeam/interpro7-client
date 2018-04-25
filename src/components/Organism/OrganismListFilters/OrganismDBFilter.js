@@ -9,6 +9,7 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
@@ -59,7 +60,7 @@ class OrganismDBFilter extends PureComponent {
       ]);
     }
     return (
-      <div style={{ overflowX: 'hidden' }}>
+      <div style={{ overflowX: 'hidden' }} className={f('list-organism-type')}>
         {dbs.map(([type, count]) => (
           <div key={type} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -97,7 +98,7 @@ const getUrlFor = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 

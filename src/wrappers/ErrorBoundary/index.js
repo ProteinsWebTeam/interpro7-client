@@ -4,6 +4,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { customLocationSelector } from 'reducers/custom-location';
+
 import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
 const defaultRenderOnError = _ => <ErrorMessage />;
@@ -35,17 +37,15 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
     customLocation: T.object.isRequired,
   };
 
-  constructor(props /*: Props */) {
-    super(props);
-    this.state = { error: null };
+  static getDerivedStateFromProps() {
+    // Any change in props should reset the error state, and try to re-render
+    return { error: null };
   }
 
-  componentWillReceiveProps({ customLocation }) {
-    // If the location is changing, the children should be
-    // rendered again
-    if (this.props.customLocation !== customLocation) {
-      this.setState({ error: null });
-    }
+  constructor(props /*: Props */) {
+    super(props);
+
+    this.state = { error: null };
   }
 
   componentDidCatch(error /*: Error */, info /*: any */) {
@@ -65,7 +65,7 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation,
+  customLocationSelector,
   customLocation => ({ customLocation }),
 );
 export default connect(mapStateToProps)(ErrorBoundary);

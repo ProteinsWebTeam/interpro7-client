@@ -100,28 +100,31 @@ const addSignature = (entry, ipro, integrated) => {
     console.error('integrated entry without InterPro: ', entry);
   }
 };
-const groupResidues = residues => {
-  const resTypes = {};
-  for (const fr of residues.fragments) {
-    if (!(fr.description in resTypes)) resTypes[fr.description] = [];
-    resTypes[fr.description].push(fr);
-  }
-  const output = [
-    {
-      accession: residues.name,
-      entry_accession: residues.entry_accession,
-      locations: Object.entries(resTypes).map(([description, fragments]) => ({
-        accession: description.replace(' ', '_'),
-        description,
-        fragments,
-      })),
-    },
-  ];
-  return output;
-};
+
+// const groupResidues = residues => {
+//   TODO: Check if this is necessary for the cases that a residue is related to an unexistent entry
+//   TODO: Remove this when using the full dataset
+//   const resTypes = {};
+//   for (const fr of residues.fragments || residues.locations) {
+//     if (!(fr.description in resTypes)) resTypes[fr.description] = [];
+//     resTypes[fr.description].push(fr);
+//   }
+//   const output = [
+//     {
+//       accession: residues.name,
+//       entry_accession: residues.entry_accession,
+//       locations: Object.entries(resTypes).map(([description, fragments]) => ({
+//         accession: description.replace(' ', '_'),
+//         description,
+//         fragments,
+//       })),
+//     },
+//   ];
+//   return output;
+// };
 const mergeData = (interpro, integrated, unintegrated, residues) => {
   const { out, ipro } = groupByEntryType(interpro);
-  if (unintegrated.length > 0) {
+  if (unintegrated.length) {
     unintegrated.forEach(
       u => (u.link = `/entry/${u.source_database}/${u.accession}`),
     );
@@ -130,13 +133,13 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
   for (const entry of integrated.concat(unintegrated)) {
     entry.coordinates = toArrayStructure(entry.entry_protein_locations);
     if (residues && residues.hasOwnProperty(entry.accession)) {
-      entry.residues = groupResidues(residues[entry.accession]);
+      entry.residues = [residues[entry.accession]]; // groupResidues(residues[entry.accession]);
       delete residues[entry.accession];
     }
     addSignature(entry, ipro, integrated);
   }
-  if (Object.keys(residues).length > 0) {
-    out.residues = groupResidues(residues);
+  if (Object.keys(residues).length) {
+    out.residues = [residues]; // groupResidues(residues);
   }
   return out;
 };
@@ -202,10 +205,17 @@ export class DomainOnProteinWithoutData extends PureComponent {
     }
 
     const mergedData = mergeData(
-      'payload' in dataInterPro ? dataInterPro.payload.entries : [],
-      'payload' in dataIntegrated ? dataIntegrated.payload.entries : [],
-      'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
-      dataResidues.payload,
+      (dataInterPro && dataInterPro.payload && dataInterPro.payload.entries) ||
+        [],
+      (dataIntegrated &&
+        dataIntegrated.payload &&
+        dataIntegrated.payload.entries) ||
+        [],
+      (dataUnintegrated &&
+        dataUnintegrated.payload &&
+        dataUnintegrated.payload.entries) ||
+        [],
+      dataResidues && dataResidues.payload,
     );
 
     if (Object.keys(mergedData).length === 0) {

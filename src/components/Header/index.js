@@ -5,6 +5,8 @@ import { createSelector } from 'reselect';
 
 import classnames from 'classnames/bind';
 
+import { stuckSelector } from 'reducers/ui/stuck';
+import { sideNavSelector } from 'reducers/ui/sideNav';
 import { openSideNav } from 'actions/creators';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
@@ -17,6 +19,7 @@ import TextSearchBox from 'components/SearchByText/TextSearchBox';
 import { sticky as supportsSticky } from 'utils/support';
 
 import { foundationPartial } from 'styles/foundation';
+
 import styles from './style.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -25,7 +28,7 @@ import ipro from 'styles/interpro-new.css';
 const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
 const reducedStyleBundle = classnames.bind(styles);
 
-class _HamburgerBtn extends PureComponent {
+export class _HamburgerBtn extends PureComponent {
   static propTypes = {
     openSideNav: T.func.isRequired,
     open: T.bool.isRequired,
@@ -82,13 +85,14 @@ class _HamburgerBtn extends PureComponent {
   }
 }
 
-const getSideNav = state => state.ui.sideNav;
-const mapStateToPropsHamburger = createSelector(getSideNav, open => ({ open }));
+const mapStateToPropsHamburger = createSelector(sideNavSelector, open => ({
+  open,
+}));
 const HamburgerBtn = connect(mapStateToPropsHamburger, { openSideNav })(
   _HamburgerBtn,
 );
 
-class _SideIcons extends PureComponent {
+export class _SideIcons extends PureComponent {
   static propTypes = {
     movedAway: T.bool.isRequired,
     stuck: T.bool.isRequired,
@@ -134,7 +138,7 @@ class _SideIcons extends PureComponent {
 }
 
 const mapStateToPropsSideIcons = createSelector(
-  getSideNav,
+  sideNavSelector,
   state => state.settings.ui.lowGraphics,
   (movedAway, lowGraphics) => ({ movedAway, lowGraphics }),
 );
@@ -175,7 +179,7 @@ const styleForHeader = (supportsSticky, offset, stuck) => {
   return style;
 };
 
-class Header extends PureComponent {
+export class Header extends PureComponent {
   static propTypes = {
     stickyMenuOffset: T.number.isRequired,
     stuck: T.bool.isRequired,
@@ -204,7 +208,7 @@ class Header extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.ui.stuck,
+  stuckSelector,
   state => state.customLocation.description.main.key,
   state => state.customLocation.description.entry.db,
   state => state.customLocation.description.entry.accession,

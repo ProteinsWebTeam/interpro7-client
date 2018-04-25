@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -8,7 +9,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
-import MemberDBTabs from 'components/MemberDBTabs';
+import MemberDBSelector from 'components/MemberDBSelector';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -18,19 +19,21 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-
-import loadData from 'higherOrder/loadData';
-import loadWebComponent from 'utils/loadWebComponent';
-import loadable from 'higherOrder/loadable';
-import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
-
-import subPages from 'subPages';
-import config from 'config';
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 
+import loadData from 'higherOrder/loadData';
+import loadWebComponent from 'utils/load-web-component';
+import loadable from 'higherOrder/loadable';
+import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
+
+import { mainDBLocationSelector } from 'reducers/custom-location/description';
+
+import subPages from 'subPages';
+import config from 'config';
+
 import { memberDBAccessions } from 'staticData/home';
-import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -70,7 +73,7 @@ class List extends PureComponent {
     }),
   };
 
-  componentWillMount() {
+  componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
         m => m.InterproType,
@@ -82,7 +85,12 @@ class List extends PureComponent {
     const {
       data,
       isStale,
-      customLocation: { description: { entry: { db } }, search },
+      customLocation: {
+        description: {
+          entry: { db },
+        },
+        search,
+      },
       dataBase,
     } = this.props;
     let _payload = data.payload;
@@ -99,8 +107,10 @@ class List extends PureComponent {
     const includeGrid = data.url;
     return (
       <div className={f('row')}>
-        <MemberDBTabs />
-
+        <MemberDBSelector
+          contentType="entry"
+          className="left-side-db-selector"
+        />
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr />
@@ -117,6 +127,7 @@ class List extends PureComponent {
             )}
           <Table
             dataTable={_payload.results}
+            contentType="entry"
             loading={data.loading}
             ok={data.ok}
             isStale={isStale}
@@ -158,7 +169,7 @@ class List extends PureComponent {
                   const _type = type.replace('_', ' ');
                   return (
                     <Tooltip title={`${_type} type`}>
-                      <interpro-type type={_type} size="26px">
+                      <interpro-type type={_type} dimension="26px">
                         {_type}
                       </interpro-type>
                     </Tooltip>
@@ -168,7 +179,7 @@ class List extends PureComponent {
             )}
             <Column
               dataKey="accession"
-              renderer={(accession /*: string */, data, row) => (
+              renderer={(accession /*: string */, row) => (
                 <Tooltip title={accession}>
                   <Link
                     to={customLocation => ({
@@ -276,7 +287,12 @@ class List extends PureComponent {
                         <Tooltip
                           key={accession}
                           title={`${id} (${db})`}
-                          className={f('signature')}
+                          className={f('signature', {
+                            'corresponds-to-filter':
+                              search.signature_in &&
+                              search.signature_in.toLowerCase() ===
+                                db.toLowerCase(),
+                          })}
                         >
                           <Link
                             to={{
@@ -391,12 +407,9 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const subPagesForEntry = new Set();
+const subPagesForEntry = new Map();
 for (const subPage of config.pages.entry.subPages) {
-  subPagesForEntry.add({
-    value: subPage,
-    component: subPages.get(subPage),
-  });
+  subPagesForEntry.set(subPage, subPages.get(subPage));
 }
 
 const SummaryComponent = ({ data: { payload }, isStale, customLocation }) => (
@@ -414,9 +427,20 @@ SummaryComponent.propTypes = {
   customLocation: T.object.isRequired,
 };
 
+const detailSelector = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 const Summary = props => {
-  const { data: { loading, payload }, isStale } = props;
-  if (loading || (isStale && !payload.metadata)) {
+  const {
+    data: { loading, payload },
+  } = props;
+  if (loading || !payload.metadata) {
     return <Loading />;
   }
   return (
@@ -429,15 +453,7 @@ const Summary = props => {
       </div>
       <Switch
         {...props}
-        locationSelector={l => {
-          const { key } = l.description.main;
-          return (
-            l.description[key].detail ||
-            (Object.entries(l.description).find(
-              ([_key, value]) => value.isFilter,
-            ) || [])[0]
-          );
-        }}
+        locationSelector={detailSelector}
         indexRoute={SummaryComponent}
         childRoutes={subPagesForEntry}
       />
@@ -463,24 +479,26 @@ const RedirectToInterPro = () => (
   />
 );
 
-const dbAccs = new RegExp(`(${memberDBAccessions.join('|')}|IPR[0-9]{6})`, 'i');
-
+const childRoutes = new Map([
+  [new RegExp(`(${memberDBAccessions.join('|')}|IPR[0-9]{6})`, 'i'), Summary],
+]);
+const accessionSelector = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].accession ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 const InnerSwitch = props => (
   <ErrorBoundary>
     <Switch
       {...props}
-      locationSelector={l => {
-        const { key } = l.description.main;
-        return (
-          l.description[key].accession ||
-          (Object.entries(l.description).find(
-            ([_key, value]) => value.isFilter,
-          ) || [])[0]
-        );
-      }}
+      locationSelector={accessionSelector}
       indexRoute={List}
-      childRoutes={[{ value: dbAccs, component: Summary }]}
+      childRoutes={childRoutes}
       catchAll={List}
     />
   </ErrorBoundary>
@@ -497,7 +515,10 @@ class Entry extends PureComponent {
   };
 
   render() {
-    const { data: { payload }, dataBase } = this.props;
+    const {
+      data: { payload },
+      dataBase,
+    } = this.props;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
 
@@ -529,7 +550,7 @@ class Entry extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
-            locationSelector={l => l.description[l.description.main.key].db}
+            locationSelector={mainDBLocationSelector}
             indexRoute={RedirectToInterPro}
             catchAll={InnerSwitch}
           />

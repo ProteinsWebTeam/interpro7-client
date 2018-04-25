@@ -1,6 +1,7 @@
-// @flow
+//
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+/*:: import type { Node } from 'react'; */
 
 import ResizeObserver from './ResizeObserver';
 
@@ -8,25 +9,25 @@ import ResizeObserver from './ResizeObserver';
   'bottom' | 'height' | 'left' | 'right' | 'top' | 'width' | 'x' | 'y';
 */
 
+/*:: type State = {
+  [Measurement]: number,
+}; */
+
 /*:: type Props = {
   element: ?string,
-  children: Element,
+  children: State => Node,
   measurements: Measurement | Array<Measurement>,
 }; */
 
-/*:: type State = {} | {|
-  [key: Measurement]: number,
-|}; */
-
 class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
   /*::
-    _node: ?HTMLElement;
+    _ref: { current: ?HTMLElement };
     _resizeObserver: any;
   */
 
   static propTypes = {
     element: T.string,
-    children: T.any.isRequired,
+    children: T.func.isRequired,
     measurements: T.oneOfType([T.arrayOf(T.string).isRequired, T.string]),
   };
 
@@ -37,20 +38,22 @@ class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
     this._resizeObserver = new ResizeObserver(
       this._handleResizeEvent.bind(this),
     );
+
+    this._ref = React.createRef();
   }
 
   componentDidMount() {
-    this._resizeObserver.observe(this._node);
+    this._resizeObserver.observe(this._ref.current);
   }
 
   componentWillUnmount() {
-    this._resizeObserver.unobserve(this._node);
+    this._resizeObserver.unobserve(this._ref.current);
   }
 
   _handleResizeEvent(resizeObserverEntries) {
     let finalContentRect;
     for (const { target, contentRect } of resizeObserverEntries) {
-      if (target !== this._node) continue; // shouldn't happen, but still
+      if (target !== this._ref.current) continue; // shouldn't happen, but still
       finalContentRect = contentRect;
     }
     if (finalContentRect) {
@@ -66,15 +69,11 @@ class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
     }
   }
 
-  _setRef = node => {
-    if (node instanceof HTMLElement) this._node = node;
-  };
-
   render() {
     const { children, element, measurements, ...props } = this.props;
     const Element = element || 'div';
     return (
-      <Element {...props} ref={this._setRef}>
+      <Element {...props} ref={this._ref}>
         {children(this.state)}
       </Element>
     );

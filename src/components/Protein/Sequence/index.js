@@ -1,4 +1,4 @@
-// @flow
+//
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -80,7 +80,8 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
 }; */
 
 class Sequence extends PureComponent /*:: <SequenceProps> */ {
-  /*:: _node: ?HTMLElement; */
+  /*:: _ref: { current: ?HTMLElement }; */
+
   static propTypes = {
     sequence: T.string,
     goToCustomLocation: T.func.isRequired,
@@ -88,13 +89,23 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
     name: T.string,
   };
 
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   _isSelectionInSequence = selection => {
-    if (!this._node) return false;
+    if (!this._ref.current) return false;
     // Beginning of selection is in the sequence element
-    const selectionIsInSequence = this._node.contains(selection.anchorNode);
-    if (!this._node) return false;
+    const selectionIsInSequence = this._ref.current.contains(
+      selection.anchorNode,
+    );
+    if (!this._ref.current) return false;
     // End of selection is in the sequence element
-    return selectionIsInSequence && this._node.contains(selection.focusNode);
+    return (
+      selectionIsInSequence && this._ref.current.contains(selection.focusNode)
+    );
   };
 
   _getSelection = () => {
@@ -158,7 +169,7 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
         <div className={f('row')}>
           <div
             className={f('medium-10', 'columns', 'margin-bottom-large')}
-            ref={node => (this._node = node)}
+            ref={this._ref}
           >
             <Inner sequence={sequence} />
           </div>

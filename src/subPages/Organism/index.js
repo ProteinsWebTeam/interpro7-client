@@ -85,13 +85,20 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { data: { loading, ok, payload } } = this.props;
+    const {
+      data: { loading, ok, payload },
+    } = this.props;
     if (loading) return <Loading />;
     const processed = payloadToProcessed(payload);
     return (
       <div className={f('row')}>
         <div className={f('column')}>
-          <Table dataTable={processed} loading={loading} ok={ok}>
+          <Table
+            dataTable={processed}
+            contentType="organism"
+            loading={loading}
+            ok={ok}
+          >
             <Column
               dataKey="taxId"
               renderer={taxId => (

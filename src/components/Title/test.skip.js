@@ -5,7 +5,7 @@ import Title from '.';
 
 const renderer = new ShallowRenderer();
 
-describe.skip('<Title />', () => {
+describe('<Title />', () => {
   describe('For an entry', () => {
     test('should render a title component correctly', () => {
       renderer.render(

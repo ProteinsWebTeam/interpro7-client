@@ -14,9 +14,15 @@ class NoRows extends PureComponent {
     children: T.any.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   componentDidMount() {
-    if (!this._node || !this._node.animate) return;
-    this._node.animate(
+    if (!(this._ref.current && this._ref.current.animate)) return;
+    this._ref.current.animate(
       { opacity: [0, 1] },
       { duration: 500, delay: 500, easing: 'ease-in-out', fill: 'both' },
     );
@@ -24,7 +30,7 @@ class NoRows extends PureComponent {
 
   render() {
     return (
-      <tbody ref={node => (this._node = node)}>
+      <tbody ref={this._ref}>
         <tr>
           <td
             className={f('padding-top-large', 'padding-bottom-large')}

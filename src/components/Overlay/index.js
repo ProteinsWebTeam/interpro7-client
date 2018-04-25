@@ -6,6 +6,8 @@ import { createSelector } from 'reselect';
 import classnames from 'classnames/bind';
 
 import { closeEverything } from 'actions/creators';
+import { emblMapNavSelector } from 'reducers/ui/emblMapNav';
+import { sideNavSelector } from 'reducers/ui/sideNav';
 
 import styles from './style.css';
 
@@ -36,9 +38,9 @@ export class Overlay extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.ui.sideNav,
-  state => state.ui.emblMapNav,
-  (sideNav, emblMapNav) => ({ visible: sideNav || emblMapNav })
+  emblMapNavSelector,
+  sideNavSelector,
+  (emblMapNav, sideNav) => ({ visible: sideNav || emblMapNav }),
 );
 
 export default connect(mapStateToProps, { closeEverything })(Overlay);

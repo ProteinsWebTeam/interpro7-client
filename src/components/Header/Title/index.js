@@ -4,6 +4,9 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { overallDataLoadingSelector } from 'reducers/data-progress';
+import { stuckSelector } from 'reducers/ui/stuck';
+
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
@@ -22,7 +25,7 @@ const styles = foundationPartial(ebiGlobalStyles, ipro, localStyles);
   stuck: boolean,
 }; */
 
-class Title extends PureComponent /*:: <Props> */ {
+export class Title extends PureComponent /*:: <Props> */ {
   static propTypes = {
     loading: T.bool.isRequired,
     mainType: T.string,
@@ -97,16 +100,7 @@ class Title extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  createSelector(
-    state => state.data,
-    (data = {}) =>
-      Object.values(data).some(datum => {
-        if (datum && typeof datum === 'object') {
-          return datum.loading;
-        }
-        return false;
-      }),
-  ),
+  overallDataLoadingSelector,
   state => state.customLocation.description.main.key,
   state =>
     state.customLocation.description.main.key &&
@@ -116,7 +110,7 @@ const mapStateToProps = createSelector(
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  state => state.ui.stuck,
+  stuckSelector,
   (loading, mainType, mainDB, mainAccession, stuck) => ({
     loading,
     mainType,

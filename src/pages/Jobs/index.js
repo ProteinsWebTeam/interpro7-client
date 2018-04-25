@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -37,12 +38,17 @@ const RedirectToIPScan = () => (
   />
 );
 
+const jobAccessionSelector = createSelector(
+  customLocation => customLocation.description.job.accession,
+  value => value,
+);
+
 const InnerSwitch = props => (
   <Wrapper>
     <ErrorBoundary>
       <Switch
         {...props}
-        locationSelector={l => l.description.job.accession}
+        locationSelector={jobAccessionSelector}
         indexRoute={IPScanStatus}
         catchAll={IPScanResult}
       />
@@ -50,7 +56,7 @@ const InnerSwitch = props => (
   </Wrapper>
 );
 
-const routes = new Set([{ value: 'InterProScan', component: InnerSwitch }]);
+const routes = new Map([['InterProScan', InnerSwitch]]);
 
 class Wrapper extends PureComponent {
   static propTypes = {
@@ -84,7 +90,11 @@ class Wrapper extends PureComponent {
                     job: { type: 'InterProScan' },
                   },
                 }}
-                activeClass={({ description: { job: { type } } }) =>
+                activeClass={({
+                  description: {
+                    job: { type },
+                  },
+                }) =>
                   type === 'InterProScan' && f('is-active', 'is-active-tab')
                 }
               >
@@ -103,9 +113,14 @@ class Wrapper extends PureComponent {
   }
 }
 
+const jobTypeSelector = createSelector(
+  customLocation => customLocation.description.job.type,
+  value => value,
+);
+
 const Jobs = () => (
   <Switch
-    locationSelector={l => l.description.job.type}
+    locationSelector={jobTypeSelector}
     indexRoute={RedirectToIPScan}
     childRoutes={routes}
   />
