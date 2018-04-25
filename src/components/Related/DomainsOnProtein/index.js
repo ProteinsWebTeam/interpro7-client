@@ -205,10 +205,17 @@ export class DomainOnProteinWithoutData extends PureComponent {
     }
 
     const mergedData = mergeData(
-      'payload' in dataInterPro ? dataInterPro.payload.entries : [],
-      'payload' in dataIntegrated ? dataIntegrated.payload.entries : [],
-      'payload' in dataUnintegrated ? dataUnintegrated.payload.entries : [],
-      dataResidues.payload,
+      (dataInterPro && dataInterPro.payload && dataInterPro.payload.entries) ||
+        [],
+      (dataIntegrated &&
+        dataIntegrated.payload &&
+        dataIntegrated.payload.entries) ||
+        [],
+      (dataUnintegrated &&
+        dataUnintegrated.payload &&
+        dataUnintegrated.payload.entries) ||
+        [],
+      dataResidues && dataResidues.payload,
     );
 
     if (Object.keys(mergedData).length === 0) {
