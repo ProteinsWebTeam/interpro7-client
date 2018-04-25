@@ -15,7 +15,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import { NumberComponent } from 'components/NumberLabel';
 import { ParagraphWithCites } from 'components/Description';
-import loadWebComponent from 'utils/loadWebComponent';
+import loadWebComponent from 'utils/load-web-component';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -130,7 +130,9 @@ class Lineage extends PureComponent {
     }).isRequired,
   };
   render() {
-    const { data: { loading, payload } } = this.props;
+    const {
+      data: { loading, payload },
+    } = this.props;
     const linetree = `${loading ? 0 : payload.metadata.lineage}`;
     let superkingdom = null;
     let nodespot = null;
@@ -198,7 +200,9 @@ class SpeciesIcon extends PureComponent {
     }).isRequired,
   };
   render() {
-    const { data: { loading, payload } } = this.props;
+    const {
+      data: { loading, payload },
+    } = this.props;
     const linetree = `${loading ? 0 : payload.metadata.lineage}`;
     let icon = null;
     let nodecolor = null;
@@ -406,7 +410,10 @@ class TaxnameStructures extends PureComponent {
     }).isRequired,
   };
   render() {
-    const { metadata, data: { loading, payload } } = this.props;
+    const {
+      metadata,
+      data: { loading, payload },
+    } = this.props;
 
     return (
       // TODO get values when more than 2 species
@@ -433,7 +440,11 @@ class SummaryCounterStructures extends PureComponent {
     }).isRequired,
   };
   render() {
-    const { entryDB, metadata, data: { loading, payload } } = this.props;
+    const {
+      entryDB,
+      metadata,
+      data: { loading, payload },
+    } = this.props;
 
     let entries = 0;
     let proteins = 0;
@@ -543,7 +554,11 @@ class SummaryCounterEntries extends PureComponent {
     }).isRequired,
   };
   render() {
-    const { entryDB, metadata, data: { loading, payload } } = this.props;
+    const {
+      entryDB,
+      metadata,
+      data: { loading, payload },
+    } = this.props;
 
     let proteins = 0;
     let organisms = 0;
@@ -727,7 +742,10 @@ class DescriptionEntries extends PureComponent {
     }).isRequired,
   };
   render() {
-    const { metadata, data: { loading, payload } } = this.props;
+    const {
+      metadata,
+      data: { loading, payload },
+    } = this.props;
     const GetDesc = `${loading ? 0 : payload.metadata.description[0]}`;
     return (
       <div>
@@ -770,7 +788,11 @@ class SummaryCounterOrg extends PureComponent {
     }).isRequired,
   };
   render() {
-    const { entryDB, metadata, data: { loading, payload } } = this.props;
+    const {
+      entryDB,
+      metadata,
+      data: { loading, payload },
+    } = this.props;
     let entries = 0;
     let proteins = 0;
     let structures = 0;
