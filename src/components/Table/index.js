@@ -56,7 +56,7 @@ const TreeView = loadable({
 const mainChildRoutes = new Map([
   ['table', TableView],
   ['list', () => 'LIST!'],
-  ['grid', () => 'GRID!'],
+  ['grid', GridView],
   ['tree', TreeView],
 ]);
 
