@@ -16,7 +16,6 @@ import MemberSymbol from 'components/Entry/MemberSymbol';
 import { NumberComponent } from 'components/NumberLabel';
 import { ParagraphWithCites } from 'components/Description';
 import loadWebComponent from 'utils/loadWebComponent';
-import { PDBeLink } from 'components/ExtLink';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -774,13 +773,11 @@ class SummaryCounterOrg extends PureComponent {
     const { entryDB, metadata, data: { loading, payload } } = this.props;
     let entries = 0;
     let proteins = 0;
-    let organisms = 0;
     let structures = 0;
     let proteomes = 0;
     if (!loading && payload && payload.metadata) {
       entries = payload.metadata.counters.entries;
       proteins = payload.metadata.counters.proteins;
-      organisms = payload.metadata.counters.organisms;
       structures = payload.metadata.counters.structures;
       proteomes = payload.metadata.counters.proteomes;
     }
@@ -934,7 +931,7 @@ class SummaryCounterOrg extends PureComponent {
             </Tooltip>
           </div>
         </div>
-      ) //no counter found for proteomes for now
+      )
     );
   }
 }
@@ -995,7 +992,7 @@ class GridView extends PureComponent {
                       },
                     }}
                   >
-                    {//Specie ICON  only for taxonomy
+                    {// Specie ICON  only for taxonomy
                     metadata.source_database.toLowerCase() === 'taxonomy' && (
                       <SpeciesIconWithData />
                     )}
@@ -1039,7 +1036,7 @@ class GridView extends PureComponent {
                 )}
 
                 {// TITLE browse entries - all NON interpro MD
-                //not protein
+                // not protein
                 metadata.source_database.toLowerCase() !== 'pdb' &&
                   metadata.source_database.toLowerCase() !== 'taxonomy' &&
                   metadata.source_database !== 'proteome' &&
@@ -1116,7 +1113,6 @@ class GridView extends PureComponent {
               ) : null}
 
               {// COUNTER all db
-              //not protein
               metadata.source_database.toLowerCase() !== 'pdb' &&
                 metadata.source_database !== 'proteome' &&
                 metadata.source_database !== 'taxonomy' && (
