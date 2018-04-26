@@ -13,7 +13,7 @@
   position: absolute;
   width: 70vw;
   padding: 1rem 0.5rem;
-  margin-top: 3rem; /*was 47- 2em*/
+  margin-top: 47px; /*was 2em*/
   background: white;
   border: 1px solid var(--colors-vlightgray);
   border-radius: 0.5ch;
