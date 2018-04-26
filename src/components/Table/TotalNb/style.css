@@ -6,28 +6,36 @@
   margin-bottom: 0;
 }
 
-.text {
-  font-size: 0.75em;
+.component div {
+  outline: 0;
+}
+
+.header-total-results {
+  font-size: 0.9em;
   padding: 0.5em;
-  border: solid 1px var(--colors-gray);
-  border-radius: 0.5ch;
+  border: solid 1px var(--colors-vlightgray);
+  transition: border var(--timing-fast) ease-in-out;
+  /*border-radius: 0.5ch;*/
 
   &.selector {
     cursor: pointer;
-
+    outline: 0;
+    &:hover {
+      outline: 0;
+      border: solid 1px var(--colors-lightgray);
+    }
     &::after {
       content: '▼';
-      opacity: 1;
-      transition: opacity var(--timing-medium) ease-in-out;
+      /*opacity: 1;*/
+      /*transition: opacity var(--timing-medium) ease-in-out;*/
     }
 
     &.open::after {
-      opacity: 0;
+      /*opacity: 0;*/
     }
   }
 }
-
-.db {
+.total-text-bold {
   font-weight: bold;
 }
 
