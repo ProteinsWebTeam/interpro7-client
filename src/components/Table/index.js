@@ -134,8 +134,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   <Tooltip title="View your results as a table">
                     <Link
                       to={l => ({ ...l, hash: 'table' })}
-                      activeClass={f('active')}
                       className={f('icon-view', 'table-view')}
+                      activeClass={f('active')}
                       aria-label="view your results as a table"
                       onMouseOver={TableView.preload}
                       onFocus={TableView.preload}
@@ -173,6 +173,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       className={f('icon-view', 'tree-view', {
                         disabled: !withTree,
                       })}
+                      activeClass={f('active')}
                       aria-disabled={withTree ? 'false' : 'true'}
                       aria-label="view your results as a tree"
                       onMouseOver={TreeView.preload}
