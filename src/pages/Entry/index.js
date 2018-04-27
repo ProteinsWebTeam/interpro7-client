@@ -134,7 +134,7 @@ class List extends PureComponent {
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
-            withGrid={includeGrid}
+            withGrid={!!includeGrid}
           >
             <Exporter>
               <ul>
