@@ -19,7 +19,7 @@ const UNIT_SCALE_MARGIN = 100;
 // We don't want transitions to stop and resume later
 TweenLite.lagSmoothing(0);
 
-export const DEFAULT_DURATION = 0.75;
+export const DEFAULT_DURATION = 1;
 
 const DELAY_RANGE = 0.25;
 
@@ -31,6 +31,21 @@ const getAbbr = (value /*: number */) => {
     _value = Math.floor(_value / UNIT_SCALE);
   }
   return `${_value.toLocaleString()}${UNITS[unitIndex]}`;
+};
+
+const numberToDisplayText = (value, abbr) => {
+  let _value = Math.round(value);
+  if (isNaN(_value)) _value = 'N/A';
+  if (Number.isFinite(_value)) {
+    if (abbr) {
+      _value = getAbbr(_value);
+    } else {
+      // this will print the number according to locale preference
+      // like a coma as thousand-separator in english
+      if (Number.isFinite(_value)) _value = _value.toLocaleString();
+    }
+  }
+  return _value;
 };
 
 class _NumberComponent extends PureComponent {
@@ -53,15 +68,15 @@ class _NumberComponent extends PureComponent {
   constructor(props /*: ?any */) {
     super(props);
 
-    this.state = { value: 0 };
+    this._ref = React.createRef();
   }
 
   componentDidMount() {
-    this._animate();
+    this._animate(this.props.value);
   }
 
-  componentDidUpdate() {
-    this._animate();
+  componentDidUpdate({ value: from }) {
+    this._animate(this.props.value, from);
   }
 
   componentWillUnmount() {
@@ -69,36 +84,34 @@ class _NumberComponent extends PureComponent {
       this._animation.kill();
       this._animation = null;
     }
-    if (this._onUpdate) {
-      this._onUpdate.cancel();
-      this._onUpdate = null;
-    }
   }
 
-  _animate = () => {
-    const { value: from } = this.state;
-    const { value: to } = this.props;
+  _animate = (to, from = 0) => {
     if (this._animation) this._animation.kill();
-    if (this._onUpdate) this._onUpdate.cancel();
+
     const canAnimate =
       !this.props.lowGraphics &&
       from !== to &&
       Number.isFinite(from) &&
       Number.isFinite(to);
-    if (!canAnimate) return this.setState({ value: to });
 
-    const animatable = { value: this.state.value };
-    this._onUpdate = debounce(
-      () => this.setState({ value: Math.round(animatable.value) }),
-      16,
-    );
-    this._animation = TweenLite.to(animatable, this.props.duration, {
+    if (!canAnimate && this._ref.current) {
+      this._ref.current.textContent = numberToDisplayText(to, this.props.abbr);
+      return;
+    }
+
+    const animatable = { value: from };
+    const duration =
+      this.props.duration + (Math.random() - 1 / 2) * DELAY_RANGE;
+    this._animation = TweenLite.to(animatable, duration, {
       value: to,
-      // between 0 and 10% of full duration
       delay: Math.random() * this.props.duration * DELAY_RANGE,
-      onUpdate: this._onUpdate,
-      onComplete: () => {
-        if (this._onUpdate()) this._onUpdate.flush();
+      onUpdate: () => {
+        if (!this._ref.current) return;
+        this._ref.current.textContent = numberToDisplayText(
+          animatable.value,
+          this.props.abbr,
+        );
       },
       ease: TweenLite.Power2.easeIn,
     });
@@ -116,34 +129,64 @@ class _NumberComponent extends PureComponent {
       title,
       ...props
     } = this.props;
-    let { value: _value } = this.state;
-    if (isNaN(_value)) _value = 'N/A';
-    if (Number.isFinite(_value)) {
-      if (abbr) {
-        _value = getAbbr(_value);
-      } else {
-        // this will print the number according to locale preference
-        // like a coma as thousand-separator in english
-        if (Number.isFinite(_value)) _value = _value.toLocaleString();
-      }
-    }
+
     let _title = title;
     if (!_title && abbr) {
       const potentialTitle =
         (this.props.value && this.props.value.toLocaleString()) || '0';
       // Should only happen if value has been shortened
-      if (potentialTitle !== _value) _title = potentialTitle;
+      if (potentialTitle !== value) _title = potentialTitle;
     }
     return (
       <span
         className={f(className, { loading, lowGraphics })}
         title={_title || ''}
+        ref={this._ref}
         {...props}
-      >
-        {_value}
-      </span>
+      />
     );
   }
+
+  // render() {
+  //   const {
+  //     value,
+  //     loading,
+  //     duration,
+  //     lowGraphics,
+  //     className,
+  //     dispatch,
+  //     abbr,
+  //     title,
+  //     ...props
+  //   } = this.props;
+  //   let { value: _value } = this.state;
+  //   if (isNaN(_value)) _value = 'N/A';
+  //   if (Number.isFinite(_value)) {
+  //     if (abbr) {
+  //       _value = getAbbr(_value);
+  //     } else {
+  //       // this will print the number according to locale preference
+  //       // like a coma as thousand-separator in english
+  //       if (Number.isFinite(_value)) _value = _value.toLocaleString();
+  //     }
+  //   }
+  //   let _title = title;
+  //   if (!_title && abbr) {
+  //     const potentialTitle =
+  //       (this.props.value && this.props.value.toLocaleString()) || '0';
+  //     // Should only happen if value has been shortened
+  //     if (potentialTitle !== _value) _title = potentialTitle;
+  //   }
+  //   return (
+  //     <span
+  //       className={f(className, { loading, lowGraphics })}
+  //       title={_title || ''}
+  //       {...props}
+  //     >
+  //       {_value}
+  //     </span>
+  //   );
+  // }
 }
 
 const mapStateToProps = createSelector(
