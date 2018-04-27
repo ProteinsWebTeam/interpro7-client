@@ -145,7 +145,7 @@ const List = ({
           actualSize={_payload.count}
           query={search}
           notFound={notFound}
-          withGrid={includeGrid}
+          withGrid={!!includeGrid}
         >
           <Exporter>
             <ul>
