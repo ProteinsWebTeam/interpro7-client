@@ -122,7 +122,7 @@ class List extends PureComponent {
     const notFound = !loading && status !== HTTP_OK;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
-    const db = (dbE || dbS).toUpperCase();
+    const db = (dbE || dbS).toLowerCase();
     const dbAll = { canonical: 'ALL', name: 'All', version: 'N/A' };
     if (loading || notFound) {
       _payload = {

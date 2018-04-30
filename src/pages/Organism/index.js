@@ -221,7 +221,7 @@ class List extends PureComponent {
           {databases && (
             <SchemaOrgData
               data={{
-                data: { db: databases.UNIPROT },
+                data: { db: databases.uniprot },
                 location: window.location,
               }}
               processData={schemaProcessDataTable}
@@ -571,7 +571,7 @@ class _Summary extends PureComponent {
                 data={{
                   data: payloadOrg,
                   endpoint: 'organism',
-                  version: databases && databases.UNIPROT.version,
+                  version: databases && databases.uniprot.version,
                 }}
                 processData={schemaProcessDataRecord}
               />

@@ -148,7 +148,7 @@ const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
 export const setDBs /*: Set<Object> */ = new Set([
   {
     name: 'pfam',
-    re: /^CL[0-9]{4}$/,
+    re: /^cl[0-9]{4}$/,
     url_template: 'http://pfam.xfam.org/clan/{id}',
   },
   {

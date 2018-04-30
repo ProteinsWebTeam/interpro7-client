@@ -147,10 +147,10 @@ const checkOrganismBrowse = async page => {
 };
 const checkBrowseSubsection = {
   // Entry: checkEntryBrowse,
-  // Protein: checkProteinBrowse,
-  Structure: checkStructureBrowse,
-  Set: checkSetBrowse,
-  Organism: checkOrganismBrowse,
+  Protein: checkProteinBrowse,
+  // Structure: checkStructureBrowse,
+  // Set: checkSetBrowse,
+  // Organism: checkOrganismBrowse,
 };
 const checkBrowseSection = async page => {
   await page.waitForSelector(browseTabsSelector);
@@ -167,7 +167,7 @@ const checkBrowseSection = async page => {
 };
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
   await page.goto('http://localhost:8000/interpro/');
