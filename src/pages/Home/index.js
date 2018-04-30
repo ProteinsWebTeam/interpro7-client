@@ -444,8 +444,8 @@ class Home extends PureComponent {
                 data={{
                   name: 'InterPro',
                   location: window.location,
-                  version: databases && databases.INTERPRO.version,
-                  releaseDate: databases && databases.INTERPRO.releaseDate,
+                  version: databases && databases.interpro.version,
+                  releaseDate: databases && databases.interpro.releaseDate,
                 }}
                 processData={schemaProcessDataForDB}
               />

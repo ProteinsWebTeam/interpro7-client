@@ -49,7 +49,7 @@ const getCountFor = (
     if (dataSubPageCount.loading) return 'loading';
     if (!dataSubPageCount.ok) return;
     switch (db) {
-      case 'INTERPRO':
+      case 'interpro':
         return _get(
           dataSubPageCount.payload.entries,
           ['interpro', sub === 'entry' ? null : toPlural(sub)].filter(Boolean),
@@ -70,7 +70,7 @@ const getCountFor = (
     }
   } else {
     switch (db) {
-      case 'INTERPRO':
+      case 'interpro':
         if (dataDBCount.loading) return 'loading';
         if (!dataDBCount.ok) return;
         return _get(
@@ -148,15 +148,15 @@ class _MemberDBSelector extends PureComponent {
 
   _populateDBs = databases => {
     if (databases.payload && this._dbs.size <= 1) {
-      this._dbs.set('INTERPRO', databases.payload.databases.INTERPRO);
+      this._dbs.set('interpro', databases.payload.databases.interpro);
       const dbs = Object.values(databases.payload.databases).sort(
         comparisonFunction,
       );
       for (const db of dbs) {
         if (
           db.type === 'entry' &&
-          db.canonical !== 'INTERPRO' &&
-          db.canonical !== 'MOBIDBLT'
+          db.canonical !== 'interpro' &&
+          db.canonical !== 'mobidblt'
         ) {
           this._dbs.set(db.canonical, db);
         }
