@@ -219,11 +219,12 @@ class _MemberDBSelector extends PureComponent {
     const dbs = this._populateDBs(dataDB);
     if (dbs.size <= 1) return null;
     const main = customLocation.description.main.key;
-    const sub =
+    const subL =
       customLocation.description[main].accession &&
       Object.entries(customLocation.description).find(
         ([_, { isFilter }]) => isFilter,
-      )[0];
+      );
+    const sub = subL && subL[0];
     const selected = Array.from(this._dbs.values()).find(
       db =>
         (customLocation.description.entry.db || 'all').toLowerCase() ===
