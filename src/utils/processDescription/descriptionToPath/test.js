@@ -183,11 +183,11 @@ describe('descriptionToPath()', () => {
           set: { db: 'pfam' },
         };
         expect(descriptionToPath(description)).toBe('/set/pfam/');
-        description.set.accession = 'CL0001';
-        expect(descriptionToPath(description)).toBe('/set/pfam/CL0001/');
+        description.set.accession = 'cl0001';
+        expect(descriptionToPath(description)).toBe('/set/pfam/cl0001/');
         description.set.detail = 'whatever';
         expect(descriptionToPath(description)).toBe(
-          '/set/pfam/CL0001/whatever/',
+          '/set/pfam/cl0001/whatever/',
         );
       });
     });
