@@ -46,7 +46,7 @@ class Redirect extends PureComponent /*:: <Props> */ {
     if (typeof to === 'function') {
       _to = to(customLocation);
     }
-    this.props.goToCustomLocation(_to, true);
+    goToCustomLocation(_to, true);
   }
 
   render() {
