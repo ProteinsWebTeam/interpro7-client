@@ -5,6 +5,7 @@
 
   & h5 {
     font-size: 1.3rem;
+    display: flex;
   }
 
   &,
@@ -32,12 +33,17 @@
 .row {
   max-width: 1200px;
   margin: 0 auto 1rem;
+  display: flex;
 
   &::before,
   &::after {
     display: table;
     content: ' ';
   }
+}
+
+:global(#elixir-banner-info) {
+  display: flex;
 }
 
 .elixir-logo-kite {
