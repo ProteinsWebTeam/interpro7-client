@@ -7,6 +7,10 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { toPlural } from 'utils/pages';
+import getColor from 'utils/taxonomy/get-color';
+import getIcon from 'utils/taxonomy/get-icon';
+import getNodeSpotlight from 'utils/taxonomy/get-node-spotlight';
+import getSuperKingdom from 'utils/taxonomy/get-super-kingdom';
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Link from 'components/generic/Link';
@@ -121,31 +125,6 @@ const getUrlForEntries = (accession, db) =>
       }),
   );
 
-const getSuperKingdom = (lineage /*: string */) => {
-  if (lineage.includes(' 2759 ')) return 'Eukaryota';
-  if (lineage.includes(' 2157 ')) return 'Archaea';
-  if (lineage.includes(' 10239 ')) return 'Viruses';
-  if (lineage.includes(' 12884 ')) return 'Viroids';
-  if (lineage.includes(' 2 ')) return 'Bacteria';
-};
-
-const getNodespot = (lineage /*: string */) => {
-  if (lineage.includes(' 1224 ')) return 'Proteobacteria';
-  if (lineage.includes(' 201174 ')) return 'Actinobacteria';
-  if (lineage.includes(' 203691 ')) return 'Spirochaetes';
-  if (lineage.includes(' 203682 ')) return 'Planctomycetes';
-  if (lineage.includes(' 1239 ')) return 'Firmicutes';
-  if (lineage.includes(' 976 ')) return 'Bacteroidetes';
-  if (lineage.includes(' 40674 ')) return 'Mammalia';
-  if (lineage.includes(' 6656 ')) return 'Arthropoda';
-  if (lineage.includes(' 33090 ')) return 'Viridiplantae';
-  if (lineage.includes(' 6231 ')) return 'Nematoda';
-  if (lineage.includes(' 8782 ')) return 'Birds';
-  if (lineage.includes(' 4751 ')) return 'Fungi';
-  if (lineage.includes(' 32561 ')) return 'Sauria';
-  if (lineage.includes(' 7898 ')) return 'Fish';
-};
-
 class Lineage extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -154,6 +133,7 @@ class Lineage extends PureComponent {
       }),
     }).isRequired,
   };
+
   render() {
     const {
       data: { loading, payload },
@@ -161,7 +141,7 @@ class Lineage extends PureComponent {
     if (loading || !payload) return null;
     const { lineage } = payload.metadata;
     const superkingdom = getSuperKingdom(lineage) || 'N/A';
-    const nodespot = getNodespot(lineage);
+    const nodespot = getNodeSpotlight(lineage);
 
     return (
       <Tooltip title={`Lineage: ${payload.metadata.lineage}`}>
@@ -179,202 +159,26 @@ class SpeciesIcon extends PureComponent {
       }),
     }).isRequired,
   };
+
   render() {
     const {
       data: { loading, payload },
     } = this.props;
-    const linetree = `${loading ? 0 : payload.metadata.lineage}`;
-    let icon = null;
-    let nodecolor = null;
-
-    // key species in Interpro & EBI
-    if (linetree.includes(' 121221 ')) {
-      /* Node Pediculidae (body lice, includes 121224 Pediculus humanus subsp. corporis (louse)*/
-      icon = '4';
-    } else if (linetree.includes(' 34735 ')) {
-      /* Node Apoidea (bees)*/
-      icon = '$';
-    } else if (linetree.includes(' 6855 ')) {
-      /* Node Scorpiones (Scorpion)*/
-      icon = 's';
-    } else if (linetree.includes(' 6935 ')) {
-      /* Node Ixodida (Ticks)*/
-      icon = '&';
-    } else if (linetree.includes(' 6448 ')) {
-      /* Node Gastropoda (Snail)*/
-      icon = "'";
-    } else if (linetree.includes(' 28376 ')) {
-      /* Node anolis*/
-      icon = '7';
-    } else if (linetree.includes(' 9681 ')) {
-      /* Node felidae (includes 9685 Felis catus) */
-      icon = 'A';
-    } else if (linetree.includes(' 9606 ')) {
-      /* homo*/
-      icon = 'H';
-    } else if (linetree.includes(' 3702 ')) {
-      /* Mouse-ear cress */
-      icon = 'B';
-      nodecolor = '#5cb85c';
-    } else if (linetree.includes(' 6231 ')) {
-      /* Node Nematoda (includes 6239 Caenorhabditis elegans) */
-      icon = 'W';
-    } else if (linetree.includes(' 9031 ')) {
-      /* Gallus gallus (Chicken) */
-      icon = 'k';
-    } else if (linetree.includes(' 9922 ')) {
-      /* Node Capra (includes 9925 Capra hircus goat)*/
-      icon = 'm';
-    } else if (linetree.includes(' 55153 ')) {
-      /* Node Sciuridae (Squirrels)*/
-      icon = 'I';
-    } else if (linetree.includes(' 9723 ')) {
-      /* Node Platanistidae (Dolphin)*/
-      icon = 'D';
-    } else if (linetree.includes(' 8292 ')) {
-      /* Node Amphibia */
-      icon = 'f';
-    } else if (linetree.includes(' 8782 ')) {
-      /* Node Bird (Finch)*/
-      icon = 'n';
-    } else if (linetree.includes(' 7157 ')) {
-      /* subNode Culicidae (Mosquito) */
-      icon = '1';
-    } else if (linetree.includes(' 7147 ')) {
-      /* Node Diptera (includes 7227 drosophila melanogaster)- WARNING HAS TO BE AFTER Mosquitoe node*/
-      icon = 'F';
-    } else if (linetree.includes(' 6656 ')) {
-      /* Node Arthropoda (Spider)*/
-      icon = 'S';
-    } else if (linetree.includes(' 1639119 ')) {
-      /* Node Plasmodium (Plasmodiidae)*/
-      icon = '@';
-    } else if (linetree.includes(' 7955 ')) {
-      /* Zebrafish */
-      icon = 'Z';
-    } else if (linetree.includes(' 31031 ')) {
-      /* Node Tetraodontidae (puffers) (includes 31033 Takifugu rubripes) */
-      icon = 'E';
-    } else if (linetree.includes(' 7898 ')) {
-      /* Node Fish (7898 Actinopterygii NOT 7776 Gnathostomata includes mammals -  NOT 7777 Chondrichthyes)*/
-      icon = 'Z';
-    } else if (linetree.includes(' 10088 ')) {
-      /* Node Mouse (includes 10090 Mus musculus)*/
-      icon = 'M';
-    } else if (linetree.includes(' 9368 ')) {
-      /* Node Erinaceidae (Hedgehog)*/
-      icon = 'o';
-    } else if (linetree.includes(' 10114 ')) {
-      /* Node Rattus (includes 10116 Rattus norvegicus)*/
-      icon = 'R';
-    } else if (linetree.includes(' 9615 ')) {
-      /* Canis lupus familiaris (Dog)*/
-      icon = 'd';
-    } else if (linetree.includes(' 27592 ')) {
-      /* Node Bovinae (includes Bos taurus (Bovine) 9913)*/
-      icon = 'C';
-    } else if (linetree.includes(' 9779 ')) {
-      /* Node Proboscidea (elephants) (inludes 9783 Indian Elephant)*/
-      icon = 'e';
-    } else if (linetree.includes(' 9935 ')) {
-      /* Node Ovis (includes 9940 Sheep) */
-      icon = 'x';
-    } else if (linetree.includes(' 9979 ')) {
-      /* Node Leporidae (includes Oryctolagus cuniculus (Rabbit) 9986*/
-      icon = 't';
-    } else if (linetree.includes(' 9821 ')) {
-      /*  Suidae (Pig)*/
-      icon = 'p';
-    } else if (linetree.includes(' 10140 ')) {
-      /* Node Cavia (includes 10141 Cavia porcellus (Guinea pig))*/
-      icon = 'g';
-    } else if (linetree.includes(' 9265 ')) {
-      /*  Node Didelphidae (opossums) (icnludes 126299 Monodelphis emiliae (Emilia's short-tailed opossum)*/
-      icon = '9';
-    } else if (linetree.includes(' 9554 ')) {
-      /* Node Papio (includes 9555 Papio anubis (Olive baboon))*/
-      icon = '8';
-    } else if (linetree.includes(' 9596 ')) {
-      /* Node Pan (chimpanzees) (includes 9598 Pan troglodytes)*/
-      icon = 'i';
-    } else if (linetree.includes(' 9539 ')) {
-      /* Node Macaca (includes 9544 Macaca mulatta (Rhesus macaque)*/
-      icon = 'r';
-    } else if (linetree.includes(' 9397 ')) {
-      /* Node Chiroptera (bats) (includes 9430 Desmodus rotundus (Vampire bat)*/
-      icon = '(';
-    } else if (linetree.includes(' 9599 ')) {
-      /* Node Pongo (orangutan)*/
-      icon = '*';
-    } else if (linetree.includes(' 9592 ')) {
-      /* Node Gorilla*/
-      icon = 'G';
-    } else if (linetree.includes(' 4932 ') || linetree.includes('4894')) {
-      /* Saccharomyces cerevisiae (Baker's yeast) or Schizosaccharomycetaceae (fission yeasts)*/
-      icon = 'Y';
-      nodecolor = '#5bc0de';
-    } else if (linetree.includes(' 2157 ')) {
-      /* Archaea*/
-      icon = 'L';
-      nodecolor = '#5bc0de';
-    } else if (linetree.includes(' 2 ')) {
-      /* Node Bacteria (Ecoli)*/
-      icon = 'L';
-      nodecolor = '#5bc0de';
-    } else if (linetree.includes(' 10239 ')) {
-      /* Node Virus */
-      icon = 'v';
-      nodecolor = '#5bc0de';
-    } else if (linetree.includes(' 4751 ')) {
-      /* Node Fungus*/
-      icon = 'u';
-      nodecolor = '#5bc0de';
-    } else if (linetree.includes(' 4527 ')) {
-      /* Node Oryza (includes 4530 (Oriza sativa))*/
-      icon = '6';
-      nodecolor = '#5cb85c';
-    } else if (linetree.includes(' 4575 ')) {
-      /* Node Zea (Corn) (includes 4577 Zea mays (Maize))*/
-      icon = 'c';
-      nodecolor = '#5cb85c';
-    } else if (linetree.includes(' 49274 ')) {
-      /* Node Lycopersicon (Tomatoes)*/
-      icon = ')';
-      nodecolor = '#5cb85c';
-    } else if (linetree.includes(' 4512 ')) {
-      /* Node Hordeum (Barley)*/
-      icon = '5';
-      nodecolor = '#5cb85c';
-    } else if (linetree.includes(' 3700 ')) {
-      /* Node Brassicaceae (mustard family)*/
-      icon = 'B';
-      nodecolor = '#5cb85c';
-    } else if (linetree.includes(' 3603 ')) {
-      /* Node Vitis (grape)*/
-      icon = 'O';
-      nodecolor = '#5cb85c';
-    } else if (linetree.includes(' 1462606 ')) {
-      /* Node Soja (includes 3847 Glycine max (Soybean))*/
-      icon = '^';
-      nodecolor = '#5cb85c';
-    } else if (linetree.includes(' 33090 ')) {
-      /* Node viridiplantae*/
-      icon = '.';
-      nodecolor = '#5cb85c';
-    } else {
-      /* default icon*/
-      icon = '.';
+    let icon = '.';
+    let color;
+    if (!loading && payload) {
+      icon = getIcon(payload.metadata.lineage) || '.';
+      color = getColor(payload.metadata.lineage);
     }
 
+    // key species in Interpro & EBI
+
     return (
-      <Tooltip title="Organism for the node">
-        {' '}
-        <span
-          style={{ color: nodecolor }}
-          className={f('small', 'icon', 'icon-species')}
-          data-icon={icon}
-        />
-      </Tooltip>
+      <span
+        style={{ color }}
+        className={f('small', 'icon', 'icon-species')}
+        data-icon={icon}
+      />
     );
   }
 }
@@ -382,16 +186,15 @@ class SpeciesIcon extends PureComponent {
 class TaxnameStructures extends PureComponent {
   static propTypes = {
     dataTable: T.array,
-    metadata: T.object.isRequired,
     data: T.shape({
       payload: T.shape({
         databases: T.object,
       }),
     }).isRequired,
   };
+
   render() {
     const {
-      metadata,
       data: { loading, payload },
     } = this.props;
 
@@ -419,6 +222,7 @@ class SummaryCounterStructures extends PureComponent {
       }),
     }).isRequired,
   };
+
   render() {
     const {
       entryDB,
@@ -452,7 +256,7 @@ class SummaryCounterStructures extends PureComponent {
                     db: 'pdb',
                     accession: metadata.accession.toString(),
                   },
-                  entry: { isFilter: true, db: entryDB ? entryDB : 'all' },
+                  entry: { isFilter: true, db: entryDB || 'all' },
                 },
               }}
             >
@@ -465,7 +269,12 @@ class SummaryCounterStructures extends PureComponent {
                 <MemberSymbol type="all" className={f('md-small')} />
               )}
 
-              <NumberComponent loading={loading} value={entries} />
+              <NumberComponent
+                loading={loading}
+                value={entries}
+                abbr
+                scaleMargin={1}
+              />
 
               <span className={f('label-number')}>
                 {toPlural('entry', entries)}
@@ -496,7 +305,12 @@ class SummaryCounterStructures extends PureComponent {
                 className={f('icon', 'icon-conceptual')}
                 data-icon="&#x50;"
               />{' '}
-              <NumberComponent loading={loading} value={proteins} />
+              <NumberComponent
+                loading={loading}
+                value={proteins}
+                abbr
+                scaleMargin={1}
+              />
               <span className={f('label-number')}>
                 {toPlural('protein', proteins)}
               </span>
@@ -511,7 +325,12 @@ class SummaryCounterStructures extends PureComponent {
             }`}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent loading={loading} value={organisms} />
+            <NumberComponent
+              loading={loading}
+              value={organisms}
+              abbr
+              scaleMargin={1}
+            />
             <span className={f('label-number')}>
               {toPlural('organism', organisms)}
             </span>
@@ -533,6 +352,7 @@ class SummaryCounterEntries extends PureComponent {
       }),
     }).isRequired,
   };
+
   render() {
     const {
       entryDB,
@@ -575,7 +395,12 @@ class SummaryCounterEntries extends PureComponent {
                 className={f('icon', 'icon-conceptual')}
                 data-icon="&#x50;"
               />{' '}
-              <NumberComponent loading={loading} value={proteins} />
+              <NumberComponent
+                loading={loading}
+                value={proteins}
+                abbr
+                scaleMargin={1}
+              />
               <span className={f('label-number')}>
                 {toPlural('protein', proteins)}
               </span>
@@ -598,7 +423,12 @@ class SummaryCounterEntries extends PureComponent {
               }}
             >
               <div className={f('icon', 'icon-count-ida')} />{' '}
-              <NumberComponent loading={loading} value="" />
+              <NumberComponent
+                loading={loading}
+                value=""
+                abbr
+                scaleMargin={1}
+              />
               <span className={f('label-number')}>domain architectures</span>
             </Link>
           </Tooltip>
@@ -623,7 +453,12 @@ class SummaryCounterEntries extends PureComponent {
               }}
             >
               <div className={f('icon', 'icon-count-species')} />{' '}
-              <NumberComponent loading={loading} value={organisms} />
+              <NumberComponent
+                loading={loading}
+                value={organisms}
+                abbr
+                scaleMargin={1}
+              />
               <span className={f('label-number')}>
                 {toPlural('organism', organisms)}
               </span>
@@ -653,7 +488,12 @@ class SummaryCounterEntries extends PureComponent {
                 }}
               >
                 <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-                <NumberComponent loading={loading} value={structures} />
+                <NumberComponent
+                  loading={loading}
+                  value={structures}
+                  abbr
+                  scaleMargin={1}
+                />
                 <span className={f('label-number')}>
                   {toPlural('structure', structures)}
                 </span>
@@ -661,7 +501,12 @@ class SummaryCounterEntries extends PureComponent {
             ) : (
               <div className={f('no-link')}>
                 <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-                <NumberComponent loading={loading} value={structures} />
+                <NumberComponent
+                  loading={loading}
+                  value={structures}
+                  abbr
+                  scaleMargin={1}
+                />
                 <span className={f('label-number')}>
                   {toPlural('structure', structures)}
                 </span>
@@ -694,7 +539,12 @@ class SummaryCounterEntries extends PureComponent {
                     }}
                   >
                     <div className={f('icon', 'icon-count-set')} />{' '}
-                    <NumberComponent loading={loading} value={sets} />
+                    <NumberComponent
+                      loading={loading}
+                      value={sets}
+                      abbr
+                      scaleMargin={1}
+                    />
                     <span className={f('label-number')}>
                       {toPlural('set', sets)}
                     </span>
@@ -721,6 +571,7 @@ class DescriptionEntries extends PureComponent {
       }),
     }).isRequired,
   };
+
   render() {
     const {
       metadata,
@@ -756,6 +607,7 @@ class DescriptionEntries extends PureComponent {
     );
   }
 }
+
 class SummaryCounterOrg extends PureComponent {
   static propTypes = {
     entryDB: T.string,
@@ -767,6 +619,7 @@ class SummaryCounterOrg extends PureComponent {
       }),
     }).isRequired,
   };
+
   render() {
     const {
       entryDB,
@@ -789,7 +642,7 @@ class SummaryCounterOrg extends PureComponent {
         <div className={f('card-block', 'card-counter', 'label-off')}>
           <div className={f('count-entries')}>
             <Tooltip
-              title={`${entries} ${entryDB !== null ? entryDB : ''} ${toPlural(
+              title={`${entries} ${entryDB || ''} ${toPlural(
                 'entry',
                 entries,
               )} matching ${metadata.name}`}
@@ -802,7 +655,7 @@ class SummaryCounterOrg extends PureComponent {
                       db: 'taxonomy',
                       accession: metadata.accession.toString(),
                     },
-                    entry: { isFilter: true, db: entryDB ? entryDB : 'all' },
+                    entry: { isFilter: true, db: entryDB && 'all' },
                   },
                 }}
               >
@@ -815,7 +668,12 @@ class SummaryCounterOrg extends PureComponent {
                   <MemberSymbol type="all" className={f('md-small')} />
                 )}
 
-                <NumberComponent loading={loading} value={entries} />
+                <NumberComponent
+                  loading={loading}
+                  value={entries}
+                  abbr
+                  scaleMargin={1}
+                />
                 <span className={f('label-number')}>
                   {toPlural('entry', entries)}
                 </span>
@@ -845,7 +703,12 @@ class SummaryCounterOrg extends PureComponent {
                   className={f('icon', 'icon-conceptual')}
                   data-icon="&#x50;"
                 />{' '}
-                <NumberComponent loading={loading} value={proteins} />
+                <NumberComponent
+                  loading={loading}
+                  value={proteins}
+                  abbr
+                  scaleMargin={1}
+                />
                 <span className={f('label-number')}>
                   {' '}
                   {toPlural('protein', proteins)}
@@ -879,7 +742,12 @@ class SummaryCounterOrg extends PureComponent {
                     className={f('icon', 'icon-conceptual')}
                     data-icon="&#x73;"
                   />{' '}
-                  <NumberComponent loading={loading} value={structures} />{' '}
+                  <NumberComponent
+                    loading={loading}
+                    value={structures}
+                    abbr
+                    scaleMargin={1}
+                  />{' '}
                   <span className={f('label-number')}>structures</span>
                 </Link>
               ) : (
@@ -888,7 +756,12 @@ class SummaryCounterOrg extends PureComponent {
                     className={f('icon', 'icon-conceptual')}
                     data-icon="&#x73;"
                   />{' '}
-                  <NumberComponent loading={loading} value={structures} />{' '}
+                  <NumberComponent
+                    loading={loading}
+                    value={structures}
+                    abbr
+                    scaleMargin={1}
+                  />{' '}
                   <span className={f('label-number')}>
                     {toPlural('structure', structures)}
                   </span>
@@ -917,7 +790,12 @@ class SummaryCounterOrg extends PureComponent {
                     className={f('icon', 'icon-common', 'icon-bookmark-temp')}
                     data-icon="&#x2e;"
                   />
-                  <NumberComponent loading={loading} value={proteomes} />{' '}
+                  <NumberComponent
+                    loading={loading}
+                    value={proteomes}
+                    abbr
+                    scaleMargin={1}
+                  />{' '}
                   <span className={f('label-number')}>proteomes</span>
                 </Link>
               ) : (
@@ -926,7 +804,12 @@ class SummaryCounterOrg extends PureComponent {
                     className={f('icon', 'icon-common', 'icon-bookmark-temp')}
                     data-icon="&#x2e;"
                   />
-                  <NumberComponent loading={loading} value={proteomes} />{' '}
+                  <NumberComponent
+                    loading={loading}
+                    value={proteomes}
+                    abbr
+                    scaleMargin={1}
+                  />{' '}
                   <span className={f('label-number')}>proteomes</span>
                 </div>
               )}
