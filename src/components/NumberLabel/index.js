@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import debounce from 'lodash-es/debounce';
 
 import TweenLite from 'gsap/TweenLite';
 
