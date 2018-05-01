@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import Redirect from 'components/generic/Redirect';
 
 import _Header from './Header';
 import _Exporter from './Exporter';
@@ -52,6 +53,10 @@ const GridView = loadable({
 const TreeView = loadable({
   loader: () => import(/* webpackChunkName: "tree-view" */ './views/Tree'),
 });
+
+const RedirectToDefault = () => (
+  <Redirect to={customLocation => ({ ...customLocation, hash: 'table' })} />
+);
 
 const mainChildRoutes = new Map([
   ['table', TableView],
@@ -199,9 +204,9 @@ export default class Table extends PureComponent /*:: <Props> */ {
               />
               <Switch
                 locationSelector={hashSelector}
-                indexRoute={TableView}
+                indexRoute={RedirectToDefault}
                 childRoutes={mainChildRoutes}
-                catchAll={TableView}
+                catchAll={RedirectToDefault}
                 // passed down props
                 isStale={isStale}
                 loading={loading}
