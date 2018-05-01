@@ -121,6 +121,31 @@ const getUrlForEntries = (accession, db) =>
       }),
   );
 
+const getSuperKingdom = (lineage /*: string */) => {
+  if (lineage.includes(' 2759 ')) return 'Eukaryota';
+  if (lineage.includes(' 2157 ')) return 'Archaea';
+  if (lineage.includes(' 10239 ')) return 'Viruses';
+  if (lineage.includes(' 12884 ')) return 'Viroids';
+  if (lineage.includes(' 2 ')) return 'Bacteria';
+};
+
+const getNodespot = (lineage /*: string */) => {
+  if (lineage.includes(' 1224 ')) return 'Proteobacteria';
+  if (lineage.includes(' 201174 ')) return 'Actinobacteria';
+  if (lineage.includes(' 203691 ')) return 'Spirochaetes';
+  if (lineage.includes(' 203682 ')) return 'Planctomycetes';
+  if (lineage.includes(' 1239 ')) return 'Firmicutes';
+  if (lineage.includes(' 976 ')) return 'Bacteroidetes';
+  if (lineage.includes(' 40674 ')) return 'Mammalia';
+  if (lineage.includes(' 6656 ')) return 'Arthropoda';
+  if (lineage.includes(' 33090 ')) return 'Viridiplantae';
+  if (lineage.includes(' 6231 ')) return 'Nematoda';
+  if (lineage.includes(' 8782 ')) return 'Birds';
+  if (lineage.includes(' 4751 ')) return 'Fungi';
+  if (lineage.includes(' 32561 ')) return 'Sauria';
+  if (lineage.includes(' 7898 ')) return 'Fish';
+};
+
 class Lineage extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -133,58 +158,13 @@ class Lineage extends PureComponent {
     const {
       data: { loading, payload },
     } = this.props;
-    const linetree = `${loading ? 0 : payload.metadata.lineage}`;
-    let superkingdom = null;
-    let nodespot = null;
-
-    if (linetree.includes(' 2759 ')) {
-      superkingdom = 'Eukaryota';
-    } else if (linetree.includes(' 2157 ')) {
-      superkingdom = 'Archaea';
-    } else if (linetree.includes(' 10239 ')) {
-      superkingdom = 'Viruses';
-    } else if (linetree.includes(' 12884 ')) {
-      superkingdom = 'Viroids';
-    } else if (linetree.includes(' 2 ')) {
-      superkingdom = 'Bacteria';
-    } else {
-      superkingdom = 'N/A';
-    }
-
-    if (linetree.includes(' 1224 ')) {
-      nodespot = 'Proteobacteria';
-    } else if (linetree.includes(' 201174 ')) {
-      nodespot = 'Actinobacteria';
-    } else if (linetree.includes(' 203691 ')) {
-      nodespot = 'Spirochaetes';
-    } else if (linetree.includes(' 203682 ')) {
-      nodespot = 'Planctomycetes';
-    } else if (linetree.includes(' 1239 ')) {
-      nodespot = 'Firmicutes';
-    } else if (linetree.includes(' 976 ')) {
-      nodespot = 'Bacteroidetes';
-    } else if (linetree.includes(' 40674 ')) {
-      nodespot = 'Mammalia';
-    } else if (linetree.includes(' 6656 ')) {
-      nodespot = 'Arthropoda';
-    } else if (linetree.includes(' 33090 ')) {
-      nodespot = 'Viridiplantae';
-    } else if (linetree.includes(' 6231 ')) {
-      nodespot = 'Nematoda';
-    } else if (linetree.includes(' 8782 ')) {
-      nodespot = 'Birds';
-    } else if (linetree.includes(' 4751 ')) {
-      nodespot = 'Fungi';
-    } else if (linetree.includes(' 32561 ')) {
-      nodespot = 'Sauria';
-    } else if (linetree.includes('7898 ')) {
-      nodespot = 'Fish';
-    } else {
-      nodespot = null;
-    }
+    if (loading || !payload) return null;
+    const { lineage } = payload.metadata;
+    const superkingdom = getSuperKingdom(lineage) || 'N/A';
+    const nodespot = getNodespot(lineage);
 
     return (
-      <Tooltip title={`Lineage: ${loading ? 0 : payload.metadata.lineage} `}>
+      <Tooltip title={`Lineage: ${payload.metadata.lineage}`}>
         {superkingdom} {nodespot && `(${nodespot})`}
       </Tooltip>
     );
