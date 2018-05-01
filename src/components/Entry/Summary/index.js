@@ -207,7 +207,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   </p>
                 )}
               {// doesn't work for some HAMAP as they have enpty <P> tag
-              Object.keys(metadata.description).length && (
+              Object.keys(metadata.description).length ? (
                 <Fragment>
                   <h4>Description</h4>
                   <Description
@@ -215,7 +215,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                     literature={included}
                   />
                 </Fragment>
-              )}
+              ) : null}
             </div>
             <SidePanel metadata={metadata} />
           </div>
