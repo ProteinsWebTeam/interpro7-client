@@ -7,10 +7,9 @@ import { foundationPartial } from 'styles/foundation';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import global from 'styles/global.css';
 import loadable from 'higherOrder/loadable';
 
-const f = foundationPartial(fonts, global);
+const f = foundationPartial(fonts);
 
 const schemaProcessData = data => ({
   '@id': '@contains',

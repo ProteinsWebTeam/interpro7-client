@@ -16,14 +16,13 @@ import TaxonomyVisualisation from 'taxonomy-visualisation';
 
 import { foundationPartial } from 'styles/foundation';
 
-import global from 'styles/global.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.scss';
 
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
-const f = foundationPartial(ebiStyles, global);
+const f = foundationPartial(ebiStyles);
 
 export const parentRelationship = ({ taxId, name = null }) => ({
   '@id': '@additionalProperty',
