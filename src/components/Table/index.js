@@ -58,11 +58,20 @@ const RedirectToDefault = () => (
   <Redirect to={customLocation => ({ ...customLocation, hash: 'table' })} />
 );
 
+// redirects to default type if the 'withXXXX' type is not in the props
+const safeGuard = (withType, Component) => {
+  const SafeGuarded = ({ [withType]: extractedWithType, ...props }) =>
+    extractedWithType ? <Component {...props} /> : <RedirectToDefault />;
+  SafeGuarded.displayName = `safeGuard(${withType}, ${Component.name ||
+    Component.displayName})`;
+  return SafeGuarded;
+};
+
 const mainChildRoutes = new Map([
   ['table', TableView],
-  ['list', () => 'LIST!'],
-  ['grid', GridView],
-  ['tree', TreeView],
+  // ['list', () => 'LIST!'],
+  ['grid', safeGuard('withGrid', GridView)],
+  ['tree', safeGuard('withTree', TreeView)],
 ]);
 
 const footerChildRoutes = new Map([['tree', () => null]]);
@@ -214,6 +223,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 columns={columns}
                 notFound={notFound}
                 dataTable={dataTable}
+                withTree={withTree}
+                withGrid={withGrid}
               />
               <Switch
                 locationSelector={hashSelector}
