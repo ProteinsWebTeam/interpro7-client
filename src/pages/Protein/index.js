@@ -29,14 +29,13 @@ import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
 
-import global from 'styles/global.css';
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
+const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 import {
   schemaProcessDataTable,

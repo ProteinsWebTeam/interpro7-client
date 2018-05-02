@@ -15,12 +15,11 @@ import loadable from 'higherOrder/loadable';
 import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
-import global from 'styles/global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(fonts, global, pageStyle, ipro, styles);
+const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 const SummaryAsync = loadable({
   loader: () =>
