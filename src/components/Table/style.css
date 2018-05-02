@@ -70,8 +70,8 @@ table.light .subheader {
 }
 
 table.light span::before {
-  color: #71818a;
-} /*doesn't work using class .icon-functional*/
+  color: #71818a; /* doesn't work using class .icon-functional */
+}
 
 .table-view .table-results-filtering {
   display: flex;
@@ -79,7 +79,7 @@ table.light span::before {
   align-items: center;
   color: #505f74;
   margin-bottom: 0.5rem;
-  background: #e9f1f3; /*bluer rgba(45, 174, 193, 0.25) darker d4dddf*/
+  background: #e9f1f3; /* bluer rgba(45, 174, 193, 0.25) darker d4dddf */
   padding: 0.4rem 0.5rem;
 }
 
@@ -96,7 +96,6 @@ table.light span::before {
 
 .table-view .table-results-filtering .icon-view {
   color: #71818a;
-  margin-right: 1rem;
   width: 25px;
   height: 25px;
   display: inline-block;
@@ -124,12 +123,28 @@ table.light span::before {
   background: url(../../images/icons/ico-view-tree.svg) no-repeat;
 }
 .table-view .table-results-filtering .icon-view.disabled {
-  opacity: 0;
-  cursor: not-allowed;
-  pointer-events: none; /*avoid click*/
+  display: none;
 }
 .table-view .table-results-filtering .filter-wrapper {
   display: flex;
+}
+
+.type-selector {
+  display: flex;
+  line-height: 0;
+
+  & > * {
+    margin: 0 0.5ch;
+  }
+}
+
+.test-support-grid {
+  display: none;
+}
+@supports (display: grid) {
+  .test-support-grid {
+    display: initial;
+  }
 }
 
 .table-footer {

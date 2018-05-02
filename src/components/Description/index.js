@@ -15,11 +15,11 @@ import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiStyles, styles, theme);
 
-export const ParagraphWithCites = ({ p, literature = [] }) => (
+export const ParagraphWithCites = ({ p, literature = [], withoutRefs }) => (
   <div className={styles.paragraph}>
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
-      return i % 2 ? (
+      return i % 2 && !withoutRefs ? (
         <a key={i} id={refCounter} href={`${location.pathname}#${part}`}>
           {refCounter}
         </a>
@@ -38,6 +38,7 @@ export const ParagraphWithCites = ({ p, literature = [] }) => (
 ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
   literature: T.array,
+  withoutRefs: T.bool,
 };
 
 const _getAttributesFromStringTag = text =>
