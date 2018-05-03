@@ -157,6 +157,12 @@ export const setDBs /*: Set<Object> */ = new Set([
     url_template:
       'https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={id}',
   },
+  {
+    name: 'kegg', // NOTE: Only for fixtures support
+    re: /^kegg[0-9]{2}$/,
+    url_template:
+      'https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={id}',
+  },
 ]);
 
 const isEmpty = object => !Object.values(object).some(Boolean);
