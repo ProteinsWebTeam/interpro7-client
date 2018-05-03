@@ -6,11 +6,11 @@ import { createSelector } from 'reselect';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import Redirect from 'components/generic/Redirect';
 
 import _Header from './Header';
 import _Exporter from './Exporter';
 import _PageSizeSelector from './PageSizeSelector';
-// import _Search from './Search';
 import _SearchBox from './SearchBox';
 import _Body from './Body';
 import _Column from './Column';
@@ -46,19 +46,32 @@ const TableView = loadable({
 //   loader: () => import(/* webpackChunkName: "list-view" */ './views/List'),
 // });
 
-// const GridView = loadable({
-//   loader: () => import(/* webpackChunkName: "grid-view" */ './views/Grid'),
-// });
+const GridView = loadable({
+  loader: () => import(/* webpackChunkName: "grid-view" */ './views/Grid'),
+});
 
 const TreeView = loadable({
   loader: () => import(/* webpackChunkName: "tree-view" */ './views/Tree'),
 });
 
+const RedirectToDefault = () => (
+  <Redirect to={customLocation => ({ ...customLocation, hash: 'table' })} />
+);
+
+// redirects to default type if the 'withXXXX' type is not in the props
+const safeGuard = (withType, Component) => {
+  const SafeGuarded = ({ [withType]: extractedWithType, ...props }) =>
+    extractedWithType ? <Component {...props} /> : <RedirectToDefault />;
+  SafeGuarded.displayName = `safeGuard(${withType}, ${Component.name ||
+    Component.displayName})`;
+  return SafeGuarded;
+};
+
 const mainChildRoutes = new Map([
   ['table', TableView],
-  ['list', () => 'LIST!'],
-  ['grid', () => 'GRID!'],
-  ['tree', TreeView],
+  // ['list', () => 'LIST!'],
+  ['grid', safeGuard('withGrid', GridView)],
+  ['tree', safeGuard('withTree', TreeView)],
 ]);
 
 const footerChildRoutes = new Map([['tree', () => null]]);
@@ -80,6 +93,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     contentType: T.string,
     children: T.any,
     withTree: T.bool,
+    withGrid: T.bool,
   };
 
   render() {
@@ -95,6 +109,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       contentType,
       children,
       withTree,
+      withGrid,
     } = this.props;
 
     const _query = query || {};
@@ -134,31 +149,36 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     <Link
                       to={l => ({ ...l, hash: 'table' })}
                       className={f('icon-view', 'table-view')}
+                      activeClass={f('active')}
                       aria-label="view your results as a table"
                       onMouseOver={TableView.preload}
                       onFocus={TableView.preload}
                     />
                   </Tooltip>{' '}
-                  <Tooltip title="View your results as a list">
-                    <Link
-                      to={l => ({ ...l, hash: 'list' })}
-                      className={f('icon-view', 'list-view', 'disabled')}
-                      aria-disabled="true"
-                      disabled
-                      aria-label="view your results as a list"
-                      // onMouseOver={ListView.preload}
-                      // onFocus={ListView.preload}
-                    />
-                  </Tooltip>{' '}
+                  {
+                    // <Tooltip title="View your results as a list">
+                    //  <Link
+                    //   to={l => ({ ...l, hash: 'list' })}
+                    //  className={f('icon-view', 'list-view', 'disabled')}
+                    //  aria-disabled="true"
+                    //  disabled
+                    //  aria-label="view your results as a list"
+                    // onMouseOver={ListView.preload}
+                    // onFocus={ListView.preload}
+                    // />
+                    // </Tooltip>
+                  }{' '}
                   <Tooltip title="View your results in a grid">
                     <Link
                       to={l => ({ ...l, hash: 'grid' })}
-                      className={f('icon-view', 'grid-view', 'disabled')}
-                      aria-disabled="true"
-                      disabled
+                      className={f('icon-view', 'grid-view', {
+                        disabled: !withGrid,
+                      })}
+                      activeClass={f('active')}
+                      aria-disabled={withGrid ? 'false' : 'true'}
                       aria-label="view your results in a grid"
-                      // onMouseOver={GridView.preload}
-                      // onFocus={GridView.preload}
+                      onMouseOver={GridView.preload}
+                      onFocus={GridView.preload}
                     />
                   </Tooltip>
                   <Tooltip title="View your results as a tree">
@@ -167,8 +187,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       className={f('icon-view', 'tree-view', {
                         disabled: !withTree,
                       })}
+                      activeClass={f('active')}
                       aria-disabled={withTree ? 'false' : 'true'}
-                      disabled={!withTree}
                       aria-label="view your results as a tree"
                       onMouseOver={TreeView.preload}
                       onFocus={TreeView.preload}
@@ -193,9 +213,9 @@ export default class Table extends PureComponent /*:: <Props> */ {
               />
               <Switch
                 locationSelector={hashSelector}
-                indexRoute={TableView}
+                indexRoute={RedirectToDefault}
                 childRoutes={mainChildRoutes}
-                catchAll={TableView}
+                catchAll={RedirectToDefault}
                 // passed down props
                 isStale={isStale}
                 loading={loading}
@@ -203,6 +223,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 columns={columns}
                 notFound={notFound}
                 dataTable={dataTable}
+                withTree={withTree}
+                withGrid={withGrid}
               />
               <Switch
                 locationSelector={hashSelector}

@@ -2,12 +2,19 @@
 import { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { goToCustomLocation } from 'actions/creators';
+import { customLocationSelector } from 'reducers/custom-location';
 
 /*:: type Props = {
   goToCustomLocation: function,
-  to: {
+  customLocation: {
+    description: Object,
+    search: ?Object,
+    hash: ?string,
+  },
+  to: function | {
     description: Object,
     search: ?Object,
     hash: ?string,
@@ -17,16 +24,29 @@ import { goToCustomLocation } from 'actions/creators';
 class Redirect extends PureComponent /*:: <Props> */ {
   static propTypes = {
     goToCustomLocation: T.func.isRequired,
-    to: T.shape({
+    customLocation: T.shape({
       description: T.object.isRequired,
       search: T.object,
       hash: T.string,
     }).isRequired,
+    to: T.oneOfType([
+      T.shape({
+        description: T.object.isRequired,
+        search: T.object,
+        hash: T.string,
+      }),
+      T.func,
+    ]),
   };
 
   componentDidMount() {
+    const { to, customLocation, goToCustomLocation } = this.props;
     // Go to the new location, but replacing current location
-    this.props.goToCustomLocation(this.props.to, true);
+    let _to = to;
+    if (typeof to === 'function') {
+      _to = to(customLocation);
+    }
+    goToCustomLocation(_to, true);
   }
 
   render() {
@@ -34,4 +54,9 @@ class Redirect extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(null, { goToCustomLocation })(Redirect);
+const mapStateToProps = createSelector(
+  customLocationSelector,
+  customLocation => ({ customLocation }),
+);
+
+export default connect(mapStateToProps, { goToCustomLocation })(Redirect);

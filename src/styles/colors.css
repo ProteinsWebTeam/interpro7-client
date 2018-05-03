@@ -9,6 +9,7 @@
   --colors-graydark: #676767;
   --colors-gray: #888;
   --colors-lightgray: #9f9f9f;
+  --colors-vlightgray: #d4d4d4;
   --colors-loading-bar: #77b6ff;
   --colors-tag: #1878ba; /*or marroon #e0d6a5 lightblue:#b6ced5*/
   --colors-marktext: #fcf655;
@@ -37,6 +38,7 @@
   --colors-smart: #ff8d8d; /*more saturated #ff7a76*/
   --colors-ssf: #686868;
   --colors-tigrfams: #56b9a6; /*was v2 4f9294 - v1 #b37977;*/
+  --colors-all: #71818a;
   /*TYPE*/
   --colors-family-main: #ec7865;
   --colors-family-sub: #f4cdc7;

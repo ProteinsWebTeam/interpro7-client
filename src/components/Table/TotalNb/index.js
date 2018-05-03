@@ -30,7 +30,7 @@ const dbText = (entryDB, setDB, db, isSubPageButMainIsEntry) => {
   return (
     <span>
       {entryDB === db || setDB === db ? ' in ' : ' matching '}
-      <span className={s('db')}>{entryDB}</span>
+      <span className={s('total-text-bold')}>{entryDB}</span>
       <MemberSymbol type={entryDB} className={s('db-symbol')} />
     </span>
   );
@@ -83,7 +83,10 @@ const TotalNb = ({
       >
         {open => (
           <span
-            className={s('text', { selector: typeof open === 'boolean', open })}
+            className={s('header-total-results', {
+              selector: typeof open === 'boolean',
+              open,
+            })}
           >
             <NumberComponent value={index} />
             {' - '}

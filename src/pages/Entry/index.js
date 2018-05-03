@@ -104,6 +104,7 @@ class List extends PureComponent {
       };
     }
     const urlHasParameter = data.url && data.url.includes('?');
+    const includeGrid = data.url;
     return (
       <div className={f('row')}>
         <MemberDBSelector
@@ -127,12 +128,13 @@ class List extends PureComponent {
           <Table
             dataTable={_payload.results}
             contentType="entry"
-            isStale={isStale}
             loading={data.loading}
             ok={data.ok}
+            isStale={isStale}
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
+            withGrid={!!includeGrid}
           >
             <Exporter>
               <ul>
