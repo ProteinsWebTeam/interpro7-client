@@ -85,7 +85,9 @@ class OrganismSubPage extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { data: { loading, ok, payload } } = this.props;
+    const {
+      data: { loading, ok, payload },
+    } = this.props;
     if (loading) return <Loading />;
     const processed = payloadToProcessed(payload);
     return (

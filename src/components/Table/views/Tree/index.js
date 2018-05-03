@@ -61,7 +61,11 @@ class DataProvider extends PureComponent {
 
   _sendDataUpIfAny = () => {
     if (this._sent) return;
-    const { taxID, data: { loading, payload }, sendData } = this.props;
+    const {
+      taxID,
+      data: { loading, payload },
+      sendData,
+    } = this.props;
     if (!loading && payload) {
       this._sent = true;
       sendData(taxID, payload);

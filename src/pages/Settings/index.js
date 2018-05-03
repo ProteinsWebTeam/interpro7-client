@@ -281,13 +281,6 @@ const getStatusForEndpoint = endpoint =>
     status => ({ status }),
   );
 
-const getUrlForEndpoint = endpoint =>
-  createSelector(
-    state => state.settings[endpoint],
-    ({ protocol, hostname, port, root }) =>
-      `${protocol}//${hostname}:${port}${root}`,
-  );
-
 const APIEndpointSettings = connect(getStatusForEndpoint('api'))(
   EndpointSettings,
 );

@@ -90,7 +90,11 @@ class Wrapper extends PureComponent {
                     job: { type: 'InterProScan' },
                   },
                 }}
-                activeClass={({ description: { job: { type } } }) =>
+                activeClass={({
+                  description: {
+                    job: { type },
+                  },
+                }) =>
                   type === 'InterProScan' && f('is-active', 'is-active-tab')
                 }
               >

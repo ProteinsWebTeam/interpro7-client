@@ -142,7 +142,9 @@ class AdvancedOptions extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload, ok } } = this.props;
+    const {
+      data: { loading, payload, ok },
+    } = this.props;
     if (loading) return 'Loading…';
     if (!ok) return 'Failed…';
     const { mdb1, mdb2, other, noCategory } = groupApplications(

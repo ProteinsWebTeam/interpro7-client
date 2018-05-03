@@ -111,9 +111,11 @@ class Wrapper extends PureComponent {
                     search: { type: 'text' },
                   },
                 }}
-                activeClass={({ description: { search: { type } } }) =>
-                  type === 'text' && f('is-active', 'is-active-tab')
-                }
+                activeClass={({
+                  description: {
+                    search: { type },
+                  },
+                }) => type === 'text' && f('is-active', 'is-active-tab')}
               >
                 by text
               </Link>

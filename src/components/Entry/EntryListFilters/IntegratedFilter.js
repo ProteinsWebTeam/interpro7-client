@@ -62,7 +62,9 @@ class IntegratedFilter extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const {
+      data: { loading, payload },
+    } = this.props;
     const types = loading ? {} : payload;
     if (!loading) types.both = payload.integrated + payload.unintegrated;
     return (
@@ -96,7 +98,10 @@ const getUrlFor = createSelector(
   state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from description
-    const { entry: { integration, ...entry }, ..._description } = description;
+    const {
+      entry: { integration, ...entry },
+      ..._description
+    } = description;
     _description.entry = entry;
     // omit from search
     const { search: _, ..._search } = search;

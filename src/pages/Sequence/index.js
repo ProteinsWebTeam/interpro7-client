@@ -64,7 +64,10 @@ class IPScanResult extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload }, matched } = this.props;
+    const {
+      data: { loading, payload },
+      matched,
+    } = this.props;
     if (loading) {
       return <Loading />;
     }

@@ -209,6 +209,7 @@ class List extends PureComponent {
     }
     const urlHasParameter = url && url.includes('?');
     const includeTree = url && !url.includes('proteome');
+    const includeGrid = url && !url.includes('proteome');
     return (
       <div className={f('row')}>
         <MemberDBSelector
@@ -236,7 +237,8 @@ class List extends PureComponent {
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
-            withTree={includeTree}
+            withTree={!!includeTree}
+            withGrid={!!includeGrid}
           >
             <Exporter>
               <ul>
@@ -261,7 +263,7 @@ class List extends PureComponent {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search}>Search proteins</SearchBox>
+            <SearchBox search={search.search}>Search organism</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

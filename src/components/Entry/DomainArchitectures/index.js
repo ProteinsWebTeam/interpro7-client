@@ -147,7 +147,10 @@ class DomainArchitectures extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload }, mainAccession } = this.props;
+    const {
+      data: { loading, payload },
+      mainAccession,
+    } = this.props;
     if (loading) return <Loading />;
     return (
       <div className={f('row')}>

@@ -57,7 +57,12 @@ class EntryTypeFilter extends PureComponent {
   render() {
     const {
       data: { loading, payload },
-      customLocation: { description: { entry: { db } }, search },
+      customLocation: {
+        description: {
+          entry: { db },
+        },
+        search,
+      },
     } = this.props;
     const types = Object.entries(loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,

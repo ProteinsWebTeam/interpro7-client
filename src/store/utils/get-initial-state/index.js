@@ -6,7 +6,9 @@ import parseParamToNumber from 'store/utils/parse-param-to-number';
 import settingsStorage from 'storage/settings';
 
 export default history => {
-  const { location: { pathname, search, hash } } = history;
+  const {
+    location: { pathname, search, hash },
+  } = history;
   let settings;
   if (settingsStorage) {
     settings = settingsStorage.getValue() || undefined;

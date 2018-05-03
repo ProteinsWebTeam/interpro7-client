@@ -177,7 +177,11 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     }).isRequired,
   };
   render() {
-    const { data: { payload: { metadata } } } = this.props;
+    const {
+      data: {
+        payload: { metadata },
+      },
+    } = this.props;
     return (
       <div className={f('row')}>
         <div className={f('medium-9', 'columns')}>
@@ -245,7 +249,9 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
     ) {
       return <Loading />;
     }
-    const { metadata: { source_database: db } } = this.props.data.payload;
+    const {
+      metadata: { source_database: db },
+    } = this.props.data.payload;
     return (
       <div className={f('sections')}>
         {db === 'taxonomy' ? <SummaryTaxonomy {...this.props} /> : null}

@@ -12,9 +12,10 @@
 .popup {
   position: absolute;
   width: 70vw;
-  margin-top: 2em;
+  padding: 1rem 0.5rem;
+  margin-top: 47px; /*was 2em*/
   background: white;
-  border: 1px solid var(--colors-gray);
+  border: 1px solid var(--colors-vlightgray);
   border-radius: 0.5ch;
   z-index: 100;
   /*transition-property: opacity, transform, clip-path;*/
@@ -41,7 +42,8 @@
 .db-selector {
   column-count: 3;
   padding: 0.5ch;
-  margin: 1ch;
+  column-gap: 1rem;
+  /*margin: 1ch;*/
 
   &:not(.one-column) .text {
     margin-right: 1ch;
@@ -157,9 +159,10 @@
 .container {
   display: flex;
   padding: 0;
+  outline: 0;
 
   & h6 {
-    margin: 1ch;
+    margin: 0 1ch 1ch 0.5ch;
   }
 }
 

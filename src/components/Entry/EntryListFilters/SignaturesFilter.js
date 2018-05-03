@@ -44,7 +44,9 @@ class SignaturesFilter extends PureComponent {
   render() {
     const {
       data: { loading, payload },
-      customLocation: { search: { signature_in: signature } },
+      customLocation: {
+        search: { signature_in: signature },
+      },
     } = this.props;
     const signatureDBs = Object.entries(loading ? {} : payload)
       .sort(([, a], [, b]) => b - a)

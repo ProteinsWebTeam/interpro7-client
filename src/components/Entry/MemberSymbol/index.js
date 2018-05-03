@@ -32,6 +32,7 @@ const classNames = new Map([
   ['SSF', f('md-su')],
   ['TIGRFAMS', f('md-ti')],
   ['NEW', f('md-new')],
+  ['ALL', f('md-all')],
 ]);
 
 const MemberSymbol = (

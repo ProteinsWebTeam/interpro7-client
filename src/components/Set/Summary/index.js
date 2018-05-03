@@ -97,7 +97,10 @@ class SummarySet extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { data: { metadata }, currentSet } = this.props;
+    const {
+      data: { metadata },
+      currentSet,
+    } = this.props;
     return (
       <div className={f('sections')}>
         <section>
