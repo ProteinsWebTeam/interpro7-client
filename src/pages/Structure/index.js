@@ -380,7 +380,7 @@ class Structure extends PureComponent {
                 data={{
                   data: this.props.data.payload,
                   endpoint: 'structure',
-                  version: databases && databases.PDB.version,
+                  version: databases && databases.pdb.version,
                 }}
                 processData={schemaProcessDataRecord}
               />
