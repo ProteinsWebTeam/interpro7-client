@@ -4,6 +4,7 @@
 }
 
 .db-name {
+  font-size: 80%;
   color: #4b555b;
 }
 
@@ -35,12 +36,6 @@
     &:hover {
       transition: background-color 0.1s;
       background-color: #e4f3ff;
-    }
-
-    & div {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: center;
     }
   }
 }
