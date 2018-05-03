@@ -1,5 +1,4 @@
 .card-wrapper {
-  border: 0px pink solid;
   display: grid;
   grid-gap: 14px;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -29,7 +28,6 @@
   flex-grow: 1;
 }
 .card-header {
-  border: 0px solid blue;
   text-align: center;
   width: 100%;
 }
@@ -53,7 +51,6 @@
 }
 
 .card-block {
-  border: 0px solid green;
   font-size: 15px;
   margin: 0.5rem 0;
 }
@@ -66,7 +63,6 @@
 .count-organisms,
 .count-sets {
   text-align: center;
-  border: 0px solid lightgreen;
 }
 
 .card-footer {
@@ -82,7 +78,6 @@
 } /*tax ID*/
 
 .card-sum-wrapper {
-  border: 0px red solid;
   overflow: hidden;
   height: 92px;
 }
