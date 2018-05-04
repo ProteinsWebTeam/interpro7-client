@@ -319,7 +319,10 @@ export const latests = [
     accession: 'IPR033983',
     type: 'Domain',
     name: 'Thiazole synthase ThiG',
-    counter: 8192,
+    counter_P: 14591,
+    counter_I: 0,
+    counter_O: 12172,
+    counter_S: 12,
     contributing: [
       {
         accession: 'PF05690',
@@ -331,7 +334,10 @@ export const latests = [
     accession: 'IPR033985',
     type: 'Domain',
     name: 'SusD-like, N-terminal',
-    counter: 22916,
+    counter_P: 41685,
+    counter_I: 0,
+    counter_O: 1627,
+    counter_S: 26,
     contributing: [
       {
         accession: 'PF14322',
@@ -343,7 +349,10 @@ export const latests = [
     accession: 'IPR033986',
     type: 'Site',
     name: 'Clusterin, conserved site',
-    counter: 145,
+    counter_P: 203,
+    counter_I: 0,
+    counter_O: 112,
+    counter_S: 0,
     contributing: [
       {
         accession: 'PS00492',
@@ -355,7 +364,10 @@ export const latests = [
     accession: 'IPR033987',
     type: 'Domain',
     name: 'Aggrecan/versican, C-type lectin-like domain',
-    counter: 249,
+    counter_P: 376,
+    counter_I: 0,
+    counter_O: 119,
+    counter_S: 0,
     contributing: [
       {
         accession: 'cd03588',
@@ -367,7 +379,7 @@ export const latests = [
     accession: 'IPR033988',
     type: 'Domain',
     name: 'CEL-1-like C-type lectin-like domain',
-    counter: 75,
+    counter_P: 75,
     contributing: [
       {
         accession: 'cd03589',
@@ -379,7 +391,7 @@ export const latests = [
     accession: 'IPR033989',
     type: 'Domain',
     name: 'CD209-like, C-type lectin-like domain',
-    counter: 1586,
+    counter_P: 1586,
     contributing: [
       {
         accession: 'cd03590',
@@ -391,7 +403,7 @@ export const latests = [
     accession: 'IPR034004',
     type: 'Domain',
     name: 'Pol I subunit A12, C-terminal zinc ribbon',
-    counter: 977,
+    counter_P: 977,
     contributing: [
       {
         accession: 'cd10507',
@@ -403,7 +415,7 @@ export const latests = [
     accession: 'IPR034005',
     type: 'Family',
     name: 'Peptidyl-dipeptidase DCP',
-    counter: 8245,
+    counter_P: 8245,
     contributing: [
       {
         accession: 'cd06456',
