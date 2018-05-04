@@ -1,43 +1,121 @@
+.card-wrapper {
+  display: grid;
+  grid-gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  border: 1px solid black;
+}
+
+.card-flex-container {
+  padding: 1rem;
+  border: 1px rgba(0, 0, 0, 0.2) solid;
+  transition: all 0.2s ease-out;
+  color: #606060;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
+    sans-serif;
+}
+
+.card-flex-container:hover {
+  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+.card-header h6 {
+  font-weight: 600;
+  font-size: 110%;
+}
+
+.card-block {
+  font-size: 15px;
+  margin: 0.5rem 0;
+}
+
+.count-entries,
+.count-proteins,
+.count-structures,
+.count-proteomes,
+.count-architectures,
+.count-organisms,
+.count-sets {
+  text-align: center;
+}
+
+.card-counter {
+  color: #333;
+  /*margin-bottom: 0;*/
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.card-counter a,
+.card-counter a:visited,
+.card-counter a:hover {
+  color: #333;
+  display: flex;
+  flex-direction: column;
+}
+.no-link {
+  display: flex;
+  flex-direction: column;
+}
+.card-counter .icon-conceptual::before {
+  font-size: 210%;
+}
+
+.icon-count-ida {
+  height: 3em;
+  width: 38px;
+  background-image: url('../../../images/icons/ico-ida.svg');
+  background-size: 100%;
+  background-position-y: 59%;
+  background-repeat: no-repeat;
+}
+
+.icon-count-set {
+  height: 3em;
+  width: 26px;
+  background-image: url('../../../images/icons/ico-set.svg');
+  background-size: 100%;
+  background-position-y: 59%;
+  background-repeat: no-repeat;
+}
+
+.icon-count-species {
+  height: 3em; /*to align icon*/
+  width: 30px;
+  background-image: url('../../../images/icons/ico-species.svg');
+  background-size: 100%;
+  background-position-y: 59%;
+  background-repeat: no-repeat;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 80%;
+}
+.card-footer > div:first-child {
+  flex-grow: 1;
+}
+.card-footer > div:last-child {
+  text-align: right;
+} /*tax ID*/
+
+.label-off .label-number {
+  display: none;
+}
+
 .list-item interpro-type {
   margin-right: 0.5ch;
   padding-top: 4px;
   float: left;
 }
 
-.entry-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-size: 94%;
-}
-
-.list-vertical-scroll {
-  position: relative;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto; /*height: 378px;*/
-  margin-bottom: 1rem;
-}
-
-.entry-list .list-item {
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-.entry-list .list-vertical-scroll ul li {
-  padding: 0.4em 0;
-  border-radius: 6px;
-}
-
-.entry-list .list-vertical-scroll ul li:hover {
-  background-color: #e4f3ff;
-}
-
-.entry-list .list-vertical-scroll a {
+.feat-entry-list a {
   color: #0a0a0a;
 }
 
-.entry-list .md-small {
+.feat-entry-list .md-small {
   width: 29px;
   float: left;
 }
