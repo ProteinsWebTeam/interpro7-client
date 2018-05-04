@@ -4,22 +4,24 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import { toPlural } from 'utils/pages';
 
-import AnimatedEntry from 'components/AnimatedEntry';
 import Link from 'components/generic/Link';
+import AnimatedEntry from 'components/AnimatedEntry';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import { latests } from 'staticData/home';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/load-web-component';
+import { NumberComponent } from 'components/NumberLabel';
 
-import { foundationPartial } from 'styles.css/foundation';
+import { foundationPartial } from 'styles/foundation';
 
-import ipro from 'styles.css/interpro-new.css';
+import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import theme from 'styles.css/theme-interpro.css';
+import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
@@ -46,66 +48,199 @@ class LatestEntry extends PureComponent {
   render() {
     const { entry } = this.props;
     return (
-      <li className={f('list-item')}>
-        <Tooltip title={`${entry.type} type`}>
-          <interpro-type
-            dimension="1.5em"
-            type={entry.type}
-            aria-label="Entry type"
-          />
-        </Tooltip>
+      <div className={f('card-flex-container')}>
         <div className={f('list-body')}>
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: 'InterPro',
-                  accession: entry.accession,
+          <div className={f('card-header')}>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: 'InterPro',
+                    accession: entry.accession,
+                  },
                 },
-              },
-            }}
-          >
-            <div className={f('list-title')}>
-              {entry.name}
-              <span>({entry.accession})</span> —{' '}
-              <i>{entry.counter} proteins matched</i>
-              <br />
-            </div>
-          </Link>
-          {entry.contributing.map(c => (
-            <div className={f('list-more')} key={c.accession}>
-              <MemberSymbol
-                type={c.source_database}
-                className={f('md-small')}
-              />
-              <small>
-                {c.source_database}:
+              }}
+            >
+              <Tooltip title={`${entry.type} type`}>
+                <interpro-type
+                  dimension="1.5em"
+                  type={entry.type}
+                  aria-label="Entry type"
+                />
+              </Tooltip>
+              <h6>{entry.name}</h6>
+            </Link>
+          </div>
+
+          <div className={f('card-block', 'card-counter', 'label-off')}>
+            {' '}
+            <div className={f('count-proteins')}>
+              <Tooltip
+                title={`${entry.counter_P} ${toPlural(
+                  'protein',
+                  entry.counter_P,
+                )} matching ${entry.name}`}
+              >
                 <Link
                   to={{
                     description: {
                       main: { key: 'entry' },
                       entry: {
-                        db: c.source_database,
-                        accession: c.accession,
+                        db: 'InterPro',
+                        accession: entry.accession,
+                      },
+                      protein: { isFilter: true, db: 'UniProt' },
+                    },
+                  }}
+                >
+                  <div
+                    className={f('icon', 'icon-conceptual')}
+                    data-icon="&#x50;"
+                  />{' '}
+                  <NumberComponent value={entry.counter_P} />
+                  <span className={f('label-number')}>
+                    {toPlural('protein', entry.counter_P)}
+                  </span>
+                </Link>
+              </Tooltip>
+            </div>
+            <div className={f('count-architectures')}>
+              <Tooltip
+                title={`... domain architectures matching ${entry.name}`}
+              >
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'entry' },
+                      entry: {
+                        db: 'InterPro',
+                        accession: entry.accession,
+                        detail: 'domain_architecture',
                       },
                     },
                   }}
-                  className={f('list-sign')}
                 >
-                  {' '}
-                  {c.accession}
+                  <div className={f('icon', 'icon-count-ida')} />{' '}
+                  <NumberComponent value={entry.counter_I} />
+                  <span className={f('label-number')}>
+                    domain architectures
+                  </span>
                 </Link>
-              </small>
+              </Tooltip>
             </div>
-          ))}
+            <div className={f('count-organisms')}>
+              <Tooltip
+                title={`${entry.counter_O} ${toPlural(
+                  'organism',
+                  entry.counter_O,
+                )} matching ${entry.name}`}
+              >
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'entry' },
+                      entry: {
+                        db: 'InterPro',
+                        accession: entry.accession,
+                      },
+                      organism: { isFilter: true, db: 'taxonomy' },
+                    },
+                  }}
+                >
+                  <div className={f('icon', 'icon-count-species')} />{' '}
+                  <NumberComponent value={entry.counter_O} />
+                  <span className={f('label-number')}>
+                    {toPlural('organism', entry.counter_O)}
+                  </span>
+                </Link>
+              </Tooltip>
+            </div>
+            <div className={f('count-structures')}>
+              <Tooltip
+                title={`${entry.counter_S}  ${toPlural(
+                  'structure',
+                  entry.counter_S,
+                )} matching ${entry.name}`}
+              >
+                {// link only when value > 0
+                entry.counter_S > 0 ? (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: 'InterPro',
+                          accession: entry.accession,
+                        },
+                        structure: { isFilter: true, db: 'PDB' },
+                      },
+                    }}
+                  >
+                    <div
+                      className={f('icon', 'icon-conceptual')}
+                      data-icon="s"
+                    />{' '}
+                    <NumberComponent value={entry.counter_S} />
+                    <span className={f('label-number')}>
+                      {toPlural('structure', entry.counter_S)}
+                    </span>
+                  </Link>
+                ) : (
+                  <div className={f('no-link')}>
+                    <div
+                      className={f('icon', 'icon-conceptual')}
+                      data-icon="s"
+                    />{' '}
+                    <NumberComponent value={entry.counter_S} />
+                    <span className={f('label-number')}>
+                      {toPlural('structure', entry.counter_S)}
+                    </span>
+                  </div>
+                )}
+              </Tooltip>
+            </div>
+          </div>
+          <div className={f('card-footer')}>
+            <div>{entry.type}</div>
+            <div>{entry.accession}</div>
+          </div>
+
+          {
+            //entry.contributing.map(c => (
+            //   <div className={f('list-more')} key={c.accession}>
+            //     <MemberSymbol
+            //       type={c.source_database}
+            //       className={f('md-small')}
+            //     />
+            //     <small>
+            //       {c.source_database}:
+            //       <Link
+            //         to={{
+            //           description: {
+            //             main: { key: 'entry' },
+            //             entry: {
+            //               db: c.source_database,
+            //               accession: c.accession,
+            //             },
+            //           },
+            //         }}
+            //         className={f('list-sign')}
+            //       >
+            //         {' '}
+            //         {c.accession}
+            //       </Link>
+            //     </small>
+            //   </div>
+            // ))
+          }
         </div>
-      </li>
+      </div>
     );
   }
 }
 
-class ByLatestEntries extends PureComponent {
+class ByEntriesFeatured extends PureComponent {
   static propTypes = {
     data: T.shape({
       payload: T.object,
@@ -114,17 +249,16 @@ class ByLatestEntries extends PureComponent {
 
   render() {
     return (
-      <div className={f('entry-list')}>
+      <div className={f('feat-entry-list')}>
         <div className={f('row')}>
           <div className={f('columns')}>
             <h5>
               <small> Total : 29415 entries</small>
             </h5>
-            <div className={f('list-vertical-scroll')}>
-              <AnimatedEntry>
-                {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
-              </AnimatedEntry>
-            </div>
+
+            <AnimatedEntry className={f('card-wrapper')} element="div">
+              {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
+            </AnimatedEntry>
             <Link
               to={{
                 description: { main: { key: 'entry' } },
@@ -151,4 +285,4 @@ const mapStateToUrl = createSelector(
     }),
 );
 
-export default loadData(mapStateToUrl)(ByLatestEntries);
+export default loadData(mapStateToUrl)(ByEntriesFeatured);
