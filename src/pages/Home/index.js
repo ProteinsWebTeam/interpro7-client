@@ -80,6 +80,10 @@ const ByLatestEntries = loadable({
   loader: () =>
     import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByLatestEntries'),
 });
+const ByEntriesFeatured = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByEntriesFeatured'),
+});
 const ByGOTerms = loadable({
   loader: () =>
     import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms'),
@@ -516,7 +520,7 @@ class Home extends PureComponent {
                 <div title="Featured">
                   <div className={f('row')}>
                     <div className={f('columns')}>
-                      Featured: Under development
+                      <ByEntriesFeatured />
                     </div>
                   </div>
                 </div>
