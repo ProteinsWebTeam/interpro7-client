@@ -4,7 +4,6 @@ node_js:
 before_install:
 - cp config.yml.example config.yml
 script:
-- npm run test
 - npm run deploy:production
 - npm run report
 - npm run coveralls
