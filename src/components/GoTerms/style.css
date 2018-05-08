@@ -1,3 +1,7 @@
+.title {
+  display: inline-block;
+}
+
 .go-list {
   font-size: 90%;
 }
