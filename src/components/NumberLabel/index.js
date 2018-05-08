@@ -5,6 +5,8 @@ import { createSelector } from 'reselect';
 
 import TweenLite from 'gsap/TweenLite';
 
+import random from 'utils/random';
+
 import { foundationPartial } from 'styles/foundation';
 import style from './style.css';
 
@@ -106,11 +108,11 @@ class _NumberComponent extends PureComponent {
     }
 
     const animatable = { value: from };
-    const duration =
-      this.props.duration + (Math.random() - 1 / 2) * DELAY_RANGE;
+    // eslint-disable-next-line no-magic-numbers
+    const duration = this.props.duration + random(-0.5, 0.5) * DELAY_RANGE;
     this._animation = TweenLite.to(animatable, duration, {
       value: to,
-      delay: Math.random() * this.props.duration * DELAY_RANGE,
+      delay: random() * this.props.duration * DELAY_RANGE,
       onUpdate: () => {
         if (!this._ref.current) return;
         this._ref.current.textContent = numberToDisplayText(
