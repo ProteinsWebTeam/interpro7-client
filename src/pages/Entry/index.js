@@ -27,7 +27,6 @@ import Title from 'components/Title';
 import { NumberComponent } from 'components/NumberLabel';
 import { ParagraphWithCites } from 'components/Description';
 
-import random from 'utils/random';
 import { toPlural } from 'utils/pages';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
@@ -260,64 +259,28 @@ class SummaryCounterEntries extends PureComponent {
   }
 }
 
-class PlaceholderDescription extends PureComponent {
-  render() {
-    /* eslint-disable no-magic-numbers */
-    return (
-      <div className={f('placeholder')}>
-        <div style={{ width: `${random(75, 100, true)}%` }}>&nbsp;</div>
-        <div style={{ width: `${random(75, 100, true)}%` }}>&nbsp;</div>
-        <div style={{ width: `${random(75, 100, true)}%` }}>&nbsp;</div>
-        <div style={{ width: `${random(75, 100, true)}%` }}>&nbsp;</div>
-        <div style={{ width: `${random(25, 100, true)}%` }}>&nbsp;</div>
-      </div>
-    );
-    /* eslint-enable no-magic-numbers */
-  }
-}
-
 class DescriptionEntries extends PureComponent {
   static propTypes = {
-    metadata: T.object.isRequired,
-    data: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
+    description: T.arrayOf(T.string),
+    db: T.string.isRequired,
+    accession: T.string.isRequired,
   };
 
   render() {
-    const {
-      metadata,
-      data: { loading, payload },
-    } = this.props;
+    const { description, db, accession } = this.props;
 
-    let paragraph;
-    if (
-      !loading &&
-      payload &&
-      payload.metadata &&
-      payload.metadata.description
-    ) {
-      if (!payload.metadata.description.length) return null;
-      paragraph = (
-        <ParagraphWithCites p={payload.metadata.description[0]} withoutRefs />
-      );
-    } else {
-      paragraph = <PlaceholderDescription />;
-    }
+    if (!(description && description.length)) return null;
 
     return (
       <React.Fragment>
-        <div className={f('card-description')}>{paragraph}</div>
+        <div className={f('card-description')}>
+          <ParagraphWithCites p={description[0]} withoutRefs />
+        </div>
         <Link
           to={{
             description: {
               main: { key: 'entry' },
-              entry: {
-                db: metadata.source_database,
-                accession: metadata.accession,
-              },
+              entry: { db, accession },
             },
           }}
           className={f('card-description-link')}
@@ -362,7 +325,6 @@ class EntryCard extends PureComponent {
     const commonLoadData = loadData(getUrlForEntries(nextAccession, nextDB));
     return {
       SummaryCounterEntriesWithData: commonLoadData(SummaryCounterEntries),
-      DescriptionEntriesWithData: commonLoadData(DescriptionEntries),
       accession: nextAccession,
       db: nextDB,
     };
@@ -376,7 +338,6 @@ class EntryCard extends PureComponent {
     const commonLoadData = loadData(getUrlForEntries(accession, db));
     this.state = {
       SummaryCounterEntriesWithData: commonLoadData(SummaryCounterEntries),
-      DescriptionEntriesWithData: commonLoadData(DescriptionEntries),
       accession,
       db,
     };
@@ -384,10 +345,7 @@ class EntryCard extends PureComponent {
 
   render() {
     const { data, search, entryDB } = this.props;
-    const {
-      SummaryCounterEntriesWithData,
-      DescriptionEntriesWithData,
-    } = this.state;
+    const { SummaryCounterEntriesWithData } = this.state;
     return (
       <React.Fragment>
         <div className={f('card-header')}>
@@ -434,7 +392,11 @@ class EntryCard extends PureComponent {
           metadata={data.metadata}
         />
 
-        <DescriptionEntriesWithData metadata={data.metadata} />
+        <DescriptionEntries
+          db={data.metadata.source_database}
+          accession={data.metadata.accession}
+          description={data.extra_fields.description}
+        />
 
         <div className={f('card-footer')}>
           {entryDB.toLowerCase() === 'interpro' ? (

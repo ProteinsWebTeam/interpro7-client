@@ -261,33 +261,9 @@
   width: 46px;
 }
 
-@keyframes placeholderanimation {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
 .card-description {
   overflow: hidden;
   max-height: 6em;
-
-  & > .placeholder > * {
-    border-radius: 0.2em;
-    height: 1em;
-    margin: 0.2em 0;
-    background: var(--colors-nearly-white);
-    animation-duration: var(--timing-slow);
-    animation-direction: alternate;
-    animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
-    animation-name: placeholderanimation;
-    animation-timing-function: linear;
-    opacity: 1;
-  }
 }
 
 .card-description-link {
