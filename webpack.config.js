@@ -297,10 +297,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             AppCache: false,
             // TODO: Check whats the best way to do this autoupdate.
             // autoUpdate: 60000,
-            ServiceWorker: {
-              minify: false,
-              events: true,
-            },
+            ServiceWorker: { events: true },
             safeToUseOptionalCaches: true,
             excludes: ['**/.*', '**/*.{map,br,gz}'],
           })
