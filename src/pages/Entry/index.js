@@ -282,31 +282,32 @@ class List extends PureComponent {
                 cellClassName={f('col-md')}
                 renderer={(memberDataBases /*: object */) => (
                   <div className={f('signature-container')}>
-                    {Object.entries(memberDataBases).map(([db, entries]) =>
-                      Object.entries(entries).map(([accession, id]) => (
-                        <Tooltip
-                          key={accession}
-                          title={`${id} (${db})`}
-                          className={f('signature', {
-                            'corresponds-to-filter':
-                              search.signature_in &&
-                              search.signature_in.toLowerCase() ===
-                                db.toLowerCase(),
-                          })}
-                        >
-                          <Link
-                            to={{
-                              description: {
-                                main: { key: 'entry' },
-                                entry: { db, accession },
-                              },
-                            }}
+                    {memberDataBases &&
+                      Object.entries(memberDataBases).map(([db, entries]) =>
+                        Object.entries(entries).map(([accession, id]) => (
+                          <Tooltip
+                            key={accession}
+                            title={`${id} (${db})`}
+                            className={f('signature', {
+                              'corresponds-to-filter':
+                                search.signature_in &&
+                                search.signature_in.toLowerCase() ===
+                                  db.toLowerCase(),
+                            })}
                           >
-                            {accession}
-                          </Link>
-                        </Tooltip>
-                      )),
-                    )}
+                            <Link
+                              to={{
+                                description: {
+                                  main: { key: 'entry' },
+                                  entry: { db, accession },
+                                },
+                              }}
+                            >
+                              {accession}
+                            </Link>
+                          </Tooltip>
+                        )),
+                      )}
                   </div>
                 )}
               >
@@ -348,33 +349,37 @@ class List extends PureComponent {
                 cellClassName={f('col-go')}
                 renderer={(goTerms /*: Array<Object> */) => (
                   <div className={f('go-container')}>
-                    {Array.from(goTerms)
-                      .sort((a, b) => {
-                        if (a.category.code > b.category.code) return 0;
-                        if (a.category.code < b.category.code) return 1;
-                        if (a.name > b.name) return 1;
-                        return 0;
-                      })
-                      .map(go => (
-                        <span key={go.identifier} className={f('go-list')}>
-                          <Tooltip
-                            title={`${go.category.name.replace('_', ' ')} term`}
-                          >
-                            <span
-                              className={f('go-circle')}
-                              style={{
-                                background:
-                                  GO_COLORS.get(go.category.code) || '#ddd',
-                              }}
-                            />
-                          </Tooltip>
-                          <Tooltip title={`${go.name} (${go.identifier})`}>
-                            <GoLink id={go.identifier} className={f('ext')}>
-                              {go.name ? go.name : 'None'}
-                            </GoLink>
-                          </Tooltip>
-                        </span>
-                      ))}
+                    {goTerms &&
+                      Array.from(goTerms)
+                        .sort((a, b) => {
+                          if (a.category.code > b.category.code) return 0;
+                          if (a.category.code < b.category.code) return 1;
+                          if (a.name > b.name) return 1;
+                          return 0;
+                        })
+                        .map(go => (
+                          <span key={go.identifier} className={f('go-list')}>
+                            <Tooltip
+                              title={`${go.category.name.replace(
+                                '_',
+                                ' ',
+                              )} term`}
+                            >
+                              <span
+                                className={f('go-circle')}
+                                style={{
+                                  background:
+                                    GO_COLORS.get(go.category.code) || '#ddd',
+                                }}
+                              />
+                            </Tooltip>
+                            <Tooltip title={`${go.name} (${go.identifier})`}>
+                              <GoLink id={go.identifier} className={f('ext')}>
+                                {go.name ? go.name : 'None'}
+                              </GoLink>
+                            </Tooltip>
+                          </span>
+                        ))}
                   </div>
                 )}
               >
