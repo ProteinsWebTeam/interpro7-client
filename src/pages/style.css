@@ -74,6 +74,19 @@
   }
 }
 
+.ext {
+  &,
+  &:hover,
+  &:active,
+  &:focus {
+    border: none !important;
+  }
+
+  &:focus {
+    outline-style: auto;
+  }
+}
+
 .signature {
   background-color: #d5eff3;
   border-radius: 4px;
