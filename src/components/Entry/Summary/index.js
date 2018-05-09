@@ -81,12 +81,27 @@ const SidePanel = ({ metadata }) => (
   <div className={f('medium-4', 'large-4', 'columns')}>
     {metadata.integrated && <Integration intr={metadata.integrated} />}
     {metadata.integrated && (
-      <div>
-        <h5>External links</h5>
-        <Link className={f('ext')} to={{ description: {} }}>
-          {metadata.source_database} website
-        </Link>
-      </div>
+      <section>
+        <h5>External Links</h5>
+        <ul className={f('no-bullet')}>
+          <li>
+            <Link className={f('ext')} to={{ description: {} }}>
+              {metadata.source_database} website
+            </Link>
+          </li>
+          {metadata.wikipedia && (
+            <li>
+              <Link
+                className={f('ext')}
+                target="_blank"
+                href={`https://en.wikipedia.org/wiki/${metadata.wikipedia}`}
+              >
+                Wikipedia article
+              </Link>
+            </li>
+          )}
+        </ul>
+      </section>
     )}
     {metadata.member_databases &&
     Object.keys(metadata.member_databases).length ? (
