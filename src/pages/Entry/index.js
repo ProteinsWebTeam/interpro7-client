@@ -322,9 +322,10 @@ class EntryCard extends PureComponent {
     if (nextAccession === prevState.accession || nextDB === prevState.db)
       return null;
 
-    const commonLoadData = loadData(getUrlForEntries(nextAccession, nextDB));
     return {
-      SummaryCounterEntriesWithData: commonLoadData(SummaryCounterEntries),
+      SummaryCounterEntriesWithData: loadData(
+        getUrlForEntries(nextAccession, nextDB),
+      )(SummaryCounterEntries),
       accession: nextAccession,
       db: nextDB,
     };
@@ -335,9 +336,10 @@ class EntryCard extends PureComponent {
 
     const accession = props.data.metadata.accession;
     const db = props.data.metadata.source_database;
-    const commonLoadData = loadData(getUrlForEntries(accession, db));
     this.state = {
-      SummaryCounterEntriesWithData: commonLoadData(SummaryCounterEntries),
+      SummaryCounterEntriesWithData: loadData(getUrlForEntries(accession, db))(
+        SummaryCounterEntries,
+      ),
       accession,
       db,
     };
