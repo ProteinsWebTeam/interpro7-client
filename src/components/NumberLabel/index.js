@@ -35,6 +35,7 @@ const getAbbr = (value /*: number */, scaleMargin) => {
 };
 
 const numberToDisplayText = (value, abbr, scaleMargin) => {
+  if (!value && value !== 0) return;
   let _value = Math.round(value);
   if (isNaN(_value)) _value = 'N/A';
   if (Number.isFinite(_value)) {
