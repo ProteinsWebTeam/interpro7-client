@@ -27,6 +27,7 @@ import Title from 'components/Title';
 import { NumberComponent } from 'components/NumberLabel';
 import { ParagraphWithCites } from 'components/Description';
 
+import getExtUrlFor from 'utils/url-patterns';
 import { toPlural } from 'utils/pages';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
@@ -560,33 +561,31 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
-                <Tooltip title={accession}>
-                  <Link
-                    to={customLocation => ({
-                      description: {
-                        ...customLocation.description,
-                        entry: {
-                          ...customLocation.description.entry,
-                          accession,
-                        },
+                <Link
+                  to={customLocation => ({
+                    description: {
+                      ...customLocation.description,
+                      entry: {
+                        ...customLocation.description.entry,
+                        accession,
                       },
-                    })}
-                  >
-                    <SchemaOrgData
-                      data={{
-                        data: { row, endpoint: 'entry' },
-                        location: window.location,
-                      }}
-                      processData={schemaProcessDataTableRow}
+                    },
+                  })}
+                >
+                  <SchemaOrgData
+                    data={{
+                      data: { row, endpoint: 'entry' },
+                      location: window.location,
+                    }}
+                    processData={schemaProcessDataTableRow}
+                  />
+                  <span className={f('acc-row')}>
+                    <HighlightedText
+                      text={accession}
+                      textToHighlight={search.search}
                     />
-                    <span className={f('acc-row')}>
-                      <HighlightedText
-                        text={accession}
-                        textToHighlight={search.search}
-                      />
-                    </span>
-                  </Link>
-                </Tooltip>
+                  </span>
+                </Link>
               )}
             >
               Accession
@@ -647,11 +646,26 @@ class List extends PureComponent {
                 dataKey="source_database"
                 headerClassName={f('table-center')}
                 cellClassName={f('table-center')}
-                renderer={(db /*: string */) => (
-                  <Tooltip title={`${db} database`}>
+                renderer={(db /*: string */, { accession }) => {
+                  const externalLinkRenderer = getExtUrlFor(db);
+                  const symbol = (
                     <MemberSymbol type={db} className={f('md-small')} />
-                  </Tooltip>
-                )}
+                  );
+                  if (!externalLinkRenderer) return symbol;
+                  return (
+                    <Tooltip
+                      title={`link to ${accession} on the ${db} website`}
+                    >
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href={externalLinkRenderer(accession)}
+                      >
+                        {symbol}
+                      </Link>
+                    </Tooltip>
+                  );
+                }}
               >
                 DB
               </Column>

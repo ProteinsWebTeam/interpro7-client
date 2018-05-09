@@ -1,5 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import partition from 'lodash-es/partition';
+
 import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
@@ -10,7 +12,7 @@ import ContributingSignatures from 'components/Entry/ContributingSignatures';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import partition from 'lodash-es/partition';
+import getUrlFor from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -85,7 +87,11 @@ const SidePanel = ({ metadata }) => (
         <h5>External Links</h5>
         <ul className={f('no-bullet')}>
           <li>
-            <Link className={f('ext')} to={{ description: {} }}>
+            <Link
+              className={f('ext')}
+              target="_blank"
+              href={getUrlFor(metadata.source_database)(metadata.accession)}
+            >
               {metadata.source_database} website
             </Link>
           </li>
