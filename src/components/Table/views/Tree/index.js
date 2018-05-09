@@ -22,7 +22,8 @@ const mapStateToUrlFor = createSelector(
   taxID =>
     createSelector(
       state => state.settings.api,
-      ({ protocol, hostname, port, root }) =>
+      state => state.customLocation.description,
+      ({ protocol, hostname, port, root }, description) =>
         format({
           protocol,
           hostname,
@@ -30,6 +31,7 @@ const mapStateToUrlFor = createSelector(
           pathname:
             root +
             descriptionToPath({
+              ...description,
               main: { key: 'organism' },
               organism: {
                 db: 'taxonomy',
@@ -164,15 +166,59 @@ const mergeData = (root, update, names) => {
 };
 
 class TreeView extends PureComponent {
+  static propTypes = {
+    customLocation: T.shape({
+      description: T.object,
+    }).isRequired,
+  };
+  static getDerivedStateFromProps(
+    {
+      customLocation: {
+        description: {
+          entry: { db: newDB },
+        },
+      },
+    },
+    { entryDB: oldDB },
+  ) {
+    // componentDidUpdate({customLocation: {description: {entry: {db: oldDB}}}}) {
+    //   const {customLocation: {description: {entry: {db: newDB}}}} = this.props;
+    if (newDB !== oldDB) {
+      // this._CDPMap.clear();
+      return {
+        focused: '1',
+        entryDB: newDB,
+      };
+    }
+    return null;
+  }
   constructor(props) {
     super(props);
     this.state = {
       data: { name: 'root', id: '1' },
       focused: '1',
+      entryDB: props.customLocation.description.entry.db,
     };
     this._CDPMap = new Map();
   }
-
+  shouldComponentUpdate(nextProps, nextState) {
+    const {
+      customLocation: {
+        description: {
+          entry: { db: newDB },
+        },
+      },
+    } = nextProps;
+    const {
+      customLocation: {
+        description: {
+          entry: { db: oldDB },
+        },
+      },
+    } = this.props;
+    if (newDB !== oldDB) this._CDPMap.clear();
+    return nextProps !== this.props || nextState !== this.state;
+  }
   componentWillUnmount() {
     this._CDPMap.clear();
   }
