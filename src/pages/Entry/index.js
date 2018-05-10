@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
+import { format } from 'url';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -15,6 +16,7 @@ import MemberSymbol from 'components/Entry/MemberSymbol';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, {
   Column,
+  Card,
   SearchBox,
   PageSizeSelector,
   Exporter,
@@ -22,7 +24,12 @@ import Table, {
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
+import { NumberComponent } from 'components/NumberLabel';
+import { ParagraphWithCites } from 'components/Description';
 
+import getExtUrlFor from 'utils/url-patterns';
+import { toPlural } from 'utils/pages';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/load-web-component';
 import loadable from 'higherOrder/loadable';
@@ -39,8 +46,9 @@ import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(pageStyle, styles);
+const f = foundationPartial(pageStyle, styles, fonts);
 
 import {
   schemaProcessDataTable,
@@ -54,6 +62,376 @@ const GO_COLORS = new Map([
   ['F', '#e0f2d1'],
   ['C', '#f5ddd3'],
 ]);
+
+class SummaryCounterEntries extends PureComponent {
+  static propTypes = {
+    entryDB: T.string,
+    metadata: T.object.isRequired,
+    data: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
+  };
+
+  render() {
+    const {
+      entryDB,
+      metadata,
+      data: { loading, payload },
+    } = this.props;
+
+    let proteins = 0;
+    let domainArchitectures = 0;
+    let organisms = 0;
+    let structures = 0;
+    let sets = 0;
+    if (!loading && payload && payload.metadata) {
+      proteins = payload.metadata.counters.proteins;
+      domainArchitectures = payload.metadata.counters.domainArchitectures;
+      organisms = payload.metadata.counters.organisms;
+      structures = payload.metadata.counters.structures;
+      sets = payload.metadata.counters.sets;
+    }
+
+    return (
+      <div className={f('card-block', 'card-counter', 'label-off')}>
+        <Tooltip
+          title={`${proteins} ${toPlural('protein', proteins)} matching ${
+            metadata.name
+          }`}
+          className={f('count-proteins')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: entryDB,
+                  accession: metadata.accession,
+                },
+                protein: { isFilter: true, db: 'UniProt' },
+              },
+            }}
+          >
+            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <NumberComponent
+              loading={loading}
+              value={proteins}
+              abbr
+              scaleMargin={1}
+            />
+            <span className={f('label-number')}>
+              {toPlural('protein', proteins)}
+            </span>
+          </Link>
+        </Tooltip>
+
+        <Tooltip
+          title={`… domain architectures matching ${metadata.name}`}
+          className={f('count-architectures')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: entryDB,
+                  accession: metadata.accession,
+                  detail: 'domain_architecture',
+                },
+              },
+            }}
+            // TODO: remove comment when we have the counter implemented
+            // disabled={!domainArchitectures}
+          >
+            <div className={f('icon', 'icon-count-ida')} />{' '}
+            <NumberComponent
+              loading={loading}
+              value={domainArchitectures}
+              abbr
+              scaleMargin={1}
+            />
+            <span className={f('label-number')}>domain architectures</span>
+          </Link>
+        </Tooltip>
+
+        <Tooltip
+          title={`${organisms} ${toPlural('organism', organisms)} matching ${
+            metadata.name
+          }`}
+          className={f('count-organisms')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: entryDB,
+                  accession: metadata.accession,
+                },
+                organism: { isFilter: true, db: 'taxonomy' },
+              },
+            }}
+            disabled={!organisms}
+          >
+            <div className={f('icon', 'icon-count-species')} />{' '}
+            <NumberComponent
+              loading={loading}
+              value={organisms}
+              abbr
+              scaleMargin={1}
+            />
+            <span className={f('label-number')}>
+              {toPlural('organism', organisms)}
+            </span>
+          </Link>
+        </Tooltip>
+
+        <Tooltip
+          title={`${structures} ${toPlural('structure', structures)} matching ${
+            metadata.name
+          }`}
+          className={f('count-structures')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: entryDB,
+                  accession: metadata.accession,
+                },
+                structure: { isFilter: true, db: 'PDB' },
+              },
+            }}
+            disabled={!structures}
+          >
+            <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
+            <NumberComponent
+              loading={loading}
+              value={structures}
+              abbr
+              scaleMargin={1}
+            />
+            <span className={f('label-number')}>
+              {toPlural('structure', structures)}
+            </span>
+          </Link>
+        </Tooltip>
+
+        {// show sets counter + icon only when available
+        entryDB.toLowerCase() === 'cdd' || entryDB.toLowerCase() === 'pfam' ? (
+          <Tooltip
+            title={`${sets} ${toPlural('set', sets)} matching ${metadata.name}`}
+            className={f('count-sets')}
+            style={{ display: 'flex' }}
+          >
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: entryDB,
+                    accession: metadata.accession,
+                  },
+                  set: { isFilter: true, db: entryDB },
+                },
+              }}
+              disabled={!sets}
+            >
+              <div className={f('icon', 'icon-count-set')} />{' '}
+              <NumberComponent
+                loading={loading}
+                value={sets}
+                abbr
+                scaleMargin={1}
+              />
+              <span className={f('label-number')}>{toPlural('set', sets)}</span>
+            </Link>
+          </Tooltip>
+        ) : null}
+      </div>
+    );
+  }
+}
+
+class DescriptionEntries extends PureComponent {
+  static propTypes = {
+    description: T.arrayOf(T.string),
+    db: T.string.isRequired,
+    accession: T.string.isRequired,
+  };
+
+  render() {
+    const { description, db, accession } = this.props;
+
+    if (!(description && description.length)) return null;
+
+    return (
+      <React.Fragment>
+        <div className={f('card-description')}>
+          <ParagraphWithCites p={description[0]} withoutRefs />
+        </div>
+        <Link
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: { db, accession },
+            },
+          }}
+          className={f('card-description-link')}
+        >
+          […]
+        </Link>
+      </React.Fragment>
+    );
+  }
+}
+
+const getUrlForEntries = (accession, db) =>
+  createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname:
+          root +
+          descriptionToPath({
+            main: { key: 'entry' },
+            entry: { db, accession },
+          }),
+      }),
+  );
+
+class EntryCard extends PureComponent {
+  static propTypes = {
+    data: T.object,
+    search: T.string,
+    entryDB: T.string,
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const nextAccession = nextProps.data.metadata.accession;
+    const nextDB = nextProps.data.metadata.source_database;
+    if (nextAccession === prevState.accession || nextDB === prevState.db)
+      return null;
+
+    return {
+      SummaryCounterEntriesWithData: loadData(
+        getUrlForEntries(nextAccession, nextDB),
+      )(SummaryCounterEntries),
+      accession: nextAccession,
+      db: nextDB,
+    };
+  }
+
+  constructor(props) {
+    super(props);
+
+    const accession = props.data.metadata.accession;
+    const db = props.data.metadata.source_database;
+    this.state = {
+      SummaryCounterEntriesWithData: loadData(getUrlForEntries(accession, db))(
+        SummaryCounterEntries,
+      ),
+      accession,
+      db,
+    };
+  }
+
+  render() {
+    const { data, search, entryDB } = this.props;
+    const { SummaryCounterEntriesWithData } = this.state;
+    return (
+      <React.Fragment>
+        <div className={f('card-header')}>
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: data.metadata.source_database,
+                  accession: data.metadata.accession,
+                },
+              },
+            }}
+          >
+            {entryDB.toLowerCase() === 'interpro' ? (
+              <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
+                <interpro-type
+                  dimension="2em"
+                  type={data.metadata.type.replace('_', ' ')}
+                  aria-label="Entry type"
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip title={`${entryDB} database`}>
+                <MemberSymbol
+                  size="2em"
+                  type={entryDB}
+                  aria-label="Database type"
+                  className={f('md-small')}
+                />
+              </Tooltip>
+            )}
+            <h6>
+              <HighlightedText
+                text={data.metadata.name}
+                textToHighlight={search}
+              />
+            </h6>
+          </Link>
+        </div>
+
+        <SummaryCounterEntriesWithData
+          entryDB={entryDB}
+          metadata={data.metadata}
+        />
+
+        <DescriptionEntries
+          db={data.metadata.source_database}
+          accession={data.metadata.accession}
+          description={data.extra_fields.description}
+        />
+
+        <div className={f('card-footer')}>
+          {entryDB.toLowerCase() === 'interpro' ? (
+            <span>{data.metadata.type.replace('_', ' ')}</span>
+          ) : (
+            <span>
+              {data.metadata.integrated ? 'Integrated to ' : 'Not integrated'}
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: 'InterPro',
+                      accession: data.metadata.integrated,
+                    },
+                  },
+                }}
+                disabled={!data.metadata.integrated}
+              >
+                {data.metadata.integrated}
+              </Link>
+            </span>
+          )}
+          <HighlightedText
+            text={data.metadata.accession}
+            textToHighlight={search}
+          />
+        </div>
+      </React.Fragment>
+    );
+  }
+}
 
 class List extends PureComponent {
   static propTypes = {
@@ -99,9 +477,7 @@ class List extends PureComponent {
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
     if (data.loading || notFound) {
-      _payload = {
-        results: [],
-      };
+      _payload = { results: [] };
     }
     const urlHasParameter = data.url && data.url.includes('?');
     const includeGrid = data.url;
@@ -159,6 +535,11 @@ class List extends PureComponent {
               </ul>
             </Exporter>
             <PageSizeSelector />
+            <Card>
+              {data => (
+                <EntryCard data={data} search={search.search} entryDB={db} />
+              )}
+            </Card>
             <SearchBox search={search.search}>&nbsp;</SearchBox>
             {db === 'InterPro' && (
               <Column
@@ -180,33 +561,31 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
-                <Tooltip title={accession}>
-                  <Link
-                    to={customLocation => ({
-                      description: {
-                        ...customLocation.description,
-                        entry: {
-                          ...customLocation.description.entry,
-                          accession,
-                        },
+                <Link
+                  to={customLocation => ({
+                    description: {
+                      ...customLocation.description,
+                      entry: {
+                        ...customLocation.description.entry,
+                        accession,
                       },
-                    })}
-                  >
-                    <SchemaOrgData
-                      data={{
-                        data: { row, endpoint: 'entry' },
-                        location: window.location,
-                      }}
-                      processData={schemaProcessDataTableRow}
+                    },
+                  })}
+                >
+                  <SchemaOrgData
+                    data={{
+                      data: { row, endpoint: 'entry' },
+                      location: window.location,
+                    }}
+                    processData={schemaProcessDataTableRow}
+                  />
+                  <span className={f('acc-row')}>
+                    <HighlightedText
+                      text={accession}
+                      textToHighlight={search.search}
                     />
-                    <span className={f('acc-row')}>
-                      <HighlightedText
-                        text={accession}
-                        textToHighlight={search.search}
-                      />
-                    </span>
-                  </Link>
-                </Tooltip>
+                  </span>
+                </Link>
               )}
             >
               Accession
@@ -267,11 +646,26 @@ class List extends PureComponent {
                 dataKey="source_database"
                 headerClassName={f('table-center')}
                 cellClassName={f('table-center')}
-                renderer={(db /*: string */) => (
-                  <Tooltip title={`${db} database`}>
+                renderer={(db /*: string */, { accession }) => {
+                  const externalLinkRenderer = getExtUrlFor(db);
+                  const symbol = (
                     <MemberSymbol type={db} className={f('md-small')} />
-                  </Tooltip>
-                )}
+                  );
+                  if (!externalLinkRenderer) return symbol;
+                  return (
+                    <Tooltip
+                      title={`link to ${accession} on the ${db} website`}
+                    >
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href={externalLinkRenderer(accession)}
+                      >
+                        {symbol}
+                      </Link>
+                    </Tooltip>
+                  );
+                }}
               >
                 DB
               </Column>

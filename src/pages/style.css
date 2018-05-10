@@ -74,6 +74,19 @@
   }
 }
 
+.ext {
+  &,
+  &:hover,
+  &:active,
+  &:focus {
+    border: none !important;
+  }
+
+  &:focus {
+    outline-style: auto;
+  }
+}
+
 .signature {
   background-color: #d5eff3;
   border-radius: 4px;
@@ -128,6 +141,147 @@
 }
 .sign-label-head.cc {
   background: var(--colors-go-cc);
+}
+
+.card-header {
+  flex-grow: 1;
+  text-align: center;
+  width: 100%;
+}
+
+.card-header span::before {
+  font-size: 376%;
+}
+
+.card-header h6 {
+  font-weight: 600;
+  font-size: 110%;
+} /*16px*/
+
+.card-header img {
+  max-width: 60%;
+}
+
+.card-subheader {
+  text-align: center;
+  font-size: 80%;
+}
+
+.card-footer {
+  margin-top: 0.2em;
+  display: flex;
+  justify-content: space-between;
+  font-size: 80%;
+}
+
+.card-block {
+  font-size: 15px;
+  margin: 0.5rem 0;
+}
+
+.card-counter {
+  color: #333;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+
+  & .container,
+  & a {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  & a,
+  & a:visited,
+  & a:hover {
+    color: #333;
+  }
+}
+
+/* small screens */
+@media screen and (max-width: 39.9375em) {
+  .card-counter {
+    flex-wrap: wrap;
+  }
+}
+
+.card-counter .icon-conceptual::before {
+  font-size: 210%; /* EBI icon size */
+}
+
+.count-entries,
+.count-proteins,
+.count-structures,
+.count-proteomes,
+.count-architectures,
+.count-organisms,
+.count-sets {
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+}
+.count-proteomes {
+  padding: 0.5ch 1ch 0; /* to be consistent with EBI icons */
+}
+
+.icon-bookmark-proteome {
+  width: 18px;
+  height: 47px;
+  background-image: url('../images/icons/ico-proteome.svg');
+  background-position-y: 40%;
+  background-repeat: no-repeat;
+}
+
+.icon-count-species {
+  height: 3em; /* to align icon */
+  width: 30px;
+  background-image: url('../images/icons/ico-species.svg');
+  background-size: 100%;
+  background-position-y: 59%;
+  background-repeat: no-repeat;
+}
+
+.icon-count-ida {
+  height: 3em;
+  width: 38px;
+  background-image: url('../images/icons/ico-ida.svg');
+  background-size: 100%;
+  background-position-y: 59%;
+  background-repeat: no-repeat;
+}
+
+.icon-count-set {
+  height: 3em;
+  width: 26px;
+  background-image: url('../images/icons/ico-set.svg');
+  background-size: 100%;
+  background-position-y: 59%;
+  background-repeat: no-repeat;
+}
+
+.label-off .label-number {
+  display: none;
+}
+
+.icon-species {
+  color: #e47471; /* default color for most of the icons */
+}
+
+.card-counter .md-small {
+  display: flex;
+  width: 46px;
+}
+
+.card-description {
+  overflow: hidden;
+  max-height: 6em;
+}
+
+.card-description-link {
+  align-self: center;
+  margin: 0.2em;
 }
 
 /* add some space on top between banner and breadcrumb and at bottom too otherwise content si stuck on footer*/

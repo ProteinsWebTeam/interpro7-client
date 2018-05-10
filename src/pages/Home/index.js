@@ -61,12 +61,12 @@ const SearchByText = loadable({
 });
 const IPScanSearch = loadable({
   loader: () =>
-    import(/* webpackChunkName: "ipscan-search" */ 'components/IPScan/Search'),
+    import(/* webpackChunkName: "ipscan-search", webpackPreload: true */ 'components/IPScan/Search'),
 });
 // Browse by X box
 const ByMemberDatabase = loadable({
   loader: () =>
-    import(/* webpackChunkName: "by-member-database" */ 'components/home/ByMemberDatabase'),
+    import(/* webpackChunkName: "by-member-database", webpackPreload: true */ 'components/home/ByMemberDatabase'),
 });
 const ByEntryType = loadable({
   loader: () =>
@@ -78,15 +78,11 @@ const BySpecies = loadable({
 });
 const ByLatestEntries = loadable({
   loader: () =>
-    import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByLatestEntries'),
-});
-const ByGOTerms = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms'),
+    import(/* webpackChunkName: "by-latest-entries", webpackPreload: true */ 'components/home/ByLatestEntries'),
 });
 const BlogEntries = loadable({
   loader: () =>
-    import(/* webpackChunkName: "blog-entries" */ 'components/home/BlogEntries'),
+    import(/* webpackChunkName: "blog-entries", webpackPreload: true */ 'components/home/BlogEntries'),
 });
 
 const Twitter = loadable({
@@ -496,9 +492,6 @@ class Home extends PureComponent {
                 </div>
                 <div title="Species">
                   <BySpecies />
-                </div>
-                <div title="GO term" className={f('go-list')}>
-                  <ByGOTerms />
                 </div>
               </Tabs>
             </div>

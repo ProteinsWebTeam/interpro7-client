@@ -1,14 +1,16 @@
 // @flow
 import React from 'react';
 import T from 'prop-types';
+
 import { foundationPartial } from 'styles/foundation';
-import ipro from 'styles/interpro-new.css';
 
 import uniqueId from 'utils/cheap-unique-id';
 
 import cn from 'classnames';
 
-const f = foundationPartial(ipro);
+import styles from './style.css';
+
+const f = foundationPartial(styles);
 
 const classNames = new Map([
   ['INTERPRO', f('md-ip')],
@@ -71,9 +73,7 @@ const MemberSymbol = (
           dx="-0.01em"
           dy="0.4em"
           className={f('md-color')}
-          style={{
-            clipPath: `url(#clip-${id})`,
-          }}
+          style={{ clipPath: `url(#clip-${id})` }}
         >
           D
         </text>
