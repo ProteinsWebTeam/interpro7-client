@@ -524,17 +524,18 @@ export const jobTypeHandler /*: Handler */ = handlerConstructor({
   key: {
     value: ['job', 'type'],
   },
-  cleanedUp: {
-    value: 'InterProScan',
+  cleanUp: {
+    value: value =>
+      /^InterProScan$/i.test(value) ? 'InterProScan' : 'download',
   },
   regexp: {
-    value: /interproscan/i,
+    value: /(interproscan|download)/i,
   },
 });
 
-export const jobAccessionHandler /*: Handler */ = handlerConstructor({
+export const jobIPScanAccessionHandler /*: Handler */ = handlerConstructor({
   name: {
-    value: 'jobAccessionHandler',
+    value: 'jobIPScanAccessionHandler',
   },
   key: {
     value: ['job', 'accession'],
@@ -543,7 +544,22 @@ export const jobAccessionHandler /*: Handler */ = handlerConstructor({
     value: value => value,
   },
   regexp: {
-    value: /(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}|internal-[1-9]\d*-\d+)/,
+    value: /(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}|internal-[1-9]\d*)/,
+  },
+});
+
+export const jobDownloadAccessionHandler /*: Handler */ = handlerConstructor({
+  name: {
+    value: 'jobDownloadAccessionHandler',
+  },
+  key: {
+    value: ['job', 'accession'],
+  },
+  cleanUp: {
+    value: value => value,
+  },
+  regexp: {
+    value: /download-[1-9]\d*-\d+/,
   },
 });
 
@@ -737,9 +753,12 @@ searchTypeHandler.children = new Set([searchValueHandler]);
 // Job
 jobHandler.children = new Set([jobTypeHandler]);
 
-jobTypeHandler.children = new Set([jobAccessionHandler]);
+jobTypeHandler.children = new Set([
+  jobIPScanAccessionHandler,
+  jobIPScanAccessionHandler,
+]);
 
-jobAccessionHandler.children = new Set([entryHandler, detailHandler]);
+jobIPScanAccessionHandler.children = new Set([entryHandler, detailHandler]);
 
 // Common and other
 otherHandler.children = new Set([otherHandler]);
