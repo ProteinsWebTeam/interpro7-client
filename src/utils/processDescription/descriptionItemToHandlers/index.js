@@ -66,7 +66,13 @@ export default new Map([
   ['search.type', new Set([handlers.searchTypeHandler])],
   ['search.value', new Set([handlers.searchValueHandler])],
   ['job.type', new Set([handlers.jobTypeHandler])],
-  ['job.accession', new Set([handlers.jobAccessionHandler])],
+  [
+    'job.accession',
+    new Set([
+      handlers.jobIPScanAccessionHandler,
+      handlers.jobDownloadAccessionHandler,
+    ]),
+  ],
   ['job.detail', new Set([handlers.detailHandler])],
   ['other.0', otherHandlerSet],
   ['other.1', otherHandlerSet],
