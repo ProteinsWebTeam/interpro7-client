@@ -5,11 +5,12 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import App from 'App';
-
-import config, { PROD, STAGING, DEV } from 'config';
+import analytics from 'utils/analytics';
 import ready from 'utils/ready';
 
 import hmr from 'index-hmr';
+
+import config, { PROD, STAGING, DEV } from 'config';
 
 if (PROD || STAGING) {
   import(/* webpackChunkName: offline */ './offline').then(m => m.default());
@@ -85,17 +86,16 @@ const main = async () => {
   if (DEV) hmr(DOM_ROOT);
 };
 
-const handleError = e => {
+const handleError = error => {
   if (DEV) {
-    throw e;
+    throw error;
   }
   try {
-    e.preventDefault();
+    error.preventDefault();
   } catch (_) {
     /**/
   }
-  console.error(e);
-  // TODO: send to analytics
+  analytics.send('error', { error });
 };
 
 window.addEventListener('unhandledrejection', handleError);
