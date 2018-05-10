@@ -1,6 +1,8 @@
 import { format } from 'url';
 import { frame } from 'timing-functions/src';
 
+import analytics from 'utils/analytics';
+
 import { NEW_CUSTOM_LOCATION } from 'actions/types';
 import { customLocationChangeFromHistory } from 'actions/creators';
 
@@ -15,6 +17,16 @@ export default history => ({ dispatch, getState }) => {
     async ({ state: { customLocation, state } }) => {
       await Promise.resolve();
       return dispatch(customLocationChangeFromHistory(customLocation, state));
+    },
+  );
+
+  let previous;
+  history.listen(
+    // Analytics
+    (_, action) => {
+      const current = window.location.href;
+      analytics.send('navigation', { from: previous, to: current, action });
+      previous = current;
     },
   );
 

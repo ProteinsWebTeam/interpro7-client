@@ -3,6 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import analytics from 'utils/analytics';
 import uniqueId from 'utils/cheap-unique-id';
 import cancelable from 'utils/cancelable';
 import { dataProgressInfo, dataProgressUnload } from 'actions/creators';
@@ -105,6 +106,11 @@ const loadData = params => {
         const request = this._request;
         try {
           const response = await request.promise;
+          analytics.send('data', {
+            url,
+            ok: response.ok,
+            status: response.status,
+          });
           // We have a response 🎉 set it into the local state
           this.setState(({ data }) => {
             const nextData = {
@@ -122,6 +128,7 @@ const loadData = params => {
           // just ignore, otherwise it's a real error
           if (!request.canceled) {
             // we have a problem, something bad happened
+            analytics.send('data', { url, ok: false });
             this.setState(({ data }) => ({
               data: { ...data, loading: false, progress: 1, ok: false, error },
             }));
