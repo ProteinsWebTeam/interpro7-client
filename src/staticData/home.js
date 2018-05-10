@@ -379,7 +379,10 @@ export const latests = [
     accession: 'IPR033988',
     type: 'Domain',
     name: 'CEL-1-like C-type lectin-like domain',
-    counter_P: 75,
+    counter_P: 100,
+    counter_I: 0,
+    counter_O: 87,
+    counter_S: 3,
     contributing: [
       {
         accession: 'cd03589',
@@ -391,7 +394,10 @@ export const latests = [
     accession: 'IPR033989',
     type: 'Domain',
     name: 'CD209-like, C-type lectin-like domain',
-    counter_P: 1586,
+    counter_P: 2415,
+    counter_I: 0,
+    counter_O: 185,
+    counter_S: 84,
     contributing: [
       {
         accession: 'cd03590',
@@ -403,7 +409,10 @@ export const latests = [
     accession: 'IPR034004',
     type: 'Domain',
     name: 'Pol I subunit A12, C-terminal zinc ribbon',
-    counter_P: 977,
+    counter_P: 1304,
+    counter_I: 0,
+    counter_O: 1132,
+    counter_S: 0,
     contributing: [
       {
         accession: 'cd10507',
@@ -415,7 +424,10 @@ export const latests = [
     accession: 'IPR034005',
     type: 'Family',
     name: 'Peptidyl-dipeptidase DCP',
-    counter_P: 8245,
+    counter_P: 14329,
+    counter_I: 0,
+    counter_O: 8838,
+    counter_S: 4,
     contributing: [
       {
         accession: 'cd06456',
