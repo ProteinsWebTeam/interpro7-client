@@ -37,6 +37,11 @@ const Funding = loadable({
     import(/* webpackChunkName: "about-funding" */ 'components/About/Funding'),
 });
 
+const Privacy = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-funding" */ 'components/About/Privacy'),
+});
+
 const Advanced = loadable({
   loader: () =>
     import(/* webpackChunkName: "about-advanced" */ 'components/About/Advanced'),
@@ -46,6 +51,7 @@ const routes = new Map([
   ['consortium', Consortium],
   ['citation', Citation],
   ['funding', Funding],
+  ['privacy', Privacy],
   ['advanced', Advanced],
 ]);
 
@@ -103,6 +109,18 @@ class About extends PureComponent /*:: <{}> */ {
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 Funding
+              </Link>
+            </li>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={Privacy.preload}
+              onFocus={Privacy.preload}
+            >
+              <Link
+                to={{ description: { other: ['about', 'privacy'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                Privacy
               </Link>
             </li>
             <li

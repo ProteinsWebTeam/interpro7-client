@@ -30,11 +30,13 @@ export const getUrl = createSelector(
       state => state.settings.navigation.pageSize,
       state => state.customLocation.description,
       state => state.customLocation.search,
+      state => state.customLocation.hash,
       (
         { protocol, hostname, port, root },
         settingsPageSize,
         description,
         search,
+        hash,
       ) => {
         const _search =
           description.main.key && description[description.main.key].accession
@@ -48,6 +50,9 @@ export const getUrl = createSelector(
           (description.entry && description.entry.memberDB)
         )
           _search.page_size = _search.page_size || settingsPageSize;
+        if (description.main.key === 'entry' && hash === 'grid') {
+          _search.extra_fields = 'description';
+        }
         return cleanUpMultipleSlashes(
           format({
             protocol,

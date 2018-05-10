@@ -60,9 +60,15 @@ const GoTerms = (
     acc[term.category.name].push(term);
     return acc;
   }, getDefaultPayload());
-  let title = 'InterPro2GO';
-  if (type === 'entry' && db.toLowerCase() !== 'interpro') {
-    title = `GO terms (as provided by ${db})`;
+  let title = 'GO terms, ';
+  if (type === 'entry') {
+    if (db.toLowerCase() === 'interpro') {
+      title += 'annotated by InterPro curators';
+    } else {
+      title += `as provided by ${db}`;
+    }
+  } else {
+    title += 'as provided by the InterPro2GO pipeline';
   }
   const goTermEntries = Object.entries(_terms);
   const none = goTermEntries.every(([, category]) => !category.length);
@@ -70,7 +76,9 @@ const GoTerms = (
     <section className={f('margin-top-large')}>
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
-          <h4 title="GO terms">{title}</h4>
+          <Tooltip title={title}>
+            <h4 className={f('title')}>GO terms</h4>
+          </Tooltip>
         </div>
       </div>
       <div className={f('row')}>
