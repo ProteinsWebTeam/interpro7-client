@@ -30,7 +30,7 @@ class LatestEntry extends PureComponent {
       accession: T.string,
       type: T.string,
       name: T.string,
-      counter: T.number,
+      counter_P: T.number,
       contributing: T.array,
     }),
   };
@@ -69,7 +69,7 @@ class LatestEntry extends PureComponent {
             <div className={f('list-title')}>
               {entry.name}
               <span>({entry.accession})</span> —{' '}
-              <i>{entry.counter} proteins matched</i>
+              <i>{entry.counter_P} proteins matched</i>
               <br />
             </div>
           </Link>
