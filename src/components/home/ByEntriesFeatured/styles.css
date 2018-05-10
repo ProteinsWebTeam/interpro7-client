@@ -21,6 +21,10 @@
   display: flex;
 }
 
+.card-header > a div {
+  margin-right: 1rem;
+}
+
 .card-header h6 {
   font-weight: 600;
   font-size: 110%;
