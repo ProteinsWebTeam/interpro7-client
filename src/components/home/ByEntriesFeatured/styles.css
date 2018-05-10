@@ -2,7 +2,6 @@
   display: grid;
   grid-gap: 14px;
   grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  border: 1px solid black;
 }
 
 .card-flex-container {
