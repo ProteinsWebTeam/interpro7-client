@@ -48,7 +48,7 @@ class LatestEntry extends PureComponent {
   render() {
     const { entry } = this.props;
     return (
-      <div className={f('card-flex-container')}>
+      <div className={f('card-flex-container', 'card-shrink')}>
         <div className={f('list-body')}>
           <div className={f('card-header')}>
             <Link
@@ -69,11 +69,16 @@ class LatestEntry extends PureComponent {
                   aria-label="Entry type"
                 />
               </Tooltip>
-              <h6>{entry.name}</h6>
+              <Tooltip title={`${entry.name} (${entry.accession})`}>
+                <h6>{entry.name}</h6>
+              </Tooltip>
+              <span className={f('name-ac')}>{entry.accession}</span>
             </Link>
           </div>
 
-          <div className={f('card-block', 'card-counter', 'label-off')}>
+          <div
+            className={f('card-block', 'card-counter', 'label-off', 'label-h')}
+          >
             {' '}
             <div className={f('count-proteins')}>
               <Tooltip
@@ -148,7 +153,7 @@ class LatestEntry extends PureComponent {
                     },
                   }}
                 >
-                  <div className={f('icon', 'icon-count-species')} />{' '}
+                  <div className={f('icon', 'icon-count-organisms')} />{' '}
                   <NumberComponent value={entry.counter_O} />
                   <span className={f('label-number')}>
                     {toPlural('organism', entry.counter_O)}
@@ -206,8 +211,43 @@ class LatestEntry extends PureComponent {
             <div>{entry.accession}</div>
           </div>
 
+          <div className={f('card-options')}>
+            <Tooltip title={`Add this entry to your favorites`}>
+              <Link
+                to={{ description: { other: ['settings'] } }}
+                className={f('icon', 'icon-functional')}
+                data-icon="+"
+                aria-label="settings"
+              />
+            </Tooltip>{' '}
+            <Tooltip title={`Follow, be notified when this entry is updated`}>
+              <Link
+                to={{ description: { other: ['settings'] } }}
+                className={f('icon', 'icon-functional')}
+                data-icon="4"
+                aria-label="settings"
+              />
+            </Tooltip>{' '}
+            <Tooltip title={`Edit this entry`}>
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: 'InterPro',
+                      accession: entry.accession,
+                    },
+                  },
+                }}
+                className={f('icon', 'icon-functional')}
+                data-icon="5"
+              />
+            </Tooltip>
+          </div>
+
           {
-            //entry.contributing.map(c => (
+            // SIGNATURE INFO
+            // entry.contributing.map(c => (
             //   <div className={f('list-more')} key={c.accession}>
             //     <MemberSymbol
             //       type={c.source_database}
@@ -252,10 +292,6 @@ class ByEntriesFeatured extends PureComponent {
       <div className={f('feat-entry-list')}>
         <div className={f('row')}>
           <div className={f('columns')}>
-            <h5>
-              <small> Total : 29415 entries</small>
-            </h5>
-
             <AnimatedEntry className={f('card-wrapper')} element="div">
               {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
             </AnimatedEntry>
