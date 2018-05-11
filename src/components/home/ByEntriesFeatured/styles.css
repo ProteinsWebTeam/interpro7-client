@@ -1,38 +1,122 @@
 .card-wrapper {
   display: grid;
-  grid-gap: 14px;
+  grid-gap: 0.8rem;
   grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
 }
 
 .card-flex-container {
   padding: 1rem;
-  border: 1px rgba(0, 0, 0, 0.2) solid;
+  border: 1px rgba(0, 0, 0, 0.1) solid;
   transition: all 0.2s ease-out;
   color: #606060;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
     sans-serif;
+  position: relative; /*for options*/
+}
+
+.name-ac {
+  display: none;
+}
+
+.card-shrink .card-header .name-ac {
+  display: block;
+}
+
+.card-shrink.card-flex-container {
+  padding: 0.5rem 1rem;
+}
+.card-shrink .card-block {
+  margin-bottom: 0;
+}
+.card-shrink .card-footer {
+  display: none;
 }
 
 .card-flex-container:hover {
   box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }
-.card-header > a {
-  display: flex;
+
+.card-options {
+  font-size: 130%;
+  margin-top: 0.2rem;
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
 }
 
-.card-header > a div {
+.card-options .icon {
+  opacity: 0.3;
+  margin-right: 0.2rem;
+}
+
+.card-options .icon:hover {
+  opacity: 0.6;
+}
+
+.card-options div:last-of-type {
+  margin-right: 0.5rem;
+}
+
+.card-options a,
+.card-options a:visited,
+.card-options a:hover {
+  color: #333;
+}
+
+.card-flex-container:hover .card-options {
+  opacity: 1;
+}
+
+.card-options div:first-of-type > a {
+  font-size: 90%;
+} /*smaller icon for the plus*/
+
+.card-header > a {
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-header > a div:first-of-type {
   margin-right: 1rem;
+  line-height: 0;
+}
+
+.card-header > a div:nth-of-type(2) {
+  flex-grow: 1;
+  border: 0px black solid;
 }
 
 .card-header h6 {
   font-weight: 600;
   font-size: 110%;
+  margin-bottom: 0;
+}
+.card-wrapper.grid-2col {
+  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.grid-2col .card-header h6 {
+  width: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-header .name-ac {
+  color: #9f9f9f;
+  margin-left: 0.5rem;
+  font-size: 80%;
 }
 
 .card-block {
   font-size: 15px;
-  margin: 0.5rem 0;
+  margin-bottom: 0.5rem;
 }
 
 .count-entries,
@@ -61,12 +145,25 @@
   flex-direction: column;
   align-items: center;
 }
+
 .no-link {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
+
 .card-counter .icon-conceptual::before {
   font-size: 210%;
+}
+
+.label-h .icon {
+  margin: 0 0.5rem;
+}
+.card-counter.label-h a {
+  flex-direction: row;
+}
+.card-counter.label-h .no-link {
+  flex-direction: row;
 }
 
 .icon-count-ida {
@@ -86,12 +183,13 @@
   background-repeat: no-repeat;
 }
 
-.icon-count-species {
+.icon-count-organisms {
   height: 3em; /*to align icon*/
   width: 30px;
   background-image: url('../../../images/icons/ico-species.svg');
   background-position-y: 59%;
   background-repeat: no-repeat;
+  margin: 0.5rem;
 }
 
 .card-footer {
@@ -99,6 +197,7 @@
   justify-content: space-between;
   font-size: 80%;
 }
+
 .card-footer > div:first-child {
   flex-grow: 1;
 }
