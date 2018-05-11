@@ -10,6 +10,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
+import Description from 'components/Description';
 import MemberDBSelector from 'components/MemberDBSelector';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -25,7 +26,6 @@ import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 import { NumberComponent } from 'components/NumberLabel';
-import { ParagraphWithCites } from 'components/Description';
 
 import getExtUrlFor from 'utils/url-patterns';
 import { toPlural } from 'utils/pages';
@@ -260,22 +260,39 @@ class SummaryCounterEntries extends PureComponent {
   }
 }
 
+const description2IDs = description =>
+  (description.match(/"(PUB\d+)"/gi) || []).map(t =>
+    t.replace(/(^")|("$)/g, ''),
+  );
+
 class DescriptionEntries extends PureComponent {
   static propTypes = {
     description: T.arrayOf(T.string),
+    literature: T.object,
     db: T.string.isRequired,
     accession: T.string.isRequired,
   };
 
   render() {
-    const { description, db, accession } = this.props;
+    const { description, literature, db, accession } = this.props;
 
     if (!(description && description.length)) return null;
+
+    const desc = description[0];
+
+    const citations = description2IDs(desc);
+    const included = Object.entries(literature)
+      .filter(([id]) => citations.includes(id))
+      .sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
 
     return (
       <React.Fragment>
         <div className={f('card-description')}>
-          <ParagraphWithCites p={description[0]} withoutRefs />
+          <Description
+            textBlocks={[desc]}
+            literature={included}
+            accession={accession}
+          />
         </div>
         <Link
           to={{
@@ -399,6 +416,7 @@ class EntryCard extends PureComponent {
           db={data.metadata.source_database}
           accession={data.metadata.accession}
           description={data.extra_fields.description}
+          literature={data.extra_fields.literature}
         />
 
         <div className={f('card-footer')}>

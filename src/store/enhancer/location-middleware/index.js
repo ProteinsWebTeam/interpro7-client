@@ -1,5 +1,4 @@
 import { format } from 'url';
-import { frame } from 'timing-functions/src';
 
 import analytics from 'utils/analytics';
 
@@ -7,6 +6,7 @@ import { NEW_CUSTOM_LOCATION } from 'actions/types';
 import { customLocationChangeFromHistory } from 'actions/creators';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import autoScroll from 'utils/auto-scroll';
 
 // Middleware to handle history change events
 export default history => ({ dispatch, getState }) => {
@@ -43,6 +43,7 @@ export default history => ({ dispatch, getState }) => {
     customLocation: getState().customLocation,
     replace: true,
   });
+  autoScroll(history.location);
 
   // Hijack normal Redux flow
   return next => action => {
@@ -50,9 +51,11 @@ export default history => ({ dispatch, getState }) => {
     // eventually result in another NEW_PROCESSED_CUSTOM_LOCATION action being
     // dispatched through callback
     if (action.type === NEW_CUSTOM_LOCATION) {
+      const previous = history.location;
+      // update browser's location
       historyDispatch(action);
-      // scroll to top on new location (queued for next frame draw)
-      frame().then(() => window.scrollTo(0, 0));
+      autoScroll(history.location, previous);
+
       return;
     }
 
