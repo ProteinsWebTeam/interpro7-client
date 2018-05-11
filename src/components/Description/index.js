@@ -15,14 +15,28 @@ import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiStyles, styles, theme);
 
-export const ParagraphWithCites = ({ p, literature = [], withoutRefs }) => (
+export const ParagraphWithCites = ({ p, literature = [], accession }) => (
   <div className={styles.paragraph}>
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
-      return i % 2 && !withoutRefs ? (
-        <a key={i} id={refCounter} href={`${location.pathname}#${part}`}>
+      return i % 2 ? (
+        <Link
+          key={i}
+          id={`${accession}-description-${refCounter}`}
+          to={customLocation => {
+            const key = customLocation.description.main.key;
+            return {
+              ...customLocation,
+              description: {
+                main: { key },
+                [key]: { db: customLocation.description[key].db, accession },
+              },
+              hash: part,
+            };
+          }}
+        >
           {refCounter}
-        </a>
+        </Link>
       ) : (
         <span key={i}>
           {part === ', ' ? (
@@ -38,7 +52,7 @@ export const ParagraphWithCites = ({ p, literature = [], withoutRefs }) => (
 ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
   literature: T.array,
-  withoutRefs: T.bool,
+  accession: T.string,
 };
 
 const _getAttributesFromStringTag = text =>
@@ -146,10 +160,11 @@ class Description extends PureComponent /*:: <Props> */ {
   static propTypes = {
     textBlocks: T.arrayOf(T.string).isRequired,
     literature: T.array,
+    accession: T.string,
   };
 
   render() {
-    const { textBlocks, literature } = this.props;
+    const { textBlocks, literature, accession } = this.props;
     const paragraphs = textBlocks.reduce((acc, e) => {
       transformFormatted(e).forEach(p => acc.push(p));
       return acc;
@@ -157,7 +172,12 @@ class Description extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('margin-bottom-large')}>
         {paragraphs.map((p, i) => (
-          <ParagraphWithCites key={i} p={p} literature={literature} />
+          <ParagraphWithCites
+            key={i}
+            p={p}
+            literature={literature}
+            accession={accession}
+          />
         ))}
       </div>
     );

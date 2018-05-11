@@ -51,7 +51,7 @@ export const getUrl = createSelector(
         )
           _search.page_size = _search.page_size || settingsPageSize;
         if (description.main.key === 'entry' && hash === 'grid') {
-          _search.extra_fields = 'description';
+          _search.extra_fields = 'description,literature';
         }
         return cleanUpMultipleSlashes(
           format({
