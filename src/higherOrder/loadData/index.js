@@ -33,6 +33,7 @@ const analyticsMessage = (url /*: string */, response /*:: ?: Response */) => {
     url,
     ok: response.ok,
     status: response.status,
+    referrer: window.location.href,
     fromCache: response.headers.get('Client-Cache') === 'true',
   };
 };
