@@ -140,7 +140,7 @@ class GraphicalView extends PureComponent {
           justifyContent: 'center',
         }}
       >
-        <svg ref={this._ref} style={{ flex: '1' }} />
+        <svg className={f('container')} ref={this._ref} style={{ flex: '1' }} />
       </div>
     );
   }

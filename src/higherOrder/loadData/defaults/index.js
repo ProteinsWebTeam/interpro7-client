@@ -53,7 +53,7 @@ export const getUrl = createSelector(
         if (hash === 'grid') {
           switch (description.main.key) {
             case 'entry':
-              _search.extra_fields = 'description,counters';
+              _search.extra_fields = 'description,literature,counters';
               break;
             case 'organism':
               _search.extra_fields = 'lineage,counters';
