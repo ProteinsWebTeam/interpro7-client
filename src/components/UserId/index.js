@@ -1,14 +1,15 @@
 import React, { PureComponent } from 'react';
-import { schedule } from 'timing-functions/src';
+import { schedule, sleep } from 'timing-functions/src';
 
 import Storage from 'utils/storage';
 
 import f from 'styles/foundation';
 
-const storage = new Storage('user-id', 'local');
+const storage = new Storage('user-id', 'local', 0);
 
-const handleReset = () => {
+const handleReset = async () => {
   storage.setValue('');
+  await sleep(1); // Just give to for storage to be set
   window.location.reload();
 };
 
