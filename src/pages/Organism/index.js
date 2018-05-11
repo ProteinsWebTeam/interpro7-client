@@ -197,68 +197,38 @@ const dataProviderFor = (accession, sourceDatabase) => {
   return DataProvider;
 };
 
-class SpeciesIcon extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-  };
-
-  render() {
-    const {
-      data: { loading, payload },
-    } = this.props;
-    let icon = '.';
-    let color;
-    if (!loading && payload) {
-      icon = getIcon(payload.metadata.lineage) || '.';
-      color = getColor(payload.metadata.lineage);
-    }
-
-    // key species in Interpro & EBI
-
-    return (
-      <span
-        style={{ color }}
-        className={f('small', 'icon', 'icon-species')}
-        data-icon={icon}
-      />
-    );
+const SpeciesIcon = ({ lineage }) => {
+  let icon = '.';
+  let color;
+  if (lineage) {
+    icon = getIcon(lineage) || '.';
+    color = getColor(lineage);
   }
-}
+  return (
+    <span
+      style={{ color }}
+      className={f('small', 'icon', 'icon-species')}
+      data-icon={icon}
+    />
+  );
+};
+SpeciesIcon.propTypes = {
+  lineage: T.string.isRequired,
+};
 
 class SummaryCounterOrg extends PureComponent {
   static propTypes = {
     entryDB: T.string,
     metadata: T.object.isRequired,
-    data: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
+    counters: T.object.isRequired,
   };
 
   render() {
-    const {
-      entryDB,
-      metadata,
-      data: { loading, payload },
-    } = this.props;
+    const { entryDB, metadata, counters } = this.props;
 
     if (metadata.source_database === 'proteome') return null;
 
-    let entries = 0;
-    let proteins = 0;
-    let structures = 0;
-    let proteomes = 0;
-    if (!loading && payload && payload.metadata) {
-      entries = payload.metadata.counters.entries;
-      proteins = payload.metadata.counters.proteins;
-      structures = payload.metadata.counters.structures;
-      proteomes = payload.metadata.counters.proteomes;
-    }
+    const { entries, proteins, structures, proteomes } = counters;
 
     return (
       <div className={f('card-block', 'card-counter', 'label-off')}>
@@ -284,12 +254,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!entries}
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-            <NumberComponent
-              loading={loading}
-              value={entries}
-              abbr
-              scaleMargin={1}
-            />
+            <NumberComponent value={entries} abbr scaleMargin={1} />
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
             </span>
@@ -317,12 +282,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!proteins}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent
-              loading={loading}
-              value={proteins}
-              abbr
-              scaleMargin={1}
-            />
+            <NumberComponent value={proteins} abbr scaleMargin={1} />
             <span className={f('label-number')}>
               {' '}
               {toPlural('protein', proteins)}
@@ -351,12 +311,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
-            <NumberComponent
-              loading={loading}
-              value={structures}
-              abbr
-              scaleMargin={1}
-            />{' '}
+            <NumberComponent value={structures} abbr scaleMargin={1} />{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
         </Tooltip>
@@ -383,12 +338,7 @@ class SummaryCounterOrg extends PureComponent {
               className={f('icon', 'icon-common', 'icon-bookmark-proteome')}
               data-icon="&#x2e;"
             />
-            <NumberComponent
-              loading={loading}
-              value={proteomes}
-              abbr
-              scaleMargin={1}
-            />{' '}
+            <NumberComponent value={proteomes} abbr scaleMargin={1} />{' '}
             <span className={f('label-number')}>proteomes</span>
           </Link>
         </Tooltip>
@@ -397,162 +347,71 @@ class SummaryCounterOrg extends PureComponent {
   }
 }
 
-class Lineage extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-  };
-
-  render() {
-    const {
-      data: { loading, payload },
-    } = this.props;
-    if (loading || !payload) return null;
-    const { lineage } = payload.metadata;
-    const superkingdom = getSuperKingdom(lineage) || 'N/A';
-    const nodespot = getNodeSpotlight(lineage);
-
-    return (
-      <Tooltip title={`Lineage: ${payload.metadata.lineage}`}>
-        {superkingdom} {nodespot && `(${nodespot})`}
-      </Tooltip>
-    );
-  }
-}
-
-const getUrlFor = accession =>
-  createSelector(
-    state => state.settings.api,
-    ({ protocol, hostname, port, root }) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname:
-          root +
-          descriptionToPath({
-            main: { key: 'organism' },
-            organism: { db: 'taxonomy', accession },
-          }),
-      }),
+const Lineage = ({ lineage }) => {
+  const superkingdom = getSuperKingdom(lineage) || 'N/A';
+  const nodespot = getNodeSpotlight(lineage);
+  return (
+    <Tooltip title={`Lineage: ${lineage}`}>
+      {superkingdom} {nodespot && `(${nodespot})`}
+    </Tooltip>
   );
+};
+Lineage.propTypes = {
+  lineage: T.string.isRequired,
+};
 
-const getUrlForOrg = accession =>
-  createSelector(
-    state => state.settings.api,
-    state => state.customLocation.description.entry.db,
-    ({ protocol, hostname, port, root }, db) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname:
-          root +
-          descriptionToPath({
+const OrganismCard = ({ data, search, entryDB }) => (
+  <React.Fragment>
+    <div className={f('card-header')}>
+      <Link
+        to={{
+          description: {
             main: { key: 'organism' },
-            entry: { isFilter: true, db: db || 'all' },
-            protein: { isFilter: true },
-            organism: { db: 'taxonomy', accession },
-          }),
-      }),
-  );
+            organism: {
+              db: data.metadata.source_database,
+              accession: `${data.metadata.accession}`,
+            },
+          },
+        }}
+      >
+        {data.metadata.source_database === 'taxonomy' && (
+          <SpeciesIcon lineage={data.extra_fields.lineage} />
+        )}
+        <h6>
+          <HighlightedText text={data.metadata.name} textToHighlight={search} />
+        </h6>
+      </Link>
+    </div>
 
-class OrganismCard extends PureComponent {
-  static propTypes = {
-    data: T.object,
-    search: T.string,
-    entryDB: T.string,
-  };
+    <SummaryCounterOrg
+      entryDB={entryDB}
+      metadata={data.metadata}
+      counters={data.extra_fields.counters}
+    />
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const nextAccession = `${nextProps.data.metadata.accession}`;
-
-    if (nextAccession === prevState.accession) return null;
-
-    const commonLoadData = loadData(getUrlFor(nextAccession));
-    return {
-      SpeciesIconWithData: commonLoadData(SpeciesIcon),
-      SummaryCounterOrgWithData: loadData(getUrlForOrg(nextAccession))(
-        SummaryCounterOrg,
-      ),
-      LineageWithData: commonLoadData(Lineage),
-      accession: nextAccession,
-    };
-  }
-
-  constructor(props) {
-    super(props);
-
-    const accession = `${props.data.metadata.accession}`;
-    const commonLoadData = loadData(getUrlFor(accession));
-    this.state = {
-      SpeciesIconWithData: commonLoadData(SpeciesIcon),
-      SummaryCounterOrgWithData: loadData(getUrlForOrg(accession))(
-        SummaryCounterOrg,
-      ),
-      LineageWithData: commonLoadData(Lineage),
-      accession,
-    };
-  }
-
-  render() {
-    const { data, search, entryDB } = this.props;
-    const {
-      SpeciesIconWithData,
-      SummaryCounterOrgWithData,
-      LineageWithData,
-    } = this.state;
-    return (
-      <React.Fragment>
-        <div className={f('card-header')}>
-          <Link
-            to={{
-              description: {
-                main: { key: 'organism' },
-                organism: {
-                  db: data.metadata.source_database,
-                  accession: `${data.metadata.accession}`,
-                },
-              },
-            }}
-          >
-            {data.metadata.source_database === 'taxonomy' && (
-              <SpeciesIconWithData />
-            )}
-            <h6>
-              <HighlightedText
-                text={data.metadata.name}
-                textToHighlight={search}
-              />
-            </h6>
-          </Link>
-        </div>
-
-        <SummaryCounterOrgWithData entryDB={entryDB} metadata={data.metadata} />
-
-        <div className={f('card-footer')}>
-          <span>
-            {data.metadata.source_database === 'taxonomy' && (
-              <LineageWithData />
-            )}
-          </span>
-          <div>
-            {`${
-              data.metadata.source_database === 'taxonomy' ? 'Tax' : 'Proteome'
-            } ID: `}
-            <HighlightedText
-              text={data.metadata.accession}
-              textToHighlight={search}
-            />
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
-}
+    <div className={f('card-footer')}>
+      <span>
+        {data.metadata.source_database === 'taxonomy' && (
+          <Lineage lineage={data.extra_fields.lineage} />
+        )}
+      </span>
+      <div>
+        {`${
+          data.metadata.source_database === 'taxonomy' ? 'Tax' : 'Proteome'
+        } ID: `}
+        <HighlightedText
+          text={data.metadata.accession}
+          textToHighlight={search}
+        />
+      </div>
+    </div>
+  </React.Fragment>
+);
+OrganismCard.propTypes = {
+  data: T.object,
+  search: T.string,
+  entryDB: T.string,
+};
 
 class List extends PureComponent {
   static propTypes = propTypes;
