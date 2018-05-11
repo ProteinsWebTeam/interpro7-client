@@ -108,7 +108,10 @@ class SummarySet extends PureComponent /*:: <Props> */ {
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
               <Accession accession={metadata.accession} id={metadata.id} />
               <h4>Description</h4>
-              <Description textBlocks={[metadata.description]} />
+              <Description
+                textBlocks={[metadata.description]}
+                accession={metadata.accession}
+              />
               {metadata.relationships &&
                 metadata.relationships.nodes &&
                 metadata.relationships.nodes.map(m => (

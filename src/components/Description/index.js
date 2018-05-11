@@ -15,14 +15,19 @@ import theme from 'styles/theme-interpro.css';
 
 const f = foundationPartial(ebiStyles, styles, theme);
 
-export const ParagraphWithCites = ({ p, literature = [], accession }) => (
+export const ParagraphWithCites = ({
+  p,
+  literature = [],
+  accession,
+  withoutIDs,
+}) => (
   <div className={styles.paragraph}>
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
       return i % 2 ? (
         <Link
           key={i}
-          id={`${accession}-description-${refCounter}`}
+          id={withoutIDs ? null : `description-${refCounter}`}
           to={customLocation => {
             const key = customLocation.description.main.key;
             return {
@@ -53,6 +58,7 @@ ParagraphWithCites.propTypes = {
   p: T.string.isRequired,
   literature: T.array,
   accession: T.string,
+  withoutIDs: T.bool,
 };
 
 const _getAttributesFromStringTag = text =>
@@ -161,10 +167,11 @@ class Description extends PureComponent /*:: <Props> */ {
     textBlocks: T.arrayOf(T.string).isRequired,
     literature: T.array,
     accession: T.string,
+    withoutIDs: T.bool,
   };
 
   render() {
-    const { textBlocks, literature, accession } = this.props;
+    const { textBlocks, literature, accession, withoutIDs } = this.props;
     const paragraphs = textBlocks.reduce((acc, e) => {
       transformFormatted(e).forEach(p => acc.push(p));
       return acc;
@@ -177,6 +184,7 @@ class Description extends PureComponent /*:: <Props> */ {
             p={p}
             literature={literature}
             accession={accession}
+            withoutIDs={withoutIDs}
           />
         ))}
       </div>

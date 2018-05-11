@@ -234,6 +234,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   <Description
                     textBlocks={metadata.description}
                     literature={included}
+                    accession={metadata.accession}
                   />
                 </Fragment>
               ) : null}
