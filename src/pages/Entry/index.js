@@ -292,6 +292,7 @@ class DescriptionEntries extends PureComponent {
             textBlocks={[desc]}
             literature={included}
             accession={accession}
+            withoutIDs
           />
         </div>
         <Link
