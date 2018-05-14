@@ -1,6 +1,5 @@
+/* global ga: false */
 import { format } from 'url';
-
-import analytics from 'utils/analytics';
 
 import { NEW_CUSTOM_LOCATION } from 'actions/types';
 import { customLocationChangeFromHistory } from 'actions/creators';
@@ -20,15 +19,11 @@ export default history => ({ dispatch, getState }) => {
     },
   );
 
-  let previous;
-  history.listen(
-    // Analytics
-    (_, action) => {
-      const current = window.location.href;
-      analytics.send('navigation', { from: previous, to: current, action });
-      previous = current;
-    },
-  );
+  // Analytics
+  history.listen(() => {
+    ga('set', 'location', window.location.href);
+    ga('send', 'pageview');
+  });
 
   const historyDispatch = ({ customLocation, replace, state }) =>
     history[replace ? 'replace' : 'push']({
