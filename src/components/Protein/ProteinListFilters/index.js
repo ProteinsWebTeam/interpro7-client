@@ -3,14 +3,14 @@ import React from 'react';
 
 import FiltersPanel from 'components/FiltersPanel';
 import CurationFilter from './CurationFilter';
-import LengthFilter from './LengthFilter';
+import SizeFilter from './SizeFilter';
 import TaxonomyFilter from './TaxonomyFilter';
 
 const ProteinListFilters = () => (
   <FiltersPanel>
     <CurationFilter label="UniProt Curation" />
     <TaxonomyFilter label="Taxonomy" />
-    {/*<LengthFilter label="Length" />*/}
+    <SizeFilter label="Protein Size" />
   </FiltersPanel>
 );
 

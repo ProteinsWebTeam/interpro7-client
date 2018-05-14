@@ -1,7 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
-import { format } from 'url';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -29,7 +28,6 @@ import { NumberComponent } from 'components/NumberLabel';
 
 import getExtUrlFor from 'utils/url-patterns';
 import { toPlural } from 'utils/pages';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/load-web-component';
 import loadable from 'higherOrder/loadable';
@@ -67,32 +65,18 @@ class SummaryCounterEntries extends PureComponent {
   static propTypes = {
     entryDB: T.string,
     metadata: T.object.isRequired,
-    data: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
+    counters: T.object.isRequired,
   };
 
   render() {
+    const { entryDB, metadata, counters } = this.props;
     const {
-      entryDB,
-      metadata,
-      data: { loading, payload },
-    } = this.props;
-
-    let proteins = 0;
-    let domainArchitectures = 0;
-    let organisms = 0;
-    let structures = 0;
-    let sets = 0;
-    if (!loading && payload && payload.metadata) {
-      proteins = payload.metadata.counters.proteins;
-      domainArchitectures = payload.metadata.counters.domainArchitectures;
-      organisms = payload.metadata.counters.organisms;
-      structures = payload.metadata.counters.structures;
-      sets = payload.metadata.counters.sets;
-    }
+      proteins,
+      domain_architectures: domainArchitectures,
+      organisms,
+      structures,
+      sets,
+    } = counters;
 
     return (
       <div className={f('card-block', 'card-counter', 'label-off')}>
@@ -116,12 +100,7 @@ class SummaryCounterEntries extends PureComponent {
             }}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent
-              loading={loading}
-              value={proteins}
-              abbr
-              scaleMargin={1}
-            />
+            <NumberComponent value={proteins} abbr scaleMargin={1} />
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
             </span>
@@ -129,7 +108,9 @@ class SummaryCounterEntries extends PureComponent {
         </Tooltip>
 
         <Tooltip
-          title={`… domain architectures matching ${metadata.name}`}
+          title={`${domainArchitectures} domain architectures matching ${
+            metadata.name
+          }`}
           className={f('count-architectures')}
           style={{ display: 'flex' }}
         >
@@ -144,16 +125,10 @@ class SummaryCounterEntries extends PureComponent {
                 },
               },
             }}
-            // TODO: remove comment when we have the counter implemented
-            // disabled={!domainArchitectures}
+            disabled={!domainArchitectures}
           >
             <div className={f('icon', 'icon-count-ida')} />{' '}
-            <NumberComponent
-              loading={loading}
-              value={domainArchitectures}
-              abbr
-              scaleMargin={1}
-            />
+            <NumberComponent value={domainArchitectures} abbr scaleMargin={1} />
             <span className={f('label-number')}>domain architectures</span>
           </Link>
         </Tooltip>
@@ -179,12 +154,7 @@ class SummaryCounterEntries extends PureComponent {
             disabled={!organisms}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent
-              loading={loading}
-              value={organisms}
-              abbr
-              scaleMargin={1}
-            />
+            <NumberComponent value={organisms} abbr scaleMargin={1} />
             <span className={f('label-number')}>
               {toPlural('organism', organisms)}
             </span>
@@ -212,12 +182,7 @@ class SummaryCounterEntries extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-            <NumberComponent
-              loading={loading}
-              value={structures}
-              abbr
-              scaleMargin={1}
-            />
+            <NumberComponent value={structures} abbr scaleMargin={1} />
             <span className={f('label-number')}>
               {toPlural('structure', structures)}
             </span>
@@ -245,12 +210,7 @@ class SummaryCounterEntries extends PureComponent {
               disabled={!sets}
             >
               <div className={f('icon', 'icon-count-set')} />{' '}
-              <NumberComponent
-                loading={loading}
-                value={sets}
-                abbr
-                scaleMargin={1}
-              />
+              <NumberComponent value={sets} abbr scaleMargin={1} />
               <span className={f('label-number')}>{toPlural('set', sets)}</span>
             </Link>
           </Tooltip>
@@ -311,23 +271,6 @@ class DescriptionEntries extends PureComponent {
   }
 }
 
-const getUrlForEntries = (accession, db) =>
-  createSelector(
-    state => state.settings.api,
-    ({ protocol, hostname, port, root }) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname:
-          root +
-          descriptionToPath({
-            main: { key: 'entry' },
-            entry: { db, accession },
-          }),
-      }),
-  );
-
 class EntryCard extends PureComponent {
   static propTypes = {
     data: T.object,
@@ -335,38 +278,8 @@ class EntryCard extends PureComponent {
     entryDB: T.string,
   };
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const nextAccession = nextProps.data.metadata.accession;
-    const nextDB = nextProps.data.metadata.source_database;
-    if (nextAccession === prevState.accession || nextDB === prevState.db)
-      return null;
-
-    return {
-      SummaryCounterEntriesWithData: loadData(
-        getUrlForEntries(nextAccession, nextDB),
-      )(SummaryCounterEntries),
-      accession: nextAccession,
-      db: nextDB,
-    };
-  }
-
-  constructor(props) {
-    super(props);
-
-    const accession = props.data.metadata.accession;
-    const db = props.data.metadata.source_database;
-    this.state = {
-      SummaryCounterEntriesWithData: loadData(getUrlForEntries(accession, db))(
-        SummaryCounterEntries,
-      ),
-      accession,
-      db,
-    };
-  }
-
   render() {
     const { data, search, entryDB } = this.props;
-    const { SummaryCounterEntriesWithData } = this.state;
     return (
       <React.Fragment>
         <div className={f('card-header')}>
@@ -408,9 +321,10 @@ class EntryCard extends PureComponent {
           </Link>
         </div>
 
-        <SummaryCounterEntriesWithData
+        <SummaryCounterEntries
           entryDB={entryDB}
           metadata={data.metadata}
+          counters={data.extra_fields.counters}
         />
 
         <DescriptionEntries
@@ -695,31 +609,32 @@ class List extends PureComponent {
                 cellClassName={f('col-md')}
                 renderer={(memberDataBases /*: object */) => (
                   <div className={f('signature-container')}>
-                    {Object.entries(memberDataBases).map(([db, entries]) =>
-                      Object.entries(entries).map(([accession, id]) => (
-                        <Tooltip
-                          key={accession}
-                          title={`${id} (${db})`}
-                          className={f('signature', {
-                            'corresponds-to-filter':
-                              search.signature_in &&
-                              search.signature_in.toLowerCase() ===
-                                db.toLowerCase(),
-                          })}
-                        >
-                          <Link
-                            to={{
-                              description: {
-                                main: { key: 'entry' },
-                                entry: { db, accession },
-                              },
-                            }}
+                    {memberDataBases &&
+                      Object.entries(memberDataBases).map(([db, entries]) =>
+                        Object.entries(entries).map(([accession, id]) => (
+                          <Tooltip
+                            key={accession}
+                            title={`${id} (${db})`}
+                            className={f('signature', {
+                              'corresponds-to-filter':
+                                search.signature_in &&
+                                search.signature_in.toLowerCase() ===
+                                  db.toLowerCase(),
+                            })}
                           >
-                            {accession}
-                          </Link>
-                        </Tooltip>
-                      )),
-                    )}
+                            <Link
+                              to={{
+                                description: {
+                                  main: { key: 'entry' },
+                                  entry: { db, accession },
+                                },
+                              }}
+                            >
+                              {accession}
+                            </Link>
+                          </Tooltip>
+                        )),
+                      )}
                   </div>
                 )}
               >
@@ -761,33 +676,37 @@ class List extends PureComponent {
                 cellClassName={f('col-go')}
                 renderer={(goTerms /*: Array<Object> */) => (
                   <div className={f('go-container')}>
-                    {Array.from(goTerms)
-                      .sort((a, b) => {
-                        if (a.category.code > b.category.code) return 0;
-                        if (a.category.code < b.category.code) return 1;
-                        if (a.name > b.name) return 1;
-                        return 0;
-                      })
-                      .map(go => (
-                        <span key={go.identifier} className={f('go-list')}>
-                          <Tooltip
-                            title={`${go.category.name.replace('_', ' ')} term`}
-                          >
-                            <span
-                              className={f('go-circle')}
-                              style={{
-                                background:
-                                  GO_COLORS.get(go.category.code) || '#ddd',
-                              }}
-                            />
-                          </Tooltip>
-                          <Tooltip title={`${go.name} (${go.identifier})`}>
-                            <GoLink id={go.identifier} className={f('ext')}>
-                              {go.name ? go.name : 'None'}
-                            </GoLink>
-                          </Tooltip>
-                        </span>
-                      ))}
+                    {goTerms &&
+                      Array.from(goTerms)
+                        .sort((a, b) => {
+                          if (a.category.code > b.category.code) return 0;
+                          if (a.category.code < b.category.code) return 1;
+                          if (a.name > b.name) return 1;
+                          return 0;
+                        })
+                        .map(go => (
+                          <span key={go.identifier} className={f('go-list')}>
+                            <Tooltip
+                              title={`${go.category.name.replace(
+                                '_',
+                                ' ',
+                              )} term`}
+                            >
+                              <span
+                                className={f('go-circle')}
+                                style={{
+                                  background:
+                                    GO_COLORS.get(go.category.code) || '#ddd',
+                                }}
+                              />
+                            </Tooltip>
+                            <Tooltip title={`${go.name} (${go.identifier})`}>
+                              <GoLink id={go.identifier} className={f('ext')}>
+                                {go.name ? go.name : 'None'}
+                              </GoLink>
+                            </Tooltip>
+                          </span>
+                        ))}
                   </div>
                 )}
               >

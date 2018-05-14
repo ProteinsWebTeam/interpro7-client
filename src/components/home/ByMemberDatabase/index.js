@@ -56,7 +56,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
     const counts = payload && payload.entries.member_databases;
     const memberDB = payloadMeta
       ? Object.values(payloadMeta.databases).filter(
-          db => db.type === 'entry' && db.canonical !== 'INTERPRO',
+          db => db.type === 'entry' && db.canonical !== 'interpro',
         )
       : [];
     return (
