@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -29,6 +30,8 @@ const SchemaOrgData = loadable({
 //   author: data.authors,
 // });
 
+/*:: type Reference = Object; */
+
 const LiteratureItem = (
   {
     pubID,
@@ -36,13 +39,13 @@ const LiteratureItem = (
     i,
     included,
     target,
-  } /*: {
+  } /*: {|
   pubID: string,
-  reference: Object,
+  reference: Reference,
   i?: number,
   included?: boolean,
   target: boolean,
-} */,
+|} */,
 ) => (
   <div className={f('reference', 'small', { target })}>
     <p className={f('cite')}>
@@ -107,7 +110,11 @@ const Literature = (
     included = [],
     extra = [],
     target,
-  } /*: {| included: Array, extra: Array, target: string |} */,
+  } /*: {|
+  included?: Array<[string, Reference]>,
+  extra?: Array<[string, Reference]>,
+  target: string
+|} */,
 ) => (
   <div className={f('row')}>
     <div className={f('large-12', 'columns', 'margin-bottom-large')}>
@@ -125,6 +132,7 @@ const Literature = (
           ))}
         </div>
       ) : null}
+      {/* Only display “Further reading” if there have been main references */}
       {included.length && extra.length ? <h5>Further reading</h5> : null}
       {extra.length ? (
         <div

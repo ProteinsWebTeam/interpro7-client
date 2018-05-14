@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -21,26 +22,28 @@ const getNextLocation = (customLocation, to) =>
   typeof to === 'function' ? to(customLocation) : to;
 
 /*:: type Props = {
-  onClick: ?function,
+  onClick?: function,
   customLocation: {
     description: Object,
     search: Object,
     hash: string,
   },
+  exact?: boolean,
   children: any,
-  href: ?string,
+  rel?: string,
+  href?: string,
   closeEverything: function,
   goToCustomLocation: function,
-  target: ?string,
-  to: ?function | {
+  target?: string,
+  to?: function | {
     description: Object,
-    search: ?Object,
-    hash: ?string,
+    search?: Object,
+    hash?: string,
   },
   style?: ?Object,
-  disabled: ?boolean,
-  className: ?string,
-  activeClass: ?function | string,
+  disabled?: boolean,
+  className?: string,
+  activeClass?: function | string,
 }; */
 
 class Link extends PureComponent /*:: <Props> */ {
