@@ -112,7 +112,7 @@ const Literature = (
   <div className={f('row')}>
     <div className={f('large-12', 'columns', 'margin-bottom-large')}>
       {included.length ? (
-        <div className={f('list')}>
+        <div className={f('list', { 'single-entry': included.length === 1 })}>
           {included.map(([pubID, ref], i) => (
             <LiteratureItem
               pubID={pubID}
@@ -126,8 +126,12 @@ const Literature = (
         </div>
       ) : null}
       {included.length && extra.length ? <h5>Further reading</h5> : null}
-      {included.length && extra.length ? (
-        <div className={f('list', 'further')}>
+      {extra.length ? (
+        <div
+          className={f('list', 'further', {
+            'single-entry': extra.length === 1,
+          })}
+        >
           {extra.map(([pubID, ref]) => (
             <LiteratureItem
               pubID={pubID}
@@ -137,19 +141,7 @@ const Literature = (
             />
           ))}
         </div>
-      ) : (
-        // References for structure page (no gap)
-        <div className={f('list', 'nogap')}>
-          {extra.map(([pubID, ref]) => (
-            <LiteratureItem
-              pubID={pubID}
-              key={pubID}
-              reference={ref}
-              target={target === pubID}
-            />
-          ))}
-        </div>
-      )}
+      ) : null}
     </div>
   </div>
 );
