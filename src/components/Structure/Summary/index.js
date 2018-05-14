@@ -135,6 +135,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                   <h4>References</h4>
                 </div>
               </div>
+              {/* $FlowFixMe */}
               <Literature extra={literature} />
             </section>
           )}
