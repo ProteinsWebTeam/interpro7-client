@@ -64,17 +64,11 @@
   columns: 19em;
   column-gap: 2rem;
 
-  @nest & > * {
-    break-inside: avoid;
+  &.single-entry {
+    columns: unset;
   }
 
-  /* only structure page */
-  @nest &.nogap {
-    columns: 100em;
-
-    @nest & div {
-      padding-left: 0;
-      text-indent: 0;
-    }
+  & > * {
+    break-inside: avoid;
   }
 }
