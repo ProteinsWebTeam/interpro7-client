@@ -15,6 +15,10 @@
   position: relative; /*for options*/
 }
 
+.card-flex-container:last-child {
+  margin-bottom: 0.8rem;
+} /*extra space before more button*/
+
 .name-ac {
   display: none;
 }
