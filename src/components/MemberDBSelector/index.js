@@ -49,7 +49,7 @@ const getCountFor = (
     if (dataSubPageCount.loading) return 'loading';
     if (!dataSubPageCount.ok) return;
     switch (db) {
-      case 'INTERPRO':
+      case 'interpro':
         return _get(
           dataSubPageCount.payload.entries,
           ['interpro', sub === 'entry' ? null : toPlural(sub)].filter(Boolean),
@@ -70,7 +70,7 @@ const getCountFor = (
     }
   } else {
     switch (db) {
-      case 'INTERPRO':
+      case 'interpro':
         if (dataDBCount.loading) return 'loading';
         if (!dataDBCount.ok) return;
         return _get(
@@ -119,6 +119,7 @@ class _MemberDBSelector extends PureComponent {
     dataDBCount: dataType,
     dataSubPageCount: dataType,
     contentType: T.string.isRequired,
+    filterType: T.string,
     customLocation: T.shape({
       description: T.object.isRequired,
       search: T.object.isRequired,
@@ -126,6 +127,9 @@ class _MemberDBSelector extends PureComponent {
     lowGraphics: T.bool.isRequired,
     goToCustomLocation: T.func.isRequired,
     className: T.string,
+    isSelected: T.func,
+    onChange: T.func,
+    hideCounters: T.bool,
   };
 
   constructor(props) {
@@ -148,15 +152,15 @@ class _MemberDBSelector extends PureComponent {
 
   _populateDBs = databases => {
     if (databases.payload && this._dbs.size <= 1) {
-      this._dbs.set('INTERPRO', databases.payload.databases.INTERPRO);
+      this._dbs.set('interpro', databases.payload.databases.interpro);
       const dbs = Object.values(databases.payload.databases).sort(
         comparisonFunction,
       );
       for (const db of dbs) {
         if (
           db.type === 'entry' &&
-          db.canonical !== 'INTERPRO' &&
-          db.canonical !== 'MOBIDBLT'
+          db.canonical !== 'interpro' &&
+          db.canonical !== 'mobidblt'
         ) {
           this._dbs.set(db.canonical, db);
         }
@@ -165,7 +169,7 @@ class _MemberDBSelector extends PureComponent {
     return this._dbs;
   };
 
-  _handleChange = ({ target: { value } }) => {
+  _defaultHandleChange = ({ target: { value } }) => {
     const description = { ...this.props.customLocation.description };
     if (value === 'all') {
       description.entry = {};
@@ -219,16 +223,19 @@ class _MemberDBSelector extends PureComponent {
     const dbs = this._populateDBs(dataDB);
     if (dbs.size <= 1) return null;
     const main = customLocation.description.main.key;
-    const sub =
+    const subL =
       customLocation.description[main].accession &&
       Object.entries(customLocation.description).find(
         ([_, { isFilter }]) => isFilter,
-      )[0];
-    const selected = Array.from(this._dbs.values()).find(
-      db =>
+      );
+    const sub = this.props.filterType || (subL && subL[0]);
+    const isSelected =
+      this.props.isSelected ||
+      (db =>
         (customLocation.description.entry.db || 'all').toLowerCase() ===
-        db.canonical.toLowerCase(),
-    );
+        db.canonical.toLowerCase());
+    const selected = Array.from(this._dbs.values()).find(isSelected);
+    const handleChange = this.props.onChange || this._defaultHandleChange;
     return (
       <div
         tabIndex="0"
@@ -262,7 +269,7 @@ class _MemberDBSelector extends PureComponent {
           <h6>Select your database:</h6>
           <form
             className={f('db-selector', { 'one-column': !children })}
-            onChange={this._handleChange}
+            onChange={handleChange}
           >
             {Array.from(this._dbs.values()).map(db => {
               const count = getCountFor(
@@ -293,21 +300,26 @@ class _MemberDBSelector extends PureComponent {
                   <span className={f('text')}>
                     {db.name === 'All' ? `All ${toPlural(main)}` : db.name}
                   </span>
-                  <Tooltip
-                    title={
-                      loading ? 'loading' : `${count} ${toPlural(main, count)}`
-                    }
-                  >
-                    <NumberLabel
-                      value={(!loading && count) || 0}
-                      loading={loading}
-                      className={f('label')}
-                      style={{
-                        background: checked && config.colors.get(db.canonical),
-                      }}
-                      abbr
-                    />
-                  </Tooltip>
+                  {!this.props.hideCounters && (
+                    <Tooltip
+                      title={
+                        loading
+                          ? 'loading'
+                          : `${count} ${toPlural(main, count)}`
+                      }
+                    >
+                      <NumberLabel
+                        value={(!loading && count) || 0}
+                        loading={loading}
+                        className={f('label')}
+                        style={{
+                          background:
+                            checked && config.colors.get(db.canonical),
+                        }}
+                        abbr
+                      />
+                    </Tooltip>
+                  )}
                 </label>
               );
             })}

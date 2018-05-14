@@ -32,7 +32,7 @@ const Integration = ({ intr, dataBase }) => {
             <SchemaOrgData
               data={{
                 name: intr,
-                version: databases.INTERPRO.version,
+                version: databases.interpro.version,
               }}
               processData={schemaProcessIntegrated}
             />
