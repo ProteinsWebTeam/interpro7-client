@@ -1,3 +1,4 @@
+/* global ga: false */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
