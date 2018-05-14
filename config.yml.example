@@ -1,3 +1,4 @@
+googleAnalytics: UA-XXXXXXXX-X
 root:
   website: http://localhost:8080/interpro/
   API: https://wwwdev.ebi.ac.uk/interpro7/api/
