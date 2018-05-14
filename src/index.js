@@ -1,11 +1,11 @@
 // Polyfills
+/* global ga: false */
 import 'babel-polyfill';
 
 import React from 'react';
 import { render } from 'react-dom';
 
 import App from 'App';
-import analytics from 'utils/analytics';
 import ready from 'utils/ready';
 
 import hmr from 'index-hmr';
@@ -95,7 +95,7 @@ const handleError = error => {
   } catch (_) {
     /**/
   }
-  analytics.send('error', { error });
+  ga('send', 'exception', { exDescription: error.message, exFatal: true });
 };
 
 window.addEventListener('unhandledrejection', handleError);
