@@ -4,7 +4,12 @@
     <!-- Google Analytics -->
     <script>
       window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-      ga('create', '<%= require("../interpro-config.js").googleAnalytics %>', 'auto');
+      ga('create', '<%= require("../interpro-config.js").googleAnalytics %>', {
+        // see https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference
+        siteSpeedSampleRage: 10,
+        alwaysSendReferrer: true,
+        cookieExpiration: 5184000, // 2 months
+      });
       ga('set', 'anonymizeIp', true);
       ga('send', 'pageview');
     </script>
