@@ -323,6 +323,9 @@ export const latests = [
     counter_I: 0,
     counter_O: 12172,
     counter_S: 12,
+    counter_Si: 1,
+    counter_Go: 0,
+    counter_Pu: 1,
     contributing: [
       {
         accession: 'PF05690',
@@ -338,6 +341,9 @@ export const latests = [
     counter_I: 0,
     counter_O: 1627,
     counter_S: 26,
+    counter_Si: 1,
+    counter_Go: 0,
+    counter_Pu: 1,
     contributing: [
       {
         accession: 'PF14322',
@@ -353,9 +359,16 @@ export const latests = [
     counter_I: 0,
     counter_O: 112,
     counter_S: 0,
+    counter_Si: 2,
+    counter_Go: 0,
+    counter_Pu: 4,
     contributing: [
       {
         accession: 'PS00492',
+        source_database: 'patterns',
+      },
+      {
+        accession: 'PS00493',
         source_database: 'patterns',
       },
     ],
@@ -368,6 +381,9 @@ export const latests = [
     counter_I: 0,
     counter_O: 119,
     counter_S: 0,
+    counter_Si: 1,
+    counter_Go: 0,
+    counter_Pu: 4,
     contributing: [
       {
         accession: 'cd03588',
@@ -383,6 +399,9 @@ export const latests = [
     counter_I: 0,
     counter_O: 87,
     counter_S: 3,
+    counter_Si: 1,
+    counter_Go: 0,
+    counter_Pu: 6,
     contributing: [
       {
         accession: 'cd03589',
@@ -398,6 +417,9 @@ export const latests = [
     counter_I: 0,
     counter_O: 185,
     counter_S: 84,
+    counter_Si: 1,
+    counter_Go: 0,
+    counter_Pu: 8,
     contributing: [
       {
         accession: 'cd03590',
@@ -413,6 +435,9 @@ export const latests = [
     counter_I: 0,
     counter_O: 1132,
     counter_S: 0,
+    counter_Si: 1,
+    counter_Go: 1,
+    counter_Pu: 3,
     contributing: [
       {
         accession: 'cd10507',
@@ -428,6 +453,9 @@ export const latests = [
     counter_I: 0,
     counter_O: 8838,
     counter_S: 4,
+    counter_Si: 1,
+    counter_Go: 1,
+    counter_Pu: 3,
     contributing: [
       {
         accession: 'cd06456',
