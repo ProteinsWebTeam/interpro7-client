@@ -1,10 +1,8 @@
 /* eslint-env node */
-const fs = require('fs');
 const path = require('path');
 
 const webpack = require('webpack');
 const url = require('url');
-const yaml = require('js-yaml');
 
 // Webpack plugins
 const HTMLWebpackPlugin = require('html-webpack-plugin');
@@ -20,7 +18,8 @@ const pkg = require('./package.json');
 const DEFAULT_PORT = 80;
 const kB = 1024;
 
-const iprConfig = yaml.safeLoad(fs.readFileSync('config.yml'));
+const iprConfig = require('./interpro-config.js');
+
 const websiteURL = url.parse(iprConfig.root.website, true, true);
 
 const getCompressionPlugin = (() => {

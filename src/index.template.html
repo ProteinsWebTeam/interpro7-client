@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en-GB">
   <head>
+    <!-- Google Analytics -->
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', '<%= require("../interpro-config.js").googleAnalytics %>', {
+        // see https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference
+        siteSpeedSampleRage: 10,
+        alwaysSendReferrer: true,
+        cookieExpiration: 5184000, // 2 months
+      });
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <!-- End Google Analytics -->
     <meta charset="utf-8" />
     <meta lang="en-GB" />
     <meta name="theme-color" content="#00559e" />
