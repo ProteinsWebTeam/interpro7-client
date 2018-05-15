@@ -11,7 +11,7 @@ import cancelable from 'utils/cancelable';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);

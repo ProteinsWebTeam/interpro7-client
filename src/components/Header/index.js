@@ -21,7 +21,7 @@ import { sticky as supportsSticky } from 'utils/support';
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 

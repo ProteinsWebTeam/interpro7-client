@@ -12,7 +12,8 @@
   margin: 0 auto;
 }
 
-.jumbo-news-container .icon-socialmedia {
+.jumbo-news-container .icon-common {
+  color: #007bb6;
   font-size: 340%;
 }
 

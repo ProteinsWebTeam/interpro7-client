@@ -10,7 +10,7 @@ import { InterPro } from 'menuConfig';
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
-// import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+// import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import interproStyles from 'styles/interpro-new.css';
 import styles from './styles.css';
 

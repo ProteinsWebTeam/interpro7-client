@@ -15,7 +15,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import loadData from 'higherOrder/loadData';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 

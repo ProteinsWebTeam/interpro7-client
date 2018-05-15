@@ -14,7 +14,7 @@ import { schemaProcessCitations } from 'schema_org/processors';
 import { foundationPartial } from 'styles/foundation';
 
 import refStyles from './style.css';
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(refStyles, ebiStyles);
 
