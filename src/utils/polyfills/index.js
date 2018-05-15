@@ -17,7 +17,7 @@ export const webComponents = ()/*: Promise<boolean> */ => {
       }
       try {
         await import(/* webpackChunkName: "webcomponents-polyfill" */
-        '@webcomponents/webcomponentsjs/webcomponents-sd-ce');
+        '@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce');
         res(false);
       } catch (err) {
         rej(err);
