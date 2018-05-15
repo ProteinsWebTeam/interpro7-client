@@ -10,7 +10,7 @@ import { closeEverything } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import helperClasses from 'styles/helper-classes.css';
 import styles from './style.css';
 

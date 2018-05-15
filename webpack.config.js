@@ -37,8 +37,8 @@ const cssSettings = mode => ({
   minimize: mode === 'production',
   localIdentName: '[folder]_[name]__[local]___[hash:2]',
   alias: {
-    '../libraries/tablesorter/css':
-      'ebi-framework/libraries/tablesorter/dist/css',
+    '../libraries': 'ebi-framework/libraries',
+    'EBI-Common': 'EBI-Icon-fonts/EBI-Common',
     'EBI-Conceptual': 'EBI-Icon-fonts/EBI-Conceptual',
     'EBI-Functional': 'EBI-Icon-fonts/EBI-Functional',
     'EBI-Generic': 'EBI-Icon-fonts/EBI-Generic',

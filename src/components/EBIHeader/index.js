@@ -10,7 +10,7 @@ import { toggleEMBLMapNav } from 'actions/creators';
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
