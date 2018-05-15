@@ -404,6 +404,37 @@ class InterProGraphicAnim extends PureComponent {
   }
 }
 
+const SchemaOrgDataWithData = loadData(getUrlForMeta)(
+  class SchemaOrgDataWithData extends PureComponent {
+    static propTypes = {
+      data: T.shape({
+        payload: T.shape({
+          databases: T.object,
+        }),
+      }).isRequired,
+    };
+
+    render() {
+      const databases =
+        this.props.data &&
+        this.props.data.payload &&
+        this.props.data.payload.databases;
+      if (!databases) return null;
+      return (
+        <SchemaOrgData
+          data={{
+            name: 'InterPro',
+            location: window.location,
+            version: databases && databases.interpro.version,
+            releaseDate: databases && databases.interpro.releaseDate,
+          }}
+          processData={schemaProcessDataForDB}
+        />
+      );
+    }
+  },
+);
+
 const description = `
 InterPro provides functional analysis of proteins by classifying them into
 families and predicting domains and important sites. We combine protein
@@ -415,18 +446,7 @@ different databases (referred to as member databases) that make up the
 InterPro consortium.`.trim();
 
 class Home extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-  };
   render() {
-    const databases =
-      this.props.data &&
-      this.props.data.payload &&
-      this.props.data.payload.databases;
     return (
       <Fragment>
         <div className={f('row')}>
@@ -435,17 +455,7 @@ class Home extends PureComponent {
               data={{ location: window.location, description }}
               processData={schemaProcessDataInterpro}
             />
-            {databases && (
-              <SchemaOrgData
-                data={{
-                  name: 'InterPro',
-                  location: window.location,
-                  version: databases && databases.interpro.version,
-                  releaseDate: databases && databases.interpro.releaseDate,
-                }}
-                processData={schemaProcessDataForDB}
-              />
-            )}
+            <SchemaOrgDataWithData />
             <div className={f('container-intro')}>
               <div className={f('fig-container')}>
                 <Tooltip title="Domain analysis and prediction on multiple protein sequences">
@@ -680,4 +690,4 @@ class Home extends PureComponent {
   }
 }
 
-export default loadData(getUrlForMeta)(Home);
+export default Home;
