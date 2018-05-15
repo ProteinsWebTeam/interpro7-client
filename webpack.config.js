@@ -293,6 +293,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
               additional: [/\.(worker\.js)$/i],
               optional: [/\.(eot|ttf|woff|svg|ico|png|jpe?g)$/i],
             },
+            appShell: publicPath,
             AppCache: false,
             // TODO: Check whats the best way to do this autoupdate.
             // autoUpdate: 60000,
