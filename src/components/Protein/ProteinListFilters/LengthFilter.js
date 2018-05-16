@@ -8,7 +8,7 @@ import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles);
 

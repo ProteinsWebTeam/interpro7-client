@@ -1,3 +1,5 @@
+// @flow
+/*:: import type { Middleware } from 'redux'; */
 import { format } from 'url';
 import { schedule } from 'timing-functions/src';
 
@@ -34,7 +36,7 @@ const checkStatus = async function*({
   }
 };
 
-export default ({ dispatch, getState }) => {
+const middleware /*: Middleware */ = ({ dispatch, getState }) => {
   let loopID;
   let running = false;
   const loop = async () => {
@@ -79,3 +81,5 @@ export default ({ dispatch, getState }) => {
     return next(action);
   };
 };
+
+export default middleware;

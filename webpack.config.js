@@ -37,8 +37,8 @@ const cssSettings = mode => ({
   minimize: mode === 'production',
   localIdentName: '[folder]_[name]__[local]___[hash:2]',
   alias: {
-    '../libraries/tablesorter/css':
-      'ebi-framework/libraries/tablesorter/dist/css',
+    '../libraries': 'ebi-framework/libraries',
+    'EBI-Common': 'EBI-Icon-fonts/EBI-Common',
     'EBI-Conceptual': 'EBI-Icon-fonts/EBI-Conceptual',
     'EBI-Functional': 'EBI-Icon-fonts/EBI-Functional',
     'EBI-Generic': 'EBI-Icon-fonts/EBI-Generic',
@@ -293,6 +293,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
               additional: [/\.(worker\.js)$/i],
               optional: [/\.(eot|ttf|woff|svg|ico|png|jpe?g)$/i],
             },
+            appShell: publicPath,
             AppCache: false,
             // TODO: Check whats the best way to do this autoupdate.
             // autoUpdate: 60000,

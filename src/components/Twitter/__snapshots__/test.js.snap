@@ -19,8 +19,8 @@ exports[`<Twitter /> should render 1`] = `
         className="jumbo-news-container"
       >
         <div
-          className="icon icon-socialmedia icon-s2"
-          data-icon="T"
+          className="icon icon-common"
+          data-icon="🐦"
         />
         <Connect(Link)
           className="twitter-timeline"
