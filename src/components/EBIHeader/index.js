@@ -33,9 +33,10 @@ const _EmblButton = ({ toggleEMBLMapNav }) => (
     style={{ height: '36px' }}
     type="button"
     aria-expanded="false"
+    aria-label="EMBL dropdown"
     onClick={toggleEMBLMapNav}
   >
-    Hinxton
+    &nbsp;
   </button>
 );
 _EmblButton.propTypes = {
@@ -45,53 +46,76 @@ _EmblButton.propTypes = {
 const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
 
 const EBIHeader = () => (
-  <div
+  <header
     id="masthead-black-bar"
     className={styleBundle('clearfix', 'masthead-black-bar')}
   >
-    <nav className={styleBundle('row')}>
-      <ul id="global-nav" className={styleBundle('menu')}>
-        <li className={styleBundle('home-mobile')}>
-          <Link href="https://www.ebi.ac.uk">EMBL-EBI Home page</Link>
-        </li>
-
-        <li className={styleBundle('home')}>
-          <Link href="https://www.ebi.ac.uk">EMBL-EBI</Link>
-        </li>
-
-        <li className={styleBundle('services', 'active')}>
-          <Link href="https://www.ebi.ac.uk/services">Services</Link>
-        </li>
-
-        <li className={styleBundle('research')}>
-          <Link href="https://www.ebi.ac.uk/research">Research</Link>
-        </li>
-
-        <li className={styleBundle('training')}>
-          <Link href="https://www.ebi.ac.uk/training">Training</Link>
-        </li>
-
-        <li className={styleBundle('about')}>
-          <Link href="https://www.ebi.ac.uk/about">About us</Link>
-        </li>
-
-        <li
-          className={styleBundle(
-            'float-right',
-            'show-for-medium',
-            'embl-selector',
-          )}
-          style={{ flexGrow: 1 }}
+    <div>
+      <nav className={styleBundle('row')}>
+        <ul
+          id="global-nav"
+          className={styleBundle('menu', 'global-nav', 'text-right')}
         >
-          <EmblButton />
-        </li>
-      </ul>
-    </nav>
-  </div>
+          <li className={styleBundle('home-mobile', 'show-for-small-only')}>
+            <Link href="https://www.ebi.ac.uk">EMBL-EBI Home page</Link>
+          </li>
+
+          <li className={styleBundle('embl', 'hide')}>
+            <Link href="http://www.embl.org/">EMBL</Link>
+          </li>
+          <li className={styleBundle('barcelona', 'hide')}>
+            <Link href="https://www.embl-barcelona.es/">Barcelona</Link>
+          </li>
+          <li className={styleBundle('hamburg', 'hide')}>
+            <Link href="https://www.embl-hamburg.de/">Hamburg</Link>
+          </li>
+          <li className={styleBundle('heidelberg', 'hide')}>
+            <Link href="https://www.embl.de/">Heidelberg</Link>
+          </li>
+          <li className={styleBundle('grenoble', 'hide')}>
+            <Link href="https://www.embl.fr/">Grenoble</Link>
+          </li>
+          <li className={styleBundle('rome', 'hide')}>
+            <Link href="https://www.embl.it/">Rome</Link>
+          </li>
+
+          <li className={styleBundle('ebi')}>
+            <Link href="https://www.ebi.ac.uk">EMBL-EBI</Link>
+          </li>
+
+          <li className={styleBundle('services', 'active')}>
+            <Link href="https://www.ebi.ac.uk/services">Services</Link>
+          </li>
+
+          <li className={styleBundle('research')}>
+            <Link href="https://www.ebi.ac.uk/research">Research</Link>
+          </li>
+
+          <li className={styleBundle('training')}>
+            <Link href="https://www.ebi.ac.uk/training">Training</Link>
+          </li>
+
+          <li className={styleBundle('about')}>
+            <Link href="https://www.ebi.ac.uk/about">About us</Link>
+          </li>
+
+          <li
+            className={styleBundle(
+              'float-right',
+              'show-for-medium',
+              'embl-selector',
+              'embl-ebi',
+            )}
+          >
+            <EmblButton />
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 );
 
 // Skip to div
-// TODO: Check why we have to put that in particular now that we don't use ids
 export const EbiSkipToDiv = () => (
   <div id="skip-to">
     <ul>
