@@ -48,7 +48,7 @@ class SizeFilter extends PureComponent {
       terms.unshift(['All', NaN]);
     }
     return (
-      <div className={f('list-go')}>
+      <div className={f('list-size')}>
         {terms.map(([term, count]) => (
           <div key={term} className={f('column')}>
             <label className={f('row', 'filter-button')}>
