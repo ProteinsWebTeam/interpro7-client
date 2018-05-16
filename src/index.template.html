@@ -31,61 +31,87 @@
     <% for (const chunk of Object.keys(htmlWebpackPlugin.files.chunks)) { %>
     <script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" defer></script>
     <% } %>
+    <style>
+    .loading {
+      margin: 100px auto;
+      width: 200px;
+      height: 50px;
+      text-align: center;
+      font-size: 10px;
+    }
+
+    .loading > div {
+      background-color: rgba(0,0,0,1);
+      height: 40%;
+      width: 21px;
+      display: inline-block;
+      border-radius: 50%;
+      margin-right: 0.2rem;
+      -webkit-animation: stretchdelay 1.1s infinite ease-in-out;
+      animation: stretchdelay 1.1s infinite ease-in-out;
+    }
+
+    .loading > div:first-child {
+      -webkit-animation-delay: -1.2s;
+      animation-delay: -1.2s;
+    }
+
+    .loading > div:last-child {
+      -webkit-animation-delay: -1s;
+      animation-delay: -1s;
+    }
+
+    @-webkit-keyframes stretchdelay {
+      0%, 40%, 100% { -webkit-transform: scale(.5) }
+      20% { -webkit-transform: scale(1) }
+    }
+
+    @keyframes stretchdelay {
+      0%, 40%, 100% {
+        transform: scale(.5);
+        -webkit-transform: scale(.5);
+        opacity: .3;
+      }
+      20% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        opacity: .6;
+      }
+    }
+    </style>
+
+    <noscript>
+      <style>
+        .loading {
+          display: none;
+        }
+
+        noscript {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: larger;
+        }
+      </style>
+    </noscript>
   </head>
-  <style>
-  .loading-spinner {
-    margin: 100px auto;
-    width: 200px;
-    height: 50px;
-    text-align: center;
-    font-size: 10px;
-  }
-
-  .loading-spinner > div {
-    background-color: rgba(0,0,0,1);
-    height: 40%;
-    width: 21px;
-    display: inline-block;
-    border-radius: 50%;
-    margin-right: 0.2rem;
-    -webkit-animation: stretchdelay 1.1s infinite ease-in-out;
-    animation: stretchdelay 1.1s infinite ease-in-out;
-  }
-
-  .loading-spinner > div:first-child {
-    -webkit-animation-delay: -1.2s;
-    animation-delay: -1.2s;
-  }
-
-  .loading-spinner > div:last-child {
-    -webkit-animation-delay: -1s;
-    animation-delay: -1s;
-  }
-
-  @-webkit-keyframes stretchdelay {
-    0%, 40%, 100% { -webkit-transform: scale(.5) }
-    20% { -webkit-transform: scale(1) }
-  }
-
-  @keyframes stretchdelay {
-    0%, 40%, 100% {
-      transform: scale(.5);
-      -webkit-transform: scale(.5);
-      opacity: .3;
-    }
-    20% {
-      transform: scale(1);
-      -webkit-transform: scale(1);
-      opacity: .6;
-    }
-  }
-  </style>
   <body>
+    <noscript>
+      <p>
+        InterPro requires JavaScript to work, please enable JavaScript or use a
+        browser supporting JavaScript
+      </p>
+    </noscript>
     <div id="root">
-      <div class="loading-spinner">
-        <div class="rd1"></div>
-        <div class="rd2"></div>
-        <div class="rd3"></div>
+      <div class="loading">
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </div>
   </body>

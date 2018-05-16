@@ -9,7 +9,7 @@ import { transformFormatted } from 'utils/text';
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import styles from './style.css';
 import theme from 'styles/theme-interpro.css';
 

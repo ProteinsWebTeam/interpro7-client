@@ -1,4 +1,7 @@
+// @flow
 /* global ga: false */
+/*:: import type { Middleware } from 'redux'; */
+/*:: declare var ga: (...args: Array<string>) => void; */
 import { format } from 'url';
 
 import { NEW_CUSTOM_LOCATION } from 'actions/types';
@@ -8,7 +11,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import autoScroll from 'utils/auto-scroll';
 
 // Middleware to handle history change events
-export default history => ({ dispatch, getState }) => {
+const middleware /*: Middleware */ = history => ({ dispatch, getState }) => {
   // Hook into history
   history.listen(
     // Dispatch new action only when history actually changes
@@ -37,6 +40,7 @@ export default history => ({ dispatch, getState }) => {
   historyDispatch({
     customLocation: getState().customLocation,
     replace: true,
+    state: null,
   });
   autoScroll(history.location);
 
@@ -58,3 +62,5 @@ export default history => ({ dispatch, getState }) => {
     return next(action);
   };
 };
+
+export default middleware;

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,7 +14,7 @@ import { schemaProcessCitations } from 'schema_org/processors';
 import { foundationPartial } from 'styles/foundation';
 
 import refStyles from './style.css';
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(refStyles, ebiStyles);
 
@@ -29,6 +30,8 @@ const SchemaOrgData = loadable({
 //   author: data.authors,
 // });
 
+/*:: type Reference = Object; */
+
 const LiteratureItem = (
   {
     pubID,
@@ -36,13 +39,13 @@ const LiteratureItem = (
     i,
     included,
     target,
-  } /*: {
+  } /*: {|
   pubID: string,
-  reference: Object,
+  reference: Reference,
   i?: number,
   included?: boolean,
   target: boolean,
-} */,
+|} */,
 ) => (
   <div className={f('reference', 'small', { target })}>
     <p className={f('cite')}>
@@ -107,12 +110,16 @@ const Literature = (
     included = [],
     extra = [],
     target,
-  } /*: {| included: Array, extra: Array, target: string |} */,
+  } /*: {|
+  included?: Array<[string, Reference]>,
+  extra?: Array<[string, Reference]>,
+  target: string
+|} */,
 ) => (
   <div className={f('row')}>
     <div className={f('large-12', 'columns', 'margin-bottom-large')}>
       {included.length ? (
-        <div className={f('list')}>
+        <div className={f('list', { 'single-entry': included.length === 1 })}>
           {included.map(([pubID, ref], i) => (
             <LiteratureItem
               pubID={pubID}
@@ -125,9 +132,14 @@ const Literature = (
           ))}
         </div>
       ) : null}
+      {/* Only display “Further reading” if there have been main references */}
       {included.length && extra.length ? <h5>Further reading</h5> : null}
-      {included.length && extra.length ? (
-        <div className={f('list', 'further')}>
+      {extra.length ? (
+        <div
+          className={f('list', 'further', {
+            'single-entry': extra.length === 1,
+          })}
+        >
           {extra.map(([pubID, ref]) => (
             <LiteratureItem
               pubID={pubID}
@@ -137,19 +149,7 @@ const Literature = (
             />
           ))}
         </div>
-      ) : (
-        // References for structure page (no gap)
-        <div className={f('list', 'nogap')}>
-          {extra.map(([pubID, ref]) => (
-            <LiteratureItem
-              pubID={pubID}
-              key={pubID}
-              reference={ref}
-              target={target === pubID}
-            />
-          ))}
-        </div>
-      )}
+      ) : null}
     </div>
   </div>
 );

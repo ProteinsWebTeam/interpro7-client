@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,7 +7,7 @@ import cn from 'classnames';
 
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToCustomLocation, closeEverything } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
 
 import generateHref from './utils/generate-href';
@@ -21,25 +22,28 @@ const getNextLocation = (customLocation, to) =>
   typeof to === 'function' ? to(customLocation) : to;
 
 /*:: type Props = {
-  onClick: ?function,
+  onClick?: function,
   customLocation: {
     description: Object,
     search: Object,
     hash: string,
   },
+  exact?: boolean,
   children: any,
-  href: ?string,
+  rel?: string,
+  href?: string,
+  closeEverything: function,
   goToCustomLocation: function,
-  target: ?string,
-  to: ?function | {
+  target?: string,
+  to?: function | {
     description: Object,
-    search: ?Object,
-    hash: ?string,
+    search?: Object,
+    hash?: string,
   },
   style?: ?Object,
-  disabled: ?boolean,
-  className: ?string,
-  activeClass: ?function | string,
+  disabled?: boolean,
+  className?: string,
+  activeClass?: function | string,
 }; */
 
 class Link extends PureComponent /*:: <Props> */ {
@@ -54,6 +58,7 @@ class Link extends PureComponent /*:: <Props> */ {
     children: T.any,
     rel: T.string,
     href: T.string,
+    closeEverything: T.func.isRequired,
     goToCustomLocation: T.func.isRequired,
     target: T.string,
     to: T.oneOfType([
@@ -74,6 +79,7 @@ class Link extends PureComponent /*:: <Props> */ {
       disabled,
       onClick,
       target,
+      closeEverything,
       goToCustomLocation,
       to,
       href,
@@ -85,8 +91,9 @@ class Link extends PureComponent /*:: <Props> */ {
       return;
     }
     if (onClick) onClick(event);
-    if (!to && href) return;
     if (event.defaultPrevented) return;
+    closeEverything();
+    if (!to && href) return;
     // conditions to ignore handling
     if (!happenedWithLeftClick(event)) return;
     if (happenedWithModifierKey(event)) return;
@@ -101,6 +108,7 @@ class Link extends PureComponent /*:: <Props> */ {
     const {
       // unused (to prevent passing down)
       onClick,
+      closeEverything,
       goToCustomLocation,
       // used or changed
       exact,
@@ -157,4 +165,7 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(Link);
+export default connect(mapStateToProps, {
+  closeEverything,
+  goToCustomLocation,
+})(Link);
