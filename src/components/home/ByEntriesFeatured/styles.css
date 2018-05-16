@@ -97,8 +97,10 @@
 }
 
 .card-header h6 {
-  font-weight: 600;
-  font-size: 110%;
+  /*font-weight: 600;*/
+  font-weight: 300;
+  /*font-size: 110%;*/
+  font-size: 120%;
   margin-bottom: 0;
 }
 .card-wrapper.grid-2col {
@@ -123,14 +125,10 @@
   margin-bottom: 0.5rem;
 }
 
-.count-entries,
-.count-proteins,
-.count-structures,
-.count-proteomes,
-.count-architectures,
-.count-organisms,
-.count-sets {
-  text-align: center;
+.count-4 {
+  display: flex;
+  align-items: center;
+  width: 25%;
 }
 
 .card-counter {
@@ -160,6 +158,10 @@
   font-size: 210%;
 }
 
+.card-counter .icon-generic::before {
+  font-size: 140%;
+}
+
 .label-h .icon {
   margin: 0 0.5rem;
 }
@@ -168,6 +170,9 @@
 }
 .card-counter.label-h .no-link {
   flex-direction: row;
+}
+.icon-count-signatures {
+  margin-top: 3px;
 }
 
 .icon-count-ida {
@@ -194,6 +199,20 @@
   background-position-y: 59%;
   background-repeat: no-repeat;
   margin: 0.5rem;
+}
+
+.icon-count-go {
+  margin: 0.5rem;
+  font-weight: 400;
+  font-size: 140%;
+}
+
+.icon-count-go::before {
+  content: 'G';
+}
+.icon-count-go::after {
+  content: 'O';
+  margin-left: -3px;
 }
 
 .card-footer {
@@ -224,6 +243,5 @@
 }
 
 .feat-entry-list .md-small {
-  width: 29px;
-  float: left;
+  width: 36px;
 }
