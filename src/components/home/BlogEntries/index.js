@@ -8,10 +8,11 @@ import Link from 'components/generic/Link';
 import { foundationPartial } from 'styles/foundation';
 
 import interpro from 'styles/interpro-new.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
 
-const f = foundationPartial(interpro, theme, local);
+const f = foundationPartial(ebiGlobalStyles, interpro, theme, local);
 
 const BLOG_ROOT = 'https://proteinswebteam.github.io/interpro-blog';
 
@@ -69,7 +70,9 @@ class BlogEntries extends PureComponent {
   };
 
   render() {
-    const { data: { loading, payload } } = this.props;
+    const {
+      data: { loading, payload },
+    } = this.props;
     if (loading) return 'Loading…';
     if (!payload) return null;
     return (
