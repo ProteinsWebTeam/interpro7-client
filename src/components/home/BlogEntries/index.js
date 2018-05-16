@@ -1,9 +1,12 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import loadData from 'higherOrder/loadData';
 
 import Link from 'components/generic/Link';
+
+import { unescape } from 'utils/text';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -16,13 +19,15 @@ const f = foundationPartial(ebiGlobalStyles, interpro, theme, local);
 
 const BLOG_ROOT = 'https://proteinswebteam.github.io/interpro-blog';
 
-const unescape = text =>
-  text
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>');
+/*:: type BlogEntryProps = {
+ category: string,
+ author?: string,
+ excerpt: string,
+ title: string,
+ url: string,
+}; */
 
-export class BlogEntry extends PureComponent {
+export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
   static propTypes = {
     category: T.string.isRequired,
     author: T.string,
@@ -61,7 +66,14 @@ export class BlogEntry extends PureComponent {
   }
 }
 
-class BlogEntries extends PureComponent {
+/*:: type BlogEntriesProps = {
+ data: {
+   loading: boolean,
+   payload?: Object,
+ },
+}; */
+
+class BlogEntries extends PureComponent /*:: <BlogEntriesProps> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
