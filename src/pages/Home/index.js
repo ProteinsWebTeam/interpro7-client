@@ -517,13 +517,15 @@ class Home extends PureComponent {
                 <div title="Latest entries">
                   <ByLatestEntries />
                 </div>
-                <div title="Featured">
-                  <div className={f('row')}>
-                    <div className={f('columns')}>
-                      <ByEntriesFeatured />
-                    </div>
-                  </div>
-                </div>
+                {
+                  // <div title="Featured">
+                  //  <div className={f('row')}>
+                  //   <div className={f('columns')}>
+                  //    <ByEntriesFeatured />
+                  //  </div>
+                  // </div>
+                  // </div>
+                }
                 <div title="My entries">
                   <div className={f('row')}>
                     <div className={f('columns')}>
