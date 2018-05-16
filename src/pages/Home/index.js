@@ -524,10 +524,19 @@ class Home extends PureComponent {
                     </div>
                   </div>
                 </div>
-                <div title="Most Popular">
+                <div title="My entries">
                   <div className={f('row')}>
                     <div className={f('columns')}>
-                      Most Popular: Under Development
+                      You didn't "save" any entry yet. Please use the{' '}
+                      <Link
+                        to={{ description: { other: ['settings'] } }}
+                        className={f('icon', 'icon-functional')}
+                        data-icon="+"
+                        aria-label="settings"
+                      />{' '}
+                      icon next to an entry to add this entry to your
+                      "favorites". It should then appear on this dedicated
+                      dashboard and in your settings.
                     </div>
                   </div>
                 </div>
