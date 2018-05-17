@@ -323,7 +323,7 @@ class LatestEntry extends PureComponent {
           </div>
 
           <div className={f('card-options')}>
-            <Tooltip title={`Add this entry to your favorites`}>
+            <Tooltip title="Add this entry to your favorites">
               <Link
                 to={{ description: { other: ['settings'] } }}
                 className={f('icon', 'icon-functional')}
@@ -331,7 +331,7 @@ class LatestEntry extends PureComponent {
                 aria-label="settings"
               />
             </Tooltip>{' '}
-            <Tooltip title={`Watch: be notified when this entry is updated`}>
+            <Tooltip title="Watch: be notified when this entry is updated">
               <Link
                 to={{ description: { other: ['settings'] } }}
                 className={f('icon', 'icon-functional')}
@@ -339,7 +339,7 @@ class LatestEntry extends PureComponent {
                 aria-label="settings"
               />
             </Tooltip>{' '}
-            <Tooltip title={`Suggest an edit`}>
+            <Tooltip title="Suggest an edit">
               <Link
                 to={{
                   description: {
@@ -392,14 +392,14 @@ class ByEntriesFeatured extends PureComponent {
                       },
                     }}
                   >
-                    <Tooltip title={`domain type`}>
+                    <Tooltip title="domain type">
                       <interpro-type
                         dimension="1.5em"
                         type="domain"
                         aria-label="Entry type"
                       />
                     </Tooltip>
-                    <Tooltip title={`srGAP1/2/3, SH3 domain (IPR035648)`}>
+                    <Tooltip title="srGAP1/2/3, SH3 domain (IPR035648)">
                       <h6>srGAP1/2/3, SH3 domain</h6>
                     </Tooltip>
                     <span className={f('name-ac')}>IPR035648</span>
@@ -412,7 +412,7 @@ class ByEntriesFeatured extends PureComponent {
                 </div>
 
                 <div className={f('card-options')}>
-                  <Tooltip title={`Add this entry to your favorites`}>
+                  <Tooltip title="Add this entry to your favorites">
                     <Link
                       to={{ description: { other: ['settings'] } }}
                       className={f('icon', 'icon-functional')}
@@ -420,9 +420,7 @@ class ByEntriesFeatured extends PureComponent {
                       aria-label="settings"
                     />
                   </Tooltip>{' '}
-                  <Tooltip
-                    title={`Watch: be notified when this entry is updated`}
-                  >
+                  <Tooltip title="Watch: be notified when this entry is updated">
                     <Link
                       to={{ description: { other: ['settings'] } }}
                       className={f('icon', 'icon-functional')}
@@ -430,7 +428,7 @@ class ByEntriesFeatured extends PureComponent {
                       aria-label="settings"
                     />
                   </Tooltip>{' '}
-                  <Tooltip title={`Suggest an edit`}>
+                  <Tooltip title="Suggest an edit">
                     <Link
                       to={{
                         description: {
@@ -463,16 +461,14 @@ class ByEntriesFeatured extends PureComponent {
                       },
                     }}
                   >
-                    <Tooltip title={`family type`}>
+                    <Tooltip title="family type">
                       <interpro-type
                         dimension="1.5em"
                         type="family"
                         aria-label="Family type"
                       />
                     </Tooltip>
-                    <Tooltip
-                      title={`SLIT-ROBO Rho GTPase-activating protein 2 (IPR030252)`}
-                    >
+                    <Tooltip title="SLIT-ROBO Rho GTPase-activating protein 2 (IPR030252)">
                       <h6>SLIT-ROBO Rho GTPase-activating protein 2</h6>
                     </Tooltip>
                     <span className={f('name-ac')}>IPR030252</span>
@@ -485,7 +481,7 @@ class ByEntriesFeatured extends PureComponent {
                 </div>
 
                 <div className={f('card-options')}>
-                  <Tooltip title={`Add this entry to your favorites`}>
+                  <Tooltip title="Add this entry to your favorites">
                     <Link
                       to={{ description: { other: ['settings'] } }}
                       className={f('icon', 'icon-functional')}
@@ -493,9 +489,7 @@ class ByEntriesFeatured extends PureComponent {
                       aria-label="settings"
                     />
                   </Tooltip>{' '}
-                  <Tooltip
-                    title={`Watch: be notified when this entry is updated`}
-                  >
+                  <Tooltip title="Watch: be notified when this entry is updated">
                     <Link
                       to={{ description: { other: ['settings'] } }}
                       className={f('icon', 'icon-functional')}
@@ -503,7 +497,7 @@ class ByEntriesFeatured extends PureComponent {
                       aria-label="settings"
                     />
                   </Tooltip>{' '}
-                  <Tooltip title={`Suggest an edit`}>
+                  <Tooltip title="Suggest an edit">
                     <Link
                       to={{
                         description: {
