@@ -450,9 +450,7 @@ class Home extends PureComponent {
             )}
             <div className={f('container-intro')}>
               <div className={f('fig-container')}>
-                <Tooltip title="Domain analysis and prediction on multiple protein sequences">
-                  <InterProGraphicAnim />
-                </Tooltip>
+                <InterProGraphicAnim />
               </div>
               <h3>Classification of protein families</h3>
               <Description textBlocks={[description]} />
