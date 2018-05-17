@@ -529,16 +529,19 @@ class Home extends PureComponent {
                 <div title="My entries">
                   <div className={f('row')}>
                     <div className={f('columns')}>
-                      You didn't "save" any entry yet. Please use the{' '}
-                      <Link
-                        to={{ description: { other: ['settings'] } }}
-                        className={f('icon', 'icon-functional')}
-                        data-icon="+"
-                        aria-label="settings"
-                      />{' '}
-                      icon next to an entry to add this entry to your
-                      "favorites". It should then appear on this dedicated
-                      dashboard and in your settings.
+                      <p>
+                        You didn&#39;t &quot;save&quot; any entry yet. Please
+                        use the{' '}
+                        <Link
+                          to={{ description: { other: ['settings'] } }}
+                          className={f('icon', 'icon-functional')}
+                          data-icon="+"
+                          aria-label="settings"
+                        />{' '}
+                        icon next to an entry to add this entry to your
+                        &quot;favorites&quot;. It should then appear on this
+                        dedicated dashboard and in your settings.
+                      </p>
                     </div>
                   </div>
                 </div>
