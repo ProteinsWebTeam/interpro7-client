@@ -209,6 +209,42 @@ div#local-title {
   color: #d72b3f;
   margin-right: 0.5rem;
 }
+
+.callout.nosquare {
+  background-image: linear-gradient(to right, #6b656530, #6b656530),
+    url(https://www.wellcomegenomecampus.org/gfx/hackathon-bg.png);
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 5%;
+  overflow: hidden;
+}
+.callout.nosquare.border {
+  border: 0px solid rgba(10, 10, 10, 0.25);
+}
+.callout.nosquare h3 {
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+} /*extra margin because of corner*/
+.callout.nosquare::after {
+  content: '';
+  position: absolute;
+  width: calc(100vw + 20px);
+  height: 120px;
+  background-color: white;
+  transform: rotate(-45deg);
+  right: -740px;
+  bottom: -75px;
+}
+.callout.nosquare::before {
+  content: '';
+  position: absolute;
+  width: calc(100vw + 20px);
+  height: 120px;
+  background-color: white;
+  transform: rotate(-45deg);
+  left: -570px;
+  top: -279px;
+}
 /*ICONS*/
 /*MEMBER DATABASE SVG icons*/
 .svg-mask {
@@ -788,7 +824,9 @@ hr {
   stroke: #aaa;
 }
 .clanviewer g.link:hover path {
-  stroke: #2199e8;
+  /*stroke: #2199e8;
+  stroke: #7eb1bb;*/
+  stroke: var(--colors-markchart);
 }
 /*END custom CLAN-VIEWER node module*/
 
