@@ -323,7 +323,7 @@ class LatestEntry extends PureComponent {
           </div>
 
           <div className={f('card-options')}>
-            <Tooltip title={`Add this entry to your favorites`}>
+            <Tooltip title="Add this entry to your favorites">
               <Link
                 to={{ description: { other: ['settings'] } }}
                 className={f('icon', 'icon-functional')}
@@ -331,7 +331,7 @@ class LatestEntry extends PureComponent {
                 aria-label="settings"
               />
             </Tooltip>{' '}
-            <Tooltip title={`Watch: be notified when this entry is updated`}>
+            <Tooltip title="Watch: be notified when this entry is updated">
               <Link
                 to={{ description: { other: ['settings'] } }}
                 className={f('icon', 'icon-functional')}
@@ -339,7 +339,7 @@ class LatestEntry extends PureComponent {
                 aria-label="settings"
               />
             </Tooltip>{' '}
-            <Tooltip title={`Suggest an edit`}>
+            <Tooltip title="Suggest an edit">
               <Link
                 to={{
                   description: {
