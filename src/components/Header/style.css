@@ -71,6 +71,7 @@ background-size: 100%, 100%;
 /*STYLE - make menu items hover slightly darker*/
 .masthead nav ul li a:hover {
   color: #000;
+  background-color: rgba(255, 255, 255, 0.9);
 }
 /*STYLE - slightly hide division between menu items */
 .masthead nav ul.menu li {
@@ -229,8 +230,7 @@ background-size: 100%, 100%;
         }
       }
 
-      &:hover,
-      &:focus {
+      &:hover, &:focus {
         &::before {
           transform: translateY(0);
         }
