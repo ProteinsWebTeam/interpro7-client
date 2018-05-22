@@ -187,7 +187,6 @@
 }
 .card-description.card-block {
   margin-bottom: 0;
-  font-weight: 300;
 } /*remove margin bottom when 3dots*/
 .card-description.card-block pre {
   display: none;
