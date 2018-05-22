@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
+import Redirect from 'components/generic/Redirect';
 
 import _Header from './Header';
 import _Exporter from './Exporter';
@@ -13,6 +14,7 @@ import _PageSizeSelector from './PageSizeSelector';
 import _SearchBox from './SearchBox';
 import _Body from './Body';
 import _Column from './Column';
+import _Card from './Card';
 import _Row from './Row';
 import _Footer from './Footer';
 import _TotalNb from './TotalNb';
@@ -53,11 +55,24 @@ const TreeView = loadable({
   loader: () => import(/* webpackChunkName: "tree-view" */ './views/Tree'),
 });
 
+const RedirectToDefault = () => (
+  <Redirect to={customLocation => ({ ...customLocation, hash: 'table' })} />
+);
+
+// redirects to default type if the 'withXXXX' type is not in the props
+const safeGuard = (withType, Component) => {
+  const SafeGuarded = ({ [withType]: extractedWithType, ...props }) =>
+    extractedWithType ? <Component {...props} /> : <RedirectToDefault />;
+  SafeGuarded.displayName = `safeGuard(${withType}, ${Component.name ||
+    Component.displayName})`;
+  return SafeGuarded;
+};
+
 const mainChildRoutes = new Map([
   ['table', TableView],
-  ['list', () => 'LIST!'],
-  ['grid', GridView],
-  ['tree', TreeView],
+  // ['list', () => 'LIST!'],
+  ['grid', safeGuard('withGrid', GridView)],
+  ['tree', safeGuard('withTree', TreeView)],
 ]);
 
 const footerChildRoutes = new Map([['tree', () => null]]);
@@ -95,7 +110,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
       contentType,
       children,
       withTree,
-      withGrid,
     } = this.props;
 
     const _query = query || {};
@@ -104,6 +118,10 @@ export default class Table extends PureComponent /*:: <Props> */ {
     const columns = _children
       .filter(child => child.type === _Column)
       .map(child => child.props);
+    // Extract card renderer out of the Card child (child as a function)
+    let card = _children.find(child => child.type === _Card);
+    if (card) card = card.props.children;
+    //
     const search = _children.find(child => child.type === _SearchBox);
     const withPageSizeSelector = !!_children.find(
       child => child.type === _PageSizeSelector,
@@ -127,10 +145,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     notFound={notFound}
                   />
                 </div>
-                <div
-                  className={f('show-for-large')}
-                  style={{ lineHeight: 0, display: 'flex' }}
-                >
+                <div className={f('type-selector', 'show-for-large')}>
                   <Tooltip title="View your results as a table">
                     <Link
                       to={l => ({ ...l, hash: 'table' })}
@@ -154,19 +169,21 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     // />
                     // </Tooltip>
                   }{' '}
-                  <Tooltip title="View your results in a grid">
-                    <Link
-                      to={l => ({ ...l, hash: 'grid' })}
-                      className={f('icon-view', 'grid-view', {
-                        disabled: !withGrid,
-                      })}
-                      activeClass={f('active')}
-                      aria-disabled={withGrid ? 'false' : 'true'}
-                      aria-label="view your results in a grid"
-                      onMouseOver={GridView.preload}
-                      onFocus={GridView.preload}
-                    />
-                  </Tooltip>
+                  <div className={f('test-support-grid')}>
+                    <Tooltip title="View your results in a grid">
+                      <Link
+                        to={l => ({ ...l, hash: 'grid' })}
+                        className={f('icon-view', 'grid-view', {
+                          disabled: !card,
+                        })}
+                        activeClass={f('active')}
+                        aria-disabled={card ? 'false' : 'true'}
+                        aria-label="view your results in a grid"
+                        onMouseOver={GridView.preload}
+                        onFocus={GridView.preload}
+                      />
+                    </Tooltip>
+                  </div>
                   <Tooltip title="View your results as a tree">
                     <Link
                       to={l => ({ ...l, hash: 'tree' })}
@@ -199,16 +216,19 @@ export default class Table extends PureComponent /*:: <Props> */ {
               />
               <Switch
                 locationSelector={hashSelector}
-                indexRoute={TableView}
+                indexRoute={RedirectToDefault}
                 childRoutes={mainChildRoutes}
-                catchAll={TableView}
+                catchAll={RedirectToDefault}
                 // passed down props
                 isStale={isStale}
                 loading={loading}
                 ok={ok}
                 columns={columns}
+                card={card}
                 notFound={notFound}
                 dataTable={dataTable}
+                withTree={withTree}
+                withGrid={!!card}
               />
               <Switch
                 locationSelector={hashSelector}
@@ -234,5 +254,6 @@ export const Exporter = _Exporter;
 export const SearchBox = _SearchBox;
 export const Body = _Body;
 export const Column = _Column;
+export const Card = _Card;
 export const Row = _Row;
 export const Footer = _Footer;

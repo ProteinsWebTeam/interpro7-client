@@ -3,7 +3,7 @@ import T from 'prop-types';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);

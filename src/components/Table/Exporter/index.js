@@ -44,7 +44,7 @@ class Exporter extends PureComponent {
           <span className={fPlus('icon', 'icon-functional')} data-icon="=" />{' '}
           <span className={fPlus('hide-for-small-only')}>Export</span>{' '}
         </button>
-        <Tooltip title="Settings (customise  results by page ...)">
+        <Tooltip title="Settings (customise results by page, …)">
           <div style={{ display: 'flex' }}>
             <Link
               to={{ description: { other: ['settings'] } }}

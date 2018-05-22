@@ -6,108 +6,275 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
   className="masthead-black-bar"
   inert=""
 >
-  <div
+  <nav
     className="dropdown-pane bottom embl-dropdown"
     id="embl-dropdown"
   >
-    <p>
-      EMBL-EBI in Hinxton is one of six EMBL locations across Europe.
-      <br />
-      <Connect(Link)
-        className="small readmore"
-        href="https://www.ebi.ac.uk/about"
-      >
-        More about EMBL-EBI
-      </Connect(Link)>
-    </p>
-    <h6>
-      Connect to another EMBL location
-    </h6>
     <div
-      className="row small-collapse clearfix padding-bottom-large"
+      className="row padding-bottom-medium"
     >
       <div
-        className="columns small-5 padding-bottom-medium"
+        className="columns padding-top-medium"
       >
-        <Connect(Link)
-          href="https://www.embl.de/"
+        <button
+          aria-label="Close alert"
+          className="close-button"
+          onClick={[Function]}
+          type="button"
         >
-          Heidelberg
-        </Connect(Link)>
+          <span
+            aria-hidden="true"
+          >
+            ×
+          </span>
+        </button>
+      </div>
+      <div
+        className="columns medium-7"
+      >
         <div
-          className="small"
+          className="large-10 medium-12"
         >
-          Main Laboratory
+          <div
+            className="margin-bottom-large padding-top-xsmall margin-top-large"
+          >
+            <h3
+              className="no-underline inline"
+              style={
+                Object {
+                  "lineHeight": "1rem",
+                }
+              }
+            >
+              <Connect(Link)
+                href="https://embl.org"
+              >
+                EMBL
+              </Connect(Link)>
+            </h3>
+             
+            was set up in 1974 as Europe’s flagship laboratory for the life sciences – an intergovernmental organisation with more than 80 independent research groups covering the spectrum of molecular biology:
+          </div>
+        </div>
+        <div
+          className="row large-up-3 medium-up-3 small-up-2 no-underline medium-11"
+        >
+          <div
+            className="column padding-bottom-medium"
+          >
+            <Connect(Link)
+              href="https://www.embl.de/research/index.php"
+            >
+              <h5
+                className="inline underline"
+              >
+                Research:
+              </h5>
+               
+              perform basic research in molecular biology
+            </Connect(Link)>
+          </div>
+          <div
+            className="column padding-bottom-medium"
+          >
+            <Connect(Link)
+              href="https://www.embl.de/services/index.html"
+            >
+              <h5
+                className="inline underline"
+              >
+                Services:
+              </h5>
+               
+              offer vital services to scientists in the member states
+            </Connect(Link)>
+          </div>
+          <div
+            className="column padding-bottom-medium"
+          >
+            <Connect(Link)
+              href="https://www.embl.de/training/index.php"
+            >
+              <h5
+                className="inline underline"
+              >
+                Training
+              </h5>
+               
+              scientists, students and visitors at all levels
+            </Connect(Link)>
+          </div>
+          <div
+            className="column padding-bottom-medium"
+          >
+            <Connect(Link)
+              href="https://www.embl.de/research/tech_transfer/index.html"
+            >
+              <h5
+                className="inline underline"
+              >
+                Transfer
+              </h5>
+               
+              and development of technology
+            </Connect(Link)>
+          </div>
+          <div
+            className="column padding-bottom-medium"
+          >
+            <h5
+              className="inline underline"
+            >
+              Develop
+            </h5>
+             
+            new instruments and methods
+          </div>
+          <div
+            className="column padding-bottom-medium"
+          >
+            <h5
+              className="inline underline"
+            >
+              Integrating
+            </h5>
+             
+            life science research in Europe
+          </div>
+        </div>
+        <div
+          className="margin-top-xlarge no-underline"
+        >
+          <h3>
+            <Connect(Link)
+              className="readmore"
+              href="https://embl.org"
+            >
+              More about EMBL
+            </Connect(Link)>
+          </h3>
         </div>
       </div>
       <div
-        className="columns small-7 padding-bottom-medium"
+        className="columns medium-5"
       >
-        <Connect(Link)
-          href="http://www.embl-barcelona.es/"
-        >
-          Barcelona
-        </Connect(Link)>
         <div
-          className="small"
+          className="large-10 medium-12"
         >
-          Tissue biology and disease modelling
+          <h3
+            className="inline"
+          >
+            Six sites
+          </h3>
+          <p>
+            represent EMBL in Europe.
+          </p>
         </div>
-      </div>
-      <div
-        className="columns small-5 padding-bottom-medium"
-      >
-        <Connect(Link)
-          href="https://www.embl.fr/"
-        >
-          Grenoble
-        </Connect(Link)>
         <div
-          className="small"
+          className="row medium-up-2 small-up-2"
         >
-          Structural Biology
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.embl-barcelona.es/"
+              >
+                Barcelona
+              </Connect(Link)>
+            </h5>
+            <p>
+              Tissue biology and disease modelling
+            </p>
+          </div>
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.embl.fr/"
+              >
+                Grenoble
+              </Connect(Link)>
+            </h5>
+            <p>
+              Structural biology
+            </p>
+          </div>
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.embl-hamburg.de/"
+              >
+                Hamburg
+              </Connect(Link)>
+            </h5>
+            <p>
+              Structural biology
+            </p>
+          </div>
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.embl.de/"
+              >
+                Heidelberg
+              </Connect(Link)>
+            </h5>
+            <p>
+              Main laboratory
+            </p>
+          </div>
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.ebi.ac.uk/"
+              >
+                Hinxton
+              </Connect(Link)>
+            </h5>
+            <p
+              className="margin-bottom-none"
+            >
+              EMBL-EBI: European Bioinformatics Institute
+            </p>
+          </div>
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.embl.it/"
+              >
+                Rome
+              </Connect(Link)>
+            </h5>
+            <p>
+              Epigenetics and neurobiology
+            </p>
+          </div>
         </div>
-      </div>
-      <div
-        className="columns small-7 padding-bottom-medium"
-      >
-        <Connect(Link)
-          href="https://www.embl-hamburg.de/"
-        >
-          Hamburg
-        </Connect(Link)>
-        <div
-          className="small"
-        >
-          Structural Biology
-        </div>
-      </div>
-      <div
-        className="columns small-5 padding-bottom-medium"
-      >
-        <Connect(Link)
-          href="https://www.embl.it/"
-        >
-          Rome
-        </Connect(Link)>
-        <div
-          className="small"
-        >
-          Epigenetics and neurology
-        </div>
-      </div>
-      <div
-        className="columns small-7 padding-bottom-medium"
-      >
-        <Connect(Link)
-          className="readmore"
-          href="https://embl.org/"
-        >
-          More about EMBL
-        </Connect(Link)>
       </div>
     </div>
-  </div>
+  </nav>
 </div>
 `;
 
@@ -117,107 +284,274 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
   className="masthead-black-bar visible"
   inert={undefined}
 >
-  <div
+  <nav
     className="dropdown-pane bottom embl-dropdown"
     id="embl-dropdown"
   >
-    <p>
-      EMBL-EBI in Hinxton is one of six EMBL locations across Europe.
-      <br />
-      <Connect(Link)
-        className="small readmore"
-        href="https://www.ebi.ac.uk/about"
-      >
-        More about EMBL-EBI
-      </Connect(Link)>
-    </p>
-    <h6>
-      Connect to another EMBL location
-    </h6>
     <div
-      className="row small-collapse clearfix padding-bottom-large"
+      className="row padding-bottom-medium"
     >
       <div
-        className="columns small-5 padding-bottom-medium"
+        className="columns padding-top-medium"
       >
-        <Connect(Link)
-          href="https://www.embl.de/"
+        <button
+          aria-label="Close alert"
+          className="close-button"
+          onClick={[Function]}
+          type="button"
         >
-          Heidelberg
-        </Connect(Link)>
+          <span
+            aria-hidden="true"
+          >
+            ×
+          </span>
+        </button>
+      </div>
+      <div
+        className="columns medium-7"
+      >
         <div
-          className="small"
+          className="large-10 medium-12"
         >
-          Main Laboratory
+          <div
+            className="margin-bottom-large padding-top-xsmall margin-top-large"
+          >
+            <h3
+              className="no-underline inline"
+              style={
+                Object {
+                  "lineHeight": "1rem",
+                }
+              }
+            >
+              <Connect(Link)
+                href="https://embl.org"
+              >
+                EMBL
+              </Connect(Link)>
+            </h3>
+             
+            was set up in 1974 as Europe’s flagship laboratory for the life sciences – an intergovernmental organisation with more than 80 independent research groups covering the spectrum of molecular biology:
+          </div>
+        </div>
+        <div
+          className="row large-up-3 medium-up-3 small-up-2 no-underline medium-11"
+        >
+          <div
+            className="column padding-bottom-medium"
+          >
+            <Connect(Link)
+              href="https://www.embl.de/research/index.php"
+            >
+              <h5
+                className="inline underline"
+              >
+                Research:
+              </h5>
+               
+              perform basic research in molecular biology
+            </Connect(Link)>
+          </div>
+          <div
+            className="column padding-bottom-medium"
+          >
+            <Connect(Link)
+              href="https://www.embl.de/services/index.html"
+            >
+              <h5
+                className="inline underline"
+              >
+                Services:
+              </h5>
+               
+              offer vital services to scientists in the member states
+            </Connect(Link)>
+          </div>
+          <div
+            className="column padding-bottom-medium"
+          >
+            <Connect(Link)
+              href="https://www.embl.de/training/index.php"
+            >
+              <h5
+                className="inline underline"
+              >
+                Training
+              </h5>
+               
+              scientists, students and visitors at all levels
+            </Connect(Link)>
+          </div>
+          <div
+            className="column padding-bottom-medium"
+          >
+            <Connect(Link)
+              href="https://www.embl.de/research/tech_transfer/index.html"
+            >
+              <h5
+                className="inline underline"
+              >
+                Transfer
+              </h5>
+               
+              and development of technology
+            </Connect(Link)>
+          </div>
+          <div
+            className="column padding-bottom-medium"
+          >
+            <h5
+              className="inline underline"
+            >
+              Develop
+            </h5>
+             
+            new instruments and methods
+          </div>
+          <div
+            className="column padding-bottom-medium"
+          >
+            <h5
+              className="inline underline"
+            >
+              Integrating
+            </h5>
+             
+            life science research in Europe
+          </div>
+        </div>
+        <div
+          className="margin-top-xlarge no-underline"
+        >
+          <h3>
+            <Connect(Link)
+              className="readmore"
+              href="https://embl.org"
+            >
+              More about EMBL
+            </Connect(Link)>
+          </h3>
         </div>
       </div>
       <div
-        className="columns small-7 padding-bottom-medium"
+        className="columns medium-5"
       >
-        <Connect(Link)
-          href="http://www.embl-barcelona.es/"
-        >
-          Barcelona
-        </Connect(Link)>
         <div
-          className="small"
+          className="large-10 medium-12"
         >
-          Tissue biology and disease modelling
+          <h3
+            className="inline"
+          >
+            Six sites
+          </h3>
+          <p>
+            represent EMBL in Europe.
+          </p>
         </div>
-      </div>
-      <div
-        className="columns small-5 padding-bottom-medium"
-      >
-        <Connect(Link)
-          href="https://www.embl.fr/"
-        >
-          Grenoble
-        </Connect(Link)>
         <div
-          className="small"
+          className="row medium-up-2 small-up-2"
         >
-          Structural Biology
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.embl-barcelona.es/"
+              >
+                Barcelona
+              </Connect(Link)>
+            </h5>
+            <p>
+              Tissue biology and disease modelling
+            </p>
+          </div>
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.embl.fr/"
+              >
+                Grenoble
+              </Connect(Link)>
+            </h5>
+            <p>
+              Structural biology
+            </p>
+          </div>
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.embl-hamburg.de/"
+              >
+                Hamburg
+              </Connect(Link)>
+            </h5>
+            <p>
+              Structural biology
+            </p>
+          </div>
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.embl.de/"
+              >
+                Heidelberg
+              </Connect(Link)>
+            </h5>
+            <p>
+              Main laboratory
+            </p>
+          </div>
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.ebi.ac.uk/"
+              >
+                Hinxton
+              </Connect(Link)>
+            </h5>
+            <p
+              className="margin-bottom-none"
+            >
+              EMBL-EBI: European Bioinformatics Institute
+            </p>
+          </div>
+          <div
+            className="column"
+          >
+            <h5
+              className="inline"
+            >
+              <Connect(Link)
+                href="https://www.embl.it/"
+              >
+                Rome
+              </Connect(Link)>
+            </h5>
+            <p>
+              Epigenetics and neurobiology
+            </p>
+          </div>
         </div>
-      </div>
-      <div
-        className="columns small-7 padding-bottom-medium"
-      >
-        <Connect(Link)
-          href="https://www.embl-hamburg.de/"
-        >
-          Hamburg
-        </Connect(Link)>
-        <div
-          className="small"
-        >
-          Structural Biology
-        </div>
-      </div>
-      <div
-        className="columns small-5 padding-bottom-medium"
-      >
-        <Connect(Link)
-          href="https://www.embl.it/"
-        >
-          Rome
-        </Connect(Link)>
-        <div
-          className="small"
-        >
-          Epigenetics and neurology
-        </div>
-      </div>
-      <div
-        className="columns small-7 padding-bottom-medium"
-      >
-        <Connect(Link)
-          className="readmore"
-          href="https://embl.org/"
-        >
-          More about EMBL
-        </Connect(Link)>
       </div>
     </div>
-  </div>
+  </nav>
 </div>
 `;

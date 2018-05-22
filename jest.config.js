@@ -11,7 +11,7 @@ const websiteURL = url.parse(iprConfig.root.website, true, true);
 module.exports = {
   verbose: false,
   moduleNameMapper: {
-    'config.yml$': '<rootDir>/src/__mocks__/configMock.js',
+    'config.yml$': '<rootDir>/interpro-config.js',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$':
       '<rootDir>/src/__mocks__/fileMock.js',
     '\\.(css|less|scss)$': 'identity-obj-proxy',

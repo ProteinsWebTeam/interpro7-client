@@ -14,7 +14,7 @@ import { stuckSelector } from 'reducers/ui/stuck';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 import style from './style.css';
 
