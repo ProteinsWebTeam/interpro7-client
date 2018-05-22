@@ -533,25 +533,23 @@ class List extends PureComponent {
                 name /*: string */,
                 { accession } /*: {accession: string} */,
               ) => (
-                <Tooltip title={`${name} (${accession})`}>
-                  <Link
-                    to={customLocation => ({
-                      description: {
-                        ...customLocation.description,
-                        entry: {
-                          ...customLocation.description.entry,
-                          accession,
-                        },
+                <Link
+                  to={customLocation => ({
+                    description: {
+                      ...customLocation.description,
+                      entry: {
+                        ...customLocation.description.entry,
+                        accession,
                       },
-                      search: {},
-                    })}
-                  >
-                    <HighlightedText
-                      text={name}
-                      textToHighlight={search.search}
-                    />
-                  </Link>
-                </Tooltip>
+                    },
+                    search: {},
+                  })}
+                >
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
+                </Link>
               )}
             >
               Name
