@@ -1,16 +1,20 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
+import { format } from 'url';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
+import MemberSymbol from 'components/Entry/MemberSymbol';
 import { PDBeLink } from 'components/ExtLink';
 import LazyImage from 'components/LazyImage';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import StructureListFilters from 'components/Structure/StructureListFilters';
 import Table, {
   Column,
+  Card,
   SearchBox,
   PageSizeSelector,
   Exporter,
@@ -18,6 +22,10 @@ import Table, {
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import { NumberComponent } from 'components/NumberLabel';
+
+import { toPlural } from 'utils/pages';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -36,13 +44,15 @@ import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+
 import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(pageStyle, styles);
+const f = foundationPartial(pageStyle, styles, fonts);
 
 const SummaryAsync = loadable({
   loader: () =>
@@ -94,11 +104,263 @@ const Overview = ({ data: { payload, loading } }) => {
 };
 Overview.propTypes = propTypes;
 
+class SummaryCounterStructures extends PureComponent {
+  static propTypes = {
+    entryDB: T.string,
+    metadata: T.object.isRequired,
+    counters: T.object.isRequired,
+  };
+
+  render() {
+    const { entryDB, metadata, counters } = this.props;
+
+    const { entries, proteins, organisms } = counters;
+
+    return (
+      <div className={f('card-block', 'card-counter', 'label-off')}>
+        <Tooltip
+          title={`${entries} ${entryDB} ${toPlural(
+            'entry',
+            entries,
+          )} matching ${metadata.name}`}
+          className={f('count-entries')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'structure' },
+                structure: {
+                  db: 'pdb',
+                  accession: metadata.accession.toString(),
+                },
+                entry: { isFilter: true, db: entryDB || 'all' },
+              },
+            }}
+          >
+            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+
+            <NumberComponent value={entries} abbr scaleMargin={1} />
+
+            <span className={f('label-number')}>
+              {toPlural('entry', entries)}
+            </span>
+          </Link>
+        </Tooltip>
+
+        <Tooltip
+          title={`${proteins} ${toPlural('protein', proteins)} matching ${
+            metadata.name
+          }`}
+          className={f('count-proteins')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'structure' },
+                structure: {
+                  db: 'pdb',
+                  accession: metadata.accession.toString(),
+                },
+                protein: { isFilter: true, db: 'UniProt' },
+              },
+            }}
+          >
+            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <NumberComponent value={proteins} abbr scaleMargin={1} />
+            <span className={f('label-number')}>
+              {toPlural('protein', proteins)}
+            </span>
+          </Link>
+        </Tooltip>
+
+        <Tooltip
+          title={`${organisms} ${toPlural('organism', organisms)} matching ${
+            metadata.name
+          }`}
+          className={f('count-organisms')}
+          style={{ display: 'flex' }}
+        >
+          <div className={f('container')}>
+            <div className={f('icon', 'icon-count-species')} />{' '}
+            <NumberComponent value={organisms} abbr scaleMargin={1} />
+            <span className={f('label-number')}>
+              {toPlural('organism', organisms)}
+            </span>
+          </div>
+        </Tooltip>
+      </div>
+    );
+  }
+}
+
+class TaxnameStructures extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
+  };
+
+  render() {
+    const {
+      data: { loading, payload },
+    } = this.props;
+
+    return (
+      // TODO: get values when more than 2 species
+      <div
+        title={`${loading ||
+          payload.results[0].metadata.name}(Tax ID: ${loading ||
+          payload.results[0].metadata.accession})`}
+      >
+        {loading || payload.results[0].metadata.name}
+      </div>
+    );
+  }
+}
+
+const getUrlForStructTaxname = accession =>
+  createSelector(
+    state => state.settings.api,
+    ({ protocol, hostname, port, root }) =>
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname:
+          root +
+          descriptionToPath({
+            main: { key: 'organism' },
+            organism: { db: 'taxonomy' },
+            structure: {
+              isFilter: true,
+              db: 'pdb',
+              accession: accession,
+            },
+          }),
+      }),
+  );
+
+class StructureCard extends PureComponent {
+  static propTypes = {
+    data: T.object,
+    search: T.string,
+    entryDB: T.string,
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const nextAccession = nextProps.data.metadata.accession;
+
+    if (nextAccession === prevState.accession) return null;
+
+    return {
+      TaxnameStructuresWithData: loadData(
+        getUrlForStructTaxname(nextAccession),
+      )(TaxnameStructures),
+      accession: nextAccession,
+    };
+  }
+
+  constructor(props) {
+    super(props);
+
+    const accession = props.data.metadata.accession;
+    this.state = {
+      TaxnameStructuresWithData: loadData(getUrlForStructTaxname(accession))(
+        TaxnameStructures,
+      ),
+      accession,
+    };
+  }
+
+  render() {
+    const { data, search, entryDB } = this.props;
+    const { TaxnameStructuresWithData } = this.state;
+    return (
+      <React.Fragment>
+        <div className={f('card-header')}>
+          <Link
+            to={{
+              description: {
+                main: { key: 'structure' },
+                structure: {
+                  db: data.metadata.source_database,
+                  accession: data.metadata.accession,
+                },
+              },
+            }}
+          >
+            <Tooltip
+              title={`3D visualisation for ${
+                data.metadata.accession
+              } structure`}
+            >
+              <LazyImage
+                src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${
+                  data.metadata.accession
+                }/traces.jpg`}
+                alt={`structure with accession ${data.metadata.accession}`}
+              />
+            </Tooltip>
+            <h6>
+              <HighlightedText
+                text={data.metadata.name}
+                textToHighlight={search}
+              />
+            </h6>
+          </Link>
+
+          <div className={f('card-subheader')}>
+            {// INFO RESOLUTION BL - browse structures - Xray
+            data.metadata.experiment_type === 'x-ray' && (
+              <Tooltip
+                title={`X-ray, resolution ${data.metadata.resolution} Å`}
+              >
+                {data.metadata.experiment_type}
+                {': '}
+                {data.metadata.resolution}Å
+              </Tooltip>
+            )}
+            {// INFO TYPE BL - browse structures -NMR
+            data.metadata.experiment_type === 'nmr' && (
+              <Tooltip title="Nuclear Magnetic Resonance">
+                {data.metadata.experiment_type}
+              </Tooltip>
+            )}
+          </div>
+        </div>
+
+        {data.metadata &&
+          data.extra_fields.counters && (
+            <SummaryCounterStructures
+              metadata={data.metadata}
+              entryDB={entryDB}
+              counters={data.extra_fields.counters}
+            />
+          )}
+        <div className={f('card-footer')}>
+          <TaxnameStructuresWithData />
+          <div>
+            <HighlightedText
+              text={data.metadata.accession}
+              textToHighlight={search}
+            />
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+}
+
 const List = ({
   data: { payload, loading, ok, url, status },
   isStale,
   customLocation: {
     description: {
+      entry: { db: entryDB },
       structure: { db },
     },
     search,
@@ -170,6 +432,15 @@ const List = ({
             </ul>
           </Exporter>
           <PageSizeSelector />
+          <Card>
+            {data => (
+              <StructureCard
+                data={data}
+                search={search.search}
+                entryDB={entryDB}
+              />
+            )}
+          </Card>
           <SearchBox search={search.search}>Search structures</SearchBox>
           <Column
             dataKey="accession"
@@ -380,7 +651,7 @@ class Structure extends PureComponent {
                 data={{
                   data: this.props.data.payload,
                   endpoint: 'structure',
-                  version: databases && databases.PDB.version,
+                  version: databases && databases.pdb.version,
                 }}
                 processData={schemaProcessDataRecord}
               />

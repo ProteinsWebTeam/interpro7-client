@@ -6,7 +6,7 @@ import { schedule } from 'timing-functions/src';
 
 // Global stylesheets loaded here
 import 'styles/foundation';
-import 'ebi-framework/css/ebi-global.scss';
+import 'ebi-framework/css/ebi-global.css';
 import 'styles/global.css';
 // import 'styles/theme-interpro.css';
 import 'react-tippy/dist/tippy.css';
@@ -47,7 +47,7 @@ const SideMenuAsync = loadable({
 const EMBLDropdownAsync = loadable({
   loader: () =>
     schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "cookie-banner" */ 'components/EMBLDropdown'),
+      import(/* webpackChunkName: "embl-dropdown" */ 'components/EMBLDropdown'),
     ),
   loading: NullComponent,
 });
@@ -55,7 +55,7 @@ const EMBLDropdownAsync = loadable({
 const ElixirFooterAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "elixir-footer" */ 'components/ElixirFooter'),
+      import(/* webpackChunkName: "elixir-footer", webpackPreload: true */ 'components/ElixirFooter'),
     ),
   loading: NullComponent,
 });
@@ -63,7 +63,7 @@ const ElixirFooterAsync = loadable({
 const EBIFooterAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "ebi-footer" */ 'components/EBIFooter'),
+      import(/* webpackChunkName: "ebi-footer", webpackPreload: true */ 'components/EBIFooter'),
     ),
   loading: NullComponent,
 });

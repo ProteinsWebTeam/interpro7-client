@@ -4,7 +4,7 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 
 import PageSizeSelector from '../PageSizeSelector';
-import { NumberComponent, DEFAULT_DURATION } from 'components/NumberLabel';
+import { NumberComponent } from 'components/NumberLabel';
 
 import config from 'config';
 
@@ -37,7 +37,7 @@ class PaginationItem extends PureComponent {
           {...(!value || noLink ? {} : { to: toFunctionFor(value) })}
         >
           {(value && children) || (
-            <NumberComponent duration={duration || 0} value={value || ''} />
+            <NumberComponent duration={duration || 0} value={value} />
           )}
         </LinkOrFragment>
       </li>
@@ -138,19 +138,6 @@ class NextDotDotDot extends PureComponent {
   }
 }
 
-class Last extends PureComponent {
-  static propTypes = {
-    current: T.number.isRequired,
-    last: T.number.isRequired,
-  };
-
-  render() {
-    const { current, last } = this.props;
-    if (last === current) return null;
-    return <PaginationItem value={last} duration={DEFAULT_DURATION} />;
-  }
-}
-
 class NextText extends PureComponent {
   static propTypes = {
     next: T.number.isRequired,
@@ -196,7 +183,6 @@ const Footer = ({
             <Current current={current} />
             <Next current={current} next={next} last={last} />
             <NextDotDotDot next={next} last={last} />
-            <Last current={current} last={last} />
             <NextText next={next} />
           </ul>
         </div>

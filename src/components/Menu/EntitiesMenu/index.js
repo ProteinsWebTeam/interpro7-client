@@ -6,7 +6,7 @@ import MenuItem from 'components/Menu/MenuItem';
 
 import { entities } from 'menuConfig';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const EntitiesMenu = (
   { className, children } /*: {className?: string, children?: any} */,

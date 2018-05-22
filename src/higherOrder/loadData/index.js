@@ -1,3 +1,4 @@
+/* global ga: false */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -105,6 +106,13 @@ const loadData = params => {
         const request = this._request;
         try {
           const response = await request.promise;
+          // Analytics
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'data',
+            eventAction: response.status,
+            eventLabel: url,
+          });
           // We have a response 🎉 set it into the local state
           this.setState(({ data }) => {
             const nextData = {
@@ -122,6 +130,13 @@ const loadData = params => {
           // just ignore, otherwise it's a real error
           if (!request.canceled) {
             // we have a problem, something bad happened
+            // Analytics
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'data',
+              eventAction: 'fail',
+              eventLabel: url,
+            });
             this.setState(({ data }) => ({
               data: { ...data, loading: false, progress: 1, ok: false, error },
             }));

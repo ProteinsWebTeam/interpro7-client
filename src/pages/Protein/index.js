@@ -114,7 +114,7 @@ class List extends PureComponent {
     const notFound = !loading && status !== HTTP_OK;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
-    const db = 'UNIPROT';
+    const db = 'uniprot';
     if (loading || notFound) {
       _payload = {
         results: [],
@@ -133,10 +133,10 @@ class List extends PureComponent {
           <hr />
           {databases &&
             db &&
-            databases[db.toUpperCase()] && (
+            databases[db.toLowerCase()] && (
               <SchemaOrgData
                 data={{
-                  data: { db: databases[db.toUpperCase()] },
+                  data: { db: databases[db.toLowerCase()] },
                   location: window.location,
                 }}
                 processData={schemaProcessDataTable}
@@ -374,7 +374,7 @@ class Summary extends PureComponent {
               data={{
                 data: payload,
                 endpoint: 'protein',
-                version: databases && databases.UNIPROT.version,
+                version: databases && databases.uniprot.version,
               }}
               processData={schemaProcessDataRecord}
             />

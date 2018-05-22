@@ -8,9 +8,11 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
+import MemberSymbol from 'components/Entry/MemberSymbol';
 import OrganismListFilters from 'components/Organism/OrganismListFilters';
 import Table, {
   Column,
+  Card,
   SearchBox,
   PageSizeSelector,
   Exporter,
@@ -23,6 +25,12 @@ import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
+
+import { toPlural } from 'utils/pages';
+import getColor from 'utils/taxonomy/get-color';
+import getIcon from 'utils/taxonomy/get-icon';
+import getNodeSpotlight from 'utils/taxonomy/get-node-spotlight';
+import getSuperKingdom from 'utils/taxonomy/get-super-kingdom';
 
 import { mainDBLocationSelector } from 'reducers/custom-location/description';
 
@@ -40,13 +48,15 @@ import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
+
 import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
-import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(pageStyle, styles);
+const f = foundationPartial(pageStyle, styles, fonts);
 
 const EntryAccessionsRenderer = taxId => (
   <ProteinFile taxId={`${taxId}`} type="entry-accession" />
@@ -187,6 +197,217 @@ const dataProviderFor = (accession, sourceDatabase) => {
   return DataProvider;
 };
 
+const SpeciesIcon = ({ lineage }) => {
+  let icon = '.';
+  let color;
+  if (lineage) {
+    icon = getIcon(lineage) || '.';
+    color = getColor(lineage);
+  }
+  return (
+    <span
+      style={{ color }}
+      className={f('small', 'icon', 'icon-species')}
+      data-icon={icon}
+    />
+  );
+};
+SpeciesIcon.propTypes = {
+  lineage: T.string.isRequired,
+};
+
+class SummaryCounterOrg extends PureComponent {
+  static propTypes = {
+    entryDB: T.string,
+    metadata: T.object.isRequired,
+    counters: T.object.isRequired,
+  };
+
+  render() {
+    const { entryDB, metadata, counters } = this.props;
+
+    if (metadata.source_database === 'proteome') return null;
+
+    const { entries, proteins, structures, proteomes } = counters;
+
+    return (
+      <div className={f('card-block', 'card-counter', 'label-off')}>
+        <Tooltip
+          title={`${entries} ${entryDB || ''} ${toPlural(
+            'entry',
+            entries,
+          )} matching ${metadata.name}`}
+          className={f('count-entries')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'organism' },
+                organism: {
+                  db: 'taxonomy',
+                  accession: metadata.accession.toString(),
+                },
+                entry: { isFilter: true, db: entryDB && 'all' },
+              },
+            }}
+            disabled={!entries}
+          >
+            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+            <NumberComponent value={entries} abbr scaleMargin={1} />
+            <span className={f('label-number')}>
+              {toPlural('entry', entries)}
+            </span>
+          </Link>
+        </Tooltip>
+
+        <Tooltip
+          title={`${proteins}  ${toPlural('protein', proteins)} matching ${
+            metadata.name
+          }`}
+          className={f('count-proteins')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'organism' },
+                organism: {
+                  db: 'taxonomy',
+                  accession: metadata.accession.toString(),
+                },
+                protein: { isFilter: true, db: 'UniProt' },
+              },
+            }}
+            disabled={!proteins}
+          >
+            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <NumberComponent value={proteins} abbr scaleMargin={1} />
+            <span className={f('label-number')}>
+              {' '}
+              {toPlural('protein', proteins)}
+            </span>
+          </Link>
+        </Tooltip>
+
+        <Tooltip
+          title={`${structures} ${toPlural('structure', structures)} matching ${
+            metadata.name
+          }`}
+          className={f('count-structures')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'organism' },
+                organism: {
+                  db: 'taxonomy',
+                  accession: `${metadata.accession}`,
+                },
+                structure: { isFilter: true, db: 'PDB' },
+              },
+            }}
+            disabled={!structures}
+          >
+            <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
+            <NumberComponent value={structures} abbr scaleMargin={1} />{' '}
+            <span className={f('label-number')}>structures</span>
+          </Link>
+        </Tooltip>
+
+        <Tooltip
+          title={`${proteomes} proteomes matching ${metadata.name}`}
+          className={f('count-proteomes')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'organism' },
+                organism: {
+                  db: metadata.source_database,
+                  accession: `${metadata.accession}`,
+                  proteomeDB: 'proteome',
+                },
+              },
+            }}
+            disabled={!proteomes}
+          >
+            <div className={f('icon', 'icon-common', 'icon-count-proteome')} />
+            <NumberComponent value={proteomes} abbr scaleMargin={1} />{' '}
+            <span className={f('label-number')}>proteomes</span>
+          </Link>
+        </Tooltip>
+      </div>
+    );
+  }
+}
+
+const Lineage = ({ lineage }) => {
+  const superkingdom = getSuperKingdom(lineage) || 'N/A';
+  const nodespot = getNodeSpotlight(lineage);
+  return (
+    <Tooltip title={`Lineage: ${lineage}`}>
+      {superkingdom} {nodespot && `(${nodespot})`}
+    </Tooltip>
+  );
+};
+Lineage.propTypes = {
+  lineage: T.string.isRequired,
+};
+
+const OrganismCard = ({ data, search, entryDB }) => (
+  <React.Fragment>
+    <div className={f('card-header')}>
+      <Link
+        to={{
+          description: {
+            main: { key: 'organism' },
+            organism: {
+              db: data.metadata.source_database,
+              accession: `${data.metadata.accession}`,
+            },
+          },
+        }}
+      >
+        {data.metadata.source_database === 'taxonomy' && (
+          <SpeciesIcon lineage={data.extra_fields.lineage} />
+        )}
+        <h6>
+          <HighlightedText text={data.metadata.name} textToHighlight={search} />
+        </h6>
+      </Link>
+    </div>
+
+    <SummaryCounterOrg
+      entryDB={entryDB}
+      metadata={data.metadata}
+      counters={data.extra_fields.counters}
+    />
+
+    <div className={f('card-footer')}>
+      {data.metadata.source_database === 'taxonomy' && (
+        <Lineage lineage={data.extra_fields.lineage} />
+      )}
+      <div>
+        {`${
+          data.metadata.source_database === 'taxonomy' ? 'Tax' : 'Proteome'
+        } ID: `}
+        <HighlightedText
+          text={data.metadata.accession}
+          textToHighlight={search}
+        />
+      </div>
+    </div>
+  </React.Fragment>
+);
+OrganismCard.propTypes = {
+  data: T.object,
+  search: T.string,
+  entryDB: T.string,
+};
+
 class List extends PureComponent {
   static propTypes = propTypes;
 
@@ -194,7 +415,12 @@ class List extends PureComponent {
     const {
       data: { payload, loading, ok, url, status },
       isStale,
-      customLocation: { search },
+      customLocation: {
+        description: {
+          entry: { db: entryDB },
+        },
+        search,
+      },
       dataBase,
     } = this.props;
     let _payload = payload;
@@ -222,7 +448,7 @@ class List extends PureComponent {
           {databases && (
             <SchemaOrgData
               data={{
-                data: { db: databases.UNIPROT },
+                data: { db: databases.uniprot },
                 location: window.location,
               }}
               processData={schemaProcessDataTable}
@@ -263,6 +489,15 @@ class List extends PureComponent {
               </ul>
             </Exporter>
             <PageSizeSelector />
+            <Card>
+              {data => (
+                <OrganismCard
+                  data={data}
+                  search={search.search}
+                  entryDB={entryDB}
+                />
+              )}
+            </Card>
             <SearchBox search={search.search}>Search organism</SearchBox>
             <Column
               dataKey="accession"
@@ -573,7 +808,7 @@ class _Summary extends PureComponent {
                 data={{
                   data: payloadOrg,
                   endpoint: 'organism',
-                  version: databases && databases.UNIPROT.version,
+                  version: databases && databases.uniprot.version,
                 }}
                 processData={schemaProcessDataRecord}
               />

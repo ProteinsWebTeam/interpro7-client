@@ -1,16 +1,20 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { PMCLink, DOILink } from 'components/ExtLink';
 import Link from 'components/generic/Link';
 
+import { hashSelector } from 'reducers/custom-location/hash';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessCitations } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
 import refStyles from './style.css';
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(refStyles, ebiStyles);
 
@@ -26,15 +30,24 @@ const SchemaOrgData = loadable({
 //   author: data.authors,
 // });
 
+/*:: type Reference = Object; */
+
 const LiteratureItem = (
   {
     pubID,
     reference: r,
     i,
     included,
-  } /*: {pubID: string, reference: Object, i?: number, included?: boolean} */,
+    target,
+  } /*: {|
+  pubID: string,
+  reference: Reference,
+  i?: number,
+  included?: boolean,
+  target: boolean,
+|} */,
 ) => (
-  <div className={f('reference', 'small')} id={included ? pubID : null}>
+  <div className={f('reference', 'small', { target })}>
     <p className={f('cite')}>
       <SchemaOrgData
         data={{
@@ -45,11 +58,17 @@ const LiteratureItem = (
       />
       {included &&
         typeof i !== 'undefined' && (
-          <span className={f('index')}>
-            <Link href={`#${i}`} aria-label="jump up">
-              {i}.^
-            </Link>{' '}
-          </span>
+          <Link
+            id={pubID}
+            className={f('index')}
+            to={customLocation => ({
+              ...customLocation,
+              hash: `description-${i}`,
+            })}
+            aria-label="jump up"
+          >
+            {i}.^
+          </Link>
         )}
       <span className={f('title')}>{r.title} </span>
       <span className={f('authors')}>{r.authors.join(', ')} </span>{' '}
@@ -83,15 +102,24 @@ LiteratureItem.propTypes = {
   reference: T.object.isRequired,
   i: T.number,
   included: T.bool,
+  target: T.bool.isRequired,
 };
 
 const Literature = (
-  { included = [], extra = [] } /*: {|included: Array, extra: Array|} */,
+  {
+    included = [],
+    extra = [],
+    target,
+  } /*: {|
+  included?: Array<[string, Reference]>,
+  extra?: Array<[string, Reference]>,
+  target: string
+|} */,
 ) => (
   <div className={f('row')}>
     <div className={f('large-12', 'columns', 'margin-bottom-large')}>
       {included.length ? (
-        <div className={f('list')}>
+        <div className={f('list', { 'single-entry': included.length === 1 })}>
           {included.map(([pubID, ref], i) => (
             <LiteratureItem
               pubID={pubID}
@@ -99,31 +127,38 @@ const Literature = (
               reference={ref}
               i={i + 1}
               included
+              target={target === pubID}
             />
           ))}
         </div>
       ) : null}
+      {/* Only display “Further reading” if there have been main references */}
       {included.length && extra.length ? <h5>Further reading</h5> : null}
-      {included.length && extra.length ? (
-        <div className={f('list', 'further')}>
+      {extra.length ? (
+        <div
+          className={f('list', 'further', {
+            'single-entry': extra.length === 1,
+          })}
+        >
           {extra.map(([pubID, ref]) => (
-            <LiteratureItem pubID={pubID} key={pubID} reference={ref} />
+            <LiteratureItem
+              pubID={pubID}
+              key={pubID}
+              reference={ref}
+              target={target === pubID}
+            />
           ))}
         </div>
-      ) : (
-        // References for structure page (no gap)
-        <div className={f('list', 'nogap')}>
-          {extra.map(([pubID, ref]) => (
-            <LiteratureItem pubID={pubID} key={pubID} reference={ref} />
-          ))}
-        </div>
-      )}
+      ) : null}
     </div>
   </div>
 );
 Literature.propTypes = {
   included: T.arrayOf(T.array),
   extra: T.arrayOf(T.array),
+  target: T.string.isRequired,
 };
 
-export default Literature;
+const mapStateToProps = createSelector(hashSelector, target => ({ target }));
+
+export default connect(mapStateToProps)(Literature);

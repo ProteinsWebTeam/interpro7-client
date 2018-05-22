@@ -16,13 +16,19 @@ import TaxonomyVisualisation from 'taxonomy-visualisation';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import global from 'styles/global.css';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
+import memberSelectorStyle from 'components/Table/TotalNb/style.css';
 
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
-const f = foundationPartial(ebiStyles);
+const f = foundationPartial(ebiStyles, global, memberSelectorStyle);
+
+import MemberDBSelector from 'components/MemberDBSelector';
+import { createSelector } from 'reselect';
+import { format } from 'url';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 export const parentRelationship = ({ taxId, name = null }) => ({
   '@id': '@additionalProperty',
@@ -61,6 +67,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
       }).isRequired,
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
+    customLocation: T.object.isRequired,
   };
 
   constructor(props /*: Props */) {
@@ -126,12 +133,56 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     this._vis.focusNodeWithID(`${data.accession}`);
   };
 
+  _handleChange = ({ target: { value } }) => {
+    const {
+      customLocation: { description },
+    } = this.props;
+    this.props.goToCustomLocation({
+      search: {
+        entry_db: value,
+      },
+      description,
+    });
+  };
+  _isSelected = currentDB => {
+    const {
+      customLocation: {
+        search: { entry_db: db },
+      },
+    } = this.props;
+    return (db || 'all').toLowerCase() === currentDB.canonical.toLowerCase();
+  };
+
   render() {
     // const { data: { metadata } } = this.props;
     const { metadata, names } = this.props.data.payload;
+    const {
+      customLocation: {
+        search: { entry_db: db },
+      },
+    } = this.props;
+
     return (
       <div className={f('row')}>
         <div className={f('medium-12', 'columns')}>
+          <MemberDBSelector
+            contentType="organism"
+            filterType="entry"
+            onChange={this._handleChange}
+            isSelected={this._isSelected}
+            hideCounters={true}
+          >
+            {open => (
+              <span
+                className={f('header-total-results', {
+                  selector: typeof open === 'boolean',
+                  open,
+                })}
+              >
+                Entry Database: {db || 'All'}
+              </span>
+            )}
+          </MemberDBSelector>
           <Accession
             accession={metadata.accession}
             id={metadata.id}
@@ -260,7 +311,36 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default loadData((...args) => {
-  const url = getUrlForApi(...args);
-  return `${url}${url.includes('?') ? '&' : '?'}with_names`;
-})(connect(null, { goToCustomLocation })(SummaryOrganism));
+const getUrl = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    const { entry_db: db, ..._search } = search;
+    const hasFilters = Object.values(description).some(
+      endpoint => endpoint.isFilter,
+    );
+    _search.with_names = true;
+    const newDescription =
+      hasFilters || !db || db === 'all'
+        ? description
+        : {
+            ...description,
+            entry: {
+              isFilter: true,
+              db,
+            },
+          };
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(newDescription),
+      query: _search,
+    });
+  },
+);
+
+export default loadData(getUrl)(
+  connect(null, { goToCustomLocation })(SummaryOrganism),
+);

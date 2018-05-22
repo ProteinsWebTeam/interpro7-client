@@ -14,7 +14,7 @@ import ServerStatus from './ServerStatus';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import interproStyles from 'styles/interpro-new.css';
 import helperClasses from 'styles/helper-classes.css';
 import style from './style.css';

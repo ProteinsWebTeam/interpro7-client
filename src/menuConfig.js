@@ -61,6 +61,7 @@ export const entities /*: Array<Object> */ = [
             integration: customLocation.description.entry.integration,
           },
         },
+        hash: customLocation.hash,
       };
     },
     name: 'Entry',
@@ -74,6 +75,7 @@ export const entities /*: Array<Object> */ = [
           entry: getEntryForFilter(customLocation.description),
           organism: getOrganismForFilter(customLocation.description),
         },
+        hash: customLocation.hash,
       };
     },
     name: 'Protein',
@@ -86,6 +88,7 @@ export const entities /*: Array<Object> */ = [
           structure: { db: 'PDB' },
           entry: getEntryForFilter(customLocation.description),
         },
+        hash: customLocation.hash,
       };
     },
     name: 'Structure',
@@ -100,6 +103,7 @@ export const entities /*: Array<Object> */ = [
           },
           entry: getEntryForFilter(customLocation.description),
         },
+        hash: customLocation.hash,
       };
     },
     name: 'Organism',
@@ -112,6 +116,7 @@ export const entities /*: Array<Object> */ = [
           set: { db: 'all' },
           entry: getEntryForFilter(customLocation.description),
         },
+        hash: customLocation.hash,
       };
     },
     name: 'Set',

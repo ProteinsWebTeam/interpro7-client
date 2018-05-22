@@ -15,7 +15,7 @@ import loadable from 'higherOrder/loadable';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import local from '../styles.css';
@@ -56,7 +56,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
     const counts = payload && payload.entries.member_databases;
     const memberDB = payloadMeta
       ? Object.values(payloadMeta.databases).filter(
-          db => db.type === 'entry' && db.canonical !== 'INTERPRO',
+          db => db.type === 'entry' && db.canonical !== 'interpro',
         )
       : [];
     return (
@@ -98,8 +98,8 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                     {name}{' '}
                     <Tooltip title={description}>
                       <span
-                        className={f('small', 'icon', 'icon-generic')}
-                        data-icon="i"
+                        className={f('small', 'icon', 'icon-common')}
+                        data-icon="ℹ"
                         aria-label={description}
                       />
                     </Tooltip>

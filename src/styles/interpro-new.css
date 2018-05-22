@@ -1,5 +1,4 @@
 @import '../styles/colors.css';
-@import '../styles/timing.css';
 /******************************Override EBI global***************************/
 /*to include more systems fonts for windows machines*/
 h1,
@@ -190,8 +189,8 @@ div#local-title {
   color: #222;
 }
 .callout.info.withicon::before {
-  content: 'i';
-  font-family: 'EBI-Generic';
+  content: 'ℹ';
+  font-family: 'EBI-Common';
   color: #7fb0d1;
   margin-right: 0.5rem;
 }
@@ -208,42 +207,6 @@ div#local-title {
   font-family: 'EBI-Generic';
   color: #d72b3f;
   margin-right: 0.5rem;
-}
-
-.callout.nosquare {
-  background-image: linear-gradient(to right, #6b656530, #6b656530),
-    url(https://www.wellcomegenomecampus.org/gfx/hackathon-bg.png);
-  background-repeat: no-repeat;
-  background-position-x: 100%;
-  background-position-y: 5%;
-  overflow: hidden;
-}
-.callout.nosquare.border {
-  border: 0px solid rgba(10, 10, 10, 0.25);
-}
-.callout.nosquare h3 {
-  margin-left: 2rem;
-  margin-bottom: 1rem;
-} /*extra margin because of corner*/
-.callout.nosquare::after {
-  content: '';
-  position: absolute;
-  width: calc(100vw + 20px);
-  height: 120px;
-  background-color: white;
-  transform: rotate(-45deg);
-  right: -740px;
-  bottom: -75px;
-}
-.callout.nosquare::before {
-  content: '';
-  position: absolute;
-  width: calc(100vw + 20px);
-  height: 120px;
-  background-color: white;
-  transform: rotate(-45deg);
-  left: -570px;
-  top: -279px;
 }
 /*ICONS*/
 /*MEMBER DATABASE SVG icons*/
@@ -361,13 +324,6 @@ div#local-title {
   margin-left: 0.2rem;
 }
 /*using EBI font*/
-/*.ext::before {
-  font-family: 'EBI-Generic';
-  content: 'x';
-  font-size: 80%;
-  margin: 0 0.1rem 0 0;*/
-/*content: ' \21AA ';*/
-/*}*/
 /*/EXTERNAL LINKS*/
 
 /*/NEUTRAL LINKS*/
@@ -766,11 +722,11 @@ hr {
   content: 's';
 }
 .lm-plugin span.lm-icon-screenshot:before {
-  font-family: EBI-Generic;
+  font-family: EBI-Common;
   content: '!';
 }
 .lm-plugin span.lm-icon-help-circle:before {
-  font-family: EBI-Generic;
+  font-family: EBI-Common;
   content: '?';
 }
 .lm-plugin span.lm-icon-reset-scene:before {

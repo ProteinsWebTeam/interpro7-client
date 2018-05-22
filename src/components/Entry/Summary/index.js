@@ -1,5 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import partition from 'lodash-es/partition';
+
 import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
@@ -10,7 +12,7 @@ import ContributingSignatures from 'components/Entry/ContributingSignatures';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import partition from 'lodash-es/partition';
+import getUrlFor from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -52,10 +54,7 @@ const MemberDBSubtitle = ({ metadata }) => {
         >
           {metadata.source_database}{' '}
           <Tooltip title={metadata.source_database}>
-            <span
-              className={f('small', 'icon', 'icon-generic')}
-              data-icon="i"
-            />
+            <span className={f('small', 'icon', 'icon-common')} data-icon="ℹ" />
           </Tooltip>
         </Link>
       </h5>
@@ -81,12 +80,31 @@ const SidePanel = ({ metadata }) => (
   <div className={f('medium-4', 'large-4', 'columns')}>
     {metadata.integrated && <Integration intr={metadata.integrated} />}
     {metadata.integrated && (
-      <div>
-        <h5>External links</h5>
-        <Link className={f('ext')} to={{ description: {} }}>
-          {metadata.source_database} website
-        </Link>
-      </div>
+      <section>
+        <h5>External Links</h5>
+        <ul className={f('no-bullet')}>
+          <li>
+            <Link
+              className={f('ext')}
+              target="_blank"
+              href={getUrlFor(metadata.source_database)(metadata.accession)}
+            >
+              {metadata.source_database} website
+            </Link>
+          </li>
+          {metadata.wikipedia && (
+            <li>
+              <Link
+                className={f('ext')}
+                target="_blank"
+                href={`https://en.wikipedia.org/wiki/${metadata.wikipedia}`}
+              >
+                Wikipedia article
+              </Link>
+            </li>
+          )}
+        </ul>
+      </section>
     )}
     {metadata.member_databases &&
     Object.keys(metadata.member_databases).length ? (
@@ -207,15 +225,16 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   </p>
                 )}
               {// doesn't work for some HAMAP as they have enpty <P> tag
-              Object.keys(metadata.description).length && (
+              Object.keys(metadata.description).length ? (
                 <Fragment>
                   <h4>Description</h4>
                   <Description
                     textBlocks={metadata.description}
                     literature={included}
+                    accession={metadata.accession}
                   />
                 </Fragment>
-              )}
+              ) : null}
             </div>
             <SidePanel metadata={metadata} />
           </div>

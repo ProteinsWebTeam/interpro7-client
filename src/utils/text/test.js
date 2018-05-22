@@ -1,5 +1,5 @@
 // @flow
-import { transformFormatted } from '.';
+import { transformFormatted, unescape } from '.';
 
 describe('text utils', () => {
   describe('transformFormatted', () => {
@@ -17,6 +17,14 @@ describe('text utils', () => {
       for (const { i, o } of tests) {
         expect(transformFormatted(i)).toEqual(o);
       }
+    });
+  });
+
+  describe('unescape', () => {
+    test('should transform back escaped entities in a text', () => {
+      expect(unescape('&lt;span&gt;text &amp; more text&lt;/span&gt;')).toBe(
+        '<span>text & more text</span>',
+      );
     });
   });
 });

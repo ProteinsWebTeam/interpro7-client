@@ -33,7 +33,13 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
   const cached = sessionStorage.getItem(key);
 
   if (useCache && cached) {
-    return Promise.resolve(new Response(new Blob([cached])));
+    return Promise.resolve(
+      new Response(new Blob([cached]), {
+        status: SUCCESS_STATUS,
+        statusText: 'OK',
+        headers: { 'Client-Cache': 'true' },
+      }),
+    );
   }
 
   return fetch(url, restOfOptions).then(response => {
@@ -70,7 +76,12 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
   if (responseType && typeof response[responseType] === 'function') {
     payloadP = response[responseType]();
   }
-  return { payload: await payloadP, status: response.status, ok: response.ok };
+  return {
+    payload: await payloadP,
+    status: response.status,
+    ok: response.ok,
+    headers: response.headers,
+  };
 };
 
 export const cachedFetchText = commonCachedFetch('text');

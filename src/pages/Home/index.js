@@ -29,7 +29,7 @@ import {
 import { foundationPartial } from 'styles/foundation';
 // CSS
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import style from '../style.css';
@@ -61,12 +61,12 @@ const SearchByText = loadable({
 });
 const IPScanSearch = loadable({
   loader: () =>
-    import(/* webpackChunkName: "ipscan-search" */ 'components/IPScan/Search'),
+    import(/* webpackChunkName: "ipscan-search", webpackPreload: true */ 'components/IPScan/Search'),
 });
 // Browse by X box
 const ByMemberDatabase = loadable({
   loader: () =>
-    import(/* webpackChunkName: "by-member-database" */ 'components/home/ByMemberDatabase'),
+    import(/* webpackChunkName: "by-member-database", webpackPreload: true */ 'components/home/ByMemberDatabase'),
 });
 const ByEntryType = loadable({
   loader: () =>
@@ -78,19 +78,11 @@ const BySpecies = loadable({
 });
 const ByLatestEntries = loadable({
   loader: () =>
-    import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByLatestEntries'),
-});
-const ByEntriesFeatured = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "by-latest-entries" */ 'components/home/ByEntriesFeatured'),
-});
-const ByGOTerms = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "by-go-terms" */ 'components/home/ByGOTerms'),
+    import(/* webpackChunkName: "by-latest-entries", webpackPreload: true */ 'components/home/ByLatestEntries'),
 });
 const BlogEntries = loadable({
   loader: () =>
-    import(/* webpackChunkName: "blog-entries" */ 'components/home/BlogEntries'),
+    import(/* webpackChunkName: "blog-entries", webpackPreload: true */ 'components/home/BlogEntries'),
 });
 
 const Twitter = loadable({
@@ -412,23 +404,43 @@ class InterProGraphicAnim extends PureComponent {
   }
 }
 
+const SchemaOrgDataWithData = loadData(getUrlForMeta)(
+  class SchemaOrgDataWithData extends PureComponent {
+    static propTypes = {
+      data: T.shape({
+        payload: T.shape({
+          databases: T.object,
+        }),
+      }).isRequired,
+    };
+
+    render() {
+      const databases =
+        this.props.data &&
+        this.props.data.payload &&
+        this.props.data.payload.databases;
+      if (!databases) return null;
+      return (
+        <SchemaOrgData
+          data={{
+            name: 'InterPro',
+            location: window.location,
+            version: databases && databases.interpro.version,
+            releaseDate: databases && databases.interpro.releaseDate,
+          }}
+          processData={schemaProcessDataForDB}
+        />
+      );
+    }
+  },
+);
+
 const description = `
 InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites. To classify proteins in this way, InterPro uses predictive models, known as signatures, provided by several different databases (referred to as member databases) that make up the InterPro consortium. We combine protein signatures from these member databases into a single searchable resource, capitalising on their individual strengths to produce a powerful integrated database and diagnostic tool.
 `.trim();
 
 class Home extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-  };
   render() {
-    const databases =
-      this.props.data &&
-      this.props.data.payload &&
-      this.props.data.payload.databases;
     return (
       <Fragment>
         <div className={f('row')}>
@@ -437,17 +449,7 @@ class Home extends PureComponent {
               data={{ location: window.location, description }}
               processData={schemaProcessDataInterpro}
             />
-            {databases && (
-              <SchemaOrgData
-                data={{
-                  name: 'InterPro',
-                  location: window.location,
-                  version: databases && databases.INTERPRO.version,
-                  releaseDate: databases && databases.INTERPRO.releaseDate,
-                }}
-                processData={schemaProcessDataForDB}
-              />
-            )}
+            <SchemaOrgDataWithData />
             <div className={f('container-intro')}>
               <div className={f('fig-container')}>
                 <InterProGraphicAnim />
@@ -492,9 +494,6 @@ class Home extends PureComponent {
                 </div>
                 <div title="Species">
                   <BySpecies />
-                </div>
-                <div title="GO term" className={f('go-list')}>
-                  <ByGOTerms />
                 </div>
               </Tabs>
             </div>
@@ -697,4 +696,4 @@ class Home extends PureComponent {
   }
 }
 
-export default loadData(getUrlForMeta)(Home);
+export default Home;
