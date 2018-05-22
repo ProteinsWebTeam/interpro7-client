@@ -418,7 +418,7 @@ class List extends PureComponent {
     const urlHasParameter = data.url && data.url.includes('?');
     const includeGrid = data.url;
     return (
-      <div className={f('row', 'test')}>
+      <div className={f('row')}>
         <MemberDBSelector
           contentType="entry"
           className="left-side-db-selector"
