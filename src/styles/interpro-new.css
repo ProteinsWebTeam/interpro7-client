@@ -11,16 +11,11 @@ h6 {
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
     sans-serif;
 }
-/*temp - big title experiment
-body h3 {
-  color: #282c34;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-  font-size: 50px;
-  line-height: 65px;
-  font-weight: 700;
+
+h3 {
+  font-weight: 300;
 }
-*/
+
 /*resize h5 should be included in template*/
 @media screen and (max-width: 75rem) {
   body h5 {
@@ -72,6 +67,15 @@ a:visited {
     display: none;
   }
 }
+
+.tabs {
+  border-top-width: 0;
+}
+
+a:focus {
+  box-shadow: 0 0 0 rgba(100, 100, 100, 0.5);
+} /*remove that as it doesn't work with tabs */
+
 /*override EBI foundation css that overrides foundation*/
 mark {
   background-color: var(--colors-marktext);
