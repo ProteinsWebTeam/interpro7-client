@@ -418,7 +418,7 @@ class List extends PureComponent {
     const urlHasParameter = data.url && data.url.includes('?');
     const includeGrid = data.url;
     return (
-      <div className={f('row')}>
+      <div className={f('row', 'test')}>
         <MemberDBSelector
           contentType="entry"
           className="left-side-db-selector"
@@ -858,7 +858,7 @@ class Entry extends PureComponent {
       dataBase && dataBase.payload && dataBase.payload.databases;
 
     return (
-      <div>
+      <div className={f('row')}>
         {payload &&
           payload.metadata &&
           payload.metadata.accession && (
