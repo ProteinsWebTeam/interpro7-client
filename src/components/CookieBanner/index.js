@@ -63,31 +63,25 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
           zIndex: 101,
         }}
       >
-        <div className={foundation('row')} ref={this._ref}>
+        <div
+          className={foundation('row')}
+          style={{ display: 'flex', alignItems: 'baseline' }}
+          ref={this._ref}
+        >
           <span style={{ marginRight: '2em', flex: 1 }}>
-            This website uses cookies. By continuing to browse this site, you
-            are agreeing to the use of our site cookies. To find out more, see
-            our{' '}
+            This website requires cookies, and the limited processing of your
+            personal data in order to function. By using the site you are
+            agreeing to this as outlined in our Privacy Notice and{' '}
             <Link
               target="_blank"
               href="https://www.ebi.ac.uk/about/terms-of-use"
-              style={{ color: '#f8f8f8', borderBottom: '1px dotted' }}
+              style={{ color: '#f8f8f8' }}
             >
               Terms of Use
             </Link>.
           </span>
-          <button
-            style={{
-              fontWeight: 'bold',
-              padding: '0.5em',
-              color: '#fff',
-              position: 'absolute',
-              top: '1ch',
-              right: '1ch',
-            }}
-            onClick={this.handleClick}
-          >
-            ×
+          <button style={{ color: '#fff' }} onClick={this.handleClick}>
+            I agree, dismiss this banner
           </button>
         </div>
       </AnimatedEntry>

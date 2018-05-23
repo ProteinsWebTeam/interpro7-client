@@ -30,6 +30,12 @@ exports[`<CookieBanner /> should render 1`] = `
 >
   <div
     className="row"
+    style={
+      Object {
+        "alignItems": "baseline",
+        "display": "flex",
+      }
+    }
   >
     <span
       style={
@@ -39,13 +45,12 @@ exports[`<CookieBanner /> should render 1`] = `
         }
       }
     >
-      This website uses cookies. By continuing to browse this site, you are agreeing to the use of our site cookies. To find out more, see our
+      This website requires cookies, and the limited processing of your personal data in order to function. By using the site you are agreeing to this as outlined in our Privacy Notice and
        
       <Connect(Link)
         href="https://www.ebi.ac.uk/about/terms-of-use"
         style={
           Object {
-            "borderBottom": "1px dotted",
             "color": "#f8f8f8",
           }
         }
@@ -60,15 +65,10 @@ exports[`<CookieBanner /> should render 1`] = `
       style={
         Object {
           "color": "#fff",
-          "fontWeight": "bold",
-          "padding": "0.5em",
-          "position": "absolute",
-          "right": "1ch",
-          "top": "1ch",
         }
       }
     >
-      ×
+      I agree, dismiss this banner
     </button>
   </div>
 </Connect(AnimatedEntry)>
