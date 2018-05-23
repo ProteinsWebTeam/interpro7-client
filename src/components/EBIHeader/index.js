@@ -55,46 +55,46 @@ const EBIHeader = () => (
           className={styleBundle('menu', 'global-nav', 'text-right')}
         >
           <li className={styleBundle('home-mobile', 'show-for-small-only')}>
-            <Link href="https://www.ebi.ac.uk">EMBL-EBI Home page</Link>
+            <Link href="//www.ebi.ac.uk">EMBL-EBI Home page</Link>
           </li>
 
           <li className={styleBundle('embl', 'hide')}>
-            <Link href="http://www.embl.org/">EMBL</Link>
+            <Link href="//www.embl.org/">EMBL</Link>
           </li>
           <li className={styleBundle('barcelona', 'hide')}>
-            <Link href="https://www.embl-barcelona.es/">Barcelona</Link>
+            <Link href="//www.embl-barcelona.es/">Barcelona</Link>
           </li>
           <li className={styleBundle('hamburg', 'hide')}>
-            <Link href="https://www.embl-hamburg.de/">Hamburg</Link>
+            <Link href="//www.embl-hamburg.de/">Hamburg</Link>
           </li>
           <li className={styleBundle('heidelberg', 'hide')}>
-            <Link href="https://www.embl.de/">Heidelberg</Link>
+            <Link href="//www.embl.de/">Heidelberg</Link>
           </li>
           <li className={styleBundle('grenoble', 'hide')}>
-            <Link href="https://www.embl.fr/">Grenoble</Link>
+            <Link href="//www.embl.fr/">Grenoble</Link>
           </li>
           <li className={styleBundle('rome', 'hide')}>
-            <Link href="https://www.embl.it/">Rome</Link>
+            <Link href="//www.embl.it/">Rome</Link>
           </li>
 
           <li className={styleBundle('ebi')}>
-            <Link href="https://www.ebi.ac.uk">EMBL-EBI</Link>
+            <Link href="//www.ebi.ac.uk">EMBL-EBI</Link>
           </li>
 
           <li className={styleBundle('services', 'active')}>
-            <Link href="https://www.ebi.ac.uk/services">Services</Link>
+            <Link href="//www.ebi.ac.uk/services">Services</Link>
           </li>
 
           <li className={styleBundle('research')}>
-            <Link href="https://www.ebi.ac.uk/research">Research</Link>
+            <Link href="//www.ebi.ac.uk/research">Research</Link>
           </li>
 
           <li className={styleBundle('training')}>
-            <Link href="https://www.ebi.ac.uk/training">Training</Link>
+            <Link href="//www.ebi.ac.uk/training">Training</Link>
           </li>
 
           <li className={styleBundle('about')}>
-            <Link href="https://www.ebi.ac.uk/about">About us</Link>
+            <Link href="//www.ebi.ac.uk/about">About us</Link>
           </li>
 
           <li
