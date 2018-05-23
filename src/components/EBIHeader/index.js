@@ -26,11 +26,9 @@ const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 /*
  EMBL-EBI button and hidden div behaviour
  */
-// TODO: SP remove height when bug on EBI side is fixed
 const _EmblButton = ({ toggleEMBLMapNav }) => (
   <button
     className={styleBundle('button', 'float-right')}
-    style={{ height: '36px' }}
     type="button"
     aria-expanded="false"
     aria-label="EMBL dropdown"
@@ -121,18 +119,6 @@ export const EbiSkipToDiv = () => (
     <ul>
       <li>
         <a href="#content">Skip to main content</a>
-      </li>
-      <li>
-        <a href="#local-nav">Skip to local navigation</a>
-      </li>
-      <li>
-        <a href="#global-nav">Skip to EBI global navigation menu</a>
-      </li>
-      <li>
-        <a href="#global-nav-expanded">
-          Skip to expanded EBI global navigation menu (includes all
-          sub-sections)
-        </a>
       </li>
     </ul>
   </div>
