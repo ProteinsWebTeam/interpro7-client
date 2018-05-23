@@ -9,7 +9,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import OrganismListFilters from 'components/Organism/OrganismListFilters';
+// import OrganismListFilters from 'components/Organism/OrganismListFilters';
 import Table, {
   Column,
   Card,
@@ -70,6 +70,16 @@ const ProteinFastasRenderer = taxId => (
   <ProteinFile taxId={`${taxId}`} type="FASTA" />
 );
 
+const SummaryAsync = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
+});
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
 const propTypes = {
   data: T.shape({
     payload: T.object,
@@ -99,13 +109,13 @@ class Overview extends PureComponent {
     } = this.props;
     return (
       <ul className={f('card')}>
-        {Object.entries(payload.organisms || {}).map(([name, count]) => (
+        {Object.entries(payload.taxa || {}).map(([name, count]) => (
           <li key={name}>
             <Link
               to={{
                 description: {
-                  main: { key: 'protein' },
-                  protein: { db: name },
+                  main: { key: 'taxonomy' },
+                  taxonomy: { db: name },
                 },
               }}
             >
@@ -118,8 +128,6 @@ class Overview extends PureComponent {
     );
   }
 }
-
-// TODO: remove need for all of that. Might cause memory leaks?
 const dataProviders = new Map();
 class PlainDataProvider extends PureComponent {
   static propTypes = {
@@ -157,10 +165,10 @@ const dataProviderFor = (accession, sourceDatabase) => {
         pathname:
           root +
           descriptionToPath({
-            main: { key: 'organism' },
+            main: { key: 'taxonomy' },
             entry: { isFilter: true },
             protein: { isFilter: true },
-            organism: { db: sourceDatabase, accession },
+            taxonomy: { db: sourceDatabase, accession },
           }),
       }),
   );
@@ -175,10 +183,10 @@ const dataProviderFor = (accession, sourceDatabase) => {
         pathname:
           root +
           descriptionToPath({
-            main: { key: 'organism' },
+            main: { key: 'taxonomy' },
             entry: { isFilter: true, db: entryDB },
             protein: { isFilter: true },
-            organism: { db: sourceDatabase, accession },
+            taxonomy: { db: sourceDatabase, accession },
           }),
       }),
   );
@@ -197,6 +205,115 @@ const dataProviderFor = (accession, sourceDatabase) => {
   return DataProvider;
 };
 
+const subPagesForTaxonomy = new Map();
+for (const subPage of config.pages.taxonomy.subPages) {
+  subPagesForTaxonomy.set(subPage, subPages.get(subPage));
+}
+
+const locationSelector1 = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
+
+class SummaryComponent extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      payload: T.any,
+    }).isRequired,
+    customLocation: T.object.isRequired,
+  };
+
+  render() {
+    const {
+      data: { payload, loading },
+      customLocation,
+    } = this.props;
+    return (
+      <SummaryAsync
+        data={payload}
+        customLocation={customLocation}
+        loading={loading}
+      />
+    );
+  }
+}
+
+class Summary extends PureComponent {
+  static propTypes = {
+    data: T.shape({
+      loading: T.bool.isRequired,
+    }).isRequired,
+    dataBase: T.shape({
+      payload: T.shape({
+        databases: T.object,
+      }),
+    }).isRequired,
+    customLocation: T.object.isRequired,
+  };
+
+  render() {
+    const {
+      data: { loading, payload },
+      // dataOrganism: { loading: loadingOrg, payload: payloadOrg },
+      dataBase,
+    } = this.props;
+    if (loading || !payload) {
+      return <Loading />;
+    }
+    const databases =
+      dataBase && dataBase.payload && dataBase.payload.databases;
+    return (
+      <Fragment>
+        {payload &&
+          payload.metadata &&
+          payload.metadata.accession && (
+            <Fragment>
+              <SchemaOrgData
+                data={{
+                  data: payload,
+                  endpoint: 'taxonomy',
+                  version: databases && databases.uniprot.version,
+                }}
+                processData={schemaProcessDataRecord}
+              />
+              <SchemaOrgData
+                data={{
+                  data: payload.metadata,
+                  type: 'Taxonomy',
+                }}
+                processData={schemaProcessMainEntity}
+              />
+            </Fragment>
+          )}
+
+        <ErrorBoundary>
+          <div className={f('row')}>
+            <div className={f('medium-12', 'large-12', 'columns')}>
+              {/* <LoadedTitle />*/}
+              {loading ? (
+                <Loading />
+              ) : (
+                <Title metadata={payload.metadata} mainType="taxonomy" />
+              )}
+              <EntryMenu metadata={payload.metadata} />
+            </div>
+          </div>
+          <Switch
+            {...this.props}
+            locationSelector={locationSelector1}
+            indexRoute={SummaryComponent}
+            childRoutes={subPagesForTaxonomy}
+          />
+        </ErrorBoundary>
+      </Fragment>
+    );
+  }
+}
 const SpeciesIcon = ({ lineage }) => {
   let icon = '.';
   let color;
@@ -215,7 +332,6 @@ const SpeciesIcon = ({ lineage }) => {
 SpeciesIcon.propTypes = {
   lineage: T.string.isRequired,
 };
-
 class SummaryCounterOrg extends PureComponent {
   static propTypes = {
     entryDB: T.string,
@@ -225,8 +341,6 @@ class SummaryCounterOrg extends PureComponent {
 
   render() {
     const { entryDB, metadata, counters } = this.props;
-
-    if (metadata.source_database === 'proteome') return null;
 
     const { entries, proteins, structures, proteomes } = counters;
 
@@ -243,9 +357,9 @@ class SummaryCounterOrg extends PureComponent {
           <Link
             to={{
               description: {
-                main: { key: 'organism' },
-                organism: {
-                  db: 'taxonomy',
+                main: { key: 'taxonomy' },
+                taxonomy: {
+                  db: 'uniprot',
                   accession: metadata.accession.toString(),
                 },
                 entry: { isFilter: true, db: entryDB && 'all' },
@@ -271,9 +385,9 @@ class SummaryCounterOrg extends PureComponent {
           <Link
             to={{
               description: {
-                main: { key: 'organism' },
-                organism: {
-                  db: 'taxonomy',
+                main: { key: 'taxonomy' },
+                taxonomy: {
+                  db: 'uniprot',
                   accession: metadata.accession.toString(),
                 },
                 protein: { isFilter: true, db: 'UniProt' },
@@ -300,9 +414,9 @@ class SummaryCounterOrg extends PureComponent {
           <Link
             to={{
               description: {
-                main: { key: 'organism' },
-                organism: {
-                  db: 'taxonomy',
+                main: { key: 'taxonomy' },
+                taxonomy: {
+                  db: 'uniprot',
                   accession: `${metadata.accession}`,
                 },
                 structure: { isFilter: true, db: 'PDB' },
@@ -324,12 +438,12 @@ class SummaryCounterOrg extends PureComponent {
           <Link
             to={{
               description: {
-                main: { key: 'organism' },
-                organism: {
-                  db: metadata.source_database,
+                main: { key: 'taxonomy' },
+                taxonomy: {
+                  db: 'uniprot',
                   accession: `${metadata.accession}`,
-                  proteomeDB: 'proteome',
                 },
+                proteome: { isFilter: true, db: 'uniprot' },
               },
             }}
             disabled={!proteomes}
@@ -343,7 +457,6 @@ class SummaryCounterOrg extends PureComponent {
     );
   }
 }
-
 const Lineage = ({ lineage }) => {
   const superkingdom = getSuperKingdom(lineage) || 'N/A';
   const nodespot = getNodeSpotlight(lineage);
@@ -357,23 +470,21 @@ Lineage.propTypes = {
   lineage: T.string.isRequired,
 };
 
-const OrganismCard = ({ data, search, entryDB }) => (
+const TaxonomyCard = ({ data, search, entryDB }) => (
   <React.Fragment>
     <div className={f('card-header')}>
       <Link
         to={{
           description: {
-            main: { key: 'organism' },
-            organism: {
+            main: { key: 'taxonomy' },
+            taxonomy: {
               db: data.metadata.source_database,
               accession: `${data.metadata.accession}`,
             },
           },
         }}
       >
-        {data.metadata.source_database === 'taxonomy' && (
-          <SpeciesIcon lineage={data.extra_fields.lineage} />
-        )}
+        <SpeciesIcon lineage={data.extra_fields.lineage} />
         <h6>
           <HighlightedText text={data.metadata.name} textToHighlight={search} />
         </h6>
@@ -387,13 +498,11 @@ const OrganismCard = ({ data, search, entryDB }) => (
     />
 
     <div className={f('card-footer')}>
-      {data.metadata.source_database === 'taxonomy' && (
+      {data.extra_fields.lineage && (
         <Lineage lineage={data.extra_fields.lineage} />
       )}
       <div>
-        {`${
-          data.metadata.source_database === 'taxonomy' ? 'Tax' : 'Proteome'
-        } ID: `}
+        Tax ID:
         <HighlightedText
           text={data.metadata.accession}
           textToHighlight={search}
@@ -402,7 +511,7 @@ const OrganismCard = ({ data, search, entryDB }) => (
     </div>
   </React.Fragment>
 );
-OrganismCard.propTypes = {
+TaxonomyCard.propTypes = {
   data: T.object,
   search: T.string,
   entryDB: T.string,
@@ -434,16 +543,14 @@ class List extends PureComponent {
       };
     }
     const urlHasParameter = url && url.includes('?');
-    const includeTree = url && !url.includes('proteome');
-    const includeGrid = url && !url.includes('proteome');
     return (
       <div className={f('row')}>
         <MemberDBSelector
-          contentType="organism"
+          contentType="taxonomy"
           className="left-side-db-selector"
         />
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          <OrganismListFilters />
+          {/*<OrganismListFilters />*/}
           <hr />
           {databases && (
             <SchemaOrgData
@@ -456,27 +563,27 @@ class List extends PureComponent {
           )}
           <Table
             dataTable={_payload.results}
-            contentType="organism"
+            contentType="taxonomy"
             loading={loading}
             ok={ok}
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
-            withTree={!!includeTree}
-            withGrid={!!includeGrid}
+            withTree={true}
+            withGrid={true}
           >
             <Exporter>
               <ul>
                 <li>
-                  <Link href={url} download="organisms.json">
+                  <Link href={url} download="taxonomy.json">
                     JSON
                   </Link>
                 </li>
                 <li>
                   <Link
                     href={`${url}${urlHasParameter ? '&' : '?'}format=tsv`}
-                    download="organisms.tsv"
+                    download="taxonomy.tsv"
                   >
                     TSV
                   </Link>
@@ -491,37 +598,31 @@ class List extends PureComponent {
             <PageSizeSelector />
             <Card>
               {data => (
-                <OrganismCard
+                <TaxonomyCard
                   data={data}
                   search={search.search}
                   entryDB={entryDB}
                 />
               )}
             </Card>
-            <SearchBox search={search.search}>Search organism</SearchBox>
+            <SearchBox search={search.search}>Search taxonomy</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
                 <Link
                   to={customLocation => ({
                     description: {
-                      main: { key: 'organism' },
-                      organism: {
-                        ...customLocation.description.organism,
-                        accession: customLocation.description.organism.db
-                          ? accession.toString()
-                          : null,
-                        proteomeAccession: customLocation.description.organism
-                          .proteomeDB
-                          ? accession.toString()
-                          : null,
+                      main: { key: 'taxonomy' },
+                      taxonomy: {
+                        ...customLocation.description.taxonomy,
+                        accession: accession.toString(),
                       },
                     },
                   })}
                 >
                   <SchemaOrgData
                     data={{
-                      data: { row, endpoint: 'organism' },
+                      data: { row, endpoint: 'taxonomy' },
                       location: window.location,
                     }}
                     processData={schemaProcessDataTableRow}
@@ -533,7 +634,7 @@ class List extends PureComponent {
                 </Link>
               )}
             >
-              Tax ID
+              Accession
             </Column>
             <Column
               dataKey="name"
@@ -544,9 +645,9 @@ class List extends PureComponent {
                 <Link
                   to={customLocation => ({
                     description: {
-                      main: { key: 'organism' },
-                      organism: {
-                        ...customLocation.description.organism,
+                      main: { key: 'taxonomy' },
+                      taxonomy: {
+                        ...customLocation.description.taxonomy,
                         accession: accession.toString(),
                       },
                     },
@@ -584,9 +685,9 @@ class List extends PureComponent {
                           className={f('no-decoration')}
                           to={{
                             description: {
-                              main: { key: 'organism' },
-                              organism: {
-                                db: 'taxonomy',
+                              main: { key: 'taxonomy' },
+                              taxonomy: {
+                                db: 'uniprot',
                                 accession: `${accession}`,
                               },
                               entry: { isFilter: true, db: db || 'all' },
@@ -635,9 +736,9 @@ class List extends PureComponent {
                         <Link
                           to={{
                             description: {
-                              main: { key: 'organism' },
-                              organism: {
-                                db: 'taxonomy',
+                              main: { key: 'taxonomy' },
+                              taxonomy: {
+                                db: 'uniprot',
                                 accession: `${accession}`,
                               },
                               protein: { isFilter: true, db: 'UniProt' },
@@ -656,7 +757,7 @@ class List extends PureComponent {
                 );
               }}
             >
-              <Tooltip title="All the proteins for this organism containing an entry from the selected database">
+              <Tooltip title="All the proteins for this taxonomy containing an entry from the selected database">
                 Protein count
               </Tooltip>
             </Column>
@@ -685,175 +786,9 @@ class List extends PureComponent {
   }
 }
 
-const SummaryAsync = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
-});
-
-const SchemaOrgData = loadable({
-  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  loading: () => null,
-});
-
-class SummaryComponent extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.any,
-    }).isRequired,
-    customLocation: T.object.isRequired,
-  };
-
-  render() {
-    const {
-      data: { payload, loading },
-      customLocation,
-    } = this.props;
-    return (
-      <SummaryAsync
-        data={payload}
-        customLocation={customLocation}
-        loading={loading}
-      />
-    );
-  }
-}
-
-const subPagesForOrganism = new Map();
-for (const subPage of config.pages.organism.subPages) {
-  subPagesForOrganism.set(subPage, subPages.get(subPage));
-}
-
-// const _Title = ({ data: { loading, payload } }) =>
-//   loading ? (
-//     <Loading />
-//   ) : (
-//     <Title metadata={payload.metadata} mainType="organism" />
-//   );
-// _Title.propTypes = {
-//   data: T.shape({
-//     loading: T.bool,
-//     payload: T.object,
-//   }).isRequired,
-// };
-
-const mapStateToAccessionUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.organism.db,
-  state => state.customLocation.description.organism.accession,
-  state => state.customLocation.description.organism.proteomeDB,
-  state => state.customLocation.description.organism.proteomeAccession,
-  (
-    { protocol, hostname, port, root },
-    db,
-    accession,
-    proteomeDB,
-    proteomeAccession,
-  ) =>
-    format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}/organism/${db || ''}/${accession || ''}/${
-        proteomeAccession ? proteomeDB : ''
-      }/${proteomeAccession || ''}`,
-    }),
-);
-
-const locationSelector1 = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].detail ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0] ||
-    (customLocation.description[key].accession &&
-      customLocation.description[key].proteomeDB)
-  );
-}, value => value);
-
-class _Summary extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-    }).isRequired,
-    dataOrganism: T.shape({
-      loading: T.bool.isRequired,
-    }).isRequired,
-    dataBase: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-    customLocation: T.object.isRequired,
-  };
-
-  render() {
-    const {
-      data: { loading, payload },
-      dataOrganism: { loading: loadingOrg, payload: payloadOrg },
-      dataBase,
-    } = this.props;
-    if (loading || !payload) {
-      return <Loading />;
-    }
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
-    return (
-      <Fragment>
-        {payloadOrg &&
-          payloadOrg.metadata &&
-          payloadOrg.metadata.accession && (
-            <Fragment>
-              <SchemaOrgData
-                data={{
-                  data: payloadOrg,
-                  endpoint: 'organism',
-                  version: databases && databases.uniprot.version,
-                }}
-                processData={schemaProcessDataRecord}
-              />
-              <SchemaOrgData
-                data={{
-                  data: payloadOrg.metadata,
-                  type: 'Organism',
-                }}
-                processData={schemaProcessMainEntity}
-              />
-            </Fragment>
-          )}
-
-        <ErrorBoundary>
-          <div className={f('row')}>
-            <div className={f('medium-12', 'large-12', 'columns')}>
-              {/* <LoadedTitle />*/}
-              {loadingOrg ? (
-                <Loading />
-              ) : (
-                <Title metadata={payloadOrg.metadata} mainType="organism" />
-              )}
-              <EntryMenu metadata={payload.metadata} />
-            </div>
-          </div>
-          <Switch
-            {...this.props}
-            locationSelector={locationSelector1}
-            indexRoute={SummaryComponent}
-            childRoutes={subPagesForOrganism}
-          />
-        </ErrorBoundary>
-      </Fragment>
-    );
-  }
-}
-const Summary = loadData({
-  getUrl: mapStateToAccessionUrl,
-  propNamespace: 'Organism',
-})(loadData()(_Summary));
-
 const locationSelector2 = createSelector(customLocation => {
   const { key } = customLocation.description.main;
   return (
-    customLocation.description[key].proteomeAccession ||
     customLocation.description[key].accession ||
     (Object.entries(customLocation.description).find(
       ([_key, value]) => value.isFilter,
@@ -861,7 +796,7 @@ const locationSelector2 = createSelector(customLocation => {
   );
 }, value => value);
 
-const childRoutes = new Map([[/(UP\d{9})|(\d+)|(all)/i, Summary]]);
+const childRoutes = new Map([[/(\d+)|(all)/i, Summary]]);
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 class InnerSwitch extends PureComponent {
   render() {
@@ -879,14 +814,7 @@ class InnerSwitch extends PureComponent {
   }
 }
 
-const locationSelector3 = createSelector(
-  customLocation =>
-    mainDBLocationSelector(customLocation) ||
-    customLocation.description[customLocation.description.main.key].proteomeDB,
-  value => value,
-);
-
-class Organism extends PureComponent {
+class Taxonomy extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,
   };
@@ -896,7 +824,7 @@ class Organism extends PureComponent {
       <ErrorBoundary>
         <Switch
           {...this.props}
-          locationSelector={locationSelector3}
+          locationSelector={mainDBLocationSelector}
           indexRoute={Overview}
           catchAll={InnerSwitch}
         />
@@ -906,5 +834,5 @@ class Organism extends PureComponent {
 }
 
 export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  loadData()(Organism),
+  loadData()(Taxonomy),
 );

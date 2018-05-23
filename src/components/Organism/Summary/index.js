@@ -291,6 +291,7 @@ class SummaryOrganism extends PureComponent /*:: <Props> */ {
   };
 
   render() {
+    return <b>ORGANISM Summary</b>;
     if (
       this.props.loading ||
       !this.props.data ||
