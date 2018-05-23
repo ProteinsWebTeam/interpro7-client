@@ -23,11 +23,8 @@ class ElixirFooter extends PureComponent {
               alt="Elixir logo"
               src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png"
             />
-            <h5>
-              <span className={f('elixir-banner-name')}>This service</span> is
-              part of the ELIXIR infrastructure
-            </h5>
-            <div id="elixir-banner-info">
+            <h5>This service is part of the ELIXIR infrastructure</h5>
+            <div>
               <small>
                 <span className={f('elixir-banner-description')}>
                   InterPro is an ELIXIR Core Data Resource
