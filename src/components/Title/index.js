@@ -178,8 +178,8 @@ class Title extends PureComponent /*:: <Props> */ {
             Reference proteome{' '}
             <Tooltip title="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny.">
               <span
-                className={f('small', 'icon', 'icon-generic')}
-                data-icon="i"
+                className={f('small', 'icon', 'icon-common')}
+                data-icon="ℹ"
                 aria-label="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny."
               />
             </Tooltip>
@@ -192,8 +192,8 @@ class Title extends PureComponent /*:: <Props> */ {
             Set {dbLabel}{' '}
             <Tooltip title="A Set is defined as a group of related entries">
               <span
-                className={f('small', 'icon', 'icon-generic')}
-                data-icon="i"
+                className={f('small', 'icon', 'icon-common')}
+                data-icon="ℹ"
               />
             </Tooltip>
           </div>

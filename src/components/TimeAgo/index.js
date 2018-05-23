@@ -1,3 +1,4 @@
+// @flow
 import { PureComponent } from 'react';
 import T from 'prop-types';
 import TA from 'timeago.js';
@@ -10,12 +11,22 @@ const ONE_MINUTE = 60000;
 
 const mounted = new WeakSet();
 
-class TimeAgo extends PureComponent {
+/*:: type Props = {
+  date: Date,
+  noUpdate?: boolean,
+};*/
+
+class TimeAgo extends PureComponent /*:: <Props> */ {
+  /* ::
+    _delay: () => number;
+    __delay: number;
+  */
   static propTypes = {
     date: T.instanceOf(Date).isRequired,
+    noUpdate: T.bool,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
     // Only create one instance, and only when it is needed
     if (!timeago) timeago = new TA();
@@ -23,6 +34,7 @@ class TimeAgo extends PureComponent {
 
   async componentDidMount() {
     mounted.add(this);
+    if (this.props.noUpdate) return;
     await sleep(this._delay);
     await schedule();
     // infinite loop while mounted

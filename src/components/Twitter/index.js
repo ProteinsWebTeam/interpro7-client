@@ -9,7 +9,7 @@ import getsInView from 'utils/gets-in-view';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, local);
@@ -71,10 +71,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
               className={f('jumbo-news-container')}
               ref={node => (this._ref.current = node)}
             >
-              <div
-                className={f('icon', 'icon-socialmedia', 'icon-s2')}
-                data-icon="T"
-              />
+              <div className={f('icon', 'icon-common')} data-icon="🐦" />
               <Link
                 ref={this._LinkRef}
                 data-dnt="true"

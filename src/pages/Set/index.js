@@ -34,7 +34,6 @@ import { setDBs } from 'utils/processDescription/handlers';
 
 import { foundationPartial } from 'styles/foundation';
 
-import global from 'styles/global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
@@ -44,7 +43,7 @@ import {
   schemaProcessMainEntity,
 } from '../../schema_org/processors';
 
-const f = foundationPartial(fonts, pageStyle, ipro, global);
+const f = foundationPartial(fonts, pageStyle, ipro);
 
 // const SVG_WIDTH = 100;
 // const colorHash = new ColorHash();
@@ -122,7 +121,7 @@ class List extends PureComponent {
     const notFound = !loading && status !== HTTP_OK;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
-    const db = (dbE || dbS).toUpperCase();
+    const db = (dbE || dbS).toLowerCase();
     const dbAll = { canonical: 'ALL', name: 'All', version: 'N/A' };
     if (loading || notFound) {
       _payload = {

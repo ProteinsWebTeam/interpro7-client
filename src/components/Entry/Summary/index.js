@@ -54,10 +54,7 @@ const MemberDBSubtitle = ({ metadata }) => {
         >
           {metadata.source_database}{' '}
           <Tooltip title={metadata.source_database}>
-            <span
-              className={f('small', 'icon', 'icon-generic')}
-              data-icon="i"
-            />
+            <span className={f('small', 'icon', 'icon-common')} data-icon="ℹ" />
           </Tooltip>
         </Link>
       </h5>
@@ -234,6 +231,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   <Description
                     textBlocks={metadata.description}
                     literature={included}
+                    accession={metadata.accession}
                   />
                 </Fragment>
               ) : null}

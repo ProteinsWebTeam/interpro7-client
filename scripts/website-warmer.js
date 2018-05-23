@@ -90,7 +90,7 @@ const checkProteinBrowse = async page => {
       const txt1 = await page.evaluate(t => t.value, option);
       await swipeFilter(page, '.list-taxonomy input', async option2 => {
         const txt2 = await page.evaluate(t => t.value, option2);
-        await swipeFilter(page, '.list-length input', async option3 => {
+        await swipeFilter(page, '.list-size input', async option3 => {
           const txt3 = await page.evaluate(t => t.value, option3);
           console.log(`      Filter: ${txt1}-${txt2}-${txt3}`);
         });
@@ -167,7 +167,7 @@ const checkBrowseSection = async page => {
 };
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
   await page.goto('http://localhost:8000/interpro/');

@@ -1,77 +1,119 @@
 <!DOCTYPE html>
 <html lang="en-GB">
   <head>
+    <!-- Google Analytics -->
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', '<%= require("../interpro-config.js").googleAnalytics %>', {
+        // see https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference
+        siteSpeedSampleRage: 10,
+        alwaysSendReferrer: true,
+        cookieExpiration: 5184000, // 2 months
+      });
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <!-- End Google Analytics -->
     <meta charset="utf-8" />
     <meta lang="en-GB" />
     <meta name="theme-color" content="#00559e" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites. We combine protein signatures from a number of member databases into a single searchable resource, capitalising on their individual strengths to produce a powerful integrated database and diagnostic tool.">
     <meta name="keywords" content="InterPro, interpro, InterProScan, protein, signatures, entry, family, sequence, database, proteins, entries, families, domain, domains, sites, repeats, sequences, annotation, signature, functional, analysis, databases, function, type, types, research, pathways, resource, match, download, GO, relationships, hierarchies, Go terms, sequence analysis, function prediction, Gene Ontology, protein family, protein families, sequence features, automatic annotation, annotation tools, InterPro2GO, UniProt, PROSITE, HAMAP, Pfam, PRINTS, ProDom, SMART, TIGRFAMs, PIRSF, SUPERFAMILY, Gene3D, CATH-Gene3D, CDD, SFLD, MobiDB,  PANTHER, ebi, EBI, bioinformatics, bioinformatic, europe, institute">
-    <% for (const css of htmlWebpackPlugin.files.css) { %>
-    <link href="<%= css %>" rel="stylesheet">
-    <% } %>
+
     <title><%= htmlWebpackPlugin.options.title %></title>
+
+    <% for (const css of htmlWebpackPlugin.files.css) { %>
+    <link rel="preload" as="style" href="<%= css %>" />
+    <% } %>
+    <% for (const chunk of Object.keys(htmlWebpackPlugin.files.chunks)) { %>
+    <link rel="preload" as="script" href="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" />
+    <% } %>
     <% for (const font of webpack.assets.map(({name}) => name).filter(name => name.endsWith('woff') && !name.includes('fontello'))) { %>
     <link rel="preload" as="font" href="<%= webpackConfig.output.publicPath %><%= font %>" crossorigin />
     <% } %>
-    <% for (const chunk of Object.keys(htmlWebpackPlugin.files.chunks)) { %>
-    <script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" defer></script>
-    <% } %>
+    <style>
+    .loading {
+      margin: 100px auto;
+      width: 200px;
+      height: 50px;
+      text-align: center;
+      font-size: 10px;
+    }
+
+    .loading > div {
+      background-color: rgba(0,0,0,1);
+      height: 40%;
+      width: 21px;
+      display: inline-block;
+      border-radius: 50%;
+      margin-right: 0.2rem;
+      -webkit-animation: stretchdelay 1.1s infinite ease-in-out;
+      animation: stretchdelay 1.1s infinite ease-in-out;
+    }
+
+    .loading > div:first-child {
+      -webkit-animation-delay: -1.2s;
+      animation-delay: -1.2s;
+    }
+
+    .loading > div:last-child {
+      -webkit-animation-delay: -1s;
+      animation-delay: -1s;
+    }
+
+    @-webkit-keyframes stretchdelay {
+      0%, 40%, 100% { -webkit-transform: scale(.5) }
+      20% { -webkit-transform: scale(1) }
+    }
+
+    @keyframes stretchdelay {
+      0%, 40%, 100% {
+        transform: scale(.5);
+        -webkit-transform: scale(.5);
+        opacity: .3;
+      }
+      20% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        opacity: .6;
+      }
+    }
+    </style>
+
+    <noscript>
+      <style>
+        .loading {
+          display: none;
+        }
+
+        noscript {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: larger;
+        }
+      </style>
+    </noscript>
   </head>
-  <style>
-  .loading-spinner {
-    margin: 100px auto;
-    width: 200px;
-    height: 50px;
-    text-align: center;
-    font-size: 10px;
-  }
-
-  .loading-spinner > div {
-    background-color: rgba(0,0,0,1);
-    height: 40%;
-    width: 21px;
-    display: inline-block;
-    border-radius: 50%;
-    margin-right: 0.2rem;
-    -webkit-animation: stretchdelay 1.1s infinite ease-in-out;
-    animation: stretchdelay 1.1s infinite ease-in-out;
-  }
-
-  .loading-spinner > div:first-child {
-    -webkit-animation-delay: -1.2s;
-    animation-delay: -1.2s;
-  }
-
-  .loading-spinner > div:last-child {
-    -webkit-animation-delay: -1s;
-    animation-delay: -1s;
-  }
-
-  @-webkit-keyframes stretchdelay {
-    0%, 40%, 100% { -webkit-transform: scale(.5) }
-    20% { -webkit-transform: scale(1) }
-  }
-
-  @keyframes stretchdelay {
-    0%, 40%, 100% {
-      transform: scale(.5);
-      -webkit-transform: scale(.5);
-      opacity: .3;
-    }
-    20% {
-      transform: scale(1);
-      -webkit-transform: scale(1);
-      opacity: .6;
-    }
-  }
-  </style>
-  <body>
+  <body class="ebi-black-bar-loaded">
+    <noscript>
+      <p>
+        InterPro requires JavaScript to work, please enable JavaScript or use a
+        browser supporting JavaScript
+      </p>
+    </noscript>
     <div id="root">
-      <div class="loading-spinner">
-        <div class="rd1"></div>
-        <div class="rd2"></div>
-        <div class="rd3"></div>
+      <div class="loading">
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </div>
   </body>

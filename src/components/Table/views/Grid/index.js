@@ -17,14 +17,14 @@ class GridView extends PureComponent {
     const renderer = card || (() => null);
     if (card) {
       return (
-        <AnimatedEntry className={local['card-wrapper']}>
+        <AnimatedEntry className={local['card-wrapper']} element="div">
           {dataTable.map((data, i) => (
-            <li
+            <div
               key={data.metadata.accession || i}
               className={local['card-flex-container']}
             >
               <ErrorBoundary>{renderer(data)}</ErrorBoundary>
-            </li>
+            </div>
           ))}
         </AnimatedEntry>
       );

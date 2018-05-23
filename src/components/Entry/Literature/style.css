@@ -15,8 +15,9 @@
 .reference span.journal {
   font-style: italic;
 }
-.reference span.index {
-  padding-left: 0;
+
+.reference .index {
+  margin-right: 0.5ch;
   color: #9da0a4;
 }
 
@@ -26,17 +27,33 @@
 .reference span.pages {
 }
 
-.reference:target .cite {
-  background-color: #fbf8da;
-  transition: background-color var(--timing-slow) ease-in-out;
+.reference .cite {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    background: #fbf8da;
+    opacity: 0;
+    transition: opacity var(--timing-slow) ease-in-out;
+  }
 }
 
-.reference:target span.index {
+.reference.target .cite::after {
+  opacity: 1;
+}
+
+.reference.target .index {
   font-weight: bold;
   font-size: 110%;
 }
 
-.reference a:not([href*='localhost']) {
+.reference a {
   white-space: nowrap;
 }
 
@@ -47,15 +64,11 @@
   columns: 19em;
   column-gap: 2rem;
 
-  @nest & > * {
-    break-inside: avoid;
+  &.single-entry {
+    columns: unset;
   }
-  /*only structure page*/
-  @nest &.nogap {
-    columns: 100em;
-    @nest & div {
-      padding-left: 0;
-      text-indent: 0;
-    }
+
+  & > * {
+    break-inside: avoid;
   }
 }

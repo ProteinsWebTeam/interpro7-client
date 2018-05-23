@@ -4,20 +4,22 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import { toPlural } from 'utils/pages';
 
-import AnimatedEntry from 'components/AnimatedEntry';
 import Link from 'components/generic/Link';
+import AnimatedEntry from 'components/AnimatedEntry';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import { latests } from 'staticData/home';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/load-web-component';
+import { NumberComponent } from 'components/NumberLabel';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
@@ -30,7 +32,7 @@ class LatestEntry extends PureComponent {
       accession: T.string,
       type: T.string,
       name: T.string,
-      counter: T.number,
+      counter: T.array,
       contributing: T.array,
     }),
   };
@@ -46,66 +48,322 @@ class LatestEntry extends PureComponent {
   render() {
     const { entry } = this.props;
     return (
-      <li className={f('list-item')}>
-        <Tooltip title={`${entry.type} type`}>
-          <interpro-type
-            dimension="1.5em"
-            type={entry.type}
-            aria-label="Entry type"
-          />
-        </Tooltip>
+      <div className={f('card-flex-container', 'card-shrink')}>
         <div className={f('list-body')}>
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: 'InterPro',
-                  accession: entry.accession,
+          <div className={f('card-header')}>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: 'InterPro',
+                    accession: entry.accession,
+                  },
                 },
-              },
-            }}
-          >
-            <div className={f('list-title')}>
-              {entry.name}
-              <span>({entry.accession})</span> —{' '}
-              <i>{entry.counter} proteins matched</i>
-              <br />
-            </div>
-          </Link>
-          {entry.contributing.map(c => (
-            <div className={f('list-more')} key={c.accession}>
-              <MemberSymbol
-                type={c.source_database}
-                className={f('md-small')}
-              />
-              <small>
-                {c.source_database}:
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: c.source_database,
-                        accession: c.accession,
-                      },
-                    },
-                  }}
-                  className={f('list-sign')}
+              }}
+            >
+              <Tooltip title={`${entry.type} type`}>
+                <interpro-type
+                  dimension="1.5em"
+                  type={entry.type}
+                  aria-label="Entry type"
+                />
+              </Tooltip>
+
+              <div>
+                <h6>{entry.name}</h6>
+              </div>
+
+              <span className={f('name-ac')}>{entry.accession}</span>
+            </Link>
+          </div>
+
+          {entry.counter.map(c => (
+            <div
+              key={c}
+              className={f(
+                'card-block',
+                'card-counter',
+                'label-off',
+                'label-h',
+              )}
+            >
+              {' '}
+              <div className={f('count-4', 'count-proteins')}>
+                <Tooltip
+                  title={`${c.P} ${toPlural('protein', c.P)} matching ${
+                    entry.name
+                  }`}
                 >
-                  {' '}
-                  {c.accession}
-                </Link>
-              </small>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: 'InterPro',
+                          accession: entry.accession,
+                        },
+                        protein: { isFilter: true, db: 'UniProt' },
+                      },
+                    }}
+                  >
+                    <div
+                      className={f('icon', 'icon-conceptual')}
+                      data-icon="&#x50;"
+                    />{' '}
+                    <NumberComponent value={c.P} />
+                    <span className={f('label-number')}>
+                      {toPlural('protein', c.P)}
+                    </span>
+                  </Link>
+                </Tooltip>
+              </div>
+              <div className={f('count-4', 'count-architectures')}>
+                <Tooltip
+                  title={`... domain architectures matching ${entry.name}`}
+                >
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: 'InterPro',
+                          accession: entry.accession,
+                          detail: 'domain_architecture',
+                        },
+                      },
+                    }}
+                  >
+                    <div className={f('icon', 'icon-count-ida')} />{' '}
+                    <NumberComponent value={c.I} />
+                    <span className={f('label-number')}>
+                      domain architectures
+                    </span>
+                  </Link>
+                </Tooltip>
+              </div>
+              <div className={f('count-4', 'count-organisms')}>
+                <Tooltip
+                  title={`${c.O} ${toPlural('organism', c.O)} matching ${
+                    entry.name
+                  }`}
+                >
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: 'InterPro',
+                          accession: entry.accession,
+                        },
+                        organism: { isFilter: true, db: 'taxonomy' },
+                      },
+                    }}
+                  >
+                    <div className={f('icon', 'icon-count-organisms')} />{' '}
+                    <NumberComponent value={c.O} />
+                    <span className={f('label-number')}>
+                      {toPlural('organism', c.O)}
+                    </span>
+                  </Link>
+                </Tooltip>
+              </div>
+              <div className={f('count-4', 'count-structures')}>
+                <Tooltip
+                  title={`${c.S}  ${toPlural('structure', c.S)} matching ${
+                    entry.name
+                  }`}
+                >
+                  {// link only when value > 0
+                  c.S > 0 ? (
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: {
+                            db: 'InterPro',
+                            accession: entry.accession,
+                          },
+                          structure: { isFilter: true, db: 'PDB' },
+                        },
+                      }}
+                    >
+                      <div
+                        className={f('icon', 'icon-conceptual')}
+                        data-icon="s"
+                      />{' '}
+                      <NumberComponent value={c.S} />
+                      <span className={f('label-number')}>
+                        {toPlural('structure', c.S)}
+                      </span>
+                    </Link>
+                  ) : (
+                    <div className={f('no-link')}>
+                      <div
+                        className={f('icon', 'icon-conceptual')}
+                        data-icon="s"
+                      />{' '}
+                      <NumberComponent value={c.S} />
+                      <span className={f('label-number')}>
+                        {toPlural('structure', c.S)}
+                      </span>
+                    </div>
+                  )}
+                </Tooltip>
+              </div>
+              {// OPTION COUNT SIGNATURES - ICON SVG
+              entry.contributing.map(c => (
+                <div className={f('icon-count-signatures')} key={c.accession}>
+                  <Tooltip
+                    title={`${c.source_database} signature:  ${c.accession}`}
+                  >
+                    {' '}
+                    <MemberSymbol
+                      type={c.source_database}
+                      className={f('md-small')}
+                    />
+                  </Tooltip>
+                </div>
+              ))}
+              {
+                // OPTION COUNT SIGNATURES
+                // <div className={f('count-signatures')}>
+                //   <Tooltip
+                //     title={`${entry.Si} contributing signatures matching ${entry.name}`}
+                //   >
+                //
+                //     <Link
+                //       to={{
+                //         description: {
+                //           main: { key: 'entry' },
+                //           entry: {
+                //             db: 'InterPro',
+                //             accession: entry.accession,
+                //           },
+                //         },
+                //       }}
+                //     >
+                //       <div
+                //         className={f('icon', 'icon-generic')}
+                //         data-icon="D"
+                //       />{' '}
+                //       <NumberComponent value={entry.Si} />
+                //       <span className={f('label-number')}>
+                //         signatures
+                //       </span>
+                //     </Link>
+                //
+                //   </Tooltip>
+                // </div>
+              }
+              {
+                // OPTION COUNT GO-TERMS
+                //   <div className={f('count-go')}>
+                //   <Tooltip
+                //     title={`${entry.Go} GO terms matching ${entry.name}`}
+                //   >
+                //
+                //     <Link
+                //       to={{
+                //           description: {
+                //             main: { key: 'entry' },
+                //             entry: {
+                //               db: 'InterPro',
+                //               accession: entry.accession,
+                //             },
+                //           },
+                //         }}
+                //     >
+                //       <div
+                //         className={f('icon', 'icon-count-go')}
+                //       />{' '}
+                //       <NumberComponent value={entry.Go} />
+                //         <span className={f('label-number')}>
+                //           GO terms
+                //         </span>
+                //     </Link>
+                //
+                //   </Tooltip>
+                // </div>
+              }
+              {
+                // OPTION COUNT PUBLICATIONS
+                // <div className={f('count-publications')}>
+                //   <Tooltip
+                //     title={`${entry.Pu} publications matching ${entry.name}`}
+                //   >
+                //
+                //     <Link
+                //       to={{
+                //         description: {
+                //           main: { key: 'entry' },
+                //           entry: {
+                //             db: 'InterPro',
+                //             accession: entry.accession,
+                //           },
+                //         },
+                //       }}
+                //     >
+                //       <div
+                //         className={f('icon', 'icon-generic')}
+                //         data-icon="P"
+                //       />{' '}
+                //       <NumberComponent value={entry.Pu} />
+                //       <span className={f('label-number')}>
+                //         publications
+                //       </span>
+                //     </Link>
+                //
+                //   </Tooltip>
+                // </div>
+              }
             </div>
           ))}
+          <div className={f('card-footer')}>
+            <div>{entry.type}</div>
+            <div>{entry.accession}</div>
+          </div>
+
+          <div className={f('card-options')}>
+            <Tooltip title="Add this entry to your favorites">
+              <Link
+                to={{ description: { other: ['settings'] } }}
+                className={f('icon', 'icon-functional')}
+                data-icon="+"
+                aria-label="settings"
+              />
+            </Tooltip>{' '}
+            <Tooltip title="Watch: be notified when this entry is updated">
+              <Link
+                to={{ description: { other: ['settings'] } }}
+                className={f('icon', 'icon-functional')}
+                data-icon="4"
+                aria-label="settings"
+              />
+            </Tooltip>{' '}
+            <Tooltip title="Suggest an edit">
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: 'InterPro',
+                      accession: entry.accession,
+                    },
+                  },
+                }}
+                className={f('icon', 'icon-functional')}
+                data-icon="5"
+              />
+            </Tooltip>
+          </div>
         </div>
-      </li>
+      </div>
     );
   }
 }
 
-class ByLatestEntries extends PureComponent {
+class ByEntriesFeatured extends PureComponent {
   static propTypes = {
     data: T.shape({
       payload: T.object,
@@ -114,24 +372,19 @@ class ByLatestEntries extends PureComponent {
 
   render() {
     return (
-      <div className={f('entry-list')}>
+      <div className={f('feat-entry-list')}>
         <div className={f('row')}>
           <div className={f('columns')}>
-            <h5>
-              <small> Total : 29415 entries</small>
-            </h5>
-            <div className={f('list-vertical-scroll')}>
-              <AnimatedEntry>
-                {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
-              </AnimatedEntry>
-            </div>
+            <AnimatedEntry className={f('card-wrapper')} element="div">
+              {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
+            </AnimatedEntry>
             <Link
               to={{
                 description: { main: { key: 'entry' } },
               }}
               className={f('button')}
             >
-              View all entries
+              View all latest entries
             </Link>
           </div>
         </div>
@@ -151,4 +404,4 @@ const mapStateToUrl = createSelector(
     }),
 );
 
-export default loadData(mapStateToUrl)(ByLatestEntries);
+export default loadData(mapStateToUrl)(ByEntriesFeatured);

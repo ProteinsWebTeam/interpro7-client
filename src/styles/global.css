@@ -1,10 +1,3 @@
 html {
   scroll-behavior: smooth;
 }
-
-:global(#root) {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  /*width: 100vw;*/
-}

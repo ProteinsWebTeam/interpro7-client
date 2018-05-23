@@ -29,7 +29,7 @@ import {
 import { foundationPartial } from 'styles/foundation';
 // CSS
 import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import style from '../style.css';
@@ -404,29 +404,43 @@ class InterProGraphicAnim extends PureComponent {
   }
 }
 
+const SchemaOrgDataWithData = loadData(getUrlForMeta)(
+  class SchemaOrgDataWithData extends PureComponent {
+    static propTypes = {
+      data: T.shape({
+        payload: T.shape({
+          databases: T.object,
+        }),
+      }).isRequired,
+    };
+
+    render() {
+      const databases =
+        this.props.data &&
+        this.props.data.payload &&
+        this.props.data.payload.databases;
+      if (!databases) return null;
+      return (
+        <SchemaOrgData
+          data={{
+            name: 'InterPro',
+            location: window.location,
+            version: databases && databases.interpro.version,
+            releaseDate: databases && databases.interpro.releaseDate,
+          }}
+          processData={schemaProcessDataForDB}
+        />
+      );
+    }
+  },
+);
+
 const description = `
-InterPro provides functional analysis of proteins by classifying them into
-families and predicting domains and important sites. We combine protein
-signatures from a number of member databases into a single searchable
-resource, capitalising on their individual strengths to produce a powerful
-integrated database and diagnostic tool. To classify proteins in this way,
-InterPro uses predictive models, known as signatures, provided by several
-different databases (referred to as member databases) that make up the
-InterPro consortium.`.trim();
+InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites. To classify proteins in this way, InterPro uses predictive models, known as signatures, provided by several different databases (referred to as member databases) that make up the InterPro consortium. We combine protein signatures from these member databases into a single searchable resource, capitalising on their individual strengths to produce a powerful integrated database and diagnostic tool.
+`.trim();
 
 class Home extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-  };
   render() {
-    const databases =
-      this.props.data &&
-      this.props.data.payload &&
-      this.props.data.payload.databases;
     return (
       <Fragment>
         <div className={f('row')}>
@@ -435,22 +449,10 @@ class Home extends PureComponent {
               data={{ location: window.location, description }}
               processData={schemaProcessDataInterpro}
             />
-            {databases && (
-              <SchemaOrgData
-                data={{
-                  name: 'InterPro',
-                  location: window.location,
-                  version: databases && databases.INTERPRO.version,
-                  releaseDate: databases && databases.INTERPRO.releaseDate,
-                }}
-                processData={schemaProcessDataForDB}
-              />
-            )}
+            <SchemaOrgDataWithData />
             <div className={f('container-intro')}>
               <div className={f('fig-container')}>
-                <Tooltip title="Domain analysis and prediction on multiple protein sequences">
-                  <InterProGraphicAnim />
-                </Tooltip>
+                <InterProGraphicAnim />
               </div>
               <h3>Classification of protein families</h3>
               <Description textBlocks={[description]} />
@@ -506,17 +508,31 @@ class Home extends PureComponent {
                 <div title="Latest entries">
                   <ByLatestEntries />
                 </div>
-                <div title="Featured">
+                {
+                  // <div title="Featured">
+                  //  <div className={f('row')}>
+                  //   <div className={f('columns')}>
+                  //    <ByEntriesFeatured />
+                  //  </div>
+                  // </div>
+                  // </div>
+                }
+                <div title="My entries">
                   <div className={f('row')}>
                     <div className={f('columns')}>
-                      Featured: Under development
-                    </div>
-                  </div>
-                </div>
-                <div title="Most Popular">
-                  <div className={f('row')}>
-                    <div className={f('columns')}>
-                      Most Popular: Under Development
+                      <p>
+                        You didn&#39;t &quot;save&quot; any entry yet. Please
+                        use the{' '}
+                        <Link
+                          to={{ description: { other: ['settings'] } }}
+                          className={f('icon', 'icon-functional')}
+                          data-icon="+"
+                          aria-label="settings"
+                        />{' '}
+                        icon next to an entry to add this entry to your
+                        &quot;favorites&quot;. It should then appear on this
+                        dedicated dashboard and in your settings.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -680,4 +696,4 @@ class Home extends PureComponent {
   }
 }
 
-export default loadData(getUrlForMeta)(Home);
+export default Home;

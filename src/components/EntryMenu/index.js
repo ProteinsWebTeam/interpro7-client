@@ -93,7 +93,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             name={e.name}
             data={data}
             counter={e.counter}
-            isFirstLevel={!mainAccession}
+            isFirstLevel={!(mainAccession || proteomeAccession)}
             isSignature={isSignature}
           />
         ))}

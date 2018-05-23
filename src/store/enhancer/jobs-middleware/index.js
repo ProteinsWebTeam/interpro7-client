@@ -1,3 +1,4 @@
+/*:: import type { Middleware } from 'redux'; */
 import url from 'url';
 import { schedule } from 'timing-functions/src';
 
@@ -60,7 +61,7 @@ const updateJobInDB = async (metadata, data) => {
   if (data) dataT.update(metadata.localID, prev => ({ ...prev, ...data }));
 };
 
-export default ({ dispatch, getState }) => {
+const middleware /*: Middleware */ = ({ dispatch, getState }) => {
   // function definitions
   const processJob = async (localID, meta) => {
     // Wait to have some time to do all the maintenance
@@ -234,3 +235,5 @@ export default ({ dispatch, getState }) => {
     return output;
   };
 };
+
+export default middleware;

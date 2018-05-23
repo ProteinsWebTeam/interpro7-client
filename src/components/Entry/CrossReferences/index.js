@@ -9,7 +9,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(fonts, ebiStyles, local);
 
@@ -30,7 +30,7 @@ const ReferenceSection = ({ accessions, name, description }) => (
     <h5>
       {name}{' '}
       <Tooltip title={description}>
-        <span className={f('small', 'icon', 'icon-generic')} data-icon="i" />
+        <span className={f('small', 'icon', 'icon-common')} data-icon="ℹ" />
       </Tooltip>
     </h5>
 

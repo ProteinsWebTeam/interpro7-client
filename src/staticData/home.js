@@ -319,7 +319,17 @@ export const latests = [
     accession: 'IPR033983',
     type: 'Domain',
     name: 'Thiazole synthase ThiG',
-    counter: 8192,
+    counter: [
+      {
+        P: 14591,
+        I: 19,
+        O: 12172,
+        S: 12,
+        Si: 1,
+        Go: 0,
+        Pu: 1,
+      },
+    ],
     contributing: [
       {
         accession: 'PF05690',
@@ -331,7 +341,17 @@ export const latests = [
     accession: 'IPR033985',
     type: 'Domain',
     name: 'SusD-like, N-terminal',
-    counter: 22916,
+    counter: [
+      {
+        P: 41685,
+        I: 38,
+        O: 1627,
+        S: 26,
+        Si: 1,
+        Go: 0,
+        Pu: 1,
+      },
+    ],
     contributing: [
       {
         accession: 'PF14322',
@@ -343,10 +363,24 @@ export const latests = [
     accession: 'IPR033986',
     type: 'Site',
     name: 'Clusterin, conserved site',
-    counter: 145,
+    counter: [
+      {
+        P: 203,
+        I: 4,
+        O: 112,
+        S: 0,
+        Si: 2,
+        Go: 0,
+        Pu: 4,
+      },
+    ],
     contributing: [
       {
         accession: 'PS00492',
+        source_database: 'patterns',
+      },
+      {
+        accession: 'PS00493',
         source_database: 'patterns',
       },
     ],
@@ -355,7 +389,17 @@ export const latests = [
     accession: 'IPR033987',
     type: 'Domain',
     name: 'Aggrecan/versican, C-type lectin-like domain',
-    counter: 249,
+    counter: [
+      {
+        P: 376,
+        I: 55,
+        O: 119,
+        S: 0,
+        Si: 1,
+        Go: 0,
+        Pu: 4,
+      },
+    ],
     contributing: [
       {
         accession: 'cd03588',
@@ -367,7 +411,17 @@ export const latests = [
     accession: 'IPR033988',
     type: 'Domain',
     name: 'CEL-1-like C-type lectin-like domain',
-    counter: 75,
+    counter: [
+      {
+        P: 100,
+        I: 4,
+        O: 87,
+        S: 3,
+        Si: 1,
+        Go: 0,
+        Pu: 6,
+      },
+    ],
     contributing: [
       {
         accession: 'cd03589',
@@ -379,7 +433,17 @@ export const latests = [
     accession: 'IPR033989',
     type: 'Domain',
     name: 'CD209-like, C-type lectin-like domain',
-    counter: 1586,
+    counter: [
+      {
+        P: 2415,
+        I: 58,
+        O: 185,
+        S: 84,
+        Si: 1,
+        Go: 0,
+        Pu: 8,
+      },
+    ],
     contributing: [
       {
         accession: 'cd03590',
@@ -387,23 +451,40 @@ export const latests = [
       },
     ],
   },
-  {
-    accession: 'IPR034004',
-    type: 'Domain',
-    name: 'Pol I subunit A12, C-terminal zinc ribbon',
-    counter: 977,
-    contributing: [
-      {
-        accession: 'cd10507',
-        source_database: 'CDD',
-      },
-    ],
-  },
+  // {
+  //   accession: 'IPR034004',
+  //   type: 'Domain',
+  //   name: 'Pol I subunit A12, C-terminal zinc ribbon',
+  //   counter_P: 1304,
+  //   counter_I: 13,
+  //   counter_O: 1132,
+  //   counter_S: 0,
+  //   counter_Si: 1,
+  //   counter_Go: 1,
+  //   counter_Pu: 3,
+  //   counter: [{ P:'x number', I:'y number',  O:'z number', S:'x number', Si:'x number'}],
+  //   contributing: [
+  //     {
+  //       accession: 'cd10507',
+  //       source_database: 'CDD',
+  //     },
+  //   ],
+  // },
   {
     accession: 'IPR034005',
     type: 'Family',
     name: 'Peptidyl-dipeptidase DCP',
-    counter: 8245,
+    counter: [
+      {
+        P: 14329,
+        I: 19,
+        O: 8838,
+        S: 4,
+        Si: 1,
+        Go: 1,
+        Pu: 3,
+      },
+    ],
     contributing: [
       {
         accession: 'cd06456',
