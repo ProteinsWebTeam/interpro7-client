@@ -55,7 +55,7 @@ export const getUrl = createSelector(
             case 'entry':
               _search.extra_fields = 'description,literature,counters';
               break;
-            case 'organism':
+            case 'taxonomy':
               _search.extra_fields = 'lineage,counters';
               break;
             default:
