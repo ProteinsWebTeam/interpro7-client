@@ -6,7 +6,7 @@ a.browse-tabs-link {
   &:hover,
   &:visited {
     font-size: 0.9rem; /*same size as submenu*/
-    padding: 0.7rem 0.2rem 0.5rem 0.2rem;
+    padding: 1.2rem 0.2rem 0.8rem 0.2rem;
     color: black;
     line-height: inherit;
     background-color: transparent; /*to keep*/
