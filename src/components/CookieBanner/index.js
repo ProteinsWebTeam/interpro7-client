@@ -71,7 +71,15 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
           <span style={{ marginRight: '2em', flex: 1 }}>
             This website requires cookies, and the limited processing of your
             personal data in order to function. By using the site you are
-            agreeing to this as outlined in our Privacy Notice and{' '}
+            agreeing to this as outlined in our{' '}
+            <Link
+              target="_blank"
+              href="https://www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
+              style={{ color: '#f8f8f8' }}
+            >
+              Privacy Notice
+            </Link>
+            {' and '}
             <Link
               target="_blank"
               href="https://www.ebi.ac.uk/about/terms-of-use"
