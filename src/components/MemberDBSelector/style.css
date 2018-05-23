@@ -54,6 +54,9 @@
     margin: 0;
   }
 }
+.left-side-db-selector .db-selector {
+  padding: 0;
+} /*removed for non popup selector*/
 
 @supports (display: grid) {
   .db-selector:not(.one-column) {
