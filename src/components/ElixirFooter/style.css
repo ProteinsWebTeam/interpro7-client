@@ -42,10 +42,6 @@
   }
 }
 
-:global(#elixir-banner-info) {
-  display: flex;
-}
-
 .elixir-logo-kite {
   display: inline-block;
   float: left;
