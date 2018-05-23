@@ -6,7 +6,7 @@ import { schedule } from 'timing-functions/src';
 
 // Global stylesheets loaded here
 import 'styles/foundation';
-import 'ebi-framework/css/ebi-global.scss';
+import 'ebi-framework/css/ebi-global.css';
 import 'styles/global.css';
 // import 'styles/theme-interpro.css';
 import 'react-tippy/dist/tippy.css';

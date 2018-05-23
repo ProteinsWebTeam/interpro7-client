@@ -168,22 +168,35 @@
 }
 
 .card-footer {
-  margin-top: 0.2em;
+  margin-top: 0.5rem;
   display: flex;
   justify-content: space-between;
   font-size: 80%;
+}
+
+.card-footer > div:last-child {
+  text-align: right;
+}
+.card-footer > div:first-child {
+  flex-grow: 1;
 }
 
 .card-block {
   font-size: 15px;
   margin: 0.5rem 0;
 }
+.card-description.card-block {
+  margin-bottom: 0;
+} /*remove margin bottom when 3dots*/
+.card-description.card-block pre {
+  display: none;
+} /*hide alignments that are causing problem in Firefox*/
 
 .card-counter {
   color: #333;
   margin-bottom: 0;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: stretch;
 
   & .container,
@@ -220,13 +233,13 @@
 .count-sets {
   text-align: center;
   display: flex;
-  justify-content: space-around;
-}
-.count-proteomes {
-  padding: 0.5ch 1ch 0; /* to be consistent with EBI icons */
 }
 
-.icon-bookmark-proteome {
+.count-proteomes {
+  padding: 0 0.5rem;
+}
+
+.icon-count-proteome {
   width: 18px;
   height: 47px;
   background-image: url('../images/icons/ico-proteome.svg');
@@ -276,12 +289,7 @@
 
 .card-description {
   overflow: hidden;
-  max-height: 6em;
-}
-
-.card-description-link {
-  align-self: center;
-  margin: 0.2em;
+  height: 6em; /*better for alignment description + counter*/
 }
 
 /* add some space on top between banner and breadcrumb and at bottom too otherwise content si stuck on footer*/

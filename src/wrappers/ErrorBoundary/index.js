@@ -1,4 +1,5 @@
 // @flow
+/* global ga: false */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -51,6 +52,8 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
   componentDidCatch(error /*: Error */, info /*: any */) {
     console.error(error);
     console.warn(info);
+    // $FlowFixMe
+    ga('send', 'exception', { exDescription: error.message, exFatal: false });
     this.setState({ error: { error, info } });
   }
 

@@ -139,8 +139,8 @@ class IPScanStatus extends PureComponent {
                     status === 'submitted') && (
                     <span
                       style={{ fontSize: '200%' }}
-                      className={f('icon', 'icon-generic', 'ico-progress')}
-                      data-icon="{"
+                      className={f('icon', 'icon-common', 'ico-progress')}
+                      data-icon="&#x17;"
                       aria-label={`Job ${status}`}
                     />
                   )}

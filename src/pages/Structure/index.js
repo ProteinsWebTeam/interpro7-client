@@ -108,28 +108,13 @@ class SummaryCounterStructures extends PureComponent {
   static propTypes = {
     entryDB: T.string,
     metadata: T.object.isRequired,
-    data: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
+    counters: T.object.isRequired,
   };
 
   render() {
-    const {
-      entryDB,
-      metadata,
-      data: { loading, payload },
-    } = this.props;
+    const { entryDB, metadata, counters } = this.props;
 
-    let entries = 0;
-    let proteins = 0;
-    let organisms = 0;
-    if (!loading && payload && payload.metadata) {
-      entries = payload.metadata.counters.entries;
-      proteins = payload.metadata.counters.proteins;
-      organisms = payload.metadata.counters.organisms;
-    }
+    const { entries, proteins, organisms } = counters;
 
     return (
       <div className={f('card-block', 'card-counter', 'label-off')}>
@@ -155,12 +140,7 @@ class SummaryCounterStructures extends PureComponent {
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
 
-            <NumberComponent
-              loading={loading}
-              value={entries}
-              abbr
-              scaleMargin={1}
-            />
+            <NumberComponent value={entries} abbr scaleMargin={1} />
 
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
@@ -188,12 +168,7 @@ class SummaryCounterStructures extends PureComponent {
             }}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent
-              loading={loading}
-              value={proteins}
-              abbr
-              scaleMargin={1}
-            />
+            <NumberComponent value={proteins} abbr scaleMargin={1} />
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
             </span>
@@ -209,12 +184,7 @@ class SummaryCounterStructures extends PureComponent {
         >
           <div className={f('container')}>
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent
-              loading={loading}
-              value={organisms}
-              abbr
-              scaleMargin={1}
-            />
+            <NumberComponent value={organisms} abbr scaleMargin={1} />
             <span className={f('label-number')}>
               {toPlural('organism', organisms)}
             </span>
@@ -252,25 +222,6 @@ class TaxnameStructures extends PureComponent {
   }
 }
 
-const getUrlForStruct = accession =>
-  createSelector(
-    state => state.settings.api,
-    state => state.customLocation.description.entry.db,
-    ({ protocol, hostname, port, root }, db) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname:
-          root +
-          descriptionToPath({
-            main: { key: 'structure' },
-            structure: { db: 'pdb', accession },
-            entry: { isFilter: true, db: db || 'all' },
-          }),
-      }),
-  );
-
 const getUrlForStructTaxname = accession =>
   createSelector(
     state => state.settings.api,
@@ -306,9 +257,6 @@ class StructureCard extends PureComponent {
     if (nextAccession === prevState.accession) return null;
 
     return {
-      SummaryCounterStructuresWithData: loadData(
-        getUrlForStruct(nextAccession),
-      )(SummaryCounterStructures),
       TaxnameStructuresWithData: loadData(
         getUrlForStructTaxname(nextAccession),
       )(TaxnameStructures),
@@ -321,9 +269,6 @@ class StructureCard extends PureComponent {
 
     const accession = props.data.metadata.accession;
     this.state = {
-      SummaryCounterStructuresWithData: loadData(getUrlForStruct(accession))(
-        SummaryCounterStructures,
-      ),
       TaxnameStructuresWithData: loadData(getUrlForStructTaxname(accession))(
         TaxnameStructures,
       ),
@@ -333,10 +278,7 @@ class StructureCard extends PureComponent {
 
   render() {
     const { data, search, entryDB } = this.props;
-    const {
-      SummaryCounterStructuresWithData,
-      TaxnameStructuresWithData,
-    } = this.state;
+    const { TaxnameStructuresWithData } = this.state;
     return (
       <React.Fragment>
         <div className={f('card-header')}>
@@ -391,17 +333,22 @@ class StructureCard extends PureComponent {
           </div>
         </div>
 
-        <SummaryCounterStructuresWithData
-          metadata={data.metadata}
-          entryDB={entryDB}
-        />
-
+        {data.metadata &&
+          data.extra_fields.counters && (
+            <SummaryCounterStructures
+              metadata={data.metadata}
+              entryDB={entryDB}
+              counters={data.extra_fields.counters}
+            />
+          )}
         <div className={f('card-footer')}>
           <TaxnameStructuresWithData />
-          <HighlightedText
-            text={data.metadata.accession}
-            textToHighlight={search}
-          />
+          <div>
+            <HighlightedText
+              text={data.metadata.accession}
+              textToHighlight={search}
+            />
+          </div>
         </div>
       </React.Fragment>
     );
@@ -704,7 +651,7 @@ class Structure extends PureComponent {
                 data={{
                   data: this.props.data.payload,
                   endpoint: 'structure',
-                  version: databases && databases.PDB.version,
+                  version: databases && databases.pdb.version,
                 }}
                 processData={schemaProcessDataRecord}
               />

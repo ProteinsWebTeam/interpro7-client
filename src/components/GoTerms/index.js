@@ -8,7 +8,7 @@ import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.scss';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
 

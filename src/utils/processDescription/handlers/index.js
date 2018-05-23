@@ -148,12 +148,18 @@ const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
 export const setDBs /*: Set<Object> */ = new Set([
   {
     name: 'pfam',
-    re: /^CL[0-9]{4}$/,
+    re: /^cl[0-9]{4}$/,
     url_template: 'http://pfam.xfam.org/clan/{id}',
   },
   {
     name: 'cdd',
     re: /^cl[0-9]{5}$/,
+    url_template:
+      'https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={id}',
+  },
+  {
+    name: 'kegg', // NOTE: Only for fixtures support
+    re: /^kegg[0-9]{2}$/,
     url_template:
       'https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={id}',
   },

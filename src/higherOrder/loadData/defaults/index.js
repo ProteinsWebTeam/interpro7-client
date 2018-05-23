@@ -50,8 +50,18 @@ export const getUrl = createSelector(
           (description.entry && description.entry.memberDB)
         )
           _search.page_size = _search.page_size || settingsPageSize;
-        if (description.main.key === 'entry' && hash === 'grid') {
-          _search.extra_fields = 'description';
+        if (hash === 'grid') {
+          switch (description.main.key) {
+            case 'entry':
+              _search.extra_fields = 'description,literature,counters';
+              break;
+            case 'organism':
+              _search.extra_fields = 'lineage,counters';
+              break;
+            default:
+              _search.extra_fields = 'counters';
+              break;
+          }
         }
         return cleanUpMultipleSlashes(
           format({
