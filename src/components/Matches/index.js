@@ -207,7 +207,7 @@ const Matches = (
         );
       }}
     >
-      {primary === 'organism' ? 'Tax Id' : 'Accession'}
+      Accession
     </Column>
     <Column
       dataKey="name"
@@ -238,9 +238,9 @@ const Matches = (
           <Link
             to={{
               description: {
-                main: { key: 'organism' },
-                organism: {
-                  db: 'taxonomy',
+                main: { key: 'taxonomy' },
+                taxonomy: {
+                  db: 'uniprot',
                   accession: `${sourceOrganism.taxId}`,
                 },
               },
@@ -259,7 +259,7 @@ const Matches = (
       dataKey="source_database"
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
-      displayIf={primary !== 'organism' && primary !== 'protein'}
+      displayIf={primary !== 'taxonomy' && primary !== 'protein'}
       renderer={(db /*: string */) =>
         db === 'reviewed' ? (
           <Tooltip
@@ -303,8 +303,10 @@ const Matches = (
     <Column
       dataKey="match"
       displayIf={
-        primary !== 'organism' &&
-        secondary !== 'organism' &&
+        primary !== 'taxonomy' &&
+        secondary !== 'taxonomy' &&
+        primary !== 'proteome' &&
+        secondary !== 'proteome' &&
         primary !== 'set' &&
         secondary !== 'set'
       }
@@ -324,7 +326,7 @@ const Matches = (
       defaultKey="protein-count"
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
-      displayIf={primary === 'organism'}
+      displayIf={primary === 'taxonomy' || primary === 'proteome'}
       renderer={count => <NumberComponent value={count} abbr />}
     >
       protein count
@@ -334,7 +336,7 @@ const Matches = (
       defaultKey="proteinFastas"
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
-      displayIf={primary === 'organism'}
+      displayIf={primary === 'taxonomy' || primary === 'proteome'}
       renderer={ProteinFastasRenderer}
     >
       FASTA
@@ -344,7 +346,7 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       defaultKey="proteinAccessions"
-      displayIf={primary === 'organism'}
+      displayIf={primary === 'taxonomy' || primary === 'proteome'}
       renderer={ProteinAccessionsRenderer}
     >
       Protein accessions

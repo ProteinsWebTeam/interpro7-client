@@ -1,9 +1,6 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { createSelector } from 'reselect';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import Table, {
@@ -13,20 +10,15 @@ import Table, {
   Exporter,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import Loading from 'components/SimpleCommonComponents/Loading';
 
-import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
-
-import { mainDBLocationSelector } from 'reducers/custom-location/description';
 
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
 } from 'schema_org/processors';
 
-import EntryMenu from 'components/EntryMenu';
-import Title from 'components/Title';
+import EndPointPage from '../endpoint-page';
 import subPages from 'subPages';
 import config from 'config';
 
@@ -37,16 +29,8 @@ import { foundationPartial } from 'styles/foundation';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
-import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
-import {
-  schemaProcessDataRecord,
-  schemaProcessMainEntity,
-} from '../../schema_org/processors';
 
 const f = foundationPartial(fonts, pageStyle, ipro);
-
-// const SVG_WIDTH = 100;
-// const colorHash = new ColorHash();
 
 const propTypes = {
   data: T.shape({
@@ -64,41 +48,6 @@ const propTypes = {
     loading: T.bool.isRequired,
   }),
 };
-
-const defaultPayload = {
-  sets: {},
-};
-
-class Overview extends PureComponent {
-  static propTypes = propTypes;
-
-  render() {
-    if (this.props.loading) {
-      return <Loading />;
-    }
-    const {
-      data: { payload = defaultPayload },
-    } = this.props;
-    return (
-      <ul className={f('card')}>
-        {Object.entries(payload.sets || {})
-          .filter(set => set[0] !== 'kegg')
-          .map(([name, count]) => (
-            <li key={name}>
-              <Link
-                to={{
-                  description: { main: { key: 'set' }, set: { db: name } },
-                }}
-              >
-                {name}
-                {Number.isFinite(count) ? ` (${count})` : ''}
-              </Link>
-            </li>
-          ))}
-      </ul>
-    );
-  }
-}
 
 class List extends PureComponent {
   static propTypes = propTypes;
@@ -261,118 +210,6 @@ for (const subPage of config.pages.set.subPages) {
   subPagesForSet.set(subPage, subPages.get(subPage));
 }
 
-class SummaryComponent extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.any,
-    }).isRequired,
-    customLocation: T.object.isRequired,
-  };
-
-  render() {
-    const {
-      data: { payload },
-      customLocation,
-    } = this.props;
-    return (
-      <SummaryAsync
-        {...this.props}
-        data={payload}
-        customLocation={customLocation}
-      />
-    );
-  }
-}
-
-const locationSelector1 = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].detail ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
-
-class Summary extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.shape({
-        metadata: T.shape({
-          accession: T.string.isRequired,
-        }),
-      }),
-    }).isRequired,
-    dataBase: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-  };
-
-  render() {
-    const {
-      data: { loading, payload },
-      dataBase,
-    } = this.props;
-    if (loading || !payload.metadata) {
-      return <Loading />;
-    }
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
-    let currentSet = null;
-    for (const setDB of setDBs) {
-      if (setDB.name === payload.metadata.source_database) {
-        currentSet = setDB;
-        break;
-      }
-    }
-    return (
-      <Fragment>
-        {payload &&
-          payload.metadata &&
-          payload.metadata.accession && (
-            <Fragment>
-              <SchemaOrgData
-                data={{
-                  data: payload,
-                  endpoint: 'set',
-                  version:
-                    databases &&
-                    databases[payload.metadata.source_database].version,
-                }}
-                processData={schemaProcessDataRecord}
-              />
-              <SchemaOrgData
-                data={{
-                  data: payload.metadata,
-                  type: 'Set',
-                }}
-                processData={schemaProcessMainEntity}
-              />
-            </Fragment>
-          )}
-        <ErrorBoundary>
-          <div className={f('row')}>
-            <div className={f('medium-12', 'large-12', 'columns')}>
-              <Title metadata={payload.metadata} mainType="set" />
-              <EntryMenu metadata={payload.metadata} />
-            </div>
-          </div>
-          <Switch
-            {...this.props}
-            currentSet={currentSet}
-            locationSelector={locationSelector1}
-            indexRoute={SummaryComponent}
-            childRoutes={subPagesForSet}
-          />
-        </ErrorBoundary>
-      </Fragment>
-    );
-  }
-}
-
 const dbAccs = new RegExp(
   Array.from(setDBs)
     .map(db => db.re.source)
@@ -381,41 +218,13 @@ const dbAccs = new RegExp(
   'i',
 );
 
-const childRoutes = new Map([[dbAccs, Summary]]);
-const locationSelector2 = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].accession ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
-const InnerSwitch = props => (
-  <ErrorBoundary>
-    <Switch
-      {...props}
-      locationSelector={locationSelector2}
-      indexRoute={List}
-      childRoutes={childRoutes}
-      catchAll={List}
-    />
-  </ErrorBoundary>
+const EntrySet = () => (
+  <EndPointPage
+    subpagesRoutes={dbAccs}
+    listOfEndpointEntities={List}
+    SummaryAsync={SummaryAsync}
+    subPagesForEndpoint={subPagesForSet}
+  />
 );
 
-const EntrySet = props => (
-  <div>
-    <ErrorBoundary>
-      <Switch
-        {...props}
-        locationSelector={mainDBLocationSelector}
-        indexRoute={Overview}
-        catchAll={InnerSwitch}
-      />
-    </ErrorBoundary>
-  </div>
-);
-
-export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  loadData()(EntrySet),
-);
+export default EntrySet;
