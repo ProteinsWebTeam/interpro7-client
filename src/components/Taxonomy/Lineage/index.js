@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import TaxIdOrName from 'components/Organism/TaxIdOrName';
+import TaxIdOrName from 'components/Taxonomy/TaxIdOrName';
 
 class Lineage extends PureComponent {
   static propTypes = {

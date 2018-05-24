@@ -62,7 +62,7 @@ const ProteinFastasRenderer = taxId => (
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
+    import(/* webpackChunkName: "taxonomy-summary" */ 'components/Taxonomy/Summary'),
 });
 
 const SchemaOrgData = loadable({
