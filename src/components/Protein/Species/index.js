@@ -21,9 +21,9 @@ class Species extends PureComponent /*:: <Props> */ {
         <Link
           to={{
             description: {
-              main: { key: 'organism' },
+              main: { key: 'taxonomy' },
               // TODO: remove stringification of taxID when API returns strings
-              organism: { db: 'taxonomy', accession: `${taxID}` },
+              taxonomy: { db: 'uniprot', accession: `${taxID}` },
             },
           }}
         >

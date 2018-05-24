@@ -1,19 +1,14 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { createSelector } from 'reselect';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
-import Redirect from 'components/generic/Redirect';
 import { GoLink } from 'components/ExtLink';
 import Description from 'components/Description';
 import MemberDBSelector from 'components/MemberDBSelector';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, {
   Column,
   Card,
@@ -22,8 +17,6 @@ import Table, {
   Exporter,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import EntryMenu from 'components/EntryMenu';
-import Title from 'components/Title';
 import { NumberComponent } from 'components/NumberLabel';
 
 import getExtUrlFor from 'utils/url-patterns';
@@ -31,10 +24,9 @@ import { toPlural } from 'utils/pages';
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/load-web-component';
 import loadable from 'higherOrder/loadable';
-import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
+import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
-import { mainDBLocationSelector } from 'reducers/custom-location/description';
-
+import EndPointPage from '../endpoint-page';
 import subPages from 'subPages';
 import config from 'config';
 
@@ -51,8 +43,6 @@ const f = foundationPartial(pageStyle, styles, fonts);
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
-  schemaProcessMainEntity,
-  schemaProcessDataRecord,
 } from 'schema_org/processors';
 
 const GO_COLORS = new Map([
@@ -73,7 +63,7 @@ class SummaryCounterEntries extends PureComponent {
     const {
       proteins,
       domain_architectures: domainArchitectures,
-      organisms,
+      taxa,
       structures,
       sets,
     } = counters;
@@ -134,7 +124,7 @@ class SummaryCounterEntries extends PureComponent {
         </Tooltip>
 
         <Tooltip
-          title={`${organisms} ${toPlural('organism', organisms)} matching ${
+          title={`${taxa} ${toPlural('taxonomy', taxa)} matching ${
             metadata.name
           }`}
           className={f('count-organisms')}
@@ -148,15 +138,15 @@ class SummaryCounterEntries extends PureComponent {
                   db: entryDB,
                   accession: metadata.accession,
                 },
-                organism: { isFilter: true, db: 'taxonomy' },
+                taxonomy: { isFilter: true, db: 'uniprot' },
               },
             }}
-            disabled={!organisms}
+            disabled={!taxa}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent value={organisms} abbr scaleMargin={1} />
+            <NumberComponent value={taxa} abbr scaleMargin={1} />
             <span className={f('label-number')}>
-              {toPlural('organism', organisms)}
+              {toPlural('taxonomy', taxa)}
             </span>
           </Link>
         </Tooltip>
@@ -747,158 +737,22 @@ for (const subPage of config.pages.entry.subPages) {
   subPagesForEntry.set(subPage, subPages.get(subPage));
 }
 
-const SummaryComponent = ({ data: { payload }, isStale, customLocation }) => (
-  <SummaryAsync
-    data={payload}
-    isStale={isStale}
-    customLocation={customLocation}
-  />
+const childRoutesReg = new RegExp(
+  `(${memberDBAccessions.join('|')}|IPR[0-9]{6})`,
+  'i',
 );
-SummaryComponent.propTypes = {
-  data: T.shape({
-    payload: T.object,
-  }).isRequired,
-  isStale: T.bool.isRequired,
-  customLocation: T.object.isRequired,
-};
 
-const detailSelector = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].detail ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
-const Summary = props => {
-  const {
-    data: { loading, payload },
-  } = props;
-  if (loading || !payload.metadata) {
-    return <Loading />;
-  }
-  return (
-    <ErrorBoundary>
-      <div className={f('row')}>
-        <div className={f('medium-12', 'large-12', 'columns')}>
-          <Title metadata={payload.metadata} mainType="entry" />
-          <EntryMenu metadata={payload.metadata} />
-        </div>
-      </div>
-      <Switch
-        {...props}
-        locationSelector={detailSelector}
-        indexRoute={SummaryComponent}
-        childRoutes={subPagesForEntry}
-      />
-    </ErrorBoundary>
-  );
-};
-Summary.propTypes = {
-  data: T.shape({
-    loading: T.bool,
-    payload: T.object,
-  }).isRequired,
-  isStale: T.bool.isRequired,
-};
-
-const RedirectToInterPro = () => (
-  <Redirect
-    to={{
-      description: {
-        main: { key: 'entry' },
-        entry: { db: 'InterPro' },
-      },
-    }}
+const Entry = () => (
+  <EndPointPage
+    subpagesRoutes={childRoutesReg}
+    listOfEndpointEntities={List}
+    SummaryAsync={SummaryAsync}
+    subPagesForEndpoint={subPagesForEntry}
   />
 );
 
-const childRoutes = new Map([
-  [new RegExp(`(${memberDBAccessions.join('|')}|IPR[0-9]{6})`, 'i'), Summary],
-]);
-const accessionSelector = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].accession ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
-// Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = props => (
-  <ErrorBoundary>
-    <Switch
-      {...props}
-      locationSelector={accessionSelector}
-      indexRoute={List}
-      childRoutes={childRoutes}
-      catchAll={List}
-    />
-  </ErrorBoundary>
-);
-
-class Entry extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.object,
-    }).isRequired,
-    dataBase: T.shape({
-      payload: T.object,
-    }).isRequired,
-  };
-
-  render() {
-    const {
-      data: { payload },
-      dataBase,
-    } = this.props;
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
-
-    return (
-      <div>
-        {payload &&
-          payload.metadata &&
-          payload.metadata.accession && (
-            <Fragment>
-              <SchemaOrgData
-                data={{
-                  data: this.props.data.payload,
-                  endpoint: 'entry',
-                  version:
-                    databases &&
-                    databases[payload.metadata.source_database].version,
-                }}
-                processData={schemaProcessDataRecord}
-              />
-              <SchemaOrgData
-                data={{
-                  data: payload.metadata,
-                  type: 'Entry',
-                }}
-                processData={schemaProcessMainEntity}
-              />
-            </Fragment>
-          )}
-        <ErrorBoundary>
-          <Switch
-            {...this.props}
-            locationSelector={mainDBLocationSelector}
-            indexRoute={RedirectToInterPro}
-            catchAll={InnerSwitch}
-          />
-        </ErrorBoundary>
-      </div>
-    );
-  }
-}
-
-export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  loadData((...args) =>
-    getUrlForApi(...args)
-      .replace('/logo', '/')
-      .replace('domain_architecture', ''),
-  )(Entry),
-);
+export default loadData((...args) =>
+  getUrlForApi(...args)
+    .replace('/logo', '/')
+    .replace('domain_architecture', ''),
+)(Entry);

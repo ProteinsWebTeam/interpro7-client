@@ -47,6 +47,7 @@ const propTypes = {
     loading: T.bool.isRequired,
     ok: T.bool,
   }),
+  subPagesForEndpoint: T.func,
 };
 
 class SummaryComponent extends PureComponent {

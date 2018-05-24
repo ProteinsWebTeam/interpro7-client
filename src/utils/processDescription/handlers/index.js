@@ -6,7 +6,8 @@ import set from 'lodash-es/set';
   'entry' |
   'protein' |
   'structure' |
-  'organism' |
+  'taxonomy' |
+  'proteome' |
   'set' |
   'search' |
   'job'
@@ -38,12 +39,17 @@ import set from 'lodash-es/set';
     chain: ?string,
     detail: ?string,
   |},
-  organism: {|
+  taxonomy: {|
     isFilter: ?boolean,
     db: ?string,
     accession: ?string,
-    proteomeDB: ?string,
-    proteomeAccession: ?string,
+    detail: ?string,
+  |},
+  proteome: {|
+    isFilter: ?boolean,
+    db: ?string,
+    accession: ?string,
+    detail: ?string,
   |},
   set: {|
     isFilter: ?boolean,

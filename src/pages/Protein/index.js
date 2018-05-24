@@ -1,10 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
-import { createSelector } from 'reselect';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
@@ -15,15 +12,12 @@ import Table, {
   Exporter,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import EntryMenu from 'components/EntryMenu';
-import Title from 'components/Title';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
-import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
+import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
-import { mainDBLocationSelector } from 'reducers/custom-location/description';
-
+import EndPointPage from '../endpoint-page';
 import subPages from 'subPages';
 import config from 'config';
 
@@ -33,15 +27,12 @@ import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
-import Loading from 'components/SimpleCommonComponents/Loading';
 
 const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
-  schemaProcessDataRecord,
-  schemaProcessMainEntity,
 } from 'schema_org/processors';
 
 const propTypes = {
@@ -60,43 +51,6 @@ const propTypes = {
     loading: T.bool.isRequired,
   }).isRequired,
 };
-
-const defaultPayload = {
-  proteins: {
-    uniprot: null,
-    reviewed: null,
-    unreviewed: null,
-  },
-};
-
-class Overview extends PureComponent {
-  static propTypes = propTypes;
-
-  render() {
-    const {
-      data: { payload = defaultPayload },
-    } = this.props;
-    return (
-      <ul className={f('card')}>
-        {Object.entries(payload.proteins || {}).map(([name, count]) => (
-          <li key={name}>
-            <Link
-              to={{
-                description: {
-                  main: { key: 'protein' },
-                  protein: { db: name },
-                },
-              }}
-            >
-              {name}
-              {Number.isFinite(count) ? ` (${count})` : ''}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-}
 
 class List extends PureComponent {
   static propTypes = propTypes;
@@ -256,9 +210,9 @@ class List extends PureComponent {
                 <Link
                   to={{
                     description: {
-                      main: { key: 'organism' },
-                      organism: {
-                        db: 'taxonomy',
+                      main: { key: 'taxonomy' },
+                      taxonomy: {
+                        db: 'uniprot',
                         accession: `${taxId}`,
                       },
                     },
@@ -306,145 +260,19 @@ for (const subPage of config.pages.protein.subPages) {
   subPagesForProtein.set(subPage, subPages.get(subPage));
 }
 
-class SummaryComponent extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.any,
-    }).isRequired,
-    customLocation: T.object.isRequired,
-  };
+const childRoutesReg = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
 
-  render() {
-    const {
-      data: { payload },
-      customLocation,
-    } = this.props;
-    return <SummaryAsync data={payload} customLocation={customLocation} />;
-  }
-}
-
-const locationSelector1 = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].detail ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
-
-class Summary extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.shape({
-        metadata: T.shape({
-          accession: T.string.isRequired,
-        }).isRequired,
-      }),
-    }).isRequired,
-    dataBase: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-  };
-
-  render() {
-    const {
-      data: { loading, payload },
-      dataBase,
-    } = this.props;
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
-    if (loading || !payload.metadata) {
-      return <Loading />;
-    }
-    return (
-      <Fragment>
-        <div className={f('row')}>
-          <div className={f('medium-12', 'large-12', 'columns')}>
-            <Title metadata={payload.metadata} mainType="protein" />
-            <EntryMenu metadata={payload.metadata} />
-          </div>
-        </div>
-        {payload.metadata.accession && (
-          <Fragment>
-            <SchemaOrgData
-              data={{
-                data: payload,
-                endpoint: 'protein',
-                version: databases && databases.uniprot.version,
-              }}
-              processData={schemaProcessDataRecord}
-            />
-            <SchemaOrgData
-              data={{
-                data: payload.metadata,
-                type: 'Protein',
-              }}
-              processData={schemaProcessMainEntity}
-            />
-          </Fragment>
-        )}
-        <ErrorBoundary>
-          <Switch
-            {...this.props}
-            locationSelector={locationSelector1}
-            indexRoute={SummaryComponent}
-            childRoutes={subPagesForProtein}
-          />
-        </ErrorBoundary>
-      </Fragment>
-    );
-  }
-}
-
-const childRoutes = new Map([
-  [
-    /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i,
-    Summary,
-  ],
-]);
-const locationSelector2 = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].accession ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
-// Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = props => (
-  <ErrorBoundary>
-    <Switch
-      {...props}
-      locationSelector={locationSelector2}
-      indexRoute={List}
-      childRoutes={childRoutes}
-      catchAll={List}
-    />
-  </ErrorBoundary>
+const Protein = () => (
+  <EndPointPage
+    subpagesRoutes={childRoutesReg}
+    listOfEndpointEntities={List}
+    SummaryAsync={SummaryAsync}
+    subPagesForEndpoint={subPagesForProtein}
+  />
 );
 
-const Protein = props => (
-  <div>
-    <ErrorBoundary>
-      <Switch
-        {...props}
-        locationSelector={mainDBLocationSelector}
-        indexRoute={Overview}
-        catchAll={InnerSwitch}
-      />
-    </ErrorBoundary>
-  </div>
-);
-
-export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  loadData((...args) =>
-    getUrlForApi(...args)
-      .replace('domain_architecture', 'entry')
-      .replace('sequence', ''),
-  )(Protein),
-);
+export default loadData((...args) =>
+  getUrlForApi(...args)
+    .replace('domain_architecture', 'entry')
+    .replace('sequence', ''),
+)(Protein);
