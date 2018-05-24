@@ -483,7 +483,7 @@ class Home extends PureComponent {
             'margin-bottom-large',
           )}
         >
-          <div className={f('columns', 'browse-by')}>
+          <div className={f('columns')}>
             <div className={f('callout-box')}>
               <Tabs>
                 <div title="Member Database">
@@ -499,7 +499,7 @@ class Home extends PureComponent {
             </div>
           </div>
 
-          <div className={f('columns', 'stat-by')}>
+          <div className={f('columns')}>
             {
               // Browse by latest entries or most popular
             }
