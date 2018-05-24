@@ -10,8 +10,9 @@ import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(fonts, local);
+const f = foundationPartial(fonts, local, ipro);
 
 const TITLE = 'Manually refresh job information';
 
