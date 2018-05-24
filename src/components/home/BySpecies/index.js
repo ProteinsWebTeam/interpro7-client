@@ -152,7 +152,7 @@ class BySpecies extends PureComponent /*:: <Props> */ {
               organism: { db: 'taxonomy' },
             },
           }}
-          className={f('button')}
+          className={f('button', 'margin-bottom-none')}
         >
           View all Organism
         </Link>
