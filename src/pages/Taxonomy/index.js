@@ -1,11 +1,9 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -20,7 +18,6 @@ import Table, {
 import ProteinFile from 'subPages/Organism/ProteinFile';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import Loading from 'components/SimpleCommonComponents/Loading';
 import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
@@ -32,24 +29,17 @@ import getIcon from 'utils/taxonomy/get-icon';
 import getNodeSpotlight from 'utils/taxonomy/get-node-spotlight';
 import getSuperKingdom from 'utils/taxonomy/get-super-kingdom';
 
-import { mainDBLocationSelector } from 'reducers/custom-location/description';
-
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
-  schemaProcessDataRecord,
-  schemaProcessMainEntity,
 } from 'schema_org/processors';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import EntryMenu from 'components/EntryMenu';
-import Title from 'components/Title';
 import subPages from 'subPages';
 import config from 'config';
 
-import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
-
+import EndPointPage from '../endpoint-page';
 import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from '../style.css';
@@ -98,36 +88,6 @@ const propTypes = {
   }),
 };
 
-const defaultPayload = {};
-
-class Overview extends PureComponent {
-  static propTypes = propTypes;
-
-  render() {
-    const {
-      data: { payload = defaultPayload },
-    } = this.props;
-    return (
-      <ul className={f('card')}>
-        {Object.entries(payload.taxa || {}).map(([name, count]) => (
-          <li key={name}>
-            <Link
-              to={{
-                description: {
-                  main: { key: 'taxonomy' },
-                  taxonomy: { db: name },
-                },
-              }}
-            >
-              {name}
-              {Number.isFinite(count) ? ` (${count})` : ''}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-}
 const dataProviders = new Map();
 class PlainDataProvider extends PureComponent {
   static propTypes = {
@@ -210,110 +170,6 @@ for (const subPage of config.pages.taxonomy.subPages) {
   subPagesForTaxonomy.set(subPage, subPages.get(subPage));
 }
 
-const locationSelector1 = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].detail ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
-
-class SummaryComponent extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.any,
-    }).isRequired,
-    customLocation: T.object.isRequired,
-  };
-
-  render() {
-    const {
-      data: { payload, loading },
-      customLocation,
-    } = this.props;
-    return (
-      <SummaryAsync
-        data={payload}
-        customLocation={customLocation}
-        loading={loading}
-      />
-    );
-  }
-}
-
-class Summary extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-    }).isRequired,
-    dataBase: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-    customLocation: T.object.isRequired,
-  };
-
-  render() {
-    const {
-      data: { loading, payload },
-      // dataOrganism: { loading: loadingOrg, payload: payloadOrg },
-      dataBase,
-    } = this.props;
-    if (loading || !payload) {
-      return <Loading />;
-    }
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
-    return (
-      <Fragment>
-        {payload &&
-          payload.metadata &&
-          payload.metadata.accession && (
-            <Fragment>
-              <SchemaOrgData
-                data={{
-                  data: payload,
-                  endpoint: 'taxonomy',
-                  version: databases && databases.uniprot.version,
-                }}
-                processData={schemaProcessDataRecord}
-              />
-              <SchemaOrgData
-                data={{
-                  data: payload.metadata,
-                  type: 'Taxonomy',
-                }}
-                processData={schemaProcessMainEntity}
-              />
-            </Fragment>
-          )}
-
-        <ErrorBoundary>
-          <div className={f('row')}>
-            <div className={f('medium-12', 'large-12', 'columns')}>
-              {/* <LoadedTitle />*/}
-              {loading ? (
-                <Loading />
-              ) : (
-                <Title metadata={payload.metadata} mainType="taxonomy" />
-              )}
-              <EntryMenu metadata={payload.metadata} />
-            </div>
-          </div>
-          <Switch
-            {...this.props}
-            locationSelector={locationSelector1}
-            indexRoute={SummaryComponent}
-            childRoutes={subPagesForTaxonomy}
-          />
-        </ErrorBoundary>
-      </Fragment>
-    );
-  }
-}
 const SpeciesIcon = ({ lineage }) => {
   let icon = '.';
   let color;
@@ -785,54 +641,15 @@ class List extends PureComponent {
     );
   }
 }
+const childRoutes = /(\d+)|(all)/i;
 
-const locationSelector2 = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].accession ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
-
-const childRoutes = new Map([[/(\d+)|(all)/i, Summary]]);
-// Keep outside! Otherwise will be redefined at each render of the outer Switch
-class InnerSwitch extends PureComponent {
-  render() {
-    return (
-      <ErrorBoundary>
-        <Switch
-          {...this.props}
-          locationSelector={locationSelector2}
-          indexRoute={List}
-          childRoutes={childRoutes}
-          catchAll={List}
-        />
-      </ErrorBoundary>
-    );
-  }
-}
-
-class Taxonomy extends PureComponent {
-  static propTypes = {
-    data: T.object.isRequired,
-  };
-
-  render() {
-    return (
-      <ErrorBoundary>
-        <Switch
-          {...this.props}
-          locationSelector={mainDBLocationSelector}
-          indexRoute={Overview}
-          catchAll={InnerSwitch}
-        />
-      </ErrorBoundary>
-    );
-  }
-}
-
-export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  loadData()(Taxonomy),
+const Taxonomy = () => (
+  <EndPointPage
+    subpagesRoutes={childRoutes}
+    listOfEndpointEntities={List}
+    SummaryAsync={SummaryAsync}
+    subPagesForEndpoint={subPagesForTaxonomy}
+  />
 );
+
+export default Taxonomy;

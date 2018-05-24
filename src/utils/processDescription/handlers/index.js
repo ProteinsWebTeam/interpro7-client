@@ -442,7 +442,7 @@ export const proteomeAccessionHandler /*: Handler */ = handlerConstructor({
     value: 'proteomeAccessionHandler',
   },
   key: {
-    value: ['proteome', 'proteomeAccession'],
+    value: ['proteome', 'accession'],
   },
   cleanUp: {
     value: value => value.toUpperCase(),

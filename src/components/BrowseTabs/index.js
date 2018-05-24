@@ -93,20 +93,10 @@ const mapStateToProps = createSelector(
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .db,
-  state =>
-    state.customLocation.description.main.key === 'organism'
-      ? state.customLocation.description.organism.proteomeDB
-      : null,
-  state =>
-    state.customLocation.description.main.key === 'organism'
-      ? state.customLocation.description.organism.proteomeAccession
-      : null,
-  (mainType, mainDB, mainAccession, proteomeDB, proteomeAccession) => ({
+  (mainType, mainDB, mainAccession) => ({
     mainType,
     mainDB,
     mainAccession,
-    proteomeDB,
-    proteomeAccession,
     isSignature: !!(
       mainType === 'entry' &&
       mainDB !== 'InterPro' &&
@@ -126,17 +116,7 @@ const mapStateToUrl = createSelector(
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  state =>
-    state.customLocation.description.main.key === 'organism'
-      ? state.customLocation.description.organism
-      : {},
-  (
-    { protocol, hostname, port, root },
-    key,
-    db,
-    accession,
-    { proteomeDB, proteomeAccession },
-  ) => {
+  ({ protocol, hostname, port, root }, key, db, accession) => {
     if (!accession) return;
     return format({
       protocol,
@@ -146,7 +126,7 @@ const mapStateToUrl = createSelector(
         root +
         descriptionToPath({
           main: { key },
-          [key]: { db, accession, proteomeDB, proteomeAccession },
+          [key]: { db, accession },
         }),
     });
   },
