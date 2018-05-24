@@ -41,7 +41,14 @@ describe('descriptionToPath()', () => {
   });
 
   describe('data types', () => {
-    const types = ['entry', 'protein', 'structure', 'organism', 'set'];
+    const types = [
+      'entry',
+      'protein',
+      'structure',
+      'taxonomy',
+      'proteome',
+      'set',
+    ];
 
     test('basic', () => {
       for (const key of types) {
