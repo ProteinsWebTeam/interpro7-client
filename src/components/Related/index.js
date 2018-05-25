@@ -109,8 +109,12 @@ const primariesAndSecondaries = {
       primary: 'structure',
       secondary: 'entry',
     },
-    organism: {
-      primary: 'organism',
+    taxonomy: {
+      primary: 'taxonomy',
+      secondary: 'entry',
+    },
+    proteome: {
+      primary: 'proteome',
       secondary: 'entry',
     },
     set: {
@@ -138,18 +142,32 @@ const primariesAndSecondaries = {
       secondary: 'structure',
     },
   },
-  organism: {
+  taxonomy: {
     entry: {
       primary: 'entry',
-      secondary: 'organism',
+      secondary: 'taxonomy',
     },
     protein: {
       primary: 'protein',
-      secondary: 'organism',
+      secondary: 'taxonomy',
     },
     structure: {
       primary: 'structure',
-      secondary: 'organism',
+      secondary: 'taxonomy',
+    },
+  },
+  proteome: {
+    entry: {
+      primary: 'entry',
+      secondary: 'proteome',
+    },
+    protein: {
+      primary: 'protein',
+      secondary: 'proteome',
+    },
+    structure: {
+      primary: 'structure',
+      secondary: 'proteome',
     },
   },
   set: {
@@ -165,8 +183,8 @@ const primariesAndSecondaries = {
       primary: 'structure',
       secondary: 'set',
     },
-    organism: {
-      primary: 'organism',
+    taxonomy: {
+      primary: 'taxonomy',
       secondary: 'set',
     },
   },
@@ -286,7 +304,7 @@ const getReversedUrl = createSelector(
       pathname: root + descriptionToPath(newDesc),
       query: { ...search, page_size: search.page_size || settingsPageSize },
     });
-    if (description.main.key === 'entry' && newMain === 'organism') {
+    if (description.main.key === 'entry' && newMain === 'taxonomy') {
       url = url.replace('/entry/', '/protein/entry/');
     }
     return url;

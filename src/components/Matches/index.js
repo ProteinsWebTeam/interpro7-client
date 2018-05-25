@@ -33,7 +33,8 @@ const SchemaOrgData = loadable({
 const schemamap = {
   entry: {
     protein: ['@isContainedIn', 'Protein'],
-    organism: ['@isContainedIn', 'Organism'],
+    taxonomy: ['@isContainedIn', 'Taxonomy'],
+    proteome: ['@isContainedIn', 'Proteome'],
     structure: ['@isContainedIn', 'Structure'],
     set: ['@isContainedIn', 'Set'],
   },
@@ -44,19 +45,26 @@ const schemamap = {
   structure: {
     entry: ['@additionalProperty', 'Entry'],
     protein: ['@isContainedIn', 'Protein'],
-    organism: ['@isContainedIn', 'Organism'],
+    taxonomy: ['@isContainedIn', 'Taxonomy'],
+    proteome: ['@isContainedIn', 'Proteome'],
   },
-  organism: {
+  taxonomy: {
     entry: ['@contains', 'Entry'],
     protein: ['@contains', 'Protein'],
     structure: ['@contains', 'Structure'],
     proteome: ['@contains', 'Proteome'],
   },
+  proteome: {
+    entry: ['@contains', 'Entry'],
+    protein: ['@contains', 'Protein'],
+    structure: ['@contains', 'Structure'],
+  },
   set: {
     entry: ['@additionalProperty', 'Entry'],
     protein: ['@additionalProperty', 'Protein'],
     structure: ['@additionalProperty', 'Structure'],
-    organism: ['@additionalProperty', 'Organism'],
+    taxonomy: ['@additionalProperty', 'Taxonomy'],
+    proteome: ['@additionalProperty', 'Proteome'],
   },
 };
 

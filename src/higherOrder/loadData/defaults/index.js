@@ -63,6 +63,16 @@ export const getUrl = createSelector(
               break;
           }
         }
+        if (hash === 'table') {
+          switch (description.main.key) {
+            case 'taxonomy':
+            case 'proteome':
+              _search.extra_fields = 'counters';
+              break;
+            default:
+              break;
+          }
+        }
         return cleanUpMultipleSlashes(
           format({
             protocol,
