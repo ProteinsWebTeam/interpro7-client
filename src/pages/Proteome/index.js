@@ -53,7 +53,7 @@ const SchemaOrgData = loadable({
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "organism-summary" */ 'components/Organism/Summary'),
+    import(/* webpackChunkName: "proteome-summary" */ 'components/Proteome/Summary'),
 });
 
 const propTypes = {

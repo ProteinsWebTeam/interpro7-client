@@ -187,7 +187,7 @@ class SummaryCounterStructures extends PureComponent {
             <div className={f('icon', 'icon-count-species')} />{' '}
             <NumberComponent value={taxa} abbr scaleMargin={1} />
             <span className={f('label-number')}>
-              {toPlural('organism', taxa)}
+              {toPlural('taxonomy', taxa)}
             </span>
           </div>
         </Tooltip>
