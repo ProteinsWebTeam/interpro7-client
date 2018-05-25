@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { format } from 'url';
 
 import FileWorker from 'webWorkers/proteinFile';
 
@@ -9,7 +10,11 @@ import ProgressButton from 'components/ProgressButton';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
 import classnames from 'classnames/bind';
+
+import { downloadURL } from 'actions/creators';
 
 import styles from './style.css';
 
@@ -42,14 +47,33 @@ class ProteinFile extends PureComponent {
     api: T.object.isRequired,
     taxId: T.string.isRequired,
     type: T.string.isRequired,
+    downloadURL: T.func.isRequired,
+    // TODO: switch to isRequired when all components have been updated
+    customLocationDescription: T.object,
+    fileType: T.oneOf(['accession', 'FASTA']),
   };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    // TODO: remove next line when all components have been updated
+    if (!nextProps.customLocationDescription) return null;
+    const url = format({
+      ...nextProps.api,
+      pathname:
+        nextProps.api.root +
+        descriptionToPath(nextProps.customLocationDescription),
+    });
+    if (prevState.url === url) return null;
+    return { url };
+  }
 
   constructor(props) {
     super(props);
+
     this.state = {
       downloading: false,
       failed: false,
       success: false,
+      url: null,
       progress: 0,
     };
   }
@@ -68,7 +92,7 @@ class ProteinFile extends PureComponent {
     }
   }
 
-  _handleClick = e => {
+  _handleClickLegacy = e => {
     if (this.state.downloading || this.state.success || this.state.failed) {
       return;
     }
@@ -78,6 +102,11 @@ class ProteinFile extends PureComponent {
     this._worker.addEventListener('message', this._workerMessage);
     const { entryDescription, api, taxId, type } = this.props;
     this._worker.postMessage({ entryDescription, api, taxId, type });
+  };
+
+  _handleClick = e => {
+    e.preventDefault();
+    this.props.downloadURL(this.state.url, this.props.fileType);
   };
 
   _workerMessage = ({ data: { type, details } }) => {
@@ -119,23 +148,43 @@ class ProteinFile extends PureComponent {
     }
     title += ` for tax ID ${taxId}`;
     return (
-      <Tooltip title={title}>
-        <Link
-          download={getDownloadName(this.props)}
-          href={href}
-          disabled={downloading}
-          className={s('link', { downloading, failed })}
-          target="_blank"
-          onClick={this._handleClick}
-        >
-          <ProgressButton
-            downloading={downloading}
-            success={success}
-            failed={failed}
-            progress={progress}
-          />
-        </Link>
-      </Tooltip>
+      <React.Fragment>
+        <Tooltip title={title}>
+          <Link
+            download={getDownloadName(this.props)}
+            href={href}
+            disabled={downloading}
+            className={s('link', { downloading, failed })}
+            target="_blank"
+            onClick={this._handleClickLegacy}
+            style={{ opacity: 0.5 }}
+          >
+            <ProgressButton
+              downloading={downloading}
+              success={success}
+              failed={failed}
+              progress={progress}
+            />
+          </Link>
+        </Tooltip>
+        <Tooltip title={title}>
+          <Link
+            download={getDownloadName(this.props)}
+            href={href}
+            disabled={downloading}
+            className={s('link', { downloading, failed })}
+            target="_blank"
+            onClick={this._handleClick}
+          >
+            <ProgressButton
+              downloading={downloading}
+              success={success}
+              failed={failed}
+              progress={progress}
+            />
+          </Link>
+        </Tooltip>
+      </React.Fragment>
     );
   }
 }
@@ -146,4 +195,4 @@ const mapStateToProps = createSelector(
   (api, entryDescription) => ({ api, entryDescription }),
 );
 
-export default connect(mapStateToProps)(ProteinFile);
+export default connect(mapStateToProps, { downloadURL })(ProteinFile);
