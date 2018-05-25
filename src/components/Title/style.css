@@ -18,11 +18,14 @@
     margin-bottom: 0.3rem;
   } /*to align tag element with entry icon*/
 }
-.title small {
-  color: #333;
-  padding: 0 0.5rem;
+.title-id {
   margin-left: 2rem;
+  font-size: 160%;
 }
+.title-id span {
+  padding: 0.2rem 0.5rem;
+}
+
 .title-id-family {
   background-color: var(--colors-family-sub);
 }
@@ -65,7 +68,7 @@
   .title-tag .tag {
     font-size: 60%;
   }
-  .title small {
+  .title-id {
     margin-left: 1rem;
   }
 }
