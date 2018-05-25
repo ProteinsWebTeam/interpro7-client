@@ -36,6 +36,10 @@ table.light tr:nth-child(odd):hover {
   background-color: #f9fafb; /*darker #d0deeb - #d3dddf*/
 }
 
+table.light tbody {
+  border: none;
+}
+
 table.light tbody tr:nth-child(even) {
   background-color: #fff;
 }
