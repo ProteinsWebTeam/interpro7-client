@@ -155,6 +155,10 @@ const primariesAndSecondaries = {
       primary: 'structure',
       secondary: 'taxonomy',
     },
+    proteome: {
+      primary: 'proteome',
+      secondary: 'taxonomy',
+    },
   },
   proteome: {
     entry: {
@@ -306,6 +310,9 @@ const getReversedUrl = createSelector(
     });
     if (description.main.key === 'entry' && newMain === 'taxonomy') {
       url = url.replace('/entry/', '/protein/entry/');
+    }
+    if (description.main.key === 'taxonomy' && newMain === 'proteome') {
+      url = url.replace('/taxonomy/', '/protein/taxonomy/');
     }
     return url;
   },

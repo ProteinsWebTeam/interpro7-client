@@ -96,7 +96,7 @@ const subPages = new Map([
   ['entry', loadData(defaultMapStateToProps)(List)],
   ['protein', loadData(defaultMapStateToProps)(List)],
   ['structure', loadData(defaultMapStateToProps)(List)],
-  ['organism', loadData(defaultMapStateToProps)(List)],
+  ['taxonomy', loadData(defaultMapStateToProps)(List)],
   ['set', loadData(defaultMapStateToProps)(List)],
   ['sequence', Sequence],
   ['domain_architecture', DomainArchitecture],

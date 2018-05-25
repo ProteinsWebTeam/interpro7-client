@@ -253,7 +253,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'Taxonomy',
-      counter: 'Taxonomy',
+      counter: 'taxa',
     },
   ],
   [
@@ -277,7 +277,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'Proteomes',
-      counter: 'Proteomes',
+      counter: 'proteomes',
     },
   ],
   [
