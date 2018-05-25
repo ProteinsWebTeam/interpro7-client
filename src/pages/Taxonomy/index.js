@@ -1,13 +1,9 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import { format } from 'url';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-// import OrganismListFilters from 'components/Organism/OrganismListFilters';
 import Table, {
   Column,
   Card,
@@ -20,7 +16,6 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import { NumberComponent } from 'components/NumberLabel';
 
-import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
 import { toPlural } from 'utils/pages';
@@ -33,8 +28,6 @@ import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
 } from 'schema_org/processors';
-
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import subPages from 'subPages';
 import config from 'config';
@@ -86,83 +79,6 @@ const propTypes = {
     loading: T.bool.isRequired,
     ok: T.bool,
   }),
-};
-
-const dataProviders = new Map();
-class PlainDataProvider extends PureComponent {
-  static propTypes = {
-    dataEntry: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.object,
-    }),
-    dataProtein: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.object,
-    }),
-    db: T.string,
-    renderer: T.func.isRequired,
-  };
-
-  render() {
-    return this.props.renderer(
-      this.props.dataEntry,
-      this.props.dataProtein,
-      this.props.db,
-    );
-  }
-}
-const dataProviderFor = (accession, sourceDatabase) => {
-  let DataProvider = dataProviders.get(accession);
-  if (DataProvider) return DataProvider;
-  // create new one if not already existing
-  const mapStateToUrlForEntry = createSelector(
-    state => state.settings.api,
-    ({ protocol, hostname, port, root }) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname:
-          root +
-          descriptionToPath({
-            main: { key: 'taxonomy' },
-            entry: { isFilter: true },
-            protein: { isFilter: true },
-            taxonomy: { db: sourceDatabase, accession },
-          }),
-      }),
-  );
-  const mapStateToUrlForProtein = createSelector(
-    state => state.settings.api,
-    state => state.customLocation.description.entry.db,
-    ({ protocol, hostname, port, root }, entryDB) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname:
-          root +
-          descriptionToPath({
-            main: { key: 'taxonomy' },
-            entry: { isFilter: true, db: entryDB },
-            protein: { isFilter: true },
-            taxonomy: { db: sourceDatabase, accession },
-          }),
-      }),
-  );
-  const mapStateToProps = createSelector(
-    state => state.customLocation.description.entry.db,
-    db => ({ db }),
-  );
-  DataProvider = connect(mapStateToProps)(
-    loadData({ getUrl: mapStateToUrlForEntry, propNamespace: 'Entry' })(
-      loadData({ getUrl: mapStateToUrlForProtein, propNamespace: 'Protein' })(
-        PlainDataProvider,
-      ),
-    ),
-  );
-  dataProviders.set(accession, DataProvider);
-  return DataProvider;
 };
 
 const subPagesForTaxonomy = new Map();
@@ -523,42 +439,25 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="entry-count"
-              renderer={(accession /*: string */, { source_database: db }) => {
-                const DataProvider = dataProviderFor(`${accession}`, db);
+              renderer={(accession /*: string */, _row, extra) => {
+                const count =
+                  (extra && extra.counters && extra.counters.entries) || '-';
                 return (
-                  <DataProvider
-                    renderer={({ loading, payload }, _, db) => {
-                      let count = 0;
-                      if (payload) {
-                        if (db && db in payload.entries.member_databases) {
-                          count = payload.entries.member_databases[db];
-                        } else {
-                          count = payload.entries[(db || 'all').toLowerCase()];
-                        }
-                      }
-                      return (
-                        <Link
-                          className={f('no-decoration')}
-                          to={{
-                            description: {
-                              main: { key: 'taxonomy' },
-                              taxonomy: {
-                                db: 'uniprot',
-                                accession: `${accession}`,
-                              },
-                              entry: { isFilter: true, db: db || 'all' },
-                            },
-                          }}
-                        >
-                          <NumberComponent
-                            value={count}
-                            loading={loading}
-                            abbr
-                          />
-                        </Link>
-                      );
+                  <Link
+                    className={f('no-decoration')}
+                    to={{
+                      description: {
+                        main: { key: 'taxonomy' },
+                        taxonomy: {
+                          db: 'uniprot',
+                          accession: `${accession}`,
+                        },
+                        entry: { isFilter: true, db: entryDB || 'all' },
+                      },
                     }}
-                  />
+                  >
+                    <NumberComponent value={count} loading={loading} abbr />
+                  </Link>
                 );
               }}
             >
@@ -578,38 +477,24 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="protein-count"
-              renderer={(accession /*: string */, { source_database: db }) => {
-                const DataProvider = dataProviderFor(`${accession}`, db);
+              renderer={(accession /*: string */, _row, extra) => {
+                const count =
+                  (extra && extra.counters && extra.counters.proteins) || '-';
                 return (
-                  <DataProvider
-                    renderer={(_, { payload, loading }) => {
-                      let count = 0;
-                      if (payload) {
-                        count = payload.proteins.uniprot;
-                        if (typeof count === 'object') count = count.proteins;
-                      }
-                      return (
-                        <Link
-                          to={{
-                            description: {
-                              main: { key: 'taxonomy' },
-                              taxonomy: {
-                                db: 'uniprot',
-                                accession: `${accession}`,
-                              },
-                              protein: { isFilter: true, db: 'UniProt' },
-                            },
-                          }}
-                        >
-                          <NumberComponent
-                            value={count}
-                            loading={loading}
-                            abbr
-                          />
-                        </Link>
-                      );
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'taxonomy' },
+                        taxonomy: {
+                          db: 'uniprot',
+                          accession: `${accession}`,
+                        },
+                        protein: { isFilter: true, db: 'UniProt' },
+                      },
                     }}
-                  />
+                  >
+                    <NumberComponent value={count} loading={loading} abbr />
+                  </Link>
                 );
               }}
             >
