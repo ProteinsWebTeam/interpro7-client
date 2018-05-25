@@ -178,12 +178,6 @@ div#local-title {
 .callout.border {
   border: 1px solid rgba(10, 10, 10, 0.25);
 }
-.callout.alert.withicon::before {
-  content: 'l';
-  font-family: 'EBI-Generic';
-  color: #d1847f;
-  margin-right: 0.5rem;
-}
 .callout.info {
   background-color: #c6e9ff;
   color: #222;
@@ -195,86 +189,12 @@ div#local-title {
   margin-right: 0.5rem;
 }
 
-.callout.slk {
-  background-color: transparent;
-  border: 1px solid var(--colors-nearly-white);
-  border-left: #d72b3f 4px solid;
-  border-radius: 0.25rem;
-  color: #222;
-}
-.callout.slk.withicon::before {
-  content: 'l';
-  font-family: 'EBI-Generic';
-  color: #d72b3f;
-  margin-right: 0.5rem;
-}
 /*ICONS*/
 /*MEMBER DATABASE SVG icons*/
 .svg-mask {
   display: none;
 }
-.md-color,
-.md-server {
-  transition: fill var(--timing-slow) ease-in-out;
-  fill: #e2e2e2;
-  font-size: 9em;
-  font-family: 'EBI-generic', arial, sans-serif;
-}
 
-.md-ip .md-color {
-  fill: var(--colors-interpro);
-}
-
-.md-cg .md-color {
-  fill: var(--colors-cathgene3d);
-}
-.md-cd .md-color {
-  fill: var(--colors-cdd);
-}
-.md-ha .md-color {
-  fill: var(--colors-hamap);
-}
-.md-mo .md-color {
-  fill: var(--colors-modi);
-}
-.md-pa .md-color {
-  fill: var(--colors-panther);
-}
-.md-pf .md-color {
-  fill: var(--colors-pfam);
-}
-.md-pi .md-color {
-  fill: var(--colors-pirsf);
-}
-.md-pri .md-color {
-  fill: var(--colors-prints);
-}
-.md-pro .md-color {
-  fill: var(--colors-prodom);
-}
-.md-prpro .md-color,
-.md-pr .md-color {
-  fill: var(--colors-profile);
-}
-.md-prpat .md-color {
-  fill: var(--colors-prosite); /*was 8899a6*/
-}
-.md-sf .md-color {
-  fill: var(--colors-sfld);
-}
-.md-sm .md-color {
-  fill: var(--colors-smart);
-}
-.md-su .md-color {
-  fill: var(--colors-ssf);
-}
-.md-ti .md-color {
-  fill: var(--colors-tigrfams);
-}
-
-.md-all .md-color {
-  fill: var(--colors-all);
-}
 /*/MEMBER DATABASE SVG icons*/
 
 /*SVG icons*/

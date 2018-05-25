@@ -265,7 +265,6 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
       new HTMLWebpackPlugin({
         title: pkg.name,
         template: path.join('.', 'src', 'index.template.html'),
-        inject: false,
       }),
       mode === 'production'
         ? new (require('webapp-webpack-plugin'))({
@@ -275,7 +274,6 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
               'icons-and-manifests',
               '[hash:base62:3]'
             ),
-            inject: true,
             favicons: {
               background: '#007c82',
               theme_color: '#007c82',
@@ -293,7 +291,8 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
               additional: [/\.(worker\.js)$/i],
               optional: [/\.(eot|ttf|woff|svg|ico|png|jpe?g)$/i],
             },
-            appShell: publicPath,
+            // TODO: check a way to use it without affecting /api
+            // appShell: publicPath,
             AppCache: false,
             // TODO: Check whats the best way to do this autoupdate.
             // autoUpdate: 60000,
