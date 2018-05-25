@@ -69,10 +69,6 @@ table.light .subheader {
   margin: 10px 0 0 10px;
 }
 
-table.light span::before {
-  color: #71818a; /* doesn't work using class .icon-functional */
-}
-
 .table-view .table-results-filtering {
   display: flex;
   justify-content: space-between;
