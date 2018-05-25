@@ -2,7 +2,6 @@
   /*GAL*/
   --colors-main: #007c82;
   --colors-submain: #1779ba;
-  --colors-nearly-white: #eee;
   --colors-nearly-black: #222;
   --colors-ebidark: #333;
   --colors-dark: #4b4b4b;
@@ -11,6 +10,7 @@
   --colors-slightgray: #909090;
   --colors-lightgray: #9f9f9f;
   --colors-vlightgray: #d4d4d4;
+  --colors-nearly-white: #eee;
   --colors-loading-bar: #77b6ff;
   --colors-tag: #1878ba; /*or marroon #e0d6a5 lightblue:#b6ced5*/
   --colors-marktext: #fcf655;
