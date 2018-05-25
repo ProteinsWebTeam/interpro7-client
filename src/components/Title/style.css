@@ -1,12 +1,12 @@
 @import '../../styles/colors.css';
 
 .title {
-  display: inline-block;
-  width: 100%;
+  display: flex;
 
   & interpro-type {
     float: left;
-    margin: 0.5rem 1rem 0.5rem 0;
+    margin: 0.5rem 2rem 0.5rem 0;
+    line-height: 0;
   }
   & .icon-container {
     /*negative values as the viewbox is not well defined*/
@@ -21,6 +21,7 @@
 .title small {
   color: #333;
   padding: 0 0.5rem;
+  margin-left: 2rem;
 }
 .title-id-family {
   background-color: var(--colors-family-sub);
@@ -52,4 +53,11 @@
 .shortname {
   color: #41647d;
   font-size: 80%;
+}
+
+@media screen and (max-width: 75rem) {
+  /*reduce tag font*/
+  .title-tag .tag {
+    font-size: 60%;
+  }
 }
