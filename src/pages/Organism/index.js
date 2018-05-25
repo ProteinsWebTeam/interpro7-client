@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -58,16 +59,45 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(pageStyle, styles, fonts);
 
-const EntryAccessionsRenderer = taxId => (
-  <ProteinFile taxId={`${taxId}`} type="entry-accession" />
+const EntryAccessionsRenderer = entryDB => taxId => (
+  <ProteinFile
+    taxId={`${taxId}`}
+    type="entry-accession"
+    fileType="accession"
+    customLocationDescription={{
+      main: { key: 'entry' },
+      entry: { db: entryDB || 'all' },
+      organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+    }}
+  />
 );
 
-const ProteinAccessionsRenderer = taxId => (
-  <ProteinFile taxId={`${taxId}`} type="protein-accession" />
+const ProteinAccessionsRenderer = entryDB => taxId => (
+  <ProteinFile
+    taxId={`${taxId}`}
+    type="protein-accession"
+    fileType="accession"
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      entry: { isFilter: true, db: entryDB || 'all' },
+      organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+    }}
+  />
 );
 
-const ProteinFastasRenderer = taxId => (
-  <ProteinFile taxId={`${taxId}`} type="FASTA" />
+const ProteinFastasRenderer = entryDB => taxId => (
+  <ProteinFile
+    taxId={`${taxId}`}
+    type="FASTA"
+    fileType="FASTA"
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      entry: { isFilter: true, db: entryDB || 'all' },
+      organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+    }}
+  />
 );
 
 const propTypes = {
@@ -612,7 +642,7 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="entryAccessions"
-              renderer={EntryAccessionsRenderer}
+              renderer={EntryAccessionsRenderer(entryDB)}
             >
               Entry accessions
             </Column>
@@ -665,7 +695,7 @@ class List extends PureComponent {
               defaultKey="proteinFastas"
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
-              renderer={ProteinFastasRenderer}
+              renderer={ProteinFastasRenderer(entryDB)}
             >
               FASTA
             </Column>
@@ -674,7 +704,7 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="proteinAccessions"
-              renderer={ProteinAccessionsRenderer}
+              renderer={ProteinAccessionsRenderer(entryDB)}
             >
               Protein accessions
             </Column>
