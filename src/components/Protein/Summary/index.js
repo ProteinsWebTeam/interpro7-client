@@ -16,6 +16,7 @@ import {
   isTranscribedFrom,
   isContainedInOrganism,
 } from 'schema_org/processors';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 const f = foundationPartial(ebiStyles);
 
@@ -34,10 +35,12 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object.isRequired,
     }).isRequired,
+    loading: T.bool.isRequired,
   };
 
   render() {
-    const { data } = this.props;
+    const { data, loading } = this.props;
+    if (loading || !data || !data.metadata) return <Loading />;
     const metadata = data.metadata;
     return (
       <div className={f('sections')}>

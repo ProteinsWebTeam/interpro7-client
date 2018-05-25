@@ -53,12 +53,13 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     _ref: { current: ?HTMLElement };
   */
   static propTypes = {
-    data: T.shape({
+    dataNames: T.shape({
       payload: T.shape({
         metadata: T.object.isRequired,
         names: T.object,
-      }).isRequired,
-    }).isRequired,
+      }),
+      loading: T.bool,
+    }),
     goToCustomLocation: T.func.isRequired,
     customLocation: T.object.isRequired,
   };
@@ -77,14 +78,15 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   componentDidMount() {
     this._vis.tree = this._ref.current;
     this.loadingVis = true;
-    this._populateData(this.props.data.payload);
+    if (this.props.dataNames.payload)
+      this._populateData(this.props.dataNames.payload);
     this.loadingVis = false;
   }
 
   componentDidUpdate(prevProps /*: Props */) {
-    if (prevProps.data !== this.props.data) {
+    if (prevProps.dataNames !== this.props.dataNames) {
       this.loadingVis = true;
-      this._populateData(this.props.data.payload);
+      this._populateData(this.props.dataNames.payload);
       this.loadingVis = false;
     }
   }
@@ -147,8 +149,13 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    if (this.props.data.loading) return <Loading />;
-    const { metadata, names } = this.props.data.payload;
+    if (
+      this.props.dataNames.loading ||
+      !this.props.dataNames.payload ||
+      !this.props.dataNames.payload.metadata
+    )
+      return <Loading />;
+    const { metadata, names } = this.props.dataNames.payload;
     const {
       customLocation: {
         search: { entry_db: db },
@@ -241,6 +248,6 @@ const getUrl = createSelector(
   },
 );
 
-export default loadData(getUrl)(
+export default loadData({ getUrl, propNamespace: 'Names' })(
   connect(null, { goToCustomLocation })(SummaryTaxonomy),
 );

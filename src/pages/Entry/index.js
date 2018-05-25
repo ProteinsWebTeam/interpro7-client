@@ -9,6 +9,8 @@ import Description from 'components/Description';
 import MemberDBSelector from 'components/MemberDBSelector';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
+import Loading from 'components/SimpleCommonComponents/Loading';
+
 import Table, {
   Column,
   Card,
@@ -311,19 +313,25 @@ class EntryCard extends PureComponent {
           </Link>
         </div>
 
-        <SummaryCounterEntries
-          entryDB={entryDB}
-          metadata={data.metadata}
-          counters={data.extra_fields.counters}
-        />
-
-        <DescriptionEntries
-          db={data.metadata.source_database}
-          accession={data.metadata.accession}
-          description={data.extra_fields.description}
-          literature={data.extra_fields.literature}
-        />
-
+        {data.extra_fields ? (
+          <SummaryCounterEntries
+            entryDB={entryDB}
+            metadata={data.metadata}
+            counters={data.extra_fields.counters}
+          />
+        ) : (
+          <Loading />
+        )}
+        {data.extra_fields ? (
+          <DescriptionEntries
+            db={data.metadata.source_database}
+            accession={data.metadata.accession}
+            description={data.extra_fields.description}
+            literature={data.extra_fields.literature}
+          />
+        ) : (
+          <Loading />
+        )}
         <div className={f('card-footer')}>
           {entryDB.toLowerCase() === 'interpro' ? (
             <div>{data.metadata.type.replace('_', ' ')}</div>

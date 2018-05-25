@@ -20,15 +20,15 @@ const schemaProcessData = ({ taxId, name }) => ({
   '@id': '@contains', // maybe 'is member of' http://semanticscience.org/resource/SIO_000095
   name: 'contains',
   value: {
-    '@type': ['Organism', 'StructuredValue', 'BioChemEntity'],
+    '@type': ['Taxonomy', 'StructuredValue', 'BioChemEntity'],
     name,
     identifier: taxId,
     url:
       config.root.website.protocol +
       config.root.website.href +
       descriptionToPath({
-        main: { key: 'organism' },
-        organism: { db: 'taxonomy', accession: taxId },
+        main: { key: 'taxonomy' },
+        taxonomy: { db: 'uniprot', accession: taxId },
       }),
   },
 });

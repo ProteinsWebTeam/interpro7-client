@@ -42,9 +42,9 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
         <Link
           to={{
             description: {
-              main: { key: 'organism' },
-              organism: {
-                db: 'taxonomy',
+              main: { key: 'taxonomy' },
+              taxonomy: {
+                db: 'uniprot',
                 accession: species.tax_id,
               },
             },
@@ -66,8 +66,11 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
             <Link
               to={{
                 description: {
-                  main: { key: 'organism' },
-                  organism: { db: 'taxonomy', accession: species.tax_id },
+                  main: { key: 'taxonomy' },
+                  taxonomy: {
+                    db: 'uniprot',
+                    accession: species.tax_id,
+                  },
                   entry: { isFilter: true, db: 'all' },
                 },
               }}
@@ -85,8 +88,11 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
             <Link
               to={{
                 description: {
-                  main: { key: 'organism' },
-                  organism: { db: 'taxonomy', accession: species.tax_id },
+                  main: { key: 'taxonomy' },
+                  taxonomy: {
+                    db: 'uniprot',
+                    accession: species.tax_id,
+                  },
                   protein: { isFilter: true, db: 'UniProt' },
                 },
               }}
@@ -148,13 +154,13 @@ class BySpecies extends PureComponent /*:: <Props> */ {
         <Link
           to={{
             description: {
-              main: { key: 'organism' },
-              organism: { db: 'taxonomy' },
+              main: { key: 'taxonomy' },
+              taxonomy: { db: 'uniprot' },
             },
           }}
           className={f('button')}
         >
-          View all Organism
+          View all Taxa
         </Link>
       </div>
     );
