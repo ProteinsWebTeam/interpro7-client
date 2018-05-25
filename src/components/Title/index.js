@@ -18,15 +18,15 @@ import config from 'config';
 const f = foundationPartial(fonts, ipro, styles);
 
 const mapNameToClass = new Map([
-  ['Domain', 'title-id-domain'],
-  ['Family', 'title-id-family'],
-  ['Repeat', 'title-id-repeat'],
-  ['Unknown', 'title-id-unknown'],
-  ['Conserved_site', 'title-id-site'],
-  ['Binding_site', 'title-id-site'],
-  ['Active_site', 'title-id-site'],
-  ['PTM', 'title-id-site'],
-  ['Homologous_superfamily', 'title-id-hh'],
+  ['domain', 'title-id-domain'],
+  ['family', 'title-id-family'],
+  ['repeat', 'title-id-repeat'],
+  ['unknown', 'title-id-unknown'],
+  ['conserved_site', 'title-id-site'],
+  ['binding_site', 'title-id-site'],
+  ['active_site', 'title-id-site'],
+  ['ptm', 'title-id-site'],
+  ['homologous_superfamily', 'title-id-hh'],
 ]);
 
 /*:: type Props = {
