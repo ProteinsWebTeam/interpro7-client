@@ -46,7 +46,6 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
   render() {
     const {
       mainType,
-      mainDB,
       mainAccession,
       data,
       isSignature,

@@ -1,4 +1,4 @@
-import React, { PureComponent, Children, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 

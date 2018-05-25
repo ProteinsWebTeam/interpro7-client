@@ -1,10 +1,8 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -30,22 +28,14 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
-import { mainDBLocationSelector } from 'reducers/custom-location/description';
-
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
-  schemaProcessDataRecord,
-  schemaProcessMainEntity,
 } from 'schema_org/processors';
 
-import EntryMenu from 'components/EntryMenu';
-import Title from 'components/Title';
 import EndPointPage from '../endpoint-page';
 import subPages from 'subPages';
 import config from 'config';
-
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 

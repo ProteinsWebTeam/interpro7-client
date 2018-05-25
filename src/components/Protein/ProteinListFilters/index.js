@@ -9,7 +9,7 @@ import SizeFilter from './SizeFilter';
 const ProteinListFilters = () => (
   <FiltersPanel>
     <CurationFilter label="UniProt Curation" />
-    {/*<TaxonomyFilter label="Taxonomy" />*/}
+    {/* <TaxonomyFilter label="Taxonomy" />*/}
     <SizeFilter label="Protein Size" />
   </FiltersPanel>
 );
