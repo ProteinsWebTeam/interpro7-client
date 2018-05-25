@@ -8,6 +8,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import loadable from 'higherOrder/loadable';
+import Related from 'components/Related';
 
 const f = foundationPartial(fonts);
 
@@ -24,118 +25,127 @@ const SchemaOrgData = loadable({
 
 class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation: Object}> */ {
   static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-      ok: T.bool,
-      payload: T.object,
-    }).isRequired,
-    customLocation: T.object.isRequired,
+    data: T.object.isRequired,
   };
 
   render() {
-    if (this.props.data.loading) return <Loading />;
-    const {
-      data: {
-        payload: { results, count },
-        loading,
-        ok,
-      },
-      customLocation: { search },
-    } = this.props;
-    return (
-      <Table
-        dataTable={results}
-        contentType="organism"
-        loading={loading}
-        ok={ok}
-        actualSize={count}
-        query={search}
-      >
-        <PageSizeSelector />
-        <SearchBox search={search.search}>Search</SearchBox>
-        <Column
-          dataKey="accession"
-          renderer={(acc /*: string */, obj) => (
-            <Link
-              to={{
-                description: {
-                  main: { key: 'organism' },
-                  organism: {
-                    proteomeDB: 'proteome',
-                    proteomeAccession: acc,
-                  },
-                },
-              }}
-            >
-              <span>{acc}</span>
-              <SchemaOrgData data={obj} processData={schemaProcessData} />
-            </Link>
-          )}
-        >
-          Accession
-        </Column>
-        <Column
-          dataKey="name"
-          renderer={(
-            name /*: string */,
-            { accession } /*: {accession: string, source_database: string} */,
-          ) => (
-            <Link
-              to={{
-                description: {
-                  main: { key: 'organism' },
-                  organism: {
-                    proteomeDB: 'proteome',
-                    proteomeAccession: accession,
-                  },
-                },
-              }}
-            >
-              {name}
-            </Link>
-          )}
-        />
-        <Column
-          dataKey="taxonomy"
-          renderer={(taxID /*: string */) => (
-            <Link
-              to={{
-                description: {
-                  main: { key: 'organism' },
-                  organism: {
-                    db: 'taxonomy',
-                    accession: taxID,
-                  },
-                },
-              }}
-            >
-              {taxID}
-            </Link>
-          )}
-        >
-          Taxonomy ID
-        </Column>
-        <Column
-          dataKey="is_reference"
-          headerClassName={f('table-center')}
-          renderer={(isReference /*: string */) => (
-            <div>
-              {isReference ? (
-                <div title="Proteome reference">
-                  <span
-                    className={f('icon', 'icon-functional')}
-                    data-icon="/"
-                  />
-                </div>
-              ) : null}
-            </div>
-          )}
-        >
-          Is Reference
-        </Column>
-      </Table>
-    );
+    return <Related data={this.props.data} />;
   }
 }
+
+//   static propTypes = {
+//     data: T.shape({
+//       loading: T.bool.isRequired,
+//       ok: T.bool,
+//       payload: T.object,
+//     }).isRequired,
+//     customLocation: T.object.isRequired,
+//   };
+//
+//   render() {
+//     if (this.props.data.loading) return <Loading />;
+//     const {
+//       data: {
+//         payload: { results, count },
+//         loading,
+//         ok,
+//       },
+//       customLocation: { search },
+//     } = this.props;
+//     return (
+//       <Table
+//         dataTable={results}
+//         contentType="proteome"
+//         loading={loading}
+//         ok={ok}
+//         actualSize={count}
+//         query={search}
+//       >
+//         <PageSizeSelector />
+//         <SearchBox search={search.search}>Search</SearchBox>
+//         <Column
+//           dataKey="accession"
+//           renderer={(acc /*: string */, obj) => (
+//             <Link
+//               to={{
+//                 description: {
+//                   main: { key: 'proteome' },
+//                   proteome: {
+//                     db: 'uniprot',
+//                     accession: acc,
+//                   },
+//                 },
+//               }}
+//             >
+//               <span>{acc}</span>
+//               <SchemaOrgData data={obj} processData={schemaProcessData} />
+//             </Link>
+//           )}
+//         >
+//           Accession
+//         </Column>
+//         <Column
+//           dataKey="name"
+//           renderer={(
+//             name /*: string */,
+//             { accession } /*: {accession: string, source_database: string} */,
+//           ) => (
+//             <Link
+//               to={{
+//                 description: {
+//                   main: { key: 'proteome' },
+//                   proteome: {
+//                     db: 'uniprot',
+//                     accession: accession,
+//                   },
+//                 },
+//               }}
+//             >
+//               {name}
+//             </Link>
+//           )}
+//         />
+//         <Column
+//           dataKey="taxonomy"
+//           renderer={(taxID /*: string */) => (
+//             <Link
+//               to={{
+//                 description: {
+//                   main: { key: 'taxonomy' },
+//                   taxonomy: {
+//                     db: 'uniprot',
+//                     accession: taxID,
+//                   },
+//                 },
+//               }}
+//             >
+//               {taxID}
+//             </Link>
+//           )}
+//         >
+//           Taxonomy ID
+//         </Column>
+//         <Column
+//           dataKey="is_reference"
+//           headerClassName={f('table-center')}
+//           renderer={(isReference /*: string */) => (
+//             <div>
+//               {isReference ? (
+//                 <div title="Proteome reference">
+//                   <span
+//                     className={f('icon', 'icon-functional')}
+//                     data-icon="/"
+//                   />
+//                 </div>
+//               ) : null}
+//             </div>
+//           )}
+//         >
+//           Is Reference
+//         </Column>
+//       </Table>
+//     );
+//   }
+// }
 
 export default ProteomeSubPage;
