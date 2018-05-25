@@ -56,8 +56,16 @@
 }
 
 @media screen and (max-width: 75rem) {
+  /*reduce SVG icon*/
+  .title interpro-type {
+    font-size: 86%;
+    margin-right: 1rem;
+  }
   /*reduce tag font*/
   .title-tag .tag {
     font-size: 60%;
+  }
+  .title small {
+    margin-left: 1rem;
   }
 }
