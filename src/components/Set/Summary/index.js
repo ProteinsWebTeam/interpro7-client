@@ -9,7 +9,6 @@ import Accession from 'components/Accession';
 import Description from 'components/Description';
 import { BaseLink } from 'components/ExtLink';
 
-import Loading from 'components/SimpleCommonComponents/Loading';
 import ClanViewer from 'clanviewer';
 import 'clanviewer/css/clanviewer.css';
 

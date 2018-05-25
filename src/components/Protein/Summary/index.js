@@ -24,6 +24,7 @@ const f = foundationPartial(ebiStyles);
   data: {
     metadata: Object,
   },
+  loading: Boolean,
 }; */
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
