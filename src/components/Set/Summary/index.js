@@ -49,13 +49,13 @@ export const schemaProcessData = ({ data: { accession, score }, db }) => ({
 class SummarySet extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
-      metadata: T.object.isRequired,
+      metadata: T.object,
     }).isRequired,
     db: T.string.isRequired,
     currentSet: T.object,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.object.isRequired,
-    loading: T.bool,
+    loading: T.bool.isRequired,
   };
 
   constructor(props) {

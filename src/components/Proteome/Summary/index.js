@@ -16,7 +16,7 @@ const f = foundationPartial(ebiStyles, global, memberSelectorStyle);
 class SummaryProteome extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
-      metadata: T.object.isRequired,
+      metadata: T.object,
     }).isRequired,
     loading: T.bool.isRequired,
   };
