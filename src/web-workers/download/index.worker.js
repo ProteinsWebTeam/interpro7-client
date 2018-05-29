@@ -65,12 +65,14 @@ const downloadContent = async function*(url, fileType, _) {
   }
   location.query.page = 1;
   location.query.page_size = MAX_PAGE_SIZE;
+  // Counters for progress information
   let totalCount;
   let i = 0;
-  let next = format(location);
+  // Create a function to transform API response into processed file part
   const processResults = processResultsFor(fileType);
+  // As long as we have a next page, we keep processing
+  let next = format(location);
   while (next) {
-    console.log(`fetching ${next}`);
     const response = await fetch(next);
     const payload = await response.json();
     totalCount = payload.count;
@@ -79,6 +81,7 @@ const downloadContent = async function*(url, fileType, _) {
       // time needed to create the blob
       yield { part, progress: ++i / (totalCount + 1) };
     }
+    // If it's the last page, it will be null, so we exit the loop
     next = payload.next;
   }
 };
@@ -105,7 +108,7 @@ const download = async (url, fileType) => {
     // Store content in there
     const content = [];
     postProgress(action(downloadProgress, 0));
-    // Loop over what downloadContent yield to…
+    // Loop over what downloadContent yields to…
     for await (const { part, progress } of action(downloadContent)) {
       // …store content
       content.push(part);

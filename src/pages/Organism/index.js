@@ -18,7 +18,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-import ProteinFile from 'subPages/Organism/ProteinFile';
+import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -60,10 +60,9 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 const f = foundationPartial(pageStyle, styles, fonts);
 
 const EntryAccessionsRenderer = entryDB => taxId => (
-  <ProteinFile
-    taxId={`${taxId}`}
-    type="entry-accession"
+  <File
     fileType="accession"
+    name={`${entryDB || 'all'}-entry-accessions-for-${taxId}.txt`}
     customLocationDescription={{
       main: { key: 'entry' },
       entry: { db: entryDB || 'all' },
@@ -72,11 +71,12 @@ const EntryAccessionsRenderer = entryDB => taxId => (
   />
 );
 
-const ProteinAccessionsRenderer = entryDB => taxId => (
-  <ProteinFile
-    taxId={`${taxId}`}
-    type="protein-accession"
-    fileType="accession"
+const ProteinFastasRenderer = entryDB => taxId => (
+  <File
+    fileType="FASTA"
+    name={`protein-sequences${
+      entryDB ? `-matching-${entryDB}` : ''
+    }-for-${taxId}.txt`}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
@@ -86,11 +86,12 @@ const ProteinAccessionsRenderer = entryDB => taxId => (
   />
 );
 
-const ProteinFastasRenderer = entryDB => taxId => (
-  <ProteinFile
-    taxId={`${taxId}`}
-    type="FASTA"
-    fileType="FASTA"
+const ProteinAccessionsRenderer = entryDB => taxId => (
+  <File
+    fileType="accession"
+    name={`protein-accessions${
+      entryDB ? `-matching-${entryDB}` : ''
+    }-for-${taxId}.txt`}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
