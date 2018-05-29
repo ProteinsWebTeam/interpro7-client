@@ -372,10 +372,10 @@ class ProtVista extends PureComponent {
   renderOptions() {
     const { collapsed } = this.state;
     return (
-      <div className={f('aligned-to-track-component')}>
+      <div className={f('aligned-to-track-component', 'view-options-wrap')}>
         <div className={f('view-options-title')}>Domains on protein</div>
         <div className={f('view-options')}>
-          <div className={f('option-color', 'margin-right-large')}>
+          <div className={f('option-color', 'margin-right-medium')}>
             Color By:{' '}
             <select
               className={f('select-inline')}
