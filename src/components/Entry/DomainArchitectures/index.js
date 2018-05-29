@@ -12,6 +12,7 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Footer from 'components/Table/Footer';
 
 import { foundationPartial } from 'styles/foundation';
 import pageStyle from './style.css';
@@ -33,8 +34,8 @@ const schemaProcessData = data => ({
     'BioChemEntity',
     'CreativeWork',
   ],
-  identifier: data.IDA_FK,
-  name: data.IDA,
+  identifier: data.ida_id,
+  name: data.ida,
 });
 
 const groupDomains = domains => {
@@ -55,29 +56,40 @@ const groupDomains = domains => {
 };
 
 const ida2json = ida => {
-  const idaParts = ida.split('#');
-  const numDigitsInAccession = 6;
+  const idaParts = ida.split('-');
+  const n = idaParts.length;
+  const length = 1000;
+  const gap = 5;
+  const feature = (length - gap * (n + 1)) / n;
+  const domains = idaParts.map((p, i) => ({
+    accession: p.indexOf(':') < 0 ? p : p.split(':')[1],
+    locations: [
+      {
+        fragments: [
+          {
+            start: gap + i * (gap + feature),
+            end: (i + 1) * (gap + feature),
+          },
+        ],
+      },
+    ],
+  }));
+  const grouped = domains.reduce((obj, domain) => {
+    if (!obj[domain.accession]) obj[domain.accession] = domain;
+    else obj[domain.accession].locations.push(domain.locations[0]);
+    return obj;
+  }, {});
   const obj = {
-    length: Number(idaParts[0].split('/')[0]),
-    domains: groupDomains(
-      idaParts[1].split('~').map(match => {
-        const m = match.split(':');
-        return {
-          id: m[0],
-          accessions: m[0]
-            .split('&')
-            .map(acc => `IPR${`0000000${acc}`.substr(-numDigitsInAccession)}`),
-          fragment: m[1].split('-').map(Number),
-        };
-      }),
-    ),
+    length,
+    domains: Object.values(grouped),
+    accessions: Object.keys(grouped),
   };
   return obj;
 };
 
 class IDAProtVista extends ProtVistaMatches {
   static propTypes = {
-    matches: T.object.isRequired,
+    matches: T.arrayOf(T.object).isRequired,
   };
   updateTracksWithData(props) {
     const { matches } = props;
@@ -85,19 +97,18 @@ class IDAProtVista extends ProtVistaMatches {
     for (const domain of matches) {
       const tmp = [
         {
-          accession: domain.accessions.join('-'),
-          name: domain.accessions.join('-'),
+          name: domain.accession,
           source_database: 'interpro',
-          locations: domain.locations,
           color: getTrackColor(
-            { accession: domain.accessions[0] },
+            { accession: domain.accession },
             EntryColorMode.ACCESSION,
           ),
           type: 'entry',
+          ...domain,
         },
       ];
 
-      this.web_tracks[domain.accessions[0]].data = tmp;
+      this.web_tracks[domain.accession].data = tmp;
     }
   }
   render() {
@@ -105,33 +116,29 @@ class IDAProtVista extends ProtVistaMatches {
     return (
       <div>
         {matches.map(d => (
-          <div key={d.accessions[0]} className={f('track-row')}>
+          <div key={d.accession} className={f('track-row')}>
             <div className={f('track-component')}>
               <protvista-interpro-track
                 length={length}
                 displaystart="1"
                 displayend={length}
-                id={`track_${d.accessions[0]}`}
-                ref={e => (this.web_tracks[d.accessions[0]] = e)}
+                id={`track_${d.accession}`}
+                ref={e => (this.web_tracks[d.accession] = e)}
                 shape="roundRectangle"
                 expanded
               />
             </div>
             <div className={f('track-accession')}>
-              {d.accessions.map(acc => (
-                <Fragment key={acc}>
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: { db: 'InterPro', accession: acc },
-                      },
-                    }}
-                  >
-                    {acc}
-                  </Link>{' '}
-                </Fragment>
-              ))}
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: { db: 'InterPro', accession: d.accession },
+                  },
+                }}
+              >
+                {d.accession}
+              </Link>
             </div>
           </div>
         ))}
@@ -150,15 +157,16 @@ class DomainArchitectures extends PureComponent {
     const {
       data: { loading, payload },
       mainAccession,
+      search,
     } = this.props;
     if (loading) return <Loading />;
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
           {(payload.results || []).map(obj => {
-            const idaObj = ida2json(obj.IDA);
+            const idaObj = ida2json(obj.ida);
             return (
-              <div key={obj.IDA_FK} className={f('margin-bottom-large')}>
+              <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
                 <Link
                   to={{
@@ -167,37 +175,39 @@ class DomainArchitectures extends PureComponent {
                       protein: { db: 'UniProt' },
                       entry: { db: 'InterPro', accession: mainAccession },
                     },
-                    search: { ida: obj.IDA_FK },
+                    search: { ida: obj.ida_id },
                   }}
                 >
                   There {obj.unique_proteins > 1 ? 'are' : 'is'}{' '}
                   {obj.unique_proteins} proteins{' '}
                 </Link>
                 with this architecture:<br />
-                {idaObj.domains.map(d => (
-                  <span key={d.accessions.join('|')}>
-                    {d.accessions.map(acc => (
-                      <Link
-                        key={acc}
-                        to={{
-                          description: {
-                            main: { key: 'entry' },
-                            entry: { db: 'InterPro', accession: acc },
-                          },
-                        }}
-                      >
-                        {' '}
-                        {acc}{' '}
-                      </Link>
-                    ))}{' '}
-                    -
+                {idaObj.accessions.map(d => (
+                  <span key={d}>
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: { db: 'InterPro', accession: d },
+                        },
+                      }}
+                    >
+                      {' '}
+                      {d}{' '}
+                    </Link>{' '}
+                    -{' '}
                   </span>
                 ))}
-                <IDAProtVista matches={idaObj.domains} length={idaObj.length} />
+                <IDAProtVista matches={idaObj.domains} length={1000} />
                 {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
               </div>
             );
           })}
+          <Footer
+            withPageSizeSelector={true}
+            actualSize={payload.count}
+            pagination={search}
+          />
         </div>
       </div>
     );
@@ -213,6 +223,7 @@ const getUrlFor = createSelector(
     const { type, search: _, ..._search } = search;
     // add to search
     _search.ida = null;
+    console.log(_search, _);
     // build URL
     return format({
       protocol,
@@ -231,7 +242,8 @@ const mapStateToProps = createSelector(
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  mainAccession => ({ mainAccession }),
+  state => state.customLocation.search,
+  (mainAccession, search) => ({ mainAccession, search }),
 );
 
 export default connect(mapStateToProps)(

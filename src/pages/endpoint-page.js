@@ -5,7 +5,7 @@ import Link from 'components/generic/Link';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import { mainDBLocationSelector } from 'reducers/custom-location/description';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 import loadData from 'higherOrder/loadData';
 import { toPlural } from 'utils/pages';
 
@@ -93,14 +93,15 @@ class Summary extends PureComponent {
       data: { loading, payload },
       // dataOrganism: { loading: loadingOrg, payload: payloadOrg },
       dataBase,
-      customLocation: {
-        description: {
-          main: { key: endpoint },
-        },
-      },
+      customLocation,
       subPagesForEndpoint,
     } = this.props;
-    if (loading || !payload) {
+    const {
+      description: {
+        main: { key: endpoint },
+      },
+    } = customLocation;
+    if (loading || (!locationhasDetailOrFilter(customLocation) && !payload)) {
       return <Loading />;
     }
     const databases =
@@ -132,12 +133,14 @@ class Summary extends PureComponent {
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('medium-12', 'large-12', 'columns')}>
-              {loading || !payload.metadata ? (
+              {loading || !payload || !payload.metadata ? (
                 <Loading />
               ) : (
-                <Title metadata={payload.metadata} mainType={endpoint} />
+                <Fragment>
+                  <Title metadata={payload.metadata} mainType={endpoint} />
+                  <EntryMenu metadata={payload.metadata} />
+                </Fragment>
               )}
-              <EntryMenu metadata={payload.metadata} />
             </div>
           </div>
           <Switch
@@ -243,5 +246,9 @@ class EndPointPage extends PureComponent {
 }
 
 export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  loadData()(EndPointPage),
+  loadData((...args) =>
+    getUrlForApi(...args)
+      .replace('/logo', '/')
+      .replace('domain_architecture', ''),
+  )(EndPointPage),
 );
