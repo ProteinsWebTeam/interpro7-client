@@ -10,7 +10,7 @@ import Link from 'components/generic/Link';
 
 class Species extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    taxID: T.number.isRequired,
+    taxID: T.string.isRequired,
   };
 
   render() {

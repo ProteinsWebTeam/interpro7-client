@@ -39,6 +39,6 @@ export const mainDBLocationSelector = createSelector(
     if (!mainKey) return null;
     const mainType = description[mainKey];
     if (!mainType) return null;
-    return mainType.db || null;
+    return mainType.db || mainType.memberDB || null;
   },
 );

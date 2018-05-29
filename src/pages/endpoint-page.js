@@ -47,7 +47,7 @@ const propTypes = {
     loading: T.bool.isRequired,
     ok: T.bool,
   }),
-  subPagesForEndpoint: T.func,
+  subPagesForEndpoint: T.oneOfType([T.func, T.object]),
 };
 
 class SummaryComponent extends PureComponent {
@@ -192,6 +192,7 @@ const locationHasAccessionOrFilters = createSelector(customLocation => {
   const { key } = customLocation.description.main;
   return (
     customLocation.description[key].accession ||
+    customLocation.description[key].memberDBAccession ||
     (Object.entries(customLocation.description).find(
       ([_key, value]) => value.isFilter,
     ) || [])[0]

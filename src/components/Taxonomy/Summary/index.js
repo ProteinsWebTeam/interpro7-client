@@ -77,14 +77,16 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 
   componentDidMount() {
     this._vis.tree = this._ref.current;
-    this.loadingVis = true;
-    if (this.props.dataNames.payload)
+    if (this.props.dataNames.payload) {
+      this.loadingVis = true;
       this._populateData(this.props.dataNames.payload);
-    this.loadingVis = false;
+      this.loadingVis = false;
+    }
   }
 
   componentDidUpdate(prevProps /*: Props */) {
     if (prevProps.dataNames !== this.props.dataNames) {
+      this._vis.tree = this._ref.current;
       this.loadingVis = true;
       this._populateData(this.props.dataNames.payload);
       this.loadingVis = false;
