@@ -340,6 +340,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'Domain Architectures',
+      counter: 'domain_architectures',
     },
   ],
   [
