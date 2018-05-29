@@ -58,25 +58,23 @@ export default class CrossReferences extends PureComponent {
       ([a], [b]) => a.rank - b.rank,
     );
     return (
-      <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
-          <AnimatedEntry
-            className={f('list', 'margin-left-none')}
-            itemDelay={100}
-            duration={500}
-          >
-            {databases.map(
-              ([database, { displayName, description, accessions }]) => (
-                <ReferenceSection
-                  key={database}
-                  name={displayName}
-                  description={description}
-                  accessions={accessions}
-                />
-              ),
-            )}
-          </AnimatedEntry>
-        </div>
+      <div className={f('large-12', 'columns')}>
+        <AnimatedEntry
+          className={f('list', 'margin-left-none')}
+          itemDelay={100}
+          duration={500}
+        >
+          {databases.map(
+            ([database, { displayName, description, accessions }]) => (
+              <ReferenceSection
+                key={database}
+                name={displayName}
+                description={description}
+                accessions={accessions}
+              />
+            ),
+          )}
+        </AnimatedEntry>
       </div>
     );
   }
