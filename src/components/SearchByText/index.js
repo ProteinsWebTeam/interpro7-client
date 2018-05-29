@@ -128,7 +128,7 @@ class SearchByText extends PureComponent {
             >
               <div className={f('row')}>
                 <div className={f('large-12', 'columns', 'search-input')}>
-                  <h3>
+                  <h3 className={f('light')}>
                     Search families, domains, proteins, keywords or GO terms
                   </h3>
                   <TextSearchBox inputRef={node => (this._input = node)} />
