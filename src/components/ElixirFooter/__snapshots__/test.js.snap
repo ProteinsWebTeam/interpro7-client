@@ -14,15 +14,14 @@ exports[`<ElixirFooter /> should render 1`] = `
       <LazyImage
         alt="Elixir logo"
         className="elixir-logo-kite"
-        src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png"
+        src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.3/images/logos/ELIXIR/elixir-cdr.gif"
       />
       <h5>
         <span
           className="elixir-banner-name"
         >
-          This service
+          This service is part of the ELIXIR infrastructure
         </span>
-         is part of the ELIXIR infrastructure
       </h5>
       <div
         id="elixir-banner-info"
