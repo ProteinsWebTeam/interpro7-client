@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import FileWorker from 'webWorkers/proteinFile';
+// import FileWorker from 'webWorkers/proteinFile';
 
 import ProgressButton from 'components/ProgressButton';
 import Link from 'components/generic/Link';
@@ -93,15 +93,15 @@ class ProteinFile extends PureComponent {
   }
 
   _handleClickLegacy = e => {
-    if (this.state.downloading || this.state.success || this.state.failed) {
-      return;
-    }
-    e.preventDefault();
-    this.setState({ downloading: true });
-    this._worker = new FileWorker();
-    this._worker.addEventListener('message', this._workerMessage);
-    const { entryDescription, api, taxId, type } = this.props;
-    this._worker.postMessage({ entryDescription, api, taxId, type });
+    // if (this.state.downloading || this.state.success || this.state.failed) {
+    //   return;
+    // }
+    // e.preventDefault();
+    // this.setState({ downloading: true });
+    // this._worker = new FileWorker();
+    // this._worker.addEventListener('message', this._workerMessage);
+    // const { entryDescription, api, taxId, type } = this.props;
+    // this._worker.postMessage({ entryDescription, api, taxId, type });
   };
 
   _handleClick = e => {

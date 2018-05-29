@@ -129,8 +129,8 @@ const ProteinAccessionsRenderer = taxId => (
   <ProteinFile taxId={taxId} type="protein-accession" />
 );
 
-const ProteinFastasRenderer = taxId => (
-  <ProteinFile taxId={taxId} type="FASTA" />
+const ProteinFastasRenderer = (taxId, row) => (
+  <ProteinFile taxId={taxId} row={row} type="FASTA" />
 );
 
 // List of all matches, many to many

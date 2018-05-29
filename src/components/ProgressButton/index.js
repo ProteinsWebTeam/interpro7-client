@@ -26,7 +26,7 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 class ProgressButton extends PureComponent /*:: <Props> */ {
   static propTypes = {
     downloading: T.bool.isRequired,
-    success: T.bool.isRequired,
+    success: T.bool,
     failed: T.bool.isRequired,
     progress: T.number.isRequired,
   };
@@ -54,15 +54,15 @@ class ProgressButton extends PureComponent /*:: <Props> */ {
               strokeDasharray={CIRCUMFERENCE}
               strokeDashoffset={CIRCUMFERENCE * (1 - progress)}
             />
+            <circle
+              cx={CENTER}
+              cy={CENTER}
+              // circle inside the progress circle (+1 to account for interpolat.)
+              r={RADIUS - STROKE_WIDTH / 2 + 1}
+              fill="none"
+            />
           </g>
-          <circle
-            cx={CENTER}
-            cy={CENTER}
-            // circle inside the progress circle (+1 to account for interpolat.)
-            r={RADIUS - STROKE_WIDTH / 2 + 1}
-            fill="none"
-          />
-          <g className={s('card', { flipped: success })}>
+          <g className={s('icon-flip', { flipped: success })}>
             <image
               x="30"
               y="10"
