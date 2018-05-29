@@ -14,6 +14,8 @@
 .view-options-title {
   font-size: 140%;
   font-family: var(--fonts-system);
+  line-height: 1;
+  float: left; /*temp - fix alignment bug*/
 }
 
 @media screen and (max-width: 75rem) {
@@ -30,7 +32,8 @@
 }
 .view-options select {
   font-size: 100%;
-  padding: 0 1rem 0 0.5rem;
+  padding: 0 1.5rem 0 0.5rem;
+  border: 1px transparent solid; /*define transparent border to fix the moving bu on focus*/
 }
 
 .track-group {
