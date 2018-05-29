@@ -23,10 +23,8 @@ import { NumberComponent } from 'components/NumberLabel';
 
 import getExtUrlFor from 'utils/url-patterns';
 import { toPlural } from 'utils/pages';
-import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/load-web-component';
 import loadable from 'higherOrder/loadable';
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
 import EndPointPage from '../endpoint-page';
 import subPages from 'subPages';
@@ -759,8 +757,4 @@ const Entry = () => (
   />
 );
 
-export default loadData((...args) =>
-  getUrlForApi(...args)
-    .replace('/logo', '/')
-    .replace('domain_architecture', ''),
-)(Entry);
+export default Entry;
