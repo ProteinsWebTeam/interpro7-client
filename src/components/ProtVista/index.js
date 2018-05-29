@@ -428,16 +428,12 @@ class ProtVista extends PureComponent {
     const { hideCategory } = this.state;
     return (
       <div ref={this._mainRef} className={f('fullscreenable')}>
-        <div className={f('row')}>
-          <div className={f('columns')}>
-            <div className={f('track-row')}>{this.renderOptions()}</div>
-          </div>
-        </div>
+        <div className={f('track-row')}>{this.renderOptions()}</div>
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
           <div ref={this._popperContentRef} />
         </div>
-        <div className={f('row', 'protvista')}>
+        <div className={f('protvista')}>
           <protvista-manager
             attributes="length displaystart displayend highlightstart highlightend"
             id="pv-manager"
