@@ -42,11 +42,11 @@ import { memberDBAccessions } from 'staticData/home';
 
 import { foundationPartial } from 'styles/foundation';
 
-import styles from 'styles/blocks.css';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(pageStyle, styles, fonts);
+const f = foundationPartial(pageStyle, ebiStyles, fonts);
 
 import {
   schemaProcessDataTable,
@@ -778,11 +778,9 @@ const Summary = props => {
   }
   return (
     <ErrorBoundary>
-      <div className={f('row')}>
-        <div className={f('medium-12', 'large-12', 'columns')}>
-          <Title metadata={payload.metadata} mainType="entry" />
-          <EntryMenu metadata={payload.metadata} />
-        </div>
+      <div className={f('medium-12', 'large-12', 'columns')}>
+        <Title metadata={payload.metadata} mainType="entry" />
+        <EntryMenu metadata={payload.metadata} />
       </div>
       <Switch
         {...props}
