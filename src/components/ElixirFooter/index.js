@@ -6,8 +6,8 @@ import LazyImage from 'components/LazyImage';
 import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
-
-const f = foundationPartial(local);
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
+const f = foundationPartial(local, ebiStyles);
 
 class ElixirFooter extends PureComponent {
   render() {
@@ -21,11 +21,12 @@ class ElixirFooter extends PureComponent {
             <LazyImage
               className={f('elixir-logo-kite')}
               alt="Elixir logo"
-              src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png"
+              src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.3/images/logos/ELIXIR/elixir-cdr.gif"
             />
             <h5>
-              <span className={f('elixir-banner-name')}>This service</span> is
-              part of the ELIXIR infrastructure
+              <span className={f('elixir-banner-name')}>
+                This service is part of the ELIXIR infrastructure
+              </span>
             </h5>
             <div id="elixir-banner-info">
               <small>
