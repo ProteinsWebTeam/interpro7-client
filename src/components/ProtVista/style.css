@@ -7,15 +7,13 @@
 /*top option*/
 .view-options-wrap {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
 }
 
 .view-options-title {
   font-size: 140%;
   font-family: var(--fonts-system);
-  line-height: 1;
-  float: left; /*temp - fix alignment bug*/
 }
 
 @media screen and (max-width: 75rem) {
