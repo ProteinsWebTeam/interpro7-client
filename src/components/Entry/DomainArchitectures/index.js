@@ -223,7 +223,6 @@ const getUrlFor = createSelector(
     const { type, search: _, ..._search } = search;
     // add to search
     _search.ida = null;
-    console.log(_search, _);
     // build URL
     return format({
       protocol,

@@ -256,7 +256,10 @@ const TaxonomyCard = ({ data, search, entryDB }) => (
           },
         }}
       >
-        <SpeciesIcon lineage={data.extra_fields.lineage} />
+        {data.extra_fields &&
+          data.extra_fields.lineage && (
+            <SpeciesIcon lineage={data.extra_fields.lineage} />
+          )}
         <h6>
           <HighlightedText text={data.metadata.name} textToHighlight={search} />
         </h6>

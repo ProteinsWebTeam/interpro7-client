@@ -324,7 +324,8 @@ class StructureCard extends PureComponent {
           </div>
         </div>
 
-        {data.metadata &&
+        {data.extra_fields &&
+          data.metadata &&
           data.extra_fields.counters && (
             <SummaryCounterStructures
               metadata={data.metadata}
