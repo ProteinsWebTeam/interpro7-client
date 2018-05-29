@@ -19,9 +19,9 @@ import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
 
 import { foundationPartial } from 'styles/foundation';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-import global from 'styles/global.css';
-const f = foundationPartial(global);
+const f = foundationPartial(ebiGlobalStyles);
 
 class ObjectToList extends PureComponent {
   static propTypes = {
@@ -206,25 +206,25 @@ export class _RelatedAdvanced extends PureComponent {
         focusDB === 'InterPro' ? (
           <ProteinEntryHierarchy entries={secondaryData} />
         ) : null}
-        <div className={f('row')}>
-          <div className={f('columns')}>
-            {mainType === 'protein' && focusType === 'entry' ? (
-              <p>
-                This {mainType} contains
-                {secondaryData.length > 1
-                  ? ` these ${toPlural(focusType)}:`
-                  : ` this ${focusType}:`}
-              </p>
-            ) : (
-              <p>
-                This {mainType} matches
-                {secondaryData.length > 1
-                  ? ` these ${toPlural(focusType)}:`
-                  : ` this ${focusType}:`}
-              </p>
-            )}
-          </div>
+
+        <div className={f('columns')}>
+          {mainType === 'protein' && focusType === 'entry' ? (
+            <p>
+              This {mainType} contains
+              {secondaryData.length > 1
+                ? ` these ${toPlural(focusType)}:`
+                : ` this ${focusType}:`}
+            </p>
+          ) : (
+            <p>
+              This {mainType} matches
+              {secondaryData.length > 1
+                ? ` these ${toPlural(focusType)}:`
+                : ` this ${focusType}:`}
+            </p>
+          )}
         </div>
+
         <Matches
           actualSize={actualSize}
           matches={secondaryData.reduce(
