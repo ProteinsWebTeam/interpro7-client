@@ -240,9 +240,9 @@ export const memberDBHandler /*: Handler */ = handlerConstructor({
     value: 'memberDBHandler',
   },
   getKey: {
-    value: ({ entry: { db, integration } }) => [
+    value: ({ entry: { db } }) => [
       'entry',
-      integration || db === 'InterPro' ? 'memberDB' : 'db',
+      db === 'InterPro' ? 'memberDB' : 'db',
     ],
   },
   match: {
@@ -290,9 +290,9 @@ export const memberDBAccessionHandler /*: Handler */ = handlerConstructor({
     value: 'memberDBAccessionHandler',
   },
   getKey: {
-    value: ({ entry: { db, integration } }) => [
+    value: ({ entry: { db } }) => [
       'entry',
-      integration || db === 'InterPro' ? 'memberDBAccession' : 'accession',
+      db === 'InterPro' ? 'memberDBAccession' : 'accession',
     ],
   },
   cleanUp: {

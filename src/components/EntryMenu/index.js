@@ -68,7 +68,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       }
       tabs = tabs.filter(Boolean);
     }
-    if (loading || !payload.metadata) {
+    if (loading || !payload || !payload.metadata) {
       return <Loading />;
     }
     return (
