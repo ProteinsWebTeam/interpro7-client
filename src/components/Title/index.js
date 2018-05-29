@@ -91,7 +91,7 @@ class Title extends PureComponent /*:: <Props> */ {
           metadata.type &&
           metadata.source_database &&
           metadata.source_database.toLowerCase() !== 'interpro' && (
-            <div>
+            <div className={f('icon-container')}>
               <MemberSymbol type={metadata.source_database} />
             </div>
           )}
