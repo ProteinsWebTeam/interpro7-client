@@ -16,6 +16,7 @@ import {
   isTranscribedFrom,
   isContainedInOrganism,
 } from 'schema_org/processors';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 const f = foundationPartial(ebiStyles);
 
@@ -23,6 +24,7 @@ const f = foundationPartial(ebiStyles);
   data: {
     metadata: Object,
   },
+  loading: Boolean,
 }; */
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -32,12 +34,14 @@ const SchemaOrgData = loadable({
 class SummaryProtein extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
-      metadata: T.object.isRequired,
+      metadata: T.object,
     }).isRequired,
+    loading: T.bool.isRequired,
   };
 
   render() {
-    const { data } = this.props;
+    const { data, loading } = this.props;
+    if (loading || !data || !data.metadata) return <Loading />;
     const metadata = data.metadata;
     return (
       <div className={f('sections')}>

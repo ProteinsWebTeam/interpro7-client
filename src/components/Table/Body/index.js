@@ -67,11 +67,13 @@ class Body extends PureComponent {
       <tbody className={f('tbody', { loading: loading || isStale })}>
         {rows.map((row, index) => {
           const rowData = row.metadata || row;
+          const extraData = row.extra_fields;
           return (
             <Row
               key={rowData.accession || index}
               row={rowData}
               columns={columns}
+              extra={extraData}
             />
           );
         })}

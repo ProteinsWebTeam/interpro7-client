@@ -49,12 +49,13 @@ export const schemaProcessData = ({ data: { accession, score }, db }) => ({
 class SummarySet extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
-      metadata: T.object.isRequired,
+      metadata: T.object,
     }).isRequired,
     db: T.string.isRequired,
     currentSet: T.object,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.object.isRequired,
+    loading: T.bool.isRequired,
   };
 
   constructor(props) {
@@ -66,7 +67,12 @@ class SummarySet extends PureComponent /*:: <Props> */ {
   componentDidMount() {
     if (!this._ref.current) return;
     this._vis = new ClanViewer({ element: this._ref.current });
-    const data = this.props.data.metadata.relationships;
+    const data = (this.props.data &&
+      this.props.data.metadata &&
+      this.props.data.metadata.relationships) || {
+      nodes: [],
+      relationships: [],
+    };
     this._vis.paint(data, false);
     this._ref.current.addEventListener('click', this._handleClick);
   }
@@ -97,10 +103,15 @@ class SummarySet extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const {
-      data: { metadata },
-      currentSet,
-    } = this.props;
+    const metadata =
+      this.props.loading || !this.props.data.metadata
+        ? {
+            accession: '',
+            description: '',
+            id: '',
+          }
+        : this.props.data.metadata;
+    const { currentSet } = this.props;
     return (
       <div className={f('sections')}>
         <section>

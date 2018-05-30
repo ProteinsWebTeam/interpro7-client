@@ -33,11 +33,14 @@ const Protein = loadable({
 const Structure = loadable({
   loader: () => import(/* webpackChunkName: "structure-page" */ './Structure'),
 });
-const Organism = loadable({
-  loader: () => import(/* webpackChunkName: "organism-page" */ './Organism'),
+const Taxonomy = loadable({
+  loader: () => import(/* webpackChunkName: "taxonomy-page" */ './Taxonomy'),
+});
+const Proteome = loadable({
+  loader: () => import(/* webpackChunkName: "proteome-page" */ './Proteome'),
 });
 const EntrySet = loadable({
-  loader: () => import(/* webpackChunkName: "organism-page" */ './Set'),
+  loader: () => import(/* webpackChunkName: "set-page" */ './Set'),
 });
 
 // Other
@@ -72,7 +75,8 @@ const pages = new Map([
   ['entry', Entry],
   ['protein', Protein],
   ['structure', Structure],
-  ['organism', Organism],
+  ['taxonomy', Taxonomy],
+  ['proteome', Proteome],
   ['set', EntrySet],
   // other
   ['search', Search],

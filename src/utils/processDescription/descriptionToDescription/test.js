@@ -51,7 +51,14 @@ describe('descriptionToDescription()', () => {
   });
 
   test('keep isFilter', () => {
-    const types = ['entry', 'protein', 'structure', 'organism', 'set'];
+    const types = [
+      'entry',
+      'protein',
+      'structure',
+      'taxonomy',
+      'proteome',
+      'set',
+    ];
     for (const key of types) {
       const d = { main: { key } };
       expect(Object.values(descriptionToDescription(d)).find(v => v.isFilter))
