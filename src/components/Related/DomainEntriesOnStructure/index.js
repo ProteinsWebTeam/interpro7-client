@@ -5,7 +5,10 @@ import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+const f = foundationPartial(ebiGlobalStyles);
 
 const ProtVista = loadable({
   loader: () =>
