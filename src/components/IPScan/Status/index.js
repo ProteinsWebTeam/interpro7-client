@@ -67,7 +67,7 @@ class IPScanStatus extends PureComponent {
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <div className={f('row')}>
-            <h3 className={f('large-9', 'columns')}>
+            <h3 className={f('large-9', 'columns', 'light')}>
               Your InterProScan searches
             </h3>
             <SchemaOrgData
