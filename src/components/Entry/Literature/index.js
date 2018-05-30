@@ -116,39 +116,41 @@ const Literature = (
   target: string
 |} */,
 ) => (
-  <div className={f('large-12', 'columns', 'margin-bottom-large')}>
-    {included.length ? (
-      <div className={f('list', { 'single-entry': included.length === 1 })}>
-        {included.map(([pubID, ref], i) => (
-          <LiteratureItem
-            pubID={pubID}
-            key={pubID}
-            reference={ref}
-            i={i + 1}
-            included
-            target={target === pubID}
-          />
-        ))}
-      </div>
-    ) : null}
-    {/* Only display “Further reading” if there have been main references */}
-    {included.length && extra.length ? <h5>Further reading</h5> : null}
-    {extra.length ? (
-      <div
-        className={f('list', 'further', {
-          'single-entry': extra.length === 1,
-        })}
-      >
-        {extra.map(([pubID, ref]) => (
-          <LiteratureItem
-            pubID={pubID}
-            key={pubID}
-            reference={ref}
-            target={target === pubID}
-          />
-        ))}
-      </div>
-    ) : null}
+  <div className={f('row')}>
+    <div className={f('large-12', 'columns', 'margin-bottom-large')}>
+      {included.length ? (
+        <div className={f('list', { 'single-entry': included.length === 1 })}>
+          {included.map(([pubID, ref], i) => (
+            <LiteratureItem
+              pubID={pubID}
+              key={pubID}
+              reference={ref}
+              i={i + 1}
+              included
+              target={target === pubID}
+            />
+          ))}
+        </div>
+      ) : null}
+      {/* Only display “Further reading” if there have been main references */}
+      {included.length && extra.length ? <h5>Further reading</h5> : null}
+      {extra.length ? (
+        <div
+          className={f('list', 'further', {
+            'single-entry': extra.length === 1,
+          })}
+        >
+          {extra.map(([pubID, ref]) => (
+            <LiteratureItem
+              pubID={pubID}
+              key={pubID}
+              reference={ref}
+              target={target === pubID}
+            />
+          ))}
+        </div>
+      ) : null}
+    </div>
   </div>
 );
 Literature.propTypes = {
