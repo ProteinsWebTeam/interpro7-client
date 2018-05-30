@@ -8,7 +8,9 @@ import {
   DOWNLOAD_PROGRESS,
   DOWNLOAD_ERROR,
   DOWNLOAD_SUCCESS,
+  DOWNLOAD_DELETE,
 } from 'actions/types';
+import { downloadSelector } from 'reducers/download';
 
 const messageHandler = dispatch => message => {
   const { data } = message;
@@ -32,6 +34,14 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
       case DOWNLOAD_URL:
       case DOWNLOAD_CANCEL:
         worker.postMessage(action);
+        break;
+      case DOWNLOAD_DELETE:
+        // Clean up file reference
+        URL.revokeObjectURL(
+          downloadSelector(getState())[`${action.url}|${action.fileType}`]
+            .blobURL || '',
+        );
+        break;
     }
     return next(action);
   };

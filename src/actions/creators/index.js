@@ -197,6 +197,15 @@ export const downloadProgress = (
   progress,
 });
 
+export const downloadDelete = (
+  url /*: string */,
+  fileType /*: 'accession' | 'FASTA' */,
+) => ({
+  type: types.DOWNLOAD_DELETE,
+  url,
+  fileType,
+});
+
 // status
 export const serverStatus = (server /*: string */, status /*: boolean*/) => ({
   type: types.SERVER_STATUS,

@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import Table, { Column } from 'components/Table';
 import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-import Actions from 'components/IPScan/Actions';
+import Actions from 'components/Download/Actions';
 
 import { downloadSelector } from 'reducers/download';
 
@@ -88,9 +88,10 @@ class Summary extends PureComponent {
             <Column
               dataKey="localID"
               defaultKey="actions"
-              renderer={(localID /*: string */) => (
-                <Actions localID={localID} />
-              )}
+              renderer={(
+                localID /*: string */,
+                { blobURL } /* { blobURL?: string } */,
+              ) => <Actions localID={localID} blobURL={blobURL} />}
             >
               Actions
             </Column>
