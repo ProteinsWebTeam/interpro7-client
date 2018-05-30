@@ -16,10 +16,11 @@ import getUrlFor from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
-const f = foundationPartial(fonts, local);
+const f = foundationPartial(ebiGlobalStyles, fonts, local);
 
 const description2IDs = description =>
   description.reduce(
@@ -128,8 +129,10 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
     )}
     {Object.keys(metadata.literature).length ? (
       <section id="references">
-        <div className={f('large-12', 'columns')}>
-          <h4>References</h4>
+        <div className={f('row')}>
+          <div className={f('large-12', 'columns')}>
+            <h4>References</h4>
+          </div>
         </div>
         <Literature included={included} extra={extra} />
       </section>
@@ -137,8 +140,10 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
 
     {Object.keys(metadata.cross_references || {}).length ? (
       <section id="cross_references">
-        <div className={f('large-12', 'columns')}>
-          <h4>Cross References</h4>
+        <div className={f('row')}>
+          <div className={f('large-12', 'columns')}>
+            <h4>Cross References</h4>
+          </div>
         </div>
         <CrossReferences xRefs={metadata.cross_references} />
       </section>
@@ -198,40 +203,42 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('sections')}>
         <section>
-          <div className={f('medium-8', 'large-8', 'columns')}>
-            {metadata.hierarchy && Object.keys(metadata.hierarchy).length ? (
-              <div>
-                <h4>{metadata.type} Relationships</h4>
-                <InterProHierarchy
-                  accession={metadata.accession}
-                  hierarchy={metadata.hierarchy}
-                />
-              </div>
-            ) : null}
+          <div className={f('row')}>
+            <div className={f('medium-8', 'large-8', 'columns')}>
+              {metadata.hierarchy && Object.keys(metadata.hierarchy).length ? (
+                <div>
+                  <h4>{metadata.type} Relationships</h4>
+                  <InterProHierarchy
+                    accession={metadata.accession}
+                    hierarchy={metadata.hierarchy}
+                  />
+                </div>
+              ) : null}
 
-            <MemberDBSubtitle metadata={metadata} />
-            {metadata.source_database &&
-              metadata.source_database.toLowerCase() === 'interpro' &&
-              metadata.name.short &&
-              metadata.accession !== metadata.name.short && (
-                <p>
-                  Short name:&nbsp;
-                  <i className={f('shortname')}>{metadata.name.short}</i>
-                </p>
-              )}
-            {// doesn't work for some HAMAP as they have enpty <P> tag
-            Object.keys(metadata.description).length ? (
-              <Fragment>
-                <h4>Description</h4>
-                <Description
-                  textBlocks={metadata.description}
-                  literature={included}
-                  accession={metadata.accession}
-                />
-              </Fragment>
-            ) : null}
+              <MemberDBSubtitle metadata={metadata} />
+              {metadata.source_database &&
+                metadata.source_database.toLowerCase() === 'interpro' &&
+                metadata.name.short &&
+                metadata.accession !== metadata.name.short && (
+                  <p>
+                    Short name:&nbsp;
+                    <i className={f('shortname')}>{metadata.name.short}</i>
+                  </p>
+                )}
+              {// doesn't work for some HAMAP as they have enpty <P> tag
+              Object.keys(metadata.description).length ? (
+                <Fragment>
+                  <h4>Description</h4>
+                  <Description
+                    textBlocks={metadata.description}
+                    literature={included}
+                    accession={metadata.accession}
+                  />
+                </Fragment>
+              ) : null}
+            </div>
+            <SidePanel metadata={metadata} />
           </div>
-          <SidePanel metadata={metadata} />
         </section>
         <OtherSections metadata={metadata} citations={{ included, extra }} />
       </div>
