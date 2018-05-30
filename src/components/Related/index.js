@@ -206,25 +206,25 @@ export class _RelatedAdvanced extends PureComponent {
         focusDB === 'InterPro' ? (
           <ProteinEntryHierarchy entries={secondaryData} />
         ) : null}
-
-        <div className={f('columns')}>
-          {mainType === 'protein' && focusType === 'entry' ? (
-            <p>
-              This {mainType} contains
-              {secondaryData.length > 1
-                ? ` these ${toPlural(focusType)}:`
-                : ` this ${focusType}:`}
-            </p>
-          ) : (
-            <p>
-              This {mainType} matches
-              {secondaryData.length > 1
-                ? ` these ${toPlural(focusType)}:`
-                : ` this ${focusType}:`}
-            </p>
-          )}
+        <div className={f('row')}>
+          <div className={f('columns')}>
+            {mainType === 'protein' && focusType === 'entry' ? (
+              <p>
+                This {mainType} contains
+                {secondaryData.length > 1
+                  ? ` these ${toPlural(focusType)}:`
+                  : ` this ${focusType}:`}
+              </p>
+            ) : (
+              <p>
+                This {mainType} matches
+                {secondaryData.length > 1
+                  ? ` these ${toPlural(focusType)}:`
+                  : ` this ${focusType}:`}
+              </p>
+            )}
+          </div>
         </div>
-
         <Matches
           actualSize={actualSize}
           matches={secondaryData.reduce(
