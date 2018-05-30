@@ -93,6 +93,16 @@ describe('pathToDescription()', () => {
         ).toEqual(d);
       });
 
+      test('entry integrated', () => {
+        expect(pathToDescription('/entry/')).toEqual(d);
+        d.entry.integration = 'integrated';
+        expect(pathToDescription('/entry/integrated/')).toEqual(d);
+        d.entry.db = 'cdd';
+        expect(pathToDescription('/entry/integrated/cdd')).toEqual(d);
+        d.entry.accession = 'CD00001';
+        expect(pathToDescription('/entry/integrated/cdd/CD00001')).toEqual(d);
+      });
+
       test('combined', () => {
         d.entry.db = 'InterPro';
         d.protein.isFilter = true;

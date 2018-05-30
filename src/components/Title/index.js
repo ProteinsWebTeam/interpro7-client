@@ -45,7 +45,7 @@ const mapNameToClass = new Map([
   data?: Object,
 }; */
 
-const accessionDisplay = new Set(['protein', 'structure', 'organism']);
+const accessionDisplay = new Set(['protein', 'structure', 'proteome']);
 
 class Title extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -124,14 +124,11 @@ class Title extends PureComponent /*:: <Props> */ {
                 {metadata.accession}
               </small>
             )}
-          {// greyish accession: for protein , structure, and proteomes and no accession for tax
-          accessionDisplay.has(mainType) &&
-            metadata.source_database !== 'taxonomy' && (
-              // no accession for Taxonomy but in blue for protein (reviewed), structure (pdb), and proteomes (proteome)
-              <small className={f('title-id-other')}>
-                {metadata.accession}
-              </small>
-            )}
+          {// greyish accession: for protein , structure, and proteomes
+          accessionDisplay.has(mainType) && (
+            // no accession for Taxonomy but in blue for protein (reviewed), structure (pdb), and proteomes (proteome)
+            <small className={f('title-id-other')}>{metadata.accession}</small>
+          )}
         </h3>
 
         {// InterPro Entry
@@ -165,12 +162,11 @@ class Title extends PureComponent /*:: <Props> */ {
         )}
 
         {// Species
-        metadata.source_database !== 'proteome' &&
-          mainType === 'organism' && (
-            <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-              {dbLabel}
-            </div>
-          )}
+        mainType === 'taxonomy' && (
+          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+            {dbLabel}
+          </div>
+        )}
 
         {// Proteome
         metadata.is_reference ? (

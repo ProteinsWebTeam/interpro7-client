@@ -19,19 +19,17 @@ Object {
   "main": Object {
     "key": null,
   },
-  "organism": Object {
-    "accession": null,
-    "db": null,
-    "detail": null,
-    "isFilter": null,
-    "proteomeAccession": null,
-    "proteomeDB": null,
-  },
   "other": Object {
     "0": null,
     "1": null,
   },
   "protein": Object {
+    "accession": null,
+    "db": null,
+    "detail": null,
+    "isFilter": null,
+  },
+  "proteome": Object {
     "accession": null,
     "db": null,
     "detail": null,
@@ -50,6 +48,12 @@ Object {
   "structure": Object {
     "accession": null,
     "chain": null,
+    "db": null,
+    "detail": null,
+    "isFilter": null,
+  },
+  "taxonomy": Object {
+    "accession": null,
     "db": null,
     "detail": null,
     "isFilter": null,
