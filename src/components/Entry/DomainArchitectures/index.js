@@ -1,5 +1,5 @@
 /* eslint no-magic-numbers: [1, {ignore: [0, 1, 2, 3, 10]}]*/
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -26,6 +26,9 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
+const FAKE_PROTEIN_LENGTH = 1000;
+const GAP_BETWEEN_DOMAINS = 5;
+
 const schemaProcessData = data => ({
   '@id': '@isContainedIn',
   '@type': [
@@ -38,49 +41,31 @@ const schemaProcessData = data => ({
   name: data.ida,
 });
 
-const groupDomains = domains => {
-  const groups = {};
-  for (const domain of domains) {
-    if (!(domain.id in groups)) {
-      groups[domain.id] = {
-        accessions: domain.accessions,
-        locations: [{ fragments: [] }],
-      };
-    }
-    groups[domain.id].locations[0].fragments.push({
-      start: domain.fragment[0],
-      end: domain.fragment[1],
-    });
-  }
-  return Object.values(groups);
-};
-
 const ida2json = ida => {
   const idaParts = ida.split('-');
   const n = idaParts.length;
-  const length = 1000;
-  const gap = 5;
-  const feature = (length - gap * (n + 1)) / n;
+  const feature = (FAKE_PROTEIN_LENGTH - GAP_BETWEEN_DOMAINS * (n + 1)) / n;
   const domains = idaParts.map((p, i) => ({
     accession: p.indexOf(':') < 0 ? p : p.split(':')[1],
     locations: [
       {
         fragments: [
           {
-            start: gap + i * (gap + feature),
-            end: (i + 1) * (gap + feature),
+            start: GAP_BETWEEN_DOMAINS + i * (GAP_BETWEEN_DOMAINS + feature),
+            end: (i + 1) * (GAP_BETWEEN_DOMAINS + feature),
           },
         ],
       },
     ],
   }));
   const grouped = domains.reduce((obj, domain) => {
-    if (!obj[domain.accession]) obj[domain.accession] = domain;
-    else obj[domain.accession].locations.push(domain.locations[0]);
+    if (obj[domain.accession])
+      obj[domain.accession].locations.push(domain.locations[0]);
+    else obj[domain.accession] = domain;
     return obj;
   }, {});
   const obj = {
-    length,
+    length: FAKE_PROTEIN_LENGTH,
     domains: Object.values(grouped),
     accessions: Object.keys(grouped),
   };
@@ -151,6 +136,7 @@ class DomainArchitectures extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,
     mainAccession: T.string,
+    search: T.object,
   };
 
   render() {
@@ -198,7 +184,10 @@ class DomainArchitectures extends PureComponent {
                     -{' '}
                   </span>
                 ))}
-                <IDAProtVista matches={idaObj.domains} length={1000} />
+                <IDAProtVista
+                  matches={idaObj.domains}
+                  length={FAKE_PROTEIN_LENGTH}
+                />
                 {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
               </div>
             );
