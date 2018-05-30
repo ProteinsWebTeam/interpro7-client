@@ -12,9 +12,10 @@ import { schemaProcessDataWebPage } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(ipro);
+const f = foundationPartial(ebiGlobalStyles, ipro);
 
 const IPScanStatus = loadable({
   loader: () =>
