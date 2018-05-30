@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import Link from 'components/generic/Link/index';
+import Link from 'components/generic/Link';
 
 /*:: type Props = {
   accession: string | number,
