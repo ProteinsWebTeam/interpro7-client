@@ -778,9 +778,11 @@ const Summary = props => {
   }
   return (
     <ErrorBoundary>
-      <div className={f('medium-12', 'large-12', 'columns')}>
-        <Title metadata={payload.metadata} mainType="entry" />
-        <EntryMenu metadata={payload.metadata} />
+      <div className={f('row')}>
+        <div className={f('medium-12', 'large-12', 'columns')}>
+          <Title metadata={payload.metadata} mainType="entry" />
+          <EntryMenu metadata={payload.metadata} />
+        </div>
       </div>
       <Switch
         {...props}
@@ -854,7 +856,7 @@ class Entry extends PureComponent {
       dataBase && dataBase.payload && dataBase.payload.databases;
 
     return (
-      <div className={f('row')}>
+      <div>
         {payload &&
           payload.metadata &&
           payload.metadata.accession && (
