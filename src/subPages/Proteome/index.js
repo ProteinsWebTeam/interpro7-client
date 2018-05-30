@@ -118,6 +118,7 @@ class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation:
         <Column
           dataKey="is_reference"
           headerClassName={f('table-center')}
+          cellClassName={f('table-center')}
           renderer={(isReference /*: string */) => (
             <div>
               {isReference ? (
