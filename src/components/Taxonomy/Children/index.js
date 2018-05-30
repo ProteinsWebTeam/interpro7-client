@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import TaxIdOrName from 'components/Taxonomy/TaxIdOrName/index';
+import TaxIdOrName from 'components/Taxonomy/TaxIdOrName';
 
-import { foundationPartial } from 'styles/foundation/index';
+import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
-import loadable from 'higherOrder/loadable/index';
+import loadable from 'higherOrder/loadable';
 import config from 'config';
-import descriptionToPath from 'utils/processDescription/descriptionToPath/index';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(local);
 
