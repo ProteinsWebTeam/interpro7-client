@@ -242,14 +242,8 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             // </div>
             // ) : null
           }
-          <div>
-            <Accession
-              id={metadata.id}
-              accession={metadata.proteomeAccession || metadata.accession}
-              title="Proteome ID"
-            />
-          </div>
-          <div>Strain: {metadata.strain}</div>
+          <div>Proteome ID: {metadata.accession}</div>
+          {metadata.strain && <div>Strain: {metadata.strain}</div>}
           <div>
             Taxonomy:{' '}
             <Metadata
