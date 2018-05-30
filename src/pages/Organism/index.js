@@ -76,7 +76,7 @@ const ProteinFastasRenderer = entryDB => taxId => (
     fileType="FASTA"
     name={`protein-sequences${
       entryDB ? `-matching-${entryDB}` : ''
-    }-for-${taxId}.txt`}
+    }-for-${taxId}.fasta`}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
