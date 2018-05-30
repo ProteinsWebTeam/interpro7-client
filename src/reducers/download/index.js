@@ -1,6 +1,4 @@
 // @flow
-import { createSelector } from 'reselect';
-
 import {
   DOWNLOAD_URL,
   DOWNLOAD_PROGRESS,
