@@ -46,7 +46,10 @@ class Actions extends PureComponent {
     const { localID, withTitle, jobs } = this.props;
     const { saved } = (jobs[localID] || {}).metadata || {};
     return (
-      <div>
+      <div
+        className={f('margin-right-large')}
+        style={{ position: 'absolute', top: 0, right: 0 }}
+      >
         {withTitle && 'Actions: '}
         <Tooltip title="Save job">
           <button
