@@ -54,7 +54,6 @@ const processResultsFor = fileType =>
 // the `_` is just to make flow happy
 const downloadContent = async function*(url, fileType, _) {
   const location = parse(url, true);
-  const query = location.query;
   if (fileType === 'FASTA') {
     location.query.extra_fields = [
       ...(location.query.extra_fields, '').split(','),

@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, { Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -8,12 +9,15 @@ import Link from 'components/generic/Link';
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
-import ProteinFile from 'subPages/Organism/ProteinFile';
+import File from 'components/File';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import { NumberComponent } from 'components/NumberLabel';
 import { PDBeLink } from 'components/ExtLink';
 import LazyImage from 'components/LazyImage';
+
+import { searchSelector } from 'reducers/custom-location/search';
+import { descriptionSelector } from 'reducers/custom-location/description';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -125,12 +129,38 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
-const ProteinAccessionsRenderer = taxId => (
-  <ProteinFile taxId={taxId} type="protein-accession" />
+const ProteinFastasRenderer = description => taxId => (
+  <React.Fragment>
+    <File
+      fileType="FASTA"
+      name={`protein-sequences-matching-${
+        description.entry.accession
+      }-for-${taxId}.fasta`}
+      customLocationDescription={{
+        main: { key: 'protein' },
+        protein: { db: 'UniProt' },
+        organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+        entry: { ...description.entry, isFilter: true },
+      }}
+    />
+  </React.Fragment>
 );
 
-const ProteinFastasRenderer = (taxId, row) => (
-  <ProteinFile taxId={taxId} row={row} type="FASTA" />
+const ProteinAccessionsRenderer = description => taxId => (
+  <React.Fragment>
+    <File
+      fileType="accession"
+      name={`protein-accessions-matching-${
+        description.entry.accession
+      }-for-${taxId}.txt`}
+      customLocationDescription={{
+        main: { key: 'protein' },
+        protein: { db: 'UniProt' },
+        organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+        entry: { ...description.entry, isFilter: true },
+      }}
+    />
+  </React.Fragment>
 );
 
 // List of all matches, many to many
@@ -142,15 +172,17 @@ const Matches = (
     actualSize,
     isStale,
     search,
+    description,
     ...props
   } /*: {
-   matches: Array<Object>,
-   primary: string,
-   secondary: string,
-   actualSize: number,
-   isStale: boolean,
-   search: Object,
-   props: Array<any>
+    matches: Array<Object>,
+    primary: string,
+    secondary: string,
+    actualSize: number,
+    isStale: boolean,
+    search: Object,
+    description: Object,
+    props: Array<any>
 } */,
 ) => (
   <Table
@@ -335,7 +367,7 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       displayIf={primary === 'organism'}
-      renderer={ProteinFastasRenderer}
+      renderer={ProteinFastasRenderer(description)}
     >
       FASTA
     </Column>
@@ -345,7 +377,7 @@ const Matches = (
       cellClassName={f('table-center')}
       defaultKey="proteinAccessions"
       displayIf={primary === 'organism'}
-      renderer={ProteinAccessionsRenderer}
+      renderer={ProteinAccessionsRenderer(description)}
     >
       Protein accessions
     </Column>
@@ -354,8 +386,9 @@ const Matches = (
 Matches.propTypes = propTypes;
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.search,
-  search => ({ search }),
+  searchSelector,
+  descriptionSelector,
+  (search, description) => ({ search, description }),
 );
 
 export default connect(mapStateToProps)(Matches);
