@@ -129,118 +129,116 @@ export default class Table extends PureComponent /*:: <Props> */ {
     const exporter = _children.find(child => child.type === _Exporter);
 
     return (
-      <div className={f('row')}>
-        <div className={f('columns', 'table-view')}>
-          <div className={f('row')}>
-            <div className={f('columns')}>
-              <div className={f('table-results-filtering')}>
-                <div className={f('pagesize-wrapper')}>
-                  {title && <h4>{title}</h4>}
-                  <_TotalNb
-                    className={f('hide-for-small-only')}
-                    data={dataTable}
-                    actualSize={actualSize}
-                    pagination={_query}
-                    contentType={contentType}
-                    notFound={notFound}
+      <div className={f('table-view')}>
+        <div className={f('row')}>
+          <div className={f('columns')}>
+            <div className={f('table-results-filtering')}>
+              <div className={f('pagesize-wrapper')}>
+                {title && <h4>{title}</h4>}
+                <_TotalNb
+                  className={f('hide-for-small-only')}
+                  data={dataTable}
+                  actualSize={actualSize}
+                  pagination={_query}
+                  contentType={contentType}
+                  notFound={notFound}
+                />
+              </div>
+              <div className={f('type-selector', 'show-for-large')}>
+                <Tooltip title="View your results as a table">
+                  <Link
+                    to={l => ({ ...l, hash: 'table' })}
+                    className={f('icon-view', 'table-view')}
+                    activeClass={f('active')}
+                    aria-label="view your results as a table"
+                    onMouseOver={TableView.preload}
+                    onFocus={TableView.preload}
                   />
-                </div>
-                <div className={f('type-selector', 'show-for-large')}>
-                  <Tooltip title="View your results as a table">
+                </Tooltip>{' '}
+                {
+                  // <Tooltip title="View your results as a list">
+                  //  <Link
+                  //   to={l => ({ ...l, hash: 'list' })}
+                  //  className={f('icon-view', 'list-view', 'disabled')}
+                  //  aria-disabled="true"
+                  //  disabled
+                  //  aria-label="view your results as a list"
+                  // onMouseOver={ListView.preload}
+                  // onFocus={ListView.preload}
+                  // />
+                  // </Tooltip>
+                }{' '}
+                <div className={f('test-support-grid')}>
+                  <Tooltip title="View your results in a grid">
                     <Link
-                      to={l => ({ ...l, hash: 'table' })}
-                      className={f('icon-view', 'table-view')}
-                      activeClass={f('active')}
-                      aria-label="view your results as a table"
-                      onMouseOver={TableView.preload}
-                      onFocus={TableView.preload}
-                    />
-                  </Tooltip>{' '}
-                  {
-                    // <Tooltip title="View your results as a list">
-                    //  <Link
-                    //   to={l => ({ ...l, hash: 'list' })}
-                    //  className={f('icon-view', 'list-view', 'disabled')}
-                    //  aria-disabled="true"
-                    //  disabled
-                    //  aria-label="view your results as a list"
-                    // onMouseOver={ListView.preload}
-                    // onFocus={ListView.preload}
-                    // />
-                    // </Tooltip>
-                  }{' '}
-                  <div className={f('test-support-grid')}>
-                    <Tooltip title="View your results in a grid">
-                      <Link
-                        to={l => ({ ...l, hash: 'grid' })}
-                        className={f('icon-view', 'grid-view', {
-                          disabled: !card,
-                        })}
-                        activeClass={f('active')}
-                        aria-disabled={card ? 'false' : 'true'}
-                        aria-label="view your results in a grid"
-                        onMouseOver={GridView.preload}
-                        onFocus={GridView.preload}
-                      />
-                    </Tooltip>
-                  </div>
-                  <Tooltip title="View your results as a tree">
-                    <Link
-                      to={l => ({ ...l, hash: 'tree' })}
-                      className={f('icon-view', 'tree-view', {
-                        disabled: !withTree,
+                      to={l => ({ ...l, hash: 'grid' })}
+                      className={f('icon-view', 'grid-view', {
+                        disabled: !card,
                       })}
                       activeClass={f('active')}
-                      aria-disabled={withTree ? 'false' : 'true'}
-                      aria-label="view your results as a tree"
-                      onMouseOver={TreeView.preload}
-                      onFocus={TreeView.preload}
+                      aria-disabled={card ? 'false' : 'true'}
+                      aria-label="view your results in a grid"
+                      onMouseOver={GridView.preload}
+                      onFocus={GridView.preload}
                     />
                   </Tooltip>
                 </div>
-                <div className={f('filter-wrapper')}>
-                  {search}
-                  {exporter}
-                </div>
+                <Tooltip title="View your results as a tree">
+                  <Link
+                    to={l => ({ ...l, hash: 'tree' })}
+                    className={f('icon-view', 'tree-view', {
+                      disabled: !withTree,
+                    })}
+                    activeClass={f('active')}
+                    aria-disabled={withTree ? 'false' : 'true'}
+                    aria-label="view your results as a tree"
+                    onMouseOver={TreeView.preload}
+                    onFocus={TreeView.preload}
+                  />
+                </Tooltip>
+              </div>
+              <div className={f('filter-wrapper')}>
+                {search}
+                {exporter}
               </div>
             </div>
           </div>
-          <div className={f('row')}>
-            <div className={f('columns')}>
-              <_TotalNb
-                className={f('show-for-small-only')}
-                data={dataTable}
-                actualSize={actualSize}
-                pagination={_query}
-                notFound={notFound}
-              />
-              <Switch
-                locationSelector={hashSelector}
-                indexRoute={RedirectToDefault}
-                childRoutes={mainChildRoutes}
-                catchAll={RedirectToDefault}
-                // passed down props
-                isStale={isStale}
-                loading={loading}
-                ok={ok}
-                columns={columns}
-                card={card}
-                notFound={notFound}
-                dataTable={dataTable}
-                withTree={withTree}
-                withGrid={!!card}
-              />
-              <Switch
-                locationSelector={hashSelector}
-                indexRoute={_Footer}
-                childRoutes={footerChildRoutes}
-                catchAll={_Footer}
-                // passed down props
-                withPageSizeSelector={withPageSizeSelector}
-                actualSize={actualSize}
-                pagination={_query}
-              />
-            </div>
+        </div>
+        <div className={f('row')}>
+          <div className={f('columns')}>
+            <_TotalNb
+              className={f('show-for-small-only')}
+              data={dataTable}
+              actualSize={actualSize}
+              pagination={_query}
+              notFound={notFound}
+            />
+            <Switch
+              locationSelector={hashSelector}
+              indexRoute={RedirectToDefault}
+              childRoutes={mainChildRoutes}
+              catchAll={RedirectToDefault}
+              // passed down props
+              isStale={isStale}
+              loading={loading}
+              ok={ok}
+              columns={columns}
+              card={card}
+              notFound={notFound}
+              dataTable={dataTable}
+              withTree={withTree}
+              withGrid={!!card}
+            />
+            <Switch
+              locationSelector={hashSelector}
+              indexRoute={_Footer}
+              childRoutes={footerChildRoutes}
+              catchAll={_Footer}
+              // passed down props
+              withPageSizeSelector={withPageSizeSelector}
+              actualSize={actualSize}
+              pagination={_query}
+            />
           </div>
         </div>
       </div>
