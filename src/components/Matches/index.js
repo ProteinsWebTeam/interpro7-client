@@ -130,37 +130,39 @@ const MatchesByPrimary = (
 MatchesByPrimary.propTypes = propTypes;
 
 const ProteinFastasRenderer = description => taxId => (
-  <React.Fragment>
-    <File
-      fileType="FASTA"
-      name={`protein-sequences-matching-${
-        description.entry.accession
-      }-for-${taxId}.fasta`}
-      customLocationDescription={{
-        main: { key: 'protein' },
-        protein: { db: 'UniProt' },
-        organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
-        entry: { ...description.entry, isFilter: true },
-      }}
-    />
-  </React.Fragment>
+  <File
+    fileType="FASTA"
+    name={`protein-sequences-matching-${
+      description[description.main.key].accession
+    }-for-${taxId}.fasta`}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+      [description.main.key]: {
+        ...description[description.main.key],
+        isFilter: true,
+      },
+    }}
+  />
 );
 
 const ProteinAccessionsRenderer = description => taxId => (
-  <React.Fragment>
-    <File
-      fileType="accession"
-      name={`protein-accessions-matching-${
-        description.entry.accession
-      }-for-${taxId}.txt`}
-      customLocationDescription={{
-        main: { key: 'protein' },
-        protein: { db: 'UniProt' },
-        organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
-        entry: { ...description.entry, isFilter: true },
-      }}
-    />
-  </React.Fragment>
+  <File
+    fileType="accession"
+    name={`protein-accessions-matching-${
+      description[description.main.key].accession
+    }-for-${taxId}.txt`}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+      [description.main.key]: {
+        ...description[description.main.key],
+        isFilter: true,
+      },
+    }}
+  />
 );
 
 // List of all matches, many to many
