@@ -6,12 +6,13 @@
   transition-property: opacity, transform;
   transition-timing-function: ease-in-out;
   transition-duration: var(--timing-medium);
+  display: none; /*solve bug top button non clickable on small screen because of visibility*/
   opacity: 0;
   transform: translateY(-50vh);
   position: relative;
 
   &.visible {
-    visibility: visible;
+    display: block;
     opacity: 1;
     transform: translateY(-10px);
     z-index: 5;
@@ -20,7 +21,7 @@
 
   & .dropdown-pane.embl-dropdown {
     position: fixed;
-    background-color: #111;
+    background-color: #222;
     top: calc(38px + var(--spacing-medium));
     left: initial;
     /*right: var(--spacing-medium);*/
