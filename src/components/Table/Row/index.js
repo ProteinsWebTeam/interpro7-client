@@ -11,6 +11,7 @@ class Row extends PureComponent {
   static propTypes = {
     row: T.object.isRequired,
     columns: T.array.isRequired,
+    extra: T.object,
   };
 
   constructor(props) {
@@ -34,7 +35,7 @@ class Row extends PureComponent {
   }
 
   render() {
-    const { row, columns } = this.props;
+    const { row, columns, extra } = this.props;
     return (
       <tr ref={this._ref}>
         {columns
@@ -52,7 +53,7 @@ class Row extends PureComponent {
                 style={cellStyle}
                 className={cellClassName}
               >
-                {renderer(lodashGet(row, dataKey, '∅'), row)}
+                {renderer(lodashGet(row, dataKey, '∅'), row, extra)}
               </td>
             ),
           )}

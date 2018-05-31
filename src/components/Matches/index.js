@@ -37,7 +37,8 @@ const SchemaOrgData = loadable({
 const schemamap = {
   entry: {
     protein: ['@isContainedIn', 'Protein'],
-    organism: ['@isContainedIn', 'Organism'],
+    taxonomy: ['@isContainedIn', 'Taxonomy'],
+    proteome: ['@isContainedIn', 'Proteome'],
     structure: ['@isContainedIn', 'Structure'],
     set: ['@isContainedIn', 'Set'],
   },
@@ -48,19 +49,26 @@ const schemamap = {
   structure: {
     entry: ['@additionalProperty', 'Entry'],
     protein: ['@isContainedIn', 'Protein'],
-    organism: ['@isContainedIn', 'Organism'],
+    taxonomy: ['@isContainedIn', 'Taxonomy'],
+    proteome: ['@isContainedIn', 'Proteome'],
   },
-  organism: {
+  taxonomy: {
     entry: ['@contains', 'Entry'],
     protein: ['@contains', 'Protein'],
     structure: ['@contains', 'Structure'],
     proteome: ['@contains', 'Proteome'],
   },
+  proteome: {
+    entry: ['@contains', 'Entry'],
+    protein: ['@contains', 'Protein'],
+    structure: ['@contains', 'Structure'],
+  },
   set: {
     entry: ['@additionalProperty', 'Entry'],
     protein: ['@additionalProperty', 'Protein'],
     structure: ['@additionalProperty', 'Structure'],
-    organism: ['@additionalProperty', 'Organism'],
+    taxonomy: ['@additionalProperty', 'Taxonomy'],
+    proteome: ['@additionalProperty', 'Proteome'],
   },
 };
 
@@ -129,16 +137,20 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
-const ProteinFastasRenderer = description => taxId => (
+const ProteinFastasRenderer = description => accession => (
   <File
     fileType="FASTA"
     name={`protein-sequences-matching-${
       description[description.main.key].accession
-    }-for-${taxId}.fasta`}
+    }-for-${accession}.fasta`}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
-      organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+      [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
+        isFilter: description.taxonomy.isFilter,
+        db: 'UniProt',
+        accession: `${accession}`,
+      },
       [description.main.key]: {
         ...description[description.main.key],
         isFilter: true,
@@ -147,16 +159,20 @@ const ProteinFastasRenderer = description => taxId => (
   />
 );
 
-const ProteinAccessionsRenderer = description => taxId => (
+const ProteinAccessionsRenderer = description => accession => (
   <File
     fileType="accession"
     name={`protein-accessions-matching-${
       description[description.main.key].accession
-    }-for-${taxId}.txt`}
+    }-for-${accession}.txt`}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
-      organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+      [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
+        isFilter: description.taxonomy.isFilter,
+        db: 'UniProt',
+        accession: `${accession}`,
+      },
       [description.main.key]: {
         ...description[description.main.key],
         isFilter: true,
@@ -241,7 +257,7 @@ const Matches = (
         );
       }}
     >
-      {primary === 'organism' ? 'Tax Id' : 'Accession'}
+      Accession
     </Column>
     <Column
       dataKey="name"
@@ -272,9 +288,9 @@ const Matches = (
           <Link
             to={{
               description: {
-                main: { key: 'organism' },
-                organism: {
-                  db: 'taxonomy',
+                main: { key: 'taxonomy' },
+                taxonomy: {
+                  db: 'uniprot',
                   accession: `${sourceOrganism.taxId}`,
                 },
               },
@@ -293,7 +309,11 @@ const Matches = (
       dataKey="source_database"
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
-      displayIf={primary !== 'organism' && primary !== 'protein'}
+      displayIf={
+        primary !== 'taxonomy' &&
+        primary !== 'proteome' &&
+        primary !== 'protein'
+      }
       renderer={(db /*: string */) =>
         db === 'reviewed' ? (
           <Tooltip
@@ -337,8 +357,10 @@ const Matches = (
     <Column
       dataKey="match"
       displayIf={
-        primary !== 'organism' &&
-        secondary !== 'organism' &&
+        primary !== 'taxonomy' &&
+        secondary !== 'taxonomy' &&
+        primary !== 'proteome' &&
+        secondary !== 'proteome' &&
         primary !== 'set' &&
         secondary !== 'set'
       }
@@ -354,11 +376,11 @@ const Matches = (
       {primary === 'protein' ? 'Domain Architecture' : 'Matches'}
     </Column>
     <Column
-      dataKey="counters.proteins.uniprot"
+      dataKey="counters.extra_fields.counters.proteins"
       defaultKey="protein-count"
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
-      displayIf={primary === 'organism'}
+      displayIf={primary === 'taxonomy' || primary === 'proteome'}
       renderer={count => <NumberComponent value={count} abbr />}
     >
       protein count
@@ -368,7 +390,7 @@ const Matches = (
       defaultKey="proteinFastas"
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
-      displayIf={primary === 'organism'}
+      displayIf={primary === 'taxonomy' || primary === 'proteome'}
       renderer={ProteinFastasRenderer(description)}
     >
       FASTA
@@ -378,7 +400,7 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       defaultKey="proteinAccessions"
-      displayIf={primary === 'organism'}
+      displayIf={primary === 'taxonomy' || primary === 'proteome'}
       renderer={ProteinAccessionsRenderer(description)}
     >
       Protein accessions

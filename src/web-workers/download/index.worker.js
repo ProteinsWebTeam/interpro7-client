@@ -3,6 +3,7 @@ import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
 import { format, parse } from 'url';
 import throttle from 'lodash-es/throttle';
+import { sleep } from 'timing-functions/src';
 
 import { DOWNLOAD_URL } from 'actions/types';
 
@@ -17,7 +18,9 @@ import {
 // Max page size provided by the server
 // to maximise the number of results sent by the server at once
 const MAX_PAGE_SIZE = 200;
-// const MAX_PAGE_SIZE = 4;
+// Time to wait before retrying to get results from API when we have a timeout
+const DELAY_WHEN_TIMEOUT = 60000; // 1 minute
+const REQUEST_TIMEOUT = 408;
 
 const THROTTLE_TIME = 500; // half a second
 
@@ -73,6 +76,13 @@ const downloadContent = async function*(url, fileType, _) {
   let next = format(location);
   while (next) {
     const response = await fetch(next);
+    // If the server sent a timeout response…
+    if (response.status === REQUEST_TIMEOUT) {
+      // …wait a bit…
+      await sleep(DELAY_WHEN_TIMEOUT);
+      // …then restart the loop with at the same URL
+      continue;
+    }
     const payload = await response.json();
     totalCount = payload.count;
     for (const part of processResults(payload.results)) {

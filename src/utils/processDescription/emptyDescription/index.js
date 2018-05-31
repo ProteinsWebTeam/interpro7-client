@@ -27,12 +27,16 @@ export default () /*: Description */ => Object.freeze({
     chain: null,
     detail: null,
   }),
-  organism: Object.seal({
+  taxonomy: Object.seal({
     isFilter: null,
     db: null,
     accession: null,
-    proteomeDB: null,
-    proteomeAccession: null,
+    detail: null,
+  }),
+  proteome: Object.seal({
+    isFilter: null,
+    db: null,
+    accession: null,
     detail: null,
   }),
   set: Object.seal({
