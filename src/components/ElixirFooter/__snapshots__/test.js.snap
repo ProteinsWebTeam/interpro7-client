@@ -7,40 +7,44 @@ exports[`<ElixirFooter /> should render 1`] = `
   <div
     className="row"
   >
-    <Connect(Link)
-      href="https://www.elixir-europe.org/about-us/who-we-are/nodes/embl-ebi"
-      target="_blank"
+    <div
+      className="columns"
     >
-      <LazyImage
-        alt="Elixir logo"
-        className="elixir-logo-kite"
-        src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.3/images/logos/ELIXIR/elixir-cdr.gif"
-      />
-      <h5>
-        <span
-          className="elixir-banner-name"
-        >
-          This service is part of the ELIXIR infrastructure
-        </span>
-      </h5>
-      <div
-        id="elixir-banner-info"
+      <Connect(Link)
+        href="https://www.elixir-europe.org/about-us/who-we-are/nodes/embl-ebi"
+        target="_blank"
       >
-        <small>
+        <LazyImage
+          alt="Elixir logo"
+          className="elixir-logo-kite"
+          src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.3/images/logos/ELIXIR/elixir-cdr.gif"
+        />
+        <h5>
           <span
-            className="elixir-banner-description"
+            className="elixir-banner-name"
           >
-            InterPro is an ELIXIR Core Data Resource
+            This service is part of the ELIXIR infrastructure
           </span>
-           
-          <span
-            className="readmore"
-          >
-            Learn more ›
-          </span>
-        </small>
-      </div>
-    </Connect(Link)>
+        </h5>
+        <div
+          id="elixir-banner-info"
+        >
+          <small>
+            <span
+              className="elixir-banner-description"
+            >
+              InterPro is an ELIXIR Core Data Resource
+            </span>
+             
+            <span
+              className="readmore"
+            >
+              Learn more ›
+            </span>
+          </small>
+        </div>
+      </Connect(Link)>
+    </div>
   </div>
 </div>
 `;
