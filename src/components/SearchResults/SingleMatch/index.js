@@ -52,7 +52,7 @@ class _SingleMatchWrapper extends PureComponent {
     const LinkOrRedirect = this.state.triggerRedirect ? Redirect : Link;
     return (
       <div className={f('callout', 'info')}>
-        <h5>Found an exact match</h5>
+        <span>Found an exact match: </span>
         <LinkOrRedirect to={to}>{children}</LinkOrRedirect>
       </div>
     );
@@ -129,7 +129,6 @@ class SingleMatch extends PureComponent {
         );
       }
     }
-    return null;
   }
 }
 
