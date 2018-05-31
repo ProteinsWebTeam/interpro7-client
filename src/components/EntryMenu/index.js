@@ -34,8 +34,6 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     mainType: T.string,
     mainDB: T.string,
     mainAccession: T.string,
-    proteomeDB: T.string,
-    proteomeAccession: T.string,
     isSignature: T.bool.isRequired,
     data: T.shape({
       loading: T.bool.isRequired,
@@ -48,10 +46,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
   render() {
     const {
       mainType,
-      mainDB,
       mainAccession,
-      proteomeDB,
-      proteomeAccession,
       data,
       isSignature,
       children,
@@ -59,25 +54,21 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       className,
     } = this.props;
     let tabs = entities;
-    if (
-      (mainAccession || proteomeAccession) &&
-      mainType &&
-      config.pages[mainType]
-    ) {
+    if (mainAccession && mainType && config.pages[mainType]) {
       tabs = [singleEntity.get('overview')];
       for (const subPage of config.pages[mainType].subPages) {
-        if (
-          !(
-            subPage === 'proteome' &&
-            proteomeDB === 'proteome' &&
-            mainDB === null
-          )
-        )
-          tabs.push(singleEntity.get(subPage));
+        // if (
+        //   !(
+        //     subPage === 'proteome' &&
+        //     proteomeDB === 'proteome' &&
+        //     mainDB === null
+        //   )
+        // )
+        tabs.push(singleEntity.get(subPage));
       }
       tabs = tabs.filter(Boolean);
     }
-    if (loading || !payload.metadata) {
+    if (loading || !payload || !payload.metadata) {
       return <Loading />;
     }
     return (
@@ -93,7 +84,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             name={e.name}
             data={data}
             counter={e.counter}
-            isFirstLevel={!(mainAccession || proteomeAccession)}
+            isFirstLevel={!mainAccession}
             isSignature={isSignature}
           />
         ))}
@@ -111,20 +102,10 @@ const mapStateToProps = createSelector(
   state =>
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  state =>
-    state.customLocation.description.main.key === 'organism'
-      ? state.customLocation.description.organism.proteomeDB
-      : null,
-  state =>
-    state.customLocation.description.main.key === 'organism'
-      ? state.customLocation.description.organism.proteomeAccession
-      : null,
-  (mainType, mainDB, mainAccession, proteomeDB, proteomeAccession) => ({
+  (mainType, mainDB, mainAccession) => ({
     mainType,
     mainDB,
     mainAccession,
-    proteomeDB,
-    proteomeAccession,
     isSignature: !!(
       mainType === 'entry' &&
       mainDB !== 'InterPro' &&
@@ -143,23 +124,8 @@ const mapStateToUrl = createSelector(
   state =>
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  state =>
-    state.customLocation.description.main.key === 'organism'
-      ? state.customLocation.description.organism.proteomeDB
-      : null,
-  state =>
-    state.customLocation.description.main.key === 'organism'
-      ? state.customLocation.description.organism.proteomeAccession
-      : null,
-  (
-    { protocol, hostname, port, root },
-    mainType,
-    db,
-    accession,
-    proteomeDB,
-    proteomeAccession,
-  ) => {
-    if (!accession && !proteomeAccession) return;
+  ({ protocol, hostname, port, root }, mainType, db, accession) => {
+    if (!accession) return;
     return format({
       protocol,
       hostname,
@@ -171,8 +137,6 @@ const mapStateToUrl = createSelector(
           [mainType]: {
             db,
             accession,
-            proteomeDB: proteomeAccession ? proteomeDB : null,
-            proteomeAccession,
           },
         }),
     });

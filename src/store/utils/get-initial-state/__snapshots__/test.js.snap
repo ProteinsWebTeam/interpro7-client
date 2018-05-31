@@ -21,19 +21,17 @@ Object {
       "main": Object {
         "key": null,
       },
-      "organism": Object {
-        "accession": null,
-        "db": null,
-        "detail": null,
-        "isFilter": null,
-        "proteomeAccession": null,
-        "proteomeDB": null,
-      },
       "other": Object {
         "0": "about",
         "1": null,
       },
       "protein": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "proteome": Object {
         "accession": null,
         "db": null,
         "detail": null,
@@ -52,6 +50,12 @@ Object {
       "structure": Object {
         "accession": null,
         "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "taxonomy": Object {
+        "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
@@ -85,19 +89,17 @@ Object {
       "main": Object {
         "key": "entry",
       },
-      "organism": Object {
-        "accession": null,
-        "db": null,
-        "detail": null,
-        "isFilter": null,
-        "proteomeAccession": null,
-        "proteomeDB": null,
-      },
       "other": Object {
         "0": null,
         "1": null,
       },
       "protein": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "proteome": Object {
         "accession": null,
         "db": null,
         "detail": null,
@@ -116,6 +118,12 @@ Object {
       "structure": Object {
         "accession": null,
         "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "taxonomy": Object {
+        "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
@@ -149,19 +157,17 @@ Object {
       "main": Object {
         "key": "protein",
       },
-      "organism": Object {
-        "accession": null,
-        "db": null,
-        "detail": null,
-        "isFilter": null,
-        "proteomeAccession": null,
-        "proteomeDB": null,
-      },
       "other": Object {
         "0": null,
         "1": null,
       },
       "protein": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "proteome": Object {
         "accession": null,
         "db": null,
         "detail": null,
@@ -180,6 +186,12 @@ Object {
       "structure": Object {
         "accession": null,
         "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "taxonomy": Object {
+        "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
@@ -213,19 +225,17 @@ Object {
       "main": Object {
         "key": null,
       },
-      "organism": Object {
-        "accession": null,
-        "db": null,
-        "detail": null,
-        "isFilter": null,
-        "proteomeAccession": null,
-        "proteomeDB": null,
-      },
       "other": Object {
         "0": null,
         "1": null,
       },
       "protein": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "proteome": Object {
         "accession": null,
         "db": null,
         "detail": null,
@@ -244,6 +254,12 @@ Object {
       "structure": Object {
         "accession": null,
         "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "taxonomy": Object {
+        "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
@@ -277,19 +293,17 @@ Object {
       "main": Object {
         "key": "entry",
       },
-      "organism": Object {
-        "accession": null,
-        "db": null,
-        "detail": null,
-        "isFilter": null,
-        "proteomeAccession": null,
-        "proteomeDB": null,
-      },
       "other": Object {
         "0": null,
         "1": null,
       },
       "protein": Object {
+        "accession": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "proteome": Object {
         "accession": null,
         "db": null,
         "detail": null,
@@ -308,6 +322,12 @@ Object {
       "structure": Object {
         "accession": null,
         "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "taxonomy": Object {
+        "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
@@ -341,14 +361,6 @@ Object {
       "main": Object {
         "key": "protein",
       },
-      "organism": Object {
-        "accession": null,
-        "db": null,
-        "detail": null,
-        "isFilter": null,
-        "proteomeAccession": null,
-        "proteomeDB": null,
-      },
       "other": Object {
         "0": null,
         "1": null,
@@ -356,6 +368,12 @@ Object {
       "protein": Object {
         "accession": "A0A023GPI8",
         "db": "reviewed",
+        "detail": null,
+        "isFilter": null,
+      },
+      "proteome": Object {
+        "accession": null,
+        "db": null,
         "detail": null,
         "isFilter": null,
       },
@@ -372,6 +390,12 @@ Object {
       "structure": Object {
         "accession": null,
         "chain": null,
+        "db": null,
+        "detail": null,
+        "isFilter": null,
+      },
+      "taxonomy": Object {
+        "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,

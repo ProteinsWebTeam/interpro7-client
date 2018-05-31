@@ -44,9 +44,9 @@ const getEntryForFilter = ({ entry }) => {
     return { ...entry, isFilter: true };
   }
 };
-const getOrganismForFilter = ({ organism }) => {
-  if (organism.db) {
-    return { ...organism, isFilter: true };
+const getTaxonomyForFilter = ({ taxonomy }) => {
+  if (taxonomy.db) {
+    return { ...taxonomy, isFilter: true };
   }
 };
 
@@ -73,7 +73,7 @@ export const entities /*: Array<Object> */ = [
           main: { key: 'protein' },
           protein: { db: customLocation.description.protein.db || 'UniProt' },
           entry: getEntryForFilter(customLocation.description),
-          organism: getOrganismForFilter(customLocation.description),
+          taxonomy: getTaxonomyForFilter(customLocation.description),
         },
         hash: customLocation.hash,
       };
@@ -97,16 +97,31 @@ export const entities /*: Array<Object> */ = [
     to(customLocation) {
       return {
         description: {
-          main: { key: 'organism' },
-          organism: {
-            db: customLocation.description.organism.db || 'taxonomy',
+          main: { key: 'taxonomy' },
+          taxonomy: {
+            db: customLocation.description.taxonomy.db || 'uniprot',
           },
           entry: getEntryForFilter(customLocation.description),
         },
         hash: customLocation.hash,
       };
     },
-    name: 'Organism',
+    name: 'Taxonomy',
+  },
+  {
+    to(customLocation) {
+      return {
+        description: {
+          main: { key: 'proteome' },
+          proteome: {
+            db: customLocation.description.proteome.db || 'uniprot',
+          },
+          entry: getEntryForFilter(customLocation.description),
+        },
+        hash: customLocation.hash,
+      };
+    },
+    name: 'Proteome',
   },
   {
     to(customLocation) {
@@ -136,9 +151,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             [key]: {
               ...customLocation.description[key],
               detail: null,
-              proteomeDB: customLocation.description[key].proteomeAccession
-                ? 'proteome'
-                : null,
             },
           },
         };
@@ -159,9 +171,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             [key]: {
               ...customLocation.description[key],
               detail: null,
-              proteomeDB: customLocation.description[key].proteomeAccession
-                ? 'proteome'
-                : null,
             },
             entry: {
               isFilter: true,
@@ -187,9 +196,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             [key]: {
               ...customLocation.description[key],
               detail: null,
-              proteomeDB: customLocation.description[key].proteomeAccession
-                ? 'proteome'
-                : null,
             },
             protein: {
               isFilter: true,
@@ -214,9 +220,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             [key]: {
               ...customLocation.description[key],
               detail: null,
-              proteomeDB: customLocation.description[key].proteomeAccession
-                ? 'proteome'
-                : null,
             },
             structure: {
               isFilter: true,
@@ -230,7 +233,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
-    'organism',
+    'taxonomy',
     {
       to(customLocation) {
         const { key } = customLocation.description.main;
@@ -242,15 +245,39 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
               ...customLocation.description[key],
               detail: null,
             },
-            organism: {
+            taxonomy: {
               isFilter: true,
-              db: 'taxonomy',
+              db: 'uniprot',
             },
           },
         };
       },
-      name: 'Organisms',
-      counter: 'organisms',
+      name: 'Taxonomy',
+      counter: 'taxa',
+    },
+  ],
+  [
+    'proteome',
+    {
+      to(customLocation) {
+        const { key } = customLocation.description.main;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: null,
+            },
+            proteome: {
+              isFilter: true,
+              db: 'uniprot',
+            },
+          },
+        };
+      },
+      name: 'Proteomes',
+      counter: 'proteomes',
     },
   ],
   [
@@ -265,9 +292,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             [key]: {
               ...customLocation.description[key],
               detail: null,
-              proteomeDB: customLocation.description[key].proteomeAccession
-                ? 'proteome'
-                : null,
             },
             set: {
               isFilter: true,
@@ -316,6 +340,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'Domain Architectures',
+      counter: 'domain_architectures',
     },
   ],
   [
@@ -337,26 +362,26 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
       name: 'Signature',
     },
   ],
-  [
-    'proteome',
-    {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
-        return {
-          description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              proteomeDB: 'proteome',
-            },
-          },
-        };
-      },
-      name: 'Proteomes',
-      counter: 'proteomes',
-    },
-  ],
+  // [
+  //   'proteome',
+  //   {
+  //     to(customLocation) {
+  //       const { key } = customLocation.description.main;
+  //       return {
+  //         description: {
+  //           ...getEmptyDescription(),
+  //           main: { key },
+  //           [key]: {
+  //             ...customLocation.description[key],
+  //             proteomeDB: 'proteome',
+  //           },
+  //         },
+  //       };
+  //     },
+  //     name: 'Proteomes',
+  //     counter: 'proteomes',
+  //   },
+  // ],
 ]);
 
 export const InterPro /*: Array<Object> */ = [

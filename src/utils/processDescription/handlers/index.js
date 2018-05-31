@@ -6,7 +6,8 @@ import set from 'lodash-es/set';
   'entry' |
   'protein' |
   'structure' |
-  'organism' |
+  'taxonomy' |
+  'proteome' |
   'set' |
   'search' |
   'job'
@@ -38,12 +39,17 @@ import set from 'lodash-es/set';
     chain: ?string,
     detail: ?string,
   |},
-  organism: {|
+  taxonomy: {|
     isFilter: ?boolean,
     db: ?string,
     accession: ?string,
-    proteomeDB: ?string,
-    proteomeAccession: ?string,
+    detail: ?string,
+  |},
+  proteome: {|
+    isFilter: ?boolean,
+    db: ?string,
+    accession: ?string,
+    detail: ?string,
   |},
   set: {|
     isFilter: ?boolean,
@@ -234,9 +240,9 @@ export const memberDBHandler /*: Handler */ = handlerConstructor({
     value: 'memberDBHandler',
   },
   getKey: {
-    value: ({ entry: { db, integration } }) => [
+    value: ({ entry: { db } }) => [
       'entry',
-      integration || db === 'InterPro' ? 'memberDB' : 'db',
+      db === 'InterPro' ? 'memberDB' : 'db',
     ],
   },
   match: {
@@ -284,9 +290,9 @@ export const memberDBAccessionHandler /*: Handler */ = handlerConstructor({
     value: 'memberDBAccessionHandler',
   },
   getKey: {
-    value: ({ entry: { db, integration } }) => [
+    value: ({ entry: { db } }) => [
       'entry',
-      integration || db === 'InterPro' ? 'memberDBAccession' : 'accession',
+      db === 'InterPro' ? 'memberDBAccession' : 'accession',
     ],
   },
   cleanUp: {
@@ -382,18 +388,18 @@ export const structureChainHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-// Organism handlers
-export const organismHandler /*: Handler */ = typeConstructor('organism');
+// taxonomy handlers
+export const taxonomyHandler /*: Handler */ = typeConstructor('taxonomy');
 
 export const taxonomyDBHandler /*: Handler */ = handlerConstructor({
   name: {
     value: 'taxonomyDBHandler',
   },
   key: {
-    value: ['organism', 'db'],
+    value: ['taxonomy', 'db'],
   },
   cleanedUp: {
-    value: 'taxonomy',
+    value: 'uniprot',
   },
   match: {
     value(current) {
@@ -407,7 +413,7 @@ export const taxonomyAccessionHandler /*: Handler */ = handlerConstructor({
     value: 'taxonomyAccessionHandler',
   },
   key: {
-    value: ['organism', 'accession'],
+    value: ['taxonomy', 'accession'],
   },
   cleanUp: {
     value: value => value,
@@ -417,15 +423,18 @@ export const taxonomyAccessionHandler /*: Handler */ = handlerConstructor({
   },
 });
 
+// proteome handlers
+export const proteomeHandler /*: Handler */ = typeConstructor('proteome');
+
 export const proteomeDBHandler /*: Handler */ = handlerConstructor({
   name: {
     value: 'proteomeDBHandler',
   },
   key: {
-    value: ['organism', 'proteomeDB'],
+    value: ['proteome', 'db'],
   },
   cleanedUp: {
-    value: 'proteome',
+    value: 'uniprot',
   },
   match: {
     value(current) {
@@ -439,7 +448,7 @@ export const proteomeAccessionHandler /*: Handler */ = handlerConstructor({
     value: 'proteomeAccessionHandler',
   },
   key: {
-    value: ['organism', 'proteomeAccession'],
+    value: ['proteome', 'accession'],
   },
   cleanUp: {
     value: value => value.toUpperCase(),
@@ -619,7 +628,8 @@ integrationHandler.children = new Set([memberDBHandler]);
 interProHandler.children = new Set([
   proteinHandler,
   structureHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setHandler,
   interProAccessionHandler,
 ]);
@@ -627,7 +637,8 @@ interProHandler.children = new Set([
 memberDBHandler.children = new Set([
   proteinHandler,
   structureHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setHandler,
   memberDBAccessionHandler,
 ]);
@@ -635,7 +646,8 @@ memberDBHandler.children = new Set([
 interProAccessionHandler.children = new Set([
   proteinHandler,
   structureHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setHandler,
   memberDBHandler,
   detailHandler,
@@ -644,7 +656,8 @@ interProAccessionHandler.children = new Set([
 memberDBAccessionHandler.children = new Set([
   proteinHandler,
   structureHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setHandler,
   detailHandler,
 ]);
@@ -655,7 +668,8 @@ proteinHandler.children = new Set([proteinDBHandler]);
 proteinDBHandler.children = new Set([
   entryHandler,
   structureHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setHandler,
   proteinAccessionHandler,
 ]);
@@ -663,7 +677,8 @@ proteinDBHandler.children = new Set([
 proteinAccessionHandler.children = new Set([
   entryHandler,
   structureHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setHandler,
   detailHandler,
 ]);
@@ -674,7 +689,8 @@ structureHandler.children = new Set([structureDBHandler]);
 structureDBHandler.children = new Set([
   entryHandler,
   proteinHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setHandler,
   structureAccessionHandler,
 ]);
@@ -682,7 +698,8 @@ structureDBHandler.children = new Set([
 structureAccessionHandler.children = new Set([
   entryHandler,
   proteinHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setHandler,
   structureChainHandler,
   detailHandler,
@@ -691,35 +708,41 @@ structureAccessionHandler.children = new Set([
 structureChainHandler.children = new Set([
   entryHandler,
   proteinHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setHandler,
   detailHandler,
 ]);
 
-// Organism
-organismHandler.children = new Set([taxonomyDBHandler, proteomeDBHandler]);
+// Taxonomy
+taxonomyHandler.children = new Set([taxonomyDBHandler]);
 
 taxonomyDBHandler.children = new Set([
   entryHandler,
   proteinHandler,
   structureHandler,
+  proteomeHandler,
   setHandler,
   taxonomyAccessionHandler,
 ]);
 
 taxonomyAccessionHandler.children = new Set([
-  proteomeDBHandler,
   entryHandler,
   proteinHandler,
+  proteomeHandler,
   structureHandler,
   setHandler,
   detailHandler,
 ]);
 
+// Poteome
+proteomeHandler.children = new Set([proteomeDBHandler]);
+
 proteomeDBHandler.children = new Set([
   entryHandler,
   proteinHandler,
   structureHandler,
+  taxonomyHandler,
   setHandler,
   proteomeAccessionHandler,
 ]);
@@ -728,6 +751,7 @@ proteomeAccessionHandler.children = new Set([
   entryHandler,
   proteinHandler,
   structureHandler,
+  taxonomyHandler,
   setHandler,
   detailHandler,
 ]);
@@ -739,7 +763,8 @@ setDBHandler.children = new Set([
   entryHandler,
   proteinHandler,
   structureHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setAccessionHandler,
 ]);
 
@@ -747,7 +772,8 @@ setAccessionHandler.children = new Set([
   entryHandler,
   proteinHandler,
   structureHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   detailHandler,
 ]);
 
@@ -773,7 +799,8 @@ rootHandler.children = new Set([
   entryHandler,
   proteinHandler,
   structureHandler,
-  organismHandler,
+  taxonomyHandler,
+  proteomeHandler,
   setHandler,
   searchHandler,
   jobHandler,

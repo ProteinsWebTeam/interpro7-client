@@ -12,8 +12,9 @@ pages:
     subPages:
       - protein
       - domain_architecture
-      - organism
       - structure
+      - taxonomy
+      - proteome
       - set
       - logo
   protein:
@@ -25,12 +26,18 @@ pages:
     subPages:
       - entry
       - protein
-  organism:
+  taxonomy:
+    plural: taxa
     subPages:
       - entry
       - protein
       - structure
       - proteome
+  proteome:
+    subPages:
+      - entry
+      - protein
+      - structure
   sequence:
     subPages:
       - entry
@@ -40,7 +47,8 @@ pages:
       - entry
       - protein
       - structure
-      - organism
+      - taxonomy
+      - proteome
   job:
 pagination:
   pageSize: 20
