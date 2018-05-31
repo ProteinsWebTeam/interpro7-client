@@ -136,7 +136,7 @@
 
   & > .text {
     margin-left: 0.5rem;
-    color: #4b555b;
+    color: var(--colors-light-txt);
   }
 
   & > input {
@@ -164,8 +164,11 @@
   display: flex;
   outline: 0;
 
-  & h6 {
+  & .filter-label {
     margin: 0 1ch 1ch 0.5ch;
+    line-height: 1.4;
+    font-size: 1rem;
+    color: var(--colors-light-txt);
   }
 }
 
