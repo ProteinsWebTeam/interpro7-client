@@ -266,7 +266,7 @@ class _MemberDBSelector extends PureComponent {
           {children ? children(visible) : null}
         </span>
         <div className={f('potential-popup', { popup: children, visible })}>
-          <h6>Select your database:</h6>
+          <div className={f('filter-label')}>Select your database:</div>
           <form
             className={f('db-selector', { 'one-column': !children })}
             onChange={handleChange}
