@@ -141,10 +141,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
       <div className={f('sections')}>
         <section>
           <div className={f('row')}>
-            <div
-              className={f('medium-12', 'columns', 'margin-bottom-large')}
-              style={{ position: 'relative' }}
-            >
+            <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
               <Title metadata={metadata} mainType="protein" />
               <Accession accession={accession} title="Job ID" />
               <Length metadata={metadata} />
