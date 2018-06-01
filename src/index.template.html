@@ -21,15 +21,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites. We combine protein signatures from a number of member databases into a single searchable resource, capitalising on their individual strengths to produce a powerful integrated database and diagnostic tool.">
     <meta name="keywords" content="InterPro, interpro, InterProScan, protein, signatures, entry, family, sequence, database, proteins, entries, families, domain, domains, sites, repeats, sequences, annotation, signature, functional, analysis, databases, function, type, types, research, pathways, resource, match, download, GO, relationships, hierarchies, Go terms, sequence analysis, function prediction, Gene Ontology, protein family, protein families, sequence features, automatic annotation, annotation tools, InterPro2GO, UniProt, PROSITE, HAMAP, Pfam, PRINTS, ProDom, SMART, TIGRFAMs, PIRSF, SUPERFAMILY, Gene3D, CATH-Gene3D, CDD, SFLD, MobiDB,  PANTHER, ebi, EBI, bioinformatics, bioinformatic, europe, institute">
-    <% for (const css of htmlWebpackPlugin.files.css) { %>
-    <link href="<%= css %>" rel="stylesheet">
-    <% } %>
+
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <% for (const font of webpack.assets.map(({name}) => name).filter(name => name.endsWith('woff') && !name.includes('fontello'))) { %>
-    <link rel="preload" as="font" href="<%= webpackConfig.output.publicPath %><%= font %>" crossorigin />
+
+    <% for (const css of htmlWebpackPlugin.files.css) { %>
+    <link rel="preload" as="style" href="<%= css %>" />
     <% } %>
     <% for (const chunk of Object.keys(htmlWebpackPlugin.files.chunks)) { %>
-    <script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" defer></script>
+    <link rel="preload" as="script" href="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" />
+    <% } %>
+    <% for (const font of webpack.assets.map(({name}) => name).filter(name => name.endsWith('woff') && !name.includes('fontello'))) { %>
+    <link rel="preload" as="font" href="<%= webpackConfig.output.publicPath %><%= font %>" crossorigin />
     <% } %>
     <style>
     .loading {

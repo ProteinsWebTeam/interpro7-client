@@ -32,9 +32,9 @@ const mapStateToUrlFor = createSelector(
             root +
             descriptionToPath({
               ...description,
-              main: { key: 'organism' },
-              organism: {
-                db: 'taxonomy',
+              main: { key: 'taxonomy' },
+              taxonomy: {
+                db: 'uniprot',
                 accession: taxID,
               },
             }),
@@ -246,8 +246,8 @@ class TreeView extends PureComponent {
             className={f('button', 'hollow')}
             to={{
               description: {
-                main: { key: 'organism' },
-                organism: { db: 'taxonomy', accession: focused },
+                main: { key: 'taxonomy' },
+                taxonomy: { db: 'uniprot', accession: focused },
               },
             }}
           >

@@ -44,8 +44,8 @@ class TaxIdOrName extends PureComponent /*:: <Props> */ {
       <Link
         to={{
           description: {
-            main: { key: 'organism' },
-            organism: { db: 'taxonomy', accession: accession.toString() },
+            main: { key: 'taxonomy' },
+            taxonomy: { db: 'uniprot', accession: accession.toString() },
           },
         }}
       >

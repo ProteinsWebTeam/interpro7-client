@@ -26,7 +26,7 @@
     left: initial;
     /*right: var(--spacing-medium);*/
     display: block;
-    width: calc(100vw - 2 * var(--spacing-medium));
+    width: calc(100vw);
     /*max-width: 1400px;*/
     visibility: visible;
     border: none;

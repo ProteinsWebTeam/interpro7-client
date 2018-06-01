@@ -10,8 +10,10 @@ import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import ipro from 'styles/interpro-new.css';
+import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
 
-const f = foundationPartial(fonts, local);
+const f = foundationPartial(interproTheme, fonts, local, ipro);
 
 const TITLE = 'Manually refresh job information';
 
@@ -31,7 +33,7 @@ class RefreshButton extends PureComponent {
     if (this._ref.current.animate) {
       this._ref.current.animate(
         { transform: ['rotate(0)', 'rotate(360deg)'] },
-        { duration: 1000, iterations: 3 },
+        { duration: 500, iterations: 2 },
       );
     }
     this.props.updateJobStatus();

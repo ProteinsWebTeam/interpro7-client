@@ -2,33 +2,26 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
-import { goToCustomLocation } from 'actions/creators';
+import TaxonomyVisualisation from 'taxonomy-visualisation';
+import MemberDBSelector from 'components/MemberDBSelector';
+import Loading from 'components/SimpleCommonComponents/Loading';
+import loadable from 'higherOrder/loadable';
 
 import Accession from 'components/Accession';
-import Lineage from 'components/Organism/Lineage';
-import Children from 'components/Organism/Children';
-import Metadata from 'wrappers/Metadata';
-import TaxIdOrName from 'components/Organism/TaxIdOrName';
-import { ProteomeLink } from 'components/ExtLink';
-import Loading from 'components/SimpleCommonComponents/Loading';
-
-import TaxonomyVisualisation from 'taxonomy-visualisation';
-
-import { foundationPartial } from 'styles/foundation';
+import Lineage from 'components/Taxonomy/Lineage';
+import Children from 'components/Taxonomy/Children';
 
 import global from 'styles/global.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import memberSelectorStyle from 'components/Table/TotalNb/style.css';
-
-import loadData from 'higherOrder/loadData';
-import loadable from 'higherOrder/loadable';
-
-const f = foundationPartial(ebiStyles, global, memberSelectorStyle);
-
-import MemberDBSelector from 'components/MemberDBSelector';
+import { foundationPartial } from 'styles/foundation';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import { goToCustomLocation } from 'actions/creators';
+import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
+const f = foundationPartial(ebiStyles, global, memberSelectorStyle);
 
 export const parentRelationship = ({ taxId, name = null }) => ({
   '@id': '@additionalProperty',
@@ -60,12 +53,13 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     _ref: { current: ?HTMLElement };
   */
   static propTypes = {
-    data: T.shape({
+    dataNames: T.shape({
       payload: T.shape({
         metadata: T.object.isRequired,
         names: T.object,
-      }).isRequired,
-    }).isRequired,
+      }),
+      loading: T.bool,
+    }),
     goToCustomLocation: T.func.isRequired,
     customLocation: T.object.isRequired,
   };
@@ -83,15 +77,18 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 
   componentDidMount() {
     this._vis.tree = this._ref.current;
-    this.loadingVis = true;
-    this._populateData(this.props.data.payload);
-    this.loadingVis = false;
+    if (this.props.dataNames.payload) {
+      this.loadingVis = true;
+      this._populateData(this.props.dataNames.payload);
+      this.loadingVis = false;
+    }
   }
 
   componentDidUpdate(prevProps /*: Props */) {
-    if (prevProps.data !== this.props.data) {
+    if (prevProps.dataNames !== this.props.dataNames) {
+      this._vis.tree = this._ref.current;
       this.loadingVis = true;
-      this._populateData(this.props.data.payload);
+      this._populateData(this.props.dataNames.payload);
       this.loadingVis = false;
     }
   }
@@ -100,8 +97,8 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     if (!this.loadingVis)
       this.props.goToCustomLocation({
         description: {
-          main: { key: 'organism' },
-          organism: { db: 'taxonomy', accession: id },
+          main: { key: 'taxonomy' },
+          taxonomy: { db: 'uniprot', accession: id },
         },
       });
   };
@@ -154,8 +151,13 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    // const { data: { metadata } } = this.props;
-    const { metadata, names } = this.props.data.payload;
+    if (
+      this.props.dataNames.loading ||
+      !this.props.dataNames.payload ||
+      !this.props.dataNames.payload.metadata
+    )
+      return <Loading />;
+    const { metadata, names } = this.props.dataNames.payload;
     const {
       customLocation: {
         search: { entry_db: db },
@@ -166,7 +168,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
       <div className={f('row')}>
         <div className={f('medium-12', 'columns')}>
           <MemberDBSelector
-            contentType="organism"
+            contentType="taxonomy"
             filterType="entry"
             onChange={this._handleChange}
             isSelected={this._isSelected}
@@ -218,93 +220,6 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   }
 }
 
-class SummaryProteome extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    data: T.shape({
-      payload: T.shape({
-        metadata: T.object.isRequired,
-      }),
-    }).isRequired,
-  };
-  render() {
-    const {
-      data: {
-        payload: { metadata },
-      },
-    } = this.props;
-    return (
-      <div className={f('row')}>
-        <div className={f('medium-9', 'columns')}>
-          {
-            // metadata.is_reference ? (
-            // <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-            //  Reference Proteome
-            // </div>
-            // ) : null
-          }
-          <div>Proteome ID: {metadata.accession}</div>
-          {metadata.strain && <div>Strain: {metadata.strain}</div>}
-          <div>
-            Taxonomy:{' '}
-            <Metadata
-              endpoint="organism"
-              db="taxonomy"
-              accession={metadata.taxonomy}
-              key={metadata.taxonomy}
-            >
-              <TaxIdOrName accession={metadata.taxonomy} />
-            </Metadata>
-          </div>
-        </div>
-        <div className={f('medium-3', 'columns')}>
-          <div className={f('panel')}>
-            <h5>External Links</h5>
-            <ul className={f('no-bullet')}>
-              <li>
-                <ProteomeLink id={metadata.accession} className={f('ext')}>
-                  View this proteome in UniProt
-                </ProteomeLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-class SummaryOrganism extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    data: T.shape({
-      payload: T.shape({
-        metadata: T.object.isRequired,
-      }),
-    }).isRequired,
-    loading: T.bool.isRequired,
-    isStale: T.bool.isRequired,
-  };
-
-  render() {
-    if (
-      this.props.loading ||
-      !this.props.data ||
-      !this.props.data.payload ||
-      this.props.isStale
-    ) {
-      return <Loading />;
-    }
-    const {
-      metadata: { source_database: db },
-    } = this.props.data.payload;
-    return (
-      <div className={f('sections')}>
-        {db === 'taxonomy' ? <SummaryTaxonomy {...this.props} /> : null}
-        {db === 'proteome' ? <SummaryProteome {...this.props} /> : null}
-      </div>
-    );
-  }
-}
-
 const getUrl = createSelector(
   state => state.settings.api,
   state => state.customLocation.description,
@@ -335,6 +250,6 @@ const getUrl = createSelector(
   },
 );
 
-export default loadData(getUrl)(
-  connect(null, { goToCustomLocation })(SummaryOrganism),
+export default loadData({ getUrl, propNamespace: 'Names' })(
+  connect(null, { goToCustomLocation })(SummaryTaxonomy),
 );

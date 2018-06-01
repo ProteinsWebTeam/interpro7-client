@@ -68,9 +68,6 @@ const TotalNb = ({
       isSubPageButMainIsEntry ||
       description.main.key === 'search' ||
       description.main.key === 'job' ||
-      (description.main.key === 'organism' &&
-        description.organism.accession &&
-        description.organism.proteomeDB) ||
       (contentType !== 'entry' && contentType !== description.main.key)
     );
 

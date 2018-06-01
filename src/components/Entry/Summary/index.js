@@ -11,6 +11,7 @@ import Integration from 'components/Entry/Integration';
 import ContributingSignatures from 'components/Entry/ContributingSignatures';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import getUrlFor from 'utils/url-patterns';
 
@@ -184,14 +185,16 @@ OtherSections.propTypes = {
 class SummaryEntry extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
-      metadata: T.object.isRequired,
-    }),
+      metadata: T.object,
+    }).isRequired,
+    loading: T.bool.isRequired,
   };
 
   render() {
     const {
       data: { metadata },
     } = this.props;
+    if (this.props.loading || !metadata) return <Loading />;
     const citations = description2IDs(metadata.description);
     const desc = metadata.description.reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(

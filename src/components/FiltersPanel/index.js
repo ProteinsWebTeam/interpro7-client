@@ -63,7 +63,7 @@ class FiltersPanel extends PureComponent {
     const { description, hash, search } = this.props.customLocation;
     const { key } = description.main;
     let db = key === 'protein' ? 'UniProt' : description[key].db;
-    if (key === 'organism') db = 'taxonomy';
+    if (key === 'taxonomy') db = 'uniprot';
     const newDescription = {
       ...description,
       [key]: {

@@ -5,6 +5,11 @@
   margin: auto;
 }
 
+.container {
+  display: inline-block;
+  line-height: 0;
+}
+
 .failed {
   cursor: not-allowed;
 }
@@ -54,7 +59,7 @@
   stroke: var(--colors-progress); /*sat. 8ecddc*/
 }
 
-.card {
+.icon-flip {
   perspective: 500px;
 
   & > * {

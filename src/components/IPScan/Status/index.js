@@ -17,10 +17,11 @@ import { updateJobStatus } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
+import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(fonts, ipro);
+const f = foundationPartial(interproTheme, fonts, ipro);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),

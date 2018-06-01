@@ -35,7 +35,7 @@ exports[`<ElixirFooter /> should render 1`] = `
             >
               InterPro is an ELIXIR Core Data Resource
             </span>
-             
+
             <span
               className="readmore"
             >
