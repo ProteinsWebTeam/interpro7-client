@@ -1,5 +1,5 @@
 @import '../styles/colors.css';
-/******************************Override EBI global***************************/
+/******************************Overwrite EBI global***************************/
 /*to include more systems fonts for windows machines*/
 h1,
 h2,
@@ -12,325 +12,63 @@ h6 {
     sans-serif;
 }
 
-h3 {
-  font-weight: 300;
-}
-
-/*resize h5 should be included in template*/
+/* resize h5  - should be included in EBI global*/
 @media screen and (max-width: 75rem) {
   body h5 {
     font-size: 1rem;
     font-weight: 500;
   }
 }
-/*STYLE - remove the dotted line for links to make the page look better but add the enmphasis on mouse over*/
+/* remove the dotted line for links to make the page look better*/
 a,
 a:visited {
   border-bottom-width: 0;
 }
 
-/*links color - should be in EBI-GLobal*/
+/* remove the shadow defined by default on focus as it doesn't work with tabs */
+a:focus {
+  box-shadow: 0 0 0 rgba(100, 100, 100, 0.5);
+}
+
+/* links color - should be in EBI-GLobal*/
 .main a,
 .main a:visited,
 .main a:focus {
   color: rgb(0, 112, 187);
 }
-/*NEUTRAL LINKS*/
-.main a.neutral {
-  color: #4b555b;
-}
 
-.main a.neutral:hover {
-  border-bottom: 1px #222 solid;
-}
-
-/*NEUTRAL LINKS*/
+/* button LINKS */
 .main a.button {
   color: white;
-  white-space: inherit; /*override EBI global style where default is nowrap*/
+  white-space: inherit; /* default is nowrap in ebi css - bug for small screens*/
 }
 
-/*Active tab - active is used on li element in ebi css*/
-.masthead .menu .active {
-  color: #0a0a0a;
-  background: #fff;
-}
-
-/*remove border for menu items overide ebi-global - can't be component specific as defined from .masthead */
-.masthead nav ul.menu li {
-  border-right-width: 0;
-}
-
-/*remove top-right button - temp while EBI fixing the hscrollbar issue*/
+/* move the EMBL button - temp - not in the v1.3 ebi-global but it is live (lab)*/
 @media screen and (max-width: 53em) {
-  .embl-selector .button {
-    display: none;
+  .masthead-black-bar li.embl-selector {
+    padding-left: 0.5rem;
+  }
+  .masthead-black-bar li.embl-selector .button {
+    padding-right: 1rem;
+    &:hover {
+      padding-right: 1rem;
+    }
   }
 }
 
+/* custom tab onglets and tab content*/
 .tabs {
   border-top-width: 0;
 }
 
-a:focus {
-  box-shadow: 0 0 0 rgba(100, 100, 100, 0.5);
-} /*remove that as it doesn't work with tabs */
-
-/*override EBI foundation css that overrides foundation*/
+/* Overwrite EBI foundation css that overwrites foundation*/
 mark {
   background-color: var(--colors-marktext);
 }
 
-.tag.secondary {
-  background-color: var(--colors-tag);
-}
-
-.tag.md-p {
-  background-color: var(--colors-md-sub);
-} /*tag used on md page*/
-
-/* buttons (secondary, alert, hollow) - redefine foundation style*/
-.button.alert {
-  background-color: var(--colors-alert-main);
-}
-.button.alert:hover,
-.button.alert:active,
-.button.alert:focus {
-  background-color: #ff6246;
-}
-.button.secondary {
-  background-color: #909090;
-}
-.button.secondary:hover,
-.button.secondary:active,
-.button.secondary:focus {
-  background-color: #909090;
-}
-
-.button.hollow,
-.button.hollow.primary,
-.button.hollow.secondary,
-.button.hollow.neutral {
-  background-color: transparent;
-  @nest &:hover {
-    background-color: transparent;
-  }
-  @nest &:active {
-    background-color: transparent;
-  }
-  @nest &:focus {
-    background-color: transparent;
-  }
-}
-
-.button.hollow.neutral {
-  border: 1px solid #222;
-  color: #222;
-}
-
-.button.hollow.neutral:hover {
-  border: 1px solid #0a0a0a;
-  color: #0a0a0a;
-}
-
-.button.hollow.tertiary {
-  border: 1px solid #2daec1;
-  color: #2daec1;
-}
-.button.hollow.tertiary:hover {
-  border: 1px solid #3798a7;
-  color: #3798a7;
-}
-.fieldset {
-  border: 1px solid #cacaca;
-}
-[type='text'] {
-  border: 1px solid #cacaca;
-}
-input::placeholder,
-textarea::placeholder {
-  color: #cacaca;
-}
-
-/*missing in custom foundation.EBI.css - TEMP ?*/
-.tabs-panel.is-active {
-  display: block;
-}
-
-button {
-  cursor: pointer;
-} /*used for tabs*/
-
-div#local-title {
-  min-height: 116px;
-} /*if you use subtitles that disappear on small screen we need a min-height for very small screens*/
-
-/****************************** END Override EBI  global**********************/
-
-/******************************Local style***************************************/
-/*TOOLTIP*/
-.tippy-tooltip {
-  text-align: left;
-}
-/*/TOOLTIP*/
-
-.tag {
-  border-radius: 4px;
-} /*used on protein and proteome page */
-
-/*CALLOUT ALERT WARNING MESSAGE - missing in foundation*/
-.callout.border {
-  border: 1px solid rgba(10, 10, 10, 0.25);
-}
-.callout.alert.withicon::before {
-  content: 'l';
-  font-family: 'EBI-Generic';
-  color: #d1847f;
-  margin-right: 0.5rem;
-}
-.callout.info {
-  background-color: #c6e9ff;
-  color: #222;
-}
-.callout.info.withicon::before {
-  content: 'ℹ';
-  font-family: 'EBI-Common';
-  color: #7fb0d1;
-  margin-right: 0.5rem;
-}
-
-.callout.slk {
-  background-color: transparent;
-  border: 1px solid var(--colors-nearly-white);
-  border-left: #d72b3f 4px solid;
-  border-radius: 0.25rem;
-  color: #222;
-}
-.callout.slk.withicon::before {
-  content: 'l';
-  font-family: 'EBI-Generic';
-  color: #d72b3f;
-  margin-right: 0.5rem;
-}
-/*ICONS*/
-/*MEMBER DATABASE SVG icons*/
-.svg-mask {
-  display: none;
-}
-.md-color,
-.md-server {
-  transition: fill var(--timing-slow) ease-in-out;
-  fill: #e2e2e2;
-  font-size: 9em;
-  font-family: 'EBI-generic', arial, sans-serif;
-}
-
-.md-ip .md-color {
-  fill: var(--colors-interpro);
-}
-
-.md-cg .md-color {
-  fill: var(--colors-cathgene3d);
-}
-.md-cd .md-color {
-  fill: var(--colors-cdd);
-}
-.md-ha .md-color {
-  fill: var(--colors-hamap);
-}
-.md-mo .md-color {
-  fill: var(--colors-modi);
-}
-.md-pa .md-color {
-  fill: var(--colors-panther);
-}
-.md-pf .md-color {
-  fill: var(--colors-pfam);
-}
-.md-pi .md-color {
-  fill: var(--colors-pirsf);
-}
-.md-pri .md-color {
-  fill: var(--colors-prints);
-}
-.md-pro .md-color {
-  fill: var(--colors-prodom);
-}
-.md-prpro .md-color,
-.md-pr .md-color {
-  fill: var(--colors-profile);
-}
-.md-prpat .md-color {
-  fill: var(--colors-prosite); /*was 8899a6*/
-}
-.md-sf .md-color {
-  fill: var(--colors-sfld);
-}
-.md-sm .md-color {
-  fill: var(--colors-smart);
-}
-.md-su .md-color {
-  fill: var(--colors-ssf);
-}
-.md-ti .md-color {
-  fill: var(--colors-tigrfams);
-}
-
-.md-all .md-color {
-  fill: var(--colors-all);
-}
-/*/MEMBER DATABASE SVG icons*/
-
-/*SVG icons*/
-.icon {
-  display: inline-block;
-  /*vertical-align: middle;*/
-}
-/*/MEMBER DATABASE icons*/
-/*I5 result page icons*/
-.ico-confirmed::before {
-  color: #2eab9f;
-}
-.ico-progress::before {
-  color: grey;
-}
-.ico-notfound::before {
-  color: var(--colors-alert-main);
-}
-/*/I5 result page icons*/
-/*/ICONS*/
+/****************************** END Overwrite EBI  global**********************/
 
 /******************************BANNER*********************************/
-.masthead h1 span {
-  font-size: 41%;
-}
-
-/*************************
-*cross components features*
-**************************/
-.browse-by .button,
-.stat-by .button {
-  margin: 0;
-}
-
-/***** LOCAL BUTTONS  + LINKS*****/
-/*EXTERNAL LINKS*/
-.ext::after {
-  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjIuNjc3IiBoZWlnaHQ9IjIyLjY3NyIgdmlld0JveD0iMCAwIDIyLjY3NyAyMi42NzciPjxwYXRoIGZpbGw9IiMzMzMiIGQ9Ik0tNDAuMjM3IDMzLjk5MmgtMjcuNTU3Yy00LjkwNyAwLTguODk5LTMuOTg4LTguODk5LTguODg5Vi0yLjQyNGMwLTQuOTAzIDMuOTk0LTguODkxIDguOTAyLTguODkxaDEwLjQ0N3YyLjg4MWgtMTAuNDQ3Yy0zLjMyMSAwLTYuMDIzIDIuNjk2LTYuMDIzIDYuMDF2MjcuNTI3YzAgMy4zMTIgMi43MDEgNi4wMDkgNi4wMiA2LjAwOWgyNy41NTdjMy4zMTggMCA2LjAyLTIuNjk2IDYuMDItNi4wMTFWMTMuMjk3aDIuODc5djExLjgwNWMtLjAwMSA0LjkwMi0zLjk5MyA4Ljg5LTguODk5IDguODl6Ii8+PHBhdGggZmlsbD0iIzMzMyIgZD0iTS00MC4zMTMtNC4zOWwyLjAzNCAyLjAzOS0yNS4zODkgMjUuMzI4LTIuMDM0LTIuMDR6Ii8+PGRlZnM+PHBhdGggaWQ9ImEiIGQ9Ik0tMzEuMzQzLTExLjM2MlY2LjIxNmwtMTcuOTAzLTE3LjU3NHoiLz48L2RlZnM+PGNsaXBQYXRoIGlkPSJiIj48dXNlIHhsaW5rOmhyZWY9IiNhIiBvdmVyZmxvdz0idmlzaWJsZSIvPjwvY2xpcFBhdGg+PHBhdGggY2xpcC1wYXRoPSJ1cmwoI2IpIiBmaWxsPSIjMzMzIiBkPSJNLTQwLjY3Ny0yMS44ODFMLTIxLjEyMi0yLjM1LTMyLjAxNSA4LjUzbC0xOS41NTQtMTkuNTMxeiIvPjxwYXRoIGZpbGw9IiMzMzMiIGQ9Ik0xOC4yMjggMjIuNjc3SDQuNDQ5QTQuNDUyIDQuNDUyIDAgMCAxIDAgMTguMjMyVjQuNDY5QTQuNDUzIDQuNDUzIDAgMCAxIDQuNDUxLjAyM2g1LjIyNHYxLjQ0SDQuNDUxYTMuMDEyIDMuMDEyIDAgMCAwLTMuMDEyIDMuMDA1djEzLjc2M2EzLjAxMiAzLjAxMiAwIDAgMCAzLjAxIDMuMDA1aDEzLjc3OGEzLjAxMiAzLjAxMiAwIDAgMCAzLjAxLTMuMDA2di01LjkwMmgxLjQzOXY1LjkwMmE0LjQ1MSA0LjQ1MSAwIDAgMS00LjQ0OCA0LjQ0N3oiLz48cGF0aCBmaWxsPSIjMzMzIiBkPSJNMTguMTg4IDMuNDg2bDEuMDE3IDEuMDJMNi41MTUgMTcuMTdsLTEuMDE4LTEuMDJ6Ii8+PGRlZnM+PHBhdGggaWQ9ImMiIGQ9Ik0yMi42NzUgMHY4Ljc4OUwxMy43MjQuMDAyeiIvPjwvZGVmcz48Y2xpcFBhdGggaWQ9ImQiPjx1c2UgeGxpbms6aHJlZj0iI2MiIG92ZXJmbG93PSJ2aXNpYmxlIi8+PC9jbGlwUGF0aD48cGF0aCBjbGlwLXBhdGg9InVybCgjZCkiIGZpbGw9IiMzMzMiIGQ9Ik0xOC4wMDgtNS4yNmw5Ljc3NyA5Ljc2Ni01LjQ0NiA1LjQ0TDEyLjU2Mi4xOHoiLz48L3N2Zz4=);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  display: inline-block;
-  position: relative;
-  width: 9px;
-  height: 9px;
-  content: '';
-  margin-left: 0.2rem;
-}
-/*using EBI font*/
-/*/EXTERNAL LINKS*/
-
-/*/NEUTRAL LINKS*/
 
 .local-site-search .icon-functional:before,
 .local-offcanvas-menu .icon-functional:before {
@@ -424,16 +162,151 @@ a:hover.noline {
   font-weight: normal; /*avoid bold on badge when activated*/
 }
 
-.masthead nav ul.dropdown.menu.float-left li a:hover:after {
-  display: none;
-  border-bottom: 3px;
-} /*important for collapse button remove foundation "bar" after that bug and makes the elements move*/ /*remove extra space that makes the banner move just for small screen*/
+/******************************LOCAL STYLE*********************************/
 
-/*dropdown menu style - button collapse*/
-.masthead ul.submenu li a:hover {
-  background-color: #85b6d3; /*was 79b4d4*/
-  color: white;
+/************************  ICONS  **********************************/
+/*MEMBER DATABASE SVG ICON*/
+.svg-mask {
+  display: none;
 }
+.md-color,
+.md-server {
+  transition: fill var(--timing-slow) ease-in-out;
+  fill: #e2e2e2;
+  font-size: 9em;
+  font-family: 'EBI-generic', arial, sans-serif;
+}
+
+.md-ip .md-color {
+  fill: var(--colors-interpro);
+}
+
+.md-cg .md-color {
+  fill: var(--colors-cathgene3d);
+}
+.md-cd .md-color {
+  fill: var(--colors-cdd);
+}
+.md-ha .md-color {
+  fill: var(--colors-hamap);
+}
+.md-mo .md-color {
+  fill: var(--colors-modi);
+}
+.md-pa .md-color {
+  fill: var(--colors-panther);
+}
+.md-pf .md-color {
+  fill: var(--colors-pfam);
+}
+.md-pi .md-color {
+  fill: var(--colors-pirsf);
+}
+.md-pri .md-color {
+  fill: var(--colors-prints);
+}
+.md-pro .md-color {
+  fill: var(--colors-prodom);
+}
+.md-prpro .md-color,
+.md-pr .md-color {
+  fill: var(--colors-profile);
+}
+.md-prpat .md-color {
+  fill: var(--colors-prosite); /*was 8899a6*/
+}
+.md-sf .md-color {
+  fill: var(--colors-sfld);
+}
+.md-sm .md-color {
+  fill: var(--colors-smart);
+}
+.md-su .md-color {
+  fill: var(--colors-ssf);
+}
+.md-ti .md-color {
+  fill: var(--colors-tigrfams);
+}
+
+.md-all .md-color {
+  fill: var(--colors-all);
+}
+/*/MEMBER DATABASE SVG ICONS*/
+
+/*SP is that still needed ?*/
+.icon {
+  display: inline-block;
+}
+
+/*I5 result page icons*/
+.ico-confirmed::before {
+  color: var(--colors-check);
+}
+
+.ico-progress::before {
+  color: var(--colors-all);
+}
+
+.ico-notfound::before {
+  color: var(--colors-alert-main);
+}
+/*/I5 result page icons*/
+/************************  END ICONS  **********************************/
+
+/************************  LINKS  **********************************/
+/*EXTERNAL LINKS - not using EBI font*/
+.ext::after {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjIuNjc3IiBoZWlnaHQ9IjIyLjY3NyIgdmlld0JveD0iMCAwIDIyLjY3NyAyMi42NzciPjxwYXRoIGZpbGw9IiMzMzMiIGQ9Ik0tNDAuMjM3IDMzLjk5MmgtMjcuNTU3Yy00LjkwNyAwLTguODk5LTMuOTg4LTguODk5LTguODg5Vi0yLjQyNGMwLTQuOTAzIDMuOTk0LTguODkxIDguOTAyLTguODkxaDEwLjQ0N3YyLjg4MWgtMTAuNDQ3Yy0zLjMyMSAwLTYuMDIzIDIuNjk2LTYuMDIzIDYuMDF2MjcuNTI3YzAgMy4zMTIgMi43MDEgNi4wMDkgNi4wMiA2LjAwOWgyNy41NTdjMy4zMTggMCA2LjAyLTIuNjk2IDYuMDItNi4wMTFWMTMuMjk3aDIuODc5djExLjgwNWMtLjAwMSA0LjkwMi0zLjk5MyA4Ljg5LTguODk5IDguODl6Ii8+PHBhdGggZmlsbD0iIzMzMyIgZD0iTS00MC4zMTMtNC4zOWwyLjAzNCAyLjAzOS0yNS4zODkgMjUuMzI4LTIuMDM0LTIuMDR6Ii8+PGRlZnM+PHBhdGggaWQ9ImEiIGQ9Ik0tMzEuMzQzLTExLjM2MlY2LjIxNmwtMTcuOTAzLTE3LjU3NHoiLz48L2RlZnM+PGNsaXBQYXRoIGlkPSJiIj48dXNlIHhsaW5rOmhyZWY9IiNhIiBvdmVyZmxvdz0idmlzaWJsZSIvPjwvY2xpcFBhdGg+PHBhdGggY2xpcC1wYXRoPSJ1cmwoI2IpIiBmaWxsPSIjMzMzIiBkPSJNLTQwLjY3Ny0yMS44ODFMLTIxLjEyMi0yLjM1LTMyLjAxNSA4LjUzbC0xOS41NTQtMTkuNTMxeiIvPjxwYXRoIGZpbGw9IiMzMzMiIGQ9Ik0xOC4yMjggMjIuNjc3SDQuNDQ5QTQuNDUyIDQuNDUyIDAgMCAxIDAgMTguMjMyVjQuNDY5QTQuNDUzIDQuNDUzIDAgMCAxIDQuNDUxLjAyM2g1LjIyNHYxLjQ0SDQuNDUxYTMuMDEyIDMuMDEyIDAgMCAwLTMuMDEyIDMuMDA1djEzLjc2M2EzLjAxMiAzLjAxMiAwIDAgMCAzLjAxIDMuMDA1aDEzLjc3OGEzLjAxMiAzLjAxMiAwIDAgMCAzLjAxLTMuMDA2di01LjkwMmgxLjQzOXY1LjkwMmE0LjQ1MSA0LjQ1MSAwIDAgMS00LjQ0OCA0LjQ0N3oiLz48cGF0aCBmaWxsPSIjMzMzIiBkPSJNMTguMTg4IDMuNDg2bDEuMDE3IDEuMDJMNi41MTUgMTcuMTdsLTEuMDE4LTEuMDJ6Ii8+PGRlZnM+PHBhdGggaWQ9ImMiIGQ9Ik0yMi42NzUgMHY4Ljc4OUwxMy43MjQuMDAyeiIvPjwvZGVmcz48Y2xpcFBhdGggaWQ9ImQiPjx1c2UgeGxpbms6aHJlZj0iI2MiIG92ZXJmbG93PSJ2aXNpYmxlIi8+PC9jbGlwUGF0aD48cGF0aCBjbGlwLXBhdGg9InVybCgjZCkiIGZpbGw9IiMzMzMiIGQ9Ik0xOC4wMDgtNS4yNmw5Ljc3NyA5Ljc2Ni01LjQ0NiA1LjQ0TDEyLjU2Mi4xOHoiLz48L3N2Zz4=);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  display: inline-block;
+  position: relative;
+  width: 9px;
+  height: 9px;
+  content: '';
+  margin-left: 0.2rem;
+}
+/*/EXTERNAL LINKS*/
+/************************  END LINKS  **********************************/
+
+/************************  FORM INPUT TEXTAREA  **********************************/
+/* reduce border input search field*/
+[type='text'] {
+  border: 1px solid #cacaca;
+}
+
+/* placeholder */
+input::placeholder,
+textarea::placeholder {
+  color: #cacaca;
+}
+/************************  END FORM INPUT TEXTAREA  **********************************/
+
+/************************  BANNER **********************************/
+/**** BANNER TITLE ****/
+.masthead h1 span {
+  font-size: 31%;
+}
+
+/*banner min-height to be set for small screen and sticky  - do not remove */
+div#local-title {
+  min-height: 116px;
+}
+/**** BANNER TITLE ****/
+
+/**** BANNER MENU ****/
+/*Active tab - active is used on li element in ebi css*/
+.masthead .menu .active {
+  color: #0a0a0a;
+  background: #fff;
+}
+
+/*remove border for menu items  - can't be "menu" css component specific as defined from .masthead */
+.masthead nav ul.menu li {
+  border-right-width: 0;
+}
+/**** END BANNER MENU ****/
 
 /************************ END BANNER**********************************/
 
@@ -460,20 +333,111 @@ a:hover.noline {
   font-size: 30px;
 } /*icon size and position*/
 
-/*Foundation sticky*/
-/*transform logo*/
-.masthead.is-stuck h1 {
-  transform: scale(0.6) translate(-350px, 131px);
-}
-
-/*transform tagline*/
-.masthead.is-stuck h4 {
-  transform: scale(0.8) translate(96px, 24px);
-}
-/*/Foundation sticky*/
 /************************ END STICKY BANNER**********************************/
 
-/*Overwritting Foundation*/
+/****************************** TABLE *********************************/
+.table-center {
+  text-align: center;
+}
+
+/*Filter menu option*/
+.sub-nav {
+  background-color: #e7f2ff;
+  padding: 0.2rem 0.2rem 0.2rem 0;
+  margin-bottom: 1rem;
+}
+.sub-nav li {
+  color: #686868;
+  font-size: 0.77778rem;
+  padding-left: 0.88889rem;
+}
+#content .sub-nav li.active a {
+  border-radius: 3px;
+  color: #fff;
+  cursor: default;
+  font-weight: normal;
+  padding: 0.16667rem 0.88889rem;
+}
+#content .sub-nav a {
+  border-bottom: 0 solid red;
+}
+/*/filter menu option*/
+/****************************** END TABLE *********************************/
+
+/****************************** BUTTONS *********************************/
+/*missing in foundation used for tabs*/
+button {
+  cursor: pointer;
+}
+
+/* buttons (secondary, alert, hollow) - redefine foundation style*/
+.button.alert {
+  background-color: var(--colors-alert-main);
+  color: white;
+}
+
+.button.alert:hover,
+.button.alert:active,
+.button.alert:focus {
+  background-color: var(--colors-alert-button);
+  color: white;
+}
+
+.button.warning {
+  background-color: var(--colors-warning-main);
+  color: white;
+}
+
+.button.warning:hover,
+.button.warning:active,
+.button.warning:focus {
+  background-color: var(--colors-warning-main);
+  color: white;
+}
+
+.button.secondary {
+  background-color: var(--colors-slightgray);
+}
+
+.button.hollow {
+  background-color: transparent;
+  &:hover {
+    background-color: transparent;
+  }
+  &:active {
+    background-color: transparent;
+  }
+  &:focus {
+    background-color: transparent;
+  }
+}
+
+.button.hollow.secondary {
+  border-color: var(--colors-lightgray);
+}
+.button.hollow.secondary:hover {
+  color: var(--colors-dark);
+}
+
+.button.hollow.tertiary {
+  border: 1px solid #7fcad6;
+  color: var(--colors-interpro);
+}
+.button.hollow.tertiary:hover {
+  border: 1px solid #3798a7;
+  color: #3798a7;
+}
+/****************************** END BUTTONS *********************************/
+
+/****************************** OTHERS *********************************/
+
+/****************************** TITLE - TEXT *********************************/
+/*title sue for box like search box*/
+h3.light {
+  font-weight: 300;
+}
+
+/*Overwrite Foundation*/
 h1 small,
 h2 small,
 h3 small,
@@ -505,38 +469,63 @@ h6 small {
 hr {
   border-bottom: 1px solid #d4d4d4;
 }
-/*/Overwritting Foundation*/
+/*/Overwrite Foundation*/
 
-/****************************** TABLE *********************************/
-.table-center {
-  text-align: center;
+/*TOOLTIP*/
+.tippy-tooltip {
+  text-align: left;
+}
+/*/TOOLTIP*/
+
+/*TAG block*/
+.tag {
+  border-radius: 4px;
+} /*used on protein and proteome page */
+
+.tag.secondary {
+  background-color: var(--colors-tag);
 }
 
-/*Filter menu option*/
-.sub-nav {
-  background-color: #e7f2ff;
-  padding: 0.2rem 0.2rem 0.2rem 0;
-  margin-bottom: 1rem;
+/* tag used on md signature page */
+.tag.md-p {
+  background-color: var(--colors-md-sub);
 }
-.sub-nav li {
-  color: #686868;
-  font-size: 0.77778rem;
-  padding-left: 0.88889rem;
-}
-#content .sub-nav li.active a {
-  border-radius: 3px;
-  color: #fff;
-  cursor: default;
-  font-weight: normal;
-  padding: 0.16667rem 0.88889rem;
-}
-#content .sub-nav a {
-  border-bottom: 0 solid red;
-}
-/*/filter menu option*/
-/****************************** END TABLE *********************************/
 
-/******************************LOCAL STYLE*********************************/
+/*CALLOUT ALERT WARNING MESSAGE - missing in foundation*/
+.callout.border {
+  border: 1px solid rgba(10, 10, 10, 0.25);
+}
+.callout.alert.withicon::before {
+  content: 'l';
+  font-family: 'EBI-Generic';
+  color: #d1847f;
+  margin-right: 0.5rem;
+}
+.callout.info {
+  background-color: #c6e9ff;
+  color: #222;
+}
+.callout.info.withicon::before {
+  content: 'ℹ';
+  font-family: 'EBI-Common';
+  color: #7fb0d1;
+  margin-right: 0.5rem;
+}
+
+.callout.slk {
+  background-color: transparent;
+  border: 1px solid var(--colors-nearly-white);
+  border-left: #d72b3f 4px solid;
+  border-radius: 0.25rem;
+  color: #222;
+}
+.callout.slk.withicon::before {
+  content: 'l';
+  font-family: 'EBI-Generic';
+  color: #d72b3f;
+  margin-right: 0.5rem;
+}
+
 /*TABS - home*/
 
 /*Tabs style main - homepage*/
@@ -789,6 +778,8 @@ hr {
   stroke: var(--colors-markchart);
 }
 /*END custom CLAN-VIEWER node module*/
+
+/****************************** END OTHERS *********************************/
 
 /*RESPONSIVE DESIGN*/
 
