@@ -72,7 +72,8 @@
 }
 
 .card-flex-container:hover .card-options {
-  opacity: 1;
+  /*opacity: 1;*/
+  display: none; /*keep the option hidden while waiting for implementation*/
 }
 
 .card-options div:first-of-type > a {
