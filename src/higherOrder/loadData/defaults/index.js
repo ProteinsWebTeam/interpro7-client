@@ -55,11 +55,21 @@ export const getUrl = createSelector(
             case 'entry':
               _search.extra_fields = 'description,literature,counters';
               break;
-            case 'organism':
+            case 'taxonomy':
               _search.extra_fields = 'lineage,counters';
               break;
             default:
               _search.extra_fields = 'counters';
+              break;
+          }
+        }
+        if (hash === 'table') {
+          switch (description.main.key) {
+            case 'taxonomy':
+            case 'proteome':
+              _search.extra_fields = 'counters';
+              break;
+            default:
               break;
           }
         }

@@ -1,10 +1,8 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
-import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -30,21 +28,14 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
-import { mainDBLocationSelector } from 'reducers/custom-location/description';
-
 import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
-  schemaProcessDataRecord,
-  schemaProcessMainEntity,
 } from 'schema_org/processors';
 
-import EntryMenu from 'components/EntryMenu';
-import Title from 'components/Title';
+import EndPointPage from '../endpoint-page';
 import subPages from 'subPages';
 import config from 'config';
-
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -114,7 +105,7 @@ class SummaryCounterStructures extends PureComponent {
   render() {
     const { entryDB, metadata, counters } = this.props;
 
-    const { entries, proteins, organisms } = counters;
+    const { entries, proteins, taxa } = counters;
 
     return (
       <div className={f('card-block', 'card-counter', 'label-off')}>
@@ -176,7 +167,7 @@ class SummaryCounterStructures extends PureComponent {
         </Tooltip>
 
         <Tooltip
-          title={`${organisms} ${toPlural('organism', organisms)} matching ${
+          title={`${taxa} ${toPlural('taxonomy', taxa)} matching ${
             metadata.name
           }`}
           className={f('count-organisms')}
@@ -184,9 +175,9 @@ class SummaryCounterStructures extends PureComponent {
         >
           <div className={f('container')}>
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent value={organisms} abbr scaleMargin={1} />
+            <NumberComponent value={taxa} abbr scaleMargin={1} />
             <span className={f('label-number')}>
-              {toPlural('organism', organisms)}
+              {toPlural('taxonomy', taxa)}
             </span>
           </div>
         </Tooltip>
@@ -233,8 +224,8 @@ const getUrlForStructTaxname = accession =>
         pathname:
           root +
           descriptionToPath({
-            main: { key: 'organism' },
-            organism: { db: 'taxonomy' },
+            main: { key: 'taxonomy' },
+            taxonomy: { db: 'uniprot' },
             structure: {
               isFilter: true,
               db: 'pdb',
@@ -333,7 +324,8 @@ class StructureCard extends PureComponent {
           </div>
         </div>
 
-        {data.metadata &&
+        {data.extra_fields &&
+          data.metadata &&
           data.extra_fields.counters && (
             <SummaryCounterStructures
               metadata={data.metadata}
@@ -545,138 +537,20 @@ const List = ({
 };
 List.propTypes = propTypes;
 
-const SummaryComponent = ({ data: { payload }, customLocation }) => (
-  <SummaryAsync data={payload} customLocation={customLocation} />
-);
-SummaryComponent.propTypes = {
-  data: T.shape({
-    payload: T.any,
-  }).isRequired,
-  customLocation: T.object.isRequired,
-};
-
 const subPagesForStructure = new Map();
 for (const subPage of config.pages.structure.subPages) {
   subPagesForStructure.set(subPage, subPages.get(subPage));
 }
 
-const locationSelector1 = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].detail ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
-const Summary = props => {
-  const {
-    data: { loading, payload },
-  } = props;
-  if (loading || !payload || !payload.metadata) return <Loading />;
-  return (
-    <ErrorBoundary>
-      <div className={f('row')}>
-        <div className={f('medium-12', 'large-12', 'columns')}>
-          <Title metadata={payload.metadata} mainType="structure" />
-          <EntryMenu metadata={payload.metadata} />
-        </div>
-      </div>
-      <Switch
-        {...props}
-        locationSelector={locationSelector1}
-        indexRoute={SummaryComponent}
-        childRoutes={subPagesForStructure}
-      />
-    </ErrorBoundary>
-  );
-};
-Summary.propTypes = {
-  data: T.shape({
-    loading: T.bool.isRequired,
-  }).isRequired,
-  customLocation: T.object.isRequired,
-};
+const childRoutesReg = /^[a-z\d]{4}$/i;
 
-const childRoutes = new Map([[/^[a-z\d]{4}$/i, Summary]]);
-const locationSelector2 = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].accession ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
-// Keep outside! Otherwise will be redefined at each render of the outer Switch
-const InnerSwitch = props => (
-  <ErrorBoundary>
-    <Switch
-      {...props}
-      locationSelector={locationSelector2}
-      indexRoute={List}
-      childRoutes={childRoutes}
-      catchAll={List}
-    />
-  </ErrorBoundary>
+const Structure = () => (
+  <EndPointPage
+    subpagesRoutes={childRoutesReg}
+    listOfEndpointEntities={List}
+    SummaryAsync={SummaryAsync}
+    subPagesForEndpoint={subPagesForStructure}
+  />
 );
 
-class Structure extends PureComponent {
-  static propTypes = {
-    data: T.shape({
-      payload: T.shape({
-        metadata: T.shape({
-          accession: T.string.isRequired,
-        }),
-      }),
-    }).isRequired,
-    dataBase: T.shape({
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-  };
-
-  render() {
-    const { dataBase } = this.props;
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
-    return (
-      <div>
-        {this.props.data.payload &&
-          this.props.data.payload.metadata &&
-          this.props.data.payload.metadata.accession && (
-            <Fragment>
-              <SchemaOrgData
-                data={{
-                  data: this.props.data.payload,
-                  endpoint: 'structure',
-                  version: databases && databases.pdb.version,
-                }}
-                processData={schemaProcessDataRecord}
-              />
-              <SchemaOrgData
-                data={{
-                  data: this.props.data.payload.metadata,
-                  type: 'Structure',
-                }}
-                processData={schemaProcessMainEntity}
-              />
-            </Fragment>
-          )}
-        <ErrorBoundary>
-          <Switch
-            {...this.props}
-            locationSelector={mainDBLocationSelector}
-            indexRoute={Overview}
-            catchAll={InnerSwitch}
-          />
-        </ErrorBoundary>
-      </div>
-    );
-  }
-}
-
-export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  loadData()(Structure),
-);
+export default Structure;

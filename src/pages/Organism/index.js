@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -17,7 +18,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
 } from 'components/Table';
-import ProteinFile from 'subPages/Organism/ProteinFile';
+import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -58,16 +59,46 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(pageStyle, ebiGlobalStyles, fonts);
 
-const EntryAccessionsRenderer = taxId => (
-  <ProteinFile taxId={`${taxId}`} type="entry-accession" />
+const EntryAccessionsRenderer = entryDB => taxId => (
+  <File
+    fileType="accession"
+    name={`${entryDB || 'all'}-entry-accessions-for-${taxId}.txt`}
+    customLocationDescription={{
+      main: { key: 'entry' },
+      entry: { db: entryDB || 'all' },
+      organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+    }}
+  />
 );
 
-const ProteinAccessionsRenderer = taxId => (
-  <ProteinFile taxId={`${taxId}`} type="protein-accession" />
+const ProteinFastasRenderer = entryDB => taxId => (
+  <File
+    fileType="FASTA"
+    name={`protein-sequences${
+      entryDB ? `-matching-${entryDB}` : ''
+    }-for-${taxId}.fasta`}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      entry: { isFilter: true, db: entryDB || 'all' },
+      organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+    }}
+  />
 );
 
-const ProteinFastasRenderer = taxId => (
-  <ProteinFile taxId={`${taxId}`} type="FASTA" />
+const ProteinAccessionsRenderer = entryDB => taxId => (
+  <File
+    fileType="accession"
+    name={`protein-accessions${
+      entryDB ? `-matching-${entryDB}` : ''
+    }-for-${taxId}.txt`}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      entry: { isFilter: true, db: entryDB || 'all' },
+      organism: { isFilter: true, db: 'taxonomy', accession: `${taxId}` },
+    }}
+  />
 );
 
 const propTypes = {
@@ -612,7 +643,7 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="entryAccessions"
-              renderer={EntryAccessionsRenderer}
+              renderer={EntryAccessionsRenderer(entryDB)}
             >
               Entry accessions
             </Column>
@@ -665,7 +696,7 @@ class List extends PureComponent {
               defaultKey="proteinFastas"
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
-              renderer={ProteinFastasRenderer}
+              renderer={ProteinFastasRenderer(entryDB)}
             >
               FASTA
             </Column>
@@ -674,7 +705,7 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="proteinAccessions"
-              renderer={ProteinAccessionsRenderer}
+              renderer={ProteinAccessionsRenderer(entryDB)}
             >
               Protein accessions
             </Column>

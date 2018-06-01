@@ -16,7 +16,7 @@ const singleEntityNames = new Map(
   Array.from(singleEntity).map(e => [e[1].name, e[0]]),
 );
 
-const whitelist = new Set(['Overview', 'Domain Architectures', 'Sequence']);
+const whitelist = new Set(['Overview', 'Sequence']);
 
 /*:: type Props = {
   to: Object | function,
@@ -84,13 +84,13 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       }
       // TODO: find a generic way to deal with this:
       if (whitelist.has(name)) value = NaN;
-      if (
-        name === 'Domain Architectures' &&
-        payload.metadata.counters &&
-        !payload.metadata.counters.proteins
-      ) {
-        value = 0;
-      }
+      // if (
+      //   name === 'Domain Architectures' &&
+      //   payload.metadata.counters &&
+      //   !payload.metadata.counters.proteins
+      // ) {
+      //   value = 0;
+      // }
       // TODO: find a generic way to deal with this:
       if (
         name === 'Domain Architectures' &&

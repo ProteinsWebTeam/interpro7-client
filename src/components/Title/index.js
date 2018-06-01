@@ -45,7 +45,7 @@ const mapNameToClass = new Map([
   data?: Object,
 }; */
 
-const accessionDisplay = new Set(['protein', 'structure', 'organism']);
+const accessionDisplay = new Set(['protein', 'structure', 'proteome']);
 
 class Title extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -97,10 +97,9 @@ class Title extends PureComponent /*:: <Props> */ {
           )}
 
         <Helmet>
-          <title>
-            {metadata.name.name} - {metadata.accession}
-          </title>
+          <title>{metadata.accession}</title>
         </Helmet>
+
         <div className={f('title-name')}>
           <h3>{metadata.name.name} </h3>
           <div className={f('title-tag')}>
@@ -111,7 +110,6 @@ class Title extends PureComponent /*:: <Props> */ {
               metadata.source_database.toLowerCase() === 'interpro' && (
                 <div className={f('tag', 'secondary')}>{dbLabel} entry</div>
               )}
-
             {// MD Entry -signature
             isEntry &&
               metadata.type &&

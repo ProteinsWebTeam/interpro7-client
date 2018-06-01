@@ -144,7 +144,7 @@ class LatestEntry extends PureComponent {
               </div>
               <div className={f('count-4', 'count-organisms')}>
                 <Tooltip
-                  title={`${c.O} ${toPlural('organism', c.O)} matching ${
+                  title={`${c.O} ${toPlural('taxonomy', c.O)} matching ${
                     entry.name
                   }`}
                 >
@@ -156,14 +156,14 @@ class LatestEntry extends PureComponent {
                           db: 'InterPro',
                           accession: entry.accession,
                         },
-                        organism: { isFilter: true, db: 'taxonomy' },
+                        taxonomy: { isFilter: true, db: 'uniprot' },
                       },
                     }}
                   >
                     <div className={f('icon', 'icon-count-organisms')} />{' '}
                     <NumberComponent value={c.O} />
                     <span className={f('label-number')}>
-                      {toPlural('organism', c.O)}
+                      {toPlural('taxonomy', c.O)}
                     </span>
                   </Link>
                 </Tooltip>

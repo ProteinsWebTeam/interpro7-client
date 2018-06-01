@@ -30,7 +30,8 @@ const f = foundationPartial(styles);
 const defaultDBFor = new Map([
   ['protein', 'uniprot'],
   ['structure', 'pdb'],
-  ['organism', 'taxonomy'],
+  ['taxonomy', 'uniprot'],
+  ['proteome', 'uniprot'],
   ['set', 'all'],
 ]);
 
