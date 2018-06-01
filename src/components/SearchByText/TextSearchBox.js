@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -16,7 +17,22 @@ const f = foundationPartial(interproTheme, fonts, local);
 
 const DEBOUNCE_RATE = 1000; // 1s
 
-class TextSearchBox extends PureComponent {
+/*:: type Props = {
+  pageSize?: number,
+  main: ?string,
+  value: ?string,
+  className?: string,
+  goToCustomLocation: function,
+  inputRef: function,
+}; */
+/*:: type State = {|
+  localValue: ?string,
+|} */
+
+class TextSearchBox extends PureComponent /*:: <Props, State> */ {
+  /* ::
+    _debouncedPush: ?boolean => void;
+  */
   static propTypes = {
     pageSize: T.number,
     main: T.string,
@@ -26,16 +42,12 @@ class TextSearchBox extends PureComponent {
     inputRef: T.func,
   };
 
-  static getDerivedStateFromProps({ value }) {
-    return { value: value || '' };
-  }
-
   constructor(props) {
     super(props);
 
-    this.state = { value: props.value || '' };
+    this.state = { localValue: null };
 
-    this.debouncedPush = debounce(this.routerPush, DEBOUNCE_RATE);
+    this._debouncedPush = debounce(this.routerPush, DEBOUNCE_RATE);
   }
 
   routerPush = replace => {
@@ -46,7 +58,7 @@ class TextSearchBox extends PureComponent {
       {
         description: {
           main: { key: 'search' },
-          search: { type: 'text', value: this.state.value },
+          search: { type: 'text', value: this.state.localValue },
         },
         search: query,
       },
@@ -62,12 +74,8 @@ class TextSearchBox extends PureComponent {
   };
 
   handleChange = ({ target }) => {
-    this.setState({ value: target.value });
-    this.debouncedPush(true);
-  };
-
-  focus = () => {
-    if (this._input) this._input.focus();
+    this.setState({ localValue: target.value });
+    this._debouncedPush(true);
   };
 
   render() {
@@ -78,7 +86,7 @@ class TextSearchBox extends PureComponent {
             type="text"
             aria-label="search InterPro"
             onChange={this.handleChange}
-            value={this.state.value}
+            value={this.state.localValue || this.props.value}
             placeholder="Enter your search"
             onKeyPress={this.handleKeyPress}
             className={this.props.className}
@@ -98,4 +106,7 @@ const mapStateToProps = createSelector(
   (main, value, pageSize) => ({ main, value, pageSize }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(TextSearchBox);
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(TextSearchBox);
