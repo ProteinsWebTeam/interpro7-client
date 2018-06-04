@@ -56,7 +56,7 @@ a:focus {
   }
 }
 
-/* custom tab onglets and tab content*/
+/* custom TAB onglets and tab content*/
 .tabs {
   border-top-width: 0;
 }
@@ -68,84 +68,6 @@ mark {
 
 /****************************** END Overwrite EBI  global**********************/
 
-/******************************BANNER*********************************/
-
-.local-site-search .icon-functional:before,
-.local-offcanvas-menu .icon-functional:before {
-  font-size: 2.5em;
-}
-html.fontface .local-site-search .icon-functional:before,
-.local-offcanvas-menu .icon-functional:before {
-  padding-right: 0;
-} /*solve a bug with search icon moving on two lines on firefox*/
-.local-site-search .button,
-.local-offcanvas-menu .button,
-.local-site-search .button:hover,
-.local-offcanvas-menu .button:hover {
-  background-color: transparent;
-} /*we don't want bgd for those buttons*/
-.local-site-search {
-  position: absolute;
-  top: 118px;
-  right: 10px;
-} /*let the text field appear with no size problem*/
-.local-offcanvas-menu {
-  position: absolute;
-  top: 68px;
-  right: 10px;
-}
-/*.local-offcanvas-menu .button {margin:0;} is it still used?*/
-/*Menu - not used anymore in the new way to interact with offcanvas*/
-/*.main-header .local-offcanvas-menu .close-menu {display: none;}!*switch between open/close text*!*/
-/*.offc-nav.expand ~ .main-header .local-offcanvas-menu .close-menu {display: block;}!*switch between open/close text*!*/
-/*.offc-nav.expand ~ .main-header .local-offcanvas-menu .open-menu {display: none;}!*switch between open/close text*!*/
-/*Search*/
-.local-site-search .search-box {
-  width: 70%;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.3s ease-in-out;
-  display: block;
-  float: right;
-  padding: 0; /*background-color: rgba(255, 255, 255, 0.07);*/
-  background-color: rgba(255, 255, 255, 0);
-  box-shadow: none;
-  outline: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.5);
-}
-.local-site-search .button {
-  float: right;
-} /*important to keep for the smooth effect moving left the magnifying icon next to input field*/
-.local-site-search [type='text']:focus {
-  border-bottom: 3px solid white;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  color: white;
-  background-color: transparent;
-  outline: none;
-  box-shadow: none;
-  transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
-}
-.local-site-search:hover .tool-search .search-box,
-.search-box:focus {
-  transform: scaleX(1);
-}
-.local-site-search:hover ::placeholder {
-  opacity: 1;
-}
-input:focus::placeholder {
-  color: transparent;
-}
-
-a:hover.noline {
-  border-bottom: 0 solid transparent;
-}
 /*/****LOCAL BUTTONS + LINKS ***/
 
 /* MENU*/
@@ -165,73 +87,6 @@ a:hover.noline {
 /******************************LOCAL STYLE*********************************/
 
 /************************  ICONS  **********************************/
-/*MEMBER DATABASE SVG ICON*/
-.svg-mask {
-  display: none;
-}
-.md-color,
-.md-server {
-  transition: fill var(--timing-slow) ease-in-out;
-  fill: #e2e2e2;
-  font-size: 9em;
-  font-family: 'EBI-generic', arial, sans-serif;
-}
-
-.md-ip .md-color {
-  fill: var(--colors-interpro);
-}
-
-.md-cg .md-color {
-  fill: var(--colors-cathgene3d);
-}
-.md-cd .md-color {
-  fill: var(--colors-cdd);
-}
-.md-ha .md-color {
-  fill: var(--colors-hamap);
-}
-.md-mo .md-color {
-  fill: var(--colors-modi);
-}
-.md-pa .md-color {
-  fill: var(--colors-panther);
-}
-.md-pf .md-color {
-  fill: var(--colors-pfam);
-}
-.md-pi .md-color {
-  fill: var(--colors-pirsf);
-}
-.md-pri .md-color {
-  fill: var(--colors-prints);
-}
-.md-pro .md-color {
-  fill: var(--colors-prodom);
-}
-.md-prpro .md-color,
-.md-pr .md-color {
-  fill: var(--colors-profile);
-}
-.md-prpat .md-color {
-  fill: var(--colors-prosite); /*was 8899a6*/
-}
-.md-sf .md-color {
-  fill: var(--colors-sfld);
-}
-.md-sm .md-color {
-  fill: var(--colors-smart);
-}
-.md-su .md-color {
-  fill: var(--colors-ssf);
-}
-.md-ti .md-color {
-  fill: var(--colors-tigrfams);
-}
-
-.md-all .md-color {
-  fill: var(--colors-all);
-}
-/*/MEMBER DATABASE SVG ICONS*/
 
 /*SP is that still needed ?*/
 .icon {
@@ -553,7 +408,7 @@ hr {
 .tabs.main-style .tabs-title:last-of-type {
   border-right: 1px #e6e6e6 solid;
 }
-
+/*tabs - is it used?*/
 .tabs.main-style .tabs-title.is-active {
   & > a,
   & > a:focus,
@@ -569,7 +424,7 @@ hr {
   }
 }
 
-/*Search page tabs*/
+/*tabs main style (e.g search, homepage)*/
 .tabs.main-style .tabs-title a.is-active {
   border-top: #36aac0 3px solid;
   background: #fff;
@@ -610,12 +465,9 @@ hr {
     background: #666;
   }
 }
+/*Tabs style menu*/
 
-/*TABS - search page*/
-.tabs .tabs-title a.is-active {
-  color: white;
-  background: #666;
-}
+/*/Tabs style menu*/
 
 /*footer*/
 .local_footer {
