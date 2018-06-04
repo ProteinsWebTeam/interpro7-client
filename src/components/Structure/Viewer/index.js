@@ -108,38 +108,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
             }
           }
 
-          //Testing customtheme
-          console.log('CustomTheme');
-          const customTheme = new CustomTheme(
-            Core,
-            Visualisation,
-            Boostrap,
-            Query,
-          );
-          const colour = {
-            base: { r: 255, g: 255, b: 255 },
-            entries: [
-              {
-                entity_id: polymer.id,
-                struct_asym_id: 'A',
-                start_residue_number: 3,
-                end_residue_number: 51,
-                color: { r: 255, g: 128, b: 64 },
-              },
-              {
-                entity_id: polymer.id,
-                struct_asym_id: 'A',
-                start_residue_number: 70,
-                end_residue_number: 153,
-                color: { r: 64, g: 128, b: 255 },
-              },
-            ],
-          };
-
-          const theme = customTheme.createTheme(model.props.model, colour);
-          customTheme.applyTheme(plugin, 'polymer-visual', theme);
-          //end customtheme testing
-
           entryResidues[entry] = residues;
           queries.push({
             entry: entry,
@@ -150,6 +118,60 @@ class StructureView extends PureComponent /*:: <Props> */ {
           });
         }
 
+        //Testing customtheme
+        console.log('CustomTheme');
+        const customTheme = new CustomTheme(
+          Core,
+          Visualisation,
+          Boostrap,
+          Query,
+        );
+        /*
+        const colour = {
+          base: { r: 255, g: 255, b: 255 },
+          entries: [
+            {
+              entity_id: polymer.id,
+              struct_asym_id: 'A',
+              start_residue_number: 3,
+              end_residue_number: 51,
+              color: { r: 255, g: 128, b: 64 },
+            },
+            {
+              entity_id: polymer.id,
+              struct_asym_id: 'A',
+              start_residue_number: 70,
+              end_residue_number: 153,
+              color: { r: 64, g: 128, b: 255 },
+            },
+          ],
+        };
+        */
+        const colour = {
+          base: { r: 255, g: 255, b: 255 },
+          entries: [
+            {
+              entity_id: '1',
+              struct_asym_id: 'A',
+              start_residue_number: 10,
+              end_residue_number: 25,
+              color: { r: 255, g: 128, b: 64 },
+            },
+            {
+              entity_id: '1',
+              struct_asym_id: 'A',
+              start_residue_number: 40,
+              end_residue_number: 60,
+              color: { r: 64, g: 128, b: 255 },
+            },
+          ],
+        };
+
+        const theme = customTheme.createTheme(model.props.model, colour);
+        customTheme.applyTheme(plugin, 'polymer-visual', theme);
+        //end customtheme testing
+
+        /*
         const group = Transform.build();
         group.add(
           polymer,
@@ -182,6 +204,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
             });
           }
         });
+        */
       }
     });
   }
