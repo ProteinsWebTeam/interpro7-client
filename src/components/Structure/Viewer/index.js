@@ -4,6 +4,7 @@ import T from 'prop-types';
 import LiteMol from 'litemol';
 
 // import LiteMolViewer from 'litemol/dist/js/LiteMol-viewer.js';
+import CustomTheme from './CustomTheme';
 
 import 'litemol/dist/css/LiteMol-plugin-light.css';
 
@@ -38,6 +39,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
     // const Behaviour = LiteMol.Bootstrap.Behaviour;
     // const Components = LiteMol.Plugin.Components;
     // const LayoutRegion = LiteMol.Bootstrap.Components.LayoutRegion;
+    const Core = LiteMol.Core;
+    const Visualisation = LiteMol.Visualization;
+    const Boostrap = LiteMol.Bootstrap;
     const Transformer = LiteMol.Bootstrap.Entity.Transformer;
     const Query = LiteMol.Core.Structure.Query;
     const Command = LiteMol.Bootstrap.Command;
@@ -45,21 +49,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
     const pdbid = this.props.id;
 
-    /*
-    const InterProSpec = LiteMol.Plugin.getDefaultSpecification();
-    InterProSpec.behaviours = [
-      Behaviour.SetEntityToCurrentWhenAdded,
-      Behaviour.FocusCameraOnSelect,
-      Behaviour.CreateVisualWhenModelIsAdded,
-    ];
-    InterProSpec.components = [
-      Components.Transform.View(LayoutRegion.Right),
-      Components.Context.Log(LayoutRegion.Bottom, true),
-      Components.Context.Overlay(LayoutRegion.Root),
-      Components.Context.Toast(LayoutRegion.Main, true),
-      Components.Context.BackgroundTasks(LayoutRegion.Main, true),
-    ];
-    */
     const plugin = LiteMol.Plugin.create({
       target: this._ref.current,
       viewportBackground: '#fff',
@@ -67,7 +56,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
         hideControls: true,
         isExpanded: false,
       },
-      // customSpecification: InterProSpec,
     });
     const context = plugin.context;
 
@@ -108,9 +96,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
           const db = match.metadata.source_database;
           let chain;
           const residues = [];
+
           for (const structure of match.structures) {
             chain = structure.chain;
-
             for (const location of structure.entry_protein_locations) {
               for (const fragment of location.fragments) {
                 for (let i = fragment.start; i <= fragment.end; i++) {
@@ -119,6 +107,39 @@ class StructureView extends PureComponent /*:: <Props> */ {
               }
             }
           }
+
+          //Testing customtheme
+          console.log('CustomTheme');
+          const customTheme = new CustomTheme(
+            Core,
+            Visualisation,
+            Boostrap,
+            Query,
+          );
+          const colour = {
+            base: { r: 255, g: 255, b: 255 },
+            entries: [
+              {
+                entity_id: polymer.id,
+                struct_asym_id: 'A',
+                start_residue_number: 3,
+                end_residue_number: 51,
+                color: { r: 255, g: 128, b: 64 },
+              },
+              {
+                entity_id: polymer.id,
+                struct_asym_id: 'A',
+                start_residue_number: 70,
+                end_residue_number: 153,
+                color: { r: 64, g: 128, b: 255 },
+              },
+            ],
+          };
+
+          const theme = customTheme.createTheme(model.props.model, colour);
+          customTheme.applyTheme(plugin, 'polymer-visual', theme);
+          //end customtheme testing
+
           entryResidues[entry] = residues;
           queries.push({
             entry: entry,
