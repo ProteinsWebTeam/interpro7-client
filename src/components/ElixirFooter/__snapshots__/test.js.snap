@@ -20,22 +20,16 @@ exports[`<ElixirFooter /> should render 1`] = `
           src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.3/images/logos/ELIXIR/elixir-cdr.gif"
         />
         <h5>
-          <span
-            className="elixir-banner-name"
-          >
-            This service is part of the ELIXIR infrastructure
-          </span>
+          This service is part of the ELIXIR infrastructure
         </h5>
-        <div
-          id="elixir-banner-info"
-        >
+        <div>
           <small>
             <span
               className="elixir-banner-description"
             >
               InterPro is an ELIXIR Core Data Resource
             </span>
-
+             
             <span
               className="readmore"
             >
