@@ -60,7 +60,7 @@ export default class Citation extends PureComponent {
   render() {
     return (
       <section>
-        <h4>How to cite</h4>
+        <h3>How to cite</h3>
         <div className={f('row')}>
           {citations.map(c => (
             <div
@@ -77,7 +77,7 @@ export default class Citation extends PureComponent {
                   data-icon="l"
                 />
                 <span className={f('cite-title')}>
-                  <h5>{c.resource}</h5>
+                  <h4>{c.resource}</h4>
                 </span>
                 <span className={f('cite-text')}>
                   To cite {c.label}, please refer to the following publication:
