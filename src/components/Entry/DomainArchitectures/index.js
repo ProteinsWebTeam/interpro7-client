@@ -15,9 +15,11 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Footer from 'components/Table/Footer';
 
 import { foundationPartial } from 'styles/foundation';
+
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from './style.css';
 
-const f = foundationPartial(pageStyle, protvista);
+const f = foundationPartial(ebiGlobalStyles, pageStyle, protvista);
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import loadable from 'higherOrder/loadable';
 

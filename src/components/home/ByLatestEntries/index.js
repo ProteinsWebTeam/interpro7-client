@@ -382,7 +382,7 @@ class ByEntriesFeatured extends PureComponent {
               to={{
                 description: { main: { key: 'entry' } },
               }}
-              className={f('button')}
+              className={f('button', 'margin-bottom-none')}
             >
               View all latest entries
             </Link>

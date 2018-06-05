@@ -39,11 +39,11 @@ import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
 
-import pageStyle from '../style.css';
-import styles from 'styles/blocks.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import pageStyle from '../style.css';
 
-const f = foundationPartial(pageStyle, styles, fonts);
+const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts);
 
 const SummaryAsync = loadable({
   loader: () =>

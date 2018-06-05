@@ -17,10 +17,11 @@ import { updateJobStatus } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
+import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(fonts, ipro);
+const f = foundationPartial(interproTheme, fonts, ipro);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -67,7 +68,7 @@ class IPScanStatus extends PureComponent {
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <div className={f('row')}>
-            <h3 className={f('large-9', 'columns')}>
+            <h3 className={f('large-9', 'columns', 'light')}>
               Your InterProScan searches
             </h3>
             <SchemaOrgData

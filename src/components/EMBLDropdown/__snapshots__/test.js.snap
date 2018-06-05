@@ -47,7 +47,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               }
             >
               <Connect(Link)
-                href="https://embl.org"
+                href="//embl.org"
               >
                 EMBL
               </Connect(Link)>
@@ -63,7 +63,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             className="column padding-bottom-medium"
           >
             <Connect(Link)
-              href="https://www.embl.de/research/index.php"
+              href="//www.embl.de/research/index.php"
             >
               <h5
                 className="inline underline"
@@ -78,7 +78,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             className="column padding-bottom-medium"
           >
             <Connect(Link)
-              href="https://www.embl.de/services/index.html"
+              href="//www.embl.de/services/index.html"
             >
               <h5
                 className="inline underline"
@@ -93,7 +93,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             className="column padding-bottom-medium"
           >
             <Connect(Link)
-              href="https://www.embl.de/training/index.php"
+              href="//www.embl.de/training/index.php"
             >
               <h5
                 className="inline underline"
@@ -108,7 +108,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             className="column padding-bottom-medium"
           >
             <Connect(Link)
-              href="https://www.embl.de/research/tech_transfer/index.html"
+              href="//www.embl.de/research/tech_transfer/index.html"
             >
               <h5
                 className="inline underline"
@@ -148,7 +148,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
           <h3>
             <Connect(Link)
               className="readmore"
-              href="https://embl.org"
+              href="//embl.org"
             >
               More about EMBL
             </Connect(Link)>
@@ -180,7 +180,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.embl-barcelona.es/"
+                href="//www.embl-barcelona.es/"
               >
                 Barcelona
               </Connect(Link)>
@@ -196,7 +196,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.embl.fr/"
+                href="//www.embl.fr/"
               >
                 Grenoble
               </Connect(Link)>
@@ -212,7 +212,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.embl-hamburg.de/"
+                href="//www.embl-hamburg.de/"
               >
                 Hamburg
               </Connect(Link)>
@@ -228,7 +228,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.embl.de/"
+                href="//www.embl.de/"
               >
                 Heidelberg
               </Connect(Link)>
@@ -244,7 +244,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.ebi.ac.uk/"
+                href="//www.ebi.ac.uk/"
               >
                 Hinxton
               </Connect(Link)>
@@ -262,7 +262,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.embl.it/"
+                href="//www.embl.it/"
               >
                 Rome
               </Connect(Link)>
@@ -282,6 +282,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
 <div
   aria-hidden={false}
   className="masthead-black-bar visible"
+  inert={undefined}
 >
   <nav
     className="dropdown-pane bottom embl-dropdown"
@@ -324,7 +325,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               }
             >
               <Connect(Link)
-                href="https://embl.org"
+                href="//embl.org"
               >
                 EMBL
               </Connect(Link)>
@@ -340,7 +341,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             className="column padding-bottom-medium"
           >
             <Connect(Link)
-              href="https://www.embl.de/research/index.php"
+              href="//www.embl.de/research/index.php"
             >
               <h5
                 className="inline underline"
@@ -355,7 +356,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             className="column padding-bottom-medium"
           >
             <Connect(Link)
-              href="https://www.embl.de/services/index.html"
+              href="//www.embl.de/services/index.html"
             >
               <h5
                 className="inline underline"
@@ -370,7 +371,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             className="column padding-bottom-medium"
           >
             <Connect(Link)
-              href="https://www.embl.de/training/index.php"
+              href="//www.embl.de/training/index.php"
             >
               <h5
                 className="inline underline"
@@ -385,7 +386,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             className="column padding-bottom-medium"
           >
             <Connect(Link)
-              href="https://www.embl.de/research/tech_transfer/index.html"
+              href="//www.embl.de/research/tech_transfer/index.html"
             >
               <h5
                 className="inline underline"
@@ -425,7 +426,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
           <h3>
             <Connect(Link)
               className="readmore"
-              href="https://embl.org"
+              href="//embl.org"
             >
               More about EMBL
             </Connect(Link)>
@@ -457,7 +458,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.embl-barcelona.es/"
+                href="//www.embl-barcelona.es/"
               >
                 Barcelona
               </Connect(Link)>
@@ -473,7 +474,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.embl.fr/"
+                href="//www.embl.fr/"
               >
                 Grenoble
               </Connect(Link)>
@@ -489,7 +490,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.embl-hamburg.de/"
+                href="//www.embl-hamburg.de/"
               >
                 Hamburg
               </Connect(Link)>
@@ -505,7 +506,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.embl.de/"
+                href="//www.embl.de/"
               >
                 Heidelberg
               </Connect(Link)>
@@ -521,7 +522,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.ebi.ac.uk/"
+                href="//www.ebi.ac.uk/"
               >
                 Hinxton
               </Connect(Link)>
@@ -539,7 +540,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               className="inline"
             >
               <Connect(Link)
-                href="https://www.embl.it/"
+                href="//www.embl.it/"
               >
                 Rome
               </Connect(Link)>

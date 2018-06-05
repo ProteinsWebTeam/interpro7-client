@@ -6,8 +6,9 @@ import Link from 'components/generic/Link';
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './styles.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(styles);
+const f = foundationPartial(ebiGlobalStyles, styles);
 
 class NotFound extends PureComponent /*:: <{}> */ {
   render() {

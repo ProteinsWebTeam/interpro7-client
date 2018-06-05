@@ -46,11 +46,11 @@ class Actions extends PureComponent {
     const { localID, withTitle, jobs } = this.props;
     const { saved } = (jobs[localID] || {}).metadata || {};
     return (
-      <div>
+      <div className={f('margin-right-large')}>
         {withTitle && 'Actions: '}
         <Tooltip title="Save job">
           <button
-            className={f('button', saved ? 'warning' : 'secondary')}
+            className={f('button', 'tiny', saved ? 'warning' : 'secondary')}
             type="button"
             onClick={this._handleSaveToggle}
             aria-label="Save job"
@@ -60,7 +60,7 @@ class Actions extends PureComponent {
         </Tooltip>
         <Tooltip title="Delete job">
           <button
-            className={f('button', 'alert')}
+            className={f('button', 'tiny', 'alert')}
             type="button"
             onClick={this._handleDelete}
             aria-label="Delete job"

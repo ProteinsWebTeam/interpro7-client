@@ -15,8 +15,8 @@ import Title from 'components/Title';
 import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from './style.css';
-import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import { createSelector } from 'reselect';
 import {
   schemaProcessDataRecord,
@@ -24,7 +24,7 @@ import {
 } from 'schema_org/processors';
 import loadable from 'higherOrder/loadable';
 
-const f = foundationPartial(pageStyle, styles, fonts);
+const f = foundationPartial(ebiGlobalStyles, fonts, pageStyle);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -170,7 +170,7 @@ class Overview extends PureComponent {
     const keyS = toPlural(key);
     const _payload = payload || {};
     return (
-      <ul className={f('card')}>
+      <ul>
         {Object.entries(_payload[keyS] || {}).map(([name, count]) => (
           <li key={name}>
             <Link

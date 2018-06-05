@@ -53,11 +53,11 @@ import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
-import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(pageStyle, styles, fonts);
+const f = foundationPartial(pageStyle, ebiGlobalStyles, fonts);
 
 const EntryAccessionsRenderer = entryDB => taxId => (
   <File
@@ -129,7 +129,7 @@ class Overview extends PureComponent {
       data: { payload = defaultPayload },
     } = this.props;
     return (
-      <ul className={f('card')}>
+      <ul>
         {Object.entries(payload.organisms || {}).map(([name, count]) => (
           <li key={name}>
             <Link

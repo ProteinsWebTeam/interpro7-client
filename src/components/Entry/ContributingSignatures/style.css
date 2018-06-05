@@ -1,3 +1,5 @@
+@import '../../../styles/timing.css';
+
 .side-panel h5 {
   /*background-color: #b9d7ef;*/
   padding: 0.5rem 1rem;
@@ -34,8 +36,8 @@
     } /* only when one single signature and nothing else */
 
     &:hover {
-      transition: background-color 0.1s;
-      background-color: #e4f3ff;
+      /*transition: background-color var(--timing-really-fast) ease-in-out;*/
+      /*background-color: #eee;*/
     }
   }
 }
