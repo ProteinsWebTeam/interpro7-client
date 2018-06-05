@@ -466,7 +466,37 @@ hr {
   }
 }
 /*Tabs style menu*/
+.tabs.menu-style {
+  border: 0px solid #e6e6e6;
+  margin-bottom: 2rem;
+}
 
+.tabs.menu-style .tabs-title {
+  & {
+    margin: 0 1em 0 0;
+  }
+  & > a {
+    font-size: 0.9rem;
+    padding: 0.7rem 1rem;
+    line-height: inherit;
+  }
+  & > a:hover {
+    color: var(--colors-submain);
+    background-color: transparent;
+  }
+  & > a.is-active-tab {
+    font-weight: 700;
+    background: #1779ba;
+    color: #fff;
+  }
+}
+
+.tabs.menu-style ~ .tabs-content {
+  border: 0;
+}
+.tabs.menu-style ~ .tabs-content .tabs-panel {
+  padding: 0;
+}
 /*/Tabs style menu*/
 
 /*footer*/
