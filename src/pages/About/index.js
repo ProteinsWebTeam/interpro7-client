@@ -74,8 +74,7 @@ class About extends PureComponent /*:: <{}> */ {
           processData={schemaProcessDataInterpro}
         />
         <div className={f('columns', 'margin-bottom-large')}>
-          <h3>About this website</h3>
-          <ul className={f('tabs', 'main-style', 'margin-top-large')}>
+          <ul className={f('tabs', 'menu-style')}>
             <li
               className={f('tabs-title')}
               onMouseOver={Consortium.preload}
