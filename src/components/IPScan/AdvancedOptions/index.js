@@ -132,8 +132,8 @@ class AdvancedOptions extends PureComponent {
     this._ref = React.createRef();
   }
 
-  async componentDidMount() {
-    console.log(await detailsTagPolyfill());
+  componentDidMount() {
+    detailsTagPolyfill();
   }
 
   _selectAll = event => {
