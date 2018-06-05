@@ -1,0 +1,18 @@
+.cite-box {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.cite-icon {
+  align-self: center;
+  font-size: 720%;
+  color: #dedede;
+  line-height: 1;
+}
+
+.cite-title {
+  font-weight: bold;
+  align-self: center;
+  margin-bottom: 1rem;
+}
