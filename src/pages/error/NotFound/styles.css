@@ -11,4 +11,5 @@
 
 .error-msg ul {
   list-style-type: none;
+  margin: 0;
 }

@@ -12,8 +12,9 @@ import { foundationPartial } from 'styles/foundation';
 import local from './style.css';
 import ipro from 'styles/interpro-new.css';
 import loadable from 'higherOrder/loadable';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(ipro, local);
+const f = foundationPartial(ebiGlobalStyles, ipro, local);
 
 const comment = /^\s*[;>].*$/gm;
 const whiteSpaces = /\s*/g;

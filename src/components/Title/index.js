@@ -18,15 +18,15 @@ import config from 'config';
 const f = foundationPartial(fonts, ipro, styles);
 
 const mapNameToClass = new Map([
-  ['Domain', 'title-id-domain'],
-  ['Family', 'title-id-family'],
-  ['Repeat', 'title-id-repeat'],
-  ['Unknown', 'title-id-unknown'],
-  ['Conserved_site', 'title-id-site'],
-  ['Binding_site', 'title-id-site'],
-  ['Active_site', 'title-id-site'],
-  ['PTM', 'title-id-site'],
-  ['Homologous_superfamily', 'title-id-hh'],
+  ['domain', 'title-id-domain'],
+  ['family', 'title-id-family'],
+  ['repeat', 'title-id-repeat'],
+  ['unknown', 'title-id-unknown'],
+  ['conserved_site', 'title-id-site'],
+  ['binding_site', 'title-id-site'],
+  ['active_site', 'title-id-site'],
+  ['ptm', 'title-id-site'],
+  ['homologous_superfamily', 'title-id-hh'],
 ]);
 
 /*:: type Props = {
@@ -99,101 +99,107 @@ class Title extends PureComponent /*:: <Props> */ {
         <Helmet>
           <title>{metadata.accession}</title>
         </Helmet>
-        <h3>
-          {metadata.name.name}{' '}
+
+        <div className={f('title-name')}>
+          <h3>{metadata.name.name} </h3>
+          <div className={f('title-tag')}>
+            {// InterPro Entry
+            isEntry &&
+              metadata.type &&
+              metadata.source_database &&
+              metadata.source_database.toLowerCase() === 'interpro' && (
+                <div className={f('tag', 'secondary')}>{dbLabel} entry</div>
+              )}
+            {// MD Entry -signature
+            isEntry &&
+              metadata.type &&
+              metadata.source_database &&
+              metadata.source_database.toLowerCase() !== 'interpro' && (
+                <div className={f('tag', 'md-p')}>{dbLabel} Entry</div>
+              )}
+
+            {// protein page
+            mainType === 'protein' && (
+              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+                Protein {dbLabel}
+              </div>
+            )}
+
+            {// Structure
+            mainType === 'structure' && (
+              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+                Structure
+              </div>
+            )}
+
+            {// Species
+            metadata.source_database !== 'proteome' &&
+              mainType === 'organism' && (
+                <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+                  {dbLabel}
+                </div>
+              )}
+
+            {// Proteome
+            metadata.is_reference ? (
+              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+                Reference proteome{' '}
+                <Tooltip title="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny.">
+                  <span
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="ℹ"
+                    aria-label="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny."
+                  />
+                </Tooltip>
+              </div>
+            ) : null}
+
+            {// Set
+            mainType === 'set' && (
+              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+                Set {dbLabel}{' '}
+                <Tooltip title="A Set is defined as a group of related entries">
+                  <span
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="ℹ"
+                  />
+                </Tooltip>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className={f('title-id')}>
           {// Red, Green for domains,  Purple for sites, and Blue for Homologous accession: for InterPro page only
           isEntry &&
             metadata.type &&
             metadata.source_database &&
             metadata.source_database.toLowerCase() === 'interpro' && (
-              <small className={f(mapNameToClass.get(metadata.type))}>
+              <span className={f(mapNameToClass.get(metadata.type))}>
                 {metadata.accession}
-              </small>
+              </span>
             )}
           {// Blue accession: for Member Database and Unknown entry-type
           isEntry &&
             metadata.type &&
             metadata.source_database &&
             metadata.source_database.toLowerCase() !== 'interpro' && (
-              <small
+              <span
                 style={{
                   backgroundColor: config.colors.get(metadata.source_database),
                 }}
                 className={f('title-id-md')}
               >
                 {metadata.accession}
-              </small>
+              </span>
             )}
-          {// greyish accession: for protein , structure, and proteomes
-          accessionDisplay.has(mainType) && (
-            // no accession for Taxonomy but in blue for protein (reviewed), structure (pdb), and proteomes (proteome)
-            <small className={f('title-id-other')}>{metadata.accession}</small>
-          )}
-        </h3>
-
-        {// InterPro Entry
-        isEntry &&
-          metadata.type &&
-          metadata.source_database &&
-          metadata.source_database.toLowerCase() === 'interpro' && (
-            <div className={f('tag', 'secondary')}>{dbLabel} entry</div>
-          )}
-
-        {// MD Entry -signature
-        isEntry &&
-          metadata.type &&
-          metadata.source_database &&
-          metadata.source_database.toLowerCase() !== 'interpro' && (
-            <div className={f('tag', 'md-p')}>{dbLabel} Entry</div>
-          )}
-
-        {// protein page
-        mainType === 'protein' && (
-          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-            Protein {dbLabel}
-          </div>
-        )}
-
-        {// Structure
-        mainType === 'structure' && (
-          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-            Structure
-          </div>
-        )}
-
-        {// Species
-        mainType === 'taxonomy' && (
-          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-            {dbLabel}
-          </div>
-        )}
-
-        {// Proteome
-        metadata.is_reference ? (
-          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-            Reference proteome{' '}
-            <Tooltip title="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny.">
-              <span
-                className={f('small', 'icon', 'icon-common')}
-                data-icon="ℹ"
-                aria-label="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny."
-              />
-            </Tooltip>
-          </div>
-        ) : null}
-
-        {// Set
-        mainType === 'set' && (
-          <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-            Set {dbLabel}{' '}
-            <Tooltip title="A Set is defined as a group of related entries">
-              <span
-                className={f('small', 'icon', 'icon-common')}
-                data-icon="ℹ"
-              />
-            </Tooltip>
-          </div>
-        )}
+          {// greyish accession: for protein , structure, and proteomes and no accession for tax
+          accessionDisplay.has(mainType) &&
+            metadata.source_database !== 'taxonomy' && (
+              // no accession for Taxonomy but in blue for protein (reviewed), structure (pdb), and proteomes (proteome)
+              <span className={f('title-id-other')}>{metadata.accession}</span>
+            )}
+        </div>
       </div>
     );
   }

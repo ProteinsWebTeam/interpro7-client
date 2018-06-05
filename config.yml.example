@@ -55,7 +55,7 @@ pagination:
 cache:
   enabled: true
 colors:
-  fallback: '#cacaca'
+  fallback: '#718189'
   cathgene3d: '#a88cc3'
   cdd: '#addc58'
   hamap: '#2cd6d6'

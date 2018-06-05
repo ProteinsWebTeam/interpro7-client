@@ -29,7 +29,8 @@
   padding: 0.3rem 1rem;
 }
 .exporter .dropdown-pane ul li a:hover {
-  background-color: #2daec1; /*#85b6d3*/
+  /*background-color: #85b6d3;*/
+  background-color: #1878ba;
   color: white;
 }
 

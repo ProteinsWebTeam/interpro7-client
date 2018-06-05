@@ -17,7 +17,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="home-mobile show-for-small-only"
         >
           <Connect(Link)
-            href="https://www.ebi.ac.uk"
+            href="//www.ebi.ac.uk"
           >
             EMBL-EBI Home page
           </Connect(Link)>
@@ -26,7 +26,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="embl hide"
         >
           <Connect(Link)
-            href="http://www.embl.org/"
+            href="//www.embl.org/"
           >
             EMBL
           </Connect(Link)>
@@ -35,7 +35,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="barcelona hide"
         >
           <Connect(Link)
-            href="https://www.embl-barcelona.es/"
+            href="//www.embl-barcelona.es/"
           >
             Barcelona
           </Connect(Link)>
@@ -44,7 +44,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="hamburg hide"
         >
           <Connect(Link)
-            href="https://www.embl-hamburg.de/"
+            href="//www.embl-hamburg.de/"
           >
             Hamburg
           </Connect(Link)>
@@ -53,7 +53,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="heidelberg hide"
         >
           <Connect(Link)
-            href="https://www.embl.de/"
+            href="//www.embl.de/"
           >
             Heidelberg
           </Connect(Link)>
@@ -62,7 +62,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="grenoble hide"
         >
           <Connect(Link)
-            href="https://www.embl.fr/"
+            href="//www.embl.fr/"
           >
             Grenoble
           </Connect(Link)>
@@ -71,7 +71,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="rome hide"
         >
           <Connect(Link)
-            href="https://www.embl.it/"
+            href="//www.embl.it/"
           >
             Rome
           </Connect(Link)>
@@ -80,7 +80,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="ebi"
         >
           <Connect(Link)
-            href="https://www.ebi.ac.uk"
+            href="//www.ebi.ac.uk"
           >
             EMBL-EBI
           </Connect(Link)>
@@ -89,7 +89,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="services active"
         >
           <Connect(Link)
-            href="https://www.ebi.ac.uk/services"
+            href="//www.ebi.ac.uk/services"
           >
             Services
           </Connect(Link)>
@@ -98,7 +98,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="research"
         >
           <Connect(Link)
-            href="https://www.ebi.ac.uk/research"
+            href="//www.ebi.ac.uk/research"
           >
             Research
           </Connect(Link)>
@@ -107,7 +107,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="training"
         >
           <Connect(Link)
-            href="https://www.ebi.ac.uk/training"
+            href="//www.ebi.ac.uk/training"
           >
             Training
           </Connect(Link)>
@@ -116,7 +116,7 @@ exports[`<EBIHeader /> should render 1`] = `
           className="about"
         >
           <Connect(Link)
-            href="https://www.ebi.ac.uk/about"
+            href="//www.ebi.ac.uk/about"
           >
             About us
           </Connect(Link)>

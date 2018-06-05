@@ -196,11 +196,13 @@ class _MemberDBSelector extends PureComponent {
     this.setState({ visible: true });
   };
 
-  _handleExit = (maybeEvent /*: Event | number */) => {
+  _handleExit = (withDelay /*: boolean*/) => (
+    maybeEvent /*: Event | number */,
+  ) => {
     if (!this.state.visible) return;
     const delay = Number.isFinite(maybeEvent) ? maybeEvent : MIN_DELAY;
     this._exit = cancelable(
-      sleep(delay).then(() => {
+      sleep(withDelay ? delay : 0).then(() => {
         if (this._exit && !this._exit.canceled) {
           this.setState({ visible: false });
         }
@@ -247,8 +249,8 @@ class _MemberDBSelector extends PureComponent {
         onClick={this._handleOpen}
         onKeyPress={this._handleOpen}
         onFocus={this._handleOpen}
-        onMouseLeave={this._handleExit}
-        onBlur={this._handleExit}
+        onMouseLeave={this._handleExit(true)}
+        onBlur={this._handleExit(true)}
         className={f('container', className, {
           columns: !children,
           'small-12': !children,
@@ -259,15 +261,15 @@ class _MemberDBSelector extends PureComponent {
       >
         <span
           className={f('child-container')}
-          onClick={this._handleExit}
-          onKeyPress={this._handleExit}
+          onClick={this._handleExit(false)}
+          onKeyPress={this._handleExit(false)}
           role="button"
           tabIndex="0"
         >
           {children ? children(visible) : null}
         </span>
         <div className={f('potential-popup', { popup: children, visible })}>
-          <h6>Select your database:</h6>
+          <div className={f('filter-label')}>Select your database:</div>
           <form
             className={f('db-selector', { 'one-column': !children })}
             onChange={handleChange}

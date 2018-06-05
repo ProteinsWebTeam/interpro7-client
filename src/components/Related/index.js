@@ -19,9 +19,9 @@ import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
 
 import { foundationPartial } from 'styles/foundation';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-import global from 'styles/global.css';
-const f = foundationPartial(global);
+const f = foundationPartial(ebiGlobalStyles);
 
 class ObjectToList extends PureComponent {
   static propTypes = {

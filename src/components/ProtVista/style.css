@@ -7,7 +7,7 @@
 /*top option*/
 .view-options-wrap {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
 }
 
@@ -30,7 +30,8 @@
 }
 .view-options select {
   font-size: 100%;
-  padding: 0 1rem 0 0.5rem;
+  padding: 0 1.5rem 0 0.5rem;
+  border: 1px transparent solid; /*define transparent border to fix the moving bu on focus*/
 }
 
 .track-group {
@@ -52,7 +53,7 @@
   font-weight: 300;
 }
 .track-container {
-  padding-left: 1em;
+  /*padding-left: 1em;*/
 }
 
 .track-row {

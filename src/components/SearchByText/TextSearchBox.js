@@ -110,7 +110,4 @@ const mapStateToProps = createSelector(
   (main, value, pageSize) => ({ main, value, pageSize }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(TextSearchBox);
+export default connect(mapStateToProps, { goToCustomLocation })(TextSearchBox);

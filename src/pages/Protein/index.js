@@ -23,12 +23,12 @@ import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
 
-import styles from 'styles/blocks.css';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(fonts, pageStyle, ipro, styles);
+const f = foundationPartial(fonts, pageStyle, ebiStyles, ipro);
 
 import {
   schemaProcessDataTable,

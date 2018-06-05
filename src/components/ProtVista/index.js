@@ -372,10 +372,10 @@ class ProtVista extends PureComponent {
   renderOptions() {
     const { collapsed } = this.state;
     return (
-      <div className={f('aligned-to-track-component')}>
+      <div className={f('aligned-to-track-component', 'view-options-wrap')}>
         <div className={f('view-options-title')}>Domains on protein</div>
         <div className={f('view-options')}>
-          <div className={f('option-color', 'margin-right-large')}>
+          <div className={f('option-color', 'margin-right-medium')}>
             Color By:{' '}
             <select
               className={f('select-inline')}
@@ -428,16 +428,12 @@ class ProtVista extends PureComponent {
     const { hideCategory } = this.state;
     return (
       <div ref={this._mainRef} className={f('fullscreenable')}>
-        <div className={f('row')}>
-          <div className={f('columns')}>
-            <div className={f('track-row')}>{this.renderOptions()}</div>
-          </div>
-        </div>
+        <div className={f('track-row')}>{this.renderOptions()}</div>
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
           <div ref={this._popperContentRef} />
         </div>
-        <div className={f('row', 'protvista')}>
+        <div className={f('protvista')}>
           <protvista-manager
             attributes="length displaystart displayend highlightstart highlightend"
             id="pv-manager"

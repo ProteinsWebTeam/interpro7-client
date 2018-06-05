@@ -84,7 +84,7 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
                     className={styleBundle('no-underline', 'inline')}
                     style={{ lineHeight: '1rem' }}
                   >
-                    <Link href="https://embl.org">EMBL</Link>
+                    <Link href="//embl.org">EMBL</Link>
                   </h3>{' '}
                   was set up in 1974 as Europe’s flagship laboratory for the
                   life sciences – an intergovernmental organisation with more
@@ -103,7 +103,7 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
                 )}
               >
                 <div className={styleBundle('column', 'padding-bottom-medium')}>
-                  <Link href="https://www.embl.de/research/index.php">
+                  <Link href="//www.embl.de/research/index.php">
                     <h5 className={styleBundle('inline', 'underline')}>
                       Research:
                     </h5>{' '}
@@ -111,7 +111,7 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
                   </Link>
                 </div>
                 <div className={styleBundle('column', 'padding-bottom-medium')}>
-                  <Link href="https://www.embl.de/services/index.html">
+                  <Link href="//www.embl.de/services/index.html">
                     <h5 className={styleBundle('inline', 'underline')}>
                       Services:
                     </h5>{' '}
@@ -119,7 +119,7 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
                   </Link>
                 </div>
                 <div className={styleBundle('column', 'padding-bottom-medium')}>
-                  <Link href="https://www.embl.de/training/index.php">
+                  <Link href="//www.embl.de/training/index.php">
                     <h5 className={styleBundle('inline', 'underline')}>
                       Training
                     </h5>{' '}
@@ -127,7 +127,7 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
                   </Link>
                 </div>
                 <div className={styleBundle('column', 'padding-bottom-medium')}>
-                  <Link href="https://www.embl.de/research/tech_transfer/index.html">
+                  <Link href="//www.embl.de/research/tech_transfer/index.html">
                     <h5 className={styleBundle('inline', 'underline')}>
                       Transfer
                     </h5>{' '}
@@ -149,10 +149,7 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
               </div>
               <div className={styleBundle('margin-top-xlarge', 'no-underline')}>
                 <h3>
-                  <Link
-                    href="https://embl.org"
-                    className={styleBundle('readmore')}
-                  >
+                  <Link href="//embl.org" className={styleBundle('readmore')}>
                     More about EMBL
                   </Link>
                 </h3>
@@ -166,31 +163,31 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
               <div className={styleBundle('row medium-up-2', 'small-up-2')}>
                 <div className={styleBundle('column')}>
                   <h5 className={styleBundle('inline')}>
-                    <Link href="https://www.embl-barcelona.es/">Barcelona</Link>
+                    <Link href="//www.embl-barcelona.es/">Barcelona</Link>
                   </h5>
                   <p>Tissue biology and disease modelling</p>
                 </div>
                 <div className={styleBundle('column')}>
                   <h5 className={styleBundle('inline')}>
-                    <Link href="https://www.embl.fr/">Grenoble</Link>
+                    <Link href="//www.embl.fr/">Grenoble</Link>
                   </h5>
                   <p>Structural biology</p>
                 </div>
                 <div className={styleBundle('column')}>
                   <h5 className={styleBundle('inline')}>
-                    <Link href="https://www.embl-hamburg.de/">Hamburg</Link>
+                    <Link href="//www.embl-hamburg.de/">Hamburg</Link>
                   </h5>
                   <p>Structural biology</p>
                 </div>
                 <div className={styleBundle('column')}>
                   <h5 className={styleBundle('inline')}>
-                    <Link href="https://www.embl.de/">Heidelberg</Link>
+                    <Link href="//www.embl.de/">Heidelberg</Link>
                   </h5>
                   <p>Main laboratory</p>
                 </div>
                 <div className={styleBundle('column')}>
                   <h5 className={styleBundle('inline')}>
-                    <Link href="https://www.ebi.ac.uk/">Hinxton</Link>
+                    <Link href="//www.ebi.ac.uk/">Hinxton</Link>
                   </h5>
                   <p className={styleBundle('margin-bottom-none')}>
                     EMBL-EBI: European Bioinformatics Institute
@@ -198,7 +195,7 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
                 </div>
                 <div className={styleBundle('column')}>
                   <h5 className={styleBundle('inline')}>
-                    <Link href="https://www.embl.it/">Rome</Link>
+                    <Link href="//www.embl.it/">Rome</Link>
                   </h5>
                   <p>Epigenetics and neurobiology</p>
                 </div>

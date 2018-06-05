@@ -28,10 +28,20 @@
   & h5 {
     margin: 0;
   }
+  & .elixir-logo-kite {
+    position: relative;
+    top: -5px;
+    margin: 0 1rem -0.5rem 0;
+    height: 60px;
+    width: 60px;
+    display: inline-block;
+    float: left;
+    background-size: 60px;
+  }
 }
 
 .row {
-  max-width: 1200px;
+  /*max-width: 1200px;*/
   margin: 0 auto 1rem;
   display: flex;
 
