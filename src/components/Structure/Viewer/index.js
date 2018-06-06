@@ -31,20 +31,18 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   constructor(props /*: Props */) {
     super(props);
-
+    this.state = {
+      entryMap: {},
+    };
     this._ref = React.createRef();
   }
 
   componentDidMount() {
-    // const Behaviour = LiteMol.Bootstrap.Behaviour;
-    // const Components = LiteMol.Plugin.Components;
-    // const LayoutRegion = LiteMol.Bootstrap.Components.LayoutRegion;
     const Core = LiteMol.Core;
     const Visualisation = LiteMol.Visualization;
     const Boostrap = LiteMol.Bootstrap;
     const Transformer = LiteMol.Bootstrap.Entity.Transformer;
     const Query = LiteMol.Core.Structure.Query;
-    const Command = LiteMol.Bootstrap.Command;
     const Transform = LiteMol.Bootstrap.Tree.Transform;
 
     const pdbid = this.props.id;
@@ -66,7 +64,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
         type: 'String',
         id: pdbid,
       })
-      .then(Transformer.Data.ParseCif, { id: pdbid }, { isBinding: true })
+      .then(
+        Transformer.Data.ParseCif,
+        { id: pdbid },
+        { isBinding: true, ref: 'parse' },
+      )
       .then(
         Transformer.Molecule.CreateFromMmCif,
         { blockIndex: 0 },
@@ -86,38 +88,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
     plugin.applyTransform(action).then(() => {
       const model = context.select('model')[0];
+      const parser = context.select('parse')[0];
       const polymer = context.select('polymer-visual')[0];
       if (this.props.matches) {
-        const entryResidues = {};
-        // create matches in structure hierarchy
-        const queries = [];
-        for (const match of this.props.matches) {
-          const entry = match.metadata.accession;
-          const db = match.metadata.source_database;
-          let chain;
-          const residues = [];
-
-          for (const structure of match.structures) {
-            chain = structure.chain;
-            for (const location of structure.entry_protein_locations) {
-              for (const fragment of location.fragments) {
-                for (let i = fragment.start; i <= fragment.end; i++) {
-                  residues.push({ authAsymId: chain, authSeqNumber: i });
-                }
-              }
-            }
-          }
-
-          entryResidues[entry] = residues;
-          queries.push({
-            entry: entry,
-            chain: chain,
-            db: db,
-            query: Query.residues(...residues),
-            length: residues.length,
-          });
-        }
-
         //Testing customtheme
         console.log('CustomTheme');
         const customTheme = new CustomTheme(
@@ -126,39 +99,18 @@ class StructureView extends PureComponent /*:: <Props> */ {
           Boostrap,
           Query,
         );
-        /*
         const colour = {
-          base: { r: 255, g: 255, b: 255 },
+          base: { r: 204, g: 201, b: 193 },
           entries: [
             {
-              entity_id: polymer.id,
-              struct_asym_id: 'A',
-              start_residue_number: 3,
-              end_residue_number: 51,
-              color: { r: 255, g: 128, b: 64 },
-            },
-            {
-              entity_id: polymer.id,
-              struct_asym_id: 'A',
-              start_residue_number: 70,
-              end_residue_number: 153,
-              color: { r: 64, g: 128, b: 255 },
-            },
-          ],
-        };
-        */
-        const colour = {
-          base: { r: 255, g: 255, b: 255 },
-          entries: [
-            {
-              entity_id: '1',
+              entity_id: `${parser.parent.id}`,
               struct_asym_id: 'A',
               start_residue_number: 10,
               end_residue_number: 25,
               color: { r: 255, g: 128, b: 64 },
             },
             {
-              entity_id: '1',
+              entity_id: `${parser.parent.id}`,
               struct_asym_id: 'A',
               start_residue_number: 40,
               end_residue_number: 60,
@@ -170,43 +122,38 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const theme = customTheme.createTheme(model.props.model, colour);
         customTheme.applyTheme(plugin, 'polymer-visual', theme);
         //end customtheme testing
-
-        /*
-        const group = Transform.build();
-        group.add(
-          polymer,
-          Transformer.Basic.CreateGroup,
-          { label: 'Entries', description: 'Entries mapped to this structure' },
-          { isBinding: false },
-        );
-        for (const q of queries) {
-          group
-            .then(
-              Transformer.Molecule.CreateSelectionFromQuery,
-              { name: `${q.entry} (${q.db})`, query: q.query, silent: true },
-              { ref: q.entry },
-            )
-            .then(Transformer.Molecule.CreateVisual, {
-              style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get(
-                'Cartoons',
-              ),
-            });
-        }
-        plugin.applyTransform(group).then(() => {
-          if (this.props.highlight && entryResidues[this.props.highlight]) {
-            const query = Query.residues(
-              ...entryResidues[this.props.highlight],
-            );
-            Command.Molecule.Highlight.dispatch(context.tree.context, {
-              model: model,
-              query: query,
-              isOn: true,
-            });
-          }
-        });
-        */
       }
     });
+    //const entryMap = this.createEntryMap();
+  }
+
+  createEntryMap() {
+    const entryMap = {};
+
+    if (this.props.matches) {
+      const entryResidues = {};
+      // create matches in structure hierarchy
+      const queries = [];
+      for (const match of this.props.matches) {
+        const entry = match.metadata.accession;
+        const db = match.metadata.source_database;
+        let chain;
+        const residues = [];
+
+        for (const structure of match.structures) {
+          chain = structure.chain;
+          for (const location of structure.entry_protein_locations) {
+            console.log(location);
+            for (const fragment of location.fragments) {
+              console.log(fragment);
+            }
+          }
+        }
+
+        entryResidues[entry] = residues;
+      }
+    }
+    return entryMap;
   }
 
   render() {
@@ -224,6 +171,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
             position: 'relative',
           }}
         />
+        <div />
       </div>
     );
   }
