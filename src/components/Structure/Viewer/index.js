@@ -1,5 +1,10 @@
 //
-import React, { PureComponent } from 'react';
+import React, {
+  PureComponent,
+  ButtonToolBar,
+  ButtonGroup,
+  Button,
+} from 'react';
 import T from 'prop-types';
 import LiteMol from 'litemol';
 
@@ -32,6 +37,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
   constructor(props /*: Props */) {
     super(props);
     this.state = {
+      plugin: null,
       entryMap: {},
     };
     this._ref = React.createRef();
@@ -87,12 +93,30 @@ class StructureView extends PureComponent /*:: <Props> */ {
       });
 
     plugin.applyTransform(action).then(() => {
-      const model = context.select('model')[0];
       const parser = context.select('parse')[0];
       const polymer = context.select('polymer-visual')[0];
       if (this.props.matches) {
-        //Testing customtheme
-        console.log('CustomTheme');
+        const entryMap = this.createEntryMap(parser.parent.id);
+        this.setState({
+          plugin: plugin,
+          entryMap: entryMap,
+        });
+      }
+    });
+  }
+
+  updateTheme(entries) {
+    if (this.state.plugin != null) {
+      const Core = LiteMol.Core;
+      const Visualisation = LiteMol.Visualization;
+      const Boostrap = LiteMol.Bootstrap;
+      const Query = LiteMol.Core.Structure.Query;
+      const plugin = this.state.plugin;
+      const context = plugin.context;
+      const model = context.select('model')[0];
+      const parser = context.select('parse')[0];
+      if (this.props.matches) {
+        console.log(`CustomTheme: ${entries.length}`);
         const customTheme = new CustomTheme(
           Core,
           Visualisation,
@@ -101,31 +125,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
         );
         const colour = {
           base: { r: 204, g: 201, b: 193 },
-          entries: [
-            {
-              entity_id: `${parser.parent.id}`,
-              struct_asym_id: 'A',
-              start_residue_number: 10,
-              end_residue_number: 25,
-              color: { r: 255, g: 128, b: 64 },
-            },
-            {
-              entity_id: `${parser.parent.id}`,
-              struct_asym_id: 'A',
-              start_residue_number: 40,
-              end_residue_number: 60,
-              color: { r: 64, g: 128, b: 255 },
-            },
-          ],
+          entries: entries,
         };
 
         const theme = customTheme.createTheme(model.props.model, colour);
         customTheme.applyTheme(plugin, 'polymer-visual', theme);
         //end customtheme testing
-        const entryMap = this.createEntryMap(parser.parent.ids);
-        this.setState({ entryMap: entryMap });
       }
-    });
+    }
   }
 
   createEntryMap(rootId) {
@@ -150,7 +157,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
           for (const location of structure.entry_protein_locations) {
             for (const fragment of location.fragments) {
               memberDBMap[db][entry].push({
-                entity_id: `rootId`,
+                entity_id: rootId,
                 struct_asym_id: chain,
                 start_residue_number: fragment.start,
                 end_residue_number: fragment.end,
@@ -164,12 +171,36 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return memberDBMap;
   }
 
+  handleClick(memberDB, entry) {
+    this.updateTheme([]);
+    this.updateTheme(this.state.entryMap[memberDB][entry]);
+  }
+
   render() {
-    for (const [memberDB, entry] of Object.entries(this.state.entryMap)) {
-    }
     const highlights = [];
+    for (const [memberDB, entries] of Object.entries(this.state.entryMap)) {
+      const entryList = [];
+      for (const [entry, matches] of Object.entries(entries)) {
+        console.log(`${memberDB} => ${entry}`);
+        const key = `${memberDB}-${entry}`;
+        entryList.push(
+          <div key={key} onClick={() => this.handleClick(memberDB, entry)}>
+            {entry}
+          </div>,
+        );
+      }
+      highlights.push(
+        <div key={memberDB}>
+          <div>
+            {memberDB}
+            {entryList}
+          </div>
+        </div>,
+      );
+    }
     return (
       <div>
+        <div>{highlights}</div>
         <div style={embedStyle}>
           <div
             ref={this._ref}
@@ -183,8 +214,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
               position: 'relative',
             }}
           />
-          <div />
-          <div>{highlights}</div>
         </div>
       </div>
     );
