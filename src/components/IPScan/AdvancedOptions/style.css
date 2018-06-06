@@ -1,14 +1,5 @@
 @import '../../../styles/colors.css';
 
-.details {
-  margin-bottom: 0.5em;
-
-  & > summary {
-    cursor: pointer;
-    outline: 0;
-  }
-}
-
 .fieldset label {
   display: inline-block;
   margin-right: 2em;
