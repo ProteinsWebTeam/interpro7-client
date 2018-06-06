@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberLabel from 'components/NumberLabel';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -38,9 +39,9 @@ class TaxonomyFilter extends PureComponent {
       ...this.props.customLocation,
       description: {
         ...this.props.customLocation.description,
-        organism: {
+        taxonomy: {
           isFilter: value !== 'ALL',
-          db: value === 'ALL' ? null : 'taxonomy',
+          db: value === 'ALL' ? null : 'uniprot',
           accession: value === 'ALL' ? null : value,
         },
       },
@@ -49,11 +50,12 @@ class TaxonomyFilter extends PureComponent {
   };
 
   render() {
+    if (!this.props.data || this.props.data.loading) return <Loading />;
     const {
       data: { loading, payload },
       customLocation: {
         description: {
-          organism: { accession },
+          taxonomy: { accession },
         },
       },
     } = this.props;
@@ -105,8 +107,8 @@ const getUrlFor = createSelector(
     // build URL
     const desc = {
       ...description,
-      organism: {
-        ...description.organism,
+      taxonomy: {
+        ...description.taxonomy,
         accession: null,
       },
     };
