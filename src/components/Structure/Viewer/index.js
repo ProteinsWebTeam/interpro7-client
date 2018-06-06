@@ -122,13 +122,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const theme = customTheme.createTheme(model.props.model, colour);
         customTheme.applyTheme(plugin, 'polymer-visual', theme);
         //end customtheme testing
+        const entryMap = this.createEntryMap(parser.parent.ids);
+        this.setState({ entryMap: entryMap });
       }
     });
-    //const entryMap = this.createEntryMap();
   }
 
-  createEntryMap() {
-    const entryMap = {};
+  createEntryMap(rootId) {
+    const memberDBMap = {};
 
     if (this.props.matches) {
       const entryResidues = {};
@@ -137,41 +138,54 @@ class StructureView extends PureComponent /*:: <Props> */ {
       for (const match of this.props.matches) {
         const entry = match.metadata.accession;
         const db = match.metadata.source_database;
-        let chain;
-        const residues = [];
+        if (memberDBMap[db] == null) {
+          memberDBMap[db] = {};
+        }
+        if (memberDBMap[db][entry] == null) {
+          memberDBMap[db][entry] = [];
+        }
 
         for (const structure of match.structures) {
-          chain = structure.chain;
+          const chain = structure.chain;
           for (const location of structure.entry_protein_locations) {
-            console.log(location);
             for (const fragment of location.fragments) {
-              console.log(fragment);
+              memberDBMap[db][entry].push({
+                entity_id: `rootId`,
+                struct_asym_id: chain,
+                start_residue_number: fragment.start,
+                end_residue_number: fragment.end,
+                color: { r: 64, g: 128, b: 255 },
+              });
             }
           }
         }
-
-        entryResidues[entry] = residues;
       }
     }
-    return entryMap;
+    return memberDBMap;
   }
 
   render() {
+    for (const [memberDB, entry] of Object.entries(this.state.entryMap)) {
+    }
+    const highlights = [];
     return (
-      <div style={embedStyle}>
-        <div
-          ref={this._ref}
-          style={{
-            background: 'white',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-          }}
-        />
-        <div />
+      <div>
+        <div style={embedStyle}>
+          <div
+            ref={this._ref}
+            style={{
+              background: 'white',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+            }}
+          />
+          <div />
+          <div>{highlights}</div>
+        </div>
       </div>
     );
   }
