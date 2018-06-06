@@ -152,7 +152,7 @@ class AdvancedOptions extends PureComponent {
     );
     return (
       <div className={f('row')}>
-        <details className={f('columns', 'details')}>
+        <details className={f('columns', 'margin-bottom-medium')}>
           <summary>Advanced Options</summary>
           <fieldset className={f('fieldset')}>
             <legend>Job configuration</legend>
