@@ -112,8 +112,9 @@ class SummaryCounterProteins extends PureComponent {
           </Link>
         </Tooltip>
 
-        {// show sets counter + icon only when available
-        entryDB.toLowerCase() === 'cdd' || entryDB.toLowerCase() === 'pfam' ? (
+        {entryDB && // show sets counter + icon only when available
+        (entryDB.toLowerCase() === 'cdd' ||
+          entryDB.toLowerCase() === 'pfam') ? (
           <Tooltip
             title={`${sets} ${toPlural('set', sets)} matching ${metadata.name}`}
             className={f('count-sets')}
@@ -145,6 +146,19 @@ class SummaryCounterProteins extends PureComponent {
 
 const ProteinCard = ({ data, search, entryDB }) => (
   <React.Fragment>
+    {data.metadata.source_database === 'reviewed' ? (
+      <Fragment>
+        <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+          <h4>
+            <span
+              className={f('icon', 'icon-functional')}
+              data-icon="/"
+              aria-label="reviewed"
+            />
+          </h4>
+        </Tooltip>
+      </Fragment>
+    ) : null}
     <div className={f('card-header')}>
       <Link
         to={{
@@ -159,7 +173,7 @@ const ProteinCard = ({ data, search, entryDB }) => (
       >
         <h6>
           <HighlightedText
-            text={data.metadata.accession.toUpperCase()}
+            text={(data.metadata.accession || '').toUpperCase()}
             textToHighlight={search}
           />
         </h6>
