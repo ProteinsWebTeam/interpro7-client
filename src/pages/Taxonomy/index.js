@@ -117,7 +117,7 @@ for (const subPage of config.pages.taxonomy.subPages) {
   subPagesForTaxonomy.set(subPage, subPages.get(subPage));
 }
 
-const SpeciesIcon = ({ lineage }) => {
+export const SpeciesIcon = ({ lineage }) => {
   let icon = '.';
   let color;
   if (lineage) {
