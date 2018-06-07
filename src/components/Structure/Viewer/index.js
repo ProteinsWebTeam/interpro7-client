@@ -1,17 +1,12 @@
 //
-import React, {
-  PureComponent,
-  ButtonToolBar,
-  ButtonGroup,
-  Button,
-} from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import config from 'config';
 import LiteMol from 'litemol';
-
-// import LiteMolViewer from 'litemol/dist/js/LiteMol-viewer.js';
 import CustomTheme from './CustomTheme';
+import { hexToRgb } from 'utils/entry-color';
 
-import 'litemol/dist/css/LiteMol-plugin-light.css';
+import 'litemol/dist/css/LiteMol-plugin.css';
 
 const embedStyle = { width: '100%', height: '50vh' };
 // const f = foundationPartial(ebiStyles);
@@ -102,6 +97,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
           entryMap: entryMap,
         });
       }
+      //override the default litemol colour with the custom theme
+      this.updateTheme([]);
     });
   }
 
@@ -115,20 +112,20 @@ class StructureView extends PureComponent /*:: <Props> */ {
       const context = plugin.context;
       const model = context.select('model')[0];
       const parser = context.select('parse')[0];
-      if (this.props.matches) {
-        console.log(`CustomTheme: ${entries.length}`);
+      if (this.props.matches != null) {
         const customTheme = new CustomTheme(
           Core,
           Visualisation,
           Boostrap,
           Query,
         );
-        const colour = {
-          base: { r: 204, g: 201, b: 193 },
+        const base = hexToRgb(config.colors.get('fallback'));
+        const color = {
+          base: base,
           entries: entries,
         };
 
-        const theme = customTheme.createTheme(model.props.model, colour);
+        const theme = customTheme.createTheme(model.props.model, color);
         customTheme.applyTheme(plugin, 'polymer-visual', theme);
         //end customtheme testing
       }
@@ -156,12 +153,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
           const chain = structure.chain;
           for (const location of structure.entry_protein_locations) {
             for (const fragment of location.fragments) {
+              const hexCol = config.colors.get(db);
+              const color = hexToRgb(hexCol);
               memberDBMap[db][entry].push({
                 entity_id: rootId,
                 struct_asym_id: chain,
                 start_residue_number: fragment.start,
                 end_residue_number: fragment.end,
-                color: { r: 64, g: 128, b: 255 },
+                color: color,
               });
             }
           }
@@ -181,7 +180,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
     for (const [memberDB, entries] of Object.entries(this.state.entryMap)) {
       const entryList = [];
       for (const [entry, matches] of Object.entries(entries)) {
-        console.log(`${memberDB} => ${entry}`);
         const key = `${memberDB}-${entry}`;
         entryList.push(
           <div key={key} onClick={() => this.handleClick(memberDB, entry)}>
