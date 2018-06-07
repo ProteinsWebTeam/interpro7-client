@@ -95,7 +95,7 @@ export default class Faqs extends PureComponent {
               <li>
                 {' '}
                 <interpro-type
-                  dimension="1.5em"
+                  dimension="4em"
                   type="homologous superfamily"
                   aria-label="Entry type"
                 />{' '}
@@ -110,7 +110,7 @@ export default class Faqs extends PureComponent {
               <li>
                 {' '}
                 <interpro-type
-                  dimension="1.5em"
+                  dimension="4em"
                   type="Family"
                   aria-label="Entry type"
                 />{' '}
@@ -123,7 +123,7 @@ export default class Faqs extends PureComponent {
               <li>
                 {' '}
                 <interpro-type
-                  dimension="1.5em"
+                  dimension="4em"
                   type="Domain"
                   aria-label="Entry type"
                 />
@@ -135,7 +135,7 @@ export default class Faqs extends PureComponent {
               <li>
                 {' '}
                 <interpro-type
-                  dimension="1.5em"
+                  dimension="4em"
                   type="Repeat"
                   aria-label="Entry type"
                 />
@@ -146,7 +146,7 @@ export default class Faqs extends PureComponent {
               <li>
                 {' '}
                 <interpro-type
-                  dimension="1.5em"
+                  dimension="4em"
                   type="Site"
                   aria-label="Entry type"
                 />
@@ -159,7 +159,7 @@ export default class Faqs extends PureComponent {
               <li>
                 {' '}
                 <interpro-type
-                  dimension="1.5em"
+                  dimension="4em"
                   type="Unknown"
                   aria-label="Entry type"
                 />
