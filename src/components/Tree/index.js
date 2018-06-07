@@ -23,7 +23,7 @@ import fisheyeOn from 'EBI-Icon-fonts/source/common/font-awesome/solid/bullseye.
 
 export default class Tree extends PureComponent /*:: <Props, State> */ {
   /* ::
-    _ref: {current: null | React$ElementRef<'svg'>};
+    _ref: { current: null | React$ElementRef<'svg'> };
     _loadingVis: ?boolean;
     _vis: TaxonomyVisualisation;
   */

@@ -1,4 +1,4 @@
-//
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -81,7 +81,7 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
 }; */
 
 class Sequence extends PureComponent /*:: <SequenceProps> */ {
-  /*:: _ref: { current: ?HTMLElement }; */
+  /*:: _ref: { current: null | React$ElementRef<'div'> }; */
 
   static propTypes = {
     sequence: T.string,
@@ -211,4 +211,7 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
   }
 }
 
-export default connect(undefined, { goToCustomLocation })(Sequence);
+export default connect(
+  undefined,
+  { goToCustomLocation },
+)(Sequence);

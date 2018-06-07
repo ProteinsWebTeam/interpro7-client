@@ -1,4 +1,4 @@
-//
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 /*:: import type { Node } from 'react'; */
@@ -21,7 +21,7 @@ import ResizeObserver from './ResizeObserver';
 
 class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
   /*::
-    _ref: { current: ?HTMLElement };
+    _ref: { current: null | React$ElementRef<string> };
     _resizeObserver: any;
   */
 
@@ -73,6 +73,7 @@ class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
     const { children, element, measurements, ...props } = this.props;
     const Element = element || 'div';
     return (
+      // $FlowIgnore
       <Element {...props} ref={this._ref}>
         {children(this.state)}
       </Element>
