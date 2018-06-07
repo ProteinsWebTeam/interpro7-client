@@ -10,7 +10,6 @@
   grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
 }
 .flex-grid interpro-type {
-  font-size: 274%;
   padding: 0 1rem 0 0;
   float: left;
   line-height: 0;
