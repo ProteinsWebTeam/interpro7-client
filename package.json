@@ -141,7 +141,7 @@
     "redux": "4.0.0",
     "reselect": "3.0.1",
     "resize-observer-polyfill": "^1.5.0",
-    "taxonomy-visualisation": "0.1.9",
+    "taxonomy-visualisation": "1.0.1",
     "timeago.js": "^3.0.2",
     "timing-functions": "0.2.2",
     "url": "0.11.0",

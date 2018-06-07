@@ -1,14 +1,3 @@
-@import '../../../../styles/timing.css';
-
 .button {
   width: 100%;
-}
-
-.container :global(.node) {
-  opacity: 1;
-  transition: opacity var(--timing-slow) ease-in-out;
-
-  &:not(:global(.in-path)) {
-    opacity: 0.5;
-  }
 }
