@@ -1,18 +1,17 @@
-.cite-box {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-}
+/*.flex-columns {display: flex; flex-wrap: wrap; list-style-type: none;}*/
+/*.flex-columns li {width:23%; padding: 1rem 2rem;flex-grow: 1; }*/
+/*.flex-columns interpro-type {font-size:274%; padding: 0 1rem 0 0; float:left; line-height: 0;}*/
 
-.cite-icon {
-  align-self: center;
-  font-size: 720%;
-  color: #dedede;
-  line-height: 1;
+.flex-grid {
+  margin: 0;
+  list-style-type: none;
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
 }
-
-.cite-title {
-  font-weight: bold;
-  align-self: center;
-  margin-bottom: 1rem;
+.flex-grid interpro-type {
+  font-size: 274%;
+  padding: 0 1rem 0 0;
+  float: left;
+  line-height: 0;
 }
