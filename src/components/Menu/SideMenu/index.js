@@ -12,6 +12,8 @@ import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
 import Link from 'components/generic/Link';
 import ServerStatus from './ServerStatus';
 
+import { inert as inertPolyfill } from 'utils/polyfills';
+
 import { foundationPartial } from 'styles/foundation';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
@@ -99,6 +101,10 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
     this.state = { hasRendered: false };
   }
 
+  componentDidMount() {
+    inertPolyfill();
+  }
+
   render() {
     const { visible, mainAccession, mainType, closeSideNav } = this.props;
     const { hasRendered } = this.state;
@@ -171,4 +177,7 @@ const mapStateToProps = createSelector(
   (visible, mainType, mainAccession) => ({ visible, mainType, mainAccession }),
 );
 
-export default connect(mapStateToProps, { closeSideNav })(SideMenu);
+export default connect(
+  mapStateToProps,
+  { closeSideNav },
+)(SideMenu);

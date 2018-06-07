@@ -3,9 +3,9 @@
 import {
   webComponents as supportsWebComponents,
   detailsTag as supportsDetailsTag,
+  inert as supportsInert,
 } from 'utils/support';
 
-let response;
 let responses /*: Map<string, Promise<boolean>> */ = new Map();
 
 const loadPolyfillIfNeeded = (
@@ -53,6 +53,16 @@ export const detailsTag = () /*: Promise<boolean> */ => {
         import(/* webpackChunkName: "detailstags-polyfill" */ 'details-element-polyfill'),
       'detailsTag',
       supportsDetailsTag,
+    ) || Promise.resolve(true)
+  );
+};
+
+export const inert = () /*: Promise<boolean> */ => {
+  return (
+    loadPolyfillIfNeeded(
+      () => import(/* webpackChunkName: "inert-polyfill" */ 'wicg-inert'),
+      'inert',
+      supportsInert,
     ) || Promise.resolve(true)
   );
 };

@@ -144,7 +144,8 @@
     "taxonomy-visualisation": "0.1.9",
     "timeago.js": "^3.0.2",
     "timing-functions": "0.2.2",
-    "url": "0.11.0"
+    "url": "0.11.0",
+    "wicg-inert": "2.0.0"
   },
   "devDependencies": {
     "babel-core": "6.26.3",
