@@ -44,8 +44,8 @@ const getEntryForFilter = ({ entry }) => {
     return { ...entry, isFilter: true };
   }
 };
-const getTaxonomyForFilter = ({ taxonomy }) => {
-  if (taxonomy.db) {
+const getTaxonomyForFilter = ({ taxonomy, main }) => {
+  if (main.key !== 'taxonomy' && taxonomy.db) {
     return { ...taxonomy, isFilter: true };
   }
 };
