@@ -56,11 +56,18 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
   });
 };
 
+/*:: export type FetchOutput = {|
+  status: number,
+  ok: boolean,
+  headers: Headers,
+  payload?: Object,
+|}; */
+
 const commonCachedFetch = (responseType /*: ?string */) => async (
   url /*: string */,
   { method = 'GET', headers = new Headers(), ...options } /*: Object */ = {},
   onProgress /*:: ?: (number) => void */,
-) => {
+) /*: Promise<FetchOutput> */ => {
   // modify options as needed
   options.method = method;
   if (responseType === 'json' && !headers.get('Accept')) {
@@ -76,12 +83,18 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
   if (responseType && typeof response[responseType] === 'function') {
     payloadP = response[responseType]();
   }
-  return {
-    payload: await payloadP,
+  const output /*: FetchOutput */ = {
     status: response.status,
     ok: response.ok,
     headers: response.headers,
   };
+  try {
+    output.payload = await payloadP;
+  } catch (error) {
+    /**/
+  } finally {
+    return output;
+  }
 };
 
 export const cachedFetchText = commonCachedFetch('text');

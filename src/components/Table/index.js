@@ -156,20 +156,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       onMouseOver={TableView.preload}
                       onFocus={TableView.preload}
                     />
-                  </Tooltip>{' '}
-                  {
-                    // <Tooltip title="View your results as a list">
-                    //  <Link
-                    //   to={l => ({ ...l, hash: 'list' })}
-                    //  className={f('icon-view', 'list-view', 'disabled')}
-                    //  aria-disabled="true"
-                    //  disabled
-                    //  aria-label="view your results as a list"
-                    // onMouseOver={ListView.preload}
-                    // onFocus={ListView.preload}
-                    // />
-                    // </Tooltip>
-                  }{' '}
+                  </Tooltip>
                   <div className={f('test-support-grid')}>
                     <Tooltip title="View your results in a grid">
                       <Link
