@@ -433,7 +433,7 @@ const List = ({
               />
             )}
           </Card>
-          <SearchBox search={search.search}>Search structures</SearchBox>
+          <SearchBox>Search structures</SearchBox>
           <Column
             dataKey="accession"
             headerClassName={f('table-center')}

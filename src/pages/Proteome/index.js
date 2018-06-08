@@ -346,7 +346,7 @@ class List extends PureComponent {
                 />
               )}
             </Card>
-            <SearchBox search={search.search}>Search organism</SearchBox>
+            <SearchBox>Search organism</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

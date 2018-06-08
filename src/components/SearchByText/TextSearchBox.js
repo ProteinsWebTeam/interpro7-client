@@ -22,7 +22,7 @@ const DEBOUNCE_RATE = 1000; // 1s
   main: ?string,
   value: ?string,
   className?: string,
-  goToCustomLocation: function,
+  goToCustomLocation: goToCustomLocation,
   inputRef: function,
 }; */
 /*:: type State = {|
@@ -30,9 +30,7 @@ const DEBOUNCE_RATE = 1000; // 1s
 |} */
 
 class TextSearchBox extends PureComponent /*:: <Props, State> */ {
-  /* ::
-    _debouncedPush: ?boolean => void;
-  */
+  /*:: _debouncedPush: ?boolean => void; */
   static propTypes = {
     pageSize: T.number,
     main: T.string,
@@ -74,8 +72,7 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
   };
 
   handleChange = ({ target }) => {
-    this.setState({ localValue: target.value });
-    this._debouncedPush(true);
+    this.setState({ localValue: target.value }, this._debouncedPush(true));
   };
 
   render() {
@@ -110,4 +107,7 @@ const mapStateToProps = createSelector(
   (main, value, pageSize) => ({ main, value, pageSize }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(TextSearchBox);
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(TextSearchBox);

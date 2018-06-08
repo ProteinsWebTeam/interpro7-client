@@ -216,7 +216,7 @@ const Matches = (
     contentType={primary}
   >
     <PageSizeSelector />
-    <SearchBox search={search.search}>Search</SearchBox>
+    <SearchBox />
     <Column
       dataKey="accession"
       renderer={(acc /*: string */, obj /*: {source_database: string} */) => {
