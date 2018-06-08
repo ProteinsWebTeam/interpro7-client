@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
+
 import Link from 'components/generic/Link';
-import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -10,11 +10,6 @@ import ipro from 'styles/interpro-new.css';
 import local from './style.css';
 
 const f = foundationPartial(ipro, local);
-
-const SchemaOrgData = loadable({
-  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  loading: () => null,
-});
 
 export default class Faqs extends PureComponent {
   componentDidMount() {
@@ -45,7 +40,7 @@ export default class Faqs extends PureComponent {
               target="_blank"
             >
               {' '}
-              EBI's FTP server
+              EBI&apos;s FTP server
             </Link>.
           </p>
         </details>
@@ -166,7 +161,7 @@ export default class Faqs extends PureComponent {
                 <strong>Unintegrated signatures</strong>: In addition to
                 signatures that have been grouped into InterPro entries, you can
                 also find unintegrated signatures that might not yet be curated
-                or might not reach InterPro's standards for integration.
+                or might not reach InterPro&apos;s standards for integration.
                 However, they may provide information about a protein.
               </li>
             </ul>
@@ -216,15 +211,16 @@ export default class Faqs extends PureComponent {
           <p>
             TO BE UPDATED - The graphical view of InterPro matches show where
             the signatures that match your protein appear on the sequence. There
-            are two ways that these graphical "blobs" can be coloured. If you
-            select "Colour by: domain relationship", in the left hand menu, the
-            domains that are from the same or related InterPro entries will be
-            coloured the same, allowing easy visualisation of domains we know to
-            be related. Unintegrated signatures will always be grey blobs,
-            family signatures will always be shown as white, and sites will
-            always be black when this option is selected. If you select "Colour
-            by: member database", each blob in the sequence features section
-            will be coloured according to the member database that provides the
+            are two ways that these graphical &ldquo;blobs&rdquo; can be
+            coloured. If you select &ldquo;Colour by: domain
+            relationship&rdquo;, in the left hand menu, the domains that are
+            from the same or related InterPro entries will be coloured the same,
+            allowing easy visualisation of domains we know to be related.
+            Unintegrated signatures will always be grey blobs, family signatures
+            will always be shown as white, and sites will always be black when
+            this option is selected. If you select &ldquo;Colour by: member
+            database&rdquo;, each blob in the sequence features section will be
+            coloured according to the member database that provides the
             signature, as shown in this diagram. However, the sequence summary
             view will retain the domain relationship colour scheme.
           </p>
