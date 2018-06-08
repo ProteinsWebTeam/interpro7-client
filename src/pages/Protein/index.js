@@ -328,7 +328,7 @@ class List extends PureComponent {
               )}
             </Card>
             <PageSizeSelector />
-            <SearchBox search={search.search}>Search proteins</SearchBox>
+            <SearchBox>Search proteins</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
