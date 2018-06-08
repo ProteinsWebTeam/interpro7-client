@@ -1,7 +1,14 @@
-// @flow
 import React, { PureComponent } from 'react';
+import { createSelector } from 'reselect';
+
+import Link from 'components/generic/Link';
+import Switch from 'components/generic/Switch';
+import Redirect from 'components/generic/Redirect';
 
 import loadable from 'higherOrder/loadable';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+
+import { schemaProcessDataInterpro } from 'schema_org/processors';
 import {
   schemaProcessDataWebPage,
   schemaProcessDataPageSection,
@@ -14,9 +21,40 @@ const SchemaOrgData = loadable({
 
 import { foundationPartial } from 'styles/foundation';
 
+import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(ebiGlobalStyles);
+const f = foundationPartial(ebiGlobalStyles, ipro);
+
+const Tutorial = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-consortium" */ 'components/Help/Tutorial'),
+});
+
+const Faqs = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-citation" */ 'components/Help/Faqs'),
+});
+
+const Documentation = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-funding" */ 'components/Help/Documentation'),
+});
+
+const routes = new Map([
+  ['tutorial', Tutorial],
+  ['faqs', Faqs],
+  ['documentation', Documentation],
+]);
+
+const locationSelector = createSelector(
+  customLocation => customLocation.description.other[1],
+  value => value,
+);
+
+const RedirectToDefault = () => (
+  <Redirect to={{ description: { other: ['help', 'tutorial'] } }} />
+);
 
 export default class extends PureComponent /*:: <{}> */ {
   static displayName = 'Help';
@@ -32,72 +70,54 @@ export default class extends PureComponent /*:: <{}> */ {
           }}
           processData={schemaProcessDataWebPage}
         />
-        <div className={f('columns', 'large-12')}>
-          <section>
-            <h3>Help</h3>
-          </section>
-          <section>
-            <h4>FAQs</h4>
-            <SchemaOrgData
-              data={{
-                name: 'FAQS',
-                description:
-                  'Answers to many of the most commonly asked questions',
-              }}
-              processData={schemaProcessDataPageSection}
-            />
-            <p>
-              All documentation relating to the use of the InterPro has been
-              moved to Read the Docs. This allows us to provide a rich,
-              searchable and downloadable document, as well as enables us to
-              store different versions corresponding to the different InterPro
-              releases.{' '}
-            </p>
-            <p>
-              Answers to many of the most commonly asked questions can be found
-              under the FAQ section.
-            </p>
-          </section>
-          <section>
-            <h4>Training & material</h4>
-            <SchemaOrgData
-              data={{
-                name: 'Training & material',
-                description:
-                  'training materials as part of the EBI Train online',
-              }}
-              processData={schemaProcessDataPageSection}
-            />
-            <p>
-              There are also the following training materials as part of the EBI
-              Train online
-            </p>
-            <ul>
-              <li>
-                InterPro: functional and structural analysis of protein
-                sequences
-              </li>
-              <li>
-                Protein classification: An introduction to EMBL-EBI resources
-              </li>
-              <li>A Quick Tour of InterPro</li>
-            </ul>
-          </section>
-          <section>
-            <h4>Support & feedback</h4>
-            <SchemaOrgData
-              data={{
-                name: 'Support & feedback',
-                description: 'contact us by email',
-              }}
-              processData={schemaProcessDataPageSection}
-            />
-            <p>
-              You can contact us by email following this link to the EBI contact
-              form, if neither the documentation nor online materials answer
-              your question.
-            </p>
-          </section>
+        <div className={f('columns', 'margin-bottom-large')}>
+          <ul className={f('tabs', 'menu-style')}>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={Tutorial.preload}
+              onFocus={Tutorial.preload}
+            >
+              <Link
+                to={{ description: { other: ['help', 'tutorial'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                Tutorials &amp; training
+              </Link>
+            </li>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={Faqs.preload}
+              onFocus={Faqs.preload}
+            >
+              <Link
+                to={{ description: { other: ['help', 'faqs'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                FAQs
+              </Link>
+            </li>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={Documentation.preload}
+              onFocus={Documentation.preload}
+            >
+              <Link
+                to={{ description: { other: ['help', 'documentation'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                Documentation
+              </Link>
+            </li>
+          </ul>
+          <div className={f('tabs', 'tabs-content')}>
+            <div className={f('tabs-panel', 'is-active')}>
+              <Switch
+                locationSelector={locationSelector}
+                indexRoute={RedirectToDefault}
+                childRoutes={routes}
+              />
+            </div>
+          </div>
         </div>
       </div>
     );
