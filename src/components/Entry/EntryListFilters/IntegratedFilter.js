@@ -29,6 +29,12 @@ class IntegratedFilter extends PureComponent {
     }).isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = { value: null };
+  }
+
   static getDerivedStateFromProps({ customLocation }) {
     const { integration: value } = customLocation.description.entry;
     switch (value) {
@@ -38,12 +44,6 @@ class IntegratedFilter extends PureComponent {
       default:
         return { value: 'both' };
     }
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = { value: null };
   }
 
   _handleSelection = ({ target: { value } }) => {
@@ -123,7 +123,10 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(
   loadData({
     getUrl: getUrlFor,
   })(IntegratedFilter),

@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent, Children } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';

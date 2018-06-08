@@ -242,6 +242,18 @@ class StructureCard extends PureComponent {
     entryDB: T.string,
   };
 
+  constructor(props) {
+    super(props);
+
+    const accession = props.data.metadata.accession;
+    this.state = {
+      TaxnameStructuresWithData: loadData(getUrlForStructTaxname(accession))(
+        TaxnameStructures,
+      ),
+      accession,
+    };
+  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const nextAccession = nextProps.data.metadata.accession;
 
@@ -252,18 +264,6 @@ class StructureCard extends PureComponent {
         getUrlForStructTaxname(nextAccession),
       )(TaxnameStructures),
       accession: nextAccession,
-    };
-  }
-
-  constructor(props) {
-    super(props);
-
-    const accession = props.data.metadata.accession;
-    this.state = {
-      TaxnameStructuresWithData: loadData(getUrlForStructTaxname(accession))(
-        TaxnameStructures,
-      ),
-      accession,
     };
   }
 

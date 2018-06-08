@@ -90,15 +90,15 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
     closeSideNav: T.func.isRequired,
   };
 
-  static getDerivedStateFromProps({ visible }, { hasRendered }) {
-    if (hasRendered || !visible) return null;
-    return { hasRendered: true };
-  }
-
   constructor(props) {
     super(props);
 
     this.state = { hasRendered: false };
+  }
+
+  static getDerivedStateFromProps({ visible }, { hasRendered }) {
+    if (hasRendered || !visible) return null;
+    return { hasRendered: true };
   }
 
   componentDidMount() {

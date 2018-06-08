@@ -34,18 +34,18 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
     closeEMBLMapNav: T.func.isRequired,
   };
 
+  constructor(props /*: Props */) {
+    super(props);
+
+    this.state = { wasRendered: false };
+  }
+
   static getDerivedStateFromProps(
     { visible } /*: Props */,
     { wasRendered } /*: State */,
   ) {
     if (wasRendered || !visible) return null;
     return { wasRendered: true };
-  }
-
-  constructor(props /*: Props */) {
-    super(props);
-
-    this.state = { wasRendered: false };
   }
 
   componentDidMount() {

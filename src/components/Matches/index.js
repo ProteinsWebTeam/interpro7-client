@@ -100,7 +100,8 @@ const propTypes = {
     niceRatio: T.number,
   }),
   actualSize: T.number,
-  search: T.object,
+  search: T.object.isRequired,
+  description: T.object.isRequired,
 };
 
 const componentMatch = {

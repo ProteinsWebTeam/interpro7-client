@@ -95,6 +95,16 @@ class File extends PureComponent {
     name: T.string,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      url: null,
+      fileType: null,
+      ConnectedButton: null,
+    };
+  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const url = format({
       ...nextProps.api,
@@ -110,16 +120,6 @@ class File extends PureComponent {
       ConnectedButton: connect(mapStateToPropFor(url, nextProps.fileType))(
         Button,
       ),
-    };
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      url: null,
-      fileType: null,
-      ConnectedButton: null,
     };
   }
 
@@ -147,4 +147,7 @@ const mapStateToProps = createSelector(
   (api, entryDescription) => ({ api, entryDescription }),
 );
 
-export default connect(mapStateToProps, { downloadURL })(File);
+export default connect(
+  mapStateToProps,
+  { downloadURL },
+)(File);
