@@ -95,7 +95,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
               <h3 className={f('light')}>Additional help</h3>
               <ul>
                 <li>
-                  <Link href="//www.ebi.ac.uk/Tools/webservices/">
+                  <Link href="//www.ebi.ac.uk/support/interpro-general-query">
                     <span
                       className={f('icon', 'icon-common')}
                       data-icon="&#x27a;"
@@ -104,7 +104,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   </Link>
                 </li>
                 <li>
-                  <Link href="//www.ebi.ac.uk/Tools/webservices/">
+                  <Link href="//www.ebi.ac.uk/support/interpro-general-query">
                     <span
                       className={f('icon', 'icon-common')}
                       data-icon="&#x1d8;"
