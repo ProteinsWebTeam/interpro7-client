@@ -11,7 +11,8 @@
   }
 }
 
-.toggle:hover {
+.toggle:hover,
+.toggle:focus {
   opacity: 0.5;
 }
 

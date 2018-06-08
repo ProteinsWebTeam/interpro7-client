@@ -97,16 +97,18 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
   render() {
     return (
       <React.Fragment>
-        <span className={styles.toggle}>
-          <Tooltip title="toggle fisheye view">
-            <button onClick={this._handleClick}>
-              <img
-                src={this.state.fisheye ? fisheyeOff : fisheyeOn}
-                alt="toggle-fisheye"
-              />
-            </button>
-          </Tooltip>
-        </span>
+        {this.props.hideToggle ? null : (
+          <span className={styles.toggle}>
+            <Tooltip title="toggle fisheye view">
+              <button onClick={this._handleClick}>
+                <img
+                  src={this.state.fisheye ? fisheyeOff : fisheyeOn}
+                  alt="toggle-fisheye"
+                />
+              </button>
+            </Tooltip>
+          </span>
+        )}
         <div
           style={{
             width: '100%',
