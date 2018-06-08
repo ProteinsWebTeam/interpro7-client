@@ -207,7 +207,7 @@ const ProteomeCard = ({ data, search, entryDB }) => (
           },
         }}
       >
-        <SpeciesIcon lineage={` ${data.metadata.taxonomy} `} />
+        <SpeciesIcon lineage={data.metadata.lineage} />
         <h6>
           <HighlightedText text={data.metadata.name} textToHighlight={search} />
         </h6>
