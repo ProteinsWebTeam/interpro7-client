@@ -3,11 +3,8 @@ import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 
-import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
-
-import { schemaProcessDataForDB } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -16,11 +13,6 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
 const f = foundationPartial(local, fonts, ipro);
-
-const SchemaOrgData = loadable({
-  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  loading: () => null,
-});
 
 /*:: type Props = {
   data: {
@@ -184,7 +176,7 @@ export const Tutorial = class extends PureComponent /*:: <Props> */ {
                 </div>
               </div>
               {
-                //<Link  href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou" className={f('button')}>Start the course</Link>
+                // <Link  href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou" className={f('button')}>Start the course</Link>
               }
             </Link>
           </div>
