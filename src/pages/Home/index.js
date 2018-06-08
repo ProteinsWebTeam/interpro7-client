@@ -1,9 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
-// Components
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-
 import loadable from 'higherOrder/loadable';
 
 import Link from 'components/generic/Link';
@@ -15,10 +12,7 @@ import LazyImage from 'components/LazyImage';
 import { schedule } from 'timing-functions/src';
 
 // Animation
-import 'gsap/TweenMax';
-// import Timeline from 'gsap/TimelineLite';
-import TweenLite from 'gsap/TweenLite';
-import { Expo } from 'gsap/EasePack';
+import { TweenLite, Expo } from 'gsap/all';
 
 import {
   schemaProcessDataInterpro,

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Table, { Column } from 'components/Table';
-import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Actions from 'components/Download/Actions';
 
@@ -21,9 +20,7 @@ class Summary extends PureComponent {
   static propTypes = {
     download: T.arrayOf(T.object).isRequired,
   };
-  // progress: number,
-  // successful: ?boolean,
-  // blobURL
+
   render() {
     const { download } = this.props;
     return (
@@ -55,14 +52,14 @@ class Summary extends PureComponent {
                 { successful } /*: { successful?: boolean } */,
               ) => (
                 <Tooltip title={`Job ${Math.floor(progress * 100)}% complete`}>
-                  {progress !== 1 ? (
+                  {progress === 1 ? null : (
                     <span
                       style={{ fontSize: '200%' }}
                       className={f('icon', 'icon-common', 'ico-progress')}
                       data-icon="&#x17;"
                       aria-label={`Job ${Math.floor(progress * 100)}% complete`}
                     />
-                  ) : null}
+                  )}
 
                   {successful === false ? (
                     <span
@@ -72,6 +69,7 @@ class Summary extends PureComponent {
                       aria-label="Job failed or not found"
                     />
                   ) : null}
+
                   {successful === true && (
                     <span
                       style={{ fontSize: '160%' }}

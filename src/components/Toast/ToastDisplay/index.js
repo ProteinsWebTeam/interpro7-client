@@ -15,18 +15,18 @@ class ToastDisplay extends PureComponent {
     removeToast: T.func.isRequired,
   };
 
-  static getDerivedStateFromProps({ toasts }) {
-    if (Object.keys(toasts).length) return null;
-    // If no toast, the mouse can't be over
-    return { over: false };
-  }
-
   constructor(props) {
     super(props);
 
     this.state = { over: false };
 
     this._ref = React.createRef();
+  }
+
+  static getDerivedStateFromProps({ toasts }) {
+    if (Object.keys(toasts).length) return null;
+    // If no toast, the mouse can't be over
+    return { over: false };
   }
 
   componentDidUpdate() {
@@ -88,4 +88,7 @@ const mapStateToProps = createSelector(
   toasts => ({ toasts }),
 );
 
-export default connect(mapStateToProps, { removeToast })(ToastDisplay);
+export default connect(
+  mapStateToProps,
+  { removeToast },
+)(ToastDisplay);

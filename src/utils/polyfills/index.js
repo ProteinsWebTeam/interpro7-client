@@ -6,7 +6,7 @@ import {
   inert as supportsInert,
 } from 'utils/support';
 
-let responses /*: Map<string, Promise<boolean>> */ = new Map();
+const responses /*: Map<string, Promise<boolean>> */ = new Map();
 
 const loadPolyfillIfNeeded = (
   loader /*: function */,

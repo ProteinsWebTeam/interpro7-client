@@ -27,16 +27,16 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     _loadingVis: ?boolean;
     _vis: TaxonomyVisualisation;
   */
-  static defaultProps = {
-    initialFisheye: true,
-  };
-
   static propTypes = {
     data: T.object,
     focused: T.string,
     changeFocus: T.func,
     hideToggle: T.bool,
     initialFisheye: T.bool,
+  };
+
+  static defaultProps = {
+    initialFisheye: true,
   };
 
   constructor(props /*: Props */) {

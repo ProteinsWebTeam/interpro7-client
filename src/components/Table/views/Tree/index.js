@@ -104,6 +104,17 @@ class TreeView extends Component {
     }).isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: { name: 'root', id: '1' },
+      focused: '1',
+      entryDB: props.customLocation.description.entry.db,
+    };
+    this._CDPMap = new Map();
+  }
+
   static getDerivedStateFromProps(
     {
       customLocation: {
@@ -124,17 +135,6 @@ class TreeView extends Component {
       };
     }
     return null;
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data: { name: 'root', id: '1' },
-      focused: '1',
-      entryDB: props.customLocation.description.entry.db,
-    };
-    this._CDPMap = new Map();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
