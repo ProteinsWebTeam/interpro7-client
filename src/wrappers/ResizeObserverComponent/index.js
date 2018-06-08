@@ -21,7 +21,7 @@ import ResizeObserver from './ResizeObserver';
 
 class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
   /*::
-    _ref: { current: null | React$ElementRef<string> };
+    _ref: { current: null | React$ElementRef<string | Class<React$Component<*, *>>> };
     _resizeObserver: any;
   */
 
