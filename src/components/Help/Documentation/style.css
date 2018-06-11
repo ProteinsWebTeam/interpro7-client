@@ -1,4 +1,9 @@
 @import '../../../styles/colors.css';
+/*to move to interpro-new.css?*/
+.xl {
+  color: var(--colors-ebidark);
+  font-size: 280%;
+}
 
 .box-add {
   border-left: 4px solid var(--colors-submain);
@@ -17,9 +22,7 @@
   flex-wrap: nowrap;
   padding: 1rem;
 }
-.flex-container a {
-  color: white;
-}
+
 .flex-item {
   display: flex;
   flex-wrap: nowrap;
@@ -44,4 +47,8 @@
   & h4::before {
     font-size: 200%;
   }
+}
+/*to move to interpro-new.css?*/
+.margin-top-xxlarge {
+  margin-top: 4rem;
 }
