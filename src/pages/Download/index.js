@@ -231,8 +231,8 @@ class Download extends PureComponent /*:: <{}> */ {
                   </td>
                   <td>
                     File describing the hierarchy of relationships between
-                    InterPro's entries (i.e. families and their subfamilies) in
-                    a simple text-based format.
+                    InterPro&quot;s entries (i.e. families and their
+                    subfamilies) in a simple text-based format.
                   </td>
                   <td>ParentChildTreeFile.txt</td>
                   <td>TXT</td>
