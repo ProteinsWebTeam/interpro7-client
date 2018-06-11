@@ -7,9 +7,9 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import table from 'components/Table/style.css';
+import local from './style.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, table, ipro);
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro, local);
 
 class Download extends PureComponent /*:: <{}> */ {
   render() {
@@ -20,7 +20,7 @@ class Download extends PureComponent /*:: <{}> */ {
             <h3>Download</h3>
 
             <h4>InterProScan</h4>
-            <table className={f('default')}>
+            <table className={f('classic')}>
               <thead>
                 {' '}
                 <tr>
@@ -89,7 +89,7 @@ class Download extends PureComponent /*:: <{}> */ {
 
           <section>
             <h4>InterPro</h4>
-            <table className={f('default')}>
+            <table className={f('classic')}>
               <thead>
                 {' '}
                 <tr>
