@@ -146,6 +146,7 @@ class SingleMatch extends PureComponent /*:: <SMProps> */ {
         );
       }
     }
+    return null;
   }
 }
 

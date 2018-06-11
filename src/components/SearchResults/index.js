@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
-import Table, { Column, Exporter } from 'components/Table';
+import Table, { Column, Exporter, PageSizeSelector } from 'components/Table';
 import SingleMatch from 'components/SearchResults/SingleMatch';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
@@ -47,6 +47,7 @@ class SearchResults extends PureComponent {
       searchValue,
       query,
     } = this.props;
+    if (!searchValue) return null;
     const { entries, hitCount } = payload || {};
     if (!loading && hitCount === 0) {
       return (
@@ -116,6 +117,7 @@ class SearchResults extends PureComponent {
           >
             Description
           </Column>
+          <PageSizeSelector />
         </Table>
       </Fragment>
     );
