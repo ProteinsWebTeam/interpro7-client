@@ -131,7 +131,7 @@ const templateHandler /*: Handler */ = {
 const memberDB = new Set([
   {
     name: 'cathgene3d',
-    re: /^G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{2,5}$/i,
+    re: /^G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{1,5}$/i,
   },
   { name: 'cdd', re: /^(?:[cs])d[0-9]{5}$/i },
   { name: 'hamap', re: /^MF_[0-9]{5}(_([AB]){1})?$/i },
