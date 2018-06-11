@@ -61,6 +61,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
       publicPath,
       filename: path.join('js', '[id].[name].[hash:3].js'),
       chunkFilename: path.join('js', '[id].[name].[chunkhash:3].js'),
+      globalObject: 'this',
     },
     // RESOLVE
     resolve: {

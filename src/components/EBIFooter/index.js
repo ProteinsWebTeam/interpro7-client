@@ -24,7 +24,7 @@ class EBIFooter extends PureComponent {
               'medium-2': 'true',
             })}
           >
-            <Link href="https://www.ebi.ac.uk" title="EMBL-EBI">
+            <Link href="//www.ebi.ac.uk" title="EMBL-EBI">
               <span className={f('ebi-logo')} />
             </Link>
             <ul />
@@ -39,22 +39,20 @@ class EBIFooter extends PureComponent {
             <h5 className={f('services')}>
               <Link
                 className={f('services-color')}
-                href="https://www.ebi.ac.uk/services"
+                href="//www.ebi.ac.uk/services"
               >
                 Services
               </Link>
             </h5>
             <ul>
               <li className={f('first')}>
-                <Link href="https://www.ebi.ac.uk/services">By topic</Link>
+                <Link href="//www.ebi.ac.uk/services">By topic</Link>
               </li>
               <li>
-                <Link href="https://www.ebi.ac.uk/services/all">
-                  By name (A-Z)
-                </Link>
+                <Link href="//www.ebi.ac.uk/services/all">By name (A-Z)</Link>
               </li>
               <li className={f('last')}>
-                <Link href="https://www.ebi.ac.uk/support">Help & Support</Link>
+                <Link href="//www.ebi.ac.uk/support">Help & Support</Link>
               </li>
             </ul>
           </div>
@@ -69,28 +67,26 @@ class EBIFooter extends PureComponent {
             <h5 className={f('research')}>
               <Link
                 className={f('research-color')}
-                href="https://www.ebi.ac.uk/research"
+                href="//www.ebi.ac.uk/research"
               >
                 Research
               </Link>
             </h5>
             <ul>
               <li>
-                <Link href="https://www.ebi.ac.uk/research/publications">
+                <Link href="//www.ebi.ac.uk/research/publications">
                   Publications
                 </Link>
               </li>
               <li>
-                <Link href="https://www.ebi.ac.uk/research/groups">
+                <Link href="//www.ebi.ac.uk/research/groups">
                   Research groups
                 </Link>
               </li>
               <li className={f('last')}>
-                <Link href="https://www.ebi.ac.uk/research/postdocs">
-                  Postdocs
-                </Link>
+                <Link href="//www.ebi.ac.uk/research/postdocs">Postdocs</Link>
                 &nbsp;&&nbsp;
-                <Link href="https://www.ebi.ac.uk/research/eipp">PhDs</Link>
+                <Link href="//www.ebi.ac.uk/research/eipp">PhDs</Link>
               </li>
             </ul>
           </div>
@@ -105,29 +101,27 @@ class EBIFooter extends PureComponent {
             <h5 className={f('training')}>
               <Link
                 className={f('training-color')}
-                href="https://www.ebi.ac.uk/training"
+                href="//www.ebi.ac.uk/training"
               >
                 Training
               </Link>
             </h5>
             <ul>
               <li>
-                <Link href="https://www.ebi.ac.uk/training/handson">
+                <Link href="//www.ebi.ac.uk/training/handson">
                   Train at EBI
                 </Link>
               </li>
               <li>
-                <Link href="https://www.ebi.ac.uk/training/roadshow">
+                <Link href="//www.ebi.ac.uk/training/roadshow">
                   Train outside EBI
                 </Link>
               </li>
               <li>
-                <Link href="https://www.ebi.ac.uk/training/online">
-                  Train online
-                </Link>
+                <Link href="//www.ebi.ac.uk/training/online">Train online</Link>
               </li>
               <li className={f('last')}>
-                <Link href="https://www.ebi.ac.uk/training/contact-us">
+                <Link href="//www.ebi.ac.uk/training/contact-us">
                   Contact organisers
                 </Link>
               </li>
@@ -144,29 +138,27 @@ class EBIFooter extends PureComponent {
             <h5 className={f('industry')}>
               <Link
                 className={f('industry-color')}
-                href="https://www.ebi.ac.uk/industry"
+                href="//www.ebi.ac.uk/industry"
               >
                 Industry
               </Link>
             </h5>
             <ul>
               <li>
-                <Link href="https://www.ebi.ac.uk/industry/private">
+                <Link href="//www.ebi.ac.uk/industry/private">
                   Members Area
                 </Link>
               </li>
               <li>
-                <Link href="https://www.ebi.ac.uk/industry/workshops">
-                  Workshops
-                </Link>
+                <Link href="//www.ebi.ac.uk/industry/workshops">Workshops</Link>
               </li>
               <li>
-                <Link href="https://www.ebi.ac.uk/industry/sme-forum">
+                <Link href="//www.ebi.ac.uk/industry/sme-forum">
                   <abbr title="Small Medium Enterprise">SME</abbr> Forum
                 </Link>
               </li>
               <li className={f('last')}>
-                <Link href="https://www.ebi.ac.uk/industry/contact">
+                <Link href="//www.ebi.ac.uk/industry/contact">
                   Contact Industry programme
                 </Link>
               </li>
@@ -181,37 +173,30 @@ class EBIFooter extends PureComponent {
             })}
           >
             <h5 className={f('about')}>
-              <Link
-                className={f('ebi-color')}
-                href="https://www.ebi.ac.uk/about"
-              >
+              <Link className={f('ebi-color')} href="//www.ebi.ac.uk/about">
                 About EMBL-EBI
               </Link>
             </h5>
             <ul>
               <li>
-                <Link href="https://www.ebi.ac.uk/about/contact">
-                  Contact us
-                </Link>
+                <Link href="//www.ebi.ac.uk/about/contact">Contact us</Link>
               </li>
               <li>
-                <Link href="https://www.ebi.ac.uk/about/events">Events</Link>
+                <Link href="//www.ebi.ac.uk/about/events">Events</Link>
               </li>
               <li>
                 <Link
-                  href="https://www.ebi.ac.uk/about/jobs"
+                  href="//www.ebi.ac.uk/about/jobs"
                   title="Jobs, postdocs, PhDs…"
                 >
                   Jobs
                 </Link>
               </li>
               <li>
-                <Link href="https://www.ebi.ac.uk/about/news">News</Link>
+                <Link href="//www.ebi.ac.uk/about/news">News</Link>
               </li>
               <li>
-                <Link href="https://www.ebi.ac.uk/about/people">
-                  People & groups
-                </Link>
+                <Link href="//www.ebi.ac.uk/about/people">People & groups</Link>
               </li>
             </ul>
           </div>
@@ -228,11 +213,11 @@ class EBIFooter extends PureComponent {
             </p>
             <p className={f('legal')}>
               Copyright © EMBL-EBI 2017 | EMBL-EBI is&nbsp;
-              <Link href="https://www.embl.org/" rel="noopener">
+              <Link href="//www.embl.org/" rel="noopener">
                 part of the European Molecular Biology Laboratory
               </Link>{' '}
               |{' '}
-              <Link href="https://www.ebi.ac.uk/about/terms-of-use">
+              <Link href="//www.ebi.ac.uk/about/terms-of-use">
                 Terms of use
               </Link>
               <Link

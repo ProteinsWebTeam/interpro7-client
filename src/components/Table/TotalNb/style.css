@@ -29,9 +29,13 @@
       /*opacity: 1;*/
       /*transition: opacity var(--timing-medium) ease-in-out;*/
     }
+    &:active {
+      border: solid 1px var(--colors-active-form);
+    }
 
     &.open::after {
       /*opacity: 0;*/
+      content: '▲';
     }
   }
 }

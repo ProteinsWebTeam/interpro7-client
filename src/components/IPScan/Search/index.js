@@ -288,7 +288,7 @@ class IPScanSearch extends PureComponent {
               <div className={f('secondary', 'callout', 'border')}>
                 <div className={f('row')}>
                   <div className={f('large-12', 'columns', 'sqc-search-input')}>
-                    <h3>Sequence, in FASTA format</h3>
+                    <h3 className={f('light')}>Sequence, in FASTA format</h3>
                     <SchemaOrgData
                       data={{
                         name: 'Search By Sequence',

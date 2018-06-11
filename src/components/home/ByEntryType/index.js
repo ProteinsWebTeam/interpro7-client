@@ -104,7 +104,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
         </AnimatedEntry>
         <Link
           to={{ description: { main: { key: 'entry' } } }}
-          className={f('button')}
+          className={f('button', 'margin-bottom-none')}
         >
           View all entries
         </Link>

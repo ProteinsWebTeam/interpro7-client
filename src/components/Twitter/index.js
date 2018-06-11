@@ -20,8 +20,8 @@ const noPadding = { padding: 0 };
 
 class Twitter extends PureComponent /*:: <{}> */ {
   /* ::
-    _ref: { current: ?HTMLElement };
-    _linkRef: { current: ?HTMLElement };
+    _ref: { current: null | React$ElementRef<'div'> };
+    _linkRef: { current: null | React$ElementRef<Link> };
     _twitterScript: ?{
       cancel: function,
       promise: Promise<any>,
@@ -67,10 +67,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
       <div className={f('expanded', 'row')}>
         <div className={f('columns')} style={noPadding}>
           <div className={f('jumbo-news')}>
-            <div
-              className={f('jumbo-news-container')}
-              ref={node => (this._ref.current = node)}
-            >
+            <div className={f('jumbo-news-container')} ref={this._ref}>
               <div className={f('icon', 'icon-common')} data-icon="🐦" />
               <Link
                 ref={this._LinkRef}

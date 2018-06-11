@@ -25,15 +25,15 @@ exports[`<ProgressButton /> should render, first step 1`] = `
         strokeWidth={12}
         transform="rotate(-90 60 60)"
       />
+      <circle
+        cx={60}
+        cy={60}
+        fill="none"
+        r={43}
+      />
     </g>
-    <circle
-      cx={60}
-      cy={60}
-      fill="none"
-      r={43}
-    />
     <g
-      className="card"
+      className="icon-flip"
     >
       <image
         className="back"
@@ -81,15 +81,15 @@ exports[`<ProgressButton /> should render, with failure 1`] = `
         strokeWidth={12}
         transform="rotate(-90 60 60)"
       />
+      <circle
+        cx={60}
+        cy={60}
+        fill="none"
+        r={43}
+      />
     </g>
-    <circle
-      cx={60}
-      cy={60}
-      fill="none"
-      r={43}
-    />
     <g
-      className="card flipped"
+      className="icon-flip flipped"
     >
       <image
         className="back"
@@ -137,15 +137,15 @@ exports[`<ProgressButton /> should render, with progress 1`] = `
         strokeWidth={12}
         transform="rotate(-90 60 60)"
       />
+      <circle
+        cx={60}
+        cy={60}
+        fill="none"
+        r={43}
+      />
     </g>
-    <circle
-      cx={60}
-      cy={60}
-      fill="none"
-      r={43}
-    />
     <g
-      className="card"
+      className="icon-flip"
     >
       <image
         className="back"
@@ -193,15 +193,15 @@ exports[`<ProgressButton /> should render, with success 1`] = `
         strokeWidth={12}
         transform="rotate(-90 60 60)"
       />
+      <circle
+        cx={60}
+        cy={60}
+        fill="none"
+        r={43}
+      />
     </g>
-    <circle
-      cx={60}
-      cy={60}
-      fill="none"
-      r={43}
-    />
     <g
-      className="card flipped"
+      className="icon-flip flipped"
     >
       <image
         className="back"

@@ -32,12 +32,12 @@ const InterProMin = InterPro.filter(item => item.name !== 'Settings');
 class DynamicMenu extends PureComponent /*:: <Props, State> */ {
   /*:: _menuItems: Set<HTMLElement>; */
   /*:: _dotdotdot: HTMLElement; */
-  static defaultProps = {
-    width: +Infinity,
-  };
-
   static propTypes = {
     width: T.number.isRequired,
+  };
+
+  static defaultProps = {
+    width: +Infinity,
   };
 
   constructor(props /*: Props */) {

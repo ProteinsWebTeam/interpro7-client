@@ -6,24 +6,37 @@
   transition-property: opacity, transform;
   transition-timing-function: ease-in-out;
   transition-duration: var(--timing-medium);
+  display: none; /*solve bug top button non clickable on small screen because of visibility*/
   opacity: 0;
   transform: translateY(-50vh);
+  position: relative;
 
   &.visible {
-    visibility: visible;
+    display: block;
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-10px);
+    z-index: 5;
+    /*position: relative;*/
   }
 
   & .dropdown-pane.embl-dropdown {
     position: fixed;
+    background-color: #222;
     top: calc(38px + var(--spacing-medium));
     left: initial;
-    right: var(--spacing-medium);
+    /*right: var(--spacing-medium);*/
     display: block;
-    width: calc(100vw - 2 * var(--spacing-medium));
-    max-width: 1400px;
+    width: calc(100vw);
+    /*max-width: 1400px;*/
     visibility: visible;
+    border: none;
+
+    & .close-button {
+      font-size: 300%;
+    }
+    & .close-button:hover {
+      color: white;
+    }
 
     & h3,
     & h5,

@@ -41,15 +41,6 @@ const loadData = params => {
         appState: T.object.isRequired,
       };
 
-      static getDerivedStateFromProps(nextProps, prevState) {
-        // get potential new url in state according to props
-        const url = getUrl(nextProps.appState);
-        // if it's the same, don't update the state
-        if (prevState.url === url) return null;
-        // otherwise, update url in state, and create new data object in state
-        return { data: newData(url), url };
-      }
-
       constructor(props) {
         super(props);
 
@@ -63,6 +54,15 @@ const loadData = params => {
           data: newData(url),
           staleData: null,
         };
+      }
+
+      static getDerivedStateFromProps(nextProps, prevState) {
+        // get potential new url in state according to props
+        const url = getUrl(nextProps.appState);
+        // if it's the same, don't update the state
+        if (prevState.url === url) return null;
+        // otherwise, update url in state, and create new data object in state
+        return { data: newData(url), url };
       }
 
       componentDidMount() {
@@ -168,9 +168,10 @@ const loadData = params => {
       }
     }
 
-    return connect(mapStateToProps, { dataProgressInfo, dataProgressUnload })(
-      DataWrapper,
-    );
+    return connect(
+      mapStateToProps,
+      { dataProgressInfo, dataProgressUnload },
+    )(DataWrapper);
   };
 };
 

@@ -17,10 +17,11 @@ import getUrlFor from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
-const f = foundationPartial(fonts, local);
+const f = foundationPartial(ebiGlobalStyles, fonts, local);
 
 const description2IDs = description =>
   description.reduce(

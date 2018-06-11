@@ -33,7 +33,7 @@ const rules = {
   // Enforces return statements in callbacks of array's methods
   'array-callback-return': 1,
   // Enforces no braces where they can be omitted
-  'arrow-body-style': [1, 'as-needed'],
+  'arrow-body-style': 0,
   // Require space before/after arrow function's arrow
   'arrow-spacing': [1, { before: true, after: true }],
   // Treat var statements as if they were block scoped
@@ -181,7 +181,10 @@ const rules = {
   // Disallow creation of functions within loops
   'no-loop-func': 1,
   // Disallow magic numbers
-  'no-magic-numbers': [1, { ignoreArrayIndexes: true, ignore: [-1, 0, 1, 2] }],
+  'no-magic-numbers': [
+    1,
+    { ignoreArrayIndexes: true, ignore: [-1, 0, 1, 2, 100] },
+  ],
   // Disallow mixed spaces and tabs for indentation
   'no-mixed-spaces-and-tabs': 2,
   // Disallow multiple empty lines and only one newline at the end

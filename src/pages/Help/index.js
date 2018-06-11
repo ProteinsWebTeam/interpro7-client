@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { foundationPartial } from 'styles/foundation';
+
 import loadable from 'higherOrder/loadable';
 import {
   schemaProcessDataWebPage,
@@ -12,7 +12,11 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const f = foundationPartial();
+import { foundationPartial } from 'styles/foundation';
+
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+
+const f = foundationPartial(ebiGlobalStyles);
 
 export default class extends PureComponent /*:: <{}> */ {
   static displayName = 'Help';

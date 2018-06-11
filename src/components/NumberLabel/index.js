@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import TweenLite from 'gsap/TweenLite';
+import { TweenLite, Power2 } from 'gsap/all';
 
 import random from 'utils/random';
 
@@ -122,7 +122,7 @@ class _NumberComponent extends PureComponent {
           this.props.scaleMargin,
         );
       },
-      ease: TweenLite.Power2.easeIn,
+      ease: Power2.easeIn,
     });
   };
 
