@@ -112,7 +112,7 @@ class Download extends PureComponent /*:: <{}> */ {
                     accessions, types and names.
                   </td>
                   <td>entry.list</td>
-                  <td class="text_center xs_hide">TSV</td>
+                  <td>TSV</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/entry.list">
                       <span
@@ -140,7 +140,7 @@ class Download extends PureComponent /*:: <{}> */ {
                     exists describing the format.
                   </td>
                   <td>interpro.xml.gz</td>
-                  <td class="text_center xs_hide">gzipped</td>
+                  <td>gzipped</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz">
                       <span
@@ -168,7 +168,7 @@ class Download extends PureComponent /*:: <{}> */ {
                     exists describing the format.
                   </td>
                   <td>match_complete.xml.gz</td>
-                  <td class="text_center xs_hide">gzipped</td>
+                  <td>gzipped</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/match_complete.xml.gz">
                       <span
@@ -190,7 +190,7 @@ class Download extends PureComponent /*:: <{}> */ {
                     entries and individual signatures they match, in XML format.
                   </td>
                   <td>uniparc_match.tar.gz</td>
-                  <td class="text_center xs_hide">gzipped</td>
+                  <td>gzipped</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.tar.gz">
                       <span
@@ -212,7 +212,7 @@ class Download extends PureComponent /*:: <{}> */ {
                     individual signatures they match, in a tab-delimited format.
                   </td>
                   <td>protein2ipr.dat.gz</td>
-                  <td class="text_center xs_hide">gzipped</td>
+                  <td>gzipped</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz">
                       <span
@@ -235,7 +235,7 @@ class Download extends PureComponent /*:: <{}> */ {
                     a simple text-based format.
                   </td>
                   <td>ParentChildTreeFile.txt</td>
-                  <td class="text_center xs_hide">TXT</td>
+                  <td>TXT</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/ParentChildTreeFile.txt">
                       <span
@@ -257,7 +257,7 @@ class Download extends PureComponent /*:: <{}> */ {
                     Mappings of InterPro entries to Gene Ontology (GO) terms.
                   </td>
                   <td>interpro2go</td>
-                  <td class="text_center xs_hide">TXT</td>
+                  <td>TXT</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
                       <span
@@ -273,7 +273,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   // <tr><td><Link
                   //    href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">Latest release note</Link></td>
                   //    <td>The current release notes, in text-based format.</td>
-                  //    <td>release_notes.txt</td><td class="text_center xs_hide">TXT</td>
+                  //    <td>release_notes.txt</td><td >TXT</td>
                   //    <td>
                   //      <Link
                   //        href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">
