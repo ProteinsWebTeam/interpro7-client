@@ -30,16 +30,22 @@ class PaginationItem extends PureComponent {
 
   render() {
     const { className, value, noLink, children, duration } = this.props;
-    const LinkOrFragment = !value || noLink ? React.Fragment : Link;
+    const LinkOrSpan = !value || noLink ? 'span' : Link;
+    const props = {};
+    if (value) {
+      if (noLink) {
+        props.className = f('no-link');
+      } else {
+        props.to = toFunctionFor(value);
+      }
+    }
     return (
       <li className={className}>
-        <LinkOrFragment
-          {...(!value || noLink ? {} : { to: toFunctionFor(value) })}
-        >
+        <LinkOrSpan {...props}>
           {(value && children) || (
             <NumberComponent duration={duration || 0} value={value} />
           )}
-        </LinkOrFragment>
+        </LinkOrSpan>
       </li>
     );
   }
@@ -51,8 +57,11 @@ class PreviousText extends PureComponent {
   };
 
   render() {
+    const { previous, current } = this.props;
     return (
-      <PaginationItem value={this.props.previous}>Previous</PaginationItem>
+      <PaginationItem value={previous} noLink={previous === current}>
+        Previous
+      </PaginationItem>
     );
   }
 }
@@ -144,7 +153,12 @@ class NextText extends PureComponent {
   };
 
   render() {
-    return <PaginationItem value={this.props.next}>Next</PaginationItem>;
+    const { current, next } = this.props;
+    return (
+      <PaginationItem value={next} noLink={current === next}>
+        Next
+      </PaginationItem>
+    );
   }
 }
 
@@ -176,14 +190,14 @@ const Footer = ({
             role="navigation"
             aria-label="Pagination"
           >
-            <PreviousText previous={previous} />
+            <PreviousText previous={previous} current={current} />
             <First first={first} current={current} />
             <PreviousDotDotDot first={first} previous={previous} />
             <Previous first={first} previous={previous} current={current} />
             <Current current={current} />
             <Next current={current} next={next} last={last} />
             <NextDotDotDot next={next} last={last} />
-            <NextText next={next} />
+            <NextText current={current} next={next} />
           </ul>
         </div>
       </div>
