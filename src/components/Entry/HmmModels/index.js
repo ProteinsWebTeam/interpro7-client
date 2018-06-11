@@ -5,10 +5,11 @@ import hmmLogo from './hmm_logo';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import styles from './logo.css';
 import loadable from 'higherOrder/loadable';
 
-const f = foundationPartial(styles);
+const f = foundationPartial(ebiGlobalStyles, styles);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),

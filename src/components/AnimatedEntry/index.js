@@ -19,7 +19,7 @@ const DEFAULT_DURATION = 250;
 
 class AnimatedEntry extends PureComponent /*:: <Props> */ {
   /*::
-    _ref: { current: ?HTMLElement };
+    _ref: { current: null | React$ElementRef<string> };
     _animations: ?Array<any>;
   */
   static propTypes = {
@@ -97,4 +97,7 @@ const mapStateToProps = createSelector(
   lowGraphics => ({ lowGraphics }),
 );
 
-export default connect(mapStateToProps, undefined)(AnimatedEntry);
+export default connect(
+  mapStateToProps,
+  undefined,
+)(AnimatedEntry);

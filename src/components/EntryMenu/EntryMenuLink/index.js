@@ -32,14 +32,15 @@ const whitelist = new Set(['Overview', 'Sequence']);
 }; */
 
 const mapNameToClass = new Map([
-  ['Domain', 'menu-domain'],
-  ['Family', 'menu-family'],
-  ['Repeat', 'menu-repeat'],
-  ['Unknown', 'menu-unknown'],
-  ['Conserved_site', 'menu-site'],
-  ['Binding_site', 'menu-site'],
-  ['Active_site', 'menu-site'],
-  ['PTM', 'menu-site'],
+  ['domain', 'menu-domain'],
+  ['family', 'menu-family'],
+  ['repeat', 'menu-repeat'],
+  ['unknown', 'menu-unknown'],
+  ['conserved_site', 'menu-site'],
+  ['binding_site', 'menu-site'],
+  ['active_site', 'menu-site'],
+  ['ptm', 'menu-site'],
+  ['homologous_superfamily', 'menu-hh'],
 ]);
 
 class EntryMenuLink extends PureComponent /*:: <Props> */ {

@@ -158,7 +158,7 @@ class BySpecies extends PureComponent /*:: <Props> */ {
               taxonomy: { db: 'uniprot' },
             },
           }}
-          className={f('button')}
+          className={f('button', 'margin-bottom-none')}
         >
           View all Taxa
         </Link>

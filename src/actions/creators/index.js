@@ -154,6 +154,58 @@ export const unloadDataJob = (
   job,
 });
 
+// download
+export const downloadURL = (
+  url /*: string */,
+  fileType /*: 'accession' | 'FASTA' */,
+) => ({
+  type: types.DOWNLOAD_URL,
+  url,
+  fileType,
+});
+
+export const downloadError = (
+  url /*: string */,
+  fileType /*: 'accession' | 'FASTA' */,
+  errorMessage /*: string */,
+) => ({
+  type: types.DOWNLOAD_ERROR,
+  url,
+  fileType,
+  errorMessage,
+});
+
+export const downloadSuccess = (
+  url /*: string */,
+  fileType /*: 'accession' | 'FASTA' */,
+  blobURL /*: string */,
+) => ({
+  type: types.DOWNLOAD_SUCCESS,
+  url,
+  fileType,
+  blobURL,
+});
+
+export const downloadProgress = (
+  url /*: string */,
+  fileType /*: 'accession' | 'FASTA' */,
+  progress /*: number */,
+) => ({
+  type: types.DOWNLOAD_PROGRESS,
+  url,
+  fileType,
+  progress,
+});
+
+export const downloadDelete = (
+  url /*: string */,
+  fileType /*: 'accession' | 'FASTA' */,
+) => ({
+  type: types.DOWNLOAD_DELETE,
+  url,
+  fileType,
+});
+
 // status
 export const serverStatus = (server /*: string */, status /*: boolean*/) => ({
   type: types.SERVER_STATUS,

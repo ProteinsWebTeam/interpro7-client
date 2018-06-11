@@ -1,14 +1,16 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { customLocationSelector } from 'reducers/custom-location';
+/*:: import type { CustomLocation } from 'reducers/custom-location'; */
 
 const defaultCatchAll = () => <div>404</div>;
 
 const match = (childRoutes, indexRoute, valueFromLocation) => {
-  if (!valueFromLocation) return { Component: indexRoute };
+  if (!valueFromLocation) return { Component: indexRoute, matched: null };
   for (const [value, component] of childRoutes.entries()) {
     if (typeof value === 'string') {
       if (value === valueFromLocation) {
@@ -22,7 +24,15 @@ const match = (childRoutes, indexRoute, valueFromLocation) => {
   }
 };
 
-class _Switch extends PureComponent {
+/*:: type Props = {
+  indexRoute: function,
+  locationSelector: function,
+  childRoutes: ?Map<string | RegExp, Class<React$Component<*, *>>>,
+  catchAll?: function,
+  customLocation: CustomLocation,
+}; */
+
+class _Switch extends PureComponent /*:: <Props> */ {
   static propTypes = {
     indexRoute: T.func.isRequired,
     locationSelector: T.func.isRequired,
@@ -35,14 +45,14 @@ class _Switch extends PureComponent {
     const {
       indexRoute,
       locationSelector,
-      childRoutes = [],
+      childRoutes,
       catchAll = defaultCatchAll,
       customLocation,
       ...props
     } = this.props;
     const valueFromLocation = locationSelector(customLocation);
     const { Component = catchAll, matched = valueFromLocation } =
-      match(childRoutes, indexRoute, valueFromLocation) || {};
+      match(childRoutes || new Map(), indexRoute, valueFromLocation) || {};
     return (
       <Component {...props} matched={matched} customLocation={customLocation} />
     );

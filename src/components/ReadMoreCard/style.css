@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
 
-  @nest & > div {
+  & > div {
     transition: max-height 0.5s ease-in-out;
 
     &:hover {
@@ -11,7 +11,7 @@
     }
   }
 
-  @nest & > button {
+  & > button {
     border: none;
     background-color: transparent;
     opacity: 0.5;
@@ -27,13 +27,13 @@
 }
 
 .hidden {
-  display:none;
+  display: none;
 }
 
 .collapsed {
   composes: read_more;
 
-  @nest & > div {
+  & > div {
     max-height: 200px;
     overflow: hidden;
   }
@@ -42,12 +42,12 @@
 .opened {
   composes: read_more;
 
-  @nest & > div {
+  & > div {
     max-height: 1000px;
     overflow: scroll;
   }
 
-  @nest & > button > div {
+  & > button > div {
     transform: rotate(180deg);
   }
 }

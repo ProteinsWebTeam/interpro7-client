@@ -34,11 +34,11 @@ import { memberDBAccessions } from 'staticData/home';
 
 import { foundationPartial } from 'styles/foundation';
 
-import styles from 'styles/blocks.css';
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(pageStyle, styles, fonts);
+const f = foundationPartial(pageStyle, ebiStyles, fonts);
 
 import {
   schemaProcessDataTable,
@@ -472,7 +472,7 @@ class List extends PureComponent {
                 <EntryCard data={data} search={search.search} entryDB={db} />
               )}
             </Card>
-            <SearchBox search={search.search}>&nbsp;</SearchBox>
+            <SearchBox>Search entries</SearchBox>
             {db === 'InterPro' && (
               <Column
                 dataKey="type"
@@ -529,25 +529,23 @@ class List extends PureComponent {
                 name /*: string */,
                 { accession } /*: {accession: string} */,
               ) => (
-                <Tooltip title={`${name} (${accession})`}>
-                  <Link
-                    to={customLocation => ({
-                      description: {
-                        ...customLocation.description,
-                        entry: {
-                          ...customLocation.description.entry,
-                          accession,
-                        },
+                <Link
+                  to={customLocation => ({
+                    description: {
+                      ...customLocation.description,
+                      entry: {
+                        ...customLocation.description.entry,
+                        accession,
                       },
-                      search: {},
-                    })}
-                  >
-                    <HighlightedText
-                      text={name}
-                      textToHighlight={search.search}
-                    />
-                  </Link>
-                </Tooltip>
+                    },
+                    search: {},
+                  })}
+                >
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
+                </Link>
               )}
             >
               Name

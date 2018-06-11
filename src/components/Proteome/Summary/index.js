@@ -35,7 +35,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
               title="Proteome ID"
             />
           </div>
-          <div>Strain: {metadata.strain}</div>
+          {metadata.strain && <div>Strain: {metadata.strain}</div>}
           <div>
             Taxonomy: <TaxIdOrName accession={metadata.taxonomy} />
           </div>

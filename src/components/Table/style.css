@@ -36,6 +36,10 @@ table.light tr:nth-child(odd):hover {
   background-color: #f9fafb; /*darker #d0deeb - #d3dddf*/
 }
 
+table.light tbody {
+  border: none;
+}
+
 table.light tbody tr:nth-child(even) {
   background-color: #fff;
 }
@@ -67,10 +71,6 @@ table.light .tfooter label {
 table.light .subheader {
   color: #505f74;
   margin: 10px 0 0 10px;
-}
-
-table.light span::before {
-  color: #71818a; /* doesn't work using class .icon-functional */
 }
 
 .table-view .table-results-filtering {

@@ -1,0 +1,26 @@
+@import '../../styles/timing.css';
+
+.toggle {
+  position: absolute;
+  margin: 1ch;
+  opacity: 0.1;
+  transition: opacity ease-in-out var(--timing-fast);
+
+  & img {
+    width: 1.5em;
+  }
+}
+
+.toggle:hover,
+.toggle:focus {
+  opacity: 0.5;
+}
+
+.container .node {
+  opacity: 1;
+  transition: opacity var(--timing-slow) ease-in-out;
+
+  &:not(.in-path) {
+    opacity: 0.5;
+  }
+}

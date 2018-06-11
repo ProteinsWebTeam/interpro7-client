@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -9,11 +10,14 @@ import Table, {
   SearchBox,
   PageSizeSelector,
   Exporter,
+  Card,
 } from 'components/Table';
-import ProteinFile from 'subPages/Organism/ProteinFile';
+import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import { NumberComponent } from 'components/NumberLabel';
+import { SpeciesIcon } from 'pages/Taxonomy';
+import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import loadable from 'higherOrder/loadable';
 
@@ -31,19 +35,50 @@ import { foundationPartial } from 'styles/foundation';
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import { toPlural } from 'utils/pages';
 
 const f = foundationPartial(pageStyle, styles, fonts);
 
-const EntryAccessionsRenderer = taxId => (
-  <ProteinFile taxId={`${taxId}`} type="entry-accession" />
+const EntryAccessionsRenderer = entryDB => accession => (
+  <File
+    fileType="accession"
+    name={`${entryDB || 'all'}-entry-accessions-for-${accession}.txt`}
+    customLocationDescription={{
+      main: { key: 'entry' },
+      entry: { db: entryDB || 'all' },
+      proteome: { isFilter: true, db: 'UniProt', accession },
+    }}
+  />
 );
 
-const ProteinAccessionsRenderer = taxId => (
-  <ProteinFile taxId={`${taxId}`} type="protein-accession" />
+const ProteinFastasRenderer = entryDB => accession => (
+  <File
+    fileType="FASTA"
+    name={`protein-sequences${
+      entryDB ? `-matching-${entryDB}` : ''
+    }-for-${accession}.fasta`}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      entry: { isFilter: true, db: entryDB || 'all' },
+      proteome: { isFilter: true, db: 'UniProt', accession },
+    }}
+  />
 );
 
-const ProteinFastasRenderer = taxId => (
-  <ProteinFile taxId={`${taxId}`} type="FASTA" />
+const ProteinAccessionsRenderer = entryDB => accession => (
+  <File
+    fileType="accession"
+    name={`protein-accessions${
+      entryDB ? `-matching-${entryDB}` : ''
+    }-for-${accession}.txt`}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      entry: { isFilter: true, db: entryDB || 'all' },
+      proteome: { isFilter: true, db: 'UniProt', accession },
+    }}
+  />
 );
 
 const SchemaOrgData = loadable({
@@ -55,6 +90,152 @@ const SummaryAsync = loadable({
   loader: () =>
     import(/* webpackChunkName: "proteome-summary" */ 'components/Proteome/Summary'),
 });
+
+class SummaryCounterProteome extends PureComponent {
+  static propTypes = {
+    entryDB: T.string,
+    metadata: T.object.isRequired,
+    counters: T.object.isRequired,
+  };
+
+  render() {
+    const { entryDB, metadata, counters } = this.props;
+
+    const { entries, proteins, structures } = counters;
+
+    return (
+      <div className={f('card-block', 'card-counter', 'label-off')}>
+        <Tooltip
+          title={`${entries} ${entryDB || ''} ${toPlural(
+            'entry',
+            entries,
+          )} matching ${metadata.name}`}
+          className={f('count-entries')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'proteome' },
+                proteome: {
+                  db: 'uniprot',
+                  accession: metadata.accession.toString(),
+                },
+                entry: { isFilter: true, db: entryDB && 'all' },
+              },
+            }}
+            disabled={!entries}
+          >
+            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+            <NumberComponent value={entries} abbr scaleMargin={1} />
+            <span className={f('label-number')}>
+              {toPlural('entry', entries)}
+            </span>
+          </Link>
+        </Tooltip>
+
+        <Tooltip
+          title={`${proteins}  ${toPlural('protein', proteins)} matching ${
+            metadata.name
+          }`}
+          className={f('count-proteins')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'proteome' },
+                proteome: {
+                  db: 'uniprot',
+                  accession: metadata.accession.toString(),
+                },
+                protein: { isFilter: true, db: 'UniProt' },
+              },
+            }}
+            disabled={!proteins}
+          >
+            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <NumberComponent value={proteins} abbr scaleMargin={1} />
+            <span className={f('label-number')}>
+              {' '}
+              {toPlural('protein', proteins)}
+            </span>
+          </Link>
+        </Tooltip>
+
+        <Tooltip
+          title={`${structures} ${toPlural('structure', structures)} matching ${
+            metadata.name
+          }`}
+          className={f('count-structures')}
+          style={{ display: 'flex' }}
+        >
+          <Link
+            to={{
+              description: {
+                main: { key: 'proteome' },
+                proteome: {
+                  db: 'uniprot',
+                  accession: `${metadata.accession}`,
+                },
+                structure: { isFilter: true, db: 'PDB' },
+              },
+            }}
+            disabled={!structures}
+          >
+            <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
+            <NumberComponent value={structures} abbr scaleMargin={1} />{' '}
+            <span className={f('label-number')}>structures</span>
+          </Link>
+        </Tooltip>
+      </div>
+    );
+  }
+}
+
+const ProteomeCard = ({ data, search, entryDB }) => (
+  <React.Fragment>
+    <div className={f('card-header')}>
+      <Link
+        to={{
+          description: {
+            main: { key: 'proteome' },
+            proteome: {
+              db: data.metadata.source_database,
+              accession: `${data.metadata.accession}`,
+            },
+          },
+        }}
+      >
+        <SpeciesIcon lineage={data.metadata.lineage} />
+        <h6>
+          <HighlightedText text={data.metadata.name} textToHighlight={search} />
+        </h6>
+      </Link>
+    </div>
+
+    <SummaryCounterProteome
+      entryDB={entryDB}
+      metadata={data.metadata}
+      counters={data.extra_fields.counters}
+    />
+
+    <div className={f('card-footer')}>
+      <div>
+        ID:
+        <HighlightedText
+          text={data.metadata.accession}
+          textToHighlight={search}
+        />
+      </div>
+    </div>
+  </React.Fragment>
+);
+ProteomeCard.propTypes = {
+  data: T.object,
+  search: T.string,
+  entryDB: T.string,
+};
 
 const propTypes = {
   data: T.shape({
@@ -156,7 +337,16 @@ class List extends PureComponent {
               </ul>
             </Exporter>
             <PageSizeSelector />
-            <SearchBox search={search.search}>Search organism</SearchBox>
+            <Card>
+              {data => (
+                <ProteomeCard
+                  data={data}
+                  search={search.search}
+                  entryDB={entryDB}
+                />
+              )}
+            </Card>
+            <SearchBox>Search organism</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
@@ -247,7 +437,7 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="entryAccessions"
-              renderer={EntryAccessionsRenderer}
+              renderer={EntryAccessionsRenderer(entryDB)}
             >
               Entry accessions
             </Column>
@@ -286,7 +476,7 @@ class List extends PureComponent {
               defaultKey="proteinFastas"
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
-              renderer={ProteinFastasRenderer}
+              renderer={ProteinFastasRenderer(entryDB)}
             >
               FASTA
             </Column>
@@ -295,7 +485,7 @@ class List extends PureComponent {
               headerClassName={f('table-center')}
               cellClassName={f('table-center')}
               defaultKey="proteinAccessions"
-              renderer={ProteinAccessionsRenderer}
+              renderer={ProteinAccessionsRenderer(entryDB)}
             >
               Protein accessions
             </Column>

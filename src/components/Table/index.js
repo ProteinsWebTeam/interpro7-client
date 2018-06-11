@@ -23,10 +23,11 @@ import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from './style.css';
 
-const f = foundationPartial(styles, fonts);
+const f = foundationPartial(ebiGlobalStyles, fonts, styles);
 
 /*:: type Props = {
   dataTable: Array<Object>,

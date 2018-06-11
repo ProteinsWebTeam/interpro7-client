@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -19,7 +20,18 @@ const f = foundationPartial(ebiGlobalStyles, ipro);
 const INTERPRO_ACCESSION_PADDING = 6;
 const TOGGLE_DURATION = 500;
 
-class _SingleMatchWrapper extends PureComponent {
+/*:: type SMWProps = {
+  to: Object,
+  children: any,
+  autoRedirect: boolean,
+}; */
+/*:: type SMWState = {|
+  triggerRedirect: boolean,
+|}; */
+class _SingleMatchWrapper extends PureComponent /*:: <SMWProps, SMWState> */ {
+  /*::
+    _trigger: cancelable;
+  */
   static propTypes = {
     to: T.object.isRequired,
     children: T.any.isRequired,
@@ -52,7 +64,7 @@ class _SingleMatchWrapper extends PureComponent {
     const LinkOrRedirect = this.state.triggerRedirect ? Redirect : Link;
     return (
       <div className={f('callout', 'info')}>
-        <h5>Found an exact match</h5>
+        <span>Found an exact match: </span>
         <LinkOrRedirect to={to}>{children}</LinkOrRedirect>
       </div>
     );
@@ -66,14 +78,19 @@ const mapStateToProps = createSelector(
 
 const SingleMatchWrapper = connect(mapStateToProps)(_SingleMatchWrapper);
 
-class SingleMatch extends PureComponent {
+/*:: type SMProps = {
+  payload: Object,
+  searchValue: ?string,
+} */
+class SingleMatch extends PureComponent /*:: <SMProps> */ {
   static propTypes = {
     payload: T.object.isRequired,
-    searchValue: T.string.isRequired,
+    searchValue: T.string,
   };
 
   render() {
     const { searchValue, payload } = this.props;
+    if (!searchValue) return null;
     const searchRE = new RegExp(
       `^(${searchValue}|IPR${searchValue.padStart(
         INTERPRO_ACCESSION_PADDING,
@@ -129,7 +146,6 @@ class SingleMatch extends PureComponent {
         );
       }
     }
-    return null;
   }
 }
 

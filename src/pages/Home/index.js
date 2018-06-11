@@ -1,9 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
-// Components
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-
 import loadable from 'higherOrder/loadable';
 
 import Link from 'components/generic/Link';
@@ -15,10 +12,7 @@ import LazyImage from 'components/LazyImage';
 import { schedule } from 'timing-functions/src';
 
 // Animation
-import 'gsap/TweenMax';
-// import Timeline from 'gsap/TimelineLite';
-import TweenLite from 'gsap/TweenLite';
-import { Expo } from 'gsap/EasePack';
+import { TweenLite, Expo } from 'gsap/all';
 
 import {
   schemaProcessDataInterpro,
@@ -483,7 +477,7 @@ class Home extends PureComponent {
             'margin-bottom-large',
           )}
         >
-          <div className={f('columns', 'browse-by')}>
+          <div className={f('columns')}>
             <div className={f('callout-box')}>
               <Tabs>
                 <div title="Member Database">
@@ -499,7 +493,7 @@ class Home extends PureComponent {
             </div>
           </div>
 
-          <div className={f('columns', 'stat-by')}>
+          <div className={f('columns')}>
             {
               // Browse by latest entries or most popular
             }
@@ -517,25 +511,27 @@ class Home extends PureComponent {
                   // </div>
                   // </div>
                 }
-                <div title="My entries">
-                  <div className={f('row')}>
-                    <div className={f('columns')}>
-                      <p>
-                        You didn&#39;t &quot;save&quot; any entry yet. Please
-                        use the{' '}
-                        <Link
-                          to={{ description: { other: ['settings'] } }}
-                          className={f('icon', 'icon-functional')}
-                          data-icon="+"
-                          aria-label="settings"
-                        />{' '}
-                        icon next to an entry to add this entry to your
-                        &quot;favorites&quot;. It should then appear on this
-                        dedicated dashboard and in your settings.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                {
+                  // <div title="My entries">
+                  //   <div className={f('row')}>
+                  //     <div className={f('columns')}>
+                  //       <p>
+                  //         You didn&#39;t &quot;save&quot; any entry yet. Please
+                  //         use the{' '}
+                  //         <Link
+                  //           to={{ description: { other: ['settings'] } }}
+                  //           className={f('icon', 'icon-functional')}
+                  //           data-icon="+"
+                  //           aria-label="settings"
+                  //         />{' '}
+                  //         icon next to an entry to add this entry to your
+                  //         &quot;favorites&quot;. It should then appear on this
+                  //         dedicated dashboard and in your settings.
+                  //       </p>
+                  //     </div>
+                  //   </div>
+                  // </div>
+                }
               </Tabs>
             </div>
             {

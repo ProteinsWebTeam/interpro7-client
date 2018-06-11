@@ -1,4 +1,5 @@
 @import '../../../styles/colors.css';
+@import '../../../styles/timing.css';
 
 a.browse-tabs-link {
   &,
@@ -6,7 +7,7 @@ a.browse-tabs-link {
   &:hover,
   &:visited {
     font-size: 0.9rem; /*same size as submenu*/
-    padding: 0.7rem 0.2rem 0.5rem 0.2rem;
+    padding: 1rem 0.4rem 0.6rem 0.4rem;
     color: black;
     line-height: inherit;
     background-color: transparent; /*to keep*/
@@ -14,6 +15,7 @@ a.browse-tabs-link {
   }
 }
 
+/* custom menu color bottom (Protein, structure, Organism , taxon, set) */
 a.is-active-tab {
   &,
   &:focus,
@@ -21,14 +23,20 @@ a.is-active-tab {
   &:visited {
     font-weight: bold;
     color: black;
-    /* color used for Protein, structure, Organism , taxon, set */
     border-bottom: 3px solid var(--colors-submain);
-    transition: border-bottom-color 0.5s ease-in-out;
+    background-color: transparent;
+    transition: border-bottom-color var(--timing-medium) ease-in-out;
   }
 
   &.is-signature {
     border-bottom-color: #4e7287;
   }
+}
+
+a.is-active-tab:hover,
+a.browse-tabs-link:hover {
+  background-color: var(--colors-nearly-white);
+  transition: background-color var(--timing-really-fast) ease-in-out;
 }
 
 a.is-active-tab.menu-family {
@@ -47,8 +55,11 @@ a.is-active-tab.menu-repeat {
   border-bottom-color: var(--colors-repeat-main);
 }
 
+a.is-active-tab.menu-hh {
+  border-bottom-color: var(--colors-homolog-main);
+}
 .tabs-title {
   display: flex;
   align-items: stretch;
-  margin-right: 3rem;
+  margin-right: 2rem;
 }

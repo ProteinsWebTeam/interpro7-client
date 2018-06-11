@@ -14,8 +14,9 @@ import { schemaProcessDataInterpro } from 'schema_org/processors';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(ipro);
+const f = foundationPartial(ebiGlobalStyles, ipro);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),

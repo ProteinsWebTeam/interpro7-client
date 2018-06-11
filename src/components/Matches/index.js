@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, { Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -8,12 +9,15 @@ import Link from 'components/generic/Link';
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
-import ProteinFile from 'subPages/Organism/ProteinFile';
+import File from 'components/File';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import { NumberComponent } from 'components/NumberLabel';
 import { PDBeLink } from 'components/ExtLink';
 import LazyImage from 'components/LazyImage';
+
+import { searchSelector } from 'reducers/custom-location/search';
+import { descriptionSelector } from 'reducers/custom-location/description';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -96,7 +100,8 @@ const propTypes = {
     niceRatio: T.number,
   }),
   actualSize: T.number,
-  search: T.object,
+  search: T.object.isRequired,
+  description: T.object.isRequired,
 };
 
 const componentMatch = {
@@ -133,12 +138,48 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
-const ProteinAccessionsRenderer = taxId => (
-  <ProteinFile taxId={taxId} type="protein-accession" />
+const ProteinFastasRenderer = description => accession => (
+  <File
+    fileType="FASTA"
+    name={`protein-sequences-matching-${
+      description[description.main.key].accession
+    }-for-${accession}.fasta`}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
+        isFilter: description.taxonomy.isFilter,
+        db: 'UniProt',
+        accession: `${accession}`,
+      },
+      [description.main.key]: {
+        ...description[description.main.key],
+        isFilter: true,
+      },
+    }}
+  />
 );
 
-const ProteinFastasRenderer = taxId => (
-  <ProteinFile taxId={taxId} type="FASTA" />
+const ProteinAccessionsRenderer = description => accession => (
+  <File
+    fileType="accession"
+    name={`protein-accessions-matching-${
+      description[description.main.key].accession
+    }-for-${accession}.txt`}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
+        isFilter: description.taxonomy.isFilter,
+        db: 'UniProt',
+        accession: `${accession}`,
+      },
+      [description.main.key]: {
+        ...description[description.main.key],
+        isFilter: true,
+      },
+    }}
+  />
 );
 
 // List of all matches, many to many
@@ -150,15 +191,17 @@ const Matches = (
     actualSize,
     isStale,
     search,
+    description,
     ...props
   } /*: {
-   matches: Array<Object>,
-   primary: string,
-   secondary: string,
-   actualSize: number,
-   isStale: boolean,
-   search: Object,
-   props: Array<any>
+    matches: Array<Object>,
+    primary: string,
+    secondary: string,
+    actualSize: number,
+    isStale: boolean,
+    search: Object,
+    description: Object,
+    props: Array<any>
 } */,
 ) => (
   <Table
@@ -174,7 +217,7 @@ const Matches = (
     contentType={primary}
   >
     <PageSizeSelector />
-    <SearchBox search={search.search}>Search</SearchBox>
+    <SearchBox />
     <Column
       dataKey="accession"
       renderer={(acc /*: string */, obj /*: {source_database: string} */) => {
@@ -267,7 +310,11 @@ const Matches = (
       dataKey="source_database"
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
-      displayIf={primary !== 'taxonomy' && primary !== 'protein'}
+      displayIf={
+        primary !== 'taxonomy' &&
+        primary !== 'proteome' &&
+        primary !== 'protein'
+      }
       renderer={(db /*: string */) =>
         db === 'reviewed' ? (
           <Tooltip
@@ -330,7 +377,7 @@ const Matches = (
       {primary === 'protein' ? 'Domain Architecture' : 'Matches'}
     </Column>
     <Column
-      dataKey="counters.proteins.uniprot"
+      dataKey="counters.extra_fields.counters.proteins"
       defaultKey="protein-count"
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
@@ -345,7 +392,7 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={ProteinFastasRenderer}
+      renderer={ProteinFastasRenderer(description)}
     >
       FASTA
     </Column>
@@ -355,7 +402,7 @@ const Matches = (
       cellClassName={f('table-center')}
       defaultKey="proteinAccessions"
       displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={ProteinAccessionsRenderer}
+      renderer={ProteinAccessionsRenderer(description)}
     >
       Protein accessions
     </Column>
@@ -364,8 +411,9 @@ const Matches = (
 Matches.propTypes = propTypes;
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.search,
-  search => ({ search }),
+  searchSelector,
+  descriptionSelector,
+  (search, description) => ({ search, description }),
 );
 
 export default connect(mapStateToProps)(Matches);

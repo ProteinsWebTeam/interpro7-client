@@ -1,4 +1,4 @@
-//
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -12,8 +12,9 @@ import { foundationPartial } from 'styles/foundation';
 import local from './style.css';
 import ipro from 'styles/interpro-new.css';
 import loadable from 'higherOrder/loadable';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(ipro, local);
+const f = foundationPartial(ebiGlobalStyles, ipro, local);
 
 const comment = /^\s*[;>].*$/gm;
 const whiteSpaces = /\s*/g;
@@ -80,7 +81,7 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
 }; */
 
 class Sequence extends PureComponent /*:: <SequenceProps> */ {
-  /*:: _ref: { current: ?HTMLElement }; */
+  /*:: _ref: { current: null | React$ElementRef<'div'> }; */
 
   static propTypes = {
     sequence: T.string,
@@ -210,4 +211,7 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
   }
 }
 
-export default connect(undefined, { goToCustomLocation })(Sequence);
+export default connect(
+  undefined,
+  { goToCustomLocation },
+)(Sequence);

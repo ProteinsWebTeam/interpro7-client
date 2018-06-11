@@ -25,22 +25,23 @@ ReferenceItem.propTypes = {
   accession: T.string.isRequired,
 };
 
-const ReferenceSection = ({ accessions, name, description }) => (
-  <li className={f('xref-section', 'small')}>
-    <h5>
-      {name}{' '}
-      <Tooltip title={description}>
-        <span className={f('small', 'icon', 'icon-common')} data-icon="ℹ" />
-      </Tooltip>
-    </h5>
+const ReferenceSection = ({ accessions, name, description }) =>
+  name !== 'pdb' && (
+    <li className={f('xref-section', 'small')}>
+      <h5>
+        {name}{' '}
+        <Tooltip title={description}>
+          <span className={f('small', 'icon', 'icon-common')} data-icon="ℹ" />
+        </Tooltip>
+      </h5>
 
-    <ul>
-      {accessions.map(({ accession, url }) => (
-        <ReferenceItem key={accession} accession={accession} url={url} />
-      ))}
-    </ul>
-  </li>
-);
+      <ul>
+        {accessions.map(({ accession, url }) => (
+          <ReferenceItem key={accession} accession={accession} url={url} />
+        ))}
+      </ul>
+    </li>
+  );
 ReferenceSection.propTypes = {
   accessions: T.array.isRequired,
   name: T.string.isRequired,

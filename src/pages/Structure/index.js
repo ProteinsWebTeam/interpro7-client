@@ -39,11 +39,11 @@ import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
 
-import pageStyle from '../style.css';
-import styles from 'styles/blocks.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import pageStyle from '../style.css';
 
-const f = foundationPartial(pageStyle, styles, fonts);
+const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts);
 
 const SummaryAsync = loadable({
   loader: () =>
@@ -242,6 +242,18 @@ class StructureCard extends PureComponent {
     entryDB: T.string,
   };
 
+  constructor(props) {
+    super(props);
+
+    const accession = props.data.metadata.accession;
+    this.state = {
+      TaxnameStructuresWithData: loadData(getUrlForStructTaxname(accession))(
+        TaxnameStructures,
+      ),
+      accession,
+    };
+  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const nextAccession = nextProps.data.metadata.accession;
 
@@ -252,18 +264,6 @@ class StructureCard extends PureComponent {
         getUrlForStructTaxname(nextAccession),
       )(TaxnameStructures),
       accession: nextAccession,
-    };
-  }
-
-  constructor(props) {
-    super(props);
-
-    const accession = props.data.metadata.accession;
-    this.state = {
-      TaxnameStructuresWithData: loadData(getUrlForStructTaxname(accession))(
-        TaxnameStructures,
-      ),
-      accession,
     };
   }
 
@@ -433,7 +433,7 @@ const List = ({
               />
             )}
           </Card>
-          <SearchBox search={search.search}>Search structures</SearchBox>
+          <SearchBox>Search structures</SearchBox>
           <Column
             dataKey="accession"
             headerClassName={f('table-center')}
