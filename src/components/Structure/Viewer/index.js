@@ -88,10 +88,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
       });
 
     plugin.applyTransform(action).then(() => {
-      const parser = context.select('parse')[0];
       const polymer = context.select('polymer-visual')[0];
       if (this.props.matches) {
-        const entryMap = this.createEntryMap(parser.parent.id);
+        const entryMap = this.createEntryMap(polymer.id);
         this.setState({
           plugin: plugin,
           entryMap: entryMap,
@@ -112,6 +111,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       const context = plugin.context;
       const model = context.select('model')[0];
       const parser = context.select('parse')[0];
+      const polymer = context.select('polymer-visual')[0];
       if (this.props.matches != null) {
         const customTheme = new CustomTheme(
           Core,
@@ -132,7 +132,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
-  createEntryMap(rootId) {
+  createEntryMap(entityID) {
     const memberDBMap = {};
 
     if (this.props.matches) {
@@ -155,8 +155,21 @@ class StructureView extends PureComponent /*:: <Props> */ {
             for (const fragment of location.fragments) {
               const hexCol = config.colors.get(db);
               const color = hexToRgb(hexCol);
+              //MAQ
+              /*
+              for (let x=3; x < 4; x++) {
+                memberDBMap[db][entry].push({
+                  entity_id: x,
+                  struct_asym_id: chain,
+                  start_residue_number: fragment.start,
+                  end_residue_number: fragment.end,
+                  color: color,
+                });
+              }
+              */
+
               memberDBMap[db][entry].push({
-                entity_id: rootId,
+                entity_id: 1,
                 struct_asym_id: chain,
                 start_residue_number: fragment.start,
                 end_residue_number: fragment.end,
@@ -172,7 +185,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   handleClick(memberDB, entry) {
     this.updateTheme([]);
-    this.updateTheme(this.state.entryMap[memberDB][entry]);
+    const hits = this.state.entryMap[memberDB][entry];
+    this.updateTheme(hits);
   }
 
   render() {
