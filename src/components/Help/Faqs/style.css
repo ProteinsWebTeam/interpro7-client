@@ -1,3 +1,4 @@
+@import '../../../styles/colors.css';
 /*.flex-columns {display: flex; flex-wrap: wrap; list-style-type: none;}*/
 /*.flex-columns li {width:23%; padding: 1rem 2rem;flex-grow: 1; }*/
 /*.flex-columns interpro-type {font-size:274%; padding: 0 1rem 0 0; float:left; line-height: 0;}*/
@@ -13,4 +14,18 @@
   padding: 0 1rem 0 0;
   float: left;
   line-height: 0;
+}
+.box-add {
+  border-left: 4px solid var(--colors-submain);
+  padding: 0 1rem;
+}
+.box-add ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  line-height: 2;
+}
+/*to move to interpro-new.css?*/
+.margin-top-xxlarge {
+  margin-top: 4rem;
 }
