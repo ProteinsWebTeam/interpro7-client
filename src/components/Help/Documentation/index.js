@@ -29,13 +29,13 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   {
                     //<h4 className={f('icon', 'icon-common')} data-icon="&#x109;"></h4>
                   }
-                  <h4
-                    className={f('icon', 'icon-common')}
+                  <span
+                    className={f('icon', 'icon-common', 'xl')}
                     data-icon="&#xf110;"
                   />
-                  <h4>Technical specs</h4>
+                  <h5>Technical specs</h5>
                   <ul>
-                    <li>API</li>
+                    <li>API (upcoming)</li>
                     <li>
                       <Link
                         href="/www.ebi.ac.uk/Tools/webservices/"
@@ -65,8 +65,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                     </li>
 
                     <li>
-                      <Link href="" className={f('ext')}>
-                        Security
+                      <Link
+                        href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
+                        className={f('ext')}
+                      >
+                        Privacy and security
                       </Link>
                     </li>
                   </ul>
@@ -80,11 +83,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       },
                     }}
                   >
-                    <h4
-                      className={f('icon', 'icon-common')}
+                    <span
+                      className={f('icon', 'icon-common', 'xl')}
                       data-icon="&#xf10a;"
                     />{' '}
-                    <h4>Publications</h4>
+                    <h5>Publications</h5>
                   </Link>
                 </div>
               </div>
@@ -92,17 +95,21 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
           </div>
           <div className={f('columns', 'large-4')}>
             <div className={f('box-add')}>
-              <h3 className={f('light')}>Additional help</h3>
+              <h3 className={f('light', 'margin-top-xxlarge')}>
+                Additional help
+              </h3>
               <ul>
-                <li>
-                  <Link href="//www.ebi.ac.uk/support/interpro-general-query">
-                    <span
-                      className={f('icon', 'icon-common')}
-                      data-icon="&#x27a;"
-                    />{' '}
-                    Chat with an assistant{' '}
-                  </Link>
-                </li>
+                {
+                  // <li>
+                  //   <Link href="//www.ebi.ac.uk/support/interpro-general-query">
+                  //     <span
+                  //       className={f('icon', 'icon-common')}
+                  //       data-icon="&#x27a;"
+                  //     />{' '}
+                  //     Chat with an assistant{' '}
+                  //   </Link>
+                  // </li>
+                }
                 <li>
                   <Link href="//www.ebi.ac.uk/support/interpro-general-query">
                     <span
