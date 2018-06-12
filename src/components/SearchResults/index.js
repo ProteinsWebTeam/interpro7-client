@@ -79,6 +79,7 @@ class SearchResults extends PureComponent {
           <Exporter>
             <Link
               disabled={!url}
+              target="_blank"
               href={url}
               download={`SearchResults-${searchValue}.json`}
             >
@@ -96,7 +97,7 @@ class SearchResults extends PureComponent {
                   },
                 }}
               >
-                {id}
+                <HighlightedText text={id} textToHighlight={searchValue} />
               </Link>
             )}
             headerStyle={{ width: '200px' }}
@@ -104,13 +105,14 @@ class SearchResults extends PureComponent {
             Accession
           </Column>
           <Column
-            dataKey="fields"
+            dataKey="fields.description"
             renderer={d => (
               <Fragment>
                 <HighlightedText
-                  text={d.description[0].slice(0, MAX_LENGTH)}
+                  text={d.join('\n')}
+                  maxLength={MAX_LENGTH}
                   textToHighlight={searchValue}
-                />…
+                />
               </Fragment>
             )}
             cellStyle={{ textAlign: 'justify' }}

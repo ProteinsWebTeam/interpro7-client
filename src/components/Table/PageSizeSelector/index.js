@@ -13,6 +13,8 @@ import s from './style.css';
 
 const f = foundationPartial(s);
 
+const OPTIONS = [20, 50, 100];
+
 const getPageSize = createSelector(
   props => props,
   props => props.customLocation.search.page_size || props.settingsPageSize,
@@ -27,6 +29,7 @@ class PageSizeSelector extends PureComponent {
   };
 
   _handleChange = event => {
+    this.setState({ pageSize: event.target.value });
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       search: {
