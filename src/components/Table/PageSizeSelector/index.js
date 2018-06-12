@@ -13,6 +13,13 @@ import s from './style.css';
 
 const f = foundationPartial(s);
 
+const OPTIONS = [20, 50, 100];
+
+const getPageSize = createSelector(
+  props => props,
+  props => props.customLocation.search.page_size || props.settingsPageSize,
+);
+
 class PageSizeSelector extends PureComponent {
   static propTypes = {
     customLocation: T.object.isRequired,
@@ -42,12 +49,10 @@ class PageSizeSelector extends PureComponent {
   };
 
   render() {
-    let options = [20, 50, 100];
-    if (!options.includes(this.state.pageSize * 1)) {
-      options = Array.from(new Set([...options, this.state.pageSize])).sort(
-        (a, b) => a - b,
-      );
-    }
+    const options = Array.from(new Set([...OPTIONS, getPageSize(this.props)]))
+      .filter(Boolean)
+      .sort((a, b) => a - b);
+    console.log(options);
     return (
       <div className={f('table-length')}>
         Show{' '}
@@ -76,6 +81,7 @@ const mapStateToProps = createSelector(
   (pageSize, customLocation) => ({ pageSize, customLocation }),
 );
 
-export default connect(mapStateToProps, { changePageSize, goToCustomLocation })(
-  PageSizeSelector,
-);
+export default connect(
+  mapStateToProps,
+  { changePageSize, goToCustomLocation },
+)(PageSizeSelector);
