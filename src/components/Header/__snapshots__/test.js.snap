@@ -181,6 +181,7 @@ exports[`<Header /> stuck, not signature 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -192,6 +193,7 @@ exports[`<Header /> stuck, signature 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -203,6 +205,7 @@ exports[`<Header /> unstuck, not signature 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -214,6 +217,7 @@ exports[`<Header /> unstuck, signature 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -225,6 +229,7 @@ exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -236,6 +241,7 @@ exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -247,6 +253,7 @@ exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -258,6 +265,7 @@ exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -269,6 +277,7 @@ exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -280,6 +289,7 @@ exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -291,6 +301,7 @@ exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
@@ -302,6 +313,7 @@ exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
   <button
     aria-label="Show the InterPro Menu"
     className="top_level_hamburger"
+    onClick={undefined}
   >
     ☰
   </button>
