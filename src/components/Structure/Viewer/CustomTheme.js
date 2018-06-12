@@ -10,18 +10,24 @@ class CustomTheme {
   }
 
   createTheme(model, colorDef) {
-    var mapper = new ColorMapper(this.Core, this.Visualisation);
+    const mapper = new ColorMapper(this.Core, this.Visualisation);
     mapper.addColor(colorDef.base);
-    var map = new Uint8Array(model.data.atoms.count);
-    for (var _i = 0, _a = colorDef.entries; _i < _a.length; _i++) {
-      var e = _a[_i];
-      var query = this.Q.sequence(
-        e.entity_id.toString(),
-        e.struct_asym_id,
-        { seqNumber: e.start_residue_number },
-        { seqNumber: e.end_residue_number },
-      ).compile();
-      var colorIndex = mapper.addColor(e.color);
+    const map = new Uint8Array(model.data.atoms.count);
+    for (const fragment of colorDef.entries) {
+      const residues = [];
+      for (
+        let i = fragment.start_residue_number;
+        i <= fragment.end_residue_number;
+        i++
+      ) {
+        residues.push({
+          authAsymId: fragment.struct_asym_id,
+          authSeqNumber: i,
+        });
+      }
+      const query = this.Q.residues(...residues).compile();
+
+      var colorIndex = mapper.addColor(fragment.color);
       for (
         var _b = 0, _c = query(model.queryContext).fragments;
         _b < _c.length;
