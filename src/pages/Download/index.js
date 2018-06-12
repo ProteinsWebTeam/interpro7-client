@@ -7,9 +7,8 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import local from './style.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, local);
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
 
 class Download extends PureComponent /*:: <{}> */ {
   render() {
