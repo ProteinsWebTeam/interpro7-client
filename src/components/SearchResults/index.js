@@ -90,12 +90,19 @@ class SearchResults extends PureComponent {
           </Exporter>
           <Column
             dataKey="id"
-            renderer={id => (
+            renderer={(
+              id,
+              {
+                fields: {
+                  source_database: [db],
+                },
+              },
+            ) => (
               <Link
                 to={{
                   description: {
                     main: { key: 'entry' },
-                    entry: { db: 'InterPro', accession: id },
+                    entry: { db, accession: id },
                   },
                 }}
               >
