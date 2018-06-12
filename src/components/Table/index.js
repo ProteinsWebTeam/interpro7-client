@@ -88,6 +88,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     isStale: T.bool,
     loading: T.bool,
     ok: T.bool,
+    status: T.number,
     actualSize: T.number,
     query: T.object,
     title: T.string,
@@ -104,6 +105,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       isStale,
       loading,
       ok,
+      status,
       actualSize,
       query,
       title,
@@ -211,6 +213,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 isStale={isStale}
                 loading={loading}
                 ok={ok}
+                status={status}
                 columns={columns}
                 card={card}
                 notFound={notFound}

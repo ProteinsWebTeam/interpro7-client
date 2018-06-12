@@ -8,6 +8,8 @@ import { sleep } from 'timing-functions/src';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 
+import loadData from 'higherOrder/loadData';
+
 import cancelable from 'utils/cancelable';
 
 import { foundationPartial } from 'styles/foundation';
@@ -79,18 +81,25 @@ const mapStateToProps = createSelector(
 const SingleMatchWrapper = connect(mapStateToProps)(_SingleMatchWrapper);
 
 /*:: type SMProps = {
-  payload: Object,
+  data: {
+    payload: Object,
+  },
   searchValue: ?string,
 } */
 class SingleMatch extends PureComponent /*:: <SMProps> */ {
   static propTypes = {
-    payload: T.object.isRequired,
+    data: T.shape({
+      payload: T.object,
+    }),
     searchValue: T.string,
   };
 
   render() {
-    const { searchValue, payload } = this.props;
-    if (!searchValue) return null;
+    const {
+      searchValue,
+      data: { payload },
+    } = this.props;
+    if (!searchValue || !payload || !payload.entries) return null;
     const searchRE = new RegExp(
       `^(${searchValue}|IPR${searchValue.padStart(
         INTERPRO_ACCESSION_PADDING,
@@ -98,18 +107,23 @@ class SingleMatch extends PureComponent /*:: <SMProps> */ {
       )})$`,
       'i',
     );
-    for (const accession of payload.entries.map(entry => entry.id)) {
+    for (const {
+      id: accession,
+      fields: {
+        source_database: [db],
+      },
+    } of payload.entries) {
       if (searchRE.test(accession)) {
         return (
           <SingleMatchWrapper
             to={{
               description: {
                 main: { key: 'entry' },
-                entry: { db: 'InterPro', accession },
+                entry: { db, accession },
               },
             }}
           >
-            Entry: {accession}
+            Entry {accession}
           </SingleMatchWrapper>
         );
       }
@@ -125,7 +139,7 @@ class SingleMatch extends PureComponent /*:: <SMProps> */ {
               },
             }}
           >
-            Structure: {accession}
+            Structure {accession}
           </SingleMatchWrapper>
         );
       }
@@ -141,7 +155,7 @@ class SingleMatch extends PureComponent /*:: <SMProps> */ {
               },
             }}
           >
-            Protein: {accession}
+            Protein {accession}
           </SingleMatchWrapper>
         );
       }
@@ -150,4 +164,38 @@ class SingleMatch extends PureComponent /*:: <SMProps> */ {
   }
 }
 
-export default SingleMatch;
+const getQueryTerm = createSelector(
+  query => query,
+  query => {
+    const number = +query;
+    if (!Number.isInteger(number)) return query;
+    const stringified = number.toString();
+    if (stringified.length > INTERPRO_ACCESSION_PADDING) return query;
+    return `IPR${stringified.padStart(
+      INTERPRO_ACCESSION_PADDING,
+      '0',
+    )} OR ${query}`;
+  },
+);
+
+const getEbiSearchUrl = createSelector(
+  state => state.settings.ebi,
+  state => state.settings.navigation.pageSize,
+  state => state.customLocation.search,
+  state => state.customLocation.description.search.value,
+  (
+    { protocol, hostname, port, root },
+    settingsPageSize,
+    search,
+    searchValue,
+  ) => {
+    if (!searchValue) return null;
+    const fields = 'PDB,UNIPROT,description,source_database';
+    const size = search.page_size || settingsPageSize;
+    const query = getQueryTerm(searchValue);
+    const params = `?query=${query}&format=json&fields=${fields}&start=0&size=${size}`;
+    return `${protocol}//${hostname}:${port}${root}${params}`;
+  },
+);
+
+export default loadData(getEbiSearchUrl)(SingleMatch);

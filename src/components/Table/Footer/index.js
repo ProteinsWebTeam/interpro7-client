@@ -130,7 +130,7 @@ class Next extends PureComponent {
 
   render() {
     const { current, next, last } = this.props;
-    if (next === current || next === last) return null;
+    if (next === current || last <= current) return null;
     return <PaginationItem value={next} />;
   }
 }

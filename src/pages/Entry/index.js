@@ -438,6 +438,7 @@ class List extends PureComponent {
             contentType="entry"
             loading={data.loading}
             ok={data.ok}
+            status={data.status}
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
