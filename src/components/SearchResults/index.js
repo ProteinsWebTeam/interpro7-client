@@ -79,7 +79,7 @@ class SearchResults extends PureComponent {
             <Link
               disabled={!url}
               target="_blank"
-              href={url}
+              href={url.replace(/start=\d+/, 'start=0')}
               download={`SearchResults-${searchValue}.json`}
             >
               JSON
