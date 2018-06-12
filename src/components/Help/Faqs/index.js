@@ -78,7 +78,7 @@ export default class Faqs extends PureComponent {
               <summary>How do I interpret my InterProScan results?</summary>
               <p>
                 Please see the online tutorials section on the{' '}
-                <Link href="/help/training/">Training &amp; tutorials</Link>{' '}
+                <Link href="/help/tutorial/">Training &amp; tutorials</Link>{' '}
                 page.
               </p>
             </details>
@@ -219,19 +219,22 @@ export default class Faqs extends PureComponent {
                 What do the colours mean in the graphical view of matches to my
                 protein?
               </summary>
+              {
+                // Text need an update
+              }
               <p>
-                TO BE UPDATED - The graphical view of InterPro matches show
-                where the signatures that match your protein appear on the
-                sequence. There are two ways that these graphical
-                &ldquo;blobs&rdquo; can be coloured. If you select &ldquo;Colour
-                by: domain relationship&rdquo;, in the left hand menu, the
-                domains that are from the same or related InterPro entries will
-                be coloured the same, allowing easy visualisation of domains we
-                know to be related. Unintegrated signatures will always be grey
-                blobs, family signatures will always be shown as white, and
-                sites will always be black when this option is selected. If you
-                select &ldquo;Colour by: member database&rdquo;, each blob in
-                the sequence features section will be coloured according to the
+                The graphical view of InterPro matches show where the signatures
+                that match your protein appear on the sequence. There are two
+                ways that these graphical &ldquo;blobs&rdquo; can be coloured.
+                If you select &ldquo;Colour by: domain relationship&rdquo;, in
+                the left hand menu, the domains that are from the same or
+                related InterPro entries will be coloured the same, allowing
+                easy visualisation of domains we know to be related.
+                Unintegrated signatures will always be grey blobs, family
+                signatures will always be shown as white, and sites will always
+                be black when this option is selected. If you select
+                &ldquo;Colour by: member database&rdquo;, each blob in the
+                sequence features section will be coloured according to the
                 member database that provides the signature, as shown in this
                 diagram. However, the sequence summary view will retain the
                 domain relationship colour scheme.
@@ -298,7 +301,15 @@ export default class Faqs extends PureComponent {
               <summary>How are InterPro entries mapped to GO terms?</summary>
               <p>
                 The assignment of GO terms to InterPro entries is performed
-                manually, and is an ongoing process (view related publication).
+                manually, and is an ongoing process (<Link
+                  to={{
+                    description: {
+                      other: ['help', 'documentation/publications'],
+                    },
+                  }}
+                >
+                  view related publication
+                </Link>).
               </p>
             </details>
 
