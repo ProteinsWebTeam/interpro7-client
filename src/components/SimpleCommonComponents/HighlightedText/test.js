@@ -19,6 +19,17 @@ describe('<HighlightedText />', () => {
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 
+  test('highlight "e", maxLength 6', () => {
+    renderer.render(
+      <HighlightedText
+        text="some example text"
+        textToHighlight="e"
+        maxLength={6}
+      />,
+    );
+    expect(renderer.getRenderOutput()).toMatchSnapshot();
+  });
+
   test('highlight "example"', () => {
     renderer.render(
       <HighlightedText text="some example text" textToHighlight="example" />,
