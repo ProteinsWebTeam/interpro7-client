@@ -282,6 +282,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
 <div
   aria-hidden={false}
   className="masthead-black-bar visible"
+  inert={undefined}
 >
   <nav
     className="dropdown-pane bottom embl-dropdown"
