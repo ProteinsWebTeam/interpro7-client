@@ -1,8 +1,9 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Link from 'components/generic/Link';
 import Table, { Column, Exporter, PageSizeSelector } from 'components/Table';
 import SingleMatch from 'components/SearchResults/SingleMatch';
@@ -42,7 +43,7 @@ class SearchResults extends PureComponent {
 
   render() {
     const {
-      data: { payload, loading, ok, url },
+      data: { payload, loading, ok, url, status },
       isStale,
       searchValue,
       query,
@@ -58,7 +59,7 @@ class SearchResults extends PureComponent {
       );
     }
     return (
-      <Fragment>
+      <ErrorBoundary>
         <SchemaOrgData
           data={{
             name: 'Search Results',
@@ -66,7 +67,7 @@ class SearchResults extends PureComponent {
           }}
           processData={schemaProcessDataPageSection}
         />
-        {payload && <SingleMatch payload={payload} searchValue={searchValue} />}
+        <SingleMatch searchValue={searchValue} />
         <Table
           dataTable={entries}
           contentType="search"
@@ -75,6 +76,7 @@ class SearchResults extends PureComponent {
           isStale={isStale}
           loading={loading}
           ok={ok}
+          status={status}
         >
           <Exporter>
             <Link
@@ -104,16 +106,15 @@ class SearchResults extends PureComponent {
           >
             Accession
           </Column>
+          <Column dataKey="fields.source_database.0">Source database</Column>
           <Column
             dataKey="fields.description"
             renderer={d => (
-              <Fragment>
-                <HighlightedText
-                  text={d.join('\n')}
-                  maxLength={MAX_LENGTH}
-                  textToHighlight={searchValue}
-                />
-              </Fragment>
+              <HighlightedText
+                text={d.join('\n')}
+                maxLength={MAX_LENGTH}
+                textToHighlight={searchValue}
+              />
             )}
             cellStyle={{ textAlign: 'justify' }}
           >
@@ -121,7 +122,7 @@ class SearchResults extends PureComponent {
           </Column>
           <PageSizeSelector />
         </Table>
-      </Fragment>
+      </ErrorBoundary>
     );
   }
 }
@@ -158,7 +159,7 @@ const getEbiSearchUrl = createSelector(
     searchValue,
   ) => {
     if (!searchValue) return null;
-    const fields = 'PDB,UNIPROT,description';
+    const fields = 'PDB,UNIPROT,description,source_database';
     const size = search.page_size || settingsPageSize;
     const start = ((search.page || 1) - 1) * size;
     const query = getQueryTerm(searchValue);

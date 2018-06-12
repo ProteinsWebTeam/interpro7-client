@@ -292,6 +292,7 @@ class List extends PureComponent {
             isStale={isStale}
             loading={loading}
             ok={ok}
+            status={status}
             actualSize={_payload.count}
             query={search}
             notFound={notFound}

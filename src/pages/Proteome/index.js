@@ -309,6 +309,7 @@ class List extends PureComponent {
             contentType="proteome"
             loading={loading}
             ok={ok}
+            status={status}
             isStale={isStale}
             actualSize={_payload.count}
             query={search}

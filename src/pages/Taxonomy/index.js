@@ -372,6 +372,7 @@ class List extends PureComponent {
             contentType="taxonomy"
             loading={loading}
             ok={ok}
+            status={status}
             isStale={isStale}
             actualSize={_payload.count}
             query={search}

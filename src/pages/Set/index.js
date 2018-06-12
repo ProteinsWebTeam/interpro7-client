@@ -300,6 +300,7 @@ class List extends PureComponent {
             contentType="set"
             loading={loading}
             ok={ok}
+            status={status}
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
