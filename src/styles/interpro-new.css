@@ -191,6 +191,29 @@ div#local-title {
 /************************ END STICKY BANNER**********************************/
 
 /****************************** TABLE *********************************/
+/*Style default table*/
+table.classic {
+  font-size: 0.9rem;
+  & thead th {
+    border: 1px solid var(--colors-vlightgray);
+    background: var(--colors-very-white);
+  }
+  & tr td {
+    border: 1px solid var(--colors-very-white);
+  }
+  & tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+}
+
+table.classic tbody tr:nth-child(even) {
+  background-color: var(--colors-nearly-white);
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+/*/Style default table*/
+
 .table-center {
   text-align: center;
 }
@@ -285,6 +308,52 @@ button {
 /****************************** END BUTTONS *********************************/
 
 /****************************** OTHERS *********************************/
+/*ACCORDION TYPE*/
+details > summary {
+  cursor: pointer;
+  outline: 0;
+}
+/*custom*/
+details.accordion-style > summary {
+  color: var(--colors-submain);
+  border: 1px solid var(--colors-very-white);
+  padding: 1rem;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--colors-graydark);
+  }
+  &:after {
+    content: 'ć'; /*content: "\0f11a";*/
+    font-family: 'EBI-Common';
+    float: right;
+    font-size: 120%;
+  }
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+details.accordion-style > p,
+details.accordion-style > div {
+  border: 1px solid var(--colors-nearly-white);
+  border-top-width: 0;
+  padding: 1rem;
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+details.accordion-style[open] > summary {
+  background-color: var(--colors-submain);
+  color: white;
+}
+details.accordion-style.light[open] > summary {
+  background-color: var(--colors-nearly-white);
+  color: var(--colors-graydark);
+} /*alt color for testing*/
+details.accordion-style[open] summary:after {
+  content: 'Ć';
+}
+/*/ACCORDION TYPE*/
 
 /****************************** TITLE - TEXT *********************************/
 /*title sue for box like search box*/
@@ -292,13 +361,13 @@ h3.light {
   font-weight: 300;
 }
 
-/*Overwrite Foundation*/
-h1 small,
-h2 small,
-h3 small,
-h4 small {
-  color: #bbb;
-}
+/*not used anymore - use default foundation*/
+/*h1 small,*/
+/*h2 small,*/
+/*h3 small,*/
+/*h4 small {*/
+/*color: #bbb;*/
+/*}*/
 h5 small,
 h6 small {
   color: #8b8b8b;
