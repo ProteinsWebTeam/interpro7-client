@@ -100,7 +100,8 @@ const propTypes = {
     niceRatio: T.number,
   }),
   actualSize: T.number,
-  search: T.object,
+  search: T.object.isRequired,
+  description: T.object.isRequired,
 };
 
 const componentMatch = {
@@ -216,7 +217,7 @@ const Matches = (
     contentType={primary}
   >
     <PageSizeSelector />
-    <SearchBox search={search.search}>Search</SearchBox>
+    <SearchBox />
     <Column
       dataKey="accession"
       renderer={(acc /*: string */, obj /*: {source_database: string} */) => {

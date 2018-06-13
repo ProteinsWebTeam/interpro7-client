@@ -38,15 +38,15 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
     customLocation: T.object.isRequired,
   };
 
-  static getDerivedStateFromProps() {
-    // Any change in props should reset the error state, and try to re-render
-    return { error: null };
-  }
-
   constructor(props /*: Props */) {
     super(props);
 
     this.state = { error: null };
+  }
+
+  static getDerivedStateFromProps() {
+    // Any change in props should reset the error state, and try to re-render
+    return { error: null };
   }
 
   componentDidCatch(error /*: Error */, info /*: any */) {

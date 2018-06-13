@@ -88,6 +88,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     isStale: T.bool,
     loading: T.bool,
     ok: T.bool,
+    status: T.number,
     actualSize: T.number,
     query: T.object,
     title: T.string,
@@ -104,6 +105,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       isStale,
       loading,
       ok,
+      status,
       actualSize,
       query,
       title,
@@ -156,20 +158,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       onMouseOver={TableView.preload}
                       onFocus={TableView.preload}
                     />
-                  </Tooltip>{' '}
-                  {
-                    // <Tooltip title="View your results as a list">
-                    //  <Link
-                    //   to={l => ({ ...l, hash: 'list' })}
-                    //  className={f('icon-view', 'list-view', 'disabled')}
-                    //  aria-disabled="true"
-                    //  disabled
-                    //  aria-label="view your results as a list"
-                    // onMouseOver={ListView.preload}
-                    // onFocus={ListView.preload}
-                    // />
-                    // </Tooltip>
-                  }{' '}
+                  </Tooltip>
                   <div className={f('test-support-grid')}>
                     <Tooltip title="View your results in a grid">
                       <Link
@@ -224,6 +213,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 isStale={isStale}
                 loading={loading}
                 ok={ok}
+                status={status}
                 columns={columns}
                 card={card}
                 notFound={notFound}

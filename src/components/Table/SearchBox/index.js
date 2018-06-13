@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -5,6 +6,8 @@ import { createSelector } from 'reselect';
 import debounce from 'lodash-es/debounce';
 
 import { customLocationSelector } from 'reducers/custom-location';
+import { goToCustomLocation } from 'actions/creators';
+/*:: import type { CustomLocation } from 'actions/creators'; */
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -12,27 +15,30 @@ import s from './style.css';
 
 const f = foundationPartial(s);
 
-import { goToCustomLocation } from 'actions/creators';
-
 const DEBOUNCE_RATE = 500; // In ms
 
-class SearchBox extends PureComponent {
-  static propTypes = {
-    customLocation: T.object,
-    goToCustomLocation: T.func,
-    children: T.any,
-  };
+/*:: type Props = {
+  customLocation: CustomLocation,
+  goToCustomLocation: goToCustomLocation,
+  children?: ?string,
+}; */
+/*:: type State = {|
+  localSearch: ?string,
+|}; */
 
-  static getDerivedStateFromProps({ customLocation: { search } }) {
-    return { search: search.search };
-  }
+class SearchBox extends PureComponent /*:: <Props, State> */ {
+  static propTypes = {
+    customLocation: T.object.isRequired,
+    goToCustomLocation: T.func.isRequired,
+    children: T.string,
+  };
 
   constructor(props) {
     super(props);
 
     this.routerPush = debounce(this.routerPush, DEBOUNCE_RATE);
 
-    this.state = { search: this.props.customLocation.search.search };
+    this.state = { localSearch: null };
   }
 
   componentDidUpdate() {
@@ -42,11 +48,11 @@ class SearchBox extends PureComponent {
   handleReset = () => this.handleChange({ target: { value: null } });
 
   handleChange = ({ target: { value: search } }) =>
-    this.setState({ search }, this.routerPush);
+    this.setState({ localSearch: search }, this.routerPush);
 
   routerPush = () => {
     const { page, search, ...rest } = this.props.customLocation.search;
-    if (this.state.search) rest.search = this.state.search;
+    if (this.state.localSearch) rest.search = this.state.localSearch;
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       search: rest,
@@ -60,9 +66,13 @@ class SearchBox extends PureComponent {
           <input
             id="table-filter-text"
             type="text"
-            value={this.state.search || ''}
+            value={
+              this.state.localSearch === null
+                ? this.props.customLocation.search.search || ''
+                : this.state.localSearch
+            }
             onChange={this.handleChange}
-            placeholder="Filter table"
+            placeholder={this.props.children || 'Search'}
           />
           <button
             className={f('cancel-button')}
@@ -83,4 +93,7 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(SearchBox);
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(SearchBox);
