@@ -41,8 +41,8 @@ class CustomTheme {
       }
     }
     var fallbackColor = { r: 0.6, g: 0.6, b: 0.6 };
-    var selectionColor = { r: 0, g: 0, b: 1 };
-    var highlightColor = { r: 1, g: 0, b: 1 };
+    var selectionColor = { r: 0, g: 1, b: 1 };
+    var highlightColor = { r: 0, g: 1, b: 0 };
     var colors = this.Core.Utils.FastMap.create();
     colors.set('Uniform', fallbackColor);
     colors.set('Selection', selectionColor);
