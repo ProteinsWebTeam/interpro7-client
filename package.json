@@ -120,7 +120,7 @@
     "idb": "2.1.1",
     "interpro-components": "0.6.1",
     "isomorphic-fetch": "2.2.1",
-    "litemol": "github:dsehnal/LiteMol",
+    "litemol": "github:dsehnal/LiteMol#85ec87c2698b6abeca8a18cf150f0341b8f2c6ea",
     "lodash-es": "4.17.10",
     "pdb-web-components": "^0.2.0",
     "popper.js": "1.14.3",
