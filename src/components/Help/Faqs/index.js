@@ -304,7 +304,7 @@ export default class Faqs extends PureComponent {
                 manually, and is an ongoing process (<Link
                   to={{
                     description: {
-                      other: ['help', 'documentation/publication'],
+                      other: ['help', 'publication'],
                     },
                   }}
                 >
