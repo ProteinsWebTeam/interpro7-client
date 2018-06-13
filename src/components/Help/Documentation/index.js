@@ -79,7 +79,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   <Link
                     to={{
                       description: {
-                        other: ['help', 'documentation/publications'],
+                        other: ['help', 'publication'],
                       },
                     }}
                   >
