@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Link from 'components/generic/Link';
 import Table, { Column, Exporter, PageSizeSelector } from 'components/Table';
-import SingleMatch from 'components/SearchResults/SingleMatch';
+import ExactMatch from 'components/SearchResults/ExactMatch';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import loadData from 'higherOrder/loadData';
@@ -67,7 +67,7 @@ class SearchResults extends PureComponent {
           }}
           processData={schemaProcessDataPageSection}
         />
-        <SingleMatch searchValue={searchValue} />
+        <ExactMatch searchValue={searchValue} />
         <Table
           dataTable={entries}
           contentType="search"
@@ -166,7 +166,7 @@ const getEbiSearchUrl = createSelector(
     searchValue,
   ) => {
     if (!searchValue) return null;
-    const fields = 'PDB,UNIPROT,description,source_database';
+    const fields = 'description,source_database';
     const size = search.page_size || settingsPageSize;
     const start = ((search.page || 1) - 1) * size;
     const query = getQueryTerm(searchValue);
