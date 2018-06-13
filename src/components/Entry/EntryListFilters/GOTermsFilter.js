@@ -128,6 +128,7 @@ class GOTermsFilter extends PureComponent {
                   value={count}
                   loading={loading}
                   className={f('filter-label')}
+                  abbr
                 />
               )}
             </label>
@@ -164,7 +165,10 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(
   loadData({
     getUrl: getUrlFor,
   })(GOTermsFilter),

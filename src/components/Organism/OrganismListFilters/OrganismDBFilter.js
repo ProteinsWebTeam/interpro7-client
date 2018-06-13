@@ -77,6 +77,7 @@ class OrganismDBFilter extends PureComponent {
                 value={count}
                 loading={loading}
                 className={f('filter-label')}
+                abbr
               />
             </label>
           </div>
@@ -102,6 +103,7 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(
-  loadData(getUrlFor)(OrganismDBFilter),
-);
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(loadData(getUrlFor)(OrganismDBFilter));
