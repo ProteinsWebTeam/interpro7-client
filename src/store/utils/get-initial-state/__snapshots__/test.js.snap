@@ -24,6 +24,7 @@ Object {
       "other": Object {
         "0": "about",
         "1": null,
+        "2": null,
       },
       "protein": Object {
         "accession": null,
@@ -92,6 +93,7 @@ Object {
       "other": Object {
         "0": null,
         "1": null,
+        "2": null,
       },
       "protein": Object {
         "accession": null,
@@ -160,6 +162,7 @@ Object {
       "other": Object {
         "0": null,
         "1": null,
+        "2": null,
       },
       "protein": Object {
         "accession": null,
@@ -228,6 +231,7 @@ Object {
       "other": Object {
         "0": null,
         "1": null,
+        "2": null,
       },
       "protein": Object {
         "accession": null,
@@ -296,6 +300,7 @@ Object {
       "other": Object {
         "0": null,
         "1": null,
+        "2": null,
       },
       "protein": Object {
         "accession": null,
@@ -364,6 +369,7 @@ Object {
       "other": Object {
         "0": null,
         "1": null,
+        "2": null,
       },
       "protein": Object {
         "accession": "A0A023GPI8",

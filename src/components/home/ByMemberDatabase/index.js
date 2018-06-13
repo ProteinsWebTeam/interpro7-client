@@ -102,6 +102,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                     <span className={f('count', { visible: payload })}>
                       <NumberComponent
                         value={(counts && counts[canonical.toLowerCase()]) || 0}
+                        abbr
                       />
                       {' entries'}
                     </span>

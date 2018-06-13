@@ -75,7 +75,7 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
                 },
               }}
             >
-              <NumberComponent loading={loading} value={entries} />{' '}
+              <NumberComponent loading={loading} value={entries} abbr />{' '}
               {toPlural('entry', entries)}
             </Link>
           </Tooltip>
@@ -97,7 +97,7 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
                 },
               }}
             >
-              <NumberComponent loading={loading} value={proteins} />{' '}
+              <NumberComponent loading={loading} value={proteins} abbr />{' '}
               {toPlural('protein', proteins)}
             </Link>
           </Tooltip>

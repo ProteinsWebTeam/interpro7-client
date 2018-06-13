@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -59,4 +58,7 @@ class Actions extends PureComponent {
   }
 }
 
-export default connect(undefined, { downloadDelete })(Actions);
+export default connect(
+  undefined,
+  { downloadDelete },
+)(Actions);

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 'use strict';
 
 const puppeteer = require('puppeteer');
@@ -7,8 +8,8 @@ const tabLinksSelector = '.browse-by .tabs-title button';
 const browseTabsSelectors = {
   'Member Database': 'a[href="/interpro/entry/prints/"]',
   'Entry type': 'a[href="/interpro/entry/InterPro/?type=domain"]',
-  Species: 'a[href="/interpro/organism/taxonomy/39947/entry/all/"]',
-  'GO term': 'a[href="/interpro/entry/InterPro/?go_term=GO%3A0003824"]',
+  Species: 'a[href="/interpro/taxonomy/uniprot/39947/entry/all/"]',
+  // 'GO term': 'a[href="/interpro/entry/InterPro/?go_term=GO%3A0003824"]',
 };
 
 const checkHomePage = async page => {
@@ -128,35 +129,46 @@ const checkSetBrowse = async page => {
     console.log(`    Click on tab ${linkTitle} `);
   }
 };
-const checkOrganismBrowse = async page => {
+const checkTaxonomyBrowse = async page => {
   const selector = '.left-side-db-selector h6';
-  console.log(`  Click on tab Organism and looking for ${selector}`);
+  console.log(`  Click on tab Taxonomy and looking for ${selector}`);
   await page.waitForSelector(selector);
   const memberDBLinks = await page.$$(memberDBLinksSelector);
-  console.log('  ✓ First Organism selector found');
+  console.log('  ✓ First Taxonomy selector found');
   for (const link of memberDBLinks) {
     const linkTitle = await page.evaluate(t => t.innerText, link);
     await page.waitFor(oneSec);
     await link.click();
     console.log(`    Click on tab ${linkTitle} `);
-    await swipeFilter(page, '.list-organism-type input', async option => {
-      const txt1 = await page.evaluate(t => t.value, option);
-      console.log(`      Filter: ${txt1}`);
-    });
+  }
+};
+const checkProteomeBrowse = async page => {
+  const selector = '.left-side-db-selector h6';
+  console.log(`  Click on tab proeome and looking for ${selector}`);
+  await page.waitForSelector(selector);
+  const memberDBLinks = await page.$$(memberDBLinksSelector);
+  console.log('  ✓ First Proteome selector found');
+  for (const link of memberDBLinks) {
+    const linkTitle = await page.evaluate(t => t.innerText, link);
+    await page.waitFor(oneSec);
+    await link.click();
+    console.log(`    Click on tab ${linkTitle} `);
   }
 };
 const checkBrowseSubsection = {
   // Entry: checkEntryBrowse,
   // Protein: checkProteinBrowse,
-  Structure: checkStructureBrowse,
-  Set: checkSetBrowse,
-  Organism: checkOrganismBrowse,
+  // Structure: checkStructureBrowse,
+  // Set: checkSetBrowse,
+  Taxonomy: checkTaxonomyBrowse,
+  Proteome: checkProteomeBrowse,
 };
 const checkBrowseSection = async page => {
   await page.waitForSelector(browseTabsSelector);
   const browseLinks = await page.$$(browseTabsSelector);
   for (const tab of browseLinks) {
     const tabTitle = await page.evaluate(t => t.innerText, tab);
+    console.log(' Tab:', tabTitle);
     await tab.click();
     // TODO: clicking twice to give time to the scrolling, otherwise the click won't be captured
     await page.waitFor(oneSec);
@@ -167,8 +179,18 @@ const checkBrowseSection = async page => {
 };
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  // Viewport && Window size
+  const width = 1000;
+  const height = 1000;
+
+  const browser = await puppeteer.launch({
+    headless: false,
+    args: [`--window-size=${width},${height}`],
+  });
+
   const page = await browser.newPage();
+
+  await page.setViewport({ width, height });
 
   await page.goto('http://localhost:8000/interpro/');
 

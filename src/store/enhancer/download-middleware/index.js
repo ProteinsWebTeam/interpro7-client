@@ -42,6 +42,8 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
             .blobURL || '',
         );
         break;
+      default:
+        break;
     }
     return next(action);
   };

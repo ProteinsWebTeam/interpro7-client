@@ -95,6 +95,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
                         counts[type.toLowerCase().replace(' ', '_')]) ||
                       null
                     }
+                    abbr
                   />
                   {type === 'new' ? ' ' : ' entries'}
                 </span>

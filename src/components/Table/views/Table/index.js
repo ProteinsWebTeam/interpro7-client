@@ -16,13 +16,22 @@ class TableView extends PureComponent {
     loading: T.bool,
     isStale: T.bool,
     ok: T.bool,
+    status: T.number,
     columns: T.array,
     notFound: T.bool,
     dataTable: T.array,
   };
 
   render() {
-    const { loading, isStale, ok, columns, notFound, dataTable } = this.props;
+    const {
+      loading,
+      isStale,
+      ok,
+      status,
+      columns,
+      notFound,
+      dataTable,
+    } = this.props;
     return (
       <table className={f('table', 'light')}>
         <Header columns={columns} notFound={notFound} />
@@ -33,6 +42,7 @@ class TableView extends PureComponent {
           loading={loading}
           isStale={isStale}
           ok={ok}
+          status={status}
         />
       </table>
     );

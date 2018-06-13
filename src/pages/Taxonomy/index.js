@@ -117,7 +117,7 @@ for (const subPage of config.pages.taxonomy.subPages) {
   subPagesForTaxonomy.set(subPage, subPages.get(subPage));
 }
 
-const SpeciesIcon = ({ lineage }) => {
+export const SpeciesIcon = ({ lineage }) => {
   let icon = '.';
   let color;
   if (lineage) {
@@ -171,7 +171,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!entries}
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-            <NumberComponent value={entries} abbr scaleMargin={1} />
+            <NumberComponent value={entries} abbr />
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
             </span>
@@ -199,7 +199,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!proteins}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr scaleMargin={1} />
+            <NumberComponent value={proteins} abbr />
             <span className={f('label-number')}>
               {' '}
               {toPlural('protein', proteins)}
@@ -228,7 +228,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
-            <NumberComponent value={structures} abbr scaleMargin={1} />{' '}
+            <NumberComponent value={structures} abbr />{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
         </Tooltip>
@@ -252,7 +252,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!proteomes}
           >
             <div className={f('icon', 'icon-common', 'icon-count-proteome')} />
-            <NumberComponent value={proteomes} abbr scaleMargin={1} />{' '}
+            <NumberComponent value={proteomes} abbr />{' '}
             <span className={f('label-number')}>proteomes</span>
           </Link>
         </Tooltip>
@@ -372,6 +372,7 @@ class List extends PureComponent {
             contentType="taxonomy"
             loading={loading}
             ok={ok}
+            status={status}
             isStale={isStale}
             actualSize={_payload.count}
             query={search}
@@ -411,7 +412,7 @@ class List extends PureComponent {
                 />
               )}
             </Card>
-            <SearchBox search={search.search}>Search taxonomy</SearchBox>
+            <SearchBox>Search taxonomy</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

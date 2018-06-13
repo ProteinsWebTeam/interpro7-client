@@ -131,7 +131,7 @@ const templateHandler /*: Handler */ = {
 const memberDB = new Set([
   {
     name: 'cathgene3d',
-    re: /^G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{2,5}$/i,
+    re: /^G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{1,5}$/i,
   },
   { name: 'cdd', re: /^(?:[cs])d[0-9]{5}$/i },
   { name: 'hamap', re: /^MF_[0-9]{5}(_([AB]){1})?$/i },
@@ -594,11 +594,16 @@ export const otherHandler /*: Handler */ = handlerConstructor({
   },
   getKey: {
     // if level 1 is already defined, send to second level
-    value: ({ other: [first] }) => ['other', first ? 1 : 0],
+    value: ({ other: [first, second] }) => {
+      let index = 0;
+      if (first) index = 1;
+      if (second) index = 2;
+      return ['other', index];
+    },
   },
   match: {
-    // stop at (arbitrary defined) second level, to avoid looping indefinitely
-    value: (_, { other: [, second] }) => !second,
+    // stop at (arbitrary defined) third level, to avoid looping indefinitely
+    value: (_, { other: [, , third] }) => !third,
   },
 });
 

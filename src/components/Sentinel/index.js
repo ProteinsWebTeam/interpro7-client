@@ -57,14 +57,14 @@ const listenScrolled = (element, args) => {
 };
 
 class Sentinel extends PureComponent {
-  static defaultProps = {
-    top: 0,
-  };
-
   static propTypes = {
     top: T.number.isRequired,
     stick: T.func.isRequired,
     unstick: T.func.isRequired,
+  };
+
+  static defaultProps = {
+    top: 0,
   };
 
   constructor(props) {
@@ -93,4 +93,7 @@ class Sentinel extends PureComponent {
   }
 }
 
-export default connect(null, { stick, unstick })(Sentinel);
+export default connect(
+  null,
+  { stick, unstick },
+)(Sentinel);

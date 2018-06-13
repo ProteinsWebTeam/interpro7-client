@@ -1,25 +1,29 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
-
+import { createSelector } from 'reselect';
+import { format } from 'url';
 import TaxonomyVisualisation from 'taxonomy-visualisation';
+
 import MemberDBSelector from 'components/MemberDBSelector';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import loadable from 'higherOrder/loadable';
-
 import Accession from 'components/Accession';
 import Lineage from 'components/Taxonomy/Lineage';
 import Children from 'components/Taxonomy/Children';
+import Tree from 'components/Tree';
+
+import loadable from 'higherOrder/loadable';
+import loadData from 'higherOrder/loadData';
+
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
+import { goToCustomLocation } from 'actions/creators';
+
+import { foundationPartial } from 'styles/foundation';
 
 import global from 'styles/global.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import memberSelectorStyle from 'components/Table/TotalNb/style.css';
-import { foundationPartial } from 'styles/foundation';
-import { createSelector } from 'reselect';
-import { format } from 'url';
-import { goToCustomLocation } from 'actions/creators';
-import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(ebiStyles, global, memberSelectorStyle);
 
@@ -69,10 +73,13 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 
     this._vis = new TaxonomyVisualisation(undefined, {
       initialMaxNodes: +Infinity,
+      fisheye: true,
     });
     this._vis.addEventListener('focus', this._handleFocus);
 
     this._ref = React.createRef();
+
+    this.state = {};
   }
 
   componentDidMount() {
@@ -93,12 +100,12 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     }
   }
 
-  _handleFocus = ({ detail: { id } }) => {
+  _handleFocus = accession => {
     if (!this.loadingVis)
       this.props.goToCustomLocation({
         description: {
           main: { key: 'taxonomy' },
-          taxonomy: { db: 'uniprot', accession: id },
+          taxonomy: { db: 'uniprot', accession },
         },
       });
   };
@@ -126,8 +133,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
         id,
       }));
     }
-    this._vis.data = root;
-    this._vis.focusNodeWithID(`${data.accession}`);
+    this.setState({ data: root, focused: `${data.accession}` });
   };
 
   _handleChange = ({ target: { value } }) => {
@@ -141,6 +147,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
       description,
     });
   };
+
   _isSelected = currentDB => {
     const {
       customLocation: {
@@ -202,18 +209,11 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
           )}
           <Lineage lineage={metadata.lineage} names={names} />
           <Children taxChildren={metadata.children} names={names} />
-          <div
-            style={{
-              width: '100%',
-              height: '50vh',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'stretch',
-              justifyContent: 'center',
-            }}
-          >
-            <svg ref={this._ref} style={{ flex: '1' }} />
-          </div>
+          <Tree
+            data={this.state.data}
+            focused={this.state.focused}
+            changeFocus={this._handleFocus}
+          />
         </div>
       </div>
     );
@@ -251,5 +251,8 @@ const getUrl = createSelector(
 );
 
 export default loadData({ getUrl, propNamespace: 'Names' })(
-  connect(null, { goToCustomLocation })(SummaryTaxonomy),
+  connect(
+    null,
+    { goToCustomLocation },
+  )(SummaryTaxonomy),
 );
