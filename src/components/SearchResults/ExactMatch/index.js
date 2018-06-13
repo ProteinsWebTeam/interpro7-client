@@ -22,15 +22,22 @@ const f = foundationPartial(ebiGlobalStyles, ipro);
 const INTERPRO_ACCESSION_PADDING = 6;
 const TOGGLE_DURATION = 500;
 
+// TODO: review the whole logic for this file, especially, check if there is a
+// TODO: way to be sure to have all the exact matches (in one go if possible)
+// 1 -> entry IPR000001 AND taxid 1
+// 9606 -> entry IPR09606 AND taxid 9606
+// Only redirect, if activated, to the entry if there are multiple matches
+
 /*:: type SMWProps = {
   to: Object,
   children: any,
   autoRedirect: boolean,
+  absolutelyNoRedirect?: boolean,
 }; */
 /*:: type SMWState = {|
   triggerRedirect: boolean,
 |}; */
-class _SingleMatchWrapper extends PureComponent /*:: <SMWProps, SMWState> */ {
+class _ExactMatchWrapper extends PureComponent /*:: <SMWProps, SMWState> */ {
   /*::
     _trigger: cancelable;
   */
@@ -38,6 +45,7 @@ class _SingleMatchWrapper extends PureComponent /*:: <SMWProps, SMWState> */ {
     to: T.object.isRequired,
     children: T.any.isRequired,
     autoRedirect: T.bool.isRequired,
+    absolutelyNoRedirect: T.bool,
   };
 
   constructor(props) {
@@ -62,8 +70,9 @@ class _SingleMatchWrapper extends PureComponent /*:: <SMWProps, SMWState> */ {
   };
 
   render() {
-    const { to, children } = this.props;
-    const LinkOrRedirect = this.state.triggerRedirect ? Redirect : Link;
+    const { to, children, absolutelyNoRedirect } = this.props;
+    const LinkOrRedirect =
+      absolutelyNoRedirect || !this.state.triggerRedirect ? Link : Redirect;
     return (
       <div className={f('callout', 'info')}>
         <span>Found an exact match: </span>
@@ -78,7 +87,14 @@ const mapStateToProps = createSelector(
   autoRedirect => ({ autoRedirect }),
 );
 
-const SingleMatchWrapper = connect(mapStateToProps)(_SingleMatchWrapper);
+const ExactMatchWrapper = connect(mapStateToProps)(_ExactMatchWrapper);
+
+const XREFS = new Map([
+  ['UNIPROT', { type: 'protein', db: 'UniProt' }],
+  ['PDB', { type: 'structure', db: 'PDB' }],
+  ['TAXONOMY', { type: 'taxonomy', db: 'UniProt' }],
+  ['PROTEOME', { type: 'proteome', db: 'UniProt' }],
+]);
 
 /*:: type SMProps = {
   data: {
@@ -86,7 +102,7 @@ const SingleMatchWrapper = connect(mapStateToProps)(_SingleMatchWrapper);
   },
   searchValue: ?string,
 } */
-class SingleMatch extends PureComponent /*:: <SMProps> */ {
+class ExactMatch extends PureComponent /*:: <SMProps> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,
@@ -107,6 +123,7 @@ class SingleMatch extends PureComponent /*:: <SMProps> */ {
       )})$`,
       'i',
     );
+    const exactMatches = new Map();
     for (const {
       id: accession,
       fields: {
@@ -114,8 +131,10 @@ class SingleMatch extends PureComponent /*:: <SMProps> */ {
       },
     } of payload.entries) {
       if (searchRE.test(accession)) {
-        return (
-          <SingleMatchWrapper
+        exactMatches.set(
+          'entry',
+          <ExactMatchWrapper
+            key="entry"
             to={{
               description: {
                 main: { key: 'entry' },
@@ -123,44 +142,42 @@ class SingleMatch extends PureComponent /*:: <SMProps> */ {
               },
             }}
           >
-            Entry {accession}
-          </SingleMatchWrapper>
+            entry {accession}
+          </ExactMatchWrapper>,
         );
+        break;
       }
     }
-    for (const accession of payload.entries[0].fields.PDB) {
-      if (searchRE.test(accession)) {
-        return (
-          <SingleMatchWrapper
-            to={{
-              description: {
-                main: { key: 'structure' },
-                structure: { db: 'PDB', accession },
-              },
-            }}
-          >
-            Structure {accession}
-          </SingleMatchWrapper>
-        );
+    for (const datum of payload.entries) {
+      for (const [key, { type, db }] of XREFS.entries()) {
+        if (exactMatches.has(type)) continue;
+        for (const accession of datum.fields[key]) {
+          if (searchRE.test(accession)) {
+            const absolutelyNoRedirect = !!exactMatches.size;
+            exactMatches.set(
+              type,
+              <ExactMatchWrapper
+                key={type}
+                to={{
+                  description: {
+                    main: { key: type },
+                    [type]: { db, accession },
+                  },
+                }}
+                absolutelyNoRedirect={absolutelyNoRedirect}
+              >
+                {type} {accession}
+              </ExactMatchWrapper>,
+            );
+            break;
+          }
+        }
       }
     }
-    for (const accession of payload.entries[0].fields.UNIPROT) {
-      if (searchRE.test(accession)) {
-        return (
-          <SingleMatchWrapper
-            to={{
-              description: {
-                main: { key: 'protein' },
-                protein: { db: 'UniProt', accession },
-              },
-            }}
-          >
-            Protein {accession}
-          </SingleMatchWrapper>
-        );
-      }
-    }
-    return null;
+    if (!exactMatches.size) return null;
+    return Array.from(exactMatches.entries()).map(
+      ([type, Component]) => Component,
+    );
   }
 }
 
@@ -180,22 +197,14 @@ const getQueryTerm = createSelector(
 
 const getEbiSearchUrl = createSelector(
   state => state.settings.ebi,
-  state => state.settings.navigation.pageSize,
-  state => state.customLocation.search,
   state => state.customLocation.description.search.value,
-  (
-    { protocol, hostname, port, root },
-    settingsPageSize,
-    search,
-    searchValue,
-  ) => {
+  ({ protocol, hostname, port, root }, searchValue) => {
     if (!searchValue) return null;
-    const fields = 'PDB,UNIPROT,description,source_database';
-    const size = search.page_size || settingsPageSize;
+    const fields = 'UNIPROT,PDB,TAXONOMY,PROTEOME,source_database';
     const query = getQueryTerm(searchValue);
-    const params = `?query=${query}&format=json&fields=${fields}&start=0&size=${size}`;
+    const params = `?query=${query}&format=json&fields=${fields}&start=0&size=2`;
     return `${protocol}//${hostname}:${port}${root}${params}`;
   },
 );
 
-export default loadData(getEbiSearchUrl)(SingleMatch);
+export default loadData(getEbiSearchUrl)(ExactMatch);
