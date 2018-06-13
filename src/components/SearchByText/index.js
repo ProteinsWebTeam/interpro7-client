@@ -170,7 +170,15 @@ class SearchByText extends PureComponent /*:: <SearchByTextProps> */ {
                     'search-adv',
                   )}
                 >
-                  <span>Powered by EBI search</span>
+                  <span>
+                    Powered by{' '}
+                    <Link
+                      target="_blank"
+                      href="https://www.ebi.ac.uk/ebisearch/"
+                    >
+                      EBI search
+                    </Link>
+                  </span>
                 </div>
               </div>
 
