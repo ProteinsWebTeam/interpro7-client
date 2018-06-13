@@ -90,7 +90,7 @@ class SummaryCounterEntries extends PureComponent {
             }}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr scaleMargin={1} />
+            <NumberComponent value={proteins} abbr />
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
             </span>
@@ -118,7 +118,7 @@ class SummaryCounterEntries extends PureComponent {
             disabled={!domainArchitectures}
           >
             <div className={f('icon', 'icon-count-ida')} />{' '}
-            <NumberComponent value={domainArchitectures} abbr scaleMargin={1} />
+            <NumberComponent value={domainArchitectures} abbr />
             <span className={f('label-number')}>domain architectures</span>
           </Link>
         </Tooltip>
@@ -144,7 +144,7 @@ class SummaryCounterEntries extends PureComponent {
             disabled={!taxa}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent value={taxa} abbr scaleMargin={1} />
+            <NumberComponent value={taxa} abbr />
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
             </span>
@@ -172,7 +172,7 @@ class SummaryCounterEntries extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-            <NumberComponent value={structures} abbr scaleMargin={1} />
+            <NumberComponent value={structures} abbr />
             <span className={f('label-number')}>
               {toPlural('structure', structures)}
             </span>
@@ -200,7 +200,7 @@ class SummaryCounterEntries extends PureComponent {
               disabled={!sets}
             >
               <div className={f('icon', 'icon-count-set')} />{' '}
-              <NumberComponent value={sets} abbr scaleMargin={1} />
+              <NumberComponent value={sets} abbr />
               <span className={f('label-number')}>{toPlural('set', sets)}</span>
             </Link>
           </Tooltip>

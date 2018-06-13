@@ -111,7 +111,7 @@ class LatestEntry extends PureComponent {
                       className={f('icon', 'icon-conceptual')}
                       data-icon="&#x50;"
                     />{' '}
-                    <NumberComponent value={c.P} />
+                    <NumberComponent value={c.P} abbr />
                     <span className={f('label-number')}>
                       {toPlural('protein', c.P)}
                     </span>
@@ -135,7 +135,7 @@ class LatestEntry extends PureComponent {
                     }}
                   >
                     <div className={f('icon', 'icon-count-ida')} />{' '}
-                    <NumberComponent value={c.I} />
+                    <NumberComponent value={c.I} abbr />
                     <span className={f('label-number')}>
                       domain architectures
                     </span>
@@ -161,7 +161,7 @@ class LatestEntry extends PureComponent {
                     }}
                   >
                     <div className={f('icon', 'icon-count-organisms')} />{' '}
-                    <NumberComponent value={c.O} />
+                    <NumberComponent value={c.O} abbr />
                     <span className={f('label-number')}>
                       {toPlural('taxonomy', c.O)}
                     </span>
@@ -192,7 +192,7 @@ class LatestEntry extends PureComponent {
                         className={f('icon', 'icon-conceptual')}
                         data-icon="s"
                       />{' '}
-                      <NumberComponent value={c.S} />
+                      <NumberComponent value={c.S} abbr />
                       <span className={f('label-number')}>
                         {toPlural('structure', c.S)}
                       </span>
@@ -203,7 +203,7 @@ class LatestEntry extends PureComponent {
                         className={f('icon', 'icon-conceptual')}
                         data-icon="s"
                       />{' '}
-                      <NumberComponent value={c.S} />
+                      <NumberComponent value={c.S} abbr />
                       <span className={f('label-number')}>
                         {toPlural('structure', c.S)}
                       </span>
@@ -247,7 +247,7 @@ class LatestEntry extends PureComponent {
                 //         className={f('icon', 'icon-generic')}
                 //         data-icon="D"
                 //       />{' '}
-                //       <NumberComponent value={entry.Si} />
+                //       <NumberComponent value={entry.Si} abbr />
                 //       <span className={f('label-number')}>
                 //         signatures
                 //       </span>
@@ -277,7 +277,7 @@ class LatestEntry extends PureComponent {
                 //       <div
                 //         className={f('icon', 'icon-count-go')}
                 //       />{' '}
-                //       <NumberComponent value={entry.Go} />
+                //       <NumberComponent value={entry.Go} abbr />
                 //         <span className={f('label-number')}>
                 //           GO terms
                 //         </span>
@@ -308,7 +308,7 @@ class LatestEntry extends PureComponent {
                 //         className={f('icon', 'icon-generic')}
                 //         data-icon="P"
                 //       />{' '}
-                //       <NumberComponent value={entry.Pu} />
+                //       <NumberComponent value={entry.Pu} abbr />
                 //       <span className={f('label-number')}>
                 //         publications
                 //       </span>

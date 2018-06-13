@@ -71,6 +71,7 @@ class CurationFilter extends PureComponent {
                 value={value}
                 loading={loading}
                 className={f('filter-label')}
+                abbr
               />
             </label>
           </div>
@@ -110,6 +111,7 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(
-  loadData(getUrl)(CurationFilter),
-);
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(loadData(getUrl)(CurationFilter));

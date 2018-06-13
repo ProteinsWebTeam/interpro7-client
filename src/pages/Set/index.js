@@ -73,7 +73,7 @@ class SummaryCounterSet extends PureComponent {
             disabled={!entries}
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-            <NumberComponent value={entries} abbr scaleMargin={1} />
+            <NumberComponent value={entries} abbr />
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
             </span>
@@ -101,7 +101,7 @@ class SummaryCounterSet extends PureComponent {
             disabled={!proteins}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr scaleMargin={1} />
+            <NumberComponent value={proteins} abbr />
             <span className={f('label-number')}>
               {' '}
               {toPlural('protein', proteins)}
@@ -130,7 +130,7 @@ class SummaryCounterSet extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
-            <NumberComponent value={structures} abbr scaleMargin={1} />{' '}
+            <NumberComponent value={structures} abbr />{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
         </Tooltip>
@@ -155,7 +155,7 @@ class SummaryCounterSet extends PureComponent {
             disabled={!taxa}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent value={taxa} abbr scaleMargin={1} />
+            <NumberComponent value={taxa} abbr />
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
             </span>
@@ -181,7 +181,7 @@ class SummaryCounterSet extends PureComponent {
             disabled={!proteomes}
           >
             <div className={f('icon', 'icon-common', 'icon-count-proteome')} />
-            <NumberComponent value={proteomes} abbr scaleMargin={1} />{' '}
+            <NumberComponent value={proteomes} abbr />{' '}
             <span className={f('label-number')}>proteomes</span>
           </Link>
         </Tooltip>
