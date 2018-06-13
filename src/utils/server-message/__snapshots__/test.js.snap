@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`server-message should render 1`] = `
+<div
+  className="callout withicon info"
+>
+  Valid query, but unfortunately no data was available on the server
+</div>
+`;
+
+exports[`server-message should render 2`] = `
+<div
+  className="callout withicon alert"
+>
+  There was an error, this is not a valid request to the server
+</div>
+`;
+
+exports[`server-message should render 3`] = `
+<div
+  className="callout withicon alert"
+>
+  There was an error, this is not a known resource on the server
+</div>
+`;
+
+exports[`server-message should render 4`] = `
+<div
+  className="callout withicon alert"
+>
+  The request timed out, your query is running in the server, try again later
+</div>
+`;
+
+exports[`server-message should render 5`] = `
+<div
+  className="callout withicon alert"
+>
+  There was an error while getting data from the server
+</div>
+`;
