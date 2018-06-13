@@ -54,6 +54,7 @@ class PaginationItem extends PureComponent {
 class PreviousText extends PureComponent {
   static propTypes = {
     previous: T.number.isRequired,
+    current: T.number.isRequired,
   };
 
   render() {
@@ -149,6 +150,7 @@ class NextDotDotDot extends PureComponent {
 
 class NextText extends PureComponent {
   static propTypes = {
+    current: T.number.isRequired,
     next: T.number.isRequired,
   };
 

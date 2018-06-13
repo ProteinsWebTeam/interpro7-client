@@ -175,9 +175,7 @@ class ExactMatch extends PureComponent /*:: <SMProps> */ {
       }
     }
     if (!exactMatches.size) return null;
-    return Array.from(exactMatches.entries()).map(
-      ([type, Component]) => Component,
-    );
+    return Array.from(exactMatches.values());
   }
 }
 
