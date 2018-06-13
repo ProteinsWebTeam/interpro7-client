@@ -17,7 +17,7 @@ const OPTIONS = [20, 50, 100];
 
 const getPageSize = createSelector(
   props => props,
-  props => props.customLocation.search.page_size || props.settingsPageSize,
+  props => +(props.customLocation.search.page_size || props.settingsPageSize),
 );
 
 class PageSizeSelector extends PureComponent {
@@ -41,8 +41,8 @@ class PageSizeSelector extends PureComponent {
   };
 
   render() {
-    let options = [20, 50, 100];
-    if (!options.includes(getPageSize(this.props) * 1)) {
+    let options = [...OPTIONS];
+    if (!options.includes(getPageSize(this.props))) {
       options = Array.from(new Set([...options, getPageSize(this.props)])).sort(
         (a, b) => a - b,
       );
