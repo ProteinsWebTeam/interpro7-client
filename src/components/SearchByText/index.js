@@ -157,7 +157,9 @@ class SearchByText extends PureComponent /*:: <SearchByTextProps> */ {
                     <Example>O00167</Example>,
                     <Example>PF02932</Example>,
                     <Example>GO:0007165</Example>,
-                    <Example>1t2v</Example>
+                    <Example>1t2v</Example>,
+                    <Example>9606</Example>,
+                    <Example>UP000005640</Example>
                   </span>
                 </div>
                 <div
