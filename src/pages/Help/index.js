@@ -26,6 +26,11 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);
 
+const Publication = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-consortium" */ 'components/Help/Publication'),
+});
+
 const Tutorial = loadable({
   loader: () =>
     import(/* webpackChunkName: "about-consortium" */ 'components/Help/Tutorial'),
@@ -42,6 +47,7 @@ const Documentation = loadable({
 });
 
 const routes = new Map([
+  ['publication', Publication],
   ['tutorial', Tutorial],
   ['faqs', Faqs],
   ['documentation', Documentation],
