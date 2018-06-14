@@ -92,7 +92,7 @@
   display: flex;
   flex-wrap: wrap;
   transition: opacity var(--timing-really-fast) ease-out;
-  & > div {
+  & > div:not(:last-child) {
     margin-right: 0.5rem;
   }
 }
