@@ -191,6 +191,10 @@ const primariesAndSecondaries = {
       primary: 'taxonomy',
       secondary: 'set',
     },
+    proteome: {
+      primary: 'proteome',
+      secondary: 'set',
+    },
   },
 };
 

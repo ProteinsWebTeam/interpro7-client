@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 
 import Link from 'components/generic/Link';
 
+import { detailsTag as detailsTagPolyfill } from 'utils/polyfills';
+
 import { foundationPartial } from 'styles/foundation';
 
 import loadWebComponent from 'utils/load-web-component';
@@ -14,6 +16,7 @@ const f = foundationPartial(ipro, fonts, local);
 
 export default class Faqs extends PureComponent {
   componentDidMount() {
+    detailsTagPolyfill();
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
         m => m.InterproType,
@@ -305,7 +308,7 @@ export default class Faqs extends PureComponent {
                 <Link
                   to={{
                     description: {
-                      other: ['help', 'publication'],
+                      other: ['help', 'documentation', 'publication'],
                     },
                   }}
                 >
