@@ -473,6 +473,6 @@ const Protein = () => (
 
 export default loadData((...args) =>
   getUrlForApi(...args)
-    .replace('domain_architecture', 'entry')
-    .replace('sequence', ''),
+    .replace('/domain_architecture', '/entry')
+    .replace('/sequence', '/'),
 )(Protein);
