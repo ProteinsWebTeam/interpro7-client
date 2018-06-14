@@ -301,7 +301,8 @@ export default class Faqs extends PureComponent {
               <summary>How are InterPro entries mapped to GO terms?</summary>
               <p>
                 The assignment of GO terms to InterPro entries is performed
-                manually, and is an ongoing process (<Link
+                manually, and is an ongoing process (
+                <Link
                   to={{
                     description: {
                       other: ['help', 'publication'],
