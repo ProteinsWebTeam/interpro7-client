@@ -76,7 +76,6 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
 
             <table className={f('light', 'small', 'margin-bottom-xlarge')}>
               <thead>
-                {' '}
                 <tr>
                   <th />
                   <th>type</th>
