@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -25,7 +26,12 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-class _Settings extends PureComponent {
+/*:: type SettingsProps = {
+  autoRedirect: boolean,
+  changeSettings: changeSettings,
+}; */
+
+class _Settings extends PureComponent /*:: <SettingsProps> */ {
   static propTypes = {
     autoRedirect: T.bool.isRequired,
     changeSettings: T.func.isRequired,
@@ -89,9 +95,15 @@ const mapStateToProps = createSelector(
   autoRedirect => ({ autoRedirect }),
 );
 
-const Settings = connect(mapStateToProps, { changeSettings })(_Settings);
+const Settings = connect(
+  mapStateToProps,
+  { changeSettings },
+)(_Settings);
 
-class SearchByText extends PureComponent {
+/*:: type SearchByTextProps = { main: string }; */
+
+class SearchByText extends PureComponent /*:: <SearchByTextProps> */ {
+  /*:: _input: HTMLInputElement; */
   static propTypes = {
     main: T.string,
   };
@@ -145,7 +157,9 @@ class SearchByText extends PureComponent {
                     <Example>O00167</Example>,
                     <Example>PF02932</Example>,
                     <Example>GO:0007165</Example>,
-                    <Example>1t2v</Example>
+                    <Example>1t2v</Example>,
+                    <Example>9606</Example>,
+                    <Example>UP000005640</Example>
                   </span>
                 </div>
                 <div
@@ -156,7 +170,15 @@ class SearchByText extends PureComponent {
                     'search-adv',
                   )}
                 >
-                  <span>Powered by EBI search</span>
+                  <span>
+                    Powered by{' '}
+                    <Link
+                      target="_blank"
+                      href="https://www.ebi.ac.uk/ebisearch/"
+                    >
+                      EBI search
+                    </Link>
+                  </span>
                 </div>
               </div>
 

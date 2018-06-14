@@ -3,6 +3,8 @@ import T from 'prop-types';
 
 import Row from '../Row';
 
+import getStatusMessage from 'utils/server-message';
+
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
@@ -51,13 +53,24 @@ class Body extends PureComponent {
     loading: T.bool,
     isStale: T.bool,
     ok: T.bool,
+    status: T.number,
     rows: T.array.isRequired,
     columns: T.array.isRequired,
     notFound: T.bool,
   };
 
   render() {
-    const { loading, isStale, ok, rows, columns, notFound } = this.props;
+    const {
+      loading,
+      isStale,
+      ok,
+      status,
+      rows,
+      columns,
+      notFound,
+    } = this.props;
+    const message = getStatusMessage(status);
+    if (message) return <NoRows>{message}</NoRows>;
     // don't change next line to “!ok”, might be undefined
     if (ok === false) return <NoRows>The API request failed</NoRows>;
     if (notFound || !rows.length) {

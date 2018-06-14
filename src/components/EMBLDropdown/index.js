@@ -9,6 +9,8 @@ import Link from 'components/generic/Link';
 import { closeEMBLMapNav } from 'actions/creators';
 import { emblMapNavSelector } from 'reducers/ui/emblMapNav';
 
+import { inert as inertPolyfill } from 'utils/polyfills';
+
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
@@ -32,6 +34,12 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
     closeEMBLMapNav: T.func.isRequired,
   };
 
+  constructor(props /*: Props */) {
+    super(props);
+
+    this.state = { wasRendered: false };
+  }
+
   static getDerivedStateFromProps(
     { visible } /*: Props */,
     { wasRendered } /*: State */,
@@ -40,10 +48,8 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
     return { wasRendered: true };
   }
 
-  constructor(props /*: Props */) {
-    super(props);
-
-    this.state = { wasRendered: false };
+  componentDidMount() {
+    inertPolyfill();
   }
 
   _handleClick = () => {
@@ -222,4 +228,7 @@ const mapStateToProps = createSelector(emblMapNavSelector, visible => ({
   visible,
 }));
 
-export default connect(mapStateToProps, { closeEMBLMapNav })(EMBLDropdown);
+export default connect(
+  mapStateToProps,
+  { closeEMBLMapNav },
+)(EMBLDropdown);

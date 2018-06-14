@@ -1,7 +1,8 @@
 // @flow
+import { webComponents as webComponentsPolyfill } from 'utils/polyfills';
+
 let polyfillLoader = async () => {
-  const polyfills = await import(/* webpackChunkName: "utils-polyfills" */ 'utils/polyfills');
-  const WCPolyfill = await polyfills.webComponents();
+  const WCPolyfill = await webComponentsPolyfill();
   polyfillLoader = () => WCPolyfill;
   return WCPolyfill;
 };

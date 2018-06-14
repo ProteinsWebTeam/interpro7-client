@@ -168,18 +168,22 @@ table.light .subheader {
     margin-bottom: 0;
   }
 
+  & :not(.current) > .no-link {
+    opacity: 0.5;
+    padding: 3px 10px;
+    cursor: not-allowed;
+  }
+
   & li.current {
     background: #71818a; /*b4cad8*/
   }
 
   & a {
-    color: #505f74;
-  }
-  & a:focus {
-    color: #505f74;
-  }
-  & a:visited {
-    color: #505f74;
+    &,
+    &:focus,
+    &:visited {
+      color: #505f74;
+    }
   }
 }
 

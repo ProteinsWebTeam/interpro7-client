@@ -1,5 +1,5 @@
-// flow-typed signature: fd5d22cd6739da0622f561f1f87c5f9b
-// flow-typed version: fa7dd580d7/chalk_v2.x.x/flow_>=v0.25.x
+// flow-typed signature: db5b2cdde8db39d47e27cc8ab84f89bf
+// flow-typed version: d662d43161/chalk_v2.x.x/flow_>=v0.25.x
 
 // From: https://github.com/chalk/chalk/blob/master/index.js.flow
 
@@ -18,7 +18,12 @@ declare module "chalk" {
     level?: Level
   |};
 
-  declare type ColorSupport = boolean;
+  declare type ColorSupport = {|
+    level: Level,
+    hasBasic: boolean,
+    has256: boolean,
+    has16m: boolean
+  |};
 
   declare interface Chalk {
     (...text: string[]): string,

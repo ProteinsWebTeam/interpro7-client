@@ -26,12 +26,6 @@ class Metadata extends PureComponent {
     children: T.element.isRequired,
   };
 
-  static getDerivedStateFromProps({ children, endpoint, db, accession }) {
-    const child = Children.only(children);
-    const getURL = getURLFor(endpoint, db, accession);
-    return { child, element: loadData(getURL)(child.type) };
-  }
-
   constructor(props) {
     super(props);
 
@@ -39,6 +33,12 @@ class Metadata extends PureComponent {
       child: Children.only(props.children),
       element: null,
     };
+  }
+
+  static getDerivedStateFromProps({ children, endpoint, db, accession }) {
+    const child = Children.only(children);
+    const getURL = getURLFor(endpoint, db, accession);
+    return { child, element: loadData(getURL)(child.type) };
   }
 
   render() {

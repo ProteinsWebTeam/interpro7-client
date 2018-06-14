@@ -1,11 +1,10 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component, PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import Link from 'components/generic/Link';
-
-import TaxonomyVisualisation from 'taxonomy-visualisation';
+import Tree from 'components/Tree';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
@@ -79,73 +78,6 @@ class DataProvider extends PureComponent {
   }
 }
 
-class GraphicalView extends PureComponent {
-  static propTypes = {
-    data: T.object.isRequired,
-    focused: T.string.isRequired,
-    changeFocus: T.func.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this._vis = new TaxonomyVisualisation(undefined, {
-      initialMaxNodes: +Infinity,
-    });
-    this._vis.addEventListener('focus', this._handleFocus);
-
-    this._ref = React.createRef();
-  }
-
-  componentDidMount() {
-    this._vis.tree = this._ref.current;
-    this._loadingVis = true;
-    this._populateData(this.props.data, this.props.focused);
-    this._loadingVis = false;
-  }
-
-  componentDidUpdate({ data, focused }) {
-    if (data !== this.props.data) {
-      this._loadingVis = true;
-      this._populateData(this.props.data, this.props.focused);
-      this._loadingVis = false;
-    }
-    if (focused !== this.props.focused) {
-      this._vis.focusNodeWithID(this.props.focused);
-    }
-  }
-
-  componentWillUnmount() {
-    this._vis.cleanup();
-  }
-
-  _handleFocus = ({ detail: { id } }) => {
-    if (!this._loadingVis) this.props.changeFocus(id);
-  };
-
-  _populateData = (data, focused) => {
-    this._vis.data = data;
-    this._vis.focusNodeWithID(focused);
-  };
-
-  render() {
-    return (
-      <div
-        style={{
-          width: '100%',
-          height: '50vh',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'stretch',
-          justifyContent: 'center',
-        }}
-      >
-        <svg className={f('container')} ref={this._ref} style={{ flex: '1' }} />
-      </div>
-    );
-  }
-}
-
 const findNodeWithId = (id, node) => {
   if (node.id === id) return node;
   for (const child of node.children || []) {
@@ -165,12 +97,24 @@ const mergeData = (root, update, names) => {
   return root;
 };
 
-class TreeView extends PureComponent {
+class TreeView extends Component {
   static propTypes = {
     customLocation: T.shape({
       description: T.object,
     }).isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: { name: 'root', id: '1' },
+      focused: '1',
+      entryDB: props.customLocation.description.entry.db,
+    };
+    this._CDPMap = new Map();
+  }
+
   static getDerivedStateFromProps(
     {
       customLocation: {
@@ -192,15 +136,7 @@ class TreeView extends PureComponent {
     }
     return null;
   }
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: { name: 'root', id: '1' },
-      focused: '1',
-      entryDB: props.customLocation.description.entry.db,
-    };
-    this._CDPMap = new Map();
-  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const {
       customLocation: {
@@ -219,6 +155,7 @@ class TreeView extends PureComponent {
     if (newDB !== oldDB) this._CDPMap.clear();
     return nextProps !== this.props || nextState !== this.state;
   }
+
   componentWillUnmount() {
     this._CDPMap.clear();
   }
@@ -255,7 +192,7 @@ class TreeView extends PureComponent {
           </Link>
         </div>
         <ConnectedDataProvider sendData={this._handleNewData} taxID={focused} />
-        <GraphicalView
+        <Tree
           data={data}
           focused={focused}
           changeFocus={this._handleNewFocus}

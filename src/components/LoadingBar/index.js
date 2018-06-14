@@ -1,4 +1,4 @@
-//
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,7 +14,7 @@ import styles from './styles.css';
 
 export class LoadingBar extends PureComponent /*:: <Props> */ {
   /* ::
-    _ref: { current: ?HTMLElement };
+    _ref: { current: null | React$ElementRef<'span'> };
   */
 
   static propTypes = {

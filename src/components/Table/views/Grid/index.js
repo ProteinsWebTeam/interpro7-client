@@ -4,16 +4,21 @@ import T from 'prop-types';
 import AnimatedEntry from 'components/AnimatedEntry';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 
+import getStatusMessage from 'utils/server-message';
+
 import local from './style.css';
 
 class GridView extends PureComponent {
   static propTypes = {
     dataTable: T.array,
     card: T.func,
+    status: T.number,
   };
 
   render() {
-    const { dataTable, card } = this.props;
+    const { dataTable, card, status } = this.props;
+    const message = getStatusMessage(status);
+    if (message) return message;
     const renderer = card || (() => null);
     if (card) {
       return (
@@ -29,6 +34,7 @@ class GridView extends PureComponent {
         </AnimatedEntry>
       );
     }
+    return null;
   }
 }
 

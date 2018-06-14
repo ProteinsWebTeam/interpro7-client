@@ -22,6 +22,7 @@ Object {
   "other": Object {
     "0": null,
     "1": null,
+    "2": null,
   },
   "protein": Object {
     "accession": null,
