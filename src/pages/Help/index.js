@@ -5,6 +5,7 @@ import Link from 'components/generic/Link';
 import Switch from 'components/generic/Switch';
 import Redirect from 'components/generic/Redirect';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import loadable from 'higherOrder/loadable';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
@@ -46,11 +47,32 @@ const Documentation = loadable({
     import(/* webpackChunkName: "about-funding" */ 'components/Help/Documentation'),
 });
 
+const innerRoutes = new Map([['publication', Publication]]);
+
+const innerLocationSelector = createSelector(
+  customLocation => customLocation.description.other[2],
+  value => value,
+);
+
+class InnerSwitch extends PureComponent {
+  render() {
+    return (
+      <ErrorBoundary>
+        <Switch
+          {...this.props}
+          locationSelector={innerLocationSelector}
+          indexRoute={Documentation}
+          childRoutes={innerRoutes}
+        />
+      </ErrorBoundary>
+    );
+  }
+}
+
 const routes = new Map([
-  ['publication', Publication],
   ['tutorial', Tutorial],
   ['faqs', Faqs],
-  ['documentation', Documentation],
+  ['documentation', InnerSwitch],
 ]);
 
 const locationSelector = createSelector(
@@ -117,11 +139,13 @@ export default class extends PureComponent /*:: <{}> */ {
           </ul>
           <div className={f('tabs', 'tabs-content')}>
             <div className={f('tabs-panel', 'is-active')}>
-              <Switch
-                locationSelector={locationSelector}
-                indexRoute={RedirectToDefault}
-                childRoutes={routes}
-              />
+              <ErrorBoundary>
+                <Switch
+                  locationSelector={locationSelector}
+                  indexRoute={RedirectToDefault}
+                  childRoutes={routes}
+                />
+              </ErrorBoundary>
             </div>
           </div>
         </div>

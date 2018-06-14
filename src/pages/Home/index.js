@@ -614,7 +614,7 @@ class Home extends PureComponent {
               <Link
                 to={{
                   description: {
-                    other: ['help', 'publication'],
+                    other: ['help', 'documentation', 'publication'],
                   },
                 }}
                 className={f('button')}
