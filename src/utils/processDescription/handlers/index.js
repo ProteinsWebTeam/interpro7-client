@@ -594,6 +594,7 @@ export const otherHandler /*: Handler */ = handlerConstructor({
   },
   getKey: {
     // if level 1 is already defined, send to second level
+    // if level 2 is already defined, send to third level
     value: ({ other: [first, second] }) => {
       let index = 0;
       if (first) index = 1;

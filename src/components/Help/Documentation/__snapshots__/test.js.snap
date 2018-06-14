@@ -96,6 +96,7 @@ exports[`<Consortium /> should render 1`] = `
                   "description": Object {
                     "other": Array [
                       "help",
+                      "documentation",
                       "publication",
                     ],
                   },
