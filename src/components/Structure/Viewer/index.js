@@ -4,6 +4,7 @@ import T from 'prop-types';
 import config from 'config';
 import LiteMol from 'litemol';
 import CustomTheme from './CustomTheme';
+import EntrySelection from './EntrySelection';
 import { hexToRgb } from 'utils/entry-color';
 
 import 'litemol/dist/css/LiteMol-plugin-light.css';
@@ -169,36 +170,17 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return memberDBMap;
   }
 
-  handleClick(memberDB, entry) {
+  showEntryInStructure = (memberDB, entry) => {
     this.updateTheme([]);
-    const hits = this.state.entryMap[memberDB][entry];
-    this.updateTheme(hits);
-  }
+    if (memberDB != null && entry != null) {
+      const hits = this.state.entryMap[memberDB][entry];
+      this.updateTheme(hits);
+    }
+  };
 
   render() {
-    const highlights = [];
-    for (const [memberDB, entries] of Object.entries(this.state.entryMap)) {
-      const entryList = [];
-      for (const [entry, matches] of Object.entries(entries)) {
-        const key = `${memberDB}-${entry}`;
-        entryList.push(
-          <div key={key} onClick={() => this.handleClick(memberDB, entry)}>
-            {entry}
-          </div>,
-        );
-      }
-      highlights.push(
-        <div key={memberDB}>
-          <div>
-            {memberDB}
-            {entryList}
-          </div>
-        </div>,
-      );
-    }
     return (
       <div>
-        <div>{highlights}</div>
         <div style={embedStyle}>
           <div
             ref={this._ref}
@@ -213,6 +195,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
             }}
           />
         </div>
+        <EntrySelection
+          entryMap={this.state.entryMap}
+          updateStructure={this.showEntryInStructure}
+        />
       </div>
     );
   }
