@@ -122,9 +122,9 @@
   background-size: 20%;
 }
 .tuto-go .card-image {
-  background: url('//www.ebi.ac.uk/interpro/resources/images/publication/ico_pub_dat_2012.jpg')
-    no-repeat 50% 90%;
-  background-size: 20%;
+  background: url(../../../images/cover/cover_database_journal.png) no-repeat
+    50% 90%;
+  background-size: 100%;
 }
 .tuto-interproscan .card-image {
   background: url('//www.ebi.ac.uk/interpro/resources/images/publication/cover_bioinf_interproscan5_2014.png')
