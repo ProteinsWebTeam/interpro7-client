@@ -143,6 +143,8 @@ class Summary extends PureComponent {
               )}
             </div>
           </div>
+        </ErrorBoundary>
+        <ErrorBoundary>
           <Switch
             {...this.props}
             locationSelector={locationhasDetailOrFilter}
