@@ -251,6 +251,7 @@ export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
   loadData((...args) =>
     getUrlForApi(...args)
       .replace('/logo', '/')
-      .replace('domain_architecture', ''),
+      .replace('/domain_architecture', '/')
+      .replace('/sequence', '/'),
   )(EndPointPage),
 );
