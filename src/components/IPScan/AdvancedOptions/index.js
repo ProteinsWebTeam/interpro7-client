@@ -6,6 +6,7 @@ import { format } from 'url';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import loadData from 'higherOrder/loadData';
+import { detailsTag as detailsTagPolyfill } from 'utils/polyfills';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -129,6 +130,10 @@ class AdvancedOptions extends PureComponent {
     super(props);
 
     this._ref = React.createRef();
+  }
+
+  componentDidMount() {
+    detailsTagPolyfill();
   }
 
   _selectAll = event => {

@@ -13,21 +13,20 @@ import s from './style.css';
 
 const f = foundationPartial(s);
 
+const OPTIONS = [20, 50, 100];
+
+const getPageSize = createSelector(
+  props => props,
+  props => +(props.customLocation.search.page_size || props.settingsPageSize),
+);
+
 class PageSizeSelector extends PureComponent {
   static propTypes = {
     customLocation: T.object.isRequired,
-    pageSize: T.number,
+    settingsPageSize: T.number,
     changePageSize: T.func,
     goToCustomLocation: T.func,
   };
-
-  constructor(props) {
-    super(props);
-    const pageSize = props.customLocation.search.page_size
-      ? props.customLocation.search.page_size
-      : props.pageSize;
-    this.state = { pageSize };
-  }
 
   _handleChange = event => {
     this.setState({ pageSize: event.target.value });
@@ -35,16 +34,16 @@ class PageSizeSelector extends PureComponent {
       ...this.props.customLocation,
       search: {
         ...this.props.customLocation.search,
-        page_size: event.target.value,
+        page_size: +event.target.value,
         page: 1,
       },
     });
   };
 
   render() {
-    let options = [20, 50, 100];
-    if (!options.includes(this.state.pageSize * 1)) {
-      options = Array.from(new Set([...options, this.state.pageSize])).sort(
+    let options = [...OPTIONS];
+    if (!options.includes(getPageSize(this.props))) {
+      options = Array.from(new Set([...options, getPageSize(this.props)])).sort(
         (a, b) => a - b,
       );
     }
@@ -54,7 +53,7 @@ class PageSizeSelector extends PureComponent {
         <select
           className={f('small')}
           style={{ width: 'auto' }}
-          value={this.state.pageSize}
+          value={getPageSize(this.props)}
           onChange={this._handleChange}
           onBlur={this._handleChange}
         >
@@ -73,9 +72,10 @@ class PageSizeSelector extends PureComponent {
 const mapStateToProps = createSelector(
   state => state.settings.navigation.pageSize,
   customLocationSelector,
-  (pageSize, customLocation) => ({ pageSize, customLocation }),
+  (settingsPageSize, customLocation) => ({ settingsPageSize, customLocation }),
 );
 
-export default connect(mapStateToProps, { changePageSize, goToCustomLocation })(
-  PageSizeSelector,
-);
+export default connect(
+  mapStateToProps,
+  { changePageSize, goToCustomLocation },
+)(PageSizeSelector);

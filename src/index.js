@@ -13,7 +13,7 @@ import hmr from 'index-hmr';
 import config, { PROD, STAGING, DEV } from 'config';
 
 if (PROD || STAGING) {
-  import(/* webpackChunkName: offline */ './offline').then(m => m.default());
+  import(/* webpackChunkName: "offline" */ './offline').then(m => m.default());
 }
 
 const schemaOrgManager = (...args) =>

@@ -1,3 +1,4 @@
+// @flow
 export default (
   rel /*:: ?: string */,
   target /*:: ?: string */,

@@ -131,7 +131,7 @@ class SummaryCounterStructures extends PureComponent {
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
 
-            <NumberComponent value={entries} abbr scaleMargin={1} />
+            <NumberComponent value={entries} abbr />
 
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
@@ -159,7 +159,7 @@ class SummaryCounterStructures extends PureComponent {
             }}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr scaleMargin={1} />
+            <NumberComponent value={proteins} abbr />
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
             </span>
@@ -175,7 +175,7 @@ class SummaryCounterStructures extends PureComponent {
         >
           <div className={f('container')}>
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent value={taxa} abbr scaleMargin={1} />
+            <NumberComponent value={taxa} abbr />
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
             </span>
@@ -242,6 +242,18 @@ class StructureCard extends PureComponent {
     entryDB: T.string,
   };
 
+  constructor(props) {
+    super(props);
+
+    const accession = props.data.metadata.accession;
+    this.state = {
+      TaxnameStructuresWithData: loadData(getUrlForStructTaxname(accession))(
+        TaxnameStructures,
+      ),
+      accession,
+    };
+  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const nextAccession = nextProps.data.metadata.accession;
 
@@ -252,18 +264,6 @@ class StructureCard extends PureComponent {
         getUrlForStructTaxname(nextAccession),
       )(TaxnameStructures),
       accession: nextAccession,
-    };
-  }
-
-  constructor(props) {
-    super(props);
-
-    const accession = props.data.metadata.accession;
-    this.state = {
-      TaxnameStructuresWithData: loadData(getUrlForStructTaxname(accession))(
-        TaxnameStructures,
-      ),
-      accession,
     };
   }
 
@@ -395,6 +395,7 @@ const List = ({
           contentType="structure"
           loading={loading}
           ok={ok}
+          status={status}
           isStale={isStale}
           actualSize={_payload.count}
           query={search}
@@ -433,7 +434,7 @@ const List = ({
               />
             )}
           </Card>
-          <SearchBox search={search.search}>Search structures</SearchBox>
+          <SearchBox>Search structures</SearchBox>
           <Column
             dataKey="accession"
             headerClassName={f('table-center')}
