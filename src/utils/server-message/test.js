@@ -1,6 +1,4 @@
 // @flow
-import ShallowRenderer from 'react-test-renderer/shallow';
-
 import getServerMessage from '.';
 
 describe('server-message', () => {

@@ -1,16 +1,11 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { sleep } from 'timing-functions/src';
 
 import Link from 'components/generic/Link';
-import Redirect from 'components/generic/Redirect';
 
 import loadData from 'higherOrder/loadData';
-
-import cancelable from 'utils/cancelable';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -20,79 +15,31 @@ import ipro from 'styles/interpro-new.css';
 const f = foundationPartial(ebiGlobalStyles, ipro);
 
 const INTERPRO_ACCESSION_PADDING = 6;
-const TOGGLE_DURATION = 500;
 
-// TODO: review the whole logic for this file, especially, check if there is a
-// TODO: way to be sure to have all the exact matches (in one go if possible)
-// 1 -> entry IPR000001 AND taxid 1
-// 9606 -> entry IPR09606 AND taxid 9606
-// Only redirect, if activated, to the entry if there are multiple matches
-
-/*:: type SMWProps = {
+/*:: type EMWProps = {
   to: Object,
   children: any,
-  autoRedirect: boolean,
-  absolutelyNoRedirect?: boolean,
 }; */
-/*:: type SMWState = {|
-  triggerRedirect: boolean,
-|}; */
-class _ExactMatchWrapper extends PureComponent /*:: <SMWProps, SMWState> */ {
-  /*::
-    _trigger: cancelable;
-  */
+class ExactMatchWrapper extends PureComponent /*:: <EMWProps> */ {
   static propTypes = {
     to: T.object.isRequired,
     children: T.any.isRequired,
-    autoRedirect: T.bool.isRequired,
-    absolutelyNoRedirect: T.bool,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = { triggerRedirect: props.autoRedirect };
-  }
-
-  componentDidUpdate() {
-    if (this._trigger) this._trigger.cancel();
-    this._trigger = cancelable(this._triggerRedirect());
-  }
-
-  componentWillUnmount() {
-    if (this._trigger) this._trigger.cancel();
-  }
-
-  _triggerRedirect = async () => {
-    await sleep(TOGGLE_DURATION);
-    if (this._trigger.canceled) return;
-    this.setState({ triggerRedirect: this.props.autoRedirect });
   };
 
   render() {
-    const { to, children, absolutelyNoRedirect } = this.props;
-    const LinkOrRedirect =
-      absolutelyNoRedirect || !this.state.triggerRedirect ? Link : Redirect;
+    const { to, children } = this.props;
     return (
       <div className={f('callout', 'info')}>
         <span>Found an exact match: </span>
-        <LinkOrRedirect to={to}>{children}</LinkOrRedirect>
+        <Link to={to}>{children}</Link>
       </div>
     );
   }
 }
 
-const mapStateToProps = createSelector(
-  state => state.settings.navigation.autoRedirect,
-  autoRedirect => ({ autoRedirect }),
-);
-
-const ExactMatchWrapper = connect(mapStateToProps)(_ExactMatchWrapper);
-
 const XREFS = new Map([
   ['UNIPROT', { type: 'protein', db: 'UniProt' }],
   ['PDB', { type: 'structure', db: 'PDB' }],
-  ['TAXONOMY', { type: 'taxonomy', db: 'UniProt' }],
   ['PROTEOME', { type: 'proteome', db: 'UniProt' }],
 ]);
 
@@ -153,7 +100,6 @@ class ExactMatch extends PureComponent /*:: <SMProps> */ {
         if (exactMatches.has(type)) continue;
         for (const accession of datum.fields[key]) {
           if (searchRE.test(accession)) {
-            const absolutelyNoRedirect = !!exactMatches.size;
             exactMatches.set(
               type,
               <ExactMatchWrapper
@@ -164,7 +110,6 @@ class ExactMatch extends PureComponent /*:: <SMProps> */ {
                     [type]: { db, accession },
                   },
                 }}
-                absolutelyNoRedirect={absolutelyNoRedirect}
               >
                 {type} {accession}
               </ExactMatchWrapper>,
@@ -198,7 +143,7 @@ const getEbiSearchUrl = createSelector(
   state => state.customLocation.description.search.value,
   ({ protocol, hostname, port, root }, searchValue) => {
     if (!searchValue) return null;
-    const fields = 'UNIPROT,PDB,TAXONOMY,PROTEOME,source_database';
+    const fields = 'UNIPROT,PDB,PROTEOME,source_database';
     const query = getQueryTerm(searchValue);
     const params = `?query=${query}&format=json&fields=${fields}&start=0&size=2`;
     return `${protocol}//${hostname}:${port}${root}${params}`;

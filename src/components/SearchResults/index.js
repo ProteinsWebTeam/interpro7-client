@@ -70,7 +70,7 @@ class SearchResults extends PureComponent {
         <ExactMatch searchValue={searchValue} />
         <Table
           dataTable={entries}
-          contentType="search"
+          contentType="entry"
           actualSize={hitCount}
           query={query}
           isStale={isStale}
