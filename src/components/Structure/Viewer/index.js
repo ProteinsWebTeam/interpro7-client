@@ -36,6 +36,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       plugin: null,
       entryMap: {},
     };
+    this.plugin = null;
     this._ref = React.createRef();
   }
 
@@ -49,7 +50,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
     const pdbid = this.props.id;
 
-    const plugin = LiteMol.Plugin.create({
+    this.plugin = LiteMol.Plugin.create({
       target: this._ref.current,
       viewportBackground: '#fff',
       layoutState: {
@@ -57,7 +58,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         isExpanded: false,
       },
     });
-    const context = plugin.context;
+    const context = this.plugin.context;
 
     const action = Transform.build();
     action
@@ -88,11 +89,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
         water: false,
       });
 
-    plugin.applyTransform(action).then(() => {
+    this.plugin.applyTransform(action).then(() => {
       if (this.props.matches) {
         const entryMap = this.createEntryMap();
         this.setState({
-          plugin: plugin,
           entryMap: entryMap,
         });
       }
@@ -102,13 +102,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
   }
 
   updateTheme(entries) {
-    if (this.state.plugin != null) {
+    if (this.plugin != null) {
       const Core = LiteMol.Core;
       const Visualisation = LiteMol.Visualization;
       const Boostrap = LiteMol.Bootstrap;
       const Query = LiteMol.Core.Structure.Query;
-      const plugin = this.state.plugin;
-      const context = plugin.context;
+      const context = this.plugin.context;
       const model = context.select('model')[0];
       const parser = context.select('parse')[0];
       const polymer = context.select('polymer-visual')[0];
@@ -126,7 +125,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         };
 
         const theme = customTheme.createTheme(model.props.model, color);
-        customTheme.applyTheme(plugin, 'polymer-visual', theme);
+        customTheme.applyTheme(this.plugin, 'polymer-visual', theme);
         //end customtheme testing
       }
     }
@@ -179,6 +178,15 @@ class StructureView extends PureComponent /*:: <Props> */ {
   };
 
   render() {
+    let eventSelector = '';
+    if (this.props.matches) {
+      eventSelector = (
+        <EntrySelection
+          entryMap={this.state.entryMap}
+          updateStructure={this.showEntryInStructure}
+        />
+      );
+    }
     return (
       <div>
         <div style={embedStyle}>
@@ -195,10 +203,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
             }}
           />
         </div>
-        <EntrySelection
-          entryMap={this.state.entryMap}
-          updateStructure={this.showEntryInStructure}
-        />
+        {eventSelector}
       </div>
     );
   }
