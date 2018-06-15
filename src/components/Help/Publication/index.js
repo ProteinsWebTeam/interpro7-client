@@ -11,10 +11,10 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import helper from 'styles/helper-classes.css';
-import tutocss from '../Tutorial/style.css';
+// import tuto from '../Tutorial/style.css';
 import local from './style.css';
 
-const f = foundationPartial(fonts, ipro, tutocss, helper, local);
+const f = foundationPartial(fonts, ipro, helper, local);
 
 /*:: type Props = {
   data: {
