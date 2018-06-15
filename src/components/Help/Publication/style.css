@@ -14,17 +14,16 @@
 
 /*to keep*/
 .tuto-beyond .card-image {
-  background: url(../../../images/cover/cover_journal_nucleicacidsresearch.png)
+  background: url(../../../images/cover/journal_nucleicacidsresearch.png)
     no-repeat no-repeat 60% 60%;
   background-size: 100%;
 }
 .tuto-go .card-image {
-  background: url(../../../images/cover/cover_journal_database.png) no-repeat
-    50% 90%;
+  background: url(../../../images/cover/journal_database.png) no-repeat 50% 90%;
   background-size: 100%;
 }
 .tuto-interproscan .card-image {
-  background: url(../../../images/cover/cover_journal_bioinformatics.png)
-    no-repeat 50% 90%;
+  background: url(../../../images/cover/journal_bioinformatics.png) no-repeat
+    50% 90%;
   background-size: 100%;
 }
