@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -7,9 +7,7 @@ import { createSelector } from 'reselect';
 import TextSearchBox from 'components/SearchByText/TextSearchBox';
 import Example from 'components/SearchByText/Example';
 import Link from 'components/generic/Link';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import { changeSettings } from 'actions/creators';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
@@ -26,83 +24,9 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-/*:: type SettingsProps = {
-  autoRedirect: boolean,
-  changeSettings: changeSettings,
-}; */
+/*:: type Props = { main: string }; */
 
-class _Settings extends PureComponent /*:: <SettingsProps> */ {
-  static propTypes = {
-    autoRedirect: T.bool.isRequired,
-    changeSettings: T.func.isRequired,
-  };
-
-  render() {
-    return (
-      <div className={f('large-3', 'columns', 'settings')}>
-        <Tooltip
-          interactive
-          useContext
-          className={f('float-right')}
-          html={
-            <Fragment>
-              <span>
-                This will take you to the corresponding page if there is an
-                exact match.
-              </span>
-              <br />
-              <span>
-                {'This can also be changed in the '}
-                <Link
-                  className={f('link-in-tooltip')}
-                  to={{ description: { other: ['settings'] } }}
-                >
-                  Settings
-                </Link>
-                {' page'}
-              </span>
-            </Fragment>
-          }
-        >
-          <span className={f('visible-label')}>auto redirect</span>
-          <span className={f('switch', 'tiny')}>
-            <input
-              onChange={this.props.changeSettings}
-              type="checkbox"
-              checked={this.props.autoRedirect}
-              className={f('switch-input')}
-              name="autoRedirect"
-              id="autoRedirect-input"
-            />
-            <label className={f('switch-paddle')} htmlFor="autoRedirect-input">
-              <span className={f('show-for-sr')}>Automatic redirect:</span>
-              <span className={f('switch-active')} aria-hidden="true">
-                On
-              </span>
-              <span className={f('switch-inactive')} aria-hidden="true">
-                Off
-              </span>
-            </label>
-          </span>
-        </Tooltip>
-      </div>
-    );
-  }
-}
-
-const mapStateToProps = createSelector(
-  state => state.settings.navigation.autoRedirect,
-  autoRedirect => ({ autoRedirect }),
-);
-
-const Settings = connect(
-  mapStateToProps,
-  { changeSettings },
-)(_Settings);
-
-/*:: type SearchByTextProps = { main: string }; */
-
-class SearchByText extends PureComponent /*:: <SearchByTextProps> */ {
+class SearchByText extends PureComponent /*:: <Props> */ {
   /*:: _input: HTMLInputElement; */
   static propTypes = {
     main: T.string,
@@ -158,7 +82,6 @@ class SearchByText extends PureComponent /*:: <SearchByTextProps> */ {
                     <Example>PF02932</Example>,
                     <Example>GO:0007165</Example>,
                     <Example>1t2v</Example>,
-                    <Example>9606</Example>,
                     <Example>UP000005640</Example>
                   </span>
                 </div>
@@ -205,8 +128,6 @@ class SearchByText extends PureComponent /*:: <SearchByTextProps> */ {
                     Clear
                   </Link>
                 </div>
-
-                <Settings />
               </div>
             </div>
           </form>

@@ -22,7 +22,7 @@ import loadable from 'higherOrder/loadable';
 
 const f = foundationPartial(theme, local);
 
-const NavigationSettings = ({ navigation: { pageSize, autoRedirect } }) => (
+const NavigationSettings = ({ navigation: { pageSize } }) => (
   <form data-category="navigation">
     <h4>Navigation settings</h4>
     <SchemaOrgData
@@ -54,39 +54,11 @@ const NavigationSettings = ({ navigation: { pageSize, autoRedirect } }) => (
         </label>
       </div>
     </div>
-    <div className={f('row')}>
-      <div className={f('medium-12', 'column')}>
-        <p>
-          Redirect automatically to an entity page if an exact match has been
-          found:
-        </p>
-        <div className={f('switch', 'large')}>
-          <input
-            type="checkbox"
-            checked={autoRedirect}
-            className={f('switch-input')}
-            name="autoRedirect"
-            id="autoRedirect-input"
-            onChange={noop}
-          />
-          <label className={f('switch-paddle')} htmlFor="autoRedirect-input">
-            <span className={f('show-for-sr')}>Automatic redirect:</span>
-            <span className={f('switch-active')} aria-hidden="true">
-              On
-            </span>
-            <span className={f('switch-inactive')} aria-hidden="true">
-              Off
-            </span>
-          </label>
-        </div>
-      </div>
-    </div>
   </form>
 );
 NavigationSettings.propTypes = {
   navigation: T.shape({
     pageSize: T.number.isRequired,
-    autoRedirect: T.bool.isRequired,
   }).isRequired,
   handleChange: T.func.isRequired,
 };
@@ -369,6 +341,7 @@ const mapStateToProps = createSelector(
   settings => ({ settings }),
 );
 
-export default connect(mapStateToProps, { changeSettings, resetSettings })(
-  Settings,
-);
+export default connect(
+  mapStateToProps,
+  { changeSettings, resetSettings },
+)(Settings);
