@@ -48,16 +48,16 @@ class Actions extends PureComponent {
     return (
       <div className={f('margin-right-large')}>
         {withTitle && 'Actions: '}
-        <Tooltip title="Save job">
-          <button
-            className={f('button', 'tiny', saved ? 'warning' : 'secondary')}
-            type="button"
-            onClick={this._handleSaveToggle}
-            aria-label="Save job"
-          >
-            ★
-          </button>
-        </Tooltip>
+        {/*<Tooltip title="Save job">*/}
+        {/*<button*/}
+        {/*className={f('button', 'tiny', saved ? 'warning' : 'secondary')}*/}
+        {/*type="button"*/}
+        {/*onClick={this._handleSaveToggle}*/}
+        {/*aria-label="Save job"*/}
+        {/*>*/}
+        {/*★*/}
+        {/*</button>*/}
+        {/*</Tooltip>*/}
         <Tooltip title="Delete job">
           <button
             className={f('button', 'tiny', 'alert')}
@@ -75,8 +75,11 @@ class Actions extends PureComponent {
 
 const mapStateToProps = createSelector(state => state.jobs, jobs => ({ jobs }));
 
-export default connect(mapStateToProps, {
-  updateJob,
-  deleteJob,
-  goToCustomLocation,
-})(Actions);
+export default connect(
+  mapStateToProps,
+  {
+    updateJob,
+    deleteJob,
+    goToCustomLocation,
+  },
+)(Actions);
