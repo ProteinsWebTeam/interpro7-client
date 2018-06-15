@@ -6,6 +6,10 @@
 
   &.input-group {
     display: table;
+
+    & > input {
+      margin-bottom: 0;
+    }
   }
 }
 
