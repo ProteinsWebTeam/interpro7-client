@@ -116,7 +116,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
           to={{
             description: { main: { key: 'entry' } },
           }}
-          className={f('button', 'margin-bottom-none')}
+          className={f('button', 'margin-bottom-none', 'margin-top-large')}
         >
           View all entries
         </Link>
