@@ -14,6 +14,7 @@ class EntrySelection extends PureComponent {
 
   onSelectionChange(e) {
     //extract memberDB and entry from component
+    console.log(e);
     const entry = e.target.value;
     let memberDB = null;
     if (entry != null) {
@@ -29,7 +30,7 @@ class EntrySelection extends PureComponent {
   render() {
     const selectionGroups = [];
     selectionGroups.push(
-      <option key="None" value="" onChange={() => this.toggleState()}>
+      <option key="None" value="">
         Select Entry
       </option>,
     );

@@ -1,6 +1,26 @@
 /*
  * Copyright (c) 2016 - now David Sehnal, licensed under Apache 2.0, See LICENSE file for more info.
  */
+class ColorMapper {
+  constructor(Core, Visualisation) {
+    this.Core = Core;
+    this.uniqueColors = [];
+    this.map = Core.Utils.FastMap.create();
+    this.Visualisation = Visualisation;
+  }
+
+  addColor(color) {
+    var id = color.r + '-' + color.g + '-' + color.b;
+    if (this.map.has(id)) return this.map.get(id);
+    var index = this.uniqueColors.length;
+    this.uniqueColors.push(
+      this.Visualisation.Color.fromRgb(color.r, color.g, color.b),
+    );
+    this.map.set(id, index);
+    return index;
+  }
+}
+
 class CustomTheme {
   constructor(Core, Visualisation, BootStrap, Q) {
     this.Core = Core;
@@ -74,26 +94,6 @@ class CustomTheme {
         theme: theme,
       });
     }
-  }
-}
-
-class ColorMapper {
-  constructor(Core, Visualisation) {
-    this.Core = Core;
-    this.uniqueColors = [];
-    this.map = Core.Utils.FastMap.create();
-    this.Visualisation = Visualisation;
-  }
-
-  addColor(color) {
-    var id = color.r + '-' + color.g + '-' + color.b;
-    if (this.map.has(id)) return this.map.get(id);
-    var index = this.uniqueColors.length;
-    this.uniqueColors.push(
-      this.Visualisation.Color.fromRgb(color.r, color.g, color.b),
-    );
-    this.map.set(id, index);
-    return index;
   }
 }
 
