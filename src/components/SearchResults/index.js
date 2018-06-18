@@ -1,11 +1,12 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Link from 'components/generic/Link';
-import Table, { Column, Exporter } from 'components/Table';
-import SingleMatch from 'components/SearchResults/SingleMatch';
+import Table, { Column, Exporter, PageSizeSelector } from 'components/Table';
+import ExactMatch from 'components/SearchResults/ExactMatch';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import loadData from 'higherOrder/loadData';
@@ -42,11 +43,12 @@ class SearchResults extends PureComponent {
 
   render() {
     const {
-      data: { payload, loading, ok, url },
+      data: { payload, loading, ok, url, status },
       isStale,
       searchValue,
       query,
     } = this.props;
+    if (!searchValue) return null;
     const { entries, hitCount } = payload || {};
     if (!loading && hitCount === 0) {
       return (
@@ -57,7 +59,7 @@ class SearchResults extends PureComponent {
       );
     }
     return (
-      <Fragment>
+      <ErrorBoundary>
         <SchemaOrgData
           data={{
             name: 'Search Results',
@@ -65,19 +67,21 @@ class SearchResults extends PureComponent {
           }}
           processData={schemaProcessDataPageSection}
         />
-        {payload && <SingleMatch payload={payload} searchValue={searchValue} />}
+        <ExactMatch searchValue={searchValue} />
         <Table
           dataTable={entries}
-          contentType="search"
+          contentType="entry"
           actualSize={hitCount}
           query={query}
           isStale={isStale}
           loading={loading}
           ok={ok}
+          status={status}
         >
           <Exporter>
             <Link
               disabled={!url}
+              target="_blank"
               href={url}
               download={`SearchResults-${searchValue}.json`}
             >
@@ -86,38 +90,46 @@ class SearchResults extends PureComponent {
           </Exporter>
           <Column
             dataKey="id"
-            renderer={id => (
+            renderer={(
+              id,
+              {
+                fields: {
+                  source_database: [db],
+                },
+              },
+            ) => (
               <Link
                 to={{
                   description: {
                     main: { key: 'entry' },
-                    entry: { db: 'InterPro', accession: id },
+                    entry: { db, accession: id },
                   },
                 }}
               >
-                {id}
+                <HighlightedText text={id} textToHighlight={searchValue} />
               </Link>
             )}
             headerStyle={{ width: '200px' }}
           >
             Accession
           </Column>
+          <Column dataKey="fields.source_database.0">Source database</Column>
           <Column
-            dataKey="fields"
+            dataKey="fields.description"
             renderer={d => (
-              <Fragment>
-                <HighlightedText
-                  text={d.description[0].slice(0, MAX_LENGTH)}
-                  textToHighlight={searchValue}
-                />…
-              </Fragment>
+              <HighlightedText
+                text={d.join('\n')}
+                maxLength={MAX_LENGTH}
+                textToHighlight={searchValue}
+              />
             )}
             cellStyle={{ textAlign: 'justify' }}
           >
             Description
           </Column>
+          <PageSizeSelector />
         </Table>
-      </Fragment>
+      </ErrorBoundary>
     );
   }
 }
@@ -154,7 +166,7 @@ const getEbiSearchUrl = createSelector(
     searchValue,
   ) => {
     if (!searchValue) return null;
-    const fields = 'PDB,UNIPROT,description';
+    const fields = 'description,source_database';
     const size = search.page_size || settingsPageSize;
     const start = ((search.page || 1) - 1) * size;
     const query = getQueryTerm(searchValue);

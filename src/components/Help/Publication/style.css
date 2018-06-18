@@ -1,0 +1,137 @@
+@import '../../../styles/colors.css';
+@import '../../../styles/timing.css';
+
+/*Alternative to grid */
+/*.flex-column {display: flex; flex-wrap: wrap; list-style-type: none;}*/
+/*.flex-column .card-grid {width:23%; padding: 1rem;flex-grow: 1; margin: .5rem; }*/
+
+.flex-grid {
+  margin: 0;
+  list-style-type: none;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+
+  & interpro-type {
+    padding: 0 1rem 0 0;
+    float: left;
+    line-height: 0;
+  }
+}
+
+.card-grid {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transition: all var(--timing-really-fast) ease-out;
+
+  &:hover {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18),
+      0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-grid a,
+.card-grid a:visited,
+.card-grid a:focus,
+.card-grid a:hover {
+  color: #222;
+}
+
+.card-image {
+  width: 100%;
+  background-color: var(--colors-submain);
+  height: 130px;
+  position: relative;
+  transition: opacity 200ms ease-out;
+  opacity: 0.7;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 1rem 1.5rem;
+}
+
+.card-content > div {
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  flex-grow: 1;
+  font-size: 130%;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
+    sans-serif;
+}
+
+.card-label {
+  padding: 0.2rem 0.5rem;
+  color: white;
+  text-transform: uppercase;
+  font-size: 70%;
+  position: absolute;
+  bottom: 0;
+  left: 7%;
+}
+
+.publication .card-label {
+  background-color: #5daace;
+  opacity: 0.7;
+  transition: opacity var(--timing-really-fast) ease-out;
+}
+
+.card-grid:hover .card-label {
+  opacity: 1;
+}
+
+.card-info {
+  font-size: 90%;
+  opacity: 0.5;
+  display: flex;
+  flex-wrap: wrap;
+  transition: opacity var(--timing-really-fast) ease-out;
+  & > div {
+    margin-right: 0.5rem;
+  }
+}
+
+.card-grid:hover .card-info {
+  opacity: 1;
+}
+
+.card-description {
+  color: #606060;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
+    sans-serif;
+  font-weight: 400;
+  height: 9rem;
+  overflow: hidden;
+}
+
+.card-grid .button {
+  margin-bottom: 0;
+}
+
+.tuto-beyond .card-image {
+  background: url('//www.ebi.ac.uk/interpro/resources/images/publication/ico_pub_nar_2017.jpg')
+    no-repeat 50% 90%;
+  background-size: 20%;
+}
+.tuto-go .card-image {
+  background: url('//www.ebi.ac.uk/interpro/resources/images/publication/ico_pub_dat_2012.jpg')
+    no-repeat 50% 90%;
+  background-size: 20%;
+}
+.tuto-interproscan .card-image {
+  background: url('//www.ebi.ac.uk/interpro/resources/images/publication/cover_bioinf_interproscan5_2014.png')
+    no-repeat 50% 90%;
+  background-size: 20%;
+}
+
+.card-grid:hover .card-image {
+  opacity: 1;
+}

@@ -11,6 +11,11 @@ describe('descriptionToPath()', () => {
       expect(descriptionToPath({ other: ['download', 'interproscan'] })).toBe(
         '/download/interproscan/',
       );
+      expect(
+        descriptionToPath({
+          other: ['help', 'documentation', 'publication'],
+        }),
+      ).toBe('/help/documentation/publication/');
     });
   });
 

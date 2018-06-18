@@ -10,7 +10,6 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
     case 'navigation':
       return {
         pageSize: config.pagination.pageSize,
-        autoRedirect: false,
       };
     case 'ui':
       return {

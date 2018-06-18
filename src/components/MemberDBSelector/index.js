@@ -10,7 +10,6 @@ import _get from 'lodash-es/get';
 import config from 'config';
 
 import NumberLabel from 'components/NumberLabel';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import loadData from 'higherOrder/loadData';
 
@@ -304,24 +303,16 @@ class _MemberDBSelector extends PureComponent {
                     {db.name === 'All' ? `All ${toPlural(main)}` : db.name}
                   </span>
                   {!this.props.hideCounters && (
-                    <Tooltip
-                      title={
-                        loading
-                          ? 'loading'
-                          : `${count} ${toPlural(main, count)}`
-                      }
-                    >
-                      <NumberLabel
-                        value={(!loading && count) || 0}
-                        loading={loading}
-                        className={f('label')}
-                        style={{
-                          background:
-                            checked && config.colors.get(db.canonical),
-                        }}
-                        abbr
-                      />
-                    </Tooltip>
+                    <NumberLabel
+                      value={(!loading && count) || 0}
+                      loading={loading}
+                      className={f('label')}
+                      titleType={toPlural(main, (!loading && count) || 0)}
+                      style={{
+                        background: checked && config.colors.get(db.canonical),
+                      }}
+                      abbr
+                    />
                   )}
                 </label>
               );
@@ -406,7 +397,12 @@ export default loadData({ getUrl: getUrlForMemberDB, propNamespace: 'DB' })(
       loadData({
         getUrl: getUrlForSubPageCount,
         propNamespace: 'SubPageCount',
-      })(connect(mapStateToProps, { goToCustomLocation })(_MemberDBSelector)),
+      })(
+        connect(
+          mapStateToProps,
+          { goToCustomLocation },
+        )(_MemberDBSelector),
+      ),
     ),
   ),
 );

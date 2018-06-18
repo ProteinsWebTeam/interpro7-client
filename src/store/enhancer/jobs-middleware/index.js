@@ -18,11 +18,21 @@ import config from 'config';
 
 import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
 
-const DEFAULT_SCHEDULE_DELAY = 2000; // 2 seconds
-const DEFAULT_LOOP_TIMEOUT = 60000; // one minute
+// eslint-disable-next-line no-magic-numbers
+const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
+// eslint-disable-next-line no-magic-numbers
+const DEFAULT_LOOP_TIMEOUT = 1000 * 60; // one minute
+// eslint-disable-next-line no-magic-numbers
+const MAX_TIME_ON_SERVER = 1000 * 60 * 60 * 24 * 7; // one week
 
 const metaTA = getTableAccess(IPScanJobsMeta);
 const dataTA = getTableAccess(IPScanJobsData);
+
+const deleteJobInDB = async localID => {
+  const [dataT, metaT] = await Promise.all([dataTA, metaTA]);
+  dataT.delete(localID);
+  metaT.delete(localID);
+};
 
 const rehydrateStoredJobs = async dispatch => {
   await schedule(DEFAULT_SCHEDULE_DELAY);
@@ -31,16 +41,16 @@ const rehydrateStoredJobs = async dispatch => {
   const entries = Object.entries(meta);
   if (!entries.length) return;
   const jobs = {};
+  const now = Date.now();
   for (const [localID, metadata] of entries) {
-    jobs[localID] = { metadata };
+    // if job expired on server, delete it
+    if (now - metadata.times.created > MAX_TIME_ON_SERVER) {
+      deleteJobInDB(localID);
+    } else {
+      jobs[localID] = { metadata };
+    }
   }
   dispatch(rehydrateJobs(jobs));
-};
-
-const deleteJobInDB = async localID => {
-  const [dataT, metaT] = await Promise.all([dataTA, metaTA]);
-  dataT.delete(localID);
-  metaT.delete(localID);
 };
 
 const createJobInDB = async (metadata, data) => {

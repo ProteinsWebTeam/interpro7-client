@@ -76,7 +76,7 @@ class SummaryCounterProteins extends PureComponent {
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
 
-            <NumberComponent value={entries} abbr scaleMargin={1} />
+            <NumberComponent value={entries} abbr />
 
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
@@ -105,7 +105,7 @@ class SummaryCounterProteins extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-            <NumberComponent value={structures} abbr scaleMargin={1} />
+            <NumberComponent value={structures} abbr />
             <span className={f('label-number')}>
               {toPlural('structure', structures)}
             </span>
@@ -134,7 +134,7 @@ class SummaryCounterProteins extends PureComponent {
               disabled={!sets}
             >
               <div className={f('icon', 'icon-count-set')} />{' '}
-              <NumberComponent value={sets} abbr scaleMargin={1} />
+              <NumberComponent value={sets} abbr />
               <span className={f('label-number')}>{toPlural('set', sets)}</span>
             </Link>
           </Tooltip>
@@ -292,6 +292,7 @@ class List extends PureComponent {
             isStale={isStale}
             loading={loading}
             ok={ok}
+            status={status}
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
@@ -472,6 +473,6 @@ const Protein = () => (
 
 export default loadData((...args) =>
   getUrlForApi(...args)
-    .replace('domain_architecture', 'entry')
-    .replace('sequence', ''),
+    .replace('/domain_architecture', '/entry')
+    .replace('/sequence', '/'),
 )(Protein);

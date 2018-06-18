@@ -24,15 +24,26 @@ class ElixirFooter extends PureComponent {
                 alt="Elixir logo"
                 src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.3/images/logos/ELIXIR/elixir-cdr.gif"
               />
-              <h5>This service is part of the ELIXIR infrastructure</h5>
-              <div>
-                <small>
-                  <span className={f('elixir-banner-description')}>
-                    InterPro is an ELIXIR Core Data Resource
-                  </span>{' '}
-                  <span className={f('readmore')}>Learn more ›</span>
-                </small>
-              </div>
+              {
+                // replace H5 by span as H5 creates a block with link
+              }
+              <span className={f('elixir-title')}>
+                This service is part of the ELIXIR infrastructure
+              </span>
+              <br />
+              {
+                // remove div as it creates a block with link
+                // <div>
+              }
+              <small>
+                <span className={f('elixir-banner-description')}>
+                  InterPro is an ELIXIR Core Data Resource
+                </span>{' '}
+                <span className={f('readmore')}>Learn more ›</span>
+              </small>
+              {
+                // </div>
+              }
             </Link>
           </div>
         </div>

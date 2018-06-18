@@ -16,10 +16,10 @@ export default class Advanced extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <section>
-        <h4>Advanced information</h4>
+        <h3>Advanced information</h3>
         <DiskUsage />
         <section>
-          <h5>Developer information</h5>
+          <h4>Developer information</h4>
           <div>
             {'This website has been built on '}
             <code>{new Date(info.build.time).toString()}</code>

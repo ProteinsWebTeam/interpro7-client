@@ -36,7 +36,7 @@ class DiskUsage extends PureComponent {
     }
     return (
       <section>
-        <h5>Disk usage</h5>
+        <h4>Disk usage</h4>
         <p>{content}</p>
       </section>
     );

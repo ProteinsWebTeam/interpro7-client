@@ -60,7 +60,7 @@ export default class Citation extends PureComponent {
   render() {
     return (
       <section>
-        <h4>How to cite</h4>
+        <h3>How to cite</h3>
         <div className={f('row')}>
           {citations.map(c => (
             <div

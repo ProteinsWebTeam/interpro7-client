@@ -12,9 +12,10 @@ import style from './style.css';
 
 const f = foundationPartial(style);
 
-const UNITS = ['', 'k+', 'M+', 'G+'];
-const UNIT_SCALE = 1000;
-const UNIT_SCALE_MARGIN = 100;
+const UNITS = ['', 'k', 'M', 'G'];
+const UNIT_SCALE = 1000; // Jump scale every 1000 jump in magnitude
+const UNIT_SCALE_MARGIN = 1; // abbr at this level
+// examples: (1: 1000 -> 1k) (10: 1000 -> 1000, 10000 -> 10k)
 
 // Jump ahead if the animation didn't run because it wasn't visible
 // We don't want transitions to stop and resume later
@@ -61,6 +62,7 @@ class _NumberComponent extends PureComponent {
     abbr: T.bool,
     scaleMargin: T.number,
     title: T.oneOfType([T.string, T.number]),
+    titleType: T.string,
   };
 
   static defaultProps = {
@@ -93,18 +95,26 @@ class _NumberComponent extends PureComponent {
   _animate = (to, from = 0) => {
     if (this._animation) this._animation.kill();
 
+    if (!this._ref.current) return;
+    const finalValue = numberToDisplayText(
+      to,
+      this.props.abbr,
+      this.props.scaleMargin,
+    );
+
+    if (!this.props.title) {
+      this._ref.current.title = `Approximately ${finalValue} ${this.props
+        .titleType || ''}`.trim();
+    }
+
     const canAnimate =
       !this.props.lowGraphics &&
       from !== to &&
       Number.isFinite(from) &&
       Number.isFinite(to);
 
-    if (!canAnimate && this._ref.current) {
-      this._ref.current.textContent = numberToDisplayText(
-        to,
-        this.props.abbr,
-        this.props.scaleMargin,
-      );
+    if (!canAnimate) {
+      this._ref.current.textContent = finalValue;
       return;
     }
 
@@ -136,6 +146,7 @@ class _NumberComponent extends PureComponent {
       dispatch,
       abbr,
       title,
+      titleType,
       scaleMargin,
       ...props
     } = this.props;
@@ -150,7 +161,6 @@ class _NumberComponent extends PureComponent {
     return (
       <span
         className={f(className, { loading, lowGraphics })}
-        title={_title || ''}
         ref={this._ref}
         {...props}
       />

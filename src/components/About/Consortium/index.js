@@ -53,7 +53,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
     );
     return (
       <section>
-        <h4>The InterPro Consortium</h4>
+        <h3>The InterPro Consortium</h3>
         <p>The following databases make up the InterPro Consortium:</p>
 
         <ul className={f('list')}>
