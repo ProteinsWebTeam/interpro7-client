@@ -55,7 +55,13 @@ export const getTrackColor = (
   return config.colors.get();
 };
 
-export function hexToRgb(hex) {
+/*:: type RGB = {
+  r: number,
+  g: number,
+  b: number
+}; */
+
+export function hexToRgb(hex /*: string */) /*: ?RGB */ {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (result) {
     const rgb = {
