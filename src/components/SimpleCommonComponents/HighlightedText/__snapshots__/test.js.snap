@@ -32,6 +32,26 @@ Array [
 ]
 `;
 
+exports[`<HighlightedText /> highlight "e", maxLength 6 1`] = `
+Array [
+  <span>
+    som
+  </span>,
+  <mark>
+    e
+  </mark>,
+  <span>
+     
+  </span>,
+  <mark>
+    e
+  </mark>,
+  <span>
+    …
+  </span>,
+]
+`;
+
 exports[`<HighlightedText /> highlight "example" 1`] = `
 Array [
   <span>

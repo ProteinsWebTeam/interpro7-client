@@ -5,7 +5,7 @@ export default class Funding extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <section>
-        <h4>Funding</h4>
+        <h3>Funding</h3>
         <p>
           InterPro is supported by EMBL, with additional funding gratefully
           received from the Biotechnology and Biological Sciences Research

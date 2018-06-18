@@ -3,13 +3,12 @@
   font-family: Helvetica, Arial, FreeSans, 'Liberation Sans', sans-serif;
   border-top: 1px solid #f6f6f6;
 
-  & h5 {
+  & .elixir-title {
     font-size: 1.3rem;
-    display: flex;
   }
 
   &,
-  & h5,
+  & .elixir-title,
   & a,
   & a:active,
   & a:hover {
@@ -25,9 +24,6 @@
     border-bottom: 1px dotted #fff;
   }
 
-  & h5 {
-    margin: 0;
-  }
   & .elixir-logo-kite {
     position: relative;
     top: -5px;

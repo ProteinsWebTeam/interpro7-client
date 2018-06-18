@@ -1,0 +1,54 @@
+@import '../../../styles/colors.css';
+/*to move to interpro-new.css?*/
+.xl {
+  color: var(--colors-ebidark);
+  font-size: 280%;
+}
+
+.box-add {
+  border-left: 4px solid var(--colors-submain);
+  padding: 0 1rem;
+}
+.box-add ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  line-height: 2;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  padding: 1rem;
+}
+
+.flex-item {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+}
+
+.icon-box {
+  border: 1px solid var(--colors-vlightgray);
+  text-align: center;
+  border-radius: 4px;
+  padding: 2rem;
+  width: 50%;
+  justify-content: center;
+
+  &:first-of-type {
+    margin-right: 1rem;
+  }
+  & ul {
+    list-style-type: none;
+    margin: 0;
+  }
+  & h4::before {
+    font-size: 200%;
+  }
+}
+/*to move to interpro-new.css?*/
+.margin-top-xxlarge {
+  margin-top: 4rem;
+}
