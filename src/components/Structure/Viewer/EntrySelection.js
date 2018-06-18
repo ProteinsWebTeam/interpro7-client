@@ -13,6 +13,7 @@ class EntrySelection extends PureComponent {
   }
 
   onSelectionChange(e) {
+    //extract memberDB and entry from component
     const entry = e.target.value;
     let memberDB = null;
     if (entry != null) {
@@ -21,21 +22,14 @@ class EntrySelection extends PureComponent {
       const optGroup = selectedOption.parentNode;
       memberDB = optGroup.label;
     }
-
-    this.props.updateStructure(memberDB, entry);
-  }
-
-  toggleState(event) {
-    const active = this.state.active ? false : true;
-    this.setState({ active: active });
-    console.log(`${memberDB}:${entry} => ${active}`);
+    //update LiteMol
     this.props.updateStructure(memberDB, entry);
   }
 
   render() {
     const selectionGroups = [];
     selectionGroups.push(
-      <option key="None" value={null} onChange={() => this.toggleState()}>
+      <option key="None" value="" onChange={() => this.toggleState()}>
         Select Entry
       </option>,
     );
@@ -57,7 +51,10 @@ class EntrySelection extends PureComponent {
       );
     }
     const selection = (
-      <select onChange={e => this.onSelectionChange(e)}>
+      <select
+        onChange={e => this.onSelectionChange(e)}
+        value={this.props.selectedEntry}
+      >
         {selectionGroups}
       </select>
     );

@@ -35,6 +35,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.state = {
       plugin: null,
       entryMap: {},
+      selectedEntry: '',
     };
     this.plugin = null;
     this._ref = React.createRef();
@@ -44,6 +45,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     const Core = LiteMol.Core;
     const Visualisation = LiteMol.Visualization;
     const Boostrap = LiteMol.Bootstrap;
+    const Event = LiteMol.Bootstrap.Event;
     const Transformer = LiteMol.Bootstrap.Entity.Transformer;
     const Query = LiteMol.Core.Structure.Query;
     const Transform = LiteMol.Bootstrap.Tree.Transform;
@@ -59,7 +61,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
       },
     });
     const context = this.plugin.context;
-
     const action = Transform.build();
     action
       .add(context.tree.root, Transformer.Data.Download, {
@@ -98,6 +99,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
       //override the default litemol colour with the custom theme
       this.updateTheme([]);
+      //detect any changes to the tree from within LiteMol and reset select control
+      Event.Tree.TransformFinished.getStream(context).subscribe(ev => {
+        this.setState({ selectedEntry: '' });
+      });
     });
   }
 
@@ -109,8 +114,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
       const Query = LiteMol.Core.Structure.Query;
       const context = this.plugin.context;
       const model = context.select('model')[0];
-      const parser = context.select('parse')[0];
-      const polymer = context.select('polymer-visual')[0];
       if (this.props.matches != null) {
         const customTheme = new CustomTheme(
           Core,
@@ -126,7 +129,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
         const theme = customTheme.createTheme(model.props.model, color);
         customTheme.applyTheme(this.plugin, 'polymer-visual', theme);
-        //end customtheme testing
       }
     }
   }
@@ -174,6 +176,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     if (memberDB != null && entry != null) {
       const hits = this.state.entryMap[memberDB][entry];
       this.updateTheme(hits);
+      this.setState({ selectedEntry: entry });
     }
   };
 
@@ -184,6 +187,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         <EntrySelection
           entryMap={this.state.entryMap}
           updateStructure={this.showEntryInStructure}
+          selectedEntry={this.state.selectedEntry}
         />
       );
     }
