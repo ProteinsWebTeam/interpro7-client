@@ -8,13 +8,14 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 
+import EBIGlobal from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import helper from 'styles/helper-classes.css';
 import tutogrid from 'components/Help/Tutorial/style.css';
 import local from './style.css';
 
-const f = foundationPartial(tutogrid, fonts, ipro, helper, local);
+const f = foundationPartial(EBIGlobal, tutogrid, fonts, ipro, helper, local);
 
 /*:: type Props = {
   data: {
@@ -232,7 +233,7 @@ export const Publication = class extends PureComponent /*:: <Props> */ {
         </div>
         <h3 className={f('margin-top-large')}>How to cite</h3>
         <p>To cite InterPro, please refer to the following publication:</p>
-        <p>
+        <blockquote className={f('quote')}>
           Robert D. <span className={f('sc')}>Finn</span>, Teresa K.{' '}
           <span className={f('sc')}>Attwood</span>, Patricia C.{' '}
           <span className={f('sc')}>Babbitt</span>, Alex{' '}
@@ -285,7 +286,7 @@ export const Publication = class extends PureComponent /*:: <Props> */ {
             InterPro in 2017 — beyond protein family and domain annotations
           </strong>.{' '}
           <i>Nucleic Acids Research, Jan 2017; doi: 10.1093/nar/gkw1107</i>
-        </p>
+        </blockquote>
       </section>
     );
   }
