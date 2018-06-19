@@ -14,7 +14,6 @@ class EntrySelection extends PureComponent {
 
   onSelectionChange = e => {
     //extract memberDB and entry from component
-    console.log(e);
     const entry = e.target.value;
     let memberDB = null;
     if (entry != null) {
