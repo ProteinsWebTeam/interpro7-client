@@ -13,10 +13,10 @@
   list-style: none;
   margin: 0 0 1rem 0;
   padding: 0;
-  columns: 8em;
+  columns: 19em;
   column-gap: 2rem;
-
-  & h5 {
-    break-after: avoid-column; /* is it really working? */
+  break-inside: avoid; /*avoid break between Title and list elements*/
+  & li {
+    break-inside: avoid;
   }
 }
