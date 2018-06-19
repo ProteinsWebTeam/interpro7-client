@@ -380,6 +380,10 @@ details.accordion-style[open] summary:after {
 /*/ACCORDION TYPE*/
 
 /****************************** TITLE - TEXT *********************************/
+.uppercase {
+  text-transform: uppercase;
+}
+
 /*title sue for box like search box*/
 h3.light {
   font-weight: 300;
