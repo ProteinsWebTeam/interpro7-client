@@ -10,8 +10,9 @@ import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
+import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(fonts, ebiStyles, local);
+const f = foundationPartial(ipro, fonts, ebiStyles, local);
 
 const ReferenceItem = ({ url, accession }) => (
   <li>
@@ -28,7 +29,7 @@ ReferenceItem.propTypes = {
 const ReferenceSection = ({ accessions, name, description }) =>
   name !== 'pdb' && (
     <li className={f('xref-section', 'small')}>
-      <h5>
+      <h5 className={f('uppercase')}>
         {name}{' '}
         <Tooltip title={description}>
           <span className={f('small', 'icon', 'icon-common')} data-icon="ℹ" />
