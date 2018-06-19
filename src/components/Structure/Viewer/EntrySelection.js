@@ -12,7 +12,7 @@ class EntrySelection extends PureComponent {
     };
   }
 
-  onSelectionChange(e) {
+  onSelectionChange = e => {
     //extract memberDB and entry from component
     console.log(e);
     const entry = e.target.value;
@@ -25,7 +25,7 @@ class EntrySelection extends PureComponent {
     }
     //update LiteMol
     this.props.updateStructure(memberDB, entry);
-  }
+  };
 
   render() {
     const selectionGroups = [];
@@ -53,7 +53,8 @@ class EntrySelection extends PureComponent {
     }
     const selection = (
       <select
-        onChange={e => this.onSelectionChange(e)}
+        onChange={this.onSelectionChange}
+        onBlur={this.onSelectionChange}
         value={this.props.selectedEntry}
       >
         {selectionGroups}
