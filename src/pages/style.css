@@ -74,18 +74,18 @@
   }
 }
 
-.ext {
-  &,
-  &:hover,
-  &:active,
-  &:focus {
-    border: none !important;
-  }
+/*.ext {*/
+/*&,*/
+/*&:hover,*/
+/*&:active,*/
+/*&:focus {*/
+/*border: none !important;*/
+/*}*/
 
-  &:focus {
-    outline-style: auto;
-  }
-}
+/*&:focus {*/
+/*outline-style: auto;*/
+/*}*/
+/*}*/
 
 .signature {
   background-color: #d5eff3;
