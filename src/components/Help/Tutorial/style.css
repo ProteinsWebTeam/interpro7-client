@@ -11,12 +11,6 @@
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-
-  & interpro-type {
-    padding: 0 1rem 0 0;
-    float: left;
-    line-height: 0;
-  }
 }
 
 .card-grid {
