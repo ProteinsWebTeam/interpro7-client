@@ -12,3 +12,7 @@
   color: #41647d;
 }
 /*/Entry page - md info next title*/
+/*to move to interpro-new?*/
+.first-letter-capital::first-letter {
+  text-transform: capitalize;
+}
