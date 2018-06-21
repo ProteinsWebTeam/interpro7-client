@@ -588,9 +588,9 @@ class List extends PureComponent {
                       title={`link to ${accession} on the ${db} website`}
                     >
                       <Link
-                        className={f('ext')}
                         target="_blank"
                         href={externalLinkRenderer(accession)}
+                        style={{ borderBottomWidth: 0 }}
                       >
                         {symbol}
                       </Link>
