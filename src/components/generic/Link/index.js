@@ -139,10 +139,10 @@ class Link extends PureComponent /*:: <Props> */ {
     if (disabled) {
       props.style = {
         ...(props.style || {}),
-        userSelect: 'none',
-        // pointerEvents: 'none',
+        // userSelect: 'none',
+        pointerEvents: 'none',
         cursor: 'not-allowed',
-        opacity: 0.5,
+        opacity: 0.3,
       };
     }
     return (
@@ -165,7 +165,10 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, {
-  closeEverything,
-  goToCustomLocation,
-})(Link);
+export default connect(
+  mapStateToProps,
+  {
+    closeEverything,
+    goToCustomLocation,
+  },
+)(Link);
