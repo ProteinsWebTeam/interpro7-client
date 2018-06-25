@@ -125,6 +125,21 @@ mark {
   margin-left: 0.2rem;
 }
 /*/EXTERNAL LINKS*/
+
+/*NEUTRAL LINKS*/
+.neutral,
+.neutral a,
+.neutral,
+.neutral a:visited {
+  color: var(--colors-gray);
+}
+
+.neutral a:hover {
+  color: var(--colors-gray);
+  border-bottom: 1px var(--colors-gray) solid;
+}
+/*/NEUTRAL LINKS*/
+
 /************************  END LINKS  **********************************/
 
 /************************  FORM INPUT TEXTAREA  **********************************/
