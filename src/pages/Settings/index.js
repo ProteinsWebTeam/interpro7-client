@@ -8,7 +8,7 @@ import { DEV } from 'config';
 // Generate async components
 const Advanced = loadable({
   loader: () =>
-    import(/* webpackChunkName: "about-advanced" */ 'components/About/Advanced'),
+    import(/* webpackChunkName: "about-advanced" */ 'components/Settings/Advanced'),
 });
 
 import noop from 'lodash-es/noop';
