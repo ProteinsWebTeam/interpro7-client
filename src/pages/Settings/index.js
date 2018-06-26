@@ -5,12 +5,6 @@ import { createSelector } from 'reselect';
 
 import { DEV } from 'config';
 
-// Generate async components
-const Advanced = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "about-advanced" */ 'components/Settings/Advanced'),
-});
-
 import noop from 'lodash-es/noop';
 
 import {
@@ -28,6 +22,12 @@ import local from './styles.css';
 import loadable from 'higherOrder/loadable';
 
 const f = foundationPartial(ebiGlobalStyles, theme, local);
+
+// Generate async components
+const Advanced = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-advanced" */ 'components/Settings/Advanced'),
+});
 
 const NavigationSettings = ({ navigation: { pageSize } }) => (
   <form data-category="navigation">
