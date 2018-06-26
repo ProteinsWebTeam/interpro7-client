@@ -1,9 +1,11 @@
 //
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import config from 'config';
 import LiteMol from 'litemol';
-
-// import LiteMolViewer from 'litemol/dist/js/LiteMol-viewer.js';
+import CustomTheme from './CustomTheme';
+import EntrySelection from './EntrySelection';
+import { hexToRgb } from 'utils/entry-color';
 
 import 'litemol/dist/css/LiteMol-plugin-light.css';
 
@@ -30,47 +32,35 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   constructor(props /*: Props */) {
     super(props);
-
+    this.state = {
+      plugin: null,
+      entryMap: {},
+      selectedEntry: '',
+    };
+    this.plugin = null;
     this._ref = React.createRef();
   }
 
   componentDidMount() {
-    // const Behaviour = LiteMol.Bootstrap.Behaviour;
-    // const Components = LiteMol.Plugin.Components;
-    // const LayoutRegion = LiteMol.Bootstrap.Components.LayoutRegion;
+    const Core = LiteMol.Core;
+    const Visualisation = LiteMol.Visualization;
+    const Boostrap = LiteMol.Bootstrap;
+    const Event = LiteMol.Bootstrap.Event;
     const Transformer = LiteMol.Bootstrap.Entity.Transformer;
     const Query = LiteMol.Core.Structure.Query;
-    const Command = LiteMol.Bootstrap.Command;
     const Transform = LiteMol.Bootstrap.Tree.Transform;
 
     const pdbid = this.props.id;
 
-    /*
-    const InterProSpec = LiteMol.Plugin.getDefaultSpecification();
-    InterProSpec.behaviours = [
-      Behaviour.SetEntityToCurrentWhenAdded,
-      Behaviour.FocusCameraOnSelect,
-      Behaviour.CreateVisualWhenModelIsAdded,
-    ];
-    InterProSpec.components = [
-      Components.Transform.View(LayoutRegion.Right),
-      Components.Context.Log(LayoutRegion.Bottom, true),
-      Components.Context.Overlay(LayoutRegion.Root),
-      Components.Context.Toast(LayoutRegion.Main, true),
-      Components.Context.BackgroundTasks(LayoutRegion.Main, true),
-    ];
-    */
-    const plugin = LiteMol.Plugin.create({
+    this.plugin = LiteMol.Plugin.create({
       target: this._ref.current,
       viewportBackground: '#fff',
       layoutState: {
         hideControls: true,
         isExpanded: false,
       },
-      // customSpecification: InterProSpec,
     });
-    const context = plugin.context;
-
+    const context = this.plugin.context;
     const action = Transform.build();
     action
       .add(context.tree.root, Transformer.Data.Download, {
@@ -78,7 +68,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
         type: 'String',
         id: pdbid,
       })
-      .then(Transformer.Data.ParseCif, { id: pdbid }, { isBinding: true })
+      .then(
+        Transformer.Data.ParseCif,
+        { id: pdbid },
+        { isBinding: true, ref: 'parse' },
+      )
       .then(
         Transformer.Molecule.CreateFromMmCif,
         { blockIndex: 0 },
@@ -96,90 +90,124 @@ class StructureView extends PureComponent /*:: <Props> */ {
         water: false,
       });
 
-    plugin.applyTransform(action).then(() => {
-      const model = context.select('model')[0];
-      const polymer = context.select('polymer-visual')[0];
+    this.plugin.applyTransform(action).then(() => {
       if (this.props.matches) {
-        const entryResidues = {};
-        // create matches in structure hierarchy
-        const queries = [];
-        for (const match of this.props.matches) {
-          const entry = match.metadata.accession;
-          const db = match.metadata.source_database;
-          let chain;
-          const residues = [];
-          for (const structure of match.structures) {
-            chain = structure.chain;
-
-            for (const location of structure.entry_protein_locations) {
-              for (const fragment of location.fragments) {
-                for (let i = fragment.start; i <= fragment.end; i++) {
-                  residues.push({ authAsymId: chain, authSeqNumber: i });
-                }
-              }
-            }
-          }
-          entryResidues[entry] = residues;
-          queries.push({
-            entry: entry,
-            chain: chain,
-            db: db,
-            query: Query.residues(...residues),
-            length: residues.length,
-          });
-        }
-
-        const group = Transform.build();
-        group.add(
-          polymer,
-          Transformer.Basic.CreateGroup,
-          { label: 'Entries', description: 'Entries mapped to this structure' },
-          { isBinding: false },
-        );
-        for (const q of queries) {
-          group
-            .then(
-              Transformer.Molecule.CreateSelectionFromQuery,
-              { name: `${q.entry} (${q.db})`, query: q.query, silent: true },
-              { ref: q.entry },
-            )
-            .then(Transformer.Molecule.CreateVisual, {
-              style: LiteMol.Bootstrap.Visualization.Molecule.Default.ForType.get(
-                'Cartoons',
-              ),
-            });
-        }
-        plugin.applyTransform(group).then(() => {
-          if (this.props.highlight && entryResidues[this.props.highlight]) {
-            const query = Query.residues(
-              ...entryResidues[this.props.highlight],
-            );
-            Command.Molecule.Highlight.dispatch(context.tree.context, {
-              model: model,
-              query: query,
-              isOn: true,
-            });
-          }
+        const entryMap = this.createEntryMap();
+        this.setState({
+          entryMap: entryMap,
         });
       }
+      //override the default litemol colour with the custom theme
+      this.updateTheme([]);
+      //detect any changes to the tree from within LiteMol and reset select control
+      Event.Tree.TransformFinished.getStream(context).subscribe(ev => {
+        this.setState({ selectedEntry: '' });
+      });
     });
   }
 
+  updateTheme(entries) {
+    if (this.plugin != null) {
+      const Core = LiteMol.Core;
+      const Visualisation = LiteMol.Visualization;
+      const Boostrap = LiteMol.Bootstrap;
+      const Query = LiteMol.Core.Structure.Query;
+      const context = this.plugin.context;
+      const model = context.select('model')[0];
+      if (this.props.matches != null) {
+        const customTheme = new CustomTheme(
+          Core,
+          Visualisation,
+          Boostrap,
+          Query,
+        );
+        const base = hexToRgb(config.colors.get('fallback'));
+        const color = {
+          base: base,
+          entries: entries,
+        };
+
+        const theme = customTheme.createTheme(model.props.model, color);
+        customTheme.applyTheme(this.plugin, 'polymer-visual', theme);
+      }
+    }
+  }
+
+  createEntryMap() {
+    const memberDBMap = {};
+
+    if (this.props.matches) {
+      const entryResidues = {};
+      // create matches in structure hierarchy
+      const queries = [];
+      for (const match of this.props.matches) {
+        const entry = match.metadata.accession;
+        const db = match.metadata.source_database;
+        if (memberDBMap[db] == null) {
+          memberDBMap[db] = {};
+        }
+        if (memberDBMap[db][entry] == null) {
+          memberDBMap[db][entry] = [];
+        }
+
+        for (const structure of match.structures) {
+          const chain = structure.chain;
+          for (const location of structure.entry_protein_locations) {
+            for (const fragment of location.fragments) {
+              const hexCol = config.colors.get(db);
+              const color = hexToRgb(hexCol);
+
+              memberDBMap[db][entry].push({
+                struct_asym_id: chain,
+                start_residue_number: fragment.start,
+                end_residue_number: fragment.end,
+                color: color,
+              });
+            }
+          }
+        }
+      }
+    }
+    return memberDBMap;
+  }
+
+  showEntryInStructure = (memberDB, entry) => {
+    this.updateTheme([]);
+    if (memberDB != null && entry != null) {
+      const hits = this.state.entryMap[memberDB][entry];
+      this.updateTheme(hits);
+      this.setState({ selectedEntry: entry });
+    }
+  };
+
   render() {
-    return (
-      <div style={embedStyle}>
-        <div
-          ref={this._ref}
-          style={{
-            background: 'white',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-          }}
+    let eventSelector = '';
+    if (this.props.matches) {
+      eventSelector = (
+        <EntrySelection
+          entryMap={this.state.entryMap}
+          updateStructure={this.showEntryInStructure}
+          selectedEntry={this.state.selectedEntry}
         />
+      );
+    }
+    return (
+      <div>
+        <div style={embedStyle}>
+          <div
+            ref={this._ref}
+            style={{
+              background: 'white',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+            }}
+          />
+        </div>
+        {eventSelector}
       </div>
     );
   }
