@@ -96,6 +96,7 @@ class SearchByText extends PureComponent /*:: <Props> */ {
                   <span>
                     Powered by{' '}
                     <Link
+                      className={f('neutral')}
                       target="_blank"
                       href="https://www.ebi.ac.uk/ebisearch/"
                     >
