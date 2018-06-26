@@ -9,6 +9,8 @@ import { customLocationSelector } from 'reducers/custom-location';
 
 import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
+/*:: import type CustomLocation from 'reducers/custom-location/index.js'; */
+
 const defaultRenderOnError = _ => <ErrorMessage />;
 
 /*:: type ReactError = {|
@@ -21,11 +23,12 @@ const defaultRenderOnError = _ => <ErrorMessage />;
 /*:: type Props = {
   children: React$Node,
   renderOnError?: ?ReactError => React$Node,
-  customLocation: Object,
+  customLocation: CustomLocation,
 }; */
 
 /*:: type State = {|
   error: ?ReactError,
+  customLocation: CustomLocation
 |}; */
 
 // This component should be inserted before any possibly “risky” component
@@ -41,10 +44,11 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
   constructor(props /*: Props */) {
     super(props);
 
-    this.state = { error: null };
+    this.state = { error: null, customLocation: props.customLocation };
   }
 
-  static getDerivedStateFromProps() {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.customLocation === prevState.customLocation) return null;
     // Any change in props should reset the error state, and try to re-render
     return { error: null };
   }
