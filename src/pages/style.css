@@ -130,7 +130,7 @@
   color: #71818a;
 }
 .col-go div:first-child span {
-  margin-left: 1rem;
+  margin-left: 0;
 }
 
 .sign-label-head.bp {
@@ -343,8 +343,5 @@
   }
   .col-type {
     display: none;
-  }
-  .col-go div:first-child span {
-    margin-left: 0;
   }
 }
