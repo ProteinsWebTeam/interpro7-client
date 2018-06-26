@@ -128,13 +128,12 @@ mark {
 
 /*NEUTRAL LINKS*/
 .neutral,
-.neutral a,
-.neutral,
-.neutral a:visited {
+a.neutral,
+a.neutral:visited {
   color: var(--colors-gray);
 }
 
-.neutral a:hover {
+a.neutral:hover {
   color: var(--colors-gray);
   border-bottom: 1px var(--colors-gray) solid;
 }
