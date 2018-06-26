@@ -3,6 +3,12 @@ import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 
+import { foundationPartial } from 'styles/foundation';
+
+import ipro from 'styles/interpro-new.css';
+
+const f = foundationPartial(ipro);
+
 class Example extends PureComponent {
   static propTypes = {
     children: T.string,
@@ -14,6 +20,7 @@ class Example extends PureComponent {
       <i>
         {' '}
         <Link
+          className={f('neutral')}
           to={{
             description: {
               main: { key: 'search' },
