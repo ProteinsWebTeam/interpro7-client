@@ -1,6 +1,8 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+
+import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import { foundationPartial } from 'styles/foundation';
@@ -34,6 +36,18 @@ export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
           <button onClick={reload} className={f('button')}>
             Reload this page
           </button>
+          <p>
+            If this keeps happening, you might want to get in touch with us
+            through our contact form.
+          </p>
+          <Link
+            className={f('button')}
+            href="https://www.ebi.ac.uk/support/interpro"
+            target="_blank"
+            withReferrer
+          >
+            Contact form
+          </Link>
         </div>
       </div>
     );
