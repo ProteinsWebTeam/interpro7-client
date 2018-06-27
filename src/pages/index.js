@@ -55,7 +55,7 @@ const Jobs = loadable({
 const Download = loadable({
   loader: () => import(/* webpackChunkName: "about-page" */ './Download'),
 });
-const Release_notes = loadable({
+const ReleaseNotes = loadable({
   loader: () => import(/* webpackChunkName: "about-page" */ './Release_notes'),
 });
 const About = loadable({
@@ -88,7 +88,7 @@ const pages = new Map([
   ['search', Search],
   ['job', Jobs],
   // static pages
-  ['release_notes', Release_notes],
+  ['release_notes', ReleaseNotes],
   ['download', Download],
   ['about', About],
   ['help', Help],

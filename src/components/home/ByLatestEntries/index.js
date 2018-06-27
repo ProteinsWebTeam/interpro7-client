@@ -120,7 +120,7 @@ class LatestEntry extends PureComponent {
               </div>
               <div className={f('count-4', 'count-architectures')}>
                 <Tooltip
-                  title={`... domain architectures matching ${entry.name}`}
+                  title={`${c.I} domain architectures matching ${entry.name}`}
                 >
                   <Link
                     to={{

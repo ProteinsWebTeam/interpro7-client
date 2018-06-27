@@ -210,7 +210,10 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
             <div className={f('medium-8', 'large-8', 'columns')}>
               {metadata.hierarchy && Object.keys(metadata.hierarchy).length ? (
                 <div>
-                  <h4>{metadata.type} Relationships</h4>
+                  <h4 className={f('first-letter-capital')}>
+                    {metadata.type.replace('_', ' ').toLowerCase()}{' '}
+                    relationships
+                  </h4>
                   <InterProHierarchy
                     accession={metadata.accession}
                     hierarchy={metadata.hierarchy}

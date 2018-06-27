@@ -88,6 +88,7 @@ class SummaryCounterEntries extends PureComponent {
                 protein: { isFilter: true, db: 'UniProt' },
               },
             }}
+            className={f(!proteins ? 'ico-disabled' : null)}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
             <NumberComponent value={proteins} abbr />
@@ -115,7 +116,7 @@ class SummaryCounterEntries extends PureComponent {
                 },
               },
             }}
-            disabled={!domainArchitectures}
+            className={f(!domainArchitectures ? 'ico-disabled' : null)}
           >
             <div className={f('icon', 'icon-count-ida')} />{' '}
             <NumberComponent value={domainArchitectures} abbr />
@@ -141,7 +142,7 @@ class SummaryCounterEntries extends PureComponent {
                 taxonomy: { isFilter: true, db: 'uniprot' },
               },
             }}
-            disabled={!taxa}
+            className={f(!taxa ? 'ico-disabled' : null)}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
             <NumberComponent value={taxa} abbr />
@@ -169,7 +170,7 @@ class SummaryCounterEntries extends PureComponent {
                 structure: { isFilter: true, db: 'PDB' },
               },
             }}
-            disabled={!structures}
+            className={f(!structures ? 'ico-disabled' : null)}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
             <NumberComponent value={structures} abbr />
@@ -197,7 +198,7 @@ class SummaryCounterEntries extends PureComponent {
                   set: { isFilter: true, db: entryDB },
                 },
               }}
-              disabled={!sets}
+              className={f(!sets ? 'ico-disabled' : null)}
             >
               <div className={f('icon', 'icon-count-set')} />{' '}
               <NumberComponent value={sets} abbr />
@@ -588,9 +589,9 @@ class List extends PureComponent {
                       title={`link to ${accession} on the ${db} website`}
                     >
                       <Link
-                        className={f('ext')}
                         target="_blank"
                         href={externalLinkRenderer(accession)}
+                        style={{ borderBottomWidth: 0 }}
                       >
                         {symbol}
                       </Link>

@@ -142,10 +142,10 @@ class Link extends PureComponent /*:: <Props> */ {
     if (disabled) {
       props.style = {
         ...(props.style || {}),
-        userSelect: 'none',
-        // pointerEvents: 'none',
+        // userSelect: 'none',
+        pointerEvents: 'none',
         cursor: 'not-allowed',
-        opacity: 0.5,
+        opacity: 0.3,
       };
     }
     const _rel = generateRel(rel, target, href, withReferrer);

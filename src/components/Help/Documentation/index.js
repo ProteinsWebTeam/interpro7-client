@@ -27,14 +27,14 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
               <div className={f('flex-container')}>
                 <div className={f('flex-item', 'icon-box')}>
                   {
-                    //<h4 className={f('icon', 'icon-common')} data-icon="&#x109;"></h4>
+                    // <h4 className={f('icon', 'icon-common')} data-icon="&#x109;"></h4>
                   }
                   <span
                     className={f('icon', 'icon-common', 'xl')}
                     data-icon="&#xf110;"
                   />
                   <h5>Technical specs</h5>
-                  <ul>
+                  <ul className={f('small')}>
                     <li>API (upcoming)</li>
                     <li>
                       <Link
