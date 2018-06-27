@@ -1,5 +1,6 @@
 // @flow
 import config from 'config';
+
 /**
  * List of the available pages(endpoints) in singular
  * @type {Array<string>}
@@ -19,12 +20,17 @@ export const plural /*: Array<string> */ = Object.entries(config.pages).map(
   },
 );
 
+/**
+ * Regular expression to catch a “s” at the end of a string
+ * @type {RegExp}
+ */
 const FINAL_S = /s$/i;
 
 /**
  * Takes the text in singular of the page and returns the text in plural
- * @param {string}s text in singular
+ * @param {string} string text in singular
  * @param {number} [count = +Infinity] optional count to determine if need plural
+ * @param {boolean} ignoreNonExisting optional count to determine if need plural
  * @returns {*} text in plural
  */
 export const toPlural = (

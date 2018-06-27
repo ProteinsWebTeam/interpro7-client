@@ -32,12 +32,15 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   constructor(props /*: Props */) {
     super(props);
+
     this.state = {
       plugin: null,
       entryMap: {},
       selectedEntry: '',
     };
+
     this.plugin = null;
+
     this._ref = React.createRef();
   }
 
@@ -97,24 +100,24 @@ class StructureView extends PureComponent /*:: <Props> */ {
           entryMap: entryMap,
         });
       }
-      //override the default litemol colour with the custom theme
+      // override the default litemol colour with the custom theme
       this.updateTheme([]);
-      //detect any changes to the tree from within LiteMol and reset select control
-      Event.Tree.TransformFinished.getStream(context).subscribe(ev => {
+      // detect any changes to the tree from within LiteMol and reset select control
+      Event.Tree.TransformFinished.getStream(context).subscribe(() => {
         this.setState({ selectedEntry: '' });
       });
     });
   }
 
   updateTheme(entries) {
-    if (this.plugin != null) {
+    if (!this.plugin) {
       const Core = LiteMol.Core;
       const Visualisation = LiteMol.Visualization;
       const Boostrap = LiteMol.Bootstrap;
       const Query = LiteMol.Core.Structure.Query;
       const context = this.plugin.context;
       const model = context.select('model')[0];
-      if (this.props.matches != null) {
+      if (!this.props.matches) {
         const customTheme = new CustomTheme(
           Core,
           Visualisation,
@@ -137,18 +140,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
     const memberDBMap = {};
 
     if (this.props.matches) {
-      const entryResidues = {};
       // create matches in structure hierarchy
-      const queries = [];
       for (const match of this.props.matches) {
         const entry = match.metadata.accession;
         const db = match.metadata.source_database;
-        if (memberDBMap[db] == null) {
-          memberDBMap[db] = {};
-        }
-        if (memberDBMap[db][entry] == null) {
-          memberDBMap[db][entry] = [];
-        }
+        if (!memberDBMap[db]) memberDBMap[db] = {};
+        if (!memberDBMap[db][entry]) memberDBMap[db][entry] = [];
 
         for (const structure of match.structures) {
           const chain = structure.chain;
@@ -173,7 +170,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   showEntryInStructure = (memberDB, entry) => {
     this.updateTheme([]);
-    if (memberDB != null && entry != null) {
+    if (!memberDB && !entry) {
       const hits = this.state.entryMap[memberDB][entry];
       this.updateTheme(hits);
       this.setState({ selectedEntry: entry });
