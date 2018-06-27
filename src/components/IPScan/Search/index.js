@@ -401,7 +401,10 @@ const mapStateToProps = createSelector(
   (ipScan, value) => ({ ipScan, value }),
 );
 
-export default connect(mapStateToProps, {
-  createJob,
-  goToCustomLocation,
-})(IPScanSearch);
+export default connect(
+  mapStateToProps,
+  {
+    createJob,
+    goToCustomLocation,
+  },
+)(IPScanSearch);

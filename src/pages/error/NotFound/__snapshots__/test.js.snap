@@ -37,8 +37,9 @@ exports[`<NotFound /> should render 1`] = `
         </Connect(Link)>
         . If you continue to get this page, contact us using the 
         <Connect(Link)
-          href="http://www.ebi.ac.uk/support/interpro-general-query"
+          href="http://www.ebi.ac.uk/support/interpro"
           target="_blank"
+          withReferrer={true}
         >
           EMBL-EBI feedback form
         </Connect(Link)>
