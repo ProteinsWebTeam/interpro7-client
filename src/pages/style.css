@@ -74,18 +74,18 @@
   }
 }
 
-.ext {
-  &,
-  &:hover,
-  &:active,
-  &:focus {
-    border: none !important;
-  }
+/*.ext {*/
+/*&,*/
+/*&:hover,*/
+/*&:active,*/
+/*&:focus {*/
+/*border: none !important;*/
+/*}*/
 
-  &:focus {
-    outline-style: auto;
-  }
-}
+/*&:focus {*/
+/*outline-style: auto;*/
+/*}*/
+/*}*/
 
 .signature {
   background-color: #d5eff3;
@@ -290,6 +290,11 @@
 .card-description {
   overflow: hidden;
   height: 6em; /*better for alignment description + counter*/
+}
+
+.ico-disabled {
+  pointer-events: none;
+  opacity: 0.3;
 }
 
 /* add some space on top between banner and breadcrumb and at bottom too otherwise content si stuck on footer*/

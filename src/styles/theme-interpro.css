@@ -57,5 +57,8 @@ a.special {
 div.local-masthead {
   background-color: rgb(0, 124, 130);
 }
-
+/*Overwrite EBI global - needed to be added to theme.css*/
+input:checked ~ .switch-paddle {
+  background: #2daec1;
+}
 /* end */

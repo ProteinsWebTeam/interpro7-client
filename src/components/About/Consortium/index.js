@@ -74,13 +74,15 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                 </Link>
                 {db.releaseDate ? (
                   <p>
-                    {'Released '}
-                    <time
-                      dateTime={db.releaseDate}
-                      title={date.toLocaleDateString()}
-                    >
-                      <TimeAgo date={date} noUpdate />
-                    </time>
+                    <small>
+                      {'Released '}
+                      <time
+                        dateTime={db.releaseDate}
+                        title={date.toLocaleDateString()}
+                      >
+                        <TimeAgo date={date} noUpdate />
+                      </time>
+                    </small>
                   </p>
                 ) : null}
                 <p>{db.description}</p>

@@ -1,5 +1,6 @@
 @import '../styles/colors.css';
 @import '../styles/timing.css';
+@import '../styles/animation.css';
 /******************************Overwrite EBI global***************************/
 /*to include more systems fonts for windows machines*/
 h1,
@@ -124,6 +125,20 @@ mark {
   margin-left: 0.2rem;
 }
 /*/EXTERNAL LINKS*/
+
+/*NEUTRAL LINKS*/
+.neutral,
+a.neutral,
+a.neutral:visited {
+  color: var(--colors-gray);
+}
+
+a.neutral:hover {
+  color: var(--colors-gray);
+  border-bottom: 1px var(--colors-gray) solid;
+}
+/*/NEUTRAL LINKS*/
+
 /************************  END LINKS  **********************************/
 
 /************************  FORM INPUT TEXTAREA  **********************************/
@@ -318,10 +333,14 @@ details > summary {
 details.accordion-style > summary {
   color: var(--colors-submain);
   border: 1px solid var(--colors-very-white);
+  border-bottom-width: 0;
   padding: 1rem;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    color: var(--colors-graydark);
+    background-color: var(--colors-accordion);
+    /*background-color: rgba(0, 0, 0, 0.1);*/
+    color: white;
+    /*color: var(--colors-graydark);*/
+    transition: all 0.4s ease-out;
   }
   &:after {
     content: 'ć'; /*content: "\0f11a";*/
@@ -334,29 +353,51 @@ details.accordion-style > summary {
   }
 }
 
-details.accordion-style > p,
-details.accordion-style > div {
+details.accordion-style:last-child {
+  border-bottom: 1px solid var(--colors-very-white);
+}
+
+.accordion-info {
   border: 1px solid var(--colors-nearly-white);
   border-top-width: 0;
   padding: 1rem;
-  &:last-of-type {
+  & p:last-of-type {
     margin-bottom: 0;
   }
 }
+
 details.accordion-style[open] > summary {
-  background-color: var(--colors-submain);
+  background-color: var(--colors-accordion);
   color: white;
+  z-index: 1;
+  position: relative; /*for animation*/
 }
+
+details.accordion-style[open] summary ~ * {
+  animation: sweep var(--timing-fast) ease-out;
+}
+
+/*alt color for testing*/
 details.accordion-style.light[open] > summary {
   background-color: var(--colors-nearly-white);
   color: var(--colors-graydark);
-} /*alt color for testing*/
+}
+details.accordion-style.classic[open] > summary {
+  background-color: var(--colors-submain);
+  color: white;
+}
+/*/alt color for testing*/
+
 details.accordion-style[open] summary:after {
   content: 'Ć';
 }
 /*/ACCORDION TYPE*/
 
 /****************************** TITLE - TEXT *********************************/
+.uppercase {
+  text-transform: uppercase;
+}
+
 /*title sue for box like search box*/
 h3.light {
   font-weight: 300;
