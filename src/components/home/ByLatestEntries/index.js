@@ -90,126 +90,117 @@ class LatestEntry extends PureComponent {
             >
               {' '}
               <div className={f('count-4', 'count-proteins')}>
-                <Tooltip
-                  title={`${c.P} ${toPlural('protein', c.P)} matching ${
-                    entry.name
-                  }`}
-                >
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: {
-                          db: 'InterPro',
-                          accession: entry.accession,
-                        },
-                        protein: { isFilter: true, db: 'UniProt' },
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'entry' },
+                      entry: {
+                        db: 'InterPro',
+                        accession: entry.accession,
                       },
-                    }}
-                  >
-                    <div
-                      className={f('icon', 'icon-conceptual')}
-                      data-icon="&#x50;"
-                    />{' '}
-                    <NumberComponent value={c.P} abbr />
-                    <span className={f('label-number')}>
-                      {toPlural('protein', c.P)}
-                    </span>
-                  </Link>
-                </Tooltip>
+                      protein: { isFilter: true, db: 'UniProt' },
+                    },
+                  }}
+                  disabled={!c.P}
+                >
+                  <div
+                    className={f('icon', 'icon-conceptual')}
+                    data-icon="&#x50;"
+                  />{' '}
+                  <NumberComponent
+                    value={c.P}
+                    abbr
+                    titleType={`${toPlural('protein', c.P)} matching ${
+                      entry.name
+                    }`}
+                  />
+                  <span className={f('label-number')}>
+                    {toPlural('protein', c.P)}
+                  </span>
+                </Link>
               </div>
               <div className={f('count-4', 'count-architectures')}>
-                <Tooltip
-                  title={`${c.I} domain architectures matching ${entry.name}`}
-                >
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: {
-                          db: 'InterPro',
-                          accession: entry.accession,
-                          detail: 'domain_architecture',
-                        },
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'entry' },
+                      entry: {
+                        db: 'InterPro',
+                        accession: entry.accession,
+                        detail: 'domain_architecture',
                       },
-                    }}
-                  >
-                    <div className={f('icon', 'icon-count-ida')} />{' '}
-                    <NumberComponent value={c.I} abbr />
-                    <span className={f('label-number')}>
-                      domain architectures
-                    </span>
-                  </Link>
-                </Tooltip>
+                    },
+                  }}
+                  disabled={!c.I}
+                >
+                  <div className={f('icon', 'icon-count-ida')} />{' '}
+                  <NumberComponent
+                    value={c.I}
+                    abbr
+                    titleType={`${toPlural(
+                      'domain architecture',
+                      c.I,
+                      true,
+                    )} matching ${entry.name}`}
+                  />
+                  <span className={f('label-number')}>
+                    domain architectures
+                  </span>
+                </Link>
               </div>
               <div className={f('count-4', 'count-organisms')}>
-                <Tooltip
-                  title={`${c.O} ${toPlural('taxonomy', c.O)} matching ${
-                    entry.name
-                  }`}
-                >
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: {
-                          db: 'InterPro',
-                          accession: entry.accession,
-                        },
-                        taxonomy: { isFilter: true, db: 'uniprot' },
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'entry' },
+                      entry: {
+                        db: 'InterPro',
+                        accession: entry.accession,
                       },
-                    }}
-                  >
-                    <div className={f('icon', 'icon-count-organisms')} />{' '}
-                    <NumberComponent value={c.O} abbr />
-                    <span className={f('label-number')}>
-                      {toPlural('taxonomy', c.O)}
-                    </span>
-                  </Link>
-                </Tooltip>
+                      taxonomy: { isFilter: true, db: 'uniprot' },
+                    },
+                  }}
+                  disabled={!c.O}
+                >
+                  <div className={f('icon', 'icon-count-organisms')} />{' '}
+                  <NumberComponent
+                    value={c.O}
+                    abbr
+                    titleType={`${toPlural('taxonomy', c.O)} matching ${
+                      entry.name
+                    }`}
+                  />
+                  <span className={f('label-number')}>
+                    {toPlural('taxonomy', c.O)}
+                  </span>
+                </Link>
               </div>
               <div className={f('count-4', 'count-structures')}>
-                <Tooltip
-                  title={`${c.S}  ${toPlural('structure', c.S)} matching ${
-                    entry.name
-                  }`}
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'entry' },
+                      entry: {
+                        db: 'InterPro',
+                        accession: entry.accession,
+                      },
+                      structure: { isFilter: true, db: 'PDB' },
+                    },
+                  }}
+                  disabled={!c.S}
                 >
-                  {// link only when value > 0
-                  c.S > 0 ? (
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            db: 'InterPro',
-                            accession: entry.accession,
-                          },
-                          structure: { isFilter: true, db: 'PDB' },
-                        },
-                      }}
-                    >
-                      <div
-                        className={f('icon', 'icon-conceptual')}
-                        data-icon="s"
-                      />{' '}
-                      <NumberComponent value={c.S} abbr />
-                      <span className={f('label-number')}>
-                        {toPlural('structure', c.S)}
-                      </span>
-                    </Link>
-                  ) : (
-                    <div className={f('no-link')}>
-                      <div
-                        className={f('icon', 'icon-conceptual')}
-                        data-icon="s"
-                      />{' '}
-                      <NumberComponent value={c.S} abbr />
-                      <span className={f('label-number')}>
-                        {toPlural('structure', c.S)}
-                      </span>
-                    </div>
-                  )}
-                </Tooltip>
+                  <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
+                  <NumberComponent
+                    value={c.S}
+                    abbr
+                    titleType={`${toPlural('structure', c.S)} matching ${
+                      entry.name
+                    }`}
+                  />
+                  <span className={f('label-number')}>
+                    {toPlural('structure', c.S)}
+                  </span>
+                </Link>
               </div>
               {// OPTION COUNT SIGNATURES - ICON SVG
               entry.contributing.map(c => (
