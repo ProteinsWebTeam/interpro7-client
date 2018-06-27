@@ -8,7 +8,6 @@ import { overallDataLoadingSelector } from 'reducers/data-progress';
 import { stuckSelector } from 'reducers/ui/stuck';
 import { browserStatusSelector } from 'reducers/status/browser';
 
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';

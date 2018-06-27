@@ -6,7 +6,6 @@ import { createSelector } from 'reselect';
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
