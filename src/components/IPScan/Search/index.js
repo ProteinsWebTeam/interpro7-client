@@ -74,7 +74,7 @@ const getCheckedApplications = form =>
   );
 
 const getLocalTitle = form =>
-  form.querySelector('input[name="local-title"').value.trim();
+  form.querySelector('input[name="local-title"]').value.trim();
 
 const isXChecked = x => form => !!form.querySelector(checkedSelectorFor(x));
 
