@@ -19,6 +19,8 @@ export const plural /*: Array<string> */ = Object.entries(config.pages).map(
   },
 );
 
+const FINAL_S = /s$/i;
+
 /**
  * Takes the text in singular of the page and returns the text in plural
  * @param {string}s text in singular
@@ -26,14 +28,19 @@ export const plural /*: Array<string> */ = Object.entries(config.pages).map(
  * @returns {*} text in plural
  */
 export const toPlural = (
-  s /*: string */,
+  string /*: string */,
   count /*:: ?: number */ = +Infinity,
+  ignoreNonExisting /*:: ?: boolean */,
 ) => {
+  const _string = string.trim();
   for (let i = 0; i < singular.length; i++) {
-    if (singular[i] === s) {
+    if (singular[i] === _string) {
       if (count > 1) return plural[i];
-      return s;
+      return _string;
     }
+  }
+  if (ignoreNonExisting) {
+    return _string.replace(FINAL_S, '') + (count > 1 ? 's' : '');
   }
   throw new Error('Not an existing page');
 };
