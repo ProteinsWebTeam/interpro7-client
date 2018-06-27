@@ -290,9 +290,10 @@ export default class Faqs extends PureComponent {
                   signatures are computational predictions. If you think one of
                   our signatures matches false positives, please{' '}
                   <Link
-                    href="//www.ebi.ac.uk/support/interpro-general-query"
+                    href="//www.ebi.ac.uk/support/interpro"
                     className={f('ext')}
                     target="_blank"
+                    withReferrer
                   >
                     contact us
                   </Link>.
@@ -335,9 +336,10 @@ export default class Faqs extends PureComponent {
                 We welcome your contributions. To report errors or problems with
                 the database, please{' '}
                 <Link
-                  href="//www.ebi.ac.uk/support/interpro-general-query"
+                  href="//www.ebi.ac.uk/support/interpro"
                   className={f('ext')}
                   target="_blank"
+                  withReferrer
                 >
                   get in touch via EBI support
                 </Link>.
@@ -350,9 +352,10 @@ export default class Faqs extends PureComponent {
                 If you are interested in potential collaborations with InterPro,
                 please{' '}
                 <Link
-                  href="//www.ebi.ac.uk/support/interpro-general-query"
+                  href="//www.ebi.ac.uk/support/interpro"
                   className={f('ext')}
                   target="_blank"
+                  withReferrer
                 >
                   contact us via EBI support
                 </Link>.
@@ -377,7 +380,11 @@ export default class Faqs extends PureComponent {
                   // </li>
                 }
                 <li>
-                  <Link href="//www.ebi.ac.uk/support/interpro-general-query">
+                  <Link
+                    href="//www.ebi.ac.uk/support/interpro"
+                    target="_blank"
+                    withReferrer
+                  >
                     <span
                       className={f('icon', 'icon-common')}
                       data-icon="&#x1d8;"

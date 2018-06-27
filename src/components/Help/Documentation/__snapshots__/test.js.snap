@@ -130,7 +130,9 @@ exports[`<Consortium /> should render 1`] = `
         <ul>
           <li>
             <Connect(Link)
-              href="//www.ebi.ac.uk/support/interpro-general-query"
+              href="//www.ebi.ac.uk/support/interpro"
+              target="_blank"
+              withReferrer={true}
             >
               <span
                 className="icon icon-common"
