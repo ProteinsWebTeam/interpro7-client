@@ -52,6 +52,7 @@ export default class Toast extends PureComponent {
       title,
       body,
       link,
+      action,
       className,
       paused,
       ttl,
@@ -68,8 +69,12 @@ export default class Toast extends PureComponent {
       >
         {title && <strong>{title}</strong>}
         <p>{body}</p>
-        {link && <Link {...link} /> // eslint-disable-line jsx-a11y/anchor-has-content
-        }
+        {link ? <Link {...link} /> : null}
+        {action ? (
+          <button type="button" className={s('button')} onClick={action.fn}>
+            {action.text || 'Action'}
+          </button>
+        ) : null}
       </li>
     );
   }
