@@ -45,14 +45,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
   }
 
   componentDidMount() {
-    const { Core, Visualisation, Bootstrap } = LiteMol;
-    const {
-      Event,
-      Entity: { Transformer },
-      Tree: { Transform },
-    } = Bootstrap;
-    const Query = Core.Structure.Query;
-
     const pdbid = this.props.id;
 
     this.plugin = LiteMol.Plugin.create({
@@ -64,34 +56,41 @@ class StructureView extends PureComponent /*:: <Props> */ {
       },
     });
     const context = this.plugin.context;
-    const action = Transform.build();
+    const action = LiteMol.Bootstrap.Tree.Transform.build();
     action
-      .add(context.tree.root, Transformer.Data.Download, {
-        url: `https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_updated.cif`,
-        type: 'String',
-        id: pdbid,
-      })
+      .add(
+        context.tree.root,
+        LiteMol.Bootstrap.Entity.Transformer.Data.Download,
+        {
+          url: `https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_updated.cif`,
+          type: 'String',
+          id: pdbid,
+        },
+      )
       .then(
-        Transformer.Data.ParseCif,
+        LiteMol.Bootstrap.Entity.Transformer.Data.ParseCif,
         { id: pdbid },
         { isBinding: true, ref: 'parse' },
       )
       .then(
-        Transformer.Molecule.CreateFromMmCif,
+        LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateFromMmCif,
         { blockIndex: 0 },
         { isBinding: true },
       )
       .then(
-        Transformer.Molecule.CreateModel,
+        LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateModel,
         { modelIndex: 0 },
         { isBinding: false, ref: 'model' },
       )
-      .then(Transformer.Molecule.CreateMacromoleculeVisual, {
-        polymer: true,
-        polymerRef: 'polymer-visual',
-        het: false,
-        water: false,
-      });
+      .then(
+        LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateMacromoleculeVisual,
+        {
+          polymer: true,
+          polymerRef: 'polymer-visual',
+          het: false,
+          water: false,
+        },
+      );
 
     this.plugin.applyTransform(action).then(() => {
       if (this.props.matches) {
@@ -101,7 +100,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
       // override the default litemol colour with the custom theme
       this.updateTheme([]);
       // detect any changes to the tree from within LiteMol and reset select control
-      Event.Tree.TransformFinished.getStream(context).subscribe(() => {
+      LiteMol.Bootstrap.Event.Tree.TransformFinished.getStream(
+        context,
+      ).subscribe(() => {
         this.setState({ selectedEntry: '' });
       });
     });
@@ -109,18 +110,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   updateTheme(entries) {
     if (this.plugin) {
-      const Core = LiteMol.Core;
-      const Visualisation = LiteMol.Visualization;
-      const Boostrap = LiteMol.Bootstrap;
-      const Query = LiteMol.Core.Structure.Query;
       const context = this.plugin.context;
       const model = context.select('model')[0];
       if (this.props.matches) {
         const customTheme = new CustomTheme(
-          Core,
-          Visualisation,
-          Boostrap,
-          Query,
+          LiteMol.Core,
+          LiteMol.Visualization,
+          LiteMol.Boostrap,
+          LiteMol.Core.Structure.Query,
         );
         const base = hexToRgb(config.colors.get('fallback'));
         const color = {

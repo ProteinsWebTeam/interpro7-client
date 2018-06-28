@@ -18,6 +18,7 @@ export default class Toast extends PureComponent {
     title: T.string,
     body: T.string,
     link: T.object,
+    action: T.object,
     ttl: T.number,
     handleClose: T.func.isRequired,
   };
