@@ -45,13 +45,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
   }
 
   componentDidMount() {
-    const Core = LiteMol.Core;
-    const Visualisation = LiteMol.Visualization;
-    const Boostrap = LiteMol.Bootstrap;
-    const Event = LiteMol.Bootstrap.Event;
-    const Transformer = LiteMol.Bootstrap.Entity.Transformer;
-    const Query = LiteMol.Core.Structure.Query;
-    const Transform = LiteMol.Bootstrap.Tree.Transform;
+    const { Core, Visualisation, Bootstrap } = LiteMol;
+    const {
+      Event,
+      Entity: { Transformer },
+      Tree: { Transform },
+    } = Bootstrap;
+    const Query = Core.Structure.Query;
 
     const pdbid = this.props.id;
 
@@ -96,9 +96,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.plugin.applyTransform(action).then(() => {
       if (this.props.matches) {
         const entryMap = this.createEntryMap();
-        this.setState({
-          entryMap: entryMap,
-        });
+        this.setState({ entryMap });
       }
       // override the default litemol colour with the custom theme
       this.updateTheme([]);
@@ -110,14 +108,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
   }
 
   updateTheme(entries) {
-    if (!this.plugin) {
+    if (this.plugin) {
       const Core = LiteMol.Core;
       const Visualisation = LiteMol.Visualization;
       const Boostrap = LiteMol.Bootstrap;
       const Query = LiteMol.Core.Structure.Query;
       const context = this.plugin.context;
       const model = context.select('model')[0];
-      if (!this.props.matches) {
+      if (this.props.matches) {
         const customTheme = new CustomTheme(
           Core,
           Visualisation,
@@ -170,7 +168,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   showEntryInStructure = (memberDB, entry) => {
     this.updateTheme([]);
-    if (!memberDB && !entry) {
+    if (memberDB && entry) {
       const hits = this.state.entryMap[memberDB][entry];
       this.updateTheme(hits);
       this.setState({ selectedEntry: entry });
@@ -178,16 +176,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    let eventSelector = '';
-    if (this.props.matches) {
-      eventSelector = (
-        <EntrySelection
-          entryMap={this.state.entryMap}
-          updateStructure={this.showEntryInStructure}
-          selectedEntry={this.state.selectedEntry}
-        />
-      );
-    }
     return (
       <div>
         <div style={embedStyle}>
@@ -204,7 +192,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
             }}
           />
         </div>
-        {eventSelector}
+        {this.props.matches ? (
+          <EntrySelection
+            entryMap={this.state.entryMap}
+            updateStructure={this.showEntryInStructure}
+            selectedEntry={this.state.selectedEntry}
+          />
+        ) : null}
       </div>
     );
   }

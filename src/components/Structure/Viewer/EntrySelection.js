@@ -56,7 +56,7 @@ class EntrySelection extends PureComponent {
         </optgroup>,
       );
     }
-    const selection = (
+    return (
       <select
         onChange={this.onSelectionChange}
         onBlur={this.onSelectionChange}
@@ -65,7 +65,6 @@ class EntrySelection extends PureComponent {
         {selectionGroups}
       </select>
     );
-    return <div>{selection}</div>;
   }
 }
 
