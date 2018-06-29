@@ -6,14 +6,13 @@ import { createSelector } from 'reselect';
 import { TweenLite, Power2 } from 'gsap/all';
 
 import random from 'utils/random';
+import getAbbr from './utils/get-abbr';
 
 import { foundationPartial } from 'styles/foundation';
 import style from './style.css';
 
 const f = foundationPartial(style);
 
-const UNITS = ['', 'k', 'M', 'G'];
-const UNIT_SCALE = 1000; // Jump scale every 1000 jump in magnitude
 const UNIT_SCALE_MARGIN = 1; // abbr at this level
 // examples: (1: 1000 -> 1k) (10: 1000 -> 1000, 10000 -> 10k)
 
@@ -24,16 +23,6 @@ TweenLite.lagSmoothing(0);
 export const DEFAULT_DURATION = 1;
 
 const DELAY_RANGE = 0.25;
-
-const getAbbr = (value /*: number */, scaleMargin) => {
-  let _value = value;
-  let unitIndex = 0;
-  while (_value > UNIT_SCALE * scaleMargin) {
-    unitIndex++;
-    _value = Math.floor(_value / UNIT_SCALE);
-  }
-  return `${_value.toLocaleString()}${UNITS[unitIndex]}`;
-};
 
 const numberToDisplayText = (value, abbr, scaleMargin) => {
   if (!value && value !== 0) return;
