@@ -1,6 +1,10 @@
 @import '../../styles/colors.css';
 @import '../../styles/timing.css';
 
+.input-group {
+  display: flex;
+} /*solve an issue with Safari and icon alignments*/
+
 .search-adv {
   text-align: right;
 }
