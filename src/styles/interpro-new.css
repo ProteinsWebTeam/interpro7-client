@@ -342,7 +342,7 @@ details.accordion-style > summary {
     /*color: var(--colors-graydark);*/
     transition: all 0.4s ease-out;
   }
-  &:after {
+  &::after {
     content: 'ć'; /*content: "\0f11a";*/
     font-family: 'EBI-Common';
     float: right;
