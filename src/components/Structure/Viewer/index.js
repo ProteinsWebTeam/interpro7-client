@@ -116,7 +116,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const customTheme = new CustomTheme(
           LiteMol.Core,
           LiteMol.Visualization,
-          LiteMol.Boostrap,
+          LiteMol.Bootstrap,
           LiteMol.Core.Structure.Query,
         );
         const base = hexToRgb(config.colors.get('fallback'));
