@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import { TweenLite, Power2 } from 'gsap/all';
 
 import random from 'utils/random';
-import getAbbr from './utils/get-abbr';
+import numberToDisplayText from './utils/number-to-display-text';
 
 import { foundationPartial } from 'styles/foundation';
 import style from './style.css';
@@ -24,23 +24,25 @@ export const DEFAULT_DURATION = 1;
 
 const DELAY_RANGE = 0.25;
 
-const numberToDisplayText = (value, abbr, scaleMargin) => {
-  if (!value && value !== 0) return;
-  let _value = Math.round(value);
-  if (isNaN(_value)) _value = 'N/A';
-  if (Number.isFinite(_value)) {
-    if (abbr) {
-      _value = getAbbr(_value, scaleMargin);
-    } else {
-      // this will print the number according to locale preference
-      // like a coma as thousand-separator in english
-      if (Number.isFinite(_value)) _value = _value.toLocaleString();
-    }
-  }
-  return _value;
-};
+/*:: type ComponentProps = {
+  value: ?(number | string),
+  loading?: boolean,
+  duration: number,
+  className: ?string,
+  lowGraphics: boolean,
+  dispatch: function,
+  abbr: boolean,
+  scaleMargin: number,
+  title?: number | string,
+  titleType?: string,
+}; */
 
-class _NumberComponent extends PureComponent {
+class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
+  /*::
+    _ref: { current: HTMLSpanElement | null };
+    _animation: ?any;
+  */
+
   static propTypes = {
     value: T.oneOfType([T.number, T.string]),
     loading: T.bool,
@@ -60,7 +62,7 @@ class _NumberComponent extends PureComponent {
     scaleMargin: UNIT_SCALE_MARGIN,
   };
 
-  constructor(props /*: ?any */) {
+  constructor(props /*: ComponentProps */) {
     super(props);
 
     this._ref = React.createRef();
@@ -91,7 +93,7 @@ class _NumberComponent extends PureComponent {
       this.props.scaleMargin,
     );
 
-    if (!this.props.title) {
+    if (!this.props.title && finalValue && this._ref.current !== null) {
       this._ref.current.title = `Approximately ${finalValue} ${this.props
         .titleType || ''}`.trim();
     }
@@ -102,8 +104,8 @@ class _NumberComponent extends PureComponent {
       Number.isFinite(from) &&
       Number.isFinite(to);
 
-    if (!canAnimate) {
-      this._ref.current.textContent = finalValue;
+    if (!canAnimate && finalValue && this._ref.current) {
+      this._ref.current.textContent = `${finalValue}`;
       return;
     }
 
@@ -115,11 +117,11 @@ class _NumberComponent extends PureComponent {
       delay: random() * this.props.duration * DELAY_RANGE,
       onUpdate: () => {
         if (!this._ref.current) return;
-        this._ref.current.textContent = numberToDisplayText(
+        this._ref.current.textContent = `${numberToDisplayText(
           animatable.value,
           this.props.abbr,
           this.props.scaleMargin,
-        );
+        ) || ''}`;
       },
       ease: Power2.easeIn,
     });
@@ -164,7 +166,18 @@ const mapStateToProps = createSelector(
 
 export const NumberComponent = connect(mapStateToProps)(_NumberComponent);
 
-class NumberLabel extends PureComponent {
+/*:: type LabelProps = {
+  value: ?(number | string),
+  loading?: boolean,
+  duration?: number,
+  className: ?string,
+  abbr?: boolean,
+  scaleMargin?: number,
+  title?: number | string,
+  titleType?: string,
+}; */
+
+class NumberLabel extends PureComponent /*:: <LabelProps> */ {
   static propTypes = {
     className: T.string,
   };
