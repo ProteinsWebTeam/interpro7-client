@@ -33,6 +33,7 @@ const DELAY_RANGE = 0.25;
   dispatch: function,
   abbr: boolean,
   scaleMargin: number,
+  noTitle: ?boolean,
   title?: number | string,
   titleType?: string,
 }; */
@@ -52,6 +53,7 @@ class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
     dispatch: T.func.isRequired,
     abbr: T.bool,
     scaleMargin: T.number,
+    noTitle: T.bool,
     title: T.oneOfType([T.string, T.number]),
     titleType: T.string,
   };
@@ -93,7 +95,12 @@ class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
       this.props.scaleMargin,
     );
 
-    if (!this.props.title && finalValue && this._ref.current !== null) {
+    if (
+      !this.props.noTitle &&
+      !this.props.title &&
+      finalValue &&
+      this._ref.current !== null
+    ) {
       this._ref.current.title = `Approximately ${finalValue} ${this.props
         .titleType || ''}`.trim();
     }
@@ -144,13 +151,6 @@ class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
       ...props
     } = this.props;
 
-    let _title = title;
-    if (!_title && abbr) {
-      const potentialTitle =
-        (this.props.value && this.props.value.toLocaleString()) || '0';
-      // Should only happen if value has been shortened
-      if (potentialTitle !== value) _title = potentialTitle;
-    }
     return (
       <span
         className={f(className, { loading, lowGraphics })}
