@@ -150,7 +150,7 @@ const mapStateToUrl = createSelector(
       protocol,
       hostname,
       port,
-      pathname: `${root}/entry`,
+      pathname: `${root}/entry/InterPro/`,
       query: { group_by: 'type' },
     }),
 );

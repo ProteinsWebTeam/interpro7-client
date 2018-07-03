@@ -32,6 +32,15 @@ const loadInterProWebComponents = () => {
   return Promise.all(webComponents);
 };
 
+const cleanHierarchyType = hierarchy => {
+  const output = { ...hierarchy };
+  output.type = output.type.replace('_', ' ');
+  if (output.children && output.children.length) {
+    output.children = output.children.map(cleanHierarchyType);
+  }
+  return output;
+};
+
 class InterProHierarchy extends PureComponent {
   static propTypes = {
     accession: T.string.isRequired,
@@ -47,8 +56,8 @@ class InterProHierarchy extends PureComponent {
 
   async componentDidMount() {
     await loadInterProWebComponents();
-    const h = this.props.hierarchy;
-    if (h) this._ref.current.hierarchy = h;
+    const hierarchy = this.props.hierarchy;
+    if (hierarchy) this._ref.current.hierarchy = cleanHierarchyType(hierarchy);
     this._ref.current.addEventListener('click', e => {
       if (e.path[0].classList.contains('link')) {
         e.preventDefault();
@@ -72,4 +81,7 @@ class InterProHierarchy extends PureComponent {
   }
 }
 
-export default connect(null, { goToCustomLocation })(InterProHierarchy);
+export default connect(
+  null,
+  { goToCustomLocation },
+)(InterProHierarchy);
