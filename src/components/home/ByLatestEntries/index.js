@@ -67,7 +67,26 @@ class LatestEntry extends PureComponent {
                   dimension="1.5em"
                   type={entry.type}
                   aria-label="Entry type"
-                />
+                >
+                  {
+                    // IE11 fallback for icons
+                  }
+                  <span
+                    className={f('icon-type', {
+                      ['icon-family']: entry.type === 'Family',
+                      ['icon-domain']: entry.type === 'Domain',
+                      ['icon-repeat']: entry.type === 'Repeat',
+                      ['icon-hh']: entry.type === 'Homologous Superfamily',
+                      ['icon-site']: entry.type === 'Site',
+                    })}
+                  >
+                    {entry.type === 'Family' ? 'F' : null}
+                    {entry.type === 'Domain' ? 'D' : null}
+                    {entry.type === 'Repeat' ? 'R' : null}
+                    {entry.type === 'Homologous Superfamily' ? 'H' : null}
+                    {entry.type === 'Site' ? 'S' : null}
+                  </span>
+                </interpro-type>
               </Tooltip>
 
               <div>
