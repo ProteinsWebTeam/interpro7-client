@@ -2,6 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import loadable from 'higherOrder/loadable';
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
@@ -457,10 +458,14 @@ class Home extends PureComponent {
           <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
             <Tabs>
               <div title="Search by sequence">
-                <IPScanSearch />
+                <ErrorBoundary>
+                  <IPScanSearch />
+                </ErrorBoundary>
               </div>
               <div title="Search by text">
-                <SearchByText />
+                <ErrorBoundary>
+                  <SearchByText />
+                </ErrorBoundary>
               </div>
             </Tabs>
           </div>
@@ -687,7 +692,9 @@ class Home extends PureComponent {
             </div>
           </div>
         </div>
-        <Twitter />
+        <ErrorBoundary>
+          <Twitter />
+        </ErrorBoundary>
       </Fragment>
     );
   }

@@ -3,7 +3,7 @@ import T from 'prop-types';
 
 import MenuItem from 'components/Menu/MenuItem';
 
-import { schedule } from 'timing-functions/src';
+import { schedule, sleep } from 'timing-functions/src';
 
 import { InterPro } from 'menuConfig';
 
@@ -25,6 +25,7 @@ const f = foundationPartial(fonts, interproStyles, styles);
   [key: string]: boolean,
 }; */
 
+const RECHECK_AFTER_MOUNT = 500; // ms
 const MAX_DELAY_BEFORE_CHECKING_FIT = 200; // ms
 
 const InterProMin = InterPro.filter(item => item.name !== 'Settings');
@@ -52,7 +53,8 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
     this._dotdotdotRef = React.createRef();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    await sleep(RECHECK_AFTER_MOUNT);
     this._checkSizes(this.props.width);
   }
 

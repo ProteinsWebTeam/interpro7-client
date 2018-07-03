@@ -19,4 +19,22 @@ describe('toPlural', () => {
   test('gibberish', () => {
     expect(() => toPlural('gibberish')).toThrowError('Not an existing page');
   });
+
+  test('ignore if existing page', () => {
+    expect(toPlural('word', 0, true)).toBe('word');
+    expect(toPlural('word', 1, true)).toBe('word');
+    expect(toPlural('word', 2, true)).toBe('words');
+  });
+
+  test('ignore if existing page, already in plural', () => {
+    expect(toPlural('words', 0, true)).toBe('word');
+    expect(toPlural('words', 1, true)).toBe('word');
+    expect(toPlural('words', 2, true)).toBe('words');
+  });
+
+  test('clean up string', () => {
+    expect(toPlural(' word ', 0, true)).toBe('word');
+    expect(toPlural('   word', 2, true)).toBe('words');
+    expect(toPlural('   entry ', 2, true)).toBe('entries');
+  });
 });

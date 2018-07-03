@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Title /> loading, stuck 1`] = `
+exports[`<Title /> loading, stuck, offline 1`] = `
 <div
   className="columns small-6 medium-8"
   id="local-title"
@@ -21,6 +21,7 @@ exports[`<Title /> loading, stuck 1`] = `
       >
         <div
           className="logo-flex-item logo-icon stuck"
+          title="Your browser appears to be offline, you might not have access to all the features of this website"
         >
           <svg
             className="icon"
@@ -62,7 +63,7 @@ exports[`<Title /> loading, stuck 1`] = `
               transform="rotate(-45 45 41)"
             >
               <rect
-                fill="white"
+                fill="currentColor"
                 height="65"
                 mask="url(#logo-mask)"
                 ry="8"
@@ -89,7 +90,95 @@ exports[`<Title /> loading, stuck 1`] = `
 </div>
 `;
 
-exports[`<Title /> not loading, unstuck 1`] = `
+exports[`<Title /> loading, stuck, online 1`] = `
+<div
+  className="columns small-6 medium-8"
+  id="local-title"
+>
+  <h1
+    className="main-title stuck"
+  >
+    <div
+      className="logo-flex"
+    >
+      <Connect(Link)
+        title="Back to InterPro homepage"
+        to={
+          Object {
+            "description": Object {},
+          }
+        }
+      >
+        <div
+          className="logo-flex-item logo-icon stuck online"
+        >
+          <svg
+            className="icon"
+            viewBox="0 0 88 88"
+            width="62"
+          >
+            <defs>
+              <mask
+                id="logo-mask"
+              >
+                <rect
+                  fill="white"
+                  height="65"
+                  ry="8"
+                  width="65"
+                  x="10"
+                  y="10"
+                />
+                <rect
+                  fill="black"
+                  height="4"
+                  width="65"
+                  x="10"
+                  y="41"
+                />
+                <rect
+                  className="domain loading"
+                  fill="black"
+                  height="18"
+                  ry="8"
+                  width="38"
+                  x="23"
+                  y="34"
+                />
+              </mask>
+            </defs>
+            <g
+              transform="rotate(-45 45 41)"
+            >
+              <rect
+                fill="currentColor"
+                height="65"
+                mask="url(#logo-mask)"
+                ry="8"
+                width="65"
+                x="10"
+                y="10"
+              />
+            </g>
+          </svg>
+        </div>
+        <div
+          className="logo-flex-item logo-text"
+        >
+          InterPro
+        </div>
+      </Connect(Link)>
+    </div>
+  </h1>
+  <h4
+    className="subtitle stuck"
+  >
+    Classification of protein families
+  </h4>
+</div>
+`;
+
+exports[`<Title /> not loading, unstuck, offline 1`] = `
 <div
   className="columns small-6 medium-8"
   id="local-title"
@@ -110,6 +199,95 @@ exports[`<Title /> not loading, unstuck 1`] = `
       >
         <div
           className="logo-flex-item logo-icon"
+          title="Your browser appears to be offline, you might not have access to all the features of this website"
+        >
+          <svg
+            className="icon"
+            viewBox="0 0 88 88"
+            width="62"
+          >
+            <defs>
+              <mask
+                id="logo-mask"
+              >
+                <rect
+                  fill="white"
+                  height="65"
+                  ry="8"
+                  width="65"
+                  x="10"
+                  y="10"
+                />
+                <rect
+                  fill="black"
+                  height="4"
+                  width="65"
+                  x="10"
+                  y="41"
+                />
+                <rect
+                  className="domain"
+                  fill="black"
+                  height="18"
+                  ry="8"
+                  width="38"
+                  x="23"
+                  y="34"
+                />
+              </mask>
+            </defs>
+            <g
+              transform="rotate(-45 45 41)"
+            >
+              <rect
+                fill="currentColor"
+                height="65"
+                mask="url(#logo-mask)"
+                ry="8"
+                width="65"
+                x="10"
+                y="10"
+              />
+            </g>
+          </svg>
+        </div>
+        <div
+          className="logo-flex-item logo-text"
+        >
+          InterPro
+        </div>
+      </Connect(Link)>
+    </div>
+  </h1>
+  <h4
+    className="subtitle"
+  >
+    Classification of protein families
+  </h4>
+</div>
+`;
+
+exports[`<Title /> not loading, unstuck, online 1`] = `
+<div
+  className="columns small-6 medium-8"
+  id="local-title"
+>
+  <h1
+    className="main-title"
+  >
+    <div
+      className="logo-flex"
+    >
+      <Connect(Link)
+        title="Back to InterPro homepage"
+        to={
+          Object {
+            "description": Object {},
+          }
+        }
+      >
+        <div
+          className="logo-flex-item logo-icon online"
         >
           <svg
             className="icon"
@@ -151,7 +329,7 @@ exports[`<Title /> not loading, unstuck 1`] = `
               transform="rotate(-45 45 41)"
             >
               <rect
-                fill="white"
+                fill="currentColor"
                 height="65"
                 mask="url(#logo-mask)"
                 ry="8"

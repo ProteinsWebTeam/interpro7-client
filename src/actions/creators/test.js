@@ -124,7 +124,7 @@ describe('actions', () => {
       expect(actions.changePageSize(40)).toEqual(expected);
     });
 
-    test('should create an action to change settings', () => {
+    test('should create an action to change settings for “input”', () => {
       const category = 'my-category';
       const name = 'my-name';
       const value = 'my-value';
@@ -141,6 +141,27 @@ describe('actions', () => {
         value,
       };
       expect(actions.changeSettings({ target: input })).toEqual(expected);
+    });
+
+    test('should create an action to change settings for “select”', () => {
+      const category = 'my-category';
+      const name = 'my-name';
+      const value = 'my-value';
+      const form = document.createElement('form');
+      const select = document.createElement('select');
+      const option = document.createElement('option');
+      option.value = value;
+      select.name = name;
+      select.appendChild(option);
+      form.dataset.category = category;
+      form.appendChild(select);
+      const expected = {
+        type: types.CHANGE_SETTINGS,
+        category,
+        key: name,
+        value,
+      };
+      expect(actions.changeSettings({ target: select })).toEqual(expected);
     });
 
     test('should create an action to reset settings', () => {

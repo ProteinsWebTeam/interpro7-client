@@ -23,6 +23,8 @@ import Header from 'components/Header';
 
 import Pages from 'pages';
 
+import ErrorBoundary from 'wrappers/ErrorBoundary';
+
 const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 
@@ -92,6 +94,8 @@ const CookieFooterAsync = loadable({
   loading: NullComponent,
 });
 
+const renderNull = () => null;
+
 const Root = () => (
   <Fragment>
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
@@ -110,8 +114,12 @@ const Root = () => (
       <ElixirFooterAsync />
       <EBIFooterAsync />
     </footer>
-    <ToastDisplayAsync />
-    <CookieFooterAsync />
+    <ErrorBoundary renderOnError={renderNull}>
+      <ToastDisplayAsync />
+    </ErrorBoundary>
+    <ErrorBoundary renderOnError={renderNull}>
+      <CookieFooterAsync />
+    </ErrorBoundary>
   </Fragment>
 );
 
