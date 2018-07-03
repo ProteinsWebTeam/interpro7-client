@@ -82,7 +82,40 @@ class Title extends PureComponent /*:: <Props> */ {
               <interpro-type
                 type={metadata.type.replace('_', ' ')}
                 dimension="4em"
-              />
+                aria-label="Entry type"
+              >
+                {
+                  // IE11 fallback for icons
+                }
+                <span
+                  className={f('icon-type', {
+                    ['icon-family']: metadata.type === 'family',
+                    ['icon-domain']: metadata.type === 'domain',
+                    ['icon-repeat']: metadata.type === 'repeat',
+                    ['icon-hh']:
+                      metadata.type.replace('_', ' ') ===
+                      'homologous superfamily',
+                    ['icon-site']:
+                      metadata.type.replace('_', ' ') === 'conserved site' ||
+                      metadata.type.replace('_', ' ') === 'binding site' ||
+                      metadata.type.replace('_', ' ') === 'active site' ||
+                      metadata.type === 'ptm',
+                  })}
+                >
+                  {metadata.type === 'family' ? 'F' : null}
+                  {metadata.type === 'domain' ? 'D' : null}
+                  {metadata.type === 'repeat' ? 'R' : null}
+                  {metadata.type.replace('_', ' ') === 'homologous superfamily'
+                    ? 'H'
+                    : null}
+                  {metadata.type.replace('_', ' ') === 'conserved site' ||
+                  metadata.type.replace('_', ' ') === 'binding site' ||
+                  metadata.type.replace('_', ' ') === 'active site' ||
+                  metadata.type === 'ptm'
+                    ? 'S'
+                    : null}
+                </span>
+              </interpro-type>
             </Tooltip>
           )}
 
