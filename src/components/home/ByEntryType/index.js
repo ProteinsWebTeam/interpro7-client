@@ -80,8 +80,37 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
                 <interpro-type
                   type={type}
                   dimension="4em"
+                  aria-label="Entry type"
                   style={{ display: 'block', paddingTop: '1rem' }}
-                />
+                >
+                  {
+                    // IE11 fallback for icons
+                  }
+                  <span
+                    className={f('icon-type', {
+                      ['icon-family']: type === 'Family',
+                      ['icon-domain']: type === 'Domain',
+                      ['icon-repeat']: type === 'Repeat',
+                      ['icon-hh']: type === 'Homologous Superfamily',
+                      ['icon-site']:
+                        type === 'Binding Site' ||
+                        type === 'Active Site' ||
+                        type === 'Conserved Site' ||
+                        type === 'PTM',
+                    })}
+                  >
+                    {type === 'Family' ? 'F' : null}
+                    {type === 'Domain' ? 'D' : null}
+                    {type === 'Repeat' ? 'R' : null}
+                    {type === 'Homologous Superfamily' ? 'H' : null}
+                    {type === 'Binding Site' ||
+                    type === 'Active Site' ||
+                    type === 'Conserved Site' ||
+                    type === 'PTM'
+                      ? 'S'
+                      : null}
+                  </span>
+                </interpro-type>
                 <h5>{type}</h5>
               </Tooltip>
               <p>
