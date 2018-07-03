@@ -28,9 +28,9 @@
       rgba(45, 174, 193, 0.5),
       rgba(0, 85, 158, 0.9)
     ),
-    url(images/backgrounds/bgd-banner.svg);
+    url(images/backgrounds/bgd-banner-01.svg);
   background-repeat: no-repeat, repeat;
-  background-position: 0, 100% -1.6%;
+  background-position: 0, 100% -0.5%;
   background-size: 100%, 2030px;
 }
 /*fallback*/
@@ -54,7 +54,7 @@
       rgba(249, 255, 182, 0.53),
       rgb(43, 111, 128)
     ),
-    url(images/backgrounds/bgd-banner.svg);
+    url(images/backgrounds/bgd-banner-01.svg);
 }
 
 /* to have same size as global  header*/
