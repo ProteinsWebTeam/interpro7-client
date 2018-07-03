@@ -44,6 +44,7 @@ const getNextLocation = (customLocation, to) =>
   disabled?: boolean,
   className?: string,
   activeClass?: function | string,
+  withReferrer?: boolean,
 }; */
 
 class Link extends PureComponent /*:: <Props> */ {
@@ -72,6 +73,7 @@ class Link extends PureComponent /*:: <Props> */ {
     disabled: T.bool,
     className: T.string,
     activeClass: T.oneOfType([T.string, T.func]),
+    withReferrer: T.bool,
   };
 
   handleClick = event => {
@@ -121,6 +123,7 @@ class Link extends PureComponent /*:: <Props> */ {
       children,
       rel,
       target,
+      withReferrer,
       // passed down
       ...props
     } = this.props;
@@ -145,11 +148,12 @@ class Link extends PureComponent /*:: <Props> */ {
         opacity: 0.3,
       };
     }
+    const _rel = generateRel(rel, target, href, withReferrer);
     return (
       <a
         {...props}
         href={_href}
-        rel={generateRel(rel, target, href)}
+        rel={_rel}
         target={target}
         className={cn(className, activeClassName) || null}
         onClick={this.handleClick}
