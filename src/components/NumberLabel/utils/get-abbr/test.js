@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-magic-numbers */
 import getAbbr from '.';
 
 describe('getAbbr', () => {

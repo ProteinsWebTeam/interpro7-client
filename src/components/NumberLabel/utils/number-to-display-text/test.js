@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-magic-numbers */
 // For these tests, since they depend on `toLocaleString`, assume that the
 // locale used is American English (default in node)
 import numberToDisplayText from '.';
