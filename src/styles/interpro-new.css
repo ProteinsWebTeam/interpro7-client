@@ -89,6 +89,32 @@ mark {
 /******************************LOCAL STYLE*********************************/
 
 /************************  ICONS  **********************************/
+/* IE11 fallback for ENTRY icons */
+.icon-type {
+  color: white;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+}
+
+.icon-family {
+  background-color: var(--colors-family-main);
+}
+
+.icon-domain {
+  background-color: var(--colors-domain-main);
+}
+
+.icon-site {
+  background-color: var(--colors-site-main);
+}
+
+.icon-repeat {
+  background-color: var(--colors-repeat-main);
+}
+
+.icon-hh {
+  background-color: var(--colors-homolog-main);
+}
 
 /*SP is that still needed ?*/
 .icon {
