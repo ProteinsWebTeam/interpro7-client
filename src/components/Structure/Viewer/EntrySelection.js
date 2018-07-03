@@ -1,10 +1,16 @@
 import React, { PureComponent } from 'react';
-
 import T from 'prop-types';
 
 class EntrySelection extends PureComponent {
+  static propTypes = {
+    updateStructure: T.func.isRequired,
+    entryMap: T.object.isRequired,
+    selectedEntry: T.any,
+  };
+
   constructor(props) {
     super(props);
+
     this.state = {
       memberDB: null,
       accession: null,
@@ -13,16 +19,16 @@ class EntrySelection extends PureComponent {
   }
 
   onSelectionChange = e => {
-    //extract memberDB and entry from component
+    // extract memberDB and entry from component
     const entry = e.target.value;
     let memberDB = null;
-    if (entry != null) {
+    if (entry !== null) {
       const selectedOption =
         e.currentTarget.options[e.currentTarget.selectedIndex];
       const optGroup = selectedOption.parentNode;
       memberDB = optGroup.label;
     }
-    //update LiteMol
+    // update LiteMol
     this.props.updateStructure(memberDB, entry);
   };
 
@@ -36,7 +42,7 @@ class EntrySelection extends PureComponent {
 
     for (const [memberDB, entries] of Object.entries(this.props.entryMap)) {
       const entryList = [];
-      for (const [entry, matches] of Object.entries(entries)) {
+      for (const entry of Object.keys(entries)) {
         const key = `${memberDB}$-${entry}`;
         entryList.push(
           <option key={key} value={entry}>
@@ -50,7 +56,7 @@ class EntrySelection extends PureComponent {
         </optgroup>,
       );
     }
-    const selection = (
+    return (
       <select
         onChange={this.onSelectionChange}
         onBlur={this.onSelectionChange}
@@ -59,7 +65,6 @@ class EntrySelection extends PureComponent {
         {selectionGroups}
       </select>
     );
-    return <div>{selection}</div>;
   }
 }
 

@@ -43,21 +43,22 @@ class Actions extends PureComponent {
   };
 
   render() {
-    const { localID, withTitle, jobs } = this.props;
-    const { saved } = (jobs[localID] || {}).metadata || {};
+    // const { localID, withTitle, jobs } = this.props;
+    const { withTitle } = this.props;
+    // const { saved } = (jobs[localID] || {}).metadata || {};
     return (
       <div className={f('margin-right-large')}>
         {withTitle && 'Actions: '}
-        {/*<Tooltip title="Save job">*/}
-        {/*<button*/}
-        {/*className={f('button', 'tiny', saved ? 'warning' : 'secondary')}*/}
-        {/*type="button"*/}
-        {/*onClick={this._handleSaveToggle}*/}
-        {/*aria-label="Save job"*/}
-        {/*>*/}
-        {/*★*/}
-        {/*</button>*/}
-        {/*</Tooltip>*/}
+        {/* <Tooltip title="Save job"> */}
+        {/* <button */}
+        {/* className={f('button', 'tiny', saved ? 'warning' : 'secondary')} */}
+        {/* type="button" */}
+        {/* onClick={this._handleSaveToggle} */}
+        {/* aria-label="Save job" */}
+        {/* > */}
+        {/* ★ */}
+        {/* </button> */}
+        {/* </Tooltip> */}
         <Tooltip title="Delete job">
           <button
             className={f('button', 'tiny', 'alert')}

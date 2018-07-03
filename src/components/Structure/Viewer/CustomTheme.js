@@ -10,9 +10,9 @@ class ColorMapper {
   }
 
   addColor(color) {
-    var id = color.r + '-' + color.g + '-' + color.b;
+    const id = `${color.r}-${color.g}-${color.b}`;
     if (this.map.has(id)) return this.map.get(id);
-    var index = this.uniqueColors.length;
+    const index = this.uniqueColors.length;
     this.uniqueColors.push(
       this.Visualisation.Color.fromRgb(color.r, color.g, color.b),
     );
@@ -47,30 +47,26 @@ class CustomTheme {
       }
       const query = this.Q.residues(...residues).compile();
 
-      var colorIndex = mapper.addColor(fragment.color);
+      const colorIndex = mapper.addColor(fragment.color);
       for (
-        var _b = 0, _c = query(model.queryContext).fragments;
+        let _b = 0, _c = query(model.queryContext).fragments;
         _b < _c.length;
         _b++
       ) {
-        var f = _c[_b];
-        for (var _d = 0, _e = f.atomIndices; _d < _e.length; _d++) {
-          var a = _e[_d];
-          map[a] = colorIndex;
+        for (let _d = 0, _e = _c[_b].atomIndices; _d < _e.length; _d++) {
+          map[_e[_d]] = colorIndex;
         }
       }
     }
-    var fallbackColor = { r: 0.6, g: 0.6, b: 0.6 };
-    var selectionColor = { r: 0, g: 1, b: 1 };
-    var highlightColor = { r: 0, g: 1, b: 0 };
-    var colors = this.Core.Utils.FastMap.create();
+    const fallbackColor = { r: 0.6, g: 0.6, b: 0.6 };
+    const selectionColor = { r: 0, g: 1, b: 1 };
+    const highlightColor = { r: 0, g: 1, b: 0 };
+    const colors = this.Core.Utils.FastMap.create();
     colors.set('Uniform', fallbackColor);
     colors.set('Selection', selectionColor);
     colors.set('Highlight', highlightColor);
-    var mapping = this.Visualisation.Theme.createColorMapMapping(
-      function(i) {
-        return map[i];
-      },
+    const mapping = this.Visualisation.Theme.createColorMapMapping(
+      i => map[i],
       mapper.colorMap,
       fallbackColor,
     );
@@ -82,15 +78,14 @@ class CustomTheme {
   }
 
   applyTheme(plugin, modelRef, theme) {
-    var visuals = plugin.selectEntities(
+    const visuals = plugin.selectEntities(
       this.Bootstrap.Tree.Selection.byRef(modelRef)
         .subtree()
         .ofType(this.Bootstrap.Entity.Molecule.Visual),
     );
-    for (var _i = 0, visuals_2 = visuals; _i < visuals_2.length; _i++) {
-      var v = visuals_2[_i];
+    for (let _i = 0, visuals2 = visuals; _i < visuals2.length; _i++) {
       plugin.command(this.Bootstrap.Command.Visual.UpdateBasicTheme, {
-        visual: v,
+        visual: visuals2[_i],
         theme: theme,
       });
     }
@@ -99,10 +94,8 @@ class CustomTheme {
 
 Object.defineProperty(ColorMapper.prototype, 'colorMap', {
   get: function() {
-    var map = this.Core.Utils.FastMap.create();
-    this.uniqueColors.forEach(function(c, i) {
-      return map.set(i, c);
-    });
+    const map = this.Core.Utils.FastMap.create();
+    this.uniqueColors.forEach((color, index) => map.set(index, color));
     return map;
   },
   enumerable: true,

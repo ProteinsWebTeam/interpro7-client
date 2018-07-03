@@ -85,9 +85,9 @@ const TotalNb = ({
               open,
             })}
           >
-            <NumberComponent value={index} />
+            <NumberComponent value={index} noTitle />
             {' - '}
-            <NumberComponent value={index + data.length - 1} />
+            <NumberComponent value={index + data.length - 1} noTitle />
             {' of '}
             <strong>
               <NumberComponent value={actualSize} abbr />

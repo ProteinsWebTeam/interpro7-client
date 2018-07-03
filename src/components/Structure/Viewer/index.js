@@ -32,24 +32,19 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   constructor(props /*: Props */) {
     super(props);
+
     this.state = {
       plugin: null,
       entryMap: {},
       selectedEntry: '',
     };
+
     this.plugin = null;
+
     this._ref = React.createRef();
   }
 
   componentDidMount() {
-    const Core = LiteMol.Core;
-    const Visualisation = LiteMol.Visualization;
-    const Boostrap = LiteMol.Bootstrap;
-    const Event = LiteMol.Bootstrap.Event;
-    const Transformer = LiteMol.Bootstrap.Entity.Transformer;
-    const Query = LiteMol.Core.Structure.Query;
-    const Transform = LiteMol.Bootstrap.Tree.Transform;
-
     const pdbid = this.props.id;
 
     this.plugin = LiteMol.Plugin.create({
@@ -61,65 +56,68 @@ class StructureView extends PureComponent /*:: <Props> */ {
       },
     });
     const context = this.plugin.context;
-    const action = Transform.build();
+    const action = LiteMol.Bootstrap.Tree.Transform.build();
     action
-      .add(context.tree.root, Transformer.Data.Download, {
-        url: `https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_updated.cif`,
-        type: 'String',
-        id: pdbid,
-      })
+      .add(
+        context.tree.root,
+        LiteMol.Bootstrap.Entity.Transformer.Data.Download,
+        {
+          url: `https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_updated.cif`,
+          type: 'String',
+          id: pdbid,
+        },
+      )
       .then(
-        Transformer.Data.ParseCif,
+        LiteMol.Bootstrap.Entity.Transformer.Data.ParseCif,
         { id: pdbid },
         { isBinding: true, ref: 'parse' },
       )
       .then(
-        Transformer.Molecule.CreateFromMmCif,
+        LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateFromMmCif,
         { blockIndex: 0 },
         { isBinding: true },
       )
       .then(
-        Transformer.Molecule.CreateModel,
+        LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateModel,
         { modelIndex: 0 },
         { isBinding: false, ref: 'model' },
       )
-      .then(Transformer.Molecule.CreateMacromoleculeVisual, {
-        polymer: true,
-        polymerRef: 'polymer-visual',
-        het: false,
-        water: false,
-      });
+      .then(
+        LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateMacromoleculeVisual,
+        {
+          polymer: true,
+          polymerRef: 'polymer-visual',
+          het: false,
+          water: false,
+        },
+      );
 
     this.plugin.applyTransform(action).then(() => {
       if (this.props.matches) {
         const entryMap = this.createEntryMap();
-        this.setState({
-          entryMap: entryMap,
-        });
+        this.setState({ entryMap });
       }
-      //override the default litemol colour with the custom theme
+      // override the default litemol colour with the custom theme
       this.updateTheme([]);
-      //detect any changes to the tree from within LiteMol and reset select control
-      Event.Tree.TransformFinished.getStream(context).subscribe(ev => {
+      // detect any changes to the tree from within LiteMol and reset select control
+      LiteMol.Bootstrap.Event.Tree.TransformFinished.getStream(
+        context,
+      ).subscribe(() => {
         this.setState({ selectedEntry: '' });
       });
     });
   }
 
   updateTheme(entries) {
-    if (this.plugin != null) {
-      const Core = LiteMol.Core;
-      const Visualisation = LiteMol.Visualization;
-      const Boostrap = LiteMol.Bootstrap;
-      const Query = LiteMol.Core.Structure.Query;
+    if (this.plugin) {
       const context = this.plugin.context;
       const model = context.select('model')[0];
-      if (this.props.matches != null) {
+      if (this.props.matches) {
         const customTheme = new CustomTheme(
-          Core,
-          Visualisation,
-          Boostrap,
-          Query,
+          LiteMol.Core,
+          LiteMol.Visualization,
+          LiteMol.Bootstrap,
+          LiteMol.Core.Structure.Query,
         );
         const base = hexToRgb(config.colors.get('fallback'));
         const color = {
@@ -137,18 +135,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
     const memberDBMap = {};
 
     if (this.props.matches) {
-      const entryResidues = {};
       // create matches in structure hierarchy
-      const queries = [];
       for (const match of this.props.matches) {
         const entry = match.metadata.accession;
         const db = match.metadata.source_database;
-        if (memberDBMap[db] == null) {
-          memberDBMap[db] = {};
-        }
-        if (memberDBMap[db][entry] == null) {
-          memberDBMap[db][entry] = [];
-        }
+        if (!memberDBMap[db]) memberDBMap[db] = {};
+        if (!memberDBMap[db][entry]) memberDBMap[db][entry] = [];
 
         for (const structure of match.structures) {
           const chain = structure.chain;
@@ -173,7 +165,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   showEntryInStructure = (memberDB, entry) => {
     this.updateTheme([]);
-    if (memberDB != null && entry != null) {
+    if (memberDB && entry) {
       const hits = this.state.entryMap[memberDB][entry];
       this.updateTheme(hits);
       this.setState({ selectedEntry: entry });
@@ -181,16 +173,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    let eventSelector = '';
-    if (this.props.matches) {
-      eventSelector = (
-        <EntrySelection
-          entryMap={this.state.entryMap}
-          updateStructure={this.showEntryInStructure}
-          selectedEntry={this.state.selectedEntry}
-        />
-      );
-    }
     return (
       <div>
         <div style={embedStyle}>
@@ -207,7 +189,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
             }}
           />
         </div>
-        {eventSelector}
+        {this.props.matches ? (
+          <EntrySelection
+            entryMap={this.state.entryMap}
+            updateStructure={this.showEntryInStructure}
+            selectedEntry={this.state.selectedEntry}
+          />
+        ) : null}
       </div>
     );
   }

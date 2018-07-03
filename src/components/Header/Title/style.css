@@ -50,6 +50,13 @@
 
 .logo-icon {
   transition: transform var(--timing-fast) ease-in-out;
+  color: white;
+  opacity: 1;
+
+  &:not(.online) {
+    color: indianred;
+    opacity: 0.75;
+  }
 }
 
 .stuck .logo-text {

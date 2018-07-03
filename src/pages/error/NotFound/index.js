@@ -28,7 +28,8 @@ class NotFound extends PureComponent /*:: <{}> */ {
               {'. If you continue to get this page, contact us using the '}
               <Link
                 target="_blank"
-                href="http://www.ebi.ac.uk/support/interpro-general-query"
+                href="http://www.ebi.ac.uk/support/interpro"
+                withReferrer
               >
                 EMBL-EBI feedback form
               </Link>
