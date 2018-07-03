@@ -104,8 +104,10 @@ class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
       Number.isFinite(from) &&
       Number.isFinite(to);
 
-    if (!canAnimate && finalValue && this._ref.current) {
-      this._ref.current.textContent = `${finalValue}`;
+    if (!canAnimate) {
+      if (this._ref.current) {
+        this._ref.current.textContent = `${finalValue || ''}`;
+      }
       return;
     }
 
