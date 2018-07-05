@@ -420,11 +420,19 @@ details.accordion-style[open] summary:after {
 /*/ACCORDION TYPE*/
 
 /****************************** TITLE - TEXT *********************************/
-.uppercase {
-  text-transform: uppercase;
+/* TITLE Alt for Entry page - TEST */
+.box-title {
+  color: #585656;
+  border-bottom: 1px #d0d0d0 solid;
+  font-size: 120%;
+  & span {
+    background-color: #d0d0d0;
+    padding: 0 1rem;
+    margin: 0;
+  }
 }
 
-/*title sue for box like search box*/
+/* TITLE used for box like search box*/
 h3.light {
   font-weight: 300;
 }
@@ -458,6 +466,11 @@ h6 small {
 .masthead.md-smart h4 small {
   color: #a2d7b9;
 }
+
+.uppercase {
+  text-transform: uppercase;
+}
+
 hr {
   border-bottom: 1px solid #d4d4d4;
 }
