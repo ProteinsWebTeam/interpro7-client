@@ -150,12 +150,7 @@ const ParagraphWithTags = ({ children }) => (
             className={styles.inline}
             key={`${i}-${j}`}
             // eslint-disable-next-line react/no-danger
-            // SP: to TEST
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(part)
-                .replace('[', ' ')
-                .replace(']', ' '),
-            }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(part) }}
           />
         );
       });
