@@ -26,9 +26,10 @@ export default class Privacy extends PureComponent /*:: <{}> */ {
             Privacy Notice for EMBL-EBI Public Website
           </Link>. If you have any questions about this privacy policy, please{' '}
           <Link
-            href="//www.ebi.ac.uk/support/interpro-general-query"
+            href="//www.ebi.ac.uk/support/interpro"
             className={f('ext')}
             target="_blank"
+            withReferrer
           >
             contact us via EBI support
           </Link>.{' '}

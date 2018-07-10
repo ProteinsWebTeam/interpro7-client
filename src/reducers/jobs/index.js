@@ -22,7 +22,7 @@ export default (
     case CREATE_JOB:
     case UPDATE_JOB:
     case LOAD_DATA_JOB:
-    case UNLOAD_DATA_JOB: // eslint-disable-line no-case-declarations
+    case UNLOAD_DATA_JOB:
       let id = action.job.metadata.localID;
       let job = state[id];
       if (!id) {
@@ -42,7 +42,7 @@ export default (
           data: data(job.data, action),
         },
       };
-    case DELETE_JOB: // eslint-disable-line no-case-declarations
+    case DELETE_JOB:
       const { [action.job.metadata.localID]: _, ...newState } = state;
       return newState;
     case REHYDRATE_JOBS:
