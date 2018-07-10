@@ -37,7 +37,9 @@ describe('numberToDisplayText', () => {
     expect(numberToDisplayText('1000', true)).toBe('1k');
     expect(numberToDisplayText(1234567, true)).toBe('1M');
     expect(numberToDisplayText('1234567', true)).toBe('1M');
-    expect(numberToDisplayText(1234567, true, 1000)).toBe('1,234k');
-    expect(numberToDisplayText('1234567', true, 1000)).toBe('1,234k');
+    expect(numberToDisplayText(1234567, true, 1000)).toBe('1,235k');
+    expect(numberToDisplayText('1234567', true, 1000)).toBe('1,235k');
+    expect(numberToDisplayText(1234499, true, 1000)).toBe('1,234k');
+    expect(numberToDisplayText('1234499', true, 1000)).toBe('1,234k');
   });
 });

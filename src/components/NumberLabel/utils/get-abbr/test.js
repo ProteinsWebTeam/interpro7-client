@@ -14,8 +14,10 @@ describe('getAbbr', () => {
     expect(getAbbr(1e3)).toBe('1k');
     expect(getAbbr(1001)).toBe('1k');
     expect(getAbbr(1234)).toBe('1k');
-    // TODO: check if next line is really what we want
-    expect(getAbbr(9999)).toBe('9k');
+    expect(getAbbr(1499)).toBe('1k');
+    expect(getAbbr(1500)).toBe('2k');
+    expect(getAbbr(1501)).toBe('2k');
+    expect(getAbbr(9999)).toBe('10k');
     expect(getAbbr(1e6)).toBe('1M');
     expect(getAbbr(2e6)).toBe('2M');
   });
