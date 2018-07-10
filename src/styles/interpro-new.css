@@ -518,6 +518,23 @@ h3.light {
 /*h4 small {*/
 /*color: #bbb;*/
 /*}*/
+
+/*simulation H5 but needs to stay span in order to show ext icon on the same line*/
+.h5 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
+    sans-serif;
+  color: #222;
+  font-weight: 400;
+  border-bottom: 2px white solid;
+  padding-bottom: 2px;
+}
+
+a .h5:hover {
+  border-bottom: 2px #4e4e4e solid;
+  padding-bottom: 2px;
+}
+
 h5 small,
 h6 small {
   color: #8b8b8b;
