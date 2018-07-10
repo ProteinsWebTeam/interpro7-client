@@ -151,9 +151,9 @@ const ParagraphWithTags = ({ children }) => (
             key={`${i}-${j}`}
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(part)
-                .replace('[', ' ')
-                .replace(']', ' '),
+              __html: DOMPurify.sanitize(
+                part.replace(/\[$/, ' ').replace(/^]/, ' '),
+              ),
             }}
           />
         );
