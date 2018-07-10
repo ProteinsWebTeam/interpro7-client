@@ -39,7 +39,7 @@ const SignatureLink = ({ accession, db, label }) => (
     }}
   >
     <small>
-      <Tooltip title={`${label} (${accession})`}>{label || accession}</Tooltip>
+      <Tooltip title={`${label} (${accession})`}>{accession || label}</Tooltip>
       <br />
     </small>
   </Link>
