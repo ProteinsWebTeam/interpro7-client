@@ -42,7 +42,7 @@ export const Tutorial = class extends PureComponent /*:: <Props> */ {
       <section>
         <h3>Tutorials</h3>
         <p>A number of online tutorials relating to InterPro are available.</p>
-        <div className={f('flex-grid', 'tutorials')}>
+        <div className={f('flex-column', 'tutorials')}>
           <div className={f('card-grid', 'tuto-method')}>
             <Link href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies">
               <div className={f('card-image')}>
