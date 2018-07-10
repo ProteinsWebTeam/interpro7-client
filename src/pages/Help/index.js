@@ -7,13 +7,8 @@ import Redirect from 'components/generic/Redirect';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import loadable from 'higherOrder/loadable';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
-import { schemaProcessDataInterpro } from 'schema_org/processors';
-import {
-  schemaProcessDataWebPage,
-  schemaProcessDataPageSection,
-} from 'schema_org/processors';
+import { schemaProcessDataWebPage } from 'schema_org/processors';
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),

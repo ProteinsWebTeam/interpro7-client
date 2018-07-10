@@ -8,7 +8,19 @@ describe('reducer for EMBL map nav open state', () => {
 
   test('should handle TOGGLE_EMBL_MAP_NAV action', () => {
     expect(reducer(true, { type: TOGGLE_EMBL_MAP_NAV })).toBe(false);
+    expect(reducer(true, { type: TOGGLE_EMBL_MAP_NAV, status: 'open' })).toBe(
+      true,
+    );
+    expect(reducer(false, { type: TOGGLE_EMBL_MAP_NAV, status: 'open' })).toBe(
+      true,
+    );
     expect(reducer(false, { type: TOGGLE_EMBL_MAP_NAV })).toBe(true);
+    expect(reducer(true, { type: TOGGLE_EMBL_MAP_NAV, status: 'close' })).toBe(
+      false,
+    );
+    expect(reducer(false, { type: TOGGLE_EMBL_MAP_NAV, status: 'close' })).toBe(
+      false,
+    );
   });
 
   test('should handle CLOSE_EVERYTHING action', () => {

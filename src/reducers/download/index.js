@@ -46,8 +46,8 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
           blobURL: action.blobURL,
         },
       };
-    case DOWNLOAD_CANCEL: // eslint-disable-line no-case-declarations
-    case DOWNLOAD_DELETE: // eslint-disable-line no-case-declarations
+    case DOWNLOAD_CANCEL:
+    case DOWNLOAD_DELETE:
       const { [keyFromAction(action)]: _, ...newState } = state;
       return newState;
     default:

@@ -88,7 +88,7 @@ class SummaryCounterEntries extends PureComponent {
                 protein: { isFilter: true, db: 'UniProt' },
               },
             }}
-            className={f(!proteins ? 'ico-disabled' : null)}
+            className={f(proteins ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
             <NumberComponent value={proteins} abbr />
@@ -116,7 +116,7 @@ class SummaryCounterEntries extends PureComponent {
                 },
               },
             }}
-            className={f(!domainArchitectures ? 'ico-disabled' : null)}
+            className={f(domainArchitectures ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-count-ida')} />{' '}
             <NumberComponent value={domainArchitectures} abbr />
@@ -142,7 +142,7 @@ class SummaryCounterEntries extends PureComponent {
                 taxonomy: { isFilter: true, db: 'uniprot' },
               },
             }}
-            className={f(!taxa ? 'ico-disabled' : null)}
+            className={f(taxa ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
             <NumberComponent value={taxa} abbr />
@@ -170,7 +170,7 @@ class SummaryCounterEntries extends PureComponent {
                 structure: { isFilter: true, db: 'PDB' },
               },
             }}
-            className={f(!structures ? 'ico-disabled' : null)}
+            className={f(structures ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
             <NumberComponent value={structures} abbr />
@@ -198,7 +198,7 @@ class SummaryCounterEntries extends PureComponent {
                   set: { isFilter: true, db: entryDB },
                 },
               }}
-              className={f(!sets ? 'ico-disabled' : null)}
+              className={f(sets ? null : 'ico-disabled')}
             >
               <div className={f('icon', 'icon-count-set')} />{' '}
               <NumberComponent value={sets} abbr />
