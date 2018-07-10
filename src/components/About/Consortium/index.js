@@ -14,9 +14,10 @@ import { schemaProcessDataForDB } from 'schema_org/processors';
 import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
+import ipro from 'styles/interpro-new.css';
 import entry from 'components/Entry/Literature/style.css';
 
-const f = foundationPartial(local, entry);
+const f = foundationPartial(ipro, local, entry);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -55,53 +56,66 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
       <section>
         <h3>The InterPro Consortium</h3>
         <p>The following databases make up the InterPro Consortium:</p>
-
-        <ul className={f('list')}>
-          {memberDBs.map(db => {
-            const date = db.releaseDate && new Date(db.releaseDate);
-            return (
-              <li key={db.canonical}>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: { db: db.canonical },
-                    },
-                  }}
-                >
-                  <MemberSymbol type={db.canonical} className={f('md-small')} />
-                  <strong>{db.name}</strong> (version {db.version})
-                </Link>
-                {db.releaseDate ? (
-                  <p>
-                    <small>
-                      {'Released '}
-                      <time
-                        dateTime={db.releaseDate}
-                        title={date.toLocaleDateString()}
-                      >
-                        <TimeAgo date={date} noUpdate />
-                      </time>
-                    </small>
-                  </p>
-                ) : null}
-                <p>{db.description}</p>
-                {databases &&
-                  databases[db.type.toUpperCase()] && (
-                    <SchemaOrgData
-                      data={{
-                        name: db.name,
-                        version: db.version,
-                        releaseDate: db.releaseDate,
-                        location: window.location,
-                      }}
-                      processData={schemaProcessDataForDB}
+        <table className={f('light')}>
+          <tbody>
+            {memberDBs.map(db => {
+              const date = db.releaseDate && new Date(db.releaseDate);
+              return (
+                <tr key={db.canonical}>
+                  <td>
+                    <MemberSymbol
+                      type={db.canonical}
+                      className={f('md-small')}
                     />
-                  )}
-              </li>
-            );
-          })}
-        </ul>
+                  </td>
+                  <td>
+                    {' '}
+                    <Link
+                      className={f('ext')}
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: { db: db.canonical },
+                        },
+                      }}
+                    >
+                      {db.name}
+                    </Link>
+                  </td>
+                  <td>{db.version}</td>
+
+                  <td>
+                    {' '}
+                    {db.description} <br />{' '}
+                    {db.releaseDate ? (
+                      <small>
+                        {'Released '}
+                        <time
+                          dateTime={db.releaseDate}
+                          title={date.toLocaleDateString()}
+                        >
+                          <TimeAgo date={date} noUpdate />
+                        </time>
+                      </small>
+                    ) : null}
+                    {databases &&
+                      databases[db.type.toUpperCase()] && (
+                        <SchemaOrgData
+                          data={{
+                            name: db.name,
+                            version: db.version,
+                            releaseDate: db.releaseDate,
+                            location: window.location,
+                          }}
+                          processData={schemaProcessDataForDB}
+                        />
+                      )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </section>
     );
   }
