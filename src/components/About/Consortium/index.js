@@ -79,7 +79,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                         },
                       }}
                     >
-                      {db.name}
+                      <span className={f('h5')}>{db.name}</span>
                     </Link>
                   </td>
                   <td>{db.version}</td>
