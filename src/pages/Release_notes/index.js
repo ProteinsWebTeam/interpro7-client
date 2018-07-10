@@ -89,7 +89,12 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="Family"
                       aria-label="Entry type"
-                    />
+                    >
+                      {
+                        // IE11 fallback for icons
+                      }
+                      <span className={f('icon-type', 'icon-family')}>F</span>
+                    </interpro-type>
                   </td>
                   <td>Family</td>
                   <td className={f('text-right')}>
@@ -113,7 +118,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="Domain"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-domain')}>D</span>
+                    </interpro-type>
                   </td>
                   <td>Domain</td>
                   <td className={f('text-right')}>
@@ -137,7 +144,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="homologous superfamily"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-hh')}>H</span>
+                    </interpro-type>
                   </td>
                   <td>Homologous superfamily</td>
                   <td className={f('text-right')}>
@@ -161,7 +170,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="repeat"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-repeat')}>R</span>
+                    </interpro-type>
                   </td>
                   <td>Repeat</td>
                   <td className={f('text-right')}>
@@ -185,7 +196,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="site"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-site')}>S</span>
+                    </interpro-type>
                   </td>
                   <td>Active site</td>
                   <td className={f('text-right')}>
@@ -209,7 +222,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="site"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-site')}>S</span>
+                    </interpro-type>
                   </td>
                   <td>Binding site</td>
                   <td className={f('text-right')}>
@@ -233,7 +248,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="site"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-site')}>S</span>
+                    </interpro-type>
                   </td>
                   <td>Conserved site</td>
                   <td className={f('text-right')}>
@@ -257,7 +274,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="PTM"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-site')}>S</span>
+                    </interpro-type>
                   </td>
                   <td>PTM</td>
                   <td className={f('text-right')}>

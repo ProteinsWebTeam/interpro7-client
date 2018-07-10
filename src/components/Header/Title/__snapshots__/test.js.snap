@@ -25,6 +25,7 @@ exports[`<Title /> loading, stuck, offline 1`] = `
         >
           <svg
             className="icon"
+            height="62"
             viewBox="0 0 88 88"
             width="62"
           >
@@ -113,6 +114,7 @@ exports[`<Title /> loading, stuck, online 1`] = `
         >
           <svg
             className="icon"
+            height="62"
             viewBox="0 0 88 88"
             width="62"
           >
@@ -202,6 +204,7 @@ exports[`<Title /> not loading, unstuck, offline 1`] = `
         >
           <svg
             className="icon"
+            height="62"
             viewBox="0 0 88 88"
             width="62"
           >
@@ -290,6 +293,7 @@ exports[`<Title /> not loading, unstuck, online 1`] = `
         >
           <svg
             className="icon"
+            height="62"
             viewBox="0 0 88 88"
             width="62"
           >

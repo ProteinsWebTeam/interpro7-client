@@ -47,7 +47,7 @@ export const Publication = class extends PureComponent /*:: <Props> */ {
         <p>
           A number of online Publications relating to InterPro are available.
         </p>
-        <div className={f('flex-grid', 'publication')}>
+        <div className={f('flex-column', 'publication')}>
           <div className={f('card-grid', 'tuto-beyond')}>
             <Link
               href="http://nar.oxfordjournals.org/content/45/D1/D190"

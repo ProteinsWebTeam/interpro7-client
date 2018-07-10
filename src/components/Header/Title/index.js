@@ -58,13 +58,18 @@ export class Title extends PureComponent /*:: <Props> */ {
           <div className={styles('logo-flex')}>
             <Link to={{ description: {} }} title="Back to InterPro homepage">
               <div
+                title={online ? undefined : offlineMessage}
                 className={styles('logo-flex-item', 'logo-icon', {
                   stuck,
                   online,
                 })}
-                title={online ? undefined : offlineMessage}
               >
-                <svg className={styles('icon')} viewBox="0 0 88 88" width="62">
+                <svg
+                  className={styles('icon')}
+                  viewBox="0 0 88 88"
+                  width="62"
+                  height="62"
+                >
                   <defs>
                     <mask id="logo-mask">
                       <rect
