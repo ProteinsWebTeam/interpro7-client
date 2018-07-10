@@ -85,17 +85,15 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                 >
                   <MemberSymbol type={canonical} />
 
-                  <h6>
-                    {name}{' '}
-                    <Tooltip title={description}>
-                      <span
-                        className={f('small', 'icon', 'icon-common')}
-                        data-icon="ℹ"
-                        aria-label={description}
-                      />
-                    </Tooltip>
-                  </h6>
-
+                  <span className={f('card-title')}>{name} </span>
+                  <Tooltip title={description}>
+                    <span
+                      className={f('small', 'icon', 'icon-common')}
+                      data-icon="ℹ"
+                      aria-label={description}
+                    />
+                  </Tooltip>
+                  <br />
                   <small>{version}</small>
 
                   <p className={f('margin-bottom-medium')}>
