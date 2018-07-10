@@ -7,7 +7,7 @@ export default (value /*: number */, scaleMargin /*:: ?: number */ = 1) => {
   let unitIndex = 0;
   while (_value >= UNIT_SCALE * scaleMargin) {
     unitIndex++;
-    _value = Math.floor(_value / UNIT_SCALE);
+    _value = Math.round(_value / UNIT_SCALE);
   }
   return `${_value.toLocaleString()}${UNITS[unitIndex]}`;
 };
