@@ -89,7 +89,9 @@ const SidePanel = ({ metadata }) => (
             <Link
               className={f('ext')}
               target="_blank"
-              href={getUrlFor(metadata.source_database)(metadata.accession)}
+              href={getUrlFor(metadata.source_database)(
+                metadata.accession.toUpperCase(),
+              )}
             >
               {metadata.source_database} website
             </Link>
