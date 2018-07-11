@@ -138,7 +138,7 @@ const mergeData = (interpro, integrated, unintegrated, residues) => {
     }
     addSignature(entry, ipro, integrated);
   }
-  if (Object.keys(residues).length) {
+  if (Object.keys(residues || {}).length) {
     out.residues = [residues]; // groupResidues(residues);
   }
   return out;

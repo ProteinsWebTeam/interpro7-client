@@ -202,13 +202,13 @@ class TaxnameStructures extends PureComponent {
 
     return (
       // TODO: get values when more than 2 species
-      <div
+      <Tooltip
         title={`${loading ||
-          payload.results[0].metadata.name}(Tax ID: ${loading ||
+          payload.results[0].metadata.name} (Tax ID: ${loading ||
           payload.results[0].metadata.accession})`}
       >
         {loading || payload.results[0].metadata.name}
-      </div>
+      </Tooltip>
     );
   }
 }
@@ -335,6 +335,7 @@ class StructureCard extends PureComponent {
           )}
         <div className={f('card-footer')}>
           <TaxnameStructuresWithData />
+
           <div>
             <HighlightedText
               text={data.metadata.accession}

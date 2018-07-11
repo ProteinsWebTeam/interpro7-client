@@ -12,7 +12,11 @@ import { BaseLink } from 'components/ExtLink';
 import ClanViewer from 'clanviewer';
 import 'clanviewer/css/clanviewer.css';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+
+const f = foundationPartial(ebiGlobalStyles);
+
 import loadable from 'higherOrder/loadable';
 import config from 'config';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -133,12 +137,12 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                   />
                 ))}
             </div>
-            <div className={f('medium-3', 'columns')}>
-              <div className={f('panel')}>
-                <h5>External Links</h5>
-                <ul className={f('no-bullet')}>
-                  <li>
-                    {currentSet ? (
+            {currentSet ? (
+              <div className={f('medium-3', 'columns')}>
+                <div className={f('panel')}>
+                  <h5>External Links</h5>
+                  <ul className={f('no-bullet')}>
+                    <li>
                       <BaseLink
                         id={metadata.accession}
                         className={f('ext')}
@@ -147,11 +151,11 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                       >
                         View this set in {currentSet.name}
                       </BaseLink>
-                    ) : null}
-                  </li>
-                </ul>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
           <div className={f('row', 'columns')}>
             <div ref={this._ref} />
@@ -167,4 +171,7 @@ const mapStateToProps = createSelector(
   db => ({ db }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(SummarySet);
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(SummarySet);

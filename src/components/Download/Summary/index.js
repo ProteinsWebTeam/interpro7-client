@@ -27,7 +27,9 @@ class Summary extends PureComponent {
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <div className={f('row')}>
-            <h3 className={f('large-9', 'columns')}>Your download jobs</h3>
+            <h3 className={f('large-9', 'columns', 'light')}>
+              Your download jobs
+            </h3>
           </div>
           <Table dataTable={download} contentType="files" actualSize={0}>
             <Column

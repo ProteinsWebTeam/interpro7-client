@@ -29,14 +29,14 @@ class DiskUsage extends PureComponent {
     if (isNaN(usage) || isNaN(quota)) {
       content = 'Unable to determine disk usage…';
     } else {
-      const ratio = Math.round(usage / quota * PERCENT);
+      const ratio = Math.round((usage / quota) * PERCENT);
       content = `Using approximately ${getFileSize(usage)} out of ${getFileSize(
         quota,
       )} of available quota (${ratio ? 'about' : 'less than'} ${ratio}%)`;
     }
     return (
       <section>
-        <h4>Disk usage</h4>
+        <h5>Disk usage</h5>
         <p>{content}</p>
       </section>
     );

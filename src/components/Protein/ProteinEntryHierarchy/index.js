@@ -4,8 +4,11 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import loadWebComponent from 'utils/load-web-component';
+import pathToDescription from 'utils/processDescription/pathToDescription';
 
 import getFetch from 'higherOrder/loadData/getFetch';
+
+import config from 'config';
 
 const hierarchyContainsAccession = (node, accession) => {
   if (node.accession === accession) return true;
@@ -106,6 +109,19 @@ class ProteinEntryHierarchy extends PureComponent {
         .map(e => e.accession),
     );
     if (accs.size === 0) return;
+    this._ref.current.addEventListener('click', e => {
+      const target = (e.path || e.composedPath())[0];
+      if (target.classList.contains('link')) {
+        e.preventDefault();
+        this.props.goToCustomLocation({
+          description: pathToDescription(
+            target
+              .getAttribute('href')
+              .replace(new RegExp(`^${config.root.website.path}`), ''),
+          ),
+        });
+      }
+    });
     try {
       await getHierarchy(accs, hierarchies);
       await loadInterProWebComponents();
@@ -120,7 +136,7 @@ class ProteinEntryHierarchy extends PureComponent {
     return (
       <interpro-hierarchy
         accessions={entries.map(e => e.accession)}
-        hrefroot="/entry/interpro"
+        hrefroot={`${config.root.website.path}/entry/interpro`}
         ref={this._ref}
         displaymode="pruned no-children"
       />

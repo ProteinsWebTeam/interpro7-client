@@ -72,7 +72,7 @@ class SearchByText extends PureComponent /*:: <Props> */ {
               </div>
 
               <div className={f('row')}>
-                <div className={f('medium-8', 'columns', 'search-ex')}>
+                <div className={f('medium-8', 'columns', 'neutral')}>
                   <span>
                     {' '}
                     e.g.
@@ -96,6 +96,7 @@ class SearchByText extends PureComponent /*:: <Props> */ {
                   <span>
                     Powered by{' '}
                     <Link
+                      className={f('neutral')}
                       target="_blank"
                       href="https://www.ebi.ac.uk/ebisearch/"
                     >

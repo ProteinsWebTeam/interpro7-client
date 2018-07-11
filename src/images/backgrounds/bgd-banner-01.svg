@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  width="1000px"
+  height="1000px"
+  viewBox="0 0 1000 1000"
+  style='background-color: #12AFC1; filter: blur(1px);'>
+<g transform="rotate(90, 100, 100)">
+	<g id="line-01">
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="72" x2="20" y2="200"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="40" x2="20" y2="40"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-23" x2="20" y2="-23"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-50" x2="20" y2="-90"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-120" x2="20" y2="-120"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-150" x2="20" y2="-200"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-226" x2="20" y2="-260"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-310" x2="20" y2="-350"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-380" x2="20" y2="-380"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-410" x2="20" y2="-410"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-440" x2="20" y2="-490"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-520" x2="20" y2="-570"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-600" x2="20" y2="-600"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-630" x2="20" y2="-630"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-660" x2="20" y2="-660"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-700" x2="20" y2="-760"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="20" y1="-790" x2="20" y2="-790"/>
+	</g>
+	<g id="line-02">
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="100" x2="64" y2="200"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="66" x2="64" y2="80"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-50" x2="64" y2="44"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-130" x2="64" y2="-130"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-160" x2="64" y2="-200"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-230" x2="64" y2="-230"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-280" x2="64" y2="-280"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-310" x2="64" y2="-310"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-340" x2="64" y2="-380"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-420" x2="64" y2="-420"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-466" x2="64" y2="-500"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-530" x2="64" y2="-530"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-560" x2="64" y2="-560"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-600" x2="64" y2="-640"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-680" x2="64" y2="-680"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-710" x2="64" y2="-710"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-740" x2="64" y2="-740"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-800" x2="64" y2="-780"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-840" x2="64" y2="-840"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-860" x2="64" y2="-860"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="64" y1="-980" x2="64" y2="-900"/>
+	</g>
+	<g id="line-03">
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="110" y1="260" x2="110" y2="300"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="110" y1="224" x2="110" y2="240"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="110" y1="-120" x2="110" y2="200"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="110" y1="-160" x2="110" y2="-400"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="110" y1="-440" x2="110" y2="-440"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="110" y1="-460" x2="110" y2="-460"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="110" y1="-490" x2="110" y2="-1000"/>
+	</g>
+	<g id="line-04">
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="156" y1="270" x2="156" y2="270"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="156" y1="220" x2="156" y2="230"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="156" y1="-100" x2="156" y2="200"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="156" y1="-120" x2="156" y2="-180"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="156" y1="-240" x2="156" y2="-280"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="156" y1="-300" x2="156" y2="-300"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="156" y1="-330" x2="156" y2="-330"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="156" y1="-360" x2="156" y2="-580"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="156" y1="-710" x2="156" y2="-640"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="156" y1="-2000" x2="156" y2="-770"/>
+	</g>
+	<g id="line-05">
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="202" y1="160" x2="202" y2="1000"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="202" y1="-60" x2="202" y2="60"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="202" y1="-86" x2="202" y2="-110"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="202" y1="-130" x2="202" y2="-200"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="202" y1="-680" x2="202" y2="-300"/>
+		<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="202" y1="-700" x2="202" y2="-2000"/>
+	</g>
+</g>
+<g id="line-01_1_">
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="133" y1="248" x2="5" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="165" y1="248" x2="165" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="228" y1="248" x2="228" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="255" y1="248" x2="295" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="325" y1="248" x2="325" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="355" y1="248" x2="405" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="431" y1="248" x2="465" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="515" y1="248" x2="555" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="585" y1="248" x2="585" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="615" y1="248" x2="615" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="645" y1="248" x2="695" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="725" y1="248" x2="775" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="805" y1="248" x2="805" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="835" y1="248" x2="835" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="865" y1="248" x2="865" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="905" y1="248" x2="965" y2="248"/>
+	<line stroke="#23C2CA" stroke-width="16" stroke-linecap="round" x1="995" y1="248" x2="995" y2="248"/>
+</g>
+</svg>
