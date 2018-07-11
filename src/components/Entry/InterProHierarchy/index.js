@@ -7,6 +7,8 @@ import { goToCustomLocation } from 'actions/creators';
 import loadWebComponent from 'utils/load-web-component';
 import pathToDescription from 'utils/processDescription/pathToDescription';
 
+import config from 'config';
+
 const webComponents = [];
 
 const loadInterProWebComponents = () => {
@@ -59,10 +61,15 @@ class InterProHierarchy extends PureComponent {
     const hierarchy = this.props.hierarchy;
     if (hierarchy) this._ref.current.hierarchy = cleanHierarchyType(hierarchy);
     this._ref.current.addEventListener('click', e => {
-      if (e.path[0].classList.contains('link')) {
+      const target = (e.path || e.composedPath())[0];
+      if (target.classList.contains('link')) {
         e.preventDefault();
         this.props.goToCustomLocation({
-          description: pathToDescription(e.path[0].getAttribute('href')),
+          description: pathToDescription(
+            target
+              .getAttribute('href')
+              .replace(new RegExp(`^${config.root.website.path}`), ''),
+          ),
         });
       }
     });
@@ -74,7 +81,7 @@ class InterProHierarchy extends PureComponent {
         style={{ display: 'block', marginBottom: '1rem' }}
         accession={this.props.accession}
         hideafter="2"
-        hrefroot="/entry/interpro"
+        hrefroot={`${config.root.website.path}/entry/interpro`}
         ref={this._ref}
       />
     );
