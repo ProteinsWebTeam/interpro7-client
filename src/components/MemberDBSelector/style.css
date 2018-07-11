@@ -130,12 +130,13 @@
   }
 
   &.disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     pointer-events: none;
   }
 
   & > .text {
     margin-left: 0.5rem;
+    z-index: 1; /* IE11: to show text on top of grey bgd */
     color: var(--colors-light-txt);
   }
 

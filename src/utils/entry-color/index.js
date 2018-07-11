@@ -54,3 +54,21 @@ export const getTrackColor = (
   }
   return config.colors.get();
 };
+
+const HEX_REGEXP = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+
+/*:: type RGB = {
+  r: number,
+  g: number,
+  b: number
+}; */
+
+/**
+ * Transforms hex string for color into rgb object
+ * @param {string} hex hex string representing a color
+ * @returns {{r: number, g: number, b: number}} RGB object containing number
+ */
+export const hexToRgb = (hex /*: string */) /*: ?RGB */ => {
+  const [, r = 0, g = 0, b = 0] = hex.match(HEX_REGEXP) || [];
+  return { r: parseInt(r, 16), g: parseInt(g, 16), b: parseInt(b, 16) };
+};

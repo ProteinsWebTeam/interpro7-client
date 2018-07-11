@@ -6,7 +6,6 @@ import { createSelector } from 'reselect';
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { NumberComponent } from 'components/NumberLabel';
 
 import loadData from 'higherOrder/loadData';
@@ -58,11 +57,7 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
           <h6>{species.title}</h6>
         </Link>
         <div className={f('list-detail')}>
-          <Tooltip
-            title={`${entries} ${toPlural('entry', entries)} matching ${
-              species.title
-            }`}
-          >
+          <p>
             <Link
               to={{
                 description: {
@@ -75,16 +70,17 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
                 },
               }}
             >
-              <NumberComponent loading={loading} value={entries} abbr />{' '}
+              <NumberComponent
+                loading={loading}
+                value={entries}
+                abbr
+                titleType={`${toPlural('entry', entries)} matching ${
+                  species.title
+                }`}
+              />{' '}
               {toPlural('entry', entries)}
             </Link>
-          </Tooltip>
-          <br />
-          <Tooltip
-            title={`${proteins} ${toPlural('protein', proteins)} matching ${
-              species.title
-            }`}
-          >
+            <br />
             <Link
               to={{
                 description: {
@@ -96,11 +92,19 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
                   protein: { isFilter: true, db: 'UniProt' },
                 },
               }}
+              disabled={!proteins}
             >
-              <NumberComponent loading={loading} value={proteins} abbr />{' '}
+              <NumberComponent
+                loading={loading}
+                value={proteins}
+                abbr
+                titleType={`${toPlural('protein', proteins)} matching ${
+                  species.title
+                }`}
+              />{' '}
               {toPlural('protein', proteins)}
             </Link>
-          </Tooltip>
+          </p>
         </div>
       </div>
     );
@@ -123,6 +127,7 @@ class BySpecies extends PureComponent /*:: <Props> */ {
     data: T.object,
     dataProtein: T.object,
   };
+
   render() {
     const countsE = this.props.data.payload;
     const countsP = this.props.dataProtein.payload;
@@ -158,7 +163,7 @@ class BySpecies extends PureComponent /*:: <Props> */ {
               taxonomy: { db: 'uniprot' },
             },
           }}
-          className={f('button', 'margin-bottom-none')}
+          className={f('button', 'margin-bottom-none', 'margin-top-large')}
         >
           View all Taxa
         </Link>

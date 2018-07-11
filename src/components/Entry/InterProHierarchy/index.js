@@ -7,6 +7,8 @@ import { goToCustomLocation } from 'actions/creators';
 import loadWebComponent from 'utils/load-web-component';
 import pathToDescription from 'utils/processDescription/pathToDescription';
 
+import config from 'config';
+
 const webComponents = [];
 
 const loadInterProWebComponents = () => {
@@ -32,6 +34,15 @@ const loadInterProWebComponents = () => {
   return Promise.all(webComponents);
 };
 
+const cleanHierarchyType = hierarchy => {
+  const output = { ...hierarchy };
+  output.type = output.type.replace('_', ' ');
+  if (output.children && output.children.length) {
+    output.children = output.children.map(cleanHierarchyType);
+  }
+  return output;
+};
+
 class InterProHierarchy extends PureComponent {
   static propTypes = {
     accession: T.string.isRequired,
@@ -47,13 +58,18 @@ class InterProHierarchy extends PureComponent {
 
   async componentDidMount() {
     await loadInterProWebComponents();
-    const h = this.props.hierarchy;
-    if (h) this._ref.current.hierarchy = h;
+    const hierarchy = this.props.hierarchy;
+    if (hierarchy) this._ref.current.hierarchy = cleanHierarchyType(hierarchy);
     this._ref.current.addEventListener('click', e => {
-      if (e.path[0].classList.contains('link')) {
+      const target = (e.path || e.composedPath())[0];
+      if (target.classList.contains('link')) {
         e.preventDefault();
         this.props.goToCustomLocation({
-          description: pathToDescription(e.path[0].getAttribute('href')),
+          description: pathToDescription(
+            target
+              .getAttribute('href')
+              .replace(new RegExp(`^${config.root.website.path}`), ''),
+          ),
         });
       }
     });
@@ -65,11 +81,14 @@ class InterProHierarchy extends PureComponent {
         style={{ display: 'block', marginBottom: '1rem' }}
         accession={this.props.accession}
         hideafter="2"
-        hrefroot="/entry/interpro"
+        hrefroot={`${config.root.website.path}/entry/interpro`}
         ref={this._ref}
       />
     );
   }
 }
 
-export default connect(null, { goToCustomLocation })(InterProHierarchy);
+export default connect(
+  null,
+  { goToCustomLocation },
+)(InterProHierarchy);

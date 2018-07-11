@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { sleep } from 'timing-functions/src';
 
+import { webAnimations as supportsWebAnimations } from 'utils/support';
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
@@ -9,6 +11,12 @@ import localStyles from './style.css';
 const s = foundationPartial(localStyles);
 
 const GRANULARITY = 250; // 250ms, time frequency of ttl update
+const ANIMATION_DURATION = 500; // 500ms
+const ANIMATION_OPTIONS = {
+  duration: ANIMATION_DURATION,
+  easing: 'ease-in-out',
+  fill: 'both',
+};
 
 export default class Toast extends PureComponent {
   static propTypes = {
@@ -18,15 +26,29 @@ export default class Toast extends PureComponent {
     title: T.string,
     body: T.string,
     link: T.object,
+    action: T.object,
     ttl: T.number,
     handleClose: T.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
   componentDidMount() {
     const ttl = +this.props.ttl;
-    if (!ttl || isNaN(ttl) || ttl < 0 || ttl === Infinity) return;
-    this._remaining = this.props.ttl;
-    this._timeout = setTimeout(this._loop, GRANULARITY);
+    if (ttl && !isNaN(ttl) && ttl >= 0 && ttl !== Infinity) {
+      this._remaining = this.props.ttl;
+      this._timeout = setTimeout(this._loop, GRANULARITY);
+    }
+    if (supportsWebAnimations && this._ref.current) {
+      this._ref.current.animate(
+        { transform: ['translateX(150%)', 'translateX(0)'] },
+        ANIMATION_OPTIONS,
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -44,7 +66,17 @@ export default class Toast extends PureComponent {
     this._timeout = setTimeout(this._loop, GRANULARITY);
   };
 
-  _close = e => this.props.handleClose(this.props.toastId, e);
+  _close = async e => {
+    if (supportsWebAnimations && this._ref.current) {
+      this._ref.current.animate(
+        { transform: ['translateX(0)', 'translateX(150%)'] },
+        ANIMATION_OPTIONS,
+      );
+      e.persist();
+      await sleep(ANIMATION_DURATION);
+    }
+    this.props.handleClose(this.props.toastId, e);
+  };
 
   render() {
     const {
@@ -52,6 +84,7 @@ export default class Toast extends PureComponent {
       title,
       body,
       link,
+      action,
       className,
       paused,
       ttl,
@@ -64,12 +97,17 @@ export default class Toast extends PureComponent {
         role="presentation"
         onClick={this._close}
         onKeyPress={this._close}
+        ref={this._ref}
         {...props}
       >
         {title && <strong>{title}</strong>}
         <p>{body}</p>
-        {link && <Link {...link} /> // eslint-disable-line jsx-a11y/anchor-has-content
-        }
+        {link ? <Link {...link} /> : null}
+        {action ? (
+          <button type="button" className={s('button')} onClick={action.fn}>
+            {action.text || 'Action'}
+          </button>
+        ) : null}
       </li>
     );
   }

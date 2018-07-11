@@ -21,6 +21,17 @@ exports[`<ErrorMessage /> should render error message 1`] = `
     >
       Reload this page
     </button>
+    <p>
+      If this keeps happening, you might want to get in touch with us through our contact form.
+    </p>
+    <Connect(Link)
+      className="button"
+      href="https://www.ebi.ac.uk/support/interpro"
+      target="_blank"
+      withReferrer={true}
+    >
+      Contact form
+    </Connect(Link)>
   </div>
 </div>
 `;

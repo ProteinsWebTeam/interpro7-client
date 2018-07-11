@@ -133,9 +133,8 @@ class Summary extends PureComponent {
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('medium-12', 'large-12', 'columns')}>
-              {loading || !payload || !payload.metadata ? (
-                <Loading />
-              ) : (
+              {loading ? <Loading /> : null}
+              {!loading && (!payload || !payload.metadata) ? null : (
                 <Fragment>
                   <Title metadata={payload.metadata} mainType={endpoint} />
                   <EntryMenu metadata={payload.metadata} />

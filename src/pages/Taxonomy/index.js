@@ -36,11 +36,12 @@ import config from 'config';
 import EndPointPage from '../endpoint-page';
 import { foundationPartial } from 'styles/foundation';
 
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(pageStyle, styles, fonts);
+const f = foundationPartial(ebiGlobalStyles, pageStyle, styles, fonts);
 
 const EntryAccessionsRenderer = entryDB => taxId => (
   <File

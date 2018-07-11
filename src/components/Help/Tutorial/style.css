@@ -2,21 +2,24 @@
 @import '../../../styles/timing.css';
 
 /*Alternative to grid */
-/*.flex-column {display: flex; flex-wrap: wrap; list-style-type: none;}*/
-/*.flex-column .card-grid {width:23%; padding: 1rem;flex-grow: 1; margin: .5rem; }*/
+.flex-column {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+}
+.flex-column .card-grid {
+  width: 23%;
+  flex-grow: 1;
+  margin: 0.5rem;
+}
 
+/* grid not yet working with IE11*/
 .flex-grid {
   margin: 0;
   list-style-type: none;
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-
-  & interpro-type {
-    padding: 0 1rem 0 0;
-    float: left;
-    line-height: 0;
-  }
 }
 
 .card-grid {
@@ -60,7 +63,7 @@
 
 .card-title {
   flex-grow: 1;
-  font-size: 130%;
+  font-size: 120%;
   font-weight: 600;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
@@ -92,7 +95,7 @@
   display: flex;
   flex-wrap: wrap;
   transition: opacity var(--timing-really-fast) ease-out;
-  & > div {
+  & > div:not(:last-child) {
     margin-right: 0.5rem;
   }
 }
@@ -136,4 +139,10 @@
 
 .card-grid:hover .card-image {
   opacity: 1;
+}
+
+@media screen and (max-width: 39.9375em) {
+  .flex-column .card-grid {
+    width: 40%;
+  }
 }

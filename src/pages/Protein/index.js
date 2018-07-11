@@ -172,37 +172,13 @@ const ProteinCard = ({ data, search, entryDB }) => (
         }}
       >
         <h6>
-          <HighlightedText
-            text={(data.metadata.accession || '').toUpperCase()}
-            textToHighlight={search}
-          />
-        </h6>
-        <h5>
           <HighlightedText text={data.metadata.name} textToHighlight={search} />
-        </h5>
+        </h6>
       </Link>
     </div>
-    <Link
-      to={{
-        description: {
-          main: { key: 'taxonomy' },
-          taxonomy: {
-            db: 'uniprot',
-            accession: data.metadata.source_organism.taxId,
-          },
-        },
-      }}
-    >
-      <div className={f('card-subheader')}>
-        <HighlightedText
-          text={
-            data.metadata.source_organism.fullName ||
-            data.metadata.source_organism.taxId
-          }
-          textToHighlight={search}
-        />
-      </div>
-    </Link>
+
+    <div className={f('card-subheader')} />
+
     {data.extra_fields ? (
       <SummaryCounterProteins
         metadata={data.metadata}
@@ -212,6 +188,22 @@ const ProteinCard = ({ data, search, entryDB }) => (
     ) : (
       <Loading />
     )}
+
+    <div className={f('card-footer')}>
+      <Tooltip
+        title={`${data.metadata.source_organism.fullName} (Tax ID: ${
+          data.metadata.source_organism.taxId
+        })`}
+      >
+        {data.metadata.source_organism.fullName}
+      </Tooltip>
+      <div>
+        <HighlightedText
+          text={(data.metadata.accession || '').toUpperCase()}
+          textToHighlight={search}
+        />
+      </div>
+    </div>
   </React.Fragment>
 );
 ProteinCard.propTypes = {

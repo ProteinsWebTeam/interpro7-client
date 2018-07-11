@@ -1,13 +1,16 @@
+@import '../../../styles/timing.css';
+
 .species-list {
   font-size: 80%;
-}
 
-.species-list .column:hover {
-  background-color: #e4f3ff;
-}
-
-.species-list span:before {
-  font-size: 520%;
+  & .column:hover {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18),
+      0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    transition: all var(--timing-really-fast) ease-out;
+  }
+  & span:before {
+    font-size: 520%;
+  }
 }
 
 /*temp replace the float css while update to latest foundation*/

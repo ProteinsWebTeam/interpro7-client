@@ -1,6 +1,10 @@
 @import '../../styles/colors.css';
 @import '../../styles/timing.css';
 
+.input-group {
+  display: flex;
+} /*solve an issue with Safari and icon alignments*/
+
 .search-adv {
   text-align: right;
 }
@@ -11,22 +15,10 @@
   margin-right: 0.2rem; /*to align with border form*/
 }
 
-.search-ex span {
+.neutral span {
   margin-left: 0.1rem;
-} /*to align with border form*/
-
-.search-ex,
-.search-ex a,
-.search-ex,
-.search-ex a:visited {
   font-size: 90%;
-  color: var(--colors-gray);
-}
-
-.search-ex a:hover {
-  color: var(--colors-gray);
-  border-bottom: 1px #777 solid;
-}
+} /*to align with border form*/
 
 .search-input h3 {
   font-size: 150%;

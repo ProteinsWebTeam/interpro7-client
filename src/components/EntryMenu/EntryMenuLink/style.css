@@ -7,7 +7,7 @@ a.browse-tabs-link {
   &:hover,
   &:visited {
     font-size: 0.9rem; /*same size as submenu*/
-    padding: 1rem 0.4rem 0.6rem 0.4rem;
+    padding: 1rem 1rem 0.5rem 1rem;
     color: black;
     line-height: inherit;
     background-color: transparent; /*to keep*/
@@ -61,5 +61,5 @@ a.is-active-tab.menu-hh {
 .tabs-title {
   display: flex;
   align-items: stretch;
-  margin-right: 2rem;
+  margin-right: 1rem;
 }

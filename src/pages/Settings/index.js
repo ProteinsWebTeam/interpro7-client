@@ -16,11 +16,18 @@ import { changeSettings, resetSettings } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
 import loadable from 'higherOrder/loadable';
 
-const f = foundationPartial(theme, local);
+const f = foundationPartial(ebiGlobalStyles, theme, local);
+
+// Generate async components
+const Advanced = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-advanced" */ 'components/Settings/Advanced'),
+});
 
 const NavigationSettings = ({ navigation: { pageSize } }) => (
   <form data-category="navigation">
@@ -313,8 +320,11 @@ class Settings extends PureComponent {
               navigation={navigation}
               handleChange={changeSettings}
             />
+
             <UISettings ui={ui} />
+
             <CacheSettings cache={cache} />
+
             <APIEndpointSettings category="api" endpointDetails={api}>
               API Settings {!DEV && '(modification temporarily disabled)'}
             </APIEndpointSettings>
@@ -326,10 +336,13 @@ class Settings extends PureComponent {
               InterProScan Settings{' '}
               {!DEV && '(modification temporarily disabled)'}
             </IPScanEndpointSettings>
+
             <button onClick={this._handleReset} className={f('button')}>
               Reset settings to default values
             </button>
           </section>
+
+          <Advanced />
         </div>
       </div>
     );

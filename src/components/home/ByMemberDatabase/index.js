@@ -62,8 +62,9 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('md-list')}>
         <AnimatedEntry className={f('row')} element="div">
-          {memberDB.map(
-            ({ canonical, description, name, version, releaseDate }) => (
+          {memberDB
+            .filter(({ canonical }) => canonical !== 'mobidblt')
+            .map(({ canonical, description, name, version, releaseDate }) => (
               <div className={f('column', 'text-center')} key={name}>
                 <SchemaOrgData
                   data={{
@@ -109,14 +110,13 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                   </p>
                 </Link>
               </div>
-            ),
-          )}
+            ))}
         </AnimatedEntry>
         <Link
           to={{
             description: { main: { key: 'entry' } },
           }}
-          className={f('button', 'margin-bottom-none')}
+          className={f('button', 'margin-bottom-none', 'margin-top-large')}
         >
           View all entries
         </Link>

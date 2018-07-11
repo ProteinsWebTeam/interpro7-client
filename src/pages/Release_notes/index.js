@@ -14,7 +14,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, local, ipro);
 
-class Release_notes extends PureComponent /*:: <{}> */ {
+class ReleaseNotes extends PureComponent /*:: <{}> */ {
   componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
@@ -76,7 +76,6 @@ class Release_notes extends PureComponent /*:: <{}> */ {
 
             <table className={f('light', 'small', 'margin-bottom-xlarge')}>
               <thead>
-                {' '}
                 <tr>
                   <th />
                   <th>type</th>
@@ -90,7 +89,12 @@ class Release_notes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="Family"
                       aria-label="Entry type"
-                    />
+                    >
+                      {
+                        // IE11 fallback for icons
+                      }
+                      <span className={f('icon-type', 'icon-family')}>F</span>
+                    </interpro-type>
                   </td>
                   <td>Family</td>
                   <td className={f('text-right')}>
@@ -114,7 +118,9 @@ class Release_notes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="Domain"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-domain')}>D</span>
+                    </interpro-type>
                   </td>
                   <td>Domain</td>
                   <td className={f('text-right')}>
@@ -138,7 +144,9 @@ class Release_notes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="homologous superfamily"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-hh')}>H</span>
+                    </interpro-type>
                   </td>
                   <td>Homologous superfamily</td>
                   <td className={f('text-right')}>
@@ -162,7 +170,9 @@ class Release_notes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="repeat"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-repeat')}>R</span>
+                    </interpro-type>
                   </td>
                   <td>Repeat</td>
                   <td className={f('text-right')}>
@@ -186,7 +196,9 @@ class Release_notes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="site"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-site')}>S</span>
+                    </interpro-type>
                   </td>
                   <td>Active site</td>
                   <td className={f('text-right')}>
@@ -210,7 +222,9 @@ class Release_notes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="site"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-site')}>S</span>
+                    </interpro-type>
                   </td>
                   <td>Binding site</td>
                   <td className={f('text-right')}>
@@ -234,7 +248,9 @@ class Release_notes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="site"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-site')}>S</span>
+                    </interpro-type>
                   </td>
                   <td>Conserved site</td>
                   <td className={f('text-right')}>
@@ -258,7 +274,9 @@ class Release_notes extends PureComponent /*:: <{}> */ {
                       dimension="2em"
                       type="PTM"
                       aria-label="Entry type"
-                    />
+                    >
+                      <span className={f('icon-type', 'icon-site')}>S</span>
+                    </interpro-type>
                   </td>
                   <td>PTM</td>
                   <td className={f('text-right')}>
@@ -822,13 +840,15 @@ class Release_notes extends PureComponent /*:: <{}> */ {
               </Link>{' '}
               database, to provide consensus annotation of long-range intrinsic
               disorder in protein sequences. Read more about MobiDB-lite in{' '}
-              <i>Bioinformatics</i>, 33(9), 2017, 1402–1404, (<Link
+              <i>Bioinformatics</i>, 33(9), 2017, 1402–1404, (
+              <Link
                 href="https://doi.org/10.1093/bioinformatics/btx015"
                 className={f('ext')}
                 target="_blank"
               >
                 doi: 10.1093/bioinformatics/btx015
-              </Link>).
+              </Link>
+              ).
             </p>
 
             <table className={f('light')}>
@@ -901,4 +921,4 @@ class Release_notes extends PureComponent /*:: <{}> */ {
   }
 }
 
-export default Release_notes;
+export default ReleaseNotes;

@@ -68,31 +68,33 @@
 
 @supports (display: grid) {
   .signature-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    /*display: grid;*/
+    /*grid-template-columns: repeat(3, 1fr);*/
     font-size: 0.72rem;
   }
 }
 
-.ext {
-  &,
-  &:hover,
-  &:active,
-  &:focus {
-    border: none !important;
-  }
+/*.ext {*/
+/*&,*/
+/*&:hover,*/
+/*&:active,*/
+/*&:focus {*/
+/*border: none !important;*/
+/*}*/
 
-  &:focus {
-    outline-style: auto;
-  }
-}
+/*&:focus {*/
+/*outline-style: auto;*/
+/*}*/
+/*}*/
 
 .signature {
   background-color: #d5eff3;
+  /*display:flex;*/
+  /*flex-basis: 30%;*/ /* 3 items 100% columns width : doesn't work on IE11 !*/
+  border: 1px rgba(140, 166, 175, 0.16) solid;
   border-radius: 4px;
   padding: 0 4px;
   margin: 2px;
-  flex-basis: 30%; /*3 items by row more or less*/
   text-align: center;
   transition: background-color var(--timing-fast) ease-in-out;
 
@@ -130,7 +132,7 @@
   color: #71818a;
 }
 .col-go div:first-child span {
-  margin-left: 1rem;
+  margin-left: 0;
 }
 
 .sign-label-head.bp {
@@ -292,6 +294,11 @@
   height: 6em; /*better for alignment description + counter*/
 }
 
+.ico-disabled {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
 /* add some space on top between banner and breadcrumb and at bottom too otherwise content si stuck on footer*/
 /* IMPORTANT DON'T USE <MAIN> tag AS it doesn't work on IE11 even if specifying
    it as display:block element */
@@ -306,9 +313,10 @@
 }
 
 /*make the table more consistent  in term of column with fluctuation while navigating*/
+/*for 3 signatures a row*/
 .col-md {
-  width: 26%;
-} /*for 3 signatures a row*/
+  width: 24%;
+}
 .col-go {
   width: 30%;
 } /*to get most GO terms in single line*/
@@ -338,8 +346,5 @@
   }
   .col-type {
     display: none;
-  }
-  .col-go div:first-child span {
-    margin-left: 0;
   }
 }

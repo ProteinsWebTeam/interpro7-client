@@ -1,5 +1,5 @@
 // @flow
-import { EntryColorMode, getTrackColor } from '.';
+import { EntryColorMode, getTrackColor, hexToRgb } from '.';
 
 import config from 'config';
 
@@ -24,4 +24,22 @@ describe('getTrackColor', () => {
       expect(getTrackColor(entry, colorMode)).toMatchSnapshot();
     });
   }
+});
+
+describe('hexToRgb', () => {
+  test('basic', () => {
+    expect(hexToRgb('000000')).toEqual({ r: 0, g: 0, b: 0 });
+    expect(hexToRgb('00FF00')).toEqual({ r: 0, g: 255, b: 0 });
+    expect(hexToRgb('FFFFFF')).toEqual({ r: 255, g: 255, b: 255 });
+    expect(hexToRgb('#000000')).toEqual({ r: 0, g: 0, b: 0 });
+    expect(hexToRgb('#00FF00')).toEqual({ r: 0, g: 255, b: 0 });
+    expect(hexToRgb('#FFFFFF')).toEqual({ r: 255, g: 255, b: 255 });
+  });
+
+  test('invalid', () => {
+    expect(hexToRgb('invalid')).toEqual({ r: 0, g: 0, b: 0 });
+    expect(hexToRgb('#00000')).toEqual({ r: 0, g: 0, b: 0 });
+    expect(hexToRgb('00000')).toEqual({ r: 0, g: 0, b: 0 });
+    expect(hexToRgb('red')).toEqual({ r: 0, g: 0, b: 0 });
+  });
 });

@@ -10,11 +10,7 @@ import ready from 'utils/ready';
 
 import hmr from 'index-hmr';
 
-import config, { PROD, STAGING, DEV } from 'config';
-
-if (PROD || STAGING) {
-  import(/* webpackChunkName: "offline" */ './offline').then(m => m.default());
-}
+import config, { DEV } from 'config';
 
 const schemaOrgManager = (...args) =>
   import(/* webpackChunkName: "schemaOrg" */ 'schema_org').then(

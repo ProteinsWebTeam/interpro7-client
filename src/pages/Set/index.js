@@ -30,12 +30,13 @@ import { setDBs } from 'utils/processDescription/handlers';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import { toPlural } from 'utils/pages';
 
-const f = foundationPartial(fonts, pageStyle, ipro);
+const f = foundationPartial(ebiGlobalStyles, fonts, pageStyle, ipro);
 
 class SummaryCounterSet extends PureComponent {
   static propTypes = {

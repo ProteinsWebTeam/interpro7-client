@@ -69,7 +69,7 @@ class ProgressButton extends PureComponent /*:: <Props> */ {
               width="60"
               height="100"
               className={s('back')}
-              href={download}
+              xlinkHref={download}
             />
 
             <image
@@ -78,7 +78,7 @@ class ProgressButton extends PureComponent /*:: <Props> */ {
               width="60"
               height="100"
               className={s('front')}
-              href={save}
+              xlinkHref={save}
             />
           </g>
         </svg>

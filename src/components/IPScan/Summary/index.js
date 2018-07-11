@@ -80,7 +80,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
       }
     }
 
-    const mergedData = { unintegrated: [] };
+    const mergedData = { unintegrated: [], predictions: [] };
     let integrated = new Map();
     for (const match of payload.matches) {
       const { library } = match.signature.signatureLibraryRelease;
@@ -99,7 +99,10 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
         ],
         score: match.score,
       };
-      if (match.signature.entry) {
+      if (library === 'PHOBIUS' || library === 'MOBIDB_LITE') {
+        processedMatch.accession += ` (${mergedData.predictions.length + 1})`;
+        mergedData.predictions.push(processedMatch);
+      } else if (match.signature.entry) {
         const accession = match.signature.entry.accession;
         const entry = integrated.get(accession) || {
           accession,
