@@ -16,9 +16,12 @@ const middleware /*: Middleware */ = history => ({ dispatch, getState }) => {
   history.listen(
     // Dispatch new action only when history actually changes
     // Build new action from scratch
-    async ({ state: { customLocation, state } }) => {
+    async ({ state }) => {
+      if (!state) return;
       await Promise.resolve();
-      return dispatch(customLocationChangeFromHistory(customLocation, state));
+      return dispatch(
+        customLocationChangeFromHistory(state.customLocation, state.state),
+      );
     },
   );
 
