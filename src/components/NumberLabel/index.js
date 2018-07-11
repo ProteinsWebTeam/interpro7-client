@@ -145,6 +145,7 @@ class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
       className,
       dispatch,
       abbr,
+      noTitle,
       title,
       titleType,
       scaleMargin,
