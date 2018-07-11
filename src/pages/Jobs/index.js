@@ -32,6 +32,11 @@ const DownloadSummary = loadable({
     import(/* webpackChunkName: "download-summary" */ 'components/Download/Summary'),
 });
 
+const DownloadForm = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "download-form" */ 'components/DownloadForm'),
+});
+
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
@@ -63,10 +68,23 @@ const InterProScanInnerSwitch = props => (
   </Wrapper>
 );
 
-const Download = () => (
+const downloadSelector = createSelector(
+  customLocation => customLocation.hash,
+  hash => hash,
+);
+
+const downloadRoutes = new Map([[/^\//, DownloadForm]]);
+
+const Download = props => (
   <Wrapper>
     <ErrorBoundary>
-      <DownloadSummary />
+      <Switch
+        {...props}
+        locationSelector={downloadSelector}
+        indexRoute={DownloadSummary}
+        childRoutes={downloadRoutes}
+        catchAll={DownloadSummary}
+      />
     </ErrorBoundary>
   </Wrapper>
 );
