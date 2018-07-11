@@ -471,7 +471,7 @@ class List extends PureComponent {
       <div className={f('row')}>
         <MemberDBSelector
           contentType="organism"
-          className="left-side-db-selector"
+          className="pp-left-side-db-selector"
         />
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <OrganismListFilters />

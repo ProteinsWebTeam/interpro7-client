@@ -478,7 +478,7 @@ class Home extends PureComponent {
           )}
         >
           <div className={f('columns')}>
-            <div className={f('callout-box')}>
+            <div className={f('callout-box', 'pp-browse-by')}>
               <Tabs>
                 <div title="Member Database">
                   <ByMemberDatabase />
