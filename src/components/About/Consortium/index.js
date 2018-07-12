@@ -60,27 +60,142 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
           <tbody>
             {memberDBs.map(db => {
               const date = db.releaseDate && new Date(db.releaseDate);
+              const md = db.canonical;
               return (
-                <tr key={db.canonical}>
+                <tr key={md}>
                   <td>
-                    <MemberSymbol
-                      type={db.canonical}
-                      className={f('md-small')}
-                    />
+                    <MemberSymbol type={md} className={f('md-small')} />
                   </td>
                   <td>
                     {' '}
-                    <Link
-                      className={f('ext')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: db.canonical },
-                        },
-                      }}
-                    >
-                      <span className={f('h5')}>{db.name}</span>
-                    </Link>
+                    {md === 'cdd' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'cathgene3d' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//www.cathdb.info/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'hamap' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//hamap.expasy.org/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'mobidblt' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//mobidb.bio.unipd.it/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'panther' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//www.pantherdb.org/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'pfam' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//pfam.xfam.org/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'pirsf' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'prints' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//130.88.97.239/PRINTS/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'prodom' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//prodom.prabi.fr/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'profile' || md === 'prosite' ? (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//prosite.expasy.org/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    ) : (
+                      ''
+                    )}
+                    {md === 'sfld' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//sfld.rbvi.ucsf.edu/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'smart' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//smart.embl-heidelberg.de/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'ssf' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//supfam.org/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'tigrfams' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//tigrfams.jcvi.org/cgi-bin/index.cgi"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
                   </td>
                   <td>{db.version}</td>
 
