@@ -322,10 +322,7 @@ class IPScanSearch extends PureComponent {
                 <div className={f('row')}>
                   <div className={f('columns')}>
                     <div className={f('button-group', 'line-with-buttons')}>
-                      <button
-                        type="button"
-                        className={f('hollow', 'button', 'tertiary')}
-                      >
+                      <div className={f('hollow', 'button', 'tertiary')}>
                         <label className={f('file-input-label')}>
                           Choose file
                           <input
@@ -334,7 +331,7 @@ class IPScanSearch extends PureComponent {
                             hidden
                           />
                         </label>
-                      </button>
+                      </div>
                       <button
                         type="button"
                         className={f('hollow', 'button', 'secondary')}
