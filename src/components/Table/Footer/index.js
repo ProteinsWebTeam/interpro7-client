@@ -43,7 +43,7 @@ class PaginationItem extends PureComponent {
       <li className={className}>
         <LinkOrSpan {...props}>
           {(value && children) || (
-            <NumberComponent duration={duration || 0} value={value} abbr />
+            <NumberComponent duration={duration || 0} value={value} noTitle />
           )}
         </LinkOrSpan>
       </li>
