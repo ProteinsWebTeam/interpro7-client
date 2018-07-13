@@ -23,7 +23,7 @@ export default (state /*: DataProgress */ = {}, action /*: Object */) => {
           weight: action.weight,
         },
       };
-    case UNLOAD_DATA: // eslint-disable-line no-case-declarations
+    case UNLOAD_DATA:
       const { [action.key]: _, ...newState } = state;
       return newState;
     default:

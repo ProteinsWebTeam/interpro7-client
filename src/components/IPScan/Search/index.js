@@ -74,7 +74,7 @@ const getCheckedApplications = form =>
   );
 
 const getLocalTitle = form =>
-  form.querySelector('input[name="local-title"').value.trim();
+  form.querySelector('input[name="local-title"]').value.trim();
 
 const isXChecked = x => form => !!form.querySelector(checkedSelectorFor(x));
 
@@ -322,7 +322,10 @@ class IPScanSearch extends PureComponent {
                 <div className={f('row')}>
                   <div className={f('columns')}>
                     <div className={f('button-group', 'line-with-buttons')}>
-                      <button className={f('hollow', 'button', 'tertiary')}>
+                      <button
+                        type="button"
+                        className={f('hollow', 'button', 'tertiary')}
+                      >
                         <label className={f('file-input-label')}>
                           Choose file
                           <input
@@ -401,7 +404,10 @@ const mapStateToProps = createSelector(
   (ipScan, value) => ({ ipScan, value }),
 );
 
-export default connect(mapStateToProps, {
-  createJob,
-  goToCustomLocation,
-})(IPScanSearch);
+export default connect(
+  mapStateToProps,
+  {
+    createJob,
+    goToCustomLocation,
+  },
+)(IPScanSearch);

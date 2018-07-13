@@ -1,24 +1,70 @@
 // @flow
 import * as runtime from 'offline-plugin/runtime';
+import { sleep, schedule } from 'timing-functions/src';
 
-export default () => {
+import id from 'utils/cheap-unique-id';
+
+import { addToast } from 'actions/creators';
+
+// eslint-disable-next-line no-magic-numbers
+const DELAY_BEFORE_CHECKING_NEW_VERSION = 1000 * 60 * 30; // 30 minutes
+const DELAY_BEFORE_UNSAFE_TO_RELOAD = 1000; // 1 second
+
+/*:: import type Store from 'redux'; */
+
+export default async ({ dispatch } /*: Store */) => {
+  let safeToReload = true;
+
   runtime.install({
-    onUpdating: () => {
+    onInstalled() {
+      console.log('SW Event:', 'onInstalled');
+    },
+    onUpdating() {
       console.log('SW Event:', 'onUpdating');
     },
-    onUpdateReady: () => {
+    onUpdateReady() {
       console.log('SW Event:', 'onUpdateReady');
       // Tells to new SW to take control immediately
       runtime.applyUpdate();
     },
-    onUpdated: () => {
+    onUpdated() {
       console.log('SW Event:', 'onUpdated');
-      // Reload the webpage to load into the new version
-      window.location.reload();
+      // If we are within a small timeframe after the page has loaded
+      if (safeToReload) {
+        // Just reload the page directly
+        return window.location.reload();
+      }
+      // Reload the page to load the new version only if user wants it
+      dispatch(
+        addToast(
+          {
+            title: 'New version ready',
+            body:
+              'A new version of this website is ready, reload this page now to use it',
+            action: {
+              text: 'Load new version',
+              fn() {
+                window.location.reload();
+              },
+            },
+          },
+          id(),
+        ),
+      );
     },
-
-    onUpdateFailed: () => {
+    onUpdateFailed() {
       console.log('SW Event:', 'onUpdateFailed');
     },
   });
+
+  await sleep(DELAY_BEFORE_UNSAFE_TO_RELOAD);
+  safeToReload = false;
+
+  // Infinite loop to check if new version available every once in a while
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    await sleep(DELAY_BEFORE_CHECKING_NEW_VERSION);
+    await schedule();
+    runtime.update();
+  }
 };

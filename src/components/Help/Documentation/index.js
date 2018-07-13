@@ -111,7 +111,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   // </li>
                 }
                 <li>
-                  <Link href="//www.ebi.ac.uk/support/interpro-general-query">
+                  <Link
+                    href="//www.ebi.ac.uk/support/interpro"
+                    target="_blank"
+                    withReferrer
+                  >
                     <span
                       className={f('icon', 'icon-common')}
                       data-icon="&#x1d8;"
