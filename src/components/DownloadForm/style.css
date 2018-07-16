@@ -1,0 +1,12 @@
+.controls {
+  padding: 1ch;
+  border: 1px solid gray;
+  background: rgba(255, 255, 255, 0.8);
+  position: sticky;
+  bottom: 0;
+}
+
+.input-group-field {
+  height: 2.5rem;
+  margin: 0;
+}

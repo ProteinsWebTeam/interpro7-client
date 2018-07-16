@@ -3,6 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import Link from 'components/generic/Link';
 import Table, { Column } from 'components/Table';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Actions from 'components/Download/Actions';
@@ -11,10 +12,26 @@ import { downloadSelector } from 'reducers/download';
 
 import { foundationPartial } from 'styles/foundation';
 
+import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(fonts, ipro);
+const f = foundationPartial(interproTheme, fonts, ipro);
+
+const GoToNewDownload = () => (
+  <Link
+    to={{
+      description: {
+        main: { key: 'job' },
+        job: { type: 'download' },
+      },
+      hash: '/entry/|json',
+    }}
+    className={f('button')}
+  >
+    Create a new file
+  </Link>
+);
 
 class Summary extends PureComponent {
   static propTypes = {
@@ -27,9 +44,12 @@ class Summary extends PureComponent {
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <div className={f('row')}>
-            <h3 className={f('large-9', 'columns', 'light')}>
+            <h3 className={f('large-10', 'columns', 'light')}>
               Your download jobs
             </h3>
+            <div className={f('button-group', 'columns', 'large-2')}>
+              <GoToNewDownload />
+            </div>
           </div>
           <Table dataTable={download} contentType="files" actualSize={0}>
             <Column
