@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import flattenDeep from 'lodash-es/flattenDeep';
 
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
@@ -10,7 +11,7 @@ import Title from 'components/Title';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
 import Actions from 'components/IPScan/Actions';
 
-import flattenDeep from 'lodash-es/flattenDeep';
+import { NOT_MEMBER_DBS } from 'menuConfig';
 
 import f from 'styles/foundation';
 
@@ -99,7 +100,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
         ],
         score: match.score,
       };
-      if (library === 'PHOBIUS' || library === 'MOBIDB_LITE') {
+      if (NOT_MEMBER_DBS.has(library)) {
         processedMatch.accession += ` (${mergedData.predictions.length + 1})`;
         mergedData.predictions.push(processedMatch);
       } else if (match.signature.entry) {
