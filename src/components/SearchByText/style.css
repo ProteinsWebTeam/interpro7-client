@@ -31,6 +31,7 @@
   }
 }
 .search-input-box {
+  flex-grow: 1; /*to make the input search full length using flex*/
   position: relative;
 }
 

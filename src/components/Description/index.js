@@ -25,27 +25,30 @@ export const ParagraphWithCites = ({
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
       return i % 2 ? (
-        <Link
-          key={i}
-          id={withoutIDs ? null : `description-${refCounter}`}
-          to={customLocation => {
-            const key = customLocation.description.main.key;
-            return {
-              ...customLocation,
-              description: {
-                main: { key },
-                [key]: { db: customLocation.description[key].db, accession },
-              },
-              hash: part,
-            };
-          }}
-        >
-          {refCounter}
-        </Link>
+        <sup>
+          <Link
+            className={f('text-high')}
+            key={i}
+            id={withoutIDs ? null : `description-${refCounter}`}
+            to={customLocation => {
+              const key = customLocation.description.main.key;
+              return {
+                ...customLocation,
+                description: {
+                  main: { key },
+                  [key]: { db: customLocation.description[key].db, accession },
+                },
+                hash: part,
+              };
+            }}
+          >
+            [{refCounter}]
+          </Link>
+        </sup>
       ) : (
         <span key={i}>
           {part === ', ' ? (
-            ',\u00a0'
+            '\u00a0'
           ) : (
             <ParagraphWithTags>{part}</ParagraphWithTags>
           )}
@@ -147,7 +150,11 @@ const ParagraphWithTags = ({ children }) => (
             className={styles.inline}
             key={`${i}-${j}`}
             // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(part) }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(
+                part.replace(/\[$/, ' ').replace(/^]/, ' '),
+              ),
+            }}
           />
         );
       });

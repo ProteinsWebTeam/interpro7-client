@@ -12,6 +12,7 @@ import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
+import { NOT_MEMBER_DBS } from 'menuConfig';
 
 import PopperJS from 'popper.js';
 
@@ -290,12 +291,7 @@ class ProtVista extends PureComponent {
 
   renderLabels(entry) {
     const { expandedTrack } = this.state;
-    if (
-      entry.source_database === 'PHOBIUS' ||
-      entry.source_database === 'MOBIDB_LITE'
-    ) {
-      return entry.accession;
-    }
+    if (NOT_MEMBER_DBS.has(entry.source_database)) return entry.accession;
     return (
       <Fragment>
         <Link

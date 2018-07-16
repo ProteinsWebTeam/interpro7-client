@@ -88,9 +88,10 @@ export class _HamburgerBtn extends PureComponent {
 const mapStateToPropsHamburger = createSelector(sideNavSelector, open => ({
   open,
 }));
-const HamburgerBtn = connect(mapStateToPropsHamburger, { openSideNav })(
-  _HamburgerBtn,
-);
+const HamburgerBtn = connect(
+  mapStateToPropsHamburger,
+  { openSideNav },
+)(_HamburgerBtn);
 
 export class _SideIcons extends PureComponent {
   static propTypes = {
@@ -111,7 +112,14 @@ export class _SideIcons extends PureComponent {
           <HamburgerBtn svg stuck={stuck} aria-label="Show the InterPro Menu" />
           <label className={reducedStyleBundle('side-search', { stuck })}>
             <TextSearchBox name="search" />
-            <Link to={{ description: { other: ['search'] } }}>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'search' },
+                  search: { type: 'text' },
+                },
+              }}
+            >
               <div aria-label="Search InterPro">
                 <svg
                   width="2.2em"
