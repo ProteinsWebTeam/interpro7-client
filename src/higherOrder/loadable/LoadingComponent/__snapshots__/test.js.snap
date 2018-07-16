@@ -30,7 +30,13 @@ exports[`<ErrorMessage /> should render error message 1`] = `
       target="_blank"
       withReferrer={true}
     >
-      ✉️ Contact form
+      <span
+        aria-label="email"
+        role="img"
+      >
+        ✉
+      </span>
+      ️ Contact form
     </Connect(Link)>
   </div>
 </div>
