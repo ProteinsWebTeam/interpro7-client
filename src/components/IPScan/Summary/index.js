@@ -31,7 +31,6 @@ const LUT = new Map([
   ['PROSITE_PATTERNS', 'patterns'],
   ['SUPERFAMILY', 'ssf'],
   ['GENE3D', 'cathgene3d'],
-  ['COILS', 'cathgene3d'],
 ]);
 
 class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
