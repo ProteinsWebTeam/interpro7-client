@@ -256,6 +256,80 @@ table.classic tbody tr:nth-child(even) {
 }
 /*/Style default table*/
 
+/*Style light table */
+table.light {
+  color: var(--colors-light-txt);
+  font-size: 0.93em;
+  border-collapse: collapse;
+}
+table.light thead {
+  color: #9baaaf;
+  font-size: 0.9em;
+  margin: 10px 0;
+  border: 0;
+}
+table.light thead th {
+  background: rgba(255, 255, 255, 0.8);
+  outline: none;
+  border-bottom: 1px solid #d4dddf;
+  text-transform: uppercase;
+  font-size: 0.93em;
+  font-weight: 400;
+  color: #73828c;
+}
+table.light.sorting thead th {
+  color: #a7b2b6;
+}
+table.light.small {
+  width: 40%;
+}
+table.light thead th:hover {
+  color: #73828c;
+}
+table.light tr:nth-child(even):hover,
+table.light tr:nth-child(odd):hover {
+  background-color: #f9fafb;
+}
+table.light tbody {
+  border: none;
+}
+table.light tbody tr:nth-child(even) {
+  background-color: #fff;
+}
+table.light tbody tr td {
+  border-top: 1px solid #d4dddf;
+  border-bottom: 1px solid #d4dddf;
+}
+table.light .order-row {
+  background: #f2f6f7;
+  border: 1px solid #fff;
+}
+table.light .tfooter label {
+  color: #a7b2b6;
+  font-size: 0.93em;
+}
+table.light .subheader {
+  color: #505f74;
+  margin: 10px 0 0 10px;
+}
+
+table.light.nolink tbody a,
+.table.light tbody a:visited {
+  color: var(--colors-light-txt);
+}
+
+table.light.nolink tbody a:hover {
+  border-bottom: 1px solid var(--colors-light-txt);
+}
+
+table.light.sorting thead th {
+  color: #a7b2b6;
+}
+table.light.sorting thead th:hover {
+  color: #73828c;
+}
+/*/Style light table */
+
 .table-center {
   text-align: center;
 }
@@ -420,11 +494,19 @@ details.accordion-style[open] summary:after {
 /*/ACCORDION TYPE*/
 
 /****************************** TITLE - TEXT *********************************/
-.uppercase {
-  text-transform: uppercase;
+/* TITLE Alt for Entry page - TEST */
+.box-title {
+  color: #585656;
+  border-bottom: 1px #d0d0d0 solid;
+  font-size: 120%;
+  & span {
+    background-color: #d0d0d0;
+    padding: 0 1rem;
+    margin: 0;
+  }
 }
 
-/*title sue for box like search box*/
+/* TITLE used for box like search box*/
 h3.light {
   font-weight: 300;
 }
@@ -436,6 +518,23 @@ h3.light {
 /*h4 small {*/
 /*color: #bbb;*/
 /*}*/
+
+/*simulation H5 but needs to stay span in order to show ext icon on the same line*/
+.h5 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
+    sans-serif;
+  color: #222;
+  font-weight: 400;
+  border-bottom: 2px white solid;
+  padding-bottom: 2px;
+}
+
+a .h5:hover {
+  border-bottom: 2px #4e4e4e solid;
+  padding-bottom: 2px;
+}
+
 h5 small,
 h6 small {
   color: #8b8b8b;
@@ -458,6 +557,11 @@ h6 small {
 .masthead.md-smart h4 small {
   color: #a2d7b9;
 }
+
+.uppercase {
+  text-transform: uppercase;
+}
+
 hr {
   border-bottom: 1px solid #d4d4d4;
 }

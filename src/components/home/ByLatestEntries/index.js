@@ -90,7 +90,7 @@ class LatestEntry extends PureComponent {
               </Tooltip>
 
               <div>
-                <h6>{entry.name}</h6>
+                <span className={f('card-title')}>{entry.name}</span>
               </div>
 
               <span className={f('name-ac')}>{entry.accession}</span>
