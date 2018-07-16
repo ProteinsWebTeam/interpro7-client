@@ -51,6 +51,9 @@ const mapStateToPropsForOldLink = createSelector(
   d => {
     const href = 'https://www.ebi.ac.uk/interpro/';
     const { key } = d.main;
+    if (key === 'job' && d.job.type === 'InterProScan' && d.job.accession) {
+      return { href: `${href}sequencesearch/${d.job.accession}` };
+    }
     if (key === 'entry') {
       if (!d.entry.db) {
         return { href };
