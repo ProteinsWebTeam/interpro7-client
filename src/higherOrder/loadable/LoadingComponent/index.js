@@ -46,7 +46,9 @@ export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
             target="_blank"
             withReferrer
           >
-            ✉️ Contact form
+            <span role="img" aria-label="email">
+              ✉
+            </span>️ Contact form
           </Link>
         </div>
       </div>
