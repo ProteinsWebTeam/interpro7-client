@@ -1,4 +1,5 @@
 @import '../../styles/timing.css';
+@import '../../styles/colors.css';
 
 @supports (initial-letter: 2) {
   .paragraph::first-letter {
@@ -9,4 +10,12 @@
 
 .inline {
   display: inline;
+}
+
+a.text-high:focus {
+  color: var(--colors-warning-txt);
+  font-weight: bold;
+  font-size: 110%;
+  background-color: var(--colors-marktext);
+  outline: 0;
 }

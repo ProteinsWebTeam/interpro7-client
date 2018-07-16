@@ -3,8 +3,8 @@
 
 .reference {
   /*padding-top: 0.2rem;*/
-  text-indent: -1.6em;
-  padding-left: 1.3rem;
+  /*text-indent: -1.6em;*/
+  /*padding-left: 1.3rem;*/
 }
 
 .further .reference {
@@ -19,12 +19,7 @@
 .reference .index {
   margin-right: 0.5ch;
   color: #9da0a4;
-}
-
-.reference span.volume {
-}
-
-.reference span.pages {
+  outline: 0;
 }
 
 .reference .cite {

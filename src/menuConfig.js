@@ -479,3 +479,15 @@ export const InterPro /*: Array<Object> */ = [
     iconClass: 'functional',
   },
 ];
+
+export const NOT_MEMBER_DBS /*: Set<string> */ = new Set([
+  'COILS',
+  'MOBIDB',
+  'MOBIDB_LITE',
+  'SIGNALP',
+  'SIGNALP_EUK',
+  'SIGNALP_GRAM_POSITIVE',
+  'SIGNALP_GRAM_NEGATIVE',
+  'PHOBIUS',
+  'TMHMM',
+]);

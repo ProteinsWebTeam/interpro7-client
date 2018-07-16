@@ -14,9 +14,10 @@ import { schemaProcessDataForDB } from 'schema_org/processors';
 import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
+import ipro from 'styles/interpro-new.css';
 import entry from 'components/Entry/Literature/style.css';
 
-const f = foundationPartial(local, entry);
+const f = foundationPartial(ipro, local, entry);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -55,53 +56,181 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
       <section>
         <h3>The InterPro Consortium</h3>
         <p>The following databases make up the InterPro Consortium:</p>
-
-        <ul className={f('list')}>
-          {memberDBs.map(db => {
-            const date = db.releaseDate && new Date(db.releaseDate);
-            return (
-              <li key={db.canonical}>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: { db: db.canonical },
-                    },
-                  }}
-                >
-                  <MemberSymbol type={db.canonical} className={f('md-small')} />
-                  <strong>{db.name}</strong> (version {db.version})
-                </Link>
-                {db.releaseDate ? (
-                  <p>
-                    <small>
-                      {'Released '}
-                      <time
-                        dateTime={db.releaseDate}
-                        title={date.toLocaleDateString()}
+        <table className={f('light')}>
+          <tbody>
+            {memberDBs.map(db => {
+              const date = db.releaseDate && new Date(db.releaseDate);
+              const md = db.canonical;
+              return (
+                <tr key={md}>
+                  <td>
+                    <MemberSymbol type={md} className={f('md-small')} />
+                  </td>
+                  <td>
+                    {' '}
+                    {md === 'cdd' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml"
                       >
-                        <TimeAgo date={date} noUpdate />
-                      </time>
-                    </small>
-                  </p>
-                ) : null}
-                <p>{db.description}</p>
-                {databases &&
-                  databases[db.type.toUpperCase()] && (
-                    <SchemaOrgData
-                      data={{
-                        name: db.name,
-                        version: db.version,
-                        releaseDate: db.releaseDate,
-                        location: window.location,
-                      }}
-                      processData={schemaProcessDataForDB}
-                    />
-                  )}
-              </li>
-            );
-          })}
-        </ul>
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'cathgene3d' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//www.cathdb.info/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'hamap' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//hamap.expasy.org/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'mobidblt' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//mobidb.bio.unipd.it/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'panther' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//www.pantherdb.org/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'pfam' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//pfam.xfam.org/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'pirsf' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'prints' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//130.88.97.239/PRINTS/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'prodom' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//prodom.prabi.fr/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'profile' || md === 'prosite' ? (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//prosite.expasy.org/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    ) : (
+                      ''
+                    )}
+                    {md === 'sfld' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//sfld.rbvi.ucsf.edu/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'smart' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//smart.embl-heidelberg.de/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'ssf' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//supfam.org/"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                    {md === 'tigrfams' && (
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href="//tigrfams.jcvi.org/cgi-bin/index.cgi"
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
+                    )}
+                  </td>
+                  <td>{db.version}</td>
+
+                  <td>
+                    {' '}
+                    {db.description} <br />{' '}
+                    {db.releaseDate ? (
+                      <small>
+                        {'Released '}
+                        <time
+                          dateTime={db.releaseDate}
+                          title={date.toLocaleDateString()}
+                        >
+                          <TimeAgo date={date} noUpdate />
+                        </time>
+                      </small>
+                    ) : null}
+                    {databases &&
+                      databases[db.type.toUpperCase()] && (
+                        <SchemaOrgData
+                          data={{
+                            name: db.name,
+                            version: db.version,
+                            releaseDate: db.releaseDate,
+                            location: window.location,
+                          }}
+                          processData={schemaProcessDataForDB}
+                        />
+                      )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </section>
     );
   }

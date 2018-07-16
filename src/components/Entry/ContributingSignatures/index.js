@@ -39,8 +39,7 @@ const SignatureLink = ({ accession, db, label }) => (
     }}
   >
     <small>
-      <Tooltip title={`${label} (${accession})`}>{label || accession}</Tooltip>
-      <br />
+      <Tooltip title={`${label} (${accession})`}>{accession || label}</Tooltip>
     </small>
   </Link>
 );
@@ -62,12 +61,13 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => {
               <MemberSymbol type={db} className={f('md-small')} />
               <div>
                 <span className={f('db-name')}>{db}: </span>{' '}
-                {Object.entries(signatures).map(([accession, name]) => (
+                {Object.entries(signatures).map(([accession, name], index) => (
                   <React.Fragment key={accession}>
                     <SchemaOrgData
                       data={{ db, name: accession }}
                       processData={schemaProcessData}
                     />
+                    {index ? ', ' : ''}
                     <SignatureLink db={db} accession={accession} label={name} />
                   </React.Fragment>
                 ))}

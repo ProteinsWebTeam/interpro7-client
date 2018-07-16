@@ -89,9 +89,9 @@
 
 .signature {
   background-color: #d5eff3;
+  border: 1px #d5eff3 solid;
   /*display:flex;*/
   /*flex-basis: 30%;*/ /* 3 items 100% columns width : doesn't work on IE11 !*/
-  border: 1px rgba(140, 166, 175, 0.16) solid;
   border-radius: 4px;
   padding: 0 4px;
   margin: 2px;
