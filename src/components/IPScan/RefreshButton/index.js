@@ -58,4 +58,7 @@ class RefreshButton extends PureComponent {
   }
 }
 
-export default connect(undefined, { updateJobStatus })(RefreshButton);
+export default connect(
+  undefined,
+  { updateJobStatus },
+)(RefreshButton);

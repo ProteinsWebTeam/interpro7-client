@@ -627,6 +627,11 @@ entryHandler.children = new Set([
   integrationHandler,
   interProHandler,
   memberDBHandler,
+  proteinHandler,
+  structureHandler,
+  taxonomyHandler,
+  proteomeHandler,
+  setHandler,
 ]);
 
 integrationHandler.children = new Set([memberDBHandler]);
@@ -669,7 +674,14 @@ memberDBAccessionHandler.children = new Set([
 ]);
 
 // Protein
-proteinHandler.children = new Set([proteinDBHandler]);
+proteinHandler.children = new Set([
+  proteinDBHandler,
+  entryHandler,
+  structureHandler,
+  taxonomyHandler,
+  proteomeHandler,
+  setHandler,
+]);
 
 proteinDBHandler.children = new Set([
   entryHandler,
@@ -690,7 +702,14 @@ proteinAccessionHandler.children = new Set([
 ]);
 
 // Structure
-structureHandler.children = new Set([structureDBHandler]);
+structureHandler.children = new Set([
+  structureDBHandler,
+  entryHandler,
+  proteinHandler,
+  taxonomyHandler,
+  proteomeHandler,
+  setHandler,
+]);
 
 structureDBHandler.children = new Set([
   entryHandler,
@@ -721,7 +740,14 @@ structureChainHandler.children = new Set([
 ]);
 
 // Taxonomy
-taxonomyHandler.children = new Set([taxonomyDBHandler]);
+taxonomyHandler.children = new Set([
+  taxonomyDBHandler,
+  entryHandler,
+  proteinHandler,
+  structureHandler,
+  proteomeHandler,
+  setHandler,
+]);
 
 taxonomyDBHandler.children = new Set([
   entryHandler,
@@ -742,7 +768,14 @@ taxonomyAccessionHandler.children = new Set([
 ]);
 
 // Poteome
-proteomeHandler.children = new Set([proteomeDBHandler]);
+proteomeHandler.children = new Set([
+  proteomeDBHandler,
+  entryHandler,
+  proteinHandler,
+  structureHandler,
+  taxonomyHandler,
+  setHandler,
+]);
 
 proteomeDBHandler.children = new Set([
   entryHandler,
@@ -763,7 +796,14 @@ proteomeAccessionHandler.children = new Set([
 ]);
 
 // Set
-setHandler.children = new Set([setDBHandler]);
+setHandler.children = new Set([
+  setDBHandler,
+  entryHandler,
+  proteinHandler,
+  structureHandler,
+  taxonomyHandler,
+  proteomeHandler,
+]);
 
 setDBHandler.children = new Set([
   entryHandler,
