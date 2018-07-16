@@ -234,21 +234,12 @@ export class _RelatedAdvanced extends PureComponent {
         ) : null}
         <div className={f('row')}>
           <div className={f('columns')}>
-            {mainType === 'protein' && focusType === 'entry' ? (
-              <p>
-                This {mainType} contains
-                {secondaryData.length > 1
-                  ? ` these ${toPlural(focusType)}:`
-                  : ` this ${focusType}:`}
-              </p>
-            ) : (
-              <p>
-                This {mainType} matches
-                {secondaryData.length > 1
-                  ? ` these ${toPlural(focusType)}:`
-                  : ` this ${focusType}:`}
-              </p>
-            )}
+            <p>
+              This {mainType} matches
+              {secondaryData.length > 1
+                ? ` these ${toPlural(focusType)}:`
+                : ` this ${focusType}:`}
+            </p>
           </div>
         </div>
         <Matches

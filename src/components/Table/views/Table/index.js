@@ -6,10 +6,11 @@ import Body from 'components/Table/Body';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from '../../style.css';
 
-const f = foundationPartial(styles, fonts);
+const f = foundationPartial(styles, ipro, fonts);
 
 class TableView extends PureComponent {
   static propTypes = {
@@ -33,7 +34,7 @@ class TableView extends PureComponent {
       dataTable,
     } = this.props;
     return (
-      <table className={f('table', 'light')}>
+      <table className={f('table', 'light', 'nolink', 'sorting')}>
         <Header columns={columns} notFound={notFound} />
         <Body
           rows={dataTable || []}
