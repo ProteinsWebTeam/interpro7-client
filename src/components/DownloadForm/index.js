@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import set from 'lodash-es/set';
-import { frame } from 'timing-functions/src';
 
 import Link from 'components/generic/Link';
 
@@ -60,7 +59,7 @@ class DownloadForm extends PureComponent {
         }
       }
     }
-    for (const { name, value, dataset } of this._ref.current.elements) {
+    for (const { name, value } of this._ref.current.elements) {
       if (name) set(object, name, value);
     }
     set(object.description, [object.description.main.key, 'isFilter'], null);
@@ -101,6 +100,9 @@ class DownloadForm extends PureComponent {
     const filters = typeObjects.filter(([, type]) => type.isFilter);
 
     const main = description.main.key || 'entry';
+
+    let sentence = `This ${fileType} file will contain information about`;
+    // TODO: to be continued
 
     return (
       <form onChange={this._handleChange} ref={this._ref}>
@@ -246,6 +248,7 @@ class DownloadForm extends PureComponent {
             <code>{endpoint}</code>
           </Link>
         </div>
+        <div>{sentence}</div>
         <pre>{JSON.stringify(description, null, 2)}</pre>
         <fieldset className={f('controls')}>
           <legend>Download</legend>
