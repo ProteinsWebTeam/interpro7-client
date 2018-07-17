@@ -282,7 +282,10 @@ class List extends PureComponent {
     const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
-        <MemberDBSelector contentType="set" className="left-side-db-selector" />
+        <MemberDBSelector
+          contentType="set"
+          className="pp-left-side-db-selector"
+        />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <hr />
