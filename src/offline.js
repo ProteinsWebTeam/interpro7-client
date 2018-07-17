@@ -2,8 +2,6 @@
 import * as runtime from 'offline-plugin/runtime';
 import { sleep, schedule } from 'timing-functions/src';
 
-import id from 'utils/cheap-unique-id';
-
 import { addToast } from 'actions/creators';
 
 // eslint-disable-next-line no-magic-numbers
@@ -36,6 +34,7 @@ export default async ({ dispatch } /*: Store */) => {
         return window.location.reload();
       }
       // Reload the page to load the new version only if user wants it
+
       dispatch(
         addToast(
           {
@@ -49,7 +48,7 @@ export default async ({ dispatch } /*: Store */) => {
               },
             },
           },
-          id(),
+          'new-version-toast',
         ),
       );
     },

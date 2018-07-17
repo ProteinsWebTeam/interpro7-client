@@ -11,9 +11,6 @@ const extractAllBut = key => ({
 export default (state /*: Object */ = {}, action /*: Object */) => {
   switch (action.type) {
     case ADD_TOAST:
-      if (state[action.id]) {
-        throw new Error(`Toast "${action.id}" already existing`);
-      }
       return { ...state, [action.id]: action.toast };
     case REMOVE_TOAST:
       return extractAllBut(action.id).from(state);
