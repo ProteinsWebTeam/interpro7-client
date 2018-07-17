@@ -8,6 +8,7 @@ import { addToast } from 'actions/creators';
 
 // eslint-disable-next-line no-magic-numbers
 const DELAY_BEFORE_CHECKING_NEW_VERSION = 1000 * 60 * 30; // 30 minutes
+// eslint-disable-next-line no-magic-numbers
 const DELAY_BEFORE_UNSAFE_TO_RELOAD = 2 * 1000; // 2 seconds
 
 /*:: import type Store from 'redux'; */
