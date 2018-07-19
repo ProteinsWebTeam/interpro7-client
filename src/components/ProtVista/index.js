@@ -18,10 +18,12 @@ import PopperJS from 'popper.js';
 import loadWebComponent from 'utils/load-web-component';
 
 import { foundationPartial } from 'styles/foundation';
+
+import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
-const f = foundationPartial(local, fonts);
+const f = foundationPartial(ipro, local, fonts);
 
 const requestFullScreen = element => {
   if (!element) return;
@@ -218,12 +220,13 @@ class ProtVista extends PureComponent {
               : entry.locations
                   .map(({ fragments }) =>
                     `
-          <li>location:
+          <li> 
+          <!--location:-->
             <ul>
               ${fragments
                 .map(({ start, end }) =>
                   `
-                <li>From ${start} to ${end}</li>
+                <li>${start} - ${end}</li>
               `.trim(),
                 )
                 .join('')}
@@ -397,18 +400,22 @@ class ProtVista extends PureComponent {
             </select>
           </div>
           <div className={f('option-collapse')}>
-            &nbsp;|&nbsp;
             <Tooltip title={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}>
               <button
                 onClick={this.toggleCollapseAll}
                 aria-label={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}
               >
-                {collapsed ? '▸ Expand' : '▾ Collapse'} All
+                {collapsed ? 'Expand' : 'Collapse'} All
               </button>
             </Tooltip>
-            &nbsp;|&nbsp;
           </div>
-          <div className={f('option-fullscreen')}>
+          <div
+            className={f(
+              'option-fullscreen',
+              'size-200',
+              'margin-right-medium',
+            )}
+          >
             <Tooltip title="View the domain viewer in full screen mode">
               <button
                 onClick={this.handleFullScreen}
@@ -484,7 +491,7 @@ class ProtVista extends PureComponent {
                               )
                             }
                           >
-                            {hideCategory[type] ? '▾' : '▸'} {type}
+                            {hideCategory[type] ? '▸' : '▾'} {type}
                           </button>
                         </header>
                       </div>
