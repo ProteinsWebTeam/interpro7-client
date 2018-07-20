@@ -82,11 +82,26 @@ const isGoTermsChecked = isXChecked('goterms');
 const isPathwaysChecked = isXChecked('pathways');
 const isStayChecked = isXChecked('stay');
 
-const checkValidity = (({ comment, IUPACProt }) => lines =>
-  lines.reduce(
-    (acc, line) => acc && (comment.test(line) || IUPACProt.test(line)),
-    true,
-  ))({ comment: /^\s*[>;].*$/m, IUPACProt: /^[a-z* -]*$/im });
+const commentRE = /^\s*[>;].*$/m;
+const IUPACProtRE = /^[a-z* -]*$/im;
+
+const checkValidity = lines => {
+  for (const line of lines) {
+    if (!commentRE.test(line) && !IUPACProtRE.test(line)) return false;
+  }
+  return true;
+};
+
+const MIN_LENGTH = 3;
+
+const isTooShort = lines => {
+  let count = 0;
+  for (const line of lines) {
+    if (IUPACProtRE.test(line)) count += line.trim().length;
+    if (count >= MIN_LENGTH) return false;
+  }
+  return true;
+};
 
 const compositeDecorator = new CompositeDecorator([
   {
@@ -122,6 +137,7 @@ class IPScanSearch extends PureComponent {
     this.state = {
       editorState,
       valid: true,
+      tooShort: true,
     };
 
     this._formRef = React.createRef();
@@ -149,6 +165,7 @@ class IPScanSearch extends PureComponent {
               )
             : EditorState.createEmpty(compositeDecorator),
         valid: true,
+        tooShort: true,
         dragging: false,
         uploading: false,
       },
@@ -250,6 +267,7 @@ class IPScanSearch extends PureComponent {
     this.setState({
       editorState,
       valid: checkValidity(lines),
+      tooShort: isTooShort(lines),
     });
   };
 
@@ -267,7 +285,7 @@ class IPScanSearch extends PureComponent {
           }}
         />
       );
-    const { editorState, valid, dragging } = this.state;
+    const { editorState, valid, tooShort, dragging } = this.state;
     return (
       <div className={f('row', 'margin-bottom-medium')}>
         <div className={f('large-12', 'columns')}>
@@ -364,7 +382,7 @@ class IPScanSearch extends PureComponent {
                     <input
                       type="submit"
                       className={f('button', { disabled: !valid })}
-                      disabled={!valid}
+                      disabled={tooShort || !valid}
                       value="Search"
                     />
                     <input

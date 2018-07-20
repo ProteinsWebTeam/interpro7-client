@@ -14,10 +14,11 @@ import { schemaProcessDataForDB } from 'schema_org/processors';
 import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import entry from 'components/Entry/Literature/style.css';
 
-const f = foundationPartial(ipro, local, entry);
+const f = foundationPartial(fonts, ipro, local, entry);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -203,7 +204,13 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                     {' '}
                     {db.description} <br />{' '}
                     {db.releaseDate ? (
-                      <small>
+                      // TEMP - to re-add when update to latest icon set
+                      // <small className={f('icon', 'icon-common')} data-icon="&#xf073;">
+                      <small
+                        className={f('icon', 'icon-generic')}
+                        data-icon="r"
+                      >
+                        {' '}
                         {'Released '}
                         <time
                           dateTime={db.releaseDate}

@@ -18,10 +18,10 @@ import {
 // Max page size provided by the server
 // to maximise the number of results sent by the server at once
 const MAX_PAGE_SIZE = 200;
-// Time to wait before retrying to get results from API when we have a timeout
-const DELAY_WHEN_TIMEOUT = 60000; // 1 minute
+// Time to wait before retrying to get results from API when we have a problem
+const DELAY_WHEN_SOME_KIND_OF_PROBLEM = 60000; // 1 minute
 const REQUEST_TIMEOUT = 408;
-
+const MAX_ERROR_COUNT_FOR_ONE_REQUEST = 3;
 const THROTTLE_TIME = 500; // half a second
 
 const CHUNK_OF_EIGHTY = /(.{1,80})/g;
@@ -54,8 +54,7 @@ const processResultsFor = fileType =>
     }
   };
 
-// the `_` is just to make flow happy
-const downloadContent = async function*(url, fileType, _) {
+const getFirstPage = (url, fileType) => {
   const location = parse(url, true);
   if (fileType === 'FASTA') {
     location.query.extra_fields = [
@@ -67,31 +66,51 @@ const downloadContent = async function*(url, fileType, _) {
   }
   location.query.page = 1;
   location.query.page_size = MAX_PAGE_SIZE;
+  return location;
+};
+
+// the `_` is just to make flow happy
+const downloadContent = async function*(url, fileType, _) {
+  const firstPage = getFirstPage(url, fileType);
   // Counters for progress information
   let totalCount;
   let i = 0;
   // Create a function to transform API response into processed file part
   const processResults = processResultsFor(fileType);
   // As long as we have a next page, we keep processing
-  let next = format(location);
+  // Let's start with the first one
+  let next = format(firstPage);
+  let errorCount = 0;
   while (next) {
-    const response = await fetch(next);
-    // If the server sent a timeout response…
-    if (response.status === REQUEST_TIMEOUT) {
-      // …wait a bit…
-      await sleep(DELAY_WHEN_TIMEOUT);
-      // …then restart the loop with at the same URL
-      continue;
+    try {
+      const response = await fetch(next);
+      // If the server sent a timeout response…
+      if (response.status === REQUEST_TIMEOUT) {
+        // …wait a bit…
+        await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
+        // …then restart the loop with at the same URL
+        continue;
+      }
+      const payload = await response.json();
+      totalCount = payload.count;
+      for (const part of processResults(payload.results)) {
+        // use `totalCount + 1` to not finish at exactly 1 to account for the
+        // time needed to create the blob
+        yield { part, progress: ++i / (totalCount + 1) };
+      }
+      // If it's the last page, it will be null, so we exit the loop
+      next = payload.next;
+      // reset error counter as we're finished with that URL
+      errorCount = 0;
+    } catch (error) {
+      // If we have too many errors for one URL, just bail and throw the last
+      if (errorCount > MAX_ERROR_COUNT_FOR_ONE_REQUEST) {
+        throw error;
+      } else {
+        errorCount++;
+        await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
+      }
     }
-    const payload = await response.json();
-    totalCount = payload.count;
-    for (const part of processResults(payload.results)) {
-      // use `totalCount + 1` to not finish at exactly 1 to account for the
-      // time needed to create the blob
-      yield { part, progress: ++i / (totalCount + 1) };
-    }
-    // If it's the last page, it will be null, so we exit the loop
-    next = payload.next;
   }
 };
 
