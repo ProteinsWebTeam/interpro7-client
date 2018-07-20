@@ -116,7 +116,9 @@ class SearchByText extends PureComponent /*:: <Props> */ {
                     'button-group',
                   )}
                 >
-                  <button className={f('button')}>Search</button>
+                  <button className={f('button')} type="submit">
+                    Search
+                  </button>
                   <Link
                     className={f('secondary', 'hollow', 'button')}
                     to={{
