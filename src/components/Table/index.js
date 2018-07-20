@@ -148,7 +148,13 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     notFound={notFound}
                   />
                 </div>
-                <div className={f('type-selector', 'show-for-large')}>
+                <div
+                  className={f(
+                    'type-selector',
+                    'show-for-large',
+                    'pp-table-options',
+                  )}
+                >
                   <Tooltip title="View your results as a table">
                     <Link
                       to={l => ({ ...l, hash: 'table' })}

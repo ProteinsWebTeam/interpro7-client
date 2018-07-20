@@ -19,13 +19,13 @@ describe('reducer for toast messages', () => {
         { type: ADD_TOAST, id: 'b', toast: { value: 'value-b' } },
       ),
     ).toEqual({ a: { value: 'value-a' }, b: { value: 'value-b' } });
-    // id clash
-    expect(() =>
+    // replace existing one
+    expect(
       reducer(
         { a: { value: 'value-a' } },
         { type: ADD_TOAST, id: 'a', toast: { value: 'value-b' } },
       ),
-    ).toThrow();
+    ).toEqual({ a: { value: 'value-b' } });
   });
 
   test('should handle REMOVE_TOAST action', () => {
