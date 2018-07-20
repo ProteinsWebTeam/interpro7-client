@@ -18,8 +18,9 @@
 
 @media screen and (max-width: 75rem) {
   .view-options-title {
-    font-size: 1.23rem;
+    font-size: 1rem;
     font-weight: 500;
+    flex-shrink: 0;
   }
 }
 .view-options {
@@ -30,89 +31,138 @@
 }
 .view-options select {
   font-size: 100%;
+  width: auto;
   padding: 0 1.5rem 0 0.5rem;
   border: 1px transparent solid; /*define transparent border to fix the moving bu on focus*/
+  margin-bottom: 0;
+}
+/*avoid select text to collapse for small screens*/
+.option-color {
+  white-space: nowrap;
+}
+.option-fullscreen button {
+  color: var(--colors-dark);
+}
+.option-fullscreen button:hover {
+  color: var(--colors-nearly-black);
+}
+
+.option-collapse {
+  width: 150px;
+  border-left: 1px solid black;
+  padding-left: 1.5rem;
+  & button {
+    outline: none;
+  }
 }
 
 .track-group {
   width: 100%;
   display: block;
 }
+
 .tracks-container {
   color: rgb(102, 102, 102);
 }
 
 .tracks-container header {
-  border-top: 6px solid rgba(255, 255, 255, 0.4);
+  padding-top: 0.5rem;
+  padding-left: 0.3rem;
+  /*Trial to make it work with highlighted*/
+  /*position: absolute;*/
+  /*margin-top: -1.5rem;*/
+  border-top: 3px solid rgba(195, 195, 195, 0.4);
 }
+
 .tracks-container header button {
+  outline: 0;
   fill: var(--colors-dark);
   text-transform: capitalize;
-  font-size: 110%;
+  font-size: 129%;
   font-family: var(--fonts-system);
   font-weight: 300;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
 }
-.track-container {
-  /*padding-left: 1em;*/
+
+/*text ruler used when zooming*/
+.track-container text {
+  fill: var(--colors-graydark);
+}
+
+/*zoom sqc indicator*/
+.track-container svg polygon {
+  fill: black;
+  opacity: 0.8;
+}
+.track-container svg rect {
+  stroke-width: 0;
+  fill-opacity: 0.45; /*fill: black;*/
 }
 
 .track-row {
   display: flex;
 }
 .track-component {
-  width: 90%;
+  width: 88%;
   background: rgba(0, 0, 0, 0.14);
+  cursor: move;
 }
+
+/*can't use highlight class*/
+.track-component rect {
+  fill: grey;
+}
+
+/*blobs*/
 .track-component path {
-  opacity: 0.7;
   stroke: rgba(0, 0, 0, 0.3);
   stroke-width: 2;
+  cursor: pointer;
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
 }
-.track-component path:hover {
-  opacity: 1;
-}
+
 .aligned-to-track-component {
-  width: 90%;
+  width: 88%;
   line-height: 0;
 }
+
 .track-accession {
-  width: 10%;
+  font-family: var(--fonts-system);
+  width: 12%;
   overflow: hidden;
   white-space: nowrap;
-  padding-left: 0.5em;
+  padding-left: 0.5rem;
+  text-transform: uppercase;
+  & a:hover {
+    border-bottom: 1px var(--colors-dark) solid;
+  }
 }
 .track-accession > a,
 .track-accession > a:focus,
 .track-accession > a:visited {
-  text-transform: uppercase;
-  font-weight: bold;
+  font-weight: 600;
   color: var(--colors-dark);
 }
 .track-accession-child {
-  line-height: 1.2;
+  line-height: 1.2; /*condensed view - if removed highlight is not working anymore*/
   white-space: nowrap;
 }
 .track-accession-child > a,
 .track-accession-child > a:focus,
 .track-accession-child > a:visited {
-  text-transform: uppercase;
-  font-size: 0.9em;
-  font-weight: normal;
-  color: var(--colors-dark);
+  font-size: 90%;
+  color: var(--colors-graydark);
 }
-div.buttons {
-  font-size: 0.9em;
-}
-.select-inline {
-  font-size: 0.9em;
-  width: auto;
-  padding-bottom: 0;
-  border: 0;
-  margin-bottom: 0;
-}
+
 .hideCategory {
   display: none;
 }
+
 .fullscreenable:-webkit-full-screen .fullscreen {
   display: none;
 }
@@ -121,19 +171,8 @@ div.buttons {
 }
 
 .popper {
-  & h5 {
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-  & h5,
-  & h4 {
-    color: white;
-  }
-}
-
-.popper {
   position: absolute;
-  background: #333;
+  background: var(--colors-ebidark);
   text-align: center;
   color: white;
   min-width: 150px;
@@ -141,11 +180,24 @@ div.buttons {
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   padding: 0.4rem 0.8rem;
   margin: 6px;
+
+  & h5 {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  & h5,
+  & h4 {
+    color: white;
+  }
+
+  & ul {
+    /*text-align: left;*/
+    list-style: none;
+    margin: 0;
+  }
 }
-.popper ul {
-  text-align: left;
-  list-style: none;
-}
+
 .popper .popper__arrow {
   width: 0;
   height: 0;
@@ -204,11 +256,24 @@ div.buttons {
   margin-right: 0;
 }
 
+/*Structure and protein page - entry list page*/
 .track-in-table {
-  min-width: 300px;
-  font-size: 12px;
+  /*min-width: 300px;*/
 }
+
+.track-in-table text {
+  fill: var(--colors-graydark);
+}
+/*temp while we can't use the direct class .sequence*/
+.track-in-table protvista-sequence svg > g:nth-of-type(2) text {
+  transform: TranslateY(6px); /*temp fix when sequence appears*/
+}
+.track-in-table .track-component,
+.track-in-table .aligned-to-track-component {
+  width: 100%;
+}
+/*keep nth-of-type to make it work with multi track as for structure*/
 .track-in-table .track-component:nth-of-type(2),
 .track-in-table .track-row:nth-of-type(2) {
-  margin-top: -24px;
+  margin-top: -18px;
 }
