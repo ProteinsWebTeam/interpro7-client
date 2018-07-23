@@ -274,7 +274,8 @@ export const entryType = [
   },
   {
     type: 'Homologous Superfamily',
-    description: '',
+    description:
+      'A homologous superfamily is a group of proteins that share a common evolutionary origin, reflected by similarity in their structure. Since superfamily members often display very low similarity at the sequence level, this type of InterPro entry is usually based on a collection of underlying hidden Markov models, rather than a single signature.',
   },
   {
     type: 'Repeat',
@@ -307,10 +308,6 @@ export const entryType = [
       A short sequence that contains one or more conserved residues.
       Post-translational modification site.
     `,
-  },
-  {
-    type: 'Unknown',
-    description: '',
   },
 ];
 
