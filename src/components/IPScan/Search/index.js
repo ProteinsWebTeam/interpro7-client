@@ -340,19 +340,29 @@ class IPScanSearch extends PureComponent {
                 <div className={f('row')}>
                   <div className={f('columns')}>
                     <div className={f('button-group', 'line-with-buttons')}>
-                      <div className={f('hollow', 'button', 'tertiary')}>
-                        <label className={f('file-input-label')}>
-                          Choose file
-                          <input
-                            type="file"
-                            onChange={this._handleFileChange}
-                            hidden
-                          />
-                        </label>
-                      </div>
+                      <label
+                        className={f(
+                          'hollow',
+                          'button',
+                          'tertiary',
+                          'user-select-none',
+                        )}
+                      >
+                        Choose file
+                        <input
+                          type="file"
+                          onChange={this._handleFileChange}
+                          hidden
+                        />
+                      </label>
                       <button
                         type="button"
-                        className={f('hollow', 'button', 'secondary')}
+                        className={f(
+                          'hollow',
+                          'button',
+                          'secondary',
+                          'user-select-none',
+                        )}
                         onClick={this._loadExample}
                       >
                         Example protein sequence
