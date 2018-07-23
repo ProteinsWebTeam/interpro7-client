@@ -67,6 +67,10 @@ a:focus {
 mark {
   background-color: var(--colors-marktext);
 }
+/*entry type - force last item to align on left*/
+.columns:last-child:not(:first-child) {
+  float: left;
+}
 
 /****************************** END Overwrite EBI  global**********************/
 
