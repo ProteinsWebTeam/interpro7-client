@@ -135,26 +135,33 @@ class BySpecies extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('species-list')}>
         <AnimatedEntry className={f('row')} element="div">
-          {speciesFeat.map(species => {
-            const { tax_id: taxID } = species;
-            return (
-              <Species
-                species={species}
-                key={taxID || 'unclassified'}
-                loading={loading}
-                entries={
-                  loading
-                    ? '...'
-                    : countsE && countsE[taxID] && countsE[taxID].value
-                }
-                proteins={
-                  loading
-                    ? '...'
-                    : countsP && countsP[taxID] && countsP[taxID].value
-                }
-              />
-            );
-          })}
+          {speciesFeat
+            .sort((a, b) => {
+              // sort list by alphabetical order
+              if (a.title.toUpperCase() > b.title.toUpperCase()) return 1;
+              if (a.title.toUpperCase() < b.title.toUpperCase()) return -1;
+              return 0;
+            })
+            .map(species => {
+              const { tax_id: taxID } = species;
+              return (
+                <Species
+                  species={species}
+                  key={taxID || 'unclassified'}
+                  loading={loading}
+                  entries={
+                    loading
+                      ? '...'
+                      : countsE && countsE[taxID] && countsE[taxID].value
+                  }
+                  proteins={
+                    loading
+                      ? '...'
+                      : countsP && countsP[taxID] && countsP[taxID].value
+                  }
+                />
+              );
+            })}
         </AnimatedEntry>
         <Link
           to={{
