@@ -64,6 +64,14 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
         <AnimatedEntry className={f('row')} element="div">
           {memberDB
             .filter(({ canonical }) => canonical !== 'mobidblt')
+            .sort((a, b) => {
+              // sort list by alphabetical order
+              if (a.canonical.toUpperCase() > b.canonical.toUpperCase())
+                return 1;
+              if (a.canonical.toUpperCase() < b.canonical.toUpperCase())
+                return -1;
+              return 0;
+            })
             .map(({ canonical, description, name, version, releaseDate }) => (
               <div className={f('column', 'text-center')} key={name}>
                 <SchemaOrgData
