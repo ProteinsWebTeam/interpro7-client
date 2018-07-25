@@ -303,7 +303,14 @@ class IPScanSearch extends PureComponent {
             ref={this._formRef}
           >
             <div>
-              <div className={f('secondary', 'callout', 'border')}>
+              <div
+                className={f(
+                  'secondary',
+                  'callout',
+                  'border',
+                  'margin-bottom-none',
+                )}
+              >
                 <div className={f('row')}>
                   <div className={f('large-12', 'columns', 'sqc-search-input')}>
                     <h3 className={f('light')}>Sequence, in FASTA format</h3>
