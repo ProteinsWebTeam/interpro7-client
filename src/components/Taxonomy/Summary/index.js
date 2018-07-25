@@ -183,7 +183,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
           >
             {open => (
               <span
-                className={f('header-total-results', {
+                className={f('header-total-results', 'margin-bottom-medium', {
                   selector: typeof open === 'boolean',
                   open,
                 })}
