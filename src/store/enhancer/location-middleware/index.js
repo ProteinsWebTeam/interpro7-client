@@ -18,7 +18,12 @@ const middleware /*: Middleware */ = history => ({ dispatch, getState }) => {
     // Build new action from scratch
     async ({ state: { customLocation, state } }) => {
       await Promise.resolve();
-      return dispatch(customLocationChangeFromHistory(customLocation, state));
+      return dispatch(
+        customLocationChangeFromHistory(customLocation, {
+          ...customLocation.state,
+          ...state,
+        }),
+      );
     },
   );
 
