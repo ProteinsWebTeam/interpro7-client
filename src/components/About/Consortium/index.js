@@ -82,7 +82,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                       <Link
                         className={f('ext')}
                         target="_blank"
-                        href="//www.cathdb.info/"
+                        href="http://www.cathdb.info/"
                       >
                         <span className={f('h5')}>{db.name}</span>
                       </Link>
@@ -96,20 +96,22 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                         <span className={f('h5')}>{db.name}</span>
                       </Link>
                     )}
-                    {md === 'mobidblt' && (
+                    {// keep http - not https - while we wait for an update of their url
+                    md === 'mobidblt' && (
                       <Link
                         className={f('ext')}
                         target="_blank"
-                        href="//mobidb.bio.unipd.it/"
+                        href="http://mobidb.bio.unipd.it/"
                       >
                         <span className={f('h5')}>{db.name}</span>
                       </Link>
                     )}
-                    {md === 'panther' && (
+                    {// keep http - not https - while we wait for an update of their url
+                    md === 'panther' && (
                       <Link
                         className={f('ext')}
                         target="_blank"
-                        href="//www.pantherdb.org/"
+                        href="http://www.pantherdb.org/"
                       >
                         <span className={f('h5')}>{db.name}</span>
                       </Link>
@@ -132,11 +134,12 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                         <span className={f('h5')}>{db.name}</span>
                       </Link>
                     )}
-                    {md === 'prints' && (
+                    {// keep http - not https - while we wait for an update of their url
+                    md === 'prints' && (
                       <Link
                         className={f('ext')}
                         target="_blank"
-                        href="//130.88.97.239/PRINTS/"
+                        href="http://130.88.97.239/PRINTS/"
                       >
                         <span className={f('h5')}>{db.name}</span>
                       </Link>
@@ -161,29 +164,32 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                     ) : (
                       ''
                     )}
-                    {md === 'sfld' && (
+                    {// keep http - not https - while we wait for an update of their url
+                    md === 'sfld' && (
                       <Link
                         className={f('ext')}
                         target="_blank"
-                        href="//sfld.rbvi.ucsf.edu/"
+                        href="http://sfld.rbvi.ucsf.edu/django/"
                       >
                         <span className={f('h5')}>{db.name}</span>
                       </Link>
                     )}
-                    {md === 'smart' && (
+                    {// keep http - not https - while we wait for an update of their url
+                    md === 'smart' && (
                       <Link
                         className={f('ext')}
                         target="_blank"
-                        href="//smart.embl-heidelberg.de/"
+                        href="http://smart.embl-heidelberg.de/"
                       >
                         <span className={f('h5')}>{db.name}</span>
                       </Link>
                     )}
-                    {md === 'ssf' && (
+                    {// keep http - not https - while we wait for an update of their url
+                    md === 'ssf' && (
                       <Link
                         className={f('ext')}
                         target="_blank"
-                        href="//supfam.org/"
+                        href="http://supfam.org/"
                       >
                         <span className={f('h5')}>{db.name}</span>
                       </Link>
