@@ -113,6 +113,12 @@ class ProtVista extends PureComponent {
   }
 
   updateTracksWithData(data) {
+    const b2sh = new Map([
+      ['s', 'discontinuosStart'],
+      ['e', 'discontinuosEnd'],
+      ['se', 'discontinuos'],
+      ['es', 'discontinuos'],
+    ]);
     for (const type of data) {
       for (const d of type[1]) {
         const tmp = (d.entry_protein_locations || d.locations).map(loc => ({
@@ -133,7 +139,15 @@ class ProtVista extends PureComponent {
               source_database: child.source_database,
               entry_type: child.entry_type,
               type: child.type,
-              locations: child.entry_protein_locations || child.locations,
+              locations: (child.entry_protein_locations || child.locations).map(
+                loc => ({
+                  ...loc,
+                  fragments: loc.fragments.map(f => ({
+                    shape: b2sh.get(f.bounds),
+                    ...f,
+                  })),
+                }),
+              ),
               parent: d,
               color: getTrackColor(
                 Object.assign(child, { parent: d }),
