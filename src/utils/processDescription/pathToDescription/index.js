@@ -3,19 +3,25 @@ import { rootHandler, otherHandler } from 'utils/processDescription/handlers';
 
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 
+import getNewPartsFromOldURL from 'utils/interpro6-url-pattern';
+
 const MULTIPLE_SLASHES = /\/+/;
 
 export default (path /*: string */) => {
   const parts = path.split(MULTIPLE_SLASHES).filter(Boolean);
-  let output;
   try {
-    output = rootHandler.handle(getEmptyDescription(), ...parts);
+    return rootHandler.handle(getEmptyDescription(), ...parts);
   } catch (error) {
-    if (error.message.includes('404')) {
-      console.warn('404, check referrer');
-      console.log(window.referrer);
+    console.log('error');
+    if (
+      error.message.includes(
+        '404',
+      ) /*&&
+      document.referrer.startsWith(BASE_FOR_IP)6*/
+    ) {
+      const parts = getNewPartsFromOldURL(path);
+      if (parts) return rootHandler.handle(getEmptyDescription(), ...parts);
     }
-    output = otherHandler.handle(getEmptyDescription(), ...parts);
+    return otherHandler.handle(getEmptyDescription(), ...parts);
   }
-  return output;
 };
