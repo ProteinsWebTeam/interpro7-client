@@ -1,8 +1,32 @@
 @import '../../../styles/timing.css';
-.entry-type a.block {
-  display: block;
-}
-.entry-type a.block:hover {
-  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-  transition: all var(--timing-really-fast) ease-out;
+
+.entry-type {
+  font-size: 90%;
+
+  & a.block {
+    color: #0a0a0a;
+    display: block;
+    &:hover {
+      box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18),
+        0 4px 15px 0 rgba(0, 0, 0, 0.15);
+      transition: all var(--timing-really-fast) ease-out;
+    }
+  }
+
+  & .card-title {
+    line-height: 1.1;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
+      sans-serif;
+    font-weight: 600;
+    font-size: 120%;
+    border-bottom: 2px white solid;
+    padding-bottom: 2px;
+    transition: border 0.3s ease-in-out;
+
+    &:hover {
+      border-bottom: 2px #4e4e4e solid;
+      padding-bottom: 2px;
+    }
+  }
 }
