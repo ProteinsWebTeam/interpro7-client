@@ -68,7 +68,5 @@ export default new Map([
     ]),
   ],
   ['job.detail', new Set([handlers.detailHandler])],
-  ['other.0', otherHandlerSet],
-  ['other.1', otherHandlerSet],
-  ['other.2', otherHandlerSet],
+  // No need to add for 'other', handling that in descriptionToDescription
 ]);

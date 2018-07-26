@@ -43,10 +43,14 @@ describe('pathToDescription()', () => {
         expect(pathToDescription('/whatever/level_2/level_3/')).toEqual(d);
       });
 
-      test('whatever 4 levels, should throw', () => {
-        expect(() =>
-          pathToDescription('/whatever/level_2/level_3/level_4/'),
-        ).toThrow('404');
+      test('whatever 4 levels', () => {
+        d.other[0] = 'whatever';
+        d.other[1] = 'level_2';
+        d.other[2] = 'level_3';
+        d.other[3] = 'level_4';
+        expect(pathToDescription('/whatever/level_2/level_3/level_4/')).toEqual(
+          d,
+        );
       });
     });
 

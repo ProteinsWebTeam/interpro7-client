@@ -13,14 +13,7 @@ export default history => {
   if (settingsStorage) {
     settings = settingsStorage.getValue() || undefined;
   }
-  let description = { other: ['error', '404'] };
-  let state;
-  try {
-    description = pathToDescription(pathname);
-  } catch (error) {
-    state = { errorURL: pathname };
-    console.error(error);
-  }
+  const description = pathToDescription(pathname);
   return {
     customLocation: {
       description,
@@ -28,7 +21,6 @@ export default history => {
         parseParamToNumber('page')(parse(search, true).query),
       ),
       hash: hash.replace(/^#/, ''),
-      state,
     },
     settings,
   };
