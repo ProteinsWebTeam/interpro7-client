@@ -1,7 +1,5 @@
 import * as handlers from 'utils/processDescription/handlers';
 
-const otherHandlerSet = new Set([handlers.otherHandler]);
-
 export default new Map([
   [
     'main.key',
