@@ -37,12 +37,6 @@ exports[`<Pages /> should render 1`] = `
           "set" => [Function],
           "search" => [Function],
           "job" => [Function],
-          "release_notes" => [Function],
-          "download" => [Function],
-          "about" => [Function],
-          "help" => [Function],
-          "contact" => [Function],
-          "settings" => [Function],
         }
       }
       indexRoute={[Function]}

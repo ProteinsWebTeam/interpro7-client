@@ -4,7 +4,7 @@ import set from 'lodash-es/set';
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 import descriptionItemToHandlers from 'utils/processDescription/descriptionItemToHandlers';
 
-export default (description /*: {[key: string]: string} */) => {
+export default (description /*: {[key: string]: string} */ = {}) => {
   // new description to be populated
   const _description = getEmptyDescription();
   // for all possible keys in description, get potential handlers
@@ -39,5 +39,9 @@ export default (description /*: {[key: string]: string} */) => {
       matchingHandler.cleanedUp || matchingHandler.cleanUp(value, _description),
     );
   }
+  // Specific logic for 'other'
+  _description.other.push(...(description.other || []));
+  Object.seal(_description.other);
+
   return _description;
 };

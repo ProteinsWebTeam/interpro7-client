@@ -1,12 +1,5 @@
 // @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-
-import config from 'config';
-
-import { locationStateSelector } from 'reducers/custom-location/state';
 
 import Link from 'components/generic/Link';
 
@@ -17,13 +10,8 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, styles);
 
-export class NotFound extends PureComponent /*:: <{ errorURL?: string }> */ {
-  static propTypes = {
-    errorURL: T.string,
-  };
-
+class NotFound extends PureComponent /*:: <{}> */ {
   render() {
-    const { errorURL } = this.props;
     return (
       <section className={f('error-msg')}>
         <div className={f('row')}>
@@ -33,17 +21,6 @@ export class NotFound extends PureComponent /*:: <{ errorURL?: string }> */ {
             <h5 className={f('lead')}>
               We are sorry, the page you were trying to access doesn’t exist.
             </h5>
-            {errorURL ? (
-              <p>
-                You were trying to access{' '}
-                <code>
-                  {`${config.root.website.pathname}/${errorURL}`.replace(
-                    /\/+/g,
-                    '/',
-                  )}
-                </code>
-              </p>
-            ) : null}
             <br />
             <p>
               {'Double check the URL or go back to the '}
@@ -95,8 +72,4 @@ export class NotFound extends PureComponent /*:: <{ errorURL?: string }> */ {
   }
 }
 
-const mapStateToProps = createSelector(locationStateSelector, state => ({
-  errorURL: state.errorURL,
-}));
-
-export default connect(mapStateToProps)(NotFound);
+export default NotFound;
