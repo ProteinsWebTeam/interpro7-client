@@ -870,7 +870,7 @@ hr {
 /*END customise LiteMole*/
 
 /*custom CLAN-VIEWER node module*/
-.clanviewer {
+:global(.clanviewer) {
   width: 100%;
 }
 .clanviewer g text {
