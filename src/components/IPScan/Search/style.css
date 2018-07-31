@@ -104,3 +104,7 @@ input:disabled {
   color: var(--colors-gray);
   margin-right: 0.2rem; /*to align with border form*/
 }
+
+.user-select-none {
+  user-select: none;
+}

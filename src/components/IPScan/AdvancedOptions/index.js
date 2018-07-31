@@ -178,7 +178,7 @@ class AdvancedOptions extends PureComponent {
             </Tooltip>
             <Tooltip title="Give this job a local title (only visible on this browser)">
               <label className={f('input-group')}>
-                <span className={f('input-group-label')}>local title</span>
+                <span className={f('input-group-label')}>Job title</span>
                 <input
                   type="text"
                   className={f('input-group-field')}
