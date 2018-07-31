@@ -54,7 +54,8 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
             className={f('small', 'icon', 'icon-species')}
             data-icon={species.icon}
           />
-          <h6>{species.title}</h6>
+          <br />
+          <span className={f('card-title')}>{species.title}</span>
         </Link>
         <div className={f('list-detail')}>
           <p>
