@@ -1,5 +1,6 @@
 @import '../../styles/colors.css';
 @import '../../styles/timing.css';
+@import '../../styles/fonts.css';
 
 .count {
   color: var(--colors-graydark);
@@ -30,9 +31,7 @@
 
   & .card-title {
     line-height: 1.1;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-      Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
-      sans-serif;
+    font-family: var(--fonts-system);
     font-weight: 600;
     font-size: 120%;
     border-bottom: 2px white solid;
