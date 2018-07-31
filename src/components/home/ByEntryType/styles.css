@@ -1,4 +1,5 @@
 @import '../../../styles/timing.css';
+@import '../../../styles/fonts.css';
 
 .entry-type {
   font-size: 90%;
@@ -15,9 +16,7 @@
 
   & .card-title {
     line-height: 1.1;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-      Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
-      sans-serif;
+    font-family: var(--fonts-system);
     font-weight: 600;
     font-size: 120%;
     border-bottom: 2px white solid;
