@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-
+// import Description from 'components/Description';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Link from 'components/generic/Link';
 import Table, { Column, Exporter, PageSizeSelector } from 'components/Table';
@@ -58,6 +58,9 @@ class SearchResults extends PureComponent {
         </div>
       );
     }
+    // TODO: Use Improved description component to show summary (with  limit of characters and highlight) as there is a limitation for search starting with "cite..." or "taxon..." in this case
+    const reg = /\<[^"].*?id="([^"]+)"\/>/gi; /*all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/>*/
+    const regtax = /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /*Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon>*/
     return (
       <ErrorBoundary>
         <SchemaOrgData
@@ -117,11 +120,27 @@ class SearchResults extends PureComponent {
           <Column
             dataKey="fields.description"
             renderer={d => (
-              <HighlightedText
-                text={d.join('\n')}
-                maxLength={MAX_LENGTH}
-                textToHighlight={searchValue}
-              />
+              <div>
+                <HighlightedText
+                  text={d
+                    .join('\n')
+                    .replace('<p>', '')
+                    .replace('</p>', '')
+                    .replace(regtax, '$1')
+                    .replace(reg, '$1')
+                    .replace('[]', '')
+                    .replace('()', '')}
+                  maxLength={MAX_LENGTH}
+                  textToHighlight={searchValue}
+                />
+
+                {
+                  //   <Description
+                  // textBlocks={d}
+                  //  withoutIDs
+                  //  />
+                }
+              </div>
             )}
             cellStyle={{ textAlign: 'justify' }}
           >
