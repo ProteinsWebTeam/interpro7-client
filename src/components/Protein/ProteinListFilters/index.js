@@ -19,7 +19,7 @@ const ProteinListFilters = ({ hasEntryFilter }) => (
   </FiltersPanel>
 );
 ProteinListFilters.propTypes = {
-  hasEntryFilter: T.boolean,
+  hasEntryFilter: T.bool,
 };
 
 const mapStateToProps = createSelector(
