@@ -1,13 +1,27 @@
 @import '../styles/timing.css';
 @import '../styles/colors.css';
+@import '../styles/fonts.css';
 /************************************home.js************************************/
-/*homepage figures - temp while there is a specific component*/
-.fig-container {
-  float: left;
-  width: 17%;
-  margin: 0.5rem 1.5rem 1rem 0;
-  overflow: hidden;
+.intro-wrapper {
+  display: flex;
+  margin: 1rem 0 2rem 0;
+  font-family: var(--fonts-system);
+  font-weight: 400;
+  font-size: 100%;
 }
+
+/*homepage figures - temp while there is a specific component*/
+.intro-fig {
+  width: 57%;
+  margin-right: 2rem;
+  /*overflow: hidden;*/
+}
+
+.fig-brick {
+  background: url(../images/cube-md-pile-03.svg) no-repeat 50% 50%;
+  background-size: 120%;
+}
+
 .fig-sqc {
   background: url(../images/sqc.png) no-repeat -12% 69%;
   height: 12.4rem;
