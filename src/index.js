@@ -1,5 +1,6 @@
 // Polyfills
 /* global ga: false */
+import 'core-js/fn/symbol/iterator';
 import 'babel-polyfill';
 
 import React from 'react';
