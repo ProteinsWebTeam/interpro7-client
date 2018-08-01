@@ -180,6 +180,7 @@ const EndpointSettings = ({
 
     <div className={f('row')}>
       <div className={f('medium-2', 'column')}>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           Protocol:
           <select name="protocol" value={protocol} readOnly={!DEV}>
