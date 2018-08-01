@@ -84,6 +84,13 @@ const RedirectToDefault = ({
     />
   );
 };
+RedirectToDefault.propTypes = {
+  customLocation: T.shape({
+    search: T.shape({
+      q: T.string,
+    }).isRequired,
+  }).isRequired,
+};
 
 class Wrapper extends PureComponent {
   static propTypes = {
