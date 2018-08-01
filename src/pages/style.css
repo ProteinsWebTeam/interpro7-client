@@ -5,9 +5,6 @@
 .intro-wrapper {
   display: flex;
   margin: 1rem 0 2rem 0;
-  font-family: var(--fonts-system);
-  font-weight: 400;
-  font-size: 100%;
 }
 
 /*homepage figures - temp while there is a specific component*/
