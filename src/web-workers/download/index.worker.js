@@ -134,9 +134,10 @@ const generateFileHandle = (
   return URL.createObjectURL(blob);
 };
 
-const postProgress = throttle(progressAction => {
-  self.postMessage(progressAction);
-}, THROTTLE_TIME);
+const postProgress = throttle(
+  progressAction => self.postMessage(progressAction),
+  THROTTLE_TIME,
+);
 
 // Download manager, send messages from there
 const download = async (url, fileType) => {
