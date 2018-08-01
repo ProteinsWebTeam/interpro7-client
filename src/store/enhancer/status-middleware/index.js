@@ -50,9 +50,9 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
     await schedule(DEFAULT_SCHEDULE_DELAY);
 
     try {
-      for await (const action of checkStatus(getState())) {
-        dispatch(action);
-      }
+      // for await (const action of checkStatus(getState())) {
+      //   dispatch(action);
+      // }
     } catch (error) {
       console.error(error);
     } finally {
