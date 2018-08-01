@@ -66,3 +66,10 @@ export const inert = () /*: Promise<boolean> */ => {
     ) || Promise.resolve(true)
   );
 };
+
+export const elementMatches = () => {
+  if (!Element.prototype.matches) {
+    // $FlowIgnore
+    Element.prototype.matches = Element.prototype.msMatchesSelector;
+  }
+};
