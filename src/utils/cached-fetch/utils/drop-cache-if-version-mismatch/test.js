@@ -1,6 +1,6 @@
 import dropCacheIfVersionMismatch, { VersionHeader } from '.';
 
-describe('dropCacheIfVersionMismatch', () => {
+describe.skip('dropCacheIfVersionMismatch', () => {
   beforeAll(() => {
     // Mock sessionStorage
     window.sessionStorage = new Map();
