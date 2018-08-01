@@ -4,6 +4,8 @@ import 'core-js/fn/symbol/iterator';
 import 'core-js/es6/symbol.js';
 import 'babel-polyfill';
 
+import { elementMatches as elementMatchesPolyfill } from 'utils/polyfills';
+
 import React from 'react';
 import { render } from 'react-dom';
 
@@ -13,6 +15,8 @@ import ready from 'utils/ready';
 import hmr from 'index-hmr';
 
 import config, { DEV } from 'config';
+
+elementMatchesPolyfill();
 
 const schemaOrgManager = (...args) =>
   import(/* webpackChunkName: "schemaOrg" */ 'schema_org').then(
