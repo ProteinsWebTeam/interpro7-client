@@ -9,8 +9,13 @@ import { hexToRgb } from 'utils/entry-color';
 
 import 'litemol/dist/css/LiteMol-plugin-light.css';
 
-const embedStyle = { width: '100%', height: '50vh' };
-// const f = foundationPartial(ebiStyles);
+import { foundationPartial } from 'styles/foundation';
+import style from './style.css';
+
+const f = foundationPartial(style);
+
+// This is use to force an update in the litemol when changing to the stuck view
+const eventResize = new Event('resize');
 
 /*:: type Props = {
   id: string|number,
@@ -20,6 +25,12 @@ const embedStyle = { width: '100%', height: '50vh' };
 
 // Call as follows to highlight pre-selected entry (from Structure/Summary)
 // <StructureView id={accession} matches={matches} highlight={"pf00071"}/>
+
+const optionsForObserver = {
+  root: null,
+  rootMargin: '0px',
+  threshold: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+};
 
 class StructureView extends PureComponent /*:: <Props> */ {
   /*:: _ref: { current: ?HTMLElement }; */
@@ -37,11 +48,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
       plugin: null,
       entryMap: {},
       selectedEntry: '',
+      isStuck: false,
     };
 
     this.plugin = null;
 
     this._ref = React.createRef();
+    this._placeholder = React.createRef();
   }
 
   componentDidMount() {
@@ -106,8 +119,18 @@ class StructureView extends PureComponent /*:: <Props> */ {
         this.setState({ selectedEntry: '' });
       });
     });
+
+    const observer = new IntersectionObserver(entries => {
+      this.setState({ isStuck: entries[0].intersectionRatio < 0.4 });
+    }, optionsForObserver);
+    observer.observe(this._placeholder.current);
   }
 
+  componentDidUpdate(_, prevState) {
+    if (prevState.isStuck !== this.state.isStuck) {
+      window.dispatchEvent(eventResize);
+    }
+  }
   updateTheme(entries) {
     if (this.plugin) {
       const context = this.plugin.context;
@@ -175,19 +198,25 @@ class StructureView extends PureComponent /*:: <Props> */ {
   render() {
     return (
       <div>
-        <div style={embedStyle}>
+        <div className={f('structure-placeholder')} ref={this._placeholder}>
           <div
-            ref={this._ref}
-            style={{
-              background: 'white',
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
-            }}
-          />
+            className={f('structure-viewer', {
+              'is-stuck': this.state.isStuck,
+            })}
+          >
+            <div
+              ref={this._ref}
+              style={{
+                background: 'white',
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+              }}
+            />
+          </div>
         </div>
         {this.props.matches ? (
           <EntrySelection
@@ -196,6 +225,21 @@ class StructureView extends PureComponent /*:: <Props> */ {
             selectedEntry={this.state.selectedEntry}
           />
         ) : null}
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     );
   }
