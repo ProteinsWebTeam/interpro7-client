@@ -178,12 +178,13 @@ export const downloadError = (
 export const downloadSuccess = (
   url /*: string */,
   fileType /*: 'accession' | 'FASTA' */,
-  blobURL /*: string */,
+  { blobURL, size } /*: { string, size } */,
 ) => ({
   type: types.DOWNLOAD_SUCCESS,
   url,
   fileType,
   blobURL,
+  size,
 });
 
 export const downloadProgress = (

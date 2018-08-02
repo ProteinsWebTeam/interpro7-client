@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import filesize from 'filesize';
 
 import Table, { Column } from 'components/Table';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -84,6 +85,16 @@ class Summary extends PureComponent {
               )}
             >
               Status
+            </Column>
+            <Column
+              dataKey="size"
+              renderer={(size /*:: ?: number */) =>
+                Number.isFinite(size)
+                  ? filesize(size, { standard: 'iec' })
+                  : size
+              }
+            >
+              Size
             </Column>
             <Column
               dataKey="localID"
