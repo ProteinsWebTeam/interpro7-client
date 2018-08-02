@@ -131,7 +131,7 @@ const generateFileHandle = (
   const blob = new Blob(content, {
     type: `text/${fileType === 'FASTA' ? 'x-fasta' : 'plain'}`,
   });
-  return URL.createObjectURL(blob);
+  return { blobURL: URL.createObjectURL(blob), size: blob.size };
 };
 
 const postProgress = throttle(
@@ -165,11 +165,11 @@ const download = async (url, fileType) => {
         () => {
           // Finished getting all the content, generate a blob out of that
           // and get its URL
-          const blobURL = generateFileHandle(content, fileType);
+          const urlAndSize = generateFileHandle(content, fileType);
           // OK, we have done everything, set progress to 1 and set success
           postProgress(action(downloadProgress, 1));
           postProgress.flush();
-          self.postMessage(action(downloadSuccess, blobURL));
+          self.postMessage(action(downloadSuccess, urlAndSize));
         },
         onError,
       ),
