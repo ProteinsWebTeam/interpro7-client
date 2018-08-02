@@ -1,3 +1,5 @@
+@import '../../styles/timing.css';
+
 table th {
   top: 98px;
   position: sticky;
@@ -150,4 +152,15 @@ table th {
 .md-small {
   width: 50px;
   display: inline-block;
+}
+
+.table-main {
+  transition: opacity var(--timing-fast) ease-in-out;
+  opacity: 1;
+
+  &.loading {
+    user-select: none;
+    pointer-events: none;
+    opacity: 0.5;
+  }
 }
