@@ -11,10 +11,10 @@ import { serverStatus, browserStatus } from 'actions/creators';
 const DEFAULT_SCHEDULE_DELAY = 2000; // 2 seconds
 const DEFAULT_LOOP_TIMEOUT = 60000; // one minute
 
-const checkStatus = async function*({
-  status: { servers, browser },
-  settings,
-}) {
+const checkStatusesAndDispatch = async function(
+  { status: { servers, browser }, settings },
+  dispatch,
+) {
   // If we don't have a connection, no need to check for the servers,
   // we'll keep the last know values
   if (!browser) return;
@@ -29,9 +29,9 @@ const checkStatus = async function*({
         method: 'HEAD',
         useCache: false,
       });
-      yield serverStatus(endpoint, response.ok);
+      dispatch(serverStatus(endpoint, response.ok));
     } catch (_) {
-      yield serverStatus(endpoint, false);
+      dispatch(serverStatus(endpoint, false));
     }
   }
 };
@@ -50,9 +50,7 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
     await schedule(DEFAULT_SCHEDULE_DELAY);
 
     try {
-      for await (const action of checkStatus(getState())) {
-        dispatch(action);
-      }
+      checkStatusesAndDispatch(getState(), dispatch);
     } catch (error) {
       console.error(error);
     } finally {
