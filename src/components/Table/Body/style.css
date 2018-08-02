@@ -1,18 +1,5 @@
-@import '../../../styles/timing.css';
-
 .warning-msg-table {
   display: flex;
   justify-content: center;
   font-size: 140%;
-}
-
-.tbody {
-  transition: opacity var(--timing-fast) ease-in-out;
-  opacity: 1;
-
-  &.loading {
-    user-select: none;
-    pointer-events: none;
-    opacity: 0.5;
-  }
 }
