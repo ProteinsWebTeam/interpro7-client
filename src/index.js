@@ -1,7 +1,5 @@
 // Polyfills
 /* global ga: false */
-import 'core-js/fn/symbol/iterator';
-import 'core-js/es6/symbol.js';
 import 'babel-polyfill';
 
 import { elementMatches as elementMatchesPolyfill } from 'utils/polyfills';
