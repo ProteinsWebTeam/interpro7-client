@@ -16,8 +16,7 @@ export default (path /*: string */) => {
     if (
       error.message.includes(
         '404',
-      ) /*&&
-      document.referrer.startsWith(BASE_FOR_IP)6*/
+      ) /* && document.referrer.startsWith(BASE_FOR_IP6) */
     ) {
       const parts = getNewPartsFromOldURL(path);
       if (parts) return rootHandler.handle(getEmptyDescription(), ...parts);
