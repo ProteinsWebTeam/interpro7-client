@@ -77,6 +77,13 @@
   font-size: 0.72rem;
 }
 
+/*@supports (display: grid) {
+  .signature-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+*/
 /*.ext {*/
 /*&,*/
 /*&:hover,*/
