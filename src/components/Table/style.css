@@ -42,7 +42,7 @@ table th {
 
 .table-view .table-results-filtering .icon-view.table-view {
   background: url(../../images/icons/ico-view-table-round.svg) no-repeat;
-  background-size: 98%;
+  background-size: 100%;
 }
 .table-view .table-results-filtering .icon-view.list-view {
   background: url(../../images/icons/ico-view-list.svg) no-repeat;
