@@ -191,7 +191,8 @@ class ProtVista extends PureComponent {
   getElementFromEntry(detail) {
     const entry = detail.feature;
     const isResidue = detail.type === 'residue';
-    const tagString = `<div>
+    const isInterPro = entry.source_database === 'interpro';
+    const tagString = `<section>   
         <h5>
           ${entry.accession}
           ${
@@ -200,10 +201,26 @@ class ProtVista extends PureComponent {
               : ''
           } 
          </h5>
+          
         ${entry.name ? `<h4>${entry.name}</h4>` : ''}
-        <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
-        <p style={{ textTransform: 'uppercase' }}>
-          <small>${
+        
+        <!-- use class as Protvista is not react-->       
+        <div class="${f('pop-wrapper')}" >
+        <div>${
+          isInterPro
+            ? `<interpro-type
+                    type="${entry.entry_type.replace('_', ' ')}"
+                    dimension="1.4em"
+                    aria-label="Entry type"
+                  />`
+            : ''
+        } 
+        </div>
+        <div>${entry.entry_type.replace('_', ' ') || ''}</div>       
+        </div>
+        <p>
+          <small>  
+          ${
             Array.isArray(entry.source_database)
               ? entry.source_database[0]
               : entry.source_database
@@ -238,8 +255,7 @@ class ProtVista extends PureComponent {
                   .join('')
           }
         </ul>
-
-      </div>
+      </section>
     `.trim();
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));
@@ -440,8 +456,9 @@ class ProtVista extends PureComponent {
         <div className={f('track-row')}>{this.renderOptions()}</div>
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
-          <div ref={this._popperContentRef} />
+          <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
+
         <div className={f('protvista')}>
           <protvista-manager
             attributes="length displaystart displayend highlightstart highlightend"
