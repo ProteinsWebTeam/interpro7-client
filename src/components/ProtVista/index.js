@@ -128,12 +128,14 @@ class ProtVista extends PureComponent {
           locations: [loc],
           color: getTrackColor(d, this.state.colorMode),
           entry_type: d.entry_type,
-          type: 'entry',
+          type: d.type || 'entry',
           residues: d.residues,
+          chain: d.chain,
         }));
         const children = d.children
           ? d.children.map(child => ({
               accession: child.accession,
+              chain: d.chain,
               name: child.name,
               residues: child.residues,
               source_database: child.source_database,
@@ -308,7 +310,8 @@ class ProtVista extends PureComponent {
 
   renderLabels(entry) {
     const { expandedTrack } = this.state;
-    if (NOT_MEMBER_DBS.has(entry.source_database)) return entry.accession;
+    if (NOT_MEMBER_DBS.has(entry.source_database) || entry.type === 'chain')
+      return entry.accession;
     return (
       <Fragment>
         <Link
