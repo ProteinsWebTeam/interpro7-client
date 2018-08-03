@@ -7,15 +7,13 @@ import CustomTheme from './CustomTheme';
 import EntrySelection from './EntrySelection';
 import { hexToRgb } from 'utils/entry-color';
 
+import ProtVistaForStructure from './ProtVistaForStructures';
+
 import 'litemol/dist/css/LiteMol-plugin-light.css';
 
 import { foundationPartial } from 'styles/foundation';
 import style from './style.css';
-
 const f = foundationPartial(style);
-
-// This is use to force an update in the litemol when changing to the stuck view
-const eventResize = new Event('resize');
 
 /*:: type Props = {
   id: string|number,
@@ -48,6 +46,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       plugin: null,
       entryMap: {},
       selectedEntry: '',
+      selectedEntryToKeep: null,
       isStuck: false,
     };
 
@@ -55,6 +54,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
     this._ref = React.createRef();
     this._placeholder = React.createRef();
+    this._protvista = React.createRef();
   }
 
   componentDidMount() {
@@ -124,11 +124,46 @@ class StructureView extends PureComponent /*:: <Props> */ {
       this.setState({ isStuck: entries[0].intersectionRatio < 0.4 });
     }, optionsForObserver);
     observer.observe(this._placeholder.current);
+    this._protvista.current.addEventListener(
+      'entryclick',
+      ({
+        detail: {
+          feature: { accession, source_database: db, type, chain },
+        },
+      }) => {
+        this.setState(
+          {
+            selectedEntryToKeep:
+              type === 'chain'
+                ? null
+                : {
+                    accession: accession,
+                    db,
+                    chain,
+                  },
+          },
+          this.showEntryInStructure,
+        );
+      },
+    );
+    this._protvista.current.addEventListener(
+      'entrymouseover',
+      ({
+        detail: {
+          feature: { accession, source_database: db, type, chain },
+        },
+      }) => {
+        if (type !== 'chain') this.showEntryInStructure(db, accession, chain);
+      },
+    );
+    this._protvista.current.addEventListener('entrymouseout', () => {
+      this.showEntryInStructure();
+    });
   }
 
   componentDidUpdate(_, prevState) {
     if (prevState.isStuck !== this.state.isStuck) {
-      window.dispatchEvent(eventResize);
+      this.plugin.instance.context.scene.scene.handleResize();
     }
   }
   updateTheme(entries) {
@@ -163,16 +198,18 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const entry = match.metadata.accession;
         const db = match.metadata.source_database;
         if (!memberDBMap[db]) memberDBMap[db] = {};
-        if (!memberDBMap[db][entry]) memberDBMap[db][entry] = [];
+        if (!memberDBMap[db][entry]) memberDBMap[db][entry] = {};
 
         for (const structure of match.structures) {
           const chain = structure.chain;
+          if (!memberDBMap[db][entry][chain])
+            memberDBMap[db][entry][chain] = [];
           for (const location of structure.entry_protein_locations) {
             for (const fragment of location.fragments) {
               const hexCol = config.colors.get(db);
               const color = hexToRgb(hexCol);
 
-              memberDBMap[db][entry].push({
+              memberDBMap[db][entry][chain].push({
                 struct_asym_id: chain,
                 start_residue_number: fragment.start,
                 end_residue_number: fragment.end,
@@ -186,13 +223,22 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return memberDBMap;
   }
 
-  showEntryInStructure = (memberDB, entry) => {
+  showEntryInStructure = (memberDB, entry, chain) => {
+    const keep = this.state.selectedEntryToKeep;
     this.updateTheme([]);
-    if (memberDB && entry) {
-      const hits = this.state.entryMap[memberDB][entry];
+    const db = memberDB || (keep && keep.db);
+    const acc = entry || (keep && keep.accession);
+    const ch = chain || (keep && keep.chain);
+    if (db && acc) {
+      const hits = ch
+        ? this.state.entryMap[db][acc][ch]
+        : Object.values(this.state.entryMap[db][acc]).reduce(
+            (agg, v) => agg.concat(v),
+            [],
+          );
       this.updateTheme(hits);
-      this.setState({ selectedEntry: entry });
     }
+    this.setState({ selectedEntry: acc || '' });
   };
 
   render() {
@@ -225,21 +271,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
             selectedEntry={this.state.selectedEntry}
           />
         ) : null}
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
+        <div ref={this._protvista}>
+          <ProtVistaForStructure />
+        </div>
       </div>
     );
   }
