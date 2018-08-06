@@ -21,6 +21,17 @@ const f = foundationPartial(styles);
 
 const TRANSITION_DURATION = 500;
 
+const mapNameToClass = new Map([
+  ['domain', 'menu-domain'],
+  ['family', 'menu-family'],
+  ['repeat', 'menu-repeat'],
+  ['conserved_site', 'menu-site'],
+  ['binding_site', 'menu-site'],
+  ['active_site', 'menu-site'],
+  ['ptm', 'menu-site'],
+  ['homologous_superfamily', 'menu-hh'],
+]);
+
 /*:: type Props = {
   mainType: ?string,
   mainDB: ?string,
@@ -70,7 +81,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
   }
 
   _moveFakeBorder = () => {
-    if (!this._ref.current || this.props.lowGraphics) return;
+    if (!this._ref.current) return;
     const newTarget = this._ref.current.querySelector(
       `a.${entryMenuLinkClasses['is-active-tab']}`,
     );
@@ -78,36 +89,43 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     const fakeBorder = this._ref.current.firstElementChild;
     if (!fakeBorder.animate) return;
 
+    const containerBoundingRect = this._ref.current.getBoundingClientRect();
     const boundingRect = newTarget.getBoundingClientRect();
 
+    const countainerWidth = this.props.width;
     // current transform
     const currentTransform = `translateX(${
       this._currentTransformTranslateX
     }px) scale(${this._currentTransformScaleX}, 1)`;
     // next transform
-    const nextTranslateX = boundingRect.left - this.props.left;
-    const nextScaleX = boundingRect.width;
+    const nextTranslateX = boundingRect.left - containerBoundingRect.left;
+    const nextScaleX = boundingRect.width / countainerWidth;
     const nextTransform = `translateX(${nextTranslateX}px) scale(${nextScaleX}, 1)`;
     // middle transform
-    let middleTranslateX;
-    let middleScaleX;
+    let middleTranslateX = this._currentTransformTranslateX;
+    let middleScaleX = this._currentTransformScaleX;
     if (nextTranslateX > this._currentTransformTranslateX) {
       // going right
-      console.log('going right');
       middleTranslateX = this._currentTransformTranslateX;
-      middleScaleX = boundingRect.right - this._currentTransformTranslateX;
-    } else {
+      middleScaleX =
+        (boundingRect.right - this._currentTransformTranslateX) /
+        countainerWidth;
+    } else if (nextTranslateX > this._currentTransformTranslateX) {
       // going left
-      console.log('going left');
       middleTranslateX = nextTranslateX;
       middleScaleX =
-        this._currentTransformScaleX +
-        this._currentTransformTranslateX -
-        nextTranslateX;
+        (this._currentTransformScaleX +
+          this._currentTransformTranslateX -
+          nextTranslateX) /
+        countainerWidth;
     }
-    // Calculate some kind of stretch value
-    // y scale = inverse of x scale multiplied by current x scale
-    const middleScaleY = (1 * this._currentTransformScaleX) / middleScaleX;
+    // Calculate some kind of stretch value, clamp to [0, 1]
+    // y scale = inverse of middle x scale multiplied by current x scale
+    let middleScaleY = Math.min(
+      1,
+      (1 * this._currentTransformScaleX) / middleScaleX,
+    );
+    if (Number.isNaN(middleScaleY)) middleScaleY = 1;
     const middleTransform = `translateX(${middleTranslateX}px) scale(${middleScaleX}, ${middleScaleY})`;
 
     // cancel previous animation in case it's still running
@@ -153,7 +171,15 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
         className={f('tabs', className, { sign: isSignature })}
         ref={this._ref}
       >
-        <span className={f('fake-border')} />
+        <span
+          className={f(
+            'fake-border',
+            payload.metadata.source_database.toLowerCase() === 'interpro'
+              ? mapNameToClass.get(payload.metadata.type)
+              : null,
+            { ['is-signature']: isSignature },
+          )}
+        />
         {children}
         {tabs.map(e => (
           <EntryMenuLink

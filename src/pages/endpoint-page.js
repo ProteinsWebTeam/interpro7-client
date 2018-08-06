@@ -142,12 +142,15 @@ class Summary extends PureComponent {
               {!loading && (!payload || !payload.metadata) ? null : (
                 <Fragment>
                   <Title metadata={payload.metadata} mainType={endpoint} />
-                  <ResizeObserverComponent measurements={['left', 'bottom']}>
-                    {({ left, bottom }) => (
+                  <ResizeObserverComponent
+                    measurements={['width', 'height']}
+                    className={f('entry-menu')}
+                  >
+                    {({ width, height }) => (
                       <EntryMenu
                         metadata={payload.metadata}
-                        left={left}
-                        bottom={bottom}
+                        width={width}
+                        height={height}
                       />
                     )}
                   </ResizeObserverComponent>
