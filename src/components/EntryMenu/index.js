@@ -96,11 +96,11 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     // current transform
     const currentTransform = `translateX(${
       this._currentTransformTranslateX
-    }px) scale(${this._currentTransformScaleX}, 1)`;
+    }px) scaleX(${this._currentTransformScaleX})`;
     // next transform
     const nextTranslateX = boundingRect.left - containerBoundingRect.left;
     const nextScaleX = boundingRect.width / countainerWidth;
-    const nextTransform = `translateX(${nextTranslateX}px) scale(${nextScaleX}, 1)`;
+    const nextTransform = `translateX(${nextTranslateX}px) scaleX(${nextScaleX})`;
     // middle transform
     let middleTranslateX = this._currentTransformTranslateX;
     let middleScaleX = this._currentTransformScaleX;
@@ -119,14 +119,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
           nextTranslateX) /
         countainerWidth;
     }
-    // Calculate some kind of stretch value, clamp to [0, 1]
-    // y scale = inverse of middle x scale multiplied by current x scale
-    let middleScaleY = Math.min(
-      1,
-      (1 * this._currentTransformScaleX) / middleScaleX,
-    );
-    if (Number.isNaN(middleScaleY)) middleScaleY = 1;
-    const middleTransform = `translateX(${middleTranslateX}px) scale(${middleScaleX}, ${middleScaleY})`;
+    const middleTransform = `translateX(${middleTranslateX}px) scaleX(${middleScaleX})`;
 
     // cancel previous animation in case it's still running
     if (this._animation) this._animation.cancel();
