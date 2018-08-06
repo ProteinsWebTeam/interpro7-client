@@ -1,11 +1,13 @@
 //
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import config from 'config';
 import LiteMol from 'litemol';
 import CustomTheme from './CustomTheme';
 import EntrySelection from './EntrySelection';
-import { hexToRgb } from 'utils/entry-color';
+import { EntryColorMode, hexToRgb, getTrackColor } from 'utils/entry-color';
 
 import ProtVistaForStructure from './ProtVistaForStructures';
 
@@ -13,6 +15,7 @@ import 'litemol/dist/css/LiteMol-plugin-light.css';
 
 import { foundationPartial } from 'styles/foundation';
 import style from './style.css';
+import { changeColorDomainSetting } from 'actions/creators';
 const f = foundationPartial(style);
 
 /*:: type Props = {
@@ -37,6 +40,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     id: T.oneOfType([T.string, T.number]).isRequired,
     matches: T.array,
     highlight: T.string,
+    colorDomainsBy: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -213,7 +217,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
                 struct_asym_id: chain,
                 start_residue_number: fragment.start,
                 end_residue_number: fragment.end,
-                color: color,
+                // color: color,
+                accession: entry,
+                source_database: db,
+                parent: match.metadata.integrated
+                  ? { accession: match.metadata.integrated }
+                  : null,
               });
             }
           }
@@ -236,6 +245,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
             (agg, v) => agg.concat(v),
             [],
           );
+      hits.forEach(
+        hit =>
+          (hit.color = hexToRgb(getTrackColor(hit, this.props.colorDomainsBy))),
+      );
       this.updateTheme(hits);
     }
     this.setState({ selectedEntry: acc || '' });
@@ -278,4 +291,15 @@ class StructureView extends PureComponent /*:: <Props> */ {
     );
   }
 }
-export default StructureView;
+
+const mapStateToProps = createSelector(
+  state => state.settings.ui,
+  ui => ({
+    colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
+  }),
+);
+
+export default connect(
+  mapStateToProps,
+  { changeColorDomainSetting },
+)(StructureView);
