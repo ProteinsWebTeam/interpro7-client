@@ -1,7 +1,53 @@
+@import '../../styles/colors.css';
+@import '../../styles/timing.css';
+
 .tabs {
   border: 0; /*needed to remove foundation style*/
   margin-bottom: 2rem;
   display: flex;
   align-items: stretch;
   flex-wrap: wrap;
+  position: relative;
+
+  &:hover > .fake-border {
+    will-change: transform;
+  }
+}
+
+.fake-border {
+  width: 100%;
+  height: 3px;
+  background-color: var(--colors-submain);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform-origin: left;
+  transform: translateX(0) scaleX(0);
+  z-index: 1;
+  pointer-events: none;
+  transition: background-color var(--timing-fast) ease-in-out;
+
+  &.menu-family {
+    background-color: var(--colors-family-main);
+  }
+
+  &.menu-domain {
+    background-color: var(--colors-domain-main);
+  }
+
+  &.menu-site {
+    background-color: var(--colors-site-main);
+  }
+
+  &.menu-repeat {
+    background-color: var(--colors-repeat-main);
+  }
+
+  &.menu-hh {
+    background-color: var(--colors-homolog-main);
+  }
+
+  &.is-signature {
+    background-color: #4e7287;
+  }
 }

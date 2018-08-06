@@ -12,6 +12,8 @@ import { toPlural } from 'utils/pages';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
+import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
+
 import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from './style.css';
@@ -75,15 +77,18 @@ class SummaryComponent extends PureComponent {
   }
 }
 
-const locationhasDetailOrFilter = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].detail ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
+const locationhasDetailOrFilter = createSelector(
+  customLocation => {
+    const { key } = customLocation.description.main;
+    return (
+      customLocation.description[key].detail ||
+      (Object.entries(customLocation.description).find(
+        ([_key, value]) => value.isFilter,
+      ) || [])[0]
+    );
+  },
+  value => value,
+);
 
 class Summary extends PureComponent {
   static propTypes = propTypes;
@@ -137,7 +142,18 @@ class Summary extends PureComponent {
               {!loading && (!payload || !payload.metadata) ? null : (
                 <Fragment>
                   <Title metadata={payload.metadata} mainType={endpoint} />
-                  <EntryMenu metadata={payload.metadata} />
+                  <ResizeObserverComponent
+                    measurements={['width', 'height']}
+                    className={f('entry-menu')}
+                  >
+                    {({ width, height }) => (
+                      <EntryMenu
+                        metadata={payload.metadata}
+                        width={width}
+                        height={height}
+                      />
+                    )}
+                  </ResizeObserverComponent>
                 </Fragment>
               )}
             </div>
@@ -192,16 +208,19 @@ class Overview extends PureComponent {
   }
 }
 
-const locationHasAccessionOrFilters = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].accession ||
-    customLocation.description[key].memberDBAccession ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
+const locationHasAccessionOrFilters = createSelector(
+  customLocation => {
+    const { key } = customLocation.description.main;
+    return (
+      customLocation.description[key].accession ||
+      customLocation.description[key].memberDBAccession ||
+      (Object.entries(customLocation.description).find(
+        ([_key, value]) => value.isFilter,
+      ) || [])[0]
+    );
+  },
+  value => value,
+);
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 class InnerSwitch extends PureComponent {
