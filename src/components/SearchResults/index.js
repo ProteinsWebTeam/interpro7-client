@@ -17,8 +17,9 @@ import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
+import local from './style.css';
 
-const f = foundationPartial(ebiGlobalStyles, ipro);
+const f = foundationPartial(ebiGlobalStyles, ipro, local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -59,8 +60,8 @@ class SearchResults extends PureComponent {
       );
     }
     // TODO: Use Improved description component to show summary (with  limit of characters and highlight) as there is a limitation for search starting with "cite..." or "taxon..." in this case
-    const reg = /\<[^"].*?id="([^"]+)"\/>/gi; /*all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/>*/
-    const regtax = /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /*Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon>*/
+    const reg = /\<[^"].*?id="([^"]+)"\/>/gi; /* all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/> */
+    const regtax = /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /* Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon> */
     return (
       <ErrorBoundary>
         <SchemaOrgData
@@ -102,6 +103,7 @@ class SearchResults extends PureComponent {
               },
             ) => (
               <Link
+                className={f('acc-row')}
                 to={{
                   description: {
                     main: { key: 'entry' },
@@ -112,9 +114,35 @@ class SearchResults extends PureComponent {
                 <HighlightedText text={id} textToHighlight={searchValue} />
               </Link>
             )}
-            headerStyle={{ width: '200px' }}
           >
             Accession
+          </Column>
+          <Column
+            dataKey="id"
+            defaultKey="name"
+            headerStyle={{ width: '28%' }}
+            renderer={(
+              id,
+              {
+                fields: {
+                  source_database: [db],
+                  name: [n],
+                },
+              },
+            ) => (
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: { db, accession: id },
+                  },
+                }}
+              >
+                <HighlightedText text={n} textToHighlight={searchValue} />
+              </Link>
+            )}
+          >
+            Name
           </Column>
           <Column dataKey="fields.source_database.0">Source database</Column>
           <Column
@@ -185,7 +213,7 @@ const getEbiSearchUrl = createSelector(
     searchValue,
   ) => {
     if (!searchValue) return null;
-    const fields = 'description,source_database';
+    const fields = 'description,source_database,name';
     const size = search.page_size || settingsPageSize;
     const start = ((search.page || 1) - 1) * size;
     const query = getQueryTerm(searchValue);
