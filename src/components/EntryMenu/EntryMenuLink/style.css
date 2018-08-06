@@ -11,7 +11,7 @@ a.browse-tabs-link {
     color: black;
     line-height: inherit;
     background-color: transparent; /*to keep*/
-    border-bottom: 3px solid white; /*just for animation*/
+    /*border-bottom: 3px solid white; !*just for animation*!*/
   }
 }
 
@@ -23,7 +23,7 @@ a.is-active-tab {
   &:visited {
     font-weight: bold;
     color: black;
-    border-bottom: 3px solid var(--colors-submain);
+    /*border-bottom: 3px solid var(--colors-submain);*/
     background-color: transparent;
     transition: border-bottom-color var(--timing-medium) ease-in-out;
   }
