@@ -30,7 +30,7 @@ const main = async () => {
 
   // Instantiates schema.org manager
   schemaOrgManager({
-    dev: DEV,
+    dev: false,
     root: {
       '@context': [
         'http://schema.org',
