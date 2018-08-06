@@ -1,5 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+
+import { changeColorDomainSetting } from 'actions/creators';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -87,7 +91,7 @@ class ProtVista extends PureComponent {
 
     this.state = {
       entryHovered: null,
-      colorMode: EntryColorMode.DOMAIN_RELATIONSHIP,
+      // colorMode: EntryColorMode.DOMAIN_RELATIONSHIP,
       hideCategory: {},
       expandedTrack: {},
       collapsed: false,
@@ -126,7 +130,7 @@ class ProtVista extends PureComponent {
           name: d.name,
           source_database: d.source_database,
           locations: [loc],
-          color: getTrackColor(d, this.state.colorMode),
+          color: getTrackColor(d, this.props.colorDomainsBy),
           entry_type: d.entry_type,
           type: d.type || 'entry',
           residues: d.residues,
@@ -153,7 +157,7 @@ class ProtVista extends PureComponent {
               parent: d,
               color: getTrackColor(
                 Object.assign(child, { parent: d }),
-                this.state.colorMode,
+                this.props.colorDomainsBy,
               ),
               location2residue: child.location2residue,
             }))
@@ -305,7 +309,8 @@ class ProtVista extends PureComponent {
       }
       track.refresh();
     }
-    this.setState({ colorMode });
+    // this.setState({ colorMode });
+    this.props.changeColorDomainSetting(colorMode);
   };
 
   renderLabels(entry) {
@@ -401,7 +406,7 @@ class ProtVista extends PureComponent {
             Color By:{' '}
             <select
               className={f('select-inline')}
-              value={this.state.colorMode}
+              value={this.props.colorDomainsBy}
               onChange={this.changeColor}
               onBlur={this.changeColor}
             >
@@ -546,4 +551,14 @@ class ProtVista extends PureComponent {
   }
 }
 
-export default ProtVista;
+const mapStateToProps = createSelector(
+  state => state.settings.ui,
+  ui => ({
+    colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
+  }),
+);
+
+export default connect(
+  mapStateToProps,
+  { changeColorDomainSetting },
+)(ProtVista);
