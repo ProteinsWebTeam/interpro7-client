@@ -148,7 +148,7 @@ const ProteinFastasRenderer = description => accession => (
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
       [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
-        isFilter: description.taxonomy.isFilter,
+        isFilter: true,
         db: 'UniProt',
         accession: `${accession}`,
       },
@@ -170,7 +170,7 @@ const ProteinAccessionsRenderer = description => accession => (
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
       [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
-        isFilter: description.taxonomy.isFilter,
+        isFilter: true,
         db: 'UniProt',
         accession: `${accession}`,
       },
