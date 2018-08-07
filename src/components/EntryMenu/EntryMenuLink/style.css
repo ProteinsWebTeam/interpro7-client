@@ -1,6 +1,3 @@
-@import '../../../styles/colors.css';
-@import '../../../styles/timing.css';
-
 a.browse-tabs-link {
   &,
   &:focus,
@@ -10,8 +7,23 @@ a.browse-tabs-link {
     padding: 1rem 1rem 0.5rem 1rem;
     color: black;
     line-height: inherit;
-    background-color: transparent; /*to keep*/
-    border-bottom: 3px solid white; /*just for animation*/
+    background-color: transparent; /* keep! */
+
+    & > .name {
+      display: inline-block;
+      margin-right: 0.5ch;
+
+      &::after {
+        display: block;
+        padding-top: 1rem;
+        content: attr(data-content);
+        position: absolute;
+        top: 0;
+        font-weight: bold;
+        color: black;
+        opacity: 0;
+      }
+    }
   }
 }
 
@@ -21,43 +33,18 @@ a.is-active-tab {
   &:focus,
   &:hover,
   &:visited {
-    font-weight: bold;
     color: black;
-    border-bottom: 3px solid var(--colors-submain);
-    background-color: transparent;
-    transition: border-bottom-color var(--timing-medium) ease-in-out;
+
+    & > .name {
+      color: transparent;
+
+      &::after {
+        opacity: 1;
+      }
+    }
   }
-
-  &.is-signature {
-    border-bottom-color: #4e7287;
-  }
 }
 
-a.is-active-tab:hover,
-a.browse-tabs-link:hover {
-  background-color: var(--colors-nearly-white);
-  transition: background-color var(--timing-really-fast) ease-in-out;
-}
-
-a.is-active-tab.menu-family {
-  border-bottom-color: var(--colors-family-main);
-}
-
-a.is-active-tab.menu-domain {
-  border-bottom-color: var(--colors-domain-main);
-}
-
-a.is-active-tab.menu-site {
-  border-bottom-color: var(--colors-site-main);
-}
-
-a.is-active-tab.menu-repeat {
-  border-bottom-color: var(--colors-repeat-main);
-}
-
-a.is-active-tab.menu-hh {
-  border-bottom-color: var(--colors-homolog-main);
-}
 .tabs-title {
   display: flex;
   align-items: stretch;

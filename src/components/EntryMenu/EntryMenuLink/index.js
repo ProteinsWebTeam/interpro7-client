@@ -31,18 +31,6 @@ const whitelist = new Set(['Overview', 'Sequence']);
   isSignature: boolean
 }; */
 
-const mapNameToClass = new Map([
-  ['domain', 'menu-domain'],
-  ['family', 'menu-family'],
-  ['repeat', 'menu-repeat'],
-  ['unknown', 'menu-unknown'],
-  ['conserved_site', 'menu-site'],
-  ['binding_site', 'menu-site'],
-  ['active_site', 'menu-site'],
-  ['ptm', 'menu-site'],
-  ['homologous_superfamily', 'menu-hh'],
-]);
-
 class EntryMenuLink extends PureComponent /*:: <Props> */ {
   static propTypes = {
     to: T.oneOfType([T.object, T.func]).isRequired,
@@ -107,17 +95,12 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
         <Link
           to={to}
           exact={exact}
-          className={f(
-            payload.metadata.source_database.toLowerCase() === 'interpro'
-              ? mapNameToClass.get(payload.metadata.type)
-              : null,
-            'browse-tabs-link',
-            { ['is-signature']: isSignature },
-          )}
+          className={f('browse-tabs-link')}
           activeClass={f('is-active', 'is-active-tab')}
-          // disabled={!isFirstLevel && !isNaN(value) && !value}
         >
-          {name}
+          <span data-content={name} className={f('name')}>
+            {name}
+          </span>
           {value !== null && ' '}
           {value !== null &&
             !isNaN(value) && (
