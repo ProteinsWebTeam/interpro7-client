@@ -67,8 +67,8 @@ const mapStateToPropsForOldLink = createSelector(
         return { href: `${href}signature/${d.entry.accession}/` };
       }
       return { href: `${href}member-database/${d.entry.db}/` };
-    } else if (key === 'protein' && d.entry.accession) {
-      return { href: `${href}protein/${d.entry.accession}/` };
+    } else if (key === 'protein' && d.protein.accession) {
+      return { href: `${href}protein/${d.protein.accession}/` };
     }
     return { href };
   },
