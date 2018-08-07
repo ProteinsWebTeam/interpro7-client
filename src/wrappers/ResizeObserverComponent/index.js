@@ -71,7 +71,7 @@ class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
 
   render() {
     const { children, element, measurements, ...props } = this.props;
-    const Element = element || 'div';
+    const Element = element || 'span';
     return (
       // $FlowIgnore
       <Element {...props} ref={this._ref}>
