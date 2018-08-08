@@ -27,10 +27,14 @@ const f = foundationPartial(style);
 // Call as follows to highlight pre-selected entry (from Structure/Summary)
 // <StructureView id={accession} matches={matches} highlight={"pf00071"}/>
 
+const NUMBER_OF_CHECKS = 10;
 const optionsForObserver = {
   root: null,
   rootMargin: '0px',
-  threshold: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+  threshold: Array(...{ length: NUMBER_OF_CHECKS }).map(
+    Number.call,
+    n => (n + 1) / NUMBER_OF_CHECKS,
+  ),
 };
 
 class StructureView extends PureComponent /*:: <Props> */ {
@@ -123,9 +127,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
         this.setState({ selectedEntry: '' });
       });
     });
-
+    const threshold = 0.4;
     const observer = new IntersectionObserver(entries => {
-      this.setState({ isStuck: entries[0].intersectionRatio < 0.4 });
+      this.setState({ isStuck: entries[0].intersectionRatio < threshold });
     }, optionsForObserver);
     observer.observe(this._placeholder.current);
     this._protvista.current.addEventListener(
@@ -210,14 +214,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
             memberDBMap[db][entry][chain] = [];
           for (const location of structure.entry_protein_locations) {
             for (const fragment of location.fragments) {
-              const hexCol = config.colors.get(db);
-              const color = hexToRgb(hexCol);
-
               memberDBMap[db][entry][chain].push({
                 struct_asym_id: chain,
                 start_residue_number: fragment.start,
                 end_residue_number: fragment.end,
-                // color: color,
                 accession: entry,
                 source_database: db,
                 parent: match.metadata.integrated

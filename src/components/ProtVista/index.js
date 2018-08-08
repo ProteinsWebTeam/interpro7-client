@@ -82,6 +82,8 @@ class ProtVista extends PureComponent {
   static propTypes = {
     protein: T.object,
     data: T.array,
+    colorDomainsBy: T.string,
+    changeColorDomainSetting: T.func,
   };
 
   constructor(props) {
