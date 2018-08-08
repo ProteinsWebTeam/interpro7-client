@@ -53,12 +53,12 @@ const sortFunction = ([a], [b]) => {
   const firsts = ['family', 'domain'];
   const lasts = ['residues', 'features', 'predictions'];
   for (const label of firsts) {
-    if (a.toLowerCase() === label) return 0;
+    if (a.toLowerCase() === label) return -1;
     if (b.toLowerCase() === label) return 1;
   }
   for (const l of lasts) {
     if (a.toLowerCase() === l) return 1;
-    if (b.toLowerCase() === l) return 0;
+    if (b.toLowerCase() === l) return -1;
   }
   return a > b ? 1 : 0;
 };
