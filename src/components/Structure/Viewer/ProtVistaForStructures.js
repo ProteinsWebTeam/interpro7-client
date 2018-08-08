@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import T from 'prop-types';
 import loadData from 'higherOrder/loadData';
 import { createSelector } from 'reselect';
