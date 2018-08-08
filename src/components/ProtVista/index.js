@@ -133,7 +133,7 @@ class ProtVista extends PureComponent {
           color: getTrackColor(d, this.props.colorDomainsBy),
           entry_type: d.entry_type,
           type: d.type || 'entry',
-          residues: d.residues,
+          residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
           chain: d.chain,
         }));
         const children = d.children
@@ -141,7 +141,8 @@ class ProtVista extends PureComponent {
               accession: child.accession,
               chain: d.chain,
               name: child.name,
-              residues: child.residues,
+              residues:
+                child.residues && JSON.parse(JSON.stringify(child.residues)),
               source_database: child.source_database,
               entry_type: child.entry_type,
               type: child.type,

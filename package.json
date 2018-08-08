@@ -125,7 +125,7 @@
     "pdb-web-components": "^0.2.0",
     "popper.js": "1.14.3",
     "prop-types": "15.6.2",
-    "protvista-interpro-track": "0.1.3",
+    "protvista-interpro-track": "^0.1.4",
     "protvista-manager": "0.1.2",
     "protvista-navigation": "0.1.1",
     "protvista-sequence": "0.1.1",
