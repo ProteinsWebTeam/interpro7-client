@@ -7,47 +7,20 @@ import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import { processData } from 'components/ProtVista/utils';
+
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-const processData = createSelector(
-  data => data.payload.results,
-  dataResults => {
-    const results = [];
-    for (const item of dataResults) {
-      results.splice(
-        0,
-        0,
-        ...item.structures.map(structure => ({
-          ...structure,
-          ...item.metadata,
-        })),
-      );
-    }
-    const interpro = results.filter(
-      entry => entry.source_database.toLowerCase() === 'interpro',
-    );
-    const interproMap = new Map(
-      interpro.map(ipro => [`${ipro.accession}-${ipro.chain}`, ipro]),
-    );
-    const integrated = results.filter(entry => entry.integrated);
-    const unintegrated = results.filter(
-      entry => interpro.concat(integrated).indexOf(entry) === -1,
-    );
-    integrated.forEach(entry => {
-      const ipro = interproMap.get(`${entry.integrated}-${entry.chain}`) || {};
-      if (!ipro.children) ipro.children = [];
-      if (ipro.children.indexOf(entry) === -1) ipro.children.push(entry);
-    });
-    return interpro.concat(unintegrated);
-  },
-);
 const ProtVistaForStructure = ({ data }) => {
   if (!data || data.loading || !data.payload) return <Loading />;
 
-  const pData = processData(data);
+  const { interpro, unintegrated } = processData({
+    data,
+    endpoint: 'structure',
+  });
   return (
     <div>
-      <EntriesOnStructure entries={pData} />
+      <EntriesOnStructure entries={interpro.concat(unintegrated)} />
     </div>
   );
 };
@@ -73,7 +46,7 @@ const getInterproRelatedEntriesURL = createSelector(
       port,
       pathname: root + descriptionToPath(newDesc),
       query: {
-        page_size: 100,
+        page_size: 200,
       },
     });
   },
