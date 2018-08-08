@@ -6,8 +6,6 @@ import { createSelector } from 'reselect';
 import loadWebComponent from 'utils/load-web-component';
 import pathToDescription from 'utils/processDescription/pathToDescription';
 
-import { goToCustomLocation } from 'actions/creators';
-
 import getFetch from 'higherOrder/loadData/getFetch';
 
 import config from 'config';
@@ -152,7 +150,4 @@ const mapStateToProps = createSelector(
   api => ({ api }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(ProteinEntryHierarchy);
+export default connect(mapStateToProps)(ProteinEntryHierarchy);
