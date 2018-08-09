@@ -52,18 +52,12 @@ const loadPDBWebComponents = () => {
 /*:: type Props = {
   data: Data,
   dataMatches: Data,
-  customLocation: {
-    description: Object,
-  },
 }; */
 
 class SummaryStructure extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({}).isRequired,
     dataMatches: T.shape({}).isRequired,
-    customLocation: T.shape({
-      description: T.object.isRequired,
-    }).isRequired,
   };
 
   componentDidMount() {

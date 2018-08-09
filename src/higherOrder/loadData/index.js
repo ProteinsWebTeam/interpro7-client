@@ -11,7 +11,7 @@ import { dataProgressInfo, dataProgressUnload } from 'actions/creators';
 import extractParams from './extract-params';
 import getFetch from './getFetch';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
+import { UnconnectedErrorBoundary } from 'wrappers/ErrorBoundary';
 
 const mapStateToProps = createSelector(
   state => state,
@@ -161,9 +161,9 @@ const loadData = params => {
           [`isStale${propNamespace}`]: this.state.staleData !== this.state.data,
         };
         return (
-          <ErrorBoundary>
+          <UnconnectedErrorBoundary customLocation={appState.customLocation}>
             <Wrapped {...passedProps} />
-          </ErrorBoundary>
+          </UnconnectedErrorBoundary>
         );
       }
     }
