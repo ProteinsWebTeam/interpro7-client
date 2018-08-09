@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import NumberLabel from 'components/NumberLabel';
 
 import { goToCustomLocation } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
-import { connect } from 'react-redux';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
@@ -109,7 +109,8 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(
+export default loadData({
+  getUrl,
   mapStateToProps,
-  { goToCustomLocation },
-)(loadData(getUrl)(MatchPresenceFilter));
+  mapDispatchToProps: { goToCustomLocation },
+})(MatchPresenceFilter);
