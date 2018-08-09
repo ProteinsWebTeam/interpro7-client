@@ -286,6 +286,15 @@
   background-repeat: no-repeat;
 }
 
+.icon-count-hmm {
+  height: 3em;
+  width: 26px;
+  background-image: url('../images/icons/ico-hmm.svg');
+  background-size: 100%;
+  background-position-y: 59%;
+  background-repeat: no-repeat;
+}
+
 .label-off .label-number {
   display: none;
 }
@@ -345,16 +354,9 @@
 
 /* Small screen only */
 @media screen and (max-width: 39.9375em) {
-  /*table.light th {word-break: break-all;}*/
-  /*remove  GO terms and entry type columns*/
+  /*make  GO terms and entry type 100% on xsmall*/
   .col-go,
   .col-md {
     width: 100%;
-  }
-  .col-go div {
-    margin-left: 0;
-  }
-  .col-type {
-    display: none;
   }
 }
