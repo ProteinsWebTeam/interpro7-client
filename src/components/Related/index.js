@@ -227,11 +227,6 @@ export class _RelatedAdvanced extends PureComponent {
         {mainType === 'structure' && focusType === 'entry' ? (
           <EntriesOnStructure entries={secondaryData} />
         ) : null}
-        {mainType === 'protein' &&
-        focusType === 'entry' &&
-        focusDB === 'InterPro' ? (
-          <ProteinEntryHierarchy entries={secondaryData} />
-        ) : null}
         <div className={f('row')}>
           <div className={f('columns')}>
             <p>

@@ -13,6 +13,7 @@ export const processData = createSelector(
         ...item[toPlural(endpoint)].map(match => ({
           ...match,
           ...item.metadata,
+          ...(item.extra_fields || {}),
         })),
       );
     }
