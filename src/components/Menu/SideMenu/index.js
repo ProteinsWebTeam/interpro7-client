@@ -8,7 +8,7 @@ import { sideNavSelector } from 'reducers/ui/sideNav';
 
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterProMenu from 'components/Menu/InterProMenu';
-import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
+import EntryMenu from 'components/EntryMenu';
 import Link from 'components/generic/Link';
 import ServerStatus from './ServerStatus';
 
@@ -126,11 +126,11 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
           <nav>
             <ul>
               {mainAccession && (
-                <SingleEntityMenu className={f('primary')}>
+                <EntryMenu className={f('sidemenu')}>
                   <span className={f('menu-label', 'cursor-default')}>
                     {mainType} menu ({mainAccession})
                   </span>
-                </SingleEntityMenu>
+                </EntryMenu>
               )}
               <InterProMenu className={f('secondary', 'is-drilldown')}>
                 <span className={f('menu-label', 'cursor-default')}>
