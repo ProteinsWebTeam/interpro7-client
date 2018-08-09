@@ -2,7 +2,9 @@ import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
+import ErrorBoundary, {
+  UnconnectedErrorBoundary,
+} from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import { mainDBLocationSelector } from 'reducers/custom-location/description';
 import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
@@ -135,7 +137,7 @@ class Summary extends PureComponent {
             </Fragment>
           )}
 
-        <ErrorBoundary>
+        <UnconnectedErrorBoundary customLocation={customLocation}>
           <div className={f('row')}>
             <div className={f('medium-12', 'large-12', 'columns')}>
               {loading ? <Loading /> : null}
@@ -158,15 +160,15 @@ class Summary extends PureComponent {
               )}
             </div>
           </div>
-        </ErrorBoundary>
-        <ErrorBoundary>
+        </UnconnectedErrorBoundary>
+        <UnconnectedErrorBoundary customLocation={customLocation}>
           <Switch
             {...this.props}
             locationSelector={locationhasDetailOrFilter}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForEndpoint}
           />
-        </ErrorBoundary>
+        </UnconnectedErrorBoundary>
       </Fragment>
     );
   }
@@ -229,6 +231,7 @@ class InnerSwitch extends PureComponent {
     children: T.any,
     listOfEndpointEntities: T.func,
   };
+
   render() {
     const { subpagesRoutes, listOfEndpointEntities } = this.props;
     const childRoutes = new Map([[subpagesRoutes, Summary]]);
@@ -245,6 +248,7 @@ class InnerSwitch extends PureComponent {
     );
   }
 }
+
 class EndPointPage extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,

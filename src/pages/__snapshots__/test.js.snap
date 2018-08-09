@@ -4,7 +4,7 @@ exports[`<Pages /> should render 1`] = `
 <div
   className="main stuck"
 >
-  <Connect(ErrorBoundary)>
+  <Connect(UnconnectedErrorBoundary)>
     <div
       className="row"
     >
@@ -23,8 +23,8 @@ exports[`<Pages /> should render 1`] = `
         />
       </div>
     </div>
-  </Connect(ErrorBoundary)>
-  <Connect(ErrorBoundary)>
+  </Connect(UnconnectedErrorBoundary)>
+  <Connect(UnconnectedErrorBoundary)>
     <Connect(_Switch)
       catchAll={[Function]}
       childRoutes={
@@ -42,6 +42,6 @@ exports[`<Pages /> should render 1`] = `
       indexRoute={[Function]}
       locationSelector={[Function]}
     />
-  </Connect(ErrorBoundary)>
+  </Connect(UnconnectedErrorBoundary)>
 </div>
 `;
