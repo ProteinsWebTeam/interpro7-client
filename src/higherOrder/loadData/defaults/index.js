@@ -41,7 +41,7 @@ export const getUrl = createSelector(
         const _search =
           description.main.key && description[description.main.key].accession
             ? {}
-            : { ...search } || {};
+            : { ...(search || {}) };
         if (
           !description[description.main.key].accession ||
           Object.values(description).find(
