@@ -8,9 +8,11 @@ import { singleEntity } from 'menuConfig';
 
 import { foundationPartial } from 'styles/foundation';
 
-import styles from './style.css';
+import pages from 'pages/style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
 
-const f = foundationPartial(styles);
+const f = foundationPartial(pages, fonts, local);
 
 const singleEntityNames = new Map(
   Array.from(singleEntity).map(e => [e[1].name, e[0]]),
@@ -117,6 +119,97 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
           activeClass={f('is-active', 'is-active-tab')}
           // disabled={!isFirstLevel && !isNaN(value) && !value}
         >
+          {name === 'Entries' && (
+            <i
+              data-icon="D"
+              className={f(
+                'icon',
+                'icon-generic',
+                'icon-count-sm',
+                'margin-right-medium',
+              )}
+              aria-label="icon entry matches"
+            />
+          )}
+          {name === 'Proteins' && (
+            <i
+              data-icon="&#x50;"
+              className={f(
+                'icon',
+                'icon-conceptual',
+                'icon-count-sm',
+                'margin-right-medium',
+              )}
+              aria-label="icon proteins"
+            />
+          )}
+          {name === 'Structures' && (
+            <i
+              data-icon="s"
+              className={f(
+                'icon',
+                'icon-conceptual',
+                'icon-count-sm',
+                'margin-right-medium',
+              )}
+              aria-label="icon structures"
+            />
+          )}
+          {name === 'Domain Architectures' && (
+            <i
+              className={f(
+                'icon',
+                'icon-count-ida',
+                'icon-count-sm',
+                'margin-right-medium',
+              )}
+              aria-label="icon domain architectures"
+            />
+          )}
+          {name === 'Taxonomy' && (
+            <i
+              className={f(
+                'icon',
+                'icon-count-species',
+                'icon-count-sm',
+                'margin-right-medium',
+              )}
+              aria-label="icon taxonomy"
+            />
+          )}
+          {name === 'Proteomes' && (
+            <i
+              className={f(
+                'icon',
+                'icon-count-proteome',
+                'icon-count-sm',
+                'margin-right-medium',
+              )}
+              aria-label="icon proteomes"
+            />
+          )}
+          {name === 'Sets' && (
+            <i
+              className={f(
+                'icon',
+                'icon-count-set',
+                'icon-count-sm',
+                'margin-right-medium',
+              )}
+              aria-label="icon set"
+            />
+          )}
+          {name === 'Signature' && (
+            <i
+              className={f(
+                'icon',
+                'icon-count-hmm',
+                'icon-count-sm',
+                'margin-right-medium',
+              )}
+              aria-label="icon signature"
+            />
+          )}
           {name}
           {value !== null && ' '}
           {value !== null &&
