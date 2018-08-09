@@ -2,54 +2,12 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { goToCustomLocation } from 'actions/creators';
 
 import loadWebComponent from 'utils/load-web-component';
 import pathToDescription from 'utils/processDescription/pathToDescription';
 
-import getFetch from 'higherOrder/loadData/getFetch';
-
 import config from 'config';
-
-const hierarchyContainsAccession = (node, accession) => {
-  if (node.accession === accession) return true;
-  if (node.children) {
-    for (const child of node.children) {
-      if (hierarchyContainsAccession(child, accession)) return true;
-    }
-  }
-  return false;
-};
-let apiUrl = null;
-
-// TODO: change this logic to use the state!!
-const getHierarchyUrl = ({ protocol, hostname, port, root }, accession) =>
-  `${protocol}//${hostname}:${port}${root}/entry/interpro/${accession}`;
-
-const getHierarchy = (accs, hierarchies) =>
-  new Promise((resolve, reject) => {
-    if (accs.size === 0) {
-      resolve(hierarchies);
-      return;
-    }
-    const accession = String(accs.values().next().value);
-    const fetchF = getFetch({ method: 'GET', responseType: 'json' });
-    let found = false;
-    hierarchies.forEach(h => {
-      if (hierarchyContainsAccession(h, accession)) found = true;
-    });
-    accs.delete(accession);
-    if (found) {
-      resolve(getHierarchy(accs, hierarchies));
-    } else {
-      fetchF(getHierarchyUrl(apiUrl, accession))
-        .then(({ payload: { metadata: { hierarchy } } }) => {
-          if (hierarchy) hierarchies.push(hierarchy);
-        })
-        .then(() => getHierarchy(accs, hierarchies))
-        .then(() => resolve(hierarchies))
-        .catch(e => reject(e));
-    }
-  });
 
 const webComponents = [];
 
@@ -75,6 +33,8 @@ const loadInterProWebComponents = () => {
   }
   return Promise.all(webComponents);
 };
+const getUniqueHierarchies = hierarchies =>
+  Array.from(new Map(hierarchies.map(h => [h.accession, h])).values());
 
 class ProteinEntryHierarchy extends PureComponent {
   static propTypes = {
@@ -82,6 +42,7 @@ class ProteinEntryHierarchy extends PureComponent {
       T.shape({
         accession: T.string.isRequired,
         type: T.string.isRequired,
+        hierarchy: T.object.isRequired,
       }),
     ),
     api: T.shape({
@@ -95,40 +56,31 @@ class ProteinEntryHierarchy extends PureComponent {
 
   constructor(props) {
     super(props);
-
     this._ref = React.createRef();
   }
 
   async componentDidMount() {
     await loadInterProWebComponents();
-    const { entries, api } = this.props;
-    const hierarchies = [];
-    apiUrl = api;
-    const accs = new Set(
-      entries
-        .filter(e => e.type.toLowerCase() === 'family')
-        .map(e => e.accession),
-    );
-    if (accs.size === 0) return;
-    this._ref.current.addEventListener('click', e => {
-      const target = (e.path || e.composedPath())[0];
-      if (target.classList.contains('link')) {
-        e.preventDefault();
-        this.props.goToCustomLocation({
-          description: pathToDescription(
-            target
-              .getAttribute('href')
-              .replace(new RegExp(`^${config.root.website.path}`), ''),
-          ),
-        });
-      }
-    });
-    try {
-      await getHierarchy(accs, hierarchies);
-      await loadInterProWebComponents();
-      if (this._ref.current) this._ref.current.hierarchy = hierarchies;
-    } catch (error) {
-      console.warn(error.message);
+    if (this._ref.current) {
+      // Making sure the same hierarchy only appears once.
+      this._ref.current.hierarchy = getUniqueHierarchies(
+        this.props.entries.map(e => e.hierarchy),
+      );
+      // Adding the click event so it doesn't refresh the whole page,
+      // but instead use the customLocation.
+      this._ref.current.addEventListener('click', e => {
+        const target = (e.path || e.composedPath())[0];
+        if (target.classList.contains('link')) {
+          e.preventDefault();
+          this.props.goToCustomLocation({
+            description: pathToDescription(
+              target
+                .getAttribute('href')
+                .replace(new RegExp(`^${config.root.website.path}`), ''),
+            ),
+          });
+        }
+      });
     }
   }
 
@@ -150,4 +102,7 @@ const mapStateToProps = createSelector(
   api => ({ api }),
 );
 
-export default connect(mapStateToProps)(ProteinEntryHierarchy);
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(ProteinEntryHierarchy);
