@@ -17,7 +17,7 @@
 
   @nest & ul {
     list-style: none;
-    margin: 0;
+    margin: 0 0 0.5rem 0;
   }
 
   @nest & a {
@@ -59,24 +59,26 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
-.primary {
+/*ENTRY MENU*/
+.sidemenu {
+  background: none;
   color: #34b5b5; /*domain color*/
   flex-direction: column;
 }
-
-.primary i {
-  display: inline !important;
+/*show icons for side menu - not on entry page*/
+.sidemenu i {
+  display: inline-block;
 }
 
-/*custom style when menu is off-canvas */
-.sidemenu.primary {
-  background: none;
-}
 .sidemenu li {
   margin-right: 0rem;
 }
 .sidemenu li a,
-.sidemenu li a:hover {
+.sidemenu li a:hover,
+.sidemenu li a:active,
+.sidemenu li a:focus,
+.sidemenu li a:visited {
+  color: #ccc;
   border: none;
   font-weight: normal;
   border-bottom: none;
@@ -84,15 +86,22 @@
   display: block;
   width: 100%;
 }
-.sidemenu li a:hover {
-  background-color: #1f77b4;
-  color: #ccc;
+
+/* doesn't work anymre? doesn't recognise active-tab class- trick to make the active class work - temp solution while we include SVG inline and use their class like*/
+.sidemenu li :global(a.is-active-tab) i {
+  filter: saturate(5) hue-rotate(190deg) brightness(0) contrast(0);
+}
+.sidemenu li :global(a.is-active-tab) i {
+  filter: sepia(1) saturate(2) brightness(2) hue-rotate(138deg) contrast(0);
 }
 
-.container .primary li > a:hover,
-.container .primary li > a:focus {
+.container .sidemenu li > a:hover,
+.container .sidemenu li > a:focus {
   background-color: rgba(0, 0, 0, 0.2);
 }
+
+/*/ENTRY MENU*/
+/*INTERPRO MENU*/
 
 .secondary {
   color: #2199e8;
@@ -107,6 +116,8 @@
 .container .secondary a:focus {
   background-color: rgba(60, 135, 185, 0.2);
 }
+/*INTERPRO MENU*/
+/*EBI MENU*/
 
 .tertiary {
   color: #85bf7b;
@@ -117,16 +128,6 @@
   background-color: rgba(63, 165, 156, 0.2);
 }
 
-/*bgd palette for side menu - not used yet */
-.primary.domain {
-  background: #6aad4c;
-}
-.primary.family {
-  background: indianred;
-}
-.tertiary.clans {
-  background: #279292;
-}
 .secondary.default {
   background: #4b4b4b;
 }
