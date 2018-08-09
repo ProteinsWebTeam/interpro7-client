@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import TaxonomyVisualisation from 'taxonomy-visualisation';
@@ -250,9 +249,8 @@ const getUrl = createSelector(
   },
 );
 
-export default loadData({ getUrl, propNamespace: 'Names' })(
-  connect(
-    null,
-    { goToCustomLocation },
-  )(SummaryTaxonomy),
-);
+export default loadData({
+  getUrl,
+  propNamespace: 'Names',
+  mapDispatchToProps: { goToCustomLocation },
+})(SummaryTaxonomy);

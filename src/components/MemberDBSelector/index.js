@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import { sleep } from 'timing-functions/src';
@@ -397,12 +396,9 @@ export default loadData({ getUrl: getUrlForMemberDB, propNamespace: 'DB' })(
       loadData({
         getUrl: getUrlForSubPageCount,
         propNamespace: 'SubPageCount',
-      })(
-        connect(
-          mapStateToProps,
-          { goToCustomLocation },
-        )(_MemberDBSelector),
-      ),
+        mapStateToProps,
+        mapDispatchToProps: { goToCustomLocation },
+      })(_MemberDBSelector),
     ),
   ),
 );

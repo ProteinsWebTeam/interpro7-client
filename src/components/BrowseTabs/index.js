@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -132,6 +131,6 @@ const mapStateToUrl = createSelector(
   },
 );
 
-export default loadData(mapStateToUrl)(
-  connect(mapStateToProps)(BrowseTabsWithoutData),
+export default loadData({ getUrl: mapStateToUrl, mapStateToProps })(
+  BrowseTabsWithoutData,
 );

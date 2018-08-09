@@ -320,41 +320,35 @@ const mapStateToPropsAdvancedQuery = createSelector(
   state => state.customLocation.description.main.key,
   mainType => ({ mainType }),
 );
-const RelatedAdvancedQuery = connect(mapStateToPropsAdvancedQuery)(
-  loadData(getReversedUrl)(
-    ({ data: { payload, loading }, secondaryData, ...props }) => {
-      if (loading) return <Loading />;
-      const _secondaryData =
-        payload && payload.results
-          ? payload.results.map(x => {
-              const { ...obj } = x.metadata;
-              const plural = toPlural(props.mainType);
-              obj.counters = omit(x, ['metadata', plural]);
-              // Given the reverse of the URL, and that we are querying by an accession
-              // we can assume is only one, hence [0]
-              obj.entry_protein_locations =
-                x[plural][0].entry_protein_locations;
-              obj.protein_length = x[plural][0].protein_length;
-              obj.protein = x[plural][0].protein;
-              obj.protein_structure_locations =
-                x[plural][0].protein_structure_locations;
-              if (x[plural][0].chain) {
-                obj.chain = x[plural][0].chain;
-              }
-              return obj;
-            })
-          : [];
-      const c = payload ? payload.count : 0;
-      return (
-        <RelatedAdvanced
-          secondaryData={_secondaryData}
-          actualSize={c}
-          {...props}
-        />
-      );
-    },
-  ),
-);
+const RelatedAdvancedQuery = loadData({
+  getUrl: getReversedUrl,
+  mapStateToProps: mapStateToPropsAdvancedQuery,
+})(({ data: { payload, loading }, secondaryData, ...props }) => {
+  if (loading) return <Loading />;
+  const _secondaryData =
+    payload && payload.results
+      ? payload.results.map(x => {
+          const { ...obj } = x.metadata;
+          const plural = toPlural(props.mainType);
+          obj.counters = omit(x, ['metadata', plural]);
+          // Given the reverse of the URL, and that we are querying by an accession
+          // we can assume is only one, hence [0]
+          obj.entry_protein_locations = x[plural][0].entry_protein_locations;
+          obj.protein_length = x[plural][0].protein_length;
+          obj.protein = x[plural][0].protein;
+          obj.protein_structure_locations =
+            x[plural][0].protein_structure_locations;
+          if (x[plural][0].chain) {
+            obj.chain = x[plural][0].chain;
+          }
+          return obj;
+        })
+      : [];
+  const c = payload ? payload.count : 0;
+  return (
+    <RelatedAdvanced secondaryData={_secondaryData} actualSize={c} {...props} />
+  );
+});
 
 class Related extends PureComponent {
   static propTypes = {

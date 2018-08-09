@@ -13,7 +13,7 @@ import getFetch from './getFetch';
 
 import { UnconnectedErrorBoundary } from 'wrappers/ErrorBoundary';
 
-const mapStateToProps = createSelector(
+const mapStateToState = createSelector(
   state => state,
   appState => ({ appState }),
 );
@@ -28,7 +28,14 @@ const newData = url => ({
 });
 
 const loadData = params => {
-  const { getUrl, fetchOptions, propNamespace, weight } = extractParams(params);
+  const {
+    getUrl,
+    fetchOptions,
+    propNamespace,
+    weight,
+    mapStateToProps,
+    mapDispatchToProps,
+  } = extractParams(params);
   const fetchFun = getFetch(fetchOptions);
 
   return Wrapped => {
@@ -162,15 +169,15 @@ const loadData = params => {
         };
         return (
           <UnconnectedErrorBoundary customLocation={appState.customLocation}>
-            <Wrapped {...passedProps} />
+            <Wrapped {...passedProps} {...mapStateToProps(appState) || {}} />
           </UnconnectedErrorBoundary>
         );
       }
     }
 
     return connect(
-      mapStateToProps,
-      { dataProgressInfo, dataProgressUnload },
+      mapStateToState,
+      { dataProgressInfo, dataProgressUnload, ...mapDispatchToProps },
     )(DataWrapper);
   };
 };
