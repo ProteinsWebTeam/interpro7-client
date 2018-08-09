@@ -35,7 +35,6 @@ class LengthFilter extends PureComponent {
   }
 
   _handleChange = ({ target: { value }, fromMount }) => {
-    console.log(value);
     const { goToCustomLocation, customLocation } = this.props;
     const { page, length: _, ...search } = customLocation.search;
     if (fromMount && page) search.page = page;
@@ -79,4 +78,7 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(LengthFilter);
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(LengthFilter);

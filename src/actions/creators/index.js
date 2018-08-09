@@ -94,6 +94,12 @@ export const changeSettings = (event /* :Event */) => {
     };
   }
 };
+export const changeColorDomainSetting = value => ({
+  type: types.CHANGE_SETTINGS,
+  category: 'ui',
+  key: 'colorDomainsBy',
+  value: value,
+});
 
 export const resetSettings = (value /*: ?Object */) => ({
   type: types.RESET_SETTINGS,
@@ -178,12 +184,13 @@ export const downloadError = (
 export const downloadSuccess = (
   url /*: string */,
   fileType /*: 'accession' | 'FASTA' */,
-  blobURL /*: string */,
+  { blobURL, size } /*: { string, size } */,
 ) => ({
   type: types.DOWNLOAD_SUCCESS,
   url,
   fileType,
   blobURL,
+  size,
 });
 
 export const downloadProgress = (

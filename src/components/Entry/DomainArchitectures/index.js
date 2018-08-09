@@ -1,7 +1,6 @@
 /* eslint no-magic-numbers: [1, {ignore: [0, 1, 2, 3, 10]}]*/
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -169,7 +168,8 @@ class DomainArchitectures extends PureComponent {
                   There {obj.unique_proteins > 1 ? 'are' : 'is'}{' '}
                   {obj.unique_proteins} proteins{' '}
                 </Link>
-                with this architecture:<br />
+                with this architecture:
+                <br />
                 {idaObj.accessions.map(d => (
                   <span key={d}>
                     <Link
@@ -236,8 +236,6 @@ const mapStateToProps = createSelector(
   (mainAccession, search) => ({ mainAccession, search }),
 );
 
-export default connect(mapStateToProps)(
-  loadData({
-    getUrl: getUrlFor,
-  })(DomainArchitectures),
+export default loadData({ getUrl: getUrlFor, mapStateToProps })(
+  DomainArchitectures,
 );

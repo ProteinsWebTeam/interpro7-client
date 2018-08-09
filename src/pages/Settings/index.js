@@ -20,6 +20,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
 import loadable from 'higherOrder/loadable';
+import { EntryColorMode } from 'utils/entry-color';
 
 const f = foundationPartial(ebiGlobalStyles, theme, local);
 
@@ -70,7 +71,7 @@ NavigationSettings.propTypes = {
   handleChange: T.func.isRequired,
 };
 
-const UISettings = ({ ui: { lowGraphics } }) => (
+const UISettings = ({ ui: { lowGraphics, colorDomainsBy } }) => (
   <form data-category="ui">
     <h4>UI settings</h4>
     <SchemaOrgData
@@ -105,6 +106,27 @@ const UISettings = ({ ui: { lowGraphics } }) => (
             </span>
           </label>
         </div>
+      </div>
+    </div>
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        <p>Color Domains:</p>
+        <p>
+          <small>Selection mode to color by</small>
+        </p>
+        <select
+          className={f('select-inline')}
+          value={colorDomainsBy}
+          name="colorDomainsBy"
+          // onChange={this.changeColor}
+          // onBlur={this.changeColor}
+        >
+          <option value={EntryColorMode.ACCESSION}>Accession</option>
+          <option value={EntryColorMode.MEMBER_DB}>Member Database</option>
+          <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
+            Domain Relationship
+          </option>
+        </select>
       </div>
     </div>
   </form>
@@ -180,6 +202,7 @@ const EndpointSettings = ({
 
     <div className={f('row')}>
       <div className={f('medium-2', 'column')}>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           Protocol:
           <select name="protocol" value={protocol} readOnly={!DEV}>

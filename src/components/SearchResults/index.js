@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 // import Description from 'components/Description';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -222,6 +221,6 @@ const getEbiSearchUrl = createSelector(
   },
 );
 
-export default connect(mapStateToProps)(
-  loadData(getEbiSearchUrl)(SearchResults),
+export default loadData({ getUrl: getEbiSearchUrl, mapStateToProps })(
+  SearchResults,
 );

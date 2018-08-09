@@ -70,47 +70,56 @@ const getFirstPage = (url, fileType) => {
 };
 
 // the `_` is just to make flow happy
-const downloadContent = async function*(url, fileType, _) {
-  const firstPage = getFirstPage(url, fileType);
-  // Counters for progress information
-  let totalCount;
-  let i = 0;
-  // Create a function to transform API response into processed file part
-  const processResults = processResultsFor(fileType);
-  // As long as we have a next page, we keep processing
-  // Let's start with the first one
-  let next = format(firstPage);
-  let errorCount = 0;
-  while (next) {
-    try {
-      const response = await fetch(next);
-      // If the server sent a timeout response…
-      if (response.status === REQUEST_TIMEOUT) {
-        // …wait a bit…
-        await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
-        // …then restart the loop with at the same URL
-        continue;
-      }
-      const payload = await response.json();
-      totalCount = payload.count;
-      for (const part of processResults(payload.results)) {
-        // use `totalCount + 1` to not finish at exactly 1 to account for the
-        // time needed to create the blob
-        yield { part, progress: ++i / (totalCount + 1) };
-      }
-      // If it's the last page, it will be null, so we exit the loop
-      next = payload.next;
-      // reset error counter as we're finished with that URL
-      errorCount = 0;
-    } catch (error) {
-      // If we have too many errors for one URL, just bail and throw the last
-      if (errorCount > MAX_ERROR_COUNT_FOR_ONE_REQUEST) {
-        throw error;
-      } else {
-        errorCount++;
-        await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
+const downloadContent = (onProgress, onSuccess, onError) => async (
+  url,
+  fileType,
+  _,
+) => {
+  try {
+    const firstPage = getFirstPage(url, fileType);
+    // Counters for progress information
+    let totalCount;
+    let i = 0;
+    // Create a function to transform API response into processed file part
+    const processResults = processResultsFor(fileType);
+    // As long as we have a next page, we keep processing
+    // Let's start with the first one
+    let next = format(firstPage);
+    let errorCount = 0;
+    while (next) {
+      try {
+        const response = await fetch(next);
+        // If the server sent a timeout response…
+        if (response.status === REQUEST_TIMEOUT) {
+          // …wait a bit…
+          await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
+          // …then restart the loop with at the same URL
+          continue;
+        }
+        const payload = await response.json();
+        totalCount = payload.count;
+        for (const part of processResults(payload.results)) {
+          // use `totalCount + 1` to not finish at exactly 1 to account for the
+          // time needed to create the blob
+          onProgress({ part, progress: ++i / (totalCount + 1) });
+        }
+        // If it's the last page, it will be null, so we exit the loop
+        next = payload.next;
+        // reset error counter as we're finished with that URL
+        errorCount = 0;
+      } catch (error) {
+        // If we have too many errors for one URL, just bail and throw the last
+        if (errorCount > MAX_ERROR_COUNT_FOR_ONE_REQUEST) {
+          throw error;
+        } else {
+          errorCount++;
+          await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
+        }
       }
     }
+    onSuccess();
+  } catch (error) {
+    onError(error);
   }
 };
 
@@ -122,39 +131,51 @@ const generateFileHandle = (
   const blob = new Blob(content, {
     type: `text/${fileType === 'FASTA' ? 'x-fasta' : 'plain'}`,
   });
-  return URL.createObjectURL(blob);
+  return { blobURL: URL.createObjectURL(blob), size: blob.size };
 };
 
-const postProgress = throttle(progressAction => {
-  self.postMessage(progressAction);
-}, THROTTLE_TIME);
+const postProgress = throttle(
+  progressAction => self.postMessage(progressAction),
+  THROTTLE_TIME,
+);
 
 // Download manager, send messages from there
 const download = async (url, fileType) => {
   const action = createActionCallerFor(url, fileType);
-  try {
-    // Store content in there
-    const content = [];
-    postProgress(action(downloadProgress, 0));
-    // Loop over what downloadContent yields to…
-    for await (const { part, progress } of action(downloadContent)) {
-      // …store content
-      content.push(part);
-      // …and regularly send progress info to main thread
-      postProgress(action(downloadProgress, progress));
-    }
-    // Finished getting all the content, generate a blob out of that
-    // and get its URL
-    const blobURL = generateFileHandle(content, fileType);
-    // OK, we have done everything, set progress to 1 and set success
-    postProgress(action(downloadProgress, 1));
-    postProgress.flush();
-    self.postMessage(action(downloadSuccess, blobURL));
-  } catch (error) {
+  const onError = error => {
     console.error(error);
     postProgress(action(downloadProgress, 1));
     postProgress.flush();
     self.postMessage(action(downloadError, error.message));
+  };
+  try {
+    // Store content in there
+    const content = [];
+    postProgress(action(downloadProgress, 0));
+    action(
+      downloadContent(
+        // onProgress
+        ({ part, progress }) => {
+          // store content
+          content.push(part);
+          // and regularly send progress info to main thread
+          postProgress(action(downloadProgress, progress));
+        },
+        // onSuccess
+        () => {
+          // Finished getting all the content, generate a blob out of that
+          // and get its URL
+          const urlAndSize = generateFileHandle(content, fileType);
+          // OK, we have done everything, set progress to 1 and set success
+          postProgress(action(downloadProgress, 1));
+          postProgress.flush();
+          self.postMessage(action(downloadSuccess, urlAndSize));
+        },
+        onError,
+      ),
+    );
+  } catch (error) {
+    onError(error);
   }
 };
 

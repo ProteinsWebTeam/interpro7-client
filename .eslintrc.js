@@ -74,8 +74,10 @@ const rules = {
   'generator-star-spacing': 0,
   // Make sure for-in loops have an if statement
   'guard-for-in': 2,
+  // Enforce that a label tag has a text label and an associated control
+  'jsx-a11y/label-has-associated-control': [1, { depth: 3 }],
   // Enforce label tags to have associated control
-  'jsx-a11y/label-has-for': [2, { required: { every: ['nesting'] } }],
+  'jsx-a11y/label-has-for': 0,
   // Specify quote type in JSX attributes
   'jsx-quotes': [1, 'prefer-double'],
   // Enforce spacing style for keys and values in object literal properties

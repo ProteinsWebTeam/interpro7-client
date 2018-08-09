@@ -56,13 +56,41 @@ const routes = new Map([
   ['sequence', WrappedIPScanSearch],
 ]);
 
-const RedirectToDefault = () => (
-  <Redirect
-    to={{
-      description: { main: { key: 'search' }, search: { type: 'sequence' } },
-    }}
-  />
-);
+const RedirectToDefault = ({
+  customLocation: {
+    search: { q: value },
+  },
+}) => {
+  // TODO: after a decent amount of time, remove from here…
+  // This logic is only to handle old IP6 URL structure and redirect to new one
+  if (typeof value === 'string') {
+    return (
+      <Redirect
+        to={{
+          description: {
+            main: { key: 'search' },
+            search: { type: 'text', value },
+          },
+        }}
+      />
+    );
+  }
+  // TODO: …to there
+  return (
+    <Redirect
+      to={{
+        description: { main: { key: 'search' }, search: { type: 'sequence' } },
+      }}
+    />
+  );
+};
+RedirectToDefault.propTypes = {
+  customLocation: T.shape({
+    search: T.shape({
+      q: T.string,
+    }).isRequired,
+  }).isRequired,
+};
 
 class Wrapper extends PureComponent {
   static propTypes = {

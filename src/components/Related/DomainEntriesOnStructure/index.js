@@ -35,7 +35,8 @@ const mergeData = secondaryData => {
               coordinates: toArrayStructure(entry.protein_structure_locations),
               locations: entry.protein_structure_locations,
               label: `Chain ${entry.chain}`,
-              source_database: entry.source_database,
+              source_database: 'pdb',
+              type: 'chain',
             },
           ],
         },
@@ -48,6 +49,8 @@ const mergeData = secondaryData => {
       coordinates: toArrayStructure(entry.entry_protein_locations),
       locations: entry.entry_protein_locations,
       link: `/entry/${entry.source_database}/${entry.accession}`,
+      children: entry.children,
+      chain: entry.chain,
     });
   }
   return Object.keys(out)
@@ -66,7 +69,7 @@ ProtVistaLoaded.propTypes = {
       metadata: T.object.isRequired,
     }),
   }).isRequired,
-  tracks: T.object,
+  tracks: T.oneOfType([T.object, T.array]),
 };
 
 const includeProtein = accession =>
@@ -78,13 +81,16 @@ const includeProtein = accession =>
     ),
     propNamespace: 'protein',
   })(ProtVistaLoaded);
-const protvistaPerChain = {};
+const protvistaPerChainProtein = {};
 const EntriesOnStructure = ({ entries }) => (
   <div className={f('row')}>
     {mergeData(entries).map((e, i) => {
-      if (!protvistaPerChain[e.chain])
-        protvistaPerChain[e.chain] = includeProtein(e.protein.accession);
-      const ProtVistaPlusProtein = protvistaPerChain[e.chain];
+      if (!protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`])
+        protvistaPerChainProtein[
+          `${e.chain}-${e.protein.accession}`
+        ] = includeProtein(e.protein.accession);
+      const ProtVistaPlusProtein =
+        protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`];
       return (
         <div key={i} className={f('columns')}>
           <h4>Chain {e.chain}</h4>

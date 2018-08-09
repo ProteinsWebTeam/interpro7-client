@@ -4,10 +4,10 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import NotFound from 'pages/error/NotFound';
+
 import { customLocationSelector } from 'reducers/custom-location';
 /*:: import type { CustomLocation } from 'reducers/custom-location'; */
-
-const defaultCatchAll = () => <div>404</div>;
 
 const match = (childRoutes, indexRoute, valueFromLocation) => {
   if (!valueFromLocation) return { Component: indexRoute, matched: null };
@@ -46,7 +46,7 @@ class _Switch extends PureComponent /*:: <Props> */ {
       indexRoute,
       locationSelector,
       childRoutes,
-      catchAll = defaultCatchAll,
+      catchAll = NotFound,
       customLocation,
       ...props
     } = this.props;

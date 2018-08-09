@@ -163,6 +163,22 @@
   display: none;
 }
 
+.track-component path:global(.child-fragment) {
+  stroke-width: 0;
+  opacity: 0.5;
+  cursor: pointer;
+}
+.track-component path:global(.child-fragment):hover {
+  opacity: 0.7;
+}
+.track-component line:global(.cover) {
+  opacity: 0.5;
+}
+/*remove stroke when residues track*/
+.track-component :global(.residues-group) path:global(.feature) {
+  stroke-width: 0;
+}
+
 .fullscreenable:-webkit-full-screen .fullscreen {
   display: none;
 }

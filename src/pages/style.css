@@ -331,6 +331,10 @@
   margin-top: 174px;
 }
 
+.entry-menu {
+  display: inline-block;
+}
+
 /*make the table more consistent  in term of column with fluctuation while navigating*/
 /*for 3 signatures a row*/
 .col-md {

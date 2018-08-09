@@ -101,6 +101,7 @@ const ParagraphWithTags = ({ children }) => (
           return (
             <Link
               href={xReferenceURL[mainDB].replace('{}', attrs.id)}
+              target="_blank"
               className={f('ext')}
               key={i}
             >
