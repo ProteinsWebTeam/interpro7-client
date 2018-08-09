@@ -1,3 +1,5 @@
+import noop from 'lodash-es/noop';
+
 import { getUrlForApi } from '../defaults';
 
 import extractParams from '.';
@@ -11,6 +13,8 @@ describe('extractParams', () => {
       fetchOptions: {},
       propNamespace: '',
       weight: 1,
+      mapStateToProps: noop,
+      mapDispatchToProps: {},
     });
   });
 
@@ -20,6 +24,8 @@ describe('extractParams', () => {
       fetchOptions: {},
       propNamespace: '',
       weight: 1,
+      mapStateToProps: noop,
+      mapDispatchToProps: {},
     });
   });
 
@@ -30,6 +36,8 @@ describe('extractParams', () => {
         fetchOptions: {},
         propNamespace: '',
         weight: 1,
+        mapStateToProps: noop,
+        mapDispatchToProps: {},
       });
     });
 
@@ -39,6 +47,8 @@ describe('extractParams', () => {
         fetchOptions: { method: 'HEAD' },
         propNamespace: '',
         weight: 1,
+        mapStateToProps: noop,
+        mapDispatchToProps: {},
       });
     });
 
@@ -48,6 +58,8 @@ describe('extractParams', () => {
         fetchOptions: {},
         propNamespace: 'Namespace',
         weight: 1,
+        mapStateToProps: noop,
+        mapDispatchToProps: {},
       });
     });
 
@@ -57,6 +69,8 @@ describe('extractParams', () => {
         fetchOptions: {},
         propNamespace: '',
         weight: 2,
+        mapStateToProps: noop,
+        mapDispatchToProps: {},
       });
     });
 
@@ -68,6 +82,8 @@ describe('extractParams', () => {
         fetchOptions: { method: 'HEAD' },
         propNamespace: '',
         weight: 1,
+        mapStateToProps: noop,
+        mapDispatchToProps: {},
       });
     });
 
@@ -79,6 +95,8 @@ describe('extractParams', () => {
         fetchOptions: {},
         propNamespace: 'Namespace',
         weight: 1,
+        mapStateToProps: noop,
+        mapDispatchToProps: {},
       });
     });
 
@@ -93,22 +111,30 @@ describe('extractParams', () => {
         fetchOptions: { method: 'HEAD' },
         propNamespace: 'Namespace',
         weight: 1,
+        mapStateToProps: noop,
+        mapDispatchToProps: {},
       });
     });
 
     test('all', () => {
+      const mapStateToProps = () => {};
+      const action = () => {};
       expect(
         extractParams({
           getUrl: fakeGetUrl,
           fetchOptions: { method: 'HEAD' },
           propNamespace: 'Namespace',
           weight: 2,
+          mapStateToProps,
+          mapDispatchToProps: { action },
         }),
       ).toEqual({
         getUrl: fakeGetUrl,
         fetchOptions: { method: 'HEAD' },
         propNamespace: 'Namespace',
         weight: 2,
+        mapStateToProps,
+        mapDispatchToProps: { action },
       });
     });
   });

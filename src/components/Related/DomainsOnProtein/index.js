@@ -7,6 +7,8 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import { processData } from 'components/ProtVista/utils';
+
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -14,6 +16,7 @@ import loadable from 'higherOrder/loadable';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
 const f = foundationPartial(ipro);
 
@@ -22,126 +25,28 @@ const ProtVista = loadable({
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
-const getUrlFor = createSelector(
-  // this one only to memoize it
-  db => db,
-  db =>
-    createSelector(
-      state => state.settings.api,
-      state => state.customLocation.description,
-      ({ protocol, hostname, port, root }, description) => {
-        const _description = {};
-        for (const [key, value] of Object.entries(description)) {
-          _description[key] = { ...value };
-        }
-        // omit detail from description
-        _description[description.main.key].detail = null;
-        // brand new search
-        const search = {};
-        if (db === 'Residues') {
-          search.residues = null;
-        } else {
-          _description.entry.isFilter = true;
-          _description.entry[db === 'InterPro' ? 'db' : 'integration'] = db;
-        }
-        // build URL
-        return format({
-          protocol,
-          hostname,
-          port,
-          pathname: root + descriptionToPath(_description),
-          query: search,
+const mergeResidues = (data, residues) => {
+  Object.values(data).forEach(group =>
+    group.forEach(entry => {
+      if (residues[entry.accession])
+        entry.residues = [residues[entry.accession]];
+      if (entry.children && entry.children.length)
+        entry.children.forEach(child => {
+          if (residues[child.accession])
+            child.residues = [residues[child.accession]];
         });
-      },
-    ),
-);
-
-// const mergeResidues = residues =>
-//   Object.values(residues).map(location => ({
-//     accession: `_${location.entry_accession}`,
-//     name: location.name,
-//     type: 'residue',
-//     location2residue: location.fragments.reduce((acc, fragment) => {
-//       acc[fragment.start] = fragment.residue;
-//       return acc;
-//     }, {}),
-//     source_database: location.source,
-//     locations: location.fragments.map(f => ({
-//       fragments: [{ start: f.start, end: f.end }],
-//     })),
-//   }));
-
-const toArrayStructure = locations =>
-  locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
-
+    }),
+  );
+};
+const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
 const groupByEntryType = interpro => {
-  const ipro = {};
-  const out = interpro.reduce((acc, val) => {
-    val.signatures = [];
-    val.children = [];
-    val.coordinates = toArrayStructure(val.entry_protein_locations);
-    val.link = `/entry/${val.source_database}/${val.accession}`;
-    ipro[val.accession] = val;
-    if (!(val.entry_type in acc)) {
-      acc[val.entry_type] = [];
-    }
-    acc[val.entry_type].push(val);
-    return acc;
-  }, {});
-  return { out, ipro };
-};
-
-const addSignature = (entry, ipro, integrated) => {
-  if (entry.entry_integrated in ipro) {
-    entry.link = `/entry/${entry.source_database}/${entry.accession}`;
-    ipro[entry.entry_integrated].signatures.push(entry);
-    ipro[entry.entry_integrated].children.push(entry);
-  } else if (entry in integrated) {
-    console.error('integrated entry without InterPro: ', entry);
+  const groups = {};
+  for (const entry of interpro) {
+    if (!groups[entry.type]) groups[entry.type] = [];
+    groups[entry.type].push(entry);
   }
-};
-
-// const groupResidues = residues => {
-//   TODO: Check if this is necessary for the cases that a residue is related to an unexistent entry
-//   TODO: Remove this when using the full dataset
-//   const resTypes = {};
-//   for (const fr of residues.fragments || residues.locations) {
-//     if (!(fr.description in resTypes)) resTypes[fr.description] = [];
-//     resTypes[fr.description].push(fr);
-//   }
-//   const output = [
-//     {
-//       accession: residues.name,
-//       entry_accession: residues.entry_accession,
-//       locations: Object.entries(resTypes).map(([description, fragments]) => ({
-//         accession: description.replace(' ', '_'),
-//         description,
-//         fragments,
-//       })),
-//     },
-//   ];
-//   return output;
-// };
-const mergeData = (interpro, integrated, unintegrated, residues) => {
-  const { out, ipro } = groupByEntryType(interpro);
-  if (unintegrated.length) {
-    unintegrated.forEach(
-      u => (u.link = `/entry/${u.source_database}/${u.accession}`),
-    );
-    out.unintegrated = unintegrated;
-  }
-  for (const entry of integrated.concat(unintegrated)) {
-    entry.coordinates = toArrayStructure(entry.entry_protein_locations);
-    if (residues && residues.hasOwnProperty(entry.accession)) {
-      entry.residues = [residues[entry.accession]]; // groupResidues(residues[entry.accession]);
-      delete residues[entry.accession];
-    }
-    addSignature(entry, ipro, integrated);
-  }
-  if (Object.keys(residues || {}).length) {
-    out.residues = [residues]; // groupResidues(residues);
-  }
-  return out;
+  Object.values(groups).forEach(g => g.sort(orderByAccession));
+  return groups;
 };
 
 const UNDERSCORE = /_/g;
@@ -149,12 +54,12 @@ const sortFunction = ([a], [b]) => {
   const firsts = ['family', 'domain'];
   const lasts = ['residues', 'features', 'predictions'];
   for (const label of firsts) {
-    if (a.toLowerCase() === label) return 0;
+    if (a.toLowerCase() === label) return -1;
     if (b.toLowerCase() === label) return 1;
   }
   for (const l of lasts) {
     if (a.toLowerCase() === l) return 1;
-    if (b.toLowerCase() === l) return 0;
+    if (b.toLowerCase() === l) return -1;
   }
   return a > b ? 1 : 0;
 };
@@ -176,77 +81,101 @@ export class DomainOnProteinWithoutMergedData extends PureComponent {
       <ProtVista
         protein={mainData.metadata || mainData.payload.metadata}
         data={sortedData}
+        title="Entry matches in this Protein"
       />
     );
   }
 }
-
 export class DomainOnProteinWithoutData extends PureComponent {
   static propTypes = {
     mainData: T.object.isRequired,
-    dataInterPro: T.object.isRequired,
-    dataIntegrated: T.object.isRequired,
-    dataUnintegrated: T.object.isRequired,
+    data: T.object.isRequired,
     dataResidues: T.object.isRequired,
-    dataMerged: T.object,
   };
 
   render() {
-    const {
-      mainData,
-      dataInterPro,
-      dataIntegrated,
-      dataResidues,
-      dataUnintegrated,
-    } = this.props;
+    const { data, mainData, dataResidues } = this.props;
 
-    if (dataInterPro.loading || dataIntegrated.loading) {
-      return <Loading />;
-    }
-
-    const mergedData = mergeData(
-      (dataInterPro && dataInterPro.payload && dataInterPro.payload.entries) ||
-        [],
-      (dataIntegrated &&
-        dataIntegrated.payload &&
-        dataIntegrated.payload.entries) ||
-        [],
-      (dataUnintegrated &&
-        dataUnintegrated.payload &&
-        dataUnintegrated.payload.entries) ||
-        [],
-      dataResidues && dataResidues.payload,
-    );
-
-    if (Object.keys(mergedData).length === 0) {
+    if (!data || data.loading) return <Loading />;
+    if (!data.payload || !data.payload.results) {
       return (
         <div className={f('callout', 'info', 'withicon')}>
-          There is no available domain for this protein.
+          There are no entries matching this protein.
         </div>
       );
     }
 
+    const { interpro, unintegrated } = processData({
+      data,
+      endpoint: 'protein',
+    });
+    const interproFamilies = interpro.filter(entry => entry.type === 'family');
+    const groups = groupByEntryType(interpro);
+    unintegrated.sort(orderByAccession);
+    const mergedData = { ...groups, unintegrated };
+    if (dataResidues && !dataResidues.loading && dataResidues.payload) {
+      mergeResidues(mergedData, dataResidues.payload);
+    }
+
     return (
-      <DomainOnProteinWithoutMergedData
-        mainData={mainData}
-        dataMerged={mergedData}
-      />
+      <React.Fragment>
+        <div>
+          <h5>Protein family membership</h5>
+          {interproFamilies.length ? (
+            <ProteinEntryHierarchy entries={interproFamilies} />
+          ) : (
+            <div className={f('callout', 'info', 'withicon')}>
+              This Protein does not have any <b>family</b> matches
+            </div>
+          )}
+        </div>
+        <br />
+        <DomainOnProteinWithoutMergedData
+          mainData={mainData}
+          dataMerged={mergedData}
+        />
+      </React.Fragment>
     );
   }
 }
 
-const DomainOnProtein = [
-  'Integrated',
-  'InterPro',
-  'Residues',
-  'Unintegrated',
-].reduce(
-  (Index, db) =>
-    loadData({
-      getUrl: getUrlFor(db),
-      propNamespace: db,
-    })(Index),
-  DomainOnProteinWithoutData,
+const getInterproRelatedEntriesURL = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description.protein.accession,
+  ({ protocol, hostname, port, root }, accession) => {
+    const newDesc = {
+      main: { key: 'entry' },
+      protein: { isFilter: true, db: 'uniprot', accession },
+      entry: { db: 'all' },
+    };
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(newDesc),
+      query: {
+        page_size: 200,
+        extra_fields: 'hierarchy',
+      },
+    });
+  },
+);
+const getResiduesURL = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description,
+  ({ protocol, hostname, port, root }, description) => {
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(description),
+      query: {
+        residues: null,
+      },
+    });
+  },
 );
 
-export default DomainOnProtein;
+export default loadData({ getUrl: getResiduesURL, propNamespace: 'Residues' })(
+  loadData(getInterproRelatedEntriesURL)(DomainOnProteinWithoutData),
+);

@@ -409,7 +409,14 @@ class List extends PureComponent {
     const notFound = !data.loading && data.status !== HTTP_OK;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
-    if (data.loading || notFound) {
+    const isStaleButShouldntDisplayStale =
+      isStale &&
+      _payload &&
+      _payload.results &&
+      _payload.results[0] &&
+      _payload.results[0].metadata.source_database.toLowerCase() !==
+        db.toLowerCase();
+    if (data.loading || notFound || isStaleButShouldntDisplayStale) {
       _payload = { results: [] };
     }
     const urlHasParameter = data.url && data.url.includes('?');

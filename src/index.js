@@ -1,6 +1,9 @@
 // Polyfills
 /* global ga: false */
 import 'babel-polyfill';
+// import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
+
+import { elementMatches as elementMatchesPolyfill } from 'utils/polyfills';
 
 import React from 'react';
 import { render } from 'react-dom';
@@ -11,6 +14,8 @@ import ready from 'utils/ready';
 import hmr from 'index-hmr';
 
 import config, { DEV } from 'config';
+
+elementMatchesPolyfill();
 
 const schemaOrgManager = (...args) =>
   import(/* webpackChunkName: "schemaOrg" */ 'schema_org').then(
@@ -25,7 +30,7 @@ const main = async () => {
 
   // Instantiates schema.org manager
   schemaOrgManager({
-    dev: DEV,
+    dev: false,
     root: {
       '@context': [
         'http://schema.org',

@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -110,7 +109,8 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(
+export default loadData({
+  getUrl: getUrlFor,
   mapStateToProps,
-  { goToCustomLocation },
-)(loadData(getUrlFor)(ExperimentTypeFilter));
+  mapDispatchToProps: { goToCustomLocation },
+})(ExperimentTypeFilter);

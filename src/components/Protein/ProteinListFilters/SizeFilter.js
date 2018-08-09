@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -105,7 +104,8 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(
+export default loadData({
+  getUrl,
   mapStateToProps,
-  { goToCustomLocation },
-)(loadData(getUrl)(SizeFilter));
+  mapDispatchTopProps: { goToCustomLocation },
+})(SizeFilter);

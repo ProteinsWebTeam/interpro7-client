@@ -945,20 +945,3 @@ hr {
     opacity: 0;
   } /*make the buttons disappear for very small screens so they don't overlap with title*/
 }
-
-/******sequence viewer*******/
-/*blobs for children elements*/
-.track-component path.child-fragment {
-  stroke-dasharray: 0 0 2;
-  stroke-width: 2;
-  opacity: 0.5;
-  cursor: pointer;
-}
-.track-component path.child-fragment:hover {
-  opacity: 0.7;
-}
-/*remove stroke when residues track*/
-.track-component .residues-group path.feature {
-  stroke-width: 0;
-}
-/****** END sequence viewer*******/

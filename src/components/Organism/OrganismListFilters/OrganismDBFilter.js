@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import NumberLabel from 'components/NumberLabel';
@@ -103,7 +102,8 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(
+export default loadData({
+  getUrl: getUrlFor,
   mapStateToProps,
-  { goToCustomLocation },
-)(loadData(getUrlFor)(OrganismDBFilter));
+  mapDispatchToProps: { goToCustomLocation },
+})(OrganismDBFilter);
