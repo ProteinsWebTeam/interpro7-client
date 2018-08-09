@@ -84,6 +84,7 @@ class ProtVista extends PureComponent {
     data: T.array,
     colorDomainsBy: T.string,
     changeColorDomainSetting: T.func,
+    title: T.string,
   };
 
   constructor(props) {
@@ -401,9 +402,10 @@ class ProtVista extends PureComponent {
 
   renderOptions() {
     const { collapsed } = this.state;
+    const title = this.props.title || 'Domains on protein';
     return (
       <div className={f('aligned-to-track-component', 'view-options-wrap')}>
-        <div className={f('view-options-title')}>Domains on protein</div>
+        <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
           <div className={f('option-color', 'margin-right-medium')}>
             Color By:{' '}

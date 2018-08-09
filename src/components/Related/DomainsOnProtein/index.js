@@ -16,6 +16,7 @@ import loadable from 'higherOrder/loadable';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
 const f = foundationPartial(ipro);
 
@@ -80,6 +81,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent {
       <ProtVista
         protein={mainData.metadata || mainData.payload.metadata}
         data={sortedData}
+        title="Entry matches in this Protein"
       />
     );
   }
@@ -95,10 +97,19 @@ export class DomainOnProteinWithoutData extends PureComponent {
     const { data, mainData, dataResidues } = this.props;
 
     if (!data || data.loading) return <Loading />;
+    if (!data.payload || !data.payload.results) {
+      return (
+        <div className={f('callout', 'info', 'withicon')}>
+          There are no entries matching this protein.
+        </div>
+      );
+    }
+
     const { interpro, unintegrated } = processData({
       data,
       endpoint: 'protein',
     });
+    const interproFamilies = interpro.filter(entry => entry.type === 'family');
     const groups = groupByEntryType(interpro);
     unintegrated.sort(orderByAccession);
     const mergedData = { ...groups, unintegrated };
@@ -106,19 +117,24 @@ export class DomainOnProteinWithoutData extends PureComponent {
       mergeResidues(mergedData, dataResidues.payload);
     }
 
-    if (Object.keys(mergedData).length === 0) {
-      return (
-        <div className={f('callout', 'info', 'withicon')}>
-          There is no available domain for this protein.
-        </div>
-      );
-    }
-
     return (
-      <DomainOnProteinWithoutMergedData
-        mainData={mainData}
-        dataMerged={mergedData}
-      />
+      <React.Fragment>
+        <div>
+          <h5>Protein family membership</h5>
+          {interproFamilies.length ? (
+            <ProteinEntryHierarchy entries={interproFamilies} />
+          ) : (
+            <div className={f('callout', 'info', 'withicon')}>
+              This Protein does not have any <b>family</b> matches
+            </div>
+          )}
+        </div>
+        <br />
+        <DomainOnProteinWithoutMergedData
+          mainData={mainData}
+          dataMerged={mergedData}
+        />
+      </React.Fragment>
     );
   }
 }
@@ -139,6 +155,7 @@ const getInterproRelatedEntriesURL = createSelector(
       pathname: root + descriptionToPath(newDesc),
       query: {
         page_size: 200,
+        extra_fields: 'hierarchy',
       },
     });
   },
