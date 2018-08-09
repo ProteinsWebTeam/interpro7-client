@@ -22,7 +22,7 @@ a.is-active-tab {
   &:hover,
   &:visited {
     font-weight: bold;
-    color: black;
+    /*color: black;*/
     border-bottom: 3px solid var(--colors-submain);
     background-color: transparent;
     transition: border-bottom-color var(--timing-medium) ease-in-out;
@@ -62,4 +62,12 @@ a.is-active-tab.menu-hh {
   display: flex;
   align-items: stretch;
   margin-right: 1rem;
+}
+/*hide icons on main menu - show them only on sidemenu and revert color from black to white*/
+.icon-count-sm {
+  display: none;
+  width: 18px;
+  height: 16px;
+  filter: invert(100%);
+  color: black;
 }
