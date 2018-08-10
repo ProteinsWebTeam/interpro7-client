@@ -51,6 +51,7 @@ const getTaxonomyForFilter = ({ taxonomy, main }) => {
 };
 
 export const entities /*: Array<Object> */ = [
+  // for Browse menu
   {
     to(customLocation) {
       return {

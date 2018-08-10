@@ -4,7 +4,7 @@ a.browse-tabs-link {
   &:hover,
   &:visited {
     font-size: 0.9rem; /*same size as submenu*/
-    padding: 1rem 1rem 0.5rem 1rem;
+    padding: 1rem 0.5rem 0.7rem 0.5rem;
     color: black;
     line-height: inherit;
     background-color: transparent; /* keep! */
@@ -33,7 +33,8 @@ a.is-active-tab {
   &:focus,
   &:hover,
   &:visited {
-    color: black;
+    font-weight: bold;
+    /*color: black;*/
 
     & > .name {
       color: transparent;
@@ -49,4 +50,12 @@ a.is-active-tab {
   display: flex;
   align-items: stretch;
   margin-right: 1rem;
+}
+/*hide icons on main menu - show them only on sidemenu and revert color from black to white*/
+.icon-count-sm {
+  display: none;
+  width: 18px;
+  height: 16px;
+  filter: invert(100%);
+  color: black;
 }

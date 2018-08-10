@@ -41,18 +41,15 @@ const subPagesForSequence = new Map([
   ['sequence', SequenceSubPage],
 ]);
 
-const locationSelector = createSelector(
-  customLocation => {
-    const { key } = customLocation.description.main;
-    return (
-      customLocation.description[key].detail ||
-      (Object.entries(customLocation.description).find(
-        ([_key, value]) => value.isFilter,
-      ) || [])[0]
-    );
-  },
-  value => value,
-);
+const locationSelector = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 
 class IPScanResult extends PureComponent {
   static propTypes = {
