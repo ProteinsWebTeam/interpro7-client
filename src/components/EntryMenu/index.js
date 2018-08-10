@@ -57,7 +57,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     children: T.any,
     className: T.string,
     lowGraphics: T.bool.isRequired,
-    usedOnTheSide: T.bool.isRequired,
+    usedOnTheSide: T.bool,
   };
 
   constructor(props) {
