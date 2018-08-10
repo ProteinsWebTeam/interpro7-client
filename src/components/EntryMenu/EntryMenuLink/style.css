@@ -54,6 +54,10 @@ a.is-active-tab {
       }
     }
   }
+
+  & a.is-active-tab .name {
+    font-weight: bold;
+  }
 }
 
 .tabs-title {
