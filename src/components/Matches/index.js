@@ -101,8 +101,6 @@ const propTypes = {
     niceRatio: T.number,
   }),
   actualSize: T.number,
-  search: T.object.isRequired,
-  description: T.object.isRequired,
 };
 
 const componentMatch = {
@@ -415,7 +413,11 @@ const Matches = (
     </Column>
   </Table>
 );
-Matches.propTypes = propTypes;
+Matches.propTypes = {
+  ...propTypes,
+  search: T.object.isRequired,
+  description: T.object.isRequired,
+};
 
 const mapStateToProps = createSelector(
   searchSelector,

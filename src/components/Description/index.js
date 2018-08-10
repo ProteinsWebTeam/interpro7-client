@@ -25,10 +25,9 @@ export const ParagraphWithCites = ({
     {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
       const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
       return i % 2 ? (
-        <sup>
+        <sup key={i}>
           <Link
             className={f('text-high')}
-            key={i}
             id={withoutIDs ? null : `description-${refCounter}`}
             to={customLocation => {
               const key = customLocation.description.main.key;
