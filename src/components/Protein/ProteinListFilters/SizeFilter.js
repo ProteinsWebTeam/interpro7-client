@@ -107,5 +107,5 @@ const mapStateToProps = createSelector(
 export default loadData({
   getUrl,
   mapStateToProps,
-  mapDispatchTopProps: { goToCustomLocation },
+  mapDispatchToProps: { goToCustomLocation },
 })(SizeFilter);
