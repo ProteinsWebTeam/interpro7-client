@@ -3,7 +3,7 @@ a.browse-tabs-link {
   &:focus,
   &:hover,
   &:visited {
-    font-size: 0.9rem; /*same size as submenu*/
+    font-size: 0.9rem; /* same size as submenu */
     padding: 1rem 0.5rem 0.7rem 0.5rem;
     color: black;
     line-height: inherit;
@@ -43,16 +43,40 @@ a.is-active-tab {
   }
 }
 
+.used-on-the-side {
+  &,
+  & a.is-active-tab {
+    & .name {
+      color: #ccc;
+
+      &::after {
+        content: initial;
+      }
+    }
+  }
+}
+
 .tabs-title {
   display: flex;
   align-items: stretch;
   margin-right: 1rem;
 }
-/*hide icons on main menu - show them only on sidemenu and revert color from black to white*/
+
+/* hide icons on main menu - show them only on sidemenu and revert color from black to white */
 .icon-count-sm {
   display: none;
   width: 18px;
   height: 16px;
   filter: invert(100%);
   color: black;
+}
+
+.used-on-the-side {
+  & .icon-count-sm {
+    display: inline-block;
+  }
+
+  & .counter {
+    color: white;
+  }
 }

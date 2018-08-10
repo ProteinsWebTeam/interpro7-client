@@ -126,7 +126,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
           <nav>
             <ul>
               {mainAccession && (
-                <EntryMenu className={f('sidemenu')}>
+                <EntryMenu className={f('sidemenu')} usedOnTheSide>
                   <span className={f('menu-label', 'cursor-default')}>
                     {mainType} menu ({mainAccession})
                   </span>

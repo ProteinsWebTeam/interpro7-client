@@ -57,6 +57,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     children: T.any,
     className: T.string,
     lowGraphics: T.bool.isRequired,
+    usedOnTheSide: T.bool.isRequired,
   };
 
   constructor(props) {
@@ -148,6 +149,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       children,
       data: { loading, payload },
       className,
+      usedOnTheSide,
     } = this.props;
     let tabs = entities;
     if (mainAccession && mainType && config.pages[mainType]) {
@@ -186,7 +188,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             data={data}
             counter={e.counter}
             isFirstLevel={!mainAccession}
-            isSignature={isSignature}
+            usedOnTheSide={usedOnTheSide}
           />
         ))}
       </ul>
