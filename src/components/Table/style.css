@@ -5,7 +5,7 @@ table th {
   position: sticky;
 }
 
-.table-view .table-results-filtering {
+.result-page .table-results-filtering {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,18 +15,18 @@ table th {
   padding: 0.4rem 0.5rem;
 }
 
-.table-view select {
+.result-page select {
   color: #505f74;
   margin: 0;
   height: 2.1rem;
 }
 
-.table-view input {
+.result-page input {
   margin-bottom: 0;
   height: 2.2rem;
 }
 
-.table-view .table-results-filtering .icon-view {
+.result-page .table-results-filtering .icon-view {
   color: #71818a;
   width: 25px;
   height: 25px;
@@ -34,30 +34,31 @@ table th {
   opacity: 0.5;
 }
 
-.table-view .table-results-filtering .icon-view.active {
+.result-page .table-results-filtering .icon-view.active {
   opacity: 1;
 }
 
-.table-view .table-results-filtering div > div:last-child .icon-view {
+.result-page .table-results-filtering div > div:last-child .icon-view {
   margin-right: 0;
 }
 
-.table-view .table-results-filtering .icon-view.table-view {
-  background: url(../../images/icons/ico-view-table.svg) no-repeat;
+.result-page .table-results-filtering .icon-view.table-view {
+  background: url(../../images/icons/ico-view-table-round.svg) no-repeat;
+  background-size: 100%;
 }
-.table-view .table-results-filtering .icon-view.list-view {
+.result-page .table-results-filtering .icon-view.list-view {
   background: url(../../images/icons/ico-view-list.svg) no-repeat;
 }
-.table-view .table-results-filtering .icon-view.grid-view {
+.result-page .table-results-filtering .icon-view.grid-view {
   background: url(../../images/icons/ico-view-grid.svg) no-repeat;
 }
-.table-view .table-results-filtering .icon-view.tree-view {
+.result-page .table-results-filtering .icon-view.tree-view {
   background: url(../../images/icons/ico-view-tree.svg) no-repeat;
 }
-.table-view .table-results-filtering .icon-view.disabled {
+.result-page .table-results-filtering .icon-view.disabled {
   display: none;
 }
-.table-view .table-results-filtering .filter-wrapper {
+.result-page .table-results-filtering .filter-wrapper {
   display: flex;
 }
 
@@ -75,7 +76,7 @@ table th {
 }
 @supports (display: grid) {
   .test-support-grid {
-    display: initial;
+    display: flex;
   }
 }
 
@@ -120,7 +121,7 @@ table th {
 
 /* Small screen only */
 @media screen and (max-width: 39.9375em) {
-  .table-view .table-results-filtering .filter-wrapper {
+  .result-page .table-results-filtering .filter-wrapper {
     flex-grow: 1;
   }
   table.light th,

@@ -79,18 +79,15 @@ class SummaryComponent extends PureComponent {
   }
 }
 
-const locationhasDetailOrFilter = createSelector(
-  customLocation => {
-    const { key } = customLocation.description.main;
-    return (
-      customLocation.description[key].detail ||
-      (Object.entries(customLocation.description).find(
-        ([_key, value]) => value.isFilter,
-      ) || [])[0]
-    );
-  },
-  value => value,
-);
+const locationhasDetailOrFilter = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 
 class Summary extends PureComponent {
   static propTypes = propTypes;
@@ -210,19 +207,16 @@ class Overview extends PureComponent {
   }
 }
 
-const locationHasAccessionOrFilters = createSelector(
-  customLocation => {
-    const { key } = customLocation.description.main;
-    return (
-      customLocation.description[key].accession ||
-      customLocation.description[key].memberDBAccession ||
-      (Object.entries(customLocation.description).find(
-        ([_key, value]) => value.isFilter,
-      ) || [])[0]
-    );
-  },
-  value => value,
-);
+const locationHasAccessionOrFilters = createSelector(customLocation => {
+  const { key } = customLocation.description.main;
+  return (
+    customLocation.description[key].accession ||
+    customLocation.description[key].memberDBAccession ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => value.isFilter,
+    ) || [])[0]
+  );
+}, value => value);
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 class InnerSwitch extends PureComponent {

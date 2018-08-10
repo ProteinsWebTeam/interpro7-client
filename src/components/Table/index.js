@@ -133,7 +133,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
 
     return (
       <div className={f('row')}>
-        <div className={f('columns', 'table-view')}>
+        <div className={f('columns', 'result-page')}>
           <div className={f('row')}>
             <div className={f('columns')}>
               <div className={f('table-results-filtering')}>

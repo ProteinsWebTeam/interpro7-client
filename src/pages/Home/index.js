@@ -445,12 +445,14 @@ class Home extends PureComponent {
               processData={schemaProcessDataInterpro}
             />
             <SchemaOrgDataWithData />
-            <div className={f('container-intro')}>
-              <div className={f('fig-container')}>
+            <div className={f('intro-wrapper')}>
+              <div className={f('intro-fig')}>
                 <InterProGraphicAnim />
               </div>
-              <h3>Classification of protein families</h3>
-              <Description textBlocks={[description]} />
+              <div className={f('intro-content')}>
+                <h3>Classification of protein families</h3>
+                <Description textBlocks={[description]} />
+              </div>
             </div>
           </div>
         </div>

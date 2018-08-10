@@ -1,13 +1,24 @@
 @import '../styles/timing.css';
 @import '../styles/colors.css';
+@import '../styles/fonts.css';
 /************************************home.js************************************/
-/*homepage figures - temp while there is a specific component*/
-.fig-container {
-  float: left;
-  width: 17%;
-  margin: 0.5rem 1.5rem 1rem 0;
-  overflow: hidden;
+.intro-wrapper {
+  display: flex;
+  margin: 1rem 0 2rem 0;
 }
+
+/*homepage figures - temp while there is a specific component*/
+.intro-fig {
+  width: 57%;
+  margin-right: 2rem;
+  /*overflow: hidden;*/
+}
+
+.fig-brick {
+  background: url(../images/md-pile.svg) no-repeat 50% 50%;
+  background-size: 120%;
+}
+
 .fig-sqc {
   background: url(../images/sqc.png) no-repeat -12% 69%;
   height: 12.4rem;
@@ -66,14 +77,13 @@
   font-size: 0.72rem;
 }
 
-@supports (display: grid) {
+/*@supports (display: grid) {
   .signature-container {
-    /*display: grid;*/
-    /*grid-template-columns: repeat(3, 1fr);*/
-    font-size: 0.72rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
-
+*/
 /*.ext {*/
 /*&,*/
 /*&:hover,*/
@@ -276,6 +286,15 @@
   background-repeat: no-repeat;
 }
 
+.icon-count-hmm {
+  height: 3em;
+  width: 26px;
+  background-image: url('../images/icons/ico-hmm.svg');
+  background-size: 100%;
+  background-position-y: 59%;
+  background-repeat: no-repeat;
+}
+
 .label-off .label-number {
   display: none;
 }
@@ -339,16 +358,9 @@
 
 /* Small screen only */
 @media screen and (max-width: 39.9375em) {
-  /*table.light th {word-break: break-all;}*/
-  /*remove  GO terms and entry type columns*/
+  /*make  GO terms and entry type 100% on xsmall*/
   .col-go,
   .col-md {
     width: 100%;
-  }
-  .col-go div {
-    margin-left: 0;
-  }
-  .col-type {
-    display: none;
   }
 }
