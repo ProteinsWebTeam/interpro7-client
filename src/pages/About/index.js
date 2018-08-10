@@ -43,17 +43,11 @@ const Privacy = loadable({
     import(/* webpackChunkName: "about-funding" */ 'components/About/Privacy'),
 });
 
-// const Advanced = loadable({
-//   loader: () =>
-//     import(/* webpackChunkName: "about-advanced" */ 'components/About/Advanced'),
-// });
-
 const routes = new Map([
   ['consortium', Consortium],
   ['citation', Citation],
   ['funding', Funding],
   ['privacy', Privacy],
-  // ['advanced', Advanced],
 ]);
 
 const locationSelector = createSelector(
@@ -123,20 +117,6 @@ class About extends PureComponent /*:: <{}> */ {
                 Privacy
               </Link>
             </li>
-            {
-              // <li
-              //   className={f('tabs-title')}
-              //   onMouseOver={Advanced.preload}
-              //   onFocus={Advanced.preload}
-              // >
-              //   <Link
-              //     to={{ description: { other: ['about', 'advanced'] } }}
-              //     activeClass={f('is-active', 'is-active-tab')}
-              //   >
-              //     Advanced
-              //   </Link>
-              // </li>
-            }
           </ul>
           <div className={f('tabs', 'tabs-content')}>
             <div className={f('tabs-panel', 'is-active')}>
