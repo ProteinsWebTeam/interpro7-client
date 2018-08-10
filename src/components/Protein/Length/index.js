@@ -33,7 +33,8 @@ class Length extends PureComponent {
             },
           })}
         >
-          {length} amino acids{fragmentText}
+          {length} amino acids
+          {fragmentText}
         </Link>
       </div>
     );

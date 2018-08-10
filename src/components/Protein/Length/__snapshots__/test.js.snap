@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Length /> should render 1`] = `
+<div>
+  Length: 
+  <Connect(Link)
+    to={[Function]}
+  >
+    100
+     amino acids
+     (complete)
+  </Connect(Link)>
+</div>
+`;
+
+exports[`<Length /> should render 2`] = `
+<div>
+  Length: 
+  <Connect(Link)
+    to={[Function]}
+  >
+    100
+     amino acids
+     (fragment)
+  </Connect(Link)>
+</div>
+`;
+
+exports[`<Length /> should render 3`] = `
+<div>
+  Length: 
+  <Connect(Link)
+    to={[Function]}
+  >
+    100
+     amino acids
+  </Connect(Link)>
+</div>
+`;
