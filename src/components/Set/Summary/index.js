@@ -157,7 +157,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
               </div>
             ) : null}
           </div>
-          <div className={f('row', 'columns')}>
+          <div className={f('row')}>
             <div ref={this._ref} style={{ minHeight: 500 }} />
           </div>
         </section>

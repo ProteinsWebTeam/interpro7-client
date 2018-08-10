@@ -29,8 +29,7 @@ const whitelist = new Set(['Overview', 'Sequence']);
     loading: boolean,
     payload?: ?Object,
   },
-  isFirstLevel?: boolean,
-  isSignature: boolean
+  isFirstLevel?: boolean
 }; */
 
 class EntryMenuLink extends PureComponent /*:: <Props> */ {
@@ -44,7 +43,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       payload: T.any,
     }).isRequired,
     isFirstLevel: T.bool,
-    isSignature: T.bool.isRequired,
+    usedOnTheSide: T.bool.isRequired,
   };
 
   render() {
@@ -55,7 +54,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       counter,
       data: { loading, payload },
       isFirstLevel,
-      isSignature,
+      usedOnTheSide,
     } = this.props;
     let value = null;
     if (!loading && payload && payload.metadata) {
@@ -93,7 +92,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     if (!isFirstLevel && !isNaN(value) && !value) return null;
 
     return (
-      <li className={f('tabs-title')}>
+      <li className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}>
         <Link
           to={to}
           exact={exact}
@@ -197,7 +196,13 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
           {value !== null && ' '}
           {value !== null &&
             !isNaN(value) && (
-              <NumberLabel loading={loading} value={value} abbr />
+              <NumberLabel
+                loading={loading}
+                value={value}
+                abbr
+                duration={usedOnTheSide ? 0 : undefined}
+                className={f('counter')}
+              />
             )}
         </Link>
       </li>

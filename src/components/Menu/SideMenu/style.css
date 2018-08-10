@@ -78,7 +78,6 @@
 .sidemenu li a:active,
 .sidemenu li a:focus,
 .sidemenu li a:visited {
-  color: #ccc;
   border: none;
   font-weight: normal;
   border-bottom: none;
@@ -87,7 +86,7 @@
   width: 100%;
 }
 
-/* doesn't work anymre? doesn't recognise active-tab class- trick to make the active class work - temp solution while we include SVG inline and use their class like*/
+/* doesn't work anymore? doesn't recognise active-tab class- trick to make the active class work - temp solution while we include SVG inline and use their class like */
 .sidemenu li :global(a.is-active-tab) i {
   filter: saturate(5) hue-rotate(190deg) brightness(0) contrast(0);
 }
