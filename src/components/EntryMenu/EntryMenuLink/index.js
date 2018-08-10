@@ -43,7 +43,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       payload: T.any,
     }).isRequired,
     isFirstLevel: T.bool,
-    usedOnTheSide: T.bool.isRequired,
+    usedOnTheSide: T.bool,
   };
 
   render() {
