@@ -14,6 +14,7 @@ import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import { NumberComponent } from 'components/NumberLabel';
 import { PDBeLink } from 'components/ExtLink';
+import Lazy from 'wrappers/Lazy';
 import LazyImage from 'components/LazyImage';
 
 import { searchSelector } from 'reducers/custom-location/search';
@@ -366,12 +367,18 @@ const Matches = (
         secondary !== 'set'
       }
       renderer={(match /*: Object */) => (
-        <MatchesByPrimary
-          matches={[match]}
-          primary={primary}
-          secondary={secondary}
-          {...props}
-        />
+        <Lazy>
+          {(hasBeenVisible /*: boolean */) =>
+            hasBeenVisible ? (
+              <MatchesByPrimary
+                matches={[match]}
+                primary={primary}
+                secondary={secondary}
+                {...props}
+              />
+            ) : null
+          }
+        </Lazy>
       )}
     >
       {primary === 'protein' ? 'Domain Architecture' : 'Matches'}
