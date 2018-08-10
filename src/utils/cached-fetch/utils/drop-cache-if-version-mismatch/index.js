@@ -11,7 +11,7 @@ export default (headers /*: Headers */) => {
     const dropEverything = !!interProVersion;
     interProVersion = version;
     if (dropEverything) {
-      sessionStorage.clear();
+      window.sessionStorage.clear();
       return true;
     } // else, it's the first time we run through this function
   }

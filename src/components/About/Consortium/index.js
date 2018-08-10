@@ -4,6 +4,7 @@ import T from 'prop-types';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import Link from 'components/generic/Link';
 import TimeAgo from 'components/TimeAgo';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
@@ -48,7 +49,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
 
   render() {
     const { loading, payload } = this.props.data;
-    if (loading || !payload) return 'Loading…';
+    if (loading || !payload) return <Loading />;
     const databases = payload && payload.databases;
     const memberDBs = Object.values(payload.databases).filter(
       db => db.type === 'entry' && db.canonical !== 'interpro',

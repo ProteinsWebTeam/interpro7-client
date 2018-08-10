@@ -79,9 +79,7 @@ const RedirectToDefault = () => (
   <Redirect to={{ description: { other: ['help', 'tutorial'] } }} />
 );
 
-export default class extends PureComponent /*:: <{}> */ {
-  static displayName = 'Help';
-
+export default class Help extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <div className={f('row')}>

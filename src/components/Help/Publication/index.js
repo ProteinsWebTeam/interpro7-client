@@ -1,10 +1,6 @@
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-
-import loadData from 'higherOrder/loadData';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -17,30 +13,8 @@ import local from './style.css';
 
 const f = foundationPartial(EBIGlobal, tutogrid, fonts, ipro, helper, local);
 
-/*:: type Props = {
-  data: {
-    loading: boolean,
-    payload?: {
-      databases: {},
-    }
-  },
-}; */
-
-export const Publication = class extends PureComponent /*:: <Props> */ {
-  static displayName = 'Publication';
-
-  static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-  };
-
+export default class Publication extends PureComponent /*:: <{||}> */ {
   render() {
-    const { loading, payload } = this.props.data;
-    if (loading || !payload) return 'Loading…';
     return (
       <section>
         <h3>Publications</h3>
@@ -100,9 +74,9 @@ export const Publication = class extends PureComponent /*:: <Props> */ {
                     <span className={f('sc')}>Redaschi</span>, Lorna{' '}
                     <span className={f('sc')}>Richardson</span>, Catherine{' '}
                     <span className={f('sc')}>Rivoire</span>, Amaia{' '}
-                    <span className={f('sc')}>Sangrador</span>-Vegas, Christian{' '}
-                    <span className={f('sc')}>Sigrist</span>, Ian{' '}
-                    <span className={f('sc')}>Sillitoe</span>, Ben{' '}
+                    <span className={f('sc')}>Sangrador</span>
+                    -Vegas, Christian <span className={f('sc')}>Sigrist</span>,
+                    Ian <span className={f('sc')}>Sillitoe</span>, Ben{' '}
                     <span className={f('sc')}>Smithers</span>, Silvano{' '}
                     <span className={f('sc')}>Squizzato</span>, Granger{' '}
                     <span className={f('sc')}>Sutton</span>, Narmada{' '}
@@ -112,8 +86,8 @@ export const Publication = class extends PureComponent /*:: <Props> */ {
                     <span className={f('sc')}>Wu</span>, Ioannis{' '}
                     <span className={f('sc')}>Xenarios</span>, Lai-Su{' '}
                     <span className={f('sc')}>Yeh</span>, Siew-Yit{' '}
-                    <span className={f('sc')}>Young</span>and Alex L.{' '}
-                    <span className={f('sc')}>Mitchell</span>
+                    <span className={f('sc')}>Young</span>
+                    and Alex L. <span className={f('sc')}>Mitchell</span>
                   </div>
                   <div className={f('card-info-level')}>
                     <span
@@ -284,12 +258,10 @@ export const Publication = class extends PureComponent /*:: <Props> */ {
           <strong>
             {' '}
             InterPro in 2017 — beyond protein family and domain annotations
-          </strong>.{' '}
-          <i>Nucleic Acids Research, Jan 2017; doi: 10.1093/nar/gkw1107</i>
+          </strong>
+          . <i>Nucleic Acids Research, Jan 2017; doi: 10.1093/nar/gkw1107</i>
         </blockquote>
       </section>
     );
   }
-};
-
-export default loadData(getUrlForMeta)(Publication);
+}

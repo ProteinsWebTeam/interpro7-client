@@ -1,10 +1,6 @@
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-
-import loadData from 'higherOrder/loadData';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -14,30 +10,8 @@ import local from './style.css';
 
 const f = foundationPartial(local, fonts, ipro);
 
-/*:: type Props = {
-  data: {
-    loading: boolean,
-    payload?: {
-      databases: {},
-    }
-  },
-}; */
-
-export const Tutorial = class extends PureComponent /*:: <Props> */ {
-  static displayName = 'Tutorial';
-
-  static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.shape({
-        databases: T.object,
-      }),
-    }).isRequired,
-  };
-
+export default class Tutorial extends PureComponent /*:: <{||}> */ {
   render() {
-    const { loading, payload } = this.props.data;
-    if (loading || !payload) return 'Loading…';
     return (
       <section>
         <h3>Tutorials</h3>
@@ -236,6 +210,4 @@ export const Tutorial = class extends PureComponent /*:: <Props> */ {
       </section>
     );
   }
-};
-
-export default loadData(getUrlForMeta)(Tutorial);
+}

@@ -70,7 +70,7 @@ describe('getUrlForApi', () => {
         };
 
         expect(getUrlForApi(state)).toBe(
-          `https://www.example.com:443/basename/entry/InterPro/?page_size=10`,
+          'https://www.example.com:443/basename/entry/InterPro/?page_size=10',
         );
       });
 
@@ -81,13 +81,13 @@ describe('getUrlForApi', () => {
         };
 
         expect(getUrlForApi(state)).toBe(
-          `https://www.example.com:443/basename/entry/InterPro/?page_size=10`,
+          'https://www.example.com:443/basename/entry/InterPro/?page_size=10',
         );
 
         state.customLocation.search = null;
 
         expect(getUrlForApi(state)).toBe(
-          `https://www.example.com:443/basename/entry/InterPro/?page_size=10`,
+          'https://www.example.com:443/basename/entry/InterPro/?page_size=10',
         );
       });
     });
@@ -102,7 +102,7 @@ describe('getUrlForApi', () => {
       };
 
       expect(getUrlForApi(state)).toBe(
-        `https://www.example.com:443/basename/entry/InterPro/?page_size=50`,
+        'https://www.example.com:443/basename/entry/InterPro/?page_size=50',
       );
     });
 
@@ -159,7 +159,7 @@ describe('getUrlForApi', () => {
       };
 
       expect(getUrlForApi(state)).toBe(
-        `https://www.example.com:443/basename/entry/InterPro/?page_size=50`,
+        'https://www.example.com:443/basename/entry/InterPro/?page_size=50',
       );
     });
 
