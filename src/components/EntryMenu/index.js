@@ -107,9 +107,11 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       // going right
       middleTranslateX = this._currentTransformTranslateX;
       middleScaleX =
-        (boundingRect.right - this._currentTransformTranslateX) /
+        (boundingRect.right -
+          containerBoundingRect.left -
+          this._currentTransformTranslateX) /
         countainerWidth;
-    } else if (nextTranslateX > this._currentTransformTranslateX) {
+    } else if (nextTranslateX < this._currentTransformTranslateX) {
       // going left
       middleTranslateX = nextTranslateX;
       middleScaleX =

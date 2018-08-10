@@ -33,9 +33,6 @@ a.is-active-tab {
   &:focus,
   &:hover,
   &:visited {
-    font-weight: bold;
-    /*color: black;*/
-
     & > .name {
       color: transparent;
 
