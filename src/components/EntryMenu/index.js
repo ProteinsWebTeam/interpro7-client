@@ -99,7 +99,8 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     }px) scaleX(${this._currentTransformScaleX})`;
     // next transform
     const nextTranslateX = boundingRect.left - containerBoundingRect.left;
-    const nextScaleX = boundingRect.width / countainerWidth;
+    let nextScaleX = boundingRect.width / countainerWidth;
+    if (Number.isNaN(nextScaleX)) nextScaleX = this._currentTransformScaleX;
     const nextTransform = `translateX(${nextTranslateX}px) scaleX(${nextScaleX})`;
     // middle transform
     let middleTranslateX = this._currentTransformTranslateX;
