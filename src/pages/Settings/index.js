@@ -71,7 +71,9 @@ NavigationSettings.propTypes = {
   handleChange: T.func.isRequired,
 };
 
-const UISettings = ({ ui: { lowGraphics, colorDomainsBy } }) => (
+const UISettings = ({
+  ui: { lowGraphics, colorDomainsBy, structureViewer },
+}) => (
   <form data-category="ui">
     <h4>UI settings</h4>
     <SchemaOrgData
@@ -118,8 +120,8 @@ const UISettings = ({ ui: { lowGraphics, colorDomainsBy } }) => (
           className={f('select-inline')}
           value={colorDomainsBy}
           name="colorDomainsBy"
-          // onChange={this.changeColor}
-          // onBlur={this.changeColor}
+          onChange={noop}
+          onBlur={noop}
         >
           <option value={EntryColorMode.ACCESSION}>Accession</option>
           <option value={EntryColorMode.MEMBER_DB}>Member Database</option>
@@ -127,6 +129,40 @@ const UISettings = ({ ui: { lowGraphics, colorDomainsBy } }) => (
             Domain Relationship
           </option>
         </select>
+      </div>
+    </div>
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        <p>Display structure viewer all the time:</p>
+        <p>
+          <small>
+            On some low-end devices, small screens, or under network or battery
+            constraints, we might decide to not display the structure viewer by
+            default. It will still be available on demand. Do you still want to
+            display the viewer all the time?
+          </small>
+        </p>
+        <div className={f('switch', 'large')}>
+          <input
+            type="checkbox"
+            checked={structureViewer}
+            className={f('switch-input')}
+            name="structureViewer"
+            id="structureViewer-input"
+            onChange={noop}
+          />
+          <label className={f('switch-paddle')} htmlFor="structureViewer-input">
+            <span className={f('show-for-sr')}>
+              Structure viewer always visible:
+            </span>
+            <span className={f('switch-active')} aria-hidden="true">
+              Yes
+            </span>
+            <span className={f('switch-inactive')} aria-hidden="true">
+              No
+            </span>
+          </label>
+        </div>
       </div>
     </div>
   </form>
@@ -205,7 +241,13 @@ const EndpointSettings = ({
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           Protocol:
-          <select name="protocol" value={protocol} readOnly={!DEV}>
+          <select
+            name="protocol"
+            value={protocol}
+            onChange={noop}
+            onBlur={noop}
+            readOnly={!DEV}
+          >
             <option value="http:">http://</option>
             <option value="https:">https://</option>
           </select>

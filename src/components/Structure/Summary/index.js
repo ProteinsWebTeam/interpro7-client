@@ -8,8 +8,8 @@ import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
-import StructureView from 'components/Structure/Viewer';
 import TimeAgo from 'components/TimeAgo';
+import ViewerOnDemand from 'components/Structure/ViewerOnDemand';
 
 import loadWebComponent from 'utils/load-web-component';
 
@@ -138,7 +138,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
           <ErrorBoundary>
             <div className={f('row')}>
               <div className={f('columns')}>
-                <StructureView id={metadata.accession} matches={matches} />
+                <ViewerOnDemand id={metadata.accession} matches={matches} />
               </div>
             </div>
           </ErrorBoundary>

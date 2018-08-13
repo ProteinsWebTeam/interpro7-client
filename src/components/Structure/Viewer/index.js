@@ -256,7 +256,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <div className={f('structure-placeholder')} ref={this._placeholder}>
           <div
             className={f('structure-viewer', {
@@ -266,7 +266,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
             <div
               ref={this._ref}
               style={{
-                background: 'white',
                 width: '100%',
                 height: '100%',
                 display: 'flex',
@@ -287,7 +286,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         <div ref={this._protvista}>
           <ProtVistaForStructure />
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }
