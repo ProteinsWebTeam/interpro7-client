@@ -8,6 +8,7 @@ import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
 import StructureView from 'components/Structure/Viewer';
+import TimeAgo from 'components/TimeAgo';
 
 import loadWebComponent from 'utils/load-web-component';
 
@@ -89,7 +90,13 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                   )}
                   <div>Chains: {chains.join(', ')}</div>
                   <div>
-                    Released: <time>{date.toLocaleDateString()}</time>
+                    Released:{' '}
+                    <time
+                      dateTime={date.toISOString()}
+                      title={date.toLocaleDateString()}
+                    >
+                      <TimeAgo date={date} noUpdate />
+                    </time>
                   </div>
                 </div>
               )}
