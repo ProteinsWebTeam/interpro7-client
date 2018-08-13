@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { changeColorDomainSetting } from 'actions/creators';
+import { changeSettingsRaw } from 'actions/creators';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -83,7 +83,7 @@ class ProtVista extends PureComponent {
     protein: T.object,
     data: T.array,
     colorDomainsBy: T.string,
-    changeColorDomainSetting: T.func,
+    changeSettingsRaw: T.func,
     title: T.string,
   };
 
@@ -330,8 +330,7 @@ class ProtVista extends PureComponent {
       }
       track.refresh();
     }
-    // this.setState({ colorMode });
-    this.props.changeColorDomainSetting(colorMode);
+    this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
   };
 
   renderLabels(entry) {
@@ -583,5 +582,5 @@ const mapStateToProps = createSelector(
 
 export default connect(
   mapStateToProps,
-  { changeColorDomainSetting },
+  { changeSettingsRaw },
 )(ProtVista);

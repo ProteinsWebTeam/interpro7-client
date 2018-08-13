@@ -77,7 +77,10 @@ const rules = {
   // Enforce that all elements that require alternative text have meaningful information to relay back to the end user
   'jsx-a11y/alt-text': [2, { img: ['LazyImage'] }],
   // Enforce that a label tag has a text label and an associated control
-  'jsx-a11y/label-has-associated-control': [1, { depth: 3 }],
+  'jsx-a11y/label-has-associated-control': [
+    1,
+    { depth: 3, controlComponents: ['TextSearchBox'] },
+  ],
   // Enforce label tags to have associated control
   'jsx-a11y/label-has-for': 0,
   // Specify quote type in JSX attributes
