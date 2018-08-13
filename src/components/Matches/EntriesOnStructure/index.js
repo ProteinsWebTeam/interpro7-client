@@ -1,3 +1,5 @@
+// TODO: check if we can replace that file with
+// TODO: 'components/Related/DomainEntriesOnStructure'
 /* eslint no-magic-numbers: 0 */
 import React from 'react';
 import T from 'prop-types';
@@ -20,6 +22,7 @@ class EntriesOnStructure extends ProtVistaMatches {
     ).isRequired,
     options: T.object,
   };
+
   updateTracksWithData({ matches: data }) {
     if (data.length > 1) {
       console.error(

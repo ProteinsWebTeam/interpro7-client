@@ -233,14 +233,15 @@ class ProtVista extends PureComponent {
         <div>${
           isInterPro
             ? `<interpro-type
-                    type="${entry.entry_type.replace('_', ' ')}"
+                    type="${(entry.entry_type || entry.type).replace('_', ' ')}"
                     dimension="1.4em"
                     aria-label="Entry type"
                   />`
             : ''
         } 
         </div>
-        <div>${entry.entry_type.replace('_', ' ') || ''}</div>       
+        <div>${(entry.entry_type || entry.type || '').replace('_', ' ') ||
+          ''}</div>       
         </div>
         <p>
           <small>  

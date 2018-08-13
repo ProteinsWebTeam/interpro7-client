@@ -51,6 +51,7 @@ const mergeData = secondaryData => {
       link: `/entry/${entry.source_database}/${entry.accession}`,
       children: entry.children,
       chain: entry.chain,
+      type: entry.type || entry.entry_type,
     });
   }
   return Object.keys(out)
@@ -81,7 +82,9 @@ const includeProtein = accession =>
     ),
     propNamespace: 'protein',
   })(ProtVistaLoaded);
+
 const protvistaPerChainProtein = {};
+
 const EntriesOnStructure = ({ entries }) => (
   <div className={f('row')}>
     {mergeData(entries).map((e, i) => {
