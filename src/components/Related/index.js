@@ -14,7 +14,6 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import { toPlural } from 'utils/pages';
 
-import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
 
@@ -205,7 +204,6 @@ export class _RelatedAdvanced extends PureComponent {
     isStale: T.bool.isRequired,
     mainType: T.string.isRequired,
     focusType: T.string.isRequired,
-    focusDB: T.string,
     actualSize: T.number,
   };
 
@@ -216,7 +214,6 @@ export class _RelatedAdvanced extends PureComponent {
       isStale,
       mainType,
       focusType,
-      focusDB,
       actualSize,
     } = this.props;
     return (

@@ -11,11 +11,11 @@ import { EntryColorMode, hexToRgb, getTrackColor } from 'utils/entry-color';
 
 import ProtVistaForStructure from './ProtVistaForStructures';
 
-import 'litemol/dist/css/LiteMol-plugin-light.css';
-
 import { foundationPartial } from 'styles/foundation';
+
+import 'litemol/dist/css/LiteMol-plugin-light.css';
 import style from './style.css';
-import { changeColorDomainSetting } from 'actions/creators';
+
 const f = foundationPartial(style);
 
 /*:: type Props = {
@@ -298,7 +298,4 @@ const mapStateToProps = createSelector(
   }),
 );
 
-export default connect(
-  mapStateToProps,
-  { changeColorDomainSetting },
-)(StructureView);
+export default connect(mapStateToProps)(StructureView);

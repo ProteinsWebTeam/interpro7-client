@@ -101,13 +101,6 @@ export const changeSettings = (event /* :Event */) => {
   }
 };
 
-export const changeColorDomainSetting = value => ({
-  type: types.CHANGE_SETTINGS,
-  category: 'ui',
-  key: 'colorDomainsBy',
-  value: value,
-});
-
 export const resetSettings = (value /*: ?Object */) => ({
   type: types.RESET_SETTINGS,
   value,
