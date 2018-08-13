@@ -42,6 +42,7 @@ const mapNameToClass = new Map([
   children: ?any,
   className: ?string,
   lowGraphics: boolean,
+  usedOnTheSide?: boolean,
 }; */
 
 export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
