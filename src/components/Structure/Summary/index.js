@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
@@ -84,7 +85,21 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
               {chains.length && (
                 <div className={f('margin-top-large')}>
                   <div>Accession: {metadata.accession}</div>
-                  <div>Experiment type: {metadata.experiment_type}</div>
+                  <div>
+                    Experiment type:{' '}
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'structure' },
+                          structure: { db: 'PDB' },
+                          entry: { isFilter: true, db: 'InterPro' },
+                        },
+                        search: { experiment_type: metadata.experiment_type },
+                      }}
+                    >
+                      {metadata.experiment_type}
+                    </Link>
+                  </div>
                   {metadata.resolution && (
                     <div>Resolution: {metadata.resolution} Å </div>
                   )}
