@@ -1,6 +1,8 @@
 import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
 import config from 'config';
 
+import { EntryColorMode } from 'utils/entry-color';
+
 const DEFAULT_HTTP_PORT = 80;
 
 // type Category = 'navigation' | 'ui' | 'cache' | 'ebi' | 'api' | 'ipScan';
@@ -14,6 +16,8 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
     case 'ui':
       return {
         lowGraphics: false,
+        colorDomainsBy: EntryColorMode.ACCESSION,
+        structureViewer: false,
       };
     case 'cache':
       return {
