@@ -119,17 +119,15 @@ export class DomainOnProteinWithoutData extends PureComponent {
 
     return (
       <React.Fragment>
-        <div>
+        <div className={f('margin-bottom-large')}>
           <h5>Protein family membership</h5>
           {interproFamilies.length ? (
             <ProteinEntryHierarchy entries={interproFamilies} />
           ) : (
-            <div className={f('callout', 'info', 'withicon')}>
-              This Protein does not have any <b>family</b> matches
-            </div>
+            <p className={f('margin-bottom-medium')}>None predicted</p>
           )}
         </div>
-        <br />
+
         <DomainOnProteinWithoutMergedData
           mainData={mainData}
           dataMerged={mergedData}
