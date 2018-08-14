@@ -54,9 +54,5 @@ export default () /*: Description */ => Object.freeze({
     accession: null,
     detail: null,
   }),
-  other: {
-    0: null,
-    1: null,
-    2: null,
-  },
+  other: [],
 });

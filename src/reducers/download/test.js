@@ -14,7 +14,12 @@ describe('reducer for download handling in state', () => {
         { type: DOWNLOAD_URL, url: 'www.example.com', fileType: 'FASTA' },
       ),
     ).toEqual({
-      'www.example.com|FASTA': { progress: 0, successful: null, blobURL: null },
+      'www.example.com|FASTA': {
+        progress: 0,
+        successful: null,
+        blobURL: null,
+        size: null,
+      },
     });
   });
 });

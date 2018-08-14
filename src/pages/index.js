@@ -87,6 +87,10 @@ const pages = new Map([
   // other
   ['search', Search],
   ['job', Jobs],
+]);
+
+// Everything which ends up in the 'other' array of the location description
+const otherPages = new Map([
   // static pages
   ['release_notes', ReleaseNotes],
   ['download', Download],
@@ -104,18 +108,38 @@ const Null = () => null;
 }; */
 
 const childRoutes = new Map([[/^search|job$/, Null]]);
-const locationSelector1 = createSelector(customLocation => {
-  if (
-    customLocation.description.main.key &&
-    !customLocation.description[customLocation.description.main.key].accession
-  )
-    return customLocation.description.main.key;
-}, value => value);
-const locationSelector2 = createSelector(
-  customLocation =>
-    customLocation.description.other[0] || customLocation.description.main.key,
+const locationSelector1 = createSelector(
+  customLocation => {
+    if (
+      customLocation.description.main.key &&
+      !customLocation.description[customLocation.description.main.key].accession
+    )
+      return customLocation.description.main.key;
+  },
   value => value,
 );
+const locationSelector2 = createSelector(
+  customLocation => customLocation.description.main.key,
+  value => value,
+);
+const locationSelectorForOther = createSelector(
+  customLocation => customLocation.description.other[0],
+  value => value,
+);
+
+class HomeOrOther extends PureComponent /*:: <Props> */ {
+  render() {
+    return (
+      <Switch
+        {...this.props}
+        locationSelector={locationSelectorForOther}
+        indexRoute={Home}
+        childRoutes={otherPages}
+        catchAll={NotFound}
+      />
+    );
+  }
+}
 
 export class Pages extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -144,7 +168,7 @@ export class Pages extends PureComponent /*:: <Props> */ {
           <Switch
             {...props}
             locationSelector={locationSelector2}
-            indexRoute={Home}
+            indexRoute={HomeOrOther}
             childRoutes={pages}
             catchAll={NotFound}
           />

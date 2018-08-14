@@ -1,17 +1,29 @@
-@import '../../../styles/colors.css';
-@import '../../../styles/timing.css';
-
 a.browse-tabs-link {
   &,
   &:focus,
   &:hover,
   &:visited {
-    font-size: 0.9rem; /*same size as submenu*/
-    padding: 1rem 1rem 0.5rem 1rem;
+    font-size: 0.9rem; /* same size as submenu */
+    padding: 1rem 0.5rem 0.7rem 0.5rem;
     color: black;
     line-height: inherit;
-    background-color: transparent; /*to keep*/
-    border-bottom: 3px solid white; /*just for animation*/
+    background-color: transparent; /* keep! */
+
+    & > .name {
+      display: inline-block;
+      margin-right: 0.5ch;
+
+      &::after {
+        display: block;
+        padding-top: 1rem;
+        content: attr(data-content);
+        position: absolute;
+        top: 0;
+        font-weight: bold;
+        color: black;
+        opacity: 0;
+      }
+    }
   }
 }
 
@@ -21,45 +33,54 @@ a.is-active-tab {
   &:focus,
   &:hover,
   &:visited {
+    & > .name {
+      color: transparent;
+
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.used-on-the-side {
+  &,
+  & a.is-active-tab {
+    & .name {
+      color: #ccc;
+
+      &::after {
+        content: initial;
+      }
+    }
+  }
+
+  & a.is-active-tab .name {
     font-weight: bold;
-    color: black;
-    border-bottom: 3px solid var(--colors-submain);
-    background-color: transparent;
-    transition: border-bottom-color var(--timing-medium) ease-in-out;
-  }
-
-  &.is-signature {
-    border-bottom-color: #4e7287;
   }
 }
 
-a.is-active-tab:hover,
-a.browse-tabs-link:hover {
-  background-color: var(--colors-nearly-white);
-  transition: background-color var(--timing-really-fast) ease-in-out;
-}
-
-a.is-active-tab.menu-family {
-  border-bottom-color: var(--colors-family-main);
-}
-
-a.is-active-tab.menu-domain {
-  border-bottom-color: var(--colors-domain-main);
-}
-
-a.is-active-tab.menu-site {
-  border-bottom-color: var(--colors-site-main);
-}
-
-a.is-active-tab.menu-repeat {
-  border-bottom-color: var(--colors-repeat-main);
-}
-
-a.is-active-tab.menu-hh {
-  border-bottom-color: var(--colors-homolog-main);
-}
 .tabs-title {
   display: flex;
   align-items: stretch;
   margin-right: 1rem;
+}
+
+/* hide icons on main menu - show them only on sidemenu and revert color from black to white */
+.icon-count-sm {
+  display: none;
+  width: 18px;
+  height: 16px;
+  filter: invert(100%);
+  color: black;
+}
+
+.used-on-the-side {
+  & .icon-count-sm {
+    display: inline-block;
+  }
+
+  & .counter {
+    color: white;
+  }
 }

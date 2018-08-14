@@ -1,16 +1,22 @@
 //
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import config from 'config';
 import LiteMol from 'litemol';
 import CustomTheme from './CustomTheme';
 import EntrySelection from './EntrySelection';
-import { hexToRgb } from 'utils/entry-color';
+import { EntryColorMode, hexToRgb, getTrackColor } from 'utils/entry-color';
+
+import ProtVistaForStructure from './ProtVistaForStructures';
+
+import { foundationPartial } from 'styles/foundation';
 
 import 'litemol/dist/css/LiteMol-plugin-light.css';
+import style from './style.css';
 
-const embedStyle = { width: '100%', height: '50vh' };
-// const f = foundationPartial(ebiStyles);
+const f = foundationPartial(style);
 
 /*:: type Props = {
   id: string|number,
@@ -21,6 +27,16 @@ const embedStyle = { width: '100%', height: '50vh' };
 // Call as follows to highlight pre-selected entry (from Structure/Summary)
 // <StructureView id={accession} matches={matches} highlight={"pf00071"}/>
 
+const NUMBER_OF_CHECKS = 10;
+const optionsForObserver = {
+  root: null,
+  rootMargin: '0px',
+  threshold: Array(...{ length: NUMBER_OF_CHECKS }).map(
+    Number.call,
+    n => (n + 1) / NUMBER_OF_CHECKS,
+  ),
+};
+
 class StructureView extends PureComponent /*:: <Props> */ {
   /*:: _ref: { current: ?HTMLElement }; */
 
@@ -28,6 +44,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     id: T.oneOfType([T.string, T.number]).isRequired,
     matches: T.array,
     highlight: T.string,
+    colorDomainsBy: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -37,11 +54,15 @@ class StructureView extends PureComponent /*:: <Props> */ {
       plugin: null,
       entryMap: {},
       selectedEntry: '',
+      selectedEntryToKeep: null,
+      isStuck: false,
     };
 
     this.plugin = null;
 
     this._ref = React.createRef();
+    this._placeholder = React.createRef();
+    this._protvista = React.createRef();
   }
 
   componentDidMount() {
@@ -106,8 +127,53 @@ class StructureView extends PureComponent /*:: <Props> */ {
         this.setState({ selectedEntry: '' });
       });
     });
+    const threshold = 0.4;
+    const observer = new IntersectionObserver(entries => {
+      this.setState({ isStuck: entries[0].intersectionRatio < threshold });
+    }, optionsForObserver);
+    observer.observe(this._placeholder.current);
+    this._protvista.current.addEventListener(
+      'entryclick',
+      ({
+        detail: {
+          feature: { accession, source_database: db, type, chain },
+        },
+      }) => {
+        this.setState(
+          {
+            selectedEntryToKeep:
+              type === 'chain'
+                ? null
+                : {
+                    accession: accession,
+                    db,
+                    chain,
+                  },
+          },
+          this.showEntryInStructure,
+        );
+      },
+    );
+    this._protvista.current.addEventListener(
+      'entrymouseover',
+      ({
+        detail: {
+          feature: { accession, source_database: db, type, chain },
+        },
+      }) => {
+        if (type !== 'chain') this.showEntryInStructure(db, accession, chain);
+      },
+    );
+    this._protvista.current.addEventListener('entrymouseout', () => {
+      this.showEntryInStructure();
+    });
   }
 
+  componentDidUpdate(_, prevState) {
+    if (prevState.isStuck !== this.state.isStuck) {
+      this.plugin.instance.context.scene.scene.handleResize();
+    }
+  }
   updateTheme(entries) {
     if (this.plugin) {
       const context = this.plugin.context;
@@ -140,20 +206,23 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const entry = match.metadata.accession;
         const db = match.metadata.source_database;
         if (!memberDBMap[db]) memberDBMap[db] = {};
-        if (!memberDBMap[db][entry]) memberDBMap[db][entry] = [];
+        if (!memberDBMap[db][entry]) memberDBMap[db][entry] = {};
 
         for (const structure of match.structures) {
           const chain = structure.chain;
+          if (!memberDBMap[db][entry][chain])
+            memberDBMap[db][entry][chain] = [];
           for (const location of structure.entry_protein_locations) {
             for (const fragment of location.fragments) {
-              const hexCol = config.colors.get(db);
-              const color = hexToRgb(hexCol);
-
-              memberDBMap[db][entry].push({
+              memberDBMap[db][entry][chain].push({
                 struct_asym_id: chain,
                 start_residue_number: fragment.start,
                 end_residue_number: fragment.end,
-                color: color,
+                accession: entry,
+                source_database: db,
+                parent: match.metadata.integrated
+                  ? { accession: match.metadata.integrated }
+                  : null,
               });
             }
           }
@@ -163,31 +232,49 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return memberDBMap;
   }
 
-  showEntryInStructure = (memberDB, entry) => {
+  showEntryInStructure = (memberDB, entry, chain) => {
+    const keep = this.state.selectedEntryToKeep;
     this.updateTheme([]);
-    if (memberDB && entry) {
-      const hits = this.state.entryMap[memberDB][entry];
+    const db = memberDB || (keep && keep.db);
+    const acc = entry || (keep && keep.accession);
+    const ch = chain || (keep && keep.chain);
+    if (db && acc) {
+      const hits = ch
+        ? this.state.entryMap[db][acc][ch]
+        : Object.values(this.state.entryMap[db][acc]).reduce(
+            (agg, v) => agg.concat(v),
+            [],
+          );
+      hits.forEach(
+        hit =>
+          (hit.color = hexToRgb(getTrackColor(hit, this.props.colorDomainsBy))),
+      );
       this.updateTheme(hits);
-      this.setState({ selectedEntry: entry });
     }
+    this.setState({ selectedEntry: acc || '' });
   };
 
   render() {
     return (
-      <div>
-        <div style={embedStyle}>
+      <React.Fragment>
+        <div className={f('structure-placeholder')} ref={this._placeholder}>
           <div
-            ref={this._ref}
-            style={{
-              background: 'white',
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
-            }}
-          />
+            className={f('structure-viewer', {
+              'is-stuck': this.state.isStuck,
+            })}
+          >
+            <div
+              ref={this._ref}
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+              }}
+            />
+          </div>
         </div>
         {this.props.matches ? (
           <EntrySelection
@@ -196,8 +283,19 @@ class StructureView extends PureComponent /*:: <Props> */ {
             selectedEntry={this.state.selectedEntry}
           />
         ) : null}
-      </div>
+        <div ref={this._protvista}>
+          <ProtVistaForStructure />
+        </div>
+      </React.Fragment>
     );
   }
 }
-export default StructureView;
+
+const mapStateToProps = createSelector(
+  state => state.settings.ui,
+  ui => ({
+    colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
+  }),
+);
+
+export default connect(mapStateToProps)(StructureView);

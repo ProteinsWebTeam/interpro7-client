@@ -1,5 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+
+import { changeSettingsRaw } from 'actions/creators';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -78,6 +82,9 @@ class ProtVista extends PureComponent {
   static propTypes = {
     protein: T.object,
     data: T.array,
+    colorDomainsBy: T.string,
+    changeSettingsRaw: T.func,
+    title: T.string,
   };
 
   constructor(props) {
@@ -87,7 +94,7 @@ class ProtVista extends PureComponent {
 
     this.state = {
       entryHovered: null,
-      colorMode: EntryColorMode.DOMAIN_RELATIONSHIP,
+      // colorMode: EntryColorMode.DOMAIN_RELATIONSHIP,
       hideCategory: {},
       expandedTrack: {},
       collapsed: false,
@@ -113,6 +120,12 @@ class ProtVista extends PureComponent {
   }
 
   updateTracksWithData(data) {
+    const b2sh = new Map([
+      ['s', 'discontinuosStart'],
+      ['e', 'discontinuosEnd'],
+      ['se', 'discontinuos'],
+      ['es', 'discontinuos'],
+    ]);
     for (const type of data) {
       for (const d of type[1]) {
         const tmp = (d.entry_protein_locations || d.locations).map(loc => ({
@@ -120,24 +133,35 @@ class ProtVista extends PureComponent {
           name: d.name,
           source_database: d.source_database,
           locations: [loc],
-          color: getTrackColor(d, this.state.colorMode),
+          color: getTrackColor(d, this.props.colorDomainsBy),
           entry_type: d.entry_type,
-          type: 'entry',
-          residues: d.residues,
+          type: d.type || 'entry',
+          residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
+          chain: d.chain,
         }));
         const children = d.children
           ? d.children.map(child => ({
               accession: child.accession,
+              chain: d.chain,
               name: child.name,
-              residues: child.residues,
+              residues:
+                child.residues && JSON.parse(JSON.stringify(child.residues)),
               source_database: child.source_database,
               entry_type: child.entry_type,
               type: child.type,
-              locations: child.entry_protein_locations || child.locations,
+              locations: (child.entry_protein_locations || child.locations).map(
+                loc => ({
+                  ...loc,
+                  fragments: loc.fragments.map(f => ({
+                    shape: b2sh.get(f.bounds),
+                    ...f,
+                  })),
+                }),
+              ),
               parent: d,
               color: getTrackColor(
                 Object.assign(child, { parent: d }),
-                this.state.colorMode,
+                this.props.colorDomainsBy,
               ),
               location2residue: child.location2residue,
             }))
@@ -191,7 +215,8 @@ class ProtVista extends PureComponent {
   getElementFromEntry(detail) {
     const entry = detail.feature;
     const isResidue = detail.type === 'residue';
-    const tagString = `<div>
+    const isInterPro = entry.source_database === 'interpro';
+    const tagString = `<section>   
         <h5>
           ${entry.accession}
           ${
@@ -200,10 +225,27 @@ class ProtVista extends PureComponent {
               : ''
           } 
          </h5>
+          
         ${entry.name ? `<h4>${entry.name}</h4>` : ''}
-        <p style={{ textTransform: 'capitalize' }}>${entry.entry_type || ''}</p>
-        <p style={{ textTransform: 'uppercase' }}>
-          <small>${
+        
+        <!-- use class as Protvista is not react-->       
+        <div class="${f('pop-wrapper')}" >
+        <div>${
+          isInterPro
+            ? `<interpro-type
+                    type="${(entry.entry_type || entry.type).replace('_', ' ')}"
+                    dimension="1.4em"
+                    aria-label="Entry type"
+                  />`
+            : ''
+        } 
+        </div>
+        <div>${(entry.entry_type || entry.type || '').replace('_', ' ') ||
+          ''}</div>       
+        </div>
+        <p>
+          <small>  
+          ${
             Array.isArray(entry.source_database)
               ? entry.source_database[0]
               : entry.source_database
@@ -238,8 +280,7 @@ class ProtVista extends PureComponent {
                   .join('')
           }
         </ul>
-
-      </div>
+      </section>
     `.trim();
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));
@@ -289,12 +330,13 @@ class ProtVista extends PureComponent {
       }
       track.refresh();
     }
-    this.setState({ colorMode });
+    this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
   };
 
   renderLabels(entry) {
     const { expandedTrack } = this.state;
-    if (NOT_MEMBER_DBS.has(entry.source_database)) return entry.accession;
+    if (NOT_MEMBER_DBS.has(entry.source_database) || entry.type === 'chain')
+      return entry.accession;
     return (
       <Fragment>
         <Link
@@ -376,15 +418,16 @@ class ProtVista extends PureComponent {
 
   renderOptions() {
     const { collapsed } = this.state;
+    const title = this.props.title || 'Domains on protein';
     return (
       <div className={f('aligned-to-track-component', 'view-options-wrap')}>
-        <div className={f('view-options-title')}>Domains on protein</div>
+        <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
           <div className={f('option-color', 'margin-right-medium')}>
             Color By:{' '}
             <select
               className={f('select-inline')}
-              value={this.state.colorMode}
+              value={this.props.colorDomainsBy}
               onChange={this.changeColor}
               onBlur={this.changeColor}
             >
@@ -440,8 +483,9 @@ class ProtVista extends PureComponent {
         <div className={f('track-row')}>{this.renderOptions()}</div>
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
-          <div ref={this._popperContentRef} />
+          <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
+
         <div className={f('protvista')}>
           <protvista-manager
             attributes="length displaystart displayend highlightstart highlightend"
@@ -529,4 +573,14 @@ class ProtVista extends PureComponent {
   }
 }
 
-export default ProtVista;
+const mapStateToProps = createSelector(
+  state => state.settings.ui,
+  ui => ({
+    colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
+  }),
+);
+
+export default connect(
+  mapStateToProps,
+  { changeSettingsRaw },
+)(ProtVista);

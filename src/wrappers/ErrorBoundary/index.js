@@ -34,7 +34,7 @@ const defaultRenderOnError = _ => <ErrorMessage />;
 // This component should be inserted before any possibly “risky” component
 // Acts as a try/catch, preventing the rest of the website to crash
 // Ideally to be inserted before any <Switch> or complex visualisation widget
-class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
+export class UnconnectedErrorBoundary extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     children: T.node.isRequired,
     renderOnError: T.func,
@@ -47,7 +47,10 @@ class ErrorBoundary extends PureComponent /*:: <Props, State> */ {
     this.state = { error: null, customLocation: props.customLocation };
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(
+    nextProps /*: Props */,
+    prevState /*: State */,
+  ) {
     if (nextProps.customLocation === prevState.customLocation) return null;
     // Any change in props should reset the error state, and try to re-render
     return { error: null };
@@ -75,4 +78,5 @@ const mapStateToProps = createSelector(
   customLocationSelector,
   customLocation => ({ customLocation }),
 );
-export default connect(mapStateToProps)(ErrorBoundary);
+
+export default connect(mapStateToProps)(UnconnectedErrorBoundary);

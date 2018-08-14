@@ -34,6 +34,7 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
           progress: action.progress || 0,
           successful: null,
           blobURL: null,
+          size: null,
         },
       };
     case DOWNLOAD_ERROR:
@@ -44,6 +45,7 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
           progress: action.progress || 1,
           successful: action.type === DOWNLOAD_SUCCESS,
           blobURL: action.blobURL,
+          size: action.size,
         },
       };
     case DOWNLOAD_CANCEL:

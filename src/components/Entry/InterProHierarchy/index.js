@@ -74,6 +74,11 @@ class InterProHierarchy extends PureComponent {
       }
     });
   }
+  async componentDidUpdate() {
+    await loadInterProWebComponents();
+    const hierarchy = this.props.hierarchy;
+    if (hierarchy) this._ref.current.hierarchy = cleanHierarchyType(hierarchy);
+  }
 
   render() {
     return (

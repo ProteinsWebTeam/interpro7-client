@@ -4,10 +4,12 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
-import StructureView from 'components/Structure/Viewer';
+import TimeAgo from 'components/TimeAgo';
+import ViewerOnDemand from 'components/Structure/ViewerOnDemand';
 
 import loadWebComponent from 'utils/load-web-component';
 
@@ -52,18 +54,12 @@ const loadPDBWebComponents = () => {
 /*:: type Props = {
   data: Data,
   dataMatches: Data,
-  customLocation: {
-    description: Object,
-  },
 }; */
 
 class SummaryStructure extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({}).isRequired,
     dataMatches: T.shape({}).isRequired,
-    customLocation: T.shape({
-      description: T.object.isRequired,
-    }).isRequired,
   };
 
   componentDidMount() {
@@ -89,13 +85,33 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
               {chains.length && (
                 <div className={f('margin-top-large')}>
                   <div>Accession: {metadata.accession}</div>
-                  <div>Experiment type: {metadata.experiment_type}</div>
+                  <div>
+                    Experiment type:{' '}
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'structure' },
+                          structure: { db: 'PDB' },
+                          entry: { isFilter: true, db: 'InterPro' },
+                        },
+                        search: { experiment_type: metadata.experiment_type },
+                      }}
+                    >
+                      {metadata.experiment_type}
+                    </Link>
+                  </div>
                   {metadata.resolution && (
                     <div>Resolution: {metadata.resolution} Å </div>
                   )}
                   <div>Chains: {chains.join(', ')}</div>
                   <div>
-                    Released: <time>{date.toLocaleDateString()}</time>
+                    Released:{' '}
+                    <time
+                      dateTime={date.toISOString()}
+                      title={date.toLocaleDateString()}
+                    >
+                      <TimeAgo date={date} noUpdate />
+                    </time>
                   </div>
                 </div>
               )}
@@ -122,7 +138,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
           <ErrorBoundary>
             <div className={f('row')}>
               <div className={f('columns')}>
-                <StructureView id={metadata.accession} matches={matches} />
+                <ViewerOnDemand id={metadata.accession} matches={matches} />
               </div>
             </div>
           </ErrorBoundary>

@@ -20,6 +20,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
 import loadable from 'higherOrder/loadable';
+import { EntryColorMode } from 'utils/entry-color';
 
 const f = foundationPartial(ebiGlobalStyles, theme, local);
 
@@ -70,7 +71,9 @@ NavigationSettings.propTypes = {
   handleChange: T.func.isRequired,
 };
 
-const UISettings = ({ ui: { lowGraphics } }) => (
+const UISettings = ({
+  ui: { lowGraphics, colorDomainsBy, structureViewer },
+}) => (
   <form data-category="ui">
     <h4>UI settings</h4>
     <SchemaOrgData
@@ -102,6 +105,61 @@ const UISettings = ({ ui: { lowGraphics } }) => (
             </span>
             <span className={f('switch-inactive')} aria-hidden="true">
               Off
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        <p>Color Domains:</p>
+        <p>
+          <small>Selection mode to color by</small>
+        </p>
+        <select
+          className={f('select-inline')}
+          value={colorDomainsBy}
+          name="colorDomainsBy"
+          onChange={noop}
+          onBlur={noop}
+        >
+          <option value={EntryColorMode.ACCESSION}>Accession</option>
+          <option value={EntryColorMode.MEMBER_DB}>Member Database</option>
+          <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
+            Domain Relationship
+          </option>
+        </select>
+      </div>
+    </div>
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        <p>Display structure viewer all the time:</p>
+        <p>
+          <small>
+            On some low-end devices, small screens, or under network or battery
+            constraints, we might decide to not display the structure viewer by
+            default. It will still be available on demand. Do you still want to
+            display the viewer all the time?
+          </small>
+        </p>
+        <div className={f('switch', 'large')}>
+          <input
+            type="checkbox"
+            checked={structureViewer}
+            className={f('switch-input')}
+            name="structureViewer"
+            id="structureViewer-input"
+            onChange={noop}
+          />
+          <label className={f('switch-paddle')} htmlFor="structureViewer-input">
+            <span className={f('show-for-sr')}>
+              Structure viewer always visible:
+            </span>
+            <span className={f('switch-active')} aria-hidden="true">
+              Yes
+            </span>
+            <span className={f('switch-inactive')} aria-hidden="true">
+              No
             </span>
           </label>
         </div>
@@ -180,9 +238,16 @@ const EndpointSettings = ({
 
     <div className={f('row')}>
       <div className={f('medium-2', 'column')}>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           Protocol:
-          <select name="protocol" value={protocol} readOnly={!DEV}>
+          <select
+            name="protocol"
+            value={protocol}
+            onChange={noop}
+            onBlur={noop}
+            readOnly={!DEV}
+          >
             <option value="http:">http://</option>
             <option value="https:">https://</option>
           </select>

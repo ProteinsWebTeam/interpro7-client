@@ -81,17 +81,23 @@ export const changePageSize = (pageSize /* :number */) => ({
   value: +pageSize,
 });
 
+export const changeSettingsRaw = (category, key, value) => ({
+  type: types.CHANGE_SETTINGS,
+  category,
+  key,
+  value,
+});
+
 export const changeSettings = (event /* :Event */) => {
   if (
     event.target instanceof HTMLInputElement ||
     event.target instanceof HTMLSelectElement
   ) {
-    return {
-      type: types.CHANGE_SETTINGS,
-      category: event.target.form && event.target.form.dataset.category,
-      key: event.target.name,
-      value: parseValueFromInput(event.target),
-    };
+    return changeSettingsRaw(
+      event.target.form && event.target.form.dataset.category,
+      event.target.name,
+      parseValueFromInput(event.target),
+    );
   }
 };
 
@@ -178,12 +184,13 @@ export const downloadError = (
 export const downloadSuccess = (
   url /*: string */,
   fileType /*: 'accession' | 'FASTA' */,
-  blobURL /*: string */,
+  { blobURL, size } /*: { string, size } */,
 ) => ({
   type: types.DOWNLOAD_SUCCESS,
   url,
   fileType,
   blobURL,
+  size,
 });
 
 export const downloadProgress = (

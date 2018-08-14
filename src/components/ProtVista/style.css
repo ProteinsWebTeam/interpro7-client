@@ -163,6 +163,22 @@
   display: none;
 }
 
+.track-component path:global(.child-fragment) {
+  stroke-width: 0;
+  opacity: 0.5;
+  cursor: pointer;
+}
+.track-component path:global(.child-fragment):hover {
+  opacity: 0.7;
+}
+.track-component line:global(.cover) {
+  opacity: 0.5;
+}
+/*remove stroke when residues track*/
+.track-component :global(.residues-group) path:global(.feature) {
+  stroke-width: 0;
+}
+
 .fullscreenable:-webkit-full-screen .fullscreen {
   display: none;
 }
@@ -175,11 +191,11 @@
   background: var(--colors-ebidark);
   text-align: center;
   color: white;
-  min-width: 150px;
+  min-width: 180px;
   border-radius: 4px;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-  padding: 0.4rem 0.8rem;
-  margin: 6px;
+  padding: 0.8rem 1rem;
+  margin: 4px;
 
   & h5 {
     text-transform: uppercase;
@@ -276,4 +292,15 @@
 .track-in-table .track-component:nth-of-type(2),
 .track-in-table .track-row:nth-of-type(2) {
   margin-top: -18px;
+}
+
+.pop-wrapper {
+  display: flex;
+  justify-content: center;
+  & div:first-of-type {
+    margin-right: 0.5rem;
+  }
+  & div:last-of-type {
+    text-transform: capitalize;
+  }
 }

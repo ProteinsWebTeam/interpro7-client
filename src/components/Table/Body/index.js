@@ -51,7 +51,6 @@ class NoRows extends PureComponent {
 class Body extends PureComponent {
   static propTypes = {
     loading: T.bool,
-    isStale: T.bool,
     ok: T.bool,
     status: T.number,
     rows: T.array.isRequired,
@@ -60,15 +59,7 @@ class Body extends PureComponent {
   };
 
   render() {
-    const {
-      loading,
-      isStale,
-      ok,
-      status,
-      rows,
-      columns,
-      notFound,
-    } = this.props;
+    const { loading, ok, status, rows, columns, notFound } = this.props;
     const message = getStatusMessage(status);
     if (message) return <NoRows>{message}</NoRows>;
     // don't change next line to “!ok”, might be undefined
@@ -77,7 +68,7 @@ class Body extends PureComponent {
       return <NoRows>{loading ? 'Loading…' : 'No data available'}</NoRows>;
     }
     return (
-      <tbody className={f('tbody', { loading: loading || isStale })}>
+      <tbody>
         {rows.map((row, index) => {
           const rowData = row.metadata || row;
           const extraData = row.extra_fields;
