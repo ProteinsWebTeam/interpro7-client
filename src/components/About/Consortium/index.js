@@ -158,7 +158,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                         <Link
                           className={f('ext')}
                           target="_blank"
-                          href="//prodom.prabi.fr/"
+                          href="http://prodom.prabi.fr/"
                         >
                           <span className={f('h5')}>{db.name}</span>
                         </Link>
@@ -208,7 +208,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                         <Link
                           className={f('ext')}
                           target="_blank"
-                          href="//tigrfams.jcvi.org/cgi-bin/index.cgi"
+                          href="http://tigrfams.jcvi.org/cgi-bin/index.cgi"
                         >
                           <span className={f('h5')}>{db.name}</span>
                         </Link>
