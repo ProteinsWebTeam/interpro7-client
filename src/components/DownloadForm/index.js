@@ -5,7 +5,9 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import set from 'lodash-es/set';
 
-import Link from 'components/generic/Link';
+import ApiLink from './ApiLink';
+import TextExplanation from './TextExplanation';
+import Estimation from './Estimation';
 
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -100,9 +102,6 @@ class DownloadForm extends PureComponent {
     const filters = typeObjects.filter(([, type]) => type.isFilter);
 
     const main = description.main.key || 'entry';
-
-    let sentence = `This ${fileType} file will contain information about`;
-    // TODO: to be continued
 
     return (
       <form onChange={this._handleChange} ref={this._ref}>
@@ -242,14 +241,9 @@ class DownloadForm extends PureComponent {
           </div>
         </fieldset>
         <h5>More info</h5>
-        <div>Corresponding API call:</div>
-        <div>
-          <Link href={endpoint} target="_blank">
-            <code>{endpoint}</code>
-          </Link>
-        </div>
-        <div>{sentence}</div>
-        <pre>{JSON.stringify(description, null, 2)}</pre>
+        <ApiLink url={endpoint} />
+        <TextExplanation fileType={fileType} description={description} />
+        <Estimation url={endpoint} />
         <fieldset className={f('controls')}>
           <legend>Download</legend>
           <label>
