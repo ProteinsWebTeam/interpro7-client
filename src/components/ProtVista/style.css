@@ -300,7 +300,4 @@
   & div:first-of-type {
     margin-right: 0.5rem;
   }
-  & div:last-of-type {
-    text-transform: capitalize;
-  }
 }
