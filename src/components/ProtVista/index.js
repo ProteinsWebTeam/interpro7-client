@@ -240,16 +240,17 @@ class ProtVista extends PureComponent {
             : ''
         } 
         </div>
-        <div>${(entry.entry_type || entry.type || '').replace('_', ' ') ||
-          ''}</div>       
-        </div>
-        <p>
-          <small>  
+        <div>
           ${
             Array.isArray(entry.source_database)
               ? entry.source_database[0]
               : entry.source_database
           }
+        ${(entry.entry_type || entry.type || '').replace('_', ' ') ||
+          ''}</div>       
+        </div>
+        <p>
+          <small>          
             ${entry.entry ? `(${entry.entry})` : ''}
           </small>
         </p>
