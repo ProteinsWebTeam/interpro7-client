@@ -1,0 +1,296 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Tutorial /> should render 1`] = `
+<section>
+  <h3>
+    Tutorials
+  </h3>
+  <p>
+    A number of online tutorials relating to InterPro are available.
+  </p>
+  <div
+    className="flex-column tutorials"
+  >
+    <div
+      className="card-grid tuto-method"
+    >
+      <Connect(Link)
+        href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies"
+      >
+        <div
+          className="card-image"
+        >
+          <div
+            className="card-label"
+          >
+            Tutorial
+          </div>
+        </div>
+        <div
+          className="card-content"
+        >
+          <div
+            className="card-title"
+          >
+            InterPro: A case study of 3 protein family building methodologies
+          </div>
+          <div
+            className="card-info"
+          >
+            <div
+              className="card-info-author"
+            >
+              <span
+                className="icon icon-common"
+                data-icon="ȵ"
+              />
+               
+              Lorna Richardson, Shoshana Brown, Paul Thomas, David Haft
+               
+            </div>
+            <div
+              className="card-info-level"
+            >
+              <span
+                className="icon icon-common"
+                data-icon="Ŏ"
+              />
+               
+              Beginner
+            </div>
+            <div
+              className="card-info-duration"
+            >
+              <span
+                className="icon icon-common"
+                data-icon=""
+              />
+               
+              1 hour
+            </div>
+          </div>
+          <div
+            className="card-description"
+          >
+            This course provides an insight into the different protein family building methodologies employed by three InterPro member databases, namely SFLD (Structure Function Linkage Database), TIGRFAMs and PANTHER. It also describes an automated approach to comparing protein signatures and predicting hierarchical relationships between them.
+          </div>
+        </div>
+      </Connect(Link)>
+    </div>
+    <div
+      className="card-grid tuto-what"
+    >
+      <Connect(Link)
+        href="//www.ebi.ac.uk/training/online/course/interpro-functional-and-structural-analysis-protei/what-interpro"
+      >
+        <div
+          className="card-image"
+        >
+          <div
+            className="card-label"
+          >
+            Tutorial
+          </div>
+        </div>
+        <div
+          className="card-content"
+        >
+          <div
+            className="card-title"
+          >
+            InterPro: functional and structural analysis of protein sequences
+          </div>
+          <div
+            className="card-info"
+          >
+            <div
+              className="card-info-author"
+            >
+              <em
+                className="icon icon-common"
+                data-icon="ȵ"
+              />
+               
+              Alex Mitchell
+            </div>
+            <div
+              className="card-info-level"
+            >
+              <em
+                className="icon icon-common"
+                data-icon="Ŏ"
+              />
+               
+              Beginner
+            </div>
+            <div
+              className="card-info-duration"
+            >
+              <em
+                className="icon icon-common"
+                data-icon=""
+              />
+               
+              1 hour
+            </div>
+          </div>
+          <div
+            className="card-description"
+          >
+            This course will provide an in-depth guide to InterPro - how to access it, how to search the database and interpret the results.
+          </div>
+        </div>
+      </Connect(Link)>
+    </div>
+    <div
+      className="card-grid tuto-intro"
+    >
+      <Connect(Link)
+        href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou"
+      >
+        <div
+          className="card-image"
+        >
+          <div
+            className="card-label"
+          >
+            Tutorial
+          </div>
+        </div>
+        <div
+          className="card-content"
+        >
+          <div
+            className="card-title"
+          >
+            Protein classification: An introduction to EMBL-EBI resources
+          </div>
+          <div
+            className="card-info"
+          >
+            <div
+              className="card-info-author"
+            >
+              <em
+                className="icon icon-common"
+                data-icon="ȵ"
+              />
+               
+              Amaia Sangrador
+               
+            </div>
+            <div
+              className="card-info-level"
+            >
+              <em
+                className="icon icon-common"
+                data-icon="Ŏ"
+              />
+               
+              Beginner
+            </div>
+            <div
+              className="card-info-duration"
+            >
+              <em
+                className="icon icon-common"
+                data-icon=""
+              />
+               
+              0.5 hour
+            </div>
+          </div>
+          <div
+            className="card-description"
+          >
+            This course provides background information on protein signature databases and their use in sequence analysis and protein classification.
+          </div>
+        </div>
+      </Connect(Link)>
+    </div>
+    <div
+      className="card-grid tuto-tour"
+    >
+      <Connect(Link)
+        href="//www.ebi.ac.uk/training/online/course/interpro-quick-tour"
+      >
+        <div
+          className="card-image"
+        >
+          <div
+            className="card-label"
+          >
+            Tutorial
+          </div>
+        </div>
+        <div
+          className="card-content"
+        >
+          <div
+            className="card-title"
+          >
+            A Quick Tour of InterPro
+          </div>
+          <div
+            className="card-info"
+          >
+            <div
+              className="card-info-author"
+            >
+              <em
+                className="icon icon-common"
+                data-icon="ȵ"
+              />
+               
+              Alex Mitchell
+               
+            </div>
+            <div
+              className="card-info-level"
+            >
+              <em
+                className="icon icon-common"
+                data-icon="Ŏ"
+              />
+               
+              Beginner
+            </div>
+            <div
+              className="card-info-duration"
+            >
+              <em
+                className="icon icon-common"
+                data-icon=""
+              />
+               
+              0.5 hour
+            </div>
+          </div>
+          <div
+            className="card-description"
+          >
+            This course provides a brief overview of InterPro, including querying the database and visualising the results using the web interface.
+          </div>
+        </div>
+      </Connect(Link)>
+    </div>
+  </div>
+  <h3
+    className="margin-top-large"
+  >
+    Training
+  </h3>
+  <p>
+    InterPro hands-on practical sessions feature regularly as part of the EBI training courses and workshops.
+     
+    <Connect(Link)
+      className="ext"
+      href="//www.ebi.ac.uk/training"
+    >
+      Find out more
+    </Connect(Link)>
+     
+    about when and where these training courses will run, as well as how to apply to host them.
+  </p>
+</section>
+`;

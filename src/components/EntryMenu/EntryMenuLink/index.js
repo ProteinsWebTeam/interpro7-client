@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -8,9 +9,11 @@ import { singleEntity } from 'menuConfig';
 
 import { foundationPartial } from 'styles/foundation';
 
-import styles from './style.css';
+import pages from 'pages/style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
 
-const f = foundationPartial(styles);
+const f = foundationPartial(pages, fonts, local);
 
 const singleEntityNames = new Map(
   Array.from(singleEntity).map(e => [e[1].name, e[0]]),
@@ -28,20 +31,8 @@ const whitelist = new Set(['Overview', 'Sequence']);
     payload?: ?Object,
   },
   isFirstLevel?: boolean,
-  isSignature: boolean
+  usedOnTheSide?: boolean,
 }; */
-
-const mapNameToClass = new Map([
-  ['domain', 'menu-domain'],
-  ['family', 'menu-family'],
-  ['repeat', 'menu-repeat'],
-  ['unknown', 'menu-unknown'],
-  ['conserved_site', 'menu-site'],
-  ['binding_site', 'menu-site'],
-  ['active_site', 'menu-site'],
-  ['ptm', 'menu-site'],
-  ['homologous_superfamily', 'menu-hh'],
-]);
 
 class EntryMenuLink extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -54,7 +45,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       payload: T.any,
     }).isRequired,
     isFirstLevel: T.bool,
-    isSignature: T.bool.isRequired,
+    usedOnTheSide: T.bool,
   };
 
   render() {
@@ -65,7 +56,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       counter,
       data: { loading, payload },
       isFirstLevel,
-      isSignature,
+      usedOnTheSide,
     } = this.props;
     let value = null;
     if (!loading && payload && payload.metadata) {
@@ -103,25 +94,117 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     if (!isFirstLevel && !isNaN(value) && !value) return null;
 
     return (
-      <li className={f('tabs-title')}>
+      <li className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}>
         <Link
           to={to}
           exact={exact}
-          className={f(
-            payload.metadata.source_database.toLowerCase() === 'interpro'
-              ? mapNameToClass.get(payload.metadata.type)
-              : null,
-            'browse-tabs-link',
-            { ['is-signature']: isSignature },
-          )}
+          className={f('browse-tabs-link')}
           activeClass={f('is-active', 'is-active-tab')}
-          // disabled={!isFirstLevel && !isNaN(value) && !value}
         >
-          {name}
+          <span data-content={name} className={f('name')}>
+            {name === 'Entries' && (
+              <i
+                data-icon="D"
+                className={f(
+                  'icon',
+                  'icon-generic',
+                  'icon-count-sm',
+                  'margin-right-medium',
+                )}
+                aria-label="icon entry matches"
+              />
+            )}
+            {name === 'Proteins' && (
+              <i
+                data-icon="&#x50;"
+                className={f(
+                  'icon',
+                  'icon-conceptual',
+                  'icon-count-sm',
+                  'margin-right-medium',
+                )}
+                aria-label="icon proteins"
+              />
+            )}
+            {name === 'Structures' && (
+              <i
+                data-icon="s"
+                className={f(
+                  'icon',
+                  'icon-conceptual',
+                  'icon-count-sm',
+                  'margin-right-medium',
+                )}
+                aria-label="icon structures"
+              />
+            )}
+            {name === 'Domain Architectures' && (
+              <i
+                className={f(
+                  'icon',
+                  'icon-count-ida',
+                  'icon-count-sm',
+                  'margin-right-medium',
+                )}
+                aria-label="icon domain architectures"
+              />
+            )}
+            {name === 'Taxonomy' && (
+              <i
+                className={f(
+                  'icon',
+                  'icon-count-species',
+                  'icon-count-sm',
+                  'margin-right-medium',
+                )}
+                aria-label="icon taxonomy"
+              />
+            )}
+            {name === 'Proteomes' && (
+              <i
+                className={f(
+                  'icon',
+                  'icon-count-proteome',
+                  'icon-count-sm',
+                  'margin-right-medium',
+                )}
+                aria-label="icon proteomes"
+              />
+            )}
+            {name === 'Sets' && (
+              <i
+                className={f(
+                  'icon',
+                  'icon-count-set',
+                  'icon-count-sm',
+                  'margin-right-medium',
+                )}
+                aria-label="icon set"
+              />
+            )}
+            {name === 'Signature' && (
+              <i
+                className={f(
+                  'icon',
+                  'icon-count-hmm',
+                  'icon-count-sm',
+                  'margin-right-medium',
+                )}
+                aria-label="icon signature"
+              />
+            )}
+            {name}
+          </span>
           {value !== null && ' '}
           {value !== null &&
             !isNaN(value) && (
-              <NumberLabel loading={loading} value={value} abbr />
+              <NumberLabel
+                loading={loading}
+                value={value}
+                abbr
+                duration={usedOnTheSide ? 0 : undefined}
+                className={f('counter')}
+              />
             )}
         </Link>
       </li>

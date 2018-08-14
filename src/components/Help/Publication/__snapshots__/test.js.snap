@@ -1,0 +1,1007 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Publication /> should render 1`] = `
+<section>
+  <h3>
+    Publications
+  </h3>
+  <p>
+    A number of online Publications relating to InterPro are available.
+  </p>
+  <div
+    className="flex-column publication"
+  >
+    <div
+      className="card-grid tuto-beyond"
+    >
+      <Connect(Link)
+        href="http://nar.oxfordjournals.org/content/45/D1/D190"
+        target="_blank"
+      >
+        <div
+          className="card-image"
+        >
+          <div
+            className="card-label"
+          >
+            Publication
+          </div>
+        </div>
+        <div
+          className="card-content"
+        >
+          <div
+            className="card-title"
+          >
+            InterPro in 2017 — beyond protein family and domain annotations
+          </div>
+          <div
+            className="card-info"
+          >
+            <div
+              className="card-info-author"
+            >
+              <span
+                className="icon icon-common"
+                data-icon="ȵ"
+              />
+               
+              Robert D. 
+              <span
+                className="sc"
+              >
+                Finn
+              </span>
+              , Teresa K.
+               
+              <span
+                className="sc"
+              >
+                Attwood
+              </span>
+              , Patricia C.
+               
+              <span
+                className="sc"
+              >
+                Babbitt
+              </span>
+              , Alex
+               
+              <span
+                className="sc"
+              >
+                Bateman
+              </span>
+              , Peer
+               
+              <span
+                className="sc"
+              >
+                Bork
+              </span>
+              , Alan J.
+               
+              <span
+                className="sc"
+              >
+                Bridge
+              </span>
+              , Hsin-Yu
+               
+              <span
+                className="sc"
+              >
+                Chang
+              </span>
+              , Zsuzsanna
+               
+              <span
+                className="sc"
+              >
+                Dosztányi
+              </span>
+              , Sara
+               
+              <span
+                className="sc"
+              >
+                El-Gebali
+              </span>
+              , Matthew
+               
+              <span
+                className="sc"
+              >
+                Fraser
+              </span>
+              , Julian
+               
+              <span
+                className="sc"
+              >
+                Gough
+              </span>
+              , David
+               
+              <span
+                className="sc"
+              >
+                Haft
+              </span>
+              , Gemma L.
+               
+              <span
+                className="sc"
+              >
+                Holliday
+              </span>
+              , Hongzhan
+               
+              <span
+                className="sc"
+              >
+                Huang
+              </span>
+              , Xiaosong
+               
+              <span
+                className="sc"
+              >
+                Huang
+              </span>
+              , Ivica
+               
+              <span
+                className="sc"
+              >
+                Letunic
+              </span>
+              , Rodrigo
+               
+              <span
+                className="sc"
+              >
+                Lopez
+              </span>
+              , Shennan
+               
+              <span
+                className="sc"
+              >
+                Lu
+              </span>
+              , Aron
+               
+              <span
+                className="sc"
+              >
+                Marchler-Bauer
+              </span>
+              , Huaiyu
+               
+              <span
+                className="sc"
+              >
+                Mi
+              </span>
+              , Jaina
+               
+              <span
+                className="sc"
+              >
+                Mistry
+              </span>
+              , Darren A.
+               
+              <span
+                className="sc"
+              >
+                Natale
+              </span>
+              , Marco
+               
+              <span
+                className="sc"
+              >
+                Necci
+              </span>
+              , Gift
+               
+              <span
+                className="sc"
+              >
+                Nuka
+              </span>
+              , Christine A.
+               
+              <span
+                className="sc"
+              >
+                Orengo
+              </span>
+              , Youngmi
+               
+              <span
+                className="sc"
+              >
+                Park
+              </span>
+              , Sebastien
+               
+              <span
+                className="sc"
+              >
+                Pesseat
+              </span>
+              , Damiano
+               
+              <span
+                className="sc"
+              >
+                Piovesan
+              </span>
+              , Simon C.
+               
+              <span
+                className="sc"
+              >
+                Potter
+              </span>
+              , Neil D.
+               
+              <span
+                className="sc"
+              >
+                Rawlings
+              </span>
+              , Nicole
+               
+              <span
+                className="sc"
+              >
+                Redaschi
+              </span>
+              , Lorna
+               
+              <span
+                className="sc"
+              >
+                Richardson
+              </span>
+              , Catherine
+               
+              <span
+                className="sc"
+              >
+                Rivoire
+              </span>
+              , Amaia
+               
+              <span
+                className="sc"
+              >
+                Sangrador
+              </span>
+              -Vegas, Christian 
+              <span
+                className="sc"
+              >
+                Sigrist
+              </span>
+              , Ian 
+              <span
+                className="sc"
+              >
+                Sillitoe
+              </span>
+              , Ben
+               
+              <span
+                className="sc"
+              >
+                Smithers
+              </span>
+              , Silvano
+               
+              <span
+                className="sc"
+              >
+                Squizzato
+              </span>
+              , Granger
+               
+              <span
+                className="sc"
+              >
+                Sutton
+              </span>
+              , Narmada
+               
+              <span
+                className="sc"
+              >
+                Thanki
+              </span>
+              , Paul D
+               
+              <span
+                className="sc"
+              >
+                Thomas
+              </span>
+              , Silvio C. E.
+               
+              <span
+                className="sc"
+              >
+                Tosatto
+              </span>
+              , Cathy H.
+               
+              <span
+                className="sc"
+              >
+                Wu
+              </span>
+              , Ioannis
+               
+              <span
+                className="sc"
+              >
+                Xenarios
+              </span>
+              , Lai-Su
+               
+              <span
+                className="sc"
+              >
+                Yeh
+              </span>
+              , Siew-Yit
+               
+              <span
+                className="sc"
+              >
+                Young
+              </span>
+              and Alex L. 
+              <span
+                className="sc"
+              >
+                Mitchell
+              </span>
+            </div>
+            <div
+              className="card-info-level"
+            >
+              <span
+                className="icon icon-common"
+                data-icon="Ǫ"
+              />
+               
+              Nucleic Acids Research, Jan 2017, (doi: 10.1093/nar/gkw1107)
+            </div>
+          </div>
+          <div
+            className="card-description"
+          >
+            Here, we report recent developments with InterPro and its associated software, including the addition of two new databases (SFLD and CDD), and the functionality to include residue-level annotation and prediction of intrinsic disorder.
+          </div>
+        </div>
+      </Connect(Link)>
+    </div>
+    <div
+      className="card-grid tuto-go"
+    >
+      <Connect(Link)
+        href="http://database.oxfordjournals.org/content/2016/baw027.full"
+        target="_blank"
+      >
+        <div
+          className="card-image"
+        >
+          <div
+            className="card-label"
+          >
+            Publication
+          </div>
+        </div>
+        <div
+          className="card-content"
+        >
+          <div
+            className="card-title"
+          >
+            GO annotation in InterPro: why stability does not indicate accuracy in a sea of changing annotation
+          </div>
+          <div
+            className="card-info"
+          >
+            <div
+              className="card-info-author"
+            >
+              <span
+                className="icon icon-common"
+                data-icon="ȵ"
+              />
+               
+              <span
+                className="sc"
+              >
+                Sangrador-Vegas
+              </span>
+               A,
+               
+              <span
+                className="sc"
+              >
+                Mitchell
+              </span>
+               AL,
+               
+              <span
+                className="sc"
+              >
+                Chang
+              </span>
+               HY,
+               
+              <span
+                className="sc"
+              >
+                Yong
+              </span>
+               SY and
+               
+              <span
+                className="sc"
+              >
+                Finn
+              </span>
+               RD
+            </div>
+            <div
+              className="card-info-level"
+            >
+              <span
+                className="icon icon-common"
+                data-icon="Ǫ"
+              />
+               
+              Database, 2016, 1–8, (doi: 10.1093/database/baw027)
+            </div>
+          </div>
+          <div
+            className="card-description"
+          >
+            Here, we describe some of these events and their consequences for the InterPro database, and demonstrate that annotation removal or reassignment is not always linked to incorrect annotation by the curator.
+          </div>
+        </div>
+      </Connect(Link)>
+    </div>
+    <div
+      className="card-grid tuto-interproscan"
+    >
+      <Connect(Link)
+        href="http://bioinformatics.oxfordjournals.org/content/early/2014/01/29/bioinformatics.btu031.full"
+        target="_blank"
+      >
+        <div
+          className="card-image"
+        >
+          <div
+            className="card-label"
+          >
+            Publication
+          </div>
+        </div>
+        <div
+          className="card-content"
+        >
+          <div
+            className="card-title"
+          >
+            InterProScan 5: genome-scale protein function classification
+          </div>
+          <div
+            className="card-info"
+          >
+            <div
+              className="card-info-author"
+            >
+              <span
+                className="icon icon-common"
+                data-icon="ȵ"
+              />
+               
+              Philip 
+              <span
+                className="sc"
+              >
+                Jones
+              </span>
+              , David
+               
+              <span
+                className="sc"
+              >
+                Binns
+              </span>
+              , Hsin-Yu
+               
+              <span
+                className="sc"
+              >
+                Chang
+              </span>
+              , Matthew
+               
+              <span
+                className="sc"
+              >
+                Fraser
+              </span>
+              , Weizhong
+               
+              <span
+                className="sc"
+              >
+                Li
+              </span>
+              , Craig
+               
+              <span
+                className="sc"
+              >
+                McAnulla
+              </span>
+              , Hamish
+               
+              <span
+                className="sc"
+              >
+                McWilliam
+              </span>
+              , John
+               
+              <span
+                className="sc"
+              >
+                Maslen
+              </span>
+              , Alex
+               
+              <span
+                className="sc"
+              >
+                Mitchell
+              </span>
+              , Gift
+               
+              <span
+                className="sc"
+              >
+                Nuka
+              </span>
+              , Sebastien
+               
+              <span
+                className="sc"
+              >
+                Pesseat
+              </span>
+              , Antony F.
+               
+              <span
+                className="sc"
+              >
+                Quinn
+              </span>
+              , Amaia
+               
+              <span
+                className="sc"
+              >
+                Sangrador-Vegas
+              </span>
+              , Maxim
+               
+              <span
+                className="sc"
+              >
+                Scheremetjew
+              </span>
+              , Siew-Yit
+               
+              <span
+                className="sc"
+              >
+                Yong
+              </span>
+              , Rodrigo
+               
+              <span
+                className="sc"
+              >
+                Lopez
+              </span>
+              , and Sarah
+               
+              <span
+                className="sc"
+              >
+                Hunter
+              </span>
+            </div>
+            <div
+              className="card-info-level"
+            >
+              <span
+                className="icon icon-common"
+                data-icon="Ǫ"
+              />
+               
+              Bioinformatics, Jan 2014 (doi:10.1093/bioinformatics/btu031)
+            </div>
+          </div>
+          <div
+            className="card-description"
+          >
+            Here, we describe a new Java-based architecture for the widely used protein function prediction software package InterProScan.
+          </div>
+        </div>
+      </Connect(Link)>
+    </div>
+  </div>
+  <h3
+    className="margin-top-large"
+  >
+    How to cite
+  </h3>
+  <p>
+    To cite InterPro, please refer to the following publication:
+  </p>
+  <blockquote
+    className="quote"
+  >
+    Robert D. 
+    <span
+      className="sc"
+    >
+      Finn
+    </span>
+    , Teresa K.
+     
+    <span
+      className="sc"
+    >
+      Attwood
+    </span>
+    , Patricia C.
+     
+    <span
+      className="sc"
+    >
+      Babbitt
+    </span>
+    , Alex
+     
+    <span
+      className="sc"
+    >
+      Bateman
+    </span>
+    , Peer
+     
+    <span
+      className="sc"
+    >
+      Bork
+    </span>
+    , Alan J.
+     
+    <span
+      className="sc"
+    >
+      Bridge
+    </span>
+    , Hsin-Yu
+     
+    <span
+      className="sc"
+    >
+      Chang
+    </span>
+    , Zsuzsanna
+     
+    <span
+      className="sc"
+    >
+      Dosztányi
+    </span>
+    , Sara
+     
+    <span
+      className="sc"
+    >
+      El-Gebali
+    </span>
+    , Matthew
+     
+    <span
+      className="sc"
+    >
+      Fraser
+    </span>
+    , Julian
+     
+    <span
+      className="sc"
+    >
+      Gough
+    </span>
+    , David
+     
+    <span
+      className="sc"
+    >
+      Haft
+    </span>
+    , Gemma L.
+     
+    <span
+      className="sc"
+    >
+      Holliday
+    </span>
+    , Hongzhan
+     
+    <span
+      className="sc"
+    >
+      Huang
+    </span>
+    , Xiaosong
+     
+    <span
+      className="sc"
+    >
+      Huang
+    </span>
+    , Ivica
+     
+    <span
+      className="sc"
+    >
+      Letunic
+    </span>
+    , Rodrigo
+     
+    <span
+      className="sc"
+    >
+      Lopez
+    </span>
+    , Shennan
+     
+    <span
+      className="sc"
+    >
+      Lu
+    </span>
+    , Aron
+     
+    <span
+      className="sc"
+    >
+      Marchler-Bauer
+    </span>
+    , Huaiyu
+     
+    <span
+      className="sc"
+    >
+      Mi
+    </span>
+    , Jaina
+     
+    <span
+      className="sc"
+    >
+      Mistry
+    </span>
+    , Darren A.
+     
+    <span
+      className="sc"
+    >
+      Natale
+    </span>
+    , Marco
+     
+    <span
+      className="sc"
+    >
+      Necci
+    </span>
+    , Gift
+     
+    <span
+      className="sc"
+    >
+      Nuka
+    </span>
+    , Christine A.
+     
+    <span
+      className="sc"
+    >
+      Orengo
+    </span>
+    , Youngmi
+     
+    <span
+      className="sc"
+    >
+      Park
+    </span>
+    , Sebastien
+     
+    <span
+      className="sc"
+    >
+      Pesseat
+    </span>
+    , Damiano
+     
+    <span
+      className="sc"
+    >
+      Piovesan
+    </span>
+    , Simon C.
+     
+    <span
+      className="sc"
+    >
+      Potter
+    </span>
+    , Neil D.
+     
+    <span
+      className="sc"
+    >
+      Rawlings
+    </span>
+    , Nicole
+     
+    <span
+      className="sc"
+    >
+      Redaschi
+    </span>
+    , Lorna
+     
+    <span
+      className="sc"
+    >
+      Richardson
+    </span>
+    , Catherine
+     
+    <span
+      className="sc"
+    >
+      Rivoire
+    </span>
+    , Amaia
+     
+    <span
+      className="sc"
+    >
+      Sangrador-Vegas
+    </span>
+    , Christian
+     
+    <span
+      className="sc"
+    >
+      Sigrist
+    </span>
+    , Ian
+     
+    <span
+      className="sc"
+    >
+      Sillitoe
+    </span>
+    , Ben
+     
+    <span
+      className="sc"
+    >
+      Smithers
+    </span>
+    , Silvano
+     
+    <span
+      className="sc"
+    >
+      Squizzato
+    </span>
+    , Granger
+     
+    <span
+      className="sc"
+    >
+      Sutton
+    </span>
+    , Narmada
+     
+    <span
+      className="sc"
+    >
+      Thanki
+    </span>
+    , Paul D
+     
+    <span
+      className="sc"
+    >
+      Thomas
+    </span>
+    , Silvio C. E.
+     
+    <span
+      className="sc"
+    >
+      Tosatto
+    </span>
+    , Cathy H.
+     
+    <span
+      className="sc"
+    >
+      Wu
+    </span>
+    , Ioannis
+     
+    <span
+      className="sc"
+    >
+      Xenarios
+    </span>
+    , Lai-Su
+     
+    <span
+      className="sc"
+    >
+      Yeh
+    </span>
+    , Siew-Yit
+     
+    <span
+      className="sc"
+    >
+      Young
+    </span>
+     and Alex L.
+     
+    <span
+      className="sc"
+    >
+      Mitchell
+    </span>
+     (2017).
+    <strong>
+       
+      InterPro in 2017 — beyond protein family and domain annotations
+    </strong>
+    . 
+    <i>
+      Nucleic Acids Research, Jan 2017; doi: 10.1093/nar/gkw1107
+    </i>
+  </blockquote>
+</section>
+`;

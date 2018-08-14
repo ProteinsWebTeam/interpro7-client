@@ -322,7 +322,7 @@ export const proteinDBHandler /*: Handler */ = handlerConstructor({
     value: value => value.toLowerCase().replace('uniprot', 'UniProt'),
   },
   regexp: {
-    value: /(un)?reviewed|uniprot/i,
+    value: /^((un)?reviewed|uniprot)$/i,
   },
 });
 
@@ -454,7 +454,7 @@ export const proteomeAccessionHandler /*: Handler */ = handlerConstructor({
     value: value => value.toUpperCase(),
   },
   regexp: {
-    value: /UP\d{9}/i,
+    value: /^UP\d{9}$/i,
   },
 });
 
@@ -513,7 +513,7 @@ export const searchTypeHandler /*: Handler */ = handlerConstructor({
     value: ['search', 'type'],
   },
   regexp: {
-    value: /(text|sequence)/i,
+    value: /^(text|sequence)$/i,
   },
 });
 
@@ -544,7 +544,7 @@ export const jobTypeHandler /*: Handler */ = handlerConstructor({
       /^InterProScan$/i.test(value) ? 'InterProScan' : 'download',
   },
   regexp: {
-    value: /(interproscan|download)/i,
+    value: /^(interproscan|download)$/i,
   },
 });
 
@@ -559,7 +559,7 @@ export const jobIPScanAccessionHandler /*: Handler */ = handlerConstructor({
     value: value => value,
   },
   regexp: {
-    value: /(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}|internal-[1-9]\d*)/,
+    value: /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}|internal-[1-9]\d*-[1-9]\d*)$/,
   },
 });
 
@@ -574,7 +574,7 @@ export const jobDownloadAccessionHandler /*: Handler */ = handlerConstructor({
     value: value => value,
   },
   regexp: {
-    value: /download-[1-9]\d*-\d+/,
+    value: /^download-[1-9]\d*-\d+$/,
   },
 });
 
@@ -593,18 +593,7 @@ export const otherHandler /*: Handler */ = handlerConstructor({
     value: 'otherHandler',
   },
   getKey: {
-    // if level 1 is already defined, send to second level
-    // if level 2 is already defined, send to third level
-    value: ({ other: [first, second] }) => {
-      let index = 0;
-      if (first) index = 1;
-      if (second) index = 2;
-      return ['other', index];
-    },
-  },
-  match: {
-    // stop at (arbitrary defined) third level, to avoid looping indefinitely
-    value: (_, { other: [, , third] }) => !third,
+    value: ({ other }) => ['other', other.length],
   },
 });
 

@@ -2,7 +2,9 @@ import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
+import ErrorBoundary, {
+  UnconnectedErrorBoundary,
+} from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import { mainDBLocationSelector } from 'reducers/custom-location/description';
 import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
@@ -12,6 +14,8 @@ import { toPlural } from 'utils/pages';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
+import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
+
 import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from './style.css';
@@ -75,15 +79,18 @@ class SummaryComponent extends PureComponent {
   }
 }
 
-const locationhasDetailOrFilter = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].detail ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
+const locationhasDetailOrFilter = createSelector(
+  customLocation => {
+    const { key } = customLocation.description.main;
+    return (
+      customLocation.description[key].detail ||
+      (Object.entries(customLocation.description).find(
+        ([_key, value]) => value.isFilter,
+      ) || [])[0]
+    );
+  },
+  value => value,
+);
 
 class Summary extends PureComponent {
   static propTypes = propTypes;
@@ -130,27 +137,38 @@ class Summary extends PureComponent {
             </Fragment>
           )}
 
-        <ErrorBoundary>
+        <UnconnectedErrorBoundary customLocation={customLocation}>
           <div className={f('row')}>
             <div className={f('medium-12', 'large-12', 'columns')}>
               {loading ? <Loading /> : null}
               {!loading && (!payload || !payload.metadata) ? null : (
                 <Fragment>
                   <Title metadata={payload.metadata} mainType={endpoint} />
-                  <EntryMenu metadata={payload.metadata} />
+                  <ResizeObserverComponent
+                    measurements={['width', 'height']}
+                    className={f('entry-menu')}
+                  >
+                    {({ width, height }) => (
+                      <EntryMenu
+                        metadata={payload.metadata}
+                        width={width}
+                        height={height}
+                      />
+                    )}
+                  </ResizeObserverComponent>
                 </Fragment>
               )}
             </div>
           </div>
-        </ErrorBoundary>
-        <ErrorBoundary>
+        </UnconnectedErrorBoundary>
+        <UnconnectedErrorBoundary customLocation={customLocation}>
           <Switch
             {...this.props}
             locationSelector={locationhasDetailOrFilter}
             indexRoute={SummaryComponent}
             childRoutes={subPagesForEndpoint}
           />
-        </ErrorBoundary>
+        </UnconnectedErrorBoundary>
       </Fragment>
     );
   }
@@ -192,16 +210,19 @@ class Overview extends PureComponent {
   }
 }
 
-const locationHasAccessionOrFilters = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].accession ||
-    customLocation.description[key].memberDBAccession ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
+const locationHasAccessionOrFilters = createSelector(
+  customLocation => {
+    const { key } = customLocation.description.main;
+    return (
+      customLocation.description[key].accession ||
+      customLocation.description[key].memberDBAccession ||
+      (Object.entries(customLocation.description).find(
+        ([_key, value]) => value.isFilter,
+      ) || [])[0]
+    );
+  },
+  value => value,
+);
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 class InnerSwitch extends PureComponent {
@@ -210,6 +231,7 @@ class InnerSwitch extends PureComponent {
     children: T.any,
     listOfEndpointEntities: T.func,
   };
+
   render() {
     const { subpagesRoutes, listOfEndpointEntities } = this.props;
     const childRoutes = new Map([[subpagesRoutes, Summary]]);
@@ -226,6 +248,7 @@ class InnerSwitch extends PureComponent {
     );
   }
 }
+
 class EndPointPage extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,

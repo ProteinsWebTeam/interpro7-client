@@ -48,7 +48,8 @@ class EntriesOnProtein extends ProtVistaMatches {
 
     this.web_tracks[entry.accession].data = tmp;
     if (!this.web_protein.data)
-      this.web_protein.data = protein.sequence || ' '.repeat(protein.length);
+      this.web_protein.data =
+        protein.sequence || '\u00A0'.repeat(protein.length);
   }
 
   render() {

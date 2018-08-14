@@ -8,7 +8,7 @@ import { sideNavSelector } from 'reducers/ui/sideNav';
 
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterProMenu from 'components/Menu/InterProMenu';
-import SingleEntityMenu from 'components/Menu/SingleEntityMenu';
+import EntryMenu from 'components/EntryMenu';
 import Link from 'components/generic/Link';
 import ServerStatus from './ServerStatus';
 
@@ -67,8 +67,8 @@ const mapStateToPropsForOldLink = createSelector(
         return { href: `${href}signature/${d.entry.accession}/` };
       }
       return { href: `${href}member-database/${d.entry.db}/` };
-    } else if (key === 'protein' && d.entry.accession) {
-      return { href: `${href}protein/${d.entry.accession}/` };
+    } else if (key === 'protein' && d.protein.accession) {
+      return { href: `${href}protein/${d.protein.accession}/` };
     }
     return { href };
   },
@@ -126,11 +126,11 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
           <nav>
             <ul>
               {mainAccession && (
-                <SingleEntityMenu className={f('primary')}>
+                <EntryMenu className={f('sidemenu')} usedOnTheSide>
                   <span className={f('menu-label', 'cursor-default')}>
                     {mainType} menu ({mainAccession})
                   </span>
-                </SingleEntityMenu>
+                </EntryMenu>
               )}
               <InterProMenu className={f('secondary', 'is-drilldown')}>
                 <span className={f('menu-label', 'cursor-default')}>

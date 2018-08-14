@@ -11,9 +11,9 @@ import { dataProgressInfo, dataProgressUnload } from 'actions/creators';
 import extractParams from './extract-params';
 import getFetch from './getFetch';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
+import { UnconnectedErrorBoundary } from 'wrappers/ErrorBoundary';
 
-const mapStateToProps = createSelector(
+const mapStateToState = createSelector(
   state => state,
   appState => ({ appState }),
 );
@@ -28,7 +28,14 @@ const newData = url => ({
 });
 
 const loadData = params => {
-  const { getUrl, fetchOptions, propNamespace, weight } = extractParams(params);
+  const {
+    getUrl,
+    fetchOptions,
+    propNamespace,
+    weight,
+    mapStateToProps,
+    mapDispatchToProps,
+  } = extractParams(params);
   const fetchFun = getFetch(fetchOptions);
 
   return Wrapped => {
@@ -161,16 +168,16 @@ const loadData = params => {
           [`isStale${propNamespace}`]: this.state.staleData !== this.state.data,
         };
         return (
-          <ErrorBoundary>
-            <Wrapped {...passedProps} />
-          </ErrorBoundary>
+          <UnconnectedErrorBoundary customLocation={appState.customLocation}>
+            <Wrapped {...passedProps} {...mapStateToProps(appState) || {}} />
+          </UnconnectedErrorBoundary>
         );
       }
     }
 
     return connect(
-      mapStateToProps,
-      { dataProgressInfo, dataProgressUnload },
+      mapStateToState,
+      { dataProgressInfo, dataProgressUnload, ...mapDispatchToProps },
     )(DataWrapper);
   };
 };

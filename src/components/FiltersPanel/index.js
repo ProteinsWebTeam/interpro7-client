@@ -8,7 +8,7 @@ import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
+import { UnconnectedErrorBoundary } from 'wrappers/ErrorBoundary';
 
 import style from './style.css';
 
@@ -107,7 +107,8 @@ class FiltersPanel extends PureComponent {
           <span className={f('filter-buttons')}>
             <button className={f('but-collapse')} onClick={this.clearAll}>
               Clear
-            </button>&nbsp;|&nbsp;
+            </button>
+            &nbsp;|&nbsp;
             <button className={f('but-collapse')} onClick={this.toggleAll}>
               {toCollapse ? 'Show All' : 'Collapse All'}
               <span className={f('filter-title-arrow')}>
@@ -117,7 +118,7 @@ class FiltersPanel extends PureComponent {
           </span>
         </div>
 
-        <ErrorBoundary>
+        <UnconnectedErrorBoundary customLocation={this.props.customLocation}>
           {children.map(
             (child, i) =>
               child && (
@@ -131,7 +132,7 @@ class FiltersPanel extends PureComponent {
                 </FilterPanel>
               ),
           )}
-        </ErrorBoundary>
+        </UnconnectedErrorBoundary>
       </div>
     );
   }
@@ -141,4 +142,7 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(FiltersPanel);
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(FiltersPanel);

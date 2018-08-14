@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -41,15 +41,18 @@ const subPagesForSequence = new Map([
   ['sequence', SequenceSubPage],
 ]);
 
-const locationSelector = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].detail ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
+const locationSelector = createSelector(
+  customLocation => {
+    const { key } = customLocation.description.main;
+    return (
+      customLocation.description[key].detail ||
+      (Object.entries(customLocation.description).find(
+        ([_key, value]) => value.isFilter,
+      ) || [])[0]
+    );
+  },
+  value => value,
+);
 
 class IPScanResult extends PureComponent {
   static propTypes = {
@@ -78,7 +81,7 @@ class IPScanResult extends PureComponent {
         ),
       ).size;
     return (
-      <Fragment>
+      <React.Fragment>
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('large-12', 'columns')}>
@@ -103,7 +106,7 @@ class IPScanResult extends PureComponent {
             childRoutes={subPagesForSequence}
           />
         </ErrorBoundary>
-      </Fragment>
+      </React.Fragment>
     );
   }
 }

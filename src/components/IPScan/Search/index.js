@@ -303,7 +303,14 @@ class IPScanSearch extends PureComponent {
             ref={this._formRef}
           >
             <div>
-              <div className={f('secondary', 'callout', 'border')}>
+              <div
+                className={f(
+                  'secondary',
+                  'callout',
+                  'border',
+                  'margin-bottom-none',
+                )}
+              >
                 <div className={f('row')}>
                   <div className={f('large-12', 'columns', 'sqc-search-input')}>
                     <h3 className={f('light')}>Sequence, in FASTA format</h3>
@@ -340,19 +347,29 @@ class IPScanSearch extends PureComponent {
                 <div className={f('row')}>
                   <div className={f('columns')}>
                     <div className={f('button-group', 'line-with-buttons')}>
-                      <div className={f('hollow', 'button', 'tertiary')}>
-                        <label className={f('file-input-label')}>
-                          Choose file
-                          <input
-                            type="file"
-                            onChange={this._handleFileChange}
-                            hidden
-                          />
-                        </label>
-                      </div>
+                      <label
+                        className={f(
+                          'hollow',
+                          'button',
+                          'tertiary',
+                          'user-select-none',
+                        )}
+                      >
+                        Choose file
+                        <input
+                          type="file"
+                          onChange={this._handleFileChange}
+                          hidden
+                        />
+                      </label>
                       <button
                         type="button"
-                        className={f('hollow', 'button', 'secondary')}
+                        className={f(
+                          'hollow',
+                          'button',
+                          'secondary',
+                          'user-select-none',
+                        )}
                         onClick={this._loadExample}
                       >
                         Example protein sequence

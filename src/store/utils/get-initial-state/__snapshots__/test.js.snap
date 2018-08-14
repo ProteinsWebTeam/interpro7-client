@@ -21,11 +21,9 @@ Object {
       "main": Object {
         "key": null,
       },
-      "other": Object {
-        "0": "about",
-        "1": null,
-        "2": null,
-      },
+      "other": Array [
+        "about",
+      ],
       "protein": Object {
         "accession": null,
         "db": null,
@@ -90,11 +88,7 @@ Object {
       "main": Object {
         "key": "entry",
       },
-      "other": Object {
-        "0": null,
-        "1": null,
-        "2": null,
-      },
+      "other": Array [],
       "protein": Object {
         "accession": null,
         "db": null,
@@ -159,11 +153,7 @@ Object {
       "main": Object {
         "key": "protein",
       },
-      "other": Object {
-        "0": null,
-        "1": null,
-        "2": null,
-      },
+      "other": Array [],
       "protein": Object {
         "accession": null,
         "db": null,
@@ -228,11 +218,7 @@ Object {
       "main": Object {
         "key": null,
       },
-      "other": Object {
-        "0": null,
-        "1": null,
-        "2": null,
-      },
+      "other": Array [],
       "protein": Object {
         "accession": null,
         "db": null,
@@ -297,11 +283,7 @@ Object {
       "main": Object {
         "key": "entry",
       },
-      "other": Object {
-        "0": null,
-        "1": null,
-        "2": null,
-      },
+      "other": Array [],
       "protein": Object {
         "accession": null,
         "db": null,
@@ -366,11 +348,7 @@ Object {
       "main": Object {
         "key": "protein",
       },
-      "other": Object {
-        "0": null,
-        "1": null,
-        "2": null,
-      },
+      "other": Array [],
       "protein": Object {
         "accession": "A0A023GPI8",
         "db": "reviewed",

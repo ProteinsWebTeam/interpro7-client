@@ -15,6 +15,7 @@ import { latests } from 'staticData/home';
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/load-web-component';
 import { NumberComponent } from 'components/NumberLabel';
+import numberToDisplayText from 'components/NumberLabel/utils/number-to-display-text';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -109,117 +110,124 @@ class LatestEntry extends PureComponent {
             >
               {' '}
               <div className={f('count-4', 'count-proteins')}>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: 'InterPro',
-                        accession: entry.accession,
-                      },
-                      protein: { isFilter: true, db: 'UniProt' },
-                    },
-                  }}
-                  disabled={!c.P}
+                <Tooltip
+                  title={`${numberToDisplayText(c.P, true)} ${toPlural(
+                    'protein',
+                    c.P,
+                  )} matching ${entry.name}`}
                 >
-                  <div
-                    className={f('icon', 'icon-conceptual')}
-                    data-icon="&#x50;"
-                  />{' '}
-                  <NumberComponent
-                    value={c.P}
-                    abbr
-                    titleType={`${toPlural('protein', c.P)} matching ${
-                      entry.name
-                    }`}
-                  />
-                  <span className={f('label-number')}>
-                    {toPlural('protein', c.P)}
-                  </span>
-                </Link>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: 'InterPro',
+                          accession: entry.accession,
+                        },
+                        protein: { isFilter: true, db: 'UniProt' },
+                      },
+                    }}
+                    disabled={!c.P}
+                  >
+                    <div
+                      className={f('icon', 'icon-conceptual')}
+                      data-icon="&#x50;"
+                    />{' '}
+                    <NumberComponent value={c.P} abbr noTitle />
+                    <span className={f('label-number')}>
+                      {toPlural('protein', c.P)}
+                    </span>
+                  </Link>
+                </Tooltip>
               </div>
               <div className={f('count-4', 'count-architectures')}>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: 'InterPro',
-                        accession: entry.accession,
-                        detail: 'domain_architecture',
-                      },
-                    },
-                  }}
-                  disabled={!c.I}
+                <Tooltip
+                  title={`${numberToDisplayText(c.I, true)} ${toPlural(
+                    'domain architecture',
+                    c.I,
+                    true,
+                  )} matching ${entry.name}`}
                 >
-                  <div className={f('icon', 'icon-count-ida')} />{' '}
-                  <NumberComponent
-                    value={c.I}
-                    abbr
-                    titleType={`${toPlural(
-                      'domain architecture',
-                      c.I,
-                      true,
-                    )} matching ${entry.name}`}
-                  />
-                  <span className={f('label-number')}>
-                    domain architectures
-                  </span>
-                </Link>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: 'InterPro',
+                          accession: entry.accession,
+                          detail: 'domain_architecture',
+                        },
+                      },
+                    }}
+                    disabled={!c.I}
+                  >
+                    <div className={f('icon', 'icon-count-ida')} />{' '}
+                    <NumberComponent value={c.I} abbr noTitle />
+                    <span className={f('label-number')}>
+                      domain architectures
+                    </span>
+                  </Link>
+                </Tooltip>
               </div>
               <div className={f('count-4', 'count-organisms')}>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: 'InterPro',
-                        accession: entry.accession,
-                      },
-                      taxonomy: { isFilter: true, db: 'uniprot' },
-                    },
-                  }}
-                  disabled={!c.O}
+                <Tooltip
+                  title={`${numberToDisplayText(c.O, true)} ${toPlural(
+                    'taxonomy',
+                    c.O,
+                    true,
+                  )} matching ${entry.name}`}
                 >
-                  <div className={f('icon', 'icon-count-organisms')} />{' '}
-                  <NumberComponent
-                    value={c.O}
-                    abbr
-                    titleType={`${toPlural('taxonomy', c.O)} matching ${
-                      entry.name
-                    }`}
-                  />
-                  <span className={f('label-number')}>
-                    {toPlural('taxonomy', c.O)}
-                  </span>
-                </Link>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: 'InterPro',
+                          accession: entry.accession,
+                        },
+                        taxonomy: { isFilter: true, db: 'uniprot' },
+                      },
+                    }}
+                    disabled={!c.O}
+                  >
+                    <div className={f('icon', 'icon-count-organisms')} />{' '}
+                    <NumberComponent value={c.O} abbr noTitle />
+                    <span className={f('label-number')}>
+                      {toPlural('taxonomy', c.O)}
+                    </span>
+                  </Link>
+                </Tooltip>
               </div>
               <div className={f('count-4', 'count-structures')}>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: 'InterPro',
-                        accession: entry.accession,
-                      },
-                      structure: { isFilter: true, db: 'PDB' },
-                    },
-                  }}
-                  disabled={!c.S}
+                <Tooltip
+                  title={`${numberToDisplayText(c.S, true)} ${toPlural(
+                    'structure',
+                    c.S,
+                  )} matching ${entry.name}`}
                 >
-                  <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-                  <NumberComponent
-                    value={c.S}
-                    abbr
-                    titleType={`${toPlural('structure', c.S)} matching ${
-                      entry.name
-                    }`}
-                  />
-                  <span className={f('label-number')}>
-                    {toPlural('structure', c.S)}
-                  </span>
-                </Link>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: 'InterPro',
+                          accession: entry.accession,
+                        },
+                        structure: { isFilter: true, db: 'PDB' },
+                      },
+                    }}
+                    disabled={!c.S}
+                  >
+                    <div
+                      className={f('icon', 'icon-conceptual')}
+                      data-icon="s"
+                    />{' '}
+                    <NumberComponent value={c.S} abbr noTitle />
+                    <span className={f('label-number')}>
+                      {toPlural('structure', c.S)}
+                    </span>
+                  </Link>
+                </Tooltip>
               </div>
               {// OPTION COUNT SIGNATURES - ICON SVG
               entry.contributing.map(c => (
@@ -386,7 +394,9 @@ class ByEntriesFeatured extends PureComponent {
         <div className={f('row')}>
           <div className={f('columns')}>
             <AnimatedEntry className={f('card-wrapper')} element="div">
-              {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
+              {latests.map(e => (
+                <LatestEntry entry={e} key={e.accession} />
+              ))}
             </AnimatedEntry>
             <Link
               to={{
