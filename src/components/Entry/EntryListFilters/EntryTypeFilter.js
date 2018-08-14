@@ -28,6 +28,7 @@ class EntryTypeFilter extends PureComponent {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    isStale: T.bool.isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
       description: T.shape({
@@ -56,6 +57,7 @@ class EntryTypeFilter extends PureComponent {
   render() {
     const {
       data: { loading, payload },
+      isStale,
       customLocation: {
         description: {
           entry: { db },
@@ -63,10 +65,10 @@ class EntryTypeFilter extends PureComponent {
         search,
       },
     } = this.props;
-    const types = Object.entries(loading ? {} : payload).sort(
+    const types = Object.entries(isStale || loading ? {} : payload).sort(
       ([, a], [, b]) => b - a,
     );
-    if (!loading) {
+    if (!(loading || isStale)) {
       types.unshift(['All', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
     return (

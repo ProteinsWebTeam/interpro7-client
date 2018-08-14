@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+import Loading from 'components/SimpleCommonComponents/Loading';
+
 import Row from '../Row';
 
 import getStatusMessage from 'utils/server-message';
@@ -65,7 +67,7 @@ class Body extends PureComponent {
     // don't change next line to “!ok”, might be undefined
     if (ok === false) return <NoRows>The API request failed</NoRows>;
     if (notFound || !rows.length) {
-      return <NoRows>{loading ? 'Loading…' : 'No data available'}</NoRows>;
+      return <NoRows>{loading ? <Loading /> : 'No data available'}</NoRows>;
     }
     return (
       <tbody>
