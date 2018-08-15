@@ -5,12 +5,45 @@ import { toPlural } from 'utils/pages';
 
 import styles from './style.css';
 
-const Highlight = ({ children }) => (
-  <span className={styles.highlight}>{children}</span>
-);
-Highlight.propTypes = {
-  children: T.string.isRequired,
-};
+class Highlight extends PureComponent {
+  static propTypes = {
+    children: T.string.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this._ref = React.createRef();
+  }
+
+  _animate = () => {
+    if (!this._ref.current || !this._ref.current.animate) return;
+    this._ref.current.animate(
+      { color: ['red', 'black'] },
+      {
+        duration: 1000,
+        easing: 'ease-in',
+        fill: 'both',
+      },
+    );
+  };
+
+  componentDidMount() {
+    this._animate();
+  }
+
+  componentDidUpdate({ children }) {
+    if (children !== this.props.children) this._animate();
+  }
+
+  render() {
+    return (
+      <span className={styles.highlight} ref={this._ref}>
+        {this.props.children}
+      </span>
+    );
+  }
+}
 
 const getMainFragment = description => {
   const main = description.main.key;

@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import set from 'lodash-es/set';
 
+import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';
 import TextExplanation from './TextExplanation';
 import Estimation from './Estimation';
@@ -55,7 +56,7 @@ class DownloadForm extends PureComponent {
         for (const input of this._ref.current.querySelectorAll(
           `input[data-reset="${e.target.dataset.reset}"], input[name="${
             e.target.dataset.key
-          }"]`,
+          }"], select[name="${e.target.dataset.key}"]`,
         )) {
           input.value = '';
         }
@@ -120,11 +121,11 @@ class DownloadForm extends PureComponent {
           </label>
           <label className={f('input-group')}>
             <span className={f('input-group-label')}>{main} DB:</span>
-            <input
-              type="text"
-              defaultValue={description[main].db}
-              name={`description.${main}.db`}
+            <DBChoiceInput
+              type={main}
+              defaultValue={(description[main].db || '').toLowerCase()}
               className={f('input-group-field')}
+              name={`description.${main}.db`}
             />
             <div className={f('input-group-button')}>
               <button
@@ -192,9 +193,9 @@ class DownloadForm extends PureComponent {
                     </label>
                     <label className={f('input-group')}>
                       <span className={f('input-group-label')}>{key} DB:</span>
-                      <input
-                        type="text"
-                        defaultValue={value.db}
+                      <DBChoiceInput
+                        type={key}
+                        defaultValue={(value.db || '').toLowerCase()}
                         name={`description.${key}.db`}
                         className={f('input-group-field')}
                         data-reset={`description.${key}`}
@@ -240,12 +241,14 @@ class DownloadForm extends PureComponent {
             </ul>
           </div>
         </fieldset>
+
         <h5>More info</h5>
         <ApiLink url={endpoint} />
-        <TextExplanation fileType={fileType} description={description} />
         <Estimation url={endpoint} />
+
         <fieldset className={f('controls')}>
           <legend>Download</legend>
+          <TextExplanation fileType={fileType} description={description} />
           <label>
             Download type
             <select name="fileType" defaultValue={fileType || 'json'}>
