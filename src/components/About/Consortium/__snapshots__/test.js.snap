@@ -20,9 +20,9 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
+            disabled={false}
             href="http://www.cathdb.info/"
             target="_blank"
           >
@@ -32,32 +32,25 @@ exports[`<Consortium /> should render with data 1`] = `
               CATH-Gene3D
             </span>
           </Connect(Link)>
-          
         </td>
         <td>
           4.2.0
         </td>
         <td>
-           
-          CATH-Gene3D database describes protein families and domain architectures in complete genomes. Protein families are formed using a Markov clustering algorithm, followed by multi-linkage clustering according to sequence identity. Mapping of predicted structure and sequence domains is undertaken using hidden Markov models libraries representing CATH and Pfam domains. CATH-Gene3D is based at University College, London, UK.
-           
-          <br />
-           
+          <p>
+            CATH-Gene3D database describes protein families and domain architectures in complete genomes. Protein families are formed using a Markov clustering algorithm, followed by multi-linkage clustering according to sequence identity. Mapping of predicted structure and sequence domains is undertaken using hidden Markov models libraries representing CATH and Pfam domains. CATH-Gene3D is based at University College, London, UK.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2017-09-04T00:00:00Z"
-              title="2017-9-4"
-            >
-              <TimeAgo
-                date={2017-09-04T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2017-09-04T00:00:00.000Z}
+              noUpdate={true}
+              title="9/4/2017"
+            />
           </small>
         </td>
       </tr>
@@ -69,10 +62,10 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
-            href="//www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml"
+            disabled={false}
+            href="https://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml"
             target="_blank"
           >
             <span
@@ -81,32 +74,25 @@ exports[`<Consortium /> should render with data 1`] = `
               CDD
             </span>
           </Connect(Link)>
-          
         </td>
         <td>
           3.16
         </td>
         <td>
-           
-          CDD is a protein annotation resource that consists of a collection of annotated multiple sequence alignment models for ancient domains and full-length proteins. These are available as position-specific score matrices (PSSMs) for fast identification of conserved domains in protein sequences via RPS-BLAST. CDD content includes NCBI-curated domain models, which use 3D-structure information to explicitly define domain boundaries and provide insights into sequence/structure/function relationships, as well as domain models imported from a number of external source databases.
-           
-          <br />
-           
+          <p>
+            CDD is a protein annotation resource that consists of a collection of annotated multiple sequence alignment models for ancient domains and full-length proteins. These are available as position-specific score matrices (PSSMs) for fast identification of conserved domains in protein sequences via RPS-BLAST. CDD content includes NCBI-curated domain models, which use 3D-structure information to explicitly define domain boundaries and provide insights into sequence/structure/function relationships, as well as domain models imported from a number of external source databases.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2017-03-28T00:00:00Z"
-              title="2017-3-28"
-            >
-              <TimeAgo
-                date={2017-03-28T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2017-03-28T00:00:00.000Z}
+              noUpdate={true}
+              title="3/28/2017"
+            />
           </small>
         </td>
       </tr>
@@ -118,10 +104,10 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
-            href="//hamap.expasy.org/"
+            disabled={false}
+            href="https://hamap.expasy.org/"
             target="_blank"
           >
             <span
@@ -130,32 +116,25 @@ exports[`<Consortium /> should render with data 1`] = `
               HAMAP
             </span>
           </Connect(Link)>
-          
         </td>
         <td>
           2018_03
         </td>
         <td>
-           
-          HAMAP stands for High-quality Automated and Manual Annotation of Proteins. HAMAP profiles are manually created by expert curators. They identify proteins that are part of well-conserved proteins families or subfamilies. HAMAP is based at the SIB Swiss Institute of Bioinformatics, Geneva, Switzerland.
-           
-          <br />
-           
+          <p>
+            HAMAP stands for High-quality Automated and Manual Annotation of Proteins. HAMAP profiles are manually created by expert curators. They identify proteins that are part of well-conserved proteins families or subfamilies. HAMAP is based at the SIB Swiss Institute of Bioinformatics, Geneva, Switzerland.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2018-03-28T00:00:00Z"
-              title="2018-3-28"
-            >
-              <TimeAgo
-                date={2018-03-28T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2018-03-28T00:00:00.000Z}
+              noUpdate={true}
+              title="3/28/2018"
+            />
           </small>
         </td>
       </tr>
@@ -167,9 +146,9 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
+            disabled={false}
             href="http://mobidb.bio.unipd.it/"
             target="_blank"
           >
@@ -179,32 +158,25 @@ exports[`<Consortium /> should render with data 1`] = `
               MobiDB Lite
             </span>
           </Connect(Link)>
-          
         </td>
         <td>
           1.0
         </td>
         <td>
-           
-          MobiDB offers a centralized resource for annotations of intrinsic protein disorder. The database features three levels of annotation: manually curated, indirect and predicted. The different sources present a clear tradeoff between quality and coverage. By combining them all into a consensus annotation, MobiDB aims at giving the best possible picture of the “disorder landscape” of a given protein of interest.
-           
-          <br />
-           
+          <p>
+            MobiDB offers a centralized resource for annotations of intrinsic protein disorder. The database features three levels of annotation: manually curated, indirect and predicted. The different sources present a clear tradeoff between quality and coverage. By combining them all into a consensus annotation, MobiDB aims at giving the best possible picture of the “disorder landscape” of a given protein of interest.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2016-05-02T00:00:00Z"
-              title="2016-5-2"
-            >
-              <TimeAgo
-                date={2016-05-02T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2016-05-02T00:00:00.000Z}
+              noUpdate={true}
+              title="5/2/2016"
+            />
           </small>
         </td>
       </tr>
@@ -216,9 +188,9 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
+            disabled={false}
             href="http://www.pantherdb.org/"
             target="_blank"
           >
@@ -228,32 +200,25 @@ exports[`<Consortium /> should render with data 1`] = `
               PANTHER
             </span>
           </Connect(Link)>
-          
         </td>
         <td>
           12.0
         </td>
         <td>
-           
-          PANTHER is a large collection of protein families that have been subdivided into functionally related subfamilies, using human expertise. These subfamilies model the divergence of specific functions within protein families, allowing more accurate association with function, as well as inference of amino acids important for functional specificity. Hidden Markov models (HMMs) are built for each family and subfamily for classifying additional protein sequences. PANTHER is based at at University of Southern California, CA, US.
-           
-          <br />
-           
+          <p>
+            PANTHER is a large collection of protein families that have been subdivided into functionally related subfamilies, using human expertise. These subfamilies model the divergence of specific functions within protein families, allowing more accurate association with function, as well as inference of amino acids important for functional specificity. Hidden Markov models (HMMs) are built for each family and subfamily for classifying additional protein sequences. PANTHER is based at at University of Southern California, CA, US.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2017-05-08T00:00:00Z"
-              title="2017-5-8"
-            >
-              <TimeAgo
-                date={2017-05-08T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2017-05-08T00:00:00.000Z}
+              noUpdate={true}
+              title="5/8/2017"
+            />
           </small>
         </td>
       </tr>
@@ -265,10 +230,10 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
-            href="//pfam.xfam.org/"
+            disabled={false}
+            href="https://pfam.xfam.org/"
             target="_blank"
           >
             <span
@@ -277,32 +242,25 @@ exports[`<Consortium /> should render with data 1`] = `
               Pfam
             </span>
           </Connect(Link)>
-          
         </td>
         <td>
           31.0
         </td>
         <td>
-           
-          PFAM is a large collection of multiple sequence alignments and hidden Markov models covering many common protein domains. Pfam is based at EMBL-EBI, Hinxton, UK.
-           
-          <br />
-           
+          <p>
+            PFAM is a large collection of multiple sequence alignments and hidden Markov models covering many common protein domains. Pfam is based at EMBL-EBI, Hinxton, UK.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2017-03-08T00:00:00Z"
-              title="2017-3-8"
-            >
-              <TimeAgo
-                date={2017-03-08T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2017-03-08T00:00:00.000Z}
+              noUpdate={true}
+              title="3/8/2017"
+            />
           </small>
         </td>
       </tr>
@@ -314,10 +272,10 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
-            href="//pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml"
+            disabled={false}
+            href="https://pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml"
             target="_blank"
           >
             <span
@@ -326,32 +284,25 @@ exports[`<Consortium /> should render with data 1`] = `
               PIRSF
             </span>
           </Connect(Link)>
-          
         </td>
         <td>
           3.02
         </td>
         <td>
-           
-          PIRSF protein classification system is a network with multiple levels of sequence diversity from superfamilies to subfamilies that reflects the evolutionary relationship of full-length proteins and domains. PIRSF is based at the Protein Information Resource, Georgetown University Medical Centre, Washington DC, US.
-           
-          <br />
-           
+          <p>
+            PIRSF protein classification system is a network with multiple levels of sequence diversity from superfamilies to subfamilies that reflects the evolutionary relationship of full-length proteins and domains. PIRSF is based at the Protein Information Resource, Georgetown University Medical Centre, Washington DC, US.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2014-04-07T00:00:00Z"
-              title="2014-4-7"
-            >
-              <TimeAgo
-                date={2014-04-07T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2014-04-07T00:00:00.000Z}
+              noUpdate={true}
+              title="4/7/2014"
+            />
           </small>
         </td>
       </tr>
@@ -363,9 +314,9 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
+            disabled={false}
             href="http://130.88.97.239/PRINTS/"
             target="_blank"
           >
@@ -375,32 +326,25 @@ exports[`<Consortium /> should render with data 1`] = `
               PRINTS
             </span>
           </Connect(Link)>
-          
         </td>
         <td>
           42.0
         </td>
         <td>
-           
-          PRINTS is a compendium of protein fingerprints. A fingerprint is a group of conserved motifs used to characterise a protein family or domain. PRINTS is based at the University of Manchester, UK.
-           
-          <br />
-           
+          <p>
+            PRINTS is a compendium of protein fingerprints. A fingerprint is a group of conserved motifs used to characterise a protein family or domain. PRINTS is based at the University of Manchester, UK.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2012-06-14T00:00:00Z"
-              title="2012-6-14"
-            >
-              <TimeAgo
-                date={2012-06-14T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2012-06-14T00:00:00.000Z}
+              noUpdate={true}
+              title="6/14/2012"
+            />
           </small>
         </td>
       </tr>
@@ -412,10 +356,10 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
-            href="//prodom.prabi.fr/"
+            disabled={false}
+            href="http://prodom.prabi.fr/"
             target="_blank"
           >
             <span
@@ -424,32 +368,25 @@ exports[`<Consortium /> should render with data 1`] = `
               ProDom
             </span>
           </Connect(Link)>
-          
         </td>
         <td>
           2006.1
         </td>
         <td>
-           
-          PRODOM protein domain database consists of an automatic compilation of homologous domains. Current versions of ProDom are built using a novel procedure based on recursive PSI-BLAST searches. ProDom is based at PRABI Villeurbanne, France.
-           
-          <br />
-           
+          <p>
+            PRODOM protein domain database consists of an automatic compilation of homologous domains. Current versions of ProDom are built using a novel procedure based on recursive PSI-BLAST searches. ProDom is based at PRABI Villeurbanne, France.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2009-04-23T12:05:33Z"
-              title="2009-4-23"
-            >
-              <TimeAgo
-                date={2009-04-23T12:05:33.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2009-04-23T12:05:33.000Z}
+              noUpdate={true}
+              title="4/23/2009"
+            />
           </small>
         </td>
       </tr>
@@ -461,10 +398,10 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
-            href="//prosite.expasy.org/"
+            disabled={false}
+            href="https://prosite.expasy.org/"
             target="_blank"
           >
             <span
@@ -478,25 +415,18 @@ exports[`<Consortium /> should render with data 1`] = `
           2018_02
         </td>
         <td>
-           
-           
-          <br />
-           
+          <p />
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2018-02-28T00:00:00Z"
-              title="2018-2-28"
-            >
-              <TimeAgo
-                date={2018-02-28T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2018-02-28T00:00:00.000Z}
+              noUpdate={true}
+              title="2/28/2018"
+            />
           </small>
         </td>
       </tr>
@@ -508,10 +438,10 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
           <Connect(Link)
             className="ext"
-            href="//prosite.expasy.org/"
+            disabled={false}
+            href="https://prosite.expasy.org/"
             target="_blank"
           >
             <span
@@ -525,26 +455,20 @@ exports[`<Consortium /> should render with data 1`] = `
           2018_02
         </td>
         <td>
-           
-          PROSITE is a database of protein families and domains. It consists of biologically significant sites, patterns and profiles that help to reliably identify to which known protein family a new sequence belongs. PROSITE is base at the Swiss Institute of Bioinformatics (SIB), Geneva, Switzerland.
-           
-          <br />
-           
+          <p>
+            PROSITE is a database of protein families and domains. It consists of biologically significant sites, patterns and profiles that help to reliably identify to which known protein family a new sequence belongs. PROSITE is base at the Swiss Institute of Bioinformatics (SIB), Geneva, Switzerland.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2018-02-28T00:00:00Z"
-              title="2018-2-28"
-            >
-              <TimeAgo
-                date={2018-02-28T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2018-02-28T00:00:00.000Z}
+              noUpdate={true}
+              title="2/28/2018"
+            />
           </small>
         </td>
       </tr>
@@ -556,10 +480,9 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
-          
           <Connect(Link)
             className="ext"
+            disabled={false}
             href="http://sfld.rbvi.ucsf.edu/django/"
             target="_blank"
           >
@@ -574,26 +497,20 @@ exports[`<Consortium /> should render with data 1`] = `
           3
         </td>
         <td>
-           
-          SFLD (Structure-Function Linkage Database) is a hierarchical classification of enzymes that relates specific sequence-structure features to specific chemical capabilities.
-           
-          <br />
-           
+          <p>
+            SFLD (Structure-Function Linkage Database) is a hierarchical classification of enzymes that relates specific sequence-structure features to specific chemical capabilities.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2017-07-13T00:00:00Z"
-              title="2017-7-13"
-            >
-              <TimeAgo
-                date={2017-07-13T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2017-07-13T00:00:00.000Z}
+              noUpdate={true}
+              title="7/13/2017"
+            />
           </small>
         </td>
       </tr>
@@ -605,10 +522,9 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
-          
           <Connect(Link)
             className="ext"
+            disabled={false}
             href="http://smart.embl-heidelberg.de/"
             target="_blank"
           >
@@ -623,26 +539,20 @@ exports[`<Consortium /> should render with data 1`] = `
           7.1
         </td>
         <td>
-           
-          SMART (a Simple Modular Architecture Research Tool) allows the identification and annotation of genetically mobile domains and the analysis of domain architectures. SMART is based at at EMBL, Heidelberg, Germany.
-           
-          <br />
-           
+          <p>
+            SMART (a Simple Modular Architecture Research Tool) allows the identification and annotation of genetically mobile domains and the analysis of domain architectures. SMART is based at at EMBL, Heidelberg, Germany.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2016-02-05T00:00:00Z"
-              title="2016-2-5"
-            >
-              <TimeAgo
-                date={2016-02-05T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2016-02-05T00:00:00.000Z}
+              noUpdate={true}
+              title="2/5/2016"
+            />
           </small>
         </td>
       </tr>
@@ -654,10 +564,9 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
-          
           <Connect(Link)
             className="ext"
+            disabled={false}
             href="http://supfam.org/"
             target="_blank"
           >
@@ -672,26 +581,20 @@ exports[`<Consortium /> should render with data 1`] = `
           1.75
         </td>
         <td>
-           
-          SUPERFAMILY is a library of profile hidden Markov models that represent all proteins of known structure. The library is based on the SCOP classification of proteins: each model corresponds to a SCOP domain and aims to represent the entire SCOP superfamily that the domain belongs to. SUPERFAMILY is based at the University of Bristol, UK.
-           
-          <br />
-           
+          <p>
+            SUPERFAMILY is a library of profile hidden Markov models that represent all proteins of known structure. The library is based on the SCOP classification of proteins: each model corresponds to a SCOP domain and aims to represent the entire SCOP superfamily that the domain belongs to. SUPERFAMILY is based at the University of Bristol, UK.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2010-11-08T00:00:00Z"
-              title="2010-11-8"
-            >
-              <TimeAgo
-                date={2010-11-08T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2010-11-08T00:00:00.000Z}
+              noUpdate={true}
+              title="11/8/2010"
+            />
           </small>
         </td>
       </tr>
@@ -703,11 +606,10 @@ exports[`<Consortium /> should render with data 1`] = `
           />
         </td>
         <td>
-           
-          
           <Connect(Link)
             className="ext"
-            href="//tigrfams.jcvi.org/cgi-bin/index.cgi"
+            disabled={false}
+            href="http://tigrfams.jcvi.org/cgi-bin/index.cgi"
             target="_blank"
           >
             <span
@@ -721,26 +623,20 @@ exports[`<Consortium /> should render with data 1`] = `
           15.0
         </td>
         <td>
-           
-          TIGRFAMs is a collection of protein families, featuring curated multiple sequence alignments, hidden Markov models (HMMs) and annotation, which provides a tool for identifying functionally related proteins based on sequence homology. TIGRFAMs is based at the J. Craig Venter Institute, Rockville, MD, US.
-           
-          <br />
-           
+          <p>
+            TIGRFAMs is a collection of protein families, featuring curated multiple sequence alignments, hidden Markov models (HMMs) and annotation, which provides a tool for identifying functionally related proteins based on sequence homology. TIGRFAMs is based at the J. Craig Venter Institute, Rockville, MD, US.
+          </p>
           <small
             className="icon icon-generic"
             data-icon="r"
           >
              
             Released 
-            <time
-              dateTime="2014-09-16T00:00:00Z"
-              title="2014-9-16"
-            >
-              <TimeAgo
-                date={2014-09-16T00:00:00.000Z}
-                noUpdate={true}
-              />
-            </time>
+            <TimeAgo
+              date={2014-09-16T00:00:00.000Z}
+              noUpdate={true}
+              title="9/16/2014"
+            />
           </small>
         </td>
       </tr>
