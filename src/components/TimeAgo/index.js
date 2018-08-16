@@ -1,5 +1,5 @@
 // @flow
-import { PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import TA from 'timeago.js';
 import { sleep, schedule } from 'timing-functions/src';
@@ -9,44 +9,46 @@ import random from 'utils/random';
 let timeago;
 const ONE_MINUTE = 60000;
 
-const mounted = new WeakSet();
-
 /*:: type Props = {
   date: Date,
+  title?: string,
+  noTitle?: boolean,
   noUpdate?: boolean,
 };*/
 
 class TimeAgo extends PureComponent /*:: <Props> */ {
   /* ::
+    _ref: { current: HTMLElement | null };
     _delay: () => number;
     __delay: number;
   */
   static propTypes = {
     date: T.instanceOf(Date).isRequired,
+    title: T.string,
+    noTitle: T.bool,
     noUpdate: T.bool,
   };
 
   constructor(props /*: Props */) {
     super(props);
+
     // Only create one instance, and only when it is needed
     if (!timeago) timeago = new TA();
+
+    this._ref = React.createRef();
   }
 
   async componentDidMount() {
-    mounted.add(this);
     if (this.props.noUpdate) return;
     await sleep(this._delay);
     await schedule();
     // infinite loop while mounted
-    while (mounted.has(this)) {
-      this.forceUpdate();
+    while (this._ref.current) {
+      // $FlowIgnore
+      this._ref.current.textContent = timeago.format(this.props.date);
       await sleep(this._delay);
       await schedule();
     }
-  }
-
-  componentWillUnmount() {
-    mounted.delete(this);
   }
 
   // delay before re-rendering will slowly grow everytime by up to 1 minute
@@ -56,7 +58,16 @@ class TimeAgo extends PureComponent /*:: <Props> */ {
   }
 
   render() {
-    return timeago.format(this.props.date);
+    const { date, title, noTitle } = this.props;
+    let _title;
+    if (!noTitle) {
+      _title = title || date.toLocaleString();
+    }
+    return (
+      <time dateTime={date.toISOString()} title={_title} ref={this._ref}>
+        {timeago.format(date)}
+      </time>
+    );
   }
 }
 
