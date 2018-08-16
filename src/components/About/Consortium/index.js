@@ -10,6 +10,8 @@ import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
+import sortFn from 'utils/sort-functions/basic';
+
 import { schemaProcessDataForDB } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
@@ -80,14 +82,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
         <table className={f('light')}>
           <tbody>
             {memberDBs
-              .sort((a, b) => {
-                // sort list by alphabetical order
-                if (a.canonical.toUpperCase() > b.canonical.toUpperCase())
-                  return 1;
-                if (a.canonical.toUpperCase() < b.canonical.toUpperCase())
-                  return -1;
-                return 0;
-              })
+              .sort(sortFn({ selector: item => item.canonical.toUpperCase() }))
               .map(db => {
                 const date = db.releaseDate && new Date(db.releaseDate);
                 const md = db.canonical;
