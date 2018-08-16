@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import sortFn from '.';
 
 describe('sort-basic', () => {
