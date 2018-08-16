@@ -120,9 +120,7 @@ class IPScanStatus extends PureComponent {
                   <Tooltip
                     title={`Created on ${parsed.toLocaleDateString()} at ${parsed.toLocaleTimeString()}`}
                   >
-                    <time dateTime={parsed.toISOString()}>
-                      <TimeAgo date={parsed} />
-                    </time>
+                    <TimeAgo date={parsed} noTitle />
                   </Tooltip>
                 );
               }}
