@@ -7,7 +7,7 @@ import styles from './style.css';
 
 class Highlight extends PureComponent {
   static propTypes = {
-    children: T.string.isRequired,
+    children: T.any.isRequired,
   };
 
   constructor(props) {
@@ -112,6 +112,8 @@ const getFilters = description =>
       </React.Fragment>
     ));
 
+const MAGIC_MARGIN = 5;
+
 export default class TextExplanation extends PureComponent {
   static propTypes = {
     fileType: T.string.isRequired,
@@ -131,8 +133,20 @@ export default class TextExplanation extends PureComponent {
       <React.Fragment>
         <h6>Explanation</h6>
         <p>
-          This <Highlight>{fileType}</Highlight> file will contain{' '}
-          {getMainFragment(description)}
+          This{' '}
+          <select
+            name="fileType"
+            defaultValue={fileType || 'json'}
+            style={{ width: `${fileType.length + MAGIC_MARGIN}ch` }}
+            className={styles.select}
+            aria-label="Download type"
+          >
+            <option value="json">JSON</option>
+            {/*<option value="tsv">TSV</option>*/}
+            <option value="fasta">FASTA</option>
+            <option value="accession">Accession</option>
+          </select>{' '}
+          file will contain {getMainFragment(description)}
           {filterText}.
         </p>
       </React.Fragment>

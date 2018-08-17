@@ -9,6 +9,7 @@ import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';
 import TextExplanation from './TextExplanation';
 import Estimation from './Estimation';
+import Controls from './Controls';
 
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -249,21 +250,7 @@ class DownloadForm extends PureComponent {
         <fieldset className={f('controls')}>
           <legend>Download</legend>
           <TextExplanation fileType={fileType} description={description} />
-          <label>
-            Download type
-            <select name="fileType" defaultValue={fileType || 'json'}>
-              <option value="json">JSON</option>
-              <option value="tsv">TSV</option>
-              <option value="fasta">FASTA</option>
-              <option value="accession">Accession</option>
-            </select>
-          </label>
-          <button type="button" className={f('button')}>
-            Generate
-          </button>
-          <button type="button" className={f('button')} disabled>
-            Download
-          </button>
+          <Controls fileType={fileType} url={endpoint} />
         </fieldset>
       </form>
     );
