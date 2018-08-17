@@ -2,28 +2,39 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import noop from 'lodash-es/noop';
 
 import { toPlural } from 'utils/pages';
+import sortFnFor from 'utils/sort-functions/basic';
 
 import loadData from 'higherOrder/loadData';
 
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
 
-const payloadToOptions = payload =>
-  Object.entries(payload).map(([key, value]) => {
-    if (typeof value !== 'object') {
+import f from 'styles/foundation';
+
+const integrationFlags = new Set(['all', 'integrated', 'unintegrated']);
+
+const sortFn = sortFnFor({ selector: tuple => tuple[0] });
+
+const payloadToOptions = (payload, isIntegration = false) =>
+  Object.entries(payload)
+    .filter(([key]) => integrationFlags.has(key) === isIntegration)
+    .sort(sortFn)
+    .map(([key, value]) => {
+      if (typeof value !== 'object') {
+        return (
+          <option key={key} value={key.toLowerCase()}>
+            {key}
+          </option>
+        );
+      }
       return (
-        <option key={key} value={key.toLowerCase()}>
-          {key}
-        </option>
+        <optgroup key={key} label={key.replace('_', ' ')}>
+          {payloadToOptions(value, isIntegration)}
+        </optgroup>
       );
-    }
-    return (
-      <optgroup key={key} label={key.replace('_', ' ')}>
-        {payloadToOptions(value)}
-      </optgroup>
-    );
-  });
+    });
 
 export class DBChoiceInputWithoutData extends PureComponent {
   static propTypes = {
@@ -33,6 +44,11 @@ export class DBChoiceInputWithoutData extends PureComponent {
       payload: T.object,
     }).isRequired,
     isStale: T.bool.isRequired,
+    onClick: T.func.isRequired,
+    isIntegration: T.bool,
+    name: T.string.isRequired,
+    value: T.string.isRequired,
+    valueIntegration: T.string.isRequired,
   };
 
   render() {
@@ -40,15 +56,57 @@ export class DBChoiceInputWithoutData extends PureComponent {
       type,
       data: { loading, payload },
       isStale: _,
-      ...props
+      onClick,
+      isIntegration,
+      name,
+      value,
+      valueIntegration,
     } = this.props;
-    if (loading) return 'Loading…';
-    if (!payload) return 'Error…';
+    let integration;
+    let _name = name;
+    let _value = value;
+    if (type === 'entry' && _value !== 'interpro') {
+      if (!isIntegration) {
+        integration = (
+          <DBChoiceInputWithoutData {...this.props} isIntegration />
+        );
+      } else {
+        _name = name.replace('.db', '.integration');
+        _value = valueIntegration;
+      }
+    }
     return (
-      <select {...props}>
-        <option value="">{'< no selection >'}</option>
-        {payloadToOptions(payload[toPlural(type)])}
-      </select>
+      <React.Fragment>
+        <label className={f('input-group')}>
+          <span className={f('input-group-label')}>
+            {type} {isIntegration ? 'integration' : 'DB'}:
+          </span>
+          {!loading &&
+            payload && (
+              <select
+                className={f('input-group-field')}
+                name={_name}
+                value={_value}
+                onChange={noop}
+                onBlur={noop}
+              >
+                <option value="">{'< no selection >'}</option>
+                {payloadToOptions(payload[toPlural(type)], isIntegration)}
+              </select>
+            )}
+          <div className={f('input-group-button')}>
+            <button
+              type="button"
+              data-key={_name}
+              className={f('button')}
+              onClick={onClick}
+            >
+              x
+            </button>
+          </div>
+        </label>
+        {integration}
+      </React.Fragment>
     );
   }
 }

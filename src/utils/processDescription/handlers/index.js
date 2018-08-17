@@ -623,7 +623,14 @@ entryHandler.children = new Set([
   setHandler,
 ]);
 
-integrationHandler.children = new Set([memberDBHandler]);
+integrationHandler.children = new Set([
+  memberDBHandler,
+  proteinHandler,
+  structureHandler,
+  taxonomyHandler,
+  proteomeHandler,
+  setHandler,
+]);
 
 interProHandler.children = new Set([
   proteinHandler,

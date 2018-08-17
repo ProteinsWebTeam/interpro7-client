@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+
+// external modules required: node-fetch, timing-functions
+const fetch = require('node-fetch');
+const sleep = require('timing-functions').sleep;
+<% if (fileType === 'fasta') { %>
+const DESCRIPTION_SEPARATOR = '|';
+const CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS = /(.{1,80})/g;
+<% } %>
+const processItem = item => {
+  // write description line
+  yield '>';
+  yield item.metadata.accession;
+  yield DESCRIPTION_SEPARATOR;
+  yield item.metadata.source_database;
+  yield DESCRIPTION_SEPARATOR;
+  yield item.metadata.name;
+  yield DESCRIPTION_SEPARATOR;
+  yield `taxID:${item.metadata.source_organism.taxId}`;
+  yield '\n';
+  // write sequence
+  yield item.extra_fields.sequence.replace(
+    CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS,
+    '$1\n',
+  );
+};
+
+const main = async function* (startURL) => {
+  let next = startURL;
+  while (next) {
+    const response = await fetch(next);
+    // If the server sent a timeout response…
+    if (response.status === 408) {
+      // …wait a bit…
+      await sleep(60000);
+      // …then restart the loop with at the same URL
+      continue;
+    }
+    const payload = await response.json();
+    for (const item of payload.results) {
+      yield* processItem(item);
+    }
+    next = payload.next;
+    await sleep(1000);
+  }
+};
+
+const BASE_URL = '<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>';
+
+if (require.main === module) {
+  // If used from the command line, will write data to stdout asap
+  const mainWriteToStdout = async () => {
+    const process = require('process');
+    for await (const output of main(BASE_URL)) {
+    process.stdout.write()
+  }
+  mainWriteToStdout();
+} else {
+  // If used as a module, can be used as an async generator
+  module.exports = (baseURL = BASE_URL) => main(baseURL);
+}

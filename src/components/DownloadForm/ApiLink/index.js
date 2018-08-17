@@ -11,14 +11,14 @@ export default class ApiLink extends PureComponent {
   render() {
     const { url } = this.props;
     return (
-      <React.Fragment>
+      <section>
         <h6>Corresponding API call</h6>
         <p>
           <Link href={url} target="_blank">
             <code>{url}</code>
           </Link>
         </p>
-      </React.Fragment>
+      </section>
     );
   }
 }

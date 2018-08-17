@@ -10,3 +10,13 @@
   height: 2.5rem;
   margin: 0;
 }
+
+.download-form {
+  & section {
+    margin-top: 2ch;
+  }
+
+  & h6 {
+    font-weight: bold;
+  }
+}
