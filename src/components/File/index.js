@@ -80,11 +80,11 @@ class Button extends PureComponent {
   }
 }
 
-const mapStateToPropFor = (url, fileType) =>
-  createSelector(downloadSelector, downloads => {
-    const key = `${url}|${fileType}`;
-    return downloads[key] || {};
-  });
+const mapStateToPropsFor = (url, fileType) =>
+  createSelector(
+    downloadSelector,
+    downloads => downloads[`${url}|${fileType}`] || {},
+  );
 
 class File extends PureComponent {
   static propTypes = {
@@ -112,12 +112,14 @@ class File extends PureComponent {
         nextProps.api.root +
         descriptionToPath(nextProps.customLocationDescription),
     });
-    if (prevState.url === url && prevState.fileType === nextProps.fileType)
+    if (prevState.url === url && prevState.fileType === nextProps.fileType) {
       return null;
+    }
+
     return {
       url,
       fileType: nextProps.fileType,
-      ConnectedButton: connect(mapStateToPropFor(url, nextProps.fileType))(
+      ConnectedButton: connect(mapStateToPropsFor(url, nextProps.fileType))(
         Button,
       ),
     };
