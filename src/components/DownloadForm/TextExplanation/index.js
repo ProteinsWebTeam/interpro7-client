@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import noop from 'lodash-es/noop';
 
 import { toPlural } from 'utils/pages';
 
@@ -57,6 +58,19 @@ const getMainFragment = description => {
       </React.Fragment>
     );
   }
+  if (db && integration) {
+    return (
+      <React.Fragment>
+        <Highlight>a list</Highlight> of{' '}
+        {integration !== 'all' && (
+          <React.Fragment>
+            <Highlight>{integration}</Highlight>{' '}
+          </React.Fragment>
+        )}
+        <Highlight>{db}</Highlight> <Highlight>{toPlural(main)}</Highlight>
+      </React.Fragment>
+    );
+  }
   if (db || integration) {
     return (
       <React.Fragment>
@@ -74,7 +88,7 @@ const getMainFragment = description => {
   );
 };
 
-const getFilterFragment = (type, { db, accession }) => {
+const getFilterFragment = (type, { db, integration, accession }) => {
   if (accession) {
     return (
       <React.Fragment>
@@ -84,10 +98,23 @@ const getFilterFragment = (type, { db, accession }) => {
       </React.Fragment>
     );
   }
-  if (db) {
+  if (db && integration) {
     return (
       <React.Fragment>
-        any of the <Highlight>{db}</Highlight>{' '}
+        any of the{' '}
+        {integration !== 'all' && (
+          <React.Fragment>
+            <Highlight>{integration}</Highlight>{' '}
+          </React.Fragment>
+        )}
+        <Highlight>{db}</Highlight> <Highlight>{toPlural(type)}</Highlight>
+      </React.Fragment>
+    );
+  }
+  if (db || (integration && integration !== 'all')) {
+    return (
+      <React.Fragment>
+        any of the <Highlight>{db || integration}</Highlight>{' '}
         <Highlight>{toPlural(type)}</Highlight>
       </React.Fragment>
     );
@@ -130,21 +157,23 @@ export default class TextExplanation extends PureComponent {
     }
 
     return (
-      <React.Fragment>
+      <section>
         <h6>Explanation</h6>
         <p>
           This{' '}
           <select
             name="fileType"
-            defaultValue={fileType || 'json'}
+            value={fileType || 'accession'}
             style={{ width: `${fileType.length + MAGIC_MARGIN}ch` }}
             className={styles.select}
             aria-label="Download type"
+            onChange={noop}
+            onBlur={noop}
           >
             <option value="accession">Accession</option>
-            {description.main.key === 'protein' && (
-              <option value="fasta">FASTA</option>
-            )}
+            <option value="fasta" disabled={description.main.key !== 'protein'}>
+              FASTA
+            </option>
             <option value="json">JSON</option>
             {/* <option value="tsv">TSV</option> */}
             {/* <option value="xml">XML</option> */}
@@ -152,7 +181,7 @@ export default class TextExplanation extends PureComponent {
           file will contain {getMainFragment(description)}
           {filterText}.
         </p>
-      </React.Fragment>
+      </section>
     );
   }
 }

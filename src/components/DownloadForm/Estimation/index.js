@@ -41,7 +41,10 @@ export class EstimationWithoutData extends PureComponent {
       }${count} item${count > 1 ? 's' : ''}.`;
     }
 
-    const size = +headers.get('content-length');
+    let size = +headers.get('content-length');
+    if (!size) {
+      size = JSON.stringify(payload, null, 2).length;
+    }
     if (size && Number.isFinite(size)) {
       return `Your file size will be of ${
         size > ONE_K ? 'approximately ' : ''
@@ -78,10 +81,10 @@ export default class Estimation extends PureComponent {
   render() {
     const { EstimationWithData } = this.state;
     return (
-      <React.Fragment>
+      <section>
         <h6>Estimation</h6>
         <EstimationWithData />
-      </React.Fragment>
+      </section>
     );
   }
 }

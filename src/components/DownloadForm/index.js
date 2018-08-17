@@ -9,6 +9,7 @@ import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';
 import TextExplanation from './TextExplanation';
 import Estimation from './Estimation';
+import Snippet from './Snippet';
 import Controls from './Controls';
 
 import pathToDescription from 'utils/processDescription/pathToDescription';
@@ -66,6 +67,13 @@ class DownloadForm extends PureComponent {
     for (const { name, value } of this._ref.current.elements) {
       if (name) set(object, name, value);
     }
+    if (
+      object.description.entry &&
+      object.description.entry.db === 'interpro'
+    ) {
+      // remove integration from entry if db is InterPro, because it's useless
+      object.description.entry.integration = null;
+    }
     set(object.description, [object.description.main.key, 'isFilter'], null);
     let path;
     try {
@@ -79,6 +87,13 @@ class DownloadForm extends PureComponent {
     ) {
       // Since we can only have fasta type for proteins, change type to default
       object.fileType = 'accession';
+    }
+    if (
+      (object.fileType === 'fasta' || object.fileType === 'accession') &&
+      !object.description[object.description.main.key].db
+    ) {
+      // Since we can only have counter objects in JSON, change type to default
+      object.fileType = 'json';
     }
     const nextHash = [path, object.fileType].join('|');
     if (nextHash !== this.props.customLocation.hash) {
@@ -113,7 +128,12 @@ class DownloadForm extends PureComponent {
     const main = description.main.key || 'entry';
 
     return (
-      <form onChange={this._handleChange} ref={this._ref}>
+      <form
+        onChange={this._handleChange}
+        ref={this._ref}
+        className={f('download-form')}
+      >
+        <Snippet fileType={fileType} url={endpoint} />
         <h4>Generate a new file</h4>
         <fieldset className={f('fieldset')}>
           <legend>Main type</legend>
@@ -127,25 +147,15 @@ class DownloadForm extends PureComponent {
               ))}
             </select>
           </label>
-          <label className={f('input-group')}>
-            <span className={f('input-group-label')}>{main} DB:</span>
-            <DBChoiceInput
-              type={main}
-              defaultValue={(description[main].db || '').toLowerCase()}
-              className={f('input-group-field')}
-              name={`description.${main}.db`}
-            />
-            <div className={f('input-group-button')}>
-              <button
-                type="button"
-                data-key={`description.${main}.db`}
-                className={f('button')}
-                onClick={this._handleChange}
-              >
-                x
-              </button>
-            </div>
-          </label>
+          <DBChoiceInput
+            type={main}
+            value={(description[main].db || '').toLowerCase()}
+            valueIntegration={(
+              description[main].integration || ''
+            ).toLowerCase()}
+            name={`description.${main}.db`}
+            onClick={this._handleChange}
+          />
         </fieldset>
         <fieldset className={f('fieldset')}>
           <legend>Filters</legend>
@@ -199,27 +209,13 @@ class DownloadForm extends PureComponent {
                         </button>
                       </div>
                     </label>
-                    <label className={f('input-group')}>
-                      <span className={f('input-group-label')}>{key} DB:</span>
-                      <DBChoiceInput
-                        type={key}
-                        defaultValue={(value.db || '').toLowerCase()}
-                        name={`description.${key}.db`}
-                        className={f('input-group-field')}
-                        data-reset={`description.${key}`}
-                      />
-                      <div className={f('input-group-button')}>
-                        <button
-                          type="button"
-                          data-key={`description.${key}.db`}
-                          className={f('button')}
-                          onClick={this._handleChange}
-                          data-reset={`description.${key}`}
-                        >
-                          x
-                        </button>
-                      </div>
-                    </label>
+                    <DBChoiceInput
+                      type={key}
+                      value={(value.db || '').toLowerCase()}
+                      valueIntegration={(value.integration || '').toLowerCase()}
+                      name={`description.${key}.db`}
+                      onClick={this._handleChange}
+                    />
                     <label className={f('input-group')}>
                       <span className={f('input-group-label')}>
                         {key} accession:
@@ -253,6 +249,7 @@ class DownloadForm extends PureComponent {
         <h5>More info</h5>
         <ApiLink url={endpoint} />
         <Estimation url={endpoint} />
+        <Snippet fileType={fileType} url={endpoint} />
 
         <fieldset className={f('controls')}>
           <legend>Download</legend>
