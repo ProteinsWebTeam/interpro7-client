@@ -67,13 +67,20 @@ class DownloadForm extends PureComponent {
       if (name) set(object, name, value);
     }
     set(object.description, [object.description.main.key, 'isFilter'], null);
-    let description;
+    let path;
     try {
-      description = descriptionToPath(object.description);
+      path = descriptionToPath(object.description);
     } catch (_) {
       return;
     }
-    const nextHash = [description, object.fileType].join('|');
+    if (
+      object.fileType === 'fasta' &&
+      object.description.main.key !== 'protein'
+    ) {
+      // Since we can only have fasta type for proteins, change type to default
+      object.fileType = 'accession';
+    }
+    const nextHash = [path, object.fileType].join('|');
     if (nextHash !== this.props.customLocation.hash) {
       this.props.goToCustomLocation({
         ...this.props.customLocation,

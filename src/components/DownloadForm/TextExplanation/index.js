@@ -141,10 +141,13 @@ export default class TextExplanation extends PureComponent {
             className={styles.select}
             aria-label="Download type"
           >
-            <option value="json">JSON</option>
-            {/*<option value="tsv">TSV</option>*/}
-            <option value="fasta">FASTA</option>
             <option value="accession">Accession</option>
+            {description.main.key === 'protein' && (
+              <option value="fasta">FASTA</option>
+            )}
+            <option value="json">JSON</option>
+            {/* <option value="tsv">TSV</option> */}
+            {/* <option value="xml">XML</option> */}
           </select>{' '}
           file will contain {getMainFragment(description)}
           {filterText}.
