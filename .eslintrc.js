@@ -79,7 +79,7 @@ const rules = {
   // Enforce that a label tag has a text label and an associated control
   'jsx-a11y/label-has-associated-control': [
     1,
-    { depth: 3, controlComponents: ['TextSearchBox'] },
+    { depth: 3, controlComponents: ['TextSearchBox', 'select'] },
   ],
   // Enforce label tags to have associated control
   'jsx-a11y/label-has-for': 0,

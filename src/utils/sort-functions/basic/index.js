@@ -1,7 +1,7 @@
 const defaultSelector = item => item;
 
 export default ({
-  selector = item => item,
+  selector = defaultSelector,
   descending = false,
 } /*: {
   selector: (any => string) | (any => number),
