@@ -7,11 +7,10 @@ export class DataPreviewProviderWithoutData extends PureComponent {
   static propTypes = {
     children: T.func.isRequired,
     url: T.string.isRequired,
-    dispatch: T.string.isRequired,
   };
 
   render() {
-    const { children, url, dispatch, ...props } = this.props;
+    const { children, url, ...props } = this.props;
     return children(props);
   }
 }
