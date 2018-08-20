@@ -8,7 +8,8 @@ import set from 'lodash-es/set';
 import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';
 import TextExplanation from './TextExplanation';
-import Estimation from './Estimation';
+import DataPreviewProvider from './DataPreviewProvider';
+import Estimate from './Estimate';
 import Snippet from './Snippet';
 import Controls from './Controls';
 
@@ -133,7 +134,6 @@ class DownloadForm extends PureComponent {
         ref={this._ref}
         className={f('download-form')}
       >
-        <Snippet fileType={fileType} url={endpoint} />
         <h4>Generate a new file</h4>
         <fieldset className={f('fieldset')}>
           <legend>Main type</legend>
@@ -164,9 +164,7 @@ class DownloadForm extends PureComponent {
             <div className={f('button-group')}>
               {typeObjects
                 .filter(
-                  ([type]) =>
-                    type !== description.main.key &&
-                    !description[type].isFilter,
+                  ([type]) => type !== main && !description[type].isFilter,
                 )
                 .map(([type]) => (
                   <button
@@ -248,14 +246,27 @@ class DownloadForm extends PureComponent {
 
         <h5>More info</h5>
         <ApiLink url={endpoint} />
-        <Estimation url={endpoint} />
-        <Snippet fileType={fileType} url={endpoint} />
+        <DataPreviewProvider url={endpoint}>
+          {({ data }) => (
+            <React.Fragment>
+              <Estimate data={data} />
+              {/* Only display if the response from the API is a list of items */}
+              {description[main].db &&
+                !description[main].accession && (
+                  <Snippet fileType={fileType} url={endpoint} />
+                )}
 
-        <fieldset className={f('controls')}>
-          <legend>Download</legend>
-          <TextExplanation fileType={fileType} description={description} />
-          <Controls fileType={fileType} url={endpoint} />
-        </fieldset>
+              <fieldset className={f('controls')}>
+                <legend>Download</legend>
+                <TextExplanation
+                  fileType={fileType}
+                  description={description}
+                />
+                <Controls fileType={fileType} url={endpoint} data={data} />
+              </fieldset>
+            </React.Fragment>
+          )}
+        </DataPreviewProvider>
       </form>
     );
   }

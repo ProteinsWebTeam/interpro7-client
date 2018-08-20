@@ -35,9 +35,9 @@ const main = async function* (startURL) {
     );
     // If the server sent a timeout response…
     if (response.status === 408) {
-      // …wait a bit…
+      // …wait a bit for the server to process the query in the background…
       await sleep(60000);
-      // …then restart the loop with at the same URL
+      // …then continue this loop with the same URL
       continue;
     }
     const payload = await response.json();
@@ -45,6 +45,7 @@ const main = async function* (startURL) {
       yield* processItem(item);
     }
     next = payload.next;
+    // Don't overload the server, give it a bit of time before asking for more
     await sleep(1000);
   }
 };
