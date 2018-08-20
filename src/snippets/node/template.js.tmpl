@@ -7,26 +7,26 @@ const sleep = require('timing-functions').sleep;
 const DESCRIPTION_SEPARATOR = '|';
 const CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS = /(.{1,80})/g;
 <% } %>
-const processItem = ({
+const processItem = function* ({
   metadata: { accession, source_database, name, source_organism},
   extra_fields: { sequence },
-}) => {
+}) {
   // generate description line
   yield `>${
     [accession, source_database, name, `taxID:${source_organism.taxId}`]
       .join(DESCRIPTION_SEPARATOR)
   }}\n`;
   // generate sequence
-  yield item.extra_fields.sequence.replace(
-    CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS,
-    '$1\n',
-  );
+  yield sequence.replace(CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS, '$1\n');
 };
 
-const main = async function* (startURL) => {
+const main = async function* (startURL) {
   let next = startURL;
   while (next) {
-    const response = await fetch(next);
+    const response = await fetch(
+      next,
+      { headers: { Accept: 'application/json' } }
+    );
     // If the server sent a timeout response…
     if (response.status === 408) {
       // …wait a bit…
@@ -50,7 +50,8 @@ if (require.main === module) {
   const mainWriteToStdout = async () => {
     const process = require('process');
     for await (const output of main(BASE_URL)) {
-    process.stdout.write()
+      process.stdout.write(output);
+    }
   }
   mainWriteToStdout();
 } else {
