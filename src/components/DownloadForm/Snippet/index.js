@@ -28,11 +28,17 @@ const options = { interpolate: /<%=([\s\S]+?)%>/g };
 const lut = new Map([
   [
     'js',
-    { template: template(jsRaw, options), type: 'application/javascript' },
+    {
+      template: template(jsRaw.replace(/\n+/g, '\n'), options),
+      type: 'application/javascript',
+    },
   ],
   [
     'py',
-    { template: template(pythonRaw, options), type: 'application/x-python' },
+    {
+      template: template(pythonRaw.replace(/\n+/g, '\n'), options),
+      type: 'application/x-python',
+    },
   ],
 ]);
 
