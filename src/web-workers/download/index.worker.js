@@ -13,7 +13,7 @@ import {
   downloadSuccess,
 } from 'actions/creators';
 
-/*:: type FileType = 'accession' | 'FASTA'; */
+/*:: type FileType = 'accession' | 'fasta'; */
 
 // Max page size provided by the server
 // to maximise the number of results sent by the server at once
@@ -26,6 +26,15 @@ const THROTTLE_TIME = 500; // half a second
 
 const CHUNK_OF_EIGHTY = /(.{1,80})/g;
 
+const lut = new Map([
+  ['fasta', 'text/x-fasta'],
+  ['accession', 'text/plain'],
+  ['json', 'application/json'],
+  ['ndjson', 'application/x-ndjson'],
+  ['xml', 'application/xml'],
+  ['tsv', 'text/tab-separated-values'],
+]);
+
 // always send the same thing, so abstract that
 const createActionCallerFor = (...args1) => (creator, ...args2) =>
   creator(...args1, ...args2);
@@ -34,7 +43,7 @@ const processResultsFor = fileType =>
   function*(results) {
     for (const result of results) {
       let content = '';
-      if (fileType === 'FASTA') {
+      if (fileType === 'fasta') {
         content += `>${result.metadata.accession}|${
           result.metadata.source_database
         }|${result.metadata.name}|taxID:${
@@ -44,7 +53,7 @@ const processResultsFor = fileType =>
         content += result.metadata.accession;
       }
       content += '\n';
-      if (fileType === 'FASTA') {
+      if (fileType === 'fasta') {
         content += result.extra_fields.sequence.replace(
           CHUNK_OF_EIGHTY,
           '$1\n',
@@ -56,7 +65,7 @@ const processResultsFor = fileType =>
 
 const getFirstPage = (url, fileType) => {
   const location = parse(url, true);
-  if (fileType === 'FASTA') {
+  if (fileType === 'fasta') {
     location.query.extra_fields = [
       ...(location.query.extra_fields, '').split(','),
       'sequence',
@@ -128,9 +137,7 @@ const generateFileHandle = (
   content /*: Array<string> */,
   fileType /*: FileType */,
 ) => {
-  const blob = new Blob(content, {
-    type: `text/${fileType === 'FASTA' ? 'x-fasta' : 'plain'}`,
-  });
+  const blob = new Blob(content, { type: lut.get(fileType) });
   return { blobURL: URL.createObjectURL(blob), size: blob.size };
 };
 
@@ -182,6 +189,7 @@ const download = async (url, fileType) => {
 const main = ({ data }) => {
   switch (data.type) {
     case DOWNLOAD_URL:
+      console.log(data);
       download(data.url, data.fileType);
       break;
     default:
