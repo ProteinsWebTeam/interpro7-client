@@ -19,6 +19,7 @@ const f = foundationPartial(styles);
 
 export class UnconnectedControls extends PureComponent {
   static propTypes = {
+    url: T.string.isRequired,
     fileType: T.string.isRequired,
     progress: T.number,
     successful: T.bool,

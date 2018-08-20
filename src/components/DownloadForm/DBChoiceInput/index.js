@@ -66,13 +66,13 @@ export class DBChoiceInputWithoutData extends PureComponent {
     let _name = name;
     let _value = value;
     if (type === 'entry' && _value !== 'interpro') {
-      if (!isIntegration) {
+      if (isIntegration) {
+        _name = name.replace('.db', '.integration');
+        _value = valueIntegration;
+      } else {
         integration = (
           <DBChoiceInputWithoutData {...this.props} isIntegration />
         );
-      } else {
-        _name = name.replace('.db', '.integration');
-        _value = valueIntegration;
       }
     }
     return (

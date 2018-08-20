@@ -7,18 +7,16 @@ const sleep = require('timing-functions').sleep;
 const DESCRIPTION_SEPARATOR = '|';
 const CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS = /(.{1,80})/g;
 <% } %>
-const processItem = item => {
-  // write description line
-  yield '>';
-  yield item.metadata.accession;
-  yield DESCRIPTION_SEPARATOR;
-  yield item.metadata.source_database;
-  yield DESCRIPTION_SEPARATOR;
-  yield item.metadata.name;
-  yield DESCRIPTION_SEPARATOR;
-  yield `taxID:${item.metadata.source_organism.taxId}`;
-  yield '\n';
-  // write sequence
+const processItem = ({
+  metadata: { accession, source_database, name, source_organism},
+  extra_fields: { sequence },
+}) => {
+  // generate description line
+  yield `>${
+    [accession, source_database, name, `taxID:${source_organism.taxId}`]
+      .join(DESCRIPTION_SEPARATOR)
+  }}\n`;
+  // generate sequence
   yield item.extra_fields.sequence.replace(
     CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS,
     '$1\n',

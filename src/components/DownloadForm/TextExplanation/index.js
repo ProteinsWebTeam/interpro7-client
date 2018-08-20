@@ -17,6 +17,14 @@ class Highlight extends PureComponent {
     this._ref = React.createRef();
   }
 
+  componentDidMount() {
+    this._animate();
+  }
+
+  componentDidUpdate({ children }) {
+    if (children !== this.props.children) this._animate();
+  }
+
   _animate = () => {
     if (!this._ref.current || !this._ref.current.animate) return;
     this._ref.current.animate(
@@ -28,14 +36,6 @@ class Highlight extends PureComponent {
       },
     );
   };
-
-  componentDidMount() {
-    this._animate();
-  }
-
-  componentDidUpdate({ children }) {
-    if (children !== this.props.children) this._animate();
-  }
 
   render() {
     return (
