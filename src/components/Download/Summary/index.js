@@ -26,7 +26,7 @@ const GoToNewDownload = () => (
         main: { key: 'job' },
         job: { type: 'download' },
       },
-      hash: '/entry/|accession',
+      hash: '/entry/InterPro/|accession',
     }}
     className={f('button')}
   >

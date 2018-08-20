@@ -156,6 +156,8 @@ export default class TextExplanation extends PureComponent {
       filterText = <React.Fragment> which match with {filters}</React.Fragment>;
     }
 
+    const main = description.main.key;
+
     return (
       <section>
         <h6>Explanation</h6>
@@ -170,11 +172,17 @@ export default class TextExplanation extends PureComponent {
             onChange={noop}
             onBlur={noop}
           >
-            <option value="accession">Accession</option>
-            <option value="fasta" disabled={description.main.key !== 'protein'}>
+            <option
+              value="accession"
+              disabled={!description[main].db || description[main].accession}
+            >
+              Accession
+            </option>
+            <option value="fasta" disabled={main !== 'protein'}>
               FASTA
             </option>
             <option value="json">JSON</option>
+            <option value="ndjson">Newline-delimited JSON</option>
             {/* <option value="tsv">TSV</option> */}
             {/* <option value="xml">XML</option> */}
           </select>{' '}

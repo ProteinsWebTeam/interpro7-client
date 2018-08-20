@@ -24,10 +24,17 @@ const processItem = function* ({
 const processItem = function* ({ metadata: { accession } }) {
   yield `${accession}\n`;
 };
+<% } else if (fileType === 'json' || fileType === 'ndjson') { %>
+const processItem = function* (item) {
+  yield JSON.stringify(item);<% if (fileType === 'ndjson') { %>
+  yield '\n';<% } %>
+};
 <% } %>
 
 const main = async function* (startURL) {
-  let next = startURL;
+  let next = startURL;<% if (fileType === 'json') { %>
+    <% if (fileType === 'json') { %>let first = true;<% } %>
+  yield `{\n"results": [\n`;<% } %>
   while (next) {
     const response = await fetch(
       next,
@@ -41,12 +48,21 @@ const main = async function* (startURL) {
       continue;
     }
     const payload = await response.json();
-    for (const item of payload.results) {
+    for (const item of payload.results) {<% if (fileType === 'json') { %>
+      if (first) {
+        yield '\n';
+        first = false;
+      } else {
+        yield ',\n';
+      }<% } %>
       yield* processItem(item);
     }
-    next = payload.next;
+    next = payload.next;<% if (fileType === 'json') { %>
+    if (!next) {
+      yield '\n]\n}\n';
+    }<% } %>
     // Don't overload the server, give it a bit of time before asking for more
-    await sleep(1000);
+    if (next) await sleep(1000);
   }
 };
 
@@ -56,6 +72,11 @@ if (require.main === module) {
   // If used from the command line, will write data to stdout asap
   const mainWriteToStdout = async () => {
     const process = require('process');
+    // If pipe is interrupted, it might be normal, just exit
+    process.stdout.on(
+      'error',
+      ({ code }) => process.exit(code === 'EPIPE' ? 0 : 1)
+    );
     for await (const output of main(BASE_URL)) {
       process.stdout.write(output);
     }

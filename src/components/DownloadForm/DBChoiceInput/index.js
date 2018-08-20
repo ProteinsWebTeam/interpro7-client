@@ -81,7 +81,7 @@ export class DBChoiceInputWithoutData extends PureComponent {
           <span className={f('input-group-label')}>
             {type} {isIntegration ? 'integration' : 'DB'}:
           </span>
-          {!loading &&
+          {(!loading &&
             payload && (
               <select
                 className={f('input-group-field')}
@@ -93,7 +93,7 @@ export class DBChoiceInputWithoutData extends PureComponent {
                 <option value="">{'< no selection >'}</option>
                 {payloadToOptions(payload[toPlural(type)], isIntegration)}
               </select>
-            )}
+            )) || <input />}
           <div className={f('input-group-button')}>
             <button
               type="button"
