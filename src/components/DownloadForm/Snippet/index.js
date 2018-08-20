@@ -109,8 +109,18 @@ export class Snippet extends PureComponent {
       <section>
         <h6>Code snippet</h6>
         <p>
-          Below you can find some code to generate the file directly from your
-          computer. Feel free to make changes to adapt it to your needs.
+          Since the type of result given by the API for your selection is a
+          list, and, depending on the data you are querying and the filters
+          applied, it can get quite big, we recommend you download this data
+          programatically instead of downloading through the browser. If you
+          notice that your browser crashes when downloading one of those
+          generated files, it is <strong>definitely</strong> because it is
+          running out of memory. Then, the <strong>only</strong> way to download
+          your file is to do it programatically.
+        </p>
+        <p>
+          To help you do it, we have generated below a snippet of code for you
+          to copy, download, run on your machine, and adapt as you wish.
         </p>
         <div>
           <label>

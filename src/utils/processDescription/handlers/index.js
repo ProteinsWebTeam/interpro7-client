@@ -299,10 +299,16 @@ export const memberDBAccessionHandler /*: Handler */ = handlerConstructor({
     value: value => value.toUpperCase(),
   },
   match: {
-    value(current) {
+    value(
+      current,
+      {
+        entry: { db, memberDB: mdb },
+      },
+    ) {
+      const _mdb = db === 'InterPro' ? mdb : db;
       const _current = this.cleanUp(current);
-      for (const { re } of memberDB) {
-        if (re.test(_current)) return true;
+      for (const { name, re } of memberDB) {
+        if (name === _mdb && re.test(_current)) return true;
       }
     },
   },
