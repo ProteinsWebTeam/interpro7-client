@@ -3,10 +3,11 @@
 // external modules required: node-fetch, timing-functions
 const fetch = require('node-fetch');
 const sleep = require('timing-functions').sleep;
+
 <% if (fileType === 'fasta') { %>
 const DESCRIPTION_SEPARATOR = '|';
 const CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS = /(.{1,80})/g;
-<% } %>
+
 const processItem = function* ({
   metadata: { accession, source_database, name, source_organism},
   extra_fields: { sequence },
@@ -19,6 +20,11 @@ const processItem = function* ({
   // generate sequence
   yield sequence.replace(CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS, '$1\n');
 };
+<% } else if (fileType === 'accession') { %>
+const processItem = function* ({ metadata: { accession } }) {
+  yield `${accession}\n`;
+};
+<% } %>
 
 const main = async function* (startURL) {
   let next = startURL;
