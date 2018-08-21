@@ -6,7 +6,7 @@ import Link from 'components/generic/Link';
 import ProgressButton from 'components/ProgressButton';
 import { NumberComponent } from 'components/NumberLabel';
 
-import { downloadURL } from 'actions/creators';
+import { downloadURL, downloadDelete } from 'actions/creators';
 
 import blockEvent from 'utils/block-event';
 import { toPlural } from 'utils/pages';
@@ -35,10 +35,19 @@ export class Controls extends PureComponent {
       blobURL: T.string,
     }).isRequired,
     downloadURL: T.func.isRequired,
+    downloadDelete: T.func.isRequired,
   };
 
   _handleGenerateClick = blockEvent(() =>
     this.props.downloadURL(
+      this.props.url,
+      this.props.fileType,
+      this.props.subset,
+    ),
+  );
+
+  _handleCancelClick = blockEvent(() =>
+    this.props.downloadDelete(
       this.props.url,
       this.props.fileType,
       this.props.subset,
@@ -94,6 +103,15 @@ export class Controls extends PureComponent {
           >
             Download
           </Link>
+          {downloading && (
+            <button
+              type="button"
+              className={f('button', 'hollow')}
+              onClick={this._handleCancelClick}
+            >
+              Cancel
+            </button>
+          )}
         </div>
       </React.Fragment>
     );
@@ -102,5 +120,5 @@ export class Controls extends PureComponent {
 
 export default connect(
   undefined,
-  { downloadURL },
+  { downloadURL, downloadDelete },
 )(Controls);

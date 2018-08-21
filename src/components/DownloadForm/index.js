@@ -295,7 +295,7 @@ class DownloadForm extends PureComponent {
                   download={download}
                 />
               </fieldset>
-              {lowGraphics && <ProgressAnimation download={download} />}
+              {lowGraphics || <ProgressAnimation download={download} />}
             </React.Fragment>
           )}
         </DataPreviewAndProgressProvider>
