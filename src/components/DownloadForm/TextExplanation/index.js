@@ -145,10 +145,11 @@ export default class TextExplanation extends PureComponent {
   static propTypes = {
     fileType: T.string.isRequired,
     description: T.object.isRequired,
+    subset: T.bool.isRequired,
   };
 
   render() {
-    const { fileType, description } = this.props;
+    const { fileType, description, subset } = this.props;
 
     const filters = getFilters(description);
     let filterText = '';
@@ -189,6 +190,21 @@ export default class TextExplanation extends PureComponent {
           file will contain {getMainFragment(description)}
           {filterText}.
         </p>
+        {fileType === 'fasta' &&
+          description.entry.isFilter &&
+          description.entry.accession && (
+            <label>
+              <input
+                name="subset"
+                type="checkbox"
+                checked={subset}
+                onChange={noop}
+                onBlur={noop}
+              />
+              I&apos;m only interested in the part(s) of the sequence matching
+              (1 subsequence per match)
+            </label>
+          )}
       </section>
     );
   }

@@ -11,10 +11,28 @@ describe('reducer for download handling in state', () => {
     expect(
       reducer(
         {},
-        { type: DOWNLOAD_URL, url: 'www.example.com', fileType: 'FASTA' },
+        { type: DOWNLOAD_URL, url: 'www.example.com', fileType: 'fasta' },
       ),
     ).toEqual({
-      'www.example.com|FASTA': {
+      'www.example.com|fasta': {
+        progress: 0,
+        successful: null,
+        blobURL: null,
+        size: null,
+      },
+    });
+    expect(
+      reducer(
+        {},
+        {
+          type: DOWNLOAD_URL,
+          url: 'www.example.com',
+          fileType: 'fasta',
+          subset: true,
+        },
+      ),
+    ).toEqual({
+      'www.example.com|fasta|subset': {
         progress: 0,
         successful: null,
         blobURL: null,

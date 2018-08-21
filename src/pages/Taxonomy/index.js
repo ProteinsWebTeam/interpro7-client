@@ -57,7 +57,7 @@ const EntryAccessionsRenderer = entryDB => taxId => (
 
 const ProteinFastasRenderer = entryDB => taxId => (
   <File
-    fileType="FASTA"
+    fileType="fasta"
     name={`protein-sequences${
       entryDB ? `-matching-${entryDB}` : ''
     }-for-${taxId}.fasta`}

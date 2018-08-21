@@ -38,8 +38,11 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
       case DOWNLOAD_DELETE:
         // Clean up file reference
         URL.revokeObjectURL(
-          downloadSelector(getState())[`${action.url}|${action.fileType}`]
-            .blobURL || '',
+          downloadSelector(getState())[
+            [action.url, action.fileType, action.subset]
+              .filter(Boolean)
+              .join('|')
+          ].blobURL || '',
         );
         break;
       default:

@@ -18,15 +18,19 @@ export class DataPreviewProviderWithoutData extends PureComponent {
   }
 }
 
-const mapStateToPropsFor = (url, fileType) =>
+const mapStateToPropsFor = (url, fileType, subset) =>
   createSelector(downloadSelector, downloads => ({
-    download: downloads[`${url}|${fileType}`] || {},
+    download:
+      downloads[
+        [url, fileType, subset && 'subset'].filter(Boolean).join('|')
+      ] || {},
   }));
 
 export default class DataPreviewProvider extends PureComponent {
   static propTypes = {
     url: T.string.isRequired,
     fileType: T.string.isRequired,
+    subset: T.bool.isRequired,
   };
 
   constructor(props) {
@@ -36,19 +40,26 @@ export default class DataPreviewProvider extends PureComponent {
       DataPreviewProviderWithData: null,
       url: null,
       fileType: null,
+      subset: null,
     };
   }
 
-  static getDerivedStateFromProps({ url, fileType }, prevState) {
-    if (url === prevState.url && fileType === prevState.fileType) return null;
+  static getDerivedStateFromProps({ url, fileType, subset }, prevState) {
+    if (
+      url === prevState.url &&
+      fileType === prevState.fileType &&
+      subset === prevState.subset
+    )
+      return null;
 
     return {
       DataPreviewProviderWithData: loadData({
         getUrl: () => url,
-        mapStateToProps: mapStateToPropsFor(url, fileType),
+        mapStateToProps: mapStateToPropsFor(url, fileType, subset),
       })(DataPreviewProviderWithoutData),
       url,
       fileType,
+      subset,
     };
   }
 

@@ -16,7 +16,10 @@ import {
 /*:: export type Download = { [string]: DatumProgress }; */
 /*:: import type { State } from 'reducers'; */
 
-const keyFromAction = action => `${action.url}|${action.fileType}`;
+const keyFromAction = action =>
+  [action.url, action.fileType, action.subset && 'subset']
+    .filter(Boolean)
+    .join('|');
 
 export default (state /*: Download */ = {}, action /*: Object */) => {
   switch (action.type) {

@@ -9,16 +9,32 @@ const DESCRIPTION_SEPARATOR = '|';
 const CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS = /(.{1,80})/g;
 
 const processItem = function* ({
-  metadata: { accession, source_database, name, source_organism},
+  metadata: { accession, source_database, name, source_organism},<% if (subset) { %>
+  entries: [{ entry_protein_locations: matches }],<% } %>
   extra_fields: { sequence },
-}) {
+}) {<% if (subset) { %>
+  for (const [index, match] of matches.entries) {
+    // generate description line
+    yield `>${[
+      accession,
+      `match:${index + 1}/${matches.length}`
+      `subsequence:${match.fragments.map(({ start, end }) => `${start}-${end}`).join(';')}`
+      source_database,
+      name,
+      `taxID:${source_organism.taxId}`
+    ].join(DESCRIPTION_SEPARATOR)}}\n`;
+    // generate sequence
+    yield match.fragments.map(
+      ({ start, end }) => sequence.substring(start - 1, end)
+    ).join('-').replace(CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS, '$1\n');
+  }<% } else { %>
   // generate description line
   yield `>${
     [accession, source_database, name, `taxID:${source_organism.taxId}`]
       .join(DESCRIPTION_SEPARATOR)
   }}\n`;
   // generate sequence
-  yield sequence.replace(CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS, '$1\n');
+  yield sequence.replace(CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS, '$1\n');<% } %>
 };
 <% } else if (fileType === 'accession') { %>
 const processItem = function* ({ metadata: { accession } }) {
@@ -33,7 +49,7 @@ const processItem = function* (item) {
 
 const main = async function* (startURL) {
   let next = startURL;<% if (fileType === 'json') { %>
-    <% if (fileType === 'json') { %>let first = true;<% } %>
+  <% if (fileType === 'json') { %>let first = true;<% } %>
   yield `{\n"results": [\n`;<% } %>
   while (next) {
     const response = await fetch(
