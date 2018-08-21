@@ -27,8 +27,8 @@ import local from './style.css';
 const f = foundationPartial(local);
 
 const extractDataFromHash = hash => {
-  const [href, fileType] = hash.split('|');
-  const output = { fileType };
+  const [href, fileType, subset] = hash.split('|');
+  const output = { fileType, subset: !!subset };
   try {
     output.description = pathToDescription(href);
   } catch (_) {
@@ -67,9 +67,12 @@ class DownloadForm extends PureComponent {
         }
       }
     }
-    for (const { name, value } of this._ref.current.elements) {
-      if (name) set(object, name, value);
+    for (const { name, value, type, checked } of this._ref.current.elements) {
+      if (name) {
+        set(object, name, type === 'checkbox' ? checked : value);
+      }
     }
+    // Specific cases
     if (
       object.description.entry &&
       object.description.entry.db === 'interpro'
@@ -83,6 +86,18 @@ class DownloadForm extends PureComponent {
       path = descriptionToPath(object.description);
     } catch (_) {
       return;
+    }
+    // More specific cases
+    // Subset only available for fasta format, for proteins filtered by an entry
+    if (
+      object.subset &&
+      !(
+        object.fileType === 'fasta' &&
+        object.description.entry.isFilter &&
+        object.description.entry.accession
+      )
+    ) {
+      object.subset = false;
     }
     if (
       object.fileType === 'fasta' &&
@@ -98,7 +113,9 @@ class DownloadForm extends PureComponent {
       // Since we can only have counter objects in JSON, change type to default
       object.fileType = 'json';
     }
-    const nextHash = [path, object.fileType].join('|');
+    const nextHash = [path, object.fileType, object.subset && 'subset']
+      .filter(Boolean)
+      .join('|');
     if (nextHash !== this.props.customLocation.hash) {
       this.props.goToCustomLocation({
         ...this.props.customLocation,
@@ -110,7 +127,7 @@ class DownloadForm extends PureComponent {
   render() {
     const { matched, api, lowGraphics } = this.props;
 
-    const { description, fileType } = extractDataFromHash(matched);
+    const { description, fileType, subset } = extractDataFromHash(matched);
 
     const endpoint = format({
       protocol: api.protocol,
@@ -248,14 +265,18 @@ class DownloadForm extends PureComponent {
 
         <h5>More info</h5>
         <ApiLink url={endpoint} />
-        <DataPreviewAndProgressProvider url={endpoint} fileType={fileType}>
+        <DataPreviewAndProgressProvider
+          url={endpoint}
+          fileType={fileType}
+          subset={subset}
+        >
           {({ data, download }) => (
             <React.Fragment>
               <Estimate data={data} />
               {/* Only display if the response from the API is a list of items */}
               {description[main].db &&
                 !description[main].accession && (
-                  <Snippet fileType={fileType} url={endpoint} />
+                  <Snippet fileType={fileType} url={endpoint} subset={subset} />
                 )}
 
               <fieldset className={f('controls')}>
@@ -263,15 +284,18 @@ class DownloadForm extends PureComponent {
                 <TextExplanation
                   fileType={fileType}
                   description={description}
+                  subset={subset}
                 />
                 <Controls
                   fileType={fileType}
+                  subset={subset}
+                  entityType={main}
                   url={endpoint}
                   data={data}
                   download={download}
                 />
               </fieldset>
-              {lowGraphics ? <ProgressAnimation download={download} /> : null}
+              {lowGraphics && <ProgressAnimation download={download} />}
             </React.Fragment>
           )}
         </DataPreviewAndProgressProvider>

@@ -163,32 +163,38 @@ export const unloadDataJob = (
 // download
 export const downloadURL = (
   url /*: string */,
-  fileType /*: 'accession' | 'FASTA' */,
+  fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
+  subset /*: boolean */,
 ) => ({
   type: types.DOWNLOAD_URL,
   url,
   fileType,
+  subset,
 });
 
 export const downloadError = (
   url /*: string */,
   fileType /*: 'accession' | 'FASTA' */,
+  subset /*: boolean */,
   errorMessage /*: string */,
 ) => ({
   type: types.DOWNLOAD_ERROR,
   url,
   fileType,
+  subset,
   errorMessage,
 });
 
 export const downloadSuccess = (
   url /*: string */,
   fileType /*: 'accession' | 'FASTA' */,
+  subset /*: boolean */,
   { blobURL, size } /*: { string, size } */,
 ) => ({
   type: types.DOWNLOAD_SUCCESS,
   url,
   fileType,
+  subset,
   blobURL,
   size,
 });
@@ -196,21 +202,25 @@ export const downloadSuccess = (
 export const downloadProgress = (
   url /*: string */,
   fileType /*: 'accession' | 'FASTA' */,
+  subset /*: boolean */,
   progress /*: number */,
 ) => ({
   type: types.DOWNLOAD_PROGRESS,
   url,
   fileType,
+  subset,
   progress,
 });
 
 export const downloadDelete = (
   url /*: string */,
   fileType /*: 'accession' | 'FASTA' */,
+  subset /*: boolean */,
 ) => ({
   type: types.DOWNLOAD_DELETE,
   url,
   fileType,
+  subset,
 });
 
 // status

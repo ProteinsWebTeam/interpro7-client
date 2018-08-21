@@ -29,14 +29,14 @@ const lut = new Map([
   [
     'js',
     {
-      template: template(jsRaw.replace(/\n+/g, '\n'), options),
+      template: template(jsRaw, options),
       type: 'application/javascript',
     },
   ],
   [
     'py',
     {
-      template: template(pythonRaw.replace(/\n+/g, '\n'), options),
+      template: template(pythonRaw, options),
       type: 'application/x-python',
     },
   ],
@@ -59,10 +59,13 @@ export class Snippet extends PureComponent {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const langInfo = lut.get(prevState.language);
-    const code = langInfo.template(nextProps);
+    const code = langInfo.template(nextProps).replace(/\n{2,}/g, '\n\n');
+
     if (code === prevState.code) return null;
+
     URL.revokeObjectURL(prevState.href);
     const href = URL.createObjectURL(new Blob([code], { type: langInfo.type }));
+
     return { code, href };
   }
 
@@ -132,6 +135,9 @@ export class Snippet extends PureComponent {
             >
               <option value="js">JavaScript (node, version ≥ 10)</option>
               <option value="py">Python (version ≥ 3)</option>
+              <option value="pl" disabled>
+                Perl (not available yet)
+              </option>
             </select>
           </label>
           <button

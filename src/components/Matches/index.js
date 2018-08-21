@@ -139,7 +139,7 @@ MatchesByPrimary.propTypes = propTypes;
 
 const ProteinFastasRenderer = description => accession => (
   <File
-    fileType="FASTA"
+    fileType="fasta"
     name={`protein-sequences-matching-${
       description[description.main.key].accession
     }-for-${accession}.fasta`}

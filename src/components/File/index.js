@@ -80,10 +80,13 @@ class Button extends PureComponent {
   }
 }
 
-const mapStateToPropsFor = (url, fileType) =>
+const mapStateToPropsFor = (url, fileType, subset) =>
   createSelector(
     downloadSelector,
-    downloads => downloads[`${url}|${fileType}`] || {},
+    downloads =>
+      downloads[
+        [url, fileType, subset && 'subset'].filter(Boolean).join('|')
+      ] || {},
   );
 
 class File extends PureComponent {
@@ -91,7 +94,8 @@ class File extends PureComponent {
     api: T.object.isRequired,
     entryDescription: T.object.isRequired,
     downloadURL: T.func.isRequired,
-    fileType: T.oneOf(['accession', 'FASTA']),
+    fileType: T.oneOf(['accession', 'fasta']),
+    subset: T.bool,
     name: T.string,
   };
 
@@ -101,6 +105,7 @@ class File extends PureComponent {
     this.state = {
       url: null,
       fileType: null,
+      subset: null,
       ConnectedButton: null,
     };
   }
@@ -112,21 +117,30 @@ class File extends PureComponent {
         nextProps.api.root +
         descriptionToPath(nextProps.customLocationDescription),
     });
-    if (prevState.url === url && prevState.fileType === nextProps.fileType) {
+    if (
+      prevState.url === url &&
+      prevState.fileType === nextProps.fileType &&
+      prevState.subset === nextProps.subset
+    ) {
       return null;
     }
 
     return {
       url,
       fileType: nextProps.fileType,
-      ConnectedButton: connect(mapStateToPropsFor(url, nextProps.fileType))(
-        Button,
-      ),
+      subset: nextProps.subset,
+      ConnectedButton: connect(
+        mapStateToPropsFor(url, nextProps.fileType, nextProps.subset),
+      )(Button),
     };
   }
 
   _handleClick = blockEvent(() =>
-    this.props.downloadURL(this.state.url, this.props.fileType),
+    this.props.downloadURL(
+      this.state.url,
+      this.props.fileType,
+      this.props.subset,
+    ),
   );
 
   render() {

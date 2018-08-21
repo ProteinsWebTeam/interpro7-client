@@ -39,27 +39,52 @@ const lut = new Map([
 const createActionCallerFor = (...args1) => (creator, ...args2) =>
   creator(...args1, ...args2);
 
-const processResultsFor = fileType =>
+const DESCRIPTION_SEPARATOR = '|';
+
+const processResultsFor = (fileType, subset) =>
   function*(results) {
     for (const result of results) {
-      let content = '';
       if (fileType === 'fasta') {
-        content += `>${result.metadata.accession}|${
-          result.metadata.source_database
-        }|${result.metadata.name}|taxID:${
-          result.metadata.source_organism.taxId
-        }`;
+        if (subset) {
+          const matches = result.entries[0].entry_protein_locations;
+          for (const [
+            index,
+            match,
+          ] of result.entries[0].entry_protein_locations.entries()) {
+            // description
+            yield `>${[
+              result.metadata.accession,
+              `match:${index + 1}/${matches.length}`,
+              `subsequence:${match.fragments
+                .map(({ start, end }) => `${start}-${end}`)
+                .join(';')}`,
+              result.metadata.source_database,
+              result.metadata.name,
+              `taxID:${result.metadata.source_organism.taxId}`,
+            ].join(DESCRIPTION_SEPARATOR)}\n`;
+            // sequence
+            yield match.fragments
+              .map(({ start, end }) =>
+                result.extra_fields.sequence.substring(start - 1, end),
+              )
+              .join('-')
+              .replace(CHUNK_OF_EIGHTY, '$1\n');
+          }
+        } else {
+          // description
+          yield `>${[
+            result.metadata.accession,
+            result.metadata.source_database,
+            result.metadata.name,
+            `taxID:${result.metadata.source_organism.taxId}`,
+          ].join(DESCRIPTION_SEPARATOR)}\n`;
+          // sequence
+          yield result.extra_fields.sequence.replace(CHUNK_OF_EIGHTY, '$1\n');
+        }
       } else {
-        content += result.metadata.accession;
+        // accession
+        yield result.metadata.accession;
       }
-      content += '\n';
-      if (fileType === 'fasta') {
-        content += result.extra_fields.sequence.replace(
-          CHUNK_OF_EIGHTY,
-          '$1\n',
-        );
-      }
-      yield content;
     }
   };
 
@@ -82,6 +107,7 @@ const getFirstPage = (url, fileType) => {
 const downloadContent = (onProgress, onSuccess, onError) => async (
   url,
   fileType,
+  subset,
   _,
 ) => {
   try {
@@ -90,7 +116,7 @@ const downloadContent = (onProgress, onSuccess, onError) => async (
     let totalCount;
     let i = 0;
     // Create a function to transform API response into processed file part
-    const processResults = processResultsFor(fileType);
+    const processResults = processResultsFor(fileType, subset);
     // As long as we have a next page, we keep processing
     // Let's start with the first one
     let next = format(firstPage);
@@ -147,8 +173,8 @@ const postProgress = throttle(
 );
 
 // Download manager, send messages from there
-const download = async (url, fileType) => {
-  const action = createActionCallerFor(url, fileType);
+const download = async (url, fileType, subset) => {
+  const action = createActionCallerFor(url, fileType, subset);
   const onError = error => {
     console.error(error);
     postProgress(action(downloadProgress, 1));
@@ -161,7 +187,6 @@ const download = async (url, fileType) => {
     postProgress(action(downloadProgress, 0));
     action(
       downloadContent(
-        // onProgress
         ({ part, progress }) => {
           // store content
           content.push(part);
@@ -189,8 +214,7 @@ const download = async (url, fileType) => {
 const main = ({ data }) => {
   switch (data.type) {
     case DOWNLOAD_URL:
-      console.log(data);
-      download(data.url, data.fileType);
+      download(data.url, data.fileType, data.subset);
       break;
     default:
       console.warn('not a recognised message', data);

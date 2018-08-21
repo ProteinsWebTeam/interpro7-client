@@ -9,6 +9,7 @@ import { NumberComponent } from 'components/NumberLabel';
 import { downloadURL } from 'actions/creators';
 
 import blockEvent from 'utils/block-event';
+import { toPlural } from 'utils/pages';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -26,6 +27,8 @@ export class Controls extends PureComponent {
     }).isRequired,
     url: T.string.isRequired,
     fileType: T.string.isRequired,
+    subset: T.bool.isRequired,
+    entityType: T.string.isRequired,
     download: T.shape({
       progress: T.number,
       successful: T.bool,
@@ -35,13 +38,18 @@ export class Controls extends PureComponent {
   };
 
   _handleGenerateClick = blockEvent(() =>
-    this.props.downloadURL(this.props.url, this.props.fileType),
+    this.props.downloadURL(
+      this.props.url,
+      this.props.fileType,
+      this.props.subset,
+    ),
   );
 
   render() {
     const {
       data,
       fileType,
+      entityType,
       download: { progress, successful, blobURL },
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
@@ -53,7 +61,8 @@ export class Controls extends PureComponent {
             className={f('callout', count > HARD_LIMIT ? 'alert' : 'warning')}
           >
             We expect this file to contain{' '}
-            <NumberComponent value={count} abbr /> items.{' '}
+            <NumberComponent value={count} abbr /> distinct{' '}
+            {toPlural(entityType)}.{' '}
             {count > HARD_LIMIT
               ? 'This file will be too large to generate within your browser'
               : 'If you encounter any problems generating this file'}
