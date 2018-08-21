@@ -1,13 +1,11 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 import ProgressButton from 'components/ProgressButton';
 import { NumberComponent } from 'components/NumberLabel';
 
-import { downloadSelector } from 'reducers/download';
 import { downloadURL } from 'actions/creators';
 
 import blockEvent from 'utils/block-event';
@@ -21,16 +19,18 @@ const f = foundationPartial(styles);
 const HARD_LIMIT = 50000;
 const SOFT_LIMIT = 10000;
 
-export class UnconnectedControls extends PureComponent {
+export class Controls extends PureComponent {
   static propTypes = {
     data: T.shape({
       payload: T.object,
     }).isRequired,
     url: T.string.isRequired,
     fileType: T.string.isRequired,
-    progress: T.number,
-    successful: T.bool,
-    blobURL: T.string,
+    download: T.shape({
+      progress: T.number,
+      successful: T.bool,
+      blobURL: T.string,
+    }).isRequired,
     downloadURL: T.func.isRequired,
   };
 
@@ -39,7 +39,11 @@ export class UnconnectedControls extends PureComponent {
   );
 
   render() {
-    const { data, fileType, progress, successful, blobURL } = this.props;
+    const {
+      data,
+      fileType,
+      download: { progress, successful, blobURL },
+    } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
     const count = (data.payload && data.payload.count) || 0;
     return (
@@ -87,43 +91,7 @@ export class UnconnectedControls extends PureComponent {
   }
 }
 
-const mapStateToPropsFor = (url, fileType) =>
-  createSelector(
-    downloadSelector,
-    downloads => downloads[`${url}|${fileType}`] || {},
-  );
-
-export default class Controls extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      url: null,
-      fileType: null,
-      ConnectedControls: null,
-    };
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (
-      nextProps.url === prevState.url &&
-      nextProps.fileType === prevState.fileType
-    ) {
-      return null;
-    }
-
-    return {
-      url: nextProps.url,
-      fileType: nextProps.fileType,
-      ConnectedControls: connect(
-        mapStateToPropsFor(nextProps.url, nextProps.fileType),
-        { downloadURL },
-      )(UnconnectedControls),
-    };
-  }
-
-  render() {
-    const { ConnectedControls } = this.state;
-    return <ConnectedControls {...this.props} />;
-  }
-}
+export default connect(
+  undefined,
+  { downloadURL },
+)(Controls);

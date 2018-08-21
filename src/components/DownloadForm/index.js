@@ -8,10 +8,11 @@ import set from 'lodash-es/set';
 import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';
 import TextExplanation from './TextExplanation';
-import DataPreviewProvider from './DataPreviewProvider';
+import DataPreviewAndProgressProvider from './DataPreviewAndProgressProvider';
 import Estimate from './Estimate';
 import Snippet from './Snippet';
 import Controls from './Controls';
+import ProgressAnimation from './ProgressAnimation';
 
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -40,6 +41,7 @@ class DownloadForm extends PureComponent {
   static propTypes = {
     matched: T.string.isRequired,
     api: T.object.isRequired,
+    lowGraphics: T.bool.isRequired,
     customLocation: T.object.isRequired,
     goToCustomLocation: T.func.isRequired,
   };
@@ -106,7 +108,7 @@ class DownloadForm extends PureComponent {
   };
 
   render() {
-    const { matched, api } = this.props;
+    const { matched, api, lowGraphics } = this.props;
 
     const { description, fileType } = extractDataFromHash(matched);
 
@@ -246,8 +248,8 @@ class DownloadForm extends PureComponent {
 
         <h5>More info</h5>
         <ApiLink url={endpoint} />
-        <DataPreviewProvider url={endpoint}>
-          {({ data }) => (
+        <DataPreviewAndProgressProvider url={endpoint} fileType={fileType}>
+          {({ data, download }) => (
             <React.Fragment>
               <Estimate data={data} />
               {/* Only display if the response from the API is a list of items */}
@@ -262,11 +264,17 @@ class DownloadForm extends PureComponent {
                   fileType={fileType}
                   description={description}
                 />
-                <Controls fileType={fileType} url={endpoint} data={data} />
+                <Controls
+                  fileType={fileType}
+                  url={endpoint}
+                  data={data}
+                  download={download}
+                />
               </fieldset>
+              {lowGraphics ? <ProgressAnimation download={download} /> : null}
             </React.Fragment>
           )}
-        </DataPreviewProvider>
+        </DataPreviewAndProgressProvider>
       </form>
     );
   }
@@ -275,7 +283,8 @@ class DownloadForm extends PureComponent {
 const mapStateToProps = createSelector(
   customLocationSelector,
   state => state.settings.api,
-  (customLocation, api) => ({ customLocation, api }),
+  state => state.settings.ui.lowGraphics,
+  (customLocation, api, lowGraphics) => ({ customLocation, api, lowGraphics }),
 );
 
 export default connect(

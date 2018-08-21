@@ -1,7 +1,10 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData';
+
+import { downloadSelector } from 'reducers/download';
 
 export class DataPreviewProviderWithoutData extends PureComponent {
   static propTypes = {
@@ -15,9 +18,15 @@ export class DataPreviewProviderWithoutData extends PureComponent {
   }
 }
 
+const mapStateToPropsFor = (url, fileType) =>
+  createSelector(downloadSelector, downloads => ({
+    download: downloads[`${url}|${fileType}`] || {},
+  }));
+
 export default class DataPreviewProvider extends PureComponent {
   static propTypes = {
     url: T.string.isRequired,
+    fileType: T.string.isRequired,
   };
 
   constructor(props) {
@@ -26,17 +35,20 @@ export default class DataPreviewProvider extends PureComponent {
     this.state = {
       DataPreviewProviderWithData: null,
       url: null,
+      fileType: null,
     };
   }
 
-  static getDerivedStateFromProps({ url }, prevState) {
-    if (url === prevState.url) return null;
+  static getDerivedStateFromProps({ url, fileType }, prevState) {
+    if (url === prevState.url && fileType === prevState.fileType) return null;
 
     return {
-      DataPreviewProviderWithData: loadData(() => url)(
-        DataPreviewProviderWithoutData,
-      ),
+      DataPreviewProviderWithData: loadData({
+        getUrl: () => url,
+        mapStateToProps: mapStateToPropsFor(url, fileType),
+      })(DataPreviewProviderWithoutData),
       url,
+      fileType,
     };
   }
 
