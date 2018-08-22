@@ -139,8 +139,6 @@ const getFilters = description =>
       </React.Fragment>
     ));
 
-const MAGIC_MARGIN = 5;
-
 export default class TextExplanation extends PureComponent {
   static propTypes = {
     fileType: T.string.isRequired,
@@ -167,7 +165,6 @@ export default class TextExplanation extends PureComponent {
           <select
             name="fileType"
             value={fileType || 'accession'}
-            style={{ width: `${fileType.length + MAGIC_MARGIN}ch` }}
             className={styles.select}
             aria-label="Download type"
             onChange={noop}

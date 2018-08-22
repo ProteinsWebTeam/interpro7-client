@@ -1,6 +1,11 @@
 /* eslint-disable no-magic-numbers */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import classnames from 'classnames/bind';
+
+import styles from './style.css';
+
+const s = classnames.bind(styles);
 
 export default class ProgressAnimation extends PureComponent {
   static propTypes = {
@@ -18,12 +23,12 @@ export default class ProgressAnimation extends PureComponent {
     let visualProgress = 0;
     if (downloading) {
       if (progress) {
-        visualProgress = progress * 0.85 + 0.075;
+        visualProgress = progress * 0.9 + 0.05;
       } else {
-        visualProgress = 0.075;
+        visualProgress = 0.05;
       }
     } else if (progress === 1) {
-      visualProgress = 1;
+      visualProgress = 1.1;
     }
 
     return (
@@ -46,115 +51,23 @@ export default class ProgressAnimation extends PureComponent {
             </filter>
           </defs>
         </svg>
-        <div
-          style={{
-            background: 'lightblue',
-            height: '5em',
-            width: '100%',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              filter: 'url(#gooey-filter)',
-            }}
-          >
+        <div className={s('main-container')}>
+          <div className={s('filter-container', 'absolute')}>
+            <div className={s('left', 'side', 'absolute')} />
             <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                width: '1.75em',
-                background: 'white',
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                top: '0',
-                bottom: '0',
-                left: '-3em',
-                width: 'calc(100% + 3em)',
-                transition: 'transform ease-out 1s',
-                transform: `translateX(${visualProgress * 100}%)`,
-              }}
+              className={s('moving-container', 'absolute')}
+              style={{ transform: `translateX(${visualProgress * 100}%)` }}
             >
-              <span
-                style={{
-                  position: 'absolute',
-                  top: '2em',
-                  height: '1em',
-                  left: '-0.5em',
-                  width: '1em',
-                  borderRadius: '50%',
-                  background: 'white',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '1em',
-                  height: '3em',
-                  left: '0',
-                  width: '3em',
-                  borderRadius: '50%',
-                  background: 'white',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
+              <div className={s('trail', 'absolute')} />
+              <div className={s('trail', 'ball', 'absolute')} />
+              <div className={s('progress', 'ball', 'absolute')}>
                 <span>{Math.floor((progress || 0) * 100)}%</span>
               </div>
-              <span
-                style={{
-                  position: 'absolute',
-                  top: 'calc(2.5em - 2px)',
-                  height: '4px',
-                  left: '-100%',
-                  width: '100%',
-                  background: 'white',
-                }}
-              />
             </div>
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                right: 0,
-                width: '1.75em',
-                background: 'white',
-              }}
-            />
+            <div className={s('right', 'side', 'absolute')} />
           </div>
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              left: 0,
-              width: '2em',
-              background: 'white',
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              right: 0,
-              width: '2em',
-              background: 'white',
-            }}
-          />
+          <div className={s('left', 'side', 'absolute')} />
+          <div className={s('right', 'side', 'absolute')} />
         </div>
       </React.Fragment>
     );
