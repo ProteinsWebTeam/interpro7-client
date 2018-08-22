@@ -3,7 +3,6 @@ import {
   DOWNLOAD_URL,
   DOWNLOAD_PROGRESS,
   DOWNLOAD_SUCCESS,
-  DOWNLOAD_CANCEL,
   DOWNLOAD_DELETE,
   DOWNLOAD_ERROR,
 } from 'actions/types';
@@ -51,7 +50,6 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
           size: action.size,
         },
       };
-    case DOWNLOAD_CANCEL:
     case DOWNLOAD_DELETE:
       const { [keyFromAction(action)]: _, ...newState } = state;
       return newState;

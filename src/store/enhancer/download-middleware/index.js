@@ -4,7 +4,6 @@
 import DownloadWorker from 'web-workers/download';
 import {
   DOWNLOAD_URL,
-  DOWNLOAD_CANCEL,
   DOWNLOAD_PROGRESS,
   DOWNLOAD_ERROR,
   DOWNLOAD_SUCCESS,
@@ -32,10 +31,10 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
   return next => action => {
     switch (action.type) {
       case DOWNLOAD_URL:
-      case DOWNLOAD_CANCEL:
         worker.postMessage(action);
         break;
       case DOWNLOAD_DELETE:
+        worker.postMessage(action);
         // Clean up file reference
         URL.revokeObjectURL(
           downloadSelector(getState())[

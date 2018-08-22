@@ -5,7 +5,7 @@ import { format, parse } from 'url';
 import throttle from 'lodash-es/throttle';
 import { sleep } from 'timing-functions/src';
 
-import { DOWNLOAD_URL } from 'actions/types';
+import { DOWNLOAD_URL, DOWNLOAD_DELETE } from 'actions/types';
 
 import {
   downloadError,
@@ -26,6 +26,8 @@ const THROTTLE_TIME = 500; // half a second
 
 const CHUNK_OF_EIGHTY = /(.{1,80})/g;
 
+const canceled = new Set();
+
 const lut = new Map([
   ['fasta', 'text/x-fasta'],
   ['accession', 'text/plain'],
@@ -44,6 +46,7 @@ const DESCRIPTION_SEPARATOR = '|';
 const processResultsFor = (fileType, subset) =>
   function*(results) {
     for (const result of results) {
+      let content = '';
       if (fileType === 'fasta') {
         if (subset) {
           const matches = result.entries[0].entry_protein_locations;
@@ -52,7 +55,7 @@ const processResultsFor = (fileType, subset) =>
             match,
           ] of result.entries[0].entry_protein_locations.entries()) {
             // description
-            yield `>${[
+            content += `>${[
               result.metadata.accession,
               `match:${index + 1}/${matches.length}`,
               `subsequence:${match.fragments
@@ -63,7 +66,7 @@ const processResultsFor = (fileType, subset) =>
               `taxID:${result.metadata.source_organism.taxId}`,
             ].join(DESCRIPTION_SEPARATOR)}\n`;
             // sequence
-            yield match.fragments
+            content += match.fragments
               .map(({ start, end }) =>
                 result.extra_fields.sequence.substring(start - 1, end),
               )
@@ -72,19 +75,23 @@ const processResultsFor = (fileType, subset) =>
           }
         } else {
           // description
-          yield `>${[
+          content += `>${[
             result.metadata.accession,
             result.metadata.source_database,
             result.metadata.name,
             `taxID:${result.metadata.source_organism.taxId}`,
           ].join(DESCRIPTION_SEPARATOR)}\n`;
           // sequence
-          yield result.extra_fields.sequence.replace(CHUNK_OF_EIGHTY, '$1\n');
+          content += result.extra_fields.sequence.replace(
+            CHUNK_OF_EIGHTY,
+            '$1\n',
+          );
         }
       } else {
         // accession
-        yield result.metadata.accession;
+        content += result.metadata.accession;
       }
+      yield content;
     }
   };
 
@@ -112,6 +119,7 @@ const downloadContent = (onProgress, onSuccess, onError) => async (
 ) => {
   try {
     const firstPage = getFirstPage(url, fileType);
+    const key = [url, fileType, subset].filter(Boolean).join('');
     // Counters for progress information
     let totalCount;
     let i = 0;
@@ -134,6 +142,8 @@ const downloadContent = (onProgress, onSuccess, onError) => async (
         const payload = await response.json();
         totalCount = payload.count;
         for (const part of processResults(payload.results)) {
+          // Check if it was canceled, if so, stop everything and return
+          if (canceled.has(key)) return;
           // use `totalCount + 1` to not finish at exactly 1 to account for the
           // time needed to create the blob
           onProgress({ part, progress: ++i / (totalCount + 1) });
@@ -215,6 +225,11 @@ const main = ({ data }) => {
   switch (data.type) {
     case DOWNLOAD_URL:
       download(data.url, data.fileType, data.subset);
+      break;
+    case DOWNLOAD_DELETE:
+      canceled.add(
+        [data.url, data.fileType, data.subset].filter(Boolean).join(''),
+      );
       break;
     default:
       console.warn('not a recognised message', data);

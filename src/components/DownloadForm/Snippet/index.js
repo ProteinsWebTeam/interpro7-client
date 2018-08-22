@@ -134,7 +134,9 @@ export class Snippet extends PureComponent {
               value={language}
             >
               <option value="js">JavaScript (node, version ≥ 10)</option>
-              <option value="py">Python (version ≥ 3)</option>
+              <option value="py" disabled>
+                Python (version ≥ 3, not available yet)
+              </option>
               <option value="pl" disabled>
                 Perl (not available yet)
               </option>
