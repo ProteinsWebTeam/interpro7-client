@@ -15,8 +15,8 @@ import blockEvent from 'utils/block-event';
 
 import { addToast } from 'actions/creators';
 
-import jsRaw from 'raw-loader!../../../snippets/node/template.js.tmpl';
-import pythonRaw from 'raw-loader!../../../snippets/python/template.py';
+import jsRaw from 'raw-loader!../../../snippets/template.js.tmpl';
+import pythonRaw from 'raw-loader!../../../snippets/template.py.tmpl';
 
 import f from 'styles/foundation';
 
