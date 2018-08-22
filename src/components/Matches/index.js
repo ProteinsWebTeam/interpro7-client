@@ -137,34 +137,13 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
-const ProteinFastasRenderer = description => accession => (
+const ProteinDownloadRenderer = description => (accession, row) => (
   <File
     fileType="fasta"
     name={`protein-sequences-matching-${
       description[description.main.key].accession
     }-for-${accession}.fasta`}
-    customLocationDescription={{
-      main: { key: 'protein' },
-      protein: { db: 'UniProt' },
-      [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
-        isFilter: true,
-        db: 'UniProt',
-        accession: `${accession}`,
-      },
-      [description.main.key]: {
-        ...description[description.main.key],
-        isFilter: true,
-      },
-    }}
-  />
-);
-
-const ProteinAccessionsRenderer = description => accession => (
-  <File
-    fileType="accession"
-    name={`protein-accessions-matching-${
-      description[description.main.key].accession
-    }-for-${accession}.txt`}
+    count={row.counters.extra_fields.counters.proteins}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
@@ -397,19 +376,9 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={ProteinFastasRenderer(description)}
+      renderer={ProteinDownloadRenderer(description)}
     >
       FASTA
-    </Column>
-    <Column
-      dataKey="accession"
-      headerClassName={f('table-center')}
-      cellClassName={f('table-center')}
-      defaultKey="proteinAccessions"
-      displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={ProteinAccessionsRenderer(description)}
-    >
-      Protein accessions
     </Column>
   </Table>
 );

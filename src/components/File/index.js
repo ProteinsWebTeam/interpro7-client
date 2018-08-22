@@ -14,16 +14,20 @@ import { downloadURL } from 'actions/creators';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import blockEvent from 'utils/block-event';
 
-import classnames from 'classnames/bind';
+import { foundationPartial } from 'styles/foundation';
+
+import { HARD_LIMIT } from 'components/DownloadForm/Controls';
 
 import styles from './style.css';
 
-const s = classnames.bind(styles);
+const f = foundationPartial(styles);
 
 class Button extends PureComponent {
   static propTypes = {
-    fileType: T.oneOf(['accession', 'FASTA']).isRequired,
+    fileType: T.oneOf(['accession', 'fasta']).isRequired,
     url: T.string.isRequired,
+    subpath: T.string.isRequired,
+    count: T.number,
     name: T.string,
     progress: T.number,
     successful: T.bool,
@@ -35,6 +39,8 @@ class Button extends PureComponent {
     const {
       fileType,
       url,
+      subpath,
+      count,
       name,
       progress,
       successful,
@@ -44,37 +50,66 @@ class Button extends PureComponent {
     const downloading = Number.isFinite(progress) && !successful;
     const failed = successful === false;
     let title = '';
-    if (downloading) {
+    if (count > HARD_LIMIT) {
+      title += 'Direct download disabled for this';
+    } else if (downloading) {
       title += 'Generating';
     } else if (failed) {
       title += 'Failed generating';
     } else if (successful) {
       title += 'Download';
     } else {
-      title += 'Generate';
+      title += 'Click icon to generate';
     }
     title += ` ${fileType} file`;
     const filename =
       name || `${fileType}.${fileType === 'accession' ? 'txt' : 'fasta'}`;
     return (
-      <Tooltip title={title}>
-        <Link
-          download={filename}
-          href={blobURL || url}
-          disabled={downloading}
-          className={s('link', { downloading, failed })}
-          target="_blank"
-          onClick={downloading || successful ? undefined : handleClick}
-          data-url={url}
-          data-type={fileType}
-        >
-          <ProgressButton
-            downloading={downloading}
-            success={successful}
-            failed={failed}
-            progress={progress || 0}
-          />
-        </Link>
+      <Tooltip
+        interactive
+        useContext
+        html={
+          <div>
+            <p className={f('tooltip-paragraph')}>
+              <span>{title}</span>
+            </p>
+            <p className={f('tooltip-paragraph')}>
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'job' },
+                    job: { type: 'download' },
+                  },
+                  hash: `${subpath}|${fileType}`,
+                }}
+                className={f('button', 'hollow')}
+              >
+                See more download options
+              </Link>
+            </p>
+          </div>
+        }
+      >
+        <div>
+          {/* there to have tooltip go higher than the button */}
+          <Link
+            download={filename}
+            href={blobURL || url}
+            disabled={downloading || count > HARD_LIMIT}
+            className={f('link', { downloading, failed })}
+            target="_blank"
+            onClick={downloading || successful ? undefined : handleClick}
+            data-url={url}
+            data-type={fileType}
+          >
+            <ProgressButton
+              downloading={downloading}
+              success={successful}
+              failed={failed}
+              progress={progress || 0}
+            />
+          </Link>
+        </div>
       </Tooltip>
     );
   }
@@ -95,6 +130,7 @@ class File extends PureComponent {
     entryDescription: T.object.isRequired,
     downloadURL: T.func.isRequired,
     fileType: T.oneOf(['accession', 'fasta']),
+    count: T.number,
     subset: T.bool,
     name: T.string,
   };
@@ -111,11 +147,10 @@ class File extends PureComponent {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    const subpath = descriptionToPath(nextProps.customLocationDescription);
     const url = format({
       ...nextProps.api,
-      pathname:
-        nextProps.api.root +
-        descriptionToPath(nextProps.customLocationDescription),
+      pathname: nextProps.api.root + subpath,
     });
     if (
       prevState.url === url &&
@@ -127,6 +162,7 @@ class File extends PureComponent {
 
     return {
       url,
+      subpath,
       fileType: nextProps.fileType,
       subset: nextProps.subset,
       ConnectedButton: connect(
@@ -144,14 +180,16 @@ class File extends PureComponent {
   );
 
   render() {
-    const { ConnectedButton, url } = this.state;
-    const { fileType, name } = this.props;
+    const { ConnectedButton, url, subpath } = this.state;
+    const { fileType, name, count } = this.props;
     return (
       <ConnectedButton
         fileType={fileType}
         url={url}
+        subpath={subpath}
         name={name}
         handleClick={this._handleClick}
+        count={count}
       />
     );
   }

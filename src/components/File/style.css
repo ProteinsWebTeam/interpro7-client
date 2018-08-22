@@ -11,3 +11,23 @@
 .failed {
   cursor: not-allowed !important;
 }
+
+.button {
+  &,
+  &:focus,
+  &:visited {
+    border-color: white !important;
+    color: white !important;
+  }
+}
+
+.tooltip-paragraph {
+  padding: 0.2em;
+  display: flex;
+  justify-content: center;
+
+  &,
+  & > .button {
+    margin: 0;
+  }
+}
