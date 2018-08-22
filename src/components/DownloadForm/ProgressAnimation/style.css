@@ -1,4 +1,5 @@
 @import '../../../styles/timing.css';
+@import '../../../styles/colors.css';
 
 .absolute {
   position: absolute;
@@ -10,7 +11,8 @@
 
 .main-container {
   position: relative;
-  background: lightblue;
+  background: var(--colors-interpro);
+  border-radius: 0.5em;
   height: 5em;
   width: 100%;
   overflow: hidden;

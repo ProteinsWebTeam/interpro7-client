@@ -43,10 +43,11 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, styles, fonts);
 
-const EntryAccessionsRenderer = entryDB => taxId => (
+const EntryAccessionsRenderer = entryDB => (taxId, _row, extra) => (
   <File
     fileType="accession"
     name={`${entryDB || 'all'}-entry-accessions-for-${taxId}.txt`}
+    count={extra && extra.counters && extra.counters.entries}
     customLocationDescription={{
       main: { key: 'entry' },
       entry: { db: entryDB || 'all' },
@@ -55,27 +56,13 @@ const EntryAccessionsRenderer = entryDB => taxId => (
   />
 );
 
-const ProteinFastasRenderer = entryDB => taxId => (
+const ProteinFastasRenderer = entryDB => (taxId, _row, extra) => (
   <File
     fileType="fasta"
     name={`protein-sequences${
       entryDB ? `-matching-${entryDB}` : ''
     }-for-${taxId}.fasta`}
-    customLocationDescription={{
-      main: { key: 'protein' },
-      protein: { db: 'UniProt' },
-      entry: { isFilter: true, db: entryDB || 'all' },
-      taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
-    }}
-  />
-);
-
-const ProteinAccessionsRenderer = entryDB => taxId => (
-  <File
-    fileType="accession"
-    name={`protein-accessions${
-      entryDB ? `-matching-${entryDB}` : ''
-    }-for-${taxId}.txt`}
+    count={extra && extra.counters && extra.counters.proteins}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
@@ -546,15 +533,6 @@ class List extends PureComponent {
               renderer={ProteinFastasRenderer(entryDB)}
             >
               FASTA
-            </Column>
-            <Column
-              dataKey="accession"
-              headerClassName={f('table-center')}
-              cellClassName={f('table-center')}
-              defaultKey="proteinAccessions"
-              renderer={ProteinAccessionsRenderer(entryDB)}
-            >
-              Protein accessions
             </Column>
           </Table>
         </div>

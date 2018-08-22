@@ -40,10 +40,11 @@ import { toPlural } from 'utils/pages';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, styles, fonts);
 
-const EntryAccessionsRenderer = entryDB => accession => (
+const EntryAccessionsRenderer = entryDB => (accession, _row, extra) => (
   <File
     fileType="accession"
     name={`${entryDB || 'all'}-entry-accessions-for-${accession}.txt`}
+    count={extra && extra.counters && extra.counters.entries}
     customLocationDescription={{
       main: { key: 'entry' },
       entry: { db: entryDB || 'all' },
@@ -52,27 +53,13 @@ const EntryAccessionsRenderer = entryDB => accession => (
   />
 );
 
-const ProteinFastasRenderer = entryDB => accession => (
+const ProteinFastasRenderer = entryDB => (accession, _row, extra) => (
   <File
     fileType="fasta"
     name={`protein-sequences${
       entryDB ? `-matching-${entryDB}` : ''
     }-for-${accession}.fasta`}
-    customLocationDescription={{
-      main: { key: 'protein' },
-      protein: { db: 'UniProt' },
-      entry: { isFilter: true, db: entryDB || 'all' },
-      proteome: { isFilter: true, db: 'UniProt', accession },
-    }}
-  />
-);
-
-const ProteinAccessionsRenderer = entryDB => accession => (
-  <File
-    fileType="accession"
-    name={`protein-accessions${
-      entryDB ? `-matching-${entryDB}` : ''
-    }-for-${accession}.txt`}
+    count={extra && extra.counters && extra.counters.proteins}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
@@ -481,15 +468,6 @@ class List extends PureComponent {
               renderer={ProteinFastasRenderer(entryDB)}
             >
               FASTA
-            </Column>
-            <Column
-              dataKey="accession"
-              headerClassName={f('table-center')}
-              cellClassName={f('table-center')}
-              defaultKey="proteinAccessions"
-              renderer={ProteinAccessionsRenderer(entryDB)}
-            >
-              Protein accessions
             </Column>
           </Table>
         </div>

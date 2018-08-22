@@ -17,8 +17,8 @@ import styles from './style.css';
 
 const f = foundationPartial(styles);
 
-const HARD_LIMIT = 50000;
-const SOFT_LIMIT = 10000;
+export const HARD_LIMIT = 50000;
+export const SOFT_LIMIT = 10000;
 
 export class Controls extends PureComponent {
   static propTypes = {

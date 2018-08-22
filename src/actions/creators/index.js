@@ -174,7 +174,7 @@ export const downloadURL = (
 
 export const downloadError = (
   url /*: string */,
-  fileType /*: 'accession' | 'FASTA' */,
+  fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
   subset /*: boolean */,
   errorMessage /*: string */,
 ) => ({
@@ -187,7 +187,7 @@ export const downloadError = (
 
 export const downloadSuccess = (
   url /*: string */,
-  fileType /*: 'accession' | 'FASTA' */,
+  fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
   subset /*: boolean */,
   { blobURL, size } /*: { string, size } */,
 ) => ({
@@ -201,7 +201,7 @@ export const downloadSuccess = (
 
 export const downloadProgress = (
   url /*: string */,
-  fileType /*: 'accession' | 'FASTA' */,
+  fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
   subset /*: boolean */,
   progress /*: number */,
 ) => ({
@@ -214,7 +214,7 @@ export const downloadProgress = (
 
 export const downloadDelete = (
   url /*: string */,
-  fileType /*: 'accession' | 'FASTA' */,
+  fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
   subset /*: boolean */,
 ) => ({
   type: types.DOWNLOAD_DELETE,
