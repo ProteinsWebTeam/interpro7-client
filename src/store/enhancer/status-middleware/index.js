@@ -71,7 +71,7 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
   };
 
   // start the logic
-  running = loop();
+  loop();
 
   // Browser connection events
   window.addEventListener('online', () => dispatch(browserStatus(true)));
@@ -82,7 +82,7 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
       // In case settings changes, update the server statuses
       case CHANGE_SETTINGS:
       case RESET_SETTINGS:
-        running = loop();
+        loop();
         break;
       default:
         break;
