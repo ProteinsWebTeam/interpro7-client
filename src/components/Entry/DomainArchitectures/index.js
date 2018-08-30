@@ -4,23 +4,25 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
-import protvista from 'components/ProtVista/style.css';
-
-import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Footer from 'components/Table/Footer';
+import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
+
+import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
+
+import { toPlural } from 'utils/pages';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from './style.css';
+import protvista from 'components/ProtVista/style.css';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, protvista);
-import { getTrackColor, EntryColorMode } from 'utils/entry-color';
-import loadable from 'higherOrder/loadable';
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -155,37 +157,43 @@ class DomainArchitectures extends PureComponent {
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'protein' },
-                      protein: { db: 'UniProt' },
-                      entry: { db: 'InterPro', accession: mainAccession },
-                    },
-                    search: { ida: obj.ida_id },
-                  }}
-                >
-                  There {obj.unique_proteins > 1 ? 'are' : 'is'}{' '}
-                  {obj.unique_proteins} proteins{' '}
-                </Link>
-                with this architecture:
-                <br />
-                {idaObj.accessions.map(d => (
-                  <span key={d}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro', accession: d },
-                        },
-                      }}
-                    >
-                      {' '}
-                      {d}{' '}
-                    </Link>{' '}
-                    -{' '}
-                  </span>
-                ))}
+                <div>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'protein' },
+                        protein: { db: 'UniProt' },
+                        entry: { db: 'InterPro', accession: mainAccession },
+                      },
+                      search: { ida: obj.ida_id },
+                    }}
+                  >
+                    There {obj.unique_proteins > 1 ? 'are' : 'is'}{' '}
+                    {obj.unique_proteins}{' '}
+                    {toPlural('protein', obj.unique_proteins)}{' '}
+                  </Link>
+                  with this architecture:
+                </div>
+                <div>
+                  {idaObj.accessions.map((accession, i) => (
+                    <React.Fragment key={accession}>
+                      {i !== 0 && ' - '}
+                      <span>
+                        <Link
+                          to={{
+                            description: {
+                              main: { key: 'entry' },
+                              entry: { db: 'InterPro', accession },
+                            },
+                          }}
+                        >
+                          {' '}
+                          {accession}{' '}
+                        </Link>
+                      </span>
+                    </React.Fragment>
+                  ))}
+                </div>
                 <IDAProtVista
                   matches={idaObj.domains}
                   length={FAKE_PROTEIN_LENGTH}
