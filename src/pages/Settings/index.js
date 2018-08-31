@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 
 import { DEV } from 'config';
 
-import noop from 'lodash-es/noop';
+import { noop } from 'lodash-es';
 
 import {
   schemaProcessDataWebPage,

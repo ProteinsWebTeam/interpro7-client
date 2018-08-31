@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
-import partition from 'lodash-es/partition';
+import { partition } from 'lodash-es';
 
 import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';

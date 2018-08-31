@@ -1,6 +1,5 @@
 // @flow
-import get from 'lodash-es/get';
-import set from 'lodash-es/set';
+import { get, set } from 'lodash-es';
 
 /*:: type PossibleMain = (
   'entry' |

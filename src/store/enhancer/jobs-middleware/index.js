@@ -71,7 +71,7 @@ const updateJobInDB = async (metadata, data) => {
   if (data) dataT.update(metadata.localID, prev => ({ ...prev, ...data }));
 };
 
-const middleware /*: Middleware */ = ({ dispatch, getState }) => {
+const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   // function definitions
   const processJob = async (localID, meta) => {
     // Wait to have some time to do all the maintenance

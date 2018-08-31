@@ -47,7 +47,7 @@ const checkStatusesAndDispatch = async function(
   );
 };
 
-const middleware /*: Middleware */ = ({ dispatch, getState }) => {
+const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   let loopID;
   let running = false;
   const loop = async () => {

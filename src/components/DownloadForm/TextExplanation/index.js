@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import noop from 'lodash-es/noop';
+import { noop } from 'lodash-es';
 
 import { toPlural } from 'utils/pages';
 

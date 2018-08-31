@@ -1,6 +1,5 @@
 // Polyfills
 /* global ga: false */
-import 'babel-polyfill';
 // import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 
 import { elementMatches as elementMatchesPolyfill } from 'utils/polyfills';

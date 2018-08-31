@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import noop from 'lodash-es/noop';
+import { noop } from 'lodash-es';
 
 import { toPlural } from 'utils/pages';
 import sortFnFor from 'utils/sort-functions/basic';
