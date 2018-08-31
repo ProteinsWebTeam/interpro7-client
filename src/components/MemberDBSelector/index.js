@@ -3,8 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import { sleep } from 'timing-functions/src';
-import noop from 'lodash-es/noop';
-import _get from 'lodash-es/get';
+import { noop, get as _get } from 'lodash-es';
 
 import config from 'config';
 

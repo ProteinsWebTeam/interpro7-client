@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import flattenDeep from 'lodash-es/flattenDeep';
+import { flattenDeep } from 'lodash-es';
 
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';

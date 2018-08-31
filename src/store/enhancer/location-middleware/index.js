@@ -1,6 +1,7 @@
 // @flow
 /* global ga: false */
 /*:: import type { Middleware } from 'redux'; */
+/*:: import type history from 'history/createBrowserHistory'; */
 /*:: declare var ga: (...args: Array<string>) => void; */
 import { format } from 'url';
 
@@ -11,7 +12,10 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import autoScroll from 'utils/auto-scroll';
 
 // Middleware to handle history change events
-const middleware /*: Middleware */ = history => ({ dispatch, getState }) => {
+const middleware = (history /*: history */) /*: Middleware<*, *, *> */ => ({
+  dispatch,
+  getState,
+}) => {
   // Hook into history
   history.listen(
     // Dispatch new action only when history actually changes

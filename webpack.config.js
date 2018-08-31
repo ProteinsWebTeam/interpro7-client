@@ -91,7 +91,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
           include: [
             path.resolve('src'),
             path.resolve('node_modules', 'lodash-es'),
-            path.resolve('node_modules', 'color-hash'),
+            // path.resolve('node_modules', 'color-hash'),
             path.resolve('node_modules', 'timing-functions'),
             // /protvista/i,
             // path.resolve('node_modules', 'data-loader'),
@@ -101,6 +101,45 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
           use: [
             {
               loader: 'babel-loader',
+              options: {
+                presets: [
+                  [
+                    '@babel/env',
+                    {
+                      modules: false,
+                      loose: true,
+                      useBuiltIns: 'usage',
+                      targets: {
+                        browsers: '> 0.25%',
+                      },
+                    },
+                  ],
+                  ['@babel/react', { development: mode === 'development' }],
+                ],
+                plugins: [
+                  '@babel/plugin-syntax-dynamic-import',
+                  ['@babel/plugin-proposal-class-properties', { loose: true }],
+                ],
+                env: {
+                  dev: {
+                    // better sourcemaps for JSX code
+                    plugins: ['transform-react-jsx-source'],
+                  },
+                  production: {
+                    plugins: [
+                      '@babel/plugin-syntax-dynamic-import',
+                      [
+                        '@babel/plugin-proposal-class-properties',
+                        { loose: true },
+                      ],
+                      // optimisations for react
+                      'babel-plugin-transform-react-remove-prop-types',
+                      'babel-plugin-transform-react-constant-elements',
+                      'babel-plugin-transform-react-inline-elements',
+                    ],
+                  },
+                },
+              },
             },
           ],
         },
@@ -309,7 +348,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             test: /\.(js|css|html|svg)$/i,
             cache: true,
             algorithm(buffer, options, callback) {
-              require('node-zopfli').gzip(buffer, options, callback);
+              require('node-zopfli-es').gzip(buffer, options, callback);
             },
           })
         : null,

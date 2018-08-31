@@ -29,7 +29,7 @@ class SizeFilter extends PureComponent {
     }).isRequired,
   };
 
-  _handleSelection = ({ target: { value } }) => {
+  handleSelection = ({ target: { value } }) => {
     const { page, size: _, ...search } = this.props.customLocation.search;
     if (value !== 'All') search.size = value;
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
@@ -55,7 +55,7 @@ class SizeFilter extends PureComponent {
                 type="radio"
                 name="protein_size"
                 value={term || 'All'}
-                onChange={this._handleSelection}
+                onChange={this.handleSelection}
                 checked={
                   (term === 'All' && !search.size) || search.size === term
                 }

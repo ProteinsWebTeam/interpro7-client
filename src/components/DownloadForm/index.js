@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import set from 'lodash-es/set';
+import { set } from 'lodash-es';
 
 import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';

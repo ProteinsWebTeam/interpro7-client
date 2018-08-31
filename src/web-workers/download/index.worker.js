@@ -1,8 +1,7 @@
 // @flow
-import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
 import { format, parse } from 'url';
-import throttle from 'lodash-es/throttle';
+import { throttle } from 'lodash-es';
 import { sleep } from 'timing-functions/src';
 
 import { DOWNLOAD_URL, DOWNLOAD_DELETE } from 'actions/types';

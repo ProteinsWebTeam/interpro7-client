@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
-import template from 'lodash-es/template';
+import { template } from 'lodash-es';
 import ClipboardJS from 'clipboard';
 
 import SyntaxHighlighter, {
