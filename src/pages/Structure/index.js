@@ -271,7 +271,7 @@ class StructureCard extends PureComponent {
     const { data, search, entryDB } = this.props;
     const { TaxnameStructuresWithData } = this.state;
     return (
-      <React.Fragment>
+      <>
         <div className={f('card-header')}>
           <Link
             to={{
@@ -343,7 +343,7 @@ class StructureCard extends PureComponent {
             />
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

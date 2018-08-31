@@ -192,7 +192,7 @@ class SummaryCounterSet extends PureComponent {
 }
 
 const SetCard = ({ data, search, entryDB }) => (
-  <React.Fragment>
+  <>
     <div className={f('card-header')}>
       <Link
         to={{
@@ -226,7 +226,7 @@ const SetCard = ({ data, search, entryDB }) => (
         />
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 SetCard.propTypes = {
   data: T.object,

@@ -81,7 +81,7 @@ class IPScanResult extends PureComponent {
         ),
       ).size;
     return (
-      <React.Fragment>
+      <>
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('large-12', 'columns')}>
@@ -106,7 +106,7 @@ class IPScanResult extends PureComponent {
             childRoutes={subPagesForSequence}
           />
         </ErrorBoundary>
-      </React.Fragment>
+      </>
     );
   }
 }

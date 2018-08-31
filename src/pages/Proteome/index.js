@@ -182,7 +182,7 @@ class SummaryCounterProteome extends PureComponent {
 }
 
 const ProteomeCard = ({ data, search, entryDB }) => (
-  <React.Fragment>
+  <>
     <div className={f('card-header')}>
       <Link
         to={{
@@ -217,7 +217,7 @@ const ProteomeCard = ({ data, search, entryDB }) => (
         />
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 ProteomeCard.propTypes = {
   data: T.object,

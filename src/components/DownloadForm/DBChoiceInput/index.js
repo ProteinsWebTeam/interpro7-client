@@ -76,7 +76,7 @@ export class DBChoiceInputWithoutData extends PureComponent {
       }
     }
     return (
-      <React.Fragment>
+      <>
         <label className={f('input-group')}>
           <span className={f('input-group-label')}>
             {type} {isIntegration ? 'integration' : 'DB'}:
@@ -106,7 +106,7 @@ export class DBChoiceInputWithoutData extends PureComponent {
           </div>
         </label>
         {integration}
-      </React.Fragment>
+      </>
     );
   }
 }

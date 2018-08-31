@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 
@@ -114,11 +114,11 @@ class Summary extends PureComponent {
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
     return (
-      <Fragment>
+      <>
         {payload &&
           payload.metadata &&
           payload.metadata.accession && (
-            <Fragment>
+            <>
               <SchemaOrgData
                 data={{
                   data: payload,
@@ -134,7 +134,7 @@ class Summary extends PureComponent {
                 }}
                 processData={schemaProcessMainEntity}
               />
-            </Fragment>
+            </>
           )}
 
         <UnconnectedErrorBoundary customLocation={customLocation}>
@@ -142,7 +142,7 @@ class Summary extends PureComponent {
             <div className={f('medium-12', 'large-12', 'columns')}>
               {loading ? <Loading /> : null}
               {!loading && (!payload || !payload.metadata) ? null : (
-                <Fragment>
+                <>
                   <Title metadata={payload.metadata} mainType={endpoint} />
                   <ResizeObserverComponent
                     measurements={['width', 'height']}
@@ -156,7 +156,7 @@ class Summary extends PureComponent {
                       />
                     )}
                   </ResizeObserverComponent>
-                </Fragment>
+                </>
               )}
             </div>
           </div>
@@ -169,7 +169,7 @@ class Summary extends PureComponent {
             childRoutes={subPagesForEndpoint}
           />
         </UnconnectedErrorBoundary>
-      </Fragment>
+      </>
     );
   }
 }

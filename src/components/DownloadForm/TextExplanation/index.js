@@ -51,78 +51,78 @@ const getMainFragment = description => {
   const { db, integration, accession } = description[main];
   if (accession) {
     return (
-      <React.Fragment>
+      <>
         <Highlight>metadata</Highlight> about <Highlight>{db}</Highlight>{' '}
         <Highlight>{main}</Highlight> with accession{' '}
         <Highlight>{accession}</Highlight>
-      </React.Fragment>
+      </>
     );
   }
   if (db && integration) {
     return (
-      <React.Fragment>
+      <>
         <Highlight>a list</Highlight> of{' '}
         {integration !== 'all' && (
-          <React.Fragment>
+          <>
             <Highlight>{integration}</Highlight>{' '}
-          </React.Fragment>
+          </>
         )}
         <Highlight>{db}</Highlight> <Highlight>{toPlural(main)}</Highlight>
-      </React.Fragment>
+      </>
     );
   }
   if (db || integration) {
     return (
-      <React.Fragment>
+      <>
         <Highlight>a list</Highlight> of{' '}
         <Highlight>{db || integration}</Highlight>{' '}
         <Highlight>{toPlural(main)}</Highlight>
-      </React.Fragment>
+      </>
     );
   }
   return (
-    <React.Fragment>
+    <>
       <Highlight>a counter overview</Highlight> centered on{' '}
       <Highlight>{toPlural(main)}</Highlight>
-    </React.Fragment>
+    </>
   );
 };
 
 const getFilterFragment = (type, { db, integration, accession }) => {
   if (accession) {
     return (
-      <React.Fragment>
+      <>
         the <Highlight>{db}</Highlight>{' '}
         <Highlight>{type === 'taxonomy' ? 'taxon' : type}</Highlight> with
         accession <Highlight>{accession}</Highlight>
-      </React.Fragment>
+      </>
     );
   }
   if (db && integration) {
     return (
-      <React.Fragment>
+      <>
         any of the{' '}
         {integration !== 'all' && (
-          <React.Fragment>
+          <>
             <Highlight>{integration}</Highlight>{' '}
-          </React.Fragment>
+          </>
         )}
         <Highlight>{db}</Highlight> <Highlight>{toPlural(type)}</Highlight>
-      </React.Fragment>
+      </>
     );
   }
   if (db || (integration && integration !== 'all')) {
     return (
-      <React.Fragment>
+      <>
         any of the <Highlight>{db || integration}</Highlight>{' '}
         <Highlight>{toPlural(type)}</Highlight>
-      </React.Fragment>
+      </>
     );
   }
   return (
-    <React.Fragment>
+    <>
       any <Highlight>{type === 'taxonomy' ? 'taxon' : type}</Highlight>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -152,7 +152,7 @@ export default class TextExplanation extends PureComponent {
     const filters = getFilters(description);
     let filterText = '';
     if (filters.length) {
-      filterText = <React.Fragment> which match with {filters}</React.Fragment>;
+      filterText = <> which match with {filters}</>;
     }
 
     const main = description.main.key;

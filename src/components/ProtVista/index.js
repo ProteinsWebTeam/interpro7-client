@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -338,7 +338,7 @@ class ProtVista extends PureComponent {
     if (NOT_MEMBER_DBS.has(entry.source_database) || entry.type === 'chain')
       return entry.accession;
     return (
-      <Fragment>
+      <>
         <Link
           to={{
             description: {
@@ -383,7 +383,7 @@ class ProtVista extends PureComponent {
               </div>
             ))}
         </div>
-      </Fragment>
+      </>
     );
   }
 

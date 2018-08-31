@@ -64,7 +64,7 @@ export class Controls extends PureComponent {
     const downloading = Number.isFinite(progress) && !successful;
     const count = (data.payload && data.payload.count) || 0;
     return (
-      <React.Fragment>
+      <>
         {count > SOFT_LIMIT && (
           <div
             className={f('callout', count > HARD_LIMIT ? 'alert' : 'warning')}
@@ -113,7 +113,7 @@ export class Controls extends PureComponent {
             </button>
           )}
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -237,7 +237,7 @@ class DescriptionEntries extends PureComponent {
       .sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
 
     return (
-      <React.Fragment>
+      <>
         <div className={f('card-description', 'card-block')}>
           <Description
             textBlocks={[desc]}
@@ -257,7 +257,7 @@ class DescriptionEntries extends PureComponent {
         >
           […]
         </Link>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -272,7 +272,7 @@ class EntryCard extends PureComponent {
   render() {
     const { data, search, entryDB } = this.props;
     return (
-      <React.Fragment>
+      <>
         <div className={f('card-header')}>
           <Link
             to={{
@@ -361,7 +361,7 @@ class EntryCard extends PureComponent {
             />
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import loadable from 'higherOrder/loadable';
@@ -437,7 +437,7 @@ InterPro provides functional analysis of proteins by classifying them into famil
 class Home extends PureComponent {
   render() {
     return (
-      <Fragment>
+      <>
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <SchemaOrgData
@@ -698,7 +698,7 @@ class Home extends PureComponent {
         <ErrorBoundary>
           <Twitter />
         </ErrorBoundary>
-      </Fragment>
+      </>
     );
   }
 }

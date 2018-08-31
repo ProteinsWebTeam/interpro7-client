@@ -262,7 +262,7 @@ Lineage.propTypes = {
 };
 
 const TaxonomyCard = ({ data, search, entryDB }) => (
-  <React.Fragment>
+  <>
     <div className={f('card-header')}>
       <Link
         to={{
@@ -303,7 +303,7 @@ const TaxonomyCard = ({ data, search, entryDB }) => (
         />
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 TaxonomyCard.propTypes = {
   data: T.object,
