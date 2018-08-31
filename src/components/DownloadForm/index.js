@@ -271,7 +271,7 @@ class DownloadForm extends PureComponent {
           subset={subset}
         >
           {({ data, download }) => (
-            <React.Fragment>
+            <>
               <Estimate data={data} />
               {/* Only display if the response from the API is a list of items */}
               {description[main].db &&
@@ -296,7 +296,7 @@ class DownloadForm extends PureComponent {
                 />
               </fieldset>
               {lowGraphics || <ProgressAnimation download={download} />}
-            </React.Fragment>
+            </>
           )}
         </DataPreviewAndProgressProvider>
       </form>

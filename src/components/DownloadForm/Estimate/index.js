@@ -20,10 +20,10 @@ const getText = ({ loading, payload, ok, status, headers }) => {
   const count = payload.count;
   if (count) {
     return (
-      <React.Fragment>
+      <>
         Your file will contain <NumberComponent value={count} abbr /> item
         {count > 1 ? 's' : ''}.
-      </React.Fragment>
+      </>
     );
   }
 
@@ -38,9 +38,9 @@ const getText = ({ loading, payload, ok, status, headers }) => {
       output: 'array',
     });
     return (
-      <React.Fragment>
+      <>
         Your file size will be of <NumberComponent value={value} /> {suffix}
-      </React.Fragment>
+      </>
     );
   }
 

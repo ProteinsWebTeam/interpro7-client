@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -145,9 +145,9 @@ class SummaryCounterProteins extends PureComponent {
 }
 
 const ProteinCard = ({ data, search, entryDB }) => (
-  <React.Fragment>
+  <>
     {data.metadata.source_database === 'reviewed' ? (
-      <Fragment>
+      <>
         <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
           <h4>
             <span
@@ -157,7 +157,7 @@ const ProteinCard = ({ data, search, entryDB }) => (
             />
           </h4>
         </Tooltip>
-      </Fragment>
+      </>
     ) : null}
     <div className={f('card-header')}>
       <Link
@@ -204,7 +204,7 @@ const ProteinCard = ({ data, search, entryDB }) => (
         />
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 ProteinCard.propTypes = {
   data: T.object,
@@ -325,7 +325,7 @@ class List extends PureComponent {
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
-                <Fragment>
+                <>
                   <SchemaOrgData
                     data={{
                       data: { row, endpoint: 'protein' },
@@ -353,7 +353,7 @@ class List extends PureComponent {
                     />
                   </Link>
                   {row.source_database === 'reviewed' ? (
-                    <Fragment>
+                    <>
                       {'\u00A0' /* non-breakable space */}
                       <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
                         <span
@@ -362,9 +362,9 @@ class List extends PureComponent {
                           aria-label="reviewed"
                         />
                       </Tooltip>
-                    </Fragment>
+                    </>
                   ) : null}
-                </Fragment>
+                </>
               )}
             />
 

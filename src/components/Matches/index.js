@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { Fragment } from 'react';
+import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -206,7 +206,7 @@ const Matches = (
           //   reviewed = (
           //
           //   )
-          <Fragment>
+          <>
             <SchemaOrgData
               data={{ data: obj, primary, secondary }}
               processData={schemaProcessData}
@@ -232,7 +232,7 @@ const Matches = (
                 />
               </Tooltip>
             ) : null}
-          </Fragment>
+          </>
         );
       }}
     >
