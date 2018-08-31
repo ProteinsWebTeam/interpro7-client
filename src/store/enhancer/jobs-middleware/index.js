@@ -59,7 +59,7 @@ const createJobInDB = async (metadata, data) => {
     // add data and metadata to idb
     const [dataT, metaT] = await Promise.all([dataTA, metaTA]);
     await Promise.all([dataT.set(data, localID), metaT.set(metadata, localID)]);
-  } catch (error) {
+  } catch {
     // cleanup if anything bad happens
     deleteJobInDB(localID);
   }
@@ -191,7 +191,6 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       for (const [localID, meta] of Object.entries(await metaT.getAll())) {
         await processJob(localID, meta);
       }
-      //
     } catch (error) {
       console.error(error);
     } finally {

@@ -92,7 +92,7 @@ const handleError = error => {
   }
   try {
     error.preventDefault();
-  } catch (_) {
+  } catch {
     /**/
   }
   ga('send', 'exception', { exDescription: error.message, exFatal: true });

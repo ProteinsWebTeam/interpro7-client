@@ -87,7 +87,7 @@ const CookieFooterAsync = loadable({
           window.document.cookie.match(/cookies-accepted=(true)/i)[1]
         )
           return;
-      } catch (_) {
+      } catch {
         return import(/* webpackChunkName: "cookie-banner" */ 'components/CookieBanner');
       }
     }),

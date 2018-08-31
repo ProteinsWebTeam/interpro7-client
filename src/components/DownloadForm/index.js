@@ -31,7 +31,7 @@ const extractDataFromHash = hash => {
   const output = { fileType, subset: !!subset };
   try {
     output.description = pathToDescription(href);
-  } catch (_) {
+  } catch {
     /**/
   }
   return output;
@@ -84,7 +84,7 @@ class DownloadForm extends PureComponent {
     let path;
     try {
       path = descriptionToPath(object.description);
-    } catch (_) {
+    } catch {
       return;
     }
     // More specific cases

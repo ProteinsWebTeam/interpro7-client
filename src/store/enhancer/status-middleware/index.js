@@ -34,7 +34,7 @@ const checkStatusesAndDispatch = async function(
         useCache: false,
       });
       dispatch(serverStatus(endpoint, response.ok));
-    } catch (_) {
+    } catch {
       dispatch(serverStatus(endpoint, false));
       // Something bad happened, reduce the loop timeout
       loopTimeoutWithBackOff = DEFAULT_LOOP_TIMEOUT;
