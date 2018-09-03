@@ -4,18 +4,22 @@
 // way process also the files in `node_modules` that we have explicitely
 // included in `jest.config.js`
 module.exports = {
-  presets: [
-    [
-      '@babel/env',
-      {
-        useBuiltIns: 'usage',
-        targets: { node: '8' },
-      },
-    ],
-    '@babel/react',
-  ],
-  plugins: [
-    '@babel/plugin-proposal-class-properties',
-    'babel-plugin-dynamic-import-node',
-  ],
+  env: {
+    test: {
+      presets: [
+        [
+          '@babel/env',
+          {
+            useBuiltIns: 'usage',
+            targets: { node: '8' },
+          },
+        ],
+        '@babel/react',
+      ],
+      plugins: [
+        'babel-plugin-dynamic-import-node',
+        '@babel/plugin-proposal-class-properties',
+      ],
+    },
+  },
 };

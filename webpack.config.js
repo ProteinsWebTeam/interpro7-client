@@ -96,6 +96,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
             /protvista/i,
             path.resolve('node_modules', 'data-loader'),
             path.resolve('node_modules', 'interpro-components'),
+            path.resolve('node_modules', 'lit-html'),
             path.resolve('node_modules', 'pdb-web-components'),
           ],
           use: [
@@ -127,11 +128,6 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
                   },
                   production: {
                     plugins: [
-                      '@babel/plugin-syntax-dynamic-import',
-                      [
-                        '@babel/plugin-proposal-class-properties',
-                        { loose: true },
-                      ],
                       // optimisations for react
                       'babel-plugin-transform-react-remove-prop-types',
                       'babel-plugin-transform-react-constant-elements',
