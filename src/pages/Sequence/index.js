@@ -12,6 +12,8 @@ import Switch from 'components/generic/Switch';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import loadable from 'higherOrder/loadable';
 
+import getTableAccess, { IPScanJobsData } from 'storage/idb';
+
 import { foundationPartial } from 'styles/foundation';
 
 import styles from 'styles/blocks.css';
@@ -54,6 +56,8 @@ const locationSelector = createSelector(
   value => value,
 );
 
+const FASTA_CLEANER = /(^[>;].*$)|\W/gm;
+
 class IPScanResult extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -64,6 +68,44 @@ class IPScanResult extends PureComponent {
     }),
     matched: T.string.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = { localIDForLocalPayload: null, localPayload: null };
+  }
+
+  #getLocalDataIfNeeded = () => {
+    const { localID } = this.props;
+    if (
+      !localID ||
+      this.props.data.payload ||
+      this.state.localIDForLocalPayload === localID
+    ) {
+      return;
+    }
+    this.setState({ localIDForLocalPayload: localID }, async () => {
+      const dataT = await getTableAccess(IPScanJobsData);
+      const data = await dataT.get(localID);
+      this.setState({
+        localPayload: {
+          sequence: data.input.replace(FASTA_CLEANER, '').toUpperCase(),
+          matches: [],
+          xref: [
+            { name: 'Results are being processed on the InterProScan server' },
+          ],
+        },
+      });
+    });
+  };
+
+  componentDidMount() {
+    this.#getLocalDataIfNeeded();
+  }
+
+  componentDidUpdate() {
+    this.#getLocalDataIfNeeded();
+  }
 
   render() {
     const { data: { loading, payload } = {}, matched } = this.props;
@@ -100,6 +142,7 @@ class IPScanResult extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
+            localPayload={this.state.localPayload}
             locationSelector={locationSelector}
             indexRoute={SummaryAsync}
             childRoutes={subPagesForSequence}
@@ -111,10 +154,17 @@ class IPScanResult extends PureComponent {
 }
 
 const mapStateToUrl = createSelector(
+  state => state.jobs,
   state => state.settings.ipScan,
   state => state.customLocation.description.job.accession,
-  ({ protocol, hostname, port, root }, accession) => {
-    if (accession.includes('internal')) return;
+  (jobs, { protocol, hostname, port, root }, accession) => {
+    if (!jobs) return;
+    const job = Object.values(jobs).find(
+      job =>
+        job.metadata.localID === accession ||
+        job.metadata.remoteID === accession,
+    );
+    if (!job || job.metadata.status !== 'finished') return;
     return format({
       protocol,
       hostname,
@@ -124,4 +174,19 @@ const mapStateToUrl = createSelector(
   },
 );
 
-export default loadData(mapStateToUrl)(IPScanResult);
+const mapStateToProps = createSelector(
+  state => state.jobs || {},
+  state => state.customLocation.description.job.accession,
+  (jobs, accession) => {
+    const job = Object.values(jobs).find(
+      job =>
+        job.metadata.localID === accession ||
+        job.metadata.remoteID === accession,
+    );
+    return { localID: job.metadata.localID };
+  },
+);
+
+export default loadData({ getUrl: mapStateToUrl, mapStateToProps })(
+  IPScanResult,
+);
