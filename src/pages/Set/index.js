@@ -408,7 +408,7 @@ class List extends PureComponent {
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "protein-summary" */ 'components/Set/Summary'),
+    import(/* webpackChunkName: "set-summary" */ 'components/Set/Summary'),
 });
 
 const SchemaOrgData = loadable({
