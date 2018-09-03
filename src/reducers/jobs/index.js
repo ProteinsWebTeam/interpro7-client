@@ -15,7 +15,7 @@ import {
 } */
 
 export default (
-  state /*: {[key: string]: Job } */ = {},
+  state /*: ?{[key: string]: Job } */ = null,
   action /*: Object */,
 ) => {
   switch (action.type) {
@@ -46,7 +46,8 @@ export default (
       const { [action.job.metadata.localID]: _, ...newState } = state;
       return newState;
     case REHYDRATE_JOBS:
-      return { ...state, ...action.jobs };
+      // Needs to be run once and only once before any other action
+      return action.jobs;
     default:
       return state;
   }
