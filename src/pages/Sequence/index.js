@@ -23,7 +23,7 @@ const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "protein-summary" */ 'components/IPScan/Summary'),
+    import(/* webpackChunkName: "ipscan-summary" */ 'components/IPScan/Summary'),
 });
 
 const EntrySubPage = loadable({
@@ -61,25 +61,24 @@ class IPScanResult extends PureComponent {
       payload: T.shape({
         results: T.array,
       }),
-    }).isRequired,
+    }),
     matched: T.string.isRequired,
   };
 
   render() {
-    const {
-      data: { loading, payload },
-      matched,
-    } = this.props;
-    if (loading) {
-      return <Loading />;
+    const { data: { loading, payload } = {}, matched } = this.props;
+
+    let entries = NaN;
+    if (payload && payload.results) {
+      entries =
+        payload.results[0].matches.length +
+        new Set(
+          payload.results[0].matches.map(
+            m => (m.signature.entry || {}).accession,
+          ),
+        ).size;
     }
-    const entries =
-      payload.results[0].matches.length +
-      new Set(
-        payload.results[0].matches.map(
-          m => (m.signature.entry || {}).accession,
-        ),
-      ).size;
+
     return (
       <>
         <ErrorBoundary>
@@ -114,13 +113,15 @@ class IPScanResult extends PureComponent {
 const mapStateToUrl = createSelector(
   state => state.settings.ipScan,
   state => state.customLocation.description.job.accession,
-  ({ protocol, hostname, port, root }, accession) =>
-    format({
+  ({ protocol, hostname, port, root }, accession) => {
+    if (accession.includes('internal')) return;
+    return format({
       protocol,
       hostname,
       port,
       pathname: `${root}/result/${accession}/json`,
-    }),
+    });
+  },
 );
 
 export default loadData(mapStateToUrl)(IPScanResult);
