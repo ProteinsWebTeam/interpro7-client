@@ -9,7 +9,6 @@ import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 
-import Loading from 'components/SimpleCommonComponents/Loading';
 import loadable from 'higherOrder/loadable';
 
 import getTableAccess, { IPScanJobsData } from 'storage/idb';
@@ -75,6 +74,14 @@ class IPScanResult extends PureComponent {
     this.state = { localIDForLocalPayload: null, localPayload: null };
   }
 
+  componentDidMount() {
+    this.#getLocalDataIfNeeded();
+  }
+
+  componentDidUpdate() {
+    this.#getLocalDataIfNeeded();
+  }
+
   #getLocalDataIfNeeded = () => {
     const { localID } = this.props;
     if (
@@ -99,16 +106,8 @@ class IPScanResult extends PureComponent {
     });
   };
 
-  componentDidMount() {
-    this.#getLocalDataIfNeeded();
-  }
-
-  componentDidUpdate() {
-    this.#getLocalDataIfNeeded();
-  }
-
   render() {
-    const { data: { loading, payload } = {}, matched } = this.props;
+    const { data: { payload } = {}, matched } = this.props;
 
     let entries = NaN;
     if (payload && payload.results) {
