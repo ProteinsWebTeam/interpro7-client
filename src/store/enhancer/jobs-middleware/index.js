@@ -39,7 +39,7 @@ const rehydrateStoredJobs = async dispatch => {
   const metaT = await metaTA;
   const meta = await metaT.getAll();
   const entries = Object.entries(meta);
-  if (!entries.length) return;
+  if (!entries.length) return dispatch(rehydrateJobs({}));
   const jobs = {};
   const now = Date.now();
   for (const [localID, metadata] of entries) {
