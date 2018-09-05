@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import React, { PureComponent } from 'react';
 import loadWebComponent from 'utils/load-web-component';
 
@@ -38,29 +39,41 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               )}
             >
               <h3>
-                InterPro 68.0 <small> &bull; 26th April 2018</small>
+                InterPro 70.0{' '}
+                <small>
+                  • <time dateTime="2018-09-13">13th September 2018</time>
+                </small>
               </h3>
             </div>
 
             <p>Features include:</p>
 
             <ul>
-              <li>The addition of 240 InterPro entries.</li>
               <li>
-                An update to HAMAP (2018_03), PROSITE patterns (2018_02) and
-                PROSITE profiles (2018_02).
+                The addition of <NumberComponent duration={0} value={662} />{' '}
+                InterPro entries.
               </li>
+              <li>An update to SFLD (4).</li>
               <li>
-                Integration of 381 new methods from the CATH-Gene3D (2), CDD
-                (17), HAMAP (29), PANTHER (298), Pfam (16), ProDom (1), PROSITE
-                profiles (16) and SUPERFAMILY (2) databases.
+                Integration of <NumberComponent duration={0} value={886} /> new
+                methods from the CATH-Gene3D (
+                <NumberComponent duration={0} value={5} />
+                ), CDD (<NumberComponent duration={0} value={17} />
+                ), HAMAP (<NumberComponent duration={0} value={1} />
+                ), PANTHER (<NumberComponent duration={0} value={689} />
+                ), Pfam (<NumberComponent duration={0} value={119} />
+                ), PIRSF (<NumberComponent duration={0} value={1} />
+                ), PRINTS (<NumberComponent duration={0} value={2} />
+                ), ProDom (<NumberComponent duration={0} value={3} />
+                ), SFLD (<NumberComponent duration={0} value={22} />) and SMART
+                (<NumberComponent duration={0} value={1} />) databases.
               </li>
             </ul>
 
             <h4>Contents and coverage</h4>
             <p className={f('margin-bottom-small')}>
               InterPro protein matches are now calculated for all UniProtKB and
-              UniParc proteins. InterPro release 68.0 contains{' '}
+              UniParc proteins. InterPro release 70.0 contains{' '}
               <Link
                 to={{
                   description: {
@@ -69,9 +82,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                   },
                 }}
               >
-                <NumberComponent value={33947} />
-                entries
-              </Link>, representing:
+                <NumberComponent value={35020} /> entries
+              </Link>
+              , representing:
             </p>
 
             <table className={f('light', 'small', 'margin-bottom-xlarge')}>
@@ -107,7 +120,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'family' },
                       }}
                     >
-                      <NumberComponent value={20795} />
+                      <NumberComponent value={21695} />
                     </Link>
                   </td>
                 </tr>
@@ -133,7 +146,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'domain' },
                       }}
                     >
-                      <NumberComponent value={9099} />
+                      <NumberComponent value={9268} />
                     </Link>
                   </td>
                 </tr>
@@ -159,7 +172,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'homologous_superfamily' },
                       }}
                     >
-                      <NumberComponent value={2862} />
+                      <NumberComponent value={2865} />
                     </Link>
                   </td>
                 </tr>
@@ -185,7 +198,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'repeat' },
                       }}
                     >
-                      <NumberComponent value={276} />
+                      <NumberComponent value={280} />
                     </Link>
                   </td>
                 </tr>
@@ -200,7 +213,13 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                       <span className={f('icon-type', 'icon-site')}>S</span>
                     </interpro-type>
                   </td>
-                  <td>Active site</td>
+                  <td>Site</td>
+                  <td />
+                </tr>
+
+                <tr>
+                  <td />
+                  <td>╰ Active site</td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -217,16 +236,8 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
 
                 <tr>
-                  <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="site"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-site')}>S</span>
-                    </interpro-type>
-                  </td>
-                  <td>Binding site</td>
+                  <td />
+                  <td>╰ Binding site</td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -243,16 +254,8 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
 
                 <tr>
-                  <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="site"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-site')}>S</span>
-                    </interpro-type>
-                  </td>
-                  <td>Conserved site</td>
+                  <td />
+                  <td>╰ Conserved site</td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -269,16 +272,10 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
 
                 <tr>
+                  <td />
                   <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="PTM"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-site')}>S</span>
-                    </interpro-type>
+                    ╰ <abbr title="post-translational modification">PTM</abbr>
                   </td>
-                  <td>PTM</td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -344,7 +341,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={2140} />
+                      <NumberComponent value={2147} /> (
+                      {Math.floor((1000 * 2147) / 6119) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -380,7 +379,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={2790} />
+                      <NumberComponent value={2910} /> (
+                      {Math.floor((1000 * 2910) / 12805) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -416,7 +417,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={2244} />
+                      <NumberComponent value={2245} /> (
+                      {Math.floor((1000 * 2245) / 2246) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -452,7 +455,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={7868} />
+                      <NumberComponent value={8974} /> (
+                      {Math.floor((1000 * 8974) / 90742) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -488,7 +493,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={16114} />
+                      <NumberComponent value={16235} /> (
+                      {Math.floor((1000 * 16235) / 16712) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -524,7 +531,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={3223} />
+                      <NumberComponent value={3223} /> (
+                      {Math.floor((1000 * 3223) / 3285) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -560,7 +569,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1968} />
+                      <NumberComponent value={1965} /> (
+                      {Math.floor((1000 * 1965) / 2106) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -596,7 +607,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1307} />
+                      <NumberComponent value={1311} /> (
+                      {Math.floor((1000 * 1311) / 1894) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -632,7 +645,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1288} />
+                      <NumberComponent value={1287} /> (
+                      {Math.floor((1000 * 1287) / 1309) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -668,7 +683,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1176} />
+                      <NumberComponent value={1174} /> (
+                      {Math.floor((1000 * 1174) / 1210) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -678,7 +695,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                     <MemberSymbol type={'sfld'} className={f('md-small')} />
                   </td>
                   <td>SFLD</td>
-                  <td className={f('text-center')}>3</td>
+                  <td className={f('text-center')}>4</td>
                   <td className={f('text-right')}>
                     <Link
                       className={f('block')}
@@ -704,7 +721,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={147} />
+                      <NumberComponent value={164} /> (
+                      {Math.floor((1000 * 164) / 303) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -740,7 +759,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1263} />
+                      <NumberComponent value={1264} /> (
+                      {Math.floor((1000 * 1264) / 1312) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -775,7 +796,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1601} />
+                      <NumberComponent value={1601} /> (
+                      {Math.floor((1000 * 1601) / 2019) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -810,7 +833,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={4445} />
+                      <NumberComponent value={4438} /> (
+                      {Math.floor((1000 * 4438) / 4488) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -818,7 +843,8 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
             </table>
 
             <p className={f('small', 'margin-top-small')}>
-              * Some signatures may not have matches to UniProtKB proteins.<br />
+              * Some signatures may not have matches to UniProtKB proteins.
+              <br />
               ** Not all signatures of a member database may be integrated at
               the time of an InterPro release
             </p>
@@ -830,7 +856,8 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 target="_blank"
               >
                 MobiDB-lite
-              </Link>, a derivative of the
+              </Link>
+              , a derivative of the
               <Link
                 href="http://mobidb.bio.unipd.it/"
                 className={f('ext')}
@@ -854,17 +881,12 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
             <table className={f('light')}>
               <thead>
                 <tr>
-                  <th>Sequence database</th>
-                  <th>Version</th>
-                  <th>Count</th>
+                  <th rowSpan="2">Sequence database</th>
+                  <th rowSpan="2">Version</th>
+                  <th rowSpan="2">Count</th>
                   <th colSpan="2">Count of proteins matching</th>
                 </tr>
-              </thead>
-              <tbody>
                 <tr>
-                  <td />
-                  <td />
-                  <td />
                   <td>
                     <strong>any signature</strong>
                   </td>
@@ -872,40 +894,73 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                     <strong>integrated signatures</strong>
                   </td>
                 </tr>
+              </thead>
+              <tbody>
                 <tr>
                   <td>UniProtKB</td>
-                  <td>2018_04</td>
-                  <td>115316915</td>
-                  <td>101076817 (87.7%)</td>
-                  <td>93075570 (80.7%)</td>
+                  <td>2018_08</td>
+                  <td>
+                    <NumberComponent value={125355233} />
+                  </td>
+                  <td>
+                    <NumberComponent value={104705922} /> (
+                    {Math.floor((1000 * 104705922) / 125355233) / 10}
+                    %)
+                  </td>
+                  <td>
+                    <NumberComponent value={101460097} /> (
+                    {Math.floor((1000 * 101460097) / 125355233) / 10}
+                    %)
+                  </td>
                 </tr>
                 <tr>
                   <td>UniProtKB/TrEMBL</td>
-                  <td>2018_04</td>
-                  <td>114759640</td>
-                  <td>100531651 (87.6%)</td>
-                  <td>92537241 (80.6%)</td>
+                  <td>2018_08</td>
+                  <td>
+                    <NumberComponent value={124797108} />
+                  </td>
+                  <td>
+                    <NumberComponent value={104163101} /> (
+                    {Math.floor((1000 * 104163101) / 124797108) / 10}
+                    %)
+                  </td>
+                  <td>
+                    <NumberComponent value={100920355} /> (
+                    {Math.floor((1000 * 100920355) / 124797108) / 10}
+                    %)
+                  </td>
                 </tr>
                 <tr>
                   <td>UniProtKB/Swiss-Prot</td>
-                  <td>2018_04</td>
-                  <td>557275</td>
-                  <td>545166 (97.8%)</td>
-                  <td>538329 (96.6%)</td>
+                  <td>2018_08</td>
+                  <td>
+                    <NumberComponent value={558125} />
+                  </td>
+                  <td>
+                    <NumberComponent value={542821} /> (
+                    {Math.floor((1000 * 542821) / 558125) / 10}
+                    %)
+                  </td>
+                  <td>
+                    <NumberComponent value={539742} /> (
+                    {Math.floor((1000 * 539742) / 558125) / 10}
+                    %)
+                  </td>
                 </tr>
               </tbody>
             </table>
 
             <h3>InterPro2GO</h3>
             <p>
-              We have a total number of 33944 GO terms mapped to InterPro
-              entries.
+              We have a total number of <NumberComponent value={34550} /> GO
+              terms mapped to InterPro entries.
             </p>
 
             <p>
               <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
                 List of InterPro2GO mappings
-              </Link>. These are also available through the EBI GO browser{' '}
+              </Link>
+              . These are also available through the EBI GO browser{' '}
               <Link
                 href="http://www.ebi.ac.uk/QuickGO/"
                 className={f('ext')}
