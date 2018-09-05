@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -72,7 +72,8 @@ class OrganismDBFilter extends PureComponent {
                 style={{ margin: '0.25em' }}
               />
               <span style={{ textTransform: 'capitalize' }}>{type}</span>
-              <NumberLabel
+              <NumberComponent
+                label
                 value={count}
                 loading={loading}
                 className={f('filter-label')}

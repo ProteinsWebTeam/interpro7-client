@@ -4,7 +4,7 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 
 import PageSizeSelector from '../PageSizeSelector';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import config from 'config';
 

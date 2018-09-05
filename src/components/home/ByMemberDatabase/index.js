@@ -8,7 +8,7 @@ import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import AnimatedEntry from 'components/AnimatedEntry';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';

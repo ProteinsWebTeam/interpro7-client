@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -82,7 +82,12 @@ class IntegratedFilter extends PureComponent {
                   style={{ margin: '0.25em' }}
                 />
                 <span style={{ textTransform: 'capitalize' }}>{type}</span>
-                <NumberLabel value={types[type]} loading={loading} abbr />
+                <NumberComponent
+                  label
+                  value={types[type]}
+                  loading={loading}
+                  abbr
+                />
               </label>
             </div>
           ))}

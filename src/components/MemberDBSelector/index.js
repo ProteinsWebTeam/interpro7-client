@@ -7,7 +7,7 @@ import { noop, get as _get } from 'lodash-es';
 
 import config from 'config';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 
@@ -301,7 +301,8 @@ class _MemberDBSelector extends PureComponent {
                     {db.name === 'All' ? `All ${toPlural(main)}` : db.name}
                   </span>
                   {!this.props.hideCounters && (
-                    <NumberLabel
+                    <NumberComponent
+                      label
                       value={(!loading && count) || 0}
                       loading={loading}
                       className={f('label')}

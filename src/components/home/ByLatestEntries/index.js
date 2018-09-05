@@ -14,8 +14,8 @@ import { latests } from 'staticData/home';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/load-web-component';
-import { NumberComponent } from 'components/NumberLabel';
-import numberToDisplayText from 'components/NumberLabel/utils/number-to-display-text';
+import NumberComponent from 'components/NumberComponent';
+import numberToDisplayText from 'components/NumberComponent/utils/number-to-display-text';
 
 import { foundationPartial } from 'styles/foundation';
 

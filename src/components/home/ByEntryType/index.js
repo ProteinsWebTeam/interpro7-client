@@ -8,7 +8,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/load-web-component';

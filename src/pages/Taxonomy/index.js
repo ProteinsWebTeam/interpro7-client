@@ -15,7 +15,7 @@ import Table, {
 import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadable from 'higherOrder/loadable';
 

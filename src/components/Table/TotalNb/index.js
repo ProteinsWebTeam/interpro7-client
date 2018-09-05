@@ -7,7 +7,7 @@ import { createSelector } from 'reselect';
 
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import cn from 'classnames/bind';
 

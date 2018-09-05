@@ -19,7 +19,7 @@ import Table, {
   Exporter,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import getExtUrlFor from 'utils/url-patterns';
 import { toPlural } from 'utils/pages';

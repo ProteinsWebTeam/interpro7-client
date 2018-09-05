@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
@@ -79,7 +79,8 @@ class TaxonomyFilter extends PureComponent {
               />
               {taxId === 'ALL' ? <div>All</div> : title}
               {typeof count === 'undefined' || isNaN(count) ? null : (
-                <NumberLabel
+                <NumberComponent
+                  label
                   value={count}
                   loading={loading}
                   className={f('filter-label')}

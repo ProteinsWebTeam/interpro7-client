@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import { singleEntity } from 'menuConfig';
 
@@ -99,7 +99,9 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
         {name}
         {value !== null && ' '}
         {value !== null &&
-          !isNaN(value) && <NumberLabel value={value} loading={loading} abbr />}
+          !isNaN(value) && (
+            <NumberComponent label value={value} loading={loading} abbr />
+          )}
       </Link>
     );
   }

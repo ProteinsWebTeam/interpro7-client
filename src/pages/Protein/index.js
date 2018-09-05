@@ -16,7 +16,7 @@ import Table, {
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
