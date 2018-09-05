@@ -50,23 +50,23 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
 
             <ul>
               <li>
-                The addition of <NumberComponent duration={0} value={662} />{' '}
+                The addition of <NumberComponent noAnimation value={662} />{' '}
                 InterPro entries.
               </li>
               <li>An update to SFLD (4).</li>
               <li>
-                Integration of <NumberComponent duration={0} value={886} /> new
+                Integration of <NumberComponent noAnimation value={886} /> new
                 methods from the CATH-Gene3D (
-                <NumberComponent duration={0} value={5} />
-                ), CDD (<NumberComponent duration={0} value={17} />
-                ), HAMAP (<NumberComponent duration={0} value={1} />
-                ), PANTHER (<NumberComponent duration={0} value={689} />
-                ), Pfam (<NumberComponent duration={0} value={119} />
-                ), PIRSF (<NumberComponent duration={0} value={1} />
-                ), PRINTS (<NumberComponent duration={0} value={2} />
-                ), ProDom (<NumberComponent duration={0} value={3} />
-                ), SFLD (<NumberComponent duration={0} value={22} />) and SMART
-                (<NumberComponent duration={0} value={1} />) databases.
+                <NumberComponent noAnimation value={5} />
+                ), CDD (<NumberComponent noAnimation value={17} />
+                ), HAMAP (<NumberComponent noAnimation value={1} />
+                ), PANTHER (<NumberComponent noAnimation value={689} />
+                ), Pfam (<NumberComponent noAnimation value={119} />
+                ), PIRSF (<NumberComponent noAnimation value={1} />
+                ), PRINTS (<NumberComponent noAnimation value={2} />
+                ), ProDom (<NumberComponent noAnimation value={3} />
+                ), SFLD (<NumberComponent noAnimation value={22} />) and SMART (
+                <NumberComponent noAnimation value={1} />) databases.
               </li>
             </ul>
 
