@@ -117,15 +117,12 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
                 <span
                   className={f('count', { visible: this.props.data.payload })}
                 >
-                  <NumberComponent
-                    value={
-                      (counts &&
-                        type &&
-                        counts[type.toLowerCase().replace(' ', '_')]) ||
-                      null
-                    }
-                    abbr
-                  />
+                  <NumberComponent abbr>
+                    {(counts &&
+                      type &&
+                      counts[type.toLowerCase().replace(' ', '_')]) ||
+                      null}
+                  </NumberComponent>
                   {type === 'new' ? ' ' : ' entries'}
                 </span>
               </p>

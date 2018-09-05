@@ -76,7 +76,7 @@ class SummaryCounterProteins extends PureComponent {
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
 
-            <NumberComponent value={entries} abbr />
+            <NumberComponent abbr>{entries}</NumberComponent>
 
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
@@ -105,7 +105,7 @@ class SummaryCounterProteins extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-            <NumberComponent value={structures} abbr />
+            <NumberComponent abbr>{structures}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('structure', structures)}
             </span>
@@ -134,7 +134,7 @@ class SummaryCounterProteins extends PureComponent {
               disabled={!sets}
             >
               <div className={f('icon', 'icon-count-set')} />{' '}
-              <NumberComponent value={sets} abbr />
+              <NumberComponent abbr>{sets}</NumberComponent>
               <span className={f('label-number')}>{toPlural('set', sets)}</span>
             </Link>
           </Tooltip>

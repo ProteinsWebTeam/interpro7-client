@@ -74,11 +74,12 @@ class OrganismDBFilter extends PureComponent {
               <span style={{ textTransform: 'capitalize' }}>{type}</span>
               <NumberComponent
                 label
-                value={count}
                 loading={loading}
                 className={f('filter-label')}
                 abbr
-              />
+              >
+                {count}
+              </NumberComponent>
             </label>
           </div>
         ))}

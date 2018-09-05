@@ -115,7 +115,7 @@ class SummaryCounterProteome extends PureComponent {
             disabled={!entries}
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-            <NumberComponent value={entries} abbr />
+            <NumberComponent abbr>{entries}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
             </span>
@@ -143,7 +143,7 @@ class SummaryCounterProteome extends PureComponent {
             disabled={!proteins}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr />
+            <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {' '}
               {toPlural('protein', proteins)}
@@ -172,7 +172,7 @@ class SummaryCounterProteome extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
-            <NumberComponent value={structures} abbr />{' '}
+            <NumberComponent abbr>{structures}</NumberComponent>{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
         </Tooltip>
@@ -414,7 +414,9 @@ class List extends PureComponent {
                       },
                     }}
                   >
-                    <NumberComponent value={count} loading={loading} abbr />
+                    <NumberComponent loading={loading} abbr>
+                      {count}
+                    </NumberComponent>
                   </Link>
                 );
               }}
@@ -451,7 +453,9 @@ class List extends PureComponent {
                       },
                     }}
                   >
-                    <NumberComponent value={count} loading={loading} abbr />
+                    <NumberComponent loading={loading} abbr>
+                      {count}
+                    </NumberComponent>
                   </Link>
                 );
               }}

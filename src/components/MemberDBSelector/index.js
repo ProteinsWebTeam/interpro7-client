@@ -302,8 +302,6 @@ class _MemberDBSelector extends PureComponent {
                   </span>
                   {!this.props.hideCounters && (
                     <NumberComponent
-                      label
-                      value={(!loading && count) || 0}
                       loading={loading}
                       className={f('label')}
                       titleType={toPlural(main, (!loading && count) || 0)}
@@ -311,7 +309,9 @@ class _MemberDBSelector extends PureComponent {
                         background: checked && config.colors.get(db.canonical),
                       }}
                       abbr
-                    />
+                    >
+                      {(!loading && count) || 0}
+                    </NumberComponent>
                   )}
                 </label>
               );

@@ -82,12 +82,9 @@ class IntegratedFilter extends PureComponent {
                   style={{ margin: '0.25em' }}
                 />
                 <span style={{ textTransform: 'capitalize' }}>{type}</span>
-                <NumberComponent
-                  label
-                  value={types[type]}
-                  loading={loading}
-                  abbr
-                />
+                <NumberComponent label loading={loading} abbr>
+                  {types[type]}
+                </NumberComponent>
               </label>
             </div>
           ))}

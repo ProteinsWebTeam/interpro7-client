@@ -73,12 +73,13 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
             >
               <NumberComponent
                 loading={loading}
-                value={entries}
                 abbr
                 titleType={`${toPlural('entry', entries)} matching ${
                   species.title
                 }`}
-              />{' '}
+              >
+                {entries}
+              </NumberComponent>{' '}
               {toPlural('entry', entries)}
             </Link>
             <br />
@@ -97,12 +98,13 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
             >
               <NumberComponent
                 loading={loading}
-                value={proteins}
                 abbr
                 titleType={`${toPlural('protein', proteins)} matching ${
                   species.title
                 }`}
-              />{' '}
+              >
+                {proteins}
+              </NumberComponent>{' '}
               {toPlural('protein', proteins)}
             </Link>
           </p>

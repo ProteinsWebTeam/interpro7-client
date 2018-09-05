@@ -366,7 +366,7 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={count => <NumberComponent value={count} abbr />}
+      renderer={count => <NumberComponent abbr>{count}</NumberComponent>}
     >
       protein count
     </Column>

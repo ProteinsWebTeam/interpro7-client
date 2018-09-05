@@ -91,7 +91,7 @@ class SummaryCounterEntries extends PureComponent {
             className={f(proteins ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr />
+            <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
             </span>
@@ -119,7 +119,7 @@ class SummaryCounterEntries extends PureComponent {
             className={f(domainArchitectures ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-count-ida')} />{' '}
-            <NumberComponent value={domainArchitectures} abbr />
+            <NumberComponent abbr>{domainArchitectures}</NumberComponent>
             <span className={f('label-number')}>domain architectures</span>
           </Link>
         </Tooltip>
@@ -145,7 +145,7 @@ class SummaryCounterEntries extends PureComponent {
             className={f(taxa ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent value={taxa} abbr />
+            <NumberComponent abbr>{taxa}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
             </span>
@@ -173,7 +173,7 @@ class SummaryCounterEntries extends PureComponent {
             className={f(structures ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-            <NumberComponent value={structures} abbr />
+            <NumberComponent abbr>{structures}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('structure', structures)}
             </span>
@@ -201,7 +201,7 @@ class SummaryCounterEntries extends PureComponent {
               className={f(sets ? null : 'ico-disabled')}
             >
               <div className={f('icon', 'icon-count-set')} />{' '}
-              <NumberComponent value={sets} abbr />
+              <NumberComponent abbr>{sets}</NumberComponent>
               <span className={f('label-number')}>{toPlural('set', sets)}</span>
             </Link>
           </Tooltip>

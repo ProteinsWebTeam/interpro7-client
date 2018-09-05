@@ -25,7 +25,7 @@ export const DEFAULT_DURATION = 1;
 const DELAY_RANGE = 0.25;
 
 /*:: type ComponentProps = {
-  value: ?(number | string),
+  children: ?(number | string),
   loading?: boolean,
   noAnimation?: boolean,
   duration: number,
@@ -47,7 +47,7 @@ class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
   */
 
   static propTypes = {
-    value: T.oneOfType([T.number, T.string]),
+    children: T.oneOfType([T.number, T.string]),
     loading: T.bool,
     noAnimation: T.bool,
     duration: T.number,
@@ -75,11 +75,11 @@ class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
   }
 
   componentDidMount() {
-    this._animate(this.props.value);
+    this._animate(this.props.children);
   }
 
-  componentDidUpdate({ value: from }) {
-    this._animate(this.props.value, from);
+  componentDidUpdate({ children: from }) {
+    this._animate(this.props.children, from);
   }
 
   componentWillUnmount() {
@@ -143,7 +143,7 @@ class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
 
   render() {
     const {
-      value,
+      children,
       loading,
       noAnimation,
       duration,
