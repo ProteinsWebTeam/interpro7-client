@@ -27,6 +27,7 @@ const DELAY_RANGE = 0.25;
 /*:: type ComponentProps = {
   value: ?(number | string),
   loading?: boolean,
+  noAnimation?: boolean,
   duration: number,
   className: ?string,
   lowGraphics: boolean,
@@ -47,6 +48,7 @@ class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
   static propTypes = {
     value: T.oneOfType([T.number, T.string]),
     loading: T.bool,
+    noAnimation: T.bool,
     duration: T.number,
     className: T.string,
     lowGraphics: T.bool.isRequired,
@@ -106,6 +108,7 @@ class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
     }
 
     const canAnimate =
+      !this.props.noAnimation &&
       !this.props.lowGraphics &&
       from !== to &&
       Number.isFinite(from) &&
@@ -140,6 +143,7 @@ class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
     const {
       value,
       loading,
+      noAnimation,
       duration,
       lowGraphics,
       className,
@@ -172,6 +176,7 @@ export const NumberComponent = connect(mapStateToProps)(_NumberComponent);
 /*:: type LabelProps = {
   value: ?(number | string),
   loading?: boolean,
+  noAnimation?: boolean,
   duration?: number,
   className: ?string,
   abbr?: boolean,
