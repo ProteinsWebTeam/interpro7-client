@@ -12,7 +12,7 @@ import StructureOnProtein from './StructureOnProtein';
 import File from 'components/File';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 import { PDBeLink } from 'components/ExtLink';
 import Lazy from 'wrappers/Lazy';
 import LazyImage from 'components/LazyImage';

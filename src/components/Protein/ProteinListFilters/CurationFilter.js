@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -66,7 +66,8 @@ class CurationFilter extends PureComponent {
                 style={{ margin: '0.25em' }}
               />
               <span>{db === 'uniprot' ? 'both' : db}</span>
-              <NumberLabel
+              <NumberComponent
+                label
                 value={value}
                 loading={loading}
                 className={f('filter-label')}

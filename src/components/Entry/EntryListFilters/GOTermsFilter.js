@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import loadData from 'higherOrder/loadData';
@@ -123,7 +123,8 @@ class GOTermsFilter extends PureComponent {
               )}
 
               {typeof count === 'undefined' || isNaN(count) ? null : (
-                <NumberLabel
+                <NumberComponent
+                  label
                   value={count}
                   loading={loading}
                   className={f('filter-label')}

@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import { singleEntity } from 'menuConfig';
 
@@ -198,7 +198,8 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
           {value !== null && ' '}
           {value !== null &&
             !isNaN(value) && (
-              <NumberLabel
+              <NumberComponent
+                label
                 loading={loading}
                 value={value}
                 abbr

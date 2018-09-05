@@ -5,7 +5,7 @@ import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import { goToCustomLocation } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
@@ -66,7 +66,8 @@ class MatchPresenceFilter extends PureComponent {
                 style={{ margin: '0.25em' }}
               />
               <span>{labels.get(key)}</span>
-              <NumberLabel
+              <NumberComponent
+                label
                 value={value}
                 loading={loading}
                 className={f('filter-label')}

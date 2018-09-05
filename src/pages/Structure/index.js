@@ -20,7 +20,7 @@ import Table, {
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import { toPlural } from 'utils/pages';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';

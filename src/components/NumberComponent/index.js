@@ -33,13 +33,14 @@ const DELAY_RANGE = 0.25;
   lowGraphics: boolean,
   dispatch: function,
   abbr: boolean,
+  label?: boolean,
   scaleMargin: number,
   noTitle: ?boolean,
   title?: number | string,
   titleType?: string,
 }; */
 
-class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
+class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
   /*::
     _ref: { current: HTMLSpanElement | null };
     _animation: ?any;
@@ -54,6 +55,7 @@ class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
     lowGraphics: T.bool.isRequired,
     dispatch: T.func.isRequired,
     abbr: T.bool,
+    label: T.bool,
     scaleMargin: T.number,
     noTitle: T.bool,
     title: T.oneOfType([T.string, T.number]),
@@ -152,13 +154,14 @@ class _NumberComponent extends PureComponent /*:: <ComponentProps> */ {
       noTitle,
       title,
       titleType,
+      label,
       scaleMargin,
       ...props
     } = this.props;
 
     return (
       <span
-        className={f(className, { loading, lowGraphics })}
+        className={f(className, { loading, lowGraphics, label })}
         ref={this._ref}
         {...props}
       />
@@ -171,29 +174,4 @@ const mapStateToProps = createSelector(
   lowGraphics => ({ lowGraphics }),
 );
 
-export const NumberComponent = connect(mapStateToProps)(_NumberComponent);
-
-/*:: type LabelProps = {
-  value: ?(number | string),
-  loading?: boolean,
-  noAnimation?: boolean,
-  duration?: number,
-  className: ?string,
-  abbr?: boolean,
-  scaleMargin?: number,
-  title?: number | string,
-  titleType?: string,
-}; */
-
-class NumberLabel extends PureComponent /*:: <LabelProps> */ {
-  static propTypes = {
-    className: T.string,
-  };
-
-  render() {
-    const { className, ...props } = this.props;
-    return <NumberComponent className={f('label', className)} {...props} />;
-  }
-}
-
-export default NumberLabel;
+export default connect(mapStateToProps)(NumberComponent);
