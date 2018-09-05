@@ -68,11 +68,12 @@ class MatchPresenceFilter extends PureComponent {
               <span>{labels.get(key)}</span>
               <NumberComponent
                 label
-                value={value}
                 loading={loading}
                 className={f('filter-label')}
                 abbr
-              />
+              >
+                {value}
+              </NumberComponent>
             </label>
           </div>
         ))}

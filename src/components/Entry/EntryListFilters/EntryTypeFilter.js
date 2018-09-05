@@ -100,11 +100,12 @@ class EntryTypeFilter extends PureComponent {
               )}
               <NumberComponent
                 label
-                value={count}
                 loading={loading}
                 className={f('filter-label')}
                 abbr
-              />
+              >
+                {count}
+              </NumberComponent>
             </label>
           </div>
         ))}

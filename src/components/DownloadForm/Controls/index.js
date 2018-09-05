@@ -70,7 +70,7 @@ export class Controls extends PureComponent {
             className={f('callout', count > HARD_LIMIT ? 'alert' : 'warning')}
           >
             We expect this file to contain{' '}
-            <NumberComponent value={count} abbr /> distinct{' '}
+            <NumberComponent abbr>{count}</NumberComponent> distinct{' '}
             {toPlural(entityType)}.{' '}
             {count > HARD_LIMIT
               ? 'This file will be too large to generate within your browser'

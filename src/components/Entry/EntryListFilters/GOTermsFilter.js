@@ -125,11 +125,12 @@ class GOTermsFilter extends PureComponent {
               {typeof count === 'undefined' || isNaN(count) ? null : (
                 <NumberComponent
                   label
-                  value={count}
                   loading={loading}
                   className={f('filter-label')}
                   abbr
-                />
+                >
+                  {count}
+                </NumberComponent>
               )}
             </label>
           </div>

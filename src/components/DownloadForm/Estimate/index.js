@@ -21,7 +21,8 @@ const getText = ({ loading, payload, ok, status, headers }) => {
   if (count) {
     return (
       <>
-        Your file will contain <NumberComponent value={count} abbr /> item
+        Your file will contain <NumberComponent abbr>{count}</NumberComponent>{' '}
+        item
         {count > 1 ? 's' : ''}.
       </>
     );
@@ -39,7 +40,8 @@ const getText = ({ loading, payload, ok, status, headers }) => {
     });
     return (
       <>
-        Your file size will be of <NumberComponent value={value} /> {suffix}
+        Your file size will be of <NumberComponent>{value}</NumberComponent>{' '}
+        {suffix}
       </>
     );
   }

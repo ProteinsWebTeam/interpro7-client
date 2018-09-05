@@ -107,10 +107,9 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
 
                   <p className={f('margin-bottom-medium')}>
                     <span className={f('count', { visible: payload })}>
-                      <NumberComponent
-                        value={(counts && counts[canonical.toLowerCase()]) || 0}
-                        abbr
-                      />
+                      <NumberComponent abbr>
+                        {(counts && counts[canonical.toLowerCase()]) || 0}
+                      </NumberComponent>
                       {' entries'}
                     </span>
                   </p>

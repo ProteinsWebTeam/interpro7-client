@@ -201,11 +201,12 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
               <NumberComponent
                 label
                 loading={loading}
-                value={value}
                 abbr
                 duration={usedOnTheSide ? 0 : undefined}
                 className={f('counter')}
-              />
+              >
+                {value}
+              </NumberComponent>
             )}
         </Link>
       </li>
