@@ -132,7 +132,8 @@ class Link extends PureComponent /*:: <Props> */ {
     } = this.props;
     let _disabled = disabled;
     let _children = children;
-    let _href, activeClassName;
+    let _href;
+    let activeClassName;
     try {
       const nextCustomLocation = getNextLocation(customLocation, to) || {};
       nextCustomLocation.description = descriptionToDescription(
