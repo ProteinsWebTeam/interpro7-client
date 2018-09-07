@@ -23,7 +23,7 @@
     "report:coverage:flow": "flow-coverage-report",
     "report:coverage:jest": "npm run test:unit -- --coverage",
     "report:lighthouse": "node scripts/lighthouse.js",
-    "report:stats": "mkdirp reports/webpack-stats && webpack --profile --json > reports/webpack-stats/stats.json",
+    "report:stats": "#mkdirp reports/webpack-stats && webpack --profile --json > reports/webpack-stats/stats.json",
     "coveralls": "cat reports/jest-coverage/lcov.info | coveralls",
     "dev": "webpack-dev-server --mode=development",
     "flow-typed:install": "npx flow-typed install",
@@ -51,12 +51,12 @@
     ]
   },
   "flow-coverage-report": {
-    "includeGlob": [
+    "globIncludePatterns": [
       "src/**/*.js"
     ],
     "concurrentFiles": 4,
     "threshold": 50,
-    "type": [
+    "reportTypes": [
       "text",
       "html",
       "json"
