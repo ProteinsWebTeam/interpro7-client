@@ -12,15 +12,19 @@ import {
   schemaProcessDataPageSection,
 } from 'schema_org/processors';
 
-import { changeSettings, resetSettings } from 'actions/creators';
+import { installPrompt } from 'index';
+
+import loadable from 'higherOrder/loadable';
+
+import { changeSettings, resetSettings, addToast } from 'actions/creators';
+
+import { EntryColorMode } from 'utils/entry-color';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
-import loadable from 'higherOrder/loadable';
-import { EntryColorMode } from 'utils/entry-color';
 
 const f = foundationPartial(ebiGlobalStyles, theme, local);
 
@@ -340,6 +344,87 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
+class _AddToHomeScreen extends PureComponent {
+  static propTypes = {
+    addToast: T.func.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+
+    // see if the event has been caught before somewhere else while browsing
+    this.state = { event: installPrompt.event };
+  }
+
+  componentDidMount() {
+    window.addEventListener('beforeinstallprompt', this.#beforeInstall);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeinstallprompt', this.#beforeInstall);
+  }
+
+  #beforeInstall = event => {
+    event.preventDefault();
+    this.setState({ event });
+  };
+
+  _handleClick = async () => {
+    const { event } = this.state;
+    if (!event) return;
+    event.prompt();
+    const { outcome } = await event.userChoice;
+    if (outcome === 'accepted') {
+      // user accepted browser prompt
+      this.props.addToast(
+        {
+          title: 'Added to homescreen or desktop',
+          body:
+            'Keep in mind that you still need to be online to browse our data',
+          ttl: 5000, // eslint-disable-line no-magic-numbers
+        },
+        'add-to-homescreen-banner',
+      );
+    } else {
+      // user refused 🤔🤷🏻‍♂️
+      this.props.addToast(
+        {
+          title: 'Failed to add to homescreen or desktop',
+          body:
+            'It looks like you refused to add this website to the homescreen or desktop after all',
+          ttl: 5000, // eslint-disable-line no-magic-numbers
+        },
+        'add-to-homescreen-banner',
+      );
+    }
+    // remove stored event, cannot use it twice
+    this.setState({ event: null });
+    installPrompt.event = null;
+  };
+
+  render() {
+    if (!this.state.event) return null;
+    return (
+      <div className={f('row')}>
+        <div className={f('columns', 'large-12')}>
+          <h3>Add InterPro to your home screen or desktop</h3>
+          <button
+            type="button"
+            className={f('button')}
+            onClick={this._handleClick}
+          >
+            Add it!
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+const AddToHomeScreen = connect(
+  undefined,
+  { addToast },
+)(_AddToHomeScreen);
+
 class Settings extends PureComponent {
   static propTypes = {
     settings: T.shape({
@@ -368,48 +453,55 @@ class Settings extends PureComponent {
       changeSettings,
     } = this.props;
     return (
-      <div className={f('row')}>
-        <SchemaOrgData
-          data={{
-            name: 'InterPro Settings Page',
-            description: 'Configuration options for the website',
-            location: window.location,
-          }}
-          processData={schemaProcessDataWebPage}
-        />
-        <div className={f('columns', 'large-12')}>
-          <section onChange={changeSettings}>
-            <h3>Settings</h3>
+      <>
+        <AddToHomeScreen />
 
-            <NavigationSettings
-              navigation={navigation}
-              handleChange={changeSettings}
-            />
+        <div className={f('row')}>
+          <SchemaOrgData
+            data={{
+              name: 'InterPro Settings Page',
+              description: 'Configuration options for the website',
+              location: window.location,
+            }}
+            processData={schemaProcessDataWebPage}
+          />
+          <div className={f('columns', 'large-12')}>
+            <section onChange={changeSettings}>
+              <h3>Settings</h3>
 
-            <UISettings ui={ui} />
+              <NavigationSettings
+                navigation={navigation}
+                handleChange={changeSettings}
+              />
 
-            <CacheSettings cache={cache} />
+              <UISettings ui={ui} />
 
-            <APIEndpointSettings category="api" endpointDetails={api}>
-              API Settings {!DEV && '(modification temporarily disabled)'}
-            </APIEndpointSettings>
-            <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
-              EBI Search Settings{' '}
-              {!DEV && '(modification temporarily disabled)'}
-            </EBIEndpointSettings>
-            <IPScanEndpointSettings category="ipScan" endpointDetails={ipScan}>
-              InterProScan Settings{' '}
-              {!DEV && '(modification temporarily disabled)'}
-            </IPScanEndpointSettings>
+              <CacheSettings cache={cache} />
 
-            <button onClick={this._handleReset} className={f('button')}>
-              Reset settings to default values
-            </button>
-          </section>
+              <APIEndpointSettings category="api" endpointDetails={api}>
+                API Settings {!DEV && '(modification temporarily disabled)'}
+              </APIEndpointSettings>
+              <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
+                EBI Search Settings{' '}
+                {!DEV && '(modification temporarily disabled)'}
+              </EBIEndpointSettings>
+              <IPScanEndpointSettings
+                category="ipScan"
+                endpointDetails={ipScan}
+              >
+                InterProScan Settings{' '}
+                {!DEV && '(modification temporarily disabled)'}
+              </IPScanEndpointSettings>
 
-          <Advanced />
+              <button onClick={this._handleReset} className={f('button')}>
+                Reset settings to default values
+              </button>
+            </section>
+
+            <Advanced />
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 }
