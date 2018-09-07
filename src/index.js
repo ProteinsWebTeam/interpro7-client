@@ -16,6 +16,15 @@ import config, { DEV } from 'config';
 
 elementMatchesPolyfill();
 
+// "add to homescreen" banner management
+// see https://developers.google.com/web/updates/2018/06/a2hs-updates
+// save the event in an exported object to be able to use it wherever we want
+export const installPrompt = {};
+window.addEventListener('beforeinstallprompt', event => {
+  event.preventDefault();
+  installPrompt.event = event;
+});
+
 const schemaOrgManager = (...args) =>
   import(/* webpackChunkName: "schemaOrg" */ 'schema_org').then(
     m => new m.Manager(...args),
