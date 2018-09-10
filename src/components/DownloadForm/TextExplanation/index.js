@@ -199,7 +199,7 @@ export default class TextExplanation extends PureComponent {
                 onBlur={noop}
               />
               I&apos;m only interested in the part(s) of the sequence matching
-              (1 subsequence per match)
+              (1 subsequence with all the fragments for every match)
             </label>
           )}
       </section>

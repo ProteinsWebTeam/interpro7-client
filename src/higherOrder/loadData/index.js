@@ -55,7 +55,7 @@ const loadData = params => {
         this._id = uniqueId('data-loader');
 
         // Initialize state
-        const url = getUrl(props.appState);
+        const url = getUrl(props.appState, props);
         this.state = {
           url,
           data: newData(url),
@@ -65,7 +65,7 @@ const loadData = params => {
 
       static getDerivedStateFromProps(nextProps, prevState) {
         // get potential new url in state according to props
-        const url = getUrl(nextProps.appState);
+        const url = getUrl(nextProps.appState, nextProps);
         // if it's the same, don't update the state
         if (prevState.url === url) return null;
         // otherwise, update url in state, and create new data object in state
@@ -169,7 +169,10 @@ const loadData = params => {
         };
         return (
           <UnconnectedErrorBoundary customLocation={appState.customLocation}>
-            <Wrapped {...passedProps} {...mapStateToProps(appState) || {}} />
+            <Wrapped
+              {...passedProps}
+              {...mapStateToProps(appState, passedProps) || {}}
+            />
           </UnconnectedErrorBoundary>
         );
       }
