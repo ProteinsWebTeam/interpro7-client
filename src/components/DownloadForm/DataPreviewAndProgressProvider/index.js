@@ -18,53 +18,19 @@ export class DataPreviewProviderWithoutData extends PureComponent {
   }
 }
 
-const mapStateToPropsFor = (url, fileType, subset) =>
-  createSelector(downloadSelector, downloads => ({
-    download:
-      downloads[
-        [url, fileType, subset && 'subset'].filter(Boolean).join('|')
-      ] || {},
-  }));
+const getMapStateToProps = () =>
+  createSelector(
+    downloadSelector,
+    (_, { url, fileType, subset }) => ({ url, fileType, subset }),
+    (downloads, { url, fileType, subset }) => ({
+      download:
+        downloads[
+          [url, fileType, subset && 'subset'].filter(Boolean).join('|')
+        ] || {},
+    }),
+  );
 
-export default class DataPreviewProvider extends PureComponent {
-  static propTypes = {
-    url: T.string.isRequired,
-    fileType: T.string.isRequired,
-    subset: T.bool.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      DataPreviewProviderWithData: null,
-      url: null,
-      fileType: null,
-      subset: null,
-    };
-  }
-
-  static getDerivedStateFromProps({ url, fileType, subset }, prevState) {
-    if (
-      url === prevState.url &&
-      fileType === prevState.fileType &&
-      subset === prevState.subset
-    )
-      return null;
-
-    return {
-      DataPreviewProviderWithData: loadData({
-        getUrl: () => url,
-        mapStateToProps: mapStateToPropsFor(url, fileType, subset),
-      })(DataPreviewProviderWithoutData),
-      url,
-      fileType,
-      subset,
-    };
-  }
-
-  render() {
-    const { DataPreviewProviderWithData } = this.state;
-    return <DataPreviewProviderWithData {...this.props} />;
-  }
-}
+export default loadData({
+  getUrl: (_, { url }) => url,
+  mapStateToProps: getMapStateToProps(),
+})(DataPreviewProviderWithoutData);

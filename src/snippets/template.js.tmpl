@@ -49,7 +49,7 @@ const processItem = function* (item) {
 
 const main = async function* (startURL) {
   let next = startURL;<% if (fileType === 'json') { %>
-  <% if (fileType === 'json') { %>let first = true;<% } %>
+  let first = true;
   yield `{\n"results": [\n`;<% } %>
   while (next) {
     const response = await fetch(
