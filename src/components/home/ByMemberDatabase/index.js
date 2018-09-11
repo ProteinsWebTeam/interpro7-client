@@ -98,7 +98,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                   <Tooltip title={description}>
                     <span
                       className={f('small', 'icon', 'icon-common')}
-                      data-icon="ℹ"
+                      data-icon="&#xf129;"
                       aria-label={description}
                     />
                   </Tooltip>

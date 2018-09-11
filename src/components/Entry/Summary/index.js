@@ -56,7 +56,10 @@ const MemberDBSubtitle = ({ metadata }) => {
         >
           {metadata.source_database}{' '}
           <Tooltip title={metadata.source_database}>
-            <span className={f('small', 'icon', 'icon-common')} data-icon="ℹ" />
+            <span
+              className={f('small', 'icon', 'icon-common')}
+              data-icon="&#xf129;"
+            />
           </Tooltip>
         </Link>
       </h5>
