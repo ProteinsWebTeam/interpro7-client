@@ -140,11 +140,8 @@ class IPScanStatus extends PureComponent {
                     status === 'submitted') && (
                     <span
                       style={{ fontSize: '200%' }}
-                      className={f('icon', 'icon-generic', 'ico-progress')}
-                      data-icon="{"
-                      // TEMP while we wait for latest update EBI framework
-                      // className={f('icon', 'icon-common', 'ico-progress')}
-                      // data-icon="&#xf017;"
+                      className={f('icon', 'icon-common', 'ico-progress')}
+                      data-icon="&#xf017;"
                       aria-label={`Job ${status}`}
                     />
                   )}
