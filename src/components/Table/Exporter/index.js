@@ -41,7 +41,7 @@ class Exporter extends PureComponent {
             this.setState({ isOpen: !this.state.isOpen });
           }}
         >
-          <span className={fPlus('icon', 'icon-functional')} data-icon="=" />{' '}
+          <span className={fPlus('icon', 'icon-common')} data-icon="&#x3d;" />{' '}
           <span className={fPlus('hide-for-small-only')}>Export</span>{' '}
         </button>
         <Tooltip title="Settings (customise results by page, …)">
