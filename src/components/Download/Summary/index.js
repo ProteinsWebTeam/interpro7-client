@@ -99,6 +99,8 @@ class Summary extends PureComponent {
             <Column
               dataKey="localID"
               defaultKey="actions"
+              headerClassName={f('table-center')}
+              cellClassName={f('table-center')}
               renderer={(
                 localID /*: string */,
                 { blobURL } /* { blobURL?: string } */,
