@@ -44,8 +44,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -93,8 +93,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -142,8 +142,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -191,8 +191,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -240,8 +240,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -289,8 +289,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -338,8 +338,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -387,8 +387,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -415,7 +415,7 @@ exports[`<Consortium /> should render with data 1`] = `
            
           <Connect(Link)
             className="ext"
-            href="//prodom.prabi.fr/"
+            href="http://prodom.prabi.fr/"
             target="_blank"
           >
             <span
@@ -436,8 +436,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -483,8 +483,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -531,8 +531,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -580,8 +580,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -629,8 +629,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -678,8 +678,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
@@ -707,7 +707,7 @@ exports[`<Consortium /> should render with data 1`] = `
           
           <Connect(Link)
             className="ext"
-            href="//tigrfams.jcvi.org/cgi-bin/index.cgi"
+            href="http://tigrfams.jcvi.org/cgi-bin/index.cgi"
             target="_blank"
           >
             <span
@@ -727,8 +727,8 @@ exports[`<Consortium /> should render with data 1`] = `
           <br />
            
           <small
-            className="icon icon-generic"
-            data-icon="r"
+            className="icon icon-common"
+            data-icon=""
           >
              
             Released 
