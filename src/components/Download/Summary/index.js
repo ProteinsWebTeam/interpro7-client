@@ -58,7 +58,7 @@ class Summary extends PureComponent {
                   {progress === 1 ? null : (
                     <span
                       style={{ fontSize: '200%' }}
-                      className={f('icon', 'icon-common', 'ico-progress')}
+                      className={f('icon', 'icon-common', 'ico-neutral')}
                       data-icon="&#x17;"
                       aria-label={`Job ${Math.floor(progress * 100)}% complete`}
                     />
@@ -67,8 +67,8 @@ class Summary extends PureComponent {
                   {successful === false ? (
                     <span
                       style={{ fontSize: '160%' }}
-                      className={f('icon', 'icon-functional', 'ico-notfound')}
-                      data-icon="x"
+                      className={f('icon', 'icon-common', 'ico-notfound')}
+                      data-icon="&#x78;"
                       aria-label="Job failed or not found"
                     />
                   ) : null}
@@ -76,8 +76,8 @@ class Summary extends PureComponent {
                   {successful === true && (
                     <span
                       style={{ fontSize: '160%' }}
-                      className={f('icon', 'icon-functional', 'ico-confirmed')}
-                      data-icon="/"
+                      className={f('icon', 'icon-common', 'ico-confirmed')}
+                      data-icon="&#xf00c;"
                       aria-label="Job finished"
                     />
                   )}
