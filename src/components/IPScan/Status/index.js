@@ -140,7 +140,7 @@ class IPScanStatus extends PureComponent {
                     status === 'submitted') && (
                     <span
                       style={{ fontSize: '200%' }}
-                      className={f('icon', 'icon-common', 'ico-progress')}
+                      className={f('icon', 'icon-common', 'ico-neutral')}
                       data-icon="&#xf017;"
                       aria-label={`Job ${status}`}
                     />
@@ -151,16 +151,16 @@ class IPScanStatus extends PureComponent {
                   status === 'error' ? (
                     <span
                       style={{ fontSize: '160%' }}
-                      className={f('icon', 'icon-functional', 'ico-notfound')}
-                      data-icon="x"
+                      className={f('icon', 'icon-common', 'ico-notfound')}
+                      data-icon="&#x78;"
                       aria-label="Job failed or not found"
                     />
                   ) : null}
                   {status === 'finished' && (
                     <span
                       style={{ fontSize: '160%' }}
-                      className={f('icon', 'icon-functional', 'ico-confirmed')}
-                      data-icon="/"
+                      className={f('icon', 'icon-common', 'ico-confirmed')}
+                      data-icon="&#xf00c;"
                       aria-label="Job finished"
                     />
                   )}
