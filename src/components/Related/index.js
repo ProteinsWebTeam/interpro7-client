@@ -280,7 +280,7 @@ const getReversedUrl = createSelector(
     const newDesc = {};
     let newMain;
     for (const [key, value] of Object.entries(description)) {
-      newDesc[key] = { ...value };
+      newDesc[key] = key === 'other' ? [...value] : { ...value };
       if (value.isFilter) {
         newMain = key;
         newDesc[key].isFilter = false;
