@@ -444,7 +444,7 @@ details.accordion-style > summary {
     transition: all 0.4s ease-out;
   }
   &::after {
-    content: 'ć'; /*content: "\0f11a";*/
+    content: '';
     font-family: 'EBI-Common';
     float: right;
     font-size: 120%;
@@ -490,7 +490,7 @@ details.accordion-style.classic[open] > summary {
 /*/alt color for testing*/
 
 details.accordion-style[open] summary:after {
-  content: 'Ć';
+  content: '';
 }
 /*/ACCORDION TYPE*/
 
@@ -631,8 +631,8 @@ hr {
 }
 
 .callout.warning {
-  /*background-color: #f1edd0;*/
-  background-color: var(--colors-warning-bgd);
+  color: var(--colors-light-title);
+  /*background-color: var(--colors-warning-bgd); use default foundation style*/
 }
 
 .callout.border {
@@ -846,27 +846,39 @@ hr {
   background: #ccc; /*not transparent otherwise can't be read properly*/
   z-index: 2; /*reduce Z-index to stay below sticky banner*/
 }
-/*replace icons LiteMole by EBI icons*/
-.lm-plugin span.lm-icon-expand-layout:before {
-  font-family: EBI-Functional;
-  content: 'F';
-} /*to be consistent*/
-.lm-plugin span.lm-icon-settings:before {
-  font-family: EBI-Functional;
-  content: 's';
+
+/* icons LiteMole by EBI icons*/
+/*help icon*/
+.lm-plugin span.lm-icon-help-circle:before {
+  font-family: EBI-Common;
+  content: '';
 }
+
+/*settings icon*/
+.lm-plugin span.lm-icon-settings:before {
+  font-family: EBI-Common;
+  content: '';
+}
+
+/* temp while e use the new camera icon from EBI font set
 .lm-plugin span.lm-icon-screenshot:before {
   font-family: EBI-Common;
   content: '!';
-}
-.lm-plugin span.lm-icon-help-circle:before {
+}*/
+
+/*full screen icon*/
+.lm-plugin span.lm-icon-expand-layout:before {
   font-family: EBI-Common;
-  content: '?';
+  content: 'F';
 }
+
+/*refresh icon*/
 .lm-plugin span.lm-icon-reset-scene:before {
-  font-family: EBI-Functional;
-  content: 'R';
+  font-family: EBI-Common;
+  content: '';
 }
+/*/ icons LiteMole by EBI icons*/
+
 /*change color font in control panel*/
 .lm-plugin
   .lm-entity-tree-entry-current-path
