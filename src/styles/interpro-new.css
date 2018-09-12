@@ -130,7 +130,7 @@ mark {
   color: var(--colors-check);
 }
 
-.ico-progress::before {
+.ico-neutral::before {
   color: var(--colors-all);
 }
 
