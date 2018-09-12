@@ -591,40 +591,56 @@ hr {
   background-color: var(--colors-md-sub);
 }
 
-/*CALLOUT ALERT WARNING MESSAGE - missing in foundation*/
-.callout.border {
-  border: 1px solid rgba(10, 10, 10, 0.25);
-}
-.callout.alert.withicon::before {
-  content: 'l';
-  font-family: 'EBI-Generic';
-  color: #d1847f;
-  margin-right: 0.5rem;
-}
+/*CALLOUT info & alert messages*/
+
 .callout.info {
   background-color: #c6e9ff;
-  color: #222;
 }
-.callout.info.withicon::before {
-  content: 'ℹ';
+
+.callout.info.withicon::before,
+.callout.info-alt.withicon::before {
+  content: '';
   font-family: 'EBI-Common';
   color: #7fb0d1;
   margin-right: 0.5rem;
 }
 
-.callout.slk {
+.callout.info-alt {
+  background-color: transparent;
+  border: 1px solid var(--colors-nearly-white);
+  border-left: #7fb0d1 4px solid;
+  border-radius: 0.25rem;
+}
+
+.callout.alert.withicon::before {
+  content: '';
+  font-family: 'EBI-Common';
+  color: #d1847f;
+  margin-right: 0.5rem;
+}
+
+.callout.alert-alt {
   background-color: transparent;
   border: 1px solid var(--colors-nearly-white);
   border-left: #d72b3f 4px solid;
   border-radius: 0.25rem;
-  color: #222;
 }
-.callout.slk.withicon::before {
-  content: 'l';
-  font-family: 'EBI-Generic';
+
+.callout.alert-alt.withicon::before {
+  content: '';
+  font-family: 'EBI-Common';
   color: #d72b3f;
   margin-right: 0.5rem;
 }
+
+.callout.warning {
+  background-color: #f1edd0;
+}
+
+.callout.border {
+  border: 1px solid rgba(10, 10, 10, 0.1);
+}
+/*/ CALLOUT info & alert messages*/
 
 /*TABS - home*/
 
