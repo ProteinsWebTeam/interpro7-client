@@ -118,7 +118,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   >
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x1d8;"
+                      data-icon="&#x6e;"
                     />{' '}
                     Submit a ticket
                   </Link>
