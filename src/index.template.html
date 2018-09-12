@@ -25,7 +25,7 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
 
     <% for (const css of htmlWebpackPlugin.files.css) { %>
-    <link rel="preload" as="style" href="<%= css %>" />
+    <link rel="stylesheet" href="<%= css %>" />
     <% } %>
     <% for (const font of webpack.assets.map(({name}) => name).filter(name => name.endsWith('woff') && !name.includes('fontello'))) { %>
     <link rel="preload" as="font" href="<%= webpackConfig.output.publicPath %><%= font %>" crossorigin />
