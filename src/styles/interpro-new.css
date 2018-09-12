@@ -368,29 +368,26 @@ button {
   cursor: pointer;
 }
 
-/* buttons (secondary, alert, hollow) - redefine foundation style*/
+/* buttons (alert, warning, secondary, hollow) - IScan form*/
 .button.alert {
   background-color: var(--colors-alert-main);
   color: white;
-}
-
-.button.alert:hover,
-.button.alert:active,
-.button.alert:focus {
-  background-color: var(--colors-alert-button);
-  color: white;
+  &:active,
+  &:focus,
+  &:hover {
+    background-color: var(--colors-alert-more);
+    color: white;
+  }
 }
 
 .button.warning {
-  background-color: var(--colors-warning-main);
-  color: white;
-}
-
-.button.warning:hover,
-.button.warning:active,
-.button.warning:focus {
-  background-color: var(--colors-warning-main);
-  color: white;
+  &,
+  &:active,
+  &:focus,
+  &:hover {
+    background-color: var(--colors-warning-main);
+    color: white;
+  }
 }
 
 .button.secondary {
@@ -634,7 +631,8 @@ hr {
 }
 
 .callout.warning {
-  background-color: #f1edd0;
+  /*background-color: #f1edd0;*/
+  background-color: var(--colors-warning-bgd);
 }
 
 .callout.border {
