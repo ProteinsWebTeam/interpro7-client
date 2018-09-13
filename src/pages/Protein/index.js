@@ -151,8 +151,8 @@ const ProteinCard = ({ data, search, entryDB }) => (
         <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
           <h4>
             <span
-              className={f('icon', 'icon-functional')}
-              data-icon="/"
+              className={f('icon', 'icon-common')}
+              data-icon="&#xf00c;"
               aria-label="reviewed"
             />
           </h4>
@@ -357,8 +357,8 @@ class List extends PureComponent {
                       {'\u00A0' /* non-breakable space */}
                       <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
                         <span
-                          className={f('icon', 'icon-functional')}
-                          data-icon="/"
+                          className={f('icon', 'icon-common')}
+                          data-icon="&#xf00c;"
                           aria-label="reviewed"
                         />
                       </Tooltip>
