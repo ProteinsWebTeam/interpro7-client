@@ -461,7 +461,7 @@ class ProtVista extends PureComponent {
                 onClick={this.handleFullScreen}
                 data-icon="F"
                 title="Full screen"
-                className={f('margin-bottom-none', 'icon', 'icon-functional')}
+                className={f('margin-bottom-none', 'icon', 'icon-common')}
               />
             </Tooltip>
           </div>
