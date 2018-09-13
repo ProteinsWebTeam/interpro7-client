@@ -68,7 +68,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
         <div className={f('columns')} style={noPadding}>
           <div className={f('jumbo-news')}>
             <div className={f('jumbo-news-container')} ref={this._ref}>
-              <div className={f('icon', 'icon-common')} data-icon="🐦" />
+              <div className={f('icon', 'icon-common')} data-icon="&#xf099;" />
               <Link
                 ref={this._LinkRef}
                 data-dnt="true"
