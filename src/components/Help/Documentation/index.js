@@ -31,14 +31,18 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   }
                   <span
                     className={f('icon', 'icon-common', 'xl')}
-                    data-icon="&#xf110;"
+                    data-icon="&#xf085;"
                   />
                   <h5>Technical specs</h5>
                   <ul className={f('small')}>
-                    <li>API (upcoming)</li>
+                    <li>
+                      <Link href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/">
+                        API documentation
+                      </Link>
+                    </li>
                     <li>
                       <Link
-                        href="/www.ebi.ac.uk/Tools/webservices/"
+                        href="//www.ebi.ac.uk/Tools/webservices/"
                         className={f('ext')}
                         target="_blank"
                       >
@@ -58,7 +62,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       >
                         <span
                           className={f('icon', 'icon-common')}
-                          data-icon="&#x1f9ee;"
+                          data-icon="&#xf09b;"
                         />{' '}
                         InterProScan Wiki
                       </Link>
@@ -68,6 +72,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       <Link
                         href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
                         className={f('ext')}
+                        target="_blank"
                       >
                         Privacy and security
                       </Link>
@@ -85,7 +90,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   >
                     <span
                       className={f('icon', 'icon-common', 'xl')}
-                      data-icon="&#xf10a;"
+                      data-icon="&#xf02d;"
                     />{' '}
                     <h5>Publications</h5>
                   </Link>
