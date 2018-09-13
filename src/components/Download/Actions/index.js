@@ -34,13 +34,13 @@ class Actions extends PureComponent {
       <div>
         <Tooltip title="Download job">
           <Link
-            className={f('button', 'secondary', 'icon', 'icon-common')}
+            className={f('icon', 'icon-common', 'ico-neutral')}
             href={blobURL}
             download={localID}
             disabled={!blobURL}
             aria-label="Download job"
             data-icon="&#x3d;"
-            style={{ fontSize: '160%', border: 'none', color: 'white' }}
+            style={{ fontSize: '160%', border: 'none' }}
           />
         </Tooltip>
         <Tooltip title="Delete job">
