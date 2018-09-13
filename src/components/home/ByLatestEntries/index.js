@@ -323,8 +323,8 @@ class LatestEntry extends PureComponent {
                 //       }}
                 //     >
                 //       <div
-                //         className={f('icon', 'icon-generic')}
-                //         data-icon="P"
+                //         className={f('icon', 'icon-common')}
+                //         data-icon="&#xf2ec;"
                 //       />{' '}
                 //       <NumberComponent value={entry.Pu} abbr />
                 //       <span className={f('label-number')}>
