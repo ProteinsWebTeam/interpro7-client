@@ -72,7 +72,7 @@ export default class Toast extends PureComponent {
         { transform: ['translateX(0)', 'translateX(150%)'] },
         ANIMATION_OPTIONS,
       );
-      e.persist();
+      if (e) e.persist();
       await sleep(ANIMATION_DURATION);
     }
     this.props.handleClose(this.props.toastId, e);

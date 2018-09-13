@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import flattenDeep from 'lodash-es/flattenDeep';
+import { flattenDeep } from 'lodash-es';
 
 import { _RelatedAdvanced as Related } from 'components/Related';
 

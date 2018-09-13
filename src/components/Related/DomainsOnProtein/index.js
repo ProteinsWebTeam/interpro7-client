@@ -118,7 +118,7 @@ export class DomainOnProteinWithoutData extends PureComponent {
     }
 
     return (
-      <React.Fragment>
+      <>
         <div className={f('margin-bottom-large')}>
           <h5>Protein family membership</h5>
           {interproFamilies.length ? (
@@ -132,7 +132,7 @@ export class DomainOnProteinWithoutData extends PureComponent {
           mainData={mainData}
           dataMerged={mergedData}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

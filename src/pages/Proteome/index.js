@@ -15,7 +15,7 @@ import Table, {
 import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 import { SpeciesIcon } from 'pages/Taxonomy';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
@@ -40,10 +40,11 @@ import { toPlural } from 'utils/pages';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, styles, fonts);
 
-const EntryAccessionsRenderer = entryDB => accession => (
+const EntryAccessionsRenderer = entryDB => (accession, _row, extra) => (
   <File
     fileType="accession"
     name={`${entryDB || 'all'}-entry-accessions-for-${accession}.txt`}
+    count={extra && extra.counters && extra.counters.entries}
     customLocationDescription={{
       main: { key: 'entry' },
       entry: { db: entryDB || 'all' },
@@ -52,27 +53,13 @@ const EntryAccessionsRenderer = entryDB => accession => (
   />
 );
 
-const ProteinFastasRenderer = entryDB => accession => (
+const ProteinFastasRenderer = entryDB => (accession, _row, extra) => (
   <File
-    fileType="FASTA"
+    fileType="fasta"
     name={`protein-sequences${
       entryDB ? `-matching-${entryDB}` : ''
     }-for-${accession}.fasta`}
-    customLocationDescription={{
-      main: { key: 'protein' },
-      protein: { db: 'UniProt' },
-      entry: { isFilter: true, db: entryDB || 'all' },
-      proteome: { isFilter: true, db: 'UniProt', accession },
-    }}
-  />
-);
-
-const ProteinAccessionsRenderer = entryDB => accession => (
-  <File
-    fileType="accession"
-    name={`protein-accessions${
-      entryDB ? `-matching-${entryDB}` : ''
-    }-for-${accession}.txt`}
+    count={extra && extra.counters && extra.counters.proteins}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
@@ -128,7 +115,7 @@ class SummaryCounterProteome extends PureComponent {
             disabled={!entries}
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-            <NumberComponent value={entries} abbr />
+            <NumberComponent abbr>{entries}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
             </span>
@@ -156,7 +143,7 @@ class SummaryCounterProteome extends PureComponent {
             disabled={!proteins}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr />
+            <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {' '}
               {toPlural('protein', proteins)}
@@ -185,7 +172,7 @@ class SummaryCounterProteome extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
-            <NumberComponent value={structures} abbr />{' '}
+            <NumberComponent abbr>{structures}</NumberComponent>{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
         </Tooltip>
@@ -195,7 +182,7 @@ class SummaryCounterProteome extends PureComponent {
 }
 
 const ProteomeCard = ({ data, search, entryDB }) => (
-  <React.Fragment>
+  <>
     <div className={f('card-header')}>
       <Link
         to={{
@@ -230,7 +217,7 @@ const ProteomeCard = ({ data, search, entryDB }) => (
         />
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 ProteomeCard.propTypes = {
   data: T.object,
@@ -427,7 +414,9 @@ class List extends PureComponent {
                       },
                     }}
                   >
-                    <NumberComponent value={count} loading={loading} abbr />
+                    <NumberComponent loading={loading} abbr>
+                      {count}
+                    </NumberComponent>
                   </Link>
                 );
               }}
@@ -464,7 +453,9 @@ class List extends PureComponent {
                       },
                     }}
                   >
-                    <NumberComponent value={count} loading={loading} abbr />
+                    <NumberComponent loading={loading} abbr>
+                      {count}
+                    </NumberComponent>
                   </Link>
                 );
               }}
@@ -481,15 +472,6 @@ class List extends PureComponent {
               renderer={ProteinFastasRenderer(entryDB)}
             >
               FASTA
-            </Column>
-            <Column
-              dataKey="accession"
-              headerClassName={f('table-center')}
-              cellClassName={f('table-center')}
-              defaultKey="proteinAccessions"
-              renderer={ProteinAccessionsRenderer(entryDB)}
-            >
-              Protein accessions
             </Column>
           </Table>
         </div>

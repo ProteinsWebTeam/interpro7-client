@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 
@@ -79,15 +79,18 @@ class SummaryComponent extends PureComponent {
   }
 }
 
-const locationhasDetailOrFilter = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].detail ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
+const locationhasDetailOrFilter = createSelector(
+  customLocation => {
+    const { key } = customLocation.description.main;
+    return (
+      customLocation.description[key].detail ||
+      (Object.entries(customLocation.description).find(
+        ([_key, value]) => value.isFilter,
+      ) || [])[0]
+    );
+  },
+  value => value,
+);
 
 class Summary extends PureComponent {
   static propTypes = propTypes;
@@ -111,11 +114,11 @@ class Summary extends PureComponent {
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
     return (
-      <Fragment>
+      <>
         {payload &&
           payload.metadata &&
           payload.metadata.accession && (
-            <Fragment>
+            <>
               <SchemaOrgData
                 data={{
                   data: payload,
@@ -131,7 +134,7 @@ class Summary extends PureComponent {
                 }}
                 processData={schemaProcessMainEntity}
               />
-            </Fragment>
+            </>
           )}
 
         <UnconnectedErrorBoundary customLocation={customLocation}>
@@ -139,7 +142,7 @@ class Summary extends PureComponent {
             <div className={f('medium-12', 'large-12', 'columns')}>
               {loading ? <Loading /> : null}
               {!loading && (!payload || !payload.metadata) ? null : (
-                <Fragment>
+                <>
                   <Title metadata={payload.metadata} mainType={endpoint} />
                   <ResizeObserverComponent
                     measurements={['width', 'height']}
@@ -153,7 +156,7 @@ class Summary extends PureComponent {
                       />
                     )}
                   </ResizeObserverComponent>
-                </Fragment>
+                </>
               )}
             </div>
           </div>
@@ -166,7 +169,7 @@ class Summary extends PureComponent {
             childRoutes={subPagesForEndpoint}
           />
         </UnconnectedErrorBoundary>
-      </Fragment>
+      </>
     );
   }
 }
@@ -207,16 +210,19 @@ class Overview extends PureComponent {
   }
 }
 
-const locationHasAccessionOrFilters = createSelector(customLocation => {
-  const { key } = customLocation.description.main;
-  return (
-    customLocation.description[key].accession ||
-    customLocation.description[key].memberDBAccession ||
-    (Object.entries(customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0]
-  );
-}, value => value);
+const locationHasAccessionOrFilters = createSelector(
+  customLocation => {
+    const { key } = customLocation.description.main;
+    return (
+      customLocation.description[key].accession ||
+      customLocation.description[key].memberDBAccession ||
+      (Object.entries(customLocation.description).find(
+        ([_key, value]) => value.isFilter,
+      ) || [])[0]
+    );
+  },
+  value => value,
+);
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
 class InnerSwitch extends PureComponent {

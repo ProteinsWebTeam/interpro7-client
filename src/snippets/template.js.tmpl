@@ -1,0 +1,104 @@
+#!/usr/bin/env node
+
+// external modules required: node-fetch, timing-functions
+const fetch = require('node-fetch');
+const sleep = require('timing-functions').sleep;
+
+<% if (fileType === 'fasta') { %>
+const DESCRIPTION_SEPARATOR = '|';
+const CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS = /(.{1,80})/g;
+
+const processItem = function* ({
+  metadata: { accession, source_database, name, source_organism},<% if (subset) { %>
+  entries: [{ entry_protein_locations: matches }],<% } %>
+  extra_fields: { sequence },
+}) {<% if (subset) { %>
+  for (const [index, match] of matches.entries) {
+    // generate description line
+    yield `>${[
+      accession,
+      `match:${index + 1}/${matches.length}`
+      `subsequence:${match.fragments.map(({ start, end }) => `${start}-${end}`).join(';')}`
+      source_database,
+      name,
+      `taxID:${source_organism.taxId}`
+    ].join(DESCRIPTION_SEPARATOR)}}\n`;
+    // generate sequence
+    yield match.fragments.map(
+      ({ start, end }) => sequence.substring(start - 1, end)
+    ).join('-').replace(CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS, '$1\n');
+  }<% } else { %>
+  // generate description line
+  yield `>${
+    [accession, source_database, name, `taxID:${source_organism.taxId}`]
+      .join(DESCRIPTION_SEPARATOR)
+  }}\n`;
+  // generate sequence
+  yield sequence.replace(CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS, '$1\n');<% } %>
+};
+<% } else if (fileType === 'accession') { %>
+const processItem = function* ({ metadata: { accession } }) {
+  yield `${accession}\n`;
+};
+<% } else if (fileType === 'json' || fileType === 'ndjson') { %>
+const processItem = function* (item) {
+  yield JSON.stringify(item);<% if (fileType === 'ndjson') { %>
+  yield '\n';<% } %>
+};
+<% } %>
+
+const main = async function* (startURL) {
+  let next = startURL;<% if (fileType === 'json') { %>
+  let first = true;
+  yield `{\n"results": [\n`;<% } %>
+  while (next) {
+    const response = await fetch(
+      next,
+      { headers: { Accept: 'application/json' } }
+    );
+    // If the server sent a timeout response…
+    if (response.status === 408) {
+      // …wait a bit for the server to process the query in the background…
+      await sleep(60000);
+      // …then continue this loop with the same URL
+      continue;
+    }
+    const payload = await response.json();
+    for (const item of payload.results) {<% if (fileType === 'json') { %>
+      if (first) {
+        yield '\n';
+        first = false;
+      } else {
+        yield ',\n';
+      }<% } %>
+      yield* processItem(item);
+    }
+    next = payload.next;<% if (fileType === 'json') { %>
+    if (!next) {
+      yield '\n]\n}\n';
+    }<% } %>
+    // Don't overload the server, give it a bit of time before asking for more
+    if (next) await sleep(1000);
+  }
+};
+
+const BASE_URL = '<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>';
+
+if (require.main === module) {
+  // If used from the command line, will write data to stdout asap
+  const mainWriteToStdout = async () => {
+    const process = require('process');
+    // If pipe is interrupted, it might be normal, just exit
+    process.stdout.on(
+      'error',
+      ({ code }) => process.exit(code === 'EPIPE' ? 0 : 1)
+    );
+    for await (const output of main(BASE_URL)) {
+      process.stdout.write(output);
+    }
+  }
+  mainWriteToStdout();
+} else {
+  // If used as a module, can be used as an async generator
+  module.exports = (baseURL = BASE_URL) => main(baseURL);
+}

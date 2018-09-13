@@ -1,6 +1,6 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import partition from 'lodash-es/partition';
+import { partition } from 'lodash-es';
 
 import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
@@ -124,7 +124,7 @@ SidePanel.propTypes = {
 };
 
 const OtherSections = ({ metadata, citations: { included, extra } }) => (
-  <Fragment>
+  <>
     {!Object.keys(metadata.go_terms).length ||
     metadata.source_database.toLowerCase() !== 'interpro' ? null : (
       <GoTerms
@@ -154,7 +154,7 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
         <CrossReferences xRefs={metadata.cross_references} />
       </section>
     ) : null}
-  </Fragment>
+  </>
 );
 OtherSections.propTypes = {
   metadata: T.object.isRequired,
@@ -238,14 +238,14 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 )}
               {// doesn't work for some HAMAP as they have enpty <P> tag
               Object.keys(metadata.description).length ? (
-                <Fragment>
+                <>
                   <h4>Description</h4>
                   <Description
                     textBlocks={metadata.description}
                     literature={included}
                     accession={metadata.accession}
                   />
-                </Fragment>
+                </>
               ) : null}
             </div>
             <SidePanel metadata={metadata} />

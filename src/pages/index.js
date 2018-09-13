@@ -108,13 +108,16 @@ const Null = () => null;
 }; */
 
 const childRoutes = new Map([[/^search|job$/, Null]]);
-const locationSelector1 = createSelector(customLocation => {
-  if (
-    customLocation.description.main.key &&
-    !customLocation.description[customLocation.description.main.key].accession
-  )
-    return customLocation.description.main.key;
-}, value => value);
+const locationSelector1 = createSelector(
+  customLocation => {
+    if (
+      customLocation.description.main.key &&
+      !customLocation.description[customLocation.description.main.key].accession
+    )
+      return customLocation.description.main.key;
+  },
+  value => value,
+);
 const locationSelector2 = createSelector(
   customLocation => customLocation.description.main.key,
   value => value,

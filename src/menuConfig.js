@@ -451,7 +451,13 @@ export const InterPro /*: Array<Object> */ = [
     iconClass: 'common',
   },
   {
-    to: { description: { main: { key: 'job' } } },
+    to({
+      description: {
+        job: { type },
+      },
+    }) {
+      return { description: { main: { key: 'job' }, job: { type } } };
+    },
     icon: '',
     name: 'Jobs',
     iconClass: 'common',

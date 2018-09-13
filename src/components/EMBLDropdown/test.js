@@ -2,7 +2,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import noop from 'lodash-es/noop';
+import { noop } from 'lodash-es';
 
 import { EMBLDropdown } from '.';
 

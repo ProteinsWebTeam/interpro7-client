@@ -39,7 +39,7 @@ const rehydrateStoredJobs = async dispatch => {
   const metaT = await metaTA;
   const meta = await metaT.getAll();
   const entries = Object.entries(meta);
-  if (!entries.length) return;
+  if (!entries.length) return dispatch(rehydrateJobs({}));
   const jobs = {};
   const now = Date.now();
   for (const [localID, metadata] of entries) {
@@ -59,7 +59,7 @@ const createJobInDB = async (metadata, data) => {
     // add data and metadata to idb
     const [dataT, metaT] = await Promise.all([dataTA, metaTA]);
     await Promise.all([dataT.set(data, localID), metaT.set(metadata, localID)]);
-  } catch (error) {
+  } catch {
     // cleanup if anything bad happens
     deleteJobInDB(localID);
   }
@@ -71,7 +71,7 @@ const updateJobInDB = async (metadata, data) => {
   if (data) dataT.update(metadata.localID, prev => ({ ...prev, ...data }));
 };
 
-const middleware /*: Middleware */ = ({ dispatch, getState }) => {
+const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   // function definitions
   const processJob = async (localID, meta) => {
     // Wait to have some time to do all the maintenance
@@ -191,7 +191,6 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
       for (const [localID, meta] of Object.entries(await metaT.getAll())) {
         await processJob(localID, meta);
       }
-      //
     } catch (error) {
       console.error(error);
     } finally {

@@ -13,7 +13,12 @@ const autoScroll = async (
     window.scrollTo(0, 0);
   }
   if (current.hash) {
-    const target = document.querySelector(current.hash);
+    let target;
+    try {
+      target = document.querySelector(current.hash);
+    } catch {
+      /**/
+    }
     if (target) {
       window.scrollTo(target.getBoundingClientRect());
       target.focus();

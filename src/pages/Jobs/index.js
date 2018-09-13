@@ -1,11 +1,14 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
+import Loading from 'components/SimpleCommonComponents/Loading';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
+
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataWebPage } from 'schema_org/processors';
@@ -32,6 +35,11 @@ const DownloadSummary = loadable({
     import(/* webpackChunkName: "download-summary" */ 'components/Download/Summary'),
 });
 
+const DownloadForm = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "download-form" */ 'components/DownloadForm'),
+});
+
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
@@ -50,6 +58,15 @@ const jobAccessionSelector = createSelector(
   value => value,
 );
 
+const _IPScanResultSafeGuardIfNotRehydratedYet = ({ jobs, ...props }) => {
+  if (!jobs) return <Loading />;
+  return <IPScanResult {...props} />;
+};
+const jobSelector = createSelector(state => state.jobs, jobs => ({ jobs }));
+const IPScanResultSafeGuardIfNotRehydratedYet = connect(jobSelector)(
+  _IPScanResultSafeGuardIfNotRehydratedYet,
+);
+
 const InterProScanInnerSwitch = props => (
   <Wrapper>
     <ErrorBoundary>
@@ -57,16 +74,29 @@ const InterProScanInnerSwitch = props => (
         {...props}
         locationSelector={jobAccessionSelector}
         indexRoute={IPScanStatus}
-        catchAll={IPScanResult}
+        catchAll={IPScanResultSafeGuardIfNotRehydratedYet}
       />
     </ErrorBoundary>
   </Wrapper>
 );
 
-const Download = () => (
+const downloadSelector = createSelector(
+  customLocation => customLocation.hash,
+  hash => hash,
+);
+
+const downloadRoutes = new Map([[/^\//, DownloadForm]]);
+
+const Download = props => (
   <Wrapper>
     <ErrorBoundary>
-      <DownloadSummary />
+      <Switch
+        {...props}
+        locationSelector={downloadSelector}
+        indexRoute={DownloadSummary}
+        childRoutes={downloadRoutes}
+        catchAll={DownloadSummary}
+      />
     </ErrorBoundary>
   </Wrapper>
 );

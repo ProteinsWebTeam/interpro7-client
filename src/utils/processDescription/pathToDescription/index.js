@@ -12,7 +12,7 @@ export default (path /*: string */) => {
   try {
     return rootHandler.handle(getEmptyDescription(), ...parts);
   } catch (error) {
-    console.log('error');
+    console.warn(error);
     if (
       error.message.includes(
         '404',

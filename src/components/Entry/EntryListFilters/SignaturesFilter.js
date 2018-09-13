@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 // import MemberDBSelector from 'components/MemberDBSelector';
 
 import loadData from 'higherOrder/loadData';
@@ -74,12 +74,14 @@ class SignaturesFilter extends PureComponent {
               />
               <span>{signatureDB}</span>
               {typeof count === 'undefined' || isNaN(count) ? null : (
-                <NumberLabel
-                  value={count}
+                <NumberComponent
+                  label
                   loading={loading}
                   className={f('filter-label')}
                   abbr
-                />
+                >
+                  {count}
+                </NumberComponent>
               )}
             </label>
           </div>
