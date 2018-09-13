@@ -262,8 +262,8 @@ class LatestEntry extends PureComponent {
                 //       }}
                 //     >
                 //       <div
-                //         className={f('icon', 'icon-generic')}
-                //         data-icon="D"
+                //         className={f('icon', 'icon-common')}
+                //         data-icon="&#xf1c0;"
                 //       />{' '}
                 //       <NumberComponent value={entry.Si} abbr />
                 //       <span className={f('label-number')}>
@@ -346,17 +346,17 @@ class LatestEntry extends PureComponent {
             <Tooltip title="Add this entry to your favorites">
               <Link
                 to={{ description: { other: ['settings'] } }}
-                className={f('icon', 'icon-functional')}
-                data-icon="+"
-                aria-label="settings"
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf067;"
+                aria-label="add to favorite"
               />
             </Tooltip>{' '}
             <Tooltip title="Watch: be notified when this entry is updated">
               <Link
                 to={{ description: { other: ['settings'] } }}
-                className={f('icon', 'icon-functional')}
-                data-icon="4"
-                aria-label="settings"
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf06e;"
+                aria-label="Watch"
               />
             </Tooltip>{' '}
             <Tooltip title="Suggest an edit">
@@ -370,8 +370,9 @@ class LatestEntry extends PureComponent {
                     },
                   },
                 }}
-                className={f('icon', 'icon-functional')}
-                data-icon="5"
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf044;"
+                aria-label="edit"
               />
             </Tooltip>
           </div>
@@ -394,7 +395,9 @@ class ByEntriesFeatured extends PureComponent {
         <div className={f('row')}>
           <div className={f('columns')}>
             <AnimatedEntry className={f('card-wrapper')} element="div">
-              {latests.map(e => <LatestEntry entry={e} key={e.accession} />)}
+              {latests.map(e => (
+                <LatestEntry entry={e} key={e.accession} />
+              ))}
             </AnimatedEntry>
             <Link
               to={{
