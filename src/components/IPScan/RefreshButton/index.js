@@ -48,8 +48,8 @@ class RefreshButton extends PureComponent {
       >
         <Tooltip title={TITLE}>
           <span
-            className={f('icon', 'icon-functional')}
-            data-icon="R"
+            className={f('icon', 'icon-common')}
+            data-icon="&#xf2f9;"
             ref={this._ref}
           />
         </Tooltip>
@@ -58,4 +58,7 @@ class RefreshButton extends PureComponent {
   }
 }
 
-export default connect(undefined, { updateJobStatus })(RefreshButton);
+export default connect(
+  undefined,
+  { updateJobStatus },
+)(RefreshButton);
