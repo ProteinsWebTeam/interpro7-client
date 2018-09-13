@@ -211,31 +211,6 @@ div#local-title {
 
 /************************ END BANNER**********************************/
 
-/************************ STICKY BANNER**********************************/
-.smaller {
-  z-index: 1;
-  left: 0;
-  position: fixed;
-  margin-top: -10.5em !important;
-}
-.smaller h4 {
-  transform: translate(156px, 32px);
-  font-size: 133%;
-} /*transform tagline*/
-.smaller .local-site-search {
-  top: 164px;
-  right: 72px;
-} /*move icon on right*/
-.smaller .local-offcanvas-menu {
-  top: 164px;
-} /*move icon on right*/
-.smaller .local-site-search .icon-functional:before,
-.smaller .local-offcanvas-menu .icon-functional:before {
-  font-size: 30px;
-} /*icon size and position*/
-
-/************************ END STICKY BANNER**********************************/
-
 /****************************** TABLE *********************************/
 /*Style default table*/
 table.classic {
