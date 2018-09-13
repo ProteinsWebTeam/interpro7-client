@@ -370,33 +370,30 @@ button {
 }
 
 .button.hollow {
-  background-color: transparent;
+  &,
+  &:active,
+  &:focus,
   &:hover {
-    background-color: transparent;
-  }
-  &:active {
-    background-color: transparent;
-  }
-  &:focus {
     background-color: transparent;
   }
 }
 
 .button.hollow.secondary {
   border-color: var(--colors-lightgray);
-}
-.button.hollow.secondary:hover {
-  color: var(--colors-dark);
+  &:hover {
+    color: var(--colors-dark);
+  }
 }
 
 .button.hollow.tertiary {
   border: 1px solid #7fcad6;
   color: var(--colors-interpro);
+  &:hover {
+    border: 1px solid #3798a7;
+    color: #3798a7;
+  }
 }
-.button.hollow.tertiary:hover {
-  border: 1px solid #3798a7;
-  color: #3798a7;
-}
+
 /****************************** END BUTTONS *********************************/
 
 /****************************** OTHERS *********************************/
