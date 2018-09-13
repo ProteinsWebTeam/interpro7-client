@@ -527,9 +527,9 @@ class Home extends PureComponent {
                   //         use the{' '}
                   //         <Link
                   //           to={{ description: { other: ['settings'] } }}
-                  //           className={f('icon', 'icon-functional')}
-                  //           data-icon="+"
-                  //           aria-label="settings"
+                  //           className={f('icon', 'icon-common')}
+                  //           data-icon="&#xf067;"
+                  //           aria-label="add to your favorite"
                   //         />{' '}
                   //         icon next to an entry to add this entry to your
                   //         &quot;favorites&quot;. It should then appear on this
@@ -590,7 +590,8 @@ class Home extends PureComponent {
                   <div className={f('media-object-section')}>
                     <p>
                       GO annotation in InterPro: why stability does not indicate
-                      accuracy in a sea of changing annotation.<br />
+                      accuracy in a sea of changing annotation.
+                      <br />
                       <i>Database</i>, 2016.
                     </p>
                   </div>
