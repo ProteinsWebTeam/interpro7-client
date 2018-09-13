@@ -1,0 +1,10 @@
+.highlight {
+  font-weight: bold;
+}
+
+.select {
+  margin: 0;
+  background: transparent;
+  width: initial;
+  display: inline;
+}

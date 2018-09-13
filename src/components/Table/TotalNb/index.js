@@ -7,7 +7,7 @@ import { createSelector } from 'reselect';
 
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import cn from 'classnames/bind';
 
@@ -85,12 +85,12 @@ const TotalNb = ({
               open,
             })}
           >
-            <NumberComponent value={index} noTitle />
+            <NumberComponent noTitle>{index}</NumberComponent>
             {' - '}
-            <NumberComponent value={index + data.length - 1} noTitle />
+            <NumberComponent noTitle>{index + data.length - 1}</NumberComponent>
             {' of '}
             <strong>
-              <NumberComponent value={actualSize} abbr />
+              <NumberComponent abbr>{actualSize}</NumberComponent>
             </strong>{' '}
             {entityText(contentType || description.main.key, actualSize)}
             {dbText(

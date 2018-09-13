@@ -1,4 +1,4 @@
-import noop from 'lodash-es/noop';
+import { noop } from 'lodash-es';
 
 import { getUrlForApi } from '../defaults';
 

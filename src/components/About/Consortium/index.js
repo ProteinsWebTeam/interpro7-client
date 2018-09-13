@@ -10,6 +10,8 @@ import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
+import sortFn from 'utils/sort-functions/basic';
+
 import { schemaProcessDataForDB } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
@@ -25,6 +27,24 @@ const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
+
+const lut = new Map([
+  ['cdd', '//www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml'],
+  ['cathgene3d', 'http://www.cathdb.info/'],
+  ['hamap', '//hamap.expasy.org/'],
+  ['mobidblt', 'http://mobidb.bio.unipd.it/'],
+  ['panther', 'http://www.pantherdb.org/'],
+  ['pfam', '//pfam.xfam.org/'],
+  ['pirsf', '//pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml'],
+  ['prints', 'http://130.88.97.239/PRINTS/'],
+  ['prodom', 'http://prodom.prabi.fr/'],
+  ['profile', '//prosite.expasy.org/'],
+  ['prosite', '//prosite.expasy.org/'],
+  ['sfld', 'http://sfld.rbvi.ucsf.edu/django/'],
+  ['smart', 'http://smart.embl-heidelberg.de/'],
+  ['ssf', 'http://supfam.org/'],
+  ['tigrfams', 'http://tigrfams.jcvi.org/cgi-bin/index.cgi'],
+]);
 
 /*:: type Props = {
   data: {
@@ -58,167 +78,35 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
       <section>
         <h3>The InterPro Consortium</h3>
         <p>The following databases make up the InterPro Consortium:</p>
+
         <table className={f('light')}>
           <tbody>
             {memberDBs
-              .sort((a, b) => {
-                // sort list by alphabetical order
-                if (a.canonical.toUpperCase() > b.canonical.toUpperCase())
-                  return 1;
-                if (a.canonical.toUpperCase() < b.canonical.toUpperCase())
-                  return -1;
-                return 0;
-              })
+              .sort(sortFn({ selector: item => item.canonical.toUpperCase() }))
               .map(db => {
                 const date = db.releaseDate && new Date(db.releaseDate);
                 const md = db.canonical;
+                const href = lut.get(md);
                 return (
                   <tr key={md}>
                     <td>
                       <MemberSymbol type={md} className={f('md-small')} />
                     </td>
                     <td>
-                      {' '}
-                      {md === 'cdd' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="//www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {md === 'cathgene3d' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="http://www.cathdb.info/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {md === 'hamap' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="//hamap.expasy.org/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {// keep http - not https - while we wait for an update of their url
-                      md === 'mobidblt' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="http://mobidb.bio.unipd.it/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {// keep http - not https - while we wait for an update of their url
-                      md === 'panther' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="http://www.pantherdb.org/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {md === 'pfam' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="//pfam.xfam.org/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {md === 'pirsf' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="//pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {// keep http - not https - while we wait for an update of their url
-                      md === 'prints' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="http://130.88.97.239/PRINTS/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {md === 'prodom' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="http://prodom.prabi.fr/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {md === 'profile' || md === 'prosite' ? (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="//prosite.expasy.org/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      ) : (
-                        ''
-                      )}
-                      {// keep http - not https - while we wait for an update of their url
-                      md === 'sfld' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="http://sfld.rbvi.ucsf.edu/django/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {// keep http - not https - while we wait for an update of their url
-                      md === 'smart' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="http://smart.embl-heidelberg.de/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {// keep http - not https - while we wait for an update of their url
-                      md === 'ssf' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="http://supfam.org/"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
-                      {md === 'tigrfams' && (
-                        <Link
-                          className={f('ext')}
-                          target="_blank"
-                          href="http://tigrfams.jcvi.org/cgi-bin/index.cgi"
-                        >
-                          <span className={f('h5')}>{db.name}</span>
-                        </Link>
-                      )}
+                      <Link
+                        className={f('ext')}
+                        target="_blank"
+                        href={href}
+                        disabled={!href}
+                      >
+                        <span className={f('h5')}>{db.name}</span>
+                      </Link>
                     </td>
+
                     <td>{db.version}</td>
 
                     <td>
-                      {' '}
-                      {db.description} <br />{' '}
+                      <p>{db.description}</p>
                       {db.releaseDate ? (
                         // TEMP - to re-add when update to latest icon set
                         // <small className={f('icon', 'icon-common')} data-icon="&#xf073;">
@@ -228,12 +116,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                         >
                           {' '}
                           {'Released '}
-                          <time
-                            dateTime={db.releaseDate}
-                            title={date.toLocaleDateString()}
-                          >
-                            <TimeAgo date={date} noUpdate />
-                          </time>
+                          <TimeAgo date={date} noUpdate />
                         </small>
                       ) : null}
                       {databases &&

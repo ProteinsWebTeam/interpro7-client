@@ -53,7 +53,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
       }
       if (this._LinkRef.current)
         window.twttr.widgets.load(this._LinkRef.current);
-    } catch (_) {
+    } catch {
       /**/
     }
   }

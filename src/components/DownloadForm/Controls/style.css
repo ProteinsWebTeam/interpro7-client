@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+
+  & > * {
+    margin: 0 1ch;
+  }
+}
+
+.button {
+  line-height: initial;
+}

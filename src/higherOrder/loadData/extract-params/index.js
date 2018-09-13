@@ -1,5 +1,5 @@
 // @flow
-import noop from 'lodash-es/noop';
+import { noop } from 'lodash-es';
 
 import * as defaults from '../defaults';
 

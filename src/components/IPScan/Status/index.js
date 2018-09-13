@@ -87,6 +87,7 @@ class IPScanStatus extends PureComponent {
           </div>
           <Table
             dataTable={paginatedJobs}
+            rowKey="localID"
             contentType="job"
             actualSize={jobs.length}
             query={search}
@@ -120,9 +121,7 @@ class IPScanStatus extends PureComponent {
                   <Tooltip
                     title={`Created on ${parsed.toLocaleDateString()} at ${parsed.toLocaleTimeString()}`}
                   >
-                    <time dateTime={parsed.toISOString()}>
-                      <TimeAgo date={parsed} />
-                    </time>
+                    <TimeAgo date={parsed} noTitle />
                   </Tooltip>
                 );
               }}
@@ -189,7 +188,7 @@ class IPScanStatus extends PureComponent {
 
 const mapsStateToProps = createSelector(
   state =>
-    Object.values(state.jobs)
+    Object.values(state.jobs || {})
       .map(j => j.metadata)
       .sort((a, b) => b.times.created - a.times.created),
   state => state.customLocation.search,

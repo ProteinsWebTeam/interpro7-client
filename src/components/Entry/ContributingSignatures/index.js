@@ -54,7 +54,10 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => {
   return (
     <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
       <div className={f('md-icon-list-box', 'margin-bottom-large')}>
-        <h5>Contributing entr{contrEntries.length < 2 ? 'y' : 'ies'}</h5>
+        <h5>
+          Contributing entr
+          {contrEntries.length < 2 ? 'y' : 'ies'}
+        </h5>
         <ul className={f('md-list')}>
           {contrEntries.map(([db, signatures]) => (
             <li key={db}>

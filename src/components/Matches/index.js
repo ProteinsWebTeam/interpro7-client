@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { Fragment } from 'react';
+import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -12,7 +12,7 @@ import StructureOnProtein from './StructureOnProtein';
 import File from 'components/File';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 import { PDBeLink } from 'components/ExtLink';
 import Lazy from 'wrappers/Lazy';
 import LazyImage from 'components/LazyImage';
@@ -137,34 +137,13 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
-const ProteinFastasRenderer = description => accession => (
+const ProteinDownloadRenderer = description => (accession, row) => (
   <File
-    fileType="FASTA"
+    fileType="fasta"
     name={`protein-sequences-matching-${
       description[description.main.key].accession
     }-for-${accession}.fasta`}
-    customLocationDescription={{
-      main: { key: 'protein' },
-      protein: { db: 'UniProt' },
-      [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
-        isFilter: true,
-        db: 'UniProt',
-        accession: `${accession}`,
-      },
-      [description.main.key]: {
-        ...description[description.main.key],
-        isFilter: true,
-      },
-    }}
-  />
-);
-
-const ProteinAccessionsRenderer = description => accession => (
-  <File
-    fileType="accession"
-    name={`protein-accessions-matching-${
-      description[description.main.key].accession
-    }-for-${accession}.txt`}
+    count={row.counters.extra_fields.counters.proteins}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
@@ -227,7 +206,7 @@ const Matches = (
           //   reviewed = (
           //
           //   )
-          <Fragment>
+          <>
             <SchemaOrgData
               data={{ data: obj, primary, secondary }}
               processData={schemaProcessData}
@@ -253,7 +232,7 @@ const Matches = (
                 />
               </Tooltip>
             ) : null}
-          </Fragment>
+          </>
         );
       }}
     >
@@ -387,7 +366,7 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={count => <NumberComponent value={count} abbr />}
+      renderer={count => <NumberComponent abbr>{count}</NumberComponent>}
     >
       protein count
     </Column>
@@ -397,19 +376,9 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={ProteinFastasRenderer(description)}
+      renderer={ProteinDownloadRenderer(description)}
     >
       FASTA
-    </Column>
-    <Column
-      dataKey="accession"
-      headerClassName={f('table-center')}
-      cellClassName={f('table-center')}
-      defaultKey="proteinAccessions"
-      displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={ProteinAccessionsRenderer(description)}
-    >
-      Protein accessions
     </Column>
   </Table>
 );

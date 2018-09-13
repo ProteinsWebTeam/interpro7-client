@@ -20,7 +20,7 @@ import Table, {
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import { toPlural } from 'utils/pages';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -131,7 +131,7 @@ class SummaryCounterStructures extends PureComponent {
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
 
-            <NumberComponent value={entries} abbr />
+            <NumberComponent abbr>{entries}</NumberComponent>
 
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
@@ -159,7 +159,7 @@ class SummaryCounterStructures extends PureComponent {
             }}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr />
+            <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
             </span>
@@ -175,7 +175,7 @@ class SummaryCounterStructures extends PureComponent {
         >
           <div className={f('container')}>
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent value={taxa} abbr />
+            <NumberComponent abbr>{taxa}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
             </span>
@@ -271,7 +271,7 @@ class StructureCard extends PureComponent {
     const { data, search, entryDB } = this.props;
     const { TaxnameStructuresWithData } = this.state;
     return (
-      <React.Fragment>
+      <>
         <div className={f('card-header')}>
           <Link
             to={{
@@ -343,7 +343,7 @@ class StructureCard extends PureComponent {
             />
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

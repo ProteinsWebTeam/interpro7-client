@@ -13,7 +13,7 @@ import Table, {
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadable from 'higherOrder/loadable';
 
@@ -74,7 +74,7 @@ class SummaryCounterSet extends PureComponent {
             disabled={!entries}
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-            <NumberComponent value={entries} abbr />
+            <NumberComponent abbr>{entries}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
             </span>
@@ -102,7 +102,7 @@ class SummaryCounterSet extends PureComponent {
             disabled={!proteins}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr />
+            <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {' '}
               {toPlural('protein', proteins)}
@@ -131,7 +131,7 @@ class SummaryCounterSet extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
-            <NumberComponent value={structures} abbr />{' '}
+            <NumberComponent abbr>{structures}</NumberComponent>{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
         </Tooltip>
@@ -156,7 +156,7 @@ class SummaryCounterSet extends PureComponent {
             disabled={!taxa}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent value={taxa} abbr />
+            <NumberComponent abbr>{taxa}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
             </span>
@@ -182,7 +182,7 @@ class SummaryCounterSet extends PureComponent {
             disabled={!proteomes}
           >
             <div className={f('icon', 'icon-common', 'icon-count-proteome')} />
-            <NumberComponent value={proteomes} abbr />{' '}
+            <NumberComponent abbr>{proteomes}</NumberComponent>{' '}
             <span className={f('label-number')}>proteomes</span>
           </Link>
         </Tooltip>
@@ -192,7 +192,7 @@ class SummaryCounterSet extends PureComponent {
 }
 
 const SetCard = ({ data, search, entryDB }) => (
-  <React.Fragment>
+  <>
     <div className={f('card-header')}>
       <Link
         to={{
@@ -226,7 +226,7 @@ const SetCard = ({ data, search, entryDB }) => (
         />
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 SetCard.propTypes = {
   data: T.object,
@@ -408,7 +408,7 @@ class List extends PureComponent {
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "protein-summary" */ 'components/Set/Summary'),
+    import(/* webpackChunkName: "set-summary" */ 'components/Set/Summary'),
 });
 
 const SchemaOrgData = loadable({

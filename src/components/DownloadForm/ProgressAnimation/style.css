@@ -1,0 +1,86 @@
+@import '../../../styles/timing.css';
+@import '../../../styles/colors.css';
+
+.absolute {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.main-container {
+  position: relative;
+  background: var(--colors-interpro);
+  border-radius: 0.5em;
+  height: 5em;
+  width: 100%;
+  overflow: hidden;
+}
+
+.side {
+  width: 2em;
+  background: white;
+
+  &.left {
+    left: -2em;
+    right: initial;
+  }
+
+  &.right {
+    left: initial;
+    right: -2em;
+  }
+}
+
+.filter-container {
+  filter: url(#gooey-filter);
+
+  & > .side {
+    width: 1.75em;
+  }
+}
+
+.moving-container {
+  right: initial;
+  left: -3em;
+  width: calc(100% + 3em);
+  transition: transform ease-out var(--timing-slow);
+}
+
+.trail {
+  top: calc(2.5em - 2px);
+  right: initial;
+  bottom: initial;
+  height: 4px;
+  left: -200%;
+  width: 200%;
+  background: white;
+}
+
+.ball {
+  border-radius: 50%;
+
+  &.trail {
+    top: 2em;
+    right: initial;
+    bottom: initial;
+    height: 1em;
+    left: -0.5em;
+    width: 1em;
+    background: white;
+  }
+
+  &.progress {
+    top: 1em;
+    right: initial;
+    bottom: initial;
+    height: 3em;
+    left: 0;
+    width: 3em;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

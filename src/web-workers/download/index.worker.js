@@ -1,11 +1,10 @@
 // @flow
-import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
 import { format, parse } from 'url';
-import throttle from 'lodash-es/throttle';
+import { throttle } from 'lodash-es';
 import { sleep } from 'timing-functions/src';
 
-import { DOWNLOAD_URL } from 'actions/types';
+import { DOWNLOAD_URL, DOWNLOAD_DELETE } from 'actions/types';
 
 import {
   downloadError,
@@ -13,7 +12,7 @@ import {
   downloadSuccess,
 } from 'actions/creators';
 
-/*:: type FileType = 'accession' | 'FASTA'; */
+/*:: type FileType = 'accession' | 'fasta'; */
 
 // Max page size provided by the server
 // to maximise the number of results sent by the server at once
@@ -26,29 +25,70 @@ const THROTTLE_TIME = 500; // half a second
 
 const CHUNK_OF_EIGHTY = /(.{1,80})/g;
 
+const canceled = new Set();
+
+const lut = new Map([
+  ['fasta', 'text/x-fasta'],
+  ['accession', 'text/plain'],
+  ['json', 'application/json'],
+  ['ndjson', 'application/x-ndjson'],
+  ['xml', 'application/xml'],
+  ['tsv', 'text/tab-separated-values'],
+]);
+
 // always send the same thing, so abstract that
 const createActionCallerFor = (...args1) => (creator, ...args2) =>
   creator(...args1, ...args2);
 
-const processResultsFor = fileType =>
+const DESCRIPTION_SEPARATOR = '|';
+
+const processResultsFor = (fileType, subset) =>
   function*(results) {
     for (const result of results) {
       let content = '';
-      if (fileType === 'FASTA') {
-        content += `>${result.metadata.accession}|${
-          result.metadata.source_database
-        }|${result.metadata.name}|taxID:${
-          result.metadata.source_organism.taxId
-        }`;
+      if (fileType === 'fasta') {
+        if (subset) {
+          const matches = result.entries[0].entry_protein_locations;
+          for (const [
+            index,
+            match,
+          ] of result.entries[0].entry_protein_locations.entries()) {
+            // description
+            content += `>${[
+              result.metadata.accession,
+              `match:${index + 1}/${matches.length}`,
+              `subsequence:${match.fragments
+                .map(({ start, end }) => `${start}-${end}`)
+                .join(';')}`,
+              result.metadata.source_database,
+              result.metadata.name,
+              `taxID:${result.metadata.source_organism.taxId}`,
+            ].join(DESCRIPTION_SEPARATOR)}\n`;
+            // sequence
+            content += match.fragments
+              .map(({ start, end }) =>
+                result.extra_fields.sequence.substring(start - 1, end),
+              )
+              .join('-')
+              .replace(CHUNK_OF_EIGHTY, '$1\n');
+          }
+        } else {
+          // description
+          content += `>${[
+            result.metadata.accession,
+            result.metadata.source_database,
+            result.metadata.name,
+            `taxID:${result.metadata.source_organism.taxId}`,
+          ].join(DESCRIPTION_SEPARATOR)}\n`;
+          // sequence
+          content += result.extra_fields.sequence.replace(
+            CHUNK_OF_EIGHTY,
+            '$1\n',
+          );
+        }
       } else {
+        // accession
         content += result.metadata.accession;
-      }
-      content += '\n';
-      if (fileType === 'FASTA') {
-        content += result.extra_fields.sequence.replace(
-          CHUNK_OF_EIGHTY,
-          '$1\n',
-        );
       }
       yield content;
     }
@@ -56,7 +96,7 @@ const processResultsFor = fileType =>
 
 const getFirstPage = (url, fileType) => {
   const location = parse(url, true);
-  if (fileType === 'FASTA') {
+  if (fileType === 'fasta') {
     location.query.extra_fields = [
       ...(location.query.extra_fields, '').split(','),
       'sequence',
@@ -73,15 +113,17 @@ const getFirstPage = (url, fileType) => {
 const downloadContent = (onProgress, onSuccess, onError) => async (
   url,
   fileType,
+  subset,
   _,
 ) => {
   try {
     const firstPage = getFirstPage(url, fileType);
+    const key = [url, fileType, subset].filter(Boolean).join('');
     // Counters for progress information
     let totalCount;
     let i = 0;
     // Create a function to transform API response into processed file part
-    const processResults = processResultsFor(fileType);
+    const processResults = processResultsFor(fileType, subset);
     // As long as we have a next page, we keep processing
     // Let's start with the first one
     let next = format(firstPage);
@@ -99,6 +141,8 @@ const downloadContent = (onProgress, onSuccess, onError) => async (
         const payload = await response.json();
         totalCount = payload.count;
         for (const part of processResults(payload.results)) {
+          // Check if it was canceled, if so, stop everything and return
+          if (canceled.has(key)) return;
           // use `totalCount + 1` to not finish at exactly 1 to account for the
           // time needed to create the blob
           onProgress({ part, progress: ++i / (totalCount + 1) });
@@ -128,9 +172,7 @@ const generateFileHandle = (
   content /*: Array<string> */,
   fileType /*: FileType */,
 ) => {
-  const blob = new Blob(content, {
-    type: `text/${fileType === 'FASTA' ? 'x-fasta' : 'plain'}`,
-  });
+  const blob = new Blob(content, { type: lut.get(fileType) });
   return { blobURL: URL.createObjectURL(blob), size: blob.size };
 };
 
@@ -140,8 +182,8 @@ const postProgress = throttle(
 );
 
 // Download manager, send messages from there
-const download = async (url, fileType) => {
-  const action = createActionCallerFor(url, fileType);
+const download = async (url, fileType, subset) => {
+  const action = createActionCallerFor(url, fileType, subset);
   const onError = error => {
     console.error(error);
     postProgress(action(downloadProgress, 1));
@@ -154,7 +196,6 @@ const download = async (url, fileType) => {
     postProgress(action(downloadProgress, 0));
     action(
       downloadContent(
-        // onProgress
         ({ part, progress }) => {
           // store content
           content.push(part);
@@ -182,7 +223,12 @@ const download = async (url, fileType) => {
 const main = ({ data }) => {
   switch (data.type) {
     case DOWNLOAD_URL:
-      download(data.url, data.fileType);
+      download(data.url, data.fileType, data.subset);
+      break;
+    case DOWNLOAD_DELETE:
+      canceled.add(
+        [data.url, data.fileType, data.subset].filter(Boolean).join(''),
+      );
       break;
     default:
       console.warn('not a recognised message', data);

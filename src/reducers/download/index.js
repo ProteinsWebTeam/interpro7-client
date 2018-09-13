@@ -3,7 +3,6 @@ import {
   DOWNLOAD_URL,
   DOWNLOAD_PROGRESS,
   DOWNLOAD_SUCCESS,
-  DOWNLOAD_CANCEL,
   DOWNLOAD_DELETE,
   DOWNLOAD_ERROR,
 } from 'actions/types';
@@ -16,7 +15,10 @@ import {
 /*:: export type Download = { [string]: DatumProgress }; */
 /*:: import type { State } from 'reducers'; */
 
-const keyFromAction = action => `${action.url}|${action.fileType}`;
+const keyFromAction = action =>
+  [action.url, action.fileType, action.subset && 'subset']
+    .filter(Boolean)
+    .join('|');
 
 export default (state /*: Download */ = {}, action /*: Object */) => {
   switch (action.type) {
@@ -48,7 +50,6 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
           size: action.size,
         },
       };
-    case DOWNLOAD_CANCEL:
     case DOWNLOAD_DELETE:
       const { [keyFromAction(action)]: _, ...newState } = state;
       return newState;

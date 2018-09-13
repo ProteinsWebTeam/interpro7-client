@@ -106,12 +106,11 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                   <div>Chains: {chains.join(', ')}</div>
                   <div>
                     Released:{' '}
-                    <time
-                      dateTime={date.toISOString()}
+                    <TimeAgo
+                      date={date}
+                      noUpdate
                       title={date.toLocaleDateString()}
-                    >
-                      <TimeAgo date={date} noUpdate />
-                    </time>
+                    />
                   </div>
                 </div>
               )}
