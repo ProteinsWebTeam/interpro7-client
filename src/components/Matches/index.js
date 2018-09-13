@@ -247,8 +247,8 @@ const Matches = (
             {primary === 'protein' && sourceDatabase === 'reviewed' ? (
               <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
                 <span
-                  className={f('icon', 'icon-functional')}
-                  data-icon="/"
+                  className={f('icon', 'icon-common')}
+                  data-icon="&#xf00c;"
                   aria-label="reviewed"
                 />
               </Tooltip>
@@ -324,8 +324,8 @@ const Matches = (
             }
           >
             <span
-              className={f('icon', 'icon-functional')}
-              data-icon="/"
+              className={f('icon', 'icon-common')}
+              data-icon="&#xf00c;"
               aria-label="reviewed"
             />
           </Tooltip>
