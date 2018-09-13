@@ -50,11 +50,11 @@ class Exporter extends PureComponent {
               to={{ description: { other: ['settings'] } }}
               className={fPlus(
                 'icon',
-                'icon-functional',
+                'icon-common',
                 'icon-settings',
                 'show-for-large',
               )}
-              data-icon="s"
+              data-icon="&#xf013;"
               aria-label="settings"
             />
           </div>
