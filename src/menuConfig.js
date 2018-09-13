@@ -14,28 +14,33 @@ import f from 'styles/foundation';
 export const EBI /*: Array<Object> */ = [
   {
     href: 'https://www.ebi.ac.uk',
-    icon: 'H',
+    icon: '',
     name: 'EMBL-EBI',
+    iconClass: 'common',
   },
   {
     href: 'https://www.ebi.ac.uk/services',
-    icon: '(',
+    icon: '',
     name: 'Services',
+    iconClass: 'common',
   },
   {
     href: 'https://www.ebi.ac.uk/research',
-    icon: ')',
+    icon: '',
     name: 'Research',
+    iconClass: 'common',
   },
   {
     href: 'https://www.ebi.ac.uk/training',
-    icon: 't',
+    icon: '',
     name: 'Training',
+    iconClass: 'common',
   },
   {
     href: 'https://www.ebi.ac.uk/about',
-    icon: 'i',
+    icon: '',
     name: 'About EBI',
+    iconClass: 'common',
   },
 ];
 
@@ -394,9 +399,9 @@ export const InterPro /*: Array<Object> */ = [
   },
   {
     to: { description: { main: { key: 'search' } } },
-    icon: '1',
+    icon: '',
     name: 'Search',
-    iconClass: 'functional',
+    iconClass: 'common',
   },
   {
     to(customLocation) {
@@ -443,41 +448,43 @@ export const InterPro /*: Array<Object> */ = [
     },
     icon: 'b',
     name: 'Browse',
-    iconClass: 'functional',
+    iconClass: 'common',
   },
   {
     to: { description: { main: { key: 'job' } } },
-    icon: '1',
+    icon: '',
     name: 'Jobs',
-    iconClass: 'functional',
+    iconClass: 'common',
   },
   {
     to: { description: { other: ['release_notes'] } },
-    icon: '0',
+    icon: '',
     name: 'Release\xa0Notes',
-    iconClass: 'functional',
+    iconClass: 'common',
   },
   {
     to: { description: { other: ['download'] } },
     icon: '=',
     name: 'Download',
-    iconClass: 'functional',
+    iconClass: 'common',
   },
   {
     to: { description: { other: ['help'] } },
-    icon: '?',
+    icon: '',
     name: 'Help',
+    iconClass: 'common',
   },
   {
     to: { description: { other: ['about'] } },
-    icon: 'i',
+    icon: '',
     name: 'About',
+    iconClass: 'common',
   },
   {
     to: { description: { other: ['settings'] } },
-    icon: 's',
+    icon: '',
     name: 'Settings',
-    iconClass: 'functional',
+    iconClass: 'common',
   },
 ];
 
