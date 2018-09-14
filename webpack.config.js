@@ -63,8 +63,8 @@ const getHTMLWebpackPlugin = mode =>
 const legacyModuleSplitPlugin = new LegacyModuleSplitPlugin();
 
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
-  filename: path.join('css', `[name].[contenthash:3].css`),
-  chunkFilename: path.join('css', `[id].[contenthash:3].css`),
+  filename: path.join('css', '[name].[contenthash:3].css'),
+  chunkFilename: path.join('css', '[id].[contenthash:3].css'),
 });
 
 const getConfigFor = (env, mode, module = false) => {
@@ -318,7 +318,7 @@ const getConfigFor = (env, mode, module = false) => {
             caches: {
               main: [
                 new RegExp(`js/[^/]*${name}[^/]*.js$`, 'i'),
-                new RegExp(`css/[^/]+.css$`, 'i'),
+                new RegExp('css/[^/]+.css$', 'i'),
               ],
               additional: [/\.(worker\.js)$/i],
               optional: [/\.(eot|ttf|woff|svg|ico|png|jpe?g)$/i],
