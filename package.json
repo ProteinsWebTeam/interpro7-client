@@ -5,21 +5,25 @@
     "type": "git",
     "url": "https://github.com/ProteinsWebTeam/interpro7-client.git"
   },
+  "engines": {
+    "node": ">=8"
+  },
+  "engineStrict": true,
   "license": "GPL-3.0",
   "scripts": {
     "preanalyze": "npm run report:stats",
     "analyze": "npx webpack-bundle-analyzer reports/webpack-stats/stats.json",
     "test": "npm-run-all test:flow test:lint test:unit",
     "test:flow": "flow focus-check --merge-timeout=1000 .",
-    "test:lint": "eslint --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" \"./**/*.js\"",
-    "test:unit": "jest --notify src",
+    "test:lint": "eslint --color --ignore-path .gitignore --ignore-pattern \"flow-typed\" --ignore-pattern \"snippets\" \"./**/*.js\"",
+    "test:unit": "jest --notify --maxWorkers=2 src",
     "test:functional": "[[ -n $IS_EBI_CLUSTER ]] && echo 'skipped functionnal test on EBI cluster' || jest --notify tests",
     "report": "npm-run-all -s --continue-on-error clean:report report:**",
     "report:build": "node scripts/report-build-info.js",
     "report:coverage:flow": "flow-coverage-report",
     "report:coverage:jest": "npm run test:unit -- --coverage",
     "report:lighthouse": "node scripts/lighthouse.js",
-    "report:stats": "mkdirp reports/webpack-stats && webpack --profile --json > reports/webpack-stats/stats.json",
+    "report:stats": "#mkdirp reports/webpack-stats && webpack --profile --json > reports/webpack-stats/stats.json",
     "coveralls": "cat reports/jest-coverage/lcov.info | coveralls",
     "dev": "webpack-dev-server --mode=development",
     "flow-typed:install": "npx flow-typed install",
@@ -40,44 +44,6 @@
   "contributors": [
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)"
   ],
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "modules": false,
-          "loose": true,
-          "useBuiltIns": true,
-          "targets": {
-            "browsers": "> 0.25%",
-            "node": true
-          }
-        }
-      ],
-      "stage-2",
-      "react"
-    ],
-    "env": {
-      "dev": {
-        "plugins": [
-          "transform-react-jsx-source"
-        ]
-      },
-      "test": {
-        "plugins": [
-          "transform-es2015-modules-commonjs",
-          "babel-plugin-dynamic-import-node"
-        ]
-      },
-      "production": {
-        "plugins": [
-          "transform-react-remove-prop-types",
-          "transform-react-constant-elements",
-          "transform-react-inline-elements"
-        ]
-      }
-    }
-  },
   "lint-staged": {
     "*.+(js|css)": [
       "prettier --write",
@@ -85,12 +51,12 @@
     ]
   },
   "flow-coverage-report": {
-    "includeGlob": [
+    "globIncludePatterns": [
       "src/**/*.js"
     ],
     "concurrentFiles": 4,
     "threshold": 50,
-    "type": [
+    "reportTypes": [
       "text",
       "html",
       "json"
@@ -101,21 +67,22 @@
     "threshold": 20
   },
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "2.0.3",
+    "@babel/cli": "^7.0.0",
+    "@webcomponents/webcomponentsjs": "2.1.1",
     "EBI-Icon-fonts": "1.3.0-rc.1",
-    "babel-polyfill": "6.26.0",
     "clanviewer": "^0.1.11",
+    "clipboard": "2.0.1",
     "color-hash": "1.0.3",
     "core-js": "2.5.7",
-    "d3": "5.5.0",
+    "d3": "5.7.0",
     "data-loader": "0.3.3",
-    "details-element-polyfill": "2.0.1",
+    "details-element-polyfill": "2.0.2",
     "dompurify": "1.0.7",
     "draft-js": "0.10.5",
     "ebi-framework": "1.3.0",
     "filesize": "3.6.1",
     "foundation-sites": "^6.4.3",
-    "gsap": "2.0.1",
+    "gsap": "2.0.2",
     "history": "4.7.2",
     "idb": "2.1.3",
     "interpro-components": "0.6.1",
@@ -123,20 +90,21 @@
     "litemol": "github:dsehnal/LiteMol#85ec87c2698b6abeca8a18cf150f0341b8f2c6ea",
     "lodash-es": "4.17.10",
     "pdb-web-components": "^0.2.0",
-    "popper.js": "1.14.3",
+    "popper.js": "1.14.4",
     "prop-types": "15.6.2",
     "protvista-interpro-track": "^0.1.4",
-    "protvista-manager": "0.1.2",
+    "protvista-manager": "0.1.3",
     "protvista-navigation": "0.1.1",
     "protvista-sequence": "0.1.1",
     "protvista-track": "0.1.2",
     "protvista-zoomable": "^0.1.3",
-    "react": "16.4.1",
+    "react": "16.4.2",
     "react-addons-transition-group": "15.6.2",
-    "react-dom": "16.4.1",
+    "react-dom": "16.4.2",
     "react-helmet": "5.2.0",
-    "react-loadable": "5.4.0",
+    "react-loadable": "5.5.0",
     "react-redux": "5.0.7",
+    "react-syntax-highlighter": "8.0.1",
     "react-tippy": "^1.2.2",
     "redux": "4.0.0",
     "reselect": "3.0.1",
@@ -148,68 +116,67 @@
     "wicg-inert": "2.0.0"
   },
   "devDependencies": {
-    "babel-core": "6.26.3",
-    "babel-eslint": "8.2.6",
-    "babel-loader": "7.1.5",
-    "babel-plugin-dynamic-import-node": "2.0.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "6.26.2",
+    "@babel/core": "7.0.0",
+    "@babel/plugin-proposal-class-properties": "7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "7.0.0",
+    "@babel/preset-env": "7.0.0",
+    "@babel/preset-react": "7.0.0",
+    "@babel/register": "7.0.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "9.0.0",
+    "babel-jest": "23.4.2",
+    "babel-loader": "8.0.2",
+    "babel-plugin-dynamic-import-node": "2.1.0",
     "babel-plugin-transform-react-constant-elements": "6.23.0",
     "babel-plugin-transform-react-inline-elements": "6.22.0",
-    "babel-plugin-transform-react-jsx-source": "6.22.0",
-    "babel-plugin-transform-react-remove-prop-types": "0.4.14",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-react": "6.24.1",
-    "babel-preset-stage-2": "6.24.1",
-    "babel-register": "6.26.0",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.15",
     "chalk": "2.4.1",
     "chrome-launcher": "0.10.2",
     "classnames": "2.2.6",
-    "compression-webpack-plugin": "1.1.11",
+    "compression-webpack-plugin": "1.1.12",
     "coveralls": "3.0.2",
     "css-loader": "0.28.11",
     "empty": "0.10.1",
-    "eslint": "5.2.0",
-    "eslint-config-prettier": "2.9.0",
+    "eslint": "5.5.0",
+    "eslint-config-prettier": "3.0.1",
     "eslint-plugin-jsx-a11y": "6.1.1",
-    "eslint-plugin-react": "7.10.0",
+    "eslint-plugin-react": "7.11.1",
     "express": "4.16.3",
-    "file-loader": "1.1.11",
-    "flow-bin": "0.77.0",
-    "flow-coverage-report": "0.5.0",
-    "glob": "7.1.2",
-    "glob-loader": "0.3.0",
+    "file-loader": "2.0.0",
+    "flow-bin": "0.80.0",
+    "flow-coverage-report": "0.6.0",
     "html-webpack-plugin": "3.2.0",
     "husky": "0.14.3",
     "identity-obj-proxy": "3.0.0",
     "iltorb": "2.4.0",
     "img-loader": "3.0.0",
-    "jest": "23.4.2",
+    "jest": "23.5.0",
     "js-yaml": "3.12.0",
     "json-loader": "0.5.7",
     "lighthouse": "2.9.4",
-    "lint-staged": "7.2.0",
-    "mini-css-extract-plugin": "0.4.1",
+    "lint-staged": "7.2.2",
+    "mini-css-extract-plugin": "0.4.2",
     "mkdirp": "0.5.1",
-    "node-sass": "4.9.2",
-    "node-zopfli": "2.0.2",
+    "node-sass": "4.9.3",
+    "node-zopfli-es": "0.0.2",
     "npm-run-all": "4.1.3",
     "offline-plugin": "5.0.5",
     "postcss-cssnext": "3.1.0",
     "postcss-import": "11.1.0",
     "postcss-loader": "2.1.6",
-    "prettier": "1.14.0",
+    "prettier": "1.14.2",
     "puppeteer": "1.4.0",
     "raw-loader": "0.5.1",
-    "react-test-renderer": "16.4.1",
+    "react-test-renderer": "16.4.2",
     "rimraf": "2.6.2",
-    "sass-loader": "7.0.3",
+    "sass-loader": "7.1.0",
     "source-map": "0.7.3",
-    "style-loader": "0.21.0",
-    "url-loader": "1.0.1",
+    "style-loader": "0.23.0",
+    "url-loader": "1.1.1",
     "webapp-webpack-plugin": "2.3.0",
-    "webpack": "4.16.3",
+    "webpack": "4.17.1",
     "webpack-cli": "3.1.0",
-    "webpack-dev-server": "3.1.5",
+    "webpack-dev-server": "3.1.7",
     "worker-loader": "2.0.0",
     "yaml-loader": "0.5.0"
   }
