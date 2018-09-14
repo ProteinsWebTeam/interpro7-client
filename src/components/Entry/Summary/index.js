@@ -204,12 +204,51 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
       ([id]) => citations.includes(id),
     );
     included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
-
+    if (metadata.overlaps_with) {
+      metadata.overlaps_with.sort((a, b) => {
+        if (a.type > b.type) return 1;
+        if (a.type < b.type) return -1;
+        return a.accession > b.accession ? 1 : -1;
+      });
+    }
     return (
       <div className={f('sections')}>
         <section>
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
+              {metadata.overlaps_with &&
+              Object.keys(metadata.overlaps_with).length ? (
+                <div>
+                  <h4 className={f('first-letter-capital')}>
+                    {metadata.type === 'homologous_superfamily'
+                      ? 'Overlapping entries'
+                      : 'Overlapping homologous superfamilies'}
+                  </h4>
+                  {metadata.overlaps_with.map(ov => (
+                    <div key={ov.accession} style={{ paddingLeft: '1.5em' }}>
+                      <interpro-type
+                        type={ov.type.replace('_', ' ')}
+                        dimension="1.2em"
+                      />
+                      <Link
+                        to={{
+                          description: {
+                            main: { key: 'entry' },
+                            entry: {
+                              db: 'InterPro',
+                              accession: ov.accession,
+                            },
+                          },
+                        }}
+                      >
+                        {ov.name}
+                      </Link>{' '}
+                      ({ov.accession})
+                    </div>
+                  ))}
+                  <br />
+                </div>
+              ) : null}
               {metadata.hierarchy && Object.keys(metadata.hierarchy).length ? (
                 <div>
                   <h4 className={f('first-letter-capital')}>
