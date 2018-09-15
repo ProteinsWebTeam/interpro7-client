@@ -342,7 +342,7 @@ const getConfigFor = (env, mode, module = false) => {
       // GZIP compression
       mode === 'production'
         ? new (getCompressionPlugin())({
-            asset: '[path].gz[query]',
+            filename: '[path].gz[query]',
             test: /\.(js|css|html|svg)$/i,
             cache: true,
             algorithm(buffer, options, callback) {
@@ -353,7 +353,7 @@ const getConfigFor = (env, mode, module = false) => {
       // Brotli compression
       mode === 'production'
         ? new (getCompressionPlugin())({
-            asset: '[path].br[query]',
+            filename: '[path].br[query]',
             test: /\.(js|css|html|svg)$/i,
             cache: true,
             algorithm(buffer, _, callback) {
