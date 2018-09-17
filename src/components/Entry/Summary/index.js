@@ -100,7 +100,7 @@ const SidePanel = ({ metadata }) => (
               {metadata.source_database}
             </Link>
           </li>
-          {false &&
+          {false && // TODO: reactivate that after change in the API
             metadata.wikipedia && (
               <li>
                 <Link
