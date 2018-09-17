@@ -220,7 +220,10 @@ const Matches = (
               }}
             >
               <span className={f('acc-row')}>
-                <HighlightedText text={acc} textToHighlight={search.search} />
+                <HighlightedText
+                  text={acc.toUpperCase()}
+                  textToHighlight={search.search}
+                />
               </span>
             </Link>{' '}
             {primary === 'protein' && sourceDatabase === 'reviewed' ? (
