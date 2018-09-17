@@ -121,7 +121,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                 <ul className={f('no-bullet')}>
                   <li>
                     <PDBeLink id={metadata.accession} className={f('ext')}>
-                      View this structure in PDBe
+                      View {metadata.accession.toUpperCase()} in PDBe
                     </PDBeLink>
                     {
                       // remove the PDB viewer as we already show info on page (duplication)
