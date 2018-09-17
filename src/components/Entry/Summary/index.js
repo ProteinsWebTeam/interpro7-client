@@ -84,35 +84,33 @@ MemberDBSubtitle.propTypes = {
 const SidePanel = ({ metadata }) => (
   <div className={f('medium-4', 'large-4', 'columns')}>
     {metadata.integrated && <Integration intr={metadata.integrated} />}
-    {metadata.integrated && (
-      <section>
-        <h5>External Links</h5>
-        <ul className={f('no-bullet')}>
+    <section>
+      <h5>External Links</h5>
+      <ul className={f('no-bullet')}>
+        <li>
+          <Link
+            className={f('ext')}
+            target="_blank"
+            href={getUrlFor(metadata.source_database)(
+              metadata.accession.toUpperCase(),
+            )}
+          >
+            {metadata.source_database} website
+          </Link>
+        </li>
+        {metadata.wikipedia && (
           <li>
             <Link
               className={f('ext')}
               target="_blank"
-              href={getUrlFor(metadata.source_database)(
-                metadata.accession.toUpperCase(),
-              )}
+              href={`https://en.wikipedia.org/wiki/${metadata.wikipedia}`}
             >
-              {metadata.source_database} website
+              Wikipedia article
             </Link>
           </li>
-          {metadata.wikipedia && (
-            <li>
-              <Link
-                className={f('ext')}
-                target="_blank"
-                href={`https://en.wikipedia.org/wiki/${metadata.wikipedia}`}
-              >
-                Wikipedia article
-              </Link>
-            </li>
-          )}
-        </ul>
-      </section>
-    )}
+        )}
+      </ul>
+    </section>
     {metadata.member_databases &&
     Object.keys(metadata.member_databases).length ? (
       <ContributingSignatures contr={metadata.member_databases} />
