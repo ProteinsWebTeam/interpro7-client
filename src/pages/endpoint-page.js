@@ -92,12 +92,26 @@ const locationhasDetailOrFilter = createSelector(
   value => value,
 );
 
+const STATUS_NO_CONTENT = 204;
+const STATUS_NOT_FOUND = 404;
+const STATUS_GONE = 410;
+
+const edgeCases = new Map([
+  [
+    STATUS_NO_CONTENT,
+    // TODO: change wording when server supports 410 response
+    `The item you are trying to view doesn't exist (it might never have, or it might have been removed in a recent release)`,
+  ],
+  [STATUS_NOT_FOUND, 'This is not a valid accession'],
+  [STATUS_GONE, 'This item no longer exists'],
+]);
+
 class Summary extends PureComponent {
   static propTypes = propTypes;
 
   render() {
     const {
-      data: { loading, payload },
+      data: { status, loading, payload },
       // dataOrganism: { loading: loadingOrg, payload: payloadOrg },
       dataBase,
       customLocation,
@@ -108,6 +122,8 @@ class Summary extends PureComponent {
         main: { key: endpoint },
       },
     } = customLocation;
+    const edgeCaseText = edgeCases.get(status);
+    if (edgeCaseText) return <div className={f('row')}>{edgeCaseText}</div>;
     if (loading || (!locationhasDetailOrFilter(customLocation) && !payload)) {
       return <Loading />;
     }
