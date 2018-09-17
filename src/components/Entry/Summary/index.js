@@ -219,6 +219,16 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
+              <MemberDBSubtitle metadata={metadata} />
+              {metadata.source_database &&
+                metadata.source_database.toLowerCase() === 'interpro' &&
+                metadata.name.short &&
+                metadata.accession !== metadata.name.short && (
+                  <p>
+                    Short name:&nbsp;
+                    <i className={f('shortname')}>{metadata.name.short}</i>
+                  </p>
+                )}
               {metadata.overlaps_with &&
               Object.keys(metadata.overlaps_with).length ? (
                 <div>
@@ -246,13 +256,16 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       >
                         {ov.name}
                       </Link>{' '}
-                      ({ov.accession})
+                      ({ov.accession.toUpperCase()})
                     </div>
                   ))}
                   <br />
                 </div>
               ) : null}
-              {metadata.hierarchy && Object.keys(metadata.hierarchy).length ? (
+              {metadata.hierarchy &&
+              Object.keys(metadata.hierarchy).length &&
+              metadata.hierarchy.children &&
+              metadata.hierarchy.children.length ? (
                 <div>
                   <h4 className={f('first-letter-capital')}>
                     {metadata.type.replace('_', ' ').toLowerCase()}{' '}
@@ -265,16 +278,6 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 </div>
               ) : null}
 
-              <MemberDBSubtitle metadata={metadata} />
-              {metadata.source_database &&
-                metadata.source_database.toLowerCase() === 'interpro' &&
-                metadata.name.short &&
-                metadata.accession !== metadata.name.short && (
-                  <p>
-                    Short name:&nbsp;
-                    <i className={f('shortname')}>{metadata.name.short}</i>
-                  </p>
-                )}
               {// doesn't work for some HAMAP as they have enpty <P> tag
               Object.keys(metadata.description).length ? (
                 <>
