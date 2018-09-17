@@ -46,7 +46,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             <ul className={f('no-bullet')}>
               <li>
                 <ProteomeLink id={metadata.accession} className={f('ext')}>
-                  View this proteome in UniProt
+                  View {metadata.accession.toUpperCase()} in UniProt
                 </ProteomeLink>
               </li>
             </ul>
