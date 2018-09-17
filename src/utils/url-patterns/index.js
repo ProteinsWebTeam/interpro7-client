@@ -7,7 +7,7 @@ export default (db /*: string */) => {
   let pattern = '';
   switch (db.toLowerCase()) {
     case 'cathgene3d':
-      pattern = '//www.cathdb.info/version/latest/superfamily/{}';
+      pattern = 'http://www.cathdb.info/version/latest/superfamily/{}';
       break;
     case 'cdd':
       pattern = '//www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={}';
@@ -16,7 +16,7 @@ export default (db /*: string */) => {
       pattern = '//hamap.expasy.org/signature/{}';
       break;
     case 'panther':
-      pattern = '//www.pantherdb.org/panther/family.do?clsAccession={}';
+      pattern = 'http://www.pantherdb.org/panther/family.do?clsAccession={}';
       break;
     case 'pfam':
       pattern = '//pfam.xfam.org/family/{}';
@@ -26,11 +26,11 @@ export default (db /*: string */) => {
       break;
     case 'prints':
       pattern =
-        '//www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn={}&display_opts=Prints&category=None&queryform=false&regexpr=off';
+        'http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn={}&display_opts=Prints&category=None&queryform=false&regexpr=off';
       break;
     case 'prodom':
       pattern =
-        '//prodom.prabi.fr/prodom/current/cgi-bin/request.pl?question=DBEN&query={}';
+        'http://prodom.prabi.fr/prodom/current/cgi-bin/request.pl?question=DBEN&query={}';
       break;
     case 'profile':
       pattern = '//prosite.expasy.org/{}';
@@ -39,16 +39,17 @@ export default (db /*: string */) => {
       pattern = '//prosite.expasy.org/{}';
       break;
     case 'sfld':
-      pattern = '//sfld.rbvi.ucsf.edu/django/family/{}/';
+      pattern = 'http://sfld.rbvi.ucsf.edu/django/family/{}/';
       break;
     case 'smart':
-      pattern = '//smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN={}';
+      pattern =
+        'http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN={}';
       break;
     case 'ssf':
-      pattern = '//supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid={}';
+      pattern = 'http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid={}';
       break;
     case 'tigrfams':
-      pattern = '//www.jcvi.org/cgi-bin/tigrfams/HmmReportPage.cgi?acc={}';
+      pattern = 'http://www.jcvi.org/cgi-bin/tigrfams/HmmReportPage.cgi?acc={}';
       break;
     default:
       pattern = '';
