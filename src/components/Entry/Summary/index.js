@@ -194,12 +194,16 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     }).isRequired,
     loading: T.bool.isRequired,
   };
-
+  constructor(props) {
+    super(props);
+    this.state = { showAllOverlappingEntries: false };
+  }
   render() {
     const {
       data: { metadata },
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
+    const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
     const citations = description2IDs(metadata.description);
     const desc = metadata.description.reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(
@@ -207,12 +211,18 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
       ([id]) => citations.includes(id),
     );
     included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
+    let overlaps = metadata.overlaps_with;
     if (metadata.overlaps_with) {
       metadata.overlaps_with.sort((a, b) => {
         if (a.type > b.type) return 1;
         if (a.type < b.type) return -1;
         return a.accession > b.accession ? 1 : -1;
       });
+      if (!this.state.showAllOverlappingEntries)
+        overlaps = metadata.overlaps_with.slice(
+          0,
+          MAX_NUMBER_OF_OVERLAPPING_ENTRIES,
+        );
     }
     return (
       <div className={f('sections')}>
@@ -229,15 +239,14 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                     <i className={f('shortname')}>{metadata.name.short}</i>
                   </p>
                 )}
-              {metadata.overlaps_with &&
-              Object.keys(metadata.overlaps_with).length ? (
+              {overlaps && Object.keys(overlaps).length ? (
                 <div>
                   <h4 className={f('first-letter-capital')}>
                     {metadata.type === 'homologous_superfamily'
                       ? 'Overlapping entries'
                       : 'Overlapping homologous superfamilies'}
                   </h4>
-                  {metadata.overlaps_with.map(ov => (
+                  {overlaps.map(ov => (
                     <div key={ov.accession} style={{ paddingLeft: '1.5em' }}>
                       <interpro-type
                         type={ov.type.replace('_', ' ')}
@@ -259,6 +268,22 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       ({ov.accession.toUpperCase()})
                     </div>
                   ))}
+                  {Object.keys(metadata.overlaps_with).length >
+                    MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
+                    <button
+                      className={f('button')}
+                      style={{ marginLeft: '1.5em' }}
+                      onClick={() =>
+                        this.setState({
+                          showAllOverlappingEntries: !this.state
+                            .showAllOverlappingEntries,
+                        })
+                      }
+                    >
+                      Show{' '}
+                      {this.state.showAllOverlappingEntries ? 'Less' : 'More'}
+                    </button>
+                  )}
                   <br />
                 </div>
               ) : null}
