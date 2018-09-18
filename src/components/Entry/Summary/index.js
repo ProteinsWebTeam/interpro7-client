@@ -228,7 +228,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       : 'Overlapping homologous superfamilies'}
                   </h4>
                   {metadata.overlaps_with.map(ov => (
-                    <div key={ov.accession} style={{ paddingLeft: '1.5em' }}>
+                    <div key={ov.accession} className={f('list-items')}>
                       <interpro-type
                         type={ov.type.replace('_', ' ')}
                         dimension="1.2em"
@@ -246,10 +246,9 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       >
                         {ov.name}
                       </Link>{' '}
-                      ({ov.accession})
+                      <small>({ov.accession})</small>
                     </div>
                   ))}
-                  <br />
                 </div>
               ) : null}
               {metadata.hierarchy && Object.keys(metadata.hierarchy).length ? (
