@@ -67,7 +67,6 @@ const TotalNb = ({
     const needSelector = !(
       isSubPageButMainIsEntry ||
       description.main.key === 'search' ||
-      description.main.key === 'job' ||
       (contentType !== 'entry' && contentType !== description.main.key)
     );
 
