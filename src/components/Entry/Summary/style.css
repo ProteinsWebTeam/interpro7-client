@@ -16,3 +16,7 @@
 .first-letter-capital::first-letter {
   text-transform: capitalize;
 }
+
+.list-item {
+  padding-left: 1.5em;
+}
