@@ -29,17 +29,17 @@ const SchemaOrgData = loadable({
 });
 
 const lut = new Map([
-  ['cdd', '//www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml'],
+  ['cdd', 'https://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml'],
   ['cathgene3d', 'http://www.cathdb.info/'],
-  ['hamap', '//hamap.expasy.org/'],
+  ['hamap', 'https://hamap.expasy.org/'],
   ['mobidblt', 'http://mobidb.bio.unipd.it/'],
   ['panther', 'http://www.pantherdb.org/'],
-  ['pfam', '//pfam.xfam.org/'],
-  ['pirsf', '//pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml'],
+  ['pfam', 'https://pfam.xfam.org/'],
+  ['pirsf', 'https://pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml'],
   ['prints', 'http://130.88.97.239/PRINTS/'],
   ['prodom', 'http://prodom.prabi.fr/'],
-  ['profile', '//prosite.expasy.org/'],
-  ['prosite', '//prosite.expasy.org/'],
+  ['profile', 'https://prosite.expasy.org/'],
+  ['prosite', 'https://prosite.expasy.org/'],
   ['sfld', 'http://sfld.rbvi.ucsf.edu/django/'],
   ['smart', 'http://smart.embl-heidelberg.de/'],
   ['ssf', 'http://supfam.org/'],
