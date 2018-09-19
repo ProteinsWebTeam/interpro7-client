@@ -84,7 +84,7 @@ MemberDBSubtitle.propTypes = {
 const SidePanel = ({ metadata }) => (
   <div className={f('medium-4', 'large-4', 'columns')}>
     {metadata.integrated && <Integration intr={metadata.integrated} />}
-    {metadata.integrated && (
+    {metadata.source_database.toLowerCase() !== 'interpro' && (
       <section>
         <h5>External Links</h5>
         <ul className={f('no-bullet')}>
@@ -96,20 +96,22 @@ const SidePanel = ({ metadata }) => (
                 metadata.accession.toUpperCase(),
               )}
             >
-              {metadata.source_database} website
+              View {metadata.accession.toUpperCase()} in{' '}
+              {metadata.source_database}
             </Link>
           </li>
-          {metadata.wikipedia && (
-            <li>
-              <Link
-                className={f('ext')}
-                target="_blank"
-                href={`https://en.wikipedia.org/wiki/${metadata.wikipedia}`}
-              >
-                Wikipedia article
-              </Link>
-            </li>
-          )}
+          {false && // TODO: reactivate that after change in the API
+            metadata.wikipedia && (
+              <li>
+                <Link
+                  className={f('ext')}
+                  target="_blank"
+                  href={`https://en.wikipedia.org/wiki/${metadata.wikipedia}`}
+                >
+                  Wikipedia article
+                </Link>
+              </li>
+            )}
         </ul>
       </section>
     )}
@@ -194,12 +196,16 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     }).isRequired,
     loading: T.bool.isRequired,
   };
-
+  constructor(props) {
+    super(props);
+    this.state = { showAllOverlappingEntries: false };
+  }
   render() {
     const {
       data: { metadata },
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
+    const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
     const citations = description2IDs(metadata.description);
     const desc = metadata.description.reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(
@@ -207,27 +213,42 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
       ([id]) => citations.includes(id),
     );
     included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
+    let overlaps = metadata.overlaps_with;
     if (metadata.overlaps_with) {
       metadata.overlaps_with.sort((a, b) => {
         if (a.type > b.type) return 1;
         if (a.type < b.type) return -1;
         return a.accession > b.accession ? 1 : -1;
       });
+      if (!this.state.showAllOverlappingEntries)
+        overlaps = metadata.overlaps_with.slice(
+          0,
+          MAX_NUMBER_OF_OVERLAPPING_ENTRIES,
+        );
     }
     return (
       <div className={f('sections')}>
         <section>
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
-              {metadata.overlaps_with &&
-              Object.keys(metadata.overlaps_with).length ? (
+              <MemberDBSubtitle metadata={metadata} />
+              {metadata.source_database &&
+                metadata.source_database.toLowerCase() === 'interpro' &&
+                metadata.name.short &&
+                metadata.accession !== metadata.name.short && (
+                  <p>
+                    Short name:&nbsp;
+                    <i className={f('shortname')}>{metadata.name.short}</i>
+                  </p>
+                )}
+              {overlaps && Object.keys(overlaps).length ? (
                 <div>
                   <h4 className={f('first-letter-capital')}>
                     {metadata.type === 'homologous_superfamily'
                       ? 'Overlapping entries'
                       : 'Overlapping homologous superfamilies'}
                   </h4>
-                  {metadata.overlaps_with.map(ov => (
+                  {overlaps.map(ov => (
                     <div key={ov.accession} className={f('list-items')}>
                       <interpro-type
                         type={ov.type.replace('_', ' ')}
@@ -246,12 +267,31 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       >
                         {ov.name}
                       </Link>{' '}
-                      <small>({ov.accession})</small>
+                      <small>({ov.accession.toUpperCase()})</small>
                     </div>
                   ))}
+                  {Object.keys(metadata.overlaps_with).length >
+                    MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
+                    <button
+                      className={f('button')}
+                      style={{ marginLeft: '1.5em' }}
+                      onClick={() =>
+                        this.setState({
+                          showAllOverlappingEntries: !this.state
+                            .showAllOverlappingEntries,
+                        })
+                      }
+                    >
+                      Show{' '}
+                      {this.state.showAllOverlappingEntries ? 'Less' : 'More'}
+                    </button>
+                  )}
                 </div>
               ) : null}
-              {metadata.hierarchy && Object.keys(metadata.hierarchy).length ? (
+              {metadata.hierarchy &&
+              Object.keys(metadata.hierarchy).length &&
+              metadata.hierarchy.children &&
+              metadata.hierarchy.children.length ? (
                 <div>
                   <h4 className={f('first-letter-capital')}>
                     {metadata.type.replace('_', ' ').toLowerCase()}{' '}
@@ -264,16 +304,6 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 </div>
               ) : null}
 
-              <MemberDBSubtitle metadata={metadata} />
-              {metadata.source_database &&
-                metadata.source_database.toLowerCase() === 'interpro' &&
-                metadata.name.short &&
-                metadata.accession !== metadata.name.short && (
-                  <p>
-                    Short name:&nbsp;
-                    <i className={f('shortname')}>{metadata.name.short}</i>
-                  </p>
-                )}
               {// doesn't work for some HAMAP as they have enpty <P> tag
               Object.keys(metadata.description).length ? (
                 <>

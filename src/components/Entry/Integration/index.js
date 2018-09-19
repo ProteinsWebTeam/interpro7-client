@@ -45,7 +45,7 @@ const Integration = ({ intr, dataBase }) => {
               },
             }}
           >
-            {intr}
+            {intr.toUpperCase()}
           </Link>
         </li>
       </ul>

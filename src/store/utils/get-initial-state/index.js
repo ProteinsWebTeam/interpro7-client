@@ -15,7 +15,7 @@ export default history => {
   let settings;
   if (settingsStorage) {
     settings = settingsStorage.getValue() || undefined;
-    if (PROD) {
+    if (PROD && settings) {
       settings.ebi = {
         protocol: config.root.EBIsearch.protocol,
         hostname: config.root.EBIsearch.hostname,
