@@ -18,7 +18,7 @@
   --colors-tag: #1878ba; /*or marroon #e0d6a5 lightblue:#b6ced5*/
   --colors-light-title: #505f74;
   --colors-light-txt: #4b555b;
-  --colors-marktext: #fcf655;
+  --colors-marktext: #fff47e; /*more saturated #fcf655;*/
   --colors-markprot: rgba(255, 235, 59, 0.8);
   --colors-markchart: #e8df8a;
   --colors-alert-main: #fa7e6e;
