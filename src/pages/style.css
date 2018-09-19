@@ -110,6 +110,7 @@
 
   &.corresponds-to-filter {
     background-color: var(--colors-marktext);
+    border-color: var(--colors-marktext);
   }
 }
 
