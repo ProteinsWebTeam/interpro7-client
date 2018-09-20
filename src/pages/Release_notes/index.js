@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import loadWebComponent from 'utils/load-web-component';
 
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -255,7 +256,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
 
                 <tr>
                   <td />
-                  <td>╰ Active site</td>
+                  <td>
+                    <span className={f('ico-rel')} /> Active site
+                  </td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -273,7 +276,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
 
                 <tr>
                   <td />
-                  <td>╰ Binding site</td>
+                  <td>
+                    <span className={f('ico-rel')} /> Binding site
+                  </td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -291,7 +296,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
 
                 <tr>
                   <td />
-                  <td>╰ Conserved site</td>
+                  <td>
+                    <span className={f('ico-rel')} /> Conserved site
+                  </td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -310,7 +317,10 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 <tr>
                   <td />
                   <td>
-                    ╰ <abbr title="post-translational modification">PTM</abbr>
+                    <span className={f('ico-rel')} />{' '}
+                    <Tooltip title="post-translational modification">
+                      PTM
+                    </Tooltip>
                   </td>
                   <td className={f('text-right')}>
                     <Link
@@ -337,8 +347,26 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                   <th />
                   <th>Signature database</th>
                   <th className={f('text-center')}>Version</th>
-                  <th className={f('text-right')}>Signatures*</th>
-                  <th className={f('text-right')}>Integrated signatures**</th>
+                  <th className={f('text-right')}>
+                    Signatures{' '}
+                    <Tooltip title="Some signatures may not have matches to UniProtKB proteins">
+                      <span
+                        className={f('small', 'icon', 'icon-common')}
+                        data-icon="&#xf129;"
+                        aria-label="Some signatures may not have matches to UniProtKB proteins"
+                      />
+                    </Tooltip>
+                  </th>
+                  <th className={f('text-right')}>
+                    Integrated signatures{' '}
+                    <Tooltip title="Not all signatures of a member database may be integrated at the time of an InterPro release">
+                      <span
+                        className={f('small', 'icon', 'icon-common')}
+                        data-icon="&#xf129;"
+                        aria-label="Not all signatures of a member database may be integrated at the time of an InterPro release"
+                      />
+                    </Tooltip>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -878,12 +906,6 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               </tbody>
             </table>
 
-            <p className={f('small', 'margin-top-small')}>
-              * Some signatures may not have matches to UniProtKB proteins.
-              <br />
-              ** Not all signatures of a member database may be integrated at
-              the time of an InterPro release
-            </p>
             <p className={f('small', 'margin-top-small')}>
               We use{' '}
               <Link
