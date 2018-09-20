@@ -3,6 +3,13 @@ node_js:
   - '10'
 before_install:
   - cp config.yml.example config.yml
+before_script:
+  - free -m
+  - sudo fallocate -l 4G /swapfile
+  - sudo chmod 600 /swapfile
+  - sudo mkswap /swapfile
+  - sudo swapon /swapfile
+  - free -m
 script:
   - npm run deploy:production
   - npm run report
