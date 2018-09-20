@@ -939,18 +939,17 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
             <table className={f('light')}>
               <thead>
                 <tr>
-                  <th rowSpan="2">Sequence database</th>
-                  <th rowSpan="2">Version</th>
-                  <th rowSpan="2">Count</th>
-                  <th colSpan="2">Count of proteins matching</th>
+                  <th>Sequence database</th>
+                  <th>Version</th>
+                  <th>Count</th>
+                  <th colSpan="2" className={f('text-center')}>
+                    Count of proteins matching
+                  </th>
                 </tr>
                 <tr>
-                  <td>
-                    <strong>any signature</strong>
-                  </td>
-                  <td>
-                    <strong>integrated signatures</strong>
-                  </td>
+                  <td colSpan="3" />
+                  <td>Any signature</td>
+                  <td>Integrated signatures</td>
                 </tr>
               </thead>
               <tbody>
