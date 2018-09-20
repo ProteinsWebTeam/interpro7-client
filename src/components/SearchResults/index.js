@@ -93,7 +93,14 @@ class SearchResults extends PureComponent {
           </Exporter>
           <Column
             dataKey="id"
-            renderer={(accession, { source: db }) => (
+            renderer={(
+              accession,
+              {
+                fields: {
+                  source_database: [db],
+                },
+              },
+            ) => (
               <Link
                 className={f('acc-row')}
                 to={{
@@ -119,9 +126,9 @@ class SearchResults extends PureComponent {
             renderer={(
               accession,
               {
-                source: db,
                 fields: {
                   name: [name],
+                  source_database: [db],
                 },
               },
             ) => (
@@ -208,7 +215,7 @@ const getEbiSearchUrl = createSelector(
     searchValue,
   ) => {
     if (!searchValue) return null;
-    const fields = 'description,name';
+    const fields = 'description,name,source_database';
     const size = search.page_size || settingsPageSize;
     const start = ((search.page || 1) - 1) * size;
     const query = getQueryTerm(searchValue);
