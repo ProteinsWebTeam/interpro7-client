@@ -77,6 +77,16 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                         Privacy and security
                       </Link>
                     </li>
+
+                    <li>
+                      <Link
+                        href="//www.ebi.ac.uk/ebisearch/documentation.ebi"
+                        className={f('ext')}
+                        target="_blank"
+                      >
+                        Search documentation (EBI)
+                      </Link>
+                    </li>
                   </ul>
                 </div>
 
