@@ -18,9 +18,7 @@ exports[`<EBIHeader /> should render 1`] = `
         >
           <Connect(Link)
             href="//www.ebi.ac.uk"
-          >
-            EMBL-EBI Home page
-          </Connect(Link)>
+          />
         </li>
         <li
           className="embl hide"
