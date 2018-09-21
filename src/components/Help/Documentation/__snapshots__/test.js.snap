@@ -92,6 +92,15 @@ exports[`<Documentation /> should render 1`] = `
                   Privacy and security
                 </Connect(Link)>
               </li>
+              <li>
+                <Connect(Link)
+                  className="ext"
+                  href="//www.ebi.ac.uk/ebisearch/documentation.ebi"
+                  target="_blank"
+                >
+                  Search documentation (EBI)
+                </Connect(Link)>
+              </li>
             </ul>
           </div>
           <div
