@@ -212,6 +212,10 @@ div#local-title {
 /************************ END BANNER**********************************/
 
 /****************************** TABLE *********************************/
+/*gal*/
+.table-center {
+  text-align: center;
+}
 /*Style default table*/
 table.classic {
   font-size: 0.9rem;
@@ -325,10 +329,27 @@ table.light.sorting thead th:hover {
   color: #73828c;
 }
 /*/Style light table */
+/*responsive table*/
+@media screen and (max-width: 39.9375em) {
+  table.responsive th,
+  table.responsive tr {
+    display: block;
+    margin-bottom: 1rem;
+  }
 
-.table-center {
-  text-align: center;
+  table.responsive tbody tr {
+    border: 2px #d4dddf solid;
+  }
+
+  table.responsive tbody tr td {
+    border: 0;
+  }
+  /*class used to show info on the same line   */
+  table.responsive td.sm-inline {
+    display: inline-block;
+  }
 }
+/*/responsive table*/
 
 /*Filter menu option*/
 .sub-nav {
