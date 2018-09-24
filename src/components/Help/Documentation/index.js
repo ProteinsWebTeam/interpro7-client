@@ -18,93 +18,82 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
       <section>
         <div className={f('row')}>
           <div className={f('columns', 'large-8')}>
-            <div className={f('row')}>
-              <div className={f('columns', 'large-12')}>
-                <h3>Documentation</h3>
+            <div className={f('flex-container')}>
+              <div className={f('flex-box')}>
+                <span
+                  className={f('icon', 'icon-common', 'xl')}
+                  data-icon="&#xf085;"
+                />
+                <h5>Techincal specs</h5>
+                <ul>
+                  <li>
+                    <Link href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/">
+                      API documentation
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="//www.ebi.ac.uk/Tools/webservices/"
+                      className={f('ext')}
+                      target="_blank"
+                    >
+                      Web services
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={{ description: { other: ['release_notes'] } }}>
+                      Release notes
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="//github.com/ebi-pf-team/interproscan/wiki"
+                      className={f('ext')}
+                      target="_blank"
+                    >
+                      <span
+                        className={f('icon', 'icon-common')}
+                        data-icon="&#xf09b;"
+                      />{' '}
+                      InterProScan Wiki
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
+                      className={f('ext')}
+                      target="_blank"
+                    >
+                      Privacy and security
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      href="//www.ebi.ac.uk/ebisearch/documentation.ebi"
+                      className={f('ext')}
+                      target="_blank"
+                    >
+                      Search documentation (EBI)
+                    </Link>
+                  </li>
+                </ul>
               </div>
-            </div>
-            <div className={f('row')}>
-              <div className={f('flex-container')}>
-                <div className={f('flex-item', 'icon-box')}>
-                  {
-                    // <h4 className={f('icon', 'icon-common')} data-icon="&#x109;"></h4>
-                  }
+              <div className={f('flex-box')}>
+                <Link
+                  to={{
+                    description: {
+                      other: ['help', 'documentation', 'publication'],
+                    },
+                  }}
+                >
                   <span
                     className={f('icon', 'icon-common', 'xl')}
-                    data-icon="&#xf085;"
-                  />
-                  <h5>Technical specs</h5>
-                  <ul className={f('small')}>
-                    <li>
-                      <Link href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/">
-                        API documentation
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="//www.ebi.ac.uk/Tools/webservices/"
-                        className={f('ext')}
-                        target="_blank"
-                      >
-                        Web services
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to={{ description: { other: ['release_notes'] } }}>
-                        Release notes
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="//github.com/ebi-pf-team/interproscan/wiki"
-                        className={f('ext')}
-                        target="_blank"
-                      >
-                        <span
-                          className={f('icon', 'icon-common')}
-                          data-icon="&#xf09b;"
-                        />{' '}
-                        InterProScan Wiki
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link
-                        href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
-                        className={f('ext')}
-                        target="_blank"
-                      >
-                        Privacy and security
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link
-                        href="//www.ebi.ac.uk/ebisearch/documentation.ebi"
-                        className={f('ext')}
-                        target="_blank"
-                      >
-                        Search documentation (EBI)
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className={f('flex-item', 'icon-box', 'box-publications')}>
-                  <Link
-                    to={{
-                      description: {
-                        other: ['help', 'documentation', 'publication'],
-                      },
-                    }}
-                  >
-                    <span
-                      className={f('icon', 'icon-common', 'xl')}
-                      data-icon="&#xf02d;"
-                    />{' '}
-                    <h5>Publications</h5>
-                  </Link>
-                </div>
+                    data-icon="&#xf02d;"
+                  />{' '}
+                  <h5>Publications</h5>
+                </Link>
               </div>
             </div>
           </div>
