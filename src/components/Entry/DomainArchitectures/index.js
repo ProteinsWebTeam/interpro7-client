@@ -188,7 +188,7 @@ class DomainArchitectures extends PureComponent {
                           }}
                         >
                           {' '}
-                          {accession}{' '}
+                          {accession.toUpperCase()}{' '}
                         </Link>
                       </span>
                     </React.Fragment>
