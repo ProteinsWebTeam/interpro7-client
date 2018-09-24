@@ -462,7 +462,7 @@ const List = ({
                   processData={schemaProcessDataTableRow}
                 />
                 <HighlightedText
-                  text={accession}
+                  text={accession.toUpperCase()}
                   textToHighlight={search.search}
                 />
               </Link>
