@@ -9,17 +9,21 @@ exports[`<Consortium /> should render with data 1`] = `
     The following databases make up the InterPro Consortium:
   </p>
   <table
-    className="light"
+    className="light responsive"
   >
     <tbody>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="cathgene3d"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -33,7 +37,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           4.2.0
         </td>
         <td>
@@ -54,13 +60,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="cdd"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -74,7 +84,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           3.16
         </td>
         <td>
@@ -95,13 +107,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="hamap"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -115,7 +131,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           2018_03
         </td>
         <td>
@@ -136,13 +154,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="mobidblt"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -156,7 +178,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           1.0
         </td>
         <td>
@@ -177,13 +201,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="panther"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -197,7 +225,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           12.0
         </td>
         <td>
@@ -218,13 +248,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="pfam"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -238,7 +272,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           31.0
         </td>
         <td>
@@ -259,13 +295,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="pirsf"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -279,7 +319,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           3.02
         </td>
         <td>
@@ -300,13 +342,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="prints"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -320,7 +366,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           42.0
         </td>
         <td>
@@ -341,13 +389,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="prodom"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -361,7 +413,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           2006.1
         </td>
         <td>
@@ -382,13 +436,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="profile"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -402,7 +460,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           2018_02
         </td>
         <td>
@@ -421,13 +481,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="prosite"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -441,7 +505,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           2018_02
         </td>
         <td>
@@ -462,13 +528,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="sfld"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -482,7 +552,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           3
         </td>
         <td>
@@ -503,13 +575,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="smart"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -523,7 +599,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           7.1
         </td>
         <td>
@@ -544,13 +622,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="ssf"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -564,7 +646,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           1.75
         </td>
         <td>
@@ -585,13 +669,17 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <MemberSymbol
             className="md-small"
             type="tigrfams"
           />
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           <Connect(Link)
             className="ext"
             disabled={false}
@@ -605,7 +693,9 @@ exports[`<Consortium /> should render with data 1`] = `
             </span>
           </Connect(Link)>
         </td>
-        <td>
+        <td
+          className="sm-inline"
+        >
           15.0
         </td>
         <td>
