@@ -48,19 +48,23 @@ const ida2json = ida => {
   const idaParts = ida.split('-');
   const n = idaParts.length;
   const feature = (FAKE_PROTEIN_LENGTH - GAP_BETWEEN_DOMAINS * (n + 1)) / n;
-  const domains = idaParts.map((p, i) => ({
-    accession: p.indexOf(':') < 0 ? p : p.split(':')[1],
-    locations: [
-      {
-        fragments: [
-          {
-            start: GAP_BETWEEN_DOMAINS + i * (GAP_BETWEEN_DOMAINS + feature),
-            end: (i + 1) * (GAP_BETWEEN_DOMAINS + feature),
-          },
-        ],
-      },
-    ],
-  }));
+  const domains = idaParts.map((p, i) => {
+    const [pf, ipr] = p.split(':');
+    return {
+      accession: ipr || pf,
+      unintegrated: !ipr,
+      locations: [
+        {
+          fragments: [
+            {
+              start: GAP_BETWEEN_DOMAINS + i * (GAP_BETWEEN_DOMAINS + feature),
+              end: (i + 1) * (GAP_BETWEEN_DOMAINS + feature),
+            },
+          ],
+        },
+      ],
+    };
+  });
   const grouped = domains.reduce((obj, domain) => {
     if (obj[domain.accession])
       obj[domain.accession].locations.push(domain.locations[0]);
@@ -83,14 +87,17 @@ class IDAProtVista extends ProtVistaMatches {
     const { matches } = props;
 
     for (const domain of matches) {
+      const isIPR = domain.accession.toLowerCase().startsWith('ipr');
       const tmp = [
         {
           name: domain.accession,
-          source_database: 'interpro',
-          color: getTrackColor(
-            { accession: domain.accession },
-            EntryColorMode.ACCESSION,
-          ),
+          source_database: isIPR ? 'InterPro' : 'pfam',
+          color: isIPR
+            ? getTrackColor(
+                { accession: domain.accession },
+                EntryColorMode.ACCESSION,
+              )
+            : '#888888',
           type: 'entry',
           ...domain,
         },
@@ -121,7 +128,12 @@ class IDAProtVista extends ProtVistaMatches {
                 to={{
                   description: {
                     main: { key: 'entry' },
-                    entry: { db: 'InterPro', accession: d.accession },
+                    entry: {
+                      db: d.accession.toLowerCase().startsWith('ipr')
+                        ? 'InterPro'
+                        : 'pfam',
+                      accession: d.accession,
+                    },
                   },
                 }}
               >
@@ -183,7 +195,12 @@ class DomainArchitectures extends PureComponent {
                           to={{
                             description: {
                               main: { key: 'entry' },
-                              entry: { db: 'InterPro', accession },
+                              entry: {
+                                db: accession.toLowerCase().startsWith('ipr')
+                                  ? 'InterPro'
+                                  : 'pfam',
+                                accession,
+                              },
                             },
                           }}
                         >
