@@ -98,10 +98,8 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
             </div>
           </div>
           <div className={f('columns', 'large-4')}>
-            <div className={f('box-add')}>
-              <h3 className={f('light', 'margin-top-xxlarge')}>
-                Additional help
-              </h3>
+            <div className={f('box-add', 'margin-top-xxlarge')}>
+              <h3 className={f('light')}>Additional help</h3>
               <ul>
                 {
                   // <li>
