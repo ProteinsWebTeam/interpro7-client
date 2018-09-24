@@ -348,7 +348,7 @@ class List extends PureComponent {
                     className={f('acc-row')}
                   >
                     <HighlightedText
-                      text={accession}
+                      text={accession.toUpperCase()}
                       textToHighlight={search.search}
                     />
                   </Link>
