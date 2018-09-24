@@ -1,14 +1,4 @@
 @import '../../../styles/colors.css';
-/*to move to interpro-new.css?*/
-.xl {
-  color: var(--colors-ebidark);
-  font-size: 280%;
-}
-
-.margin-top-xxlarge {
-  margin-top: 4rem;
-}
-/*/to move to interpro-new.css?*/
 
 .box-add {
   border-left: 4px solid var(--colors-submain);
