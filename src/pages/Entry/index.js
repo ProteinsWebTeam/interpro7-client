@@ -349,14 +349,14 @@ class EntryCard extends PureComponent {
                 }}
                 disabled={!data.metadata.integrated}
               >
-                {data.metadata.integrated}
+                {(data.metadata.accession || '').toUpperCase()}
               </Link>
             </div>
           )}
           <div>
             {' '}
             <HighlightedText
-              text={data.metadata.accession}
+              text={(data.metadata.accession || '').toUpperCase()}
               textToHighlight={search}
             />
           </div>
