@@ -221,7 +221,7 @@ const SetCard = ({ data, search, entryDB }) => (
       <div>
         ID:
         <HighlightedText
-          text={data.metadata.accession}
+          text={(data.metadata.accession || '').toUpperCase()}
           textToHighlight={search}
         />
       </div>

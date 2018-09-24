@@ -338,7 +338,7 @@ class StructureCard extends PureComponent {
 
           <div>
             <HighlightedText
-              text={data.metadata.accession}
+              text={(data.metadata.accession || '').toUpperCase()}
               textToHighlight={search}
             />
           </div>
