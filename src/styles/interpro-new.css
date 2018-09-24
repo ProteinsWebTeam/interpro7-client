@@ -172,15 +172,15 @@ a.neutral:hover {
 /************************  END LINKS  **********************************/
 
 /************************  FORM INPUT TEXTAREA  **********************************/
-/* reduce border input search field*/
+/* reduce impact border search input field*/
 [type='text'] {
-  border: 1px solid #cacaca;
+  border: 1px solid var(--colors-ulightgray);
 }
 
 /* placeholder */
 input::placeholder,
 textarea::placeholder {
-  color: #cacaca;
+  color: var(--colors-ulightgray);
 }
 /************************  END FORM INPUT TEXTAREA  **********************************/
 
@@ -434,77 +434,8 @@ button {
 
 /****************************** END BUTTONS *********************************/
 
-/****************************** OTHERS *********************************/
-/*ACCORDION TYPE*/
-details > summary {
-  cursor: pointer;
-  outline: 0;
-}
-/*custom*/
-details.accordion-style > summary {
-  color: var(--colors-submain);
-  border: 1px solid var(--colors-very-white);
-  border-bottom-width: 0;
-  padding: 1rem;
-  &:hover {
-    background-color: var(--colors-accordion);
-    /*background-color: rgba(0, 0, 0, 0.1);*/
-    color: white;
-    /*color: var(--colors-graydark);*/
-    transition: all 0.4s ease-out;
-  }
-  &::after {
-    content: '';
-    font-family: 'EBI-Common';
-    float: right;
-    font-size: 120%;
-  }
-  &::-webkit-details-marker {
-    display: none;
-  }
-}
-
-details.accordion-style:last-child {
-  border-bottom: 1px solid var(--colors-very-white);
-}
-
-.accordion-info {
-  border: 1px solid var(--colors-nearly-white);
-  border-top-width: 0;
-  padding: 1rem;
-  & p:last-of-type {
-    margin-bottom: 0;
-  }
-}
-
-details.accordion-style[open] > summary {
-  background-color: var(--colors-accordion);
-  color: white;
-  z-index: 1;
-  position: relative; /*for animation*/
-}
-
-details.accordion-style[open] summary ~ * {
-  animation: sweep var(--timing-fast) ease-out;
-}
-
-/*alt color for testing*/
-details.accordion-style.light[open] > summary {
-  background-color: var(--colors-nearly-white);
-  color: var(--colors-graydark);
-}
-details.accordion-style.classic[open] > summary {
-  background-color: var(--colors-submain);
-  color: white;
-}
-/*/alt color for testing*/
-
-details.accordion-style[open] summary:after {
-  content: '';
-}
-/*/ACCORDION TYPE*/
-
 /****************************** TITLE - TEXT *********************************/
+
 /* TITLE Alt for Entry page - TEST */
 .box-title {
   color: #585656;
@@ -521,14 +452,6 @@ details.accordion-style[open] summary:after {
 h3.light {
   font-weight: 300;
 }
-
-/*not used anymore - use default foundation*/
-/*h1 small,*/
-/*h2 small,*/
-/*h3 small,*/
-/*h4 small {*/
-/*color: #bbb;*/
-/*}*/
 
 /*simulation H5 but needs to stay span in order to show ext icon on the same line*/
 .h5 {
@@ -574,8 +497,19 @@ h6 small {
 }
 
 hr {
-  border-bottom: 1px solid #d4d4d4;
+  border-bottom: 1px solid var(--colors-vlightgray);
 }
+/*documentation*/
+.xl {
+  color: var(--colors-ebidark);
+  font-size: 280%;
+}
+
+.margin-top-xxlarge {
+  margin-top: 4rem;
+}
+/*/documentation*/
+
 /*/Overwrite Foundation*/
 
 /*TOOLTIP*/
@@ -650,7 +584,11 @@ hr {
 }
 /*/ CALLOUT info & alert messages*/
 
-/*TABS - home*/
+/****************************** END TITLE - TEXT *********************************/
+
+/****************************** OTHERS *********************************/
+
+/*TABS*/
 
 /*Tabs style main - homepage*/
 .tabs.main-style {
@@ -768,6 +706,75 @@ hr {
 }
 /*/Tabs style menu*/
 
+/*ACCORDION TYPE*/
+details > summary {
+  cursor: pointer;
+  outline: 0;
+}
+/*custom*/
+details.accordion-style > summary {
+  color: var(--colors-submain);
+  border: 1px solid var(--colors-very-white);
+  border-bottom-width: 0;
+  padding: 1rem;
+  &:hover {
+    background-color: var(--colors-accordion);
+    /*background-color: rgba(0, 0, 0, 0.1);*/
+    color: white;
+    /*color: var(--colors-graydark);*/
+    transition: all 0.4s ease-out;
+  }
+  &::after {
+    content: '';
+    font-family: 'EBI-Common';
+    float: right;
+    font-size: 120%;
+  }
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+details.accordion-style:last-child {
+  border-bottom: 1px solid var(--colors-very-white);
+}
+
+.accordion-info {
+  border: 1px solid var(--colors-nearly-white);
+  border-top-width: 0;
+  padding: 1rem;
+  & p:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+details.accordion-style[open] > summary {
+  background-color: var(--colors-accordion);
+  color: white;
+  z-index: 1;
+  position: relative; /*for animation*/
+}
+
+details.accordion-style[open] summary ~ * {
+  animation: sweep var(--timing-fast) ease-out;
+}
+
+/*alt color for testing*/
+details.accordion-style.light[open] > summary {
+  background-color: var(--colors-nearly-white);
+  color: var(--colors-graydark);
+}
+details.accordion-style.classic[open] > summary {
+  background-color: var(--colors-submain);
+  color: white;
+}
+/*/alt color for testing*/
+
+details.accordion-style[open] summary:after {
+  content: '';
+}
+/*/ACCORDION TYPE*/
+
 /*footer*/
 .local_footer {
   padding: 1rem 0;
@@ -836,7 +843,7 @@ hr {
 }
 /*/back to top button*/
 
-/*Customise LiteMole - Structure page*/
+/* LiteMole - Structure page*/
 .lm-plugin .lm-btn-link span.lm-icon {
   font-size: 120%;
 }
@@ -903,7 +910,7 @@ hr {
 .lm-plugin .lm-layout-standard-outside .lm-layout-right {
   z-index: 2;
 }
-/*END customise LiteMole*/
+/*END LiteMole*/
 
 /*custom CLAN-VIEWER node module*/
 :global(.clanviewer) {
