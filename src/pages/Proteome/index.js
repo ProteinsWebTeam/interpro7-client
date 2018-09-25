@@ -4,7 +4,8 @@ import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
-// import OrganismListFilters from 'components/Organism/OrganismListFilters';
+import ProteomeListFilters from 'components/Proteome/ProteomeListFilters';
+
 import Table, {
   Column,
   SearchBox,
@@ -281,7 +282,7 @@ class List extends PureComponent {
           className="pp-left-side-db-selector"
         />
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          {/* <OrganismListFilters />*/}
+          <ProteomeListFilters />
           <hr />
           {databases && (
             <SchemaOrgData
