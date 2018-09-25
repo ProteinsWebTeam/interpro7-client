@@ -776,11 +776,14 @@ details.accordion-style:last-child {
   }
 }
 
+summary {
+  z-index: 1;
+  position: relative; /*for animation*/
+}
+
 details.accordion-style[open] > summary {
   background-color: var(--colors-accordion);
   color: white;
-  z-index: 1;
-  position: relative; /*for animation*/
 }
 
 details.accordion-style[open] summary ~ * {
