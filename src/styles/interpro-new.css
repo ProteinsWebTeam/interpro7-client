@@ -220,6 +220,12 @@ div#local-title {
 .min-width-sm {
   width: 18%;
 }
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  .xs-hide {
+    display: none;
+  }
+}
 
 /*Style default table*/
 table.classic {
@@ -976,10 +982,6 @@ details.accordion-style[open] summary:after {
 /*RESPONSIVE DESIGN*/
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-}
-
-/* Small screen only */
-@media screen and (max-width: 39.9375em) {
 }
 
 /*make banner buttons disappear for very small screens so they don't overlap with title*/
