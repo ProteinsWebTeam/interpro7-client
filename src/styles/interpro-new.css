@@ -734,33 +734,59 @@ hr {
 }
 /*/Tabs style menu*/
 
-/*ACCORDION TYPE*/
-details > summary {
-  cursor: pointer;
-  outline: 0;
-}
-/*custom*/
+/*** ACCORDION MENU ***/
 details.accordion-style > summary {
   color: var(--colors-submain);
   border: 1px solid var(--colors-very-white);
   border-bottom-width: 0;
   padding: 1rem;
+  cursor: pointer;
+  outline: 0;
+  z-index: 1;
+  position: relative; /*for animation*/
   &:hover {
-    background-color: var(--colors-accordion);
-    /*background-color: rgba(0, 0, 0, 0.1);*/
-    color: white;
-    /*color: var(--colors-graydark);*/
-    transition: all 0.4s ease-out;
+    /*background-color: var(--colors-accordion);*/
+    background-color: var(--colors-unknown-sub);
+    color: var(--colors-graydark);
+    transition: all var(--timing-medclose) ease-out;
+    &::after {
+      background: var(--colors-unknown-sub);
+      transition: background-color var(--timing-medclose) ease-out;
+    }
+  }
+  &::before {
+    transform: translateY(-50%) rotate(-45deg);
+    background: var(--colors-submain);
   }
   &::after {
-    content: '';
-    font-family: 'EBI-Common';
-    float: right;
-    font-size: 120%;
+    margin-top: -3px;
+    background: white;
+    transform: translateY(-50%) rotate(-45deg);
   }
+
+  /* using icon instead
+&::after {*/
+  /*content: '';*/
+  /*font-family: 'EBI-Common';*/
+  /*position: absolute;*/
+  /*font-size: 120%;*/
+  /*top: 20%;*/
+  /*right: .5rem;*/
+  /*}*/
+
   &::-webkit-details-marker {
     display: none;
   }
+}
+
+details.accordion-style > summary::before,
+details.accordion-style > summary::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  right: 20px;
+  top: 50%;
 }
 
 details.accordion-style:last-child {
@@ -776,11 +802,6 @@ details.accordion-style:last-child {
   }
 }
 
-summary {
-  z-index: 1;
-  position: relative; /*for animation*/
-}
-
 details.accordion-style[open] > summary {
   background-color: var(--colors-accordion);
   color: white;
@@ -790,21 +811,25 @@ details.accordion-style[open] summary ~ * {
   animation: sweep var(--timing-fast) ease-out;
 }
 
-/*alt color for testing*/
-details.accordion-style.light[open] > summary {
-  background-color: var(--colors-nearly-white);
-  color: var(--colors-graydark);
-}
-details.accordion-style.classic[open] > summary {
-  background-color: var(--colors-submain);
-  color: white;
-}
 /*/alt color for testing*/
-
-details.accordion-style[open] summary:after {
-  content: '';
+details.accordion-style[open] summary {
+  &::after {
+    content: '';
+    background: var(--colors-accordion);
+    margin-top: -2px;
+    transform: rotate(45deg);
+  }
+  &::before {
+    transform: translateY(-50%) rotate(45deg);
+  }
 }
-/*/ACCORDION TYPE*/
+
+/* using icon
+details.accordion-style[open] summary:after {*/
+/*content: '';*/
+/*}*/
+
+/*** END ACCORDION MENU ****/
 
 /*footer*/
 .local_footer {
