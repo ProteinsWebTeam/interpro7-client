@@ -95,7 +95,7 @@ const applicationToCheckbox = ({ label, value, defaultValue, properties }) => (
     title={properties && properties.properties[0].value}
     key={value}
   >
-    {value} {label === value ? '' : `(${label})`}
+    {value}
   </AdvancedOption>
 );
 applicationToCheckbox.propTypes = {
