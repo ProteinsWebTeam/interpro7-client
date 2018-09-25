@@ -24,11 +24,13 @@
   flex: 1 0 50%;
   border: 1px solid var(--colors-vlightgray);
   border-radius: 4px;
+
   & ul {
     list-style-type: none;
     margin: 0;
   }
 }
+
 @media screen and (min-width: 39.9375em) {
   .flex-box:first-of-type {
     margin-right: 1rem;
