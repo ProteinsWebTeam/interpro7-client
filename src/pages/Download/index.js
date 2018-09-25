@@ -26,8 +26,8 @@ class Download extends PureComponent /*:: <{}> */ {
                   <th className={f('min-width-sm')}>Name</th>
                   <th>Description</th>
                   <th>Data</th>
-                  <th>File name</th>
-                  <th>Format</th>
+                  <th className={f('xs-hide')}>File name</th>
+                  <th className={f('xs-hide')}>Format</th>
                   <th />
                 </tr>
               </thead>
@@ -46,8 +46,10 @@ class Download extends PureComponent /*:: <{}> */ {
                     (64-bit Linux)
                   </td>
                   <td>v70.0</td>
-                  <td>interproscan-5.31-70.0-64-bit.tar.gz</td>
-                  <td>gzipped</td>
+                  <td className={f('xs-hide')}>
+                    interproscan-5.31-70.0-64-bit.tar.gz
+                  </td>
+                  <td className={f('xs-hide')}>gzipped</td>
                   <td>
                     <Link
                       href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.31-70.0/interproscan-5.31-70.0-64-bit.tar.gz"
@@ -96,8 +98,8 @@ class Download extends PureComponent /*:: <{}> */ {
                 <tr>
                   <th className={f('min-width-sm')}>Name</th>
                   <th>Description</th>
-                  <th>File name</th>
-                  <th>Format</th>
+                  <th className={f('xs-hide')}>File name</th>
+                  <th className={f('xs-hide')}>Format</th>
                   <th />
                 </tr>
               </thead>
@@ -112,8 +114,8 @@ class Download extends PureComponent /*:: <{}> */ {
                     TSV file listing basic InterPro entry information - the
                     accessions, types and names.
                   </td>
-                  <td>entry.list</td>
-                  <td>TSV</td>
+                  <td className={f('xs-hide')}>entry.list</td>
+                  <td className={f('xs-hide')}>TSV</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/entry.list">
                       <span
@@ -140,8 +142,8 @@ class Download extends PureComponent /*:: <{}> */ {
                     </Link>{' '}
                     exists describing the format.
                   </td>
-                  <td>interpro.xml.gz</td>
-                  <td>gzipped</td>
+                  <td className={f('xs-hide')}>interpro.xml.gz</td>
+                  <td className={f('xs-hide')}>gzipped</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz">
                       <span
@@ -168,8 +170,8 @@ class Download extends PureComponent /*:: <{}> */ {
                     </Link>{' '}
                     exists describing the format.
                   </td>
-                  <td>match_complete.xml.gz</td>
-                  <td>gzipped</td>
+                  <td className={f('xs-hide')}>match_complete.xml.gz</td>
+                  <td className={f('xs-hide')}>gzipped</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/match_complete.xml.gz">
                       <span
@@ -190,8 +192,8 @@ class Download extends PureComponent /*:: <{}> */ {
                     All uniparc (UniProt Archive) sequences and the InterPro
                     entries and individual signatures they match, in XML format.
                   </td>
-                  <td>uniparc_match.tar.gz</td>
-                  <td>gzipped</td>
+                  <td className={f('xs-hide')}>uniparc_match.tar.gz</td>
+                  <td className={f('xs-hide')}>gzipped</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.tar.gz">
                       <span
@@ -212,8 +214,8 @@ class Download extends PureComponent /*:: <{}> */ {
                     All UniProtKB proteins and the InterPro entries and
                     individual signatures they match, in a tab-delimited format.
                   </td>
-                  <td>protein2ipr.dat.gz</td>
-                  <td>gzipped</td>
+                  <td className={f('xs-hide')}>protein2ipr.dat.gz</td>
+                  <td className={f('xs-hide')}>gzipped</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz">
                       <span
@@ -235,8 +237,8 @@ class Download extends PureComponent /*:: <{}> */ {
                     InterPro&quot;s entries (i.e. families and their
                     subfamilies) in a simple text-based format.
                   </td>
-                  <td>ParentChildTreeFile.txt</td>
-                  <td>TXT</td>
+                  <td className={f('xs-hide')}>ParentChildTreeFile.txt</td>
+                  <td className={f('xs-hide')}>TXT</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/ParentChildTreeFile.txt">
                       <span
@@ -257,8 +259,8 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     Mappings of InterPro entries to Gene Ontology (GO) terms.
                   </td>
-                  <td>interpro2go</td>
-                  <td>TXT</td>
+                  <td className={f('xs-hide')}>interpro2go</td>
+                  <td className={f('xs-hide')}>TXT</td>
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
                       <span
