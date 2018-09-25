@@ -11,10 +11,11 @@ import Link from 'components/generic/Link';
 class Species extends PureComponent /*:: <Props> */ {
   static propTypes = {
     taxID: T.string.isRequired,
+    fullName: T.string,
   };
 
   render() {
-    const { taxID } = this.props;
+    const { taxID, fullName } = this.props;
     return (
       <div>
         {'Species: '}
@@ -27,7 +28,7 @@ class Species extends PureComponent /*:: <Props> */ {
             },
           }}
         >
-          {taxID}
+          {fullName}
         </Link>
       </div>
     );
