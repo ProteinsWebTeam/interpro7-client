@@ -23,7 +23,7 @@ class Download extends PureComponent /*:: <{}> */ {
               <thead>
                 {' '}
                 <tr>
-                  <th>Name</th>
+                  <th className={f('min-width-sm')}>Name</th>
                   <th>Description</th>
                   <th>Data</th>
                   <th>File name</th>
@@ -35,27 +35,27 @@ class Download extends PureComponent /*:: <{}> */ {
                 <tr>
                   <td>
                     <Link
-                      href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.29-68.0/interproscan-5.29-68.0-64-bit.tar.gz"
+                      href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.31-70.0/interproscan-5.31-70.0-64-bit.tar.gz"
                       target="_blank"
                     >
-                      InterProScan 5.29-68.0
+                      InterProScan 5.31-70.0
                     </Link>
                   </td>
                   <td>
                     Download and install the latest version of InterProScan
                     (64-bit Linux)
                   </td>
-                  <td>v68.0</td>
-                  <td>interproscan-5.29-68.0-64-bit.tar.gz</td>
+                  <td>v70.0</td>
+                  <td>interproscan-5.31-70.0-64-bit.tar.gz</td>
                   <td>gzipped</td>
                   <td>
                     <Link
-                      href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.29-68.0/interproscan-5.29-68.0-64-bit.tar.gz"
+                      href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.31-70.0/interproscan-5.31-70.0-64-bit.tar.gz"
                       target="_blank"
                     >
                       {' '}
                       <span
-                        className={f('icon', 'icon-common')}
+                        className={f('icon', 'icon-common', 'font-large')}
                         data-icon="&#x3d;"
                       />{' '}
                       64-bit
@@ -94,7 +94,7 @@ class Download extends PureComponent /*:: <{}> */ {
               <thead>
                 {' '}
                 <tr>
-                  <th>Name</th>
+                  <th className={f('min-width-sm')}>Name</th>
                   <th>Description</th>
                   <th>File name</th>
                   <th>Format</th>
@@ -117,7 +117,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/entry.list">
                       <span
-                        className={f('icon', 'icon-common')}
+                        className={f('icon', 'icon-common', 'font-large')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -145,7 +145,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz">
                       <span
-                        className={f('icon', 'icon-common')}
+                        className={f('icon', 'icon-common', 'font-large')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -173,7 +173,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/match_complete.xml.gz">
                       <span
-                        className={f('icon', 'icon-common')}
+                        className={f('icon', 'icon-common', 'font-large')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -195,7 +195,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.tar.gz">
                       <span
-                        className={f('icon', 'icon-common')}
+                        className={f('icon', 'icon-common', 'font-large')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -217,7 +217,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz">
                       <span
-                        className={f('icon', 'icon-common')}
+                        className={f('icon', 'icon-common', 'font-large')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -240,7 +240,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/ParentChildTreeFile.txt">
                       <span
-                        className={f('icon', 'icon-common')}
+                        className={f('icon', 'icon-common', 'font-large')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -262,7 +262,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
                       <span
-                        className={f('icon', 'icon-common')}
+                        className={f('icon', 'icon-common', 'font-large')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -278,7 +278,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   //    <td>
                   //      <Link
                   //        href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">
-                  //        <span className={f('icon', 'icon-common')} data-icon="&#x3d;"/>
+                  //        <span className={f('icon', 'icon-common', 'font-large')} data-icon="&#x3d;"/>
                   //      </Link>
                   //    </td>
                   //  </tr>
