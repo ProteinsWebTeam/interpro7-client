@@ -146,7 +146,7 @@ class SearchResults extends PureComponent {
           >
             Name
           </Column>
-          <Column dataKey="source">Source database</Column>
+          <Column dataKey="fields.source_database">Source database</Column>
           <Column
             dataKey="fields.description"
             renderer={d => (
