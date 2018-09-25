@@ -1,8 +1,8 @@
 :root {
-  --timing-instant: 100ms;
-  --timing-really-fast: 200ms;
-  --timing-fast: 250ms;
-  --timing-medium: 500ms;
+  --timing-instant: 0.1s;
+  --timing-really-fast: 0.2s;
+  --timing-fast: 0.25s;
+  --timing-medium: 0.5s;
   --timing-slow: 1s;
   --timing-really-slow: 2s;
 
