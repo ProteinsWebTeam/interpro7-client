@@ -27,6 +27,7 @@ const DEBOUNCE_RATE = 1000; // 1s
 }; */
 /*:: type State = {|
   localValue: ?string,
+  loading: ?boolean,
 |} */
 
 class TextSearchBox extends PureComponent /*:: <Props, State> */ {
