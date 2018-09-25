@@ -43,11 +43,27 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
   constructor(props) {
     super(props);
 
-    this.state = { localValue: null };
+    this.state = { localValue: null, loading: false };
 
     this._debouncedPush = debounce(this.routerPush, DEBOUNCE_RATE);
   }
 
+  componentDidMount() {
+    this._updateStateFromProps();
+  }
+
+  componentDidUpdate() {
+    this._updateStateFromProps();
+  }
+
+  _updateStateFromProps() {
+    if (!this.state.loading && this.props.value !== this.state.localValue) {
+      this.setState({ localValue: this.props.value, loading: true });
+    }
+    if (this.props.value === this.state.localValue) {
+      this.setState({ loading: false });
+    }
+  }
   routerPush = replace => {
     const { pageSize } = this.props;
     const query /*: { page: number, page_size?: number } */ = { page: 1 };
@@ -72,7 +88,10 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
   };
 
   handleChange = ({ target }) => {
-    this.setState({ localValue: target.value }, this._debouncedPush(true));
+    this.setState(
+      { localValue: target.value, loading: true },
+      this._debouncedPush(true),
+    );
   };
 
   render() {
@@ -83,11 +102,7 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
             type="text"
             aria-label="search InterPro"
             onChange={this.handleChange}
-            value={
-              this.state.localValue === null
-                ? this.props.value || ''
-                : this.state.localValue
-            }
+            value={this.state.localValue}
             placeholder="Enter your search"
             onKeyPress={this.handleKeyPress}
             className={this.props.className}
