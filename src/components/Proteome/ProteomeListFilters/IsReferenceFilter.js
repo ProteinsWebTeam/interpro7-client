@@ -40,7 +40,11 @@ class IsReferenceFilter extends PureComponent {
   _handleSelection = ({ target: { value } }) => {
     const { goToCustomLocation, customLocation } = this.props;
     const { page, proteome_is_reference: _, ...search } = customLocation.search;
-    if (labels.has(value)) search.is_reference = value;
+    if (labels.has(value) && (value === 'true' || value === 'false')) {
+      search.is_reference = value;
+    } else if (search.has('is_reference')) {
+      delete search.is_reference;
+    }
     goToCustomLocation({ ...customLocation, search });
   };
 
@@ -56,8 +60,8 @@ class IsReferenceFilter extends PureComponent {
       isReference.both = isReference.true + isReference.false;
     }
 
-    const selectedValue = search.match_presence || 'both';
-
+    const selectedValue = search.is_reference || 'both';
+    console.log(`Selected value ${selectedValue}`);
     return (
       <div className={f('list-proteome-is-reference')}>
         {Object.entries(isReference).map(([key, value]) => (
@@ -97,7 +101,7 @@ const getUrl = createSelector(
       proteome: { db: 'UniProt' },
     };
     // omit from search
-    const { search: _, match_presence: __, ..._search } = search;
+    const { search: _, is_reference: __, ..._search } = search;
     // add to search
     _search.group_by = 'proteome_is_reference';
     // build URL
