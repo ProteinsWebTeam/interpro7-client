@@ -62,8 +62,9 @@ const mdb1Values = new Set([
   'SMART',
   'TIGRFAM',
   'PrositePatterns',
+  'SFLD',
 ]);
-const mdb2Values = new Set(['Gene3d', 'SFLD', 'SuperFamily']);
+const mdb2Values = new Set(['Gene3d', 'SuperFamily']);
 const otherValues = new Set([
   'Coils',
   'MobiDBLite',
@@ -94,7 +95,7 @@ const applicationToCheckbox = ({ label, value, defaultValue, properties }) => (
     title={properties && properties.properties[0].value}
     key={value}
   >
-    {label}
+    {value} {label === value ? '' : `(${label})`}
   </AdvancedOption>
 );
 applicationToCheckbox.propTypes = {
