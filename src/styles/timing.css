@@ -2,6 +2,7 @@
   --timing-instant: 0.1s;
   --timing-really-fast: 0.2s;
   --timing-fast: 0.25s;
+  --timing-medclose: 0.4s;
   --timing-medium: 0.5s;
   --timing-slow: 1s;
   --timing-really-slow: 2s;
