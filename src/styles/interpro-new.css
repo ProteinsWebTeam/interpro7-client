@@ -216,9 +216,15 @@ div#local-title {
 .table-center {
   text-align: center;
 }
+
+.min-width-sm {
+  width: 18%;
+}
+
 /*Style default table*/
 table.classic {
   font-size: 0.9rem;
+  margin-bottom: 0.5rem;
   & thead th {
     border: 1px solid var(--colors-vlightgray);
     background: var(--colors-very-white);
@@ -503,6 +509,22 @@ hr {
 .xl {
   color: var(--colors-ebidark);
   font-size: 280%;
+}
+
+.font-xxlarge {
+  font-size: 400%;
+}
+.font-xlarge {
+  font-size: 300%;
+}
+.font-large {
+  font-size: 170%;
+}
+.font-medium {
+  font-size: 100%;
+}
+.font-small {
+  font-size: 90%;
 }
 
 .margin-top-xxlarge {
