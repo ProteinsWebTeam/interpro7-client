@@ -6,6 +6,7 @@ import Link from 'components/generic/Link';
 
 /*:: type Props = {
   taxID: string,
+ fullName: string,
 }; */
 
 class Species extends PureComponent /*:: <Props> */ {
