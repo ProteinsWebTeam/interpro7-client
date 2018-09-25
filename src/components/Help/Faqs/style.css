@@ -1,17 +1,21 @@
 @import '../../../styles/colors.css';
+
 .flex-columns {
   display: flex;
   flex-wrap: wrap;
   list-style-type: none;
-  margin: 0;
+  margin: 0 -0.5rem; /*to align with foundation grid*/
 }
+
 .flex-columns li {
-  width: 23%;
   padding: 1rem;
-  flex-grow: 1;
+  flex: 1 0 30%;
+  min-width: 240px;
 }
+
+/*size type icon */
 .flex-columns interpro-type {
-  font-size: 214%;
+  font-size: 144%;
 }
 /*
 .flex-grid {
