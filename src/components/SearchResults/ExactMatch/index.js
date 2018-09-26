@@ -75,7 +75,12 @@ class ExactMatch extends PureComponent /*:: <SMProps> */ {
       'i',
     );
     const exactMatches = new Map();
-    for (const { id: accession, source: db } of payload.entries) {
+    for (const {
+      id: accession,
+      fields: {
+        source_database: [db],
+      },
+    } of payload.entries) {
       if (searchRE.test(accession)) {
         exactMatches.set(
           'entry',
@@ -142,7 +147,7 @@ const getEbiSearchUrl = createSelector(
   state => state.customLocation.description.search.value,
   ({ protocol, hostname, port, root }, searchValue) => {
     if (!searchValue) return null;
-    const fields = 'UNIPROT,PDB,PROTEOME';
+    const fields = 'UNIPROT,PDB,PROTEOME,source_database';
     const query = getQueryTerm(searchValue);
     const params = `?query=${query}&format=json&fields=${fields}&start=0&size=2`;
     return `${protocol}//${hostname}:${port}${root}${params}`;
