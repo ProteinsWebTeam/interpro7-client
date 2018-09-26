@@ -103,7 +103,7 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
             type="text"
             aria-label="search InterPro"
             onChange={this.handleChange}
-            value={this.state.localValue}
+            value={this.state.localValue || ''}
             placeholder="Enter your search"
             onKeyPress={this.handleKeyPress}
             className={this.props.className}
