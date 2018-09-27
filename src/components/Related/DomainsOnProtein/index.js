@@ -81,7 +81,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent {
       <ProtVista
         protein={mainData.metadata || mainData.payload.metadata}
         data={sortedData}
-        title="Entry matches in this Protein"
+        title="Entry matches to this protein"
       />
     );
   }
