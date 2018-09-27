@@ -117,14 +117,13 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
         name: match.signature.name,
         source_database: LUT.get(library) || library,
         protein_length: payload.sequenceLength,
-        locations: [
-          {
-            fragments: match.locations.map(l => ({
-              start: l.start,
-              end: l.end,
-            })),
-          },
-        ],
+        locations: match.locations.map(loc => ({
+          ...loc,
+          fragments:
+            loc['location-fragments'] && loc['location-fragments'].length
+              ? loc['location-fragments']
+              : [{ start: loc.start, end: loc.end }],
+        })),
         score: match.score,
       };
       if (NOT_MEMBER_DBS.has(library)) {
