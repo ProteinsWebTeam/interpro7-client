@@ -409,7 +409,10 @@ class ByEntriesFeatured extends PureComponent {
             </AnimatedEntry>
             <Link
               to={{
-                description: { main: { key: 'entry' } },
+                description: {
+                  main: { key: 'entry' },
+                  entry: { db: 'InterPro' },
+                },
               }}
               className={f('button', 'margin-bottom-none')}
             >
