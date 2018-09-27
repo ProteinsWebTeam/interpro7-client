@@ -105,14 +105,14 @@ export class DomainOnProteinWithoutData extends PureComponent {
       );
     }
 
-    const { interpro, unintegrated } = processData({
+    const { interpro, unintegrated, other } = processData({
       data,
       endpoint: 'protein',
     });
     const interproFamilies = interpro.filter(entry => entry.type === 'family');
     const groups = groupByEntryType(interpro);
     unintegrated.sort(orderByAccession);
-    const mergedData = { ...groups, unintegrated };
+    const mergedData = { ...groups, unintegrated, other_features: other };
     if (dataResidues && !dataResidues.loading && dataResidues.payload) {
       mergeResidues(mergedData, dataResidues.payload);
     }
