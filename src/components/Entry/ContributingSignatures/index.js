@@ -59,7 +59,7 @@ const ContributingSignatures = ({ contr, data } /*: {contr: Object} */) => {
     <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
       <div className={f('md-icon-list-box', 'margin-bottom-large')}>
         <h5>
-          Contributing Entr
+          Contributing Member Database Entr
           {contrEntries.length < 2 ? 'y' : 'ies'}
         </h5>
         <ul className={f('md-list')}>
