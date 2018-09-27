@@ -23,3 +23,25 @@
     margin: 0 1ch 0 0;
   }
 }
+
+details.option-style > summary {
+  color: var(--colors-graydark);
+  border: 0px solid var(--colors-very-white);
+  border-bottom-width: 0;
+  padding: 1rem;
+  cursor: pointer;
+  outline: 0;
+  z-index: 1;
+  position: relative; /*for animation*/
+  list-style: none; /*to keep for Firefox*/
+  /*remove default icon (Edge + Chrome + Opera_*/
+  &:hover {
+    background-color: var(--colors-unknown-sub);
+    color: var(--colors-dark);
+    transition: all var(--timing-medclose) ease-out;
+  }
+}
+
+details.option-style:last-child {
+  border-bottom: 0px solid var(--colors-very-white);
+}
