@@ -73,7 +73,7 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
       {
         description: {
           main: { key: 'search' },
-          search: { type: 'text', value: this.state.localValue },
+          search: { type: 'text', value: this.state.localValue.trim() },
         },
         search: query,
       },
