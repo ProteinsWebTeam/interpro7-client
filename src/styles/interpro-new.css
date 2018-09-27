@@ -744,6 +744,7 @@ details.accordion-style > summary {
   outline: 0;
   z-index: 1;
   position: relative; /*for animation*/
+  list-style: none; /*keep to remove default icon for Firefox*/
   &:hover {
     /*background-color: var(--colors-accordion);*/
     background-color: var(--colors-unknown-sub);
