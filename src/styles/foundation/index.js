@@ -13,8 +13,8 @@ import foundation from 'foundation-sites/dist/css/foundation-float.css';
 export default classNames.bind(foundation);
 
 /**
- * If multiple css needs to be bound, use this function, which need to be
- * called from the file where is used. e.g.
+ * If multiple css need to be bound, use this function, which needs to be
+ * called from the file where it is used. e.g.
  * @example
  * import s from './other_style.css';
  * const f_and_s = foundationPartial(s);

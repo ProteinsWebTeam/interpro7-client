@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
 import ProgressButton from 'components/ProgressButton';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import { downloadURL, downloadDelete } from 'actions/creators';
 
@@ -64,13 +64,13 @@ export class Controls extends PureComponent {
     const downloading = Number.isFinite(progress) && !successful;
     const count = (data.payload && data.payload.count) || 0;
     return (
-      <React.Fragment>
+      <>
         {count > SOFT_LIMIT && (
           <div
             className={f('callout', count > HARD_LIMIT ? 'alert' : 'warning')}
           >
             We expect this file to contain{' '}
-            <NumberComponent value={count} abbr /> distinct{' '}
+            <NumberComponent abbr>{count}</NumberComponent> distinct{' '}
             {toPlural(entityType)}.{' '}
             {count > HARD_LIMIT
               ? 'This file will be too large to generate within your browser'
@@ -113,7 +113,7 @@ export class Controls extends PureComponent {
             </button>
           )}
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -87,6 +87,7 @@ class IPScanStatus extends PureComponent {
           </div>
           <Table
             dataTable={paginatedJobs}
+            rowKey="localID"
             contentType="job"
             actualSize={jobs.length}
             query={search}
@@ -138,11 +139,8 @@ class IPScanStatus extends PureComponent {
                     status === 'submitted') && (
                     <span
                       style={{ fontSize: '200%' }}
-                      className={f('icon', 'icon-generic', 'ico-progress')}
-                      data-icon="{"
-                      // TEMP while we wait for latest update EBI framework
-                      // className={f('icon', 'icon-common', 'ico-progress')}
-                      // data-icon="&#xf017;"
+                      className={f('icon', 'icon-common', 'ico-neutral')}
+                      data-icon="&#xf017;"
                       aria-label={`Job ${status}`}
                     />
                   )}
@@ -152,16 +150,16 @@ class IPScanStatus extends PureComponent {
                   status === 'error' ? (
                     <span
                       style={{ fontSize: '160%' }}
-                      className={f('icon', 'icon-functional', 'ico-notfound')}
-                      data-icon="x"
+                      className={f('icon', 'icon-common', 'ico-notfound')}
+                      data-icon="&#x78;"
                       aria-label="Job failed or not found"
                     />
                   ) : null}
                   {status === 'finished' && (
                     <span
                       style={{ fontSize: '160%' }}
-                      className={f('icon', 'icon-functional', 'ico-confirmed')}
-                      data-icon="/"
+                      className={f('icon', 'icon-common', 'ico-confirmed')}
+                      data-icon="&#xf00c;"
                       aria-label="Job finished"
                     />
                   )}
@@ -173,6 +171,8 @@ class IPScanStatus extends PureComponent {
             <Column
               dataKey="localID"
               defaultKey="actions"
+              headerClassName={f('table-center')}
+              cellClassName={f('table-center')}
               renderer={(localID /*: string */) => (
                 <Actions localID={localID} />
               )}
@@ -188,7 +188,7 @@ class IPScanStatus extends PureComponent {
 
 const mapsStateToProps = createSelector(
   state =>
-    Object.values(state.jobs)
+    Object.values(state.jobs || {})
       .map(j => j.metadata)
       .sort((a, b) => b.times.created - a.times.created),
   state => state.customLocation.search,

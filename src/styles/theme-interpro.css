@@ -35,7 +35,8 @@ a.special {
   background-color: #2daec1;
 }
 /*custom color for disabled buttons*/
-.button.disabled {
+.button.disabled,
+.button[disabled] {
   background-color: #2daec1;
   &:hover {
     background-color: #2daec1;

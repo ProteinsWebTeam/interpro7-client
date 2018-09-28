@@ -2,9 +2,9 @@
 export default (
   from /*: number */ = 0,
   to /*: number */ = 1,
-  int /*:: ?: boolean */,
+  doYouWantAnInteger /*:: ?: boolean */,
 ) => {
   const value = Math.random() * (to - from) + from;
-  if (!int) return value;
+  if (!doYouWantAnInteger) return value;
   return Math.round(value);
 };

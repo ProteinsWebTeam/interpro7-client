@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import filesize from 'filesize';
 
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 const NO_CONTENT = 204;
 
@@ -20,10 +20,11 @@ const getText = ({ loading, payload, ok, status, headers }) => {
   const count = payload.count;
   if (count) {
     return (
-      <React.Fragment>
-        Your file will contain <NumberComponent value={count} abbr /> item
+      <>
+        Your file will contain <NumberComponent abbr>{count}</NumberComponent>{' '}
+        item
         {count > 1 ? 's' : ''}.
-      </React.Fragment>
+      </>
     );
   }
 
@@ -38,9 +39,10 @@ const getText = ({ loading, payload, ok, status, headers }) => {
       output: 'array',
     });
     return (
-      <React.Fragment>
-        Your file size will be of <NumberComponent value={value} /> {suffix}
-      </React.Fragment>
+      <>
+        Your file size will be of <NumberComponent>{value}</NumberComponent>{' '}
+        {suffix}
+      </>
     );
   }
 

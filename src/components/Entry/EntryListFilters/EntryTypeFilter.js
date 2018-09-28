@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -98,12 +98,14 @@ class EntryTypeFilter extends PureComponent {
                   {type}
                 </interpro-type>
               )}
-              <NumberLabel
-                value={count}
+              <NumberComponent
+                label
                 loading={loading}
                 className={f('filter-label')}
                 abbr
-              />
+              >
+                {count}
+              </NumberComponent>
             </label>
           </div>
         ))}

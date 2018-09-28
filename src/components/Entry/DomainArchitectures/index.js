@@ -4,23 +4,25 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
-import protvista from 'components/ProtVista/style.css';
-
-import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Footer from 'components/Table/Footer';
+import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
+
+import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
+
+import { toPlural } from 'utils/pages';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from './style.css';
+import protvista from 'components/ProtVista/style.css';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, protvista);
-import { getTrackColor, EntryColorMode } from 'utils/entry-color';
-import loadable from 'higherOrder/loadable';
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -46,19 +48,23 @@ const ida2json = ida => {
   const idaParts = ida.split('-');
   const n = idaParts.length;
   const feature = (FAKE_PROTEIN_LENGTH - GAP_BETWEEN_DOMAINS * (n + 1)) / n;
-  const domains = idaParts.map((p, i) => ({
-    accession: p.indexOf(':') < 0 ? p : p.split(':')[1],
-    locations: [
-      {
-        fragments: [
-          {
-            start: GAP_BETWEEN_DOMAINS + i * (GAP_BETWEEN_DOMAINS + feature),
-            end: (i + 1) * (GAP_BETWEEN_DOMAINS + feature),
-          },
-        ],
-      },
-    ],
-  }));
+  const domains = idaParts.map((p, i) => {
+    const [pf, ipr] = p.split(':');
+    return {
+      accession: ipr || pf,
+      unintegrated: !ipr,
+      locations: [
+        {
+          fragments: [
+            {
+              start: GAP_BETWEEN_DOMAINS + i * (GAP_BETWEEN_DOMAINS + feature),
+              end: (i + 1) * (GAP_BETWEEN_DOMAINS + feature),
+            },
+          ],
+        },
+      ],
+    };
+  });
   const grouped = domains.reduce((obj, domain) => {
     if (obj[domain.accession])
       obj[domain.accession].locations.push(domain.locations[0]);
@@ -81,14 +87,17 @@ class IDAProtVista extends ProtVistaMatches {
     const { matches } = props;
 
     for (const domain of matches) {
+      const isIPR = domain.accession.toLowerCase().startsWith('ipr');
       const tmp = [
         {
           name: domain.accession,
-          source_database: 'interpro',
-          color: getTrackColor(
-            { accession: domain.accession },
-            EntryColorMode.ACCESSION,
-          ),
+          source_database: isIPR ? 'InterPro' : 'pfam',
+          color: isIPR
+            ? getTrackColor(
+                { accession: domain.accession },
+                EntryColorMode.ACCESSION,
+              )
+            : '#888888',
           type: 'entry',
           ...domain,
         },
@@ -119,7 +128,12 @@ class IDAProtVista extends ProtVistaMatches {
                 to={{
                   description: {
                     main: { key: 'entry' },
-                    entry: { db: 'InterPro', accession: d.accession },
+                    entry: {
+                      db: d.accession.toLowerCase().startsWith('ipr')
+                        ? 'InterPro'
+                        : 'pfam',
+                      accession: d.accession,
+                    },
                   },
                 }}
               >
@@ -155,37 +169,48 @@ class DomainArchitectures extends PureComponent {
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'protein' },
-                      protein: { db: 'UniProt' },
-                      entry: { db: 'InterPro', accession: mainAccession },
-                    },
-                    search: { ida: obj.ida_id },
-                  }}
-                >
-                  There {obj.unique_proteins > 1 ? 'are' : 'is'}{' '}
-                  {obj.unique_proteins} proteins{' '}
-                </Link>
-                with this architecture:
-                <br />
-                {idaObj.accessions.map(d => (
-                  <span key={d}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro', accession: d },
-                        },
-                      }}
-                    >
-                      {' '}
-                      {d}{' '}
-                    </Link>{' '}
-                    -{' '}
-                  </span>
-                ))}
+                <div>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'protein' },
+                        protein: { db: 'UniProt' },
+                        entry: { db: 'InterPro', accession: mainAccession },
+                      },
+                      search: { ida: obj.ida_id },
+                    }}
+                  >
+                    There {obj.unique_proteins > 1 ? 'are' : 'is'}{' '}
+                    {obj.unique_proteins}{' '}
+                    {toPlural('protein', obj.unique_proteins)}{' '}
+                  </Link>
+                  with this architecture:
+                </div>
+                <div>
+                  {idaObj.accessions.map((accession, i) => (
+                    <React.Fragment key={accession}>
+                      {i !== 0 && ' - '}
+                      <span>
+                        <Link
+                          to={{
+                            description: {
+                              main: { key: 'entry' },
+                              entry: {
+                                db: accession.toLowerCase().startsWith('ipr')
+                                  ? 'InterPro'
+                                  : 'pfam',
+                                accession,
+                              },
+                            },
+                          }}
+                        >
+                          {' '}
+                          {accession.toUpperCase()}{' '}
+                        </Link>
+                      </span>
+                    </React.Fragment>
+                  ))}
+                </div>
                 <IDAProtVista
                   matches={idaObj.domains}
                   length={FAKE_PROTEIN_LENGTH}

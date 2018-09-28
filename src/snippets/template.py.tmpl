@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+
+# standard library modules
+import sys, errno, re, json
+from urllib import request
+from time import sleep
+
+<% if (fileType === 'fasta') { %>
+DESCRIPTION_SEPARATOR = '|';
+CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS = re.compile(r"(.{1,80})");
+
+def _process_item(item):<% if (subset) { %>
+    matches = item["entries"]["entry_protein_locations"]
+    matches_length = len(matches)
+    for match in enumerate(matches.values()):
+        # generate description line
+        yield ">{}\n".format(DESCRIPTION_SEPARATOR.join([
+            item["metadata"]["accession"],
+            "match:{}.{}".format(index + 1, matches_length),
+            "subsequences:{}".format(";".join([
+                "{start}-{end}".format(**fragment)
+                for fragment in match["fragments"]
+            ])),
+            item["metadata"]["source_database"],
+            item["metadata"]["name"],
+            "taxID:{}".format(item["metadata"]["source_organism"]["taxId"]),
+        ]))
+        # generate sequence
+        sequence = item["extra_fields"]["sequence"]
+        yield CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS.sub(
+            "-".join([
+                sequence[fragment["start"] - 1:fragment["end"]]
+                for fragment in match.fragments
+            ]),
+            "\g<1>\n"
+        )
+    <% } else { %>
+    # generate description line
+    yield ">{}\n".format(DESCRIPTION_SEPARATOR.join([
+        item["metadata"]["accession"],
+        item["metadata"]["source_database"],
+        item["metadata"]["name"],
+        "taxID:{}".format(item["metadata"]["source_organism"]["taxId"]),
+    ]))
+    # generate sequence
+    yield CHUNK_OF_TEXT_OF_EIGHTY_CHARACTERS.sub(sequence, "\g<1>\n")<% } %>
+<% } else if (fileType === 'accession') { %>
+def _process_item(item):
+    yield "{}\n".format(item["metadata"]["accession"])
+<% } else if (fileType === 'json' || fileType === 'ndjson') { %>
+def _process_item(item):
+  yield json.dumps(item)<% if (fileType === 'ndjson') { %>
+  yield "\n"<% } %>
+<% } %>
+
+BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>"
+
+# If used as a module, can be used as a generator
+def main(start_URL = BASE_URL):
+    next = start_URL<% if (fileType === 'json') { %>
+    first = true
+    yield `{\n"results": [\n`<% } %>
+    while next:
+        req = request.Request(next, headers={"Accept": "application/json"})
+        res = request.urlopen(req)
+        # If the server sent a timeout response…
+        if res.status == 408:
+            # …wait a bit for the server to process the query in the background…
+            sleep(60)
+            # …then continue this loop with the same URL
+            continue
+        payload = json.loads(res.read())
+        for item in payload["results"]:<% if (fileType === 'json') { %>
+            if first:
+                yield "\n"
+                first = False
+            else:
+                yield ",\n"<% } %>
+            yield from _process_item(item)
+        next = payload["next"]<% if (fileType === 'json') { %>
+        if not next:
+            yield "\n]\n}\n"<% } %>
+        # Don't overload the server, give it time before asking for more
+        if next:
+            sleep(1)
+
+if __name__ == "__main__":
+    try:
+        # If used from the command line, will write data to stdout asap
+        for output in main():
+            sys.stdout.write(output)
+    except IOError as e:
+        # If pipe is interrupted, it might be normal, just exit
+        if e.errno == errno.EPIPE:
+            pass

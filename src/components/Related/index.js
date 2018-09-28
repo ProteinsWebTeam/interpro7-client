@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import omit from 'lodash-es/omit';
+import { omit } from 'lodash-es';
 
 import Link from 'components/generic/Link';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -280,7 +280,7 @@ const getReversedUrl = createSelector(
     const newDesc = {};
     let newMain;
     for (const [key, value] of Object.entries(description)) {
-      newDesc[key] = { ...value };
+      newDesc[key] = key === 'other' ? [...value] : { ...value };
       if (value.isFilter) {
         newMain = key;
         newDesc[key].isFilter = false;

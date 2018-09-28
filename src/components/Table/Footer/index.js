@@ -4,7 +4,7 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 
 import PageSizeSelector from '../PageSizeSelector';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import config from 'config';
 
@@ -43,7 +43,9 @@ class PaginationItem extends PureComponent {
       <li className={className}>
         <LinkOrSpan {...props}>
           {(value && children) || (
-            <NumberComponent duration={duration || 0} value={value} noTitle />
+            <NumberComponent duration={duration || 0} noTitle>
+              {value}
+            </NumberComponent>
           )}
         </LinkOrSpan>
       </li>
