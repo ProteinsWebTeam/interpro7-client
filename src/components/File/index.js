@@ -106,7 +106,7 @@ class Button extends PureComponent {
               downloading={downloading}
               success={successful}
               failed={failed}
-              progress={progress || 0}
+              progress={progress || 0.01}
             />
           </Link>
         </div>

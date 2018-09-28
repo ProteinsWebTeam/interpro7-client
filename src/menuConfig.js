@@ -498,6 +498,7 @@ export const NOT_MEMBER_DBS /*: Set<string> */ = new Set([
   'COILS',
   'MOBIDB',
   'MOBIDB_LITE',
+  'mobidblt',
   'SIGNALP',
   'SIGNALP_EUK',
   'SIGNALP_GRAM_POSITIVE',
