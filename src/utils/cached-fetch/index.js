@@ -90,7 +90,7 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
   };
   try {
     output.payload = await payloadP;
-  } catch (error) {
+  } catch {
     /**/
   } finally {
     return output;

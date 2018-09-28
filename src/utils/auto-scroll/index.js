@@ -16,7 +16,7 @@ const autoScroll = async (
     let target;
     try {
       target = document.querySelector(current.hash);
-    } catch (_) {
+    } catch {
       /**/
     }
     if (target) {

@@ -28,7 +28,12 @@ class Exporter extends PureComponent {
   }
 
   render() {
-    const { children, entryDB } = this.props;
+    const {
+      children,
+      entryDB,
+      includeSettings = true,
+      left = true,
+    } = this.props;
     return (
       <div
         className={fPlus('button-group', 'small', 'exporter')}
@@ -41,31 +46,30 @@ class Exporter extends PureComponent {
             this.setState({ isOpen: !this.state.isOpen });
           }}
         >
-          <span className={fPlus('icon', 'icon-functional')} data-icon="=" />{' '}
+          <span className={fPlus('icon', 'icon-common')} data-icon="&#x3d;" />{' '}
           <span className={fPlus('hide-for-small-only')}>Export</span>{' '}
         </button>
-        <Tooltip title="Settings (customise results by page, …)">
-          <div style={{ display: 'flex' }}>
-            <Link
-              to={{ description: { other: ['settings'] } }}
-              className={fPlus(
-                'icon',
-                'icon-functional',
-                'icon-settings',
-                'show-for-large',
-              )}
-              data-icon="s"
-              aria-label="settings"
-            />
-          </div>
-        </Tooltip>
+        {includeSettings && (
+          <Tooltip title="Settings (customise results by page, …)">
+            <div style={{ display: 'flex' }}>
+              <Link
+                to={{ description: { other: ['settings'] } }}
+                className={fPlus(
+                  'icon',
+                  'icon-common',
+                  'icon-settings',
+                  'show-for-large',
+                )}
+                data-icon="&#xf013;"
+                aria-label="settings"
+              />
+            </div>
+          </Tooltip>
+        )}
         <div
-          className={fPlus(
-            'dropdown-pane',
-            'left',
-            'dropdown-content',
-            entryDB,
-          )}
+          className={fPlus('dropdown-pane', 'dropdown-content', entryDB, {
+            left,
+          })}
           style={{
             borderColor: config.colors.get(entryDB),
             transform: `scaleY(${this.state.isOpen ? 1 : 0})`,

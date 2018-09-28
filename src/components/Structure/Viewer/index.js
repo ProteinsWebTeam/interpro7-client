@@ -31,7 +31,7 @@ const NUMBER_OF_CHECKS = 10;
 const optionsForObserver = {
   root: null,
   rootMargin: '0px',
-  threshold: Array(...{ length: NUMBER_OF_CHECKS }).map(
+  threshold: Array(null, { length: NUMBER_OF_CHECKS }).map(
     Number.call,
     n => (n + 1) / NUMBER_OF_CHECKS,
   ),
@@ -256,7 +256,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <div className={f('structure-placeholder')} ref={this._placeholder}>
           <div
             className={f('structure-viewer', {
@@ -286,7 +286,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         <div ref={this._protvista}>
           <ProtVistaForStructure />
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

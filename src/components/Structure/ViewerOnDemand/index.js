@@ -100,7 +100,9 @@ export class ViewerOnDemand extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   state => state.settings.ui.structureViewer,
-  userActivatedVisible => ({ userActivatedVisible }),
+  userActivatedVisible => ({
+    userActivatedVisible: userActivatedVisible || false,
+  }),
 );
 
 export default connect(

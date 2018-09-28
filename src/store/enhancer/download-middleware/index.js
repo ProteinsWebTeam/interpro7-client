@@ -24,7 +24,7 @@ const messageHandler = dispatch => message => {
   }
 };
 
-const middleware /*: Middleware */ = ({ dispatch, getState }) => {
+const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   const worker = new DownloadWorker();
   worker.addEventListener('message', messageHandler(dispatch));
 

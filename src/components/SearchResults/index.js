@@ -94,7 +94,7 @@ class SearchResults extends PureComponent {
           <Column
             dataKey="id"
             renderer={(
-              id,
+              accession,
               {
                 fields: {
                   source_database: [db],
@@ -106,11 +106,14 @@ class SearchResults extends PureComponent {
                 to={{
                   description: {
                     main: { key: 'entry' },
-                    entry: { db, accession: id },
+                    entry: { db, accession },
                   },
                 }}
               >
-                <HighlightedText text={id} textToHighlight={searchValue} />
+                <HighlightedText
+                  text={accession}
+                  textToHighlight={searchValue}
+                />
               </Link>
             )}
           >
@@ -121,11 +124,11 @@ class SearchResults extends PureComponent {
             defaultKey="name"
             headerStyle={{ width: '28%' }}
             renderer={(
-              id,
+              accession,
               {
                 fields: {
+                  name: [name],
                   source_database: [db],
-                  name: [n],
                 },
               },
             ) => (
@@ -133,17 +136,17 @@ class SearchResults extends PureComponent {
                 to={{
                   description: {
                     main: { key: 'entry' },
-                    entry: { db, accession: id },
+                    entry: { db, accession },
                   },
                 }}
               >
-                <HighlightedText text={n} textToHighlight={searchValue} />
+                <HighlightedText text={name} textToHighlight={searchValue} />
               </Link>
             )}
           >
             Name
           </Column>
-          <Column dataKey="fields.source_database.0">Source database</Column>
+          <Column dataKey="fields.source_database">Source database</Column>
           <Column
             dataKey="fields.description"
             renderer={d => (
@@ -212,7 +215,7 @@ const getEbiSearchUrl = createSelector(
     searchValue,
   ) => {
     if (!searchValue) return null;
-    const fields = 'description,source_database,name';
+    const fields = 'description,name,source_database';
     const size = search.page_size || settingsPageSize;
     const start = ((search.page || 1) - 1) * size;
     const query = getQueryTerm(searchValue);

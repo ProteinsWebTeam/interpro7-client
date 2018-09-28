@@ -85,7 +85,7 @@ const xReferenceURL = {
 };
 
 const ParagraphWithTags = ({ children }) => (
-  <span>
+  <>
     {// Checking for the TAG dbxref
     children.split(/(<dbxref [^>]+?\/>)/i).map((part, i) => {
       if (i % 2) {
@@ -152,14 +152,19 @@ const ParagraphWithTags = ({ children }) => (
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(
-                part.replace(/\[$/, ' ').replace(/^]/, ' '),
+                part
+                  .replace(/\[$/, ' ')
+                  .replace(/^]/, ' ')
+                  .replace(/<li>/g, '&nbsp;• ')
+                  .replace(/<\/li>/g, '<br>')
+                  .replace(/<\/?(ul|li)>/g, ''),
               ),
             }}
           />
         );
       });
     })}
-  </span>
+  </>
 );
 ParagraphWithTags.propTypes = {
   children: T.any,

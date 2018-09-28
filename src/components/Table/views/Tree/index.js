@@ -1,4 +1,4 @@
-import React, { Component, PureComponent, Fragment } from 'react';
+import React, { Component, PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -177,7 +177,7 @@ class TreeView extends Component {
       this._CDPMap.set(focused, ConnectedDataProvider);
     }
     return (
-      <Fragment>
+      <>
         <div>
           <Link
             className={f('button', 'hollow')}
@@ -197,7 +197,7 @@ class TreeView extends Component {
           focused={focused}
           changeFocus={this._handleNewFocus}
         />
-      </Fragment>
+      </>
     );
   }
 }

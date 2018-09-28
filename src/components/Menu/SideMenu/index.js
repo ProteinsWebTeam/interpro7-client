@@ -114,7 +114,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
     let content = null;
     if (hasRendered || visible) {
       content = (
-        <React.Fragment>
+        <>
           <button
             className={f('exit')}
             title="Close side menu"
@@ -154,7 +154,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
               </li>
             </ul>
           </nav>
-        </React.Fragment>
+        </>
       );
     }
     return (

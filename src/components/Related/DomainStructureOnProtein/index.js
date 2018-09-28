@@ -27,7 +27,11 @@ const getUrlFor = createSelector(
         // copy description
         const _description = {};
         for (const [key, value] of Object.entries(description)) {
-          _description[key] = value.isFilter ? {} : { ...value };
+          if (key === 'other') {
+            _description.other = [];
+          } else {
+            _description[key] = value.isFilter ? {} : { ...value };
+          }
         }
         // brand new search
         const search = {};

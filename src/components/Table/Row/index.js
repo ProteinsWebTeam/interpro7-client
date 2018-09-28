@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import lodashGet from 'lodash-es/get';
+import { get as lodashGet } from 'lodash-es';
 
 const defaultRenderer = (value /*: string | number */) => <div>{value}</div>;
 

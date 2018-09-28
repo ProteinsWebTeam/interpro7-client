@@ -145,6 +145,7 @@
   }
 
   & > .label {
+    color: #636363;
     background: var(--colors-nearly-white);
   }
 }

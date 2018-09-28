@@ -20,7 +20,7 @@ exports[`<Twitter /> should render 1`] = `
       >
         <div
           className="icon icon-common"
-          data-icon="🐦"
+          data-icon=""
         />
         <Connect(Link)
           className="twitter-timeline"

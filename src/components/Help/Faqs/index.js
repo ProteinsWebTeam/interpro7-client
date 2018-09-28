@@ -50,7 +50,8 @@ export default class Faqs extends PureComponent {
                   >
                     {' '}
                     EBI&apos;s FTP server
-                  </Link>.
+                  </Link>
+                  .
                 </p>
               </div>
             </details>
@@ -78,7 +79,8 @@ export default class Faqs extends PureComponent {
                   >
                     {' '}
                     REST
-                  </Link>-based services are available).
+                  </Link>
+                  -based services are available).
                 </p>
               </div>
             </details>
@@ -317,7 +319,8 @@ export default class Faqs extends PureComponent {
                     withReferrer
                   >
                     contact us
-                  </Link>.
+                  </Link>
+                  .
                 </p>
               </div>
             </details>
@@ -336,7 +339,8 @@ export default class Faqs extends PureComponent {
                     }}
                   >
                     view related publication
-                  </Link>).
+                  </Link>
+                  ).
                 </p>
               </div>
             </details>
@@ -370,7 +374,8 @@ export default class Faqs extends PureComponent {
                     withReferrer
                   >
                     get in touch via EBI support
-                  </Link>.
+                  </Link>
+                  .
                 </p>
               </div>
             </details>
@@ -388,7 +393,8 @@ export default class Faqs extends PureComponent {
                     withReferrer
                   >
                     contact us via EBI support
-                  </Link>.
+                  </Link>
+                  .
                 </p>
               </div>
             </details>
@@ -407,7 +413,7 @@ export default class Faqs extends PureComponent {
                   >
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x1d8;"
+                      data-icon="&#x6e;"
                     />{' '}
                     Submit a ticket
                   </Link>

@@ -32,7 +32,7 @@ export default class ProgressAnimation extends PureComponent {
     }
 
     return (
-      <React.Fragment>
+      <>
         <svg width="0" height="0">
           <defs>
             <filter id="gooey-filter">
@@ -69,7 +69,7 @@ export default class ProgressAnimation extends PureComponent {
           <div className={s('left', 'side', 'absolute')} />
           <div className={s('right', 'side', 'absolute')} />
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

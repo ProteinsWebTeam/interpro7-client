@@ -73,16 +73,16 @@ class ByEntriesFeatured extends PureComponent {
                   <Tooltip title="Add this entry to your favorites">
                     <Link
                       to={{ description: { other: ['settings'] } }}
-                      className={f('icon', 'icon-functional')}
-                      data-icon="+"
+                      className={f('icon', 'icon-common')}
+                      data-icon="&#xf067;"
                       aria-label="settings"
                     />
                   </Tooltip>{' '}
                   <Tooltip title="Watch: be notified when this entry is updated">
                     <Link
                       to={{ description: { other: ['settings'] } }}
-                      className={f('icon', 'icon-functional')}
-                      data-icon="4"
+                      className={f('icon', 'icon-common')}
+                      data-icon="&#xf06e;"
                       aria-label="settings"
                     />
                   </Tooltip>{' '}
@@ -97,8 +97,8 @@ class ByEntriesFeatured extends PureComponent {
                           },
                         },
                       }}
-                      className={f('icon', 'icon-functional')}
-                      data-icon="5"
+                      className={f('icon', 'icon-common')}
+                      data-icon="&#xf044;"
                     />
                   </Tooltip>
                 </div>
@@ -142,16 +142,16 @@ class ByEntriesFeatured extends PureComponent {
                   <Tooltip title="Add this entry to your favorites">
                     <Link
                       to={{ description: { other: ['settings'] } }}
-                      className={f('icon', 'icon-functional')}
-                      data-icon="+"
+                      className={f('icon', 'icon-common')}
+                      data-icon="&#xf067;"
                       aria-label="settings"
                     />
                   </Tooltip>{' '}
                   <Tooltip title="Watch: be notified when this entry is updated">
                     <Link
                       to={{ description: { other: ['settings'] } }}
-                      className={f('icon', 'icon-functional')}
-                      data-icon="4"
+                      className={f('icon', 'icon-common')}
+                      data-icon="&#xf06e;"
                       aria-label="settings"
                     />
                   </Tooltip>{' '}
@@ -166,8 +166,8 @@ class ByEntriesFeatured extends PureComponent {
                           },
                         },
                       }}
-                      className={f('icon', 'icon-functional')}
-                      data-icon="5"
+                      className={f('icon', 'icon-common')}
+                      data-icon="&#xf044;"
                     />
                   </Tooltip>
                 </div>
