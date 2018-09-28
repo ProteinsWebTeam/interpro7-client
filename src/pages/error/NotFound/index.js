@@ -67,12 +67,12 @@ class NotFound extends PureComponent /*:: <{}> */ {
                 </Link>
               </li>
               <li>
-                <Link to={{ description: { other: ['help', 'training'] } }}>
-                  InterPro Training and tutorial material
+                <Link to={{ description: { other: ['help', 'tutorial'] } }}>
+                  InterPro tutorials &amp; training material
                 </Link>
               </li>
               <li>
-                <Link to={{ description: { other: ['help', 'faq'] } }}>
+                <Link to={{ description: { other: ['help', 'faqs'] } }}>
                   InterPro FAQs
                 </Link>
               </li>
@@ -81,11 +81,6 @@ class NotFound extends PureComponent /*:: <{}> */ {
                   to={{ description: { other: ['help', 'documentation'] } }}
                 >
                   InterPro Documentation
-                </Link>
-              </li>
-              <li>
-                <Link to={{ description: { other: ['help', 'support'] } }}>
-                  InterPro Help/Support
                 </Link>
               </li>
             </ul>

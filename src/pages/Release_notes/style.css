@@ -4,6 +4,15 @@
 }
 
 .md-small {
-  width: 50px;
-  height: 50px; /*for IE11*/
+  width: 40px;
+  height: 40px; /*for IE11*/
+}
+
+.ico-rel {
+  width: 8px;
+  height: 8px;
+  background: url(../../images/icons/ico-tree-relationship-sq.svg) no-repeat;
+  background-size: 100%;
+  display: inline-block;
+  margin-right: 0.5rem;
 }

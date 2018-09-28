@@ -11,6 +11,15 @@
   justify-content: space-between;
 }
 
+@media screen and (max-width: 39.9375em) {
+  .view-options-wrap {
+    flex-wrap: wrap;
+  }
+  .option-fullscreen {
+    display: none;
+  }
+}
+
 .view-options-title {
   font-size: 140%;
   font-family: var(--fonts-system);
@@ -23,12 +32,14 @@
     flex-shrink: 0;
   }
 }
+
 .view-options {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   font-size: 90%;
 }
+
 .view-options select {
   font-size: 100%;
   width: auto;
@@ -53,6 +64,12 @@
   padding-left: 1.5rem;
   & button {
     outline: none;
+  }
+}
+
+@media screen and (max-width: 39.9375em) {
+  .option-collapse {
+    padding-left: 0.5rem;
   }
 }
 
@@ -157,6 +174,16 @@
 .track-accession-child > a:visited {
   font-size: 90%;
   color: var(--colors-graydark);
+}
+/*resize elements for small screens in order to see full IPR number*/
+@media screen and (max-width: 39.9375em) {
+  .aligned-to-track-component,
+  .track-component {
+    width: 80%;
+  }
+  .track-accession {
+    width: 20%;
+  }
 }
 
 .hideCategory {

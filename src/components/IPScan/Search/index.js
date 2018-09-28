@@ -394,6 +394,7 @@ class IPScanSearch extends PureComponent {
                       'columns',
                       'stacked-for-small',
                       'button-group',
+                      'margin-bottom-none',
                     )}
                   >
                     <input
