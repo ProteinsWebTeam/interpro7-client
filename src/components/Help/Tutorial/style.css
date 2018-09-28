@@ -6,10 +6,12 @@
   display: flex;
   flex-wrap: wrap;
   list-style-type: none;
+  margin: 0 -0.5rem; /*to align with foundation grid*/
 }
+
 .flex-column .card-grid {
-  width: 23%;
-  flex-grow: 1;
+  flex: 1 0 20%;
+  min-width: 270px;
   margin: 0.5rem;
 }
 
@@ -117,32 +119,35 @@
 .card-grid .button {
   margin-bottom: 0;
 }
+/* graphic only
+.tuto-method .card-image {
+  background: url('../../../images/cover/tuto/casestudy.jpg')
+  no-repeat 88% 66%;
+  background-size: 200%;
+}
+*/
 
 .tuto-method .card-image {
-  background: url('//www.ebi.ac.uk/training/online/sites/ebi.ac.uk.training.online/files/styles/full_width/public/course-images/funcfamsTO_image_small.jpeg?itok=AWLuNfMT')
-    no-repeat 88% 17%;
-}
-.tuto-what .card-image {
-  background: url('//www.ebi.ac.uk/training/online/sites/ebi.ac.uk.training.online/files/user/429/documents/fig11.png')
-    no-repeat 50% 40%;
+  background: url('../../../images/cover/tuto/photo_tuto_casestudy.png')
+    no-repeat 88% 46%;
   background-size: 100%;
 }
+
+.tuto-what .card-image {
+  background: url('../../../images/cover/tuto/sequence.png') no-repeat 50% 40%;
+  background-size: 100%;
+}
+
 .tuto-intro .card-image {
-  background: url('//www.ebi.ac.uk/training/online/sites/ebi.ac.uk.training.online/files/user/71/images/figure1.png')
-    no-repeat 50% 40%;
+  background: url('../../../images/cover/tuto/classification.png') no-repeat 50%
+    40%;
   background-size: 100%;
 }
 .tuto-tour .card-image {
-  background: url('//www.ebi.ac.uk/training/online/sites/ebi.ac.uk.training.online/files/slides/InterProMD_new2.jpg')
-    no-repeat 50% 40%;
+  background: url('../../../images/cover/tuto/quicktour.jpg') no-repeat 42% 40%;
+  background-size: 160%;
 }
 
 .card-grid:hover .card-image {
   opacity: 1;
-}
-
-@media screen and (max-width: 39.9375em) {
-  .flex-column .card-grid {
-    width: 40%;
-  }
 }

@@ -79,7 +79,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
         <h3>The InterPro Consortium</h3>
         <p>The following databases make up the InterPro Consortium:</p>
 
-        <table className={f('light')}>
+        <table className={f('light', 'responsive')}>
           <tbody>
             {memberDBs
               .sort(sortFn({ selector: item => item.canonical.toUpperCase() }))
@@ -89,10 +89,10 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                 const href = lut.get(md);
                 return (
                   <tr key={md}>
-                    <td>
+                    <td className={f('sm-inline')}>
                       <MemberSymbol type={md} className={f('md-small')} />
                     </td>
-                    <td>
+                    <td className={f('sm-inline')}>
                       <Link
                         className={f('ext')}
                         target="_blank"
@@ -103,7 +103,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                       </Link>
                     </td>
 
-                    <td>{db.version}</td>
+                    <td className={f('sm-inline')}>{db.version}</td>
 
                     <td>
                       <p>{db.description}</p>

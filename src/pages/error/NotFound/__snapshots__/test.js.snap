@@ -71,13 +71,13 @@ exports[`<NotFound /> should render 1`] = `
                 "description": Object {
                   "other": Array [
                     "help",
-                    "training",
+                    "tutorial",
                   ],
                 },
               }
             }
           >
-            InterPro Training and tutorial material
+            InterPro tutorials & training material
           </Connect(Link)>
         </li>
         <li>
@@ -87,7 +87,7 @@ exports[`<NotFound /> should render 1`] = `
                 "description": Object {
                   "other": Array [
                     "help",
-                    "faq",
+                    "faqs",
                   ],
                 },
               }
@@ -110,22 +110,6 @@ exports[`<NotFound /> should render 1`] = `
             }
           >
             InterPro Documentation
-          </Connect(Link)>
-        </li>
-        <li>
-          <Connect(Link)
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "help",
-                    "support",
-                  ],
-                },
-              }
-            }
-          >
-            InterPro Help/Support
           </Connect(Link)>
         </li>
       </ul>

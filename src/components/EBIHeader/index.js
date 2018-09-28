@@ -41,7 +41,10 @@ _EmblButton.propTypes = {
   toggleEMBLMapNav: T.func.isRequired,
 };
 
-const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
+const EmblButton = connect(
+  null,
+  { toggleEMBLMapNav },
+)(_EmblButton);
 
 const EBIHeader = () => (
   <header
@@ -55,7 +58,7 @@ const EBIHeader = () => (
           className={styleBundle('menu', 'global-nav', 'text-right')}
         >
           <li className={styleBundle('home-mobile', 'show-for-small-only')}>
-            <Link href="//www.ebi.ac.uk">EMBL-EBI Home page</Link>
+            <Link href="//www.ebi.ac.uk" />
           </li>
 
           <li className={styleBundle('embl', 'hide')}>

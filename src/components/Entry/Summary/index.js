@@ -17,11 +17,12 @@ import getUrlFor from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 
+import theme from 'styles/theme-interpro.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, local);
+const f = foundationPartial(ebiGlobalStyles, fonts, theme, local);
 
 const description2IDs = description =>
   description.reduce(
@@ -248,8 +249,13 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       ? 'Overlapping entries'
                       : 'Overlapping homologous superfamilies'}
                   </h4>
+                  <span
+                    title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75."
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="&#xf129;"
+                  />
                   {overlaps.map(ov => (
-                    <div key={ov.accession} style={{ paddingLeft: '1.5em' }}>
+                    <div key={ov.accession} className={f('list-items')}>
                       <interpro-type
                         type={ov.type.replace('_', ' ')}
                         dimension="1.2em"
@@ -267,7 +273,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       >
                         {ov.name}
                       </Link>{' '}
-                      ({ov.accession.toUpperCase()})
+                      <small>({ov.accession.toUpperCase()})</small>
                     </div>
                   ))}
                   {Object.keys(metadata.overlaps_with).length >
@@ -286,7 +292,6 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       {this.state.showAllOverlappingEntries ? 'Less' : 'More'}
                     </button>
                   )}
-                  <br />
                 </div>
               ) : null}
               {metadata.hierarchy &&

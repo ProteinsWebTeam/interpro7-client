@@ -172,15 +172,15 @@ a.neutral:hover {
 /************************  END LINKS  **********************************/
 
 /************************  FORM INPUT TEXTAREA  **********************************/
-/* reduce border input search field*/
+/* reduce impact border search input field*/
 [type='text'] {
-  border: 1px solid #cacaca;
+  border: 1px solid var(--colors-ulightgray);
 }
 
 /* placeholder */
 input::placeholder,
 textarea::placeholder {
-  color: #cacaca;
+  color: var(--colors-ulightgray);
 }
 /************************  END FORM INPUT TEXTAREA  **********************************/
 
@@ -212,9 +212,25 @@ div#local-title {
 /************************ END BANNER**********************************/
 
 /****************************** TABLE *********************************/
+/*gal*/
+.table-center {
+  text-align: center;
+}
+
+.min-width-sm {
+  width: 18%;
+}
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  .xs-hide {
+    display: none;
+  }
+}
+
 /*Style default table*/
 table.classic {
   font-size: 0.9rem;
+  margin-bottom: 0.5rem;
   & thead th {
     border: 1px solid var(--colors-vlightgray);
     background: var(--colors-very-white);
@@ -246,6 +262,7 @@ table.light thead {
   font-size: 0.9em;
   margin: 10px 0;
   border: 0;
+  background: transparent; /*Overwrite EBI global*/
 }
 table.light thead th {
   background: rgba(255, 255, 255, 0.8);
@@ -259,9 +276,25 @@ table.light thead th {
 table.light.sorting thead th {
   color: #a7b2b6;
 }
-table.light.small {
-  width: 40%;
+
+table.light thead tr:nth-child(even):hover {
+  background: transparent;
 }
+table.light thead td {
+  font-weight: normal;
+  font-style: italic;
+  color: #73828c; /*Overwrite EBI global*/
+}
+
+table.light.small {
+  width: 30%;
+  min-width: 300px;
+}
+
+table.light.small td {
+  border: none;
+}
+
 table.light thead th:hover {
   color: #73828c;
 }
@@ -308,10 +341,27 @@ table.light.sorting thead th:hover {
   color: #73828c;
 }
 /*/Style light table */
+/*responsive table*/
+@media screen and (max-width: 39.9375em) {
+  table.responsive th,
+  table.responsive tr {
+    display: block;
+    margin-bottom: 1rem;
+  }
 
-.table-center {
-  text-align: center;
+  table.responsive tbody tr {
+    border: 2px #d4dddf solid;
+  }
+
+  table.responsive tbody tr td {
+    border: 0;
+  }
+  /*class used to show info on the same line   */
+  table.responsive td.sm-inline {
+    display: inline-block;
+  }
 }
+/*/responsive table*/
 
 /*Filter menu option*/
 .sub-nav {
@@ -396,77 +446,8 @@ button {
 
 /****************************** END BUTTONS *********************************/
 
-/****************************** OTHERS *********************************/
-/*ACCORDION TYPE*/
-details > summary {
-  cursor: pointer;
-  outline: 0;
-}
-/*custom*/
-details.accordion-style > summary {
-  color: var(--colors-submain);
-  border: 1px solid var(--colors-very-white);
-  border-bottom-width: 0;
-  padding: 1rem;
-  &:hover {
-    background-color: var(--colors-accordion);
-    /*background-color: rgba(0, 0, 0, 0.1);*/
-    color: white;
-    /*color: var(--colors-graydark);*/
-    transition: all 0.4s ease-out;
-  }
-  &::after {
-    content: '';
-    font-family: 'EBI-Common';
-    float: right;
-    font-size: 120%;
-  }
-  &::-webkit-details-marker {
-    display: none;
-  }
-}
-
-details.accordion-style:last-child {
-  border-bottom: 1px solid var(--colors-very-white);
-}
-
-.accordion-info {
-  border: 1px solid var(--colors-nearly-white);
-  border-top-width: 0;
-  padding: 1rem;
-  & p:last-of-type {
-    margin-bottom: 0;
-  }
-}
-
-details.accordion-style[open] > summary {
-  background-color: var(--colors-accordion);
-  color: white;
-  z-index: 1;
-  position: relative; /*for animation*/
-}
-
-details.accordion-style[open] summary ~ * {
-  animation: sweep var(--timing-fast) ease-out;
-}
-
-/*alt color for testing*/
-details.accordion-style.light[open] > summary {
-  background-color: var(--colors-nearly-white);
-  color: var(--colors-graydark);
-}
-details.accordion-style.classic[open] > summary {
-  background-color: var(--colors-submain);
-  color: white;
-}
-/*/alt color for testing*/
-
-details.accordion-style[open] summary:after {
-  content: '';
-}
-/*/ACCORDION TYPE*/
-
 /****************************** TITLE - TEXT *********************************/
+
 /* TITLE Alt for Entry page - TEST */
 .box-title {
   color: #585656;
@@ -483,14 +464,6 @@ details.accordion-style[open] summary:after {
 h3.light {
   font-weight: 300;
 }
-
-/*not used anymore - use default foundation*/
-/*h1 small,*/
-/*h2 small,*/
-/*h3 small,*/
-/*h4 small {*/
-/*color: #bbb;*/
-/*}*/
 
 /*simulation H5 but needs to stay span in order to show ext icon on the same line*/
 .h5 {
@@ -536,8 +509,35 @@ h6 small {
 }
 
 hr {
-  border-bottom: 1px solid #d4d4d4;
+  border-bottom: 1px solid var(--colors-vlightgray);
 }
+/*documentation*/
+.xl {
+  color: var(--colors-ebidark);
+  font-size: 280%;
+}
+
+.font-xxlarge {
+  font-size: 400%;
+}
+.font-xlarge {
+  font-size: 300%;
+}
+.font-large {
+  font-size: 170%;
+}
+.font-medium {
+  font-size: 100%;
+}
+.font-small {
+  font-size: 90%;
+}
+
+.margin-top-xxlarge {
+  margin-top: 4rem;
+}
+/*/documentation*/
+
 /*/Overwrite Foundation*/
 
 /*TOOLTIP*/
@@ -612,7 +612,11 @@ hr {
 }
 /*/ CALLOUT info & alert messages*/
 
-/*TABS - home*/
+/****************************** END TITLE - TEXT *********************************/
+
+/****************************** OTHERS *********************************/
+
+/*TABS*/
 
 /*Tabs style main - homepage*/
 .tabs.main-style {
@@ -730,6 +734,104 @@ hr {
 }
 /*/Tabs style menu*/
 
+/*** ACCORDION MENU ***/
+details.accordion-style > summary {
+  color: var(--colors-submain);
+  border: 1px solid var(--colors-very-white);
+  border-bottom-width: 0;
+  padding: 1rem;
+  cursor: pointer;
+  outline: 0;
+  z-index: 1;
+  position: relative; /*for animation*/
+  list-style: none; /*keep to remove default icon for Firefox*/
+  &:hover {
+    /*background-color: var(--colors-accordion);*/
+    background-color: var(--colors-unknown-sub);
+    color: var(--colors-graydark);
+    transition: all var(--timing-medclose) ease-out;
+    &::after {
+      background: var(--colors-unknown-sub);
+      transition: background-color var(--timing-medclose) ease-out;
+    }
+  }
+  &::before {
+    transform: translateY(-50%) rotate(-45deg);
+    background: var(--colors-submain);
+  }
+  &::after {
+    margin-top: -3px;
+    background: white;
+    transform: translateY(-50%) rotate(-45deg);
+  }
+
+  /* using icon instead
+&::after {*/
+  /*content: '';*/
+  /*font-family: 'EBI-Common';*/
+  /*position: absolute;*/
+  /*font-size: 120%;*/
+  /*top: 20%;*/
+  /*right: .5rem;*/
+  /*}*/
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+details.accordion-style > summary::before,
+details.accordion-style > summary::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  right: 20px;
+  top: 50%;
+}
+
+details.accordion-style:last-child {
+  border-bottom: 1px solid var(--colors-very-white);
+}
+
+.accordion-info {
+  border: 1px solid var(--colors-nearly-white);
+  border-top-width: 0;
+  padding: 1rem;
+  & p:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+details.accordion-style[open] > summary {
+  background-color: var(--colors-accordion);
+  color: white;
+}
+
+details.accordion-style[open] summary ~ * {
+  animation: sweep var(--timing-fast) ease-out;
+}
+
+/*/alt color for testing*/
+details.accordion-style[open] summary {
+  &::after {
+    content: '';
+    background: var(--colors-accordion);
+    margin-top: -2px;
+    transform: rotate(45deg);
+  }
+  &::before {
+    transform: translateY(-50%) rotate(45deg);
+  }
+}
+
+/* using icon
+details.accordion-style[open] summary:after {*/
+/*content: '';*/
+/*}*/
+
+/*** END ACCORDION MENU ****/
+
 /*footer*/
 .local_footer {
   padding: 1rem 0;
@@ -798,7 +900,7 @@ hr {
 }
 /*/back to top button*/
 
-/*Customise LiteMole - Structure page*/
+/* LiteMole - Structure page*/
 .lm-plugin .lm-btn-link span.lm-icon {
   font-size: 120%;
 }
@@ -865,7 +967,7 @@ hr {
 .lm-plugin .lm-layout-standard-outside .lm-layout-right {
   z-index: 2;
 }
-/*END customise LiteMole*/
+/*END LiteMole*/
 
 /*custom CLAN-VIEWER node module*/
 :global(.clanviewer) {
@@ -909,10 +1011,6 @@ hr {
 /*RESPONSIVE DESIGN*/
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-}
-
-/* Small screen only */
-@media screen and (max-width: 39.9375em) {
 }
 
 /*make banner buttons disappear for very small screens so they don't overlap with title*/

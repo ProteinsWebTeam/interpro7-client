@@ -61,7 +61,10 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
               Short name: {metadata.id}
-              <Species taxID={metadata.source_organism.taxId} />
+              <Species
+                fullName={metadata.source_organism.fullName}
+                taxID={metadata.source_organism.taxId}
+              />
               <Length metadata={metadata} />
             </div>
             <div className={f('medium-3', 'columns')}>

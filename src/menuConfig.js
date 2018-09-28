@@ -465,7 +465,7 @@ export const InterPro /*: Array<Object> */ = [
   {
     to: { description: { other: ['release_notes'] } },
     icon: '',
-    name: 'Release\xa0Notes',
+    name: 'Release\xa0notes',
     iconClass: 'common',
   },
   {

@@ -117,9 +117,13 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
               </div>
             ))}
         </AnimatedEntry>
+
         <Link
           to={{
-            description: { main: { key: 'entry' } },
+            description: {
+              main: { key: 'entry' },
+              entry: { db: 'InterPro' },
+            },
           }}
           className={f('button', 'margin-bottom-none', 'margin-top-large')}
         >

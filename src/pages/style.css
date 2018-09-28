@@ -4,14 +4,24 @@
 /************************************home.js************************************/
 .intro-wrapper {
   display: flex;
+  flex-wrap: nowrap;
   margin: 1rem 0 2rem 0;
 }
 
 /*homepage figures - temp while there is a specific component*/
 .intro-fig {
   width: 57%;
+  max-width: 200px;
   margin-right: 2rem;
   /*overflow: hidden;*/
+}
+
+/* small + Medium screen only*/
+@media screen and (max-width: 63.9375em) {
+  /*let the figure collapse on top of text*/
+  .intro-wrapper {
+    flex-wrap: wrap;
+  }
 }
 
 .fig-brick {
@@ -110,6 +120,7 @@
 
   &.corresponds-to-filter {
     background-color: var(--colors-marktext);
+    border-color: var(--colors-marktext);
   }
 }
 

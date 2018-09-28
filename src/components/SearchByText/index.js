@@ -76,12 +76,9 @@ class SearchByText extends PureComponent /*:: <Props> */ {
                   <span>
                     {' '}
                     e.g.
-                    <Example>IPR020422</Example>,
-                    <Example>kinase</Example>,
-                    <Example>O00167</Example>,
-                    <Example>PF02932</Example>,
-                    <Example>GO:0007165</Example>,
-                    <Example>1t2v</Example>,
+                    <Example>IPR020422</Example>,<Example>kinase</Example>,
+                    <Example>O00167</Example>,<Example>PF02932</Example>,
+                    <Example>GO:0007165</Example>,<Example>1t2v</Example>,
                     <Example>UP000005640</Example>
                   </span>
                 </div>
@@ -96,7 +93,7 @@ class SearchByText extends PureComponent /*:: <Props> */ {
                   <span>
                     Powered by{' '}
                     <Link
-                      className={f('neutral')}
+                      className={f('neutral', 'ext')}
                       target="_blank"
                       href="https://www.ebi.ac.uk/ebisearch/"
                     >
