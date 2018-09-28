@@ -85,6 +85,7 @@ const hashSelector = createSelector(
 export default class Table extends PureComponent /*:: <Props> */ {
   static propTypes = {
     dataTable: T.array,
+    rowKey: T.string,
     isStale: T.bool,
     loading: T.bool,
     ok: T.bool,
@@ -102,6 +103,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
   render() {
     const {
       dataTable,
+      rowKey,
       isStale,
       loading,
       ok,
@@ -225,6 +227,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   card={card}
                   notFound={notFound}
                   dataTable={dataTable}
+                  rowKey={rowKey}
                   withTree={withTree}
                   withGrid={!!card}
                 />

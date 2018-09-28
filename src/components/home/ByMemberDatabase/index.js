@@ -8,7 +8,7 @@ import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import AnimatedEntry from 'components/AnimatedEntry';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -98,7 +98,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                   <Tooltip title={description}>
                     <span
                       className={f('small', 'icon', 'icon-common')}
-                      data-icon="ℹ"
+                      data-icon="&#xf129;"
                       aria-label={description}
                     />
                   </Tooltip>
@@ -107,10 +107,9 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
 
                   <p className={f('margin-bottom-medium')}>
                     <span className={f('count', { visible: payload })}>
-                      <NumberComponent
-                        value={(counts && counts[canonical.toLowerCase()]) || 0}
-                        abbr
-                      />
+                      <NumberComponent abbr>
+                        {(counts && counts[canonical.toLowerCase()]) || 0}
+                      </NumberComponent>
                       {' entries'}
                     </span>
                   </p>

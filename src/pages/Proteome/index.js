@@ -16,7 +16,7 @@ import Table, {
 import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 import { SpeciesIcon } from 'pages/Taxonomy';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
@@ -116,7 +116,7 @@ class SummaryCounterProteome extends PureComponent {
             disabled={!entries}
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-            <NumberComponent value={entries} abbr />
+            <NumberComponent abbr>{entries}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
             </span>
@@ -144,7 +144,7 @@ class SummaryCounterProteome extends PureComponent {
             disabled={!proteins}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr />
+            <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {' '}
               {toPlural('protein', proteins)}
@@ -173,7 +173,7 @@ class SummaryCounterProteome extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
-            <NumberComponent value={structures} abbr />{' '}
+            <NumberComponent abbr>{structures}</NumberComponent>{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
         </Tooltip>
@@ -183,7 +183,7 @@ class SummaryCounterProteome extends PureComponent {
 }
 
 const ProteomeCard = ({ data, search, entryDB }) => (
-  <React.Fragment>
+  <>
     <div className={f('card-header')}>
       <Link
         to={{
@@ -213,12 +213,12 @@ const ProteomeCard = ({ data, search, entryDB }) => (
       <div>
         ID:
         <HighlightedText
-          text={data.metadata.accession}
+          text={(data.metadata.accession || '').toUpperCase()}
           textToHighlight={search}
         />
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 ProteomeCard.propTypes = {
   data: T.object,
@@ -359,7 +359,7 @@ class List extends PureComponent {
                     processData={schemaProcessDataTableRow}
                   />
                   <HighlightedText
-                    text={accession}
+                    text={accession.toUpperCase()}
                     textToHighlight={search.search}
                   />
                 </Link>
@@ -415,7 +415,9 @@ class List extends PureComponent {
                       },
                     }}
                   >
-                    <NumberComponent value={count} loading={loading} abbr />
+                    <NumberComponent loading={loading} abbr>
+                      {count}
+                    </NumberComponent>
                   </Link>
                 );
               }}
@@ -452,7 +454,9 @@ class List extends PureComponent {
                       },
                     }}
                   >
-                    <NumberComponent value={count} loading={loading} abbr />
+                    <NumberComponent loading={loading} abbr>
+                      {count}
+                    </NumberComponent>
                   </Link>
                 );
               }}

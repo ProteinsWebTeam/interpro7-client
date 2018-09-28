@@ -12,7 +12,7 @@ const webpackConfig = require('../webpack.config.js')(undefined, {
 const DEFAULT_PORT = 8888;
 
 app.use(
-  webpackConfig.output.publicPath,
+  webpackConfig[0].output.publicPath,
   express.static(path.resolve('.', 'dist'))
 );
 

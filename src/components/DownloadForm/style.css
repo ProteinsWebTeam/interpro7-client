@@ -1,7 +1,7 @@
 .controls {
   padding: 1ch;
   border: 1px solid gray;
-  background: rgba(255, 255, 255, 0.8);
+  background: white;
   position: sticky;
   bottom: -1px; /* hide bottom border when sticky */
 }

@@ -130,7 +130,7 @@ mark {
   color: var(--colors-check);
 }
 
-.ico-progress::before {
+.ico-neutral::before {
   color: var(--colors-all);
 }
 
@@ -210,31 +210,6 @@ div#local-title {
 /**** END BANNER MENU ****/
 
 /************************ END BANNER**********************************/
-
-/************************ STICKY BANNER**********************************/
-.smaller {
-  z-index: 1;
-  left: 0;
-  position: fixed;
-  margin-top: -10.5em !important;
-}
-.smaller h4 {
-  transform: translate(156px, 32px);
-  font-size: 133%;
-} /*transform tagline*/
-.smaller .local-site-search {
-  top: 164px;
-  right: 72px;
-} /*move icon on right*/
-.smaller .local-offcanvas-menu {
-  top: 164px;
-} /*move icon on right*/
-.smaller .local-site-search .icon-functional:before,
-.smaller .local-offcanvas-menu .icon-functional:before {
-  font-size: 30px;
-} /*icon size and position*/
-
-/************************ END STICKY BANNER**********************************/
 
 /****************************** TABLE *********************************/
 /*Style default table*/
@@ -368,29 +343,26 @@ button {
   cursor: pointer;
 }
 
-/* buttons (secondary, alert, hollow) - redefine foundation style*/
+/* buttons (alert, warning, secondary, hollow) - IScan form*/
 .button.alert {
   background-color: var(--colors-alert-main);
   color: white;
-}
-
-.button.alert:hover,
-.button.alert:active,
-.button.alert:focus {
-  background-color: var(--colors-alert-button);
-  color: white;
+  &:active,
+  &:focus,
+  &:hover {
+    background-color: var(--colors-alert-more);
+    color: white;
+  }
 }
 
 .button.warning {
-  background-color: var(--colors-warning-main);
-  color: white;
-}
-
-.button.warning:hover,
-.button.warning:active,
-.button.warning:focus {
-  background-color: var(--colors-warning-main);
-  color: white;
+  &,
+  &:active,
+  &:focus,
+  &:hover {
+    background-color: var(--colors-warning-main);
+    color: white;
+  }
 }
 
 .button.secondary {
@@ -398,33 +370,30 @@ button {
 }
 
 .button.hollow {
-  background-color: transparent;
+  &,
+  &:active,
+  &:focus,
   &:hover {
-    background-color: transparent;
-  }
-  &:active {
-    background-color: transparent;
-  }
-  &:focus {
     background-color: transparent;
   }
 }
 
 .button.hollow.secondary {
   border-color: var(--colors-lightgray);
-}
-.button.hollow.secondary:hover {
-  color: var(--colors-dark);
+  &:hover {
+    color: var(--colors-dark);
+  }
 }
 
 .button.hollow.tertiary {
   border: 1px solid #7fcad6;
   color: var(--colors-interpro);
+  &:hover {
+    border: 1px solid #3798a7;
+    color: #3798a7;
+  }
 }
-.button.hollow.tertiary:hover {
-  border: 1px solid #3798a7;
-  color: #3798a7;
-}
+
 /****************************** END BUTTONS *********************************/
 
 /****************************** OTHERS *********************************/
@@ -447,7 +416,7 @@ details.accordion-style > summary {
     transition: all 0.4s ease-out;
   }
   &::after {
-    content: 'ć'; /*content: "\0f11a";*/
+    content: '';
     font-family: 'EBI-Common';
     float: right;
     font-size: 120%;
@@ -493,7 +462,7 @@ details.accordion-style.classic[open] > summary {
 /*/alt color for testing*/
 
 details.accordion-style[open] summary:after {
-  content: 'Ć';
+  content: '';
 }
 /*/ACCORDION TYPE*/
 
@@ -591,40 +560,57 @@ hr {
   background-color: var(--colors-md-sub);
 }
 
-/*CALLOUT ALERT WARNING MESSAGE - missing in foundation*/
-.callout.border {
-  border: 1px solid rgba(10, 10, 10, 0.25);
-}
-.callout.alert.withicon::before {
-  content: 'l';
-  font-family: 'EBI-Generic';
-  color: #d1847f;
-  margin-right: 0.5rem;
-}
+/*CALLOUT info & alert messages*/
+
 .callout.info {
   background-color: #c6e9ff;
-  color: #222;
 }
-.callout.info.withicon::before {
-  content: 'ℹ';
+
+.callout.info.withicon::before,
+.callout.info-alt.withicon::before {
+  content: '';
   font-family: 'EBI-Common';
   color: #7fb0d1;
   margin-right: 0.5rem;
 }
 
-.callout.slk {
+.callout.info-alt {
+  background-color: transparent;
+  border: 1px solid var(--colors-nearly-white);
+  border-left: #7fb0d1 4px solid;
+  border-radius: 0.25rem;
+}
+
+.callout.alert.withicon::before {
+  content: '';
+  font-family: 'EBI-Common';
+  color: #d1847f;
+  margin-right: 0.5rem;
+}
+
+.callout.alert-alt {
   background-color: transparent;
   border: 1px solid var(--colors-nearly-white);
   border-left: #d72b3f 4px solid;
   border-radius: 0.25rem;
-  color: #222;
 }
-.callout.slk.withicon::before {
-  content: 'l';
-  font-family: 'EBI-Generic';
+
+.callout.alert-alt.withicon::before {
+  content: '';
+  font-family: 'EBI-Common';
   color: #d72b3f;
   margin-right: 0.5rem;
 }
+
+.callout.warning {
+  color: var(--colors-light-title);
+  /*background-color: var(--colors-warning-bgd); use default foundation style*/
+}
+
+.callout.border {
+  border: 1px solid rgba(10, 10, 10, 0.1);
+}
+/*/ CALLOUT info & alert messages*/
 
 /*TABS - home*/
 
@@ -832,27 +818,39 @@ hr {
   background: #ccc; /*not transparent otherwise can't be read properly*/
   z-index: 2; /*reduce Z-index to stay below sticky banner*/
 }
-/*replace icons LiteMole by EBI icons*/
-.lm-plugin span.lm-icon-expand-layout:before {
-  font-family: EBI-Functional;
-  content: 'F';
-} /*to be consistent*/
-.lm-plugin span.lm-icon-settings:before {
-  font-family: EBI-Functional;
-  content: 's';
+
+/* icons LiteMole by EBI icons*/
+/*help icon*/
+.lm-plugin span.lm-icon-help-circle:before {
+  font-family: EBI-Common;
+  content: '';
 }
+
+/*settings icon*/
+.lm-plugin span.lm-icon-settings:before {
+  font-family: EBI-Common;
+  content: '';
+}
+
+/* temp while e use the new camera icon from EBI font set
 .lm-plugin span.lm-icon-screenshot:before {
   font-family: EBI-Common;
   content: '!';
-}
-.lm-plugin span.lm-icon-help-circle:before {
+}*/
+
+/*full screen icon*/
+.lm-plugin span.lm-icon-expand-layout:before {
   font-family: EBI-Common;
-  content: '?';
+  content: 'F';
 }
+
+/*refresh icon*/
 .lm-plugin span.lm-icon-reset-scene:before {
-  font-family: EBI-Functional;
-  content: 'R';
+  font-family: EBI-Common;
+  content: '';
 }
+/*/ icons LiteMole by EBI icons*/
+
 /*change color font in control panel*/
 .lm-plugin
   .lm-entity-tree-entry-current-path
@@ -909,39 +907,18 @@ hr {
 /****************************** END OTHERS *********************************/
 
 /*RESPONSIVE DESIGN*/
-
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
 }
 
 /* Small screen only */
 @media screen and (max-width: 39.9375em) {
-  /*reduce bgd image*/
-  .masthead {
-    background-size: 100%, 600px;
-  }
-
-  .local-site-search .icon-functional:before,
-  .local-offcanvas-menu .icon-functional:before {
-    font-size: 30px;
-  } /*icon size and position*/
-  .local-site-search:hover .tool-search .search-box,
-  .search-box:focus {
-    width: 50%;
-  } /*reduce width input*/
-  .offc-nav {
-    width: 12rem;
-  } /*reduce width off-canvas menu*/
-  .my-svg-container {
-    width: 36%;
-    float: none;
-    margin: 0 auto;
-  }
 }
 
+/*make banner buttons disappear for very small screens so they don't overlap with title*/
 @media screen and (max-width: 20em) {
   .local-offcanvas-menu,
   .local-site-search {
     opacity: 0;
-  } /*make the buttons disappear for very small screens so they don't overlap with title*/
+  }
 }

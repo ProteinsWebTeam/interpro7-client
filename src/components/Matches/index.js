@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { Fragment } from 'react';
+import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -12,7 +12,7 @@ import StructureOnProtein from './StructureOnProtein';
 import File from 'components/File';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 import { PDBeLink } from 'components/ExtLink';
 import Lazy from 'wrappers/Lazy';
 import LazyImage from 'components/LazyImage';
@@ -206,7 +206,7 @@ const Matches = (
           //   reviewed = (
           //
           //   )
-          <Fragment>
+          <>
             <SchemaOrgData
               data={{ data: obj, primary, secondary }}
               processData={schemaProcessData}
@@ -220,19 +220,22 @@ const Matches = (
               }}
             >
               <span className={f('acc-row')}>
-                <HighlightedText text={acc} textToHighlight={search.search} />
+                <HighlightedText
+                  text={acc.toUpperCase()}
+                  textToHighlight={search.search}
+                />
               </span>
             </Link>{' '}
             {primary === 'protein' && sourceDatabase === 'reviewed' ? (
               <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
                 <span
-                  className={f('icon', 'icon-functional')}
-                  data-icon="/"
+                  className={f('icon', 'icon-common')}
+                  data-icon="&#xf00c;"
                   aria-label="reviewed"
                 />
               </Tooltip>
             ) : null}
-          </Fragment>
+          </>
         );
       }}
     >
@@ -303,8 +306,8 @@ const Matches = (
             }
           >
             <span
-              className={f('icon', 'icon-functional')}
-              data-icon="/"
+              className={f('icon', 'icon-common')}
+              data-icon="&#xf00c;"
               aria-label="reviewed"
             />
           </Tooltip>
@@ -366,7 +369,7 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={count => <NumberComponent value={count} abbr />}
+      renderer={count => <NumberComponent abbr>{count}</NumberComponent>}
     >
       protein count
     </Column>
