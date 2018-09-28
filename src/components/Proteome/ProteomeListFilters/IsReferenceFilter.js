@@ -42,7 +42,7 @@ class IsReferenceFilter extends PureComponent {
     const { page, proteome_is_reference: _, ...search } = customLocation.search;
     if (labels.has(value) && (value === 'true' || value === 'false')) {
       search.is_reference = value;
-    } else if (search.has('is_reference')) {
+    } else if ('is_reference' in search) {
       delete search.is_reference;
     }
     goToCustomLocation({ ...customLocation, search });
