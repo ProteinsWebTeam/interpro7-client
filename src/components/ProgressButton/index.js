@@ -47,6 +47,7 @@ class ProgressButton extends PureComponent /*:: <Props> */ {
               cy={CENTER}
               transform={`rotate(-90 ${CENTER} ${CENTER})`}
               r={RADIUS}
+              opacity={downloading ? 1 : 0}
               fill="none"
               className={s('progress')}
               strokeWidth={STROKE_WIDTH}

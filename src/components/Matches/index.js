@@ -10,12 +10,19 @@ import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
 import File from 'components/File';
-import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
+import Table, {
+  Column,
+  PageSizeSelector,
+  SearchBox,
+  Exporter,
+} from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
 import { PDBeLink } from 'components/ExtLink';
 import Lazy from 'wrappers/Lazy';
 import LazyImage from 'components/LazyImage';
+
+import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
 import { searchSelector } from 'reducers/custom-location/search';
 import { descriptionSelector } from 'reducers/custom-location/description';
@@ -159,6 +166,23 @@ const ProteinDownloadRenderer = description => (accession, row) => (
     }}
   />
 );
+const AllProteinDownload = ({ description, count }) => (
+  <File
+    fileType="fasta"
+    name={`protein-sequences-matching-${
+      description[description.main.key].accession
+    }.fasta`}
+    count={count}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      [description.main.key]: {
+        ...description[description.main.key],
+        isFilter: true,
+      },
+    }}
+  />
+);
 
 // List of all matches, many to many
 const Matches = (
@@ -170,6 +194,7 @@ const Matches = (
     isStale,
     search,
     description,
+    state,
     ...props
   } /*: {
     matches: Array<Object>,
@@ -179,6 +204,7 @@ const Matches = (
     isStale: boolean,
     search: Object,
     description: Object,
+    state: Object,
     props: Array<any>
 } */,
 ) => (
@@ -196,6 +222,26 @@ const Matches = (
   >
     <PageSizeSelector />
     <SearchBox />
+    <Exporter>
+      <ul>
+        {primary === 'protein' && (
+          <li style={{ display: 'flex', alignItems: 'center' }}>
+            <div>
+              <AllProteinDownload
+                description={description}
+                count={actualSize}
+              />
+            </div>
+            <div>FASTA</div>
+          </li>
+        )}
+        <li>
+          <Link target="_blank" href={getUrlForApi(state)}>
+            Open in API web view
+          </Link>
+        </li>
+      </ul>
+    </Exporter>
     <Column
       dataKey="accession"
       renderer={(acc /*: string */, obj /*: {source_database: string} */) => {
@@ -389,12 +435,14 @@ Matches.propTypes = {
   ...propTypes,
   search: T.object.isRequired,
   description: T.object.isRequired,
+  state: T.object.isRequired,
 };
 
 const mapStateToProps = createSelector(
   searchSelector,
   descriptionSelector,
-  (search, description) => ({ search, description }),
+  state => state,
+  (search, description, state) => ({ search, description, state }),
 );
 
 export default connect(mapStateToProps)(Matches);

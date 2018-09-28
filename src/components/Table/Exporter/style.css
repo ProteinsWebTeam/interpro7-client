@@ -4,7 +4,6 @@
   & .dropdown-content {
     position: absolute;
     top: 100%;
-    overflow: auto;
     width: initial;
     padding: 1rem 0.5rem;
     /*transform: scaleY(0);*/
