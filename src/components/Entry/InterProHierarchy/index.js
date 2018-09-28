@@ -58,7 +58,6 @@ class InterProHierarchy extends PureComponent {
   async componentDidMount() {
     await loadInterProWebComponents();
     const hierarchy = this.props.hierarchy;
-    console.log(hierarchy);
     if (hierarchy) this._ref.current.hierarchy = cleanHierarchyType(hierarchy);
     this._ref.current.addEventListener('click', e => {
       const target = (e.path || e.composedPath())[0];

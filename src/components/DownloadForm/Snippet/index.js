@@ -53,10 +53,7 @@ export class Snippet extends PureComponent {
 
   constructor(props) {
     super(props);
-
     this.state = { language: 'js', code: null, href: null };
-
-    console.log('constructor');
     this._ref = React.createRef();
   }
 
