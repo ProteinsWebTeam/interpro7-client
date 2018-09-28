@@ -14,9 +14,11 @@ import Title from 'components/Title';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
 import Actions from 'components/IPScan/Actions';
 
+import { Exporter } from 'components/Table';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
 import f from 'styles/foundation';
+import Link from 'components/generic/Link';
 
 /*:: type Props = {
   accession: string,
@@ -115,14 +117,13 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
         name: match.signature.name,
         source_database: LUT.get(library) || library,
         protein_length: payload.sequenceLength,
-        locations: [
-          {
-            fragments: match.locations.map(l => ({
-              start: l.start,
-              end: l.end,
-            })),
-          },
-        ],
+        locations: match.locations.map(loc => ({
+          ...loc,
+          fragments:
+            loc['location-fragments'] && loc['location-fragments'].length
+              ? loc['location-fragments']
+              : [{ start: loc.start, end: loc.end }],
+        })),
         score: match.score,
       };
       if (NOT_MEMBER_DBS.has(library)) {
@@ -170,12 +171,33 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
       <div className={f('sections')}>
         <section>
           <div className={f('row')}>
-            <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
+            <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
               <Title metadata={metadata} mainType="protein" />
               <Accession accession={accession} title="Job ID" />
               <Length metadata={metadata} />
               {localID && <Actions localID={localID} withTitle />}
               <span>Status: {status}</span>
+            </div>
+            <div className={f('medium-3', 'columns', 'margin-bottom-large')}>
+              {status === 'finished' && (
+                <Exporter includeSettings={false} left={false}>
+                  <ul>
+                    {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(
+                      type => (
+                        <li key={type}>
+                          <Link
+                            target="_blank"
+                            href={data.url.replace('json', type)}
+                            download={`InterProScan.${type}`}
+                          >
+                            {type.toUpperCase()}
+                          </Link>
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </Exporter>
+              )}
             </div>
           </div>
         </section>

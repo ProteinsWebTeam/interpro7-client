@@ -88,7 +88,7 @@ const processResultsFor = (fileType, subset) =>
         }
       } else {
         // accession
-        content += result.metadata.accession;
+        content += `${result.metadata.accession}\n`;
       }
       yield content;
     }

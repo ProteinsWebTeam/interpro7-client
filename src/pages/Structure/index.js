@@ -338,7 +338,7 @@ class StructureCard extends PureComponent {
 
           <div>
             <HighlightedText
-              text={data.metadata.accession}
+              text={(data.metadata.accession || '').toUpperCase()}
               textToHighlight={search}
             />
           </div>
@@ -462,7 +462,7 @@ const List = ({
                   processData={schemaProcessDataTableRow}
                 />
                 <HighlightedText
-                  text={accession}
+                  text={accession.toUpperCase()}
                   textToHighlight={search.search}
                 />
               </Link>

@@ -212,7 +212,7 @@ const ProteomeCard = ({ data, search, entryDB }) => (
       <div>
         ID:
         <HighlightedText
-          text={data.metadata.accession}
+          text={(data.metadata.accession || '').toUpperCase()}
           textToHighlight={search}
         />
       </div>
@@ -358,7 +358,7 @@ class List extends PureComponent {
                     processData={schemaProcessDataTableRow}
                   />
                   <HighlightedText
-                    text={accession}
+                    text={accession.toUpperCase()}
                     textToHighlight={search.search}
                   />
                 </Link>

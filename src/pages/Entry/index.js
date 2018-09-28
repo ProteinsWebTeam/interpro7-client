@@ -349,14 +349,14 @@ class EntryCard extends PureComponent {
                 }}
                 disabled={!data.metadata.integrated}
               >
-                {data.metadata.integrated}
+                {(data.metadata.accession || '').toUpperCase()}
               </Link>
             </div>
           )}
           <div>
             {' '}
             <HighlightedText
-              text={data.metadata.accession}
+              text={(data.metadata.accession || '').toUpperCase()}
               textToHighlight={search}
             />
           </div>
@@ -522,7 +522,7 @@ class List extends PureComponent {
                   />
                   <span className={f('acc-row')}>
                     <HighlightedText
-                      text={accession}
+                      text={accession.toUpperCase()}
                       textToHighlight={search.search}
                     />
                   </span>
@@ -636,7 +636,7 @@ class List extends PureComponent {
                                 },
                               }}
                             >
-                              {accession}
+                              {accession.toUpperCase()}
                             </Link>
                           </Tooltip>
                         )),
@@ -660,7 +660,9 @@ class List extends PureComponent {
                         search: {},
                       }}
                     >
-                      <Tooltip title={`${accession}`}>{accession}</Tooltip>
+                      <Tooltip title={`${accession}`}>
+                        {accession.toUpperCase()}
+                      </Tooltip>
                     </Link>
                   ) : (
                     ''
