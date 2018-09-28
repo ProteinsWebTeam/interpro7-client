@@ -8,6 +8,7 @@ a.browse-tabs-link {
     color: black;
     line-height: inherit;
     background-color: transparent; /* keep! */
+    position: relative; /*to avoid bug when resize menu on small screens*/
 
     & > .name {
       display: inline-block;
