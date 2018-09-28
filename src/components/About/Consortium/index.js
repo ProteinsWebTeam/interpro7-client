@@ -111,8 +111,8 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                         // TEMP - to re-add when update to latest icon set
                         // <small className={f('icon', 'icon-common')} data-icon="&#xf073;">
                         <small
-                          className={f('icon', 'icon-generic')}
-                          data-icon="r"
+                          className={f('icon', 'icon-common')}
+                          data-icon="&#xf073;"
                         >
                           {' '}
                           {'Released '}

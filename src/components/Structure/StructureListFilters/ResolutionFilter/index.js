@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import debounce from 'lodash-es/debounce';
+import { debounce } from 'lodash-es';
 
 import MultipleInput from 'components/SimpleCommonComponents/MultipleInput';
 
@@ -142,6 +142,7 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(
-  ResolutionFilter,
-);
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(ResolutionFilter);

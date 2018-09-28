@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 // import MemberDBSelector from 'components/MemberDBSelector';
 
 import loadData from 'higherOrder/loadData';
@@ -15,12 +15,17 @@ import { customLocationSelector } from 'reducers/custom-location';
 import { foundationPartial } from 'styles/foundation';
 
 import style from 'components/FiltersPanel/style.css';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 const f = foundationPartial(style);
 
 class SignaturesFilter extends PureComponent {
   static propTypes = {
     data: T.shape({
+      loading: T.bool.isRequired,
+      payload: T.any,
+    }).isRequired,
+    dataMeta: T.shape({
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
@@ -40,6 +45,13 @@ class SignaturesFilter extends PureComponent {
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
+  getDBName(db) {
+    const metaDB =
+      this.props.dataMeta.loading || !this.props.dataMeta.payload
+        ? {}
+        : this.props.dataMeta.payload.databases;
+    return (metaDB[db] && metaDB[db].name) || db;
+  }
   render() {
     const {
       data: { loading, payload },
@@ -72,14 +84,16 @@ class SignaturesFilter extends PureComponent {
                 }
                 style={{ margin: '0.25em' }}
               />
-              <span>{signatureDB}</span>
+              <span>{this.getDBName(signatureDB)}</span>
               {typeof count === 'undefined' || isNaN(count) ? null : (
-                <NumberLabel
-                  value={count}
+                <NumberComponent
+                  label
                   loading={loading}
                   className={f('filter-label')}
                   abbr
-                />
+                >
+                  {count}
+                </NumberComponent>
               )}
             </label>
           </div>
@@ -119,4 +133,6 @@ export default loadData({
   getUrl: getUrlFor,
   mapStateToProps,
   mapDispatchToProps: { goToCustomLocation },
-})(SignaturesFilter);
+})(
+  loadData({ getUrl: getUrlForMeta, propNamespace: 'Meta' })(SignaturesFilter),
+);

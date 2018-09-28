@@ -399,7 +399,7 @@ exports[`<Faqs /> should render 1`] = `
             >
               <span
                 className="icon icon-common"
-                data-icon="ǘ"
+                data-icon="n"
               />
                
               Submit a ticket

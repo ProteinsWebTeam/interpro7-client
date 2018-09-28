@@ -73,6 +73,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
           <li className={f('tabs-title')} key={e.name}>
             <BrowseTabsLink
               to={e.to}
+              exact={e.exact}
               name={e.name}
               data={data}
               counter={e.counter}

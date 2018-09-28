@@ -14,6 +14,8 @@ import generateHref from './utils/generate-href';
 import generateRel from './utils/generate-rel';
 import generateClassName from './utils/generate-classname';
 
+import { DEV } from 'config';
+
 const happenedWithModifierKey = event =>
   !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 const happenedWithLeftClick = event => event.button === 0;
@@ -92,6 +94,7 @@ class Link extends PureComponent /*:: <Props> */ {
       event.preventDefault();
       return;
     }
+
     if (onClick) onClick(event);
     if (event.defaultPrevented) return;
     closeEverything();
@@ -127,19 +130,42 @@ class Link extends PureComponent /*:: <Props> */ {
       // passed down
       ...props
     } = this.props;
-    const nextCustomLocation = getNextLocation(customLocation, to) || {};
-    nextCustomLocation.description = descriptionToDescription(
-      nextCustomLocation.description,
-    );
-    const _href = generateHref(nextCustomLocation, href);
-    const activeClassName = generateClassName(
-      activeClass,
-      customLocation,
-      href,
-      _href,
-      exact,
-    );
-    if (disabled) {
+    let _disabled = disabled;
+    let _children = children;
+    let _href;
+    let activeClassName;
+    try {
+      const nextCustomLocation = getNextLocation(customLocation, to) || {};
+      nextCustomLocation.description = descriptionToDescription(
+        nextCustomLocation.description,
+      );
+      _href = generateHref(nextCustomLocation, href);
+      activeClassName = generateClassName(
+        activeClass,
+        customLocation,
+        href,
+        _href,
+        exact,
+      );
+    } catch (error) {
+      console.error(error);
+      _disabled = true;
+      if (DEV) {
+        props.style = {
+          ...(props.style || {}),
+          border: '1px dashed red',
+          color: 'darkred',
+        };
+        _children = (
+          <>
+            ⚠️
+            {children}
+            ⚠️
+          </>
+        );
+      }
+    }
+    if (_disabled) {
       props.style = {
         ...(props.style || {}),
         // userSelect: 'none',
@@ -158,7 +184,7 @@ class Link extends PureComponent /*:: <Props> */ {
         className={cn(className, activeClassName) || null}
         onClick={this.handleClick}
       >
-        {children}
+        {_children}
       </a>
     );
   }

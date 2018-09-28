@@ -62,6 +62,11 @@ hr {
   flex-shrink: 0;
 } /*important so the radio button doesn't resize for taxonomy filter*/
 
+/* target Member Database Type filter*/
+.list-entries label {
+  text-transform: capitalize;
+}
+
 /* Medium + */
 @media screen and (min-width: 40em) and (max-width: 56em) {
   /*.filter-panel label span {display: none;}

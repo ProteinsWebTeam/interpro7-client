@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 
 import { schedule } from 'timing-functions/src';
@@ -87,7 +87,7 @@ const CookieFooterAsync = loadable({
           window.document.cookie.match(/cookies-accepted=(true)/i)[1]
         )
           return;
-      } catch (_) {
+      } catch {
         return import(/* webpackChunkName: "cookie-banner" */ 'components/CookieBanner');
       }
     }),
@@ -97,7 +97,7 @@ const CookieFooterAsync = loadable({
 const renderNull = () => null;
 
 const Root = () => (
-  <Fragment>
+  <>
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
     <LoadingBarAsync />
     <Overlay />
@@ -120,7 +120,7 @@ const Root = () => (
     <ErrorBoundary renderOnError={renderNull}>
       <CookieFooterAsync />
     </ErrorBoundary>
-  </Fragment>
+  </>
 );
 
 export default Root;

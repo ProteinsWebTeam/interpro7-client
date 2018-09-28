@@ -34,27 +34,28 @@ class Actions extends PureComponent {
       <div>
         <Tooltip title="Download job">
           <Link
-            // TEMP while we wait for latest update EBI framework
-            // className={f('button', 'secondary', 'icon', 'icon-common')}
-            className={f('button', 'secondary', 'icon', 'icon-functional')}
+            className={f('icon', 'icon-common', 'ico-neutral')}
             href={blobURL}
             download={localID}
             disabled={!blobURL}
             aria-label="Download job"
             data-icon="&#x3d;"
-            // data-icon="&#x3d;"
-            style={{ color: 'white' }}
+            style={{ fontSize: '160%', border: 'none' }}
           />
         </Tooltip>
         <Tooltip title="Delete job">
           <button
-            className={f('button', 'alert')}
-            type="button"
+            style={{ fontSize: '120%' }}
+            className={f(
+              'icon',
+              'icon-common',
+              'ico-neutral',
+              'margin-left-large',
+            )}
             onClick={this._handleDelete}
+            data-icon="&#xf1f8;"
             aria-label="Delete job"
-          >
-            ✖
-          </button>
+          />
         </Tooltip>
       </div>
     );

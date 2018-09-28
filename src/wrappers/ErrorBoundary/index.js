@@ -9,7 +9,7 @@ import { customLocationSelector } from 'reducers/custom-location';
 
 import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
-/*:: import type CustomLocation from 'reducers/custom-location/index.js'; */
+/*:: import typeof CustomLocation from 'reducers/custom-location/index.js'; */
 
 const defaultRenderOnError = _ => <ErrorMessage />;
 

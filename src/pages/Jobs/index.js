@@ -1,11 +1,14 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import ErrorBoundary from 'wrappers/ErrorBoundary';
+import Loading from 'components/SimpleCommonComponents/Loading';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
+
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataWebPage } from 'schema_org/processors';
@@ -55,6 +58,15 @@ const jobAccessionSelector = createSelector(
   value => value,
 );
 
+const _IPScanResultSafeGuardIfNotRehydratedYet = ({ jobs, ...props }) => {
+  if (!jobs) return <Loading />;
+  return <IPScanResult {...props} />;
+};
+const jobSelector = createSelector(state => state.jobs, jobs => ({ jobs }));
+const IPScanResultSafeGuardIfNotRehydratedYet = connect(jobSelector)(
+  _IPScanResultSafeGuardIfNotRehydratedYet,
+);
+
 const InterProScanInnerSwitch = props => (
   <Wrapper>
     <ErrorBoundary>
@@ -62,7 +74,7 @@ const InterProScanInnerSwitch = props => (
         {...props}
         locationSelector={jobAccessionSelector}
         indexRoute={IPScanStatus}
-        catchAll={IPScanResult}
+        catchAll={IPScanResultSafeGuardIfNotRehydratedYet}
       />
     </ErrorBoundary>
   </Wrapper>

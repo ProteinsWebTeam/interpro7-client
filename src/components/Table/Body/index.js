@@ -56,12 +56,17 @@ class Body extends PureComponent {
     ok: T.bool,
     status: T.number,
     rows: T.array.isRequired,
+    rowKey: T.string,
     columns: T.array.isRequired,
     notFound: T.bool,
   };
 
+  static defaultProps = {
+    rowKey: 'accession',
+  };
+
   render() {
-    const { loading, ok, status, rows, columns, notFound } = this.props;
+    const { loading, ok, status, rows, rowKey, columns, notFound } = this.props;
     const message = getStatusMessage(status);
     if (message) return <NoRows>{message}</NoRows>;
     // don't change next line to “!ok”, might be undefined
@@ -76,7 +81,7 @@ class Body extends PureComponent {
           const extraData = row.extra_fields;
           return (
             <Row
-              key={rowData.accession || index}
+              key={rowData[rowKey] || index}
               row={rowData}
               columns={columns}
               extra={extraData}

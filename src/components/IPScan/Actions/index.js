@@ -61,13 +61,12 @@ class Actions extends PureComponent {
         {/* </Tooltip> */}
         <Tooltip title="Delete job">
           <button
-            className={f('button', 'tiny', 'alert')}
-            type="button"
+            style={{ fontSize: '120%' }}
+            className={f('icon', 'icon-common', 'ico-neutral')}
             onClick={this._handleDelete}
+            data-icon="&#xf1f8;"
             aria-label="Delete job"
-          >
-            ✖
-          </button>
+          />
         </Tooltip>
       </div>
     );
