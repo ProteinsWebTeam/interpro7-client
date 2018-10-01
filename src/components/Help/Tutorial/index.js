@@ -16,16 +16,18 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
       <section>
         <h3>Tutorials</h3>
         <p>A number of online tutorials relating to InterPro are available.</p>
-        <div className={f('flex-column', 'tutorials')}>
-          <div className={f('card-grid', 'tuto-method')}>
+        <div className={f('flex-column')}>
+          <div className={f('card-grid')}>
             <Link href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies">
-              <div className={f('card-image')}>
-                <div className={f('card-label')}>Tutorial</div>
+              <div className={f('card-image', 'tuto-method')}>
+                <div className={f('card-tag', 'tag-tuto')}>Tutorial</div>
               </div>
               <div className={f('card-content')}>
                 <div className={f('card-title')}>
-                  InterPro: A case study of 3 protein family building
-                  methodologies
+                  <h4>
+                    InterPro: A case study of 3 protein family building
+                    methodologies
+                  </h4>
                 </div>
                 <div className={f('card-info')}>
                   <div className={f('card-info-author')}>
@@ -65,16 +67,18 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
             </Link>
           </div>
 
-          <div className={f('card-grid', 'tuto-what')}>
+          <div className={f('card-grid')}>
             <Link href="//www.ebi.ac.uk/training/online/course/interpro-functional-and-structural-analysis-protei/what-interpro">
-              <div className={f('card-image')}>
-                <div className={f('card-label')}>Tutorial</div>
+              <div className={f('card-image', 'tuto-what')}>
+                <div className={f('card-tag', 'tag-tuto')}>Tutorial</div>
               </div>
 
               <div className={f('card-content')}>
                 <div className={f('card-title')}>
-                  InterPro: functional and structural analysis of protein
-                  sequences
+                  <h4>
+                    InterPro: functional and structural analysis of protein
+                    sequences
+                  </h4>
                 </div>
                 <div className={f('card-info')}>
                   <div className={f('card-info-author')}>
@@ -111,14 +115,17 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
             </Link>
           </div>
 
-          <div className={f('card-grid', 'tuto-intro')}>
+          <div className={f('card-grid')}>
             <Link href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou">
-              <div className={f('card-image')}>
-                <div className={f('card-label')}>Tutorial</div>
+              <div className={f('card-image', 'tuto-intro')}>
+                <div className={f('card-tag', 'tag-tuto')}>Tutorial</div>
               </div>
               <div className={f('card-content')}>
                 <div className={f('card-title')}>
-                  Protein classification: An introduction to EMBL-EBI resources
+                  <h4>
+                    Protein classification: An introduction to EMBL-EBI
+                    resources
+                  </h4>
                 </div>
                 <div className={f('card-info')}>
                   <div className={f('card-info-author')}>
@@ -155,13 +162,15 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
             </Link>
           </div>
 
-          <div className={f('card-grid', 'tuto-tour')}>
+          <div className={f('card-grid')}>
             <Link href="//www.ebi.ac.uk/training/online/course/interpro-quick-tour">
-              <div className={f('card-image')}>
-                <div className={f('card-label')}>Tutorial</div>
+              <div className={f('card-image', 'tuto-tour')}>
+                <div className={f('card-tag', 'tag-tuto')}>Tutorial</div>
               </div>
               <div className={f('card-content')}>
-                <div className={f('card-title')}>A Quick Tour of InterPro</div>
+                <div className={f('card-title')}>
+                  <h4>A Quick Tour of InterPro</h4>
+                </div>
                 <div className={f('card-info')}>
                   <div className={f('card-info-author')}>
                     <em
