@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
@@ -42,7 +42,7 @@ class IsReferenceFilter extends PureComponent {
     const { page, proteome_is_reference: _, ...search } = customLocation.search;
     if (labels.has(value) && (value === 'true' || value === 'false')) {
       search.is_reference = value;
-    } else if (search.has('is_reference')) {
+    } else if ('is_reference' in search) {
       delete search.is_reference;
     }
     goToCustomLocation({ ...customLocation, search });
@@ -76,12 +76,14 @@ class IsReferenceFilter extends PureComponent {
                 style={{ margin: '0.25em' }}
               />
               <span>{labels.get(key)}</span>
-              <NumberLabel
-                value={value}
+              <NumberComponent
+                label
                 loading={loading}
                 className={f('filter-label')}
                 abbr
-              />
+              >
+                {value}
+              </NumberComponent>
             </label>
           </div>
         ))}
