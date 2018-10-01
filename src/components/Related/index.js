@@ -17,6 +17,9 @@ import { toPlural } from 'utils/pages';
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
 
+import FiltersPanel from 'components/FiltersPanel';
+import CurationFilter from 'components/Protein/ProteinListFilters/CurationFilter';
+
 import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
@@ -234,6 +237,11 @@ export class _RelatedAdvanced extends PureComponent {
             </p>
           </div>
         </div>
+        {focusType === 'protein' && (
+          <FiltersPanel>
+            <CurationFilter label="UniProt Curation" />
+          </FiltersPanel>
+        )}
         <Matches
           actualSize={actualSize}
           matches={secondaryData.reduce(

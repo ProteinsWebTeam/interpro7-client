@@ -35,7 +35,10 @@ class CurationFilter extends PureComponent {
       ...this.props.customLocation,
       description: {
         ...this.props.customLocation.description,
-        protein: { db: value },
+        protein: {
+          ...this.props.customLocation.description.protein,
+          db: value,
+        },
       },
       search,
     });
@@ -92,6 +95,15 @@ const getUrl = createSelector(
       ...description,
       protein: { db: 'UniProt' },
     };
+    // For Subpages
+    if (description.main.key !== 'protein') {
+      _description.main = { key: 'protein' };
+      _description[description.main.key] = {
+        ...description[description.main.key],
+        isFilter: true,
+      };
+    }
+
     // omit from search
     const { search: _, ..._search } = search;
     // add to search
