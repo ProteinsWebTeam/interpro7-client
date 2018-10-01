@@ -22,38 +22,43 @@ export const ParagraphWithCites = ({
   withoutIDs,
 }) => (
   <div className={styles.paragraph}>
-    {p.split(/<cite id="([^"]+)" ?\/>/i /* /\[(PUB\d+)\]/i*/).map((part, i) => {
-      const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
-      return i % 2 ? (
-        <sup key={i}>
-          <Link
-            className={f('text-high')}
-            id={withoutIDs ? null : `description-${refCounter}`}
-            to={customLocation => {
-              const key = customLocation.description.main.key;
-              return {
-                ...customLocation,
-                description: {
-                  main: { key },
-                  [key]: { db: customLocation.description[key].db, accession },
-                },
-                hash: part,
-              };
-            }}
-          >
-            [{refCounter}]
-          </Link>
-        </sup>
-      ) : (
-        <span key={i}>
-          {part === ', ' ? (
-            '\u00a0'
-          ) : (
-            <ParagraphWithTags>{part}</ParagraphWithTags>
-          )}
-        </span>
-      );
-    })}
+    {p
+      .split(/<cite id="([^"]+)" ?\/>,?/i /* /\[(PUB\d+)\]/i*/)
+      .map((part, i) => {
+        const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
+        return i % 2 ? (
+          <sup key={i}>
+            <Link
+              className={f('text-high')}
+              id={withoutIDs ? null : `description-${refCounter}`}
+              to={customLocation => {
+                const key = customLocation.description.main.key;
+                return {
+                  ...customLocation,
+                  description: {
+                    main: { key },
+                    [key]: {
+                      db: customLocation.description[key].db,
+                      accession,
+                    },
+                  },
+                  hash: part,
+                };
+              }}
+            >
+              [{refCounter}]
+            </Link>
+          </sup>
+        ) : (
+          <span key={i}>
+            {part === ', ' ? (
+              '\u00a0'
+            ) : (
+              <ParagraphWithTags>{part}</ParagraphWithTags>
+            )}
+          </span>
+        );
+      })}
   </div>
 );
 ParagraphWithCites.propTypes = {
@@ -157,6 +162,7 @@ const ParagraphWithTags = ({ children }) => (
                   .replace(/^]/, ' ')
                   .replace(/<li>/g, '&nbsp;• ')
                   .replace(/<\/li>/g, '<br>')
+                  .replace(/<ul>/g, '<br>')
                   .replace(/<\/?(ul|li)>/g, ''),
               ),
             }}
