@@ -248,12 +248,14 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                     {metadata.type === 'homologous_superfamily'
                       ? 'Overlapping entries'
                       : 'Overlapping homologous superfamilies'}
+                    <Tooltip title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75.">
+                      &nbsp;
+                      <span
+                        className={f('small', 'icon', 'icon-common')}
+                        data-icon="&#xf129;"
+                      />
+                    </Tooltip>
                   </h4>
-                  <span
-                    title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75."
-                    className={f('small', 'icon', 'icon-common')}
-                    data-icon="&#xf129;"
-                  />
                   {overlaps.map(ov => (
                     <div key={ov.accession} className={f('list-items')}>
                       <interpro-type
