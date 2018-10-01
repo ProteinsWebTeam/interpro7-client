@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import { singleEntity } from 'menuConfig';
 
@@ -104,10 +104,10 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
           <span data-content={name} className={f('name')}>
             {name === 'Entries' && (
               <i
-                data-icon="D"
+                data-icon="&#xf1c0;"
                 className={f(
                   'icon',
-                  'icon-generic',
+                  'icon-common',
                   'icon-count-sm',
                   'margin-right-medium',
                 )}
@@ -198,13 +198,15 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
           {value !== null && ' '}
           {value !== null &&
             !isNaN(value) && (
-              <NumberLabel
+              <NumberComponent
+                label
                 loading={loading}
-                value={value}
                 abbr
                 duration={usedOnTheSide ? 0 : undefined}
                 className={f('counter')}
-              />
+              >
+                {value}
+              </NumberComponent>
             )}
         </Link>
       </li>

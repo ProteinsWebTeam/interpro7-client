@@ -96,7 +96,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         {this.props.hideToggle ? null : (
           <span className={styles.toggle}>
             <Tooltip title="toggle fisheye view">
@@ -125,7 +125,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
             style={{ flex: '1' }}
           />
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

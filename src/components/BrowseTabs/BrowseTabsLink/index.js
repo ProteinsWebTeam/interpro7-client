@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import { singleEntity } from 'menuConfig';
 
@@ -49,6 +49,7 @@ const getValue = (loading, payload, counter, name) => {
 /*:: type Props = {
   to: Object | function,
   name: string,
+  exact?: boolean,
   counter: string,
   data: {
     loading: boolean,
@@ -62,6 +63,7 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
   static propTypes = {
     to: T.oneOfType([T.object, T.func]).isRequired,
     name: T.string.isRequired,
+    exact: T.bool,
     counter: T.string,
     data: T.shape({
       loading: T.bool.isRequired,
@@ -75,6 +77,7 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
     const {
       to,
       name,
+      exact,
       counter,
       data: { loading, payload },
       isFirstLevel,
@@ -88,6 +91,7 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
     return (
       <Link
         to={to}
+        exact={exact}
         className={f('browse-tabs-link', { ['is-signature']: isSignature })}
         activeClass={f('is-active', 'is-active-tab')}
         // disabled={!isFirstLevel && !isNaN(value) && !value}
@@ -95,7 +99,11 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
         {name}
         {value !== null && ' '}
         {value !== null &&
-          !isNaN(value) && <NumberLabel value={value} loading={loading} abbr />}
+          !isNaN(value) && (
+            <NumberComponent label loading={loading} abbr>
+              {value}
+            </NumberComponent>
+          )}
       </Link>
     );
   }

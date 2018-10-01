@@ -53,7 +53,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
       }
       if (this._LinkRef.current)
         window.twttr.widgets.load(this._LinkRef.current);
-    } catch (_) {
+    } catch {
       /**/
     }
   }
@@ -68,7 +68,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
         <div className={f('columns')} style={noPadding}>
           <div className={f('jumbo-news')}>
             <div className={f('jumbo-news-container')} ref={this._ref}>
-              <div className={f('icon', 'icon-common')} data-icon="🐦" />
+              <div className={f('icon', 'icon-common')} data-icon="&#xf099;" />
               <Link
                 ref={this._LinkRef}
                 data-dnt="true"

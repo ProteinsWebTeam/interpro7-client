@@ -22,7 +22,7 @@ export default async () => {
       // If low battery and discharging, restriction!
       return !battery.isCharging && battery.level < LOW_BATTERY_LEVEL;
     }
-  } catch (_) {
+  } catch {
     /**/
   }
   return false;

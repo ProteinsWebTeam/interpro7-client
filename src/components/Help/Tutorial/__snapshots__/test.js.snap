@@ -42,7 +42,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <span
                 className="icon icon-common"
-                data-icon="ȵ"
+                data-icon=""
               />
                
               Lorna Richardson, Shoshana Brown, Paul Thomas, David Haft
@@ -53,7 +53,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <span
                 className="icon icon-common"
-                data-icon="Ŏ"
+                data-icon=""
               />
                
               Beginner
@@ -63,7 +63,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <span
                 className="icon icon-common"
-                data-icon=""
+                data-icon=""
               />
                
               1 hour
@@ -108,7 +108,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <em
                 className="icon icon-common"
-                data-icon="ȵ"
+                data-icon=""
               />
                
               Alex Mitchell
@@ -118,7 +118,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <em
                 className="icon icon-common"
-                data-icon="Ŏ"
+                data-icon=""
               />
                
               Beginner
@@ -128,7 +128,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <em
                 className="icon icon-common"
-                data-icon=""
+                data-icon=""
               />
                
               1 hour
@@ -173,7 +173,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <em
                 className="icon icon-common"
-                data-icon="ȵ"
+                data-icon=""
               />
                
               Amaia Sangrador
@@ -184,7 +184,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <em
                 className="icon icon-common"
-                data-icon="Ŏ"
+                data-icon=""
               />
                
               Beginner
@@ -194,7 +194,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <em
                 className="icon icon-common"
-                data-icon=""
+                data-icon=""
               />
                
               0.5 hour
@@ -239,7 +239,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <em
                 className="icon icon-common"
-                data-icon="ȵ"
+                data-icon=""
               />
                
               Alex Mitchell
@@ -250,7 +250,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <em
                 className="icon icon-common"
-                data-icon="Ŏ"
+                data-icon=""
               />
                
               Beginner
@@ -260,7 +260,7 @@ exports[`<Tutorial /> should render 1`] = `
             >
               <em
                 className="icon icon-common"
-                data-icon=""
+                data-icon=""
               />
                
               0.5 hour

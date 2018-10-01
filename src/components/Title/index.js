@@ -180,7 +180,7 @@ class Title extends PureComponent /*:: <Props> */ {
                 <Tooltip title="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny.">
                   <span
                     className={f('small', 'icon', 'icon-common')}
-                    data-icon="ℹ"
+                    data-icon="&#xf129;"
                     aria-label="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny."
                   />
                 </Tooltip>
@@ -194,7 +194,7 @@ class Title extends PureComponent /*:: <Props> */ {
                 <Tooltip title="A Set is defined as a group of related entries">
                   <span
                     className={f('small', 'icon', 'icon-common')}
-                    data-icon="ℹ"
+                    data-icon="&#xf129;"
                   />
                 </Tooltip>
               </div>

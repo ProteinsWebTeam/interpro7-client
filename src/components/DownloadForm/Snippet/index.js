@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
-import template from 'lodash-es/template';
+import { template } from 'lodash-es';
 import ClipboardJS from 'clipboard';
 
 import SyntaxHighlighter, {
@@ -15,8 +15,8 @@ import blockEvent from 'utils/block-event';
 
 import { addToast } from 'actions/creators';
 
-import jsRaw from 'raw-loader!../../../snippets/node/template.js.tmpl';
-import pythonRaw from 'raw-loader!../../../snippets/python/template.py';
+import jsRaw from 'raw-loader!../../../snippets/template.js.tmpl';
+import pythonRaw from 'raw-loader!../../../snippets/template.py.tmpl';
 
 import f from 'styles/foundation';
 
@@ -31,6 +31,7 @@ const lut = new Map([
     {
       template: template(jsRaw, options),
       type: 'application/javascript',
+      syntax: 'javascript',
     },
   ],
   [
@@ -38,6 +39,7 @@ const lut = new Map([
     {
       template: template(pythonRaw, options),
       type: 'application/x-python',
+      syntax: 'python',
     },
   ],
 ]);
@@ -54,6 +56,7 @@ export class Snippet extends PureComponent {
 
     this.state = { language: 'js', code: null, href: null };
 
+    console.log('constructor');
     this._ref = React.createRef();
   }
 
@@ -134,12 +137,10 @@ export class Snippet extends PureComponent {
               value={language}
             >
               <option value="js">JavaScript (node, version ≥ 10)</option>
-              <option value="py" disabled>
-                Python (version ≥ 3, not available yet)
-              </option>
-              <option value="pl" disabled>
+              <option value="py">Python (version ≥ 3)</option>
+              {/* <option value="pl" disabled>
                 Perl (not available yet)
-              </option>
+              </option> */}
             </select>
           </label>
           <button
@@ -156,7 +157,7 @@ export class Snippet extends PureComponent {
           >
             Download script file
           </a>
-          <SyntaxHighlighter language="javascript" style={docco}>
+          <SyntaxHighlighter language={lut.get(language).syntax} style={docco}>
             {code}
           </SyntaxHighlighter>
         </div>

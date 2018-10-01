@@ -19,7 +19,7 @@ import Table, {
   Exporter,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import getExtUrlFor from 'utils/url-patterns';
 import { toPlural } from 'utils/pages';
@@ -91,7 +91,7 @@ class SummaryCounterEntries extends PureComponent {
             className={f(proteins ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr />
+            <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
             </span>
@@ -119,7 +119,7 @@ class SummaryCounterEntries extends PureComponent {
             className={f(domainArchitectures ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-count-ida')} />{' '}
-            <NumberComponent value={domainArchitectures} abbr />
+            <NumberComponent abbr>{domainArchitectures}</NumberComponent>
             <span className={f('label-number')}>domain architectures</span>
           </Link>
         </Tooltip>
@@ -145,7 +145,7 @@ class SummaryCounterEntries extends PureComponent {
             className={f(taxa ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-count-species')} />{' '}
-            <NumberComponent value={taxa} abbr />
+            <NumberComponent abbr>{taxa}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
             </span>
@@ -173,7 +173,7 @@ class SummaryCounterEntries extends PureComponent {
             className={f(structures ? null : 'ico-disabled')}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
-            <NumberComponent value={structures} abbr />
+            <NumberComponent abbr>{structures}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('structure', structures)}
             </span>
@@ -201,7 +201,7 @@ class SummaryCounterEntries extends PureComponent {
               className={f(sets ? null : 'ico-disabled')}
             >
               <div className={f('icon', 'icon-count-set')} />{' '}
-              <NumberComponent value={sets} abbr />
+              <NumberComponent abbr>{sets}</NumberComponent>
               <span className={f('label-number')}>{toPlural('set', sets)}</span>
             </Link>
           </Tooltip>
@@ -237,7 +237,7 @@ class DescriptionEntries extends PureComponent {
       .sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
 
     return (
-      <React.Fragment>
+      <>
         <div className={f('card-description', 'card-block')}>
           <Description
             textBlocks={[desc]}
@@ -257,7 +257,7 @@ class DescriptionEntries extends PureComponent {
         >
           […]
         </Link>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -272,7 +272,7 @@ class EntryCard extends PureComponent {
   render() {
     const { data, search, entryDB } = this.props;
     return (
-      <React.Fragment>
+      <>
         <div className={f('card-header')}>
           <Link
             to={{
@@ -349,19 +349,19 @@ class EntryCard extends PureComponent {
                 }}
                 disabled={!data.metadata.integrated}
               >
-                {data.metadata.integrated}
+                {(data.metadata.accession || '').toUpperCase()}
               </Link>
             </div>
           )}
           <div>
             {' '}
             <HighlightedText
-              text={data.metadata.accession}
+              text={(data.metadata.accession || '').toUpperCase()}
               textToHighlight={search}
             />
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -522,7 +522,7 @@ class List extends PureComponent {
                   />
                   <span className={f('acc-row')}>
                     <HighlightedText
-                      text={accession}
+                      text={accession.toUpperCase()}
                       textToHighlight={search.search}
                     />
                   </span>
@@ -636,7 +636,7 @@ class List extends PureComponent {
                                 },
                               }}
                             >
-                              {accession}
+                              {accession.toUpperCase()}
                             </Link>
                           </Tooltip>
                         )),
@@ -660,7 +660,9 @@ class List extends PureComponent {
                         search: {},
                       }}
                     >
-                      <Tooltip title={`${accession}`}>{accession}</Tooltip>
+                      <Tooltip title={`${accession}`}>
+                        {accession.toUpperCase()}
+                      </Tooltip>
                     </Link>
                   ) : (
                     ''
