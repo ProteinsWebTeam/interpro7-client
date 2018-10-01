@@ -1,6 +1,5 @@
 // Polyfills
 /* global ga: false */
-import 'babel-polyfill';
 // import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 
 import { elementMatches as elementMatchesPolyfill } from 'utils/polyfills';
@@ -16,6 +15,15 @@ import hmr from 'index-hmr';
 import config, { DEV } from 'config';
 
 elementMatchesPolyfill();
+
+// "add to homescreen" banner management
+// see https://developers.google.com/web/updates/2018/06/a2hs-updates
+// save the event in an exported object to be able to use it wherever we want
+export const installPrompt = {};
+window.addEventListener('beforeinstallprompt', event => {
+  event.preventDefault();
+  installPrompt.event = event;
+});
 
 const schemaOrgManager = (...args) =>
   import(/* webpackChunkName: "schemaOrg" */ 'schema_org').then(
@@ -93,7 +101,7 @@ const handleError = error => {
   }
   try {
     error.preventDefault();
-  } catch (_) {
+  } catch {
     /**/
   }
   ga('send', 'exception', { exDescription: error.message, exFatal: true });

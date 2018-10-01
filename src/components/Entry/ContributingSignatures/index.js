@@ -1,9 +1,12 @@
 import React from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import loadable from 'higherOrder/loadable';
+import loadData from 'higherOrder/loadData';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -49,18 +52,24 @@ SignatureLink.propTypes = {
   label: T.string.isRequired,
 };
 
-const ContributingSignatures = ({ contr } /*: {contr: Object} */) => {
+const ContributingSignatures = ({ contr, data } /*: {contr: Object} */) => {
+  const metaDB = data.loading || !data.payload ? {} : data.payload.databases;
   const contrEntries = Object.entries(contr);
   return (
     <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
       <div className={f('md-icon-list-box', 'margin-bottom-large')}>
-        <h5>Contributing entr{contrEntries.length < 2 ? 'y' : 'ies'}</h5>
+        <h5>
+          Contributing Entr
+          {contrEntries.length < 2 ? 'y' : 'ies'}
+        </h5>
         <ul className={f('md-list')}>
           {contrEntries.map(([db, signatures]) => (
             <li key={db}>
               <MemberSymbol type={db} className={f('md-small')} />
               <div>
-                <span className={f('db-name')}>{db}: </span>{' '}
+                <span className={f('db-name')}>
+                  {(metaDB[db] && metaDB[db].name) || db}:{' '}
+                </span>{' '}
                 {Object.entries(signatures).map(([accession, name], index) => (
                   <React.Fragment key={accession}>
                     <SchemaOrgData
@@ -68,7 +77,11 @@ const ContributingSignatures = ({ contr } /*: {contr: Object} */) => {
                       processData={schemaProcessData}
                     />
                     {index ? ', ' : ''}
-                    <SignatureLink db={db} accession={accession} label={name} />
+                    <SignatureLink
+                      db={db}
+                      accession={accession.toUpperCase()}
+                      label={name}
+                    />
                   </React.Fragment>
                 ))}
               </div>
@@ -83,4 +96,4 @@ ContributingSignatures.propTypes = {
   contr: T.object.isRequired,
 };
 
-export default ContributingSignatures;
+export default loadData(getUrlForMeta)(ContributingSignatures);

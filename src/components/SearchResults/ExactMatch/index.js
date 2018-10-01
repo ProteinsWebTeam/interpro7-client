@@ -10,9 +10,10 @@ import loadData from 'higherOrder/loadData';
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(ebiGlobalStyles, ipro);
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
 
 const INTERPRO_ACCESSION_PADDING = 6;
 
@@ -29,8 +30,11 @@ class ExactMatchWrapper extends PureComponent /*:: <EMWProps> */ {
   render() {
     const { to, children } = this.props;
     return (
-      <div className={f('callout', 'info')}>
-        <span>Found an exact match: </span>
+      <div className={f('callout', 'warning', 'margin-bottom-medium')}>
+        <span className={f('icon', 'icon-common')} data-icon="&#xf35a;">
+          {' '}
+          Found an exact match:
+        </span>{' '}
         <Link to={to}>{children}</Link>
       </div>
     );

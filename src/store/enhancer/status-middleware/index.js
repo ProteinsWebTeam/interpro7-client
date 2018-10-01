@@ -10,6 +10,10 @@ import { serverStatus, browserStatus } from 'actions/creators';
 
 const DEFAULT_SCHEDULE_DELAY = 2000; // 2 seconds
 const DEFAULT_LOOP_TIMEOUT = 60000; // one minute
+const MAX_LOOP_TIMEOUT = 360000; // one hour
+const BACK_OFF_RATE = 1.5;
+
+let loopTimeoutWithBackOff = DEFAULT_LOOP_TIMEOUT;
 
 const checkStatusesAndDispatch = async function(
   { status: { servers, browser }, settings },
@@ -30,13 +34,20 @@ const checkStatusesAndDispatch = async function(
         useCache: false,
       });
       dispatch(serverStatus(endpoint, response.ok));
-    } catch (_) {
+    } catch {
       dispatch(serverStatus(endpoint, false));
+      // Something bad happened, reduce the loop timeout
+      loopTimeoutWithBackOff = DEFAULT_LOOP_TIMEOUT;
     }
   }
+  // Increment the current loop timeout
+  loopTimeoutWithBackOff = Math.min(
+    MAX_LOOP_TIMEOUT,
+    BACK_OFF_RATE * loopTimeoutWithBackOff,
+  );
 };
 
-const middleware /*: Middleware */ = ({ dispatch, getState }) => {
+const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   let loopID;
   let running = false;
   const loop = async () => {
@@ -54,13 +65,13 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
     } catch (error) {
       console.error(error);
     } finally {
-      loopID = setTimeout(loop, DEFAULT_LOOP_TIMEOUT);
+      loopID = setTimeout(loop, loopTimeoutWithBackOff);
       running = false;
     }
   };
 
   // start the logic
-  running = loop();
+  loop();
 
   // Browser connection events
   window.addEventListener('online', () => dispatch(browserStatus(true)));
@@ -71,7 +82,7 @@ const middleware /*: Middleware */ = ({ dispatch, getState }) => {
       // In case settings changes, update the server statuses
       case CHANGE_SETTINGS:
       case RESET_SETTINGS:
-        running = loop();
+        loop();
         break;
       default:
         break;

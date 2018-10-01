@@ -14,8 +14,8 @@ import { latests } from 'staticData/home';
 
 import loadData from 'higherOrder/loadData';
 import loadWebComponent from 'utils/load-web-component';
-import { NumberComponent } from 'components/NumberLabel';
-import numberToDisplayText from 'components/NumberLabel/utils/number-to-display-text';
+import NumberComponent from 'components/NumberComponent';
+import numberToDisplayText from 'components/NumberComponent/utils/number-to-display-text';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -133,7 +133,9 @@ class LatestEntry extends PureComponent {
                       className={f('icon', 'icon-conceptual')}
                       data-icon="&#x50;"
                     />{' '}
-                    <NumberComponent value={c.P} abbr noTitle />
+                    <NumberComponent abbr noTitle>
+                      {c.P}
+                    </NumberComponent>
                     <span className={f('label-number')}>
                       {toPlural('protein', c.P)}
                     </span>
@@ -162,7 +164,9 @@ class LatestEntry extends PureComponent {
                     disabled={!c.I}
                   >
                     <div className={f('icon', 'icon-count-ida')} />{' '}
-                    <NumberComponent value={c.I} abbr noTitle />
+                    <NumberComponent abbr noTitle>
+                      {c.I}
+                    </NumberComponent>
                     <span className={f('label-number')}>
                       domain architectures
                     </span>
@@ -191,7 +195,9 @@ class LatestEntry extends PureComponent {
                     disabled={!c.O}
                   >
                     <div className={f('icon', 'icon-count-organisms')} />{' '}
-                    <NumberComponent value={c.O} abbr noTitle />
+                    <NumberComponent abbr noTitle>
+                      {c.O}
+                    </NumberComponent>
                     <span className={f('label-number')}>
                       {toPlural('taxonomy', c.O)}
                     </span>
@@ -222,7 +228,9 @@ class LatestEntry extends PureComponent {
                       className={f('icon', 'icon-conceptual')}
                       data-icon="s"
                     />{' '}
-                    <NumberComponent value={c.S} abbr noTitle />
+                    <NumberComponent abbr noTitle>
+                      {c.S}
+                    </NumberComponent>
                     <span className={f('label-number')}>
                       {toPlural('structure', c.S)}
                     </span>
@@ -262,10 +270,10 @@ class LatestEntry extends PureComponent {
                 //       }}
                 //     >
                 //       <div
-                //         className={f('icon', 'icon-generic')}
-                //         data-icon="D"
+                //         className={f('icon', 'icon-common')}
+                //         data-icon="&#xf1c0;"
                 //       />{' '}
-                //       <NumberComponent value={entry.Si} abbr />
+                //       <NumberComponent abbr>{entry.Si}</NumberComponent>
                 //       <span className={f('label-number')}>
                 //         signatures
                 //       </span>
@@ -295,7 +303,7 @@ class LatestEntry extends PureComponent {
                 //       <div
                 //         className={f('icon', 'icon-count-go')}
                 //       />{' '}
-                //       <NumberComponent value={entry.Go} abbr />
+                //       <NumberComponent abbr>{entry.Go}</NumberComponent>
                 //         <span className={f('label-number')}>
                 //           GO terms
                 //         </span>
@@ -323,10 +331,10 @@ class LatestEntry extends PureComponent {
                 //       }}
                 //     >
                 //       <div
-                //         className={f('icon', 'icon-generic')}
-                //         data-icon="P"
+                //         className={f('icon', 'icon-common')}
+                //         data-icon="&#xf2ec;"
                 //       />{' '}
-                //       <NumberComponent value={entry.Pu} abbr />
+                //       <NumberComponent abbr>{entry.Pu}</NumberComponent>
                 //       <span className={f('label-number')}>
                 //         publications
                 //       </span>
@@ -346,17 +354,17 @@ class LatestEntry extends PureComponent {
             <Tooltip title="Add this entry to your favorites">
               <Link
                 to={{ description: { other: ['settings'] } }}
-                className={f('icon', 'icon-functional')}
-                data-icon="+"
-                aria-label="settings"
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf067;"
+                aria-label="add to favorite"
               />
             </Tooltip>{' '}
             <Tooltip title="Watch: be notified when this entry is updated">
               <Link
                 to={{ description: { other: ['settings'] } }}
-                className={f('icon', 'icon-functional')}
-                data-icon="4"
-                aria-label="settings"
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf06e;"
+                aria-label="Watch"
               />
             </Tooltip>{' '}
             <Tooltip title="Suggest an edit">
@@ -370,8 +378,9 @@ class LatestEntry extends PureComponent {
                     },
                   },
                 }}
-                className={f('icon', 'icon-functional')}
-                data-icon="5"
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf044;"
+                aria-label="edit"
               />
             </Tooltip>
           </div>
