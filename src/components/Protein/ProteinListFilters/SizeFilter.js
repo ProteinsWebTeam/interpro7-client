@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -29,7 +29,7 @@ class SizeFilter extends PureComponent {
     }).isRequired,
   };
 
-  _handleSelection = ({ target: { value } }) => {
+  handleSelection = ({ target: { value } }) => {
     const { page, size: _, ...search } = this.props.customLocation.search;
     if (value !== 'All') search.size = value;
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
@@ -55,7 +55,7 @@ class SizeFilter extends PureComponent {
                 type="radio"
                 name="protein_size"
                 value={term || 'All'}
-                onChange={this._handleSelection}
+                onChange={this.handleSelection}
                 checked={
                   (term === 'All' && !search.size) || search.size === term
                 }
@@ -63,12 +63,14 @@ class SizeFilter extends PureComponent {
               />
               <span>{term}</span>
               {typeof count === 'undefined' || isNaN(count) ? null : (
-                <NumberLabel
-                  value={count}
+                <NumberComponent
+                  label
                   loading={loading}
                   className={f('filter-label')}
                   abbr
-                />
+                >
+                  {count}
+                </NumberComponent>
               )}
             </label>
           </div>

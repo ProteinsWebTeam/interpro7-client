@@ -3,12 +3,11 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import { sleep } from 'timing-functions/src';
-import noop from 'lodash-es/noop';
-import _get from 'lodash-es/get';
+import { noop, get as _get } from 'lodash-es';
 
 import config from 'config';
 
-import NumberLabel from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 
@@ -302,8 +301,7 @@ class _MemberDBSelector extends PureComponent {
                     {db.name === 'All' ? `All ${toPlural(main)}` : db.name}
                   </span>
                   {!this.props.hideCounters && (
-                    <NumberLabel
-                      value={(!loading && count) || 0}
+                    <NumberComponent
                       loading={loading}
                       className={f('label')}
                       titleType={toPlural(main, (!loading && count) || 0)}
@@ -311,7 +309,9 @@ class _MemberDBSelector extends PureComponent {
                         background: checked && config.colors.get(db.canonical),
                       }}
                       abbr
-                    />
+                    >
+                      {(!loading && count) || 0}
+                    </NumberComponent>
                   )}
                 </label>
               );

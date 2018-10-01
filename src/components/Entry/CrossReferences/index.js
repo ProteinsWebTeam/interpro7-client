@@ -32,7 +32,10 @@ const ReferenceSection = ({ accessions, name, description }) =>
       <h5 className={f('uppercase')}>
         {name}{' '}
         <Tooltip title={description}>
-          <span className={f('small', 'icon', 'icon-common')} data-icon="ℹ" />
+          <span
+            className={f('small', 'icon', 'icon-common')}
+            data-icon="&#xf129;"
+          />
         </Tooltip>
       </h5>
 

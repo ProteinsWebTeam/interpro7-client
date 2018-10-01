@@ -70,7 +70,7 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                 <ul className={f('no-bullet')}>
                   <li>
                     <UniProtLink id={metadata.accession} className={f('ext')}>
-                      View this protein in UniProtKB
+                      View {metadata.accession.toUpperCase()} in UniProtKB
                     </UniProtLink>
                   </li>
                 </ul>

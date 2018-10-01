@@ -39,7 +39,7 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                   <div className={f('card-info-author')}>
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x235;"
+                      data-icon="&#xf007;"
                     />{' '}
                     Robert D. <span className={f('sc')}>Finn</span>, Teresa K.{' '}
                     <span className={f('sc')}>Attwood</span>, Patricia C.{' '}
@@ -92,7 +92,7 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                   <div className={f('card-info-level')}>
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x1ea;"
+                      data-icon="&#xf1ea;"
                     />{' '}
                     Nucleic Acids Research, Jan 2017, (doi: 10.1093/nar/gkw1107)
                   </div>
@@ -124,7 +124,7 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                   <div className={f('card-info-author')}>
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x235;"
+                      data-icon="&#xf007;"
                     />{' '}
                     <span className={f('sc')}>Sangrador-Vegas</span> A,{' '}
                     <span className={f('sc')}>Mitchell</span> AL,{' '}
@@ -135,7 +135,7 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                   <div className={f('card-info-level')}>
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x1ea;"
+                      data-icon="&#xf1ea;"
                     />{' '}
                     Database, 2016, 1–8, (doi: 10.1093/database/baw027)
                   </div>
@@ -167,7 +167,7 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                   <div className={f('card-info-author')}>
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x235;"
+                      data-icon="&#xf007;"
                     />{' '}
                     Philip <span className={f('sc')}>Jones</span>, David{' '}
                     <span className={f('sc')}>Binns</span>, Hsin-Yu{' '}
@@ -190,7 +190,7 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                   <div className={f('card-info-level')}>
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x1ea;"
+                      data-icon="&#xf1ea;"
                     />{' '}
                     Bioinformatics, Jan 2014 (doi:10.1093/bioinformatics/btu031)
                   </div>

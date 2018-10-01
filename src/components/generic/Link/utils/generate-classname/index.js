@@ -22,7 +22,7 @@ export default (
   try {
     pathname = window.location.pathname;
     hash = getHashPartWithoutHashSign(location.hash);
-  } catch (_) {
+  } catch {
     /**/
   }
   // Not running in browser, so, for now, ignore active class

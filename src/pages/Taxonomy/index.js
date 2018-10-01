@@ -15,7 +15,7 @@ import Table, {
 import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadable from 'higherOrder/loadable';
 
@@ -159,7 +159,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!entries}
           >
             <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-            <NumberComponent value={entries} abbr />
+            <NumberComponent abbr>{entries}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
             </span>
@@ -187,7 +187,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!proteins}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
-            <NumberComponent value={proteins} abbr />
+            <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {' '}
               {toPlural('protein', proteins)}
@@ -216,7 +216,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!structures}
           >
             <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
-            <NumberComponent value={structures} abbr />{' '}
+            <NumberComponent abbr>{structures}</NumberComponent>{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
         </Tooltip>
@@ -240,7 +240,7 @@ class SummaryCounterOrg extends PureComponent {
             disabled={!proteomes}
           >
             <div className={f('icon', 'icon-common', 'icon-count-proteome')} />
-            <NumberComponent value={proteomes} abbr />{' '}
+            <NumberComponent abbr>{proteomes}</NumberComponent>{' '}
             <span className={f('label-number')}>proteomes</span>
           </Link>
         </Tooltip>
@@ -262,7 +262,7 @@ Lineage.propTypes = {
 };
 
 const TaxonomyCard = ({ data, search, entryDB }) => (
-  <React.Fragment>
+  <>
     <div className={f('card-header')}>
       <Link
         to={{
@@ -303,7 +303,7 @@ const TaxonomyCard = ({ data, search, entryDB }) => (
         />
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 TaxonomyCard.propTypes = {
   data: T.object,
@@ -423,7 +423,7 @@ class List extends PureComponent {
                     processData={schemaProcessDataTableRow}
                   />
                   <HighlightedText
-                    text={accession}
+                    text={accession.toUpperCase()}
                     textToHighlight={search.search}
                   />
                 </Link>
@@ -479,7 +479,9 @@ class List extends PureComponent {
                       },
                     }}
                   >
-                    <NumberComponent value={count} loading={loading} abbr />
+                    <NumberComponent loading={loading} abbr>
+                      {count}
+                    </NumberComponent>
                   </Link>
                 );
               }}
@@ -516,7 +518,9 @@ class List extends PureComponent {
                       },
                     }}
                   >
-                    <NumberComponent value={count} loading={loading} abbr />
+                    <NumberComponent loading={loading} abbr>
+                      {count}
+                    </NumberComponent>
                   </Link>
                 );
               }}

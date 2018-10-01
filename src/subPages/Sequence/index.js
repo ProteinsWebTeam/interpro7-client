@@ -57,22 +57,28 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
             }.isRequired,
           ),
         }),
-      ]).isRequired,
+      ]),
     }).isRequired,
+    localPayload: T.object,
   };
 
   render() {
     let accession;
     let sequence;
     let name;
-    const { payload } = this.props.data;
+    let payload = this.props.data.payload;
+    if (!payload.metadata)
+      payload = this.props.data.payload.results
+        ? this.props.data.payload.results[0]
+        : this.props.localPayload;
+    if (!payload) return null;
     if (payload.metadata) {
       accession = payload.metadata.accession;
       sequence = payload.metadata.sequence;
       name = payload.metadata.name.name;
     } else {
-      accession = payload.results[0].xref[0].identifier;
-      sequence = payload.results[0].sequence;
+      accession = payload.xref[0].identifier || '';
+      sequence = payload.sequence;
     }
     return <Sequence accession={accession} sequence={sequence} name={name} />;
   }

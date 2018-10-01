@@ -16,15 +16,17 @@
   --colors-active-form: #b9d7ef;
   --colors-progress: #d4dee5;
   --colors-tag: #1878ba; /*or marroon #e0d6a5 lightblue:#b6ced5*/
+  --colors-light-title: #505f74;
   --colors-light-txt: #4b555b;
   --colors-marktext: #fcf655;
   --colors-markprot: rgba(255, 235, 59, 0.8);
   --colors-markchart: #e8df8a;
   --colors-alert-main: #fa7e6e;
   --colors-alert-txt: tomato;
-  --colors-alert-button: #ff6246;
+  --colors-alert-more: #ff6246;
   --colors-warning-main: #efcb61;
   --colors-warning-txt: #e49902;
+  --colors-warning-bgd: #fbf8da;
   --colors-check: #2eab9f;
   --colors-accordion: rgb(120, 210, 221);
   /*ENTRY*/

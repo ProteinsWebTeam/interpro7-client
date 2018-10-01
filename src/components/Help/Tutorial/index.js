@@ -31,21 +31,21 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                   <div className={f('card-info-author')}>
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x235;"
+                      data-icon="&#xf007;"
                     />{' '}
                     Lorna Richardson, Shoshana Brown, Paul Thomas, David Haft{' '}
                   </div>
                   <div className={f('card-info-level')}>
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x14e;"
+                      data-icon="&#xf14e;"
                     />{' '}
                     Beginner
                   </div>
                   <div className={f('card-info-duration')}>
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x17;"
+                      data-icon="&#xf017;"
                     />{' '}
                     1 hour
                   </div>
@@ -80,21 +80,21 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                   <div className={f('card-info-author')}>
                     <em
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x235;"
+                      data-icon="&#xf007;"
                     />{' '}
                     Alex Mitchell
                   </div>
                   <div className={f('card-info-level')}>
                     <em
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x14e;"
+                      data-icon="&#xf14e;"
                     />{' '}
                     Beginner
                   </div>
                   <div className={f('card-info-duration')}>
                     <em
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x17;"
+                      data-icon="&#xf017;"
                     />{' '}
                     1 hour
                   </div>
@@ -124,21 +124,21 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                   <div className={f('card-info-author')}>
                     <em
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x235;"
+                      data-icon="&#xf007;"
                     />{' '}
                     Amaia Sangrador{' '}
                   </div>
                   <div className={f('card-info-level')}>
                     <em
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x14e;"
+                      data-icon="&#xf14e;"
                     />{' '}
                     Beginner
                   </div>
                   <div className={f('card-info-duration')}>
                     <em
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x17;"
+                      data-icon="&#xf017;"
                     />{' '}
                     0.5 hour
                   </div>
@@ -166,21 +166,21 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                   <div className={f('card-info-author')}>
                     <em
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x235;"
+                      data-icon="&#xf007;"
                     />{' '}
                     Alex Mitchell{' '}
                   </div>
                   <div className={f('card-info-level')}>
                     <em
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x14e;"
+                      data-icon="&#xf14e;"
                     />{' '}
                     Beginner
                   </div>
                   <div className={f('card-info-duration')}>
                     <em
                       className={f('icon', 'icon-common')}
-                      data-icon="&#x17;"
+                      data-icon="&#xf017;"
                     />{' '}
                     0.5 hour
                   </div>
