@@ -21,6 +21,7 @@ class TableView extends PureComponent {
     columns: T.array,
     notFound: T.bool,
     dataTable: T.array,
+    rowKey: T.string,
   };
 
   render() {
@@ -32,12 +33,14 @@ class TableView extends PureComponent {
       columns,
       notFound,
       dataTable,
+      rowKey,
     } = this.props;
     return (
       <table className={f('table', 'light', 'nolink', 'sorting')}>
         <Header columns={columns} notFound={notFound} />
         <Body
           rows={dataTable || []}
+          rowKey={rowKey}
           columns={columns}
           notFound={notFound}
           loading={loading}

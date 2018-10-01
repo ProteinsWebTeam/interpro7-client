@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -240,16 +240,17 @@ class ProtVista extends PureComponent {
             : ''
         } 
         </div>
-        <div>${(entry.entry_type || entry.type || '').replace('_', ' ') ||
-          ''}</div>       
-        </div>
-        <p>
-          <small>  
+        <div>
           ${
             Array.isArray(entry.source_database)
               ? entry.source_database[0]
               : entry.source_database
           }
+        ${(entry.entry_type || entry.type || '').replace('_', ' ') ||
+          ''}</div>       
+        </div>
+        <p>
+          <small>          
             ${entry.entry ? `(${entry.entry})` : ''}
           </small>
         </p>
@@ -338,7 +339,7 @@ class ProtVista extends PureComponent {
     if (NOT_MEMBER_DBS.has(entry.source_database) || entry.type === 'chain')
       return entry.accession;
     return (
-      <Fragment>
+      <>
         <Link
           to={{
             description: {
@@ -383,7 +384,7 @@ class ProtVista extends PureComponent {
               </div>
             ))}
         </div>
-      </Fragment>
+      </>
     );
   }
 
@@ -460,7 +461,7 @@ class ProtVista extends PureComponent {
                 onClick={this.handleFullScreen}
                 data-icon="F"
                 title="Full screen"
-                className={f('margin-bottom-none', 'icon', 'icon-functional')}
+                className={f('margin-bottom-none', 'icon', 'icon-common')}
               />
             </Tooltip>
           </div>

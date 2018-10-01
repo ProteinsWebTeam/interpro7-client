@@ -43,7 +43,7 @@ exports[`<Publication /> should render 1`] = `
             >
               <span
                 className="icon icon-common"
-                data-icon="ȵ"
+                data-icon=""
               />
                
               Robert D. 
@@ -377,7 +377,7 @@ exports[`<Publication /> should render 1`] = `
             >
               <span
                 className="icon icon-common"
-                data-icon="Ǫ"
+                data-icon=""
               />
                
               Nucleic Acids Research, Jan 2017, (doi: 10.1093/nar/gkw1107)
@@ -423,7 +423,7 @@ exports[`<Publication /> should render 1`] = `
             >
               <span
                 className="icon icon-common"
-                data-icon="ȵ"
+                data-icon=""
               />
                
               <span
@@ -466,7 +466,7 @@ exports[`<Publication /> should render 1`] = `
             >
               <span
                 className="icon icon-common"
-                data-icon="Ǫ"
+                data-icon=""
               />
                
               Database, 2016, 1–8, (doi: 10.1093/database/baw027)
@@ -512,7 +512,7 @@ exports[`<Publication /> should render 1`] = `
             >
               <span
                 className="icon icon-common"
-                data-icon="ȵ"
+                data-icon=""
               />
                
               Philip 
@@ -639,7 +639,7 @@ exports[`<Publication /> should render 1`] = `
             >
               <span
                 className="icon icon-common"
-                data-icon="Ǫ"
+                data-icon=""
               />
                
               Bioinformatics, Jan 2014 (doi:10.1093/bioinformatics/btu031)

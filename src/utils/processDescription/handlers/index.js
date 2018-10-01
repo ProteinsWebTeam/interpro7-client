@@ -1,6 +1,5 @@
 // @flow
-import get from 'lodash-es/get';
-import set from 'lodash-es/set';
+import { get, set } from 'lodash-es';
 
 /*:: type PossibleMain = (
   'entry' |
@@ -143,7 +142,7 @@ const memberDB = new Set([
   { name: 'prosite', re: /^PS[0-9]{5}$/i },
   { name: 'patterns', re: /^PS[0-9]{5}$/i },
   { name: 'profile', re: /^PS[0-9]{5}$/i },
-  { name: 'sfld', re: /^sfld[gf]\d{5}$/i },
+  { name: 'sfld', re: /^sfld[gfs]\d{5}$/i },
   { name: 'smart', re: /^SM[0-9]{5}$/i },
   { name: 'ssf', re: /^SSF[0-9]{5,6}$/i },
   { name: 'tigrfams', re: /^TIGR[0-9]{5}$/i },

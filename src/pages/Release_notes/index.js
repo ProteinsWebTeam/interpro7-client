@@ -1,8 +1,9 @@
+/* eslint-disable no-magic-numbers */
 import React, { PureComponent } from 'react';
 import loadWebComponent from 'utils/load-web-component';
 
 import Link from 'components/generic/Link';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import { foundationPartial } from 'styles/foundation';
@@ -38,29 +39,77 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               )}
             >
               <h3>
-                InterPro 68.0 <small> &bull; 26th April 2018</small>
+                InterPro 70.0{' '}
+                <small>
+                  • <time dateTime="2018-09-13">13th September 2018</time>
+                </small>
               </h3>
             </div>
 
             <p>Features include:</p>
 
             <ul>
-              <li>The addition of 240 InterPro entries.</li>
               <li>
-                An update to HAMAP (2018_03), PROSITE patterns (2018_02) and
-                PROSITE profiles (2018_02).
+                The addition of{' '}
+                <NumberComponent noTitle noAnimation>
+                  {662}
+                </NumberComponent>{' '}
+                InterPro entries.
               </li>
+              <li>An update to SFLD (4).</li>
               <li>
-                Integration of 381 new methods from the CATH-Gene3D (2), CDD
-                (17), HAMAP (29), PANTHER (298), Pfam (16), ProDom (1), PROSITE
-                profiles (16) and SUPERFAMILY (2) databases.
+                Integration of{' '}
+                <NumberComponent noTitle noAnimation>
+                  {886}
+                </NumberComponent>{' '}
+                new methods from the CATH-Gene3D (
+                <NumberComponent noTitle noAnimation>
+                  {5}
+                </NumberComponent>
+                ), CDD (
+                <NumberComponent noTitle noAnimation>
+                  {17}
+                </NumberComponent>
+                ), HAMAP (
+                <NumberComponent noTitle noAnimation>
+                  {1}
+                </NumberComponent>
+                ), PANTHER (
+                <NumberComponent noTitle noAnimation>
+                  {689}
+                </NumberComponent>
+                ), Pfam (
+                <NumberComponent noTitle noAnimation>
+                  {119}
+                </NumberComponent>
+                ), PIRSF (
+                <NumberComponent noTitle noAnimation>
+                  {1}
+                </NumberComponent>
+                ), PRINTS (
+                <NumberComponent noTitle noAnimation>
+                  {2}
+                </NumberComponent>
+                ), ProDom (
+                <NumberComponent noTitle noAnimation>
+                  {3}
+                </NumberComponent>
+                ), SFLD (
+                <NumberComponent noTitle noAnimation>
+                  {22}
+                </NumberComponent>
+                ) and SMART (
+                <NumberComponent noTitle noAnimation>
+                  {1}
+                </NumberComponent>
+                ) databases.
               </li>
             </ul>
 
             <h4>Contents and coverage</h4>
             <p className={f('margin-bottom-small')}>
               InterPro protein matches are now calculated for all UniProtKB and
-              UniParc proteins. InterPro release 68.0 contains{' '}
+              UniParc proteins. InterPro release 70.0 contains{' '}
               <Link
                 to={{
                   description: {
@@ -69,9 +118,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                   },
                 }}
               >
-                <NumberComponent value={33947} />
-                entries
-              </Link>, representing:
+                <NumberComponent noTitle>{35020}</NumberComponent> entries
+              </Link>
+              , representing:
             </p>
 
             <table className={f('light', 'small', 'margin-bottom-xlarge')}>
@@ -107,7 +156,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'family' },
                       }}
                     >
-                      <NumberComponent value={20795} />
+                      <NumberComponent noTitle>{21695}</NumberComponent>
                     </Link>
                   </td>
                 </tr>
@@ -133,7 +182,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'domain' },
                       }}
                     >
-                      <NumberComponent value={9099} />
+                      <NumberComponent noTitle>{9268}</NumberComponent>
                     </Link>
                   </td>
                 </tr>
@@ -159,7 +208,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'homologous_superfamily' },
                       }}
                     >
-                      <NumberComponent value={2862} />
+                      <NumberComponent noTitle>{2865}</NumberComponent>
                     </Link>
                   </td>
                 </tr>
@@ -185,7 +234,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'repeat' },
                       }}
                     >
-                      <NumberComponent value={276} />
+                      <NumberComponent noTitle>{280}</NumberComponent>
                     </Link>
                   </td>
                 </tr>
@@ -200,7 +249,13 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                       <span className={f('icon-type', 'icon-site')}>S</span>
                     </interpro-type>
                   </td>
-                  <td>Active site</td>
+                  <td>Site</td>
+                  <td />
+                </tr>
+
+                <tr>
+                  <td />
+                  <td>╰ Active site</td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -211,22 +266,14 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'active_site' },
                       }}
                     >
-                      <NumberComponent value={132} />
+                      <NumberComponent noTitle>{132}</NumberComponent>
                     </Link>
                   </td>
                 </tr>
 
                 <tr>
-                  <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="site"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-site')}>S</span>
-                    </interpro-type>
-                  </td>
-                  <td>Binding site</td>
+                  <td />
+                  <td>╰ Binding site</td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -237,22 +284,14 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'binding_site' },
                       }}
                     >
-                      <NumberComponent value={76} />
+                      <NumberComponent noTitle>{76}</NumberComponent>
                     </Link>
                   </td>
                 </tr>
 
                 <tr>
-                  <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="site"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-site')}>S</span>
-                    </interpro-type>
-                  </td>
-                  <td>Conserved site</td>
+                  <td />
+                  <td>╰ Conserved site</td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -263,22 +302,16 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'conserved_site' },
                       }}
                     >
-                      <NumberComponent value={687} />
+                      <NumberComponent noTitle>{687}</NumberComponent>
                     </Link>
                   </td>
                 </tr>
 
                 <tr>
+                  <td />
                   <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="PTM"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-site')}>S</span>
-                    </interpro-type>
+                    ╰ <abbr title="post-translational modification">PTM</abbr>
                   </td>
-                  <td>PTM</td>
                   <td className={f('text-right')}>
                     <Link
                       to={{
@@ -289,7 +322,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         search: { type: 'ptm' },
                       }}
                     >
-                      <NumberComponent value={17} />
+                      <NumberComponent noTitle>{17}</NumberComponent>
                     </Link>
                   </td>
                 </tr>
@@ -328,7 +361,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={6119} />
+                      <NumberComponent noTitle>{6119}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -344,7 +377,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={2140} />
+                      <NumberComponent noTitle>{2147}</NumberComponent> (
+                      {Math.floor((1000 * 2147) / 6119) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -365,7 +400,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={12805} />
+                      <NumberComponent noTitle>{12805}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -380,7 +415,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={2790} />
+                      <NumberComponent noTitle>{2910}</NumberComponent> (
+                      {Math.floor((1000 * 2910) / 12805) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -401,7 +438,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={2246} />
+                      <NumberComponent noTitle>{2246}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -416,7 +453,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={2244} />
+                      <NumberComponent noTitle>{2245}</NumberComponent> (
+                      {Math.floor((1000 * 2245) / 2246) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -437,7 +476,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={90742} />
+                      <NumberComponent noTitle>{90742}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -452,7 +491,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={7868} />
+                      <NumberComponent noTitle>{8974}</NumberComponent> (
+                      {Math.floor((1000 * 8974) / 90742) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -473,7 +514,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={16712} />
+                      <NumberComponent noTitle>{16712}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -488,7 +529,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={16114} />
+                      <NumberComponent noTitle>{16235}</NumberComponent> (
+                      {Math.floor((1000 * 16235) / 16712) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -509,7 +552,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={3285} />
+                      <NumberComponent noTitle>{3285}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -524,7 +567,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={3223} />
+                      <NumberComponent noTitle>{3223}</NumberComponent> (
+                      {Math.floor((1000 * 3223) / 3285) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -545,7 +590,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={2106} />
+                      <NumberComponent noTitle>{2106}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -560,7 +605,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1968} />
+                      <NumberComponent noTitle>{1965}</NumberComponent> (
+                      {Math.floor((1000 * 1965) / 2106) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -581,7 +628,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1894} />
+                      <NumberComponent noTitle>{1894}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -596,7 +643,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1307} />
+                      <NumberComponent noTitle>{1311}</NumberComponent> (
+                      {Math.floor((1000 * 1311) / 1894) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -617,7 +666,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1309} />
+                      <NumberComponent noTitle>{1309}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -632,7 +681,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1288} />
+                      <NumberComponent noTitle>{1287}</NumberComponent> (
+                      {Math.floor((1000 * 1287) / 1309) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -653,7 +704,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1210} />
+                      <NumberComponent noTitle>{1210}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -668,7 +719,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1176} />
+                      <NumberComponent noTitle>{1174}</NumberComponent> (
+                      {Math.floor((1000 * 1174) / 1210) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -678,7 +731,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                     <MemberSymbol type={'sfld'} className={f('md-small')} />
                   </td>
                   <td>SFLD</td>
-                  <td className={f('text-center')}>3</td>
+                  <td className={f('text-center')}>4</td>
                   <td className={f('text-right')}>
                     <Link
                       className={f('block')}
@@ -689,7 +742,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={303} />
+                      <NumberComponent noTitle>{303}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -704,7 +757,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={147} />
+                      <NumberComponent noTitle>{164}</NumberComponent> (
+                      {Math.floor((1000 * 164) / 303) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -725,7 +780,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1312} />
+                      <NumberComponent noTitle>{1312}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -740,7 +795,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1263} />
+                      <NumberComponent noTitle>{1264}</NumberComponent> (
+                      {Math.floor((1000 * 1264) / 1312) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -760,7 +817,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={2019} />
+                      <NumberComponent noTitle>{2019}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -775,7 +832,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={1601} />
+                      <NumberComponent noTitle>{1601}</NumberComponent> (
+                      {Math.floor((1000 * 1601) / 2019) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -795,7 +854,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={4488} />
+                      <NumberComponent noTitle>{4488}</NumberComponent>
                     </Link>
                   </td>
                   <td className={f('text-right')}>
@@ -810,7 +869,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      <NumberComponent value={4445} />
+                      <NumberComponent noTitle>{4438}</NumberComponent> (
+                      {Math.floor((1000 * 4438) / 4488) / 10}
+                      %)
                     </Link>
                   </td>
                 </tr>
@@ -818,7 +879,8 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
             </table>
 
             <p className={f('small', 'margin-top-small')}>
-              * Some signatures may not have matches to UniProtKB proteins.<br />
+              * Some signatures may not have matches to UniProtKB proteins.
+              <br />
               ** Not all signatures of a member database may be integrated at
               the time of an InterPro release
             </p>
@@ -830,7 +892,8 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 target="_blank"
               >
                 MobiDB-lite
-              </Link>, a derivative of the
+              </Link>
+              , a derivative of the
               <Link
                 href="http://mobidb.bio.unipd.it/"
                 className={f('ext')}
@@ -854,17 +917,12 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
             <table className={f('light')}>
               <thead>
                 <tr>
-                  <th>Sequence database</th>
-                  <th>Version</th>
-                  <th>Count</th>
+                  <th rowSpan="2">Sequence database</th>
+                  <th rowSpan="2">Version</th>
+                  <th rowSpan="2">Count</th>
                   <th colSpan="2">Count of proteins matching</th>
                 </tr>
-              </thead>
-              <tbody>
                 <tr>
-                  <td />
-                  <td />
-                  <td />
                   <td>
                     <strong>any signature</strong>
                   </td>
@@ -872,40 +930,74 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                     <strong>integrated signatures</strong>
                   </td>
                 </tr>
+              </thead>
+              <tbody>
                 <tr>
                   <td>UniProtKB</td>
-                  <td>2018_04</td>
-                  <td>115316915</td>
-                  <td>101076817 (87.7%)</td>
-                  <td>93075570 (80.7%)</td>
+                  <td>2018_08</td>
+                  <td>
+                    <NumberComponent noTitle>{125355233}</NumberComponent>
+                  </td>
+                  <td>
+                    <NumberComponent noTitle>{104705922}</NumberComponent> (
+                    {Math.floor((1000 * 104705922) / 125355233) / 10}
+                    %)
+                  </td>
+                  <td>
+                    <NumberComponent noTitle>{101460097}</NumberComponent> (
+                    {Math.floor((1000 * 101460097) / 125355233) / 10}
+                    %)
+                  </td>
                 </tr>
                 <tr>
                   <td>UniProtKB/TrEMBL</td>
-                  <td>2018_04</td>
-                  <td>114759640</td>
-                  <td>100531651 (87.6%)</td>
-                  <td>92537241 (80.6%)</td>
+                  <td>2018_08</td>
+                  <td>
+                    <NumberComponent noTitle>{124797108}</NumberComponent>
+                  </td>
+                  <td>
+                    <NumberComponent noTitle>{104163101}</NumberComponent> (
+                    {Math.floor((1000 * 104163101) / 124797108) / 10}
+                    %)
+                  </td>
+                  <td>
+                    <NumberComponent noTitle>{100920355}</NumberComponent> (
+                    {Math.floor((1000 * 100920355) / 124797108) / 10}
+                    %)
+                  </td>
                 </tr>
                 <tr>
                   <td>UniProtKB/Swiss-Prot</td>
-                  <td>2018_04</td>
-                  <td>557275</td>
-                  <td>545166 (97.8%)</td>
-                  <td>538329 (96.6%)</td>
+                  <td>2018_08</td>
+                  <td>
+                    <NumberComponent noTitle>{558125}</NumberComponent>
+                  </td>
+                  <td>
+                    <NumberComponent noTitle>{542821}</NumberComponent> (
+                    {Math.floor((1000 * 542821) / 558125) / 10}
+                    %)
+                  </td>
+                  <td>
+                    <NumberComponent noTitle>{539742}</NumberComponent> (
+                    {Math.floor((1000 * 539742) / 558125) / 10}
+                    %)
+                  </td>
                 </tr>
               </tbody>
             </table>
 
             <h3>InterPro2GO</h3>
             <p>
-              We have a total number of 33944 GO terms mapped to InterPro
-              entries.
+              We have a total number of{' '}
+              <NumberComponent noTitle>{34550}</NumberComponent> GO terms mapped
+              to InterPro entries.
             </p>
 
             <p>
               <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
                 List of InterPro2GO mappings
-              </Link>. These are also available through the EBI GO browser{' '}
+              </Link>
+              . These are also available through the EBI GO browser{' '}
               <Link
                 href="http://www.ebi.ac.uk/QuickGO/"
                 className={f('ext')}

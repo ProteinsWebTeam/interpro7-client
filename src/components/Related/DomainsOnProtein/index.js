@@ -81,7 +81,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent {
       <ProtVista
         protein={mainData.metadata || mainData.payload.metadata}
         data={sortedData}
-        title="Entry matches in this Protein"
+        title="Entry matches to this protein"
       />
     );
   }
@@ -105,36 +105,34 @@ export class DomainOnProteinWithoutData extends PureComponent {
       );
     }
 
-    const { interpro, unintegrated } = processData({
+    const { interpro, unintegrated, other } = processData({
       data,
       endpoint: 'protein',
     });
     const interproFamilies = interpro.filter(entry => entry.type === 'family');
     const groups = groupByEntryType(interpro);
     unintegrated.sort(orderByAccession);
-    const mergedData = { ...groups, unintegrated };
+    const mergedData = { ...groups, unintegrated, other_features: other };
     if (dataResidues && !dataResidues.loading && dataResidues.payload) {
       mergeResidues(mergedData, dataResidues.payload);
     }
 
     return (
-      <React.Fragment>
-        <div>
+      <>
+        <div className={f('margin-bottom-large')}>
           <h5>Protein family membership</h5>
           {interproFamilies.length ? (
             <ProteinEntryHierarchy entries={interproFamilies} />
           ) : (
-            <div className={f('callout', 'info', 'withicon')}>
-              This Protein does not have any <b>family</b> matches
-            </div>
+            <p className={f('margin-bottom-medium')}>None predicted</p>
           )}
         </div>
-        <br />
+
         <DomainOnProteinWithoutMergedData
           mainData={mainData}
           dataMerged={mergedData}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

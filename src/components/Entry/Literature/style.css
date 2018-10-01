@@ -33,7 +33,7 @@
     left: 0;
     right: 0;
     z-index: -1;
-    background: #fbf8da;
+    background-color: var(--colors-warning-bgd);
     opacity: 0;
     transition: opacity var(--timing-slow) ease-in-out;
   }

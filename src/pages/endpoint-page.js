@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
 
@@ -92,12 +92,26 @@ const locationhasDetailOrFilter = createSelector(
   value => value,
 );
 
+const STATUS_NO_CONTENT = 204;
+const STATUS_NOT_FOUND = 404;
+const STATUS_GONE = 410;
+
+const edgeCases = new Map([
+  [
+    STATUS_NO_CONTENT,
+    // TODO: change wording when server supports 410 response
+    `The item you are trying to view doesn't exist (it might never have, or it might have been removed in a recent release)`,
+  ],
+  [STATUS_NOT_FOUND, 'This is not a valid accession'],
+  [STATUS_GONE, 'This item no longer exists'],
+]);
+
 class Summary extends PureComponent {
   static propTypes = propTypes;
 
   render() {
     const {
-      data: { loading, payload },
+      data: { status, loading, payload },
       // dataOrganism: { loading: loadingOrg, payload: payloadOrg },
       dataBase,
       customLocation,
@@ -108,17 +122,19 @@ class Summary extends PureComponent {
         main: { key: endpoint },
       },
     } = customLocation;
+    const edgeCaseText = edgeCases.get(status);
+    if (edgeCaseText) return <div className={f('row')}>{edgeCaseText}</div>;
     if (loading || (!locationhasDetailOrFilter(customLocation) && !payload)) {
       return <Loading />;
     }
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
     return (
-      <Fragment>
+      <>
         {payload &&
           payload.metadata &&
           payload.metadata.accession && (
-            <Fragment>
+            <>
               <SchemaOrgData
                 data={{
                   data: payload,
@@ -134,7 +150,7 @@ class Summary extends PureComponent {
                 }}
                 processData={schemaProcessMainEntity}
               />
-            </Fragment>
+            </>
           )}
 
         <UnconnectedErrorBoundary customLocation={customLocation}>
@@ -142,7 +158,7 @@ class Summary extends PureComponent {
             <div className={f('medium-12', 'large-12', 'columns')}>
               {loading ? <Loading /> : null}
               {!loading && (!payload || !payload.metadata) ? null : (
-                <Fragment>
+                <>
                   <Title metadata={payload.metadata} mainType={endpoint} />
                   <ResizeObserverComponent
                     measurements={['width', 'height']}
@@ -156,7 +172,7 @@ class Summary extends PureComponent {
                       />
                     )}
                   </ResizeObserverComponent>
-                </Fragment>
+                </>
               )}
             </div>
           </div>
@@ -169,7 +185,7 @@ class Summary extends PureComponent {
             childRoutes={subPagesForEndpoint}
           />
         </UnconnectedErrorBoundary>
-      </Fragment>
+      </>
     );
   }
 }

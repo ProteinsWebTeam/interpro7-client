@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import set from 'lodash-es/set';
+import { set } from 'lodash-es';
 
 import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';
@@ -31,7 +31,7 @@ const extractDataFromHash = hash => {
   const output = { fileType, subset: !!subset };
   try {
     output.description = pathToDescription(href);
-  } catch (_) {
+  } catch {
     /**/
   }
   return output;
@@ -84,7 +84,7 @@ class DownloadForm extends PureComponent {
     let path;
     try {
       path = descriptionToPath(object.description);
-    } catch (_) {
+    } catch {
       return;
     }
     // More specific cases
@@ -271,7 +271,7 @@ class DownloadForm extends PureComponent {
           subset={subset}
         >
           {({ data, download }) => (
-            <React.Fragment>
+            <>
               <Estimate data={data} />
               {/* Only display if the response from the API is a list of items */}
               {description[main].db &&
@@ -296,7 +296,7 @@ class DownloadForm extends PureComponent {
                 />
               </fieldset>
               {lowGraphics || <ProgressAnimation download={download} />}
-            </React.Fragment>
+            </>
           )}
         </DataPreviewAndProgressProvider>
       </form>

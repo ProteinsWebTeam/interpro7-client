@@ -1,77 +1,111 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-
-import flattenDeep from 'lodash-es/flattenDeep';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { flattenDeep } from 'lodash-es';
 
 import { _RelatedAdvanced as Related } from 'components/Related';
+import Loading from 'components/SimpleCommonComponents/Loading';
+import Redirect from 'components/generic/Redirect';
+
+import { descriptionSelector } from 'reducers/custom-location/description';
 
 /*:: type Props = {
   data: Object,
+  entryDB: entry,
 }*/
+
+const flatMatchesFromIPScanPayload = function*(ipScanMatches, proteinLength) {
+  const protein = { protein: { length: proteinLength } };
+  for (const match of ipScanMatches) {
+    if (match.signature.entry) {
+      yield {
+        accession: match.signature.entry.accession,
+        name: match.signature.entry.name,
+        source_database: 'InterPro',
+        entry_protein_locations: match.locations.map(location => ({
+          fragments: [location],
+        })),
+        match: protein,
+      };
+    }
+    yield {
+      accession: match['model-ac'],
+      name: match.signature.name,
+      source_database: match.signature.signatureLibraryRelease.library,
+      entry_protein_locations: match.locations.map(location => ({
+        fragments: [location],
+      })),
+      match: protein,
+    };
+  }
+};
+
+const mergeEntries = matches => {
+  const map = new Map();
+  for (const match of matches) {
+    let _match = map.get(match.accession);
+    if (_match) {
+      _match.entry_protein_locations = [
+        ..._match.entry_protein_locations,
+        ...match.entry_protein_locations,
+      ];
+    }
+    map.set(match.accession, _match || match);
+  }
+  return Array.from(map.values());
+};
 
 class EntrySubPage extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.object.isRequired,
+    entryDB: T.string.isRequired,
   };
 
   render() {
-    const mainData = this.props.data.payload.results[0];
-    mainData.length = mainData.sequenceLength;
-    // massage data to make it look like what is needed for
-    // a standard domain architecture subpage
-    const data = {
-      integrated: new Map(),
-    };
-    for (const match of mainData.matches) {
-      if (!match.signature.entry) continue;
-      const { accession, name, type } = match.signature.entry;
-      const entry = data.integrated.get(accession) || {
-        accession,
-        source_database: 'InterPro',
-        children: [],
-        name,
-        type,
-      };
-      entry.children.push({
-        coordinates: [match.locations.map(l => [l.start, l.end])],
-      });
-      data.integrated.set(accession, entry);
-    }
-    data.integrated = Array.from(data.integrated.values()).map(m => {
-      const coordinates = flattenDeep(m.children.map(s => s.coordinates));
-      return {
-        ...m,
-        entry_protein_locations: [
-          {
-            fragments: [
-              {
-                start: Math.min(...coordinates),
-                end: Math.max(...coordinates),
-              },
-            ],
-          },
-        ],
-        matches: [
-          {
-            protein: {
-              length: mainData.sequenceLength,
+    const {
+      entryDB,
+      data: { payload },
+    } = this.props;
+    if (!entryDB)
+      return (
+        <Redirect
+          to={customLocation => ({
+            ...customLocation,
+            description: {
+              ...customLocation.description,
+              entry: { isFilter: true, db: 'InterPro' },
             },
-          },
-        ],
-      };
-    });
+          })}
+        />
+      );
+    if (!payload) return <Loading />;
+    const mainData = { ...payload.results[0] };
+    mainData.length = mainData.sequence.length;
+    const flatArray = Array.from(
+      flatMatchesFromIPScanPayload(mainData.matches, mainData.length),
+    );
+    const filtered = flatArray.filter(
+      ({ source_database }) =>
+        source_database.toLowerCase() === entryDB.toLowerCase(),
+    );
+    const unique = mergeEntries(filtered);
     return (
       <Related
         mainData={mainData}
-        secondaryData={data.integrated}
+        secondaryData={unique}
         isStale={false}
         mainType="protein"
         focusType="entry"
-        focusDB="InterPro"
-        actualSize={data.integrated.length}
+        focusDB={entryDB}
+        actualSize={unique.length}
       />
     );
   }
 }
 
-export default EntrySubPage;
+const mapStateToProps = createSelector(descriptionSelector, description => ({
+  entryDB: description.entry.db,
+}));
+
+export default connect(mapStateToProps)(EntrySubPage);

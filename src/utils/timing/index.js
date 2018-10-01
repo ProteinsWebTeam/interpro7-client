@@ -1,5 +1,5 @@
 // @flow
-import debounce from 'lodash-es/debounce';
+import { debounce } from 'lodash-es';
 
 // Default delay if none is provided to the function
 const DEFAULT_DELAY = 1000; // 1s 🕑

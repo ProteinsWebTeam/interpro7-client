@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
-import { NumberComponent } from 'components/NumberLabel';
+import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
 import { toPlural } from 'utils/pages';
@@ -73,12 +73,13 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
             >
               <NumberComponent
                 loading={loading}
-                value={entries}
                 abbr
                 titleType={`${toPlural('entry', entries)} matching ${
                   species.title
                 }`}
-              />{' '}
+              >
+                {entries}
+              </NumberComponent>{' '}
               {toPlural('entry', entries)}
             </Link>
             <br />
@@ -97,12 +98,13 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
             >
               <NumberComponent
                 loading={loading}
-                value={proteins}
                 abbr
                 titleType={`${toPlural('protein', proteins)} matching ${
                   species.title
                 }`}
-              />{' '}
+              >
+                {proteins}
+              </NumberComponent>{' '}
               {toPlural('protein', proteins)}
             </Link>
           </p>

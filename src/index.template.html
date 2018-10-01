@@ -24,12 +24,6 @@
 
     <title><%= htmlWebpackPlugin.options.title %></title>
 
-    <% for (const css of htmlWebpackPlugin.files.css) { %>
-    <link rel="preload" as="style" href="<%= css %>" />
-    <% } %>
-    <% for (const chunk of Object.keys(htmlWebpackPlugin.files.chunks)) { %>
-    <link rel="preload" as="script" href="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" />
-    <% } %>
     <% for (const font of webpack.assets.map(({name}) => name).filter(name => name.endsWith('woff') && !name.includes('fontello'))) { %>
     <link rel="preload" as="font" href="<%= webpackConfig.output.publicPath %><%= font %>" crossorigin />
     <% } %>
@@ -101,6 +95,9 @@
         }
       </style>
     </noscript>
+    <% for (const css of htmlWebpackPlugin.files.css) { %>
+    <link rel="stylesheet" href="<%= css %>" />
+    <% } %>
   </head>
   <body class="ebi-black-bar-loaded">
     <noscript>
@@ -116,5 +113,44 @@
         <div></div>
       </div>
     </div>
+    <% if (!htmlWebpackPlugin.options.inject) { %>
+    <% if (
+      htmlWebpackPlugin.options.moduleScripts &&
+      htmlWebpackPlugin.options.moduleScripts.length &&
+      htmlWebpackPlugin.options.legacyScripts &&
+      htmlWebpackPlugin.options.legacyScripts.length
+    ) { %>
+    <script nomodule type="text/javascript">
+      // workaround for Safari 10.1 supporting module but ignoring nomodule
+      // From https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
+      (function() {
+        var d = document;
+        var c = d.createElement('script');
+        if (!('noModule' in c) && 'onbeforeload' in c) {
+          var s = false;
+          d.addEventListener('beforeload', function(e) {
+            if (e.target === c) {
+              s = true;
+            } else if (!e.target.hasAttribute('nomodule') || !s) {
+              return;
+            }
+            e.preventDefault();
+          }, true);
+
+          c.type = 'module';
+          c.src = '.';
+          d.head.appendChild(c);
+          c.remove();
+        }
+      }());
+    </script>
+    <% } %>
+    <% for (const file of htmlWebpackPlugin.options.moduleScripts || []) { %>
+    <script type="module" src="<%= file %>"></script>
+    <% } %>
+    <% for (const file of htmlWebpackPlugin.options.legacyScripts || []) { %>
+    <script nomodule defer type="text/javascript" src="<%= file %>"></script>
+    <% } %>
+    <% } %>
   </body>
 </html>

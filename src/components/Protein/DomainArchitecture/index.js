@@ -202,7 +202,6 @@ class DomainArchitecture extends PureComponent {
                   {collapsed ? (
                     <Tooltip title="Expand all tracks">
                       <button
-                        data-icon="9"
                         // onClick={this.handleExpand}
                         onClick={this._combiExp}
                         // onClick={function(event){ this._handleCollapseToggle(); this.handleExpand();}}
@@ -210,10 +209,11 @@ class DomainArchitecture extends PureComponent {
                         style={{ outline: '0' }}
                         className={f(
                           'icon',
-                          'icon-functional',
+                          'icon-common',
                           'margin-right-large',
                           'margin-bottom-none',
                         )}
+                        data-icon="&#x39;"
                         aria-label="Expand all tracks"
                       >
                         {' '}
@@ -223,15 +223,15 @@ class DomainArchitecture extends PureComponent {
                   ) : (
                     <Tooltip title="Collapse all tracks">
                       <button
-                        data-icon="8"
                         onClick={this._combiCol}
                         style={{ outline: '0' }}
                         className={f(
                           'icon',
-                          'icon-functional',
+                          'icon-common',
                           'margin-right-large',
                           'margin-bottom-none',
                         )}
+                        data-icon="&#x38;"
                         aria-label="collapse all tracks"
                       >
                         {' '}
@@ -245,13 +245,9 @@ class DomainArchitecture extends PureComponent {
                   <Tooltip title="View the domain viewer in full screen mode">
                     <button
                       onClick={this.handleFullScreen}
-                      data-icon="F"
                       title="Full screen"
-                      className={f(
-                        'margin-bottom-none',
-                        'icon',
-                        'icon-functional',
-                      )}
+                      className={f('margin-bottom-none', 'icon', 'icon-common')}
+                      data-icon="F"
                       style={{ marginRight: '5.3rem' }}
                     />
                   </Tooltip>
@@ -269,4 +265,7 @@ class DomainArchitecture extends PureComponent {
   }
 }
 
-export default connect(null, { goToCustomLocation })(DomainArchitecture);
+export default connect(
+  null,
+  { goToCustomLocation },
+)(DomainArchitecture);

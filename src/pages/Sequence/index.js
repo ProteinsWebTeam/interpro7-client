@@ -9,8 +9,9 @@ import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 
-import Loading from 'components/SimpleCommonComponents/Loading';
 import loadable from 'higherOrder/loadable';
+
+import getTableAccess, { IPScanJobsData } from 'storage/idb';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -23,7 +24,7 @@ const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "protein-summary" */ 'components/IPScan/Summary'),
+    import(/* webpackChunkName: "ipscan-summary" */ 'components/IPScan/Summary'),
 });
 
 const EntrySubPage = loadable({
@@ -54,6 +55,8 @@ const locationSelector = createSelector(
   value => value,
 );
 
+const FASTA_CLEANER = /(^[>;].*$)|\W/gm;
+
 class IPScanResult extends PureComponent {
   static propTypes = {
     data: T.shape({
@@ -61,27 +64,64 @@ class IPScanResult extends PureComponent {
       payload: T.shape({
         results: T.array,
       }),
-    }).isRequired,
+    }),
     matched: T.string.isRequired,
   };
 
-  render() {
-    const {
-      data: { loading, payload },
-      matched,
-    } = this.props;
-    if (loading) {
-      return <Loading />;
+  constructor(props) {
+    super(props);
+
+    this.state = { localIDForLocalPayload: null, localPayload: null };
+  }
+
+  componentDidMount() {
+    this.#getLocalDataIfNeeded();
+  }
+
+  componentDidUpdate() {
+    this.#getLocalDataIfNeeded();
+  }
+
+  #getLocalDataIfNeeded = () => {
+    const { localID } = this.props;
+    if (
+      !localID ||
+      this.props.data.payload ||
+      this.state.localIDForLocalPayload === localID
+    ) {
+      return;
     }
-    const entries =
-      payload.results[0].matches.length +
-      new Set(
-        payload.results[0].matches.map(
-          m => (m.signature.entry || {}).accession,
-        ),
-      ).size;
+    this.setState({ localIDForLocalPayload: localID }, async () => {
+      const dataT = await getTableAccess(IPScanJobsData);
+      const data = await dataT.get(localID);
+      this.setState({
+        localPayload: {
+          sequence: data.input.replace(FASTA_CLEANER, '').toUpperCase(),
+          matches: [],
+          xref: [
+            { name: 'Results are being processed on the InterProScan server' },
+          ],
+        },
+      });
+    });
+  };
+
+  render() {
+    const { data: { payload } = {}, matched } = this.props;
+
+    let entries = NaN;
+    if (payload && payload.results) {
+      entries =
+        payload.results[0].matches.length +
+        new Set(
+          payload.results[0].matches.map(
+            m => (m.signature.entry || {}).accession,
+          ),
+        ).size;
+    }
+
     return (
-      <React.Fragment>
+      <>
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('large-12', 'columns')}>
@@ -101,26 +141,51 @@ class IPScanResult extends PureComponent {
         <ErrorBoundary>
           <Switch
             {...this.props}
+            localPayload={this.state.localPayload}
             locationSelector={locationSelector}
             indexRoute={SummaryAsync}
             childRoutes={subPagesForSequence}
           />
         </ErrorBoundary>
-      </React.Fragment>
+      </>
     );
   }
 }
 
 const mapStateToUrl = createSelector(
+  state => state.jobs,
   state => state.settings.ipScan,
   state => state.customLocation.description.job.accession,
-  ({ protocol, hostname, port, root }, accession) =>
-    format({
+  (jobs, { protocol, hostname, port, root }, accession) => {
+    if (!jobs) return;
+    const job = Object.values(jobs).find(
+      job =>
+        job.metadata.localID === accession ||
+        job.metadata.remoteID === accession,
+    );
+    if (!job || job.metadata.status !== 'finished') return;
+    return format({
       protocol,
       hostname,
       port,
       pathname: `${root}/result/${accession}/json`,
-    }),
+    });
+  },
 );
 
-export default loadData(mapStateToUrl)(IPScanResult);
+const mapStateToProps = createSelector(
+  state => state.jobs || {},
+  state => state.customLocation.description.job.accession,
+  (jobs, accession) => {
+    const job = Object.values(jobs).find(
+      job =>
+        job.metadata.localID === accession ||
+        job.metadata.remoteID === accession,
+    );
+    return { localID: job.metadata.localID };
+  },
+);
+
+export default loadData({ getUrl: mapStateToUrl, mapStateToProps })(
+  IPScanResult,
+);

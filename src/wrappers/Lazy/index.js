@@ -54,7 +54,7 @@ class Lazy extends PureComponent /*:: <Props, State> */ {
       );
       await this._inView.promise;
       this.setState({ hasBeenVisible: true });
-    } catch (_) {
+    } catch {
       /**/
     }
   }
