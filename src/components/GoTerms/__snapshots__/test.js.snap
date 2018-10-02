@@ -127,57 +127,45 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
             data="GO:0004930"
             processData={[Function]}
           />
-          <Tooltip
-            title="test1 (GO:0004930)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0004930"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0004930"
-            >
-              test1
-               (
-              GO:0004930
-              )
-            </GoLink>
-          </Tooltip>
+            test1
+             (
+            GO:0004930
+            )
+          </GoLink>
         </li>
         <li>
           <LoadableComponent
             data="GO:0007186"
             processData={[Function]}
           />
-          <Tooltip
-            title="test2 (GO:0007186)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0007186"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0007186"
-            >
-              test2
-               (
-              GO:0007186
-              )
-            </GoLink>
-          </Tooltip>
+            test2
+             (
+            GO:0007186
+            )
+          </GoLink>
         </li>
         <li>
           <LoadableComponent
             data="GO:0016021"
             processData={[Function]}
           />
-          <Tooltip
-            title="test3 (GO:0016021)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0016021"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0016021"
-            >
-              test3
-               (
-              GO:0016021
-              )
-            </GoLink>
-          </Tooltip>
+            test3
+             (
+            GO:0016021
+            )
+          </GoLink>
         </li>
       </ul>
     </div>
@@ -279,19 +267,15 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
             data="GO:0004930"
             processData={[Function]}
           />
-          <Tooltip
-            title="test2 (GO:0004930)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0004930"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0004930"
-            >
-              test2
-               (
-              GO:0004930
-              )
-            </GoLink>
-          </Tooltip>
+            test2
+             (
+            GO:0004930
+            )
+          </GoLink>
         </li>
       </ul>
     </div>
@@ -426,57 +410,45 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
             data="GO:0004930"
             processData={[Function]}
           />
-          <Tooltip
-            title="test1 (GO:0004930)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0004930"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0004930"
-            >
-              test1
-               (
-              GO:0004930
-              )
-            </GoLink>
-          </Tooltip>
+            test1
+             (
+            GO:0004930
+            )
+          </GoLink>
         </li>
         <li>
           <LoadableComponent
             data="GO:0007186"
             processData={[Function]}
           />
-          <Tooltip
-            title="test2 (GO:0007186)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0007186"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0007186"
-            >
-              test2
-               (
-              GO:0007186
-              )
-            </GoLink>
-          </Tooltip>
+            test2
+             (
+            GO:0007186
+            )
+          </GoLink>
         </li>
         <li>
           <LoadableComponent
             data="GO:0016021"
             processData={[Function]}
           />
-          <Tooltip
-            title="test3 (GO:0016021)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0016021"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0016021"
-            >
-              test3
-               (
-              GO:0016021
-              )
-            </GoLink>
-          </Tooltip>
+            test3
+             (
+            GO:0016021
+            )
+          </GoLink>
         </li>
       </ul>
     </div>
@@ -578,19 +550,15 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
             data="GO:0004930"
             processData={[Function]}
           />
-          <Tooltip
-            title="test2 (GO:0004930)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0004930"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0004930"
-            >
-              test2
-               (
-              GO:0004930
-              )
-            </GoLink>
-          </Tooltip>
+            test2
+             (
+            GO:0004930
+            )
+          </GoLink>
         </li>
       </ul>
     </div>
@@ -725,57 +693,45 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
             data="GO:0004930"
             processData={[Function]}
           />
-          <Tooltip
-            title="test1 (GO:0004930)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0004930"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0004930"
-            >
-              test1
-               (
-              GO:0004930
-              )
-            </GoLink>
-          </Tooltip>
+            test1
+             (
+            GO:0004930
+            )
+          </GoLink>
         </li>
         <li>
           <LoadableComponent
             data="GO:0007186"
             processData={[Function]}
           />
-          <Tooltip
-            title="test2 (GO:0007186)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0007186"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0007186"
-            >
-              test2
-               (
-              GO:0007186
-              )
-            </GoLink>
-          </Tooltip>
+            test2
+             (
+            GO:0007186
+            )
+          </GoLink>
         </li>
         <li>
           <LoadableComponent
             data="GO:0016021"
             processData={[Function]}
           />
-          <Tooltip
-            title="test3 (GO:0016021)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0016021"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0016021"
-            >
-              test3
-               (
-              GO:0016021
-              )
-            </GoLink>
-          </Tooltip>
+            test3
+             (
+            GO:0016021
+            )
+          </GoLink>
         </li>
       </ul>
     </div>
@@ -877,19 +833,15 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
             data="GO:0004930"
             processData={[Function]}
           />
-          <Tooltip
-            title="test2 (GO:0004930)"
+          <GoLink
+            className="go-terms ext"
+            id="GO:0004930"
           >
-            <GoLink
-              className="go-terms ext"
-              id="GO:0004930"
-            >
-              test2
-               (
-              GO:0004930
-              )
-            </GoLink>
-          </Tooltip>
+            test2
+             (
+            GO:0004930
+            )
+          </GoLink>
         </li>
       </ul>
     </div>
