@@ -9,20 +9,20 @@ exports[`<Publication /> should render 1`] = `
     A number of online Publications relating to InterPro are available.
   </p>
   <div
-    className="flex-column publication"
+    className="flex-column"
   >
     <div
-      className="card-grid tuto-beyond"
+      className="card-grid"
     >
       <Connect(Link)
         href="http://nar.oxfordjournals.org/content/45/D1/D190"
         target="_blank"
       >
         <div
-          className="card-image"
+          className="card-image tuto-beyond"
         >
           <div
-            className="card-label"
+            className="card-tag tag-publi"
           >
             Publication
           </div>
@@ -33,7 +33,9 @@ exports[`<Publication /> should render 1`] = `
           <div
             className="card-title"
           >
-            InterPro in 2017 — beyond protein family and domain annotations
+            <h4>
+              InterPro in 2017 — beyond protein family and domain annotations
+            </h4>
           </div>
           <div
             className="card-info"
@@ -389,20 +391,30 @@ exports[`<Publication /> should render 1`] = `
             Here, we report recent developments with InterPro and its associated software, including the addition of two new databases (SFLD and CDD), and the functionality to include residue-level annotation and prediction of intrinsic disorder.
           </div>
         </div>
+        <div
+          className="card-more"
+        >
+          <div
+            className="button hollow secondary button-more icon icon-common icon-right margin-bottom-none"
+            data-icon=""
+          >
+            Read more
+          </div>
+        </div>
       </Connect(Link)>
     </div>
     <div
-      className="card-grid tuto-go"
+      className="card-grid"
     >
       <Connect(Link)
         href="http://database.oxfordjournals.org/content/2016/baw027.full"
         target="_blank"
       >
         <div
-          className="card-image"
+          className="card-image tuto-go"
         >
           <div
-            className="card-label"
+            className="card-tag tag-publi"
           >
             Publication
           </div>
@@ -413,7 +425,9 @@ exports[`<Publication /> should render 1`] = `
           <div
             className="card-title"
           >
-            GO annotation in InterPro: why stability does not indicate accuracy in a sea of changing annotation
+            <h4>
+              GO annotation in InterPro: why stability does not indicate accuracy in a sea of changing annotation
+            </h4>
           </div>
           <div
             className="card-info"
@@ -478,20 +492,30 @@ exports[`<Publication /> should render 1`] = `
             Here, we describe some of these events and their consequences for the InterPro database, and demonstrate that annotation removal or reassignment is not always linked to incorrect annotation by the curator.
           </div>
         </div>
+        <div
+          className="card-more"
+        >
+          <div
+            className="button hollow secondary button-more icon icon-common icon-right margin-bottom-none"
+            data-icon=""
+          >
+            Read more
+          </div>
+        </div>
       </Connect(Link)>
     </div>
     <div
-      className="card-grid tuto-interproscan"
+      className="card-grid"
     >
       <Connect(Link)
         href="http://bioinformatics.oxfordjournals.org/content/early/2014/01/29/bioinformatics.btu031.full"
         target="_blank"
       >
         <div
-          className="card-image"
+          className="card-image tuto-interproscan"
         >
           <div
-            className="card-label"
+            className="card-tag tag-publi"
           >
             Publication
           </div>
@@ -502,7 +526,9 @@ exports[`<Publication /> should render 1`] = `
           <div
             className="card-title"
           >
-            InterProScan 5: genome-scale protein function classification
+            <h4>
+              InterProScan 5: genome-scale protein function classification
+            </h4>
           </div>
           <div
             className="card-info"
@@ -649,6 +675,16 @@ exports[`<Publication /> should render 1`] = `
             className="card-description"
           >
             Here, we describe a new Java-based architecture for the widely used protein function prediction software package InterProScan.
+          </div>
+        </div>
+        <div
+          className="card-more"
+        >
+          <div
+            className="button hollow secondary button-more icon icon-common icon-right margin-bottom-none"
+            data-icon=""
+          >
+            Read more
           </div>
         </div>
       </Connect(Link)>
