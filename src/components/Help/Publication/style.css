@@ -1,5 +1,3 @@
-@import '../../../styles/timing.css';
-
 /* grid not yet working with IE11*/
 .flex-grid {
   grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
