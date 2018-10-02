@@ -8,10 +8,9 @@ import EBIGlobal from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import helper from 'styles/helper-classes.css';
-import tutogrid from 'components/Help/Tutorial/style.css';
 import local from './style.css';
 
-const f = foundationPartial(EBIGlobal, tutogrid, fonts, ipro, helper, local);
+const f = foundationPartial(EBIGlobal, fonts, ipro, helper, local);
 
 export default class Publication extends PureComponent /*:: <{||}> */ {
   render() {
@@ -21,20 +20,23 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
         <p>
           A number of online Publications relating to InterPro are available.
         </p>
-        <div className={f('flex-column', 'publication')}>
-          <div className={f('card-grid', 'tuto-beyond')}>
+        <div className={f('flex-column')}>
+          <div className={f('card-grid')}>
             <Link
               href="http://nar.oxfordjournals.org/content/45/D1/D190"
               target="_blank"
             >
-              <div className={f('card-image')}>
-                <div className={f('card-label')}>Publication</div>
+              <div className={f('card-image', 'tuto-beyond')}>
+                <div className={f('card-tag', 'tag-publi')}>Publication</div>
               </div>
               <div className={f('card-content')}>
                 <div className={f('card-title')}>
-                  InterPro in 2017 — beyond protein family and domain
-                  annotations
+                  <h4>
+                    InterPro in 2017 — beyond protein family and domain
+                    annotations
+                  </h4>
                 </div>
+
                 <div className={f('card-info')}>
                   <div className={f('card-info-author')}>
                     <span
@@ -97,6 +99,7 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                     Nucleic Acids Research, Jan 2017, (doi: 10.1093/nar/gkw1107)
                   </div>
                 </div>
+
                 <div className={f('card-description')}>
                   Here, we report recent developments with InterPro and its
                   associated software, including the addition of two new
@@ -104,22 +107,43 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                   residue-level annotation and prediction of intrinsic disorder.
                 </div>
               </div>
+
+              <div className={f('card-more')}>
+                <div
+                  className={f(
+                    'button',
+                    'hollow',
+                    'secondary',
+                    'button-more',
+                    'icon',
+                    'icon-common',
+                    'icon-right',
+                    'margin-bottom-none',
+                  )}
+                  data-icon="&#xf061;"
+                >
+                  Read more
+                </div>
+              </div>
             </Link>
           </div>
 
-          <div className={f('card-grid', 'tuto-go')}>
+          <div className={f('card-grid')}>
             <Link
               href="http://database.oxfordjournals.org/content/2016/baw027.full"
               target="_blank"
             >
-              <div className={f('card-image')}>
-                <div className={f('card-label')}>Publication</div>
+              <div className={f('card-image', 'tuto-go')}>
+                <div className={f('card-tag', 'tag-publi')}>Publication</div>
               </div>
               <div className={f('card-content')}>
                 <div className={f('card-title')}>
-                  GO annotation in InterPro: why stability does not indicate
-                  accuracy in a sea of changing annotation
+                  <h4>
+                    GO annotation in InterPro: why stability does not indicate
+                    accuracy in a sea of changing annotation
+                  </h4>
                 </div>
+
                 <div className={f('card-info')}>
                   <div className={f('card-info-author')}>
                     <span
@@ -148,21 +172,42 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                   annotation by the curator.
                 </div>
               </div>
+
+              <div className={f('card-more')}>
+                <div
+                  className={f(
+                    'button',
+                    'hollow',
+                    'secondary',
+                    'button-more',
+                    'icon',
+                    'icon-common',
+                    'icon-right',
+                    'margin-bottom-none',
+                  )}
+                  data-icon="&#xf061;"
+                >
+                  Read more
+                </div>
+              </div>
             </Link>
           </div>
 
-          <div className={f('card-grid', 'tuto-interproscan')}>
+          <div className={f('card-grid')}>
             <Link
               href="http://bioinformatics.oxfordjournals.org/content/early/2014/01/29/bioinformatics.btu031.full"
               target="_blank"
             >
-              <div className={f('card-image')}>
-                <div className={f('card-label')}>Publication</div>
+              <div className={f('card-image', 'tuto-interproscan')}>
+                <div className={f('card-tag', 'tag-publi')}>Publication</div>
               </div>
               <div className={f('card-content')}>
                 <div className={f('card-title')}>
-                  InterProScan 5: genome-scale protein function classification
+                  <h4>
+                    InterProScan 5: genome-scale protein function classification
+                  </h4>
                 </div>
+
                 <div className={f('card-info')}>
                   <div className={f('card-info-author')}>
                     <span
@@ -200,6 +245,24 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                   Here, we describe a new Java-based architecture for the widely
                   used protein function prediction software package
                   InterProScan.
+                </div>
+              </div>
+
+              <div className={f('card-more')}>
+                <div
+                  className={f(
+                    'button',
+                    'hollow',
+                    'secondary',
+                    'button-more',
+                    'icon',
+                    'icon-common',
+                    'icon-right',
+                    'margin-bottom-none',
+                  )}
+                  data-icon="&#xf061;"
+                >
+                  Read more
                 </div>
               </div>
             </Link>
