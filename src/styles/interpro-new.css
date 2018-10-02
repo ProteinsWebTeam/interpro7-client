@@ -1,6 +1,8 @@
 @import '../styles/colors.css';
 @import '../styles/timing.css';
 @import '../styles/animation.css';
+@import '../styles/fonts.css';
+
 /******************************Overwrite EBI global***************************/
 /*to include more systems fonts for windows machines*/
 h1,
@@ -9,9 +11,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
-    sans-serif;
+  font-family: var(--fonts-system);
 }
 
 /* resize h5  - should be included in EBI global*/
@@ -467,9 +467,7 @@ h3.light {
 
 /*simulation H5 but needs to stay span in order to show ext icon on the same line*/
 .h5 {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
-    sans-serif;
+  font-family: -var(--fonts-system);
   color: #222;
   font-weight: 400;
   border-bottom: 2px white solid;
@@ -615,6 +613,169 @@ hr {
 /****************************** END TITLE - TEXT *********************************/
 
 /****************************** OTHERS *********************************/
+/*CARDS*/
+/*Alternative to grid */
+.flex-column {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+  margin: 0 -0.5rem; /*to align with foundation grid*/
+}
+
+.card-grid {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 20%;
+  min-width: 270px;
+  margin: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transition: all var(--timing-really-fast) ease-out;
+
+  &:hover {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18),
+      0 4px 15px 0 rgba(0, 0, 0, 0.15);
+
+    & .card-tag {
+      opacity: 1;
+    }
+
+    & .card-info {
+      opacity: 1;
+    }
+
+    & .card-image {
+      opacity: 1;
+    }
+
+    & .button.hollow.secondary {
+      opacity: 1;
+    }
+  }
+}
+/*if single link on top*/
+.card-grid a {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-image {
+  width: 100%;
+  background-color: var(--colors-submain);
+  height: 160px;
+  position: relative;
+  opacity: 0.7;
+  transition: opacity var(--timing-really-fast) ease-out;
+}
+/*Card with no image*/
+.card-image.no-img {
+  height: 0;
+}
+
+.card-tag {
+  position: absolute;
+  font-size: 70%;
+  color: white;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  bottom: -8px;
+  left: 7%;
+  background-color: var(--colors-submain); /*default color*/
+  opacity: 0.7;
+  transition: opacity var(--timing-really-fast) ease-out;
+}
+
+/*to move to colors?*/
+.card-tag.tag-publi {
+  background-color: #5daace;
+}
+.card-tag.tag-tuto {
+  background-color: #fab700;
+}
+
+.card-content {
+  /*border: 1px red solid;*/
+  flex-grow: 1;
+  padding: 1rem 1.5rem;
+}
+
+/*separation between elements*/
+.card-content > div {
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  /* flex-grow: 1; is this used?*/
+  & h4 {
+    font-size: 120%;
+    font-weight: 600;
+    color: var(--colors-nearly-black);
+    border-bottom: 2px white solid;
+    transition: border var(--timing-fast) ease-in-out;
+    display: inline; /*to make title underline work for every line*/
+    &:hover {
+      border-bottom: 2px var(--colors-dark) solid;
+    }
+  }
+}
+
+.card-info {
+  color: var(--colors-nearly-black);
+  font-size: 90%;
+  opacity: 0.5;
+  display: flex;
+  flex-wrap: wrap;
+  transition: opacity var(--timing-really-fast) ease-out;
+  & > div:not(:last-child) {
+    margin-right: 0.5rem;
+  }
+}
+
+.card-description {
+  color: var(--colors-graydark);
+  font-family: var(--fonts-system);
+  font-weight: 400;
+  max-height: 9rem;
+  overflow: hidden;
+}
+
+.card-grid .button.hollow.secondary {
+  border-width: 2px;
+  opacity: 0.5;
+}
+.card-more {
+  align-self: flex-end;
+}
+
+.button-more {
+  width: 50%;
+  position: relative;
+  min-width: 200px; /*for small screens*/
+}
+
+.icon.button-more {
+  font-weight: 600; /*bold on just text*/
+  &::after,
+  &::before {
+    font-weight: 300; /*keep the icon unbold*/
+  }
+}
+
+/*to add class icon-right in EBI ebi-utility-styles (define position icon)*/
+.icon-common.icon-right:before {
+  content: '';
+}
+.icon-common.icon-right:after {
+  content: attr(data-icon);
+  font-family: 'EBI-Common';
+  position: absolute;
+  right: 1.5rem;
+  transition: all var(--timing-instant) ease-in;
+}
+.icon-common.icon-right:hover:after {
+  right: 1em;
+}
+/*/CARDS*/
 
 /*TABS*/
 
