@@ -18,10 +18,14 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
         <p>A number of online tutorials relating to InterPro are available.</p>
         <div className={f('flex-column')}>
           <div className={f('card-grid')}>
-            <Link href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies">
+            <Link
+              href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies"
+              target="_blank"
+            >
               <div className={f('card-image', 'tuto-method')}>
                 <div className={f('card-tag', 'tag-tuto')}>Tutorial</div>
               </div>
+
               <div className={f('card-content')}>
                 <div className={f('card-title')}>
                   <h4>
@@ -29,6 +33,7 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                     methodologies
                   </h4>
                 </div>
+
                 <div className={f('card-info')}>
                   <div className={f('card-info-author')}>
                     <span
@@ -52,6 +57,7 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                     1 hour
                   </div>
                 </div>
+
                 <div className={f('card-description')}>
                   This course provides an insight into the different protein
                   family building methodologies employed by three InterPro
@@ -61,14 +67,32 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                   predicting hierarchical relationships between them.
                 </div>
               </div>
-              {
-                // <Link  href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies" className={f('button')}>Start the course</Link>
-              }
+
+              <div className={f('card-more')}>
+                <div
+                  className={f(
+                    'button',
+                    'hollow',
+                    'secondary',
+                    'button-more',
+                    'icon',
+                    'icon-common',
+                    'icon-right',
+                    'margin-bottom-none',
+                  )}
+                  data-icon="&#xf061;"
+                >
+                  Start the course
+                </div>
+              </div>
             </Link>
           </div>
 
           <div className={f('card-grid')}>
-            <Link href="//www.ebi.ac.uk/training/online/course/interpro-functional-and-structural-analysis-protei/what-interpro">
+            <Link
+              href="//www.ebi.ac.uk/training/online/course/interpro-functional-and-structural-analysis-protei/what-interpro"
+              target="_blank"
+            >
               <div className={f('card-image', 'tuto-what')}>
                 <div className={f('card-tag', 'tag-tuto')}>Tutorial</div>
               </div>
@@ -80,6 +104,7 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                     sequences
                   </h4>
                 </div>
+
                 <div className={f('card-info')}>
                   <div className={f('card-info-author')}>
                     <em
@@ -103,23 +128,43 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                     1 hour
                   </div>
                 </div>
+
                 <div className={f('card-description')}>
                   This course will provide an in-depth guide to InterPro - how
                   to access it, how to search the database and interpret the
                   results.
                 </div>
               </div>
-              {
-                // <Link  href="//www.ebi.ac.uk/training/online/course/interpro-functional-and-structural-analysis-protei/what-interpro" className={f('button')}>Start the course</Link>
-              }
+
+              <div className={f('card-more')}>
+                <div
+                  className={f(
+                    'button',
+                    'hollow',
+                    'secondary',
+                    'button-more',
+                    'icon',
+                    'icon-common',
+                    'icon-right',
+                    'margin-bottom-none',
+                  )}
+                  data-icon="&#xf061;"
+                >
+                  Start the course
+                </div>
+              </div>
             </Link>
           </div>
 
           <div className={f('card-grid')}>
-            <Link href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou">
+            <Link
+              href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou"
+              target="_blank"
+            >
               <div className={f('card-image', 'tuto-intro')}>
                 <div className={f('card-tag', 'tag-tuto')}>Tutorial</div>
               </div>
+
               <div className={f('card-content')}>
                 <div className={f('card-title')}>
                   <h4>
@@ -150,20 +195,39 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                     0.5 hour
                   </div>
                 </div>
+
                 <div className={f('card-description')}>
                   This course provides background information on protein
                   signature databases and their use in sequence analysis and
                   protein classification.
                 </div>
               </div>
-              {
-                // <Link  href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou" className={f('button')}>Start the course</Link>
-              }
+
+              <div className={f('card-more')}>
+                <div
+                  className={f(
+                    'button',
+                    'hollow',
+                    'secondary',
+                    'button-more',
+                    'icon',
+                    'icon-common',
+                    'icon-right',
+                    'margin-bottom-none',
+                  )}
+                  data-icon="&#xf061;"
+                >
+                  Start the course
+                </div>
+              </div>
             </Link>
           </div>
 
           <div className={f('card-grid')}>
-            <Link href="//www.ebi.ac.uk/training/online/course/interpro-quick-tour">
+            <Link
+              href="//www.ebi.ac.uk/training/online/course/interpro-quick-tour"
+              target="_blank"
+            >
               <div className={f('card-image', 'tuto-tour')}>
                 <div className={f('card-tag', 'tag-tuto')}>Tutorial</div>
               </div>
@@ -200,9 +264,24 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                   web interface.
                 </div>
               </div>
-              {
-                // <Link  href="//www.ebi.ac.uk/training/online/course/interpro-quick-tour" className={f('button')}>Start the course</Link>
-              }
+
+              <div className={f('card-more')}>
+                <div
+                  className={f(
+                    'button',
+                    'hollow',
+                    'secondary',
+                    'button-more',
+                    'icon',
+                    'icon-common',
+                    'icon-right',
+                    'margin-bottom-none',
+                  )}
+                  data-icon="&#xf061;"
+                >
+                  Start the course
+                </div>
+              </div>
             </Link>
           </div>
         </div>
