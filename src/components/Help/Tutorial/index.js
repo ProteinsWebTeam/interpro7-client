@@ -78,7 +78,6 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                     'icon',
                     'icon-common',
                     'icon-right',
-                    'margin-bottom-none',
                   )}
                   data-icon="&#xf061;"
                 >
@@ -146,7 +145,6 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                     'icon',
                     'icon-common',
                     'icon-right',
-                    'margin-bottom-none',
                   )}
                   data-icon="&#xf061;"
                 >
@@ -213,7 +211,6 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                     'icon',
                     'icon-common',
                     'icon-right',
-                    'margin-bottom-none',
                   )}
                   data-icon="&#xf061;"
                 >
@@ -275,7 +272,6 @@ export default class Tutorial extends PureComponent /*:: <{||}> */ {
                     'icon',
                     'icon-common',
                     'icon-right',
-                    'margin-bottom-none',
                   )}
                   data-icon="&#xf061;"
                 >
