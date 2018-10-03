@@ -118,7 +118,6 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                     'icon',
                     'icon-common',
                     'icon-right',
-                    'margin-bottom-none',
                   )}
                   data-icon="&#xf061;"
                 >
@@ -183,7 +182,6 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                     'icon',
                     'icon-common',
                     'icon-right',
-                    'margin-bottom-none',
                   )}
                   data-icon="&#xf061;"
                 >
@@ -258,7 +256,6 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
                     'icon',
                     'icon-common',
                     'icon-right',
-                    'margin-bottom-none',
                   )}
                   data-icon="&#xf061;"
                 >
