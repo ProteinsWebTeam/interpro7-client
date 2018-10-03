@@ -1,6 +1,11 @@
 /* eslint-disable no-magic-numbers */
 import React, { PureComponent } from 'react';
 import loadWebComponent from 'utils/load-web-component';
+import T from 'prop-types';
+import { createSelector } from 'reselect';
+import { format } from 'url';
+
+import loadData from 'higherOrder/loadData';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
@@ -13,10 +18,64 @@ import local from './style.css';
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
+import Loading from 'components/SimpleCommonComponents/Loading';
+import { formatISODate } from 'utils/date';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, local, ipro);
 
+const StatsPerType = ({ iconType, label, type, count, child = false }) => (
+  <tr>
+    <td>
+      {iconType && (
+        <interpro-type dimension="2em" type={iconType} aria-label="Entry type">
+          {
+            // IE11 fallback for icons
+          }
+          <span className={f('icon-type', `icon-${iconType}`)}>{label[0]}</span>
+        </interpro-type>
+      )}
+    </td>
+    <td>
+      {child && <span className={f('ico-rel')} />}
+      {label}
+    </td>
+    {count && (
+      <td className={f('text-right')}>
+        <Link
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: { db: 'InterPro' },
+            },
+            search: { type: type },
+          }}
+        >
+          <NumberComponent noTitle>{count}</NumberComponent>
+        </Link>
+      </td>
+    )}
+  </tr>
+);
+StatsPerType.propTypes = {
+  iconType: T.string,
+  label: T.string.isRequired,
+  type: T.string.isRequired,
+  count: T.number,
+  child: T.bool,
+};
+
 class ReleaseNotes extends PureComponent /*:: <{}> */ {
+  static propTypes = {
+    data: T.shape({
+      payload: T.shape({
+        version: T.string.isRequired,
+        release_date: T.string.isRequired,
+        content: T.object.isRequired,
+      }),
+      loading: T.bool.isRequired,
+    }).isRequired,
+  };
   componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
@@ -25,6 +84,34 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
     ).as('interpro-type');
   }
   render() {
+    if (!this.props.data || this.props.data.loading) {
+      return <Loading />;
+    }
+    const { version, release_date: date, content } = this.props.data.payload;
+    const totalIpro = content.interpro.types.reduce(
+      (agg, v) => agg + v.count,
+      0,
+    );
+    const perType = content.interpro.types.reduce((agg, v) => {
+      agg[v.type] = v.count;
+      return agg;
+    }, {});
+    const types = [
+      { label: 'Family', key: 'family' },
+      { label: 'Domain', key: 'domain' },
+      { label: 'Homologous Superfamily', key: 'homologous_superfamily' },
+      { label: 'Repeat', key: 'repeat' },
+      {
+        label: 'Site',
+        key: 'site',
+        children: [
+          { label: 'Active Site', key: 'active_site' },
+          { label: 'Binding Site', key: 'binding_site' },
+          { label: 'Conserved Site', key: 'conserved_site' },
+          { label: 'PTM', key: 'ptm' },
+        ],
+      },
+    ];
     return (
       <div className={f('row')}>
         <div className={f('columns', 'release')}>
@@ -40,9 +127,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               )}
             >
               <h3>
-                InterPro 70.0{' '}
+                InterPro {version}{' '}
                 <small>
-                  • <time dateTime="2018-09-13">13th September 2018</time>
+                  • <time dateTime={date}>{formatISODate(date)}</time>
                 </small>
               </h3>
             </div>
@@ -119,7 +206,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                   },
                 }}
               >
-                <NumberComponent noTitle>{35020}</NumberComponent> entries
+                <NumberComponent noTitle>{totalIpro}</NumberComponent> entries
               </Link>
               , representing:
             </p>
@@ -133,209 +220,29 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               )}
             >
               <tbody>
-                <tr>
-                  <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="Family"
-                      aria-label="Entry type"
-                    >
-                      {
-                        // IE11 fallback for icons
-                      }
-                      <span className={f('icon-type', 'icon-family')}>F</span>
-                    </interpro-type>
-                  </td>
-                  <td>Family</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'family' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{21695}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="Domain"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-domain')}>D</span>
-                    </interpro-type>
-                  </td>
-                  <td>Domain</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'domain' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{9268}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="homologous superfamily"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-hh')}>H</span>
-                    </interpro-type>
-                  </td>
-                  <td>Homologous superfamily</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'homologous_superfamily' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2865}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="repeat"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-repeat')}>R</span>
-                    </interpro-type>
-                  </td>
-                  <td>Repeat</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'repeat' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{280}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <interpro-type
-                      dimension="2em"
-                      type="site"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-site')}>S</span>
-                    </interpro-type>
-                  </td>
-                  <td>Site</td>
-                  <td />
-                </tr>
-
-                <tr>
-                  <td />
-                  <td>
-                    <span className={f('ico-rel')} /> Active site
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'active_site' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{132}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td />
-                  <td>
-                    <span className={f('ico-rel')} /> Binding site
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'binding_site' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{76}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td />
-                  <td>
-                    <span className={f('ico-rel')} /> Conserved site
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'conserved_site' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{687}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td />
-                  <td>
-                    <span className={f('ico-rel')} />{' '}
-                    <Tooltip title="post-translational modification">
-                      PTM
-                    </Tooltip>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'ptm' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{17}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
+                {types.map(({ label, key, children }) => {
+                  const type = label.toLowerCase();
+                  return (
+                    <React.Fragment key={key}>
+                      <StatsPerType
+                        label={label}
+                        iconType={type}
+                        type={key}
+                        count={perType[key]}
+                      />
+                      {children &&
+                        children.map(child => (
+                          <StatsPerType
+                            label={child.label}
+                            key={child.key}
+                            type={child.key}
+                            count={perType[child.key]}
+                            child={true}
+                          />
+                        ))}
+                    </React.Fragment>
+                  );
+                })}
               </tbody>
             </table>
 
@@ -1073,5 +980,17 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
     );
   }
 }
+const getReleaseNotesUrl = createSelector(
+  state => state.settings.api,
+  ({ protocol, hostname, port, root }) =>
+    cleanUpMultipleSlashes(
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}/utils/release/current`,
+      }),
+    ),
+);
 
-export default ReleaseNotes;
+export default loadData(getReleaseNotesUrl)(ReleaseNotes);
