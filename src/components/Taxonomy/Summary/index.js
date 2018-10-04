@@ -191,11 +191,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
               </span>
             )}
           </MemberDBSelector>
-          <Accession
-            accession={metadata.accession}
-            id={metadata.id}
-            title="Tax ID"
-          />
+          <Accession accession={metadata.accession} title="Tax ID" />
           {metadata.rank && <div>Rank: {metadata.rank}</div>}
           {metadata.parent && (
             <SchemaOrgData
