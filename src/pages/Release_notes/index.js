@@ -93,7 +93,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
       0,
     );
     const newIpro = 1; // TODO: Take this value from the release notes.
-    const updates = []; // TODO: Take this value from the release notes.
+    const updates = [['SFLD', 4]]; // TODO: Take this value from the release notes.
     const perType = content.interpro.types.reduce((agg, v) => {
       agg[v.type] = v.count;
       return agg;
