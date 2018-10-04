@@ -10,33 +10,23 @@ Default.propTypes = {
   children: T.oneOfType([T.string, T.number]).isRequired,
 };
 
-const componentMap = new Map([
-  ['reviewed', UniProtLink],
-  ['unreviewed', UniProtLink],
-  ['proteome', ProteomeLink],
-]);
-
 /*:: type Props = {
   accession: string | number,
-  id?: string,
   db: string,
 }; */
 
 export class Accession extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.oneOfType([T.string, T.number]).isRequired,
-    id: T.string,
     title: T.string,
     db: T.string,
   };
 
   render() {
     const { accession, id, db, title } = this.props;
-    const Link = componentMap.get(db) || Default;
     return (
       <div>
-        {title || 'Accession'}: <Link id={accession}>{accession}</Link>
-        {id && ` (${id})`}
+        {title || 'Accession'}: {accession}
       </div>
     );
   }
