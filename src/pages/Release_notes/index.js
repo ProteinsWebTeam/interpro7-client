@@ -92,10 +92,25 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
       (agg, v) => agg + v.count,
       0,
     );
+    const newIpro = 1; // TODO: Take this value from the release notes.
+    const updates = []; // TODO: Take this value from the release notes.
     const perType = content.interpro.types.reduce((agg, v) => {
       agg[v.type] = v.count;
       return agg;
     }, {});
+    const perMemberDB = content.member_databases.reduce((agg, v) => {
+      agg[v.name] = {
+        ...v,
+        new: Math.floor(Math.random() * 100),
+      };
+      return agg;
+    }, {});
+    delete perMemberDB['MobiDB Lite'];
+
+    const totalNewMethod = Object.values(perMemberDB).reduce(
+      (agg, v) => agg + v.new,
+      0,
+    );
     const types = [
       { label: 'Family', key: 'family' },
       { label: 'Domain', key: 'domain' },
@@ -112,6 +127,11 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
         ],
       },
     ];
+    const dbMap = new Map([
+      ['PROSITE patterns', 'prosite'],
+      ['PROSITE profiles', 'profile'],
+      ['SUPERFAMILY', 'ssf'],
+    ]);
     return (
       <div className={f('row')}>
         <div className={f('columns', 'release')}>
@@ -140,64 +160,46 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               <li>
                 The addition of{' '}
                 <NumberComponent noTitle noAnimation>
-                  {662}
+                  {newIpro}
                 </NumberComponent>{' '}
                 InterPro entries.
               </li>
-              <li>An update to SFLD (4).</li>
+              {updates &&
+                !!updates.length && (
+                  <li>
+                    An update to{' '}
+                    {updates.map(([db, count]) => (
+                      <span key={db}>
+                        {db} ({count})
+                      </span>
+                    ))}
+                    .
+                  </li>
+                )}
               <li>
                 Integration of{' '}
                 <NumberComponent noTitle noAnimation>
-                  {886}
+                  {totalNewMethod}
                 </NumberComponent>{' '}
-                new methods from the CATH-Gene3D (
-                <NumberComponent noTitle noAnimation>
-                  {5}
-                </NumberComponent>
-                ), CDD (
-                <NumberComponent noTitle noAnimation>
-                  {17}
-                </NumberComponent>
-                ), HAMAP (
-                <NumberComponent noTitle noAnimation>
-                  {1}
-                </NumberComponent>
-                ), PANTHER (
-                <NumberComponent noTitle noAnimation>
-                  {689}
-                </NumberComponent>
-                ), Pfam (
-                <NumberComponent noTitle noAnimation>
-                  {119}
-                </NumberComponent>
-                ), PIRSF (
-                <NumberComponent noTitle noAnimation>
-                  {1}
-                </NumberComponent>
-                ), PRINTS (
-                <NumberComponent noTitle noAnimation>
-                  {2}
-                </NumberComponent>
-                ), ProDom (
-                <NumberComponent noTitle noAnimation>
-                  {3}
-                </NumberComponent>
-                ), SFLD (
-                <NumberComponent noTitle noAnimation>
-                  {22}
-                </NumberComponent>
-                ) and SMART (
-                <NumberComponent noTitle noAnimation>
-                  {1}
-                </NumberComponent>
-                ) databases.
+                new methods from the
+                {Object.entries(perMemberDB).map(([name, db], i) => (
+                  <React.Fragment key={name}>
+                    {i === 0 ? ' ' : ', '}
+                    {name} (
+                    <NumberComponent noTitle noAnimation>
+                      {db.new}
+                    </NumberComponent>
+                    )
+                  </React.Fragment>
+                ))}{' '}
+                databases.
               </li>
             </ul>
 
             <h4>Contents and coverage</h4>
             <p className={f('margin-bottom-small')}>
               InterPro protein matches are now calculated for all UniProtKB and
-              UniParc proteins. InterPro release 70.0 contains{' '}
+              UniParc proteins. InterPro release {version} contains{' '}
               <Link
                 to={{
                   description: {
@@ -277,567 +279,56 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol
-                      type={'cathgene3d'}
-                      className={f('md-small')}
-                    />
-                  </td>
-                  <td>CATH-Gene3D</td>
-                  <td className={f('text-center')}>4.2.0</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('no-underline')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'cathgene3d' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{6119}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('no-underline')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'cathgene3d',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2147}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 2147) / 6119) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'cdd'} className={f('md-small')} />
-                  </td>
-                  <td>CDD</td>
-                  <td className={f('text-center')}>3.16</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('no-underline')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'cdd' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{12805}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'cdd',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2910}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 2910) / 12805) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'hamap'} className={f('md-small')} />
-                  </td>
-                  <td>HAMAP</td>
-                  <td className={f('text-center')}>2018_03</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'hamap' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2246}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'hamap',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2245}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 2245) / 2246) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'panther'} className={f('md-small')} />
-                  </td>
-                  <td>PANTHER</td>
-                  <td className={f('text-center')}>12.0</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'panther' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{90742}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'panther',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{8974}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 8974) / 90742) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'pfam'} className={f('md-small')} />
-                  </td>
-                  <td>Pfam</td>
-                  <td className={f('text-center')}>31.0</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'Pfam' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{16712}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'Pfam',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{16235}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 16235) / 16712) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'pirsf'} className={f('md-small')} />
-                  </td>
-                  <td>PIRSF</td>
-                  <td className={f('text-center')}>3.02</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'pirsf' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{3285}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'pirsf',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{3223}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 3223) / 3285) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'prints'} className={f('md-small')} />
-                  </td>
-                  <td>PRINTS</td>
-                  <td className={f('text-center')}>42.0</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'prints' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2106}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'prints',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1965}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1965) / 2106) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'prodom'} className={f('md-small')} />
-                  </td>
-                  <td>ProDom</td>
-                  <td className={f('text-center')}>2006.1</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'prodom' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1894}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'prodom',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1311}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1311) / 1894) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'prosite'} className={f('md-small')} />
-                  </td>
-                  <td>PROSITE patterns</td>
-                  <td className={f('text-center')}>2018_02</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'prosite' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1309}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'prosite',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1287}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1287) / 1309) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'profile'} className={f('md-small')} />
-                  </td>
-                  <td>PROSITE profiles</td>
-                  <td className={f('text-center')}>2018_02</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'profile' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1210}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'profile',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1174}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1174) / 1210) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'sfld'} className={f('md-small')} />
-                  </td>
-                  <td>SFLD</td>
-                  <td className={f('text-center')}>4</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'sfld' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{303}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'sfld',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{164}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 164) / 303) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'smart'} className={f('md-small')} />
-                  </td>
-                  <td>SMART</td>
-                  <td className={f('text-center')}>7.1</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'smart' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1312}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'smart',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1264}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1264) / 1312) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'ssf'} className={f('md-small')} />
-                  </td>
-                  <td>SUPERFAMILY</td>
-                  <td className={f('text-center')}>1.75</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'ssf' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2019}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'ssf',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1601}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1601) / 2019) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'tigrfams'} className={f('md-small')} />
-                  </td>
-                  <td>TIGRFAMs</td>
-                  <td className={f('text-center')}>15.0</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'tigrfams' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{4488}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'tigrfams',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{4438}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 4438) / 4488) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
+                {Object.values(perMemberDB).map(
+                  ({ name, version, integrated, count }) => {
+                    const db =
+                      dbMap.get(name) || name.toLowerCase().replace('-', '');
+                    return (
+                      <tr key={name}>
+                        <td className={f('no-lineheight')}>
+                          <MemberSymbol type={db} className={f('md-small')} />
+                        </td>
+                        <td>{name}</td>
+                        <td className={f('text-center')}>{version}</td>
+                        <td className={f('text-right')}>
+                          <Link
+                            className={f('no-underline')}
+                            to={{
+                              description: {
+                                main: { key: 'entry' },
+                                entry: { db: db },
+                              },
+                            }}
+                          >
+                            <NumberComponent noTitle>{count}</NumberComponent>
+                          </Link>
+                        </td>
+                        <td className={f('text-right')}>
+                          <Link
+                            className={f('no-underline')}
+                            to={{
+                              description: {
+                                main: { key: 'entry' },
+                                entry: {
+                                  db: db,
+                                  integration: 'integrated',
+                                },
+                              },
+                            }}
+                          >
+                            <NumberComponent noTitle>
+                              {integrated}
+                            </NumberComponent>{' '}
+                            <small>
+                              ({(integrated / count).toFixed(1)}
+                              %)
+                            </small>
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  },
+                )}
               </tbody>
             </table>
 
