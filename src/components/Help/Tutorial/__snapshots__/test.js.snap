@@ -82,7 +82,7 @@ exports[`<Tutorial /> should render 1`] = `
           className="card-more"
         >
           <div
-            className="button hollow secondary button-more icon icon-common icon-right margin-bottom-none"
+            className="button hollow secondary button-more icon icon-common icon-right"
             data-icon=""
           >
             Start the course
@@ -160,7 +160,7 @@ exports[`<Tutorial /> should render 1`] = `
           className="card-more"
         >
           <div
-            className="button hollow secondary button-more icon icon-common icon-right margin-bottom-none"
+            className="button hollow secondary button-more icon icon-common icon-right"
             data-icon=""
           >
             Start the course
@@ -239,7 +239,7 @@ exports[`<Tutorial /> should render 1`] = `
           className="card-more"
         >
           <div
-            className="button hollow secondary button-more icon icon-common icon-right margin-bottom-none"
+            className="button hollow secondary button-more icon icon-common icon-right"
             data-icon=""
           >
             Start the course
@@ -318,7 +318,7 @@ exports[`<Tutorial /> should render 1`] = `
           className="card-more"
         >
           <div
-            className="button hollow secondary button-more icon icon-common icon-right margin-bottom-none"
+            className="button hollow secondary button-more icon icon-common icon-right"
             data-icon=""
           >
             Start the course
