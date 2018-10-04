@@ -4,11 +4,7 @@ exports[`<Accession /> should render the accession component for UniProt proteom
 <div>
   Accession
   : 
-  <ProteomeLink
-    id="UP000000278"
-  >
-    UP000000278
-  </ProteomeLink>
+  UP000000278
 </div>
 `;
 
@@ -16,12 +12,7 @@ exports[`<Accession /> should render the accession component for UniProt reviewe
 <div>
   Accession
   : 
-  <UniProtLink
-    id="A0A023GPI8"
-  >
-    A0A023GPI8
-  </UniProtLink>
-   (LECA_CANBL)
+  A0A023GPI8
 </div>
 `;
 
@@ -29,11 +20,7 @@ exports[`<Accession /> should render the accession component for UniProt reviewe
 <div>
   Accession
   : 
-  <UniProtLink
-    id="A0A023GPI8"
-  >
-    A0A023GPI8
-  </UniProtLink>
+  A0A023GPI8
 </div>
 `;
 
@@ -41,12 +28,7 @@ exports[`<Accession /> should render the accession component for UniProt unrevie
 <div>
   Accession
   : 
-  <UniProtLink
-    id="A0A1S2IFJ5"
-  >
-    A0A1S2IFJ5
-  </UniProtLink>
-   (A0A1S2IFJ5_9MICO)
+  A0A1S2IFJ5
 </div>
 `;
 
@@ -54,11 +36,7 @@ exports[`<Accession /> should render the accession component for UniProt unrevie
 <div>
   Accession
   : 
-  <UniProtLink
-    id="A0A1S2IFJ5"
-  >
-    A0A1S2IFJ5
-  </UniProtLink>
+  A0A1S2IFJ5
 </div>
 `;
 
@@ -66,11 +44,7 @@ exports[`<Accession /> should render the accession component for other 1`] = `
 <div>
   Accession
   : 
-  <Default
-    id="iprscan5-R20171012-151028-0135-99171282-p1m"
-  >
-    iprscan5-R20171012-151028-0135-99171282-p1m
-  </Default>
+  iprscan5-R20171012-151028-0135-99171282-p1m
 </div>
 `;
 
@@ -78,10 +52,6 @@ exports[`<Accession /> should render the accession component for taxon 1`] = `
 <div>
   Accession
   : 
-  <Default
-    id={1}
-  >
-    1
-  </Default>
+  1
 </div>
 `;
