@@ -30,7 +30,6 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
         <div className={f('medium-9', 'columns')}>
           <div>
             <Accession
-              id={metadata.id}
               accession={metadata.proteomeAccession || metadata.accession}
               title="Proteome ID"
             />
