@@ -50,8 +50,8 @@ const MemberDBSubtitle = ({ metadata }) => {
         <Link
           to={{
             description: {
-              mainType: 'entry',
-              mainDB: metadata.source_database,
+              main: { key: 'entry' },
+              entry: { db: metadata.source_database },
             },
           }}
         >
