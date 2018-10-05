@@ -59,6 +59,9 @@ class SummaryComponent extends PureComponent {
     data: T.shape({
       payload: T.any,
     }).isRequired,
+    dataBase: T.shape({
+      payload: T.any,
+    }).isRequired,
     customLocation: T.object.isRequired,
     SummaryAsync: T.func,
   };
@@ -66,14 +69,20 @@ class SummaryComponent extends PureComponent {
   render() {
     const {
       data: { payload, loading },
+      dataBase: {
+        payload: { databases },
+        loading: loadingDB,
+      },
       customLocation,
       SummaryAsync,
     } = this.props;
+    const db = databases[customLocation.description.entry.db];
     return (
       <SummaryAsync
         data={payload}
+        dbInfo={db}
         customLocation={customLocation}
-        loading={loading}
+        loading={loading && loadingDB}
       />
     );
   }
