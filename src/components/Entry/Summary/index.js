@@ -35,14 +35,13 @@ const description2IDs = description =>
     [],
   );
 
-const MemberDBSubtitle = ({ metadata }) => {
+const MemberDBSubtitle = ({ metadata, dbInfo }) => {
   if (
     !metadata.source_database ||
     metadata.source_database.toLowerCase() === 'interpro'
   ) {
     return null;
   }
-
   return (
     <div className={f('md-hlight')}>
       <h5>
@@ -56,7 +55,9 @@ const MemberDBSubtitle = ({ metadata }) => {
           }}
         >
           {metadata.source_database}{' '}
-          <Tooltip title={metadata.source_database}>
+          <Tooltip
+            title={dbInfo.description || `${dbInfo.name} (${dbInfo.version})`}
+          >
             <span
               className={f('small', 'icon', 'icon-common')}
               data-icon="&#xf129;"
@@ -195,6 +196,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object,
     }).isRequired,
+    dbInfo: T.object,
     loading: T.bool.isRequired,
   };
   constructor(props) {
@@ -204,6 +206,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
   render() {
     const {
       data: { metadata },
+      dbInfo,
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
     const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
@@ -232,7 +235,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
-              <MemberDBSubtitle metadata={metadata} />
+              <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
               {metadata.source_database &&
                 metadata.source_database.toLowerCase() === 'interpro' &&
                 metadata.name.short &&
