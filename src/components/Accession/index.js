@@ -3,7 +3,10 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { UniProtLink, ProteomeLink } from 'components/ExtLink';
+import { foundationPartial } from 'styles/foundation';
+import ipro from 'styles/interpro-new.css';
+
+const f = foundationPartial(ipro);
 
 const Default = ({ children }) => <span>{children}</span>;
 Default.propTypes = {
@@ -23,10 +26,15 @@ export class Accession extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { accession, id, db, title } = this.props;
+    const { accession, title } = this.props;
     return (
       <div>
-        {title || 'Accession'}: {accession}
+        {title || 'Accession'}:
+        {title === 'Job ID' ? (
+          <span className={f('tag-sqc')}> {accession}</span>
+        ) : (
+          accession
+        )}
       </div>
     );
   }
