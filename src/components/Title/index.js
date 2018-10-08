@@ -166,12 +166,11 @@ class Title extends PureComponent /*:: <Props> */ {
             )}
 
             {// Species
-            metadata.source_database !== 'proteome' &&
-              mainType === 'organism' && (
-                <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-                  {dbLabel}
-                </div>
-              )}
+            mainType === 'taxonomy' && (
+              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+                Taxonomy
+              </div>
+            )}
 
             {// Proteome
             mainType === 'proteome' && (
