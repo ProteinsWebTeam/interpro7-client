@@ -174,18 +174,11 @@ class Title extends PureComponent /*:: <Props> */ {
               )}
 
             {// Proteome
-            metadata.is_reference ? (
+            mainType === 'proteome' && (
               <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-                Reference proteome{' '}
-                <Tooltip title="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny.">
-                  <span
-                    className={f('small', 'icon', 'icon-common')}
-                    data-icon="&#xf129;"
-                    aria-label="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny."
-                  />
-                </Tooltip>
+                {metadata.is_reference ? 'Reference' : 'Non-reference'} proteome
               </div>
-            ) : null}
+            )}
 
             {// Set
             mainType === 'set' && (
@@ -226,10 +219,11 @@ class Title extends PureComponent /*:: <Props> */ {
                 {metadata.accession}
               </span>
             )}
-          {// greyish accession: for protein , structure, and proteomes and no accession for tax
+          {// greyblueish accession: for protein , structure, and proteomes and no accession for tax
           accessionDisplay.has(mainType) &&
-            metadata.source_database !== 'taxonomy' && (
-              // no accession for Taxonomy but in blue for protein (reviewed), structure (pdb), and proteomes (proteome)
+            metadata.source_database !== 'taxonomy' &&
+            metadata.name.name !== 'InterProScan Search' && (
+              // for proteins, structures and proteomes (no accession in title for taxonomy and sets)
               <span className={f('title-id-other')}>{metadata.accession}</span>
             )}
         </div>
