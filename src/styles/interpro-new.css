@@ -515,20 +515,38 @@ hr {
   font-size: 280%;
 }
 
-.font-xxlarge {
+.font-xxl {
   font-size: 400%;
 }
-.font-xlarge {
+.font-xl {
   font-size: 300%;
 }
-.font-large {
-  font-size: 170%;
+.font-l {
+  font-size: 160%;
 }
-.font-medium {
+
+.font-ml {
+  font-size: 120%;
+}
+
+.font-m {
   font-size: 100%;
 }
-.font-small {
-  font-size: 90%;
+
+.font-sm {
+  font-size: 80%;
+}
+
+.font-s {
+  font-size: 60%;
+}
+
+.font-xs {
+  font-size: 40%;
+}
+
+.font-xxs {
+  font-size: 20%;
 }
 
 .margin-top-xxlarge {
@@ -556,6 +574,15 @@ hr {
 /* tag used on md signature page */
 .tag.md-p {
   background-color: var(--colors-md-sub);
+}
+
+/*used on ipscan search result*/
+.tag-sqc {
+  background-color: var(--colors-other-main);
+  margin-left: 0.2rem;
+  padding: 0.3rem 0.5rem;
+  color: var(--colors-light-title);
+  text-transform: uppercase;
 }
 
 /*CALLOUT info & alert messages*/
@@ -681,8 +708,10 @@ hr {
   bottom: -8px;
   left: 7%;
   background-color: var(--colors-submain); /*default color*/
-  opacity: 0.7;
+  opacity: 0.9;
   transition: opacity var(--timing-really-fast) ease-out;
+  min-width: 100px;
+  text-align: center;
 }
 
 /*to move to colors?*/
@@ -692,6 +721,73 @@ hr {
 .card-tag.tag-tuto {
   background-color: #fab700;
 }
+
+.card-tag.tag-tool {
+  background-color: rgb(45, 125, 149);
+  /*background-color: var(--colors-submain);*/
+  /*background-color: var(--colors-main);*/
+}
+
+.card-tag.tag-focus {
+  /*background-color: #c29880;*/
+  background-color: #ef5f57;
+}
+
+.card-tag.tag-blog {
+  /*background-color: #95afaa;*/
+  background-color: var(--colors-interpro);
+}
+
+/*img tool + focus&blog homepage - background-position for 4 cards - temp*/
+.blog-newweb {
+  background: url('../images/cover/blog/blog_new_interpro.PNG') no-repeat 50%
+    56%;
+  background-size: 100%;
+}
+/* nice multi bgd effect */
+.blog-iceberg {
+  background: url('../images/cover/blog/blog_iceberg.png') no-repeat 50% 56%,
+    linear-gradient(
+      to bottom,
+      #e8e9d0 0%,
+      #e8e9d0 32%,
+      #b8c1c9 32%,
+      #b8c1c9 100%
+    );
+}
+
+.blog-type {
+  background: url('../images/cover/blog/blog_type.png') no-repeat 50% 56%;
+  background-size: 36%;
+}
+
+.focus-ape {
+  background: url('../images/cover/focus/focus_ape.png') no-repeat 50% 16%;
+  background-size: 100%;
+}
+
+.tool-ipscan {
+  background: url('../images/cover/tool/tool_interproscan.svg') no-repeat 50%
+    26%;
+  background-size: contain;
+  background-color: #0d68a6;
+}
+
+.tool-api {
+  background: url('../images/cover/tool/tool_api.png') no-repeat 50% 76%;
+  background-size: 56%;
+}
+
+.tool-protvista {
+  background: url('../images/cover/tool/tool_protvista.png') no-repeat 40% 14%;
+  background-size: 268%;
+}
+
+.tool-litemol {
+  background: url('../images/cover/tool/tool_litemol.png') no-repeat 50% 14%;
+  background-size: 210%;
+}
+/*/img tool homepage - temp*/
 
 .card-content {
   /*border: 1px red solid;*/
@@ -745,12 +841,13 @@ hr {
 }
 .card-more {
   align-self: flex-end;
+  margin-right: 1rem;
 }
 
 .button-more {
-  width: 50%;
+  /*width: 50%;*/
   position: relative;
-  min-width: 200px; /*for small screens*/
+  min-width: 182px; /*for small screens*/
 }
 
 .icon.button-more {
@@ -769,11 +866,11 @@ hr {
   content: attr(data-icon);
   font-family: 'EBI-Common';
   position: absolute;
-  right: 1.5rem;
-  transition: all var(--timing-instant) ease-in;
+  right: 0.6rem;
+  transition: all var(--timing-instant) ease-in-out;
 }
 .icon-common.icon-right:hover:after {
-  right: 1em;
+  right: 0.3em;
 }
 /*/CARDS*/
 
