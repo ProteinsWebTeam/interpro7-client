@@ -134,7 +134,12 @@ class Title extends PureComponent /*:: <Props> */ {
         </Helmet>
 
         <div className={f('title-name')}>
-          <h3>{metadata.name.name} </h3>
+          {// add margin only for IPSCAN result page
+          metadata.name.name === 'InterProScan Search' ? (
+            <h3 className={f('margin-bottom-large')}>{metadata.name.name} </h3>
+          ) : (
+            <h3>{metadata.name.name} </h3>
+          )}
           <div className={f('title-tag')}>
             {// InterPro Entry
             isEntry &&
@@ -151,12 +156,13 @@ class Title extends PureComponent /*:: <Props> */ {
                 <div className={f('tag', 'md-p')}>{dbLabel} Entry</div>
               )}
 
-            {// protein page
-            mainType === 'protein' && (
-              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-                Protein {dbLabel}
-              </div>
-            )}
+            {// protein page (remove tag for IPSCAN result page
+            mainType === 'protein' &&
+              metadata.name.name !== 'InterProScan Search' && (
+                <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+                  Protein {dbLabel}
+                </div>
+              )}
 
             {// Structure
             mainType === 'structure' && (
