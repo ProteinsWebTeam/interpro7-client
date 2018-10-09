@@ -637,6 +637,9 @@ hr {
 }
 /*/ CALLOUT info & alert messages*/
 
+.shortname {
+  color: var(--colors-graydark);
+}
 /****************************** END TITLE - TEXT *********************************/
 
 /****************************** OTHERS *********************************/
