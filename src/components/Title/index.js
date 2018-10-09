@@ -159,35 +159,29 @@ class Title extends PureComponent /*:: <Props> */ {
             {// protein page (remove tag for IPSCAN result page
             mainType === 'protein' &&
               metadata.name.name !== 'InterProScan Search' && (
-                <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-                  Protein {dbLabel}
-                </div>
+                <div className={f('tag', 'secondary')}>Protein {dbLabel}</div>
               )}
 
             {// Structure
             mainType === 'structure' && (
-              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-                Structure
-              </div>
+              <div className={f('tag', 'secondary')}>Structure</div>
             )}
 
             {// Species
             mainType === 'taxonomy' && (
-              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-                Taxonomy
-              </div>
+              <div className={f('tag', 'secondary')}>Taxonomy</div>
             )}
 
             {// Proteome
             mainType === 'proteome' && (
-              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+              <div className={f('tag', 'secondary')}>
                 {metadata.is_reference ? 'Reference' : 'Non-reference'} proteome
               </div>
             )}
 
             {// Set
             mainType === 'set' && (
-              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+              <div className={f('tag', 'secondary')}>
                 Set {dbLabel}{' '}
                 <Tooltip title="A Set is defined as a group of related entries">
                   <span
