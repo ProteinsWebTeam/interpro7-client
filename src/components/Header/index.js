@@ -98,6 +98,7 @@ export class _SideIcons extends PureComponent {
     movedAway: T.bool.isRequired,
     stuck: T.bool.isRequired,
     lowGraphics: T.bool.isRequired,
+    search: T.object.isRequired,
   };
 
   render() {
