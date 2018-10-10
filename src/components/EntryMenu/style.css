@@ -12,6 +12,9 @@
   &:hover > .fake-border {
     will-change: transform;
   }
+  &:before {
+    display: none; /*remove foundation empty space defined by default on the before element*/
+  }
 }
 
 .fake-border {
