@@ -3,7 +3,7 @@
 .title {
   display: flex;
 
-  & > div:first-of-type:not(.icon-container) {
+  & > div:first-of-type:not(.icon-container):not(.title-name) {
     margin-top: 0.5rem; /* when using tooltip only way to move the SVG icon*/
   }
 
