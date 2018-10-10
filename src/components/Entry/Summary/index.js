@@ -81,6 +81,7 @@ const MemberDBSubtitle = ({ metadata, dbInfo }) => {
 };
 MemberDBSubtitle.propTypes = {
   metadata: T.object.isRequired,
+  dbInfo: T.object.isRequired,
 };
 
 const SidePanel = ({ metadata }) => (
