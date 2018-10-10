@@ -101,7 +101,7 @@ export class _SideIcons extends PureComponent {
   };
 
   render() {
-    const { movedAway, stuck, lowGraphics } = this.props;
+    const { movedAway, stuck, lowGraphics, search } = this.props;
     return (
       <div
         className={styleBundle('columns', 'small-6', 'medium-4', {
@@ -116,7 +116,10 @@ export class _SideIcons extends PureComponent {
               to={{
                 description: {
                   main: { key: 'search' },
-                  search: { type: 'text' },
+                  search: {
+                    ...search,
+                    type: 'text',
+                  },
                 },
               }}
             >
@@ -148,7 +151,8 @@ export class _SideIcons extends PureComponent {
 const mapStateToPropsSideIcons = createSelector(
   sideNavSelector,
   state => state.settings.ui.lowGraphics,
-  (movedAway, lowGraphics) => ({ movedAway, lowGraphics }),
+  state => state.customLocation.description.search,
+  (movedAway, lowGraphics, search) => ({ movedAway, lowGraphics, search }),
 );
 const SideIcons = connect(mapStateToPropsSideIcons)(_SideIcons);
 
