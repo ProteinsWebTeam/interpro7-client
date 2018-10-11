@@ -445,12 +445,15 @@ class List extends PureComponent {
                   <Link
                     to={{
                       description: {
-                        main: { key: 'taxonomy' },
-                        taxonomy: {
+                        main: { key: 'proteome' },
+                        proteome: {
                           db: 'uniprot',
                           accession: `${accession}`,
                         },
-                        protein: { isFilter: true, db: 'UniProt' },
+                        protein: { isFilter: true, db: 'UniProt', order: 1 },
+                        entry: entryDB
+                          ? { isFilter: true, db: entryDB, order: 2 }
+                          : null,
                       },
                     }}
                   >
