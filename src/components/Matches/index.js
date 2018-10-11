@@ -415,7 +415,41 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={count => <NumberComponent abbr>{count}</NumberComponent>}
+      renderer={(
+        count,
+        {
+          accession,
+          source_database: sourceDatabase,
+          match: {
+            [secondary]: { accession: acc, source_database: db },
+          },
+        },
+      ) => (
+        <Link
+          to={{
+            description: {
+              main: { key: secondary },
+              [secondary]: {
+                accession: acc,
+                db,
+              },
+              protein: {
+                db: 'uniprot',
+                order: 1,
+                isFilter: true,
+              },
+              [primary]: {
+                db: sourceDatabase,
+                accession,
+                order: 2,
+                isFilter: true,
+              },
+            },
+          }}
+        >
+          <NumberComponent abbr>{count}</NumberComponent>
+        </Link>
+      )}
     >
       protein count
     </Column>
