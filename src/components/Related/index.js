@@ -208,6 +208,9 @@ export class _RelatedAdvanced extends PureComponent {
     mainType: T.string.isRequired,
     focusType: T.string.isRequired,
     actualSize: T.number,
+    otherFilters: T.arrayOf(
+      T.shape([T.string.isRequired, T.object.isRequired]),
+    ),
   };
 
   render() {
@@ -218,6 +221,7 @@ export class _RelatedAdvanced extends PureComponent {
       mainType,
       focusType,
       actualSize,
+      otherFilters,
     } = this.props;
     return (
       <div>
@@ -235,6 +239,33 @@ export class _RelatedAdvanced extends PureComponent {
                 ? ` these ${toPlural(focusType)}:`
                 : ` this ${focusType}:`}
             </p>
+            {otherFilters &&
+              otherFilters.length > 0 && (
+                <div className={f('callout', 'info', 'withicon')}>
+                  This list have been filtered by:
+                  <ul>
+                    {otherFilters.map(([endpoint, { db, accession }]) => (
+                      <li key={endpoint}>
+                        The {toPlural(focusType)} associated with{' '}
+                        <b>{toPlural(endpoint)}</b>
+                        {db && (
+                          <span>
+                            {' '}
+                            in the database <b>{db}</b>
+                          </span>
+                        )}
+                        {accession && (
+                          <span>
+                            {' '}
+                            with accession <b>{accession}</b>
+                          </span>
+                        )}
+                        .
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
           </div>
         </div>
         {focusType === 'protein' && (
@@ -263,12 +294,17 @@ const mapStateToPropsAdvanced = createSelector(
   state => state.customLocation.description.main.key,
   state =>
     Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter,
+      ([_key, value]) => value.isFilter && value.order === 1,
     ),
-  (mainType, [focusType, { db: focusDB }]) => ({
+  state =>
+    Object.entries(state.customLocation.description).filter(
+      ([_key, value]) => value.isFilter && value.order !== 1,
+    ),
+  (mainType, [focusType, { db: focusDB }], otherFilters) => ({
     mainType,
     focusType,
     focusDB,
+    otherFilters,
   }),
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
