@@ -129,16 +129,112 @@ class Title extends PureComponent /*:: <Props> */ {
             </div>
           )}
 
-        <Helmet>
-          <title>{metadata.accession}</title>
-        </Helmet>
+        {// Title - InterPro Entry
+        isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() === 'interpro' && (
+            <Helmet
+              titleTemplate={`${
+                metadata.name.name
+              } ${metadata.accession.toUpperCase()} - Entry - InterPro`}
+            >
+              <title>
+                {' '}
+                {metadata.name.name} {metadata.accession}
+              </title>
+            </Helmet>
+          )}
+
+        {//Title - MD Entry
+        isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() !== 'interpro' && (
+            <Helmet
+              titleTemplate={`${
+                metadata.name.name
+              } (${metadata.accession.toUpperCase()}) - ${dbLabel} entry - InterPro`}
+            >
+              <title>
+                {' '}
+                {metadata.name.name} {metadata.accession}
+              </title>
+            </Helmet>
+          )}
+
+        {//Title - protein page
+        mainType === 'protein' && (
+          <Helmet
+            titleTemplate={`${
+              metadata.name.name
+            } (${metadata.accession.toUpperCase()}) - Protein - InterPro`}
+          >
+            <title>
+              {' '}
+              {metadata.name.name} {metadata.accession}
+            </title>
+          </Helmet>
+        )}
+
+        {// Title - Structure
+        mainType === 'structure' && (
+          <Helmet
+            titleTemplate={`${
+              metadata.name.name
+            } (${metadata.accession.toUpperCase()}) - Structure - InterPro`}
+          >
+            <title>
+              {metadata.name.name} {metadata.accession}
+            </title>
+          </Helmet>
+        )}
+
+        {// Title - Species
+        mainType === 'taxonomy' && (
+          <Helmet
+            titleTemplate={`${
+              metadata.name.name
+            } (${metadata.accession.toUpperCase()}) - Taxonomy - InterPro`}
+          >
+            <title>
+              {metadata.name.name} {metadata.accession}
+            </title>
+          </Helmet>
+        )}
+
+        {// Title - Proteome
+        mainType === 'proteome' && (
+          <Helmet
+            titleTemplate={`${
+              metadata.name.name
+            } (${metadata.accession.toUpperCase()}) - Proteome - InterPro`}
+          >
+            <title>
+              {metadata.name.name} {metadata.accession}
+            </title>
+          </Helmet>
+        )}
+
+        {// Title - Set
+        mainType === 'set' && (
+          <Helmet
+            titleTemplate={`${
+              metadata.name.name
+            } (${metadata.accession.toUpperCase()}) -  Set - InterPro`}
+          >
+            <title>
+              {metadata.name.name} {metadata.accession}
+            </title>
+          </Helmet>
+        )}
 
         <div className={f('title-name')}>
           {// add margin only for IPSCAN result page
           metadata.name.name === 'InterProScan Search' ? (
             <h3 className={f('margin-bottom-large')}>{metadata.name.name} </h3>
           ) : (
-            <h3>{metadata.name.name} </h3>
+            <h3>{metadata.name.name}</h3>
           )}
           <div className={f('title-tag')}>
             {// InterPro Entry
