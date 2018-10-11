@@ -139,10 +139,7 @@ class Title extends PureComponent /*:: <Props> */ {
                 metadata.name.name
               } ${metadata.accession.toUpperCase()} - Entry - InterPro`}
             >
-              <title>
-                {' '}
-                {metadata.name.name} {metadata.accession}
-              </title>
+              <title> </title>
             </Helmet>
           )}
 
@@ -156,10 +153,7 @@ class Title extends PureComponent /*:: <Props> */ {
                 metadata.name.name
               } (${metadata.accession.toUpperCase()}) - ${dbLabel} entry - InterPro`}
             >
-              <title>
-                {' '}
-                {metadata.name.name} {metadata.accession}
-              </title>
+              <title> </title>
             </Helmet>
           )}
 
@@ -170,10 +164,7 @@ class Title extends PureComponent /*:: <Props> */ {
               metadata.name.name
             } (${metadata.accession.toUpperCase()}) - Protein - InterPro`}
           >
-            <title>
-              {' '}
-              {metadata.name.name} {metadata.accession}
-            </title>
+            <title> </title>
           </Helmet>
         )}
 
@@ -184,9 +175,7 @@ class Title extends PureComponent /*:: <Props> */ {
               metadata.name.name
             } (${metadata.accession.toUpperCase()}) - Structure - InterPro`}
           >
-            <title>
-              {metadata.name.name} {metadata.accession}
-            </title>
+            <title> </title>
           </Helmet>
         )}
 
@@ -197,9 +186,7 @@ class Title extends PureComponent /*:: <Props> */ {
               metadata.name.name
             } (${metadata.accession.toUpperCase()}) - Taxonomy - InterPro`}
           >
-            <title>
-              {metadata.name.name} {metadata.accession}
-            </title>
+            <title> </title>
           </Helmet>
         )}
 
@@ -210,9 +197,7 @@ class Title extends PureComponent /*:: <Props> */ {
               metadata.name.name
             } (${metadata.accession.toUpperCase()}) - Proteome - InterPro`}
           >
-            <title>
-              {metadata.name.name} {metadata.accession}
-            </title>
+            <title> </title>
           </Helmet>
         )}
 
@@ -223,9 +208,7 @@ class Title extends PureComponent /*:: <Props> */ {
               metadata.name.name
             } (${metadata.accession.toUpperCase()}) -  Set - InterPro`}
           >
-            <title>
-              {metadata.name.name} {metadata.accession}
-            </title>
+            <title> </title>
           </Helmet>
         )}
 
