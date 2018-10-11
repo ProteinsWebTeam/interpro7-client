@@ -242,22 +242,22 @@ export class _RelatedAdvanced extends PureComponent {
             {otherFilters &&
               otherFilters.length > 0 && (
                 <div className={f('callout', 'info', 'withicon')}>
-                  This list have been filtered by:
+                  This list shows only:
                   <ul>
                     {otherFilters.map(([endpoint, { db, accession }]) => (
                       <li key={endpoint}>
-                        The {toPlural(focusType)} associated with{' '}
-                        <b>{toPlural(endpoint)}</b>
-                        {db && (
-                          <span>
-                            {' '}
-                            in the database <b>{db}</b>
-                          </span>
-                        )}
+                        {toPlural(focusType)} associated with{' '}
+                        <b>{accession ? endpoint : toPlural(endpoint)}</b>
                         {accession && (
                           <span>
                             {' '}
-                            with accession <b>{accession}</b>
+                            accession <b>{accession}</b>
+                          </span>
+                        )}
+                        {db && (
+                          <span>
+                            {' '}
+                            from the <b>{db}</b> database
                           </span>
                         )}
                         .
