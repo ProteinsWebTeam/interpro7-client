@@ -11,7 +11,9 @@ export default (description /*: {[key: string]: string} */ = {}) => {
     // if not in provided description, fill output with null
     if (!get(description, key)) {
       try {
-        set(_description, key, null);
+        if (key.indexOf('order') === -1) {
+          set(_description, key, null);
+        }
       } finally {
         continue;
       }
@@ -37,6 +39,12 @@ export default (description /*: {[key: string]: string} */ = {}) => {
       key,
       matchingHandler.cleanedUp || matchingHandler.cleanUp(value, _description),
     );
+    if (key.indexOf('isFilter') >= 0) {
+      _description.main.numberOfFilters++;
+      const endpoint = key.split('.')[0];
+      _description[endpoint].order =
+        _description[endpoint].order || _description.main.numberOfFilters;
+    }
   }
   // Specific logic for 'other'
   _description.other.push(...(description.other || []));

@@ -15,6 +15,7 @@ import { get, set } from 'lodash-es';
 /*:: export type Description = {|
   main: {|
     key: ?PossibleMain,
+    numberOfFilters: number,
   |},
   entry: {|
     isFilter: ?boolean,
@@ -24,12 +25,14 @@ import { get, set } from 'lodash-es';
     memberDB: ?string,
     memberAccession: ?string,
     detail: ?string,
+    order: ?number,
   |},
   protein: {|
     isFilter: ?boolean,
     db: ?string,
     accession: ?string,
     detail: ?string,
+    order: ?number,
   |},
   structure: {|
     isFilter: ?boolean,
@@ -37,24 +40,28 @@ import { get, set } from 'lodash-es';
     accession: ?string,
     chain: ?string,
     detail: ?string,
+    order: ?number,
   |},
   taxonomy: {|
     isFilter: ?boolean,
     db: ?string,
     accession: ?string,
     detail: ?string,
+    order: ?number,
   |},
   proteome: {|
     isFilter: ?boolean,
     db: ?string,
     accession: ?string,
     detail: ?string,
+    order: ?number,
   |},
   set: {|
     isFilter: ?boolean,
     db: ?string,
     accession: ?string,
     detail: ?string,
+    order: ?number,
   |},
   search: {|
     type: ?string,
@@ -115,6 +122,10 @@ const templateHandler /*: Handler */ = {
         key,
         this.cleanedUp || this.cleanUp(current, description),
       );
+      if (key[1] && key[1] === 'isFilter') {
+        description.main.numberOfFilters++;
+        description[key[0]].order = description.main.numberOfFilters;
+      }
     }
     if (!next) return description;
     for (const child of this.children) {
@@ -343,6 +354,20 @@ export const proteinAccessionHandler /*: Handler */ = handlerConstructor({
   },
   regexp: {
     value: /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
+  },
+});
+export const orderHandler /*: Handler */ = handlerConstructor({
+  name: {
+    value: 'orderHandler',
+  },
+  getKey: {
+    value: ({ main: { key } }) => (key ? [key, 'order'] : null),
+  },
+  cleanUp: {
+    value: (value, _description) => value,
+  },
+  regexp: {
+    value: /^(\d+)$/i,
   },
 });
 
