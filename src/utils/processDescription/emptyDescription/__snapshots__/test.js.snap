@@ -10,6 +10,7 @@ Object {
     "isFilter": null,
     "memberDB": null,
     "memberDBAccession": null,
+    "order": null,
   },
   "job": Object {
     "accession": null,
@@ -18,6 +19,7 @@ Object {
   },
   "main": Object {
     "key": null,
+    "numberOfFilters": 0,
   },
   "other": Array [],
   "protein": Object {
@@ -25,12 +27,14 @@ Object {
     "db": null,
     "detail": null,
     "isFilter": null,
+    "order": null,
   },
   "proteome": Object {
     "accession": null,
     "db": null,
     "detail": null,
     "isFilter": null,
+    "order": null,
   },
   "search": Object {
     "type": null,
@@ -41,6 +45,7 @@ Object {
     "db": null,
     "detail": null,
     "isFilter": null,
+    "order": null,
   },
   "structure": Object {
     "accession": null,
@@ -48,12 +53,14 @@ Object {
     "db": null,
     "detail": null,
     "isFilter": null,
+    "order": null,
   },
   "taxonomy": Object {
     "accession": null,
     "db": null,
     "detail": null,
     "isFilter": null,
+    "order": null,
   },
 }
 `;
