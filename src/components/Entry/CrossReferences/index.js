@@ -29,7 +29,7 @@ ReferenceItem.propTypes = {
 const ReferenceSection = ({ accessions, name, description }) =>
   name !== 'pdb' && (
     <li className={f('xref-section', 'small')}>
-      <h5 className={f('uppercase')}>
+      <h5 className={f('text-up')}>
         {name}{' '}
         <Tooltip title={description}>
           <span
