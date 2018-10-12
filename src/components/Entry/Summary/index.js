@@ -54,7 +54,7 @@ const MemberDBSubtitle = ({ metadata, dbInfo }) => {
             },
           }}
         >
-          {metadata.source_database}{' '}
+          {dbInfo.name}{' '}
           <Tooltip
             title={dbInfo.description || `${dbInfo.name} (${dbInfo.version})`}
           >
@@ -66,8 +66,7 @@ const MemberDBSubtitle = ({ metadata, dbInfo }) => {
         </Link>
       </h5>
       <p className={f('margin-bottom-medium')}>
-        {metadata.source_database} type:{' '}
-        {metadata.type.replace('_', ' ').toLowerCase()}
+        {dbInfo.name} type: {metadata.type.replace('_', ' ').toLowerCase()}
       </p>
       {metadata.name.short &&
         metadata.accession !== metadata.name.short && (
@@ -84,7 +83,7 @@ MemberDBSubtitle.propTypes = {
   dbInfo: T.object.isRequired,
 };
 
-const SidePanel = ({ metadata }) => (
+const SidePanel = ({ metadata, dbInfo }) => (
   <div className={f('medium-4', 'large-4', 'columns')}>
     {metadata.integrated && <Integration intr={metadata.integrated} />}
     {metadata.source_database.toLowerCase() !== 'interpro' && (
@@ -100,7 +99,7 @@ const SidePanel = ({ metadata }) => (
               )}
             >
               View {metadata.accession.toUpperCase()} in{' '}
-              {metadata.source_database}
+              {(dbInfo && dbInfo.name) || metadata.source_database}
             </Link>
           </li>
           {false && // TODO: reactivate that after change in the API
@@ -328,7 +327,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 </>
               ) : null}
             </div>
-            <SidePanel metadata={metadata} />
+            <SidePanel metadata={metadata} dbInfo={dbInfo} />
           </div>
         </section>
         <OtherSections metadata={metadata} citations={{ included, extra }} />
