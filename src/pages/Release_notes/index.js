@@ -134,9 +134,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
             >
               <tbody>
                 <tr>
-                  <td>
+                  <td className={f('no-lineheight')}>
                     <interpro-type
-                      dimension="2em"
+                      dimension="1.8em"
                       type="Family"
                       aria-label="Entry type"
                     >
@@ -163,9 +163,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
 
                 <tr>
-                  <td>
+                  <td className={f('no-lineheight')}>
                     <interpro-type
-                      dimension="2em"
+                      dimension="1.8em"
                       type="Domain"
                       aria-label="Entry type"
                     >
@@ -189,9 +189,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
 
                 <tr>
-                  <td>
+                  <td className={f('no-lineheight')}>
                     <interpro-type
-                      dimension="2em"
+                      dimension="1.8em"
                       type="homologous superfamily"
                       aria-label="Entry type"
                     >
@@ -215,9 +215,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
 
                 <tr>
-                  <td>
+                  <td className={f('no-lineheight')}>
                     <interpro-type
-                      dimension="2em"
+                      dimension="1.8em"
                       type="repeat"
                       aria-label="Entry type"
                     >
@@ -241,9 +241,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
 
                 <tr>
-                  <td>
+                  <td className={f('no-lineheight')}>
                     <interpro-type
-                      dimension="2em"
+                      dimension="1.8em"
                       type="site"
                       aria-label="Entry type"
                     >
