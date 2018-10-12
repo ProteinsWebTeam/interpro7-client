@@ -88,7 +88,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                 const md = db.canonical;
                 const href = lut.get(md);
                 return (
-                  <tr key={md}>
+                  <tr id={md} key={md}>
                     <td className={f('sm-inline')}>
                       <MemberSymbol type={md} className={f('md-small')} />
                     </td>
