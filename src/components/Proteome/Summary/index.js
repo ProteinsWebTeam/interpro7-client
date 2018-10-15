@@ -35,7 +35,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
                 <td>
                   <Accession
                     accession={metadata.proteomeAccession || metadata.accession}
-                    title=""
+                    title="Proteome ID"
                   />
                 </td>
               </tr>
