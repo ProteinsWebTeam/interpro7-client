@@ -1,11 +1,18 @@
-.list {
+.list-children {
   list-style: none;
-  margin: 0 0 1rem 0;
+  /*margin: 0 0 1rem 0;*/
   padding: 0;
-  columns: 19em;
-  column-gap: 2rem;
+  /*columns: 19em;*/
+  /*column-gap: 2rem;*/
+  max-height: 369px; /*temp while waiting for view more button*/
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
 
-  @nest & > * {
-    break-inside: avoid;
+  /*@nest & > * {*/
+  /*break-inside: avoid;*/
+  /*}*/
+  & > div {
+    margin-right: 3rem;
   }
 }
