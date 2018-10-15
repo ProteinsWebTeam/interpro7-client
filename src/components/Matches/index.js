@@ -183,6 +183,10 @@ const AllProteinDownload = ({ description, count }) => (
     }}
   />
 );
+AllProteinDownload.propTypes = {
+  description: T.object,
+  count: T.number,
+};
 
 // List of all matches, many to many
 const Matches = (
@@ -195,6 +199,7 @@ const Matches = (
     search,
     description,
     state,
+    databases,
     ...props
   } /*: {
     matches: Array<Object>,
@@ -205,6 +210,7 @@ const Matches = (
     search: Object,
     description: Object,
     state: Object,
+    databases: Object,
     props: Array<any>
 } */,
 ) => (
@@ -219,6 +225,7 @@ const Matches = (
     isStale={isStale}
     notFound={matches.length === 0}
     contentType={primary}
+    databases={databases}
   >
     <PageSizeSelector />
     <SearchBox />
@@ -358,7 +365,7 @@ const Matches = (
             />
           </Tooltip>
         ) : (
-          db
+          (databases && databases[db] && databases[db].name) || db
         )
       }
     >
@@ -470,6 +477,7 @@ Matches.propTypes = {
   search: T.object.isRequired,
   description: T.object.isRequired,
   state: T.object.isRequired,
+  databases: T.object.isRequired,
 };
 
 const mapStateToProps = createSelector(
