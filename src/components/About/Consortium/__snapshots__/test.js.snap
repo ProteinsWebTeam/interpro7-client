@@ -12,7 +12,9 @@ exports[`<Consortium /> should render with data 1`] = `
     className="light responsive"
   >
     <tbody>
-      <tr>
+      <tr
+        id="cathgene3d"
+      >
         <td
           className="sm-inline"
         >
@@ -59,7 +61,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="cdd"
+      >
         <td
           className="sm-inline"
         >
@@ -106,7 +110,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="hamap"
+      >
         <td
           className="sm-inline"
         >
@@ -153,7 +159,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="mobidblt"
+      >
         <td
           className="sm-inline"
         >
@@ -200,7 +208,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="panther"
+      >
         <td
           className="sm-inline"
         >
@@ -247,7 +257,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="pfam"
+      >
         <td
           className="sm-inline"
         >
@@ -294,7 +306,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="pirsf"
+      >
         <td
           className="sm-inline"
         >
@@ -341,7 +355,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="prints"
+      >
         <td
           className="sm-inline"
         >
@@ -388,7 +404,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="prodom"
+      >
         <td
           className="sm-inline"
         >
@@ -435,7 +453,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="profile"
+      >
         <td
           className="sm-inline"
         >
@@ -480,7 +500,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="prosite"
+      >
         <td
           className="sm-inline"
         >
@@ -527,7 +549,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="sfld"
+      >
         <td
           className="sm-inline"
         >
@@ -574,7 +598,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="smart"
+      >
         <td
           className="sm-inline"
         >
@@ -621,7 +647,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="ssf"
+      >
         <td
           className="sm-inline"
         >
@@ -668,7 +696,9 @@ exports[`<Consortium /> should render with data 1`] = `
           </small>
         </td>
       </tr>
-      <tr>
+      <tr
+        id="tigrfams"
+      >
         <td
           className="sm-inline"
         >
