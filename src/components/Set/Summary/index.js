@@ -126,7 +126,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                   <tr>
                     <td>Accession</td>
                     <td>
-                      <Accession accession={metadata.accession} title="" />
+                      <Accession accession={metadata.accession} />
                     </td>
                   </tr>
                   <tr>
