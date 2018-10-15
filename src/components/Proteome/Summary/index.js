@@ -54,6 +54,13 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
                   />
                 </td>
               </tr>
+              <tr>
+                <td>Proteome type</td>
+                <td>
+                  {metadata.is_reference ? 'Reference' : 'Non-reference'}{' '}
+                  proteome
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
