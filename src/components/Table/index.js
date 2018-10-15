@@ -148,6 +148,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     pagination={_query}
                     contentType={contentType}
                     notFound={notFound}
+                    {...this.props}
                   />
                 </div>
                 <div
