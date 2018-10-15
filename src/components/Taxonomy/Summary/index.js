@@ -178,7 +178,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
               <tr>
                 <td>Tax ID</td>
                 <td>
-                  <Accession accession={metadata.accession} title="" />
+                  <Accession accession={metadata.accession} title="Tax ID" />
                 </td>
               </tr>
               {metadata.rank && (
