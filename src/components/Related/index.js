@@ -200,6 +200,42 @@ const primariesAndSecondaries = {
     },
   },
 };
+const InfoFilters = ({ filters, focusType, databases }) =>
+  filters &&
+  filters.length > 0 && (
+    <div className={f('callout', 'info', 'withicon')}>
+      This list shows only:
+      <ul>
+        {filters.map(([endpoint, { db, accession }]) => (
+          <li key={endpoint}>
+            {toPlural(focusType)} associated with{' '}
+            <b>{accession ? endpoint : toPlural(endpoint)}</b>
+            {accession && (
+              <span>
+                {' '}
+                accession <b>{accession}</b>
+              </span>
+            )}
+            {db && (
+              <span>
+                {' '}
+                from the <b>
+                  {(databases[db] && databases[db].name) || db}
+                </b>{' '}
+                database
+              </span>
+            )}
+            .
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+InfoFilters.propTypes = {
+  databases: T.object.isRequired,
+  focusType: T.string.isRequired,
+  filters: T.array,
+};
 
 export class _RelatedAdvanced extends PureComponent {
   static propTypes = {
@@ -249,37 +285,11 @@ export class _RelatedAdvanced extends PureComponent {
                 ? ` these ${toPlural(focusType)}:`
                 : ` this ${focusType}:`}
             </p>
-            {otherFilters &&
-              otherFilters.length > 0 && (
-                <div className={f('callout', 'info', 'withicon')}>
-                  This list shows only:
-                  <ul>
-                    {otherFilters.map(([endpoint, { db, accession }]) => (
-                      <li key={endpoint}>
-                        {toPlural(focusType)} associated with{' '}
-                        <b>{accession ? endpoint : toPlural(endpoint)}</b>
-                        {accession && (
-                          <span>
-                            {' '}
-                            accession <b>{accession}</b>
-                          </span>
-                        )}
-                        {db && (
-                          <span>
-                            {' '}
-                            from the{' '}
-                            <b>
-                              {(databases[db] && databases[db].name) || db}
-                            </b>{' '}
-                            database
-                          </span>
-                        )}
-                        .
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+            <InfoFilters
+              filters={otherFilters}
+              focusType={focusType}
+              databases={databases}
+            />
           </div>
         </div>
         {focusType === 'protein' && (
