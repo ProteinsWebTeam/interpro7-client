@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import Accession from 'components/Accession';
 import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -87,7 +88,9 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                   <tbody>
                     <tr>
                       <td>Accession</td>
-                      <td>{metadata.accession}</td>
+                      <td>
+                        <Accession accession={metadata.accession} />
+                      </td>
                     </tr>
                     <tr>
                       <td>Experiment type</td>
