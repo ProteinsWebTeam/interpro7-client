@@ -25,12 +25,21 @@ const entityText = (entity, count) => {
   return toPlural(entity, count);
 };
 
-const dbText = (entryDB, setDB, db, isSubPageButMainIsEntry) => {
+const dbText = (
+  entryDB,
+  setDB,
+  db,
+  isSubPageButMainIsEntry,
+  databases = {},
+) => {
   if (isSubPageButMainIsEntry || !entryDB) return null;
   return (
     <span>
       {entryDB === db || setDB === db ? ' in ' : ' matching '}
-      <span className={s('total-text-bold')}>{entryDB}</span>
+      <span className={s('total-text-bold')}>
+        {(databases && databases[entryDB] && databases[entryDB].name) ||
+          entryDB}
+      </span>
       <MemberSymbol type={entryDB} className={s('db-symbol')} />
     </span>
   );
@@ -49,6 +58,7 @@ const TotalNb = ({
   pagination,
   description,
   contentType,
+  databases,
 }) => {
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
@@ -97,6 +107,7 @@ const TotalNb = ({
               description.set.db,
               db,
               isSubPageButMainIsEntry,
+              databases,
             )}
           </span>
         )}
