@@ -50,7 +50,7 @@ const propTypes = {
     payload: T.object,
     loading: T.bool.isRequired,
     ok: T.bool,
-  }),
+  }).isRequired,
   subPagesForEndpoint: T.oneOfType([T.func, T.object]),
 };
 
@@ -69,14 +69,16 @@ class SummaryComponent extends PureComponent {
   render() {
     const {
       data: { payload, loading },
-      dataBase: {
-        payload: { databases },
-        loading: loadingDB,
-      },
+      dataBase: { payload: payloadDB, loading: loadingDB },
       customLocation,
       SummaryAsync,
     } = this.props;
-    const db = databases[customLocation.description.entry.db];
+    const db =
+      (!loadingDB &&
+        payloadDB &&
+        payloadDB.databases &&
+        payloadDB.databases[customLocation.description.entry.db]) ||
+      {};
     return (
       <SummaryAsync
         data={payload}
