@@ -228,7 +228,10 @@
     text-transform: uppercase;
     font-weight: bold;
   }
-
+  & h6 {
+    opacity: 0.8;
+  }
+  & h6,
   & h5,
   & h4 {
     color: white;
