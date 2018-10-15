@@ -29,7 +29,8 @@ export class Accession extends PureComponent /*:: <Props> */ {
     const { accession, title } = this.props;
     return (
       <div>
-        {title || 'Accession'}:
+        {title !== '' ? <span> {title || 'Accession'}:</span> : null}
+
         {title === 'Job ID' ? (
           <span className={f('tag-sqc')}> {accession}</span>
         ) : (
