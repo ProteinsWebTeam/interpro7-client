@@ -138,6 +138,11 @@ mark {
   color: var(--colors-alert-main);
 }
 /*/I5 result page icons*/
+
+/*lineage*/
+.ico-primary ::before {
+  color: var(--colors-submain);
+}
 /************************  END ICONS  **********************************/
 
 /************************  LINKS  **********************************/
@@ -168,6 +173,15 @@ a.neutral:hover {
   border-bottom: 1px var(--colors-gray) solid;
 }
 /*/NEUTRAL LINKS*/
+
+/*like-text Links*/
+.main a.nolink {
+  color: var(--colors-light-txt);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
 
 /************************  END LINKS  **********************************/
 
@@ -286,15 +300,6 @@ table.light thead td {
   color: #73828c; /*Overwrite EBI global*/
 }
 
-table.light.small {
-  width: 30%;
-  min-width: 300px;
-}
-
-table.light.small td {
-  border: none;
-}
-
 table.light thead th:hover {
   color: #73828c;
 }
@@ -341,6 +346,37 @@ table.light.sorting thead th:hover {
   color: #73828c;
 }
 /*/Style light table */
+
+table.light.small {
+  width: 30%;
+  min-width: 300px;
+
+  & td {
+    border: none;
+    padding: 0.3rem; /* no extra space */
+  }
+}
+
+table.light.table-sum {
+  color: var(--colors-dark);
+  width: 100%;
+  border-right-width: 0;
+  border-collapse: inherit;
+
+  & tr:hover {
+    background-color: transparent;
+  }
+
+  & td {
+    border: none;
+    padding: 0.3rem 2rem 0.3rem 0; /* extra space between two rows - easier than defining with */
+
+    &:first-of-type {
+      width: 140px; /*target first columns*/
+    }
+  }
+}
+
 /*responsive table*/
 @media screen and (max-width: 39.9375em) {
   table.responsive th,
@@ -502,8 +538,14 @@ h6 small {
   color: #a2d7b9;
 }
 
-.uppercase {
+.text-up {
   text-transform: uppercase;
+}
+.text-cap {
+  text-transform: capitalize;
+}
+.first-letter-cap::first-letter {
+  text-transform: capitalize;
 }
 
 hr {
@@ -852,7 +894,10 @@ hr {
   position: relative;
   min-width: 182px; /*for small screens*/
 }
-
+.button-sm {
+  min-width: 25px;
+  margin-right: 0.5rem;
+}
 .icon.button-more {
   font-weight: 600; /*bold on just text*/
   &::after,
