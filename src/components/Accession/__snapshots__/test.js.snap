@@ -2,77 +2,42 @@
 
 exports[`<Accession /> should render the accession component for UniProt proteome 1`] = `
 <div>
-  <span>
-     
-    Accession
-    :
-  </span>
   UP000000278
 </div>
 `;
 
 exports[`<Accession /> should render the accession component for UniProt reviewed 1`] = `
 <div>
-  <span>
-     
-    Accession
-    :
-  </span>
   A0A023GPI8
 </div>
 `;
 
 exports[`<Accession /> should render the accession component for UniProt reviewed 2`] = `
 <div>
-  <span>
-     
-    Accession
-    :
-  </span>
   A0A023GPI8
 </div>
 `;
 
 exports[`<Accession /> should render the accession component for UniProt unreviewed 1`] = `
 <div>
-  <span>
-     
-    Accession
-    :
-  </span>
   A0A1S2IFJ5
 </div>
 `;
 
 exports[`<Accession /> should render the accession component for UniProt unreviewed 2`] = `
 <div>
-  <span>
-     
-    Accession
-    :
-  </span>
   A0A1S2IFJ5
 </div>
 `;
 
 exports[`<Accession /> should render the accession component for other 1`] = `
 <div>
-  <span>
-     
-    Accession
-    :
-  </span>
   iprscan5-R20171012-151028-0135-99171282-p1m
 </div>
 `;
 
 exports[`<Accession /> should render the accession component for taxon 1`] = `
 <div>
-  <span>
-     
-    Accession
-    :
-  </span>
   1
 </div>
 `;
