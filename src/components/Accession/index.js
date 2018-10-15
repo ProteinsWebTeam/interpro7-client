@@ -21,16 +21,18 @@ Default.propTypes = {
 export class Accession extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.oneOfType([T.string, T.number]).isRequired,
+    withTitle: T.bool,
     title: T.string,
     db: T.string,
   };
 
   render() {
-    const { accession, title } = this.props;
+    const { withTitle, accession, title } = this.props;
     return (
       <div>
-        {title !== '' ? <span> {title || 'Accession'}:</span> : null}
-
+        {title !== '' && withTitle ? (
+          <span> {title || 'Accession'}:</span>
+        ) : null}
         {title === 'Job ID' ? (
           <span className={f('tag-sqc')}> {accession}</span>
         ) : (
