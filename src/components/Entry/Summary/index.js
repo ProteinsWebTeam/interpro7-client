@@ -17,12 +17,13 @@ import getUrlFor from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ipro from 'styles/interpro-new.css';
 import theme from 'styles/theme-interpro.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, theme, local);
+const f = foundationPartial(ebiGlobalStyles, fonts, theme, ipro, local);
 
 const description2IDs = description =>
   description.reduce(
@@ -63,7 +64,7 @@ const MemberDBSubtitle = ({ metadata }) => {
               {metadata.source_database}{' '}
               <Tooltip title={metadata.source_database}>
                 <span
-                  className={f('small', 'icon', 'icon-common')}
+                  className={f('font-s', 'icon', 'icon-common')}
                   data-icon="&#xf129;"
                 />
               </Tooltip>
@@ -292,8 +293,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   {Object.keys(metadata.overlaps_with).length >
                     MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
                     <button
-                      className={f('button')}
-                      style={{ marginLeft: '1.5em' }}
+                      className={f('button', 'hollow', 'secondary')}
                       onClick={() =>
                         this.setState({
                           showAllOverlappingEntries: !this.state
@@ -302,7 +302,23 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       }
                     >
                       Show{' '}
-                      {this.state.showAllOverlappingEntries ? 'Less' : 'More'}
+                      {this.state.showAllOverlappingEntries ? (
+                        <span>
+                          Less{' '}
+                          <i
+                            className={f('icon', 'icon-common')}
+                            data-icon="&#xf102;"
+                          />
+                        </span>
+                      ) : (
+                        <span>
+                          More{' '}
+                          <i
+                            className={f('icon', 'icon-common')}
+                            data-icon="&#xf103;"
+                          />
+                        </span>
+                      )}
                     </button>
                   )}
                 </div>
