@@ -125,6 +125,7 @@ const SidePanel = ({ metadata, dbInfo }) => (
 );
 SidePanel.propTypes = {
   metadata: T.object.isRequired,
+  dbInfo: T.object.isRequired,
 };
 
 const OtherSections = ({ metadata, citations: { included, extra } }) => (
@@ -196,7 +197,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object,
     }).isRequired,
-    dbInfo: T.object,
+    dbInfo: T.object.isRequired,
     loading: T.bool.isRequired,
   };
   constructor(props) {
