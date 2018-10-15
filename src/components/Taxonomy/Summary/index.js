@@ -173,6 +173,47 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('row')}>
         <div className={f('medium-12', 'columns')}>
+          <table className={f('light', 'table-sum')}>
+            <tbody>
+              <tr>
+                <td>Tax ID</td>
+                <td>
+                  <Accession accession={metadata.accession} title="" />
+                </td>
+              </tr>
+              {metadata.rank && (
+                <tr>
+                  <td>Rank</td>
+                  <td className={f('text-up')}>{metadata.rank}</td>
+                </tr>
+              )}
+
+              {// SP: is this still working ?
+              metadata.parent && (
+                <SchemaOrgData
+                  data={{
+                    taxId: metadata.parent,
+                    name: names[metadata.parent] && names[metadata.parent].name,
+                  }}
+                  processData={parentRelationship}
+                />
+              )}
+
+              <tr>
+                <td>Lineage</td>
+                <td className={f('ico-primary')}>
+                  <Lineage lineage={metadata.lineage} names={names} />
+                </td>
+              </tr>
+              <tr>
+                <td>Children</td>
+                <td>
+                  <Children taxChildren={metadata.children} names={names} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
           <MemberDBSelector
             contentType="taxonomy"
             filterType="entry"
@@ -191,19 +232,7 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
               </span>
             )}
           </MemberDBSelector>
-          <Accession accession={metadata.accession} title="Tax ID" />
-          {metadata.rank && <div>Rank: {metadata.rank}</div>}
-          {metadata.parent && (
-            <SchemaOrgData
-              data={{
-                taxId: metadata.parent,
-                name: names[metadata.parent] && names[metadata.parent].name,
-              }}
-              processData={parentRelationship}
-            />
-          )}
-          <Lineage lineage={metadata.lineage} names={names} />
-          <Children taxChildren={metadata.children} names={names} />
+
           <Tree
             data={this.state.data}
             focused={this.state.focused}
