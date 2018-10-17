@@ -144,13 +144,13 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
-const ProteinDownloadRenderer = description => (accession, row) => (
+export const ProteinDownloadRenderer = description => (accession, row) => (
   <File
     fileType="fasta"
     name={`protein-sequences-matching-${
       description[description.main.key].accession
     }-for-${accession}.fasta`}
-    count={row.counters.extra_fields.counters.proteins}
+    count={row.proteins || row.counters.extra_fields.counters.proteins}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },

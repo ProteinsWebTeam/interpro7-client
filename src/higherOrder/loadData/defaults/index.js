@@ -86,4 +86,48 @@ export const getUrl = createSelector(
     ),
 );
 
+export const getReversedUrl = createSelector(
+  state => state.settings.api,
+  state => state.settings.navigation.pageSize,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
+  (
+    { protocol, hostname, port, root },
+    settingsPageSize,
+    description,
+    search,
+  ) => {
+    // copy of description, to modify it after
+    const newDesc = {};
+    let newMain;
+    for (const [key, value] of Object.entries(description)) {
+      newDesc[key] = key === 'other' ? [...value] : { ...value };
+      if (value.isFilter && value.order === 1) {
+        newMain = key;
+        newDesc[key].isFilter = false;
+      }
+    }
+    newDesc[description.main.key].isFilter = true;
+    newDesc.main.key = newMain;
+    let url = format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(newDesc),
+      query: {
+        ...search,
+        extra_fields: 'counters',
+        page_size: search.page_size || settingsPageSize,
+      },
+    });
+    if (description.main.key === 'entry' && newMain === 'taxonomy') {
+      url = url.replace('/entry/', '/protein/entry/');
+    }
+    if (description.main.key === 'taxonomy' && newMain === 'proteome') {
+      url = url.replace('/taxonomy/', '/protein/taxonomy/');
+    }
+    return url;
+  },
+);
+
 export const getUrlForApi = getUrl('api');

@@ -2,11 +2,9 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { format } from 'url';
 import { omit } from 'lodash-es';
 
 import Link from 'components/generic/Link';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
 import Matches from 'components/Matches';
@@ -16,13 +14,14 @@ import { toPlural } from 'utils/pages';
 
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
+import KeySpeciesTable from 'components/Taxonomy/KeySpeciesTable';
 
 import FiltersPanel from 'components/FiltersPanel';
 import CurationFilter from 'components/Protein/ProteinListFilters/CurationFilter';
 
 import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
 const f = foundationPartial(ebiGlobalStyles);
 
@@ -279,6 +278,7 @@ export class _RelatedAdvanced extends PureComponent {
         ) : null}
         <div className={f('row')}>
           <div className={f('columns')}>
+            {focusType === 'taxonomy' ? <KeySpeciesTable /> : null}
             <p>
               This {mainType} matches
               {secondaryData.length > 1
@@ -334,49 +334,6 @@ const mapStateToPropsAdvanced = createSelector(
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
 
-const getReversedUrl = createSelector(
-  state => state.settings.api,
-  state => state.settings.navigation.pageSize,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
-  (
-    { protocol, hostname, port, root },
-    settingsPageSize,
-    description,
-    search,
-  ) => {
-    // copy of description, to modify it after
-    const newDesc = {};
-    let newMain;
-    for (const [key, value] of Object.entries(description)) {
-      newDesc[key] = key === 'other' ? [...value] : { ...value };
-      if (value.isFilter && value.order === 1) {
-        newMain = key;
-        newDesc[key].isFilter = false;
-      }
-    }
-    newDesc[description.main.key].isFilter = true;
-    newDesc.main.key = newMain;
-    let url = format({
-      protocol,
-      hostname,
-      port,
-      pathname: root + descriptionToPath(newDesc),
-      query: {
-        ...search,
-        extra_fields: 'counters',
-        page_size: search.page_size || settingsPageSize,
-      },
-    });
-    if (description.main.key === 'entry' && newMain === 'taxonomy') {
-      url = url.replace('/entry/', '/protein/entry/');
-    }
-    if (description.main.key === 'taxonomy' && newMain === 'proteome') {
-      url = url.replace('/taxonomy/', '/protein/taxonomy/');
-    }
-    return url;
-  },
-);
 const mapStateToPropsAdvancedQuery = createSelector(
   state => state.customLocation.description.main.key,
   mainType => ({ mainType }),
