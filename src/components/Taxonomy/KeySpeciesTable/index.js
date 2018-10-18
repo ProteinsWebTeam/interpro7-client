@@ -27,6 +27,7 @@ const f = foundationPartial(fonts, ebiGlobalStyles);
   data: {
     loading: boolean,
     payload ?: Object,
+    status ?: number,
   },
   description: Description,
 }; */
@@ -155,6 +156,7 @@ _KeySpeciesTableWithData.propTypes = {
     payload: T.object,
   }).isRequired,
   description: T.object,
+  status: T.number,
 };
 const mapStateToPropsDefault = createSelector(
   state => state.customLocation.description,
