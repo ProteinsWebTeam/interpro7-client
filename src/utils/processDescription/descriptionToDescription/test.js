@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 import { merge, mergeWith, cloneDeep, toPlainObject } from 'lodash-es';
 
 import descriptionToDescription from '.';
@@ -71,6 +72,95 @@ describe('descriptionToDescription()', () => {
           expect(descriptionToDescription(description)[type].isFilter).toBe(
             true,
           );
+        }
+      }
+    }
+  });
+
+  test('order and numberOfFilters for 1 filter', () => {
+    const types = [
+      'entry',
+      'protein',
+      'structure',
+      'taxonomy',
+      'proteome',
+      'set',
+    ];
+    for (const key of types) {
+      const d = { main: { key } };
+      expect(Object.values(descriptionToDescription(d)).find(v => v.isFilter))
+        .toBeUndefined;
+      for (const type of types) {
+        const description = { ...d, [type]: { isFilter: true } };
+        if (key === type) {
+          expect(() => descriptionToDescription(description)).toThrow();
+        } else {
+          expect(
+            descriptionToDescription(description).main.numberOfFilters,
+          ).toBe(1);
+          expect(descriptionToDescription(description)[type].order).toBe(1);
+          description[type].order = 2;
+          expect(descriptionToDescription(description)[type].order).toBe(2);
+        }
+      }
+    }
+  });
+
+  test('order and numberOfFilters for 2 filters', () => {
+    const types = [
+      'entry',
+      'protein',
+      'structure',
+      'taxonomy',
+      'proteome',
+      'set',
+    ];
+    for (const key of types) {
+      const d = { main: { key } };
+      expect(Object.values(descriptionToDescription(d)).find(v => v.isFilter))
+        .toBeUndefined;
+      for (const type of types) {
+        const description = { ...d, [type]: { isFilter: true } };
+        if (key === type) {
+          expect(() => descriptionToDescription(description)).toThrow();
+        } else {
+          for (const subType of types) {
+            if (type === subType) continue;
+            const description2 = {
+              ...d,
+              [type]: { isFilter: true },
+              [subType]: { isFilter: true },
+            };
+            if (key === type || key === subType) {
+              expect(() => descriptionToDescription(description2)).toThrow();
+            } else {
+              expect(
+                descriptionToDescription(description2).main.numberOfFilters,
+              ).toBe(2);
+              expect(
+                descriptionToDescription(description2)[type].order,
+              ).toBeGreaterThan(0);
+              expect(
+                descriptionToDescription(description2)[subType].order,
+              ).toBeGreaterThan(0);
+              description2[type].order = 1;
+              description2[subType].order = 2;
+              expect(descriptionToDescription(description2)[type].order).toBe(
+                1,
+              );
+              expect(
+                descriptionToDescription(description2)[subType].order,
+              ).toBe(2);
+              description2[type].order = 2;
+              description2[subType].order = 1;
+              expect(descriptionToDescription(description2)[type].order).toBe(
+                2,
+              );
+              expect(
+                descriptionToDescription(description2)[subType].order,
+              ).toBe(1);
+            }
+          }
         }
       }
     }

@@ -2,11 +2,9 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { format } from 'url';
 import { omit } from 'lodash-es';
 
 import Link from 'components/generic/Link';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
 import Matches from 'components/Matches';
@@ -16,12 +14,14 @@ import { toPlural } from 'utils/pages';
 
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
+import KeySpeciesTable from 'components/Taxonomy/KeySpeciesTable';
 
 import FiltersPanel from 'components/FiltersPanel';
 import CurationFilter from 'components/Protein/ProteinListFilters/CurationFilter';
 
 import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
 const f = foundationPartial(ebiGlobalStyles);
 
@@ -199,6 +199,42 @@ const primariesAndSecondaries = {
     },
   },
 };
+const InfoFilters = ({ filters, focusType, databases }) =>
+  filters &&
+  filters.length > 0 && (
+    <div className={f('callout', 'info', 'withicon')}>
+      This list shows only:
+      <ul>
+        {filters.map(([endpoint, { db, accession }]) => (
+          <li key={endpoint}>
+            {toPlural(focusType)} associated with{' '}
+            <b>{accession ? endpoint : toPlural(endpoint)}</b>
+            {accession && (
+              <span>
+                {' '}
+                accession <b>{accession}</b>
+              </span>
+            )}
+            {db && (
+              <span>
+                {' '}
+                from the <b>
+                  {(databases[db] && databases[db].name) || db}
+                </b>{' '}
+                database
+              </span>
+            )}
+            .
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+InfoFilters.propTypes = {
+  databases: T.object.isRequired,
+  focusType: T.string.isRequired,
+  filters: T.array,
+};
 
 export class _RelatedAdvanced extends PureComponent {
   static propTypes = {
@@ -208,6 +244,11 @@ export class _RelatedAdvanced extends PureComponent {
     mainType: T.string.isRequired,
     focusType: T.string.isRequired,
     actualSize: T.number,
+    otherFilters: T.array,
+    dataBase: T.shape({
+      payload: T.object,
+      loading: T.bool.isRequired,
+    }).isRequired,
   };
 
   render() {
@@ -218,7 +259,15 @@ export class _RelatedAdvanced extends PureComponent {
       mainType,
       focusType,
       actualSize,
+      otherFilters,
+      dataBase,
     } = this.props;
+    const databases =
+      (dataBase &&
+        !dataBase.loading &&
+        dataBase.payload &&
+        dataBase.payload.databases) ||
+      {};
     return (
       <div>
         {mainType === 'protein' && focusType === 'structure' ? (
@@ -229,12 +278,18 @@ export class _RelatedAdvanced extends PureComponent {
         ) : null}
         <div className={f('row')}>
           <div className={f('columns')}>
+            {focusType === 'taxonomy' ? <KeySpeciesTable /> : null}
             <p>
               This {mainType} matches
               {secondaryData.length > 1
                 ? ` these ${toPlural(focusType)}:`
                 : ` this ${focusType}:`}
             </p>
+            <InfoFilters
+              filters={otherFilters}
+              focusType={focusType}
+              databases={databases}
+            />
           </div>
         </div>
         {focusType === 'protein' && (
@@ -252,6 +307,7 @@ export class _RelatedAdvanced extends PureComponent {
             [],
           )}
           isStale={isStale}
+          databases={databases}
           {...primariesAndSecondaries[mainType][focusType]}
         />
       </div>
@@ -263,92 +319,63 @@ const mapStateToPropsAdvanced = createSelector(
   state => state.customLocation.description.main.key,
   state =>
     Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter,
+      ([_key, value]) => value.isFilter && value.order === 1,
     ),
-  (mainType, [focusType, { db: focusDB }]) => ({
+  state =>
+    Object.entries(state.customLocation.description).filter(
+      ([_key, value]) => value.isFilter && value.order !== 1,
+    ),
+  (mainType, [focusType, { db: focusDB }], otherFilters) => ({
     mainType,
     focusType,
     focusDB,
+    otherFilters,
   }),
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
 
-const getReversedUrl = createSelector(
-  state => state.settings.api,
-  state => state.settings.navigation.pageSize,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
-  (
-    { protocol, hostname, port, root },
-    settingsPageSize,
-    description,
-    search,
-  ) => {
-    // copy of description, to modify it after
-    const newDesc = {};
-    let newMain;
-    for (const [key, value] of Object.entries(description)) {
-      newDesc[key] = key === 'other' ? [...value] : { ...value };
-      if (value.isFilter) {
-        newMain = key;
-        newDesc[key].isFilter = false;
-      }
-    }
-    newDesc[description.main.key].isFilter = true;
-    newDesc.main.key = newMain;
-    let url = format({
-      protocol,
-      hostname,
-      port,
-      pathname: root + descriptionToPath(newDesc),
-      query: {
-        ...search,
-        extra_fields: 'counters',
-        page_size: search.page_size || settingsPageSize,
-      },
-    });
-    if (description.main.key === 'entry' && newMain === 'taxonomy') {
-      url = url.replace('/entry/', '/protein/entry/');
-    }
-    if (description.main.key === 'taxonomy' && newMain === 'proteome') {
-      url = url.replace('/taxonomy/', '/protein/taxonomy/');
-    }
-    return url;
-  },
-);
 const mapStateToPropsAdvancedQuery = createSelector(
   state => state.customLocation.description.main.key,
   mainType => ({ mainType }),
 );
 const RelatedAdvancedQuery = loadData({
-  getUrl: getReversedUrl,
-  mapStateToProps: mapStateToPropsAdvancedQuery,
-})(({ data: { payload, loading }, secondaryData, ...props }) => {
-  if (loading) return <Loading />;
-  const _secondaryData =
-    payload && payload.results
-      ? payload.results.map(x => {
-          const { ...obj } = x.metadata;
-          const plural = toPlural(props.mainType);
-          obj.counters = omit(x, ['metadata', plural]);
-          // Given the reverse of the URL, and that we are querying by an accession
-          // we can assume is only one, hence [0]
-          obj.entry_protein_locations = x[plural][0].entry_protein_locations;
-          obj.protein_length = x[plural][0].protein_length;
-          obj.protein = x[plural][0].protein;
-          obj.protein_structure_locations =
-            x[plural][0].protein_structure_locations;
-          if (x[plural][0].chain) {
-            obj.chain = x[plural][0].chain;
-          }
-          return obj;
-        })
-      : [];
-  const c = payload ? payload.count : 0;
-  return (
-    <RelatedAdvanced secondaryData={_secondaryData} actualSize={c} {...props} />
-  );
-});
+  getUrl: getUrlForMeta,
+  propNamespace: 'Base',
+})(
+  loadData({
+    getUrl: getReversedUrl,
+    mapStateToProps: mapStateToPropsAdvancedQuery,
+  })(({ data: { payload, loading }, secondaryData, ...props }) => {
+    if (loading) return <Loading />;
+    const _secondaryData =
+      payload && payload.results
+        ? payload.results.map(x => {
+            const { ...obj } = x.metadata;
+            const plural = toPlural(props.mainType);
+            obj.counters = omit(x, ['metadata', plural]);
+            // Given the reverse of the URL, and that we are querying by an accession
+            // we can assume is only one, hence [0]
+            obj.entry_protein_locations = x[plural][0].entry_protein_locations;
+            obj.protein_length = x[plural][0].protein_length;
+            obj.protein = x[plural][0].protein;
+            obj.protein_structure_locations =
+              x[plural][0].protein_structure_locations;
+            if (x[plural][0].chain) {
+              obj.chain = x[plural][0].chain;
+            }
+            return obj;
+          })
+        : [];
+    const c = payload ? payload.count : 0;
+    return (
+      <RelatedAdvanced
+        secondaryData={_secondaryData}
+        actualSize={c}
+        {...props}
+      />
+    );
+  }),
+);
 
 class Related extends PureComponent {
   static propTypes = {

@@ -48,11 +48,11 @@ describe('descriptionToPath()', () => {
   describe('data types', () => {
     const types = [
       'entry',
-      'protein',
+      'set',
       'structure',
+      'protein',
       'taxonomy',
       'proteome',
-      'set',
     ];
 
     test('basic', () => {
@@ -66,6 +66,7 @@ describe('descriptionToPath()', () => {
         const description = { main: { key } };
         const descriptionXFilters = { ...description };
         let i = 0;
+        let accumulatedPath = `/${key}/`;
         for (const type of types) {
           if (key === type) continue;
           // Only one filter
@@ -74,11 +75,13 @@ describe('descriptionToPath()', () => {
           const pathOneFilter = descriptionToPath(descriptionOneFilter);
           expect(pathOneFilter).toBe(`/${key}/${type}/`);
           // Multiple filters accumulated
-          descriptionXFilters[type] = { isFilter: true };
+          descriptionXFilters[type] = { isFilter: true, order: ++i };
+          accumulatedPath += `${type}/`;
           const pathXFilters = descriptionToPath(descriptionXFilters);
           expect(pathXFilters).toEqual(
-            expect.stringMatching(new RegExp(`^/${key}/(\\w+/){${++i}}$`)),
+            expect.stringMatching(new RegExp(`^/${key}/(\\w+/){${i}}$`)),
           );
+          expect(pathXFilters).toBe(accumulatedPath);
         }
       }
     });

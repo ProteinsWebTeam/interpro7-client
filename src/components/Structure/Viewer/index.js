@@ -31,7 +31,8 @@ const NUMBER_OF_CHECKS = 10;
 const optionsForObserver = {
   root: null,
   rootMargin: '0px',
-  threshold: Array(null, { length: NUMBER_OF_CHECKS }).map(
+  /* eslint-disable-next-line prefer-spread */
+  threshold: Array.apply(null, { length: NUMBER_OF_CHECKS }).map(
     Number.call,
     n => (n + 1) / NUMBER_OF_CHECKS,
   ),

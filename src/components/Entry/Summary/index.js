@@ -35,14 +35,13 @@ const description2IDs = description =>
     [],
   );
 
-const MemberDBSubtitle = ({ metadata }) => {
+const MemberDBSubtitle = ({ metadata, dbInfo }) => {
   if (
     !metadata.source_database ||
     metadata.source_database.toLowerCase() === 'interpro'
   ) {
     return null;
   }
-
   return (
     <div className={f('md-hlight')}>
       <h5>
@@ -50,13 +49,15 @@ const MemberDBSubtitle = ({ metadata }) => {
         <Link
           to={{
             description: {
-              mainType: 'entry',
-              mainDB: metadata.source_database,
+              main: { key: 'entry' },
+              entry: { db: metadata.source_database },
             },
           }}
         >
-          {metadata.source_database}{' '}
-          <Tooltip title={metadata.source_database}>
+          {dbInfo.name}{' '}
+          <Tooltip
+            title={dbInfo.description || `${dbInfo.name} (${dbInfo.version})`}
+          >
             <span
               className={f('small', 'icon', 'icon-common')}
               data-icon="&#xf129;"
@@ -65,8 +66,7 @@ const MemberDBSubtitle = ({ metadata }) => {
         </Link>
       </h5>
       <p className={f('margin-bottom-medium')}>
-        {metadata.source_database} type:{' '}
-        {metadata.type.replace('_', ' ').toLowerCase()}
+        {dbInfo.name} type: {metadata.type.replace('_', ' ').toLowerCase()}
       </p>
       {metadata.name.short &&
         metadata.accession !== metadata.name.short && (
@@ -80,9 +80,10 @@ const MemberDBSubtitle = ({ metadata }) => {
 };
 MemberDBSubtitle.propTypes = {
   metadata: T.object.isRequired,
+  dbInfo: T.object.isRequired,
 };
 
-const SidePanel = ({ metadata }) => (
+const SidePanel = ({ metadata, dbInfo }) => (
   <div className={f('medium-4', 'large-4', 'columns')}>
     {metadata.integrated && <Integration intr={metadata.integrated} />}
     {metadata.source_database.toLowerCase() !== 'interpro' && (
@@ -98,7 +99,7 @@ const SidePanel = ({ metadata }) => (
               )}
             >
               View {metadata.accession.toUpperCase()} in{' '}
-              {metadata.source_database}
+              {(dbInfo && dbInfo.name) || metadata.source_database}
             </Link>
           </li>
           {false && // TODO: reactivate that after change in the API
@@ -124,6 +125,7 @@ const SidePanel = ({ metadata }) => (
 );
 SidePanel.propTypes = {
   metadata: T.object.isRequired,
+  dbInfo: T.object.isRequired,
 };
 
 const OtherSections = ({ metadata, citations: { included, extra } }) => (
@@ -195,6 +197,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object,
     }).isRequired,
+    dbInfo: T.object.isRequired,
     loading: T.bool.isRequired,
   };
   constructor(props) {
@@ -204,6 +207,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
   render() {
     const {
       data: { metadata },
+      dbInfo,
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
     const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
@@ -232,7 +236,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
-              <MemberDBSubtitle metadata={metadata} />
+              <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
               {metadata.source_database &&
                 metadata.source_database.toLowerCase() === 'interpro' &&
                 metadata.name.short &&
@@ -324,7 +328,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 </>
               ) : null}
             </div>
-            <SidePanel metadata={metadata} />
+            <SidePanel metadata={metadata} dbInfo={dbInfo} />
           </div>
         </section>
         <OtherSections metadata={metadata} citations={{ included, extra }} />

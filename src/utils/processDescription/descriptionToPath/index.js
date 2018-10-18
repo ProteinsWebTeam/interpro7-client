@@ -19,9 +19,9 @@ export default (description /*: Description */) => {
   }
   const main = _description.main.key;
   output += `${pathForPart(main, _description[main])}/`;
-  const filters = Object.entries(_description).filter(
-    ([, { isFilter }]) => isFilter,
-  );
+  const filters = Object.entries(_description)
+    .filter(([, { isFilter }]) => isFilter)
+    .sort(([, { order: a }], [, { order: b }]) => (a > b ? 1 : -1));
   return filters.reduce(
     (acc, [key, values]) => `${acc}${pathForPart(key, values)}/`,
     output,
