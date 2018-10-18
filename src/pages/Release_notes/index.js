@@ -34,14 +34,30 @@ const ReleaseNotesSelectorWithData = ({
     <ul className={f('release-selector')}>
       {Object.entries(payload).map(([version, date]) => (
         <li key={version} className={f({ current: version === current })}>
-          InterPro {version}{' '}
-          <small>
-            • <time dateTime={date}>{formatISODate(date)}</time>
-          </small>
+          <Link
+            to={{
+              description: {
+                other: ['release_notes', version],
+              },
+            }}
+            disabled={version === current}
+          >
+            InterPro {version}{' '}
+            <small>
+              • <time dateTime={date}>{formatISODate(date)}</time>
+            </small>
+          </Link>
         </li>
       ))}
     </ul>
   );
+};
+ReleaseNotesSelectorWithData.propTypes = {
+  data: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.object,
+  }).isRequired,
+  current: T.string,
 };
 
 const getReleaseNotesListUrl = createSelector(
