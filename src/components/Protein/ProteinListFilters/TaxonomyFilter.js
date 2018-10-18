@@ -54,13 +54,14 @@ class TaxonomyFilter extends PureComponent {
       data: { loading, payload },
       customLocation: {
         description: {
-          taxonomy: { accession },
+          taxonomy: { accession: acc, isFilter },
         },
       },
     } = this.props;
     const taxes = Object.entries(loading ? {} : payload).sort(
       ([, { value: a }], [, { value: b }]) => b - a,
     );
+    const accession = isFilter ? acc : null;
     if (!loading) {
       taxes.unshift(['ALL', NaN]);
     }
