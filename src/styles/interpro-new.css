@@ -465,7 +465,7 @@ button {
 }
 
 .button.hollow.secondary {
-  border-color: var(--colors-lightgray);
+  border-color: var(--colors-grey);
   &:hover {
     color: var(--colors-dark);
   }
@@ -691,7 +691,8 @@ hr {
   display: flex;
   flex-wrap: wrap;
   list-style-type: none;
-  margin: 0 -0.5rem; /*to align with foundation grid*/
+  /*margin: 0 -0.5rem;*/
+  margin: 0 -1rem; /*to align with grid*/
 }
 
 .card-grid {
@@ -699,7 +700,8 @@ hr {
   flex-direction: column;
   flex: 1 0 20%;
   min-width: 270px;
-  margin: 0.5rem;
+  /*margin: 0.5rem;*/
+  margin: 1rem; /*to align with grid*/
   border: 1px solid rgba(0, 0, 0, 0.2);
   transition: all var(--timing-really-fast) ease-out;
 
@@ -707,20 +709,15 @@ hr {
     box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18),
       0 4px 15px 0 rgba(0, 0, 0, 0.15);
 
-    & .card-tag {
-      opacity: 1;
-    }
-
-    & .card-info {
-      opacity: 1;
-    }
-
-    & .card-image {
-      opacity: 1;
-    }
-
+    & .card-tag,
+    & .card-info,
+    & .card-image,
+    & .button-nu,
     & .button.hollow.secondary {
       opacity: 1;
+    }
+    & .button-nu:hover {
+      color: var(--colors-ebidark);
     }
   }
 }
@@ -736,7 +733,7 @@ hr {
   background-color: var(--colors-submain);
   height: 160px;
   position: relative;
-  opacity: 0.7;
+  opacity: 0.8;
   transition: opacity var(--timing-really-fast) ease-out;
 }
 /*Card with no image*/
@@ -768,7 +765,7 @@ hr {
 }
 
 .card-tag.tag-tool {
-  background-color: rgb(45, 125, 149);
+  background-color: #3886c1;
   /*background-color: var(--colors-submain);*/
   /*background-color: var(--colors-main);*/
 }
@@ -802,7 +799,7 @@ hr {
 }
 
 .blog-type {
-  background: url('../images/cover/blog/blog_type.png') no-repeat 50% 56%;
+  background: #fff url('../images/cover/blog/blog_type.png') no-repeat 50% 56%;
   background-size: 36%;
 }
 
@@ -811,25 +808,32 @@ hr {
   background-size: 100%;
 }
 
+.special {
+  /*background-color: var(--colors-slightgray);*/
+  background-color: #a2abb1;
+}
+
 .tool-ipscan {
-  background: url('../images/cover/tool/tool_interproscan.svg') no-repeat 50%
-    26%;
+  background: #fff url('../images/cover/tool/tool_interproscan.svg') no-repeat
+    50% 26%;
   background-size: contain;
   background-color: #0d68a6;
 }
 
 .tool-api {
-  background: url('../images/cover/tool/tool_api.png') no-repeat 50% 76%;
+  background: #fff url('../images/cover/tool/tool_api.png') no-repeat 50% 76%;
   background-size: 56%;
 }
 
 .tool-protvista {
-  background: url('../images/cover/tool/tool_protvista.png') no-repeat 40% 14%;
+  background: #fff url('../images/cover/tool/tool_protvista.png') no-repeat 40%
+    14%;
   background-size: 268%;
 }
 
 .tool-litemol {
-  background: url('../images/cover/tool/tool_litemol.png') no-repeat 50% 14%;
+  background: #fff url('../images/cover/tool/tool_litemol.png') no-repeat 50%
+    14%;
   background-size: 210%;
 }
 /*/img tool homepage - temp*/
@@ -851,7 +855,7 @@ hr {
     font-size: 120%;
     font-weight: 600;
     color: var(--colors-nearly-black);
-    border-bottom: 2px white solid;
+    border-bottom: 2px transparent solid;
     transition: border var(--timing-fast) ease-in-out;
     display: inline; /*to make title underline work for every line*/
     &:hover {
@@ -884,6 +888,7 @@ hr {
   border-width: 2px;
   opacity: 0.5;
 }
+
 .card-more {
   align-self: flex-end;
   margin-right: 1rem;
@@ -894,10 +899,26 @@ hr {
   position: relative;
   min-width: 182px; /*for small screens*/
 }
-.button-sm {
+
+.button-nu {
   min-width: 25px;
   margin-right: 0.5rem;
+  padding: 0;
+  color: grey;
+  background-color: transparent;
+  font-size: 160%;
+  margin: 0 1rem 1rem 0;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
+
+.card-grid .button-nu {
+  opacity: 0.5;
+}
+
 .icon.button-more {
   font-weight: 600; /*bold on just text*/
   &::after,
@@ -914,11 +935,11 @@ hr {
   content: attr(data-icon);
   font-family: 'EBI-Common';
   position: absolute;
-  right: 0.6rem;
+  right: 0.8rem;
   transition: all var(--timing-instant) ease-in-out;
 }
 .icon-common.icon-right:hover:after {
-  right: 0.3em;
+  right: 0.5em;
 }
 /*/CARDS*/
 
