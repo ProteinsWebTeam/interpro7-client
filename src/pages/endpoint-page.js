@@ -50,13 +50,16 @@ const propTypes = {
     payload: T.object,
     loading: T.bool.isRequired,
     ok: T.bool,
-  }),
+  }).isRequired,
   subPagesForEndpoint: T.oneOfType([T.func, T.object]),
 };
 
 class SummaryComponent extends PureComponent {
   static propTypes = {
     data: T.shape({
+      payload: T.any,
+    }).isRequired,
+    dataBase: T.shape({
       payload: T.any,
     }).isRequired,
     customLocation: T.object.isRequired,
@@ -66,14 +69,22 @@ class SummaryComponent extends PureComponent {
   render() {
     const {
       data: { payload, loading },
+      dataBase: { payload: payloadDB, loading: loadingDB },
       customLocation,
       SummaryAsync,
     } = this.props;
+    const db =
+      (!loadingDB &&
+        payloadDB &&
+        payloadDB.databases &&
+        payloadDB.databases[customLocation.description.entry.db]) ||
+      {};
     return (
       <SummaryAsync
         data={payload}
+        dbInfo={db}
         customLocation={customLocation}
-        loading={loading}
+        loading={loading && loadingDB}
       />
     );
   }
