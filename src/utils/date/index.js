@@ -30,7 +30,7 @@ const _getOrdinal = d => {
 
 export const formatISODate = date => {
   const d = new Date(date);
-  return `${_getOrdinal(d.getDay())} ${
+  return `${_getOrdinal(d.getDate())} ${
     monthNames[d.getMonth()]
   } ${d.getFullYear()}`;
 };
