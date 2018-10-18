@@ -5,19 +5,21 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData';
+import { edgeCases, STATUS_OK } from 'higherOrder/loadData/defaults';
 import { getReversedUrl } from 'higherOrder/loadData/defaults';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, { Column } from 'components/Table';
 import { ProteinDownloadRenderer } from 'components/Matches';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import { foundationPartial } from 'styles/foundation';
 
 import { speciesFeat } from 'staticData/home';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 
-const f = foundationPartial(fonts);
+const f = foundationPartial(fonts, ebiGlobalStyles);
 
 /*:: import type { Description } from 'utils/processDescription/handlers'; */
 
@@ -31,9 +33,15 @@ const f = foundationPartial(fonts);
 
 const _KeySpeciesTableWithData = (props /*: DataProps */) => {
   const {
-    data: { loading, payload },
+    data: { status, loading, payload },
     description,
   } = props;
+  if (!loading && status !== STATUS_OK)
+    return (
+      <div className={f('callout', 'info', 'withicon')}>
+        {edgeCases.get(status)}
+      </div>
+    );
   if (loading || !payload) return <Loading />;
   return (
     <Table
@@ -47,6 +55,7 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
     >
       <Column
         dataKey="accession"
+        defaultKey="icons"
         renderer={(acc, { features }) => {
           return (
             <span

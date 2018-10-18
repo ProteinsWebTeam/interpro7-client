@@ -9,6 +9,7 @@ import Switch from 'components/generic/Switch';
 import { mainDBLocationSelector } from 'reducers/custom-location/description';
 import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 import loadData from 'higherOrder/loadData';
+import { edgeCases } from 'higherOrder/loadData/defaults';
 import { toPlural } from 'utils/pages';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -102,20 +103,6 @@ const locationhasDetailOrFilter = createSelector(
   },
   value => value,
 );
-
-const STATUS_NO_CONTENT = 204;
-const STATUS_NOT_FOUND = 404;
-const STATUS_GONE = 410;
-
-const edgeCases = new Map([
-  [
-    STATUS_NO_CONTENT,
-    // TODO: change wording when server supports 410 response
-    `The item you are trying to view doesn't exist (it might never have, or it might have been removed in a recent release)`,
-  ],
-  [STATUS_NOT_FOUND, 'This is not a valid accession'],
-  [STATUS_GONE, 'This item no longer exists'],
-]);
 
 class Summary extends PureComponent {
   static propTypes = propTypes;
