@@ -144,13 +144,13 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
-const ProteinDownloadRenderer = description => (accession, row) => (
+export const ProteinDownloadRenderer = description => (accession, row) => (
   <File
     fileType="fasta"
     name={`protein-sequences-matching-${
       description[description.main.key].accession
     }-for-${accession}.fasta`}
-    count={row.counters.extra_fields.counters.proteins}
+    count={row.proteins || row.counters.extra_fields.counters.proteins}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
@@ -183,6 +183,10 @@ const AllProteinDownload = ({ description, count }) => (
     }}
   />
 );
+AllProteinDownload.propTypes = {
+  description: T.object,
+  count: T.number,
+};
 
 // List of all matches, many to many
 const Matches = (
@@ -195,6 +199,7 @@ const Matches = (
     search,
     description,
     state,
+    databases,
     ...props
   } /*: {
     matches: Array<Object>,
@@ -205,6 +210,7 @@ const Matches = (
     search: Object,
     description: Object,
     state: Object,
+    databases: Object,
     props: Array<any>
 } */,
 ) => (
@@ -219,6 +225,7 @@ const Matches = (
     isStale={isStale}
     notFound={matches.length === 0}
     contentType={primary}
+    databases={databases}
   >
     <PageSizeSelector />
     <SearchBox />
@@ -358,7 +365,7 @@ const Matches = (
             />
           </Tooltip>
         ) : (
-          db
+          (databases && databases[db] && databases[db].name) || db
         )
       }
     >
@@ -415,7 +422,41 @@ const Matches = (
       headerClassName={f('table-center')}
       cellClassName={f('table-center')}
       displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={count => <NumberComponent abbr>{count}</NumberComponent>}
+      renderer={(
+        count,
+        {
+          accession,
+          source_database: sourceDatabase,
+          match: {
+            [secondary]: { accession: acc, source_database: db },
+          },
+        },
+      ) => (
+        <Link
+          to={{
+            description: {
+              main: { key: secondary },
+              [secondary]: {
+                accession: acc,
+                db,
+              },
+              protein: {
+                db: 'uniprot',
+                order: 1,
+                isFilter: true,
+              },
+              [primary]: {
+                db: sourceDatabase,
+                accession,
+                order: 2,
+                isFilter: true,
+              },
+            },
+          }}
+        >
+          <NumberComponent abbr>{count}</NumberComponent>
+        </Link>
+      )}
     >
       protein count
     </Column>
@@ -436,6 +477,7 @@ Matches.propTypes = {
   search: T.object.isRequired,
   description: T.object.isRequired,
   state: T.object.isRequired,
+  databases: T.object.isRequired,
 };
 
 const mapStateToProps = createSelector(

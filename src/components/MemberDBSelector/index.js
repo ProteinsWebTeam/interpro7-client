@@ -42,6 +42,7 @@ const getCountFor = (
   dataSubPageCount,
   main,
   sub,
+  hasMoreThanOneFilter,
 ) => {
   if (sub) {
     if (dataSubPageCount.loading) return 'loading';
@@ -50,7 +51,10 @@ const getCountFor = (
       case 'interpro':
         return _get(
           dataSubPageCount.payload.entries,
-          ['interpro', sub === 'entry' ? null : toPlural(sub)].filter(Boolean),
+          [
+            'interpro',
+            sub === 'entry' && !hasMoreThanOneFilter ? null : toPlural(sub),
+          ].filter(Boolean),
         );
       case 'all':
         return _get(
@@ -60,9 +64,10 @@ const getCountFor = (
       default:
         return _get(
           dataSubPageCount.payload.entries.member_databases,
-          [db.toLowerCase(), sub === 'entry' ? null : toPlural(sub)].filter(
-            Boolean,
-          ),
+          [
+            db.toLowerCase(),
+            sub === 'entry' && !hasMoreThanOneFilter ? null : toPlural(sub),
+          ].filter(Boolean),
           0,
         );
     }
@@ -73,9 +78,10 @@ const getCountFor = (
         if (!dataDBCount.ok) return;
         return _get(
           dataDBCount.payload.entries,
-          ['interpro', main === 'entry' ? null : toPlural(main)].filter(
-            Boolean,
-          ),
+          [
+            'interpro',
+            main === 'entry' && !hasMoreThanOneFilter ? null : toPlural(main),
+          ].filter(Boolean),
         );
       case 'all':
         if (dataAllCount.loading) return 'loading';
@@ -89,9 +95,10 @@ const getCountFor = (
         if (!dataDBCount.ok) return;
         return _get(
           dataDBCount.payload.entries.member_databases,
-          [db.toLowerCase(), main === 'entry' ? null : toPlural(main)].filter(
-            Boolean,
-          ),
+          [
+            db.toLowerCase(),
+            main === 'entry' && !hasMoreThanOneFilter ? null : toPlural(main),
+          ].filter(Boolean),
           0,
         );
     }
@@ -236,6 +243,11 @@ class _MemberDBSelector extends PureComponent {
         db.canonical.toLowerCase());
     const selected = Array.from(this._dbs.values()).find(isSelected);
     const handleChange = this.props.onChange || this._defaultHandleChange;
+    const hasMoreThanOneFilter =
+      Object.entries(customLocation.description).filter(
+        ([_, { isFilter }]) => isFilter,
+      ).length > 1;
+
     return (
       <div
         tabIndex="0"
@@ -279,6 +291,7 @@ class _MemberDBSelector extends PureComponent {
                 dataSubPageCount,
                 main,
                 sub,
+                hasMoreThanOneFilter,
               );
               const disabled = count === 0;
               const loading = count === 'loading';
