@@ -24,5 +24,13 @@
 
 .release-selector .current {
   font-size: 1.4rem;
+}
+
+ul.release-selector li.current a {
+  opacity: 1 !important;
+  color: #444444;
+}
+ul.release-selector a {
+  opacity: 0.6 !important;
   color: #444444;
 }
