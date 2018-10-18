@@ -16,3 +16,13 @@
   display: inline-block;
   margin-right: 0.5rem;
 }
+
+.release-selector {
+  list-style: none;
+  color: #888888;
+}
+
+.release-selector .current {
+  font-size: 1.4rem;
+  color: #444444;
+}

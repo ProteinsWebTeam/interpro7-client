@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import loadWebComponent from 'utils/load-web-component';
 import T from 'prop-types';
+import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -24,6 +25,41 @@ import { formatISODate } from 'utils/date';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, local, ipro);
 
+const ReleaseNotesSelectorWithData = ({
+  data: { loading, payload },
+  current,
+}) => {
+  if (loading || !payload) return <Loading />;
+  return (
+    <ul className={f('release-selector')}>
+      {Object.entries(payload).map(([version, date]) => (
+        <li key={version} className={f({ current: version === current })}>
+          InterPro {version}{' '}
+          <small>
+            • <time dateTime={date}>{formatISODate(date)}</time>
+          </small>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const getReleaseNotesListUrl = createSelector(
+  state => state.settings.api,
+  ({ protocol, hostname, port, root }) =>
+    cleanUpMultipleSlashes(
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}/utils/release/`,
+      }),
+    ),
+);
+
+const ReleaseNotesSelector = loadData(getReleaseNotesListUrl)(
+  ReleaseNotesSelectorWithData,
+);
 const StatsPerType = ({ iconType, label, type, count, child = false }) => (
   <tr>
     <td>
@@ -75,6 +111,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
       }),
       loading: T.bool.isRequired,
     }).isRequired,
+    description: T.object.isRequired,
   };
   componentDidMount() {
     loadWebComponent(() =>
@@ -88,27 +125,15 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
       return <Loading />;
     }
     const { version, release_date: date, content } = this.props.data.payload;
-    const totalIpro = content.interpro.types.reduce(
-      (agg, v) => agg + v.count,
-      0,
+    const totalIpro = content.interpro.entries;
+    const newIpro = content.interpro.new_entries.length;
+    const updates = Object.values(content.member_databases).filter(
+      db => db.is_updated,
     );
-    const newIpro = 1; // TODO: Take this value from the release notes.
-    const updates = [['SFLD', 4]]; // TODO: Take this value from the release notes.
-    const perType = content.interpro.types.reduce((agg, v) => {
-      agg[v.type] = v.count;
-      return agg;
-    }, {});
-    const perMemberDB = content.member_databases.reduce((agg, v) => {
-      agg[v.name] = {
-        ...v,
-        new: Math.floor(Math.random() * 100),
-      };
-      return agg;
-    }, {});
-    delete perMemberDB['MobiDB Lite'];
-
+    const perType = content.interpro.types;
+    const perMemberDB = content.member_databases;
     const totalNewMethod = Object.values(perMemberDB).reduce(
-      (agg, v) => agg + v.new,
+      (agg, v) => agg + v.recently_integrated.length,
       0,
     );
     const types = [
@@ -127,6 +152,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
         ],
       },
     ];
+    const sets = Object.values(content.member_databases).filter(db => db.sets);
     const dbMap = new Map([
       ['PROSITE patterns', 'prosite'],
       ['PROSITE profiles', 'profile'],
@@ -137,7 +163,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
         <div className={f('columns', 'release')}>
           <section>
             <h3>Release notes</h3>
-            <p>This page records all release notes, most recent first.</p>
+            <ReleaseNotesSelector current={version} />
             <hr />
             <div
               className={f(
@@ -168,9 +194,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 !!updates.length && (
                   <li>
                     An update to{' '}
-                    {updates.map(([db, count]) => (
-                      <span key={db}>
-                        {db} ({count})
+                    {updates.map(({ name, recently_integrated: r }) => (
+                      <span key={name}>
+                        {name} ({r.length})
                       </span>
                     ))}
                     .
@@ -182,16 +208,18 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                   {totalNewMethod}
                 </NumberComponent>{' '}
                 new methods from the
-                {Object.entries(perMemberDB).map(([name, db], i) => (
-                  <React.Fragment key={name}>
-                    {i === 0 ? ' ' : ', '}
-                    {name} (
-                    <NumberComponent noTitle noAnimation>
-                      {db.new}
-                    </NumberComponent>
-                    )
-                  </React.Fragment>
-                ))}{' '}
+                {Object.entries(perMemberDB)
+                  .filter(([_name, { recently_integrated: r }]) => r.length)
+                  .map(([name, db], i) => (
+                    <React.Fragment key={name}>
+                      {i === 0 ? ' ' : ', '}
+                      {name} (
+                      <NumberComponent noTitle noAnimation>
+                        {db.recently_integrated.length}
+                      </NumberComponent>
+                      )
+                    </React.Fragment>
+                  ))}{' '}
                 databases.
               </li>
             </ul>
@@ -248,6 +276,8 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               </tbody>
             </table>
 
+            <p>Interpro cites {content.citations} publications in PubMed.</p>
+
             <h4>Member database information</h4>
 
             <table className={f('light', 'margin-top-large')}>
@@ -279,56 +309,65 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
               </thead>
               <tbody>
-                {Object.values(perMemberDB).map(
-                  ({ name, version, integrated, count }) => {
-                    const db =
-                      dbMap.get(name) || name.toLowerCase().replace('-', '');
-                    return (
-                      <tr key={name}>
-                        <td className={f('no-lineheight')}>
-                          <MemberSymbol type={db} className={f('md-small')} />
-                        </td>
-                        <td>{name}</td>
-                        <td className={f('text-center')}>{version}</td>
-                        <td className={f('text-right')}>
-                          <Link
-                            className={f('no-underline')}
-                            to={{
-                              description: {
-                                main: { key: 'entry' },
-                                entry: { db: db },
-                              },
-                            }}
-                          >
-                            <NumberComponent noTitle>{count}</NumberComponent>
-                          </Link>
-                        </td>
-                        <td className={f('text-right')}>
-                          <Link
-                            className={f('no-underline')}
-                            to={{
-                              description: {
-                                main: { key: 'entry' },
-                                entry: {
-                                  db: db,
-                                  integration: 'integrated',
+                {Object.values(perMemberDB)
+                  .filter(db => !db.name.toLowerCase().startsWith('mobidb'))
+                  .map(
+                    ({
+                      name,
+                      version,
+                      signatures,
+                      integrated_signatures: integrated,
+                    }) => {
+                      const db =
+                        dbMap.get(name) || name.toLowerCase().replace('-', '');
+                      return (
+                        <tr key={name}>
+                          <td className={f('no-lineheight')}>
+                            <MemberSymbol type={db} className={f('md-small')} />
+                          </td>
+                          <td>{name}</td>
+                          <td className={f('text-center')}>{version}</td>
+                          <td className={f('text-right')}>
+                            <Link
+                              className={f('no-underline')}
+                              to={{
+                                description: {
+                                  main: { key: 'entry' },
+                                  entry: { db: db },
                                 },
-                              },
-                            }}
-                          >
-                            <NumberComponent noTitle>
-                              {integrated}
-                            </NumberComponent>{' '}
-                            <small>
-                              ({(integrated / count).toFixed(1)}
-                              %)
-                            </small>
-                          </Link>
-                        </td>
-                      </tr>
-                    );
-                  },
-                )}
+                              }}
+                            >
+                              <NumberComponent noTitle>
+                                {signatures}
+                              </NumberComponent>
+                            </Link>
+                          </td>
+                          <td className={f('text-right')}>
+                            <Link
+                              className={f('no-underline')}
+                              to={{
+                                description: {
+                                  main: { key: 'entry' },
+                                  entry: {
+                                    db: db,
+                                    integration: 'integrated',
+                                  },
+                                },
+                              }}
+                            >
+                              <NumberComponent noTitle>
+                                {integrated}
+                              </NumberComponent>{' '}
+                              <small>
+                                ({((100 * integrated) / signatures).toFixed(1)}
+                                %)
+                              </small>
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    },
+                  )}
               </tbody>
             </table>
 
@@ -362,6 +401,31 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               ).
             </p>
 
+            <h4>InterPro2GO</h4>
+            <p>
+              We have a total number of{' '}
+              <NumberComponent noTitle>
+                {content.interpro.go_terms}
+              </NumberComponent>{' '}
+              GO terms mapped to InterPro entries.
+            </p>
+
+            <p>
+              <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
+                List of InterPro2GO mappings
+              </Link>
+              . These are also available through the EBI GO browser{' '}
+              <Link
+                href="http://www.ebi.ac.uk/QuickGO/"
+                className={f('ext')}
+                target="_blank"
+              >
+                QuickGO
+              </Link>
+            </p>
+
+            <h3>Protein information</h3>
+
             <table className={f('light', 'margin-top-large')}>
               <thead>
                 <tr>
@@ -379,92 +443,110 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>UniProtKB</td>
-                  <td>2018_08</td>
-                  <td>
-                    <NumberComponent noTitle>{125355233}</NumberComponent>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{104705922}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 104705922) / 125355233) / 10}
-                      %)
-                    </small>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{101460097}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 101460097) / 125355233) / 10}
-                      %)
-                    </small>
-                  </td>
-                </tr>
-                <tr>
-                  <td>UniProtKB/TrEMBL</td>
-                  <td>2018_08</td>
-                  <td>
-                    <NumberComponent noTitle>{124797108}</NumberComponent>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{104163101}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 104163101) / 124797108) / 10}
-                      %)
-                    </small>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{100920355}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 100920355) / 124797108) / 10}
-                      %)
-                    </small>
-                  </td>
-                </tr>
-                <tr>
-                  <td>UniProtKB/Swiss-Prot</td>
-                  <td>2018_08</td>
-                  <td>
-                    <NumberComponent noTitle>{558125}</NumberComponent>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{542821}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 542821) / 558125) / 10}
-                      %)
-                    </small>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{539742}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 539742) / 558125) / 10}
-                      %)
-                    </small>
-                  </td>
-                </tr>
+                {Object.entries(content.proteins)
+                  .sort(([a], [b]) => (a > b ? 1 : -1))
+                  .map(([name, detail]) => (
+                    <tr key={name}>
+                      <td>{name}</td>
+                      <td>{detail.version}</td>
+                      <td>
+                        <NumberComponent noTitle>
+                          {detail.count}
+                        </NumberComponent>
+                      </td>
+                      <td>
+                        <NumberComponent noTitle>
+                          {detail.signatures}
+                        </NumberComponent>{' '}
+                        <small>
+                          (
+                          {((100 * detail.signatures) / detail.count).toFixed(
+                            1,
+                          )}
+                          %)
+                        </small>
+                      </td>
+                      <td>
+                        <NumberComponent noTitle>
+                          {detail.integrated_signatures}
+                        </NumberComponent>{' '}
+                        <small>
+                          (
+                          {(
+                            (100 * detail.integrated_signatures) /
+                            detail.count
+                          ).toFixed(1)}
+                          %)
+                        </small>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
+            {['structures', 'proteomes', 'taxonomy'].map(key => (
+              <section key={key}>
+                <h3 style={{ textTransform: 'capitalize' }}>
+                  {key} information
+                </h3>
 
-            <h3>InterPro2GO</h3>
-            <p>
-              We have a total number of{' '}
-              <NumberComponent noTitle>{34550}</NumberComponent> GO terms mapped
-              to InterPro entries.
-            </p>
+                <table className={f('light', 'margin-top-large')}>
+                  <thead>
+                    <tr>
+                      <th>Version</th>
+                      <th>Count</th>
+                      <th>Integrated</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{content[key].version}</td>
+                      <td>
+                        <NumberComponent noTitle>
+                          {content[key].total}
+                        </NumberComponent>
+                      </td>
+                      <td>
+                        <NumberComponent noTitle>
+                          {content[key].integrated}
+                        </NumberComponent>{' '}
+                        <small>
+                          (
+                          {(
+                            (100 * content[key].integrated) /
+                            content[key].total
+                          ).toFixed(1)}
+                          %)
+                        </small>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            ))}
+            <section>
+              <h3>Sets Information</h3>
 
-            <p>
-              <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
-                List of InterPro2GO mappings
-              </Link>
-              . These are also available through the EBI GO browser{' '}
-              <Link
-                href="http://www.ebi.ac.uk/QuickGO/"
-                className={f('ext')}
-                target="_blank"
-              >
-                QuickGO
-              </Link>
-            </p>
+              <table className={f('light', 'margin-top-large')}>
+                <thead>
+                  <tr>
+                    <th>Database</th>
+                    <th>Version</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sets.map(({ name, sets, version }) => (
+                    <tr key={name}>
+                      <td>{name}</td>
+                      <td>{version}</td>
+                      <td>
+                        <NumberComponent noTitle>{sets}</NumberComponent>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
           </section>
         </div>
       </div>
@@ -473,15 +555,24 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
 }
 const getReleaseNotesUrl = createSelector(
   state => state.settings.api,
-  ({ protocol, hostname, port, root }) =>
+  state => state.customLocation.description.other,
+  ({ protocol, hostname, port, root }, other) =>
     cleanUpMultipleSlashes(
       format({
         protocol,
         hostname,
         port,
-        pathname: `${root}/utils/release/current`,
+        pathname: `${root}/utils/release/${
+          other.length > 1 ? other[1] : 'current'
+        }`,
       }),
     ),
 );
 
-export default loadData(getReleaseNotesUrl)(ReleaseNotes);
+const mapStateToProps = createSelector(
+  state => state.customLocation.description,
+  description => ({ description }),
+);
+export default connect(mapStateToProps)(
+  loadData(getReleaseNotesUrl)(ReleaseNotes),
+);
