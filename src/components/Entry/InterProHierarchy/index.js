@@ -42,7 +42,6 @@ const cleanHierarchyType = hierarchy => {
   }
   return output;
 };
-
 class InterProHierarchy extends PureComponent {
   static propTypes = {
     accession: T.string.isRequired,
@@ -85,9 +84,11 @@ class InterProHierarchy extends PureComponent {
       <interpro-hierarchy
         style={{ display: 'block', marginBottom: '1rem', marginLeft: '-4px' }}
         accession={this.props.accession}
+        accessions={this.props.accession}
         hideafter="2"
         hrefroot={`${config.root.website.path}/entry/interpro`}
         ref={this._ref}
+        displaymode="pruned"
       />
     );
   }

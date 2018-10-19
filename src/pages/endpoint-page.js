@@ -9,6 +9,7 @@ import Switch from 'components/generic/Switch';
 import { mainDBLocationSelector } from 'reducers/custom-location/description';
 import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 import loadData from 'higherOrder/loadData';
+import { edgeCases } from 'higherOrder/loadData/defaults';
 import { toPlural } from 'utils/pages';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -50,13 +51,16 @@ const propTypes = {
     payload: T.object,
     loading: T.bool.isRequired,
     ok: T.bool,
-  }),
+  }).isRequired,
   subPagesForEndpoint: T.oneOfType([T.func, T.object]),
 };
 
 class SummaryComponent extends PureComponent {
   static propTypes = {
     data: T.shape({
+      payload: T.any,
+    }).isRequired,
+    dataBase: T.shape({
       payload: T.any,
     }).isRequired,
     customLocation: T.object.isRequired,
@@ -66,14 +70,22 @@ class SummaryComponent extends PureComponent {
   render() {
     const {
       data: { payload, loading },
+      dataBase: { payload: payloadDB, loading: loadingDB },
       customLocation,
       SummaryAsync,
     } = this.props;
+    const db =
+      (!loadingDB &&
+        payloadDB &&
+        payloadDB.databases &&
+        payloadDB.databases[customLocation.description.entry.db]) ||
+      {};
     return (
       <SummaryAsync
         data={payload}
+        dbInfo={db}
         customLocation={customLocation}
-        loading={loading}
+        loading={loading && loadingDB}
       />
     );
   }
@@ -91,20 +103,6 @@ const locationhasDetailOrFilter = createSelector(
   },
   value => value,
 );
-
-const STATUS_NO_CONTENT = 204;
-const STATUS_NOT_FOUND = 404;
-const STATUS_GONE = 410;
-
-const edgeCases = new Map([
-  [
-    STATUS_NO_CONTENT,
-    // TODO: change wording when server supports 410 response
-    `The item you are trying to view doesn't exist (it might never have, or it might have been removed in a recent release)`,
-  ],
-  [STATUS_NOT_FOUND, 'This is not a valid accession'],
-  [STATUS_GONE, 'This item no longer exists'],
-]);
 
 class Summary extends PureComponent {
   static propTypes = propTypes;

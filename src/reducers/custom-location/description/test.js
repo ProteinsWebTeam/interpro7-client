@@ -20,7 +20,10 @@ describe('reducer for location description', () => {
         type: NEW_PROCESSED_CUSTOM_LOCATION,
         customLocation: { description: { main: { key: 'entry' } } },
       }),
-    ).toEqual({ ...emptyDescription, main: { key: 'entry' } });
+    ).toEqual({
+      ...emptyDescription,
+      main: { key: 'entry', numberOfFilters: 0 },
+    });
     expect(
       reducer(emptyDescription, {
         type: NEW_PROCESSED_CUSTOM_LOCATION,
