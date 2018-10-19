@@ -1,31 +1,21 @@
-@import '../../../styles/timing.css';
-
+/* grid not yet working with IE11*/
 .flex-grid {
   grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
 }
 
-.publication .card-label {
-  background-color: #5daace;
-  opacity: 0.7;
-  transition: opacity var(--timing-really-fast) ease-out;
-}
-
-.publication .card-info > div {
-  margin-right: 0;
-}
-
-/*to keep*/
-.tuto-beyond .card-image {
+.card-image.tuto-beyond {
   background: url('../../../images/cover/publi/journal_nucleicacidsresearch.png')
     no-repeat no-repeat 60% 60%;
   background-size: 100%;
 }
-.tuto-go .card-image {
+
+.card-image.tuto-go {
   background: url('../../../images/cover/publi/journal_database.png') no-repeat
     50% 90%;
   background-size: 100%;
 }
-.tuto-interproscan .card-image {
+
+.card-image.tuto-interproscan {
   background: url('../../../images/cover/publi/journal_bioinformatics.png')
     no-repeat 50% 90%;
   background-size: 100%;

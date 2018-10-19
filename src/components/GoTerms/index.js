@@ -106,14 +106,10 @@ const GoTerms = (
                         data={identifier}
                         processData={schemaProcessData}
                       />
-                      <Tooltip title={`${name} (${identifier})`}>
-                        <GoLink
-                          id={identifier}
-                          className={f('go-terms', 'ext')}
-                        >
-                          {name} ({identifier})
-                        </GoLink>
-                      </Tooltip>
+
+                      <GoLink id={identifier} className={f('go-terms', 'ext')}>
+                        {name} ({identifier})
+                      </GoLink>
                     </li>
                   ))
                 ) : (

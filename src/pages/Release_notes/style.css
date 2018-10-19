@@ -1,6 +1,8 @@
-/*reduce line-height for smaller row in the table */
+/*reduce line-height for icons*/
 .no-lineheight {
-  line-height: 0.1;
+  line-height: 0;
+  margin: 0;
+  padding: 0.3rem;
 }
 
 .md-small {

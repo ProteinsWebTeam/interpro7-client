@@ -3,40 +3,41 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { UniProtLink, ProteomeLink } from 'components/ExtLink';
+import { foundationPartial } from 'styles/foundation';
+import ipro from 'styles/interpro-new.css';
+
+const f = foundationPartial(ipro);
 
 const Default = ({ children }) => <span>{children}</span>;
 Default.propTypes = {
   children: T.oneOfType([T.string, T.number]).isRequired,
 };
 
-const componentMap = new Map([
-  ['reviewed', UniProtLink],
-  ['unreviewed', UniProtLink],
-  ['proteome', ProteomeLink],
-]);
-
 /*:: type Props = {
   accession: string | number,
-  id?: string,
   db: string,
 }; */
 
 export class Accession extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.oneOfType([T.string, T.number]).isRequired,
-    id: T.string,
+    withTitle: T.bool,
     title: T.string,
     db: T.string,
   };
 
   render() {
-    const { accession, id, db, title } = this.props;
-    const Link = componentMap.get(db) || Default;
+    const { withTitle, accession, title } = this.props;
     return (
       <div>
-        {title || 'Accession'}: <Link id={accession}>{accession}</Link>
-        {id && ` (${id})`}
+        {title !== '' && withTitle ? (
+          <span> {title || 'Accession'}:</span>
+        ) : null}
+        {title === 'Job ID' ? (
+          <span className={f('tag-sqc')}> {accession}</span>
+        ) : (
+          accession
+        )}
       </div>
     );
   }

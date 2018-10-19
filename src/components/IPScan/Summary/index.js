@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flattenDeep } from 'lodash-es';
 
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Redirect from 'components/generic/Redirect';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -17,7 +18,10 @@ import Actions from 'components/IPScan/Actions';
 import { Exporter } from 'components/Table';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
-import f from 'styles/foundation';
+import { foundationPartial } from 'styles/foundation';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+
+const f = foundationPartial(fonts);
 import Link from 'components/generic/Link';
 
 /*:: type Props = {
@@ -173,10 +177,68 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
               <Title metadata={metadata} mainType="protein" />
-              <Accession accession={accession} title="Job ID" />
-              <Length metadata={metadata} />
-              {localID && <Actions localID={localID} withTitle />}
-              <span>Status: {status}</span>
+              <table className={f('light', 'table-sum')}>
+                <tbody>
+                  <tr>
+                    <td>Job ID</td>
+                    <td>
+                      <Accession accession={accession} title="Job ID" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Length</td>
+                    <td>
+                      <Length metadata={metadata} />
+                    </td>
+                  </tr>
+                  {localID && (
+                    <tr>
+                      <td>Actions</td>
+                      <td>
+                        <Actions localID={localID} />
+                      </td>
+                    </tr>
+                  )}
+                  <tr>
+                    <td>Status</td>
+                    <td>
+                      <Tooltip title={`Job ${status}`}>
+                        {(status === 'running' ||
+                          status === 'created' ||
+                          status === 'submitted') && (
+                          <span
+                            className={f('icon', 'icon-common', 'ico-neutral')}
+                            data-icon="&#xf017;"
+                            aria-label={`Job ${status}`}
+                          />
+                        )}
+
+                        {status === 'not found' ||
+                        status === 'failure' ||
+                        status === 'error' ? (
+                          <span
+                            className={f('icon', 'icon-common', 'ico-notfound')}
+                            data-icon="&#x78;"
+                            aria-label="Job failed or not found"
+                          />
+                        ) : null}
+                        {status === 'finished' && (
+                          <span
+                            className={f(
+                              'icon',
+                              'icon-common',
+                              'ico-confirmed',
+                            )}
+                            data-icon="&#xf00c;"
+                            aria-label="Job finished"
+                          />
+                        )}
+                      </Tooltip>{' '}
+                      {status}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <div className={f('medium-3', 'columns', 'margin-bottom-large')}>
               {status === 'finished' && (
