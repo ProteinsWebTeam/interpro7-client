@@ -177,7 +177,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
               <Title metadata={metadata} mainType="protein" />
-              <table className={f('light', 'table-sum')}>
+              <table className={f('light', 'table-sum', 'margin-bottom-none')}>
                 <tbody>
                   <tr>
                     <td>Job ID</td>
