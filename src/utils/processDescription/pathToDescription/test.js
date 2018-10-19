@@ -114,11 +114,27 @@ describe('pathToDescription()', () => {
         expect(pathToDescription('/entry/integrated/cdd/CD00001')).toEqual(d);
       });
 
+      // TODO: write more
       test('combined', () => {
+        d.main.numberOfFilters = 1;
         d.entry.db = 'InterPro';
         d.protein.isFilter = true;
+        d.protein.order = 1;
         expect(pathToDescription('/entry/InterPro/protein/')).toEqual(d);
-        // TODO: write more
+      });
+      test('3 combined', () => {
+        d.entry.db = 'InterPro';
+        d.main.numberOfFilters = 2;
+        d.protein.isFilter = true;
+        d.protein.order = 1;
+        d.structure.isFilter = true;
+        d.structure.order = 2;
+        expect(pathToDescription('/entry/InterPro/protein/structure')).toEqual(
+          d,
+        );
+        expect(
+          pathToDescription('/entry/InterPro/structure/protein'),
+        ).not.toEqual(d);
       });
     });
   });

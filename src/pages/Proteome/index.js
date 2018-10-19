@@ -4,7 +4,8 @@ import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
-// import OrganismListFilters from 'components/Organism/OrganismListFilters';
+import ProteomeListFilters from 'components/Proteome/ProteomeListFilters';
+
 import Table, {
   Column,
   SearchBox,
@@ -281,7 +282,7 @@ class List extends PureComponent {
           className="pp-left-side-db-selector"
         />
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          {/* <OrganismListFilters />*/}
+          <ProteomeListFilters />
           <hr className={f('margin-bottom-none')} />
           {databases && (
             <SchemaOrgData
@@ -444,12 +445,15 @@ class List extends PureComponent {
                   <Link
                     to={{
                       description: {
-                        main: { key: 'taxonomy' },
-                        taxonomy: {
+                        main: { key: 'proteome' },
+                        proteome: {
                           db: 'uniprot',
                           accession: `${accession}`,
                         },
-                        protein: { isFilter: true, db: 'UniProt' },
+                        protein: { isFilter: true, db: 'UniProt', order: 1 },
+                        entry: entryDB
+                          ? { isFilter: true, db: entryDB, order: 2 }
+                          : null,
                       },
                     }}
                   >

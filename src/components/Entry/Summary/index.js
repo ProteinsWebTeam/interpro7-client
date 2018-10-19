@@ -36,14 +36,13 @@ const description2IDs = description =>
     [],
   );
 
-const MemberDBSubtitle = ({ metadata }) => {
+const MemberDBSubtitle = ({ metadata, dbInfo }) => {
   if (
     !metadata.source_database ||
     metadata.source_database.toLowerCase() === 'interpro'
   ) {
     return null;
   }
-
   return (
     <table className={f('light', 'table-sum')}>
       <tbody>
@@ -58,11 +57,15 @@ const MemberDBSubtitle = ({ metadata }) => {
                 description: {
                   other: ['about', 'consortium'],
                 },
-                hash: `${metadata.source_database}`,
+                hash: `${dbInfo.name}`,
               }}
             >
-              {metadata.source_database}{' '}
-              <Tooltip title={metadata.source_database}>
+              {dbInfo.name}{' '}
+              <Tooltip
+                title={
+                  dbInfo.description || `${dbInfo.name} (${dbInfo.version})`
+                }
+              >
                 <span
                   className={f('font-s', 'icon', 'icon-common')}
                   data-icon="&#xf129;"
@@ -72,9 +75,7 @@ const MemberDBSubtitle = ({ metadata }) => {
           </td>
         </tr>
         <tr>
-          <td className={f('first-letter-cap')}>
-            {metadata.source_database} type
-          </td>
+          <td className={f('first-letter-cap')}>{dbInfo.name} type</td>
           <td className={f('first-letter-cap')}>
             {metadata.type.replace('_', ' ').toLowerCase()}
           </td>
@@ -94,9 +95,10 @@ const MemberDBSubtitle = ({ metadata }) => {
 };
 MemberDBSubtitle.propTypes = {
   metadata: T.object.isRequired,
+  dbInfo: T.object.isRequired,
 };
 
-const SidePanel = ({ metadata }) => (
+const SidePanel = ({ metadata, dbInfo }) => (
   <div className={f('medium-4', 'large-4', 'columns')}>
     {metadata.integrated && <Integration intr={metadata.integrated} />}
     {metadata.source_database.toLowerCase() !== 'interpro' && (
@@ -112,7 +114,7 @@ const SidePanel = ({ metadata }) => (
               )}
             >
               View {metadata.accession.toUpperCase()} in{' '}
-              {metadata.source_database}
+              {(dbInfo && dbInfo.name) || metadata.source_database}
             </Link>
           </li>
           {false && // TODO: reactivate that after change in the API
@@ -138,6 +140,7 @@ const SidePanel = ({ metadata }) => (
 );
 SidePanel.propTypes = {
   metadata: T.object.isRequired,
+  dbInfo: T.object.isRequired,
 };
 
 const OtherSections = ({ metadata, citations: { included, extra } }) => (
@@ -209,6 +212,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     data: T.shape({
       metadata: T.object,
     }).isRequired,
+    dbInfo: T.object.isRequired,
     loading: T.bool.isRequired,
   };
   constructor(props) {
@@ -218,6 +222,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
   render() {
     const {
       data: { metadata },
+      dbInfo,
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
     const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
@@ -246,7 +251,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-8', 'large-8', 'columns')}>
-              <MemberDBSubtitle metadata={metadata} />
+              <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
               {metadata.source_database &&
                 metadata.source_database.toLowerCase() === 'interpro' &&
                 metadata.name.short &&
@@ -262,12 +267,14 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                     {metadata.type === 'homologous_superfamily'
                       ? 'Overlapping entries'
                       : 'Overlapping homologous superfamilies'}
+                    <Tooltip title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75.">
+                      &nbsp;
+                      <span
+                        className={f('small', 'icon', 'icon-common')}
+                        data-icon="&#xf129;"
+                      />
+                    </Tooltip>
                   </h4>
-                  <span
-                    title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75."
-                    className={f('small', 'icon', 'icon-common')}
-                    data-icon="&#xf129;"
-                  />
                   {overlaps.map(ov => (
                     <div key={ov.accession} className={f('list-items')}>
                       <interpro-type
@@ -351,7 +358,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 </>
               ) : null}
             </div>
-            <SidePanel metadata={metadata} />
+            <SidePanel metadata={metadata} dbInfo={dbInfo} />
           </div>
         </section>
         <OtherSections metadata={metadata} citations={{ included, extra }} />
