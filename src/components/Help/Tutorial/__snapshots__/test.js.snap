@@ -9,19 +9,20 @@ exports[`<Tutorial /> should render 1`] = `
     A number of online tutorials relating to InterPro are available.
   </p>
   <div
-    className="flex-column tutorials"
+    className="flex-column"
   >
     <div
-      className="card-grid tuto-method"
+      className="card-grid"
     >
       <Connect(Link)
         href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies"
+        target="_blank"
       >
         <div
-          className="card-image"
+          className="card-image tuto-method"
         >
           <div
-            className="card-label"
+            className="card-tag tag-tuto"
           >
             Tutorial
           </div>
@@ -32,7 +33,9 @@ exports[`<Tutorial /> should render 1`] = `
           <div
             className="card-title"
           >
-            InterPro: A case study of 3 protein family building methodologies
+            <h4>
+              InterPro: A case study of 3 protein family building methodologies
+            </h4>
           </div>
           <div
             className="card-info"
@@ -75,19 +78,30 @@ exports[`<Tutorial /> should render 1`] = `
             This course provides an insight into the different protein family building methodologies employed by three InterPro member databases, namely SFLD (Structure Function Linkage Database), TIGRFAMs and PANTHER. It also describes an automated approach to comparing protein signatures and predicting hierarchical relationships between them.
           </div>
         </div>
+        <div
+          className="card-more"
+        >
+          <div
+            className="button hollow secondary button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Start the course
+          </div>
+        </div>
       </Connect(Link)>
     </div>
     <div
-      className="card-grid tuto-what"
+      className="card-grid"
     >
       <Connect(Link)
         href="//www.ebi.ac.uk/training/online/course/interpro-functional-and-structural-analysis-protei/what-interpro"
+        target="_blank"
       >
         <div
-          className="card-image"
+          className="card-image tuto-what"
         >
           <div
-            className="card-label"
+            className="card-tag tag-tuto"
           >
             Tutorial
           </div>
@@ -98,7 +112,9 @@ exports[`<Tutorial /> should render 1`] = `
           <div
             className="card-title"
           >
-            InterPro: functional and structural analysis of protein sequences
+            <h4>
+              InterPro: functional and structural analysis of protein sequences
+            </h4>
           </div>
           <div
             className="card-info"
@@ -140,19 +156,30 @@ exports[`<Tutorial /> should render 1`] = `
             This course will provide an in-depth guide to InterPro - how to access it, how to search the database and interpret the results.
           </div>
         </div>
+        <div
+          className="card-more"
+        >
+          <div
+            className="button hollow secondary button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Start the course
+          </div>
+        </div>
       </Connect(Link)>
     </div>
     <div
-      className="card-grid tuto-intro"
+      className="card-grid"
     >
       <Connect(Link)
         href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou"
+        target="_blank"
       >
         <div
-          className="card-image"
+          className="card-image tuto-intro"
         >
           <div
-            className="card-label"
+            className="card-tag tag-tuto"
           >
             Tutorial
           </div>
@@ -163,7 +190,9 @@ exports[`<Tutorial /> should render 1`] = `
           <div
             className="card-title"
           >
-            Protein classification: An introduction to EMBL-EBI resources
+            <h4>
+              Protein classification: An introduction to EMBL-EBI resources
+            </h4>
           </div>
           <div
             className="card-info"
@@ -206,19 +235,30 @@ exports[`<Tutorial /> should render 1`] = `
             This course provides background information on protein signature databases and their use in sequence analysis and protein classification.
           </div>
         </div>
+        <div
+          className="card-more"
+        >
+          <div
+            className="button hollow secondary button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Start the course
+          </div>
+        </div>
       </Connect(Link)>
     </div>
     <div
-      className="card-grid tuto-tour"
+      className="card-grid"
     >
       <Connect(Link)
         href="//www.ebi.ac.uk/training/online/course/interpro-quick-tour"
+        target="_blank"
       >
         <div
-          className="card-image"
+          className="card-image tuto-tour"
         >
           <div
-            className="card-label"
+            className="card-tag tag-tuto"
           >
             Tutorial
           </div>
@@ -229,7 +269,9 @@ exports[`<Tutorial /> should render 1`] = `
           <div
             className="card-title"
           >
-            A Quick Tour of InterPro
+            <h4>
+              A Quick Tour of InterPro
+            </h4>
           </div>
           <div
             className="card-info"
@@ -270,6 +312,16 @@ exports[`<Tutorial /> should render 1`] = `
             className="card-description"
           >
             This course provides a brief overview of InterPro, including querying the database and visualising the results using the web interface.
+          </div>
+        </div>
+        <div
+          className="card-more"
+        >
+          <div
+            className="button hollow secondary button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Start the course
           </div>
         </div>
       </Connect(Link)>

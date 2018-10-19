@@ -17,12 +17,13 @@ import getUrlFor from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 
+import ipro from 'styles/interpro-new.css';
 import theme from 'styles/theme-interpro.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, theme, local);
+const f = foundationPartial(ebiGlobalStyles, fonts, theme, ipro, local);
 
 const description2IDs = description =>
   description.reduce(
@@ -44,38 +45,51 @@ const MemberDBSubtitle = ({ metadata }) => {
   }
 
   return (
-    <div className={f('md-hlight')}>
-      <h5>
-        Member database:&nbsp;
-        <Link
-          to={{
-            description: {
-              mainType: 'entry',
-              mainDB: metadata.source_database,
-            },
-          }}
-        >
-          {metadata.source_database}{' '}
-          <Tooltip title={metadata.source_database}>
-            <span
-              className={f('small', 'icon', 'icon-common')}
-              data-icon="&#xf129;"
-            />
-          </Tooltip>
-        </Link>
-      </h5>
-      <p className={f('margin-bottom-medium')}>
-        {metadata.source_database} type:{' '}
-        {metadata.type.replace('_', ' ').toLowerCase()}
-      </p>
-      {metadata.name.short &&
-        metadata.accession !== metadata.name.short && (
-          <p>
-            Short name:&nbsp;
-            <i className={f('shortname')}>{metadata.name.short}</i>
-          </p>
-        )}
-    </div>
+    <table className={f('light', 'table-sum')}>
+      <tbody>
+        <tr>
+          <td className={f('font-ml')} style={{ width: '200px' }}>
+            Member database
+          </td>
+          <td className={f('first-letter-cap', 'md-hlight', 'font-ml')}>
+            <Link
+              className={f('nolink')}
+              to={{
+                description: {
+                  other: ['about', 'consortium'],
+                },
+                hash: `${metadata.source_database}`,
+              }}
+            >
+              {metadata.source_database}{' '}
+              <Tooltip title={metadata.source_database}>
+                <span
+                  className={f('font-s', 'icon', 'icon-common')}
+                  data-icon="&#xf129;"
+                />
+              </Tooltip>
+            </Link>
+          </td>
+        </tr>
+        <tr>
+          <td className={f('first-letter-cap')}>
+            {metadata.source_database} type
+          </td>
+          <td className={f('first-letter-cap')}>
+            {metadata.type.replace('_', ' ').toLowerCase()}
+          </td>
+        </tr>
+        {metadata.name.short &&
+          metadata.accession !== metadata.name.short && (
+            <tr>
+              <td>Short name</td>
+              <td>
+                <i className={f('shortname')}>{metadata.name.short}</i>
+              </td>
+            </tr>
+          )}
+      </tbody>
+    </table>
   );
 };
 MemberDBSubtitle.propTypes = {
@@ -244,7 +258,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 )}
               {overlaps && Object.keys(overlaps).length ? (
                 <div>
-                  <h4 className={f('first-letter-capital')}>
+                  <h4>
                     {metadata.type === 'homologous_superfamily'
                       ? 'Overlapping entries'
                       : 'Overlapping homologous superfamilies'}
@@ -279,8 +293,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   {Object.keys(metadata.overlaps_with).length >
                     MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
                     <button
-                      className={f('button')}
-                      style={{ marginLeft: '1.5em' }}
+                      className={f('button', 'hollow', 'secondary')}
                       onClick={() =>
                         this.setState({
                           showAllOverlappingEntries: !this.state
@@ -289,7 +302,23 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       }
                     >
                       Show{' '}
-                      {this.state.showAllOverlappingEntries ? 'Less' : 'More'}
+                      {this.state.showAllOverlappingEntries ? (
+                        <span>
+                          Less{' '}
+                          <i
+                            className={f('icon', 'icon-common')}
+                            data-icon="&#xf102;"
+                          />
+                        </span>
+                      ) : (
+                        <span>
+                          More{' '}
+                          <i
+                            className={f('icon', 'icon-common')}
+                            data-icon="&#xf103;"
+                          />
+                        </span>
+                      )}
                     </button>
                   )}
                 </div>
@@ -298,8 +327,8 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
               Object.keys(metadata.hierarchy).length &&
               metadata.hierarchy.children &&
               metadata.hierarchy.children.length ? (
-                <div>
-                  <h4 className={f('first-letter-capital')}>
+                <div className={f('margin-bottom-large')}>
+                  <h4 className={f('first-letter-cap')}>
                     {metadata.type.replace('_', ' ').toLowerCase()}{' '}
                     relationships
                   </h4>

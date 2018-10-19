@@ -1,6 +1,8 @@
 @import '../styles/colors.css';
 @import '../styles/timing.css';
 @import '../styles/animation.css';
+@import '../styles/fonts.css';
+
 /******************************Overwrite EBI global***************************/
 /*to include more systems fonts for windows machines*/
 h1,
@@ -9,9 +11,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
-    sans-serif;
+  font-family: var(--fonts-system);
 }
 
 /* resize h5  - should be included in EBI global*/
@@ -138,6 +138,11 @@ mark {
   color: var(--colors-alert-main);
 }
 /*/I5 result page icons*/
+
+/*lineage*/
+.ico-primary ::before {
+  color: var(--colors-submain);
+}
 /************************  END ICONS  **********************************/
 
 /************************  LINKS  **********************************/
@@ -168,6 +173,15 @@ a.neutral:hover {
   border-bottom: 1px var(--colors-gray) solid;
 }
 /*/NEUTRAL LINKS*/
+
+/*like-text Links*/
+.main a.nolink {
+  color: var(--colors-light-txt);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
 
 /************************  END LINKS  **********************************/
 
@@ -286,15 +300,6 @@ table.light thead td {
   color: #73828c; /*Overwrite EBI global*/
 }
 
-table.light.small {
-  width: 30%;
-  min-width: 300px;
-}
-
-table.light.small td {
-  border: none;
-}
-
 table.light thead th:hover {
   color: #73828c;
 }
@@ -341,6 +346,37 @@ table.light.sorting thead th:hover {
   color: #73828c;
 }
 /*/Style light table */
+
+table.light.small {
+  width: 30%;
+  min-width: 300px;
+
+  & td {
+    border: none;
+    padding: 0.3rem; /* no extra space */
+  }
+}
+
+table.light.table-sum {
+  color: var(--colors-dark);
+  width: 100%;
+  border-right-width: 0;
+  border-collapse: inherit;
+
+  & tr:hover {
+    background-color: transparent;
+  }
+
+  & td {
+    border: none;
+    padding: 0.3rem 2rem 0.3rem 0; /* extra space between two rows - easier than defining with */
+
+    &:first-of-type {
+      width: 140px; /*target first columns*/
+    }
+  }
+}
+
 /*responsive table*/
 @media screen and (max-width: 39.9375em) {
   table.responsive th,
@@ -429,7 +465,7 @@ button {
 }
 
 .button.hollow.secondary {
-  border-color: var(--colors-lightgray);
+  border-color: var(--colors-grey);
   &:hover {
     color: var(--colors-dark);
   }
@@ -467,9 +503,7 @@ h3.light {
 
 /*simulation H5 but needs to stay span in order to show ext icon on the same line*/
 .h5 {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
-    sans-serif;
+  font-family: -var(--fonts-system);
   color: #222;
   font-weight: 400;
   border-bottom: 2px white solid;
@@ -504,8 +538,14 @@ h6 small {
   color: #a2d7b9;
 }
 
-.uppercase {
+.text-up {
   text-transform: uppercase;
+}
+.text-cap {
+  text-transform: capitalize;
+}
+.first-letter-cap::first-letter {
+  text-transform: capitalize;
 }
 
 hr {
@@ -517,20 +557,38 @@ hr {
   font-size: 280%;
 }
 
-.font-xxlarge {
+.font-xxl {
   font-size: 400%;
 }
-.font-xlarge {
+.font-xl {
   font-size: 300%;
 }
-.font-large {
-  font-size: 170%;
+.font-l {
+  font-size: 160%;
 }
-.font-medium {
+
+.font-ml {
+  font-size: 120%;
+}
+
+.font-m {
   font-size: 100%;
 }
-.font-small {
-  font-size: 90%;
+
+.font-sm {
+  font-size: 80%;
+}
+
+.font-s {
+  font-size: 60%;
+}
+
+.font-xs {
+  font-size: 40%;
+}
+
+.font-xxs {
+  font-size: 20%;
 }
 
 .margin-top-xxlarge {
@@ -558,6 +616,15 @@ hr {
 /* tag used on md signature page */
 .tag.md-p {
   background-color: var(--colors-md-sub);
+}
+
+/*used on ipscan search result*/
+.tag-sqc {
+  background-color: var(--colors-other-main);
+  margin-left: 0.2rem;
+  padding: 0.3rem 0.5rem;
+  color: var(--colors-light-title);
+  text-transform: uppercase;
 }
 
 /*CALLOUT info & alert messages*/
@@ -612,13 +679,255 @@ hr {
 }
 /*/ CALLOUT info & alert messages*/
 
+.shortname {
+  color: var(--colors-graydark);
+}
 /****************************** END TITLE - TEXT *********************************/
 
 /****************************** OTHERS *********************************/
+/*CARDS*/
+/*Alternative to grid */
+.flex-column {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+  /*margin: 0 -0.5rem;*/
+  margin: 0 -1rem; /*to align with grid*/
+}
 
-/*TABS*/
+.card-grid {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 20%;
+  min-width: 270px;
+  /*margin: 0.5rem;*/
+  margin: 1rem; /*to align with grid*/
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transition: all var(--timing-really-fast) ease-out;
 
-/*Tabs style main - homepage*/
+  &:hover {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18),
+      0 4px 15px 0 rgba(0, 0, 0, 0.15);
+
+    & .card-tag,
+    & .card-info,
+    & .card-image,
+    & .button-nu,
+    & .button.hollow.secondary {
+      opacity: 1;
+    }
+    & .button-nu:hover {
+      color: var(--colors-ebidark);
+    }
+  }
+}
+/*if single link on top*/
+.card-grid a {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-image {
+  width: 100%;
+  background-color: var(--colors-submain);
+  height: 160px;
+  position: relative;
+  opacity: 0.8;
+  transition: opacity var(--timing-really-fast) ease-out;
+}
+/*Card with no image*/
+.card-image.no-img {
+  height: 0;
+}
+
+.card-tag {
+  position: absolute;
+  font-size: 70%;
+  color: white;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  bottom: -8px;
+  left: 7%;
+  background-color: var(--colors-submain); /*default color*/
+  opacity: 0.9;
+  transition: opacity var(--timing-really-fast) ease-out;
+  min-width: 100px;
+  text-align: center;
+}
+
+/*to move to colors?*/
+.card-tag.tag-publi {
+  background-color: #5daace;
+}
+.card-tag.tag-tuto {
+  background-color: #fab700;
+}
+
+.card-tag.tag-tool {
+  background-color: #3886c1;
+  /*background-color: var(--colors-submain);*/
+  /*background-color: var(--colors-main);*/
+}
+
+.card-tag.tag-focus {
+  /*background-color: #c29880;*/
+  background-color: #ef5f57;
+}
+
+.card-tag.tag-blog {
+  /*background-color: #95afaa;*/
+  background-color: var(--colors-interpro);
+}
+
+/*img tool + focus&blog homepage - background-position for 4 cards - temp*/
+.blog-newweb {
+  background: url('../images/cover/blog/blog_new_interpro.PNG') no-repeat 50%
+    56%;
+  background-size: 100%;
+}
+/* nice multi bgd effect */
+.blog-iceberg {
+  background: url('../images/cover/blog/blog_iceberg.png') no-repeat 50% 56%,
+    linear-gradient(
+      to bottom,
+      #e8e9d0 0%,
+      #e8e9d0 32%,
+      #b8c1c9 32%,
+      #b8c1c9 100%
+    );
+}
+.blog-type {
+  background: #fff url('../images/cover/blog/blog_type.png') no-repeat 50% 56%;
+  background-size: 36%;
+}
+.focus-ape {
+  background: url('../images/cover/focus/focus_ape.png') no-repeat 50% 16%;
+  background-size: 100%;
+}
+.special {
+  /* background-color: var(--colors-slightgray); */
+  background-color: #a2abb1;
+}
+.tool-ipscan {
+  background: #fff url('../images/cover/tool/tool_interproscan.svg') no-repeat
+    50% 26%;
+  background-size: contain;
+  background-color: #0d68a6;
+}
+.tool-api {
+  background: #fff url('../images/cover/tool/tool_api.png') no-repeat 50% 76%;
+  background-size: 56%;
+}
+.tool-protvista {
+  background: #fff url('../images/cover/tool/tool_protvista.png') no-repeat 40%
+    14%;
+  background-size: 268%;
+}
+
+.tool-litemol {
+  background: #fff url('../images/cover/tool/tool_litemol.png') no-repeat 50%
+    14%;
+  background-size: 210%;
+}
+
+/* /img tool homepage - temp */
+.card-content {
+  /* border: 1px red solid; */
+  flex-grow: 1;
+  padding: 1rem 1.5rem;
+}
+/* separation between elements */
+.card-content > div {
+  margin-bottom: 1rem;
+}
+.card-title {
+  /* flex-grow: 1; is this used? */
+  & h4 {
+    font-size: 120%;
+    font-weight: 600;
+    color: var(--colors-nearly-black);
+    border-bottom: 2px transparent solid;
+    transition: border var(--timing-fast) ease-in-out;
+    display: inline; /* to make title underline work for every line */
+    &:hover {
+      border-bottom: 2px var(--colors-dark) solid;
+    }
+  }
+}
+.card-info {
+  color: var(--colors-nearly-black);
+  font-size: 90%;
+  opacity: 0.5;
+  display: flex;
+  flex-wrap: wrap;
+  transition: opacity var(--timing-really-fast) ease-out;
+  & > div:not(:last-child) {
+    margin-right: 0.5rem;
+  }
+}
+.card-description {
+  color: var(--colors-graydark);
+  font-family: var(--fonts-system);
+  font-weight: 400;
+  max-height: 9rem;
+  overflow: hidden;
+}
+.card-grid .button.hollow.secondary {
+  border-width: 2px;
+  opacity: 0.5;
+}
+.card-more {
+  align-self: flex-end;
+  margin-right: 1rem;
+}
+.button-more {
+  /* width: 50%; */
+  position: relative;
+  min-width: 182px; /* for small screens */
+}
+
+.button-nu {
+  min-width: 25px;
+  margin-right: 0.5rem;
+  padding: 0;
+  color: grey;
+  background-color: transparent;
+  font-size: 160%;
+  margin: 0 1rem 1rem 0;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+.card-grid .button-nu {
+  opacity: 0.5;
+}
+.icon.button-more {
+  font-weight: 600; /* bold on just text */
+  &::after,
+  &::before {
+    font-weight: 300; /* keep the icon unbold */
+  }
+}
+/* to add class icon-right in EBI ebi-utility-styles (define position icon) */
+.icon-common.icon-right:before {
+  content: '';
+}
+.icon-common.icon-right:after {
+  content: attr(data-icon);
+  font-family: 'EBI-Common';
+  position: absolute;
+  right: 0.8rem;
+  transition: all var(--timing-instant) ease-in-out;
+}
+.icon-common.icon-right:hover:after {
+  right: 0.5em;
+}
+/* /CARDS */
+/* TABS */
+/* Tabs style main - homepage */
+
 .tabs.main-style {
   border-bottom: 1px solid #e6e6e6;
   border-right-width: 0;
@@ -626,7 +935,6 @@ hr {
 }
 .tabs.main-style .tabs-title {
   margin-bottom: -1px;
-
   & > button,
   & > a {
     color: var(--colors-graydark);
@@ -639,11 +947,10 @@ hr {
     background: #ddd;
   }
 }
-
 .tabs.main-style .tabs-title:last-of-type {
   border-right: 1px #e6e6e6 solid;
 }
-/*tabs - is it used?*/
+/* tabs - is it used? */
 .tabs.main-style .tabs-title.is-active {
   & > a,
   & > a:focus,
@@ -658,17 +965,14 @@ hr {
     background: white;
   }
 }
-
-/*tabs main style (e.g search, homepage)*/
+/* tabs main style (e.g search, homepage) */
 .tabs.main-style .tabs-title a.is-active {
   border-top: #36aac0 3px solid;
   background: #fff;
   color: #222;
   outline: none;
 }
-
-/*/Tabs style main*/
-
+/* /Tabs style main */
 .tabs .tabs-title.is-active {
   & > a,
   & > a:focus,
@@ -678,7 +982,6 @@ hr {
     background: #666;
   }
 }
-
 .tabs .tabs-title {
   & > button,
   & > a {
@@ -687,25 +990,23 @@ hr {
     font-size: 0.75rem;
     line-height: 1;
   }
-
   & > button:hover,
   & > a:hover {
     opacity: 0.9;
     background: #ddd;
   }
 }
-/*important to keep otherwise become light grey like other tabs */
+/* important to keep otherwise become light grey like other tabs */
 .tabs .tabs-title.is-active {
   & > button:hover {
     background: #666;
   }
 }
-/*Tabs style menu*/
+/* Tabs style menu */
 .tabs.menu-style {
   border: 0px solid #e6e6e6;
   margin-bottom: 2rem;
 }
-
 .tabs.menu-style .tabs-title {
   & {
     margin: 0 1em 0 0;
@@ -725,16 +1026,14 @@ hr {
     color: #fff;
   }
 }
-
 .tabs.menu-style ~ .tabs-content {
   border: 0;
 }
 .tabs.menu-style ~ .tabs-content .tabs-panel {
   padding: 0;
 }
-/*/Tabs style menu*/
-
-/*** ACCORDION MENU ***/
+/* /Tabs style menu */
+/* ** ACCORDION MENU ** */
 details.accordion-style > summary {
   color: var(--colors-submain);
   border: 1px solid var(--colors-very-white);
@@ -743,10 +1042,10 @@ details.accordion-style > summary {
   cursor: pointer;
   outline: 0;
   z-index: 1;
-  position: relative; /*for animation*/
-  list-style: none; /*keep to remove default icon for Firefox*/
+  position: relative; /* for animation */
+  list-style: none; /* keep to remove default icon for Firefox */
   &:hover {
-    /*background-color: var(--colors-accordion);*/
+    /* background-color: var(--colors-accordion); */
     background-color: var(--colors-unknown-sub);
     color: var(--colors-graydark);
     transition: all var(--timing-medclose) ease-out;
@@ -764,22 +1063,18 @@ details.accordion-style > summary {
     background: white;
     transform: translateY(-50%) rotate(-45deg);
   }
-
   /* using icon instead
-&::after {*/
-  /*content: '';*/
-  /*font-family: 'EBI-Common';*/
-  /*position: absolute;*/
-  /*font-size: 120%;*/
-  /*top: 20%;*/
-  /*right: .5rem;*/
-  /*}*/
-
+&::after { */
+  /* content: ''; */
+  /* font-family: 'EBI-Common'; */
+  /* position: absolute; */
+  /* font-size: 120%; */
+  /* top: 20%; */ /* right: .5rem; */
+  /* } */
   &::-webkit-details-marker {
     display: none;
   }
 }
-
 details.accordion-style > summary::before,
 details.accordion-style > summary::after {
   content: '';
@@ -789,11 +1084,9 @@ details.accordion-style > summary::after {
   right: 20px;
   top: 50%;
 }
-
 details.accordion-style:last-child {
   border-bottom: 1px solid var(--colors-very-white);
 }
-
 .accordion-info {
   border: 1px solid var(--colors-nearly-white);
   border-top-width: 0;
@@ -802,17 +1095,14 @@ details.accordion-style:last-child {
     margin-bottom: 0;
   }
 }
-
 details.accordion-style[open] > summary {
   background-color: var(--colors-accordion);
   color: white;
 }
-
 details.accordion-style[open] summary ~ * {
   animation: sweep var(--timing-fast) ease-out;
 }
-
-/*/alt color for testing*/
+/* /alt color for testing */
 details.accordion-style[open] summary {
   &::after {
     content: '';
@@ -824,15 +1114,13 @@ details.accordion-style[open] summary {
     transform: translateY(-50%) rotate(45deg);
   }
 }
-
 /* using icon
-details.accordion-style[open] summary:after {*/
-/*content: '';*/
-/*}*/
+details.accordion-style[open] summary:after { */
+/* content: ''; */
+  }
 
-/*** END ACCORDION MENU ****/
-
-/*footer*/
+/* ** END ACCORDION MENU *** */
+/* footer */
 .local_footer {
   padding: 1rem 0;
 }
@@ -864,8 +1152,7 @@ details.accordion-style[open] summary:after {*/
 .local_footer.masthead {
   background-size: 130%, 110%;
 }
-
-/*back to top button*/
+/* back to top button */
 #back-top {
   position: fixed;
   bottom: 0;
@@ -898,13 +1185,12 @@ details.accordion-style[open] summary:after {*/
 #back-top:hover {
   padding-bottom: 14px;
 }
-/*/back to top button*/
-
-/* LiteMole - Structure page*/
+/* /back to top button */
+/* LiteMole - Structure page */
 .lm-plugin .lm-btn-link span.lm-icon {
   font-size: 120%;
 }
-/*update color icons LiteMole*/
+/* update color icons LiteMole */
 .lm-plugin .lm-viewport-controls-buttons button.lm-btn-link {
   color: #71818a;
 }
@@ -914,46 +1200,42 @@ details.accordion-style[open] summary:after {*/
 .lm-plugin .lm-viewport-controls-buttons button.lm-btn-link:hover {
   color: #646e74;
 }
-/*update color info window that appear on mouse over*/
+/* update color info window that appear on mouse over */
 .lm-plugin div.lm-highlight-info {
   color: #4b555b;
-  background: #ccc; /*not transparent otherwise can't be read properly*/
-  z-index: 2; /*reduce Z-index to stay below sticky banner*/
+  background: #ccc; /* not transparent otherwise can't be read properly */
+  z-index: 2; /* reduce Z-index to stay below sticky banner */
 }
-
-/* icons LiteMole by EBI icons*/
-/*help icon*/
+/* icons LiteMole by EBI icons */
+/* help icon */
 .lm-plugin span.lm-icon-help-circle:before {
   font-family: EBI-Common;
   content: '';
 }
-
-/*settings icon*/
+/* settings icon */
 .lm-plugin span.lm-icon-settings:before {
   font-family: EBI-Common;
   content: '';
 }
 
-/* temp while e use the new camera icon from EBI font set
-.lm-plugin span.lm-icon-screenshot:before {
+/* camera icon */
+/* .lm-plugin span.lm-icon-screenshot:before {
   font-family: EBI-Common;
-  content: '!';
-}*/
-
-/*full screen icon*/
+  content: '';
+} */
+/* full screen icon */
 .lm-plugin span.lm-icon-expand-layout:before {
   font-family: EBI-Common;
   content: 'F';
 }
-
-/*refresh icon*/
+/* refresh icon */
 .lm-plugin span.lm-icon-reset-scene:before {
   font-family: EBI-Common;
   content: '';
 }
-/*/ icons LiteMole by EBI icons*/
 
-/*change color font in control panel*/
+/* / icons LiteMole by EBI icons */
+/* change color font in control panel */
 .lm-plugin
   .lm-entity-tree-entry-current-path
   button.lm-entity-tree-entry-label {
@@ -962,14 +1244,13 @@ details.accordion-style[open] summary:after {*/
 .lm-plugin .lm-entity-tree-entry-current button.lm-entity-tree-entry-label {
   color: #4b555b;
 }
-/*z-index so element in the panel goes on top of footer*/
+/* z-index so element in the panel goes on top of footer */
 .lm-plugin .lm-layout-standard-outside .lm-layout-left,
 .lm-plugin .lm-layout-standard-outside .lm-layout-right {
   z-index: 2;
 }
-/*END LiteMole*/
-
-/*custom CLAN-VIEWER node module*/
+/* END LiteMole */
+/* custom CLAN-VIEWER node module */
 :global(.clanviewer) {
   width: 100%;
 }
@@ -1000,20 +1281,17 @@ details.accordion-style[open] summary:after {*/
   stroke: #aaa;
 }
 .clanviewer g.link:hover path {
-  /*stroke: #2199e8;
-  stroke: #7eb1bb;*/
+  /* stroke: #2199e8;
+  stroke: #7eb1bb; */
   stroke: var(--colors-markchart);
 }
-/*END custom CLAN-VIEWER node module*/
-
-/****************************** END OTHERS *********************************/
-
-/*RESPONSIVE DESIGN*/
+/* END custom CLAN-VIEWER node module */
+/* ***************************** END OTHERS ******************************** */
+/* RESPONSIVE DESIGN */
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
 }
-
-/*make banner buttons disappear for very small screens so they don't overlap with title*/
+/* make banner buttons disappear for very small screens so they don't overlap with title */
 @media screen and (max-width: 20em) {
   .local-offcanvas-menu,
   .local-site-search {
