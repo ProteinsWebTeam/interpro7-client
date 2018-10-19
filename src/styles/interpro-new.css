@@ -1261,10 +1261,10 @@ details.accordion-style[open] summary:after {*/
   content: '';
 }
 
-/* temp while e use the new camera icon from EBI font set
-.lm-plugin span.lm-icon-screenshot:before {
+/* camera icon */
+/*.lm-plugin span.lm-icon-screenshot:before {
   font-family: EBI-Common;
-  content: '!';
+  content: '';
 }*/
 
 /*full screen icon*/
