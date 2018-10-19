@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -12,11 +13,18 @@ import { goToCustomLocation } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
+
 import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-class CurationFilter extends PureComponent {
+const labels = new Map([
+  ['true', 'Reference Proteomes'],
+  ['false', 'Non-reference Proteomes'],
+  ['both', 'All Proteomes'],
+]);
+
+class IsReferenceFilter extends PureComponent {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -30,45 +38,44 @@ class CurationFilter extends PureComponent {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    const { page, ...search } = this.props.customLocation.search;
-    this.props.goToCustomLocation({
-      ...this.props.customLocation,
-      description: {
-        ...this.props.customLocation.description,
-        protein: {
-          ...this.props.customLocation.description.protein,
-          db: value,
-        },
-      },
-      search,
-    });
+    const { goToCustomLocation, customLocation } = this.props;
+    const { page, proteome_is_reference: _, ...search } = customLocation.search;
+    if (labels.has(value) && (value === 'true' || value === 'false')) {
+      search.is_reference = value;
+    } else if ('is_reference' in search) {
+      delete search.is_reference;
+    }
+    goToCustomLocation({ ...customLocation, search });
   };
 
   render() {
     const {
       data: { loading, payload },
-      customLocation: { description },
+      customLocation: { search },
     } = this.props;
-    const databases = loading || !payload ? {} : payload;
+
+    const isReference =
+      loading || !payload ? {} : payload.proteome_is_reference;
     if (!loading) {
-      databases.uniprot = databases
-        ? (databases.reviewed || 0) + (databases.unreviewed || 0)
-        : 0;
+      isReference.both = isReference.true + isReference.false;
     }
+
+    const selectedValue = search.is_reference || 'both';
+    console.log(`Selected value ${selectedValue}`);
     return (
-      <div className={f('list-curation')}>
-        {Object.entries(databases).map(([db, value]) => (
-          <div key={db} className={f('column')}>
+      <div className={f('list-proteome-is-reference')}>
+        {Object.entries(isReference).map(([key, value]) => (
+          <div key={key} className={f('column')}>
             <label className={f('row', 'filter-button')}>
               <input
                 type="radio"
-                name="curated_filter"
-                value={db}
+                name="proteome_is_reference_filter"
+                value={key}
+                checked={selectedValue === key}
                 onChange={this._handleSelection}
-                checked={description.protein.db.toLowerCase() === db}
                 style={{ margin: '0.25em' }}
               />
-              <span>{db === 'uniprot' ? 'both' : db}</span>
+              <span>{labels.get(key)}</span>
               <NumberComponent
                 label
                 loading={loading}
@@ -93,21 +100,12 @@ const getUrl = createSelector(
     // transform description
     const _description = {
       ...description,
-      protein: { db: 'UniProt' },
+      proteome: { db: 'UniProt' },
     };
-    // For Subpages
-    if (description.main.key !== 'protein') {
-      _description.main = { key: 'protein' };
-      _description[description.main.key] = {
-        ...description[description.main.key],
-        isFilter: true,
-      };
-    }
-
     // omit from search
-    const { search: _, ..._search } = search;
+    const { search: _, is_reference: __, ..._search } = search;
     // add to search
-    _search.group_by = 'source_database';
+    _search.group_by = 'proteome_is_reference';
     // build URL
     return format({
       protocol,
@@ -128,4 +126,4 @@ export default loadData({
   getUrl,
   mapStateToProps,
   mapDispatchToProps: { goToCustomLocation },
-})(CurationFilter);
+})(IsReferenceFilter);

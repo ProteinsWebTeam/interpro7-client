@@ -71,10 +71,12 @@ class FiltersPanel extends PureComponent {
         db,
       },
     };
+    newDescription.taxonomy.isFilter = false;
     newDescription.entry.integration = null;
+    const newSearch = search.page_size ? { page_size: search.page_size } : {};
     this.props.goToCustomLocation({
       description: newDescription,
-      search: { page_size: search.page_size },
+      search: newSearch,
       hash,
     });
   };
