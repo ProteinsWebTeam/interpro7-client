@@ -4,6 +4,7 @@
 export default () /*: Description */ => Object.freeze({
   main: Object.seal({
     key: null,
+    numberOfFilters: 0,
   }),
   entry: Object.seal({
     isFilter: null,
@@ -13,12 +14,14 @@ export default () /*: Description */ => Object.freeze({
     memberDB: null,
     memberDBAccession: null,
     detail: null,
+    order: null,
   }),
   protein: Object.seal({
     isFilter: null,
     db: null,
     accession: null,
     detail: null,
+    order: null,
   }),
   structure: Object.seal({
     isFilter: null,
@@ -26,24 +29,28 @@ export default () /*: Description */ => Object.freeze({
     accession: null,
     chain: null,
     detail: null,
+    order: null,
   }),
   taxonomy: Object.seal({
     isFilter: null,
     db: null,
     accession: null,
     detail: null,
+    order: null,
   }),
   proteome: Object.seal({
     isFilter: null,
     db: null,
     accession: null,
     detail: null,
+    order: null,
   }),
   set: Object.seal({
     isFilter: null,
     db: null,
     accession: null,
     detail: null,
+    order: null,
   }),
   search: Object.seal({
     type: null,

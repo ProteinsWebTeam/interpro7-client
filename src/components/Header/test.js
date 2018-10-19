@@ -66,36 +66,53 @@ describe('<HamburgerBtn />', () => {
 
 describe('<SideIcons />', () => {
   test('movedAway, stuck, lowGraphics', () => {
-    renderer.render(<SideIcons movedAway stuck lowGraphics />);
+    renderer.render(<SideIcons movedAway stuck lowGraphics search={{}} />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('movedAway, stuck, no lowGraphics', () => {
-    renderer.render(<SideIcons movedAway stuck lowGraphics={false} />);
+    renderer.render(
+      <SideIcons movedAway stuck lowGraphics={false} search={{}} />,
+    );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('movedAway, unstuck, lowGraphics', () => {
-    renderer.render(<SideIcons movedAway stuck={false} lowGraphics />);
+    renderer.render(
+      <SideIcons movedAway stuck={false} lowGraphics search={{}} />,
+    );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('movedAway, unstuck, no lowGraphics', () => {
-    renderer.render(<SideIcons movedAway stuck={false} lowGraphics={false} />);
+    renderer.render(
+      <SideIcons movedAway stuck={false} lowGraphics={false} search={{}} />,
+    );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('not movedAway, stuck, lowGraphics', () => {
-    renderer.render(<SideIcons movedAway={false} stuck lowGraphics />);
+    renderer.render(
+      <SideIcons movedAway={false} stuck lowGraphics search={{}} />,
+    );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('not movedAway, stuck, no lowGraphics', () => {
-    renderer.render(<SideIcons movedAway={false} stuck lowGraphics={false} />);
+    renderer.render(
+      <SideIcons movedAway={false} stuck lowGraphics={false} search={{}} />,
+    );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('not movedAway, unstuck, lowGraphics', () => {
-    renderer.render(<SideIcons movedAway={false} stuck={false} lowGraphics />);
+    renderer.render(
+      <SideIcons movedAway={false} stuck={false} lowGraphics search={{}} />,
+    );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('not movedAway, unstuck, no lowGraphics', () => {
     renderer.render(
-      <SideIcons movedAway={false} stuck={false} lowGraphics={false} />,
+      <SideIcons
+        movedAway={false}
+        stuck={false}
+        lowGraphics={false}
+        search={{}}
+      />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });

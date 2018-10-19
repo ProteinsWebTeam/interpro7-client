@@ -514,7 +514,10 @@ class List extends PureComponent {
                           db: 'uniprot',
                           accession: `${accession}`,
                         },
-                        protein: { isFilter: true, db: 'UniProt' },
+                        protein: { isFilter: true, db: 'UniProt', order: 1 },
+                        entry: entryDB
+                          ? { isFilter: true, db: entryDB, order: 2 }
+                          : null,
                       },
                     }}
                   >
