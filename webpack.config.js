@@ -389,6 +389,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
       ? new (require('webapp-webpack-plugin'))({
           logo: path.join('.', 'images', 'logo', 'logo_1776x1776.png'),
           prefix: path.join('assets', 'icons-and-manifests', '[hash:base62:3]'),
+          inject: 'force',
           favicons: {
             background: '#007c82',
             theme_color: '#007c82',
@@ -427,7 +428,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
     // also, generate a bundle for legacy browsers
     const configLegacy = getConfigFor(env, mode);
     configLegacy.plugins = [htmlWebpackPlugin, ...configLegacy.plugins];
-    return [configModule, configLegacy];
+    return [configLegacy, configModule];
   }
   // just generate for modern browsers
   return configModule;
