@@ -5,6 +5,8 @@ import T from 'prop-types';
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
+import Link from 'components/generic/Link';
+
 import { UniProtLink } from 'components/ExtLink';
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
@@ -66,6 +68,25 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                 taxID={metadata.source_organism.taxId}
               />
               <Length metadata={metadata} />
+              {metadata.proteomes &&
+                metadata.proteomes.length > 0 && (
+                  <p>
+                    Proteome:{' '}
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'proteome' },
+                          proteome: {
+                            db: 'uniprot',
+                            accession: metadata.proteomes[0],
+                          },
+                        },
+                      }}
+                    >
+                      {metadata.proteomes[0].toUpperCase()}
+                    </Link>
+                  </p>
+                )}
             </div>
             <div className={f('medium-3', 'columns')}>
               <div className={f('panel')}>
@@ -84,9 +105,6 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
-              {
-                // <h4>Domains on Protein</h4>
-              }
               <DomainsOnProtein mainData={data} />
             </div>
           </div>
