@@ -46,7 +46,8 @@
     "warmup": "node scripts/website-warmer.js"
   },
   "contributors": [
-    "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)"
+    "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)",
+    "Gustavo A. Salazar <gsalazar@ebi.ac.uk> (https://github.com/4ndr01d3/)"
   ],
   "lint-staged": {
     "*.+(js|css)": [
@@ -158,7 +159,7 @@
     "js-yaml": "3.12.0",
     "json-loader": "0.5.7",
     "lighthouse": "3.2.1",
-    "lint-staged": "7.2.2",
+    "lint-staged": "7.3.0",
     "mini-css-extract-plugin": "0.4.4",
     "mkdirp": "0.5.1",
     "node-sass": "4.9.4",
