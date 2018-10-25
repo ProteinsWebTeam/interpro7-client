@@ -58,6 +58,13 @@ class EntrySelection extends PureComponent {
     }
     return (
       <select
+        style={{
+          maxWidth: '400px',
+          position: 'absolute',
+          bottom: '.5rem',
+          fontSize: '90%',
+          left: '0',
+        }}
         onChange={this.onSelectionChange}
         onBlur={this.onSelectionChange}
         value={this.props.selectedEntry}
