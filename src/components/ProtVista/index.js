@@ -476,7 +476,10 @@ class ProtVista extends PureComponent {
 
     const { hideCategory } = this.state;
     return (
-      <div ref={this._mainRef} className={f('fullscreenable')}>
+      <div
+        ref={this._mainRef}
+        className={f('fullscreenable', 'margin-bottom-large')}
+      >
         <div className={f('track-row')}>{this.renderOptions()}</div>
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
