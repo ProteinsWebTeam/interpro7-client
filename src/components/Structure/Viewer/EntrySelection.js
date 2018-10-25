@@ -64,6 +64,7 @@ class EntrySelection extends PureComponent {
           bottom: '.5rem',
           fontSize: '90%',
           left: '0',
+          margin: '0',
         }}
         onChange={this.onSelectionChange}
         onBlur={this.onSelectionChange}
