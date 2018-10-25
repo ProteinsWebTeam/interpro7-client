@@ -269,21 +269,22 @@ class StructureView extends PureComponent /*:: <Props> */ {
               style={{
                 width: '100%',
                 height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                // don't think that is needed anymore?
+                // display: 'flex',
+                // alignItems: 'center',
+                // justifyContent: 'center',
                 position: 'relative',
               }}
             />
+            {this.props.matches ? (
+              <EntrySelection
+                entryMap={this.state.entryMap}
+                updateStructure={this.showEntryInStructure}
+                selectedEntry={this.state.selectedEntry}
+              />
+            ) : null}
           </div>
         </div>
-        {this.props.matches ? (
-          <EntrySelection
-            entryMap={this.state.entryMap}
-            updateStructure={this.showEntryInStructure}
-            selectedEntry={this.state.selectedEntry}
-          />
-        ) : null}
         <div ref={this._protvista}>
           <ProtVistaForStructure />
         </div>
