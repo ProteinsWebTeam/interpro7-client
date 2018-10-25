@@ -142,7 +142,7 @@ export const edgeCases = new Map([
   [
     STATUS_NO_CONTENT,
     // TODO: change wording when server supports 410 response
-    `The item you are trying to view doesn't exist (it might never have, or it might have been removed in a recent release)`,
+    "The item you are trying to view doesn't exist (it might never have, or it might have been removed in a recent release)",
   ],
   [STATUS_NOT_FOUND, 'This is not a valid accession'],
   [STATUS_GONE, 'This item no longer exists'],
