@@ -55,9 +55,9 @@ const MemberDBSubtitle = ({ metadata, dbInfo }) => {
               className={f('nolink')}
               to={{
                 description: {
-                  other: ['about', 'consortium'],
+                  main: { key: 'entry' },
+                  entry: { db: metadata.source_database },
                 },
-                hash: `${dbInfo.name}`,
               }}
             >
               {dbInfo.name}{' '}
