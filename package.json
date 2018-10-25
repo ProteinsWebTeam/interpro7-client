@@ -31,7 +31,6 @@
     "clean": "rimraf dist",
     "clean:report": "rimraf reports && mkdirp reports",
     "bundle": "webpack --progress",
-    "precommit": "lint-staged",
     "predeploy": "npm-run-all test clean",
     "postdeploy": "npm run test:functional",
     "deploy": "npm run bundle",
@@ -49,6 +48,11 @@
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)",
     "Gustavo A. Salazar <gsalazar@ebi.ac.uk> (https://github.com/4ndr01d3/)"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "*.+(js|css)": [
       "prettier --write",
