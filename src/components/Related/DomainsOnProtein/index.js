@@ -38,6 +38,18 @@ const mergeResidues = (data, residues) => {
     }),
   );
 };
+const mergeExtraFeatures = (data, extraFeatures) => {
+  console.log(data.other_features);
+  data.other_features = data.other_features.concat(
+    Object.values(extraFeatures).map(feature => ({
+      ...feature,
+      locations: feature.locations.map(({ start, end }) => ({
+        fragments: [{ start, end }],
+      })),
+    })),
+  );
+  return data;
+};
 const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
 const groupByEntryType = interpro => {
   const groups = {};
@@ -91,10 +103,11 @@ export class DomainOnProteinWithoutData extends PureComponent {
     mainData: T.object.isRequired,
     data: T.object.isRequired,
     dataResidues: T.object.isRequired,
+    dataFeatures: T.object.isRequired,
   };
 
   render() {
-    const { data, mainData, dataResidues } = this.props;
+    const { data, mainData, dataResidues, dataFeatures } = this.props;
 
     if (!data || data.loading) return <Loading />;
     if (!data.payload || !data.payload.results) {
@@ -115,6 +128,12 @@ export class DomainOnProteinWithoutData extends PureComponent {
     const mergedData = { ...groups, unintegrated, other_features: other };
     if (dataResidues && !dataResidues.loading && dataResidues.payload) {
       mergeResidues(mergedData, dataResidues.payload);
+    }
+    if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
+      mergeExtraFeatures(mergedData, dataFeatures.payload);
+    }
+    if (!mergedData.other_features || !mergedData.other_features.length) {
+      delete mergedData.other_features;
     }
 
     return (
@@ -158,22 +177,28 @@ const getInterproRelatedEntriesURL = createSelector(
     });
   },
 );
-const getResiduesURL = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  ({ protocol, hostname, port, root }, description) => {
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: root + descriptionToPath(description),
-      query: {
-        residues: null,
-      },
-    });
-  },
-);
+const getExtraURL = query =>
+  createSelector(
+    state => state.settings.api,
+    state => state.customLocation.description,
+    ({ protocol, hostname, port, root }, description) => {
+      return format({
+        protocol,
+        hostname,
+        port,
+        pathname: root + descriptionToPath(description),
+        query: {
+          [query]: null,
+        },
+      });
+    },
+  );
 
-export default loadData({ getUrl: getResiduesURL, propNamespace: 'Residues' })(
-  loadData(getInterproRelatedEntriesURL)(DomainOnProteinWithoutData),
+export default loadData({
+  getUrl: getExtraURL('extra_features'),
+  propNamespace: 'Features',
+})(
+  loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
+    loadData(getInterproRelatedEntriesURL)(DomainOnProteinWithoutData),
+  ),
 );
