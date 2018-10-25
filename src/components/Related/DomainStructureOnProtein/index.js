@@ -56,7 +56,28 @@ const getUrlFor = createSelector(
 const toArrayStructure = locations =>
   locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
 
-const mergeData = (interpro, structures) => {
+const formatStructureInfoObj = data => {
+  const features = [];
+  for (const key of Object.keys(data)) {
+    if (key === 'pdb') continue;
+    for (const acc of Object.keys(data[key]).sort()) {
+      const f = data[key][acc];
+      features.push({
+        accession: `${key} - ${acc}`,
+        source_database: key.toUpperCase(),
+        locations: [
+          {
+            fragments: f.coordinates,
+          },
+        ],
+        name: f.domain_id,
+      });
+    }
+  }
+  return features;
+};
+
+const mergeData = (interpro, structures, structureInfo) => {
   const ipro = {};
   const out = interpro.reduce((acc, val) => {
     val.signatures = [];
@@ -82,12 +103,12 @@ const mergeData = (interpro, structures) => {
       }))
       .sort((a, b) => a.label > b.label);
   }
-  // if (structureInfo && structureInfo.prediction) {
-  //   out.predictions = formatStructureInfoObj(structureInfo.prediction);
-  // }
-  // if (structureInfo && structureInfo.feature) {
-  //   out.features = formatStructureInfoObj(structureInfo.feature);
-  // }
+  if (structureInfo && structureInfo.prediction) {
+    out.predictions = formatStructureInfoObj(structureInfo.prediction);
+  }
+  if (structureInfo && structureInfo.feature) {
+    out.features = formatStructureInfoObj(structureInfo.feature);
+  }
   return out;
 };
 
