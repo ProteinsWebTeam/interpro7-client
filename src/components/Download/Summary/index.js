@@ -30,7 +30,7 @@ const GoToNewDownload = () => (
     }}
     className={f('button')}
   >
-    Create a new file
+    Select and Download InterPro data
   </Link>
 );
 
