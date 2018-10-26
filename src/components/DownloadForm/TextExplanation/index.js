@@ -82,7 +82,7 @@ const getMainFragment = description => {
   }
   return (
     <>
-      <Highlight>a counter overview</Highlight> centered on{' '}
+      <Highlight>a list of counts</Highlight> centered on{' '}
       <Highlight>{toPlural(main)}</Highlight>
     </>
   );
