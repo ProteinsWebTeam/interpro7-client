@@ -9,6 +9,7 @@ import SyntaxHighlighter, {
 } from 'react-syntax-highlighter/light';
 import js from 'react-syntax-highlighter/languages/hljs/javascript';
 import python from 'react-syntax-highlighter/languages/hljs/python';
+import perl from 'react-syntax-highlighter/languages/hljs/perl';
 import docco from 'react-syntax-highlighter/styles/hljs/docco';
 
 import blockEvent from 'utils/block-event';
@@ -17,29 +18,48 @@ import { addToast } from 'actions/creators';
 
 import jsRaw from 'raw-loader!../../../snippets/template.js.tmpl';
 import pythonRaw from 'raw-loader!../../../snippets/template.py.tmpl';
+import python2Raw from 'raw-loader!../../../snippets/template.py2.tmpl';
+import perlRaw from 'raw-loader!../../../snippets/template.pl.tmpl';
 
 import f from 'styles/foundation';
 
 registerLanguage('javascript', js);
 registerLanguage('python', python);
+registerLanguage('perl', perl);
 
 // Need to specify that, otherwise tries to interpolate ES2015 template strings
 const options = { interpolate: /<%=([\s\S]+?)%>/g };
 const lut = new Map([
-  [
-    'js',
-    {
-      template: template(jsRaw, options),
-      type: 'application/javascript',
-      syntax: 'javascript',
-    },
-  ],
   [
     'py',
     {
       template: template(pythonRaw, options),
       type: 'application/x-python',
       syntax: 'python',
+    },
+  ],
+  [
+    'py2',
+    {
+      template: template(python2Raw, options),
+      type: 'application/x-perl',
+      syntax: 'perl',
+    },
+  ],
+  [
+    'pl',
+    {
+      template: template(perlRaw, options),
+      type: 'application/x-perl',
+      syntax: 'perl',
+    },
+  ],
+  [
+    'js',
+    {
+      template: template(jsRaw, options),
+      type: 'application/javascript',
+      syntax: 'javascript',
     },
   ],
 ]);
@@ -53,7 +73,7 @@ export class Snippet extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = { language: 'js', code: null, href: null };
+    this.state = { language: 'py', code: null, href: null };
     this._ref = React.createRef();
   }
 
@@ -133,11 +153,10 @@ export class Snippet extends PureComponent {
               onBlur={this._handleChange}
               value={language}
             >
-              <option value="js">JavaScript (node, version ≥ 10)</option>
               <option value="py">Python (version ≥ 3)</option>
-              {/* <option value="pl" disabled>
-                Perl (not available yet)
-              </option> */}
+              <option value="py2">Python (version 2)</option>
+              <option value="pl">Perl (version 5)</option>
+              <option value="js">JavaScript (node, version ≥ 10)</option>
             </select>
           </label>
           <button
