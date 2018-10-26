@@ -1,0 +1,96 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use LWP::UserAgent;
+use JSON qw( encode_json decode_json );
+use Data::Dumper;
+
+# Switching off SSL verification
+$ENV{'PERL_LWP_SSL_VERIFY_HOSTNAME'} = 0;
+
+my $HEADER_SEPARATOR = "|";
+my $LINE_LENGTH = 80;
+
+my $BASE_URL = "https://www.ebi.ac.uk:443/interpro/beta/api/set/pfam/?page_size=200";
+$BASE_URL = "https://www.ebi.ac.uk:443/interpro/beta/api/protein/reviewed/set/pfam/CL0005?page_size=200&extra_fields=sequence";
+$BASE_URL = "https://www.ebi.ac.uk/interpro/beta/api/protein/reviewed/entry/pfam/pf00001?page_size=10&extra_fields=sequence";
+
+# If used as a module, can be used as a generator
+sub main {
+  my $agent = LWP::UserAgent->new();
+
+  my $next = $BASE_URL;
+  my $last_page = 0;
+  <% if (fileType === "json") { %>
+  print "{ \"results\": [\n";
+  <% } %>
+  while ($next) {
+    my $req = HTTP::Request->new(
+      GET => $next,
+      HTTP::Headers->new("Accept" => "application/json"),
+      ssl_opts =>  {
+        SSL_verify_mode => 0
+      }
+    );
+    my $res = $agent->request($req);
+    if ($res->code == 408) {
+      #wait just over a minute
+      sleep(61);
+      # then continue this loop with the same URL
+      next;
+    }
+    my $payload = decode_json($res->content);
+    $next = $payload->{"next"};
+    unless (defined $next){
+      $last_page = 1;
+    }
+    my $results = $payload->{"results"};
+    for (my $i=0; $i < (@{$results}); $i++) {
+      my $item = $results->[$i];
+      <% if (fileType === "json") { %>
+      print encode_json($item);
+      unless ($last_page && $i+1 == (@{$results})){
+        print ",\n";
+      }
+      <% } else if (fileType === "fasta") { %>
+      if (defined $item->{"entries"}){
+        foreach my $entry (@{$item->{"entries"}}) {
+          foreach my $locations  (@{$entry->{"entry_protein_locations"}}) {
+            foreach my $location  (@{$entry->{"entry_protein_locations"}}) {
+              foreach my $fragment (@{$locations->{"fragments"}}) {
+                my $start = $fragment->{"start"};
+                my $end = $fragment->{"end"};
+                print ">$item->{metadata}->{accession}$HEADER_SEPARATOR"
+                      ."$entry->{accession}$HEADER_SEPARATOR"
+                      ."$start...$end$HEADER_SEPARATOR"
+                      ."$item->{metadata}->{name}\n";
+                my $seq =  $item->{"extra_fields"}{"sequence"};
+                foreach my $fastaSeqFragment (unpack("(A$LINE_LENGTH)*", $seq)) {
+                  print "$fastaSeqFragment\n";
+                }
+              }
+            }
+          }
+        }
+      } else {
+        print ">$item->{metadata}->{accession}$HEADER_SEPARATOR$item->{metadata}->{name}\n";
+        my $seq =  $item->{"extra_fields"}{"sequence"};
+        foreach my $fastaSeqFragment (unpack("(A$LINE_LENGTH)*", $seq)) {
+          print "$fastaSeqFragment\n";
+        }
+      }
+      <% } else { %>
+      print $item->{'metadata'}->{'accession'}."\n";
+      <% } %>
+    }
+    if ($next) {
+      sleep(1);
+    }
+  }
+  <% if (fileType === "json") { %>
+  print "] }\n";
+  <% } %>
+}
+
+main();

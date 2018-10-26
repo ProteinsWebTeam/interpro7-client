@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
 # standard library modules
 import sys, errno, re, json, ssl
-from urllib import request
+import urllib2
 from time import sleep
 
 # FILETYPE = <%=fileType%>
@@ -28,10 +28,10 @@ def output_list():
   sys.stdout.write("{ \"results\": [\n")
   <% } %>
   while next:
-    req = request.Request(next, headers={"Accept": "application/json"})
-    res = request.urlopen(req, context=context)
+    req = urllib2.Request(next, headers={"Accept": "application/json"})
+    res = urllib2.urlopen(req, context=context)
     # If the API times out due a long running query
-    if res.status == 408:
+    if res.getcode() == 408:
       # wait just over a minute
       sleep(61)
       # then continue this loop with the same URL
@@ -43,7 +43,7 @@ def output_list():
       last_page = True
 
     for i, item in enumerate(payload["results"]):
-      <% if (fileType === "json") { %>
+      <% if (fileType === "json" || fileType === "json") { %>
       sys.stdout.write(json.dumps(item))
       # for indented output replace the above line with the following
       # sys.stdout.write(json.dumps(item, indent=4))
@@ -52,7 +52,7 @@ def output_list():
         sys.stdout.write("")
       else:
         sys.stdout.write(",\n")
-      <% } else if (fileType === "fasta") { %>
+        <% } else if (fileType === "fasta") { %>
       if ("entries" in item):
         for entry in item["entries"]:
           for locations in entry["entry_protein_locations"]:
@@ -64,26 +64,26 @@ def output_list():
                                + str(start) + "..." + str(end) + HEADER_SEPARATOR
                                + item["metadata"]["name"] + "\n")
               seq = item["extra_fields"]["sequence"]
-              fastaSeqFragments = [seq[0+i:LINE_LENGTH+i] for i in range(0, len(seq), LINE_LENGTH)]
+              fastaSeqFragments = [seq[0+i:LINE_LENGTH+i] for i in xrange(0, len(seq), LINE_LENGTH)]
               for fastaSeqFragment in fastaSeqFragments:
                 sys.stdout.write(fastaSeqFragment + "\n")
       else:
         sys.stdout.write(">" + item["metadata"]["accession"] + HEADER_SEPARATOR + item["metadata"]["name"] + "\n")
         seq = item["extra_fields"]["sequence"]
-        fastaSeqFragments = [seq[0+i:LINE_LENGTH+i] for i in range(0, len(seq), LINE_LENGTH)]
+        fastaSeqFragments = [seq[0+i:LINE_LENGTH+i] for i in xrange(0, len(seq), LINE_LENGTH)]
         for fastaSeqFragment in fastaSeqFragments:
           sys.stdout.write(fastaSeqFragment + "\n")
-      <% } else { %>
-        sys.stdout.write(item["metadata"]["accession"] + "\n")
-      <% } %>
-      # Don't overload the server, give it time before asking for more
+        <% } else { %>
+          sys.stdout.write(item["metadata"]["accession"] + "\n")
+        <% } %>
+    # Don't overload the server, give it time before asking for more
     if next:
       sleep(1)
 
 <% if (fileType === "json") { %>
-  #json footer
-  sys.stdout.write("\n] }\n")
-  <% } %>
+#json footer
+sys.stdout.write("\n] }\n")
+<% } %>
 
 
 if __name__ == "__main__":
