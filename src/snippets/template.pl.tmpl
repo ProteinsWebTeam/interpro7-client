@@ -12,9 +12,7 @@ $ENV{'PERL_LWP_SSL_VERIFY_HOSTNAME'} = 0;
 my $HEADER_SEPARATOR = "|";
 my $LINE_LENGTH = 80;
 
-my $BASE_URL = "https://www.ebi.ac.uk:443/interpro/beta/api/set/pfam/?page_size=200";
-$BASE_URL = "https://www.ebi.ac.uk:443/interpro/beta/api/protein/reviewed/set/pfam/CL0005?page_size=200&extra_fields=sequence";
-$BASE_URL = "https://www.ebi.ac.uk/interpro/beta/api/protein/reviewed/entry/pfam/pf00001?page_size=10&extra_fields=sequence";
+my $BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>";
 
 # If used as a module, can be used as a generator
 sub main {
