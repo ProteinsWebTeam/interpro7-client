@@ -139,13 +139,9 @@ export const STATUS_GONE = 410;
 export const STATUS_SERVER_ERROR = 500;
 
 export const edgeCases = new Map([
-  [
-    STATUS_NO_CONTENT,
-    // TODO: change wording when server supports 410 response
-    "The item you are trying to view doesn't exist (it might never have, or it might have been removed in a recent release)",
-  ],
+  [STATUS_NO_CONTENT, 'There is no data associated with this accession'],
   [STATUS_NOT_FOUND, 'This is not a valid accession'],
-  [STATUS_GONE, 'This item no longer exists'],
+  [STATUS_GONE, 'The data associated with this accession has been removed'],
   [
     STATUS_SERVER_ERROR,
     "The API response reported an error, but we haven't been able to determined its cause",
