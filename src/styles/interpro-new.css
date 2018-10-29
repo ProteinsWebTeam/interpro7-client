@@ -465,7 +465,7 @@ button {
 }
 
 .button.hollow.secondary {
-  border-color: var(--colors-grey);
+  border-color: var(--colors-gray);
   &:hover {
     color: var(--colors-dark);
   }

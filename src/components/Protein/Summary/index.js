@@ -85,8 +85,8 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                       <Length metadata={metadata} />
                     </td>
                   </tr>
-                  {metadata.proteomes &&
-                    metadata.proteomes.length > 0 && (
+                  {metadata.proteome &&
+                    metadata.proteome.length > 0 && (
                       <tr>
                         <td>Proteome</td>
                         <td>
@@ -96,12 +96,12 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                                 main: { key: 'proteome' },
                                 proteome: {
                                   db: 'uniprot',
-                                  accession: metadata.proteomes[0],
+                                  accession: metadata.proteome,
                                 },
                               },
                             }}
                           >
-                            {metadata.proteomes[0].toUpperCase()}
+                            {metadata.proteome.toUpperCase()}
                           </Link>
                         </td>
                       </tr>
