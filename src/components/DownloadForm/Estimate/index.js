@@ -40,7 +40,7 @@ const getText = ({ loading, payload, ok, status, headers }) => {
     });
     return (
       <>
-        Your file size will be of <NumberComponent>{value}</NumberComponent>{' '}
+        Your file size will be <NumberComponent>{value}</NumberComponent>{' '}
         {suffix}
       </>
     );
