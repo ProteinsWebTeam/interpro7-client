@@ -5,9 +5,6 @@ import sys, errno, re, json, ssl
 import urllib2
 from time import sleep
 
-# FILETYPE = <%=fileType%>
-# SUBSET = <%=subset%>
-
 BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>"
 
 <% if (fileType === 'fasta') { %>
