@@ -24,11 +24,25 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   className={f('icon', 'icon-common', 'xl')}
                   data-icon="&#xf085;"
                 />
-                <h5>Techincal specs</h5>
+                <h5>Technical specs</h5>
                 <ul>
                   <li>
+                    <Link
+                      href="https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
+                      className={f('ext')}
+                      target="_blank"
+                    >
+                      General API documentation
+                    </Link>
+                  </li>
+                  <li>
                     <Link href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/">
-                      API documentation
+                      Swagger API documentation
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/interpro/job/download/#/entry/">
+                      Code snippet generator
                     </Link>
                   </li>
                   <li>
