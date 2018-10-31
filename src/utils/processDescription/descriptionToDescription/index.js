@@ -23,6 +23,10 @@ export default (description /*: {[key: string]: string} */ = {}) => {
     // for all possible handlers for this key
     for (const handler of handlers) {
       value = get(description, key);
+      if (typeof value === 'string') {
+        //all string values in elasticsearch are lower case
+        value = value.toLowerCase();
+      }
       if (handler.match(value, _description)) {
         matchingHandler = handler;
         // Stop! we found a handler, no need to look further
