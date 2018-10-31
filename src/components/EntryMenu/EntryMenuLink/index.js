@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
@@ -12,6 +13,7 @@ import { foundationPartial } from 'styles/foundation';
 import pages from 'pages/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import { createSelector } from 'reselect';
 
 const f = foundationPartial(pages, fonts, local);
 
@@ -32,6 +34,8 @@ const whitelist = new Set(['Overview', 'Sequence']);
   },
   isFirstLevel?: boolean,
   usedOnTheSide?: boolean,
+  mainKey ?: string,
+  entryDB ?: string,
 }; */
 
 class EntryMenuLink extends PureComponent /*:: <Props> */ {
@@ -46,6 +50,8 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     }).isRequired,
     isFirstLevel: T.bool,
     usedOnTheSide: T.bool,
+    mainKey: T.string,
+    entryDB: T.string,
   };
 
   render() {
@@ -57,6 +63,8 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       data: { loading, payload },
       isFirstLevel,
       usedOnTheSide,
+      mainKey,
+      entryDB,
     } = this.props;
     let value = null;
     if (!loading && payload && payload.metadata) {
@@ -65,6 +73,15 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
         Number.isFinite(payload.metadata.counters[counter])
       ) {
         value = payload.metadata.counters[counter];
+        if (
+          name.toLowerCase() === 'entries' &&
+          mainKey.toLowerCase() !== 'set'
+        ) {
+          value = payload.metadata.counters.dbEntries.interpro;
+          if (entryDB) {
+            value = payload.metadata.counters.dbEntries[entryDB.toLowerCase()];
+          }
+        }
       } // Enabling the menuitems that appear in the entry_annotations array.
       // i.e. only enable the menu item if there is info for it
       if (
@@ -213,5 +230,10 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     );
   }
 }
+const mapStateToProps = createSelector(
+  state => state.customLocation.description.main.key,
+  state => state.customLocation.description.entry.db,
+  (mainKey, entryDB) => ({ mainKey, entryDB }),
+);
 
-export default EntryMenuLink;
+export default connect(mapStateToProps)(EntryMenuLink);
