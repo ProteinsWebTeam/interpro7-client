@@ -75,6 +75,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
         value = payload.metadata.counters[counter];
         if (
           name.toLowerCase() === 'entries' &&
+          mainKey &&
           mainKey.toLowerCase() !== 'set'
         ) {
           value = payload.metadata.counters.dbEntries.interpro;
