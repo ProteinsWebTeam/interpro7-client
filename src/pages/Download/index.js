@@ -57,7 +57,7 @@ class Download extends PureComponent /*:: <{}> */ {
                     >
                       {' '}
                       <span
-                        className={f('icon', 'icon-common', 'font-large')}
+                        className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />{' '}
                       64-bit
@@ -119,7 +119,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/entry.list">
                       <span
-                        className={f('icon', 'icon-common', 'font-large')}
+                        className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -147,7 +147,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz">
                       <span
-                        className={f('icon', 'icon-common', 'font-large')}
+                        className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -175,7 +175,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/match_complete.xml.gz">
                       <span
-                        className={f('icon', 'icon-common', 'font-large')}
+                        className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -197,7 +197,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.tar.gz">
                       <span
-                        className={f('icon', 'icon-common', 'font-large')}
+                        className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -219,7 +219,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz">
                       <span
-                        className={f('icon', 'icon-common', 'font-large')}
+                        className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -242,7 +242,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/ParentChildTreeFile.txt">
                       <span
-                        className={f('icon', 'icon-common', 'font-large')}
+                        className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -264,7 +264,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   <td>
                     <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
                       <span
-                        className={f('icon', 'icon-common', 'font-large')}
+                        className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
                     </Link>
@@ -280,7 +280,7 @@ class Download extends PureComponent /*:: <{}> */ {
                   //    <td>
                   //      <Link
                   //        href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">
-                  //        <span className={f('icon', 'icon-common', 'font-large')} data-icon="&#x3d;"/>
+                  //        <span className={f('icon', 'icon-common', 'font-l')} data-icon="&#x3d;"/>
                   //      </Link>
                   //    </td>
                   //  </tr>

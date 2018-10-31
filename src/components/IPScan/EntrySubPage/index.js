@@ -44,7 +44,7 @@ const flatMatchesFromIPScanPayload = function*(ipScanMatches, proteinLength) {
 const mergeEntries = matches => {
   const map = new Map();
   for (const match of matches) {
-    let _match = map.get(match.accession);
+    const _match = map.get(match.accession);
     if (_match) {
       _match.entry_protein_locations = [
         ..._match.entry_protein_locations,

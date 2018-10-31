@@ -18,20 +18,17 @@ class Species extends PureComponent /*:: <Props> */ {
   render() {
     const { taxID, fullName } = this.props;
     return (
-      <div>
-        {'Species: '}
-        <Link
-          to={{
-            description: {
-              main: { key: 'taxonomy' },
-              // TODO: remove stringification of taxID when API returns strings
-              taxonomy: { db: 'uniprot', accession: `${taxID}` },
-            },
-          }}
-        >
-          {fullName}
-        </Link>
-      </div>
+      <Link
+        to={{
+          description: {
+            main: { key: 'taxonomy' },
+            // TODO: remove stringification of taxID when API returns strings
+            taxonomy: { db: 'uniprot', accession: `${taxID}` },
+          },
+        }}
+      >
+        {fullName}
+      </Link>
     );
   }
 }

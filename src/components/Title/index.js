@@ -129,12 +129,96 @@ class Title extends PureComponent /*:: <Props> */ {
             </div>
           )}
 
-        <Helmet>
-          <title>{metadata.accession}</title>
-        </Helmet>
+        {// Title - InterPro Entry
+        isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() === 'interpro' && (
+            <Helmet
+              titleTemplate={`${
+                metadata.name.name
+              } ${metadata.accession.toUpperCase()} - Entry - InterPro`}
+            >
+              <title>InterPro</title>
+            </Helmet>
+          )}
+
+        {// Title - MD Entry
+        isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() !== 'interpro' && (
+            <Helmet
+              titleTemplate={`${
+                metadata.name.name
+              } (${metadata.accession.toUpperCase()}) - ${dbLabel} entry - InterPro`}
+            >
+              <title>InterPro</title>
+            </Helmet>
+          )}
+
+        {// Title - protein page
+        mainType === 'protein' && (
+          <Helmet
+            titleTemplate={`${
+              metadata.name.name
+            } (${metadata.accession.toUpperCase()}) - Protein - InterPro`}
+          >
+            <title>InterPro</title>
+          </Helmet>
+        )}
+
+        {// Title - Structure
+        mainType === 'structure' && (
+          <Helmet
+            titleTemplate={`${
+              metadata.name.name
+            } (${metadata.accession.toUpperCase()}) - Structure - InterPro`}
+          >
+            <title>InterPro</title>
+          </Helmet>
+        )}
+
+        {// Title - Species
+        mainType === 'taxonomy' && (
+          <Helmet
+            titleTemplate={`${
+              metadata.name.name
+            } (${metadata.accession.toUpperCase()}) - Taxonomy - InterPro`}
+          >
+            <title>InterPro</title>
+          </Helmet>
+        )}
+
+        {// Title - Proteome
+        mainType === 'proteome' && (
+          <Helmet
+            titleTemplate={`${
+              metadata.name.name
+            } (${metadata.accession.toUpperCase()}) - Proteome - InterPro`}
+          >
+            <title>InterPro</title>
+          </Helmet>
+        )}
+
+        {// Title - Set
+        mainType === 'set' && (
+          <Helmet
+            titleTemplate={`${
+              metadata.name.name
+            } (${metadata.accession.toUpperCase()}) -  Set - InterPro`}
+          >
+            <title>InterPro</title>
+          </Helmet>
+        )}
 
         <div className={f('title-name')}>
-          <h3>{metadata.name.name} </h3>
+          {// add margin only for IPSCAN result page
+          metadata.name.name === 'InterProScan Search' ? (
+            <h3 className={f('margin-bottom-large')}>{metadata.name.name} </h3>
+          ) : (
+            <h3>{metadata.name.name}</h3>
+          )}
           <div className={f('title-tag')}>
             {// InterPro Entry
             isEntry &&
@@ -151,45 +235,32 @@ class Title extends PureComponent /*:: <Props> */ {
                 <div className={f('tag', 'md-p')}>{dbLabel} Entry</div>
               )}
 
-            {// protein page
-            mainType === 'protein' && (
-              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-                Protein {dbLabel}
-              </div>
-            )}
+            {// protein page (remove tag for IPSCAN result page
+            mainType === 'protein' &&
+              metadata.name.name !== 'InterProScan Search' && (
+                <div className={f('tag', 'secondary')}>Protein {dbLabel}</div>
+              )}
 
             {// Structure
             mainType === 'structure' && (
-              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-                Structure
-              </div>
+              <div className={f('tag', 'secondary')}>Structure</div>
             )}
 
             {// Species
-            metadata.source_database !== 'proteome' &&
-              mainType === 'organism' && (
-                <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-                  {dbLabel}
-                </div>
-              )}
+            mainType === 'taxonomy' && (
+              <div className={f('tag', 'secondary')}>Taxonomy</div>
+            )}
 
             {// Proteome
-            metadata.is_reference ? (
-              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
-                Reference proteome{' '}
-                <Tooltip title="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny.">
-                  <span
-                    className={f('small', 'icon', 'icon-common')}
-                    data-icon="&#xf129;"
-                    aria-label="Some proteomes have been (manually and algorithmically) selected as reference proteomes. They cover well-studied model organisms and other organisms of interest for biomedical research and phylogeny."
-                  />
-                </Tooltip>
+            mainType === 'proteome' && (
+              <div className={f('tag', 'secondary')}>
+                {metadata.is_reference ? 'Reference' : 'Non-reference'} proteome
               </div>
-            ) : null}
+            )}
 
             {// Set
             mainType === 'set' && (
-              <div className={f('tag', 'secondary', 'margin-bottom-large')}>
+              <div className={f('tag', 'secondary')}>
                 Set {dbLabel}{' '}
                 <Tooltip title="A Set is defined as a group of related entries">
                   <span
@@ -226,10 +297,11 @@ class Title extends PureComponent /*:: <Props> */ {
                 {metadata.accession}
               </span>
             )}
-          {// greyish accession: for protein , structure, and proteomes and no accession for tax
+          {// greyblueish accession: for protein , structure, and proteomes and no accession for tax
           accessionDisplay.has(mainType) &&
-            metadata.source_database !== 'taxonomy' && (
-              // no accession for Taxonomy but in blue for protein (reviewed), structure (pdb), and proteomes (proteome)
+            metadata.source_database !== 'taxonomy' &&
+            metadata.name.name !== 'InterProScan Search' && (
+              // for proteins, structures and proteomes (no accession in title for taxonomy and sets)
               <span className={f('title-id-other')}>{metadata.accession}</span>
             )}
         </div>

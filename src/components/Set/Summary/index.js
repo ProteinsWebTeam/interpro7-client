@@ -92,6 +92,10 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     if (this._ref.current) {
       this._ref.current.removeEventListener('click', this._handleClick);
     }
+    this._vis._ro.disconnect();
+    this._vis.tick = null;
+    this._vis = null;
+    this._ref = null;
   }
 
   _handleClick = event => {
@@ -121,7 +125,25 @@ class SummarySet extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
-              <Accession accession={metadata.accession} id={metadata.id} />
+              <table className={f('light', 'table-sum')}>
+                <tbody>
+                  <tr>
+                    <td>Accession</td>
+                    <td>
+                      <Accession accession={metadata.accession} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Data type</td>
+                    <td>Set</td>
+                  </tr>
+                  <tr>
+                    <td style={{ width: '200px' }}>Member database</td>
+                    <td className={f('text-up')}>{metadata.source_database}</td>
+                  </tr>
+                </tbody>
+              </table>
+
               <h4>Description</h4>
               <Description
                 textBlocks={[metadata.description]}
