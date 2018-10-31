@@ -1,6 +1,8 @@
-/*reduce line-height for smaller row in the table */
+/*reduce line-height for icons*/
 .no-lineheight {
-  line-height: 0.1;
+  line-height: 0;
+  margin: 0;
+  padding: 0.3rem;
 }
 
 .md-small {
@@ -15,4 +17,22 @@
   background-size: 100%;
   display: inline-block;
   margin-right: 0.5rem;
+}
+
+.release-selector {
+  list-style: none;
+  color: #888888;
+}
+
+.release-selector .current {
+  font-size: 1.4rem;
+}
+
+ul.release-selector li.current a {
+  opacity: 1 !important;
+  color: #444444;
+}
+ul.release-selector a {
+  opacity: 0.6 !important;
+  color: #444444;
 }

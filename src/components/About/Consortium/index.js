@@ -88,7 +88,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                 const md = db.canonical;
                 const href = lut.get(md);
                 return (
-                  <tr key={md}>
+                  <tr id={md} key={md}>
                     <td className={f('sm-inline')}>
                       <MemberSymbol type={md} className={f('md-small')} />
                     </td>
@@ -108,8 +108,6 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                     <td>
                       <p>{db.description}</p>
                       {db.releaseDate ? (
-                        // TEMP - to re-add when update to latest icon set
-                        // <small className={f('icon', 'icon-common')} data-icon="&#xf073;">
                         <small
                           className={f('icon', 'icon-common')}
                           data-icon="&#xf073;"

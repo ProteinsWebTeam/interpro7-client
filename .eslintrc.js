@@ -403,8 +403,10 @@ const rules = {
     'always',
     { markers: [':', '::', '?:'], exceptions: ['-'] },
   ],
+  // TODO: Remove when is https://github.com/babel/babel-eslint/issues/530 fixed
   // Disallow usage of spacing in template strings
-  'template-curly-spacing': [1, 'never'],
+  'template-curly-spacing': 'off', // [1, 'never'],
+  indent: 'off',
   // Disallow comparisons with the value NaN
   'use-isnan': 2,
   // Ensure JSDoc comments are valid

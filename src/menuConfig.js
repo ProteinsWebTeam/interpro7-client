@@ -505,4 +505,6 @@ export const NOT_MEMBER_DBS /*: Set<string> */ = new Set([
   'SIGNALP_GRAM_NEGATIVE',
   'PHOBIUS',
   'TMHMM',
+  'CATH',
+  'SWISS-MODEL',
 ]);

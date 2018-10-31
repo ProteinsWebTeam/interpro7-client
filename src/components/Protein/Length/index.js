@@ -20,23 +20,20 @@ class Length extends PureComponent {
       fragmentText = ` (${fragment === 'N' ? 'complete' : 'fragment'})`;
     }
     return (
-      <div>
-        {'Length: '}
-        <Link
-          to={({ description }) => ({
-            description: {
-              ...description,
-              [description.main.key]: {
-                ...description[description.main.key],
-                detail: 'sequence',
-              },
+      <Link
+        to={({ description }) => ({
+          description: {
+            ...description,
+            [description.main.key]: {
+              ...description[description.main.key],
+              detail: 'sequence',
             },
-          })}
-        >
-          {length} amino acids
-          {fragmentText}
-        </Link>
-      </div>
+          },
+        })}
+      >
+        {length} amino acids
+        {fragmentText}
+      </Link>
     );
   }
 }

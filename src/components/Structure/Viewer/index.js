@@ -129,10 +129,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
       });
     });
     const threshold = 0.4;
-    const observer = new IntersectionObserver(entries => {
+    this.observer = new IntersectionObserver(entries => {
       this.setState({ isStuck: entries[0].intersectionRatio < threshold });
     }, optionsForObserver);
-    observer.observe(this._placeholder.current);
+    this.observer.observe(this._placeholder.current);
     this._protvista.current.addEventListener(
       'entryclick',
       ({
@@ -175,6 +175,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
       this.plugin.instance.context.scene.scene.handleResize();
     }
   }
+
+  componentWillUnmount() {
+    this.observer.disconnect();
+  }
+
   updateTheme(entries) {
     if (this.plugin) {
       const context = this.plugin.context;
@@ -269,21 +274,22 @@ class StructureView extends PureComponent /*:: <Props> */ {
               style={{
                 width: '100%',
                 height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                // don't think that is needed anymore?
+                // display: 'flex',
+                // alignItems: 'center',
+                // justifyContent: 'center',
                 position: 'relative',
               }}
             />
+            {this.props.matches ? (
+              <EntrySelection
+                entryMap={this.state.entryMap}
+                updateStructure={this.showEntryInStructure}
+                selectedEntry={this.state.selectedEntry}
+              />
+            ) : null}
           </div>
         </div>
-        {this.props.matches ? (
-          <EntrySelection
-            entryMap={this.state.entryMap}
-            updateStructure={this.showEntryInStructure}
-            selectedEntry={this.state.selectedEntry}
-          />
-        ) : null}
         <div ref={this._protvista}>
           <ProtVistaForStructure />
         </div>

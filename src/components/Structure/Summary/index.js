@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import Accession from 'components/Accession';
 import Link from 'components/generic/Link';
 import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -83,36 +84,55 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
               {chains.length && (
-                <div className={f('margin-top-large')}>
-                  <div>Accession: {metadata.accession}</div>
-                  <div>
-                    Experiment type:{' '}
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'structure' },
-                          structure: { db: 'PDB' },
-                          entry: { isFilter: true, db: 'InterPro' },
-                        },
-                        search: { experiment_type: metadata.experiment_type },
-                      }}
-                    >
-                      {metadata.experiment_type}
-                    </Link>
-                  </div>
-                  {metadata.resolution && (
-                    <div>Resolution: {metadata.resolution} Å </div>
-                  )}
-                  <div>Chains: {chains.join(', ')}</div>
-                  <div>
-                    Released:{' '}
-                    <TimeAgo
-                      date={date}
-                      noUpdate
-                      title={date.toLocaleDateString()}
-                    />
-                  </div>
-                </div>
+                <table className={f('light', 'table-sum')}>
+                  <tbody>
+                    <tr>
+                      <td>Accession</td>
+                      <td>
+                        <Accession accession={metadata.accession} />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Experiment type</td>
+                      <td className={f('text-cap')}>
+                        <Link
+                          to={{
+                            description: {
+                              main: { key: 'structure' },
+                              structure: { db: 'PDB' },
+                              entry: { isFilter: true, db: 'InterPro' },
+                            },
+                            search: {
+                              experiment_type: metadata.experiment_type,
+                            },
+                          }}
+                        >
+                          {metadata.experiment_type}
+                        </Link>
+                      </td>
+                    </tr>
+                    {metadata.resolution && (
+                      <tr>
+                        <td>Resolution</td>
+                        <td>{metadata.resolution} Å</td>
+                      </tr>
+                    )}
+                    <tr>
+                      <td>Chains</td>
+                      <td>{chains.join(', ')}</td>
+                    </tr>
+                    <tr>
+                      <td>Released</td>
+                      <td>
+                        <TimeAgo
+                          date={date}
+                          noUpdate
+                          title={date.toLocaleDateString()}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               )}
             </div>
             <div className={f('medium-3', 'columns')}>
