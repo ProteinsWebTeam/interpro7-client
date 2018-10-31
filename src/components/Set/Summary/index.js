@@ -92,6 +92,10 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     if (this._ref.current) {
       this._ref.current.removeEventListener('click', this._handleClick);
     }
+    this._vis._ro.disconnect();
+    this._vis.tick = null;
+    this._vis = null;
+    this._ref = null;
   }
 
   _handleClick = event => {
