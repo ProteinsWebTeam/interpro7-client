@@ -172,7 +172,7 @@ class IPScanStatus extends PureComponent {
               dataKey="localID"
               defaultKey="actions"
               headerClassName={f('table-center')}
-              cellClassName={f('table-center')}
+              cellClassName={f('table-center', 'font-ml')}
               renderer={(localID /*: string */) => (
                 <Actions localID={localID} />
               )}

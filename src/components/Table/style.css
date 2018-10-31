@@ -43,7 +43,7 @@ table th {
 }
 
 .result-page .table-results-filtering .icon-view.table-view {
-  background: url(../../images/icons/ico-view-table-round.svg) no-repeat;
+  background: url(../../images/icons/ico-view-table.svg) no-repeat;
   background-size: 100%;
 }
 .result-page .table-results-filtering .icon-view.list-view {
@@ -78,6 +78,10 @@ table th {
   .test-support-grid {
     display: flex;
   }
+}
+
+.pagesize-wrapper {
+  min-width: 260px; /*placeholder - avoid too much jumping back and forth of icons in table when clicking on different MD*/
 }
 
 .table-footer {

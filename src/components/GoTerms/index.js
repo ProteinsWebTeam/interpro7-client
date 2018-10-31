@@ -73,7 +73,7 @@ const GoTerms = (
   const goTermEntries = Object.entries(_terms);
   const none = goTermEntries.every(([, category]) => !category.length);
   return (
-    <section className={f('margin-top-large')}>
+    <section>
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <Tooltip title={title}>
@@ -106,14 +106,10 @@ const GoTerms = (
                         data={identifier}
                         processData={schemaProcessData}
                       />
-                      <Tooltip title={`${name} (${identifier})`}>
-                        <GoLink
-                          id={identifier}
-                          className={f('go-terms', 'ext')}
-                        >
-                          {name} ({identifier})
-                        </GoLink>
-                      </Tooltip>
+
+                      <GoLink id={identifier} className={f('go-terms', 'ext')}>
+                        {name} ({identifier})
+                      </GoLink>
                     </li>
                   ))
                 ) : (

@@ -288,7 +288,7 @@ class List extends PureComponent {
         />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          <hr />
+          <hr className={f('margin-bottom-none')} />
           {databases && (
             <SchemaOrgData
               data={{

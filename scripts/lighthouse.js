@@ -7,7 +7,7 @@ const mkdirp = require('mkdirp');
 const chalk = require('chalk');
 const puppeteer = require('puppeteer');
 const chromeLauncher = require('chrome-launcher');
-const ReportGenerator = require('lighthouse/lighthouse-core/report/v2/report-generator');
+const ReportGenerator = require('lighthouse/lighthouse-core/report/report-generator');
 
 const failThreshold = require('../package.json').lighthouse.threshold;
 
@@ -35,14 +35,12 @@ const getColorFor = (score /*: number */) => {
 const renderScores = async results => {
   let average = 0;
   console.log(chalk.blue.bold('Lighthouse audit'));
-  for (const { name, score } of results.reportCategories) {
-    average += score;
-    console.log(
-      '  ',
-      chalk[getColorFor(score)](`${name}: ${Math.floor(score)}`)
-    );
+  const categories = Object.values(results.lhr.categories);
+  for (const { title, score } of categories) {
+    average += score * 100;
+    console.log('  ', chalk[getColorFor(score)](`${title}: ${score * 100}`));
   }
-  average /= results.reportCategories.length;
+  average /= categories.length;
   console.log(
     chalk.blue.bold('Average score: '),
     chalk[getColorFor(average)].bold(Math.floor(average))
@@ -55,7 +53,7 @@ const renderScores = async results => {
   );
   await writeFile(
     path.resolve(AUDIT_ROOT, 'lighthouse-audit.html'),
-    new ReportGenerator().generateReportHtml(results)
+    results.report
   );
   return average;
 };
@@ -83,7 +81,7 @@ const chromeConfig = {
     // ignore 'artifacts' from results because it's not serializable;
     const { artifacts: _, ...results } = await require('lighthouse')(
       app(port),
-      { port: chrome.port }
+      { port: chrome.port, output: 'html' }
     );
     const average = await renderScores(results);
     // cleanup

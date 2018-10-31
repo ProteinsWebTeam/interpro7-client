@@ -5,6 +5,8 @@ import T from 'prop-types';
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
+import Link from 'components/generic/Link';
+
 import { UniProtLink } from 'components/ExtLink';
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
@@ -60,12 +62,52 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
-              Short name: {metadata.id}
-              <Species
-                fullName={metadata.source_organism.fullName}
-                taxID={metadata.source_organism.taxId}
-              />
-              <Length metadata={metadata} />
+              <table className={f('light', 'table-sum')}>
+                <tbody>
+                  <tr>
+                    <td>Short name</td>
+                    <td>
+                      <i className={f('shortname')}>{metadata.id}</i>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Species</td>
+                    <td>
+                      <Species
+                        fullName={metadata.source_organism.fullName}
+                        taxID={metadata.source_organism.taxId}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Length</td>
+                    <td>
+                      <Length metadata={metadata} />
+                    </td>
+                  </tr>
+                  {metadata.proteome &&
+                    metadata.proteome.length > 0 && (
+                      <tr>
+                        <td>Proteome</td>
+                        <td>
+                          <Link
+                            to={{
+                              description: {
+                                main: { key: 'proteome' },
+                                proteome: {
+                                  db: 'uniprot',
+                                  accession: metadata.proteome,
+                                },
+                              },
+                            }}
+                          >
+                            {metadata.proteome.toUpperCase()}
+                          </Link>
+                        </td>
+                      </tr>
+                    )}
+                </tbody>
+              </table>
             </div>
             <div className={f('medium-3', 'columns')}>
               <div className={f('panel')}>
@@ -84,9 +126,6 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
         <section>
           <div className={f('row')}>
             <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
-              {
-                // <h4>Domains on Protein</h4>
-              }
               <DomainsOnProtein mainData={data} />
             </div>
           </div>

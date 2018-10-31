@@ -1,4 +1,5 @@
 @import '../../../../styles/timing.css';
+@import '../../../../styles/fonts.css';
 
 .card-wrapper {
   display: grid;
@@ -12,9 +13,7 @@
   border: 1px rgba(0, 0, 0, 0.2) solid;
   transition: all var(--timing-really-fast) ease-out;
   color: #606060;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
-    sans-serif;
+  font-family: var(--fonts-system);
   display: flex;
   flex-direction: column;
 }
