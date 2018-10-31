@@ -54,7 +54,6 @@ SignatureLink.propTypes = {
 const ContributingSignatures = ({ contr, data } /*: {contr: Object} */) => {
   const metaDB = data.loading || !data.payload ? {} : data.payload.databases;
   const contrEntries = Object.entries(contr);
-  console.log(contr);
   return (
     <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
       <div className={f('md-icon-list-box', 'margin-bottom-large')}>
