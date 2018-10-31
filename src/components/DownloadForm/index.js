@@ -84,7 +84,9 @@ class DownloadForm extends PureComponent {
     let path;
     try {
       path = descriptionToPath(object.description);
+      e.target.classList.remove(f('invalid-accession'));
     } catch {
+      e.target.classList.add(f('invalid-accession'));
       return;
     }
     // More specific cases
