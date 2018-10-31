@@ -129,10 +129,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
       });
     });
     const threshold = 0.4;
-    const observer = new IntersectionObserver(entries => {
+    this.observer = new IntersectionObserver(entries => {
       this.setState({ isStuck: entries[0].intersectionRatio < threshold });
     }, optionsForObserver);
-    observer.observe(this._placeholder.current);
+    this.observer.observe(this._placeholder.current);
     this._protvista.current.addEventListener(
       'entryclick',
       ({
@@ -175,6 +175,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
       this.plugin.instance.context.scene.scene.handleResize();
     }
   }
+
+  componentWillUnmount() {
+    this.observer.disconnect();
+  }
+
   updateTheme(entries) {
     if (this.plugin) {
       const context = this.plugin.context;
