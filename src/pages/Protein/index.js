@@ -266,7 +266,7 @@ class List extends PureComponent {
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />
-          <hr />
+          <hr className={f('margin-bottom-none')} />
           {databases &&
             db &&
             databases[db.toLowerCase()] && (

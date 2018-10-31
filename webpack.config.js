@@ -13,6 +13,7 @@ const LegacyModuleSplitPlugin = require('./webpack-plugins/legacy-module-split-p
 // CSS-related
 const postCSSImport = require('postcss-import');
 const cssNext = require('postcss-cssnext');
+const cssNano = require('cssnano');
 
 const buildInfo = require('./scripts/build-info');
 const pkg = require('./package.json');
@@ -38,17 +39,6 @@ const cssSettings = mode => ({
   sourceMap: true,
   minimize: mode === 'production',
   localIdentName: '[folder]_[name]__[local]___[hash:2]',
-  alias: {
-    '../libraries': 'ebi-framework/libraries',
-    'EBI-Common': 'EBI-Icon-fonts/EBI-Common',
-    'EBI-Conceptual': 'EBI-Icon-fonts/EBI-Conceptual',
-    'EBI-Functional': 'EBI-Icon-fonts/EBI-Functional',
-    'EBI-Generic': 'EBI-Icon-fonts/EBI-Generic',
-    'EBI-Species': 'EBI-Icon-fonts/EBI-Species',
-    'EBI-SocialMedia': 'EBI-Icon-fonts/EBI-SocialMedia',
-    'EBI-FileFormats': 'EBI-Icon-fonts/EBI-FileFormats',
-    'EBI-Chemistry': 'EBI-Icon-fonts/EBI-Chemistry',
-  },
 });
 
 const publicPath = websiteURL.pathname || '/interpro/';
@@ -87,6 +77,17 @@ const getConfigFor = (env, mode, module = false) => {
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
       extensions: ['.js', '.json', '.worker.js'],
+      alias: {
+        '../libraries': 'ebi-framework/libraries',
+        'EBI-Common': 'EBI-Icon-fonts/EBI-Common',
+        'EBI-Conceptual': 'EBI-Icon-fonts/EBI-Conceptual',
+        'EBI-Functional': 'EBI-Icon-fonts/EBI-Functional',
+        'EBI-Generic': 'EBI-Icon-fonts/EBI-Generic',
+        'EBI-Species': 'EBI-Icon-fonts/EBI-Species',
+        'EBI-SocialMedia': 'EBI-Icon-fonts/EBI-SocialMedia',
+        'EBI-FileFormats': 'EBI-Icon-fonts/EBI-FileFormats',
+        'EBI-Chemistry': 'EBI-Icon-fonts/EBI-Chemistry',
+      },
     },
     // MODULE
     module: {
@@ -197,7 +198,11 @@ const getConfigFor = (env, mode, module = false) => {
             {
               loader: 'postcss-loader',
               options: {
-                plugins: [postCSSImport, cssNext()],
+                plugins: [
+                  postCSSImport,
+                  cssNext(),
+                  mode === 'production' && cssNano(),
+                ].filter(Boolean),
               },
             },
           ],
@@ -218,7 +223,11 @@ const getConfigFor = (env, mode, module = false) => {
             {
               loader: 'postcss-loader',
               options: {
-                plugins: [postCSSImport, cssNext()],
+                plugins: [
+                  postCSSImport,
+                  cssNext(),
+                  mode === 'production' && cssNano(),
+                ].filter(Boolean),
               },
             },
           ],
@@ -389,6 +398,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
       ? new (require('webapp-webpack-plugin'))({
           logo: path.join('.', 'images', 'logo', 'logo_1776x1776.png'),
           prefix: path.join('assets', 'icons-and-manifests', '[hash:base62:3]'),
+          inject: 'force',
           favicons: {
             background: '#007c82',
             theme_color: '#007c82',
@@ -427,7 +437,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
     // also, generate a bundle for legacy browsers
     const configLegacy = getConfigFor(env, mode);
     configLegacy.plugins = [htmlWebpackPlugin, ...configLegacy.plugins];
-    return [configModule, configLegacy];
+    return [configLegacy, configModule];
   }
   // just generate for modern browsers
   return configModule;

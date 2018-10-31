@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Accession from 'components/Accession';
-import TaxIdOrName from 'components/Taxonomy/TaxIdOrName';
+import Species from 'components/Protein/Species';
 import { ProteomeLink } from 'components/ExtLink';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -28,17 +28,41 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('row')}>
         <div className={f('medium-9', 'columns')}>
-          <div>
-            <Accession
-              id={metadata.id}
-              accession={metadata.proteomeAccession || metadata.accession}
-              title="Proteome ID"
-            />
-          </div>
-          {metadata.strain && <div>Strain: {metadata.strain}</div>}
-          <div>
-            Taxonomy: <TaxIdOrName accession={metadata.taxonomy} />
-          </div>
+          <table className={f('light', 'table-sum')}>
+            <tbody>
+              <tr>
+                <td>Proteome ID</td>
+                <td>
+                  <Accession
+                    accession={metadata.proteomeAccession || metadata.accession}
+                    title="Proteome ID"
+                  />
+                </td>
+              </tr>
+              {metadata.strain && (
+                <tr>
+                  <td>Strain</td>
+                  <td>{metadata.strain}</td>
+                </tr>
+              )}
+              <tr>
+                <td>Species</td>
+                <td>
+                  <Species
+                    fullName={metadata.name.name}
+                    taxID={metadata.taxonomy}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Proteome type</td>
+                <td>
+                  {metadata.is_reference ? 'Reference' : 'Non-reference'}{' '}
+                  proteome
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div className={f('medium-3', 'columns')}>
           <div className={f('panel')}>

@@ -41,23 +41,20 @@ class Children extends PureComponent {
   render() {
     const { taxChildren, names } = this.props;
     return (
-      <div className={f('')}>
-        Children:
-        <div className={f('list')}>
-          {taxChildren.length ? (
-            taxChildren.map(taxId => (
-              <div key={taxId}>
-                <TaxIdOrName accession={taxId} name={names[taxId]} />
-                <SchemaOrgData
-                  data={{ taxId, name: names[taxId] }}
-                  processData={schemaProcessData}
-                />
-              </div>
-            ))
-          ) : (
-            <span> no child</span>
-          )}
-        </div>
+      <div className={f('list-children')}>
+        {taxChildren.length ? (
+          taxChildren.map(taxId => (
+            <div key={taxId}>
+              <TaxIdOrName accession={taxId} name={names[taxId]} />
+              <SchemaOrgData
+                data={{ taxId, name: names[taxId] }}
+                processData={schemaProcessData}
+              />
+            </div>
+          ))
+        ) : (
+          <span>None</span>
+        )}
       </div>
     );
   }

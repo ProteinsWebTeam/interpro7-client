@@ -217,14 +217,14 @@ class ProtVista extends PureComponent {
     const isResidue = detail.type === 'residue';
     const isInterPro = entry.source_database === 'interpro';
     const tagString = `<section>   
-        <h5>
+        <h6>
           ${entry.accession}
           ${
             isResidue
               ? `<br/>[${detail.description || detail.location.description}]`
               : ''
           } 
-         </h5>
+         </h6>
           
         ${entry.name ? `<h4>${entry.name}</h4>` : ''}
         
@@ -450,11 +450,7 @@ class ProtVista extends PureComponent {
             </Tooltip>
           </div>
           <div
-            className={f(
-              'option-fullscreen',
-              'size-200',
-              'margin-right-medium',
-            )}
+            className={f('option-fullscreen', 'font-l', 'margin-right-large')}
           >
             <Tooltip title="View the domain viewer in full screen mode">
               <button
@@ -480,7 +476,10 @@ class ProtVista extends PureComponent {
 
     const { hideCategory } = this.state;
     return (
-      <div ref={this._mainRef} className={f('fullscreenable')}>
+      <div
+        ref={this._mainRef}
+        className={f('fullscreenable', 'margin-bottom-large')}
+      >
         <div className={f('track-row')}>{this.renderOptions()}</div>
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
