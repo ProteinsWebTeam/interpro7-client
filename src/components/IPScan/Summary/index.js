@@ -46,6 +46,12 @@ const LUT = new Map([
   ['GENE3D', 'cathgene3d'],
 ]);
 
+const mergeMatch = (match1, match2) => {
+  if (!match1) return match2;
+  match1.locations = match1.locations.concat(match2.locations);
+  return match1;
+};
+
 class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     accession: T.string.isRequired,
@@ -112,8 +118,9 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
       }
     }
 
-    const mergedData = { unintegrated: [], predictions: [] };
+    const mergedData = { unintegrated: {}, predictions: [] };
     let integrated = new Map();
+    const signatures = new Map();
     for (const match of payload.matches) {
       const { library } = match.signature.signatureLibraryRelease;
       const processedMatch = {
@@ -123,6 +130,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
         protein_length: payload.sequenceLength,
         locations: match.locations.map(loc => ({
           ...loc,
+          model_acc: match['model-ac'],
           fragments:
             loc['location-fragments'] && loc['location-fragments'].length
               ? loc['location-fragments']
@@ -130,24 +138,35 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
         })),
         score: match.score,
       };
+
       if (NOT_MEMBER_DBS.has(library)) {
         processedMatch.accession += ` (${mergedData.predictions.length + 1})`;
         mergedData.predictions.push(processedMatch);
-      } else if (match.signature.entry) {
+        continue;
+      }
+      const mergedMatch = mergeMatch(
+        signatures.get(processedMatch.accession),
+        processedMatch,
+      );
+      signatures.set(mergedMatch.accession, mergedMatch);
+      if (match.signature.entry) {
         const accession = match.signature.entry.accession;
         const entry = integrated.get(accession) || {
           accession,
           name: match.signature.entry.name,
           source_database: 'InterPro',
+          _children: {},
           children: [],
           type: match.signature.entry.type.toLowerCase(),
         };
-        entry.children.push(processedMatch);
+        entry._children[mergedMatch.accession] = mergedMatch;
+        entry.children = Object.values(entry._children);
         integrated.set(accession, entry);
       } else {
-        mergedData.unintegrated.push(processedMatch);
+        mergedData.unintegrated[mergedMatch.accession] = mergedMatch;
       }
     }
+    mergedData.unintegrated = Object.values(mergedData.unintegrated);
     integrated = Array.from(integrated.values()).map(m => {
       const locations = flattenDeep(
         m.children.map(s =>
