@@ -84,7 +84,9 @@ class DownloadForm extends PureComponent {
     let path;
     try {
       path = descriptionToPath(object.description);
+      e.target.classList.remove(f('invalid-accession'));
     } catch {
+      e.target.classList.add(f('invalid-accession'));
       return;
     }
     // More specific cases
@@ -153,11 +155,11 @@ class DownloadForm extends PureComponent {
         ref={this._ref}
         className={f('download-form')}
       >
-        <h4>Generate a new file</h4>
+        <h4>Select data</h4>
         <fieldset className={f('fieldset')}>
-          <legend>Main type</legend>
+          <legend>Main data type</legend>
           <label>
-            Choose a main type:
+            Choose a main data type:
             <select name="description.main.key" defaultValue={main}>
               {typeObjects.map(([type]) => (
                 <option key={type} value={type}>

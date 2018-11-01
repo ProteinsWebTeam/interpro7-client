@@ -18,3 +18,21 @@
   display: inline-block;
   margin-right: 0.5rem;
 }
+
+.release-selector {
+  list-style: none;
+  color: #888888;
+}
+
+.release-selector .current {
+  font-size: 1.4rem;
+}
+
+ul.release-selector li.current a {
+  opacity: 1 !important;
+  color: #444444;
+}
+ul.release-selector a {
+  opacity: 0.6 !important;
+  color: #444444;
+}

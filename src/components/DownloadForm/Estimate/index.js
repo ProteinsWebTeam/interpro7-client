@@ -9,13 +9,13 @@ const NO_CONTENT = 204;
 const getText = ({ loading, payload, ok, status, headers }) => {
   if (loading) return 'Getting estimation from server…';
 
-  if (!ok) return 'An error happened during the request to the server.';
+  if (!ok) return 'There was an error fetching data from the server.';
 
   if (status === NO_CONTENT) {
-    return 'No data was found for this specific query.';
+    return 'No data matched this query.';
   }
 
-  if (!payload) return 'An unexpected error happened.';
+  if (!payload) return 'An unexpected error was encountered.';
 
   const count = payload.count;
   if (count) {
@@ -40,7 +40,7 @@ const getText = ({ loading, payload, ok, status, headers }) => {
     });
     return (
       <>
-        Your file size will be of <NumberComponent>{value}</NumberComponent>{' '}
+        Your file size will be <NumberComponent>{value}</NumberComponent>{' '}
         {suffix}
       </>
     );
@@ -63,7 +63,7 @@ export default class Estimate extends PureComponent {
   render() {
     return (
       <section>
-        <h6>Estimation</h6>
+        <h6>Estimate</h6>
         {getText(this.props.data)}
       </section>
     );
