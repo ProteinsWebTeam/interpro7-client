@@ -262,10 +262,11 @@ class ProtVista extends PureComponent {
               <li>Residue: ${detail.residue || detail.residues}</li>
               `
               : entry.locations
-                  .map(({ fragments }) =>
+                  .map(({ fragments, model_acc: model }) =>
                     `
           <li> 
           <!--location:-->
+            ${model && model !== entry.accession ? `Model: ${model}` : ''}
             <ul>
               ${fragments
                 .map(({ start, end }) =>
