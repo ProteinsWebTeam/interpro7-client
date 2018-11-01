@@ -1,6 +1,12 @@
 /* eslint-disable no-magic-numbers */
 import React, { PureComponent } from 'react';
 import loadWebComponent from 'utils/load-web-component';
+import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { format } from 'url';
+
+import loadData from 'higherOrder/loadData';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
@@ -13,10 +19,116 @@ import local from './style.css';
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
+import Loading from 'components/SimpleCommonComponents/Loading';
+import { formatISODate } from 'utils/date';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, local, ipro);
 
+const ReleaseNotesSelectorWithData = ({
+  data: { loading, payload },
+  current,
+}) => {
+  if (loading || !payload) return <Loading />;
+  return (
+    <ul className={f('release-selector')}>
+      {Object.entries(payload).map(([version, date]) => (
+        <li key={version} className={f({ current: version === current })}>
+          <Link
+            to={{
+              description: {
+                other: ['release_notes', version],
+              },
+            }}
+            disabled={version === current}
+          >
+            InterPro {version}{' '}
+            <small>
+              • <time dateTime={date}>{formatISODate(date)}</time>
+            </small>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+};
+ReleaseNotesSelectorWithData.propTypes = {
+  data: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.object,
+  }).isRequired,
+  current: T.string,
+};
+
+const getReleaseNotesListUrl = createSelector(
+  state => state.settings.api,
+  ({ protocol, hostname, port, root }) =>
+    cleanUpMultipleSlashes(
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}/utils/release/`,
+      }),
+    ),
+);
+
+const ReleaseNotesSelector = loadData(getReleaseNotesListUrl)(
+  ReleaseNotesSelectorWithData,
+);
+const StatsPerType = ({ iconType, label, type, count, child = false }) => (
+  <tr>
+    <td>
+      {iconType && (
+        <interpro-type dimension="2em" type={iconType} aria-label="Entry type">
+          {
+            // IE11 fallback for icons
+          }
+          <span className={f('icon-type', `icon-${iconType}`)}>{label[0]}</span>
+        </interpro-type>
+      )}
+    </td>
+    <td>
+      {child && <span className={f('ico-rel')} />}
+      {label}
+    </td>
+    {count && (
+      <td className={f('text-right')}>
+        <Link
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: { db: 'InterPro' },
+            },
+            search: { type: type },
+          }}
+        >
+          <NumberComponent noTitle>{count}</NumberComponent>
+        </Link>
+      </td>
+    )}
+  </tr>
+);
+StatsPerType.propTypes = {
+  iconType: T.string,
+  label: T.string.isRequired,
+  type: T.string.isRequired,
+  count: T.number,
+  child: T.bool,
+};
+
 class ReleaseNotes extends PureComponent /*:: <{}> */ {
+  static propTypes = {
+    data: T.shape({
+      payload: T.shape({
+        version: T.string.isRequired,
+        release_date: T.string.isRequired,
+        content: T.object.isRequired,
+      }),
+      loading: T.bool.isRequired,
+    }).isRequired,
+    description: T.object.isRequired,
+  };
   componentDidMount() {
     loadWebComponent(() =>
       import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
@@ -25,12 +137,49 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
     ).as('interpro-type');
   }
   render() {
+    if (!this.props.data || this.props.data.loading) {
+      return <Loading />;
+    }
+    const { version, release_date: date, content } = this.props.data.payload;
+    const totalIpro = content.interpro.entries;
+    const newIpro = content.interpro.new_entries.length;
+    const updates = Object.values(content.member_databases).filter(
+      db => db.is_updated,
+    );
+    const perType = content.interpro.types;
+    const perMemberDB = content.member_databases;
+    const totalNewMethod = Object.values(perMemberDB).reduce(
+      (agg, v) => agg + v.recently_integrated.length,
+      0,
+    );
+    const types = [
+      { label: 'Family', key: 'family' },
+      { label: 'Domain', key: 'domain' },
+      { label: 'Homologous Superfamily', key: 'homologous_superfamily' },
+      { label: 'Repeat', key: 'repeat' },
+      {
+        label: 'Site',
+        key: 'site',
+        children: [
+          { label: 'Active Site', key: 'active_site' },
+          { label: 'Binding Site', key: 'binding_site' },
+          { label: 'Conserved Site', key: 'conserved_site' },
+          { label: 'PTM', key: 'ptm' },
+        ],
+      },
+    ];
+    const sets = Object.values(content.member_databases).filter(db => db.sets);
+    const dbMap = new Map([
+      ['PROSITE patterns', 'prosite'],
+      ['PROSITE profiles', 'profile'],
+      ['SUPERFAMILY', 'ssf'],
+    ]);
     return (
       <div className={f('row')}>
         <div className={f('columns', 'release')}>
           <section>
             <h3>Release notes</h3>
-            <p>This page records all release notes, most recent first.</p>
+            <ReleaseNotesSelector current={version} />
             <hr />
             <div
               className={f(
@@ -40,9 +189,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               )}
             >
               <h3>
-                InterPro 70.0{' '}
+                InterPro {version}{' '}
                 <small>
-                  • <time dateTime="2018-09-13">13th September 2018</time>
+                  • <time dateTime={date}>{formatISODate(date)}</time>
                 </small>
               </h3>
             </div>
@@ -53,64 +202,48 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               <li>
                 The addition of{' '}
                 <NumberComponent noTitle noAnimation>
-                  {662}
+                  {newIpro}
                 </NumberComponent>{' '}
                 InterPro entries.
               </li>
-              <li>An update to SFLD (4).</li>
+              {updates &&
+                !!updates.length && (
+                  <li>
+                    An update to{' '}
+                    {updates.map(({ name, recently_integrated: r }) => (
+                      <span key={name}>
+                        {name} ({r.length})
+                      </span>
+                    ))}
+                    .
+                  </li>
+                )}
               <li>
                 Integration of{' '}
                 <NumberComponent noTitle noAnimation>
-                  {886}
+                  {totalNewMethod}
                 </NumberComponent>{' '}
-                new methods from the CATH-Gene3D (
-                <NumberComponent noTitle noAnimation>
-                  {5}
-                </NumberComponent>
-                ), CDD (
-                <NumberComponent noTitle noAnimation>
-                  {17}
-                </NumberComponent>
-                ), HAMAP (
-                <NumberComponent noTitle noAnimation>
-                  {1}
-                </NumberComponent>
-                ), PANTHER (
-                <NumberComponent noTitle noAnimation>
-                  {689}
-                </NumberComponent>
-                ), Pfam (
-                <NumberComponent noTitle noAnimation>
-                  {119}
-                </NumberComponent>
-                ), PIRSF (
-                <NumberComponent noTitle noAnimation>
-                  {1}
-                </NumberComponent>
-                ), PRINTS (
-                <NumberComponent noTitle noAnimation>
-                  {2}
-                </NumberComponent>
-                ), ProDom (
-                <NumberComponent noTitle noAnimation>
-                  {3}
-                </NumberComponent>
-                ), SFLD (
-                <NumberComponent noTitle noAnimation>
-                  {22}
-                </NumberComponent>
-                ) and SMART (
-                <NumberComponent noTitle noAnimation>
-                  {1}
-                </NumberComponent>
-                ) databases.
+                new methods from the
+                {Object.entries(perMemberDB)
+                  .filter(([_name, { recently_integrated: r }]) => r.length)
+                  .map(([name, db], i) => (
+                    <React.Fragment key={name}>
+                      {i === 0 ? ' ' : ', '}
+                      {name} (
+                      <NumberComponent noTitle noAnimation>
+                        {db.recently_integrated.length}
+                      </NumberComponent>
+                      )
+                    </React.Fragment>
+                  ))}{' '}
+                databases.
               </li>
             </ul>
 
             <h4>Contents and coverage</h4>
             <p className={f('margin-bottom-small')}>
               InterPro protein matches are now calculated for all UniProtKB and
-              UniParc proteins. InterPro release 70.0 contains{' '}
+              UniParc proteins. InterPro release {version} contains{' '}
               <Link
                 to={{
                   description: {
@@ -119,7 +252,7 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                   },
                 }}
               >
-                <NumberComponent noTitle>{35020}</NumberComponent> entries
+                <NumberComponent noTitle>{totalIpro}</NumberComponent> entries
               </Link>
               , representing:
             </p>
@@ -133,211 +266,33 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               )}
             >
               <tbody>
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <interpro-type
-                      dimension="1.8em"
-                      type="Family"
-                      aria-label="Entry type"
-                    >
-                      {
-                        // IE11 fallback for icons
-                      }
-                      <span className={f('icon-type', 'icon-family')}>F</span>
-                    </interpro-type>
-                  </td>
-                  <td>Family</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'family' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{21695}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <interpro-type
-                      dimension="1.8em"
-                      type="Domain"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-domain')}>D</span>
-                    </interpro-type>
-                  </td>
-                  <td>Domain</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'domain' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{9268}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <interpro-type
-                      dimension="1.8em"
-                      type="homologous superfamily"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-hh')}>H</span>
-                    </interpro-type>
-                  </td>
-                  <td>Homologous superfamily</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'homologous_superfamily' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2865}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <interpro-type
-                      dimension="1.8em"
-                      type="repeat"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-repeat')}>R</span>
-                    </interpro-type>
-                  </td>
-                  <td>Repeat</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'repeat' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{280}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <interpro-type
-                      dimension="1.8em"
-                      type="site"
-                      aria-label="Entry type"
-                    >
-                      <span className={f('icon-type', 'icon-site')}>S</span>
-                    </interpro-type>
-                  </td>
-                  <td>Site</td>
-                  <td />
-                </tr>
-
-                <tr>
-                  <td />
-                  <td>
-                    <span className={f('ico-rel')} /> Active site
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'active_site' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{132}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td />
-                  <td>
-                    <span className={f('ico-rel')} /> Binding site
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'binding_site' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{76}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td />
-                  <td>
-                    <span className={f('ico-rel')} /> Conserved site
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'conserved_site' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{687}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td />
-                  <td>
-                    <span className={f('ico-rel')} />{' '}
-                    <Tooltip title="post-translational modification">
-                      PTM
-                    </Tooltip>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro' },
-                        },
-                        search: { type: 'ptm' },
-                      }}
-                    >
-                      <NumberComponent noTitle>{17}</NumberComponent>
-                    </Link>
-                  </td>
-                </tr>
+                {types.map(({ label, key, children }) => {
+                  const type = label.toLowerCase();
+                  return (
+                    <React.Fragment key={key}>
+                      <StatsPerType
+                        label={label}
+                        iconType={type}
+                        type={key}
+                        count={perType[key]}
+                      />
+                      {children &&
+                        children.map(child => (
+                          <StatsPerType
+                            label={child.label}
+                            key={child.key}
+                            type={child.key}
+                            count={perType[child.key]}
+                            child={true}
+                          />
+                        ))}
+                    </React.Fragment>
+                  );
+                })}
               </tbody>
             </table>
+
+            <p>Interpro cites {content.citations} publications in PubMed.</p>
 
             <h4>Member database information</h4>
 
@@ -370,567 +325,65 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol
-                      type={'cathgene3d'}
-                      className={f('md-small')}
-                    />
-                  </td>
-                  <td>CATH-Gene3D</td>
-                  <td className={f('text-center')}>4.2.0</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('no-underline')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'cathgene3d' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{6119}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('no-underline')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'cathgene3d',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2147}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 2147) / 6119) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'cdd'} className={f('md-small')} />
-                  </td>
-                  <td>CDD</td>
-                  <td className={f('text-center')}>3.16</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('no-underline')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'cdd' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{12805}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'cdd',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2910}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 2910) / 12805) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'hamap'} className={f('md-small')} />
-                  </td>
-                  <td>HAMAP</td>
-                  <td className={f('text-center')}>2018_03</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'hamap' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2246}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'hamap',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2245}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 2245) / 2246) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'panther'} className={f('md-small')} />
-                  </td>
-                  <td>PANTHER</td>
-                  <td className={f('text-center')}>12.0</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'panther' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{90742}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'panther',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{8974}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 8974) / 90742) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'pfam'} className={f('md-small')} />
-                  </td>
-                  <td>Pfam</td>
-                  <td className={f('text-center')}>31.0</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'Pfam' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{16712}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'Pfam',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{16235}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 16235) / 16712) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'pirsf'} className={f('md-small')} />
-                  </td>
-                  <td>PIRSF</td>
-                  <td className={f('text-center')}>3.02</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'pirsf' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{3285}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'pirsf',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{3223}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 3223) / 3285) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'prints'} className={f('md-small')} />
-                  </td>
-                  <td>PRINTS</td>
-                  <td className={f('text-center')}>42.0</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'prints' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2106}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'prints',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1965}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1965) / 2106) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'prodom'} className={f('md-small')} />
-                  </td>
-                  <td>ProDom</td>
-                  <td className={f('text-center')}>2006.1</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'prodom' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1894}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'prodom',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1311}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1311) / 1894) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'prosite'} className={f('md-small')} />
-                  </td>
-                  <td>PROSITE patterns</td>
-                  <td className={f('text-center')}>2018_02</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'prosite' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1309}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'prosite',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1287}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1287) / 1309) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'profile'} className={f('md-small')} />
-                  </td>
-                  <td>PROSITE profiles</td>
-                  <td className={f('text-center')}>2018_02</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'profile' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1210}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'profile',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1174}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1174) / 1210) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'sfld'} className={f('md-small')} />
-                  </td>
-                  <td>SFLD</td>
-                  <td className={f('text-center')}>4</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'sfld' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{303}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'sfld',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{164}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 164) / 303) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'smart'} className={f('md-small')} />
-                  </td>
-                  <td>SMART</td>
-                  <td className={f('text-center')}>7.1</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'smart' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1312}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'smart',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1264}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1264) / 1312) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'ssf'} className={f('md-small')} />
-                  </td>
-                  <td>SUPERFAMILY</td>
-                  <td className={f('text-center')}>1.75</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'ssf' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{2019}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'ssf',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{1601}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 1601) / 2019) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td className={f('no-lineheight')}>
-                    <MemberSymbol type={'tigrfams'} className={f('md-small')} />
-                  </td>
-                  <td>TIGRFAMs</td>
-                  <td className={f('text-center')}>15.0</td>
-                  <td className={f('text-right')}>
-                    <Link
-                      className={f('block')}
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'tigrfams' },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{4488}</NumberComponent>
-                    </Link>
-                  </td>
-                  <td className={f('text-right')}>
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            integration: 'integrated',
-                            db: 'tigrfams',
-                          },
-                        },
-                      }}
-                    >
-                      <NumberComponent noTitle>{4438}</NumberComponent>{' '}
-                      <small>
-                        ({Math.floor((1000 * 4438) / 4488) / 10}
-                        %)
-                      </small>
-                    </Link>
-                  </td>
-                </tr>
+                {Object.values(perMemberDB)
+                  .filter(db => !db.name.toLowerCase().startsWith('mobidb'))
+                  .map(
+                    ({
+                      name,
+                      version,
+                      signatures,
+                      integrated_signatures: integrated,
+                    }) => {
+                      const db =
+                        dbMap.get(name) || name.toLowerCase().replace('-', '');
+                      return (
+                        <tr key={name}>
+                          <td className={f('no-lineheight')}>
+                            <MemberSymbol type={db} className={f('md-small')} />
+                          </td>
+                          <td>{name}</td>
+                          <td className={f('text-center')}>{version}</td>
+                          <td className={f('text-right')}>
+                            <Link
+                              className={f('no-underline')}
+                              to={{
+                                description: {
+                                  main: { key: 'entry' },
+                                  entry: { db: db },
+                                },
+                              }}
+                            >
+                              <NumberComponent noTitle>
+                                {signatures}
+                              </NumberComponent>
+                            </Link>
+                          </td>
+                          <td className={f('text-right')}>
+                            <Link
+                              className={f('no-underline')}
+                              to={{
+                                description: {
+                                  main: { key: 'entry' },
+                                  entry: {
+                                    db: db,
+                                    integration: 'integrated',
+                                  },
+                                },
+                              }}
+                            >
+                              <NumberComponent noTitle>
+                                {integrated}
+                              </NumberComponent>{' '}
+                              <small>
+                                ({((100 * integrated) / signatures).toFixed(1)}
+                                %)
+                              </small>
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    },
+                  )}
               </tbody>
             </table>
 
@@ -964,6 +417,31 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
               ).
             </p>
 
+            <h4>InterPro2GO</h4>
+            <p>
+              We have a total number of{' '}
+              <NumberComponent noTitle>
+                {content.interpro.go_terms}
+              </NumberComponent>{' '}
+              GO terms mapped to InterPro entries.
+            </p>
+
+            <p>
+              <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
+                List of InterPro2GO mappings
+              </Link>
+              . These are also available through the EBI GO browser{' '}
+              <Link
+                href="http://www.ebi.ac.uk/QuickGO/"
+                className={f('ext')}
+                target="_blank"
+              >
+                QuickGO
+              </Link>
+            </p>
+
+            <h3>Protein information</h3>
+
             <table className={f('light', 'margin-top-large')}>
               <thead>
                 <tr>
@@ -981,97 +459,136 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>UniProtKB</td>
-                  <td>2018_08</td>
-                  <td>
-                    <NumberComponent noTitle>{125355233}</NumberComponent>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{104705922}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 104705922) / 125355233) / 10}
-                      %)
-                    </small>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{101460097}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 101460097) / 125355233) / 10}
-                      %)
-                    </small>
-                  </td>
-                </tr>
-                <tr>
-                  <td>UniProtKB/TrEMBL</td>
-                  <td>2018_08</td>
-                  <td>
-                    <NumberComponent noTitle>{124797108}</NumberComponent>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{104163101}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 104163101) / 124797108) / 10}
-                      %)
-                    </small>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{100920355}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 100920355) / 124797108) / 10}
-                      %)
-                    </small>
-                  </td>
-                </tr>
-                <tr>
-                  <td>UniProtKB/Swiss-Prot</td>
-                  <td>2018_08</td>
-                  <td>
-                    <NumberComponent noTitle>{558125}</NumberComponent>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{542821}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 542821) / 558125) / 10}
-                      %)
-                    </small>
-                  </td>
-                  <td>
-                    <NumberComponent noTitle>{539742}</NumberComponent>{' '}
-                    <small>
-                      ({Math.floor((1000 * 539742) / 558125) / 10}
-                      %)
-                    </small>
-                  </td>
-                </tr>
+                {Object.entries(content.proteins)
+                  .sort(([a], [b]) => (a > b ? 1 : -1))
+                  .map(([name, detail]) => (
+                    <tr key={name}>
+                      <td>{name}</td>
+                      <td>{detail.version}</td>
+                      <td>
+                        <NumberComponent noTitle>
+                          {detail.count}
+                        </NumberComponent>
+                      </td>
+                      <td>
+                        <NumberComponent noTitle>
+                          {detail.signatures}
+                        </NumberComponent>{' '}
+                        <small>
+                          (
+                          {((100 * detail.signatures) / detail.count).toFixed(
+                            1,
+                          )}
+                          %)
+                        </small>
+                      </td>
+                      <td>
+                        <NumberComponent noTitle>
+                          {detail.integrated_signatures}
+                        </NumberComponent>{' '}
+                        <small>
+                          (
+                          {(
+                            (100 * detail.integrated_signatures) /
+                            detail.count
+                          ).toFixed(1)}
+                          %)
+                        </small>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
+            {['structures', 'proteomes', 'taxonomy'].map(key => (
+              <section key={key}>
+                <h3 style={{ textTransform: 'capitalize' }}>
+                  {key} information
+                </h3>
 
-            <h3>InterPro2GO</h3>
-            <p>
-              We have a total number of{' '}
-              <NumberComponent noTitle>{34550}</NumberComponent> GO terms mapped
-              to InterPro entries.
-            </p>
+                <table className={f('light', 'margin-top-large')}>
+                  <thead>
+                    <tr>
+                      <th>Version</th>
+                      <th>Count</th>
+                      <th>Integrated</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{content[key].version}</td>
+                      <td>
+                        <NumberComponent noTitle>
+                          {content[key].total}
+                        </NumberComponent>
+                      </td>
+                      <td>
+                        <NumberComponent noTitle>
+                          {content[key].integrated}
+                        </NumberComponent>{' '}
+                        <small>
+                          (
+                          {(
+                            (100 * content[key].integrated) /
+                            content[key].total
+                          ).toFixed(1)}
+                          %)
+                        </small>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            ))}
+            <section>
+              <h3>Sets Information</h3>
 
-            <p>
-              <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
-                List of InterPro2GO mappings
-              </Link>
-              . These are also available through the EBI GO browser{' '}
-              <Link
-                href="http://www.ebi.ac.uk/QuickGO/"
-                className={f('ext')}
-                target="_blank"
-              >
-                QuickGO
-              </Link>
-            </p>
+              <table className={f('light', 'margin-top-large')}>
+                <thead>
+                  <tr>
+                    <th>Database</th>
+                    <th>Version</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sets.map(({ name, sets, version }) => (
+                    <tr key={name}>
+                      <td>{name}</td>
+                      <td>{version}</td>
+                      <td>
+                        <NumberComponent noTitle>{sets}</NumberComponent>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
           </section>
         </div>
       </div>
     );
   }
 }
+const getReleaseNotesUrl = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description.other,
+  ({ protocol, hostname, port, root }, other) =>
+    cleanUpMultipleSlashes(
+      format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}/utils/release/${
+          other.length > 1 ? other[1] : 'current'
+        }`,
+      }),
+    ),
+);
 
-export default ReleaseNotes;
+const mapStateToProps = createSelector(
+  state => state.customLocation.description,
+  description => ({ description }),
+);
+export default connect(mapStateToProps)(
+  loadData(getReleaseNotesUrl)(ReleaseNotes),
+);

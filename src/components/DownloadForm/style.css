@@ -1,3 +1,6 @@
+@import '../../styles/fonts.css';
+@import '../../styles/colors.css';
+
 .controls {
   padding: 1ch;
   border: 1px solid gray;
@@ -19,4 +22,9 @@
   & h6 {
     font-weight: bold;
   }
+}
+
+input.invalid-accession,
+input.invalid-accession:focus {
+  background-color: var(--colors-alert-main);
 }
