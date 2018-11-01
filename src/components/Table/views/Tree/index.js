@@ -31,6 +31,10 @@ const mapStateToUrlFor = createSelector(
             root +
             descriptionToPath({
               ...description,
+              [description.main.key]: {
+                ...description[description.main.key],
+                isFilter: description.main.key !== 'taxonomy',
+              },
               main: { key: 'taxonomy' },
               taxonomy: {
                 db: 'uniprot',

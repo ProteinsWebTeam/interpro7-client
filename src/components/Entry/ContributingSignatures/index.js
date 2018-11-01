@@ -1,6 +1,5 @@
 import React from 'react';
 import T from 'prop-types';
-import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -32,7 +31,7 @@ const schemaProcessData = ({ db, name }) => ({
   name,
 });
 
-const SignatureLink = ({ accession, db, label }) => (
+const SignatureLink = React.memo(({ accession, db, label }) => (
   <Link
     to={{
       description: {
@@ -45,7 +44,7 @@ const SignatureLink = ({ accession, db, label }) => (
       <Tooltip title={`${label} (${accession})`}>{accession || label}</Tooltip>
     </small>
   </Link>
-);
+));
 SignatureLink.propTypes = {
   accession: T.string.isRequired,
   db: T.string.isRequired,
@@ -94,6 +93,7 @@ const ContributingSignatures = ({ contr, data } /*: {contr: Object} */) => {
 };
 ContributingSignatures.propTypes = {
   contr: T.object.isRequired,
+  data: T.object.isRequired,
 };
 
-export default loadData(getUrlForMeta)(ContributingSignatures);
+export default loadData(getUrlForMeta)(React.memo(ContributingSignatures));

@@ -226,6 +226,7 @@ const Matches = (
     notFound={matches.length === 0}
     contentType={primary}
     databases={databases}
+    withTree={primary === 'taxonomy'}
   >
     <PageSizeSelector />
     <SearchBox />

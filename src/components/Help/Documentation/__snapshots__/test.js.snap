@@ -19,14 +19,30 @@ exports[`<Documentation /> should render 1`] = `
             data-icon=""
           />
           <h5>
-            Techincal specs
+            Technical specs
           </h5>
           <ul>
             <li>
               <Connect(Link)
+                className="ext"
+                href="https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
+                target="_blank"
+              >
+                General API documentation
+              </Connect(Link)>
+            </li>
+            <li>
+              <Connect(Link)
                 href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/"
               >
-                API documentation
+                Swagger API documentation
+              </Connect(Link)>
+            </li>
+            <li>
+              <Connect(Link)
+                href="/interpro/job/download/#/entry/"
+              >
+                Code snippet generator
               </Connect(Link)>
             </li>
             <li>
