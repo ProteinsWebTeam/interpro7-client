@@ -8,3 +8,26 @@
     color: var(--colors-nearly-black);
   }
 }
+.cache-wrapper {
+  flex-wrap: nowrap;
+  position: relative;
+  border: 1px greenyellow solid;
+  /*overflow:hidden;*/
+}
+.cache {
+  position: absolute;
+  background: white;
+  display: block;
+  top: 45%;
+  right: 0;
+  z-index: 2;
+}
+
+/*button read all*/
+.read-all {
+  margin-top: 0.5rem;
+  justify-content: center;
+  & div {
+    min-width: 182px;
+  }
+}
