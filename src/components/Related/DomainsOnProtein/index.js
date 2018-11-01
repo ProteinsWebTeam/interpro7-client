@@ -39,7 +39,6 @@ const mergeResidues = (data, residues) => {
   );
 };
 const mergeExtraFeatures = (data, extraFeatures) => {
-  console.log(data.other_features);
   data.other_features = data.other_features.concat(
     Object.values(extraFeatures).map(feature => ({
       ...feature,

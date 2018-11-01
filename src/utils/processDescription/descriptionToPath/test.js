@@ -37,8 +37,9 @@ describe('descriptionToPath()', () => {
     test('with value', () => {
       for (const type of ['text', 'sequence']) {
         for (const value of ['kinase', 'ATCTATHDJKLWKLKWLDKAEE', 'GO:12345']) {
+          const lcValue = value.toLowerCase();
           expect(descriptionToPath({ ...d, search: { type, value } })).toBe(
-            `/search/${type}/${value}/`,
+            `/search/${type}/${lcValue}/`,
           );
         }
       }
