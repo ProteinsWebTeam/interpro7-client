@@ -7,7 +7,6 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
-import LazyImage from 'components/LazyImage';
 
 // Functions
 import { schedule } from 'timing-functions/src';
@@ -28,12 +27,6 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import style from '../style.css';
-
-import local from './style.css';
-
-// Images
-import ipscanLogo from 'images/logo_interproscan_ext.png';
-import idaLogo from 'images/logo_ida_100.png';
 
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
@@ -552,149 +545,404 @@ class Home extends PureComponent {
         {
           // end Browse entry & entry list
         }
-        <BlogEntries />
-        <div className={f('row', 'small-up-1', 'medium-up-1', 'large-up-2')}>
-          <div className={f('columns', 'publication-list')}>
-            <div className={f('callout')}>
-              <h5>Publications</h5>
-              <Link href="http://nar.oxfordjournals.org/content/43/D1/D213">
-                <div className={f('media-object')}>
-                  <div className={f('media-object-section')}>
-                    <span
-                      className={f('icon', 'icon-conceptual')}
-                      data-icon="l"
-                    >
-                      &nbsp;
-                    </span>
+
+        {
+          // begin blog & protein focus
+        }
+        <div className={f('row', 'columns')}>
+          <h3 className={f('light')}>In the spotlight</h3>
+          <BlogEntries />
+        </div>
+        {
+          // end blog & protein focus
+        }
+
+        {
+          // begin tools
+        }
+        <div className={f('row', 'columns')}>
+          <h3 className={f('light')}>Tools &amp; libraries</h3>
+        </div>
+
+        <section>
+          <div className={f('row', 'columns', 'margin-bottom-large')}>
+            <div className={f('flex-column')}>
+              {
+                // LiteMol
+              }
+              <div className={f('flex-card')}>
+                <div className={f('card-image', 'image-tool-litemol')}>
+                  <div className={f('card-tag', 'tag-tool')}>Library</div>
+                </div>
+
+                <div className={f('card-content')}>
+                  <div className={f('card-title')}>
+                    <h4>
+                      <Link
+                        href="//webchemdev.ncbr.muni.cz/Litemol/"
+                        target="_blank"
+                      >
+                        LiteMol structure viewer
+                      </Link>
+                    </h4>
                   </div>
-                  <div className={f('media-object-section')}>
-                    <p>
-                      The InterPro protein families database: the classification
-                      resource after 15 years <br />
-                      <i>Nucleic Acids Research</i>, 2015.
-                    </p>
+                  <div className={f('card-description')}>
+                    Visualise protein structures using LiteMol, a powerful and
+                    blazing-fast tool for handling 3D macromolecular data in the
+                    browser.
                   </div>
                 </div>
-              </Link>
 
-              <Link href="http://database.oxfordjournals.org/content/2016/baw027.full">
-                <div className={f('media-object')}>
-                  <div className={f('media-object-section')}>
-                    <span
-                      className={f('icon', 'icon-conceptual')}
-                      data-icon="l"
+                <div className={f('card-more')}>
+                  <Link href="//github.com/dsehnal/litemol" target="_blank">
+                    <div
+                      className={f(
+                        'icon',
+                        'icon-common',
+                        'icon-right',
+                        'button-nu',
+                      )}
                     >
-                      &nbsp;
-                    </span>
-                  </div>
-                  <div className={f('media-object-section')}>
-                    <p>
-                      GO annotation in InterPro: why stability does not indicate
-                      accuracy in a sea of changing annotation.
-                      <br />
-                      <i>Database</i>, 2016.
-                    </p>
-                  </div>
-                </div>
-              </Link>
+                      <em
+                        className={f('icon', 'icon-common')}
+                        data-icon="&#xf09b;"
+                      />
+                    </div>
+                  </Link>
 
-              <Link href="http://bioinformatics.oxfordjournals.org/content/30/9/1236">
-                <div className={f('media-object')}>
-                  <div className={f('media-object-section')}>
-                    <span
-                      className={f('icon', 'icon-conceptual')}
-                      data-icon="l"
-                    >
-                      &nbsp;
-                    </span>
-                  </div>
-                  <div className={f('media-object-section')}>
-                    <p>
-                      InterProScan 5: genome-scale protein function
-                      classification.
-                      <br />
-                      <i>Bioinformatics</i>, 2014.
-                    </p>
-                  </div>
-                </div>
-              </Link>
-
-              <Link
-                to={{
-                  description: {
-                    other: ['help', 'documentation', 'publication'],
-                  },
-                }}
-                className={f('button')}
-              >
-                View all publications
-              </Link>
-            </div>
-            {
-              // end callout
-            }
-          </div>
-          {
-            // end columns publication list
-          }
-
-          <div className={f('columns', 'tools-list')}>
-            {
-              // Tools
-            }
-            <div className={f('callout')}>
-              <h5>Tools</h5>
-
-              <div className={f('row')}>
-                <div className={f('columns', 'medium-6')}>
-                  <h5>IDA</h5>
-                  <LazyImage
-                    alt="IDA logo"
-                    src={idaLogo}
-                    className={local['ida-logo']}
-                  />
-                  <p>
-                    The InterPro Domain Architecture (IDA) tool allows you to
-                    search the InterPro database with a particular set of
-                    domains, and returns all of the domain architectures and
-                    associated proteins that match the query.{' '}
-                    <Link
-                      to={{
-                        description: { other: ['about'] },
-                        hash: 'tools-ida',
-                      }}
-                      className={f('readmore')}
+                  <Link
+                    href="//webchemdev.ncbr.muni.cz/Litemol/"
+                    target="_blank"
+                  >
+                    <div
+                      className={f(
+                        'button-more',
+                        'icon',
+                        'icon-common',
+                        'icon-right',
+                      )}
+                      data-icon="&#xf061;"
                     >
                       Read more
-                    </Link>
-                  </p>
+                    </div>
+                  </Link>
                 </div>
-                <div className={f('columns', 'medium-6')}>
-                  <h5>InterProScan</h5>
-                  <LazyImage
-                    alt="InterProScan logo"
-                    src={ipscanLogo}
-                    className={local['ipscan-logo']}
-                  />
-                  <p>
-                    InterProScan is a sequence analysis application (nucleotide
-                    and protein sequences) that combines different protein
-                    signature recognition methods into one resource.{' '}
-                    <Link
-                      to={{
-                        description: { other: ['about'] },
-                        hash: 'tools-interproscan',
-                      }}
-                      className={f('readmore')}
+              </div>
+
+              {
+                // ProtVista
+              }
+              <div className={f('flex-card')}>
+                <div className={f('card-image', 'image-tool-protvista')}>
+                  <div className={f('card-tag', 'tag-tool')}>Library</div>
+                </div>
+
+                <div className={f('card-content')}>
+                  <div className={f('card-title')}>
+                    <h4>
+                      <Link
+                        href="//ebi-uniprot.github.io/ProtVista/developerGuide.html"
+                        target="_blank"
+                      >
+                        ProtVista sequence viewer
+                      </Link>
+                    </h4>
+                  </div>
+                  <div className={f('card-description')}>
+                    Interact with protein sequences, as we are now using
+                    ProtVista, a powerful and blazing-fast tool for handling
+                    protein sequence visualisation in the browser. ProtVista has
+                    been developed by UniProt.
+                  </div>
+                </div>
+
+                <div className={f('card-more')}>
+                  <Link
+                    href="//github.com/ebi-uniprot/ProtVista"
+                    target="_blank"
+                  >
+                    <div
+                      className={f(
+                        'icon',
+                        'icon-common',
+                        'icon-right',
+                        'button-nu',
+                      )}
+                    >
+                      <em
+                        className={f('icon', 'icon-common')}
+                        data-icon="&#xf09b;"
+                      />
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="//ebi-uniprot.github.io/ProtVista/developerGuide.html"
+                    target="_blank"
+                  >
+                    <div
+                      className={f(
+                        'button-more',
+                        'icon',
+                        'icon-common',
+                        'icon-right',
+                      )}
+                      data-icon="&#xf061;"
                     >
                       Read more
-                    </Link>
-                  </p>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+
+              {
+                // InterProScan
+              }
+              <div className={f('flex-card')}>
+                <div className={f('card-image', 'image-tool-ipscan')}>
+                  <div className={f('card-tag', 'tag-tool')}>Tool</div>
+                </div>
+
+                <div className={f('card-content')}>
+                  <div className={f('card-title')}>
+                    <h4>
+                      <Link
+                        href="//github.com/ebi-pf-team/interproscan/wiki"
+                        target="_blank"
+                      >
+                        InterProScan
+                      </Link>
+                    </h4>
+                  </div>
+                  <div className={f('card-description')}>
+                    InterProScan is the software package that allows sequences
+                    (protein and nucleic) to be scanned against InterPro&apos;s
+                    signatures. Signatures are predictive models, provided by
+                    several different databases, that make up the InterPro
+                    consortium. InterProScan only runs on Linux machine.
+                  </div>
+                </div>
+
+                <div className={f('card-more')}>
+                  <Link
+                    href="//github.com/ebi-pf-team/interproscan"
+                    target="_blank"
+                  >
+                    <div
+                      className={f(
+                        'icon',
+                        'icon-common',
+                        'icon-right',
+                        'button-nu',
+                      )}
+                    >
+                      <em
+                        className={f('icon', 'icon-common')}
+                        data-icon="&#xf09b;"
+                      />
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="//github.com/ebi-pf-team/interproscan/wiki"
+                    target="_blank"
+                  >
+                    <div
+                      className={f(
+                        'button-more',
+                        'icon',
+                        'icon-common',
+                        'icon-right',
+                      )}
+                      data-icon="&#xf061;"
+                    >
+                      Read more
+                    </div>
+                  </Link>
+                </div>
+              </div>
+
+              {
+                // new API
+              }
+              <div className={f('flex-card')}>
+                <div className={f('card-image', 'image-tool-api')}>
+                  <div className={f('card-tag', 'tag-tool')}>Tool</div>
+                </div>
+
+                <div className={f('card-content')}>
+                  <div className={f('card-title')}>
+                    <h4>
+                      <Link href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/">
+                        A new API for InterPro
+                      </Link>
+                    </h4>
+                  </div>
+                  <div className={f('card-description')}>
+                    You can now skip URL and use this JSON interface to work
+                    with your data directly. Currently there are 6 main
+                    endpoints: entry, protein, structure, taxonomy, proteome and
+                    set.
+                  </div>
+                </div>
+
+                <div className={f('card-more')}>
+                  <Link href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/">
+                    <div
+                      className={f(
+                        'button-more',
+                        'icon',
+                        'icon-common',
+                        'icon-right',
+                      )}
+                      data-icon="&#xf061;"
+                    >
+                      Read more
+                    </div>
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        {
+          // Begin Publications and tools
+        }
+        {
+          // <div className={f('row', 'small-up-1', 'medium-up-1', 'large-up-2')}>
+          //     <div className={f('columns', 'publication-list')}>
+          //       <div className={f('callout')}>
+          //         <h5>Publications</h5>
+          //         <Link href="http://nar.oxfordjournals.org/content/43/D1/D213">
+          //           <div className={f('media-object')}>
+          //             <div className={f('media-object-section')}>
+          //               <span
+          //                 className={f('icon', 'icon-conceptual')}
+          //                 data-icon="l"
+          //               >
+          //                 &nbsp;
+          //               </span>
+          //             </div>
+          //             <div className={f('media-object-section')}>
+          //               <p>
+          //                 The InterPro protein families database: the classification
+          //                 resource after 15 years <br />
+          //                 <i>Nucleic Acids Research</i>, 2015.
+          //               </p>
+          //             </div>
+          //           </div>
+          //         </Link>
+          //         <Link href="http://database.oxfordjournals.org/content/2016/baw027.full">
+          //           <div className={f('media-object')}>
+          //             <div className={f('media-object-section')}>
+          //               <span
+          //                 className={f('icon', 'icon-conceptual')}
+          //                 data-icon="l"
+          //               >
+          //                 &nbsp;
+          //               </span>
+          //             </div>
+          //             <div className={f('media-object-section')}>
+          //               <p>
+          //                 GO annotation in InterPro: why stability does not indicate
+          //                 accuracy in a sea of changing annotation.
+          //                 <br />
+          //                 <i>Database</i>, 2016.
+          //               </p>
+          //             </div>
+          //           </div>
+          //         </Link>
+          //
+          //         <Link href="http://bioinformatics.oxfordjournals.org/content/30/9/1236">
+          //           <div className={f('media-object')}>
+          //             <div className={f('media-object-section')}>
+          //               <span
+          //                 className={f('icon', 'icon-conceptual')}
+          //                 data-icon="l"
+          //               >
+          //                 &nbsp;
+          //               </span>
+          //             </div>
+          //             <div className={f('media-object-section')}>
+          //               <p>
+          //                 InterProScan 5: genome-scale protein function
+          //                 classification.
+          //                 <br />
+          //                 <i>Bioinformatics</i>, 2014.
+          //               </p>
+          //             </div>
+          //           </div>
+          //         </Link>
+          //         <Link
+          //           to={{
+          //             description: {
+          //               other: ['help', 'documentation', 'publication'],
+          //             },
+          //           }}
+          //           className={f('button')}
+          //         >
+          //           View all publications
+          //         </Link>
+          //       </div>
+          // </div>
+          //   <div className={f('columns', 'tools-list')}>
+          //
+          //     <div className={f('callout')}>
+          //       <h5>Tools</h5>
+          //
+          //       <div className={f('row')}>
+          //         <div className={f('columns', 'medium-6')}>
+          //           <h5>IDA</h5>
+          //           <LazyImage
+          //             alt="IDA logo"
+          //             src={idaLogo}
+          //             className={local['ida-logo']}
+          //           />
+          //           <p>
+          //             The InterPro Domain Architecture (IDA) tool allows you to
+          //             search the InterPro database with a particular set of
+          //             domains, and returns all of the domain architectures and
+          //             associated proteins that match the query.{' '}
+          //             <Link
+          //               to={{
+          //                   description: { other: ['about'] },
+          //                   hash: 'tools-ida',
+          //                 }}
+          //               className={f('readmore')}
+          //             >
+          //               Read more
+          //             </Link>
+          //           </p>
+          //         </div>
+          //         <div className={f('columns', 'medium-6')}>
+          //           <h5>InterProScan</h5>
+          //           <LazyImage
+          //             alt="InterProScan logo"
+          //             src={ipscanLogo}
+          //             className={local['ipscan-logo']}
+          //           />
+          //           <p>
+          //             InterProScan is a sequence analysis application (nucleotide
+          //             and protein sequences) that combines different protein
+          //             signature recognition methods into one resource.{' '}
+          //             <Link
+          //               to={{
+          //                   description: { other: ['about'] },
+          //                   hash: 'tools-interproscan',
+          //                 }}
+          //               className={f('readmore')}
+          //             >
+          //               Read more
+          //             </Link>
+          //           </p>
+          //         </div>
+          //       </div>
+          //     </div>
+          //   </div>
+          // </div>
+        }
+
         <ErrorBoundary>
           <Twitter />
         </ErrorBoundary>
