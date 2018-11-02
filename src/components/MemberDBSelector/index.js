@@ -35,6 +35,9 @@ const defaultDBFor = new Map([
 const MIN_DELAY = 400;
 // const DELAY = 1500;
 
+const getStaticCountFor = (db, counts) => {
+  return counts[db] || 0;
+};
 const getCountFor = (
   db,
   dataDBCount,
@@ -225,6 +228,7 @@ class _MemberDBSelector extends PureComponent {
       customLocation,
       lowGraphics,
       className = '',
+      dbCounters,
     } = this.props;
     const { visible } = this.state;
     const dbs = this._populateDBs(dataDB);
@@ -284,15 +288,17 @@ class _MemberDBSelector extends PureComponent {
             onChange={handleChange}
           >
             {Array.from(this._dbs.values()).map(db => {
-              const count = getCountFor(
-                db.canonical,
-                dataDBCount,
-                dataAllCount,
-                dataSubPageCount,
-                main,
-                sub,
-                hasMoreThanOneFilter,
-              );
+              const count = dbCounters
+                ? getStaticCountFor(db.canonical, dbCounters)
+                : getCountFor(
+                    db.canonical,
+                    dataDBCount,
+                    dataAllCount,
+                    dataSubPageCount,
+                    main,
+                    sub,
+                    hasMoreThanOneFilter,
+                  );
               const disabled = count === 0;
               const loading = count === 'loading';
               const checked = db === selected;
@@ -403,7 +409,10 @@ const mapStateToProps = createSelector(
   (customLocation, lowGraphics) => ({ customLocation, lowGraphics }),
 );
 
-export default loadData({ getUrl: getUrlForMemberDB, propNamespace: 'DB' })(
+const FullyLoadedMemberDBSelector = loadData({
+  getUrl: getUrlForMemberDB,
+  propNamespace: 'DB',
+})(
   loadData({ getUrl: getUrlForAllCount, propNamespace: 'AllCount' })(
     loadData({ getUrl: getUrlForMemberDBCount, propNamespace: 'DBCount' })(
       loadData({
@@ -415,3 +424,19 @@ export default loadData({ getUrl: getUrlForMemberDB, propNamespace: 'DB' })(
     ),
   ),
 );
+
+const SimplyLoadedMemberDBSelector = loadData({
+  getUrl: getUrlForMemberDB,
+  propNamespace: 'DB',
+  mapStateToProps,
+  mapDispatchToProps: { goToCustomLocation },
+})(_MemberDBSelector);
+
+const OptMemberDBSelector = props =>
+  props.dbCounters ? (
+    <SimplyLoadedMemberDBSelector {...props} />
+  ) : (
+    <FullyLoadedMemberDBSelector {...props} />
+  );
+
+export default OptMemberDBSelector;
