@@ -74,12 +74,12 @@
 .tag {
   margin-bottom: 1rem;
 }
-
-@media screen and (max-width: 75rem) {
+@media screen and (max-width: 63.9375em) {
   /*reduce SVG icon*/
   .title interpro-type {
     font-size: 86%;
     margin-right: 1rem;
+    display: block;
   }
   .title.notag interpro-type {
     margin-right: 1rem;
