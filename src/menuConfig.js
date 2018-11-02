@@ -494,12 +494,16 @@ export const InterPro /*: Array<Object> */ = [
   },
 ];
 
-export const NOT_MEMBER_DBS /*: Set<string> */ = new Set([
+const _NOT_MEMBER_DBS = [
   'COILS',
+  'SCOP',
   'MOBIDB',
   'MOBIDB_LITE',
-  'mobidblt',
+  'MOBIDBLT',
   'SIGNALP',
+  'SIGNALP_E',
+  'SIGNALP_G-',
+  'SIGNALP_G+',
   'SIGNALP_EUK',
   'SIGNALP_GRAM_POSITIVE',
   'SIGNALP_GRAM_NEGATIVE',
@@ -507,4 +511,7 @@ export const NOT_MEMBER_DBS /*: Set<string> */ = new Set([
   'TMHMM',
   'CATH',
   'SWISS-MODEL',
-]);
+];
+export const NOT_MEMBER_DBS /*: Set<string> */ = new Set(
+  _NOT_MEMBER_DBS.concat(_NOT_MEMBER_DBS.map(x => x.toLowerCase())),
+);
