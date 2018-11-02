@@ -5,6 +5,7 @@ import T from 'prop-types';
 import loadData from 'higherOrder/loadData';
 
 import Link from 'components/generic/Link';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { unescape } from 'utils/text';
 
@@ -63,13 +64,19 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
               `tag-${category === 'focus' ? 'focus' : 'blog'}`,
             )}
           >
-            <Link
-              href={`${BLOG_ROOT}/categories/${category}/`}
-              target="_blank"
-              className={f('white-link')}
+            <Tooltip
+              title={`View all ${
+                category === 'focus' ? 'Protein focus' : 'Blog articles'
+              }`}
             >
-              {category === 'focus' ? 'Protein focus' : 'Blog'}
-            </Link>
+              <Link
+                href={`${BLOG_ROOT}/categories/${category}/`}
+                target="_blank"
+                className={f('white-link')}
+              >
+                {category === 'focus' ? 'Protein focus' : 'Blog'}
+              </Link>
+            </Tooltip>
           </div>
         </div>
 
