@@ -130,7 +130,7 @@ class BlogEntries extends PureComponent /*:: <BlogEntriesProps> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
-      payload: T.object,
+      payload: T.any,
     }).isRequired,
   };
 
