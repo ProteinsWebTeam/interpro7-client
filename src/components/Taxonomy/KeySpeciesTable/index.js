@@ -186,7 +186,7 @@ class KeySpeciesTable extends PureComponent /*:: <Props, State> */ {
     return (
       <>
         <button onClick={() => this.setState({ open: !open })}>
-          <h3>{open ? '▾ Hide' : '▸ Show'} Key Species</h3>
+          <h4>{open ? '▾ Hide' : '▸ Show'} Key Species</h4>
         </button>
         {open && <KeySpeciesTableData />}
       </>
