@@ -1254,10 +1254,11 @@ content: '';
 }
 
 /* camera icon */
-/* .lm-plugin span.lm-icon-screenshot:before {
+.lm-plugin span.lm-icon-screenshot:before {
   font-family: EBI-Common;
   content: '';
-} */
+}
+
 /* full screen icon */
 .lm-plugin span.lm-icon-expand-layout:before {
   font-family: EBI-Common;
