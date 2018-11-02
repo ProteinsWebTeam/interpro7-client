@@ -1,7 +1,7 @@
 .card-wrapper {
   display: grid;
-  grid-gap: 0.8rem;
-  grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  grid-gap: 0.5rem; /* was .8rem*/
+  grid-template-columns: 1fr;
 }
 
 .card-flex-container {
@@ -13,6 +13,7 @@
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
     sans-serif;
   position: relative; /*for options*/
+  overflow: hidden; /* to hide DB icon when too many or on Small screens*/
 }
 
 .card-flex-container:last-child {
