@@ -182,6 +182,15 @@ a.neutral:hover {
     opacity: 0.8;
   }
 }
+/*WHITE LINK - used for card label*/
+.main a.white-link {
+  &,
+  &:active,
+  &:focus,
+  &:hover {
+    color: white;
+  }
+}
 
 /************************  END LINKS  **********************************/
 
@@ -464,19 +473,22 @@ button {
   }
 }
 
+/* buttons - Ipscan search */
 .button.hollow.secondary {
-  border-color: var(--colors-gray);
+  border-color: #9f9f9f;
+  color: var(--colors-lightgray);
   &:hover {
     color: var(--colors-dark);
   }
 }
 
+/*choose file */
 .button.hollow.tertiary {
   border: 1px solid #7fcad6;
   color: var(--colors-interpro);
   &:hover {
-    border: 1px solid #3798a7;
-    color: #3798a7;
+    border: 1px solid #358e9c;
+    color: #31818e;
   }
 }
 
@@ -686,16 +698,13 @@ hr {
 
 /****************************** OTHERS *********************************/
 /*CARDS*/
-/*Alternative to grid */
 .flex-column {
   display: flex;
   flex-wrap: wrap;
-  list-style-type: none;
-  /*margin: 0 -0.5rem;*/
-  margin: 0 -1rem; /*to align with grid*/
+  margin: 0 -1rem; /*to align with global grid*/
 }
 
-.card-grid {
+.flex-card {
   display: flex;
   flex-direction: column;
   flex: 1 0 20%;
@@ -713,7 +722,7 @@ hr {
     & .card-info,
     & .card-image,
     & .button-nu,
-    & .button.hollow.secondary {
+    & .card-more {
       opacity: 1;
     }
     & .button-nu:hover {
@@ -721,12 +730,13 @@ hr {
     }
   }
 }
-/*if single link on top*/
-.card-grid a {
+/*if single link for cards on top*/
+/*.flex-card a {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
+*/
 
 .card-image {
   width: 100%;
@@ -776,18 +786,28 @@ hr {
 }
 
 .card-tag.tag-blog {
-  /*background-color: #95afaa;*/
+  /*background-color: #97a7b4;*/
   background-color: var(--colors-interpro);
 }
 
+.theme-dark-bgd {
+  background-color: #b3bec7;
+}
+
 /*img tool + focus&blog homepage - background-position for 4 cards - temp*/
-.blog-newweb {
-  background: url('../images/cover/blog/blog_new_interpro.PNG') no-repeat 50%
-    56%;
+.image-blog-newweb {
+  background: url('../images/cover/blog/blog_newinterpro.png') no-repeat 50% 0%;
   background-size: 100%;
 }
+
+.image-blog-newskin {
+  background: url('../images/cover/blog/blog_interpro_newskin.png') no-repeat
+    50% 56%;
+  background-size: 100%;
+}
+
 /* nice multi bgd effect */
-.blog-iceberg {
+.image-blog-iceberg {
   background: url('../images/cover/blog/blog_iceberg.png') no-repeat 50% 56%,
     linear-gradient(
       to bottom,
@@ -797,35 +817,34 @@ hr {
       #b8c1c9 100%
     );
 }
-.blog-type {
+
+.image-blog-type {
   background: #fff url('../images/cover/blog/blog_type.png') no-repeat 50% 56%;
   background-size: 36%;
 }
-.focus-ape {
+
+.image-focus-ape {
   background: url('../images/cover/focus/focus_ape.png') no-repeat 50% 16%;
   background-size: 100%;
 }
-.special {
-  /* background-color: var(--colors-slightgray); */
-  background-color: #a2abb1;
-}
-.tool-ipscan {
+
+.image-tool-ipscan {
   background: #fff url('../images/cover/tool/tool_interproscan.svg') no-repeat
     50% 26%;
   background-size: contain;
   background-color: #0d68a6;
 }
-.tool-api {
+.image-tool-api {
   background: #fff url('../images/cover/tool/tool_api.png') no-repeat 50% 76%;
   background-size: 56%;
 }
-.tool-protvista {
+.image-tool-protvista {
   background: #fff url('../images/cover/tool/tool_protvista.png') no-repeat 40%
     14%;
   background-size: 268%;
 }
 
-.tool-litemol {
+.image-tool-litemol {
   background: #fff url('../images/cover/tool/tool_litemol.png') no-repeat 50%
     14%;
   background-size: 210%;
@@ -842,19 +861,22 @@ hr {
   margin-bottom: 1rem;
 }
 .card-title {
-  /* flex-grow: 1; is this used? */
   & h4 {
     font-size: 120%;
     font-weight: 600;
-    color: var(--colors-nearly-black);
-    border-bottom: 2px transparent solid;
-    transition: border var(--timing-fast) ease-in-out;
-    display: inline; /* to make title underline work for every line */
-    &:hover {
-      border-bottom: 2px var(--colors-dark) solid;
-    }
+    /*  display: inline;*/ /* to make title underline work on title when single link */
   }
 }
+
+.main .card-title a {
+  color: var(--colors-nearly-black);
+  border-bottom: 2px transparent solid;
+  transition: border var(--timing-fast) ease-in-out;
+  &:hover {
+    border-bottom: 2px var(--colors-dark) solid;
+  }
+}
+
 .card-info {
   color: var(--colors-nearly-black);
   font-size: 90%;
@@ -872,37 +894,40 @@ hr {
   font-weight: 400;
   max-height: 9rem;
   overflow: hidden;
+  height: 6em; /*better for alignment description + counter*/
 }
-.card-grid .button.hollow.secondary {
+
+.flex-card .blog {
   border-width: 2px;
   opacity: 0.5;
 }
+
 .card-more {
+  opacity: 0.5;
   align-self: flex-end;
   margin-right: 1rem;
 }
+
 .button-more {
-  /* width: 50%; */
+  font-weight: 900;
+  color: var(--colors-gray);
   position: relative;
   min-width: 182px; /* for small screens */
-}
-
-.button-nu {
-  min-width: 25px;
-  margin-right: 0.5rem;
-  padding: 0;
-  color: grey;
+  border: 2px solid var(--colors-gray);
   background-color: transparent;
-  font-size: 160%;
-  margin: 0 1rem 1rem 0;
+  padding: 0.85em 1em; /* different unit to be consistent with button class */
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
   cursor: pointer;
+  text-align: center;
+  line-height: 1;
+  vertical-align: middle;
+
   &:hover {
-    opacity: 0.8;
+    color: var(--colors-dark);
   }
 }
-.card-grid .button-nu {
-  opacity: 0.5;
-}
+
 .icon.button-more {
   font-weight: 600; /* bold on just text */
   &::after,
@@ -910,18 +935,27 @@ hr {
     font-weight: 300; /* keep the icon unbold */
   }
 }
+
+.button-nu {
+  min-width: 25px;
+  margin-right: 1rem;
+  padding: 0;
+  color: var(--colors-gray);
+  font-size: 160%;
+}
+
 /* to add class icon-right in EBI ebi-utility-styles (define position icon) */
 .icon-common.icon-right:before {
   content: '';
 }
-.icon-common.icon-right:after {
+.icon-right:after {
   content: attr(data-icon);
   font-family: 'EBI-Common';
   position: absolute;
   right: 0.8rem;
   transition: all var(--timing-instant) ease-in-out;
 }
-.icon-common.icon-right:hover:after {
+.icon-right:hover:after {
   right: 0.5em;
 }
 /* /CARDS */
@@ -1220,10 +1254,11 @@ content: '';
 }
 
 /* camera icon */
-/* .lm-plugin span.lm-icon-screenshot:before {
+.lm-plugin span.lm-icon-screenshot:before {
   font-family: EBI-Common;
   content: '';
-} */
+}
+
 /* full screen icon */
 .lm-plugin span.lm-icon-expand-layout:before {
   font-family: EBI-Common;

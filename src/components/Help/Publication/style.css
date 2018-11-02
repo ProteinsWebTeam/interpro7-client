@@ -3,19 +3,19 @@
   grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
 }
 
-.card-image.tuto-beyond {
+.image-tuto-beyond {
   background: url('../../../images/cover/publi/journal_nucleicacidsresearch.png')
-    no-repeat no-repeat 60% 60%;
-  background-size: 100%;
+    no-repeat 60% 60%;
+  background-size: 110%;
 }
 
-.card-image.tuto-go {
+.image-tuto-go {
   background: url('../../../images/cover/publi/journal_database.png') no-repeat
     50% 90%;
   background-size: 100%;
 }
 
-.card-image.tuto-interproscan {
+.image-tuto-ipscan {
   background: url('../../../images/cover/publi/journal_bioinformatics.png')
     no-repeat 50% 90%;
   background-size: 100%;
