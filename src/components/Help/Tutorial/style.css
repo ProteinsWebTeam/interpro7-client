@@ -7,31 +7,23 @@
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
 
-/* graphic only
-.card-image.tuto-method {
-  background: url('../../../images/cover/tuto/casestudy.jpg')
-  no-repeat 88% 66%;
-  background-size: 200%;
-}
-*/
-
-.card-image {
+.image-tuto-method {
   background: url('../../../images/cover/tuto/photo_tuto_casestudy.png')
     no-repeat 88% 46%;
   background-size: 100%;
 }
 
-.card-image.tuto-what {
+.image-tuto-what {
   background: url('../../../images/cover/tuto/sequence.png') no-repeat 50% 40%;
   background-size: 100%;
 }
 
-.card-image.tuto-intro {
+.image-tuto-intro {
   background: url('../../../images/cover/tuto/classification.png') no-repeat 50%
     40%;
   background-size: 100%;
 }
-.card-image.tuto-tour {
+.image-tuto-tour {
   background: url('../../../images/cover/tuto/quicktour.jpg') no-repeat 42% 40%;
-  background-size: 170%;
+  background-size: 190%;
 }
