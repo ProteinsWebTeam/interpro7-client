@@ -41,7 +41,7 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
             name: T.shape({
               name: T.string,
             }),
-          }).isRequired,
+          }),
         }),
         T.shape({
           results: T.shape(

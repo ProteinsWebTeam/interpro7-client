@@ -299,6 +299,7 @@ export class _RelatedAdvanced extends PureComponent {
           </FiltersPanel>
         )}
         <Matches
+          {...this.props}
           actualSize={actualSize}
           matches={secondaryData.reduce(
             (prev, { coordinates, ...secondaryData }) => [

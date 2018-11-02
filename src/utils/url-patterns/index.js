@@ -3,6 +3,16 @@
 const ACCESSION_PATTERN = /\{\}/;
 const ACCESSION_CLEANUP = /^(G3DSA:|SFLDF0*)/i;
 
+// TODO: have consistent data to eventually remove this
+export const iproscan2urlDB = db =>
+  new Map([
+    ['TIGRFAM', 'tigrfams'],
+    ['PROSITE_PROFILES', 'profile'],
+    ['PROSITE_PATTERNS', 'patterns'],
+    ['SUPERFAMILY', 'ssf'],
+    ['GENE3D', 'cathgene3d'],
+  ]).get(db) || db.toLowerCase();
+
 export default (db /*: string */) => {
   let pattern = '';
   switch (db.toLowerCase()) {
