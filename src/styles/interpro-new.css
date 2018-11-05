@@ -897,6 +897,10 @@ hr {
   height: 6em; /*better for alignment description + counter*/
 }
 
+.card-description img {
+  display: none; /*remove all images that would be shown in the summary e.g. blog iceberg article*/
+}
+
 .flex-card .blog {
   border-width: 2px;
   opacity: 0.5;
