@@ -246,17 +246,6 @@ class DescriptionEntries extends PureComponent {
             withoutIDs
           />
         </div>
-        <Link
-          to={{
-            description: {
-              main: { key: 'entry' },
-              entry: { db, accession },
-            },
-          }}
-          className={f('card-description-link')}
-        >
-          […]
-        </Link>
       </>
     );
   }
