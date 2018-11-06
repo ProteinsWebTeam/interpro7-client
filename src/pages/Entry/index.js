@@ -263,42 +263,58 @@ class EntryCard extends PureComponent {
     return (
       <>
         <div className={f('card-header')}>
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: data.metadata.source_database,
-                  accession: data.metadata.accession,
+          <div className={f('card-image')}>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: data.metadata.source_database,
+                    accession: data.metadata.accession,
+                  },
                 },
-              },
-            }}
-          >
-            {entryDB.toLowerCase() === 'interpro' ? (
-              <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
-                <interpro-type
-                  dimension="2em"
-                  type={data.metadata.type.replace('_', ' ')}
-                  aria-label="Entry type"
-                />
-              </Tooltip>
-            ) : (
-              <Tooltip title={`${entryDB} database`}>
-                <MemberSymbol
-                  size="2em"
-                  type={entryDB}
-                  aria-label="Database type"
-                  className={f('md-small')}
-                />
-              </Tooltip>
-            )}
+              }}
+            >
+              {entryDB.toLowerCase() === 'interpro' ? (
+                <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
+                  <interpro-type
+                    dimension="2em"
+                    type={data.metadata.type.replace('_', ' ')}
+                    aria-label="Entry type"
+                  />
+                </Tooltip>
+              ) : (
+                <Tooltip title={`${entryDB} database`}>
+                  <MemberSymbol
+                    size="2em"
+                    type={entryDB}
+                    aria-label="Database type"
+                    className={f('md-small')}
+                  />
+                </Tooltip>
+              )}
+            </Link>
+          </div>
+          <div className={f('card-title')}>
             <h6>
-              <HighlightedText
-                text={data.metadata.name}
-                textToHighlight={search}
-              />
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: data.metadata.source_database,
+                      accession: data.metadata.accession,
+                    },
+                  },
+                }}
+              >
+                <HighlightedText
+                  text={data.metadata.name}
+                  textToHighlight={search}
+                />
+              </Link>
             </h6>
-          </Link>
+          </div>
         </div>
 
         {data.extra_fields ? (
@@ -325,25 +341,29 @@ class EntryCard extends PureComponent {
             <div>{data.metadata.type.replace('_', ' ')}</div>
           ) : (
             <div>
-              {data.metadata.integrated ? 'Integrated to ' : 'Not integrated'}
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'entry' },
-                    entry: {
-                      db: 'InterPro',
-                      accession: data.metadata.integrated,
-                    },
-                  },
-                }}
-                disabled={!data.metadata.integrated}
-              >
-                {(data.metadata.accession || '').toUpperCase()}
-              </Link>
+              {data.metadata.integrated ? (
+                <div>
+                  Integrated to{' '}
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: 'InterPro',
+                          accession: data.metadata.integrated,
+                        },
+                      },
+                    }}
+                  >
+                    {data.metadata.integrated.toUpperCase()}
+                  </Link>
+                </div>
+              ) : (
+                'Not integrated'
+              )}
             </div>
           )}
           <div>
-            {' '}
             <HighlightedText
               text={(data.metadata.accession || '').toUpperCase()}
               textToHighlight={search}
