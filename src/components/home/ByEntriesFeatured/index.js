@@ -36,7 +36,7 @@ class ByEntriesFeatured extends PureComponent {
               lastest protein focus article:
             </p>
 
-            <div className={f('card-flex-container', 'card-shrink')}>
+            <div className={f('grid-card', 'card-shrink')}>
               <div className={f('list-body')}>
                 <div className={f('card-header')}>
                   <Link
@@ -105,7 +105,7 @@ class ByEntriesFeatured extends PureComponent {
               </div>
             </div>
 
-            <div className={f('card-flex-container', 'card-shrink')}>
+            <div className={f('grid-card', 'card-shrink')}>
               <div className={f('list-body')}>
                 <div className={f('card-header')}>
                   <Link
