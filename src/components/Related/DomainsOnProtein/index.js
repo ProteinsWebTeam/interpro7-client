@@ -40,12 +40,7 @@ const mergeResidues = (data, residues) => {
 };
 const mergeExtraFeatures = (data, extraFeatures) => {
   data.other_features = data.other_features.concat(
-    Object.values(extraFeatures).map(feature => ({
-      ...feature,
-      locations: feature.locations.map(({ start, end }) => ({
-        fragments: [{ start, end }],
-      })),
-    })),
+    Object.values(extraFeatures),
   );
   return data;
 };
