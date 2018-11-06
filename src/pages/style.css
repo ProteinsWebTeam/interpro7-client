@@ -59,12 +59,14 @@
   filter: hue-rotate(36deg) contrast(110%) brightness(141%);
 }
 
+/*figure intro interaction*/
 .line {
-  transition: all 0.1s ease-in-out;
+  transition: all var(--timing-instant) ease-in-out;
   cursor: pointer;
-}
-.line:hover {
-  opacity: 0.7;
+
+  &:hover {
+    opacity: 0.7;
+  }
 }
 
 /* Small screen only */
@@ -169,20 +171,21 @@
 .card-header {
   flex-grow: 1;
   text-align: center;
-  width: 100%;
-}
+  width: 100%; /*not sure we still need that*/
 
-.card-header span::before {
-  font-size: 376%;
-}
+  /*EBI icon (taxonomy-proteome)*/
+  & span::before {
+    font-size: 376%;
+  }
+  /*img (structure)*/
+  & img {
+    max-width: 60%;
+  }
 
-.card-header h6 {
-  font-weight: 600;
-  font-size: 110%;
-} /*16px*/
-
-.card-header img {
-  max-width: 60%;
+  & h6 {
+    font-weight: 600;
+    font-size: 110%;
+  }
 }
 
 .card-subheader {
