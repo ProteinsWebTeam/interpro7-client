@@ -30,7 +30,7 @@ class EntriesOnProtein extends ProtVistaMatches {
       console.table(data);
     }
     const firstMatch = data[0];
-    const { entry, protein } = firstMatch;
+    const { entry /* , protein */ } = firstMatch;
     let locations = [];
     if (firstMatch.entry && firstMatch.entry.entry_protein_locations)
       locations = firstMatch.entry.entry_protein_locations;
@@ -47,9 +47,10 @@ class EntriesOnProtein extends ProtVistaMatches {
     }));
 
     this.web_tracks[entry.accession].data = tmp;
-    if (!this.web_protein.data)
-      this.web_protein.data =
-        protein.sequence || '\u00A0'.repeat(protein.length);
+    // TODO: Re-enable the sequence component once its performance gets improved
+    // if (!this.web_protein.data)
+    //   this.web_protein.data =
+    //     protein.sequence || '\u00A0'.repeat(protein.length);
   }
 
   render() {
@@ -63,16 +64,16 @@ class EntriesOnProtein extends ProtVistaMatches {
           attributes="length displaystart displayend highlightstart highlightend"
           id="pv-manager"
         >
-          <div className={f('track-container')}>
-            <div className={f('aligned-to-track-component')}>
-              <protvista-sequence
-                ref={e => (this.web_protein = e)}
-                length={protein.length}
-                displaystart="1"
-                displayend={protein.length}
-              />
-            </div>
-          </div>
+          {/* <div className={f('track-container')}>*/}
+          {/* <div className={f('aligned-to-track-component')}>*/}
+          {/* <protvista-sequence*/}
+          {/* ref={e => (this.web_protein = e)}*/}
+          {/* length={protein.length}*/}
+          {/* displaystart="1"*/}
+          {/* displayend={protein.length}*/}
+          {/* />*/}
+          {/* </div>*/}
+          {/* </div>*/}
           <div className={f('track-component')}>
             <protvista-interpro-track
               length={protein.length}

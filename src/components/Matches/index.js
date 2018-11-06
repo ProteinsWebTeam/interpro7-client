@@ -200,6 +200,7 @@ const Matches = (
     description,
     state,
     databases,
+    dbCounters,
     ...props
   } /*: {
     matches: Array<Object>,
@@ -211,6 +212,7 @@ const Matches = (
     description: Object,
     state: Object,
     databases: Object,
+    dbCounters ?: Object,
     props: Array<any>
 } */,
 ) => (
@@ -227,6 +229,7 @@ const Matches = (
     contentType={primary}
     databases={databases}
     withTree={primary === 'taxonomy'}
+    dbCounters={dbCounters}
   >
     <PageSizeSelector />
     <SearchBox />
@@ -479,6 +482,7 @@ Matches.propTypes = {
   description: T.object.isRequired,
   state: T.object.isRequired,
   databases: T.object.isRequired,
+  dbCounters: T.object,
 };
 
 const mapStateToProps = createSelector(

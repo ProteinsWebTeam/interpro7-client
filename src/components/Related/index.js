@@ -200,9 +200,9 @@ const primariesAndSecondaries = {
     },
   },
 };
-const InfoFilters = ({ filters, focusType, databases }) =>
-  filters &&
-  filters.length > 0 && (
+const InfoFilters = ({ filters, focusType, databases }) => {
+  if (!filters || filters.length === 0) return null;
+  return (
     <div className={f('callout', 'info', 'withicon')}>
       This list shows only:
       <ul>
@@ -231,6 +231,7 @@ const InfoFilters = ({ filters, focusType, databases }) =>
       </ul>
     </div>
   );
+};
 InfoFilters.propTypes = {
   databases: T.object.isRequired,
   focusType: T.string.isRequired,
@@ -300,6 +301,7 @@ export class _RelatedAdvanced extends PureComponent {
             </div>
           )}
         <Matches
+          {...this.props}
           actualSize={actualSize}
           matches={secondaryData.reduce(
             (prev, { coordinates, ...secondaryData }) => [
