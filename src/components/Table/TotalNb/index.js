@@ -59,6 +59,7 @@ const TotalNb = ({
   description,
   contentType,
   databases,
+  dbCounters,
 }) => {
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
@@ -86,6 +87,7 @@ const TotalNb = ({
       <SelectorMaybe
         {...(needSelector ? { contentType } : {})}
         contentType={contentType}
+        dbCounters={dbCounters}
       >
         {open => (
           <span

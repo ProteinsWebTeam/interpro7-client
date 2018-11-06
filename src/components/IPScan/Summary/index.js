@@ -17,6 +17,7 @@ import Actions from 'components/IPScan/Actions';
 
 import { Exporter } from 'components/Table';
 import { NOT_MEMBER_DBS } from 'menuConfig';
+import { iproscan2urlDB } from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -37,14 +38,137 @@ import Link from 'components/generic/Link';
   localPayload: ?Object,
 }; */
 
-// TODO: have consistent data to eventually remove this
-const LUT = new Map([
-  ['TIGRFAM', 'tigrfams'],
-  ['PROSITE_PROFILES', 'profile'],
-  ['PROSITE_PATTERNS', 'patterns'],
-  ['SUPERFAMILY', 'ssf'],
-  ['GENE3D', 'cathgene3d'],
-]);
+const mergeMatch = (match1, match2) => {
+  if (!match1) return match2;
+  match1.locations = match1.locations.concat(match2.locations);
+  return match1;
+};
+
+const getGoTerms = matches => {
+  const goTerms = new Map();
+  for (const match of matches) {
+    for (const { id, category, name } of (match.signature.entry || {})
+      .goXRefs || []) {
+      goTerms.set(id, {
+        category: {
+          name: category.toLowerCase(),
+          code: category[0],
+        },
+        name,
+        identifier: id,
+      });
+    }
+  }
+  return goTerms;
+};
+const integrateSignature = (signature, interpro, integrated) => {
+  const accession = interpro.accession;
+  const entry = integrated.get(accession) || {
+    accession,
+    name: interpro.name,
+    source_database: 'InterPro',
+    _children: {},
+    children: [],
+    type: interpro.type.toLowerCase(),
+  };
+  entry._children[signature.accession] = signature;
+  entry.children = Object.values(entry._children);
+  integrated.set(accession, entry);
+};
+
+const StatusTooltip = React.memo(status => (
+  <Tooltip title={`Job ${status}`}>
+    {(status === 'running' ||
+      status === 'created' ||
+      status === 'submitted') && (
+      <span
+        className={f('icon', 'icon-common', 'ico-neutral')}
+        data-icon="&#xf017;"
+        aria-label={`Job ${status}`}
+      />
+    )}
+
+    {status === 'not found' || status === 'failure' || status === 'error' ? (
+      <span
+        className={f('icon', 'icon-common', 'ico-notfound')}
+        data-icon="&#x78;"
+        aria-label="Job failed or not found"
+      />
+    ) : null}
+    {status === 'finished' && (
+      <span
+        className={f('icon', 'icon-common', 'ico-confirmed')}
+        data-icon="&#xf00c;"
+        aria-label="Job finished"
+      />
+    )}
+  </Tooltip>
+));
+
+const mergeData = (matches, sequenceLength) => {
+  const mergedData = { unintegrated: {}, predictions: [] };
+  let integrated = new Map();
+  const signatures = new Map();
+  for (const match of matches) {
+    const { library } = match.signature.signatureLibraryRelease;
+    const processedMatch = {
+      accession: match.signature.accession,
+      name: match.signature.name,
+      source_database: iproscan2urlDB(library),
+      protein_length: sequenceLength,
+      locations: match.locations.map(loc => ({
+        ...loc,
+        model_acc: match['model-ac'],
+        fragments:
+          loc['location-fragments'] && loc['location-fragments'].length
+            ? loc['location-fragments']
+            : [{ start: loc.start, end: loc.end }],
+      })),
+      score: match.score,
+    };
+
+    if (NOT_MEMBER_DBS.has(library)) {
+      processedMatch.accession += ` (${mergedData.predictions.length + 1})`;
+      processedMatch.source_database = library; // Making sure the change matches the ignore list.
+      mergedData.predictions.push(processedMatch);
+      continue;
+    }
+    const mergedMatch = mergeMatch(
+      signatures.get(processedMatch.accession),
+      processedMatch,
+    );
+    signatures.set(mergedMatch.accession, mergedMatch);
+    if (match.signature.entry) {
+      integrateSignature(mergedMatch, match.signature.entry, integrated);
+    } else {
+      mergedData.unintegrated[mergedMatch.accession] = mergedMatch;
+    }
+  }
+  mergedData.unintegrated = Object.values(mergedData.unintegrated);
+  integrated = Array.from(integrated.values()).map(m => {
+    const locations = flattenDeep(
+      m.children.map(s =>
+        s.locations.map(l => l.fragments.map(f => [f.start, f.end])),
+      ),
+    );
+    return {
+      ...m,
+      locations: [
+        {
+          fragments: [
+            { start: Math.min(...locations), end: Math.max(...locations) },
+          ],
+        },
+      ],
+    };
+  });
+  mergedData.unintegrated.sort((m1, m2) => m2.score - m1.score);
+  for (const entry of integrated) {
+    if (!mergedData[entry.type]) mergedData[entry.type] = [];
+    mergedData[entry.type].push(entry);
+  }
+  return mergedData;
+};
 
 class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
@@ -97,80 +221,9 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
       },
     };
 
-    const goTerms = new Map();
-    for (const match of payload.matches) {
-      for (const { id, category, name } of (match.signature.entry || {})
-        .goXRefs || []) {
-        goTerms.set(id, {
-          category: {
-            name: category.toLowerCase(),
-            code: category[0],
-          },
-          name,
-          identifier: id,
-        });
-      }
-    }
+    const goTerms = getGoTerms(payload.matches);
 
-    const mergedData = { unintegrated: [], predictions: [] };
-    let integrated = new Map();
-    for (const match of payload.matches) {
-      const { library } = match.signature.signatureLibraryRelease;
-      const processedMatch = {
-        accession: match.signature.accession,
-        name: match.signature.name,
-        source_database: LUT.get(library) || library,
-        protein_length: payload.sequenceLength,
-        locations: match.locations.map(loc => ({
-          ...loc,
-          fragments:
-            loc['location-fragments'] && loc['location-fragments'].length
-              ? loc['location-fragments']
-              : [{ start: loc.start, end: loc.end }],
-        })),
-        score: match.score,
-      };
-      if (NOT_MEMBER_DBS.has(library)) {
-        processedMatch.accession += ` (${mergedData.predictions.length + 1})`;
-        mergedData.predictions.push(processedMatch);
-      } else if (match.signature.entry) {
-        const accession = match.signature.entry.accession;
-        const entry = integrated.get(accession) || {
-          accession,
-          name: match.signature.entry.name,
-          source_database: 'InterPro',
-          children: [],
-          type: match.signature.entry.type.toLowerCase(),
-        };
-        entry.children.push(processedMatch);
-        integrated.set(accession, entry);
-      } else {
-        mergedData.unintegrated.push(processedMatch);
-      }
-    }
-    integrated = Array.from(integrated.values()).map(m => {
-      const locations = flattenDeep(
-        m.children.map(s =>
-          s.locations.map(l => l.fragments.map(f => [f.start, f.end])),
-        ),
-      );
-      return {
-        ...m,
-        locations: [
-          {
-            fragments: [
-              { start: Math.min(...locations), end: Math.max(...locations) },
-            ],
-          },
-        ],
-      };
-    });
-    mergedData.unintegrated.sort((m1, m2) => m2.score - m1.score);
-    for (const entry of integrated) {
-      if (!mergedData[entry.type]) mergedData[entry.type] = [];
-      mergedData[entry.type].push(entry);
-    }
-
+    const mergedData = mergeData(payload.matches, payload.sequenceLength);
     return (
       <div className={f('sections')}>
         <section>
@@ -202,39 +255,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
                   <tr>
                     <td>Status</td>
                     <td>
-                      <Tooltip title={`Job ${status}`}>
-                        {(status === 'running' ||
-                          status === 'created' ||
-                          status === 'submitted') && (
-                          <span
-                            className={f('icon', 'icon-common', 'ico-neutral')}
-                            data-icon="&#xf017;"
-                            aria-label={`Job ${status}`}
-                          />
-                        )}
-
-                        {status === 'not found' ||
-                        status === 'failure' ||
-                        status === 'error' ? (
-                          <span
-                            className={f('icon', 'icon-common', 'ico-notfound')}
-                            data-icon="&#x78;"
-                            aria-label="Job failed or not found"
-                          />
-                        ) : null}
-                        {status === 'finished' && (
-                          <span
-                            className={f(
-                              'icon',
-                              'icon-common',
-                              'ico-confirmed',
-                            )}
-                            data-icon="&#xf00c;"
-                            aria-label="Job finished"
-                          />
-                        )}
-                      </Tooltip>{' '}
-                      {status}
+                      <StatusTooltip status={status} /> {status}
                     </td>
                   </tr>
                 </tbody>

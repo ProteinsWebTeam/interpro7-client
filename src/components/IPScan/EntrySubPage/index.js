@@ -1,17 +1,21 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { flattenDeep } from 'lodash-es';
+// import { flattenDeep } from 'lodash-es';
 
 import { _RelatedAdvanced as Related } from 'components/Related';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Redirect from 'components/generic/Redirect';
 
 import { descriptionSelector } from 'reducers/custom-location/description';
+import loadData from 'higherOrder/loadData';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+import { iproscan2urlDB } from 'utils/url-patterns';
 
 /*:: type Props = {
   data: Object,
+  dataBase: Object,
   entryDB: entry,
 }*/
 
@@ -30,16 +34,30 @@ const flatMatchesFromIPScanPayload = function*(ipScanMatches, proteinLength) {
       };
     }
     yield {
-      accession: match['model-ac'],
-      name: match.signature.name,
-      source_database: match.signature.signatureLibraryRelease.library,
+      accession: match.signature.accession,
+      name: match.signature.name || '',
+      source_database: iproscan2urlDB(
+        match.signature.signatureLibraryRelease.library,
+      ),
       entry_protein_locations: match.locations.map(location => ({
+        model_acc: match['model-ac'],
         fragments: [location],
       })),
       match: protein,
     };
   }
 };
+
+const getCountersFromFlatArray = flatArray =>
+  Array.from(
+    new Map(
+      flatArray.map(({ accession, source_database: s }) => [accession, s]),
+    ).entries(),
+  ).reduce((agg, [_, source]) => {
+    const db = source.toLowerCase();
+    agg[db] = agg[db] ? agg[db] + 1 : 1;
+    return agg;
+  }, {});
 
 const mergeEntries = matches => {
   const map = new Map();
@@ -59,6 +77,7 @@ const mergeEntries = matches => {
 class EntrySubPage extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.object.isRequired,
+    dataBase: T.object.isRequired,
     entryDB: T.string.isRequired,
   };
 
@@ -66,6 +85,7 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
     const {
       entryDB,
       data: { payload },
+      dataBase,
     } = this.props;
     if (!entryDB)
       return (
@@ -85,9 +105,9 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
     const flatArray = Array.from(
       flatMatchesFromIPScanPayload(mainData.matches, mainData.length),
     );
+    const counts = getCountersFromFlatArray(flatArray);
     const filtered = flatArray.filter(
-      ({ source_database }) =>
-        source_database.toLowerCase() === entryDB.toLowerCase(),
+      ({ source_database: db }) => db.toLowerCase() === entryDB.toLowerCase(),
     );
     const unique = mergeEntries(filtered);
     return (
@@ -99,6 +119,8 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
         focusType="entry"
         focusDB={entryDB}
         actualSize={unique.length}
+        dbCounters={counts}
+        dataBase={dataBase}
       />
     );
   }
@@ -108,4 +130,8 @@ const mapStateToProps = createSelector(descriptionSelector, description => ({
   entryDB: description.entry.db,
 }));
 
-export default connect(mapStateToProps)(EntrySubPage);
+export default loadData({
+  getUrl: getUrlForMeta,
+  propNamespace: 'Base',
+  mapStateToProps,
+})(EntrySubPage);
