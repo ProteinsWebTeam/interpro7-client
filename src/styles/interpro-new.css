@@ -872,6 +872,7 @@ hr {
   color: var(--colors-nearly-black);
   border-bottom: 2px transparent solid;
   transition: border var(--timing-fast) ease-in-out;
+  padding-bottom: 2px; /* add little extra space between title and link underline */
   &:hover {
     border-bottom: 2px var(--colors-dark) solid;
   }
