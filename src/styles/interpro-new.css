@@ -790,6 +790,10 @@ hr {
   background-color: var(--colors-interpro);
 }
 
+.theme-dark-bgd {
+  background-color: #b3bec7;
+}
+
 /*img tool + focus&blog homepage - background-position for 4 cards - temp*/
 .image-blog-newweb {
   background: url('../images/cover/blog/blog_newinterpro.png') no-repeat 50% 0%;
@@ -822,10 +826,6 @@ hr {
 .image-focus-ape {
   background: url('../images/cover/focus/focus_ape.png') no-repeat 50% 16%;
   background-size: 100%;
-}
-
-.theme-dark-bgd {
-  background-color: #b3bec7;
 }
 
 .image-tool-ipscan {
