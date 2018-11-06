@@ -194,21 +194,26 @@ class SummaryCounterSet extends PureComponent {
 const SetCard = ({ data, search, entryDB }) => (
   <>
     <div className={f('card-header')}>
-      <Link
-        to={{
-          description: {
-            main: { key: 'set' },
-            set: {
-              db: data.metadata.source_database,
-              accession: `${data.metadata.accession}`,
-            },
-          },
-        }}
-      >
+      <div className={f('card-title')}>
         <h6>
-          <HighlightedText text={data.metadata.name} textToHighlight={search} />
+          <Link
+            to={{
+              description: {
+                main: { key: 'set' },
+                set: {
+                  db: data.metadata.source_database,
+                  accession: `${data.metadata.accession}`,
+                },
+              },
+            }}
+          >
+            <HighlightedText
+              text={data.metadata.name}
+              textToHighlight={search}
+            />
+          </Link>
         </h6>
-      </Link>
+      </div>
     </div>
 
     <SummaryCounterSet
