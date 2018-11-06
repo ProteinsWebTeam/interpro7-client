@@ -185,22 +185,44 @@ class SummaryCounterProteome extends PureComponent {
 const ProteomeCard = ({ data, search, entryDB }) => (
   <>
     <div className={f('card-header')}>
-      <Link
-        to={{
-          description: {
-            main: { key: 'proteome' },
-            proteome: {
-              db: data.metadata.source_database,
-              accession: `${data.metadata.accession}`,
+      <div className={f('card-image')}>
+        <Link
+          to={{
+            description: {
+              main: { key: 'proteome' },
+              proteome: {
+                db: data.metadata.source_database,
+                accession: `${data.metadata.accession}`,
+              },
             },
-          },
-        }}
-      >
-        <SpeciesIcon lineage={data.metadata.lineage} />
+          }}
+        >
+          {data.metadata &&
+            data.metadata.lineage && (
+              <SpeciesIcon lineage={data.metadata.lineage} />
+            )}
+        </Link>
+      </div>
+      <div className={f('card-title')}>
         <h6>
-          <HighlightedText text={data.metadata.name} textToHighlight={search} />
+          <Link
+            to={{
+              description: {
+                main: { key: 'proteome' },
+                proteome: {
+                  db: data.metadata.source_database,
+                  accession: `${data.metadata.accession}`,
+                },
+              },
+            }}
+          >
+            <HighlightedText
+              text={data.metadata.name}
+              textToHighlight={search}
+            />
+          </Link>
         </h6>
-      </Link>
+      </div>
     </div>
 
     <SummaryCounterProteome
@@ -211,7 +233,7 @@ const ProteomeCard = ({ data, search, entryDB }) => (
 
     <div className={f('card-footer')}>
       <div>
-        ID:
+        ID:{' '}
         <HighlightedText
           text={(data.metadata.accession || '').toUpperCase()}
           textToHighlight={search}
