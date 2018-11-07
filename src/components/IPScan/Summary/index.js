@@ -76,7 +76,7 @@ const integrateSignature = (signature, interpro, integrated) => {
   integrated.set(accession, entry);
 };
 
-const StatusTooltip = React.memo(status => (
+const StatusTooltip = React.memo(({ status }) => (
   <Tooltip title={`Job ${status}`}>
     {(status === 'running' ||
       status === 'created' ||
@@ -246,7 +246,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
                   </tr>
                   {localID && (
                     <tr>
-                      <td>Actions</td>
+                      <td>Action</td>
                       <td>
                         <Actions localID={localID} />
                       </td>
