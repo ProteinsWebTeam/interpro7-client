@@ -171,7 +171,7 @@ class IPScanStatus extends PureComponent {
             cellClassName={f('table-center', 'font-ml')}
             renderer={(localID /*: string */) => <Actions localID={localID} />}
           >
-            Actions
+            Action
           </Column>
         </Table>
       </div>
