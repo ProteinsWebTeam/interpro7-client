@@ -47,7 +47,7 @@ class Actions extends PureComponent {
     const { withTitle } = this.props;
     // const { saved } = (jobs[localID] || {}).metadata || {};
     return (
-      <div className={f('margin-right-large')}>
+      <>
         {withTitle && 'Actions: '}
         {/* <Tooltip title="Save job"> */}
         {/* <button */}
@@ -67,7 +67,7 @@ class Actions extends PureComponent {
             aria-label="Delete job"
           />
         </Tooltip>
-      </div>
+      </>
     );
   }
 }
