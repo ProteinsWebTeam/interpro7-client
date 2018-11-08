@@ -23,6 +23,8 @@
 .view-options-title {
   font-size: 1.25rem;
   font-family: var(--fonts-system);
+  color: #444;
+  font-weight: 600;
 }
 
 @media screen and (max-width: 75rem) {
