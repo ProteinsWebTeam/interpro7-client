@@ -270,7 +270,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                     <Tooltip title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75.">
                       &nbsp;
                       <span
-                        className={f('small', 'icon', 'icon-common')}
+                        className={f('small', 'icon', 'icon-common', 'font-s')}
                         data-icon="&#xf129;"
                       />
                     </Tooltip>
