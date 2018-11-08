@@ -14,6 +14,10 @@ h6 {
   font-family: var(--fonts-system);
 }
 
+h5 {
+  font-weight: 600;
+}
+
 /* resize h5  - should be included in EBI global*/
 @media screen and (max-width: 75rem) {
   body h5 {
@@ -367,10 +371,11 @@ table.light.small {
 }
 
 table.light.table-sum {
+  font-family: var(--fonts-system);
   color: var(--colors-dark);
   width: 100%;
   border-right-width: 0;
-  border-collapse: inherit;
+  border-collapse: collapse;
 
   & tr:hover {
     background-color: transparent;
@@ -378,10 +383,12 @@ table.light.table-sum {
 
   & td {
     border: none;
-    padding: 0.3rem 2rem 0.3rem 0; /* extra space between two rows - easier than defining with */
+    padding: 0.5rem 1rem 0.5rem 0; /* extra space between two rows - easier than defining with */
 
     &:first-of-type {
-      width: 140px; /*target first columns*/
+      width: 20%;
+      font-size: 110%;
+      font-weight: 600;
     }
   }
 }
@@ -515,7 +522,7 @@ h3.light {
 
 /*simulation H5 but needs to stay span in order to show ext icon on the same line*/
 .h5 {
-  font-family: -var(--fonts-system);
+  font-family: var(--fonts-system);
   color: #222;
   font-weight: 400;
   border-bottom: 2px white solid;
@@ -633,7 +640,6 @@ hr {
 /*used on ipscan search result*/
 .tag-sqc {
   background-color: var(--colors-other-main);
-  margin-left: 0.2rem;
   padding: 0.3rem 0.5rem;
   color: var(--colors-light-title);
   text-transform: uppercase;
