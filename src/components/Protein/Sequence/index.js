@@ -198,7 +198,7 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
                   'icon-right',
                 )}
                 data-icon="&#xf061;"
-                style={{ minWidth: '302px' }}
+                style={{ minWidth: '302px', marginRight: '1rem' }}
               >
                 <div className={f('shape', 'ips', 'gray')} />
                 <div className={f('shape', 'ips', 'green')} />
