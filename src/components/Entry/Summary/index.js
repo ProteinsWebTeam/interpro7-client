@@ -262,7 +262,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   </p>
                 )}
               {overlaps && Object.keys(overlaps).length ? (
-                <div>
+                <div className={f('margin-bottom-large')}>
                   <h4>
                     {metadata.type === 'homologous_superfamily'
                       ? 'Overlapping entries'
@@ -300,7 +300,12 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   {Object.keys(metadata.overlaps_with).length >
                     MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
                     <button
-                      className={f('button', 'hollow', 'secondary')}
+                      className={f(
+                        'button',
+                        'hollow',
+                        'secondary',
+                        'margin-bottom-none',
+                      )}
                       onClick={() =>
                         this.setState({
                           showAllOverlappingEntries: !this.state
@@ -313,7 +318,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                         <span>
                           Less{' '}
                           <i
-                            className={f('icon', 'icon-common')}
+                            className={f('icon', 'icon-common', 'font-sm')}
                             data-icon="&#xf102;"
                           />
                         </span>
@@ -321,7 +326,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                         <span>
                           More{' '}
                           <i
-                            className={f('icon', 'icon-common')}
+                            className={f('icon', 'icon-common', 'font-sm')}
                             data-icon="&#xf103;"
                           />
                         </span>
