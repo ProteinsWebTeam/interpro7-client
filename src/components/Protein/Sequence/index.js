@@ -162,21 +162,25 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
     const { sequence } = this.props;
     return (
       <section id="sequence">
-        <div className={f('row')}>
-          <div className={f('large-12', 'columns')}>
-            <h4>Sequence</h4>
-          </div>
+        <div className={f('row', 'columns')}>
+          <h5>Sequence</h5>
         </div>
+
         <div className={f('row')}>
           <div
-            className={f('medium-10', 'columns', 'margin-bottom-large')}
+            className={f(
+              'small-12',
+              'medium-12',
+              'large-8',
+              'columns',
+              'margin-bottom-large',
+            )}
             ref={this._ref}
           >
             <Inner sequence={sequence} />
           </div>
-          <div className={f('medium-2', 'columns')}>
+          <div className={f('small-12', 'medium-12', 'large-4', 'columns')}>
             <Link
-              className={f('button', 'primary', 'sequence-link')}
               to={{
                 description: {
                   main: { key: 'search' },
@@ -185,27 +189,49 @@ class Sequence extends PureComponent /*:: <SequenceProps> */ {
               }}
               onClick={this._handleIPSClick}
             >
-              <div className={f('shape', 'ips', 'gray')} />
-              <div className={f('shape', 'ips', 'green')} />
-              <div className={f('shape', 'ips', 'pale-green')} />
-              <div className={f('shape', 'ips', 'red')} />
-              <div className={f('shape', 'ips', 'blue')} />
-              <span>Search selection with InterProScan</span>
+              <div
+                className={f(
+                  'sequence-link',
+                  'button-more',
+                  'icon',
+                  'icon-common',
+                  'icon-right',
+                )}
+                data-icon="&#xf061;"
+                style={{ minWidth: '302px' }}
+              >
+                <div className={f('shape', 'ips', 'gray')} />
+                <div className={f('shape', 'ips', 'green')} />
+                <div className={f('shape', 'ips', 'pale-green')} />
+                <div className={f('shape', 'ips', 'red')} />
+                <div className={f('shape', 'ips', 'blue')} />
+                <span>Search selection with InterProScan</span>
+              </div>
             </Link>
             <Link
-              className={f('button', 'hollow', 'primary', 'sequence-link')}
               href="https://www.ebi.ac.uk/Tools/hmmer/search/phmmer"
               onClick={this._handleHmmerClick}
               target="_blank"
             >
-              <div className={f('shape', 'hmmer', 'yellow')} />
-              <div className={f('shape', 'hmmer', 'red')} />
-              <div className={f('shape', 'hmmer', 'blue')} />
-              <span>Search selection with HMMER website</span>
+              <div
+                className={f(
+                  'sequence-link',
+                  'button-more',
+                  'icon',
+                  'icon-common',
+                  'icon-right',
+                )}
+                data-icon="&#xf061;"
+                style={{ minWidth: '302px' }}
+              >
+                <div className={f('shape', 'hmmer', 'yellow')} />
+                <div className={f('shape', 'hmmer', 'red')} />
+                <div className={f('shape', 'hmmer', 'blue')} />
+                <span>Search selection with HMMER</span>
+              </div>
             </Link>
           </div>
         </div>
-        <br />
       </section>
     );
   }
