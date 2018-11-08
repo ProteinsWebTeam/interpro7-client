@@ -71,18 +71,18 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                     </td>
                   </tr>
                   <tr>
+                    <td>Length</td>
+                    <td>
+                      <Length metadata={metadata} />
+                    </td>
+                  </tr>
+                  <tr>
                     <td>Species</td>
                     <td>
                       <Species
                         fullName={metadata.source_organism.fullName}
                         taxID={metadata.source_organism.taxId}
                       />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Length</td>
-                    <td>
-                      <Length metadata={metadata} />
                     </td>
                   </tr>
                   {metadata.proteome &&
