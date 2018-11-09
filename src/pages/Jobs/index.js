@@ -15,8 +15,8 @@ import { schemaProcessDataWebPage } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);
 
@@ -125,7 +125,7 @@ class Wrapper extends PureComponent {
             }}
             processData={schemaProcessDataWebPage}
           />
-          <ul className={f('tabs', 'main-style', 'margin-top-large')}>
+          <ul className={f('tabs', 'menu-style')}>
             <li
               className={f('tabs-title')}
               onMouseOver={IPScanStatus.preload}
