@@ -174,6 +174,11 @@ export const setDBs /*: Set<Object> */ = new Set([
       'https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={id}',
   },
   {
+    name: 'pirsf',
+    re: /^[Pp][Ii][Rr][Ss][Ff][0-9]{6}$/,
+    url_template: 'https://pir.georgetown.edu/cgi-bin/pf_sf_tree.pl?id={id}',
+  },
+  {
     name: 'kegg', // NOTE: Only for fixtures support
     re: /^kegg[0-9]{2}$/,
     url_template:
