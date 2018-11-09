@@ -12,6 +12,8 @@ import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
+import { ebiSearch2urlDB } from 'utils/url-patterns';
+
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
@@ -106,7 +108,7 @@ class SearchResults extends PureComponent {
                 to={{
                   description: {
                     main: { key: 'entry' },
-                    entry: { db, accession },
+                    entry: { db: db && ebiSearch2urlDB(db), accession },
                   },
                 }}
               >
@@ -136,7 +138,7 @@ class SearchResults extends PureComponent {
                 to={{
                   description: {
                     main: { key: 'entry' },
-                    entry: { db, accession },
+                    entry: { db: db && ebiSearch2urlDB(db), accession },
                   },
                 }}
               >
