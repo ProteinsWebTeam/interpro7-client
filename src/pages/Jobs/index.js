@@ -115,7 +115,6 @@ class Wrapper extends PureComponent {
     return (
       <div className={f('row')}>
         <div className={f('columns', 'margin-bottom-large')}>
-          <h3>Jobs</h3>
           <SchemaOrgData
             data={{
               name: 'InterPro Jobs Page',
@@ -146,7 +145,7 @@ class Wrapper extends PureComponent {
                   type === 'InterProScan' && f('is-active', 'is-active-tab')
                 }
               >
-                InterProScan
+                Your InterProScan searches
               </Link>
             </li>
             <li
@@ -167,7 +166,7 @@ class Wrapper extends PureComponent {
                   },
                 }) => type === 'download' && f('is-active', 'is-active-tab')}
               >
-                Download
+                Your downloads
               </Link>
             </li>
           </ul>
