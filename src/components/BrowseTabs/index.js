@@ -68,6 +68,9 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
           sign: isSignature,
         })}
       >
+        {
+          // used for both InterProScan result page (TEMP) and on top of browse
+        }
         {children}
         {tabs.map(e => (
           <li className={f('tabs-title')} key={e.name}>
