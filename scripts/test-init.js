@@ -46,25 +46,27 @@ export const config = {
   ],
 };
 
-export default (resolutionCode = 'XGA') =>
+export default (resolutionCode: string) =>
   (() => {
     let browser;
     return {
       async setup() {
-        if (!resolutionCode in RESOLUTION) {
-          throw `Resolution code '${resolutionCode}' not recognised as resolution`;
+        if (!(resolutionCode in RESOLUTION)) {
+          throw Error(
+            `Resolution code '${resolutionCode}' not recognised as resolution`
+          );
         }
         const resolution = RESOLUTION[resolutionCode];
         const port = await server.start();
         if (!port) throw new Error("Server didn't start correctly");
         config.args.push(
-          `--window-size=${resolution['width']},${resolution['height']}`
+          `--window-size=${resolution.width},${resolution.height}`
         );
         browser = await puppeteer.launch(config);
         const page = await browser.newPage();
         page.setViewport({
-          width: resolution['width'],
-          height: resolution['height'],
+          width: resolution.width,
+          height: resolution.height,
         });
         await page.goto(app(port));
         return page;
