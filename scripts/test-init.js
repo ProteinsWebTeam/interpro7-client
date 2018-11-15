@@ -5,15 +5,39 @@ import server from './serve';
 
 export const app = (port /*: number */) => `http://localhost:${port}/interpro/`;
 
-const width = 1024;
-const height = 800;
+const RESOLUTION = {
+  VGA: {
+    width: 640,
+    height: 480,
+  },
+  SVGA: {
+    width: 800,
+    height: 600,
+  },
+  XGA: {
+    width: 1024,
+    height: 768,
+  },
+  HD720: {
+    width: 1280,
+    height: 720,
+  },
+  HD1080: {
+    width: 1920,
+    height: 1080,
+  },
+  QHD: {
+    width: 2560,
+    height: 1440,
+  },
+};
 
 export const config = {
   headless: true,
-  // headless: false,
-  // slowMo: 250,
+  //headless: false,
+  slowMo: 250,
   args: [
-    `--window-size=${width},${height}`,
+    //`--window-size=${width},${height}`,
     '--disable-dev-shm-usage',
     // TODO: next two lines should eventually be removed, since they are not
     // TODO: recommended for security reasons
@@ -22,21 +46,31 @@ export const config = {
   ],
 };
 
-export default () =>
+export default (resolutionCode = 'XGA') =>
   (() => {
     let browser;
     return {
       async setup() {
+        if (!resolutionCode in RESOLUTION) {
+          throw `Resolution code '${resolutionCode}' not recognised as resolution`;
+        }
+        const resolution = RESOLUTION[resolutionCode];
         const port = await server.start();
         if (!port) throw new Error("Server didn't start correctly");
+        config.args.push(
+          `--window-size=${resolution['width']},${resolution['height']}`
+        );
         browser = await puppeteer.launch(config);
         const page = await browser.newPage();
-        page.setViewport({ width, height });
+        page.setViewport({
+          width: resolution['width'],
+          height: resolution['height'],
+        });
         await page.goto(app(port));
         return page;
       },
       async cleanup() {
-        // await sleep(1000);
+        //await sleep(1000);
         try {
           if (browser) browser.close();
         } catch (_) {
