@@ -46,7 +46,7 @@ export const config = {
   ],
 };
 
-export default (resolutionCode: string) =>
+export default (resolutionCode /*: string */) =>
   (() => {
     let browser;
     return {
