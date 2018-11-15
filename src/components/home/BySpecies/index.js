@@ -37,6 +37,7 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
       <div
         className={f('column', 'small-3', 'medium-2', 'large-4', 'text-center')}
         key={species.tax_id || 'unclassified'}
+        data-testid="by-species-box"
       >
         <Link
           to={{

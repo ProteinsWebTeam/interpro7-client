@@ -60,7 +60,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
         )
       : [];
     return (
-      <div className={f('md-list')}>
+      <div className={f('md-list')} data-testid="by-member-database-box">
         <AnimatedEntry className={f('row')} element="div">
           {memberDB
             .filter(({ canonical }) => canonical !== 'mobidblt')

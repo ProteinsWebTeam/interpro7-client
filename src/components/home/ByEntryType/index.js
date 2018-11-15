@@ -56,7 +56,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
         return out;
       }, {});
     return (
-      <div className={f('entry-type')}>
+      <div className={f('entry-type')} data-testid="by-entry-type-box">
         <AnimatedEntry className={f('row')} element="div">
           {entryType.map(({ type, description }) => (
             <Link

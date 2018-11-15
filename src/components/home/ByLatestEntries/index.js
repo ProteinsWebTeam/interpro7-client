@@ -49,7 +49,10 @@ class LatestEntry extends PureComponent {
   render() {
     const { entry } = this.props;
     return (
-      <div className={f('card-flex-container', 'card-shrink')}>
+      <div
+        className={f('card-flex-container', 'card-shrink')}
+        data-testid="by-latest-entries-box"
+      >
         <div className={f('list-body')}>
           <div className={f('card-header')}>
             <Link
