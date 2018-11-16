@@ -44,7 +44,7 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
     const { category, author, excerpt, title, url, published } = this.props;
     const maxString = 10;
     return (
-      <div className={f('flex-card')} data-testid="blog-entries=box">
+      <div className={f('flex-card')} data-testid="blog-entries-box">
         <div
           className={f(
             'card-image',

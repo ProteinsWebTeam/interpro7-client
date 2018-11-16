@@ -61,8 +61,8 @@ describe('tests', () => {
   test('home-click-by-entry-type-box', async () => {
     // entry type is not displayed by default
     // and it needs a focus event to scroll it into view
-    await Promise.all([page.focus('[data-testid="home-entry-type-button"]')]);
-    await Promise.all([page.click('[data-testid="home-entry-type-button"]')]);
+    await page.focus('[data-testid="home-entry-type-button"]');
+    await page.click('[data-testid="home-entry-type-button"]');
     const selection = await page.waitForSelector(
       '[data-testid="by-entry-type-box"]'
     );
@@ -78,8 +78,8 @@ describe('tests', () => {
   test('home-click-by-species-box', async () => {
     // species box is not displayed by default
     // and it needs a focus event to scroll it into view
-    await Promise.all([page.focus('[data-testid="home-species-button"]')]);
-    await Promise.all([page.click('[data-testid="home-species-button"]')]);
+    await page.focus('[data-testid="home-species-button"]');
+    await page.click('[data-testid="home-species-button"]');
     const selection = await page.waitForSelector(
       '[data-testid="by-species-box"]'
     );
@@ -95,9 +95,20 @@ describe('tests', () => {
 
   test('home-blog-entries-box', async () => {
     const selection = await page.waitForSelector(
-      '[data-testid="blog-entries=box"'
+      '[data-testid="blog-entries-box"'
     );
     expect(selection).not.toBeNull();
+  });
+
+  test('home-click-by-member-database-icon', async () => {
+    // and it needs a focus event to scroll it into view
+    await page.click('[data-testid="home-member-database-button"]');
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[data-testid="member-database-pfam"]'),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    expect(url).toEqual(expect.stringContaining('/entry/pfam'));
   });
 
   test('search', async () => {

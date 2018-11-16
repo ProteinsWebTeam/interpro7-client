@@ -1,6 +1,6 @@
 // @flow
 import puppeteer from 'puppeteer';
-
+import { sleep } from 'timing-functions';
 import server from './serve';
 
 export const app = (port /*: number */) => `http://localhost:${port}/interpro/`;
@@ -33,11 +33,10 @@ const RESOLUTION = {
 };
 
 export const config = {
-  headless: true,
-  //headless: false,
+  //headless: true,
+  headless: false,
   slowMo: 250,
   args: [
-    //`--window-size=${width},${height}`,
     '--disable-dev-shm-usage',
     // TODO: next two lines should eventually be removed, since they are not
     // TODO: recommended for security reasons
@@ -72,7 +71,7 @@ export default (resolutionCode /*: string */ = 'XGA') =>
         return page;
       },
       async cleanup() {
-        //await sleep(1000);
+        await sleep(100000);
         try {
           if (browser) browser.close();
         } catch (_) {
