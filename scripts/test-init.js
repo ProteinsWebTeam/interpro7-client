@@ -33,8 +33,8 @@ const RESOLUTION = {
 };
 
 export const config = {
-  //headless: true,
-  headless: false,
+  headless: true,
+  //headless: false,
   slowMo: 250,
   args: [
     '--disable-dev-shm-usage',
@@ -71,7 +71,7 @@ export default (resolutionCode /*: string */ = 'XGA') =>
         return page;
       },
       async cleanup() {
-        await sleep(100000);
+        //await sleep(1000);
         try {
           if (browser) browser.close();
         } catch (_) {
