@@ -92,6 +92,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     if (this._ref.current) {
       this._ref.current.removeEventListener('click', this._handleClick);
     }
+    // TODO: Update clanviewer to clean SVG
     this._vis._ro.disconnect();
     this._vis.tick = null;
     this._vis = null;
@@ -143,12 +144,15 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                   </tr>
                 </tbody>
               </table>
-
-              <h4>Description</h4>
-              <Description
-                textBlocks={[metadata.description]}
-                accession={metadata.accession}
-              />
+              {metadata.description && (
+                <>
+                  <h4>Description</h4>
+                  <Description
+                    textBlocks={[metadata.description]}
+                    accession={metadata.accession}
+                  />
+                </>
+              )}
               {metadata.relationships &&
                 metadata.relationships.nodes &&
                 metadata.relationships.nodes.map(m => (
