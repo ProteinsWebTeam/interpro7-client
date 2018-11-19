@@ -56,7 +56,7 @@ export default () /*: Description */ => Object.freeze({
     type: null,
     value: null,
   }),
-  job: Object.seal({
+  result: Object.seal({
     type: null,
     accession: null,
     detail: null,

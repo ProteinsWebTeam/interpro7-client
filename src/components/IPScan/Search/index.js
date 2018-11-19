@@ -198,8 +198,8 @@ class IPScanSearch extends PureComponent {
     } else {
       this.props.goToCustomLocation({
         description: {
-          main: { key: 'job' },
-          job: { type: 'InterProScan' /* , accession: localID */ },
+          main: { key: 'result' },
+          result: { type: 'InterProScan' /* , accession: localID */ },
         },
       });
     }

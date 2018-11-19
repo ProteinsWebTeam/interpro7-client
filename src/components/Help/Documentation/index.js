@@ -41,7 +41,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/interpro/job/download/#/entry/">
+                    <Link href="/interpro/result/download/#/entry/">
                       Code snippet generator
                     </Link>
                   </li>
