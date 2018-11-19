@@ -78,6 +78,7 @@ const TotalNb = ({
     const needSelector = !(
       isSubPageButMainIsEntry ||
       description.main.key === 'search' ||
+      (description.main.key === 'result' && !description.result.accession) ||
       description.main.key === 'set' ||
       (contentType !== 'entry' && contentType !== description.main.key)
     );

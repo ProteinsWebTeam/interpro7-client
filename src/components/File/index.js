@@ -77,8 +77,8 @@ class Button extends PureComponent {
               <Link
                 to={{
                   description: {
-                    main: { key: 'job' },
-                    job: { type: 'download' },
+                    main: { key: 'result' },
+                    result: { type: 'download' },
                   },
                   hash: `${subpath}|${fileType}`,
                 }}

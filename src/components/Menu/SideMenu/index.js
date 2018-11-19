@@ -51,8 +51,12 @@ const mapStateToPropsForOldLink = createSelector(
   d => {
     const href = 'https://www.ebi.ac.uk/interpro/';
     const { key } = d.main;
-    if (key === 'job' && d.job.type === 'InterProScan' && d.job.accession) {
-      return { href: `${href}sequencesearch/${d.job.accession}` };
+    if (
+      key === 'result' &&
+      d.result.type === 'InterProScan' &&
+      d.result.accession
+    ) {
+      return { href: `${href}sequencesearch/${d.result.accession}` };
     }
     if (key === 'entry') {
       if (!d.entry.db) {
@@ -125,7 +129,7 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
           </button>
           <nav>
             <ul>
-              {mainType !== 'job'
+              {mainType !== 'result'
                 ? mainAccession && (
                     <EntryMenu className={f('sidemenu')} usedOnTheSide>
                       <span className={f('menu-label', 'cursor-default')}>

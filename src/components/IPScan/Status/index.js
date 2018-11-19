@@ -84,7 +84,7 @@ class IPScanStatus extends PureComponent {
         <Table
           dataTable={paginatedJobs}
           rowKey="localID"
-          contentType="job"
+          contentType="result"
           actualSize={jobs.length}
           query={search}
         >
@@ -94,8 +94,8 @@ class IPScanStatus extends PureComponent {
               <Link
                 to={{
                   description: {
-                    main: { key: 'job' },
-                    job: {
+                    main: { key: 'result' },
+                    result: {
                       type: 'InterProScan',
                       accession: row.remoteID || localID,
                     },

@@ -9,7 +9,7 @@ import { get, set } from 'lodash-es';
   'proteome' |
   'set' |
   'search' |
-  'job'
+  'result'
 ); */
 
 /*:: export type Description = {|
@@ -67,7 +67,7 @@ import { get, set } from 'lodash-es';
     type: ?string,
     value: ?string,
   |},
-  job: {|
+  result: {|
     type: ?string,
     accession: ?string,
     detail: ?string,
@@ -564,15 +564,15 @@ export const searchValueHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-// Job handlers
-export const jobHandler /*: Handler */ = typeConstructor('job');
+// result handlers
+export const resultHandler /*: Handler */ = typeConstructor('result');
 
-export const jobTypeHandler /*: Handler */ = handlerConstructor({
+export const resultTypeHandler /*: Handler */ = handlerConstructor({
   name: {
-    value: 'jobTypeHandler',
+    value: 'resultTypeHandler',
   },
   key: {
-    value: ['job', 'type'],
+    value: ['result', 'type'],
   },
   cleanUp: {
     value: value =>
@@ -583,12 +583,12 @@ export const jobTypeHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-export const jobIPScanAccessionHandler /*: Handler */ = handlerConstructor({
+export const resultIPScanAccessionHandler /*: Handler */ = handlerConstructor({
   name: {
-    value: 'jobIPScanAccessionHandler',
+    value: 'resultIPScanAccessionHandler',
   },
   key: {
-    value: ['job', 'accession'],
+    value: ['result', 'accession'],
   },
   cleanUp: {
     value: value => value,
@@ -598,20 +598,22 @@ export const jobIPScanAccessionHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-export const jobDownloadAccessionHandler /*: Handler */ = handlerConstructor({
-  name: {
-    value: 'jobDownloadAccessionHandler',
+export const resultDownloadAccessionHandler /*: Handler */ = handlerConstructor(
+  {
+    name: {
+      value: 'resultDownloadAccessionHandler',
+    },
+    key: {
+      value: ['result', 'accession'],
+    },
+    cleanUp: {
+      value: value => value,
+    },
+    regexp: {
+      value: /^download-[1-9]\d*-\d+$/,
+    },
   },
-  key: {
-    value: ['job', 'accession'],
-  },
-  cleanUp: {
-    value: value => value,
-  },
-  regexp: {
-    value: /^download-[1-9]\d*-\d+$/,
-  },
-});
+);
 
 // Common and other handlers
 export const detailHandler /*: Handler */ = handlerConstructor({
@@ -859,15 +861,15 @@ searchHandler.children = new Set([searchTypeHandler]);
 
 searchTypeHandler.children = new Set([searchValueHandler]);
 
-// Job
-jobHandler.children = new Set([jobTypeHandler]);
+// result
+resultHandler.children = new Set([resultTypeHandler]);
 
-jobTypeHandler.children = new Set([
-  jobIPScanAccessionHandler,
-  jobIPScanAccessionHandler,
+resultTypeHandler.children = new Set([
+  resultIPScanAccessionHandler,
+  resultIPScanAccessionHandler,
 ]);
 
-jobIPScanAccessionHandler.children = new Set([entryHandler, detailHandler]);
+resultIPScanAccessionHandler.children = new Set([entryHandler, detailHandler]);
 
 // Common and other
 otherHandler.children = new Set([otherHandler]);
@@ -880,6 +882,6 @@ rootHandler.children = new Set([
   proteomeHandler,
   setHandler,
   searchHandler,
-  jobHandler,
+  resultHandler,
   otherHandler,
 ]);
