@@ -233,26 +233,28 @@ const Matches = (
   >
     <PageSizeSelector />
     <SearchBox />
-    <Exporter>
-      <ul>
-        {primary === 'protein' && (
-          <li style={{ display: 'flex', alignItems: 'center' }}>
-            <div>
-              <AllProteinDownload
-                description={description}
-                count={actualSize}
-              />
-            </div>
-            <div>FASTA</div>
+    {description.main.key !== 'result' && (
+      <Exporter>
+        <ul>
+          {primary === 'protein' && (
+            <li style={{ display: 'flex', alignItems: 'center' }}>
+              <div>
+                <AllProteinDownload
+                  description={description}
+                  count={actualSize}
+                />
+              </div>
+              <div>FASTA</div>
+            </li>
+          )}
+          <li>
+            <Link target="_blank" href={getUrlForApi(state)}>
+              Open in API web view
+            </Link>
           </li>
-        )}
-        <li>
-          <Link target="_blank" href={getUrlForApi(state)}>
-            Open in API web view
-          </Link>
-        </li>
-      </ul>
-    </Exporter>
+        </ul>
+      </Exporter>
+    )}
     <Column
       dataKey="accession"
       renderer={(acc /*: string */, obj /*: {source_database: string} */) => {
