@@ -11,7 +11,7 @@ export default new Map([
       handlers.proteomeHandler,
       handlers.setHandler,
       handlers.searchHandler,
-      handlers.jobHandler,
+      handlers.resultHandler,
     ]),
   ],
   ['entry.isFilter', new Set([handlers.entryHandler])],
@@ -63,14 +63,14 @@ export default new Map([
   ['set.order', new Set([handlers.orderHandler])],
   ['search.type', new Set([handlers.searchTypeHandler])],
   ['search.value', new Set([handlers.searchValueHandler])],
-  ['job.type', new Set([handlers.jobTypeHandler])],
+  ['result.type', new Set([handlers.resultTypeHandler])],
   [
-    'job.accession',
+    'result.accession',
     new Set([
-      handlers.jobIPScanAccessionHandler,
-      handlers.jobDownloadAccessionHandler,
+      handlers.resultIPScanAccessionHandler,
+      handlers.resultDownloadAccessionHandler,
     ]),
   ],
-  ['job.detail', new Set([handlers.detailHandler])],
+  ['result.detail', new Set([handlers.detailHandler])],
   // No need to add for 'other', handling that in descriptionToDescription
 ]);
