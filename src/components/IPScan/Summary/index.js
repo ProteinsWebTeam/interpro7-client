@@ -201,7 +201,10 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
             ...customLocation,
             description: {
               ...customLocation.description,
-              job: { ...customLocation.description.job, accession: remoteID },
+              result: {
+                ...customLocation.description.result,
+                accession: remoteID,
+              },
             },
           })}
         />
@@ -300,7 +303,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
 
 const jobMapSelector = state => state.jobs;
 const accessionSelector = state =>
-  state.customLocation.description.job.accession;
+  state.customLocation.description.result.accession;
 
 const jobSelector = createSelector(
   accessionSelector,

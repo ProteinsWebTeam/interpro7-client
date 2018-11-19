@@ -173,7 +173,7 @@ class IPScanResult extends PureComponent {
 const mapStateToUrl = createSelector(
   state => state.jobs,
   state => state.settings.ipScan,
-  state => state.customLocation.description.job.accession,
+  state => state.customLocation.description.result.accession,
   (jobs, { protocol, hostname, port, root }, accession) => {
     if (!jobs) return;
     const job = Object.values(jobs).find(
@@ -193,7 +193,7 @@ const mapStateToUrl = createSelector(
 
 const mapStateToProps = createSelector(
   state => state.jobs || {},
-  state => state.customLocation.description.job.accession,
+  state => state.customLocation.description.result.accession,
   state => state.customLocation.description.entry,
   (jobs, accession, { isFilter, db }) => {
     const job = Object.values(jobs).find(
