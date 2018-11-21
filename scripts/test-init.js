@@ -2,10 +2,9 @@
 import puppeteer from 'puppeteer';
 import { sleep } from 'timing-functions';
 import server from './serve';
-
 export const app = (port /*: number */) => `http://localhost:${port}/interpro/`;
 
-const RESOLUTION = {
+export const RESOLUTION = {
   VGA: {
     width: 640,
     height: 480,
@@ -30,6 +29,18 @@ const RESOLUTION = {
     width: 2560,
     height: 1440,
   },
+  HD720Portait: {
+    height: 1280,
+    width: 720,
+  },
+  HD1080Portait: {
+    height: 1920,
+    width: 1080,
+  },
+  QHDPortait: {
+    height: 2560,
+    widths: 1440,
+  },
 };
 
 export const config = {
@@ -45,7 +56,7 @@ export const config = {
   ],
 };
 
-export default (resolutionCode /*: string */ = 'XGA') =>
+export default (resolutionCode /*: string */ = 'HD1080') =>
   (() => {
     let browser;
     return {
@@ -71,7 +82,7 @@ export default (resolutionCode /*: string */ = 'XGA') =>
         return page;
       },
       async cleanup() {
-        //await sleep(1000);
+        //await sleep(1000000);
         try {
           if (browser) browser.close();
         } catch (_) {

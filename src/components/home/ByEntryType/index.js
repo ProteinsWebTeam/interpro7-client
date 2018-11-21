@@ -75,6 +75,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
                 search: { type: type.toLowerCase().replace(' ', '_') },
               }}
               key={type}
+              data-testid={'entry-' + type.toLowerCase().replace(' ', '_')}
             >
               <Tooltip title={description}>
                 <interpro-type
