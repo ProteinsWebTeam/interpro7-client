@@ -70,10 +70,10 @@ describe('selectors', () => {
       expect(mainDBLocationSelector(emptyCustomLocation)).toBeNull();
     });
 
-    test('should return null on job page', () => {
-      emptyCustomLocation.description.main.key = 'job';
-      emptyCustomLocation.description.job.type = 'InterProScan';
-      emptyCustomLocation.description.job.accession =
+    test('should return null on result page', () => {
+      emptyCustomLocation.description.main.key = 'result';
+      emptyCustomLocation.description.result.type = 'InterProScan';
+      emptyCustomLocation.description.result.accession =
         'iprscan5-R12345678-123456-1234-12-es';
       expect(mainDBLocationSelector(emptyCustomLocation)).toBeNull();
     });

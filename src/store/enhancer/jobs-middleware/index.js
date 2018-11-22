@@ -146,8 +146,11 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
                   link: {
                     to: {
                       description: {
-                        main: { key: 'job' },
-                        job: { type: 'InterProScan', accession: meta.remoteID },
+                        main: { key: 'result' },
+                        result: {
+                          type: 'InterProScan',
+                          accession: meta.remoteID,
+                        },
                       },
                     },
                     children: 'Go to the result page',
@@ -229,13 +232,13 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
 
     if (action.type === NEW_PROCESSED_CUSTOM_LOCATION) {
       if (
-        !previousState.customLocation.description.job.accession &&
-        getState().customLocation.description.job.accession
+        !previousState.customLocation.description.result.accession &&
+        getState().customLocation.description.result.accession
       ) {
         // load job data
       } else if (
-        previousState.customLocation.description.job.accession &&
-        getState().customLocation.description.job.accession
+        previousState.customLocation.description.result.accession &&
+        getState().customLocation.description.result.accession
       ) {
         // unload data
       }
