@@ -36,8 +36,8 @@ class Actions extends PureComponent {
     deleteJob({ metadata: { localID } });
     goToCustomLocation({
       description: {
-        main: { key: 'job' },
-        job: { type: 'InterProScan' },
+        main: { key: 'result' },
+        result: { type: 'InterProScan' },
       },
     });
   };
