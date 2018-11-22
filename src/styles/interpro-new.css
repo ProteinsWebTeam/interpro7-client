@@ -523,15 +523,15 @@ h3.light {
 /*simulation H5 but needs to stay span in order to show ext icon on the same line*/
 .h5 {
   font-family: var(--fonts-system);
-  color: #222;
   font-weight: 400;
-  border-bottom: 2px white solid;
-  padding-bottom: 2px;
-}
+  color: var(--colors-nearly-black);
+  border-bottom: 2px transparent solid;
+  transition: border var(--timing-fast) ease-in-out;
+  padding-bottom: 2px; /* add little extra space between title and link underline */
 
-a .h5:hover {
-  border-bottom: 2px #4e4e4e solid;
-  padding-bottom: 2px;
+  &:hover {
+    border-bottom: 2px var(--colors-dark) solid;
+  }
 }
 
 h5 small,
