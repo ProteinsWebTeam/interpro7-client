@@ -86,7 +86,7 @@ const pages = new Map([
   ['set', EntrySet],
   // other
   ['search', Search],
-  ['job', Jobs],
+  ['result', Jobs],
 ]);
 
 // Everything which ends up in the 'other' array of the location description
@@ -107,7 +107,7 @@ const Null = () => null;
   top: number,
 }; */
 
-const childRoutes = new Map([[/^search|job$/, Null]]);
+const childRoutes = new Map([[/^search|result$/, Null]]);
 const locationSelector1 = createSelector(
   customLocation => {
     if (

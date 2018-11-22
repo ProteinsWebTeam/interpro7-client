@@ -406,7 +406,7 @@ export const InterPro /*: Array<Object> */ = [
   {
     to(customLocation) {
       const { key } = customLocation.description.main;
-      if (!key || key === 'search' || key === 'job') {
+      if (!key || key === 'search' || key === 'result') {
         return {
           description: {
             ...getEmptyDescription(),
@@ -442,7 +442,7 @@ export const InterPro /*: Array<Object> */ = [
         description: { main },
       } /*: Location */,
     ) {
-      if (main.key && main.key !== 'search' && main.key !== 'job') {
+      if (main.key && main.key !== 'search' && main.key !== 'result') {
         return f('is-active');
       }
     },
@@ -453,13 +453,13 @@ export const InterPro /*: Array<Object> */ = [
   {
     to({
       description: {
-        job: { type },
+        result: { type },
       },
     }) {
-      return { description: { main: { key: 'job' }, job: { type } } };
+      return { description: { main: { key: 'result' }, result: { type } } };
     },
     icon: '*',
-    name: 'Jobs',
+    name: 'Results',
     iconClass: 'common',
   },
   {
