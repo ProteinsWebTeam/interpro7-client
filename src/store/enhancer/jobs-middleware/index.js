@@ -130,10 +130,10 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
         if (status === 'finished') {
           const currentDesc = getState().customLocation.description;
           if (
-            currentDesc.main.key !== 'job' ||
-            (currentDesc.job.accession &&
-              currentDesc.job.accession !== meta.localID &&
-              currentDesc.job.accession !== meta.remoteID)
+            currentDesc.main.key !== 'result' ||
+            (currentDesc.result.accession &&
+              currentDesc.result.accession !== meta.localID &&
+              currentDesc.result.accession !== meta.remoteID)
           ) {
             dispatch(
               addToast(
