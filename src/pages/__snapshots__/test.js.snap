@@ -15,7 +15,7 @@ exports[`<Pages /> should render 1`] = `
           catchAll={[Function]}
           childRoutes={
             Map {
-              /\\^search\\|job\\$/ => [Function],
+              /\\^search\\|result\\$/ => [Function],
             }
           }
           indexRoute={[Function]}
@@ -36,7 +36,7 @@ exports[`<Pages /> should render 1`] = `
           "proteome" => [Function],
           "set" => [Function],
           "search" => [Function],
-          "job" => [Function],
+          "result" => [Function],
         }
       }
       indexRoute={[Function]}

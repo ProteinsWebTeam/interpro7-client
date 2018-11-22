@@ -12,11 +12,6 @@ Object {
     "memberDBAccession": null,
     "order": null,
   },
-  "job": Object {
-    "accession": null,
-    "detail": null,
-    "type": null,
-  },
   "main": Object {
     "key": null,
     "numberOfFilters": 0,
@@ -35,6 +30,11 @@ Object {
     "detail": null,
     "isFilter": null,
     "order": null,
+  },
+  "result": Object {
+    "accession": null,
+    "detail": null,
+    "type": null,
   },
   "search": Object {
     "type": null,
