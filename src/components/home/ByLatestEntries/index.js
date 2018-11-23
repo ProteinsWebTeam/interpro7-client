@@ -130,9 +130,11 @@ class LatestEntry extends PureComponent {
                     disabled={!c.P}
                   >
                     <div
-                      className={f('icon', 'icon-conceptual')}
+                      className={f('icon', 'icon-conceptual', 'icon-wrapper')}
                       data-icon="&#x50;"
-                    />{' '}
+                    >
+                      <div className={f('icon-over-anim')} />
+                    </div>
                     <NumberComponent abbr noTitle>
                       {c.P}
                     </NumberComponent>
@@ -163,7 +165,11 @@ class LatestEntry extends PureComponent {
                     }}
                     disabled={!c.I}
                   >
-                    <div className={f('icon', 'icon-count-ida')} />{' '}
+                    <div
+                      className={f('icon', 'icon-count-ida', 'icon-wrapper')}
+                    >
+                      <div className={f('icon-over-anim')} />
+                    </div>
                     <NumberComponent abbr noTitle>
                       {c.I}
                     </NumberComponent>
@@ -194,7 +200,15 @@ class LatestEntry extends PureComponent {
                     }}
                     disabled={!c.O}
                   >
-                    <div className={f('icon', 'icon-count-organisms')} />{' '}
+                    <div
+                      className={f(
+                        'icon',
+                        'icon-count-organisms',
+                        'icon-wrapper',
+                      )}
+                    >
+                      <div className={f('icon-over-anim')} />
+                    </div>
                     <NumberComponent abbr noTitle>
                       {c.O}
                     </NumberComponent>
@@ -225,9 +239,11 @@ class LatestEntry extends PureComponent {
                     disabled={!c.S}
                   >
                     <div
-                      className={f('icon', 'icon-conceptual')}
+                      className={f('icon', 'icon-conceptual', 'icon-wrapper')}
                       data-icon="s"
-                    />{' '}
+                    >
+                      {c.S && <div className={f('icon-over-anim')} />}
+                    </div>
                     <NumberComponent abbr noTitle>
                       {c.S}
                     </NumberComponent>
