@@ -127,7 +127,7 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                         <DescriptionReadMore
                           text={metadata.description[0]}
                           minNumberOfCharToShow={250}
-                          patternToRemove="\(PubMed:\d+\)"
+                          patternToRemove="\s?\(PubMed:\d+\)\s?"
                         />
                       </td>
                     </tr>
