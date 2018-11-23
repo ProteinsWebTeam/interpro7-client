@@ -16,8 +16,9 @@ h1 {
 h2 {
   color: rgb(0, 124, 130);
 }
-h3 {
-  color: #444444;
+h3,
+h5 {
+  color: #444;
 } /*is H3 defined as #222 in ebi-global*/
 
 a.special {

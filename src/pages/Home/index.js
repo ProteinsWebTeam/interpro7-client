@@ -647,21 +647,22 @@ class Home extends PureComponent {
                         href="//ebi-uniprot.github.io/ProtVista/developerGuide.html"
                         target="_blank"
                       >
-                        ProtVista sequence viewer
+                        Nigthtingale
                       </Link>
                     </h4>
                   </div>
                   <div className={f('card-description')}>
-                    Interact with protein sequences, as we are now using
-                    ProtVista, a powerful and blazing-fast tool for handling
-                    protein sequence visualisation in the browser. ProtVista has
-                    been developed by UniProt.
+                    Nigthtingale is a monorepo containing visualisation web
+                    components, including the formerly known Protvista, a
+                    powerful and blazing-fast tool for handling protein sequence
+                    visualisation in the browser. ProtVista has been developed
+                    by UniProt.
                   </div>
                 </div>
 
                 <div className={f('card-more')}>
                   <Link
-                    href="//github.com/ebi-uniprot/ProtVista"
+                    href="//github.com/ebi-webcomponents/nightingale"
                     target="_blank"
                   >
                     <div
@@ -678,9 +679,8 @@ class Home extends PureComponent {
                       />
                     </div>
                   </Link>
-
                   <Link
-                    href="//ebi-uniprot.github.io/ProtVista/developerGuide.html"
+                    href="//ebi-webcomponents.github.io/nightingale"
                     target="_blank"
                   >
                     <div

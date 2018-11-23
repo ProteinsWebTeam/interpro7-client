@@ -14,6 +14,15 @@ export const iproscan2urlDB = (db /*: string */) =>
     ['GENE3D', 'cathgene3d'],
   ]).get(db) || db.toLowerCase();
 
+export const ebiSearch2urlDB = (db /*: string */) =>
+  new Map([
+    ['TIGRFAM', 'tigrfams'],
+    ['PROSITE profiles', 'profile'],
+    ['PROSITE patterns', 'patterns'],
+    ['SUPERFAMILY', 'ssf'],
+    ['CATH-Gene3D', 'cathgene3d'],
+  ]).get(db) || db.toLowerCase();
+
 export default (db /*: string */) => {
   const patterns = new Map([
     ['cathgene3d', 'http://www.cathdb.info/version/latest/superfamily/{}'],

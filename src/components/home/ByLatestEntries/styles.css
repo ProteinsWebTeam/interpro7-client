@@ -1,10 +1,10 @@
 .card-wrapper {
   display: grid;
-  grid-gap: 0.8rem;
-  grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  grid-gap: 0.5rem; /* was .8rem*/
+  grid-template-columns: 1fr;
 }
 
-.card-flex-container {
+.grid-card {
   padding: 1rem;
   border: 1px rgba(0, 0, 0, 0.1) solid;
   transition: all 0.2s ease-out;
@@ -13,9 +13,10 @@
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Roboto, Arial,
     sans-serif;
   position: relative; /*for options*/
+  overflow: hidden; /* to hide DB icon when too many or on Small screens*/
 }
 
-.card-flex-container:last-child {
+.grid-card:last-child {
   margin-bottom: 0.8rem;
 } /*extra space before more button*/
 
@@ -27,7 +28,7 @@
   display: block;
 }
 
-.card-shrink.card-flex-container {
+.card-shrink.grid-card {
   padding: 0.5rem 1rem;
 }
 .card-shrink .card-block {
@@ -37,7 +38,7 @@
   display: none;
 }
 
-.card-flex-container:hover {
+.grid-card:hover {
   box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }
 
@@ -71,7 +72,7 @@
   color: #333;
 }
 
-.card-flex-container:hover .card-options {
+.grid-card:hover .card-options {
   /*opacity: 1;*/
   display: none; /*keep the option hidden while waiting for implementation*/
 }

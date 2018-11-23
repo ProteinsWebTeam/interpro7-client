@@ -36,8 +36,8 @@ class Actions extends PureComponent {
     deleteJob({ metadata: { localID } });
     goToCustomLocation({
       description: {
-        main: { key: 'job' },
-        job: { type: 'InterProScan' },
+        main: { key: 'result' },
+        result: { type: 'InterProScan' },
       },
     });
   };
@@ -47,7 +47,7 @@ class Actions extends PureComponent {
     const { withTitle } = this.props;
     // const { saved } = (jobs[localID] || {}).metadata || {};
     return (
-      <div className={f('margin-right-large')}>
+      <>
         {withTitle && 'Actions: '}
         {/* <Tooltip title="Save job"> */}
         {/* <button */}
@@ -67,7 +67,7 @@ class Actions extends PureComponent {
             aria-label="Delete job"
           />
         </Tooltip>
-      </div>
+      </>
     );
   }
 }

@@ -40,7 +40,7 @@ exports[`<Documentation /> should render 1`] = `
             </li>
             <li>
               <Connect(Link)
-                href="/interpro/job/download/#/entry/"
+                href="/interpro/result/download/#/entry/"
               >
                 Code snippet generator
               </Connect(Link)>

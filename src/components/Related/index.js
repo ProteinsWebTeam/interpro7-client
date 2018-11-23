@@ -18,10 +18,11 @@ import KeySpeciesTable from 'components/Taxonomy/KeySpeciesTable';
 
 import FiltersPanel from 'components/FiltersPanel';
 import CurationFilter from 'components/Protein/ProteinListFilters/CurationFilter';
+import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
+
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
 const f = foundationPartial(ebiGlobalStyles);
 
@@ -277,27 +278,28 @@ export class _RelatedAdvanced extends PureComponent {
         {mainType === 'structure' && focusType === 'entry' ? (
           <EntriesOnStructure entries={secondaryData} />
         ) : null}
-        <div className={f('row')}>
-          <div className={f('columns')}>
-            {focusType === 'taxonomy' ? <KeySpeciesTable /> : null}
-            <p>
-              This {mainType} matches
-              {secondaryData.length > 1
-                ? ` these ${toPlural(focusType)}:`
-                : ` this ${focusType}:`}
-            </p>
-            <InfoFilters
-              filters={otherFilters}
-              focusType={focusType}
-              databases={databases}
-            />
-          </div>
+        <div className={f('row', 'columns')}>
+          {focusType === 'taxonomy' ? <KeySpeciesTable /> : null}
+          <p>
+            This {mainType} matches
+            {secondaryData.length > 1
+              ? ` these ${toPlural(focusType)}:`
+              : ` this ${focusType}:`}
+          </p>
+          <InfoFilters
+            filters={otherFilters}
+            focusType={focusType}
+            databases={databases}
+          />
         </div>
-        {focusType === 'protein' && (
-          <FiltersPanel>
-            <CurationFilter label="UniProt Curation" />
-          </FiltersPanel>
-        )}
+        {focusType === 'protein' &&
+          secondaryData.length > 1 && (
+            <div className={f('row', 'columns')}>
+              <FiltersPanel>
+                <CurationFilter label="UniProt Curation" />
+              </FiltersPanel>
+            </div>
+          )}
         <Matches
           {...this.props}
           actualSize={actualSize}

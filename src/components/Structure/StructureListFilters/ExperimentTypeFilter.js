@@ -44,9 +44,10 @@ class ExperimentTypeFilter extends PureComponent {
       data: { loading, payload },
       customLocation: { search },
     } = this.props;
-    const types = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
-    );
+    const defaultObject = { 'x-ray': NaN, nmr: NaN };
+    const types = Object.entries(
+      loading ? defaultObject : { ...defaultObject, ...payload },
+    ).sort(([, a], [, b]) => b - a);
     if (!loading) {
       types.unshift(['All', NaN]);
     }

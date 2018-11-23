@@ -76,7 +76,7 @@ const integrateSignature = (signature, interpro, integrated) => {
   integrated.set(accession, entry);
 };
 
-const StatusTooltip = React.memo(status => (
+const StatusTooltip = React.memo(({ status }) => (
   <Tooltip title={`Job ${status}`}>
     {(status === 'running' ||
       status === 'created' ||
@@ -201,7 +201,10 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
             ...customLocation,
             description: {
               ...customLocation.description,
-              job: { ...customLocation.description.job, accession: remoteID },
+              result: {
+                ...customLocation.description.result,
+                accession: remoteID,
+              },
             },
           })}
         />
@@ -246,7 +249,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
                   </tr>
                   {localID && (
                     <tr>
-                      <td>Actions</td>
+                      <td>Action</td>
                       <td>
                         <Actions localID={localID} />
                       </td>
@@ -300,7 +303,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
 
 const jobMapSelector = state => state.jobs;
 const accessionSelector = state =>
-  state.customLocation.description.job.accession;
+  state.customLocation.description.result.accession;
 
 const jobSelector = createSelector(
   accessionSelector,

@@ -15,8 +15,8 @@ import { schemaProcessDataWebPage } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);
 
@@ -48,13 +48,16 @@ const SchemaOrgData = loadable({
 const RedirectToIPScan = () => (
   <Redirect
     to={{
-      description: { main: { key: 'job' }, job: { type: 'InterProScan' } },
+      description: {
+        main: { key: 'result' },
+        result: { type: 'InterProScan' },
+      },
     }}
   />
 );
 
 const jobAccessionSelector = createSelector(
-  customLocation => customLocation.description.job.accession,
+  customLocation => customLocation.description.result.accession,
   value => value,
 );
 
@@ -115,7 +118,6 @@ class Wrapper extends PureComponent {
     return (
       <div className={f('row')}>
         <div className={f('columns', 'margin-bottom-large')}>
-          <h3>Jobs</h3>
           <SchemaOrgData
             data={{
               name: 'InterPro Jobs Page',
@@ -125,7 +127,7 @@ class Wrapper extends PureComponent {
             }}
             processData={schemaProcessDataWebPage}
           />
-          <ul className={f('tabs', 'main-style', 'margin-top-large')}>
+          <ul className={f('tabs', 'menu-style')}>
             <li
               className={f('tabs-title')}
               onMouseOver={IPScanStatus.preload}
@@ -134,19 +136,19 @@ class Wrapper extends PureComponent {
               <Link
                 to={{
                   description: {
-                    main: { key: 'job' },
-                    job: { type: 'InterProScan' },
+                    main: { key: 'result' },
+                    result: { type: 'InterProScan' },
                   },
                 }}
                 activeClass={({
                   description: {
-                    job: { type },
+                    result: { type },
                   },
                 }) =>
                   type === 'InterProScan' && f('is-active', 'is-active-tab')
                 }
               >
-                InterProScan
+                Your InterProScan searches
               </Link>
             </li>
             <li
@@ -157,17 +159,17 @@ class Wrapper extends PureComponent {
               <Link
                 to={{
                   description: {
-                    main: { key: 'job' },
-                    job: { type: 'download' },
+                    main: { key: 'result' },
+                    result: { type: 'download' },
                   },
                 }}
                 activeClass={({
                   description: {
-                    job: { type },
+                    result: { type },
                   },
                 }) => type === 'download' && f('is-active', 'is-active-tab')}
               >
-                Download
+                Your downloads
               </Link>
             </li>
           </ul>
@@ -183,7 +185,7 @@ class Wrapper extends PureComponent {
 }
 
 const jobTypeSelector = createSelector(
-  customLocation => customLocation.description.job.type,
+  customLocation => customLocation.description.result.type,
   value => value,
 );
 

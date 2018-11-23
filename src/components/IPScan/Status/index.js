@@ -65,122 +65,115 @@ class IPScanStatus extends PureComponent {
       pageSize,
     );
     return (
-      <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
-          <div className={f('row')}>
-            <h3 className={f('large-9', 'columns', 'light')}>
-              Your InterProScan searches
-            </h3>
-            <SchemaOrgData
-              data={{
-                name: 'Your InterProScan searches',
-                description:
-                  'The status of all the requested InterProScan searches',
-              }}
-              processData={schemaProcessDataPageSection}
-            />
+      <div className={f('row', 'columns')}>
+        <h3 className={f('light')}>Your InterProScan searches</h3>
+        <SchemaOrgData
+          data={{
+            name: 'Your InterProScan searches',
+            description:
+              'The status of all the requested InterProScan searches',
+          }}
+          processData={schemaProcessDataPageSection}
+        />
 
-            <div className={f('button-group', 'columns', 'large-3')}>
-              <GoToNewSearch />
-              <RefreshButton />
-            </div>
-          </div>
-          <Table
-            dataTable={paginatedJobs}
-            rowKey="localID"
-            contentType="job"
-            actualSize={jobs.length}
-            query={search}
-          >
-            <Column
-              dataKey="localID"
-              renderer={(localID /*: string */, row /*: Object */) => (
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'job' },
-                      job: {
-                        type: 'InterProScan',
-                        accession: row.remoteID || localID,
-                      },
-                    },
-                  }}
-                >
-                  {row.remoteID || localID}
-                </Link>
-              )}
-            >
-              Job ID
-            </Column>
-            <Column dataKey="localTitle">Title</Column>
-            <Column
-              dataKey="times.created"
-              renderer={(created /*: string */) => {
-                const parsed = new Date(created);
-                return (
-                  <Tooltip
-                    title={`Created on ${parsed.toLocaleDateString()} at ${parsed.toLocaleTimeString()}`}
-                  >
-                    <TimeAgo date={parsed} noTitle />
-                  </Tooltip>
-                );
-              }}
-            >
-              Created
-            </Column>
-            <Column
-              dataKey="status"
-              headerClassName={f('table-center')}
-              cellClassName={f('table-center')}
-              renderer={(status /*: string */) => (
-                <Tooltip title={`Job ${status}`}>
-                  {(status === 'running' ||
-                    status === 'created' ||
-                    status === 'submitted') && (
-                    <span
-                      style={{ fontSize: '200%' }}
-                      className={f('icon', 'icon-common', 'ico-neutral')}
-                      data-icon="&#xf017;"
-                      aria-label={`Job ${status}`}
-                    />
-                  )}
-
-                  {status === 'not found' ||
-                  status === 'failure' ||
-                  status === 'error' ? (
-                    <span
-                      style={{ fontSize: '160%' }}
-                      className={f('icon', 'icon-common', 'ico-notfound')}
-                      data-icon="&#x78;"
-                      aria-label="Job failed or not found"
-                    />
-                  ) : null}
-                  {status === 'finished' && (
-                    <span
-                      style={{ fontSize: '160%' }}
-                      className={f('icon', 'icon-common', 'ico-confirmed')}
-                      data-icon="&#xf00c;"
-                      aria-label="Job finished"
-                    />
-                  )}
-                </Tooltip>
-              )}
-            >
-              Status
-            </Column>
-            <Column
-              dataKey="localID"
-              defaultKey="actions"
-              headerClassName={f('table-center')}
-              cellClassName={f('table-center', 'font-ml')}
-              renderer={(localID /*: string */) => (
-                <Actions localID={localID} />
-              )}
-            >
-              Actions
-            </Column>
-          </Table>
+        <div className={f('button-group')}>
+          <GoToNewSearch />
+          <RefreshButton />
         </div>
+
+        <Table
+          dataTable={paginatedJobs}
+          rowKey="localID"
+          contentType="result"
+          actualSize={jobs.length}
+          query={search}
+        >
+          <Column
+            dataKey="localID"
+            renderer={(localID /*: string */, row /*: Object */) => (
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'result' },
+                    result: {
+                      type: 'InterProScan',
+                      accession: row.remoteID || localID,
+                    },
+                  },
+                }}
+              >
+                {row.remoteID || localID}
+              </Link>
+            )}
+          >
+            Job ID
+          </Column>
+          <Column dataKey="localTitle">Title</Column>
+          <Column
+            dataKey="times.created"
+            renderer={(created /*: string */) => {
+              const parsed = new Date(created);
+              return (
+                <Tooltip
+                  title={`Created on ${parsed.toLocaleDateString()} at ${parsed.toLocaleTimeString()}`}
+                >
+                  <TimeAgo date={parsed} noTitle />
+                </Tooltip>
+              );
+            }}
+          >
+            Created
+          </Column>
+          <Column
+            dataKey="status"
+            headerClassName={f('table-center')}
+            cellClassName={f('table-center')}
+            renderer={(status /*: string */) => (
+              <Tooltip title={`Job ${status}`}>
+                {(status === 'running' ||
+                  status === 'created' ||
+                  status === 'submitted') && (
+                  <span
+                    style={{ fontSize: '200%' }}
+                    className={f('icon', 'icon-common', 'ico-neutral')}
+                    data-icon="&#xf017;"
+                    aria-label={`Job ${status}`}
+                  />
+                )}
+
+                {status === 'not found' ||
+                status === 'failure' ||
+                status === 'error' ? (
+                  <span
+                    style={{ fontSize: '160%' }}
+                    className={f('icon', 'icon-common', 'ico-notfound')}
+                    data-icon="&#x78;"
+                    aria-label="Job failed or not found"
+                  />
+                ) : null}
+                {status === 'finished' && (
+                  <span
+                    style={{ fontSize: '160%' }}
+                    className={f('icon', 'icon-common', 'ico-confirmed')}
+                    data-icon="&#xf00c;"
+                    aria-label="Job finished"
+                  />
+                )}
+              </Tooltip>
+            )}
+          >
+            Status
+          </Column>
+          <Column
+            dataKey="localID"
+            defaultKey="actions"
+            headerClassName={f('table-center')}
+            cellClassName={f('table-center', 'font-ml')}
+            renderer={(localID /*: string */) => <Actions localID={localID} />}
+          >
+            Action
+          </Column>
+        </Table>
       </div>
     );
   }

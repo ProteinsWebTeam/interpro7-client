@@ -262,7 +262,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   </p>
                 )}
               {overlaps && Object.keys(overlaps).length ? (
-                <div>
+                <div className={f('margin-bottom-large')}>
                   <h4>
                     {metadata.type === 'homologous_superfamily'
                       ? 'Overlapping entries'
@@ -270,7 +270,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                     <Tooltip title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75.">
                       &nbsp;
                       <span
-                        className={f('small', 'icon', 'icon-common')}
+                        className={f('small', 'icon', 'icon-common', 'font-s')}
                         data-icon="&#xf129;"
                       />
                     </Tooltip>
@@ -300,7 +300,12 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   {Object.keys(metadata.overlaps_with).length >
                     MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
                     <button
-                      className={f('button', 'hollow', 'secondary')}
+                      className={f(
+                        'button',
+                        'hollow',
+                        'secondary',
+                        'margin-bottom-none',
+                      )}
                       onClick={() =>
                         this.setState({
                           showAllOverlappingEntries: !this.state
@@ -313,7 +318,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                         <span>
                           Less{' '}
                           <i
-                            className={f('icon', 'icon-common')}
+                            className={f('icon', 'icon-common', 'font-sm')}
                             data-icon="&#xf102;"
                           />
                         </span>
@@ -321,7 +326,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                         <span>
                           More{' '}
                           <i
-                            className={f('icon', 'icon-common')}
+                            className={f('icon', 'icon-common', 'font-sm')}
                             data-icon="&#xf103;"
                           />
                         </span>

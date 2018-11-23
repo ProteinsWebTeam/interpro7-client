@@ -264,25 +264,44 @@ Lineage.propTypes = {
 const TaxonomyCard = ({ data, search, entryDB }) => (
   <>
     <div className={f('card-header')}>
-      <Link
-        to={{
-          description: {
-            main: { key: 'taxonomy' },
-            taxonomy: {
-              db: data.metadata.source_database,
-              accession: `${data.metadata.accession}`,
+      <div className={f('card-image')}>
+        <Link
+          to={{
+            description: {
+              main: { key: 'taxonomy' },
+              taxonomy: {
+                db: data.metadata.source_database,
+                accession: `${data.metadata.accession}`,
+              },
             },
-          },
-        }}
-      >
-        {data.extra_fields &&
-          data.extra_fields.lineage && (
-            <SpeciesIcon lineage={data.extra_fields.lineage} />
-          )}
+          }}
+        >
+          {data.extra_fields &&
+            data.extra_fields.lineage && (
+              <SpeciesIcon lineage={data.extra_fields.lineage} />
+            )}
+        </Link>
+      </div>
+      <div className={f('card-title')}>
         <h6>
-          <HighlightedText text={data.metadata.name} textToHighlight={search} />
+          <Link
+            to={{
+              description: {
+                main: { key: 'taxonomy' },
+                taxonomy: {
+                  db: data.metadata.source_database,
+                  accession: `${data.metadata.accession}`,
+                },
+              },
+            }}
+          >
+            <HighlightedText
+              text={data.metadata.name}
+              textToHighlight={search}
+            />
+          </Link>
         </h6>
-      </Link>
+      </div>
     </div>
 
     <SummaryCounterOrg
@@ -296,7 +315,7 @@ const TaxonomyCard = ({ data, search, entryDB }) => (
         <Lineage lineage={data.extra_fields.lineage} />
       )}
       <div>
-        Tax ID:
+        Tax ID:{' '}
         <HighlightedText
           text={data.metadata.accession}
           textToHighlight={search}

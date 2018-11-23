@@ -19,6 +19,7 @@ import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
+import { iproscan2urlDB } from 'utils/url-patterns';
 
 const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
@@ -54,6 +55,23 @@ const locationSelector = createSelector(
   },
   value => value,
 );
+const countInterPro = createSelector(
+  payload => payload.results[0].matches,
+  matches =>
+    Array.from(
+      new Set(matches.map(m => (m.signature.entry || {}).accession)).values(),
+    ).filter(Boolean).length,
+);
+const countLibraries = createSelector(
+  payload => payload.results[0].matches,
+  matches =>
+    matches.reduce((agg, m) => {
+      const lib = iproscan2urlDB(m.signature.signatureLibraryRelease.library);
+      if (!agg[lib]) agg[lib] = new Set();
+      agg[lib].add(m.signature.accession);
+      return agg;
+    }, {}),
+);
 
 const FASTA_CLEANER = /(^[>;].*$)|\W/gm;
 
@@ -66,6 +84,7 @@ class IPScanResult extends PureComponent {
       }),
     }),
     matched: T.string.isRequired,
+    entryDB: T.string,
   };
 
   constructor(props) {
@@ -107,17 +126,16 @@ class IPScanResult extends PureComponent {
   };
 
   render() {
-    const { data: { payload } = {}, matched } = this.props;
+    const { data: { payload } = {}, matched, entryDB } = this.props;
 
     let entries = NaN;
     if (payload && payload.results) {
-      entries =
-        payload.results[0].matches.length +
-        new Set(
-          payload.results[0].matches.map(
-            m => (m.signature.entry || {}).accession,
-          ),
-        ).size;
+      if (!entryDB || entryDB.toLowerCase() === 'interpro') {
+        entries = countInterPro(payload);
+      } else {
+        const dbEntries = countLibraries(payload);
+        entries = dbEntries[entryDB].size;
+      }
     }
 
     return (
@@ -155,7 +173,7 @@ class IPScanResult extends PureComponent {
 const mapStateToUrl = createSelector(
   state => state.jobs,
   state => state.settings.ipScan,
-  state => state.customLocation.description.job.accession,
+  state => state.customLocation.description.result.accession,
   (jobs, { protocol, hostname, port, root }, accession) => {
     if (!jobs) return;
     const job = Object.values(jobs).find(
@@ -175,14 +193,15 @@ const mapStateToUrl = createSelector(
 
 const mapStateToProps = createSelector(
   state => state.jobs || {},
-  state => state.customLocation.description.job.accession,
-  (jobs, accession) => {
+  state => state.customLocation.description.result.accession,
+  state => state.customLocation.description.entry,
+  (jobs, accession, { isFilter, db }) => {
     const job = Object.values(jobs).find(
       job =>
         job.metadata.localID === accession ||
         job.metadata.remoteID === accession,
     );
-    return { localID: job.metadata.localID };
+    return { localID: job.metadata.localID, entryDB: isFilter && db };
   },
 );
 

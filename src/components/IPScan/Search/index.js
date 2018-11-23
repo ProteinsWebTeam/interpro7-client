@@ -126,18 +126,25 @@ class IPScanSearch extends PureComponent {
     super(props);
 
     let editorState;
+    let valid = true;
+    let tooShort = true;
     if (props.value) {
       editorState = EditorState.createWithContent(
         ContentState.createFromText(decodeURIComponent(props.value)),
         compositeDecorator,
       );
+      const lines = convertToRaw(editorState.getCurrentContent()).blocks.map(
+        block => block.text,
+      );
+      valid = checkValidity(lines);
+      tooShort = isTooShort(lines);
     } else {
       editorState = EditorState.createEmpty(compositeDecorator);
     }
     this.state = {
       editorState,
-      valid: true,
-      tooShort: true,
+      valid,
+      tooShort,
     };
 
     this._formRef = React.createRef();
@@ -198,8 +205,8 @@ class IPScanSearch extends PureComponent {
     } else {
       this.props.goToCustomLocation({
         description: {
-          main: { key: 'job' },
-          job: { type: 'InterProScan' /* , accession: localID */ },
+          main: { key: 'result' },
+          result: { type: 'InterProScan' /* , accession: localID */ },
         },
       });
     }

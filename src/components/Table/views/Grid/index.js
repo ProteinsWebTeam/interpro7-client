@@ -26,7 +26,7 @@ class GridView extends PureComponent {
           {dataTable.map((data, i) => (
             <div
               key={data.metadata.accession || i}
-              className={local['card-flex-container']}
+              className={local['grid-card']}
             >
               <ErrorBoundary>{renderer(data)}</ErrorBoundary>
             </div>
