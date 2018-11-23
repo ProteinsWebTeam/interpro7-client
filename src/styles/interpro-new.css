@@ -387,6 +387,7 @@ table.light.table-sum {
 
     &:first-of-type {
       width: 20%;
+      vertical-align: top;
       font-size: 110%;
       font-weight: 600;
     }
