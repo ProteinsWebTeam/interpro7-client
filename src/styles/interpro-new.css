@@ -1090,13 +1090,12 @@ details.accordion-style > summary {
   position: relative; /* for animation */
   list-style: none; /* keep to remove default icon for Firefox */
   &:hover {
-    /* background-color: var(--colors-accordion); */
     background-color: var(--colors-unknown-sub);
     color: var(--colors-graydark);
-    transition: all var(--timing-medclose) ease-out;
+    transition: all var(--timing-fast) ease-out;
     &::after {
       background: var(--colors-unknown-sub);
-      transition: background-color var(--timing-medclose) ease-out;
+      transition: background-color var(--timing-fast) ease-out;
     }
   }
   &::before {
@@ -1145,7 +1144,7 @@ details.accordion-style[open] > summary {
   color: white;
 }
 details.accordion-style[open] summary ~ * {
-  animation: sweep var(--timing-fast) ease-out;
+  animation: sweep var(--timing-really-fast) ease-out;
 }
 /* /alt color for testing */
 details.accordion-style[open] summary {
