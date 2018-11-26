@@ -183,19 +183,21 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       />
                     </Tooltip>
                   </div>
-                  <Tooltip title="View your results as a tree">
-                    <Link
-                      to={l => ({ ...l, hash: 'tree' })}
-                      className={f('icon-view', 'tree-view', {
-                        disabled: !withTree,
-                      })}
-                      activeClass={f('active')}
-                      aria-disabled={withTree ? 'false' : 'true'}
-                      aria-label="view your results as a tree"
-                      onMouseOver={TreeView.preload}
-                      onFocus={TreeView.preload}
-                    />
-                  </Tooltip>
+                  {withTree && (
+                    <Tooltip title="View your results as a tree">
+                      <Link
+                        to={l => ({ ...l, hash: 'tree' })}
+                        className={f('icon-view', 'tree-view', {
+                          disabled: !withTree,
+                        })}
+                        activeClass={f('active')}
+                        aria-disabled={withTree ? 'false' : 'true'}
+                        aria-label="view your results as a tree"
+                        onMouseOver={TreeView.preload}
+                        onFocus={TreeView.preload}
+                      />
+                    </Tooltip>
+                  )}
                 </div>
                 <div className={f('filter-wrapper')}>
                   {search}
