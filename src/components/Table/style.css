@@ -24,6 +24,7 @@ table th {
 .result-page input {
   margin-bottom: 0;
   height: 2.2rem;
+  padding: 0.5rem 1rem 0.5rem 0.5rem;
 }
 
 .result-page .table-results-filtering .icon-view {
