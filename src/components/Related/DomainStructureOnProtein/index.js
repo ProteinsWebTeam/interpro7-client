@@ -134,7 +134,13 @@ class _StructureOnProtein extends PureComponent {
         dataStructureInfo.payload,
       ),
     ).map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
-    return <ProtVista protein={protein} data={mergedData} />;
+    return (
+      <ProtVista
+        protein={protein}
+        data={mergedData}
+        title="Structures on protein"
+      />
+    );
   }
 }
 
