@@ -1,14 +1,15 @@
 import testInit from '../../scripts/test-init';
 import { sleep } from 'timing-functions';
+import config from '../test_config';
 
-const TWO_MINUTES = 120000; // needed when run in EBI cluster
-
-jest.setTimeout(TWO_MINUTES);
+jest.setTimeout(config.two_minutes);
 
 const checkForElement = async (page, selector) => {
   let status = '';
   try {
-    const selection = await page.waitForSelector(selector, { timeout: 100 });
+    const selection = await page.waitForSelector(selector, {
+      timeout: config.fast_timeout,
+    });
   } catch (e) {
     status = e.toString();
   }
@@ -89,124 +90,76 @@ describe('tests', () => {
     );
     expect(selection).not.toBeNull();
   });
-  // test('home-intro-fig', async () => {
-  //   const selection = await page.waitForSelector('[data-testid="intro-fig"]');
-  //   expect(selection).not.toBeNull();
-  // });
-  //
-  // test('home-by-member-database-box', async () => {
-  //   const selection = await page.waitForSelector(
-  //     '[data-testid="by-member-database-box"]'
-  //   );
-  //   expect(selection).not.toBeNull();
-  // });
-  //
-  // test('home-by-entry-type-box', async () => {
-  //   //entry type is not displayed by default
-  //   let status = await checkForElement(
-  //     page,
-  //     '[data-testid="by-entry-type-box"]'
-  //   );
-  //   expect(status).toMatch('TimeoutError');
-  // });
-  //
-  // test('home-click-by-entry-type-box', async () => {
-  //   // entry type is not displayed by default
-  //   // and it needs a focus event to scroll it into view
-  //   await page.focus('[data-testid="home-entry-type-button"]');
-  //   await page.click('[data-testid="home-entry-type-button"]');
-  //   const selection = await page.waitForSelector(
-  //     '[data-testid="by-entry-type-box"]'
-  //   );
-  //   expect(selection).not.toBeNull();
-  // });
-  //
-  // test('home-by-species-box', async () => {
-  //   //species box is not displayed by default
-  //   let status = await checkForElement(page, '[data-testid="by-species-box"]');
-  //   expect(status).toMatch('TimeoutError');
-  // });
-  //
-  // test('home-click-by-species-box', async () => {
-  //   // species box is not displayed by default
-  //   // and it needs a focus event to scroll it into view
-  //   await page.focus('[data-testid="home-species-button"]');
-  //   await page.click('[data-testid="home-species-button"]');
-  //   const selection = await page.waitForSelector(
-  //     '[data-testid="by-species-box"]'
-  //   );
-  //   expect(selection).not.toBeNull();
-  // });
-  //
-  // test('home-by-latest-entries-box', async () => {
-  //   const selection = await page.waitForSelector(
-  //     '[data-testid="by-latest-entries-box"'
-  //   );
-  //   expect(selection).not.toBeNull();
-  // });
-  //
-  // test('home-blog-entries-box', async () => {
-  //   const selection = await page.waitForSelector(
-  //     '[data-testid="blog-entries-box"'
-  //   );
-  //   expect(selection).not.toBeNull();
-  // });
-  //
-  // test('home-click-by-member-database-icon', async () => {
-  //   for (const member_database of MEMBER_DATABASES) {
-  //     await gotoURL(page, homepage_url);
-  //     await Promise.all([
-  //       page.waitForNavigation(),
-  //       page.click(`[data-testid="member-database-${member_database}"]`),
-  //     ]);
-  //     const url = await page.evaluate(() => window.location.href);
-  //     expect(url).toEqual(expect.stringContaining(`/entry/${member_database}`));
-  //   }
-  // });
-  //
-  // test('home-click-by-entry-type-icon', async () => {
-  //   for (const entry_type of ENTRY_TYPES) {
-  //     await gotoURL(page, homepage_url);
-  //     await page.focus('[data-testid="home-entry-type-button"]');
-  //     await page.click('[data-testid="home-entry-type-button"]');
-  //     await Promise.all([
-  //       page.waitForNavigation(),
-  //       page.click(`[data-testid="entry-${entry_type}"]`),
-  //     ]);
-  //     const url = await page.evaluate(() => window.location.href);
-  //     expect(url).toEqual(
-  //       expect.stringContaining(`/entry/InterPro/?type=${entry_type}`)
-  //     );
-  //   }
-  // });
-  //
-  // test('home-click-by-species-icon', async () => {
-  //   for (const taxid of TAXIDS) {
-  //     await gotoURL(page, homepage_url);
-  //     await page.focus('[data-testid="home-species-button"]');
-  //     await page.click('[data-testid="home-species-button"]');
-  //     await Promise.all([
-  //       page.waitForNavigation(),
-  //       page.click(`[data-testid="species-${taxid}"]`),
-  //     ]);
-  //     const url = await page.evaluate(() => window.location.href);
-  //     expect(url).toEqual(
-  //       expect.stringContaining(`/taxonomy/uniprot/${taxid}/`)
-  //     );
-  //   }
-  // });
-  //
-  // test('search', async () => {
-  //   /*
-  //   await page.type('input[type="text"]', '1');
-  //   await sleep(1500); // eslint-disable-line no-magic-numbers
-  //    */
-  //   await gotoURL(page, homepage_url);
-  //   await Promise.all([
-  //     page.waitForNavigation(),
-  //     page.type('input[type="text"]', '1'),
-  //   ]);
-  //   const url = await page.evaluate(() => window.location.href);
-  //   expect(url).toEqual(expect.stringContaining('/search/text/1/'));
-  // });
+
+  test('click-dynamic-menu-home', async () => {
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[data-testid="menu-tab-home"]'),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    expect(url).toEqual(expect.stringMatching(/interpro\/$/));
+  });
+
+  test('click-dynamic-menu-search', async () => {
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[data-testid="menu-tab-search"]'),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    expect(url).toEqual(expect.stringMatching(/interpro\/search/));
+  });
+
+  test('click-dynamic-menu-browse', async () => {
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[data-testid="menu-tab-browse"]'),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    expect(url).toEqual(expect.stringMatching(/interpro\/entry/));
+  });
+
+  test('click-dynamic-menu-results', async () => {
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[data-testid="menu-tab-results"]'),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    expect(url).toEqual(expect.stringMatching(/interpro\/result/));
+  });
+
+  test('click-dynamic-menu-release_notes', async () => {
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[data-testid="menu-tab-release_notes"]'),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    expect(url).toEqual(expect.stringMatching(/interpro\/release_notes/));
+  });
+
+  test('click-dynamic-menu-download', async () => {
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[data-testid="menu-tab-download"]'),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    expect(url).toEqual(expect.stringMatching(/interpro\/download/));
+  });
+
+  test('click-dynamic-menu-help', async () => {
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[data-testid="menu-tab-help"]'),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    expect(url).toEqual(expect.stringMatching(/interpro\/help/));
+  });
+
+  test('click-dynamic-menu-about', async () => {
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('[data-testid="menu-tab-about"]'),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    expect(url).toEqual(expect.stringMatching(/interpro\/about/));
+  });
 });

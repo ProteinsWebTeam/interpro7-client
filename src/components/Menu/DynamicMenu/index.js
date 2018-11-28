@@ -93,7 +93,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
             ref={this._setMenuItemInMap}
             data-name={name}
             className={f('menu-item', { visible: this.state[name] || false })}
-            data-testid={'menu-tab-' + name.toLowerCase().replace(' ', '_')}
+            data-testid={'menu-tab-' + name.toLowerCase().replace(/\s/, '_')}
           >
             <MenuItem to={to} activeClass={activeClass} exact={exact}>
               {name}

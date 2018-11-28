@@ -1,57 +1,15 @@
 import testInit from '../../scripts/test-init';
 import { sleep } from 'timing-functions';
+import config from '../test_config';
 
-const TWO_MINUTES = 120000; // needed when run in EBI cluster
-
-jest.setTimeout(TWO_MINUTES);
-
-const MEMBER_DATABASES = [
-  'cathgene3d',
-  'cdd',
-  'hamap',
-  'panther',
-  'pfam',
-  'pirsf',
-  'prints',
-  'prodom',
-  'profile',
-  'prosite',
-  'sfld',
-  'smart',
-  'ssf',
-  'tigrfams',
-];
-
-const ENTRY_TYPES = [
-  'domain',
-  'family',
-  'homologous_superfamily',
-  'repeat',
-  'conserved_site',
-  'active_site',
-  'binding_site',
-  'ptm',
-];
-
-const TAXIDS = [
-  559292,
-  6239,
-  10665,
-  83333,
-  284812,
-  7227,
-  2242,
-  9606,
-  10090,
-  3702,
-  39947,
-  7955,
-];
+jest.setTimeout(config.two_minutes);
 
 const checkForElement = async (page, selector) => {
   let status = '';
   try {
-    const selection = await page.waitForSelector(selector, { timeout: 100 });
+    const selection = await page.waitForSelector(selector, {
+      timeout: config.fast_timeout,
+    });
   } catch (e) {
     status = e.toString();
   }
@@ -153,7 +111,7 @@ describe('tests', () => {
   });
 
   test('home-click-by-member-database-icon', async () => {
-    for (const member_database of MEMBER_DATABASES) {
+    for (const member_database of config.general.member_databases) {
       await gotoURL(page, homepage_url);
       await Promise.all([
         page.waitForNavigation(),
@@ -165,7 +123,7 @@ describe('tests', () => {
   });
 
   test('home-click-by-entry-type-icon', async () => {
-    for (const entry_type of ENTRY_TYPES) {
+    for (const entry_type of config.general.entry_types) {
       await gotoURL(page, homepage_url);
       await page.focus('[data-testid="home-entry-type-button"]');
       await page.click('[data-testid="home-entry-type-button"]');
@@ -181,7 +139,7 @@ describe('tests', () => {
   });
 
   test('home-click-by-species-icon', async () => {
-    for (const taxid of TAXIDS) {
+    for (const taxid of config.homepage.species) {
       await gotoURL(page, homepage_url);
       await page.focus('[data-testid="home-species-button"]');
       await page.click('[data-testid="home-species-button"]');
