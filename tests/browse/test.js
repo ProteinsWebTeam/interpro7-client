@@ -109,20 +109,22 @@ describe('tests', () => {
     expect(url).toEqual(expect.stringMatching(/interpro\/set/));
   });
 
-  test.only('click-browse-page-entry-interpro-filter', async () => {
+  test('click-browse-page-entry-interpro-filter', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
     const interprodb = config.general.interpro;
     await Promise.all([
-      page.click(`[data-testid="memberdb-filter-${interprodb}"]`),
+      page.click(`[data-testid="memberdb-filter-${interprodb}"]`, {
+        waitUntil: 'networkidle0',
+      }),
     ]);
     const url = await page.evaluate(() => window.location.href);
     const urlMatch = new RegExp(`interpro\/entry\/${interprodb}`, 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
-  test.only('click-browse-page-entry-member-db-filters', async () => {
+  test('click-browse-page-entry-member-db-filters', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -130,7 +132,9 @@ describe('tests', () => {
     for (const memberdb of config.general.member_databases) {
       //click member db filter
       await Promise.all([
-        page.click(`[data-testid="memberdb-filter-${memberdb}"]`),
+        page.click(`[data-testid="memberdb-filter-${memberdb}"]`, {
+          waitUntil: 'networkidle0',
+        }),
       ]);
       const url = await page.evaluate(() => window.location.href);
       const urlMatch = new RegExp(`interpro\/entry\/${memberdb}`, 'i');
