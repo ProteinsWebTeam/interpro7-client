@@ -124,6 +124,22 @@ describe('tests', () => {
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
+  test('click-browse-page-entry-interpro-filter-page-elements', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}entry/interpro`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+    const interprodb = config.general.interpro;
+    await Promise.all([
+      page.click(`[data-testid="memberdb-filter-${interprodb}"]`, {
+        waitUntil: 'networkidle0',
+      }),
+    ]);
+    const selection = await page.waitForSelector(
+      '[data-testid="filters-panel"]'
+    );
+    expect(selection).not.toBeNull();
+  });
+
   test('click-browse-page-entry-member-db-filters', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}entry/interpro`;

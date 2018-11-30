@@ -104,6 +104,7 @@ class FiltersPanel extends PureComponent {
             'show-for-large',
             'margin-bottom-medium',
           )}
+          data-testid="filters-panel"
         >
           <span>Filter By</span>
           <span className={f('filter-buttons')}>
