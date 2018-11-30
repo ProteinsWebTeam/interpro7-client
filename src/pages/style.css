@@ -172,7 +172,7 @@
 .card-header {
   flex-grow: 1;
   text-align: center;
-  width: 100%; /*not sure we still need that*/
+  word-break: break-word; /*to solve species long names*/
 
   /*EBI icon (taxonomy-proteome)*/
   & span::before {
