@@ -132,18 +132,18 @@ export class Snippet extends PureComponent {
       <section>
         <h6>Code snippet</h6>
         <p>
-          Since the type of result given by the API for your selection is a
-          list, and, depending on the data you are querying and the filters
-          applied, it can get quite big, we recommend you download this data
-          programatically instead of downloading through the browser. If you
+          We generally recommend you download the results of your queries
+          programatically rather than through the web browser. Downloading large
+          lists of results within the browser can use up a lot of memory. If you
           notice that your browser crashes when downloading one of those
-          generated files, it is <strong>definitely</strong> because it is
-          running out of memory. Then, the <strong>only</strong> way to download
-          your file is to do it programatically.
+          generated files, it is <strong>very likely</strong>
+          to be because your computer is running out of memory.
         </p>
         <p>
-          To help you do it, we have generated below a snippet of code for you
-          to copy, download, run on your machine, and adapt as you wish.
+          To help you download data programmatically, we have generated a
+          snippet of code for you below. You can select a programming language
+          from the list below, copy or download the code into a filer and then
+          run the downloaded code via a terminal.
         </p>
         <div>
           <label>
