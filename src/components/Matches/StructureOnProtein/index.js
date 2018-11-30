@@ -31,7 +31,7 @@ class StructureOnProtein extends ProtVistaMatches {
     const { structure, protein } = firstMatch;
     const main = 'entry_protein_locations' in protein ? 'protein' : 'structure';
     const {
-      [main]: { protein_structure_locations: locations },
+      [main]: { structure_protein_locations: locations },
     } = firstMatch;
     if (!this.web_protein.data)
       this.web_protein.data = protein.sequence || ' '.repeat(protein.length);
