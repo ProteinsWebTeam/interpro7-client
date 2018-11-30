@@ -146,21 +146,19 @@ class SummaryCounterProteins extends PureComponent {
 
 const ProteinCard = ({ data, search, entryDB }) => (
   <>
-    {data.metadata.source_database === 'reviewed' ? (
-      <>
-        <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-          <h4>
-            <span
-              className={f('icon', 'icon-common')}
-              data-icon="&#xf00c;"
-              aria-label="reviewed"
-            />
-          </h4>
-        </Tooltip>
-      </>
-    ) : null}
     <div className={f('card-header')}>
       <div className={f('card-title')}>
+        {data.metadata.source_database === 'reviewed' ? (
+          <>
+            <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+              <span
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf00c;"
+                aria-label="reviewed"
+              />
+            </Tooltip>
+          </>
+        ) : null}
         <h6>
           <Link
             to={{
