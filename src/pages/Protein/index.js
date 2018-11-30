@@ -180,7 +180,7 @@ const ProteinCard = ({ data, search, entryDB }) => (
       </div>
     </div>
 
-    <div className={f('card-subheader')} />
+    <div className={f('card-subheader')}>{data.metadata.length} AA</div>
 
     {data.extra_fields ? (
       <SummaryCounterProteins
