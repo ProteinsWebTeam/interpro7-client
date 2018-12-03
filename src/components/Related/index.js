@@ -292,12 +292,11 @@ export class _RelatedAdvanced extends PureComponent {
           databases={databases}
         />
 
-        {focusType === 'protein' &&
-          secondaryData.length > 1 && (
-            <FiltersPanel>
-              <CurationFilter label="UniProt Curation" />
-            </FiltersPanel>
-          )}
+        {focusType === 'protein' && secondaryData.length > 1 && (
+          <FiltersPanel>
+            <CurationFilter label="UniProt Curation" />
+          </FiltersPanel>
+        )}
         <Matches
           {...this.props}
           actualSize={actualSize}
@@ -360,8 +359,8 @@ const RelatedAdvancedQuery = loadData({
             obj.entry_protein_locations = x[plural][0].entry_protein_locations;
             obj.protein_length = x[plural][0].protein_length;
             obj.protein = x[plural][0].protein;
-            obj.protein_structure_locations =
-              x[plural][0].protein_structure_locations;
+            obj.structure_protein_locations =
+              x[plural][0].structure_protein_locations;
             if (x[plural][0].chain) {
               obj.chain = x[plural][0].chain;
             }
