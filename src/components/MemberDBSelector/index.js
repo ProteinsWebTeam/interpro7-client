@@ -138,6 +138,7 @@ class _MemberDBSelector extends PureComponent {
     isSelected: T.func,
     onChange: T.func,
     hideCounters: T.bool,
+    dbCounters: T.object,
   };
 
   constructor(props) {
@@ -187,11 +188,15 @@ class _MemberDBSelector extends PureComponent {
         db: value,
       };
     }
-    const { page, ...search } = this.props.customLocation.search;
+    if (description.main.key === 'protein') {
+      description.protein.db = 'uniprot';
+    }
+    if (description.taxonomy.isFilter) description.taxonomy.isFilter = false;
+    // const { page, ...search } = this.props.customLocation.search;
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       description,
-      search,
+      search: {},
     });
     // this._handleExit(DELAY);
     /* TODO: if we decide to not close after click on database, remove this, and
