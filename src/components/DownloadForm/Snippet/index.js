@@ -136,8 +136,8 @@ export class Snippet extends PureComponent {
           programatically rather than through the web browser. Downloading large
           lists of results within the browser can use up a lot of memory. If you
           notice that your browser crashes when downloading one of those
-          generated files, it is <strong>very likely</strong>
-          to be because your computer is running out of memory.
+          generated files, it is <strong>very likely</strong> to be because your
+          computer is running out of memory.
         </p>
         <p>
           To help you download data programmatically, we have generated a
