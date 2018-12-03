@@ -20,26 +20,36 @@ const citations = [
   {
     resource: 'INTERPRO',
     label: 'InterPro',
-    authors: `Robert D. Finn, Teresa K. Attwood, Patricia C. Babbitt,
-              Alex Bateman, Peer Bork, Alan J. Bridge, Hsin-Yu Chang,
-              Zsuzsanna Dosztányi, Sara El-Gebali, Matthew Fraser,
-              Julian Gough, David Haft, Gemma L. Holliday, Hongzhan
-              Huang, Xiaosong Huang, Ivica Letunic, Rodrigo Lopez,
-              Shennan Lu, Aron Marchler-Bauer, Huaiyu Mi, Jaina
-              Mistry, Darren A. Natale, Marco Necci, Gift Nuka,
-              Christine A. Orengo, Youngmi Park, Sebastien Pesseat,
-              Damiano Piovesan, Simon C. Potter, Neil D. Rawlings,
-              Nicole Redaschi, Lorna Richardson, Catherine Rivoire,
-              Amaia Sangrador-Vegas, Christian Sigrist, Ian Sillitoe,
-              Ben Smithers, Silvano Squizzato, Granger Sutton, Narmada
-              Thanki, Paul D Thomas, Silvio C. E. Tosatto, Cathy H.
-              Wu, Ioannis Xenarios, Lai-Su Yeh, Siew-Yit Young and
-              Alex L. Mitchell`,
-    year: '2017',
-    title: 'InterPro in 2017 — beyond protein family and domain annotations',
-    journal: 'Nucleic Acids Research, Jan 2017',
-    doi: '10.1093/nar/gkw1107',
+    authors: `Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt, Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown, Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough, David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez, Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu Mi, Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo, Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien Pesseat, Simon C Potter, Matloob A Qureshi, Neil D Rawlings, Nicole Redaschi, Lorna J Richardson, Catherine Rivoire, Gustavo A Salazar, Amaia Sangrador-Vegas, Christian J A Sigrist, Ian Sillitoe, Granger G Sutton, Narmada Thanki, Paul D Thomas, Silvio C E Tosatto, Siew-Yit Yong and Robert D Finn`,
+    year: '2019',
+    title:
+      'InterPro in 2019: improving coverage, classification and access to protein sequence annotations',
+    journal: 'Nucleic Acids Research, Jan 2019',
+    doi: '10.1093/nar/gky1100',
   },
+  // {
+  //   resource: 'INTERPRO',
+  //   label: 'InterPro',
+  //   authors: `Robert D. Finn, Teresa K. Attwood, Patricia C. Babbitt,
+  //             Alex Bateman, Peer Bork, Alan J. Bridge, Hsin-Yu Chang,
+  //             Zsuzsanna Dosztányi, Sara El-Gebali, Matthew Fraser,
+  //             Julian Gough, David Haft, Gemma L. Holliday, Hongzhan
+  //             Huang, Xiaosong Huang, Ivica Letunic, Rodrigo Lopez,
+  //             Shennan Lu, Aron Marchler-Bauer, Huaiyu Mi, Jaina
+  //             Mistry, Darren A. Natale, Marco Necci, Gift Nuka,
+  //             Christine A. Orengo, Youngmi Park, Sebastien Pesseat,
+  //             Damiano Piovesan, Simon C. Potter, Neil D. Rawlings,
+  //             Nicole Redaschi, Lorna Richardson, Catherine Rivoire,
+  //             Amaia Sangrador-Vegas, Christian Sigrist, Ian Sillitoe,
+  //             Ben Smithers, Silvano Squizzato, Granger Sutton, Narmada
+  //             Thanki, Paul D Thomas, Silvio C. E. Tosatto, Cathy H.
+  //             Wu, Ioannis Xenarios, Lai-Su Yeh, Siew-Yit Young and
+  //             Alex L. Mitchell`,
+  //   year: '2017',
+  //   title: 'InterPro in 2017 — beyond protein family and domain annotations',
+  //   journal: 'Nucleic Acids Research, Jan 2017',
+  //   doi: '10.1093/nar/gkw1107',
+  // },
   {
     resource: 'INTERPROSCAN',
     label: 'InterProScan',
