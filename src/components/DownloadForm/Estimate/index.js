@@ -6,13 +6,13 @@ import NumberComponent from 'components/NumberComponent';
 
 const NO_CONTENT = 204;
 
-const getText = ({ loading, payload, ok, status, headers }) => {
-  if (loading) return 'Getting estimation from server…';
+const getText = ({ loading, payload, ok, status, headers }, isStale) => {
+  if (loading || isStale) return 'Calculating results…';
 
-  if (!ok) return 'There was an error fetching data from the server.';
+  if (!ok) return 'There was an error whilst fetching data.';
 
   if (status === NO_CONTENT) {
-    return 'No data matched this query.';
+    return 'No data associated with this query.';
   }
 
   if (!payload) return 'An unexpected error was encountered.';
@@ -64,7 +64,7 @@ export default class Estimate extends PureComponent {
     return (
       <section>
         <h6>Estimate</h6>
-        {getText(this.props.data)}
+        {getText(this.props.data, this.props.isStale)}
       </section>
     );
   }

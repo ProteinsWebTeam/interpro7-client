@@ -48,7 +48,6 @@ class DownloadForm extends PureComponent {
 
   constructor(props) {
     super(props);
-
     this._ref = React.createRef();
   }
 
@@ -272,9 +271,9 @@ class DownloadForm extends PureComponent {
           fileType={fileType}
           subset={subset}
         >
-          {({ data, download }) => (
+          {({ data, download, isStale }) => (
             <>
-              <Estimate data={data} />
+              <Estimate data={data} isStale={isStale} />
               {/* Only display if the response from the API is a list of items */}
               {description[main].db &&
                 !description[main].accession && (
