@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import { template } from 'lodash-es';
 import ClipboardJS from 'clipboard';
 
-import SyntaxHighlighter, {
-  registerLanguage,
-} from 'react-syntax-highlighter/light';
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import js from 'react-syntax-highlighter/languages/hljs/javascript';
 import python from 'react-syntax-highlighter/languages/hljs/python';
 import perl from 'react-syntax-highlighter/languages/hljs/perl';
@@ -23,9 +21,9 @@ import perlRaw from 'raw-loader!../../../snippets/template.pl.tmpl';
 
 import f from 'styles/foundation';
 
-registerLanguage('javascript', js);
-registerLanguage('python', python);
-registerLanguage('perl', perl);
+SyntaxHighlighter.registerLanguage('javascript', js);
+SyntaxHighlighter.registerLanguage('python', python);
+SyntaxHighlighter.registerLanguage('perl', perl);
 
 // Need to specify that, otherwise tries to interpolate ES2015 template strings
 const options = { interpolate: /<%=([\s\S]+?)%>/g };
