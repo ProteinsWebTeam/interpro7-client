@@ -38,7 +38,7 @@ class EntriesOnStructure extends ProtVistaMatches {
     const {
       [main]: {
         entry_protein_locations: locationsEP,
-        protein_structure_locations: locationsPS,
+        structure_protein_locations: locationsPS,
         protein_length: length,
       },
     } = firstMatch;
@@ -184,7 +184,7 @@ export default EntriesOnStructure;
 //         </g>
 //         <g>
 //           {matches.map(
-//             ({ [main]: { protein_structure_locations: locations } }) =>
+//             ({ [main]: { structure_protein_locations: locations } }) =>
 //               locations.map((location, i) =>
 //                 location.fragments.map((fragment, j) => (
 //                   <g

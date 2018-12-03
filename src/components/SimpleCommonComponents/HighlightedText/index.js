@@ -24,15 +24,16 @@ class HighlightedText extends PureComponent {
       findStartCentered(_text, textToHighlight, maxLength),
       maxLength,
     );
+    const textLessWildcards = textToHighlight.replace(/[\*\+\?]/, '');
+
     return _text
-      .split(new RegExp(`(${textToHighlight})`, 'i'))
-      .map(
-        (e, i) =>
-          e.toLowerCase() === textToHighlight.toLowerCase() ? (
-            <mark key={i}>{e}</mark>
-          ) : (
-            <span key={i}>{e}</span>
-          ),
+      .split(new RegExp(`(${textLessWildcards})`, 'i'))
+      .map((e, i) =>
+        e.toLowerCase() === textLessWildcards.toLowerCase() ? (
+          <mark key={i}>{e}</mark>
+        ) : (
+          <span key={i}>{e}</span>
+        ),
       );
   }
 }

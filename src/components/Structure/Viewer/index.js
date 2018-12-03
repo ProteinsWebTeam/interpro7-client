@@ -11,6 +11,8 @@ import { EntryColorMode, hexToRgb, getTrackColor } from 'utils/entry-color';
 
 import ProtVistaForStructure from './ProtVistaForStructures';
 
+import getMapper from './proteinToStructureMapper';
+
 import { foundationPartial } from 'styles/foundation';
 
 import 'litemol/dist/css/LiteMol-plugin-light.css';
@@ -162,7 +164,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
           feature: { accession, source_database: db, type, chain },
         },
       }) => {
-        if (type !== 'chain') this.showEntryInStructure(db, accession, chain);
+        if (type === 'chain')
+          this.showEntryInStructure('pdb', pdbid, accession);
+        else this.showEntryInStructure(db, accession, chain);
       },
     );
     this._protvista.current.addEventListener('entrymouseout', () => {
@@ -204,7 +208,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
   }
 
   createEntryMap() {
-    const memberDBMap = {};
+    const memberDBMap = { pdb: {} };
 
     if (this.props.matches) {
       // create matches in structure hierarchy
@@ -216,14 +220,32 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
         for (const structure of match.structures) {
           const chain = structure.chain;
+          if (!memberDBMap.pdb[structure.accession])
+            memberDBMap.pdb[structure.accession] = {};
+          const p2s = getMapper(structure.protein_structure_mapping[chain]);
+          const {
+            start,
+            end,
+          } = structure.structure_protein_locations[0].fragments[0];
+          if (!memberDBMap.pdb[structure.accession][chain]) {
+            memberDBMap.pdb[structure.accession][chain] = [
+              {
+                struct_asym_id: chain,
+                start_residue_number: p2s(start),
+                end_residue_number: p2s(end),
+                accession: chain,
+                source_database: 'pdb',
+              },
+            ];
+          }
           if (!memberDBMap[db][entry][chain])
             memberDBMap[db][entry][chain] = [];
           for (const location of structure.entry_protein_locations) {
             for (const fragment of location.fragments) {
               memberDBMap[db][entry][chain].push({
                 struct_asym_id: chain,
-                start_residue_number: fragment.start,
-                end_residue_number: fragment.end,
+                start_residue_number: p2s(fragment.start),
+                end_residue_number: p2s(fragment.end),
                 accession: entry,
                 source_database: db,
                 parent: match.metadata.integrated

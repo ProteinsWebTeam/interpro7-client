@@ -29,31 +29,31 @@ class TableAccess {
     _table: string;
     _db: DB;
   */
-  constructor(table, db) {
+  constructor(table /*: string */, db /*: DB */) {
     this._table = table;
     this._db = db;
   }
 
-  async get(key) {
+  async get(key /*: string */) {
     return this._db
       .transaction(this._table)
       .objectStore(this._table)
       .get(key);
   }
 
-  async set(value, key) {
+  async set(value /*: string */, key /*: string */) {
     const tr = this._db.transaction(this._table, 'readwrite');
     const dbKey = await tr.objectStore(this._table).put(value, key);
     await tr.complete;
     return dbKey;
   }
 
-  async update(key, updater) {
+  async update(key /*: string */, updater /*: string => string */) {
     const before = await this.get(key);
     return this.set(updater(before), key);
   }
 
-  async delete(key) {
+  async delete(key /*: string */) {
     const tr = this._db.transaction(this._table, 'readwrite');
     tr.objectStore(this._table).delete(key);
     return tr.complete;

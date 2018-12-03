@@ -387,6 +387,7 @@ table.light.table-sum {
 
     &:first-of-type {
       width: 20%;
+      vertical-align: top;
       font-size: 110%;
       font-weight: 600;
     }
@@ -823,21 +824,19 @@ hr {
       #b8c1c9 100%
     );
 }
-
 .image-blog-type {
   background: #fff url('../images/cover/blog/blog_type.png') no-repeat 50% 56%;
   background-size: 36%;
 }
-
 .image-focus-ape {
   background: url('../images/cover/focus/focus_ape.png') no-repeat 50% 16%;
   background-size: 100%;
 }
-
 .image-tool-ipscan {
   background: #fff url('../images/cover/tool/tool_interproscan.svg') no-repeat
     50% 26%;
   background-size: contain;
+
   background-color: #0d68a6;
 }
 .image-tool-api {
@@ -849,7 +848,6 @@ hr {
     14%;
   background-size: 268%;
 }
-
 .image-tool-litemol {
   background: #fff url('../images/cover/tool/tool_litemol.png') no-repeat 50%
     14%;
@@ -869,11 +867,10 @@ hr {
 .card-title {
   & h4 {
     font-size: 120%;
-    font-weight: 600;
-    /*  display: inline;*/ /* to make title underline work on title when single link */
+    font-weight: 600; /* display: inline; */
+    /* to make title underline work on title when single link */
   }
 }
-
 .main .card-title a {
   color: var(--colors-nearly-black);
   border-bottom: 2px transparent solid;
@@ -883,7 +880,6 @@ hr {
     border-bottom: 2px var(--colors-dark) solid;
   }
 }
-
 .card-info {
   color: var(--colors-nearly-black);
   font-size: 90%;
@@ -901,18 +897,15 @@ hr {
   font-weight: 400;
   max-height: 9rem;
   overflow: hidden;
-  height: 6em; /*better for alignment description + counter*/
+  height: 6em; /* better for alignment description + counter */
 }
-
 .card-description img {
-  display: none; /*remove all images that would be shown in the summary e.g. blog iceberg article*/
+  display: none; /* remove all images that would be shown in the summary e.g. blog iceberg article */
 }
-
 .flex-card .blog {
   border-width: 2px;
   opacity: 0.5;
 }
-
 .card-more {
   opacity: 0.5;
   align-self: flex-end;
@@ -923,22 +916,22 @@ hr {
   font-weight: 900;
   color: var(--colors-gray);
   position: relative;
-  min-width: 182px; /* for small screens */
+  min-width: 182px;
+  /* for small screens */
   border: 2px solid var(--colors-gray);
   background-color: transparent;
-  padding: 0.85em 1em; /* different unit to be consistent with button class */
+  padding: 0.85em 1em;
+  /* different unit to be consistent with button class */
   margin: 0 0 1rem 0;
   font-size: 0.9rem;
   cursor: pointer;
   text-align: center;
   line-height: 1;
   vertical-align: middle;
-
   &:hover {
     color: var(--colors-dark);
   }
 }
-
 .icon.button-more {
   font-weight: 600; /* bold on just text */
   &::after,
@@ -946,7 +939,6 @@ hr {
     font-weight: 300; /* keep the icon unbold */
   }
 }
-
 .button-nu {
   min-width: 25px;
   margin-right: 1rem;
@@ -954,7 +946,6 @@ hr {
   color: var(--colors-gray);
   font-size: 160%;
 }
-
 /* to add class icon-right in EBI ebi-utility-styles (define position icon) */
 .icon-common.icon-right:before {
   content: '';
@@ -972,7 +963,6 @@ hr {
 /* /CARDS */
 /* TABS */
 /* Tabs style main - homepage */
-
 .tabs.main-style {
   border-bottom: 1px solid #e6e6e6;
   border-right-width: 0;
@@ -1113,8 +1103,7 @@ details.accordion-style > summary {
   /* font-family: 'EBI-Common'; */
   /* position: absolute; */
   /* font-size: 120%; */
-  /* top: 20%; */ /* right: .5rem; */
-  /* } */
+  /* top: 20%; */ /* right: .5rem; */ /* } */
   &::-webkit-details-marker {
     display: none;
   }
@@ -1158,12 +1147,10 @@ details.accordion-style[open] summary {
     transform: translateY(-50%) rotate(45deg);
   }
 }
-
 /* using icon
 details.accordion-style[open] summary:after {
 content: '';
-}*/
-
+} */
 /* ** END ACCORDION MENU *** */
 /* footer */
 .local_footer {
@@ -1262,7 +1249,6 @@ content: '';
   font-family: EBI-Common;
   content: '';
 }
-
 /* camera icon */
 .lm-plugin span.lm-icon-screenshot:before {
   font-family: EBI-Common;
@@ -1274,12 +1260,12 @@ content: '';
   font-family: EBI-Common;
   content: 'F';
 }
+
 /* refresh icon */
 .lm-plugin span.lm-icon-reset-scene:before {
   font-family: EBI-Common;
   content: '';
 }
-
 /* / icons LiteMole by EBI icons */
 /* change color font in control panel */
 .lm-plugin
