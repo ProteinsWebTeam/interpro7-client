@@ -211,6 +211,34 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
+  _getChainMap(chain, start, end) {
+    return [
+      {
+        struct_asym_id: chain,
+        start_residue_number: start,
+        end_residue_number: end,
+        accession: chain,
+        source_database: 'pdb',
+      },
+    ];
+  }
+  _mapLocations(map, { chain, locations, entry, db, match }, p2s) {
+    if (!map[chain]) map[chain] = [];
+    for (const location of locations) {
+      for (const fragment of location.fragments) {
+        map[chain].push({
+          struct_asym_id: chain,
+          start_residue_number: p2s(fragment.start),
+          end_residue_number: p2s(fragment.end),
+          accession: entry,
+          source_database: db,
+          parent: match.metadata.integrated
+            ? { accession: match.metadata.integrated }
+            : null,
+        });
+      }
+    }
+  }
   createEntryMap() {
     const memberDBMap = { pdb: {} };
 
@@ -232,32 +260,23 @@ class StructureView extends PureComponent /*:: <Props> */ {
             end,
           } = structure.structure_protein_locations[0].fragments[0];
           if (!memberDBMap.pdb[structure.accession][chain]) {
-            memberDBMap.pdb[structure.accession][chain] = [
-              {
-                struct_asym_id: chain,
-                start_residue_number: p2s(start),
-                end_residue_number: p2s(end),
-                accession: chain,
-                source_database: 'pdb',
-              },
-            ];
+            memberDBMap.pdb[structure.accession][chain] = this._getChainMap(
+              chain,
+              p2s(start),
+              p2s(end),
+            );
           }
-          if (!memberDBMap[db][entry][chain])
-            memberDBMap[db][entry][chain] = [];
-          for (const location of structure.entry_protein_locations) {
-            for (const fragment of location.fragments) {
-              memberDBMap[db][entry][chain].push({
-                struct_asym_id: chain,
-                start_residue_number: p2s(fragment.start),
-                end_residue_number: p2s(fragment.end),
-                accession: entry,
-                source_database: db,
-                parent: match.metadata.integrated
-                  ? { accession: match.metadata.integrated }
-                  : null,
-              });
-            }
-          }
+          this._mapLocations(
+            memberDBMap[db][entry],
+            {
+              chain,
+              locations: structure.entry_protein_locations,
+              entry,
+              db,
+              match,
+            },
+            p2s,
+          );
         }
       }
     }
