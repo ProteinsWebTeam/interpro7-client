@@ -31,7 +31,7 @@ const lut = new Map([
   ['fasta', 'text/x-fasta'],
   ['accession', 'text/plain'],
   ['json', 'application/json'],
-  ['ndjson', 'application/x-ndjson'],
+  //['ndjson', 'application/x-ndjson'],
   ['xml', 'application/xml'],
   ['tsv', 'text/tab-separated-values'],
 ]);

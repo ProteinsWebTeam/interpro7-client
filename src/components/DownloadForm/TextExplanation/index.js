@@ -180,7 +180,7 @@ export default class TextExplanation extends PureComponent {
               FASTA
             </option>
             <option value="json">JSON</option>
-            <option value="ndjson">Newline-delimited JSON</option>
+            {/* <option value="ndjson">Newline-delimited JSON</option> */}
             {/* <option value="tsv">TSV</option> */}
             {/* <option value="xml">XML</option> */}
           </select>{' '}
