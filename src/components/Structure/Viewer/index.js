@@ -146,7 +146,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
           {
             selectedEntryToKeep:
               type === 'chain'
-                ? null
+                ? {
+                    accession: pdbid,
+                    db: 'pdb',
+                    chain: accession,
+                  }
                 : {
                     accession: accession,
                     db,
