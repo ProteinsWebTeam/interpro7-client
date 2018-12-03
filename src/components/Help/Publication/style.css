@@ -1,6 +1,9 @@
-/* grid not yet working with IE11*/
-.flex-grid {
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+/* to replace this by official NAR cover when available */
+.image-nar-default {
+  /*background: url('../../../images/cover/publi/journal_nar_default.svg') no-repeat -19% 30%;*/
+  background: url('../../../images/cover/publi/NAR_2018_Figure_01.svg')
+    no-repeat 10% 100%;
+  background-size: 190%;
 }
 
 .image-tuto-beyond {
