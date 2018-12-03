@@ -22,6 +22,79 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
         </p>
         <div className={f('flex-column')}>
           <div className={f('flex-card')}>
+            <div className={f('card-image', 'image-nar-default')}>
+              <div className={f('card-tag', 'tag-publi')}>Publication</div>
+            </div>
+
+            <div className={f('card-content')}>
+              <div className={f('card-title')}>
+                <h4>
+                  <Link
+                    href="https://doi.org/10.1093/nar/gky1100"
+                    target="_blank"
+                  >
+                    InterPro in 2019: improving coverage, classification and
+                    access to protein sequence annotations
+                  </Link>
+                </h4>
+              </div>
+
+              <div className={f('card-info')}>
+                <div className={f('card-info-author')}>
+                  <span
+                    className={f('icon', 'icon-common')}
+                    data-icon="&#xf007;"
+                  />{' '}
+                  Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt,
+                  Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown,
+                  Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough,
+                  David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez,
+                  Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu
+                  Mi, Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo,
+                  Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien
+                  Pesseat, Simon C Potter, Matloob A Qureshi, Neil D Rawlings,
+                  Nicole Redaschi, Lorna J Richardson, Catherine Rivoire,
+                  Gustavo A Salazar, Amaia Sangrador-Vegas, Christian J A
+                  Sigrist, Ian Sillitoe, Granger G Sutton, Narmada Thanki, Paul
+                  D Thomas, Silvio C E Tosatto, Siew-Yit Yong and Robert D Finn
+                </div>
+                <div className={f('card-info-level')}>
+                  <span
+                    className={f('icon', 'icon-common')}
+                    data-icon="&#xf1ea;"
+                  />{' '}
+                  Nucleic Acids Research, Jan 2019, (doi: 10.1093/nar/gky1100)
+                </div>
+              </div>
+
+              <div className={f('card-description')}>
+                Here, we report recent developments with InterPro (version 70.0)
+                and its associated software, including an 18% growth in the size
+                of the database in terms on new InterPro entries, updates to
+                content, the inclusion of an additional entry type, refined
+                modelling of discontinuous domains, and the development of a new
+                programmatic interface and website
+              </div>
+            </div>
+
+            <div className={f('card-more')}>
+              <Link href="https://doi.org/10.1093/nar/gky1100" target="_blank">
+                <div
+                  className={f(
+                    'button-more',
+                    'icon',
+                    'icon-common',
+                    'icon-right',
+                  )}
+                  data-icon="&#xf061;"
+                >
+                  Read more
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <div className={f('flex-card')}>
             <div className={f('card-image', 'image-tuto-beyond')}>
               <div className={f('card-tag', 'tag-publi')}>Publication</div>
             </div>
@@ -275,58 +348,23 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
         <h3 className={f('margin-top-large')}>How to cite</h3>
         <p>To cite InterPro, please refer to the following publication:</p>
         <blockquote className={f('quote')}>
-          Robert D. <span className={f('sc')}>Finn</span>, Teresa K.{' '}
-          <span className={f('sc')}>Attwood</span>, Patricia C.{' '}
-          <span className={f('sc')}>Babbitt</span>, Alex{' '}
-          <span className={f('sc')}>Bateman</span>, Peer{' '}
-          <span className={f('sc')}>Bork</span>, Alan J.{' '}
-          <span className={f('sc')}>Bridge</span>, Hsin-Yu{' '}
-          <span className={f('sc')}>Chang</span>, Zsuzsanna{' '}
-          <span className={f('sc')}>Dosztányi</span>, Sara{' '}
-          <span className={f('sc')}>El-Gebali</span>, Matthew{' '}
-          <span className={f('sc')}>Fraser</span>, Julian{' '}
-          <span className={f('sc')}>Gough</span>, David{' '}
-          <span className={f('sc')}>Haft</span>, Gemma L.{' '}
-          <span className={f('sc')}>Holliday</span>, Hongzhan{' '}
-          <span className={f('sc')}>Huang</span>, Xiaosong{' '}
-          <span className={f('sc')}>Huang</span>, Ivica{' '}
-          <span className={f('sc')}>Letunic</span>, Rodrigo{' '}
-          <span className={f('sc')}>Lopez</span>, Shennan{' '}
-          <span className={f('sc')}>Lu</span>, Aron{' '}
-          <span className={f('sc')}>Marchler-Bauer</span>, Huaiyu{' '}
-          <span className={f('sc')}>Mi</span>, Jaina{' '}
-          <span className={f('sc')}>Mistry</span>, Darren A.{' '}
-          <span className={f('sc')}>Natale</span>, Marco{' '}
-          <span className={f('sc')}>Necci</span>, Gift{' '}
-          <span className={f('sc')}>Nuka</span>, Christine A.{' '}
-          <span className={f('sc')}>Orengo</span>, Youngmi{' '}
-          <span className={f('sc')}>Park</span>, Sebastien{' '}
-          <span className={f('sc')}>Pesseat</span>, Damiano{' '}
-          <span className={f('sc')}>Piovesan</span>, Simon C.{' '}
-          <span className={f('sc')}>Potter</span>, Neil D.{' '}
-          <span className={f('sc')}>Rawlings</span>, Nicole{' '}
-          <span className={f('sc')}>Redaschi</span>, Lorna{' '}
-          <span className={f('sc')}>Richardson</span>, Catherine{' '}
-          <span className={f('sc')}>Rivoire</span>, Amaia{' '}
-          <span className={f('sc')}>Sangrador-Vegas</span>, Christian{' '}
-          <span className={f('sc')}>Sigrist</span>, Ian{' '}
-          <span className={f('sc')}>Sillitoe</span>, Ben{' '}
-          <span className={f('sc')}>Smithers</span>, Silvano{' '}
-          <span className={f('sc')}>Squizzato</span>, Granger{' '}
-          <span className={f('sc')}>Sutton</span>, Narmada{' '}
-          <span className={f('sc')}>Thanki</span>, Paul D{' '}
-          <span className={f('sc')}>Thomas</span>, Silvio C. E.{' '}
-          <span className={f('sc')}>Tosatto</span>, Cathy H.{' '}
-          <span className={f('sc')}>Wu</span>, Ioannis{' '}
-          <span className={f('sc')}>Xenarios</span>, Lai-Su{' '}
-          <span className={f('sc')}>Yeh</span>, Siew-Yit{' '}
-          <span className={f('sc')}>Young</span> and Alex L.{' '}
-          <span className={f('sc')}>Mitchell</span> (2017).
+          Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt, Matthias Blum,
+          Peer Bork, Alan Bridge, Shoshana D Brown, Hsin-Yu Chang, Sara
+          El-Gebali, Matthew I Fraser, Julian Gough, David R Haft, Hongzhan
+          Huang, Ivica Letunic, Rodrigo Lopez, Aurélien Luciani, Fabio Madeira,
+          Aron Marchler-Bauer, Huaiyu Mi, Darren A Natale, Marco Necci, Gift
+          Nuka, Christine Orengo, Arun P Pandurangan, Typhaine Paysan-Lafosse,
+          Sebastien Pesseat, Simon C Potter, Matloob A Qureshi, Neil D Rawlings,
+          Nicole Redaschi, Lorna J Richardson, Catherine Rivoire, Gustavo A
+          Salazar, Amaia Sangrador-Vegas, Christian J A Sigrist, Ian Sillitoe,
+          Granger G Sutton, Narmada Thanki, Paul D Thomas, Silvio C E Tosatto,
+          Siew-Yit Yong and Robert D Finn;
           <strong>
             {' '}
-            InterPro in 2017 — beyond protein family and domain annotations
+            InterPro in 2019: improving coverage, classification and access to
+            protein sequence annotations
           </strong>
-          . <i>Nucleic Acids Research, Jan 2017; doi: 10.1093/nar/gkw1107</i>
+          . <i>Nucleic Acids Research, Jan 2019; doi: 10.1093/nar/gky1100</i>
         </blockquote>
       </section>
     );
