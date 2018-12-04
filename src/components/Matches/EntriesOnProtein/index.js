@@ -10,6 +10,7 @@ import protvista from 'components/ProtVista/style.css';
 const f = foundationPartial(protvista);
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 class EntriesOnProtein extends ProtVistaMatches {
   static propTypes = {
@@ -30,7 +31,7 @@ class EntriesOnProtein extends ProtVistaMatches {
       console.table(data);
     }
     const firstMatch = data[0];
-    const { entry /* , protein */ } = firstMatch;
+    const { entry, protein } = firstMatch;
     let locations = [];
     if (firstMatch.entry && firstMatch.entry.entry_protein_locations)
       locations = firstMatch.entry.entry_protein_locations;
@@ -48,9 +49,9 @@ class EntriesOnProtein extends ProtVistaMatches {
 
     this.web_tracks[entry.accession].data = tmp;
     // TODO: Re-enable the sequence component once its performance gets improved
-    // if (!this.web_protein.data)
-    //   this.web_protein.data =
-    //     protein.sequence || '\u00A0'.repeat(protein.length);
+    if (!this.web_protein.data)
+      this.web_protein.data =
+        protein.sequence || '\u00A0'.repeat(protein.length);
   }
 
   render() {
@@ -60,21 +61,31 @@ class EntriesOnProtein extends ProtVistaMatches {
     return (
       <div className={f('track-in-table')}>
         {/* <SchemaOrgData data={matches[0]} processData={schemaProcessData} />*/}
-        <protvista-manager
-          attributes="length displaystart displayend highlightstart highlightend"
-          id="pv-manager"
-        >
-          {/* <div className={f('track-container')}>*/}
-          {/* <div className={f('aligned-to-track-component')}>*/}
-          {/* <protvista-sequence*/}
-          {/* ref={e => (this.web_protein = e)}*/}
-          {/* length={protein.length}*/}
-          {/* displaystart="1"*/}
-          {/* displayend={protein.length}*/}
-          {/* />*/}
-          {/* </div>*/}
-          {/* </div>*/}
-          <div className={f('track-component')}>
+        <div className={f('track-container')}>
+          <div className={f('aligned-to-track-component')}>
+            <protvista-sequence
+              ref={e => (this.web_protein = e)}
+              length={protein.length}
+              displaystart="1"
+              displayend={protein.length}
+            />
+          </div>
+        </div>
+        <div className={f('track-component')}>
+          <Tooltip
+            title={`<b>${(
+              entry.accession || ''
+            ).toUpperCase()}</b><br/>${protein.entry_protein_locations
+              .map(
+                loc =>
+                  `<p>
+                    ${loc.fragments
+                      .map(f => `${f.start}-${f.end}`)
+                      .join('<br/>')}
+                  </p>`,
+              )
+              .join()}`}
+          >
             <protvista-interpro-track
               length={protein.length}
               displaystart="1"
@@ -84,8 +95,8 @@ class EntriesOnProtein extends ProtVistaMatches {
               shape="roundRectangle"
               expanded
             />
-          </div>
-        </protvista-manager>
+          </Tooltip>
+        </div>
       </div>
     );
   }
