@@ -7,7 +7,7 @@ import NumberComponent from 'components/NumberComponent';
 const NO_CONTENT = 204;
 
 const getText = ({ loading, payload, ok, status, headers }, isStale) => {
-  if (loading || isStale) return 'Calculating results…';
+  if (loading || isStale) return 'Calculating estimate…';
 
   if (!ok) return 'There was an error whilst fetching data.';
 
