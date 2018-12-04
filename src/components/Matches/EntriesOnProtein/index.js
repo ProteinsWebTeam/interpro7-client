@@ -73,9 +73,9 @@ class EntriesOnProtein extends ProtVistaMatches {
         </div>
         <div className={f('track-component')}>
           <Tooltip
-            title={`<b>${(
-              entry.accession || ''
-            ).toUpperCase()}</b><br/>${protein.entry_protein_locations
+            title={`<b>${(entry.accession || '').toUpperCase()}</b><br/>${(
+              entry.entry_protein_locations || protein.entry_protein_locations
+            )
               .map(
                 loc =>
                   `<p>
