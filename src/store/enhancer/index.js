@@ -12,6 +12,8 @@ export default (history /*: History */) => {
   return compose(
     applyMiddleware(...middlewares),
     // Redux devtools
-    self.devToolsExtension ? self.devToolsExtension() : f => f,
+    self.__REDUX_DEVTOOLS_EXTENSION__
+      ? self.__REDUX_DEVTOOLS_EXTENSION__()
+      : f => f,
   );
 };

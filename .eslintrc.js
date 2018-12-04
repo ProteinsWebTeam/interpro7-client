@@ -2,6 +2,11 @@ const path = require('path');
 
 const parser = 'babel-eslint';
 
+const settings = {
+  react: {
+    version: '16.6.3',
+  },
+};
 const parserOptions = {
   ecmaVersion: 2017,
   sourceType: 'module',
@@ -424,6 +429,7 @@ const rules = {
 };
 
 module.exports = {
+  settings,
   parser,
   parserOptions,
   extends: extending,
