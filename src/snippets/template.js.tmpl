@@ -82,7 +82,7 @@ const main = async function* (startURL) {
   }
 };
 
-const BASE_URL = '<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>';
+const BASE_URL = '<%= url %>?page_size=100<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>';
 
 if (require.main === module) {
   // If used from the command line, will write data to stdout asap

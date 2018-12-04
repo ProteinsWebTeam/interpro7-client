@@ -5,7 +5,7 @@ import sys, errno, re, json, ssl
 import urllib2
 from time import sleep
 
-BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>"
+BASE_URL = "<%= url %>?page_size=100<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>"
 
 <% if (fileType === 'fasta') { %>
 HEADER_SEPARATOR = "|"
@@ -25,14 +25,21 @@ def output_list():
   sys.stdout.write("{ \"results\": [\n")
   <% } %>
   while next:
-    req = urllib2.Request(next, headers={"Accept": "application/json"})
-    res = urllib2.urlopen(req, context=context)
-    # If the API times out due a long running query
-    if res.getcode() == 408:
-      # wait just over a minute
-      sleep(61)
-      # then continue this loop with the same URL
-      continue
+    try:
+      req = urllib2.Request(next, headers={"Accept": "application/json"})
+      res = urllib2.urlopen(req, context=context)
+      # If the API times out due a long running query
+      if res.getcode() == 408:
+        # wait just over a minute
+        sleep(61)
+        # then continue this loop with the same URL
+        continue
+    except urllib2.HTTPError as e:
+      if e.code == 408:
+        sleep(61)
+        continue
+      else:
+        raise e
 
     payload = json.loads(res.read())
     next = payload["next"]
@@ -78,8 +85,8 @@ def output_list():
       sleep(1)
 
 <% if (fileType === "json") { %>
-#json footer
-sys.stdout.write("\n] }\n")
+    #json footer
+    sys.stdout.write("\n] }\n")
 <% } %>
 
 
