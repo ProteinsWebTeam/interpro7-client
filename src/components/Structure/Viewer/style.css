@@ -13,6 +13,15 @@
   position: relative;
 }
 
+.structure-viewer-select {
+  max-width: 400px;
+  position: absolute;
+  bottom: 0.5rem;
+  fontsize: 90%;
+  left: 0;
+  margin: 0;
+}
+
 .structure-viewer.is-stuck {
   position: fixed;
   z-index: 10000;
@@ -28,4 +37,8 @@
   box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.3);
   width: 30%;
   height: 30vh;
+
+  & .structure-viewer-select {
+    left: 1rem;
+  }
 }
