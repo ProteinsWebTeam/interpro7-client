@@ -7,7 +7,6 @@ const mkdirp = require('mkdirp');
 const chalk = require('chalk');
 const puppeteer = require('puppeteer');
 const chromeLauncher = require('chrome-launcher');
-const ReportGenerator = require('lighthouse/lighthouse-core/report/report-generator');
 
 const failThreshold = require('../package.json').lighthouse.threshold;
 

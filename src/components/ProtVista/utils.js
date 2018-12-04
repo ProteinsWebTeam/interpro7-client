@@ -6,14 +6,14 @@ const splitMobiFeatures = features => {
   for (const f of features) {
     for (const loc of f.entry_protein_locations) {
       const key = loc.seq_feature || f.name;
-      if (!newFeatures[key]) {
+      if (newFeatures[key]) {
+        newFeatures[key].entry_protein_locations.push(loc);
+      } else {
         newFeatures[key] = {
           ...f,
           accession: `Mobidblt-${key}`,
           entry_protein_locations: [loc],
         };
-      } else {
-        newFeatures[key].entry_protein_locations.push(loc);
       }
     }
   }

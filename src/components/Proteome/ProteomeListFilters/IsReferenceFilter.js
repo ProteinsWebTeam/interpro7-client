@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
-import Loading from 'components/SimpleCommonComponents/Loading';
+// import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';

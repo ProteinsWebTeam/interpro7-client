@@ -25,6 +25,8 @@ import local from './style.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, theme, ipro, local);
 
+const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
+
 const description2IDs = description =>
   description.reduce(
     (acc, part) => [
@@ -80,15 +82,14 @@ const MemberDBSubtitle = ({ metadata, dbInfo }) => {
             {metadata.type.replace('_', ' ').toLowerCase()}
           </td>
         </tr>
-        {metadata.name.short &&
-          metadata.accession !== metadata.name.short && (
-            <tr>
-              <td>Short name</td>
-              <td>
-                <i className={f('shortname')}>{metadata.name.short}</i>
-              </td>
-            </tr>
-          )}
+        {metadata.name.short && metadata.accession !== metadata.name.short && (
+          <tr>
+            <td>Short name</td>
+            <td>
+              <i className={f('shortname')}>{metadata.name.short}</i>
+            </td>
+          </tr>
+        )}
       </tbody>
     </table>
   );
@@ -184,6 +185,76 @@ OtherSections.propTypes = {
   }),
 };
 
+const OverlappingEntries = ({ metadata, overlaps }) => (
+  <div className={f('margin-bottom-large')}>
+    <h4>
+      {metadata.type === 'homologous_superfamily'
+        ? 'Overlapping entries'
+        : 'Overlapping homologous superfamilies'}
+      <Tooltip title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75.">
+        &nbsp;
+        <span
+          className={f('small', 'icon', 'icon-common', 'font-s')}
+          data-icon="&#xf129;"
+        />
+      </Tooltip>
+    </h4>
+    {overlaps.map(ov => (
+      <div key={ov.accession} className={f('list-items')}>
+        <interpro-type type={ov.type.replace('_', ' ')} dimension="1.2em" />
+        <Link
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: {
+                db: 'InterPro',
+                accession: ov.accession,
+              },
+            },
+          }}
+        >
+          {ov.name}
+        </Link>{' '}
+        <small>({ov.accession.toUpperCase()})</small>
+      </div>
+    ))}
+    {Object.keys(metadata.overlaps_with).length >
+      MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
+      <button
+        className={f('button', 'hollow', 'secondary', 'margin-bottom-none')}
+        onClick={() =>
+          this.setState({
+            showAllOverlappingEntries: !this.state.showAllOverlappingEntries,
+          })
+        }
+      >
+        Show{' '}
+        {this.state.showAllOverlappingEntries ? (
+          <span>
+            Less{' '}
+            <i
+              className={f('icon', 'icon-common', 'font-sm')}
+              data-icon="&#xf102;"
+            />
+          </span>
+        ) : (
+          <span>
+            More{' '}
+            <i
+              className={f('icon', 'icon-common', 'font-sm')}
+              data-icon="&#xf103;"
+            />
+          </span>
+        )}
+      </button>
+    )}
+  </div>
+);
+OverlappingEntries.propTypes = {
+  metadata: T.object.isRequired,
+  overlaps: T.arrayOf(T.object),
+};
+
 /* :: type Props = {
     data: {
       metadata: {
@@ -225,7 +296,6 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
       dbInfo,
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
-    const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
     const citations = description2IDs(metadata.description);
     const desc = metadata.description.reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(
@@ -262,78 +332,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                   </p>
                 )}
               {overlaps && Object.keys(overlaps).length ? (
-                <div className={f('margin-bottom-large')}>
-                  <h4>
-                    {metadata.type === 'homologous_superfamily'
-                      ? 'Overlapping entries'
-                      : 'Overlapping homologous superfamilies'}
-                    <Tooltip title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75.">
-                      &nbsp;
-                      <span
-                        className={f('small', 'icon', 'icon-common', 'font-s')}
-                        data-icon="&#xf129;"
-                      />
-                    </Tooltip>
-                  </h4>
-                  {overlaps.map(ov => (
-                    <div key={ov.accession} className={f('list-items')}>
-                      <interpro-type
-                        type={ov.type.replace('_', ' ')}
-                        dimension="1.2em"
-                      />
-                      <Link
-                        to={{
-                          description: {
-                            main: { key: 'entry' },
-                            entry: {
-                              db: 'InterPro',
-                              accession: ov.accession,
-                            },
-                          },
-                        }}
-                      >
-                        {ov.name}
-                      </Link>{' '}
-                      <small>({ov.accession.toUpperCase()})</small>
-                    </div>
-                  ))}
-                  {Object.keys(metadata.overlaps_with).length >
-                    MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
-                    <button
-                      className={f(
-                        'button',
-                        'hollow',
-                        'secondary',
-                        'margin-bottom-none',
-                      )}
-                      onClick={() =>
-                        this.setState({
-                          showAllOverlappingEntries: !this.state
-                            .showAllOverlappingEntries,
-                        })
-                      }
-                    >
-                      Show{' '}
-                      {this.state.showAllOverlappingEntries ? (
-                        <span>
-                          Less{' '}
-                          <i
-                            className={f('icon', 'icon-common', 'font-sm')}
-                            data-icon="&#xf102;"
-                          />
-                        </span>
-                      ) : (
-                        <span>
-                          More{' '}
-                          <i
-                            className={f('icon', 'icon-common', 'font-sm')}
-                            data-icon="&#xf103;"
-                          />
-                        </span>
-                      )}
-                    </button>
-                  )}
-                </div>
+                <OverlappingEntries metadata={metadata} overlaps={overlaps} />
               ) : null}
               {metadata.hierarchy &&
               Object.keys(metadata.hierarchy).length &&
