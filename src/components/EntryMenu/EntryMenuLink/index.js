@@ -127,7 +127,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
         >
           <span data-content={name} className={f('name')}>
             <i
-              data-icon={icons.get(name, undefined)}
+              data-icon={icons.get(name)}
               className={f(
                 'icon',
                 'icon-common',
