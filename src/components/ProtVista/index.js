@@ -119,6 +119,17 @@ class ProtVista extends PureComponent {
     }
   }
 
+  _setResiduesInState(children, accession) {
+    if (children) {
+      this.web_tracks[accession].contributors = children;
+      for (const child of children) {
+        if (child.residues) {
+          this.setObjectValueInState('expandedTrack', child.accession, true);
+        }
+      }
+    }
+  }
+
   updateTracksWithData(data) {
     const b2sh = new Map([
       ['s', 'discontinuosStart'],
@@ -168,18 +179,7 @@ class ProtVista extends PureComponent {
           : null;
         const isNewElement = !this.web_tracks[d.accession]._data;
         this.web_tracks[d.accession].data = tmp;
-        if (children) {
-          this.web_tracks[d.accession].contributors = children;
-          for (const child of children) {
-            if (child.residues) {
-              this.setObjectValueInState(
-                'expandedTrack',
-                child.accession,
-                true,
-              );
-            }
-          }
-        }
+        this._setResiduesInState(children, d.accession);
         if (isNewElement) {
           this.web_tracks[d.accession].addEventListener('entryclick', e => {
             this.handleCollapseLabels(e.detail.feature.accession);

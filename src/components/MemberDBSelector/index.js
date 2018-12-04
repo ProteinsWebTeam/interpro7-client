@@ -38,11 +38,11 @@ const MIN_DELAY = 400;
 const getStaticCountFor = (db, counts) => {
   return counts[db] || 0;
 };
+
+// eslint-disable-next-line
 const getCountFor = (
   db,
-  dataDBCount,
-  dataAllCount,
-  dataSubPageCount,
+  { dataDBCount, dataAllCount, dataSubPageCount },
   main,
   sub,
   hasMoreThanOneFilter,
@@ -297,9 +297,7 @@ class _MemberDBSelector extends PureComponent {
                 ? getStaticCountFor(db.canonical, dbCounters)
                 : getCountFor(
                     db.canonical,
-                    dataDBCount,
-                    dataAllCount,
-                    dataSubPageCount,
+                    { dataDBCount, dataAllCount, dataSubPageCount },
                     main,
                     sub,
                     hasMoreThanOneFilter,

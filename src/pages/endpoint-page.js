@@ -129,27 +129,25 @@ class Summary extends PureComponent {
       dataBase && dataBase.payload && dataBase.payload.databases;
     return (
       <>
-        {payload &&
-          payload.metadata &&
-          payload.metadata.accession && (
-            <>
-              <SchemaOrgData
-                data={{
-                  data: payload,
-                  endpoint,
-                  version: databases && databases.uniprot.version,
-                }}
-                processData={schemaProcessDataRecord}
-              />
-              <SchemaOrgData
-                data={{
-                  data: payload.metadata,
-                  type: endpoint,
-                }}
-                processData={schemaProcessMainEntity}
-              />
-            </>
-          )}
+        {payload && payload.metadata && payload.metadata.accession && (
+          <>
+            <SchemaOrgData
+              data={{
+                data: payload,
+                endpoint,
+                version: databases && databases.uniprot.version,
+              }}
+              processData={schemaProcessDataRecord}
+            />
+            <SchemaOrgData
+              data={{
+                data: payload.metadata,
+                type: endpoint,
+              }}
+              processData={schemaProcessMainEntity}
+            />
+          </>
+        )}
 
         <UnconnectedErrorBoundary customLocation={customLocation}>
           <div className={f('row')}>

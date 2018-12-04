@@ -49,7 +49,7 @@ const rules = {
   // Enforce one true comma style
   'comma-style': [1, 'last'],
   // Specify the maximum cyclomatic complexity allowed in a program
-  complexity: [1, 12],
+  complexity: [1, 16],
   // Disallow padding inside computed properties
   'computed-property-spacing': [1, 'never'],
   // Require return statements to either always or never specify values
@@ -98,7 +98,7 @@ const rules = {
   // Limits number of parameters that can be used in the function declaration
   'max-params': [1, 6],
   // Specify the maximum number of statement allowed in a function
-  'max-statements': [1, 25],
+  'max-statements': [1, 30],
   // Require a capital letter for constructors
   'new-cap': 0,
   // Disallow omission of parens when invoking constructor with no arguments
