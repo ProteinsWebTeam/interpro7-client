@@ -16,7 +16,7 @@ class Letter {
     // W is 30% wider than the other letters, so need to make sure
     // it gets modified accordingly.
     if (this.value === 'W') {
-      this.width += this.width * 30 / 100;
+      this.width += (this.width * 30) / 100;
     }
 
     this.height = parseInt(options.height, 10) || 100;
@@ -573,7 +573,7 @@ const HMMLogo = function(element, options = {}) {
   this.rendered = [];
   this.previous_zoom = 0;
 
-  // eslint-disable-next-line complexity, max-statements, max-params
+  // eslint-disable-next-line complexity, max-statements
   const drawSmallInsert = (
     context,
     x,
@@ -583,6 +583,7 @@ const HMMLogo = function(element, options = {}) {
     inLength,
     delOdds,
     showInserts,
+    // eslint-disable-next-line max-params
   ) => {
     let fill = '#fff';
     if (showInserts) {
@@ -664,7 +665,6 @@ const HMMLogo = function(element, options = {}) {
     context.stroke();
   };
 
-  // eslint-disable-next-line max-params
   const drawRectWithText = (
     context,
     x,
@@ -674,6 +674,7 @@ const HMMLogo = function(element, options = {}) {
     colWidth,
     fill,
     textfill,
+    // eslint-disable-next-line max-params
   ) => {
     context.font = `${fontsize}px Arial`;
     context.fillStyle = fill;
@@ -722,7 +723,6 @@ const HMMLogo = function(element, options = {}) {
     drawRectWithText(context, x, y, text, fontsize, colWidth, fill, textfill);
   };
 
-  // eslint-disable-next-line max-params
   const drawDeleteOdds = (
     context,
     x,
@@ -731,6 +731,7 @@ const HMMLogo = function(element, options = {}) {
     text,
     fontsize,
     showInserts,
+    // eslint-disable-next-line max-params
   ) => {
     let y = height - 4;
     let fill = '#fff';
@@ -752,7 +753,6 @@ const HMMLogo = function(element, options = {}) {
     drawRectWithText(context, x, y, text, fontsize, colWidth, fill, textfill);
   };
 
-  // eslint-disable-next-line max-params
   const drawColumnNumber = (
     context,
     x,
@@ -761,6 +761,7 @@ const HMMLogo = function(element, options = {}) {
     colNum,
     fontsize,
     right,
+    // eslint-disable-next-line max-params
   ) => {
     context.font = `${fontsize}px Arial`;
     context.textAlign = right ? 'right' : 'center';
@@ -1561,7 +1562,8 @@ const HMMLogo = function(element, options = {}) {
     const containerElement = this.called_on.getElementsByClassName(
       styles.logo_container,
     )[0];
-    const expectedWidth = graphicalElement.clientWidth * zoomLevel / this.zoom;
+    const expectedWidth =
+      (graphicalElement.clientWidth * zoomLevel) / this.zoom;
     if (expectedWidth > containerElement.clientWidth) {
       // if a center is not specified, then use the current center of the view
       if (options.column) {
@@ -1596,7 +1598,7 @@ const HMMLogo = function(element, options = {}) {
 
     return (
       newColumn * (this.column_width * this.zoom) +
-      this.column_width * this.zoom / 2
+      (this.column_width * this.zoom) / 2
     );
   };
 
@@ -1683,8 +1685,8 @@ const hmmLogo = function(logoElement, options = {}) {
   }
 
   /* we don't want to toggle if the max height_obs is greater than max theoretical
-     * as letters will fall off the top.
-     */
+   * as letters will fall off the top.
+   */
   if (
     logo.scale_height_enabled &&
     logo.data.max_height_obs < logo.data.max_height_theory

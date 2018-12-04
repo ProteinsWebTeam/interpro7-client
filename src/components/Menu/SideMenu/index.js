@@ -129,20 +129,20 @@ class SideMenu extends PureComponent /*:: <Props, State> */ {
           </button>
           <nav>
             <ul>
-              {mainType !== 'result'
+              {mainType === 'result'
                 ? mainAccession && (
-                    <EntryMenu className={f('sidemenu')} usedOnTheSide>
-                      <span className={f('menu-label', 'cursor-default')}>
-                        {mainType} menu ({mainAccession})
-                      </span>
-                    </EntryMenu>
-                  )
-                : mainAccession && (
                     <div className={f('sidemenu')}>
                       <span className={f('menu-label', 'cursor-default')}>
                         {mainType} menu ({mainAccession})
                       </span>
                     </div>
+                  )
+                : mainAccession && (
+                    <EntryMenu className={f('sidemenu')} usedOnTheSide>
+                      <span className={f('menu-label', 'cursor-default')}>
+                        {mainType} menu ({mainAccession})
+                      </span>
+                    </EntryMenu>
                   )}
 
               <InterProMenu className={f('secondary', 'is-drilldown')}>

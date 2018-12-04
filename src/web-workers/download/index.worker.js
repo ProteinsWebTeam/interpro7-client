@@ -110,7 +110,6 @@ const getFirstPage = (url, fileType) => {
 };
 
 // the `_` is just to make flow happy
-// eslint-disable-next-line
 const downloadContent = (onProgress, onSuccess, onError) => async (
   url,
   fileType,
