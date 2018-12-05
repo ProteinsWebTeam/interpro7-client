@@ -62,6 +62,9 @@ const main = async function* (startURL) {
       await sleep(60000);
       // …then continue this loop with the same URL
       continue;
+    } else if (response.status === 204) {
+      yield '\n]\n}\n';
+      break;
     }
     const payload = await response.json();
     for (const item of payload.results) {<% if (fileType === 'json') { %>

@@ -35,7 +35,9 @@ def output_list():
         sleep(61)
         # then continue this loop with the same URL
         continue
-
+      elif res.status == 204:
+        #no data so leave loop
+        break
       payload = json.loads(res.read())
       next = payload["next"]
       if not next:

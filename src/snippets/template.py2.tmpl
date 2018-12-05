@@ -34,6 +34,10 @@ def output_list():
         sleep(61)
         # then continue this loop with the same URL
         continue
+      elif res.getcode() == 204:
+        #no data so leave loop
+        break
+
     except urllib2.HTTPError as e:
       if e.code == 408:
         sleep(61)
@@ -85,8 +89,8 @@ def output_list():
       sleep(1)
 
 <% if (fileType === "json") { %>
-    #json footer
-    sys.stdout.write("\n] }\n")
+  #json footer
+  sys.stdout.write("\n] }\n")
 <% } %>
 
 
