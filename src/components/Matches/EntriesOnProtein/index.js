@@ -6,6 +6,7 @@ import { foundationPartial } from 'styles/foundation';
 import ProtVistaMatches from '../ProtVistaMatches';
 
 import protvista from 'components/ProtVista/style.css';
+import { location2html } from 'utils/text';
 
 const f = foundationPartial(protvista);
 
@@ -73,18 +74,10 @@ class EntriesOnProtein extends ProtVistaMatches {
         </div>
         <div className={f('track-component')}>
           <Tooltip
-            title={`<b>${(entry.accession || '').toUpperCase()}</b><br/>${(
-              entry.entry_protein_locations || protein.entry_protein_locations
-            )
-              .map(
-                loc =>
-                  `<p>
-                    ${loc.fragments
-                      .map(f => `${f.start}-${f.end}`)
-                      .join('<br/>')}
-                  </p>`,
-              )
-              .join()}`}
+            title={location2html(
+              entry.entry_protein_locations || protein.entry_protein_locations,
+              entry.accession,
+            )}
           >
             <protvista-interpro-track
               length={protein.length}

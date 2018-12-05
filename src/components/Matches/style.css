@@ -63,3 +63,7 @@
 .acc-row {
   font-size: 0.8rem;
 }
+
+.matchColumn {
+  min-width: 200px;
+}

@@ -48,3 +48,18 @@ export const findStart = (centerOfHighlight /*: number */) => (
   // after all those checks, if we're still here, return this start position
   return start;
 };
+
+export const location2html = (
+  locations /*: Array<Object> */,
+  accession /*: String */,
+) => {
+  let text = '';
+  if (accession) text = `<b>${(accession || '').toUpperCase()}</b><br/>`;
+  text += `${locations
+    .map(
+      loc =>
+        `<p>${loc.fragments.map(f => `${f.start}-${f.end}`).join('<br/>')}</p>`,
+    )
+    .join('')}`;
+  return text;
+};
