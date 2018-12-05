@@ -8,8 +8,8 @@ describe('protein2structure mapper', () => {
       {
         protein_start: 1,
         protein_end: 2,
-        structure_start: 1,
-        structure_end: 2,
+        author_structure_start: 1,
+        author_structure_end: 2,
       },
     ]);
     expect(mapper(0)).toBe(0);
@@ -22,8 +22,8 @@ describe('protein2structure mapper', () => {
       {
         protein_start: 51,
         protein_end: 100,
-        structure_start: 1,
-        structure_end: 50,
+        author_structure_start: 1,
+        author_structure_end: 50,
       },
     ]);
     expect(mapper(51)).toBe(1);
@@ -35,14 +35,14 @@ describe('protein2structure mapper', () => {
       {
         protein_start: 51,
         protein_end: 70,
-        structure_start: 1,
-        structure_end: 20,
+        author_structure_start: 1,
+        author_structure_end: 20,
       },
       {
         protein_start: 76,
         protein_end: 100,
-        structure_start: 21,
-        structure_end: 45,
+        author_structure_start: 21,
+        author_structure_end: 45,
       },
     ]);
     expect(mapper(51)).toBe(1);

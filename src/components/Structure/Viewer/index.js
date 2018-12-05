@@ -211,17 +211,22 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
-  _getChainMap(chain, start, end) {
-    return [
-      {
-        struct_asym_id: chain,
-        start_residue_number: start,
-        end_residue_number: end,
-        accession: chain,
-        source_database: 'pdb',
-      },
-    ];
+  _getChainMap(chain, locations, p2s) {
+    const chainMap = [];
+    for (const location of locations) {
+      for (const { start, end } of location.fragments) {
+        chainMap.push({
+          struct_asym_id: chain,
+          start_residue_number: p2s(start),
+          end_residue_number: p2s(end),
+          accession: chain,
+          source_database: 'pdb',
+        });
+      }
+    }
+    return chainMap;
   }
+
   _mapLocations(map, { chain, locations, entry, db, match }, p2s) {
     if (!map[chain]) map[chain] = [];
     for (const location of locations) {
@@ -255,15 +260,15 @@ class StructureView extends PureComponent /*:: <Props> */ {
           if (!memberDBMap.pdb[structure.accession])
             memberDBMap.pdb[structure.accession] = {};
           const p2s = getMapper(structure.protein_structure_mapping[chain]);
-          const {
-            start,
-            end,
-          } = structure.structure_protein_locations[0].fragments[0];
+          // const {
+          //   start,
+          //   end,
+          // } = structure.structure_protein_locations[0].fragments[0];
           if (!memberDBMap.pdb[structure.accession][chain]) {
             memberDBMap.pdb[structure.accession][chain] = this._getChainMap(
               chain,
-              p2s(start),
-              p2s(end),
+              structure.structure_protein_locations,
+              p2s,
             );
           }
           this._mapLocations(
