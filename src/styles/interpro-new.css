@@ -748,6 +748,14 @@ hr {
 .card-image {
   width: 100%;
   background-color: var(--colors-submain);
+  /*background-image: linear-gradient(
+    to right,
+    rgba(23, 121, 186, 0.5)
+  ),
+  url(images/backgrounds/bgd-banner-01.svg);*/
+  background-repeat: no-repeat, repeat;
+  background-position: 0, 100% 0%;
+  background-size: 100%, 2030px;
   height: 160px;
   position: relative;
   opacity: 0.8;
@@ -1123,7 +1131,7 @@ details.accordion-style > summary::after {
   right: 20px;
   top: 50%;
 }
-details.accordion-style:last-child {
+details.accordion-style:last-of-type {
   border-bottom: 1px solid var(--colors-very-white);
 }
 .accordion-info {
@@ -1158,6 +1166,27 @@ details.accordion-style[open] summary:after {
 content: '';
 } */
 /* ** END ACCORDION MENU *** */
+/*ALT ACCORDION*/
+details.option-style > summary {
+  color: var(--colors-graydark);
+  border: 0px solid var(--colors-very-white);
+  border-bottom-width: 0;
+  padding: 1rem;
+  cursor: pointer;
+  outline: 0;
+  z-index: 1;
+  position: relative; /*for animation*/
+  list-style: none; /*to keep for Firefox*/
+  transition: all var(--timing-medclose) ease-out;
+  /*remove default icon (Edge + Chrome + Opera_*/
+  &:hover {
+    background-color: var(--colors-unknown-sub);
+    color: var(--colors-dark);
+    transition: all var(--timing-medclose) ease-out;
+  }
+}
+
+/*END ALT*/
 /* footer */
 .local_footer {
   padding: 1rem 0;
