@@ -9,6 +9,8 @@ import protvista from 'components/ProtVista/style.css';
 const f = foundationPartial(protvista);
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import { location2html } from 'utils/text';
 
 class StructureOnProtein extends ProtVistaMatches {
   static propTypes = {
@@ -31,7 +33,7 @@ class StructureOnProtein extends ProtVistaMatches {
     const { structure, protein } = firstMatch;
     const main = 'entry_protein_locations' in protein ? 'protein' : 'structure';
     const {
-      [main]: { protein_structure_locations: locations },
+      [main]: { structure_protein_locations: locations },
     } = firstMatch;
     if (!this.web_protein.data)
       this.web_protein.data = protein.sequence || ' '.repeat(protein.length);
@@ -54,21 +56,24 @@ class StructureOnProtein extends ProtVistaMatches {
     const structure = matches[0].structure;
     return (
       <div className={f('track-in-table')}>
-        <protvista-manager
-          attributes="length displaystart displayend highlightstart highlightend"
-          id="pv-manager"
-        >
-          <div className={f('track-container')}>
-            <div className={f('aligned-to-track-component')}>
-              <protvista-sequence
-                ref={e => (this.web_protein = e)}
-                length={protein.length}
-                displaystart="1"
-                displayend={protein.length}
-              />
-            </div>
+        <div className={f('track-container')}>
+          <div className={f('aligned-to-track-component')}>
+            <protvista-sequence
+              ref={e => (this.web_protein = e)}
+              length={protein.length}
+              displaystart="1"
+              displayend={protein.length}
+            />
           </div>
-          <div className={f('track-component')}>
+        </div>
+        <div className={f('track-component')}>
+          <Tooltip
+            title={location2html(
+              structure.structure_protein_locations ||
+                protein.structure_protein_locations,
+              structure.accession,
+            )}
+          >
             <protvista-interpro-track
               length={protein.length}
               displaystart="1"
@@ -78,8 +83,8 @@ class StructureOnProtein extends ProtVistaMatches {
               shape="rectangle"
               expanded
             />
-          </div>
-        </protvista-manager>
+          </Tooltip>
+        </div>
       </div>
     );
   }

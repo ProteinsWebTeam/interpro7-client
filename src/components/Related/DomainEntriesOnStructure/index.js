@@ -32,8 +32,8 @@ const mergeData = secondaryData => {
           Chain: [
             {
               accession: entry.chain,
-              coordinates: toArrayStructure(entry.protein_structure_locations),
-              locations: entry.protein_structure_locations,
+              coordinates: toArrayStructure(entry.structure_protein_locations),
+              locations: entry.structure_protein_locations,
               label: `Chain ${entry.chain}`,
               source_database: 'pdb',
               type: 'chain',

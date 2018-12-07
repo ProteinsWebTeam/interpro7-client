@@ -1,7 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { isEqual } from 'lodash-es';
 
 import { changeSettingsRaw } from 'actions/creators';
 
@@ -78,7 +79,7 @@ const removeAllChildrenFromNode = node => {
   }
 };
 
-class ProtVista extends PureComponent {
+class ProtVista extends Component {
   static propTypes = {
     protein: T.object,
     data: T.array,
@@ -113,9 +114,24 @@ class ProtVista extends PureComponent {
     this.updateTracksWithData(data);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState !== this.state || !isEqual(nextProps, this.props);
+  }
+
   componentDidUpdate(prevProps) {
-    if (prevProps.data !== this.props.data) {
+    if (!isEqual(prevProps.data, this.props.data)) {
       this.updateTracksWithData(this.props.data);
+    }
+  }
+
+  _setResiduesInState(children, accession) {
+    if (children) {
+      this.web_tracks[accession].contributors = children;
+      for (const child of children) {
+        if (child.residues) {
+          this.setObjectValueInState('expandedTrack', child.accession, true);
+        }
+      }
     }
   }
 
@@ -168,18 +184,7 @@ class ProtVista extends PureComponent {
           : null;
         const isNewElement = !this.web_tracks[d.accession]._data;
         this.web_tracks[d.accession].data = tmp;
-        if (children) {
-          this.web_tracks[d.accession].contributors = children;
-          for (const child of children) {
-            if (child.residues) {
-              this.setObjectValueInState(
-                'expandedTrack',
-                child.accession,
-                true,
-              );
-            }
-          }
-        }
+        this._setResiduesInState(children, d.accession);
         if (isNewElement) {
           this.web_tracks[d.accession].addEventListener('entryclick', e => {
             this.handleCollapseLabels(e.detail.feature.accession);
@@ -515,57 +520,62 @@ class ProtVista extends PureComponent {
             </div>
             <div className={f('tracks-container')}>
               {data &&
-                data.map(([type, entries]) => (
-                  <div key={type} className={f('track-container')}>
-                    <div className={f('track-row')}>
+                data
+                  .filter(([_, tracks]) => tracks && tracks.length)
+                  .map(([type, entries]) => (
+                    <div key={type} className={f('track-container')}>
+                      <div className={f('track-row')}>
+                        <div
+                          className={f('track-component')}
+                          style={{ borderBottom: 0 }}
+                        >
+                          <header>
+                            <button
+                              onClick={() =>
+                                this.setObjectValueInState(
+                                  'hideCategory',
+                                  type,
+                                  !hideCategory[type],
+                                )
+                              }
+                            >
+                              {hideCategory[type] ? '▸' : '▾'} {type}
+                            </button>
+                          </header>
+                        </div>
+                      </div>
                       <div
-                        className={f('track-component')}
-                        style={{ borderBottom: 0 }}
+                        className={f('track-group', {
+                          hideCategory: hideCategory[type],
+                        })}
                       >
-                        <header>
-                          <button
-                            onClick={() =>
-                              this.setObjectValueInState(
-                                'hideCategory',
-                                type,
-                                !hideCategory[type],
-                              )
-                            }
-                          >
-                            {hideCategory[type] ? '▸' : '▾'} {type}
-                          </button>
-                        </header>
+                        {entries &&
+                          entries.map(entry => (
+                            <div
+                              key={entry.accession}
+                              className={f('track-row')}
+                            >
+                              <div className={f('track-component')}>
+                                <protvista-interpro-track
+                                  length={length}
+                                  displaystart="1"
+                                  displayend={length}
+                                  id={`track_${entry.accession}`}
+                                  ref={e =>
+                                    (this.web_tracks[entry.accession] = e)
+                                  }
+                                  shape="roundRectangle"
+                                  expanded
+                                />
+                              </div>
+                              <div className={f('track-accession')}>
+                                {this.renderLabels(entry)}
+                              </div>
+                            </div>
+                          ))}
                       </div>
                     </div>
-                    <div
-                      className={f('track-group', {
-                        hideCategory: hideCategory[type],
-                      })}
-                    >
-                      {entries &&
-                        entries.map(entry => (
-                          <div key={entry.accession} className={f('track-row')}>
-                            <div className={f('track-component')}>
-                              <protvista-interpro-track
-                                length={length}
-                                displaystart="1"
-                                displayend={length}
-                                id={`track_${entry.accession}`}
-                                ref={e =>
-                                  (this.web_tracks[entry.accession] = e)
-                                }
-                                shape="roundRectangle"
-                                expanded
-                              />
-                            </div>
-                            <div className={f('track-accession')}>
-                              {this.renderLabels(entry)}
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                ))}
+                  ))}
             </div>
           </protvista-manager>
         </div>

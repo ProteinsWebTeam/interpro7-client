@@ -46,7 +46,7 @@ export const EBI /*: Array<Object> */ = [
 
 const getEntryForFilter = ({ entry }) => {
   if (entry.db) {
-    return { ...entry, isFilter: true };
+    return { ...entry, integration: null, isFilter: true };
   }
 };
 const getTaxonomyForFilter = ({ taxonomy, main }) => {
@@ -511,6 +511,8 @@ const _NOT_MEMBER_DBS = [
   'TMHMM',
   'CATH',
   'SWISS-MODEL',
+  'MODBASE',
+  'SMODEL',
 ];
 export const NOT_MEMBER_DBS /*: Set<string> */ = new Set(
   _NOT_MEMBER_DBS.concat(_NOT_MEMBER_DBS.map(x => x.toLowerCase())),

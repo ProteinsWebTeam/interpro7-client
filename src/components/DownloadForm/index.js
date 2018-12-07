@@ -51,6 +51,7 @@ class DownloadForm extends PureComponent {
     this._ref = React.createRef();
   }
 
+  // eslint-disable-next-line complexity
   _handleChange = e => {
     if (!this._ref.current) return;
     const object = {};
@@ -275,10 +276,9 @@ class DownloadForm extends PureComponent {
             <>
               <Estimate data={data} isStale={isStale} />
               {/* Only display if the response from the API is a list of items */}
-              {description[main].db &&
-                !description[main].accession && (
-                  <Snippet fileType={fileType} url={endpoint} subset={subset} />
-                )}
+              {description[main].db && !description[main].accession && (
+                <Snippet fileType={fileType} url={endpoint} subset={subset} />
+              )}
 
               <div className={f('controls')}>
                 <h3>Download</h3>

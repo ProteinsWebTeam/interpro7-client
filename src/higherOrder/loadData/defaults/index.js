@@ -31,6 +31,7 @@ export const getUrl = createSelector(
       state => state.customLocation.description,
       state => state.customLocation.search,
       state => state.customLocation.hash,
+      // eslint-disable-next-line
       (
         { protocol, hostname, port, root },
         settingsPageSize,

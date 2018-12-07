@@ -18,9 +18,14 @@ import {
   isTranscribedFrom,
   isContainedInOrganism,
 } from 'schema_org/processors';
-import Loading from 'components/SimpleCommonComponents/Loading';
 
-const f = foundationPartial(ebiStyles);
+import { DescriptionReadMore } from 'components/Description';
+
+import Loading from 'components/SimpleCommonComponents/Loading';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+
+const f = foundationPartial(ebiStyles, fonts);
 
 /*:: type Props = {
   data: {
@@ -106,6 +111,27 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                         </td>
                       </tr>
                     )}
+                  {metadata.description && metadata.description.length ? (
+                    <tr>
+                      <td>
+                        Function{' '}
+                        <Tooltip title="Provided By UniProt">
+                          <span
+                            className={f('small', 'icon', 'icon-common')}
+                            data-icon="&#xf129;"
+                            aria-label="Provided By UniProt"
+                          />
+                        </Tooltip>
+                      </td>
+                      <td>
+                        <DescriptionReadMore
+                          text={metadata.description[0]}
+                          minNumberOfCharToShow={250}
+                          patternToRemove="\s?\(PubMed:\d+\)\s?"
+                        />
+                      </td>
+                    </tr>
+                  ) : null}
                 </tbody>
               </table>
             </div>

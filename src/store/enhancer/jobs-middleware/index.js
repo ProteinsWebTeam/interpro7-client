@@ -73,6 +73,7 @@ const updateJobInDB = async (metadata, data) => {
 
 const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   // function definitions
+  // eslint-disable-next-line
   const processJob = async (localID, meta) => {
     // Wait to have some time to do all the maintenance
     await schedule(DEFAULT_SCHEDULE_DELAY);
@@ -130,10 +131,10 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
         if (status === 'finished') {
           const currentDesc = getState().customLocation.description;
           if (
-            currentDesc.main.key !== 'job' ||
-            (currentDesc.job.accession &&
-              currentDesc.job.accession !== meta.localID &&
-              currentDesc.job.accession !== meta.remoteID)
+            currentDesc.main.key !== 'result' ||
+            (currentDesc.result.accession &&
+              currentDesc.result.accession !== meta.localID &&
+              currentDesc.result.accession !== meta.remoteID)
           ) {
             dispatch(
               addToast(
