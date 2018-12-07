@@ -318,7 +318,10 @@ class List extends PureComponent {
             <Exporter>
               <ul>
                 <li>
-                  <Link href={url} download="sets.json">
+                  <Link
+                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
+                    download="sets.json"
+                  >
                     JSON
                   </Link>
                 </li>

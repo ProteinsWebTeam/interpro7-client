@@ -324,15 +324,13 @@ class StructureCard extends PureComponent {
           </div>
         </div>
 
-        {data.extra_fields &&
-          data.metadata &&
-          data.extra_fields.counters && (
-            <SummaryCounterStructures
-              metadata={data.metadata}
-              entryDB={entryDB}
-              counters={data.extra_fields.counters}
-            />
-          )}
+        {data.extra_fields && data.metadata && data.extra_fields.counters && (
+          <SummaryCounterStructures
+            metadata={data.metadata}
+            entryDB={entryDB}
+            counters={data.extra_fields.counters}
+          />
+        )}
         <div className={f('card-footer')}>
           <TaxnameStructuresWithData />
 
@@ -380,17 +378,15 @@ const List = ({
 
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
         <StructureListFilters /> <hr className={f('margin-bottom-none')} />
-        {databases &&
-          db &&
-          databases[db.toUpperCase()] && (
-            <SchemaOrgData
-              data={{
-                data: { db: databases[db.toUpperCase()] },
-                location: window.location,
-              }}
-              processData={schemaProcessDataTable}
-            />
-          )}
+        {databases && db && databases[db.toUpperCase()] && (
+          <SchemaOrgData
+            data={{
+              data: { db: databases[db.toUpperCase()] },
+              location: window.location,
+            }}
+            processData={schemaProcessDataTable}
+          />
+        )}
         <Table
           dataTable={_payload.results}
           contentType="structure"
@@ -406,7 +402,10 @@ const List = ({
           <Exporter>
             <ul>
               <li>
-                <Link href={url} download="structures.json">
+                <Link
+                  href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
+                  download="structures.json"
+                >
                   JSON
                 </Link>
               </li>
