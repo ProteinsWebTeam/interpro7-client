@@ -880,6 +880,7 @@ hr {
     border-bottom: 2px var(--colors-dark) solid;
   }
 }
+
 .card-info {
   color: var(--colors-nearly-black);
   font-size: 90%;
@@ -891,6 +892,11 @@ hr {
     margin-right: 0.5rem;
   }
 }
+/*help - publication*/
+.card-info-source {
+  margin-top: 1rem;
+}
+
 .card-description {
   color: var(--colors-graydark);
   font-family: var(--fonts-system);
@@ -1318,6 +1324,19 @@ content: '';
   stroke: var(--colors-markchart);
 }
 /* END custom CLAN-VIEWER node module */
+
+/*Temp solution while finding a customized show more */
+.card-info-author .button.hollow.secondary {
+  border-color: transparent;
+  padding: 0.4rem 0;
+}
+.card-info-author .button.hollow.secondary i {
+  display: none;
+}
+.card-info-author .margin-bottom-large {
+  margin: 0;
+}
+
 /* ***************************** END OTHERS ******************************** */
 /* RESPONSIVE DESIGN */
 /* Medium only */
