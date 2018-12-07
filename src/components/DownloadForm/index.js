@@ -280,12 +280,14 @@ class DownloadForm extends PureComponent {
                   <Snippet fileType={fileType} url={endpoint} subset={subset} />
                 )}
 
-              <fieldset className={f('controls')}>
-                <legend>Download</legend>
+              <div className={f('controls')}>
+                <h3>Download</h3>
                 <TextExplanation
                   fileType={fileType}
                   description={description}
                   subset={subset}
+                  data={data}
+                  isStale={isStale}
                 />
                 <Controls
                   fileType={fileType}
@@ -294,8 +296,9 @@ class DownloadForm extends PureComponent {
                   url={endpoint}
                   data={data}
                   download={download}
+                  isStale={isStale}
                 />
-              </fieldset>
+              </div>
               {lowGraphics || <ProgressAnimation download={download} />}
             </>
           )}

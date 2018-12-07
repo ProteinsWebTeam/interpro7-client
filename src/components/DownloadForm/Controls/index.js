@@ -60,31 +60,33 @@ export class Controls extends PureComponent {
       fileType,
       entityType,
       download: { progress, successful, blobURL },
+      isStale,
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
     const count = (data.payload && data.payload.count) || 0;
     return (
       <>
-        {count > SOFT_LIMIT && (
-          <div
-            className={f('callout', count > HARD_LIMIT ? 'alert' : 'warning')}
-          >
-            We expect this file to contain{' '}
-            <NumberComponent abbr>{count}</NumberComponent> distinct{' '}
-            {toPlural(entityType)}.{' '}
-            {count > HARD_LIMIT
-              ? 'This file will be too large to generate within your browser'
-              : 'If you encounter any problems generating this file'}
-            , please check the “Code snippet” section of this page for
-            alternative suggestions.
-          </div>
-        )}
+        {count > SOFT_LIMIT &&
+          !isStale && (
+            <div
+              className={f('callout', count > HARD_LIMIT ? 'alert' : 'warning')}
+            >
+              We expect this file to contain{' '}
+              <NumberComponent abbr>{count}</NumberComponent> distinct{' '}
+              {toPlural(entityType)}.{' '}
+              {count > HARD_LIMIT
+                ? 'This file will be too large to generate within your browser'
+                : 'If you encounter any problems generating this file'}
+              , please check the “Code snippet” section of this page for
+              alternative suggestions.
+            </div>
+          )}
         <div className={f('container')}>
           <button
             type="button"
             className={f('button', 'hollow', { warning: count > SOFT_LIMIT })}
             onClick={this._handleGenerateClick}
-            disabled={progress || count > HARD_LIMIT}
+            disabled={progress || count > HARD_LIMIT || isStale}
           >
             Generate
           </button>

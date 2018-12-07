@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { noop } from 'lodash-es';
 
 import { toPlural } from 'utils/pages';
-
+import NumberComComponent from 'components/NumberComponent';
 import styles from './style.css';
 
 class Highlight extends PureComponent {
@@ -46,7 +46,7 @@ class Highlight extends PureComponent {
   }
 }
 
-const getMainFragment = description => {
+const getMainFragment = (description, count) => {
   const main = description.main.key;
   const { db, integration, accession } = description[main];
   if (accession) {
@@ -74,7 +74,8 @@ const getMainFragment = description => {
   if (db || integration) {
     return (
       <>
-        <Highlight>a list</Highlight> of{' '}
+        <Highlight>a list</Highlight> of approximately{' '}
+        <NumberComComponent abbr>{count}</NumberComComponent>{' '}
         <Highlight>{db || integration}</Highlight>{' '}
         <Highlight>{toPlural(main)}</Highlight>
       </>
@@ -144,10 +145,14 @@ export default class TextExplanation extends PureComponent {
     fileType: T.string.isRequired,
     description: T.object.isRequired,
     subset: T.bool.isRequired,
+    data: T.shape({
+      payload: T.object,
+    }).isRequired,
+    isStale: T.bool.isRequired,
   };
 
   render() {
-    const { fileType, description, subset } = this.props;
+    const { fileType, description, subset, data, isStale } = this.props;
 
     const filters = getFilters(description);
     let filterText = '';
@@ -156,52 +161,67 @@ export default class TextExplanation extends PureComponent {
     }
 
     const main = description.main.key;
+    const count = (data.payload && data.payload.count) || 0;
 
+    let explanation;
+    if (isStale) {
+      explanation = <p>Fetching explanation...</p>;
+    } else {
+      if (count > 0) {
+        explanation = (
+          <p>
+            This{' '}
+            <select
+              name="fileType"
+              value={fileType || 'accession'}
+              className={styles.select}
+              aria-label="Download type"
+              onChange={noop}
+              onBlur={noop}
+            >
+              <option
+                value="accession"
+                disabled={!description[main].db || description[main].accession}
+              >
+                Text
+              </option>
+              <option value="fasta" disabled={main !== 'protein'}>
+                FASTA
+              </option>
+              <option value="json">JSON</option>
+              {/* <option value="ndjson">Newline-delimited JSON</option> */}
+              {/* <option value="tsv">TSV</option> */}
+              {/* <option value="xml">XML</option> */}
+            </select>{' '}
+            file will contain {getMainFragment(description, count)}
+            {filterText}.
+          </p>
+        );
+        {
+          fileType === 'fasta' &&
+            description.entry.isFilter &&
+            description.entry.accession && (
+              <label>
+                <input
+                  name="subset"
+                  type="checkbox"
+                  checked={subset}
+                  onChange={noop}
+                  onBlur={noop}
+                />
+                I&apos;m only interested in the part(s) of the sequence matching
+                (1 subsequence with all the fragments for every match)
+              </label>
+            );
+        }
+      } else {
+        explanation = <p>No data matches the selected set of filters</p>;
+      }
+    }
     return (
       <section>
         <h6>Explanation</h6>
-        <p>
-          This{' '}
-          <select
-            name="fileType"
-            value={fileType || 'accession'}
-            className={styles.select}
-            aria-label="Download type"
-            onChange={noop}
-            onBlur={noop}
-          >
-            <option
-              value="accession"
-              disabled={!description[main].db || description[main].accession}
-            >
-              Accession
-            </option>
-            <option value="fasta" disabled={main !== 'protein'}>
-              FASTA
-            </option>
-            <option value="json">JSON</option>
-            {/* <option value="ndjson">Newline-delimited JSON</option> */}
-            {/* <option value="tsv">TSV</option> */}
-            {/* <option value="xml">XML</option> */}
-          </select>{' '}
-          file will contain {getMainFragment(description)}
-          {filterText}.
-        </p>
-        {fileType === 'fasta' &&
-          description.entry.isFilter &&
-          description.entry.accession && (
-            <label>
-              <input
-                name="subset"
-                type="checkbox"
-                checked={subset}
-                onChange={noop}
-                onBlur={noop}
-              />
-              I&apos;m only interested in the part(s) of the sequence matching
-              (1 subsequence with all the fragments for every match)
-            </label>
-          )}
+        {explanation}
       </section>
     );
   }
