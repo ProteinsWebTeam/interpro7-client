@@ -272,17 +272,15 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />
           <hr className={f('margin-bottom-none')} />
-          {databases &&
-            db &&
-            databases[db.toLowerCase()] && (
-              <SchemaOrgData
-                data={{
-                  data: { db: databases[db.toLowerCase()] },
-                  location: window.location,
-                }}
-                processData={schemaProcessDataTable}
-              />
-            )}
+          {databases && db && databases[db.toLowerCase()] && (
+            <SchemaOrgData
+              data={{
+                data: { db: databases[db.toLowerCase()] },
+                location: window.location,
+              }}
+              processData={schemaProcessDataTable}
+            />
+          )}
           <Table
             dataTable={_payload.results}
             contentType="protein"
@@ -297,7 +295,10 @@ class List extends PureComponent {
             <Exporter>
               <ul>
                 <li>
-                  <Link href={url} download="proteins.json">
+                  <Link
+                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
+                    download="proteins.json"
+                  >
                     JSON
                   </Link>
                 </li>
