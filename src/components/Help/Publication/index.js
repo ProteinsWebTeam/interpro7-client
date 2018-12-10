@@ -265,7 +265,7 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
           <summary>All previous InterPro publications</summary>
           <p className={f('margin-top-large')}>
             {
-              //<img alt="NAR publication cover" src="/interpro/resources/images/publication/ico_pub_nar_2015.jpg" />
+              // <img alt="NAR publication cover" src="/interpro/resources/images/publication/ico_pub_nar_2015.jpg" />
             }
             <Link
               href="//nar.oxfordjournals.org/content/43/D1/D213"
@@ -297,7 +297,7 @@ export default class Publication extends PureComponent /*:: <{||}> */ {
 
           <p>
             {
-              //<img alt="publication cover" src="/interpro/resources/images/publication/ico_pub_nar_1240.jpg" />
+              // <img alt="publication cover" src="/interpro/resources/images/publication/ico_pub_nar_1240.jpg" />
             }
             <Link
               href="//nar.oxfordjournals.org/content/40/D1/D306.full"
