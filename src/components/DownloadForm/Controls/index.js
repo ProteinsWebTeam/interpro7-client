@@ -26,7 +26,7 @@ export class Controls extends PureComponent {
       payload: T.object,
     }).isRequired,
     url: T.string.isRequired,
-    fileType: T.string.isRequired,
+    fileType: T.string,
     subset: T.bool.isRequired,
     entityType: T.string.isRequired,
     download: T.shape({
@@ -36,6 +36,8 @@ export class Controls extends PureComponent {
     }).isRequired,
     downloadURL: T.func.isRequired,
     downloadDelete: T.func.isRequired,
+    count: T.number.isRequired,
+    noData: T.bool.isRequired,
   };
 
   _handleGenerateClick = blockEvent(() =>
@@ -60,33 +62,33 @@ export class Controls extends PureComponent {
       fileType,
       entityType,
       download: { progress, successful, blobURL },
+      count,
+      noData,
       isStale,
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
-    const count = (data.payload && data.payload.count) || 0;
     return (
       <>
-        {count > SOFT_LIMIT &&
-          !isStale && (
-            <div
-              className={f('callout', count > HARD_LIMIT ? 'alert' : 'warning')}
-            >
-              We expect this file to contain{' '}
-              <NumberComponent abbr>{count}</NumberComponent> distinct{' '}
-              {toPlural(entityType)}.{' '}
-              {count > HARD_LIMIT
-                ? 'This file will be too large to generate within your browser'
-                : 'If you encounter any problems generating this file'}
-              , please check the “Code snippet” section of this page for
-              alternative suggestions.
-            </div>
-          )}
+        {count > SOFT_LIMIT && !isStale && (
+          <div
+            className={f('callout', count > HARD_LIMIT ? 'alert' : 'warning')}
+          >
+            We expect this file to contain{' '}
+            <NumberComponent abbr>{count}</NumberComponent> distinct{' '}
+            {toPlural(entityType)}.{' '}
+            {count > HARD_LIMIT
+              ? 'This file will be too large to generate within your browser'
+              : 'If you encounter any problems during the creation of this file'}
+            , please check the “Code snippet” section of this page for to see
+            how to download the data directly onto your computer.
+          </div>
+        )}
         <div className={f('container')}>
           <button
             type="button"
             className={f('button', 'hollow', { warning: count > SOFT_LIMIT })}
             onClick={this._handleGenerateClick}
-            disabled={progress || count > HARD_LIMIT || isStale}
+            disabled={progress || count > HARD_LIMIT || isStale || noData}
           >
             Generate
           </button>

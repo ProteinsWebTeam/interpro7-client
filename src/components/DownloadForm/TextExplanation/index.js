@@ -61,7 +61,8 @@ const getMainFragment = (description, count) => {
   if (db && integration) {
     return (
       <>
-        <Highlight>a list</Highlight> of{' '}
+        <Highlight>a list</Highlight> of approximately{' '}
+        <NumberComComponent abbr>{count}</NumberComComponent>{' '}
         {integration !== 'all' && (
           <>
             <Highlight>{integration}</Highlight>{' '}
@@ -83,8 +84,8 @@ const getMainFragment = (description, count) => {
   }
   return (
     <>
-      <Highlight>a list of counts</Highlight> centered on{' '}
-      <Highlight>{toPlural(main)}</Highlight>
+      <Highlight>a list of counts</Highlight> of{' '}
+      <Highlight>{toPlural(main)}</Highlight> from each data source in InterPro
     </>
   );
 };
@@ -115,7 +116,7 @@ const getFilterFragment = (type, { db, integration, accession }) => {
   if (db || (integration && integration !== 'all')) {
     return (
       <>
-        any of the <Highlight>{db || integration}</Highlight>{' '}
+        any <Highlight>{db || integration}</Highlight>{' '}
         <Highlight>{toPlural(type)}</Highlight>
       </>
     );
@@ -142,17 +143,27 @@ const getFilters = description =>
 
 export default class TextExplanation extends PureComponent {
   static propTypes = {
-    fileType: T.string.isRequired,
+    fileType: T.string,
     description: T.object.isRequired,
     subset: T.bool.isRequired,
     data: T.shape({
       payload: T.object,
     }).isRequired,
     isStale: T.bool.isRequired,
+    count: T.number.isRequired,
+    noData: T.bool.isRequired,
   };
 
   render() {
-    const { fileType, description, subset, data, isStale } = this.props;
+    const {
+      fileType,
+      description,
+      subset,
+      data,
+      isStale,
+      count,
+      noData,
+    } = this.props;
 
     const filters = getFilters(description);
     let filterText = '';
@@ -161,13 +172,14 @@ export default class TextExplanation extends PureComponent {
     }
 
     const main = description.main.key;
-    const count = (data.payload && data.payload.count) || 0;
 
     let explanation;
     if (isStale) {
-      explanation = <p>Fetching explanation...</p>;
+      explanation = <p>Preparing data...</p>;
     } else {
-      if (count > 0) {
+      if (noData) {
+        explanation = <p>No data matches the selected set of filters</p>;
+      } else {
         explanation = (
           <p>
             This{' '}
@@ -214,8 +226,6 @@ export default class TextExplanation extends PureComponent {
               </label>
             );
         }
-      } else {
-        explanation = <p>No data matches the selected set of filters</p>;
       }
     }
     return (

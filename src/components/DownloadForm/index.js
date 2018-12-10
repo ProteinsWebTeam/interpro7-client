@@ -272,36 +272,45 @@ class DownloadForm extends PureComponent {
           fileType={fileType}
           subset={subset}
         >
-          {({ data, download, isStale }) => (
-            <>
-              <Estimate data={data} isStale={isStale} />
-              {/* Only display if the response from the API is a list of items */}
-              {description[main].db && !description[main].accession && (
-                <Snippet fileType={fileType} url={endpoint} subset={subset} />
-              )}
+          {({ data, download, isStale }) => {
+            const count = (data.payload && data.payload.count) || 0;
+            const { db, integration } = description[main];
+            const noData = count == 0 && (db != null || integration != null);
+            return (
+              <>
+                <Estimate data={data} isStale={isStale} />
+                {/* Only display if the response from the API is a list of items */}
+                {description[main].db && !description[main].accession && (
+                  <Snippet fileType={fileType} url={endpoint} subset={subset} />
+                )}
 
-              <div className={f('controls')}>
-                <h3>Download</h3>
-                <TextExplanation
-                  fileType={fileType}
-                  description={description}
-                  subset={subset}
-                  data={data}
-                  isStale={isStale}
-                />
-                <Controls
-                  fileType={fileType}
-                  subset={subset}
-                  entityType={main}
-                  url={endpoint}
-                  data={data}
-                  download={download}
-                  isStale={isStale}
-                />
-              </div>
-              {lowGraphics || <ProgressAnimation download={download} />}
-            </>
-          )}
+                <div className={f('controls')}>
+                  <h3>Download</h3>
+                  <TextExplanation
+                    fileType={fileType}
+                    description={description}
+                    subset={subset}
+                    data={data}
+                    isStale={isStale}
+                    count={count}
+                    noData={noData}
+                  />
+                  <Controls
+                    fileType={fileType}
+                    subset={subset}
+                    entityType={main}
+                    url={endpoint}
+                    data={data}
+                    download={download}
+                    isStale={isStale}
+                    count={count}
+                    noData={noData}
+                  />
+                </div>
+                {lowGraphics || <ProgressAnimation download={download} />}
+              </>
+            );
+          }}
         </DataPreviewAndProgressProvider>
       </form>
     );
