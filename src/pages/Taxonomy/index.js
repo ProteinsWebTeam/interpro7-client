@@ -265,22 +265,9 @@ const TaxonomyCard = ({ data, search, entryDB }) => (
   <>
     <div className={f('card-header')}>
       <div className={f('card-image')}>
-        <Link
-          to={{
-            description: {
-              main: { key: 'taxonomy' },
-              taxonomy: {
-                db: data.metadata.source_database,
-                accession: `${data.metadata.accession}`,
-              },
-            },
-          }}
-        >
-          {data.extra_fields &&
-            data.extra_fields.lineage && (
-              <SpeciesIcon lineage={data.extra_fields.lineage} />
-            )}
-        </Link>
+        {data.extra_fields && data.extra_fields.lineage && (
+          <SpeciesIcon lineage={data.extra_fields.lineage} />
+        )}
       </div>
       <div className={f('card-title')}>
         <h6>
