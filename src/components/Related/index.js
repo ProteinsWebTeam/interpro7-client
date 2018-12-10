@@ -346,7 +346,8 @@ const RelatedAdvancedQuery = loadData({
   loadData({
     getUrl: getReversedUrl,
     mapStateToProps: mapStateToPropsAdvancedQuery,
-  })(({ data: { payload, loading }, secondaryData, ...props }) => {
+  })(({ data, secondaryData, ...props }) => {
+    const { payload, loading } = data;
     if (loading) return <Loading />;
     const _secondaryData =
       payload && payload.results

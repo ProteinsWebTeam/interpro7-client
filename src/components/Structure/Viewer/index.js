@@ -211,6 +211,39 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
+  _getChainMap(chain, locations, p2s) {
+    const chainMap = [];
+    for (const location of locations) {
+      for (const { start, end } of location.fragments) {
+        chainMap.push({
+          struct_asym_id: chain,
+          start_residue_number: p2s(start),
+          end_residue_number: p2s(end),
+          accession: chain,
+          source_database: 'pdb',
+        });
+      }
+    }
+    return chainMap;
+  }
+
+  _mapLocations(map, { chain, locations, entry, db, match }, p2s) {
+    if (!map[chain]) map[chain] = [];
+    for (const location of locations) {
+      for (const fragment of location.fragments) {
+        map[chain].push({
+          struct_asym_id: chain,
+          start_residue_number: p2s(fragment.start),
+          end_residue_number: p2s(fragment.end),
+          accession: entry,
+          source_database: db,
+          parent: match.metadata.integrated
+            ? { accession: match.metadata.integrated }
+            : null,
+        });
+      }
+    }
+  }
   createEntryMap() {
     const memberDBMap = { pdb: {} };
 
@@ -227,37 +260,28 @@ class StructureView extends PureComponent /*:: <Props> */ {
           if (!memberDBMap.pdb[structure.accession])
             memberDBMap.pdb[structure.accession] = {};
           const p2s = getMapper(structure.protein_structure_mapping[chain]);
-          const {
-            start,
-            end,
-          } = structure.structure_protein_locations[0].fragments[0];
+          // const {
+          //   start,
+          //   end,
+          // } = structure.structure_protein_locations[0].fragments[0];
           if (!memberDBMap.pdb[structure.accession][chain]) {
-            memberDBMap.pdb[structure.accession][chain] = [
-              {
-                struct_asym_id: chain,
-                start_residue_number: p2s(start),
-                end_residue_number: p2s(end),
-                accession: chain,
-                source_database: 'pdb',
-              },
-            ];
+            memberDBMap.pdb[structure.accession][chain] = this._getChainMap(
+              chain,
+              structure.structure_protein_locations,
+              p2s,
+            );
           }
-          if (!memberDBMap[db][entry][chain])
-            memberDBMap[db][entry][chain] = [];
-          for (const location of structure.entry_protein_locations) {
-            for (const fragment of location.fragments) {
-              memberDBMap[db][entry][chain].push({
-                struct_asym_id: chain,
-                start_residue_number: p2s(fragment.start),
-                end_residue_number: p2s(fragment.end),
-                accession: entry,
-                source_database: db,
-                parent: match.metadata.integrated
-                  ? { accession: match.metadata.integrated }
-                  : null,
-              });
-            }
-          }
+          this._mapLocations(
+            memberDBMap[db][entry],
+            {
+              chain,
+              locations: structure.entry_protein_locations,
+              entry,
+              db,
+              match,
+            },
+            p2s,
+          );
         }
       }
     }

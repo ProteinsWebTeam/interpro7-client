@@ -397,6 +397,7 @@ const Matches = (
     </Column>
     <Column
       dataKey="match"
+      headerClassName={f('matchColumn')}
       displayIf={
         primary !== 'taxonomy' &&
         secondary !== 'taxonomy' &&
