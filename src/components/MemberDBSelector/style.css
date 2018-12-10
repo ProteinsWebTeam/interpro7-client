@@ -58,6 +58,7 @@
   padding: 0;
 } /*removed for non popup selector*/
 
+/*works - TESTED on IE11: fallback that replace grid by columns*/
 @supports (display: grid) {
   .db-selector:not(.one-column) {
     display: grid;

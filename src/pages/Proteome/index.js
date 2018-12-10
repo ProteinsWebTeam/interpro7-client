@@ -232,7 +232,6 @@ const ProteomeCard = ({ data, search, entryDB }) => (
 
     <div className={f('card-footer')}>
       <div>
-        ID:{' '}
         <HighlightedText
           text={(data.metadata.accession || '').toUpperCase()}
           textToHighlight={search}
