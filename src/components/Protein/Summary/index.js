@@ -90,27 +90,26 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                       />
                     </td>
                   </tr>
-                  {metadata.proteome &&
-                    metadata.proteome.length > 0 && (
-                      <tr>
-                        <td>Proteome</td>
-                        <td>
-                          <Link
-                            to={{
-                              description: {
-                                main: { key: 'proteome' },
-                                proteome: {
-                                  db: 'uniprot',
-                                  accession: metadata.proteome,
-                                },
+                  {metadata.proteome && metadata.proteome.length > 0 && (
+                    <tr>
+                      <td>Proteome</td>
+                      <td>
+                        <Link
+                          to={{
+                            description: {
+                              main: { key: 'proteome' },
+                              proteome: {
+                                db: 'uniprot',
+                                accession: metadata.proteome,
                               },
-                            }}
-                          >
-                            {metadata.proteome.toUpperCase()}
-                          </Link>
-                        </td>
-                      </tr>
-                    )}
+                            },
+                          }}
+                        >
+                          {metadata.proteome.toUpperCase()}
+                        </Link>
+                      </td>
+                    </tr>
+                  )}
                   {metadata.description && metadata.description.length ? (
                     <tr>
                       <td>

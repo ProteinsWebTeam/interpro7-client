@@ -1,3 +1,5 @@
+@import '../../../styles/timing.css';
+
 .card-wrapper {
   display: grid;
   grid-gap: 0.5rem; /* was .8rem*/
@@ -144,6 +146,30 @@
   display: flex;
   align-items: center;
   width: 25%;
+  position: relative;
+
+  &:hover .icon-over-anim {
+    transform: scale(2.2);
+    opacity: 1;
+    transition: all var(--timing-really-fast) cubic-bezier(0.4, 0, 0.2, 1); /*to keep to do the animation on mouse leave too*/
+  }
+}
+
+.icon-wrapper {
+  position: relative;
+
+  & .icon-over-anim {
+    position: absolute;
+    top: 26%;
+    left: 10%;
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    display: block;
+    opacity: 0;
+    transition: all var(--timing-really-fast) cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }
 
 .card-counter {
@@ -192,9 +218,9 @@
 
 .icon-count-ida {
   height: 3em;
-  width: 38px;
+  width: 32px; /*was 38*/
   background-image: url('../../../images/icons/ico-ida.svg');
-  background-position-y: 59%;
+  background-position-y: 54%;
   background-repeat: no-repeat;
 }
 
