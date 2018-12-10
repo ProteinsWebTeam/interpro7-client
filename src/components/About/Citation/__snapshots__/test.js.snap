@@ -14,7 +14,18 @@ exports[`<Citation /> should render 1`] = `
       <LoadableComponent
         data={
           Object {
-            "author": "Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt, Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown, Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough, David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez, Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu Mi, Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo, Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien Pesseat, Simon C Potter, Matloob A Qureshi, Neil D Rawlings, Nicole Redaschi, Lorna J Richardson, Catherine Rivoire, Gustavo A Salazar, Amaia Sangrador-Vegas, Christian J A Sigrist, Ian Sillitoe, Granger G Sutton, Narmada Thanki, Paul D Thomas, Silvio C E Tosatto, Siew-Yit Yong and Robert D Finn",
+            "author": "Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt, 
+              Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown,
+              Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough,
+              David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez, 
+              Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu Mi, 
+              Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo, 
+              Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien Pesseat, 
+              Simon C Potter, Matloob A Qureshi, Neil D Rawlings, Nicole Redaschi, 
+              Lorna J Richardson, Catherine Rivoire, Gustavo A Salazar, 
+              Amaia Sangrador-Vegas, Christian J A Sigrist, Ian Sillitoe, 
+              Granger G Sutton, Narmada Thanki, Paul D Thomas, Silvio C E Tosatto, 
+              Siew-Yit Yong and Robert D Finn",
             "identifier": "10.1093/nar/gky1100",
           }
         }
@@ -42,7 +53,18 @@ exports[`<Citation /> should render 1`] = `
           , please refer to the following publication:
           <br />
           <i>
-            Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt, Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown, Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough, David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez, Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu Mi, Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo, Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien Pesseat, Simon C Potter, Matloob A Qureshi, Neil D Rawlings, Nicole Redaschi, Lorna J Richardson, Catherine Rivoire, Gustavo A Salazar, Amaia Sangrador-Vegas, Christian J A Sigrist, Ian Sillitoe, Granger G Sutton, Narmada Thanki, Paul D Thomas, Silvio C E Tosatto, Siew-Yit Yong and Robert D Finn
+            Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt, 
+              Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown,
+              Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough,
+              David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez, 
+              Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu Mi, 
+              Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo, 
+              Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien Pesseat, 
+              Simon C Potter, Matloob A Qureshi, Neil D Rawlings, Nicole Redaschi, 
+              Lorna J Richardson, Catherine Rivoire, Gustavo A Salazar, 
+              Amaia Sangrador-Vegas, Christian J A Sigrist, Ian Sillitoe, 
+              Granger G Sutton, Narmada Thanki, Paul D Thomas, Silvio C E Tosatto, 
+              Siew-Yit Yong and Robert D Finn
           </i>
            (
           2019
