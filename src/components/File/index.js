@@ -22,6 +22,7 @@ import styles from './style.css';
 
 const f = foundationPartial(styles);
 
+const SMALL = 0.01;
 class Button extends PureComponent {
   static propTypes = {
     fileType: T.oneOf(['accession', 'fasta']).isRequired,
@@ -106,7 +107,7 @@ class Button extends PureComponent {
               downloading={downloading}
               success={successful}
               failed={failed}
-              progress={progress || 0.01}
+              progress={progress || SMALL}
             />
           </Link>
         </div>

@@ -87,7 +87,7 @@ const groupApplications = applications => {
   return { mdb1, mdb2, other, noCategory };
 };
 
-const applicationToCheckbox = ({ label, value, defaultValue, properties }) => (
+const applicationToCheckbox = ({ value, defaultValue, properties }) => (
   <AdvancedOption
     name="appl"
     value={value}
@@ -99,7 +99,6 @@ const applicationToCheckbox = ({ label, value, defaultValue, properties }) => (
   </AdvancedOption>
 );
 applicationToCheckbox.propTypes = {
-  label: T.string.isRequired,
   value: T.string.isRequired,
   defaultValue: T.bool.isRequired,
   properties: T.shape({

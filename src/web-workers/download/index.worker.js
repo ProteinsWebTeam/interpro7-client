@@ -142,6 +142,7 @@ const downloadContent = (onProgress, onSuccess, onError) => async (
         totalCount = payload.count;
         for (const part of processResults(payload.results)) {
           // Check if it was canceled, if so, stop everything and return
+          // eslint-disable-next-line
           if (canceled.has(key)) return;
           // use `totalCount + 1` to not finish at exactly 1 to account for the
           // time needed to create the blob

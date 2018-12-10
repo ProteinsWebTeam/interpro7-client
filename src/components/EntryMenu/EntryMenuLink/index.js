@@ -54,6 +54,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     entryDB: T.string,
   };
 
+  // eslint-disable-next-line
   render() {
     const {
       to,
@@ -111,6 +112,11 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
 
     if (!isFirstLevel && !isNaN(value) && !value) return null;
 
+    const icons = new Map([
+      ['Entries', '&#xf1c0;'],
+      ['Proteins', '&#x50;'],
+      ['Structures', 's;'],
+    ]);
     return (
       <li className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}>
         <Link
@@ -120,112 +126,30 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
           activeClass={f('is-active', 'is-active-tab')}
         >
           <span data-content={name} className={f('name')}>
-            {name === 'Entries' && (
-              <i
-                data-icon="&#xf1c0;"
-                className={f(
-                  'icon',
-                  'icon-common',
-                  'icon-count-sm',
-                  'margin-right-medium',
-                )}
-                aria-label="icon entry matches"
-              />
-            )}
-            {name === 'Proteins' && (
-              <i
-                data-icon="&#x50;"
-                className={f(
-                  'icon',
-                  'icon-conceptual',
-                  'icon-count-sm',
-                  'margin-right-medium',
-                )}
-                aria-label="icon proteins"
-              />
-            )}
-            {name === 'Structures' && (
-              <i
-                data-icon="s"
-                className={f(
-                  'icon',
-                  'icon-conceptual',
-                  'icon-count-sm',
-                  'margin-right-medium',
-                )}
-                aria-label="icon structures"
-              />
-            )}
-            {name === 'Domain Architectures' && (
-              <i
-                className={f(
-                  'icon',
-                  'icon-count-ida',
-                  'icon-count-sm',
-                  'margin-right-medium',
-                )}
-                aria-label="icon domain architectures"
-              />
-            )}
-            {name === 'Taxonomy' && (
-              <i
-                className={f(
-                  'icon',
-                  'icon-count-species',
-                  'icon-count-sm',
-                  'margin-right-medium',
-                )}
-                aria-label="icon taxonomy"
-              />
-            )}
-            {name === 'Proteomes' && (
-              <i
-                className={f(
-                  'icon',
-                  'icon-count-proteome',
-                  'icon-count-sm',
-                  'margin-right-medium',
-                )}
-                aria-label="icon proteomes"
-              />
-            )}
-            {name === 'Sets' && (
-              <i
-                className={f(
-                  'icon',
-                  'icon-count-set',
-                  'icon-count-sm',
-                  'margin-right-medium',
-                )}
-                aria-label="icon set"
-              />
-            )}
-            {name === 'Signature' && (
-              <i
-                className={f(
-                  'icon',
-                  'icon-count-hmm',
-                  'icon-count-sm',
-                  'margin-right-medium',
-                )}
-                aria-label="icon signature"
-              />
-            )}
+            <i
+              data-icon={icons.get(name)}
+              className={f(
+                'icon',
+                'icon-common',
+                'icon-count-sm',
+                'margin-right-medium',
+              )}
+              aria-label={`icon ${name}`}
+            />
             {name}
           </span>
           {value !== null && ' '}
-          {value !== null &&
-            !isNaN(value) && (
-              <NumberComponent
-                label
-                loading={loading}
-                abbr
-                duration={usedOnTheSide ? 0 : undefined}
-                className={f('counter')}
-              >
-                {value}
-              </NumberComponent>
-            )}
+          {value !== null && !isNaN(value) && (
+            <NumberComponent
+              label
+              loading={loading}
+              abbr
+              duration={usedOnTheSide ? 0 : undefined}
+              className={f('counter')}
+            >
+              {value}
+            </NumberComponent>
+          )}
         </Link>
       </li>
     );
