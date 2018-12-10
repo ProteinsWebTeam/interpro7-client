@@ -20,6 +20,8 @@ class Exporter extends PureComponent {
   static propTypes = {
     entryDB: T.string,
     children: T.any,
+    includeSettings: T.oneOfType([T.bool, T.func]),
+    left: T.oneOfType([T.bool, T.func]),
   };
 
   constructor(props) {
