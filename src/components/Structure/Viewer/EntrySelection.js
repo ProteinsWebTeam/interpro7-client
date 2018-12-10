@@ -1,6 +1,11 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+import { foundationPartial } from 'styles/foundation';
+import style from './style.css';
+
+const f = foundationPartial(style);
+
 class EntrySelection extends PureComponent {
   static propTypes = {
     updateStructure: T.func.isRequired,
@@ -58,14 +63,7 @@ class EntrySelection extends PureComponent {
     }
     return (
       <select
-        style={{
-          maxWidth: '400px',
-          position: 'absolute',
-          bottom: '.5rem',
-          fontSize: '90%',
-          left: '0',
-          margin: '0',
-        }}
+        className={f('structure-viewer-select')}
         onChange={this.onSelectionChange}
         onBlur={this.onSelectionChange}
         value={this.props.selectedEntry}

@@ -5,6 +5,7 @@ import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 
+import { EntryMenuWithoutData } from 'components/EntryMenu';
 import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -143,6 +144,10 @@ class IPScanResult extends PureComponent {
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('large-12', 'columns')}>
+              {
+                // Menu Just for InterProScan search
+              }
+
               <BrowseTabsWithoutData
                 key="browse"
                 mainType="sequence"
@@ -153,6 +158,19 @@ class IPScanResult extends PureComponent {
                   payload: { metadata: { counters: { entries } } },
                 }}
               />
+              {
+                // <EntryMenuWithoutData
+                //   data={{
+                //   loading: false}}
+                //   metadata={{ counters: { entries }}}
+                //   key="browseplus"
+                //   mainType="sequence"
+                //   mainDB=""
+                //   mainAccession={matched}
+                //   lowGraphics={false}
+                //   isSignature={false}
+                // />
+              }
             </div>
           </div>
         </ErrorBoundary>

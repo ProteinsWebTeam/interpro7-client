@@ -28,13 +28,12 @@ class HighlightedText extends PureComponent {
 
     return _text
       .split(new RegExp(`(${textLessWildcards})`, 'i'))
-      .map(
-        (e, i) =>
-          e.toLowerCase() === textLessWildcards.toLowerCase() ? (
-            <mark key={i}>{e}</mark>
-          ) : (
-            <span key={i}>{e}</span>
-          ),
+      .map((e, i) =>
+        e.toLowerCase() === textLessWildcards.toLowerCase() ? (
+          <mark key={i}>{e}</mark>
+        ) : (
+          <span key={i}>{e}</span>
+        ),
       );
   }
 }
