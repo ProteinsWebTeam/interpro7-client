@@ -186,21 +186,9 @@ const ProteomeCard = ({ data, search, entryDB }) => (
   <>
     <div className={f('card-header')}>
       <div className={f('card-image')}>
-        <Link
-          to={{
-            description: {
-              main: { key: 'proteome' },
-              proteome: {
-                db: data.metadata.source_database,
-                accession: `${data.metadata.accession}`,
-              },
-            },
-          }}
-        >
-          {data.metadata && data.metadata.lineage && (
-            <SpeciesIcon lineage={data.metadata.lineage} />
-          )}
-        </Link>
+        {data.metadata && data.metadata.lineage && (
+          <SpeciesIcon lineage={data.metadata.lineage} />
+        )}
       </div>
       <div className={f('card-title')}>
         <h6>
