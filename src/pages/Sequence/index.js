@@ -5,7 +5,7 @@ import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 
-import { EntryMenuWithoutData } from 'components/EntryMenu';
+// import { EntryMenuWithoutData } from 'components/EntryMenu';
 import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
