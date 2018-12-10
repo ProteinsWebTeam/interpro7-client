@@ -168,34 +168,38 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       onFocus={TableView.preload}
                     />
                   </Tooltip>
-                  <div className={f('test-support-grid')}>
-                    <Tooltip title="View your results in a grid">
+                  {card && (
+                    <div className={f('test-support-grid')}>
+                      <Tooltip title="View your results in a grid">
+                        <Link
+                          to={l => ({ ...l, hash: 'grid' })}
+                          className={f('icon-view', 'grid-view', {
+                            disabled: !card,
+                          })}
+                          activeClass={f('active')}
+                          aria-disabled={card ? 'false' : 'true'}
+                          aria-label="view your results in a grid"
+                          onMouseOver={GridView.preload}
+                          onFocus={GridView.preload}
+                        />
+                      </Tooltip>
+                    </div>
+                  )}
+                  {withTree && (
+                    <Tooltip title="View your results as a tree">
                       <Link
-                        to={l => ({ ...l, hash: 'grid' })}
-                        className={f('icon-view', 'grid-view', {
-                          disabled: !card,
+                        to={l => ({ ...l, hash: 'tree' })}
+                        className={f('icon-view', 'tree-view', {
+                          disabled: !withTree,
                         })}
                         activeClass={f('active')}
-                        aria-disabled={card ? 'false' : 'true'}
-                        aria-label="view your results in a grid"
-                        onMouseOver={GridView.preload}
-                        onFocus={GridView.preload}
+                        aria-disabled={withTree ? 'false' : 'true'}
+                        aria-label="view your results as a tree"
+                        onMouseOver={TreeView.preload}
+                        onFocus={TreeView.preload}
                       />
                     </Tooltip>
-                  </div>
-                  <Tooltip title="View your results as a tree">
-                    <Link
-                      to={l => ({ ...l, hash: 'tree' })}
-                      className={f('icon-view', 'tree-view', {
-                        disabled: !withTree,
-                      })}
-                      activeClass={f('active')}
-                      aria-disabled={withTree ? 'false' : 'true'}
-                      aria-label="view your results as a tree"
-                      onMouseOver={TreeView.preload}
-                      onFocus={TreeView.preload}
-                    />
-                  </Tooltip>
+                  )}
                 </div>
                 <div className={f('filter-wrapper')}>
                   {search}

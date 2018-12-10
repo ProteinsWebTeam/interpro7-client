@@ -106,7 +106,7 @@ export class DomainOnProteinWithoutData extends PureComponent {
     if (!data || data.loading) return <Loading />;
     if (!data.payload || !data.payload.results) {
       return (
-        <div className={f('callout', 'info', 'withicon')}>
+        <div className={f('callout')}>
           There are no entries matching this protein.
         </div>
       );

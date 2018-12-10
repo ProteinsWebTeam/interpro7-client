@@ -153,7 +153,7 @@ class Link extends PureComponent /*:: <Props> */ {
       if (DEV) {
         props.style = {
           ...(props.style || {}),
-          border: '1px dashed red',
+          border: '5px dashed red',
           color: 'darkred',
         };
         _children = (
