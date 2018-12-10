@@ -263,36 +263,24 @@ class EntryCard extends PureComponent {
       <>
         <div className={f('card-header')}>
           <div className={f('card-image')}>
-            <Link
-              to={{
-                description: {
-                  main: { key: 'entry' },
-                  entry: {
-                    db: data.metadata.source_database,
-                    accession: data.metadata.accession,
-                  },
-                },
-              }}
-            >
-              {entryDB.toLowerCase() === 'interpro' ? (
-                <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
-                  <interpro-type
-                    dimension="2em"
-                    type={data.metadata.type.replace('_', ' ')}
-                    aria-label="Entry type"
-                  />
-                </Tooltip>
-              ) : (
-                <Tooltip title={`${entryDB} database`}>
-                  <MemberSymbol
-                    size="2em"
-                    type={entryDB}
-                    aria-label="Database type"
-                    className={f('md-small')}
-                  />
-                </Tooltip>
-              )}
-            </Link>
+            {entryDB.toLowerCase() === 'interpro' ? (
+              <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
+                <interpro-type
+                  dimension="2em"
+                  type={data.metadata.type.replace('_', ' ')}
+                  aria-label="Entry type"
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip title={`${entryDB} database`}>
+                <MemberSymbol
+                  size="2em"
+                  type={entryDB}
+                  aria-label="Database type"
+                  className={f('md-small')}
+                />
+              </Tooltip>
+            )}
           </div>
           <div className={f('card-title')}>
             <h6>
