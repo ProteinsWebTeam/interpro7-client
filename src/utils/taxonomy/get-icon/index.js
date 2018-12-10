@@ -1,5 +1,6 @@
 // @flow
 
+// eslint-disable-next-line
 export default (lineage /*: string */) => {
   /* Node Pediculidae (body lice, includes 121224 Pediculus humanus subsp. corporis (louse) */
   if (lineage.includes(' 121221 ')) return '4';

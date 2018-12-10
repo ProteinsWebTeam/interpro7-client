@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 

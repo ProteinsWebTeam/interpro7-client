@@ -73,6 +73,7 @@ const updateJobInDB = async (metadata, data) => {
 
 const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   // function definitions
+  // eslint-disable-next-line
   const processJob = async (localID, meta) => {
     // Wait to have some time to do all the maintenance
     await schedule(DEFAULT_SCHEDULE_DELAY);

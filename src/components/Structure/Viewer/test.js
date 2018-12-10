@@ -17,6 +17,35 @@ describe('protein2structure mapper', () => {
     expect(mapper(2)).toBe(2);
   });
 
+  test('using author residues', () => {
+    const mapper = getMapper([
+      {
+        protein_start: 1,
+        protein_end: 2,
+        author_structure_start: 1,
+        author_structure_end: 2,
+      },
+    ]);
+    expect(mapper(0)).toBe(0);
+    expect(mapper(1)).toBe(1);
+    expect(mapper(2)).toBe(2);
+  });
+  test('using author over residues', () => {
+    const mapper = getMapper([
+      {
+        protein_start: 1,
+        protein_end: 2,
+        structure_start: 100,
+        structure_end: 200,
+        author_structure_start: 1,
+        author_structure_end: 2,
+      },
+    ]);
+    expect(mapper(0)).toBe(0);
+    expect(mapper(1)).toBe(1);
+    expect(mapper(2)).toBe(2);
+  });
+
   test('structure covers the second half', () => {
     const mapper = getMapper([
       {
