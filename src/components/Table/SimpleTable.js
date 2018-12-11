@@ -21,7 +21,6 @@ import TableView from './views/Table';
 /*:: type Props = {
   dataTable: Array<Object>,
   isStale: ?boolean,
-  actualSize: number,
   query: Object,
   title: string,
   notFound: ?boolean,
@@ -37,7 +36,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
     loading: T.bool,
     ok: T.bool,
     status: T.number,
-    actualSize: T.number,
     query: T.object,
     title: T.string,
     notFound: T.bool,
