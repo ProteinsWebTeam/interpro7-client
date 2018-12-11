@@ -275,7 +275,8 @@ class DownloadForm extends PureComponent {
           {({ data, download, isStale }) => {
             const count = (data.payload && data.payload.count) || 0;
             const { db, integration } = description[main];
-            const noData = count == 0 && (db != null || integration != null);
+            const noData = count === 0 && (db !== null || integration !== null);
+            console.log(`NODATA DB: ${db} Integration:${integration}`);
             return (
               <>
                 <Estimate data={data} isStale={isStale} />
@@ -290,7 +291,6 @@ class DownloadForm extends PureComponent {
                     fileType={fileType}
                     description={description}
                     subset={subset}
-                    data={data}
                     isStale={isStale}
                     count={count}
                     noData={noData}
@@ -300,7 +300,6 @@ class DownloadForm extends PureComponent {
                     subset={subset}
                     entityType={main}
                     url={endpoint}
-                    data={data}
                     download={download}
                     isStale={isStale}
                     count={count}

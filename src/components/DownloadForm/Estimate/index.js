@@ -58,6 +58,7 @@ export default class Estimate extends PureComponent {
       status: T.number,
       headers: T.instanceOf(Headers),
     }).isRequired,
+    isStale: T.bool.isRequired,
   };
 
   render() {

@@ -142,7 +142,7 @@ export class Snippet extends PureComponent {
           snippet of code for you below. You can select a programming language
           from the list below, copy or download the code into a text file and
           then run the downloaded code via the selected programming language in
-          a terminal. If you're getting started with programming we recommend
+          a terminal. If you are getting started with programming we recommend
           looking into
           <a href="https://www.python.org/about/gettingstarted"> Python.</a>
         </p>

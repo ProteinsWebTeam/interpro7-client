@@ -146,9 +146,6 @@ export default class TextExplanation extends PureComponent {
     fileType: T.string,
     description: T.object.isRequired,
     subset: T.bool.isRequired,
-    data: T.shape({
-      payload: T.object,
-    }).isRequired,
     isStale: T.bool.isRequired,
     count: T.number.isRequired,
     noData: T.bool.isRequired,
@@ -159,7 +156,6 @@ export default class TextExplanation extends PureComponent {
       fileType,
       description,
       subset,
-      data,
       isStale,
       count,
       noData,
@@ -209,23 +205,21 @@ export default class TextExplanation extends PureComponent {
             {filterText}.
           </p>
         );
-        {
-          fileType === 'fasta' &&
-            description.entry.isFilter &&
-            description.entry.accession && (
-              <label>
-                <input
-                  name="subset"
-                  type="checkbox"
-                  checked={subset}
-                  onChange={noop}
-                  onBlur={noop}
-                />
-                I&apos;m only interested in the part(s) of the sequence matching
-                (1 subsequence with all the fragments for every match)
-              </label>
-            );
-        }
+        fileType === 'fasta' &&
+          description.entry.isFilter &&
+          description.entry.accession && (
+            <label>
+              <input
+                name="subset"
+                type="checkbox"
+                checked={subset}
+                onChange={noop}
+                onBlur={noop}
+              />
+              I&apos;m only interested in the part(s) of the sequence matching
+              (1 subsequence with all the fragments for every match)
+            </label>
+          );
       }
     }
     return (

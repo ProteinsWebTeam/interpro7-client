@@ -22,9 +22,6 @@ export const SOFT_LIMIT = 10000;
 
 export class Controls extends PureComponent {
   static propTypes = {
-    data: T.shape({
-      payload: T.object,
-    }).isRequired,
     url: T.string.isRequired,
     fileType: T.string,
     subset: T.bool.isRequired,
@@ -36,6 +33,7 @@ export class Controls extends PureComponent {
     }).isRequired,
     downloadURL: T.func.isRequired,
     downloadDelete: T.func.isRequired,
+    isStale: T.bool,
     count: T.number.isRequired,
     noData: T.bool.isRequired,
   };
@@ -58,7 +56,6 @@ export class Controls extends PureComponent {
 
   render() {
     const {
-      data,
       fileType,
       entityType,
       download: { progress, successful, blobURL },
