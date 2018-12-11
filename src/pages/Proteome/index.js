@@ -232,7 +232,6 @@ const ProteomeCard = ({ data, search, entryDB }) => (
 
     <div className={f('card-footer')}>
       <div>
-        ID:{' '}
         <HighlightedText
           text={(data.metadata.accession || '').toUpperCase()}
           textToHighlight={search}
@@ -329,7 +328,10 @@ class List extends PureComponent {
             <Exporter>
               <ul>
                 <li>
-                  <Link href={url} download="proteome.json">
+                  <Link
+                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
+                    download="proteome.json"
+                  >
                     JSON
                   </Link>
                 </li>

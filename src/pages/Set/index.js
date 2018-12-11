@@ -224,7 +224,6 @@ const SetCard = ({ data, search, entryDB }) => (
 
     <div className={f('card-footer')}>
       <div>
-        ID:
         <HighlightedText
           text={(data.metadata.accession || '').toUpperCase()}
           textToHighlight={search}
@@ -318,7 +317,10 @@ class List extends PureComponent {
             <Exporter>
               <ul>
                 <li>
-                  <Link href={url} download="sets.json">
+                  <Link
+                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
+                    download="sets.json"
+                  >
                     JSON
                   </Link>
                 </li>

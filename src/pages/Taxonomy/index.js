@@ -276,10 +276,9 @@ const TaxonomyCard = ({ data, search, entryDB }) => (
             },
           }}
         >
-          {data.extra_fields &&
-            data.extra_fields.lineage && (
-              <SpeciesIcon lineage={data.extra_fields.lineage} />
-            )}
+          {data.extra_fields && data.extra_fields.lineage && (
+            <SpeciesIcon lineage={data.extra_fields.lineage} />
+          )}
         </Link>
       </div>
       <div className={f('card-title')}>
@@ -390,7 +389,10 @@ class List extends PureComponent {
             <Exporter>
               <ul>
                 <li>
-                  <Link href={url} download="taxonomy.json">
+                  <Link
+                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
+                    download="taxonomy.json"
+                  >
                     JSON
                   </Link>
                 </li>

@@ -209,10 +209,16 @@
 }
 
 .fullscreenable:-webkit-full-screen .fullscreen {
-  display: none;
+  display: none; /*is this necessary?*/
 }
+
+/*define fullscreen bgd otherwise dark by default - no need for IE*/
 .fullscreenable:-webkit-full-screen {
   width: 100%;
+  background-color: white;
+}
+.fullscreenable:-moz-full-screen {
+  background-color: white;
 }
 
 .popper {

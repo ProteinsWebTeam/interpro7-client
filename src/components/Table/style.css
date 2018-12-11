@@ -24,6 +24,7 @@ table th {
 .result-page input {
   margin-bottom: 0;
   height: 2.2rem;
+  padding: 0.5rem 1.2rem 0.5rem 0.5rem;
 }
 
 .result-page .table-results-filtering .icon-view {
@@ -65,15 +66,25 @@ table th {
 .type-selector {
   display: flex;
   line-height: 0;
+  & > div {
+    margin: 0 0.4rem;
+  }
+  & > div:only-child {
+    margin: 0;
+  }
 
-  & > * {
-    margin: 0 0.5ch;
+  & > div:last-of-type {
+    margin: 0 0 0 0.4rem;
+  }
+  & > div:first-of-type {
+    margin: 0 0.4rem 0 0;
   }
 }
 
 .test-support-grid {
   display: none;
 }
+/*works - TESTED on IE11 : remove the grid icon when no support*/
 @supports (display: grid) {
   .test-support-grid {
     display: flex;

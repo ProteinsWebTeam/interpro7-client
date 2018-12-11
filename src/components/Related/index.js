@@ -271,33 +271,31 @@ export class _RelatedAdvanced extends PureComponent {
         dataBase.payload.databases) ||
       {};
     return (
-      <div>
+      <div className={f('row', 'column')}>
         {mainType === 'protein' && focusType === 'structure' ? (
           <StructureOnProtein structures={secondaryData} protein={mainData} />
         ) : null}
         {mainType === 'structure' && focusType === 'entry' ? (
           <EntriesOnStructure entries={secondaryData} />
         ) : null}
-        <div className={f('row', 'columns')}>
-          {focusType === 'taxonomy' ? <KeySpeciesTable /> : null}
-          <p>
-            This {mainType} matches
-            {secondaryData.length > 1
-              ? ` these ${toPlural(focusType)}:`
-              : ` this ${focusType}:`}
-          </p>
-          <InfoFilters
-            filters={otherFilters}
-            focusType={focusType}
-            databases={databases}
-          />
-        </div>
+
+        {focusType === 'taxonomy' ? <KeySpeciesTable /> : null}
+        <p>
+          This {mainType} matches
+          {secondaryData.length > 1
+            ? ` these ${toPlural(focusType)}:`
+            : ` this ${focusType}:`}
+        </p>
+        <InfoFilters
+          filters={otherFilters}
+          focusType={focusType}
+          databases={databases}
+        />
+
         {focusType === 'protein' && secondaryData.length > 1 && (
-          <div className={f('row', 'columns')}>
-            <FiltersPanel>
-              <CurationFilter label="UniProt Curation" />
-            </FiltersPanel>
-          </div>
+          <FiltersPanel>
+            <CurationFilter label="UniProt Curation" />
+          </FiltersPanel>
         )}
         <Matches
           {...this.props}
@@ -392,7 +390,7 @@ class Related extends PureComponent {
     if (data.loading) return <Loading />;
     const {
       metadata: mainData,
-      [toPlural(focusType)]: secondaryData,
+      [`${focusType}_subset`]: secondaryData,
     } = data.payload;
     if (!secondaryData) return <Loading />;
     const RelatedComponent = Array.isArray(secondaryData)
