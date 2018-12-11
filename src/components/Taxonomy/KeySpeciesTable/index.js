@@ -8,7 +8,8 @@ import loadData from 'higherOrder/loadData';
 import { edgeCases, STATUS_OK } from 'higherOrder/loadData/defaults';
 import { getReversedUrl } from 'higherOrder/loadData/defaults';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import Table, { Column } from 'components/Table';
+import { Column } from 'components/Table';
+import Table from 'components/Table/SimpleTable';
 import { ProteinDownloadRenderer } from 'components/Matches';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
