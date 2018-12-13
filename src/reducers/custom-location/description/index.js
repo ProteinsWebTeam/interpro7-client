@@ -5,7 +5,7 @@ import { NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 
-/*:: import type { Description } from 'utils/processDescription/handlers'; */
+/*:: import type { Description, DescriptionMain } from 'utils/processDescription/handlers'; */
 /*:: import type { CustomLocation } from '..'; */
 /*:: import type { State } from 'reducers'; */
 
@@ -32,7 +32,7 @@ const mainKeyLocationSelector = createSelector(
   description => description.main.key,
 );
 
-export const mainDBLocationSelector = createSelector(
+export const mainDBLocationSelector = (createSelector(
   descriptionLocationSelector,
   mainKeyLocationSelector,
   (description, mainKey) => {
@@ -41,4 +41,4 @@ export const mainDBLocationSelector = createSelector(
     if (!mainType) return null;
     return mainType.db || mainType.memberDB || null;
   },
-);
+) /*: (CustomLocation) => DescriptionMain | string | null */);
