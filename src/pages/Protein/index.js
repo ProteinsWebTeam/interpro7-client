@@ -74,8 +74,12 @@ class SummaryCounterProteins extends PureComponent {
               },
             }}
           >
-            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-
+            <div className={f('icon-wrapper')}>
+              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+              {entries !== 0 && (
+                <div className={f('icon-over-anim', 'mod-img-pos')} />
+              )}
+            </div>
             <NumberComponent abbr>{entries}</NumberComponent>
 
             <span className={f('label-number')}>
@@ -104,7 +108,12 @@ class SummaryCounterProteins extends PureComponent {
             }}
             disabled={!structures}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="s"
+            >
+              {structures !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{structures}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('structure', structures)}
@@ -133,7 +142,9 @@ class SummaryCounterProteins extends PureComponent {
               }}
               disabled={!sets}
             >
-              <div className={f('icon', 'icon-count-set')} />{' '}
+              <div className={f('icon', 'icon-count-set', 'icon-wrapper')}>
+                {sets !== 0 && <div className={f('icon-over-anim')} />}
+              </div>
               <NumberComponent abbr>{sets}</NumberComponent>
               <span className={f('label-number')}>{toPlural('set', sets)}</span>
             </Link>
@@ -270,17 +281,15 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />
           <hr className={f('margin-bottom-none')} />
-          {databases &&
-            db &&
-            databases[db.toLowerCase()] && (
-              <SchemaOrgData
-                data={{
-                  data: { db: databases[db.toLowerCase()] },
-                  location: window.location,
-                }}
-                processData={schemaProcessDataTable}
-              />
-            )}
+          {databases && db && databases[db.toLowerCase()] && (
+            <SchemaOrgData
+              data={{
+                data: { db: databases[db.toLowerCase()] },
+                location: window.location,
+              }}
+              processData={schemaProcessDataTable}
+            />
+          )}
           <Table
             dataTable={_payload.results}
             contentType="protein"
