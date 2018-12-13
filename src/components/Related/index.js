@@ -390,7 +390,7 @@ class Related extends PureComponent {
     if (data.loading) return <Loading />;
     const {
       metadata: mainData,
-      [toPlural(focusType)]: secondaryData,
+      [`${focusType}_subset`]: secondaryData,
     } = data.payload;
     if (!secondaryData) return <Loading />;
     const RelatedComponent = Array.isArray(secondaryData)

@@ -493,6 +493,9 @@ const HMMLogo = function(element, options = {}) {
     this.info_content_height = 256;
   }
 
+  this.column_hover = -1;
+  this.column_clicked = -1;
+
   if (options.scaled_max) {
     this.data.max_height =
       options.data.max_height_obs || this.data.max_height || 2;
@@ -1096,6 +1099,32 @@ const HMMLogo = function(element, options = {}) {
           const letters = column.length;
           let color = null;
 
+          if (i === this.column_clicked) {
+            this.contexts[contextNum].fillStyle = '#ffdede';
+            this.contexts[contextNum].fillRect(
+              x,
+              0,
+              this.zoomed_column,
+              this.height,
+            );
+            this.contexts[contextNum].strokeStyle = '#ff8888';
+            this.contexts[contextNum].strokeRect(
+              x,
+              0,
+              this.zoomed_column,
+              this.height,
+            );
+          }
+          if (i === this.column_hover) {
+            this.contexts[contextNum].fillStyle = '#ffeeee';
+            this.contexts[contextNum].fillRect(
+              x,
+              0,
+              this.zoomed_column,
+              this.height,
+            );
+          }
+
           for (let j = 0; j < letters; j++) {
             const letter = column[j];
             const values = letter.split(':', 2);
@@ -1592,7 +1621,6 @@ const HMMLogo = function(element, options = {}) {
   this.columnFromCoordinates = function(x) {
     return Math.ceil(x / (this.column_width * this.zoom));
   };
-
   this.coordinatesFromColumn = function(col) {
     const newColumn = col - 1;
 
@@ -1608,6 +1636,11 @@ const HMMLogo = function(element, options = {}) {
         .clientWidth / 2;
     const newLeft = this.coordinatesFromColumn(num);
     this.scrollme.scroller.scrollTo(newLeft - halfView, 0, animate);
+  };
+  this.refresh = function() {
+    this.rendered = [];
+    this.scrollme.reflow();
+    this.render();
   };
 };
 
@@ -1915,7 +1948,7 @@ const hmmLogo = function(logoElement, options = {}) {
         top: this.offsetTop,
         left: this.offsetLeft,
       };
-      const x = parseInt(e.pageX - offset.left, 10);
+      const x = parseInt(e.offsetX, 10);
       // get column number
       const col = hmmLogo.columnFromCoordinates(x);
       // clone the column data before reversal or the column gets messed
@@ -1924,6 +1957,9 @@ const hmmLogo = function(logoElement, options = {}) {
       let colData = [];
       let infoCols = 0;
       let heightHeader = 'Probability';
+
+      hmmLogo.column_clicked = col;
+      hmmLogo.refresh();
 
       if (logo.data.height_calc && logo.data.height_calc === 'score') {
         heightHeader = 'Score';
@@ -1992,6 +2028,16 @@ const hmmLogo = function(logoElement, options = {}) {
       logoElement.appendChild(columnInfo);
     });
   }
+
+  logoGraphic.addEventListener('mousemove', e => {
+    const hmmLogo = logo;
+    const x = parseInt(e.offsetX, 10);
+    const col = hmmLogo.columnFromCoordinates(x);
+    if (hmmLogo.column_hover !== col) {
+      hmmLogo.column_hover = col;
+      hmmLogo.refresh();
+    }
+  });
 
   return logo;
 };
