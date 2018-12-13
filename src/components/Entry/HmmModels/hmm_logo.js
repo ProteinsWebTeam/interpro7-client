@@ -1592,7 +1592,6 @@ const HMMLogo = function(element, options = {}) {
   this.columnFromCoordinates = function(x) {
     return Math.ceil(x / (this.column_width * this.zoom));
   };
-
   this.coordinatesFromColumn = function(col) {
     const newColumn = col - 1;
 
@@ -1915,7 +1914,7 @@ const hmmLogo = function(logoElement, options = {}) {
         top: this.offsetTop,
         left: this.offsetLeft,
       };
-      const x = parseInt(e.pageX - offset.left, 10);
+      const x = parseInt(e.offsetX, 10);
       // get column number
       const col = hmmLogo.columnFromCoordinates(x);
       // clone the column data before reversal or the column gets messed
