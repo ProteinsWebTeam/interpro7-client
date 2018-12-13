@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 
 import hmmLogo from './hmm_logo';
@@ -25,7 +25,7 @@ const schemaProcessData = data => ({
   minHeightObserved: data.min_height_obs,
 });
 
-class LogoSection extends PureComponent {
+class LogoSection extends Component {
   static propTypes = {
     data: T.object,
   };
