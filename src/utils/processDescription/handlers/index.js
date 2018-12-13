@@ -12,11 +12,12 @@ import { get, set } from 'lodash-es';
   'result'
 ); */
 
-/*:: export type Description = {|
-  main: {|
+/*:: export type DescriptionMain = {|
     key: ?PossibleMain,
     numberOfFilters: number,
-  |},
+|} */
+/*:: export type Description = {|
+  main: DescriptionMain,
   entry: {|
     isFilter: ?boolean,
     integration: ?string,

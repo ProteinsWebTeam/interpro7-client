@@ -12,7 +12,7 @@ import { SERVER_STATUS } from 'actions/types';
 export default (server /*: Server */) => (
   state /*: ServerStatus */ = { status: null, lastCheck: null },
   action /*: Action */,
-) => {
+) /*: ServerStatus */ => {
   switch (action.type) {
     case SERVER_STATUS:
       if (action.server !== server) return state;
