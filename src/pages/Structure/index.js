@@ -418,7 +418,10 @@ const List = ({
           <Exporter>
             <ul>
               <li>
-                <Link href={url} download="structures.json">
+                <Link
+                  href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
+                  download="structures.json"
+                >
                   JSON
                 </Link>
               </li>
