@@ -4,7 +4,10 @@ import { TOGGLE_EMBL_MAP_NAV, CLOSE_EVERYTHING } from 'actions/types';
 /*:: export type EMBLMapNav = boolean; */
 /*:: import type { State } from 'reducers'; */
 
-export default (state /*: EMBLMapNav */ = false, action /*: Object */) => {
+export default (
+  state /*: EMBLMapNav */ = false,
+  action /*: Object */,
+) /*: EMBLMapNav */ => {
   switch (action.type) {
     case TOGGLE_EMBL_MAP_NAV:
       if (!action.status) return !state;
@@ -16,4 +19,5 @@ export default (state /*: EMBLMapNav */ = false, action /*: Object */) => {
   }
 };
 
-export const emblMapNavSelector = (state /*: State */) => state.ui.emblMapNav;
+export const emblMapNavSelector = (state /*: State */) /*: EMBLMapNav */ =>
+  state.ui.emblMapNav;

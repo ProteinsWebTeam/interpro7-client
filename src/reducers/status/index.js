@@ -12,6 +12,10 @@ import servers from './servers';
 |} */
 /*:: import type { State } from 'reducers'; */
 
-export default combineReducers({ browser, servers });
+export default (combineReducers({
+  browser,
+  servers,
+}) /*: (Status | void, any) => Status */);
 
-export const statusSelector = (state /*: State */) => state.status;
+export const statusSelector = (state /*: State */) /*: Status */ =>
+  state.status;
