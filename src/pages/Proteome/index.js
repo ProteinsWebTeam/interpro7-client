@@ -115,7 +115,12 @@ class SummaryCounterProteome extends PureComponent {
             }}
             disabled={!entries}
           >
-            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+            <div className={f('icon-wrapper')}>
+              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+              {entries !== 0 && (
+                <div className={f('icon-over-anim', 'mod-img-pos')} />
+              )}
+            </div>
             <NumberComponent abbr>{entries}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
@@ -143,7 +148,12 @@ class SummaryCounterProteome extends PureComponent {
             }}
             disabled={!proteins}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x50;"
+            >
+              {proteins !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {' '}
@@ -172,7 +182,12 @@ class SummaryCounterProteome extends PureComponent {
             }}
             disabled={!structures}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x73;"
+            >
+              {structures !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{structures}</NumberComponent>{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
