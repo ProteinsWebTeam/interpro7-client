@@ -261,6 +261,35 @@
 .count-sets {
   text-align: center;
   display: flex;
+  position: relative;
+
+  &:hover .icon-over-anim {
+    transform: scale(2.2);
+    opacity: 1;
+    transition: all var(--timing-really-fast) cubic-bezier(0.4, 0, 0.2, 1); /*to keep to do the animation on mouse leave too*/
+  }
+}
+
+.icon-wrapper {
+  position: relative;
+
+  & .icon-over-anim {
+    position: absolute;
+    top: 26%;
+    left: 10%;
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    display: block;
+    opacity: 0;
+    transition: all var(--timing-really-fast) cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+.icon-over-anim.mod-img-pos {
+  top: 30%;
+  left: 24%;
 }
 
 .count-proteomes {
