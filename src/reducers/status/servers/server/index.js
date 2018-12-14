@@ -9,10 +9,10 @@ import { SERVER_STATUS } from 'actions/types';
 /*:: import type { State } from 'reducers'; */
 /*:: import type { Action } from 'actions'; */
 
-export default (server /*: Server */) => (
-  state /*: ServerStatus */ = { status: null, lastCheck: null },
-  action /*: Action */,
-) /*: ServerStatus */ => {
+export default (server /*: Server */) => ((
+  state = { status: null, lastCheck: null },
+  action,
+) => {
   switch (action.type) {
     case SERVER_STATUS:
       if (action.server !== server) return state;
@@ -23,4 +23,4 @@ export default (server /*: Server */) => (
     default:
       return state;
   }
-};
+} /*: (ServerStatus | void, any) => any */);
