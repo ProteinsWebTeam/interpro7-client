@@ -23,7 +23,7 @@ export default (combineReducers({
   search,
   hash,
   state,
-}) /*: (CustomLocation, any) => CustomLocation */);
+}) /*: (CustomLocation | void, any) => CustomLocation */);
 
 export const customLocationSelector = (state /*: State */) =>
   state.customLocation;
