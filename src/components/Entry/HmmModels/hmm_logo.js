@@ -1944,10 +1944,10 @@ const hmmLogo = function(logoElement, options = {}) {
       const hmmLogo = logo;
       let header = '<tr>';
       let tbody = '';
-      const offset = {
-        top: this.offsetTop,
-        left: this.offsetLeft,
-      };
+      // const offset = {
+      //   top: this.offsetTop,
+      //   left: this.offsetLeft,
+      // };
       const x = parseInt(e.offsetX, 10);
       // get column number
       const col = hmmLogo.columnFromCoordinates(x);
