@@ -8,21 +8,28 @@ import server from './server';
 /*:: export type ServerStatuses = {[string]: ServerStatus}; */
 /*:: import type { State } from 'reducers'; */
 
-export default combineReducers({
+export default (combineReducers({
   api: server('api'),
   ebi: server('ebi'),
   ipScan: server('ipScan'),
-});
+}) /*: (ServerStatuses | void, any) => ServerStatuses */);
 
-export const serverStatusesSelector = (state /*: State */) =>
-  state.status.servers;
+export const serverStatusesSelector = (
+  state /*: State */,
+) /*: ServerStatuses*/ => state.status.servers;
 
 const serverStatusSelectorFor = server =>
-  createSelector(
+  (createSelector(
     serverStatusesSelector,
     servers => servers[server],
-  );
+  ) /*: (State, any) => ServerStatus */);
 
-export const apiServerStatus = serverStatusSelectorFor('api');
-export const ebiServerStatus = serverStatusSelectorFor('ebi');
-export const ipScanServerStatus = serverStatusSelectorFor('ipScan');
+export const apiServerStatus = (serverStatusSelectorFor(
+  'api',
+) /*: ServerStatus*/);
+export const ebiServerStatus = (serverStatusSelectorFor(
+  'ebi',
+) /*: ServerStatus*/);
+export const ipScanServerStatus = (serverStatusSelectorFor(
+  'ipScan',
+) /*: ServerStatus*/);

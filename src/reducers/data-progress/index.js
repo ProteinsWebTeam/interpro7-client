@@ -32,7 +32,7 @@ export default (state /*: DataProgress */ = {}, action /*: Object */) => {
 };
 
 export const dataProgressSelector = (state /*: State */) => state.dataProgress;
-export const overallDataProgressSelector = createSelector(
+export const overallDataProgressSelector = (createSelector(
   dataProgressSelector,
   (dataProgress /*: DataProgress */) => {
     const keys = Object.keys(dataProgress);
@@ -47,8 +47,8 @@ export const overallDataProgressSelector = createSelector(
     overallProgress /= overallWeight;
     return overallProgress;
   },
-);
-export const overallDataLoadingSelector = createSelector(
+) /*: (State) => number | void */);
+export const overallDataLoadingSelector = (createSelector(
   overallDataProgressSelector,
   progress => progress !== 1,
-);
+) /*: (State) => boolean */);
