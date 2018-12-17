@@ -124,7 +124,7 @@ describe('tests', () => {
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
-  test('click-browse-page-entry-interpro-filter-page-elements', async () => {
+  test('click-browse-page-entry-interpro-filter-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -138,6 +138,17 @@ describe('tests', () => {
       '[data-testid="filters-panel"]'
     );
     expect(selection).not.toBeNull();
+    const table_selector = await page.waitForSelector(
+      '[data-testid="view-table-button"]'
+    );
+    expect(table_selector).not.toBeNull();
+    const grid_selector = await page.waitForSelector(
+      '[data-testid="view-grid-button"]'
+    );
+    expect(grid_selector).not.toBeNull();
+    //the default view is tabular
+    const data_table = await page.waitForSelector('[data-testid="data-table"]');
+    expect(data_table).not.toBeNull();
   });
 
   test('click-browse-page-entry-member-db-filters', async () => {
@@ -155,6 +166,38 @@ describe('tests', () => {
       const url = await page.evaluate(() => window.location.href);
       const urlMatch = new RegExp(`interpro\/entry\/${memberdb}`, 'i');
       expect(url).toEqual(expect.stringMatching(urlMatch));
+    }
+  });
+
+  test('click-browse-page-entry-member-db-filters-elements', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}entry/interpro`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    for (const memberdb of config.general.member_databases) {
+      //click member db filter
+      await Promise.all([
+        page.click(`[data-testid="memberdb-filter-${memberdb}"]`, {
+          waitUntil: 'networkidle0',
+        }),
+      ]);
+      const selection = await page.waitForSelector(
+        '[data-testid="filters-panel"]'
+      );
+      expect(selection).not.toBeNull();
+      const table_selector = await page.waitForSelector(
+        '[data-testid="view-table-button"]'
+      );
+      expect(table_selector).not.toBeNull();
+      const grid_selector = await page.waitForSelector(
+        '[data-testid="view-grid-button"]'
+      );
+      expect(grid_selector).not.toBeNull();
+      //the default view is tabular
+      const data_table = await page.waitForSelector(
+        '[data-testid="data-table"]'
+      );
+      expect(data_table).not.toBeNull();
     }
   });
 });

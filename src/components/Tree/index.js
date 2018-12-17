@@ -118,6 +118,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
             alignItems: 'stretch',
             justifyContent: 'center',
           }}
+          data-testid="data-tree"
         >
           <svg
             className={styles.container}
